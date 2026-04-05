@@ -125,7 +125,7 @@ class AbsTaskRegression(AbsTaskClassification):
             )["train"]
         return train_split_sampled, [], []
 
-    def _calculate_scores(  # type: ignore[override]
+    def _calculate_scores(  # type: ignore[override]  # noqa: PLR6301
         self,
         y_test: NDArray[np.floating] | list[float],
         y_pred: NDArray[np.floating] | list[float],
@@ -140,8 +140,9 @@ class AbsTaskRegression(AbsTaskClassification):
         )
 
     @staticmethod
-    def stratified_subsampling(
+    def stratified_subsampling(  # type: ignore[override]
         dataset_dict: datasets.DatasetDict,
+        *,
         seed: int,
         splits: list[str] = ["test"],
         label: str = "value",

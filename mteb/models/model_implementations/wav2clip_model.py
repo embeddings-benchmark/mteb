@@ -112,7 +112,7 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
 
             with torch.no_grad():
                 text_features = self.clip.get_text_features(**features)
-                text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+                text_features = text_features / text_features.norm(dim=-1, keepdim=True)  # noqa: PLR6104
             text_embeddings.append(text_features.cpu().detach().numpy())
 
         return np.vstack(text_embeddings)

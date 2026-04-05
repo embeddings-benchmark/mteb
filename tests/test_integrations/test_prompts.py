@@ -43,7 +43,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     class MockEncoderWithPrompts(MockSentenceTransformer):
         prompts = {}
 
-        def encode(
+        def encode(  # noqa: PLR6301
             self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
         ):
             assert prompt_name == to_compare
@@ -62,7 +62,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     class MockEncoderWithExistingPrompts(MockSentenceTransformer):
         prompts = {to_compare: to_compare}
 
-        def encode(
+        def encode(  # noqa: PLR6301
             self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
         ):
             assert prompt_name == to_compare

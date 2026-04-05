@@ -68,7 +68,7 @@ class EncodecWrapper(AbsEncoder):
                 min_samples = self.sampling_rate
                 if array.shape[-1] < min_samples:
                     padding = torch.zeros(min_samples - array.shape[-1])
-                    array = torch.cat([array, padding])
+                    array = torch.cat([array, padding])  # noqa: PLW2901
 
                 audio_arrays.append(array.numpy())
 
@@ -100,7 +100,7 @@ class EncodecWrapper(AbsEncoder):
                 embeddings = torch.mean(latent, dim=2)  # Average over time dimension
 
                 # Normalize embeddings
-                embeddings = embeddings / embeddings.norm(dim=-1, keepdim=True)
+                embeddings = embeddings / embeddings.norm(dim=-1, keepdim=True)  # noqa: PLR6104
 
                 all_embeddings.append(embeddings.cpu().detach())
 

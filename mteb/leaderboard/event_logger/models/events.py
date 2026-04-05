@@ -85,6 +85,7 @@ class FilterChangeEvent(BaseEvent):
         session_id: str,
         filter_name: str,
         new_value: Any,
+        *,
         old_value: Any = None,
         benchmark: str | None = None,
         filters: dict[str, Any] | None = None,

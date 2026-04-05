@@ -92,7 +92,7 @@ class Benchmark:
     def __getitem__(self, index: int) -> AbsTask:
         return self.tasks[index]
 
-    def _create_summary_table(
+    def _create_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         """Create summary table. Called by the leaderboard app.
@@ -106,7 +106,7 @@ class Benchmark:
 
         return _create_summary_table_from_benchmark_results(benchmark_results)
 
-    def _create_per_task_table(
+    def _create_per_task_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         """Create per-task table. Called by the leaderboard app.
@@ -209,7 +209,7 @@ class Benchmark:
 class RtebBenchmark(Benchmark):
     """Wrapper for RTEB benchmark."""
 
-    def _create_summary_table(
+    def _create_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         from mteb.benchmarks._create_table import (
@@ -235,7 +235,7 @@ class RtebBenchmark(Benchmark):
 class HUMEBenchmark(Benchmark):
     """Wrapper for HUME benchmark."""
 
-    def _create_summary_table(
+    def _create_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         from mteb.benchmarks._create_table import _create_summary_table_mean_subset
@@ -246,7 +246,7 @@ class HUMEBenchmark(Benchmark):
 class MIEBBenchmark(Benchmark):
     """Wrapper for MIEB benchmark."""
 
-    def _create_summary_table(
+    def _create_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         from mteb.benchmarks._create_table import _create_summary_table_mean_task_type
@@ -259,7 +259,7 @@ class MIEBBenchmark(Benchmark):
 class VidoreBenchmark(Benchmark):
     """Wrapper for Vidore3 benchmark."""
 
-    def _create_vidore_summary_table(
+    def _create_vidore_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         """Create summary table from BenchmarkResults.

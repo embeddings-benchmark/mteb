@@ -44,7 +44,7 @@ class Qwen2AudioWrapper(AbsEncoder):
 
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
-    def encode(
+    def encode(  # noqa: PLR0914
         self,
         inputs: DataLoader[BatchedInput],
         *,

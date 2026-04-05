@@ -110,7 +110,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
         return go.Figure()
     min_score, max_score = df["Mean (Task)"].min(), df["Mean (Task)"].max()
     df["sqrt(dim)"] = np.sqrt(df["Embedding Dimensions"].clip(upper=clip_embed_size))
-    df["Max Tokens"] = df["Max Tokens"].apply(lambda x: _process_max_tokens(x))
+    df["Max Tokens"] = df["Max Tokens"].apply(lambda x: _process_max_tokens(x))  # noqa: PLW0108
     rank_column = "Rank (Borda)" if "Rank (Borda)" in df.columns else "Rank (Mean Task)"
     df["_x_display"] = df["Number of Active Parameters"].replace(0, 1)
     fig = px.scatter(
@@ -299,7 +299,7 @@ def _radar_chart(df: pd.DataFrame) -> go.Figure:
             "Couldn't produce radar chart, the benchmark only contains one task category."
         )
     df = df[["Model", *task_type_columns]].set_index("Model")
-    df = df.mask(df == "", np.nan)
+    df = df.mask(df == "", np.nan)  # noqa: PLC1901
     df = df.dropna()
     df = df.head(TOP_N)
     df = df.iloc[::-1]

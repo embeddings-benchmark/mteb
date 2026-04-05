@@ -123,7 +123,7 @@ class MCTCTWrapper(AbsEncoder):
         )
         self.sampling_rate = self.feature_extractor.sampling_rate  # 16000 Hz
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,

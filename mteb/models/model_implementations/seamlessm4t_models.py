@@ -46,7 +46,7 @@ class SeamlessM4TWrapper(AbsEncoder):
         self.speech_encoder = self.speech_encoder.to(device)
         self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
