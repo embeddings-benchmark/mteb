@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from mteb._reversible_workflow import (
+from mteb._reversible_workflow.git_actions import (
     CommitAction,
     CreateBranchAction,
     CreatePRAction,
