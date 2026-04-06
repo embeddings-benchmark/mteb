@@ -106,7 +106,7 @@ class Qwen3RerankerWrapper:
     @torch.no_grad()
     def compute_logits(self, inputs: dict) -> list[float]:
         outputs = self.model.generate(
-            **inputs,
+            input_ids=inputs["input_ids"],
             generation_config=self.generation_config,
         )
         last_token_logits = outputs.logits[0]
