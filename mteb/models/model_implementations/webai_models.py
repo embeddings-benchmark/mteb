@@ -2,11 +2,11 @@
 MTEB wrapper and ModelMeta entries for ColVec1 models.
 
 # 4-B variant (remote)
-model = ColVec1Wrapper("webAI-Official/webAI-ColVec1-4b", torch_dtype=torch.bfloat16)
+model = mteb.get_model("webAI-Official/webAI-ColVec1-4b", torch_dtype=torch.bfloat16)
 results = mteb.evaluate(model=model, tasks=mteb.get_benchmark("ViDoRe(v3)"))
 
 # 9-B variant (remote)
-model = ColVec1Wrapper("webAI-Official/webAI-ColVec1-9b", torch_dtype=torch.bfloat16)
+model = mteb.get_model("webAI-Official/webAI-ColVec1-9b", torch_dtype=torch.bfloat16)
 results = mteb.evaluate(model=model, tasks=mteb.get_benchmark("ViDoRe(v3)"))
 
 For the MTEB PR, copy ColVec1Wrapper + the ModelMeta entries into
@@ -230,7 +230,7 @@ colvec1_4b = ModelMeta(
     loader=ColVec1Wrapper,
     loader_kwargs=dict(torch_dtype=torch.bfloat16),
     name="webAI-Official/webAI-ColVec1-4b",
-    revision='5b445c5474d53cd8e1471d1e8b41ae28ab77bb7b',  # TODO: Add after license is set
+    revision='dce73882e6b89a01e702891a593f775dc5711929',
     release_date="2026-04-05",
     model_type=["late-interaction"],
     languages=["eng-Latn", "fra-Latn"],
@@ -264,7 +264,7 @@ colvec1_9b = ModelMeta(
     loader=ColVec1Wrapper,
     loader_kwargs=dict(torch_dtype=torch.bfloat16),
     name="webAI-Official/webAI-ColVec1-9b",
-    revision=None,  # TODO: Add after license is set
+    revision="3767539920b9132abb24cef2c88d42d81817e50b",
     release_date="2026-04-05",
     model_type=["late-interaction"],
     languages=["eng-Latn", "fra-Latn"],
