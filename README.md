@@ -74,7 +74,7 @@ mteb run \
     --output-folder results
 ```
 
-For more on how to use the CLI check out the [related documentation](https://embeddings-benchmark.github.io/mteb/usage/cli/).
+For more on how to use the CLI check out the [related documentation](https://embeddings-benchmark.github.io/mteb/get_started/usage/cli/).
 
 ## Overview
 
@@ -97,12 +97,12 @@ For more on how to use the CLI check out the [related documentation](https://emb
 | 👩‍💻 [Adding a benchmark]        | How to add a new benchmark to MTEB and to the leaderboard                            |
 | 🤝 [Contributing]              | How to contribute to MTEB and set it up for development                              |
 
-[Get Started]: https://embeddings-benchmark.github.io/mteb/usage/get_started/
-[Defining Models]: https://embeddings-benchmark.github.io/mteb/usage/defining_the_model/
-[Selecting tasks]: https://embeddings-benchmark.github.io/mteb/usage/selecting_tasks/
-[Running Evaluation]: https://embeddings-benchmark.github.io/mteb/usage/running_the_evaluation/
-[Loading Results]: https://embeddings-benchmark.github.io/mteb/usage/loading_results/
-[Tasks]: https://embeddings-benchmark.github.io/mteb/overview/available_tasks/any2anymultilingualretrieval/
+[Get Started]: https://embeddings-benchmark.github.io/mteb/
+[Defining Models]: https://embeddings-benchmark.github.io/mteb/get_started/usage/defining_the_model/
+[Selecting tasks]: https://embeddings-benchmark.github.io/mteb/get_started/usage/selecting_tasks/
+[Running Evaluation]: https://embeddings-benchmark.github.io/mteb/get_started/usage/running_the_evaluation/
+[Loading Results]: https://embeddings-benchmark.github.io/mteb/get_started/usage/loading_results/
+[Tasks]: https://embeddings-benchmark.github.io/mteb/overview/available_tasks/retrieval/
 [Benchmarks]: https://embeddings-benchmark.github.io/mteb/overview/available_benchmarks/
 [Models]: https://embeddings-benchmark.github.io/mteb/overview/available_models/text/
 [Contributing]: https://embeddings-benchmark.github.io/mteb/CONTRIBUTING/

@@ -41,7 +41,7 @@ class HubertWrapper(AbsEncoder):
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
@@ -136,7 +136,9 @@ hubert_base = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/pytorch/fairseq/tree/master/examples/hubert",
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
-    training_datasets=set(),  # "LibriSpeech": ["train"]},
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{hsu2021hubertselfsupervisedspeechrepresentation,
@@ -170,7 +172,9 @@ hubert_large_ft = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/pytorch/fairseq/tree/master/examples/hubert",
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
-    training_datasets=set(),  # "LibriSpeech": ["train"]},
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{hsu2021hubertselfsupervisedspeechrepresentation,

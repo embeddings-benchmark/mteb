@@ -16,8 +16,6 @@ def check_descriptive_stats(task):
     result_stat = task.calculate_descriptive_statistics()
     # remove descriptive task file
     task.metadata.descriptive_stat_path.unlink()
-    print(task.metadata.name)
-    print(result_stat)
     task_stat = task.expected_stats
 
     for key, value in result_stat.items():
@@ -32,7 +30,7 @@ def test_descriptive_statistics_mock_tasks(task):
 
 @pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID)
 def test_descriptive_statistics_mock_mieb_tasks(task):
-    pytest.importorskip("PIL", reason="Image dependencies are not installed")
+    pytest.importorskip("torchvision", reason="Image dependencies are not installed")
     check_descriptive_stats(task)
 
 

@@ -87,6 +87,41 @@ _MISSING_N_EMBEDDING_MODELS = [
 ]
 
 
+def test_model_meta_hashable():
+    """Test that ModelMeta is hashable and considers experiment_kwargs in hash/equality."""
+    model1 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model",
+            revision="test_rev",
+            embed_dim=384,
+            experiment_kwargs={"param1": "value1"},
+        )
+    )
+
+    model2 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model2",
+            revision="test_rev2",
+            embed_dim=512,
+            experiment_kwargs={"param1": "value2"},
+        )
+    )
+
+    model3 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model",
+            revision="test_rev",
+            embed_dim=384,
+            experiment_kwargs={"param1": "value1"},
+        )
+    )
+
+    assert hash(model1) == hash(model3)
+
+    assert len({model1, model2}) == 2
+    assert len({model1, model3}) == 1
+
+
 @pytest.mark.parametrize(
     "training_datasets",
     [
@@ -217,6 +252,34 @@ def test_get_model_metas_each_model_type(model_type):
 
     for model in models:
         assert model_type in model.model_type
+
+
+def test_ensure_experiments_kwargs_passed():
+    """
+    Regression test to ensure that experiment kwargs are passed
+    https://github.com/embeddings-benchmark/mteb/issues/4307
+    """
+    experiment = {"array_framework": "pytorch"}
+    # should be passed when in all the following cases:
+    model1 = mteb.get_model("mteb/baseline-random-encoder", **experiment)  # type: ignore[call-arg]
+
+    meta = mteb.get_model_meta(
+        "mteb/baseline-random-encoder",
+        experiment_kwargs=experiment,
+    )
+    model2 = meta.load_model()
+
+    meta = mteb.get_model_meta(
+        "mteb/baseline-random-encoder",
+    )
+    model3 = meta.load_model(**experiment)  # type: ignore[call-arg]
+    assert model1.array_framework == "pytorch"  # type: ignore[attr-defined]
+    assert model2.array_framework == "pytorch"  # type: ignore[attr-defined]
+    assert model3.array_framework == "pytorch"  # type: ignore[attr-defined]
+
+    assert model1.mteb_model_meta.experiment_kwargs == experiment
+    assert model2.mteb_model_meta.experiment_kwargs == experiment
+    assert model3.mteb_model_meta.experiment_kwargs == experiment
 
 
 def test_loader_kwargs_persisted_in_metadata():

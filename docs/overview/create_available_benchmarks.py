@@ -52,8 +52,8 @@ def create_table(benchmark: mteb.Benchmark) -> str:
         ),
         axis=1,
     )
-    df["modalities"] = df["modalities"].apply(lambda x: pretty_long_list(x))
-    df["languages"] = df["languages"].apply(lambda x: pretty_long_list(x))
+    df["modalities"] = df["modalities"].apply(lambda x: pretty_long_list(x))  # noqa: PLW0108
+    df["languages"] = df["languages"].apply(lambda x: pretty_long_list(x))  # noqa: PLW0108
 
     tasks_md = df.to_markdown(index=False)
 
@@ -104,7 +104,7 @@ def main(path: Path) -> None:
 
     content = header
     new_content = content + benchmark_entries.strip()
-    with path.open("w") as f:
+    with path.open("w") as f:  # noqa: PLW1514
         f.write(new_content)
 
 

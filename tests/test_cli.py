@@ -10,10 +10,10 @@ import pytest
 import yaml
 
 from mteb.cli.build_cli import (
-    _available_benchmarks,
-    _available_tasks,
-    _create_meta,
-    _leaderboard,
+    _available_benchmarks,  # noqa: PLC2701
+    _available_tasks,  # noqa: PLC2701
+    _create_meta,  # noqa: PLC2701
+    _leaderboard,  # noqa: PLC2701
     run,
 )
 
@@ -133,7 +133,9 @@ def test_create_meta(tmp_path):
 
     # ensure that the command line interface works as well
     command = f"{sys.executable} -m mteb create-model-results --model-name {model_name} --results-folder {output_folder.as_posix()} --output-path {output_path.as_posix()} --overwrite"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    result = subprocess.run(
+        command, check=False, shell=True, capture_output=True, text=True
+    )
     assert result.returncode == 0, "Command failed"
 
 
@@ -144,7 +146,7 @@ def test_create_meta(tmp_path):
         ("model_card_without_frontmatter.md", "model_card_gold_without_frontmatter.md"),
     ],
 )
-def test_create_meta_from_existing(
+def test_create_meta_from_existing(  # noqa: PLR0914
     existing_readme_name: str, gold_readme_name: str, tmp_path: Path
 ):
     """Test create_meta function directly as well as through the command line interface"""
@@ -197,14 +199,16 @@ def test_create_meta_from_existing(
     assert readme_output == gold_readme
     # ensure that the command line interface works as well
     command = f"{sys.executable} -m mteb create-model-results --model-name {model_name} --results-folder {output_folder.as_posix()} --output-path {output_path.as_posix()} --from-existing {existing_readme.as_posix()} --overwrite"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    result = subprocess.run(
+        command, check=False, shell=True, capture_output=True, text=True
+    )
     assert result.returncode == 0, "Command failed"
 
 
 def test_leaderboard_help():
     """Test that leaderboard help command works."""
     command = [sys.executable, "-m", "mteb", "leaderboard", "--help"]
-    result = subprocess.run(command, capture_output=True, text=True)
+    result = subprocess.run(command, check=False, capture_output=True, text=True)
 
     assert result.returncode == 0, "Leaderboard help command failed"
     assert "--cache-path" in result.stdout, "--cache-path option not found in help"
@@ -301,7 +305,7 @@ def test_leaderboard_cli_integration():
     """Test the full CLI command integration."""
     # Test that the command is recognized by the CLI
     command = [sys.executable, "-m", "mteb", "--help"]
-    result = subprocess.run(command, capture_output=True, text=True)
+    result = subprocess.run(command, check=False, capture_output=True, text=True)
 
     assert result.returncode == 0
     assert "leaderboard" in result.stdout, "Leaderboard command not found in main help"

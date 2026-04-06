@@ -37,7 +37,7 @@ def test_task_modality_filtering(task, modalities):
     model_name = "mteb/baseline-random-encoder"
     model = mteb.get_model(model_name)
     model_meta = deepcopy(model.mteb_model_meta)
-    model_meta.modalities = modalities
+    model_meta = model_meta.model_copy(update={"modalities": modalities})
     model.mteb_model_meta = model_meta
 
     with pytest.raises(ValueError):
@@ -54,7 +54,7 @@ def test_task_modality_filtering_model_modalities_only_one_of_modalities(task, c
     with caplog.at_level(logging.WARNING):
         model = mteb.get_model("mteb/baseline-random-encoder")
         model_meta = deepcopy(model.mteb_model_meta)
-        model_meta.modalities = ["image"]
+        model_meta = model_meta.model_copy(update={"modalities": ["image"]})
         model.mteb_model_meta = model_meta
         scores = mteb.evaluate(
             model,

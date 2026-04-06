@@ -223,7 +223,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     """
     collated = {}
     for key in batch[0]:
-        if key in (
+        if key in (  # noqa: PLR6201
             "text",  # some multimodal corpora have optional text fields
             "image",  # images can be with different sizes
             "conversation",  # conversations are lists of varying lengths
@@ -292,6 +292,7 @@ def _prepare_dataset(
 
 def create_dataloader(
     dataset: Dataset,
+    *,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
     input_column: str | None = None,

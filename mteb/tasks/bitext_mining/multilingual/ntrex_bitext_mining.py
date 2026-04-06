@@ -224,7 +224,7 @@ def extend_lang_pairs() -> dict[str, list[str]]:
         for y in _LANGUAGES.keys():
             if x != y:
                 if (
-                    ("eng_Latn" in (x, y))
+                    ("eng_Latn" in (x, y))  # noqa: PLR6201
                     or (all(var in _BRIDGE_LANGUAGES for var in (x, y)))
                     or (_LANGUAGES[x]["group"] == _LANGUAGES[y]["group"])
                 ):

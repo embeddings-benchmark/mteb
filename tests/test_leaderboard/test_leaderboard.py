@@ -85,7 +85,7 @@ def test_leaderboard_app_does_not_crash():
     logger.info("Creating subprocess...")
     process = multiprocessing.Process(target=run_leaderboard_app)
 
-    try:
+    try:  # noqa: PLR1702
         logger.info("Starting subprocess...")
         process.start()
         logger.info(f"Subprocess started with PID: {process.pid}")

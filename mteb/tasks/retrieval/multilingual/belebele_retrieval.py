@@ -246,7 +246,7 @@ class BelebeleRetrieval(AbsTaskRetrieval):
                         "title": "",
                         "text": row["flores_passage"],
                     }
-                    context_idx = context_idx + 1
+                    context_idx = context_idx + 1  # noqa: PLR6104
 
             for row in ds_question:
                 query = row["question"]

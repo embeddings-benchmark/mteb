@@ -91,7 +91,7 @@ class MonoT5Reranker(RerankerWrapper):
 
         self.model.eval()
 
-    def get_prediction_tokens(
+    def get_prediction_tokens(  # noqa: PLR6301
         self, model_name_or_path, tokenizer, token_false=None, token_true=None
     ):
         if not (token_false and token_true):
@@ -243,9 +243,12 @@ Relevant: """
             self.template.format(query=query, text=text)
             for (query, text) in zip(queries, passages)
         ]
-        assert "{query}" not in prompts[0], "Query not replaced"
-        assert "{text}" not in prompts[0], "Text not replaced"
-        assert "{instruction}" not in prompts[0], "Instruction not replaced"
+        if "{query}" in prompts[0]:
+            raise ValueError("Query not replaced")
+        if "{text}" in prompts[0]:
+            raise ValueError("Text not replaced")
+        if "{instruction}" in prompts[0]:
+            raise ValueError("Instruction not replaced")
 
         tokens = self.tokenizer(
             prompts,

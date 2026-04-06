@@ -69,7 +69,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         self._embed_dim = embed_dim
         self._available_embed_dims = [2048, 1024]
 
-    def pil_to_base64(self, image, format="jpeg"):
+    def pil_to_base64(self, image, format="jpeg"):  # noqa: PLR6301
         if image is None:
             return None
         buffer = BytesIO()
@@ -147,14 +147,17 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        assert (
-            self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+        if (
+            self._embed_dim is not None
+            and self._embed_dim not in self._available_embed_dims
+        ):
+            raise ValueError(
+                f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
+            )
 
         if images is not None and texts is not None:
-            assert len(texts) == len(images)
+            if len(texts) != len(images):
+                raise ValueError(f"Expected {len(texts)} images, got {len(images)}")
             batch_len = len(texts)
             images_base64 = [self.pil_to_base64(image) for image in images]
         elif images is None:
@@ -178,22 +181,19 @@ class Seed16EmbeddingWrapper(AbsEncoder):
                     "Target_modality:Text.\n Instruction:" + instruction + "\n Query:"
                 )
                 input_text = texts[i]
+            elif texts[i] != "" and images_base64[i] is not None:  # noqa: PLC1901
+                instruction = (
+                    "Instruction: Compress the text and image into one word.\n Query:"
+                )
+                input_text = texts[i]
+            elif texts[i] != "":  # noqa: PLC1901
+                instruction = "Instruction: Compress the text into one word.\n Query:"
+                input_text = texts[i]
+            elif images_base64[i] is not None:
+                instruction = "Instruction: Compress the image into one word.\n Query:"
+                input_text = None
             else:
-                if texts[i] != "" and images_base64[i] is not None:
-                    instruction = "Instruction: Compress the text and image into one word.\n Query:"
-                    input_text = texts[i]
-                elif texts[i] != "":
-                    instruction = (
-                        "Instruction: Compress the text into one word.\n Query:"
-                    )
-                    input_text = texts[i]
-                elif images_base64[i] is not None:
-                    instruction = (
-                        "Instruction: Compress the image into one word.\n Query:"
-                    )
-                    input_text = None
-                else:
-                    raise ValueError("image and text are both None")
+                raise ValueError("image and text are both None")
 
             resp = multimodal_embedding(
                 instruction=instruction,

@@ -45,6 +45,7 @@ class AnySTSEvaluator(Evaluator):
         self,
         dataset: Dataset,
         sentences_column_names: tuple[str, str],
+        *,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
@@ -72,7 +73,7 @@ class AnySTSEvaluator(Evaluator):
         embeddings1 = model.encode(
             create_dataloader(
                 self.dataset.select_columns([self.input_columns[0]]),
-                self.task_metadata,
+                task_metadata=self.task_metadata,
                 input_column=self.input_columns[0],
                 num_proc=num_proc,
                 **encode_kwargs,
@@ -88,7 +89,7 @@ class AnySTSEvaluator(Evaluator):
         embeddings2 = model.encode(
             create_dataloader(
                 self.dataset.select_columns([self.input_columns[1]]),
-                self.task_metadata,
+                task_metadata=self.task_metadata,
                 input_column=self.input_columns[1],
                 **encode_kwargs,
             ),

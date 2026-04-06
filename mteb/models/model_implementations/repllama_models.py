@@ -85,8 +85,8 @@ class RepLLaMAModel(AbsEncoder):
             return_tensors="pt",
         )
 
-    def combine_query_and_instruction(self, query, instruction):
-        end_punct = "?" if query.strip()[-1] not in ["?", ".", "!"] else ""
+    def combine_query_and_instruction(self, query, instruction):  # noqa: PLR6301
+        end_punct = "?" if query.strip()[-1] not in ["?", ".", "!"] else ""  # noqa: PLR6201
         return f"{query}{end_punct} {instruction}".strip()
 
     def encode(
