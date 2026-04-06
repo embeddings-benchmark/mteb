@@ -223,6 +223,7 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     training_datasets=TRAINING_DATA,
     citation=LLAMA_NEMORETRIEVER_CITATION,
     required_dependencies=_TRANSFORMERS_CONSTRAINTS["llama-nemotron-colembed-vl"],
+    extra_requirements_group_name="llama-nemotron-colembed-vl",
 )
 
 llama_nemoretriever_colembed_3b_v1 = ModelMeta(
@@ -252,6 +253,7 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     training_datasets=TRAINING_DATA,
     citation=LLAMA_NEMORETRIEVER_CITATION,
     required_dependencies=_TRANSFORMERS_CONSTRAINTS["llama-nemotron-colembed-vl"],
+    extra_requirements_group_name="llama-nemotron-colembed-vl",
 )
 
 llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
@@ -281,6 +283,7 @@ llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
     training_datasets=TRAINING_DATA,
     citation=NEMOTRON_COLEMBED_CITATION_V2,
     required_dependencies=_TRANSFORMERS_CONSTRAINTS["llama-nemotron-colembed-vl"],
+    extra_requirements_group_name="llama-nemotron-colembed-vl",
 )
 
 
@@ -311,6 +314,7 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
     citation=NEMOTRON_COLEMBED_CITATION_V2,
     model_type=["late-interaction"],
     required_dependencies=_TRANSFORMERS_CONSTRAINTS["nemotron-colembed-vl-v2"],
+    extra_requirements_group_name="nemotron-colembed-vl-v2",
 )
 
 
@@ -341,6 +345,7 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
     citation=NEMOTRON_COLEMBED_CITATION_V2,
     model_type=["late-interaction"],
     required_dependencies=_TRANSFORMERS_CONSTRAINTS["nemotron-colembed-vl-v2"],
+    extra_requirements_group_name="nemotron-colembed-vl-v2",
 )
 
 
@@ -492,4 +497,5 @@ llama_nemotron_embed_vl_1b_v2 = ModelMeta(
     training_datasets=TRAINING_DATA_EMBED_VL_1B_V2,
     citation=NEMOTRON_EMBED_VL_1B_V2_CITATION,
     required_dependencies=_TRANSFORMERS_CONSTRAINTS["llama-nemotron-colembed-vl"],
+    extra_requirements_group_name="llama-nemotron-colembed-vl",
 )

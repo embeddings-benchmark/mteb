@@ -143,6 +143,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
         output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
         required_dependencies: Dependencies that required for model loading.
+        extra_requirements_group_name: Name of group of extra requirements.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -178,6 +179,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     experiment_kwargs: Mapping[str, Any] | None = None
     output_dtypes: OutputDType | list[OutputDType] | None = None
     required_dependencies: Sequence[str] | None = None
+    extra_requirements_group_name: str | None = None
 
     def __setattr__(self, name: str, value: Any) -> None:
         """Deprecation warning for direct attribute mutation. Use model_copy(update={...}) instead."""
@@ -414,10 +416,14 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             except importlib.metadata.PackageNotFoundError:
                 missing_dependencies.append(required_dependency)
         if missing_dependencies:
+            group_msg = ""
+            if self.extra_requirements_group_name is not None:
+                group_msg = f"\nYou can install it with `pip install {self.extra_requirements_group_name}`."
             raise ImportError(
                 "Missing required dependencies: {}".format(
                     ", ".join(missing_dependencies)
                 )
+                + group_msg
             )
 
     def model_name_as_path(self) -> str:

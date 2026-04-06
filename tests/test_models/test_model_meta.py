@@ -447,10 +447,11 @@ def test_model_meta_dependencies_fail():
     model_meta = mteb.get_model_meta("mteb/baseline-random-encoder").model_copy(
         update={
             "required_dependencies": ["test", "sentence-transformers<=1.0.0"],
+            "extra_requirements_group_name": "test_group",
         }
     )
     with pytest.raises(
         ImportError,
-        match="Missing required dependencies: test, sentence-transformers<=1.0.0",
+        match="Missing required dependencies: test, sentence-transformers<=1.0.0\nYou can install it with `pip install test_group`.",
     ):
         model_meta._check_requirements()
