@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 import torch.nn.functional as F
-from PIL import Image
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_image_dependencies
@@ -14,6 +13,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from PIL import Image
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -64,6 +64,7 @@ class BGEVLModel(AbsEncoder):
     @staticmethod
     def _prepare_images(images: list) -> list[Image.Image]:
         import torchvision.transforms.functional as tv_functional
+        from PIL import Image
 
         prepared: list[Image.Image] = []
         for image in images:
@@ -90,6 +91,8 @@ class BGEVLModel(AbsEncoder):
         text: list[str] | None,
         images: list[Image.Image] | None,
     ) -> torch.Tensor:
+        from PIL import Image
+
         if images is not None:
             converted_images = []
             for img in images:
@@ -111,6 +114,8 @@ class BGEVLModel(AbsEncoder):
         images: list[Image.Image] | None,
         task_instruction: str,
     ) -> torch.Tensor:
+        from PIL import Image
+
         if images is not None:
             converted_images = []
             for img in images:
