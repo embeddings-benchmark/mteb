@@ -59,7 +59,7 @@ mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
 image = [
-    "pillow>=12.0.0",
+    "pillow>=10.0.1",
     "torchvision>0.2.1",
     "transformers[torch-vision,vision]",
 ]
