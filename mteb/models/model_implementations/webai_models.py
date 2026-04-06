@@ -191,10 +191,10 @@ class ColVec1Wrapper(AbsEncoder):
         )
         return padded
 
-    def similarity(self, a, b, batch_size: int = 8):
+    def similarity(self, a, b):
         a = [torch.as_tensor(x) for x in a]
         b = [torch.as_tensor(x) for x in b]
-        return self.processor.score_multi_vector(a, b, batch_size=batch_size, device=self.device)
+        return self.processor.score_multi_vector(a, b, device=self.device)
 
 
 # ---------------------------------------------------------------------------
