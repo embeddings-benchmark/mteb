@@ -64,7 +64,6 @@ class BGEVLModel(AbsEncoder):
     @staticmethod
     def _prepare_images(images: list) -> list[Image.Image]:
         import torchvision.transforms.functional as tv_functional
-        from PIL import Image
 
         prepared: list[Image.Image] = []
         for image in images:
@@ -112,11 +111,6 @@ class BGEVLModel(AbsEncoder):
         images: list[Image.Image] | None,
         task_instruction: str,
     ) -> torch.Tensor:
-        import io
-
-        from PIL import Image
-
-        # Convert PIL Images to BytesIO objects so Image.open() works in data_process
         if images is not None:
             converted_images = []
             for img in images:
