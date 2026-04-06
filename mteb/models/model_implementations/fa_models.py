@@ -1,10 +1,10 @@
 """Farsi/Persian models for evaluation on the Persian part of MTEB"""
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 parsbert = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="HooshvareLab/bert-base-parsbert-uncased",
     model_type=["dense"],
     languages=["fas-Arab"],
@@ -41,7 +41,7 @@ parsbert = ModelMeta(
 )
 
 bert_zwnj = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="m3hrdadfi/bert-zwnj-wnli-mean-tokens",
     model_type=["dense"],
     languages=["fas-Arab"],
@@ -68,7 +68,7 @@ bert_zwnj = ModelMeta(
 )
 
 roberta_zwnj = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="m3hrdadfi/roberta-zwnj-wnli-mean-tokens",
     model_type=["dense"],
     languages=["fas-Arab"],
@@ -94,7 +94,7 @@ roberta_zwnj = ModelMeta(
 )
 
 sentence_transformer_parsbert = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="myrkur/sentence-transformer-parsbert-fa",
     model_type=["dense"],
     languages=["fas-Arab"],
@@ -120,7 +120,7 @@ sentence_transformer_parsbert = ModelMeta(
 )
 
 tooka_bert_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="PartAI/TookaBERT-Base",
     languages=["fas-Arab"],
     open_weights=True,
@@ -147,7 +147,7 @@ tooka_bert_base = ModelMeta(
 )
 
 tooka_sbert = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="PartAI/Tooka-SBERT",
     model_type=["dense"],
     languages=["fas-Arab"],
@@ -179,7 +179,7 @@ tooka_sbert = ModelMeta(
 )
 
 fa_bert = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sbunlp/fabert",
     model_type=["dense"],
     languages=["fas-Arab"],
@@ -228,7 +228,7 @@ fa_bert = ModelMeta(
 )
 
 tooka_sbert_v2_small = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="PartAI/Tooka-SBERT-V2-Small",
     model_type=["dense"],
     languages=["fas-Arab"],
@@ -260,7 +260,7 @@ tooka_sbert_v2_small = ModelMeta(
 )
 
 tooka_sbert_v2_large = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="PartAI/Tooka-SBERT-V2-Large",
     model_type=["dense"],
     languages=["fas-Arab"],

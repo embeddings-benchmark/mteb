@@ -9,13 +9,12 @@ install-for-tests:
 
 lint:
 	@echo "--- 🧹 Running linters ---"
-	uv run --no-sync ruff format . 			# running ruff formatting
-	uv run --no-sync ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
+	uv run --no-sync ruff format .
+	uv run --no-sync ruff check . --fix --exit-non-zero-on-fix
 	uv run --no-sync typos
 
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
-	# Required for CI to work, otherwise it will just pass
 	uv run --no-sync ruff format . --check
 	uv run --no-sync ruff check .
 	uv run --no-sync typos --diff
@@ -76,7 +75,7 @@ leaderboard-test-all:
 
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
-	uv run --no-sync --extra leaderboard python -m mteb.leaderboard.app
+	uv run --extra leaderboard python -m mteb leaderboard
 
 format-citations:
 	@echo "--- 🧹 Formatting citations ---"

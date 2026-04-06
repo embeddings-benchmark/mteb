@@ -77,7 +77,7 @@ class XQuADRetrieval(AbsTaskRetrieval):
             data = datasets.load_dataset(name=f"xquad.{lang}", **self.metadata.dataset)[
                 split
             ]
-            data = data.filter(lambda x: x["answers"]["text"] != "")
+            data = data.filter(lambda x: x["answers"]["text"] != "")  # noqa: PLC1901
 
             question_ids = {
                 question: id for id, question in zip(data["id"], data["question"])

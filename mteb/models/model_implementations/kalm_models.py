@@ -7,7 +7,7 @@ import torch
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
@@ -54,7 +54,7 @@ class KALMWrapper(InstructSentenceTransformerModel):
                 f"No instruction used, because prompt type = {prompt_type.document}"
             )
 
-        if task_metadata.type in ["STS", "PairClassification", "Summarization"]:
+        if task_metadata.type in ["STS", "PairClassification", "Summarization"]:  # noqa: PLR6201
             logger.info(
                 f"No instruction used, because task type = {task_metadata.type}"
             )
@@ -802,7 +802,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
 )
 
 HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="HIT-TMG/KaLM-embedding-multilingual-mini-v1",
     model_type=["dense"],
     revision="8a82a0cd2b322b91723e252486f7cce6fd8ac9d3",
@@ -955,13 +955,13 @@ KaLM_Embedding_gemma_3_12b_2511 = ModelMeta(
     languages=None,
     open_weights=True,
     release_date="2025-11-06",
-    n_parameters=11.76 * 1e9,
+    n_parameters=11766034176,
     n_embedding_parameters=1006878720,
     memory_usage_mb=44884,
     max_tokens=32768,
     embed_dim=3840,
     license=None,
-    reference="https://kalm-embedding.github.io/",
+    reference="https://huggingface.co/tencent/KaLM-Embedding-Gemma3-12B-2511",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,

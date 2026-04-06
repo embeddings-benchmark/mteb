@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
+from functools import lru_cache
 from typing import TYPE_CHECKING, Literal, cast
 
 import huggingface_hub
@@ -13,6 +14,32 @@ from mteb.types import StrURL
 if TYPE_CHECKING:
     from mteb.abstasks.aggregated_task import AbsTaskAggregate
     from mteb.results import BenchmarkResults
+
+
+@lru_cache
+def _get_benchmarks_on_leaderboard() -> set[str]:
+    from mteb.benchmarks._leaderboard_menu import (
+        GP_BENCHMARK_ENTRIES,
+        R_BENCHMARK_ENTRIES,
+        MenuEntry,
+    )
+
+    entries = GP_BENCHMARK_ENTRIES + R_BENCHMARK_ENTRIES
+
+    def __extract_benchmarks(
+        entries: Sequence[Benchmark | MenuEntry],
+    ) -> list[Benchmark]:
+        benchmarks = []
+        for entry in entries:
+            if isinstance(entry, Benchmark):
+                benchmarks.append(entry)
+            else:
+                benchmarks.extend(__extract_benchmarks(entry.benchmarks))
+        return benchmarks
+
+    names = {benchmark.name for benchmark in __extract_benchmarks(entries)}
+
+    return names
 
 
 @dataclass
@@ -46,10 +73,15 @@ class Benchmark:
     reference: StrURL | None = None
     citation: str | None = None
     contacts: list[str] | None = None
-    display_on_leaderboard: bool = True
     icon: str | None = None
     display_name: str | None = None
     language_view: list[str] | Literal["all"] = field(default_factory=list)
+
+    @property
+    def display_on_leaderboard(self) -> bool:
+        """Whether the benchmark should be displayed on the leaderboard."""
+        benchmarks_on_leaderboard = _get_benchmarks_on_leaderboard()
+        return self.name in benchmarks_on_leaderboard
 
     def __iter__(self) -> Iterator[AbsTask]:
         return iter(self.tasks)
@@ -60,7 +92,7 @@ class Benchmark:
     def __getitem__(self, index: int) -> AbsTask:
         return self.tasks[index]
 
-    def _create_summary_table(
+    def _create_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         """Create summary table. Called by the leaderboard app.
@@ -74,7 +106,7 @@ class Benchmark:
 
         return _create_summary_table_from_benchmark_results(benchmark_results)
 
-    def _create_per_task_table(
+    def _create_per_task_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         """Create per-task table. Called by the leaderboard app.
@@ -177,7 +209,7 @@ class Benchmark:
 class RtebBenchmark(Benchmark):
     """Wrapper for RTEB benchmark."""
 
-    def _create_summary_table(
+    def _create_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         from mteb.benchmarks._create_table import (
@@ -203,7 +235,7 @@ class RtebBenchmark(Benchmark):
 class HUMEBenchmark(Benchmark):
     """Wrapper for HUME benchmark."""
 
-    def _create_summary_table(
+    def _create_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         from mteb.benchmarks._create_table import _create_summary_table_mean_subset
@@ -214,7 +246,7 @@ class HUMEBenchmark(Benchmark):
 class MIEBBenchmark(Benchmark):
     """Wrapper for MIEB benchmark."""
 
-    def _create_summary_table(
+    def _create_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         from mteb.benchmarks._create_table import _create_summary_table_mean_task_type
@@ -227,7 +259,7 @@ class MIEBBenchmark(Benchmark):
 class VidoreBenchmark(Benchmark):
     """Wrapper for Vidore3 benchmark."""
 
-    def _create_vidore_summary_table(
+    def _create_vidore_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         """Create summary table from BenchmarkResults.
@@ -244,6 +276,7 @@ class VidoreBenchmark(Benchmark):
         import mteb
         from mteb.benchmarks._create_table import (
             _format_max_tokens,
+            _format_n_active_parameters,
             _format_n_parameters,
             _get_means_per_types,
             _split_on_capital,
@@ -318,15 +351,20 @@ class VidoreBenchmark(Benchmark):
         )
         joint_table.insert(
             1,
-            "Number of Parameters (B)",
+            "Total Parameters (B)",
             model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
         )
         joint_table.insert(
             1,
-            "Memory Usage (MB)",
+            "Active Parameters (B)",
             model_metas.map(
-                lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
+                lambda m: _format_n_active_parameters(m.n_active_parameters)
             ),
+        )
+
+        # Add release date from model metadata
+        joint_table["Release Date"] = model_metas.map(
+            lambda m: str(m.release_date) if m.release_date else None
         )
 
         # Clean up model names (remove HF organization)

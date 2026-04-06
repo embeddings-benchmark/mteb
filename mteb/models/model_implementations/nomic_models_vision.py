@@ -102,7 +102,7 @@ class NomicVisionModel(AbsEncoder):
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
 
-    def mean_pooling(self, model_output, attention_mask):
+    def mean_pooling(self, model_output, attention_mask):  # noqa: PLR6301
         token_embeddings = model_output[0]
         input_mask_expanded = (
             attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()

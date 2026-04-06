@@ -1,5 +1,5 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 mini_gte_datasets = {
     "MSMARCO",
@@ -23,7 +23,7 @@ mini_gte_datasets = {
 }
 
 mini_gte = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="prdev/mini-gte",
     model_type=["dense"],
     languages=["eng-Latn"],

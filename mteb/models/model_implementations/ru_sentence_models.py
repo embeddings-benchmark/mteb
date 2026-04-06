@@ -7,7 +7,7 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
 
 from .bge_models import bge_m3_training_data
@@ -236,7 +236,7 @@ GIGA_task_prompts = {
 }
 
 rubert_tiny = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="cointegrated/rubert-tiny",
     model_type=["dense"],
     languages=["rus-Cyrl"],
@@ -263,7 +263,7 @@ rubert_tiny = ModelMeta(
 )
 
 rubert_tiny2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="cointegrated/rubert-tiny2",
     model_type=["dense"],
     languages=["rus-Cyrl"],
@@ -291,7 +291,7 @@ rubert_tiny2 = ModelMeta(
 )
 
 sbert_large_nlu_ru = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="ai-forever/sbert_large_nlu_ru",
     model_type=["dense"],
     languages=["rus-Cyrl"],
@@ -318,7 +318,7 @@ sbert_large_nlu_ru = ModelMeta(
 )
 
 sbert_large_mt_nlu_ru = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="ai-forever/sbert_large_mt_nlu_ru",
     model_type=["dense"],
     languages=["rus-Cyrl"],
@@ -344,7 +344,7 @@ sbert_large_mt_nlu_ru = ModelMeta(
 )
 
 user_base_ru = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts={"query": "query: ", "document": "passage: "},
     ),
@@ -409,7 +409,7 @@ user_base_ru = ModelMeta(
 )
 
 user_bge_m3 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="deepvk/USER-bge-m3",
     model_type=["dense"],
     languages=["rus-Cyrl"],
@@ -461,7 +461,7 @@ user_bge_m3 = ModelMeta(
 )
 
 deberta_v1_ru = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="deepvk/deberta-v1-base",
     model_type=["dense"],
     languages=["rus-Cyrl"],
@@ -493,7 +493,7 @@ deberta_v1_ru = ModelMeta(
 )
 
 rubert_base_cased = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="DeepPavlov/rubert-base-cased",
     model_type=["dense"],
     languages=["rus-Cyrl"],
@@ -530,7 +530,7 @@ rubert_base_cased = ModelMeta(
 )
 
 distilrubert_small_cased_conversational = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="DeepPavlov/distilrubert-small-cased-conversational",
     model_type=["dense"],
     languages=["rus-Cyrl"],
@@ -566,7 +566,7 @@ distilrubert_small_cased_conversational = ModelMeta(
 )
 
 rubert_base_cased_sentence = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="DeepPavlov/rubert-base-cased-sentence",
     model_type=["dense"],
     languages=["rus-Cyrl"],
@@ -592,7 +592,7 @@ rubert_base_cased_sentence = ModelMeta(
 )
 
 labse_en_ru = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="cointegrated/LaBSE-en-ru",
     model_type=["dense"],
     languages=["rus-Cyrl"],
@@ -621,7 +621,7 @@ turbo_models_datasets = set(
     # Not MTEB: {"IlyaGusev/gazeta", "zloelias/lenta-ru"},
 )
 rubert_tiny_turbo = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sergeyzh/rubert-tiny-turbo",
     model_type=["dense"],
     languages=["rus-Cyrl"],
@@ -645,7 +645,7 @@ rubert_tiny_turbo = ModelMeta(
 )
 
 rubert_mini_frida = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sergeyzh/rubert-mini-frida",
     model_type=["dense"],
     languages=["rus-Cyrl"],
@@ -674,7 +674,7 @@ rubert_mini_frida = ModelMeta(
 )
 
 labse_ru_turbo = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sergeyzh/LaBSE-ru-turbo",
     model_type=["dense"],
     languages=["rus-Cyrl"],
@@ -721,7 +721,7 @@ rosberta_prompts = {
 }
 
 rosberta_ru_en = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=rosberta_prompts,
     ),
@@ -888,7 +888,7 @@ frida_training_datasets = {
 }
 
 frida = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=frida_prompts,
     ),
@@ -959,7 +959,7 @@ berta_training_datasets = (
 )  # distilled from FRIDA
 
 berta = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sergeyzh/BERTA",
     model_type=["dense"],
     languages=["rus-Cyrl"],
@@ -1030,7 +1030,7 @@ user2_prompts = {
     PromptType.document.value: "search_document: ",
 }
 user2_small = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=user2_prompts,
     ),
@@ -1064,7 +1064,7 @@ user2_small = ModelMeta(
 )
 
 user2_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=user2_prompts,
     ),

@@ -87,6 +87,41 @@ _MISSING_N_EMBEDDING_MODELS = [
 ]
 
 
+def test_model_meta_hashable():
+    """Test that ModelMeta is hashable and considers experiment_kwargs in hash/equality."""
+    model1 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model",
+            revision="test_rev",
+            embed_dim=384,
+            experiment_kwargs={"param1": "value1"},
+        )
+    )
+
+    model2 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model2",
+            revision="test_rev2",
+            embed_dim=512,
+            experiment_kwargs={"param1": "value2"},
+        )
+    )
+
+    model3 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model",
+            revision="test_rev",
+            embed_dim=384,
+            experiment_kwargs={"param1": "value1"},
+        )
+    )
+
+    assert hash(model1) == hash(model3)
+
+    assert len({model1, model2}) == 2
+    assert len({model1, model3}) == 1
+
+
 @pytest.mark.parametrize(
     "training_datasets",
     [
@@ -219,6 +254,34 @@ def test_get_model_metas_each_model_type(model_type):
         assert model_type in model.model_type
 
 
+def test_ensure_experiments_kwargs_passed():
+    """
+    Regression test to ensure that experiment kwargs are passed
+    https://github.com/embeddings-benchmark/mteb/issues/4307
+    """
+    experiment = {"array_framework": "pytorch"}
+    # should be passed when in all the following cases:
+    model1 = mteb.get_model("mteb/baseline-random-encoder", **experiment)  # type: ignore[call-arg]
+
+    meta = mteb.get_model_meta(
+        "mteb/baseline-random-encoder",
+        experiment_kwargs=experiment,
+    )
+    model2 = meta.load_model()
+
+    meta = mteb.get_model_meta(
+        "mteb/baseline-random-encoder",
+    )
+    model3 = meta.load_model(**experiment)  # type: ignore[call-arg]
+    assert model1.array_framework == "pytorch"  # type: ignore[attr-defined]
+    assert model2.array_framework == "pytorch"  # type: ignore[attr-defined]
+    assert model3.array_framework == "pytorch"  # type: ignore[attr-defined]
+
+    assert model1.mteb_model_meta.experiment_kwargs == experiment
+    assert model2.mteb_model_meta.experiment_kwargs == experiment
+    assert model3.mteb_model_meta.experiment_kwargs == experiment
+
+
 def test_loader_kwargs_persisted_in_metadata():
     model = mteb.get_model(
         "mteb/baseline-random-encoder",
@@ -274,7 +337,7 @@ def test_model_to_python():
     meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
     assert meta.to_python() == (
         """ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={},
     name='sentence-transformers/all-MiniLM-L6-v2',
     revision='8b3219a92973c328a8e22fadcfa821b5dc75636a',
@@ -299,8 +362,9 @@ def test_model_to_python():
     superseded_by=None,
     modalities=['text'],
     model_type=['dense'],
-    citation=\'@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n\',
+    citation='@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n',
     contacts=None,
+    output_dtypes=None,
 )"""
     )
 
@@ -313,7 +377,7 @@ def test_model_meta_local_path():
 
 def test_load_cross_encoder_via_get_model_meta():
     """Test loading cross-encoder via get_model_meta() with automatic detection."""
-    model_meta = mteb.get_model_meta("cross-encoder/ms-marco-TinyBERT-L-2-v2")
+    model_meta = mteb.get_model_meta("cross-encoder/ms-marco-TinyBERT-L2-v2")
 
     assert model_meta.model_type == ["cross-encoder"]
     assert model_meta.is_cross_encoder
@@ -326,7 +390,7 @@ def test_load_sentence_transformer_via_get_model_meta():
 
     assert model_meta.model_type == ["dense"]
     assert not model_meta.is_cross_encoder
-    assert model_meta.loader.__name__ == "sentence_transformers_loader"
+    assert model_meta.loader.__name__ == "SentenceTransformerEncoderWrapper"
 
 
 def test_load_model_with_experiments():
@@ -345,3 +409,26 @@ def test_load_model_with_experiments():
         model2.mteb_model_meta.experiment_name
         == model_from_meta2.mteb_model_meta.experiment_name
     )
+
+
+def test_get_model_metas_modalities_subset():
+    models = mteb.get_model_metas(modalities=["text"])
+
+    assert len(models) > 0
+    for model in models:
+        assert "text" in model.modalities
+
+
+def test_get_model_metas_modalities_exact():
+    models = mteb.get_model_metas(modalities=["text"], exclusive_modality_filter=True)
+
+    assert len(models) > 0
+    for model in models:
+        assert set(model.modalities) == {"text"}
+
+
+def test_get_model_metas_without_modality_filter_returns_more_models():
+    all_models = mteb.get_model_metas()
+    text_models = mteb.get_model_metas(modalities=["text"])
+
+    assert len(all_models) > len(text_models)

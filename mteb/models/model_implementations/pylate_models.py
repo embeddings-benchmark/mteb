@@ -748,13 +748,13 @@ nomic_embed_supervised_data = {
     "NanoHotpotQARetrieval",
 }
 colbert_zero_citation = """@misc{chaffin2026colbertzeropretrainpretraincolbert,
-  title         = {ColBERT-Zero: To Pre-train Or Not To Pre-train ColBERT models}, 
+  title         = {ColBERT-Zero: To Pre-train Or Not To Pre-train ColBERT models},
   author        = {Antoine Chaffin and Luca Arnaboldi and Amélie Chatelain and Florent Krzakala},
   year          = {2026},
   eprint        = {2602.16609},
   archivePrefix = {arXiv},
   primaryClass  = {cs.CL},
-  url           = {https://arxiv.org/abs/2602.16609}, 
+  url           = {https://arxiv.org/abs/2602.16609},
 }"""
 lightonai__colbert_zero_unsupervised = ModelMeta(
     loader=MultiVectorModel,

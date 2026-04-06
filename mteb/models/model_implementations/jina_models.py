@@ -686,9 +686,8 @@ class JinaV4Wrapper(AbsEncoder):
             scores_list.append(scores_batch)
 
         scores = torch.cat(scores_list, dim=0)
-        assert scores.shape[0] == len(qs), (
-            f"Expected {len(qs)} scores, got {scores.shape[0]}"
-        )
+        if scores.shape[0] != len(qs):
+            raise ValueError(f"Expected {len(qs)} scores, got {scores.shape[0]}")
 
         scores = scores.to(torch.float32)
         return scores
@@ -803,7 +802,7 @@ jina_embeddings_v5_text_small = ModelMeta(
     n_embedding_parameters=155582464,
     memory_usage_mb=1137.0,
     max_tokens=32768,
-    embed_dim=1024,
+    embed_dim=[32, 64, 128, 256, 512, 768, 1024],
     license="cc-by-nc-4.0",
     similarity_fn_name=ScoringFunction.COSINE,
     framework=[
@@ -858,7 +857,7 @@ jina_embeddings_v5_text_nano = ModelMeta(
     n_embedding_parameters=98500608,
     memory_usage_mb=404.0,
     max_tokens=8192,
-    embed_dim=768,
+    embed_dim=[32, 64, 128, 256, 512, 768],
     license="cc-by-nc-4.0",
     similarity_fn_name=ScoringFunction.COSINE,
     framework=[

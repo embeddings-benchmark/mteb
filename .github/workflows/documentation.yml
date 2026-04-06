@@ -40,6 +40,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
+          version: "0.10.12"
 
       - uses: actions/setup-python@v6
         with:
@@ -47,7 +48,7 @@ jobs:
 
       - name: Configure GitHub Pages
         if: github.event_name == 'push'
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d
 
       - name: Install dependencies
         run: uv sync --group docs
@@ -74,4 +75,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

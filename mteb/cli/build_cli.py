@@ -33,7 +33,7 @@ def run(args: argparse.Namespace) -> None:
     elif args.verbosity == 3:
         logging.getLogger("mteb").setLevel(logging.DEBUG)
 
-    if args.benchmarks and (
+    if args.benchmarks and (  # noqa: PLR0916
         args.tasks
         or args.eval_splits
         or args.languages
@@ -303,8 +303,8 @@ def _create_meta(args: argparse.Namespace) -> None:
 
     generate_model_card(
         model_name,
-        tasks,
-        benchmarks,
+        tasks=tasks,
+        benchmarks=benchmarks,
         existing_model_card_id_or_path=from_existing,
         results_cache=ResultCache(results_folder),
         output_path=output_path,
@@ -414,7 +414,7 @@ def _leaderboard(args: argparse.Namespace) -> None:
     except ImportError as e:
         raise ImportError(
             "Seems like some dependencies are not installed. "
-            + "You can likely install these using: `pip install mteb[leaderboard]`. "
+            + "You can likely install these using: `pip install 'mteb[leaderboard]'`. "
             + f"{e}"
         )
 

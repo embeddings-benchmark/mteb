@@ -43,7 +43,7 @@ class WavlmWrapper(AbsEncoder):
         )
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
@@ -214,8 +214,8 @@ wavlm_base_plus = ModelMeta(
     public_training_data=None,
     training_datasets={
         "Libri-Light",
-        "GigaSpeech",
-        "VoxPopuli",
+        "GigaSpeechA2TRetrieval",
+        "VoxPopuliLanguageID",
     },
     modalities=["audio"],
     citation="""
@@ -255,8 +255,8 @@ wavlm_base_plus_sv = ModelMeta(
     public_training_data=None,
     training_datasets={
         "Libri-Light",
-        "GigaSpeech",
-        "VoxPopuli",
+        "GigaSpeechA2TRetrieval",
+        "VoxPopuliLanguageID",
         "VoxCeleb1",
     },
     modalities=["audio"],
@@ -297,8 +297,8 @@ wavlm_base_plus_sd = ModelMeta(
     public_training_data=None,
     training_datasets={
         "Libri-Light",
-        "GigaSpeech",
-        "VoxPopuli",
+        "GigaSpeechA2TRetrieval",
+        "VoxPopuliLanguageID",
         "LibriMix",
     },
     modalities=["audio"],
@@ -376,8 +376,8 @@ wavlm_large = ModelMeta(
     public_training_data=None,
     training_datasets={
         "Libri-Light",
-        "GigaSpeech",
-        "VoxPopuli",
+        "GigaSpeechA2TRetrieval",
+        "VoxPopuliLanguageID",
     },
     modalities=["audio"],
     citation="""

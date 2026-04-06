@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -8,7 +9,7 @@ from tqdm.auto import tqdm
 from transformers import __version__ as transformers_version
 
 from mteb._requires_package import requires_package
-from mteb.models import sentence_transformers_loader
+from mteb.models import SentenceTransformerEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
@@ -18,6 +19,8 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
+
+logger = logging.getLogger(__name__)
 
 MULTILINGUAL_EVALUATED_LANGUAGES = [
     "arb-Arab",
@@ -116,7 +119,7 @@ class GoogleTextEmbeddingModel(AbsEncoder):
                 embeddings_batch = model.get_embeddings(batch, **kwargs)
             # Except the very rare google.api_core.exceptions.InternalServerError
             except Exception as e:
-                print("Retrying once after error:", e)
+                logger.info("Retrying once after error: %s", e)
                 embeddings_batch = model.get_embeddings(batch, **kwargs)
 
             all_embeddings.extend([embedding.values for embedding in embeddings_batch])
@@ -264,7 +267,7 @@ def gemma_embedding_loader(model_name: str, revision: str, **kwargs):
             f"version {min_transformers_version} to run `{model_name}`"
         )
 
-    return sentence_transformers_loader(model_name, revision, **kwargs)
+    return SentenceTransformerEncoderWrapper(model_name, revision, **kwargs)
 
 
 embedding_gemma_300m = ModelMeta(

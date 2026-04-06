@@ -20,7 +20,7 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
         category="a2t",
         eval_splits=["test_5s"],
         eval_langs=["zxx-Zxxx"],
-        main_score="accuracy",
+        main_score="lrap",
         date=("2025-01-01", "2025-12-31"),  # Competition year
         domains=["Spoken", "Speech", "Bioacoustics"],
         task_subtypes=["Species Classification"],
