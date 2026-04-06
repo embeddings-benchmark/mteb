@@ -1,6 +1,7 @@
 import pytest
 import torch
 from datasets import Dataset
+from packaging.version import Version
 from torch.utils.data import DataLoader
 
 import mteb
@@ -43,6 +44,8 @@ task_texts = DataLoader(
     ],
 )
 def test_float_compression(level: OutputDType):
+    if Version(torch.__version__) < Version("2.10.0"):
+        pytest.skip("PyTorch <2.10 don't support extended float types")
     model = mteb.get_model("mteb/baseline-random-encoder")
     wrapper = CompressionWrapper(model, level)
     embeddings = wrapper.encode(
@@ -134,5 +137,5 @@ def test_invalid_clipping_margin(margins: tuple[float, float]):
     ],
 )
 def test_encoder_dtype_on_task(task: AbsTask, model: EncoderProtocol):
-    wrapper = CompressionWrapper(model, OutputDType.FLOAT8_E4M3FN)
+    wrapper = CompressionWrapper(model, OutputDType.BINARY)
     mteb.evaluate(wrapper, task, cache=None)

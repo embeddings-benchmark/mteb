@@ -54,7 +54,7 @@ class KALMWrapper(InstructSentenceTransformerModel):
                 f"No instruction used, because prompt type = {prompt_type.document}"
             )
 
-        if task_metadata.type in ["STS", "PairClassification", "Summarization"]:
+        if task_metadata.type in ["STS", "PairClassification", "Summarization"]:  # noqa: PLR6201
             logger.info(
                 f"No instruction used, because task type = {task_metadata.type}"
             )

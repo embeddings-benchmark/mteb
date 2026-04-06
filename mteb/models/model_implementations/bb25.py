@@ -151,7 +151,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
 
             logger.info(f"Indexed {len(self.corpus_idx_to_id):,} documents")
 
-        def search(
+        def search(  # noqa: PLR0914
             self,
             queries: QueryDatasetType,
             *,

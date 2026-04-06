@@ -191,7 +191,7 @@ class AbsTaskClusteringLegacy(AbsTask):
             evaluate_clusters,
         )
 
-    def _compute_metrics(
+    def _compute_metrics(  # noqa: PLR6301
         self,
         labels: list[int],
         cluster_assignment: list[int],
@@ -227,7 +227,7 @@ class AbsTaskClusteringLegacy(AbsTask):
         elif compute_overall:
             inputs = []
             labels = []
-            for hf_subset in self.metadata.eval_langs:
+            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
                 labels.extend(self.dataset[hf_subset][split][self.label_column_name])
         else:

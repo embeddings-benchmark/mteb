@@ -35,7 +35,7 @@ class CompressionWrapper:
     def __init__(
         self,
         model: EncoderProtocol,
-        output_dtype: OutputDType = OutputDType.FLOAT8_E4M3FN,
+        output_dtype: OutputDType = OutputDType.INT8,
         clipping_margin: tuple[float, float] | None = None,
     ) -> None:
         """Instantiates the wrapper with an embedding model and sets the quantization level.
@@ -146,7 +146,7 @@ class CompressionWrapper:
             The quantized embeddings.
         """
         torch_dtype = self._quantization_level.get_dtype()
-        if self._quantization_level in [
+        if self._quantization_level in [  # noqa: PLR6201
             OutputDType.FLOAT8_E4M3FN,
             OutputDType.FLOAT8_E5M2,
             OutputDType.FLOAT8_E8M0FNU,
@@ -159,7 +159,7 @@ class CompressionWrapper:
         elif self._quantization_level == OutputDType.BF16:
             # Cast to bf16, then back to float32 using PyTorch as numpy doesn't support bf16
             quantized = embeddings.type(torch_dtype).float()
-        elif self._quantization_level in [
+        elif self._quantization_level in [  # noqa: PLR6201
             OutputDType.INT8,
             OutputDType.UINT8,
             OutputDType.INT4,
@@ -167,7 +167,7 @@ class CompressionWrapper:
         ]:
             num_bits = (
                 8
-                if self._quantization_level in [OutputDType.INT8, OutputDType.UINT8]
+                if self._quantization_level in [OutputDType.INT8, OutputDType.UINT8]  # noqa: PLR6201
                 else 4
             )
             if self.clipping_margin is not None:
@@ -177,7 +177,7 @@ class CompressionWrapper:
             steps = (maxs - mins) / (2**num_bits - 1)
             subtract = (
                 0
-                if self._quantization_level in [OutputDType.UINT8, OutputDType.UINT4]
+                if self._quantization_level in [OutputDType.UINT8, OutputDType.UINT4]  # noqa: PLR6201
                 else int(2**num_bits * 0.5)
             )
             quantized = torch.floor((embeddings - mins) / steps) - subtract

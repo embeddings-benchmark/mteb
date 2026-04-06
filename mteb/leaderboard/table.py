@@ -42,7 +42,7 @@ def _get_column_widths(df: pd.DataFrame) -> list[str]:
             value_lengths = [len(f"{value:.2f}") for value in df[column_name]]
         else:
             value_lengths = [len(str(value)) for value in df[column_name]]
-        max_length = max(max(column_word_lengths), max(value_lengths))
+        max_length = max(max(column_word_lengths), max(value_lengths))  # noqa: PLW3301
         n_pixels = 25 + (max_length * 10)
         widths.append(f"{n_pixels}px")
     return widths
@@ -198,8 +198,8 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
             rank_column: "{:.0f}",
             "Embedding Dimensions": "{:.0f}",
             "Max Tokens": "{:.0f}",
-            "Total Parameters (B)": lambda x: _style_number_of_parameters(x),
-            "Active Parameters (B)": lambda x: _style_number_of_parameters(x),
+            "Total Parameters (B)": lambda x: _style_number_of_parameters(x),  # noqa: PLW0108
+            "Active Parameters (B)": lambda x: _style_number_of_parameters(x),  # noqa: PLW0108
         },
         na_rep="",
     )

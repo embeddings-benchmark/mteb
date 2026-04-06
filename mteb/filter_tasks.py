@@ -71,7 +71,7 @@ def filter_tasks(
 ) -> list[type[AbsTask]]: ...
 
 
-def filter_tasks(
+def filter_tasks(  # noqa: PLR0913
     tasks: Iterable[AbsTask] | Iterable[type[AbsTask]],
     *,
     languages: Sequence[str] | None = None,
@@ -165,9 +165,8 @@ def filter_tasks(
             if exclusive_modality_filter:
                 if set(metadata.modalities) != modalities_to_keep:
                     continue
-            else:
-                if not modalities_to_keep.intersection(metadata.modalities):
-                    continue
+            elif not modalities_to_keep.intersection(metadata.modalities):
+                continue
         if exclude_superseded and metadata.superseded_by is not None:
             continue
         is_aggregate = (

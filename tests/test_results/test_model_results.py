@@ -88,7 +88,9 @@ def test_to_dataframe(
 
     t2 = mr.to_dataframe(aggregation_level="split", format="long")
     assert all(
-        col in t2.columns for col in required_columns if col not in ["subset"]
+        col in t2.columns
+        for col in required_columns
+        if col not in ["subset"]  # noqa: PLR6201
     ), "Columns are missing"
     assert "subset" not in t2.columns, "Subset column should not be present"
     assert t1.shape[0] >= t2.shape[0], (
@@ -97,7 +99,9 @@ def test_to_dataframe(
 
     t3 = mr.to_dataframe(aggregation_level="task", format="long")
     assert all(
-        col in t3.columns for col in required_columns if col not in ["subset", "split"]
+        col in t3.columns
+        for col in required_columns
+        if col not in ["subset", "split"]  # noqa: PLR6201
     ), "Columns are missing"
     assert "subset" not in t3.columns, "Subset column should not be present"
     assert "split" not in t3.columns, "Split column should not be present"

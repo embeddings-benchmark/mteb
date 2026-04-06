@@ -64,7 +64,7 @@ class IEMOCAPEmotionClassification(AbsTaskClassification):
             # First ensure we have valid emotion labels and normalize case
             self.dataset[split] = self.dataset[split].filter(
                 lambda example: example["major_emotion"] is not None
-                and example["major_emotion"] != ""
+                and example["major_emotion"] != ""  # noqa: PLC1901
             )
 
             # Map to indices with case normalization for reliability

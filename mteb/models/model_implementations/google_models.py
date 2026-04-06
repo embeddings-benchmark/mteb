@@ -119,7 +119,7 @@ class GoogleTextEmbeddingModel(AbsEncoder):
                 embeddings_batch = model.get_embeddings(batch, **kwargs)
             # Except the very rare google.api_core.exceptions.InternalServerError
             except Exception as e:
-                logger.info("Retrying once after error:", e)
+                logger.info("Retrying once after error: %s", e)
                 embeddings_batch = model.get_embeddings(batch, **kwargs)
 
             all_embeddings.extend([embedding.values for embedding in embeddings_batch])
