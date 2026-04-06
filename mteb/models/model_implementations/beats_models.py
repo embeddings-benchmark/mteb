@@ -48,7 +48,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-_BEATS_SRC_URL = "https://raw.githubusercontent.com/microsoft/unilm/master/beats"
+_BEATS_SRC_URL = "https://raw.githubusercontent.com/microsoft/unilm/732d834db70ee0fc3886b4bcbcfb4ce7fb829be2/beats"
 _BEATS_SRC_FILES = ["BEATs.py", "backbone.py", "modules.py"]
 
 _BEATS_CITATION = """
@@ -106,7 +106,7 @@ class BEATsWrapper(AbsEncoder):
         self.device = device
         self.sampling_rate = 16_000
 
-        checkpoint = torch.load(model_name, map_location="cpu", weights_only=False)
+        checkpoint = torch.load(model_name, map_location=device, weights_only=False)
         cfg = beats_config_cls(checkpoint["cfg"])
         self.model = beats_cls(cfg)
         self.model.load_state_dict(checkpoint["model"])
@@ -172,7 +172,7 @@ class BEATsWrapper(AbsEncoder):
 _common_meta = dict(
     languages=["eng-Latn"],
     open_weights=True,
-    revision="1",
+    revision="732d834db70ee0fc3886b4bcbcfb4ce7fb829be2",
     release_date="2022-12-18",
     max_tokens=None,
     n_parameters=90_000_000,
