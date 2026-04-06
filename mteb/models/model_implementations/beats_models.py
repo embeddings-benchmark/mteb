@@ -193,18 +193,18 @@ _common_meta = dict(
 
 beats_iter1 = ModelMeta(
     loader=BEATsWrapper,
-    name="microsoft/beats-iter1",
+    name="microsoft/beats-iter1-pretrained",
     **_common_meta,
 )
 
 beats_iter2 = ModelMeta(
     loader=BEATsWrapper,
-    name="microsoft/beats-iter2",
+    name="microsoft/beats-iter2-pretrained",
     **_common_meta,
 )
 
 beats_iter3 = ModelMeta(
     loader=BEATsWrapper,
-    name="microsoft/beats-iter3",
+    name="microsoft/beats-iter3-pretrained",
     **_common_meta,
 )
