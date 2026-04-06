@@ -62,7 +62,7 @@ def mocov3_loader(model_name, **kwargs):
 
         @staticmethod
         def get_text_embeddings(
-            self,
+            self,  # noqa: PLW0211
             texts: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,

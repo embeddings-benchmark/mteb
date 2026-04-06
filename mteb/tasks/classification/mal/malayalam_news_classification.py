@@ -35,7 +35,10 @@ class MalayalamNewsClassification(AbsTaskClassification):
         superseded_by="MalayalamNewsClassification.v2",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_columns({"headings": "text"})
 
 

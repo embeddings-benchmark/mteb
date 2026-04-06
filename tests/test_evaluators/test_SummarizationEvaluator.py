@@ -1,14 +1,14 @@
 import pytest
 
 import mteb
-from mteb._evaluators import SummarizationEvaluator
+from mteb._evaluators import SummarizationEvaluator  # noqa: PLC2701
 from tests.mock_tasks import MockSummarizationTask
 
 
 # Fixtures
 @pytest.fixture
 def model():
-    return mteb.get_model("baseline/random-encoder-baseline")
+    return mteb.get_model("mteb/baseline-random-encoder")
 
 
 @pytest.fixture

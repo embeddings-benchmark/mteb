@@ -13,5 +13,6 @@ from .por import *
 from .ron import *
 from .rus import *
 from .spa import *
+from .ukr import *
 from .vie import *
 from .zho import *

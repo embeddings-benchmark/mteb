@@ -35,7 +35,7 @@ class VllmWrapperBase:
     convert = "auto"
     mteb_model_meta: ModelMeta | None = None
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         model: str | ModelMeta,
         revision: str | None = None,
@@ -151,7 +151,7 @@ class VllmWrapperBase:
         try:
             self.cleanup()
         except Exception:
-            pass
+            logger.debug("Failed to cleanup vllm wrapper", exc_info=True)
 
 
 class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
@@ -178,6 +178,7 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
         self,
         model: str | ModelMeta,
         revision: str | None = None,
+        *,
         prompt_dict: dict[str, str] | None = None,
         use_instructions: bool = False,
         instruction_template: (

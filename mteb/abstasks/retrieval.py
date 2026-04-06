@@ -353,6 +353,7 @@ class AbsTaskRetrieval(AbsTask):
         self,
         model: MTEBModels,
         data_split: RetrievalSplitData,
+        *,
         encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
@@ -435,7 +436,7 @@ class AbsTaskRetrieval(AbsTask):
             naucs,
             mrr,
             naucs_mrr,
-            cv_recall,
+            hit_rate,
         ) = retriever.evaluate(
             data_split["relevant_docs"],
             results,
@@ -452,19 +453,19 @@ class AbsTaskRetrieval(AbsTask):
         )
         logger.info("Running retrieval task - Finished.")
         return make_score_dict(
-            ndcg,
-            _map,
-            recall,
-            precision,
-            mrr,
-            naucs,
-            naucs_mrr,
-            cv_recall,
-            task_specific_scores,
-            self._previous_results_model_meta,
+            ndcg=ndcg,
+            _map=_map,
+            recall=recall,
+            precision=precision,
+            mrr=mrr,
+            naucs=naucs,
+            naucs_mrr=naucs_mrr,
+            hit_rate=hit_rate,
+            task_scores=task_specific_scores,
+            previous_results_model_meta=self._previous_results_model_meta,
         )
 
-    def task_specific_scores(
+    def task_specific_scores(  # noqa: PLR6301
         self,
         scores: dict[str, dict[str, float]],
         qrels: RelevantDocumentsType,
@@ -483,7 +484,7 @@ class AbsTaskRetrieval(AbsTask):
         """
         return {}
 
-    def _calculate_descriptive_statistics_from_split(
+    def _calculate_descriptive_statistics_from_split(  # noqa: PLR0914
         self,
         split: str,
         hf_subset: str | None = None,
@@ -502,7 +503,7 @@ class AbsTaskRetrieval(AbsTask):
             corpus = None
             relevant_docs = {}
             top_ranked = {}
-            for hf_subset in self.metadata.eval_langs:
+            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 split_data = self.dataset[hf_subset][split]
                 if queries is None:
                     queries = split_data["queries"]
@@ -605,7 +606,11 @@ class AbsTaskRetrieval(AbsTask):
             top_ranked_statistics=top_ranked_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def _push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+    ) -> None:
         self.convert_v1_dataset_format_to_v2(num_proc)
 
         def _push_section(
@@ -623,14 +628,14 @@ class AbsTaskRetrieval(AbsTask):
                 converter: Function to convert dict to datasets format
             """
             sections = {}
-            for split in data.keys():
+            for split, split_data in data.items():
                 # skip empty instructions and top ranked
-                if subset_item not in data[split] or data[split][subset_item] is None:
+                if subset_item not in split_data or split_data[subset_item] is None:
                     continue
-                if isinstance(data[split][subset_item], Dataset):
-                    sections[split] = data[split][subset_item]
+                if isinstance(split_data[subset_item], Dataset):
+                    sections[split] = split_data[subset_item]
                 elif converter is not None:
-                    subset_data = data[split][subset_item]
+                    subset_data = split_data[subset_item]
                     if subset_data is None:
                         continue
 

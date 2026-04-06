@@ -103,7 +103,9 @@ def test_to_dataframe(
 
     t2 = benchmark_results.to_dataframe(aggregation_level="split", format="long")
     assert all(
-        col in t2.columns for col in required_columns if col not in ["subset"]
+        col in t2.columns
+        for col in required_columns
+        if col not in ["subset"]  # noqa: PLR6201
     ), "Columns are missing"
     assert "subset" not in t2.columns, "Subset column should not be present"
     assert t1.shape[0] >= t2.shape[0], (
@@ -112,7 +114,9 @@ def test_to_dataframe(
 
     t3 = benchmark_results.to_dataframe(aggregation_level="task", format="long")
     assert all(
-        col in t3.columns for col in required_columns if col not in ["subset", "split"]
+        col in t3.columns
+        for col in required_columns
+        if col not in ["subset", "split"]  # noqa: PLR6201
     ), "Columns are missing"
     assert "subset" not in t3.columns, "Subset column should not be present"
     assert "split" not in t3.columns, "Split column should not be present"
@@ -179,7 +183,7 @@ def test_benchmark_results(cache_path: Path) -> None:
         tasks=bench,
         models=[
             "sentence-transformers/all-MiniLM-L6-v2",
-            "baseline/random-encoder-baseline",
+            "mteb/baseline-random-encoder",
         ],
     )
     df = results.get_benchmark_result()
@@ -217,7 +221,7 @@ def test_generate_model_card_with_table_and_benchmarks(
         results_cache=ResultCache(cache_path),
         output_path=output_path,
         add_table_to_model_card=True,
-        models_to_compare=["baseline/random-encoder-baseline"],
+        models_to_compare=["mteb/baseline-random-encoder"],
     )
 
     assert output_path.exists(), "Model card file not created"
@@ -247,7 +251,7 @@ def test_generate_model_card_with_table_and_benchmarks(
                     # Normalize whitespace in table rows
                     normalized = "|".join(cell.strip() for cell in line.split("|"))
                     table_rows.append(normalized)
-                elif line.strip() == "":
+                elif not line.strip():
                     # Empty line might signal end of table
                     if table_rows:
                         break

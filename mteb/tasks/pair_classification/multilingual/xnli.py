@@ -60,7 +60,10 @@ in Natural Language Processing},
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         _dataset = {}
         for lang in self.hf_subsets:
             _dataset[lang] = {}
@@ -71,7 +74,7 @@ in Natural Language Processing},
                 # 0=entailment, 2=contradiction. Filter out neutral to match the task.
                 # Then map entailment as positive (1) and contradiction as negative (0).
                 hf_dataset = self.dataset[lang][split].filter(
-                    lambda x: x["label"] in [0, 2]
+                    lambda x: x["label"] in [0, 2]  # noqa: PLR6201
                 )
                 hf_dataset = hf_dataset.map(
                     lambda example: {"label": 0 if example["label"] == 2 else 1}

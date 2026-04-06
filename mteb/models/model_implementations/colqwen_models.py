@@ -85,6 +85,127 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         )
 
 
+class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
+    """Wrapper for ColQwen3.5 models (colpali_engine)."""
+
+    def __init__(
+        self,
+        model_name: str = "athrael-soju/colqwen3.5-4.5B-v3",
+        revision: str | None = None,
+        device: str | None = None,
+        **kwargs,
+    ):
+        requires_image_dependencies()
+        requires_package(
+            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
+        )
+        from colpali_engine.models import ColQwen3_5, ColQwen3_5Processor
+
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+
+        self.model = ColQwen3_5.from_pretrained(
+            model_name,
+            device_map=self.device,
+            adapter_kwargs={"revision": revision},
+            **kwargs,
+        )
+        self.model.eval()
+
+        self.processor = ColQwen3_5Processor.from_pretrained(model_name)
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        if (
+            "text" not in inputs.dataset.features
+            and "image" not in inputs.dataset.features
+        ):
+            raise ValueError("No text or image features found in inputs.")
+        return self.get_fused_embeddings(inputs, **kwargs)
+
+    def _encode_inputs(self, encoded_inputs: dict[str, torch.Tensor]) -> torch.Tensor:
+        # Clear stale rope_deltas cache to avoid shape mismatches across batches
+        if hasattr(self.model, "rope_deltas"):
+            self.model.rope_deltas = None
+        # ColQwen3_5.forward returns the projection tensor directly (not a named tuple)
+        return self.model(**encoded_inputs)
+
+    def get_fused_embeddings(
+        self,
+        image_texts_pairs: DataLoader[BatchedInput] | None = None,
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ):
+        import torchvision.transforms.functional as F
+        from PIL import Image
+
+        contains_image = "image" in image_texts_pairs.dataset.features
+        contains_text = "text" in image_texts_pairs.dataset.features
+        contains_both = contains_image and contains_text
+
+        if contains_both:
+            progress_desc = "Encoding images+texts"
+        elif contains_image:
+            progress_desc = "Encoding images"
+        elif contains_text:
+            progress_desc = "Encoding texts"
+        else:
+            raise ValueError("No text or image features found in inputs.")
+
+        all_embeds: list[torch.Tensor] = []
+        with torch.no_grad():
+            for batch in tqdm(
+                image_texts_pairs,
+                disable=not show_progress_bar,
+                desc=progress_desc,
+            ):
+                if contains_image:
+                    imgs = [
+                        F.to_pil_image(b.to(self.device))
+                        if not isinstance(b, Image.Image)
+                        else b
+                        for b in batch["image"]
+                    ]
+                else:
+                    imgs = None
+                if contains_text:
+                    texts = batch["text"]
+                else:
+                    texts = None
+                if contains_both:
+                    if len(imgs) != len(texts):
+                        raise ValueError(
+                            f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
+                        )
+
+                if contains_image:
+                    imgs = [img.convert("RGB") for img in imgs]
+                    inputs = self.processor.process_images(imgs)
+                else:
+                    inputs = self.processor.process_queries(texts)
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                outs = self._encode_inputs(inputs)
+                all_embeds.extend(outs.cpu().to(torch.float32))
+
+        padded = torch.nn.utils.rnn.pad_sequence(
+            all_embeds, batch_first=True, padding_value=0
+        )
+        return padded
+
+    def similarity(self, a, b):
+        a = [torch.as_tensor(x) for x in a]
+        b = [torch.as_tensor(x) for x in b]
+        return self.processor.score_multi_vector(a, b, device=self.device)
+
+
 class ColQwen3Wrapper(AbsEncoder):
     """Wrapper for the ColQwen3 vision-language retrieval model."""
 
@@ -194,9 +315,10 @@ class ColQwen3Wrapper(AbsEncoder):
                 else:
                     texts = None
                 if contains_both:
-                    assert len(imgs) == len(texts), (
-                        f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
-                    )
+                    if len(imgs) != len(texts):
+                        raise ValueError(
+                            f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
+                        )
 
                 inputs = self.processor(images=imgs, text=texts)
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
@@ -475,4 +597,48 @@ evoqwen25_vl_retriever_7b_v1 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=EVOQWEN_TRAINING_DATA,
+)
+
+
+COLQWEN35_V3_TRAINING_DATA = {
+    # from https://huggingface.co/datasets/vidore/colpali_train_set
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreArxivQARetrieval",
+    # from https://huggingface.co/datasets/openbmb/VisRAG-Ret-Train-Synthetic-data
+    "VisRAG-Ret-Train-Synthetic-data",
+    # from https://huggingface.co/datasets/openbmb/VisRAG-Ret-Train-In-domain-data
+    "VisRAG-Ret-Train-In-domain-data",
+    # from https://huggingface.co/datasets/llamaindex/vdr-multilingual-train
+    "VDRMultilingualRetrieval",
+    # from https://huggingface.co/datasets/Metric-AI/tabfquad_train_set
+    "VidoreTabfquadRetrieval",
+}
+
+colqwen3_5_v3 = ModelMeta(
+    loader=ColQwen3_5Wrapper,
+    loader_kwargs=dict(
+        torch_dtype=torch.bfloat16,
+    ),
+    name="athrael-soju/colqwen3.5-4.5B-v3",
+    model_type=["late-interaction"],
+    languages=["eng-Latn"],
+    revision="4ad8f151e39bce3adcf88e0bdd72e724c7606638",
+    release_date="2026-03-15",
+    modalities=["image", "text"],
+    n_parameters=4_600_000_000,
+    n_embedding_parameters=635_699_200,
+    memory_usage_mb=8660,
+    max_tokens=262144,
+    embed_dim=128,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "ColPali", "safetensors"],
+    reference="https://huggingface.co/athrael-soju/colqwen3.5-4.5B-v3",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=False,
+    training_datasets=COLQWEN35_V3_TRAINING_DATA,
 )

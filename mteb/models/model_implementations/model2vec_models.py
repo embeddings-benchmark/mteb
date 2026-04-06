@@ -21,10 +21,13 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 MODEL2VEC_CITATION = """@software{minishlab2024model2vec,
-      authors = {Stephan Tulkens, Thomas van Dongen},
-      title = {Model2Vec: Turn any Sentence Transformer into a Small Fast Model},
-      year = {2024},
-      url = {https://github.com/MinishLab/model2vec}
+  author       = {Stephan Tulkens and {van Dongen}, Thomas},
+  title        = {Model2Vec: Fast State-of-the-Art Static Embeddings},
+  year         = {2024},
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.17270888},
+  url          = {https://github.com/MinishLab/model2vec},
+  license      = {MIT}
 }"""
 
 _POTION_MULTILINGUAL_128M_LANGUAGES = [
@@ -342,6 +345,58 @@ potion_base_8m = ModelMeta(
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
     training_datasets=bge_training_data,  # distilled
+    public_training_code="https://github.com/MinishLab/model2vec",
+    public_training_data=None,
+    citation=MODEL2VEC_CITATION,
+)
+
+potion_base_32m = ModelMeta(
+    loader=Model2VecModel,
+    name="minishlab/potion-base-32M",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="fc914ed07732443f18799169a2571d427209c51d",
+    release_date="2025-01-22",
+    n_parameters=32302592,
+    n_embedding_parameters=32302592,
+    memory_usage_mb=123,
+    max_tokens=np.inf,
+    embed_dim=512,
+    license="mit",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["NumPy", "Sentence Transformers", "ONNX", "safetensors"],
+    reference="https://huggingface.co/minishlab/potion-base-32M",
+    use_instructions=False,
+    adapted_from="BAAI/bge-base-en-v1.5",
+    superseded_by=None,
+    training_datasets=bge_training_data,  # distilled
+    public_training_code="https://github.com/MinishLab/model2vec",
+    public_training_data=None,
+    citation=MODEL2VEC_CITATION,
+)
+
+potion_retrieval_32m = ModelMeta(
+    loader=Model2VecModel,
+    name="minishlab/potion-retrieval-32M",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="3c52220caac03b85ca0730a4cdbbe77b92db0a39",
+    release_date="2025-01-23",
+    n_parameters=32302592,
+    n_embedding_parameters=32302592,
+    memory_usage_mb=123,
+    max_tokens=np.inf,
+    embed_dim=512,
+    license="mit",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["NumPy", "Sentence Transformers", "ONNX", "safetensors"],
+    reference="https://huggingface.co/minishlab/potion-retrieval-32M",
+    use_instructions=False,
+    adapted_from="minishlab/potion-base-32M",
+    superseded_by=None,
+    training_datasets=bge_training_data,  # adapted from a distilled base model
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,

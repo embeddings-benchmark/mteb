@@ -6,10 +6,12 @@ on:
   pull_request:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Free disk space
@@ -33,24 +35,44 @@ jobs:
           docker system prune -af
 
       - uses: actions/checkout@v6
+
       - name: Install uv
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
+          version: "0.10.12"
 
       - uses: actions/setup-python@v6
         with:
           python-version: "3.10"
 
+      - name: Configure GitHub Pages
+        if: github.event_name == 'push'
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d
+
       - name: Install dependencies
         run: uv sync --group docs
 
-      - name: Build and Deploy
-        if: github.event_name == 'push'
-        run: |
-          make build-docs
-          uv run --group docs mkdocs gh-deploy --force
-
       - name: Build
-        if: github.event_name == 'pull_request'
         run: make build-docs
+
+      - name: Upload docs artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+  deploy:
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

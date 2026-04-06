@@ -3,6 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
+import mteb
 from mteb.abstasks.task_metadata import TaskMetadata
 from tests.task_grid import (
     MOCK_MAEB_TASK_GRID,
@@ -15,8 +16,6 @@ def check_descriptive_stats(task):
     result_stat = task.calculate_descriptive_statistics()
     # remove descriptive task file
     task.metadata.descriptive_stat_path.unlink()
-    print(task.metadata.name)
-    print(result_stat)
     task_stat = task.expected_stats
 
     for key, value in result_stat.items():
@@ -31,7 +30,7 @@ def test_descriptive_statistics_mock_tasks(task):
 
 @pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID)
 def test_descriptive_statistics_mock_mieb_tasks(task):
-    pytest.importorskip("PIL", reason="Image dependencies are not installed")
+    pytest.importorskip("torchvision", reason="Image dependencies are not installed")
     check_descriptive_stats(task)
 
 
@@ -198,3 +197,70 @@ def test_filled_metadata_is_filled():
         ).is_filled()
         is True
     )
+
+
+def test_contributed_by_field():
+    my_task = TaskMetadata(
+        name="MyTask",
+        dataset={"path": "test/dataset", "revision": "1.0"},
+        description="A test dataset.",
+        reference=None,
+        type="Classification",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="map_at_1000",
+        date=None,
+        domains=None,
+        license=None,
+        task_subtypes=None,
+        annotations_creators=None,
+        dialect=None,
+        sample_creation=None,
+        bibtex_citation="",
+        contributed_by="Acme Corp",
+    )
+    assert my_task.contributed_by == "Acme Corp"
+
+
+def test_task_hf_config():
+    task = mteb.get_task("ArguAna")
+    config = task._create_task_hf_config()
+    assert config.name == task.metadata.name
+    assert config.description == task.metadata.description
+    assert config.evaluation_framework == "mteb"
+    assert len(config.tasks) == 2
+
+    assert config.tasks[0].id == "ArguAna"
+    assert config.tasks[0].config is None
+
+    assert config.tasks[1].id == "ArguAna_default_test"
+    assert config.tasks[1].config == "default"
+    assert config.tasks[1].split == "test"
+
+    assert (
+        config.to_yaml()
+        == """name: ArguAna
+description: 'ArguAna: Retrieval of the Best Counterargument without Prior Topic Knowledge'
+evaluation_framework: mteb
+tasks:
+- id: ArguAna
+- id: ArguAna_default_test
+  config: default
+  split: test
+"""
+    )
+
+
+def test_task_hf_config_from_existing():
+    task1 = mteb.get_task("MIRACLRetrievalHardNegatives")
+    task2 = mteb.get_task("MIRACLRetrievalHardNegatives.v2")
+
+    config1 = task1._create_task_hf_config()
+    config2 = task2._create_task_hf_config(config1)
+
+    assert len(config2.tasks) == 2 * len(config1.tasks)
+
+    assert any(t.id == "MIRACLRetrievalHardNegatives" for t in config2.tasks)
+    assert any(t.id == "MIRACLRetrievalHardNegatives.v2" for t in config2.tasks)

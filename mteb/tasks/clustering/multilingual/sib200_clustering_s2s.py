@@ -239,7 +239,10 @@ class SIB200ClusteringFast(AbsTaskClustering):
 """,  # combined train, validation, and test into test.
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         ds = {}
         for lang in self.hf_subsets:
             labels = []

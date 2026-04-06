@@ -111,7 +111,7 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
@@ -247,6 +247,7 @@ wav2vec2_xlsr_300m = ModelMeta(
     release_date="2021-10-13",
     modalities=["audio"],
     n_parameters=300_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=1200,
     max_tokens=float("inf"),
     embed_dim=1024,
@@ -258,7 +259,12 @@ wav2vec2_xlsr_300m = ModelMeta(
     reference="https://huggingface.co/facebook/wav2vec2-xls-r-300m",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=set(),
+    training_datasets={
+        "VoxPopuliLanguageID",
+        "CommonVoiceMini17A2TRetrieval",
+        "VoxLingua107_Top10",
+        # MLS, BABEL (not in MTEB)
+    },
     citation="""
 @misc{babu2021xlsrselfsupervisedcrosslingualspeech,
       title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
@@ -279,6 +285,7 @@ wav2vec2_xlsr_300m_phoneme = ModelMeta(
     release_date="2022-05-19",
     modalities=["audio"],
     n_parameters=300_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=1200,
     max_tokens=float("inf"),
     embed_dim=1024,
@@ -290,7 +297,12 @@ wav2vec2_xlsr_300m_phoneme = ModelMeta(
     reference="https://huggingface.co/vitouphy/wav2vec2-xls-r-300m-phoneme",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=None,
+    training_datasets={
+        "VoxPopuliLanguageID",
+        "CommonVoiceMini17A2TRetrieval",
+        "VoxLingua107_Top10",
+        # MLS, BABEL (not in MTEB)
+    },
     citation="""
 @misc{babu2021xlsrselfsupervisedcrosslingualspeech,
       title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
@@ -311,6 +323,7 @@ wav2vec2_xlsr_1b = ModelMeta(
     release_date="2024-09-10",
     modalities=["audio"],
     n_parameters=1_000_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=4500,
     max_tokens=float("inf"),
     embed_dim=1024,
@@ -322,7 +335,12 @@ wav2vec2_xlsr_1b = ModelMeta(
     reference="https://huggingface.co/facebook/wav2vec2-xls-r-1b",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=None,
+    training_datasets={
+        "VoxPopuliLanguageID",
+        "CommonVoiceMini17A2TRetrieval",
+        "VoxLingua107_Top10",
+        # MLS, BABEL (not in MTEB)
+    },
     citation="""
 @misc{babu2021xlsrselfsupervisedcrosslingualspeech,
       title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
@@ -343,6 +361,7 @@ wav2vec2_xlsr_2b = ModelMeta(
     release_date="2024-09-10",
     modalities=["audio"],
     n_parameters=2_000_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=9000,
     max_tokens=float("inf"),
     embed_dim=1024,
@@ -354,7 +373,12 @@ wav2vec2_xlsr_2b = ModelMeta(
     reference="https://huggingface.co/facebook/wav2vec2-xls-r-2b",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=None,
+    training_datasets={
+        "VoxPopuliLanguageID",
+        "CommonVoiceMini17A2TRetrieval",
+        "VoxLingua107_Top10",
+        # MLS, BABEL (not in MTEB)
+    },
     citation="""
 @misc{babu2021xlsrselfsupervisedcrosslingualspeech,
       title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
@@ -375,6 +399,7 @@ wav2vec2_xlsr_2b_translation = ModelMeta(
     release_date="2024-09-10",
     modalities=["audio"],
     n_parameters=2_000_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=9200,
     max_tokens=float("inf"),
     embed_dim=1024,
@@ -386,7 +411,12 @@ wav2vec2_xlsr_2b_translation = ModelMeta(
     reference="https://huggingface.co/facebook/wav2vec2-xls-r-2b-21-to-en",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=None,
+    training_datasets={
+        "VoxPopuliLanguageID",
+        "CommonVoiceMini17A2TRetrieval",
+        "VoxLingua107_Top10",
+        # MLS, BABEL (not in MTEB)
+    },
     citation="""
 @misc{babu2021xlsrselfsupervisedcrosslingualspeech,
       title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
@@ -409,6 +439,7 @@ wav2vec2_base = ModelMeta(
     release_date="2020-10-26",
     max_tokens=float("inf"),
     n_parameters=95_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=362,
     embed_dim=768,
     license="apache-2.0",
@@ -418,7 +449,9 @@ wav2vec2_base = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{baevski2020wav2vec20frameworkselfsupervised,
@@ -442,6 +475,7 @@ wav2vec2_base_960h = ModelMeta(
     release_date="2020-10-26",
     max_tokens=float("inf"),
     n_parameters=95_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=360,
     embed_dim=768,
     license="apache-2.0",
@@ -451,7 +485,9 @@ wav2vec2_base_960h = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{baevski2020wav2vec20frameworkselfsupervised,
@@ -475,6 +511,7 @@ wav2vec2_large = ModelMeta(
     release_date="2020-10-26",
     max_tokens=float("inf"),
     n_parameters=317_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=1_209,
     embed_dim=1_024,
     license="apache-2.0",
@@ -484,12 +521,14 @@ wav2vec2_large = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{baevski2020wav2vec20frameworkselfsupervised,
       title={wav2vec 2.0: A Framework for Self-Supervised Learning of Speech Representations},
-      author={Alexei Baevski and Henry Zhou and Abdelrahman Mohamed and Michael Auli},
+      author={Alexei Baevski and Henry Zhou with Abdelrahman Mohamed and Michael Auli},
       year={2020},
       eprint={2006.11477},
       archivePrefix={arXiv},
@@ -508,6 +547,7 @@ wav2vec2_large_xlsr_53 = ModelMeta(
     release_date="2020-10-26",
     max_tokens=float("inf"),
     n_parameters=317_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=1_209,
     embed_dim=1_024,
     license="apache-2.0",
@@ -517,7 +557,9 @@ wav2vec2_large_xlsr_53 = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets={
+        "CommonVoiceMini17A2TRetrieval",
+    },
     modalities=["audio"],
     citation="""
 @misc{conneau2020unsupervisedcrosslingualrepresentationlearning,
@@ -541,6 +583,7 @@ wav2vec2_lv_60_espeak_cv_ft = ModelMeta(
     release_date="2020-10-26",
     max_tokens=float("inf"),
     n_parameters=317_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=1_209,
     embed_dim=1_024,
     license="apache-2.0",
@@ -550,7 +593,9 @@ wav2vec2_lv_60_espeak_cv_ft = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets={
+        "CommonVoiceMini17A2TRetrieval",
+    },
     modalities=["audio"],
     citation="""
 @misc{baevski2020wav2vec20frameworkselfsupervised,

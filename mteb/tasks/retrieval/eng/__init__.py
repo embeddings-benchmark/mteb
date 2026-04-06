@@ -123,6 +123,8 @@ from .hotpot_qa_retrieval import (
 from .image_co_de_t2i_retrieval import ImageCoDeT2IRetrieval
 from .info_seek_it2it_retrieval import InfoSeekIT2ITRetrieval
 from .info_seek_it2t_retrieval import InfoSeekIT2TRetrieval
+from .irpapers_t2i_retrieval import IRPapersT2IRetrieval
+from .irpapers_t2it_retrieval import IRPapersT2ITRetrieval
 from .jl_corpus import JLCorpusA2TRetrieval, JLCorpusT2ARetrieval
 from .lass import LASSA2TRetrieval, LASST2ARetrieval
 from .legal_bench_consumer_contracts_qa_retrieval import LegalBenchConsumerContractsQA
@@ -145,6 +147,8 @@ from .memotion_i2t_retrieval import MemotionI2TRetrieval
 from .memotion_t2i_retrieval import MemotionT2IRetrieval
 from .met_i2i_retrieval import METI2IRetrieval
 from .ml_questions import MLQuestionsRetrieval
+from .mmdocir_t2i_retrieval import MMDocIRT2IRetrieval
+from .mmdocir_t2it_retrieval import MMDocIRT2ITRetrieval
 from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval
 from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
 from .msmarc_ov2_retrieval import MSMARCOv2
@@ -382,6 +386,8 @@ __all__ = [
     "HotpotQA",
     "HotpotQAHardNegatives",
     "HotpotQAHardNegativesV2",
+    "IRPapersT2IRetrieval",
+    "IRPapersT2ITRetrieval",
     "ImageCoDeT2IRetrieval",
     "InfoSeekIT2ITRetrieval",
     "InfoSeekIT2TRetrieval",
@@ -409,6 +415,8 @@ __all__ = [
     "MACST2ARetrieval",
     "METI2IRetrieval",
     "MLQuestionsRetrieval",
+    "MMDocIRT2IRetrieval",
+    "MMDocIRT2ITRetrieval",
     "MSCOCOI2TRetrieval",
     "MSCOCOT2IRetrieval",
     "MSMARCOHardNegatives",

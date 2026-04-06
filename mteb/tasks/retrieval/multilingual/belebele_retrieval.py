@@ -178,8 +178,8 @@ class BelebeleRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BelebeleRetrieval",
         dataset={
-            "path": "facebook/belebele",
-            "revision": "75b399394a9803252cfec289d103de462763db7c",
+            "path": "mteb/belebele",
+            "revision": "979a211276faa22f671e69d096634193567cfd05",
         },
         description=(
             "Belebele is a multiple-choice machine reading comprehension (MRC) dataset spanning 122 language variants "
@@ -246,7 +246,7 @@ class BelebeleRetrieval(AbsTaskRetrieval):
                         "title": "",
                         "text": row["flores_passage"],
                     }
-                    context_idx = context_idx + 1
+                    context_idx = context_idx + 1  # noqa: PLR6104
 
             for row in ds_question:
                 query = row["question"]

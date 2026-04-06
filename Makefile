@@ -5,17 +5,16 @@ install:
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	uv sync --no-editable --extra bm25s --extra image --extra audio --extra codecarbon --extra leaderboard --extra faiss-cpu --group dev
+	uv sync --extra bm25s --extra image --extra audio --extra leaderboard --extra faiss-cpu --group dev
 
 lint:
 	@echo "--- 🧹 Running linters ---"
-	uv run --no-sync ruff format . 			# running ruff formatting
-	uv run --no-sync ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
+	uv run --no-sync ruff format .
+	uv run --no-sync ruff check . --fix --exit-non-zero-on-fix
 	uv run --no-sync typos
 
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
-	# Required for CI to work, otherwise it will just pass
 	uv run --no-sync ruff format . --check
 	uv run --no-sync ruff check .
 	uv run --no-sync typos --diff
@@ -36,8 +35,7 @@ pr:
 
 build-docs: build-docs-overview
 	@echo "--- 📚 Building documentation ---"
-	@echo "--- 🔍 Building with strict mode ---"
-	uv run --no-sync --group docs mkdocs build --strict
+	uv run --no-sync --group docs zensical build --clean
 
 
 build-docs-overview:
@@ -49,7 +47,7 @@ build-docs-overview:
 
 serve-docs:
 	@echo "--- 📚 Serving documentation ---"
-	uv run --no-sync --group docs python -m mkdocs serve
+	uv run --no-sync --group docs zensical serve
 
 
 model-load-test:
@@ -77,7 +75,7 @@ leaderboard-test-all:
 
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
-	uv run --no-sync --extra leaderboard python -m mteb.leaderboard.app
+	uv run --extra leaderboard python -m mteb leaderboard
 
 format-citations:
 	@echo "--- 🧹 Formatting citations ---"

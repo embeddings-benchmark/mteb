@@ -47,7 +47,10 @@ and de Paiva, Valeria},
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         _dataset = {}
 
         # Do not process the subsets we won't use
@@ -62,10 +65,9 @@ and de Paiva, Valeria},
         )
 
         for split in self.metadata.eval_splits:
-            print(self.dataset[split]["entailment_label"])
             # keep labels 0=entailment and 2=contradiction, and map them as 1 and 0 for binary classification
             hf_dataset = self.dataset[split].filter(
-                lambda x: x["entailment_label"] in [0, 2]
+                lambda x: x["entailment_label"] in [0, 2]  # noqa: PLR6201
             )
             hf_dataset = hf_dataset.map(
                 lambda example: {"label": 0 if example["entailment_label"] == 2 else 1}

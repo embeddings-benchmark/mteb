@@ -23,6 +23,7 @@ class ClusteringEvaluator(Evaluator):
     def __init__(
         self,
         dataset: Dataset,
+        *,
         input_column_name: str,
         label_column_name: str,
         task_metadata: TaskMetadata,
@@ -49,7 +50,7 @@ class ClusteringEvaluator(Evaluator):
     ) -> list[int]:
         data_loader = create_dataloader(
             self.dataset,
-            self.task_metadata,
+            task_metadata=self.task_metadata,
             input_column=self.input_column_name,
             num_proc=num_proc,
             **encode_kwargs,

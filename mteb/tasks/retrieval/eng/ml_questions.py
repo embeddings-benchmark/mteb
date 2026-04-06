@@ -74,7 +74,7 @@ Reddy, Siva},
 
         self.data_loaded = True
 
-    def _load_data_for_split(self, download_dir, split):
+    def _load_data_for_split(self, download_dir, split):  # noqa: PLR6301
         queries, corpus, qrels = {}, {}, {}
 
         download_dir = Path(download_dir)

@@ -27,7 +27,7 @@ _LANGUAGES = {
 }
 
 
-def _load_miracl_data(
+def _load_miracl_data(  # noqa: PLR0914
     path: str,
     langs: list,
     splits: list[str],

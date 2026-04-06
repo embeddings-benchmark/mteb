@@ -1,5 +1,5 @@
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 greennode_embedding_large_vn_v1_training_data = {
     "GreenNodeTableMarkdownRetrieval",
@@ -13,7 +13,7 @@ greennode_embedding_large_vn_v1 = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     open_weights=True,
     n_parameters=567754752,
     n_embedding_parameters=256_002_048,
@@ -39,7 +39,7 @@ greennode_embedding_large_vn_mixed_v1 = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     open_weights=True,
     n_parameters=567754752,
     n_embedding_parameters=256_002_048,
@@ -57,15 +57,67 @@ greennode_embedding_large_vn_mixed_v1 = ModelMeta(
     adapted_from="BAAI/bge-m3",
 )
 
+greennode_embedding_kalm_mini_instruct_vn_v1 = ModelMeta(
+    name="GreenNode/GreenNode-Embedding-KaLM-Mini-Instruct-VN-V1",
+    model_type=["dense"],
+    revision="c123a4b0ef40ed847cb5122ff2c70ffc92129f3a",
+    release_date="2026-02-26",
+    languages=[
+        "vie-Latn",
+    ],
+    loader=SentenceTransformerEncoderWrapper,
+    open_weights=True,
+    n_parameters=494032768,
+    n_embedding_parameters=136_134_656,
+    memory_usage_mb=1885,
+    embed_dim=896,
+    license="cc-by-4.0",
+    max_tokens=32768,
+    reference="https://huggingface.co/GreenNode/GreenNode-Embedding-KaLM-Mini-Instruct-VN-V1",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/GreenNode/GreenNode-Table-Markdown-Retrieval-VN",
+    training_datasets=greennode_embedding_large_vn_v1_training_data,
+    adapted_from="KaLM-Embedding/KaLM-embedding-multilingual-mini-instruct-v2.5",
+)
+
+greennode_embedding_e5_large_vn_v1 = ModelMeta(
+    name="GreenNode/GreenNode-Embedding-E5-Large-VN-V1",
+    model_type=["dense"],
+    revision="a15ad86a2a4c80f168210a17cc5d540a52354113",
+    release_date="2026-02-26",
+    languages=[
+        "vie-Latn",
+    ],
+    loader=SentenceTransformerEncoderWrapper,
+    open_weights=True,
+    n_parameters=560_000_000,
+    n_embedding_parameters=256_002_048,
+    memory_usage_mb=2136,
+    embed_dim=1024,
+    license="cc-by-4.0",
+    max_tokens=512,
+    reference="https://huggingface.co/GreenNode/GreenNode-Embedding-E5-Large-VN-V1",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/GreenNode/GreenNode-Table-Markdown-Retrieval-VN",
+    training_datasets=greennode_embedding_large_vn_v1_training_data,
+    adapted_from="intfloat/multilingual-e5-large",
+)
+
 aiteamvn_vietnamese_embeddings = ModelMeta(
     name="AITeamVN/Vietnamese_Embedding",
     model_type=["dense"],
-    revision="fcbbb905e6c3757d421aaa5db6fd7c53d038f6fb",
+    revision="dea33aa1ab339f38d66ae0a40e6c40e0a9249568",
     release_date="2024-03-17",
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     open_weights=True,
     n_parameters=567754752,
     n_embedding_parameters=256_002_048,
@@ -89,15 +141,16 @@ aiteamvn_vietnamese_embeddings = ModelMeta(
 }""",
 )
 
-hiieu_halong_embedding = ModelMeta(
-    name="hiieu/halong_embedding",
+
+contextboxai_halong_embedding = ModelMeta(
+    name="contextboxai/halong_embedding",
     model_type=["dense"],
     revision="b57776031035f70ed2030d2e35ecc533eb0f8f71",
     release_date="2024-07-06",
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     use_instructions=False,
     open_weights=True,
     n_parameters=278043648,
@@ -106,7 +159,7 @@ hiieu_halong_embedding = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     max_tokens=514,
-    reference="https://huggingface.co/hiieu/halong_embedding",
+    reference="https://huggingface.co/contextboxai/halong_embedding",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "safetensors"],
     public_training_code=None,
@@ -129,7 +182,7 @@ sup_simcse_vietnamese_phobert_base_ = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     use_instructions=False,
     open_weights=True,
     n_parameters=134998272,
@@ -168,7 +221,7 @@ bkai_foundation_models_vietnamese_bi_encoder = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     use_instructions=False,
     open_weights=True,
     n_parameters=134998272,

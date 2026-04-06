@@ -1,6 +1,11 @@
-# Adding a Dataset
+---
+title: "Adding a Task"
+icon: lucide/square
+---
 
-To add a new dataset to MTEB, you need to do four things:
+# Adding a Task
+
+To add a new task or dataset to MTEB, you need to do four things:
 
 1. **Implement a new task**: Implement a task with the desired dataset, by subclassing an abstract task
 2. **Fill out the metadata** describing the task, main scores, languages etc.
@@ -113,7 +118,7 @@ Once we have decided on task, we can implement them as follows:
     # {'id': 1, 'text': 'shall yet be glad for him, and he shall bless', 'label': 1}
 
     # ensure that we can evaluate the model on the task
-    mdl = mteb.get_model("baseline/random-encoder-baseline")
+    mdl = mteb.get_model("mteb/baseline-random-encoder")
     results = mteb.evaluate(mdl, task)
     print(results[0].get_score())  # print the accuracy score of the random baseline
     # 0.49428571428571433
@@ -166,7 +171,7 @@ Once we have decided on task, we can implement them as follows:
     # {'sentences': 'Ryssland kritiserar utökade Irak-sanktioner', 'labels': 'domestic news'}
 
     # ensure that we can evaluate the model on the task
-    mdl = mteb.get_model("baseline/random-encoder-baseline")
+    mdl = mteb.get_model("mteb/baseline-random-encoder")
     results = mteb.evaluate(mdl, task)
     print(results[0].get_score())  # print the v_measure score of the random baseline
     # 0.006444026234557669
@@ -214,7 +219,7 @@ Once we have decided on task, we can implement them as follows:
     # {'18572': 1}
 
     # ensure that we can evaluate the model on the task
-    mdl = mteb.get_model("baseline/random-encoder-baseline")
+    mdl = mteb.get_model("mteb/baseline-random-encoder")
     results = mteb.evaluate(mdl, task)
     print(results[0].get_score())  # print the ndcg_at_10 score of the random baseline
     # 0.021194685839832323
@@ -270,7 +275,7 @@ Once we have decided on task, we can implement them as follows:
     # {'sentence1': 'Akrund is a small village in Dhansura Taluka of Aravalli district of northern Gujarat in western India.', 'sentence2': 'રાહતલાવ ભારત દેશના પશ્ચિમ ભાગમાં આવેલા ગુજરાત રાજ્યના ચરોતર પ્રદેશમાં આવેલા આણંદ જિલ્લામાં આવેલા આણંદ તાલુકામાં આવેલું એક ગામ છે.', 'score': 1.0}
 
     # ensure that we can evaluate the model on the task
-    mdl = mteb.get_model("baseline/random-encoder-baseline")
+    mdl = mteb.get_model("mteb/baseline-random-encoder")
     results = mteb.evaluate(mdl, task)
     print(results[0].get_score())  # print the spearman score of the random baseline
     # 0.021194685839832323
@@ -316,7 +321,7 @@ Once we have decided on task, we can implement them as follows:
         which can then be run as follows:
         ```py
         task = MyClassificationtask()
-        mdl = mteb.get_model("baseline/random-encoder-baseline")
+        mdl = mteb.get_model("mteb/baseline-random-encoder")
         results = mteb.evaluate(mdl, task)
         ```
     === "Retrieval"
@@ -390,7 +395,7 @@ Once we have decided on task, we can implement them as follows:
         which can then be run as follows:
         ```py
         task = MyRetrievalTask()
-        mdl = mteb.get_model("baseline/random-encoder-baseline")
+        mdl = mteb.get_model("mteb/baseline-random-encoder")
         results = mteb.evaluate(mdl, task)
         ```
 

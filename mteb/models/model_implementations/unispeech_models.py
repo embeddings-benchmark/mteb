@@ -43,7 +43,7 @@ class UniSpeechWrapper(AbsEncoder):
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
@@ -130,6 +130,7 @@ unispeech_base = ModelMeta(
     release_date="2021-10-12",
     max_tokens=float("inf"),
     n_parameters=94_000_000,
+    n_embedding_parameters=24576,
     memory_usage_mb=359,
     embed_dim=768,
     license="apache-2.0",

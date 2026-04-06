@@ -60,7 +60,10 @@ Rapp, Reinhard},
         superseded_by="BUCC.v2",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         dataset = {}
         for lang in self.dataset:
             dataset[lang] = {}

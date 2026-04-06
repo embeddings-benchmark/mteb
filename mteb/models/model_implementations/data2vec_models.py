@@ -42,7 +42,7 @@ class Data2VecAudioWrapper(AbsEncoder):
 
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
@@ -127,6 +127,7 @@ data2vec_audio_base = ModelMeta(
     release_date="2022-02-07",  # Paper release date
     max_tokens=None,
     n_parameters=93_164_288,
+    n_embedding_parameters=0,
     memory_usage_mb=355,
     embed_dim=768,
     license="mit",
@@ -136,7 +137,9 @@ data2vec_audio_base = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/data2vec",
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
-    training_datasets=set(),  # "LibriSpeech": ["train"]},
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{baevski2022data2vecgeneralframeworkselfsupervised,
@@ -159,6 +162,7 @@ data2vec_audio_large = ModelMeta(
     release_date="2022-02-07",  # Paper release date
     max_tokens=None,
     n_parameters=313_276_416,
+    n_embedding_parameters=0,
     memory_usage_mb=1195,
     embed_dim=1024,
     license="mit",
@@ -168,7 +172,9 @@ data2vec_audio_large = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/data2vec",
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
-    training_datasets=set(),  # "LibriSpeech": ["train"]},
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{baevski2022data2vecgeneralframeworkselfsupervised,

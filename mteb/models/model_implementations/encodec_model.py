@@ -68,7 +68,7 @@ class EncodecWrapper(AbsEncoder):
                 min_samples = self.sampling_rate
                 if array.shape[-1] < min_samples:
                     padding = torch.zeros(min_samples - array.shape[-1])
-                    array = torch.cat([array, padding])
+                    array = torch.cat([array, padding])  # noqa: PLW2901
 
                 audio_arrays.append(array.numpy())
 
@@ -100,7 +100,7 @@ class EncodecWrapper(AbsEncoder):
                 embeddings = torch.mean(latent, dim=2)  # Average over time dimension
 
                 # Normalize embeddings
-                embeddings = embeddings / embeddings.norm(dim=-1, keepdim=True)
+                embeddings = embeddings / embeddings.norm(dim=-1, keepdim=True)  # noqa: PLR6104
 
                 all_embeddings.append(embeddings.cpu().detach())
 
@@ -130,6 +130,7 @@ encodec_24khz = ModelMeta(
     release_date="2022-10-25",
     max_tokens=None,
     n_parameters=23_273_218,
+    n_embedding_parameters=0,
     memory_usage_mb=88,
     embed_dim=128,
     license="cc-by-nc-4.0",
@@ -139,7 +140,12 @@ encodec_24khz = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/encodec",
     public_training_data=None,
-    training_datasets=None,  # ["AudioSet", "VCTK", "DNS-Challenge"],
+    training_datasets={
+        "FSD50K",
+        "CommonVoiceMini17A2TRetrieval",
+        "AudioSetMini",
+        # DNS Challenge 4, Jamendo (not in MTEB)
+    },
     modalities=["audio"],
     citation="""
 @misc{défossez2022highfidelityneuralaudio,

@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+import numpy as np
 from prettify_list import pretty_long_list
 
 import mteb
@@ -13,22 +14,27 @@ if TYPE_CHECKING:
     from mteb.models import ModelMeta
 
 model_entry = """
-####  {model_name_w_link}
+####  `{model_name}` {{ .model-copy }}
 
- **License:** {license}
+ **License:** {license} {learn_more}
 
+| :lucide-cpu: Parameters | :lucide-layers: Emb. Dim | :lucide-ruler: Max Tokens | :lucide-database: Memory | :lucide-calendar: Released | :lucide-languages: Languages |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| {n_parameters} | {embed_dim} | {max_tokens} | {required_memory} | {release_date} | {languages} |
 
-| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
-|-------|-------|-------|-------|-------|-------|
-| {max_tokens} | {embed_dim} | {n_parameters} | {required_memory} | {release_date} | {languages} |
 """
 
 h1_header = """
+---
+icon: {icon}
+title: "{modalities} Model"
+---
+
 # {modalities} Model
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-- **Number of models:** {num_models}
+{num_models} Models
 
 {models_md}
 """
@@ -37,6 +43,20 @@ h2_header = """
 ## {instruction_based}
 
 {models_md}
+"""
+
+index_header = """
+---
+title: "Available Models"
+---
+
+# Available Models
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
+
+Browse models by modality:
+
+{modality_links}
 """
 
 
@@ -54,6 +74,13 @@ citation_chunk = """
 ```
 """
 
+modality_to_icon = {
+    "Text": "lucide/type",
+    "Image": "lucide/image",
+    "Audio": "lucide/audio-lines",
+    "Multimodal": "lucide/layers",
+}
+
 
 def human_readable_number(num: int) -> str:
     """Convert a number to a human-readable format with suffixes (K, M, B, T).
@@ -62,6 +89,8 @@ def human_readable_number(num: int) -> str:
     1500 -> 1.5K
     2000000 -> 2M
     """
+    if np.isinf(num):
+        return "Infinite"
     for unit in ["", "K", "M", "B", "T"]:
         if abs(num) < 1000:
             return f"{num:.1f}{unit}" if unit else str(int(num))
@@ -70,7 +99,15 @@ def human_readable_number(num: int) -> str:
 
 
 def modality_to_string(modality: tuple[str, ...]) -> str:
+    if len(modality) > 2:
+        return (
+            "Multimodal"  # anything that is more than 2 we just display as multimodal
+        )
     return ("-".join(modality)).capitalize()
+
+
+def modality_to_filename(modality: tuple[str, ...]) -> str:
+    return f"{modality_to_string(modality).lower().replace('-', '_')}.md"
 
 
 def required_memory_string(mem_in_mb: int | None) -> str:
@@ -86,14 +123,12 @@ def required_memory_string(mem_in_mb: int | None) -> str:
 def format_model_entry(meta: ModelMeta) -> str:
     revision = meta.revision or "not specified"
     license = meta.license or "not specified"
-    model_name_w_link = (
-        f"[`{meta.name}`]({meta.reference})" if meta.reference else meta.name
-    )
     max_tokens = (
         human_readable_number(meta.max_tokens)
         if meta.max_tokens is not None
         else "not specified"
     )
+    learn_more = f"• [Learn more →]({meta.reference})" if meta.reference else ""
     embed_dim = meta.embed_dim if meta.embed_dim is not None else "not specified"
     n_parameters = (
         human_readable_number(meta.n_parameters)
@@ -109,7 +144,9 @@ def format_model_entry(meta: ModelMeta) -> str:
     required_mem = required_memory_string(meta.memory_usage_mb)
 
     entry = model_entry.format(
-        model_name_w_link=model_name_w_link,
+        icon=modality_to_icon.get(meta.modalities[0], "lucide/layers"),
+        model_name=meta.name,
+        learn_more=learn_more,
         revision=revision,
         license=license,
         max_tokens=max_tokens,
@@ -160,10 +197,14 @@ def main(folder: Path) -> None:
                 models_md=_model_entries.strip(),
             )
             modalities_string = modality_to_string(model_modalities)
-            doc_task = folder / f"{modalities_string.lower().replace('-', '_')}.md"
+            doc_task = folder / modality_to_filename(model_modalities)
             with doc_task.open("w") as f:
+                icon = modality_to_icon.get(
+                    modalities_string, modality_to_icon["Multimodal"]
+                )
                 f.write(
                     h1_header.format(
+                        icon=icon,
                         modalities=modalities_string,
                         num_models=len(metas),
                         models_md=md.strip(),

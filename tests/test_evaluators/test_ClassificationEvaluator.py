@@ -3,14 +3,14 @@ import pytest
 from sklearn.linear_model import LogisticRegression
 
 import mteb
-from mteb._evaluators import SklearnEvaluator
+from mteb._evaluators import SklearnEvaluator  # noqa: PLC2701
 from tests.mock_tasks import MockClassificationTask
 
 
 # Fixtures
 @pytest.fixture
 def model():
-    return mteb.get_model("baseline/random-encoder-baseline")
+    return mteb.get_model("mteb/baseline-random-encoder")
 
 
 @pytest.fixture
@@ -28,15 +28,12 @@ def test_expected_scores(model, mock_task):
     evaluator = SklearnEvaluator(
         train_data,
         test_data,
-        mock_task.input_column_name,
-        mock_task.label_column_name,
-        mock_task.metadata,
+        values_column_name=mock_task.input_column_name,
+        label_column_name=mock_task.label_column_name,
+        task_metadata=mock_task.metadata,
         hf_split="test",
         hf_subset="default",
-        evaluator_model=LogisticRegression(
-            n_jobs=-1,
-            max_iter=10,
-        ),
+        evaluator_model=LogisticRegression(max_iter=10),
     )
     y_pred, test_cache = evaluator(model, encode_kwargs={"batch_size": 32})
 
@@ -72,15 +69,12 @@ def test_cache_usage_binary(model):
     evaluator_initial = SklearnEvaluator(
         train_data,
         test_data,
-        mock_task.input_column_name,
-        mock_task.label_column_name,
-        mock_task.metadata,
+        values_column_name=mock_task.input_column_name,
+        label_column_name=mock_task.label_column_name,
+        task_metadata=mock_task.metadata,
         hf_split="test",
         hf_subset="default",
-        evaluator_model=LogisticRegression(
-            n_jobs=-1,
-            max_iter=10,
-        ),
+        evaluator_model=LogisticRegression(max_iter=10),
     )
     _, test_cache_initial = evaluator_initial(model, encode_kwargs={"batch_size": 32})
 
@@ -88,15 +82,12 @@ def test_cache_usage_binary(model):
     evaluator_with_cache = SklearnEvaluator(
         train_data,
         test_data,
-        mock_task.input_column_name,
-        mock_task.label_column_name,
-        mock_task.metadata,
+        values_column_name=mock_task.input_column_name,
+        label_column_name=mock_task.label_column_name,
+        task_metadata=mock_task.metadata,
         hf_split="test",
         hf_subset="default",
-        evaluator_model=LogisticRegression(
-            n_jobs=-1,
-            max_iter=10,
-        ),
+        evaluator_model=LogisticRegression(max_iter=10),
     )
     y_pred, test_cache_after_cache_usage = evaluator_with_cache(
         model, encode_kwargs={"batch_size": 32}, test_cache=test_cache_initial

@@ -57,7 +57,8 @@ class ListConRanker(RerankerWrapper):
         queries = [text for batch in inputs1 for text in batch["query"]]
         passages = [text for batch in inputs2 for text in batch["text"]["text"]]
 
-        assert len(queries) == len(passages)
+        if len(queries) != len(passages):
+            raise ValueError("queries and passages must have the same length")
 
         final_scores = []
         query = queries[0]
@@ -93,10 +94,8 @@ class ListConRanker(RerankerWrapper):
                 scores = self.model.multi_passage_in_iterative_inference(query_passages)
                 final_scores += scores
 
-        assert len(final_scores) == len(queries), (
-            f"Expected {len(queries)} scores, got {len(final_scores)}"
-        )
-
+        if len(final_scores) != len(queries):
+            raise ValueError(f"Expected {len(queries)} scores, got {len(final_scores)}")
         return final_scores
 
 
@@ -135,5 +134,6 @@ listconranker = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
+    modalities=["text"],
     citation=LISTCONRANKER_CITATION,
 )

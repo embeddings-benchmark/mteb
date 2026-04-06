@@ -1,4 +1,4 @@
-from mteb.models import ModelMeta, sentence_transformers_loader
+from mteb.models import ModelMeta, SentenceTransformerEncoderWrapper
 
 yuan_emb_zh_datasets = {
     "CMedQAv2-reranking",
@@ -14,7 +14,7 @@ yuan_emb_zh_datasets = {
 yuan_embedding_2_zh = ModelMeta(
     name="IEITYuan/Yuan-embedding-2.0-zh",
     model_type=["dense"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     languages=["zho-Hans"],
     open_weights=True,
     revision="b5ebcace6f4fc6e5a4d1852557eb2dc2d1040cee",

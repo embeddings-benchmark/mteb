@@ -59,7 +59,7 @@ class DummyModel(RandomEncoderBaseline):
 
 class TestCachedEmbeddingWrapper:
     @pytest.fixture(scope="function")
-    def cache_dir(self, tmp_path):
+    def cache_dir(self, tmp_path):  # noqa: PLR6301
         cache_path = tmp_path / "test_cache"
         yield cache_path
         # Cleanup after test
@@ -73,7 +73,7 @@ class TestCachedEmbeddingWrapper:
             FaissCache,
         ],
     )
-    def test_caching_functionality(
+    def test_caching_functionality(  # noqa: PLR0914, PLR6301
         self, cache_dir, cache_backend: type[CacheBackendProtocol]
     ):
         if cache_backend is FaissCache:
@@ -255,11 +255,11 @@ class TestCachedEmbeddingWrapper:
     [
         (
             MockMultiChoiceTask(),
-            mteb.get_model("baseline/random-encoder-baseline"),
+            mteb.get_model("mteb/baseline-random-encoder"),
         ),  # ti2i
         (
             MockRetrievalTask(),
-            mteb.get_model("baseline/random-encoder-baseline"),
+            mteb.get_model("mteb/baseline-random-encoder"),
         ),  # t2t
     ],
 )

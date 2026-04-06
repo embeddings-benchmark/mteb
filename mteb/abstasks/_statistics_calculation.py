@@ -62,7 +62,7 @@ def calculate_image_statistics(images: list[Image.Image]) -> ImageStatistics:
         img_widths.append(width)
 
         img_bytes = img.tobytes()
-        img_hash = hashlib.md5(img_bytes).hexdigest()
+        img_hash = hashlib.md5(img_bytes, usedforsecurity=False).hexdigest()
         seen_hashes.add(img_hash)
 
     return ImageStatistics(
@@ -98,7 +98,7 @@ def calculate_audio_statistics(audios: list[AudioInputItem]) -> AudioStatistics:
         sampling_rates[sampling_rate] += 1
 
         audio_bytes = array.tobytes()
-        audio_hash = hashlib.md5(audio_bytes).hexdigest()
+        audio_hash = hashlib.md5(audio_bytes, usedforsecurity=False).hexdigest()
         unique_audios.add(audio_hash)
 
     return AudioStatistics(

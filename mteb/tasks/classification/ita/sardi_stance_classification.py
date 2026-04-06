@@ -36,10 +36,13 @@ class SardiStanceClassification(AbsTaskClassification):
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         unused_cols = [
             col
             for col in self.dataset["test"].column_names
-            if col not in ["text", "label"]
+            if col not in ["text", "label"]  # noqa: PLR6201
         ]
         self.dataset = self.dataset.remove_columns(unused_cols)

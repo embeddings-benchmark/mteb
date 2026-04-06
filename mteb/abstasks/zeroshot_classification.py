@@ -102,7 +102,7 @@ class AbsTaskZeroShotClassification(AbsTask):
             labels = self.dataset[hf_subset][split][self.label_column_name]
         elif compute_overall:
             inputs, labels = [], []
-            for hf_subset in self.metadata.eval_langs:
+            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
                 labels.extend(self.dataset[hf_subset][split][self.label_column_name])
         else:
@@ -184,7 +184,7 @@ class AbsTaskZeroShotClassification(AbsTask):
             torch.tensor(probs).argmax(dim=1).tolist(),
         )
 
-    def _calculate_scores(
+    def _calculate_scores(  # noqa: PLR6301
         self,
         labels: list[int],
         predictions: list[float],
@@ -193,7 +193,11 @@ class AbsTaskZeroShotClassification(AbsTask):
             accuracy=metrics.accuracy_score(labels, predictions),
         )
 
-    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def _push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+    ) -> None:
         self._upload_dataset_to_hub(
             repo_name,
             [

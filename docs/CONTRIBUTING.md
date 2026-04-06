@@ -1,4 +1,9 @@
-# Contributing to `mteb`
+---
+title: "Setting Up MTEB"
+icon: lucide/user-pen
+---
+
+# Setting Up MTEB
  We welcome contributions. Please see the current open issues or open an issue yourself. Once you have decided on what you'd like to contribute, this document describes how to set up the repository for development.
 
 
@@ -41,6 +46,16 @@ make lint
 ```
 
 This command is equivalent to the command run during CI. It will check for code style and formatting issues.
+
+
+### Running type checks
+To run the type checks before a PR, you can use the following command:
+
+```bash
+make typecheck
+```
+
+This command is equivalent to the one run during CI. It will use mypy to check for issues with type declarations.
 
 
 ## Semantic Versioning and Releases

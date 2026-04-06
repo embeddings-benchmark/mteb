@@ -48,6 +48,7 @@ Licenses = (
         "msr-la-nc",
         "multiple",
         "gemma",
+        "eupl-1.2",
     ]
 )
 """The different licenses that a dataset or model can have. This list can be extended as needed."""
@@ -64,5 +65,6 @@ Modalities = Literal[
     "text",
     "image",
     "audio",
+    "video",
 ]
 """The different modalities that a model can support."""

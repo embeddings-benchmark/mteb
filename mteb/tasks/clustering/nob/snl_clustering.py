@@ -58,7 +58,10 @@ class SNLClustering(AbsTaskClusteringLegacy):
         superseded_by="SNLHierarchicalClusteringP2P",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         splits = self.metadata.eval_splits
 
         documents: list = []
@@ -76,7 +79,8 @@ class SNLClustering(AbsTaskClusteringLegacy):
             documents.extend(ds_split["article"])
             labels.extend(_label)
 
-            assert len(documents) == len(labels)
+            if len(documents) != len(labels):
+                raise ValueError(f"Expected {len(documents)} labels, got {len(labels)}")
 
             rng = random.Random(42)  # local only seed
             pairs = list(zip(documents, labels))

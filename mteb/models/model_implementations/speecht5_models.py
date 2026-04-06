@@ -46,7 +46,7 @@ class SpeechT5Audio(AbsEncoder):
 
         self.sampling_rate = self.asr_processor.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
@@ -298,6 +298,7 @@ speecht5_asr = ModelMeta(
     release_date="2022-05-16",
     max_tokens=None,
     n_parameters=151_575_936,
+    n_embedding_parameters=None,
     memory_usage_mb=578,
     embed_dim=768,
     license="mit",
@@ -307,7 +308,9 @@ speecht5_asr = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/microsoft/SpeechT5",
     public_training_data="https://www.openslr.org/12",
-    training_datasets=set(),  # {"LibriSpeech": ["train"]},
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{ao2022speecht5unifiedmodalencoderdecoderpretraining,
@@ -331,6 +334,7 @@ speecht5_tts = ModelMeta(
     release_date="2022-05-16",
     max_tokens=None,
     n_parameters=146_335_465,
+    n_embedding_parameters=None,
     memory_usage_mb=558,
     embed_dim=768,
     license="mit",
@@ -340,7 +344,9 @@ speecht5_tts = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/microsoft/SpeechT5",
     public_training_data="https://www.openslr.org/12",
-    training_datasets=set(),  # {"LibriTTS": ["train"]},
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["text"],
     citation="""
 @misc{ao2022speecht5unifiedmodalencoderdecoderpretraining,
@@ -364,6 +370,7 @@ speecht5_multimodal = ModelMeta(
     release_date="2022-05-16",
     max_tokens=None,
     n_parameters=297_911_401,  # Combined ASR + TTS parameters
+    n_embedding_parameters=None,
     memory_usage_mb=1136,  # Combined memory usage
     embed_dim=768,
     license="mit",
@@ -373,7 +380,9 @@ speecht5_multimodal = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/microsoft/SpeechT5",
     public_training_data="http://www.festvox.org/cmu_arctic/",
-    training_datasets=set(),
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio", "text"],
     citation="""
 @misc{ao2022speecht5unifiedmodalencoderdecoderpretraining,

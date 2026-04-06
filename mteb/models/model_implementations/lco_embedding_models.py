@@ -53,7 +53,7 @@ class LCOEmbedding(AbsEncoder):
         # Pre-calculate max samples once
         self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
-    def encode(
+    def encode(  # noqa: PLR0914
         self,
         inputs: DataLoader[BatchedInput],
         *,
@@ -140,6 +140,7 @@ lco_3b = ModelMeta(
     release_date="2025-10-23",
     max_tokens=32768,
     n_parameters=4_703_464_448,
+    n_embedding_parameters=311164928,
     memory_usage_mb=8978,
     embed_dim=2048,
     license="mit",
@@ -149,7 +150,9 @@ lco_3b = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # SeaDoc (not in MTEB)
+    ),
     modalities=["audio", "text"],
     citation="""
 @misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
@@ -172,6 +175,7 @@ lco_7b = ModelMeta(
     release_date="2025-10-15",
     max_tokens=32768,
     n_parameters=8_931_813_888,
+    n_embedding_parameters=544997376,
     memory_usage_mb=17043,
     embed_dim=3584,
     license="mit",
@@ -181,7 +185,9 @@ lco_7b = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # SeaDoc (not in MTEB)
+    ),
     modalities=["audio", "text"],
     citation="""
 @misc{xiao2025scalinglanguagecentricomnimodalrepresentation,

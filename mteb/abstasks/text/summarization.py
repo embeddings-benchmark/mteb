@@ -145,7 +145,7 @@ class AbsTaskSummarization(AbsTask):
             machine_summaries = []
             relevance = []
 
-            for hf_subset in self.metadata.eval_langs:
+            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 text.extend(self.dataset[hf_subset][split][self.text_column_name])
                 human_summaries.extend(
                     self.dataset[hf_subset][split][self.human_summaries_column_name]

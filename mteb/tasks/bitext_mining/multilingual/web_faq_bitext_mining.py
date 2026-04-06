@@ -230,7 +230,10 @@ class WebFAQBitextMiningQuestions(AbsTaskBitextMining):
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         dataset = {}
         for langs in self.dataset:
             dataset[langs] = {}
@@ -284,7 +287,10 @@ class WebFAQBitextMiningQAs(AbsTaskBitextMining):
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         dataset = {}
         for langs in self.dataset:
             dataset[langs] = {}

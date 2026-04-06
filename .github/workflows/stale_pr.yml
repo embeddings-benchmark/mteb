@@ -10,7 +10,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/stale@v9.1.0
+      - uses: actions/stale@v10
         with:
           stale-pr-label: 'stale'
           stale-issue-label: 'stale'

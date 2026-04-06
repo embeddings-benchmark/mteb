@@ -15,9 +15,9 @@ from typing import TYPE_CHECKING, Any, cast
 
 import datasets
 
-import mteb
 from mteb.abstasks import AbsTask
 from mteb.benchmarks import Benchmark
+from mteb.get_tasks import get_tasks
 from mteb.models import (
     CrossEncoderWrapper,
     ModelMeta,
@@ -96,7 +96,7 @@ class MTEB:
         from rich.console import Console
 
         # disable logging for other ranks
-        if int(os.getenv("RANK", 0)) != 0:
+        if int(os.getenv("RANK", "0")) != 0:
             return
 
         console = Console()
@@ -156,7 +156,7 @@ class MTEB:
     @classmethod
     def mteb_tasks(cls):
         """Get all tasks available in the MTEB."""
-        tasks = mteb.get_tasks()
+        tasks = get_tasks()
         instance = cls(tasks)
         instance._display_tasks(tasks, name="MTEB tasks")
 
@@ -257,9 +257,10 @@ class MTEB:
             merged[score["hf_subset"]] = score
         return list(merged.values())
 
-    def run(
+    def run(  # noqa: PLR0914
         self,
         model: MTEBModels | CrossEncoder | SentenceTransformer,
+        *,
         verbosity: int = 1,
         output_folder: str | None = "results",
         eval_splits: list[str] | None = None,
@@ -343,7 +344,7 @@ class MTEB:
         # To evaluate missing splits, we keep track of the task name and the corresponding splits.
         self._last_evaluated_splits = {}
 
-        while len(self.tasks) > 0:
+        while len(self.tasks) > 0:  # noqa: PLR1702
             task = self.tasks[0]
             logger.info(
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
@@ -575,12 +576,16 @@ class MTEB:
 
         # create a copy of the meta to avoid modifying the original object
         meta = deepcopy(meta)
-        meta.revision = meta.revision or "no_revision_available"
-        meta.name = meta.name or "no_model_name_available"
+        meta = meta.model_copy(
+            update={
+                "revision": meta.revision or "no_revision_available",
+                "name": meta.name or "no_model_name_available",
+            }
+        )
 
         return meta
 
-    def _create_output_folder(
+    def _create_output_folder(  # noqa: PLR6301
         self, model_meta: ModelMeta, output_folder: str | None
     ) -> Path | None:
         """Create output folder for the results.

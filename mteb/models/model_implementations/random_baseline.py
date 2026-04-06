@@ -5,7 +5,9 @@ from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import torch
+from tqdm.auto import tqdm
 
+from mteb._create_dataloaders import VideoCollator
 from mteb.models.model_meta import ModelMeta
 from mteb.similarity_functions import (
     select_pairwise_similarity,
@@ -16,9 +18,15 @@ if TYPE_CHECKING:
     from numpy.typing import NDArray
     from PIL import Image
     from torch.utils.data import DataLoader
+    from torchcodec.decoders import VideoDecoder
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types._encoder_io import Array, AudioInputItem, BatchedInput, PromptType
+    from mteb.types._encoder_io import (
+        Array,
+        AudioInputItem,
+        BatchedInput,
+        PromptType,
+    )
 
 
 def _string_to_vector(text: str | None, size: int) -> NDArray[np.floating]:
@@ -74,6 +82,29 @@ def _audio_to_vector(audio: AudioInputItem, size: int) -> np.ndarray:
     return rng.random(size, dtype=np.float32)
 
 
+def _video_to_vector(
+    item: dict[str, VideoDecoder | AudioInputItem],
+    size: int,
+) -> NDArray[np.floating]:
+    """Generate a deterministic random vector based on video content.
+
+    Args:
+        item: Video data
+        size: Size of the output vector.
+
+    Returns:
+        A numpy array of shape (size,) containing the random vector.
+    """
+    # Convert video to bytes and then to a numeric seed
+    video_bytes = (
+        VideoCollator.resample_video(item["frames"], 10).numpy().tobytes()
+        + item["audio"]["array"].tobytes()
+    )
+    seed = int(hashlib.sha256(video_bytes).hexdigest(), 16) % (2**32)
+    rng = np.random.default_rng(seed)
+    return rng.random(size, dtype=np.float32)
+
+
 _EMBEDDING_DIM = 32
 
 _common_mock_metadata = dict(
@@ -83,7 +114,6 @@ _common_mock_metadata = dict(
     release_date=None,
     n_parameters=0,
     memory_usage_mb=0,
-    embed_dim=_EMBEDDING_DIM,
     license="mit",
     max_tokens=np.inf,
     reference=None,
@@ -93,7 +123,7 @@ _common_mock_metadata = dict(
     public_training_code=None,  # No training code, as this is a random baseline
     public_training_data=None,  # No training data, as this is a random baseline
     training_datasets=set(),
-    modalities=["text", "image", "audio"],
+    modalities=["text", "image", "audio", "video"],
 )
 
 
@@ -111,32 +141,58 @@ def _batch_to_embeddings(
         A 2D numpy array of shape (num_samples, embedding_dim) containing the embeddings
     """
     embeddings = []
-    for batch in inputs:
-        has_text, has_image, has_audio = (
-            "text" in batch,
-            "image" in batch,
-            "audio" in batch,
-        )
+    for batch in tqdm(inputs, desc="Encoding batches", unit="batch"):
+        text_embeddings = []
+        image_embeddings = []
+        audio_embeddings = []
+        video_embeddings = []
 
-        if has_text and has_image:
-            for text, image in zip(batch["text"], batch["image"]):
-                text_vec = _string_to_vector(text, embedding_dim)
-                img_vec = _image_to_vector(image, embedding_dim)
-                embeddings.append((text_vec + img_vec) / 2)
-        elif has_image:
-            embeddings.extend(
-                _image_to_vector(img, embedding_dim) for img in batch["image"]
-            )
-        elif has_text:
-            embeddings.extend(
+        if "text" in batch:
+            text_embeddings = [
                 _string_to_vector(txt, embedding_dim) for txt in batch["text"]
-            )
-        elif has_audio:
-            embeddings.extend(
-                _audio_to_vector(aud, embedding_dim) for aud in batch["audio"]
-            )
-        else:
-            raise KeyError("Input batch must contain 'text' and/or 'image' keys.")
+            ]
+        if "image" in batch:
+            image_embeddings = [
+                _image_to_vector(img, embedding_dim) for img in batch["image"]
+            ]
+        if "audio" in batch:
+            audio_embeddings = [
+                _audio_to_vector(audio, embedding_dim) for audio in batch["audio"]
+            ]
+        if "video" in batch:
+            video_embeddings = [
+                _video_to_vector(
+                    video,
+                    embedding_dim,
+                )
+                for video in batch["video"]
+            ]
+
+        # Combine embeddings
+        max_len = max(
+            [
+                len(text_embeddings),
+                len(image_embeddings),
+                len(audio_embeddings),
+                len(video_embeddings),
+            ]
+        )
+        for i in range(max_len):
+            combined_embedding = np.zeros(embedding_dim, dtype=np.float32)
+            count = 0
+            for embeddings_list in [
+                text_embeddings,
+                image_embeddings,
+                audio_embeddings,
+                video_embeddings,
+            ]:
+                if i < len(embeddings_list):
+                    combined_embedding += embeddings_list[i]
+                    count += 1
+            if count > 0:
+                combined_embedding /= count
+            embeddings.append(combined_embedding)
+
     return np.vstack(embeddings)
 
 
@@ -155,10 +211,11 @@ class RandomEncoderBaseline:
         revision: str | None,
         array_framework: Literal["numpy", "torch"] = "numpy",
         dtype: torch.dtype | np.floating = np.float32,
+        embed_dim: int | None = None,
         **kwargs: Any,
     ) -> None:
         self.rng_state = np.random.default_rng(42)
-        self.embedding_dim = _EMBEDDING_DIM
+        self.embedding_dim = embed_dim or _EMBEDDING_DIM
         self.array_framework = array_framework
         self.dtype = dtype
 
@@ -216,8 +273,9 @@ class RandomEncoderBaseline:
 
 random_encoder_baseline = ModelMeta(
     loader=RandomEncoderBaseline,
-    name="baseline/random-encoder-baseline",
+    name="mteb/baseline-random-encoder",
     model_type=["dense"],
+    embed_dim=[_EMBEDDING_DIM, 10],
     **_common_mock_metadata,
 )
 
@@ -260,7 +318,8 @@ class RandomCrossEncoderBaseline:
 
 random_cross_encoder_baseline = ModelMeta(
     loader=RandomCrossEncoderBaseline,
-    name="baseline/random-cross-encoder-baseline",
+    name="mteb/baseline-random-cross-encoder",
     model_type=["cross-encoder"],
+    embed_dim=None,
     **_common_mock_metadata,
 )

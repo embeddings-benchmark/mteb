@@ -31,9 +31,9 @@ def test_retrieval_backends(
 ):
     """Test different retrieval backends for retrieval and reranking tasks."""
     pytest.importorskip("faiss", reason="faiss is not installed")
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
     model_meta = deepcopy(model.mteb_model_meta)
-    model_meta.similarity_fn_name = similarity
+    model_meta = model_meta.model_copy(update={"similarity_fn_name": similarity})
     model.mteb_model_meta = model_meta
 
     faiss_backend = SearchEncoderWrapper(model, index_backend=FaissSearchIndex(model))

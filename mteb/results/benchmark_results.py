@@ -59,7 +59,7 @@ def _parse_version_cached(version_str: str | None) -> Version | None:
         return None
 
 
-class BenchmarkResults(BaseModel):
+class BenchmarkResults(BaseModel):  # noqa: PLR0904
     """Data class to hold the benchmark results of a model.
 
     Attributes:
@@ -83,6 +83,7 @@ class BenchmarkResults(BaseModel):
     def _filter_tasks(
         self,
         task_names: list[str] | None = None,
+        *,
         languages: list[str] | None = None,
         domains: list[TaskDomain] | None = None,
         task_types: list[TaskType] | None = None,
@@ -164,6 +165,7 @@ class BenchmarkResults(BaseModel):
     def _filter_models(
         self,
         model_names: Iterable[str] | None = None,
+        *,
         languages: Iterable[str] | None = None,
         open_weights: bool | None = None,
         frameworks: Iterable[str] | None = None,
@@ -279,6 +281,7 @@ class BenchmarkResults(BaseModel):
 
     def _get_scores(
         self,
+        *,
         splits: list[SplitName] | None = None,
         languages: list[ISOLanguage | ISOLanguageScript] | None = None,
         scripts: list[ISOLanguageScript] | None = None,
