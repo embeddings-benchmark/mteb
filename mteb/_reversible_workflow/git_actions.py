@@ -4,7 +4,7 @@ import logging
 import subprocess
 from typing import TYPE_CHECKING, Any
 
-from mteb._reversible_workflow.reversible_workflow import ReversibleAction
+from mteb._reversible_workflow import ReversibleAction
 
 if TYPE_CHECKING:
     from pathlib import Path
