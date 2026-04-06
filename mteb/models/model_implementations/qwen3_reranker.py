@@ -21,7 +21,10 @@ if TYPE_CHECKING:
 
 
 class Qwen3RerankerWrapper:
-    """Wrapper for Qwen3 Reranker models."""
+    """Wrapper for Qwen3 Reranker models.
+
+    Reference implementation https://github.com/QwenLM/Qwen3-Embedding/blob/44548aa5f0a0aed1c76d64e19afe47727a325b8f/evaluation/qwen3_reranker_model.py
+    """
 
     def __init__(
         self,
@@ -30,24 +33,31 @@ class Qwen3RerankerWrapper:
         **kwargs,
     ):
         self.model_name_or_path = model_name_or_path
-        self.device = torch.device(
-            device
-            if device is not None
-            else ("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = device or (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
         )
 
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_name_or_path, padding_side="left"
         )
-        self.max_length = self.tokenizer.model_max_length
+        self.tokenizer.pad_token = self.tokenizer.eos_token
+        self.max_length = 8192
+
         self.model = AutoModelForCausalLM.from_pretrained(model_name_or_path, **kwargs)
         self.model.to(self.device)
         self.model.eval()
 
-        self.token_false_id = self.tokenizer.convert_tokens_to_ids("no")
-        self.token_true_id = self.tokenizer.convert_tokens_to_ids("yes")
+        self.suffix = "<|im_start|>assistant\n<think>\n\n</think>\n\n"
+        self.suffix_tokens = self.tokenizer.encode(
+            self.suffix, add_special_tokens=False
+        )
         self.true_token = self.tokenizer("yes", add_special_tokens=False).input_ids[0]
         self.false_token = self.tokenizer("no", add_special_tokens=False).input_ids[0]
+
         self.generation_config = GenerationConfig(
             max_new_tokens=1,
             do_sample=True,
@@ -56,22 +66,10 @@ class Qwen3RerankerWrapper:
             return_dict_in_generate=True,
         )
 
-        self.prefix = '<|im_start|>system\nJudge whether the Document meets the requirements based on the Query and the Instruct provided. Note that the answer can only be "yes" or "no".<|im_end|>\n<|im_start|>user\n'
-        self.suffix = "<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
-        self.prefix_tokens = self.tokenizer.encode(
-            self.prefix, add_special_tokens=False
-        )
-        self.suffix_tokens = self.tokenizer.encode(
-            self.suffix, add_special_tokens=False
-        )
-
     @staticmethod
     def format_instruction(
         instruction: str | None, query: str, doc: str
     ) -> list[dict[str, str]]:
-        if isinstance(query, tuple):
-            instruction = query[0]
-            query = query[1]
         if instruction is None:
             instruction = "Given a web search query, retrieve relevant passages that answer the query"
         text = [
@@ -86,22 +84,20 @@ class Qwen3RerankerWrapper:
         ]
         return text
 
-    def process_inputs(self, pairs: list[str]) -> dict:
-        inputs = self.tokenizer(
-            pairs,
-            padding=False,
-            truncation="longest_first",
-            return_attention_mask=False,
-            max_length=self.max_length
-            - len(self.prefix_tokens)
-            - len(self.suffix_tokens),
+    def process_inputs(self, pairs: list[dict[str, str]]) -> dict:
+        inputs = self.tokenizer.apply_chat_template(
+            pairs, tokenize=True, add_generation_prompt=False, enable_thinking=False
         )
-        inputs = self.tokenizer.apply_chat_template(pairs)
         for i, ele in enumerate(inputs["input_ids"]):
-            inputs["input_ids"][i] = ele + self.suffix_tokens
+            inputs["input_ids"][i] = (
+                ele[: self.max_length - len(self.suffix_tokens)] + self.suffix_tokens
+            )
 
         inputs = self.tokenizer.pad(
-            inputs, padding=True, return_tensors="pt", max_length=self.max_length
+            inputs,
+            padding=True,
+            return_tensors="pt",
+            max_length=self.max_length,
         )
         for key in inputs:
             inputs[key] = inputs[key].to(self.device)
@@ -109,16 +105,14 @@ class Qwen3RerankerWrapper:
 
     @torch.no_grad()
     def compute_logits(self, inputs: dict) -> list[float]:
-        batch_scores = self.model.generate(
-            **inputs,
-            generation_config=self.generation_config,
-        ).logits[0]
-        true_vector = batch_scores[:, self.token_true_id]
-        false_vector = batch_scores[:, self.token_false_id]
+        outputs = self.model(**inputs)
+        last_token_logits = outputs.logits[:, -1, :]
+        true_vector = last_token_logits[:, self.token_true_id]
+        false_vector = last_token_logits[:, self.token_false_id]
+
         batch_scores = torch.stack([false_vector, true_vector], dim=1)
         batch_scores = torch.nn.functional.log_softmax(batch_scores, dim=1)
-        scores = batch_scores[:, 1].exp().tolist()
-        return scores
+        return batch_scores[:, 1].exp().tolist()
 
     @torch.inference_mode()
     def predict(
