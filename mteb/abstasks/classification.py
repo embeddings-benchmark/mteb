@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
@@ -17,7 +16,7 @@ from sklearn.metrics import (
 )
 from sklearn.model_selection import KFold
 
-from mteb._create_dataloaders import create_dataloader
+from mteb._create_dataloaders import _normalize_input_columns, create_dataloader
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator
 from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
@@ -141,7 +140,7 @@ class AbsTaskClassification(AbsTask):
     n_experiments: int = 10
     train_split: str = "train"
     label_column_name: str = "label"
-    input_column_name: str | Sequence[str] = "text"
+    input_column_name: str | dict[str, str] = "text"
     abstask_prompt = "Classify user passages."
     is_cross_validation: bool = False
     n_splits = 5
@@ -194,13 +193,8 @@ class AbsTaskClassification(AbsTask):
 
             if isinstance(ds, Dataset | DatasetDict):
                 # Keep label and input columns
-                columns_to_keep = {self.label_column_name}
-                if isinstance(self.input_column_name, Sequence) and not isinstance(
-                    self.input_column_name, str
-                ):
-                    columns_to_keep.update(self.input_column_name)
-                elif self.input_column_name is not None:
-                    columns_to_keep.add(self.input_column_name)
+                col_mapping = _normalize_input_columns(self.input_column_name)
+                columns_to_keep = set(col_mapping.values()) | {self.label_column_name}
 
                 if isinstance(ds, DatasetDict):
                     available = set(next(iter(ds.values())).column_names)
@@ -491,11 +485,8 @@ class AbsTaskClassification(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
-        col = (
-            self.input_column_name
-            if isinstance(self.input_column_name, str)
-            else self.input_column_name[0]
-        )
+        col_mapping = _normalize_input_columns(self.input_column_name)
+        col = next(iter(col_mapping.values()))
         train_text = []
         if hf_subset:
             inputs = self.dataset[hf_subset][split][col]
@@ -549,13 +540,9 @@ class AbsTaskClassification(AbsTask):
         repo_name: str,
         num_proc: int | None = None,
     ) -> None:
-        cols = (
-            self.input_column_name
-            if isinstance(self.input_column_name, list)
-            else [self.input_column_name]
-        )
+        col_mapping = _normalize_input_columns(self.input_column_name)
         self._upload_dataset_to_hub(
             repo_name,
-            cols + [self.label_column_name],
+            list(col_mapping.values()) + [self.label_column_name],
             num_proc=num_proc,
         )

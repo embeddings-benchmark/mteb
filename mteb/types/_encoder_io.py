@@ -140,11 +140,9 @@ class VideoInputItem(TypedDict):
 
     Attributes:
         frames: The video frames as Tensor.
-        audio: The audio array as AudioInputItem.
     """
 
     frames: torch.Tensor
-    audio: NotRequired[AudioInputItem | None]
 
 
 class VideoInput(TypedDict):

@@ -32,6 +32,13 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def _normalize_input_columns(input_column_name: str | dict[str, str]) -> dict[str, str]:
+    """Normalize input_column_name to a {modality: column_name} mapping."""
+    if isinstance(input_column_name, str):
+        return {input_column_name: input_column_name}
+    return input_column_name
+
+
 def _create_dataloader_from_texts(
     text: list[str],
     batch_size: int = 32,
@@ -242,14 +249,29 @@ def _prepare_dataset(
     dataset: Dataset,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
-    input_column: str | None = None,
+    input_column: str | dict[str, str] | None = None,
     num_proc: int | None = None,
 ) -> Dataset:
     """Apply all modality-specific transformations to the dataset.
 
+    Args:
+        dataset: The dataset to prepare.
+        task_metadata: The metadata of the task.
+        prompt_type: The type of prompt.
+        input_column: Column name(s). Can be a single string, a {modality: column_name} mapping, or None.
+        num_proc: Number of processes.
+
     Returns the transformed Dataset (no DataLoader wrapping).
     """
     modalities = task_metadata.get_modalities(prompt_type)
+
+    # Build a modality → column_name mapping for rename logic
+    if isinstance(input_column, dict):
+        col_mapping = input_column
+    elif isinstance(input_column, str):
+        col_mapping = {input_column: input_column}
+    else:
+        col_mapping = {}
 
     if "text" in modalities:
         if prompt_type == PromptType.document:
@@ -273,19 +295,20 @@ def _prepare_dataset(
                 )
 
     if "image" in modalities:
+        image_col = col_mapping.get("image", "image")
         dataset = _prepare_image_dataset(
             dataset,
-            image_column_name=input_column if input_column else "image",
+            image_column_name=image_col,
             num_proc=num_proc,
         )
     for modality in ("audio", "video"):
         if modality in modalities:
+            col_name = col_mapping.get(modality, modality)
             if (
-                input_column
-                and input_column in dataset.column_names
+                col_name in dataset.column_names
                 and modality not in dataset.column_names
             ):
-                dataset = dataset.rename_column(input_column, modality)
+                dataset = dataset.rename_column(col_name, modality)
 
     return dataset
 
@@ -295,7 +318,7 @@ def create_dataloader(
     *,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
-    input_column: str | Sequence[str] | None = None,
+    input_column: str | dict[str, str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
     **kwargs: Any,
@@ -309,7 +332,7 @@ def create_dataloader(
         dataset: The dataset to create a dataloader from.
         task_metadata: The metadata of the task.
         prompt_type: The type of prompt to create a dataloader for. If None, it will be inferred from the task metadata.
-        input_column: The column to use as input. If None, it will use the first column that matches the modality.
+        input_column: The column(s) to use as input. Can be a string, a {modality: column_name} mapping, or None.
         batch_size: The batch size for the dataloader.
         num_proc: The number of processes to use for dataset processing.
         **kwargs: Additional arguments to pass to the dataloader creation functions.
@@ -317,15 +340,20 @@ def create_dataloader(
     Returns:
         A dataloader for the dataset.
     """
-    if (
-        prompt_type is None
-        and task_metadata.modalities == ["text"]
-        and input_column is not None
-    ):
-        return _create_dataloader_from_texts(
-            dataset[input_column],
-            batch_size=batch_size,
-        )
+    # Text-only shortcut: skip heavy dataset preparation for pure text tasks
+    if prompt_type is None and task_metadata.modalities == ["text"]:
+        if isinstance(input_column, dict):
+            text_col = input_column.get("text", next(iter(input_column.values())))
+        elif isinstance(input_column, str):
+            text_col = input_column
+        else:
+            text_col = None
+
+        if text_col is not None:
+            return _create_dataloader_from_texts(
+                dataset[text_col],
+                batch_size=batch_size,
+            )
 
     prepared = _prepare_dataset(
         dataset,
@@ -469,25 +497,22 @@ class VideoCollator:
         collated_inputs = []
         for row in inputs:
             video = row.pop("video")
-            frames = self.resample_video(video["frames"], self.max_frames)
+            # video is a raw VideoDecoder — pass directly to resample
+            frames = self.resample_video(video, self.max_frames)
 
-            audio_data = None
-            if "audio" in video and video["audio"] is not None:
+            # Process audio
+            if "audio" in row and row["audio"] is not None:
                 audio = self.audio_collator.resample_audio(
-                    video,
+                    row,
                     target_sampling_rate=self.audio_collator.target_sampling_rate,
                     max_samples=self.audio_collator.max_samples,
                 )
-                audio_data = AudioInputItem(
+                row["audio"] = AudioInputItem(
                     array=audio,
                     sampling_rate=self.audio_collator.target_sampling_rate,
                 )
 
-            video_input_item: VideoInputItem = {
-                "frames": frames,
-                "audio": audio_data,
-            }
-            row["video"] = video_input_item
+            row["video"] = VideoInputItem(frames=frames)
             collated_inputs.append(row)
 
         return cast(

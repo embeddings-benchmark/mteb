@@ -79,7 +79,7 @@ class PEAudioVisualWrapper(AbsEncoder):
                 # Use last hidden layer CLS token, matching the HF wrapper's intent.
                 text_pooler = text_outputs.hidden_states[-1][:, 0]
                 text_embeds = self.model.text_audio_video_head(text_pooler)
-                text_embeds = text_embeds / text_embeds.norm(dim=-1, keepdim=True)
+                text_embeds /= text_embeds.norm(dim=-1, keepdim=True)
                 all_embeddings.append(text_embeds.cpu().float().numpy())
 
         return np.vstack(all_embeddings)
@@ -115,7 +115,7 @@ class PEAudioVisualWrapper(AbsEncoder):
                 video_embeds = self.model.video_model.video_head(
                     video_out.pooler_output
                 )
-                video_embeds = video_embeds / video_embeds.norm(dim=-1, keepdim=True)
+                video_embeds /= video_embeds.norm(dim=-1, keepdim=True)
                 all_embeddings.append(video_embeds.cpu().float().numpy())
 
         return np.vstack(all_embeddings)
@@ -149,7 +149,7 @@ class PEAudioVisualWrapper(AbsEncoder):
                     input_values=processed["input_values"],
                     padding_mask=processed.get("padding_mask"),
                 )
-                audio_embeds = audio_embeds / audio_embeds.norm(dim=-1, keepdim=True)
+                audio_embeds /= audio_embeds.norm(dim=-1, keepdim=True)
                 all_embeddings.append(audio_embeds.cpu().float().numpy())
 
         return np.vstack(all_embeddings)
@@ -170,7 +170,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             desc="Processing audio-video batches",
         ):
             videos = [item["frames"] for item in batch["video"]]
-            audio_arrays = [item["audio"]["array"] for item in batch["video"]]
+            audio_arrays = [audio["array"] for audio in batch["audio"]]
             processed = self.processor(
                 videos=videos,
                 audio=audio_arrays,
@@ -188,7 +188,7 @@ class PEAudioVisualWrapper(AbsEncoder):
                     padding_mask_videos=processed.get("padding_mask_videos"),
                 )
                 av_embeds = av_output.audio_video_embeds
-                av_embeds = av_embeds / av_embeds.norm(dim=-1, keepdim=True)
+                av_embeds /= av_embeds.norm(dim=-1, keepdim=True)
                 all_embeddings.append(av_embeds.cpu().float().numpy())
 
         return np.vstack(all_embeddings)
@@ -205,9 +205,7 @@ class PEAudioVisualWrapper(AbsEncoder):
     ) -> Array:
         has_text = "text" in inputs.dataset.features
         has_video = "video" in inputs.dataset.features
-        has_audio = "audio" in inputs.dataset.features or (
-            has_video and "audio" in task_metadata.modalities
-        )
+        has_audio = "audio" in inputs.dataset.features
 
         inputs.collate_fn = MultimodalCollator(
             target_sampling_rate=self.sampling_rate,

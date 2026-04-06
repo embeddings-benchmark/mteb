@@ -1,10 +1,7 @@
-from typing import Any, ClassVar
-
-from datasets import Features
+from typing import ClassVar
 
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.types._encoder_io import VideoInputItem
 
 
 class Kinetics400Classification(AbsTaskClassification):
@@ -45,34 +42,10 @@ class Kinetics400Classification(AbsTaskClassification):
 """,
     )
 
-    input_column_name: ClassVar[str | list[str]] = "video"
+    input_column_name: ClassVar[str | dict[str, str]] = {
+        "video": "video",
+        "audio": "audio",
+    }
     label_column_name: str = "label"
 
     is_cross_validation: bool = False
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """Combine video and audio columns into a single video dict."""
-
-        def _combine_modalities(example):
-            example["video"] = VideoInputItem(
-                frames=example["video"],
-                audio=example.pop("audio"),
-            )
-            return example
-
-        for split in self.dataset:
-            split_features = self.dataset[split].features
-            self.dataset[split] = self.dataset[split].map(
-                _combine_modalities,
-                features=Features(
-                    {k: v for k, v in split_features.items() if k != "audio"}
-                    | {
-                        "video": {
-                            "frames": split_features["video"],
-                            "audio": split_features["audio"],
-                        }
-                    }
-                ),
-                remove_columns=["audio"],
-                writer_batch_size=50,
-            )
