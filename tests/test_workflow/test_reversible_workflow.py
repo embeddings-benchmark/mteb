@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from mteb._reversible_workflow.reversible_workflow import (
+from mteb._reversible_workflow.reversible_workflow import ( # noqa: PLC2701
     ReversibleWorkflow,
     WorkflowFailureError,
 )

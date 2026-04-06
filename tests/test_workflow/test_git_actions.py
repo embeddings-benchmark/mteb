@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from mteb._reversible_workflow.git_actions import (
+from mteb._reversible_workflow.git_actions import ( # noqa: PLC2701
     CommitAction,
     CreateBranchAction,
     CreatePRAction,
@@ -23,7 +23,9 @@ def test_create_branch_action_do_and_undo(monkeypatch, tmp_path: Path) -> None:
         calls.append(cmd)
         return _Completed()
 
-    monkeypatch.setattr("mteb.workflow.git_actions.subprocess.run", fake_run)
+    monkeypatch.setattr(
+        "mteb._reversible_workflow.git_actions.subprocess.run", fake_run
+    )
 
     action = CreateBranchAction(
         repo_path=tmp_path / "repo",
@@ -50,7 +52,9 @@ def test_commit_action_saves_shas_and_undo_resets(monkeypatch, tmp_path: Path) -
             return _Completed(rev_parse_outputs.pop(0))
         return _Completed()
 
-    monkeypatch.setattr("mteb.workflow.git_actions.subprocess.run", fake_run)
+    monkeypatch.setattr(
+        "mteb._reversible_workflow.git_actions.subprocess.run", fake_run
+    )
 
     action = CommitAction(repo_path=tmp_path / "repo", message="msg")
     action.do()
@@ -72,7 +76,9 @@ def test_push_to_fork_action_do_and_undo(monkeypatch, tmp_path: Path) -> None:
         calls.append(cmd)
         return _Completed()
 
-    monkeypatch.setattr("mteb.workflow.git_actions.subprocess.run", fake_run)
+    monkeypatch.setattr(
+        "mteb._reversible_workflow.git_actions.subprocess.run", fake_run
+    )
 
     action = PushToForkAction(
         repo_path=tmp_path / "repo",
@@ -158,7 +164,9 @@ def test_restore_original_branch_action_do_and_undo(
             return _Completed("feature-1\n")
         return _Completed()
 
-    monkeypatch.setattr("mteb.workflow.git_actions.subprocess.run", fake_run)
+    monkeypatch.setattr(
+        "mteb._reversible_workflow.git_actions.subprocess.run", fake_run
+    )
 
     action = RestoreOriginalBranchAction(
         repo_path=tmp_path / "repo", original_branch="main"
