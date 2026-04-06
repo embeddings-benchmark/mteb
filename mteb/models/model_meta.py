@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib
 import json
 import logging
 import warnings
@@ -22,6 +23,8 @@ from huggingface_hub.errors import (
     RepositoryNotFoundError,
     SafetensorsParsingError,
 )
+from packaging.requirements import Requirement
+from packaging.version import Version
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from transformers import AutoConfig
@@ -139,6 +142,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
         experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
         output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
+        required_dependencies: Dependencies that required for model loading.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -173,6 +177,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     contacts: list[str] | None = None
     experiment_kwargs: Mapping[str, Any] | None = None
     output_dtypes: OutputDType | list[OutputDType] | None = None
+    required_dependencies: Sequence[str] | None = None
 
     def __setattr__(self, name: str, value: Any) -> None:
         """Deprecation warning for direct attribute mutation. Use model_copy(update={...}) instead."""
@@ -339,6 +344,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     ) -> MTEBModels:
         """Loads the model using the specified loader function."""
         # create a copy so that changing the model meta on the model does not influence the original meta
+        self._check_requirements()
         _self = self.model_copy(deep=True)
 
         if _self.loader is None:
@@ -392,6 +398,27 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         )
         model.mteb_model_meta = _self  # type: ignore[misc]
         return model
+
+    def _check_requirements(self) -> None:
+        if self.required_dependencies is None:
+            return
+        missing_dependencies = []
+        for required_dependency in self.required_dependencies:
+            req = Requirement(required_dependency)
+
+            try:
+                installed = importlib.metadata.version(req.name)
+                matches = Version(installed) in req.specifier
+                if not matches:
+                    missing_dependencies.append(required_dependency)
+            except importlib.metadata.PackageNotFoundError:
+                missing_dependencies.append(required_dependency)
+        if missing_dependencies:
+            raise ImportError(
+                "Missing required dependencies: {}".format(
+                    ", ".join(missing_dependencies)
+                )
+            )
 
     def model_name_as_path(self) -> str:
         """Returns the model name in a format that can be used as a file path.

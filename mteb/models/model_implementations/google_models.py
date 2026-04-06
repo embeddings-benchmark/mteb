@@ -4,9 +4,7 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-from packaging.version import Version
 from tqdm.auto import tqdm
-from transformers import __version__ as transformers_version
 
 from mteb._requires_package import requires_package
 from mteb.models import SentenceTransformerEncoderWrapper
@@ -258,20 +256,8 @@ google_gemini_embedding_001 = ModelMeta(
 )
 
 
-def gemma_embedding_loader(model_name: str, revision: str, **kwargs):
-    min_transformers_version = "4.56.0"
-
-    if Version(transformers_version) < Version(min_transformers_version):
-        raise RuntimeError(
-            f"transformers version {transformers_version} is lower than the required "
-            f"version {min_transformers_version} to run `{model_name}`"
-        )
-
-    return SentenceTransformerEncoderWrapper(model_name, revision, **kwargs)
-
-
 embedding_gemma_300m = ModelMeta(
-    loader=gemma_embedding_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="google/embeddinggemma-300m",
     model_type=["dense"],
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
@@ -301,4 +287,5 @@ embedding_gemma_300m = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2509.20354},
 }""",
+    required_dependencies=("transformers>=4.56.0",),
 )

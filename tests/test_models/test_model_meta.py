@@ -432,3 +432,25 @@ def test_get_model_metas_without_modality_filter_returns_more_models():
     text_models = mteb.get_model_metas(modalities=["text"])
 
     assert len(all_models) > len(text_models)
+
+
+def test_model_meta_dependencies_success():
+    model_meta = mteb.get_model_meta("mteb/baseline-random-encoder").model_copy(
+        update={
+            "required_dependencies": ["transformers", "sentence-transformers>1.0.0"],
+        }
+    )
+    model_meta._check_requirements()
+
+
+def test_model_meta_dependencies_fail():
+    model_meta = mteb.get_model_meta("mteb/baseline-random-encoder").model_copy(
+        update={
+            "required_dependencies": ["test", "sentence-transformers<=1.0.0"],
+        }
+    )
+    with pytest.raises(
+        ImportError,
+        match="Missing required dependencies: test, sentence-transformers<=1.0.0",
+    ):
+        model_meta._check_requirements()
