@@ -265,14 +265,6 @@ def _prepare_dataset(
     """
     modalities = task_metadata.get_modalities(prompt_type)
 
-    # Build a modality → column_name mapping for rename logic
-    if isinstance(input_column, dict):
-        col_mapping = input_column
-    elif isinstance(input_column, str):
-        col_mapping = {input_column: input_column}
-    else:
-        col_mapping = {}
-
     if "text" in modalities:
         if prompt_type == PromptType.document:
             dataset = dataset.map(
@@ -295,7 +287,12 @@ def _prepare_dataset(
                 )
 
     if "image" in modalities:
-        image_col = col_mapping.get("image", "image")
+        if isinstance(input_column, dict):
+            image_col = input_column.get("image", "image")
+        elif isinstance(input_column, str):
+            image_col = input_column
+        else:
+            image_col = "image"
         dataset = _prepare_image_dataset(
             dataset,
             image_column_name=image_col,
@@ -303,7 +300,12 @@ def _prepare_dataset(
         )
     for modality in ("audio", "video"):
         if modality in modalities:
-            col_name = col_mapping.get(modality, modality)
+            if isinstance(input_column, dict):
+                col_name = input_column.get(modality, modality)
+            elif isinstance(input_column, str):
+                col_name = input_column
+            else:
+                col_name = modality
             if (
                 col_name in dataset.column_names
                 and modality not in dataset.column_names
