@@ -27,7 +27,7 @@ class ColVec1Wrapper(AbsEncoder):
 
     def __init__(
         self,
-        model_name: str = "webAI-Official/webAI-ColVec1-4b",
+        model_name: str,
         revision: str | None = None,
         device: str | None = None,
         torch_dtype: torch.dtype | None = torch.bfloat16,
