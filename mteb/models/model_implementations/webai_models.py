@@ -69,7 +69,7 @@ class ColVec1Wrapper(AbsEncoder):
             text_embeddings = self.get_text_embeddings(inputs, **kwargs)
         if "image" in inputs.dataset.features:
             image_embeddings = self.get_image_embeddings(inputs, **kwargs)
-        
+
         if text_embeddings is not None and image_embeddings is not None:
             if len(text_embeddings) != len(image_embeddings):
                 raise ValueError(
@@ -90,14 +90,21 @@ class ColVec1Wrapper(AbsEncoder):
                 base.rope_deltas = None
         return self.model(**encoded_inputs)
 
-    def get_image_embeddings(self, images, batch_size=32, show_progress_bar=True, **kwargs):
+    def get_image_embeddings(
+        self, images, batch_size=32, show_progress_bar=True, **kwargs
+    ):
         import torchvision.transforms.functional as F
         from PIL import Image
+
         all_embeds = []
         with torch.no_grad():
-            for batch in tqdm(images, disable=not show_progress_bar, desc="Encoding images"):
+            for batch in tqdm(
+                images, disable=not show_progress_bar, desc="Encoding images"
+            ):
                 imgs = [
-                    F.to_pil_image(b.to(self.device)) if not isinstance(b, Image.Image) else b
+                    F.to_pil_image(b.to(self.device))
+                    if not isinstance(b, Image.Image)
+                    else b
                     for b in batch["image"]
                 ]
                 imgs = [img.convert("RGB") for img in imgs]
@@ -105,17 +112,25 @@ class ColVec1Wrapper(AbsEncoder):
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 outs = self._encode_inputs(inputs)
                 all_embeds.extend(outs.cpu().to(torch.float32))
-        return torch.nn.utils.rnn.pad_sequence(all_embeds, batch_first=True, padding_value=0)
+        return torch.nn.utils.rnn.pad_sequence(
+            all_embeds, batch_first=True, padding_value=0
+        )
 
-    def get_text_embeddings(self, texts, batch_size=32, show_progress_bar=True, **kwargs):
+    def get_text_embeddings(
+        self, texts, batch_size=32, show_progress_bar=True, **kwargs
+    ):
         all_embeds = []
         with torch.no_grad():
-            for batch in tqdm(texts, disable=not show_progress_bar, desc="Encoding texts"):
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Encoding texts"
+            ):
                 inputs = self.processor.process_queries(batch["text"])
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 outs = self._encode_inputs(inputs)
                 all_embeds.extend(outs.cpu().to(torch.float32))
-        return torch.nn.utils.rnn.pad_sequence(all_embeds, batch_first=True, padding_value=0)
+        return torch.nn.utils.rnn.pad_sequence(
+            all_embeds, batch_first=True, padding_value=0
+        )
 
     def similarity(self, a, b):
         a = [torch.as_tensor(x) for x in a]
@@ -148,7 +163,7 @@ colvec1_4b = ModelMeta(
     loader=ColVec1Wrapper,
     loader_kwargs=dict(torch_dtype=torch.bfloat16),
     name="webAI-Official/webAI-ColVec1-4b",
-    revision='dce73882e6b89a01e702891a593f775dc5711929',
+    revision="dce73882e6b89a01e702891a593f775dc5711929",
     release_date="2026-04-05",
     model_type=["late-interaction"],
     languages=["eng-Latn", "fra-Latn"],
