@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any, Unpack
 
 import torch
 from tqdm.auto import tqdm
@@ -19,6 +19,12 @@ from mteb.models.model_implementations.bge_models import (
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -79,9 +85,16 @@ class E5OmniWrapper(AbsEncoder):
         self.max_samples = int(max_audio_length_seconds * self.sampling_rate)
 
     @torch.no_grad()
-    def encode(
-        self, inputs, *, task_metadata, hf_split, hf_subset, prompt_type=None, **kwargs
-    ):
+    def encode(  # noqa: PLR0914
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Unpack[EncodeKwargs],
+    ) -> Array:
         from qwen_omni_utils import process_mm_info
 
         all_embeddings = []
