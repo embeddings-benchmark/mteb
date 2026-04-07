@@ -220,7 +220,6 @@ colvec1_9b = ModelMeta(
     superseded_by=None,
     citation=COLWEBAI_CITATION,
     contacts=["psam-ai"],,
-    experiment_kwargs=None,
     output_dtypes=["bfloat16"],
     is_cross_encoder=False,
 )
