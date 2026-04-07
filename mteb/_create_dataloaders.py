@@ -540,8 +540,5 @@ class MultimodalCollator:
             return self.audio_collator(inputs)
         return cast(
             "BatchedInput",
-            {
-                key: [row[key] for row in inputs]
-                for key in inputs[0].keys()
-            },
+            {key: [row[key] for row in inputs] for key in inputs[0].keys()},
         )

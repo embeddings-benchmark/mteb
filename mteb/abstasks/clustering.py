@@ -211,7 +211,11 @@ class AbsTaskClustering(AbsTask):
             downsampled_dataset = data_split.select(example_indices)
 
         # Keep label and input columns
-        input_cols = list(self.input_column_name.values()) if isinstance(self.input_column_name, dict) else [self.input_column_name]
+        input_cols = (
+            list(self.input_column_name.values())
+            if isinstance(self.input_column_name, dict)
+            else [self.input_column_name]
+        )
         columns_to_keep = set(input_cols) | {self.label_column_name}
 
         available = set(data_split.column_names)
@@ -280,7 +284,11 @@ class AbsTaskClustering(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClusteringFastDescriptiveStatistics:
-        col = next(iter(self.input_column_name.values())) if isinstance(self.input_column_name, dict) else self.input_column_name
+        col = (
+            next(iter(self.input_column_name.values()))
+            if isinstance(self.input_column_name, dict)
+            else self.input_column_name
+        )
         if hf_subset:
             inputs = self.dataset[hf_subset][split][col]
             labels = self.dataset[hf_subset][split][self.label_column_name]
@@ -323,7 +331,11 @@ class AbsTaskClustering(AbsTask):
         repo_name: str,
         num_proc: int | None = None,
     ) -> None:
-        input_cols = list(self.input_column_name.values()) if isinstance(self.input_column_name, dict) else [self.input_column_name]
+        input_cols = (
+            list(self.input_column_name.values())
+            if isinstance(self.input_column_name, dict)
+            else [self.input_column_name]
+        )
         self._upload_dataset_to_hub(
             repo_name,
             input_cols + [self.label_column_name],
