@@ -126,7 +126,7 @@ class ColPaliEngineWrapper(AbsEncoder):
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(texts, desc="Encoding texts"):
-                batch = [
+                batch = [  # noqa: PLW2901
                     self.processor.query_prefix
                     + t
                     + self.processor.query_augmentation_token * 10
@@ -156,10 +156,6 @@ class ColPaliEngineWrapper(AbsEncoder):
         raise NotImplementedError(
             "Fused embeddings are not supported yet. Please use get_text_embeddings or get_image_embeddings."
         )
-
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        scores = self.similarity(text_embeddings, image_embeddings).T
-        return scores.softmax(dim=-1)
 
     def similarity(self, a, b):
         return self.processor.score(a, b, device=self.device)

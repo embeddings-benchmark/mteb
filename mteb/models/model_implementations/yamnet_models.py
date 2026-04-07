@@ -79,7 +79,7 @@ def yamnet_loader(*args, **kwargs):
 
             # Normalize to [-1.0, 1.0]
             if audio.numel() > 0 and audio.abs().max() > 1.0:
-                audio = audio / audio.abs().max()
+                audio = audio / audio.abs().max()  # noqa: PLR6104
 
             # Pad to minimum length
             if audio.shape[-1] < self.min_samples:
@@ -201,6 +201,7 @@ yamnet = ModelMeta(
     release_date="2020-10-06",
     max_tokens=float("inf"),
     n_parameters=3_751_369,
+    n_embedding_parameters=0,
     memory_usage_mb=14,
     embed_dim=1024,
     license="apache-2.0",
@@ -211,7 +212,7 @@ yamnet = ModelMeta(
     public_training_code="https://github.com/tensorflow/models/tree/master/research/audioset/yamnet",
     public_training_data="https://research.google.com/audioset/",
     training_datasets={
-        "AudioSet",
+        "AudioSetMini",
     },
     modalities=["audio"],
     citation="""

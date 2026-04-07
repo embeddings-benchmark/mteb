@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 @pytest.mark.parametrize("task", TASK_TEST_GRID)
-@pytest.mark.parametrize("model", [mteb.get_model("baseline/random-encoder-baseline")])
+@pytest.mark.parametrize("model", [mteb.get_model("mteb/baseline-random-encoder")])
 def test_benchmark_datasets(task: AbsTask, model: mteb.EncoderProtocol, tmp_path: Path):
     """Test that a task can be fetched and run"""
     mteb.evaluate(model, task, cache=None)

@@ -90,39 +90,13 @@ models_to_annotate = [
 ]
 
 
-def _add_size_guide(fig: go.Figure):
-    xpos = [2 * 1e6] * 4
-    ypos = [7.8, 8.5, 9, 10]
-    sizes = [256, 1024, 2048, 4096]
-    fig.add_trace(
-        go.Scatter(
-            showlegend=False,
-            opacity=0.3,
-            mode="markers",
-            marker=dict(
-                size=np.sqrt(sizes),
-                color="rgba(0,0,0,0)",
-                line=dict(color="black", width=2),
-            ),
-            x=xpos,
-            y=ypos,
-        )
-    )
-    fig.add_annotation(
-        text="<b>Embedding Size</b>",
-        font=dict(size=16),
-        x=np.log10(10 * 1e6),
-        y=10,
-        showarrow=False,
-        opacity=0.3,
-    )
-    return fig
-
-
 @_failsafe_plot
 def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
-    df["Number of Parameters"] = df["Number of Parameters (B)"].map(_parse_n_params)
+
+    clip_embed_size = 4096  # The largest embedding size that has been observed in the leaderboard, used for scaling the point sizes.
+
+    df["Number of Active Parameters"] = df["Active Parameters (B)"].map(_parse_n_params)
     df["Model"] = df["Model"].map(_parse_model_name)
     df["model_text"] = df["Model"].where(df["Model"].isin(models_to_annotate), "")
     df["Embedding Dimensions"] = df["Embedding Dimensions"].map(_parse_float)
@@ -130,18 +104,22 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df["Log(Tokens)"] = np.log10(df["Max Tokens"])
     df["Mean (Task)"] = df["Mean (Task)"].map(_parse_float)
     df = df.dropna(
-        subset=["Mean (Task)", "Number of Parameters", "Embedding Dimensions"]
+        subset=["Mean (Task)", "Number of Active Parameters", "Embedding Dimensions"]
     )
     if not len(df.index):
         return go.Figure()
     min_score, max_score = df["Mean (Task)"].min(), df["Mean (Task)"].max()
-    df["sqrt(dim)"] = np.sqrt(df["Embedding Dimensions"])
-    df["Max Tokens"] = df["Max Tokens"].apply(lambda x: _process_max_tokens(x))
+    df["sqrt(dim)"] = np.sqrt(df["Embedding Dimensions"].clip(upper=clip_embed_size))
+    df["Max Tokens"] = df["Max Tokens"].apply(lambda x: _process_max_tokens(x))  # noqa: PLW0108
     rank_column = "Rank (Borda)" if "Rank (Borda)" in df.columns else "Rank (Mean Task)"
+    df["_x_display"] = df["Number of Active Parameters"].replace(0, 1)
     fig = px.scatter(
         df,
-        x="Number of Parameters",
+        x="_x_display",
         y="Mean (Task)",
+        labels={
+            "_x_display": "Number of Active Parameters",
+        },
         log_x=True,
         template="plotly_white",
         text="model_text",
@@ -152,7 +130,8 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
         hover_data={
             "Max Tokens": True,
             "Embedding Dimensions": True,
-            "Number of Parameters": True,
+            "Number of Active Parameters": True,
+            "_x_display": False,
             "Mean (Task)": True,
             rank_column: True,
             "Log(Tokens)": False,
@@ -163,11 +142,13 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
         color_continuous_scale=px.colors.sequential.Greens,
     )
     # Note: it's important that this comes before setting the size mode
-    fig = _add_size_guide(fig)
+    desired_max_diameter = 40  # pixels
+    max_sqrt_dim = np.sqrt(clip_embed_size)
+
     fig.update_traces(
         marker=dict(
             sizemode="diameter",
-            sizeref=1.5,
+            sizeref=max_sqrt_dim / desired_max_diameter,
             sizemin=0,
         )
     )
@@ -194,6 +175,66 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     fig.update_layout(
         font=dict(size=16, color="black"),
         margin=dict(b=20, t=10, l=20, r=10),
+    )
+    return fig
+
+
+@_failsafe_plot
+def _performance_over_time_plot(df: pd.DataFrame) -> go.Figure:
+    df = df.copy()
+    score_column = "Mean (Task)"
+    if score_column not in df.columns or "Model" not in df.columns:
+        return _text_plot(
+            "Couldn't produce timeline plot. Required columns are missing."
+        )
+
+    df["Model"] = df["Model"].map(_parse_model_name)
+    df["Release Date"] = pd.to_datetime(df["Release Date"], errors="coerce")
+    df[score_column] = df[score_column].map(_parse_float)
+
+    df = df.dropna(subset=["Release Date", score_column]).sort_values(
+        ["Release Date", score_column], ascending=[True, False]
+    )
+    if not len(df.index):
+        return _text_plot(
+            "Couldn't produce timeline plot. No models have a valid release date and score."
+        )
+
+    df["score"] = df[score_column].cummax()
+    fig = px.scatter(
+        df,
+        x="Release Date",
+        y=score_column,
+        template="plotly_white",
+        hover_name="Model",
+        hover_data={
+            "Release Date": "|%Y-%m-%d",
+            score_column: True,
+            "score": False,
+        },
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=df["Release Date"],
+            y=df["score"],
+            mode="lines",
+            line=dict(color="#1f7a1f", width=2, shape="hv"),
+            hovertemplate="Date: %{x|%Y-%m-%d}<br>%{y:.2f}<extra></extra>",
+        )
+    )
+
+    fig.update_traces(marker=dict(size=9), selector=dict(mode="markers"))
+    fig.update_layout(
+        xaxis_title="Release Date",
+        yaxis_title=f"{score_column} score",
+        showlegend=False,
+        font=dict(size=16, color="black"),
+        margin=dict(b=20, t=10, l=20, r=10),
+        hoverlabel=dict(
+            bgcolor="white",
+            font_size=16,
+        ),
     )
     return fig
 
@@ -258,7 +299,7 @@ def _radar_chart(df: pd.DataFrame) -> go.Figure:
             "Couldn't produce radar chart, the benchmark only contains one task category."
         )
     df = df[["Model", *task_type_columns]].set_index("Model")
-    df = df.mask(df == "", np.nan)
+    df = df.mask(df == "", np.nan)  # noqa: PLC1901
     df = df.dropna()
     df = df.head(TOP_N)
     df = df.iloc[::-1]

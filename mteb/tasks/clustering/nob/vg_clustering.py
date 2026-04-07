@@ -58,7 +58,10 @@ class VGClustering(AbsTaskClusteringLegacy):
         superseded_by="VGHierarchicalClusteringP2P",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         splits = self.metadata.eval_splits
 
         documents: list = []
@@ -79,7 +82,8 @@ class VGClustering(AbsTaskClusteringLegacy):
             documents.extend(ds_split["article"])
             labels.extend(_label)
 
-            assert len(documents) == len(labels)
+            if len(documents) != len(labels):
+                raise ValueError(f"Expected {len(documents)} labels, got {len(labels)}")
 
             rng = random.Random(1111)  # local only seed
             # resampling changes scores from 12.68, 11.30, 12.65 (sample model)

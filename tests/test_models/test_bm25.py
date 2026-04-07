@@ -3,7 +3,7 @@ import pytest
 import mteb
 
 
-@pytest.mark.parametrize("model_name", ["bm25s", "baseline/bb25"])
+@pytest.mark.parametrize("model_name", ["mteb/baseline-bm25s", "mteb/baseline-bb25"])
 def test_bm25_e2e(model_name):
     # fails for dataset smaller than 1000
     pytest.importorskip("bm25s", reason="bm25s not installed")

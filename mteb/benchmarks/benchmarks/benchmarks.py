@@ -1000,7 +1000,7 @@ MTEB_multilingual_v1 = Benchmark(
     tasks=MTEBTasks(
         mteb_multilingual_tasks + get_tasks(tasks=["SNLHierarchicalClusteringP2P"])
     ),
-    description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. This benhcmark has been replaced by MTEB(Multilingual, v2) as one of the datasets (SNLHierarchicalClustering) included in v1 was removed from the Hugging Face Hub.",
+    description="The large-scale multilingual expansion of MTEB known as MMTEB, driven mainly by highly-curated community contributions covering 250+ languages. This benchmark has been replaced by MTEB(Multilingual, v2) as one of the datasets (SNLHierarchicalClustering) included in v1 was removed from the Hugging Face Hub.",
     reference="https://arxiv.org/abs/2502.13595",
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
@@ -1035,7 +1035,7 @@ MTEB_multilingual_v2 = Benchmark(
     ],
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
     tasks=mteb_multilingual_tasks,
-    description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. ",
+    description="The large-scale multilingual expansion of MTEB known as MMTEB, driven mainly by highly-curated community contributions covering 250+ languages. ",
     reference="https://arxiv.org/abs/2502.13595",
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
@@ -1982,7 +1982,7 @@ MIEB_common_tasks = [
     "STL10",  # coarse
     "SUN397",  # fine
     "UCF101",  # fine
-    # ImageMultiLabelClassification
+    # MultiLabelClassification
     "VOC2007",  # coarse
     # Clustering
     "CIFAR10Clustering",
@@ -2507,6 +2507,50 @@ VIDORE_V3 = VidoreBenchmark(
 """,
 )
 
+VIDORE_V3_1 = VidoreBenchmark(
+    name="ViDoRe(v3.1)",
+    display_name="ViDoRe v3.1",
+    language_view=[
+        "deu-Latn",
+        "eng-Latn",
+        "fra-Latn",
+        "ita-Latn",
+        "por-Latn",
+        "spa-Latn",
+    ],
+    icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
+    tasks=get_tasks(
+        tasks=[
+            "Vidore3FinanceEnRetrieval.v2",
+            "Vidore3IndustrialRetrieval.v2",
+            "Vidore3ComputerScienceRetrieval.v2",
+            "Vidore3PharmaceuticalsRetrieval.v2",
+            "Vidore3HrRetrieval.v2",
+            "Vidore3FinanceFrRetrieval.v2",
+            "Vidore3PhysicsRetrieval.v2",
+            "Vidore3EnergyRetrieval.v2",
+            "Vidore3TelecomRetrieval.v2",
+            "Vidore3NuclearRetrieval.v2",
+        ]
+    ),
+    description="ViDoRe v3.1 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. "
+    + "It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents. "
+    + "The benchmark includes both open and closed datasets: to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml). "
+    + "The latest 3.1 version adds and markdown derived from OCR to allow easier evaluation of text-only baselines and joint image-text baselines.",
+    reference="https://arxiv.org/abs/2601.08620",
+    citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+)
+
 VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
     name="ViDoRe(v1&v2)",
     aliases=["VisualDocumentRetrieval"],
@@ -2654,6 +2698,42 @@ VN_MTEB = Benchmark(
 }
 """,
     contacts=["BaoLocPham"],
+)
+
+MTEB_THA = Benchmark(
+    name="MTEB(tha, v1)",
+    aliases=["MTEB(tha)"],
+    display_name="Thai",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/th.svg",
+    tasks=get_tasks(
+        languages=["tha"],
+        tasks=[
+            # Classification (4) — native Thai or purpose-built; no machine-translated tasks
+            "MTOPDomainClassification",
+            "MTOPIntentClassification",
+            "SIB200Classification",
+            "WisesightSentimentClassification.v2",
+            # Clustering (1)
+            "SIB200ClusteringS2S",
+            # PairClassification (1)
+            "XNLI",
+            # Reranking (2)
+            "MIRACLReranking",
+            "MultiLongDocReranking",
+            # Retrieval (7) — human-judged or human-translated
+            "BelebeleRetrieval",
+            "MIRACLRetrievalHardNegatives.v2",
+            "MKQARetrieval",
+            "MrTidyRetrieval",
+            "MultiLongDocRetrieval",
+            "WebFAQRetrieval",
+            "XQuADRetrieval",
+        ],
+    ),
+    description="A benchmark for evaluating Thai text embedding models across 15 tasks spanning 5 task types: classification (4), clustering (1), pair classification (1), reranking (2), and retrieval (7). Tasks are native Thai or high-quality human translations; machine-translated and cross-lingual tasks are excluded.",
+    reference=None,
+    citation=None,
+    contacts=["anusoft"],
 )
 
 JINA_VDR = Benchmark(
@@ -3056,7 +3136,7 @@ MAEB_AUDIO = Benchmark(
         tasks=[
             # Any2AnyRetrieval (1)
             "JamAltArtistA2ARetrieval",
-            # AudioClassification (10)
+            # AudioClassification (11)
             "BeijingOpera",
             "BirdCLEF",
             "CREMA_D",
@@ -3065,14 +3145,13 @@ MAEB_AUDIO = Benchmark(
             "IEMOCAPGender",
             "MInDS14",
             "MridinghamTonic",
+            "SIBFLEURS",
             "VoxCelebSA",
             "VoxPopuliLanguageID",
             # AudioClustering (3)
             "CREMA_DClustering",
             "VehicleSoundClustering",
             "VoxPopuliGenderClustering",
-            # AudioMultilabelClassification (1)
-            "SIBFLEURS",
             # AudioPairClassification (3)
             "CREMADPairClassification",
             "NMSQAPairClassification",
@@ -3081,7 +3160,7 @@ MAEB_AUDIO = Benchmark(
             "GTZANAudioReranking",
         ]
     ),
-    description="""MAEB(audio-only) is the audio-only subset of MAEB with 19 tasks spanning 6 task types: classification (10), clustering (3), multilabel classification (1), pair classification (3), reranking (1), and retrieval (1). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
+    description="""MAEB(audio-only) is the audio-only subset of MAEB with 19 tasks spanning 5 task types: classification (11), clustering (3), pair classification (3), reranking (1), and retrieval (1). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -3095,12 +3174,11 @@ MAEB_EXTENDED = Benchmark(
     tasks=get_tasks(
         tasks=[
             # === Audio-only tasks (53) ===
-            # AudioMultilabelClassification (4)
+            # AudioMultilabelClassification (3)
             "FSD50K",
-            "SIBFLEURS",
             "FSD2019Kaggle",
             "AudioSetMini",
-            # AudioClassification (28)
+            # AudioClassification (29)
             "VoxPopuliAccentID",
             "MInDS14",
             "VoxPopuliGenderID",
@@ -3128,6 +3206,7 @@ MAEB_EXTENDED = Benchmark(
             "GunshotTriangulation",
             "SpeechCommands",
             "MridinghamTonic",
+            "SIBFLEURS",
             "BirdSet",
             # AudioReranking (5)
             "ESC50AudioReranking",
@@ -3221,7 +3300,7 @@ MAEB = Benchmark(
             "MACST2ARetrieval",
             "SpokenSQuADT2ARetrieval",
             "UrbanSound8KT2ARetrieval",
-            # AudioClassification (10)
+            # AudioClassification (11)
             "BeijingOpera",
             "BirdCLEF",
             "CREMA_D",
@@ -3230,15 +3309,15 @@ MAEB = Benchmark(
             "IEMOCAPGender",
             "MInDS14",
             "MridinghamTonic",
+            "SIBFLEURS",
             "VoxCelebSA",
             "VoxPopuliLanguageID",
             # AudioClustering (3)
             "CREMA_DClustering",
             "VehicleSoundClustering",
             "VoxPopuliGenderClustering",
-            # AudioMultilabelClassification (2)
+            # AudioMultilabelClassification (1)
             "FSD2019Kaggle",
-            "SIBFLEURS",
             # AudioPairClassification (3)
             "CREMADPairClassification",
             "NMSQAPairClassification",
@@ -3250,7 +3329,7 @@ MAEB = Benchmark(
             "SpeechCommandsZeroshotv0.02",
         ]
     ),
-    description="""MAEB is a comprehensive audio benchmark with 30 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (10), clustering (3), multilabel classification (2), pair classification (3), reranking (1), and zero-shot classification (2). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
+    description="""MAEB is a comprehensive audio benchmark with 30 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (11), clustering (3), multilabel classification (1), pair classification (3), reranking (1), and zero-shot classification (2). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],

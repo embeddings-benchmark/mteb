@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -21,6 +22,9 @@ if TYPE_CHECKING:
     from mteb import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
     from mteb.types._encoder_io import AudioInput
+
+
+logger = logging.getLogger(__name__)
 
 
 class MMSWrapper(AbsEncoder):
@@ -54,12 +58,14 @@ class MMSWrapper(AbsEncoder):
         try:
             self.model.load_adapter(target_lang)
         except Exception:
-            pass
+            logger.debug(
+                "Failed to load adapter for language '%s'", target_lang, exc_info=True
+            )
 
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
@@ -152,6 +158,7 @@ mms_1b_all = ModelMeta(
     release_date="2023-05-22",
     max_tokens=None,
     n_parameters=1_000_000_000,
+    n_embedding_parameters=197120,
     memory_usage_mb=3680,
     embed_dim=1024,
     license="mit",
@@ -161,7 +168,9 @@ mms_1b_all = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/mms",
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
-    training_datasets=set(),
+    training_datasets={
+        "FleursA2TRetrieval",
+    },
     modalities=["audio"],
     citation="""
 @misc{pratap2023scalingspeechtechnology1000,
@@ -184,6 +193,7 @@ mms_1b_fl102 = ModelMeta(
     release_date="2023-05-22",
     max_tokens=None,
     n_parameters=1_000_000_000,
+    n_embedding_parameters=99840,
     memory_usage_mb=3680,
     embed_dim=1024,
     license="mit",
@@ -193,7 +203,9 @@ mms_1b_fl102 = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/mms",
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
-    training_datasets=set(),
+    training_datasets={
+        "FleursA2TRetrieval",
+    },
     modalities=["audio"],
     citation="""
 @misc{pratap2023scalingspeechtechnology1000,
@@ -216,6 +228,7 @@ mms_1b_l1107 = ModelMeta(
     release_date="2023-05-22",
     max_tokens=None,
     n_parameters=1_000_000_000,
+    n_embedding_parameters=55040,
     memory_usage_mb=3680,
     embed_dim=1024,
     license="mit",
@@ -225,7 +238,9 @@ mms_1b_l1107 = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/mms",
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
-    training_datasets=set(),
+    training_datasets={
+        "FleursA2TRetrieval",
+    },
     modalities=["audio"],
     citation="""
 @misc{pratap2023scalingspeechtechnology1000,

@@ -42,7 +42,7 @@ def _get_column_widths(df: pd.DataFrame) -> list[str]:
             value_lengths = [len(f"{value:.2f}") for value in df[column_name]]
         else:
             value_lengths = [len(str(value)) for value in df[column_name]]
-        max_length = max(max(column_word_lengths), max(value_lengths))
+        max_length = max(max(column_word_lengths), max(value_lengths))  # noqa: PLW3301
         n_pixels = 25 + (max_length * 10)
         widths.append(f"{n_pixels}px")
     return widths
@@ -67,7 +67,7 @@ def _create_light_green_cmap():
 
 def apply_summary_styling_from_benchmark(
     benchmark_instance: Benchmark, benchmark_results: BenchmarkResults
-) -> gr.DataFrame:
+) -> tuple[gr.DataFrame, pd.DataFrame]:
     """Apply styling to summary table created by the benchmark instance's _create_summary_table method.
 
     This supports polymorphism - different benchmark classes can have different table generation logic.
@@ -77,17 +77,18 @@ def apply_summary_styling_from_benchmark(
         benchmark_results: BenchmarkResults object containing model results (may be pre-filtered)
 
     Returns:
-        Styled gr.DataFrame ready for display in the leaderboard
+        Tuple of (styled gr.DataFrame for display, raw pd.DataFrame with metadata for plots)
     """
     # Use the instance method to support polymorphism
     summary_df = benchmark_instance._create_summary_table(benchmark_results)
 
     # If it's a no-results DataFrame, return it as-is
     if "No results" in summary_df.columns:
-        return gr.DataFrame(summary_df)
+        return gr.DataFrame(summary_df), summary_df
 
-    # Apply the styling
-    return _apply_summary_table_styling(summary_df)
+    # Keep full data for plots, drop metadata columns from display
+    display_df = summary_df.drop(columns=["Release Date"], errors="ignore")
+    return _apply_summary_table_styling(display_df), summary_df
 
 
 def apply_per_task_styling_from_benchmark(
@@ -159,10 +160,10 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         "Rank (Mean Task)",
         "Rank",
         "Model",
-        "Number of Parameters (B)",
+        "Total Parameters (B)",
+        "Active Parameters (B)",
         "Embedding Dimensions",
         "Max Tokens",
-        "Memory Usage (MB)",
     ]
 
     gradient_columns = [
@@ -195,10 +196,10 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         {
             **dict.fromkeys(score_columns, "{:.2f}"),
             rank_column: "{:.0f}",
-            "Memory Usage (MB)": "{:.0f}",
             "Embedding Dimensions": "{:.0f}",
             "Max Tokens": "{:.0f}",
-            "Number of Parameters (B)": lambda x: _style_number_of_parameters(x),
+            "Total Parameters (B)": lambda x: _style_number_of_parameters(x),  # noqa: PLW0108
+            "Active Parameters (B)": lambda x: _style_number_of_parameters(x),  # noqa: PLW0108
         },
         na_rep="",
     )
@@ -239,7 +240,6 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         column_widths[0] = "100px"
     if len(column_widths) > 1:
         column_widths[1] = "250px"
-
     return gr.DataFrame(
         joint_table_style,
         datatype=column_types,

@@ -55,7 +55,10 @@ Purwarianti, Ayu},
         superseded_by="IndonesianMongabayConservationClassification.v2",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         splits = self.metadata.eval_splits
         class_labels = ["positif", "netral", "negatif"]
 
@@ -89,7 +92,8 @@ Purwarianti, Ayu},
                     documents.append(text)
                     labels.append(class_labels.index(label))
 
-            assert len(documents) == len(labels)
+            if len(documents) != len(labels):
+                raise ValueError(f"Expected {len(documents)} labels, got {len(labels)}")
 
             ds[split] = datasets.Dataset.from_dict(
                 {

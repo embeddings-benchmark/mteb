@@ -45,6 +45,7 @@ class AnySTSEvaluator(Evaluator):
         self,
         dataset: Dataset,
         sentences_column_names: tuple[str, str],
+        *,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
@@ -71,8 +72,8 @@ class AnySTSEvaluator(Evaluator):
         logger.info("Running semantic similarity - Encoding samples (1/2)")
         embeddings1 = model.encode(
             create_dataloader(
-                self.dataset,
-                self.task_metadata,
+                self.dataset.select_columns([self.input_columns[0]]),
+                task_metadata=self.task_metadata,
                 input_column=self.input_columns[0],
                 num_proc=num_proc,
                 **encode_kwargs,
@@ -87,8 +88,8 @@ class AnySTSEvaluator(Evaluator):
         logger.info("Running semantic similarity - Encoding samples (2/2)...")
         embeddings2 = model.encode(
             create_dataloader(
-                self.dataset,
-                self.task_metadata,
+                self.dataset.select_columns([self.input_columns[1]]),
+                task_metadata=self.task_metadata,
                 input_column=self.input_columns[1],
                 **encode_kwargs,
             ),

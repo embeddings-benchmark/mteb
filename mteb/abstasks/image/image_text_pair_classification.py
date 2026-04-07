@@ -186,7 +186,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
             num_texts_per_sample,
         )
 
-    def _compute_metrics(
+    def _compute_metrics(  # noqa: PLR6301
         self,
         scores: list[torch.Tensor],
         num_images_per_sample: int,
@@ -218,7 +218,11 @@ class AbsTaskImageTextPairClassification(AbsTask):
             accuracy=torch.Tensor(all_correct_scores).float().mean().item(),
         )
 
-    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def _push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+    ) -> None:
         text_columns = (
             [self.texts_column_names]
             if isinstance(self.texts_column_names, str)

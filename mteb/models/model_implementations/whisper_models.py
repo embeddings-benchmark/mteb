@@ -40,7 +40,7 @@ class WhisperAudioWrapper(AbsEncoder):
         self.processor = WhisperProcessor.from_pretrained(model_name, revision=revision)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         hidden_layer: float = 1.0,
@@ -260,6 +260,7 @@ whisper_tiny = ModelMeta(
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=39_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=144,
     embed_dim=512,
     license="mit",
@@ -269,7 +270,9 @@ whisper_tiny = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # 680k hours of internet audio (proprietary, not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{radford2022robustspeechrecognitionlargescale,
@@ -292,6 +295,7 @@ whisper_base = ModelMeta(
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=74_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=277,
     embed_dim=512,
     license="mit",
@@ -301,7 +305,9 @@ whisper_base = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # 680k hours of internet audio (proprietary, not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{radford2022robustspeechrecognitionlargescale,
@@ -324,6 +330,7 @@ whisper_small = ModelMeta(
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=244_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=922,
     embed_dim=768,
     license="mit",
@@ -333,7 +340,9 @@ whisper_small = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # 680k hours of internet audio (proprietary, not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{radford2022robustspeechrecognitionlargescale,
@@ -356,6 +365,7 @@ whisper_medium = ModelMeta(
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=769_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=2914,
     embed_dim=1024,
     license="mit",
@@ -365,7 +375,9 @@ whisper_medium = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # 680k hours of internet audio (proprietary, not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{radford2022robustspeechrecognitionlargescale,
@@ -388,6 +400,7 @@ whisper_large_v3 = ModelMeta(
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=1_550_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=5887,
     embed_dim=1280,
     license="mit",
@@ -397,7 +410,9 @@ whisper_large_v3 = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # 680k hours of internet audio (proprietary, not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{radford2022robustspeechrecognitionlargescale,

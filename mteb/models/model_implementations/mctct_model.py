@@ -123,7 +123,7 @@ class MCTCTWrapper(AbsEncoder):
         )
         self.sampling_rate = self.feature_extractor.sampling_rate  # 16000 Hz
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
@@ -221,6 +221,7 @@ mctct_large = ModelMeta(
     release_date="2022-01-10",
     max_tokens=None,
     n_parameters=1_058_978_691,
+    n_embedding_parameters=12387840,
     memory_usage_mb=4039,
     embed_dim=1536,
     license="apache-2.0",
@@ -230,7 +231,7 @@ mctct_large = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/speechbrain/speechbrain",
     public_training_data="https://github.com/speechbrain/speechbrain",
-    training_datasets={"Common Voice", "VoxPopuli"},
+    training_datasets={"CommonVoiceMini17A2TRetrieval", "VoxPopuliLanguageID"},
     modalities=["audio"],
     citation="""
 @misc{lugosch2022pseudolabelingmassivelymultilingualspeech,

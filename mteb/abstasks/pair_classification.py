@@ -120,8 +120,8 @@ class AbsTaskPairClassification(AbsTask):
             )
         evaluator = PairClassificationEvaluator(
             data_split,
-            self.input1_column_name,
-            self.input2_column_name,
+            input1_column_name=self.input1_column_name,
+            input2_column_name=self.input2_column_name,
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
@@ -179,18 +179,18 @@ class AbsTaskPairClassification(AbsTask):
                 max_scores[metric_name].append(metric_value)
 
         for metric in max_scores:
-            if metric in ["f1", "ap", "precision", "recall", "accuracy"]:
+            if metric in ["f1", "ap", "precision", "recall", "accuracy"]:  # noqa: PLR6201
                 output_scores[f"max_{metric}"] = max(max_scores[metric])
         return output_scores
 
-    def _calculate_descriptive_statistics_from_split(
+    def _calculate_descriptive_statistics_from_split(  # noqa: PLR0914
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> PairClassificationDescriptiveStatistics:
         if hf_subset:
             dataset = self.dataset[hf_subset][split]
         elif compute_overall:
             dataset = defaultdict(list)
-            for hf_subset in self.metadata.eval_langs:
+            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 cur_dataset = self.dataset[hf_subset][split]
                 # for compatibility with v1 version where datasets were stored in a single row
                 if isinstance(cur_dataset, list) or len(cur_dataset) == 1:
@@ -249,7 +249,7 @@ class AbsTaskPairClassification(AbsTask):
                 hashes = set()
                 for img in inputs:
                     img_bytes = img.tobytes()
-                    img_hash = hashlib.md5(img_bytes).hexdigest()
+                    img_hash = hashlib.md5(img_bytes, usedforsecurity=False).hexdigest()
                     hashes.add(img_hash)
                 return list(hashes)
 
@@ -266,7 +266,9 @@ class AbsTaskPairClassification(AbsTask):
                 for audio in inputs:
                     array = audio["array"]
                     audio_bytes = array.tobytes()
-                    audio_hash = hashlib.md5(audio_bytes).hexdigest()
+                    audio_hash = hashlib.md5(
+                        audio_bytes, usedforsecurity=False
+                    ).hexdigest()
                     hashes.add(audio_hash)
                 return list(hashes)
 
@@ -287,7 +289,11 @@ class AbsTaskPairClassification(AbsTask):
             labels_statistics=calculate_label_statistics(labels),
         )
 
-    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def _push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+    ) -> None:
         # previously pair classification datasets were stored in a single row
         if self.dataset is None:
             # overall this shouldn't happen as we check for dataset before pushing to hub
@@ -351,7 +357,7 @@ class AbsTaskPairClassification(AbsTask):
             ap=float(ap),
         )
 
-    def _find_best_acc_and_threshold(
+    def _find_best_acc_and_threshold(  # noqa: PLR6301
         self,
         scores: list[float],
         labels: NDArray[np.int64],
@@ -378,7 +384,7 @@ class AbsTaskPairClassification(AbsTask):
                 best_threshold = (rows[i][0] + rows[i + 1][0]) / 2
         return max_acc, best_threshold
 
-    def _find_best_f1_and_threshold(
+    def _find_best_f1_and_threshold(  # noqa: PLR6301
         self, scores, labels: NDArray[np.int64], high_score_more_similar: bool
     ) -> tuple[float, float, float, float]:
         scores = np.asarray(scores)

@@ -15,7 +15,7 @@ class StanfordCarsI2I(AbsTaskRetrieval):
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cv_recall_at_1",
+        main_score="hit_rate_at_1",
         date=("2012-01-01", "2013-04-01"),
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],

@@ -43,7 +43,7 @@ class WavlmWrapper(AbsEncoder):
         )
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
@@ -128,6 +128,7 @@ wavlm_base = ModelMeta(
     release_date="2022-07-19",
     max_tokens=float("inf"),
     n_parameters=94_700_000,
+    n_embedding_parameters=0,
     memory_usage_mb=361,
     embed_dim=768,
     license="mit",
@@ -164,6 +165,7 @@ wavlm_base_sd = ModelMeta(
     release_date="2022-07-19",
     max_tokens=float("inf"),
     n_parameters=94_700_000,
+    n_embedding_parameters=0,
     memory_usage_mb=361,
     embed_dim=768,
     license="mit",
@@ -200,6 +202,7 @@ wavlm_base_plus = ModelMeta(
     release_date="2022-07-19",
     max_tokens=float("inf"),
     n_parameters=94_700_000,
+    n_embedding_parameters=0,
     memory_usage_mb=361,
     embed_dim=768,
     license="mit",
@@ -211,8 +214,8 @@ wavlm_base_plus = ModelMeta(
     public_training_data=None,
     training_datasets={
         "Libri-Light",
-        "GigaSpeech",
-        "VoxPopuli",
+        "GigaSpeechA2TRetrieval",
+        "VoxPopuliLanguageID",
     },
     modalities=["audio"],
     citation="""
@@ -240,6 +243,7 @@ wavlm_base_plus_sv = ModelMeta(
     release_date="2022-07-19",
     max_tokens=float("inf"),
     n_parameters=94_700_000,
+    n_embedding_parameters=0,
     memory_usage_mb=361,
     embed_dim=768,
     license="mit",
@@ -251,8 +255,8 @@ wavlm_base_plus_sv = ModelMeta(
     public_training_data=None,
     training_datasets={
         "Libri-Light",
-        "GigaSpeech",
-        "VoxPopuli",
+        "GigaSpeechA2TRetrieval",
+        "VoxPopuliLanguageID",
         "VoxCeleb1",
     },
     modalities=["audio"],
@@ -281,6 +285,7 @@ wavlm_base_plus_sd = ModelMeta(
     release_date="2022-07-19",
     max_tokens=float("inf"),
     n_parameters=94_700_000,
+    n_embedding_parameters=0,
     memory_usage_mb=361,
     embed_dim=768,
     license="mit",
@@ -292,8 +297,8 @@ wavlm_base_plus_sd = ModelMeta(
     public_training_data=None,
     training_datasets={
         "Libri-Light",
-        "GigaSpeech",
-        "VoxPopuli",
+        "GigaSpeechA2TRetrieval",
+        "VoxPopuliLanguageID",
         "LibriMix",
     },
     modalities=["audio"],
@@ -322,6 +327,7 @@ wavlm_base_sv = ModelMeta(
     release_date="2022-07-19",
     max_tokens=float("inf"),
     n_parameters=94_700_000,
+    n_embedding_parameters=0,
     memory_usage_mb=361,
     embed_dim=768,
     license="mit",
@@ -358,6 +364,7 @@ wavlm_large = ModelMeta(
     release_date="2022-07-19",
     max_tokens=float("inf"),
     n_parameters=316_620_000,
+    n_embedding_parameters=0,
     memory_usage_mb=1208,
     embed_dim=1024,
     license="mit",
@@ -369,8 +376,8 @@ wavlm_large = ModelMeta(
     public_training_data=None,
     training_datasets={
         "Libri-Light",
-        "GigaSpeech",
-        "VoxPopuli",
+        "GigaSpeechA2TRetrieval",
+        "VoxPopuliLanguageID",
     },
     modalities=["audio"],
     citation="""

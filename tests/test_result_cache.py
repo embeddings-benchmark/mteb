@@ -10,9 +10,9 @@ import pytest
 import requests
 
 import mteb
-from mteb.cache import ResultCache
+from mteb.cache import LoadExperimentEnum, ResultCache
 from mteb.results import TaskResult
-from tests.mock_tasks import MockMultilingualClusteringTask
+from tests.mock_tasks import MockMultilingualClusteringTask, MockRetrievalTask
 
 test_cache_path = Path(__file__).parent / "mock_mteb_cache"
 
@@ -223,7 +223,7 @@ def test_cache_load_different_subsets():
         "sentence-transformers/all-MiniLM-L6-v2"
     )  # model have only arab subset results
     model2 = mteb.get_model_meta(
-        "baseline/random-encoder-baseline"
+        "mteb/baseline-random-encoder"
     )  # model have all subsets results
 
     result1 = cache.load_results(
@@ -265,6 +265,128 @@ def test_cache_load_different_subsets():
     assert result2.model_results[0].task_results[0].get_score() == 0.01035
 
 
+def test_load_experiment_results(tmp_path):
+    """Test that results from an experiment can be loaded correctly."""
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockRetrievalTask()
+    cache = mteb.ResultCache(tmp_path)
+    mteb.evaluate(model, task, cache=cache)
+
+    params_1 = {"a": "test"}
+    params_2 = {"a": "test", "b": "test2"}
+    model = mteb.get_model(
+        "mteb/baseline-random-encoder",
+        **params_1,
+    )
+    mteb.evaluate(model, task, cache=cache)
+
+    model = mteb.get_model(
+        "mteb/baseline-random-encoder",
+        **params_2,
+    )
+    mteb.evaluate(model, task, cache=cache)
+
+    # load without experiments - should only get the first result
+    base_res = cache.load_results()
+    assert len(base_res.model_results) == 1
+    assert base_res.model_results[0].experiment_name is None
+
+    base_res = cache.load_results(experiment_kwargs=[params_1, params_2])
+    assert len(base_res.model_results) == 2
+
+    # load all experiments
+    experiment_res = cache.load_results(load_experiments=LoadExperimentEnum.MATCH_NAME)
+    assert len(experiment_res.model_results) == 3
+
+    # don't load experiments
+    experiment_res = cache.load_results(
+        load_experiments=LoadExperimentEnum.NO_EXPERIMENTS
+    )
+    assert len(experiment_res.model_results) == 1
+
+    # load **only** specific experiment by kwargs
+    only_named_experiment_res = cache.load_results(
+        load_experiments=LoadExperimentEnum.MATCH_KWARGS,
+        experiment_kwargs=params_1,
+    )
+    assert len(only_named_experiment_res.model_results) == 1
+    assert only_named_experiment_res.model_results[0].experiment_name == "a_test"
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta],
+        load_experiments=LoadExperimentEnum.MATCH_NAME,
+        experiment_kwargs=params_1,
+    )
+    assert len(model_meta_res.model_results) == 1
+
+    # load specific experiment with model meta filter
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta.name],
+        load_experiments=LoadExperimentEnum.MATCH_NAME,
+        experiment_kwargs=params_2,
+    )
+    assert len(model_meta_res.model_results) == 1
+    assert model_meta_res.model_results[0].experiment_name == "a_test__b_test2"
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta],
+        load_experiments=LoadExperimentEnum.MATCH_KWARGS,
+    )
+    assert len(model_meta_res.model_results) == 1
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta],
+        load_experiments=LoadExperimentEnum.NO_EXPERIMENTS,
+    )
+    assert len(model_meta_res.model_results) == 1
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta],
+        load_experiments=LoadExperimentEnum.MATCH_KWARGS,
+    )
+    assert len(model_meta_res.model_results) == 1
+    assert model_meta_res.model_results[0].experiment_name == "a_test__b_test2"
+
+    # load experiments with model name filter
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta.name],
+        load_experiments=LoadExperimentEnum.MATCH_NAME,
+    )
+    assert len(model_meta_res.model_results) == 3
+
+    # load specific experiment with model name filter
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta.name],
+        load_experiments=LoadExperimentEnum.MATCH_KWARGS,
+        experiment_kwargs=[model.mteb_model_meta.experiment_kwargs],
+    )
+    assert len(model_meta_res.model_results) == 1
+    assert model_meta_res.model_results[0].experiment_name == "a_test__b_test2"
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta],
+        load_experiments=LoadExperimentEnum.MATCH_NAME,
+    )
+    assert len(model_meta_res.model_results) == 3
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta],
+        load_experiments=LoadExperimentEnum.MATCH_KWARGS,
+    )
+    assert len(model_meta_res.model_results) == 1
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta.name],
+        load_experiments=LoadExperimentEnum.MATCH_KWARGS,
+    )
+    assert len(model_meta_res.model_results) == 1
+
+    model_meta_res = cache.load_results(
+        experiment_kwargs=[model.mteb_model_meta.experiment_kwargs],
+    )
+    assert len(model_meta_res.model_results) == 1
+
+
 # Tests for _download_cached_results_from_branch method
 
 
@@ -272,7 +394,7 @@ class TestDownloadCachedResultsFromBranch:
     """Test the _download_cached_results_from_branch method."""
 
     @patch("requests.get")
-    def test_successful_download(
+    def test_successful_download(  # noqa: PLR6301
         self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
     ):
         """Test successful download and decompression, including parent directory creation."""
@@ -305,7 +427,7 @@ class TestDownloadCachedResultsFromBranch:
         assert nested_result_path.read_text(encoding="utf-8") == mock_benchmark_json
 
     @patch("requests.get")
-    def test_file_too_large(self, mock_get, tmp_path):
+    def test_file_too_large(self, mock_get, tmp_path):  # noqa: PLR6301
         """Test that oversized files raise ValueError."""
         cache = ResultCache(cache_path=tmp_path)
 
@@ -331,7 +453,7 @@ class TestDownloadCachedResultsFromBranch:
         ],
     )
     @patch("requests.get")
-    def test_error_handling_consolidated(
+    def test_error_handling_consolidated(  # noqa: PLR6301
         self, mock_get, tmp_path, error_type, exception_class
     ):
         """Test various error conditions in a consolidated manner."""
@@ -361,7 +483,7 @@ class TestDownloadCachedResultsFromBranch:
             cache._download_cached_results_from_branch(timeout=30)
 
     @patch("requests.get")
-    def test_default_output_path(
+    def test_default_output_path(  # noqa: PLR6301
         self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
     ):
         """Test that default output path is {cache_path}/leaderboard/__cached_results.json when none provided."""
@@ -389,7 +511,7 @@ class TestDownloadCachedResultsFromBranch:
         ],
     )
     @patch("requests.get")
-    def test_content_type_handling(
+    def test_content_type_handling(  # noqa: PLR6301
         self,
         mock_get,
         tmp_path,
@@ -428,7 +550,7 @@ class TestDownloadCachedResultsFromBranch:
         ],
     )
     @patch("requests.get")
-    def test_file_size_validation(
+    def test_file_size_validation(  # noqa: PLR6301
         self,
         mock_get,
         tmp_path,

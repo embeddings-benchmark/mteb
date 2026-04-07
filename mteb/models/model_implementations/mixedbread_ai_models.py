@@ -1,11 +1,8 @@
 from mteb.models.model_implementations.pylate_models import MultiVectorModel
-from mteb.models.model_meta import (
-    ModelMeta,
-    ScoringFunction,
-)
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
-    sentence_transformers_loader,
+    SentenceTransformerEncoderWrapper,
 )
 
 mixedbread_training_data = {
@@ -18,7 +15,7 @@ mixedbread_training_data = {
 }
 
 mxbai_embed_large_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts={
             "query": "Represent this sentence for searching relevant passages: "
@@ -68,7 +65,7 @@ mxbai_embed_large_v1 = ModelMeta(
 )
 
 mxbai_embed_2d_large_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="mixedbread-ai/mxbai-embed-2d-large-v1",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -100,7 +97,7 @@ mxbai_embed_2d_large_v1 = ModelMeta(
 
 
 mxbai_embed_xsmall_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="mixedbread-ai/mxbai-embed-xsmall-v1",
     model_type=["dense"],
     languages=["eng-Latn"],

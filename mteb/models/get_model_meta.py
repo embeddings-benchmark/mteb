@@ -11,17 +11,16 @@ from mteb.models import (
 from mteb.models.model_implementations import MODEL_REGISTRY
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Iterable, Mapping
 
     from mteb.abstasks import AbsTask
-    from mteb.models import (
-        MTEBModels,
-    )
+    from mteb.models import MTEBModels
+    from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
 
 
-def get_model_metas(
+def get_model_metas(  # noqa: PLR0913, PLR0917
     model_names: Iterable[str] | None = None,
     languages: Iterable[str] | None = None,
     open_weights: bool | None = None,
@@ -30,6 +29,8 @@ def get_model_metas(
     use_instructions: bool | None = None,
     zero_shot_on: list[AbsTask] | None = None,
     model_types: Iterable[str] | None = None,
+    modalities: Iterable[Modalities] | None = None,
+    exclusive_modality_filter: bool = False,
 ) -> list[ModelMeta]:
     """Load all models' metadata that fit the specified criteria.
 
@@ -43,6 +44,9 @@ def get_model_metas(
         use_instructions: Whether to filter by models that use instructions. If None, all models are included.
         zero_shot_on: A list of tasks on which the model is zero-shot. If None this filter is ignored.
         model_types: A list of model types to filter by. If None, all model types are included.
+        modalities: A list of modalities to filter by. If None, all modalities are included.
+        exclusive_modality_filter: If True, only return models whose modalities exactly match the provided
+            modalities. If False, return models whose modalities include the provided modalities.
 
     Returns:
         A list of model metadata objects that fit the specified criteria.
@@ -52,6 +56,8 @@ def get_model_metas(
     languages = set(languages) if languages is not None else None
     frameworks = set(frameworks) if frameworks is not None else None
     model_types_set = set(model_types) if model_types is not None else None
+    modalities_set = set(modalities) if modalities is not None else None
+
     for model_meta in MODEL_REGISTRY.values():
         if (model_names is not None) and (model_meta.name not in model_names):
             continue
@@ -72,6 +78,13 @@ def get_model_metas(
             model_meta.model_type
         ):
             continue
+        if modalities_set is not None:
+            model_modalities = set(model_meta.modalities)
+            if exclusive_modality_filter:
+                if model_modalities != modalities_set:
+                    continue
+            elif not modalities_set <= model_modalities:
+                continue
 
         lower, upper = n_parameters_range
         n_parameters = model_meta.n_parameters
@@ -93,6 +106,8 @@ def get_model(
     model_name: str,
     revision: str | None = None,
     device: str | None = None,
+    *,
+    embed_dim: int | None = None,
     **kwargs: Any,
 ) -> MTEBModels:
     """A function to fetch and load model object by name.
@@ -104,35 +119,33 @@ def get_model(
         model_name: Name of the model to fetch
         revision: Revision of the model to fetch
         device: Device used to load the model
+        embed_dim: Optional embedding dimension to load the model with. This is only used for models that support loading with a specified embedding dimension, and will be ignored for other models.
         **kwargs: Additional keyword arguments to pass to the model loader
 
     Returns:
         A model object
     """
-    meta = get_model_meta(model_name, revision)
-    model = meta.load_model(device=device, **kwargs)
-
-    if kwargs:
-        logger.info(
-            f"Model '{model_name}' loaded with additional arguments: {list(kwargs.keys())}"
-        )
-        meta = meta.model_copy(deep=True)
-        meta.loader_kwargs |= kwargs
-
-    model.mteb_model_meta = meta  # type: ignore[misc]
+    meta = get_model_meta(model_name, revision, fetch_from_hf=True)
+    model = meta.load_model(device=device, embed_dim=embed_dim, **kwargs)
     return model
 
 
 _MODEL_RENAMES: dict[str, str] = {
-    "bm25s": "baseline/bm25s",
+    "bm25s": "mteb/baseline-bm25s",
+    # to store model's eval results to display on benchmark
+    "baseline/bm25s": "mteb/baseline-bm25s",
+    "baseline/random-cross-encoder-baseline": "mteb/baseline-random-cross-encoder",
+    "mteb/baseline-random-encoder": "mteb/baseline-random-encoder",
+    "baseline/bb25": "mteb/baseline-bb25",
 }
 
 
 def get_model_meta(
     model_name: str,
     revision: str | None = None,
-    fetch_from_hf: bool = True,
+    fetch_from_hf: bool = False,
     fill_missing: bool = False,
+    experiment_kwargs: Mapping[str, Any] | None = None,
 ) -> ModelMeta:
     """A function to fetch a model metadata object by name.
 
@@ -141,6 +154,7 @@ def get_model_meta(
         revision: Revision of the model to fetch
         fetch_from_hf: Whether to fetch the model from HuggingFace Hub if not found in the registry
         fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+        experiment_kwargs: Optional dictionary of parameters to fill in the metadata for experimental models.
 
     Returns:
         A model metadata object
@@ -157,6 +171,11 @@ def get_model_meta(
         if revision and (not model_meta.revision == revision):
             raise ValueError(
                 f"Model revision {revision} not found for model {model_name}. Expected {model_meta.revision}."
+            )
+
+        if experiment_kwargs is not None:
+            model_meta = model_meta.model_copy(
+                update={"experiment_kwargs": experiment_kwargs}
             )
 
         if fill_missing and fetch_from_hf:

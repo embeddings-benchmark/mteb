@@ -204,11 +204,13 @@ class Seed16EmbeddingWrapper(AbsEncoder):
             else:
                 trimmed_sentences.append(sentence)
 
-        assert (
-            self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+        if (
+            self._embed_dim is not None
+            and self._embed_dim not in self._available_embed_dims
+        ):
+            raise ValueError(
+                f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
+            )
 
         if (
             prompt_type == PromptType("query") or prompt_type is None
@@ -235,11 +237,13 @@ class Seed16EmbeddingWrapper(AbsEncoder):
     ) -> Array:
         import torchvision.transforms.functional as F
 
-        assert (
-            self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+        if (
+            self._embed_dim is not None
+            and self._embed_dim not in self._available_embed_dims
+        ):
+            raise ValueError(
+                f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
+            )
 
         if (
             prompt_type == PromptType("query") or prompt_type is None
@@ -256,7 +260,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
             images_base64 = [pil_to_base64(image) for image in images]
         outputs = []
         for image in images_base64:
-            if instruction == "":
+            if instruction == "":  # noqa: PLC1901
                 resp = multimodal_embedding(image_base64=[image])
             else:
                 resp = multimodal_embedding(
@@ -279,13 +283,16 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         fusion_mode="sum",
         **kwargs: Any,
     ) -> Array:
-        assert (
-            self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+        if (
+            self._embed_dim is not None
+            and self._embed_dim not in self._available_embed_dims
+        ):
+            raise ValueError(
+                f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
+            )
 
-        assert len(texts) == len(images)
+        if len(texts) != len(images):
+            raise ValueError(f"Expected {len(texts)} images, got {len(images)}")
         images_base64 = [pil_to_base64(image) for image in images]
 
         outputs = []
@@ -441,4 +448,5 @@ seed_embedding = ModelMeta(
     training_datasets=doubao_embedding_training_data,
     public_training_code=None,
     public_training_data=None,
+    modalities=["text", "image"],
 )

@@ -19,7 +19,7 @@ from tests.mock_tasks import (
         MockBitextMiningTask(),  # uses model.similarity
     ],
 )
-@pytest.mark.parametrize("model", [mteb.get_model("baseline/random-encoder-baseline")])
+@pytest.mark.parametrize("model", [mteb.get_model("mteb/baseline-random-encoder")])
 def test_benchmark_datasets(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and run"""
     model = SearchEncoderWrapper(model)

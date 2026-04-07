@@ -41,7 +41,7 @@ class HubertWrapper(AbsEncoder):
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
@@ -126,6 +126,7 @@ hubert_base = ModelMeta(
     release_date="2021-06-14",  # Paper release date
     max_tokens=float("inf"),
     n_parameters=95_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=360,
     embed_dim=768,
     license="mit",
@@ -135,7 +136,9 @@ hubert_base = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/pytorch/fairseq/tree/master/examples/hubert",
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
-    training_datasets=set(),  # "LibriSpeech": ["train"]},
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{hsu2021hubertselfsupervisedspeechrepresentation,
@@ -159,6 +162,7 @@ hubert_large_ft = ModelMeta(
     release_date="2021-06-14",  # Paper release date
     max_tokens=float("inf"),
     n_parameters=317_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=1203,
     embed_dim=1024,
     license="mit",
@@ -168,7 +172,9 @@ hubert_large_ft = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/pytorch/fairseq/tree/master/examples/hubert",
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
-    training_datasets=set(),  # "LibriSpeech": ["train"]},
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{hsu2021hubertselfsupervisedspeechrepresentation,

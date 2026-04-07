@@ -860,8 +860,8 @@ class BibleNLPBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="BibleNLPBitextMining",
         dataset={
-            "path": "davidstap/biblenlp-corpus-mmteb",
-            "revision": "264a18480c529d9e922483839b4b9758e690b762",
+            "path": "mteb/biblenlp-corpus",
+            "revision": "94c4293ca75c04b908c6b8e30d15788fe20fb409",
             "split": f"train[:{_N}]",
         },
         description="Partial Bible translations in 829 languages, aligned by verse.",

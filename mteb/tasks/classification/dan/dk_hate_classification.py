@@ -60,7 +60,10 @@ Piperidis, Stelios},
 
     samples_per_label = 16
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         # convert label to a 0/1 label
         labels = self.dataset["train"]["label"]
         lab2idx = {lab: idx for idx, lab in enumerate(set(labels))}

@@ -1,11 +1,11 @@
 import torch
 
-from mteb.models.instruct_wrapper import instruct_wrapper
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
 
 
@@ -29,17 +29,12 @@ GTE_CITATION = """
 """
 
 gte_qwen2_7b_instruct = ModelMeta(
-    loader=instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
-        attn="bbcc",
-        pooling_method="lasttoken",
-        mode="embedding",
-        torch_dtype=torch.float16,
-        # The ST script does not normalize while the HF one does so unclear what to do
-        # https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct#sentence-transformers
-        normalized=True,
-        embed_eos="<|endoftext|>",
+        apply_instruction_to_passages=False,
+        model_kwargs={"dtype": torch.float16},
+        add_eos_token=True,
     ),
     name="Alibaba-NLP/gte-Qwen2-7B-instruct",
     model_type=["dense"],
@@ -64,15 +59,12 @@ gte_qwen2_7b_instruct = ModelMeta(
 )
 
 gte_qwen1_5_7b_instruct = ModelMeta(
-    loader=instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
-        attn="bbcc",
-        pooling_method="lasttoken",
-        mode="embedding",
-        torch_dtype=torch.float16,
-        normalized=True,
-        embed_eos="<|endoftext|>",
+        apply_instruction_to_passages=False,
+        model_kwargs={"dtype": torch.float16},
+        add_eos_token=True,
     ),
     name="Alibaba-NLP/gte-Qwen1.5-7B-instruct",
     model_type=["dense"],
@@ -102,15 +94,12 @@ gte_qwen1_5_7b_instruct = ModelMeta(
 )
 
 gte_qwen2_1_5b_instruct = ModelMeta(
-    loader=instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
-        attn="bbcc",
-        pooling_method="lasttoken",
-        mode="embedding",
-        torch_dtype=torch.float16,
-        normalized=True,
-        embed_eos="<|endoftext|>",
+        apply_instruction_to_passages=False,
+        model_kwargs={"dtype": torch.float16},
+        add_eos_token=True,
     ),
     name="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
     model_type=["dense"],
@@ -140,7 +129,7 @@ gte_qwen2_1_5b_instruct = ModelMeta(
 )
 
 gte_small_zh = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="thenlper/gte-small-zh",
     model_type=["dense"],
     languages=["zho-Hans"],
@@ -169,7 +158,7 @@ gte_small_zh = ModelMeta(
 )
 
 gte_base_zh = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="thenlper/gte-base-zh",
     model_type=["dense"],
     languages=["zho-Hans"],
@@ -198,7 +187,7 @@ gte_base_zh = ModelMeta(
 )
 
 gte_large_zh = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="thenlper/gte-large-zh",
     model_type=["dense"],
     languages=["zho-Hans"],
@@ -328,7 +317,7 @@ gte_multi_training_data = {
 }
 
 gte_multilingual_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Alibaba-NLP/gte-multilingual-base",
     model_type=["dense"],
     languages=gte_multilingual_langs,
@@ -358,7 +347,7 @@ gte_multilingual_base = ModelMeta(
 )
 
 gte_modernbert_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Alibaba-NLP/gte-modernbert-base",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -402,7 +391,7 @@ gte_modernbert_base = ModelMeta(
 
 
 gte_base_en_v15 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Alibaba-NLP/gte-base-en-v1.5",
     model_type=["dense"],
     languages=["eng-Latn"],

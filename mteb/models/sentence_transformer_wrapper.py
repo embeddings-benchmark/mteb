@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import sys
 import warnings
 from typing import TYPE_CHECKING, Any
 
@@ -13,6 +14,11 @@ from mteb.models import ModelMeta
 from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder
+
+if sys.version_info >= (3, 13):
+    from warnings import deprecated
+else:
+    from typing_extensions import deprecated
 
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder, SentenceTransformer
@@ -27,10 +33,16 @@ logger = logging.getLogger(__name__)
 SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
 
 
+@deprecated(
+    "sentence_transformers_loader is deprecated, use SentenceTransformerEncoderWrapper directly instead."
+)
 def sentence_transformers_loader(
     model_name: str, revision: str | None = None, device: str | None = None, **kwargs
 ) -> SentenceTransformerEncoderWrapper:
     """Loads a SentenceTransformer model and wraps it in a SentenceTransformerEncoderWrapper.
+
+    .. deprecated:: 2.11.0
+        Use :class:`SentenceTransformerEncoderWrapper` directly instead.
 
     Args:
         model_name: The name of the SentenceTransformer model to load.
@@ -54,6 +66,8 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         model_prompts: dict[str, str] | None = None,
+        *,
+        embed_dim: int | None = None,
         **kwargs,
     ) -> None:
         """Wrapper for SentenceTransformer models.
@@ -66,18 +80,29 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
+            embed_dim: The embedding dimension of the model to use.
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
         """
         from sentence_transformers import SentenceTransformer
 
         if isinstance(model, str):
             self.model = SentenceTransformer(
-                model, revision=revision, device=device, **kwargs
+                model,
+                revision=revision,
+                device=device,
+                truncate_dim=embed_dim,
+                **kwargs,
+            )
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    name=model,
+                    revision=revision,
+                    loader=sentence_transformers_loader,
+                )
             )
         else:
             self.model = model
-
-        self.mteb_model_meta = ModelMeta.from_sentence_transformer_model(self.model)
+            self.mteb_model_meta = ModelMeta.from_sentence_transformer_model(self.model)
 
         built_in_prompts = getattr(self.model, "prompts", None)
         if built_in_prompts and not model_prompts:
@@ -291,10 +316,16 @@ class CrossEncoderWrapper:
 
         if isinstance(model, CrossEncoder):
             self.model = model
+            self.mteb_model_meta = ModelMeta.from_cross_encoder(self.model)
         elif isinstance(model, str):
             self.model = CrossEncoder(model, revision=revision, device=device, **kwargs)
-
-        self.mteb_model_meta = ModelMeta.from_cross_encoder(self.model)
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    name=model,
+                    revision=revision,
+                    loader=CrossEncoderWrapper,
+                )
+            )
         self.query_prefix = query_prefix
         self.passage_prefix = passage_prefix
 

@@ -130,6 +130,7 @@ class AbsTaskSTS(AbsTask):
         self,
         model: MTEBModels,
         data_split: Dataset,
+        *,
         encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
@@ -170,7 +171,7 @@ class AbsTaskSTS(AbsTask):
 
         return self._calculate_scores(scores, normalized_scores)
 
-    def _calculate_scores(
+    def _calculate_scores(  # noqa: PLR6301
         self, scores: STSEvaluatorScores, normalized_scores: list[float]
     ) -> STSMetrics:
         def compute_corr(x: list[float], y: list[float]) -> tuple[float, float]:
@@ -222,7 +223,7 @@ class AbsTaskSTS(AbsTask):
             sentence1 = []
             sentence2 = []
             score = []
-            for hf_subset in self.metadata.eval_langs:
+            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 sentence1.extend(self.dataset[hf_subset][split][first_column])
                 sentence2.extend(self.dataset[hf_subset][split][second_column])
                 score.extend(self.dataset[hf_subset][split]["score"])
@@ -275,7 +276,11 @@ class AbsTaskSTS(AbsTask):
             label_statistics=labels_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def _push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+    ) -> None:
         self._upload_dataset_to_hub(
             repo_name,
             [self.column_names[0], self.column_names[1], "score"],

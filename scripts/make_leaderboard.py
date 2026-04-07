@@ -63,7 +63,7 @@ def load_leaderboard(
 
     # Convert scores into leaderboard tables
     loaded_benchmark = mteb.get_benchmark(benchmark.name)
-    summary_gr_df = apply_summary_styling_from_benchmark(
+    summary_gr_df, _ = apply_summary_styling_from_benchmark(
         loaded_benchmark, benchmark_results_filtered
     )
     per_task_gr_df = apply_per_task_styling_from_benchmark(

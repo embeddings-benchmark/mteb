@@ -56,7 +56,7 @@ and Fichtinger, Gabor},
     input_column_name = "webp"
     label_column_name = "cls"
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         path = Path(__file__).parent / "templates" / "PatchCamelyon_labels.txt"
         with path.open() as f:
             labels = f.readlines()

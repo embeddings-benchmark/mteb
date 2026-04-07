@@ -7,7 +7,6 @@ import torch
 import torch.nn.functional as F
 from packaging.version import Version
 
-from mteb.models import sentence_transformers_loader
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
@@ -72,7 +71,7 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
 
         # normalization not applied to classification
         # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/eval/mteb_eval/eval_mteb.py#L172
-        normalize = task_metadata not in (
+        normalize = task_metadata not in (  # noqa: PLR6201
             "Classification",
             "MultilabelClassification",
             "PairClassification",
@@ -512,7 +511,7 @@ nomic_embed_text_v2_moe = ModelMeta(
 )
 
 nomic_embed_code = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={
         "trust_remote_code": True,
         "model_prompts": model_prompts,

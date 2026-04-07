@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
-from mteb._create_dataloaders import _create_text_queries_dataloader
+from mteb._create_dataloaders import _combine_queries_with_instruction_text
 from mteb._requires_package import requires_package
 from mteb.models.model_meta import ModelMeta
 
@@ -54,7 +54,7 @@ def _composite_prior(
 
 
 def bb25_loader(model_name, **kwargs) -> SearchProtocol:
-    requires_package(bb25_loader, "bm25s", model_name, "pip install mteb[bm25s]")
+    requires_package(bb25_loader, "bm25s", model_name, "pip install 'mteb[bm25s]'")
     import bm25s
     import Stemmer
 
@@ -151,7 +151,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
 
             logger.info(f"Indexed {len(self.corpus_idx_to_id):,} documents")
 
-        def search(
+        def search(  # noqa: PLR0914
             self,
             queries: QueryDatasetType,
             *,
@@ -166,9 +166,11 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
             logger.info("Encoding Queries...")
             query_ids = list(queries["id"])
             results: RetrievalOutputType = {qid: {} for qid in query_ids}
-            queries_loader = _create_text_queries_dataloader(queries)
-            queries_texts = [text for batch in queries_loader for text in batch["text"]]
-
+            processed = queries.map(
+                _combine_queries_with_instruction_text,
+                desc="Processing queries for dataloading",
+            )
+            queries_texts = processed["text"]
             query_tokenized = self._encode(queries_texts)
 
             logger.info(f"Retrieving Results... {len(queries):,} queries")
@@ -275,7 +277,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
 
 bb25_model = ModelMeta(
     loader=bb25_loader,
-    name="baseline/bb25",
+    name="mteb/baseline-bb25",
     model_type=["sparse"],
     languages=None,
     open_weights=True,

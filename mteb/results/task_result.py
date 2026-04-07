@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 import json
 import logging
 import warnings
@@ -12,11 +13,18 @@ import numpy as np
 from huggingface_hub import EvalResult
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
+from typing_extensions import deprecated
 
-from mteb import TaskMetadata
 from mteb._helpful_enum import HelpfulStrEnum
+from mteb._hf_integration.eval_result_model import (
+    HFEvalResult,
+    HFEvalResultDataset,
+    HFEvalResults,
+    HFEvalResultSource,
+)
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.abstask import AbsTask
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
 from mteb.types import (
@@ -116,7 +124,7 @@ renamed_tasks = {
 }
 
 
-class TaskResult(BaseModel):
+class TaskResult(BaseModel):  # noqa: PLR0904
     """A class to represent the MTEB result.
 
     Attributes:
@@ -162,6 +170,7 @@ class TaskResult(BaseModel):
     scores: dict[SplitName, list[ScoresDict]]
     evaluation_time: float | None
     kg_co2_emissions: float | None = None
+    date: datetime.datetime | None = None
 
     @classmethod
     def from_task_results(
@@ -170,6 +179,7 @@ class TaskResult(BaseModel):
         scores: dict[SplitName, Mapping[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
+        date: datetime.datetime | None = None,
     ) -> TaskResult:
         """Create a TaskResult from the task and scores.
 
@@ -180,6 +190,7 @@ class TaskResult(BaseModel):
                 the dataset.
             evaluation_time: The time taken to evaluate the model.
             kg_co2_emissions: The kg of CO2 emissions produced by the model during evaluation.
+            date: The date the model was trained on.
         """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
@@ -201,6 +212,7 @@ class TaskResult(BaseModel):
             scores=flat_scores,
             evaluation_time=evaluation_time,
             kg_co2_emissions=kg_co2_emissions,
+            date=date,
         )
 
     @field_validator("scores")
@@ -265,6 +277,11 @@ class TaskResult(BaseModel):
         return self.task.metadata.is_public
 
     @property
+    def main_score(self) -> float:
+        """Get the main score of the result."""
+        return self.get_score()
+
+    @property
     def hf_subsets(self) -> list[str]:
         """Get the hf_subsets present in the scores."""
         hf_subsets = set()
@@ -320,9 +337,10 @@ class TaskResult(BaseModel):
             path: The path to the file to save.
         """
         json_obj = self.model_dump()
+        json_obj["date"] = self.date.timestamp() if self.date else None
         self._round_scores(json_obj["scores"], 6)
 
-        with path.open("w") as f:
+        with path.open("w") as f:  # noqa: PLW1514
             json.dump(json_obj, f, indent=2)
 
     @classmethod
@@ -388,7 +406,7 @@ class TaskResult(BaseModel):
         else:
             task = get_task(obj.task_name)
 
-        if task.metadata.type == "PairClassification":
+        if task.metadata.type == "PairClassification":  # noqa: PLR1702
             for split, split_scores in obj.scores.items():
                 for hf_subset_scores in split_scores:
                     # concatenate score e.g. ["max"]["ap"] -> ["max_ap"]
@@ -470,12 +488,12 @@ class TaskResult(BaseModel):
                         hf_subset_scores["main_score"] = None
 
         # specific fixes:
-        if task_name == "MLSUMClusteringP2P" and mteb_version in [
+        if task_name == "MLSUMClusteringP2P" and mteb_version in [  # noqa: PLR6201
             "1.1.2.dev0",
             "1.1.3.dev0",
         ]:  # back then it was only the french subsection which was implemented
             scores["test"]["fr"] = scores["test"].pop("default")
-        if task_name == "MLSUMClusteringS2S" and mteb_version in [
+        if task_name == "MLSUMClusteringS2S" and mteb_version in [  # noqa: PLR6201
             "1.1.2.dev0",
             "1.1.3.dev0",
         ]:
@@ -594,7 +612,7 @@ class TaskResult(BaseModel):
         return cls.model_construct(**data)
 
     def __repr__(self) -> str:
-        return f"TaskResult(task_name={self.task_name}, scores=...)"
+        return f"TaskResult(task_name={self.task_name}, main_score={self.main_score:.2f}, scores=..., ...)"
 
     def only_main_score(self) -> TaskResult:
         """Return a new TaskResult object with only the main score.
@@ -810,6 +828,9 @@ class TaskResult(BaseModel):
         merged_evaluation_time = None
         if self.evaluation_time and new_results.evaluation_time:
             merged_evaluation_time = self.evaluation_time + new_results.evaluation_time
+        date = self.date
+        if new_results.date is not None and (date is None or new_results.date > date):
+            date = new_results.date
         merged_results = TaskResult(
             dataset_revision=new_results.dataset_revision,
             task_name=new_results.task_name,
@@ -817,6 +838,7 @@ class TaskResult(BaseModel):
             scores=merged_scores,
             evaluation_time=merged_evaluation_time,
             kg_co2_emissions=merged_kg_co2_emissions,
+            date=date,
         )
 
         return merged_results
@@ -851,6 +873,10 @@ class TaskResult(BaseModel):
 
         return missing_splits
 
+    @deprecated(
+        "HF deprecated `EvalResults` in favor of `Benchmarks` and it's results. "
+        "To push new results use ModelMeta.push_eval_results()."
+    )
     def get_hf_eval_results(self) -> list[EvalResult]:
         """Create HF evaluation results objects from TaskResult objects.
 
@@ -880,6 +906,61 @@ class TaskResult(BaseModel):
                     )
                 )
         return results
+
+    def _to_hf_benchmark_result(self, user: str | None = None) -> HFEvalResults:
+        from mteb.get_tasks import get_task
+
+        task_metadata = get_task(self.task_name).metadata
+        dataset_id = task_metadata.dataset["path"]
+        dataset_revision = task_metadata.dataset["revision"]
+        eval_results = []
+        evaluated_splits = set(self.scores.keys())
+        evaluated_subsets = set()
+
+        notes = f"Obtained using MTEB v{self.mteb_version}"
+        source = HFEvalResultSource(
+            url="https://github.com/embeddings-benchmark/mteb/",
+            name=notes,
+            user=user,
+        )
+
+        for split, split_results in self.scores.items():
+            for subset_results in split_results:
+                subset_name = subset_results.get("hf_subset", "default")
+                task_id = f"{self.task_name}_{subset_name}_{split}"
+                eval_results.append(
+                    HFEvalResult(
+                        dataset=HFEvalResultDataset(
+                            id=dataset_id,
+                            task_id=task_id,
+                            revision=dataset_revision,
+                        ),
+                        value=round(subset_results["main_score"] * 100, 5),
+                        source=source,
+                        date=self.date,
+                        notes=notes,
+                    )
+                )
+                evaluated_subsets.add(subset_name)
+
+        if len(evaluated_splits) == len(task_metadata.eval_splits) and len(
+            evaluated_subsets
+        ) == len(task_metadata.hf_subsets):
+            # overall score
+            eval_results.append(
+                HFEvalResult(
+                    dataset=HFEvalResultDataset(
+                        id=dataset_id,
+                        task_id=task_metadata.name,
+                        revision=dataset_revision,
+                    ),
+                    value=round(self.get_score() * 100, 5),
+                    source=source,
+                    date=self.date,
+                    notes=notes,
+                )
+            )
+        return HFEvalResults.model_validate(eval_results)
 
 
 class TaskError(BaseModel):

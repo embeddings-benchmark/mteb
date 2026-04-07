@@ -82,7 +82,10 @@ class BlurbsClusteringP2PFast(AbsTaskClustering):
         adapted_from=["BlurbsClusteringP2P"],
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = _convert_to_fast(
             self.dataset, self.input_column_name, self.label_column_name, self.seed
         )

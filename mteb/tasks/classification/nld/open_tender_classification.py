@@ -35,7 +35,5 @@ class OpenTenderClassification(AbsTaskClassification):
   year = {2025},
 }
 """,
-        prompt={
-            "query": "Classificeer de gegeven aanbestedingsbeschrijving in het juiste onderwerp of thema"
-        },
+        prompt="Classificeer de gegeven aanbestedingsbeschrijving in het juiste onderwerp of thema",
     )
