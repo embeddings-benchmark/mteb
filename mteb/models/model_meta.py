@@ -1234,11 +1234,12 @@ class ModelMeta(BaseModel):
                 benchmarks or [],
             )
 
-        model_repo_exist = repo_exists(
-            existing_model_card_id_or_path, repo_type="model"
-        )
         if push_to_hub and existing_model_card_id_or_path:
             existing_model_card_id_or_path = str(existing_model_card_id_or_path)
+            model_repo_exist = repo_exists(
+                existing_model_card_id_or_path,
+                repo_type="model",
+            )
             if model_repo_exist:
                 existing_model_card.push_to_hub(
                     existing_model_card_id_or_path,
