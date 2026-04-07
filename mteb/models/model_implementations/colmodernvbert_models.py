@@ -38,9 +38,6 @@ class ColModernVBertWrapper(ColPaliEngineWrapper):
             **kwargs,
         )
 
-        if "torch_dtype" in kwargs:
-            self.mdl.to(kwargs["torch_dtype"])
-
 
 class BiModernVBertWrapper(ColPaliEngineWrapper):
     """Wrapper for BiModernVBERT models."""
@@ -67,9 +64,6 @@ class BiModernVBertWrapper(ColPaliEngineWrapper):
             **kwargs,
         )
 
-        if "torch_dtype" in kwargs:
-            self.mdl.to(kwargs["torch_dtype"])
-
 
 COLMODERNVBERT_CITATION = """
 @misc{teiletche2025modernvbertsmallervisualdocument,
@@ -83,7 +77,7 @@ COLMODERNVBERT_CITATION = """
 }
 """
 
-
+# Document specific model, trained for late-interaction
 colmodernvbert = ModelMeta(
     loader=ColModernVBertWrapper,
     loader_kwargs=dict(
@@ -113,6 +107,7 @@ colmodernvbert = ModelMeta(
 )
 
 
+# Document specific model, trained for single-vector retrieval
 bimodernvbert = ModelMeta(
     loader=BiModernVBertWrapper,
     loader_kwargs=dict(
@@ -128,13 +123,43 @@ bimodernvbert = ModelMeta(
     n_embedding_parameters=38_713_344,
     memory_usage_mb=961,
     max_tokens=8192,
-    embed_dim=None,
+    embed_dim=768,
     license="mit",
     open_weights=True,
     public_training_code="https://github.com/illuin-tech/modernvbert",
     public_training_data="https://huggingface.co/collections/ModernVBERT/colmodernvbert",
     framework=["ColPali", "safetensors"],
     reference="https://huggingface.co/ModernVBERT/bimodernvbert",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    training_datasets=COLPALI_TRAINING_DATA,
+    citation=COLMODERNVBERT_CITATION,
+)
+
+# Generalist model, trained for single-vector embeddings.
+# Should be specialized for specific tasks for best performance.
+modernvbert_embed = ModelMeta(
+    loader=BiModernVBertWrapper,
+    loader_kwargs=dict(
+        torch_dtype=torch.float32,
+    ),
+    name="ModernVBERT/modernvbert-embed",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    revision="da507113c3fdbc2e49d39c4b0148025c6bd008f9",
+    release_date="2025-10-01",
+    modalities=["image", "text"],
+    n_parameters=252_002_304,
+    n_embedding_parameters=38_713_344,
+    memory_usage_mb=961,
+    max_tokens=8192,
+    embed_dim=768,
+    license="mit",
+    open_weights=True,
+    public_training_code="https://github.com/illuin-tech/modernvbert",
+    public_training_data="https://huggingface.co/collections/ModernVBERT/colmodernvbert",
+    framework=["ColPali", "safetensors"],
+    reference="https://huggingface.co/ModernVBERT/modernvbert-embed",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
