@@ -43,8 +43,6 @@ class ColVec1Wrapper(AbsEncoder):
             trust_remote_code=True,
             **kwargs,
         ).to(self.device)
-        if torch_dtype is not None:
-            self.model = self.model.to(torch_dtype)
         self.model.eval()
 
         self.processor = AutoProcessor.from_pretrained(
