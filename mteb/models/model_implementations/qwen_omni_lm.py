@@ -68,8 +68,8 @@ class QwenOmniWrapper(AbsEncoder):
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
         self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
+    @staticmethod
     def _build_messages(
-        self,
         batch_texts: list[str],
         batch_images: list[Any],
         batch_audio: list[Any],
@@ -175,7 +175,7 @@ class QwenOmniWrapper(AbsEncoder):
             embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
             all_embeddings.append(embeddings.cpu())
 
-        return torch.cat(all_embeddings, dim=0)
+        return torch.cat(all_embeddings, dim=0).float()
 
 
 qwen25_omni_7b = ModelMeta(
