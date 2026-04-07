@@ -51,40 +51,6 @@ class ColVec1Wrapper(AbsEncoder):
             trust_remote_code=True,
         )
 
-        meta_name = model_name if "/" in model_name else f"local/{model_name}"
-        n_params = sum(p.numel() for p in self.model.parameters())
-        proj = self.model.embedding_proj_layer
-        n_embed_params = sum(p.numel() for p in proj.parameters())
-        self.mteb_model_meta = ModelMeta(
-            loader=None,
-            name=meta_name,
-            revision=revision,
-            release_date=None,
-            languages=["eng-Latn", "fra-Latn"],
-            model_type=["late-interaction"],
-            modalities=["image", "text"],
-            n_parameters=n_params,
-            n_embedding_parameters=n_embed_params,
-            memory_usage_mb=round(n_params * 2 / (1024 * 1024)),
-            max_tokens=262144,
-            embed_dim=proj.out_features,
-            license="apache-2.0",
-            open_weights=True,
-            public_training_code=None,
-            public_training_data=None,
-            framework=["PyTorch", "Transformers", "safetensors"],
-            similarity_fn_name=ScoringFunction.MAX_SIM,
-            use_instructions=False,
-            training_datasets=COLWEBAI_TRAINING_DATA,
-            citation=COLWEBAI_CITATION,
-            adapted_from=None,
-            superseded_by=None,
-            n_active_parameters_override=None,
-            contacts=None,
-            experiment_kwargs=None,
-            output_dtypes=["bfloat16"],
-            is_cross_encoder=False,
-        )
 
     def encode(
         self,
