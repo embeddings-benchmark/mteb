@@ -146,9 +146,6 @@ class ColVec1Wrapper(AbsEncoder):
         return self.processor.score_multi_vector(a, b, device=self.device)
 
 
-# ---------------------------------------------------------------------------
-# Training data declaration
-# ---------------------------------------------------------------------------
 
 COLWEBAI_TRAINING_DATA = {
     "VidoreDocVQARetrieval",
