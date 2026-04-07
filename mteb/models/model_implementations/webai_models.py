@@ -1,18 +1,3 @@
-"""
-MTEB wrapper and ModelMeta entries for ColVec1 models.
-
-# 4-B variant (remote)
-model = mteb.get_model("webAI-Official/webAI-ColVec1-4b", torch_dtype=torch.bfloat16)
-results = mteb.evaluate(model=model, tasks=mteb.get_benchmark("ViDoRe(v3)"))
-
-# 9-B variant (remote)
-model = mteb.get_model("webAI-Official/webAI-ColVec1-9b", torch_dtype=torch.bfloat16)
-results = mteb.evaluate(model=model, tasks=mteb.get_benchmark("ViDoRe(v3)"))
-
-For the MTEB PR, copy ColVec1Wrapper + the ModelMeta entries into
-mteb/models/model_implementations/webai_models.py.
-"""
-
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
