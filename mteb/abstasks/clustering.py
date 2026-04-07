@@ -212,9 +212,9 @@ class AbsTaskClustering(AbsTask):
 
         # Keep label and input columns
         input_cols = (
-            list(self.input_column_name.values())
-            if isinstance(self.input_column_name, dict)
-            else [self.input_column_name]
+            [self.input_column_name]
+            if isinstance(self.input_column_name, str)
+            else list(self.input_column_name.values())
         )
         columns_to_keep = set(input_cols) | {self.label_column_name}
 
@@ -285,9 +285,9 @@ class AbsTaskClustering(AbsTask):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClusteringFastDescriptiveStatistics:
         col = (
-            next(iter(self.input_column_name.values()))
-            if isinstance(self.input_column_name, dict)
-            else self.input_column_name
+            self.input_column_name
+            if isinstance(self.input_column_name, str)
+            else next(iter(self.input_column_name.values()))
         )
         if hf_subset:
             inputs = self.dataset[hf_subset][split][col]
@@ -332,9 +332,9 @@ class AbsTaskClustering(AbsTask):
         num_proc: int | None = None,
     ) -> None:
         input_cols = (
-            list(self.input_column_name.values())
-            if isinstance(self.input_column_name, dict)
-            else [self.input_column_name]
+            [self.input_column_name]
+            if isinstance(self.input_column_name, str)
+            else list(self.input_column_name.values())
         )
         self._upload_dataset_to_hub(
             repo_name,

@@ -195,9 +195,9 @@ class AbsTaskClassification(AbsTask):
             if isinstance(ds, Dataset | DatasetDict):
                 # Keep label and input columns
                 input_cols = (
-                    list(self.input_column_name.values())
-                    if isinstance(self.input_column_name, dict)
-                    else [self.input_column_name]
+                    [self.input_column_name]
+                    if isinstance(self.input_column_name, str)
+                    else list(self.input_column_name.values())
                 )
                 columns_to_keep = set(input_cols) | {self.label_column_name}
 
@@ -491,9 +491,9 @@ class AbsTaskClassification(AbsTask):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
         col = (
-            next(iter(self.input_column_name.values()))
-            if isinstance(self.input_column_name, dict)
-            else self.input_column_name
+            self.input_column_name
+            if isinstance(self.input_column_name, str)
+            else next(iter(self.input_column_name.values()))
         )
         train_text = []
         if hf_subset:
@@ -549,9 +549,9 @@ class AbsTaskClassification(AbsTask):
         num_proc: int | None = None,
     ) -> None:
         input_cols = (
-            list(self.input_column_name.values())
-            if isinstance(self.input_column_name, dict)
-            else [self.input_column_name]
+            [self.input_column_name]
+            if isinstance(self.input_column_name, str)
+            else list(self.input_column_name.values())
         )
         self._upload_dataset_to_hub(
             repo_name,

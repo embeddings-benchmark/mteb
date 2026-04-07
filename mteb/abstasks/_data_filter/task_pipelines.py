@@ -85,11 +85,10 @@ def process_classification(
     """Process classification task dataset(s) with cleaning pipeline."""
     if not task.data_loaded:
         task.load_data()
-    input_col = (
-        next(iter(task.input_column_name.values()))
-        if isinstance(task.input_column_name, dict)
-        else task.input_column_name
-    )
+    if isinstance(task.input_column_name, str):
+        input_col = task.input_column_name
+    else:
+        input_col = next(iter(task.input_column_name.values()))
 
     if isinstance(task.dataset, DatasetDict):
         return clean_dataset(
