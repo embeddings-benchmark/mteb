@@ -1164,19 +1164,17 @@ class ModelMeta(BaseModel):
         """Returns a string representation of the model."""
         return _pydantic_instance_to_code(self, exclude_fields=["experiment_kwargs"])
 
-    def generate_model_card(
+    def push_model_card_to_hub(
         self,
         tasks: Sequence[AbsTask] | None = None,
+        *,
         benchmarks: Sequence[Benchmark] | None = None,
         existing_model_card_id_or_path: str | Path | None = None,
         results_cache: ResultCache | None = None,
         output_path: Path = Path("model_card.md"),
         add_table_to_model_card: bool = False,
         models_to_compare: Sequence[str] | None = None,
-        *,
-        token: str | None = None,
         push_to_hub: bool = False,
-        push_eval_results: bool = False,
         create_pr: bool = False,
     ) -> None:
         """Generate or update a model card with evaluation results from MTEB.
@@ -1189,9 +1187,7 @@ class ModelMeta(BaseModel):
             output_path: Path to save the generated model card.
             add_table_to_model_card: Whether to add a results table to the model card.
             models_to_compare: List of models to add to results table.
-            token: Optional token for pushing to Hugging Face Hub.
             push_to_hub: Whether to push the updated model card to the Hub if it exists there.
-            push_eval_results: Whether to also push eval results to the Hub.
             create_pr: Whether to create a pull request when pushing eval results.
         """
         from mteb.cache import ResultCache
@@ -1246,22 +1242,12 @@ class ModelMeta(BaseModel):
             if model_repo_exist:
                 existing_model_card.push_to_hub(
                     existing_model_card_id_or_path,
-                    token=token,
                     create_pr=create_pr,
                 )
             else:
                 msg = f"Repository {existing_model_card_id_or_path} does not exist on the Hub. Skipping push to hub."
                 logger.warning(msg)
-                warnings.warn(msg)
         existing_model_card.save(output_path)
-
-        if push_eval_results and existing_model_card_id_or_path and model_repo_exist:
-            self.push_eval_results(
-                str(existing_model_card_id_or_path),
-                tasks=tasks,
-                cache=results_cache,
-                create_pr=create_pr,
-            )
 
     def push_eval_results(
         self,
