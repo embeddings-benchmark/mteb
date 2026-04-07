@@ -30,6 +30,7 @@ class ColVec1Wrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
+        trust_remote_code: bool = True,
         torch_dtype: torch.dtype | None = torch.bfloat16,
         **kwargs,
     ):
@@ -40,7 +41,7 @@ class ColVec1Wrapper(AbsEncoder):
             model_name,
             revision=revision,
             dtype=torch_dtype,
-            trust_remote_code=True,
+            trust_remote_code=trust_remote_code,
             **kwargs,
         ).to(self.device)
         self.model.eval()
@@ -48,9 +49,8 @@ class ColVec1Wrapper(AbsEncoder):
         self.processor = AutoProcessor.from_pretrained(
             model_name,
             revision=revision,
-            trust_remote_code=True,
+            trust_remote_code=trust_remote_code,
         )
-
 
     def encode(
         self,
@@ -62,12 +62,25 @@ class ColVec1Wrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        if (
-            "text" not in inputs.dataset.features
-            and "image" not in inputs.dataset.features
-        ):
-            raise ValueError("No text or image features found in inputs.")
-        return self.get_fused_embeddings(inputs, **kwargs)
+        text_embeddings = None
+        image_embeddings = None
+
+        if "text" in inputs.dataset.features:
+            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+        if "image" in inputs.dataset.features:
+            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
+        
+        if text_embeddings is not None and image_embeddings is not None:
+            if len(text_embeddings) != len(image_embeddings):
+                raise ValueError(
+                    "The number of texts and images must have the same length"
+                )
+            return text_embeddings + image_embeddings
+        elif text_embeddings is not None:
+            return text_embeddings
+        elif image_embeddings is not None:
+            return image_embeddings
+        raise ValueError("No text or image features found in inputs.")
 
     def _encode_inputs(self, encoded_inputs: dict[str, torch.Tensor]) -> torch.Tensor:
         vlm = getattr(self.model, "vlm", None)
@@ -77,74 +90,37 @@ class ColVec1Wrapper(AbsEncoder):
                 base.rope_deltas = None
         return self.model(**encoded_inputs)
 
-    def get_fused_embeddings(
-        self,
-        image_texts_pairs: DataLoader[BatchedInput] | None = None,
-        batch_size: int = 32,
-        show_progress_bar: bool = True,
-        **kwargs: Any,
-    ):
+    def get_image_embeddings(self, images, batch_size=32, show_progress_bar=True, **kwargs):
         import torchvision.transforms.functional as F
         from PIL import Image
-
-        contains_image = "image" in image_texts_pairs.dataset.features
-        contains_text = "text" in image_texts_pairs.dataset.features
-        contains_both = contains_image and contains_text
-
-        if contains_both:
-            progress_desc = "Encoding images+texts"
-        elif contains_image:
-            progress_desc = "Encoding images"
-        elif contains_text:
-            progress_desc = "Encoding texts"
-        else:
-            raise ValueError("No text or image features found in inputs.")
-
-        all_embeds: list[torch.Tensor] = []
+        all_embeds = []
         with torch.no_grad():
-            for batch in tqdm(
-                image_texts_pairs,
-                disable=not show_progress_bar,
-                desc=progress_desc,
-            ):
-                if contains_image:
-                    imgs = [
-                        F.to_pil_image(b.to(self.device))
-                        if not isinstance(b, Image.Image)
-                        else b
-                        for b in batch["image"]
-                    ]
-                else:
-                    imgs = None
-                if contains_text:
-                    texts = batch["text"]
-                else:
-                    texts = None
-                if contains_both:
-                    if len(imgs) != len(texts):
-                        raise ValueError(
-                            f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
-                        )
-
-                if contains_image:
-                    imgs = [img.convert("RGB") for img in imgs]
-                    inputs = self.processor.process_images(imgs)
-                else:
-                    inputs = self.processor.process_queries(texts)
+            for batch in tqdm(images, disable=not show_progress_bar, desc="Encoding images"):
+                imgs = [
+                    F.to_pil_image(b.to(self.device)) if not isinstance(b, Image.Image) else b
+                    for b in batch["image"]
+                ]
+                imgs = [img.convert("RGB") for img in imgs]
+                inputs = self.processor.process_images(imgs)
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 outs = self._encode_inputs(inputs)
                 all_embeds.extend(outs.cpu().to(torch.float32))
+        return torch.nn.utils.rnn.pad_sequence(all_embeds, batch_first=True, padding_value=0)
 
-        padded = torch.nn.utils.rnn.pad_sequence(
-            all_embeds, batch_first=True, padding_value=0
-        )
-        return padded
+    def get_text_embeddings(self, texts, batch_size=32, show_progress_bar=True, **kwargs):
+        all_embeds = []
+        with torch.no_grad():
+            for batch in tqdm(texts, disable=not show_progress_bar, desc="Encoding texts"):
+                inputs = self.processor.process_queries(batch["text"])
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                outs = self._encode_inputs(inputs)
+                all_embeds.extend(outs.cpu().to(torch.float32))
+        return torch.nn.utils.rnn.pad_sequence(all_embeds, batch_first=True, padding_value=0)
 
     def similarity(self, a, b):
         a = [torch.as_tensor(x) for x in a]
         b = [torch.as_tensor(x) for x in b]
         return self.processor.score_multi_vector(a, b, device=self.device)
-
 
 
 COLWEBAI_TRAINING_DATA = {
@@ -183,7 +159,7 @@ colvec1_4b = ModelMeta(
     memory_usage_mb=8661,
     max_tokens=262144,
     embed_dim=640,
-    license="apache-2.0",
+    license="multiple",
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
@@ -216,7 +192,7 @@ colvec1_9b = ModelMeta(
     memory_usage_mb=17968,
     max_tokens=262144,
     embed_dim=2560,
-    license="apache-2.0",
+    license="multiple",
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
