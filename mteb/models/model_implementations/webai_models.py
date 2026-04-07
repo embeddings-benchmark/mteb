@@ -9,6 +9,7 @@ from transformers import AutoModel, AutoProcessor
 from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -143,8 +144,12 @@ COLWEBAI_TRAINING_DATA = {
     "VidoreInfoVQARetrieval",
     "VidoreTatdqaRetrieval",
     "VidoreArxivQARetrieval",
-    "VisRAG-Ret-Train-Synthetic-data",
-    "VisRAG-Ret-Train-In-domain-data",
+    "VisRAGRetArxivQA",
+    "VisRAGRetChartQA",
+    "VisRAGRetInfoVQA",
+    "VisRAGRetPlotQA",
+    "VisRAGRetMPDocVQA",
+    "VisRAGRetSlideVQA",
     "VDRMultilingualRetrieval",
     "VidoreTabfquadRetrieval",
 }
@@ -183,12 +188,11 @@ colvec1_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=False,
     training_datasets=COLWEBAI_TRAINING_DATA,
-    adapted_from=None,
+    adapted_from="Qwen/Qwen3.5-4B",
     superseded_by=None,
     citation=COLWEBAI_CITATION,
     contacts=["psam-ai"],
-    output_dtypes=["bfloat16"],
-    is_cross_encoder=False,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -216,10 +220,9 @@ colvec1_9b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=False,
     training_datasets=COLWEBAI_TRAINING_DATA,
-    adapted_from=None,
+    adapted_from="Qwen/Qwen3.5-9B",
     superseded_by=None,
     citation=COLWEBAI_CITATION,
-    contacts=["psam-ai"],,
-    output_dtypes=["bfloat16"],
-    is_cross_encoder=False,
+    contacts=["psam-ai"],
+    output_dtypes=OutputDType.FLOAT16,
 )
