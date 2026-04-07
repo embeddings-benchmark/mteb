@@ -85,10 +85,7 @@ def process_classification(
     """Process classification task dataset(s) with cleaning pipeline."""
     if not task.data_loaded:
         task.load_data()
-    from mteb._create_dataloaders import _normalize_input_columns
-
-    col_mapping = _normalize_input_columns(task.input_column_name)
-    input_col = next(iter(col_mapping.values()))
+    input_col = next(iter(task.input_column_name.values())) if isinstance(task.input_column_name, dict) else task.input_column_name
 
     if isinstance(task.dataset, DatasetDict):
         return clean_dataset(

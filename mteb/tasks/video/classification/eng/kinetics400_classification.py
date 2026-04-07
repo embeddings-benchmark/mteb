@@ -1,7 +1,12 @@
-from typing import ClassVar
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar
 
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 
 class Kinetics400Classification(AbsTaskClassification):
@@ -42,7 +47,7 @@ class Kinetics400Classification(AbsTaskClassification):
 """,
     )
 
-    input_column_name: ClassVar[str | dict[str, str]] = {
+    input_column_name: ClassVar[str | Mapping[str, str]] = {
         "video": "video",
         "audio": "audio",
     }

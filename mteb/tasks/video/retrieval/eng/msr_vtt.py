@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import TYPE_CHECKING, ClassVar
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 from datasets import load_dataset
 
@@ -34,7 +37,7 @@ class MSRVTTV2T(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-    input_column_name: ClassVar[str | dict[str, str]] = {
+    input_column_name: ClassVar[str | Mapping[str, str]] = {
         "video": "video",
         "audio": "audio",
     }

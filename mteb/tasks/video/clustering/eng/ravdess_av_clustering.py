@@ -1,12 +1,17 @@
-from typing import ClassVar
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar
 
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
 
 class RAVDESSAVClustering(AbsTaskClustering):
     metadata = TaskMetadata(
-        name="RAVDESS_AVClustering",
+        name="RAVDESSAVClustering",
         description="Emotion clustering task with video and audio data for 8 emotions: neutral, calm, happy, sad, angry, fearful, surprise, and disgust expressions.",
         reference="https://doi.org/10.1371/journal.pone.0196391",
         dataset={
@@ -43,7 +48,7 @@ class RAVDESSAVClustering(AbsTaskClustering):
 """,
     )
     max_fraction_of_documents_to_embed = None
-    input_column_name: ClassVar[str | dict[str, str]] = {
+    input_column_name: ClassVar[str | Mapping[str, str]] = {
         "video": "video",
         "audio": "audio",
     }

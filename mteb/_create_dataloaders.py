@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import warnings
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
@@ -30,13 +31,6 @@ if TYPE_CHECKING:
     )
 
 logger = logging.getLogger(__name__)
-
-
-def _normalize_input_columns(input_column_name: str | dict[str, str]) -> dict[str, str]:
-    """Normalize input_column_name to a {modality: column_name} mapping."""
-    if isinstance(input_column_name, str):
-        return {input_column_name: input_column_name}
-    return input_column_name
 
 
 def _create_dataloader_from_texts(
@@ -249,7 +243,7 @@ def _prepare_dataset(
     dataset: Dataset,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
-    input_column: str | dict[str, str] | None = None,
+    input_column: str | Mapping[str, str] | None = None,
     num_proc: int | None = None,
 ) -> Dataset:
     """Apply all modality-specific transformations to the dataset.
@@ -287,7 +281,7 @@ def _prepare_dataset(
                 )
 
     if "image" in modalities:
-        if isinstance(input_column, dict):
+        if isinstance(input_column, Mapping):
             image_col = input_column.get("image", "image")
         elif isinstance(input_column, str):
             image_col = input_column
@@ -300,7 +294,7 @@ def _prepare_dataset(
         )
     for modality in ("audio", "video"):
         if modality in modalities:
-            if isinstance(input_column, dict):
+            if isinstance(input_column, Mapping):
                 col_name = input_column.get(modality, modality)
             elif isinstance(input_column, str):
                 col_name = input_column
@@ -320,7 +314,7 @@ def create_dataloader(
     *,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
-    input_column: str | dict[str, str] | None = None,
+    input_column: str | Mapping[str, str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
     **kwargs: Any,
@@ -344,7 +338,7 @@ def create_dataloader(
     """
     # Text-only shortcut: skip heavy dataset preparation for pure text tasks
     if prompt_type is None and task_metadata.modalities == ["text"]:
-        if isinstance(input_column, dict):
+        if isinstance(input_column, Mapping):
             text_col = input_column.get("text", next(iter(input_column.values())))
         elif isinstance(input_column, str):
             text_col = input_column
@@ -472,58 +466,22 @@ class AudioCollator:
 
 
 class VideoCollator:
-    """Collator for video data that optionally truncates to a maximum number of frames."""
+    """Collator for video data that resamples video frames."""
 
-    def __init__(
-        self,
-        max_frames: int,
-        target_sampling_rate: int = 32_000,
-        max_samples: int | None = None,
-    ) -> None:
+    def __init__(self, max_frames: int) -> None:
         """Initialize the collator.
 
         Args:
-            max_frames: The maximum number of frames to keep for each video. If None, no truncation is applied.
-            target_sampling_rate: The sampling rate to resample the audio to.
-            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+            max_frames: The maximum number of frames to keep for each video.
         """
         self.max_frames = max_frames
-        self.audio_collator = AudioCollator(
-            target_sampling_rate=target_sampling_rate, max_samples=max_samples
-        )
 
-    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
-        if "video" not in inputs[0]:
-            return cast("BatchedInput", inputs)
-
-        collated_inputs = []
+    def __call__(self, inputs: list[dict[str, Any]]) -> list[dict[str, Any]]:
         for row in inputs:
             video = row.pop("video")
-            # video is a raw VideoDecoder — pass directly to resample
             frames = self.resample_video(video, self.max_frames)
-
-            # Process audio
-            if "audio" in row and row["audio"] is not None:
-                audio = self.audio_collator.resample_audio(
-                    row,
-                    target_sampling_rate=self.audio_collator.target_sampling_rate,
-                    max_samples=self.audio_collator.max_samples,
-                )
-                row["audio"] = AudioInputItem(
-                    array=audio,
-                    sampling_rate=self.audio_collator.target_sampling_rate,
-                )
-
             row["video"] = VideoInputItem(frames=frames)
-            collated_inputs.append(row)
-
-        return cast(
-            "BatchedInput",
-            {
-                key: [row[key] for row in collated_inputs]
-                for key in collated_inputs[0].keys()
-            },
-        )
+        return inputs
 
     @staticmethod
     def resample_video(
@@ -553,8 +511,7 @@ class VideoCollator:
 class MultimodalCollator:
     """Collator that handles any combination of video and audio modalities.
 
-    Delegates to VideoCollator when video is present (which also handles audio
-    embedded in VideoInputItem), and falls back to AudioCollator for audio-only.
+    Composes VideoCollator and AudioCollator: each handles its own column independently.
     """
 
     def __init__(
@@ -570,11 +527,7 @@ class MultimodalCollator:
             max_frames: Maximum number of frames to keep per video.
             max_samples: Maximum number of audio samples to keep. If None, no truncation.
         """
-        self.video_collator = VideoCollator(
-            max_frames=max_frames,
-            target_sampling_rate=target_sampling_rate,
-            max_samples=max_samples,
-        )
+        self.video_collator = VideoCollator(max_frames=max_frames)
         self.audio_collator = AudioCollator(
             target_sampling_rate=target_sampling_rate,
             max_samples=max_samples,
@@ -582,7 +535,13 @@ class MultimodalCollator:
 
     def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
         if "video" in inputs[0]:
-            return self.video_collator(inputs)
+            inputs = self.video_collator(inputs)
         if "audio" in inputs[0]:
             return self.audio_collator(inputs)
-        return cast("BatchedInput", _custom_collate_fn(inputs))
+        return cast(
+            "BatchedInput",
+            {
+                key: [row[key] for row in inputs]
+                for key in inputs[0].keys()
+            },
+        )

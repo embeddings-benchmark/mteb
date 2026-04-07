@@ -16,7 +16,7 @@ from sklearn.metrics import (
 )
 from sklearn.model_selection import KFold
 
-from mteb._create_dataloaders import _normalize_input_columns, create_dataloader
+from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator
 from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
@@ -32,6 +32,7 @@ from ._statistics_calculation import (
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
     from pathlib import Path
 
     from numpy.typing import NDArray
@@ -140,7 +141,7 @@ class AbsTaskClassification(AbsTask):
     n_experiments: int = 10
     train_split: str = "train"
     label_column_name: str = "label"
-    input_column_name: str | dict[str, str] = "text"
+    input_column_name: str | Mapping[str, str] = "text"
     abstask_prompt = "Classify user passages."
     is_cross_validation: bool = False
     n_splits = 5
@@ -193,8 +194,8 @@ class AbsTaskClassification(AbsTask):
 
             if isinstance(ds, Dataset | DatasetDict):
                 # Keep label and input columns
-                col_mapping = _normalize_input_columns(self.input_column_name)
-                columns_to_keep = set(col_mapping.values()) | {self.label_column_name}
+                input_cols = list(self.input_column_name.values()) if isinstance(self.input_column_name, dict) else [self.input_column_name]
+                columns_to_keep = set(input_cols) | {self.label_column_name}
 
                 if isinstance(ds, DatasetDict):
                     available = set(next(iter(ds.values())).column_names)
@@ -485,8 +486,7 @@ class AbsTaskClassification(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
-        col_mapping = _normalize_input_columns(self.input_column_name)
-        col = next(iter(col_mapping.values()))
+        col = next(iter(self.input_column_name.values())) if isinstance(self.input_column_name, dict) else self.input_column_name
         train_text = []
         if hf_subset:
             inputs = self.dataset[hf_subset][split][col]
@@ -540,9 +540,9 @@ class AbsTaskClassification(AbsTask):
         repo_name: str,
         num_proc: int | None = None,
     ) -> None:
-        col_mapping = _normalize_input_columns(self.input_column_name)
+        input_cols = list(self.input_column_name.values()) if isinstance(self.input_column_name, dict) else [self.input_column_name]
         self._upload_dataset_to_hub(
             repo_name,
-            list(col_mapping.values()) + [self.label_column_name],
+            input_cols + [self.label_column_name],
             num_proc=num_proc,
         )
