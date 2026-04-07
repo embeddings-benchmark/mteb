@@ -196,7 +196,6 @@ colvec1_4b = ModelMeta(
     superseded_by=None,
     citation=COLWEBAI_CITATION,
     contacts=None,
-    experiment_kwargs=None,
     output_dtypes=["bfloat16"],
     is_cross_encoder=False,
 )
