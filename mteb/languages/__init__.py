@@ -4,8 +4,6 @@ from .iso_mappings import (
     ISO_TO_FAM_LEVEL0,
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
-    _hf_lang_to_iso_lang_script,
-    _hf_langs_to_iso_lang_scripts,
 )
 from .language_scripts import LanguageScripts
 from .programming_languages import PROGRAMMING_LANGS
@@ -17,7 +15,5 @@ __all__ = [
     "ISO_TO_SCRIPT",
     "PROGRAMMING_LANGS",
     "LanguageScripts",
-    "_hf_lang_to_iso_lang_script",
-    "_hf_langs_to_iso_lang_scripts",
     "check_language_code",
 ]

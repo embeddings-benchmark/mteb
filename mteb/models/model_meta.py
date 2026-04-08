@@ -32,7 +32,8 @@ from mteb._hf_integration.hf_hub_utils import (
     _get_repo_commits,
     _repo_exists,
 )
-from mteb.languages import _hf_langs_to_iso_lang_scripts, check_language_code
+from mteb.languages import check_language_code
+from mteb.languages.iso_mappings import _hf_langs_to_iso_lang_scripts
 from mteb.models.models_protocols import MTEBModels
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 

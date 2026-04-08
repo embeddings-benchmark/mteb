@@ -76,25 +76,19 @@ def _hf_lang_to_iso_lang_script(hf_lang: str) -> str | None:
         parts = hf_lang.split("-")
         if len(parts) == 2 and len(parts[0]) == 3 and len(parts[1]) == 4:
             return f"{parts[0]}-{parts[1].capitalize()}"
-
-    # 2-letter ISO 639-1 code
-    if len(hf_lang) == 2:
-        iso3 = _get_iso1_to_iso3().get(hf_lang)
-        if iso3 is None:
-            logger.debug(f"Unknown ISO 639-1 code: {hf_lang}")
-            return None
-    # 3-letter ISO 639-2/3 code
-    elif len(hf_lang) == 3:
-        if hf_lang in ISO_TO_LANGUAGE:
-            iso3 = hf_lang
-        else:
-            logger.debug(f"Unknown ISO 639-3 code: {hf_lang}")
-            return None
-    else:
-        logger.debug(f"Unrecognized language code format: {hf_lang}")
         return None
 
-    # Look up default script
+    # Resolve to ISO 639-3 code
+    iso3: str | None = None
+    if len(hf_lang) == 2:
+        iso3 = _get_iso1_to_iso3().get(hf_lang)
+    elif len(hf_lang) == 3 and hf_lang in ISO_TO_LANGUAGE:
+        iso3 = hf_lang
+
+    if iso3 is None:
+        logger.debug(f"Could not resolve language code: {hf_lang}")
+        return None
+
     script = _get_iso3_to_default_script().get(iso3)
     if script is None:
         logger.debug(f"No default script for language code: {iso3}")
