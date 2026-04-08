@@ -5,8 +5,8 @@ from attr import dataclass
 
 from mteb.languages import (
     LanguageScripts,
-    hf_lang_to_iso_lang_script,
-    hf_langs_to_iso_lang_scripts,
+    _hf_lang_to_iso_lang_script,
+    _hf_langs_to_iso_lang_scripts,
 )
 
 
@@ -82,7 +82,7 @@ class TestHfLangToIsoLangScript:
         ],
     )
     def test_iso_639_1_codes(self, hf_lang, expected):
-        assert hf_lang_to_iso_lang_script(hf_lang) == expected
+        assert _hf_lang_to_iso_lang_script(hf_lang) == expected
 
     @pytest.mark.parametrize(
         "hf_lang, expected",
@@ -94,51 +94,51 @@ class TestHfLangToIsoLangScript:
         ],
     )
     def test_iso_639_3_codes(self, hf_lang, expected):
-        assert hf_lang_to_iso_lang_script(hf_lang) == expected
+        assert _hf_lang_to_iso_lang_script(hf_lang) == expected
 
     @pytest.mark.parametrize(
         "hf_lang",
         ["multilingual", "code", "mixed", "other", "unknown"],
     )
     def test_special_values_return_none(self, hf_lang):
-        assert hf_lang_to_iso_lang_script(hf_lang) is None
+        assert _hf_lang_to_iso_lang_script(hf_lang) is None
 
     def test_already_formatted(self):
-        assert hf_lang_to_iso_lang_script("eng-Latn") == "eng-Latn"
+        assert _hf_lang_to_iso_lang_script("eng-Latn") == "eng-Latn"
 
     def test_unknown_code_returns_none(self):
-        assert hf_lang_to_iso_lang_script("xx") is None
-        assert hf_lang_to_iso_lang_script("zzz") is None
-        assert hf_lang_to_iso_lang_script("invalid") is None
+        assert _hf_lang_to_iso_lang_script("xx") is None
+        assert _hf_lang_to_iso_lang_script("zzz") is None
+        assert _hf_lang_to_iso_lang_script("invalid") is None
 
     def test_whitespace_handling(self):
-        assert hf_lang_to_iso_lang_script("  en  ") == "eng-Latn"
+        assert _hf_lang_to_iso_lang_script("  en  ") == "eng-Latn"
 
 
 class TestHfLangsToIsoLangScripts:
     """Tests for converting lists of HuggingFace language codes."""
 
     def test_none_input(self):
-        assert hf_langs_to_iso_lang_scripts(None) is None
+        assert _hf_langs_to_iso_lang_scripts(None) is None
 
     def test_single_string(self):
-        assert hf_langs_to_iso_lang_scripts("en") == ["eng-Latn"]
+        assert _hf_langs_to_iso_lang_scripts("en") == ["eng-Latn"]
 
     def test_list_input(self):
-        result = hf_langs_to_iso_lang_scripts(["en", "fr", "de"])
+        result = _hf_langs_to_iso_lang_scripts(["en", "fr", "de"])
         assert result == ["deu-Latn", "eng-Latn", "fra-Latn"]
 
     def test_filters_special_values(self):
-        result = hf_langs_to_iso_lang_scripts(["en", "multilingual", "fr"])
+        result = _hf_langs_to_iso_lang_scripts(["en", "multilingual", "fr"])
         assert result == ["eng-Latn", "fra-Latn"]
 
     def test_all_invalid_returns_none(self):
-        assert hf_langs_to_iso_lang_scripts(["multilingual", "unknown"]) is None
+        assert _hf_langs_to_iso_lang_scripts(["multilingual", "unknown"]) is None
 
     def test_deduplication(self):
-        result = hf_langs_to_iso_lang_scripts(["en", "en", "en"])
+        result = _hf_langs_to_iso_lang_scripts(["en", "en", "en"])
         assert result == ["eng-Latn"]
 
     def test_sorted_output(self):
-        result = hf_langs_to_iso_lang_scripts(["zh", "en", "ar"])
+        result = _hf_langs_to_iso_lang_scripts(["zh", "en", "ar"])
         assert result == ["ara-Arab", "eng-Latn", "zho-Hans"]
