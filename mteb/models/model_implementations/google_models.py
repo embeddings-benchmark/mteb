@@ -14,6 +14,8 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
+logger = logging.getLogger(__name__)
+
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
@@ -306,13 +308,15 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
                     if "429" in str(e) and attempt < 9:
                         import time
 
-                        print(
+                        logger.warning(
                             f"Rate limited, waiting {wait_time}s (attempt {attempt + 1}/10): {e}"
                         )
                         time.sleep(wait_time)
                         wait_time = min(wait_time * 2, 600)
                     elif attempt < 9:
-                        print(f"Retrying after error (attempt {attempt + 1}/10): {e}")
+                        logger.warning(
+                            f"Retrying after error (attempt {attempt + 1}/10): {e}"
+                        )
                     else:
                         raise
             all_embeddings.extend(
