@@ -416,6 +416,7 @@ conflicts = [
         { extra = "muq" },
         { extra = "mctct" },
         { extra = "qwen-vl" },
+        { extra = "embeddinggemma" },
     ],
 ]
 
