@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import logging
+from functools import cache
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -33,25 +34,19 @@ with path_to_lang_fam.open("r") as f:
 
 ISO_TO_FAM_LEVEL0 = {k: v["level0"] for k, v in ISO_TO_FAM.items()}
 
-# Lazy-loaded to avoid doing too much at import time
-_iso1_to_iso3: dict[str, str] | None = None
-_iso3_to_default_script: dict[str, str] | None = None
 
-
+@cache
 def _get_iso1_to_iso3() -> dict[str, str]:
-    global _iso1_to_iso3
-    if _iso1_to_iso3 is None:
-        with _PATH_ISO1_TO_ISO3.open("r") as f:
-            _iso1_to_iso3 = json.load(f)
-    return _iso1_to_iso3
+    """Lazy-load ISO 639-1 to ISO 639-3 mapping."""
+    with _PATH_ISO1_TO_ISO3.open("r") as f:
+        return json.load(f)
 
 
+@cache
 def _get_iso3_to_default_script() -> dict[str, str]:
-    global _iso3_to_default_script
-    if _iso3_to_default_script is None:
-        with _PATH_DEFAULT_SCRIPTS.open("r") as f:
-            _iso3_to_default_script = json.load(f)
-    return _iso3_to_default_script
+    """Lazy-load ISO 639-3 to default script mapping."""
+    with _PATH_DEFAULT_SCRIPTS.open("r") as f:
+        return json.load(f)
 
 
 # Special HF language values that are not ISO codes
