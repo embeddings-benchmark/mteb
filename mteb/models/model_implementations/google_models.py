@@ -356,6 +356,14 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
             for batch in inputs:
                 for text, image in zip(batch["text"], batch["image"]):
                     contents.append([text, image])
+        elif has_text and has_audio:
+            contents = []
+            for batch in inputs:
+                for text, audio_item in zip(batch["text"], batch["audio"]):
+                    wav_bytes = _audio_to_wav_bytes(audio_item)
+                    contents.append(
+                        [text, Part.from_bytes(data=wav_bytes, mime_type="audio/wav")]
+                    )
         elif has_text:
             if has_title:
                 contents = []
@@ -508,7 +516,7 @@ google_gemini_embedding_2_preview = ModelMeta(
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=2048,
-    embed_dim=3072,
+    embed_dim=3072,  # supports [768, 1536, 3072] via MRL once #4170 is merged
     license=None,
     reference="https://ai.google.dev/gemini-api/docs/embeddings",
     similarity_fn_name=ScoringFunction.COSINE,
