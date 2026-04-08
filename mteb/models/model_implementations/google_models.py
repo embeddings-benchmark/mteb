@@ -22,8 +22,6 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
 
-logger = logging.getLogger(__name__)
-
 MULTILINGUAL_EVALUATED_LANGUAGES = [
     "arb-Arab",
     "ben-Beng",
@@ -516,7 +514,7 @@ google_gemini_embedding_2_preview = ModelMeta(
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=2048,
-    embed_dim=3072,  # supports [768, 1536, 3072] via MRL once #4170 is merged
+    embed_dim=[768, 1536, 3072],
     license=None,
     reference="https://ai.google.dev/gemini-api/docs/embeddings",
     similarity_fn_name=ScoringFunction.COSINE,
