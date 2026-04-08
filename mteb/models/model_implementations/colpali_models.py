@@ -126,7 +126,7 @@ class ColPaliEngineWrapper(AbsEncoder):
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(texts, desc="Encoding texts"):
-                batch = [
+                batch = [  # noqa: PLW2901
                     self.processor.query_prefix
                     + t
                     + self.processor.query_augmentation_token * 10

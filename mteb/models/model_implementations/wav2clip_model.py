@@ -112,7 +112,7 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
 
             with torch.no_grad():
                 text_features = self.clip.get_text_features(**features)
-                text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+                text_features = text_features / text_features.norm(dim=-1, keepdim=True)  # noqa: PLR6104
             text_embeddings.append(text_features.cpu().detach().numpy())
 
         return np.vstack(text_embeddings)
@@ -169,9 +169,7 @@ wav2clip_zero = ModelMeta(
     public_training_code="https://github.com/descriptinc/lyrebird-wav2clip",
     public_training_data="https://github.com/descriptinc/lyrebird-wav2clip#data",
     training_datasets=set(
-        # "AudioSet": ["https://research.google.com/audioset/"],
-        # "FreeSound": ["https://freesound.org/"],
-        # "BBC Sound Effects": ["https://sound-effects.bbcrewind.co.uk/"],
+        # VGGSound (not in MTEB)
     ),
     citation="""
 @misc{wu2022wav2cliplearningrobustaudio,

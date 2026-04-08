@@ -4,6 +4,7 @@ import logging
 
 import pytest
 import torch
+from packaging.version import Version
 
 import mteb
 from mteb.abstasks import AbsTask
@@ -32,4 +33,6 @@ logging.basicConfig(level=logging.INFO)
     ],
 )
 def test_encoder_dtype_on_task(task: AbsTask, model: mteb.EncoderProtocol):
+    if Version(torch.__version__) <= Version("2.5.0"):
+        pytest.xfail('Torch will raise "clamp_min_scalar_cpu" not implemented for Half')
     mteb.evaluate(model, task, cache=None)

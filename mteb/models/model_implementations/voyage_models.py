@@ -205,7 +205,7 @@ class VoyageModel(AbsEncoder):
         self._client = voyageai.Client(max_retries=max_retries)
         self._embed_func = rate_limit(max_rpm)(token_limit(max_tpm)(self._client.embed))
 
-        self._model_name = model_name.split("/")[-1].split()[0]
+        self._model_name = model_name.split("/")[-1].split()[0]  # noqa: PLC0207
         self._max_tpm = max_tpm
         self._max_tokens = max_tokens
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)

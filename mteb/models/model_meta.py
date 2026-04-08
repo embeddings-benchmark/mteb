@@ -100,7 +100,7 @@ def _get_loader_name(
     return loader.__name__
 
 
-class ModelMeta(BaseModel):
+class ModelMeta(BaseModel):  # noqa: PLR0904
     """The model metadata object.
 
     Attributes:
@@ -208,10 +208,9 @@ class ModelMeta(BaseModel):
                 if is_cross_encoder_value:
                     if "cross-encoder" not in model_type:
                         data["model_type"] = ["cross-encoder"]
-                else:
-                    if "cross-encoder" in model_type:
-                        model_type = [t for t in model_type if t != "cross-encoder"]
-                        data["model_type"] = model_type if model_type else ["dense"]
+                elif "cross-encoder" in model_type:
+                    model_type = [t for t in model_type if t != "cross-encoder"]
+                    data["model_type"] = model_type if model_type else ["dense"]
 
         return data
 
@@ -615,7 +614,7 @@ class ModelMeta(BaseModel):
                 and self.revision != "no_revision_available"
             ):
                 continue  # skip overwriting revision if overwrite has no revision available
-            if key in ["framework", "model_type"]:
+            if key in ["framework", "model_type"]:  # noqa: PLR6201
                 # Combine lists and remove duplicates
                 merged_list = set(merged_data.get(key, [])) | set(value or [])
                 merged_data[key] = list(merged_list)
@@ -644,7 +643,9 @@ class ModelMeta(BaseModel):
                 loader=SentenceTransformerEncoderWrapper,
                 max_tokens=model.max_seq_length,
                 embed_dim=model.get_sentence_embedding_dimension(),
-                similarity_fn_name=ScoringFunction.from_str(model.similarity_fn_name),
+                similarity_fn_name=ScoringFunction.from_str(model.similarity_fn_name)
+                if model.similarity_fn_name
+                else None,
                 framework=["Sentence Transformers", "PyTorch"],
                 n_embedding_parameters=n_embedding_parameters,
             )
@@ -704,7 +705,7 @@ class ModelMeta(BaseModel):
         )
 
     @classmethod
-    def _from_hub(
+    def _from_hub(  # noqa: PLR0914
         cls,
         model_name: str,
         revision: str | None = None,
@@ -1300,7 +1301,7 @@ def _pydantic_instance_to_code(
     return "\n".join(lines)
 
 
-def _value_to_code(value: Any, indent: int) -> str:
+def _value_to_code(value: Any, indent: int) -> str:  # noqa: PLR0911
     """Convert a Python value into valid Python source code."""
     if isinstance(value, BaseModel):
         return _pydantic_instance_to_code(value, indent, only_set_fields=True)

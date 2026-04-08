@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 def clean_dataset(
     ds: DatasetDict,
     metadata: TaskMetadata,
+    *,
     train_split: str,
     input_column: str,
     label_column: str,
@@ -88,9 +89,9 @@ def process_classification(
         return clean_dataset(
             task.dataset,
             task.metadata,
-            task.train_split,
-            task.input_column_name,
-            task.label_column_name,
+            train_split=task.train_split,
+            input_column=task.input_column_name,
+            label_column=task.label_column_name,
             subset=None,
         )
 
@@ -102,9 +103,9 @@ def process_classification(
         new_ds[subset] = clean_dataset(
             task.dataset[subset],
             task.metadata,
-            task.train_split,
-            task.input_column_name,
-            task.label_column_name,
+            train_split=task.train_split,
+            input_column=task.input_column_name,
+            label_column=task.label_column_name,
             subset=subset,
         )
     return new_ds

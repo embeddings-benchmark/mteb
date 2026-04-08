@@ -51,10 +51,9 @@ def _downsample_image(
         if width > 10000:
             logger.error("Processing extremely wide images.")
             return image.resize((10000, height), Resampling.LANCZOS)
-    else:
-        if height > 10000:
-            logger.error("Processing extremely high images.")
-            return image.resize((width, 10000), Resampling.LANCZOS)
+    elif height > 10000:
+        logger.error("Processing extremely high images.")
+        return image.resize((width, 10000), Resampling.LANCZOS)
     return image
 
 
@@ -82,7 +81,7 @@ def voyage_v_loader(model_name, **kwargs):
         ):
             requires_image_dependencies()
 
-            self.model_name = model_name.split("/")[-1]
+            self.model_name = model_name.split("/")[-1]  # noqa: PLC0207
             self.vo = voyageai.Client()
 
         @retry(

@@ -76,7 +76,7 @@ class BitextMiningEvaluator(Evaluator):
             )
         return neighbours
 
-    def _similarity_search(
+    def _similarity_search(  # noqa: PLR6301
         self,
         query_embeddings: Array,
         corpus_embeddings: Array,

@@ -38,6 +38,7 @@ class SklearnEvaluator(Evaluator):
         self,
         train_dataset: Dataset,
         eval_dataset: Dataset,
+        *,
         values_column_name: str,
         label_column_name: str,
         task_metadata: TaskMetadata,
@@ -65,14 +66,14 @@ class SklearnEvaluator(Evaluator):
     ) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
         dataloader_train = create_dataloader(
             self.train_dataset,
-            self.task_metadata,
+            task_metadata=self.task_metadata,
             input_column=self.values_column_name,
             num_proc=num_proc,
             **encode_kwargs,
         )
         dataloader_test = create_dataloader(
             self.eval_dataset,
-            self.task_metadata,
+            task_metadata=self.task_metadata,
             input_column=self.values_column_name,
             num_proc=num_proc,
             **encode_kwargs,

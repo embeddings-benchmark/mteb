@@ -29,6 +29,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
         dataset: Dataset,
         input_column_name: str,
         candidate_labels: list[str],
+        *,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,

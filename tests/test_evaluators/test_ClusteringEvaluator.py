@@ -6,7 +6,7 @@ import numpy as np
 from datasets import Dataset
 from torch.utils.data import DataLoader
 
-from mteb._evaluators import ClusteringEvaluator
+from mteb._evaluators import ClusteringEvaluator  # noqa: PLC2701
 from tests.mock_tasks import MockClusteringTask
 
 if TYPE_CHECKING:
@@ -14,9 +14,9 @@ if TYPE_CHECKING:
 
 
 class TestClusteringEvaluator:
-    def test_clustering_v_measure(self):
+    def test_clustering_v_measure(self):  # noqa: PLR6301
         class Model:
-            def encode(
+            def encode(  # noqa: PLR6301
                 self,
                 sentences: DataLoader,
                 task_metadata,

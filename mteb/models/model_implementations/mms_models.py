@@ -65,7 +65,7 @@ class MMSWrapper(AbsEncoder):
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
@@ -168,7 +168,9 @@ mms_1b_all = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/mms",
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
-    training_datasets=set(),
+    training_datasets={
+        "FleursA2TRetrieval",
+    },
     modalities=["audio"],
     citation="""
 @misc{pratap2023scalingspeechtechnology1000,
@@ -201,7 +203,9 @@ mms_1b_fl102 = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/mms",
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
-    training_datasets=set(),
+    training_datasets={
+        "FleursA2TRetrieval",
+    },
     modalities=["audio"],
     citation="""
 @misc{pratap2023scalingspeechtechnology1000,
@@ -234,7 +238,9 @@ mms_1b_l1107 = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/mms",
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
-    training_datasets=set(),
+    training_datasets={
+        "FleursA2TRetrieval",
+    },
     modalities=["audio"],
     citation="""
 @misc{pratap2023scalingspeechtechnology1000,
