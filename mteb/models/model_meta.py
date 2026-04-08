@@ -9,6 +9,7 @@ from collections.abc import Callable, Mapping, Sequence
 from dataclasses import field
 from enum import Enum
 from functools import partial
+from importlib.metadata import PackageNotFoundError, distribution, requires
 from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
@@ -24,7 +25,7 @@ from huggingface_hub.errors import (
     SafetensorsParsingError,
 )
 from packaging.requirements import Requirement
-from packaging.version import Version
+from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from transformers import AutoConfig
@@ -142,8 +143,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
         experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
         output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
-        required_dependencies: Dependencies that required for model loading.
-        extra_requirements_group_name: Name of group of extra requirements.
+        extra_requirements_groups: Name of group of extra requirements.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -178,8 +178,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     contacts: list[str] | None = None
     experiment_kwargs: Mapping[str, Any] | None = None
     output_dtypes: OutputDType | list[OutputDType] | None = None
-    required_dependencies: Sequence[str] | None = None
-    extra_requirements_group_name: str | None = None
+    extra_requirements_groups: Sequence[str] | None = None
 
     def __setattr__(self, name: str, value: Any) -> None:
         """Deprecation warning for direct attribute mutation. Use model_copy(update={...}) instead."""
@@ -402,28 +401,53 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         return model
 
     def _check_requirements(self) -> None:
-        if self.required_dependencies is None:
+        if self.extra_requirements_groups is None:
             return
+
+        available_extras = set(
+            distribution("mteb").metadata.get_all("Provides-Extra") or []
+        )
+        unknown = set(self.extra_requirements_groups) - available_extras
+        if unknown:
+            raise ValueError(
+                f"Unknown extras group(s) for mteb: {sorted(unknown)}. "
+                f"Available: {sorted(available_extras)}"
+            )
+
         missing_dependencies = []
-        for required_dependency in self.required_dependencies:
-            req = Requirement(required_dependency)
+
+        mteb_requires = requires("mteb")
+        if mteb_requires is None:
+            raise RuntimeError(
+                "Could not retrieve mteb package requirements. Make sure mteb is installed properly."
+            )
+
+        for req_str in mteb_requires:
+            req = Requirement(req_str)
+
+            if req.marker is None or not any(
+                req.marker.evaluate({"extra": g})
+                for g in self.extra_requirements_groups
+            ):
+                continue
 
             try:
                 installed = importlib.metadata.version(req.name)
-                matches = Version(installed) in req.specifier
-                if not matches:
-                    missing_dependencies.append(required_dependency)
-            except importlib.metadata.PackageNotFoundError:
-                missing_dependencies.append(required_dependency)
+            except PackageNotFoundError:
+                missing_dependencies.append(req_str)
+                continue
+
+            try:
+                if req.specifier and Version(installed) not in req.specifier:
+                    missing_dependencies.append(f"{req_str} (installed: {installed})")
+            except InvalidVersion:
+                missing_dependencies.append(f"{req_str} (installed: {installed})")
+
         if missing_dependencies:
-            group_msg = ""
-            if self.extra_requirements_group_name is not None:
-                group_msg = f"\nYou can install it with `pip install {self.extra_requirements_group_name}`."
             raise ImportError(
-                "Missing required dependencies: {}".format(
-                    ", ".join(missing_dependencies)
-                )
-                + group_msg
+                f"Model {self.name} is missing required dependencies: "
+                + ", ".join(missing_dependencies)
+                + f".\nYou can install it with `pip install mteb[{','.join(self.extra_requirements_groups)}]`."
             )
 
     def model_name_as_path(self) -> str:

@@ -287,5 +287,5 @@ embedding_gemma_300m = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2509.20354},
 }""",
-    required_dependencies=("transformers>=4.56.0",),
+    extra_requirements_groups=["embeddinggemma"],
 )

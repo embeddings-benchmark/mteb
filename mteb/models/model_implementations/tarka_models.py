@@ -340,7 +340,7 @@ tarka_embedding_150m_v1 = ModelMeta(
     similarity_fn_name="cosine",
     memory_usage_mb=576,
     citation=Tarka_Embedding_150M_V1_CITATION,
-    required_dependencies=("transformers>=4.56.0",),
+    extra_requirements_groups=["embeddinggemma"],
 )
 
 tark_embedding_350_v1_kwargs = dict(
