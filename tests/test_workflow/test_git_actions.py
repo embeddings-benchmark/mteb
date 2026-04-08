@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 from mteb._reversible_workflow.git_actions import (
     CommitAction,
     CreateBranchAction,
@@ -105,6 +107,8 @@ def test_push_to_fork_action_do_and_undo(monkeypatch, tmp_path: Path) -> None:
 
 
 def test_create_pr_action_do_and_undo(monkeypatch) -> None:
+    pytest.importorskip("github", reason="github is not installed")
+
     class FakePR:
         def __init__(self):
             self.number = 7
