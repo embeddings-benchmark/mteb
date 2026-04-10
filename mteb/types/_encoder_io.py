@@ -9,6 +9,8 @@ import torch
 from datasets import Dataset
 from numpy.typing import NDArray
 
+from mteb._helpful_enum import HelpfulStrEnum
+
 if TYPE_CHECKING:
     import numpy.typing as npt
     from PIL import Image
@@ -165,7 +167,7 @@ class MultimodalInput(  # type: ignore[misc]
     pass
 
 
-class OutputDType(str, Enum):
+class OutputDType(HelpfulStrEnum):
     """Enum for valid compression levels.
 
     Used by the CompressionWrapper class and specified by models to indicate the dtypes of output embeddings they
