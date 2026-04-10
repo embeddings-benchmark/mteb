@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.11.4"
+version = "2.12.15"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -32,18 +32,19 @@ classifiers = [
 requires-python = ">=3.10,<3.15"
 dependencies = [
     "datasets>=2.19.0",
-    "numpy>=1.0.0,<3.0.0",
+    "numpy>=1.23.0,<3.0.0",
     "requests>=2.26.0",
     "scikit-learn>=1.4.0",
-    "scipy>=0.0.0",
+    "scipy>=1.14.0",
     "sentence_transformers>=3.0.0",
+    "transformers>=4.40.0,<6.0.0",
     "typing-extensions>=4.5.0",
-    "torch>1.0.0",
+    "torch>=2.0.0",
     "tqdm>1.0.0",
-    "rich>=0.0.0",
+    "rich>=13.0.0",
     "pytrec-eval-terrier>=0.5.6",
-    "pydantic>=2.0.0",
-    "polars>=0.20.22",
+    "pydantic>=2.11.0",
+    "polars>=1.0.0",
 ]
 
 
@@ -124,8 +125,8 @@ qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
 lint = [
     "ruff==0.14.0", # locked so we don't get PRs which fail only due to a lint update
     "pre-commit>=4.1.0",
-    "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
     "typos>1",
+    "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
 ]
 test = [
     "pytest>=8.3.4,<8.4.0",
@@ -135,6 +136,7 @@ test = [
     "iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
     "GitPython>=3.0.0",
     "tabulate>=0.9.0",
+    "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
 ]
 docs = [
     "zensical>=0.0.11",
@@ -254,6 +256,9 @@ select = [
     "PGH",     # pygrep-hooks Use specific rule codes when ignoring type issues
     "LOG",     # logging
     "TC",      # type-checking
+    "T20",     # don't allow print
+    "PL",      # pylint
+    "S",       # flake8-bandit
 ]
 
 ignore = [
@@ -265,9 +270,19 @@ ignore = [
     "D107",     # Missing docstring in __init__
     "D415",     # First line should end with a period
     "C408",     # don't use unecc. collection call, e.g. dict over {}
+    "S404",    # subprocess import insecure
+    "S311",     # standard pseudo-random generators are fine for non-crypto use
+    "S104",     # allow binding to all interfaces in tests
+    "S607",     # start a process with partial path
+    "S603",   # allow subprocess calls with shell=True
+    "PLR2004",   # magic value comparison
+    "PLC0415",   # import outside of top-level
+    "PLR0912",  # too many branches
+    "PLR0915",  # too many statements
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
+preview = true
 
 
 [tool.ruff.lint.per-file-ignores]
@@ -275,16 +290,26 @@ typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
 "docs/*" = [
     "D",
     "DOC",
+    "S101"
 ]
 "tests/*" = [
     "RUF012",
     "D",
     "DOC",
     "TC",
+    "S101",  # allow asserts in tests
+    "S602",  # allow shell=True in tests
+    "S603",  # allow subprocess calls in tests
 ]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
-"mteb/tasks/*" = ["D", "DOC"]
-"mteb/models/model_implementations/*" = ["D", "DOC"]
+"mteb/tasks/*" = [
+    "D",
+    "DOC",
+]
+"mteb/models/model_implementations/*" = [
+    "D",
+    "DOC",
+]
 "mteb/benchmarks/benchmark.py" = [
     # pydantic would try to validate fields in Benchmark class
     "TC",
@@ -320,6 +345,9 @@ runtime-evaluated-base-classes = [
     "pydantic.BaseModel",
     "mteb.abstasks.task_metadata.TaskMetadata",  # https://github.com/astral-sh/ruff/issues/7866
 ]
+
+[tool.ruff.lint.pylint]
+max-args = 9
 
 [tool.semantic_release]
 branch = "main"
@@ -428,6 +456,8 @@ disable_error_code = ["index"]
 binary = false
 locale = "en"
 extend-ignore-words-re = [
+    "Classfication", # misspelled task name
+    "nd", # license
     # authors
     "Stap",
     "Asai",
@@ -441,11 +471,25 @@ extend-ignore-words-re = [
     "Mehta",
     "Parth",
     # languages/bibtext artifacts
+    "SHW",
     "ba",
     "creen",
     "Accademia",
+    "dementieva",
+    "Expresso",
+    "expresso",
+    "Iz",
+    "Allo",
+    "Soler",
+    # language keys:
+    "tha",
+    "yor",
+    "als",
+    "bre",
+    "thi",
     # ISO 15924 script codes
     "Beng",  # Bengali script
+
 ]
 extend-ignore-re = [
     "author.*",  # ignore authors in citations
@@ -496,8 +540,7 @@ BulgarianStoreReviewSentimentClassfication = "BulgarianStoreReviewSentimentClass
 
 [tool.typos.type.py.extend-words]
 wdth = "wdth"
-Allo = "Allo"   # AlloProfClusteringS2S.v2
-# langs/splits
+Allo = "Allo"
 som = "som"
 yor = "yor"
 Beng = "Beng"
@@ -518,3 +561,6 @@ expresso = "expresso"
 Expresso = "Expresso"
 NIFE = "NIFE"
 thw = "thw"
+ist = "ist" # spelling error in prompt for harrier-oss-v1
+shw = "SHW"
+nd = "nd"

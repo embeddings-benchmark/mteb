@@ -1,4 +1,4 @@
-from mteb.models import ModelMeta, sentence_transformers_loader
+from mteb.models import ModelMeta, SentenceTransformerEncoderWrapper
 
 solon_embeddings_1_1 = ModelMeta(
     name="OrdalieTech/Solon-embeddings-mini-beta-1.1",
@@ -23,7 +23,7 @@ solon_embeddings_1_1 = ModelMeta(
         "https://huggingface.co/datasets/OrdalieTech/wiki_fr; "
         "private LLM-synthetic (train)"
     ),
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
     ),

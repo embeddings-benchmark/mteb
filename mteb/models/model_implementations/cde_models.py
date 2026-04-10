@@ -67,7 +67,7 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
         model_config = AutoConfig.from_pretrained(model, trust_remote_code=True)
         self.max_sentences = model_config.transductive_corpus_size
 
-    def _create_embeddings_key(
+    def _create_embeddings_key(  # noqa: PLR6301
         self,
         task_metadata: TaskMetadata,
         hf_subset: str,

@@ -65,6 +65,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset,
+        *,
         images_column_names: str | Sequence[str],
         texts_column_names: str | Sequence[str],
         num_images_per_sample: int,

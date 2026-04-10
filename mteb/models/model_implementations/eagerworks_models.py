@@ -48,7 +48,7 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         # Load processor
         self.processor = AutoProcessor.from_pretrained(model_name)
 
-    def get_embedding(self, last_hidden_state: torch.Tensor) -> torch.Tensor:
+    def get_embedding(self, last_hidden_state: torch.Tensor) -> torch.Tensor:  # noqa: PLR6301
         """Extract embeddings from last token of last hidden state."""
         reps = last_hidden_state[:, -1]
         return reps

@@ -60,7 +60,7 @@ class MuQMuLanWrapper(AbsEncoder):
             for array in audio_array:
                 # Apply audio truncation (30 seconds max)
                 if array.shape[-1] > self.max_length_samples:
-                    array = array[..., : self.max_length_samples]
+                    array = array[..., : self.max_length_samples]  # noqa: PLW2901
                 audio_arrays.append(array)
 
             # Find max length and pad all tensors
@@ -174,7 +174,9 @@ muq_mulan_large = ModelMeta(
     # https://github.com/tencent-ailab/MuQ/blob/28847ea50cd31ac4b8b6a7dacc051ad7d1c7606a/src/muq/muq_mulan/muq_mulan.py#L171
     similarity_fn_name="dot",
     use_instructions=False,
-    training_datasets=set(),
+    training_datasets=set(
+        # Million Song Dataset (not in MTEB)
+    ),
     citation="""
 @misc{zhu2025muqselfsupervisedmusicrepresentation,
   title={MuQ: Self-Supervised Music Representation Learning with Mel Residual Vector Quantization},

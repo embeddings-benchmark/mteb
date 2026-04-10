@@ -16,11 +16,12 @@ from typing import TYPE_CHECKING, Any, cast
 import requests
 from pydantic import ValidationError
 
-import mteb
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks import AbsTask
 from mteb.benchmarks.benchmark import Benchmark
+from mteb.benchmarks.get_benchmark import get_benchmark
 from mteb.models import ModelMeta
+from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
 
@@ -265,6 +266,7 @@ class ResultCache:
             # check repository in the directory is the same as the remote
             remote_url = subprocess.run(
                 ["git", "config", "--get", "remote.origin.url"],
+                check=False,
                 cwd=results_directory,
                 capture_output=True,
                 text=True,
@@ -321,6 +323,7 @@ class ResultCache:
 
     def _download_cached_results_from_branch(
         self,
+        *,
         branch: str = "cached-data",
         filename: str = "__cached_results.json.gz",
         output_path: Path | None = None,
@@ -548,7 +551,7 @@ class ResultCache:
 
         all_model_names = [
             model_meta.name
-            for model_meta in mteb.get_model_metas()
+            for model_meta in get_model_metas()
             if model_meta.name is not None
         ]
 
@@ -823,6 +826,7 @@ class ResultCache:
         self,
         models: Sequence[str] | Iterable[ModelMeta] | None = None,
         tasks: Sequence[str] | Iterable[AbsTask] | Benchmark | str | None = None,
+        *,
         require_model_meta: bool = True,
         include_remote: bool = True,
         validate_and_filter: bool = False,
@@ -861,7 +865,7 @@ class ResultCache:
             ... )
         """
         if isinstance(tasks, str):
-            tasks = mteb.get_benchmark(tasks)
+            tasks = get_benchmark(tasks)
 
         if isinstance(load_experiments, str):
             load_experiments = LoadExperimentEnum.from_str(load_experiments)

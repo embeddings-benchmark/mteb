@@ -48,7 +48,7 @@ Laippala, Veronika},
         remove_cols = [
             col
             for col in self.dataset["test"].column_names
-            if col not in ["text", "label"]
+            if col not in ["text", "label"]  # noqa: PLR6201
         ]
         self.dataset = self.dataset.remove_columns(remove_cols)
 

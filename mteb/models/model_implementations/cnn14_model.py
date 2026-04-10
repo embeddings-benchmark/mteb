@@ -50,7 +50,7 @@ class CNN14Wrapper(AbsEncoder):
         # SpeechBrain uses a 16kHz sampling rate for audio
         self.sampling_rate = 16_000
 
-    def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:
+    def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:  # noqa: PLR6301
         max_len = max(w.shape[0] for w in batch)
         padded = [torch.nn.functional.pad(w, (0, max_len - w.shape[0])) for w in batch]
         return torch.stack(padded)
@@ -136,7 +136,10 @@ cnn14_esc50 = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/speechbrain/speechbrain",
     public_training_data=None,
-    training_datasets=None,  # ["ESC-50", "VGGSound"],
+    training_datasets={
+        "ESC50",
+        # "VGGSound",  # not in MTEB
+    },
     modalities=["audio"],
     citation="""
 @inproceedings{wang2022CRL,

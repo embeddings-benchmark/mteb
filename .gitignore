@@ -157,10 +157,17 @@ powermetrics_log.txt
 # vscode
 .vscode/launch.json
 
+
+# documentation
 /docs/overview/available_models/
-/docs/overview/available_tasks/
 /docs/overview/available_benchmarks.md
 
+# claude
 CLAUDE.md
 
+
+# latex
 *.tex
+
+# test files
+tests/mock_mteb_cache/leaderboard/__cached_results.json

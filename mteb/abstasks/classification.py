@@ -296,7 +296,7 @@ class AbsTaskClassification(AbsTask):
         all_predictions = []
         dataloader_train = create_dataloader(
             ds,
-            self.metadata,
+            task_metadata=self.metadata,
             input_column=self.input_column_name,
             num_proc=num_proc,
             **encode_kwargs,
@@ -346,15 +346,15 @@ class AbsTaskClassification(AbsTask):
             )
         return self._calculate_avg_scores(scores)
 
-    def _run_experiment(
+    def _run_experiment(  # noqa: PLR0913
         self,
         model: EncoderProtocol,
         train_split: Dataset,
         eval_split: Dataset,
+        *,
         experiment_num: int,
         idxs: list[int] | None,
         test_cache: Array | None,
-        *,
         encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
@@ -373,8 +373,8 @@ class AbsTaskClassification(AbsTask):
         evaluator = self.evaluator(
             train_dataset,
             eval_split,
-            self.input_column_name,
-            self.label_column_name,
+            values_column_name=self.input_column_name,
+            label_column_name=self.label_column_name,
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
@@ -408,7 +408,7 @@ class AbsTaskClassification(AbsTask):
             **avg_scores,  # type: ignore[typeddict-item]
         )
 
-    def _calculate_scores(
+    def _calculate_scores(  # noqa: PLR6301
         self,
         y_test: NDArray[np.integer] | list[int],
         y_pred: NDArray[np.integer | np.floating] | list[int],
@@ -481,7 +481,7 @@ class AbsTaskClassification(AbsTask):
         elif compute_overall:
             inputs = []
             label = []
-            for hf_subset in self.metadata.eval_langs:
+            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
                 label.extend(self.dataset[hf_subset][split][self.label_column_name])
                 if split != self.train_split:

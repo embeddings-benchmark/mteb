@@ -12,7 +12,7 @@ from tqdm.auto import tqdm
 from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -141,6 +141,12 @@ EmbeddingType = Literal[
     "int8",
     "uint8",
     "binary",
+]
+
+OUTPUT_TYPES = [
+    OutputDType.INT8,
+    OutputDType.UINT8,
+    OutputDType.BINARY,
 ]
 
 # Cohere API limits
@@ -335,7 +341,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
                         unpacked.append(1.0 if bit_val else -1.0)
                 unpacked_embeddings.append(unpacked)
             embeddings_array = np.array(unpacked_embeddings, dtype=np.float32)
-        elif primary_embedding_type in ["int8", "uint8"]:
+        elif primary_embedding_type in ["int8", "uint8"]:  # noqa: PLR6201
             # Convert int8/uint8 embeddings to float32
             embeddings_array = embeddings_array.astype(np.float32)
 
@@ -404,6 +410,7 @@ cohere_mult_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 cohere_eng_3 = ModelMeta(
@@ -430,6 +437,7 @@ cohere_eng_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 cohere_mult_light_3 = ModelMeta(
@@ -456,6 +464,7 @@ cohere_mult_light_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 cohere_eng_light_3 = ModelMeta(
@@ -482,4 +491,5 @@ cohere_eng_light_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
 )

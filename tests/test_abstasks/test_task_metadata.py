@@ -16,8 +16,6 @@ def check_descriptive_stats(task):
     result_stat = task.calculate_descriptive_statistics()
     # remove descriptive task file
     task.metadata.descriptive_stat_path.unlink()
-    print(task.metadata.name)
-    print(result_stat)
     task_stat = task.expected_stats
 
     for key, value in result_stat.items():
@@ -32,7 +30,7 @@ def test_descriptive_statistics_mock_tasks(task):
 
 @pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID)
 def test_descriptive_statistics_mock_mieb_tasks(task):
-    pytest.importorskip("PIL", reason="Image dependencies are not installed")
+    pytest.importorskip("torchvision", reason="Image dependencies are not installed")
     check_descriptive_stats(task)
 
 
@@ -199,6 +197,31 @@ def test_filled_metadata_is_filled():
         ).is_filled()
         is True
     )
+
+
+def test_contributed_by_field():
+    my_task = TaskMetadata(
+        name="MyTask",
+        dataset={"path": "test/dataset", "revision": "1.0"},
+        description="A test dataset.",
+        reference=None,
+        type="Classification",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="map_at_1000",
+        date=None,
+        domains=None,
+        license=None,
+        task_subtypes=None,
+        annotations_creators=None,
+        dialect=None,
+        sample_creation=None,
+        bibtex_citation="",
+        contributed_by="Acme Corp",
+    )
+    assert my_task.contributed_by == "Acme Corp"
 
 
 def test_task_hf_config():

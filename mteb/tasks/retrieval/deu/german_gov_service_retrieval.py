@@ -48,7 +48,7 @@ Lukas, Leon},
 
     @staticmethod
     def get_hash(input_str) -> str:
-        return hashlib.md5(input_str.encode("utf-8")).hexdigest()
+        return hashlib.md5(input_str.encode("utf-8"), usedforsecurity=False).hexdigest()
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:

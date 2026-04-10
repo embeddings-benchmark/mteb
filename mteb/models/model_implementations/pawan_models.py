@@ -2,7 +2,7 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 PAWAN_EMBD_CITATION = """@misc{medhi2025pawanembd,
     title={PawanEmbd-68M: Distilled Embedding Model},
@@ -12,7 +12,7 @@ PAWAN_EMBD_CITATION = """@misc{medhi2025pawanembd,
 }"""
 
 pawan_embd_68m = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="dmedhi/PawanEmbd-68M",
     model_type=["dense"],
     languages=["eng-Latn"],

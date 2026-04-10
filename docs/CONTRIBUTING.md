@@ -48,6 +48,16 @@ make lint
 This command is equivalent to the command run during CI. It will check for code style and formatting issues.
 
 
+### Running type checks
+To run the type checks before a PR, you can use the following command:
+
+```bash
+make typecheck
+```
+
+This command is equivalent to the one run during CI. It will use mypy to check for issues with type declarations.
+
+
 ## Semantic Versioning and Releases
 MTEB follows [semantic versioning](https://semver.org/). This means that the version number of the package is composed of three numbers: `MAJOR.MINOR.PATCH`. This allows us to use existing tools to manage the versioning of the package automatically. For maintainers (and contributors), this means that commits with the following prefixes will automatically trigger a version bump:
 
