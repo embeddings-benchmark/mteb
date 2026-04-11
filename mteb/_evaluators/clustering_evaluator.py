@@ -10,7 +10,7 @@ from mteb._create_dataloaders import create_dataloader
 from .evaluator import Evaluator
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Sequence
 
     from datasets import Dataset
 
@@ -26,7 +26,7 @@ class ClusteringEvaluator(Evaluator):
         self,
         dataset: Dataset,
         *,
-        input_column_name: str | Mapping[str, str],
+        input_column_name: str | Sequence[str],
         label_column_name: str,
         task_metadata: TaskMetadata,
         hf_split: str,
@@ -53,7 +53,9 @@ class ClusteringEvaluator(Evaluator):
         data_loader = create_dataloader(
             self.dataset,
             task_metadata=self.task_metadata,
-            input_column=self.input_column_name,
+            input_column=self.input_column_name
+            if isinstance(self.input_column_name, str)
+            else None,
             num_proc=num_proc,
             **encode_kwargs,
         )
