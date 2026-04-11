@@ -88,7 +88,7 @@ def process_classification(
     if isinstance(task.input_column_name, str):
         input_col = task.input_column_name
     else:
-        input_col = next(iter(task.input_column_name.values()))
+        input_col = task.input_column_name[0]
 
     if isinstance(task.dataset, DatasetDict):
         return clean_dataset(

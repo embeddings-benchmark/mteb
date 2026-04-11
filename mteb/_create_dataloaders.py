@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import warnings
-from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
@@ -14,10 +13,10 @@ from mteb.types import (
     ConversationTurn,
     PromptType,
 )
-from mteb.types._encoder_io import AudioInputItem, VideoInputItem
+from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Sequence
+    from collections.abc import Callable
 
     from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
 
@@ -188,14 +187,13 @@ def _convert_images_to_rgb(
 
 def _prepare_image_dataset(
     dataset: Dataset,
-    image_column_name: str | Sequence[str] | None = None,
+    image_column_name: str | None = None,
     transform: Callable[[Any], Any] | None = None,
     num_proc: int | None = None,
 ) -> Dataset:
     """Prepare the image dataset by converting images to RGB and applying transformations."""
     if (
         image_column_name
-        and isinstance(image_column_name, str)
         and image_column_name in dataset.column_names
         and "image" not in dataset.column_names
     ):
@@ -243,7 +241,7 @@ def _prepare_dataset(
     dataset: Dataset,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
-    input_column: str | Mapping[str, str] | None = None,
+    input_column: str | None = None,
     num_proc: int | None = None,
 ) -> Dataset:
     """Apply all modality-specific transformations to the dataset.
@@ -252,7 +250,7 @@ def _prepare_dataset(
         dataset: The dataset to prepare.
         task_metadata: The metadata of the task.
         prompt_type: The type of prompt.
-        input_column: Column name(s). Can be a single string, a {modality: column_name} mapping, or None.
+        input_column: The column to use as input. If None, it will use the first column that matches the modality.
         num_proc: Number of processes.
 
     Returns the transformed Dataset (no DataLoader wrapping).
@@ -281,30 +279,19 @@ def _prepare_dataset(
                 )
 
     if "image" in modalities:
-        if isinstance(input_column, Mapping):
-            image_col = input_column.get("image", "image")
-        elif isinstance(input_column, str):
-            image_col = input_column
-        else:
-            image_col = "image"
         dataset = _prepare_image_dataset(
             dataset,
-            image_column_name=image_col,
+            image_column_name=input_column if input_column else "image",
             num_proc=num_proc,
         )
     for modality in ("audio", "video"):
         if modality in modalities:
-            if isinstance(input_column, Mapping):
-                col_name = input_column.get(modality, modality)
-            elif isinstance(input_column, str):
-                col_name = input_column
-            else:
-                col_name = modality
             if (
-                col_name in dataset.column_names
+                input_column
+                and input_column in dataset.column_names
                 and modality not in dataset.column_names
             ):
-                dataset = dataset.rename_column(col_name, modality)
+                dataset = dataset.rename_column(input_column, modality)
 
     return dataset
 
@@ -314,7 +301,7 @@ def create_dataloader(
     *,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
-    input_column: str | Mapping[str, str] | None = None,
+    input_column: str | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
     **kwargs: Any,
@@ -328,7 +315,7 @@ def create_dataloader(
         dataset: The dataset to create a dataloader from.
         task_metadata: The metadata of the task.
         prompt_type: The type of prompt to create a dataloader for. If None, it will be inferred from the task metadata.
-        input_column: The column(s) to use as input. Can be a string, a {modality: column_name} mapping, or None.
+        input_column: The column to use as input. If None, it will use the first column that matches the modality.
         batch_size: The batch size for the dataloader.
         num_proc: The number of processes to use for dataset processing.
         **kwargs: Additional arguments to pass to the dataloader creation functions.
@@ -336,20 +323,15 @@ def create_dataloader(
     Returns:
         A dataloader for the dataset.
     """
-    # Text-only shortcut: skip heavy dataset preparation for pure text tasks
-    if prompt_type is None and task_metadata.modalities == ["text"]:
-        if isinstance(input_column, Mapping):
-            text_col = input_column.get("text", next(iter(input_column.values())))
-        elif isinstance(input_column, str):
-            text_col = input_column
-        else:
-            text_col = None
-
-        if text_col is not None:
-            return _create_dataloader_from_texts(
-                dataset[text_col],
-                batch_size=batch_size,
-            )
+    if (
+        prompt_type is None
+        and task_metadata.modalities == ["text"]
+        and input_column is not None
+    ):
+        return _create_dataloader_from_texts(
+            dataset[input_column],
+            batch_size=batch_size,
+        )
 
     prepared = _prepare_dataset(
         dataset,
@@ -476,12 +458,19 @@ class VideoCollator:
         """
         self.max_frames = max_frames
 
-    def __call__(self, inputs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
+        collated_inputs = []
         for row in inputs:
             video = row.pop("video")
-            frames = self.resample_video(video, self.max_frames)
-            row["video"] = VideoInputItem(frames=frames)
-        return inputs
+            row["video"] = self.resample_video(video, self.max_frames)
+            collated_inputs.append(row)
+        return cast(
+            "BatchedInput",
+            {
+                key: [row[key] for row in collated_inputs]
+                for key in collated_inputs[0].keys()
+            },
+        )
 
     @staticmethod
     def resample_video(
@@ -511,7 +500,7 @@ class VideoCollator:
 class MultimodalCollator:
     """Collator that handles any combination of video and audio modalities.
 
-    Composes VideoCollator and AudioCollator: each handles its own column independently.
+    Uses VideoCollator and AudioCollator static methods to process each modality.
     """
 
     def __init__(
@@ -527,18 +516,28 @@ class MultimodalCollator:
             max_frames: Maximum number of frames to keep per video.
             max_samples: Maximum number of audio samples to keep. If None, no truncation.
         """
-        self.video_collator = VideoCollator(max_frames=max_frames)
-        self.audio_collator = AudioCollator(
-            target_sampling_rate=target_sampling_rate,
-            max_samples=max_samples,
-        )
+        self.max_frames = max_frames
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
 
     def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
-        if "video" in inputs[0]:
-            inputs = self.video_collator(inputs)
-        if "audio" in inputs[0]:
-            return self.audio_collator(inputs)
+        collated_inputs = []
+        for row in inputs:
+            if "video" in row:
+                video = row.pop("video")
+                row["video"] = VideoCollator.resample_video(video, self.max_frames)
+            if "audio" in row:
+                audio_array = AudioCollator.resample_audio(
+                    row, self.target_sampling_rate, self.max_samples
+                )
+                row["audio"] = AudioInputItem(
+                    array=audio_array, sampling_rate=self.target_sampling_rate
+                )
+            collated_inputs.append(row)
         return cast(
             "BatchedInput",
-            {key: [row[key] for row in inputs] for key in inputs[0].keys()},
+            {
+                key: [row[key] for row in collated_inputs]
+                for key in collated_inputs[0].keys()
+            },
         )

@@ -27,7 +27,7 @@ from ._statistics_calculation import (
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Sequence
     from pathlib import Path
 
     from mteb.models import MTEBModels
@@ -163,7 +163,7 @@ class AbsTaskClustering(AbsTask):
     k_mean_batch_size: int = 512
     max_depth = None
     abstask_prompt = "Identify categories in user passages."
-    input_column_name: str | Mapping[str, str] = "sentences"
+    input_column_name: str | Sequence[str] = "sentences"
     label_column_name: str = "labels"
 
     def _evaluate_subset(
@@ -214,7 +214,7 @@ class AbsTaskClustering(AbsTask):
         input_cols = (
             [self.input_column_name]
             if isinstance(self.input_column_name, str)
-            else list(self.input_column_name.values())
+            else list(self.input_column_name)
         )
         columns_to_keep = set(input_cols) | {self.label_column_name}
 
@@ -233,7 +233,9 @@ class AbsTaskClustering(AbsTask):
             create_dataloader(
                 downsampled_dataset,
                 task_metadata=self.metadata,
-                input_column=self.input_column_name,
+                input_column=self.input_column_name
+                if isinstance(self.input_column_name, str)
+                else None,
                 num_proc=num_proc,
                 **encode_kwargs,
             ),
@@ -287,7 +289,7 @@ class AbsTaskClustering(AbsTask):
         col = (
             self.input_column_name
             if isinstance(self.input_column_name, str)
-            else next(iter(self.input_column_name.values()))
+            else self.input_column_name[0]
         )
         if hf_subset:
             inputs = self.dataset[hf_subset][split][col]
@@ -334,7 +336,7 @@ class AbsTaskClustering(AbsTask):
         input_cols = (
             [self.input_column_name]
             if isinstance(self.input_column_name, str)
-            else list(self.input_column_name.values())
+            else list(self.input_column_name)
         )
         self._upload_dataset_to_hub(
             repo_name,

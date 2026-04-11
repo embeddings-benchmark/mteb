@@ -133,26 +133,14 @@ class AudioInput(TypedDict):
     audio: list[AudioInputItem]
 
 
-class VideoInputItem(TypedDict):
-    """A video item for the VideoInput.
-
-    Dataset based on `datasets.Video` will be converted to this format during encoding.
-
-    Attributes:
-        frames: The video frames as Tensor.
-    """
-
-    frames: torch.Tensor
-
-
 class VideoInput(TypedDict):
     """The input to the encoder for videos.
 
     Attributes:
-        video: The video to encode. VideoDecoder object.
+        video: The video frames as Tensor.
     """
 
-    video: VideoInputItem
+    video: torch.Tensor
 
 
 class MultimodalInput(  # type: ignore[misc]

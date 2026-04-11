@@ -6,7 +6,7 @@ from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Sequence
 
 
 class Kinetics400Classification(AbsTaskClassification):
@@ -47,10 +47,7 @@ class Kinetics400Classification(AbsTaskClassification):
 """,
     )
 
-    input_column_name: ClassVar[str | Mapping[str, str]] = {
-        "video": "video",
-        "audio": "audio",
-    }
+    input_column_name: ClassVar[str | Sequence[str]] = ["video", "audio"]
     label_column_name: str = "label"
 
     is_cross_validation: bool = False

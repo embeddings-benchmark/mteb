@@ -32,7 +32,7 @@ from ._statistics_calculation import (
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Sequence
     from pathlib import Path
 
     from numpy.typing import NDArray
@@ -141,7 +141,7 @@ class AbsTaskClassification(AbsTask):
     n_experiments: int = 10
     train_split: str = "train"
     label_column_name: str = "label"
-    input_column_name: str | Mapping[str, str] = "text"
+    input_column_name: str | Sequence[str] = "text"
     abstask_prompt = "Classify user passages."
     is_cross_validation: bool = False
     n_splits = 5
@@ -197,7 +197,7 @@ class AbsTaskClassification(AbsTask):
                 input_cols = (
                     [self.input_column_name]
                     if isinstance(self.input_column_name, str)
-                    else list(self.input_column_name.values())
+                    else list(self.input_column_name)
                 )
                 columns_to_keep = set(input_cols) | {self.label_column_name}
 
@@ -317,7 +317,9 @@ class AbsTaskClassification(AbsTask):
         dataloader_train = create_dataloader(
             ds,
             task_metadata=self.metadata,
-            input_column=self.input_column_name,
+            input_column=self.input_column_name
+            if isinstance(self.input_column_name, str)
+            else None,
             num_proc=num_proc,
             **encode_kwargs,
         )
@@ -493,7 +495,7 @@ class AbsTaskClassification(AbsTask):
         col = (
             self.input_column_name
             if isinstance(self.input_column_name, str)
-            else next(iter(self.input_column_name.values()))
+            else self.input_column_name[0]
         )
         train_text = []
         if hf_subset:
@@ -551,7 +553,7 @@ class AbsTaskClassification(AbsTask):
         input_cols = (
             [self.input_column_name]
             if isinstance(self.input_column_name, str)
-            else list(self.input_column_name.values())
+            else list(self.input_column_name)
         )
         self._upload_dataset_to_hub(
             repo_name,

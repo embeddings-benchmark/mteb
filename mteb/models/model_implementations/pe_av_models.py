@@ -25,7 +25,7 @@ class PEAudioVisualWrapper(AbsEncoder):
     Uses the transformers API (PeAudioVideoModel / PeAudioVideoProcessor).
 
     Video inputs arrive as pre-decoded frame tensors via the VideoCollator.
-    Audio is extracted from inside each VideoInputItem.
+    Audio is read from the separate audio column in each batch.
     """
 
     def __init__(
@@ -99,7 +99,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             disable=not show_progress_bar,
             desc="Processing video batches",
         ):
-            videos = [item["frames"] for item in batch["video"]]
+            videos = list(batch["video"])
             processed = self.processor(
                 videos=videos,
                 return_tensors="pt",
@@ -169,7 +169,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             disable=not show_progress_bar,
             desc="Processing audio-video batches",
         ):
-            videos = [item["frames"] for item in batch["video"]]
+            videos = list(batch["video"])
             audio_arrays = [audio["array"] for audio in batch["audio"]]
             processed = self.processor(
                 videos=videos,

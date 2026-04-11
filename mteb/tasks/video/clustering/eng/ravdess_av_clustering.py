@@ -6,7 +6,7 @@ from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Sequence
 
 
 class RAVDESSAVClustering(AbsTaskClustering):
@@ -48,8 +48,5 @@ class RAVDESSAVClustering(AbsTaskClustering):
 """,
     )
     max_fraction_of_documents_to_embed = None
-    input_column_name: ClassVar[str | Mapping[str, str]] = {
-        "video": "video",
-        "audio": "audio",
-    }
+    input_column_name: ClassVar[str | Sequence[str]] = ["video", "audio"]
     label_column_name: str = "emotion"

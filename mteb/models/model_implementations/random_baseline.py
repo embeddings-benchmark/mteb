@@ -25,7 +25,6 @@ if TYPE_CHECKING:
         AudioInputItem,
         BatchedInput,
         PromptType,
-        VideoInputItem,
     )
 
 
@@ -83,19 +82,19 @@ def _audio_to_vector(audio: AudioInputItem, size: int) -> np.ndarray:
 
 
 def _video_to_vector(
-    item: VideoInputItem,
+    item: torch.Tensor,
     size: int,
 ) -> NDArray[np.floating]:
     """Generate a deterministic random vector based on video content.
 
     Args:
-        item: Video data containing frames tensor.
+        item: Video frames tensor.
         size: Size of the output vector.
 
     Returns:
         A numpy array of shape (size,) containing the random vector.
     """
-    video_bytes = item["frames"].numpy().tobytes()
+    video_bytes = item.numpy().tobytes()
     seed = int(hashlib.sha256(video_bytes).hexdigest(), 16) % (2**32)
     rng = np.random.default_rng(seed)
     return rng.random(size, dtype=np.float32)

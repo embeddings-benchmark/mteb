@@ -8,7 +8,7 @@ from mteb._create_dataloaders import create_dataloader
 from .evaluator import Evaluator
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Sequence
 
     import numpy as np
     from datasets import Dataset
@@ -41,7 +41,7 @@ class SklearnEvaluator(Evaluator):
         train_dataset: Dataset,
         eval_dataset: Dataset,
         *,
-        values_column_name: str | Mapping[str, str],
+        values_column_name: str | Sequence[str],
         label_column_name: str,
         task_metadata: TaskMetadata,
         hf_split: str,
@@ -66,17 +66,22 @@ class SklearnEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
     ) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
+        input_col = (
+            self.values_column_name
+            if isinstance(self.values_column_name, str)
+            else None
+        )
         dataloader_train = create_dataloader(
             self.train_dataset,
             task_metadata=self.task_metadata,
-            input_column=self.values_column_name,
+            input_column=input_col,
             num_proc=num_proc,
             **encode_kwargs,
         )
         dataloader_test = create_dataloader(
             self.eval_dataset,
             task_metadata=self.task_metadata,
-            input_column=self.values_column_name,
+            input_column=input_col,
             num_proc=num_proc,
             **encode_kwargs,
         )
