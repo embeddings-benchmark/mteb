@@ -74,7 +74,9 @@ class ZeroShotClassificationEvaluator(Evaluator):
 
         dataloader = create_dataloader(
             self.dataset,
-            input_column=self.input_column_name,
+            input_column=self.input_column_name
+            if isinstance(self.input_column_name, str)
+            else None,
             task_metadata=self.task_metadata,
             **encode_kwargs,
         )
