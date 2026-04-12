@@ -302,6 +302,9 @@ class AbsTaskClustering(AbsTask):
                 labels = [item for sublist in labels for item in sublist]
             return ClusteringFastDescriptiveStatistics(
                 num_samples=len(labels),
+                text_statistics=None,
+                image_statistics=None,
+                audio_statistics=None,
                 labels_statistics=calculate_label_statistics(labels),
             )
 

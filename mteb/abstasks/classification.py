@@ -504,6 +504,10 @@ class AbsTaskClassification(AbsTask):
                 label = self.dataset[split][self.label_column_name]
             return ClassificationDescriptiveStatistics(
                 num_samples=len(label),
+                number_texts_intersect_with_train=None,
+                text_statistics=None,
+                image_statistics=None,
+                audio_statistics=None,
                 label_statistics=calculate_label_statistics(label),
             )
 
