@@ -492,11 +492,22 @@ class AbsTaskClassification(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
-        col = (
-            self.input_column_name
-            if isinstance(self.input_column_name, str)
-            else self.input_column_name[0]
-        )
+        # Multi-column tasks (e.g. video+audio): only compute label statistics for now
+        if not isinstance(self.input_column_name, str):
+            if hf_subset:
+                label = self.dataset[hf_subset][split][self.label_column_name]
+            elif compute_overall:
+                label = []
+                for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
+                    label.extend(self.dataset[hf_subset][split][self.label_column_name])
+            else:
+                label = self.dataset[split][self.label_column_name]
+            return ClassificationDescriptiveStatistics(
+                num_samples=len(label),
+                label_statistics=calculate_label_statistics(label),
+            )
+
+        col = self.input_column_name
         train_text = []
         if hf_subset:
             inputs = self.dataset[hf_subset][split][col]
@@ -506,7 +517,7 @@ class AbsTaskClassification(AbsTask):
         elif compute_overall:
             inputs = []
             label = []
-            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
+            for hf_subset in self.metadata.eval_langs:
                 inputs.extend(self.dataset[hf_subset][split][col])
                 label.extend(self.dataset[hf_subset][split][self.label_column_name])
                 if split != self.train_split:

@@ -85,17 +85,20 @@ def process_classification(
     """Process classification task dataset(s) with cleaning pipeline."""
     if not task.data_loaded:
         task.load_data()
-    if isinstance(task.input_column_name, str):
-        input_col = task.input_column_name
-    else:
-        input_col = task.input_column_name[0]
+    # Multi-column tasks (e.g. video+audio) don't support text cleaning
+    if not isinstance(task.input_column_name, str):
+        if isinstance(task.dataset, DatasetDict):
+            return task.dataset
+        if task.dataset is None:
+            raise ValueError("Task dataset is None.")
+        return dict(task.dataset)
 
     if isinstance(task.dataset, DatasetDict):
         return clean_dataset(
             task.dataset,
             task.metadata,
             train_split=task.train_split,
-            input_column=input_col,
+            input_column=task.input_column_name,
             label_column=task.label_column_name,
             subset=None,
         )
@@ -109,7 +112,7 @@ def process_classification(
             task.dataset[subset],
             task.metadata,
             train_split=task.train_split,
-            input_column=input_col,
+            input_column=task.input_column_name,
             label_column=task.label_column_name,
             subset=subset,
         )

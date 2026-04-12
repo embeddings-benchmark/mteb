@@ -286,18 +286,33 @@ class AbsTaskClustering(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClusteringFastDescriptiveStatistics:
-        col = (
-            self.input_column_name
-            if isinstance(self.input_column_name, str)
-            else self.input_column_name[0]
-        )
+        # Multi-column tasks (e.g. video+audio): only compute label statistics for now
+        if not isinstance(self.input_column_name, str):
+            if hf_subset:
+                labels = self.dataset[hf_subset][split][self.label_column_name]
+            elif compute_overall:
+                labels = []
+                for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
+                    labels.extend(
+                        self.dataset[hf_subset][split][self.label_column_name]
+                    )
+            else:
+                labels = self.dataset[split][self.label_column_name]
+            if isinstance(labels[0], list):
+                labels = [item for sublist in labels for item in sublist]
+            return ClusteringFastDescriptiveStatistics(
+                num_samples=len(labels),
+                labels_statistics=calculate_label_statistics(labels),
+            )
+
+        col = self.input_column_name
         if hf_subset:
             inputs = self.dataset[hf_subset][split][col]
             labels = self.dataset[hf_subset][split][self.label_column_name]
         elif compute_overall:
             inputs = []
             labels = []
-            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
+            for hf_subset in self.metadata.eval_langs:
                 inputs.extend(self.dataset[hf_subset][split][col])
                 labels.extend(self.dataset[hf_subset][split][self.label_column_name])
         else:
