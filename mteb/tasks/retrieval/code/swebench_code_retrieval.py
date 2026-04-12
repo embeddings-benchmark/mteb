@@ -9,7 +9,7 @@ class SWEbenchCodeRetrieval(AbsTaskRetrieval):
         reference="https://www.swebench.com/",
         dataset={
             "path": "embedding-benchmark/SWEbenchCodeRetrieval",
-            "revision": "d875afcc6a7296022f25a59c0a671c990233d016",
+            "revision": "440b0e732b8d02c16df2c95352ab6770abe997da",
         },
         type="Retrieval",
         category="t2t",
@@ -39,53 +39,3 @@ class SWEbenchCodeRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        if self.data_loaded:
-            return
-
-        from datasets import load_dataset
-
-        # Load the three configurations
-        corpus_ds = load_dataset(
-            self.metadata.dataset["path"],
-            "corpus",
-            revision=self.metadata.dataset["revision"],
-        )["corpus"]
-        queries_ds = load_dataset(
-            self.metadata.dataset["path"],
-            "queries",
-            revision=self.metadata.dataset["revision"],
-        )["queries"]
-        qrels_ds = load_dataset(
-            self.metadata.dataset["path"],
-            "default",
-            revision=self.metadata.dataset["revision"],
-        )["test"]
-
-        # Initialize data structures with 'test' split
-        corpus = {}
-        queries = {}
-        relevant_docs = {}
-
-        # Process corpus
-        for item in corpus_ds:
-            corpus[item["id"]] = {"title": "", "text": item["text"]}
-
-        # Process queries
-        for item in queries_ds:
-            queries[item["id"]] = item["text"]
-
-        # Process qrels (relevant documents)
-        for item in qrels_ds:
-            query_id = item["query-id"]
-            if query_id not in relevant_docs:
-                relevant_docs[query_id] = {}
-            relevant_docs[query_id][item["corpus-id"]] = int(item["score"])
-
-        # Organize data by splits as expected by MTEB
-        self.corpus = {"test": corpus}
-        self.queries = {"test": queries}
-        self.relevant_docs = {"test": relevant_docs}
-
-        self.data_loaded = True
