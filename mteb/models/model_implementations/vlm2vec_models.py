@@ -8,7 +8,6 @@ from tqdm.auto import tqdm
 
 from mteb._requires_package import (
     requires_image_dependencies,
-    requires_package,
     suggest_package,
 )
 from mteb.models.abs_encoder import AbsEncoder
@@ -48,7 +47,6 @@ class VLM2VecWrapper(AbsEncoder):
         ):
             pass
 
-        requires_package(self, "peft", model_name, "pip install 'mteb[peft]'")
         from peft import LoraConfig, PeftModel
         from transformers import AutoConfig, AutoModelForCausalLM, AutoProcessor
 
@@ -294,6 +292,7 @@ vlm2vec_lora = ModelMeta(
     use_instructions=True,
     training_datasets=vlm2vec_training_datasets,
     citation=VLM2VEC_CITATION,
+    extra_requirements_groups=["peft"],
 )
 
 vlm2vec_full = ModelMeta(
@@ -319,4 +318,5 @@ vlm2vec_full = ModelMeta(
     use_instructions=True,
     training_datasets=vlm2vec_training_datasets,
     citation=VLM2VEC_CITATION,
+    extra_requirements_groups=["peft"],
 )

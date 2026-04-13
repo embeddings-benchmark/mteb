@@ -6,10 +6,7 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import (
-    requires_image_dependencies,
-    requires_package,
-)
+from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -38,9 +35,6 @@ class ColQwen2Wrapper(ColPaliEngineWrapper):
         device: str | None = None,
         **kwargs,
     ):
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
         from colpali_engine.models import ColQwen2, ColQwen2Processor
 
         super().__init__(
@@ -64,9 +58,6 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         attn_implementation: str | None = None,
         **kwargs,
     ):
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
         from colpali_engine.models import ColQwen2_5, ColQwen2_5_Processor
         from transformers.utils.import_utils import is_flash_attn_2_available
 
@@ -96,9 +87,6 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
         **kwargs,
     ):
         requires_image_dependencies()
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
         from colpali_engine.models import ColQwen3_5, ColQwen3_5Processor
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -219,7 +207,6 @@ class ColQwen3Wrapper(AbsEncoder):
         **kwargs: Any,
     ):
         requires_image_dependencies()
-        requires_package(self, "transformers", model_name, "pip install mteb[colqwen3]")
         from transformers import AutoModel, AutoProcessor
 
         self.device = device or (
@@ -360,6 +347,7 @@ colqwen2 = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
+    extra_requirements_groups=["colpali_engine"],
 )
 
 colqwen2_5 = ModelMeta(
@@ -388,6 +376,7 @@ colqwen2_5 = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
+    extra_requirements_groups=["colpali_engine"],
 )
 
 TOMORO_TRAINING_DATA = {
@@ -433,6 +422,7 @@ colqwen3_8b = ModelMeta(
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
     citation=TOMORO_CITATION,
+    extra_requirements_groups=["colqwen3"],
 )
 
 colqwen3_4b = ModelMeta(
@@ -458,6 +448,7 @@ colqwen3_4b = ModelMeta(
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
     citation=TOMORO_CITATION,
+    extra_requirements_groups=["colqwen3"],
 )
 
 
@@ -505,6 +496,7 @@ colnomic_3b = ModelMeta(
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
     citation=COLNOMIC_CITATION,
+    extra_requirements_groups=["colpali_engine"],
 )
 
 colnomic_7b = ModelMeta(
@@ -532,6 +524,7 @@ colnomic_7b = ModelMeta(
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
     citation=COLNOMIC_CITATION,
+    extra_requirements_groups=["colpali_engine"],
 )
 
 
@@ -570,6 +563,7 @@ evoqwen25_vl_retriever_3b_v1 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=EVOQWEN_TRAINING_DATA,
+    extra_requirements_groups=["colpali_engine"],
 )
 
 evoqwen25_vl_retriever_7b_v1 = ModelMeta(
@@ -597,6 +591,7 @@ evoqwen25_vl_retriever_7b_v1 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=EVOQWEN_TRAINING_DATA,
+    extra_requirements_groups=["colpali_engine"],
 )
 
 
@@ -641,4 +636,5 @@ colqwen3_5_v3 = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=False,
     training_datasets=COLQWEN35_V3_TRAINING_DATA,
+    extra_requirements_groups=["colpali_engine"],
 )

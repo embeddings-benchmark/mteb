@@ -8,7 +8,6 @@ from tqdm.auto import tqdm
 from transformers import CLIPModel, CLIPProcessor
 
 from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -29,7 +28,6 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
-        requires_package(self, "wav2clip", "pip install 'mteb[wav2clip]'")
         from wav2clip import embed_audio, get_model
 
         self.embed_audio = embed_audio
@@ -181,4 +179,5 @@ wav2clip_zero = ModelMeta(
   primaryClass={cs.SD},
   url={https://arxiv.org/abs/2110.11499},
 }""",
+    extra_requirements_groups=["wav2clip"],
 )

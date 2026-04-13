@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any, Literal
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
+from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
@@ -58,18 +58,6 @@ def _downsample_image(
 
 
 def voyage_v_loader(model_name, **kwargs):
-    requires_package(
-        voyage_v_loader,
-        "voyageai",
-        model_name,
-        "pip install 'mteb[voyage_v]'",
-    )
-    requires_package(
-        voyage_v_loader,
-        "tenacity",
-        model_name,
-        "pip install 'mteb[voyage_v]'",
-    )
     import voyageai
     from tenacity import retry, stop_after_attempt, wait_exponential
 
@@ -228,4 +216,5 @@ voyage_v = ModelMeta(
     reference="https://huggingface.co/voyageai/voyage-multimodal-3",
     use_instructions=None,
     training_datasets=set(),  # No overlap with MTEB according to Voyage, could overlap with MIEB, didn't ask
+    extra_requirements_groups=["voyage_v"],
 )

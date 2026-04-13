@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any, Literal, get_args
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
+from mteb._requires_package import requires_image_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.cohere_models import (
@@ -182,9 +182,6 @@ OUTPUT_TYPES = [
 
 
 def cohere_v_loader(model_name, **kwargs):
-    requires_package(
-        cohere_v_loader, "cohere", model_name, "pip install 'mteb[cohere]'"
-    )
     import cohere
 
     class CohereMultiModalModelWrapper(AbsEncoder):
@@ -413,6 +410,7 @@ cohere_mult_3 = ModelMeta(
     use_instructions=False,
     training_datasets=None,
     output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_eng_3 = ModelMeta(
@@ -439,6 +437,7 @@ cohere_eng_3 = ModelMeta(
     use_instructions=False,
     training_datasets=None,
     output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_embed_v4_multimodal = ModelMeta(
@@ -465,6 +464,7 @@ cohere_embed_v4_multimodal = ModelMeta(
     use_instructions=False,
     training_datasets=None,
     output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_embed_v4_multimodal_binary = ModelMeta(
@@ -492,6 +492,7 @@ cohere_embed_v4_multimodal_binary = ModelMeta(
     training_datasets=None,
     adapted_from="Cohere/Cohere-embed-v4.0",
     output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_embed_v4_multimodal_int8 = ModelMeta(
@@ -519,4 +520,5 @@ cohere_embed_v4_multimodal_int8 = ModelMeta(
     training_datasets=None,
     adapted_from="Cohere/Cohere-embed-v4.0",
     output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )

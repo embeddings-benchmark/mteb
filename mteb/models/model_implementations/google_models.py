@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models import SentenceTransformerEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -82,9 +81,6 @@ class GoogleTextEmbeddingModel(AbsEncoder):
         """Embeds texts with a pre-trained, foundational model.
         From https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings#generative-ai-get-text-embedding-python_vertex_ai_sdk
         """
-        requires_package(
-            self, "vertexai", self.model_name, "pip install 'mteb[vertexai]'"
-        )
         from vertexai.language_models import TextEmbeddingInput, TextEmbeddingModel
 
         model = TextEmbeddingModel.from_pretrained(self.model_name)
@@ -175,6 +171,7 @@ google_text_emb_004 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
+    extra_requirements_groups=["vertexai"],
 )
 
 google_text_emb_005 = ModelMeta(
@@ -201,6 +198,7 @@ google_text_emb_005 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
+    extra_requirements_groups=["vertexai"],
 )
 
 google_text_multilingual_emb_002 = ModelMeta(
@@ -227,6 +225,7 @@ google_text_multilingual_emb_002 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
+    extra_requirements_groups=["vertexai"],
 )
 
 google_gemini_embedding_001 = ModelMeta(
@@ -253,6 +252,7 @@ google_gemini_embedding_001 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
+    extra_requirements_groups=["vertexai"],
 )
 
 

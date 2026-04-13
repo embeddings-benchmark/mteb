@@ -6,10 +6,7 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import (
-    requires_image_dependencies,
-    requires_package,
-)
+from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.colpali_models import COLPALI_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -57,9 +54,6 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         **kwargs,
     ):
         requires_image_dependencies()
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
         from colpali_engine.models import BiQwen2_5, BiQwen2_5_Processor
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -178,6 +172,7 @@ nomic_embed_multimodal_3b = ModelMeta(
     use_instructions=True,
     training_datasets=TRAINING_DATA,
     citation=CITATION,
+    extra_requirements_groups=["colpali_engine"],
 )
 
 nomic_embed_multimodal_7b = ModelMeta(
@@ -207,4 +202,5 @@ nomic_embed_multimodal_7b = ModelMeta(
     use_instructions=True,
     training_datasets=TRAINING_DATA,
     citation=CITATION,
+    extra_requirements_groups=["colpali_engine"],
 )

@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
+from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.colpali_models import COLPALI_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -35,8 +35,6 @@ class JinaCLIPModel(AbsEncoder):
         from transformers import AutoModel
 
         requires_image_dependencies()
-        for package in ["timm", "peft", "einops"]:
-            requires_package(self, package, model_name, "pip install mteb[jina-clip]")
 
         self.model_name = model_name
         self.device = device
@@ -161,6 +159,7 @@ jina_clip_v1 = ModelMeta(
     training_datasets=_JINA_CLIP_TRAIN_DATASETS_V1,
     citation=JINA_CLIP_CITATION,
     superseded_by="jinaai/jina-clip-v2",
+    extra_requirements_groups=["jina-clip"],
 )
 
 jina_clip_v2 = ModelMeta(
@@ -195,4 +194,5 @@ jina_clip_v2 = ModelMeta(
       url={https://arxiv.org/abs/2412.08802},
 }
 """,
+    extra_requirements_groups=["jina-clip"],
 )

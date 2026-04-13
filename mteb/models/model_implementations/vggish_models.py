@@ -8,7 +8,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_audio_dependencies, requires_package
+from mteb._requires_package import requires_audio_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 
@@ -24,12 +24,6 @@ logger = logging.getLogger(__name__)
 
 def vggish_loader(*args, **kwargs):
     """Factory function to create a VGGish model wrapper."""
-    requires_package(
-        vggish_loader,
-        "torch_vggish_yamnet",
-        "google/vggish",
-        "pip install 'mteb[torch-vggish-yamnet]'",
-    )
     import torchaudio
     from torch_vggish_yamnet import vggish
     from torch_vggish_yamnet.input_proc import WaveformToInput
@@ -214,4 +208,5 @@ vggish = ModelMeta(
     location = {New Orleans, LA, USA}
 }
 """,
+    extra_requirements_groups=["torch-vggish-yamnet"],
 )

@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
+from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -34,12 +34,8 @@ MODEL2PROCESSOR = {
 
 
 def llm2clip_loader(model_name, **kwargs):
-    from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcessor
-
-    requires_package(
-        llm2clip_loader, "llm2vec", model_name, "pip install 'mteb[llm2vec]'"
-    )
     from llm2vec import LLM2Vec
+    from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcessor
 
     class LLM2CLIPAbsEncoder(AbsEncoder):
         def __init__(
@@ -208,6 +204,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
+    extra_requirements_groups=["llm2vec"],
 )
 
 # NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
@@ -234,6 +231,7 @@ llm2clip_openai_l_14_224 = ModelMeta(
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
+    extra_requirements_groups=["llm2vec"],
 )
 
 llm2clip_openai_b_16 = ModelMeta(
@@ -259,4 +257,5 @@ llm2clip_openai_b_16 = ModelMeta(
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
+    extra_requirements_groups=["llm2vec"],
 )

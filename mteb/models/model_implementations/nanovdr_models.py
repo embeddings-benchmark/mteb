@@ -7,7 +7,7 @@ import torch
 import torch.nn.functional as F
 from tqdm.autonotebook import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
+from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -43,13 +43,6 @@ class NanoVDRWrapper(AbsEncoder):
         device: str | None = None,
         **kwargs: Any,
     ):
-        requires_package(
-            self,
-            "sentence_transformers",
-            model_name,
-            "pip install sentence-transformers",
-        )
-
         self.device = device or (
             "cuda"
             if torch.cuda.is_available()
@@ -77,19 +70,6 @@ class NanoVDRWrapper(AbsEncoder):
             return
 
         requires_image_dependencies()
-        requires_package(
-            self,
-            "transformers",
-            "Qwen/Qwen3-VL-Embedding-2B",
-            "pip install 'mteb[qwen-vl]'",
-        )
-        requires_package(
-            self,
-            "qwen_vl_utils",
-            "Qwen/Qwen3-VL-Embedding-2B",
-            "pip install 'mteb[qwen-vl]'",
-        )
-
         from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
 
         from mteb.models.model_implementations.qwen3_vl_embedding_models import (
@@ -298,4 +278,5 @@ nanovdr_s_multi = ModelMeta(
         "VidoreArxivQARetrieval",
     },
     citation=NANOVDR_CITATION,
+    extra_requirements_groups=["qwen-vl"],
 )

@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -34,11 +33,6 @@ class SiglipModelWrapper(AbsEncoder):
         **kwargs: Any,
     ):
         from transformers import AutoModel, AutoProcessor
-
-        # for sentencepiece and protobuf:
-        requires_package(
-            self, "sentencepiece", model_name, "pip install 'mteb[siglip]'"
-        )
 
         self.model_name = model_name
         self.device = device
@@ -152,6 +146,10 @@ siglip_so400m_patch14_224 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP_CITATION,
+    extra_requirements_groups=[
+        "siglip",
+        "image",
+    ],
 )
 
 siglip_so400m_patch14_384 = ModelMeta(
@@ -177,6 +175,10 @@ siglip_so400m_patch14_384 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP_CITATION,
+    extra_requirements_groups=[
+        "siglip",
+        "image",
+    ],
 )
 
 siglip_so400m_patch16_256_i18n = ModelMeta(
@@ -202,6 +204,10 @@ siglip_so400m_patch16_256_i18n = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP_CITATION,
+    extra_requirements_groups=[
+        "siglip",
+        "image",
+    ],
 )
 
 siglip_base_patch16_256_multilingual = ModelMeta(
@@ -227,6 +233,10 @@ siglip_base_patch16_256_multilingual = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP_CITATION,
+    extra_requirements_groups=[
+        "siglip",
+        "image",
+    ],
 )
 
 siglip_base_patch16_256 = ModelMeta(
@@ -252,6 +262,10 @@ siglip_base_patch16_256 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP_CITATION,
+    extra_requirements_groups=[
+        "siglip",
+        "image",
+    ],
 )
 
 siglip_base_patch16_512 = ModelMeta(
@@ -277,6 +291,10 @@ siglip_base_patch16_512 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP_CITATION,
+    extra_requirements_groups=[
+        "siglip",
+        "image",
+    ],
 )
 
 siglip_base_patch16_384 = ModelMeta(
@@ -302,6 +320,10 @@ siglip_base_patch16_384 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP_CITATION,
+    extra_requirements_groups=[
+        "siglip",
+        "image",
+    ],
 )
 
 siglip_base_patch16_224 = ModelMeta(
@@ -327,6 +349,10 @@ siglip_base_patch16_224 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP_CITATION,
+    extra_requirements_groups=[
+        "siglip",
+        "image",
+    ],
 )
 
 siglip_large_patch16_256 = ModelMeta(
@@ -352,6 +378,10 @@ siglip_large_patch16_256 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP_CITATION,
+    extra_requirements_groups=[
+        "siglip",
+        "image",
+    ],
 )
 
 siglip_large_patch16_384 = ModelMeta(
@@ -377,4 +407,8 @@ siglip_large_patch16_384 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP_CITATION,
+    extra_requirements_groups=[
+        "siglip",
+        "image",
+    ],
 )

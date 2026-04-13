@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
+from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -24,7 +24,6 @@ MOCOV3_CITATION = """@Article{chen2021mocov3,
 
 
 def mocov3_loader(model_name, **kwargs):
-    requires_package(mocov3_loader, "timm", model_name, "pip install 'mteb[timm]'")
     import timm
 
     class MOCOv3Model(AbsEncoder):
@@ -144,6 +143,7 @@ mocov3_vit_base = ModelMeta(
     use_instructions=False,
     training_datasets=mocov3_training_datasets,
     citation=MOCOV3_CITATION,
+    extra_requirements_groups=["timm"],
 )
 
 mocov3_vit_large = ModelMeta(
@@ -169,4 +169,5 @@ mocov3_vit_large = ModelMeta(
     use_instructions=False,
     training_datasets=mocov3_training_datasets,
     citation=MOCOV3_CITATION,
+    extra_requirements_groups=["timm"],
 )

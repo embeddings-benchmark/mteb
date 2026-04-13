@@ -401,13 +401,19 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         return model
 
     def _check_requirements(self) -> None:
-        if self.extra_requirements_groups is None:
+        groups: list[str] = list(self.extra_requirements_groups or [])
+        if "image" in self.modalities and "image" not in groups:
+            groups.append("image")
+        if "audio" in self.modalities and "audio" not in groups:
+            groups.append("audio")
+
+        if not groups:
             return
 
         available_extras = set(
             distribution("mteb").metadata.get_all("Provides-Extra") or []
         )
-        unknown = set(self.extra_requirements_groups) - available_extras
+        unknown = set(groups) - available_extras
         if unknown:
             raise ValueError(
                 f"Unknown extras group(s) for mteb: {sorted(unknown)}. "
@@ -426,8 +432,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             req = Requirement(req_str)
 
             if req.marker is None or not any(
-                req.marker.evaluate({"extra": g})
-                for g in self.extra_requirements_groups
+                req.marker.evaluate({"extra": g}) for g in groups
             ):
                 continue
 
@@ -447,7 +452,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             raise ImportError(
                 f"Model {self.name} is missing required dependencies: "
                 + ", ".join(missing_dependencies)
-                + f".\nYou can install it with `pip install mteb[{','.join(self.extra_requirements_groups)}]`."
+                + f".\nYou can install it with `pip install mteb[{','.join(groups)}]`."
             )
 
     def model_name_as_path(self) -> str:

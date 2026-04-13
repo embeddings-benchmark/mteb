@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 
-from mteb._requires_package import requires_package
+from mteb._requires_package import _is_package_available
 from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder
@@ -57,9 +57,10 @@ def instruct_wrapper(
         DeprecationWarning,
         stacklevel=2,
     )
-    requires_package(
-        instruct_wrapper, "gritlm", model_name_or_path, "pip install 'mteb[gritlm]'"
-    )
+    if not _is_package_available("gritlm"):
+        raise ImportError(
+            f"gritlm is required for {model_name_or_path}. Please install with `pip install mteb[gritlm]`."
+        )
     from gritlm import GritLM  # type: ignore[import]
 
     @deprecated(
