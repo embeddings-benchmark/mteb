@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from enum import Enum
 from typing import TYPE_CHECKING, TypedDict
 
 import numpy as np
@@ -35,7 +34,7 @@ Array = NDArray[np.floating | np.integer | np.bool_] | torch.Tensor
 
 
 # --- Input types ---
-class PromptType(str, Enum):
+class PromptType(HelpfulStrEnum):
     """The type of prompt used in the input for retrieval models. Used to differentiate between queries and documents.
 
     Attributes:
