@@ -37,13 +37,12 @@ class E5OmniWrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
-        torch_dtype: torch.dtype | str | None = torch.bfloat16,
-        max_audio_length_seconds: float = 30.0,
+        torch_dtype: torch.dtype | str | None = None,
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         requires_image_dependencies()
         requires_audio_dependencies()
-        requires_package(self, "transformers", model_name, "pip install mteb[e5-omni]")
         requires_package(
             self, "qwen_omni_utils", model_name, "pip install mteb[e5-omni]"
         )
@@ -82,7 +81,7 @@ class E5OmniWrapper(AbsEncoder):
         self.model.eval()
 
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
-        self.max_samples = int(max_audio_length_seconds * self.sampling_rate)
+        self.max_samples = int((max_audio_length_seconds or 30.0) * self.sampling_rate)
 
     @torch.no_grad()
     def encode(  # noqa: PLR0914
@@ -164,9 +163,9 @@ class E5OmniWrapper(AbsEncoder):
                 )
                 emb = outputs.hidden_states[-1][:, -1]
                 emb = torch.nn.functional.normalize(emb, p=2, dim=-1)
-                all_embeddings.append(emb.cpu().to(torch.float32))
+                all_embeddings.append(emb.cpu())
 
-        return torch.cat(all_embeddings, dim=0).numpy()
+        return torch.cat(all_embeddings, dim=0)
 
 
 E5_OMNI_CITATION = """@misc{chen2026e5omniexplicitcrossmodalalignment,
@@ -189,6 +188,10 @@ E5_OMNI_TRAINING_DATASETS = bge_m3_training_data | {
 
 e5_omni_3b = ModelMeta(
     loader=E5OmniWrapper,
+    loader_kwargs=dict(
+        torch_dtype=torch.bfloat16,
+        max_audio_length_seconds=30.0,
+    ),
     name="Haon-Chen/e5-omni-3B",
     languages=bgem3_languages,
     revision="e3530921a79351089af9376317b95d70470eabd6",
@@ -218,6 +221,10 @@ e5_omni_3b = ModelMeta(
 
 e5_omni_7b = ModelMeta(
     loader=E5OmniWrapper,
+    loader_kwargs=dict(
+        torch_dtype=torch.bfloat16,
+        max_audio_length_seconds=30.0,
+    ),
     name="Haon-Chen/e5-omni-7B",
     languages=bgem3_languages,
     revision="0514b08201bc73b9a6025b1a05815ff69334806c",
