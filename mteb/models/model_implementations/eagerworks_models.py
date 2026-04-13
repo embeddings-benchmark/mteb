@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
@@ -28,7 +27,6 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         image_size: int = 784,
         **kwargs,
     ):
-        requires_image_dependencies()
         from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")

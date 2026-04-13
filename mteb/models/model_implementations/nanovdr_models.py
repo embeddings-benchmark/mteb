@@ -7,7 +7,6 @@ import torch
 import torch.nn.functional as F
 from tqdm.autonotebook import tqdm
 
-from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -69,7 +68,6 @@ class NanoVDRWrapper(AbsEncoder):
         if self._doc_model is not None:
             return
 
-        requires_image_dependencies()
         from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
 
         from mteb.models.model_implementations.qwen3_vl_embedding_models import (

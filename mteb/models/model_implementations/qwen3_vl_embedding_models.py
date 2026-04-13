@@ -8,7 +8,6 @@ import torch
 import torch.nn.functional as F
 from tqdm.autonotebook import tqdm
 
-from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -155,7 +154,6 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
         visual_document_use_text: bool = False,
         **kwargs: Any,
     ):
-        requires_image_dependencies()
         from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
 
         self.visual_document_use_text = visual_document_use_text

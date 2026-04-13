@@ -8,7 +8,6 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -35,7 +34,6 @@ def yamnet_loader(*args, **kwargs):
             max_audio_length_seconds: float = 30.0,
             **kwargs: Any,
         ):
-            requires_audio_dependencies()
             self.device = device
             self.max_audio_length_seconds = max_audio_length_seconds
             self.model = yamnet.yamnet(pretrained=True)

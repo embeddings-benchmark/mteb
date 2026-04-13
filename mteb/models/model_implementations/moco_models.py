@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -37,8 +36,6 @@ def mocov3_loader(model_name, **kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
-            requires_image_dependencies()
-
             self.model_name = model_name
             self.device = device
             name = "vit_base_patch16_224"

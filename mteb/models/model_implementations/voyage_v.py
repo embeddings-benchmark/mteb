@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any, Literal
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
@@ -67,8 +66,6 @@ def voyage_v_loader(model_name, **kwargs):
             model_name: str,
             **kwargs: Any,
         ):
-            requires_image_dependencies()
-
             self.model_name = model_name.split("/")[-1]  # noqa: PLC0207
             self.vo = voyageai.Client()
 

@@ -7,7 +7,6 @@ import torch
 from tqdm.auto import tqdm
 
 from mteb._requires_package import (
-    requires_image_dependencies,
     suggest_package,
 )
 from mteb.models.abs_encoder import AbsEncoder
@@ -38,7 +37,6 @@ class VLM2VecWrapper(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs,
     ):
-        requires_image_dependencies()
         if suggest_package(
             self,
             "flash_attn",

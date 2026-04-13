@@ -18,7 +18,6 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.colpali_models import (
     COLPALI_CITATION,
@@ -64,7 +63,6 @@ class SLMBaseWrapper(AbsEncoder):
         use_flash_attn: bool = True,
         **kwargs,
     ):
-        requires_image_dependencies()
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self._load_model_and_processor(model_name, revision, use_flash_attn, **kwargs)
         self.mdl = self.mdl.to(self.device)

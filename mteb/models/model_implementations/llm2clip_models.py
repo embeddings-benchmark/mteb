@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -44,8 +43,6 @@ def llm2clip_loader(model_name, **kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
-            requires_image_dependencies()
-
             if model_name not in MODEL2PROCESSOR:
                 raise Exception(
                     f"This model {model_name} is not in the supported mode list: {list(MODEL2PROCESSOR.keys())}."

@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING, Any, Literal, get_args
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.cohere_models import (
@@ -198,7 +197,7 @@ def cohere_v_loader(model_name, **kwargs):
             Cohere currently supports 40 images/min, thus time.sleep(1.5) is applied after each image.
             Remove or adjust this after Cohere API changes capacity.
             """
-            requires_image_dependencies()
+
             from torchvision import transforms
 
             self.model_name = model_name
