@@ -11,12 +11,8 @@ from __future__ import annotations
 import base64
 import hashlib
 import logging
-from collections import defaultdict
-
-from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
-from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
@@ -49,8 +45,8 @@ class BrowseCompPlusRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrowseCompPlusRetrieval",
         dataset={
-            "path": "Tevatron/browsecomp-plus",
-            "revision": "144cff8e35b5eaef7e526346aa60774a9deb941f",
+            "path": "mteb/BrowseCompPlusRetrieval",
+            "revision": "16df5da3ad2796a72cdff1704764b90383b7c209",
         },
         description=(
             "BrowseComp-Plus is a reasoning-intensive retrieval benchmark that isolates "
@@ -90,64 +86,3 @@ and Chen, Wenhu and Lin, Jimmy},
             "query": "Given a complex research question, retrieve relevant web documents that help answer it"
         },
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        if self.data_loaded:
-            return
-
-        logger.info("Loading BrowseComp-Plus queries (encrypted)...")
-        queries_ds = load_dataset(
-            self.metadata.dataset["path"],
-            revision=self.metadata.dataset["revision"],
-            split="test",
-        )
-
-        logger.info("Decrypting queries and building qrels...")
-        queries_list = []
-        gold_only_rels: dict[str, dict[str, int]] = defaultdict(dict)
-        gold_and_evidence_rels: dict[str, dict[str, int]] = defaultdict(dict)
-
-        for row in queries_ds:
-            qid = str(row["query_id"])  # plain — not encrypted
-            queries_list.append(
-                {"id": qid, "text": _decrypt_string(row["query"], _CANARY)}
-            )
-
-            seen: set[str] = set()
-            for doc in row["gold_docs"]:
-                docid = _decrypt_string(doc["docid"], _CANARY)
-                if docid not in seen:
-                    gold_only_rels[qid][docid] = 1
-                    gold_and_evidence_rels[qid][docid] = 1
-                    seen.add(docid)
-            for doc in row["evidence_docs"]:
-                docid = _decrypt_string(doc["docid"], _CANARY)
-                if docid not in seen:
-                    gold_and_evidence_rels[qid][docid] = 1
-                    seen.add(docid)
-
-        queries_dataset = Dataset.from_list(queries_list)
-
-        logger.info(
-            "Loading BrowseComp-Plus corpus (~100K docs, may take a few minutes)..."
-        )
-        corpus_raw = load_dataset(
-            "Tevatron/browsecomp-plus-corpus",
-            revision=_CORPUS_REVISION,
-            split="train",
-            num_proc=num_proc,
-        )
-        corpus_dataset = corpus_raw.rename_column("docid", "id").select_columns(
-            ["id", "text"]
-        )
-
-        split_kwargs = dict(
-            queries=queries_dataset, corpus=corpus_dataset, top_ranked=None
-        )
-        self.dataset["gold_only"]["test"] = RetrievalSplitData(
-            relevant_docs=dict(gold_only_rels), **split_kwargs
-        )
-        self.dataset["gold_and_evidence"]["test"] = RetrievalSplitData(
-            relevant_docs=dict(gold_and_evidence_rels), **split_kwargs
-        )
-        self.data_loaded = True
