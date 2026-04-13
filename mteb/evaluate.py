@@ -23,7 +23,7 @@ from mteb.models.sentence_transformer_wrapper import (
 )
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
-from mteb.types import OutputDType, PromptType
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -347,24 +347,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
 
     model, meta, model_name, model_revision = _sanitize_model(model)
     _check_model_modalities(meta, tasks)
-
-    if "precision" in encode_kwargs:
-        existing_experiment_kwargs = meta.experiment_kwargs
-        output_dtype = OutputDType.from_str(encode_kwargs["precision"])  # type: ignore[typeddict-item]
-        if existing_experiment_kwargs is not None:
-            existing_experiment_kwargs["output_dtypes"] = output_dtype  # type: ignore[index]
-        else:
-            existing_experiment_kwargs = {"output_dtypes": output_dtype.value}
-        logger.warning(
-            f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {output_dtype.value}."
-        )
-        model.mteb_model_meta = meta.model_copy(  # type: ignore[misc]
-            update={
-                "output_dtypes": output_dtype.value,
-                "experiment_kwargs": existing_experiment_kwargs,
-            },
-            deep=True,
-        )
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
