@@ -612,7 +612,6 @@ class TaskMetadata(BaseModel):
             "Political classification": [],
             "Question answering": [
                 "multiple-choice-qa",
-                "question-answering",
             ],
             "Sentiment/Hate speech": [
                 "sentiment-analysis",
