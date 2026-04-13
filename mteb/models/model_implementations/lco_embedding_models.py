@@ -62,13 +62,8 @@ class LCOEmbedding(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        try:
-            from qwen_omni_utils import process_mm_info
-        except ImportError:
-            raise ImportError(
-                "The 'qwen_omni_utils' package is required for this model. "
-                "Please install it or ensure it is in your python path."
-            )
+        from qwen_omni_utils import process_mm_info
+
         all_embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):
@@ -162,6 +157,7 @@ lco_3b = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    extra_requirements_groups=["qwen_omni_utils"],
 )
 
 lco_7b = ModelMeta(
@@ -197,4 +193,5 @@ lco_7b = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    extra_requirements_groups=["qwen_omni_utils"],
 )

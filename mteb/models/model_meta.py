@@ -37,6 +37,7 @@ from mteb._hf_integration.hf_hub_utils import (
     _repo_exists,
 )
 from mteb.languages import check_language_code
+from mteb.languages.iso_mappings import _hf_langs_to_iso_lang_scripts
 from mteb.models.models_protocols import MTEBModels
 from mteb.types import (
     ISOLanguageScript,
@@ -822,6 +823,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             revision = revisions[0].commit_id if revisions else None
 
         model_license = card_data.license if card_data.license != "other" else None
+        languages = _hf_langs_to_iso_lang_scripts(card_data.language)
         n_parameters = cls._calculate_num_parameters_from_hub(model_name)
         n_embedding_parameters = cls._estimate_embedding_parameters_from_hub(
             model_name, revision=revision, config=config
@@ -859,6 +861,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 reference=reference,
                 release_date=cls.fetch_release_date(model_name),
                 license=model_license,
+                languages=languages,
                 framework=frameworks,
                 n_parameters=n_parameters,
                 n_embedding_parameters=n_embedding_parameters,
