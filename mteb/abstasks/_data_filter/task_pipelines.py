@@ -85,15 +85,11 @@ def process_classification(
     """Process classification task dataset(s) with cleaning pipeline."""
     if not task.data_loaded:
         task.load_data()
-    # Multi-column tasks (e.g. video+audio): skip text cleaning pipeline
-    # (dedup, filter_empty, filter_short, etc.) as these only apply to text columns.
-    # Return dataset unchanged.
     if not isinstance(task.input_column_name, str):
-        if isinstance(task.dataset, DatasetDict):
-            return task.dataset
-        if task.dataset is None:
-            raise ValueError("Task dataset is None.")
-        return dict(task.dataset)
+        raise NotImplementedError(
+            "Data cleaning is not yet supported for multi-column tasks "
+            f"(input_column_name={task.input_column_name})."
+        )
 
     if isinstance(task.dataset, DatasetDict):
         return clean_dataset(
