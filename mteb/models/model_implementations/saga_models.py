@@ -110,6 +110,20 @@ my_custom_model_meta = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=True,
     public_training_code=None,
-    public_training_data=None,
+    public_training_data=None, 
+    training_datasets={
+        "sentence-transformers/reddit",
+        "sentence-transformers/xsum",
+        "sentence-transformers/simple-wiki",
+        "sentence-transformers/s2orc",
+        "sentence-transformers/amazon-reviews",
+        "sentence-transformers/gooaq",
+        "sentence-transformers/paq",
+        "sentence-transformers/stackexchange-duplicates",
+        "sentence-transformers/wikipedia-sections",
+        "stanfordnlp/snli",
+        "tomaarsen/natural-questions-hard-negatives",
+        "sentence-transformers/msmarco-msmarco-MiniLM-L6-v3"
+    },
     training_datasets=None,
 )
