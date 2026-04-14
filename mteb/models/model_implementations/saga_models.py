@@ -1,13 +1,11 @@
 import numpy as np
-import mteb
 from typing import Any, Optional
 from torch.utils.data import DataLoader
-from mteb.cache import ResultCache
 from mteb.models import ModelMeta, EncoderProtocol
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types import PromptType
 
-# 1. Your Custom Prompt Router
+
 def my_custom_task_to_instruction(task_name: str, task_type: str) -> str:
     if task_type in ["STS", "Summarization", "Reranking", "BitextMining"]:
         if task_type == "BornholmBitextMining":
@@ -26,7 +24,7 @@ def my_custom_task_to_instruction(task_name: str, task_type: str) -> str:
     return ""
 
 
-class MyCustomModel(EncoderProtocol):
+class SagaModel(EncoderProtocol):
     def __init__(self, model_name: str, revision: str = None, device: str = None, **kwargs):
         from sentence_transformers import SentenceTransformer
         actual_path = kwargs.pop("model_path", model_name)
@@ -92,15 +90,15 @@ class MyCustomModel(EncoderProtocol):
         return self.model.similarity_pairwise(embeddings1, embeddings2)
 
 
-my_custom_model_meta = ModelMeta(
+saga_embed_v1 = ModelMeta(
     name="nicher92/saga-embed_v1", 
     reference="https://huggingface.co/nicher92/saga-embed_v1",
-    loader=MyCustomModel,
+    loader=SagaModel,
     loader_kwargs={}, 
     revision="3be07ac3d7c3e00e4402ae9285b23fcf8fda6735",
    release_date="2025-01-09",
     languages=["swe-Latn"],
-    n_parameters=404_219_904
+    n_parameters=404_219_904,
     memory_usage_mb=2167,
     license="mit",
     max_tokens=1024,
@@ -125,5 +123,4 @@ my_custom_model_meta = ModelMeta(
         "tomaarsen/natural-questions-hard-negatives",
         "sentence-transformers/msmarco-msmarco-MiniLM-L6-v3"
     },
-    training_datasets=None,
 )
