@@ -1,23 +1,10 @@
-"""MTEB model registry entry for BidirLM-Omni-2.5B-Embedding.
-
-Copy this file to:
-    mteb/models/model_implementations/bidirlm_omni_models.py
-
-And add one import line to mteb/models/model_implementations/__init__.py:
-    from .bidirlm_omni_models import bidirlm_omni_2_5b
-
-This file is self-contained: the BidirLMOmniEncoder class and all task prompts
-are embedded directly so no external JSON file is needed.
-"""
 from __future__ import annotations
 
-import logging
-import os
 import re
-import sys
 from typing import TYPE_CHECKING, Any
 
 import torch
+from sentence_transformers import SentenceTransformer
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -30,28 +17,96 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
 
-logger = logging.getLogger(__name__)
-
-# ── Languages ─────────────────────────────────────────────────────────────────
 BIDIRLM_OMNI_LANGUAGES = [
-    "afr-Latn", "amh-Ethi", "ara-Arab", "aze-Latn", "bel-Cyrl", "bul-Cyrl",
-    "ben-Beng", "bos-Latn", "cat-Latn", "ceb-Latn", "ces-Latn", "cym-Latn",
-    "dan-Latn", "deu-Latn", "ell-Grek", "eng-Latn", "spa-Latn", "est-Latn",
-    "eus-Latn", "fas-Arab", "fin-Latn", "fra-Latn", "gle-Latn", "glg-Latn",
-    "guj-Gujr", "hau-Latn", "heb-Hebr", "hin-Deva", "hrv-Latn", "hat-Latn",
-    "hun-Latn", "hye-Armn", "ind-Latn", "ibo-Latn", "isl-Latn", "ita-Latn",
-    "jpn-Jpan", "jav-Latn", "kat-Geor", "kaz-Cyrl", "kan-Knda", "kor-Hang",
-    "kir-Cyrl", "lit-Latn", "lav-Latn", "mlg-Latn", "mkd-Cyrl", "mal-Mlym",
-    "mar-Deva", "msa-Latn", "mlt-Latn", "mya-Mymr", "nob-Latn", "nep-Deva",
-    "nld-Latn", "nso-Latn", "nya-Latn", "pan-Guru", "pol-Latn", "pus-Arab",
-    "por-Latn", "ron-Latn", "rus-Cyrl", "snd-Arab", "sin-Sinh", "slk-Latn",
-    "slv-Latn", "sna-Latn", "som-Latn", "sqi-Latn", "srp-Cyrl", "sun-Latn",
-    "swe-Latn", "swa-Latn", "tam-Taml", "tel-Telu", "tha-Thai", "tgl-Latn",
-    "tur-Latn", "ukr-Cyrl", "urd-Arab", "vie-Latn", "wol-Latn", "xho-Latn",
-    "yor-Latn", "cmn-Hans", "zul-Latn",
+    "afr-Latn",
+    "amh-Ethi",
+    "ara-Arab",
+    "aze-Latn",
+    "bel-Cyrl",
+    "bul-Cyrl",
+    "ben-Beng",
+    "bos-Latn",
+    "cat-Latn",
+    "ceb-Latn",
+    "ces-Latn",
+    "cym-Latn",
+    "dan-Latn",
+    "deu-Latn",
+    "ell-Grek",
+    "eng-Latn",
+    "spa-Latn",
+    "est-Latn",
+    "eus-Latn",
+    "fas-Arab",
+    "fin-Latn",
+    "fra-Latn",
+    "gle-Latn",
+    "glg-Latn",
+    "guj-Gujr",
+    "hau-Latn",
+    "heb-Hebr",
+    "hin-Deva",
+    "hrv-Latn",
+    "hat-Latn",
+    "hun-Latn",
+    "hye-Armn",
+    "ind-Latn",
+    "ibo-Latn",
+    "isl-Latn",
+    "ita-Latn",
+    "jpn-Jpan",
+    "jav-Latn",
+    "kat-Geor",
+    "kaz-Cyrl",
+    "kan-Knda",
+    "kor-Hang",
+    "kir-Cyrl",
+    "lit-Latn",
+    "lav-Latn",
+    "mlg-Latn",
+    "mkd-Cyrl",
+    "mal-Mlym",
+    "mar-Deva",
+    "msa-Latn",
+    "mlt-Latn",
+    "mya-Mymr",
+    "nob-Latn",
+    "nep-Deva",
+    "nld-Latn",
+    "nso-Latn",
+    "nya-Latn",
+    "pan-Guru",
+    "pol-Latn",
+    "pus-Arab",
+    "por-Latn",
+    "ron-Latn",
+    "rus-Cyrl",
+    "snd-Arab",
+    "sin-Sinh",
+    "slk-Latn",
+    "slv-Latn",
+    "sna-Latn",
+    "som-Latn",
+    "sqi-Latn",
+    "srp-Cyrl",
+    "sun-Latn",
+    "swe-Latn",
+    "swa-Latn",
+    "tam-Taml",
+    "tel-Telu",
+    "tha-Thai",
+    "tgl-Latn",
+    "tur-Latn",
+    "ukr-Cyrl",
+    "urd-Arab",
+    "vie-Latn",
+    "wol-Latn",
+    "xho-Latn",
+    "yor-Latn",
+    "cmn-Hans",
+    "zul-Latn",
 ]
 
-# ── Citation ──────────────────────────────────────────────────────────────────
 BIDIRLM_OMNI_CITATION = """@misc{boizard2026bidirlmtextomnimodalbidirectional,
       title={BidirLM: From Text to Omnimodal Bidirectional Encoders by Adapting and Composing Causal LLMs},
       author={Nicolas Boizard and Théo Deschamps-Berger and Hippolyte Gisserot-Boukhlef and Céline Hudelot and Pierre Colombo},
@@ -62,7 +117,6 @@ BIDIRLM_OMNI_CITATION = """@misc{boizard2026bidirlmtextomnimodalbidirectional,
       url={https://arxiv.org/abs/2604.02045},
 }"""
 
-# ── Training datasets ─────────────────────────────────────────────────────────
 BIDIRLM_OMNI_TRAINING_DATASETS = {
     "AFQMC",
     "OPUS-100",
@@ -141,8 +195,8 @@ BIDIRLM_OMNI_TRAINING_DATASETS = {
     "DRCD",
 }
 
-# ── Task prompts (251 entries) ────────────────────────────────────────────────
 _TASK_PROMPTS: dict[str, str | dict[str, str]] = {
+    # MTEB tasks
     "AmazonCounterfactualClassification": "Given an Amazon review, judge whether it is counterfactual.",
     "AmazonPolarityClassification": "Classifying Amazon reviews into positive or negative sentiment",
     "AmazonReviewsClassification": "Classifying the given Amazon review into its appropriate rating category",
@@ -242,7 +296,7 @@ _TASK_PROMPTS: dict[str, str | dict[str, str]] = {
     "PolEmo2.0-IN": "Classifying sentiment of the customer review into positive, neutral, or negative",
     "PolEmo2.0-OUT": "Classifying sentiment of the customer review into positive, neutral, or negative",
     "AllegroReviews": "Classifying sentiment of the customer review into positive, neutral, or negative",
-    "PAC": "Classify the sentence into one of the two types: \"BEZPIECZNE_POSTANOWIENIE_UMOWNE\" and \"KLAUZULA_ABUZYWNA\"",
+    "PAC": 'Classify the sentence into one of the two types: "BEZPIECZNE_POSTANOWIENIE_UMOWNE" and "KLAUZULA_ABUZYWNA"',
     "SICK-E-PL": "Retrieve semantically similar text",
     "SICK-R-PL": "Retrieve semantically similar text",
     "STS22": "Retrieve semantically similar text",
@@ -403,16 +457,51 @@ _TASK_PROMPTS: dict[str, str | dict[str, str]] = {
     "STS16": "Retrieve semantically similar text",
     "SummEval": "Retrieve semantically similar text",
     "ATEC": "Retrieve semantically similar text",
+    "BornholmBitextMining": "Retrieve parallel sentences between Danish and Bornholmsk dialect",
+    "CEDRClassification": "Classify the emotion expressed in the given text into one of five categories: joy, sadness, surprise, fear, or anger",
+    "DalajClassification": "Classify the linguistic acceptability of the given Swedish sentence",
+    "NorwegianCourtsBitextMining": "Retrieve parallel sentences between Norwegian Bokmål and Nynorsk",
+    "ScalaClassification": "Classify the linguistic acceptability of the given Scandinavian sentence",
+    "SpartQA": "Given a spatial reasoning question, retrieve the passage that answers the question",
+    "SwednClusteringP2P": "Identify the topic or theme of the given Swedish news articles",
+    "TempReasonL1": "Given a temporal reasoning question, retrieve the passage that answers the question",
+    "TwitterHjerneRetrieval": "Given a Danish question, retrieve the corresponding answer",
+    "WinoGrande": "Given a commonsense reasoning question, retrieve the passage that answers the question",
+    "NordicLangClassification": "Given a text, classify its Nordic language",
+    "VoyageMMarcoReranking": "Given a Japanese query, retrieve relevant passages that answer the query",
+    # MIEB tasks
+    "AROCocoOrder": "Compositionality Evaluation of images to their captions.Each capation has four hard negatives created by order permutations.",
+    "AROFlickrOrder": "Compositionality Evaluation of images to their captions.Each capation has four hard negatives created by order permutations.",
+    "BLINKIT2IMultiChoice": "Retrieve images based on images and specific retrieval instructions.",
+    "Country211ZeroShot": "Classifying images of 211 countries.",
+    "CVBenchRelation": "decide the relation of the objects in the image.",
+    "FER2013ZeroShot": "Classifying facial emotions.",
+    "VidoreDocVQARetrieval": "Retrieve associated pages according to questions.",
+    "VidoreShiftProjectRetrieval": "Retrieve associated pages according to questions.",
+    "VidoreSyntheticDocQAAIRetrieval": "Retrieve associated pages according to questions.",
+    "VidoreTabfquadRetrieval": "Retrieve associated pages according to questions.",
+    "VidoreTatdqaRetrieval": "Retrieve associated pages according to questions.",
+    "VQA2IT2TRetrieval": "Retrieve the correct answer for a question about an image.",
+    "WebQAT2ITRetrieval": "Retrieve sources of information based on questions.",
+    "WITT2IRetrieval": "Retrieve images based on multilingual descriptions.",
+    "XM3600T2IRetrieval": "Retrieve images based on multilingual descriptions.",
+    # MAEB tasks
+    "CommonLanguageAgeDetection": "Age Classification. This is a stratified subsampled version of the original CommonLanguage dataset.",
+    "CommonVoiceMini21T2ARetrieval": "Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
+    "FSD2019Kaggle": "Multilabel Audio Classification.",
+    "JamAltArtistA2ARetrieval": "Given audio clip of a song (query), retrieve all songs from the same artist in the Jam-Alt-Lines dataset.",
+    "JamAltLyricA2TRetrieval": "From audio clips of songs (query), retrieve corresponding textual lyric from the Jam-Alt-Lines dataset.",
+    "SpeechCommandsZeroshotv0.02": "Sound Classification/Keyword Spotting Dataset. This is a set of one-second audio clips containing a single spoken English word or background noise. These words are from a small set of commands such as 'yes', 'no', and 'stop' spoken by various speakers. With a total of 10 labels/commands for keyword spotting and a total of 30 labels for other auxiliary tasks.",
+    "VehicleSoundClustering": "Clustering vehicle sounds recorded from smartphones (0 (car class), 1 (truck, bus and van class), 2 (motorcycle class)).",
+    "VoxPopuliAccentPairClassification": "Classifying same or different regional accent of English.",
 }
-
-# ── Encoder ───────────────────────────────────────────────────────────────────
 
 POOLING_DIM = 2048
 _SUFFIX_RE = re.compile(r"(HardNegatives|Retrieval|Summarization|\.v\d+)$")
 
 
 def _flatten_prompts(prompts: dict) -> dict[str, str]:
-    """Flatten nemotron prompt dict to the MTEB model_prompts format.
+    """Flatten prompt dict to the MTEB model_prompts format.
 
     ``{"Task": "instr"}``                → ``{"Task": "instr"}``
     ``{"Task": {"query":"q","passage":"p"}}`` → ``{"Task-query":"q", "Task-passage":"p"}``
@@ -441,48 +530,24 @@ class BidirLMOmniEncoder(AbsEncoder):
         self,
         model_name: str,
         revision: str | None = None,
-        checkpoint_path: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_sequence_length: int = 1024,
-        max_image_size: int = 1024,
         attn_implementation: str = "eager",
+        trust_remote_code: bool = True,
         task_prompts: dict | None = None,
         **kwargs: Any,
     ) -> None:
-        from sentence_transformers import SentenceTransformer
-        from sentence_transformers import models as st_models
-
-        from huggingface_hub import snapshot_download
-        model_path_resolved = snapshot_download(repo_id=model_name, revision=revision)
-        if model_path_resolved not in sys.path:
-            sys.path.insert(0, model_path_resolved)
-        from input_module_bidirlm_omni import BidirLMOmniInputModule
-
-        input_module = BidirLMOmniInputModule(
-            model_name=model_name,
-            trust_remote_code=True,
-            max_sequence_length=max_sequence_length,
-            attn_implementation=attn_implementation,
-        )
-        pooling = st_models.Pooling(POOLING_DIM, pooling_mode="mean")
         self.model = SentenceTransformer(
-            modules=[input_module, pooling], trust_remote_code=True
+            model_name,
+            revision=revision,
+            device=device,
+            trust_remote_code=trust_remote_code,
+            model_kwargs={"attn_implementation": attn_implementation},
         )
-
-        if checkpoint_path:
-            from safetensors.torch import load_file
-            weights = load_file(os.path.join(checkpoint_path, "model.safetensors"))
-            input_module.model.load_state_dict(weights, strict=True)
-            logger.info("Loaded fine-tuned weights from: %s", checkpoint_path)
-
-        self.model.to(device)
         self.model.eval()
         self.device = device
 
         self.task_prompts = task_prompts or {}
         self.prompts_dict = _flatten_prompts(self.task_prompts)
-
-    # ── Prompt helpers ────────────────────────────────────────────────────────
 
     def _lookup_prompt(self, task_name: str):
         if task_name in self.task_prompts:
@@ -521,10 +586,6 @@ class BidirLMOmniEncoder(AbsEncoder):
         ):
             return None
 
-        if not instruction and hasattr(task_metadata, "description") and task_metadata.description:
-            desc = task_metadata.description
-            instruction = desc.get("description", "") if isinstance(desc, dict) else str(desc)
-
         if not instruction and task_type in ("STS", "PairClassification"):
             instruction = "Retrieve semantically similar text"
         if not instruction and task_type == "BitextMining":
@@ -542,8 +603,6 @@ class BidirLMOmniEncoder(AbsEncoder):
             return texts
         return [f"{formatted_instr} {t}" for t in texts]
 
-    # ── Forward helpers ───────────────────────────────────────────────────────
-
     def _run_forward(self, features: dict) -> torch.Tensor:
         for k, v in features.items():
             if isinstance(v, torch.Tensor):
@@ -552,8 +611,6 @@ class BidirLMOmniEncoder(AbsEncoder):
             features = self.model[0](features)
             features = self.model[1](features)
         return features["sentence_embedding"].cpu()
-
-    # ── Modality-specific encoding ────────────────────────────────────────────
 
     def get_text_embeddings(
         self,
@@ -597,8 +654,6 @@ class BidirLMOmniEncoder(AbsEncoder):
             all_embeddings.append(self._run_forward(features))
         return torch.cat(all_embeddings, dim=0)
 
-    # ── AbsEncoder.encode ─────────────────────────────────────────────────────
-
     @staticmethod
     def _make_loader(inputs: DataLoader, modality: str) -> DataLoader:
         import torch.utils.data
@@ -622,6 +677,12 @@ class BidirLMOmniEncoder(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        """Implements AbsEncoder.encode with multimodal support (text, image, audio).
+
+        Detects which modalities are present and encodes each independently.
+        Only text inputs receive a task instruction; image and audio do not.
+        When multiple modalities are present they are fused by element-wise addition.
+        """
         features = inputs.dataset.features
 
         def _has_data(col: str) -> bool:
@@ -630,15 +691,16 @@ class BidirLMOmniEncoder(AbsEncoder):
             first = inputs.dataset[0].get(col)
             return first is not None
 
-        has_text  = _has_data("text")
+        has_text = _has_data("text")
         has_image = _has_data("image")
         has_audio = _has_data("audio")
 
         instruction = self._get_instruction(task_metadata, prompt_type)
 
         text_emb = image_emb = audio_emb = None
-        encode_kw = {k: v for k, v in kwargs.items()
-                     if k not in ("hf_split", "hf_subset")}
+        encode_kw = {
+            k: v for k, v in kwargs.items() if k not in ("hf_split", "hf_subset")
+        }
 
         if has_text:
             text_emb = self.get_text_embeddings(
@@ -676,12 +738,12 @@ class BidirLMOmniEncoder(AbsEncoder):
         return fused.to(torch.float32).numpy()
 
 
-# ── ModelMeta ─────────────────────────────────────────────────────────────────
 bidirlm_omni_2_5b = ModelMeta(
     name="BidirLM/BidirLM-Omni-2.5B-Embedding",
     loader=BidirLMOmniEncoder,
     loader_kwargs=dict(
         task_prompts=_TASK_PROMPTS,
+        trust_remote_code=True,
     ),
     languages=BIDIRLM_OMNI_LANGUAGES,
     open_weights=True,
