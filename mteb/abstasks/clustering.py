@@ -153,7 +153,8 @@ class AbsTaskClustering(AbsTask):
         max_depth: Maximum depth to evaluate clustering. If None, evaluates all levels.
         input_column_name: Name of the column(s) containing the input sentences or data points. Default is "sentences".
             Can be a string for single-column tasks or a list of strings for multimodal tasks (e.g. ["video", "audio"]).
-            When specified as a list, column names must match the standard modality names (text, image, audio, video).
+            When specified as a list, values must be the default column names as defined in the encoder I/O types
+            (see https://embeddings-benchmark.github.io/mteb/api/types/#mteb.types._encoder_io).
         label_column_name: Name of the column containing the true cluster labels.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
