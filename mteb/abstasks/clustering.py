@@ -151,7 +151,9 @@ class AbsTaskClustering(AbsTask):
         n_clusters: Number of clustering experiments to run.
         k_mean_batch_size: Batch size to use for k-means clustering.
         max_depth: Maximum depth to evaluate clustering. If None, evaluates all levels.
-        input_column_name: Name of the column containing the input sentences or data points.
+        input_column_name: Name of the column(s) containing the input sentences or data points. Default is "sentences".
+            Can be a string for single-column tasks or a list of strings for multimodal tasks (e.g. ["video", "audio"]).
+            When specified as a list, column names must match the standard modality names (text, image, audio, video).
         label_column_name: Name of the column containing the true cluster labels.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """

@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import MultimodalCollator
+from mteb._create_dataloaders import VideoCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -24,7 +24,7 @@ class PEAudioVisualWrapper(AbsEncoder):
     PE-AV embeds audio, video, audio-video, and text into a joint embedding space.
     Uses the transformers API (PeAudioVideoModel / PeAudioVideoProcessor).
 
-    Video inputs arrive as pre-decoded frame tensors via the VideoCollator.
+    Video inputs arrive as pre-decoded frame tensors via the FramesCollator.
     Audio is read from the separate audio column in each batch.
     """
 
@@ -207,7 +207,7 @@ class PEAudioVisualWrapper(AbsEncoder):
         has_video = "video" in inputs.dataset.features
         has_audio = "audio" in inputs.dataset.features
 
-        inputs.collate_fn = MultimodalCollator(
+        inputs.collate_fn = VideoCollator(
             target_sampling_rate=self.sampling_rate,
             max_frames=self.num_frames,
         )

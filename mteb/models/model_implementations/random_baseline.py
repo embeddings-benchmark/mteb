@@ -7,7 +7,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import MultimodalCollator
+from mteb._create_dataloaders import VideoCollator
 from mteb.models.model_meta import ModelMeta
 from mteb.similarity_functions import (
     select_pairwise_similarity,
@@ -227,7 +227,7 @@ class RandomEncoderBaseline:
         has_video = "video" in inputs.dataset.features
         has_audio = "audio" in inputs.dataset.features
         if has_video or has_audio:
-            inputs.collate_fn = MultimodalCollator(
+            inputs.collate_fn = VideoCollator(
                 target_sampling_rate=16000,
                 max_frames=10,
             )
@@ -309,7 +309,7 @@ class RandomCrossEncoderBaseline:
         has_video = "video" in inputs1.dataset.features
         has_audio = "audio" in inputs1.dataset.features
         if has_video or has_audio:
-            collator = MultimodalCollator(
+            collator = VideoCollator(
                 target_sampling_rate=16000,
                 max_frames=10,
             )

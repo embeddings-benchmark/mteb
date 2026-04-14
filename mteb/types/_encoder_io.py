@@ -134,7 +134,7 @@ class AudioInput(TypedDict):
 
 
 class VideoInput(TypedDict):
-    """The input to the encoder for videos.
+    """The input to the encoder for video frames. Audio is currently included in the AudioInput.
 
     Attributes:
         video: The video frames as Tensor.

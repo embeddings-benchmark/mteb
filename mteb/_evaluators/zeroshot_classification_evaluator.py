@@ -53,11 +53,13 @@ class ZeroShotClassificationEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> Array:
+        input_col = (
+            self.input_column_name if isinstance(self.input_column_name, str) else None
+        )
+
         dataloader = create_dataloader(
             self.dataset,
-            input_column=self.input_column_name
-            if isinstance(self.input_column_name, str)
-            else None,
+            input_column=input_col,
             task_metadata=self.task_metadata,
             num_proc=num_proc,
             **encode_kwargs,
@@ -74,9 +76,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
 
         dataloader = create_dataloader(
             self.dataset,
-            input_column=self.input_column_name
-            if isinstance(self.input_column_name, str)
-            else None,
+            input_column=input_col,
             task_metadata=self.task_metadata,
             **encode_kwargs,
         )

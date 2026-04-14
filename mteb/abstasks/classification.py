@@ -126,7 +126,9 @@ class AbsTaskClassification(AbsTask):
         n_experiments: Number of experiments to run. Default is 10.
         train_split: Name of the split to use for training the evaluator model. Default is "train".
         label_column_name: Name of the column containing the labels. Default is "label".
-        input_column_name: Name of the column containing the input data. Default is "text".
+        input_column_name: Name of the column(s) containing the input data. Default is "text".
+            Can be a string for single-column tasks or a list of strings for multimodal tasks (e.g. ["video", "audio"]).
+            When specified as a list, column names must match the standard modality names (text, image, audio, video).
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
         is_cross_validation: Is task cross validation
         n_splits: Number of splits for cross-validation

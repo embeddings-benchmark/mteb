@@ -447,7 +447,7 @@ class AudioCollator:
         return audio_array
 
 
-class VideoCollator:
+class FramesCollator:
     """Collator for video data that resamples video frames."""
 
     def __init__(self, max_frames: int) -> None:
@@ -497,10 +497,10 @@ class VideoCollator:
         return video.get_frames_at(selected_frames).data
 
 
-class MultimodalCollator:
+class VideoCollator:
     """Collator that handles any combination of video and audio modalities.
 
-    Uses VideoCollator and AudioCollator static methods to process each modality.
+    Uses FramesCollator and AudioCollator static methods to process each modality.
     """
 
     def __init__(
@@ -525,7 +525,7 @@ class MultimodalCollator:
         for row in inputs:
             if "video" in row:
                 video = row.pop("video")
-                row["video"] = VideoCollator.resample_video(video, self.max_frames)
+                row["video"] = FramesCollator.resample_video(video, self.max_frames)
             if "audio" in row:
                 audio_array = AudioCollator.resample_audio(
                     row, self.target_sampling_rate, self.max_samples

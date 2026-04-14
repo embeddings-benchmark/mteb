@@ -37,10 +37,13 @@ class MSRVTTV2T(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-    input_column_name: ClassVar[str | Sequence[str]] = ["video", "audio"]
+    input_column_name: ClassVar[Sequence[str]] = ["video", "audio"]
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        """Load the MSRVTT dataset."""
+        """Load the MSRVTT dataset.
+
+        TODO: Reupload dataset in standard format and remove this custom load_data.
+        """
         if self.data_loaded:
             return
         dataset = load_dataset(
