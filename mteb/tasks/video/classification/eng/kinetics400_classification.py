@@ -1,12 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar
-
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from collections.abc import Sequence
 
 
 class Kinetics400Classification(AbsTaskClassification):
@@ -47,7 +42,7 @@ class Kinetics400Classification(AbsTaskClassification):
 """,
     )
 
-    input_column_name: ClassVar[Sequence[str]] = ["video", "audio"]
+    input_column_name = ("video", "audio")
     label_column_name: str = "label"
 
     is_cross_validation: bool = False

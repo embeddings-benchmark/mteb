@@ -1,10 +1,5 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar
-
-if TYPE_CHECKING:
-    from collections.abc import Sequence
-
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -37,7 +32,7 @@ class MSRVTTV2T(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-    input_column_name: ClassVar[Sequence[str]] = ["video", "audio"]
+    input_column_name = ("video", "audio")
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         """Load the MSRVTT dataset.
