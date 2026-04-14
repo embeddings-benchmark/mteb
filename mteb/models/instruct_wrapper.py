@@ -255,7 +255,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         instruction: str | None
         instruction = self.get_task_instruction(task_metadata, prompt_type)
 
-        if "precision" in kwargs:
+        if "precision" in kwargs and self.mteb_model_meta is not None:
             existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
             output_dtype = OutputDType.from_str(kwargs["precision"])  # type: ignore[typeddict-item]
             if existing_experiment_kwargs is not None:
@@ -265,7 +265,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             logger.warning(
                 f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {output_dtype.value}."
             )
-            self.mteb_model_meta = self.model_copy(  # type: ignore[misc]
+            self.mteb_model_meta = self.mteb_model_meta.model_copy(
                 update={
                     "experiment_kwargs": existing_experiment_kwargs,
                 },

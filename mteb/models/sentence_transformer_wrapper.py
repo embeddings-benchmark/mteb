@@ -184,7 +184,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             logger.warning(
                 f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {output_dtype.value}."
             )
-            self.mteb_model_meta = self.model_copy(  # type: ignore[misc]
+            self.mteb_model_meta = self.mteb_model_meta.model_copy(
                 update={
                     "experiment_kwargs": existing_experiment_kwargs,
                 },

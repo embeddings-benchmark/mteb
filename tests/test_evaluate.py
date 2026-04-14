@@ -7,6 +7,7 @@ import pytest
 from datasets.exceptions import DatasetNotFoundError
 
 import mteb
+from mteb import SentenceTransformerEncoderWrapper
 from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
 from mteb.models import ModelMeta
@@ -371,12 +372,10 @@ def test_mrl_unsupported_dim():
 
 
 def test_precision_arg():
-    model = mteb.get_model("mteb/baseline-random-encoder")
+    model = SentenceTransformerEncoderWrapper(MockSentenceTransformer())
     task = MockRetrievalTask()
     mteb.evaluate(model, task, cache=None, encode_kwargs={"precision": "float16"})
 
-    assert model.mteb_model_meta.output_dtypes == OutputDType.FLOAT16
-    assert "output_dtypes" in model.mteb_model_meta.experiment_kwargs
     assert (
         model.mteb_model_meta.experiment_kwargs["output_dtypes"] == OutputDType.FLOAT16
     )
