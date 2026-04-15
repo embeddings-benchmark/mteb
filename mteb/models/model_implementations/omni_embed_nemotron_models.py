@@ -71,6 +71,18 @@ class OmniEmbedNemotronWrapper(AbsEncoder):
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
     @staticmethod
+    def _frames_to_pil_list(frames: torch.Tensor) -> list[Any]:
+        """Convert a (num_frames, C, H, W) tensor to a list of PIL images."""
+        from PIL import Image
+
+        pil_frames = []
+        for frame in frames:
+            # frame shape: (C, H, W), values in [0, 255] uint8
+            np_frame = frame.permute(1, 2, 0).cpu().numpy().astype("uint8")
+            pil_frames.append(Image.fromarray(np_frame))
+        return pil_frames
+
+    @staticmethod
     def _build_messages(
         batch_texts: list[str],
         batch_images: list[Any],
@@ -89,6 +101,11 @@ class OmniEmbedNemotronWrapper(AbsEncoder):
 
             content: list[dict[str, Any]] = []
             if video_content is not None:
+                # process_mm_info expects video as a list of PIL images
+                if isinstance(video_content, torch.Tensor):
+                    video_content = OmniEmbedNemotronWrapper._frames_to_pil_list(
+                        video_content
+                    )
                 content.append({"type": "video", "video": video_content})
             if audio_content is not None:
                 content.append({"type": "audio", "audio": audio_content})
