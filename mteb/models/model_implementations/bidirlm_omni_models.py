@@ -593,32 +593,24 @@ class BidirLMOmniEncoder(AbsEncoder):
             for col in ("image", "audio", "text")
             if col in ds_features and inputs.dataset[0].get(col) is not None
         ]
-        has_image = "image" in active_cols
-        has_audio = "audio" in active_cols
-        has_text = "text" in active_cols
+        is_text_only = active_cols == ["text"]
 
         instruction = self._get_instruction(task_metadata, prompt_type)
 
-        all_messages = []
-        for batch in inputs:
-            for i in range(len(batch[active_cols[0]])):
-                content = []
-                if has_image:
-                    content.append({"type": "image", "image": batch["image"][i]})
-                if has_audio:
-                    content.append({"type": "audio", "audio": batch["audio"][i]})
-                if has_text:
-                    content.append({"type": "text", "text": batch["text"][i]})
-                all_messages.append([{"role": "user", "content": content}])
+        all_inputs = [
+            {col: batch[col][i] for col in active_cols}
+            for batch in inputs
+            for i in range(len(batch[active_cols[0]]))
+        ]
 
         # Limit text length if no image/audio is present, otherwise use the model's max context length (32768 tokens).
         # This prevents truncating special tokens in multimodal which raised error while still enabling to limit text-only inputs.
-        if has_text and not has_image and not has_audio:
+        if is_text_only:
             self.model.max_seq_length = self.max_text_length
         else:
             self.model.max_seq_length = 32768
         return self.model.encode(
-            all_messages,
+            all_inputs,
             prompt=instruction,
             batch_size=kwargs["batch_size"],
             show_progress_bar=kwargs["show_progress_bar"],
