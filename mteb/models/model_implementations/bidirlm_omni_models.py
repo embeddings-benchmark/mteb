@@ -499,31 +499,8 @@ POOLING_DIM = 2048
 _SUFFIX_RE = re.compile(r"(HardNegatives|Retrieval|Summarization|\.v\d+)$")
 
 
-def _flatten_prompts(prompts: dict) -> dict[str, str]:
-    """Flatten prompt dict to the MTEB model_prompts format.
-
-    ``{"Task": "instr"}``                → ``{"Task": "instr"}``
-    ``{"Task": {"query":"q","passage":"p"}}`` → ``{"Task-query":"q", "Task-passage":"p"}``
-    """
-    result: dict[str, str] = {}
-    for task_name, prompt in prompts.items():
-        if isinstance(prompt, dict):
-            for pt, text in prompt.items():
-                result[f"{task_name}-{pt}"] = text
-        else:
-            result[task_name] = prompt
-    return result
-
-
 class BidirLMOmniEncoder(AbsEncoder):
-    """MTEB-compatible multimodal encoder for BidirLM-Omni (text / image / audio).
-
-    Instruction handling (matches training):
-    - Queries / symmetric tasks:     ``f"Instruct: {instruction}\\nQuery: {text}"``
-    - Documents in asymmetric tasks: no instruction prefix
-    - Summarization:                 no instruction prefix
-    - Images / audio:                never instructed
-    """
+    """MTEB-compatible multimodal encoder for BidirLM-Omni (text / image / audio)."""
 
     def __init__(
         self,
@@ -546,11 +523,12 @@ class BidirLMOmniEncoder(AbsEncoder):
         self.max_text_length = max_text_length
 
         self.task_prompts = _TASK_PROMPTS
-        self.prompts_dict = _flatten_prompts(self.task_prompts)
 
     def _lookup_prompt(self, task_name: str):
         if task_name in self.task_prompts:
             return self.task_prompts[task_name]
+        # Strip known suffixes up to twice: e.g. "TaskName.v2Retrieval"
+        # → strip "Retrieval" → "TaskName.v2" → strip ".v2" → "TaskName"
         stripped = _SUFFIX_RE.sub("", task_name)
         stripped = _SUFFIX_RE.sub("", stripped)
         if stripped != task_name and stripped in self.task_prompts:
@@ -568,13 +546,6 @@ class BidirLMOmniEncoder(AbsEncoder):
             return None
 
         entry = self._lookup_prompt(task_metadata.name)
-        instruction = ""
-        if entry is not None:
-            if isinstance(entry, dict):
-                key = prompt_type.value if prompt_type else "query"
-                instruction = entry.get(key, entry.get("query", ""))
-            else:
-                instruction = entry
 
         # Asymmetric retrieval: documents get no instruction unless the prompt
         # dict explicitly provides a "passage" key.
@@ -585,14 +556,18 @@ class BidirLMOmniEncoder(AbsEncoder):
         ):
             return None
 
-        if not instruction and task_type in ("STS", "PairClassification"):
-            instruction = "Retrieve semantically similar text"
-        if not instruction and task_type == "BitextMining":
-            instruction = "Retrieve parallel sentences"
+        if entry is not None:
+            if isinstance(entry, dict):
+                key = prompt_type.value if prompt_type else "query"
+                return entry.get(key, entry.get("query")) or None
+            return entry
 
-        if not instruction:
-            return None
-        return f"Instruct: {instruction}\nQuery:"
+        if task_type in ("STS", "PairClassification"):
+            return "Retrieve semantically similar text"
+        if task_type == "BitextMining":
+            return "Retrieve parallel sentences"
+
+        return None
 
     def encode(
         self,
@@ -602,20 +577,23 @@ class BidirLMOmniEncoder(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Unpack[EncodeKwargs],
+        **kwargs: Any,
     ) -> Array:
         """Implements AbsEncoder.encode with multimodal support (text, image, audio).
 
         Builds conversation messages from whichever modalities are present and
         delegates to SentenceTransformer.encode() via the native 'message' modality.
-        Only text receives a task instruction.
         """
         ds_features = inputs.dataset.features
 
-        active_cols = [c for c in ("image", "audio", "text") if c in ds_features and inputs.dataset[0].get(c) is not None]
+        active_cols = [
+            c
+            for c in ("image", "audio", "text")
+            if c in ds_features and inputs.dataset[0].get(c) is not None
+        ]
         has_image = "image" in active_cols
         has_audio = "audio" in active_cols
-        has_text  = "text"  in active_cols
+        has_text = "text" in active_cols
 
         instruction = self._get_instruction(task_metadata, prompt_type)
 
@@ -628,11 +606,7 @@ class BidirLMOmniEncoder(AbsEncoder):
                 if has_audio:
                     content.append({"type": "audio", "audio": batch["audio"][i]})
                 if has_text:
-                    text = batch["text"][i]
-                    content.append({
-                        "type": "text",
-                        "text": f"{instruction} {text}" if instruction else text,
-                    })
+                    content.append({"type": "text", "text": batch["text"][i]})
                 all_messages.append([{"role": "user", "content": content}])
 
         # Limit text length if no image/audio is present, otherwise use the model's max context length (32768 tokens).
@@ -643,7 +617,8 @@ class BidirLMOmniEncoder(AbsEncoder):
             self.model.max_seq_length = 32768
         return self.model.encode(
             all_messages,
-            batch_size=inputs.batch_size or 32,
+            prompt=instruction,
+            batch_size=kwargs["batch_size"],
             show_progress_bar=True,
             convert_to_numpy=True,
         )
@@ -658,7 +633,7 @@ bidirlm_omni_2_5b = ModelMeta(
     ),
     languages=BIDIRLM_OMNI_LANGUAGES,
     open_weights=True,
-    revision="aa4d36bac807f24918c37b18d6110636c86ed673",
+    revision="4d8a7d34095ef8c4ab760744015825b809756dfe",
     release_date="2026-04-07",
     n_parameters=2_445_009_536,
     n_embedding_parameters=315_098_112,
