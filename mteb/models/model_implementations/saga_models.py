@@ -1,8 +1,6 @@
 from mteb.models import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-# This dictionary perfectly replicates your custom if/else logic
-
 saga_prompts = {
     # --- Default Task Types ---
     "STS": "task: semantic similarity | query: ",
