@@ -112,7 +112,20 @@ class OmniEmbedNemotronWrapper(AbsEncoder):
             if image_content is not None:
                 content.append({"type": "image", "image": image_content})
             content.append({"type": "text", "text": text_content})
-            messages.append([{"role": "user", "content": content}])
+            messages.append(
+                [
+                    {
+                        "role": "system",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "You are Qwen, a virtual human developed by the Qwen Team, Alibaba Group, capable of perceiving auditory and visual inputs, as well as generating text and speech.",
+                            }
+                        ],
+                    },
+                    {"role": "user", "content": content},
+                ]
+            )
         return messages
 
     def _prepare_audio(self, raw_audio: list[Any]) -> list[Any]:
