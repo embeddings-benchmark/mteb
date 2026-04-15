@@ -27,6 +27,7 @@ from ._statistics_calculation import (
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from pathlib import Path
 
     from mteb.models import MTEBModels
@@ -150,7 +151,10 @@ class AbsTaskClustering(AbsTask):
         n_clusters: Number of clustering experiments to run.
         k_mean_batch_size: Batch size to use for k-means clustering.
         max_depth: Maximum depth to evaluate clustering. If None, evaluates all levels.
-        input_column_name: Name of the column containing the input sentences or data points.
+        input_column_name: Name of the column(s) containing the input sentences or data points. Default is "sentences".
+            Can be a string for single-column tasks or a list of strings for multimodal tasks (e.g. ["video", "audio"]).
+            When specified as a list, values must be the default column names as defined in the encoder I/O types
+            (see https://embeddings-benchmark.github.io/mteb/api/types/#mteb.types._encoder_io).
         label_column_name: Name of the column containing the true cluster labels.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
@@ -162,7 +166,7 @@ class AbsTaskClustering(AbsTask):
     k_mean_batch_size: int = 512
     max_depth = None
     abstask_prompt = "Identify categories in user passages."
-    input_column_name: str = "sentences"
+    input_column_name: str | Sequence[str] = "sentences"
     label_column_name: str = "labels"
 
     def _evaluate_subset(
@@ -209,9 +213,23 @@ class AbsTaskClustering(AbsTask):
             )
             downsampled_dataset = data_split.select(example_indices)
 
-        downsampled_dataset = downsampled_dataset.select_columns(
-            [self.input_column_name, self.label_column_name]
+        # Keep label and input columns
+        input_cols = (
+            [self.input_column_name]
+            if isinstance(self.input_column_name, str)
+            else list(self.input_column_name)
         )
+        columns_to_keep = set(input_cols) | {self.label_column_name}
+
+        available = set(data_split.column_names)
+        missing_columns = columns_to_keep - available
+        if missing_columns:
+            raise ValueError(
+                f"Missing required columns in dataset: {missing_columns}. "
+                f"Available columns: {available}"
+            )
+
+        downsampled_dataset = downsampled_dataset.select_columns(list(columns_to_keep))
 
         logger.info("Running clustering - Encoding samples...")
         embeddings = model.encode(
@@ -269,17 +287,40 @@ class AbsTaskClustering(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClusteringFastDescriptiveStatistics:
+        # Multi-column tasks (e.g. video+audio): only compute label statistics for now
+        if not isinstance(self.input_column_name, str):
+            if hf_subset:
+                labels = self.dataset[hf_subset][split][self.label_column_name]
+            elif compute_overall:
+                labels = []
+                for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
+                    labels.extend(
+                        self.dataset[hf_subset][split][self.label_column_name]
+                    )
+            else:
+                labels = self.dataset[split][self.label_column_name]
+            if isinstance(labels[0], list):
+                labels = [item for sublist in labels for item in sublist]
+            return ClusteringFastDescriptiveStatistics(
+                num_samples=len(labels),
+                text_statistics=None,
+                image_statistics=None,
+                audio_statistics=None,
+                labels_statistics=calculate_label_statistics(labels),
+            )
+
+        col = self.input_column_name
         if hf_subset:
-            inputs = self.dataset[hf_subset][split][self.input_column_name]
+            inputs = self.dataset[hf_subset][split][col]
             labels = self.dataset[hf_subset][split][self.label_column_name]
         elif compute_overall:
             inputs = []
             labels = []
-            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
-                inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
+            for hf_subset in self.metadata.eval_langs:
+                inputs.extend(self.dataset[hf_subset][split][col])
                 labels.extend(self.dataset[hf_subset][split][self.label_column_name])
         else:
-            inputs = self.dataset[split][self.input_column_name]
+            inputs = self.dataset[split][col]
             labels = self.dataset[split][self.label_column_name]
 
         if isinstance(inputs[0], list):
@@ -311,9 +352,14 @@ class AbsTaskClustering(AbsTask):
         repo_name: str,
         num_proc: int | None = None,
     ) -> None:
+        input_cols = (
+            [self.input_column_name]
+            if isinstance(self.input_column_name, str)
+            else list(self.input_column_name)
+        )
         self._upload_dataset_to_hub(
             repo_name,
-            [self.input_column_name, self.label_column_name],
+            input_cols + [self.label_column_name],
             num_proc=num_proc,
         )
 
