@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 from sentence_transformers import SentenceTransformer
-from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -533,7 +532,7 @@ class BidirLMOmniEncoder(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         attn_implementation: str = "eager",
         trust_remote_code: bool = True,
-        task_prompts: dict | None = None,
+        max_text_length: int = 1024,
         **kwargs: Any,
     ) -> None:
         self.model = SentenceTransformer(
@@ -544,9 +543,9 @@ class BidirLMOmniEncoder(AbsEncoder):
             model_kwargs={"attn_implementation": attn_implementation},
         )
         self.model.eval()
-        self.device = device
+        self.max_text_length = max_text_length
 
-        self.task_prompts = task_prompts or {}
+        self.task_prompts = _TASK_PROMPTS
         self.prompts_dict = _flatten_prompts(self.task_prompts)
 
     def _lookup_prompt(self, task_name: str):
@@ -591,81 +590,9 @@ class BidirLMOmniEncoder(AbsEncoder):
         if not instruction and task_type == "BitextMining":
             instruction = "Retrieve parallel sentences"
 
-        return instruction or None
-
-    @staticmethod
-    def _format_instruction(instruction: str) -> str:
+        if not instruction:
+            return None
         return f"Instruct: {instruction}\nQuery:"
-
-    @staticmethod
-    def _prepend(texts: list[str], formatted_instr: str | None) -> list[str]:
-        if not formatted_instr:
-            return texts
-        return [f"{formatted_instr} {t}" for t in texts]
-
-    def _run_forward(self, features: dict) -> torch.Tensor:
-        for k, v in features.items():
-            if isinstance(v, torch.Tensor):
-                features[k] = v.to(self.device)
-        with torch.no_grad():
-            features = self.model[0](features)
-            features = self.model[1](features)
-        return features["sentence_embedding"].cpu()
-
-    def get_text_embeddings(
-        self,
-        loader: DataLoader,
-        instruction: str | None = None,
-        show_progress_bar: bool = True,
-        **kwargs: Any,
-    ) -> torch.Tensor:
-        input_module = self.model[0]
-        formatted = self._format_instruction(instruction) if instruction else None
-        all_embeddings = []
-        for batch in tqdm(loader, disable=not show_progress_bar, desc="Text"):
-            texts = self._prepend(batch["text"], formatted)
-            features = input_module.tokenize(texts)
-            all_embeddings.append(self._run_forward(features))
-        return torch.cat(all_embeddings, dim=0)
-
-    def get_image_embeddings(
-        self,
-        loader: DataLoader,
-        show_progress_bar: bool = True,
-        **kwargs: Any,
-    ) -> torch.Tensor:
-        input_module = self.model[0]
-        all_embeddings = []
-        for batch in tqdm(loader, disable=not show_progress_bar, desc="Image"):
-            features = input_module.tokenize(batch["image"])
-            all_embeddings.append(self._run_forward(features))
-        return torch.cat(all_embeddings, dim=0)
-
-    def get_audio_embeddings(
-        self,
-        loader: DataLoader,
-        show_progress_bar: bool = True,
-        **kwargs: Any,
-    ) -> torch.Tensor:
-        input_module = self.model[0]
-        all_embeddings = []
-        for batch in tqdm(loader, disable=not show_progress_bar, desc="Audio"):
-            features = input_module.tokenize(batch["audio"])
-            all_embeddings.append(self._run_forward(features))
-        return torch.cat(all_embeddings, dim=0)
-
-    @staticmethod
-    def _make_loader(inputs: DataLoader, modality: str) -> DataLoader:
-        import torch.utils.data
-
-        def _collate(batch):
-            return {modality: [row[modality] for row in batch]}
-
-        return torch.utils.data.DataLoader(
-            inputs.dataset,
-            batch_size=inputs.batch_size or 32,
-            collate_fn=_collate,
-        )
 
     def encode(
         self,
@@ -679,75 +606,59 @@ class BidirLMOmniEncoder(AbsEncoder):
     ) -> Array:
         """Implements AbsEncoder.encode with multimodal support (text, image, audio).
 
-        Detects which modalities are present and encodes each independently.
-        Only text inputs receive a task instruction; image and audio do not.
-        When multiple modalities are present they are fused by element-wise addition.
+        Builds conversation messages from whichever modalities are present and
+        delegates to SentenceTransformer.encode() via the native 'message' modality.
+        Only text receives a task instruction.
         """
-        features = inputs.dataset.features
+        ds_features = inputs.dataset.features
 
-        def _has_data(col: str) -> bool:
-            if col not in features:
-                return False
-            first = inputs.dataset[0].get(col)
-            return first is not None
-
-        has_text = _has_data("text")
-        has_image = _has_data("image")
-        has_audio = _has_data("audio")
+        active_cols = [c for c in ("image", "audio", "text") if c in ds_features and inputs.dataset[0].get(c) is not None]
+        has_image = "image" in active_cols
+        has_audio = "audio" in active_cols
+        has_text  = "text"  in active_cols
 
         instruction = self._get_instruction(task_metadata, prompt_type)
 
-        text_emb = image_emb = audio_emb = None
-        encode_kw = {
-            k: v for k, v in kwargs.items() if k not in ("hf_split", "hf_subset")
-        }
+        all_messages = []
+        for batch in inputs:
+            for i in range(len(batch[active_cols[0]])):
+                content = []
+                if has_image:
+                    content.append({"type": "image", "image": batch["image"][i]})
+                if has_audio:
+                    content.append({"type": "audio", "audio": batch["audio"][i]})
+                if has_text:
+                    text = batch["text"][i]
+                    content.append({
+                        "type": "text",
+                        "text": f"{instruction} {text}" if instruction else text,
+                    })
+                all_messages.append([{"role": "user", "content": content}])
 
-        if has_text:
-            text_emb = self.get_text_embeddings(
-                self._make_loader(inputs, "text"),
-                instruction=instruction,
-                **encode_kw,
-            )
-        if has_image:
-            image_emb = self.get_image_embeddings(
-                self._make_loader(inputs, "image"), **encode_kw
-            )
-        if has_audio:
-            audio_emb = self.get_audio_embeddings(
-                self._make_loader(inputs, "audio"), **encode_kw
-            )
-
-        present = [e for e in (text_emb, image_emb, audio_emb) if e is not None]
-
-        if not present:
-            raise ValueError(
-                f"No supported modality in dataset features: {list(features)}"
-            )
-        if len(present) == 1:
-            return present[0].to(torch.float32).numpy()
-
-        # Fuse multiple modalities by element-wise addition
-        fused = present[0]
-        for e in present[1:]:
-            if len(e) != len(fused):
-                raise ValueError(
-                    f"Cannot fuse modalities with different sample counts: "
-                    f"{[len(p) for p in present]}"
-                )
-            fused = fused + e
-        return fused.to(torch.float32).numpy()
+        # Limit text length if no image/audio is present, otherwise use the model's max context length (32768 tokens).
+        # This prevents truncating special tokens in multimodal which raised error while still enabling to limit text-only inputs.
+        if has_text and not has_image and not has_audio:
+            self.model.max_seq_length = self.max_text_length
+        else:
+            self.model.max_seq_length = 32768
+        return self.model.encode(
+            all_messages,
+            batch_size=inputs.batch_size or 32,
+            show_progress_bar=True,
+            convert_to_numpy=True,
+        )
 
 
 bidirlm_omni_2_5b = ModelMeta(
     name="BidirLM/BidirLM-Omni-2.5B-Embedding",
     loader=BidirLMOmniEncoder,
     loader_kwargs=dict(
-        task_prompts=_TASK_PROMPTS,
         trust_remote_code=True,
+        max_text_length=1024,
     ),
     languages=BIDIRLM_OMNI_LANGUAGES,
     open_weights=True,
-    revision="386cfaac2d9df72d631e4739c8e6c700ae02226f",
+    revision="aa4d36bac807f24918c37b18d6110636c86ed673",
     release_date="2026-04-07",
     n_parameters=2_445_009_536,
     n_embedding_parameters=315_098_112,
