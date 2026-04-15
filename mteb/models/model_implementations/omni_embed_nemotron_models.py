@@ -172,7 +172,7 @@ class OmniEmbedNemotronWrapper(AbsEncoder):
             videos=video_inputs,
             padding=True,
             return_tensors="pt",
-            text_kwargs={"truncation": True, "max_length": 32768},
+            text_kwargs={"truncation": True, "padding": True, "max_length": 204800},
             videos_kwargs={
                 "min_pixels": 32 * 14 * 14,
                 "max_pixels": 64 * 28 * 28,
