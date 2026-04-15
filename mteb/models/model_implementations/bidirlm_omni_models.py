@@ -602,7 +602,7 @@ class BidirLMOmniEncoder(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Implements AbsEncoder.encode with multimodal support (text, image, audio).
 
