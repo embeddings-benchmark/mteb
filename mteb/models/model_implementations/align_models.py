@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
+from transformers.modeling_outputs import BaseModelOutputWithPooling
+
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -50,6 +52,8 @@ class ALIGNModel(AbsEncoder):
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
+                if isinstance(text_outputs, BaseModelOutputWithPooling):
+                    text_outputs = text_outputs.pooler_output
                 all_text_embeddings.append(text_outputs.cpu())
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -71,6 +75,8 @@ class ALIGNModel(AbsEncoder):
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 image_outputs = self.model.get_image_features(**inputs)
+                if isinstance(image_outputs, BaseModelOutputWithPooling):
+                    image_outputs = image_outputs.pooler_output
                 all_image_embeddings.append(image_outputs.cpu())
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings

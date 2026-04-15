@@ -95,7 +95,8 @@ class ClapZeroShotWrapper(AbsEncoder):
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
             text_features = self.model.get_text_features(**inputs)
-            # Normalize embeddings
+            if isinstance(text_features, BaseModelOutputWithPooling):
+                text_features = text_features.pooler_output
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)  # noqa: PLR6104
             text_embeddings.append(text_features.cpu().detach().numpy())
 

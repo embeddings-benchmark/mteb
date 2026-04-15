@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
+from transformers.modeling_outputs import BaseModelOutputWithPooling
+
 from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -67,7 +69,10 @@ class SiglipModelWrapper(AbsEncoder):
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
-                embeddings = text_outputs.pooler_output
+                if isinstance(text_outputs, BaseModelOutputWithPooling):
+                    embeddings = text_outputs.pooler_output
+                else:
+                    embeddings = text_outputs
                 all_text_embeddings.append(embeddings.cpu())
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -89,7 +94,10 @@ class SiglipModelWrapper(AbsEncoder):
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 image_outputs = self.model.get_image_features(**inputs)
-                embeddings = image_outputs.pooler_output
+                if isinstance(image_outputs, BaseModelOutputWithPooling):
+                    embeddings = image_outputs.pooler_output
+                else:
+                    embeddings = image_outputs
                 all_image_embeddings.append(embeddings.cpu())
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
