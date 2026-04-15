@@ -589,9 +589,9 @@ class BidirLMOmniEncoder(AbsEncoder):
         ds_features = inputs.dataset.features
 
         active_cols = [
-            c
-            for c in ("image", "audio", "text")
-            if c in ds_features and inputs.dataset[0].get(c) is not None
+            col
+            for col in ("image", "audio", "text")
+            if col in ds_features and inputs.dataset[0].get(col) is not None
         ]
         has_image = "image" in active_cols
         has_audio = "audio" in active_cols
