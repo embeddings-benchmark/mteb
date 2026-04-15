@@ -11,6 +11,8 @@ import requests
 
 TIMEOUT = 300
 
+pytest.importorskip("gradio", reason="Gradio not installed")
+
 
 def run_leaderboard_app():
     """Function to launch the leaderboard app."""

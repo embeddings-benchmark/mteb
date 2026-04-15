@@ -133,28 +133,14 @@ class AudioInput(TypedDict):
     audio: list[AudioInputItem]
 
 
-class VideoInputItem(TypedDict):
-    """A video item for the VideoInput.
-
-    Dataset based on `datasets.Video` will be converted to this format during encoding.
-
-    Attributes:
-        frames: The video frames as Tensor.
-        audio: The audio array as AudioInputItem.
-    """
-
-    frames: torch.Tensor
-    audio: AudioInputItem
-
-
 class VideoInput(TypedDict):
-    """The input to the encoder for videos.
+    """The input to the encoder for video frames. Audio is currently included in the AudioInput.
 
     Attributes:
-        video: The video to encode. VideoDecoder object.
+        video: The video frames as Tensor.
     """
 
-    video: VideoInputItem
+    video: torch.Tensor
 
 
 class MultimodalInput(  # type: ignore[misc]
@@ -262,6 +248,7 @@ QueryDatasetType = Dataset
 1. `id`, `text`, `instruction` (optionally) for text queries
 2. `id`, `image` for image queries
 3. `id`, `audio` for audio queries
+4. `id`, `video` for video queries
 or a combination of these for multimodal queries.
  """
 CorpusDatasetType = Dataset
@@ -269,6 +256,7 @@ CorpusDatasetType = Dataset
  1. `id`, `title` (optionally), `body` for text corpus
  2. `id`, `image` for image corpus
  3. `id`, `audio` for audio corpus
+ 4. `id`, `video` for video corpus
  or a combination of these for multimodal corpus.
  """
 InstructionDatasetType = Dataset
