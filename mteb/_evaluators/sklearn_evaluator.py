@@ -66,22 +66,17 @@ class SklearnEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
     ) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
-        input_col = (
-            self.values_column_name
-            if isinstance(self.values_column_name, str)
-            else None
-        )
         dataloader_train = create_dataloader(
             self.train_dataset,
             task_metadata=self.task_metadata,
-            input_column=input_col,
+            input_column=self.values_column_name,
             num_proc=num_proc,
             **encode_kwargs,
         )
         dataloader_test = create_dataloader(
             self.eval_dataset,
             task_metadata=self.task_metadata,
-            input_column=input_col,
+            input_column=self.values_column_name,
             num_proc=num_proc,
             **encode_kwargs,
         )

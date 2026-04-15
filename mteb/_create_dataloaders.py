@@ -16,7 +16,7 @@ from mteb.types import (
 from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Sequence
 
     from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
 
@@ -301,7 +301,7 @@ def create_dataloader(
     *,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
-    input_column: str | None = None,
+    input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
     **kwargs: Any,
@@ -315,7 +315,8 @@ def create_dataloader(
         dataset: The dataset to create a dataloader from.
         task_metadata: The metadata of the task.
         prompt_type: The type of prompt to create a dataloader for. If None, it will be inferred from the task metadata.
-        input_column: The column to use as input. If None, it will use the first column that matches the modality.
+        input_column: The column(s) to use as input. If a string, used for column renaming.
+            If a Sequence, columns are assumed to already match modality names. If None, inferred from task metadata.
         batch_size: The batch size for the dataloader.
         num_proc: The number of processes to use for dataset processing.
         **kwargs: Additional arguments to pass to the dataloader creation functions.
@@ -323,13 +324,16 @@ def create_dataloader(
     Returns:
         A dataloader for the dataset.
     """
+    # Sequence means columns already match modality names, no renaming needed
+    _input_column = input_column if isinstance(input_column, str) else None
+
     if (
         prompt_type is None
         and task_metadata.modalities == ["text"]
-        and input_column is not None
+        and _input_column is not None
     ):
         return _create_dataloader_from_texts(
-            dataset[input_column],
+            dataset[_input_column],
             batch_size=batch_size,
         )
 
@@ -337,7 +341,7 @@ def create_dataloader(
         dataset,
         task_metadata,
         prompt_type=prompt_type,
-        input_column=input_column,
+        input_column=_input_column,
         num_proc=num_proc,
     )
 

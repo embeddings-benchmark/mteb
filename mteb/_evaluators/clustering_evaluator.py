@@ -53,9 +53,7 @@ class ClusteringEvaluator(Evaluator):
         data_loader = create_dataloader(
             self.dataset,
             task_metadata=self.task_metadata,
-            input_column=self.input_column_name
-            if isinstance(self.input_column_name, str)
-            else None,
+            input_column=self.input_column_name,
             num_proc=num_proc,
             **encode_kwargs,
         )

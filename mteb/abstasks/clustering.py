@@ -236,9 +236,7 @@ class AbsTaskClustering(AbsTask):
             create_dataloader(
                 downsampled_dataset,
                 task_metadata=self.metadata,
-                input_column=self.input_column_name
-                if isinstance(self.input_column_name, str)
-                else None,
+                input_column=self.input_column_name,
                 num_proc=num_proc,
                 **encode_kwargs,
             ),

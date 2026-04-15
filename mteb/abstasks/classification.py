@@ -320,9 +320,7 @@ class AbsTaskClassification(AbsTask):
         dataloader_train = create_dataloader(
             ds,
             task_metadata=self.metadata,
-            input_column=self.input_column_name
-            if isinstance(self.input_column_name, str)
-            else None,
+            input_column=self.input_column_name,
             num_proc=num_proc,
             **encode_kwargs,
         )
