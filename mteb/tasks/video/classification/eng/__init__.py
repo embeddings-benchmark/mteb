@@ -1,5 +1,6 @@
-from .kinetics400_classification import Kinetics400Classification
+from .kinetics400 import Kinetics400VAClassification, Kinetics400VClassification
 
 __all__ = [
-    "Kinetics400Classification",
+    "Kinetics400VAClassification",
+    "Kinetics400VClassification",
 ]
