@@ -11,10 +11,12 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from typing_extensions import Unpack
+
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 BIDIRLM_OMNI_LANGUAGES = [
     "afr-Latn",
@@ -577,7 +579,7 @@ class BidirLMOmniEncoder(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Implements AbsEncoder.encode with multimodal support (text, image, audio).
 
@@ -619,7 +621,7 @@ class BidirLMOmniEncoder(AbsEncoder):
             all_messages,
             prompt=instruction,
             batch_size=kwargs["batch_size"],
-            show_progress_bar=True,
+            show_progress_bar=kwargs["show_progress_bar"],
             convert_to_numpy=True,
         )
 
