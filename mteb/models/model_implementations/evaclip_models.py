@@ -163,6 +163,7 @@ EVA02_CLIP_B_16 = ModelMeta(
     use_instructions=False,
     training_datasets=training_datasets,
     citation=EVA_CLIP_CITATION,
+    required_dependencies=["eva_clip"],
 )
 
 EVA02_CLIP_L_14 = ModelMeta(
@@ -188,6 +189,7 @@ EVA02_CLIP_L_14 = ModelMeta(
     use_instructions=False,
     training_datasets=training_datasets,
     citation=EVA_CLIP_CITATION,
+    required_dependencies=["eva_clip"],
 )
 
 EVA02_CLIP_bigE_14 = ModelMeta(
@@ -213,6 +215,7 @@ EVA02_CLIP_bigE_14 = ModelMeta(
     use_instructions=False,
     training_datasets=laion_2b,
     citation=EVA_CLIP_CITATION,
+    required_dependencies=["eva_clip"],
 )
 
 
@@ -239,4 +242,5 @@ EVA02_CLIP_bigE_14_plus = ModelMeta(
     use_instructions=False,
     training_datasets=laion_2b,
     citation=EVA_CLIP_CITATION,
+    required_dependencies=["eva_clip"],
 )

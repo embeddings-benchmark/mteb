@@ -187,4 +187,5 @@ e5_v = ModelMeta(
         # princeton-nlp/datasets-for-simcse
     ),
     citation=E5_V_CITATION,
+    required_dependencies=["transformers==4.44.2"],
 )

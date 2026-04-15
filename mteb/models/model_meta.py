@@ -144,6 +144,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
         experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
         output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
+        required_dependencies: A list of required dependencies for the model. These are displayed in the error message if the model fails to load due
+            to an ImportError. E.g. ``["visual_bge"]`` or ``["transformers>=4.51.0"]``.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -178,6 +180,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     contacts: list[str] | None = None
     experiment_kwargs: Mapping[str, Any] | None = None
     output_dtypes: OutputDType | list[OutputDType] | None = None
+    required_dependencies: list[str] = field(default_factory=list)
 
     def __setattr__(self, name: str, value: Any) -> None:
         """Deprecation warning for direct attribute mutation. Use model_copy(update={...}) instead."""
@@ -390,11 +393,21 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
         updates["loader_kwargs"] = _kwargs
         _self = _self.model_copy(update=updates)
-        model: MTEBModels = loader(
-            name,
-            revision=revision,
-            **_kwargs,
-        )
+        try:
+            model: MTEBModels = loader(
+                name,
+                revision=revision,
+                **_kwargs,
+            )
+        except ImportError as e:
+            if _self.required_dependencies:
+                deps = ", ".join(_self.required_dependencies)
+                raise ImportError(
+                    f"Failed to load model '{_self.name}'. "
+                    f"Required dependencies: {deps}. "
+                    f"Original error: {e}"
+                ) from e
+            raise
         model.mteb_model_meta = _self  # type: ignore[misc]
         return model
 

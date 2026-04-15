@@ -365,6 +365,7 @@ def test_model_to_python():
     citation='@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n',
     contacts=None,
     output_dtypes=None,
+    required_dependencies=[],
 )"""
     )
 
@@ -432,3 +433,102 @@ def test_get_model_metas_without_modality_filter_returns_more_models():
     text_models = mteb.get_model_metas(modalities=["text"])
 
     assert len(all_models) > len(text_models)
+
+
+def test_required_dependencies_default():
+    """Test that required_dependencies defaults to an empty list."""
+    meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+    assert meta.required_dependencies == []
+
+
+def test_required_dependencies_set_on_model():
+    """Test that required_dependencies can be set on a model."""
+    meta = ModelMeta(
+        loader=None,
+        name="test/model",
+        revision="1",
+        release_date=None,
+        languages=None,
+        n_parameters=None,
+        memory_usage_mb=None,
+        max_tokens=None,
+        embed_dim=None,
+        license=None,
+        open_weights=True,
+        public_training_code=None,
+        public_training_data=None,
+        framework=[],
+        similarity_fn_name=None,
+        use_instructions=False,
+        training_datasets=None,
+        required_dependencies=["some-package>=1.0", "another-package"],
+    )
+    assert meta.required_dependencies == ["some-package>=1.0", "another-package"]
+
+
+def test_required_dependencies_in_import_error():
+    """Test that required_dependencies are shown in the ImportError message when loading fails."""
+
+    def failing_loader(name, **kwargs):
+        raise ImportError("No module named 'nonexistent_package'")
+
+    meta = ModelMeta(
+        loader=failing_loader,
+        name="test/model",
+        revision="1",
+        release_date=None,
+        languages=None,
+        n_parameters=None,
+        memory_usage_mb=None,
+        max_tokens=None,
+        embed_dim=None,
+        license=None,
+        open_weights=True,
+        public_training_code=None,
+        public_training_data=None,
+        framework=[],
+        similarity_fn_name=None,
+        use_instructions=False,
+        training_datasets=None,
+        required_dependencies=["nonexistent_package"],
+    )
+    with pytest.raises(ImportError, match="Required dependencies: nonexistent_package"):
+        meta.load_model()
+
+
+def test_required_dependencies_import_error_without_deps():
+    """Test that ImportError propagates unchanged when required_dependencies is empty."""
+
+    def failing_loader(name, **kwargs):
+        raise ImportError("No module named 'foo'")
+
+    meta = ModelMeta(
+        loader=failing_loader,
+        name="test/model",
+        revision="1",
+        release_date=None,
+        languages=None,
+        n_parameters=None,
+        memory_usage_mb=None,
+        max_tokens=None,
+        embed_dim=None,
+        license=None,
+        open_weights=True,
+        public_training_code=None,
+        public_training_data=None,
+        framework=[],
+        similarity_fn_name=None,
+        use_instructions=False,
+        training_datasets=None,
+    )
+    with pytest.raises(ImportError, match="No module named 'foo'"):
+        meta.load_model()
+
+
+def test_required_dependencies_accessible_without_loading():
+    """Test that required_dependencies can be inspected without loading the model."""
+    from mteb.models.model_implementations import MODEL_REGISTRY
+
+    vista_meta = MODEL_REGISTRY.get("BAAI/bge-visualized-base")
+    assert vista_meta is not None
+    assert "visual_bge" in vista_meta.required_dependencies

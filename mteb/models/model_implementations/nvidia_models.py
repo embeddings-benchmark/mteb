@@ -639,6 +639,7 @@ llama_embed_nemotron_8b = ModelMeta(
     public_training_data="https://huggingface.co/datasets/nvidia/embed-nemotron-dataset-v1",
     contacts=["ybabakhin"],
     citation=LlamaEmbedNemotron_CITATION,
+    required_dependencies=["transformers==4.51.0", "flash_attn"],
 )
 
 

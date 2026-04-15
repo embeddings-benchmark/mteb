@@ -162,6 +162,7 @@ lco_3b = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    required_dependencies=["qwen_omni_utils"],
 )
 
 lco_7b = ModelMeta(
@@ -197,4 +198,5 @@ lco_7b = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    required_dependencies=["qwen_omni_utils"],
 )

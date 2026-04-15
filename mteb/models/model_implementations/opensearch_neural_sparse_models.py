@@ -156,6 +156,7 @@ opensearch_neural_sparse_encoding_doc_v3_gte = ModelMeta(
     loader_kwargs=dict(
         trust_remote_code=True,
     ),
+    required_dependencies=["sentence-transformers>=5.0.0"],
 )
 
 
@@ -180,6 +181,7 @@ opensearch_neural_sparse_encoding_doc_v3_distill = ModelMeta(
     use_instructions=True,
     training_datasets=v3_training_data,
     loader=SparseEncoderWrapper,
+    required_dependencies=["sentence-transformers>=5.0.0"],
 )
 
 opensearch_neural_sparse_encoding_doc_v2_distill = ModelMeta(
@@ -203,6 +205,7 @@ opensearch_neural_sparse_encoding_doc_v2_distill = ModelMeta(
     use_instructions=True,
     training_datasets=v2_training_data,
     loader=SparseEncoderWrapper,
+    required_dependencies=["sentence-transformers>=5.0.0"],
 )
 
 
@@ -227,6 +230,7 @@ opensearch_neural_sparse_encoding_doc_v2_mini = ModelMeta(
     use_instructions=True,
     training_datasets=v2_training_data,
     loader=SparseEncoderWrapper,
+    required_dependencies=["sentence-transformers>=5.0.0"],
 )
 
 opensearch_neural_sparse_encoding_doc_v1 = ModelMeta(
@@ -252,4 +256,5 @@ opensearch_neural_sparse_encoding_doc_v1 = ModelMeta(
         "MSMARCO",
     },
     loader=SparseEncoderWrapper,
+    required_dependencies=["sentence-transformers>=5.0.0"],
 )

@@ -272,6 +272,7 @@ visualized_bge_base = ModelMeta(
     use_instructions=False,
     training_datasets=vista_training_datasets,
     citation=VISTA_CITATION,
+    required_dependencies=["visual_bge"],
 )
 
 visualized_bge_m3 = ModelMeta(
@@ -301,4 +302,5 @@ visualized_bge_m3 = ModelMeta(
     use_instructions=False,
     training_datasets=vista_training_datasets,
     citation=VISTA_CITATION,
+    required_dependencies=["visual_bge"],
 )
