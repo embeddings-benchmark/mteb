@@ -4,7 +4,6 @@ from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-
 class HMDB51Classification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HMDB51Classification",
