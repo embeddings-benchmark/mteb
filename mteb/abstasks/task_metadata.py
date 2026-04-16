@@ -377,6 +377,11 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {  # type: ig
     "Compositionality": "pair-classification",
     "AudioPairClassification": "pair-classification",
     "PairClassification": "pair-classification",
+    "VideoClassification": "classification",
+    "VideoClustering": "clustering",
+    "VideoPairClassification": "pair-classification",
+    "VideoZeroshotClassification": "classification",
+    "VideoCentricQA": "retrieval",
 }
 
 
