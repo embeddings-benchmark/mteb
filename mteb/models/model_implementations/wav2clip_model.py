@@ -6,6 +6,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 from transformers import CLIPModel, CLIPProcessor
+from transformers.modeling_outputs import BaseModelOutputWithPooling
 
 from mteb._create_dataloaders import AudioCollator
 from mteb._requires_package import requires_package
@@ -112,6 +113,8 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
 
             with torch.no_grad():
                 text_features = self.clip.get_text_features(**features)
+                if isinstance(text_features, BaseModelOutputWithPooling):
+                    text_features = text_features.pooler_output
                 text_features = text_features / text_features.norm(dim=-1, keepdim=True)  # noqa: PLR6104
             text_embeddings.append(text_features.cpu().detach().numpy())
 
