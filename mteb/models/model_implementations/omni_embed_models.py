@@ -43,11 +43,13 @@ class OmniEmbedWrapper(AbsEncoder):
         requires_package(
             self, "qwen_omni_utils", model_name, "pip install mteb[qwen_omni_utils]"
         )
-        requires_package(self, "peft", model_name, "pip install 'mteb[peft]'")
+        requires_package(self, "peft", model_name, "pip install peft")
         from transformers import (
             AutoProcessor,
             Qwen2_5OmniThinkerForConditionalGeneration,
         )
+
+        BASE_MODEL = "Qwen/Qwen2.5-Omni-7B"
 
         self.device = device or (
             "cuda"
@@ -61,14 +63,12 @@ class OmniEmbedWrapper(AbsEncoder):
 
         self.model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(
             model_name,
-            revision=revision,
+            attn_implementation="sdpa",
             torch_dtype=torch.bfloat16,
             **kwargs,
-        )
-        self.model.eval()
-        self.model.to(self.device)
+        ).to(self.device).eval()
 
-        self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
+        self.processor = AutoProcessor.from_pretrained(BASE_MODEL)
         self.processor.tokenizer.padding_side = "left"
         self.model.padding_side = "left"
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
@@ -142,7 +142,7 @@ class OmniEmbedWrapper(AbsEncoder):
 
         texts = [
             self.processor.apply_chat_template(
-                msg, tokenize=False, add_generation_prompt=False
+                msg, tokenize=False, add_generation_prompt=True
             )
             + "<|endoftext|>"
             for msg in messages
@@ -157,9 +157,8 @@ class OmniEmbedWrapper(AbsEncoder):
             audio=audio_inputs,
             images=image_inputs,
             videos=video_inputs,
-            padding=True,
             return_tensors="pt",
-            text_kwargs={"truncation": True, "max_length": 32768},
+            text_kwargs={"truncation": True, "padding": True, "max_length": 32768},
             videos_kwargs={
                 "min_pixels": 32 * 14 * 14,
                 "max_pixels": 64 * 28 * 28,
