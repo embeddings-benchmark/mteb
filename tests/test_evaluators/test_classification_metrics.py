@@ -7,21 +7,21 @@ from mteb.abstasks.multilabel_classification import hamming_score
 class TestHammingScore:
     """Test cases for the hamming_score function."""
 
-    def test_perfect_match(self):
+    def test_perfect_match(self):  # noqa: PLR6301
         """Test hamming score with perfect predictions."""
         y_true = np.array([[1, 0, 1], [0, 1, 0]])
         y_pred = np.array([[1, 0, 1], [0, 1, 0]])
         score = hamming_score(y_true, y_pred)
         assert score == 1.0
 
-    def test_no_match(self):
+    def test_no_match(self):  # noqa: PLR6301
         """Test hamming score with completely wrong predictions."""
         y_true = np.array([[1, 0, 1], [0, 1, 0]])
         y_pred = np.array([[0, 1, 0], [1, 0, 1]])
         score = hamming_score(y_true, y_pred)
         assert score == 0.0
 
-    def test_partial_match(self):
+    def test_partial_match(self):  # noqa: PLR6301
         """Test hamming score with partial predictions."""
         y_true = np.array([[1, 1, 0], [0, 1, 1]])
         y_pred = np.array([[1, 0, 0], [0, 1, 0]])
@@ -31,7 +31,7 @@ class TestHammingScore:
         score = hamming_score(y_true, y_pred)
         assert abs(score - 0.5) < 1e-6
 
-    def test_division_by_zero_handling(self):
+    def test_division_by_zero_handling(self):  # noqa: PLR6301
         """Test hamming score handles division by zero (all zeros case)."""
         y_true = np.array([[0, 0, 0], [1, 0, 1]])
         y_pred = np.array([[0, 0, 0], [1, 1, 0]])
@@ -42,42 +42,42 @@ class TestHammingScore:
         expected = (1.0 + 1 / 3) / 2
         assert abs(score - expected) < 1e-6
 
-    def test_all_zeros(self):
+    def test_all_zeros(self):  # noqa: PLR6301
         """Test hamming score with all zero predictions and labels."""
         y_true = np.array([[0, 0, 0], [0, 0, 0]])
         y_pred = np.array([[0, 0, 0], [0, 0, 0]])
         score = hamming_score(y_true, y_pred)
         assert score == 1.0
 
-    def test_shape_mismatch(self):
+    def test_shape_mismatch(self):  # noqa: PLR6301
         """Test hamming score raises error on shape mismatch."""
         y_true = np.array([[1, 0]])
         y_pred = np.array([[1, 0, 1]])
         with pytest.raises(ValueError, match="Shape mismatch"):
             hamming_score(y_true, y_pred)
 
-    def test_empty_arrays(self):
+    def test_empty_arrays(self):  # noqa: PLR6301
         """Test hamming score raises error on empty arrays."""
         y_true = np.array([]).reshape(0, 3)
         y_pred = np.array([]).reshape(0, 3)
         with pytest.raises(ValueError, match="Input arrays cannot be empty"):
             hamming_score(y_true, y_pred)
 
-    def test_non_binary_values(self):
+    def test_non_binary_values(self):  # noqa: PLR6301
         """Test hamming score raises error on non-binary values."""
         y_true = np.array([[1, 2, 0]])
         y_pred = np.array([[1, 0, 0]])
         with pytest.raises(ValueError, match="Arrays must contain only binary values"):
             hamming_score(y_true, y_pred)
 
-    def test_wrong_dimensions(self):
+    def test_wrong_dimensions(self):  # noqa: PLR6301
         """Test hamming score raises error on wrong dimensions."""
         y_true = np.array([1, 0, 1])
         y_pred = np.array([1, 0, 0])
         with pytest.raises(ValueError, match="Arrays must be 2D"):
             hamming_score(y_true, y_pred)
 
-    def test_type_conversion(self):
+    def test_type_conversion(self):  # noqa: PLR6301
         """Test hamming score handles type conversion."""
         # Test with lists (should be converted to numpy arrays)
         y_true = [[1, 0, 1], [0, 1, 0]]
@@ -85,7 +85,7 @@ class TestHammingScore:
         score = hamming_score(y_true, y_pred)
         assert score == 1.0
 
-    def test_invalid_input_types(self):
+    def test_invalid_input_types(self):  # noqa: PLR6301
         """Test hamming score raises error on invalid input types."""
         # Test with None values which cannot be converted to proper arrays
         with pytest.raises((TypeError, ValueError)):
@@ -95,7 +95,7 @@ class TestHammingScore:
         with pytest.raises(ValueError):
             hamming_score([["invalid", "data"]], [[1, 0]])
 
-    def test_mixed_performance_case(self):
+    def test_mixed_performance_case(self):  # noqa: PLR6301
         """Test hamming score with mixed performance across samples."""
         y_true = np.array([[0, 1, 0], [0, 1, 1], [1, 0, 1], [0, 0, 1]])
         y_pred = np.array([[0, 1, 1], [0, 1, 1], [0, 1, 0], [0, 0, 0]])

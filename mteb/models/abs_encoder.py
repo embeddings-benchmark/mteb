@@ -382,7 +382,7 @@ class AbsEncoder(ABC):
         )
 
 
-def get_prompt_name(
+def get_prompt_name(  # noqa: PLR0911
     model_prompts: dict[str, str] | None,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None,

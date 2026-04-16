@@ -35,7 +35,7 @@ class IFIRPm(AbsTaskRetrieval):
 """,
     )
 
-    def task_specific_scores(
+    def task_specific_scores(  # noqa: PLR6301
         self,
         scores: dict[str, dict[str, float]],
         qrels: dict[str, dict[str, int]],

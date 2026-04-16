@@ -13,10 +13,10 @@ from mteb.types import (
     ConversationTurn,
     PromptType,
 )
-from mteb.types._encoder_io import AudioInputItem, VideoInputItem
+from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Sequence
 
     from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
 
@@ -223,11 +223,11 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     """
     collated = {}
     for key in batch[0]:
-        if key in (
+        if key in (  # noqa: PLR6201
             "image",  # images can be with different sizes
             "conversation",  # conversations are lists of varying lengths
             "audio",  # audio can have different lengths
-            "video",  # video VideoDecoder objects can't be collated
+            "video",  # video can have different lengths
         ):
             collated[key] = [item[key] for item in batch]
         else:
@@ -245,6 +245,13 @@ def _prepare_dataset(
     num_proc: int | None = None,
 ) -> Dataset:
     """Apply all modality-specific transformations to the dataset.
+
+    Args:
+        dataset: The dataset to prepare.
+        task_metadata: The metadata of the task.
+        prompt_type: The type of prompt.
+        input_column: The column to use as input. If None, it will use the first column that matches the modality.
+        num_proc: Number of processes.
 
     Returns the transformed Dataset (no DataLoader wrapping).
     """
@@ -291,9 +298,10 @@ def _prepare_dataset(
 
 def create_dataloader(
     dataset: Dataset,
+    *,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
-    input_column: str | None = None,
+    input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
     **kwargs: Any,
@@ -307,7 +315,8 @@ def create_dataloader(
         dataset: The dataset to create a dataloader from.
         task_metadata: The metadata of the task.
         prompt_type: The type of prompt to create a dataloader for. If None, it will be inferred from the task metadata.
-        input_column: The column to use as input. If None, it will use the first column that matches the modality.
+        input_column: The column(s) to use as input. If a string, used for column renaming.
+            If a Sequence, columns are assumed to already match modality names. If None, inferred from task metadata.
         batch_size: The batch size for the dataloader.
         num_proc: The number of processes to use for dataset processing.
         **kwargs: Additional arguments to pass to the dataloader creation functions.
@@ -315,13 +324,16 @@ def create_dataloader(
     Returns:
         A dataloader for the dataset.
     """
+    # Sequence means columns already match modality names, no renaming needed
+    _input_column = input_column if isinstance(input_column, str) else None
+
     if (
         prompt_type is None
         and task_metadata.modalities == ["text"]
-        and input_column is not None
+        and _input_column is not None
     ):
         return _create_dataloader_from_texts(
-            dataset[input_column],
+            dataset[_input_column],
             batch_size=batch_size,
         )
 
@@ -329,7 +341,7 @@ def create_dataloader(
         dataset,
         task_metadata,
         prompt_type=prompt_type,
-        input_column=input_column,
+        input_column=_input_column,
         num_proc=num_proc,
     )
 
@@ -439,54 +451,23 @@ class AudioCollator:
         return audio_array
 
 
-class VideoCollator:
-    """Collator for video data that optionally truncates to a maximum number of frames."""
+class FramesCollator:
+    """Collator for video data that resamples video frames."""
 
-    def __init__(
-        self,
-        max_frames: int,
-        target_sampling_rate: int = 32_000,
-        max_samples: int | None = None,
-    ) -> None:
+    def __init__(self, max_frames: int) -> None:
         """Initialize the collator.
 
         Args:
-            max_frames: The maximum number of frames to keep for each video. If None, no truncation is applied.
-            target_sampling_rate: The sampling rate to resample the audio to.
-            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+            max_frames: The maximum number of frames to keep for each video.
         """
         self.max_frames = max_frames
-        self.audio_collator = AudioCollator(
-            target_sampling_rate=target_sampling_rate, max_samples=max_samples
-        )
 
     def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
-        if "video" not in inputs[0]:
-            return cast("BatchedInput", inputs)
-
         collated_inputs = []
         for row in inputs:
-            videos = row.pop("video")
-            video_inputs = []
-            for video in videos:
-                frames = self.resample_video(video["frames"], self.max_frames)
-                audio = self.audio_collator.resample_audio(
-                    video,
-                    target_sampling_rate=self.audio_collator.target_sampling_rate,
-                    max_samples=self.audio_collator.max_samples,
-                )
-                video_inputs.append(
-                    VideoInputItem(
-                        frames=frames,
-                        audio=AudioInputItem(
-                            array=audio,
-                            sampling_rate=self.audio_collator.target_sampling_rate,
-                        ),
-                    )
-                )
-            row["video"] = video_inputs
+            video = row.pop("video")
+            row["video"] = self.resample_video(video, self.max_frames)
             collated_inputs.append(row)
-
         return cast(
             "BatchedInput",
             {
@@ -518,3 +499,49 @@ class VideoCollator:
             else list(range(video_frames))
         )
         return video.get_frames_at(selected_frames).data
+
+
+class VideoCollator:
+    """Collator that handles any combination of video and audio modalities.
+
+    Uses FramesCollator and AudioCollator static methods to process each modality.
+    """
+
+    def __init__(
+        self,
+        target_sampling_rate: int,
+        max_frames: int = 16,
+        max_samples: int | None = None,
+    ) -> None:
+        """Initialize the collator.
+
+        Args:
+            target_sampling_rate: The sampling rate to resample audio to.
+            max_frames: Maximum number of frames to keep per video.
+            max_samples: Maximum number of audio samples to keep. If None, no truncation.
+        """
+        self.max_frames = max_frames
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
+
+    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
+        collated_inputs = []
+        for row in inputs:
+            if "video" in row:
+                video = row.pop("video")
+                row["video"] = FramesCollator.resample_video(video, self.max_frames)
+            if "audio" in row:
+                audio_array = AudioCollator.resample_audio(
+                    row, self.target_sampling_rate, self.max_samples
+                )
+                row["audio"] = AudioInputItem(
+                    array=audio_array, sampling_rate=self.target_sampling_rate
+                )
+            collated_inputs.append(row)
+        return cast(
+            "BatchedInput",
+            {
+                key: [row[key] for row in collated_inputs]
+                for key in collated_inputs[0].keys()
+            },
+        )

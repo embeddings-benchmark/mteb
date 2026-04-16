@@ -376,6 +376,15 @@ f2llmv2_prompts_dict.update(
         "RiaNewsRetrievalHardNegatives.v2": "Given a news title, retrieve the original article.",
         "PersianFoodSentimentClassification": "Classify the sentiment of the given text as either positive or negative.",
         "SynPerChatbotConvSAClassification": "Classify the sentiment of the given text.",
+        "SynPerChatbotConvSAAnger": "Classify the sentiment of the given text.",
+        "SynPerChatbotConvSASatisfaction": "Classify the sentiment of the given text.",
+        "SynPerChatbotConvSAFriendship": "Classify the sentiment of the given text.",
+        "SynPerChatbotConvSAFear": "Classify the sentiment of the given text.",
+        "SynPerChatbotConvSAJealousy": "Classify the sentiment of the given text.",
+        "SynPerChatbotConvSASurprise": "Classify the sentiment of the given text.",
+        "SynPerChatbotConvSALove": "Classify the sentiment of the given text.",
+        "SynPerChatbotConvSASadness": "Classify the sentiment of the given text.",
+        "SynPerChatbotConvSAHappiness": "Classify the sentiment of the given text.",
         "SynPerChatbotConvSAToneChatbotClassification": "Classify the sentiment of the given text.",
         "SynPerChatbotConvSAToneUserClassification": "Classify the sentiment of the given text.",
         "SynPerChatbotSatisfactionLevelClassification": "Classify the satisfaction level of the given text.",
@@ -443,6 +452,9 @@ f2llmv2_prompts_dict.update(
         "SciDocsRR-VN": "Given a title of a scientific paper, retrieve the titles of other relevant papers.",
         "AskUbuntuDupQuestions-VN": "Retrieve duplicate questions from AskUbuntu forum.",
         "StackOverflowDupQuestions-VN": "Retrieve duplicate questions from StackOverflow forum.",
+        "MKQARetrieval": "Given a question, retrieve the answer.",
+        "WisesightSentimentClassification.v2": "Classify the sentiment of the given text.",
+        "SpanishSentimentClassification.v2": "Classify the sentiment of the given text.",
     }
 )
 

@@ -82,11 +82,13 @@ class SeedTextEmbeddingModel(AbsEncoder):
     def _encode(
         self, inputs: list[str], task_name: str, prompt_type: PromptType | None = None
     ):
-        assert (
-            self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+        if (
+            self._embed_dim is not None
+            and self._embed_dim not in self._available_embed_dims
+        ):
+            raise ValueError(
+                f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
+            )
 
         if prompt_type == PromptType("query") or prompt_type is None:
             if task_name in TASK_NAME_TO_INSTRUCTION:

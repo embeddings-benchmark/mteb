@@ -91,7 +91,7 @@ class MSClapWrapper(AbsEncoder):
                         temp_files, resample=False
                     )
                     # Normalize embeddings
-                    audio_features = audio_features / audio_features.norm(
+                    audio_features = audio_features / audio_features.norm(  # noqa: PLR6104
                         dim=-1, keepdim=True
                     )
                     all_embeddings.append(audio_features.cpu().detach().numpy())
@@ -129,7 +129,7 @@ class MSClapWrapper(AbsEncoder):
 
             with torch.no_grad():
                 text_features = self.model.clap.caption_encoder(features)
-                text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+                text_features = text_features / text_features.norm(dim=-1, keepdim=True)  # noqa: PLR6104
             text_embeddings.append(text_features.cpu().detach().numpy())
 
         return np.vstack(text_embeddings)
@@ -186,7 +186,16 @@ ms_clap_2022 = ModelMeta(
     reference="https://github.com/microsoft/CLAP",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=set(),
+    training_datasets={
+        "ESC50",
+        "FSD50K",
+        "AudioCapsA2TRetrieval",
+        "AudioSetMini",
+        "GTZANGenre",
+        "UrbanSound8k",
+        "ClothoA2TRetrieval",
+        # FreeMusic (not in MTEB)
+    },
     citation="""
 @inproceedings{CLAP2022,
   title={Clap learning audio concepts from natural language supervision},
@@ -218,7 +227,11 @@ ms_clap_2023 = ModelMeta(
     reference="https://github.com/microsoft/CLAP",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=set(),
+    training_datasets={
+        "FSD50K",
+        "ClothoA2TRetrieval",
+        "AudioCapsA2TRetrieval",
+    },
     citation="""
 @misc{CLAP2023,
       title={Natural Language Supervision for General-Purpose Audio Representations},

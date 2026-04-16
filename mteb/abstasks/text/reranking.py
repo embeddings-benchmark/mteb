@@ -45,7 +45,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
             # use AbsTaskRetrieval default to load the data
             return super().load_data(num_proc=num_proc)
 
-    def _process_example(self, example: dict, split: str, query_idx: int) -> dict:
+    def _process_example(self, example: dict, split: str, query_idx: int) -> dict:  # noqa: PLR6301
         """Process a single example from the dataset.
 
         Args:
@@ -118,9 +118,10 @@ class AbsTaskReranking(AbsTaskRetrieval):
                     cur_dataset = cur_dataset[hf_subset]
             elif "name" in self.metadata.dataset:
                 cur_dataset = datasets.load_dataset(**self.metadata.dataset)
-                assert hf_subset == "default", (
-                    f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
-                )
+                if hf_subset != "default":
+                    raise ValueError(
+                        f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
+                    )
             else:
                 cur_dataset = datasets.load_dataset(
                     **self.metadata.dataset, name=hf_subset

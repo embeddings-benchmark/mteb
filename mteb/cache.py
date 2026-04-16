@@ -266,6 +266,7 @@ class ResultCache:
             # check repository in the directory is the same as the remote
             remote_url = subprocess.run(
                 ["git", "config", "--get", "remote.origin.url"],
+                check=False,
                 cwd=results_directory,
                 capture_output=True,
                 text=True,
@@ -322,6 +323,7 @@ class ResultCache:
 
     def _download_cached_results_from_branch(
         self,
+        *,
         branch: str = "cached-data",
         filename: str = "__cached_results.json.gz",
         output_path: Path | None = None,
@@ -824,6 +826,7 @@ class ResultCache:
         self,
         models: Sequence[str] | Iterable[ModelMeta] | None = None,
         tasks: Sequence[str] | Iterable[AbsTask] | Benchmark | str | None = None,
+        *,
         require_model_meta: bool = True,
         include_remote: bool = True,
         validate_and_filter: bool = False,

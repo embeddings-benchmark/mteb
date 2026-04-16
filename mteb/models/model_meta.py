@@ -23,7 +23,10 @@ from huggingface_hub.errors import (
     SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
-from sentence_transformers import CrossEncoder, SentenceTransformer
+from sentence_transformers import (
+    CrossEncoder,
+    SentenceTransformer,
+)
 from transformers import AutoConfig
 
 from mteb._helpful_enum import HelpfulStrEnum
@@ -33,6 +36,7 @@ from mteb._hf_integration.hf_hub_utils import (
     _repo_exists,
 )
 from mteb.languages import check_language_code
+from mteb.languages.iso_mappings import _hf_langs_to_iso_lang_scripts
 from mteb.models.models_protocols import MTEBModels
 from mteb.types import (
     ISOLanguageScript,
@@ -47,6 +51,7 @@ if TYPE_CHECKING:
     from huggingface_hub import (
         ModelCardData,
     )
+    from sentence_transformers import SentenceTransformerModelCardData
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
@@ -100,7 +105,7 @@ def _get_loader_name(
     return loader.__name__
 
 
-class ModelMeta(BaseModel):
+class ModelMeta(BaseModel):  # noqa: PLR0904
     """The model metadata object.
 
     Attributes:
@@ -174,6 +179,16 @@ class ModelMeta(BaseModel):
     experiment_kwargs: Mapping[str, Any] | None = None
     output_dtypes: OutputDType | list[OutputDType] | None = None
 
+    def __setattr__(self, name: str, value: Any) -> None:
+        """Deprecation warning for direct attribute mutation. Use model_copy(update={...}) instead."""
+        warnings.warn(
+            f"Mutating '{name}' is deprecated and will be removed in future versions. "
+            "Use .model_copy(update={...}) instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        super().__setattr__(name, value)
+
     @model_validator(mode="before")
     @classmethod
     def _handle_legacy_is_cross_encoder(cls, data: Any) -> Any:
@@ -198,10 +213,9 @@ class ModelMeta(BaseModel):
                 if is_cross_encoder_value:
                     if "cross-encoder" not in model_type:
                         data["model_type"] = ["cross-encoder"]
-                else:
-                    if "cross-encoder" in model_type:
-                        model_type = [t for t in model_type if t != "cross-encoder"]
-                        data["model_type"] = model_type if model_type else ["dense"]
+                elif "cross-encoder" in model_type:
+                    model_type = [t for t in model_type if t != "cross-encoder"]
+                    data["model_type"] = model_type if model_type else ["dense"]
 
         return data
 
@@ -251,9 +265,9 @@ class ModelMeta(BaseModel):
     def to_dict(self):
         """Returns a dictionary representation of the model metadata."""
         meta = self.model_copy(deep=True)
-        if isinstance(meta.embed_dim, Sequence):
-            meta.embed_dim = max(meta.embed_dim)
         dict_repr = meta.model_dump()
+        if isinstance(meta.embed_dim, Sequence):
+            dict_repr["embed_dim"] = max(meta.embed_dim)
         loader = dict_repr.pop("loader", None)
         dict_repr["training_datasets"] = (
             list(dict_repr["training_datasets"])
@@ -287,6 +301,40 @@ class ModelMeta(BaseModel):
             )
         return v
 
+    def __hash__(self) -> int:
+        """Make ModelMeta hashable based on name, revision, experiment_kwargs and embed_dim.
+
+        This allows ModelMeta instances to be used as dictionary keys.
+        Two ModelMeta instances with the same name, revision, experiment_kwargs and embed_dim will have the same hash.
+        """
+        # Serialize experiment_kwargs to a deterministic, hashable representation
+        exp_kwargs_repr = (
+            _serialize_experiment_kwargs_to_name(self.experiment_kwargs)
+            if self.experiment_kwargs
+            else None
+        )
+        return hash(
+            (
+                self.name,
+                self.revision,
+                exp_kwargs_repr,
+                tuple(self.embed_dim)
+                if isinstance(self.embed_dim, Sequence)
+                else self.embed_dim,
+            )
+        )
+
+    def __eq__(self, other: object) -> bool:
+        """Check equality based on name, revision, experiment_kwargs and embed_dim.
+
+        Two ModelMeta instances are equal if they have the same name, revision, experiment_kwargs and embed_dim.
+        """
+        if not isinstance(other, ModelMeta):
+            return NotImplemented
+        self_dict = self.model_dump()
+        other_dict = other.model_dump()
+        return self_dict == other_dict
+
     def load_model(
         self,
         device: str | None = None,
@@ -305,6 +353,14 @@ class ModelMeta(BaseModel):
         if _self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
 
+        loader = _self.loader
+        name = _self.name
+        revision = _self.revision
+        updates: dict[str, Any] = {}
+        base_exp_kwargs = (
+            dict(_self.experiment_kwargs) if _self.experiment_kwargs else {}
+        )
+
         if embed_dim is not None:
             if (
                 _self.embed_dim is not None
@@ -320,33 +376,25 @@ class ModelMeta(BaseModel):
                 raise ValueError(
                     f"Requested embedding dimension {embed_dim} is not in the model's supported embedding dimensions {_self.embed_dim}."
                 )
-            _self.embed_dim = embed_dim
+            updates["embed_dim"] = embed_dim
             kwargs["embed_dim"] = embed_dim
-            if _self.experiment_kwargs is None:
-                _self.experiment_kwargs = {"embed_dim": embed_dim}
-            else:
-                _self.experiment_kwargs["embed_dim"] = embed_dim  # type: ignore[index]
 
-        if _self.experiment_kwargs is None:
-            _self.experiment_kwargs = kwargs if len(kwargs) > 0 else None
-        elif len(kwargs) > 0 and _self.experiment_kwargs is not None:
-            kwargs |= _self.experiment_kwargs
-            _self.experiment_kwargs = kwargs
+        merged_exp_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
+        updates["experiment_kwargs"] = merged_exp_kwargs or None
 
         # Allow overwrites
         _kwargs = _self.loader_kwargs.copy()
-        _kwargs.update(
-            _self.experiment_kwargs if _self.experiment_kwargs is not None else {}
-        )
+        _kwargs.update(merged_exp_kwargs)
         if device is not None:
             _kwargs["device"] = device
 
-        model: MTEBModels = _self.loader(
-            _self.name,
-            revision=_self.revision,
+        updates["loader_kwargs"] = _kwargs
+        _self = _self.model_copy(update=updates)
+        model: MTEBModels = loader(
+            name,
+            revision=revision,
             **_kwargs,
         )
-        _self.loader_kwargs = _kwargs
         model.mteb_model_meta = _self  # type: ignore[misc]
         return model
 
@@ -535,10 +583,13 @@ class ModelMeta(BaseModel):
         if overwrites:
             empty_model = empty_model.model_copy(update=overwrites)
 
+        updates: dict[str, Any] = {}
         if empty_model.name is None:
-            empty_model.name = "no_model_name/available"
+            updates["name"] = "no_model_name/available"
         if empty_model.revision is None:
-            empty_model.revision = "no_revision_available"
+            updates["revision"] = "no_revision_available"
+        if updates:
+            empty_model = empty_model.model_copy(update=updates)
 
         return empty_model
 
@@ -568,7 +619,7 @@ class ModelMeta(BaseModel):
                 and self.revision != "no_revision_available"
             ):
                 continue  # skip overwriting revision if overwrite has no revision available
-            if key in ["framework", "model_type"]:
+            if key in ["framework", "model_type"]:  # noqa: PLR6201
                 # Combine lists and remove duplicates
                 merged_list = set(merged_data.get(key, [])) | set(value or [])
                 merged_data[key] = list(merged_list)
@@ -597,9 +648,14 @@ class ModelMeta(BaseModel):
                 loader=SentenceTransformerEncoderWrapper,
                 max_tokens=model.max_seq_length,
                 embed_dim=model.get_sentence_embedding_dimension(),
-                similarity_fn_name=ScoringFunction.from_str(model.similarity_fn_name),
+                similarity_fn_name=ScoringFunction.from_str(model.similarity_fn_name)
+                if model.similarity_fn_name
+                else None,
                 framework=["Sentence Transformers", "PyTorch"],
                 n_embedding_parameters=n_embedding_parameters,
+                adapted_from=_get_source_model(model.model_card_data)
+                if hasattr(model, "model_card_data")
+                else None,
             )
         )
 
@@ -653,11 +709,14 @@ class ModelMeta(BaseModel):
                 n_embedding_parameters=cls._get_n_embedding_parameters_from_sentence_transformers(
                     model
                 ),
+                adapted_from=_get_source_model(model.model_card_data)
+                if hasattr(model, "model_card_data")
+                else None,
             )
         )
 
     @classmethod
-    def _from_hub(
+    def _from_hub(  # noqa: PLR0914
         cls,
         model_name: str,
         revision: str | None = None,
@@ -712,6 +771,7 @@ class ModelMeta(BaseModel):
             revision = revisions[0].commit_id if revisions else None
 
         model_license = card_data.license if card_data.license != "other" else None
+        languages = _hf_langs_to_iso_lang_scripts(card_data.language)
         n_parameters = cls._calculate_num_parameters_from_hub(model_name)
         n_embedding_parameters = cls._estimate_embedding_parameters_from_hub(
             model_name, revision=revision, config=config
@@ -749,6 +809,7 @@ class ModelMeta(BaseModel):
                 reference=reference,
                 release_date=cls.fetch_release_date(model_name),
                 license=model_license,
+                languages=languages,
                 framework=frameworks,
                 n_parameters=n_parameters,
                 n_embedding_parameters=n_embedding_parameters,
@@ -756,6 +817,7 @@ class ModelMeta(BaseModel):
                 max_tokens=max_tokens,
                 embed_dim=embedding_dim,
                 similarity_fn_name=similarity_fn_name,
+                adapted_from=_get_source_model(card_data),
             )
         )
 
@@ -1253,7 +1315,7 @@ def _pydantic_instance_to_code(
     return "\n".join(lines)
 
 
-def _value_to_code(value: Any, indent: int) -> str:
+def _value_to_code(value: Any, indent: int) -> str:  # noqa: PLR0911
     """Convert a Python value into valid Python source code."""
     if isinstance(value, BaseModel):
         return _pydantic_instance_to_code(value, indent, only_set_fields=True)
@@ -1382,3 +1444,14 @@ def _serialize_experiment_kwargs_to_name(
         return f"exp_{param_hash}"
 
     return params_str
+
+
+def _get_source_model(
+    card_data: ModelCardData | SentenceTransformerModelCardData,
+) -> str | None:
+    source_model = None
+    if isinstance(card_data.base_model, str):
+        source_model = card_data.base_model
+    elif isinstance(card_data.base_model, list) and len(card_data.base_model) > 0:
+        source_model = card_data.base_model[0]
+    return source_model

@@ -57,7 +57,7 @@ class OpenAIModel(AbsEncoder):
         import tiktoken
 
         self._client = OpenAI() if client is None else client
-        self.model_name = model_name.split("/")[-1].split(" ")[0]
+        self.model_name = model_name.split("/")[-1].split(" ")[0]  # noqa: PLC0207
 
         if embed_dim is None:
             if self.model_name not in self.default_embed_dims:
@@ -143,7 +143,7 @@ class OpenAIModel(AbsEncoder):
                 )
             except Exception as e:
                 # Sleep due to too many requests
-                logger.info("Sleeping for 10 seconds due to error", e)
+                logger.info("Sleeping for 10 seconds due to error", e)  # noqa: PLE1205
                 import time
 
                 time.sleep(10)
@@ -152,7 +152,7 @@ class OpenAIModel(AbsEncoder):
                         input=sublist, **default_kwargs
                     )
                 except Exception as e:
-                    logger.info("Sleeping for 60 seconds due to error", e)
+                    logger.info("Sleeping for 60 seconds due to error", e)  # noqa: PLE1205
                     time.sleep(60)
                     response = self._client.embeddings.create(
                         input=sublist, **default_kwargs
@@ -167,7 +167,7 @@ class OpenAIModel(AbsEncoder):
             all_embeddings[mask] = no_empty_embeddings
         return all_embeddings
 
-    def _to_numpy(self, embedding_response) -> NDArray[np.floating]:
+    def _to_numpy(self, embedding_response) -> NDArray[np.floating]:  # noqa: PLR6301
         return np.array([e.embedding for e in embedding_response.data])
 
 

@@ -341,7 +341,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
                         unpacked.append(1.0 if bit_val else -1.0)
                 unpacked_embeddings.append(unpacked)
             embeddings_array = np.array(unpacked_embeddings, dtype=np.float32)
-        elif primary_embedding_type in ["int8", "uint8"]:
+        elif primary_embedding_type in ["int8", "uint8"]:  # noqa: PLR6201
             # Convert int8/uint8 embeddings to float32
             embeddings_array = embeddings_array.astype(np.float32)
 

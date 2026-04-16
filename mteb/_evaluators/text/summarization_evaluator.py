@@ -69,6 +69,7 @@ class SummarizationEvaluator(Evaluator):
         machine_summaries: list[list[str]],
         texts: list[str],
         gold_scores: list[list[float]],
+        *,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
@@ -95,7 +96,7 @@ class SummarizationEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
 
-    def __call__(
+    def __call__(  # noqa: PLR0914
         self,
         model: EncoderProtocol,
         *,
@@ -206,7 +207,7 @@ class SummarizationEvaluator(Evaluator):
             human_scores=all_human_scores,
         )
 
-    def _calculate_metrics(
+    def _calculate_metrics(  # noqa: PLR6301
         self,
         distances: SummarizationDistances,
     ) -> SummarizationMetrics:
@@ -258,7 +259,7 @@ class DeprecatedSummarizationEvaluator(SummarizationEvaluator):
     It is kept here to maintain compatibility with older versions of the benchmark, but we do not recommend using it.
     """
 
-    def _calculate_metrics(
+    def _calculate_metrics(  # noqa: PLR6301
         self,
         distances: SummarizationDistances,
     ) -> SummarizationMetrics:

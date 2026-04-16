@@ -7,7 +7,7 @@ import torch
 from tqdm.auto import tqdm
 
 from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
+from mteb._requires_package import requires_audio_dependencies, requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -29,6 +29,9 @@ class LCOEmbedding(AbsEncoder):
         **kwargs: Any,
     ):
         requires_audio_dependencies()
+        requires_package(
+            self, "qwen_omni_utils", model_name, "pip install mteb[qwen_omni_utils]"
+        )
         from transformers import (
             Qwen2_5OmniProcessor,
             Qwen2_5OmniThinkerForConditionalGeneration,
@@ -53,7 +56,7 @@ class LCOEmbedding(AbsEncoder):
         # Pre-calculate max samples once
         self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
-    def encode(
+    def encode(  # noqa: PLR0914
         self,
         inputs: DataLoader[BatchedInput],
         *,
@@ -64,13 +67,8 @@ class LCOEmbedding(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        try:
-            from qwen_omni_utils import process_mm_info
-        except ImportError:
-            raise ImportError(
-                "The 'qwen_omni_utils' package is required for this model. "
-                "Please install it or ensure it is in your python path."
-            )
+        from qwen_omni_utils import process_mm_info
+
         all_embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):
@@ -150,7 +148,9 @@ lco_3b = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # SeaDoc (not in MTEB)
+    ),
     modalities=["audio", "text"],
     citation="""
 @misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
@@ -183,7 +183,9 @@ lco_7b = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # SeaDoc (not in MTEB)
+    ),
     modalities=["audio", "text"],
     citation="""
 @misc{xiao2025scalinglanguagecentricomnimodalrepresentation,

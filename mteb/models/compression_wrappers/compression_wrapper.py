@@ -35,7 +35,7 @@ class CompressionWrapper:
     def __init__(
         self,
         model: EncoderProtocol,
-        output_dtype: OutputDType = OutputDType.FLOAT8_E4M3FN,
+        output_dtype: OutputDType = OutputDType.INT8,
         clipping_margin: tuple[float, float] | None = None,
     ) -> None:
         """Instantiates the wrapper with an embedding model and sets the quantization level.
@@ -49,11 +49,10 @@ class CompressionWrapper:
         self._quantization_level = output_dtype
         self.clipping_margin = None
         self.min_embeds = 10_000
-        embed_types = model.mteb_model_meta.output_dtypes
-        model.mteb_model_meta.output_dtypes = [output_dtype]
-        if model.mteb_model_meta.experiment_kwargs is None:
-            model.mteb_model_meta.experiment_kwargs = {}
-        model.mteb_model_meta.experiment_kwargs["output_dtypes"] = output_dtype.value  # type: ignore[index]
+        meta = model.mteb_model_meta
+        embed_types = meta.output_dtypes
+        exp_kwargs = dict(meta.experiment_kwargs) if meta.experiment_kwargs else {}
+        exp_kwargs["output_dtypes"] = output_dtype.value
 
         if clipping_margin is not None:
             if not 0 < clipping_margin[0] < clipping_margin[1] < 1:
@@ -62,9 +61,14 @@ class CompressionWrapper:
                     f"upper bound {clipping_margin[1]}, but got {clipping_margin}."
                 )
             self.clipping_margin = torch.tensor(clipping_margin)
-            model.mteb_model_meta.experiment_kwargs["clipping_margin"] = list(  # type: ignore[index]
-                clipping_margin
-            )
+            exp_kwargs["clipping_margin"] = list(clipping_margin)
+
+        model.mteb_model_meta = meta.model_copy(  # type: ignore[misc]
+            update={
+                "output_dtypes": [output_dtype],
+                "experiment_kwargs": exp_kwargs,
+            }
+        )
         if embed_types and output_dtype in embed_types:
             msg = (
                 f"The model {model.mteb_model_meta.name} natively supports quantization to {output_dtype.value} and "
@@ -142,7 +146,7 @@ class CompressionWrapper:
             The quantized embeddings.
         """
         torch_dtype = self._quantization_level.get_dtype()
-        if self._quantization_level in [
+        if self._quantization_level in [  # noqa: PLR6201
             OutputDType.FLOAT8_E4M3FN,
             OutputDType.FLOAT8_E5M2,
             OutputDType.FLOAT8_E8M0FNU,
@@ -155,7 +159,7 @@ class CompressionWrapper:
         elif self._quantization_level == OutputDType.BF16:
             # Cast to bf16, then back to float32 using PyTorch as numpy doesn't support bf16
             quantized = embeddings.type(torch_dtype).float()
-        elif self._quantization_level in [
+        elif self._quantization_level in [  # noqa: PLR6201
             OutputDType.INT8,
             OutputDType.UINT8,
             OutputDType.INT4,
@@ -163,7 +167,7 @@ class CompressionWrapper:
         ]:
             num_bits = (
                 8
-                if self._quantization_level in [OutputDType.INT8, OutputDType.UINT8]
+                if self._quantization_level in [OutputDType.INT8, OutputDType.UINT8]  # noqa: PLR6201
                 else 4
             )
             if self.clipping_margin is not None:
@@ -173,7 +177,7 @@ class CompressionWrapper:
             steps = (maxs - mins) / (2**num_bits - 1)
             subtract = (
                 0
-                if self._quantization_level in [OutputDType.UINT8, OutputDType.UINT4]
+                if self._quantization_level in [OutputDType.UINT8, OutputDType.UINT4]  # noqa: PLR6201
                 else int(2**num_bits * 0.5)
             )
             quantized = torch.floor((embeddings - mins) / steps) - subtract

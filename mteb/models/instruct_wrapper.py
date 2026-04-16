@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any
 import torch
 
 from mteb._requires_package import requires_package
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 from .abs_encoder import AbsEncoder
 
@@ -140,10 +140,11 @@ def instruct_wrapper(
 class InstructSentenceTransformerModel(AbsEncoder):
     """Instruction wrapper for Sentence Transformer models."""
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         model_name: str,
         revision: str,
+        *,
         device: str | None = None,
         instruction_template: str
         | Callable[[str, PromptType | None], str]
@@ -154,7 +155,6 @@ class InstructSentenceTransformerModel(AbsEncoder):
         add_eos_token: bool = False,
         prompts_dict: dict[str, str] | None = None,
         include_prompt: bool = True,
-        *,
         embed_dim: int | None = None,
         **kwargs: Any,
     ):
@@ -254,6 +254,23 @@ class InstructSentenceTransformerModel(AbsEncoder):
         sentences = [text for batch in inputs for text in batch["text"]]
         instruction: str | None
         instruction = self.get_task_instruction(task_metadata, prompt_type)
+
+        if "precision" in kwargs and self.mteb_model_meta is not None:
+            existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
+            output_dtype = OutputDType.from_str(kwargs["precision"])  # type: ignore[typeddict-item]
+            if existing_experiment_kwargs is not None:
+                existing_experiment_kwargs["output_dtypes"] = output_dtype  # type: ignore[index]
+            else:
+                existing_experiment_kwargs = {"output_dtypes": output_dtype.value}
+            logger.warning(
+                f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {output_dtype.value}."
+            )
+            self.mteb_model_meta = self.mteb_model_meta.model_copy(
+                update={
+                    "experiment_kwargs": existing_experiment_kwargs,
+                },
+                deep=True,
+            )
 
         # to passage prompts won't be applied to passages
         if (
