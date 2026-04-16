@@ -6,7 +6,7 @@ import pytest
 
 import mteb
 from mteb import BenchmarkResults, ResultCache
-from mteb.evaluate import _check_model_modalities
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.models.get_model_meta import get_model_meta
 
 logging.basicConfig(level=logging.INFO)
@@ -17,6 +17,22 @@ REFERENCE_MODELS = [
     "minishlab/potion-multilingual-128M",
     "mteb/baseline-bm25s",
 ]
+
+
+def _is_task_compatible(task, model_meta):
+    """Check if a task is compatible with the model based on modalities."""
+    if model_meta.modalities is None:
+        return True
+    model_mods = set(model_meta.modalities)
+    task_mods = set(task.metadata.modalities)
+    # For retrieval tasks, check query and document modalities separately
+    if isinstance(task, AbsTaskRetrieval):
+        from mteb.types import PromptType
+
+        query_mods = set(task.metadata.get_modalities(PromptType.query))
+        doc_mods = set(task.metadata.get_modalities(PromptType.document))
+        return bool(model_mods & query_mods) and bool(model_mods & doc_mods)
+    return task_mods.issubset(model_mods)
 
 
 def _get_expected_task_names(benchmark, model_name):
@@ -32,9 +48,7 @@ def _get_expected_task_names(benchmark, model_name):
     for task in benchmark_tasks:
         if not task.metadata.is_public:
             continue
-        try:
-            _check_model_modalities(model_meta, task)
-        except ValueError:
+        if not _is_task_compatible(task, model_meta):
             continue
         task_names.append(task.metadata.name)
     return task_names
