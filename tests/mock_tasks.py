@@ -1597,6 +1597,8 @@ class MockRerankingTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 136,
             "documents_text_statistics": {
                 "total_text_length": 84,
@@ -1650,6 +1652,8 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
+            "num_queries": 4,
+            "num_documents": 4,
             "number_of_characters": 272,
             "documents_text_statistics": {
                 "total_text_length": 168,
@@ -1685,6 +1689,8 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 136,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -1720,6 +1726,8 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 136,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -1779,6 +1787,8 @@ class MockRetrievalTask(AbsTaskRetrieval):
     expected_stats = {
         "val": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 136,
             "documents_text_statistics": {
                 "total_text_length": 84,
@@ -1809,6 +1819,8 @@ class MockRetrievalTask(AbsTaskRetrieval):
         },
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 136,
             "documents_text_statistics": {
                 "total_text_length": 84,
@@ -1859,6 +1871,8 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
     expected_stats = {
         "val": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 201,
             "documents_text_statistics": {
                 "total_text_length": 84,
@@ -1889,6 +1903,8 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
         },
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 201,
             "documents_text_statistics": {
                 "total_text_length": 84,
@@ -1956,6 +1972,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
     expected_stats = {
         "val": {
             "num_samples": 8,
+            "num_queries": 4,
+            "num_documents": 4,
             "number_of_characters": 272,
             "documents_text_statistics": {
                 "total_text_length": 168,
@@ -1986,6 +2004,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 136,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2016,6 +2036,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 136,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2048,6 +2070,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
         },
         "test": {
             "num_samples": 8,
+            "num_queries": 4,
+            "num_documents": 4,
             "number_of_characters": 272,
             "documents_text_statistics": {
                 "total_text_length": 168,
@@ -2078,6 +2102,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 136,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2108,6 +2134,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 136,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2403,6 +2431,8 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 196,
             "documents_text_statistics": {
                 "total_text_length": 84,
@@ -2452,6 +2482,8 @@ class MockInstructionReranking(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 196,
             "documents_text_statistics": {
                 "total_text_length": 84,
@@ -2504,6 +2536,8 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
+            "num_queries": 4,
+            "num_documents": 4,
             "number_of_characters": 392,
             "documents_text_statistics": {
                 "total_text_length": 168,
@@ -2534,6 +2568,8 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 196,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2564,6 +2600,8 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 196,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2618,6 +2656,8 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
+            "num_queries": 4,
+            "num_documents": 4,
             "number_of_characters": 392,
             "documents_text_statistics": {
                 "total_text_length": 168,
@@ -2653,6 +2693,8 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 196,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2688,6 +2730,8 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 196,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2759,6 +2803,8 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 60,
             "documents_text_statistics": None,
             "documents_image_statistics": {
@@ -2849,6 +2895,8 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
+            "num_queries": 4,
+            "num_documents": 4,
             "number_of_characters": 120,
             "documents_text_statistics": None,
             "documents_image_statistics": {
@@ -2894,6 +2942,8 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 60,
                     "documents_text_statistics": None,
                     "documents_image_statistics": {
@@ -2939,6 +2989,8 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 60,
                     "documents_text_statistics": None,
                     "documents_image_statistics": {
@@ -3041,6 +3093,8 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 60,
             "documents_text_statistics": {
                 "total_text_length": 60,
@@ -3115,6 +3169,8 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 60,
             "documents_text_statistics": None,
             "documents_image_statistics": {
@@ -4320,6 +4376,8 @@ class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 60,
             "documents_text_statistics": None,
             "documents_image_statistics": None,
@@ -4404,6 +4462,8 @@ class MockAny2AnyRetrievalA2TTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 60,
             "documents_text_statistics": {
                 "total_text_length": 60,
@@ -4487,6 +4547,8 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 0,
             "documents_text_statistics": None,
             "documents_image_statistics": None,
@@ -4572,6 +4634,8 @@ class MockAudioReranking(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 0,
             "documents_text_statistics": None,
             "documents_image_statistics": None,
