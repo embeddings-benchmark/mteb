@@ -30,17 +30,17 @@ class HMDB51Classification(AbsTaskClassification):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=r"""
-@INPROCEEDINGS{6126543,
-  author={Kuehne, H. and Jhuang, H. and Garrote, E. and Poggio, T. and Serre, T.},
-  booktitle={2011 International Conference on Computer Vision}, 
-  title={HMDB: A large video database for human motion recognition}, 
-  year={2011},
-  volume={},
-  number={},
-  pages={2556-2563},
-  keywords={Cameras;YouTube;Databases;Training;Visualization;Humans;Motion pictures},
-  doi={10.1109/ICCV.2011.6126543}}
-
+@inproceedings{6126543,
+  author = {Kuehne, H. and Jhuang, H. and Garrote, E. and Poggio, T. and Serre, T.},
+  booktitle = {2011 International Conference on Computer Vision},
+  doi = {10.1109/ICCV.2011.6126543},
+  keywords = {Cameras;YouTube;Databases;Training;Visualization;Humans;Motion pictures},
+  number = {},
+  pages = {2556-2563},
+  title = {HMDB: A large video database for human motion recognition},
+  volume = {},
+  year = {2011},
+}
 """,
     )
 
