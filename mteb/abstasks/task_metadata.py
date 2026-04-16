@@ -966,7 +966,7 @@ class TaskMetadata(BaseModel):
             "AudioClassification": ["audio-classification"],
             "AudioPairClassification": ["audio-classification"],
             # video
-            "VideoClassification": ["video-classification"]
+            "VideoClassification": ["video-classification"],
         }
         if self.type == "ZeroShotClassification":
             if self.modalities == ["image"]:
