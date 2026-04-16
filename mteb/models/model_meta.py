@@ -23,7 +23,10 @@ from huggingface_hub.errors import (
     SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
-from sentence_transformers import CrossEncoder, SentenceTransformer
+from sentence_transformers import (
+    CrossEncoder,
+    SentenceTransformer,
+)
 from transformers import AutoConfig
 
 from mteb._helpful_enum import HelpfulStrEnum
@@ -48,6 +51,7 @@ if TYPE_CHECKING:
     from huggingface_hub import (
         ModelCardData,
     )
+    from sentence_transformers import SentenceTransformerModelCardData
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
@@ -649,6 +653,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 else None,
                 framework=["Sentence Transformers", "PyTorch"],
                 n_embedding_parameters=n_embedding_parameters,
+                adapted_from=_get_source_model(model.model_card_data),
             )
         )
 
@@ -702,6 +707,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 n_embedding_parameters=cls._get_n_embedding_parameters_from_sentence_transformers(
                     model
                 ),
+                adapted_from=_get_source_model(model.model_card_data),
             )
         )
 
@@ -807,6 +813,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 max_tokens=max_tokens,
                 embed_dim=embedding_dim,
                 similarity_fn_name=similarity_fn_name,
+                adapted_from=_get_source_model(card_data),
             )
         )
 
@@ -1433,3 +1440,14 @@ def _serialize_experiment_kwargs_to_name(
         return f"exp_{param_hash}"
 
     return params_str
+
+
+def _get_source_model(
+    card_data: ModelCardData | SentenceTransformerModelCardData,
+) -> str | None:
+    source_model = None
+    if isinstance(card_data.base_model, str):
+        source_model = card_data.base_model
+    elif isinstance(card_data.base_model, list) and len(card_data.base_model) > 0:
+        source_model = card_data.base_model[0]
+    return source_model
