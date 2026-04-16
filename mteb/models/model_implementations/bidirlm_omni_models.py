@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import re
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -76,7 +75,6 @@ TASK_PROMPTS: dict[str, str | dict[str, str]] = {
 }
 
 POOLING_DIM = 2048
-_SUFFIX_RE = re.compile(r"(HardNegatives|Retrieval|Summarization|\.v\d+)$")
 
 
 class BidirLMOmniEncoder(AbsEncoder):
@@ -104,17 +102,6 @@ class BidirLMOmniEncoder(AbsEncoder):
 
         self.task_prompts = TASK_PROMPTS
 
-    def _lookup_prompt(self, task_name: str):
-        if task_name in self.task_prompts:
-            return self.task_prompts[task_name]
-        # Strip known suffixes up to twice: e.g. "TaskName.v2Retrieval"
-        # → strip "Retrieval" → "TaskName.v2" → strip ".v2" → "TaskName"
-        stripped = _SUFFIX_RE.sub("", task_name)
-        stripped = _SUFFIX_RE.sub("", stripped)
-        if stripped != task_name and stripped in self.task_prompts:
-            return self.task_prompts[stripped]
-        return None
-
     def _get_instruction(
         self,
         task_metadata: TaskMetadata,
@@ -125,7 +112,7 @@ class BidirLMOmniEncoder(AbsEncoder):
         if task_type == "Summarization":
             return None
 
-        entry = self._lookup_prompt(task_metadata.name)
+        entry = self.task_prompts.get(task_metadata.name)
 
         # Asymmetric retrieval: documents get no instruction unless the prompt
         # dict explicitly provides a "passage" key.
