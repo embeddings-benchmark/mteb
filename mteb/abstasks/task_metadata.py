@@ -474,7 +474,6 @@ class TaskMetadata(BaseModel):
     is_public: bool = True
     contributed_by: str | None = None
     superseded_by: str | None = None
-
     is_beta: bool = False
 
     def _validate_metadata(self) -> None:
