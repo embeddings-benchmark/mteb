@@ -63,6 +63,7 @@ from .financial_phrasebank_classification import (
 from .food101_classification import Food101Classification
 from .frenk_en_classification import FrenkEnClassification, FrenkEnClassificationV2
 from .gtsrb_classification import GTSRBClassification
+from .hmdb51_classification import HMDB51Classification
 from .hume_emotion_classification import HUMEEmotionClassification
 from .hume_toxic_conversations_classification import (
     HUMEToxicConversationsClassification,
@@ -391,6 +392,7 @@ __all__ = [
     "GlobeV2GenderClassification",
     "GlobeV3AgeClassification",
     "GlobeV3GenderClassification",
+    "HMDB51Classification",
     "HUMEEmotionClassification",
     "HUMEToxicConversationsClassification",
     "HUMETweetSentimentExtractionClassification",

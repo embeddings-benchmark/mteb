@@ -377,6 +377,11 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {  # type: ig
     "Compositionality": "pair-classification",
     "AudioPairClassification": "pair-classification",
     "PairClassification": "pair-classification",
+    "VideoClassification": "classification",
+    "VideoClustering": "clustering",
+    "VideoPairClassification": "pair-classification",
+    "VideoZeroshotClassification": "classification",
+    "VideoCentricQA": "retrieval",
 }
 
 
@@ -434,6 +439,7 @@ class TaskMetadata(BaseModel):
             where it may be harder to gather information about the source.
         superseded_by: Denotes the task that this task is superseded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
+        is_beta: Whether the task is still in beta (e.g. under active review); may change or have limited model coverage.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -466,6 +472,7 @@ class TaskMetadata(BaseModel):
     is_public: bool = True
     contributed_by: str | None = None
     superseded_by: str | None = None
+    is_beta: bool = False
 
     def _validate_metadata(self) -> None:
         self._eval_langs_are_valid(self.eval_langs)
