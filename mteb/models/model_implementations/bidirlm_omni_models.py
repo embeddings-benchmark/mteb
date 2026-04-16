@@ -35,7 +35,7 @@ BIDIRLM_OMNI_TRAINING_DATASETS = bidirlm_training_data | {
 
 TASK_PROMPTS: dict[str, str | dict[str, str]] = {
     **bidirlm_task_prompts,
-    # Asymmetric overrides: documents also get an instruction for these tasks
+    # MTEB tasks
     "ArguAna": {
         "query": "Given a claim, retrieve documents that support or refute the claim",
         "passage": "Given a claim, retrieve documents that support or refute the claim",
