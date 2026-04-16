@@ -45,6 +45,3 @@ class HMDB51Classification(AbsTaskClassification):
     )
 
     input_column_name = "video"
-    label_column_name: str = "label"
-
-    is_cross_validation: bool = False
