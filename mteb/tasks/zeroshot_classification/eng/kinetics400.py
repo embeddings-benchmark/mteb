@@ -13,7 +13,7 @@ class Kinetics400ZeroShotClassification(AbsTaskZeroShotClassification):
             "path": "mteb/kinetics-400",
             "revision": "e5b93b6eae80b8c9e9c88a381baae84d29b34fd2",
         },
-        type="ZeroShotClassification",
+        type="VideoZeroshotClassification",
         category="v2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
