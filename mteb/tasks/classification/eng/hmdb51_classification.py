@@ -49,12 +49,3 @@ class HMDB51Classification(AbsTaskClassification):
     )
 
     input_column_name = "video"
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
-        if self.metadata.dataset["revision"] != "73e5ac9cd9536c406d0046f3d6046785885f7ebe":
-            return
-        train = self.dataset["train"]
-        if len(train) != 3570:
-            return
-        keep = [i for i in range(len(train)) if i not in _BAD_VIDEO_TRAIN_INDICES]
-        self.dataset["train"] = train.select(keep)
