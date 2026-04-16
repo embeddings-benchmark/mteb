@@ -13,7 +13,7 @@ class RAVDESSAVClassification(AbsTaskClassification):
             "path": "mteb/RAVDESS_AV",
             "revision": "13af08387c3ce5e86c179a3718eb158669268d65",
         },
-        type="Classification",
+        type="VideoClassification",
         category="va2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
