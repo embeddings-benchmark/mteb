@@ -6,7 +6,6 @@ import pytest
 
 import mteb
 from mteb import BenchmarkResults, ResultCache
-from mteb.abstasks import AbsTaskRetrieval
 from mteb.models.get_model_meta import get_model_meta
 
 logging.basicConfig(level=logging.INFO)
@@ -20,18 +19,11 @@ REFERENCE_MODELS = [
 
 
 def _is_task_compatible(task, model_meta):
-    """Check if a task is compatible with the model based on modalities."""
+    """Check if a task is fully compatible with the model based on modalities."""
     if model_meta.modalities is None:
         return True
     model_mods = set(model_meta.modalities)
     task_mods = set(task.metadata.modalities)
-    # For retrieval tasks, check query and document modalities separately
-    if isinstance(task, AbsTaskRetrieval):
-        from mteb.types import PromptType
-
-        query_mods = set(task.metadata.get_modalities(PromptType.query))
-        doc_mods = set(task.metadata.get_modalities(PromptType.document))
-        return bool(model_mods & query_mods) and bool(model_mods & doc_mods)
     return task_mods.issubset(model_mods)
 
 
