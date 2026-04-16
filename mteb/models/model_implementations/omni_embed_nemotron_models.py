@@ -133,21 +133,28 @@ class OmniEmbedNemotronWrapper(AbsEncoder):
         applies its own resize. Without this, the processor's single-stage
         resize produces different aspect ratios for certain resolutions.
         """
-        from torchvision.transforms.functional import resize, InterpolationMode
+        from torchvision.transforms.functional import InterpolationMode, resize
         from transformers.models.qwen2_vl.image_processing_qwen2_vl import (
             smart_resize,
         )
 
-        _PATCH_SIZE = 14
-        _MERGE_SIZE = 2
-        _FACTOR = _PATCH_SIZE * _MERGE_SIZE  # 28
-        _MIN_PIXELS = 128 * _FACTOR * _FACTOR  # 100352
-        _MAX_PIXELS = 768 * _FACTOR * _FACTOR  # 602112
+        patch_size = 14
+        merge_size = 2
+        factor = patch_size * merge_size  # 28
+        min_pixels = 128 * factor * factor  # 100352
+        max_pixels = 768 * factor * factor  # 602112
 
         _, _, h, w = video.shape
-        new_h, new_w = smart_resize(h, w, factor=_FACTOR, min_pixels=_MIN_PIXELS, max_pixels=_MAX_PIXELS)
+        new_h, new_w = smart_resize(
+            h, w, factor=factor, min_pixels=min_pixels, max_pixels=max_pixels
+        )
         if new_h != h or new_w != w:
-            video = resize(video, [new_h, new_w], interpolation=InterpolationMode.BICUBIC, antialias=True)
+            video = resize(
+                video,
+                [new_h, new_w],
+                interpolation=InterpolationMode.BICUBIC,
+                antialias=True,
+            )
         return video
 
     def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
@@ -174,7 +181,8 @@ class OmniEmbedNemotronWrapper(AbsEncoder):
         audio_inputs = [a for a in batch_audio if a is not None] or None
         video_inputs = [
             self._resize_video(v) if isinstance(v, torch.Tensor) else v
-            for v in batch_video if v is not None
+            for v in batch_video
+            if v is not None
         ] or None
         image_inputs = [img for img in batch_images if img is not None] or None
 
@@ -267,11 +275,19 @@ omni_embed_nemotron_3b = ModelMeta(
         "HotpotQA",
         "MIRACLRetrieval",
         "NQ",
+        "VidoreArxivQARetrieval",
+        "VidoreDocVQARetrieval",
+        "VidoreInfoVQARetrieval",
+        "VidoreTabfquadRetrieval",
+        "VidoreTatdqaRetrieval",
+        "VidoreShiftProjectRetrieval",
+        "VidoreSyntheticDocQAAIRetrieval",
+        "VidoreSyntheticDocQAEnergyRetrieval",
+        "VidoreSyntheticDocQAGovernmentReportsRetrieval",
+        "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
         # "SQuAD",  # not directly in MTEB as retrieval task
         # "Stack Exchange",  # not directly in MTEB as retrieval task
-        # "Tiger Math/Stack",  # not in MTEB
         # "DocMatix-IR",  # not in MTEB
-        # "Vidore-ColPali-Training",  # not in MTEB
         # "Wiki-SS-NQ",  # not in MTEB
     },
     adapted_from="Qwen/Qwen2.5-Omni-3B",
