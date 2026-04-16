@@ -7,7 +7,11 @@ from mteb.get_tasks import get_tasks
 
 # Historic datasets without filled metadata. Do NOT add new datasets to this list.
 # Tasks should be removed from this list once their metadata is filled.
-_HISTORIC_DATASETS = []
+_HISTORIC_DATASETS = [
+    "Kinetics400V",
+    "Kinetics400VA",
+    "Kinetics400ZeroShot",
+]
 
 
 @pytest.mark.parametrize(
