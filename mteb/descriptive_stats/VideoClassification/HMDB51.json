@@ -1,0 +1,338 @@
+{
+    "test": {
+        "num_samples": 1530,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 51,
+            "labels": {
+                "0": {
+                    "count": 30
+                },
+                "1": {
+                    "count": 30
+                },
+                "2": {
+                    "count": 30
+                },
+                "3": {
+                    "count": 30
+                },
+                "4": {
+                    "count": 30
+                },
+                "5": {
+                    "count": 30
+                },
+                "6": {
+                    "count": 30
+                },
+                "7": {
+                    "count": 30
+                },
+                "8": {
+                    "count": 30
+                },
+                "9": {
+                    "count": 30
+                },
+                "10": {
+                    "count": 30
+                },
+                "11": {
+                    "count": 30
+                },
+                "12": {
+                    "count": 30
+                },
+                "13": {
+                    "count": 30
+                },
+                "14": {
+                    "count": 30
+                },
+                "15": {
+                    "count": 30
+                },
+                "16": {
+                    "count": 30
+                },
+                "17": {
+                    "count": 30
+                },
+                "18": {
+                    "count": 30
+                },
+                "19": {
+                    "count": 30
+                },
+                "20": {
+                    "count": 30
+                },
+                "21": {
+                    "count": 30
+                },
+                "22": {
+                    "count": 30
+                },
+                "23": {
+                    "count": 30
+                },
+                "24": {
+                    "count": 30
+                },
+                "25": {
+                    "count": 30
+                },
+                "26": {
+                    "count": 30
+                },
+                "27": {
+                    "count": 30
+                },
+                "28": {
+                    "count": 30
+                },
+                "29": {
+                    "count": 30
+                },
+                "30": {
+                    "count": 30
+                },
+                "31": {
+                    "count": 30
+                },
+                "32": {
+                    "count": 30
+                },
+                "33": {
+                    "count": 30
+                },
+                "34": {
+                    "count": 30
+                },
+                "35": {
+                    "count": 30
+                },
+                "36": {
+                    "count": 30
+                },
+                "37": {
+                    "count": 30
+                },
+                "38": {
+                    "count": 30
+                },
+                "39": {
+                    "count": 30
+                },
+                "40": {
+                    "count": 30
+                },
+                "41": {
+                    "count": 30
+                },
+                "42": {
+                    "count": 30
+                },
+                "43": {
+                    "count": 30
+                },
+                "44": {
+                    "count": 30
+                },
+                "45": {
+                    "count": 30
+                },
+                "46": {
+                    "count": 30
+                },
+                "47": {
+                    "count": 30
+                },
+                "48": {
+                    "count": 30
+                },
+                "49": {
+                    "count": 30
+                },
+                "50": {
+                    "count": 30
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 3570,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 51,
+            "labels": {
+                "0": {
+                    "count": 70
+                },
+                "1": {
+                    "count": 70
+                },
+                "2": {
+                    "count": 70
+                },
+                "3": {
+                    "count": 70
+                },
+                "4": {
+                    "count": 70
+                },
+                "5": {
+                    "count": 70
+                },
+                "6": {
+                    "count": 70
+                },
+                "7": {
+                    "count": 70
+                },
+                "8": {
+                    "count": 70
+                },
+                "9": {
+                    "count": 70
+                },
+                "10": {
+                    "count": 70
+                },
+                "11": {
+                    "count": 70
+                },
+                "12": {
+                    "count": 70
+                },
+                "13": {
+                    "count": 70
+                },
+                "14": {
+                    "count": 70
+                },
+                "15": {
+                    "count": 70
+                },
+                "16": {
+                    "count": 70
+                },
+                "17": {
+                    "count": 70
+                },
+                "18": {
+                    "count": 70
+                },
+                "19": {
+                    "count": 70
+                },
+                "20": {
+                    "count": 70
+                },
+                "21": {
+                    "count": 70
+                },
+                "22": {
+                    "count": 70
+                },
+                "23": {
+                    "count": 70
+                },
+                "24": {
+                    "count": 70
+                },
+                "25": {
+                    "count": 70
+                },
+                "26": {
+                    "count": 70
+                },
+                "27": {
+                    "count": 70
+                },
+                "28": {
+                    "count": 70
+                },
+                "29": {
+                    "count": 70
+                },
+                "30": {
+                    "count": 70
+                },
+                "31": {
+                    "count": 70
+                },
+                "32": {
+                    "count": 70
+                },
+                "33": {
+                    "count": 70
+                },
+                "34": {
+                    "count": 70
+                },
+                "35": {
+                    "count": 70
+                },
+                "36": {
+                    "count": 70
+                },
+                "37": {
+                    "count": 70
+                },
+                "38": {
+                    "count": 70
+                },
+                "39": {
+                    "count": 70
+                },
+                "40": {
+                    "count": 70
+                },
+                "41": {
+                    "count": 70
+                },
+                "42": {
+                    "count": 70
+                },
+                "43": {
+                    "count": 70
+                },
+                "44": {
+                    "count": 70
+                },
+                "45": {
+                    "count": 70
+                },
+                "46": {
+                    "count": 70
+                },
+                "47": {
+                    "count": 70
+                },
+                "48": {
+                    "count": 70
+                },
+                "49": {
+                    "count": 70
+                },
+                "50": {
+                    "count": 70
+                }
+            }
+        }
+    }
+}
