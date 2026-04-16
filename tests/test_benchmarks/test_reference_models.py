@@ -6,7 +6,8 @@ import pytest
 
 import mteb
 from mteb import BenchmarkResults, ResultCache
-from mteb.abstasks import AbsTaskRetrieval
+from mteb.evaluate import _check_model_modalities
+from mteb.models.get_model_meta import get_model_meta
 
 logging.basicConfig(level=logging.INFO)
 
@@ -17,28 +18,10 @@ REFERENCE_MODELS = [
     "mteb/baseline-bm25s",
 ]
 
-# Models that can only run retrieval tasks
-RETRIEVAL_ONLY_MODELS = {"mteb/baseline-bm25s"}
-
-
-def _get_target_benchmarks():
-    """Get all benchmarks displayed on the leaderboard.
-
-    Uses display_on_leaderboard flag, which is kept in sync with
-    benchmark_selector.py (see PR #4288).
-    Task-level filtering (text-only, retrieval-only) is handled in
-    _get_expected_task_names, so no benchmark-level exclusions are needed.
-    """
-    return mteb.get_benchmarks(display_on_leaderboard=True)
-
-
-def _is_text_only_task(task):
-    """Check if a task uses only text modalities."""
-    return task.metadata.modalities == ["text"]
-
 
 def _get_expected_task_names(benchmark, model_name):
-    """Get public task names, filtering by model capabilities."""
+    """Get public task names compatible with the model's modalities."""
+    model_meta = get_model_meta(model_name)
     task_names = []
     benchmark_tasks = []
     for task in benchmark.tasks:
@@ -49,11 +32,9 @@ def _get_expected_task_names(benchmark, model_name):
     for task in benchmark_tasks:
         if not task.metadata.is_public:
             continue
-        if not _is_text_only_task(task):
-            continue
-        if model_name in RETRIEVAL_ONLY_MODELS and not isinstance(
-            task, AbsTaskRetrieval
-        ):
+        try:
+            _check_model_modalities(model_meta, task)
+        except ValueError:
             continue
         task_names.append(task.metadata.name)
     return task_names
