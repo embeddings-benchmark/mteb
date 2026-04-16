@@ -41,6 +41,7 @@ class WorldSense1MinDomainClustering(AbsTaskClustering):
   url = {https://arxiv.org/abs/2502.04326},
 }
 """,
+        is_beta=True,
     )
     max_fraction_of_documents_to_embed = None
     input_column_name = ("video", "audio")
