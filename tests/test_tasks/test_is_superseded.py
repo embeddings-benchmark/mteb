@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 def test_superseded_dataset_exists():
-    tasks = mteb.get_tasks(exclude_superseded=False)
+    tasks = mteb.get_tasks(exclude_superseded=False, exclude_beta=False)
     for task in tasks:
         if task.superseded_by:
             assert task.superseded_by in _TASKS_REGISTRY, (

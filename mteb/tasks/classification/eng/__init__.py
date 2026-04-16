@@ -73,6 +73,7 @@ from .hume_tweet_sentiment_extraction_classification import (
 )
 from .imagenet1k import Imagenet1kClassification
 from .imdb_classification import ImdbClassification, ImdbClassificationV2
+from .kinetics400 import Kinetics400VAClassification, Kinetics400VClassification
 from .legal_bench_classification import (
     CanadaTaxCourtOutcomesLegalBenchClassification,
     ContractNLIConfidentialityOfAgreementLegalBenchClassification,
@@ -405,6 +406,8 @@ __all__ = [
     "InternationalCitizenshipQuestionsLegalBenchClassification",
     "JCrewBlockerLegalBenchClassification",
     "JCrewBlockerLegalBenchClassificationV2",
+    "Kinetics400VAClassification",
+    "Kinetics400VClassification",
     "LearnedHandsBenefitsLegalBenchClassification",
     "LearnedHandsBusinessLegalBenchClassification",
     "LearnedHandsConsumerLegalBenchClassification",

@@ -30,6 +30,7 @@ class MSRVTTV2T(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
+        is_beta=True,
     )
 
     input_column_name = ("video", "audio")
