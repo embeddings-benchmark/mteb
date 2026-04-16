@@ -15,7 +15,8 @@ _HISTORIC_DATASETS = [
 
 
 @pytest.mark.parametrize(
-    "task", get_tasks(exclude_superseded=False, exclude_aggregate=False, exclude_beta=False)
+    "task",
+    get_tasks(exclude_superseded=False, exclude_aggregate=False, exclude_beta=False),
 )
 def test_all_metadata_is_filled_and_valid(task: AbsTask):
     # --- test metadata is filled and valid ---
