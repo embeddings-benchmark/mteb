@@ -103,7 +103,7 @@ BIDIRLM_OMNI_LANGUAGES = [
     "wol-Latn",
     "xho-Latn",
     "yor-Latn",
-    "cmn-Hans",
+    "zho-Hans",
     "zul-Latn",
 ]
 
@@ -119,7 +119,6 @@ BIDIRLM_OMNI_CITATION = """@misc{boizard2026bidirlmtextomnimodalbidirectional,
 
 BIDIRLM_OMNI_TRAINING_DATASETS = {
     "AFQMC",
-    "OPUS-100",
     "AdvertiseGen",
     "CAIL2019-SCM",
     "CHEF",
@@ -127,6 +126,7 @@ BIDIRLM_OMNI_TRAINING_DATASETS = {
     "ChatMed_Consult_Dataset",
     "ChineseSTS",
     "CodeFeedback",
+    "DRCD",
     "ELI5_custom",
     "EmotionClassification",
     "Expertqa",
@@ -137,48 +137,49 @@ BIDIRLM_OMNI_TRAINING_DATASETS = {
     "LAION-Audio-300M",
     "LCSTS",
     "MS_COCO",
-    "MEDI2BGE",
-    "MIRACL",
     "MAmmoTH2",
+    "MEDI2BGE",
+    "MIRACLRetrieval",
     "MSMARCO",
     "Multi-CPR",
-    "NaturalQuestions",
     "NFCorpus",
+    "NaturalQuestions",
+    "OPUS-100",
     "OpenOrca",
     "PAQ",
     "PubMedQA",
     "QBQTC",
     "RefGPT",
+    "SQuAD",
     "SearchQA",
     "SimCLUE",
-    "SQuAD",
     "SyntheticClassificationData",
     "T2Ranking",
-    "THUCNews",
     "TED Talks",
+    "THUCNews",
     "TriviaQA",
     "UMETRIP-QA",
     "WebCPM",
     "WikiAnswers",
     "WikiMatrix",
-    "atec",
-    "bq",
+    "ATEC",
+    "BQ",
     "cCOVID-News",
-    "cMedQA-V2.0",
+    "CmedqaRetrieval",
     "ccnews",
-    "cmnli",
+    "Cmnli",
     "cmrc2018",
     "colpali_train_set",
     "contract-nli",
     "csl",
-    "dureader",
+    "DuRetrieval",
     "dureader_mrc",
-    "esci",
+    "ESCIReranking",
     "law-gpt",
     "lawzhidao",
     "librispeech_asr",
     "lima-chinese",
-    "mldr",
+    "MultiLongDocReranking",
     "mmarco-chinese",
     "mnli",
     "natcap",
@@ -192,7 +193,6 @@ BIDIRLM_OMNI_TRAINING_DATASETS = {
     "wikipedia-nq",
     "xnli_zh",
     "yahoo-answers",
-    "DRCD",
 }
 
 _TASK_PROMPTS: dict[str, str | dict[str, str]] = {
@@ -551,7 +551,7 @@ class BidirLMOmniEncoder(AbsEncoder):
         # Asymmetric retrieval: documents get no instruction unless the prompt
         # dict explicitly provides a "passage" key.
         if (
-            ("Retrieval" in task_type or "Reranking" in task_type)
+            task_metadata.simplified_task_type == "retrieval"
             and prompt_type == PromptType.document
             and not (isinstance(entry, dict) and "passage" in entry)
         ):
@@ -613,9 +613,7 @@ class BidirLMOmniEncoder(AbsEncoder):
         return self.model.encode(
             all_inputs,
             prompt=instruction,
-            batch_size=kwargs["batch_size"],
-            show_progress_bar=kwargs["show_progress_bar"],
-            convert_to_numpy=True,
+            **kwargs,
         )
 
 
