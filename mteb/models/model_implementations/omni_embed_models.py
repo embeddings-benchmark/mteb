@@ -41,9 +41,9 @@ class OmniEmbedWrapper(AbsEncoder):
         requires_image_dependencies()
         requires_audio_dependencies()
         requires_package(
-            self, "qwen_omni_utils", model_name, "pip install mteb[qwen_omni_utils]"
+            self, "qwen_omni_utils", model_name, "pip install 'mteb[qwen_omni_utils]'"
         )
-        requires_package(self, "peft", model_name, "pip install peft")
+        requires_package(self, "peft", model_name, "pip install 'mteb[peft]'")
         from transformers import (
             AutoProcessor,
             Qwen2_5OmniThinkerForConditionalGeneration,
