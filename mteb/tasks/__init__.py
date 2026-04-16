@@ -14,3 +14,4 @@ from .retrieval import *
 from .sts import *
 from .summarization import *
 from .zeroshot_classification import *
+from .video import *
