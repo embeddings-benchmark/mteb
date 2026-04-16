@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 from tqdm.auto import tqdm
-
 from transformers.modeling_outputs import BaseModelOutputWithPooling
 
 from mteb._requires_package import requires_package
