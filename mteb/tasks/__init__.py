@@ -13,5 +13,4 @@ from .reranking import *
 from .retrieval import *
 from .sts import *
 from .summarization import *
-from .video import *
 from .zeroshot_classification import *
