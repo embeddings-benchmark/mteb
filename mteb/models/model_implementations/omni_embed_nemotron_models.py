@@ -9,7 +9,6 @@ from mteb._create_dataloaders import AudioCollator, VideoCollator
 from mteb._requires_package import (
     requires_audio_dependencies,
     requires_image_dependencies,
-    requires_package,
 )
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -40,9 +39,6 @@ class OmniEmbedNemotronWrapper(AbsEncoder):
     ) -> None:
         requires_image_dependencies()
         requires_audio_dependencies()
-        requires_package(
-            self, "qwen_omni_utils", model_name, "pip install mteb[qwen_omni_utils]"
-        )
         from transformers import AutoModel, AutoProcessor
 
         self.device = device or (
@@ -71,18 +67,6 @@ class OmniEmbedNemotronWrapper(AbsEncoder):
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
     @staticmethod
-    def _frames_to_pil_list(frames: torch.Tensor) -> list[Any]:
-        """Convert a (num_frames, C, H, W) tensor to a list of PIL images."""
-        from PIL import Image
-
-        pil_frames = []
-        for frame in frames:
-            # frame shape: (C, H, W), values in [0, 255] uint8
-            np_frame = frame.permute(1, 2, 0).cpu().numpy().astype("uint8")
-            pil_frames.append(Image.fromarray(np_frame))
-        return pil_frames
-
-    @staticmethod
     def _build_messages(
         batch_texts: list[str],
         batch_images: list[Any],
@@ -101,11 +85,6 @@ class OmniEmbedNemotronWrapper(AbsEncoder):
 
             content: list[dict[str, Any]] = []
             if video_content is not None:
-                # process_mm_info expects video as a list of PIL images
-                if isinstance(video_content, torch.Tensor):
-                    video_content = OmniEmbedNemotronWrapper._frames_to_pil_list(
-                        video_content
-                    )
                 content.append({"type": "video", "video": video_content})
             if audio_content is not None:
                 content.append({"type": "audio", "audio": audio_content})
@@ -145,13 +124,43 @@ class OmniEmbedNemotronWrapper(AbsEncoder):
                 batch_audio.append(array)
         return batch_audio
 
-    def _encode_batch(self, batch: BatchedInput, process_mm_info: Any) -> torch.Tensor:
+    @staticmethod
+    def _resize_video(video: torch.Tensor) -> torch.Tensor:
+        """Pre-resize video frames to match the model card's expected input range.
+
+        Replicates the smart_resize step from qwen_omni_utils.process_mm_info
+        which constrains frames to 100352-602112 pixels before the processor
+        applies its own resize. Without this, the processor's single-stage
+        resize produces different aspect ratios for certain resolutions.
+        """
+        from torchvision.transforms.functional import resize, InterpolationMode
+        from transformers.models.qwen2_vl.image_processing_qwen2_vl import (
+            smart_resize,
+        )
+
+        _PATCH_SIZE = 14
+        _MERGE_SIZE = 2
+        _FACTOR = _PATCH_SIZE * _MERGE_SIZE  # 28
+        _MIN_PIXELS = 128 * _FACTOR * _FACTOR  # 100352
+        _MAX_PIXELS = 768 * _FACTOR * _FACTOR  # 602112
+
+        _, _, h, w = video.shape
+        new_h, new_w = smart_resize(h, w, factor=_FACTOR, min_pixels=_MIN_PIXELS, max_pixels=_MAX_PIXELS)
+        if new_h != h or new_w != w:
+            video = resize(video, [new_h, new_w], interpolation=InterpolationMode.BICUBIC, antialias=True)
+        return video
+
+    def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
         """Encode a single batch into normalized embeddings."""
+        batch_audio = self._prepare_audio(batch.get("audio", []))
+        batch_images = batch.get("image", [])
+        batch_video = batch.get("video", [])
+
         messages = self._build_messages(
             batch_texts=batch.get("text", []),
-            batch_images=batch.get("image", []),
-            batch_audio=self._prepare_audio(batch.get("audio", [])),
-            batch_video=batch.get("video", []),
+            batch_images=batch_images,
+            batch_audio=batch_audio,
+            batch_video=batch_video,
         )
 
         texts = [
@@ -161,18 +170,25 @@ class OmniEmbedNemotronWrapper(AbsEncoder):
             for msg in messages
         ]
 
-        audio_inputs, image_inputs, video_inputs = process_mm_info(
-            messages, use_audio_in_video=False
-        )
+        # Collect non-None media inputs for the processor.
+        audio_inputs = [a for a in batch_audio if a is not None] or None
+        video_inputs = [
+            self._resize_video(v) if isinstance(v, torch.Tensor) else v
+            for v in batch_video if v is not None
+        ] or None
+        image_inputs = [img for img in batch_images if img is not None] or None
 
         model_inputs = self.processor(
             text=texts,
             audio=audio_inputs,
             images=image_inputs,
             videos=video_inputs,
-            padding=True,
             return_tensors="pt",
             text_kwargs={"truncation": True, "padding": True, "max_length": 204800},
+            images_kwargs={
+                "min_pixels": 196,
+                "max_pixels": 2352,
+            },
             videos_kwargs={
                 "min_pixels": 32 * 14 * 14,
                 "max_pixels": 64 * 28 * 28,
@@ -203,8 +219,6 @@ class OmniEmbedNemotronWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        from qwen_omni_utils import process_mm_info
-
         if "video" in inputs.dataset.features or "audio" in inputs.dataset.features:
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=self.sampling_rate,
@@ -214,7 +228,7 @@ class OmniEmbedNemotronWrapper(AbsEncoder):
 
         all_embeddings: list[torch.Tensor] = []
         for batch in tqdm(inputs, desc="Encoding"):
-            all_embeddings.append(self._encode_batch(batch, process_mm_info).cpu())
+            all_embeddings.append(self._encode_batch(batch).cpu())
 
         return torch.cat(all_embeddings, dim=0).float()
 
