@@ -365,6 +365,7 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {  # type: ig
     "AudioZeroshotClassification": "classification",
     "AudioClassification": "classification",
     "ImageClassification": "classification",
+    "VideoClassification": "classification",
     "ZeroShotClassification": "classification",
     "MultilabelClassification": "classification",
     "Classification": "classification",
@@ -964,6 +965,8 @@ class TaskMetadata(BaseModel):
             "AudioZeroshotClassification": ["other"],
             "AudioClassification": ["audio-classification"],
             "AudioPairClassification": ["audio-classification"],
+            # video
+            "VideoClassification": ["video-classification"]
         }
         if self.type == "ZeroShotClassification":
             if self.modalities == ["image"]:
