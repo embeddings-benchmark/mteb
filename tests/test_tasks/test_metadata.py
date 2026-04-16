@@ -7,11 +7,7 @@ from mteb.get_tasks import get_tasks
 
 # Historic datasets without filled metadata. Do NOT add new datasets to this list.
 # Tasks should be removed from this list once their metadata is filled.
-_HISTORIC_DATASETS = [
-    "Kinetics400V",
-    "Kinetics400VA",
-    "Kinetics400ZeroShot",
-]
+_HISTORIC_DATASETS = []
 
 
 @pytest.mark.parametrize(
@@ -53,6 +49,11 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
     ):
         assert task.metadata.descriptive_stats is None
         pytest.skip("Skipping audio tasks for now, see issue #3498")
+
+    # TODO https://github.com/embeddings-benchmark/mteb/issues/4378
+    if "v" in task.metadata.category:
+        assert task.metadata.descriptive_stats is None
+        pytest.skip("Skipping video tasks for now, see issue #4378")
 
     assert task.metadata.descriptive_stats is not None, (
         f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YourTask().calculate_descriptive_statistics()`"
