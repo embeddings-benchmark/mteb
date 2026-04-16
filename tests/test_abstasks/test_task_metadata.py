@@ -4,7 +4,6 @@ import pytest
 from pydantic import ValidationError
 
 import mteb
-from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from tests.task_grid import (
     MOCK_MAEB_TASK_GRID,
@@ -265,7 +264,3 @@ def test_task_hf_config_from_existing():
 
     assert any(t.id == "MIRACLRetrievalHardNegatives" for t in config2.tasks)
     assert any(t.id == "MIRACLRetrievalHardNegatives.v2" for t in config2.tasks)
-
-@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
-def test_is_beta_gives_warning(task: AbsTask) -> None:
-    

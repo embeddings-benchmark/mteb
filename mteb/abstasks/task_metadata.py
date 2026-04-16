@@ -439,7 +439,7 @@ class TaskMetadata(BaseModel):
             where it may be harder to gather information about the source.
         superseded_by: Denotes the task that this task is superseded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
-        is_beta: Whether the dataset is in beta. This can be used to denote that the dataset is still being verified and may contain errors. 
+        is_beta: Whether the dataset is in beta. This can be used to denote that the dataset is still being verified and may contain errors.
             Users should be cautious when using beta datasets. We generally recommend against using beta datasets in published benchmarks, but they can be useful for internal testing and development. We
             similarly discourage contributing beta datasets, unless there is a specific reason to do so.
     """
@@ -474,7 +474,7 @@ class TaskMetadata(BaseModel):
     is_public: bool = True
     contributed_by: str | None = None
     superseded_by: str | None = None
-    
+
     is_beta: bool = False
 
     def _validate_metadata(self) -> None:

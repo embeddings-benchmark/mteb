@@ -41,7 +41,7 @@ class RAVDESSAVClustering(AbsTaskClustering):
   year = {2018},
 }
 """,
-    is_beta=True,
+        is_beta=True,
     )
     max_fraction_of_documents_to_embed = None
     input_column_name = ("video", "audio")

@@ -70,7 +70,6 @@ def filter_tasks(
     exclude_aggregate: bool = False,
     exclude_private: bool = False,
     exclude_beta: bool = False,
-    exlude_beta: bool = False,
 ) -> list[type[AbsTask]]: ...
 
 
