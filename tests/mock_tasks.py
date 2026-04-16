@@ -22,7 +22,8 @@ from mteb.abstasks.multilabel_classification import (
 )
 from mteb.abstasks.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.regression import AbsTaskRegression
-from mteb.abstasks.retrieval import AbsTaskRetrieval, RetrievalSplitData
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
