@@ -1,0 +1,35 @@
+{
+  "dataset_revision": "10c7ce0eb32d620f1f685bfedde2724066068a1c",
+  "task_name": "WorldSense1MinDomainClustering",
+  "mteb_version": "2.12.19",
+  "scores": {
+    "test": [
+      {
+        "v_measures": {
+          "Level 0": [
+            0.378611,
+            0.37557,
+            0.412776,
+            0.385364,
+            0.41144,
+            0.429574,
+            0.380891,
+            0.394853,
+            0.409198,
+            0.384622
+          ]
+        },
+        "v_measure": 0.39629,
+        "v_measure_std": 0.017356,
+        "main_score": 0.39629,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ]
+      }
+    ]
+  },
+  "evaluation_time": 6887.359404087067,
+  "kg_co2_emissions": null,
+  "date": 1776366338.845391
+}
