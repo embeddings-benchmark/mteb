@@ -3,8 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-# Train rows whose embedded video bytes fail torchcodec decode on revision below (Hub parquet).
-_BAD_VIDEO_TRAIN_INDICES: frozenset[int] = frozenset({2555, 3476})
 
 
 class HMDB51Classification(AbsTaskClassification):
