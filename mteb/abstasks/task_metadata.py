@@ -476,8 +476,6 @@ class TaskMetadata(BaseModel):
     superseded_by: str | None = None
     is_beta: bool = False
 
-    is_beta: bool = False
-
     def _validate_metadata(self) -> None:
         self._eval_langs_are_valid(self.eval_langs)
 
