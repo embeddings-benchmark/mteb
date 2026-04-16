@@ -6,7 +6,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class HMDB51Classification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="HMDB51",
+        name="HMDB51Classification",
         description="HMDB51 is a large video database for human motion recognition with 51 action categories from digitized movies and online sources.",
         reference="https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/",
         dataset={
