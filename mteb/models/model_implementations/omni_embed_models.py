@@ -49,7 +49,7 @@ class OmniEmbedWrapper(AbsEncoder):
             Qwen2_5OmniThinkerForConditionalGeneration,
         )
 
-        BASE_MODEL = "Qwen/Qwen2.5-Omni-7B"
+        base_model = "Qwen/Qwen2.5-Omni-7B"
 
         self.device = device or (
             "cuda"
@@ -61,14 +61,18 @@ class OmniEmbedWrapper(AbsEncoder):
         self.max_audio_length = max_audio_length
         self.num_frames = num_frames
 
-        self.model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(
-            model_name,
-            attn_implementation="sdpa",
-            torch_dtype=torch.bfloat16,
-            **kwargs,
-        ).to(self.device).eval()
+        self.model = (
+            Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(
+                model_name,
+                attn_implementation="sdpa",
+                torch_dtype=torch.bfloat16,
+                **kwargs,
+            )
+            .to(self.device)
+            .eval()
+        )
 
-        self.processor = AutoProcessor.from_pretrained(BASE_MODEL)
+        self.processor = AutoProcessor.from_pretrained(base_model)
         self.processor.tokenizer.padding_side = "left"
         self.model.padding_side = "left"
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
