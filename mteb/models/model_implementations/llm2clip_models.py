@@ -35,6 +35,7 @@ MODEL2PROCESSOR = {
 def llm2clip_loader(model_name, **kwargs):
     from llm2vec import LLM2Vec
     from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcessor
+    from transformers.modeling_outputs import BaseModelOutputWithPooling
 
     class LLM2CLIPAbsEncoder(AbsEncoder):
         def __init__(
@@ -108,6 +109,8 @@ def llm2clip_loader(model_name, **kwargs):
                         batch["text"], convert_to_tensor=True
                     ).to(self.device)
                     text_features = self.model.get_text_features(text_features)
+                    if isinstance(text_features, BaseModelOutputWithPooling):
+                        text_features = text_features.pooler_output
                     text_features /= text_features.norm(dim=-1, keepdim=True)
                     all_text_embeddings.append(text_features.cpu().to(torch.float32))
 
@@ -132,6 +135,8 @@ def llm2clip_loader(model_name, **kwargs):
                         return_tensors="pt",
                     ).pixel_values.to(self.device)
                     image_features = self.model.get_image_features(input_pixels)
+                    if isinstance(image_features, BaseModelOutputWithPooling):
+                        image_features = image_features.pooler_output
                     image_features /= image_features.norm(dim=-1, keepdim=True)
                     all_image_embeddings.append(image_features.cpu().to(torch.float32))
 

@@ -11,7 +11,8 @@ _HISTORIC_DATASETS = []
 
 
 @pytest.mark.parametrize(
-    "task", get_tasks(exclude_superseded=False, exclude_aggregate=False)
+    "task",
+    get_tasks(exclude_superseded=False, exclude_aggregate=False, exclude_beta=False),
 )
 def test_all_metadata_is_filled_and_valid(task: AbsTask):
     # --- test metadata is filled and valid ---
@@ -48,6 +49,11 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
     ):
         assert task.metadata.descriptive_stats is None
         pytest.skip("Skipping audio tasks for now, see issue #3498")
+
+    # TODO https://github.com/embeddings-benchmark/mteb/issues/4378
+    if "v" in task.metadata.category:
+        assert task.metadata.descriptive_stats is None
+        pytest.skip("Skipping video tasks for now, see issue #4378")
 
     assert task.metadata.descriptive_stats is not None, (
         f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YourTask().calculate_descriptive_statistics()`"
