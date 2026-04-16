@@ -653,7 +653,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 else None,
                 framework=["Sentence Transformers", "PyTorch"],
                 n_embedding_parameters=n_embedding_parameters,
-                adapted_from=_get_source_model(model.model_card_data),
+                adapted_from=_get_source_model(model.model_card_data)
+                if hasattr(model, "model_card_data")
+                else None,
             )
         )
 
@@ -707,7 +709,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 n_embedding_parameters=cls._get_n_embedding_parameters_from_sentence_transformers(
                     model
                 ),
-                adapted_from=_get_source_model(model.model_card_data),
+                adapted_from=_get_source_model(model.model_card_data)
+                if hasattr(model, "model_card_data")
+                else None,
             )
         )
 
