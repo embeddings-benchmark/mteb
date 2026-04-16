@@ -490,6 +490,7 @@ Once added, here is a checklist to ensure that everything works before you submi
   - [ ] `intfloat/multilingual-e5-small` or another small model
 - [ ] I have checked that the performance is neither trivial (close to perfect scores) nor random.
 - [ ] I have considered the size of the dataset and reduced it if it is too big (e.g. 2048 examples for binary classification)
+- [ ] I reproduced scores from the original paper (if applicable) and added them to the PR description for reference.
 ```
 
 An easy way to test it is using:
