@@ -10,6 +10,7 @@ from .fgvc_aircraft import FGVCAircraftZeroShotClassification
 from .food101 import Food101ZeroShotClassification
 from .gtsrb import GTSRBZeroShotClassification
 from .imagenet1k import Imagenet1kZeroShotClassification
+from .kinetics400 import Kinetics400ZeroShotClassification
 from .mnist import MNISTZeroShotClassification
 from .oxford_pets import OxfordPetsZeroShotClassification
 from .patch_camelyon import PatchCamelyonZeroShotClassification
@@ -41,6 +42,7 @@ __all__ = [
     "Food101ZeroShotClassification",
     "GTSRBZeroShotClassification",
     "Imagenet1kZeroShotClassification",
+    "Kinetics400ZeroShotClassification",
     "MNISTZeroShotClassification",
     "OxfordPetsZeroShotClassification",
     "PatchCamelyonZeroShotClassification",
