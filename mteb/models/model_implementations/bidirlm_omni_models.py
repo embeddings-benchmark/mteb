@@ -11,9 +11,8 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
-    from typing_extensions import Unpack
-
     from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs
@@ -561,10 +560,12 @@ class BidirLMOmniEncoder(AbsEncoder):
         if entry is not None:
             if isinstance(entry, dict):
                 key = prompt_type.value if prompt_type else "query"
-                return entry.get(key, entry.get("query")) or None
-            return entry
+                instruction = entry.get(key, entry.get("query")) or None
+            else:
+                instruction = entry
+            return instruction
 
-        if task_type in ("STS", "PairClassification"):
+        if task_type in {"STS", "PairClassification"}:
             return "Retrieve semantically similar text"
         if task_type == "BitextMining":
             return "Retrieve parallel sentences"
