@@ -186,6 +186,7 @@ When submitting you models as a PR, please copy and paste the following checklis
   - [ ] `mteb.get_model_meta(model_name, revision)`
 - [ ] I have tested the implementation works on a representative set of tasks.
 - [ ] The model is public, i.e., is available either as an API or the weights are publicly available to download
+- [ ] I reproduced results from the original paper (if applicable) on at least one benchmark, and I am including the results in the PR description.
 ```
 
 
