@@ -225,3 +225,9 @@ def test_no_duplicate_citations_with_different_ids():
             for i, (item1, item2, id1, id2, title1, title2) in enumerate(duplicates, 1)
         )
     )
+
+
+def test_get_tasks_warning_with_beta_tasks():
+    """Test that get_tasks gives a warning when beta tasks are included"""
+    with pytest.warns(UserWarning, match="is currently in beta"):
+        get_tasks(exclude_beta=False)

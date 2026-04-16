@@ -115,14 +115,14 @@ class AbsTask(ABC):  # noqa: PLR0904
         self.hf_subsets = self.metadata.hf_subsets
 
         if self.metadata.is_beta:
-            msg = f"Dataset '{self.metadata.name}' is currently in beta. This means that the dataset is still being tested and may be subject to changes. This means that the scores of this dataset is liable to change and should be used with caution."
+            msg = f"The task '{self.metadata.name}' is currently in beta. This means that the dataset is still being tested and may be subject to changes. This means that the scores of this dataset is liable to change and should be used with caution."
             logger.warning(msg)
             warnings.warn(msg)
 
     def check_if_dataset_is_superseded(self) -> None:
         """Check if the dataset is superseded by a newer version."""
         if self.superseded_by:
-            msg = f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}'. We recommend using the newer version of the dataset unless you are running a specific benchmark. See `get_task('{self.superseded_by}').metadata.description` to get a description of the task and changes."
+            msg = f"The task '{self.metadata.name}' is superseded by '{self.superseded_by}'. We recommend using the newer version of the task unless you are running a specific benchmark. See `get_task('{self.superseded_by}').metadata.description` to get a description of the task and changes."
             logger.warning(msg)
             warnings.warn(msg)
 
