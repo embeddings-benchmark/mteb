@@ -25,7 +25,7 @@ class WorldSense1MinDomainClustering(AbsTaskClustering):
         date=("2025-01-01", "2025-12-31"),
         domains=["Scene", "Web", "Entertainment"],
         task_subtypes=["Thematic clustering"],
-        license="not specified",
+        license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["video", "audio"],
