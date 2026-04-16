@@ -6,6 +6,7 @@ import pytest
 
 import mteb
 from mteb import BenchmarkResults, ResultCache
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.models.get_model_meta import get_model_meta
 
 logging.basicConfig(level=logging.INFO)
@@ -17,19 +18,15 @@ REFERENCE_MODELS = [
     "mteb/baseline-bm25s",
 ]
 
-
-def _is_task_compatible(task, model_meta):
-    """Check if a task is fully compatible with the model based on modalities."""
-    if model_meta.modalities is None:
-        return True
-    model_mods = set(model_meta.modalities)
-    task_mods = set(task.metadata.modalities)
-    return task_mods.issubset(model_mods)
+# Models that implement SearchProtocol only (retrieval/reranking tasks)
+RETRIEVAL_ONLY_MODELS = {"mteb/baseline-bm25s"}
 
 
 def _get_expected_task_names(benchmark, model_name):
-    """Get public task names compatible with the model's modalities."""
+    """Get public task names compatible with the model's capabilities."""
     model_meta = get_model_meta(model_name)
+    model_mods = set(model_meta.modalities) if model_meta.modalities else None
+    is_retrieval_only = model_name in RETRIEVAL_ONLY_MODELS
     task_names = []
     benchmark_tasks = []
     for task in benchmark.tasks:
@@ -40,7 +37,9 @@ def _get_expected_task_names(benchmark, model_name):
     for task in benchmark_tasks:
         if not task.metadata.is_public:
             continue
-        if not _is_task_compatible(task, model_meta):
+        if model_mods and not set(task.metadata.modalities).issubset(model_mods):
+            continue
+        if is_retrieval_only and not isinstance(task, AbsTaskRetrieval):
             continue
         task_names.append(task.metadata.name)
     return task_names
