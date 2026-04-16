@@ -200,10 +200,10 @@ MAEB_TASK_TYPE = (
 
 MVEB_TASK_TYPE = (
     "VideoClassification",
-    "VideoClustering",
-    "VideoPairClassification",
+    # "VideoClustering",  # TODO: uncomment when tasks exist
+    # "VideoPairClassification",  # TODO: uncomment when tasks exist
     "VideoZeroshotClassification",
-    "VideoCentricQA",
+    # "VideoCentricQA",  # TODO: uncomment when tasks exist
     "Any2AnyRetrieval",
 )
 
@@ -378,10 +378,10 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {  # type: ig
     "AudioPairClassification": "pair-classification",
     "PairClassification": "pair-classification",
     "VideoClassification": "classification",
-    "VideoClustering": "clustering",
-    "VideoPairClassification": "pair-classification",
+    # "VideoClustering": "clustering",  # TODO: uncomment when tasks exist
+    # "VideoPairClassification": "pair-classification",  # TODO: uncomment when tasks exist
     "VideoZeroshotClassification": "classification",
-    "VideoCentricQA": "retrieval",
+    # "VideoCentricQA": "retrieval",  # TODO: uncomment when tasks exist
 }
 
 
