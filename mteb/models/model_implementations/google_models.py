@@ -257,7 +257,6 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
-        sep: str = " ",
         model_prompts: dict[str, str] | None = None,
         embed_dim: int | None = None,
         **kwargs,
