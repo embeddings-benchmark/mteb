@@ -469,7 +469,7 @@ def test_model_meta_dependencies_not_installed_group():
         ImportError,
         match=re.escape(
             'Model mteb/baseline-random-encoder is missing required dependencies: torch-vggish-yamnet==0.2.1; extra == "torch-vggish-yamnet".'
-            "\nYou can install it with `pip install mteb[torch-vggish-yamnet]`."
+            "\nYou can install it with `pip install mteb[torch-vggish-yamnet,image,audio]`."
         ),
     ):
         model_meta._check_requirements()
