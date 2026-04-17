@@ -37,7 +37,7 @@ import mteb
 
 task = mteb.get_task("{{ dataset_task_name }}")
 model = mteb.get_model(YOUR_MODEL)
-mteb.evaluate(model)
+mteb.evaluate(model, task)
 ```
 
 <!-- Datasets want link to arxiv in readme to autolink dataset with paper -->
