@@ -407,10 +407,13 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
     def _check_requirements(self) -> None:
         groups: list[str] = list(self.extra_requirements_groups or [])
-        if "image" in self.modalities and "image" not in groups:
-            groups.append("image")
-        if "audio" in self.modalities and "audio" not in groups:
-            groups.append("audio")
+
+        # handle modality specific dependencies inside baseline functions
+        if not self.name.startswith("mteb/baseline"):
+            if "image" in self.modalities and "image" not in groups:
+                groups.append("image")
+            if "audio" in self.modalities and "audio" not in groups:
+                groups.append("audio")
 
         if not groups:
             return
