@@ -146,7 +146,7 @@ class QwenOmniWrapper(AbsEncoder):
         return messages
 
     @torch.no_grad()
-    def encode(
+    def encode(  # noqa: PLR0914
         self,
         inputs: DataLoader[BatchedInput],
         *,
@@ -206,20 +206,23 @@ class QwenOmniWrapper(AbsEncoder):
                 for msg in messages
             ]
 
-
             audio_inputs = [a for a in batch_audio if a is not None] or None
             video_inputs = [v for v in batch_video if v is not None] or None
             image_inputs = [img for img in batch_images if img is not None] or None
 
-            model_inputs = self.processor(
-                text=texts,
-                audio=audio_inputs,
-                images=image_inputs,
-                videos=video_inputs,
-                padding=True,
-                return_tensors="pt",
-                use_audio_in_video=False,
-            ).to(self.device).to(self.model.dtype)
+            model_inputs = (
+                self.processor(
+                    text=texts,
+                    audio=audio_inputs,
+                    images=image_inputs,
+                    videos=video_inputs,
+                    padding=True,
+                    return_tensors="pt",
+                    use_audio_in_video=False,
+                )
+                .to(self.device)
+                .to(self.model.dtype)
+            )
 
             outputs = self.model(
                 **model_inputs, output_hidden_states=True, return_dict=True
