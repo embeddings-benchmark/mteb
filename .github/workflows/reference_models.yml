@@ -4,10 +4,12 @@ on:
   push:
     branches: [main]
     paths:
+      - "mteb/benchmarks/**"
       - "tests/test_benchmarks/test_reference_models.py"
       - ".github/workflows/reference_models.yml"
   pull_request:
     paths:
+      - "mteb/benchmarks/**"
       - "tests/test_benchmarks/test_reference_models.py"
       - ".github/workflows/reference_models.yml"
   workflow_dispatch:
