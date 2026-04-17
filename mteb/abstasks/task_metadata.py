@@ -365,7 +365,6 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {  # type: ig
     "AudioZeroshotClassification": "classification",
     "AudioClassification": "classification",
     "ImageClassification": "classification",
-    "VideoClassification": "classification",
     "ZeroShotClassification": "classification",
     "MultilabelClassification": "classification",
     "Classification": "classification",
