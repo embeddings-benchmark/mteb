@@ -8,11 +8,10 @@ from transformers import (
     AutoProcessor,
 )
 
-from mteb._create_dataloaders import AudioCollator
+from mteb._create_dataloaders import AudioCollator, VideoCollator
 from mteb._requires_package import (
     requires_audio_dependencies,
     requires_image_dependencies,
-    requires_package,
 )
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -25,21 +24,19 @@ if TYPE_CHECKING:
 
 
 class QwenOmniWrapper(AbsEncoder):
-    """Wrapper for Qwen Omni models supporting audio and images. Last token pooling is used to get the embedding."""
+    """Wrapper for Qwen Omni models supporting audio, images, and video. Last token pooling is used to get the embedding."""
 
     def __init__(
         self,
         model_name: str,
         revision: str,
         device: str | None = None,
-        max_audio_length_seconds: int = 10,
+        max_audio_length_seconds: int = 300,
+        num_frames: int = 16,
         **kwargs: Any,
     ) -> None:
         requires_image_dependencies()
         requires_audio_dependencies()
-        requires_package(
-            self, "qwen_omni_utils", model_name, "pip install mteb[qwen_omni_utils]"
-        )
         self.device = device or (
             "cuda"
             if torch.cuda.is_available()
@@ -48,6 +45,7 @@ class QwenOmniWrapper(AbsEncoder):
             else "cpu"
         )
         self.max_audio_length_seconds = max_audio_length_seconds
+        self.num_frames = num_frames
 
         if "2.5" in model_name:
             from transformers import Qwen2_5OmniThinkerForConditionalGeneration
@@ -69,19 +67,57 @@ class QwenOmniWrapper(AbsEncoder):
         self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
     @staticmethod
+    def _resize_video(video: torch.Tensor) -> torch.Tensor:
+        """Pre-resize video frames via smart_resize to match the model's expected pixel range.
+
+        Replicates the smart_resize step from qwen_omni_utils fetch_video which
+        constrains frames to 100352-602112 pixels before the processor applies
+        its own resize.
+        """
+        from torchvision.transforms.functional import InterpolationMode, resize
+        from transformers.models.qwen2_vl.image_processing_qwen2_vl import (
+            smart_resize,
+        )
+
+        patch_size = 14
+        merge_size = 2
+        factor = patch_size * merge_size  # 28
+        min_pixels = 128 * factor * factor  # 100352
+        max_pixels = 768 * factor * factor  # 602112
+
+        _, _, h, w = video.shape
+        new_h, new_w = smart_resize(
+            h, w, factor=factor, min_pixels=min_pixels, max_pixels=max_pixels
+        )
+        if new_h != h or new_w != w:
+            video = resize(
+                video,
+                [new_h, new_w],
+                interpolation=InterpolationMode.BICUBIC,
+                antialias=True,
+            )
+        return video
+
+    @staticmethod
     def _build_messages(
         batch_texts: list[str],
         batch_images: list[Any],
         batch_audio: list[Any],
+        batch_video: list[Any],
     ) -> list[list[dict[str, Any]]]:
         messages = []
-        batch_size = max(len(batch_texts), len(batch_images), len(batch_audio))
+        batch_size = max(
+            len(batch_texts), len(batch_images), len(batch_audio), len(batch_video)
+        )
         for i in range(batch_size):
             text_content = batch_texts[i] if i < len(batch_texts) else ""
             image_content = batch_images[i] if i < len(batch_images) else None
             audio_content = batch_audio[i] if i < len(batch_audio) else None
+            video_content = batch_video[i] if i < len(batch_video) else None
 
             content = []
+            if video_content is not None:
+                content.append({"type": "video", "video": video_content})
             if audio_content is not None:
                 content.append({"type": "audio", "audio": audio_content})
             if image_content is not None:
@@ -120,7 +156,12 @@ class QwenOmniWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        from qwen_omni_utils import process_mm_info
+        if "video" in inputs.dataset.features or "audio" in inputs.dataset.features:
+            inputs.collate_fn = VideoCollator(
+                target_sampling_rate=self.sampling_rate,
+                max_frames=self.num_frames,
+                max_samples=self.max_samples,
+            )
 
         all_embeddings: list[torch.Tensor] = []
 
@@ -128,21 +169,34 @@ class QwenOmniWrapper(AbsEncoder):
             batch_texts = batch.get("text", [])
             batch_images = batch.get("image", [])
             raw_audio = batch.get("audio", [])
+            raw_video = batch.get("video", [])
 
             batch_audio = []
             for audio_row in raw_audio:
                 if audio_row is None:
                     batch_audio.append(None)
+                elif isinstance(audio_row, dict) and "array" in audio_row:
+                    batch_audio.append(audio_row["array"])
                 else:
                     array = AudioCollator.resample_audio(
                         {"audio": audio_row}, self.sampling_rate, self.max_samples
                     )
                     batch_audio.append(array)
 
+            batch_video = []
+            for video_row in raw_video:
+                if video_row is None:
+                    batch_video.append(None)
+                elif isinstance(video_row, torch.Tensor):
+                    batch_video.append(self._resize_video(video_row))
+                else:
+                    batch_video.append(video_row)
+
             messages = self._build_messages(
                 batch_texts=batch_texts,
                 batch_images=batch_images,
                 batch_audio=batch_audio,
+                batch_video=batch_video,
             )
 
             texts = [
@@ -152,9 +206,10 @@ class QwenOmniWrapper(AbsEncoder):
                 for msg in messages
             ]
 
-            audio_inputs, image_inputs, video_inputs = process_mm_info(
-                messages, use_audio_in_video=False
-            )
+
+            audio_inputs = [a for a in batch_audio if a is not None] or None
+            video_inputs = [v for v in batch_video if v is not None] or None
+            image_inputs = [img for img in batch_images if img is not None] or None
 
             model_inputs = self.processor(
                 text=texts,
@@ -164,7 +219,7 @@ class QwenOmniWrapper(AbsEncoder):
                 padding=True,
                 return_tensors="pt",
                 use_audio_in_video=False,
-            ).to(self.device)
+            ).to(self.device).to(self.model.dtype)
 
             outputs = self.model(
                 **model_inputs, output_hidden_states=True, return_dict=True
@@ -204,6 +259,7 @@ qwen25_omni_7b = ModelMeta(
         "text",
         "image",
         "audio",
+        "video",
     ],
     model_type=["dense"],
     citation="""
@@ -244,6 +300,7 @@ qwen25_omni_3b = ModelMeta(
         "text",
         "image",
         "audio",
+        "video",
     ],
     model_type=["dense"],
     citation="""
@@ -285,6 +342,7 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
         "text",
         "image",
         "audio",
+        "video",
     ],
     model_type=["dense"],
     citation="""
@@ -325,6 +383,7 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
         "text",
         "image",
         "audio",
+        "video",
     ],
     model_type=["dense"],
     citation="""
@@ -365,6 +424,7 @@ qwen3_omni_30b_a3b_captioner = ModelMeta(
         "text",
         "image",
         "audio",
+        "video",
     ],
     model_type=["dense"],
     citation="""
