@@ -36,8 +36,8 @@ class MSVDV2TRetrieval(AbsTaskRetrieval):
 @misc{microsoft2011msvd,
   author = {{Microsoft Research}},
   title = {Microsoft Research Video Description Corpus},
-  year = {2011},
   url = {https://www.microsoft.com/en-us/research/publication/microsoft-research-video-description-corpus/},
+  year = {2011},
 }
 """,
         prompt={
