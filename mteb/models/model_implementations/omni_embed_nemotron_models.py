@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Any
+
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
@@ -5,6 +9,31 @@ from mteb.models.model_meta import (
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerMultimodalEncoderWrapper,
 )
+
+
+class OmniEmbedNemotronWrapper(SentenceTransformerMultimodalEncoderWrapper):
+    """Thin wrapper that configures video/audio processing kwargs after loading."""
+
+    def __init__(
+        self,
+        model: str,
+        revision: str | None = None,
+        device: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(model, revision=revision, device=device, **kwargs)
+        self.model[0].processing_kwargs.update(
+            {
+                "video": {
+                    "min_pixels": 32 * 14 * 14,
+                    "max_pixels": 64 * 28 * 28,
+                    "do_sample_frames": True,
+                    "fps": 2,
+                },
+                "audio": {"max_length": 2_048_000},
+            }
+        )
+
 
 _OMNI_EMBED_NEMOTRON_CITATION = r"""
 @article{xu2025omni,
@@ -16,7 +45,7 @@ _OMNI_EMBED_NEMOTRON_CITATION = r"""
 """
 
 omni_embed_nemotron_3b = ModelMeta(
-    loader=SentenceTransformerMultimodalEncoderWrapper,
+    loader=OmniEmbedNemotronWrapper,
     loader_kwargs={
         "trust_remote_code": True,
     },
