@@ -258,8 +258,9 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
             )
 
         prompts = [prompt + text for batch in inputs for text in batch["text"]]
+        tokenization_kwargs = {"truncate_prompt_tokens":-1}
         outputs = self.llm.encode(
-            prompts, pooling_task="embed", truncate_prompt_tokens=-1
+            prompts, pooling_task="embed", tokenization_kwargs=tokenization_kwargs
         )
         embeddings = torch.stack([output.outputs.data for output in outputs])
         return embeddings
@@ -320,10 +321,11 @@ class VllmCrossEncoderWrapper(VllmWrapperBase):
         ]
         # TODO: support score prompt
 
+        tokenization_kwargs = {"truncate_prompt_tokens":-1}
         outputs = self.llm.score(
             queries,
             corpus,
-            truncate_prompt_tokens=-1,
+            tokenization_kwargs=tokenization_kwargs,
             use_tqdm=False,
         )
         scores = np.array([output.outputs.score for output in outputs])
