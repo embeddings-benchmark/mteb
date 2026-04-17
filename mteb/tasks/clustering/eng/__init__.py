@@ -5,6 +5,7 @@ from .arxiv_hierarchical_clustering import (
     ArXivHierarchicalClusteringP2P,
     ArXivHierarchicalClusteringS2S,
 )
+from .ave_dataset_clustering import AVEDatasetClustering
 from .big_patent_clustering import BigPatentClustering, BigPatentClusteringFast
 from .biorxiv_clustering_p2p import BiorxivClusteringP2P, BiorxivClusteringP2PFast
 from .biorxiv_clustering_s2s import BiorxivClusteringS2S, BiorxivClusteringS2SFast
@@ -44,6 +45,7 @@ from .wikipedia_chemistry_specialties_clustering import (
 from .wikipedia_chemistry_topics_clustering import WikipediaChemistryTopicsClustering
 
 __all__ = [
+    "AVEDatasetClustering",
     "AmbientAcousticContextClustering",
     "ArXivHierarchicalClusteringP2P",
     "ArXivHierarchicalClusteringS2S",
