@@ -32,13 +32,13 @@ class WorldSense1MinDomainClustering(AbsTaskClustering):
         sample_creation="found",
         bibtex_citation=r"""
 @misc{hong2025worldsense,
-  title = {WorldSense: Evaluating Real-world Omnimodal Understanding for Multimodal LLMs},
+  archiveprefix = {arXiv},
   author = {Jack Hong and Shilin Yan and Jiayin Cai and Xiaolong Jiang and Yao Hu and Weidi Xie},
-  year = {2025},
   eprint = {2502.04326},
-  archivePrefix = {arXiv},
-  primaryClass = {cs.CV},
+  primaryclass = {cs.CV},
+  title = {WorldSense: Evaluating Real-world Omnimodal Understanding for Multimodal LLMs},
   url = {https://arxiv.org/abs/2502.04326},
+  year = {2025},
 }
 """,
         is_beta=True,

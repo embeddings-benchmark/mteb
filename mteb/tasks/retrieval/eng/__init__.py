@@ -154,6 +154,7 @@ from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval
 from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
 from .msmarc_ov2_retrieval import MSMARCOv2
 from .msmarco_retrieval import MSMARCO, MSMARCOHardNegatives
+from .msr_vtt import MSRVTTV2T
 from .msvd_v2t_retrieval import MSVDV2TRetrieval
 from .nano_argu_ana_retrieval import NanoArguAnaRetrieval
 from .nano_climate_fever_retrieval import NanoClimateFeverRetrieval
@@ -259,6 +260,7 @@ __all__ = [
     "FEVER",
     "FORBI2I",
     "MSMARCO",
+    "MSRVTTV2T",
     "NQ",
     "PIQA",
     "SCIDOCS",

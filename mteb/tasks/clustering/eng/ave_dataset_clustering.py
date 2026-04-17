@@ -31,12 +31,12 @@ class AVEDatasetClustering(AbsTaskClustering):
         modalities=["video", "audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@InProceedings{Tian_2018_ECCV,
-    author = {Tian, Yapeng and Shi, Jing and Li, Bochen and Duan, Zhiyao and Xu, Chenliang},
-    title = {Audio-Visual Event Localization in Unconstrained Videos},
-    booktitle = {The European Conference on Computer Vision (ECCV)},
-    month = {September},
-    year = {2018}
+@inproceedings{Tian_2018_ECCV,
+  author = {Tian, Yapeng and Shi, Jing and Li, Bochen and Duan, Zhiyao and Xu, Chenliang},
+  booktitle = {The European Conference on Computer Vision (ECCV)},
+  month = {September},
+  title = {Audio-Visual Event Localization in Unconstrained Videos},
+  year = {2018},
 }
 """,
         is_beta=True,
