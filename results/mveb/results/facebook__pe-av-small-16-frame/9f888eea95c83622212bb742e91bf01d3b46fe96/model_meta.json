@@ -1,0 +1,44 @@
+{
+    "loader_kwargs": {
+        "device": "mps"
+    },
+    "name": "facebook/pe-av-small-16-frame",
+    "revision": "9f888eea95c83622212bb742e91bf01d3b46fe96",
+    "release_date": "2025-12-22",
+    "languages": [
+        "eng-Latn"
+    ],
+    "n_parameters": 846991308,
+    "n_active_parameters_override": null,
+    "n_embedding_parameters": 51576832,
+    "memory_usage_mb": 3231.0,
+    "max_tokens": 512.0,
+    "embed_dim": 1024,
+    "license": "apache-2.0",
+    "open_weights": true,
+    "public_training_code": null,
+    "public_training_data": null,
+    "framework": [
+        "PyTorch"
+    ],
+    "reference": "https://huggingface.co/facebook/pe-av-small-16-frame",
+    "similarity_fn_name": "dot",
+    "use_instructions": false,
+    "training_datasets": [],
+    "adapted_from": null,
+    "superseded_by": null,
+    "modalities": [
+        "audio",
+        "video",
+        "text"
+    ],
+    "model_type": [
+        "dense"
+    ],
+    "citation": "\n@misc{vyas2025pushingfrontieraudiovisualperception,\n      title={Pushing the Frontier of Audiovisual Perception with Large-Scale Multimodal Correspondence Learning},\n      author={Apoorv Vyas and Heng-Jui Chang and Cheng-Fu Yang and Po-Yao Huang and Luya Gao and Julius Richter and Sanyuan Chen and Matt Le and Piotr Doll\u00e1r and Christoph Feichtenhofer and Ann Lee and Wei-Ning Hsu},\n      year={2025},\n      eprint={2512.19687},\n      archivePrefix={arXiv},\n      primaryClass={cs.SD},\n      url={https://arxiv.org/abs/2512.19687},\n}\n",
+    "contacts": null,
+    "experiment_kwargs": null,
+    "output_dtypes": null,
+    "loader": "PEAudioVisualWrapper",
+    "is_cross_encoder": false
+}

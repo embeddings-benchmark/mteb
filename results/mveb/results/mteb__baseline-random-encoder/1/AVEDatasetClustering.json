@@ -1,0 +1,35 @@
+{
+  "dataset_revision": "f6eb93b4e89456277a242583b5565b801bc1981d",
+  "task_name": "AVEDatasetClustering",
+  "mteb_version": "2.12.20",
+  "scores": {
+    "test": [
+      {
+        "v_measures": {
+          "Level 0": [
+            0.272729,
+            0.262282,
+            0.258344,
+            0.265359,
+            0.266742,
+            0.242554,
+            0.270348,
+            0.261337,
+            0.254213,
+            0.243746
+          ]
+        },
+        "v_measure": 0.259765,
+        "v_measure_std": 0.00977,
+        "main_score": 0.259765,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ]
+      }
+    ]
+  },
+  "evaluation_time": 106.37514758110046,
+  "kg_co2_emissions": null,
+  "date": 1776373885.031305
+}
