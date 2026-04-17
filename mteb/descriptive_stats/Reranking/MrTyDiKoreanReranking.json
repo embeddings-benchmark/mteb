@@ -1,0 +1,64 @@
+{
+  "test": {
+    "num_samples": 1496547,
+    "number_of_characters": 262146362,
+    "documents_text_statistics": {
+      "total_text_length": 262136771,
+      "min_text_length": 4,
+      "average_text_length": 175.21035728274222,
+      "max_text_length": 25247,
+      "unique_texts": 1490526
+    },
+    "documents_image_statistics": null,
+    "documents_audio_statistics": null,
+    "queries_text_statistics": {
+      "total_text_length": 9591,
+      "min_text_length": 6,
+      "average_text_length": 22.78147268408551,
+      "max_text_length": 122,
+      "unique_texts": 421
+    },
+    "queries_image_statistics": null,
+    "queries_audio_statistics": null,
+    "relevant_docs_statistics": {
+      "num_relevant_docs": 492,
+      "min_relevant_docs_per_query": 1,
+      "average_relevant_docs_per_query": 1.168646080760095,
+      "max_relevant_docs_per_query": 3,
+      "unique_relevant_docs": 397
+    },
+    "top_ranked_statistics": null,
+    "hf_subset_descriptive_stats": {
+      "korean": {
+        "num_samples": 1496547,
+        "number_of_characters": 262146362,
+        "documents_text_statistics": {
+          "total_text_length": 262136771,
+          "min_text_length": 4,
+          "average_text_length": 175.21035728274222,
+          "max_text_length": 25247,
+          "unique_texts": 1490526
+        },
+        "documents_image_statistics": null,
+        "documents_audio_statistics": null,
+        "queries_text_statistics": {
+          "total_text_length": 9591,
+          "min_text_length": 6,
+          "average_text_length": 22.78147268408551,
+          "max_text_length": 122,
+          "unique_texts": 421
+        },
+        "queries_image_statistics": null,
+        "queries_audio_statistics": null,
+        "relevant_docs_statistics": {
+          "num_relevant_docs": 492,
+          "min_relevant_docs_per_query": 1,
+          "average_relevant_docs_per_query": 1.168646080760095,
+          "max_relevant_docs_per_query": 3,
+          "unique_relevant_docs": 397
+        },
+        "top_ranked_statistics": null
+      }
+    }
+  }
+}
