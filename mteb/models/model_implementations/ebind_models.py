@@ -24,19 +24,13 @@ class EBindWrapper(AbsEncoder):
     """MTEB wrapper for EBind multi-modal embedding model.
 
     EBind projects image, video, audio, and text into a shared 1024-dim
-    embedding space using separate backbone encoders (Perception Encoder,
-    ImageBind, Uni3D) with learned projection heads.
+    embedding space using Perception Encoder, ImageBind, and Uni3D backbones
+    with learned projection heads.
 
-    EBind's processors expect file paths, not decoded data.  This wrapper
-    bridges the gap:
-    - **text**: passed directly (PETextProcessor accepts strings).
-    - **image**: PIL images are fed to the image transform directly,
-      bypassing the file-loading step in PEImageProcessor.
-    - **video**: pre-decoded frame tensors are resized and normalised
-      directly (matching ``ImageTransform._transform_torch_tensor``).
-    - **audio**: numpy arrays are written to temporary ``.wav`` files
-      because ImageBind's mel-spectrogram pipeline is non-trivial to
-      replicate outside of ``torchaudio.load()``.
+    EBind's processors expect file paths. This wrapper bridges to MTEB's
+    decoded inputs: image transforms are applied directly on PIL images,
+    video frames are resized/normalised as tensors, and audio arrays are
+    written to temporary wav files for ImageBind's mel-spectrogram pipeline.
     """
 
     def __init__(
@@ -74,20 +68,11 @@ class EBindWrapper(AbsEncoder):
         self.model = EBindModel.from_pretrained(model_name, revision=revision)
         self.model.to(self.device).eval()
 
-        self.processor = EBindProcessor.from_pretrained(
-            model_name, revision=revision
-        )
+        self.processor = EBindProcessor.from_pretrained(model_name, revision=revision)
         self.processor = self.processor.to(self.device)
 
-        # Grab the internal image transform so we can bypass file I/O
-        # for images (the Compose pipeline accepts PIL Images directly).
         self._image_transform = self.processor.processors["image"].transform
-        # PE image size (336 for PE-Core-L14-336) used for video frame resizing.
         self._image_size = self.processor.processors["image"].model_image_size
-
-    # ------------------------------------------------------------------
-    # Per-modality encode helpers
-    # ------------------------------------------------------------------
 
     @torch.inference_mode()
     def get_text_embeddings(
@@ -98,7 +83,6 @@ class EBindWrapper(AbsEncoder):
     ) -> np.ndarray:
         all_embeddings: list[np.ndarray] = []
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding text"):
-            # PETextProcessor accepts raw strings — use the processor directly.
             processed = self.processor({"text": batch["text"]}, return_tensors="pt")
             outputs = self.model.forward(**processed)
             all_embeddings.append(outputs["text"].cpu().float().numpy())
@@ -115,8 +99,6 @@ class EBindWrapper(AbsEncoder):
         for batch in tqdm(
             inputs, disable=not show_progress_bar, desc="Encoding images"
         ):
-            # MTEB provides PIL Images.  PEImageProcessor opens file paths then
-            # calls self.transform(pil_image), so we call the transform directly.
             img_tensors = torch.stack(
                 [self._image_transform(img) for img in batch["image"]]
             ).to(self.device)
@@ -134,21 +116,13 @@ class EBindWrapper(AbsEncoder):
         import soundfile as sf
 
         all_embeddings: list[np.ndarray] = []
-        for batch in tqdm(
-            inputs, disable=not show_progress_bar, desc="Encoding audio"
-        ):
-            # IBAudioProcessor only accepts file paths (it calls
-            # torchaudio.load internally for mel-spectrogram conversion).
-            # Write decoded arrays to temporary .wav files.
+        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding audio"):
+            # IBAudioProcessor only accepts file paths — write to temp wav.
             audio_tensors = []
             for item in batch["audio"]:
-                with tempfile.NamedTemporaryFile(
-                    suffix=".wav", delete=True
-                ) as tmp:
+                with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as tmp:
                     sf.write(tmp.name, item["array"], item["sampling_rate"])
-                    audio_tensors.append(
-                        self.processor.processors["audio"](tmp.name)
-                    )
+                    audio_tensors.append(self.processor.processors["audio"](tmp.name))
             stacked = torch.stack(audio_tensors).to(self.device)
             outputs = self.model.forward(audio=stacked)
             all_embeddings.append(outputs["audio"].cpu().float().numpy())
@@ -161,35 +135,31 @@ class EBindWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
-        from torchvision.transforms.functional import InterpolationMode, normalize, resize
+        from torchvision.transforms.functional import (
+            InterpolationMode,
+            normalize,
+            resize,
+        )
 
         all_embeddings: list[np.ndarray] = []
-        for batch in tqdm(
-            inputs, disable=not show_progress_bar, desc="Encoding video"
-        ):
-            # VideoCollator yields tensors of shape (T, C, H, W) uint8.
-            # Apply the same preprocessing that PE's
-            # VideoTransform._transform_torch_tensor uses: resize to
-            # 336x336 BICUBIC, float [0,1], normalize mean=std=0.5.
+        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding video"):
             video_tensors = []
-            for frames in batch["video"]:  # each is (T, C, H, W) uint8
-                frames = resize(
-                    frames,
+            for raw_frames in batch["video"]:
+                processed = resize(
+                    raw_frames,
                     [self._image_size, self._image_size],
                     interpolation=InterpolationMode.BICUBIC,
                     antialias=True,
                 )
-                frames = frames.float() / 255.0
-                frames = normalize(frames, mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
-                video_tensors.append(frames)
+                processed = processed.float() / 255.0
+                processed = normalize(
+                    processed, mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]
+                )
+                video_tensors.append(processed)
             stacked = torch.stack(video_tensors).to(self.device)
             outputs = self.model.forward(video=stacked)
             all_embeddings.append(outputs["video"].cpu().float().numpy())
         return np.vstack(all_embeddings)
-
-    # ------------------------------------------------------------------
-    # Main encode entry point
-    # ------------------------------------------------------------------
 
     def encode(
         self,
@@ -257,8 +227,6 @@ class EBindWrapper(AbsEncoder):
         )
 
 
-# --- Model Metadata ---
-
 _EBIND_CITATION = r"""
 @misc{broadbent2025ebindpracticalapproachspace,
       title={{EBind}: a practical approach to space binding},
@@ -286,11 +254,8 @@ _EBIND_COMMON = dict(
     citation=_EBIND_CITATION,
 )
 
-# Parameter counts from the paper (arxiv:2511.14229):
-#   PE-text: 353M, PE-vision: 317M, ImageBind-audio: 90M,
-#   Uni3D: 1.02B, projectors: 4.2M each (audio + points).
-# n_parameters is the total loaded at runtime including backbone encoders.
-# memory_usage_mb assumes FP32 (4 bytes per parameter).
+# n_parameters is the total loaded at runtime (backbone encoders + projectors).
+# Safetensors only stores 8.4M projection params; backbones load from separate repos.
 
 ebind_full = ModelMeta(
     loader=EBindWrapper,
