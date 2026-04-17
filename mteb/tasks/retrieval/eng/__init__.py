@@ -154,6 +154,7 @@ from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval
 from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
 from .msmarc_ov2_retrieval import MSMARCOv2
 from .msmarco_retrieval import MSMARCO, MSMARCOHardNegatives
+from .msvd_v2t_retrieval import MSVDV2TRetrieval
 from .nano_argu_ana_retrieval import NanoArguAnaRetrieval
 from .nano_climate_fever_retrieval import NanoClimateFeverRetrieval
 from .nano_db_pedia_retrieval import NanoDBPediaRetrieval
@@ -423,6 +424,7 @@ __all__ = [
     "MSCOCOT2IRetrieval",
     "MSMARCOHardNegatives",
     "MSMARCOv2",
+    "MSVDV2TRetrieval",
     "MedicalQARetrieval",
     "MemotionI2TRetrieval",
     "MemotionT2IRetrieval",
