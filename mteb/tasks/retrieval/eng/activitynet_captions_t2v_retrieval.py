@@ -15,7 +15,7 @@ class ActivityNetCaptionsT2VRetrieval(AbsTaskRetrieval):
             "ActivityNet Captions. Each example pairs one caption with one reference "
             "video (1:1 retrieval)."
         ),
-        reference="https://huggingface.co/datasets/mteb/ActivityNet_Captions_val2",
+        reference="https://arxiv.org/abs/1705.00754",
         dataset={
             "path": "mteb/ActivityNet_Captions_val2",
             "revision": "e87473c4832ea982bbeca1dde94bbebfa6ea6ada",
