@@ -467,9 +467,11 @@ def test_model_meta_dependencies_not_installed_group():
     )
     with pytest.raises(
         ImportError,
-        match=re.escape(
-            'Model google/vggish is missing required dependencies: torch-vggish-yamnet==0.2.1; extra == "torch-vggish-yamnet".'
-            "\nYou can install it with `pip install mteb[torch-vggish-yamnet,audio]`."
+        match=(
+            'Model google/vggish is missing required dependencies:( torchaudio; extra == "audio",)? '
+            + re.escape(
+                'torch-vggish-yamnet==0.2.1; extra == "torch-vggish-yamnet".\nYou can install it with `pip install mteb[torch-vggish-yamnet,audio]`.'
+            )
         ),
     ):
         model_meta._check_requirements()
