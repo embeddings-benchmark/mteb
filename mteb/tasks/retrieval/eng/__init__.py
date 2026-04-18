@@ -242,6 +242,12 @@ from .trecdl_retrieval import TRECDL2019, TRECDL2020
 from .tu_berlin_t2i_retrieval import TUBerlinT2IRetrieval
 from .tuna_bench_t2v_retrieval import TUNABenchT2VRetrieval
 from .tuna_bench_v2t_retrieval import TUNABenchV2TRetrieval
+from .vatex_retrieval import (
+    VATEXA2TRetrieval,
+    VATEXT2ARetrieval,
+    VATEXT2VRetrieval,
+    VATEXV2TRetrieval,
+)
 from .vidore_bench_retrieval import (
     VidoreArxivQARetrieval,
     VidoreDocVQARetrieval,
@@ -514,6 +520,10 @@ __all__ = [
     "TopiOCQARetrievalHardNegatives",
     "Touche2020",
     "Touche2020v3Retrieval",
+    "VATEXA2TRetrieval",
+    "VATEXT2ARetrieval",
+    "VATEXT2VRetrieval",
+    "VATEXV2TRetrieval",
     "VQA2IT2TRetrieval",
     "VidoreArxivQARetrieval",
     "VidoreDocVQARetrieval",
