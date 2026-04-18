@@ -1,3 +1,7 @@
+from .activitynet_captions_retrieval import (
+    ActivityNetCaptionsT2VRetrieval,
+    ActivityNetCaptionsV2TRetrieval,
+)
 from .aila_casedocs_retrieval import AILACasedocs
 from .aila_statutes_retrieval import AILAStatutes
 from .alpha_nli_retrieval import AlphaNLI
@@ -280,6 +284,8 @@ __all__ = [
     "AILACasedocs",
     "AILAStatutes",
     "ARCChallenge",
+    "ActivityNetCaptionsT2VRetrieval",
+    "ActivityNetCaptionsV2TRetrieval",
     "AlphaNLI",
     "ArguAna",
     "AudioSetStrongA2TRetrieval",
