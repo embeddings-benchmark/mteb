@@ -571,9 +571,7 @@ def calculate_retrieval_scores(  # noqa: PLR0914
 ) -> RetrievalEvaluationResult:
     if skip_first_result:
         results = {
-            qid: dict(
-                sorted(doc_scores.items(), key=lambda x: x[1], reverse=True)[1:]
-            )
+            qid: dict(sorted(doc_scores.items(), key=lambda x: x[1], reverse=True)[1:])
             for qid, doc_scores in results.items()
         }
 
