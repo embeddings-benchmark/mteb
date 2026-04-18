@@ -1,5 +1,7 @@
-from .activitynet_captions_t2v_retrieval import ActivityNetCaptionsT2VRetrieval
-from .activitynet_captions_v2t_retrieval import ActivityNetCaptionsV2TRetrieval
+from .activitynet_captions_retrieval import (
+    ActivityNetCaptionsT2VRetrieval,
+    ActivityNetCaptionsV2TRetrieval,
+)
 from .aila_casedocs_retrieval import AILACasedocs
 from .aila_statutes_retrieval import AILAStatutes
 from .alpha_nli_retrieval import AlphaNLI
