@@ -200,7 +200,7 @@ MAEB_TASK_TYPE = (
 
 MVEB_TASK_TYPE = (
     "VideoClassification",
-    # "VideoClustering",  # TODO: uncomment when tasks exist
+    "VideoClustering",
     # "VideoPairClassification",  # TODO: uncomment when tasks exist
     "VideoZeroshotClassification",
     # "VideoCentricQA",  # TODO: uncomment when tasks exist
@@ -378,7 +378,7 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {  # type: ig
     "AudioPairClassification": "pair-classification",
     "PairClassification": "pair-classification",
     "VideoClassification": "classification",
-    # "VideoClustering": "clustering",  # TODO: uncomment when tasks exist
+    "VideoClustering": "clustering",
     # "VideoPairClassification": "pair-classification",  # TODO: uncomment when tasks exist
     "VideoZeroshotClassification": "classification",
     # "VideoCentricQA": "retrieval",  # TODO: uncomment when tasks exist
@@ -474,7 +474,6 @@ class TaskMetadata(BaseModel):
     is_public: bool = True
     contributed_by: str | None = None
     superseded_by: str | None = None
-
     is_beta: bool = False
 
     def _validate_metadata(self) -> None:
