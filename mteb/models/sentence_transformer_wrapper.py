@@ -267,6 +267,7 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
             )
 
         all_embeddings = []
+        _modality_keys = {"text", "image", "audio", "video"}
         for batch in inputs:
             batch_column = next(iter(batch.keys()))
             batched_input: list[dict[str, Any]] = [
@@ -275,7 +276,10 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
 
             # transform from {"text": [text1, text2], "image": [image1, image2]} to
             # [{"text": text1, "image": image1}, {"text": text2, "image": image2}]
+            # Only pass through recognized modality keys; ST rejects unknown keys.
             for key, values in batch.items():
+                if key not in _modality_keys:
+                    continue
                 for i, value in enumerate(values):
                     batched_input[i][key] = value
 

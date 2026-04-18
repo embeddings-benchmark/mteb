@@ -231,14 +231,10 @@ class AbsTaskClustering(AbsTask):
 
         downsampled_dataset = downsampled_dataset.select_columns(list(columns_to_keep))
 
-        # Pass only input columns to the encoder so labels don't leak into the
-        # dataloader (the multimodal ST wrapper rejects unknown keys).
-        encode_dataset = downsampled_dataset.select_columns(input_cols)
-
         logger.info("Running clustering - Encoding samples...")
         embeddings = model.encode(
             create_dataloader(
-                encode_dataset,
+                downsampled_dataset,
                 task_metadata=self.metadata,
                 input_column=self.input_column_name,
                 num_proc=num_proc,
