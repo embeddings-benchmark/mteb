@@ -258,8 +258,6 @@ from .web_qa_t2t_retrieval import WebQAT2TRetrieval
 from .wino_grande_retrieval import WinoGrande
 
 __all__ = [
-    "ActivityNetCaptionsT2VRetrieval",
-    "ActivityNetCaptionsV2TRetrieval",
     "CUB200I2I",
     "FEVER",
     "FORBI2I",
@@ -275,6 +273,8 @@ __all__ = [
     "AILACasedocs",
     "AILAStatutes",
     "ARCChallenge",
+    "ActivityNetCaptionsT2VRetrieval",
+    "ActivityNetCaptionsV2TRetrieval",
     "AlphaNLI",
     "ArguAna",
     "AudioSetStrongA2TRetrieval",
