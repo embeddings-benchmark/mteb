@@ -197,7 +197,18 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         flat_scores = defaultdict(list)
         for split, hf_subset_scores in scores.items():
             for hf_subset, hf_scores in hf_subset_scores.items():
-                eval_langs = subset2langscripts[hf_subset]
+                if hf_subset in subset2langscripts:
+                    eval_langs = subset2langscripts[hf_subset]
+                else:
+                    # For aggregated tasks, scores may use "default" subset
+                    # which isn't in the per-subset langscript mapping.
+                    # Collect all languages from the mapping.
+                    all_langs: list[str] = []
+                    for langs in subset2langscripts.values():
+                        all_langs.extend(
+                            lang for lang in langs if lang not in all_langs
+                        )
+                    eval_langs = all_langs
                 _scores = {
                     **hf_scores,
                     "hf_subset": hf_subset,
