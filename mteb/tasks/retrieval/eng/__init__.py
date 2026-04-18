@@ -86,10 +86,12 @@ from .dapfam_patent_retrieval import (
     DAPFAMOutTitlAbsToTitlAbsRetrieval,
 )
 from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives, DBPediaHardNegativesV2
-from .didemo_a2t_retrieval import DiDeMoA2TRetrieval
-from .didemo_t2a_retrieval import DiDeMoT2ARetrieval
-from .didemo_t2v_retrieval import DiDeMoT2VRetrieval
-from .didemo_v2t_retrieval import DiDeMoV2TRetrieval
+from .didemo_retrieval import (
+    DiDeMoA2TRetrieval,
+    DiDeMoT2ARetrieval,
+    DiDeMoT2VRetrieval,
+    DiDeMoV2TRetrieval,
+)
 from .edis_t2it_retrieval import EDIST2ITRetrieval
 from .emo_vdb import EmoVDBA2TRetrieval, EmoVDBT2ARetrieval
 from .encyclopedia_vqa_it2it_retrieval import EncyclopediaVQAIT2ITRetrieval
