@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Any, ClassVar
 import numpy as np
 import torch
 
-from mteb._requires_package import requires_package
 from mteb.languages import PROGRAMMING_LANGS
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -336,12 +335,7 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
             raise RuntimeError(
                 f"sentence_transformers version {st_version} is lower than the required version 3.1.0"
             )
-        requires_package(self, "einops", model, "pip install 'mteb[jina]'")
         import einops  # noqa: F401
-
-        requires_package(
-            self, "flash_attn", model, "pip install 'mteb[flash_attention]'"
-        )
         import flash_attn  # noqa: F401
 
         super().__init__(
@@ -402,14 +396,6 @@ class JinaV4Wrapper(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        requires_package(
-            self,
-            "flash_attn",
-            model,
-            "pip install 'mteb[flash_attention]'",
-        )
-        requires_package(self, "peft", model, "pip install 'mteb[jina-v4]'")
-        requires_package(self, "torchvision", model, "pip install 'mteb[jina-v4]'")
         import flash_attn  # noqa: F401
         import peft  # noqa: F401
         import transformers  # noqa: F401
@@ -962,6 +948,7 @@ jina_embeddings_v4 = ModelMeta(
       primaryClass={cs.AI},
       url={https://arxiv.org/abs/2506.18902},
 }""",
+    extra_requirements_groups=["jina-v4", "flash_attention"],
 )
 
 
@@ -1036,6 +1023,7 @@ jina_embeddings_v3 = ModelMeta(
       url={https://arxiv.org/abs/2409.10173},
     }
     """,
+    extra_requirements_groups=["jina", "flash_attention"],
 )
 
 jina_embeddings_v2_base_en = ModelMeta(

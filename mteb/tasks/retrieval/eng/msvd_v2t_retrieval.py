@@ -7,41 +7,53 @@ from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MSRVTTV2T(AbsTaskRetrieval):
+class MSVDV2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MSRVTTV2T",
-        description="MSRVTT",
+        name="MSVDV2TRetrieval",
+        description=(
+            "Retrieve the English caption that describes a given short video clip. "
+            "Each example pairs one video with one reference sentence (1:1 retrieval)."
+        ),
+        reference="https://huggingface.co/datasets/mteb/MSVD",
         dataset={
-            "path": "mteb/MSR-VTT",
-            "revision": "4661603cee25c1fd370e5478a2953203cf37155b",
+            "path": "mteb/MSVD",
+            "revision": "177cefe5957363d1617f0427fcfa00ff0b0d7da8",
         },
-        type="Retrieval",
-        eval_langs=["eng-Latn"],
+        type="Any2AnyRetrieval",
+        category="v2t",
         eval_splits=["test"],
+        eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        reference=None,
-        category="va2t",
-        modalities=["audio", "video", "text"],
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
-        bibtex_citation=None,
+        date=("2010-01-01", "2012-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Caption Pairing"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        modalities=["video", "text"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@misc{microsoft2011msvd,
+  author = {{Microsoft Research}},
+  title = {Microsoft Research Video Description Corpus},
+  url = {https://www.microsoft.com/en-us/research/publication/microsoft-research-video-description-corpus/},
+  year = {2011},
+}
+""",
+        prompt={
+            "query": "Find the caption that best describes the following video.",
+        },
         is_beta=True,
     )
 
-    input_column_name = ("video", "audio")
-
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        """Load the MSRVTT dataset.
+        """Load the MSVD dataset.
 
         TODO: Reupload dataset in standard format and remove this custom load_data.
         """
         if self.data_loaded:
             return
+        self.dataset = {"default": {}}
         dataset = load_dataset(
             self.metadata.dataset["path"],
             revision=self.metadata.dataset["revision"],
@@ -49,7 +61,7 @@ class MSRVTTV2T(AbsTaskRetrieval):
         )
         dataset = dataset.add_column("id", [str(i) for i in range(len(dataset))])
 
-        query = dataset.select_columns(["id", "video", "audio"])
+        query = dataset.select_columns(["id", "video"])
         corpus = dataset.select_columns(["id", "caption"]).rename_column(
             "caption", "text"
         )

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.12.19"
+version = "2.12.21"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -122,6 +122,7 @@ mctct = ["transformers<5"]  # mctct was removed in transformers 5
 siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
 qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
 qwen_omni_utils = ["qwen_omni_utils"]
+embeddinggemma = ["transformers>=4.56.0"]
 
 [dependency-groups]
 lint = [
@@ -389,6 +390,7 @@ addopts = """
 
 markers = [
     "test_datasets: marks tests that tests dataset availability",
+    "test_reference_models: marks tests that verify reference model result coverage (requires downloading results repo)",
 ]
 
 [tool.uv]
@@ -417,6 +419,7 @@ conflicts = [
         { extra = "muq" },
         { extra = "mctct" },
         { extra = "qwen-vl" },
+        { extra = "embeddinggemma" },
     ],
 ]
 

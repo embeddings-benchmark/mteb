@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -25,12 +24,6 @@ OPENCLIP_CITATION = """@inproceedings{cherti2023reproducible,
 
 
 def openclip_loader(model_name, **kwargs):
-    requires_package(
-        openclip_loader,
-        "open_clip",
-        model_name,
-        "pip install 'mteb[open_clip_torch]'",
-    )
     import open_clip
 
     class OpenCLIPModel(AbsEncoder):
@@ -41,8 +34,6 @@ def openclip_loader(model_name, **kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
-            requires_image_dependencies()
-
             self.model_name = model_name
             self.device = device
             self.model, _, self.img_preprocess = open_clip.create_model_and_transforms(
@@ -149,6 +140,7 @@ CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(
         # DataComp-1B
     ),
     citation=OPENCLIP_CITATION,
+    extra_requirements_groups=["open_clip_torch"],
 )
 
 CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
@@ -176,6 +168,7 @@ CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
         # DataComp-1B
     ),
     citation=OPENCLIP_CITATION,
+    extra_requirements_groups=["open_clip_torch"],
 )
 
 CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
@@ -203,6 +196,7 @@ CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
         # DataComp-1B
     ),
     citation=OPENCLIP_CITATION,
+    extra_requirements_groups=["open_clip_torch"],
 )
 
 CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
@@ -230,6 +224,7 @@ CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
         # 2 Billion sample English subset of LAION-5B
     ),
     citation=OPENCLIP_CITATION,
+    extra_requirements_groups=["open_clip_torch"],
 )
 
 CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
@@ -257,6 +252,7 @@ CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
         # 2 Billion sample English subset of LAION-5B
     ),
     citation=OPENCLIP_CITATION,
+    extra_requirements_groups=["open_clip_torch"],
 )
 
 CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
@@ -284,6 +280,7 @@ CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
         # 2 Billion sample English subset of LAION-5B
     ),
     citation=OPENCLIP_CITATION,
+    extra_requirements_groups=["open_clip_torch"],
 )
 
 CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
@@ -311,6 +308,7 @@ CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
         # 2 Billion sample English subset of LAION-5B
     ),
     citation=OPENCLIP_CITATION,
+    extra_requirements_groups=["open_clip_torch"],
 )
 
 CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta(
@@ -338,4 +336,5 @@ CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta(
         # 2 Billion sample English subset of LAION-5B
     ),
     citation=OPENCLIP_CITATION,
+    extra_requirements_groups=["open_clip_torch"],
 )

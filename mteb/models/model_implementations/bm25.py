@@ -4,7 +4,6 @@ import logging
 from typing import TYPE_CHECKING
 
 from mteb._create_dataloaders import _combine_queries_with_instruction_text
-from mteb._requires_package import requires_package
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
@@ -22,7 +21,6 @@ logger = logging.getLogger(__name__)
 
 
 def bm25_loader(model_name, **kwargs) -> SearchProtocol:
-    requires_package(bm25_loader, "bm25s", model_name, "pip install 'mteb[bm25s]'")
     import bm25s
     import Stemmer
 
@@ -131,6 +129,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
 
 bm25_s = ModelMeta(
     loader=bm25_loader,
+    extra_requirements_groups=["bm25s"],
     name="mteb/baseline-bm25s",
     model_type=["dense"],
     languages=["eng-Latn"],

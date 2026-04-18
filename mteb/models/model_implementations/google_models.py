@@ -1,14 +1,14 @@
 from __future__ import annotations
 
+import io
 import logging
+import time
+import wave
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-from packaging.version import Version
 from tqdm.auto import tqdm
-from transformers import __version__ as transformers_version
 
-from mteb._requires_package import requires_package
 from mteb.models import SentenceTransformerEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -166,9 +166,6 @@ class GoogleTextEmbeddingModel(AbsEncoder):
         """Embeds texts with a pre-trained, foundational model.
         From https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings#generative-ai-get-text-embedding-python_vertex_ai_sdk
         """
-        requires_package(
-            self, "vertexai", self.model_name, "pip install 'mteb[vertexai]'"
-        )
         from vertexai.language_models import TextEmbeddingInput, TextEmbeddingModel
 
         model = TextEmbeddingModel.from_pretrained(self.model_name)
@@ -237,8 +234,6 @@ class GoogleTextEmbeddingModel(AbsEncoder):
 
 def _audio_to_wav_bytes(audio_item: dict) -> bytes:
     """Convert an AudioInputItem (numpy array + sampling_rate) to WAV bytes."""
-    import io
-    import wave
 
     array = audio_item["array"]
     sampling_rate = audio_item["sampling_rate"]
@@ -261,9 +256,6 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         embed_dim: int | None = None,
         **kwargs,
     ) -> None:
-        requires_package(
-            self, "google.genai", model_name, "pip install 'mteb[google_genai]'"
-        )
         from google import genai
 
         # Strip org prefix — the Gemini API expects bare model names
@@ -303,8 +295,6 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
                     break
                 except Exception as e:
                     if "429" in str(e) and attempt < 9:
-                        import time
-
                         logger.warning(
                             f"Rate limited, waiting {wait_time}s (attempt {attempt + 1}/10): {e}"
                         )
@@ -416,6 +406,7 @@ google_text_emb_004 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
+    extra_requirements_groups=["vertexai"],
 )
 
 google_text_emb_005 = ModelMeta(
@@ -442,6 +433,7 @@ google_text_emb_005 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
+    extra_requirements_groups=["vertexai"],
 )
 
 google_text_multilingual_emb_002 = ModelMeta(
@@ -468,6 +460,7 @@ google_text_multilingual_emb_002 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
+    extra_requirements_groups=["vertexai"],
 )
 
 google_gemini_embedding_001 = ModelMeta(
@@ -494,6 +487,7 @@ google_gemini_embedding_001 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
+    extra_requirements_groups=["vertexai"],
 )
 
 google_gemini_embedding_2_preview = ModelMeta(
@@ -522,23 +516,12 @@ google_gemini_embedding_2_preview = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
+    extra_requirements_groups=["google_genai"],
 )
 
 
-def gemma_embedding_loader(model_name: str, revision: str, **kwargs):
-    min_transformers_version = "4.56.0"
-
-    if Version(transformers_version) < Version(min_transformers_version):
-        raise RuntimeError(
-            f"transformers version {transformers_version} is lower than the required "
-            f"version {min_transformers_version} to run `{model_name}`"
-        )
-
-    return SentenceTransformerEncoderWrapper(model_name, revision, **kwargs)
-
-
 embedding_gemma_300m = ModelMeta(
-    loader=gemma_embedding_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="google/embeddinggemma-300m",
     model_type=["dense"],
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
@@ -568,4 +551,5 @@ embedding_gemma_300m = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2509.20354},
 }""",
+    extra_requirements_groups=["embeddinggemma"],
 )

@@ -8,6 +8,10 @@ import torch
 from tqdm.auto import tqdm
 
 from mteb._create_dataloaders import VideoCollator
+from mteb._requires_package import (
+    requires_audio_dependencies,
+    requires_image_dependencies,
+)
 from mteb.models.model_meta import ModelMeta
 from mteb.similarity_functions import (
     select_pairwise_similarity,
@@ -227,6 +231,8 @@ class RandomEncoderBaseline:
         has_video = "video" in inputs.dataset.features
         has_audio = "audio" in inputs.dataset.features
         if has_video or has_audio:
+            requires_audio_dependencies()
+            requires_image_dependencies()
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=16000,
                 max_frames=10,

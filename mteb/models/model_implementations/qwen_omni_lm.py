@@ -9,11 +9,6 @@ from transformers import (
 )
 
 from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import (
-    requires_audio_dependencies,
-    requires_image_dependencies,
-    requires_package,
-)
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -35,11 +30,6 @@ class QwenOmniWrapper(AbsEncoder):
         max_audio_length_seconds: int = 10,
         **kwargs: Any,
     ) -> None:
-        requires_image_dependencies()
-        requires_audio_dependencies()
-        requires_package(
-            self, "qwen_omni_utils", model_name, "pip install mteb[qwen_omni_utils]"
-        )
         self.device = device or (
             "cuda"
             if torch.cuda.is_available()
@@ -216,6 +206,7 @@ qwen25_omni_7b = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2503.20215},
 }""",
+    extra_requirements_groups=["qwen_omni_utils"],
 )
 
 qwen25_omni_3b = ModelMeta(
@@ -256,6 +247,7 @@ qwen25_omni_3b = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2503.20215},
 }""",
+    extra_requirements_groups=["qwen_omni_utils"],
 )
 
 
@@ -297,6 +289,7 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
+    extra_requirements_groups=["qwen_omni_utils"],
 )
 
 qwen3_omni_30b_a3b_thinking = ModelMeta(
@@ -337,6 +330,7 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
+    extra_requirements_groups=["qwen_omni_utils"],
 )
 
 qwen3_omni_30b_a3b_captioner = ModelMeta(
@@ -377,4 +371,5 @@ qwen3_omni_30b_a3b_captioner = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
+    extra_requirements_groups=["qwen_omni_utils"],
 )
