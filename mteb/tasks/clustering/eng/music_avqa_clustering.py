@@ -8,9 +8,9 @@ class MusicAVQAClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="MusicAVQAClustering",
         description=(
-            "Clustering of synchronized video and audio clips into 22 musical "
-            "instrument categories from a MUSIC-AVQA classification subset "
-            "(Li et al., CVPR 2022)."
+            "Clustering of video clips with audio into 22 musical "
+            "instrument categories. Extracted from the MUSIC-AVQA "
+            "dataset."
         ),
         reference="https://gewu-lab.github.io/MUSIC-AVQA/",
         dataset={
