@@ -7,11 +7,11 @@ from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DiDeMoV2TRetrieval(AbsTaskRetrieval):
+class DiDeMoT2VRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="DiDeMoV2TRetrieval",
+        name="DiDeMoT2VRetrieval",
         description=(
-            "Retrieve the English caption that describes a given video clip "
+            "Retrieve the video clip that matches a given English caption "
             "from the DiDeMo dataset of Flickr videos with temporally grounded "
             "sentence descriptions."
         ),
@@ -20,12 +20,12 @@ class DiDeMoV2TRetrieval(AbsTaskRetrieval):
             "revision": "746689f644b66022540a9a39136e842bee164e6b",
         },
         type="Any2AnyRetrieval",
-        category="va2t",
+        category="t2va",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         reference="https://arxiv.org/abs/1708.01641",
-        modalities=["audio", "video", "text"],
+        modalities=["text", "audio", "video"],
         date=("2017-01-01", "2017-12-31"),
         domains=["Web", "Spoken"],
         task_subtypes=[],
@@ -42,13 +42,13 @@ class DiDeMoV2TRetrieval(AbsTaskRetrieval):
 }
 """,
         prompt={
-            "query": "Find the caption that describes the following video.",
+            "query": "Find the video clip that matches the given caption.",
         },
         is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        """Load the DiDeMo dataset.
+        """Load the DiDeMo dataset for text-to-video retrieval.
 
         TODO: Reupload dataset in standard format and remove this custom load_data.
         """
@@ -62,10 +62,10 @@ class DiDeMoV2TRetrieval(AbsTaskRetrieval):
         )
         dataset = dataset.add_column("id", [str(i) for i in range(len(dataset))])
 
-        query = dataset.select_columns(["id", "video", "audio"])
-        corpus = dataset.select_columns(["id", "caption"]).rename_column(
+        query = dataset.select_columns(["id", "caption"]).rename_column(
             "caption", "text"
         )
+        corpus = dataset.select_columns(["id", "video", "audio"])
         qrels = {}
         for i in range(len(dataset)):
             key = str(i)
