@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -34,13 +33,9 @@ MODEL2PROCESSOR = {
 
 
 def llm2clip_loader(model_name, **kwargs):
+    from llm2vec import LLM2Vec
     from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcessor
     from transformers.modeling_outputs import BaseModelOutputWithPooling
-
-    requires_package(
-        llm2clip_loader, "llm2vec", model_name, "pip install 'mteb[llm2vec]'"
-    )
-    from llm2vec import LLM2Vec
 
     class LLM2CLIPAbsEncoder(AbsEncoder):
         def __init__(
@@ -49,8 +44,6 @@ def llm2clip_loader(model_name, **kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
-            requires_image_dependencies()
-
             if model_name not in MODEL2PROCESSOR:
                 raise Exception(
                     f"This model {model_name} is not in the supported mode list: {list(MODEL2PROCESSOR.keys())}."
@@ -213,6 +206,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
+    extra_requirements_groups=["llm2vec"],
 )
 
 # NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
@@ -239,6 +233,7 @@ llm2clip_openai_l_14_224 = ModelMeta(
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
+    extra_requirements_groups=["llm2vec"],
 )
 
 llm2clip_openai_b_16 = ModelMeta(
@@ -264,4 +259,5 @@ llm2clip_openai_b_16 = ModelMeta(
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
+    extra_requirements_groups=["llm2vec"],
 )
