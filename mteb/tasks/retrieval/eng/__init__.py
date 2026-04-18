@@ -1,3 +1,5 @@
+from .activitynet_captions_t2v_retrieval import ActivityNetCaptionsT2VRetrieval
+from .activitynet_captions_v2t_retrieval import ActivityNetCaptionsV2TRetrieval
 from .aila_casedocs_retrieval import AILACasedocs
 from .aila_statutes_retrieval import AILAStatutes
 from .alpha_nli_retrieval import AlphaNLI
@@ -256,6 +258,8 @@ from .web_qa_t2t_retrieval import WebQAT2TRetrieval
 from .wino_grande_retrieval import WinoGrande
 
 __all__ = [
+    "ActivityNetCaptionsT2VRetrieval",
+    "ActivityNetCaptionsV2TRetrieval",
     "CUB200I2I",
     "FEVER",
     "FORBI2I",
