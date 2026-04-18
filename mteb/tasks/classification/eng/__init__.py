@@ -216,6 +216,7 @@ from .sds_gloves_classification import (
     SDSGlovesClassification,
     SDSGlovesClassificationV2,
 )
+from .something_something_v2_classification import SomethingSomethingV2Classification
 from .stanford_cars_classification import StanfordCarsClassification
 from .stl10_classification import STL10Classification
 from .sun397_classification import SUN397Classification
@@ -477,6 +478,7 @@ __all__ = [
     "SDSGlovesClassificationV2",
     "STL10Classification",
     "SUN397Classification",
+    "SomethingSomethingV2Classification",
     "SpeechCommandsClassification",
     "SpokeNEnglishClassification",
     "SpokenQAForIC",
