@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datasets import Dataset, load_dataset
+from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
