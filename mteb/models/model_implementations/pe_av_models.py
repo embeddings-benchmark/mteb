@@ -209,7 +209,7 @@ class PEAudioVisualWrapper(AbsEncoder):
 
         inputs.collate_fn = VideoCollator(
             target_sampling_rate=self.sampling_rate,
-            max_frames=self.num_frames,
+            num_frames=self.num_frames,
         )
 
         # Joint audio-video embedding
