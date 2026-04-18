@@ -293,13 +293,6 @@ def _prepare_dataset(
             ):
                 dataset = dataset.rename_column(input_column, modality)
 
-    # Drop columns that aren't recognized modalities (e.g. labels) so the
-    # dataloader only yields multimodal inputs.
-    keep = {"text", "image", "audio", "video"} & set(dataset.column_names)
-    drop = [c for c in dataset.column_names if c not in keep]
-    if drop:
-        dataset = dataset.remove_columns(drop)
-
     return dataset
 
 
