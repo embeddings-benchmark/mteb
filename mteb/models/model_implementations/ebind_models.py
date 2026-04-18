@@ -243,6 +243,7 @@ _EBIND_COMMON = dict(
     languages=["eng-Latn"],
     release_date="2025-11-19",
     max_tokens=512,
+    n_embedding_parameters=50_593_792,  # PE text encoder: 49408 vocab * 1024 hidden
     license="cc-by-nc-sa-4.0",
     open_weights=True,
     public_training_code="https://github.com/encord-team/ebind",
