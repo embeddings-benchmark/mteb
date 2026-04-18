@@ -390,6 +390,7 @@ addopts = """
 
 markers = [
     "test_datasets: marks tests that tests dataset availability",
+    "test_reference_models: marks tests that verify reference model result coverage (requires downloading results repo)",
 ]
 
 [tool.uv]
