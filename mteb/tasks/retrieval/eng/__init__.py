@@ -86,6 +86,7 @@ from .dapfam_patent_retrieval import (
     DAPFAMOutTitlAbsToTitlAbsRetrieval,
 )
 from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives, DBPediaHardNegativesV2
+from .didemo_v2t_retrieval import DiDeMoV2TRetrieval
 from .edis_t2it_retrieval import EDIST2ITRetrieval
 from .emo_vdb import EmoVDBA2TRetrieval, EmoVDBT2ARetrieval
 from .encyclopedia_vqa_it2it_retrieval import EncyclopediaVQAIT2ITRetrieval
@@ -355,6 +356,7 @@ __all__ = [
     "DBPedia",
     "DBPediaHardNegatives",
     "DBPediaHardNegativesV2",
+    "DiDeMoV2TRetrieval",
     "EDIST2ITRetrieval",
     "EmoVDBA2TRetrieval",
     "EmoVDBT2ARetrieval",
