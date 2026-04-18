@@ -569,6 +569,12 @@ def calculate_retrieval_scores(  # noqa: PLR0914
     k_values: list[int],
     skip_first_result: bool = False,
 ) -> RetrievalEvaluationResult:
+    if skip_first_result:
+        results = {
+            qid: dict(sorted(doc_scores.items(), key=lambda x: x[1], reverse=True)[1:])
+            for qid, doc_scores in results.items()
+        }
+
     map_string = "map_cut." + ",".join([str(k) for k in k_values])
     ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
     recall_string = "recall." + ",".join([str(k) for k in k_values])
