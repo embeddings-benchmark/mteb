@@ -229,6 +229,8 @@ from .touche2020_retrieval import Touche2020, Touche2020v3Retrieval
 from .treccovid_retrieval import TRECCOVID
 from .trecdl_retrieval import TRECDL2019, TRECDL2020
 from .tu_berlin_t2i_retrieval import TUBerlinT2IRetrieval
+from .tuna_bench_t2v_retrieval import TUNABenchT2VRetrieval
+from .tuna_bench_v2t_retrieval import TUNABenchV2TRetrieval
 from .vidore_bench_retrieval import (
     VidoreArxivQARetrieval,
     VidoreDocVQARetrieval,
@@ -481,6 +483,8 @@ __all__ = [
     "SpokenSQuADT2ARetrieval",
     "StanfordCarsI2I",
     "TUBerlinT2IRetrieval",
+    "TUNABenchT2VRetrieval",
+    "TUNABenchV2TRetrieval",
     "TempReasonL1",
     "TempReasonL2Context",
     "TempReasonL2Fact",
