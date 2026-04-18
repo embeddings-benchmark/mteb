@@ -46,8 +46,8 @@ from .amazon_polarity_classification import (
 )
 from .arxiv_classification import ArxivClassification, ArxivClassificationV2
 from .banking77_classification import Banking77Classification, Banking77ClassificationV2
-from .breakfast_classification import BreakfastClassification
 from .birdsnap_classification import BirdsnapClassification
+from .breakfast_classification import BreakfastClassification
 from .caltech101_classification import Caltech101Classification
 from .cifar import CIFAR10Classification, CIFAR100Classification
 from .country211_classification import Country211Classification
@@ -302,8 +302,8 @@ __all__ = [
     "ArxivClassificationV2",
     "Banking77Classification",
     "Banking77ClassificationV2",
-    "BreakfastClassification",
     "BirdsnapClassification",
+    "BreakfastClassification",
     "CIFAR10Classification",
     "CIFAR100Classification",
     "CSTRVCTKAccentID",
