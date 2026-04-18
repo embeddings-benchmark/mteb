@@ -1,9 +1,8 @@
-from datasets import Features, load_dataset
+from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.types._encoder_io import VideoInputItem
 
 
 class VATEXV2T(AbsTaskRetrieval):
@@ -18,7 +17,7 @@ class VATEXV2T(AbsTaskRetrieval):
             "path": "mteb/VATEX_test_1k",
             "revision": "0d2e86e6d36927f4676ee6127c4e38e3867ce0ce",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],
         eval_splits=["test"],
         main_score="ndcg_at_10",
@@ -50,28 +49,7 @@ class VATEXV2T(AbsTaskRetrieval):
             split=self.metadata.eval_splits[0],
         )
         dataset = dataset.add_column("id", [str(i) for i in range(len(dataset))])
-        query = dataset.select_columns(["id", "video", "audio"])
-
-        def _combine_modalities(example: dict) -> dict:
-            example["video"] = VideoInputItem(
-                frames=example["video"],
-                audio=example.pop("audio"),
-            )
-            return example
-
-        query_features = query.features
-        query = query.map(
-            _combine_modalities,
-            features=Features(
-                {
-                    "id": query_features["id"],
-                    "video": {
-                        "frames": query_features["video"],
-                        "audio": query_features["audio"],
-                    },
-                }
-            ),
-        )
+        query = dataset.select_columns(["id", "video"])
         corpus = dataset.select_columns(["id", "caption"]).rename_column(
             "caption", "text"
         )

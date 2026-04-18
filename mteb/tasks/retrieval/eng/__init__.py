@@ -251,6 +251,7 @@ from .viz_wiz_it2t_retrieval import VizWizIT2TRetrieval
 from .vqa2_it2t_retrieval import VQA2IT2TRetrieval
 from .web_qa_t2it_retrieval import WebQAT2ITRetrieval
 from .web_qa_t2t_retrieval import WebQAT2TRetrieval
+from .vatex import VATEXV2T
 from .wino_grande_retrieval import WinoGrande
 
 __all__ = [
@@ -508,6 +509,7 @@ __all__ = [
     "VisualNewsI2TRetrieval",
     "VisualNewsT2IRetrieval",
     "VizWizIT2TRetrieval",
+    "VATEXV2T",
     "WebQAT2ITRetrieval",
     "WebQAT2TRetrieval",
     "WinoGrande",
