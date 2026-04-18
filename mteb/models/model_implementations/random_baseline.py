@@ -148,15 +148,21 @@ def _batch_to_embeddings(
 
         if "text" in batch:
             text_embeddings = [
-                _string_to_vector(txt, embedding_dim) for txt in batch["text"]
+                _string_to_vector(txt, embedding_dim)
+                for txt in batch["text"]
+                if txt is not None
             ]
         if "image" in batch:
             image_embeddings = [
-                _image_to_vector(img, embedding_dim) for img in batch["image"]
+                _image_to_vector(img, embedding_dim)
+                for img in batch["image"]
+                if img is not None
             ]
         if "audio" in batch:
             audio_embeddings = [
-                _audio_to_vector(audio, embedding_dim) for audio in batch["audio"]
+                _audio_to_vector(audio, embedding_dim)
+                for audio in batch["audio"]
+                if audio is not None
             ]
         if "video" in batch:
             video_embeddings = [
@@ -165,6 +171,7 @@ def _batch_to_embeddings(
                     embedding_dim,
                 )
                 for video in batch["video"]
+                if video is not None
             ]
 
         # Combine embeddings

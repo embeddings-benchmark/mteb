@@ -60,29 +60,28 @@ def _create_dataloader_from_texts(
 def _corpus_to_dict(
     row: dict[str, str],
 ) -> dict[str, str]:
-    text = (
-        (row["title"] + " " + row["text"]).strip()
-        if "title" in row and len(row["title"]) > 0
-        else row["text"].strip()
-    )
+    raw_text = row.get("text") or ""
+    title = row.get("title") or ""
+    text = (title + " " + raw_text).strip() if title else raw_text.strip()
     new_row = {
         "id": row["id"],
         "text": text,
-        "body": row["text"],
+        "body": raw_text,
     }
     # dataloaders can't handle None
-    if "title" in row and row["title"] is not None and len(row["title"]) > 0:
-        new_row["title"] = row["title"]
+    if title:
+        new_row["title"] = title
     return new_row
 
 
 def _combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str]:
     row["query"] = row["text"]
 
-    if "instruction" in row and row["instruction"] is not None:
-        row["text"] = row["query"] + " " + row["instruction"]
-    else:
-        row["text"] = row["query"]
+    if row["text"] is not None:
+        if "instruction" in row and row["instruction"] is not None:
+            row["text"] = row["query"] + " " + row["instruction"]
+        else:
+            row["text"] = row["query"]
     return row
 
 
@@ -223,17 +222,19 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     """
     collated = {}
     for key in batch[0]:
+        values = [item[key] for item in batch]
         if key in (  # noqa: PLR6201
             "image",  # images can be with different sizes
             "conversation",  # conversations are lists of varying lengths
             "audio",  # audio can have different lengths
             "video",  # video can have different lengths
         ):
-            collated[key] = [item[key] for item in batch]
+            collated[key] = values
+        elif any(v is None for v in values):
+            # In multimodal tasks, text can be None for image-only items
+            collated[key] = values
         else:
-            if any(item[key] is None for item in batch):
-                raise ValueError(f"Found None in batch for key '{key}'")
-            collated[key] = default_collate([item[key] for item in batch])
+            collated[key] = default_collate(values)
     return cast("BatchedInput", collated)
 
 
