@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
+from mteb._create_dataloaders import VideoCollator
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
@@ -9,6 +10,12 @@ from mteb.models.model_meta import (
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerMultimodalEncoderWrapper,
 )
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 
 class OmniEmbedNemotronWrapper(SentenceTransformerMultimodalEncoderWrapper):
@@ -19,19 +26,61 @@ class OmniEmbedNemotronWrapper(SentenceTransformerMultimodalEncoderWrapper):
         model: str,
         revision: str | None = None,
         device: str | None = None,
+        max_audio_length: int = 2_048_000,
+        num_frames: int = 16,
         **kwargs: Any,
     ) -> None:
         super().__init__(model, revision=revision, device=device, **kwargs)
+        self.max_audio_length = max_audio_length
+        self.num_frames = num_frames
+        self.sampling_rate = self.model[0].processor.feature_extractor.sampling_rate
         self.model[0].processing_kwargs.update(
             {
                 "video": {
                     "min_pixels": 32 * 14 * 14,
                     "max_pixels": 64 * 28 * 28,
-                    "do_sample_frames": True,
-                    "fps": 2,
+                    "do_sample_frames": False,
                 },
-                "audio": {"max_length": 2_048_000},
+                "audio": {"max_length": max_audio_length},
             }
+        )
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        if "video" in inputs.dataset.features or "audio" in inputs.dataset.features:
+            base_collate = VideoCollator(
+                target_sampling_rate=self.sampling_rate,
+                max_frames=self.num_frames,
+                max_samples=self.max_audio_length,
+            )
+
+            def collate_and_unwrap(rows):
+                batch = base_collate(rows)
+                # Transformers' apply_chat_template expects audio as a raw numpy
+                # array, not an AudioInputItem dict.
+                if "audio" in batch:
+                    batch["audio"] = [
+                        a["array"] if isinstance(a, dict) and "array" in a else a
+                        for a in batch["audio"]
+                    ]
+                return batch
+
+            inputs.collate_fn = collate_and_unwrap
+        return super().encode(
+            inputs,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=prompt_type,
+            **kwargs,
         )
 
 
