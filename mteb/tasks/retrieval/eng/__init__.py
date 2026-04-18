@@ -86,6 +86,12 @@ from .dapfam_patent_retrieval import (
     DAPFAMOutTitlAbsToTitlAbsRetrieval,
 )
 from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives, DBPediaHardNegativesV2
+from .didemo_retrieval import (
+    DiDeMoA2TRetrieval,
+    DiDeMoT2ARetrieval,
+    DiDeMoT2VRetrieval,
+    DiDeMoV2TRetrieval,
+)
 from .edis_t2it_retrieval import EDIST2ITRetrieval
 from .emo_vdb import EmoVDBA2TRetrieval, EmoVDBT2ARetrieval
 from .encyclopedia_vqa_it2it_retrieval import EncyclopediaVQAIT2ITRetrieval
@@ -155,6 +161,7 @@ from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
 from .msmarc_ov2_retrieval import MSMARCOv2
 from .msmarco_retrieval import MSMARCO, MSMARCOHardNegatives
 from .msr_vtt import MSRVTTV2T
+from .msvd_t2v_retrieval import MSVDT2VRetrieval
 from .msvd_v2t_retrieval import MSVDV2TRetrieval
 from .nano_argu_ana_retrieval import NanoArguAnaRetrieval
 from .nano_climate_fever_retrieval import NanoClimateFeverRetrieval
@@ -357,6 +364,10 @@ __all__ = [
     "DBPedia",
     "DBPediaHardNegatives",
     "DBPediaHardNegativesV2",
+    "DiDeMoA2TRetrieval",
+    "DiDeMoT2ARetrieval",
+    "DiDeMoT2VRetrieval",
+    "DiDeMoV2TRetrieval",
     "EDIST2ITRetrieval",
     "EmoVDBA2TRetrieval",
     "EmoVDBT2ARetrieval",
@@ -428,6 +439,7 @@ __all__ = [
     "MSCOCOT2IRetrieval",
     "MSMARCOHardNegatives",
     "MSMARCOv2",
+    "MSVDT2VRetrieval",
     "MSVDV2TRetrieval",
     "MedicalQARetrieval",
     "MemotionI2TRetrieval",
