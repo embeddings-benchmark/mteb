@@ -35,7 +35,7 @@ KNOWN_ISSUES = {
     "AfriHateClassification",
     "KinNewsClassification",
     "InjongoIntent",
-    "SIB200-14Classes",
+    "SIB200Classification.v2",
     "EmotionAnalysisPlus",
     "FrenkEnClassification",
     "HUMEEmotionClassification",

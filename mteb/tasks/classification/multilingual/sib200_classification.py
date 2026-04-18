@@ -232,6 +232,7 @@ class SIB200Classification(AbsTaskClassification):
   year = {2023},
 }
 """,
+        superseded_by="SIB200Classification.v2",
     )
 
     def dataset_transform(self, num_proc: int = 1):
@@ -262,17 +263,17 @@ _TOPICS = [
 _TOPIC2ID = {name: idx for idx, name in enumerate(_TOPICS)}
 
 
-class SIB20014Classes(AbsTaskClassification):
-    """SIB‑200 (14 topics) multilingual classification benchmark."""
+class SIB200ClassificationV2(AbsTaskClassification):
+    """SIB-200 (14 topics) multilingual classification benchmark."""
 
     metadata = TaskMetadata(
-        name="SIB200-14Classes",
-        description=(
-            "SIB‑200 14‑class edition for multilingual topic classification. "
-            "It covers the full 205 Flores‑200 languages and provides only 5 "
-            "training examples per language to enable few‑shot evaluation."
         name="SIB200Classification.v2",
-        description="SIB-200 is the largest publicly available topic classification dataset based on Flores-200 covering 205 languages and dialects annotated. The dataset is annotated in English for the topics, travel, politics, science, sports, technology, health, nature, entertainment, geography, business, disasters, crime, education, and religion. The labels are then transferred to the other languages in Flores-200 which are human-translated. Version 2 includes 14 labels instead of 7 labels hereby making the task more challenging.",
+        description=(
+            "SIB-200 is the largest publicly available topic classification "
+            "dataset based on Flores-200 covering 205 languages and dialects. "
+            "Version 2 includes 14 labels instead of 7 labels, making the task "
+            "more challenging while preserving the original multilingual setup."
+        ),
         reference="https://arxiv.org/abs/2309.07445",
         dataset={
             "path": "Davlan/sib200_14classes",
