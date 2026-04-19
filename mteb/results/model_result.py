@@ -475,7 +475,7 @@ class ModelResult(BaseModel):
         """
         benchmark_result = None
         if benchmark is not None:
-            benchmark_score = benchmark.get_score(self)
+            benchmark_score = benchmark._get_model_score(self)["Mean(Task)"]
             benchmark_result = HFEvalResult(
                 dataset=HFEvalResultDataset(
                     id=benchmark.benchmark_hf_repo,
