@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Literal, cast
 import huggingface_hub
 import pandas as pd
 import yaml
+from huggingface_hub import DatasetCard, DatasetCardData
 
 from mteb._hf_integration.eval_model import HFEvalMeta, HFEvalTaskConfig
 from mteb._hf_integration.hf_hub_utils import _get_file_on_hub
@@ -215,6 +216,54 @@ class Benchmark:
         desc = self.description if self.description else ""
         desc = f"'{desc[:max_len]}..." if len(desc) > max_len else f"'{desc}'"
         return f"{self.__class__.__name__}(name='{self.name}', description={desc}, tasks=[...] (#{n_tasks}), ...)"
+
+    def _generate_benchmark_card(self) -> DatasetCard:
+        """Generate a README/dataset card for this benchmark."""
+        template_path = Path(__file__).parent / "benchmark_card_template.md"
+
+        task_rows = [
+            {
+                "name": task.metadata.name,
+                "reference": task.metadata.reference,
+                "simplified_type": task.metadata.simplified_task_type,
+                "description": task.metadata.description or "",
+            }
+            for task in self.tasks
+        ]
+
+        return DatasetCard.from_template(
+            card_data=DatasetCardData(tags=["mteb", "benchmark"]),
+            template_path=str(template_path),
+            benchmark_name=self.name,
+            benchmark_description=self.description,
+            tasks=task_rows,
+            citation=self.citation,
+        )
+
+    def push_benchmark_card_to_hub(
+        self,
+        *,
+        create_pr: bool = False,
+    ) -> None:
+        """Push a README benchmark card to the HuggingFace Hub dataset repo."""
+        if self.benchmark_hf_repo is None:
+            raise ValueError(
+                "`benchmark_hf_repo` must be set to push a benchmark card to the hub."
+            )
+
+        if not huggingface_hub.repo_exists(self.benchmark_hf_repo, repo_type="dataset"):
+            huggingface_hub.create_repo(
+                self.benchmark_hf_repo,
+                repo_type="dataset",
+            )
+
+        card = self._generate_benchmark_card()
+        card.push_to_hub(
+            self.benchmark_hf_repo,
+            repo_type="dataset",
+            commit_message="Add benchmark card",
+            create_pr=create_pr,
+        )
 
     def push_eval_to_hub(
         self,
