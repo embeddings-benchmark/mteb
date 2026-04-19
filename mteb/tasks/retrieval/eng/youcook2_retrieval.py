@@ -58,7 +58,7 @@ class YouCook2V2TRetrieval(AbsTaskRetrieval):
             "Retrieve the English sentence that describes a given cooking video "
             "clip from the YouCook2 dataset of instructional cooking videos."
         ),
-        reference="https://huggingface.co/datasets/mteb/YouCook2_val",
+        reference="https://arxiv.org/abs/1703.09788",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
         category="va2t",
