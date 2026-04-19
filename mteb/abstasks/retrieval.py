@@ -359,6 +359,7 @@ class AbsTaskRetrieval(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        corpus_chunk_size: int | None = None,
         **kwargs,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
@@ -371,6 +372,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset: Subset to evaluate on
             prediction_folder: Folder with results prediction
             num_proc: Number of processes to use
+            corpus_chunk_size: Number of corpus entries to encode at once. Reduces memory usage for large corpora.
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
@@ -396,7 +398,12 @@ class AbsTaskRetrieval(AbsTask):
         search_model: SearchProtocol
 
         if isinstance(model, EncoderProtocol) and not isinstance(model, SearchProtocol):
-            search_model = SearchEncoderWrapper(model)
+            wrapper_kwargs = (
+                {"corpus_chunk_size": corpus_chunk_size}
+                if corpus_chunk_size is not None
+                else {}
+            )
+            search_model = SearchEncoderWrapper(model, **wrapper_kwargs)
         elif isinstance(model, CrossEncoderProtocol):
             search_model = SearchCrossEncoderWrapper(model)
         elif isinstance(model, SearchProtocol):
