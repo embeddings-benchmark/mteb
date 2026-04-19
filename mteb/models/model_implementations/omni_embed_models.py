@@ -129,16 +129,23 @@ class OmniEmbedWrapper(AbsEncoder):
             images=images or None,
             videos=videos or None,
             return_tensors="pt",
-            text_kwargs={"truncation": True, "padding": True, "max_length": 32768},
+            padding="longest",
+            text_kwargs={"truncation": True, "max_length": 32768},
             videos_kwargs={
                 "do_sample_frames": False,
                 "min_pixels": 32 * 14 * 14,
                 "max_pixels": 64 * 28 * 28,
-                "use_audio_in_video": False,
+                "use_audio_in_video": True,
             },
             audio_kwargs={"max_length": self.max_audio_length},
         ).to(self.device)
 
+        cache_position = torch.arange(
+            0, model_inputs["input_ids"].shape[1], device=self.device
+        )
+        model_inputs = self.model.prepare_inputs_for_generation(
+            **model_inputs, use_cache=True, cache_position=cache_position
+        )
         outputs = self.model(
             **model_inputs, output_hidden_states=True, return_dict=True
         )
