@@ -58,7 +58,7 @@ class VATEXV2TRetrieval(AbsTaskRetrieval):
             "Retrieve the English caption that describes a given video clip from "
             "VATEX, a large-scale multilingual video description dataset."
         ),
-        reference="https://huggingface.co/datasets/mteb/VATEX_test_1k",
+        reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
         category="va2t",
