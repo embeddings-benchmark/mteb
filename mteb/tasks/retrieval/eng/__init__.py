@@ -268,10 +268,10 @@ from .web_qa_t2it_retrieval import WebQAT2ITRetrieval
 from .web_qa_t2t_retrieval import WebQAT2TRetrieval
 from .wino_grande_retrieval import WinoGrande
 from .youcook2_retrieval import (
-    YouCook2A2TRetrieval,
-    YouCook2T2ARetrieval,
+    YouCook2T2VARetrieval,
     YouCook2T2VRetrieval,
     YouCook2V2TRetrieval,
+    YouCook2VA2TRetrieval,
 )
 
 __all__ = [
@@ -543,8 +543,8 @@ __all__ = [
     "WebQAT2ITRetrieval",
     "WebQAT2TRetrieval",
     "WinoGrande",
-    "YouCook2A2TRetrieval",
-    "YouCook2T2ARetrieval",
+    "YouCook2T2VARetrieval",
     "YouCook2T2VRetrieval",
     "YouCook2V2TRetrieval",
+    "YouCook2VA2TRetrieval",
 ]

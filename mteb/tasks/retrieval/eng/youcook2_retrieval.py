@@ -56,6 +56,70 @@ class YouCook2V2TRetrieval(AbsTaskRetrieval):
         name="YouCook2V2TRetrieval",
         description=(
             "Retrieve the English sentence that describes a given cooking video "
+            "clip (video only) from the YouCook2 dataset of instructional cooking "
+            "videos."
+        ),
+        reference="https://arxiv.org/abs/1703.09788",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="v2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["video", "text"],
+        date=("2018-01-01", "2018-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Caption Pairing"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the caption that describes the following video."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_youcook2(self, query_columns=["video"], corpus_columns=["sentence"])
+
+
+class YouCook2T2VRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="YouCook2T2VRetrieval",
+        description=(
+            "Retrieve the cooking video clip (video only) that matches a given "
+            "English sentence from the YouCook2 dataset of instructional cooking "
+            "videos."
+        ),
+        reference="https://arxiv.org/abs/1703.09788",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="t2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["text", "video"],
+        date=("2018-01-01", "2018-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Caption Pairing"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the video clip that matches the given caption."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_youcook2(self, query_columns=["sentence"], corpus_columns=["video"])
+
+
+class YouCook2VA2TRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="YouCook2VA2TRetrieval",
+        description=(
+            "Retrieve the English sentence that describes a given cooking video "
             "clip from the YouCook2 dataset of instructional cooking videos."
         ),
         reference="https://arxiv.org/abs/1703.09788",
@@ -84,14 +148,14 @@ class YouCook2V2TRetrieval(AbsTaskRetrieval):
         )
 
 
-class YouCook2T2VRetrieval(AbsTaskRetrieval):
+class YouCook2T2VARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="YouCook2T2VRetrieval",
+        name="YouCook2T2VARetrieval",
         description=(
             "Retrieve the cooking video clip that matches a given English sentence "
             "from the YouCook2 dataset of instructional cooking videos."
         ),
-        reference="https://huggingface.co/datasets/mteb/YouCook2_val",
+        reference="https://arxiv.org/abs/1703.09788",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
         category="t2va",
@@ -115,65 +179,3 @@ class YouCook2T2VRetrieval(AbsTaskRetrieval):
         _load_youcook2(
             self, query_columns=["sentence"], corpus_columns=["video", "audio"]
         )
-
-
-class YouCook2A2TRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
-        name="YouCook2A2TRetrieval",
-        description=(
-            "Retrieve the English sentence that describes a given audio track "
-            "from the YouCook2 dataset of instructional cooking videos."
-        ),
-        reference="https://huggingface.co/datasets/mteb/YouCook2_val",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
-        type="Any2AnyRetrieval",
-        category="a2t",
-        eval_splits=["test"],
-        eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
-        modalities=["audio", "text"],
-        date=("2018-01-01", "2018-12-31"),
-        domains=["Web", "Spoken"],
-        task_subtypes=["Caption Pairing"],
-        license="not specified",
-        annotations_creators="human-annotated",
-        dialect=[],
-        sample_creation="found",
-        bibtex_citation=_BIBTEX,
-        prompt={"query": "Find the caption that describes the following audio."},
-        is_beta=True,
-    )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_youcook2(self, query_columns=["audio"], corpus_columns=["sentence"])
-
-
-class YouCook2T2ARetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
-        name="YouCook2T2ARetrieval",
-        description=(
-            "Retrieve the audio track that matches a given English sentence "
-            "from the YouCook2 dataset of instructional cooking videos."
-        ),
-        reference="https://huggingface.co/datasets/mteb/YouCook2_val",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
-        type="Any2AnyRetrieval",
-        category="t2a",
-        eval_splits=["test"],
-        eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
-        modalities=["text", "audio"],
-        date=("2018-01-01", "2018-12-31"),
-        domains=["Web", "Spoken"],
-        task_subtypes=["Caption Pairing"],
-        license="not specified",
-        annotations_creators="human-annotated",
-        dialect=[],
-        sample_creation="found",
-        bibtex_citation=_BIBTEX,
-        prompt={"query": "Find the audio track that matches the given caption."},
-        is_beta=True,
-    )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_youcook2(self, query_columns=["sentence"], corpus_columns=["audio"])
