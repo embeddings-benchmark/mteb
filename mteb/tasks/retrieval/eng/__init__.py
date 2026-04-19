@@ -222,6 +222,12 @@ from .sci_fact_retrieval import SciFact
 from .sci_mmir_i2t_retrieval import SciMMIRI2TRetrieval
 from .sci_mmir_t2i_retrieval import SciMMIRT2IRetrieval
 from .scidocs_retrieval import SCIDOCS
+from .shot2story_retrieval import (
+    Shot2Story20KT2VARetrieval,
+    Shot2Story20KT2VRetrieval,
+    Shot2Story20KV2TRetrieval,
+    Shot2Story20KVA2TRetrieval,
+)
 from .siqa_retrieval import SIQA
 from .sketchy_i2i_retrieval import SketchyI2IRetrieval
 from .sop_i2i_retrieval import SOPI2IRetrieval
@@ -511,6 +517,10 @@ __all__ = [
     "SciFact",
     "SciMMIRI2TRetrieval",
     "SciMMIRT2IRetrieval",
+    "Shot2Story20KT2VARetrieval",
+    "Shot2Story20KT2VRetrieval",
+    "Shot2Story20KV2TRetrieval",
+    "Shot2Story20KVA2TRetrieval",
     "SketchyI2IRetrieval",
     "SpartQA",
     "SpokenSQuADT2ARetrieval",
