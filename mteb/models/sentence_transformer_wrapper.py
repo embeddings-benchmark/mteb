@@ -297,8 +297,8 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
         Returns:
             The encoded sentences.
         """
-        has_video = "video" in inputs.dataset.features
-        has_audio = "audio" in inputs.dataset.features
+        has_video = "video" in inputs.dataset.features  # type: ignore[attr-defined]
+        has_audio = "audio" in inputs.dataset.features  # type: ignore[attr-defined]
         if has_video:
             from mteb._create_dataloaders import VideoCollator
 
