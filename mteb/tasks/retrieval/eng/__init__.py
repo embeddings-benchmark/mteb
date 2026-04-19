@@ -273,6 +273,12 @@ from .vqa2_it2t_retrieval import VQA2IT2TRetrieval
 from .web_qa_t2it_retrieval import WebQAT2ITRetrieval
 from .web_qa_t2t_retrieval import WebQAT2TRetrieval
 from .wino_grande_retrieval import WinoGrande
+from .youcook2_retrieval import (
+    YouCook2T2VARetrieval,
+    YouCook2T2VRetrieval,
+    YouCook2V2TRetrieval,
+    YouCook2VA2TRetrieval,
+)
 
 __all__ = [
     "CUB200I2I",
@@ -550,4 +556,8 @@ __all__ = [
     "WebQAT2ITRetrieval",
     "WebQAT2TRetrieval",
     "WinoGrande",
+    "YouCook2T2VARetrieval",
+    "YouCook2T2VRetrieval",
+    "YouCook2V2TRetrieval",
+    "YouCook2VA2TRetrieval",
 ]
