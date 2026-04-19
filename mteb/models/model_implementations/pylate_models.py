@@ -8,7 +8,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from mteb._create_dataloaders import create_dataloader
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder, get_prompt
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
@@ -298,7 +297,6 @@ class MultiVectorModel(PylateSearchEncoder):
         **kwargs,
     ) -> None:
         """Wrapper for MultiVector/ColBERT models (via PyLate)."""
-        requires_package(self, "pylate", model_name, "pip install mteb[pylate]")
         from pylate.models import ColBERT  # type: ignore[import]
 
         self.model_name = model_name
@@ -375,6 +373,7 @@ colbert_v2 = ModelMeta(
         "MSMARCO",
         "mMARCO-NL",
     },
+    extra_requirements_groups=["pylate"],
 )
 
 jina_colbert_v2 = ModelMeta(
@@ -458,6 +457,7 @@ jina_colbert_v2 = ModelMeta(
     pages = "159--166",
     abstract = "Multi-vector dense models, such as ColBERT, have proven highly effective in information retrieval. ColBERT`s late interaction scoring approximates the joint query-document attention seen in cross-encoders while maintaining inference efficiency closer to traditional dense retrieval models, thanks to its bi-encoder architecture and recent optimizations in indexing and search. In this paper, we introduce a novel architecture and a training framework to support long context window and multilingual retrieval. Leveraging Matryoshka Representation Loss, we further demonstrate that the reducing the embedding dimensionality from 128 to 64 has insignificant impact on the model`s retrieval performance and cut storage requirements by up to 50{\\%}. Our new model, Jina-ColBERT-v2, demonstrates strong performance across a range of English and multilingual retrieval tasks,"
 }""",
+    extra_requirements_groups=["pylate"],
 )
 
 
@@ -509,6 +509,7 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
     url={https://huggingface.co/lightonai/GTE-ModernColBERT-v1},
     year={2025}
 }""",
+    extra_requirements_groups=["pylate"],
 )
 
 late_on_code_citation = """@misc{LateOn-Code,
@@ -566,6 +567,7 @@ lightonai__late_on_code_pretrain = ModelMeta(
         "CornStack",
     },
     citation=late_on_code_citation,
+    extra_requirements_groups=["pylate"],
 )
 
 
@@ -627,6 +629,7 @@ lightonai__late_on_code = ModelMeta(
         "COIRCodeSearchNetRetrieval",
     },
     citation=late_on_code_citation,
+    extra_requirements_groups=["pylate"],
 )
 
 lightonai__late_on_code_edge_pretrain = ModelMeta(
@@ -669,6 +672,7 @@ lightonai__late_on_code_edge_pretrain = ModelMeta(
         "CornStack",
     },
     citation=late_on_code_citation,
+    extra_requirements_groups=["pylate"],
 )
 
 
@@ -723,6 +727,7 @@ lightonai__late_on_code_edge = ModelMeta(
         "COIRCodeSearchNetRetrieval",
     },
     citation=late_on_code_citation,
+    extra_requirements_groups=["pylate"],
 )
 
 
@@ -782,6 +787,7 @@ lightonai__colbert_zero_unsupervised = ModelMeta(
     superseded_by=None,
     training_datasets=nomic_embed_unsupervised_data,
     citation=colbert_zero_citation,
+    extra_requirements_groups=["pylate"],
 )
 
 
@@ -811,6 +817,7 @@ lightonai__colbert_zero_supervised = ModelMeta(
     superseded_by=None,
     training_datasets=nomic_embed_unsupervised_data | nomic_embed_supervised_data,
     citation=colbert_zero_citation,
+    extra_requirements_groups=["pylate"],
 )
 
 lightonai__colbert_zero = ModelMeta(
@@ -839,6 +846,7 @@ lightonai__colbert_zero = ModelMeta(
     superseded_by=None,
     training_datasets=nomic_embed_unsupervised_data | nomic_embed_supervised_data,
     citation=colbert_zero_citation,
+    extra_requirements_groups=["pylate"],
 )
 
 lightonai__reason_moderncolbert = ModelMeta(
@@ -889,4 +897,5 @@ author={Chaffin, Antoine},
 url={https://huggingface.co/lightonai/Reason-ModernColBERT},
 year={2025}
 }""",
+    extra_requirements_groups=["pylate"],
 )

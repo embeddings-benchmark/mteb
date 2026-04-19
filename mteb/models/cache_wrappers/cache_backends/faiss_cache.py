@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from mteb._requires_package import requires_package
+from mteb._requires_package import _is_package_available
 
 from ._hash_utils import _hash_item
 
@@ -24,12 +24,10 @@ class FaissCache:
     """FAISS-based vector cache that uses embeddings directly as lookup keys."""
 
     def __init__(self, directory: str | Path):
-        requires_package(
-            self,
-            "faiss",
-            "FAISS-based vector cache",
-            install_instruction="pip install mteb[faiss-cpu]",
-        )
+        if not _is_package_available("faiss"):
+            raise ImportError(
+                "FAISS is required for FaissCache. Please install with `pip install mteb[faiss-cpu]`."
+            )
 
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)

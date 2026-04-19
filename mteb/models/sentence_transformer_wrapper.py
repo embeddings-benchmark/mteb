@@ -11,7 +11,7 @@ from packaging.version import Version
 
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 from .abs_encoder import AbsEncoder
 
@@ -173,6 +173,23 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             The encoded sentences.
         """
         from sentence_transformers import __version__ as st_version
+
+        if "precision" in kwargs:
+            existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
+            output_dtype = OutputDType.from_str(kwargs["precision"])  # type: ignore[typeddict-item]
+            if existing_experiment_kwargs is not None:
+                existing_experiment_kwargs["output_dtypes"] = output_dtype  # type: ignore[index]
+            else:
+                existing_experiment_kwargs = {"output_dtypes": output_dtype.value}
+            logger.warning(
+                f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {output_dtype.value}."
+            )
+            self.mteb_model_meta = self.mteb_model_meta.model_copy(
+                update={
+                    "experiment_kwargs": existing_experiment_kwargs,
+                },
+                deep=True,
+            )
 
         has_query_encode = (
             Version(st_version).release

@@ -6,9 +6,6 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import (
-    requires_image_dependencies,
-)
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
@@ -32,8 +29,6 @@ class GraniteVisionEmbeddingWrapper:
     ):
         from transformers import AutoModel, AutoProcessor
         from transformers.utils.import_utils import is_flash_attn_2_available
-
-        requires_image_dependencies()
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.model_name = model_name

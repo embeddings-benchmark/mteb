@@ -10,7 +10,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class MSRVTTV2T(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSRVTTV2T",
-        description="MSRVTT",
+        description="A large video description dataset for bridging video and language",
         dataset={
             "path": "mteb/MSR-VTT",
             "revision": "4661603cee25c1fd370e5478a2953203cf37155b",
@@ -19,17 +19,25 @@ class MSRVTTV2T(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         eval_splits=["test"],
         main_score="ndcg_at_10",
-        reference=None,
+        reference="https://openaccess.thecvf.com/content_cvpr_2016/papers/Xu_MSR-VTT_A_Large_CVPR_2016_paper.pdf",
         category="va2t",
         modalities=["audio", "video", "text"],
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
-        bibtex_citation=None,
+        date=("2016-01-01", "2016-12-31"),
+        domains=[],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="created",
+        bibtex_citation=r"""
+@inproceedings{xu2016msrvtt,
+  author = {Xu, Jun and Mei, Tao and Yao, Ting and Rui, Yong},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  title = {Msr-vtt: A large video description dataset for bridging video and language},
+  year = {2016},
+}
+""",
+        is_beta=True,
     )
 
     input_column_name = ("video", "audio")

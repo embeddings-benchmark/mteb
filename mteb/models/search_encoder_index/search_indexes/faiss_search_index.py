@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 import torch
 
-from mteb._requires_package import requires_package
+from mteb._requires_package import _is_package_available
 from mteb.models.model_meta import ScoringFunction
 
 if TYPE_CHECKING:
@@ -35,12 +35,10 @@ class FaissSearchIndex:
     _normalize: bool = False
 
     def __init__(self, model: EncoderProtocol) -> None:
-        requires_package(
-            self,
-            "faiss",
-            "FAISS-based search",
-            install_instruction="pip install mteb[faiss-cpu]",
-        )
+        if not _is_package_available("faiss"):
+            raise ImportError(
+                "FAISS is required for FaissSearchIndex. Please install with `pip install mteb[faiss-cpu]`."
+            )
 
         from faiss import IndexFlatIP, IndexFlatL2
 

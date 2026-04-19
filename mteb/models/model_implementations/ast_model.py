@@ -8,7 +8,6 @@ from tqdm.auto import tqdm
 from transformers import ASTFeatureExtractor, ASTModel
 
 from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -30,7 +29,6 @@ class ASTWrapper(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
         self.model_name = model_name
         self.device = device
 
