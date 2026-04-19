@@ -8,8 +8,8 @@ class SWEbenchCodeRetrieval(AbsTaskRetrieval):
         description="A code retrieval task based on SWE-bench Verified, a curated set of 500 real GitHub issues from 12 popular Python repositories. Each query is a GitHub issue description (bug report or feature request), and the corpus contains Python source files from the associated repositories. The task is to retrieve the source files that need to be modified to resolve each issue. This represents a realistic software engineering retrieval scenario where developers search codebases to locate relevant files for bug fixes.",
         reference="https://www.swebench.com/",
         dataset={
-            "path": "embedding-benchmark/SWEbenchCodeRetrieval",
-            "revision": "440b0e732b8d02c16df2c95352ab6770abe997da",
+            "path": "mteb/SWEbenchCodeRetrieval",
+            "revision": "6b453d3a65280200d1931c7edd3e64be230cd69b",
         },
         type="Retrieval",
         category="t2t",
