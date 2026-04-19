@@ -455,10 +455,14 @@ class FramesCollator:
     """Collator for video data that resamples video frames.
 
     Supports two sampling modes:
-    - FPS-based (default): samples at a target frame rate, so the number of
-      frames scales with video duration. Use ``fps`` to control.
+    - FPS-based: samples at a target frame rate, so the number of frames
+      scales with video duration. Use ``fps`` to control.
     - Fixed-sample: always selects exactly ``num_frames`` frames uniformly
       across the video, regardless of duration. Use ``num_frames`` to control.
+
+    When both ``fps`` and ``num_frames`` are None, no frame resampling is
+    performed and all frames are returned as-is for the model's processor
+    to handle.
 
     When using FPS-based sampling, ``max_frames`` acts as an optional safety
     cap to prevent OOM on very long videos.
@@ -466,13 +470,11 @@ class FramesCollator:
 
     def __init__(
         self,
-        fps: float | None = 2.0,
-        max_frames: int | None = 256,
+        fps: float | None = None,
+        max_frames: int | None = None,
         num_frames: int | None = None,
     ) -> None:
         """Initialize the collator.
-
-        Exactly one of ``fps`` or ``num_frames`` must be set.
 
         Args:
             fps: Target frames per second for sampling. The number of frames
@@ -482,10 +484,8 @@ class FramesCollator:
             num_frames: If set, use fixed-sample mode: always select this many
                 frames uniformly from the video. Overrides ``fps``/``max_frames``.
         """
-        if num_frames is not None and fps is not None:
+        if num_frames is not None:
             fps = None
-        if num_frames is None and fps is None:
-            raise ValueError("Either fps or num_frames must be provided.")
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
@@ -512,11 +512,14 @@ class FramesCollator:
     @staticmethod
     def resample_video(
         video: VideoDecoder,
-        fps: float | None = 2.0,
-        max_frames: int | None = 256,
+        fps: float | None = None,
+        max_frames: int | None = None,
         num_frames: int | None = None,
     ) -> torch.Tensor:
         """Resample a video input to a target number of frames.
+
+        When both ``fps`` and ``num_frames`` are None, all frames are returned
+        for the model's processor to handle.
 
         Args:
             video: A VideoDecoder object containing the video data.
@@ -530,13 +533,15 @@ class FramesCollator:
         if num_frames is not None:
             # Fixed-sample mode: always select exactly num_frames
             target = num_frames
-        else:
+        elif fps is not None:
             # FPS-based mode: scale with duration
-            source_fps = video.metadata.average_fps
-            duration = num_source_frames / source_fps
+            duration = video.metadata.end_stream_seconds
             target = max(1, int(duration * fps))
             if max_frames is not None:
                 target = min(target, max_frames)
+        else:
+            # No resampling: return all frames
+            return video.get_frames_at(list(range(num_source_frames))).data
 
         frame_step = max(1, num_source_frames // target)
         selected_frames = list(range(0, num_source_frames, frame_step))[:target]
@@ -553,8 +558,8 @@ class VideoCollator:
     def __init__(
         self,
         target_sampling_rate: int,
-        fps: float | None = 2.0,
-        max_frames: int | None = 256,
+        fps: float | None = None,
+        max_frames: int | None = None,
         num_frames: int | None = None,
         max_samples: int | None = None,
     ) -> None:
