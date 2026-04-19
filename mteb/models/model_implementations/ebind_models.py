@@ -38,7 +38,9 @@ class EBindWrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
-        num_frames: int = 8,
+        fps: float | None = 2.0,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
         requires_package(
@@ -63,6 +65,8 @@ class EBindWrapper(AbsEncoder):
             if torch.backends.mps.is_available()
             else "cpu"
         )
+        self.fps = fps
+        self.max_frames = max_frames
         self.num_frames = num_frames
 
         self.model = EBindModel.from_pretrained(model_name, revision=revision)
@@ -180,7 +184,9 @@ class EBindWrapper(AbsEncoder):
         if has_video:
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=16_000,
-                max_frames=self.num_frames,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
             )
         elif has_audio:
             inputs.collate_fn = AudioCollator(
