@@ -380,7 +380,7 @@ class Benchmark:
             if per_task_df.shape[1] > 0:
                 borda_ranks = _get_borda_rank(per_task_df)
                 for name, rank in borda_ranks.items():
-                    scores[name]["Rank"] = int(rank)
+                    scores[name]["Rank"] = int(rank)  # type: ignore[index]
             else:
                 for name, model_scores in scores.items():
                     model_scores["Rank"] = None
