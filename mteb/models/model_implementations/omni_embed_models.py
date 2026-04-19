@@ -42,9 +42,6 @@ class OmniEmbedWrapper(AbsEncoder):
     ) -> None:
         requires_image_dependencies()
         requires_audio_dependencies()
-        requires_package(
-            self, "qwen_omni_utils", model_name, "pip install 'mteb[qwen_omni_utils]'"
-        )
         requires_package(self, "peft", model_name, "pip install 'mteb[peft]'")
         from transformers import (
             AutoProcessor,
@@ -82,71 +79,32 @@ class OmniEmbedWrapper(AbsEncoder):
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
     @staticmethod
-    def _frames_to_pil_list(frames: torch.Tensor) -> list[Any]:
-        """Convert a (num_frames, C, H, W) tensor to a list of PIL images."""
-        from PIL import Image
-
-        pil_frames = []
-        for frame in frames:
-            np_frame = frame.permute(1, 2, 0).cpu().numpy().astype("uint8")
-            pil_frames.append(Image.fromarray(np_frame))
-        return pil_frames
-
-    @staticmethod
     def _build_messages(
-        batch_texts: list[str],
-        batch_images: list[Any],
-        batch_audio: list[Any],
-        batch_video: list[Any],
+        batch: BatchedInput,
     ) -> list[list[dict[str, Any]]]:
-        messages = []
-        batch_size = max(
-            len(batch_texts), len(batch_images), len(batch_audio), len(batch_video)
-        )
-        for i in range(batch_size):
-            text_content = batch_texts[i] if i < len(batch_texts) else ""
-            image_content = batch_images[i] if i < len(batch_images) else None
-            audio_content = batch_audio[i] if i < len(batch_audio) else None
-            video_content = batch_video[i] if i < len(batch_video) else None
+        """Build chat messages from a batch for apply_chat_template."""
+        texts = batch.get("text", [])
+        images = batch.get("image", [])
+        audios = batch.get("audio", [])
+        videos = batch.get("video", [])
+        batch_size = max(len(texts), len(images), len(audios), len(videos))
 
+        messages = []
+        for i in range(batch_size):
             content: list[dict[str, Any]] = []
-            if video_content is not None:
-                if isinstance(video_content, torch.Tensor):
-                    video_content = OmniEmbedWrapper._frames_to_pil_list(video_content)
-                content.append({"type": "video", "video": video_content})
-            if audio_content is not None:
-                content.append({"type": "audio", "audio": audio_content})
-            if image_content is not None:
-                content.append({"type": "image", "image": image_content})
-            content.append({"type": "text", "text": text_content})
+            if i < len(videos) and videos[i] is not None:
+                content.append({"type": "video", "video": "placeholder"})
+            if i < len(audios) and audios[i] is not None:
+                content.append({"type": "audio", "audio": "placeholder"})
+            if i < len(images) and images[i] is not None:
+                content.append({"type": "image", "image": "placeholder"})
+            content.append({"type": "text", "text": texts[i] if i < len(texts) else ""})
             messages.append([{"role": "user", "content": content}])
         return messages
 
-    def _prepare_audio(self, raw_audio: list[Any]) -> list[Any]:
-        """Resample raw audio rows to the model's expected sampling rate."""
-        batch_audio = []
-        for audio_row in raw_audio:
-            if audio_row is None:
-                batch_audio.append(None)
-            elif isinstance(audio_row, dict) and "array" in audio_row:
-                batch_audio.append(audio_row["array"])
-            else:
-                array = AudioCollator.resample_audio(
-                    {"audio": audio_row},
-                    self.sampling_rate,
-                    self.max_audio_length,
-                )
-                batch_audio.append(array)
-        return batch_audio
-
-    def _encode_batch(self, batch: BatchedInput, process_mm_info: Any) -> torch.Tensor:
+    def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
         """Encode a single batch into normalized embeddings."""
-        messages = self._build_messages(
-            batch_texts=batch.get("text", []),
-            batch_images=batch.get("image", []),
-            batch_audio=self._prepare_audio(batch.get("audio", [])),
-            batch_video=batch.get("video", []),
-        )
+        messages = self._build_messages(batch)
 
         texts = [
             self.processor.apply_chat_template(
@@ -156,18 +114,24 @@ class OmniEmbedWrapper(AbsEncoder):
             for msg in messages
         ]
 
-        audio_inputs, image_inputs, video_inputs = process_mm_info(
-            messages, use_audio_in_video=False
-        )
+        videos = batch.get("video")
+        images = batch.get("image")
+        audios = batch.get("audio")
+        if audios:
+            audios = [
+                a["array"] if isinstance(a, dict) and "array" in a else a
+                for a in audios
+            ]
 
         model_inputs = self.processor(
             text=texts,
-            audio=audio_inputs,
-            images=image_inputs,
-            videos=video_inputs,
+            audio=audios or None,
+            images=images or None,
+            videos=videos or None,
             return_tensors="pt",
             text_kwargs={"truncation": True, "padding": True, "max_length": 32768},
             videos_kwargs={
+                "do_sample_frames": False,
                 "min_pixels": 32 * 14 * 14,
                 "max_pixels": 64 * 28 * 28,
                 "use_audio_in_video": False,
@@ -195,8 +159,6 @@ class OmniEmbedWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        from qwen_omni_utils import process_mm_info
-
         has_video = "video" in inputs.dataset.features
         has_audio = "audio" in inputs.dataset.features
         if has_video:
@@ -215,7 +177,7 @@ class OmniEmbedWrapper(AbsEncoder):
 
         all_embeddings: list[torch.Tensor] = []
         for batch in tqdm(inputs, desc="Encoding"):
-            all_embeddings.append(self._encode_batch(batch, process_mm_info).cpu())
+            all_embeddings.append(self._encode_batch(batch).cpu())
 
         return torch.cat(all_embeddings, dim=0).float()
 
