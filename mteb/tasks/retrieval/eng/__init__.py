@@ -91,10 +91,10 @@ from .dapfam_patent_retrieval import (
 )
 from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives, DBPediaHardNegativesV2
 from .didemo_retrieval import (
-    DiDeMoA2TRetrieval,
-    DiDeMoT2ARetrieval,
+    DiDeMoT2VARetrieval,
     DiDeMoT2VRetrieval,
     DiDeMoV2TRetrieval,
+    DiDeMoVA2TRetrieval,
 )
 from .edis_t2it_retrieval import EDIST2ITRetrieval
 from .emo_vdb import EmoVDBA2TRetrieval, EmoVDBT2ARetrieval
@@ -164,7 +164,7 @@ from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval
 from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
 from .msmarc_ov2_retrieval import MSMARCOv2
 from .msmarco_retrieval import MSMARCO, MSMARCOHardNegatives
-from .msr_vtt import MSRVTTV2T
+from .msr_vtt import MSRVTTT2V, MSRVTTT2VA, MSRVTTV2T, MSRVTTVA2T
 from .msvd_t2v_retrieval import MSVDT2VRetrieval
 from .msvd_v2t_retrieval import MSVDV2TRetrieval
 from .nano_argu_ana_retrieval import NanoArguAnaRetrieval
@@ -242,6 +242,12 @@ from .trecdl_retrieval import TRECDL2019, TRECDL2020
 from .tu_berlin_t2i_retrieval import TUBerlinT2IRetrieval
 from .tuna_bench_t2v_retrieval import TUNABenchT2VRetrieval
 from .tuna_bench_v2t_retrieval import TUNABenchV2TRetrieval
+from .vatex_retrieval import (
+    VATEXT2VARetrieval,
+    VATEXT2VRetrieval,
+    VATEXV2TRetrieval,
+    VATEXVA2TRetrieval,
+)
 from .vidore_bench_retrieval import (
     VidoreArxivQARetrieval,
     VidoreDocVQARetrieval,
@@ -273,7 +279,10 @@ __all__ = [
     "FEVER",
     "FORBI2I",
     "MSMARCO",
+    "MSRVTTT2V",
+    "MSRVTTT2VA",
     "MSRVTTV2T",
+    "MSRVTTVA2T",
     "NQ",
     "PIQA",
     "SCIDOCS",
@@ -370,10 +379,10 @@ __all__ = [
     "DBPedia",
     "DBPediaHardNegatives",
     "DBPediaHardNegativesV2",
-    "DiDeMoA2TRetrieval",
-    "DiDeMoT2ARetrieval",
+    "DiDeMoT2VARetrieval",
     "DiDeMoT2VRetrieval",
     "DiDeMoV2TRetrieval",
+    "DiDeMoVA2TRetrieval",
     "EDIST2ITRetrieval",
     "EmoVDBA2TRetrieval",
     "EmoVDBT2ARetrieval",
@@ -514,6 +523,10 @@ __all__ = [
     "TopiOCQARetrievalHardNegatives",
     "Touche2020",
     "Touche2020v3Retrieval",
+    "VATEXT2VARetrieval",
+    "VATEXT2VRetrieval",
+    "VATEXV2TRetrieval",
+    "VATEXVA2TRetrieval",
     "VQA2IT2TRetrieval",
     "VidoreArxivQARetrieval",
     "VidoreDocVQARetrieval",

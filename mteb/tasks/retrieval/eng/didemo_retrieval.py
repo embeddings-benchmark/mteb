@@ -55,6 +55,70 @@ class DiDeMoV2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="DiDeMoV2TRetrieval",
         description=(
+            "Retrieve the English caption that describes a given video clip (video "
+            "only) from the DiDeMo dataset of Flickr videos with temporally grounded "
+            "sentence descriptions."
+        ),
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="v2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        reference="https://arxiv.org/abs/1708.01641",
+        modalities=["video", "text"],
+        date=("2017-01-01", "2017-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the caption that describes the following video."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_didemo(self, query_columns=["video"], corpus_columns=["caption"])
+
+
+class DiDeMoT2VRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="DiDeMoT2VRetrieval",
+        description=(
+            "Retrieve the video clip (video only) that matches a given English "
+            "caption from the DiDeMo dataset of Flickr videos with temporally "
+            "grounded sentence descriptions."
+        ),
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="t2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        reference="https://arxiv.org/abs/1708.01641",
+        modalities=["text", "video"],
+        date=("2017-01-01", "2017-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the video clip that matches the given caption."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_didemo(self, query_columns=["caption"], corpus_columns=["video"])
+
+
+class DiDeMoVA2TRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="DiDeMoVA2TRetrieval",
+        description=(
             "Retrieve the English caption that describes a given video clip "
             "from the DiDeMo dataset of Flickr videos with temporally grounded "
             "sentence descriptions."
@@ -83,9 +147,9 @@ class DiDeMoV2TRetrieval(AbsTaskRetrieval):
         _load_didemo(self, query_columns=["video", "audio"], corpus_columns=["caption"])
 
 
-class DiDeMoT2VRetrieval(AbsTaskRetrieval):
+class DiDeMoT2VARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="DiDeMoT2VRetrieval",
+        name="DiDeMoT2VARetrieval",
         description=(
             "Retrieve the video clip that matches a given English caption "
             "from the DiDeMo dataset of Flickr videos with temporally grounded "
@@ -113,67 +177,3 @@ class DiDeMoT2VRetrieval(AbsTaskRetrieval):
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         _load_didemo(self, query_columns=["caption"], corpus_columns=["video", "audio"])
-
-
-class DiDeMoA2TRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
-        name="DiDeMoA2TRetrieval",
-        description=(
-            "Retrieve the English caption that describes a given audio track "
-            "from the DiDeMo dataset of Flickr videos with temporally grounded "
-            "sentence descriptions."
-        ),
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
-        type="Any2AnyRetrieval",
-        category="a2t",
-        eval_splits=["test"],
-        eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
-        reference="https://arxiv.org/abs/1708.01641",
-        modalities=["audio", "text"],
-        date=("2017-01-01", "2017-12-31"),
-        domains=["Web", "Spoken"],
-        task_subtypes=[],
-        license="not specified",
-        annotations_creators="human-annotated",
-        dialect=[],
-        sample_creation="found",
-        bibtex_citation=_BIBTEX,
-        prompt={"query": "Find the caption that describes the following audio."},
-        is_beta=True,
-    )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_didemo(self, query_columns=["audio"], corpus_columns=["caption"])
-
-
-class DiDeMoT2ARetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
-        name="DiDeMoT2ARetrieval",
-        description=(
-            "Retrieve the audio track that matches a given English caption "
-            "from the DiDeMo dataset of Flickr videos with temporally grounded "
-            "sentence descriptions."
-        ),
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
-        type="Any2AnyRetrieval",
-        category="t2a",
-        eval_splits=["test"],
-        eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
-        reference="https://arxiv.org/abs/1708.01641",
-        modalities=["text", "audio"],
-        date=("2017-01-01", "2017-12-31"),
-        domains=["Web", "Spoken"],
-        task_subtypes=[],
-        license="not specified",
-        annotations_creators="human-annotated",
-        dialect=[],
-        sample_creation="found",
-        bibtex_citation=_BIBTEX,
-        prompt={"query": "Find the audio track that matches the given caption."},
-        is_beta=True,
-    )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_didemo(self, query_columns=["caption"], corpus_columns=["audio"])
