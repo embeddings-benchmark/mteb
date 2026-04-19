@@ -32,14 +32,20 @@ class PEAudioVisualWrapper(AbsEncoder):
         self,
         model_name: str = "facebook/pe-av-large",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        num_frames: int = 16,
+        fps: float | None = 2.0,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        max_samples: int | None = None,
         **kwargs: Any,
     ):
         from transformers import PeAudioVideoModel, PeAudioVideoProcessor
 
         self.model_name = model_name
         self.device = device
+        self.fps = fps
+        self.max_frames = max_frames
         self.num_frames = num_frames
+        self.max_samples = max_samples
         self.model = PeAudioVideoModel.from_pretrained(model_name).to(self.device)
         self.model.eval()
         self.processor = PeAudioVideoProcessor.from_pretrained(model_name)
@@ -209,7 +215,10 @@ class PEAudioVisualWrapper(AbsEncoder):
 
         inputs.collate_fn = VideoCollator(
             target_sampling_rate=self.sampling_rate,
-            fps=2.0,
+            fps=self.fps,
+            max_frames=self.max_frames,
+            num_frames=self.num_frames,
+            max_samples=self.max_samples,
         )
 
         # Joint audio-video embedding
