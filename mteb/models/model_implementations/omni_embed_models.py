@@ -135,7 +135,7 @@ class OmniEmbedWrapper(AbsEncoder):
                 "do_sample_frames": False,
                 "min_pixels": 32 * 14 * 14,
                 "max_pixels": 64 * 28 * 28,
-                "use_audio_in_video": True,
+                "use_audio_in_video": False,
             },
             audio_kwargs={"max_length": self.max_audio_length},
         ).to(self.device)
