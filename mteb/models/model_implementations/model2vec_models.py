@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -147,7 +146,6 @@ class Model2VecModel(AbsEncoder):
             model_name: The Model2Vec model to load from HuggingFace Hub.
             **kwargs: Additional arguments to pass to the wrapper.
         """
-        requires_package(self, "model2vec", model_name, "pip install 'mteb[model2vec]'")
         from model2vec import StaticModel
 
         self.model_name = model_name
@@ -191,6 +189,7 @@ m2v_base_glove_subword = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
+    extra_requirements_groups=["model2vec"],
 )
 
 
@@ -218,6 +217,7 @@ m2v_base_glove = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
+    extra_requirements_groups=["model2vec"],
 )
 
 m2v_base_output = ModelMeta(
@@ -244,6 +244,7 @@ m2v_base_output = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
+    extra_requirements_groups=["model2vec"],
 )
 
 m2v_multilingual_output = ModelMeta(
@@ -270,6 +271,7 @@ m2v_multilingual_output = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
+    extra_requirements_groups=["model2vec"],
 )
 
 potion_base_2m = ModelMeta(
@@ -296,6 +298,7 @@ potion_base_2m = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
+    extra_requirements_groups=["model2vec"],
 )
 
 potion_base_4m = ModelMeta(
@@ -322,6 +325,7 @@ potion_base_4m = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
+    extra_requirements_groups=["model2vec"],
 )
 
 potion_base_8m = ModelMeta(
@@ -348,6 +352,7 @@ potion_base_8m = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
+    extra_requirements_groups=["model2vec"],
 )
 
 potion_base_32m = ModelMeta(
@@ -374,6 +379,7 @@ potion_base_32m = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
+    extra_requirements_groups=["model2vec"],
 )
 
 potion_retrieval_32m = ModelMeta(
@@ -400,6 +406,7 @@ potion_retrieval_32m = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
+    extra_requirements_groups=["model2vec"],
 )
 
 potion_multilingual_128m = ModelMeta(
@@ -426,6 +433,7 @@ potion_multilingual_128m = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
+    extra_requirements_groups=["model2vec"],
 )
 
 pubmed_bert_100k = ModelMeta(
@@ -451,6 +459,7 @@ pubmed_bert_100k = ModelMeta(
     training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-100K#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
+    extra_requirements_groups=["model2vec"],
 )
 
 pubmed_bert_500k = ModelMeta(
@@ -476,6 +485,7 @@ pubmed_bert_500k = ModelMeta(
     training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-500K#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
+    extra_requirements_groups=["model2vec"],
 )
 
 pubmed_bert_1m = ModelMeta(
@@ -501,6 +511,7 @@ pubmed_bert_1m = ModelMeta(
     training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-1M#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
+    extra_requirements_groups=["model2vec"],
 )
 
 pubmed_bert_2m = ModelMeta(
@@ -526,6 +537,7 @@ pubmed_bert_2m = ModelMeta(
     training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-2M#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
+    extra_requirements_groups=["model2vec"],
 )
 
 pubmed_bert_8m = ModelMeta(
@@ -551,4 +563,5 @@ pubmed_bert_8m = ModelMeta(
     training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-8M#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
+    extra_requirements_groups=["model2vec"],
 )

@@ -131,6 +131,7 @@ class ModelResult(BaseModel):
     def _filter_tasks(
         self,
         task_names: list[str] | None = None,
+        *,
         languages: list[str] | None = None,
         domains: list[TaskDomain] | None = None,
         task_types: list[TaskType] | None = None,
@@ -187,6 +188,7 @@ class ModelResult(BaseModel):
     @overload
     def _get_scores(
         self,
+        *,
         splits: list[SplitName] | None = None,
         languages: list[ISOLanguage | ISOLanguageScript] | None = None,
         scripts: list[ISOLanguageScript] | None = None,
@@ -198,6 +200,7 @@ class ModelResult(BaseModel):
     @overload
     def _get_scores(
         self,
+        *,
         splits: list[SplitName] | None = None,
         languages: list[ISOLanguage | ISOLanguageScript] | None = None,
         scripts: list[ISOLanguageScript] | None = None,
@@ -208,6 +211,7 @@ class ModelResult(BaseModel):
 
     def _get_scores(
         self,
+        *,
         splits: list[SplitName] | None = None,
         languages: list[ISOLanguage | ISOLanguageScript] | None = None,
         scripts: list[ISOLanguageScript] | None = None,
@@ -439,7 +443,7 @@ class ModelResult(BaseModel):
         Args:
             path: The path to the file to save.
         """
-        with path.open("w") as f:
+        with path.open("w") as f:  # noqa: PLW1514
             f.write(self.model_dump_json(indent=2))
 
     @classmethod

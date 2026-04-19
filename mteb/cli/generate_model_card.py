@@ -19,8 +19,9 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def generate_model_card(
+def generate_model_card(  # noqa: PLR0913
     model_name: str,
+    *,
     tasks: Sequence[AbsTask] | None = None,
     benchmarks: Sequence[Benchmark] | None = None,
     existing_model_card_id_or_path: str | Path | None = None,

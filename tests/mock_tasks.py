@@ -22,7 +22,8 @@ from mteb.abstasks.multilabel_classification import (
 )
 from mteb.abstasks.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.regression import AbsTaskRegression
-from mteb.abstasks.retrieval import AbsTaskRetrieval, RetrievalSplitData
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
@@ -3912,7 +3913,7 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
         )
         self.data_loaded = True
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         return ["This is a test sentence", "This is another test sentence"]
 
 
@@ -3973,7 +3974,7 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
         )
         self.data_loaded = True
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         return ["This is a test sentence", "This is another test sentence"]
 
 
@@ -4303,7 +4304,7 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
         self.dataset = self.dataset.cast_column("audio", Audio())
         self.data_loaded = True
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         """Return the text candidates for zeroshot classification"""
         return ["This is sound type 0", "This is sound type 1"]
 

@@ -72,7 +72,7 @@ class CodeEditSearchRetrieval(AbsTaskRetrieval):
         self.relevant_docs = {}
 
         for lang, sub in lang_subs.items():
-            sub = sub[:1000]
+            sub = sub[:1000]  # noqa: PLW2901
 
             self.queries[lang] = {
                 self._EVAL_SPLIT: {

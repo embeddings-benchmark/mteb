@@ -2,18 +2,20 @@
 
 from __future__ import annotations
 
-from types import SimpleNamespace
 from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import torch
 from numpy import ndarray
-from sentence_transformers import CrossEncoder, SentenceTransformer
+from sentence_transformers import (
+    CrossEncoder,
+    SentenceTransformer,
+    SentenceTransformerModelCardData,
+)
 from torch import Tensor
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
 
@@ -22,34 +24,12 @@ if TYPE_CHECKING:
 
     from mteb.types import Array, BatchedInput
 
-empty_metadata_kwargs = dict(
-    loader=None,
-    languages=["eng-Latn"],
-    revision="1",
-    release_date=None,
-    modalities=["text", "image"],
-    n_parameters=None,
-    memory_usage_mb=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=True,
-    public_training_code=None,
-    public_training_data=None,
-    framework=[],
-    reference=None,
-    similarity_fn_name=None,
-    use_instructions=False,
-    training_datasets=None,
-)
-
 
 class MockSentenceTransformer(SentenceTransformer):
     """Ensure that data types not supported by the encoder are converted to the supported data type."""
 
-    model_card_data = SimpleNamespace(
+    model_card_data = SentenceTransformerModelCardData(
         model_name="mock/MockSentenceTransformer",
-        base_model_revision="1.0.0",
     )
     prompts = {}
 
@@ -57,7 +37,7 @@ class MockSentenceTransformer(SentenceTransformer):
         self._modules = {}
         pass
 
-    def encode(
+    def encode(  # noqa: PLR0913, PLR0917, PLR6301
         self,
         sentences: list[str],
         prompt_name: str | None = None,
@@ -80,7 +60,7 @@ class MockSentenceTransformer(SentenceTransformer):
     def get_sentence_embedding_dimension() -> int:
         return 10
 
-    def max_seq_length(self) -> int:
+    def max_seq_length(self) -> int:  # noqa: PLR6301
         return 10
 
     @property
@@ -89,11 +69,11 @@ class MockSentenceTransformer(SentenceTransformer):
 
 
 class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
-    mteb_model_meta = ModelMeta(
-        name="mock/MockSentenceTransformersbf16Encoder", **empty_metadata_kwargs
+    model_card_data = SentenceTransformerModelCardData(
+        model_name="mock/MockSentenceTransformersbf16Encoder",
     )
 
-    def encode(
+    def encode(  # noqa: PLR0913, PLR0917, PLR6301
         self,
         sentences: str | list[str],
         prompt_name: str | None = None,

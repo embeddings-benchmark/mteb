@@ -62,6 +62,7 @@ class PairClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset: Dataset,
+        *,
         input1_column_name: str,
         input2_column_name: str,
         task_metadata: TaskMetadata,

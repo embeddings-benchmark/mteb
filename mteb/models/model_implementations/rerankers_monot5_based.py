@@ -91,7 +91,7 @@ class MonoT5Reranker(RerankerWrapper):
 
         self.model.eval()
 
-    def get_prediction_tokens(
+    def get_prediction_tokens(  # noqa: PLR6301
         self, model_name_or_path, tokenizer, token_false=None, token_true=None
     ):
         if not (token_false and token_true):

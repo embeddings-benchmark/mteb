@@ -14,7 +14,6 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.bge_models import bge_chinese_training_data
 from mteb.models.model_implementations.nvidia_models import nvidia_training_datasets
@@ -57,19 +56,12 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         **kwargs,
     ) -> None:
         """Wrapper for Seed embedding API."""
-        requires_package(
-            self,
-            "volcenginesdkarkruntime",
-            "pip install mteb[ark]",
-            "tiktoken",
-        )
-
         self._model_name = model_name
         self._max_tokens = 32768
         self._embed_dim = embed_dim
         self._available_embed_dims = [2048, 1024]
 
-    def pil_to_base64(self, image, format="jpeg"):
+    def pil_to_base64(self, image, format="jpeg"):  # noqa: PLR6301
         if image is None:
             return None
         buffer = BytesIO()
@@ -181,22 +173,19 @@ class Seed16EmbeddingWrapper(AbsEncoder):
                     "Target_modality:Text.\n Instruction:" + instruction + "\n Query:"
                 )
                 input_text = texts[i]
+            elif texts[i] != "" and images_base64[i] is not None:  # noqa: PLC1901
+                instruction = (
+                    "Instruction: Compress the text and image into one word.\n Query:"
+                )
+                input_text = texts[i]
+            elif texts[i] != "":  # noqa: PLC1901
+                instruction = "Instruction: Compress the text into one word.\n Query:"
+                input_text = texts[i]
+            elif images_base64[i] is not None:
+                instruction = "Instruction: Compress the image into one word.\n Query:"
+                input_text = None
             else:
-                if texts[i] != "" and images_base64[i] is not None:
-                    instruction = "Instruction: Compress the text and image into one word.\n Query:"
-                    input_text = texts[i]
-                elif texts[i] != "":
-                    instruction = (
-                        "Instruction: Compress the text into one word.\n Query:"
-                    )
-                    input_text = texts[i]
-                elif images_base64[i] is not None:
-                    instruction = (
-                        "Instruction: Compress the image into one word.\n Query:"
-                    )
-                    input_text = None
-                else:
-                    raise ValueError("image and text are both None")
+                raise ValueError("image and text are both None")
 
             resp = multimodal_embedding(
                 instruction=instruction,
@@ -629,4 +618,5 @@ seed_embedding = ModelMeta(
     training_datasets=doubao_embedding_training_data,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["ark"],
 )

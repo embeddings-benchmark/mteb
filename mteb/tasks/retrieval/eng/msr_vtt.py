@@ -1,15 +1,16 @@
-from datasets import Features, load_dataset
+from __future__ import annotations
+
+from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.types._encoder_io import VideoInputItem
 
 
 class MSRVTTV2T(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSRVTTV2T",
-        description="MSRVTT",
+        description="A large video description dataset for bridging video and language",
         dataset={
             "path": "mteb/MSR-VTT",
             "revision": "4661603cee25c1fd370e5478a2953203cf37155b",
@@ -18,21 +19,34 @@ class MSRVTTV2T(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         eval_splits=["test"],
         main_score="ndcg_at_10",
-        reference=None,
-        category="v2t",
-        modalities=["video", "text"],
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
-        bibtex_citation=None,
+        reference="https://openaccess.thecvf.com/content_cvpr_2016/papers/Xu_MSR-VTT_A_Large_CVPR_2016_paper.pdf",
+        category="va2t",
+        modalities=["audio", "video", "text"],
+        date=("2016-01-01", "2016-12-31"),
+        domains=[],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="created",
+        bibtex_citation=r"""
+@inproceedings{xu2016msrvtt,
+  author = {Xu, Jun and Mei, Tao and Yao, Ting and Rui, Yong},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  title = {Msr-vtt: A large video description dataset for bridging video and language},
+  year = {2016},
+}
+""",
+        is_beta=True,
     )
 
+    input_column_name = ("video", "audio")
+
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        """Load the MSRVTT dataset."""
+        """Load the MSRVTT dataset.
+
+        TODO: Reupload dataset in standard format and remove this custom load_data.
+        """
         if self.data_loaded:
             return
         dataset = load_dataset(
@@ -41,29 +55,8 @@ class MSRVTTV2T(AbsTaskRetrieval):
             split=self.metadata.eval_splits[0],
         )
         dataset = dataset.add_column("id", [str(i) for i in range(len(dataset))])
+
         query = dataset.select_columns(["id", "video", "audio"])
-
-        def _combine_modalities(example: dict) -> dict:
-            example["video"] = VideoInputItem(
-                frames=example["video"],
-                audio=example.pop("audio"),
-            )
-
-            return example
-
-        query_features = query.features
-        query = query.map(
-            _combine_modalities,
-            features=Features(
-                {
-                    "id": query_features["id"],
-                    "video": {
-                        "frames": query_features["video"],
-                        "audio": query_features["audio"],
-                    },
-                }
-            ),
-        )
         corpus = dataset.select_columns(["id", "caption"]).rename_column(
             "caption", "text"
         )

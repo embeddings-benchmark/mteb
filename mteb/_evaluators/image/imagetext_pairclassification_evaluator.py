@@ -12,7 +12,6 @@ from mteb._create_dataloaders import (
     _transform_image_to_rgb,
 )
 from mteb._evaluators.evaluator import Evaluator
-from mteb._requires_package import requires_image_dependencies
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -65,6 +64,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset,
+        *,
         images_column_names: str | Sequence[str],
         texts_column_names: str | Sequence[str],
         num_images_per_sample: int,
@@ -75,7 +75,6 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         **kwargs,
     ):
         super().__init__(**kwargs)
-        requires_image_dependencies()
 
         self.dataset = dataset
         self.images_column_names = images_column_names

@@ -3,7 +3,7 @@ import pytest
 from sklearn.linear_model import LogisticRegression
 
 import mteb
-from mteb._evaluators import SklearnEvaluator
+from mteb._evaluators import SklearnEvaluator  # noqa: PLC2701
 from tests.mock_tasks import MockClassificationTask
 
 
@@ -28,9 +28,9 @@ def test_expected_scores(model, mock_task):
     evaluator = SklearnEvaluator(
         train_data,
         test_data,
-        mock_task.input_column_name,
-        mock_task.label_column_name,
-        mock_task.metadata,
+        values_column_name=mock_task.input_column_name,
+        label_column_name=mock_task.label_column_name,
+        task_metadata=mock_task.metadata,
         hf_split="test",
         hf_subset="default",
         evaluator_model=LogisticRegression(max_iter=10),
@@ -69,9 +69,9 @@ def test_cache_usage_binary(model):
     evaluator_initial = SklearnEvaluator(
         train_data,
         test_data,
-        mock_task.input_column_name,
-        mock_task.label_column_name,
-        mock_task.metadata,
+        values_column_name=mock_task.input_column_name,
+        label_column_name=mock_task.label_column_name,
+        task_metadata=mock_task.metadata,
         hf_split="test",
         hf_subset="default",
         evaluator_model=LogisticRegression(max_iter=10),
@@ -82,9 +82,9 @@ def test_cache_usage_binary(model):
     evaluator_with_cache = SklearnEvaluator(
         train_data,
         test_data,
-        mock_task.input_column_name,
-        mock_task.label_column_name,
-        mock_task.metadata,
+        values_column_name=mock_task.input_column_name,
+        label_column_name=mock_task.label_column_name,
+        task_metadata=mock_task.metadata,
         hf_split="test",
         hf_subset="default",
         evaluator_model=LogisticRegression(max_iter=10),

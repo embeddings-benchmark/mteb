@@ -46,7 +46,7 @@ class SeamlessM4TWrapper(AbsEncoder):
         self.speech_encoder = self.speech_encoder.to(device)
         self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
@@ -167,7 +167,10 @@ seamless_m4t_v2_large = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/seamless_communication",
     public_training_data=None,
-    training_datasets=None,
+    training_datasets={
+        "FleursA2TRetrieval",
+        # CoVoST2, CVSS-C, NLLB-200 (not in MTEB)
+    },
     modalities=["audio"],
     citation="""
 @misc{communication2023seamlessmultilingualexpressivestreaming,

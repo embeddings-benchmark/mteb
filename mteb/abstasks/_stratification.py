@@ -45,7 +45,7 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import scipy.sparse as sp
-from sklearn.model_selection._split import _BaseKFold
+from sklearn.model_selection._split import _BaseKFold  # noqa: PLC2701
 from sklearn.utils import check_random_state
 
 if TYPE_CHECKING:

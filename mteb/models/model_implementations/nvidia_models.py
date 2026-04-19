@@ -10,7 +10,6 @@ from tqdm.auto import tqdm
 from transformers import AutoModel, AutoTokenizer
 from transformers import __version__ as transformers_version
 
-from mteb._requires_package import requires_package
 from mteb.models import CrossEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
@@ -154,10 +153,6 @@ class _NVEmbedWrapper(InstructSentenceTransformerModel):
                 f"install version {required_sbert_version} to run `nvidia/NV-Embed-v2`"
             )
 
-        requires_package(
-            self, "flash_attn", model_name, "pip install 'mteb[flash_attention]'"
-        )
-
         from sentence_transformers import SentenceTransformer
 
         if (
@@ -216,6 +211,7 @@ NV_embed_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=NV_RETRIEVER_CITATION,
+    extra_requirements_groups=["flash_attention"],
 )
 
 NV_embed_v1 = ModelMeta(
@@ -248,6 +244,7 @@ NV_embed_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=NV_RETRIEVER_CITATION,
+    extra_requirements_groups=["flash_attention"],
 )
 
 llama_embed_nemotron_evaluated_languages = [
@@ -434,10 +431,6 @@ class LlamaEmbedNemotron(AbsEncoder):
                 + f"If you want to load {model_name} model, please run `pip install 'mteb[llama-embed-nemotron]'` to install the required package."
             )
 
-        requires_package(
-            self, "flash_attn", model_name, "pip install 'mteb[flash_attention]'"
-        )
-
         self.model_name = model_name
         self.revision = revision
         self.max_seq_length = 4096
@@ -538,11 +531,11 @@ class LlamaEmbedNemotron(AbsEncoder):
             return ""
 
         # Override for STS and PairClassification tasks
-        if task_type in ["STS", "PairClassification"]:
+        if task_type in ["STS", "PairClassification"]:  # noqa: PLR6201
             return "Retrieve semantically similar text"
 
         # Override for BitextMining tasks
-        if task_type in ["BitextMining"]:
+        if task_type in ["BitextMining"]:  # noqa: PLR6201
             return "Retrieve parallel sentences"
 
         return instruction
@@ -639,6 +632,7 @@ llama_embed_nemotron_8b = ModelMeta(
     public_training_data="https://huggingface.co/datasets/nvidia/embed-nemotron-dataset-v1",
     contacts=["ybabakhin"],
     citation=LlamaEmbedNemotron_CITATION,
+    extra_requirements_groups=["flash_attention"],
 )
 
 

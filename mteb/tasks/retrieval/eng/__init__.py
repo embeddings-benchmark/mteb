@@ -1,3 +1,7 @@
+from .activitynet_captions_retrieval import (
+    ActivityNetCaptionsT2VRetrieval,
+    ActivityNetCaptionsV2TRetrieval,
+)
 from .aila_casedocs_retrieval import AILACasedocs
 from .aila_statutes_retrieval import AILAStatutes
 from .alpha_nli_retrieval import AlphaNLI
@@ -37,6 +41,7 @@ from .bright_v1_1_retrieval import (
     BrightTheoremQAQuestionsRetrieval,
     BrightTheoremQATheoremsRetrieval,
 )
+from .browse_comp_plus_retrieval import BrowseCompPlusRetrieval
 from .built_bench_retrieval import BuiltBenchRetrieval
 from .chat_doctor_retrieval import ChatDoctorRetrieval
 from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
@@ -85,6 +90,12 @@ from .dapfam_patent_retrieval import (
     DAPFAMOutTitlAbsToTitlAbsRetrieval,
 )
 from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives, DBPediaHardNegativesV2
+from .didemo_retrieval import (
+    DiDeMoA2TRetrieval,
+    DiDeMoT2ARetrieval,
+    DiDeMoT2VRetrieval,
+    DiDeMoV2TRetrieval,
+)
 from .edis_t2it_retrieval import EDIST2ITRetrieval
 from .emo_vdb import EmoVDBA2TRetrieval, EmoVDBT2ARetrieval
 from .encyclopedia_vqa_it2it_retrieval import EncyclopediaVQAIT2ITRetrieval
@@ -153,6 +164,9 @@ from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval
 from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
 from .msmarc_ov2_retrieval import MSMARCOv2
 from .msmarco_retrieval import MSMARCO, MSMARCOHardNegatives
+from .msr_vtt import MSRVTTV2T
+from .msvd_t2v_retrieval import MSVDT2VRetrieval
+from .msvd_v2t_retrieval import MSVDV2TRetrieval
 from .nano_argu_ana_retrieval import NanoArguAnaRetrieval
 from .nano_climate_fever_retrieval import NanoClimateFeverRetrieval
 from .nano_db_pedia_retrieval import NanoDBPediaRetrieval
@@ -226,6 +240,8 @@ from .touche2020_retrieval import Touche2020, Touche2020v3Retrieval
 from .treccovid_retrieval import TRECCOVID
 from .trecdl_retrieval import TRECDL2019, TRECDL2020
 from .tu_berlin_t2i_retrieval import TUBerlinT2IRetrieval
+from .tuna_bench_t2v_retrieval import TUNABenchT2VRetrieval
+from .tuna_bench_v2t_retrieval import TUNABenchV2TRetrieval
 from .vidore_bench_retrieval import (
     VidoreArxivQARetrieval,
     VidoreDocVQARetrieval,
@@ -257,6 +273,7 @@ __all__ = [
     "FEVER",
     "FORBI2I",
     "MSMARCO",
+    "MSRVTTV2T",
     "NQ",
     "PIQA",
     "SCIDOCS",
@@ -267,6 +284,8 @@ __all__ = [
     "AILACasedocs",
     "AILAStatutes",
     "ARCChallenge",
+    "ActivityNetCaptionsT2VRetrieval",
+    "ActivityNetCaptionsV2TRetrieval",
     "AlphaNLI",
     "ArguAna",
     "AudioSetStrongA2TRetrieval",
@@ -303,6 +322,7 @@ __all__ = [
     "BrightSustainableLivingRetrieval",
     "BrightTheoremQAQuestionsRetrieval",
     "BrightTheoremQATheoremsRetrieval",
+    "BrowseCompPlusRetrieval",
     "BuiltBenchRetrieval",
     "CIRRIT2IRetrieval",
     "CMUArcticA2TRetrieval",
@@ -350,6 +370,10 @@ __all__ = [
     "DBPedia",
     "DBPediaHardNegatives",
     "DBPediaHardNegativesV2",
+    "DiDeMoA2TRetrieval",
+    "DiDeMoT2ARetrieval",
+    "DiDeMoT2VRetrieval",
+    "DiDeMoV2TRetrieval",
     "EDIST2ITRetrieval",
     "EmoVDBA2TRetrieval",
     "EmoVDBT2ARetrieval",
@@ -421,6 +445,8 @@ __all__ = [
     "MSCOCOT2IRetrieval",
     "MSMARCOHardNegatives",
     "MSMARCOv2",
+    "MSVDT2VRetrieval",
+    "MSVDV2TRetrieval",
     "MedicalQARetrieval",
     "MemotionI2TRetrieval",
     "MemotionT2IRetrieval",
@@ -475,6 +501,8 @@ __all__ = [
     "SpokenSQuADT2ARetrieval",
     "StanfordCarsI2I",
     "TUBerlinT2IRetrieval",
+    "TUNABenchT2VRetrieval",
+    "TUNABenchV2TRetrieval",
     "TempReasonL1",
     "TempReasonL2Context",
     "TempReasonL2Fact",

@@ -9,7 +9,6 @@ from tqdm.auto import tqdm
 
 from mteb import TaskMetadata
 from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
@@ -96,7 +95,6 @@ class MCTCTWrapper(AbsEncoder):
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
         import transformers
         from packaging import version
 
@@ -123,7 +121,7 @@ class MCTCTWrapper(AbsEncoder):
         )
         self.sampling_rate = self.feature_extractor.sampling_rate  # 16000 Hz
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
@@ -231,7 +229,7 @@ mctct_large = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/speechbrain/speechbrain",
     public_training_data="https://github.com/speechbrain/speechbrain",
-    training_datasets={"Common Voice", "VoxPopuli"},
+    training_datasets={"CommonVoiceMini17A2TRetrieval", "VoxPopuliLanguageID"},
     modalities=["audio"],
     citation="""
 @misc{lugosch2022pseudolabelingmassivelymultilingualspeech,

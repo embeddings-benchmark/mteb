@@ -51,6 +51,7 @@ def filter_tasks(
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
     exclude_private: bool = False,
+    exclude_beta: bool = False,
 ) -> list[AbsTask]: ...
 
 
@@ -68,10 +69,11 @@ def filter_tasks(
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
     exclude_private: bool = False,
+    exclude_beta: bool = False,
 ) -> list[type[AbsTask]]: ...
 
 
-def filter_tasks(
+def filter_tasks(  # noqa: PLR0913
     tasks: Iterable[AbsTask] | Iterable[type[AbsTask]],
     *,
     languages: Sequence[str] | None = None,
@@ -84,6 +86,7 @@ def filter_tasks(
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
     exclude_private: bool = False,
+    exclude_beta: bool = False,
 ) -> list[AbsTask] | list[type[AbsTask]]:
     """Filter tasks based on the specified criteria.
 
@@ -103,6 +106,7 @@ def filter_tasks(
             If False, keep tasks if _any_ of the task's modalities match the filter modalities.
         exclude_aggregate: If True, exclude aggregate tasks. If False, both aggregate and non-aggregate tasks are returned.
         exclude_private: If True (default), exclude private/closed datasets (is_public=False). If False, include both public and private datasets.
+        exclude_beta: If True (default), exclude datasets that are in beta (is_beta=True). If False, include both beta and non-beta datasets.
 
     Returns:
         A list of tasks objects which pass all of the filters.
@@ -165,9 +169,8 @@ def filter_tasks(
             if exclusive_modality_filter:
                 if set(metadata.modalities) != modalities_to_keep:
                     continue
-            else:
-                if not modalities_to_keep.intersection(metadata.modalities):
-                    continue
+            elif not modalities_to_keep.intersection(metadata.modalities):
+                continue
         if exclude_superseded and metadata.superseded_by is not None:
             continue
         is_aggregate = (
@@ -179,7 +182,8 @@ def filter_tasks(
             continue
         if exclude_private and not metadata.is_public:
             continue
-
+        if exclude_beta and metadata.is_beta:
+            continue
         _tasks.append(t)
 
     return _tasks  # type: ignore[return-value]  # type checker cannot infer the overload return type

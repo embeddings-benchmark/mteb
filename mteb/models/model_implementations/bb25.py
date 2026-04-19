@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 from mteb._create_dataloaders import _combine_queries_with_instruction_text
-from mteb._requires_package import requires_package
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
@@ -54,7 +53,6 @@ def _composite_prior(
 
 
 def bb25_loader(model_name, **kwargs) -> SearchProtocol:
-    requires_package(bb25_loader, "bm25s", model_name, "pip install 'mteb[bm25s]'")
     import bm25s
     import Stemmer
 
@@ -151,7 +149,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
 
             logger.info(f"Indexed {len(self.corpus_idx_to_id):,} documents")
 
-        def search(
+        def search(  # noqa: PLR0914
             self,
             queries: QueryDatasetType,
             *,
@@ -310,4 +308,5 @@ bb25_model = ModelMeta(
   doi={10.5281/zenodo.18512411},
   url={https://doi.org/10.5281/zenodo.18512411},
 }""",
+    extra_requirements_groups=["bm25s"],
 )
