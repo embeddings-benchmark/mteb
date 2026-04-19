@@ -35,7 +35,9 @@ class OmniEmbedWrapper(AbsEncoder):
         revision: str,
         device: str | None = None,
         max_audio_length: int = 2_048_000,
-        num_frames: int = 16,
+        fps: float | None = 2.0,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
         requires_image_dependencies()
@@ -59,6 +61,8 @@ class OmniEmbedWrapper(AbsEncoder):
             else "cpu"
         )
         self.max_audio_length = max_audio_length
+        self.fps = fps
+        self.max_frames = max_frames
         self.num_frames = num_frames
 
         self.model = (
@@ -193,10 +197,19 @@ class OmniEmbedWrapper(AbsEncoder):
     ) -> Array:
         from qwen_omni_utils import process_mm_info
 
-        if "video" in inputs.dataset.features or "audio" in inputs.dataset.features:
+        has_video = "video" in inputs.dataset.features
+        has_audio = "audio" in inputs.dataset.features
+        if has_video:
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=self.sampling_rate,
-                max_frames=self.num_frames,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+                max_samples=self.max_audio_length,
+            )
+        elif has_audio:
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.sampling_rate,
                 max_samples=self.max_audio_length,
             )
 
