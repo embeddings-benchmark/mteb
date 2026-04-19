@@ -237,6 +237,7 @@ from .tweet_topic_single_classification import (
     TweetTopicSingleClassificationV2,
 )
 from .ucf101_classification import UCF101Classification
+from .vggsound import VGGSoundVAClassification, VGGSoundVClassification
 from .wikipedia_bio_met_chem_classification import (
     WikipediaBioMetChemClassification,
     WikipediaBioMetChemClassificationV2,
@@ -497,6 +498,8 @@ __all__ = [
     "UCCVCommonLawLegalBenchClassification",
     "UCF101Classification",
     "UnfairTOSLegalBenchClassification",
+    "VGGSoundVAClassification",
+    "VGGSoundVClassification",
     "VocalSoundClassification",
     "VoxCelebSA",
     "VoxLingua107Top10",
