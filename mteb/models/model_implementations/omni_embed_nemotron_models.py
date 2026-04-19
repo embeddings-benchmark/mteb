@@ -27,12 +27,10 @@ class OmniEmbedNemotronWrapper(SentenceTransformerMultimodalEncoderWrapper):
         revision: str | None = None,
         device: str | None = None,
         max_audio_length: int = 2_048_000,
-        num_frames: int = 16,
         **kwargs: Any,
     ) -> None:
         super().__init__(model, revision=revision, device=device, **kwargs)
         self.max_audio_length = max_audio_length
-        self.num_frames = num_frames
         self.sampling_rate = self.model[0].processor.feature_extractor.sampling_rate
         self.model[0].processing_kwargs.update(
             {
@@ -56,24 +54,10 @@ class OmniEmbedNemotronWrapper(SentenceTransformerMultimodalEncoderWrapper):
         **kwargs: Any,
     ) -> Array:
         if "video" in inputs.dataset.features or "audio" in inputs.dataset.features:
-            base_collate = VideoCollator(
+            inputs.collate_fn = VideoCollator(
                 target_sampling_rate=self.sampling_rate,
-                max_frames=self.num_frames,
                 max_samples=self.max_audio_length,
             )
-
-            def collate_and_unwrap(rows):
-                batch = base_collate(rows)
-                # Transformers' apply_chat_template expects audio as a raw numpy
-                # array, not an AudioInputItem dict.
-                if "audio" in batch:
-                    batch["audio"] = [
-                        a["array"] if isinstance(a, dict) and "array" in a else a
-                        for a in batch["audio"]
-                    ]
-                return batch
-
-            inputs.collate_fn = collate_and_unwrap
         return super().encode(
             inputs,
             task_metadata=task_metadata,

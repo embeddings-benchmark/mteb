@@ -269,6 +269,14 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
         all_embeddings = []
         _modality_keys = {"text", "image", "audio", "video"}
         for batch in inputs:
+            # Transformers' apply_chat_template expects audio as raw numpy arrays,
+            # not the {"array", "sampling_rate"} dict produced by AudioCollator.
+            # See https://github.com/huggingface/sentence-transformers/issues/3732
+            if "audio" in batch:
+                batch["audio"] = [
+                    a["array"] if isinstance(a, dict) and "array" in a else a
+                    for a in batch["audio"]
+                ]
             batch_column = next(iter(batch.keys()))
             batched_input: list[dict[str, Any]] = [
                 dict() for _ in range(len(batch[batch_column]))
