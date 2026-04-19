@@ -235,12 +235,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
 
 
 class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrapper):
-    """Wrapper for multimodal SentenceTransformer models.
-
-    Handles video/audio collation automatically when those modalities are
-    present in the dataset. Collator parameters can be set via the constructor
-    so subclasses don't need to override ``encode()``.
-    """
+    """Wrapper for multimodal SentenceTransformer models."""
 
     def __init__(
         self,
