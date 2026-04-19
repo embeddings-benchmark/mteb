@@ -3,7 +3,6 @@ from __future__ import annotations
 import tempfile
 from typing import TYPE_CHECKING, Any
 
-import numpy as np
 import torch
 from tqdm.auto import tqdm
 
@@ -84,13 +83,13 @@ class EBindWrapper(AbsEncoder):
         inputs: DataLoader[TextInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ) -> np.ndarray:
-        all_embeddings: list[np.ndarray] = []
+    ) -> torch.Tensor:
+        all_embeddings: list[torch.Tensor] = []
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding text"):
             processed = self.processor({"text": batch["text"]}, return_tensors="pt")
             outputs = self.model.forward(**processed)
-            all_embeddings.append(outputs["text"].cpu().float().numpy())
-        return np.vstack(all_embeddings)
+            all_embeddings.append(outputs["text"].cpu())
+        return torch.cat(all_embeddings, dim=0)
 
     @torch.inference_mode()
     def get_image_embeddings(
@@ -98,8 +97,8 @@ class EBindWrapper(AbsEncoder):
         inputs: DataLoader[ImageInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ) -> np.ndarray:
-        all_embeddings: list[np.ndarray] = []
+    ) -> torch.Tensor:
+        all_embeddings: list[torch.Tensor] = []
         for batch in tqdm(
             inputs, disable=not show_progress_bar, desc="Encoding images"
         ):
@@ -107,8 +106,8 @@ class EBindWrapper(AbsEncoder):
                 [self._image_transform(img) for img in batch["image"]]
             ).to(self.device)
             outputs = self.model.forward(image=img_tensors)
-            all_embeddings.append(outputs["image"].cpu().float().numpy())
-        return np.vstack(all_embeddings)
+            all_embeddings.append(outputs["image"].cpu())
+        return torch.cat(all_embeddings, dim=0)
 
     @torch.inference_mode()
     def get_audio_embeddings(
@@ -116,10 +115,10 @@ class EBindWrapper(AbsEncoder):
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ) -> np.ndarray:
+    ) -> torch.Tensor:
         import soundfile as sf
 
-        all_embeddings: list[np.ndarray] = []
+        all_embeddings: list[torch.Tensor] = []
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding audio"):
             # IBAudioProcessor only accepts file paths — write to temp wav.
             audio_tensors = []
@@ -129,8 +128,8 @@ class EBindWrapper(AbsEncoder):
                     audio_tensors.append(self.processor.processors["audio"](tmp.name))
             stacked = torch.stack(audio_tensors).to(self.device)
             outputs = self.model.forward(audio=stacked)
-            all_embeddings.append(outputs["audio"].cpu().float().numpy())
-        return np.vstack(all_embeddings)
+            all_embeddings.append(outputs["audio"].cpu())
+        return torch.cat(all_embeddings, dim=0)
 
     @torch.inference_mode()
     def get_video_embeddings(
@@ -138,14 +137,14 @@ class EBindWrapper(AbsEncoder):
         inputs: DataLoader[VideoInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ) -> np.ndarray:
+    ) -> torch.Tensor:
         from torchvision.transforms.functional import (
             InterpolationMode,
             normalize,
             resize,
         )
 
-        all_embeddings: list[np.ndarray] = []
+        all_embeddings: list[torch.Tensor] = []
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding video"):
             video_tensors = []
             for raw_frames in batch["video"]:
@@ -162,8 +161,8 @@ class EBindWrapper(AbsEncoder):
                 video_tensors.append(processed)
             stacked = torch.stack(video_tensors).to(self.device)
             outputs = self.model.forward(video=stacked)
-            all_embeddings.append(outputs["video"].cpu().float().numpy())
-        return np.vstack(all_embeddings)
+            all_embeddings.append(outputs["video"].cpu())
+        return torch.cat(all_embeddings, dim=0)
 
     def encode(
         self,
@@ -226,7 +225,7 @@ class EBindWrapper(AbsEncoder):
             embeddings = audio_emb if embeddings is None else embeddings + audio_emb
 
         if embeddings is not None:
-            return embeddings
+            return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
 
         raise ValueError(
             f"No supported modality found in dataset features: {list(features.keys())}"
