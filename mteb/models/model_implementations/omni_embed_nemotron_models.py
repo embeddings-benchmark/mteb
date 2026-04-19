@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-from mteb._create_dataloaders import VideoCollator
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
@@ -10,12 +9,6 @@ from mteb.models.model_meta import (
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerMultimodalEncoderWrapper,
 )
-
-if TYPE_CHECKING:
-    from torch.utils.data import DataLoader
-
-    from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, PromptType
 
 
 class OmniEmbedNemotronWrapper(SentenceTransformerMultimodalEncoderWrapper):
@@ -26,12 +19,23 @@ class OmniEmbedNemotronWrapper(SentenceTransformerMultimodalEncoderWrapper):
         model: str,
         revision: str | None = None,
         device: str | None = None,
+        fps: float | None = 2.0,
+        max_frames: int | None = None,
         max_audio_length: int = 2_048_000,
         **kwargs: Any,
     ) -> None:
-        super().__init__(model, revision=revision, device=device, **kwargs)
-        self.max_audio_length = max_audio_length
-        self.sampling_rate = self.model[0].processor.feature_extractor.sampling_rate
+        super().__init__(
+            model,
+            revision=revision,
+            device=device,
+            fps=fps,
+            max_frames=max_frames,
+            max_samples=max_audio_length,
+            **kwargs,
+        )
+        self.target_sampling_rate = self.model[
+            0
+        ].processor.feature_extractor.sampling_rate
         self.model[0].processing_kwargs.update(
             {
                 "video": {
@@ -41,30 +45,6 @@ class OmniEmbedNemotronWrapper(SentenceTransformerMultimodalEncoderWrapper):
                 },
                 "audio": {"max_length": max_audio_length},
             }
-        )
-
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        if "video" in inputs.dataset.features or "audio" in inputs.dataset.features:
-            inputs.collate_fn = VideoCollator(
-                target_sampling_rate=self.sampling_rate,
-                max_samples=self.max_audio_length,
-            )
-        return super().encode(
-            inputs,
-            task_metadata=task_metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            prompt_type=prompt_type,
-            **kwargs,
         )
 
 

@@ -235,7 +235,40 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
 
 
 class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrapper):
-    """Wrapper for multimodal SentenceTransformer models."""
+    """Wrapper for multimodal SentenceTransformer models.
+
+    Handles video/audio collation automatically when those modalities are
+    present in the dataset. Collator parameters can be set via the constructor
+    so subclasses don't need to override ``encode()``.
+    """
+
+    def __init__(
+        self,
+        *args,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        target_sampling_rate: int | None = None,
+        max_samples: int | None = None,
+        **kwargs,
+    ) -> None:
+        """Wrapper for multimodal SentenceTransformer models.
+
+        Args:
+            *args: Passed to SentenceTransformerEncoderWrapper.
+            fps: Target frames per second for video sampling.
+            max_frames: Safety cap on frames per video for FPS mode.
+            num_frames: If set, use fixed-sample mode instead of FPS-based.
+            target_sampling_rate: Sampling rate to resample audio to.
+            max_samples: Maximum number of audio samples to keep.
+            **kwargs: Passed to SentenceTransformerEncoderWrapper.
+        """
+        super().__init__(*args, **kwargs)
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
 
     def encode(
         self,
@@ -269,6 +302,26 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
         Returns:
             The encoded sentences.
         """
+        has_video = "video" in inputs.dataset.features
+        has_audio = "audio" in inputs.dataset.features
+        if has_video:
+            from mteb._create_dataloaders import VideoCollator
+
+            inputs.collate_fn = VideoCollator(
+                target_sampling_rate=self.target_sampling_rate or 16000,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+                max_samples=self.max_samples,
+            )
+        elif has_audio:
+            from mteb._create_dataloaders import AudioCollator
+
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.target_sampling_rate or 16000,
+                max_samples=self.max_samples,
+            )
+
         prompt = None
         prompt_name = None
         if self.model_prompts is not None:
