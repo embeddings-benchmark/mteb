@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-from .human_animal_cartoon_pc import _build_pair_dataset, _generate_pairs
+from ._video_pair_helpers import build_pair_dataset, generate_pairs
 
 
 class MELDPairClassification(AbsTaskPairClassification):
@@ -60,5 +60,5 @@ class MELDPairClassification(AbsTaskPairClassification):
         rng = random.Random(42)
         for split in self.metadata.eval_splits:
             ds = self.dataset[split]
-            pairs = _generate_pairs(ds["emotion"], rng)
-            self.dataset[split] = _build_pair_dataset(ds, pairs)
+            pairs = generate_pairs(ds["emotion"], rng)
+            self.dataset[split] = build_pair_dataset(ds, pairs)
