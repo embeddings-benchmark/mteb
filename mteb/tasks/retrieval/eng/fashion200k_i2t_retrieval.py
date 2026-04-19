@@ -41,6 +41,7 @@ class Fashion200kI2TRetrieval(AbsTaskRetrieval):
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        # fixes https://github.com/embeddings-benchmark/mteb/issues/4436
         self.dataset["default"]["test"]["corpus"] = self.dataset["default"]["test"][
             "corpus"
         ].remove_columns("image")
