@@ -32,7 +32,9 @@ class QwenOmniWrapper(AbsEncoder):
         revision: str,
         device: str | None = None,
         max_audio_length_seconds: int = 300,
-        num_frames: int = 16,
+        fps: float | None = 2.0,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
         requires_image_dependencies()
@@ -45,6 +47,8 @@ class QwenOmniWrapper(AbsEncoder):
             else "cpu"
         )
         self.max_audio_length_seconds = max_audio_length_seconds
+        self.fps = fps
+        self.max_frames = max_frames
         self.num_frames = num_frames
 
         if "2.5" in model_name:
@@ -67,70 +71,28 @@ class QwenOmniWrapper(AbsEncoder):
         self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
     @staticmethod
-    def _resize_video(video: torch.Tensor) -> torch.Tensor:
-        """Pre-resize video frames via smart_resize to match the model's expected pixel range.
-
-        Replicates the smart_resize step from qwen_omni_utils fetch_video which
-        constrains frames to 100352-602112 pixels before the processor applies
-        its own resize.
-        """
-        from torchvision.transforms.functional import InterpolationMode, resize
-        from transformers.models.qwen2_vl.image_processing_qwen2_vl import (
-            smart_resize,
-        )
-
-        patch_size = 14
-        merge_size = 2
-        factor = patch_size * merge_size  # 28
-        min_pixels = 128 * factor * factor  # 100352
-        max_pixels = 768 * factor * factor  # 602112
-
-        _, _, h, w = video.shape
-        new_h, new_w = smart_resize(
-            h, w, factor=factor, min_pixels=min_pixels, max_pixels=max_pixels
-        )
-        if new_h != h or new_w != w:
-            video = resize(
-                video,
-                [new_h, new_w],
-                interpolation=InterpolationMode.BICUBIC,
-                antialias=True,
-            )
-        return video
-
-    @staticmethod
     def _build_messages(
-        batch_texts: list[str],
-        batch_images: list[Any],
-        batch_audio: list[Any],
-        batch_video: list[Any],
+        batch: BatchedInput,
     ) -> list[list[dict[str, Any]]]:
-        messages = []
-        batch_size = max(
-            len(batch_texts), len(batch_images), len(batch_audio), len(batch_video)
-        )
-        for i in range(batch_size):
-            text_content = batch_texts[i] if i < len(batch_texts) else ""
-            image_content = batch_images[i] if i < len(batch_images) else None
-            audio_content = batch_audio[i] if i < len(batch_audio) else None
-            video_content = batch_video[i] if i < len(batch_video) else None
+        """Build chat messages from a batch for apply_chat_template."""
+        texts = batch.get("text", [])
+        images = batch.get("image", [])
+        audios = batch.get("audio", [])
+        videos = batch.get("video", [])
+        batch_size = max(len(texts), len(images), len(audios), len(videos))
 
-            content = []
-            if video_content is not None:
-                content.append({"type": "video", "video": video_content})
-            if audio_content is not None:
-                content.append({"type": "audio", "audio": audio_content})
-            if image_content is not None:
-                content.append(
-                    {
-                        "type": "image",
-                        "image": image_content,
-                    }
-                )
-            content.append({"type": "text", "text": text_content})
+        messages = []
+        for i in range(batch_size):
+            content: list[dict[str, Any]] = []
+            if i < len(videos) and videos[i] is not None:
+                content.append({"type": "video", "video": "placeholder"})
+            if i < len(audios) and audios[i] is not None:
+                content.append({"type": "audio", "audio": "placeholder"})
+            if i < len(images) and images[i] is not None:
+                content.append({"type": "image", "image": "placeholder"})
+            content.append({"type": "text", "text": texts[i] if i < len(texts) else ""})
             messages.append(
                 [
-                    # qwen2.5 audio output mode only works when using default system prompt
                     {
                         "role": "system",
                         "content": [
@@ -146,7 +108,7 @@ class QwenOmniWrapper(AbsEncoder):
         return messages
 
     @torch.no_grad()
-    def encode(  # noqa: PLR0914
+    def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,
@@ -156,48 +118,26 @@ class QwenOmniWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        if "video" in inputs.dataset.features or "audio" in inputs.dataset.features:
+        has_video = "video" in inputs.dataset.features
+        has_audio = "audio" in inputs.dataset.features
+        if has_video:
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=self.sampling_rate,
-                max_frames=self.num_frames,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+                max_samples=self.max_samples,
+            )
+        elif has_audio:
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.sampling_rate,
                 max_samples=self.max_samples,
             )
 
         all_embeddings: list[torch.Tensor] = []
 
         for batch in tqdm(inputs, desc="Encoding"):
-            batch_texts = batch.get("text", [])
-            batch_images = batch.get("image", [])
-            raw_audio = batch.get("audio", [])
-            raw_video = batch.get("video", [])
-
-            batch_audio = []
-            for audio_row in raw_audio:
-                if audio_row is None:
-                    batch_audio.append(None)
-                elif isinstance(audio_row, dict) and "array" in audio_row:
-                    batch_audio.append(audio_row["array"])
-                else:
-                    array = AudioCollator.resample_audio(
-                        {"audio": audio_row}, self.sampling_rate, self.max_samples
-                    )
-                    batch_audio.append(array)
-
-            batch_video = []
-            for video_row in raw_video:
-                if video_row is None:
-                    batch_video.append(None)
-                elif isinstance(video_row, torch.Tensor):
-                    batch_video.append(self._resize_video(video_row))
-                else:
-                    batch_video.append(video_row)
-
-            messages = self._build_messages(
-                batch_texts=batch_texts,
-                batch_images=batch_images,
-                batch_audio=batch_audio,
-                batch_video=batch_video,
-            )
+            messages = self._build_messages(batch)
 
             texts = [
                 self.processor.apply_chat_template(
@@ -206,19 +146,28 @@ class QwenOmniWrapper(AbsEncoder):
                 for msg in messages
             ]
 
-            audio_inputs = [a for a in batch_audio if a is not None] or None
-            video_inputs = [v for v in batch_video if v is not None] or None
-            image_inputs = [img for img in batch_images if img is not None] or None
+            videos = batch.get("video")
+            images = batch.get("image")
+            audios = batch.get("audio")
+            if audios:
+                audios = [
+                    a["array"] if isinstance(a, dict) and "array" in a else a
+                    for a in audios
+                ]
 
             model_inputs = (
                 self.processor(
                     text=texts,
-                    audio=audio_inputs,
-                    images=image_inputs,
-                    videos=video_inputs,
+                    audio=audios or None,
+                    images=images or None,
+                    videos=videos or None,
                     padding=True,
                     return_tensors="pt",
-                    use_audio_in_video=False,
+                    videos_kwargs={
+                        "do_sample_frames": False,
+                        "use_audio_in_video": False,
+                    },
+                    audio_kwargs={"max_length": self.max_samples},
                 )
                 .to(self.device)
                 .to(self.model.dtype)
@@ -227,9 +176,7 @@ class QwenOmniWrapper(AbsEncoder):
             outputs = self.model(
                 **model_inputs, output_hidden_states=True, return_dict=True
             )
-            embeddings = outputs.hidden_states[-1][
-                :, -1
-            ]  # select last hidden state ([-1]) and last token position ([:, -1]).
+            embeddings = outputs.hidden_states[-1][:, -1]
             embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
             all_embeddings.append(embeddings.cpu())
 
