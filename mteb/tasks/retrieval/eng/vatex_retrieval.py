@@ -84,7 +84,7 @@ class VATEXV2TRetrieval(AbsTaskRetrieval):
 
 class VATEXT2VRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="VATEXT2VRetrieval",
+        name="VATEXT2VARetrieval",
         description=(
             "Retrieve the video clip that matches a given English caption from "
             "VATEX, a large-scale multilingual video description dataset."
