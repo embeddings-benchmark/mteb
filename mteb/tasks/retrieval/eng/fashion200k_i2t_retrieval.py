@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -37,3 +39,11 @@ class Fashion200kI2TRetrieval(AbsTaskRetrieval):
             "query": "Based on the following fashion description, retrieve the best matching image."
         },
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        self.dataset["default"]["test"]["corpus"] = self.dataset["default"]["test"][
+            "corpus"
+        ].remove_columns("image")
+        self.dataset["default"]["test"]["queries"] = self.dataset["default"]["test"][
+            "queries"
+        ].remove_columns("text")

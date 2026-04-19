@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -35,3 +37,11 @@ class VisualNewsI2TRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a caption for the news in the given photo."},
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        self.dataset["default"]["test"]["corpus"] = self.dataset["default"]["test"][
+            "corpus"
+        ].remove_columns("image")
+        self.dataset["default"]["test"]["queries"] = self.dataset["default"]["test"][
+            "queries"
+        ].remove_columns("text")

@@ -31,11 +31,11 @@ class MusicAVQAClustering(AbsTaskClustering):
         modalities=["video", "audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@ARTICLE{Li2022Learning,
-    title	= {Learning to Answer Questions in Dynamic Audio-Visual Scenarios},
-    author	= {Guangyao li, Yake Wei, Yapeng Tian, Chenliang Xu, Ji-Rong Wen, Di Hu},
-    journal	= {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-    year	= {2022},
+@article{Li2022Learning,
+  author = {Guangyao li, Yake Wei, Yapeng Tian, Chenliang Xu, Ji-Rong Wen, Di Hu},
+  journal = {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  title = {Learning to Answer Questions in Dynamic Audio-Visual Scenarios},
+  year = {2022},
 }
 """,
         is_beta=True,
