@@ -276,8 +276,8 @@ class SIB200ClassificationV2(AbsTaskClassification):
         ),
         reference="https://arxiv.org/abs/2309.07445",
         dataset={
-            "path": "Davlan/sib200_14classes",
-            "revision": "9a9b57434ee6eac80271059112704ccfcad83402",
+            "path": "mteb/sib200.v2",
+            "revision": "4d46813bbbb029383bbc385c0eb7a5a638686bdd",
         },
         type="Classification",
         category="t2c",

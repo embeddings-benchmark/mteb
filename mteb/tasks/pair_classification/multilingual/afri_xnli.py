@@ -15,8 +15,8 @@ class AfriXNLI(AbsTaskPairClassification):
         ),
         reference="https://github.com/masakhane-io/afri-xnli",
         dataset={
-            "path": "masakhane/afrixnli",  # dataset on the HF hub
-            "revision": "e3ca06b30f3e7af2a86f6c8609ea76fee326bc56",
+            "path": "mteb/AfriXNLI",  # dataset on the HF hub
+            "revision": "92cff70b5f9bd7991176a47ba4203344fa710cfd",
         },
         type="PairClassification",
         category="t2t",

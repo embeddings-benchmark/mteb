@@ -18,9 +18,9 @@ class InjongoIntent(AbsTaskClassification):
         ),
         reference="https://arxiv.org/abs/2502.09814",
         dataset={
-            "path": "masakhane/InjongoIntent",
+            "path": "mteb/InjongoIntent",
             # exact commit that matches the paper; bump when the HF repo updates
-            "revision": "fe4be3882a1614161dfe231ec793197bb74f4b44",
+            "revision": "5af1657c7b42aecfe924c0d9a870ac621a589785",
         },
         type="Classification",
         category="t2c",

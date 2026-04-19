@@ -22,8 +22,8 @@ class AfriHateClassification(AbsTaskClassification):
         ),
         reference="https://aclanthology.org/2025.naacl-long.92/",
         dataset={
-            "path": "afrihate/afrihate",
-            "revision": "bb341d2234e404c1efa355ad2d7973f74ca4c140",
+            "path": "mteb/AfriHateClassification",
+            "revision": "ec8740ea28c08bfeb9cd99b7ded40fb73582297b",
         },
         type="Classification",
         category="t2c",

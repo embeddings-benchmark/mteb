@@ -23,8 +23,8 @@ class KinNewsClassification(AbsTaskClassification):
         ),
         reference="https://arxiv.org/abs/2010.12174",
         dataset={
-            "path": "andreniyongabo/kinnews_kirnews",
-            "revision": "97dce354a363f853fa94c439dd42135fc31618f0",
+            "path": "mteb/KinNewsClassification",
+            "revision": "87c7621def3ed9d06e305037416f82eddb9dceac",
         },
         type="Classification",
         category="t2c",
