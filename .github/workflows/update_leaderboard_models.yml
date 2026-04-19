@@ -1,0 +1,52 @@
+name: Update Leaderboard Model List
+
+on:
+  schedule:
+    # Weekly on Monday at 9 AM UTC
+    - cron: "0 9 * * 1"
+  push:
+    branches: [main]
+    paths:
+      - "mteb/models/**"
+  workflow_dispatch:
+
+concurrency:
+  group: update-leaderboard-models
+  cancel-in-progress: true
+
+jobs:
+  update-models:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout mteb
+        uses: actions/checkout@v6
+
+      - name: Install uv and set the Python version
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.10"
+          version: "0.10.12"
+
+      - name: Install mteb
+        run: uv sync
+
+      - name: Generate model list
+        run: uv run python scripts/generate_leaderboard_models.py > leaderboard_models.py
+
+      - name: Clone leaderboard space and update
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git clone https://huggingface.co/spaces/mteb/leaderboard hf-leaderboard
+          cp leaderboard_models.py hf-leaderboard/models.py
+          cd hf-leaderboard
+          if git diff --quiet models.py; then
+            echo "No changes to models.py"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://mteb:${HF_TOKEN}@huggingface.co/spaces/mteb/leaderboard"
+          git add models.py
+          git commit -m "Update model list"
+          git push

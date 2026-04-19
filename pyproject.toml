@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.12.16"
+version = "2.12.23"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -96,6 +96,7 @@ voyageai = ["voyageai>0.3.0,<2.0.0"]
 voyage_v = ["voyageai>0.3.0,<2.0.0", "tenacity>9.0.0"]
 cohere = ["cohere==5.14.0"]
 vertexai = ["vertexai==1.71.1"]
+google_genai = ["google-genai>=1.7.0"]
 llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
 timm = ["timm>=1.0.15,<1.1.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
@@ -120,6 +121,8 @@ vllm = ["vllm>=0.11.1"]
 mctct = ["transformers<5"]  # mctct was removed in transformers 5
 siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
 qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
+qwen_omni_utils = ["qwen_omni_utils"]
+embeddinggemma = ["transformers>=4.56.0"]
 
 [dependency-groups]
 lint = [
@@ -387,6 +390,7 @@ addopts = """
 
 markers = [
     "test_datasets: marks tests that tests dataset availability",
+    "test_reference_models: marks tests that verify reference model result coverage (requires downloading results repo)",
 ]
 
 [tool.uv]
@@ -415,6 +419,7 @@ conflicts = [
         { extra = "muq" },
         { extra = "mctct" },
         { extra = "qwen-vl" },
+        { extra = "embeddinggemma" },
     ],
 ]
 

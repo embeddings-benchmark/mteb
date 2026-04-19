@@ -5,6 +5,7 @@ from .arxiv_hierarchical_clustering import (
     ArXivHierarchicalClusteringP2P,
     ArXivHierarchicalClusteringS2S,
 )
+from .ave_dataset_clustering import AVEDatasetClustering
 from .big_patent_clustering import BigPatentClustering, BigPatentClusteringFast
 from .biorxiv_clustering_p2p import BiorxivClusteringP2P, BiorxivClusteringP2PFast
 from .biorxiv_clustering_s2s import BiorxivClusteringS2S, BiorxivClusteringS2SFast
@@ -19,6 +20,8 @@ from .hume_wiki_cities_clustering import HUMEWikiCitiesClustering
 from .image_net import ImageNet10Clustering, ImageNetDog15Clustering
 from .medrxiv_clustering_p2p import MedrxivClusteringP2P, MedrxivClusteringP2PFast
 from .medrxiv_clustering_s2s import MedrxivClusteringS2S, MedrxivClusteringS2SFast
+from .music_avqa_clustering import MusicAVQAClustering
+from .ravdess_av_clustering import RAVDESSAVClustering
 from .reddit_clustering import RedditClustering, RedditFastClusteringS2S
 from .reddit_clustering_p2p import RedditClusteringP2P, RedditFastClusteringP2P
 from .stack_exchange_clustering import (
@@ -42,8 +45,10 @@ from .wikipedia_chemistry_specialties_clustering import (
     WikipediaChemistrySpecialtiesClustering,
 )
 from .wikipedia_chemistry_topics_clustering import WikipediaChemistryTopicsClustering
+from .worldsense_1min_domain_clustering import WorldSense1MinDomainClustering
 
 __all__ = [
+    "AVEDatasetClustering",
     "AmbientAcousticContextClustering",
     "ArXivHierarchicalClusteringP2P",
     "ArXivHierarchicalClusteringS2S",
@@ -71,6 +76,8 @@ __all__ = [
     "MedrxivClusteringP2PFast",
     "MedrxivClusteringS2S",
     "MedrxivClusteringS2SFast",
+    "MusicAVQAClustering",
+    "RAVDESSAVClustering",
     "RedditClustering",
     "RedditClusteringP2P",
     "RedditFastClusteringP2P",
@@ -88,4 +95,5 @@ __all__ = [
     "WikiCitiesClustering",
     "WikipediaChemistrySpecialtiesClustering",
     "WikipediaChemistryTopicsClustering",
+    "WorldSense1MinDomainClustering",
 ]

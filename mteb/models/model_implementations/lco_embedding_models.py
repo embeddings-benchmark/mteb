@@ -7,7 +7,6 @@ import torch
 from tqdm.auto import tqdm
 
 from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies, requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -28,10 +27,6 @@ class LCOEmbedding(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
-        requires_package(
-            self, "qwen_omni_utils", model_name, "pip install mteb[qwen_omni_utils]"
-        )
         from transformers import (
             Qwen2_5OmniProcessor,
             Qwen2_5OmniThinkerForConditionalGeneration,
@@ -162,6 +157,7 @@ lco_3b = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    extra_requirements_groups=["qwen_omni_utils"],
 )
 
 lco_7b = ModelMeta(
@@ -197,4 +193,5 @@ lco_7b = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    extra_requirements_groups=["qwen_omni_utils"],
 )

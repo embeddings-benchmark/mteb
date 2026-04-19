@@ -8,7 +8,6 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.types import PromptType
@@ -47,21 +46,8 @@ class SeedTextEmbeddingModel(AbsEncoder):
         **kwargs,
     ) -> None:
         """Wrapper for Seed embedding API."""
-        requires_package(
-            self,
-            "volcenginesdkarkruntime",
-            "ByteDance Seed",
-            "pip install mteb[ark]",
-        )
-        from volcenginesdkarkruntime import Ark
-
-        requires_package(
-            self,
-            "tiktoken",
-            "ByteDance Seed",
-            "pip install mteb[ark]",
-        )
         import tiktoken
+        from volcenginesdkarkruntime import Ark
 
         self._client = Ark()
         self._model_name = model_name
@@ -270,4 +256,5 @@ seed_embedding = ModelMeta(
     training_datasets=seed_1_5_training_data,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["ark"],
 )
