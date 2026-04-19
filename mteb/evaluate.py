@@ -93,6 +93,7 @@ def _evaluate_task(
     prediction_folder: Path | None,
     public_only: bool | None,
     num_proc: int | None = None,
+    corpus_chunk_size: int | None = None,
 ) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
 
@@ -127,6 +128,7 @@ def _evaluate_task(
                 prediction_folder=prediction_folder,
                 public_only=public_only,
                 num_proc=num_proc,
+                corpus_chunk_size=corpus_chunk_size,
             )
         if isinstance(result, TaskResult):
             result.kg_co2_emissions = tracker.final_emissions
@@ -166,6 +168,7 @@ def _evaluate_task(
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             num_proc=num_proc,
+            corpus_chunk_size=corpus_chunk_size,
         )
         tock = time()
 
@@ -285,6 +288,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
     show_progress_bar: bool = True,
     public_only: bool | None = None,
     num_proc: int | None = None,
+    corpus_chunk_size: int | None = None,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -310,6 +314,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
         public_only: Run only public tasks. If None, it will attempt to run the private task.
         num_proc: Number of processes to use during data loading and transformation. Defaults to 1.
+        corpus_chunk_size: Number of corpus entries to encode at a time in retrieval and bitext mining tasks. Reduces memory usage for large corpora. Defaults to 50,000 for retrieval and 500,000 for bitext mining.
 
     Returns:
         The results of the evaluation.
@@ -479,6 +484,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 prediction_folder=prediction_folder,
                 public_only=public_only,
                 num_proc=num_proc,
+                corpus_chunk_size=corpus_chunk_size,
             )
         except Exception as e:
             logger.error(
@@ -495,6 +501,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             prediction_folder=prediction_folder,
             public_only=public_only,
             num_proc=num_proc,
+            corpus_chunk_size=corpus_chunk_size,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 

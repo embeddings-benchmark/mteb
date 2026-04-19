@@ -42,6 +42,7 @@ class BitextMiningEvaluator(Evaluator):
         *,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
+        corpus_chunk_size: int | None = None,
     ) -> dict[str, list[dict[str, float]]]:
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
@@ -69,10 +70,15 @@ class BitextMiningEvaluator(Evaluator):
             )
 
         logger.info("Finding nearest neighbors...")
+        search_kwargs = (
+            {"corpus_chunk_size": corpus_chunk_size}
+            if corpus_chunk_size is not None
+            else {}
+        )
         neighbours = {}
         for i, (key1, key2) in enumerate(tqdm(self.pairs, desc="Matching sentences")):
             neighbours[f"{key1}-{key2}"] = self._similarity_search(
-                embeddings[key1], embeddings[key2], model
+                embeddings[key1], embeddings[key2], model, **search_kwargs
             )
         return neighbours
 
