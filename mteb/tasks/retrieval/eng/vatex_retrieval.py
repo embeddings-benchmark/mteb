@@ -55,6 +55,68 @@ class VATEXV2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VATEXV2TRetrieval",
         description=(
+            "Retrieve the English caption that describes a given video clip (video "
+            "only) from VATEX, a large-scale multilingual video description dataset."
+        ),
+        reference="https://arxiv.org/abs/1904.03493",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="v2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["video", "text"],
+        date=("2019-01-01", "2019-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Caption Pairing"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the caption that describes the following video."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_vatex(self, query_columns=["video"], corpus_columns=["caption"])
+
+
+class VATEXT2VRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="VATEXT2VRetrieval",
+        description=(
+            "Retrieve the video clip (video only) that matches a given English "
+            "caption from VATEX, a large-scale multilingual video description dataset."
+        ),
+        reference="https://arxiv.org/abs/1904.03493",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="t2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["text", "video"],
+        date=("2019-01-01", "2019-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Caption Pairing"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the video clip that matches the given caption."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_vatex(self, query_columns=["caption"], corpus_columns=["video"])
+
+
+class VATEXVA2TRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="VATEXVA2TRetrieval",
+        description=(
             "Retrieve the English caption that describes a given video clip from "
             "VATEX, a large-scale multilingual video description dataset."
         ),
@@ -82,14 +144,14 @@ class VATEXV2TRetrieval(AbsTaskRetrieval):
         _load_vatex(self, query_columns=["video", "audio"], corpus_columns=["caption"])
 
 
-class VATEXT2VRetrieval(AbsTaskRetrieval):
+class VATEXT2VARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VATEXT2VARetrieval",
         description=(
             "Retrieve the video clip that matches a given English caption from "
             "VATEX, a large-scale multilingual video description dataset."
         ),
-        reference="https://huggingface.co/datasets/mteb/VATEX_test_1k",
+        reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
         category="t2va",
@@ -111,65 +173,3 @@ class VATEXT2VRetrieval(AbsTaskRetrieval):
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         _load_vatex(self, query_columns=["caption"], corpus_columns=["video", "audio"])
-
-
-class VATEXA2TRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
-        name="VATEXA2TRetrieval",
-        description=(
-            "Retrieve the English caption that describes a given audio track from "
-            "VATEX, a large-scale multilingual video description dataset."
-        ),
-        reference="https://huggingface.co/datasets/mteb/VATEX_test_1k",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
-        type="Any2AnyRetrieval",
-        category="a2t",
-        eval_splits=["test"],
-        eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
-        modalities=["audio", "text"],
-        date=("2019-01-01", "2019-12-31"),
-        domains=["Web", "Spoken"],
-        task_subtypes=["Caption Pairing"],
-        license="not specified",
-        annotations_creators="human-annotated",
-        dialect=[],
-        sample_creation="found",
-        bibtex_citation=_BIBTEX,
-        prompt={"query": "Find the caption that describes the following audio."},
-        is_beta=True,
-    )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_vatex(self, query_columns=["audio"], corpus_columns=["caption"])
-
-
-class VATEXT2ARetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
-        name="VATEXT2ARetrieval",
-        description=(
-            "Retrieve the audio track that matches a given English caption from "
-            "VATEX, a large-scale multilingual video description dataset."
-        ),
-        reference="https://huggingface.co/datasets/mteb/VATEX_test_1k",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
-        type="Any2AnyRetrieval",
-        category="t2a",
-        eval_splits=["test"],
-        eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
-        modalities=["text", "audio"],
-        date=("2019-01-01", "2019-12-31"),
-        domains=["Web", "Spoken"],
-        task_subtypes=["Caption Pairing"],
-        license="not specified",
-        annotations_creators="human-annotated",
-        dialect=[],
-        sample_creation="found",
-        bibtex_citation=_BIBTEX,
-        prompt={"query": "Find the audio track that matches the given caption."},
-        is_beta=True,
-    )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_vatex(self, query_columns=["caption"], corpus_columns=["audio"])
