@@ -467,7 +467,7 @@ class FramesCollator:
     def __init__(
         self,
         fps: float | None = 2.0,
-        max_frames: int | None = 128,
+        max_frames: int | None = 256,
         num_frames: int | None = None,
     ) -> None:
         """Initialize the collator.
@@ -513,7 +513,7 @@ class FramesCollator:
     def resample_video(
         video: VideoDecoder,
         fps: float | None = 2.0,
-        max_frames: int | None = 128,
+        max_frames: int | None = 256,
         num_frames: int | None = None,
     ) -> torch.Tensor:
         """Resample a video input to a target number of frames.
@@ -554,7 +554,7 @@ class VideoCollator:
         self,
         target_sampling_rate: int,
         fps: float | None = 2.0,
-        max_frames: int | None = 128,
+        max_frames: int | None = 256,
         num_frames: int | None = None,
         max_samples: int | None = None,
     ) -> None:

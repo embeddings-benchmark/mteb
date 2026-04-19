@@ -229,7 +229,6 @@ class RandomEncoderBaseline:
         if has_video or has_audio:
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=16000,
-                num_frames=10,
             )
         embedding = _batch_to_embeddings(inputs, self.embedding_dim)
         if self.array_framework == "torch":
@@ -311,7 +310,6 @@ class RandomCrossEncoderBaseline:
         if has_video or has_audio:
             collator = VideoCollator(
                 target_sampling_rate=16000,
-                num_frames=10,
             )
             inputs1.collate_fn = collator
             inputs2.collate_fn = collator
