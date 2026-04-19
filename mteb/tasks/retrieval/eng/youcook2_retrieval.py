@@ -79,7 +79,9 @@ class YouCook2V2TRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_youcook2(self, query_columns=["video", "audio"], corpus_columns=["sentence"])
+        _load_youcook2(
+            self, query_columns=["video", "audio"], corpus_columns=["sentence"]
+        )
 
 
 class YouCook2T2VRetrieval(AbsTaskRetrieval):
@@ -110,7 +112,9 @@ class YouCook2T2VRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_youcook2(self, query_columns=["sentence"], corpus_columns=["video", "audio"])
+        _load_youcook2(
+            self, query_columns=["sentence"], corpus_columns=["video", "audio"]
+        )
 
 
 class YouCook2A2TRetrieval(AbsTaskRetrieval):
