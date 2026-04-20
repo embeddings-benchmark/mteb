@@ -213,6 +213,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     **hf_scores,
                     "hf_subset": hf_subset,
                     "languages": eval_langs,
+                    "mteb_version": version("mteb"),
                 }
                 flat_scores[split].append(_scores)
 
@@ -741,7 +742,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         self,
         result: TaskResult | AbsTask,
         criteria: list[str] | list[Criteria] = [
-            "mteb_version",
             "dataset_revision",
         ],
         raise_error: bool = False,
@@ -751,7 +751,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         Args:
             result: The TaskResult or Task object to check against.
             criteria: Additional criteria to check for merging. Can be "mteb_version" or "dataset_revision".
-                It will always check that the task name match.
+                It will always check that the task name match. Note: "mteb_version" is not included by
+                default as cross-version merging is supported; per-subset mteb_version is tracked instead.
             raise_error: If True, raises an error if the objects cannot be merged. If False, returns False.
 
         Returns:
@@ -800,7 +801,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         self,
         new_results: TaskResult,
         criteria: list[str] | list[Criteria] = [
-            "mteb_version",
             "dataset_revision",
         ],
     ) -> TaskResult:
@@ -842,10 +842,17 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         date = self.date
         if new_results.date is not None and (date is None or new_results.date > date):
             date = new_results.date
+        versions = {
+            v
+            for v in [self.mteb_version, new_results.mteb_version]
+            if v is not None
+        }
+        merged_mteb_version = ",".join(sorted(versions)) if versions else None
+
         merged_results = TaskResult(
             dataset_revision=new_results.dataset_revision,
             task_name=new_results.task_name,
-            mteb_version=new_results.mteb_version,
+            mteb_version=merged_mteb_version,
             scores=merged_scores,
             evaluation_time=merged_evaluation_time,
             kg_co2_emissions=merged_kg_co2_emissions,
