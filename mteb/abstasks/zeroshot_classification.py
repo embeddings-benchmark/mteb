@@ -43,9 +43,8 @@ class ZeroShotClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        number_of_characters: None (no text inputs)
 
-        text_statistics: None (no text inputs)
+        text_statistics: Statistics for texts
         image_statistics: Statistics for images
         audio_statistics: Statistics for audio
         video_statistics: Statistics for video
@@ -55,7 +54,6 @@ class ZeroShotClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     """
 
     num_samples: int
-    number_of_characters: int | None
 
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
@@ -101,46 +99,41 @@ class AbsTaskZeroShotClassification(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ZeroShotClassificationDescriptiveStatistics:
+        modality = self.metadata.modalities[0]
         if hf_subset:
-            inputs = self.dataset[hf_subset][split][self.input_column_name]
-            labels = self.dataset[hf_subset][split][self.label_column_name]
+            ds = self.dataset[hf_subset][split]
+            col_inputs = {modality: ds[self.input_column_name]}
+            labels = ds[self.label_column_name]
         elif compute_overall:
-            inputs, labels = [], []
-            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
-                inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
-                labels.extend(self.dataset[hf_subset][split][self.label_column_name])
+            col_inputs = {modality: []}
+            labels = []
+            for subset in self.metadata.eval_langs:
+                ds = self.dataset[subset][split]
+                col_inputs[modality].extend(ds[self.input_column_name])
+                labels.extend(ds[self.label_column_name])
         else:
-            inputs = self.dataset[split][self.input_column_name]
-            labels = self.dataset[split][self.label_column_name]
-
-        num_samples = len(inputs)
-
-        image_statistics = None
-        text_statistics = None
-        audio_statistics = None
-        video_statistics = None
-
-        if "image" in self.metadata.modalities:
-            image_statistics = calculate_image_statistics(inputs)
-        if self.metadata.modalities == ["text"]:
-            text_statistics = calculate_text_statistics(inputs)
-        if "audio" in self.metadata.modalities:
-            audio_statistics = calculate_audio_statistics(inputs)
-        if "video" in self.metadata.modalities:
-            video_statistics = calculate_video_statistics(inputs)
-
-        label_statistics = calculate_label_statistics(labels)
-        candidate_lens = calculate_text_statistics(self.get_candidate_labels())
+            ds = self.dataset[split]
+            col_inputs = {modality: ds[self.input_column_name]}
+            labels = ds[self.label_column_name]
 
         return ZeroShotClassificationDescriptiveStatistics(
-            num_samples=num_samples,
-            number_of_characters=None,
-            text_statistics=text_statistics,
-            image_statistics=image_statistics,
-            audio_statistics=audio_statistics,
-            video_statistics=video_statistics,
-            label_statistics=label_statistics,
-            candidates_labels_text_statistics=candidate_lens,
+            num_samples=len(col_inputs[modality]),
+            text_statistics=calculate_text_statistics(col_inputs["text"])
+            if "text" in col_inputs
+            else None,
+            image_statistics=calculate_image_statistics(col_inputs["image"])
+            if "image" in col_inputs
+            else None,
+            audio_statistics=calculate_audio_statistics(col_inputs["audio"])
+            if "audio" in col_inputs
+            else None,
+            video_statistics=calculate_video_statistics(col_inputs["video"])
+            if "video" in col_inputs
+            else None,
+            label_statistics=calculate_label_statistics(labels),
+            candidates_labels_text_statistics=calculate_text_statistics(
+                self.get_candidate_labels()
+            ),
         )
 
     def _evaluate_subset(

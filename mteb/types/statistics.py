@@ -122,24 +122,24 @@ class VideoStatistics(TypedDict):
         fps: Dict of unique (rounded) fps values and their frequencies
     """
 
-    total_duration_seconds: float
-    total_frames: int
+    total_duration_seconds: float | None
+    total_frames: int | None
 
-    min_width: int
-    average_width: float
-    max_width: int
+    min_width: int | None
+    average_width: float | None
+    max_width: int | None
 
-    min_height: int
-    average_height: float
-    max_height: int
+    min_height: int | None
+    average_height: float | None
+    max_height: int | None
 
-    min_duration_seconds: float
-    average_duration_seconds: float
-    max_duration_seconds: float
+    min_duration_seconds: float | None
+    average_duration_seconds: float | None
+    max_duration_seconds: float | None
 
     unique_videos: int
 
-    average_fps: float
+    average_fps: float | None
     fps: dict[int, int]
 
 

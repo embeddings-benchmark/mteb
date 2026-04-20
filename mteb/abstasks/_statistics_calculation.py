@@ -25,47 +25,101 @@ if TYPE_CHECKING:
     from mteb.types._encoder_io import AudioInputItem
 
 
-def calculate_text_statistics(texts: list[str]) -> TextStatistics:
+def compute_text_hashes(texts: list[str]) -> list[str]:
+    """Return a hash per text — for text, the string itself is the identity key."""
+    return texts
+
+
+def compute_image_hashes(images: list[Image.Image]) -> list[str]:
+    """Return a per-image MD5 hash of the raw pixel bytes."""
+    return [
+        hashlib.md5(img.tobytes(), usedforsecurity=False).hexdigest() for img in images
+    ]
+
+
+def compute_audio_hashes(audios: list[AudioInputItem]) -> list[str]:
+    """Return a per-audio MD5 hash of the raw sample array bytes."""
+    return [
+        hashlib.md5(audio["array"].tobytes(), usedforsecurity=False).hexdigest()
+        for audio in audios
+    ]
+
+
+def compute_video_hashes(videos: list[VideoDecoder]) -> list[str]:
+    """Return a per-video MD5 hash derived from the first decoded frame.
+
+    Decoding a frame is the most expensive part of video statistics; this function
+    is extracted so callers can pass the resulting list to ``calculate_video_statistics``
+    and avoid repeating the decode.
+    """
+    hashes = []
+    for video in videos:
+        meta = video.metadata
+        num_frames = meta.num_frames
+        avg_fps = meta.average_fps
+
+        if num_frames is not None and avg_fps is not None and avg_fps > 0:
+            # Sample one frame per second: indices 0, fps, 2*fps, ...
+            step = max(1, round(avg_fps))
+            frame_indices = list(range(0, num_frames, step))
+        else:
+            frame_indices = [0]
+
+        frames = video.get_frames_at(frame_indices).data
+        hashes.append(
+            hashlib.md5(frames.numpy().tobytes(), usedforsecurity=False).hexdigest()
+        )
+    return hashes
+
+
+def calculate_text_statistics(
+    texts: list[str],
+    hashes: list[str] | None = None,
+) -> TextStatistics:
     """Calculate descriptive statistics for a list of texts.
 
     Args:
         texts: List of texts to analyze.
+        hashes: Optional pre-computed identity keys (from :func:`compute_text_hashes`).
+            When provided the function skips recomputing them.
 
     Returns:
         TextStatistics: A dictionary containing the descriptive statistics.
     """
+    if hashes is None:
+        hashes = compute_text_hashes(texts)
     lengths = [len(text) for text in texts]
-    unique_texts = len(set(texts))
-
     return TextStatistics(
         total_text_length=sum(lengths),
         min_text_length=min(lengths),
         average_text_length=sum(lengths) / len(lengths),
         max_text_length=max(lengths),
-        unique_texts=unique_texts,
+        unique_texts=len(set(hashes)),
     )
 
 
-def calculate_image_statistics(images: list[Image.Image]) -> ImageStatistics:
+def calculate_image_statistics(
+    images: list[Image.Image],
+    hashes: list[str] | None = None,
+) -> ImageStatistics:
     """Calculate descriptive statistics for a list of images.
 
     Args:
-        images: List of images to analyze. Each image should have a `size` attribute that returns a tuple (width, height).
+        images: List of images to analyze. Each image should have a ``size``
+            attribute returning ``(width, height)``.
+        hashes: Optional pre-computed MD5 hashes (from :func:`compute_image_hashes`).
+            When provided the function skips recomputing them.
 
     Returns:
         ImageStatistics: A dictionary containing the descriptive statistics.
     """
+    if hashes is None:
+        hashes = compute_image_hashes(images)
     img_widths, img_heights = [], []
-    seen_hashes: set[str] = set()
-
     for img in images:
         width, height = img.size
         img_heights.append(height)
         img_widths.append(width)
-
-        img_bytes = img.tobytes()
-        img_hash = hashlib.md5(img_bytes, usedforsecurity=False).hexdigest()
-        seen_hashes.add(img_hash)
 
     return ImageStatistics(
         min_image_width=min(img_widths),
@@ -74,41 +128,42 @@ def calculate_image_statistics(images: list[Image.Image]) -> ImageStatistics:
         min_image_height=min(img_heights),
         average_image_height=sum(img_heights) / len(img_heights),
         max_image_height=max(img_heights),
-        # some image types (PngImageFile) may be unhashable
-        unique_images=len(seen_hashes),
+        unique_images=len(set(hashes)),
     )
 
 
-def calculate_audio_statistics(audios: list[AudioInputItem]) -> AudioStatistics:
+def calculate_audio_statistics(
+    audios: list[AudioInputItem],
+    hashes: list[str] | None = None,
+) -> AudioStatistics:
     """Calculate descriptive statistics for a list of audio clips.
 
     Args:
-        audios: List of audio clips to analyze. Each audio clip should be a dictionary with 'array' and 'sampling_rate' keys.
+        audios: List of audio clips to analyze. Each clip must have ``array``
+            and ``sampling_rate`` keys.
+        hashes: Optional pre-computed MD5 hashes (from :func:`compute_audio_hashes`).
+            When provided the function skips recomputing them.
 
     Returns:
         A dictionary containing the descriptive statistics.
     """
+    if hashes is None:
+        hashes = compute_audio_hashes(audios)
     audio_lengths = []
     sampling_rates: dict[int, int] = defaultdict(int)
-    unique_audios = set()
 
     for audio in audios:
         array = audio["array"]
         sampling_rate = audio["sampling_rate"]
-        length_in_seconds = len(array) / sampling_rate
-        audio_lengths.append(length_in_seconds)
+        audio_lengths.append(len(array) / sampling_rate)
         sampling_rates[sampling_rate] += 1
-
-        audio_bytes = array.tobytes()
-        audio_hash = hashlib.md5(audio_bytes, usedforsecurity=False).hexdigest()
-        unique_audios.add(audio_hash)
 
     return AudioStatistics(
         total_duration_seconds=sum(audio_lengths),
         min_duration_seconds=min(audio_lengths),
         average_duration_seconds=sum(audio_lengths) / len(audio_lengths),
         max_duration_seconds=max(audio_lengths),
-        unique_audios=len(unique_audios),
+        unique_audios=len(set(hashes)),
         average_sampling_rate=(
             sum(rate * count for rate, count in sampling_rates.items()) / len(audios)
         ),
@@ -116,60 +171,77 @@ def calculate_audio_statistics(audios: list[AudioInputItem]) -> AudioStatistics:
     )
 
 
-def calculate_video_statistics(videos: list[VideoDecoder]) -> VideoStatistics:
+def calculate_video_statistics(  # noqa: PLR0914
+    videos: list[VideoDecoder],
+    hashes: list[str] | None = None,
+) -> VideoStatistics:
     """Calculate descriptive statistics for a list of video clips.
 
     Args:
         videos: List of VideoDecoder objects to analyze.
+        hashes: Optional pre-computed MD5 hashes (from :func:`compute_video_hashes`).
+            When provided the function skips decoding the first frame again, which
+            is the most expensive part of this function.
 
     Returns:
         A dictionary containing the descriptive statistics.
     """
-    durations = []
-    frames_counts = []
-    widths = []
-    heights = []
+    if hashes is None:
+        hashes = compute_video_hashes(videos)
+    durations: list[float | None] = []
+    frames_counts: list[int | None] = []
+    widths: list[int | None] = []
+    heights: list[int | None] = []
     fps_counts: dict[int, int] = defaultdict(int)
-    unique_videos: set[str] = set()
 
     for video in videos:
         meta = video.metadata
 
-        num_frames = meta.num_frames or 0
-        avg_fps = meta.average_fps or 0.0
+        num_frames = meta.num_frames
+        avg_fps = meta.average_fps
         duration = meta.duration_seconds
-        if duration is None:
-            duration = num_frames / avg_fps if avg_fps > 0 else 0.0
-        width = meta.width or 0
-        height = meta.height or 0
+        if (
+            duration is None
+            and num_frames is not None
+            and avg_fps is not None
+            and avg_fps > 0
+        ):
+            duration = num_frames / avg_fps
 
         durations.append(duration)
         frames_counts.append(num_frames)
-        widths.append(width)
-        heights.append(height)
-        fps_counts[round(avg_fps)] += 1
-
-        first_frame = video.get_frames_at([0]).data
-        video_hash = hashlib.md5(
-            first_frame.numpy().tobytes(), usedforsecurity=False
-        ).hexdigest()
-        unique_videos.add(video_hash)
+        widths.append(meta.width)
+        heights.append(meta.height)
+        if avg_fps is not None:
+            fps_counts[round(avg_fps)] += 1
 
     n = len(videos)
+    all_durations = durations if None not in durations else None
+    all_frames = frames_counts if None not in frames_counts else None
+    all_widths = widths if None not in widths else None
+    all_heights = heights if None not in heights else None
+    has_all_fps = len(fps_counts) > 0 and sum(fps_counts.values()) == n
+
     return VideoStatistics(
-        total_duration_seconds=sum(durations),
-        total_frames=sum(frames_counts),
-        min_width=min(widths),
-        average_width=sum(widths) / n,
-        max_width=max(widths),
-        min_height=min(heights),
-        average_height=sum(heights) / n,
-        max_height=max(heights),
-        min_duration_seconds=min(durations),
-        average_duration_seconds=sum(durations) / n,
-        max_duration_seconds=max(durations),
-        unique_videos=len(unique_videos),
-        average_fps=sum(rate * count for rate, count in fps_counts.items()) / n,
+        total_duration_seconds=sum(all_durations)
+        if all_durations is not None
+        else None,
+        total_frames=sum(all_frames) if all_frames is not None else None,
+        min_width=min(all_widths) if all_widths is not None else None,
+        average_width=sum(all_widths) / n if all_widths is not None else None,
+        max_width=max(all_widths) if all_widths is not None else None,
+        min_height=min(all_heights) if all_heights is not None else None,
+        average_height=sum(all_heights) / n if all_heights is not None else None,
+        max_height=max(all_heights) if all_heights is not None else None,
+        min_duration_seconds=min(all_durations) if all_durations is not None else None,
+        average_duration_seconds=sum(all_durations) / n
+        if all_durations is not None
+        else None,
+        max_duration_seconds=max(all_durations) if all_durations is not None else None,
+        unique_videos=len(set(hashes)),
+        average_fps=sum(rate * count for rate, count in fps_counts.items()) / n
+        if has_all_fps
+        else None,
         fps=dict(fps_counts),
     )
 

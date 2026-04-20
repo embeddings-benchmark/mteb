@@ -23,6 +23,9 @@ from mteb.models import (
     SearchEncoderWrapper,
     SearchProtocol,
 )
+from mteb.types import (
+    PromptType,
+)
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
@@ -34,6 +37,10 @@ from ._statistics_calculation import (
     calculate_text_statistics,
     calculate_top_ranked_statistics,
     calculate_video_statistics,
+    compute_audio_hashes,
+    compute_image_hashes,
+    compute_text_hashes,
+    compute_video_hashes,
 )
 from .abstask import AbsTask
 from .retrieval_dataset_loaders import (
@@ -541,10 +548,15 @@ class AbsTaskRetrieval(AbsTask):
         num_queries = len(queries)
 
         if self.metadata.category is None:
-            queries_modalities = "t"
-            corpus_modalities = "t"
+            queries_modalities = ["text"]
+            corpus_modalities = ["text"]
         else:
-            queries_modalities, corpus_modalities = self.metadata.category.split("2")
+            queries_modalities = self.metadata.get_modalities(
+                prompt_type=PromptType.query
+            )
+            corpus_modalities = self.metadata.get_modalities(
+                prompt_type=PromptType.document
+            )
 
         number_of_characters = 0
 
@@ -557,39 +569,64 @@ class AbsTaskRetrieval(AbsTask):
         queries_audio_statistics = None
         queries_video_statistics = None
 
-        if "t" in corpus_modalities:
+        if "text" in corpus_modalities:
             corpus_texts = corpus.map(_corpus_to_dict)["text"]
-            documents_text_statistics = calculate_text_statistics(corpus_texts)
+            corpus_text_hashes = compute_text_hashes(corpus_texts)
+            documents_text_statistics = calculate_text_statistics(
+                corpus_texts, hashes=corpus_text_hashes
+            )
             number_of_characters += documents_text_statistics["total_text_length"]
 
-        if "i" in corpus_modalities:
-            documents_image_statistics = calculate_image_statistics(corpus["image"])
+        if "image" in corpus_modalities:
+            corpus_images = corpus["image"]
+            documents_image_statistics = calculate_image_statistics(
+                corpus_images, hashes=compute_image_hashes(corpus_images)
+            )
 
-        if "a" in corpus_modalities:
-            documents_audio_statistics = calculate_audio_statistics(corpus["audio"])
+        if "audio" in corpus_modalities:
+            corpus_audios = corpus["audio"]
+            documents_audio_statistics = calculate_audio_statistics(
+                corpus_audios, hashes=compute_audio_hashes(corpus_audios)
+            )
 
-        if "v" in corpus_modalities:
-            documents_video_statistics = calculate_video_statistics(corpus["video"])
+        if "video" in corpus_modalities:
+            corpus_videos = corpus["video"]
+            documents_video_statistics = calculate_video_statistics(
+                corpus_videos, hashes=compute_video_hashes(corpus_videos)
+            )
 
-        if "t" in queries_modalities:
+        if "text" in queries_modalities:
             queries_ = queries
             if "instruction" in queries_[0]:
                 queries_ = queries_.map(_combine_queries_with_instruction_text)
 
             if isinstance(queries_["text"][0], dict | list):
                 queries_ = queries_.map(_convert_conv_history_to_query)
-            queries_text_statistics = calculate_text_statistics(queries_["text"])
+            queries_texts = queries_["text"]
+            queries_text_hashes = compute_text_hashes(queries_texts)
+            queries_text_statistics = calculate_text_statistics(
+                queries_texts, hashes=queries_text_hashes
+            )
 
             number_of_characters += queries_text_statistics["total_text_length"]
 
-        if "i" in queries_modalities:
-            queries_image_statistics = calculate_image_statistics(queries["image"])
+        if "image" in queries_modalities:
+            query_images = queries["image"]
+            queries_image_statistics = calculate_image_statistics(
+                query_images, hashes=compute_image_hashes(query_images)
+            )
 
-        if "a" in queries_modalities:
-            queries_audio_statistics = calculate_audio_statistics(queries["audio"])
+        if "audio" in queries_modalities:
+            query_audios = queries["audio"]
+            queries_audio_statistics = calculate_audio_statistics(
+                query_audios, hashes=compute_audio_hashes(query_audios)
+            )
 
-        if "v" in queries_modalities:
-            queries_video_statistics = calculate_video_statistics(queries["video"])
+        if "video" in queries_modalities:
+            query_videos = queries["video"]
+            queries_video_statistics = calculate_video_statistics(
+                query_videos, hashes=compute_video_hashes(query_videos)
+            )
 
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
 

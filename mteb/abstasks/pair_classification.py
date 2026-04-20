@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import logging
 from collections import defaultdict
 from typing import TYPE_CHECKING
@@ -16,6 +15,10 @@ from mteb.abstasks._statistics_calculation import (
     calculate_label_statistics,
     calculate_text_statistics,
     calculate_video_statistics,
+    compute_audio_hashes,
+    compute_image_hashes,
+    compute_text_hashes,
+    compute_video_hashes,
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ScoringFunction
@@ -228,6 +231,8 @@ class AbsTaskPairClassification(AbsTask):
             else dataset[self.label_column_name]
         )
 
+        # TODO make this multimodal
+
         text1_statistics = None
         text2_statistics = None
         image1_statistics = None
@@ -239,53 +244,36 @@ class AbsTaskPairClassification(AbsTask):
         video2_statistics = None
         unique_pairs = None
         if self.metadata.modalities == ["text"]:
-            text1_statistics = calculate_text_statistics(input1)
-            text2_statistics = calculate_text_statistics(input2)
+            h1 = compute_text_hashes(input1)
+            h2 = compute_text_hashes(input2)
+            text1_statistics = calculate_text_statistics(input1, hashes=h1)
+            text2_statistics = calculate_text_statistics(input2, hashes=h2)
             number_of_characters = (
                 text1_statistics["total_text_length"]
                 + text2_statistics["total_text_length"]
             )
-            unique_pairs = len(set(zip(input1, input2)))
+            unique_pairs = len(set(zip(h1, h2)))
 
         if self.metadata.modalities == ["image"]:
-            image1_statistics = calculate_image_statistics(input1)
-            image2_statistics = calculate_image_statistics(input2)
-
-            def _compute_image_hash(inputs: list) -> list[str]:
-                hashes = set()
-                for img in inputs:
-                    img_bytes = img.tobytes()
-                    img_hash = hashlib.md5(img_bytes, usedforsecurity=False).hexdigest()
-                    hashes.add(img_hash)
-                return list(hashes)
-
-            image_1_hashes = _compute_image_hash(input1)
-            image_2_hashes = _compute_image_hash(input2)
-            unique_pairs = len(set(zip(image_1_hashes, image_2_hashes)))
+            h1 = compute_image_hashes(input1)
+            h2 = compute_image_hashes(input2)
+            image1_statistics = calculate_image_statistics(input1, hashes=h1)
+            image2_statistics = calculate_image_statistics(input2, hashes=h2)
+            unique_pairs = len(set(zip(h1, h2)))
 
         if self.metadata.modalities == ["audio"]:
-            audio1_statistics = calculate_audio_statistics(input1)
-            audio2_statistics = calculate_audio_statistics(input2)
-
-            def _compute_audio_hash(inputs: list) -> list[str]:
-                hashes = set()
-                for audio in inputs:
-                    array = audio["array"]
-                    audio_bytes = array.tobytes()
-                    audio_hash = hashlib.md5(
-                        audio_bytes, usedforsecurity=False
-                    ).hexdigest()
-                    hashes.add(audio_hash)
-                return list(hashes)
-
-            audio_1_hashes = _compute_audio_hash(input1)
-            audio_2_hashes = _compute_audio_hash(input2)
-            unique_pairs = len(set(zip(audio_1_hashes, audio_2_hashes)))
+            h1 = compute_audio_hashes(input1)
+            h2 = compute_audio_hashes(input2)
+            audio1_statistics = calculate_audio_statistics(input1, hashes=h1)
+            audio2_statistics = calculate_audio_statistics(input2, hashes=h2)
+            unique_pairs = len(set(zip(h1, h2)))
 
         if self.metadata.modalities == ["video"]:
-            video1_statistics = calculate_video_statistics(input1)
-            video2_statistics = calculate_video_statistics(input2)
-            unique_pairs = None  # video pair uniqueness not trivially computed here
+            h1 = compute_video_hashes(input1)
+            h2 = compute_video_hashes(input2)
+            video1_statistics = calculate_video_statistics(input1, hashes=h1)
+            video2_statistics = calculate_video_statistics(input2, hashes=h2)
+            unique_pairs = len(set(zip(h1, h2)))
 
         return PairClassificationDescriptiveStatistics(
             num_samples=len(input1),

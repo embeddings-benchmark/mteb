@@ -17,6 +17,10 @@ from ._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
     calculate_video_statistics,
+    compute_audio_hashes,
+    compute_image_hashes,
+    compute_text_hashes,
+    compute_video_hashes,
 )
 from .abstask import AbsTask
 
@@ -217,7 +221,7 @@ class AbsTaskSTS(AbsTask):
             euclidean_spearman=euclidean_spearman,
         )
 
-    def _calculate_descriptive_statistics_from_split(
+    def _calculate_descriptive_statistics_from_split(  # noqa: PLR0914
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> AnySTSDescriptiveStatistics:
         first_column, second_column = self.column_names
@@ -240,36 +244,63 @@ class AbsTaskSTS(AbsTask):
             sentence2 = self.dataset[split][second_column]
             score = self.dataset[split]["score"]
 
-        if "text" in self.metadata.modalities:
-            text1_statistics = calculate_text_statistics(sentence1)
-            text2_statistics = calculate_text_statistics(sentence2)
+        # Compute hashes per modality; accumulate into per-row tuples for unique_pairs.
+        all_h1: list[list[str]] = [[] for _ in range(len(sentence1))]
+        all_h2: list[list[str]] = [[] for _ in range(len(sentence2))]
 
-            unique_pairs = len(set(zip(sentence1, sentence2)))
+        if "text" in self.metadata.modalities:
+            h1 = compute_text_hashes(sentence1)
+            h2 = compute_text_hashes(sentence2)
+            text1_statistics = calculate_text_statistics(sentence1, hashes=h1)
+            text2_statistics = calculate_text_statistics(sentence2, hashes=h2)
+            for i, h in enumerate(h1):
+                all_h1[i].append(h)
+            for i, h in enumerate(h2):
+                all_h2[i].append(h)
         else:
             text1_statistics = None
             text2_statistics = None
-            unique_pairs = None
 
         if "image" in self.metadata.modalities:
-            image1_statistics = calculate_image_statistics(sentence1)
-            image2_statistics = calculate_image_statistics(sentence2)
+            h1 = compute_image_hashes(sentence1)
+            h2 = compute_image_hashes(sentence2)
+            image1_statistics = calculate_image_statistics(sentence1, hashes=h1)
+            image2_statistics = calculate_image_statistics(sentence2, hashes=h2)
+            for i, h in enumerate(h1):
+                all_h1[i].append(h)
+            for i, h in enumerate(h2):
+                all_h2[i].append(h)
         else:
             image1_statistics = None
             image2_statistics = None
 
         if "audio" in self.metadata.modalities:
-            audio1_statistics = calculate_audio_statistics(sentence1)
-            audio2_statistics = calculate_audio_statistics(sentence2)
+            h1 = compute_audio_hashes(sentence1)
+            h2 = compute_audio_hashes(sentence2)
+            audio1_statistics = calculate_audio_statistics(sentence1, hashes=h1)
+            audio2_statistics = calculate_audio_statistics(sentence2, hashes=h2)
+            for i, h in enumerate(h1):
+                all_h1[i].append(h)
+            for i, h in enumerate(h2):
+                all_h2[i].append(h)
         else:
             audio1_statistics = None
             audio2_statistics = None
 
         if "video" in self.metadata.modalities:
-            video1_statistics = calculate_video_statistics(sentence1)
-            video2_statistics = calculate_video_statistics(sentence2)
+            h1 = compute_video_hashes(sentence1)
+            h2 = compute_video_hashes(sentence2)
+            video1_statistics = calculate_video_statistics(sentence1, hashes=h1)
+            video2_statistics = calculate_video_statistics(sentence2, hashes=h2)
+            for i, h in enumerate(h1):
+                all_h1[i].append(h)
+            for i, h in enumerate(h2):
+                all_h2[i].append(h)
         else:
             video1_statistics = None
             video2_statistics = None
+
+        unique_pairs = len({(tuple(h1), tuple(h2)) for h1, h2 in zip(all_h1, all_h2)})
 
         labels_statistics = calculate_score_statistics(score)
 

@@ -191,7 +191,7 @@ class MockClassificationTask(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_texts_intersect_with_train": 1,
+            "samples_in_train": 1,
             "text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -212,7 +212,7 @@ class MockClassificationTask(AbsTaskClassification):
         },
         "train": {
             "num_samples": 2,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": {
                 "total_text_length": 53,
                 "min_text_length": 23,
@@ -271,7 +271,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "number_texts_intersect_with_train": 1,
+            "samples_in_train": 1,
             "text_statistics": {
                 "total_text_length": 104,
                 "min_text_length": 23,
@@ -292,7 +292,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 2,
-                    "number_texts_intersect_with_train": 1,
+                    "samples_in_train": 1,
                     "text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -313,7 +313,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                 },
                 "fra": {
                     "num_samples": 2,
-                    "number_texts_intersect_with_train": 1,
+                    "samples_in_train": 1,
                     "text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -336,7 +336,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
         },
         "train": {
             "num_samples": 4,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": {
                 "total_text_length": 106,
                 "min_text_length": 23,
@@ -357,7 +357,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 2,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": None,
                     "text_statistics": {
                         "total_text_length": 53,
                         "min_text_length": 23,
@@ -378,7 +378,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                 },
                 "fra": {
                     "num_samples": 2,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": None,
                     "text_statistics": {
                         "total_text_length": 53,
                         "min_text_length": 23,
@@ -2265,7 +2265,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 6,
-            "number_texts_intersect_with_train": 1,
+            "samples_in_train": 1,
             "text_statistics": {
                 "total_text_length": 156,
                 "min_text_length": 23,
@@ -2286,7 +2286,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
         },
         "train": {
             "num_samples": 6,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": {
                 "total_text_length": 159,
                 "min_text_length": 23,
@@ -2342,7 +2342,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 12,
-            "number_texts_intersect_with_train": 1,
+            "samples_in_train": 1,
             "text_statistics": {
                 "total_text_length": 312,
                 "min_text_length": 23,
@@ -2363,7 +2363,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 6,
-                    "number_texts_intersect_with_train": 1,
+                    "samples_in_train": 1,
                     "text_statistics": {
                         "total_text_length": 156,
                         "min_text_length": 23,
@@ -2384,7 +2384,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                 },
                 "fra": {
                     "num_samples": 6,
-                    "number_texts_intersect_with_train": 1,
+                    "samples_in_train": 1,
                     "text_statistics": {
                         "total_text_length": 156,
                         "min_text_length": 23,
@@ -2407,7 +2407,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
         },
         "train": {
             "num_samples": 12,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": {
                 "total_text_length": 318,
                 "min_text_length": 23,
@@ -2428,7 +2428,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 6,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": None,
                     "text_statistics": {
                         "total_text_length": 159,
                         "min_text_length": 23,
@@ -2449,7 +2449,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                 },
                 "fra": {
                     "num_samples": 6,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": None,
                     "text_statistics": {
                         "total_text_length": 159,
                         "min_text_length": 23,
@@ -3327,7 +3327,7 @@ class MockImageClassificationTask(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": 2,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -3350,7 +3350,7 @@ class MockImageClassificationTask(AbsTaskClassification):
         },
         "train": {
             "num_samples": 10,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -3414,7 +3414,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": 2,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -3437,7 +3437,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 2,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": 2,
                     "text_statistics": None,
                     "image_statistics": {
                         "min_image_width": 100,
@@ -3460,7 +3460,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                 },
                 "fra": {
                     "num_samples": 2,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": 2,
                     "text_statistics": None,
                     "image_statistics": {
                         "min_image_width": 100,
@@ -3485,7 +3485,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
         },
         "train": {
             "num_samples": 20,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -3508,7 +3508,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 10,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": None,
                     "text_statistics": None,
                     "image_statistics": {
                         "min_image_width": 100,
@@ -3531,7 +3531,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                 },
                 "fra": {
                     "num_samples": 10,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": None,
                     "text_statistics": None,
                     "image_statistics": {
                         "min_image_width": 100,
@@ -3706,7 +3706,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": 2,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -3734,7 +3734,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
         },
         "train": {
             "num_samples": 10,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -4332,7 +4332,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": 2,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -4355,7 +4355,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
         },
         "train": {
             "num_samples": 10,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -4832,7 +4832,7 @@ class MockAudioClassification(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": 2,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -4855,7 +4855,7 @@ class MockAudioClassification(AbsTaskClassification):
         },
         "train": {
             "num_samples": 10,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -4994,7 +4994,7 @@ class MockAudioClassificationCrossVal(AbsTaskClassification):
     expected_stats = {
         "train": {
             "num_samples": 10,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -5048,7 +5048,7 @@ class MockVideoClassification(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": 1,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": None,
@@ -5078,7 +5078,7 @@ class MockVideoClassification(AbsTaskClassification):
         },
         "train": {
             "num_samples": 10,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": None,
@@ -5145,7 +5145,7 @@ class MockVideoAudioClassification(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": 2,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -5183,7 +5183,7 @@ class MockVideoAudioClassification(AbsTaskClassification):
         },
         "train": {
             "num_samples": 10,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -5403,7 +5403,7 @@ class MockVideoMultilabelClassificationTask(AbsTaskMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": 1,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": None,
@@ -5433,7 +5433,7 @@ class MockVideoMultilabelClassificationTask(AbsTaskMultilabelClassification):
         },
         "train": {
             "num_samples": 10,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": None,
@@ -5494,7 +5494,7 @@ class MockVideoAudioMultilabelClassificationTask(AbsTaskMultilabelClassification
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": 2,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -5532,7 +5532,7 @@ class MockVideoAudioMultilabelClassificationTask(AbsTaskMultilabelClassification
         },
         "train": {
             "num_samples": 10,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -5702,7 +5702,7 @@ class MockVideoPairClassificationTask(AbsTaskPairClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "unique_pairs": None,
+            "unique_pairs": 1,
             "number_of_characters": None,
             "text1_statistics": None,
             "image1_statistics": None,
