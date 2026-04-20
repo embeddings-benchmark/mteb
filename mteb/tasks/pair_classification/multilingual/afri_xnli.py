@@ -57,7 +57,7 @@ class AfriXNLI(AbsTaskPairClassification):
         for lang in self.dataset:
             for split in self.dataset[lang]:
                 # keep only entail (0) / contradict (2)
-                ds = self.dataset[lang][split].filter(lambda x: x["label"] in (0, 2))
+                ds = self.dataset[lang][split].filter(lambda x: x["label"] in {0, 2})
 
                 # map to binary labels and standard column names
                 def map_labels(example):

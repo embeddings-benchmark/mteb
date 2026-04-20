@@ -83,7 +83,6 @@ class InjongoIntent(AbsTaskClassification):
                     raise ValueError(
                         f"Couldn’t find text/label columns in InjongoIntent – {lang}-{split_name}"
                     )
-                ds = ds.rename_columns({text_col: "text", label_col: "label"})
-                transformed[lang][split_name] = ds
+                transformed[lang][split_name] = ds.rename_columns({text_col: "text", label_col: "label"})
 
         self.dataset = transformed
