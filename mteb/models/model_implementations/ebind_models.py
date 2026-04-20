@@ -152,7 +152,6 @@ class EBindWrapper(AbsEncoder):
                     raw_frames,
                     [self._image_size, self._image_size],
                     interpolation=InterpolationMode.BICUBIC,
-                    antialias=True,
                 )
                 processed = processed.float() / 255.0
                 processed = normalize(
