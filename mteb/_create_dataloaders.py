@@ -60,26 +60,29 @@ def _create_dataloader_from_texts(
 def _corpus_to_dict(
     row: dict[str, str],
 ) -> dict[str, str]:
-    raw_text = row.get("text") or ""
-    title = row.get("title") or ""
-    text = (title + " " + raw_text).strip() if title else raw_text.strip()
+    text = (
+        (row["title"] + " " + row["text"]).strip()
+        if "title" in row and len(row["title"]) > 0
+        else row["text"].strip()
+    )
     new_row = {
         "id": row["id"],
         "text": text,
-        "body": raw_text,
+        "body": row["text"],
     }
     # dataloaders can't handle None
-    if title:
-        new_row["title"] = title
+    if "title" in row and row["title"] is not None and len(row["title"]) > 0:
+        new_row["title"] = row["title"]
     return new_row
 
 
 def _combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str]:
-    row["text"] = row.get("text") or ""
     row["query"] = row["text"]
 
     if "instruction" in row and row["instruction"] is not None:
         row["text"] = row["query"] + " " + row["instruction"]
+    else:
+        row["text"] = row["query"]
     return row
 
 
@@ -289,6 +292,13 @@ def _prepare_dataset(
                 and modality not in dataset.column_names
             ):
                 dataset = dataset.rename_column(input_column, modality)
+
+    # Drop modality columns not needed for this prompt type to avoid
+    # None values in the collate function (e.g. text=None in image-only corpus)
+    all_modality_columns = {"text", "image", "audio", "video"}
+    for col in all_modality_columns - set(modalities):
+        if col in dataset.column_names:
+            dataset = dataset.remove_columns(col)
 
     return dataset
 
