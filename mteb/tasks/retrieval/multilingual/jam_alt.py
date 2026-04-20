@@ -142,7 +142,6 @@ Music Information Retrieval Conference},
             "query": "Retrieve all songs created by the same artist as the following audio clip: {query}"
         },
     )
-    skip_first_result = True
 
     def load_data(self, **kwargs):
         if self.data_loaded:

@@ -293,6 +293,13 @@ def _prepare_dataset(
             ):
                 dataset = dataset.rename_column(input_column, modality)
 
+    # Drop modality columns not needed for this prompt type to avoid
+    # None values in the collate function (e.g. text=None in image-only corpus)
+    all_modality_columns = {"text", "image", "audio", "video"}
+    for col in all_modality_columns - set(modalities):
+        if col in dataset.column_names:
+            dataset = dataset.remove_columns(col)
+
     return dataset
 
 
