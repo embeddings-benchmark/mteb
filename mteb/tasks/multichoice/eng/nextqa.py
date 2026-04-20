@@ -1,30 +1,11 @@
 from __future__ import annotations
 
-import os
 from collections import defaultdict
-from pathlib import Path
 
-from datasets import Dataset, Features, Value, Video, load_dataset
+from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-_SCRATCH_DIR = Path(os.environ.get("MTEB_VIDEO_SCRATCH", "/tmp/mteb_video_cache")) / "nextqa"
-
-
-def _extract_video(raw: dict, qid: str) -> str:
-    """Write raw video bytes to scratch dir; return absolute path.
-
-    Skips if target already exists with matching size (idempotent across runs).
-    """
-    _SCRATCH_DIR.mkdir(parents=True, exist_ok=True)
-    suffix = Path(raw.get("path") or "video.mp4").suffix or ".mp4"
-    target = _SCRATCH_DIR / f"{qid}{suffix}"
-    data = raw["bytes"]
-    if target.exists() and target.stat().st_size == len(data):
-        return str(target)
-    target.write_bytes(data)
-    return str(target)
 
 
 def _load_data(
@@ -41,22 +22,17 @@ def _load_data(
 
     for split in splits:
         ds = load_dataset(path, revision=revision, split=split)
-        ds_raw_video = ds.cast_column("video", Video(decode=False))
+        ds = ds.add_column("id", [f"q{i}" for i in range(len(ds))])
 
+        queries[split] = ds.select_columns(["id", "question", "video"]).rename_column(
+            "question", "text"
+        )
+
+        text_view = ds.select_columns(["id", "candidates", "answer"])
         corpus_rows: list[dict] = []
-        query_rows: list[dict] = []
         relevant_docs[split] = {}
-
-        for idx, row in enumerate(ds_raw_video):
-            qid = f"q{idx}"
-            video_path = _extract_video(row["video"], qid)
-            query_rows.append(
-                {
-                    "id": qid,
-                    "text": row["question"],
-                    "video": {"path": video_path, "bytes": None},
-                }
-            )
+        for row in text_view:
+            qid = row["id"]
             answer = row["answer"]
             relevant_docs[split][qid] = {}
             for j, candidate in enumerate(row["candidates"]):
@@ -65,14 +41,6 @@ def _load_data(
                 top_ranked[split][qid].append(doc_id)
                 relevant_docs[split][qid][doc_id] = 1 if candidate == answer else 0
 
-        query_feats = Features(
-            {
-                "id": Value("string"),
-                "text": Value("string"),
-                "video": Video(decode=True),
-            }
-        )
-        queries[split] = Dataset.from_list(query_rows, features=query_feats)
         corpus[split] = Dataset.from_list(corpus_rows)
 
     top_ranked_plain = {s: dict(d) for s, d in top_ranked.items()}
