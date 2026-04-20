@@ -12,14 +12,22 @@ from mteb.models.get_model_meta import get_model_meta
 logging.basicConfig(level=logging.INFO)
 
 REFERENCE_MODELS = [
+    # text models
     "intfloat/multilingual-e5-small",
     "sentence-transformers/static-similarity-mrl-multilingual-v1",
     "minishlab/potion-multilingual-128M",
     "mteb/baseline-bm25s",
+    "mteb/baseline-random-encoder",
+    "sentence-transformers/LaBSE",
+    "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    # image models
+    "vidore/colSmol-256M",
+    # audio models
+    "facebook/wav2vec2-base",
 ]
 
 # Models that implement SearchProtocol only (retrieval/reranking tasks)
-RETRIEVAL_ONLY_MODELS = {"mteb/baseline-bm25s"}
+RETRIEVAL_ONLY_MODELS = {"mteb/baseline-bm25s", "vidore/colSmol-256M"}
 
 
 def _get_expected_task_names(benchmark, model_name):
