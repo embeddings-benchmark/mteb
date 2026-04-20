@@ -197,6 +197,7 @@ class VoyageModel(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         output_dtype: str | None = None,
         api_model_name: str | None = None,
+        evolved_prompts: bool = False,
         **kwargs,
     ) -> None:
         import voyageai
@@ -207,7 +208,8 @@ class VoyageModel(AbsEncoder):
         if api_model_name:
             self._model_name = api_model_name
         else:
-            self._model_name = model_name.split("/")[-1].split()[0]
+            self._model_name = model_name.rsplit("/", maxsplit=1)[-1].split()[0]
+        self._evolved_prompts = evolved_prompts
         self._max_tpm = max_tpm
         self._max_tokens = max_tokens
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
@@ -298,10 +300,6 @@ class VoyageModel(AbsEncoder):
         return embeddings_array
 
 
-def apply_prompt(prompt: str, sentence: str) -> str:
-    return prompt.format(text=sentence)
-
-
 QUERY_PROMPTS = {
     "AILACasedocs": "{text}",
     "AILAStatutes": "Explore applicable legislative provisions for: {text}",
@@ -341,40 +339,41 @@ CORPUS_PROMPTS = {
 }
 
 
-class VoyageEvolvedPromptsModel(VoyageModel):
-    """VoyageModel variant that uses evolved best prompts per dataset."""
-
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 1_000,
-        **kwargs: Any,
-    ) -> Array:
-        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-        input_type = self.model_prompts.get(prompt_name, "document")
-
-        sentences = [text for batch in inputs for text in batch["text"]]
-        dataset_name = task_metadata.name
-
-        if input_type == "query":
-            best_prompt = QUERY_PROMPTS.get(dataset_name, "{text}")
-            sentences = [apply_prompt(best_prompt, s) for s in sentences]
-        elif input_type == "document":
-            best_corpus_prompt = CORPUS_PROMPTS.get(dataset_name, "{text}")
-            sentences = [apply_prompt(best_corpus_prompt, s) for s in sentences]
-
-        return self._batched_encode(sentences, batch_size, input_type)
-
-
 model_prompts = {
     PromptType.query.value: "query",
     PromptType.document.value: "document",
 }
+
+voyage_4_large_2048d_evolved = ModelMeta(
+    name="voyageai/voyage-4-large (embed_dim=2048)",
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-01-15",
+    languages=None,
+    loader=VoyageModel,
+    loader_kwargs=dict(
+        max_tokens=32000,
+        model_prompts=model_prompts,
+        api_model_name="voyage-4-large",
+        evolved_prompts=True,
+    ),
+    max_tokens=32000,
+    embed_dim=2048,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2026/01/15/voyage-4/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["voyageai"],
+    experiment_kwargs={"evolved_prompts": True},
+)
 
 voyage_4_large_2048d = ModelMeta(
     name="voyageai/voyage-4-large (embed_dim=2048)",
@@ -402,33 +401,6 @@ voyage_4_large_2048d = ModelMeta(
     public_training_data=None,
     output_dtypes=OUTPUT_TYPES,
     extra_requirements_groups=["voyageai"],
-)
-
-voyage_4_large_2048d_evolved = ModelMeta(
-    name="voyageai/voyage-4-large-2048d-evolved",
-    model_type=["dense"],
-    revision="1",
-    release_date="2026-01-15",
-    languages=None,
-    loader=VoyageEvolvedPromptsModel,
-    loader_kwargs=dict(
-        max_tokens=32000,
-        model_prompts=model_prompts,
-        api_model_name="voyage-4-large",
-    ),
-    max_tokens=32000,
-    embed_dim=2048,
-    open_weights=False,
-    n_parameters=None,
-    memory_usage_mb=None,
-    license=None,
-    reference="https://blog.voyageai.com/2026/01/15/voyage-4/",
-    similarity_fn_name="cosine",
-    framework=["API"],
-    use_instructions=True,
-    training_datasets=VOYAGE_TRAINING_DATA,
-    public_training_code=None,
-    public_training_data=None,
 )
 
 voyage_4 = ModelMeta(
