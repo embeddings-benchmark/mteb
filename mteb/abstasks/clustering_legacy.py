@@ -19,6 +19,7 @@ from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
+    calculate_video_statistics,
 )
 from .abstask import AbsTask
 
@@ -32,6 +33,7 @@ if TYPE_CHECKING:
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -46,6 +48,7 @@ class ClusteringDescriptiveStatistics(SplitDescriptiveStatistics):
         text_statistics: Statistics for text
         image_statistics: Statistics for images
         audio_statistics: Statistics for audio
+        video_statistics: Statistics for video
         label_statistics: Statistics for labels
     """
 
@@ -54,6 +57,7 @@ class ClusteringDescriptiveStatistics(SplitDescriptiveStatistics):
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
     label_statistics: LabelStatistics
 
 
@@ -239,15 +243,20 @@ class AbsTaskClusteringLegacy(AbsTask):
         if isinstance(labels[0], list):
             labels = [item for sublist in labels for item in sublist]
 
-        text_statistics, image_statistics, audio_statistics = None, None, None
+        text_statistics, image_statistics, audio_statistics, video_statistics = (
+            None,
+            None,
+            None,
+            None,
+        )
         if "image" in self.metadata.modalities:
             image_statistics = calculate_image_statistics(inputs)
-
         if "text" in self.metadata.modalities:
             text_statistics = calculate_text_statistics(inputs)
-
         if "audio" in self.metadata.modalities:
             audio_statistics = calculate_audio_statistics(inputs)
+        if "video" in self.metadata.modalities:
+            video_statistics = calculate_video_statistics(inputs)
 
         label_statistics = calculate_label_statistics(labels)
 
@@ -256,6 +265,7 @@ class AbsTaskClusteringLegacy(AbsTask):
             text_statistics=text_statistics,
             image_statistics=image_statistics,
             audio_statistics=audio_statistics,
+            video_statistics=video_statistics,
             label_statistics=label_statistics,
         )
 

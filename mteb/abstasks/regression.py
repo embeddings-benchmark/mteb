@@ -16,6 +16,7 @@ from mteb.abstasks._statistics_calculation import (
     calculate_image_statistics,
     calculate_score_statistics,
     calculate_text_statistics,
+    calculate_video_statistics,
 )
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
@@ -33,6 +34,7 @@ if TYPE_CHECKING:
         ImageStatistics,
         ScoreStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -48,6 +50,7 @@ class RegressionDescriptiveStatistics(SplitDescriptiveStatistics):
         text_statistics: Statistics of texts
         image_statistics: Statistics of images
         audio_statistics: Statistics of audio
+        video_statistics: Statistics of video
 
         values_statistics: Statistics of values
     """
@@ -58,6 +61,7 @@ class RegressionDescriptiveStatistics(SplitDescriptiveStatistics):
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
     values_statistics: ScoreStatistics
 
 
@@ -228,6 +232,7 @@ class AbsTaskRegression(AbsTaskClassification):
         text_statistics = None
         image_statistics = None
         audio_statistics = None
+        video_statistics = None
         num_texts_in_train = None
         if self.metadata.modalities == ["text"]:
             text_statistics = calculate_text_statistics(inputs)
@@ -240,6 +245,8 @@ class AbsTaskRegression(AbsTaskClassification):
             image_statistics = calculate_image_statistics(inputs)
         elif self.metadata.modalities == ["audio"]:
             audio_statistics = calculate_audio_statistics(inputs)
+        elif self.metadata.modalities == ["video"]:
+            video_statistics = calculate_video_statistics(inputs)
 
         return RegressionDescriptiveStatistics(
             num_samples=len(inputs),
@@ -247,5 +254,6 @@ class AbsTaskRegression(AbsTaskClassification):
             text_statistics=text_statistics,
             image_statistics=image_statistics,
             audio_statistics=audio_statistics,
+            video_statistics=video_statistics,
             values_statistics=calculate_score_statistics(values),
         )

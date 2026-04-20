@@ -28,6 +28,7 @@ from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
+    calculate_video_statistics,
 )
 from .abstask import AbsTask
 
@@ -45,6 +46,7 @@ if TYPE_CHECKING:
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -60,6 +62,7 @@ class ClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
         text_statistics: Statistics for text
         image_statistics: Statistics for images
         audio_statistics: Statistics for audio
+        video_statistics: Statistics for video
         label_statistics: Statistics for labels
     """
 
@@ -69,6 +72,7 @@ class ClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
     label_statistics: LabelStatistics
 
 
@@ -493,22 +497,40 @@ class AbsTaskClassification(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
-        # Multi-column tasks (e.g. video+audio): only compute label statistics for now
+        # Multi-column tasks (e.g. video+audio): compute per-column modality statistics
         if not isinstance(self.input_column_name, str):
+            cols = list(self.input_column_name)
             if hf_subset:
                 label = self.dataset[hf_subset][split][self.label_column_name]
+                col_inputs = {col: self.dataset[hf_subset][split][col] for col in cols}
             elif compute_overall:
                 label = []
+                col_inputs = {col: [] for col in cols}
                 for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                     label.extend(self.dataset[hf_subset][split][self.label_column_name])
+                    for col in cols:
+                        col_inputs[col].extend(self.dataset[hf_subset][split][col])
             else:
                 label = self.dataset[split][self.label_column_name]
+                col_inputs = {col: self.dataset[split][col] for col in cols}
+
+            audio_statistics = (
+                calculate_audio_statistics(col_inputs["audio"])
+                if "audio" in col_inputs
+                else None
+            )
+            video_statistics = (
+                calculate_video_statistics(col_inputs["video"])
+                if "video" in col_inputs
+                else None
+            )
             return ClassificationDescriptiveStatistics(
                 num_samples=len(label),
                 number_texts_intersect_with_train=None,
                 text_statistics=None,
                 image_statistics=None,
-                audio_statistics=None,
+                audio_statistics=audio_statistics,
+                video_statistics=video_statistics,
                 label_statistics=calculate_label_statistics(label),
             )
 
@@ -536,6 +558,7 @@ class AbsTaskClassification(AbsTask):
         image_statistics = None
         text_statistics = None
         audio_statistics = None
+        video_statistics = None
         num_texts_in_train = None
 
         if "image" in self.metadata.modalities:
@@ -549,6 +572,8 @@ class AbsTaskClassification(AbsTask):
             )
         if "audio" in self.metadata.modalities:
             audio_statistics = calculate_audio_statistics(inputs)
+        if "video" in self.metadata.modalities:
+            video_statistics = calculate_video_statistics(inputs)
 
         label_statistics = calculate_label_statistics(label)
 
@@ -558,6 +583,7 @@ class AbsTaskClassification(AbsTask):
             text_statistics=text_statistics,
             image_statistics=image_statistics,
             audio_statistics=audio_statistics,
+            video_statistics=video_statistics,
             label_statistics=label_statistics,
         )
 

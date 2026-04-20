@@ -97,6 +97,52 @@ class AudioStatistics(TypedDict):
     sampling_rates: dict[int, int]
 
 
+class VideoStatistics(TypedDict):
+    """Class for descriptive statistics for video.
+
+    Attributes:
+        total_duration_seconds: Total duration of all video clips in seconds
+        total_frames: Total number of frames across all video clips
+
+        min_width: Minimum width of video frames
+        average_width: Average width of video frames
+        max_width: Maximum width of video frames
+
+        min_height: Minimum height of video frames
+        average_height: Average height of video frames
+        max_height: Maximum height of video frames
+
+        min_duration_seconds: Minimum duration of a video clip in seconds
+        average_duration_seconds: Average duration of a video clip in seconds
+        max_duration_seconds: Maximum duration of a video clip in seconds
+
+        unique_videos: Number of unique video clips
+
+        average_fps: Average frames per second across all video clips
+        fps: Dict of unique (rounded) fps values and their frequencies
+    """
+
+    total_duration_seconds: float
+    total_frames: int
+
+    min_width: int
+    average_width: float
+    max_width: int
+
+    min_height: int
+    average_height: float
+    max_height: int
+
+    min_duration_seconds: float
+    average_duration_seconds: float
+    max_duration_seconds: float
+
+    unique_videos: int
+
+    average_fps: float
+    fps: dict[int, int]
+
+
 class LabelStatistics(TypedDict):
     """Class for descriptive statistics for texts.
 

@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 import datasets
 import numpy as np
-from datasets import Audio, Dataset, DatasetDict
+from datasets import Audio, Dataset, DatasetDict, Video
 from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
@@ -127,6 +127,45 @@ def create_mock_images(np_rng: np.random.Generator, n: int = 2) -> list[Image]:
     return [Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images]
 
 
+def create_mock_video_bytes(
+    width: int = 64,
+    height: int = 64,
+    fps: int = 24,
+    duration_s: float = 1.0,
+) -> bytes:
+    """Create minimal video bytes using PyAV.
+
+    Args:
+        width: Frame width in pixels.
+        height: Frame height in pixels.
+        fps: Frames per second.
+        duration_s: Duration of the video clip in seconds.
+
+    Returns:
+        Video encoded as MP4 bytes.
+    """
+    import io
+
+    import av
+
+    buf = io.BytesIO()
+    container = av.open(buf, mode="w", format="mp4")
+    stream = container.add_stream("h264", rate=fps)
+    stream.width = width
+    stream.height = height
+    stream.pix_fmt = "yuv420p"
+    num_frames = int(fps * duration_s)
+    for _ in range(num_frames):
+        frame_data = np.zeros((height, width, 3), dtype=np.uint8)
+        frame = av.VideoFrame.from_ndarray(frame_data, format="rgb24")
+        for pkt in stream.encode(frame):
+            container.mux(pkt)
+    for pkt in stream.encode():
+        container.mux(pkt)
+    container.close()
+    return buf.getvalue()
+
+
 def create_mock_audio(
     np_rng: np.random.Generator,
     n: int = 2,
@@ -162,6 +201,7 @@ class MockClassificationTask(AbsTaskClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -182,6 +222,7 @@ class MockClassificationTask(AbsTaskClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -240,6 +281,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -260,6 +302,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -280,6 +323,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -302,6 +346,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -322,6 +367,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -342,6 +388,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -642,6 +689,7 @@ class MockClusteringTask(AbsTaskClusteringLegacy):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -695,6 +743,7 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -714,6 +763,7 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -737,6 +787,7 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -805,6 +856,7 @@ class MockClusteringFastTask(AbsTaskClustering):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -859,6 +911,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClustering):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -878,6 +931,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClustering):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "labels_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -901,6 +955,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClustering):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "labels_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -1608,6 +1663,7 @@ class MockRerankingTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -1617,6 +1673,7 @@ class MockRerankingTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1661,6 +1718,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 104,
                 "min_text_length": 23,
@@ -1670,6 +1728,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -1696,6 +1755,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -1705,6 +1765,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -1731,6 +1792,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -1740,6 +1802,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -1790,6 +1853,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -1799,6 +1863,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1820,6 +1885,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -1829,6 +1895,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1870,6 +1937,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 117,
                 "min_text_length": 37,
@@ -1879,6 +1947,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1900,6 +1969,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 117,
                 "min_text_length": 37,
@@ -1909,6 +1979,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1967,6 +2038,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 104,
                 "min_text_length": 23,
@@ -1976,6 +2048,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -1997,6 +2070,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -2006,6 +2080,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2027,6 +2102,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -2036,6 +2112,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2059,6 +2136,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 104,
                 "min_text_length": 23,
@@ -2068,6 +2146,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -2089,6 +2168,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -2098,6 +2178,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2119,6 +2200,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -2128,6 +2210,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2174,6 +2257,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -2194,6 +2278,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -2249,6 +2334,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -2269,6 +2355,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -2289,6 +2376,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -2311,6 +2399,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -2331,6 +2420,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -2351,6 +2441,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -2414,6 +2505,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 112,
                 "min_text_length": 50,
@@ -2423,6 +2515,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -2463,6 +2556,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 112,
                 "min_text_length": 50,
@@ -2472,6 +2566,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -2515,6 +2610,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 224,
                 "min_text_length": 50,
@@ -2524,6 +2620,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -2545,6 +2642,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 112,
                         "min_text_length": 50,
@@ -2554,6 +2652,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2575,6 +2674,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 112,
                         "min_text_length": 50,
@@ -2584,6 +2684,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2629,6 +2730,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 224,
                 "min_text_length": 50,
@@ -2638,6 +2740,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -2664,6 +2767,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 112,
                         "min_text_length": 50,
@@ -2673,6 +2777,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2699,6 +2804,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 112,
                         "min_text_length": 50,
@@ -2708,6 +2814,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2772,6 +2879,7 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
                 "unique_images": 2,
             },
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 60,
                 "min_text_length": 27,
@@ -2789,6 +2897,7 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
                 "unique_images": 2,
             },
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -2862,6 +2971,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                 "unique_images": 2,
             },
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 120,
                 "min_text_length": 27,
@@ -2879,6 +2989,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                 "unique_images": 2,
             },
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -2907,6 +3018,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "unique_images": 2,
                     },
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 60,
                         "min_text_length": 27,
@@ -2924,6 +3036,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "unique_images": 2,
                     },
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2952,6 +3065,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "unique_images": 2,
                     },
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 60,
                         "min_text_length": 27,
@@ -2969,6 +3083,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "unique_images": 2,
                     },
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -3052,6 +3167,7 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": None,
             "queries_image_statistics": {
                 "min_image_width": 100,
@@ -3063,6 +3179,7 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
                 "unique_images": 2,
             },
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -3128,6 +3245,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
                 "unique_images": 2,
             },
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 60,
                 "min_text_length": 27,
@@ -3137,6 +3255,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -3202,6 +3321,7 @@ class MockImageClassificationTask(AbsTaskClassification):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3224,6 +3344,7 @@ class MockImageClassificationTask(AbsTaskClassification):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3287,6 +3408,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3309,6 +3431,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                         "unique_images": 2,
                     },
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -3331,6 +3454,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                         "unique_images": 2,
                     },
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -3355,6 +3479,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3377,6 +3502,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                         "unique_images": 2,
                     },
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -3399,6 +3525,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                         "unique_images": 2,
                     },
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -3464,6 +3591,7 @@ class MockImageClusteringTask(AbsTaskClusteringLegacy):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3516,6 +3644,7 @@ class MockImageClusteringFastTask(AbsTaskClustering):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3571,6 +3700,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -3598,6 +3728,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -3871,6 +4002,7 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3931,6 +4063,7 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3992,6 +4125,7 @@ class MockRegressionTask(AbsTaskRegression):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         },
         "train": {
@@ -4006,6 +4140,7 @@ class MockRegressionTask(AbsTaskRegression):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         },
     }
@@ -4058,6 +4193,7 @@ class MockImageRegressionTask(AbsTaskRegression):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         },
         "train": {
@@ -4074,6 +4210,7 @@ class MockImageRegressionTask(AbsTaskRegression):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         },
     }
@@ -4133,6 +4270,7 @@ class MockAudioClusteringTask(AbsTaskClustering):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 3},
             },
+            "video_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4186,6 +4324,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4208,6 +4347,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 10},
             },
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4262,6 +4402,7 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4333,6 +4474,7 @@ class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 60,
                 "min_text_length": 27,
@@ -4342,6 +4484,7 @@ class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -4415,6 +4558,7 @@ class MockAny2AnyRetrievalA2TTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": None,
             "queries_image_statistics": None,
             "queries_audio_statistics": {
@@ -4426,6 +4570,7 @@ class MockAny2AnyRetrievalA2TTask(AbsTaskRetrieval):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -4500,6 +4645,7 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "documents_video_statistics": None,
             "queries_text_statistics": None,
             "queries_image_statistics": None,
             "queries_audio_statistics": {
@@ -4511,6 +4657,7 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -4585,6 +4732,7 @@ class MockAudioReranking(AbsTaskRetrieval):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "documents_video_statistics": None,
             "queries_text_statistics": None,
             "queries_image_statistics": None,
             "queries_audio_statistics": {
@@ -4596,6 +4744,7 @@ class MockAudioReranking(AbsTaskRetrieval):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -4675,6 +4824,7 @@ class MockAudioClassification(AbsTaskClassification):
                 "average_sampling_rate": 12000.0,
                 "sampling_rates": {16000: 1, 8000: 1},
             },
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4697,6 +4847,7 @@ class MockAudioClassification(AbsTaskClassification):
                 "average_sampling_rate": 12000.0,
                 "sampling_rates": {16000: 5, 8000: 5},
             },
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4833,6 +4984,7 @@ class MockAudioClassificationCrossVal(AbsTaskClassification):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 10},
             },
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4858,4 +5010,218 @@ class MockAudioClassificationCrossVal(AbsTaskClassification):
         )
         self.dataset = self.dataset.cast_column("audio", Audio())
 
+        self.data_loaded = True
+
+
+class MockVideoClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        type="VideoClassification",
+        name="MockVideoClassification",
+        main_score="accuracy",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video"]
+    metadata.category = "v2c"
+    input_column_name = "video"
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "number_texts_intersect_with_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": None,
+            "video_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 1,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 1}, "2": {"count": 1}},
+            },
+        },
+        "train": {
+            "num_samples": 10,
+            "number_texts_intersect_with_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": None,
+            "video_statistics": {
+                "total_duration_seconds": 10.0,
+                "total_frames": 240,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 1,
+                "average_fps": 24.0,
+                "fps": {24: 10},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 5}, "2": {"count": 5}},
+            },
+        },
+    }
+
+    def load_data(self, **kwargs):
+        video_bytes = create_mock_video_bytes()
+        mock_videos = [video_bytes, video_bytes]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video": mock_videos,
+                        "label": [1, 2],
+                    }
+                ),
+                "train": Dataset.from_dict(
+                    {
+                        "video": mock_videos * 5,
+                        "label": [1, 2] * 5,
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.data_loaded = True
+
+
+class MockVideoAudioClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        type="VideoClassification",
+        name="MockVideoAudioClassification",
+        main_score="accuracy",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video", "audio"]
+    metadata.category = "va2c"
+    input_column_name = ("video", "audio")
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "number_texts_intersect_with_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 1,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 1}, "2": {"count": 1}},
+            },
+        },
+        "train": {
+            "num_samples": 10,
+            "number_texts_intersect_with_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 10.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 10},
+            },
+            "video_statistics": {
+                "total_duration_seconds": 10.0,
+                "total_frames": 240,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 1,
+                "average_fps": 24.0,
+                "fps": {24: 10},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 5}, "2": {"count": 5}},
+            },
+        },
+    }
+
+    def load_data(self, **kwargs):
+        video_bytes = create_mock_video_bytes()
+        mock_videos = [video_bytes, video_bytes]
+        mock_audio = create_mock_audio(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video": mock_videos,
+                        "audio": mock_audio,
+                        "label": [1, 2],
+                    }
+                ),
+                "train": Dataset.from_dict(
+                    {
+                        "video": mock_videos * 5,
+                        "audio": mock_audio * 5,
+                        "label": [1, 2] * 5,
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.dataset = self.dataset.cast_column("audio", Audio())
         self.data_loaded = True

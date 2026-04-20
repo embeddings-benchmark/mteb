@@ -12,12 +12,14 @@ from mteb.types.statistics import (
     ScoreStatistics,
     TextStatistics,
     TopRankedStatistics,
+    VideoStatistics,
 )
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
     from PIL import Image
+    from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
 
     from mteb.types import TopRankedDocumentsType
     from mteb.types._encoder_io import AudioInputItem
@@ -111,6 +113,64 @@ def calculate_audio_statistics(audios: list[AudioInputItem]) -> AudioStatistics:
             sum(rate * count for rate, count in sampling_rates.items()) / len(audios)
         ),
         sampling_rates=dict(sampling_rates),
+    )
+
+
+def calculate_video_statistics(videos: list[VideoDecoder]) -> VideoStatistics:
+    """Calculate descriptive statistics for a list of video clips.
+
+    Args:
+        videos: List of VideoDecoder objects to analyze.
+
+    Returns:
+        A dictionary containing the descriptive statistics.
+    """
+    durations = []
+    frames_counts = []
+    widths = []
+    heights = []
+    fps_counts: dict[int, int] = defaultdict(int)
+    unique_videos: set[str] = set()
+
+    for video in videos:
+        meta = video.metadata
+
+        num_frames = meta.num_frames or 0
+        avg_fps = meta.average_fps or 0.0
+        duration = meta.duration_seconds
+        if duration is None:
+            duration = num_frames / avg_fps if avg_fps > 0 else 0.0
+        width = meta.width or 0
+        height = meta.height or 0
+
+        durations.append(duration)
+        frames_counts.append(num_frames)
+        widths.append(width)
+        heights.append(height)
+        fps_counts[round(avg_fps)] += 1
+
+        first_frame = video.get_frames_at([0]).data
+        video_hash = hashlib.md5(
+            first_frame.numpy().tobytes(), usedforsecurity=False
+        ).hexdigest()
+        unique_videos.add(video_hash)
+
+    n = len(videos)
+    return VideoStatistics(
+        total_duration_seconds=sum(durations),
+        total_frames=sum(frames_counts),
+        min_width=min(widths),
+        average_width=sum(widths) / n,
+        max_width=max(widths),
+        min_height=min(heights),
+        average_height=sum(heights) / n,
+        max_height=max(heights),
+        min_duration_seconds=min(durations),
+        average_duration_seconds=sum(durations) / n,
+        max_duration_seconds=max(durations),
+        unique_videos=len(unique_videos),
+        average_fps=sum(rate * count for rate, count in fps_counts.items()) / n,
+        fps=dict(fps_counts),
     )
 
 

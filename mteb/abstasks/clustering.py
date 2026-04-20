@@ -23,6 +23,7 @@ from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
+    calculate_video_statistics,
 )
 from .abstask import AbsTask
 
@@ -37,6 +38,7 @@ if TYPE_CHECKING:
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -118,6 +120,7 @@ class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
         text_statistics: Statistics for text
         image_statistics: Statistics for images
         audio_statistics: Statistics for audio
+        video_statistics: Statistics for video
         labels_statistics: Statistics for labels
     """
 
@@ -126,6 +129,7 @@ class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
     labels_statistics: LabelStatistics
 
 
@@ -287,25 +291,44 @@ class AbsTaskClustering(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClusteringFastDescriptiveStatistics:
-        # Multi-column tasks (e.g. video+audio): only compute label statistics for now
+        # Multi-column tasks (e.g. video+audio): compute per-column modality statistics
         if not isinstance(self.input_column_name, str):
+            cols = list(self.input_column_name)
             if hf_subset:
                 labels = self.dataset[hf_subset][split][self.label_column_name]
+                col_inputs = {col: self.dataset[hf_subset][split][col] for col in cols}
             elif compute_overall:
                 labels = []
+                col_inputs = {col: [] for col in cols}
                 for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                     labels.extend(
                         self.dataset[hf_subset][split][self.label_column_name]
                     )
+                    for col in cols:
+                        col_inputs[col].extend(self.dataset[hf_subset][split][col])
             else:
                 labels = self.dataset[split][self.label_column_name]
+                col_inputs = {col: self.dataset[split][col] for col in cols}
+
             if isinstance(labels[0], list):
                 labels = [item for sublist in labels for item in sublist]
+
+            audio_statistics = (
+                calculate_audio_statistics(col_inputs["audio"])
+                if "audio" in col_inputs
+                else None
+            )
+            video_statistics = (
+                calculate_video_statistics(col_inputs["video"])
+                if "video" in col_inputs
+                else None
+            )
             return ClusteringFastDescriptiveStatistics(
                 num_samples=len(labels),
                 text_statistics=None,
                 image_statistics=None,
-                audio_statistics=None,
+                audio_statistics=audio_statistics,
+                video_statistics=video_statistics,
                 labels_statistics=calculate_label_statistics(labels),
             )
 
@@ -328,14 +351,20 @@ class AbsTaskClustering(AbsTask):
         if isinstance(labels[0], list):
             labels = [item for sublist in labels for item in sublist]
 
-        text_statistics, image_statistics, audio_statistics = None, None, None
+        text_statistics, image_statistics, audio_statistics, video_statistics = (
+            None,
+            None,
+            None,
+            None,
+        )
         if "image" in self.metadata.modalities:
             image_statistics = calculate_image_statistics(inputs)
-
         if "text" in self.metadata.modalities:
             text_statistics = calculate_text_statistics(inputs)
         if "audio" in self.metadata.modalities:
             audio_statistics = calculate_audio_statistics(inputs)
+        if "video" in self.metadata.modalities:
+            video_statistics = calculate_video_statistics(inputs)
 
         label_statistics = calculate_label_statistics(labels)
 
@@ -344,6 +373,7 @@ class AbsTaskClustering(AbsTask):
             text_statistics=text_statistics,
             image_statistics=image_statistics,
             audio_statistics=audio_statistics,
+            video_statistics=video_statistics,
             labels_statistics=label_statistics,
         )
 

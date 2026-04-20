@@ -18,6 +18,7 @@ from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
+    calculate_video_statistics,
 )
 from .abstask import AbsTask
 
@@ -31,6 +32,7 @@ if TYPE_CHECKING:
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -45,7 +47,8 @@ class ZeroShotClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
 
         text_statistics: None (no text inputs)
         image_statistics: Statistics for images
-        audio_statistics: None (no audio inputs)
+        audio_statistics: Statistics for audio
+        video_statistics: Statistics for video
         label_statistics: Statistics for dataset labels
 
         candidates_labels_text_statistics: Statistics for candidate labels text
@@ -57,6 +60,7 @@ class ZeroShotClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
     label_statistics: LabelStatistics
     candidates_labels_text_statistics: TextStatistics
 
@@ -114,14 +118,16 @@ class AbsTaskZeroShotClassification(AbsTask):
         image_statistics = None
         text_statistics = None
         audio_statistics = None
+        video_statistics = None
 
         if "image" in self.metadata.modalities:
             image_statistics = calculate_image_statistics(inputs)
         if self.metadata.modalities == ["text"]:
             text_statistics = calculate_text_statistics(inputs)
-
         if "audio" in self.metadata.modalities:
             audio_statistics = calculate_audio_statistics(inputs)
+        if "video" in self.metadata.modalities:
+            video_statistics = calculate_video_statistics(inputs)
 
         label_statistics = calculate_label_statistics(labels)
         candidate_lens = calculate_text_statistics(self.get_candidate_labels())
@@ -132,6 +138,7 @@ class AbsTaskZeroShotClassification(AbsTask):
             text_statistics=text_statistics,
             image_statistics=image_statistics,
             audio_statistics=audio_statistics,
+            video_statistics=video_statistics,
             label_statistics=label_statistics,
             candidates_labels_text_statistics=candidate_lens,
         )
