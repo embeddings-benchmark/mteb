@@ -11,8 +11,8 @@ _DATASET_REVISION = "003f74e0b5031c81bc0f3416f5d3de1153e21e16"
 _BIBTEX = r"""
 @article{chen2023valor,
   author = {Chen, Sihan and He, Xingjian and Guo, Longteng and Zhu, Xinxin and Wang, Weining and Tang, Jinhui and Liu, Jing},
-  title = {VALOR: Vision-Audio-Language Omni-perception Pretraining Model and Dataset},
   journal = {arXiv preprint arXiv:2304.08345},
+  title = {VALOR: Vision-Audio-Language Omni-perception Pretraining Model and Dataset},
   year = {2023},
 }
 """
