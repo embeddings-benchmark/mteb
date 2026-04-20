@@ -56,7 +56,18 @@ from .mock_tasks import (
     MockSummarizationTask,
     MockTextZeroShotClassificationTask,
     MockVideoAudioClassification,
+    MockVideoAudioClusteringTask,
+    MockVideoAudioMultilabelClassificationTask,
+    MockVideoAudioRetrievalT2VA,
+    MockVideoAudioRetrievalVA2T,
+    MockVideoAudioTextRetrievalVAT2T,
     MockVideoClassification,
+    MockVideoClusteringTask,
+    MockVideoMultilabelClassificationTask,
+    MockVideoPairClassificationTask,
+    MockVideoRetrievalT2V,
+    MockVideoRetrievalV2T,
+    MockVideoZeroshotClassificationTask,
     MockVisualSTSTask,
     MockZeroShotClassificationTask,
 )
@@ -171,6 +182,17 @@ MOCK_MIEB_TASK_REGISTRY = {
 MOCK_MVEB_TASK_GRID = [
     MockVideoClassification(),
     MockVideoAudioClassification(),
+    MockVideoClusteringTask(),
+    MockVideoAudioClusteringTask(),
+    MockVideoMultilabelClassificationTask(),
+    MockVideoAudioMultilabelClassificationTask(),
+    MockVideoZeroshotClassificationTask(),
+    MockVideoPairClassificationTask(),
+    MockVideoRetrievalV2T(),
+    MockVideoRetrievalT2V(),
+    MockVideoAudioRetrievalVA2T(),
+    MockVideoAudioRetrievalT2VA(),
+    MockVideoAudioTextRetrievalVAT2T(),
 ]
 
 ALL_TASK_TEST_GRID = (

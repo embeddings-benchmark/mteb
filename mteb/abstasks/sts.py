@@ -16,6 +16,7 @@ from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_score_statistics,
     calculate_text_statistics,
+    calculate_video_statistics,
 )
 from .abstask import AbsTask
 
@@ -32,6 +33,7 @@ if TYPE_CHECKING:
         ImageStatistics,
         ScoreStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -54,6 +56,9 @@ class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
         audio1_statistics: Statistics for audio1
         audio2_statistics: Statistics for audio2
 
+        video1_statistics: Statistics for video1
+        video2_statistics: Statistics for video2
+
         label_statistics: Statistics for labels
     """
 
@@ -69,6 +74,9 @@ class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
 
     audio1_statistics: AudioStatistics | None
     audio2_statistics: AudioStatistics | None
+
+    video1_statistics: VideoStatistics | None
+    video2_statistics: VideoStatistics | None
 
     label_statistics: ScoreStatistics
 
@@ -256,6 +264,13 @@ class AbsTaskSTS(AbsTask):
             audio1_statistics = None
             audio2_statistics = None
 
+        if "video" in self.metadata.modalities:
+            video1_statistics = calculate_video_statistics(sentence1)
+            video2_statistics = calculate_video_statistics(sentence2)
+        else:
+            video1_statistics = None
+            video2_statistics = None
+
         labels_statistics = calculate_score_statistics(score)
 
         return AnySTSDescriptiveStatistics(
@@ -273,6 +288,8 @@ class AbsTaskSTS(AbsTask):
             image2_statistics=image2_statistics,
             audio1_statistics=audio1_statistics,
             audio2_statistics=audio2_statistics,
+            video1_statistics=video1_statistics,
+            video2_statistics=video2_statistics,
             label_statistics=labels_statistics,
         )
 

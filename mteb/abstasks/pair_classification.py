@@ -15,6 +15,7 @@ from mteb.abstasks._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
+    calculate_video_statistics,
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ScoringFunction
@@ -38,6 +39,7 @@ if TYPE_CHECKING:
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -69,9 +71,11 @@ class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     text1_statistics: TextStatistics | None
     image1_statistics: ImageStatistics | None
     audio1_statistics: AudioStatistics | None
+    video1_statistics: VideoStatistics | None
     text2_statistics: TextStatistics | None
     image2_statistics: ImageStatistics | None
     audio2_statistics: AudioStatistics | None
+    video2_statistics: VideoStatistics | None
     labels_statistics: LabelStatistics
 
 
@@ -231,6 +235,8 @@ class AbsTaskPairClassification(AbsTask):
         number_of_characters = None
         audio1_statistics = None
         audio2_statistics = None
+        video1_statistics = None
+        video2_statistics = None
         unique_pairs = None
         if self.metadata.modalities == ["text"]:
             text1_statistics = calculate_text_statistics(input1)
@@ -276,6 +282,11 @@ class AbsTaskPairClassification(AbsTask):
             audio_2_hashes = _compute_audio_hash(input2)
             unique_pairs = len(set(zip(audio_1_hashes, audio_2_hashes)))
 
+        if self.metadata.modalities == ["video"]:
+            video1_statistics = calculate_video_statistics(input1)
+            video2_statistics = calculate_video_statistics(input2)
+            unique_pairs = None  # video pair uniqueness not trivially computed here
+
         return PairClassificationDescriptiveStatistics(
             num_samples=len(input1),
             unique_pairs=unique_pairs,
@@ -283,9 +294,11 @@ class AbsTaskPairClassification(AbsTask):
             text1_statistics=text1_statistics,
             image1_statistics=image1_statistics,
             audio1_statistics=audio1_statistics,
+            video1_statistics=video1_statistics,
             text2_statistics=text2_statistics,
             image2_statistics=image2_statistics,
             audio2_statistics=audio2_statistics,
+            video2_statistics=video2_statistics,
             labels_statistics=calculate_label_statistics(labels),
         )
 
