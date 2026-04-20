@@ -203,7 +203,7 @@ MVEB_TASK_TYPE = (
     "VideoClustering",
     # "VideoPairClassification",  # TODO: uncomment when tasks exist
     "VideoZeroshotClassification",
-    # "VideoCentricQA",  # TODO: uncomment when tasks exist
+    "VideoCentricQA",
     "Any2AnyRetrieval",
 )
 
@@ -383,7 +383,7 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {  # type: ig
     "VideoClustering": "clustering",
     # "VideoPairClassification": "pair-classification",  # TODO: uncomment when tasks exist
     "VideoZeroshotClassification": "classification",
-    # "VideoCentricQA": "retrieval",  # TODO: uncomment when tasks exist
+    "VideoCentricQA": "retrieval",
 }
 
 
@@ -966,6 +966,8 @@ class TaskMetadata(BaseModel):
             "AudioZeroshotClassification": ["other"],
             "AudioClassification": ["audio-classification"],
             "AudioPairClassification": ["audio-classification"],
+            # video
+            "VideoCentricQA": ["visual-question-answering"],
         }
         if self.type == "ZeroShotClassification":
             if self.modalities == ["image"]:
