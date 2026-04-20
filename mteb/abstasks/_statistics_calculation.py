@@ -8,15 +8,17 @@ from mteb.types.statistics import (
     AudioStatistics,
     ImageStatistics,
     LabelStatistics,
+    PairModalityStatistics,
     RelevantDocsStatistics,
     ScoreStatistics,
+    SingleInputModalityStatistics,
     TextStatistics,
     TopRankedStatistics,
     VideoStatistics,
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Callable, Mapping
 
     from PIL import Image
     from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
@@ -357,4 +359,143 @@ def calculate_relevant_docs_statistics(
         average_relevant_docs_per_query=qrels_per_doc,
         max_relevant_docs_per_query=max(qrels_lengths),
         unique_relevant_docs=unique_qrels,
+    )
+
+
+def calculate_single_input_modality_statistics(
+    col_inputs: dict[str, list],
+    hashes: dict[str, list[str]] | None = None,
+) -> SingleInputModalityStatistics:
+    """Compute per-modality statistics for a single-input dataset.
+
+    This is shared between Classification and Regression tasks, which both have
+    one set of input columns (one per modality) and a separate label column.
+
+    Args:
+        col_inputs: Mapping of modality name to the list of input values for
+            that modality (e.g. ``{"text": [...], "audio": [...]}``)
+        hashes: Optional pre-computed per-modality hashes
+            (from :func:`_compute_modality_hashes`).  When provided the
+            individual ``calculate_*_statistics`` calls skip re-hashing.
+
+    Returns:
+        :class:`SingleInputModalityStatistics` with one statistics entry per
+        modality, ``None`` for absent modalities.
+    """
+    _hashes = hashes or {}
+    return SingleInputModalityStatistics(
+        text_statistics=calculate_text_statistics(
+            col_inputs["text"], hashes=_hashes.get("text")
+        )
+        if "text" in col_inputs
+        else None,
+        image_statistics=calculate_image_statistics(
+            col_inputs["image"], hashes=_hashes.get("image")
+        )
+        if "image" in col_inputs
+        else None,
+        audio_statistics=calculate_audio_statistics(
+            col_inputs["audio"], hashes=_hashes.get("audio")
+        )
+        if "audio" in col_inputs
+        else None,
+        video_statistics=calculate_video_statistics(
+            col_inputs["video"], hashes=_hashes.get("video")
+        )
+        if "video" in col_inputs
+        else None,
+    )
+
+
+def calculate_pair_modality_statistics(
+    modalities: list[str],
+    get_pair_data: Callable[[str], tuple[list, list]],
+    n: int,
+) -> PairModalityStatistics:
+    """Compute per-modality statistics for a paired dataset.
+
+    This is shared between STS and PairClassification tasks.  Both task types
+    have the same structure: for each sample there is a *first* item and a
+    *second* item, potentially spanning multiple modalities.
+
+    Args:
+        modalities: Modalities present in the task (subset of
+            ``["text", "image", "audio", "video"]``).
+        get_pair_data: Callable that accepts a modality name and returns
+            ``(data1, data2)`` — the sequences of first and second items for
+            that modality.
+        n: Number of samples (used to pre-allocate per-row hash lists).
+
+    Returns:
+        :class:`PairModalityStatistics` with per-modality statistics and
+        ``unique_pairs``.
+    """
+    all_h1: list[list[str]] = [[] for _ in range(n)]
+    all_h2: list[list[str]] = [[] for _ in range(n)]
+
+    text1_statistics: TextStatistics | None = None
+    text2_statistics: TextStatistics | None = None
+    image1_statistics: ImageStatistics | None = None
+    image2_statistics: ImageStatistics | None = None
+    audio1_statistics: AudioStatistics | None = None
+    audio2_statistics: AudioStatistics | None = None
+    video1_statistics: VideoStatistics | None = None
+    video2_statistics: VideoStatistics | None = None
+
+    if "text" in modalities:
+        d1, d2 = get_pair_data("text")
+        h1 = compute_text_hashes(d1)
+        h2 = compute_text_hashes(d2)
+        text1_statistics = calculate_text_statistics(d1, hashes=h1)
+        text2_statistics = calculate_text_statistics(d2, hashes=h2)
+        for i, h in enumerate(h1):
+            all_h1[i].append(h)
+        for i, h in enumerate(h2):
+            all_h2[i].append(h)
+
+    if "image" in modalities:
+        d1, d2 = get_pair_data("image")
+        h1 = compute_image_hashes(d1)
+        h2 = compute_image_hashes(d2)
+        image1_statistics = calculate_image_statistics(d1, hashes=h1)
+        image2_statistics = calculate_image_statistics(d2, hashes=h2)
+        for i, h in enumerate(h1):
+            all_h1[i].append(h)
+        for i, h in enumerate(h2):
+            all_h2[i].append(h)
+
+    if "audio" in modalities:
+        d1, d2 = get_pair_data("audio")
+        h1 = compute_audio_hashes(d1)
+        h2 = compute_audio_hashes(d2)
+        audio1_statistics = calculate_audio_statistics(d1, hashes=h1)
+        audio2_statistics = calculate_audio_statistics(d2, hashes=h2)
+        for i, h in enumerate(h1):
+            all_h1[i].append(h)
+        for i, h in enumerate(h2):
+            all_h2[i].append(h)
+
+    if "video" in modalities:
+        d1, d2 = get_pair_data("video")
+        h1 = compute_video_hashes(d1)
+        h2 = compute_video_hashes(d2)
+        video1_statistics = calculate_video_statistics(d1, hashes=h1)
+        video2_statistics = calculate_video_statistics(d2, hashes=h2)
+        for i, h in enumerate(h1):
+            all_h1[i].append(h)
+        for i, h in enumerate(h2):
+            all_h2[i].append(h)
+
+    unique_pairs = len({(tuple(r1), tuple(r2)) for r1, r2 in zip(all_h1, all_h2)})
+
+    return PairModalityStatistics(
+        text1_statistics=text1_statistics,
+        text2_statistics=text2_statistics,
+        image1_statistics=image1_statistics,
+        image2_statistics=image2_statistics,
+        audio1_statistics=audio1_statistics,
+        audio2_statistics=audio2_statistics,
+        video1_statistics=video1_statistics,
+        video2_statistics=video2_statistics,
+        unique_pairs=unique_pairs,
     )

@@ -12,11 +12,8 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator
 from mteb.abstasks._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
     calculate_score_statistics,
-    calculate_text_statistics,
-    calculate_video_statistics,
+    calculate_single_input_modality_statistics,
 )
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
@@ -24,7 +21,6 @@ from mteb.types.statistics import (
 
 from .classification import (
     AbsTaskClassification,
-    _compute_modality_hashes,
     _count_samples_in_train,
 )
 
@@ -207,74 +203,15 @@ class AbsTaskRegression(AbsTaskClassification):
     def _calculate_descriptive_statistics_from_split(  # type: ignore[override]
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> RegressionDescriptiveStatistics:
-        # todo - refactor to avoid code duplication with AbsTaskClassification._calculate_descriptive_statistics_from_split
-        if isinstance(self.input_column_name, str):
-            col_map = {self.metadata.modalities[0]: self.input_column_name}
-        else:
-            col_map = {col: col for col in self.input_column_name}
-
-        if hf_subset:
-            ds = self.dataset[hf_subset][split]
-            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
-            values = ds[self.label_column_name]
-            train_inputs = (
-                {
-                    mod: self.dataset[hf_subset][self.train_split][col]
-                    for mod, col in col_map.items()
-                }
-                if split != self.train_split
-                else None
-            )
-        elif compute_overall:
-            col_inputs = {mod: [] for mod in col_map}
-            values = []
-            train_inputs = (
-                {mod: [] for mod in col_map} if split != self.train_split else None
-            )
-            for subset in self.metadata.eval_langs:
-                ds = self.dataset[subset][split]
-                for mod, col in col_map.items():
-                    col_inputs[mod].extend(ds[col])
-                values.extend(ds[self.label_column_name])
-                if train_inputs is not None:
-                    for mod, col in col_map.items():
-                        train_inputs[mod].extend(
-                            self.dataset[subset][self.train_split][col]
-                        )
-        else:
-            ds = self.dataset[split]
-            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
-            values = ds[self.label_column_name]
-            train_inputs = (
-                {
-                    mod: self.dataset[self.train_split][col]
-                    for mod, col in col_map.items()
-                }
-                if split != self.train_split
-                else None
-            )
-
-        # Compute hashes once; reuse for both statistics (uniqueness counts) and
-        # train/test intersection — avoids decoding expensive media (e.g. video frames) twice.
-        test_hashes = _compute_modality_hashes(col_inputs)
-        train_hashes = (
-            _compute_modality_hashes(train_inputs) if train_inputs is not None else None
+        col_inputs, values, test_hashes, train_hashes = (
+            self._load_col_inputs_and_hashes(split, hf_subset, compute_overall)
         )
-
+        modality_stats = calculate_single_input_modality_statistics(
+            col_inputs, test_hashes
+        )
         return RegressionDescriptiveStatistics(
             num_samples=len(values),
             samples_in_train=_count_samples_in_train(test_hashes, train_hashes),
-            text_statistics=calculate_text_statistics(col_inputs["text"])
-            if "text" in col_inputs
-            else None,
-            image_statistics=calculate_image_statistics(col_inputs["image"])
-            if "image" in col_inputs
-            else None,
-            audio_statistics=calculate_audio_statistics(col_inputs["audio"])
-            if "audio" in col_inputs
-            else None,
-            video_statistics=calculate_video_statistics(col_inputs["video"])
-            if "video" in col_inputs
-            else None,
+            **modality_stats,
             values_statistics=calculate_score_statistics(values),
         )

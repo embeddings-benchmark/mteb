@@ -10,15 +10,8 @@ from sklearn.metrics import average_precision_score
 
 from mteb._evaluators import PairClassificationEvaluator
 from mteb.abstasks._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
     calculate_label_statistics,
-    calculate_text_statistics,
-    calculate_video_statistics,
-    compute_audio_hashes,
-    compute_image_hashes,
-    compute_text_hashes,
-    compute_video_hashes,
+    calculate_pair_modality_statistics,
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ScoringFunction
@@ -190,7 +183,7 @@ class AbsTaskPairClassification(AbsTask):
                 output_scores[f"max_{metric}"] = max(max_scores[metric])
         return output_scores
 
-    def _calculate_descriptive_statistics_from_split(  # noqa: PLR0914
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> PairClassificationDescriptiveStatistics:
         if hf_subset:
@@ -215,78 +208,52 @@ class AbsTaskPairClassification(AbsTask):
         if isinstance(dataset, list):
             dataset = dataset[0]
 
-        input1 = (
-            dataset[self.input1_column_name][0]
-            if len(dataset[self.input1_column_name]) == 1
-            else dataset[self.input1_column_name]
-        )
-        input2 = (
-            dataset[self.input2_column_name][0]
-            if len(dataset[self.input2_column_name]) == 1
-            else dataset[self.input2_column_name]
-        )
-        labels = (
-            dataset[self.label_column_name][0]
-            if len(dataset[self.label_column_name]) == 1
-            else dataset[self.label_column_name]
+        def _get_col_data(col: str) -> list:
+            raw = dataset[col]
+            return raw[0] if len(raw) == 1 else raw
+
+        _available_cols: set[str] = (
+            set(dataset.column_names)
+            if isinstance(dataset, Dataset)
+            else set(dataset.keys())
         )
 
-        # TODO make this multimodal
+        def _get_cols(modality: str) -> tuple[str, str]:
+            c1, c2 = f"{modality}1", f"{modality}2"
+            if c1 in _available_cols and c2 in _available_cols:
+                return c1, c2
+            return self.input1_column_name, self.input2_column_name
 
-        text1_statistics = None
-        text2_statistics = None
-        image1_statistics = None
-        image2_statistics = None
-        number_of_characters = None
-        audio1_statistics = None
-        audio2_statistics = None
-        video1_statistics = None
-        video2_statistics = None
-        unique_pairs = None
-        if self.metadata.modalities == ["text"]:
-            h1 = compute_text_hashes(input1)
-            h2 = compute_text_hashes(input2)
-            text1_statistics = calculate_text_statistics(input1, hashes=h1)
-            text2_statistics = calculate_text_statistics(input2, hashes=h2)
-            number_of_characters = (
-                text1_statistics["total_text_length"]
-                + text2_statistics["total_text_length"]
-            )
-            unique_pairs = len(set(zip(h1, h2)))
+        labels = _get_col_data(self.label_column_name)
+        n = len(labels)
 
-        if self.metadata.modalities == ["image"]:
-            h1 = compute_image_hashes(input1)
-            h2 = compute_image_hashes(input2)
-            image1_statistics = calculate_image_statistics(input1, hashes=h1)
-            image2_statistics = calculate_image_statistics(input2, hashes=h2)
-            unique_pairs = len(set(zip(h1, h2)))
+        def _get_pair_data(modality: str) -> tuple[list, list]:
+            c1, c2 = _get_cols(modality)
+            return _get_col_data(c1), _get_col_data(c2)
 
-        if self.metadata.modalities == ["audio"]:
-            h1 = compute_audio_hashes(input1)
-            h2 = compute_audio_hashes(input2)
-            audio1_statistics = calculate_audio_statistics(input1, hashes=h1)
-            audio2_statistics = calculate_audio_statistics(input2, hashes=h2)
-            unique_pairs = len(set(zip(h1, h2)))
+        pair_stats = calculate_pair_modality_statistics(
+            self.metadata.modalities, _get_pair_data, n
+        )
 
-        if self.metadata.modalities == ["video"]:
-            h1 = compute_video_hashes(input1)
-            h2 = compute_video_hashes(input2)
-            video1_statistics = calculate_video_statistics(input1, hashes=h1)
-            video2_statistics = calculate_video_statistics(input2, hashes=h2)
-            unique_pairs = len(set(zip(h1, h2)))
+        number_of_characters = (
+            pair_stats["text1_statistics"]["total_text_length"]
+            + pair_stats["text2_statistics"]["total_text_length"]
+            if pair_stats["text1_statistics"]
+            else None
+        )
 
         return PairClassificationDescriptiveStatistics(
-            num_samples=len(input1),
-            unique_pairs=unique_pairs,
+            num_samples=n,
+            unique_pairs=pair_stats["unique_pairs"],
             number_of_characters=number_of_characters,
-            text1_statistics=text1_statistics,
-            image1_statistics=image1_statistics,
-            audio1_statistics=audio1_statistics,
-            video1_statistics=video1_statistics,
-            text2_statistics=text2_statistics,
-            image2_statistics=image2_statistics,
-            audio2_statistics=audio2_statistics,
-            video2_statistics=video2_statistics,
+            text1_statistics=pair_stats["text1_statistics"],
+            image1_statistics=pair_stats["image1_statistics"],
+            audio1_statistics=pair_stats["audio1_statistics"],
+            video1_statistics=pair_stats["video1_statistics"],
+            text2_statistics=pair_stats["text2_statistics"],
+            image2_statistics=pair_stats["image2_statistics"],
+            audio2_statistics=pair_stats["audio2_statistics"],
+            video2_statistics=pair_stats["video2_statistics"],
             labels_statistics=calculate_label_statistics(labels),
         )
 

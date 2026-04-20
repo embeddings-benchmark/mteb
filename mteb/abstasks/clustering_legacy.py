@@ -15,11 +15,8 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
     calculate_label_statistics,
-    calculate_text_statistics,
-    calculate_video_statistics,
+    calculate_single_input_modality_statistics,
 )
 from .abstask import AbsTask
 
@@ -250,20 +247,10 @@ class AbsTaskClusteringLegacy(AbsTask):
         if labels and isinstance(labels[0], list):
             labels = [item for sublist in labels for item in sublist]
 
+        modality_stats = calculate_single_input_modality_statistics(col_inputs)
         return ClusteringDescriptiveStatistics(
             num_samples=len(col_inputs[modality]),
-            text_statistics=calculate_text_statistics(col_inputs["text"])
-            if "text" in col_inputs
-            else None,
-            image_statistics=calculate_image_statistics(col_inputs["image"])
-            if "image" in col_inputs
-            else None,
-            audio_statistics=calculate_audio_statistics(col_inputs["audio"])
-            if "audio" in col_inputs
-            else None,
-            video_statistics=calculate_video_statistics(col_inputs["video"])
-            if "video" in col_inputs
-            else None,
+            **modality_stats,
             label_statistics=calculate_label_statistics(labels),
         )
 

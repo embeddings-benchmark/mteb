@@ -128,42 +128,49 @@ def create_mock_images(np_rng: np.random.Generator, n: int = 2) -> list[Image]:
 
 
 def create_mock_video_bytes(
+    np_rng: np.random.Generator,
+    n: int = 2,
     width: int = 64,
     height: int = 64,
     fps: int = 24,
     duration_s: float = 1.0,
-) -> bytes:
+) -> list[bytes]:
     """Create minimal video bytes using PyAV.
 
     Args:
+        np_rng: NumPy random generator used to produce distinct frame content per video.
+        n: Number of video clips to generate.
         width: Frame width in pixels.
         height: Frame height in pixels.
         fps: Frames per second.
-        duration_s: Duration of the video clip in seconds.
+        duration_s: Duration of each video clip in seconds.
 
     Returns:
-        Video encoded as MP4 bytes.
+        List of n videos, each encoded as MP4 bytes.
     """
     import io
 
     import av
 
-    buf = io.BytesIO()
-    container = av.open(buf, mode="w", format="mp4")
-    stream = container.add_stream("h264", rate=fps)
-    stream.width = width
-    stream.height = height
-    stream.pix_fmt = "yuv420p"
+    videos = []
     num_frames = int(fps * duration_s)
-    for _ in range(num_frames):
-        frame_data = np.zeros((height, width, 3), dtype=np.uint8)
-        frame = av.VideoFrame.from_ndarray(frame_data, format="rgb24")
-        for pkt in stream.encode(frame):
+    for _ in range(n):
+        buf = io.BytesIO()
+        container = av.open(buf, mode="w", format="mp4")
+        stream = container.add_stream("h264", rate=fps)
+        stream.width = width
+        stream.height = height
+        stream.pix_fmt = "yuv420p"
+        for _ in range(num_frames):
+            frame_data = np_rng.integers(0, 255, (height, width, 3), dtype=np.uint8)
+            frame = av.VideoFrame.from_ndarray(frame_data, format="rgb24")
+            for pkt in stream.encode(frame):
+                container.mux(pkt)
+        for pkt in stream.encode():
             container.mux(pkt)
-    for pkt in stream.encode():
-        container.mux(pkt)
-    container.close()
-    return buf.getvalue()
+        container.close()
+        videos.append(buf.getvalue())
+    return videos
 
 
 def create_mock_audio(
@@ -3947,8 +3954,8 @@ class MockVisualSTSTask(AbsTaskSTS):
     expected_stats = {
         "test": {
             "num_samples": 2,
+            "unique_pairs": 2,
             "number_of_characters": None,
-            "unique_pairs": None,
             "text1_statistics": None,
             "text2_statistics": None,
             "image1_statistics": {
@@ -4010,7 +4017,6 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_of_characters": None,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -4073,7 +4079,6 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_of_characters": None,
             "text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -4135,7 +4140,7 @@ class MockRegressionTask(AbsTaskRegression):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "num_texts_in_train": 1,
+            "samples_in_train": 1,
             "text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -4150,7 +4155,7 @@ class MockRegressionTask(AbsTaskRegression):
         },
         "train": {
             "num_samples": 2,
-            "num_texts_in_train": None,
+            "samples_in_train": None,
             "text_statistics": {
                 "total_text_length": 53,
                 "min_text_length": 23,
@@ -4201,7 +4206,7 @@ class MockImageRegressionTask(AbsTaskRegression):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "num_texts_in_train": None,
+            "samples_in_train": 0,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -4218,7 +4223,7 @@ class MockImageRegressionTask(AbsTaskRegression):
         },
         "train": {
             "num_samples": 2,
-            "num_texts_in_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -4410,7 +4415,6 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_of_characters": None,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -5048,7 +5052,7 @@ class MockVideoClassification(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "samples_in_train": 1,
+            "samples_in_train": 2,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": None,
@@ -5064,7 +5068,7 @@ class MockVideoClassification(AbsTaskClassification):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 2},
             },
@@ -5094,7 +5098,7 @@ class MockVideoClassification(AbsTaskClassification):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 10},
             },
@@ -5109,8 +5113,7 @@ class MockVideoClassification(AbsTaskClassification):
     }
 
     def load_data(self, **kwargs):
-        video_bytes = create_mock_video_bytes()
-        mock_videos = [video_bytes, video_bytes]
+        mock_videos = create_mock_video_bytes(self.np_rng)
 
         self.dataset = DatasetDict(
             {
@@ -5169,7 +5172,7 @@ class MockVideoAudioClassification(AbsTaskClassification):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 2},
             },
@@ -5207,7 +5210,7 @@ class MockVideoAudioClassification(AbsTaskClassification):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 10},
             },
@@ -5222,8 +5225,7 @@ class MockVideoAudioClassification(AbsTaskClassification):
     }
 
     def load_data(self, **kwargs):
-        video_bytes = create_mock_video_bytes()
-        mock_videos = [video_bytes, video_bytes]
+        mock_videos = create_mock_video_bytes(self.np_rng)
         mock_audio = create_mock_audio(self.np_rng)
 
         self.dataset = DatasetDict(
@@ -5277,7 +5279,7 @@ class MockVideoClusteringTask(AbsTaskClustering):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 3,
                 "average_fps": 24.0,
                 "fps": {24: 3},
             },
@@ -5301,8 +5303,7 @@ class MockVideoClusteringTask(AbsTaskClustering):
     metadata.category = "v2c"
 
     def load_data(self, **kwargs):
-        video_bytes = create_mock_video_bytes()
-        mock_videos = [video_bytes] * 3
+        mock_videos = create_mock_video_bytes(self.np_rng, n=3)
 
         self.dataset = DatasetDict(
             {
@@ -5350,7 +5351,7 @@ class MockVideoAudioClusteringTask(AbsTaskClustering):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 3,
                 "average_fps": 24.0,
                 "fps": {24: 3},
             },
@@ -5374,8 +5375,7 @@ class MockVideoAudioClusteringTask(AbsTaskClustering):
     metadata.category = "va2c"
 
     def load_data(self, **kwargs):
-        video_bytes = create_mock_video_bytes()
-        mock_videos = [video_bytes] * 3
+        mock_videos = create_mock_video_bytes(self.np_rng, n=3)
         mock_audio = create_mock_audio(self.np_rng, n=3)
 
         self.dataset = DatasetDict(
@@ -5403,7 +5403,7 @@ class MockVideoMultilabelClassificationTask(AbsTaskMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "samples_in_train": 1,
+            "samples_in_train": 2,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": None,
@@ -5419,7 +5419,7 @@ class MockVideoMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 2},
             },
@@ -5449,7 +5449,7 @@ class MockVideoMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 10},
             },
@@ -5474,8 +5474,7 @@ class MockVideoMultilabelClassificationTask(AbsTaskMultilabelClassification):
     input_column_name = "video"
 
     def load_data(self, **kwargs):
-        video_bytes = create_mock_video_bytes()
-        mock_videos = [video_bytes, video_bytes]
+        mock_videos = create_mock_video_bytes(self.np_rng)
         labels = [[0], [1]]
 
         self.dataset = DatasetDict(
@@ -5518,7 +5517,7 @@ class MockVideoAudioMultilabelClassificationTask(AbsTaskMultilabelClassification
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 2},
             },
@@ -5556,7 +5555,7 @@ class MockVideoAudioMultilabelClassificationTask(AbsTaskMultilabelClassification
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 10},
             },
@@ -5581,8 +5580,7 @@ class MockVideoAudioMultilabelClassificationTask(AbsTaskMultilabelClassification
     input_column_name = ("video", "audio")
 
     def load_data(self, **kwargs):
-        video_bytes = create_mock_video_bytes()
-        mock_videos = [video_bytes, video_bytes]
+        mock_videos = create_mock_video_bytes(self.np_rng)
         mock_audio = create_mock_audio(self.np_rng)
         labels = [[0], [1]]
 
@@ -5617,7 +5615,6 @@ class MockVideoZeroshotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_of_characters": None,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": None,
@@ -5633,7 +5630,7 @@ class MockVideoZeroshotClassificationTask(AbsTaskZeroShotClassification):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 2},
             },
@@ -5664,8 +5661,7 @@ class MockVideoZeroshotClassificationTask(AbsTaskZeroShotClassification):
     metadata.category = "v2c"
 
     def load_data(self, **kwargs):
-        video_bytes = create_mock_video_bytes()
-        mock_videos = [video_bytes, video_bytes]
+        mock_videos = create_mock_video_bytes(self.np_rng)
         labels = np.array([0, 1])
 
         self.dataset = DatasetDict(
@@ -5702,7 +5698,7 @@ class MockVideoPairClassificationTask(AbsTaskPairClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "unique_pairs": 1,
+            "unique_pairs": 2,
             "number_of_characters": None,
             "text1_statistics": None,
             "image1_statistics": None,
@@ -5719,7 +5715,7 @@ class MockVideoPairClassificationTask(AbsTaskPairClassification):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 2},
             },
@@ -5738,7 +5734,7 @@ class MockVideoPairClassificationTask(AbsTaskPairClassification):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 2},
             },
@@ -5757,8 +5753,7 @@ class MockVideoPairClassificationTask(AbsTaskPairClassification):
     label_column_name = "label"
 
     def load_data(self, **kwargs):
-        video_bytes = create_mock_video_bytes()
-        mock_videos = [video_bytes, video_bytes]
+        mock_videos = create_mock_video_bytes(self.np_rng)
 
         self.dataset = DatasetDict(
             {
@@ -5773,6 +5768,207 @@ class MockVideoPairClassificationTask(AbsTaskPairClassification):
         )
         self.dataset = self.dataset.cast_column("video1", Video())
         self.dataset = self.dataset.cast_column("video2", Video())
+        self.data_loaded = True
+
+
+class MockVideoAudioPairClassificationTask(AbsTaskPairClassification):
+    metadata = TaskMetadata(
+        type="VideoPairClassification",
+        name="MockVideoAudioPairClassification",
+        main_score="max_ap",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video", "audio"]
+
+    label_column_name = "label"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "unique_pairs": 2,
+            "number_of_characters": None,
+            "text1_statistics": None,
+            "image1_statistics": None,
+            "audio1_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video1_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+            },
+            "text2_statistics": None,
+            "image2_statistics": None,
+            "audio2_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video2_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+            },
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+        }
+    }
+
+    def load_data(self, **kwargs):
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video1": mock_videos,
+                        "audio1": mock_audio,
+                        "video2": mock_videos,
+                        "audio2": mock_audio,
+                        "label": [0, 1],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video1", Video())
+        self.dataset = self.dataset.cast_column("video2", Video())
+        self.dataset = self.dataset.cast_column("audio1", Audio())
+        self.dataset = self.dataset.cast_column("audio2", Audio())
+        self.data_loaded = True
+
+
+class MockVideoAudioSTSTask(AbsTaskSTS):
+    metadata = TaskMetadata(
+        type="STS",
+        name="MockVideoAudioSTS",
+        main_score="cosine_spearman",
+        **general_args,
+    )
+    metadata.modalities = ["video", "audio"]
+    metadata.category = "va2va"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "unique_pairs": 2,
+            "number_of_characters": None,
+            "text1_statistics": None,
+            "text2_statistics": None,
+            "image1_statistics": None,
+            "image2_statistics": None,
+            "audio1_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "audio2_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video1_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+            },
+            "video2_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+            },
+            "label_statistics": {"min_score": 0.5, "avg_score": 0.5, "max_score": 0.5},
+        }
+    }
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video1": mock_videos,
+                        "audio1": mock_audio,
+                        "video2": mock_videos,
+                        "audio2": mock_audio,
+                        "score": [0.5, 0.5],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video1", Video())
+        self.dataset = self.dataset.cast_column("video2", Video())
+        self.dataset = self.dataset.cast_column("audio1", Audio())
+        self.dataset = self.dataset.cast_column("audio2", Audio())
         self.data_loaded = True
 
 
@@ -5827,7 +6023,7 @@ class MockVideoRetrievalV2T(AbsTaskRetrieval):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 2},
             },
@@ -5843,8 +6039,7 @@ class MockVideoRetrievalV2T(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
-        video_bytes = create_mock_video_bytes()
-        mock_videos = [video_bytes, video_bytes]
+        mock_videos = create_mock_video_bytes(self.np_rng)
 
         self.queries = DatasetDict(
             {
@@ -5911,7 +6106,7 @@ class MockVideoRetrievalT2V(AbsTaskRetrieval):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 2},
             },
@@ -5937,8 +6132,7 @@ class MockVideoRetrievalT2V(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
-        video_bytes = create_mock_video_bytes()
-        mock_videos = [video_bytes, video_bytes]
+        mock_videos = create_mock_video_bytes(self.np_rng)
 
         self.queries = DatasetDict(
             {
@@ -6023,7 +6217,7 @@ class MockVideoAudioRetrievalVA2T(AbsTaskRetrieval):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 2},
             },
@@ -6039,8 +6233,7 @@ class MockVideoAudioRetrievalVA2T(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
-        video_bytes = create_mock_video_bytes()
-        mock_videos = [video_bytes, video_bytes]
+        mock_videos = create_mock_video_bytes(self.np_rng)
         mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(
@@ -6118,7 +6311,7 @@ class MockVideoAudioRetrievalT2VA(AbsTaskRetrieval):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 2},
             },
@@ -6144,8 +6337,7 @@ class MockVideoAudioRetrievalT2VA(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
-        video_bytes = create_mock_video_bytes()
-        mock_videos = [video_bytes, video_bytes]
+        mock_videos = create_mock_video_bytes(self.np_rng)
         mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(
@@ -6239,7 +6431,7 @@ class MockVideoAudioTextRetrievalVAT2T(AbsTaskRetrieval):
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
                 "max_duration_seconds": 1.0,
-                "unique_videos": 1,
+                "unique_videos": 2,
                 "average_fps": 24.0,
                 "fps": {24: 2},
             },
@@ -6255,8 +6447,7 @@ class MockVideoAudioTextRetrievalVAT2T(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
-        video_bytes = create_mock_video_bytes()
-        mock_videos = [video_bytes, video_bytes]
+        mock_videos = create_mock_video_bytes(self.np_rng)
         mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(

@@ -209,3 +209,51 @@ class RelevantDocsStatistics(TypedDict):
     average_relevant_docs_per_query: float
     max_relevant_docs_per_query: float
     unique_relevant_docs: int
+
+
+class SingleInputModalityStatistics(TypedDict):
+    """Per-modality statistics for a single-input dataset (Classification, Regression, …).
+
+    Fields are ``None`` when the corresponding modality is absent from the task.
+
+    Attributes:
+        text_statistics: Statistics for the text column.
+        image_statistics: Statistics for the image column.
+        audio_statistics: Statistics for the audio column.
+        video_statistics: Statistics for the video column.
+    """
+
+    text_statistics: TextStatistics | None
+    image_statistics: ImageStatistics | None
+    audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
+
+
+class PairModalityStatistics(TypedDict):
+    """Per-modality statistics for a paired dataset (STS, PairClassification, …).
+
+    Each modality has a ``*1_statistics`` field for the first item in the pair
+    and a ``*2_statistics`` field for the second item.  Fields are ``None`` when
+    the corresponding modality is absent from the task.
+
+    Attributes:
+        text1_statistics: Text statistics for the first item.
+        text2_statistics: Text statistics for the second item.
+        image1_statistics: Image statistics for the first item.
+        image2_statistics: Image statistics for the second item.
+        audio1_statistics: Audio statistics for the first item.
+        audio2_statistics: Audio statistics for the second item.
+        video1_statistics: Video statistics for the first item.
+        video2_statistics: Video statistics for the second item.
+        unique_pairs: Number of unique (item1, item2) pairs.
+    """
+
+    text1_statistics: TextStatistics | None
+    text2_statistics: TextStatistics | None
+    image1_statistics: ImageStatistics | None
+    image2_statistics: ImageStatistics | None
+    audio1_statistics: AudioStatistics | None
+    audio2_statistics: AudioStatistics | None
+    video1_statistics: VideoStatistics | None
+    video2_statistics: VideoStatistics | None
+    unique_pairs: int

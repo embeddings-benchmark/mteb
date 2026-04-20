@@ -24,11 +24,8 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
     calculate_label_statistics,
-    calculate_text_statistics,
-    calculate_video_statistics,
+    calculate_single_input_modality_statistics,
     compute_audio_hashes,
     compute_image_hashes,
     compute_text_hashes,
@@ -541,9 +538,21 @@ class AbsTaskClassification(AbsTask):
 
         return dataset.select(sampled_idxs), idxs, sampled_idxs
 
-    def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
-    ) -> ClassificationDescriptiveStatistics:
+    def _load_col_inputs_and_hashes(
+        self, split: str, hf_subset: str | None, compute_overall: bool
+    ) -> tuple[
+        dict[str, list], list, dict[str, list[str]], dict[str, list[str]] | None
+    ]:
+        """Load input columns, label data, and pre-computed hashes for a split.
+
+        Shared by :meth:`_calculate_descriptive_statistics_from_split` in both
+        :class:`AbsTaskClassification` and :class:`AbsTaskRegression`.
+
+        Returns:
+            ``(col_inputs, label_data, test_hashes, train_hashes)`` where
+            *label_data* is the raw label/value list and *train_hashes* is
+            ``None`` when the evaluated split is the train split itself.
+        """
         if isinstance(self.input_column_name, str):
             col_map = {self.metadata.modalities[0]: self.input_column_name}
         else:
@@ -596,30 +605,21 @@ class AbsTaskClassification(AbsTask):
         train_hashes = (
             _compute_modality_hashes(train_inputs) if train_inputs is not None else None
         )
+        return col_inputs, label, test_hashes, train_hashes
 
+    def _calculate_descriptive_statistics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ) -> ClassificationDescriptiveStatistics:
+        col_inputs, label, test_hashes, train_hashes = self._load_col_inputs_and_hashes(
+            split, hf_subset, compute_overall
+        )
+        modality_stats = calculate_single_input_modality_statistics(
+            col_inputs, test_hashes
+        )
         return ClassificationDescriptiveStatistics(
             num_samples=len(label),
             samples_in_train=_count_samples_in_train(test_hashes, train_hashes),
-            text_statistics=calculate_text_statistics(
-                col_inputs["text"], hashes=test_hashes.get("text")
-            )
-            if "text" in col_inputs
-            else None,
-            image_statistics=calculate_image_statistics(
-                col_inputs["image"], hashes=test_hashes.get("image")
-            )
-            if "image" in col_inputs
-            else None,
-            audio_statistics=calculate_audio_statistics(
-                col_inputs["audio"], hashes=test_hashes.get("audio")
-            )
-            if "audio" in col_inputs
-            else None,
-            video_statistics=calculate_video_statistics(
-                col_inputs["video"], hashes=test_hashes.get("video")
-            )
-            if "video" in col_inputs
-            else None,
+            **modality_stats,
             label_statistics=calculate_label_statistics(label),
         )
 

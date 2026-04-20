@@ -31,16 +31,9 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
     calculate_relevant_docs_statistics,
-    calculate_text_statistics,
+    calculate_single_input_modality_statistics,
     calculate_top_ranked_statistics,
-    calculate_video_statistics,
-    compute_audio_hashes,
-    compute_image_hashes,
-    compute_text_hashes,
-    compute_video_hashes,
 )
 from .abstask import AbsTask
 from .retrieval_dataset_loaders import (
@@ -558,96 +551,63 @@ class AbsTaskRetrieval(AbsTask):
                 prompt_type=PromptType.document
             )
 
-        number_of_characters = 0
-
-        documents_text_statistics = None
-        documents_image_statistics = None
-        documents_audio_statistics = None
-        documents_video_statistics = None
-        queries_text_statistics = None
-        queries_image_statistics = None
-        queries_audio_statistics = None
-        queries_video_statistics = None
-
+        # Build corpus col_inputs — text needs special mapping from the corpus dict format.
+        corpus_col_inputs: dict[str, list] = {}
         if "text" in corpus_modalities:
-            corpus_texts = corpus.map(_corpus_to_dict)["text"]
-            corpus_text_hashes = compute_text_hashes(corpus_texts)
-            documents_text_statistics = calculate_text_statistics(
-                corpus_texts, hashes=corpus_text_hashes
-            )
-            number_of_characters += documents_text_statistics["total_text_length"]
-
+            corpus_col_inputs["text"] = corpus.map(_corpus_to_dict)["text"]
         if "image" in corpus_modalities:
-            corpus_images = corpus["image"]
-            documents_image_statistics = calculate_image_statistics(
-                corpus_images, hashes=compute_image_hashes(corpus_images)
-            )
-
+            corpus_col_inputs["image"] = corpus["image"]
         if "audio" in corpus_modalities:
-            corpus_audios = corpus["audio"]
-            documents_audio_statistics = calculate_audio_statistics(
-                corpus_audios, hashes=compute_audio_hashes(corpus_audios)
-            )
-
+            corpus_col_inputs["audio"] = corpus["audio"]
         if "video" in corpus_modalities:
-            corpus_videos = corpus["video"]
-            documents_video_statistics = calculate_video_statistics(
-                corpus_videos, hashes=compute_video_hashes(corpus_videos)
-            )
+            corpus_col_inputs["video"] = corpus["video"]
 
+        # Build queries col_inputs — text may need instruction/conversation transformations.
+        queries_col_inputs: dict[str, list] = {}
         if "text" in queries_modalities:
             queries_ = queries
             if "instruction" in queries_[0]:
                 queries_ = queries_.map(_combine_queries_with_instruction_text)
-
             if isinstance(queries_["text"][0], dict | list):
                 queries_ = queries_.map(_convert_conv_history_to_query)
-            queries_texts = queries_["text"]
-            queries_text_hashes = compute_text_hashes(queries_texts)
-            queries_text_statistics = calculate_text_statistics(
-                queries_texts, hashes=queries_text_hashes
-            )
-
-            number_of_characters += queries_text_statistics["total_text_length"]
-
+            queries_col_inputs["text"] = queries_["text"]
         if "image" in queries_modalities:
-            query_images = queries["image"]
-            queries_image_statistics = calculate_image_statistics(
-                query_images, hashes=compute_image_hashes(query_images)
-            )
-
+            queries_col_inputs["image"] = queries["image"]
         if "audio" in queries_modalities:
-            query_audios = queries["audio"]
-            queries_audio_statistics = calculate_audio_statistics(
-                query_audios, hashes=compute_audio_hashes(query_audios)
-            )
-
+            queries_col_inputs["audio"] = queries["audio"]
         if "video" in queries_modalities:
-            query_videos = queries["video"]
-            queries_video_statistics = calculate_video_statistics(
-                query_videos, hashes=compute_video_hashes(query_videos)
-            )
+            queries_col_inputs["video"] = queries["video"]
+
+        corpus_stats = calculate_single_input_modality_statistics(corpus_col_inputs)
+        queries_stats = calculate_single_input_modality_statistics(queries_col_inputs)
+
+        number_of_characters = sum(
+            stat["total_text_length"]
+            for stat in [
+                corpus_stats["text_statistics"],
+                queries_stats["text_statistics"],
+            ]
+            if stat is not None
+        )
 
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
-
-        if top_ranked is not None and num_queries and len(top_ranked) > 0:
-            top_ranked_statistics = calculate_top_ranked_statistics(
-                top_ranked, num_queries
-            )
-        else:
-            top_ranked_statistics = None
+        top_ranked_statistics = (
+            calculate_top_ranked_statistics(top_ranked, num_queries)
+            if top_ranked is not None and num_queries and len(top_ranked) > 0
+            else None
+        )
 
         return RetrievalDescriptiveStatistics(
             num_samples=num_documents + num_queries,
             number_of_characters=number_of_characters,
-            documents_text_statistics=documents_text_statistics,
-            documents_image_statistics=documents_image_statistics,
-            documents_audio_statistics=documents_audio_statistics,
-            documents_video_statistics=documents_video_statistics,
-            queries_text_statistics=queries_text_statistics,
-            queries_image_statistics=queries_image_statistics,
-            queries_audio_statistics=queries_audio_statistics,
-            queries_video_statistics=queries_video_statistics,
+            documents_text_statistics=corpus_stats["text_statistics"],
+            documents_image_statistics=corpus_stats["image_statistics"],
+            documents_audio_statistics=corpus_stats["audio_statistics"],
+            documents_video_statistics=corpus_stats["video_statistics"],
+            queries_text_statistics=queries_stats["text_statistics"],
+            queries_image_statistics=queries_stats["image_statistics"],
+            queries_audio_statistics=queries_stats["audio_statistics"],
+            queries_video_statistics=queries_stats["video_statistics"],
             relevant_docs_statistics=relevant_docs_statistics,
             top_ranked_statistics=top_ranked_statistics,
         )

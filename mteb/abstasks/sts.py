@@ -12,15 +12,8 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
+    calculate_pair_modality_statistics,
     calculate_score_statistics,
-    calculate_text_statistics,
-    calculate_video_statistics,
-    compute_audio_hashes,
-    compute_image_hashes,
-    compute_text_hashes,
-    compute_video_hashes,
 )
 from .abstask import AbsTask
 
@@ -221,106 +214,81 @@ class AbsTaskSTS(AbsTask):
             euclidean_spearman=euclidean_spearman,
         )
 
-    def _calculate_descriptive_statistics_from_split(  # noqa: PLR0914
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> AnySTSDescriptiveStatistics:
-        first_column, second_column = self.column_names
         self.dataset = cast("dict[str, dict[str, Dataset]]", self.dataset)
 
+        # Pick a representative split dataset to inspect available column names.
+        _ref_split: Dataset = (
+            self.dataset[hf_subset][split]
+            if hf_subset
+            else (
+                self.dataset[next(iter(self.metadata.eval_langs))][split]
+                if compute_overall
+                else self.dataset[split]
+            )
+        )
+        _available_cols: set[str] = set(_ref_split.column_names)
+
+        def _get_cols(modality: str) -> tuple[str, str]:
+            c1, c2 = f"{modality}1", f"{modality}2"
+            if c1 in _available_cols and c2 in _available_cols:
+                return c1, c2
+            return self.column_names
+
         if hf_subset:
-            sentence1 = self.dataset[hf_subset][split][first_column]
-            sentence2 = self.dataset[hf_subset][split][second_column]
             score = self.dataset[hf_subset][split]["score"]
+            n = len(score)
+
+            def _load_col(col: str) -> list:
+                return self.dataset[hf_subset][split][col]  # type: ignore[index]
+
         elif compute_overall:
-            sentence1 = []
-            sentence2 = []
             score = []
-            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
-                sentence1.extend(self.dataset[hf_subset][split][first_column])
-                sentence2.extend(self.dataset[hf_subset][split][second_column])
-                score.extend(self.dataset[hf_subset][split]["score"])
+            for _subset in self.metadata.eval_langs:
+                score.extend(self.dataset[_subset][split]["score"])
+            n = len(score)
+
+            def _load_col(col: str) -> list:  # type: ignore[misc]
+                result = []
+                for subset in self.metadata.eval_langs:
+                    result.extend(self.dataset[subset][split][col])
+                return result
+
         else:
-            sentence1 = self.dataset[split][first_column]
-            sentence2 = self.dataset[split][second_column]
             score = self.dataset[split]["score"]
+            n = len(score)
 
-        # Compute hashes per modality; accumulate into per-row tuples for unique_pairs.
-        all_h1: list[list[str]] = [[] for _ in range(len(sentence1))]
-        all_h2: list[list[str]] = [[] for _ in range(len(sentence2))]
+            def _load_col(col: str) -> list:  # type: ignore[misc]
+                return self.dataset[split][col]
 
-        if "text" in self.metadata.modalities:
-            h1 = compute_text_hashes(sentence1)
-            h2 = compute_text_hashes(sentence2)
-            text1_statistics = calculate_text_statistics(sentence1, hashes=h1)
-            text2_statistics = calculate_text_statistics(sentence2, hashes=h2)
-            for i, h in enumerate(h1):
-                all_h1[i].append(h)
-            for i, h in enumerate(h2):
-                all_h2[i].append(h)
-        else:
-            text1_statistics = None
-            text2_statistics = None
+        def _get_pair_data(modality: str) -> tuple[list, list]:
+            c1, c2 = _get_cols(modality)
+            return _load_col(c1), _load_col(c2)
 
-        if "image" in self.metadata.modalities:
-            h1 = compute_image_hashes(sentence1)
-            h2 = compute_image_hashes(sentence2)
-            image1_statistics = calculate_image_statistics(sentence1, hashes=h1)
-            image2_statistics = calculate_image_statistics(sentence2, hashes=h2)
-            for i, h in enumerate(h1):
-                all_h1[i].append(h)
-            for i, h in enumerate(h2):
-                all_h2[i].append(h)
-        else:
-            image1_statistics = None
-            image2_statistics = None
-
-        if "audio" in self.metadata.modalities:
-            h1 = compute_audio_hashes(sentence1)
-            h2 = compute_audio_hashes(sentence2)
-            audio1_statistics = calculate_audio_statistics(sentence1, hashes=h1)
-            audio2_statistics = calculate_audio_statistics(sentence2, hashes=h2)
-            for i, h in enumerate(h1):
-                all_h1[i].append(h)
-            for i, h in enumerate(h2):
-                all_h2[i].append(h)
-        else:
-            audio1_statistics = None
-            audio2_statistics = None
-
-        if "video" in self.metadata.modalities:
-            h1 = compute_video_hashes(sentence1)
-            h2 = compute_video_hashes(sentence2)
-            video1_statistics = calculate_video_statistics(sentence1, hashes=h1)
-            video2_statistics = calculate_video_statistics(sentence2, hashes=h2)
-            for i, h in enumerate(h1):
-                all_h1[i].append(h)
-            for i, h in enumerate(h2):
-                all_h2[i].append(h)
-        else:
-            video1_statistics = None
-            video2_statistics = None
-
-        unique_pairs = len({(tuple(h1), tuple(h2)) for h1, h2 in zip(all_h1, all_h2)})
-
+        pair_stats = calculate_pair_modality_statistics(
+            self.metadata.modalities, _get_pair_data, n
+        )
         labels_statistics = calculate_score_statistics(score)
 
         return AnySTSDescriptiveStatistics(
-            num_samples=len(sentence1),
+            num_samples=n,
             number_of_characters=(
-                text1_statistics["total_text_length"]
-                + text2_statistics["total_text_length"]
-                if text1_statistics
+                pair_stats["text1_statistics"]["total_text_length"]
+                + pair_stats["text2_statistics"]["total_text_length"]
+                if pair_stats["text1_statistics"]
                 else None
             ),
-            unique_pairs=unique_pairs,
-            text1_statistics=text1_statistics,
-            text2_statistics=text2_statistics,
-            image1_statistics=image1_statistics,
-            image2_statistics=image2_statistics,
-            audio1_statistics=audio1_statistics,
-            audio2_statistics=audio2_statistics,
-            video1_statistics=video1_statistics,
-            video2_statistics=video2_statistics,
+            unique_pairs=pair_stats["unique_pairs"],
+            text1_statistics=pair_stats["text1_statistics"],
+            text2_statistics=pair_stats["text2_statistics"],
+            image1_statistics=pair_stats["image1_statistics"],
+            image2_statistics=pair_stats["image2_statistics"],
+            audio1_statistics=pair_stats["audio1_statistics"],
+            audio2_statistics=pair_stats["audio2_statistics"],
+            video1_statistics=pair_stats["video1_statistics"],
+            video2_statistics=pair_stats["video2_statistics"],
             label_statistics=labels_statistics,
         )
 
