@@ -207,7 +207,7 @@ class VoyageModel(AbsEncoder):
         if api_model_name:
             self._model_name = api_model_name
         else:
-            self._model_name = model_name.split("/")[-1].split()[0]
+            self._model_name = model_name.rsplit("/", maxsplit=1)[-1].split()[0]
         self._max_tpm = max_tpm
         self._max_tokens = max_tokens
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
@@ -376,6 +376,33 @@ model_prompts = {
     PromptType.document.value: "document",
 }
 
+voyage_4_large_2048d_evolved = ModelMeta(
+    name="voyageai/voyage-4-large-2048d-evolved",
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-01-15",
+    languages=None,
+    loader=VoyageEvolvedPromptsModel,
+    loader_kwargs=dict(
+        max_tokens=32000,
+        model_prompts=model_prompts,
+        api_model_name="voyage-4-large",
+    ),
+    max_tokens=32000,
+    embed_dim=2048,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2026/01/15/voyage-4/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+)
+
 voyage_4_large_2048d = ModelMeta(
     name="voyageai/voyage-4-large (embed_dim=2048)",
     model_type=["dense"],
@@ -402,33 +429,6 @@ voyage_4_large_2048d = ModelMeta(
     public_training_data=None,
     output_dtypes=OUTPUT_TYPES,
     extra_requirements_groups=["voyageai"],
-)
-
-voyage_4_large_2048d_evolved = ModelMeta(
-    name="voyageai/voyage-4-large-2048d-evolved",
-    model_type=["dense"],
-    revision="1",
-    release_date="2026-01-15",
-    languages=None,
-    loader=VoyageEvolvedPromptsModel,
-    loader_kwargs=dict(
-        max_tokens=32000,
-        model_prompts=model_prompts,
-        api_model_name="voyage-4-large",
-    ),
-    max_tokens=32000,
-    embed_dim=2048,
-    open_weights=False,
-    n_parameters=None,
-    memory_usage_mb=None,
-    license=None,
-    reference="https://blog.voyageai.com/2026/01/15/voyage-4/",
-    similarity_fn_name="cosine",
-    framework=["API"],
-    use_instructions=True,
-    training_datasets=VOYAGE_TRAINING_DATA,
-    public_training_code=None,
-    public_training_data=None,
 )
 
 voyage_4 = ModelMeta(
