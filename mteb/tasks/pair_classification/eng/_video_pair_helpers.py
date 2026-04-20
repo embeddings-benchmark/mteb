@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-import random
 from collections import defaultdict
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    import random
+
     from datasets import Dataset
 
 
