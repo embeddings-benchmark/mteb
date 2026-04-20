@@ -75,13 +75,11 @@ def _corpus_to_dict(
 
 
 def _combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str]:
+    row["text"] = row.get("text") or ""
     row["query"] = row["text"]
 
-    if row["text"] is not None:
-        if "instruction" in row and row["instruction"] is not None:
-            row["text"] = row["query"] + " " + row["instruction"]
-        else:
-            row["text"] = row["query"]
+    if "instruction" in row and row["instruction"] is not None:
+        row["text"] = row["query"] + " " + row["instruction"]
     return row
 
 
@@ -222,19 +220,17 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     """
     collated = {}
     for key in batch[0]:
-        values = [item[key] for item in batch]
         if key in (  # noqa: PLR6201
             "image",  # images can be with different sizes
             "conversation",  # conversations are lists of varying lengths
             "audio",  # audio can have different lengths
             "video",  # video can have different lengths
         ):
-            collated[key] = values
-        elif any(v is None for v in values):
-            # In multimodal tasks, text can be None for image-only items
-            collated[key] = values
+            collated[key] = [item[key] for item in batch]
         else:
-            collated[key] = default_collate(values)
+            if any(item[key] is None for item in batch):
+                raise ValueError(f"Found None in batch for key '{key}'")
+            collated[key] = default_collate([item[key] for item in batch])
     return cast("BatchedInput", collated)
 
 
