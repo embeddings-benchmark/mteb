@@ -7,7 +7,6 @@ from tqdm.auto import tqdm
 from transformers import Data2VecAudioModel, Wav2Vec2FeatureExtractor
 
 from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -28,7 +27,6 @@ class Data2VecAudioWrapper(AbsEncoder):
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds

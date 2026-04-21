@@ -17,3 +17,12 @@ logging.basicConfig(level=logging.INFO)
 def test_benchmark_datasets(task: AbsTask, model: mteb.EncoderProtocol, tmp_path: Path):
     """Test that a task can be fetched and run"""
     mteb.evaluate(model, task, cache=None)
+
+
+def test_run_task_multiple_times():
+    """Regression test for https://github.com/embeddings-benchmark/mteb/issues/4397"""
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    # Core17InstructionRetrieval already in TASK_TEST_GRID
+    task = mteb.get_task("Core17InstructionRetrieval")
+    mteb.evaluate(model, task, cache=None)
+    mteb.evaluate(model, task, cache=None)

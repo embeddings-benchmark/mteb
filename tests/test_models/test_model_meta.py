@@ -1,3 +1,5 @@
+import re
+
 import pytest
 
 import mteb
@@ -365,6 +367,7 @@ def test_model_to_python():
     citation='@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n',
     contacts=None,
     output_dtypes=None,
+    extra_requirements_groups=None,
 )"""
     )
 
@@ -432,3 +435,43 @@ def test_get_model_metas_without_modality_filter_returns_more_models():
     text_models = mteb.get_model_metas(modalities=["text"])
 
     assert len(all_models) > len(text_models)
+
+
+def test_model_meta_dependencies_success():
+    model_meta = mteb.get_model_meta("mteb/baseline-random-encoder").model_copy(
+        update={
+            "required_dependencies": ["transformers", "sentence-transformers>1.0.0"],
+        }
+    )
+    model_meta._check_requirements()
+
+
+def test_model_meta_dependencies_not_existing_group():
+    model_meta = mteb.get_model_meta("mteb/baseline-random-encoder").model_copy(
+        update={
+            "extra_requirements_groups": ["test_group"],
+        }
+    )
+    with pytest.raises(
+        ValueError,
+        match="Unknown extras group\(s\) for mteb: \['test_group'\]. .*",
+    ):
+        model_meta._check_requirements()
+
+
+def test_model_meta_dependencies_not_installed_group():
+    model_meta = mteb.get_model_meta("google/vggish").model_copy(
+        update={
+            "extra_requirements_groups": ["torch-vggish-yamnet"],
+        }
+    )
+    with pytest.raises(
+        ImportError,
+        match=(
+            'Model google/vggish is missing required dependencies:( torchaudio; extra == "audio",)? '
+            + re.escape(
+                'torch-vggish-yamnet==0.2.1; extra == "torch-vggish-yamnet".\nYou can install it with `pip install mteb[torch-vggish-yamnet,audio]`.'
+            )
+        ),
+    ):
+        model_meta._check_requirements()

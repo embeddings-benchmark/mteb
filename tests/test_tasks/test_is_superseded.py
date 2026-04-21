@@ -3,13 +3,13 @@
 import logging
 
 import mteb
-from mteb.get_tasks import _TASKS_REGISTRY  # noqa: PLC2701
+from mteb.get_tasks import _TASKS_REGISTRY
 
 logging.basicConfig(level=logging.INFO)
 
 
 def test_superseded_dataset_exists():
-    tasks = mteb.get_tasks(exclude_superseded=False)
+    tasks = mteb.get_tasks(exclude_superseded=False, exclude_beta=False)
     for task in tasks:
         if task.superseded_by:
             assert task.superseded_by in _TASKS_REGISTRY, (

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.12.16"
+version = "2.12.25"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -96,6 +96,7 @@ voyageai = ["voyageai>0.3.0,<2.0.0"]
 voyage_v = ["voyageai>0.3.0,<2.0.0", "tenacity>9.0.0"]
 cohere = ["cohere==5.14.0"]
 vertexai = ["vertexai==1.71.1"]
+google_genai = ["google-genai>=1.7.0"]
 llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
 timm = ["timm>=1.0.15,<1.1.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
@@ -121,6 +122,8 @@ mctct = ["transformers<5"]  # mctct was removed in transformers 5
 siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
 qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
 omnivinci = ["transformers==4.46.0", "einops>=0.8.0", "openai-whisper>=20240930", "soundfile>=0.13.1", "opencv-python-headless>=4.0.0", "kaldiio>=2.18.0", "decord>=0.6.0", "librosa>=0.10.0", "beartype>=0.18.0", "accelerate>=1.0.0", "s2wrapper @ git+https://github.com/bfshi/scaling_on_scales", "deepspeed>=0.9.0", "av>=10.0.0"]
+qwen_omni_utils = ["qwen_omni_utils"]
+embeddinggemma = ["transformers>=4.56.0"]
 
 [dependency-groups]
 lint = [
@@ -211,6 +214,7 @@ namespaces = false
     "descriptive_stats/Image/*/*.json",  # for descriptive_stats image
 ]
 "mteb.abstasks" = ["dataset_card_template.md"]
+"mteb.benchmarks" = ["benchmark_card_template.md"]
 "mteb.tasks.zeroshot_classification.eng.templates" = ["*.txt"]
 
 [tool.ruff]
@@ -301,6 +305,7 @@ preview = true
     "S101",  # allow asserts in tests
     "S602",  # allow shell=True in tests
     "S603",  # allow subprocess calls in tests
+    "PLC2701",  # Private name import
 ]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = [
@@ -388,6 +393,7 @@ addopts = """
 
 markers = [
     "test_datasets: marks tests that tests dataset availability",
+    "test_reference_models: marks tests that verify reference model result coverage (requires downloading results repo)",
 ]
 
 [tool.uv]
@@ -417,6 +423,7 @@ conflicts = [
         { extra = "mctct" },
         { extra = "qwen-vl" },
         { extra = "omnivinci" },
+        { extra = "embeddinggemma" },
     ],
 ]
 

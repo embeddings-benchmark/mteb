@@ -7,7 +7,6 @@ import torch
 from tqdm.auto import tqdm
 
 from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -27,7 +26,6 @@ class MuQMuLanWrapper(AbsEncoder):
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
-        requires_package(self, "muq", "pip install 'mteb[muq]'")
         from muq import MuQMuLan
 
         self.model_name = model_name
@@ -187,4 +185,5 @@ muq_mulan_large = ModelMeta(
   primaryClass={cs.SD},
   url={https://arxiv.org/abs/2501.01108},
 }""",
+    extra_requirements_groups=["muq"],
 )

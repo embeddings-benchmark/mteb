@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from enum import Enum
 from typing import TYPE_CHECKING, TypedDict
 
 import numpy as np
 import torch
 from datasets import Dataset
 from numpy.typing import NDArray
+
+from mteb._helpful_enum import HelpfulStrEnum
 
 if TYPE_CHECKING:
     import numpy.typing as npt
@@ -33,7 +34,7 @@ Array = NDArray[np.floating | np.integer | np.bool_] | torch.Tensor
 
 
 # --- Input types ---
-class PromptType(str, Enum):
+class PromptType(HelpfulStrEnum):
     """The type of prompt used in the input for retrieval models. Used to differentiate between queries and documents.
 
     Attributes:
@@ -151,7 +152,7 @@ class MultimodalInput(  # type: ignore[misc]
     pass
 
 
-class OutputDType(str, Enum):
+class OutputDType(HelpfulStrEnum):
     """Enum for valid compression levels.
 
     Used by the CompressionWrapper class and specified by models to indicate the dtypes of output embeddings they
