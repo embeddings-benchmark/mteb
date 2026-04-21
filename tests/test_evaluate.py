@@ -388,17 +388,20 @@ def test_precision_arg():
 
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)
 def test_mock_maeb_tasks(task: AbsTask):
+    pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
     model = mteb.get_model_meta("mteb/baseline-random-encoder")
     mteb.evaluate(model, task, cache=None)
 
 
 @pytest.mark.parametrize("task", MOCK_MVEB_TASK_GRID)
 def test_mock_mveb_tasks(task: AbsTask):
+    pytest.importorskip("torchcodec", reason="Audio dependencies are not installed")
     model = mteb.get_model_meta("mteb/baseline-random-encoder")
     mteb.evaluate(model, task, cache=None)
 
 
 @pytest.mark.parametrize("task", MOCK_MULTIMODAL_TASKS, ids=lambda x: x.metadata.name)
 def test_mock_mmeb_tasks(task: AbsTask):
+    pytest.importorskip("torchcodec", reason="Audio dependencies are not installed")
     model = mteb.get_model_meta("mteb/baseline-random-encoder")
     mteb.evaluate(model, task, cache=None)
