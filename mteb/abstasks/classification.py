@@ -538,21 +538,12 @@ class AbsTaskClassification(AbsTask):
 
         return dataset.select(sampled_idxs), idxs, sampled_idxs
 
-    def _load_col_inputs_and_hashes(
+    def _load_statistics_col_inputs_and_hashes(
         self, split: str, hf_subset: str | None, compute_overall: bool
     ) -> tuple[
         dict[str, list], list, dict[str, list[str]], dict[str, list[str]] | None
     ]:
-        """Load input columns, label data, and pre-computed hashes for a split.
-
-        Shared by :meth:`_calculate_descriptive_statistics_from_split` in both
-        :class:`AbsTaskClassification` and :class:`AbsTaskRegression`.
-
-        Returns:
-            ``(col_inputs, label_data, test_hashes, train_hashes)`` where
-            *label_data* is the raw label/value list and *train_hashes* is
-            ``None`` when the evaluated split is the train split itself.
-        """
+        """Load input columns, label data, and pre-computed hashes for a split."""
         if isinstance(self.input_column_name, str):
             col_map = {self.metadata.modalities[0]: self.input_column_name}
         else:
@@ -610,8 +601,10 @@ class AbsTaskClassification(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
-        col_inputs, label, test_hashes, train_hashes = self._load_col_inputs_and_hashes(
-            split, hf_subset, compute_overall
+        col_inputs, label, test_hashes, train_hashes = (
+            self._load_statistics_col_inputs_and_hashes(
+                split, hf_subset, compute_overall
+            )
         )
         modality_stats = calculate_single_input_modality_statistics(
             col_inputs, test_hashes

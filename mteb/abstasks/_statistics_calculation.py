@@ -366,22 +366,7 @@ def calculate_single_input_modality_statistics(
     col_inputs: dict[str, list],
     hashes: dict[str, list[str]] | None = None,
 ) -> SingleInputModalityStatistics:
-    """Compute per-modality statistics for a single-input dataset.
-
-    This is shared between Classification and Regression tasks, which both have
-    one set of input columns (one per modality) and a separate label column.
-
-    Args:
-        col_inputs: Mapping of modality name to the list of input values for
-            that modality (e.g. ``{"text": [...], "audio": [...]}``)
-        hashes: Optional pre-computed per-modality hashes
-            (from :func:`_compute_modality_hashes`).  When provided the
-            individual ``calculate_*_statistics`` calls skip re-hashing.
-
-    Returns:
-        :class:`SingleInputModalityStatistics` with one statistics entry per
-        modality, ``None`` for absent modalities.
-    """
+    """Compute per-modality statistics for a single-input dataset."""
     _hashes = hashes or {}
     return SingleInputModalityStatistics(
         text_statistics=calculate_text_statistics(
@@ -417,18 +402,6 @@ def calculate_pair_modality_statistics(
     This is shared between STS and PairClassification tasks.  Both task types
     have the same structure: for each sample there is a *first* item and a
     *second* item, potentially spanning multiple modalities.
-
-    Args:
-        modalities: Modalities present in the task (subset of
-            ``["text", "image", "audio", "video"]``).
-        get_pair_data: Callable that accepts a modality name and returns
-            ``(data1, data2)`` — the sequences of first and second items for
-            that modality.
-        n: Number of samples (used to pre-allocate per-row hash lists).
-
-    Returns:
-        :class:`PairModalityStatistics` with per-modality statistics and
-        ``unique_pairs``.
     """
     all_h1: list[list[str]] = [[] for _ in range(n)]
     all_h2: list[list[str]] = [[] for _ in range(n)]

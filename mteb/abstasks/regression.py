@@ -204,7 +204,9 @@ class AbsTaskRegression(AbsTaskClassification):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> RegressionDescriptiveStatistics:
         col_inputs, values, test_hashes, train_hashes = (
-            self._load_col_inputs_and_hashes(split, hf_subset, compute_overall)
+            self._load_statistics_col_inputs_and_hashes(
+                split, hf_subset, compute_overall
+            )
         )
         modality_stats = calculate_single_input_modality_statistics(
             col_inputs, test_hashes
