@@ -51,6 +51,8 @@ class OmniVinciWrapper(AbsEncoder):
         requires_audio_dependencies()
 
         from transformers import AutoModel, AutoProcessor
+        from transformers.modeling_utils import PreTrainedModel
+        from transformers.utils.import_utils import is_flash_attn_2_available
 
         self.device = device or (
             "cuda"
@@ -61,13 +63,36 @@ class OmniVinciWrapper(AbsEncoder):
         )
         self.num_frames = num_frames
 
+        attn_implementation = (
+            "flash_attention_2" if is_flash_attn_2_available() else "sdpa"
+        )
+        # VILA's remote code hardcodes flash_attention_2 in several
+        # sub-model from_pretrained calls (siglip_encoder, qwen_audio_encoder).
+        # When flash-attn is not installed, temporarily intercept
+        # from_pretrained to replace flash_attention_2 with our fallback.
+        if attn_implementation != "flash_attention_2":
+            _orig_from_pretrained = PreTrainedModel.from_pretrained.__func__
+
+            @classmethod  # type: ignore[misc]
+            def _patched_from_pretrained(cls, *args, **kw):
+                if kw.get("attn_implementation") == "flash_attention_2":
+                    kw["attn_implementation"] = attn_implementation
+                return _orig_from_pretrained(cls, *args, **kw)
+
+            PreTrainedModel.from_pretrained = _patched_from_pretrained
+
         self.model = AutoModel.from_pretrained(
             model_name,
             revision=revision,
             torch_dtype=torch.bfloat16,
             trust_remote_code=True,
+            attn_implementation=attn_implementation,
             **kwargs,
         )
+
+        # Restore original from_pretrained
+        if attn_implementation != "flash_attention_2":
+            PreTrainedModel.from_pretrained = _orig_from_pretrained
         self.model.eval()
         self.model.to(self.device)
 
@@ -82,29 +107,69 @@ class OmniVinciWrapper(AbsEncoder):
         self.model.config.load_audio_in_video = False
         self.processor.config.load_audio_in_video = False
 
+        # MTEB's VideoCollator already decodes and samples frames.  Patch
+        # VILA's _load_video so that when our wrapper passes in-memory
+        # frames via the IN_MEMORY_VIDEO sentinel, it bypasses cv2 and
+        # returns them directly — avoiding a lossy MP4 round-trip.
+        self._video_registry: dict[str, list[Any]] = {}
+        self._patch_load_video()
+
     # ------------------------------------------------------------------
-    # Temporary-file helpers (VILA processor requires file paths)
+    # In-memory video bridge (avoids lossy MP4 round-trip)
     # ------------------------------------------------------------------
 
-    @staticmethod
-    def _save_frames_as_video(frames: torch.Tensor) -> str:
-        """Write decoded frame tensors to a temporary MP4 file.
+    def _patch_load_video(self) -> None:
+        """Patch VILA's ``_load_video`` to consume our in-memory frame lists.
 
-        Args:
-            frames: ``(T, C, H, W)`` uint8 tensor produced by
-                :class:`~mteb._create_dataloaders.FramesCollator`.
-
-        Returns:
-            Path to the temporary video file (caller must unlink).
+        VILA's media pipeline expects a file path and re-decodes it via cv2.
+        MTEB has already decoded and sampled frames for us, so we register
+        the resulting PIL list under a marker file and intercept the load.
         """
-        import torchvision
+        import sys
 
-        fd, path = tempfile.mkstemp(suffix=".mp4")
-        os.close(fd)
-        # torchvision.io.write_video expects (T, H, W, C) uint8
-        frames_hwc = frames.permute(0, 2, 3, 1).contiguous()
-        torchvision.io.write_video(path, frames_hwc, fps=24)
-        return path
+        cached = next(
+            (
+                m
+                for name, m in sys.modules.items()
+                if name.endswith(".media") and "omnivinci" in name
+            ),
+            None,
+        )
+        if cached is None or not hasattr(cached, "_load_video"):
+            return
+
+        registry = self._video_registry
+        original = cached._load_video
+
+        def _patched(video_path, *args, **kwargs):
+            if isinstance(video_path, str) and video_path in registry:
+                frames = registry[video_path]
+                # MTEB has already decoded + sampled frames.  We don't know
+                # the source FPS, so use evenly-spaced 1s timestamps; the
+                # media encoder only needs a monotonic sequence for
+                # temporal position embedding.
+                video_info = {
+                    "video_path": video_path,
+                    "has_audio": False,
+                    "video_duration": float(len(frames)),
+                    "audio_info": None,
+                    "video_frame_times": [float(i) for i in range(len(frames))],
+                }
+                return frames, None, video_info
+            return original(video_path, *args, **kwargs)
+
+        cached._load_video = _patched
+
+    def _frames_to_pil(self, frames: torch.Tensor) -> list[Any]:
+        """Convert a ``(T, C, H, W)`` uint8 tensor to a list of PIL images."""
+        import PIL.Image
+
+        return [
+            PIL.Image.fromarray(
+                frame.permute(1, 2, 0).cpu().numpy().astype("uint8")
+            )
+            for frame in frames
+        ]
 
     @staticmethod
     def _save_audio_as_wav(audio_data: Any, fallback_sr: int) -> str:
@@ -153,13 +218,20 @@ class OmniVinciWrapper(AbsEncoder):
     ) -> torch.Tensor:
         """Encode one multimodal sample and return its L2-normalised embedding."""
         temp_files: list[str] = []
+        video_key: str | None = None
         try:
             content: list[dict[str, Any]] = []
 
             if video is not None:
-                video_path = self._save_frames_as_video(video)
-                temp_files.append(video_path)
-                content.append({"type": "video", "video": video_path})
+                # Create an empty marker file so VILA's processor path
+                # validation (osp.exists) passes; register PIL frames under
+                # the same path so the patched _load_video returns them
+                # without re-decoding.
+                fd, video_key = tempfile.mkstemp(suffix=".mp4")
+                os.close(fd)
+                temp_files.append(video_key)
+                self._video_registry[video_key] = self._frames_to_pil(video)
+                content.append({"type": "video", "video": video_key})
 
             if audio is not None:
                 audio_path = self._save_audio_as_wav(audio, self.AUDIO_SAMPLING_RATE)
@@ -199,6 +271,8 @@ class OmniVinciWrapper(AbsEncoder):
                     pathlib.Path(f).unlink()
                 except OSError:
                     pass
+            if video_key is not None:
+                self._video_registry.pop(video_key, None)
 
     @torch.no_grad()
     def encode(
@@ -265,11 +339,11 @@ omnivinci = ModelMeta(
     revision="7b3777b1c1f7c4e85f7bdef7b765dee1e76c1b7f",
     release_date="2025-10-21",
     languages=["eng-Latn"],
-    n_parameters=8_700_000_000,
-    memory_usage_mb=17200,
+    n_parameters=8_742_888_688,
+    memory_usage_mb=33351,
     max_tokens=32768,
     embed_dim=3584,
-    n_embedding_parameters=544_997_376,
+    n_embedding_parameters=543_553_024,
     license="apache-2.0",
     open_weights=True,
     public_training_code="https://github.com/NVlabs/OmniVinci",
