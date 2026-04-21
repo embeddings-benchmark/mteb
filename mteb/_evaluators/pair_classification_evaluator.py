@@ -95,12 +95,21 @@ class PairClassificationEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> PairClassificationDistances:
+        def _columns_for(col_name: str) -> list[str]:
+            """Select the input column plus any auxiliary columns needed by text preprocessing."""
+            cols = [col_name]
+            for aux in ("id", "title"):
+                if aux != col_name and aux in self.dataset.column_names:
+                    cols.append(aux)
+            return cols
+
         logger.info("Running pair classification - Encoding samples (1/2)")
         embeddings1 = model.encode(
             create_dataloader(
-                self.dataset.select_columns(self.input1_column_name),
+                self.dataset.select_columns(_columns_for(self.input1_column_name)),
                 task_metadata=self.task_metadata,
                 input_column=self.input1_column_name,
+                prompt_type=self.input1_prompt_type,
                 num_proc=num_proc,
                 **encode_kwargs,
             ),
@@ -113,9 +122,10 @@ class PairClassificationEvaluator(Evaluator):
         logger.info("Running pair classification - Encoding samples (2/2)")
         embeddings2 = model.encode(
             create_dataloader(
-                self.dataset.select_columns(self.input2_column_name),
+                self.dataset.select_columns(_columns_for(self.input2_column_name)),
                 task_metadata=self.task_metadata,
                 input_column=self.input2_column_name,
+                prompt_type=self.input2_prompt_type,
                 num_proc=num_proc,
                 **encode_kwargs,
             ),

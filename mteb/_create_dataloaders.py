@@ -334,11 +334,7 @@ def create_dataloader(
     # Sequence means columns already match modality names, no renaming needed
     _input_column = input_column if isinstance(input_column, str) else None
 
-    if (
-        prompt_type is None
-        and task_metadata.modalities == ["text"]
-        and _input_column is not None
-    ):
+    if task_metadata.modalities == ["text"] and _input_column is not None:
         return _create_dataloader_from_texts(
             dataset[_input_column],
             batch_size=batch_size,
