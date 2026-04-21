@@ -37,6 +37,7 @@ from .twenty_newsgroups_clustering import (
     TwentyNewsgroupsClustering,
     TwentyNewsgroupsClusteringFast,
 )
+from .ucf101_clustering import UCF101Clustering
 from .voice_gender import VoiceGenderClustering
 from .vox_celeb_clustering import VoxCelebClustering
 from .vox_populi_accent_clustering import VoxPopuliAccentClustering
@@ -89,6 +90,7 @@ __all__ = [
     "TinyImageNet",
     "TwentyNewsgroupsClustering",
     "TwentyNewsgroupsClusteringFast",
+    "UCF101Clustering",
     "VoiceGenderClustering",
     "VoxCelebClustering",
     "VoxPopuliAccentClustering",

@@ -4,38 +4,40 @@ from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MusicAVQAClustering(AbsTaskClustering):
+class UCF101Clustering(AbsTaskClustering):
     metadata = TaskMetadata(
-        name="MusicAVQAClustering",
+        name="UCF101Clustering",
         description=(
-            "Clustering of video clips with audio into 22 musical "
-            "instrument categories. Extracted from the MUSIC-AVQA "
-            "dataset."
+            "Clustering of video clips with audio into 51 human "
+            "action categories from the UCF101 dataset."
         ),
-        reference="https://gewu-lab.github.io/MUSIC-AVQA/",
+        reference="https://arxiv.org/abs/1212.0402",
         dataset={
-            "path": "mteb/MUSIC-AVQA_cls-preprocessed",
-            "revision": "29f50ae80ad4e8c1cfdbc0148aefe6fe050833dd",
+            "path": "mteb/UCF101-51VA",
+            "revision": "866b006d84629d66d9927646db89bd43381925e7",
         },
         type="VideoClustering",
         category="va2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
-        date=("2022-06-01", "2022-06-30"),
-        domains=["Music"],
-        task_subtypes=["Thematic clustering"],
-        license="mit",
+        date=("2012-01-01", "2012-12-03"),
+        domains=["Web", "Scene"],
+        task_subtypes=["Activity recognition"],
+        license="cc0-1.0",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["video", "audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{Li2022Learning,
-  author = {Guangyao li, Yake Wei, Yapeng Tian, Chenliang Xu, Ji-Rong Wen, Di Hu},
-  journal = {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-  title = {Learning to Answer Questions in Dynamic Audio-Visual Scenarios},
-  year = {2022},
+@misc{Soomro2012UCF101,
+    title = {UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild},
+    author = {Soomro, Khurram and Zamir, Amir Roshan and Shah, Mubarak},
+    year = {2012},
+    eprint = {1212.0402},
+    archivePrefix = {arXiv},
+    primaryClass = {cs.CV},
+    url = {https://arxiv.org/abs/1212.0402},
 }
 """,
         is_beta=True,

@@ -114,9 +114,9 @@ def _filter_queries_without_positives(
             continue
         _relevant_docs[idx] = relevant_docs[idx]
 
-    queries = queries.filter(
-        lambda x: x["id"] in _relevant_docs.keys(), desc="Filtering queries by qrels"
-    )
+    ids_to_keep = set(_relevant_docs.keys())
+    indices = [i for i, id_ in enumerate(queries["id"]) if id_ in ids_to_keep]
+    queries = queries.select(indices)
 
     return _relevant_docs, queries
 
