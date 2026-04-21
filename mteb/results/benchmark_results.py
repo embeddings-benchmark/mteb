@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any, Literal, cast
 
 import pandas as pd
 from packaging.version import InvalidVersion, Version
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, PrivateAttr
 
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
@@ -72,6 +72,14 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         protected_namespaces=(),  # to free up the name model_results which is otherwise protected
         arbitrary_types_allowed=True,  # Benchmark is dataclasses.dataclass
     )
+    # `to_dataframe` cache keyed on (aggregation_level, include_model_revision,
+    # format). Bypassed when `aggregation_fn` is non-None.
+    _df_cache: dict = PrivateAttr(default_factory=dict)
+    # On a filtered instance, the unfiltered parent + filter scope. `to_dataframe`
+    # reuses parent dfs via an isin() filter.
+    _parent_results: "BenchmarkResults | None" = PrivateAttr(default=None)
+    _filter_model_names: "frozenset[str] | None" = PrivateAttr(default=None)
+    _filter_task_names: "frozenset[str] | None" = PrivateAttr(default=None)
 
     def __repr__(self) -> str:
         n_models = len(self.model_results)
@@ -369,6 +377,92 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         Returns:
             A DataFrame with the scores for all models and tasks.
         """
+        # The aggregated-result cache is skipped for custom `aggregation_fn`
+        # (not hashable in general); pre-agg df is still cached.
+        cache_key = (
+            (aggregation_level, include_model_revision, format)
+            if aggregation_fn is None
+            else None
+        )
+        if cache_key is not None:
+            cached = self._df_cache.get(cache_key)
+            if cached is not None:
+                return cached
+
+        # Fast path for filtered instances: isin()-filter the parent's aggregated
+        # result. Unsafe for (language-agg + task filter) because `task_name` is
+        # dropped during language aggregation.
+        if (
+            cache_key is not None
+            and self._parent_results is not None
+            and not (
+                aggregation_level == "language"
+                and self._filter_task_names is not None
+            )
+        ):
+            parent_cached = self._parent_results._df_cache.get(cache_key)
+            if parent_cached is not None:
+                filtered = self._filter_df_by_scope(parent_cached)
+                self._df_cache[cache_key] = filtered
+                return filtered
+
+        # Pre-agg df only varies by include_model_revision; reused across
+        # (aggregation_level, format) keys. Filtered instances pull from parent.
+        pre_agg_key = ("__pre_agg__", include_model_revision)
+        df = self._df_cache.get(pre_agg_key)
+
+        if df is None and self._parent_results is not None:
+            parent_df = self._parent_results._build_pre_agg_df(include_model_revision)
+            if parent_df is not None:
+                df = self._filter_df_by_scope(parent_df)
+                self._df_cache[pre_agg_key] = df
+
+        if df is None:
+            df = self._build_pre_agg_df(include_model_revision)
+            if df is None:
+                msg = "No scores data available. Returning empty DataFrame."
+                logger.warning(msg)
+                warnings.warn(msg)
+                return pd.DataFrame()
+
+        columns = ["model_name"]
+        if include_model_revision:
+            columns.append("model_revision")
+
+        result = _aggregate_and_pivot(
+            df,
+            columns=columns,
+            aggregation_level=aggregation_level,
+            aggregation_fn=aggregation_fn,
+            format=format,
+        )
+        # Cast categorical columns back to object so downstream string ops don't
+        # raise "can only concatenate str (not Categorical) to str".
+        for col in result.select_dtypes(include="category").columns:
+            result[col] = result[col].astype(object)
+
+        if cache_key is not None:
+            self._df_cache[cache_key] = result
+        return result
+
+    def _filter_df_by_scope(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Restrict a df by `_filter_model_names` / `_filter_task_names`; no-op on an unfiltered instance."""
+        result = df
+        if self._filter_model_names is not None and "model_name" in result.columns:
+            result = result[result["model_name"].isin(self._filter_model_names)]
+        if self._filter_task_names is not None and "task_name" in result.columns:
+            result = result[result["task_name"].isin(self._filter_task_names)]
+        return result
+
+    def _build_pre_agg_df(
+        self, include_model_revision: bool
+    ) -> pd.DataFrame | None:
+        """Build (and cache) the pre-aggregation long df; returns `None` when no scores exist."""
+        pre_agg_key = ("__pre_agg__", include_model_revision)
+        cached = self._df_cache.get(pre_agg_key)
+        if cached is not None:
+            return cached
+
         bench_results = self
         if include_model_revision is False:
             bench_results = bench_results.join_revisions()
@@ -376,30 +470,20 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         scores_data = []
         for model_result in bench_results:
             scores_data.extend(model_result._get_score_for_table())
-
         if not scores_data:
-            msg = "No scores data available. Returning empty DataFrame."
-            logger.warning(msg)
-            warnings.warn(msg)
-            return pd.DataFrame()
+            return None
 
-        # Create DataFrame
         df = pd.DataFrame(scores_data)
-
-        _columns = ["model_name"]
         if include_model_revision is False:
             df = df.drop(columns=["model_revision"])
-        else:
-            _columns.append("model_revision")
+        # Use categoricals to shrink memory ~4×. Unused categories are dropped
+        # in `_filter_df_by_scope` after filtering.
+        for col in ("model_name", "task_name", "split", "subset"):
+            if col in df.columns:
+                df[col] = df[col].astype("category")
 
-        # Aggregation
-        return _aggregate_and_pivot(
-            df,
-            columns=_columns,
-            aggregation_level=aggregation_level,
-            aggregation_fn=aggregation_fn,
-            format=format,
-        )
+        self._df_cache[pre_agg_key] = df
+        return df
 
     def get_benchmark_result(self) -> pd.DataFrame:
         """Get aggregated scores for each model in the benchmark.

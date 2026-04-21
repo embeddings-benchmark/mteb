@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import hashlib
 import itertools
 import logging
@@ -17,6 +18,7 @@ import mteb
 from mteb import BenchmarkResults
 from mteb.benchmarks._leaderboard_menu import GP_BENCHMARK_ENTRIES, R_BENCHMARK_ENTRIES
 from mteb.benchmarks.benchmark import RtebBenchmark
+from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.cache import ResultCache
 from mteb.leaderboard.benchmark_selector import (
     DEFAULT_BENCHMARK_NAME,
@@ -42,6 +44,17 @@ event_logger = EventLogger()
 
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 MODEL_TYPE_CHOICES = list(get_args(MODEL_TYPES))
+
+
+@functools.lru_cache(maxsize=128)
+def _get_tasks_cached(
+    task_names: tuple[str, ...], languages: tuple[str, ...] | None
+):
+    """Memoized `mteb.get_tasks` for leaderboard callbacks (tuples for hashability)."""
+    return mteb.get_tasks(
+        tasks=list(task_names),
+        languages=list(languages) if languages is not None else None,
+    )
 
 
 def _produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
@@ -309,6 +322,18 @@ def _cache_update_task_list(
     return benchmark_tasks, tasks_to_keep
 
 
+@functools.lru_cache(maxsize=128)
+def _all_langs_for_tasks(task_names: tuple[str, ...]) -> frozenset[str]:
+    """Union of `metadata.languages` for the given tasks, read from the registry class to avoid instantiation."""
+    langs: set[str] = set()
+    for name in task_names:
+        cls = _TASKS_REGISTRY.get(name)
+        if cls is None:
+            continue
+        langs.update(cls.metadata.languages)
+    return frozenset(langs)
+
+
 def _filter_benchmark_results_for_tables(
     benchmark_results: BenchmarkResults,
     task_names: set[str] | None,
@@ -323,17 +348,31 @@ def _filter_benchmark_results_for_tables(
         task_names=sorted(task_names)
     )
 
-    # Keep only language-compatible subsets for each selected task.
+    # Keep only language-compatible subsets for each selected task. Skip the
+    # get_tasks + select_tasks round-trip when the selected languages already
+    # cover every task language (the filter would be a no-op).
     if languages:
-        filtered_tasks = mteb.get_tasks(tasks=sorted(task_names), languages=languages)
-        filtered_benchmark_results = filtered_benchmark_results.select_tasks(
-            filtered_tasks
-        )
+        all_task_langs = _all_langs_for_tasks(tuple(sorted(task_names)))
+        if not set(languages).issuperset(all_task_langs):
+            filtered_tasks = _get_tasks_cached(
+                tuple(sorted(task_names)), tuple(languages)
+            )
+            filtered_benchmark_results = filtered_benchmark_results.select_tasks(
+                filtered_tasks
+            )
 
     if model_names:
         filtered_benchmark_results = filtered_benchmark_results.select_models(
             sorted(model_names)
         )
+
+    # Record parent + filter scope so `to_dataframe` on this instance can reuse
+    # the parent's cached dfs via an isin() filter.
+    filtered_benchmark_results._parent_results = benchmark_results
+    filtered_benchmark_results._filter_model_names = (
+        frozenset(model_names) if model_names else None
+    )
+    filtered_benchmark_results._filter_task_names = frozenset(task_names)
 
     return filtered_benchmark_results
 
@@ -429,6 +468,23 @@ def get_leaderboard_app(  # noqa: PLR0914
         logger.info(
             f"Step 3/7 complete: Processed 0 benchmarks in {process_time:.2f}s (avg N/A)"
         )
+
+    # Warm each benchmark's `_df_cache` with the task-level long df so filtered
+    # child scopes reuse the parent via isin() instead of rebuilding.
+    precompute_start = time.time()
+    logger.info(
+        f"Precomputing task-level dfs for {len(benchmarks)} benchmarks..."
+    )
+    for name, br in all_benchmark_results.items():
+        try:
+            br.to_dataframe(format="long", aggregation_level="task")
+            # Evict the larger pre-agg df, it's rebuilt lazily on first per-language use.
+            br._df_cache.pop(("__pre_agg__", False), None)
+        except Exception as e:
+            logger.warning(f"Precompute failed for {name}: {e}")
+    logger.info(
+        f"Precompute complete in {time.time() - precompute_start:.2f}s"
+    )
 
     default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
     default_results = all_benchmark_results[default_benchmark.name]
