@@ -7,7 +7,6 @@ import torch
 from tqdm.auto import tqdm
 
 from mteb._create_dataloaders import AudioCollator, VideoCollator
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -42,19 +41,6 @@ class EBindWrapper(AbsEncoder):
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
-        requires_package(
-            self,
-            "ebind",
-            model_name,
-            install_instruction="pip install 'mteb[ebind]'",
-        )
-        requires_package(
-            self,
-            "soundfile",
-            model_name,
-            install_instruction="pip install 'mteb[ebind]'",
-        )
-
         from ebind import EBindModel, EBindProcessor
 
         self.device = device or (
@@ -257,6 +243,7 @@ _EBIND_COMMON = dict(
     use_instructions=False,
     training_datasets=set(),
     citation=_EBIND_CITATION,
+    extra_requirements_groups=["ebind"],
 )
 
 # n_parameters is the total loaded at runtime (backbone encoders + projectors).
