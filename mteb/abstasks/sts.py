@@ -18,6 +18,7 @@ from ._statistics_calculation import (
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from pathlib import Path
 
     from datasets import Dataset
@@ -125,7 +126,10 @@ class AbsTaskSTS(AbsTask):
     """
 
     abstask_prompt = "Retrieve semantically similar text."
-    column_names: tuple[str, str] = ("sentence1", "sentence2")
+    column_names: tuple[str, str] | tuple[Sequence[str], Sequence[str]] = (
+        "sentence1",
+        "sentence2",
+    )
     min_score: int = 0
     max_score: int = 5
     input1_prompt_type: PromptType | None = None
@@ -147,7 +151,6 @@ class AbsTaskSTS(AbsTask):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
 
         normalized_scores = list(map(self._normalize, data_split["score"]))
-        data_split = data_split.select_columns(list(self.column_names))
 
         evaluator = AnySTSEvaluator(
             data_split,
@@ -232,10 +235,16 @@ class AbsTaskSTS(AbsTask):
         _available_cols: set[str] = set(_ref_split.column_names)
 
         def _get_cols(modality: str) -> tuple[str, str]:
+            if isinstance(self.column_names[0], str) and isinstance(
+                self.column_names[1], str
+            ):
+                return self.column_names  # type: ignore[return-value]
             c1, c2 = f"{modality}1", f"{modality}2"
             if c1 in _available_cols and c2 in _available_cols:
                 return c1, c2
-            return self.column_names
+            raise ValueError(
+                f"Can't find required column {c1}, {c2}. Available columns: {_available_cols}"
+            )
 
         if hf_subset:
             score = self.dataset[hf_subset][split]["score"]
@@ -299,7 +308,10 @@ class AbsTaskSTS(AbsTask):
     ) -> None:
         self._upload_dataset_to_hub(
             repo_name,
-            [self.column_names[0], self.column_names[1], "score"],
+            [self.column_names[0], self.column_names[1], "score"]
+            if isinstance(self.column_names[0], str)
+            and isinstance(self.column_names[1], str)
+            else [*self.column_names[0], *self.column_names[1], "score"],
             num_proc=num_proc,
         )
 

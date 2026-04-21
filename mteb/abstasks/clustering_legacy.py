@@ -225,7 +225,7 @@ class AbsTaskClusteringLegacy(AbsTask):
         modality = self.metadata.modalities[0]
         if hf_subset:
             ds = self.dataset[hf_subset][split]
-            col_inputs = {modality: [ds[self.input_column_name]]}
+            col_inputs = {modality: ds[self.input_column_name]}
             labels = ds[self.label_column_name]
         elif compute_overall:
             col_inputs = {modality: []}
@@ -236,7 +236,7 @@ class AbsTaskClusteringLegacy(AbsTask):
                 labels.extend(ds[self.label_column_name])
         else:
             ds = self.dataset[split]
-            col_inputs = {modality: [ds[self.input_column_name]]}
+            col_inputs = {modality: ds[self.input_column_name]}
             labels = ds[self.label_column_name]
 
         # Flatten nested lists (e.g. grouped sentence clusters)

@@ -5685,6 +5685,93 @@ class MockVideoZeroshotClassificationTask(AbsTaskZeroShotClassification):
         return ["This is video type 0", "This is video type 1"]
 
 
+class MockVideoAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
+    input_column_name = ("video", "audio")
+    label_column_name = "label"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+            "candidates_labels_text_statistics": {
+                "total_text_length": 52,
+                "min_text_length": 26,
+                "average_text_length": 26.0,
+                "max_text_length": 26,
+                "unique_texts": 2,
+            },
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="VideoZeroshotClassification",
+        name="MockVideoZeroshotClassification",
+        main_score="accuracy",
+        **general_args,
+    )
+    metadata.modalities = ["video"]
+    metadata.category = "v2c"
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        labels = np.array([0, 1])
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video": mock_videos,
+                        "audio": mock_audio,
+                        "label": labels,
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.dataset = self.dataset.cast_column("audio", Audio())
+        self.data_loaded = True
+
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
+        return ["This is video audio type 0", "This is video audio type 1"]
+
+
 class MockVideoPairClassificationTask(AbsTaskPairClassification):
     metadata = TaskMetadata(
         type="VideoPairClassification",
@@ -5780,6 +5867,8 @@ class MockVideoAudioPairClassificationTask(AbsTaskPairClassification):
         **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["video", "audio"]
+    input1_column_name = ["video1", "audio1"]
+    input2_column_name = ["video2", "audio2"]
 
     label_column_name = "label"
 
@@ -5887,6 +5976,16 @@ class MockVideoAudioSTSTask(AbsTaskSTS):
     )
     metadata.modalities = ["video", "audio"]
     metadata.category = "va2va"
+    column_names = (
+        (
+            "video1",
+            "audio1",
+        ),
+        (
+            "video2",
+            "audio2",
+        ),
+    )
 
     expected_stats = {
         "test": {
@@ -6065,12 +6164,16 @@ class MockVideoRetrievalV2T(AbsTaskRetrieval):
             "q0": {"d1": 1, "d2": 0},
             "q1": {"d1": 0, "d2": 1},
         }
-        self.dataset["default"]["test"] = RetrievalSplitData(
-            queries=queries,
-            corpus=corpus,
-            relevant_docs=relevant_docs,
-            top_ranked=None,
-        )
+        self.dataset = {
+            "default": {
+                "test": RetrievalSplitData(
+                    queries=queries,
+                    corpus=corpus,
+                    relevant_docs=relevant_docs,
+                    top_ranked=None,
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -6156,12 +6259,16 @@ class MockVideoRetrievalT2V(AbsTaskRetrieval):
             "q0": {"d1": 1, "d2": 0},
             "q1": {"d1": 0, "d2": 1},
         }
-        self.dataset["default"]["test"] = RetrievalSplitData(
-            queries=queries,
-            corpus=corpus,
-            relevant_docs=relevant_docs,
-            top_ranked=None,
-        )
+        self.dataset = {
+            "default": {
+                "test": RetrievalSplitData(
+                    queries=queries,
+                    corpus=corpus,
+                    relevant_docs=relevant_docs,
+                    top_ranked=None,
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -6258,12 +6365,16 @@ class MockVideoAudioRetrievalVA2T(AbsTaskRetrieval):
             "q0": {"d1": 1, "d2": 0},
             "q1": {"d1": 0, "d2": 1},
         }
-        self.dataset["default"]["test"] = RetrievalSplitData(
-            queries=queries,
-            corpus=corpus,
-            relevant_docs=relevant_docs,
-            top_ranked=None,
-        )
+        self.dataset = {
+            "default": {
+                "test": RetrievalSplitData(
+                    queries=queries,
+                    corpus=corpus,
+                    relevant_docs=relevant_docs,
+                    top_ranked=None,
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -6360,12 +6471,16 @@ class MockVideoAudioRetrievalT2VA(AbsTaskRetrieval):
             "q0": {"d1": 1, "d2": 0},
             "q1": {"d1": 0, "d2": 1},
         }
-        self.dataset["default"]["test"] = RetrievalSplitData(
-            corpus=corpus,
-            queries=queries,
-            relevant_docs=relevant_docs,
-            top_ranked=None,
-        )
+        self.dataset = {
+            "default": {
+                "test": RetrievalSplitData(
+                    queries=queries,
+                    corpus=corpus,
+                    relevant_docs=relevant_docs,
+                    top_ranked=None,
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -6468,11 +6583,15 @@ class MockVideoAudioTextRetrievalVAT2T(AbsTaskRetrieval):
             "q0": {"d1": 1, "d2": 0},
             "q1": {"d1": 0, "d2": 1},
         }
-        self.dataset["default"]["test"] = RetrievalSplitData(
-            corpus=corpus,
-            queries=queries,
-            relevant_docs=relevant_docs,
-            top_ranked=None,
-        )
+        self.dataset = {
+            "default": {
+                "test": RetrievalSplitData(
+                    queries=queries,
+                    corpus=corpus,
+                    relevant_docs=relevant_docs,
+                    top_ranked=None,
+                )
+            }
+        }
 
         self.data_loaded = True

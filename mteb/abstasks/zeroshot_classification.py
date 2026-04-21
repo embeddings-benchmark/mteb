@@ -21,10 +21,11 @@ from ._statistics_calculation import (
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from pathlib import Path
 
     from mteb.models import MTEBModels
-    from mteb.types import EncodeKwargs
+    from mteb.types import EncodeKwargs, Modalities
     from mteb.types.statistics import (
         AudioStatistics,
         ImageStatistics,
@@ -82,7 +83,7 @@ class AbsTaskZeroShotClassification(AbsTask):
         label_column_name: Name of the column containing the labels (str).
     """
 
-    input_column_name: str = "image"
+    input_column_name: str | Sequence[Modalities] = "image"
     label_column_name: str = "label"
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
@@ -97,26 +98,31 @@ class AbsTaskZeroShotClassification(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ZeroShotClassificationDescriptiveStatistics:
-        modality = self.metadata.modalities[0]
+        if isinstance(self.input_column_name, str):
+            col_map = {self.metadata.modalities[0]: self.input_column_name}
+        else:
+            col_map = {col: col for col in self.input_column_name}
+
         if hf_subset:
             ds = self.dataset[hf_subset][split]
-            col_inputs = {modality: ds[self.input_column_name]}
+            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
             labels = ds[self.label_column_name]
         elif compute_overall:
-            col_inputs = {modality: []}
+            col_inputs = {mod: [] for mod in col_map}
             labels = []
             for subset in self.metadata.eval_langs:
                 ds = self.dataset[subset][split]
-                col_inputs[modality].extend(ds[self.input_column_name])
+                for mod, col in col_map.items():
+                    col_inputs[mod].extend(ds[col])
                 labels.extend(ds[self.label_column_name])
         else:
             ds = self.dataset[split]
-            col_inputs = {modality: ds[self.input_column_name]}
+            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
             labels = ds[self.label_column_name]
 
         modality_stats = calculate_single_input_modality_statistics(col_inputs)
         return ZeroShotClassificationDescriptiveStatistics(
-            num_samples=len(col_inputs[modality]),
+            num_samples=len(ds[self.label_column_name]),
             **modality_stats,
             label_statistics=calculate_label_statistics(labels),
             candidates_labels_text_statistics=calculate_text_statistics(
@@ -142,6 +148,8 @@ class AbsTaskZeroShotClassification(AbsTask):
         candidate_labels = self.get_candidate_labels()
         data_split = data_split.select_columns(
             [self.input_column_name, self.label_column_name]
+            if isinstance(self.input_column_name, str)
+            else [*self.input_column_name, self.label_column_name]
         )
         evaluator = ZeroShotClassificationEvaluator(
             data_split,
@@ -190,6 +198,11 @@ class AbsTaskZeroShotClassification(AbsTask):
             repo_name,
             [
                 self.input_column_name,
+                self.label_column_name,
+            ]
+            if isinstance(self.input_column_name, str)
+            else [
+                *self.input_column_name,
                 self.label_column_name,
             ],
             num_proc=num_proc,

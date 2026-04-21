@@ -21,6 +21,7 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from pathlib import Path
 
     from numpy.typing import NDArray
@@ -92,8 +93,8 @@ class AbsTaskPairClassification(AbsTask):
     """
 
     abstask_prompt = "Retrieve text that are semantically similar to the given text."
-    input1_column_name: str = "sentence1"
-    input2_column_name: str = "sentence2"
+    input1_column_name: str | Sequence[str] = "sentence1"
+    input2_column_name: str | Sequence[str] = "sentence2"
     label_column_name: str = "labels"
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
@@ -222,7 +223,7 @@ class AbsTaskPairClassification(AbsTask):
             c1, c2 = f"{modality}1", f"{modality}2"
             if c1 in _available_cols and c2 in _available_cols:
                 return c1, c2
-            return self.input1_column_name, self.input2_column_name
+            return self.input1_column_name, self.input2_column_name  # type: ignore[return-value]
 
         labels = _get_col_data(self.label_column_name)
         n = len(labels)
@@ -283,6 +284,13 @@ class AbsTaskPairClassification(AbsTask):
             [
                 self.input1_column_name,
                 self.input2_column_name,
+                self.label_column_name,
+            ]
+            if isinstance(self.input1_column_name, str)
+            and isinstance(self.input2_column_name, str)
+            else [
+                *self.input1_column_name,
+                *self.input2_column_name,
                 self.label_column_name,
             ],
             num_proc=num_proc,

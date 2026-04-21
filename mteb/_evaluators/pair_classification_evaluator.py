@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
@@ -13,6 +14,7 @@ from sklearn.metrics.pairwise import (
 from mteb._create_dataloaders import _create_dataloader_from_texts, create_dataloader
 from mteb._evaluators.evaluator import Evaluator
 from mteb.similarity_functions import compute_pairwise_similarity
+from mteb.types._metadata import ModalitiesValues
 
 if TYPE_CHECKING:
     from datasets import Dataset
@@ -63,8 +65,8 @@ class PairClassificationEvaluator(Evaluator):
         self,
         dataset: Dataset,
         *,
-        input1_column_name: str,
-        input2_column_name: str,
+        input1_column_name: str | Sequence[str],
+        input2_column_name: str | Sequence[str],
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
@@ -82,13 +84,6 @@ class PairClassificationEvaluator(Evaluator):
         self.input1_prompt_type = input1_prompt_type
         self.input2_prompt_type = input2_prompt_type
 
-        if len(self.dataset[self.input1_column_name]) != len(
-            self.dataset[self.input2_column_name]
-        ):
-            raise ValueError(
-                f"First and second input columns must have the same length for task {task_metadata.name}"
-            )
-
     def __call__(
         self,
         model: EncoderProtocol,
@@ -96,9 +91,19 @@ class PairClassificationEvaluator(Evaluator):
         num_proc: int | None = None,
     ) -> PairClassificationDistances:
         logger.info("Running pair classification - Encoding samples (1/2)")
+        if isinstance(self.input1_column_name, Sequence):
+            ds1_col_names = {}
+            for col in self.input1_column_name:
+                for mod in ModalitiesValues:
+                    if col == mod + "1":
+                        ds1_col_names[col] = mod
+        else:
+            ds1_col_names = {self.input1_column_name: self.input1_column_name}
         embeddings1 = model.encode(
             create_dataloader(
-                self.dataset.select_columns(self.input1_column_name),
+                self.dataset.select_columns(self.input1_column_name).rename_columns(
+                    ds1_col_names
+                ),
                 task_metadata=self.task_metadata,
                 input_column=self.input1_column_name,
                 num_proc=num_proc,
@@ -111,9 +116,20 @@ class PairClassificationEvaluator(Evaluator):
             **encode_kwargs,
         )
         logger.info("Running pair classification - Encoding samples (2/2)")
+        if isinstance(self.input2_column_name, Sequence):
+            ds2_col_names = {}
+            for col in self.input2_column_name:
+                for mod in ModalitiesValues:
+                    if col == mod + "2":
+                        ds2_col_names[col] = mod
+        else:
+            ds2_col_names = {self.input2_column_name: self.input2_column_name}
+
         embeddings2 = model.encode(
             create_dataloader(
-                self.dataset.select_columns(self.input2_column_name),
+                self.dataset.select_columns(self.input2_column_name).rename_columns(
+                    ds2_col_names
+                ),
                 task_metadata=self.task_metadata,
                 input_column=self.input2_column_name,
                 num_proc=num_proc,
