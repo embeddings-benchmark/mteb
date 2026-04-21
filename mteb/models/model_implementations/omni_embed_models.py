@@ -34,7 +34,7 @@ class OmniEmbedWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        max_audio_length: int = 2_048_000,
+        max_audio_length: int | None = None,
         fps: float | None = 2.0,
         max_frames: int | None = None,
         num_frames: int | None = None,
@@ -133,8 +133,6 @@ class OmniEmbedWrapper(AbsEncoder):
             text_kwargs={"truncation": True, "max_length": 32768},
             videos_kwargs={
                 "do_sample_frames": False,
-                "min_pixels": 32 * 14 * 14,
-                "max_pixels": 64 * 28 * 28,
                 "use_audio_in_video": False,
             },
             audio_kwargs={"max_length": self.max_audio_length},
