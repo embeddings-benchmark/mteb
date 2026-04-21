@@ -216,7 +216,6 @@ qwen25_omni_7b = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2503.20215},
 }""",
-    extra_requirements_groups=["qwen_omni_utils"],
 )
 
 qwen25_omni_3b = ModelMeta(
@@ -258,7 +257,6 @@ qwen25_omni_3b = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2503.20215},
 }""",
-    extra_requirements_groups=["qwen_omni_utils"],
 )
 
 
@@ -301,7 +299,6 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
-    extra_requirements_groups=["qwen_omni_utils"],
 )
 
 qwen3_omni_30b_a3b_thinking = ModelMeta(
@@ -343,7 +340,6 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
-    extra_requirements_groups=["qwen_omni_utils"],
 )
 
 qwen3_omni_30b_a3b_captioner = ModelMeta(
@@ -385,5 +381,4 @@ qwen3_omni_30b_a3b_captioner = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
-    extra_requirements_groups=["qwen_omni_utils"],
 )
