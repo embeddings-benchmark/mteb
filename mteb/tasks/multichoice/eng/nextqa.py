@@ -1,50 +1,10 @@
 from __future__ import annotations
 
-from collections import defaultdict
-
 from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-
-
-def _load_data(
-    path: str,
-    splits: list[str],
-    revision: str | None = None,
-):
-    corpus: dict[str, Dataset] = {}
-    queries: dict[str, Dataset] = {}
-    relevant_docs: dict[str, dict[str, dict[str, int]]] = {}
-    top_ranked: dict[str, dict[str, list[str]]] = defaultdict(
-        lambda: defaultdict(list)
-    )
-
-    for split in splits:
-        ds = load_dataset(path, revision=revision, split=split)
-        ds = ds.add_column("id", [f"q{i}" for i in range(len(ds))])
-
-        queries[split] = ds.select_columns(["id", "question", "video"]).rename_column(
-            "question", "text"
-        )
-
-        text_view = ds.select_columns(["id", "candidates", "answer"])
-        corpus_rows: list[dict] = []
-        relevant_docs[split] = {}
-        for row in text_view:
-            qid = row["id"]
-            answer = row["answer"]
-            relevant_docs[split][qid] = {}
-            for j, candidate in enumerate(row["candidates"]):
-                doc_id = f"{qid}_c{j}"
-                corpus_rows.append({"id": doc_id, "text": candidate})
-                top_ranked[split][qid].append(doc_id)
-                relevant_docs[split][qid][doc_id] = 1 if candidate == answer else 0
-
-        corpus[split] = Dataset.from_list(corpus_rows)
-
-    top_ranked_plain = {s: dict(d) for s, d in top_ranked.items()}
-    return corpus, queries, relevant_docs, top_ranked_plain
 
 
 class NExTQAVideoCentricQA(AbsTaskRetrieval):
@@ -84,9 +44,38 @@ class NExTQAVideoCentricQA(AbsTaskRetrieval):
     def load_data(self, **kwargs) -> None:
         if self.data_loaded:
             return
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
+        self.dataset = {"default": {}}
+        for split in self.metadata.eval_splits:
+            ds = load_dataset(
+                self.metadata.dataset["path"],
+                revision=self.metadata.dataset["revision"],
+                split=split,
+            )
+            ds = ds.add_column("id", [f"q{i}" for i in range(len(ds))])
+
+            queries = ds.select_columns(["id", "question", "video"]).rename_column(
+                "question", "text"
+            )
+
+            corpus_rows: list[dict] = []
+            relevant_docs: dict[str, dict[str, int]] = {}
+            top_ranked: dict[str, list[str]] = {}
+            for row in ds.select_columns(["id", "candidates", "answer"]):
+                qid = row["id"]
+                answer = row["answer"]
+                top_ranked[qid] = []
+                for j, candidate in enumerate(row["candidates"]):
+                    doc_id = f"{qid}_c{j}"
+                    corpus_rows.append({"id": doc_id, "text": candidate})
+                    top_ranked[qid].append(doc_id)
+                    if candidate == answer:
+                        relevant_docs[qid] = {doc_id: 1}
+
+            corpus = Dataset.from_list(corpus_rows)
+            self.dataset["default"][split] = RetrievalSplitData(
+                queries=queries,
+                corpus=corpus,
+                relevant_docs=relevant_docs,
+                top_ranked=top_ranked,
+            )
         self.data_loaded = True
