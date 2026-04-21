@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import io
 from typing import TYPE_CHECKING
 
 import datasets
 import numpy as np
-from datasets import Audio, Dataset, DatasetDict, Video
+import pytest
+from datasets import Audio, Dataset, DatasetDict
 from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
@@ -148,7 +150,7 @@ def create_mock_video_bytes(
     Returns:
         List of n videos, each encoded as MP4 bytes.
     """
-    import io
+    pytest.importorskip("av", reason="Please, install av to run mock video tasks")
 
     import av
 
@@ -5113,6 +5115,8 @@ class MockVideoClassification(AbsTaskClassification):
     }
 
     def load_data(self, **kwargs):
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng)
 
         self.dataset = DatasetDict(
@@ -5131,6 +5135,7 @@ class MockVideoClassification(AbsTaskClassification):
                 ),
             }
         )
+
         self.dataset = self.dataset.cast_column("video", Video())
         self.data_loaded = True
 
@@ -5225,6 +5230,8 @@ class MockVideoAudioClassification(AbsTaskClassification):
     }
 
     def load_data(self, **kwargs):
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng)
         mock_audio = create_mock_audio(self.np_rng)
 
@@ -5249,11 +5256,6 @@ class MockVideoAudioClassification(AbsTaskClassification):
         self.dataset = self.dataset.cast_column("video", Video())
         self.dataset = self.dataset.cast_column("audio", Audio())
         self.data_loaded = True
-
-
-# ============================================================
-# Video Clustering Tasks
-# ============================================================
 
 
 class MockVideoClusteringTask(AbsTaskClustering):
@@ -5303,6 +5305,8 @@ class MockVideoClusteringTask(AbsTaskClustering):
     metadata.category = "v2c"
 
     def load_data(self, **kwargs):
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng, n=3)
 
         self.dataset = DatasetDict(
@@ -5375,6 +5379,8 @@ class MockVideoAudioClusteringTask(AbsTaskClustering):
     metadata.category = "va2c"
 
     def load_data(self, **kwargs):
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng, n=3)
         mock_audio = create_mock_audio(self.np_rng, n=3)
 
@@ -5389,14 +5395,10 @@ class MockVideoAudioClusteringTask(AbsTaskClustering):
                 ),
             }
         )
+
         self.dataset = self.dataset.cast_column("video", Video())
         self.dataset = self.dataset.cast_column("audio", Audio())
         self.data_loaded = True
-
-
-# ============================================================
-# Video Multilabel Classification Tasks
-# ============================================================
 
 
 class MockVideoMultilabelClassificationTask(AbsTaskMultilabelClassification):
@@ -5474,6 +5476,8 @@ class MockVideoMultilabelClassificationTask(AbsTaskMultilabelClassification):
     input_column_name = "video"
 
     def load_data(self, **kwargs):
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng)
         labels = [[0], [1]]
 
@@ -5485,6 +5489,7 @@ class MockVideoMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 ),
             }
         )
+
         self.dataset = self.dataset.cast_column("video", Video())
         self.data_loaded = True
 
@@ -5580,6 +5585,8 @@ class MockVideoAudioMultilabelClassificationTask(AbsTaskMultilabelClassification
     input_column_name = ("video", "audio")
 
     def load_data(self, **kwargs):
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng)
         mock_audio = create_mock_audio(self.np_rng)
         labels = [[0], [1]]
@@ -5601,11 +5608,6 @@ class MockVideoAudioMultilabelClassificationTask(AbsTaskMultilabelClassification
         self.dataset = self.dataset.cast_column("video", Video())
         self.dataset = self.dataset.cast_column("audio", Audio())
         self.data_loaded = True
-
-
-# ============================================================
-# Video ZeroShot Classification Tasks
-# ============================================================
 
 
 class MockVideoZeroshotClassificationTask(AbsTaskZeroShotClassification):
@@ -5661,6 +5663,8 @@ class MockVideoZeroshotClassificationTask(AbsTaskZeroShotClassification):
     metadata.category = "v2c"
 
     def load_data(self, **kwargs):
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng)
         labels = np.array([0, 1])
 
@@ -5679,11 +5683,6 @@ class MockVideoZeroshotClassificationTask(AbsTaskZeroShotClassification):
 
     def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         return ["This is video type 0", "This is video type 1"]
-
-
-# ============================================================
-# Video Pair Classification Tasks
-# ============================================================
 
 
 class MockVideoPairClassificationTask(AbsTaskPairClassification):
@@ -5753,6 +5752,8 @@ class MockVideoPairClassificationTask(AbsTaskPairClassification):
     label_column_name = "label"
 
     def load_data(self, **kwargs):
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng)
 
         self.dataset = DatasetDict(
@@ -5852,6 +5853,8 @@ class MockVideoAudioPairClassificationTask(AbsTaskPairClassification):
     }
 
     def load_data(self, **kwargs):
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng)
         mock_audio = create_mock_audio(self.np_rng)
 
@@ -5949,6 +5952,8 @@ class MockVideoAudioSTSTask(AbsTaskSTS):
     }
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng)
         mock_audio = create_mock_audio(self.np_rng)
 
@@ -5971,10 +5976,6 @@ class MockVideoAudioSTSTask(AbsTaskSTS):
         self.dataset = self.dataset.cast_column("audio2", Audio())
         self.data_loaded = True
 
-
-# ============================================================
-# Video Retrieval Tasks (v2t, t2v, va2t, t2va, vat2t)
-# ============================================================
 
 _VIDEO_TEXTS = [
     "This is a video of an action",
@@ -6039,39 +6040,37 @@ class MockVideoRetrievalV2T(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng)
 
-        self.queries = DatasetDict(
+        queries = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "id": [f"q{i}" for i in range(2)],
-                        "video": mock_videos,
-                        "modality": ["video", "video"],
-                    }
-                )
+                "id": [f"q{i}" for i in range(2)],
+                "video": mock_videos,
+                "modality": ["video", "video"],
             }
         )
-        self.queries = self.queries.cast_column("video", Video())
+        queries = queries.cast_column("video", Video())
 
-        self.corpus = DatasetDict(
+        corpus = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "id": ["d1", "d2"],
-                        "text": _VIDEO_TEXTS,
-                        "modality": ["text", "text"],
-                    }
-                )
+                "id": ["d1", "d2"],
+                "text": _VIDEO_TEXTS,
+                "modality": ["text", "text"],
             }
         )
 
-        self.relevant_docs = {
-            "test": {
-                "q0": {"d1": 1, "d2": 0},
-                "q1": {"d1": 0, "d2": 1},
-            },
+        relevant_docs = {
+            "q0": {"d1": 1, "d2": 0},
+            "q1": {"d1": 0, "d2": 1},
         }
+        self.dataset["default"]["test"] = RetrievalSplitData(
+            queries=queries,
+            corpus=corpus,
+            relevant_docs=relevant_docs,
+            top_ranked=None,
+        )
         self.data_loaded = True
 
 
@@ -6132,39 +6131,37 @@ class MockVideoRetrievalT2V(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng)
 
-        self.queries = DatasetDict(
+        queries = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "id": [f"q{i}" for i in range(2)],
-                        "text": _VIDEO_TEXTS,
-                        "modality": ["text", "text"],
-                    }
-                )
+                "id": [f"q{i}" for i in range(2)],
+                "text": _VIDEO_TEXTS,
+                "modality": ["text", "text"],
             }
         )
 
-        self.corpus = DatasetDict(
+        corpus = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "id": ["d1", "d2"],
-                        "video": mock_videos,
-                        "modality": ["video", "video"],
-                    }
-                )
+                "id": ["d1", "d2"],
+                "video": mock_videos,
+                "modality": ["video", "video"],
             }
         )
-        self.corpus = self.corpus.cast_column("video", Video())
+        corpus = corpus.cast_column("video", Video())
 
-        self.relevant_docs = {
-            "test": {
-                "q0": {"d1": 1, "d2": 0},
-                "q1": {"d1": 0, "d2": 1},
-            },
+        relevant_docs = {
+            "q0": {"d1": 1, "d2": 0},
+            "q1": {"d1": 0, "d2": 1},
         }
+        self.dataset["default"]["test"] = RetrievalSplitData(
+            queries=queries,
+            corpus=corpus,
+            relevant_docs=relevant_docs,
+            top_ranked=None,
+        )
         self.data_loaded = True
 
 
@@ -6233,42 +6230,40 @@ class MockVideoAudioRetrievalVA2T(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng)
         mock_audio = create_mock_audio(self.np_rng)
 
-        self.queries = DatasetDict(
+        queries = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "id": [f"q{i}" for i in range(2)],
-                        "video": mock_videos,
-                        "audio": mock_audio,
-                        "modality": ["video_audio", "video_audio"],
-                    }
-                )
+                "id": [f"q{i}" for i in range(2)],
+                "video": mock_videos,
+                "audio": mock_audio,
+                "modality": ["video_audio", "video_audio"],
             }
         )
-        self.queries = self.queries.cast_column("video", Video())
-        self.queries = self.queries.cast_column("audio", Audio())
+        queries = queries.cast_column("video", Video())
+        queries = queries.cast_column("audio", Audio())
 
-        self.corpus = DatasetDict(
+        corpus = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "id": ["d1", "d2"],
-                        "text": _VIDEO_TEXTS,
-                        "modality": ["text", "text"],
-                    }
-                )
+                "id": ["d1", "d2"],
+                "text": _VIDEO_TEXTS,
+                "modality": ["text", "text"],
             }
         )
 
-        self.relevant_docs = {
-            "test": {
-                "q0": {"d1": 1, "d2": 0},
-                "q1": {"d1": 0, "d2": 1},
-            },
+        relevant_docs = {
+            "q0": {"d1": 1, "d2": 0},
+            "q1": {"d1": 0, "d2": 1},
         }
+        self.dataset["default"]["test"] = RetrievalSplitData(
+            queries=queries,
+            corpus=corpus,
+            relevant_docs=relevant_docs,
+            top_ranked=None,
+        )
         self.data_loaded = True
 
 
@@ -6337,42 +6332,40 @@ class MockVideoAudioRetrievalT2VA(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng)
         mock_audio = create_mock_audio(self.np_rng)
 
-        self.queries = DatasetDict(
+        queries = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "id": [f"q{i}" for i in range(2)],
-                        "text": _VIDEO_TEXTS,
-                        "modality": ["text", "text"],
-                    }
-                )
+                "id": [f"q{i}" for i in range(2)],
+                "text": _VIDEO_TEXTS,
+                "modality": ["text", "text"],
             }
         )
 
-        self.corpus = DatasetDict(
+        corpus = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "id": ["d1", "d2"],
-                        "video": mock_videos,
-                        "audio": mock_audio,
-                        "modality": ["video_audio", "video_audio"],
-                    }
-                )
+                "id": ["d1", "d2"],
+                "video": mock_videos,
+                "audio": mock_audio,
+                "modality": ["video_audio", "video_audio"],
             }
         )
-        self.corpus = self.corpus.cast_column("video", Video())
-        self.corpus = self.corpus.cast_column("audio", Audio())
+        corpus = corpus.cast_column("video", Video())
+        corpus = corpus.cast_column("audio", Audio())
 
-        self.relevant_docs = {
-            "test": {
-                "q0": {"d1": 1, "d2": 0},
-                "q1": {"d1": 0, "d2": 1},
-            },
+        relevant_docs = {
+            "q0": {"d1": 1, "d2": 0},
+            "q1": {"d1": 0, "d2": 1},
         }
+        self.dataset["default"]["test"] = RetrievalSplitData(
+            corpus=corpus,
+            queries=queries,
+            relevant_docs=relevant_docs,
+            top_ranked=None,
+        )
         self.data_loaded = True
 
 
@@ -6447,41 +6440,39 @@ class MockVideoAudioTextRetrievalVAT2T(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
+        from datasets import Video
+
         mock_videos = create_mock_video_bytes(self.np_rng)
         mock_audio = create_mock_audio(self.np_rng)
 
-        self.queries = DatasetDict(
+        queries = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "id": [f"q{i}" for i in range(2)],
-                        "video": mock_videos,
-                        "audio": mock_audio,
-                        "text": _VIDEO_TEXTS,
-                        "modality": ["video_audio_text", "video_audio_text"],
-                    }
-                )
+                "id": [f"q{i}" for i in range(2)],
+                "video": mock_videos,
+                "audio": mock_audio,
+                "text": _VIDEO_TEXTS,
+                "modality": ["video_audio_text", "video_audio_text"],
             }
         )
-        self.queries = self.queries.cast_column("video", Video())
-        self.queries = self.queries.cast_column("audio", Audio())
+        queries = queries.cast_column("video", Video())
+        queries = queries.cast_column("audio", Audio())
 
-        self.corpus = DatasetDict(
+        corpus = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "id": ["d1", "d2"],
-                        "text": _VIDEO_TEXTS,
-                        "modality": ["text", "text"],
-                    }
-                )
+                "id": ["d1", "d2"],
+                "text": _VIDEO_TEXTS,
+                "modality": ["text", "text"],
             }
         )
-
-        self.relevant_docs = {
-            "test": {
-                "q0": {"d1": 1, "d2": 0},
-                "q1": {"d1": 0, "d2": 1},
-            },
+        relevant_docs = {
+            "q0": {"d1": 1, "d2": 0},
+            "q1": {"d1": 0, "d2": 1},
         }
+        self.dataset["default"]["test"] = RetrievalSplitData(
+            corpus=corpus,
+            queries=queries,
+            relevant_docs=relevant_docs,
+            top_ranked=None,
+        )
+
         self.data_loaded = True
