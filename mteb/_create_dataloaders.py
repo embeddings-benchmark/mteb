@@ -455,9 +455,10 @@ class FramesCollator:
     """Collator for video data that resamples video frames.
 
     Supports two sampling modes:
-    - FPS-based: samples frames at ``fps`` frames per second, so the number
-      of selected frames scales with video duration. ``max_frames`` caps the
-      total to prevent OOM on very long videos.
+    - FPS-based: downsamples to ``fps`` frames per second, so the number of
+      selected frames scales with video duration. Videos already below the
+      target rate keep all frames. ``max_frames`` caps the total to prevent
+      OOM on very long videos.
     - Fixed-sample: always selects exactly ``num_frames`` frames uniformly
       across the video, regardless of duration.
 
@@ -475,8 +476,10 @@ class FramesCollator:
         """Initialize the collator.
 
         Args:
-            fps: Target frames per second for sampling. The number of frames
-                scales with video duration.
+            fps: Target frames per second for downsampling. The number of
+                frames scales with video duration. Only downsamples; if the
+                source video has fewer frames than the target, all frames
+                are kept.
             max_frames: Safety cap on the number of frames when using
                 FPS-based sampling.
             num_frames: If set, use fixed-sample mode: always select this many
@@ -524,7 +527,8 @@ class FramesCollator:
 
         Args:
             video: A VideoDecoder object containing the video data.
-            fps: Target frames per second. Used when ``num_frames`` is None.
+            fps: Target frames per second for downsampling. Only
+                downsamples; source videos below this rate keep all frames.
             max_frames: Safety cap when using FPS-based sampling.
             num_frames: If set, select exactly this many frames uniformly
                 (fixed-sample mode).
@@ -569,7 +573,7 @@ class VideoCollator:
 
         Args:
             target_sampling_rate: The sampling rate to resample audio to.
-            fps: Target frames per second for video sampling.
+            fps: Target frames per second for video downsampling.
             max_frames: Safety cap on frames per video for FPS mode.
             num_frames: If set, use fixed-sample mode instead of FPS-based.
             max_samples: Maximum number of audio samples to keep. If None, no truncation.
