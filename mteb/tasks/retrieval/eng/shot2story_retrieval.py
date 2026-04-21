@@ -6,24 +6,24 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_DATASET_PATH = "mteb/MSR-VTT"
-_DATASET_REVISION = "4661603cee25c1fd370e5478a2953203cf37155b"
+_DATASET_PATH = "mteb/Shot2Story20K_test"
+_DATASET_REVISION = "1957723c0ad97993f3807df271e2660b869c3ea2"
 _BIBTEX = r"""
-@inproceedings{xu2016msrvtt,
-  author = {Xu, Jun and Mei, Tao and Yao, Ting and Rui, Yong},
-  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-  title = {Msr-vtt: A large video description dataset for bridging video and language},
-  year = {2016},
+@article{han2023shot2story,
+  author = {Han, Mingfei and Zhang, Linjie and Du, Yali and Luo, Junbin and Wang, Xiaodan},
+  title = {Shot2Story: A New Benchmark for Comprehensive Understanding of Multi-shot Videos},
+  journal = {arXiv preprint arXiv:2312.10300},
+  year = {2023},
 }
 """
 
 
-def _load_msr_vtt(
+def _load_shot2story(
     task: AbsTaskRetrieval,
     query_columns: list[str],
     corpus_columns: list[str],
 ) -> None:
-    """Shared loader for all MSR-VTT retrieval directions.
+    """Shared loader for all Shot2Story20K retrieval directions.
 
     TODO: Reupload dataset in standard format and remove this custom load_data.
     """
@@ -51,117 +51,129 @@ def _load_msr_vtt(
     task.data_loaded = True
 
 
-class MSRVTTV2T(AbsTaskRetrieval):
+class Shot2Story20KV2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MSRVTTV2T",
-        description="A large video description dataset for bridging video and language",
+        name="Shot2Story20KV2TRetrieval",
+        description=(
+            "Retrieve the detailed summary caption that describes a given video "
+            "clip (video only) from the Shot2Story20K benchmark of multi-shot videos."
+        ),
+        reference="https://arxiv.org/abs/2312.10300",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
-        eval_langs=["eng-Latn"],
-        eval_splits=["test"],
-        main_score="ndcg_at_10",
-        reference="https://openaccess.thecvf.com/content_cvpr_2016/papers/Xu_MSR-VTT_A_Large_CVPR_2016_paper.pdf",
         category="v2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
         modalities=["video", "text"],
-        date=("2016-01-01", "2016-12-31"),
-        domains=[],
-        task_subtypes=[],
+        date=("2023-12-01", "2023-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Caption Pairing"],
         license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
-        sample_creation="created",
+        sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the caption that describes the following video."},
         is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_msr_vtt(self, query_columns=["video"], corpus_columns=["caption"])
+        _load_shot2story(self, query_columns=["video"], corpus_columns=["caption"])
 
 
-class MSRVTTT2V(AbsTaskRetrieval):
+class Shot2Story20KT2VRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MSRVTTT2V",
-        description="A large video description dataset for bridging video and language",
+        name="Shot2Story20KT2VRetrieval",
+        description=(
+            "Retrieve the video clip (video only) that matches a given detailed "
+            "summary caption from the Shot2Story20K benchmark of multi-shot videos."
+        ),
+        reference="https://arxiv.org/abs/2312.10300",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
-        eval_langs=["eng-Latn"],
-        eval_splits=["test"],
-        main_score="ndcg_at_10",
-        reference="https://openaccess.thecvf.com/content_cvpr_2016/papers/Xu_MSR-VTT_A_Large_CVPR_2016_paper.pdf",
         category="t2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
         modalities=["text", "video"],
-        date=("2016-01-01", "2016-12-31"),
-        domains=[],
-        task_subtypes=[],
+        date=("2023-12-01", "2023-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Caption Pairing"],
         license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
-        sample_creation="created",
+        sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video clip that matches the given caption."},
         is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_msr_vtt(self, query_columns=["caption"], corpus_columns=["video"])
+        _load_shot2story(self, query_columns=["caption"], corpus_columns=["video"])
 
 
-class MSRVTTVA2T(AbsTaskRetrieval):
+class Shot2Story20KVA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MSRVTTVA2T",
-        description="A large video description dataset for bridging video and language",
+        name="Shot2Story20KVA2TRetrieval",
+        description=(
+            "Retrieve the detailed summary caption that describes a given video "
+            "clip from the Shot2Story20K benchmark of multi-shot videos."
+        ),
+        reference="https://arxiv.org/abs/2312.10300",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
-        eval_langs=["eng-Latn"],
-        eval_splits=["test"],
-        main_score="ndcg_at_10",
-        reference="https://openaccess.thecvf.com/content_cvpr_2016/papers/Xu_MSR-VTT_A_Large_CVPR_2016_paper.pdf",
         category="va2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
         modalities=["audio", "video", "text"],
-        date=("2016-01-01", "2016-12-31"),
-        domains=[],
-        task_subtypes=[],
+        date=("2023-12-01", "2023-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Caption Pairing"],
         license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
-        sample_creation="created",
+        sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the caption that describes the following video."},
         is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_msr_vtt(
+        _load_shot2story(
             self, query_columns=["video", "audio"], corpus_columns=["caption"]
         )
 
 
-class MSRVTTT2VA(AbsTaskRetrieval):
+class Shot2Story20KT2VARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MSRVTTT2VA",
-        description="A large video description dataset for bridging video and language",
+        name="Shot2Story20KT2VARetrieval",
+        description=(
+            "Retrieve the video clip that matches a given detailed summary caption "
+            "from the Shot2Story20K benchmark of multi-shot videos."
+        ),
+        reference="https://arxiv.org/abs/2312.10300",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
-        eval_langs=["eng-Latn"],
-        eval_splits=["test"],
-        main_score="ndcg_at_10",
-        reference="https://openaccess.thecvf.com/content_cvpr_2016/papers/Xu_MSR-VTT_A_Large_CVPR_2016_paper.pdf",
         category="t2va",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
         modalities=["text", "audio", "video"],
-        date=("2016-01-01", "2016-12-31"),
-        domains=[],
-        task_subtypes=[],
+        date=("2023-12-01", "2023-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Caption Pairing"],
         license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
-        sample_creation="created",
+        sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video clip that matches the given caption."},
         is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_msr_vtt(
+        _load_shot2story(
             self, query_columns=["caption"], corpus_columns=["video", "audio"]
         )
