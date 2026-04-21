@@ -6,7 +6,7 @@ import pytest
 import mteb
 from mteb import ResultCache
 from mteb._hf_integration.eval_result_model import (
-    HFEvalResultDataset,  # noqa: PLC2701
+    HFEvalResultDataset,
 )
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
