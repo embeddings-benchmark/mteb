@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib
 import json
 import logging
 import warnings
@@ -8,6 +9,7 @@ from collections.abc import Callable, Mapping, Sequence
 from dataclasses import field
 from enum import Enum
 from functools import partial
+from importlib.metadata import PackageNotFoundError, distribution, requires
 from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
@@ -22,8 +24,13 @@ from huggingface_hub.errors import (
     RepositoryNotFoundError,
     SafetensorsParsingError,
 )
+from packaging.requirements import Requirement
+from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
-from sentence_transformers import CrossEncoder, SentenceTransformer
+from sentence_transformers import (
+    CrossEncoder,
+    SentenceTransformer,
+)
 from transformers import AutoConfig
 
 from mteb._helpful_enum import HelpfulStrEnum
@@ -48,6 +55,7 @@ if TYPE_CHECKING:
     from huggingface_hub import (
         ModelCardData,
     )
+    from sentence_transformers import SentenceTransformerModelCardData
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
@@ -140,6 +148,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
         experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
         output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
+        extra_requirements_groups: Name of group of extra requirements.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -174,6 +183,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     contacts: list[str] | None = None
     experiment_kwargs: Mapping[str, Any] | None = None
     output_dtypes: OutputDType | list[OutputDType] | None = None
+    extra_requirements_groups: Sequence[str] | None = None
 
     def __setattr__(self, name: str, value: Any) -> None:
         """Deprecation warning for direct attribute mutation. Use model_copy(update={...}) instead."""
@@ -340,6 +350,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     ) -> MTEBModels:
         """Loads the model using the specified loader function."""
         # create a copy so that changing the model meta on the model does not influence the original meta
+        self._check_requirements()
         _self = self.model_copy(deep=True)
 
         if _self.loader is None:
@@ -393,6 +404,64 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         )
         model.mteb_model_meta = _self  # type: ignore[misc]
         return model
+
+    def _check_requirements(self) -> None:
+        groups: list[str] = list(self.extra_requirements_groups or [])
+
+        # handle modality specific dependencies inside baseline functions
+        if self.name and not self.name.startswith("mteb/baseline"):
+            if "image" in self.modalities and "image" not in groups:
+                groups.append("image")
+            if "audio" in self.modalities and "audio" not in groups:
+                groups.append("audio")
+
+        if not groups:
+            return
+
+        available_extras = set(
+            distribution("mteb").metadata.get_all("Provides-Extra") or []
+        )
+        unknown = set(groups) - available_extras
+        if unknown:
+            raise ValueError(
+                f"Unknown extras group(s) for mteb: {sorted(unknown)}. "
+                f"Available: {sorted(available_extras)}"
+            )
+
+        missing_dependencies = []
+
+        mteb_requires = requires("mteb")
+        if mteb_requires is None:
+            raise RuntimeError(
+                "Could not retrieve mteb package requirements. Make sure mteb is installed properly."
+            )
+
+        for req_str in mteb_requires:
+            req = Requirement(req_str)
+
+            if req.marker is None or not any(
+                req.marker.evaluate({"extra": g}) for g in groups
+            ):
+                continue
+
+            try:
+                installed = importlib.metadata.version(req.name)
+            except PackageNotFoundError:
+                missing_dependencies.append(req_str)
+                continue
+
+            try:
+                if req.specifier and Version(installed) not in req.specifier:
+                    missing_dependencies.append(f"{req_str} (installed: {installed})")
+            except InvalidVersion:
+                missing_dependencies.append(f"{req_str} (installed: {installed})")
+
+        if missing_dependencies:
+            raise ImportError(
+                f"Model {self.name} is missing required dependencies: "
+                + ", ".join(missing_dependencies)
+                + f".\nYou can install it with `pip install mteb[{','.join(groups)}]`."
+            )
 
     def model_name_as_path(self) -> str:
         """Returns the model name in a format that can be used as a file path.
@@ -649,6 +718,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 else None,
                 framework=["Sentence Transformers", "PyTorch"],
                 n_embedding_parameters=n_embedding_parameters,
+                adapted_from=_get_source_model(model.model_card_data)
+                if hasattr(model, "model_card_data")
+                else None,
             )
         )
 
@@ -702,6 +774,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 n_embedding_parameters=cls._get_n_embedding_parameters_from_sentence_transformers(
                     model
                 ),
+                adapted_from=_get_source_model(model.model_card_data)
+                if hasattr(model, "model_card_data")
+                else None,
             )
         )
 
@@ -807,6 +882,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 max_tokens=max_tokens,
                 embed_dim=embedding_dim,
                 similarity_fn_name=similarity_fn_name,
+                adapted_from=_get_source_model(card_data),
             )
         )
 
@@ -1433,3 +1509,14 @@ def _serialize_experiment_kwargs_to_name(
         return f"exp_{param_hash}"
 
     return params_str
+
+
+def _get_source_model(
+    card_data: ModelCardData | SentenceTransformerModelCardData,
+) -> str | None:
+    source_model = None
+    if isinstance(card_data.base_model, str):
+        source_model = card_data.base_model
+    elif isinstance(card_data.base_model, list) and len(card_data.base_model) > 0:
+        source_model = card_data.base_model[0]
+    return source_model

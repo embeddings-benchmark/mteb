@@ -135,7 +135,7 @@ _MODEL_RENAMES: dict[str, str] = {
     # to store model's eval results to display on benchmark
     "baseline/bm25s": "mteb/baseline-bm25s",
     "baseline/random-cross-encoder-baseline": "mteb/baseline-random-cross-encoder",
-    "mteb/baseline-random-encoder": "mteb/baseline-random-encoder",
+    "baseline/random-encoder": "mteb/baseline-random-encoder",
     "baseline/bb25": "mteb/baseline-bb25",
 }
 
