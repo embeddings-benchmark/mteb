@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import hashlib
 from collections import Counter, defaultdict
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Any, cast
 
 from mteb.types.statistics import (
     AudioStatistics,
@@ -18,12 +18,12 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Mapping
+    from collections.abc import Callable, Mapping, Sequence
 
     from PIL import Image
     from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
 
-    from mteb.types import TopRankedDocumentsType
+    from mteb.types import Modalities, TopRankedDocumentsType
     from mteb.types._encoder_io import AudioInputItem
 
 
@@ -225,21 +225,21 @@ def calculate_video_statistics(  # noqa: PLR0914
     has_all_fps = len(fps_counts) > 0 and sum(fps_counts.values()) == n
 
     return VideoStatistics(
-        total_duration_seconds=sum(all_durations)
+        total_duration_seconds=sum(all_durations)  # type: ignore[arg-type]
         if all_durations is not None
         else None,
-        total_frames=sum(all_frames) if all_frames is not None else None,
-        min_width=min(all_widths) if all_widths is not None else None,
-        average_width=sum(all_widths) / n if all_widths is not None else None,
-        max_width=max(all_widths) if all_widths is not None else None,
-        min_height=min(all_heights) if all_heights is not None else None,
-        average_height=sum(all_heights) / n if all_heights is not None else None,
-        max_height=max(all_heights) if all_heights is not None else None,
-        min_duration_seconds=min(all_durations) if all_durations is not None else None,
-        average_duration_seconds=sum(all_durations) / n
+        total_frames=sum(all_frames) if all_frames is not None else None,  # type: ignore[type-var,arg-type]
+        min_width=min(all_widths) if all_widths is not None else None,  # type: ignore[type-var]
+        average_width=sum(all_widths) / n if all_widths is not None else None,  # type: ignore[type-var,arg-type]
+        max_width=max(all_widths) if all_widths is not None else None,  # type: ignore[type-var]
+        min_height=min(all_heights) if all_heights is not None else None,  # type: ignore[type-var]
+        average_height=sum(all_heights) / n if all_heights is not None else None,  # type: ignore[type-var,arg-type]
+        max_height=max(all_heights) if all_heights is not None else None,  # type: ignore[type-var]
+        min_duration_seconds=min(all_durations) if all_durations is not None else None,  # type: ignore[type-var]
+        average_duration_seconds=sum(all_durations) / n  # type: ignore[type-var,arg-type]
         if all_durations is not None
         else None,
-        max_duration_seconds=max(all_durations) if all_durations is not None else None,
+        max_duration_seconds=max(all_durations) if all_durations is not None else None,  # type: ignore[type-var]
         unique_videos=len(set(hashes)),
         average_fps=sum(rate * count for rate, count in fps_counts.items()) / n
         if has_all_fps
@@ -363,7 +363,7 @@ def calculate_relevant_docs_statistics(
 
 
 def calculate_single_input_modality_statistics(
-    col_inputs: dict[str, list],
+    col_inputs: dict[Modalities, list[Any]],
     hashes: dict[str, list[str]] | None = None,
 ) -> SingleInputModalityStatistics:
     """Compute per-modality statistics for a single-input dataset."""
@@ -393,7 +393,7 @@ def calculate_single_input_modality_statistics(
 
 
 def calculate_pair_modality_statistics(
-    modalities: list[str],
+    modalities: Sequence[str],
     get_pair_data: Callable[[str], tuple[list, list]],
     n: int,
 ) -> PairModalityStatistics:

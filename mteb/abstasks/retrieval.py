@@ -52,6 +52,7 @@ if TYPE_CHECKING:
     from mteb.types import (
         EncodeKwargs,
         HFSubset,
+        Modalities,
         QueryDatasetType,
         RelevantDocumentsType,
         RetrievalOutputType,
@@ -541,8 +542,8 @@ class AbsTaskRetrieval(AbsTask):
         num_queries = len(queries)
 
         if self.metadata.category is None:
-            queries_modalities = ["text"]
-            corpus_modalities = ["text"]
+            queries_modalities: Sequence[str] = ["text"]
+            corpus_modalities: Sequence[str] = ["text"]
         else:
             queries_modalities = self.metadata.get_modalities(
                 prompt_type=PromptType.query
@@ -552,7 +553,7 @@ class AbsTaskRetrieval(AbsTask):
             )
 
         # Build corpus col_inputs — text needs special mapping from the corpus dict format.
-        corpus_col_inputs: dict[str, list] = {}
+        corpus_col_inputs: dict[Modalities, list] = {}
         if "text" in corpus_modalities:
             corpus_col_inputs["text"] = corpus.map(_corpus_to_dict)["text"]
         if "image" in corpus_modalities:
@@ -563,7 +564,7 @@ class AbsTaskRetrieval(AbsTask):
             corpus_col_inputs["video"] = corpus["video"]
 
         # Build queries col_inputs — text may need instruction/conversation transformations.
-        queries_col_inputs: dict[str, list] = {}
+        queries_col_inputs: dict[Modalities, list] = {}
         if "text" in queries_modalities:
             queries_ = queries
             if "instruction" in queries_[0]:

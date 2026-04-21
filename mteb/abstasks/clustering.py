@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
-    from mteb.types import Array, EncodeKwargs, ScoresDict
+    from mteb.types import Array, EncodeKwargs, Modalities, ScoresDict
     from mteb.types.statistics import (
         AudioStatistics,
         ImageStatistics,
@@ -167,7 +167,7 @@ class AbsTaskClustering(AbsTask):
     k_mean_batch_size: int = 512
     max_depth = None
     abstask_prompt = "Identify categories in user passages."
-    input_column_name: str | Sequence[str] = "sentences"
+    input_column_name: str | Sequence[Modalities] = "sentences"
     label_column_name: str = "labels"
 
     def _evaluate_subset(

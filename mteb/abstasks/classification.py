@@ -41,7 +41,7 @@ if TYPE_CHECKING:
 
     from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
     from mteb.models import MTEBModels
-    from mteb.types import Array, EncodeKwargs, HFSubset, ScoresDict
+    from mteb.types import Array, EncodeKwargs, HFSubset, Modalities, ScoresDict
     from mteb.types.statistics import (
         AudioStatistics,
         ImageStatistics,
@@ -61,7 +61,9 @@ _HASH_FN: dict[str, Any] = {
 }
 
 
-def _compute_modality_hashes(col_inputs: dict[str, list[Any]]) -> dict[str, list[str]]:
+def _compute_modality_hashes(
+    col_inputs: dict[Modalities, list[Any]],
+) -> dict[str, list[str]]:
     """Compute per-sample hashes for each modality using the shared hash functions.
 
     Reuses the same hashing logic as the ``calculate_*_statistics`` functions so that
@@ -192,7 +194,7 @@ class AbsTaskClassification(AbsTask):
     n_experiments: int = 10
     train_split: str = "train"
     label_column_name: str = "label"
-    input_column_name: str | Sequence[str] = "text"
+    input_column_name: str | Sequence[Modalities] = "text"
     abstask_prompt = "Classify user passages."
     is_cross_validation: bool = False
     n_splits = 5
@@ -541,7 +543,10 @@ class AbsTaskClassification(AbsTask):
     def _load_statistics_col_inputs_and_hashes(
         self, split: str, hf_subset: str | None, compute_overall: bool
     ) -> tuple[
-        dict[str, list], list, dict[str, list[str]], dict[str, list[str]] | None
+        dict[Modalities, list[Any]],
+        list,
+        dict[str, list[str]],
+        dict[str, list[str]] | None,
     ]:
         """Load input columns, label data, and pre-computed hashes for a split."""
         if isinstance(self.input_column_name, str):
