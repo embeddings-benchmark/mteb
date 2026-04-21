@@ -78,7 +78,7 @@ class AnySTSEvaluator(Evaluator):
                 modality + "1": modality for modality in self.task_metadata.modalities
             }
         else:
-            ds1_col_names = {self.input_columns[1]: self.input_columns[1]}  # type: ignore[dict-item]
+            ds1_col_names = {self.input_columns[0]: self.task_metadata.modalities[0]}  # type: ignore[dict-item]
 
         embeddings1 = model.encode(
             create_dataloader(
@@ -86,7 +86,6 @@ class AnySTSEvaluator(Evaluator):
                     ds1_col_names
                 ),
                 task_metadata=self.task_metadata,
-                input_column=self.input_columns[0],
                 num_proc=num_proc,
                 **encode_kwargs,
             ),
@@ -103,7 +102,7 @@ class AnySTSEvaluator(Evaluator):
                 modality + "2": modality for modality in self.task_metadata.modalities
             }
         else:
-            ds2_col_names = {self.input_columns[1]: self.input_columns[1]}  # type: ignore[dict-item]
+            ds2_col_names = {self.input_columns[1]: self.task_metadata.modalities[0]}  # type: ignore[dict-item]
 
         embeddings2 = model.encode(
             create_dataloader(
@@ -111,7 +110,6 @@ class AnySTSEvaluator(Evaluator):
                     ds2_col_names
                 ),
                 task_metadata=self.task_metadata,
-                input_column=self.input_columns[1],
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
