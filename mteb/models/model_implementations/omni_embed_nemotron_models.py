@@ -21,6 +21,7 @@ class OmniEmbedNemotronWrapper(SentenceTransformerMultimodalEncoderWrapper):
         device: str | None = None,
         fps: float | None = 2.0,
         max_frames: int | None = None,
+        num_frames: int | None = None,
         max_audio_length: int = 2_048_000,
         **kwargs: Any,
     ) -> None:
@@ -30,6 +31,7 @@ class OmniEmbedNemotronWrapper(SentenceTransformerMultimodalEncoderWrapper):
             device=device,
             fps=fps,
             max_frames=max_frames,
+            num_frames=num_frames,
             max_samples=max_audio_length,
             **kwargs,
         )
