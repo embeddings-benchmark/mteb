@@ -304,6 +304,7 @@ pe_av_small_16_frame = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-small-16-frame",
+    loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
 )
 
@@ -317,6 +318,7 @@ pe_av_base_16_frame = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-base-16-frame",
+    loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
 )
 
@@ -330,6 +332,7 @@ pe_av_large_16_frame = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-large-16-frame",
+    loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
 )
 
