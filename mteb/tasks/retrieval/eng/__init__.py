@@ -260,6 +260,12 @@ from .vatex_retrieval import (
     VATEXV2TRetrieval,
     VATEXVA2TRetrieval,
 )
+from .vggsound_av_retrieval import (
+    VGGSoundAVT2VARetrieval,
+    VGGSoundAVT2VRetrieval,
+    VGGSoundAVV2TRetrieval,
+    VGGSoundAVVA2TRetrieval,
+)
 from .vidore_bench_retrieval import (
     VidoreArxivQARetrieval,
     VidoreDocVQARetrieval,
@@ -553,6 +559,10 @@ __all__ = [
     "VATEXT2VRetrieval",
     "VATEXV2TRetrieval",
     "VATEXVA2TRetrieval",
+    "VGGSoundAVT2VARetrieval",
+    "VGGSoundAVT2VRetrieval",
+    "VGGSoundAVV2TRetrieval",
+    "VGGSoundAVVA2TRetrieval",
     "VQA2IT2TRetrieval",
     "VidoreArxivQARetrieval",
     "VidoreDocVQARetrieval",
