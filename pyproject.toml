@@ -111,7 +111,7 @@ llama-embed-nemotron = ["transformers==4.51.0"]
 llama-nemotron-colembed-vl = ["transformers[torch]==4.49.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 llama-nemotron-embed-vl-1b-v2 = ["transformers[torch]>=4.56.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
-multimodal_sbert = ["sentence-transformers>=5.4.0", "transformers>=5.3.0"]
+multimodal-sbert = ["sentence-transformers>=5.4.0", "transformers>=5.3.0"]
 faiss-cpu = ["faiss-cpu>=1.12.0"]
 eager_embed = ["qwen_vl_utils>=0.0.14"]
 speechbrain = ["speechbrain>=0.5.12"]
@@ -410,7 +410,7 @@ conflicts = [
         { extra = "llama-nemotron-colembed-vl" }, # conflicting versions of transformers
         { extra = "nemotron-colembed-vl-v2" }, # conflicting versions of transformers
         { extra = "llama-nemotron-embed-vl-1b-v2" }, # conflicting versions of transformers
-        { extra = "multimodal_sbert" }, # conflicting version of sentence-transformers
+        { extra = "multimodal-sbert" }, # conflicting version of sentence-transformers
         { extra = "colpali_engine" },
         { extra = "colqwen3" },
         { extra = "jina-v4" },
