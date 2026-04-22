@@ -36,6 +36,27 @@ class OmniVinciWrapper(AbsEncoder):
     before being passed through. Images (PIL) are passed directly.
 
     Uses last-token pooling over the final hidden states for embeddings.
+
+    Flash-attn requirement
+    ----------------------
+    VILA's ``qwen_audio_encoder.py`` hardcodes ``attn_implementation=
+    "flash_attention_2"`` and the audio tower is instantiated at model
+    init unconditionally, so flash-attn 2.x is required even for
+    text/image/video-only inference. The ``omnivinci`` extra declares
+    ``flash-attn>=2.6.3`` so ``pip install mteb[omnivinci]`` will try to
+    resolve it — but PyPI only ships source tarballs, which triggers a
+    20-30 min nvcc compile that needs a full CUDA build environment.
+
+    To skip the compile, install the prebuilt wheel matching the pinned
+    ``torch==2.8.*`` BEFORE installing mteb (so pip sees the requirement
+    already satisfied)::
+
+        pip install "https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3/flash_attn-2.8.3+cu12torch2.8cxx11abiTRUE-cp310-cp310-linux_x86_64.whl"
+        pip install "mteb[omnivinci]"
+
+    The wheel above is for Linux x86_64 + Python 3.10 + CUDA 12 + C++11
+    ABI True. For other combos pick the matching artifact from
+    https://github.com/Dao-AILab/flash-attention/releases.
     """
 
     AUDIO_SAMPLING_RATE = 16_000  # Qwen2AudioEncoder native rate
