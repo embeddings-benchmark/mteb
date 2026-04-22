@@ -47,6 +47,11 @@ _EXISTING_VIDEO_TASKS = [
     "YouCook2V2TRetrieval",
     "YouCook2VA2TRetrieval",
     "Kinetics400ZeroShot",
+    "UCF101Clustering",
+    "VALOR32KT2VARetrieval",
+    "VALOR32KT2VRetrieval",
+    "VALOR32KV2TRetrieval",
+    "VALOR32KVA2TRetrieval",
 ]
 
 
