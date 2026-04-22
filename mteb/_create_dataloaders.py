@@ -459,21 +459,58 @@ class AudioCollator:
 
 
 class FramesCollator:
-    """Collator for video data that resamples video frames."""
+    """Collator for video data that resamples video frames.
 
-    def __init__(self, max_frames: int) -> None:
+    Supports two sampling modes:
+    - FPS-based: downsamples to ``fps`` frames per second, so the number of
+      selected frames scales with video duration. Videos already below the
+      target rate keep all frames. ``max_frames`` caps the total to prevent
+      OOM on very long videos.
+    - Fixed-sample: always selects exactly ``num_frames`` frames uniformly
+      across the video, regardless of duration.
+
+    When both ``fps`` and ``num_frames`` are None, no frame resampling is
+    performed and all frames are returned as-is for the model's processor
+    to handle.
+    """
+
+    def __init__(
+        self,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+    ) -> None:
         """Initialize the collator.
 
         Args:
-            max_frames: The maximum number of frames to keep for each video.
+            fps: Target frames per second for downsampling. The number of
+                frames scales with video duration. Only downsamples; if the
+                source video has fewer frames than the target, all frames
+                are kept.
+            max_frames: Safety cap on the number of frames when using
+                FPS-based sampling.
+            num_frames: If set, use fixed-sample mode: always select this many
+                frames uniformly from the video.
         """
+        if num_frames is not None and fps is not None:
+            raise ValueError(
+                "Cannot specify both `num_frames` and `fps`. "
+                "Use `num_frames` for fixed-sample mode or `fps` for FPS-based mode."
+            )
+        self.fps = fps
         self.max_frames = max_frames
+        self.num_frames = num_frames
 
     def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
         collated_inputs = []
         for row in inputs:
             video = row.pop("video")
-            row["video"] = self.resample_video(video, self.max_frames)
+            row["video"] = self.resample_video(
+                video,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+            )
             collated_inputs.append(row)
         return cast(
             "BatchedInput",
@@ -486,25 +523,41 @@ class FramesCollator:
     @staticmethod
     def resample_video(
         video: VideoDecoder,
-        max_video_frames: int,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
     ) -> torch.Tensor:
         """Resample a video input to a target number of frames.
 
+        When both ``fps`` and ``num_frames`` are None, all frames are returned
+        for the model's processor to handle.
+
         Args:
             video: A VideoDecoder object containing the video data.
-            max_video_frames: The maximum number of frames to keep for each video. If None, no truncation is applied.
+            fps: Target frames per second for downsampling. Only
+                downsamples; source videos below this rate keep all frames.
+            max_frames: Safety cap when using FPS-based sampling.
+            num_frames: If set, select exactly this many frames uniformly
+                (fixed-sample mode).
         """
-        video_frames = video.metadata.num_frames
-        frame_step = (
-            max(1, video_frames // max_video_frames)
-            if max_video_frames is not None
-            else 1
-        )
-        selected_frames = (
-            list(range(0, video_frames, frame_step))[:max_video_frames]
-            if max_video_frames is not None
-            else list(range(video_frames))
-        )
+        num_source_frames = video.metadata.num_frames
+
+        if num_frames is None and fps is None:
+            # No resampling: return all frames
+            return video.get_frames_at(list(range(num_source_frames))).data
+
+        if num_frames is not None:
+            # Fixed-sample mode: always select exactly num_frames
+            target = num_frames
+        else:
+            # FPS-based mode: scale with duration
+            duration = video.metadata.end_stream_seconds
+            target = max(1, int(duration * fps))
+            if max_frames is not None:
+                target = min(target, max_frames)
+
+        frame_step = max(1, num_source_frames // target)
+        selected_frames = list(range(0, num_source_frames, frame_step))[:target]
         return video.get_frames_at(selected_frames).data
 
 
@@ -512,22 +565,29 @@ class VideoCollator:
     """Collator that handles any combination of video and audio modalities.
 
     Uses FramesCollator and AudioCollator static methods to process each modality.
+    Supports both FPS-based and fixed-sample video frame selection.
     """
 
     def __init__(
         self,
         target_sampling_rate: int,
-        max_frames: int = 16,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
         max_samples: int | None = None,
     ) -> None:
         """Initialize the collator.
 
         Args:
             target_sampling_rate: The sampling rate to resample audio to.
-            max_frames: Maximum number of frames to keep per video.
+            fps: Target frames per second for video downsampling.
+            max_frames: Safety cap on frames per video for FPS mode.
+            num_frames: If set, use fixed-sample mode instead of FPS-based.
             max_samples: Maximum number of audio samples to keep. If None, no truncation.
         """
+        self.fps = fps
         self.max_frames = max_frames
+        self.num_frames = num_frames
         self.target_sampling_rate = target_sampling_rate
         self.max_samples = max_samples
 
@@ -536,7 +596,12 @@ class VideoCollator:
         for row in inputs:
             if "video" in row:
                 video = row.pop("video")
-                row["video"] = FramesCollator.resample_video(video, self.max_frames)
+                row["video"] = FramesCollator.resample_video(
+                    video,
+                    fps=self.fps,
+                    max_frames=self.max_frames,
+                    num_frames=self.num_frames,
+                )
             if "audio" in row:
                 audio_array = AudioCollator.resample_audio(
                     row, self.target_sampling_rate, self.max_samples
