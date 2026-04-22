@@ -8,9 +8,9 @@ from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb import TaskMetadata
-from mteb._create_dataloaders import AudioCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator
 from mteb.types import Array, BatchedInput, PromptType
 from mteb.types._encoder_io import AudioInput
 

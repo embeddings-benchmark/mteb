@@ -6,9 +6,9 @@ import torch
 from tqdm.auto import tqdm
 from transformers import Data2VecAudioModel, Wav2Vec2FeatureExtractor
 
-from mteb._create_dataloaders import AudioCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader

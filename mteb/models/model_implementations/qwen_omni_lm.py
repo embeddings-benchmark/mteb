@@ -8,8 +8,8 @@ from transformers import (
     AutoProcessor,
 )
 
-from mteb._create_dataloaders import AudioCollator
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
