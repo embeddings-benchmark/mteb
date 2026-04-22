@@ -10,10 +10,6 @@ from tqdm.auto import tqdm
 from transformers import AutoModel, AutoProcessor
 
 from mteb._create_dataloaders import VideoCollator
-from mteb._requires_package import (
-    requires_audio_dependencies,
-    requires_image_dependencies,
-)
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -70,9 +66,6 @@ class OmniVinciWrapper(AbsEncoder):
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ) -> None:
-        requires_image_dependencies()
-        requires_audio_dependencies()
-
         self.device = device or (
             "cuda"
             if torch.cuda.is_available()
@@ -81,7 +74,9 @@ class OmniVinciWrapper(AbsEncoder):
             else "cpu"
         )
         self.num_frames = num_frames
-        self.max_audio_samples = int(max_audio_length_seconds * self.AUDIO_SAMPLING_RATE)
+        self.max_audio_samples = int(
+            max_audio_length_seconds * self.AUDIO_SAMPLING_RATE
+        )
 
         self.model = AutoModel.from_pretrained(
             model_name,
@@ -111,7 +106,9 @@ class OmniVinciWrapper(AbsEncoder):
         fd, path = tempfile.mkstemp(suffix=".mp4")
         os.close(fd)
         # torchvision.io.write_video expects (T, H, W, C) uint8
-        torchvision.io.write_video(path, frames.permute(0, 2, 3, 1).contiguous(), fps=24)
+        torchvision.io.write_video(
+            path, frames.permute(0, 2, 3, 1).contiguous(), fps=24
+        )
         return path
 
     @staticmethod
@@ -138,38 +135,50 @@ class OmniVinciWrapper(AbsEncoder):
         sf.write(path, array, sr)
         return path
 
-    def _encode_single(
-        self,
-        text: str = "",
-        image: Any = None,
-        audio: Any = None,
-        video: torch.Tensor | None = None,
-    ) -> torch.Tensor:
-        """Encode one multimodal sample and return its L2-normalised embedding."""
+    def _build_conversations(
+        self, batch: BatchedInput
+    ) -> tuple[list[list[dict]], list[str]]:
+        """Build VILA conversations from a batch, returning conversations and temp file paths."""
+        texts = batch.get("text", [])
+        images = batch.get("image", [])
+        audios = batch.get("audio", [])
+        videos = batch.get("video", [])
+        batch_size = max(len(texts), len(images), len(audios), len(videos))
+
+        conversations = []
         temp_files: list[str] = []
-        try:
+        for i in range(batch_size):
             content: list[dict[str, Any]] = []
 
-            if video is not None:
-                video_path = self._save_frames_as_video(video)
-                temp_files.append(video_path)
-                content.append({"type": "video", "video": video_path})
+            if i < len(videos) and videos[i] is not None:
+                path = self._save_frames_as_video(videos[i])
+                temp_files.append(path)
+                content.append({"type": "video", "video": path})
 
-            if audio is not None:
-                audio_path = self._save_audio_as_wav(audio, self.AUDIO_SAMPLING_RATE)
-                temp_files.append(audio_path)
-                content.append({"type": "audio", "audio": audio_path})
+            if i < len(audios) and audios[i] is not None:
+                path = self._save_audio_as_wav(audios[i], self.AUDIO_SAMPLING_RATE)
+                temp_files.append(path)
+                content.append({"type": "audio", "audio": path})
 
-            if image is not None:
-                content.append({"type": "image", "image": image})
+            if i < len(images) and images[i] is not None:
+                content.append({"type": "image", "image": images[i]})
 
-            content.append({"type": "text", "text": text})
+            content.append({"type": "text", "text": texts[i] if i < len(texts) else ""})
+            conversations.append([{"role": "user", "content": content}])
 
-            conversation = [{"role": "user", "content": content}]
-            text_prompt = self.processor.apply_chat_template(
-                conversation, tokenize=False, add_generation_prompt=False
-            )
-            inputs = self.processor([text_prompt])
+        return conversations, temp_files
+
+    def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
+        """Encode a batch of multimodal samples and return L2-normalised embeddings."""
+        conversations, temp_files = self._build_conversations(batch)
+        try:
+            text_prompts = [
+                self.processor.apply_chat_template(
+                    conv, tokenize=False, add_generation_prompt=False
+                )
+                for conv in conversations
+            ]
+            inputs = self.processor(text_prompts)
 
             outputs = self.model(
                 input_ids=inputs.input_ids.to(self.device),
@@ -212,26 +221,8 @@ class OmniVinciWrapper(AbsEncoder):
 
         all_embeddings: list[torch.Tensor] = []
         for batch in tqdm(inputs, desc="Encoding"):
-            batch_texts = batch.get("text", [])
-            batch_images = batch.get("image", [])
-            batch_audio = batch.get("audio", [])
-            batch_video = batch.get("video", [])
-
-            batch_size = max(
-                len(batch_texts),
-                len(batch_images),
-                len(batch_audio),
-                len(batch_video),
-            )
-
-            for i in range(batch_size):
-                emb = self._encode_single(
-                    text=batch_texts[i] if i < len(batch_texts) else "",
-                    image=batch_images[i] if i < len(batch_images) else None,
-                    audio=batch_audio[i] if i < len(batch_audio) else None,
-                    video=batch_video[i] if i < len(batch_video) else None,
-                )
-                all_embeddings.append(emb.cpu())
+            embeddings = self._encode_batch(batch)
+            all_embeddings.append(embeddings.cpu())
 
         return torch.cat(all_embeddings, dim=0).float()
 
