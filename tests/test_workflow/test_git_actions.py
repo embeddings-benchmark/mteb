@@ -47,12 +47,26 @@ def git_repo(tmp_path: Path) -> Path:
     return repo_path
 
 
+def _get_default_branch(repo_path: Path) -> str:
+    """Get the default branch name of the repository."""
+    result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        cwd=repo_path,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return result.stdout.strip()
+
+
 def test_create_branch_action_do_and_undo(git_repo: Path) -> None:
     """Test creating and deleting a git branch."""
+    default_branch = _get_default_branch(git_repo)
+
     action = CreateBranchAction(
         repo_path=git_repo,
         branch_name="feature-1",
-        original_branch="main",
+        original_branch=default_branch,
     )
 
     # Do: create the branch
@@ -66,7 +80,7 @@ def test_create_branch_action_do_and_undo(git_repo: Path) -> None:
     )
     assert result.stdout.strip() == "feature-1", "Should be on feature-1 branch"
 
-    # Undo: delete the branch and restore to main
+    # Undo: delete the branch and restore to default branch
     action.undo()
     result = subprocess.run(
         ["git", "branch", "--show-current"],
@@ -75,7 +89,9 @@ def test_create_branch_action_do_and_undo(git_repo: Path) -> None:
         capture_output=True,
         text=True,
     )
-    assert result.stdout.strip() == "main", "Should be back on main branch"
+    assert result.stdout.strip() == default_branch, (
+        f"Should be back on {default_branch} branch"
+    )
 
     # Verify feature-1 branch is deleted
     result = subprocess.run(
@@ -293,6 +309,8 @@ def test_create_pr_action_do_and_undo(monkeypatch) -> None:
 
 def test_restore_original_branch_action_do_and_undo(git_repo: Path) -> None:
     """Test detecting and restoring original branch."""
+    default_branch = _get_default_branch(git_repo)
+
     # Create and switch to a feature branch
     subprocess.run(
         ["git", "checkout", "-b", "feature-1"],
@@ -312,13 +330,15 @@ def test_restore_original_branch_action_do_and_undo(git_repo: Path) -> None:
     assert result.stdout.strip() == "feature-1"
 
     # Do: detect and switch away
-    action = RestoreOriginalBranchAction(repo_path=git_repo, original_branch="main")
+    action = RestoreOriginalBranchAction(
+        repo_path=git_repo, original_branch=default_branch
+    )
     action.do()
 
     # Verify current branch was captured
     assert action.current_branch_before == "feature-1"
 
-    # Verify we switched to main
+    # Verify we switched to default branch
     result = subprocess.run(
         ["git", "rev-parse", "--abbrev-ref", "HEAD"],
         cwd=git_repo,
@@ -326,7 +346,7 @@ def test_restore_original_branch_action_do_and_undo(git_repo: Path) -> None:
         capture_output=True,
         text=True,
     )
-    assert result.stdout.strip() == "main"
+    assert result.stdout.strip() == default_branch
 
     # Undo: restore to feature-1
     action.undo()
