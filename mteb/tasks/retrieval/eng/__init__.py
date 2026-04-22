@@ -13,6 +13,7 @@ from .audiocaps_av_retrieval import (
     AudioCapsAVT2VRetrieval,
     AudioCapsAVV2TRetrieval,
     AudioCapsAVVA2TRetrieval,
+)
 from .avmeme_exam_retrieval import (
     AVMemeExamT2VARetrieval,
     AVMemeExamT2VRetrieval,
