@@ -193,6 +193,12 @@ from .nq_retrieval import NQ, NQHardNegatives
 from .okvqa_it2t_retrieval import OKVQAIT2TRetrieval
 from .oven_it2it_retrieval import OVENIT2ITRetrieval
 from .oven_it2t_retrieval import OVENIT2TRetrieval
+from .panda70m_retrieval import (
+    Panda70MT2VARetrieval,
+    Panda70MT2VRetrieval,
+    Panda70MV2TRetrieval,
+    Panda70MVA2TRetrieval,
+)
 from .piqa_retrieval import PIQA
 from .quail_retrieval import Quail
 from .quora_retrieval import (
@@ -507,6 +513,10 @@ __all__ = [
     "OKVQAIT2TRetrieval",
     "OVENIT2ITRetrieval",
     "OVENIT2TRetrieval",
+    "Panda70MT2VARetrieval",
+    "Panda70MT2VRetrieval",
+    "Panda70MV2TRetrieval",
+    "Panda70MVA2TRetrieval",
     "Quail",
     "QuoraRetrieval",
     "QuoraRetrievalHardNegatives",
