@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.12.23"
+version = "2.12.26"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -214,6 +214,7 @@ namespaces = false
     "descriptive_stats/Image/*/*.json",  # for descriptive_stats image
 ]
 "mteb.abstasks" = ["dataset_card_template.md"]
+"mteb.benchmarks" = ["benchmark_card_template.md"]
 "mteb.tasks.zeroshot_classification.eng.templates" = ["*.txt"]
 
 [tool.ruff]
@@ -304,6 +305,7 @@ preview = true
     "S101",  # allow asserts in tests
     "S602",  # allow shell=True in tests
     "S603",  # allow subprocess calls in tests
+    "PLC2701",  # Private name import
 ]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = [
