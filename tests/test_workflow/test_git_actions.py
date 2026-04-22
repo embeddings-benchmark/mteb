@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -13,97 +14,230 @@ from mteb._reversible_workflow.git_actions import (
 )
 
 
-class _Completed:
-    def __init__(self, stdout: str = "") -> None:
-        self.stdout = stdout
+@pytest.fixture
+def git_repo(tmp_path: Path) -> Path:
+    """Create a real git repository for testing."""
+    repo_path = tmp_path / "repo"
+    repo_path.mkdir()
 
-
-def test_create_branch_action_do_and_undo(monkeypatch, tmp_path: Path) -> None:
-    calls: list[list[str]] = []
-
-    def fake_run(cmd, **kwargs):
-        calls.append(cmd)
-        return _Completed()
-
-    monkeypatch.setattr(
-        "mteb._reversible_workflow.git_actions.subprocess.run", fake_run
+    subprocess.run(["git", "init"], cwd=repo_path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "config", "user.email", "test@test.com"],
+        cwd=repo_path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "Test User"],
+        cwd=repo_path,
+        check=True,
+        capture_output=True,
     )
 
+    # Create initial commit
+    (repo_path / "file.txt").write_text("content")
+    subprocess.run(["git", "add", "."], cwd=repo_path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "initial"],
+        cwd=repo_path,
+        check=True,
+        capture_output=True,
+    )
+
+    return repo_path
+
+
+def test_create_branch_action_do_and_undo(git_repo: Path) -> None:
+    """Test creating and deleting a git branch."""
     action = CreateBranchAction(
-        repo_path=tmp_path / "repo",
+        repo_path=git_repo,
         branch_name="feature-1",
         original_branch="main",
     )
+
+    # Do: create the branch
     action.do()
+    result = subprocess.run(
+        ["git", "branch", "--show-current"],
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert result.stdout.strip() == "feature-1", "Should be on feature-1 branch"
+
+    # Undo: delete the branch and restore to main
+    action.undo()
+    result = subprocess.run(
+        ["git", "branch", "--show-current"],
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert result.stdout.strip() == "main", "Should be back on main branch"
+
+    # Verify feature-1 branch is deleted
+    result = subprocess.run(
+        ["git", "branch", "-a"],
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert "feature-1" not in result.stdout, "feature-1 branch should be deleted"
+
+
+def test_commit_action_saves_shas_and_undo_resets(git_repo: Path) -> None:
+    """Test creating a commit and resetting to previous state."""
+    # Get initial commit SHA
+    result = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    initial_sha = result.stdout.strip()
+
+    # Create a change
+    (git_repo / "new_file.txt").write_text("new content")
+
+    # Do: commit the changes
+    action = CommitAction(repo_path=git_repo, message="Add new file")
+    action.do()
+
+    # Verify SHAs are captured
+    assert action.previous_sha == initial_sha
+    assert action.commit_sha is not None
+    assert action.commit_sha != initial_sha
+
+    # Verify we're at the new commit
+    result = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert result.stdout.strip() == action.commit_sha
+
+    # Undo: reset to previous state
     action.undo()
 
-    assert calls == [
+    # Verify we're back to initial commit
+    result = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert result.stdout.strip() == initial_sha
+
+    # Verify file doesn't exist anymore
+    assert not (git_repo / "new_file.txt").exists()
+
+
+def test_push_to_fork_action_do_and_undo(git_repo: Path) -> None:
+    """Test pushing to a fork remote and reverting the push."""
+    # Create a "fork" repository
+    fork_path = git_repo.parent / "fork"
+    fork_path.mkdir()
+    subprocess.run(
+        ["git", "init", "--bare"], cwd=fork_path, check=True, capture_output=True
+    )
+
+    # Add fork as remote
+    subprocess.run(
+        ["git", "remote", "add", "fork", str(fork_path)],
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
+    )
+
+    # Create a feature branch
+    subprocess.run(
         ["git", "checkout", "-b", "feature-1"],
-        ["git", "checkout", "main"],
-        ["git", "branch", "-D", "feature-1"],
-    ]
-
-
-def test_commit_action_saves_shas_and_undo_resets(monkeypatch, tmp_path: Path) -> None:
-    calls: list[list[str]] = []
-    rev_parse_outputs = ["sha-before\n", "sha-after\n"]
-
-    def fake_run(cmd, **kwargs):
-        calls.append(cmd)
-        if cmd[:3] == ["git", "rev-parse", "HEAD"]:
-            return _Completed(rev_parse_outputs.pop(0))
-        return _Completed()
-
-    monkeypatch.setattr(
-        "mteb._reversible_workflow.git_actions.subprocess.run", fake_run
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
     )
 
-    action = CommitAction(repo_path=tmp_path / "repo", message="msg")
-    action.do()
-
-    assert action.previous_sha == "sha-before"
-    assert action.commit_sha == "sha-after"
-
-    action.undo()
-
-    assert ["git", "add", "-A"] in calls
-    assert ["git", "commit", "-m", "msg"] in calls
-    assert ["git", "reset", "--hard", "sha-before"] in calls
-
-
-def test_push_to_fork_action_do_and_undo(monkeypatch, tmp_path: Path) -> None:
-    calls: list[list[str]] = []
-
-    def fake_run(cmd, **kwargs):
-        calls.append(cmd)
-        return _Completed()
-
-    monkeypatch.setattr(
-        "mteb._reversible_workflow.git_actions.subprocess.run", fake_run
+    # Make a commit on the feature branch
+    (git_repo / "feature.txt").write_text("feature content")
+    subprocess.run(["git", "add", "."], cwd=git_repo, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "feature commit"],
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
     )
 
+    # Get the commit SHA
+    result = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    feature_sha = result.stdout.strip()
+
+    # Do: push to fork
     action = PushToForkAction(
-        repo_path=tmp_path / "repo",
+        repo_path=git_repo,
         fork_remote="fork",
         branch_name="feature-1",
         origin_branch="main",
     )
     action.do()
+
+    # Verify the commit was pushed to fork by checking if it exists in the fork's refs
+    result = subprocess.run(
+        ["git", "show-ref"],
+        cwd=fork_path,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert feature_sha in result.stdout, "Commit should be in fork refs"
+    assert "feature-1" in result.stdout, "feature-1 branch should exist in fork"
+
+    # Undo: revert the push by force-pushing main to feature-1 on fork
     action.undo()
 
-    assert [
-        "git",
-        "push",
-        "fork",
-        "HEAD:refs/heads/feature-1",
-    ] in calls
-    assert [
-        "git",
-        "push",
-        "-f",
-        "fork",
-        "main:refs/heads/feature-1",
-    ] in calls
+    # Verify the push was reverted - feature-1 should now point to main
+    result = subprocess.run(
+        ["git", "show-ref"],
+        cwd=fork_path,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    # After undo, feature-1 should point to main's commit, not feature_sha
+    assert "feature-1" in result.stdout, "feature-1 branch should still exist"
+    # Get main's SHA to verify feature-1 was reverted to it
+    result_main = subprocess.run(
+        ["git", "rev-parse", "main"],
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    main_sha = result_main.stdout.strip()
+
+    # Verify that feature-1 in fork now points to main's SHA (not feature_sha)
+    result_fork_feature = subprocess.run(
+        ["git", "show-ref", "refs/heads/feature-1"],
+        cwd=fork_path,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert main_sha in result_fork_feature.stdout, (
+        "feature-1 should be reverted to main's SHA"
+    )
 
 
 def test_create_pr_action_do_and_undo(monkeypatch) -> None:
@@ -157,29 +291,52 @@ def test_create_pr_action_do_and_undo(monkeypatch) -> None:
     assert gh.repo.pr.closed is True
 
 
-def test_restore_original_branch_action_do_and_undo(
-    monkeypatch, tmp_path: Path
-) -> None:
-    calls: list[list[str]] = []
-
-    def fake_run(cmd, **kwargs):
-        calls.append(cmd)
-        if cmd == ["git", "rev-parse", "--abbrev-ref", "HEAD"]:
-            return _Completed("feature-1\n")
-        return _Completed()
-
-    monkeypatch.setattr(
-        "mteb._reversible_workflow.git_actions.subprocess.run", fake_run
+def test_restore_original_branch_action_do_and_undo(git_repo: Path) -> None:
+    """Test detecting and restoring original branch."""
+    # Create and switch to a feature branch
+    subprocess.run(
+        ["git", "checkout", "-b", "feature-1"],
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
     )
 
-    action = RestoreOriginalBranchAction(
-        repo_path=tmp_path / "repo", original_branch="main"
+    # Verify we're on feature-1
+    result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
+        text=True,
     )
+    assert result.stdout.strip() == "feature-1"
 
+    # Do: detect and switch away
+    action = RestoreOriginalBranchAction(repo_path=git_repo, original_branch="main")
     action.do()
+
+    # Verify current branch was captured
     assert action.current_branch_before == "feature-1"
 
+    # Verify we switched to main
+    result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert result.stdout.strip() == "main"
+
+    # Undo: restore to feature-1
     action.undo()
 
-    assert ["git", "checkout", "main"] in calls
-    assert ["git", "checkout", "feature-1"] in calls
+    # Verify we're back on feature-1
+    result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        cwd=git_repo,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert result.stdout.strip() == "feature-1"
