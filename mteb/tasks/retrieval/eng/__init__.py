@@ -8,6 +8,12 @@ from .alpha_nli_retrieval import AlphaNLI
 from .arc_challenge_retrieval import ARCChallenge
 from .argu_ana_retrieval import ArguAna
 from .audio_set_strong import AudioSetStrongA2TRetrieval, AudioSetStrongT2ARetrieval
+from .audiocaps_av_retrieval import (
+    AudioCapsAVT2VARetrieval,
+    AudioCapsAVT2VRetrieval,
+    AudioCapsAVV2TRetrieval,
+    AudioCapsAVVA2TRetrieval,
+)
 from .bar_exam_qa_retrieval import BarExamQARetrieval
 from .bill_sum_ca_retrieval import BillSumCARetrieval
 from .bill_sum_us_retrieval import BillSumUSRetrieval
@@ -315,6 +321,10 @@ __all__ = [
     "ActivityNetCaptionsV2TRetrieval",
     "AlphaNLI",
     "ArguAna",
+    "AudioCapsAVT2VARetrieval",
+    "AudioCapsAVT2VRetrieval",
+    "AudioCapsAVV2TRetrieval",
+    "AudioCapsAVVA2TRetrieval",
     "AudioSetStrongA2TRetrieval",
     "AudioSetStrongT2ARetrieval",
     "BIRCOArguAnaReranking",
