@@ -4,8 +4,6 @@ import logging
 import subprocess
 from typing import TYPE_CHECKING, Any
 
-from mteb._reversible_workflow import ReversibleAction
-
 if TYPE_CHECKING:
     from pathlib import Path
 
@@ -15,7 +13,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class CreateBranchAction(ReversibleAction):
+class CreateBranchAction:
     """Create a git branch. Undo by deleting the branch and restoring original."""
 
     def __init__(
@@ -67,7 +65,7 @@ class CreateBranchAction(ReversibleAction):
             logger.warning(f"Failed to cleanup branch '{self.branch_name}': {e}")
 
 
-class CommitAction(ReversibleAction):
+class CommitAction:
     """Create a git commit. Undo by resetting to the previous commit."""
 
     def __init__(self, repo_path: Path, message: str) -> None:
@@ -139,7 +137,7 @@ class CommitAction(ReversibleAction):
             logger.warning(f"Failed to reset to {self.previous_sha}: {e}")
 
 
-class PushToForkAction(ReversibleAction):
+class PushToForkAction:
     """Push commits to a fork remote. Undo by force-pushing origin branch back to rewind the remote branch."""
 
     def __init__(
@@ -196,7 +194,7 @@ class PushToForkAction(ReversibleAction):
             logger.warning(f"Failed to revert push: {e}")
 
 
-class CreatePRAction(ReversibleAction):
+class CreatePRAction:
     """Create a GitHub pull request. Undo by closing the PR."""
 
     def __init__(
@@ -262,7 +260,7 @@ class CreatePRAction(ReversibleAction):
             logger.warning(f"Failed to close PR: {e}")
 
 
-class RestoreOriginalBranchAction(ReversibleAction):
+class RestoreOriginalBranchAction:
     """Restore the original branch after successful PR creation."""
 
     def __init__(self, repo_path: Path, original_branch: str) -> None:
