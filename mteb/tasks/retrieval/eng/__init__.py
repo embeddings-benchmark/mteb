@@ -8,6 +8,12 @@ from .alpha_nli_retrieval import AlphaNLI
 from .arc_challenge_retrieval import ARCChallenge
 from .argu_ana_retrieval import ArguAna
 from .audio_set_strong import AudioSetStrongA2TRetrieval, AudioSetStrongT2ARetrieval
+from .avmeme_exam_retrieval import (
+    AVMemeExamT2VARetrieval,
+    AVMemeExamT2VRetrieval,
+    AVMemeExamV2TRetrieval,
+    AVMemeExamVA2TRetrieval,
+)
 from .bar_exam_qa_retrieval import BarExamQARetrieval
 from .bill_sum_ca_retrieval import BillSumCARetrieval
 from .bill_sum_us_retrieval import BillSumUSRetrieval
@@ -311,6 +317,10 @@ __all__ = [
     "AILACasedocs",
     "AILAStatutes",
     "ARCChallenge",
+    "AVMemeExamT2VARetrieval",
+    "AVMemeExamT2VRetrieval",
+    "AVMemeExamV2TRetrieval",
+    "AVMemeExamVA2TRetrieval",
     "ActivityNetCaptionsT2VRetrieval",
     "ActivityNetCaptionsV2TRetrieval",
     "AlphaNLI",
