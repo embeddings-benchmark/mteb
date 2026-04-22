@@ -18,10 +18,6 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import (
-    requires_image_dependencies,
-    requires_package,
-)
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.colpali_models import (
     COLPALI_CITATION,
@@ -67,11 +63,6 @@ class SLMBaseWrapper(AbsEncoder):
         use_flash_attn: bool = True,
         **kwargs,
     ):
-        requires_image_dependencies()
-        requires_package(
-            self, "sauerkrautlm_colpali", model_name, "pip install sauerkrautlm-colpali"
-        )
-
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self._load_model_and_processor(model_name, revision, use_flash_attn, **kwargs)
         self.mdl = self.mdl.to(self.device)
@@ -284,6 +275,7 @@ slm_colqwen3_1_7b_turbo = ModelMeta(
     adapted_from="Qwen/Qwen3-VL-2B-Instruct",
     training_datasets=COLPALI_TRAINING_DATA,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
+    extra_requirements_groups=["sauerkrautlm-colpali"],
 )
 
 slm_colqwen3_2b = ModelMeta(
@@ -310,6 +302,7 @@ slm_colqwen3_2b = ModelMeta(
     adapted_from="Qwen/Qwen3-VL-2B-Instruct",
     training_datasets=COLPALI_TRAINING_DATA,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
+    extra_requirements_groups=["sauerkrautlm-colpali"],
 )
 
 slm_colqwen3_4b = ModelMeta(
@@ -336,6 +329,7 @@ slm_colqwen3_4b = ModelMeta(
     adapted_from="Qwen/Qwen3-VL-4B-Instruct",
     training_datasets=COLPALI_TRAINING_DATA,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
+    extra_requirements_groups=["sauerkrautlm-colpali"],
 )
 
 slm_colqwen3_8b = ModelMeta(
@@ -362,6 +356,7 @@ slm_colqwen3_8b = ModelMeta(
     adapted_from="Qwen/Qwen3-VL-8B-Instruct",
     training_datasets=COLPALI_TRAINING_DATA,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
+    extra_requirements_groups=["sauerkrautlm-colpali"],
 )
 
 slm_collfm2_450m = ModelMeta(
@@ -387,6 +382,7 @@ slm_collfm2_450m = ModelMeta(
     adapted_from="LiquidAI/LFM2-VL-450M",
     training_datasets=COLPALI_TRAINING_DATA,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
+    extra_requirements_groups=["sauerkrautlm-colpali"],
 )
 
 slm_colministral3_3b = ModelMeta(
@@ -413,4 +409,5 @@ slm_colministral3_3b = ModelMeta(
     adapted_from="mistralai/Ministral-3B-Instruct-2410",
     training_datasets=COLPALI_TRAINING_DATA,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
+    extra_requirements_groups=["sauerkrautlm-colpali"],
 )

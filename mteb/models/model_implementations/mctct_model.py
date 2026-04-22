@@ -9,7 +9,6 @@ from tqdm.auto import tqdm
 
 from mteb import TaskMetadata
 from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
@@ -96,7 +95,6 @@ class MCTCTWrapper(AbsEncoder):
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
         import transformers
         from packaging import version
 

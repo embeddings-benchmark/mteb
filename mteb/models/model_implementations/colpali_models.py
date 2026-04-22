@@ -6,10 +6,6 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import (
-    requires_image_dependencies,
-    requires_package,
-)
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -21,6 +17,11 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
+
+_REQUIREMENT_GROUPS = (
+    "image",
+    "colpali_engine",
+)
 
 
 class ColPaliEngineWrapper(AbsEncoder):
@@ -35,11 +36,6 @@ class ColPaliEngineWrapper(AbsEncoder):
         device: str | None = None,
         **kwargs,
     ):
-        requires_image_dependencies()
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
-
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
 
         # Load model
@@ -132,7 +128,7 @@ class ColPaliEngineWrapper(AbsEncoder):
                     + self.processor.query_augmentation_token * 10
                     for t in batch["text"]
                 ]
-                inputs = self.processor.process_queries(batch)
+                inputs = self.processor.process_texts(batch)
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 outs = self.encode_input(inputs)
                 all_embeds.extend(outs.cpu().to(torch.float32))
@@ -171,9 +167,6 @@ class ColPaliWrapper(ColPaliEngineWrapper):
         device: str | None = None,
         **kwargs,
     ):
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
         from colpali_engine.models import ColPali, ColPaliProcessor
 
         super().__init__(
@@ -230,6 +223,7 @@ colpali_v1_1 = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
+    extra_requirements_groups=_REQUIREMENT_GROUPS,
 )
 
 colpali_v1_2 = ModelMeta(
@@ -258,6 +252,7 @@ colpali_v1_2 = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
+    extra_requirements_groups=_REQUIREMENT_GROUPS,
 )
 
 colpali_v1_3 = ModelMeta(
@@ -286,4 +281,5 @@ colpali_v1_3 = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
+    extra_requirements_groups=_REQUIREMENT_GROUPS,
 )

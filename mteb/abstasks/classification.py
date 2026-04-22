@@ -32,6 +32,7 @@ from ._statistics_calculation import (
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from pathlib import Path
 
     from numpy.typing import NDArray
@@ -125,7 +126,10 @@ class AbsTaskClassification(AbsTask):
         n_experiments: Number of experiments to run. Default is 10.
         train_split: Name of the split to use for training the evaluator model. Default is "train".
         label_column_name: Name of the column containing the labels. Default is "label".
-        input_column_name: Name of the column containing the input data. Default is "text".
+        input_column_name: Name of the column(s) containing the input data. Default is "text".
+            Can be a string for single-column tasks or a list of strings for multimodal tasks (e.g. ["video", "audio"]).
+            When specified as a list, values must be the default column names as defined in the encoder I/O types
+            (see https://embeddings-benchmark.github.io/mteb/api/types/#mteb.types._encoder_io).
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
         is_cross_validation: Is task cross validation
         n_splits: Number of splits for cross-validation
@@ -140,7 +144,7 @@ class AbsTaskClassification(AbsTask):
     n_experiments: int = 10
     train_split: str = "train"
     label_column_name: str = "label"
-    input_column_name: str = "text"
+    input_column_name: str | Sequence[str] = "text"
     abstask_prompt = "Classify user passages."
     is_cross_validation: bool = False
     n_splits = 5
@@ -192,7 +196,26 @@ class AbsTaskClassification(AbsTask):
                 ds = self.dataset[hf_subset]
 
             if isinstance(ds, Dataset | DatasetDict):
-                ds = ds.select_columns([self.label_column_name, self.input_column_name])
+                # Keep label and input columns
+                input_cols = (
+                    [self.input_column_name]
+                    if isinstance(self.input_column_name, str)
+                    else list(self.input_column_name)
+                )
+                columns_to_keep = set(input_cols) | {self.label_column_name}
+
+                if isinstance(ds, DatasetDict):
+                    available = set(next(iter(ds.values())).column_names)
+                else:
+                    available = set(ds.column_names)
+
+                missing_columns = columns_to_keep - available
+                if missing_columns:
+                    raise ValueError(
+                        f"Missing required columns in dataset: {missing_columns}. "
+                        f"Available columns: {available}"
+                    )
+                ds = ds.select_columns(list(columns_to_keep))
             eval_function = (
                 self._evaluate_subset
                 if not self.is_cross_validation
@@ -470,31 +493,45 @@ class AbsTaskClassification(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
+        # Multi-column tasks (e.g. video+audio): only compute label statistics for now
+        if not isinstance(self.input_column_name, str):
+            if hf_subset:
+                label = self.dataset[hf_subset][split][self.label_column_name]
+            elif compute_overall:
+                label = []
+                for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
+                    label.extend(self.dataset[hf_subset][split][self.label_column_name])
+            else:
+                label = self.dataset[split][self.label_column_name]
+            return ClassificationDescriptiveStatistics(
+                num_samples=len(label),
+                number_texts_intersect_with_train=None,
+                text_statistics=None,
+                image_statistics=None,
+                audio_statistics=None,
+                label_statistics=calculate_label_statistics(label),
+            )
+
+        col = self.input_column_name
         train_text = []
         if hf_subset:
-            inputs = self.dataset[hf_subset][split][self.input_column_name]
+            inputs = self.dataset[hf_subset][split][col]
             label = self.dataset[hf_subset][split][self.label_column_name]
             if split != self.train_split:
-                train_text = self.dataset[hf_subset][self.train_split][
-                    self.input_column_name
-                ]
+                train_text = self.dataset[hf_subset][self.train_split][col]
         elif compute_overall:
             inputs = []
             label = []
-            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
-                inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
+            for hf_subset in self.metadata.eval_langs:
+                inputs.extend(self.dataset[hf_subset][split][col])
                 label.extend(self.dataset[hf_subset][split][self.label_column_name])
                 if split != self.train_split:
-                    train_text.extend(
-                        self.dataset[hf_subset][self.train_split][
-                            self.input_column_name
-                        ]
-                    )
+                    train_text.extend(self.dataset[hf_subset][self.train_split][col])
         else:
-            inputs = self.dataset[split][self.input_column_name]
+            inputs = self.dataset[split][col]
             label = self.dataset[split][self.label_column_name]
             if split != self.train_split:
-                train_text = self.dataset[self.train_split][self.input_column_name]
+                train_text = self.dataset[self.train_split][col]
 
         image_statistics = None
         text_statistics = None
@@ -529,11 +566,13 @@ class AbsTaskClassification(AbsTask):
         repo_name: str,
         num_proc: int | None = None,
     ) -> None:
+        input_cols = (
+            [self.input_column_name]
+            if isinstance(self.input_column_name, str)
+            else list(self.input_column_name)
+        )
         self._upload_dataset_to_hub(
             repo_name,
-            [
-                self.input_column_name,
-                self.label_column_name,
-            ],
+            input_cols + [self.label_column_name],
             num_proc=num_proc,
         )

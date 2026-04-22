@@ -114,10 +114,15 @@ class AbsTask(ABC):  # noqa: PLR0904
         self.rng_state, self.np_rng = _set_seed(seed)
         self.hf_subsets = self.metadata.hf_subsets
 
+        if self.metadata.is_beta:
+            msg = f"The task '{self.metadata.name}' is currently in beta. This means that the dataset is still being tested and may be subject to changes. This means that the scores of this dataset is liable to change and should be used with caution."
+            logger.warning(msg)
+            warnings.warn(msg)
+
     def check_if_dataset_is_superseded(self) -> None:
         """Check if the dataset is superseded by a newer version."""
         if self.superseded_by:
-            msg = f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}'. We recommend using the newer version of the dataset unless you are running a specific benchmark. See `get_task('{self.superseded_by}').metadata.description` to get a description of the task and changes."
+            msg = f"The task '{self.metadata.name}' is superseded by '{self.superseded_by}'. We recommend using the newer version of the task unless you are running a specific benchmark. See `get_task('{self.superseded_by}').metadata.description` to get a description of the task and changes."
             logger.warning(msg)
             warnings.warn(msg)
 
@@ -625,24 +630,22 @@ class AbsTask(ABC):  # noqa: PLR0904
         # dataset repo not creating when pushing card
         self.metadata.push_dataset_card_to_hub(repo_name)
         if push_eval:
-            self.push_eval_to_hub(repo_name)
+            self.push_eval_to_hub()
 
     def push_eval_to_hub(
         self,
-        repo_name: str,
         *,
         create_pr: bool = False,
     ) -> None:
         """Push `eval.yaml` to the HuggingFace Hub
 
         Args:
-            repo_name: repository name
             create_pr: Whether to create the PR
         """
         eval_file_name = "eval.yaml"
 
         existing_eval_path = _get_file_on_hub(
-            repo_id=repo_name,
+            repo_id=self.metadata.dataset["name"],
             file_name=eval_file_name,
             repo_type="dataset",
         )
@@ -664,7 +667,7 @@ class AbsTask(ABC):  # noqa: PLR0904
             huggingface_hub.upload_file(
                 path_or_fileobj=tmp_file.name,
                 path_in_repo=eval_file_name,
-                repo_id=repo_name,
+                repo_id=self.metadata.dataset["name"],
                 repo_type="dataset",
                 commit_message="Add eval config",
                 create_pr=create_pr,

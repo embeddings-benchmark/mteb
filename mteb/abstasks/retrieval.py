@@ -37,7 +37,6 @@ from ._statistics_calculation import (
 from .abstask import AbsTask
 from .retrieval_dataset_loaders import (
     RetrievalDatasetLoader,
-    RetrievalSplitData,
     _combine_queries_with_instructions_datasets,
 )
 
@@ -65,6 +64,9 @@ if TYPE_CHECKING:
         TopRankedStatistics,
     )
 
+    from .retrieval_dataset_loaders import (
+        RetrievalSplitData,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -112,9 +114,9 @@ def _filter_queries_without_positives(
             continue
         _relevant_docs[idx] = relevant_docs[idx]
 
-    queries = queries.filter(
-        lambda x: x["id"] in _relevant_docs.keys(), desc="Filtering queries by qrels"
-    )
+    ids_to_keep = set(_relevant_docs.keys())
+    indices = [i for i, id_ in enumerate(queries["id"]) if id_ in ids_to_keep]
+    queries = queries.select(indices)
 
     return _relevant_docs, queries
 
@@ -146,20 +148,6 @@ class AbsTaskRetrieval(AbsTask):
     _previous_results_model_meta: dict[str, Any] | None = None
     skip_first_result: bool = False
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        empty_dataset = Dataset.from_dict({})
-        self.dataset = defaultdict(
-            lambda: defaultdict(
-                lambda: RetrievalSplitData(
-                    corpus=empty_dataset,
-                    queries=empty_dataset,
-                    relevant_docs={},
-                    top_ranked=None,
-                )
-            )
-        )
-
     def convert_v1_dataset_format_to_v2(
         self,
         num_proc: int | None,
@@ -168,18 +156,8 @@ class AbsTaskRetrieval(AbsTask):
         # check if dataset is `v1` version
         if not hasattr(self, "queries"):
             return
-        empty_dataset = Dataset.from_dict({})
 
-        self.dataset = defaultdict(
-            lambda: defaultdict(
-                lambda: RetrievalSplitData(
-                    corpus=empty_dataset,
-                    queries=empty_dataset,
-                    relevant_docs={},
-                    top_ranked=None,
-                )
-            )
-        )
+        self.dataset = {}
 
         def _process_split(
             ds_queries: dict | Dataset, ds_corpus: dict | Dataset
@@ -212,7 +190,11 @@ class AbsTaskRetrieval(AbsTask):
 
         if self.metadata.is_multilingual:
             for subset in self.queries:  # type: ignore[attr-defined]
+                if subset not in self.dataset:
+                    self.dataset[subset] = {}
                 for split in self.queries[subset]:  # type: ignore[attr-defined]
+                    if split not in self.dataset[subset]:
+                        self.dataset[subset][split] = {}  # type: ignore[typeddict-item]
                     queries = self.queries[subset][split]  # type: ignore[attr-defined]
                     corpus = self.corpus[subset][split]  # type: ignore[attr-defined]
 
@@ -237,9 +219,15 @@ class AbsTaskRetrieval(AbsTask):
                         self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                             subset
                         ][split]
+                    else:
+                        self.dataset[subset][split]["top_ranked"] = None
         else:
             subset = "default"
+            if subset not in self.dataset:
+                self.dataset[subset] = {}
             for split in self.queries:  # type: ignore[attr-defined]
+                if split not in self.dataset[subset]:
+                    self.dataset[subset][split] = {}  # type: ignore[typeddict-item]
                 queries = self.queries[split]  # type: ignore[attr-defined]
                 corpus = self.corpus[split]  # type: ignore[attr-defined]
                 (
@@ -263,6 +251,8 @@ class AbsTaskRetrieval(AbsTask):
                     self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                         split
                     ].copy()
+                else:
+                    self.dataset[subset][split]["top_ranked"] = None
 
         del self.queries  # type: ignore[attr-defined]
         del self.corpus  # type: ignore[attr-defined]
@@ -277,6 +267,7 @@ class AbsTaskRetrieval(AbsTask):
         if self.data_loaded:
             return
 
+        self.dataset = {}
         dataset_path = self.metadata.dataset["path"]
         eval_splits = self.eval_splits
         trust_remote_code = self.metadata.dataset.get("trust_remote_code", False)
@@ -287,6 +278,8 @@ class AbsTaskRetrieval(AbsTask):
             logger.debug(
                 f"Loading {split} split for {hf_subset} subset of {self.metadata.name}"
             )
+            if hf_subset not in self.dataset:
+                self.dataset[hf_subset] = {}
 
             self.dataset[hf_subset][split] = RetrievalDatasetLoader(
                 hf_repo=dataset_path,

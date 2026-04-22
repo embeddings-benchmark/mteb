@@ -190,6 +190,8 @@ def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
             "Overview of the TREC 2023 NeuCLIR Track",
             "MoD-Embedding: A Fine-tuned Multilingual Text Embedding Model",
             "Octen-Embedding-8B: A Fine-tuned Multilingual Text Embedding Model",
+            "Qwen2.5-Omni Technical Report",
+            "Qwen3-Omni Technical Report",
         ):
             continue
         use_titles = all_titles - {title}
@@ -223,3 +225,9 @@ def test_no_duplicate_citations_with_different_ids():
             for i, (item1, item2, id1, id2, title1, title2) in enumerate(duplicates, 1)
         )
     )
+
+
+def test_get_tasks_warning_with_beta_tasks():
+    """Test that get_tasks gives a warning when beta tasks are included"""
+    with pytest.warns(UserWarning, match="is currently in beta"):
+        get_tasks(exclude_beta=False)

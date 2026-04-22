@@ -198,6 +198,15 @@ MAEB_TASK_TYPE = (
     "Any2AnyRetrieval",
 )
 
+MVEB_TASK_TYPE = (
+    "VideoClassification",
+    "VideoClustering",
+    # "VideoPairClassification",  # TODO: uncomment when tasks exist
+    "VideoZeroshotClassification",
+    # "VideoCentricQA",  # TODO: uncomment when tasks exist
+    "Any2AnyRetrieval",
+)
+
 
 _TASK_TYPE = (
     (
@@ -216,6 +225,7 @@ _TASK_TYPE = (
     )
     + MIEB_TASK_TYPE
     + MAEB_TASK_TYPE
+    + MVEB_TASK_TYPE
 )
 
 TaskType = Literal[_TASK_TYPE]  # type: ignore[valid-type]
@@ -243,7 +253,21 @@ TaskCategory = Literal[
     "a2at",
     "t2at",
     "at2at",
+    "v2v",
+    "v2c",
     "v2t",
+    "t2v",
+    "vt2t",
+    "vt2v",
+    "v2vt",
+    "t2vt",
+    "vt2vt",
+    "va2c",
+    "va2t",
+    "t2va",
+    "vat2t",
+    "v2a",
+    "a2v",
 ]
 """The category of the task.
 
@@ -267,7 +291,21 @@ TaskCategory = Literal[
 18. a2at: audio to audio+text
 19. t2at: text to audio+text
 20. at2at: audio+text to audio+text
-21. v2t: video to text
+21. v2v: video to video
+22. v2c: video to category
+23. v2t: video to text
+24. t2v: text to video
+25. vt2t: video+text to text
+26. vt2v: video+text to video
+27. v2vt: video to video+text
+28. t2vt: text to video+text
+29. vt2vt: video+text to video+text
+30. va2c: video+audio to category
+31. va2t: video+audio to text
+32. t2va: text to video+audio
+33. vat2t: video+audio+text to text
+34. v2a: video to audio
+35. a2v: audio to video
 """
 
 _MODALITY_CODES: dict[str, str] = {
@@ -341,6 +379,11 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {  # type: ig
     "Compositionality": "pair-classification",
     "AudioPairClassification": "pair-classification",
     "PairClassification": "pair-classification",
+    "VideoClassification": "classification",
+    "VideoClustering": "clustering",
+    # "VideoPairClassification": "pair-classification",  # TODO: uncomment when tasks exist
+    "VideoZeroshotClassification": "classification",
+    # "VideoCentricQA": "retrieval",  # TODO: uncomment when tasks exist
 }
 
 
@@ -398,6 +441,9 @@ class TaskMetadata(BaseModel):
             where it may be harder to gather information about the source.
         superseded_by: Denotes the task that this task is superseded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
+        is_beta: Whether the dataset is in beta. This can be used to denote that the dataset is still being verified and may contain errors.
+            Users should be cautious when using beta datasets. We generally recommend against using beta datasets in published benchmarks, but they can be useful for internal testing and development. We
+            similarly discourage contributing beta datasets, unless there is a specific reason to do so.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -430,6 +476,7 @@ class TaskMetadata(BaseModel):
     is_public: bool = True
     contributed_by: str | None = None
     superseded_by: str | None = None
+    is_beta: bool = False
 
     def _validate_metadata(self) -> None:
         self._eval_langs_are_valid(self.eval_langs)
@@ -806,7 +853,6 @@ class TaskMetadata(BaseModel):
             "Political classification": [],
             "Question answering": [
                 "multiple-choice-qa",
-                "question-answering",
             ],
             "Sentiment/Hate speech": [
                 "sentiment-analysis",
