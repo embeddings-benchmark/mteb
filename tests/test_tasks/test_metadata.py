@@ -9,10 +9,51 @@ from mteb.get_tasks import get_tasks
 # Tasks should be removed from this list once their metadata is filled.
 _HISTORIC_DATASETS = []
 
+_EXISTING_VIDEO_TASKS = [
+    "BreakfastClassification",
+    "HMDB51Classification",
+    "Kinetics400VA",
+    "Kinetics400V",
+    "SomethingSomethingV2Classification",
+    "VGGSoundVA",
+    "VGGSoundV",
+    "AVEDatasetClustering",
+    "MusicAVQAClustering",
+    "RAVDESSAVClustering",
+    "WorldSense1MinDomainClustering",
+    "MSRVTTT2V",
+    "MSRVTTT2VA",
+    "MSRVTTVA2T",
+    "ActivityNetCaptionsT2VRetrieval",
+    "ActivityNetCaptionsV2TRetrieval",
+    "DiDeMoT2VARetrieval",
+    "DiDeMoT2VRetrieval",
+    "DiDeMoV2TRetrieval",
+    "DiDeMoVA2TRetrieval",
+    "MSVDT2VRetrieval",
+    "MSVDV2TRetrieval",
+    "Shot2Story20KT2VARetrieval",
+    "Shot2Story20KT2VRetrieval",
+    "Shot2Story20KV2TRetrieval",
+    "Shot2Story20KVA2TRetrieval",
+    "TUNABenchT2VRetrieval",
+    "TUNABenchV2TRetrieval",
+    "VATEXT2VARetrieval",
+    "VATEXT2VRetrieval",
+    "VATEXV2TRetrieval",
+    "VATEXVA2TRetrieval",
+    "YouCook2T2VARetrieval",
+    "YouCook2T2VRetrieval",
+    "YouCook2V2TRetrieval",
+    "YouCook2VA2TRetrieval",
+    "Kinetics400ZeroShot",
+]
+
 
 @pytest.mark.parametrize(
     "task",
     get_tasks(exclude_superseded=False, exclude_aggregate=False, exclude_beta=False),
+    ids=lambda x: x.metadata.name,
 )
 def test_all_metadata_is_filled_and_valid(task: AbsTask):
     # --- test metadata is filled and valid ---
@@ -51,7 +92,7 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         pytest.skip("Skipping audio tasks for now, see issue #3498")
 
     # TODO https://github.com/embeddings-benchmark/mteb/issues/4378
-    if "v" in task.metadata.category:
+    if task.metadata.name in _EXISTING_VIDEO_TASKS:
         assert task.metadata.descriptive_stats is None
         pytest.skip("Skipping video tasks for now, see issue #4378")
 
