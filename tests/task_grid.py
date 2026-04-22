@@ -9,6 +9,7 @@ from .mock_tasks import (
     MockAny2AnyRetrievalI2TTask,
     MockAny2AnyRetrievalT2ATask,
     MockAny2AnyRetrievalT2ITask,
+    MockAsymVideoAudioPairClassificationTask,
     MockAudioClassification,
     MockAudioClassificationCrossVal,
     MockAudioClusteringTask,
@@ -202,6 +203,7 @@ MOCK_MULTIMODAL_TASKS = (
     MockVideoAudioRetrievalT2VA(),
     MockVideoAudioTextRetrievalVAT2T(),
     MockVideoAudioZeroshotClassificationTask(),
+    MockAsymVideoAudioPairClassificationTask(),
 )
 
 ALL_TASK_TEST_GRID = (

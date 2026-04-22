@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
@@ -14,9 +13,10 @@ from sklearn.metrics.pairwise import (
 from mteb._create_dataloaders import _create_dataloader_from_texts, create_dataloader
 from mteb._evaluators.evaluator import Evaluator
 from mteb.similarity_functions import compute_pairwise_similarity
-from mteb.types._metadata import ModalitiesValues
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from datasets import Dataset
     from numpy.typing import NDArray
 
@@ -65,8 +65,8 @@ class PairClassificationEvaluator(Evaluator):
         self,
         dataset: Dataset,
         *,
-        input1_column_name: str | Sequence[str],
-        input2_column_name: str | Sequence[str],
+        input1_column_name: str | Sequence[tuple[str, str]],
+        input2_column_name: str | Sequence[tuple[str, str]],
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
@@ -91,21 +91,22 @@ class PairClassificationEvaluator(Evaluator):
         num_proc: int | None = None,
     ) -> PairClassificationDistances:
         logger.info("Running pair classification - Encoding samples (1/2)")
-        if isinstance(self.input1_column_name, Sequence):
-            ds1_col_names = {}
-            for col in self.input1_column_name:
-                for mod in ModalitiesValues:
-                    if col == mod + "1":
-                        ds1_col_names[col] = mod
+        if isinstance(self.input1_column_name, str):
+            cols1: str | list[str] = self.input1_column_name
+            ds1_col_names: dict[str, str] = {
+                self.input1_column_name: self.task_metadata.modalities[0]
+            }
         else:
-            ds1_col_names = {self.input1_column_name: self.input1_column_name}
+            cols1 = [col for col, _ in self.input1_column_name]
+            ds1_col_names = dict(self.input1_column_name)
+
         embeddings1 = model.encode(
             create_dataloader(
-                self.dataset.select_columns(self.input1_column_name).rename_columns(
-                    ds1_col_names
-                ),
+                self.dataset.select_columns(cols1).rename_columns(ds1_col_names),
                 task_metadata=self.task_metadata,
-                input_column=self.input1_column_name,
+                input_column=self.task_metadata.modalities[0]
+                if isinstance(self.input1_column_name, str)
+                else None,
                 num_proc=num_proc,
                 **encode_kwargs,
             ),
@@ -116,22 +117,22 @@ class PairClassificationEvaluator(Evaluator):
             **encode_kwargs,
         )
         logger.info("Running pair classification - Encoding samples (2/2)")
-        if isinstance(self.input2_column_name, Sequence):
-            ds2_col_names = {}
-            for col in self.input2_column_name:
-                for mod in ModalitiesValues:
-                    if col == mod + "2":
-                        ds2_col_names[col] = mod
+        if isinstance(self.input2_column_name, str):
+            cols2: str | list[str] = self.input2_column_name
+            ds2_col_names: dict[str, str] = {
+                self.input2_column_name: self.task_metadata.modalities[0]
+            }
         else:
-            ds2_col_names = {self.input2_column_name: self.input2_column_name}
+            cols2 = [col for col, _ in self.input2_column_name]
+            ds2_col_names = dict(self.input2_column_name)
 
         embeddings2 = model.encode(
             create_dataloader(
-                self.dataset.select_columns(self.input2_column_name).rename_columns(
-                    ds2_col_names
-                ),
+                self.dataset.select_columns(cols2).rename_columns(ds2_col_names),
                 task_metadata=self.task_metadata,
-                input_column=self.input2_column_name,
+                input_column=self.task_metadata.modalities[0]
+                if isinstance(self.input2_column_name, str)
+                else None,
                 num_proc=num_proc,
                 **encode_kwargs,
             ),

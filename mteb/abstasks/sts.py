@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 
     from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
     from mteb.models import MTEBModels
-    from mteb.types import EncodeKwargs, PromptType
+    from mteb.types import EncodeKwargs, Modalities, PromptType
     from mteb.types.statistics import (
         AudioStatistics,
         ImageStatistics,
@@ -126,7 +126,13 @@ class AbsTaskSTS(AbsTask):
     """
 
     abstask_prompt = "Retrieve semantically similar text."
-    column_names: tuple[str, str] | tuple[Sequence[str], Sequence[str]] = (
+    column_names: (
+        tuple[str, str]
+        | tuple[
+            Sequence[tuple[str, Modalities]],
+            Sequence[tuple[str, Modalities]],
+        ]
+    ) = (
         "sentence1",
         "sentence2",
     )
@@ -232,20 +238,6 @@ class AbsTaskSTS(AbsTask):
                 else self.dataset[split]
             )
         )
-        _available_cols: set[str] = set(_ref_split.column_names)
-
-        def _get_cols(modality: str) -> tuple[str, str]:
-            if isinstance(self.column_names[0], str) and isinstance(
-                self.column_names[1], str
-            ):
-                return self.column_names  # type: ignore[return-value]
-            c1, c2 = f"{modality}1", f"{modality}2"
-            if c1 in _available_cols and c2 in _available_cols:
-                return c1, c2
-            raise ValueError(
-                f"Can't find required column {c1}, {c2}. Available columns: {_available_cols}"
-            )
-
         if hf_subset:
             score = self.dataset[hf_subset][split]["score"]
             n = len(score)
@@ -272,12 +264,20 @@ class AbsTaskSTS(AbsTask):
             def _load_col(col: str) -> list:  # type: ignore[misc]
                 return self.dataset[split][col]
 
-        def _get_pair_data(modality: str) -> tuple[list, list]:
-            c1, c2 = _get_cols(modality)
-            return _load_col(c1), _load_col(c2)
+        if isinstance(self.column_names[0], str):
+            modality1 = self.metadata.get_modalities(self.input1_prompt_type)[0]
+            modality2 = self.metadata.get_modalities(self.input2_prompt_type)[0]
+            col_modalities1: list[tuple[str, str]] = [(self.column_names[0], modality1)]  # type: ignore[index]
+            col_modalities2: list[tuple[str, str]] = [(self.column_names[1], modality2)]  # type: ignore[index]
+        else:
+            col_modalities1 = list(self.column_names[0])  # type: ignore[arg-type]
+            col_modalities2 = list(self.column_names[1])  # type: ignore[arg-type]
 
         pair_stats = calculate_pair_modality_statistics(
-            self.metadata.modalities, _get_pair_data, n
+            col_modalities1,
+            col_modalities2,
+            _load_col,
+            n,
         )
         labels_statistics = calculate_score_statistics(score)
 
@@ -306,14 +306,13 @@ class AbsTaskSTS(AbsTask):
         repo_name: str,
         num_proc: int | None = None,
     ) -> None:
-        self._upload_dataset_to_hub(
-            repo_name,
-            [self.column_names[0], self.column_names[1], "score"]
-            if isinstance(self.column_names[0], str)
-            and isinstance(self.column_names[1], str)
-            else [*self.column_names[0], *self.column_names[1], "score"],
-            num_proc=num_proc,
-        )
+        if isinstance(self.column_names[0], str):
+            cols = [self.column_names[0], self.column_names[1]]
+        else:
+            cols = [col for col, _ in self.column_names[0]] + [
+                col for col, _ in self.column_names[1]
+            ]
+        self._upload_dataset_to_hub(repo_name, [*cols, "score"], num_proc=num_proc)
 
     def _normalize(self, x: float) -> float:
         return (x - self.min_score) / (self.max_score - self.min_score)

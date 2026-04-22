@@ -33,6 +33,7 @@ from mteb.abstasks.text.summarization import AbsTaskSummarization
 from mteb.abstasks.zeroshot_classification import (
     AbsTaskZeroShotClassification,
 )
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from PIL.Image import Image
@@ -5867,8 +5868,8 @@ class MockVideoAudioPairClassificationTask(AbsTaskPairClassification):
         **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["video", "audio"]
-    input1_column_name = ["video1", "audio1"]
-    input2_column_name = ["video2", "audio2"]
+    input1_column_name = [("video1", "video"), ("audio1", "audio")]
+    input2_column_name = [("video2", "video"), ("audio2", "audio")]
 
     label_column_name = "label"
 
@@ -5977,14 +5978,8 @@ class MockVideoAudioSTSTask(AbsTaskSTS):
     metadata.modalities = ["video", "audio"]
     metadata.category = "va2va"
     column_names = (
-        (
-            "video1",
-            "audio1",
-        ),
-        (
-            "video2",
-            "audio2",
-        ),
+        [("video1", "video"), ("audio1", "audio")],
+        [("video2", "video"), ("audio2", "audio")],
     )
 
     expected_stats = {
@@ -6594,4 +6589,91 @@ class MockVideoAudioTextRetrievalVAT2T(AbsTaskRetrieval):
             }
         }
 
+        self.data_loaded = True
+
+
+class MockAsymVideoAudioPairClassificationTask(AbsTaskPairClassification):
+    """Asymmetric pair classification: side-1 is video only, side-2 is audio only."""
+
+    metadata = TaskMetadata(
+        type="VideoPairClassification",
+        name="MockAsymVideoAudioPairClassificationTask",
+        main_score="max_ap",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video", "audio"]
+    metadata.category = "v2a"
+
+    input1_column_name = [("video1", "video")]
+    input2_column_name = [("audio2", "audio")]
+    input1_prompt_type = PromptType.query
+    input2_prompt_type = PromptType.document
+
+    label_column_name = "label"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "unique_pairs": 2,
+            "number_of_characters": None,
+            "text1_statistics": None,
+            "image1_statistics": None,
+            "audio1_statistics": None,
+            "video1_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+            },
+            "text2_statistics": None,
+            "image2_statistics": None,
+            "audio2_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video2_statistics": None,
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+        }
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video1": mock_videos,
+                        "audio2": mock_audio,
+                        "label": [0, 1],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video1", Video())
+        self.dataset = self.dataset.cast_column("audio2", Audio())
         self.data_loaded = True

@@ -30,7 +30,7 @@ if TYPE_CHECKING:
         PairClassificationDistances,
     )
     from mteb.models.models_protocols import MTEBModels
-    from mteb.types import EncodeKwargs, PromptType
+    from mteb.types import EncodeKwargs, Modalities, PromptType
     from mteb.types.statistics import (
         AudioStatistics,
         ImageStatistics,
@@ -93,8 +93,8 @@ class AbsTaskPairClassification(AbsTask):
     """
 
     abstask_prompt = "Retrieve text that are semantically similar to the given text."
-    input1_column_name: str | Sequence[str] = "sentence1"
-    input2_column_name: str | Sequence[str] = "sentence2"
+    input1_column_name: str | Sequence[tuple[str, Modalities]] = "sentence1"
+    input2_column_name: str | Sequence[tuple[str, Modalities]] = "sentence2"
     label_column_name: str = "labels"
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
@@ -213,27 +213,30 @@ class AbsTaskPairClassification(AbsTask):
             raw = dataset[col]
             return raw[0] if len(raw) == 1 else raw
 
-        _available_cols: set[str] = (
-            set(dataset.column_names)
-            if isinstance(dataset, Dataset)
-            else set(dataset.keys())
-        )
-
-        def _get_cols(modality: str) -> tuple[str, str]:
-            c1, c2 = f"{modality}1", f"{modality}2"
-            if c1 in _available_cols and c2 in _available_cols:
-                return c1, c2
-            return self.input1_column_name, self.input2_column_name  # type: ignore[return-value]
-
         labels = _get_col_data(self.label_column_name)
         n = len(labels)
 
-        def _get_pair_data(modality: str) -> tuple[list, list]:
-            c1, c2 = _get_cols(modality)
-            return _get_col_data(c1), _get_col_data(c2)
+        if isinstance(self.input1_column_name, str):
+            modality1 = self.metadata.get_modalities(self.input1_prompt_type)[0]
+            col_modalities1: list[tuple[str, str]] = [
+                (self.input1_column_name, modality1)
+            ]
+        else:
+            col_modalities1 = list(self.input1_column_name)  # type: ignore[arg-type]
+
+        if isinstance(self.input2_column_name, str):
+            modality2 = self.metadata.get_modalities(self.input2_prompt_type)[0]
+            col_modalities2: list[tuple[str, str]] = [
+                (self.input2_column_name, modality2)
+            ]
+        else:
+            col_modalities2 = list(self.input2_column_name)  # type: ignore[arg-type]
 
         pair_stats = calculate_pair_modality_statistics(
-            self.metadata.modalities, _get_pair_data, n
+            col_modalities1,
+            col_modalities2,
+            _get_col_data,
+            n,
         )
 
         number_of_characters = (
@@ -279,20 +282,17 @@ class AbsTaskPairClassification(AbsTask):
             for split in self.dataset:
                 if len(self.dataset[split]) == 1:
                     self.dataset[split] = self.dataset[split][0]
+        if isinstance(self.input1_column_name, str):
+            cols1 = [self.input1_column_name]
+        else:
+            cols1 = [col for col, _ in self.input1_column_name]
+        if isinstance(self.input2_column_name, str):
+            cols2 = [self.input2_column_name]
+        else:
+            cols2 = [col for col, _ in self.input2_column_name]
         self._upload_dataset_to_hub(
             repo_name,
-            [
-                self.input1_column_name,
-                self.input2_column_name,
-                self.label_column_name,
-            ]
-            if isinstance(self.input1_column_name, str)
-            and isinstance(self.input2_column_name, str)
-            else [
-                *self.input1_column_name,
-                *self.input2_column_name,
-                self.label_column_name,
-            ],
+            [*cols1, *cols2, self.label_column_name],
             num_proc=num_proc,
         )
 

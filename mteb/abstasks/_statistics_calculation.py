@@ -18,7 +18,7 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Mapping, Sequence
+    from collections.abc import Callable, Mapping
 
     from PIL import Image
     from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
@@ -392,84 +392,76 @@ def calculate_single_input_modality_statistics(
     )
 
 
+_STAT_FN: dict[str, Any] = {
+    "text": calculate_text_statistics,
+    "image": calculate_image_statistics,
+    "audio": calculate_audio_statistics,
+    "video": calculate_video_statistics,
+}
+
+
+def _compute_side_statistics(
+    col_modalities: list[tuple[str, str]],
+    load_col: Callable[[str], list],
+    n: int,
+) -> tuple[dict[str, Any], list[list[str]]]:
+    """Compute per-modality statistics and per-row hashes for one side of a pair.
+
+    Args:
+        col_modalities: List of ``(column_name, modality)`` pairs describing
+            which dataset column carries which modality for this side.
+        load_col: Callable that loads a column by name from the dataset.
+        n: Number of samples.
+
+    Returns a dict mapping ``{modality}_statistics`` keys to computed statistics
+    objects (``None`` for absent modalities), and a list of per-row hash lists
+    for use in unique-pair counting.
+    """
+    stats: dict[str, Any] = {
+        "text_statistics": None,
+        "image_statistics": None,
+        "audio_statistics": None,
+        "video_statistics": None,
+    }
+    all_hashes: list[list[str]] = [[] for _ in range(n)]
+    for col, modality in col_modalities:
+        data = load_col(col)
+        hashes = _HASH_FN[modality](data)
+        stats[f"{modality}_statistics"] = _STAT_FN[modality](data, hashes=hashes)
+        for i, h in enumerate(hashes):
+            all_hashes[i].append(h)
+    return stats, all_hashes
+
+
 def calculate_pair_modality_statistics(
-    modalities: Sequence[str],
-    get_pair_data: Callable[[str], tuple[list, list]],
+    col_modalities1: list[tuple[str, str]],
+    col_modalities2: list[tuple[str, str]],
+    load_col: Callable[[str], list],
     n: int,
 ) -> PairModalityStatistics:
     """Compute per-modality statistics for a paired dataset.
 
-    This is shared between STS and PairClassification tasks.  Both task types
-    have the same structure: for each sample there is a *first* item and a
-    *second* item, potentially spanning multiple modalities.
+    This is shared between STS and PairClassification tasks.
+
+    Args:
+        col_modalities1: ``[(column_name, modality), ...]`` for side 1.
+        col_modalities2: ``[(column_name, modality), ...]`` for side 2.
+        load_col: Callable that loads a column by name from the dataset split.
+        n: Number of samples.
     """
-    all_h1: list[list[str]] = [[] for _ in range(n)]
-    all_h2: list[list[str]] = [[] for _ in range(n)]
-
-    text1_statistics: TextStatistics | None = None
-    text2_statistics: TextStatistics | None = None
-    image1_statistics: ImageStatistics | None = None
-    image2_statistics: ImageStatistics | None = None
-    audio1_statistics: AudioStatistics | None = None
-    audio2_statistics: AudioStatistics | None = None
-    video1_statistics: VideoStatistics | None = None
-    video2_statistics: VideoStatistics | None = None
-
-    if "text" in modalities:
-        d1, d2 = get_pair_data("text")
-        h1 = compute_text_hashes(d1)
-        h2 = compute_text_hashes(d2)
-        text1_statistics = calculate_text_statistics(d1, hashes=h1)
-        text2_statistics = calculate_text_statistics(d2, hashes=h2)
-        for i, h in enumerate(h1):
-            all_h1[i].append(h)
-        for i, h in enumerate(h2):
-            all_h2[i].append(h)
-
-    if "image" in modalities:
-        d1, d2 = get_pair_data("image")
-        h1 = compute_image_hashes(d1)
-        h2 = compute_image_hashes(d2)
-        image1_statistics = calculate_image_statistics(d1, hashes=h1)
-        image2_statistics = calculate_image_statistics(d2, hashes=h2)
-        for i, h in enumerate(h1):
-            all_h1[i].append(h)
-        for i, h in enumerate(h2):
-            all_h2[i].append(h)
-
-    if "audio" in modalities:
-        d1, d2 = get_pair_data("audio")
-        h1 = compute_audio_hashes(d1)
-        h2 = compute_audio_hashes(d2)
-        audio1_statistics = calculate_audio_statistics(d1, hashes=h1)
-        audio2_statistics = calculate_audio_statistics(d2, hashes=h2)
-        for i, h in enumerate(h1):
-            all_h1[i].append(h)
-        for i, h in enumerate(h2):
-            all_h2[i].append(h)
-
-    if "video" in modalities:
-        d1, d2 = get_pair_data("video")
-        h1 = compute_video_hashes(d1)
-        h2 = compute_video_hashes(d2)
-        video1_statistics = calculate_video_statistics(d1, hashes=h1)
-        video2_statistics = calculate_video_statistics(d2, hashes=h2)
-        for i, h in enumerate(h1):
-            all_h1[i].append(h)
-        for i, h in enumerate(h2):
-            all_h2[i].append(h)
-
+    s1, all_h1 = _compute_side_statistics(col_modalities1, load_col, n)
+    s2, all_h2 = _compute_side_statistics(col_modalities2, load_col, n)
     unique_pairs = len({(tuple(r1), tuple(r2)) for r1, r2 in zip(all_h1, all_h2)})
 
     return PairModalityStatistics(
-        text1_statistics=text1_statistics,
-        text2_statistics=text2_statistics,
-        image1_statistics=image1_statistics,
-        image2_statistics=image2_statistics,
-        audio1_statistics=audio1_statistics,
-        audio2_statistics=audio2_statistics,
-        video1_statistics=video1_statistics,
-        video2_statistics=video2_statistics,
+        text1_statistics=s1["text_statistics"],
+        text2_statistics=s2["text_statistics"],
+        image1_statistics=s1["image_statistics"],
+        image2_statistics=s2["image_statistics"],
+        audio1_statistics=s1["audio_statistics"],
+        audio2_statistics=s2["audio_statistics"],
+        video1_statistics=s1["video_statistics"],
+        video2_statistics=s2["video_statistics"],
         unique_pairs=unique_pairs,
     )
 
