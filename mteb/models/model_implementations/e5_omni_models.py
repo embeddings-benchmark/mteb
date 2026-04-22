@@ -91,7 +91,7 @@ e5_omni_3b = ModelMeta(
     modalities=["text", "image", "audio", "video"],
     model_type=["dense"],
     citation=_E5_OMNI_CITATION,
-    extra_requirements_groups=["multimodal_sbert"],
+    extra_requirements_groups=["multimodal-sbert"],
 )
 
 e5_omni_7b = ModelMeta(
@@ -130,5 +130,5 @@ e5_omni_7b = ModelMeta(
     modalities=["text", "image", "audio", "video"],
     model_type=["dense"],
     citation=_E5_OMNI_CITATION,
-    extra_requirements_groups=["multimodal_sbert"],
+    extra_requirements_groups=["multimodal-sbert"],
 )
