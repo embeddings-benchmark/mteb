@@ -15,7 +15,6 @@ if TYPE_CHECKING:
 
     from mteb import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
-    from mteb.types._encoder_io import AudioInput, ImageInput, TextInput, VideoInput
 
 
 class EBindWrapper(AbsEncoder):
@@ -63,91 +62,70 @@ class EBindWrapper(AbsEncoder):
         self._image_transform = self.processor.processors["image"].transform
         self._image_size = self.processor.processors["image"].model_image_size
 
-    @torch.inference_mode()
-    def get_text_embeddings(
-        self,
-        inputs: DataLoader[TextInput],
-        show_progress_bar: bool = True,
-        **kwargs: Any,
-    ) -> torch.Tensor:
-        all_embeddings: list[torch.Tensor] = []
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding text"):
-            processed = self.processor({"text": batch["text"]}, return_tensors="pt")
-            outputs = self.model.forward(**processed)
-            all_embeddings.append(outputs["text"].cpu())
-        return torch.cat(all_embeddings, dim=0)
-
-    @torch.inference_mode()
-    def get_image_embeddings(
-        self,
-        inputs: DataLoader[ImageInput],
-        show_progress_bar: bool = True,
-        **kwargs: Any,
-    ) -> torch.Tensor:
-        all_embeddings: list[torch.Tensor] = []
-        for batch in tqdm(
-            inputs, disable=not show_progress_bar, desc="Encoding images"
-        ):
-            img_tensors = torch.stack(
-                [self._image_transform(img) for img in batch["image"]]
-            ).to(self.device)
-            outputs = self.model.forward(image=img_tensors)
-            all_embeddings.append(outputs["image"].cpu())
-        return torch.cat(all_embeddings, dim=0)
-
-    @torch.inference_mode()
-    def get_audio_embeddings(
-        self,
-        inputs: DataLoader[AudioInput],
-        show_progress_bar: bool = True,
-        **kwargs: Any,
-    ) -> torch.Tensor:
+    def _process_audio_batch(self, audio_items: list) -> torch.Tensor:
+        """Process a batch of audio items via temp WAV files (IBAudioProcessor requires paths)."""
         import soundfile as sf
 
-        all_embeddings: list[torch.Tensor] = []
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding audio"):
-            # IBAudioProcessor only accepts file paths — write to temp wav.
-            audio_tensors = []
-            for item in batch["audio"]:
-                with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as tmp:
-                    sf.write(tmp.name, item["array"], item["sampling_rate"])
-                    audio_tensors.append(self.processor.processors["audio"](tmp.name))
-            stacked = torch.stack(audio_tensors).to(self.device)
-            outputs = self.model.forward(audio=stacked)
-            all_embeddings.append(outputs["audio"].cpu())
-        return torch.cat(all_embeddings, dim=0)
+        audio_tensors = []
+        for item in audio_items:
+            with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as tmp:
+                sf.write(tmp.name, item["array"], item["sampling_rate"])
+                audio_tensors.append(self.processor.processors["audio"](tmp.name))
+        return torch.stack(audio_tensors).to(self.device)
 
-    @torch.inference_mode()
-    def get_video_embeddings(
-        self,
-        inputs: DataLoader[VideoInput],
-        show_progress_bar: bool = True,
-        **kwargs: Any,
-    ) -> torch.Tensor:
+    def _process_video_batch(self, video_items: list) -> torch.Tensor:
+        """Resize and normalise raw frame tensors for the PE vision encoder."""
         from torchvision.transforms.functional import (
             InterpolationMode,
             normalize,
             resize,
         )
 
-        all_embeddings: list[torch.Tensor] = []
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding video"):
-            video_tensors = []
-            for raw_frames in batch["video"]:
-                processed = resize(
-                    raw_frames,
-                    [self._image_size, self._image_size],
-                    interpolation=InterpolationMode.BICUBIC,
-                )
-                processed = processed.float() / 255.0
-                processed = normalize(
-                    processed, mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]
-                )
-                video_tensors.append(processed)
-            stacked = torch.stack(video_tensors).to(self.device)
-            outputs = self.model.forward(video=stacked)
-            all_embeddings.append(outputs["video"].cpu())
-        return torch.cat(all_embeddings, dim=0)
+        video_tensors = []
+        for raw_frames in video_items:
+            processed = resize(
+                raw_frames,
+                [self._image_size, self._image_size],
+                interpolation=InterpolationMode.BICUBIC,
+            )
+            processed = processed.float() / 255.0
+            processed = normalize(processed, mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+            video_tensors.append(processed)
+        return torch.stack(video_tensors).to(self.device)
+
+    @torch.inference_mode()
+    def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
+        """Encode all modalities in a batch, fusing by addition when mixed."""
+        embeddings = None
+
+        if batch.get("text"):
+            processed = self.processor({"text": batch["text"]}, return_tensors="pt")
+            text_emb = self.model.forward(**processed)["text"]
+            embeddings = text_emb
+
+        if batch.get("image"):
+            img_tensors = torch.stack(
+                [self._image_transform(img) for img in batch["image"]]
+            ).to(self.device)
+            image_emb = self.model.forward(image=img_tensors)["image"]
+            embeddings = image_emb if embeddings is None else embeddings + image_emb
+
+        if batch.get("video"):
+            video_tensors = self._process_video_batch(batch["video"])
+            video_emb = self.model.forward(video=video_tensors)["video"]
+            embeddings = video_emb if embeddings is None else embeddings + video_emb
+
+        if batch.get("audio"):
+            audio_tensors = self._process_audio_batch(batch["audio"])
+            audio_emb = self.model.forward(audio=audio_tensors)["audio"]
+            embeddings = audio_emb if embeddings is None else embeddings + audio_emb
+
+        if embeddings is None:
+            raise ValueError(
+                f"No supported modality found in batch: {list(batch.keys())}"
+            )
+
+        return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
 
     def encode(
         self,
@@ -160,8 +138,6 @@ class EBindWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         features = inputs.dataset.features
-        has_text = "text" in features
-        has_image = "image" in features
         has_video = "video" in features
         has_audio = "audio" in features
 
@@ -177,44 +153,12 @@ class EBindWrapper(AbsEncoder):
                 target_sampling_rate=16_000,
             )
 
-        # Single-modality fast paths
-        if has_text and not has_image and not has_video and not has_audio:
-            return self.get_text_embeddings(inputs, **kwargs)
+        all_embeddings: list[torch.Tensor] = []
+        for batch in tqdm(inputs, desc="Encoding"):
+            emb = self._encode_batch(batch)
+            all_embeddings.append(emb.cpu())
 
-        if has_image and not has_text and not has_video and not has_audio:
-            return self.get_image_embeddings(inputs, **kwargs)
-
-        if has_video and not has_text and not has_image and not has_audio:
-            return self.get_video_embeddings(inputs, **kwargs)
-
-        if has_audio and not has_text and not has_image and not has_video:
-            return self.get_audio_embeddings(inputs, **kwargs)
-
-        # Mixed modality: encode each modality separately, fuse by addition
-        embeddings = None
-
-        if has_text:
-            text_emb = self.get_text_embeddings(inputs, **kwargs)
-            embeddings = text_emb
-
-        if has_image:
-            image_emb = self.get_image_embeddings(inputs, **kwargs)
-            embeddings = image_emb if embeddings is None else embeddings + image_emb
-
-        if has_video:
-            video_emb = self.get_video_embeddings(inputs, **kwargs)
-            embeddings = video_emb if embeddings is None else embeddings + video_emb
-
-        if has_audio:
-            audio_emb = self.get_audio_embeddings(inputs, **kwargs)
-            embeddings = audio_emb if embeddings is None else embeddings + audio_emb
-
-        if embeddings is not None:
-            return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
-
-        raise ValueError(
-            f"No supported modality found in dataset features: {list(features.keys())}"
-        )
+        return torch.cat(all_embeddings, dim=0).float()
 
 
 _EBIND_CITATION = r"""
