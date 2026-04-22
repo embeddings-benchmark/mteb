@@ -70,9 +70,7 @@ class LCOEmbedding(AbsEncoder):
         return "\nSummarize the above text in one word:"
 
     @staticmethod
-    def _build_messages(
-        batch: BatchedInput, suffix: str
-    ) -> list[list[dict[str, Any]]]:
+    def _build_messages(batch: BatchedInput, suffix: str) -> list[list[dict[str, Any]]]:
         """Build chat messages for each item in the batch."""
         texts = batch.get("text", [])
         images = batch.get("image", [])
