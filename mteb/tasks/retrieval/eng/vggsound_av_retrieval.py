@@ -128,7 +128,7 @@ class VGGSoundAVVA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VGGSoundAVVA2TRetrieval",
         description=(
-            "Retrieve the audio caption that describes a given video+audio clip "
+            "Retrieve the visual caption that describes a given video+audio clip "
             "from the VGGSound-AV dataset, a large-scale audio-visual dataset "
             "sourced from YouTube."
         ),
@@ -154,7 +154,7 @@ class VGGSoundAVVA2TRetrieval(AbsTaskRetrieval):
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         _load_vggsound_av(
-            self, query_columns=["video", "audio"], corpus_columns=["audio_caption"]
+            self, query_columns=["video", "audio"], corpus_columns=["video_caption"]
         )
 
 
@@ -162,7 +162,7 @@ class VGGSoundAVT2VARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VGGSoundAVT2VARetrieval",
         description=(
-            "Retrieve the video+audio clip that matches a given audio caption "
+            "Retrieve the video+audio clip that matches a given visual caption "
             "from the VGGSound-AV dataset, a large-scale audio-visual dataset "
             "sourced from YouTube."
         ),
@@ -188,5 +188,5 @@ class VGGSoundAVT2VARetrieval(AbsTaskRetrieval):
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         _load_vggsound_av(
-            self, query_columns=["audio_caption"], corpus_columns=["video", "audio"]
+            self, query_columns=["video_caption"], corpus_columns=["video", "audio"]
         )
