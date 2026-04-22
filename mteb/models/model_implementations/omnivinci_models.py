@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 from tqdm.auto import tqdm
+from transformers import AutoModel, AutoProcessor
 
 from mteb._create_dataloaders import VideoCollator
 from mteb._requires_package import (
@@ -30,9 +31,9 @@ class OmniVinciWrapper(AbsEncoder):
     with a Qwen2 backbone, SiGLIP vision encoder, and Qwen2AudioEncoder.
     Supports text, image, audio, and video modalities.
 
-    Since the VILA processor expects file paths for video and audio inputs,
-    decoded frames and audio arrays from MTEB are written to temporary files
-    before being passed to the processor. Images (PIL) are passed directly.
+    VILA's processor consumes file paths for video/audio, so MTEB's decoded
+    frame tensors and audio arrays are written to temporary MP4/WAV files
+    before being passed through. Images (PIL) are passed directly.
 
     Uses last-token pooling over the final hidden states for embeddings.
     """
@@ -45,14 +46,11 @@ class OmniVinciWrapper(AbsEncoder):
         revision: str,
         device: str | None = None,
         num_frames: int = 32,
+        max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ) -> None:
         requires_image_dependencies()
         requires_audio_dependencies()
-
-        from transformers import AutoModel, AutoProcessor
-        from transformers.modeling_utils import PreTrainedModel
-        from transformers.utils.import_utils import is_flash_attn_2_available
 
         self.device = device or (
             "cuda"
@@ -62,37 +60,15 @@ class OmniVinciWrapper(AbsEncoder):
             else "cpu"
         )
         self.num_frames = num_frames
-
-        attn_implementation = (
-            "flash_attention_2" if is_flash_attn_2_available() else "sdpa"
-        )
-        # VILA's remote code hardcodes flash_attention_2 in several
-        # sub-model from_pretrained calls (siglip_encoder, qwen_audio_encoder).
-        # When flash-attn is not installed, temporarily intercept
-        # from_pretrained to replace flash_attention_2 with our fallback.
-        if attn_implementation != "flash_attention_2":
-            _orig_from_pretrained = PreTrainedModel.from_pretrained.__func__
-
-            @classmethod  # type: ignore[misc]
-            def _patched_from_pretrained(cls, *args, **kw):
-                if kw.get("attn_implementation") == "flash_attention_2":
-                    kw["attn_implementation"] = attn_implementation
-                return _orig_from_pretrained(cls, *args, **kw)
-
-            PreTrainedModel.from_pretrained = _patched_from_pretrained
+        self.max_audio_samples = int(max_audio_length_seconds * self.AUDIO_SAMPLING_RATE)
 
         self.model = AutoModel.from_pretrained(
             model_name,
             revision=revision,
             torch_dtype=torch.bfloat16,
             trust_remote_code=True,
-            attn_implementation=attn_implementation,
             **kwargs,
         )
-
-        # Restore original from_pretrained
-        if attn_implementation != "flash_attention_2":
-            PreTrainedModel.from_pretrained = _orig_from_pretrained
         self.model.eval()
         self.model.to(self.device)
 
@@ -100,90 +76,26 @@ class OmniVinciWrapper(AbsEncoder):
             model_name, revision=revision, trust_remote_code=True
         )
 
-        # Configure video/audio processing
         self.model.config.num_video_frames = num_frames
         self.processor.config.num_video_frames = num_frames
         # Audio arrives as a separate column in MTEB, not embedded in video
         self.model.config.load_audio_in_video = False
         self.processor.config.load_audio_in_video = False
 
-        # MTEB's VideoCollator already decodes and samples frames.  Patch
-        # VILA's _load_video so that when our wrapper passes in-memory
-        # frames via the IN_MEMORY_VIDEO sentinel, it bypasses cv2 and
-        # returns them directly — avoiding a lossy MP4 round-trip.
-        self._video_registry: dict[str, list[Any]] = {}
-        self._patch_load_video()
+    @staticmethod
+    def _save_frames_as_video(frames: torch.Tensor) -> str:
+        """Write a ``(T, C, H, W)`` uint8 tensor to a temporary MP4 file."""
+        import torchvision
 
-    # ------------------------------------------------------------------
-    # In-memory video bridge (avoids lossy MP4 round-trip)
-    # ------------------------------------------------------------------
-
-    def _patch_load_video(self) -> None:
-        """Patch VILA's ``_load_video`` to consume our in-memory frame lists.
-
-        VILA's media pipeline expects a file path and re-decodes it via cv2.
-        MTEB has already decoded and sampled frames for us, so we register
-        the resulting PIL list under a marker file and intercept the load.
-        """
-        import sys
-
-        cached = next(
-            (
-                m
-                for name, m in sys.modules.items()
-                if name.endswith(".media") and "omnivinci" in name
-            ),
-            None,
-        )
-        if cached is None or not hasattr(cached, "_load_video"):
-            return
-
-        registry = self._video_registry
-        original = cached._load_video
-
-        def _patched(video_path, *args, **kwargs):
-            if isinstance(video_path, str) and video_path in registry:
-                frames = registry[video_path]
-                # MTEB has already decoded + sampled frames.  We don't know
-                # the source FPS, so use evenly-spaced 1s timestamps; the
-                # media encoder only needs a monotonic sequence for
-                # temporal position embedding.
-                video_info = {
-                    "video_path": video_path,
-                    "has_audio": False,
-                    "video_duration": float(len(frames)),
-                    "audio_info": None,
-                    "video_frame_times": [float(i) for i in range(len(frames))],
-                }
-                return frames, None, video_info
-            return original(video_path, *args, **kwargs)
-
-        cached._load_video = _patched
-
-    def _frames_to_pil(self, frames: torch.Tensor) -> list[Any]:
-        """Convert a ``(T, C, H, W)`` uint8 tensor to a list of PIL images."""
-        import PIL.Image
-
-        return [
-            PIL.Image.fromarray(
-                frame.permute(1, 2, 0).cpu().numpy().astype("uint8")
-            )
-            for frame in frames
-        ]
+        fd, path = tempfile.mkstemp(suffix=".mp4")
+        os.close(fd)
+        # torchvision.io.write_video expects (T, H, W, C) uint8
+        torchvision.io.write_video(path, frames.permute(0, 2, 3, 1).contiguous(), fps=24)
+        return path
 
     @staticmethod
     def _save_audio_as_wav(audio_data: Any, fallback_sr: int) -> str:
-        """Write an audio array to a temporary WAV file.
-
-        Args:
-            audio_data: Either a raw numpy/torch array or an
-                :class:`~mteb.types._encoder_io.AudioInputItem` dict
-                with ``array`` and ``sampling_rate`` keys.
-            fallback_sr: Sampling rate to use when *audio_data* is a raw array.
-
-        Returns:
-            Path to the temporary WAV file (caller must unlink).
-        """
+        """Write an audio array or ``AudioInputItem`` dict to a temporary WAV."""
         import numpy as np
         import soundfile as sf
 
@@ -205,10 +117,6 @@ class OmniVinciWrapper(AbsEncoder):
         sf.write(path, array, sr)
         return path
 
-    # ------------------------------------------------------------------
-    # Core encoding
-    # ------------------------------------------------------------------
-
     def _encode_single(
         self,
         text: str = "",
@@ -218,20 +126,13 @@ class OmniVinciWrapper(AbsEncoder):
     ) -> torch.Tensor:
         """Encode one multimodal sample and return its L2-normalised embedding."""
         temp_files: list[str] = []
-        video_key: str | None = None
         try:
             content: list[dict[str, Any]] = []
 
             if video is not None:
-                # Create an empty marker file so VILA's processor path
-                # validation (osp.exists) passes; register PIL frames under
-                # the same path so the patched _load_video returns them
-                # without re-decoding.
-                fd, video_key = tempfile.mkstemp(suffix=".mp4")
-                os.close(fd)
-                temp_files.append(video_key)
-                self._video_registry[video_key] = self._frames_to_pil(video)
-                content.append({"type": "video", "video": video_key})
+                video_path = self._save_frames_as_video(video)
+                temp_files.append(video_path)
+                content.append({"type": "video", "video": video_path})
 
             if audio is not None:
                 audio_path = self._save_audio_as_wav(audio, self.AUDIO_SAMPLING_RATE)
@@ -239,7 +140,6 @@ class OmniVinciWrapper(AbsEncoder):
                 content.append({"type": "audio", "audio": audio_path})
 
             if image is not None:
-                # VILA processor accepts PIL Images directly
                 content.append({"type": "image", "image": image})
 
             content.append({"type": "text", "text": text})
@@ -248,22 +148,18 @@ class OmniVinciWrapper(AbsEncoder):
             text_prompt = self.processor.apply_chat_template(
                 conversation, tokenize=False, add_generation_prompt=False
             )
-
             inputs = self.processor([text_prompt])
-            input_ids = inputs.input_ids.to(self.device)
 
             outputs = self.model(
-                input_ids=input_ids,
+                input_ids=inputs.input_ids.to(self.device),
                 media=getattr(inputs, "media", None),
                 media_config=getattr(inputs, "media_config", None),
                 output_hidden_states=True,
                 return_dict=True,
             )
 
-            # Last-token pooling
-            hidden_states = outputs.hidden_states[-1]
-            embedding = hidden_states[:, -1]
-            return torch.nn.functional.normalize(embedding, p=2, dim=-1)
+            embeddings = outputs.hidden_states[-1][:, -1]
+            return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
 
         finally:
             for f in temp_files:
@@ -271,10 +167,8 @@ class OmniVinciWrapper(AbsEncoder):
                     pathlib.Path(f).unlink()
                 except OSError:
                     pass
-            if video_key is not None:
-                self._video_registry.pop(video_key, None)
 
-    @torch.no_grad()
+    @torch.inference_mode()
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -291,7 +185,8 @@ class OmniVinciWrapper(AbsEncoder):
         if has_video or has_audio:
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=self.AUDIO_SAMPLING_RATE,
-                max_frames=self.num_frames,
+                num_frames=self.num_frames,
+                max_samples=self.max_audio_samples,
             )
 
         all_embeddings: list[torch.Tensor] = []
@@ -309,20 +204,16 @@ class OmniVinciWrapper(AbsEncoder):
             )
 
             for i in range(batch_size):
-                text = batch_texts[i] if i < len(batch_texts) else ""
-                image = batch_images[i] if i < len(batch_images) else None
-                audio = batch_audio[i] if i < len(batch_audio) else None
-                video = batch_video[i] if i < len(batch_video) else None
-
-                emb = self._encode_single(text, image, audio, video)
+                emb = self._encode_single(
+                    text=batch_texts[i] if i < len(batch_texts) else "",
+                    image=batch_images[i] if i < len(batch_images) else None,
+                    audio=batch_audio[i] if i < len(batch_audio) else None,
+                    video=batch_video[i] if i < len(batch_video) else None,
+                )
                 all_embeddings.append(emb.cpu())
 
         return torch.cat(all_embeddings, dim=0).float()
 
-
-# ---------------------------------------------------------------------------
-# Model metadata
-# ---------------------------------------------------------------------------
 
 _OMNIVINCI_CITATION = r"""
 @article{ye2025omnivinci,
@@ -358,4 +249,5 @@ omnivinci = ModelMeta(
     modalities=["text", "image", "audio", "video"],
     model_type=["dense"],
     citation=_OMNIVINCI_CITATION,
+    extra_requirements_groups=["omnivinci"],
 )
