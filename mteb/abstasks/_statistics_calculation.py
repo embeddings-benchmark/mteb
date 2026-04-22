@@ -472,3 +472,47 @@ def calculate_pair_modality_statistics(
         video2_statistics=video2_statistics,
         unique_pairs=unique_pairs,
     )
+
+
+_HASH_FN: dict[str, Any] = {
+    "text": compute_text_hashes,
+    "image": compute_image_hashes,
+    "audio": compute_audio_hashes,
+    "video": compute_video_hashes,
+}
+
+
+def _compute_modality_hashes(
+    col_inputs: dict[Modalities, list[Any]],
+) -> dict[str, list[str]]:
+    """Compute per-sample hashes for each modality using the shared hash functions.
+
+    Reuses the same hashing logic as the ``calculate_*_statistics`` functions so that
+    callers can pass the result to both statistics functions and intersection checks
+    without decoding the data twice.
+    """
+    return {mod: _HASH_FN[mod](values) for mod, values in col_inputs.items()}
+
+
+def _count_samples_in_train(
+    test_hashes: dict[str, list[str]],
+    train_hashes: dict[str, list[str]] | None,
+) -> int | None:
+    """Count unique test samples (by row-tuple hash) that also appear in the train split.
+
+    Args:
+        test_hashes: Per-modality hash lists for the test split (from :func:`_compute_modality_hashes`).
+        train_hashes: Per-modality hash lists for the train split, or ``None`` when
+            the evaluated split *is* the train split.
+
+    Returns:
+        Number of unique test row-tuples present in train, or ``None``.
+    """
+    if train_hashes is None:
+        return None
+    mods = sorted(test_hashes.keys())
+    n_test = len(test_hashes[mods[0]])
+    n_train = len(train_hashes[mods[0]])
+    test_keys = {tuple(test_hashes[m][i] for m in mods) for i in range(n_test)}
+    train_keys = {tuple(train_hashes[m][i] for m in mods) for i in range(n_train)}
+    return len(test_keys & train_keys)
