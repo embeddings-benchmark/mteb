@@ -56,9 +56,10 @@ class AudioCapsAVV2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AudioCapsAVV2TRetrieval",
         description=(
-            "Retrieve the English caption that describes a given video clip (video "
-            "only) from AudioCaps-AV, an audio-visual extension of the AudioCaps "
-            "dataset sourced from YouTube."
+            "Retrieve the human-written audio caption that describes the sounds in a "
+            "given video clip (video only) from AudioCaps-AV. Captions describe audio "
+            "scenes and events rather than visual content, making this a cross-modal "
+            "task where visual cues must be mapped to audio descriptions."
         ),
         reference="https://audiocaps.github.io/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -76,7 +77,7 @@ class AudioCapsAVV2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=_BIBTEX,
-        prompt={"query": "Find the caption that describes the following video."},
+        prompt={"query": "Find the caption that describes the sounds in the following video."},
         is_beta=True,
     )
 
@@ -88,9 +89,10 @@ class AudioCapsAVT2VRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AudioCapsAVT2VRetrieval",
         description=(
-            "Retrieve the video clip (video only) that matches a given English "
-            "caption from AudioCaps-AV, an audio-visual extension of the AudioCaps "
-            "dataset sourced from YouTube."
+            "Retrieve the video clip (video only) that matches a given audio scene "
+            "description from AudioCaps-AV. Captions describe audio events rather "
+            "than visual content, making this a cross-modal task where audio "
+            "descriptions must be mapped to video."
         ),
         reference="https://audiocaps.github.io/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -108,7 +110,7 @@ class AudioCapsAVT2VRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=_BIBTEX,
-        prompt={"query": "Find the video clip that matches the given caption."},
+        prompt={"query": "Find the video clip that matches the given audio description."},
         is_beta=True,
     )
 
@@ -120,9 +122,10 @@ class AudioCapsAVVA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AudioCapsAVVA2TRetrieval",
         description=(
-            "Retrieve the English caption that describes a given video+audio clip "
-            "from AudioCaps-AV, an audio-visual extension of the AudioCaps dataset "
-            "sourced from YouTube."
+            "Retrieve the human-written audio caption that describes the sounds in a "
+            "given video+audio clip from AudioCaps-AV. Captions describe audio scenes "
+            "and events; the audio stream in the query directly encodes the sounds "
+            "the caption was written to describe."
         ),
         reference="https://audiocaps.github.io/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -141,7 +144,7 @@ class AudioCapsAVVA2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={
-            "query": "Find the caption that describes what is seen and heard in the following video."
+            "query": "Find the caption that describes what is heard in the following video and audio."
         },
         is_beta=True,
     )
@@ -156,9 +159,9 @@ class AudioCapsAVT2VARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AudioCapsAVT2VARetrieval",
         description=(
-            "Retrieve the video+audio clip that matches a given English caption "
-            "from AudioCaps-AV, an audio-visual extension of the AudioCaps dataset "
-            "sourced from YouTube."
+            "Retrieve the video+audio clip that matches a given audio scene "
+            "description from AudioCaps-AV. Captions describe audio events; the "
+            "audio stream in the retrieved clip directly encodes the sounds described."
         ),
         reference="https://audiocaps.github.io/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -177,7 +180,7 @@ class AudioCapsAVT2VARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={
-            "query": "Find the video and audio clip that matches the given caption."
+            "query": "Find the video and audio clip that matches the given audio description."
         },
         is_beta=True,
     )
