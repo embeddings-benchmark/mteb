@@ -1,5 +1,11 @@
 from importlib.metadata import version
 
+import torch
+
+# Set GPU deterministic mode for reproducibility
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+
 from mteb import types
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
