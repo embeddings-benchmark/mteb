@@ -26,6 +26,9 @@ def _load_vggsound_av(
 ) -> None:
     """Shared loader for all VGGSound-AV retrieval directions.
 
+    The 'av_caption' column is video_caption followed by audio_caption, matching
+    the natural order of describing a scene: what is seen, then what is heard.
+
     TODO: Reupload dataset in standard format and remove this custom load_data.
     """
     if task.data_loaded:
@@ -37,17 +40,22 @@ def _load_vggsound_av(
         split=task.metadata.eval_splits[0],
     )
     dataset = dataset.add_column("id", [str(i) for i in range(len(dataset))])
+    if "av_caption" in query_columns or "av_caption" in corpus_columns:
+        dataset = dataset.map(
+            lambda ex: {"av_caption": ex["video_caption"] + " " + ex["audio_caption"]}
+        )
 
     query = dataset.select_columns(["id"] + query_columns)
     corpus = dataset.select_columns(["id"] + corpus_columns)
+
     if "video_caption" in query_columns:
         query = query.rename_column("video_caption", "text")
     if "video_caption" in corpus_columns:
         corpus = corpus.rename_column("video_caption", "text")
-    if "audio_caption" in query_columns:
-        query = query.rename_column("audio_caption", "text")
-    if "audio_caption" in corpus_columns:
-        corpus = corpus.rename_column("audio_caption", "text")
+    if "av_caption" in query_columns:
+        query = query.rename_column("av_caption", "text")
+    if "av_caption" in corpus_columns:
+        corpus = corpus.rename_column("av_caption", "text")
 
     qrels = {str(i): {str(i): 1} for i in range(len(dataset))}
     task.dataset["default"]["test"] = RetrievalSplitData(
@@ -60,8 +68,8 @@ class VGGSoundAVV2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VGGSoundAVV2TRetrieval",
         description=(
-            "Retrieve the visual caption that describes a given video clip (video "
-            "only) from the VGGSound-AV dataset, a large-scale audio-visual dataset "
+            "Retrieve the caption that describes the visual content of a given video "
+            "clip from the VGGSound-AV dataset, a large-scale audio-visual dataset "
             "sourced from YouTube."
         ),
         reference="https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
@@ -94,9 +102,9 @@ class VGGSoundAVT2VRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VGGSoundAVT2VRetrieval",
         description=(
-            "Retrieve the video clip (video only) that matches a given visual caption "
-            "from the VGGSound-AV dataset, a large-scale audio-visual dataset "
-            "sourced from YouTube."
+            "Retrieve the video clip that matches a given caption describing its "
+            "visual content, from the VGGSound-AV dataset, a large-scale "
+            "audio-visual dataset sourced from YouTube."
         ),
         reference="https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -128,9 +136,9 @@ class VGGSoundAVVA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VGGSoundAVVA2TRetrieval",
         description=(
-            "Retrieve the visual caption that describes a given video+audio clip "
-            "from the VGGSound-AV dataset, a large-scale audio-visual dataset "
-            "sourced from YouTube."
+            "Retrieve the caption covering both what is seen and what is heard in a "
+            "given video+audio clip from the VGGSound-AV dataset, a large-scale "
+            "audio-visual dataset sourced from YouTube."
         ),
         reference="https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -148,13 +156,15 @@ class VGGSoundAVVA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=_BIBTEX,
-        prompt={"query": "Find the caption that describes the following video."},
+        prompt={
+            "query": "Find the caption that describes what is seen and heard in the following video."
+        },
         is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         _load_vggsound_av(
-            self, query_columns=["video", "audio"], corpus_columns=["video_caption"]
+            self, query_columns=["video", "audio"], corpus_columns=["av_caption"]
         )
 
 
@@ -162,9 +172,9 @@ class VGGSoundAVT2VARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VGGSoundAVT2VARetrieval",
         description=(
-            "Retrieve the video+audio clip that matches a given visual caption "
-            "from the VGGSound-AV dataset, a large-scale audio-visual dataset "
-            "sourced from YouTube."
+            "Retrieve the video+audio clip that matches a given caption covering "
+            "both what is seen and what is heard, from the VGGSound-AV dataset, a "
+            "large-scale audio-visual dataset sourced from YouTube."
         ),
         reference="https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -182,11 +192,13 @@ class VGGSoundAVT2VARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=_BIBTEX,
-        prompt={"query": "Find the video clip that matches the given caption."},
+        prompt={
+            "query": "Find the video clip that matches the given description of what is seen and heard."
+        },
         is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         _load_vggsound_av(
-            self, query_columns=["video_caption"], corpus_columns=["video", "audio"]
+            self, query_columns=["av_caption"], corpus_columns=["video", "audio"]
         )
