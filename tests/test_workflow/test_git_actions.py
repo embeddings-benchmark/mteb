@@ -21,18 +21,38 @@ def git_repo(tmp_path: Path) -> Path:
     repo_path.mkdir()
 
     subprocess.run(["git", "init"], cwd=repo_path, check=True, capture_output=True)
-    subprocess.run(
-        ["git", "config", "user.email", "test@test.com"],
-        cwd=repo_path,
-        check=True,
-        capture_output=True,
-    )
-    subprocess.run(
-        ["git", "config", "user.name", "Test User"],
-        cwd=repo_path,
-        check=True,
-        capture_output=True,
-    )
+
+    if (
+        subprocess.run(
+            ["git", "config", "user.email"],
+            check=False,
+            cwd=repo_path,
+            capture_output=True,
+        ).returncode
+        != 0
+    ):
+        subprocess.run(
+            ["git", "config", "user.email", "test@test.com"],
+            cwd=repo_path,
+            check=True,
+            capture_output=True,
+        )
+
+    if (
+        subprocess.run(
+            ["git", "config", "user.name"],
+            check=False,
+            cwd=repo_path,
+            capture_output=True,
+        ).returncode
+        != 0
+    ):
+        subprocess.run(
+            ["git", "config", "user.name", "Test User"],
+            cwd=repo_path,
+            check=True,
+            capture_output=True,
+        )
 
     # Create initial commit
     (repo_path / "file.txt").write_text("content")
