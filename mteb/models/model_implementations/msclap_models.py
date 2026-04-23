@@ -61,7 +61,7 @@ class MSClapWrapper(AbsEncoder):
     ) -> np.ndarray:
         import soundfile as sf
 
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []
         for batch in tqdm(

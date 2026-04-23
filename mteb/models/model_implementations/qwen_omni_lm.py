@@ -125,7 +125,9 @@ class QwenOmniWrapper(AbsEncoder):
                     batch_audio.append(None)
                 else:
                     array = AudioCollator.resample_audio(
-                        {"audio": audio_row}, self.sampling_rate, self.max_samples
+                        {"audio": audio_row},
+                        target_sampling_rate=self.sampling_rate,
+                        max_samples=self.max_samples,
                     )
                     batch_audio.append(array)
 

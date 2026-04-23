@@ -127,7 +127,7 @@ class MCTCTWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []
 

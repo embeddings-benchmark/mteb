@@ -21,6 +21,7 @@ class AudioCollator:
 
     def __init__(
         self,
+        *,
         target_sampling_rate: int,
         max_samples: int | None = None,
     ) -> None:
@@ -44,6 +45,7 @@ class AudioCollator:
     @staticmethod
     def resample_audios(
         inputs: list[dict[str, Any]],
+        *,
         target_sampling_rate: int,
         max_samples: int | None = None,
     ) -> BatchedInput:
@@ -58,8 +60,8 @@ class AudioCollator:
         for row in inputs:
             audio_array = AudioCollator.resample_audio(
                 row,
-                target_sampling_rate,
-                max_samples,
+                target_sampling_rate=target_sampling_rate,
+                max_samples=max_samples,
             )
             row["audio"] = AudioInputItem(
                 array=audio_array, sampling_rate=target_sampling_rate
@@ -76,6 +78,7 @@ class AudioCollator:
     @staticmethod
     def resample_audio(
         audio: dict[str, Any],
+        *,
         target_sampling_rate: int,
         max_samples: int | None = None,
     ) -> np.typing.NDArray[np.floating]:
@@ -132,6 +135,7 @@ class FramesCollator:
 
     def __init__(
         self,
+        *,
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = None,
@@ -180,6 +184,7 @@ class FramesCollator:
     @staticmethod
     def resample_video(
         video: VideoDecoder,
+        *,
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = None,
@@ -227,6 +232,7 @@ class VideoCollator:
 
     def __init__(
         self,
+        *,
         target_sampling_rate: int,
         fps: float | None = None,
         max_frames: int | None = None,
@@ -262,7 +268,9 @@ class VideoCollator:
                 )
             if "audio" in row:
                 audio_array = AudioCollator.resample_audio(
-                    row, self.target_sampling_rate, self.max_samples
+                    row,
+                    target_sampling_rate=self.target_sampling_rate,
+                    max_samples=self.max_samples,
                 )
                 row["audio"] = AudioInputItem(
                     array=audio_array, sampling_rate=self.target_sampling_rate

@@ -68,7 +68,7 @@ class Qwen2AudioWrapper(AbsEncoder):
                 if audio_row is not None:
                     array = AudioCollator.resample_audio(
                         {"audio": audio_row},
-                        self.sampling_rate,
+                        target_sampling_rate=self.sampling_rate,
                     )
                     cur_text += "<|audio_bos|><|AUDIO|><|audio_eos|>"
                     audio_arrays.append(array)
