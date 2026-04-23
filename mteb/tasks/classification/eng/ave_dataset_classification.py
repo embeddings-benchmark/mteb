@@ -21,18 +21,18 @@ class AVEDatasetClassification(AbsTaskClassification):
         date=("2018-01-01", "2018-09-01"),  # some time before conference
         domains=["Web", "AudioScene"],
         task_subtypes=["Environment Sound Classification"],
-        license=None,
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["video", "audio"],
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{tian2018audio,
-  title={Audio-visual event localization in unconstrained videos},
-  author={Tian, Yapeng and Shi, Jing and Li, Bochen and Duan, Zhiyao and Xu, Chenliang},
-  booktitle={Proceedings of the European conference on computer vision (ECCV)},
-  pages={247--263},
-  year={2018}
+  author = {Tian, Yapeng and Shi, Jing and Li, Bochen and Duan, Zhiyao and Xu, Chenliang},
+  booktitle = {Proceedings of the European conference on computer vision (ECCV)},
+  pages = {247--263},
+  title = {Audio-visual event localization in unconstrained videos},
+  year = {2018},
 }
 """,
     )
