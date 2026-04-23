@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import tempfile
 from typing import TYPE_CHECKING, Any
 
@@ -9,6 +10,8 @@ from tqdm.auto import tqdm
 from mteb._create_dataloaders import AudioCollator, VideoCollator
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -73,7 +76,7 @@ class EBindWrapper(AbsEncoder):
                 audio_tensors.append(self.processor.processors["audio"](tmp.name))
         return torch.stack(audio_tensors).to(self.device)
 
-    def _process_video_batch(self, video_items: list) -> torch.Tensor:
+    def _process_video(self, raw_frames: torch.Tensor) -> torch.Tensor:
         """Resize and normalise raw frame tensors for the PE vision encoder."""
         from torchvision.transforms.functional import (
             InterpolationMode,
@@ -81,17 +84,13 @@ class EBindWrapper(AbsEncoder):
             resize,
         )
 
-        video_tensors = []
-        for raw_frames in video_items:
-            processed = resize(
-                raw_frames,
-                [self._image_size, self._image_size],
-                interpolation=InterpolationMode.BICUBIC,
-            )
-            processed = processed.float() / 255.0
-            processed = normalize(processed, mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
-            video_tensors.append(processed)
-        return torch.stack(video_tensors).to(self.device)
+        processed = resize(
+            raw_frames,
+            [self._image_size, self._image_size],
+            interpolation=InterpolationMode.BICUBIC,
+        )
+        processed = processed.float() / 255.0
+        return normalize(processed, mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
 
     @torch.inference_mode()
     def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
@@ -111,8 +110,25 @@ class EBindWrapper(AbsEncoder):
             embeddings = image_emb if embeddings is None else embeddings + image_emb
 
         if batch.get("video"):
-            video_tensors = self._process_video_batch(batch["video"])
-            video_emb = self.model.forward(video=video_tensors)["video"]
+            processed = [self._process_video(v) for v in batch["video"]]
+            # Fixed frame count: stack into one batched forward pass
+            # Variable frame count (FPS mode): encode each video individually
+            if len({v.shape[0] for v in processed}) == 1:
+                stacked = torch.stack(processed).to(self.device)
+                video_emb = self.model.forward(video=stacked)["video"]
+            else:
+                logger.warning(
+                    "Variable frame counts in batch — falling back to per-video encoding. "
+                    "Use fixed num_frames (default 8) instead of fps for batched processing."
+                )
+                video_emb = torch.cat(
+                    [
+                        self.model.forward(video=v.unsqueeze(0).to(self.device))[
+                            "video"
+                        ]
+                        for v in processed
+                    ]
+                )
             embeddings = video_emb if embeddings is None else embeddings + video_emb
 
         if batch.get("audio"):
