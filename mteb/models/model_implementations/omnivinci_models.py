@@ -112,6 +112,14 @@ class OmniVinciWrapper(AbsEncoder):
         return path
 
     @staticmethod
+    def _save_image_as_file(image: Any) -> str:
+        """Write a PIL Image to a temporary PNG file (omnivinci processor expects paths)."""
+        fd, path = tempfile.mkstemp(suffix=".png")
+        os.close(fd)
+        image.save(path)
+        return path
+
+    @staticmethod
     def _save_audio_as_wav(audio_data: Any, fallback_sr: int) -> str:
         """Write an audio array or ``AudioInputItem`` dict to a temporary WAV."""
         import numpy as np
@@ -161,7 +169,9 @@ class OmniVinciWrapper(AbsEncoder):
                 content.append({"type": "audio", "audio": path})
 
             if i < len(images) and images[i] is not None:
-                content.append({"type": "image", "image": images[i]})
+                path = self._save_image_as_file(images[i])
+                temp_files.append(path)
+                content.append({"type": "image", "image": path})
 
             content.append({"type": "text", "text": texts[i] if i < len(texts) else ""})
             conversations.append([{"role": "user", "content": content}])
