@@ -35,9 +35,9 @@ class EBindWrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
-        fps: float | None = 2.0,
+        fps: float | None = None,
         max_frames: int | None = None,
-        num_frames: int | None = None,
+        num_frames: int | None = 8,
         **kwargs: Any,
     ) -> None:
         from ebind import EBindModel, EBindProcessor
