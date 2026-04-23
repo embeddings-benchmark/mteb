@@ -401,6 +401,43 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             format=format,
         )
 
+    def get_aggregated_scores(self) -> dict[str, dict[str, float | None]]:
+        """Get aggregated scores for each model.
+
+        When a benchmark is associated with these results, uses
+        :meth:`Benchmark.get_score` to compute scores.  Otherwise computes
+        the equivalent statistics directly from all task results.
+
+        Returns:
+            A dict mapping each model name to a dict with the keys:
+
+            - ``"Mean(Task)"``: mean score across all (benchmark) tasks.
+            - ``"Mean(TaskType)"``: mean of per-task-type means.
+
+        Examples:
+            >>> bench_results.get_aggregated_scores()
+            {
+                "model1": {"Mean(Task)": 0.5, "Mean(TaskType)": 0.52},
+                "model2": {"Mean(Task)": 0.45, "Mean(TaskType)": 0.48},
+            }
+        """
+        if self.benchmark is not None:
+            return self.benchmark.get_score(self)
+
+        from mteb.benchmarks._benchmark_metrics import (
+            _compute_mean_task,
+            _compute_mean_task_type,
+        )
+
+        bench_results = self.join_revisions()
+        return {
+            model_result.model_name: {
+                "Mean(Task)": _compute_mean_task(model_result.task_results),
+                "Mean(TaskType)": _compute_mean_task_type(model_result.task_results),
+            }
+            for model_result in bench_results
+        }
+
     def get_benchmark_result(self) -> pd.DataFrame:
         """Get aggregated scores for each model in the benchmark.
 
