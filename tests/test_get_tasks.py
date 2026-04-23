@@ -34,6 +34,53 @@ def test_get_task(
         assert task.eval_splits == task.metadata.eval_splits
 
 
+@pytest.mark.parametrize(
+    (
+        "task_name",
+        "task_type",
+        "category",
+        "expected_input_column_name",
+        "expected_modalities",
+    ),
+    [
+        (
+            "HumanAnimalCartoonVA",
+            "VideoClassification",
+            "va2c",
+            ("video", "audio"),
+            ["video", "audio"],
+        ),
+        ("HumanAnimalCartoonV", "VideoClassification", "v2c", "video", ["video"]),
+        (
+            "HumanAnimalCartoonZeroShot",
+            "VideoZeroshotClassification",
+            "v2t",
+            "video",
+            ["video", "text"],
+        ),
+    ],
+)
+def test_get_hac_tasks(
+    task_name: str,
+    task_type: str,
+    category: str,
+    expected_input_column_name: str | tuple[str, str],
+    expected_modalities: list[str],
+):
+    task = get_task(task_name)
+
+    assert isinstance(task, AbsTask)
+    assert task.metadata.name == task_name
+    assert task.metadata.type == task_type
+    assert task.metadata.category == category
+    assert task.input_column_name == expected_input_column_name
+    assert task.metadata.modalities == expected_modalities
+    assert task.metadata.eval_splits == ["test"]
+    if task_name != "HumanAnimalCartoonZeroShot":
+        assert task.train_split == "test"
+        assert task.is_cross_validation is True
+
+
 def test_get_tasks_filtering():
     """Tests that get_tasks filters tasks for languages within the task, i.e. that a multilingual task returns only relevant subtasks for the
     specified languages
