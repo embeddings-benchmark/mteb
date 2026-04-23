@@ -78,18 +78,18 @@ class OmniVinciWrapper(AbsEncoder):
             max_audio_length_seconds * self.AUDIO_SAMPLING_RATE
         )
 
+        # VILA's vision tower and mm_projector are loaded as fp16 internally
+        # and cannot be uniformly cast to bf16 (some submodules retain fp16
+        # weights). Load LLM as fp16 to match for consistent multimodal forward.
         self.model = AutoModel.from_pretrained(
             model_name,
             revision=revision,
-            torch_dtype=torch.bfloat16,
+            torch_dtype=torch.float16,
             trust_remote_code=True,
             **kwargs,
         )
         self.model.eval()
         self.model.to(self.device)
-        # The VILA vision tower (SiGLIP) is loaded as fp16 by default which
-        # conflicts with the bf16 LLM. Force everything to bf16.
-        self.model.to(dtype=torch.bfloat16)
 
         self.processor = AutoProcessor.from_pretrained(
             model_name, revision=revision, trust_remote_code=True
@@ -119,6 +119,9 @@ class OmniVinciWrapper(AbsEncoder):
         """Write a PIL Image to a temporary PNG file (omnivinci processor expects paths)."""
         fd, path = tempfile.mkstemp(suffix=".png")
         os.close(fd)
+        # PNG only supports RGB/RGBA; convert CMYK/L/etc. before saving.
+        if image.mode not in ("RGB", "RGBA", "L", "LA", "P"):
+            image = image.convert("RGB")
         image.save(path)
         return path
 
