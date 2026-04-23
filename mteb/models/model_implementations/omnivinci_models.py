@@ -87,6 +87,9 @@ class OmniVinciWrapper(AbsEncoder):
         )
         self.model.eval()
         self.model.to(self.device)
+        # The VILA vision tower (SiGLIP) is loaded as fp16 by default which
+        # conflicts with the bf16 LLM. Force everything to bf16.
+        self.model.to(dtype=torch.bfloat16)
 
         self.processor = AutoProcessor.from_pretrained(
             model_name, revision=revision, trust_remote_code=True
