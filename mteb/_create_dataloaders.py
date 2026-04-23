@@ -272,11 +272,20 @@ def _prepare_dataset(
                     num_proc=num_proc,
                 )
             else:
-                dataset = dataset.map(
-                    _combine_queries_with_instruction_text,
-                    desc="Processing queries for dataloading",
-                    num_proc=num_proc,
-                )
+                # Avoid map() to prevent Arrow 2^31 offset overflow when the
+                # query dataset contains large binary columns (e.g. video in
+                # vt2t tasks). Only touch the string text/instruction columns.
+                texts = dataset["text"]
+                dataset = dataset.add_column("query", texts)
+                if "instruction" in dataset.column_names:
+                    instructions = dataset["instruction"]
+                    new_texts = [
+                        t + " " + instr if instr is not None else t
+                        for t, instr in zip(texts, instructions)
+                    ]
+                    dataset = dataset.remove_columns(["text"]).add_column(
+                        "text", new_texts
+                    )
 
     if "image" in modalities:
         dataset = _prepare_image_dataset(
