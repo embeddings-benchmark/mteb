@@ -16,10 +16,10 @@ class ElasticKBRetrieval(AbsTaskRetrieval):
             "(grounding doc that lead to self-served ticket for real-world queries "
             "and generating doc for synthetic queries)."
         ),
-        reference="https://huggingface.co/datasets/EmiliaElastic/elastic-kb-retrieval",
+        reference="",
         dataset={
-            "path": "EmiliaElastic/elastic-kb-retrieval",
-            "revision": "3f60c92a79e3b09aa48688aa2b8437037a5720e8",
+            "path": "",
+            "revision": "",
         },
         type="Retrieval",
         category="t2t",
@@ -27,9 +27,9 @@ class ElasticKBRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs={"en": ["eng-Latn"]},
         main_score="ndcg_at_10",
-        date=["2024-01-01", "2025-04-01"],
+        date=["2015-01-01", "2026-04-01"],
         domains=["Written", "Engineering"],
-        task_subtypes=["Question answering"],
+        task_subtypes=["Question answering", "Conversational retrieval"],
         license="cc-by-4.0",
         annotations_creators="LM-generated",
         dialect=[],
