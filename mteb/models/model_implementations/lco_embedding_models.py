@@ -51,7 +51,60 @@ class LCOEmbedding(AbsEncoder):
         # Pre-calculate max samples once
         self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
-    def encode(  # noqa: PLR0914
+    @staticmethod
+    def _prompt_suffix(batch: BatchedInput) -> str:
+        """Return the prompt suffix based on the primary modality in the batch."""
+        for modality in ("audio", "video", "image"):
+            if batch.get(modality):
+                return f"\nSummarize the above {modality} in one word:"
+        return "\nSummarize the above text in one word:"
+
+    def _build_messages(self, batch: BatchedInput) -> list[list[dict]]:
+        """Build chat messages for each item in the batch."""
+        audio_list = batch.get("audio", [])
+        text_list = batch.get("text", [])
+        video_list = batch.get("video", [])
+        image_list = batch.get("image", [])
+        batch_size = max(
+            len(audio_list), len(text_list), len(video_list), len(image_list)
+        )
+        suffix = self._prompt_suffix(batch)
+
+        messages_batch = []
+        for i in range(batch_size):
+            content: list[dict] = []
+
+            # Audio
+            audio_row = audio_list[i] if i < len(audio_list) else None
+            if audio_row is not None:
+                array = AudioCollator.resample_audio(
+                    {"audio": audio_row},
+                    target_sampling_rate=self.sampling_rate,
+                    max_samples=self.max_samples,
+                )
+                content.append({"type": "audio", "audio": array})
+
+            # Video
+            video_row = video_list[i] if i < len(video_list) else None
+            if video_row is not None:
+                content.append({"type": "video", "video": video_row})
+
+            # Image
+            image_row = image_list[i] if i < len(image_list) else None
+            if image_row is not None:
+                content.append({"type": "image", "image": image_row})
+
+            # Text
+            text_row = text_list[i] if i < len(text_list) else None
+            if text_row is not None:
+                content.append({"type": "text", "text": text_row})
+
+            content.append({"type": "text", "text": suffix})
+            messages_batch.append([{"role": "user", "content": content}])
+
+        return messages_batch
+
+    def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,
@@ -62,54 +115,31 @@ class LCOEmbedding(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        """Encode batches of text, audio, image, or video inputs.
+
+        Follows the batch encoding examples from
+        https://huggingface.co/LCO-Embedding/LCO-Embedding-Omni-7B
+        """
         from qwen_omni_utils import process_mm_info
 
         all_embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):
-            messages_batch = []
-            audio_list = batch.get("audio", [])
-            text_list = batch.get("text", [])
-            batch_size = max(len(audio_list), len(text_list))
-
-            for i in range(batch_size):
-                content = []
-
-                audio_row = audio_list[i] if i < len(audio_list) else None
-
-                if audio_row is not None:
-                    array = AudioCollator.resample_audio(
-                        {"audio": audio_row},
-                        target_sampling_rate=self.sampling_rate,
-                        max_samples=self.max_samples,
-                    )
-                    content.append({"type": "audio", "audio": array})
-
-                text_row = text_list[i] if i < len(text_list) else None
-                if text_row is not None:
-                    content.append({"type": "text", "text": text_row})
-
-                # Append the training prompt
-                prompt_suffix = (
-                    "\nSummarize the above audio in one word:"
-                    if audio_row
-                    else "\nSummarize the above text in one word:"
-                )
-                content.append({"type": "text", "text": prompt_suffix})
-
-                messages_batch.append([{"role": "user", "content": content}])
+            messages_batch = self._build_messages(batch)
 
             text_prompts = self.processor.apply_chat_template(
                 messages_batch, tokenize=False, add_generation_prompt=True
             )
 
-            audio_inputs, _, _ = process_mm_info(
+            audio_inputs, image_inputs, video_inputs = process_mm_info(
                 messages_batch, use_audio_in_video=False
             )
 
             processor_inputs = self.processor(
                 text=text_prompts,
                 audio=audio_inputs,
+                images=image_inputs,
+                videos=video_inputs,
                 padding=True,
                 return_tensors="pt",
             ).to(self.device)
@@ -118,10 +148,11 @@ class LCOEmbedding(AbsEncoder):
                 outputs = self.model(
                     **processor_inputs, output_hidden_states=True, return_dict=True
                 )
-
                 embeddings = outputs.hidden_states[-1][:, -1, :]
-
                 all_embeddings.append(embeddings.cpu().to(torch.float32))
+
+            del processor_inputs, outputs
+            torch.cuda.empty_cache()
 
         return torch.cat(all_embeddings, dim=0).numpy()
 
@@ -148,7 +179,7 @@ lco_3b = ModelMeta(
     training_datasets=set(
         # SeaDoc (not in MTEB)
     ),
-    modalities=["audio", "text"],
+    modalities=["audio", "image", "text", "video"],
     citation="""
 @misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
   title={Scaling Language-Centric Omnimodal Representation Learning},
@@ -184,7 +215,7 @@ lco_7b = ModelMeta(
     training_datasets=set(
         # SeaDoc (not in MTEB)
     ),
-    modalities=["audio", "text"],
+    modalities=["audio", "image", "text", "video"],
     citation="""
 @misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
   title={Scaling Language-Centric Omnimodal Representation Learning},
