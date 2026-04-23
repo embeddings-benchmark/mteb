@@ -149,23 +149,19 @@ class QwenOmniWrapper(AbsEncoder):
                     for a in audios
                 ]
 
-            model_inputs = (
-                self.processor(
-                    text=texts,
-                    audio=audios or None,
-                    images=images or None,
-                    videos=videos or None,
-                    padding=True,
-                    return_tensors="pt",
-                    videos_kwargs={
-                        "do_sample_frames": False,
-                        "use_audio_in_video": False,
-                    },
-                    audio_kwargs={"max_length": self.max_samples},
-                )
-                .to(self.device)
-                .to(self.model.dtype)
-            )
+            model_inputs = self.processor(
+                text=texts,
+                audio=audios or None,
+                images=images or None,
+                videos=videos or None,
+                padding=True,
+                return_tensors="pt",
+                videos_kwargs={
+                    "do_sample_frames": False,
+                    "use_audio_in_video": False,
+                },
+                audio_kwargs={"max_length": self.max_samples},
+            ).to(self.device)
 
             outputs = self.model(
                 **model_inputs, output_hidden_states=True, return_dict=True
