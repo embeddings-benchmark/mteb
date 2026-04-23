@@ -57,7 +57,10 @@ if TYPE_CHECKING:
     from huggingface_hub import (
         ModelCardData,
     )
-    from sentence_transformers import SentenceTransformerModelCardData
+    from sentence_transformers import (
+        CrossEncoderModelCardData,
+        SentenceTransformerModelCardData,
+    )
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
@@ -1523,7 +1526,9 @@ def _serialize_experiment_kwargs_to_name(
 
 
 def _get_source_model(
-    card_data: ModelCardData | SentenceTransformerModelCardData,
+    card_data: ModelCardData
+    | SentenceTransformerModelCardData
+    | CrossEncoderModelCardData,
 ) -> str | None:
     source_model = None
     if isinstance(card_data.base_model, str):
