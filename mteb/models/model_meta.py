@@ -424,7 +424,12 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         available_extras = set(
             distribution("mteb").metadata.get_all("Provides-Extra") or []
         )
-        unknown = set(groups) - available_extras
+
+        def _norm(s: str) -> str:
+            return s.replace("_", "-").lower()
+
+        normalized_available = {_norm(e) for e in available_extras}
+        unknown = {g for g in groups if _norm(g) not in normalized_available}
         if unknown:
             raise ValueError(
                 f"Unknown extras group(s) for mteb: {sorted(unknown)}. "
