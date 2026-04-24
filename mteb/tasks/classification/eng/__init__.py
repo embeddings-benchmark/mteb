@@ -197,6 +197,10 @@ from .legal_bench_classification import (
     UnfairTOSLegalBenchClassification,
 )
 from .mnist_classification import MNISTClassification
+from .music_avqa_classification import (
+    MusicAVQACLSClassification,
+    MusicAVQACLSVideoClassification,
+)
 from .news_classification import NewsClassification, NewsClassificationV2
 from .oxford_flowers_classification import OxfordFlowersClassification
 from .oxford_pets_classification import OxfordPetsClassification
@@ -431,6 +435,8 @@ __all__ = [
     "MAUDLegalBenchClassification",
     "MAUDLegalBenchClassificationV2",
     "MNISTClassification",
+    "MusicAVQACLSClassification",
+    "MusicAVQACLSVideoClassification",
     "NYSJudicialEthicsLegalBenchClassification",
     "NewsClassification",
     "NewsClassificationV2",
