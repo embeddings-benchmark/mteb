@@ -6,9 +6,9 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import AudioCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -78,7 +78,9 @@ class LCOEmbedding(AbsEncoder):
             audio_row = audio_list[i] if i < len(audio_list) else None
             if audio_row is not None:
                 array = AudioCollator.resample_audio(
-                    {"audio": audio_row}, self.sampling_rate, self.max_samples
+                    {"audio": audio_row},
+                    target_sampling_rate=self.sampling_rate,
+                    max_samples=self.max_samples,
                 )
                 content.append({"type": "audio", "audio": array})
 

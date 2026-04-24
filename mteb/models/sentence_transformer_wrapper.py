@@ -300,7 +300,7 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
         has_video = "video" in inputs.dataset.features  # type: ignore[attr-defined]
         has_audio = "audio" in inputs.dataset.features  # type: ignore[attr-defined]
         if has_video:
-            from mteb._create_dataloaders import VideoCollator
+            from mteb.models.modality_collators import VideoCollator
 
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=self.target_sampling_rate or 16000,
@@ -310,7 +310,7 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
                 max_samples=self.max_samples,
             )
         elif has_audio:
-            from mteb._create_dataloaders import AudioCollator
+            from mteb.models.modality_collators import AudioCollator
 
             inputs.collate_fn = AudioCollator(
                 target_sampling_rate=self.target_sampling_rate or 16000,
