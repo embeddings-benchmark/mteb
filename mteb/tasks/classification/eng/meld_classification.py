@@ -41,6 +41,9 @@ class MELDClassification(AbsTaskClassification):
     is_cross_validation: bool = True
     train_split: str = "test"
 
+    def dataset_transform(self, num_proc=None, **kwargs) -> None:
+        self.dataset["test"] = self.dataset["test"].select(range(2048))
+
 
 class MELDVideoClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -78,3 +81,6 @@ class MELDVideoClassification(AbsTaskClassification):
     label_column_name: str = "emotion"
     is_cross_validation: bool = True
     train_split: str = "test"
+
+    def dataset_transform(self, num_proc=None, **kwargs) -> None:
+        self.dataset["test"] = self.dataset["test"].select(range(2048))
