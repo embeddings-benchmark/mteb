@@ -33,7 +33,7 @@ class RavdessZeroshotClassification(AbsTaskZeroShotClassification):
   number = {5},
   pages = {1-35},
   publisher = {Public Library of Science},
-  title = {The Ryerson Audio-Visual Database of Emotional Speech and Song (RAVDESS): A dynamic, multimodal set of facial and vocal expressions in North American English},
+  title = {The Ryerson Audio-Visual Database ofal Speech and Song (RAVDESS): A dynamic, multimodal set of facial and vocal expressions in North American English},
   url = {https://doi.org/10.1371/journal.pone.0196391},
   volume = {13},
   year = {2018},
