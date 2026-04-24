@@ -200,6 +200,7 @@ from .legal_bench_classification import (
     UCCVCommonLawLegalBenchClassification,
     UnfairTOSLegalBenchClassification,
 )
+from .meld_classification import MELDClassification, MELDVideoClassification
 from .mnist_classification import MNISTClassification
 from .news_classification import NewsClassification, NewsClassificationV2
 from .oxford_flowers_classification import OxfordFlowersClassification
@@ -362,6 +363,7 @@ __all__ = [
     "ContractNLINoLicensingLegalBenchClassification",
     "ContractNLINoticeOnCompelledDisclosureLegalBenchClassification",
     "ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification",
+    "ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification",
     "ContractNLIPermissibleCopyLegalBenchClassification",
     "ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification",
     "ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification",
@@ -435,6 +437,9 @@ __all__ = [
     "LibriCount",
     "MAUDLegalBenchClassification",
     "MAUDLegalBenchClassificationV2",
+    "MELDClassification",
+    "MELDClassification",
+    "MELDVideoClassification",
     "MNISTClassification",
     "NYSJudicialEthicsLegalBenchClassification",
     "NewsClassification",
