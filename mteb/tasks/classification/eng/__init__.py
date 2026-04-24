@@ -438,7 +438,6 @@ __all__ = [
     "MAUDLegalBenchClassification",
     "MAUDLegalBenchClassificationV2",
     "MELDClassification",
-    "MELDClassification",
     "MELDVideoClassification",
     "MNISTClassification",
     "NYSJudicialEthicsLegalBenchClassification",
