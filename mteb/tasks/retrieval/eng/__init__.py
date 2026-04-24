@@ -176,7 +176,7 @@ from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval
 from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
 from .msmarc_ov2_retrieval import MSMARCOv2
 from .msmarco_retrieval import MSMARCO, MSMARCOHardNegatives
-from .msr_vtt import MSRVTTT2V, MSRVTTT2VA, MSRVTTV2T, MSRVTTVA2T
+from .msr_vtt import MSRVTTA2V, MSRVTTT2V, MSRVTTT2VA, MSRVTTV2A, MSRVTTV2T, MSRVTTVA2T
 from .msvd_t2v_retrieval import MSVDT2VRetrieval
 from .msvd_v2t_retrieval import MSVDV2TRetrieval
 from .nano_argu_ana_retrieval import NanoArguAnaRetrieval
@@ -321,8 +321,10 @@ __all__ = [
     "FEVER",
     "FORBI2I",
     "MSMARCO",
+    "MSRVTTA2V",
     "MSRVTTT2V",
     "MSRVTTT2VA",
+    "MSRVTTV2A",
     "MSRVTTV2T",
     "MSRVTTVA2T",
     "NQ",
