@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import AudioCollator, VideoCollator
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 logger = logging.getLogger(__name__)
