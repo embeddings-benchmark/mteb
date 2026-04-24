@@ -179,3 +179,67 @@ class YouCook2T2VARetrieval(AbsTaskRetrieval):
         _load_youcook2(
             self, query_columns=["sentence"], corpus_columns=["video", "audio"]
         )
+
+
+class YouCook2V2ARetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="YouCook2V2ARetrieval",
+        description=(
+            "Retrieve the audio track that matches a given video clip from the "
+            "YouCook2 dataset of instructional cooking videos. Tests cross-modal "
+            "alignment between video frames and audio narration."
+        ),
+        reference="https://arxiv.org/abs/1703.09788",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="v2a",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["video", "audio"],
+        date=("2018-01-01", "2018-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the audio that corresponds to the following video."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_youcook2(self, query_columns=["video"], corpus_columns=["audio"])
+
+
+class YouCook2A2VRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="YouCook2A2VRetrieval",
+        description=(
+            "Retrieve the video clip that matches a given audio track from the "
+            "YouCook2 dataset of instructional cooking videos. Tests cross-modal "
+            "alignment between audio narration and video frames."
+        ),
+        reference="https://arxiv.org/abs/1703.09788",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="a2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["audio", "video"],
+        date=("2018-01-01", "2018-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the video that corresponds to the following audio."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_youcook2(self, query_columns=["audio"], corpus_columns=["video"])
