@@ -31,7 +31,9 @@ class OgmaWrapper:
 
         self.model_name = model_name
         self.revision = revision
-        self.device = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
+        self.device = torch.device(
+            device or ("cuda" if torch.cuda.is_available() else "cpu")
+        )
         self.model_path = Path(snapshot_download(model_name, revision=revision))
 
         # The Ogma HF repos ship their lightweight model implementation as source files.
@@ -42,7 +44,9 @@ class OgmaWrapper:
         from ogma_model import OgmaModel  # type: ignore[import-not-found]
 
         self.task_token = TaskToken
-        self.model = OgmaModel.from_checkpoint(str(self.model_path), device=str(self.device))
+        self.model = OgmaModel.from_checkpoint(
+            str(self.model_path), device=str(self.device)
+        )
         self.model.eval()
         self.tokenizer = Tokenizer.from_file(str(self.model_path / "tokenizer.json"))
         self.n_special_tokens = 7
@@ -70,12 +74,18 @@ class OgmaWrapper:
                 tokens = tokens[1:]
             if tokens and tokens[-1] in {"[SEP]", "</s>"}:
                 ids = ids[:-1]
-            ogma_ids = [2] + [token_id + self.n_special_tokens for token_id in ids] + [3]
+            ogma_ids = (
+                [2] + [token_id + self.n_special_tokens for token_id in ids] + [3]
+            )
             encoded.append(ogma_ids[: self.max_length])
 
         max_len = max(len(ids) for ids in encoded)
-        token_ids = torch.zeros(len(encoded), max_len, dtype=torch.long, device=self.device)
-        attention_mask = torch.zeros(len(encoded), max_len, dtype=torch.long, device=self.device)
+        token_ids = torch.zeros(
+            len(encoded), max_len, dtype=torch.long, device=self.device
+        )
+        attention_mask = torch.zeros(
+            len(encoded), max_len, dtype=torch.long, device=self.device
+        )
         for row, ids in enumerate(encoded):
             tensor_ids = torch.tensor(ids, dtype=torch.long, device=self.device)
             token_ids[row, : len(ids)] = tensor_ids
@@ -99,7 +109,9 @@ class OgmaWrapper:
             for batch in inputs:
                 texts = [str(text) for text in batch["text"]]
                 token_ids, attention_mask = self._tokenize(texts)
-                batch_embeddings = self.model.encode(token_ids, attention_mask, task=task)
+                batch_embeddings = self.model.encode(
+                    token_ids, attention_mask, task=task
+                )
                 embeddings.append(batch_embeddings.detach().cpu().float().numpy())
         return np.concatenate(embeddings, axis=0)
 
