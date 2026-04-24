@@ -39,6 +39,9 @@ class AVEDatasetClassification(AbsTaskClassification):
     input_column_name = ("video", "audio")
     label_column_name: str = "label"
     is_cross_validation: bool = False
+    
+    def dataset_transform(self, num_proc=None, **kwargs) -> None:
+        self.dataset["train"] = self.dataset["train"].select(range(2048))
 
 
 class AVEDatasetVideoClassification(AbsTaskClassification):
@@ -76,3 +79,6 @@ class AVEDatasetVideoClassification(AbsTaskClassification):
     input_column_name = "video"
     label_column_name: str = "label"
     is_cross_validation: bool = False
+
+    def dataset_transform(self, num_proc=None, **kwargs) -> None:
+        self.dataset["train"] = self.dataset["train"].select(range(2048))
