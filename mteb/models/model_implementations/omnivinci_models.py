@@ -9,8 +9,8 @@ import torch
 from tqdm.auto import tqdm
 from transformers import AutoModel, AutoProcessor
 
-from mteb._create_dataloaders import VideoCollator
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
