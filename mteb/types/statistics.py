@@ -120,6 +120,11 @@ class VideoStatistics(TypedDict):
 
         average_fps: Average frames per second across all video clips
         fps: Dict of unique (rounded) fps values and their frequencies
+
+        min_resolution: Resolution (width, height) with the smallest area
+        average_resolution: Average resolution (average_width, average_height)
+        max_resolution: Resolution (width, height) with the largest area
+        resolutions: Dict mapping "WxH" resolution strings to their frequency counts
     """
 
     total_duration_seconds: float | None
@@ -141,6 +146,11 @@ class VideoStatistics(TypedDict):
 
     average_fps: float | None
     fps: dict[int, int]
+
+    min_resolution: tuple[int, int] | None
+    average_resolution: tuple[float, float] | None
+    max_resolution: tuple[int, int] | None
+    resolutions: dict[str, int]
 
 
 class LabelStatistics(TypedDict):

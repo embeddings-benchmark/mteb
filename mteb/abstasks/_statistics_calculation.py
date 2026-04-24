@@ -195,6 +195,7 @@ def calculate_video_statistics(  # noqa: PLR0914
     widths: list[int | None] = []
     heights: list[int | None] = []
     fps_counts: dict[int, int] = defaultdict(int)
+    resolution_counts: dict[str, int] = defaultdict(int)
 
     for video in videos:
         meta = video.metadata
@@ -216,6 +217,8 @@ def calculate_video_statistics(  # noqa: PLR0914
         heights.append(meta.height)
         if avg_fps is not None:
             fps_counts[round(avg_fps)] += 1
+        if meta.width is not None and meta.height is not None:
+            resolution_counts[f"{meta.width}x{meta.height}"] += 1
 
     n = len(videos)
     all_durations = durations if None not in durations else None
@@ -223,6 +226,21 @@ def calculate_video_statistics(  # noqa: PLR0914
     all_widths = widths if None not in widths else None
     all_heights = heights if None not in heights else None
     has_all_fps = len(fps_counts) > 0 and sum(fps_counts.values()) == n
+    has_all_resolutions = sum(resolution_counts.values()) == n
+
+    if has_all_resolutions:
+        resolutions_wh = [
+            (int(r.split("x")[0]), int(r.split("x")[1])) for r in resolution_counts
+        ]
+        min_resolution: tuple[int, int] | None = min(
+            resolutions_wh, key=lambda r: r[0] * r[1]
+        )
+        max_resolution: tuple[int, int] | None = max(
+            resolutions_wh, key=lambda r: r[0] * r[1]
+        )
+    else:
+        min_resolution = None
+        max_resolution = None
 
     return VideoStatistics(
         total_duration_seconds=sum(all_durations)  # type: ignore[arg-type]
@@ -245,6 +263,12 @@ def calculate_video_statistics(  # noqa: PLR0914
         if has_all_fps
         else None,
         fps=dict(fps_counts),
+        min_resolution=min_resolution,
+        average_resolution=(sum(all_widths) / n, sum(all_heights) / n)  # type: ignore[arg-type]
+        if all_widths is not None and all_heights is not None
+        else None,
+        max_resolution=max_resolution,
+        resolutions=dict(resolution_counts),
     )
 
 

@@ -2,20 +2,10 @@
     "test": {
         "num_samples": 1758,
         "number_of_characters": 43882,
-        "documents_text_statistics": {
-            "total_text_length": 43882,
-            "min_text_length": 16,
-            "average_text_length": 49.9226393629124,
-            "max_text_length": 163,
-            "unique_texts": 879
-        },
+        "documents_text_statistics": null,
         "documents_image_statistics": null,
         "documents_audio_statistics": null,
-        "documents_video_statistics": null,
-        "queries_text_statistics": null,
-        "queries_image_statistics": null,
-        "queries_audio_statistics": null,
-        "queries_video_statistics": {
+        "documents_video_statistics": {
             "total_duration_seconds": 13369.688322,
             "total_frames": 364792,
             "min_width": 320,
@@ -59,6 +49,16 @@
                 "320x240": 879
             }
         },
+        "queries_text_statistics": {
+            "total_text_length": 43882,
+            "min_text_length": 16,
+            "average_text_length": 49.9226393629124,
+            "max_text_length": 163,
+            "unique_texts": 879
+        },
+        "queries_image_statistics": null,
+        "queries_audio_statistics": null,
+        "queries_video_statistics": null,
         "relevant_docs_statistics": {
             "num_relevant_docs": 879,
             "min_relevant_docs_per_query": 1,
