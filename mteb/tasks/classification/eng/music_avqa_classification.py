@@ -21,7 +21,7 @@ class MusicAVQACLSClassification(AbsTaskClassification):
         date=("2021-01-01", "2022-06-19"),  # around time of conference
         domains=["Music"],
         task_subtypes=["Music Instrument Recognition"],
-        license="not specified",
+        license="gpl-3.0",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["video", "audio"],
@@ -59,7 +59,7 @@ class MusicAVQACLSVideoClassification(AbsTaskClassification):
         date=("2021-01-01", "2022-06-19"),  # around time of conference
         domains=["Music"],
         task_subtypes=["Music Instrument Recognition"],
-        license="not specified",
+        license="gpl-3.0",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["video"],
