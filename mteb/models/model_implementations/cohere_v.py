@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING, Any, Literal, get_args
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.cohere_models import (
@@ -18,6 +17,7 @@ from mteb.models.model_implementations.cohere_models import (
     retry_with_rate_limit,
 )
 from mteb.models.model_meta import ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -44,7 +44,7 @@ def _post_process_embeddings(
                     unpacked.append(1.0 if bit_val else -1.0)
             unpacked_embeddings.append(unpacked)
         return torch.tensor(unpacked_embeddings, dtype=torch.float32)
-    elif embedding_type in ["int8", "uint8"]:
+    elif embedding_type in ["int8", "uint8"]:  # noqa: PLR6201
         # Convert int8/uint8 embeddings to float32
         return embeddings_array.float()
     else:
@@ -173,11 +173,14 @@ EmbeddingType = Literal[
     "binary",
 ]
 
+OUTPUT_TYPES = [
+    OutputDType.INT8,
+    OutputDType.UINT8,
+    OutputDType.BINARY,
+]
+
 
 def cohere_v_loader(model_name, **kwargs):
-    requires_package(
-        cohere_v_loader, "cohere", model_name, "pip install 'mteb[cohere]'"
-    )
     import cohere
 
     class CohereMultiModalModelWrapper(AbsEncoder):
@@ -194,7 +197,7 @@ def cohere_v_loader(model_name, **kwargs):
             Cohere currently supports 40 images/min, thus time.sleep(1.5) is applied after each image.
             Remove or adjust this after Cohere API changes capacity.
             """
-            requires_image_dependencies()
+
             from torchvision import transforms
 
             self.model_name = model_name
@@ -308,7 +311,7 @@ def cohere_v_loader(model_name, **kwargs):
                 for image in batch:
                     # cohere only supports 1 image per call
                     buffered = io.BytesIO()
-                    image = self.transform(image)
+                    image = self.transform(image)  # noqa: PLW2901
                     image.save(buffered, format=self.image_format)
                     image_bytes = buffered.getvalue()
                     stringified_buffer = base64.b64encode(image_bytes).decode("utf-8")
@@ -405,6 +408,8 @@ cohere_mult_3 = ModelMeta(
     reference="https://huggingface.co/Cohere/Cohere-embed-multilingual-v3.0",
     use_instructions=False,
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_eng_3 = ModelMeta(
@@ -430,6 +435,8 @@ cohere_eng_3 = ModelMeta(
     reference="https://huggingface.co/Cohere/Cohere-embed-english-v3.0",
     use_instructions=False,
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_embed_v4_multimodal = ModelMeta(
@@ -455,6 +462,8 @@ cohere_embed_v4_multimodal = ModelMeta(
     reference="https://docs.cohere.com/docs/cohere-embed",
     use_instructions=False,
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_embed_v4_multimodal_binary = ModelMeta(
@@ -481,6 +490,8 @@ cohere_embed_v4_multimodal_binary = ModelMeta(
     use_instructions=False,
     training_datasets=None,
     adapted_from="Cohere/Cohere-embed-v4.0",
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_embed_v4_multimodal_int8 = ModelMeta(
@@ -507,4 +518,6 @@ cohere_embed_v4_multimodal_int8 = ModelMeta(
     use_instructions=False,
     training_datasets=None,
     adapted_from="Cohere/Cohere-embed-v4.0",
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )

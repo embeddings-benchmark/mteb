@@ -51,7 +51,7 @@ jobs:
 
       - name: Cache Hugging Face
         id: cache-hf
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/huggingface
           key: ${{ runner.os }}-hf
@@ -60,6 +60,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
+          version: "0.10.12"
 
       # required for evaluation the audio subset
       - name: Install FFmpeg (Ubuntu)
@@ -74,7 +75,7 @@ jobs:
 
       - name: Setup Miniconda (Windows)
         if: runner.os == 'Windows'
-        uses: conda-incubator/setup-miniconda@v2
+        uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
           miniconda-version: "latest"

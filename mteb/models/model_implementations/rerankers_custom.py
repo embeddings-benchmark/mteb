@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 
-from mteb._requires_package import requires_package
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 
@@ -63,12 +62,6 @@ class BGEReranker(RerankerWrapper):
         if self.fp_options:
             model_args["torch_dtype"] = self.fp_options
 
-        requires_package(
-            self,
-            "FlagEmbedding",
-            model_name_or_path,
-            "pip install 'mteb[flagembedding]'",
-        )
         from FlagEmbedding import FlagReranker
 
         self.model = FlagReranker(model_name_or_path, use_fp16=True)
@@ -92,15 +85,18 @@ class BGEReranker(RerankerWrapper):
         passages = [text for batch in inputs2 for text in batch["text"]]
 
         if instructions is not None and instructions[0] is not None:
-            assert len(instructions) == len(queries)
+            if len(instructions) != len(queries):
+                raise ValueError(
+                    f"Expected {len(queries)} instructions, got {len(instructions)}"
+                )
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
 
-        assert len(queries) == len(passages)
+        if len(queries) != len(passages):
+            raise ValueError(f"Expected {len(queries)} passages, got {len(passages)}")
         query_passage_tuples = list(zip(queries, passages))
         scores = self.model.compute_score(query_passage_tuples, normalize=True)
-        assert len(scores) == len(queries), (
-            f"Expected {len(queries)} scores, got {len(scores)}"
-        )
+        if len(scores) != len(queries):
+            raise ValueError(f"Expected {len(queries)} scores, got {len(scores)}")
         return scores
 
 
@@ -264,6 +260,7 @@ bge_reranker_v2_m3 = ModelMeta(
       year = {2024},
     }
     """,
+    extra_requirements_groups=["flagembedding"],
 )
 
 # SBERT MS MARCO CrossEncoders (Version 2 models). Same training/data/citation for all.

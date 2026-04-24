@@ -1,7 +1,7 @@
 """Moka AI's Chinese embedding models"""
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 M3E_CITATION = """@software{MokaMassiveMixedEmbedding,
   author = {Wang Yuxin and Sun Qingxuan and He Sicheng},
@@ -89,7 +89,7 @@ m3e_dataset = {
 } | medi_dataset
 
 m3e_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="moka-ai/m3e-base",
     model_type=["dense"],
     languages=["zho-Hans", "eng-Latn"],
@@ -116,7 +116,7 @@ m3e_base = ModelMeta(
 )
 
 m3e_small = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="moka-ai/m3e-small",
     model_type=["dense"],
     languages=["zho-Hans", "eng-Latn"],
@@ -143,7 +143,7 @@ m3e_small = ModelMeta(
 )
 
 m3e_large = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="moka-ai/m3e-large",
     model_type=["dense"],
     languages=["zho-Hans", "eng-Latn"],

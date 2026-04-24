@@ -20,11 +20,11 @@ Typically, it only requires that you fill in metadata about the model and add it
 
 ??? example "Adding a ModelMeta object"
     ```python
-    from mteb.models import ModelMeta, sentence_transformers_loader
+    from mteb.models import ModelMeta, SentenceTransformerEncoderWrapper
 
     my_model = ModelMeta(
         name="model_name",
-        loader=sentence_transformers_loader,
+        loader=SentenceTransformerEncoderWrapper,
         languages=["eng-Latn"], # follows ISO 639-3 and BCP-47
         open_weights=True,
         revision="5617a9f61b028005a4858fdac845db406aefb181",
@@ -41,6 +41,7 @@ Typically, it only requires that you fill in metadata about the model and add it
         public_training_code="https://github.com/user-or-org/my-training-code",
         public_training_data="https://huggingface.co/datasets/user-or-org/full-dataset",
         training_datasets={"MSMARCO"}, # if you trained on the MSMARCO training set
+        output_dtypes=[OutputDType.INT8, OutputDType.BINARY], # Alternative output types supported by the model
     )
     ```
 
@@ -95,7 +96,7 @@ However, you can also add these directly to the model configuration:
 
 ```python
 model = ModelMeta(
-    loader=sentence_transformers_loader
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts={
            "query": "query: ",
@@ -185,6 +186,7 @@ When submitting you models as a PR, please copy and paste the following checklis
   - [ ] `mteb.get_model_meta(model_name, revision)`
 - [ ] I have tested the implementation works on a representative set of tasks.
 - [ ] The model is public, i.e., is available either as an API or the weights are publicly available to download
+- [ ] I reproduced results from the original paper (if applicable) on at least one benchmark, and I am including the results in the PR description.
 ```
 
 

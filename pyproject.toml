@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.11.2"
+version = "2.12.27"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -32,18 +32,19 @@ classifiers = [
 requires-python = ">=3.10,<3.15"
 dependencies = [
     "datasets>=2.19.0",
-    "numpy>=1.0.0,<3.0.0",
+    "numpy>=1.23.0,<3.0.0",
     "requests>=2.26.0",
     "scikit-learn>=1.4.0",
-    "scipy>=0.0.0",
+    "scipy>=1.14.0",
     "sentence_transformers>=3.0.0",
+    "transformers>=4.40.0,<6.0.0",
     "typing-extensions>=4.5.0",
-    "torch>1.0.0",
+    "torch>=2.0.0",
     "tqdm>1.0.0",
-    "rich>=0.0.0",
+    "rich>=13.0.0",
     "pytrec-eval-terrier>=0.5.6",
-    "pydantic>=2.0.0",
-    "polars>=0.20.22",
+    "pydantic>=2.11.0",
+    "polars>=1.0.0",
 ]
 
 
@@ -68,7 +69,7 @@ audio = [
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
-    "gradio==6.9.0",
+    "gradio==6.0.1",
     "plotly>=5.24.0,<6.0.0",
     "cachetools>=5.2.0",
     "matplotlib>=3.9.4",
@@ -95,6 +96,7 @@ voyageai = ["voyageai>0.3.0,<2.0.0"]
 voyage_v = ["voyageai>0.3.0,<2.0.0", "tenacity>9.0.0"]
 cohere = ["cohere==5.14.0"]
 vertexai = ["vertexai==1.71.1"]
+google_genai = ["google-genai>=1.7.0"]
 llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
 timm = ["timm>=1.0.15,<1.1.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
@@ -109,6 +111,7 @@ llama-embed-nemotron = ["transformers==4.51.0"]
 llama-nemotron-colembed-vl = ["transformers[torch]==4.49.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 llama-nemotron-embed-vl-1b-v2 = ["transformers[torch]>=4.56.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
+multimodal-sbert = ["sentence-transformers>=5.4.0", "transformers>=5.3.0"]
 faiss-cpu = ["faiss-cpu>=1.12.0"]
 eager_embed = ["qwen_vl_utils>=0.0.14"]
 speechbrain = ["speechbrain>=0.5.12"]
@@ -117,15 +120,17 @@ wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
 mctct = ["transformers<5"]  # mctct was removed in transformers 5
-siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]  
-qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"] 
+siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
+qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
+qwen_omni_utils = ["qwen_omni_utils"]
+embeddinggemma = ["transformers>=4.56.0"]
 
 [dependency-groups]
 lint = [
     "ruff==0.14.0", # locked so we don't get PRs which fail only due to a lint update
     "pre-commit>=4.1.0",
-    "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
     "typos>1",
+    "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
 ]
 test = [
     "pytest>=8.3.4,<8.4.0",
@@ -135,6 +140,7 @@ test = [
     "iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
     "GitPython>=3.0.0",
     "tabulate>=0.9.0",
+    "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
 ]
 docs = [
     "zensical>=0.0.11",
@@ -208,6 +214,7 @@ namespaces = false
     "descriptive_stats/Image/*/*.json",  # for descriptive_stats image
 ]
 "mteb.abstasks" = ["dataset_card_template.md"]
+"mteb.benchmarks" = ["benchmark_card_template.md"]
 "mteb.tasks.zeroshot_classification.eng.templates" = ["*.txt"]
 
 [tool.ruff]
@@ -254,6 +261,9 @@ select = [
     "PGH",     # pygrep-hooks Use specific rule codes when ignoring type issues
     "LOG",     # logging
     "TC",      # type-checking
+    "T20",     # don't allow print
+    "PL",      # pylint
+    "S",       # flake8-bandit
 ]
 
 ignore = [
@@ -265,9 +275,19 @@ ignore = [
     "D107",     # Missing docstring in __init__
     "D415",     # First line should end with a period
     "C408",     # don't use unecc. collection call, e.g. dict over {}
+    "S404",    # subprocess import insecure
+    "S311",     # standard pseudo-random generators are fine for non-crypto use
+    "S104",     # allow binding to all interfaces in tests
+    "S607",     # start a process with partial path
+    "S603",   # allow subprocess calls with shell=True
+    "PLR2004",   # magic value comparison
+    "PLC0415",   # import outside of top-level
+    "PLR0912",  # too many branches
+    "PLR0915",  # too many statements
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
+preview = true
 
 
 [tool.ruff.lint.per-file-ignores]
@@ -275,16 +295,27 @@ typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
 "docs/*" = [
     "D",
     "DOC",
+    "S101"
 ]
 "tests/*" = [
     "RUF012",
     "D",
     "DOC",
     "TC",
+    "S101",  # allow asserts in tests
+    "S602",  # allow shell=True in tests
+    "S603",  # allow subprocess calls in tests
+    "PLC2701",  # Private name import
 ]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
-"mteb/tasks/*" = ["D", "DOC"]
-"mteb/models/model_implementations/*" = ["D", "DOC"]
+"mteb/tasks/*" = [
+    "D",
+    "DOC",
+]
+"mteb/models/model_implementations/*" = [
+    "D",
+    "DOC",
+]
 "mteb/benchmarks/benchmark.py" = [
     # pydantic would try to validate fields in Benchmark class
     "TC",
@@ -320,6 +351,9 @@ runtime-evaluated-base-classes = [
     "pydantic.BaseModel",
     "mteb.abstasks.task_metadata.TaskMetadata",  # https://github.com/astral-sh/ruff/issues/7866
 ]
+
+[tool.ruff.lint.pylint]
+max-args = 9
 
 [tool.semantic_release]
 branch = "main"
@@ -359,6 +393,7 @@ addopts = """
 
 markers = [
     "test_datasets: marks tests that tests dataset availability",
+    "test_reference_models: marks tests that verify reference model result coverage (requires downloading results repo)",
 ]
 
 [tool.uv]
@@ -377,6 +412,7 @@ conflicts = [
         { extra = "llama-nemotron-colembed-vl" }, # conflicting versions of transformers
         { extra = "nemotron-colembed-vl-v2" }, # conflicting versions of transformers
         { extra = "llama-nemotron-embed-vl-1b-v2" }, # conflicting versions of transformers
+        { extra = "multimodal-sbert" }, # conflicting version of sentence-transformers
         { extra = "colpali_engine" },
         { extra = "colqwen3" },
         { extra = "jina-v4" },
@@ -387,6 +423,7 @@ conflicts = [
         { extra = "muq" },
         { extra = "mctct" },
         { extra = "qwen-vl" },
+        { extra = "embeddinggemma" },
     ],
 ]
 
@@ -428,6 +465,8 @@ disable_error_code = ["index"]
 binary = false
 locale = "en"
 extend-ignore-words-re = [
+    "Classfication", # misspelled task name
+    "nd", # license
     # authors
     "Stap",
     "Asai",
@@ -441,11 +480,25 @@ extend-ignore-words-re = [
     "Mehta",
     "Parth",
     # languages/bibtext artifacts
+    "SHW",
     "ba",
     "creen",
     "Accademia",
+    "dementieva",
+    "Expresso",
+    "expresso",
+    "Iz",
+    "Allo",
+    "Soler",
+    # language keys:
+    "tha",
+    "yor",
+    "als",
+    "bre",
+    "thi",
     # ISO 15924 script codes
     "Beng",  # Bengali script
+
 ]
 extend-ignore-re = [
     "author.*",  # ignore authors in citations
@@ -496,8 +549,7 @@ BulgarianStoreReviewSentimentClassfication = "BulgarianStoreReviewSentimentClass
 
 [tool.typos.type.py.extend-words]
 wdth = "wdth"
-Allo = "Allo"   # AlloProfClusteringS2S.v2
-# langs/splits
+Allo = "Allo"
 som = "som"
 yor = "yor"
 Beng = "Beng"
@@ -518,3 +570,6 @@ expresso = "expresso"
 Expresso = "Expresso"
 NIFE = "NIFE"
 thw = "thw"
+ist = "ist" # spelling error in prompt for harrier-oss-v1
+shw = "SHW"
+nd = "nd"

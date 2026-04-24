@@ -116,6 +116,14 @@ class AbsTaskClusteringLegacy(AbsTask):
                 logger.info(
                     f"Running clustering on cluster ({i + 1}/{len(data_split)})"
                 )
+                labels = cluster_set[self.label_column_name]
+                if len(set(labels)) <= 1:
+                    logger.warning(
+                        f"Cluster set {i} has {len(set(labels))} unique label(s), "
+                        "skipping encode step — v_measure is always 1.0."
+                    )
+                    all_metrics.append(ClusteringMetrics(v_measure=1.0))
+                    continue
                 clustering_dataset = Dataset.from_dict(cluster_set).select_columns(
                     [self.input_column_name, self.label_column_name]
                 )
@@ -183,7 +191,7 @@ class AbsTaskClusteringLegacy(AbsTask):
             evaluate_clusters,
         )
 
-    def _compute_metrics(
+    def _compute_metrics(  # noqa: PLR6301
         self,
         labels: list[int],
         cluster_assignment: list[int],
@@ -219,7 +227,7 @@ class AbsTaskClusteringLegacy(AbsTask):
         elif compute_overall:
             inputs = []
             labels = []
-            for hf_subset in self.metadata.eval_langs:
+            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
                 labels.extend(self.dataset[hf_subset][split][self.label_column_name])
         else:

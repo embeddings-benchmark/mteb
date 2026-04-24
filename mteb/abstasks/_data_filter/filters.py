@@ -22,7 +22,7 @@ def deduplicate(dataset: Dataset, input_column: str) -> Dataset:
     unique_texts = set()
     indices_to_keep = []
     for i, text in enumerate(dataset[input_column]):
-        text = text.strip()
+        text = text.strip()  # noqa: PLW2901
         if text not in unique_texts:
             unique_texts.add(text)
             indices_to_keep.append(i)

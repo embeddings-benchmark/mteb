@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -8,10 +9,9 @@ from tqdm.auto import tqdm
 from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model
 
 from mteb import TaskMetadata
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator
 from mteb.types import Array, BatchedInput, PromptType
 from mteb.types._encoder_io import AudioInput
 
@@ -21,6 +21,9 @@ if TYPE_CHECKING:
     from mteb import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
     from mteb.types._encoder_io import AudioInput
+
+
+logger = logging.getLogger(__name__)
 
 
 class MMSWrapper(AbsEncoder):
@@ -33,7 +36,6 @@ class MMSWrapper(AbsEncoder):
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
         self.model_name = model_name
         self.model_revision = revision
         self.target_lang = target_lang
@@ -54,18 +56,20 @@ class MMSWrapper(AbsEncoder):
         try:
             self.model.load_adapter(target_lang)
         except Exception:
-            pass
+            logger.debug(
+                "Failed to load adapter for language '%s'", target_lang, exc_info=True
+            )
 
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []
 
@@ -162,7 +166,9 @@ mms_1b_all = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/mms",
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
-    training_datasets=set(),
+    training_datasets={
+        "FleursA2TRetrieval",
+    },
     modalities=["audio"],
     citation="""
 @misc{pratap2023scalingspeechtechnology1000,
@@ -195,7 +201,9 @@ mms_1b_fl102 = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/mms",
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
-    training_datasets=set(),
+    training_datasets={
+        "FleursA2TRetrieval",
+    },
     modalities=["audio"],
     citation="""
 @misc{pratap2023scalingspeechtechnology1000,
@@ -228,7 +236,9 @@ mms_1b_l1107 = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/mms",
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
-    training_datasets=set(),
+    training_datasets={
+        "FleursA2TRetrieval",
+    },
     modalities=["audio"],
     citation="""
 @misc{pratap2023scalingspeechtechnology1000,

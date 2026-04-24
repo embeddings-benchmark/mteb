@@ -3,8 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-from mteb._create_dataloaders import _create_text_queries_dataloader
-from mteb._requires_package import requires_package
+from mteb._create_dataloaders import _combine_queries_with_instruction_text
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
@@ -22,7 +21,6 @@ logger = logging.getLogger(__name__)
 
 
 def bm25_loader(model_name, **kwargs) -> SearchProtocol:
-    requires_package(bm25_loader, "bm25s", model_name, "pip install mteb[bm25s]")
     import bm25s
     import Stemmer
 
@@ -86,9 +84,11 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             logger.info("Encoding Queries...")
             query_ids = list(queries["id"])
             results = {qid: {} for qid in query_ids}
-            queries_loader = _create_text_queries_dataloader(queries)
-            queries_texts = [text for batch in queries_loader for text in batch["text"]]
-
+            processed = queries.map(
+                _combine_queries_with_instruction_text,
+                desc="Processing queries for dataloading",
+            )
+            queries_texts = processed["text"]
             query_token_strs = self._encode(queries_texts)
 
             logger.info(f"Retrieving Results... {len(queries):,} queries")
@@ -129,6 +129,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
 
 bm25_s = ModelMeta(
     loader=bm25_loader,
+    extra_requirements_groups=["bm25s"],
     name="mteb/baseline-bm25s",
     model_type=["dense"],
     languages=["eng-Latn"],

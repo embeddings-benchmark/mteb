@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any, Literal
 import numpy as np
 import torch
 
-from mteb._requires_package import requires_package
+from mteb._requires_package import _is_package_available
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import PromptType
@@ -35,7 +35,7 @@ class VllmWrapperBase:
     convert = "auto"
     mteb_model_meta: ModelMeta | None = None
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         model: str | ModelMeta,
         revision: str | None = None,
@@ -83,12 +83,10 @@ class VllmWrapperBase:
             enforce_eager: Whether to disable CUDA graph optimization and use eager execution.
             **kwargs: Additional arguments to pass to the vllm serving engine model.
         """
-        requires_package(
-            self,
-            "vllm",
-            "Wrapper for vllm serving engine",
-            install_instruction="pip install mteb[vllm]",
-        )
+        if not _is_package_available("vllm"):
+            raise ImportError(
+                "vLLM is required for VllmWrapper. Please install with `pip install mteb[vllm]`."
+            )
 
         os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
 
@@ -151,7 +149,7 @@ class VllmWrapperBase:
         try:
             self.cleanup()
         except Exception:
-            pass
+            logger.debug("Failed to cleanup vllm wrapper", exc_info=True)
 
 
 class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
@@ -178,6 +176,7 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
         self,
         model: str | ModelMeta,
         revision: str | None = None,
+        *,
         prompt_dict: dict[str, str] | None = None,
         use_instructions: bool = False,
         instruction_template: (
@@ -257,8 +256,9 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
             )
 
         prompts = [prompt + text for batch in inputs for text in batch["text"]]
+        tokenization_kwargs = {"truncate_prompt_tokens": -1}
         outputs = self.llm.encode(
-            prompts, pooling_task="embed", truncate_prompt_tokens=-1
+            prompts, pooling_task="embed", tokenization_kwargs=tokenization_kwargs
         )
         embeddings = torch.stack([output.outputs.data for output in outputs])
         return embeddings
@@ -319,10 +319,11 @@ class VllmCrossEncoderWrapper(VllmWrapperBase):
         ]
         # TODO: support score prompt
 
+        tokenization_kwargs = {"truncate_prompt_tokens": -1}
         outputs = self.llm.score(
             queries,
             corpus,
-            truncate_prompt_tokens=-1,
+            tokenization_kwargs=tokenization_kwargs,
             use_tqdm=False,
         )
         scores = np.array([output.outputs.score for output in outputs])

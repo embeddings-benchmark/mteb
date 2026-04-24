@@ -22,7 +22,7 @@ def test_create_model_meta_from_sentence_transformers():
 
 
 def test_create_model_meta_from_cross_encoder():
-    model_name = "cross-encoder/ms-marco-TinyBERT-L-2-v2"
+    model_name = "cross-encoder/ms-marco-TinyBERT-L2-v2"
     revision = "841d331b6f34b15d6ac0ab366ae3a3b36eeac691"
     model = CrossEncoder(model_name, revision=revision)
 
@@ -35,7 +35,7 @@ def test_create_model_meta_from_cross_encoder():
 @pytest.mark.parametrize("task", [MockRetrievalTask()])
 def test_output_folder_model_meta(task: AbsTask, tmp_path: Path):
     mteb = MTEB(tasks=[task])
-    model_name = "cross-encoder/ms-marco-TinyBERT-L-2-v2"
+    model_name = "cross-encoder/ms-marco-TinyBERT-L2-v2"
     model = CrossEncoder(model_name)
     meta = mteb.create_model_meta(model)
     output_path = mteb._create_output_folder(
@@ -46,5 +46,5 @@ def test_output_folder_model_meta(task: AbsTask, tmp_path: Path):
     assert output_path.exists()
     assert output_path.is_dir()
     assert output_path.name == model.config._commit_hash
-    assert output_path.parent.name == "cross-encoder__ms-marco-TinyBERT-L-2-v2"
+    assert output_path.parent.name == "cross-encoder__ms-marco-TinyBERT-L2-v2"
     assert output_path.parent.parent == tmp_path

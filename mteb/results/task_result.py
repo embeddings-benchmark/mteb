@@ -15,8 +15,6 @@ from packaging.version import Version
 from pydantic import BaseModel, field_validator
 from typing_extensions import deprecated
 
-import mteb
-from mteb import TaskMetadata
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.eval_result_model import (
     HFEvalResult,
@@ -26,6 +24,7 @@ from mteb._hf_integration.eval_result_model import (
 )
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.abstask import AbsTask
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
 from mteb.types import (
@@ -125,7 +124,7 @@ renamed_tasks = {
 }
 
 
-class TaskResult(BaseModel):
+class TaskResult(BaseModel):  # noqa: PLR0904
     """A class to represent the MTEB result.
 
     Attributes:
@@ -198,7 +197,18 @@ class TaskResult(BaseModel):
         flat_scores = defaultdict(list)
         for split, hf_subset_scores in scores.items():
             for hf_subset, hf_scores in hf_subset_scores.items():
-                eval_langs = subset2langscripts[hf_subset]
+                if hf_subset in subset2langscripts:
+                    eval_langs = subset2langscripts[hf_subset]
+                else:
+                    # For aggregated tasks, scores may use "default" subset
+                    # which isn't in the per-subset langscript mapping.
+                    # Collect all languages from the mapping.
+                    all_langs: list[str] = []
+                    for langs in subset2langscripts.values():
+                        all_langs.extend(
+                            lang for lang in langs if lang not in all_langs
+                        )
+                    eval_langs = all_langs
                 _scores = {
                     **hf_scores,
                     "hf_subset": hf_subset,
@@ -341,7 +351,7 @@ class TaskResult(BaseModel):
         json_obj["date"] = self.date.timestamp() if self.date else None
         self._round_scores(json_obj["scores"], 6)
 
-        with path.open("w") as f:
+        with path.open("w") as f:  # noqa: PLW1514
             json.dump(json_obj, f, indent=2)
 
     @classmethod
@@ -407,7 +417,7 @@ class TaskResult(BaseModel):
         else:
             task = get_task(obj.task_name)
 
-        if task.metadata.type == "PairClassification":
+        if task.metadata.type == "PairClassification":  # noqa: PLR1702
             for split, split_scores in obj.scores.items():
                 for hf_subset_scores in split_scores:
                     # concatenate score e.g. ["max"]["ap"] -> ["max_ap"]
@@ -489,12 +499,12 @@ class TaskResult(BaseModel):
                         hf_subset_scores["main_score"] = None
 
         # specific fixes:
-        if task_name == "MLSUMClusteringP2P" and mteb_version in [
+        if task_name == "MLSUMClusteringP2P" and mteb_version in [  # noqa: PLR6201
             "1.1.2.dev0",
             "1.1.3.dev0",
         ]:  # back then it was only the french subsection which was implemented
             scores["test"]["fr"] = scores["test"].pop("default")
-        if task_name == "MLSUMClusteringS2S" and mteb_version in [
+        if task_name == "MLSUMClusteringS2S" and mteb_version in [  # noqa: PLR6201
             "1.1.2.dev0",
             "1.1.3.dev0",
         ]:
@@ -909,7 +919,9 @@ class TaskResult(BaseModel):
         return results
 
     def _to_hf_benchmark_result(self, user: str | None = None) -> HFEvalResults:
-        task_metadata = mteb.get_task(self.task_name).metadata
+        from mteb.get_tasks import get_task
+
+        task_metadata = get_task(self.task_name).metadata
         dataset_id = task_metadata.dataset["path"]
         dataset_revision = task_metadata.dataset["revision"]
         eval_results = []

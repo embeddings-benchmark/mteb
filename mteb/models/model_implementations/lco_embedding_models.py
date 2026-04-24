@@ -6,10 +6,9 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator, VideoCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -25,18 +24,30 @@ class LCOEmbedding(AbsEncoder):
         self,
         model_name: str,
         revision: str | None = None,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
+        fps: float | None = 2.0,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        max_audio_length: int | None = None,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
         from transformers import (
             Qwen2_5OmniProcessor,
             Qwen2_5OmniThinkerForConditionalGeneration,
         )
 
         self.model_name = model_name
-        self.device = device
-        self.max_audio_length_seconds = 10
+        self.device = device or (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.max_audio_length = max_audio_length
 
         self.processor = Qwen2_5OmniProcessor.from_pretrained(
             model_name, revision=revision
@@ -48,11 +59,41 @@ class LCOEmbedding(AbsEncoder):
         ).to(self.device)
         self.model.eval()
 
-        # Audio sampling rate target
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
-        # Pre-calculate max samples once
-        self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
+    @staticmethod
+    def _prompt_suffix(batch: BatchedInput) -> str:
+        """Return the prompt suffix based on the primary modality in the batch."""
+        for modality in ("audio", "video", "image"):
+            if batch.get(modality):
+                return f"\nSummarize the above {modality} in one word:"
+        return "\nSummarize the above text in one word:"
+
+    @staticmethod
+    def _build_messages(batch: BatchedInput, suffix: str) -> list[list[dict[str, Any]]]:
+        """Build chat messages for each item in the batch."""
+        texts = batch.get("text", [])
+        images = batch.get("image", [])
+        audios = batch.get("audio", [])
+        videos = batch.get("video", [])
+        batch_size = max(len(texts), len(images), len(audios), len(videos))
+
+        messages = []
+        for i in range(batch_size):
+            content: list[dict[str, Any]] = []
+            if i < len(videos) and videos[i] is not None:
+                content.append({"type": "video", "video": "placeholder"})
+            if i < len(audios) and audios[i] is not None:
+                content.append({"type": "audio", "audio": "placeholder"})
+            if i < len(images) and images[i] is not None:
+                content.append({"type": "image", "image": "placeholder"})
+            if i < len(texts) and texts[i] is not None:
+                content.append({"type": "text", "text": texts[i]})
+            content.append({"type": "text", "text": suffix})
+            messages.append([{"role": "user", "content": content}])
+        return messages
+
+    @torch.no_grad()
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -61,74 +102,68 @@ class LCOEmbedding(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        try:
-            from qwen_omni_utils import process_mm_info
-        except ImportError:
-            raise ImportError(
-                "The 'qwen_omni_utils' package is required for this model. "
-                "Please install it or ensure it is in your python path."
+        has_video = "video" in inputs.dataset.features
+        has_audio = "audio" in inputs.dataset.features
+        if has_video:
+            inputs.collate_fn = VideoCollator(
+                target_sampling_rate=self.sampling_rate,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+                max_samples=self.max_audio_length,
             )
-        all_embeddings = []
+        elif has_audio:
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.sampling_rate,
+                max_samples=self.max_audio_length,
+            )
 
-        for batch in tqdm(inputs, disable=not show_progress_bar):
-            messages_batch = []
-            audio_list = batch.get("audio", [])
-            text_list = batch.get("text", [])
-            batch_size = max(len(audio_list), len(text_list))
+        all_embeddings: list[torch.Tensor] = []
 
-            for i in range(batch_size):
-                content = []
+        for batch in tqdm(inputs, desc="Encoding"):
+            suffix = self._prompt_suffix(batch)
+            messages = self._build_messages(batch, suffix)
 
-                audio_row = audio_list[i] if i < len(audio_list) else None
-
-                if audio_row is not None:
-                    array = AudioCollator.resample_audio(
-                        {"audio": audio_row}, self.sampling_rate, self.max_samples
-                    )
-                    content.append({"type": "audio", "audio": array})
-
-                text_row = text_list[i] if i < len(text_list) else None
-                if text_row is not None:
-                    content.append({"type": "text", "text": text_row})
-
-                # Append the training prompt
-                prompt_suffix = (
-                    "\nSummarize the above audio in one word:"
-                    if audio_row
-                    else "\nSummarize the above text in one word:"
+            texts = [
+                self.processor.apply_chat_template(
+                    msg, tokenize=False, add_generation_prompt=True
                 )
-                content.append({"type": "text", "text": prompt_suffix})
+                for msg in messages
+            ]
 
-                messages_batch.append([{"role": "user", "content": content}])
+            videos = batch.get("video")
+            images = batch.get("image")
+            audios = batch.get("audio")
+            if audios:
+                audios = [
+                    a["array"] if isinstance(a, dict) and "array" in a else a
+                    for a in audios
+                ]
 
-            text_prompts = self.processor.apply_chat_template(
-                messages_batch, tokenize=False, add_generation_prompt=True
-            )
-
-            audio_inputs, _, _ = process_mm_info(
-                messages_batch, use_audio_in_video=False
-            )
-
-            processor_inputs = self.processor(
-                text=text_prompts,
-                audio=audio_inputs,
+            model_inputs = self.processor(
+                text=texts,
+                audio=audios or None,
+                images=images or None,
+                videos=videos or None,
                 padding=True,
                 return_tensors="pt",
+                videos_kwargs={
+                    "do_sample_frames": False,
+                    "use_audio_in_video": False,
+                },
+                audio_kwargs={"max_length": self.max_audio_length},
             ).to(self.device)
 
-            with torch.no_grad():
-                outputs = self.model(
-                    **processor_inputs, output_hidden_states=True, return_dict=True
-                )
+            outputs = self.model(
+                **model_inputs, output_hidden_states=True, return_dict=True
+            )
+            embeddings = outputs.hidden_states[-1][:, -1, :]
+            embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
+            all_embeddings.append(embeddings.cpu())
 
-                embeddings = outputs.hidden_states[-1][:, -1, :]
-
-                all_embeddings.append(embeddings.cpu().to(torch.float32))
-
-        return torch.cat(all_embeddings, dim=0).numpy()
+        return torch.cat(all_embeddings, dim=0).float()
 
 
 lco_3b = ModelMeta(
@@ -150,8 +185,10 @@ lco_3b = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
-    modalities=["audio", "text"],
+    training_datasets=set(
+        # SeaDoc (not in MTEB)
+    ),
+    modalities=["audio", "image", "text", "video"],
     citation="""
 @misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
   title={Scaling Language-Centric Omnimodal Representation Learning},
@@ -183,8 +220,10 @@ lco_7b = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
-    modalities=["audio", "text"],
+    training_datasets=set(
+        # SeaDoc (not in MTEB)
+    ),
+    modalities=["audio", "image", "text", "video"],
     citation="""
 @misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
   title={Scaling Language-Centric Omnimodal Representation Learning},

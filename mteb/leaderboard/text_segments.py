@@ -44,9 +44,6 @@ ACKNOWLEDGEMENT = """
     <a href="https://cloud.google.com/">
         <img src="https://img.icons8.com/?size=512&id=17949&format=png" width="60" height="55" style="padding: 10px;">
     </a>
-    <a href="https://contextual.ai/">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd4EDMoZLFRrIjVBrSXOQYGcmvUJ3kL4U2usvjuKPla-LoRTZtLzFnb_Cu5tXzRI7DNBo&usqp=CAU" width="60" height="55" style="padding: 10px;">
-    </a>
     <a href="https://www.laude.org/">
         <img src="https://media.licdn.com/dms/image/v2/D4E0BAQEf_yGxYWCZPQ/company-logo_200_200/B4EZd7LecEHcAI-/0/1750118302768/laude_institute_logo?e=2147483647&v=beta&t=HqOMQxuGeHVjZsPIZ0vJXHpR3ZBH9OVo2aYK-f9ovio" width="60" height="55" style="padding: 10px;">
     </a>

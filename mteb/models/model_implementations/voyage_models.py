@@ -7,11 +7,12 @@ from typing import TYPE_CHECKING, Any, Literal
 import numpy as np
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
-from mteb.types import PromptType
+from mteb.models.sentence_transformer_wrapper import (
+    SentenceTransformerEncoderWrapper,
+)
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -127,6 +128,12 @@ VOYAGE_TOTAL_TOKEN_LIMITS = {
     "voyage-3-m-exp": 120_000,
 }
 
+OUTPUT_TYPES = [
+    OutputDType.INT8,
+    OutputDType.UINT8,
+    OutputDType.BINARY,
+]
+
 
 def token_limit(max_tpm: int, interval: int = 60):
     limit_interval_start_ts = time.time()
@@ -191,13 +198,12 @@ class VoyageModel(AbsEncoder):
         output_dtype: str | None = None,
         **kwargs,
     ) -> None:
-        requires_package(self, "voyageai", model_name, "pip install 'mteb[voyageai]'")
         import voyageai
 
         self._client = voyageai.Client(max_retries=max_retries)
         self._embed_func = rate_limit(max_rpm)(token_limit(max_tpm)(self._client.embed))
 
-        self._model_name = model_name.split("/")[-1].split()[0]
+        self._model_name = model_name.split("/")[-1].split()[0]  # noqa: PLC0207
         self._max_tpm = max_tpm
         self._max_tokens = max_tokens
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
@@ -317,6 +323,8 @@ voyage_4_large_2048d = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_4 = ModelMeta(
@@ -343,6 +351,8 @@ voyage_4 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_4_lite = ModelMeta(
@@ -369,6 +379,8 @@ voyage_4_lite = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_4_large = ModelMeta(
@@ -395,6 +407,8 @@ voyage_4_large = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_3_large = ModelMeta(
@@ -423,6 +437,8 @@ voyage_3_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     superseded_by="voyageai/voyage-4-large",
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["voyageai"],
 )
 
 
@@ -452,6 +468,8 @@ voyage_3_5 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     superseded_by="voyageai/voyage-4",
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_3_5_int8 = ModelMeta(
@@ -480,6 +498,8 @@ voyage_3_5_int8 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     adapted_from="voyageai/voyage-3.5",
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_3_5_binary = ModelMeta(
@@ -508,6 +528,8 @@ voyage_3_5_binary = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     adapted_from="voyageai/voyage-3.5",
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_large_2_instruct = ModelMeta(
@@ -535,6 +557,7 @@ voyage_large_2_instruct = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_finance_2 = ModelMeta(
@@ -562,6 +585,7 @@ voyage_finance_2 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_law_2 = ModelMeta(
@@ -589,6 +613,7 @@ voyage_law_2 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_code_2 = ModelMeta(
@@ -616,6 +641,7 @@ voyage_code_2 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_code_3 = ModelMeta(
@@ -643,6 +669,8 @@ voyage_code_3 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,  # src: private communication with Voyage
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["voyageai"],
 )
 
 
@@ -671,6 +699,7 @@ voyage_large_2 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_2 = ModelMeta(
@@ -698,7 +727,9 @@ voyage_2 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["voyageai"],
 )
+
 voyage_multilingual_2 = ModelMeta(
     name="voyageai/voyage-multilingual-2",
     model_type=["dense"],
@@ -724,6 +755,7 @@ voyage_multilingual_2 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_3 = ModelMeta(
@@ -751,6 +783,7 @@ voyage_3 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_3_lite = ModelMeta(
@@ -779,6 +812,7 @@ voyage_3_lite = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     superseded_by="voyageai/voyage-4-lite",
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_3_exp = ModelMeta(
@@ -868,10 +902,11 @@ voyage_3_exp = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["voyageai"],
 )
 
 voyage_4_nano = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},
     name="voyageai/voyage-4-nano",
     model_type=["dense"],
@@ -892,4 +927,5 @@ voyage_4_nano = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["voyageai"],
 )

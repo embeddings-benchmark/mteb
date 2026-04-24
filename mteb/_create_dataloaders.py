@@ -4,7 +4,6 @@ import logging
 import warnings
 from typing import TYPE_CHECKING, Any, cast
 
-import numpy as np
 import torch
 from datasets import Dataset, Image
 from torch.utils.data import DataLoader, default_collate
@@ -13,24 +12,16 @@ from mteb.types import (
     ConversationTurn,
     PromptType,
 )
-from mteb.types._encoder_io import AudioInputItem, VideoInputItem
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-
-    from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
+    from collections.abc import Callable, Sequence
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import (
         BatchedInput,
         Conversation,
-        QueryDatasetType,
     )
     from mteb.types._encoder_io import (
-        AudioInput,
-        CorpusInput,
-        ImageInput,
-        QueryInput,
         TextInput,
     )
 
@@ -81,33 +72,6 @@ def _corpus_to_dict(
     return new_row
 
 
-def _create_dataloader_for_retrieval_corpus(
-    dataset: Dataset,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[CorpusInput]:
-    """Create a dataloader from a corpus.
-
-    Args:
-        dataset: Corpus
-        batch_size: Batch size for the dataloader.
-        num_proc: Number of processes to use.
-
-    Returns:
-        A dataloader with the corpus.
-    """
-    new_ds = dataset.map(
-        _corpus_to_dict,
-        desc="Converting corpus dict",
-        num_proc=num_proc,
-    )
-    return DataLoader(
-        new_ds,
-        batch_size=batch_size,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-    )
-
-
 def _combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str]:
     row["query"] = row["text"]
 
@@ -116,33 +80,6 @@ def _combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str
     else:
         row["text"] = row["query"]
     return row
-
-
-def _create_text_dataloader_for_queries(
-    queries: QueryDatasetType,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[QueryInput]:
-    """Create a dataloader from a list of queries.
-
-    Args:
-        queries: A list of queries.
-        batch_size: Batch size for the dataloader.
-        num_proc: Number of processes to use.
-
-    Returns:
-        A dataloader with the queries.
-    """
-    queries = queries.map(
-        _combine_queries_with_instruction_text,
-        desc="Processing queries for dataloading",
-        num_proc=num_proc,
-    )
-    return DataLoader(
-        queries,
-        batch_size=batch_size,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-    )
 
 
 def _convert_conv_history_to_query(
@@ -205,33 +142,6 @@ def _convert_conv_history_to_query(
     row["text"] = conv_str
     row["conversation"] = current_conversation
     return cast("dict[str, str | list[ConversationTurn]]", row)
-
-
-def _create_dataloader_for_queries_conversation(
-    queries: QueryDatasetType,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[QueryInput]:
-    """Create a dataloader from a list of queries.
-
-    Args:
-        queries: A list of queries.
-        batch_size: Batch size for the dataloader.
-        num_proc: Number of processes to use.
-
-    Returns:
-        A dataloader with the queries.
-    """
-    return DataLoader(
-        queries.map(
-            _convert_conv_history_to_query,
-            desc="Converting conversations to queries",
-            num_proc=num_proc,
-        ),
-        collate_fn=_custom_collate_fn,
-        batch_size=batch_size,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-    )
 
 
 def _transform_image_to_rgb(
@@ -309,11 +219,11 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     """
     collated = {}
     for key in batch[0]:
-        if key in (
+        if key in (  # noqa: PLR6201
             "image",  # images can be with different sizes
             "conversation",  # conversations are lists of varying lengths
             "audio",  # audio can have different lengths
-            "video",  # video VideoDecoder objects can't be collated
+            "video",  # video can have different lengths
         ):
             collated[key] = [item[key] for item in batch]
         else:
@@ -323,228 +233,78 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     return cast("BatchedInput", collated)
 
 
-def _create_image_dataloader(
-    dataset: Dataset,
-    image_column_name: str | None = None,
-    batch_size: int = 32,
-    transform: Callable[[Any], Any] | None = None,
-    collate_fn: Callable[[list[dict[str, Any]]], BatchedInput] = _custom_collate_fn,
-    num_proc: int | None = None,
-) -> DataLoader[ImageInput]:
-    """Creates a DataLoader with the image dataset prepared using the explicit transformation.
-
-    Args:
-        dataset: The dataset containing images.
-        image_column_name: The name of the column containing images. If None, defaults to "image".
-        batch_size: Batch size for the dataloader.
-        transform: A transformation function to apply to each image (e.g., converting to tensor).
-        collate_fn: A custom collate function to handle batching.
-        num_proc: Number of processes to use.
-
-    Returns:
-        A DataLoader with the image dataset.
-    """
-    dataset = _prepare_image_dataset(
-        dataset,
-        image_column_name,
-        transform,
-        num_proc=num_proc,
-    )
-    return DataLoader(
-        dataset,
-        batch_size=batch_size,
-        collate_fn=collate_fn,
-        shuffle=False,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-    )
-
-
-def _create_text_queries_dataloader(
-    dataset: Dataset,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[QueryInput]:
-    if not isinstance(dataset["text"][0], list):
-        return _create_text_dataloader_for_queries(
-            dataset,
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    return _create_dataloader_for_queries_conversation(
-        dataset,
-        batch_size=batch_size,
-        num_proc=num_proc,
-    )
-
-
-def _create_queries_dataloader(
-    dataset: Dataset,
-    task_metadata: TaskMetadata,
-    input_column: str | None = None,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[QueryInput | ImageInput | AudioInput]:
-    """Create a dataloader for queries."""
-    queries_type = task_metadata.get_modalities(PromptType.query)
-    if queries_type == ["text"]:  # text only
-        return _create_text_queries_dataloader(
-            dataset,
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "image" in queries_type:  # contains image
-        return _create_image_dataloader(
-            dataset,
-            image_column_name="image",
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "audio" in task_metadata.modalities:
-        return _create_audio_dataloader(
-            dataset,
-            task_metadata,
-            input_column="audio",
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "video" in task_metadata.modalities:
-        return _create_video_dataloader(
-            dataset,
-            task_metadata,
-            input_column="video",
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    raise ValueError(f"Can't handle queries type {queries_type}")
-
-
-def _create_document_dataloader(
-    dataset: Dataset,
-    task_metadata: TaskMetadata,
-    input_column: str | None = None,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[CorpusInput | ImageInput | AudioInput]:
-    """Create a dataloader for documents.
-
-    Args:
-        dataset: The dataset containing the documents.
-        task_metadata: Metadata of the task to determine the document type.
-        input_column: The column to use as input. If None, it will use the first column that matches the modality.
-        batch_size: Batch size for the dataloader.
-        num_proc: Number of processes to use.
-
-    Returns:
-        A dataloader for the documents.
-    """
-    document_type = task_metadata.get_modalities(PromptType.document)
-    if document_type == ["text"]:  # text only
-        return _create_dataloader_for_retrieval_corpus(
-            dataset,
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "image" in document_type:  # contains image
-        return _create_image_dataloader(
-            dataset,
-            image_column_name="image",
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "audio" in task_metadata.modalities:
-        return _create_audio_dataloader(
-            dataset,
-            task_metadata,
-            input_column="audio",
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "video" in task_metadata.modalities:
-        return _create_video_dataloader(
-            dataset,
-            task_metadata,
-            input_column="video",
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    raise ValueError(f"Can't handle queries type {document_type}")
-
-
-def _create_audio_dataloader(
-    dataset: Dataset,
-    task_metadata: TaskMetadata,
-    input_column: str | None = None,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[AudioInput]:
-    """Create a dataloader for audio.
-
-    Args:
-        dataset: The dataset containing the audio.
-        task_metadata: Metadata of the task to determine the audio type.
-        input_column: The column to use as input. If None, it will use the first column that matches the audio.
-        batch_size: Batch size for the dataloader.
-        num_proc: The number of workers for the dataloader.
-
-    Returns:
-        A DataLoader with the audio dataset.
-    """
-    if (
-        input_column
-        and input_column in dataset.column_names
-        and "audio" not in dataset.column_names
-    ):
-        dataset = dataset.rename_column(input_column, "audio")
-
-    return DataLoader(
-        dataset,
-        batch_size=batch_size,
-        collate_fn=_custom_collate_fn,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-        shuffle=False,
-    )
-
-
-def _create_video_dataloader(
-    dataset: Dataset,
-    task_metadata: TaskMetadata,
-    input_column: str | None = None,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[AudioInput]:
-    """Create a dataloader for video.
-
-    Args:
-        dataset: The dataset containing the audio.
-        task_metadata: Metadata of the task to determine the audio type.
-        input_column: The column to use as input. If None, it will use the first column that matches the audio.
-        batch_size: Batch size for the dataloader.
-        num_proc: The number of workers for the dataloader.
-
-    Returns:
-        A DataLoader with the audio dataset.
-    """
-    if (
-        input_column
-        and input_column in dataset.column_names
-        and "video" not in dataset.column_names
-    ):
-        dataset = dataset.rename_column(input_column, "video")
-
-    return DataLoader(
-        dataset,
-        batch_size=batch_size,
-        collate_fn=_custom_collate_fn,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-        shuffle=False,
-    )
-
-
-def create_dataloader(
+def _prepare_dataset(
     dataset: Dataset,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
     input_column: str | None = None,
+    num_proc: int | None = None,
+) -> Dataset:
+    """Apply all modality-specific transformations to the dataset.
+
+    Args:
+        dataset: The dataset to prepare.
+        task_metadata: The metadata of the task.
+        prompt_type: The type of prompt.
+        input_column: The column to use as input. If None, it will use the first column that matches the modality.
+        num_proc: Number of processes.
+
+    Returns the transformed Dataset (no DataLoader wrapping).
+    """
+    modalities = task_metadata.get_modalities(prompt_type)
+
+    if "text" in modalities:
+        if prompt_type == PromptType.document:
+            dataset = dataset.map(
+                _corpus_to_dict,
+                desc="Standardizing text corpus format",
+                num_proc=num_proc,
+            )
+        elif prompt_type == PromptType.query:
+            if isinstance(dataset["text"][0], list):
+                dataset = dataset.map(
+                    _convert_conv_history_to_query,
+                    desc="Converting conversations to queries",
+                    num_proc=num_proc,
+                )
+            else:
+                dataset = dataset.map(
+                    _combine_queries_with_instruction_text,
+                    desc="Processing queries for dataloading",
+                    num_proc=num_proc,
+                )
+
+    if "image" in modalities:
+        dataset = _prepare_image_dataset(
+            dataset,
+            image_column_name=input_column if input_column else "image",
+            num_proc=num_proc,
+        )
+    for modality in ("audio", "video"):
+        if modality in modalities:
+            if (
+                input_column
+                and input_column in dataset.column_names
+                and modality not in dataset.column_names
+            ):
+                dataset = dataset.rename_column(input_column, modality)
+
+    # Drop modality columns not needed for this prompt type to avoid
+    # None values in the collate function (e.g. text=None in image-only corpus)
+    all_modality_columns = {"text", "image", "audio", "video"}
+    for col in all_modality_columns - set(modalities):
+        if col in dataset.column_names:
+            dataset = dataset.remove_columns(col)
+
+    return dataset
+
+
+def create_dataloader(
+    dataset: Dataset,
+    *,
+    task_metadata: TaskMetadata,
+    prompt_type: PromptType | None = None,
+    input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
     **kwargs: Any,
@@ -558,7 +318,8 @@ def create_dataloader(
         dataset: The dataset to create a dataloader from.
         task_metadata: The metadata of the task.
         prompt_type: The type of prompt to create a dataloader for. If None, it will be inferred from the task metadata.
-        input_column: The column to use as input. If None, it will use the first column that matches the modality.
+        input_column: The column(s) to use as input. If a string, used for column renaming.
+            If a Sequence, columns are assumed to already match modality names. If None, inferred from task metadata.
         batch_size: The batch size for the dataloader.
         num_proc: The number of processes to use for dataset processing.
         **kwargs: Additional arguments to pass to the dataloader creation functions.
@@ -566,231 +327,31 @@ def create_dataloader(
     Returns:
         A dataloader for the dataset.
     """
-    if prompt_type == PromptType.query:
-        return _create_queries_dataloader(
-            dataset,
-            task_metadata,
+    # Sequence means columns already match modality names, no renaming needed
+    _input_column = input_column if isinstance(input_column, str) else None
+
+    if (
+        prompt_type is None
+        and task_metadata.modalities == ["text"]
+        and _input_column is not None
+    ):
+        return _create_dataloader_from_texts(
+            dataset[_input_column],
             batch_size=batch_size,
-            input_column=input_column,
-            num_proc=num_proc,
-        )
-    if prompt_type == PromptType.document:
-        return _create_document_dataloader(
-            dataset,
-            task_metadata,
-            input_column=input_column,
-            batch_size=batch_size,
-            num_proc=num_proc,
         )
 
-    if "image" in task_metadata.modalities:
-        return _create_image_dataloader(
-            dataset,
-            image_column_name=input_column,
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "audio" in task_metadata.modalities:
-        return _create_audio_dataloader(
-            dataset,
-            task_metadata,
-            input_column=input_column,
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "video" in task_metadata.modalities:
-        return _create_video_dataloader(
-            dataset,
-            task_metadata,
-            input_column=input_column,
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "text" in task_metadata.modalities and input_column is not None:
-        return _create_dataloader_from_texts(
-            dataset[input_column],
-            batch_size=batch_size,
-        )
-    return DataLoader(
+    prepared = _prepare_dataset(
         dataset,
-        batch_size=batch_size,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
+        task_metadata,
+        prompt_type=prompt_type,
+        input_column=_input_column,
+        num_proc=num_proc,
     )
 
-
-class AudioCollator:
-    """Collator for audio data that resamples audio to a target sampling rate and optionally truncates to a maximum number of samples."""
-
-    def __init__(
-        self,
-        target_sampling_rate: int,
-        max_samples: int | None = None,
-    ) -> None:
-        """Initialize the collator.
-
-        Args:
-            target_sampling_rate: The sampling rate to resample the audio to.
-            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
-        """
-        self.target_sampling_rate = target_sampling_rate
-        self.max_samples = max_samples
-
-    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
-        return self.resample_audios(
-            inputs,
-            target_sampling_rate=self.target_sampling_rate,
-            max_samples=self.max_samples,
-        )
-
-    @staticmethod
-    def resample_audios(
-        inputs: list[dict[str, Any]],
-        target_sampling_rate: int,
-        max_samples: int | None = None,
-    ) -> BatchedInput:
-        """Resample a batch of audio inputs to a target sampling rate and optionally truncate to a maximum number of samples.
-
-        Args:
-            inputs: A list of dictionaries containing audio data under the "audio" key, where each audio is a dictionary with "array" and "sampling_rate" keys.
-            target_sampling_rate: The sampling rate to resample the audio to.
-            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
-        """
-        collated_inputs = []
-        for row in inputs:
-            audio_array = AudioCollator.resample_audio(
-                row,
-                target_sampling_rate,
-                max_samples,
-            )
-            row["audio"] = AudioInputItem(
-                array=audio_array, sampling_rate=target_sampling_rate
-            )
-            collated_inputs.append(row)
-        return cast(
-            "BatchedInput",
-            {
-                key: [row[key] for row in collated_inputs]
-                for key in collated_inputs[0].keys()
-            },
-        )
-
-    @staticmethod
-    def resample_audio(
-        audio: dict[str, Any],
-        target_sampling_rate: int,
-        max_samples: int | None = None,
-    ) -> np.typing.NDArray[np.floating]:
-        """Resample an audio input to a target sampling rate and optionally truncate to a maximum number of samples.
-
-        Args:
-            audio: A list of dictionaries containing audio data under the "audio" key, where each audio is a dictionary with "array" and "sampling_rate" keys.
-            target_sampling_rate: The sampling rate to resample the audio to.
-            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
-        """
-        import torchaudio
-
-        audio = audio["audio"]
-        if audio["sampling_rate"] != target_sampling_rate:
-            logger.debug(
-                f"Resampling audio from {audio['sampling_rate']} Hz to {target_sampling_rate} Hz."
-            )
-            resampler = torchaudio.transforms.Resample(
-                orig_freq=audio["sampling_rate"],
-                new_freq=target_sampling_rate,
-            )
-            audio_array = torch.from_numpy(audio["array"]).float()
-            audio_array = resampler(audio_array)
-            audio_array = audio_array.numpy()
-        else:
-            audio_array = audio["array"]
-
-        # Convert to mono if needed
-        if audio_array.ndim > 1 and audio_array.shape[0] > 1:
-            audio_array = np.mean(audio_array, axis=0)
-
-        if max_samples is not None:
-            num_samples = audio_array.shape[-1]
-            if num_samples > max_samples:
-                audio_array = audio_array[..., :max_samples]
-        return audio_array
-
-
-class VideoCollator:
-    """Collator for video data that optionally truncates to a maximum number of frames."""
-
-    def __init__(
-        self,
-        max_frames: int,
-        target_sampling_rate: int = 32_000,
-        max_samples: int | None = None,
-    ) -> None:
-        """Initialize the collator.
-
-        Args:
-            max_frames: The maximum number of frames to keep for each video. If None, no truncation is applied.
-            target_sampling_rate: The sampling rate to resample the audio to.
-            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
-        """
-        self.max_frames = max_frames
-        self.audio_collator = AudioCollator(
-            target_sampling_rate=target_sampling_rate, max_samples=max_samples
-        )
-
-    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
-        if "video" not in inputs[0]:
-            return cast("BatchedInput", inputs)
-
-        collated_inputs = []
-        for row in inputs:
-            videos = row.pop("video")
-            video_inputs = []
-            for video in videos:
-                frames = self.resample_video(video["frames"], self.max_frames)
-                audio = self.audio_collator.resample_audio(
-                    video,
-                    target_sampling_rate=self.audio_collator.target_sampling_rate,
-                    max_samples=self.audio_collator.max_samples,
-                )
-                video_inputs.append(
-                    VideoInputItem(
-                        frames=frames,
-                        audio=AudioInputItem(
-                            array=audio,
-                            sampling_rate=self.audio_collator.target_sampling_rate,
-                        ),
-                    )
-                )
-            row["video"] = video_inputs
-            collated_inputs.append(row)
-
-        return cast(
-            "BatchedInput",
-            {
-                key: [row[key] for row in collated_inputs]
-                for key in collated_inputs[0].keys()
-            },
-        )
-
-    @staticmethod
-    def resample_video(
-        video: VideoDecoder,
-        max_video_frames: int,
-    ) -> torch.Tensor:
-        """Resample a video input to a target number of frames.
-
-        Args:
-            video: A VideoDecoder object containing the video data.
-            max_video_frames: The maximum number of frames to keep for each video. If None, no truncation is applied.
-        """
-        video_frames = video.metadata.num_frames
-        frame_step = (
-            max(1, video_frames // max_video_frames)
-            if max_video_frames is not None
-            else 1
-        )
-        selected_frames = (
-            list(range(0, video_frames, frame_step))[:max_video_frames]
-            if max_video_frames is not None
-            else list(range(video_frames))
-        )
-        return video.get_frames_at(selected_frames).data
+    return DataLoader(
+        prepared,
+        batch_size=batch_size,
+        collate_fn=_custom_collate_fn,
+        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
+        shuffle=False,
+    )

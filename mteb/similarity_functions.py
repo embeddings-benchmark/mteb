@@ -15,7 +15,7 @@ def _use_torch_compile():
     gpu_ok = False
     if torch.cuda.is_available():
         device_cap = torch.cuda.get_device_capability()
-        if device_cap in ((7, 0), (8, 0), (9, 0)):
+        if device_cap in ((7, 0), (8, 0), (9, 0)):  # noqa: PLR6201
             gpu_ok = True
 
     return gpu_ok
@@ -214,8 +214,8 @@ def pairwise_max_sim(
     for query_embedding, document_embedding in zip(
         queries_embeddings, documents_embeddings
     ):
-        query_embedding = _convert_to_tensor(query_embedding)
-        document_embedding = _convert_to_tensor(document_embedding)
+        query_embedding = _convert_to_tensor(query_embedding)  # noqa: PLW2901
+        document_embedding = _convert_to_tensor(document_embedding)  # noqa: PLW2901
 
         query_document_score = torch.einsum(
             "sh,th->st",
@@ -326,10 +326,10 @@ def similarity(text_embeddings: Array, input_embeddings: Array) -> Array:
     text_embeddings_tensor = _convert_to_tensor(text_embeddings)
     input_embeddings_tensor = _convert_to_tensor(input_embeddings)
 
-    text_embeddings_tensor = text_embeddings_tensor / text_embeddings_tensor.norm(
+    text_embeddings_tensor = text_embeddings_tensor / text_embeddings_tensor.norm(  # noqa: PLR6104
         dim=-1, keepdim=True
     )
-    input_embeddings_tensor = input_embeddings_tensor / input_embeddings_tensor.norm(
+    input_embeddings_tensor = input_embeddings_tensor / input_embeddings_tensor.norm(  # noqa: PLR6104
         dim=-1, keepdim=True
     )
     logits = torch.matmul(input_embeddings_tensor, text_embeddings_tensor.T)

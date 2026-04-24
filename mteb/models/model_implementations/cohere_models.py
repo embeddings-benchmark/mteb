@@ -9,10 +9,9 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -143,6 +142,12 @@ EmbeddingType = Literal[
     "binary",
 ]
 
+OUTPUT_TYPES = [
+    OutputDType.INT8,
+    OutputDType.UINT8,
+    OutputDType.BINARY,
+]
+
 # Cohere API limits
 COHERE_MAX_BATCH_SIZE = 96  # Maximum number of texts per API call
 COHERE_MAX_TOKENS_PER_BATCH = 128_000  # Maximum total tokens per API call
@@ -226,8 +231,6 @@ class CohereTextEmbeddingModel(AbsEncoder):
         output_dimension: int | None = None,
         **kwargs,
     ) -> None:
-        requires_package(self, "cohere", model_name, "pip install 'mteb[cohere]'")
-
         import cohere
 
         self.model_name = model_name.removeprefix("Cohere/Cohere-")
@@ -335,7 +338,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
                         unpacked.append(1.0 if bit_val else -1.0)
                 unpacked_embeddings.append(unpacked)
             embeddings_array = np.array(unpacked_embeddings, dtype=np.float32)
-        elif primary_embedding_type in ["int8", "uint8"]:
+        elif primary_embedding_type in ["int8", "uint8"]:  # noqa: PLR6201
             # Convert int8/uint8 embeddings to float32
             embeddings_array = embeddings_array.astype(np.float32)
 
@@ -404,6 +407,8 @@ cohere_mult_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_eng_3 = ModelMeta(
@@ -430,6 +435,8 @@ cohere_eng_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_mult_light_3 = ModelMeta(
@@ -456,6 +463,8 @@ cohere_mult_light_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_eng_light_3 = ModelMeta(
@@ -482,4 +491,6 @@ cohere_eng_light_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )

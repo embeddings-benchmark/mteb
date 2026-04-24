@@ -14,14 +14,13 @@ if TYPE_CHECKING:
     from collections.abc import Iterable, Mapping
 
     from mteb.abstasks import AbsTask
-    from mteb.models import (
-        MTEBModels,
-    )
+    from mteb.models import MTEBModels
+    from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
 
 
-def get_model_metas(
+def get_model_metas(  # noqa: PLR0913, PLR0917
     model_names: Iterable[str] | None = None,
     languages: Iterable[str] | None = None,
     open_weights: bool | None = None,
@@ -30,6 +29,8 @@ def get_model_metas(
     use_instructions: bool | None = None,
     zero_shot_on: list[AbsTask] | None = None,
     model_types: Iterable[str] | None = None,
+    modalities: Iterable[Modalities] | None = None,
+    exclusive_modality_filter: bool = False,
 ) -> list[ModelMeta]:
     """Load all models' metadata that fit the specified criteria.
 
@@ -43,6 +44,9 @@ def get_model_metas(
         use_instructions: Whether to filter by models that use instructions. If None, all models are included.
         zero_shot_on: A list of tasks on which the model is zero-shot. If None this filter is ignored.
         model_types: A list of model types to filter by. If None, all model types are included.
+        modalities: A list of modalities to filter by. If None, all modalities are included.
+        exclusive_modality_filter: If True, only return models whose modalities exactly match the provided
+            modalities. If False, return models whose modalities include the provided modalities.
 
     Returns:
         A list of model metadata objects that fit the specified criteria.
@@ -52,6 +56,8 @@ def get_model_metas(
     languages = set(languages) if languages is not None else None
     frameworks = set(frameworks) if frameworks is not None else None
     model_types_set = set(model_types) if model_types is not None else None
+    modalities_set = set(modalities) if modalities is not None else None
+
     for model_meta in MODEL_REGISTRY.values():
         if (model_names is not None) and (model_meta.name not in model_names):
             continue
@@ -72,6 +78,13 @@ def get_model_metas(
             model_meta.model_type
         ):
             continue
+        if modalities_set is not None:
+            model_modalities = set(model_meta.modalities)
+            if exclusive_modality_filter:
+                if model_modalities != modalities_set:
+                    continue
+            elif not modalities_set <= model_modalities:
+                continue
 
         lower, upper = n_parameters_range
         n_parameters = model_meta.n_parameters
@@ -112,16 +125,8 @@ def get_model(
     Returns:
         A model object
     """
-    meta = get_model_meta(model_name, revision).model_copy(deep=True)
+    meta = get_model_meta(model_name, revision, fetch_from_hf=True)
     model = meta.load_model(device=device, embed_dim=embed_dim, **kwargs)
-
-    if kwargs:
-        logger.info(
-            f"Model '{model_name}' loaded with additional arguments: {list(kwargs.keys())}"
-        )
-        meta.loader_kwargs |= kwargs
-
-    model.mteb_model_meta = meta  # type: ignore[misc]
     return model
 
 
@@ -130,7 +135,7 @@ _MODEL_RENAMES: dict[str, str] = {
     # to store model's eval results to display on benchmark
     "baseline/bm25s": "mteb/baseline-bm25s",
     "baseline/random-cross-encoder-baseline": "mteb/baseline-random-cross-encoder",
-    "mteb/baseline-random-encoder": "mteb/baseline-random-encoder",
+    "baseline/random-encoder": "mteb/baseline-random-encoder",
     "baseline/bb25": "mteb/baseline-bb25",
 }
 
@@ -138,7 +143,7 @@ _MODEL_RENAMES: dict[str, str] = {
 def get_model_meta(
     model_name: str,
     revision: str | None = None,
-    fetch_from_hf: bool = True,
+    fetch_from_hf: bool = False,
     fill_missing: bool = False,
     experiment_kwargs: Mapping[str, Any] | None = None,
 ) -> ModelMeta:

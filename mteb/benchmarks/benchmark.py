@@ -1,18 +1,56 @@
 from __future__ import annotations
 
+import tempfile
 from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
+from functools import lru_cache
+from pathlib import Path
 from typing import TYPE_CHECKING, Literal, cast
 
 import huggingface_hub
 import pandas as pd
+import yaml
+from huggingface_hub import DatasetCard, DatasetCardData
 
+from mteb._hf_integration.eval_model import HFEvalMeta, HFEvalTaskConfig
+from mteb._hf_integration.hf_hub_utils import _get_file_on_hub
 from mteb.abstasks.abstask import AbsTask
 from mteb.types import StrURL
 
+from ._benchmark_metrics import (
+    _compute_mean_task,
+    _compute_mean_task_type,
+)
+
 if TYPE_CHECKING:
     from mteb.abstasks.aggregated_task import AbsTaskAggregate
-    from mteb.results import BenchmarkResults
+    from mteb.results import BenchmarkResults, ModelResult
+
+
+@lru_cache
+def _get_benchmarks_on_leaderboard() -> set[str]:
+    from mteb.benchmarks._leaderboard_menu import (
+        GP_BENCHMARK_ENTRIES,
+        R_BENCHMARK_ENTRIES,
+        MenuEntry,
+    )
+
+    entries = GP_BENCHMARK_ENTRIES + R_BENCHMARK_ENTRIES
+
+    def __extract_benchmarks(
+        entries: Sequence[Benchmark | MenuEntry],
+    ) -> list[Benchmark]:
+        benchmarks = []
+        for entry in entries:
+            if isinstance(entry, Benchmark):
+                benchmarks.append(entry)
+            else:
+                benchmarks.extend(__extract_benchmarks(entry.benchmarks))
+        return benchmarks
+
+    names = {benchmark.name for benchmark in __extract_benchmarks(entries)}
+
+    return names
 
 
 @dataclass
@@ -46,10 +84,16 @@ class Benchmark:
     reference: StrURL | None = None
     citation: str | None = None
     contacts: list[str] | None = None
-    display_on_leaderboard: bool = True
     icon: str | None = None
     display_name: str | None = None
     language_view: list[str] | Literal["all"] = field(default_factory=list)
+    benchmark_hf_repo: str | None = None
+
+    @property
+    def display_on_leaderboard(self) -> bool:
+        """Whether the benchmark should be displayed on the leaderboard."""
+        benchmarks_on_leaderboard = _get_benchmarks_on_leaderboard()
+        return self.name in benchmarks_on_leaderboard
 
     def __iter__(self) -> Iterator[AbsTask]:
         return iter(self.tasks)
@@ -60,7 +104,7 @@ class Benchmark:
     def __getitem__(self, index: int) -> AbsTask:
         return self.tasks[index]
 
-    def _create_summary_table(
+    def _create_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         """Create summary table. Called by the leaderboard app.
@@ -74,7 +118,7 @@ class Benchmark:
 
         return _create_summary_table_from_benchmark_results(benchmark_results)
 
-    def _create_per_task_table(
+    def _create_per_task_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         """Create per-task table. Called by the leaderboard app.
@@ -173,11 +217,184 @@ class Benchmark:
         desc = f"'{desc[:max_len]}..." if len(desc) > max_len else f"'{desc}'"
         return f"{self.__class__.__name__}(name='{self.name}', description={desc}, tasks=[...] (#{n_tasks}), ...)"
 
+    def _generate_benchmark_card(self) -> DatasetCard:
+        """Generate a README/dataset card for this benchmark."""
+        template_path = Path(__file__).parent / "benchmark_card_template.md"
+
+        task_rows = [
+            {
+                "name": task.metadata.name,
+                "reference": task.metadata.reference,
+                "simplified_type": task.metadata.simplified_task_type,
+                "description": task.metadata.description or "",
+            }
+            for task in self.tasks
+        ]
+
+        return DatasetCard.from_template(
+            card_data=DatasetCardData(tags=["mteb", "benchmark"]),
+            template_path=str(template_path),
+            benchmark_name=self.name,
+            benchmark_description=self.description,
+            tasks=task_rows,
+            citation=self.citation,
+        )
+
+    def push_benchmark_card_to_hub(
+        self,
+        *,
+        create_pr: bool = False,
+    ) -> None:
+        """Push a README benchmark card to the HuggingFace Hub dataset repo."""
+        if self.benchmark_hf_repo is None:
+            raise ValueError(
+                "`benchmark_hf_repo` must be set to push a benchmark card to the hub."
+            )
+
+        if not huggingface_hub.repo_exists(self.benchmark_hf_repo, repo_type="dataset"):
+            huggingface_hub.create_repo(
+                self.benchmark_hf_repo,
+                repo_type="dataset",
+            )
+
+        card = self._generate_benchmark_card()
+        card.push_to_hub(
+            self.benchmark_hf_repo,
+            repo_type="dataset",
+            commit_message="Add benchmark card",
+            create_pr=create_pr,
+        )
+
+    def push_eval_to_hub(
+        self,
+        *,
+        create_pr: bool = False,
+    ) -> None:
+        """Push `eval.yaml` to the HuggingFace Hub
+
+        Args:
+            create_pr: Whether to create the PR
+        """
+        eval_file_name = "eval.yaml"
+
+        if self.benchmark_hf_repo is None:
+            raise ValueError(
+                "`benchmark_hf_repo` must be set to push eval config to the hub."
+            )
+
+        existing_eval_path = _get_file_on_hub(
+            repo_id=self.benchmark_hf_repo,
+            file_name=eval_file_name,
+            repo_type="dataset",
+        )
+
+        # handle multiple tasks in one repo (e.g. BRIGHT)
+        existing_eval = None
+        if existing_eval_path is not None:
+            with Path(existing_eval_path).open(encoding="utf-8") as f:
+                existing_eval_dict = yaml.safe_load(f)
+            if existing_eval_dict is not None:
+                existing_eval = HFEvalMeta.model_validate(existing_eval_dict)
+
+        benchmark_config = self._to_hf_eval_config()
+        benchmark_config = (
+            benchmark_config.merge(existing_eval) if existing_eval else benchmark_config
+        )
+
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8") as tmp_file:
+            tmp_file.write(benchmark_config.to_yaml())
+            tmp_file.flush()
+
+            huggingface_hub.upload_file(
+                path_or_fileobj=tmp_file.name,
+                path_in_repo=eval_file_name,
+                repo_id=self.benchmark_hf_repo,
+                repo_type="dataset",
+                commit_message="Add eval config",
+                create_pr=create_pr,
+            )
+
+    def _to_hf_eval_config(self) -> HFEvalMeta:
+        return HFEvalMeta(
+            name=self.name,
+            description=self.description,
+            tasks=[
+                HFEvalTaskConfig(
+                    id=self.name,
+                    config=None,
+                    split=None,
+                )
+            ],
+        )
+
+    def _get_model_score(
+        self,
+        model_result: ModelResult,
+    ) -> dict[str, float | None]:
+        """Compute aggregated scores for a single model."""
+        filtered = model_result.select_tasks(self.tasks).task_results
+        return {
+            "Mean(Task)": _compute_mean_task(filtered),
+            "Mean(TaskType)": _compute_mean_task_type(filtered),
+        }
+
+    def get_score(
+        self,
+        results: BenchmarkResults,
+    ) -> dict[str, dict[str, float | None]]:
+        """Get aggregated scores for all models in *results*.
+
+        The benchmark class controls how scores are aggregated — subclasses may
+        override this method to customise the returned metrics.
+
+        Args:
+            results: A `BenchmarkResults` object containing the model
+                results to score.
+
+        Returns:
+            A dict mapping each model name to a dict with the keys:
+
+            - ``"Mean(Task)"``: mean score across all benchmark tasks.
+            - ``"Mean(TaskType)"``: mean of per-task-type means.
+            - ``"Rank"``: Borda count rank (1 = best). Each model earns
+              ``n - rank`` points per task; points are summed and the model
+              with the highest total is ranked 1. Matches the leaderboard.
+        """
+        from mteb.benchmarks._create_table import _get_borda_rank
+
+        bench_results = results.join_revisions()
+        scores: dict[str, dict[str, float | None]] = {}
+        per_task_rows: dict[str, dict[str, float | None]] = {}
+
+        for model_result in bench_results:
+            scores[model_result.model_name] = self._get_model_score(model_result)
+            filtered = model_result.select_tasks(self.tasks).task_results
+            per_task_rows[model_result.model_name] = {
+                tr.task_name: tr.get_score() for tr in filtered
+            }
+
+        if per_task_rows:
+            per_task_df = pd.DataFrame.from_dict(per_task_rows, orient="index").reindex(
+                list(per_task_rows.keys())
+            )
+            if per_task_df.shape[1] > 0:
+                borda_ranks = _get_borda_rank(per_task_df)
+                for name, rank in borda_ranks.items():
+                    scores[name]["Rank"] = int(rank)  # type: ignore[index]
+            else:
+                for name, model_scores in scores.items():
+                    model_scores["Rank"] = None
+        else:
+            for name, model_scores in scores.items():
+                model_scores["Rank"] = None
+
+        return scores
+
 
 class RtebBenchmark(Benchmark):
     """Wrapper for RTEB benchmark."""
 
-    def _create_summary_table(
+    def _create_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         from mteb.benchmarks._create_table import (
@@ -203,7 +420,7 @@ class RtebBenchmark(Benchmark):
 class HUMEBenchmark(Benchmark):
     """Wrapper for HUME benchmark."""
 
-    def _create_summary_table(
+    def _create_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         from mteb.benchmarks._create_table import _create_summary_table_mean_subset
@@ -214,7 +431,7 @@ class HUMEBenchmark(Benchmark):
 class MIEBBenchmark(Benchmark):
     """Wrapper for MIEB benchmark."""
 
-    def _create_summary_table(
+    def _create_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         from mteb.benchmarks._create_table import _create_summary_table_mean_task_type
@@ -227,7 +444,7 @@ class MIEBBenchmark(Benchmark):
 class VidoreBenchmark(Benchmark):
     """Wrapper for Vidore3 benchmark."""
 
-    def _create_vidore_summary_table(
+    def _create_vidore_summary_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         """Create summary table from BenchmarkResults.
@@ -244,6 +461,7 @@ class VidoreBenchmark(Benchmark):
         import mteb
         from mteb.benchmarks._create_table import (
             _format_max_tokens,
+            _format_n_active_parameters,
             _format_n_parameters,
             _get_means_per_types,
             _split_on_capital,
@@ -318,15 +536,20 @@ class VidoreBenchmark(Benchmark):
         )
         joint_table.insert(
             1,
-            "Number of Parameters (B)",
+            "Total Parameters (B)",
             model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
         )
         joint_table.insert(
             1,
-            "Memory Usage (MB)",
+            "Active Parameters (B)",
             model_metas.map(
-                lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
+                lambda m: _format_n_active_parameters(m.n_active_parameters)
             ),
+        )
+
+        # Add release date from model metadata
+        joint_table["Release Date"] = model_metas.map(
+            lambda m: str(m.release_date) if m.release_date else None
         )
 
         # Clean up model names (remove HF organization)

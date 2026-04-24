@@ -31,3 +31,17 @@ def test_benchmark_aliases(alias, full_name):
     assert benchmark.name == full_name
     assert isinstance(benchmark, mteb.Benchmark)
     assert alias in benchmark.aliases
+
+
+def test_benchmark_on_leaderboard():
+    on_leaderboard = "MTEB(Multilingual, v2)"
+    not_on_leaderboard = "MTEB(Multilingual, v1)"
+    benchmark = mteb.get_benchmarks(display_on_leaderboard=True)
+    names = {b.name for b in benchmark}
+    assert on_leaderboard in names
+    assert not_on_leaderboard not in names
+
+    benchmark = mteb.get_benchmarks(display_on_leaderboard=False)
+    names = {b.name for b in benchmark}
+    assert on_leaderboard not in names
+    assert not_on_leaderboard in names

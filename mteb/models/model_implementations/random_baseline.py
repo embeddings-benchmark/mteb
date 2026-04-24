@@ -7,7 +7,11 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import VideoCollator
+from mteb._requires_package import (
+    requires_audio_dependencies,
+    requires_image_dependencies,
+)
+from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta
 from mteb.similarity_functions import (
     select_pairwise_similarity,
@@ -18,7 +22,6 @@ if TYPE_CHECKING:
     from numpy.typing import NDArray
     from PIL import Image
     from torch.utils.data import DataLoader
-    from torchcodec.decoders import VideoDecoder
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types._encoder_io import (
@@ -83,23 +86,19 @@ def _audio_to_vector(audio: AudioInputItem, size: int) -> np.ndarray:
 
 
 def _video_to_vector(
-    item: dict[str, VideoDecoder | AudioInputItem],
+    item: torch.Tensor,
     size: int,
 ) -> NDArray[np.floating]:
     """Generate a deterministic random vector based on video content.
 
     Args:
-        item: Video data
+        item: Video frames tensor.
         size: Size of the output vector.
 
     Returns:
         A numpy array of shape (size,) containing the random vector.
     """
-    # Convert video to bytes and then to a numeric seed
-    video_bytes = (
-        VideoCollator.resample_video(item["frames"], 10).numpy().tobytes()
-        + item["audio"]["array"].tobytes()
-    )
+    video_bytes = item.numpy().tobytes()
     seed = int(hashlib.sha256(video_bytes).hexdigest(), 16) % (2**32)
     rng = np.random.default_rng(seed)
     return rng.random(size, dtype=np.float32)
@@ -229,6 +228,15 @@ class RandomEncoderBaseline:
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        has_video = "video" in inputs.dataset.features
+        has_audio = "audio" in inputs.dataset.features
+        if has_video or has_audio:
+            requires_audio_dependencies()
+            requires_image_dependencies()
+            inputs.collate_fn = VideoCollator(
+                target_sampling_rate=16000,
+                fps=2.0,
+            )
         embedding = _batch_to_embeddings(inputs, self.embedding_dim)
         if self.array_framework == "torch":
             return torch.tensor(embedding, dtype=self.dtype)
@@ -304,6 +312,16 @@ class RandomCrossEncoderBaseline:
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        has_video = "video" in inputs1.dataset.features
+        has_audio = "audio" in inputs1.dataset.features
+        if has_video or has_audio:
+            collator = VideoCollator(
+                target_sampling_rate=16000,
+                fps=2.0,
+            )
+            inputs1.collate_fn = collator
+            inputs2.collate_fn = collator
+
         embeddings1 = _batch_to_embeddings(inputs1, self.embedding_dim)
         embeddings2 = _batch_to_embeddings(inputs2, self.embedding_dim)
         similarities = []

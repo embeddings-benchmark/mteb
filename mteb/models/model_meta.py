@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib
 import json
 import logging
 import warnings
@@ -8,6 +9,7 @@ from collections.abc import Callable, Mapping, Sequence
 from dataclasses import field
 from enum import Enum
 from functools import partial
+from importlib.metadata import PackageNotFoundError, distribution, requires
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
@@ -25,8 +27,13 @@ from huggingface_hub.errors import (
     RepositoryNotFoundError,
     SafetensorsParsingError,
 )
+from packaging.requirements import Requirement
+from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
-from sentence_transformers import CrossEncoder, SentenceTransformer
+from sentence_transformers import (
+    CrossEncoder,
+    SentenceTransformer,
+)
 from transformers import AutoConfig
 
 from mteb._helpful_enum import HelpfulStrEnum
@@ -36,10 +43,24 @@ from mteb._hf_integration.hf_hub_utils import (
     _repo_exists,
 )
 from mteb.languages import check_language_code
+from mteb.languages.iso_mappings import _hf_langs_to_iso_lang_scripts
 from mteb.models.models_protocols import MTEBModels
-from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
+from mteb.types import (
+    ISOLanguageScript,
+    Licenses,
+    Modalities,
+    OutputDType,
+    StrDate,
+    StrURL,
+)
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+    from sentence_transformers import (
+        CrossEncoderModelCardData,
+        SentenceTransformerModelCardData,
+    )
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
@@ -94,7 +115,7 @@ def _get_loader_name(
     return loader.__name__
 
 
-class ModelMeta(BaseModel):
+class ModelMeta(BaseModel):  # noqa: PLR0904
     """The model metadata object.
 
     Attributes:
@@ -108,7 +129,7 @@ class ModelMeta(BaseModel):
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
-          If annotated as list this will be treated as a range of possible embedding dimensions (Matryoshka).
+            If annotated as list this will be treated as a range of possible embedding dimensions (Matryoshka).
         revision: The revision number of the model. If None, it is assumed that the metadata (including the loader) is valid for all revisions of the model.
         release_date: The date the model's revision was released. If None, then release date will be added based on 1st commit in hf repository of model.
         license: The license under which the model is released. Required if open_weights is True.
@@ -132,6 +153,8 @@ class ModelMeta(BaseModel):
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
         experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
+        output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
+        extra_requirements_groups: Name of group of extra requirements.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -165,6 +188,18 @@ class ModelMeta(BaseModel):
     citation: str | None = None
     contacts: list[str] | None = None
     experiment_kwargs: Mapping[str, Any] | None = None
+    output_dtypes: OutputDType | list[OutputDType] | None = None
+    extra_requirements_groups: Sequence[str] | None = None
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        """Deprecation warning for direct attribute mutation. Use model_copy(update={...}) instead."""
+        warnings.warn(
+            f"Mutating '{name}' is deprecated and will be removed in future versions. "
+            "Use .model_copy(update={...}) instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        super().__setattr__(name, value)
 
     @model_validator(mode="before")
     @classmethod
@@ -190,10 +225,9 @@ class ModelMeta(BaseModel):
                 if is_cross_encoder_value:
                     if "cross-encoder" not in model_type:
                         data["model_type"] = ["cross-encoder"]
-                else:
-                    if "cross-encoder" in model_type:
-                        model_type = [t for t in model_type if t != "cross-encoder"]
-                        data["model_type"] = model_type if model_type else ["dense"]
+                elif "cross-encoder" in model_type:
+                    model_type = [t for t in model_type if t != "cross-encoder"]
+                    data["model_type"] = model_type if model_type else ["dense"]
 
         return data
 
@@ -243,9 +277,9 @@ class ModelMeta(BaseModel):
     def to_dict(self):
         """Returns a dictionary representation of the model metadata."""
         meta = self.model_copy(deep=True)
-        if isinstance(meta.embed_dim, Sequence):
-            meta.embed_dim = max(meta.embed_dim)
         dict_repr = meta.model_dump()
+        if isinstance(meta.embed_dim, Sequence):
+            dict_repr["embed_dim"] = max(meta.embed_dim)
         loader = dict_repr.pop("loader", None)
         dict_repr["training_datasets"] = (
             list(dict_repr["training_datasets"])
@@ -279,6 +313,40 @@ class ModelMeta(BaseModel):
             )
         return v
 
+    def __hash__(self) -> int:
+        """Make ModelMeta hashable based on name, revision, experiment_kwargs and embed_dim.
+
+        This allows ModelMeta instances to be used as dictionary keys.
+        Two ModelMeta instances with the same name, revision, experiment_kwargs and embed_dim will have the same hash.
+        """
+        # Serialize experiment_kwargs to a deterministic, hashable representation
+        exp_kwargs_repr = (
+            _serialize_experiment_kwargs_to_name(self.experiment_kwargs)
+            if self.experiment_kwargs
+            else None
+        )
+        return hash(
+            (
+                self.name,
+                self.revision,
+                exp_kwargs_repr,
+                tuple(self.embed_dim)
+                if isinstance(self.embed_dim, Sequence)
+                else self.embed_dim,
+            )
+        )
+
+    def __eq__(self, other: object) -> bool:
+        """Check equality based on name, revision, experiment_kwargs and embed_dim.
+
+        Two ModelMeta instances are equal if they have the same name, revision, experiment_kwargs and embed_dim.
+        """
+        if not isinstance(other, ModelMeta):
+            return NotImplemented
+        self_dict = self.model_dump()
+        other_dict = other.model_dump()
+        return self_dict == other_dict
+
     def load_model(
         self,
         device: str | None = None,
@@ -287,54 +355,124 @@ class ModelMeta(BaseModel):
         **kwargs: Any,
     ) -> MTEBModels:
         """Loads the model using the specified loader function."""
-        if self.loader is None:
+        # create a copy so that changing the model meta on the model does not influence the original meta
+        self._check_requirements()
+        _self = self.model_copy(deep=True)
+
+        if _self.loader is None:
             raise NotImplementedError(
                 "No model implementation is available for this model."
             )
-        if self.name is None:
+        if _self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
+
+        loader = _self.loader
+        name = _self.name
+        revision = _self.revision
+        updates: dict[str, Any] = {}
+        base_exp_kwargs = (
+            dict(_self.experiment_kwargs) if _self.experiment_kwargs else {}
+        )
 
         if embed_dim is not None:
             if (
-                self.embed_dim is not None
-                and isinstance(self.embed_dim, int)
-                and self.embed_dim != embed_dim
+                _self.embed_dim is not None
+                and isinstance(_self.embed_dim, int)
+                and _self.embed_dim != embed_dim
             ):
                 raise ValueError(
-                    f"Requested embedding dimension {embed_dim} does not match the model's embedding dimension {self.embed_dim}. "
+                    f"Requested embedding dimension {embed_dim} does not match the model's embedding dimension {_self.embed_dim}. "
                     "Model does not support loading with a different embedding dimension. "
                     "You can change supported embedding dimensions in `meta.embed_dim`."
                 )
-            elif isinstance(self.embed_dim, list) and embed_dim not in self.embed_dim:
+            elif isinstance(_self.embed_dim, list) and embed_dim not in _self.embed_dim:
                 raise ValueError(
-                    f"Requested embedding dimension {embed_dim} is not in the model's supported embedding dimensions {self.embed_dim}."
+                    f"Requested embedding dimension {embed_dim} is not in the model's supported embedding dimensions {_self.embed_dim}."
                 )
-            self.embed_dim = embed_dim
-            if self.experiment_kwargs is None:
-                self.experiment_kwargs = {"embed_dim": embed_dim}
-            else:
-                self.experiment_kwargs["embed_dim"] = embed_dim  # type: ignore[index]
+            updates["embed_dim"] = embed_dim
+            kwargs["embed_dim"] = embed_dim
 
-        if self.experiment_kwargs is None:
-            self.experiment_kwargs = kwargs if len(kwargs) > 0 else None
-        elif len(kwargs) > 0 and self.experiment_kwargs is not None:
-            kwargs |= self.experiment_kwargs
-            self.experiment_kwargs = kwargs
+        merged_exp_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
+        updates["experiment_kwargs"] = merged_exp_kwargs or None
 
         # Allow overwrites
-        _kwargs = self.loader_kwargs.copy()
-        _kwargs.update(kwargs)
+        _kwargs = _self.loader_kwargs.copy()
+        _kwargs.update(merged_exp_kwargs)
         if device is not None:
             _kwargs["device"] = device
 
-        model: MTEBModels = self.loader(
-            self.name,
-            revision=self.revision,
-            embed_dim=embed_dim,
+        updates["loader_kwargs"] = _kwargs
+        _self = _self.model_copy(update=updates)
+        model: MTEBModels = loader(
+            name,
+            revision=revision,
             **_kwargs,
         )
-        model.mteb_model_meta = self  # type: ignore[misc]
+        model.mteb_model_meta = _self  # type: ignore[misc]
         return model
+
+    def _check_requirements(self) -> None:
+        groups: list[str] = list(self.extra_requirements_groups or [])
+
+        # handle modality specific dependencies inside baseline functions
+        if self.name and not self.name.startswith("mteb/baseline"):
+            if "image" in self.modalities and "image" not in groups:
+                groups.append("image")
+            if "audio" in self.modalities and "audio" not in groups:
+                groups.append("audio")
+
+        if not groups:
+            return
+
+        available_extras = set(
+            distribution("mteb").metadata.get_all("Provides-Extra") or []
+        )
+
+        def _norm(s: str) -> str:
+            return s.replace("_", "-").lower()
+
+        normalized_available = {_norm(e) for e in available_extras}
+        unknown = {g for g in groups if _norm(g) not in normalized_available}
+        if unknown:
+            raise ValueError(
+                f"Unknown extras group(s) for mteb: {sorted(unknown)}. "
+                f"Available: {sorted(available_extras)}"
+            )
+
+        missing_dependencies = []
+
+        mteb_requires = requires("mteb")
+        if mteb_requires is None:
+            raise RuntimeError(
+                "Could not retrieve mteb package requirements. Make sure mteb is installed properly."
+            )
+
+        for req_str in mteb_requires:
+            req = Requirement(req_str)
+
+            if req.marker is None or not any(
+                req.marker.evaluate({"extra": g}) for g in groups
+            ):
+                continue
+
+            try:
+                installed = importlib.metadata.version(req.name)
+            except PackageNotFoundError:
+                missing_dependencies.append(req_str)
+                continue
+
+            try:
+                if req.specifier and Version(installed) not in req.specifier:
+                    missing_dependencies.append(f"{req_str} (installed: {installed})")
+            except InvalidVersion:
+                missing_dependencies.append(f"{req_str} (installed: {installed})")
+
+        if missing_dependencies:
+            raise ImportError(
+                f"Model {self.name} is missing required dependencies: "
+                + ", ".join(missing_dependencies)
+                + f".\nYou can install it with `pip install mteb[{','.join(groups)}]`."
+            )
 
     def model_name_as_path(self) -> str:
         """Returns the model name in a format that can be used as a file path.
@@ -380,7 +518,7 @@ class ModelMeta(BaseModel):
         model_name: str,
         revision: str | None,
         config: dict[str, Any] | None,
-        sentence_transformers_loader: Callable[..., MTEBModels],
+        encoder_loader: Callable[..., MTEBModels],
         cross_encoder_loader: Callable[..., MTEBModels],
     ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
         """Detect if model is CrossEncoder or default to dense."""
@@ -389,7 +527,7 @@ class ModelMeta(BaseModel):
                 f"Could not load config.json for {model_name}. "
                 "Defaulting to SentenceTransformer loader."
             )
-            return sentence_transformers_loader, "dense"
+            return encoder_loader, "dense"
 
         architectures = config.get("architectures", [])
 
@@ -406,7 +544,7 @@ class ModelMeta(BaseModel):
             f"Model {model_name} does not have modules.json or recognized architecture. "
             "Defaulting to SentenceTransformer loader."
         )
-        return sentence_transformers_loader, "dense"
+        return encoder_loader, "dense"
 
     @staticmethod
     def _is_causal_lm_reranker(
@@ -459,7 +597,10 @@ class ModelMeta(BaseModel):
             - loader_function: A callable that returns MTEBModels, or None if model doesn't exist
             - model_type: One of "dense", "cross-encoder", or "late-interaction"
         """
-        from mteb.models import CrossEncoderWrapper, sentence_transformers_loader
+        from mteb.models import (
+            CrossEncoderWrapper,
+            SentenceTransformerEncoderWrapper,
+        )
 
         try:
             modules_config = _get_json_from_hub(
@@ -469,13 +610,13 @@ class ModelMeta(BaseModel):
             if (
                 modules_config
             ):  # SentenceTransformer/SparseEncoder (Not support for now)
-                return sentence_transformers_loader, "dense"
+                return SentenceTransformerEncoderWrapper, "dense"
             else:
                 return cls._detect_cross_encoder_or_dense(
                     model_name,
                     revision,
                     config,
-                    sentence_transformers_loader,
+                    SentenceTransformerEncoderWrapper,
                     cross_encoder_loader=CrossEncoderWrapper,
                 )
 
@@ -485,7 +626,7 @@ class ModelMeta(BaseModel):
                 "Defaulting to SentenceTransformer loader."
             )
 
-        return sentence_transformers_loader, "dense"
+        return SentenceTransformerEncoderWrapper, "dense"
 
     @classmethod
     def create_empty(cls, overwrites: dict[str, Any] | None = None) -> Self:
@@ -518,10 +659,13 @@ class ModelMeta(BaseModel):
         if overwrites:
             empty_model = empty_model.model_copy(update=overwrites)
 
+        updates: dict[str, Any] = {}
         if empty_model.name is None:
-            empty_model.name = "no_model_name/available"
+            updates["name"] = "no_model_name/available"
         if empty_model.revision is None:
-            empty_model.revision = "no_revision_available"
+            updates["revision"] = "no_revision_available"
+        if updates:
+            empty_model = empty_model.model_copy(update=updates)
 
         return empty_model
 
@@ -551,7 +695,7 @@ class ModelMeta(BaseModel):
                 and self.revision != "no_revision_available"
             ):
                 continue  # skip overwriting revision if overwrite has no revision available
-            if key in ["framework", "model_type"]:
+            if key in ["framework", "model_type"]:  # noqa: PLR6201
                 # Combine lists and remove duplicates
                 merged_list = set(merged_data.get(key, [])) | set(value or [])
                 merged_data[key] = list(merged_list)
@@ -563,7 +707,7 @@ class ModelMeta(BaseModel):
     @classmethod
     def _from_sentence_transformer_model(cls, model: SentenceTransformer) -> Self:
         """Generates a ModelMeta from only a SentenceTransformer model, without fetching any additional metadata from HuggingFace Hub."""
-        from mteb.models import sentence_transformers_loader
+        from mteb.models import SentenceTransformerEncoderWrapper
 
         name: str | None = (
             model.model_card_data.model_name
@@ -577,12 +721,17 @@ class ModelMeta(BaseModel):
             overwrites=dict(
                 name=name,
                 revision=model.model_card_data.base_model_revision,
-                loader=sentence_transformers_loader,
+                loader=SentenceTransformerEncoderWrapper,
                 max_tokens=model.max_seq_length,
                 embed_dim=model.get_sentence_embedding_dimension(),
-                similarity_fn_name=ScoringFunction.from_str(model.similarity_fn_name),
+                similarity_fn_name=ScoringFunction.from_str(model.similarity_fn_name)
+                if model.similarity_fn_name
+                else None,
                 framework=["Sentence Transformers", "PyTorch"],
                 n_embedding_parameters=n_embedding_parameters,
+                adapted_from=_get_source_model(model.model_card_data)
+                if hasattr(model, "model_card_data")
+                else None,
             )
         )
 
@@ -636,11 +785,14 @@ class ModelMeta(BaseModel):
                 n_embedding_parameters=cls._get_n_embedding_parameters_from_sentence_transformers(
                     model
                 ),
+                adapted_from=_get_source_model(model.model_card_data)
+                if hasattr(model, "model_card_data")
+                else None,
             )
         )
 
     @classmethod
-    def _from_hub(
+    def _from_hub(  # noqa: PLR0914
         cls,
         model_name: str,
         revision: str | None = None,
@@ -695,6 +847,7 @@ class ModelMeta(BaseModel):
             revision = revisions[0].commit_id if revisions else None
 
         model_license = card_data.license if card_data.license != "other" else None
+        languages = _hf_langs_to_iso_lang_scripts(card_data.language)
         n_parameters = cls._calculate_num_parameters_from_hub(model_name)
         n_embedding_parameters = cls._estimate_embedding_parameters_from_hub(
             model_name, revision=revision, config=config
@@ -732,6 +885,7 @@ class ModelMeta(BaseModel):
                 reference=reference,
                 release_date=cls.fetch_release_date(model_name),
                 license=model_license,
+                languages=languages,
                 framework=frameworks,
                 n_parameters=n_parameters,
                 n_embedding_parameters=n_embedding_parameters,
@@ -739,6 +893,7 @@ class ModelMeta(BaseModel):
                 max_tokens=max_tokens,
                 embed_dim=embedding_dim,
                 similarity_fn_name=similarity_fn_name,
+                adapted_from=_get_source_model(card_data),
             )
         )
 
@@ -1254,7 +1409,7 @@ class ModelMeta(BaseModel):
         self,
         user: str | None = None,
         *,
-        tasks: Sequence[AbsTask] | Sequence[str] | None = None,
+        tasks: Iterable[AbsTask] | Sequence[str] | Benchmark | None = None,
         cache: ResultCache | None = None,
         create_pr: bool = False,
     ) -> None:
@@ -1266,6 +1421,7 @@ class ModelMeta(BaseModel):
             cache: The ResultCache containing the evaluation results to push.
             create_pr: Whether to create a pull request for the model card update if the model card already exists on the HuggingFace Hub. If False, the model card will be updated directly without a pull request.
         """
+        from mteb.benchmarks.benchmark import Benchmark
         from mteb.cache import ResultCache
 
         if cache is None:
@@ -1276,9 +1432,11 @@ class ModelMeta(BaseModel):
             tasks=tasks,
         )
         model_result = benchmark_result.model_results[0]
+
         model_result.push_model_results(
             user=user,
             create_pr=create_pr,
+            benchmark=tasks if isinstance(tasks, Benchmark) else None,
         )
 
 
@@ -1345,7 +1503,7 @@ def _pydantic_instance_to_code(
     return "\n".join(lines)
 
 
-def _value_to_code(value: Any, indent: int) -> str:
+def _value_to_code(value: Any, indent: int) -> str:  # noqa: PLR0911
     """Convert a Python value into valid Python source code."""
     if isinstance(value, BaseModel):
         return _pydantic_instance_to_code(value, indent, only_set_fields=True)
@@ -1474,3 +1632,16 @@ def _serialize_experiment_kwargs_to_name(
         return f"exp_{param_hash}"
 
     return params_str
+
+
+def _get_source_model(
+    card_data: ModelCardData
+    | SentenceTransformerModelCardData
+    | CrossEncoderModelCardData,
+) -> str | None:
+    source_model = None
+    if isinstance(card_data.base_model, str):
+        source_model = card_data.base_model
+    elif isinstance(card_data.base_model, list) and len(card_data.base_model) > 0:
+        source_model = card_data.base_model[0]
+    return source_model

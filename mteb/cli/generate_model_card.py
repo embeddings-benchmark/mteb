@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 
 def generate_model_card(
     model_name: str,
+    *,
     tasks: Sequence[AbsTask] | None = None,
     benchmarks: Sequence[Benchmark] | None = None,
     existing_model_card_id_or_path: str | Path | None = None,
@@ -22,7 +23,6 @@ def generate_model_card(
     output_path: Path = Path("model_card.md"),
     add_table_to_model_card: bool = False,
     models_to_compare: Sequence[str] | None = None,
-    *,
     push_to_hub: bool = False,
 ) -> None:
     """Generate or update a model card with evaluation results from MTEB.
