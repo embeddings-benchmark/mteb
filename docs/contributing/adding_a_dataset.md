@@ -393,8 +393,8 @@ Once we have decided on task, we can implement them as follows:
                             relevant_docs=qrels,
                             top_ranked=top_ranked,  # only for reranking
                         )
-                        }
                     }
+                }
         ```
         which can then be run as follows:
         ```py
