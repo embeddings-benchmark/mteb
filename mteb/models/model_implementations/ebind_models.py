@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 import logging
-import os
-import pathlib
 import tempfile
 from typing import TYPE_CHECKING, Any
 
@@ -29,9 +27,10 @@ class EBindWrapper(AbsEncoder):
     embedding space using Perception Encoder, ImageBind, and Uni3D backbones
     with learned projection heads.
 
-    EBind's processor expects file paths, so MTEB's decoded inputs (PIL
-    images, frame tensors, audio arrays) are written to temporary files
-    before being passed through the unified processor.
+    EBind's processors expect file paths. This wrapper bridges to MTEB's
+    decoded inputs: image transforms are applied directly on PIL images,
+    video frames are resized/normalised as tensors, and audio arrays are
+    written to temporary wav files for ImageBind's mel-spectrogram pipeline.
     """
 
     def __init__(
@@ -63,91 +62,86 @@ class EBindWrapper(AbsEncoder):
         self.processor = EBindProcessor.from_pretrained(model_name, revision=revision)
         self.processor = self.processor.to(self.device)
 
-    @staticmethod
-    def _save_image(image: Any) -> str:
-        """Write a PIL Image to a temporary PNG file."""
-        fd, path = tempfile.mkstemp(suffix=".png")
-        os.close(fd)
-        if image.mode not in {"RGB", "RGBA", "L", "LA", "P"}:
-            image = image.convert("RGB")
-        image.save(path)
-        return path
+        self._image_transform = self.processor.processors["image"].transform
+        self._image_size = self.processor.processors["image"].model_image_size
 
-    @staticmethod
-    def _save_video(frames: torch.Tensor) -> str:
-        """Write a ``(T, C, H, W)`` uint8 tensor to a temporary MP4 file."""
-        import torchvision
-
-        fd, path = tempfile.mkstemp(suffix=".mp4")
-        os.close(fd)
-        torchvision.io.write_video(
-            path, frames.permute(0, 2, 3, 1).contiguous(), fps=24
-        )
-        return path
-
-    @staticmethod
-    def _save_audio(audio_data: Any) -> str:
-        """Write an audio array or AudioInputItem dict to a temporary WAV file."""
+    def _process_audio_batch(self, audio_items: list) -> torch.Tensor:
+        """Process a batch of audio items via temp WAV files (IBAudioProcessor requires paths)."""
         import soundfile as sf
 
-        fd, path = tempfile.mkstemp(suffix=".wav")
-        os.close(fd)
-        if isinstance(audio_data, dict) and "array" in audio_data:
-            sf.write(path, audio_data["array"], audio_data["sampling_rate"])
-        else:
-            sf.write(path, audio_data, 16_000)
-        return path
+        audio_tensors = []
+        for item in audio_items:
+            with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as tmp:
+                sf.write(tmp.name, item["array"], item["sampling_rate"])
+                audio_tensors.append(self.processor.processors["audio"](tmp.name))
+        return torch.stack(audio_tensors).to(self.device)
+
+    def _process_video(self, raw_frames: torch.Tensor) -> torch.Tensor:
+        """Resize and normalise raw frame tensors for the PE vision encoder."""
+        from torchvision.transforms.functional import (
+            InterpolationMode,
+            normalize,
+            resize,
+        )
+
+        processed = resize(
+            raw_frames,
+            [self._image_size, self._image_size],
+            interpolation=InterpolationMode.BICUBIC,
+        )
+        processed = processed.float() / 255.0
+        return normalize(processed, mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
 
     @torch.inference_mode()
     def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
-        """Encode all modalities via the unified processor and a single forward pass.
+        """Encode all modalities in a batch, fusing by addition when mixed."""
+        embeddings = None
 
-        When multiple modalities are present (e.g. video+audio from the same
-        clip), embeddings are fused by element-wise addition and renormalised.
-        """
-        temp_files: list[str] = []
-        try:
-            processor_inputs: dict[str, list[str]] = {}
+        if batch.get("text"):
+            processed = self.processor({"text": batch["text"]}, return_tensors="pt")
+            text_emb = self.model.forward(**processed)["text"]
+            embeddings = text_emb
 
-            if batch.get("text"):
-                processor_inputs["text"] = batch["text"]
+        if batch.get("image"):
+            img_tensors = torch.stack(
+                [self._image_transform(img) for img in batch["image"]]
+            ).to(self.device)
+            image_emb = self.model.forward(image=img_tensors)["image"]
+            embeddings = image_emb if embeddings is None else embeddings + image_emb
 
-            if batch.get("image"):
-                paths = [self._save_image(img) for img in batch["image"]]
-                temp_files.extend(paths)
-                processor_inputs["image"] = paths
-
-            if batch.get("video"):
-                paths = [self._save_video(v) for v in batch["video"]]
-                temp_files.extend(paths)
-                processor_inputs["video"] = paths
-
-            if batch.get("audio"):
-                paths = [self._save_audio(a) for a in batch["audio"]]
-                temp_files.extend(paths)
-                processor_inputs["audio"] = paths
-
-            if not processor_inputs:
-                raise ValueError(
-                    f"No supported modality found in batch: {list(batch.keys())}"
+        if batch.get("video"):
+            processed = [self._process_video(v) for v in batch["video"]]
+            # Fixed frame count: stack into one batched forward pass
+            # Variable frame count (FPS mode): encode each video individually
+            if len({v.shape[0] for v in processed}) == 1:
+                stacked = torch.stack(processed).to(self.device)
+                video_emb = self.model.forward(video=stacked)["video"]
+            else:
+                logger.warning(
+                    "Variable frame counts in batch — falling back to per-video encoding. "
+                    "Use fixed num_frames (default 8) instead of fps for batched processing."
                 )
+                video_emb = torch.cat(
+                    [
+                        self.model.forward(video=v.unsqueeze(0).to(self.device))[
+                            "video"
+                        ]
+                        for v in processed
+                    ]
+                )
+            embeddings = video_emb if embeddings is None else embeddings + video_emb
 
-            processed = self.processor(processor_inputs, return_tensors="pt")
-            outputs = self.model.forward(**processed)
+        if batch.get("audio"):
+            audio_tensors = self._process_audio_batch(batch["audio"])
+            audio_emb = self.model.forward(audio=audio_tensors)["audio"]
+            embeddings = audio_emb if embeddings is None else embeddings + audio_emb
 
-            # Fuse by addition when multiple modalities are present
-            embeddings = None
-            for emb in outputs.values():
-                embeddings = emb if embeddings is None else embeddings + emb
+        if embeddings is None:
+            raise ValueError(
+                f"No supported modality found in batch: {list(batch.keys())}"
+            )
 
-            return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
-
-        finally:
-            for f in temp_files:
-                try:
-                    pathlib.Path(f).unlink()
-                except OSError:
-                    pass
+        return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
 
     def encode(
         self,
