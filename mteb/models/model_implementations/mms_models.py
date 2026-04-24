@@ -9,9 +9,9 @@ from tqdm.auto import tqdm
 from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model
 
 from mteb import TaskMetadata
-from mteb._create_dataloaders import AudioCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator
 from mteb.types import Array, BatchedInput, PromptType
 from mteb.types._encoder_io import AudioInput
 
@@ -69,7 +69,7 @@ class MMSWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []
 

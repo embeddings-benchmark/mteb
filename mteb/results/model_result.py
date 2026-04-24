@@ -12,6 +12,12 @@ import pandas as pd
 from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import overload
 
+from mteb._hf_integration.eval_result_model import (
+    HFEvalResult,
+    HFEvalResultDataset,
+    HFEvalResults,
+    HFEvalResultSource,
+)
 from mteb.types import Modalities
 
 from .task_result import TaskError, TaskResult
@@ -24,6 +30,7 @@ if TYPE_CHECKING:
         TaskDomain,
         TaskType,
     )
+    from mteb.benchmarks import Benchmark
     from mteb.types import (
         ISOLanguage,
         ISOLanguageScript,
@@ -453,14 +460,37 @@ class ModelResult(BaseModel):
             return cls.model_validate_json(f.read())
 
     def push_model_results(
-        self, user: str | None = None, *, create_pr: bool = False
+        self,
+        user: str | None = None,
+        *,
+        benchmark: Benchmark | None = None,
+        create_pr: bool = False,
     ) -> None:
         """Push the model results to the Hugging Face Hub.
 
         Args:
             user: The user or organization of results source.
+            benchmark: Whether to push the benchmark results.
             create_pr: Whether to create a pull request
         """
+        benchmark_result = None
+        if benchmark is not None:
+            benchmark_score = benchmark._get_model_score(self)["Mean(Task)"]
+            benchmark_result = HFEvalResult(
+                dataset=HFEvalResultDataset(
+                    id=benchmark.benchmark_hf_repo,
+                    task_id=benchmark.name,
+                    revision="1",
+                ),
+                value=benchmark_score,
+                date=None,
+                notes="Obtained using MTEB",
+                source=HFEvalResultSource(
+                    url="https://github.com/embeddings-benchmark/mteb/",
+                    user=user,
+                    name="Obtained using MTEB",
+                ),
+            )
         with tempfile.TemporaryDirectory() as tmpdir:
             path = Path(tmpdir)
             for task_result in self.task_results:
@@ -469,6 +499,14 @@ class ModelResult(BaseModel):
                     "w", encoding="utf-8"
                 ) as f:
                     f.write(task_results.to_yaml())
+
+            if (
+                benchmark_result is not None
+                and benchmark is not None
+                and benchmark.name is not None
+            ):
+                with (path / f"{benchmark.name}.yaml").open("w", encoding="utf-8") as f:
+                    f.write(HFEvalResults.model_validate([benchmark_result]).to_yaml())
 
             huggingface_hub.upload_folder(
                 repo_id=self.model_name,

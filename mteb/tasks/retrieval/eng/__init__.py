@@ -8,6 +8,18 @@ from .alpha_nli_retrieval import AlphaNLI
 from .arc_challenge_retrieval import ARCChallenge
 from .argu_ana_retrieval import ArguAna
 from .audio_set_strong import AudioSetStrongA2TRetrieval, AudioSetStrongT2ARetrieval
+from .audiocaps_av_retrieval import (
+    AudioCapsAVT2VARetrieval,
+    AudioCapsAVT2VRetrieval,
+    AudioCapsAVV2TRetrieval,
+    AudioCapsAVVA2TRetrieval,
+)
+from .avmeme_exam_retrieval import (
+    AVMemeExamT2VARetrieval,
+    AVMemeExamT2VRetrieval,
+    AVMemeExamV2TRetrieval,
+    AVMemeExamVA2TRetrieval,
+)
 from .bar_exam_qa_retrieval import BarExamQARetrieval
 from .bill_sum_ca_retrieval import BillSumCARetrieval
 from .bill_sum_us_retrieval import BillSumUSRetrieval
@@ -187,6 +199,12 @@ from .nq_retrieval import NQ, NQHardNegatives
 from .okvqa_it2t_retrieval import OKVQAIT2TRetrieval
 from .oven_it2it_retrieval import OVENIT2ITRetrieval
 from .oven_it2t_retrieval import OVENIT2TRetrieval
+from .panda70m_retrieval import (
+    Panda70MT2VARetrieval,
+    Panda70MT2VRetrieval,
+    Panda70MV2TRetrieval,
+    Panda70MVA2TRetrieval,
+)
 from .piqa_retrieval import PIQA
 from .quail_retrieval import Quail
 from .quora_retrieval import (
@@ -260,6 +278,12 @@ from .vatex_retrieval import (
     VATEXV2TRetrieval,
     VATEXVA2TRetrieval,
 )
+from .vggsound_av_retrieval import (
+    VGGSoundAVT2VARetrieval,
+    VGGSoundAVT2VRetrieval,
+    VGGSoundAVV2TRetrieval,
+    VGGSoundAVVA2TRetrieval,
+)
 from .vidore_bench_retrieval import (
     VidoreArxivQARetrieval,
     VidoreDocVQARetrieval,
@@ -311,10 +335,18 @@ __all__ = [
     "AILACasedocs",
     "AILAStatutes",
     "ARCChallenge",
+    "AVMemeExamT2VARetrieval",
+    "AVMemeExamT2VRetrieval",
+    "AVMemeExamV2TRetrieval",
+    "AVMemeExamVA2TRetrieval",
     "ActivityNetCaptionsT2VRetrieval",
     "ActivityNetCaptionsV2TRetrieval",
     "AlphaNLI",
     "ArguAna",
+    "AudioCapsAVT2VARetrieval",
+    "AudioCapsAVT2VRetrieval",
+    "AudioCapsAVV2TRetrieval",
+    "AudioCapsAVVA2TRetrieval",
     "AudioSetStrongA2TRetrieval",
     "AudioSetStrongT2ARetrieval",
     "BIRCOArguAnaReranking",
@@ -497,6 +529,10 @@ __all__ = [
     "OKVQAIT2TRetrieval",
     "OVENIT2ITRetrieval",
     "OVENIT2TRetrieval",
+    "Panda70MT2VARetrieval",
+    "Panda70MT2VRetrieval",
+    "Panda70MV2TRetrieval",
+    "Panda70MVA2TRetrieval",
     "Quail",
     "QuoraRetrieval",
     "QuoraRetrievalHardNegatives",
@@ -553,6 +589,10 @@ __all__ = [
     "VATEXT2VRetrieval",
     "VATEXV2TRetrieval",
     "VATEXVA2TRetrieval",
+    "VGGSoundAVT2VARetrieval",
+    "VGGSoundAVT2VRetrieval",
+    "VGGSoundAVV2TRetrieval",
+    "VGGSoundAVVA2TRetrieval",
     "VQA2IT2TRetrieval",
     "VidoreArxivQARetrieval",
     "VidoreDocVQARetrieval",

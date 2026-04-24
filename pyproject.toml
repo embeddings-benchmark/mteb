@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.12.25"
+version = "2.12.27"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -111,6 +111,7 @@ llama-embed-nemotron = ["transformers==4.51.0"]
 llama-nemotron-colembed-vl = ["transformers[torch]==4.49.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 llama-nemotron-embed-vl-1b-v2 = ["transformers[torch]>=4.56.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
+multimodal-sbert = ["sentence-transformers>=5.4.0", "transformers>=5.3.0"]
 faiss-cpu = ["faiss-cpu>=1.12.0"]
 eager_embed = ["qwen_vl_utils>=0.0.14"]
 speechbrain = ["speechbrain>=0.5.12"]
@@ -213,6 +214,7 @@ namespaces = false
     "descriptive_stats/Image/*/*.json",  # for descriptive_stats image
 ]
 "mteb.abstasks" = ["dataset_card_template.md"]
+"mteb.benchmarks" = ["benchmark_card_template.md"]
 "mteb.tasks.zeroshot_classification.eng.templates" = ["*.txt"]
 
 [tool.ruff]
@@ -303,6 +305,7 @@ preview = true
     "S101",  # allow asserts in tests
     "S602",  # allow shell=True in tests
     "S603",  # allow subprocess calls in tests
+    "PLC2701",  # Private name import
 ]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = [
@@ -409,6 +412,7 @@ conflicts = [
         { extra = "llama-nemotron-colembed-vl" }, # conflicting versions of transformers
         { extra = "nemotron-colembed-vl-v2" }, # conflicting versions of transformers
         { extra = "llama-nemotron-embed-vl-1b-v2" }, # conflicting versions of transformers
+        { extra = "multimodal-sbert" }, # conflicting version of sentence-transformers
         { extra = "colpali_engine" },
         { extra = "colqwen3" },
         { extra = "jina-v4" },
