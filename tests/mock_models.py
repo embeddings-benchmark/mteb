@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import torch
-from numpy import ndarray
 from sentence_transformers import (
     CrossEncoder,
     SentenceTransformer,
@@ -20,7 +19,7 @@ from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderW
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
-    from numpy.typing import NDArray
+    from sentence_transformers.base.modality_types import SingleInput
 
     from mteb.types import Array, BatchedInput
 
@@ -39,7 +38,7 @@ class MockSentenceTransformer(SentenceTransformer):
 
     def encode(  # noqa: PLR0913, PLR0917, PLR6301
         self,
-        sentences: list[str],
+        inputs: list[SingleInput] | SingleInput,
         prompt_name: str | None = None,
         prompt: str | None = None,
         batch_size: int = 32,
@@ -49,12 +48,17 @@ class MockSentenceTransformer(SentenceTransformer):
         precision: Literal["float32", "int8", "uint8", "binary", "ubinary"] = "float32",
         convert_to_numpy: bool = True,
         convert_to_tensor: bool = False,
-        device: str | None = None,
+        device: str | list[str | torch.device] | None = None,
         normalize_embeddings: bool = False,
-        **kwargs: Any,
-    ) -> ndarray:
+        truncate_dim: int | None = None,
+        pool: dict[Literal["input", "output", "processes"], Any] | None = None,
+        chunk_size: int | None = None,
+        **kwargs,
+    ) -> (
+        list[Tensor] | np.ndarray | Tensor | dict[str, Tensor] | list[dict[str, Tensor]]
+    ):
         rng_state = np.random.RandomState(42)
-        return rng_state.randn(len(sentences), 10)
+        return rng_state.randn(len(inputs), 10)
 
     @staticmethod
     def get_sentence_embedding_dimension() -> int:
@@ -75,7 +79,7 @@ class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
 
     def encode(  # noqa: PLR0913, PLR0917, PLR6301
         self,
-        sentences: str | list[str],
+        inputs: list[SingleInput] | SingleInput,
         prompt_name: str | None = None,
         prompt: str | None = None,
         batch_size: int = 32,
@@ -85,11 +89,16 @@ class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
         precision: Literal["float32", "int8", "uint8", "binary", "ubinary"] = "float32",
         convert_to_numpy: bool = True,
         convert_to_tensor: bool = False,
-        device: str | None = None,
+        device: str | list[str | torch.device] | None = None,
         normalize_embeddings: bool = False,
+        truncate_dim: int | None = None,
+        pool: dict[Literal["input", "output", "processes"], Any] | None = None,
+        chunk_size: int | None = None,
         **kwargs,
-    ) -> list[Tensor] | NDArray[np.floating] | Tensor:
-        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)
+    ) -> (
+        list[Tensor] | np.ndarray | Tensor | dict[str, Tensor] | list[dict[str, Tensor]]
+    ):
+        return torch.randn(len(inputs), 10, dtype=torch.bfloat16)
 
 
 class MockSentenceTransformerWrapper(SentenceTransformerEncoderWrapper):

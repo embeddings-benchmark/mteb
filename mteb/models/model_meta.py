@@ -57,7 +57,10 @@ if TYPE_CHECKING:
     from huggingface_hub import (
         ModelCardData,
     )
-    from sentence_transformers import SentenceTransformerModelCardData
+    from sentence_transformers import (
+        CrossEncoderModelCardData,
+        SentenceTransformerModelCardData,
+    )
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
@@ -424,7 +427,12 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         available_extras = set(
             distribution("mteb").metadata.get_all("Provides-Extra") or []
         )
-        unknown = set(groups) - available_extras
+
+        def _norm(s: str) -> str:
+            return s.replace("_", "-").lower()
+
+        normalized_available = {_norm(e) for e in available_extras}
+        unknown = {g for g in groups if _norm(g) not in normalized_available}
         if unknown:
             raise ValueError(
                 f"Unknown extras group(s) for mteb: {sorted(unknown)}. "
@@ -1518,7 +1526,9 @@ def _serialize_experiment_kwargs_to_name(
 
 
 def _get_source_model(
-    card_data: ModelCardData | SentenceTransformerModelCardData,
+    card_data: ModelCardData
+    | SentenceTransformerModelCardData
+    | CrossEncoderModelCardData,
 ) -> str | None:
     source_model = None
     if isinstance(card_data.base_model, str):
