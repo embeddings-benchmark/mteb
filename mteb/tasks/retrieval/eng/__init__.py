@@ -103,8 +103,10 @@ from .dapfam_patent_retrieval import (
 )
 from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives, DBPediaHardNegativesV2
 from .didemo_retrieval import (
+    DiDeMoA2VRetrieval,
     DiDeMoT2VARetrieval,
     DiDeMoT2VRetrieval,
+    DiDeMoV2ARetrieval,
     DiDeMoV2TRetrieval,
     DiDeMoVA2TRetrieval,
 )
@@ -431,8 +433,10 @@ __all__ = [
     "DBPedia",
     "DBPediaHardNegatives",
     "DBPediaHardNegativesV2",
+    "DiDeMoA2VRetrieval",
     "DiDeMoT2VARetrieval",
     "DiDeMoT2VRetrieval",
+    "DiDeMoV2ARetrieval",
     "DiDeMoV2TRetrieval",
     "DiDeMoVA2TRetrieval",
     "EDIST2ITRetrieval",
