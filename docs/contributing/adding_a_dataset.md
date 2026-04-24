@@ -385,12 +385,16 @@ Once we have decided on task, we can implement them as follows:
                     "query2": ["doc2", "doc1", "doc3"],
                 }
 
-                self.dataset["default"]["test"] = RetrievalSplitData(
-                    corpus=corpus,
-                    queries=queries,
-                    relevant_docs=qrels,
-                    top_ranked=top_ranked,  # only for reranking
-                )
+                self.dataset = {
+                    "default": {
+                        "test": RetrievalSplitData(
+                            corpus=corpus,
+                            queries=queries,
+                            relevant_docs=qrels,
+                            top_ranked=top_ranked,  # only for reranking
+                        )
+                        }
+                    }
         ```
         which can then be run as follows:
         ```py
