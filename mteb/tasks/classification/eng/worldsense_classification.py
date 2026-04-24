@@ -18,7 +18,7 @@ class WorldSenseClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2025-02-06", "2026-03-01"),  # around time of conference
+        date=("2025-02-06", "2026-03-01"),
         domains=["Scene", "AudioScene", "Music", "Entertainment"],
         task_subtypes=["Scene recognition"],
         license="not specified",
@@ -44,8 +44,8 @@ class WorldSenseClassification(AbsTaskClassification):
 class WorldSenseVideoClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WorldSenseVideoClassification",
-        description="",
-        reference="",
+        description="WorldSense is a multimodal video understanding benchmark encompassing visual, audio, and text inputs. Videos are categorized into 8 primary domains across 67 fine-grained subcategories. This classification task predicts the domain category of a video clip",
+        reference="https://arxiv.org/abs/2502.04326",
         dataset={
             "path": "mteb/WorldSense_1min",
             "revision": "10c7ce0eb32d620f1f685bfedde2724066068a1c",
