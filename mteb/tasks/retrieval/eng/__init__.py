@@ -271,8 +271,10 @@ from .tu_berlin_t2i_retrieval import TUBerlinT2IRetrieval
 from .tuna_bench_t2v_retrieval import TUNABenchT2VRetrieval
 from .tuna_bench_v2t_retrieval import TUNABenchV2TRetrieval
 from .valor_32k_retrieval import (
+    VALOR32KA2VRetrieval,
     VALOR32KT2VARetrieval,
     VALOR32KT2VRetrieval,
+    VALOR32KV2ARetrieval,
     VALOR32KV2TRetrieval,
     VALOR32KVA2TRetrieval,
 )
@@ -593,8 +595,10 @@ __all__ = [
     "TopiOCQARetrievalHardNegatives",
     "Touche2020",
     "Touche2020v3Retrieval",
+    "VALOR32KA2VRetrieval",
     "VALOR32KT2VARetrieval",
     "VALOR32KT2VRetrieval",
+    "VALOR32KV2ARetrieval",
     "VALOR32KV2TRetrieval",
     "VALOR32KVA2TRetrieval",
     "VATEXT2VARetrieval",
