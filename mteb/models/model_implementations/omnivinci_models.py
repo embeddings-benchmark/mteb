@@ -93,7 +93,7 @@ class OmniVinciWrapper(AbsEncoder):
         fd, path = tempfile.mkstemp(suffix=".png")
         os.close(fd)
         # PNG only supports RGB/RGBA; convert CMYK/L/etc. before saving.
-        if image.mode not in ("RGB", "RGBA", "L", "LA", "P"):
+        if image.mode not in {"RGB", "RGBA", "L", "LA", "P"}:
             image = image.convert("RGB")
         image.save(path)
         return path
