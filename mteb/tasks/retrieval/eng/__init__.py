@@ -279,8 +279,10 @@ from .valor_32k_retrieval import (
     VALOR32KVA2TRetrieval,
 )
 from .vatex_retrieval import (
+    VATEXA2VRetrieval,
     VATEXT2VARetrieval,
     VATEXT2VRetrieval,
+    VATEXV2ARetrieval,
     VATEXV2TRetrieval,
     VATEXVA2TRetrieval,
 )
@@ -601,8 +603,10 @@ __all__ = [
     "VALOR32KV2ARetrieval",
     "VALOR32KV2TRetrieval",
     "VALOR32KVA2TRetrieval",
+    "VATEXA2VRetrieval",
     "VATEXT2VARetrieval",
     "VATEXT2VRetrieval",
+    "VATEXV2ARetrieval",
     "VATEXV2TRetrieval",
     "VATEXVA2TRetrieval",
     "VGGSoundAVT2VARetrieval",
