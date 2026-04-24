@@ -7,11 +7,11 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import VideoCollator
 from mteb._requires_package import (
     requires_audio_dependencies,
     requires_image_dependencies,
 )
+from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta
 from mteb.similarity_functions import (
     select_pairwise_similarity,

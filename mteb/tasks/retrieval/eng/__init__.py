@@ -8,6 +8,12 @@ from .alpha_nli_retrieval import AlphaNLI
 from .arc_challenge_retrieval import ARCChallenge
 from .argu_ana_retrieval import ArguAna
 from .audio_set_strong import AudioSetStrongA2TRetrieval, AudioSetStrongT2ARetrieval
+from .audiocaps_av_retrieval import (
+    AudioCapsAVT2VARetrieval,
+    AudioCapsAVT2VRetrieval,
+    AudioCapsAVV2TRetrieval,
+    AudioCapsAVVA2TRetrieval,
+)
 from .avmeme_exam_retrieval import (
     AVMemeExamT2VARetrieval,
     AVMemeExamT2VRetrieval,
@@ -272,6 +278,12 @@ from .vatex_retrieval import (
     VATEXV2TRetrieval,
     VATEXVA2TRetrieval,
 )
+from .vggsound_av_retrieval import (
+    VGGSoundAVT2VARetrieval,
+    VGGSoundAVT2VRetrieval,
+    VGGSoundAVV2TRetrieval,
+    VGGSoundAVVA2TRetrieval,
+)
 from .vidore_bench_retrieval import (
     VidoreArxivQARetrieval,
     VidoreDocVQARetrieval,
@@ -331,6 +343,10 @@ __all__ = [
     "ActivityNetCaptionsV2TRetrieval",
     "AlphaNLI",
     "ArguAna",
+    "AudioCapsAVT2VARetrieval",
+    "AudioCapsAVT2VRetrieval",
+    "AudioCapsAVV2TRetrieval",
+    "AudioCapsAVVA2TRetrieval",
     "AudioSetStrongA2TRetrieval",
     "AudioSetStrongT2ARetrieval",
     "BIRCOArguAnaReranking",
@@ -573,6 +589,10 @@ __all__ = [
     "VATEXT2VRetrieval",
     "VATEXV2TRetrieval",
     "VATEXVA2TRetrieval",
+    "VGGSoundAVT2VARetrieval",
+    "VGGSoundAVT2VRetrieval",
+    "VGGSoundAVV2TRetrieval",
+    "VGGSoundAVVA2TRetrieval",
     "VQA2IT2TRetrieval",
     "VidoreArxivQARetrieval",
     "VidoreDocVQARetrieval",
