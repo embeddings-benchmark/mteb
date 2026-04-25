@@ -24,10 +24,10 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
+    _compute_modality_hashes,
+    _count_samples_in_train,
     calculate_label_statistics,
-    calculate_text_statistics,
+    calculate_single_input_modality_statistics,
 )
 from .abstask import AbsTask
 
@@ -39,12 +39,13 @@ if TYPE_CHECKING:
 
     from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
     from mteb.models import MTEBModels
-    from mteb.types import Array, EncodeKwargs, HFSubset, ScoresDict
+    from mteb.types import Array, EncodeKwargs, HFSubset, Modalities, ScoresDict
     from mteb.types.statistics import (
         AudioStatistics,
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -55,20 +56,23 @@ class ClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        number_texts_intersect_with_train: Number of texts in the train split
+        samples_in_train: Number of unique test samples (across all input modalities)
+            that also appear in the train split. None when evaluated on the train split itself.
 
         text_statistics: Statistics for text
         image_statistics: Statistics for images
         audio_statistics: Statistics for audio
+        video_statistics: Statistics for video
         label_statistics: Statistics for labels
     """
 
     num_samples: int
-    number_texts_intersect_with_train: int | None
+    samples_in_train: int | None
 
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
     label_statistics: LabelStatistics
 
 
@@ -144,7 +148,7 @@ class AbsTaskClassification(AbsTask):
     n_experiments: int = 10
     train_split: str = "train"
     label_column_name: str = "label"
-    input_column_name: str | Sequence[str] = "text"
+    input_column_name: str | Sequence[Modalities] = "text"
     abstask_prompt = "Classify user passages."
     is_cross_validation: bool = False
     n_splits = 5
@@ -490,75 +494,85 @@ class AbsTaskClassification(AbsTask):
 
         return dataset.select(sampled_idxs), idxs, sampled_idxs
 
-    def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
-    ) -> ClassificationDescriptiveStatistics:
-        # Multi-column tasks (e.g. video+audio): only compute label statistics for now
-        if not isinstance(self.input_column_name, str):
-            if hf_subset:
-                label = self.dataset[hf_subset][split][self.label_column_name]
-            elif compute_overall:
-                label = []
-                for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
-                    label.extend(self.dataset[hf_subset][split][self.label_column_name])
-            else:
-                label = self.dataset[split][self.label_column_name]
-            return ClassificationDescriptiveStatistics(
-                num_samples=len(label),
-                number_texts_intersect_with_train=None,
-                text_statistics=None,
-                image_statistics=None,
-                audio_statistics=None,
-                label_statistics=calculate_label_statistics(label),
-            )
-
-        col = self.input_column_name
-        train_text = []
-        if hf_subset:
-            inputs = self.dataset[hf_subset][split][col]
-            label = self.dataset[hf_subset][split][self.label_column_name]
-            if split != self.train_split:
-                train_text = self.dataset[hf_subset][self.train_split][col]
-        elif compute_overall:
-            inputs = []
-            label = []
-            for hf_subset in self.metadata.eval_langs:
-                inputs.extend(self.dataset[hf_subset][split][col])
-                label.extend(self.dataset[hf_subset][split][self.label_column_name])
-                if split != self.train_split:
-                    train_text.extend(self.dataset[hf_subset][self.train_split][col])
+    def _load_statistics_col_inputs_and_hashes(
+        self, split: str, hf_subset: str | None, compute_overall: bool
+    ) -> tuple[
+        dict[Modalities, list[Any]],
+        list,
+        dict[str, list[str]],
+        dict[str, list[str]] | None,
+    ]:
+        """Load input columns, label data, and pre-computed hashes for a split."""
+        if isinstance(self.input_column_name, str):
+            col_map = {self.metadata.modalities[0]: self.input_column_name}
         else:
-            inputs = self.dataset[split][col]
-            label = self.dataset[split][self.label_column_name]
-            if split != self.train_split:
-                train_text = self.dataset[self.train_split][col]
+            col_map = {col: col for col in self.input_column_name}
 
-        image_statistics = None
-        text_statistics = None
-        audio_statistics = None
-        num_texts_in_train = None
-
-        if "image" in self.metadata.modalities:
-            image_statistics = calculate_image_statistics(inputs)
-        if "text" in self.metadata.modalities:
-            text_statistics = calculate_text_statistics(inputs)
-            num_texts_in_train = (
-                len(set(inputs) & set(train_text))
+        if hf_subset:
+            ds = self.dataset[hf_subset][split]
+            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
+            label = ds[self.label_column_name]
+            train_inputs = (
+                {
+                    mod: self.dataset[hf_subset][self.train_split][col]
+                    for mod, col in col_map.items()
+                }
                 if split != self.train_split
                 else None
             )
-        if "audio" in self.metadata.modalities:
-            audio_statistics = calculate_audio_statistics(inputs)
+        elif compute_overall:
+            col_inputs = {mod: [] for mod in col_map}
+            label = []
+            train_inputs = (
+                {mod: [] for mod in col_map} if split != self.train_split else None
+            )
+            for subset in self.metadata.eval_langs:
+                ds = self.dataset[subset][split]
+                for mod, col in col_map.items():
+                    col_inputs[mod].extend(ds[col])
+                label.extend(ds[self.label_column_name])
+                if train_inputs is not None:
+                    for mod, col in col_map.items():
+                        train_inputs[mod].extend(
+                            self.dataset[subset][self.train_split][col]
+                        )
+        else:
+            ds = self.dataset[split]
+            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
+            label = ds[self.label_column_name]
+            train_inputs = (
+                {
+                    mod: self.dataset[self.train_split][col]
+                    for mod, col in col_map.items()
+                }
+                if split != self.train_split
+                else None
+            )
 
-        label_statistics = calculate_label_statistics(label)
+        # Compute hashes once; reuse for both statistics (uniqueness counts) and
+        # train/test intersection — avoids decoding expensive media (e.g. video frames) twice.
+        test_hashes = _compute_modality_hashes(col_inputs)
+        train_hashes = (
+            _compute_modality_hashes(train_inputs) if train_inputs is not None else None
+        )
+        return col_inputs, label, test_hashes, train_hashes
 
+    def _calculate_descriptive_statistics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ) -> ClassificationDescriptiveStatistics:
+        col_inputs, label, test_hashes, train_hashes = (
+            self._load_statistics_col_inputs_and_hashes(
+                split, hf_subset, compute_overall
+            )
+        )
+        modality_stats = calculate_single_input_modality_statistics(
+            col_inputs, test_hashes
+        )
         return ClassificationDescriptiveStatistics(
-            num_samples=len(inputs),
-            number_texts_intersect_with_train=num_texts_in_train,
-            text_statistics=text_statistics,
-            image_statistics=image_statistics,
-            audio_statistics=audio_statistics,
-            label_statistics=label_statistics,
+            num_samples=len(label),
+            samples_in_train=_count_samples_in_train(test_hashes, train_hashes),
+            **modality_stats,
+            label_statistics=calculate_label_statistics(label),
         )
 
     def _push_dataset_to_hub(

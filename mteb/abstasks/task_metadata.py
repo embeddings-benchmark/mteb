@@ -202,7 +202,8 @@ MAEB_TASK_TYPE = (
 MVEB_TASK_TYPE = (
     "VideoClassification",
     "VideoClustering",
-    # "VideoPairClassification",  # TODO: uncomment when tasks exist
+    "VideoMultilabelClassification",
+    "VideoPairClassification",
     "VideoZeroshotClassification",
     # "VideoCentricQA",  # TODO: uncomment when tasks exist
     "Any2AnyRetrieval",

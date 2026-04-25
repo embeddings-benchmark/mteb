@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import logging
 from collections import defaultdict
 from typing import TYPE_CHECKING
@@ -11,10 +10,8 @@ from sklearn.metrics import average_precision_score
 
 from mteb._evaluators import PairClassificationEvaluator
 from mteb.abstasks._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
     calculate_label_statistics,
-    calculate_text_statistics,
+    calculate_pair_modality_statistics,
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ScoringFunction
@@ -24,6 +21,7 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from pathlib import Path
 
     from numpy.typing import NDArray
@@ -32,12 +30,13 @@ if TYPE_CHECKING:
         PairClassificationDistances,
     )
     from mteb.models.models_protocols import MTEBModels
-    from mteb.types import EncodeKwargs, PromptType
+    from mteb.types import EncodeKwargs, Modalities, PromptType
     from mteb.types.statistics import (
         AudioStatistics,
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -69,9 +68,11 @@ class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     text1_statistics: TextStatistics | None
     image1_statistics: ImageStatistics | None
     audio1_statistics: AudioStatistics | None
+    video1_statistics: VideoStatistics | None
     text2_statistics: TextStatistics | None
     image2_statistics: ImageStatistics | None
     audio2_statistics: AudioStatistics | None
+    video2_statistics: VideoStatistics | None
     labels_statistics: LabelStatistics
 
 
@@ -92,8 +93,8 @@ class AbsTaskPairClassification(AbsTask):
     """
 
     abstask_prompt = "Retrieve text that are semantically similar to the given text."
-    input1_column_name: str = "sentence1"
-    input2_column_name: str = "sentence2"
+    input1_column_name: str | Sequence[tuple[str, Modalities]] = "sentence1"
+    input2_column_name: str | Sequence[tuple[str, Modalities]] = "sentence2"
     label_column_name: str = "labels"
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
@@ -183,7 +184,7 @@ class AbsTaskPairClassification(AbsTask):
                 output_scores[f"max_{metric}"] = max(max_scores[metric])
         return output_scores
 
-    def _calculate_descriptive_statistics_from_split(  # noqa: PLR0914
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> PairClassificationDescriptiveStatistics:
         if hf_subset:
@@ -208,84 +209,55 @@ class AbsTaskPairClassification(AbsTask):
         if isinstance(dataset, list):
             dataset = dataset[0]
 
-        input1 = (
-            dataset[self.input1_column_name][0]
-            if len(dataset[self.input1_column_name]) == 1
-            else dataset[self.input1_column_name]
+        def _get_col_data(col: str) -> list:
+            raw = dataset[col]
+            return raw[0] if len(raw) == 1 else raw
+
+        labels = _get_col_data(self.label_column_name)
+        n = len(labels)
+
+        if isinstance(self.input1_column_name, str):
+            modality1 = self.metadata.get_modalities(self.input1_prompt_type)[0]
+            col_modalities1: list[tuple[str, str]] = [
+                (self.input1_column_name, modality1)
+            ]
+        else:
+            col_modalities1 = list(self.input1_column_name)  # type: ignore[arg-type]
+
+        if isinstance(self.input2_column_name, str):
+            modality2 = self.metadata.get_modalities(self.input2_prompt_type)[0]
+            col_modalities2: list[tuple[str, str]] = [
+                (self.input2_column_name, modality2)
+            ]
+        else:
+            col_modalities2 = list(self.input2_column_name)  # type: ignore[arg-type]
+
+        pair_stats = calculate_pair_modality_statistics(
+            col_modalities1,
+            col_modalities2,
+            _get_col_data,
+            n,
         )
-        input2 = (
-            dataset[self.input2_column_name][0]
-            if len(dataset[self.input2_column_name]) == 1
-            else dataset[self.input2_column_name]
+
+        number_of_characters = (
+            pair_stats["text1_statistics"]["total_text_length"]
+            + pair_stats["text2_statistics"]["total_text_length"]
+            if pair_stats["text1_statistics"]
+            else None
         )
-        labels = (
-            dataset[self.label_column_name][0]
-            if len(dataset[self.label_column_name]) == 1
-            else dataset[self.label_column_name]
-        )
-
-        text1_statistics = None
-        text2_statistics = None
-        image1_statistics = None
-        image2_statistics = None
-        number_of_characters = None
-        audio1_statistics = None
-        audio2_statistics = None
-        unique_pairs = None
-        if self.metadata.modalities == ["text"]:
-            text1_statistics = calculate_text_statistics(input1)
-            text2_statistics = calculate_text_statistics(input2)
-            number_of_characters = (
-                text1_statistics["total_text_length"]
-                + text2_statistics["total_text_length"]
-            )
-            unique_pairs = len(set(zip(input1, input2)))
-
-        if self.metadata.modalities == ["image"]:
-            image1_statistics = calculate_image_statistics(input1)
-            image2_statistics = calculate_image_statistics(input2)
-
-            def _compute_image_hash(inputs: list) -> list[str]:
-                hashes = set()
-                for img in inputs:
-                    img_bytes = img.tobytes()
-                    img_hash = hashlib.md5(img_bytes, usedforsecurity=False).hexdigest()
-                    hashes.add(img_hash)
-                return list(hashes)
-
-            image_1_hashes = _compute_image_hash(input1)
-            image_2_hashes = _compute_image_hash(input2)
-            unique_pairs = len(set(zip(image_1_hashes, image_2_hashes)))
-
-        if self.metadata.modalities == ["audio"]:
-            audio1_statistics = calculate_audio_statistics(input1)
-            audio2_statistics = calculate_audio_statistics(input2)
-
-            def _compute_audio_hash(inputs: list) -> list[str]:
-                hashes = set()
-                for audio in inputs:
-                    array = audio["array"]
-                    audio_bytes = array.tobytes()
-                    audio_hash = hashlib.md5(
-                        audio_bytes, usedforsecurity=False
-                    ).hexdigest()
-                    hashes.add(audio_hash)
-                return list(hashes)
-
-            audio_1_hashes = _compute_audio_hash(input1)
-            audio_2_hashes = _compute_audio_hash(input2)
-            unique_pairs = len(set(zip(audio_1_hashes, audio_2_hashes)))
 
         return PairClassificationDescriptiveStatistics(
-            num_samples=len(input1),
-            unique_pairs=unique_pairs,
+            num_samples=n,
+            unique_pairs=pair_stats["unique_pairs"],
             number_of_characters=number_of_characters,
-            text1_statistics=text1_statistics,
-            image1_statistics=image1_statistics,
-            audio1_statistics=audio1_statistics,
-            text2_statistics=text2_statistics,
-            image2_statistics=image2_statistics,
-            audio2_statistics=audio2_statistics,
+            text1_statistics=pair_stats["text1_statistics"],
+            image1_statistics=pair_stats["image1_statistics"],
+            audio1_statistics=pair_stats["audio1_statistics"],
+            video1_statistics=pair_stats["video1_statistics"],
+            text2_statistics=pair_stats["text2_statistics"],
+            image2_statistics=pair_stats["image2_statistics"],
+            audio2_statistics=pair_stats["audio2_statistics"],
+            video2_statistics=pair_stats["video2_statistics"],
             labels_statistics=calculate_label_statistics(labels),
         )
 
@@ -310,13 +282,17 @@ class AbsTaskPairClassification(AbsTask):
             for split in self.dataset:
                 if len(self.dataset[split]) == 1:
                     self.dataset[split] = self.dataset[split][0]
+        if isinstance(self.input1_column_name, str):
+            cols1 = [self.input1_column_name]
+        else:
+            cols1 = [col for col, _ in self.input1_column_name]
+        if isinstance(self.input2_column_name, str):
+            cols2 = [self.input2_column_name]
+        else:
+            cols2 = [col for col, _ in self.input2_column_name]
         self._upload_dataset_to_hub(
             repo_name,
-            [
-                self.input1_column_name,
-                self.input2_column_name,
-                self.label_column_name,
-            ],
+            [*cols1, *cols2, self.label_column_name],
             num_proc=num_proc,
         )
 

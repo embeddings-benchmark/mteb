@@ -14,23 +14,24 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
     calculate_label_statistics,
+    calculate_single_input_modality_statistics,
     calculate_text_statistics,
 )
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from pathlib import Path
 
     from mteb.models import MTEBModels
-    from mteb.types import EncodeKwargs
+    from mteb.types import EncodeKwargs, Modalities
     from mteb.types.statistics import (
         AudioStatistics,
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -41,22 +42,22 @@ class ZeroShotClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        number_of_characters: None (no text inputs)
 
-        text_statistics: None (no text inputs)
+        text_statistics: Statistics for texts
         image_statistics: Statistics for images
-        audio_statistics: None (no audio inputs)
+        audio_statistics: Statistics for audio
+        video_statistics: Statistics for video
         label_statistics: Statistics for dataset labels
 
         candidates_labels_text_statistics: Statistics for candidate labels text
     """
 
     num_samples: int
-    number_of_characters: int | None
 
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
     label_statistics: LabelStatistics
     candidates_labels_text_statistics: TextStatistics
 
@@ -82,7 +83,7 @@ class AbsTaskZeroShotClassification(AbsTask):
         label_column_name: Name of the column containing the labels (str).
     """
 
-    input_column_name: str = "image"
+    input_column_name: str | Sequence[Modalities] = "image"
     label_column_name: str = "label"
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
@@ -97,43 +98,36 @@ class AbsTaskZeroShotClassification(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ZeroShotClassificationDescriptiveStatistics:
-        if hf_subset:
-            inputs = self.dataset[hf_subset][split][self.input_column_name]
-            labels = self.dataset[hf_subset][split][self.label_column_name]
-        elif compute_overall:
-            inputs, labels = [], []
-            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
-                inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
-                labels.extend(self.dataset[hf_subset][split][self.label_column_name])
+        if isinstance(self.input_column_name, str):
+            col_map = {self.metadata.modalities[0]: self.input_column_name}
         else:
-            inputs = self.dataset[split][self.input_column_name]
-            labels = self.dataset[split][self.label_column_name]
+            col_map = {col: col for col in self.input_column_name}
 
-        num_samples = len(inputs)
+        if hf_subset:
+            ds = self.dataset[hf_subset][split]
+            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
+            labels = ds[self.label_column_name]
+        elif compute_overall:
+            col_inputs = {mod: [] for mod in col_map}
+            labels = []
+            for subset in self.metadata.eval_langs:
+                ds = self.dataset[subset][split]
+                for mod, col in col_map.items():
+                    col_inputs[mod].extend(ds[col])
+                labels.extend(ds[self.label_column_name])
+        else:
+            ds = self.dataset[split]
+            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
+            labels = ds[self.label_column_name]
 
-        image_statistics = None
-        text_statistics = None
-        audio_statistics = None
-
-        if "image" in self.metadata.modalities:
-            image_statistics = calculate_image_statistics(inputs)
-        if self.metadata.modalities == ["text"]:
-            text_statistics = calculate_text_statistics(inputs)
-
-        if "audio" in self.metadata.modalities:
-            audio_statistics = calculate_audio_statistics(inputs)
-
-        label_statistics = calculate_label_statistics(labels)
-        candidate_lens = calculate_text_statistics(self.get_candidate_labels())
-
+        modality_stats = calculate_single_input_modality_statistics(col_inputs)
         return ZeroShotClassificationDescriptiveStatistics(
-            num_samples=num_samples,
-            number_of_characters=None,
-            text_statistics=text_statistics,
-            image_statistics=image_statistics,
-            audio_statistics=audio_statistics,
-            label_statistics=label_statistics,
-            candidates_labels_text_statistics=candidate_lens,
+            num_samples=len(ds[self.label_column_name]),
+            **modality_stats,
+            label_statistics=calculate_label_statistics(labels),
+            candidates_labels_text_statistics=calculate_text_statistics(
+                self.get_candidate_labels()
+            ),
         )
 
     def _evaluate_subset(
@@ -154,6 +148,8 @@ class AbsTaskZeroShotClassification(AbsTask):
         candidate_labels = self.get_candidate_labels()
         data_split = data_split.select_columns(
             [self.input_column_name, self.label_column_name]
+            if isinstance(self.input_column_name, str)
+            else [*self.input_column_name, self.label_column_name]
         )
         evaluator = ZeroShotClassificationEvaluator(
             data_split,
@@ -202,6 +198,11 @@ class AbsTaskZeroShotClassification(AbsTask):
             repo_name,
             [
                 self.input_column_name,
+                self.label_column_name,
+            ]
+            if isinstance(self.input_column_name, str)
+            else [
+                *self.input_column_name,
                 self.label_column_name,
             ],
             num_proc=num_proc,
