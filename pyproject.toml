@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.12.27"
+version = "2.12.30"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -76,6 +76,7 @@ leaderboard = [
     "pymongo>=4.15.5",
 ]
 video = ["torchcodec"]
+github = ["PyGithub>=1.60"]
 
 # model specific optional dependencies:
 peft = ["peft>=0.11.0"]
@@ -142,6 +143,7 @@ test = [
     "GitPython>=3.0.0",
     "tabulate>=0.9.0",
     "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
+    "av>=17.0.0",
 ]
 docs = [
     "zensical>=0.0.11",
@@ -442,6 +444,8 @@ module = [
     "datasets.exceptions",
     "sklearn",
     "sklearn.*",
+    "github",
+    "github.*",
     "faiss",
     "vllm",
     "torchaudio",

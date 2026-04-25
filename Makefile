@@ -5,7 +5,7 @@ install:
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	uv sync --extra bm25s --extra image --extra audio --extra leaderboard --extra faiss-cpu --group dev
+	uv sync --extra bm25s --extra image --extra audio --extra leaderboard --extra faiss-cpu --extra github --group dev
 
 lint:
 	@echo "--- 🧹 Running linters ---"

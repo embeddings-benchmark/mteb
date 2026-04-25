@@ -202,3 +202,67 @@ class VGGSoundAVT2VARetrieval(AbsTaskRetrieval):
         _load_vggsound_av(
             self, query_columns=["av_caption"], corpus_columns=["video", "audio"]
         )
+
+
+class VGGSoundAVV2ARetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="VGGSoundAVV2ARetrieval",
+        description=(
+            "Retrieve the audio track that matches a given video clip from the "
+            "VGGSound-AV dataset, a large-scale audio-visual dataset sourced from "
+            "YouTube. Tests cross-modal alignment between video frames and audio."
+        ),
+        reference="https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="v2a",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["video", "audio"],
+        date=("2020-01-01", "2020-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the audio that corresponds to the following video."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_vggsound_av(self, query_columns=["video"], corpus_columns=["audio"])
+
+
+class VGGSoundAVA2VRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="VGGSoundAVA2VRetrieval",
+        description=(
+            "Retrieve the video clip that matches a given audio track from the "
+            "VGGSound-AV dataset, a large-scale audio-visual dataset sourced from "
+            "YouTube. Tests cross-modal alignment between audio and video frames."
+        ),
+        reference="https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="a2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["audio", "video"],
+        date=("2020-01-01", "2020-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the video that corresponds to the following audio."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_vggsound_av(self, query_columns=["audio"], corpus_columns=["video"])

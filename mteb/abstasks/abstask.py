@@ -547,6 +547,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         repo_name: str,
         fields: list[str] | dict[str, str],
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         if self.dataset is None:
             raise ValueError("Dataset not loaded")
@@ -575,6 +576,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                     config,
                     commit_message=f"Add {config} dataset",
                     num_proc=num_proc,
+                    **kwargs,
                 )
         else:
             sentences = {}
@@ -608,6 +610,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         num_proc: int | None = None,
         *,
         push_eval: bool = False,
+        **kwargs: Any,
     ) -> None:
         """Push the dataset to the HuggingFace Hub.
 
@@ -615,6 +618,8 @@ class AbsTask(ABC):  # noqa: PLR0904
             repo_name: The name of the repository to push the dataset to.
             num_proc: Number of processes to use for loading the dataset.
             push_eval: Whether to also push the eval.yaml file to the Hub
+            kwargs: Additional keyword arguments passed to the [push_to_hub](https://huggingface.co/docs/datasets/main/en/package_reference/main_classes#datasets.DatasetDict.push_to_hub).
+                This can include things like `private=True` to make the dataset private.
 
         Examples:
             >>> import mteb
@@ -626,7 +631,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         if not self.data_loaded:
             self.load_data()
 
-        self._push_dataset_to_hub(repo_name, num_proc)
+        self._push_dataset_to_hub(repo_name, num_proc, **kwargs)
         # dataset repo not creating when pushing card
         self.metadata.push_dataset_card_to_hub(repo_name)
         if push_eval:
