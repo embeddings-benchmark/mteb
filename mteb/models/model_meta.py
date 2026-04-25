@@ -1457,6 +1457,8 @@ def _add_table_to_model_card(
             only_main_score=True,
         )
         df_results = benchmark_results.get_benchmark_result()
+        if "Release Date" in df_results.columns:
+            df_results = df_results.drop(columns=["Release Date"])
         mteb_content += df_results.to_markdown(index=True) + "\n\n"
 
     model_card.content = original_content + "\n\n" + mteb_content
