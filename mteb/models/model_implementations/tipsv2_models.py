@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Unpack
 
 import torch
 from torch.nn.functional import normalize
-from torchvision import transforms
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -14,7 +13,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
 
 TIPSV2_CITATION = """@article{berton2025tipsv2,
   title={TIPSv2: Unified, Scalable and Fast Vision-Language Encoders for Dense and Global Representations},
@@ -22,13 +21,6 @@ TIPSV2_CITATION = """@article{berton2025tipsv2,
   journal={arXiv preprint arXiv:2604.12012},
   year={2025}
 }"""
-
-_TRANSFORM = transforms.Compose(
-    [
-        transforms.Resize((448, 448)),
-        transforms.ToTensor(),  # converts PIL [0,255] → tensor [0,1], no ImageNet normalization
-    ]
-)
 
 
 class TIPSv2Model(AbsEncoder):
@@ -39,6 +31,7 @@ class TIPSv2Model(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        from torchvision import transforms
         from transformers import AutoModel
 
         self.model_name = model_name
@@ -47,6 +40,12 @@ class TIPSv2Model(AbsEncoder):
             model_name, revision=revision, trust_remote_code=True
         ).to(self.device)
         self.model.eval()
+        self.transform = transforms.Compose(
+            [
+                transforms.Resize((448, 448)),
+                transforms.ToTensor(),  # converts PIL [0,255] → tensor [0,1], no ImageNet normalization
+            ]
+        )
 
     def get_text_embeddings(
         self,
@@ -56,7 +55,9 @@ class TIPSv2Model(AbsEncoder):
     ):
         all_text_embeddings = []
         with torch.no_grad():
-            for batch in tqdm(texts, disable=not show_progress_bar, desc="Text Encoding"):
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Text Encoding"
+            ):
                 emb = self.model.encode_text(batch["text"])
                 all_text_embeddings.append(normalize(emb, dim=-1).cpu())
         return torch.cat(all_text_embeddings, dim=0)
@@ -69,9 +70,11 @@ class TIPSv2Model(AbsEncoder):
     ):
         all_image_embeddings = []
         with torch.no_grad():
-            for batch in tqdm(images, disable=not show_progress_bar, desc="Image Encoding"):
+            for batch in tqdm(
+                images, disable=not show_progress_bar, desc="Image Encoding"
+            ):
                 pixel_values = torch.stack(
-                    [_TRANSFORM(img) for img in batch["image"]]
+                    [self.transform(img) for img in batch["image"]]
                 ).to(self.device)
                 out = self.model.encode_image(pixel_values)
                 # cls_token shape: (batch, 1, dim) — take index 0 for global embedding
@@ -87,7 +90,7 @@ class TIPSv2Model(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         text_embeddings = None
         image_embeddings = None
