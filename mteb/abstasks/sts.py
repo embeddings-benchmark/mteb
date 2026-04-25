@@ -277,7 +277,10 @@ class AbsTaskSTS(AbsTask):
         )
 
     def _push_dataset_to_hub(
-        self, repo_name: str, num_proc: int | None = None, **kwargs: Any
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         self._upload_dataset_to_hub(
             repo_name,

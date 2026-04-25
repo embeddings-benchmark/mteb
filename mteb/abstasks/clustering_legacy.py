@@ -263,7 +263,7 @@ class AbsTaskClusteringLegacy(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         self._upload_dataset_to_hub(
             repo_name,

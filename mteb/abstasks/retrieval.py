@@ -603,7 +603,7 @@ class AbsTaskRetrieval(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         self.convert_v1_dataset_format_to_v2(num_proc)
 
