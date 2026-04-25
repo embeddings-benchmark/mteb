@@ -206,10 +206,8 @@ from .okvqa_it2t_retrieval import OKVQAIT2TRetrieval
 from .oven_it2it_retrieval import OVENIT2ITRetrieval
 from .oven_it2t_retrieval import OVENIT2TRetrieval
 from .panda70m_retrieval import (
-    Panda70MA2VRetrieval,
     Panda70MT2VARetrieval,
     Panda70MT2VRetrieval,
-    Panda70MV2ARetrieval,
     Panda70MV2TRetrieval,
     Panda70MVA2TRetrieval,
 )
@@ -555,10 +553,8 @@ __all__ = [
     "OKVQAIT2TRetrieval",
     "OVENIT2ITRetrieval",
     "OVENIT2TRetrieval",
-    "Panda70MA2VRetrieval",
     "Panda70MT2VARetrieval",
     "Panda70MT2VRetrieval",
-    "Panda70MV2ARetrieval",
     "Panda70MV2TRetrieval",
     "Panda70MVA2TRetrieval",
     "Quail",
