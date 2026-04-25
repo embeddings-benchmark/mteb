@@ -269,6 +269,8 @@ TaskCategory = Literal[
     "vat2t",
     "v2a",
     "a2v",
+    "vt2a",
+    "at2v",
 ]
 """The category of the task.
 
