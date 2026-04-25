@@ -10,13 +10,16 @@ from dataclasses import field
 from enum import Enum
 from functools import partial
 from importlib.metadata import PackageNotFoundError, distribution, requires
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
 from huggingface_hub import (
     ModelCard,
+    ModelCardData,
     get_safetensors_metadata,
     model_info,
+    repo_exists,
 )
 from huggingface_hub.errors import (
     GatedRepoError,
@@ -52,13 +55,16 @@ from mteb.types import (
 )
 
 if TYPE_CHECKING:
-    from huggingface_hub import (
-        ModelCardData,
+    from collections.abc import Iterable
+
+    from sentence_transformers import (
+        CrossEncoderModelCardData,
+        SentenceTransformerModelCardData,
     )
-    from sentence_transformers import SentenceTransformerModelCardData
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
+    from mteb.benchmarks.benchmark import Benchmark
     from mteb.cache import ResultCache
     from mteb.models.models_protocols import EncoderProtocol
 
@@ -421,7 +427,12 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         available_extras = set(
             distribution("mteb").metadata.get_all("Provides-Extra") or []
         )
-        unknown = set(groups) - available_extras
+
+        def _norm(s: str) -> str:
+            return s.replace("_", "-").lower()
+
+        normalized_available = {_norm(e) for e in available_extras}
+        unknown = {g for g in groups if _norm(g) not in normalized_available}
         if unknown:
             raise ValueError(
                 f"Unknown extras group(s) for mteb: {sorted(unknown)}. "
@@ -1308,11 +1319,97 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         """Returns a string representation of the model."""
         return _pydantic_instance_to_code(self, exclude_fields=["experiment_kwargs"])
 
+    def push_model_card_to_hub(
+        self,
+        tasks: Sequence[AbsTask] | None = None,
+        *,
+        benchmarks: Sequence[Benchmark] | None = None,
+        existing_model_card_id_or_path: str | Path | None = None,
+        results_cache: ResultCache | None = None,
+        output_path: Path = Path("model_card.md"),
+        add_table_to_model_card: bool = False,
+        models_to_compare: Sequence[str] | None = None,
+        push_to_hub: bool = False,
+        create_pr: bool = False,
+    ) -> None:
+        """Generate or update a model card with evaluation results from MTEB.
+
+        Args:
+            tasks: List of tasks to generate results for.
+            benchmarks: A Benchmark or list of benchmarks to generate results for.
+            existing_model_card_id_or_path: Path or ID of an existing model card to update.
+            results_cache: Instance of ResultCache to load results from. If None, a default ResultCache is used.
+            output_path: Path to save the generated model card.
+            add_table_to_model_card: Whether to add a results table to the model card.
+            models_to_compare: List of models to add to results table.
+            push_to_hub: Whether to push the updated model card to the Hub if it exists there.
+            create_pr: Whether to create a pull request when pushing eval results.
+        """
+        from mteb.cache import ResultCache
+
+        if self.name is None:
+            raise ValueError("Model name is not set. Cannot generate model card.")
+
+        if results_cache is None:
+            results_cache = ResultCache()
+
+        existing_model_card: ModelCard | None = None
+        if existing_model_card_id_or_path:
+            existing_model_card = ModelCard.load(existing_model_card_id_or_path)
+
+        all_tasks: list[AbsTask] = []
+        if tasks is not None:
+            all_tasks.extend(tasks)
+
+        if benchmarks is not None:
+            for b in benchmarks:
+                all_tasks.extend(b.tasks)
+
+        existing_model_card_data: ModelCardData = (
+            existing_model_card.data if existing_model_card else ModelCardData()  # type: ignore[assignment]
+        )
+
+        if existing_model_card_data.tags is None:
+            existing_model_card_data.tags = ["mteb"]
+        else:
+            existing_model_card_data.tags.append("mteb")
+
+        if existing_model_card:
+            existing_model_card.data = existing_model_card_data
+        else:
+            existing_model_card = ModelCard.from_template(
+                card_data=existing_model_card_data
+            )
+
+        if add_table_to_model_card:
+            existing_model_card = _add_table_to_model_card(
+                results_cache,
+                existing_model_card,
+                (self.name, *models_to_compare) if models_to_compare else (self.name,),
+                benchmarks or [],
+            )
+
+        if push_to_hub and existing_model_card_id_or_path:
+            existing_model_card_id_or_path = str(existing_model_card_id_or_path)
+            model_repo_exist = repo_exists(
+                existing_model_card_id_or_path,
+                repo_type="model",
+            )
+            if model_repo_exist:
+                existing_model_card.push_to_hub(
+                    existing_model_card_id_or_path,
+                    create_pr=create_pr,
+                )
+            else:
+                msg = f"Repository {existing_model_card_id_or_path} does not exist on the Hub. Skipping push to hub."
+                logger.warning(msg)
+        existing_model_card.save(output_path)
+
     def push_eval_results(
         self,
         user: str | None = None,
         *,
-        tasks: Sequence[AbsTask] | Sequence[str] | None = None,
+        tasks: Iterable[AbsTask] | Sequence[str] | Benchmark | None = None,
         cache: ResultCache | None = None,
         create_pr: bool = False,
     ) -> None:
@@ -1324,6 +1421,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             cache: The ResultCache containing the evaluation results to push.
             create_pr: Whether to create a pull request for the model card update if the model card already exists on the HuggingFace Hub. If False, the model card will be updated directly without a pull request.
         """
+        from mteb.benchmarks.benchmark import Benchmark
         from mteb.cache import ResultCache
 
         if cache is None:
@@ -1334,10 +1432,37 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             tasks=tasks,
         )
         model_result = benchmark_result.model_results[0]
+
         model_result.push_model_results(
             user=user,
             create_pr=create_pr,
+            benchmark=tasks if isinstance(tasks, Benchmark) else None,
         )
+
+
+def _add_table_to_model_card(
+    results_cache: ResultCache,
+    model_card: ModelCard,
+    models: Sequence[str],
+    benchmarks: Sequence[Benchmark],
+) -> ModelCard:
+    original_content = model_card.content
+    mteb_content = "# MTEB Results\n\n"
+
+    for benchmark in benchmarks:
+        mteb_content += f"## Benchmark: {benchmark.name}\n\n"
+        benchmark_results = results_cache.load_results(
+            tasks=benchmark,
+            models=models,
+            only_main_score=True,
+        )
+        df_results = benchmark_results.get_benchmark_result()
+        if "Release Date" in df_results.columns:
+            df_results = df_results.drop(columns=["Release Date"])
+        mteb_content += df_results.to_markdown(index=True) + "\n\n"
+
+    model_card.content = original_content + "\n\n" + mteb_content
+    return model_card
 
 
 def _pydantic_instance_to_code(
@@ -1512,7 +1637,9 @@ def _serialize_experiment_kwargs_to_name(
 
 
 def _get_source_model(
-    card_data: ModelCardData | SentenceTransformerModelCardData,
+    card_data: ModelCardData
+    | SentenceTransformerModelCardData
+    | CrossEncoderModelCardData,
 ) -> str | None:
     source_model = None
     if isinstance(card_data.base_model, str):

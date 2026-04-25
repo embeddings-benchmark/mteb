@@ -272,6 +272,7 @@ class AbsTaskBitextMining(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         if self.dataset is None:
             raise ValueError("Dataset is not loaded.")
@@ -307,4 +308,4 @@ class AbsTaskBitextMining(AbsTask):
                     }
                 )
             sentences = DatasetDict(sentences)
-            sentences.push_to_hub(repo_name, num_proc=num_proc)
+            sentences.push_to_hub(repo_name, num_proc=num_proc, **kwargs)
