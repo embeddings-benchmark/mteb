@@ -1106,8 +1106,6 @@ class ResultCache:
         """).strip()
 
         body = textwrap.dedent(f"""
-        ## MTEB Evaluation Results Submission
-
         ### Models Submitted
         {model_details_str}
 
@@ -1115,7 +1113,7 @@ class ResultCache:
 
         ---
 
-        *This PR was created automatically using `ResultCache.submit_results()`. Please check the results carefully before merging.*
+        *This PR was created automatically using [`ResultCache.submit_results()`](https://embeddings-benchmark.github.io/mteb/api/result-cache/#submit_results). Please check the results carefully before merging.*
 
         {checklist}
         """)
