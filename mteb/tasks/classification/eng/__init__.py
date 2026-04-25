@@ -242,6 +242,7 @@ from .wikipedia_bio_met_chem_classification import (
     WikipediaBioMetChemClassification,
     WikipediaBioMetChemClassificationV2,
 )
+from .avmeme_exam_classification import (AVMemeClassification, AVMemeVideoClassification)
 from .wikipedia_biolum_neurochem_classification import (
     WikipediaBiolumNeurochemClassification,
 )
@@ -328,6 +329,8 @@ __all__ = [
     "CUADJointIPOwnershipLegalBenchClassification",
     "CUADLicenseGrantLegalBenchClassification",
     "CUADLiquidatedDamagesLegalBenchClassification",
+    "AVMemeClassification",
+    "AVMemeVideoClassification",
     "CUADMinimumCommitmentLegalBenchClassification",
     "CUADMostFavoredNationLegalBenchClassification",
     "CUADNoSolicitOfCustomersLegalBenchClassification",
