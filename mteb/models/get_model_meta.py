@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def get_model_metas(
+def get_model_metas(  # noqa: PLR0913, PLR0917
     model_names: Iterable[str] | None = None,
     languages: Iterable[str] | None = None,
     open_weights: bool | None = None,
@@ -125,18 +125,8 @@ def get_model(
     Returns:
         A model object
     """
-    meta = get_model_meta(model_name, revision, fetch_from_hf=True).model_copy(
-        deep=True
-    )
+    meta = get_model_meta(model_name, revision, fetch_from_hf=True)
     model = meta.load_model(device=device, embed_dim=embed_dim, **kwargs)
-
-    if kwargs:
-        logger.info(
-            f"Model '{model_name}' loaded with additional arguments: {list(kwargs.keys())}"
-        )
-        meta.loader_kwargs |= kwargs
-
-    model.mteb_model_meta = meta  # type: ignore[misc]
     return model
 
 
@@ -145,7 +135,7 @@ _MODEL_RENAMES: dict[str, str] = {
     # to store model's eval results to display on benchmark
     "baseline/bm25s": "mteb/baseline-bm25s",
     "baseline/random-cross-encoder-baseline": "mteb/baseline-random-cross-encoder",
-    "mteb/baseline-random-encoder": "mteb/baseline-random-encoder",
+    "baseline/random-encoder": "mteb/baseline-random-encoder",
     "baseline/bb25": "mteb/baseline-bb25",
 }
 

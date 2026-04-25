@@ -119,6 +119,7 @@ TaskSubtype = Literal[
     "Question Answering Retrieval",
     "Reading Comprehension",
     "Intent Classification",
+    "Cross-Modal Retrieval",
 ]
 """The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". This list can be updated as needed."""
 
@@ -176,13 +177,11 @@ SampleCreationMethod = Literal[
 """How the text was created. It can be an important factor for understanding the quality of a dataset. E.g. used to filter out machine-translated datasets."""
 
 MIEB_TASK_TYPE = (
-    "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
     "Any2AnyMultilingualRetrieval",
     "VisionCentricQA",
     "ImageClustering",
     "ImageClassification",
-    "ImageMultilabelClassification",
     "DocumentUnderstanding",
     "VisualSTS(eng)",
     "VisualSTS(multi)",
@@ -196,8 +195,17 @@ MAEB_TASK_TYPE = (
     "AudioReranking",
     "AudioZeroshotClassification",
     "AudioClassification",
-    "AudioCrossFoldClassification",
     "AudioPairClassification",
+    "Any2AnyRetrieval",
+)
+
+MVEB_TASK_TYPE = (
+    "VideoClassification",
+    "VideoClustering",
+    "VideoMultilabelClassification",
+    "VideoPairClassification",
+    "VideoZeroshotClassification",
+    # "VideoCentricQA",  # TODO: uncomment when tasks exist
     "Any2AnyRetrieval",
 )
 
@@ -219,6 +227,7 @@ _TASK_TYPE = (
     )
     + MIEB_TASK_TYPE
     + MAEB_TASK_TYPE
+    + MVEB_TASK_TYPE
 )
 
 TaskType = Literal[_TASK_TYPE]  # type: ignore[valid-type]
@@ -246,7 +255,21 @@ TaskCategory = Literal[
     "a2at",
     "t2at",
     "at2at",
+    "v2v",
+    "v2c",
     "v2t",
+    "t2v",
+    "vt2t",
+    "vt2v",
+    "v2vt",
+    "t2vt",
+    "vt2vt",
+    "va2c",
+    "va2t",
+    "t2va",
+    "vat2t",
+    "v2a",
+    "a2v",
 ]
 """The category of the task.
 
@@ -270,7 +293,21 @@ TaskCategory = Literal[
 18. a2at: audio to audio+text
 19. t2at: text to audio+text
 20. at2at: audio+text to audio+text
-21. v2t: video to text
+21. v2v: video to video
+22. v2c: video to category
+23. v2t: video to text
+24. t2v: text to video
+25. vt2t: video+text to text
+26. vt2v: video+text to video
+27. v2vt: video to video+text
+28. t2vt: text to video+text
+29. vt2vt: video+text to video+text
+30. va2c: video+audio to category
+31. va2t: video+audio to text
+32. t2va: text to video+audio
+33. vat2t: video+audio+text to text
+34. v2a: video to audio
+35. a2v: audio to video
 """
 
 _MODALITY_CODES: dict[str, str] = {
@@ -305,6 +342,51 @@ Attributes:
     query: The prompt used for the queries in the task.
     document: The prompt used for the passages in the task.
 """
+
+
+SimplifiedTaskType = Literal[
+    "retrieval",
+    "clustering",
+    "classification",
+    "semantic-similarity",
+    "pair-classification",
+]
+
+_TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {  # type: ignore[type-arg]
+    "Any2AnyRetrieval": "retrieval",
+    "Any2AnyMultilingualRetrieval": "retrieval",
+    "VisionCentricQA": "retrieval",
+    "DocumentUnderstanding": "retrieval",
+    "AudioReranking": "retrieval",
+    "Reranking": "retrieval",
+    "Retrieval": "retrieval",
+    "InstructionRetrieval": "retrieval",
+    "InstructionReranking": "retrieval",
+    "Clustering": "clustering",
+    "ImageClustering": "clustering",
+    "AudioClustering": "clustering",
+    "AudioMultilabelClassification": "classification",
+    "AudioZeroshotClassification": "classification",
+    "AudioClassification": "classification",
+    "ImageClassification": "classification",
+    "ZeroShotClassification": "classification",
+    "MultilabelClassification": "classification",
+    "Classification": "classification",
+    "Regression": "classification",
+    "VisualSTS(eng)": "semantic-similarity",
+    "VisualSTS(multi)": "semantic-similarity",
+    "STS": "semantic-similarity",
+    "Summarization": "semantic-similarity",
+    "BitextMining": "semantic-similarity",
+    "Compositionality": "pair-classification",
+    "AudioPairClassification": "pair-classification",
+    "PairClassification": "pair-classification",
+    "VideoClassification": "classification",
+    "VideoClustering": "clustering",
+    # "VideoPairClassification": "pair-classification",  # TODO: uncomment when tasks exist
+    "VideoZeroshotClassification": "classification",
+    # "VideoCentricQA": "retrieval",  # TODO: uncomment when tasks exist
+}
 
 
 class MetadataDatasetDict(TypedDict, total=False):
@@ -361,6 +443,9 @@ class TaskMetadata(BaseModel):
             where it may be harder to gather information about the source.
         superseded_by: Denotes the task that this task is superseded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
+        is_beta: Whether the dataset is in beta. This can be used to denote that the dataset is still being verified and may contain errors.
+            Users should be cautious when using beta datasets. We generally recommend against using beta datasets in published benchmarks, but they can be useful for internal testing and development. We
+            similarly discourage contributing beta datasets, unless there is a specific reason to do so.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -370,7 +455,7 @@ class TaskMetadata(BaseModel):
     name: str
     description: str
     prompt: str | PromptDict | None = None
-    type: TaskType
+    type: TaskType  # type: ignore[valid-type]
     modalities: list[Modalities] = ["text"]
     category: TaskCategory | None = None
     reference: StrURL | None = None
@@ -393,6 +478,7 @@ class TaskMetadata(BaseModel):
     is_public: bool = True
     contributed_by: str | None = None
     superseded_by: str | None = None
+    is_beta: bool = False
 
     def _validate_metadata(self) -> None:
         self._eval_langs_are_valid(self.eval_langs)
@@ -410,7 +496,7 @@ class TaskMetadata(BaseModel):
                     )
         return prompt
 
-    def _eval_langs_are_valid(self, eval_langs: Languages) -> None:
+    def _eval_langs_are_valid(self, eval_langs: Languages) -> None:  # noqa: PLR6301
         """This method checks that the eval_langs are specified as a list of languages."""
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
@@ -419,6 +505,27 @@ class TaskMetadata(BaseModel):
         else:
             for code in eval_langs:
                 check_language_code(code)
+
+    @property
+    def simplified_task_type(self) -> SimplifiedTaskType:
+        """A simplified task type compared to metadata.type. E.g. converts AudioClustering and ImageClustering to simply Clustering.
+
+        This performs a rought separation into the following categories:
+
+        - **retrieval**: Tasks that (generally) require asymmetric matching between a query and a corpus, where the
+            query and passage embeddings may occupy different regions of the embedding space.
+        - **clustering**: Tasks that require globally coherent embeddings, where the distance between all
+            items in the embedding space reflects their semantic grouping.
+        - **classification**: Tasks that require embeddings to be linearly separable by category in the
+            embedding space. Typically these task utilize classifier or regression probe fit on the embeddings.
+        - **semantic-similarity**: Tasks that require embeddings to preserve fine-grained similarity
+            between pairs of items, such that cosine similarity reflects human judgments.
+        - **pair-classification**: Tasks that require embeddings to capture the relationship between a pair
+            of items, such as entailment or paraphrase.
+
+        These categories are compatible with task separation such as that of Jina v3, though not not an exact match.
+        """
+        return _TASKTYPE2SIMPLIFIEDTASKTYPE[self.type]
 
     @property
     def bcp47_codes(self) -> list[ISOLanguageScript]:
@@ -434,7 +541,7 @@ class TaskMetadata(BaseModel):
         """Return the languages of the dataset as iso639-3 codes."""
 
         def get_lang(lang: str) -> str:
-            return lang.split("-")[0]
+            return lang.split("-", maxsplit=1)[0]
 
         if isinstance(self.eval_langs, dict):
             return sorted(
@@ -465,7 +572,7 @@ class TaskMetadata(BaseModel):
             getattr(self, field_name) is not None
             for field_name in self.model_fields
             if field_name
-            not in ["prompt", "adapted_from", "contributed_by", "superseded_by"]
+            not in ["prompt", "adapted_from", "contributed_by", "superseded_by"]  # noqa: PLR6201
         )
 
     @property
@@ -475,7 +582,6 @@ class TaskMetadata(BaseModel):
             return self.eval_langs
         return {"default": cast("list[str]", self.eval_langs)}
 
-    @property
     def intext_citation(self, include_cite: bool = True) -> str:
         """Create an in-text citation for the dataset."""
         cite = ""
@@ -502,7 +608,7 @@ class TaskMetadata(BaseModel):
         """Return the path to the descriptive statistics file."""
         descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
         if self.type in MIEB_TASK_TYPE:
-            descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"
+            descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"  # noqa: PLR6104
         task_type_dir = descriptive_stat_base_dir / self.type
         if not descriptive_stat_base_dir.exists():
             descriptive_stat_base_dir.mkdir()
@@ -749,7 +855,6 @@ class TaskMetadata(BaseModel):
             "Political classification": [],
             "Question answering": [
                 "multiple-choice-qa",
-                "question-answering",
             ],
             "Sentiment/Hate speech": [
                 "sentiment-analysis",
@@ -851,7 +956,6 @@ class TaskMetadata(BaseModel):
             "VisionCentricQA": ["visual-question-answering"],
             "ImageClustering": ["image-feature-extraction"],
             "ImageClassification": ["image-classification"],
-            "ImageMultilabelClassification": ["image-classification"],
             "DocumentUnderstanding": ["visual-document-retrieval"],
             "VisualSTS(eng)": ["other"],
             "VisualSTS(multi)": ["other"],
@@ -863,7 +967,6 @@ class TaskMetadata(BaseModel):
             "AudioReranking": ["other"],
             "AudioZeroshotClassification": ["other"],
             "AudioClassification": ["audio-classification"],
-            "AudioCrossFoldClassification": ["audio-classification"],
             "AudioPairClassification": ["audio-classification"],
         }
         if self.type == "ZeroShotClassification":
@@ -880,15 +983,15 @@ class TaskMetadata(BaseModel):
 
     def _hf_task_category(self) -> list[str]:
         dataset_type = []
-        if self.category in ["i2i", "it2i", "i2it", "it2it"]:
+        if self.category in ["i2i", "it2i", "i2it", "it2it"]:  # noqa: PLR6201
             dataset_type.append("image-to-image")
-        if self.category in ["i2t", "t2i", "it2t", "it2i", "t2it", "i2it", "it2it"]:
+        if self.category in ["i2t", "t2i", "it2t", "it2i", "t2it", "i2it", "it2it"]:  # noqa: PLR6201
             dataset_type.extend(["image-to-text", "text-to-image"])
-        if self.category in ["it2t", "it2i", "t2it", "i2it", "it2it"]:
+        if self.category in ["it2t", "it2i", "t2it", "i2it", "it2it"]:  # noqa: PLR6201
             dataset_type.extend(["image-text-to-text"])
-        if self.category in ["a2a", "at2a", "a2at", "at2at"]:
+        if self.category in ["a2a", "at2a", "a2at", "at2at"]:  # noqa: PLR6201
             dataset_type.append("audio-to-audio")
-        if self.category in ["a2t", "t2a", "at2t", "t2at", "at2at", "a2at"]:
+        if self.category in ["a2t", "t2a", "at2t", "t2at", "at2at", "a2at"]:  # noqa: PLR6201
             dataset_type.extend(["text-to-audio"])
         return dataset_type
 

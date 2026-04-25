@@ -82,7 +82,8 @@ class VGClustering(AbsTaskClusteringLegacy):
             documents.extend(ds_split["article"])
             labels.extend(_label)
 
-            assert len(documents) == len(labels)
+            if len(documents) != len(labels):
+                raise ValueError(f"Expected {len(documents)} labels, got {len(labels)}")
 
             rng = random.Random(1111)  # local only seed
             # resampling changes scores from 12.68, 11.30, 12.65 (sample model)

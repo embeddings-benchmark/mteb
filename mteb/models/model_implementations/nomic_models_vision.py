@@ -6,7 +6,6 @@ import torch
 import torch.nn.functional as F
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -39,8 +38,6 @@ class NomicVisionModel(AbsEncoder):
         **kwargs: Any,
     ):
         from transformers import AutoImageProcessor, AutoModel, AutoTokenizer
-
-        requires_package(self, "einops", model_name, "pip install 'mteb[nomic]'")
 
         self.vision_model_name = model_name
         self.text_model_name = text_model_name
@@ -102,7 +99,7 @@ class NomicVisionModel(AbsEncoder):
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
 
-    def mean_pooling(self, model_output, attention_mask):
+    def mean_pooling(self, model_output, attention_mask):  # noqa: PLR6301
         token_embeddings = model_output[0]
         input_mask_expanded = (
             attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
@@ -192,4 +189,5 @@ nomic_embed_vision_v1_5 = ModelMeta(
         # DFN-2B
     ),
     citation=NOMIC_EMBED_VISION_CITATION,
+    extra_requirements_groups=["nomic"],
 )

@@ -395,7 +395,7 @@ class TestDownloadCachedResultsFromBranch:
     """Test the _download_cached_results_from_branch method."""
 
     @patch("requests.get")
-    def test_successful_download(
+    def test_successful_download(  # noqa: PLR6301
         self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
     ):
         """Test successful download and decompression, including parent directory creation."""
@@ -428,7 +428,7 @@ class TestDownloadCachedResultsFromBranch:
         assert nested_result_path.read_text(encoding="utf-8") == mock_benchmark_json
 
     @patch("requests.get")
-    def test_file_too_large(self, mock_get, tmp_path):
+    def test_file_too_large(self, mock_get, tmp_path):  # noqa: PLR6301
         """Test that oversized files raise ValueError."""
         cache = ResultCache(cache_path=tmp_path)
 
@@ -454,7 +454,7 @@ class TestDownloadCachedResultsFromBranch:
         ],
     )
     @patch("requests.get")
-    def test_error_handling_consolidated(
+    def test_error_handling_consolidated(  # noqa: PLR6301
         self, mock_get, tmp_path, error_type, exception_class
     ):
         """Test various error conditions in a consolidated manner."""
@@ -484,7 +484,7 @@ class TestDownloadCachedResultsFromBranch:
             cache._download_cached_results_from_branch(timeout=30)
 
     @patch("requests.get")
-    def test_default_output_path(
+    def test_default_output_path(  # noqa: PLR6301
         self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
     ):
         """Test that default output path is {cache_path}/leaderboard/__cached_results.json when none provided."""
@@ -512,7 +512,7 @@ class TestDownloadCachedResultsFromBranch:
         ],
     )
     @patch("requests.get")
-    def test_content_type_handling(
+    def test_content_type_handling(  # noqa: PLR6301
         self,
         mock_get,
         tmp_path,
@@ -551,7 +551,7 @@ class TestDownloadCachedResultsFromBranch:
         ],
     )
     @patch("requests.get")
-    def test_file_size_validation(
+    def test_file_size_validation(  # noqa: PLR6301
         self,
         mock_get,
         tmp_path,
@@ -713,7 +713,7 @@ def test_submit_results_with_fake_remote(tmp_path):
     # Verify successful submission workflow
     result = subprocess.run(
         ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-        cwd=remote_path,
+        check=False, cwd=remote_path,
         capture_output=True,
         text=True,
     )
@@ -729,7 +729,7 @@ def test_submit_results_with_fake_remote(tmp_path):
     commit_sha = result["commit_sha"]
     check = subprocess.run(
         ["git", "cat-file", "-t", commit_sha],
-        cwd=remote_path,
+        check=False, cwd=remote_path,
         capture_output=True,
         text=True,
     )
@@ -739,7 +739,7 @@ def test_submit_results_with_fake_remote(tmp_path):
     for filename in result_files_copied:
         check = subprocess.run(
             ["git", "ls-tree", "-r", "--name-only", commit_sha],
-            cwd=remote_path,
+            check=False, cwd=remote_path,
             capture_output=True,
             text=True,
         )
@@ -752,7 +752,7 @@ def test_submit_results_with_fake_remote(tmp_path):
     # Verify branch restoration: user should still be on original branch
     result_after = subprocess.run(
         ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-        cwd=remote_path,
+        check=False, cwd=remote_path,
         capture_output=True,
         text=True,
     )
@@ -814,7 +814,7 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path):
     cache = ResultCache(cache_path=cache_path)
     result = subprocess.run(
         ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-        cwd=remote_path,
+        check=False, cwd=remote_path,
         capture_output=True,
         text=True,
     )
@@ -830,7 +830,7 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path):
     # Verify user is back on original branch
     result = subprocess.run(
         ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-        cwd=remote_path,
+        check=False, cwd=remote_path,
         capture_output=True,
         text=True,
     )
@@ -842,7 +842,7 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path):
     # Verify temporary branch was deleted (should not appear in branch list)
     result = subprocess.run(
         ["git", "branch"],
-        cwd=remote_path,
+        check=False, cwd=remote_path,
         capture_output=True,
         text=True,
     )

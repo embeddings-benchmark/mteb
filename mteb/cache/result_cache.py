@@ -16,18 +16,18 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
 import requests
-from pydantic import ValidationError
-
-from mteb._helpful_enum import HelpfulStrEnum
-from mteb.abstasks import AbsTask
-from mteb.benchmarks.benchmark import Benchmark
-from mteb.benchmarks.get_benchmark import get_benchmark
 from mteb.cache._git_actions import (
     CommitAction,
     CopyResultsAction,
     CreateBranchAction,
 )
 from mteb.cache._reversible_workflow import ReversibleWorkflow
+from pydantic import ValidationError
+
+from mteb._helpful_enum import HelpfulStrEnum
+from mteb.abstasks import AbsTask
+from mteb.benchmarks.benchmark import Benchmark
+from mteb.benchmarks.get_benchmark import get_benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
@@ -37,6 +37,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
 
     from mteb.cache._reversible_workflow import ReversibleAction
+
     from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
@@ -282,6 +283,7 @@ class ResultCache:
             # check repository in the directory is the same as the remote
             remote_url = subprocess.run(
                 ["git", "config", "--get", "remote.origin.url"],
+                check=False,
                 cwd=results_directory,
                 capture_output=True,
                 text=True,
@@ -341,6 +343,7 @@ class ResultCache:
 
     def _download_cached_results_from_branch(
         self,
+        *,
         branch: str = "cached-data",
         filename: str = "__cached_results.json.gz",
         output_path: Path | None = None,
@@ -1092,7 +1095,7 @@ class ResultCache:
         try:
             result = subprocess.run(
                 ["git", "symbolic-ref", "-q", "HEAD"],
-                cwd=repo_path,
+                check=False, cwd=repo_path,
                 capture_output=True,
                 text=True,
             )
@@ -1390,7 +1393,7 @@ class ResultCache:
         try:
             result = subprocess.run(
                 ["gh", "auth", "token"],
-                capture_output=True,
+                check=False, capture_output=True,
                 text=True,
                 timeout=10,
             )
@@ -1405,7 +1408,7 @@ class ResultCache:
         try:
             result = subprocess.run(
                 ["git", "credential", "fill"],
-                input="protocol=https\nhost=github.com\n\n",
+                check=False, input="protocol=https\nhost=github.com\n\n",
                 capture_output=True,
                 text=True,
                 timeout=10,
@@ -1499,7 +1502,7 @@ class ResultCache:
             # Get fork URL from gh CLI
             result = subprocess.run(
                 ["gh", "repo", "view", "--json", "url"],
-                capture_output=True,
+                check=False, capture_output=True,
                 text=True,
                 timeout=10,
             )
@@ -1593,6 +1596,7 @@ class ResultCache:
         self,
         models: Sequence[str] | Iterable[ModelMeta] | None = None,
         tasks: Sequence[str] | Iterable[AbsTask] | Benchmark | str | None = None,
+        *,
         require_model_meta: bool = True,
         include_remote: bool = True,
         validate_and_filter: bool = False,

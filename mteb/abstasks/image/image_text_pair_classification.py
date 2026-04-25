@@ -186,7 +186,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
             num_texts_per_sample,
         )
 
-    def _compute_metrics(
+    def _compute_metrics(  # noqa: PLR6301
         self,
         scores: list[torch.Tensor],
         num_images_per_sample: int,
@@ -222,6 +222,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         text_columns = (
             [self.texts_column_names]
@@ -238,4 +239,5 @@ class AbsTaskImageTextPairClassification(AbsTask):
             repo_name,
             [*text_columns, *image_columns],
             num_proc=num_proc,
+            **kwargs,
         )

@@ -10,11 +10,13 @@ from mteb._create_dataloaders import create_dataloader
 from .evaluator import Evaluator
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from datasets import Dataset
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
-    from mteb.types import EncodeKwargs
+    from mteb.types import EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +25,8 @@ class ClusteringEvaluator(Evaluator):
     def __init__(
         self,
         dataset: Dataset,
-        input_column_name: str,
+        *,
+        input_column_name: str | Sequence[Modalities],
         label_column_name: str,
         task_metadata: TaskMetadata,
         hf_split: str,
@@ -49,7 +52,7 @@ class ClusteringEvaluator(Evaluator):
     ) -> list[int]:
         data_loader = create_dataloader(
             self.dataset,
-            self.task_metadata,
+            task_metadata=self.task_metadata,
             input_column=self.input_column_name,
             num_proc=num_proc,
             **encode_kwargs,

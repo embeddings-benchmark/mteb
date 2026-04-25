@@ -3,13 +3,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import torch
-from packaging.specifiers import SpecifierSet
 from torch.nn.functional import normalize
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
-from transformers import __version__ as transformers_version
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.types import PromptType
@@ -47,18 +44,6 @@ NEMOTRON_EMBED_VL_1B_V2_CITATION = """
     howpublished = {Available at: https://huggingface.co/blog/nvidia/llama-nemotron-vl-1b},
 }"""
 
-# Transformers version constraints per extra.
-# Keep in sync with pyproject.toml [project.optional-dependencies]
-#
-# Note: The extra name reflects the transformers version requirement, not the model version.
-# For example, llama-nemotron-colembed-vl-3b-v2 uses "llama-nemotron-colembed-vl" because it
-# requires transformers==4.49.0, even though it's a "v2" model by name.
-_TRANSFORMERS_CONSTRAINTS: dict[str, str] = {
-    "llama-nemotron-colembed-vl": "==4.49.0",  # llama-nemoretriever-colembed-*
-    "nemotron-colembed-vl-v2": "==5.0.0",  # nemotron-colembed-vl-4b-v2, nemotron-colembed-vl-8b-v2
-    "llama-nemotron-embed-vl-1b-v2": ">=4.56.0",  # llama-nemotron-embed-vl-1b-v2
-}
-
 
 class NemotronColEmbedVL(AbsEncoder):
     """Encoder for the NemotronColEmbedVL family of models."""
@@ -68,32 +53,11 @@ class NemotronColEmbedVL(AbsEncoder):
         model_name_or_path: str,
         revision: str,
         trust_remote_code: bool,
-        extra_name: str = "llama-nemotron-colembed-vl",
         device_map="cuda",
         torch_dtype=torch.bfloat16,
         attn_implementation="flash_attention_2",
         **kwargs,
     ):
-        install_hint = f"pip install 'mteb[{extra_name}]'"
-
-        # Check transformers version
-        constraint = _TRANSFORMERS_CONSTRAINTS.get(extra_name)
-        if constraint is None:
-            raise ValueError(
-                f"Unknown extra_name '{extra_name}'. "
-                f"Must be one of: {list(_TRANSFORMERS_CONSTRAINTS.keys())}"
-            )
-        if transformers_version not in SpecifierSet(constraint):
-            raise RuntimeError(
-                f"Model `{model_name_or_path}` requires transformers{constraint}, "
-                f"but {transformers_version} is installed. "
-                f"Run: {install_hint}"
-            )
-
-        # Check required packages
-        for package in ("torchvision", "accelerate", "flash_attn"):
-            requires_package(self, package, model_name_or_path, install_hint)
-
         from transformers import AutoModel
 
         self.model = AutoModel.from_pretrained(
@@ -210,7 +174,6 @@ TRAINING_DATA_v2 = {
 llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     loader=NemotronColEmbedVL,
     loader_kwargs=dict(
-        extra_name="llama-nemotron-colembed-vl",
         trust_remote_code=True,
     ),
     name="nvidia/llama-nemoretriever-colembed-1b-v1",
@@ -234,12 +197,12 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     use_instructions=True,
     training_datasets=TRAINING_DATA,
     citation=LLAMA_NEMORETRIEVER_CITATION,
+    extra_requirements_groups=["llama-nemotron-colembed-vl"],
 )
 
 llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     loader=NemotronColEmbedVL,
     loader_kwargs=dict(
-        extra_name="llama-nemotron-colembed-vl",
         trust_remote_code=True,
     ),
     name="nvidia/llama-nemoretriever-colembed-3b-v1",
@@ -263,12 +226,12 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     use_instructions=True,
     training_datasets=TRAINING_DATA,
     citation=LLAMA_NEMORETRIEVER_CITATION,
+    extra_requirements_groups=["llama-nemotron-colembed-vl"],
 )
 
 llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
     loader=NemotronColEmbedVL,
     loader_kwargs=dict(
-        extra_name="llama-nemotron-colembed-vl",
         trust_remote_code=True,
     ),
     name="nvidia/llama-nemotron-colembed-vl-3b-v2",
@@ -292,13 +255,13 @@ llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
     use_instructions=True,
     training_datasets=TRAINING_DATA,
     citation=NEMOTRON_COLEMBED_CITATION_V2,
+    extra_requirements_groups=["llama-nemotron-colembed-vl"],
 )
 
 
 nemotron_colembed_vl_4b_v2 = ModelMeta(
     loader=NemotronColEmbedVL,
     loader_kwargs=dict(
-        extra_name="nemotron-colembed-vl-v2",
         trust_remote_code=True,
     ),
     name="nvidia/nemotron-colembed-vl-4b-v2",
@@ -322,13 +285,13 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
     training_datasets=TRAINING_DATA_v2,
     citation=NEMOTRON_COLEMBED_CITATION_V2,
     model_type=["late-interaction"],
+    extra_requirements_groups=["nemotron-colembed-vl-v2"],
 )
 
 
 nemotron_colembed_vl_8b_v2 = ModelMeta(
     loader=NemotronColEmbedVL,
     loader_kwargs=dict(
-        extra_name="nemotron-colembed-vl-v2",
         trust_remote_code=True,
     ),
     name="nvidia/nemotron-colembed-vl-8b-v2",
@@ -352,6 +315,7 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
     training_datasets=TRAINING_DATA_v2,
     citation=NEMOTRON_COLEMBED_CITATION_V2,
     model_type=["late-interaction"],
+    extra_requirements_groups=["nemotron-colembed-vl-v2"],
 )
 
 
@@ -375,26 +339,6 @@ class LlamaNemotronEmbedVL(AbsEncoder):
             raise ValueError(
                 "At least one of use_image_modality or use_text_modality must be True"
             )
-
-        install_hint = f"pip install 'mteb[{extra_name}]'"
-
-        # Check transformers version
-        constraint = _TRANSFORMERS_CONSTRAINTS.get(extra_name)
-        if constraint is None:
-            raise ValueError(
-                f"Unknown extra_name '{extra_name}'. "
-                f"Must be one of: {list(_TRANSFORMERS_CONSTRAINTS.keys())}"
-            )
-        if transformers_version not in SpecifierSet(constraint):
-            raise RuntimeError(
-                f"Model `{model_name_or_path}` requires transformers{constraint}, "
-                f"but {transformers_version} is installed. "
-                f"Run: {install_hint}"
-            )
-
-        # Check required packages
-        for package in ("torchvision", "accelerate", "flash_attn"):
-            requires_package(self, package, model_name_or_path, install_hint)
 
         from transformers import AutoModel
 
@@ -450,10 +394,8 @@ class LlamaNemotronEmbedVL(AbsEncoder):
                         )
 
                 embeddings = normalize(embeddings, dim=-1)
-                assert torch.sum(embeddings).float().item() not in [
-                    0.0,
-                    float("inf"),
-                ]
+                if torch.sum(embeddings).float().item() in {0.0, float("inf")}:
+                    raise ValueError("Embeddings sum is invalid (0.0 or inf)")
                 embeddings_list.append(embeddings)
 
             concatenated_embeddings = torch.vstack(embeddings_list)
@@ -504,4 +446,5 @@ llama_nemotron_embed_vl_1b_v2 = ModelMeta(
     use_instructions=True,
     training_datasets=TRAINING_DATA_EMBED_VL_1B_V2,
     citation=NEMOTRON_EMBED_VL_1B_V2_CITATION,
+    extra_requirements_groups=["llama-nemotron-colembed-vl"],
 )

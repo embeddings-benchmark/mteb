@@ -8,7 +8,6 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.types import PromptType
@@ -47,21 +46,8 @@ class SeedTextEmbeddingModel(AbsEncoder):
         **kwargs,
     ) -> None:
         """Wrapper for Seed embedding API."""
-        requires_package(
-            self,
-            "volcenginesdkarkruntime",
-            "ByteDance Seed",
-            "pip install mteb[ark]",
-        )
-        from volcenginesdkarkruntime import Ark
-
-        requires_package(
-            self,
-            "tiktoken",
-            "ByteDance Seed",
-            "pip install mteb[ark]",
-        )
         import tiktoken
+        from volcenginesdkarkruntime import Ark
 
         self._client = Ark()
         self._model_name = model_name
@@ -82,11 +68,13 @@ class SeedTextEmbeddingModel(AbsEncoder):
     def _encode(
         self, inputs: list[str], task_name: str, prompt_type: PromptType | None = None
     ):
-        assert (
-            self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+        if (
+            self._embed_dim is not None
+            and self._embed_dim not in self._available_embed_dims
+        ):
+            raise ValueError(
+                f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
+            )
 
         if prompt_type == PromptType("query") or prompt_type is None:
             if task_name in TASK_NAME_TO_INSTRUCTION:
@@ -268,4 +256,5 @@ seed_embedding = ModelMeta(
     training_datasets=seed_1_5_training_data,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["ark"],
 )
