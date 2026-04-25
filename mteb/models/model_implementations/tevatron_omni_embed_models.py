@@ -66,7 +66,7 @@ omni_embed_v01 = ModelMeta(
         },
     },
     name="Tevatron/OmniEmbed-v0.1",
-    revision="5cfadf87cb647be9853d9d1fd7ec568466ab5e2a",
+    revision="fa8be315e74d07f563b07c0d053525de6dc7eda8",
     release_date="2025-04-12",
     languages=["eng-Latn"],
     n_parameters=8_931_813_888,
