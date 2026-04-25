@@ -117,6 +117,9 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
 
     # --- Test is descriptive stats are present for all datasets ---
     if task.is_aggregate:  # aggregate tasks do not have descriptive stats
+        assert set(task.metadata.hf_subsets_to_langscripts.keys()) == {"default"}, (
+            f"Aggregate task {task.metadata.name} has incorrect eval_langs, only a default subset is allowed"
+        )
         return
 
     # TODO https://github.com/embeddings-benchmark/mteb/issues/3498
