@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 
 from mteb.models import SentenceTransformerEncoderWrapper
+from mteb.models.model_implementations.google_gemini import GECKO_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta
 
 logger = logging.getLogger(__name__)

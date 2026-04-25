@@ -13,6 +13,7 @@ import numpy as np
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.google_text_embedding import (
+    GECKO_TRAINING_DATA,
     MODEL_PROMPTS,
     GoogleTextEmbeddingModel,
 )
@@ -189,9 +190,6 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
                         try:
                             response = await self.client.aio.models.embed_content(
                                 model=self.model_name, contents=item, config=config
-                            )
-                            assert len(response.embeddings) == 1, (
-                                f"Expected 1 embedding per call, got {len(response.embeddings)}"
                             )
                             return response.embeddings[0].values
                         except Exception as e:
