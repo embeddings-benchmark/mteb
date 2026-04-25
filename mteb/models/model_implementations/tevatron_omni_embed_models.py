@@ -84,11 +84,14 @@ omni_embed_v01 = ModelMeta(
     use_instructions=True,
     training_datasets={
         "NQ",
-        "MSRVTTV2T",
+        "MSMARCO",
+        "FEVER",
+        "SCIDOCS",
         "AudioCapsT2ARetrieval",
-        # "Tevatron/bge-ir",  # not directly in MTEB
-        # "Tevatron/pixmo-docs",  # not in MTEB
-        # "Tevatron/colpali",  # not in MTEB
+        # "MSR-VTT",  # task exists but not registered in get_tasks()
+        # "WikiSS-NQ",  # not in MTEB
+        # "PixMo-Docs",  # not in MTEB
+        # "ColPali train",  # not in MTEB
     },
     adapted_from="Qwen/Qwen2.5-Omni-7B",
     superseded_by=None,
