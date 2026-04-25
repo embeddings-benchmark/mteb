@@ -346,6 +346,13 @@ def _filter_benchmark_results_for_tables(
         task_names=sorted(task_names)
     )
 
+    # Filter models first so the more expensive language subset pass runs on the
+    # smallest possible set of model results.
+    if model_names:
+        filtered_benchmark_results = filtered_benchmark_results.select_models(
+            sorted(model_names)
+        )
+
     # Keep only language-compatible subsets for each selected task. Skip the
     # get_tasks + select_tasks round-trip when the selected languages already
     # cover every task language (the filter would be a no-op).
@@ -358,11 +365,6 @@ def _filter_benchmark_results_for_tables(
             filtered_benchmark_results = filtered_benchmark_results.select_tasks(
                 filtered_tasks
             )
-
-    if model_names:
-        filtered_benchmark_results = filtered_benchmark_results.select_models(
-            sorted(model_names)
-        )
 
     return filtered_benchmark_results
 
