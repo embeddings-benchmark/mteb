@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 import tempfile
 from typing import TYPE_CHECKING, Any
 
@@ -10,8 +9,6 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-
-logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
