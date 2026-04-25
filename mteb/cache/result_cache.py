@@ -1595,12 +1595,12 @@ class ResultCache:
         try:
             rate_limit = gh.get_rate_limit()
             logger.info(
-                f"GitHub API rate limit: {rate_limit.core.remaining}/"
-                f"{rate_limit.core.limit} remaining"
+                f"GitHub API rate limit: {rate_limit.core.remaining}/"  # type: ignore[attr-defined]
+                f"{rate_limit.core.limit} remaining"  # type: ignore[attr-defined]
             )
-            if rate_limit.core.remaining < 5:
+            if rate_limit.core.remaining < 5:  # type: ignore[attr-defined]
                 raise RuntimeError(
-                    f"GitHub API rate limit too low ({rate_limit.core.remaining} remaining). "
+                    f"GitHub API rate limit too low ({rate_limit.core.remaining} remaining). "  # type: ignore[attr-defined]
                     f"Please try again later."
                 )
         except Exception as e:
