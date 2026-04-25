@@ -193,6 +193,7 @@ class AbsTaskZeroShotClassification(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         self._upload_dataset_to_hub(
             repo_name,
@@ -208,7 +209,7 @@ class AbsTaskZeroShotClassification(AbsTask):
             num_proc=num_proc,
         )
         labels_dataset = Dataset.from_dict({"labels": self.get_candidate_labels()})
-        labels_dataset.push_to_hub(repo_name, config_name="labels")
+        labels_dataset.push_to_hub(repo_name, config_name="labels", **kwargs)
 
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""

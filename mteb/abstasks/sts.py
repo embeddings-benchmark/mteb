@@ -305,6 +305,7 @@ class AbsTaskSTS(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         if isinstance(self.column_names[0], str):
             cols = [self.column_names[0], self.column_names[1]]
@@ -312,7 +313,9 @@ class AbsTaskSTS(AbsTask):
             cols = [col for col, _ in self.column_names[0]] + [
                 col for col, _ in self.column_names[1]
             ]
-        self._upload_dataset_to_hub(repo_name, [*cols, "score"], num_proc=num_proc)
+        self._upload_dataset_to_hub(
+            repo_name, [*cols, "score"], num_proc=num_proc, **kwargs
+        )
 
     def _normalize(self, x: float) -> float:
         return (x - self.min_score) / (self.max_score - self.min_score)

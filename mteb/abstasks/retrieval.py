@@ -617,6 +617,7 @@ class AbsTaskRetrieval(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         self.convert_v1_dataset_format_to_v2(num_proc)
 
@@ -659,6 +660,7 @@ class AbsTaskRetrieval(AbsTask):
                     hf_subset_name,
                     commit_message=f"Add {hf_subset_name}-{subset_item}",
                     num_proc=num_proc,
+                    **kwargs,
                 )
 
         for subset in self.dataset:
