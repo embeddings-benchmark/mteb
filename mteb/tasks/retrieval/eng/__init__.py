@@ -24,9 +24,9 @@ from .avmeme_exam_retrieval import (
     AVMemeExamT2VARetrieval,
     AVMemeExamT2VRetrieval,
     AVMemeExamV2ARetrieval,
-    AVMemeExamVT2ARetrieval,
     AVMemeExamV2TRetrieval,
     AVMemeExamVA2TRetrieval,
+    AVMemeExamVT2ARetrieval,
 )
 from .bar_exam_qa_retrieval import BarExamQARetrieval
 from .bill_sum_ca_retrieval import BillSumCARetrieval
@@ -195,8 +195,8 @@ from .msr_vtt import (
     MSRVTTT2VA,
     MSRVTTV2A,
     MSRVTTV2T,
-    MSRVTTVT2A,
     MSRVTTVA2T,
+    MSRVTTVT2A,
 )
 from .msvd_t2v_retrieval import MSVDT2VRetrieval
 from .msvd_v2t_retrieval import MSVDV2TRetrieval
@@ -365,11 +365,11 @@ __all__ = [
     "MSRVTTA2V",
     "MSRVTTAT2V",
     "MSRVTTT2V",
-    "MSRVTTVT2A",
     "MSRVTTT2VA",
     "MSRVTTV2A",
     "MSRVTTV2T",
     "MSRVTTVA2T",
+    "MSRVTTVT2A",
     "NQ",
     "PIQA",
     "SCIDOCS",
@@ -385,9 +385,9 @@ __all__ = [
     "AVMemeExamT2VARetrieval",
     "AVMemeExamT2VRetrieval",
     "AVMemeExamV2ARetrieval",
-    "AVMemeExamVT2ARetrieval",
     "AVMemeExamV2TRetrieval",
     "AVMemeExamVA2TRetrieval",
+    "AVMemeExamVT2ARetrieval",
     "ActivityNetCaptionsT2VRetrieval",
     "ActivityNetCaptionsV2TRetrieval",
     "AlphaNLI",
@@ -487,9 +487,9 @@ __all__ = [
     "DiDeMoT2VARetrieval",
     "DiDeMoT2VRetrieval",
     "DiDeMoV2ARetrieval",
-    "DiDeMoVT2ARetrieval",
     "DiDeMoV2TRetrieval",
     "DiDeMoVA2TRetrieval",
+    "DiDeMoVT2ARetrieval",
     "EDIST2ITRetrieval",
     "EmoVDBA2TRetrieval",
     "EmoVDBT2ARetrieval",
@@ -694,7 +694,7 @@ __all__ = [
     "YouCook2T2VARetrieval",
     "YouCook2T2VRetrieval",
     "YouCook2V2ARetrieval",
-    "YouCook2VT2ARetrieval",
     "YouCook2V2TRetrieval",
     "YouCook2VA2TRetrieval",
+    "YouCook2VT2ARetrieval",
 ]
