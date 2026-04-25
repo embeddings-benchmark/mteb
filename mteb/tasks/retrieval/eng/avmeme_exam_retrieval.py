@@ -205,7 +205,9 @@ class AVMemeExamV2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=_BIBTEX,
-        prompt={"query": "Find the audio that corresponds to the following meme video."},
+        prompt={
+            "query": "Find the audio that corresponds to the following meme video."
+        },
         is_beta=True,
     )
 
@@ -237,7 +239,9 @@ class AVMemeExamA2VRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=_BIBTEX,
-        prompt={"query": "Find the meme video that corresponds to the following audio."},
+        prompt={
+            "query": "Find the meme video that corresponds to the following audio."
+        },
         is_beta=True,
     )
 
