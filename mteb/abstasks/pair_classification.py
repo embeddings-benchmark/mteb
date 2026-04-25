@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import logging
 from collections import defaultdict
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 from datasets import Dataset
@@ -293,6 +293,7 @@ class AbsTaskPairClassification(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         # previously pair classification datasets were stored in a single row
         if self.dataset is None:
@@ -318,6 +319,7 @@ class AbsTaskPairClassification(AbsTask):
                 self.label_column_name,
             ],
             num_proc=num_proc,
+            **kwargs,
         )
 
     def _compute_metrics_values(

@@ -351,6 +351,7 @@ class AbsTaskClustering(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         input_cols = (
             [self.input_column_name]
@@ -361,6 +362,7 @@ class AbsTaskClustering(AbsTask):
             repo_name,
             input_cols + [self.label_column_name],
             num_proc=num_proc,
+            **kwargs,
         )
 
 

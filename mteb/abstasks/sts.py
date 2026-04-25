@@ -277,14 +277,13 @@ class AbsTaskSTS(AbsTask):
         )
 
     def _push_dataset_to_hub(
-        self,
-        repo_name: str,
-        num_proc: int | None = None,
+        self, repo_name: str, num_proc: int | None = None, **kwargs: Any
     ) -> None:
         self._upload_dataset_to_hub(
             repo_name,
             [self.column_names[0], self.column_names[1], "score"],
             num_proc=num_proc,
+            **kwargs,
         )
 
     def _normalize(self, x: float) -> float:
