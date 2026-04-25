@@ -9,14 +9,18 @@ from .arc_challenge_retrieval import ARCChallenge
 from .argu_ana_retrieval import ArguAna
 from .audio_set_strong import AudioSetStrongA2TRetrieval, AudioSetStrongT2ARetrieval
 from .audiocaps_av_retrieval import (
+    AudioCapsAVA2VRetrieval,
     AudioCapsAVT2VARetrieval,
     AudioCapsAVT2VRetrieval,
+    AudioCapsAVV2ARetrieval,
     AudioCapsAVV2TRetrieval,
     AudioCapsAVVA2TRetrieval,
 )
 from .avmeme_exam_retrieval import (
+    AVMemeExamA2VRetrieval,
     AVMemeExamT2VARetrieval,
     AVMemeExamT2VRetrieval,
+    AVMemeExamV2ARetrieval,
     AVMemeExamV2TRetrieval,
     AVMemeExamVA2TRetrieval,
 )
@@ -202,8 +206,10 @@ from .okvqa_it2t_retrieval import OKVQAIT2TRetrieval
 from .oven_it2it_retrieval import OVENIT2ITRetrieval
 from .oven_it2t_retrieval import OVENIT2TRetrieval
 from .panda70m_retrieval import (
+    Panda70MA2VRetrieval,
     Panda70MT2VARetrieval,
     Panda70MT2VRetrieval,
+    Panda70MV2ARetrieval,
     Panda70MV2TRetrieval,
     Panda70MVA2TRetrieval,
 )
@@ -287,8 +293,10 @@ from .vatex_retrieval import (
     VATEXVA2TRetrieval,
 )
 from .vggsound_av_retrieval import (
+    VGGSoundAVA2VRetrieval,
     VGGSoundAVT2VARetrieval,
     VGGSoundAVT2VRetrieval,
+    VGGSoundAVV2ARetrieval,
     VGGSoundAVV2TRetrieval,
     VGGSoundAVVA2TRetrieval,
 )
@@ -347,16 +355,20 @@ __all__ = [
     "AILACasedocs",
     "AILAStatutes",
     "ARCChallenge",
+    "AVMemeExamA2VRetrieval",
     "AVMemeExamT2VARetrieval",
     "AVMemeExamT2VRetrieval",
+    "AVMemeExamV2ARetrieval",
     "AVMemeExamV2TRetrieval",
     "AVMemeExamVA2TRetrieval",
     "ActivityNetCaptionsT2VRetrieval",
     "ActivityNetCaptionsV2TRetrieval",
     "AlphaNLI",
     "ArguAna",
+    "AudioCapsAVA2VRetrieval",
     "AudioCapsAVT2VARetrieval",
     "AudioCapsAVT2VRetrieval",
+    "AudioCapsAVV2ARetrieval",
     "AudioCapsAVV2TRetrieval",
     "AudioCapsAVVA2TRetrieval",
     "AudioSetStrongA2TRetrieval",
@@ -543,8 +555,10 @@ __all__ = [
     "OKVQAIT2TRetrieval",
     "OVENIT2ITRetrieval",
     "OVENIT2TRetrieval",
+    "Panda70MA2VRetrieval",
     "Panda70MT2VARetrieval",
     "Panda70MT2VRetrieval",
+    "Panda70MV2ARetrieval",
     "Panda70MV2TRetrieval",
     "Panda70MVA2TRetrieval",
     "Quail",
@@ -609,8 +623,10 @@ __all__ = [
     "VATEXV2ARetrieval",
     "VATEXV2TRetrieval",
     "VATEXVA2TRetrieval",
+    "VGGSoundAVA2VRetrieval",
     "VGGSoundAVT2VARetrieval",
     "VGGSoundAVT2VRetrieval",
+    "VGGSoundAVV2ARetrieval",
     "VGGSoundAVV2TRetrieval",
     "VGGSoundAVVA2TRetrieval",
     "VQA2IT2TRetrieval",
