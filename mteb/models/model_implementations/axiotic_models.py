@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -26,30 +25,27 @@ class OgmaWrapper:
         device: str | None = None,
         **_: Any,
     ) -> None:
-        from huggingface_hub import snapshot_download
+        from huggingface_hub import hf_hub_download
         from tokenizers import Tokenizer
+        from transformers import AutoModel
 
         self.model_name = model_name
         self.revision = revision
         self.device = torch.device(
             device or ("cuda" if torch.cuda.is_available() else "cpu")
         )
-        self.model_path = Path(snapshot_download(model_name, revision=revision))
-
-        # The Ogma HF repos ship their lightweight model implementation as source files.
-        import sys
-
-        sys.path.insert(0, str(self.model_path))
-        from config import TaskToken  # type: ignore[import-not-found]
-        from ogma_model import OgmaModel  # type: ignore[import-not-found]
-
-        self.task_token = TaskToken
-        self.model = OgmaModel.from_checkpoint(
-            str(self.model_path), device=str(self.device)
+        self.model = AutoModel.from_pretrained(
+            model_name,
+            revision=revision,
+            trust_remote_code=True,
         )
+        self.model.to(self.device)
         self.model.eval()
-        self.tokenizer = Tokenizer.from_file(str(self.model_path / "tokenizer.json"))
-        self.n_special_tokens = 7
+        tokenizer_file = hf_hub_download(
+            model_name, filename="tokenizer.json", revision=revision
+        )
+        self.tokenizer = Tokenizer.from_file(tokenizer_file)
+        self.n_special_tokens = int(getattr(self.model.config, "n_special_tokens", 7))
         self.max_length = int(getattr(self.model.config, "max_seq_len", 1024))
 
     def to(self, device: torch.device) -> None:
@@ -58,10 +54,10 @@ class OgmaWrapper:
 
     def _task_for_prompt(self, prompt_type: PromptType | None) -> Any:
         if prompt_type == PromptType.query:
-            return self.task_token.QRY
+            return "QRY"
         if prompt_type == PromptType.document:
-            return self.task_token.DOC
-        return self.task_token.SYM
+            return "DOC"
+        return "SYM"
 
     def _tokenize(self, texts: list[str]) -> tuple[torch.Tensor, torch.Tensor]:
         encoded: list[list[int]] = []
