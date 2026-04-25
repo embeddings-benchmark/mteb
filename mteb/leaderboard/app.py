@@ -18,8 +18,8 @@ import mteb
 from mteb import BenchmarkResults
 from mteb.benchmarks._leaderboard_menu import GP_BENCHMARK_ENTRIES, R_BENCHMARK_ENTRIES
 from mteb.benchmarks.benchmark import RtebBenchmark
-from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.cache import ResultCache
+from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.leaderboard.benchmark_selector import (
     DEFAULT_BENCHMARK_NAME,
     _make_selector,
@@ -47,9 +47,7 @@ MODEL_TYPE_CHOICES = list(get_args(MODEL_TYPES))
 
 
 @functools.lru_cache(maxsize=128)
-def _get_tasks_cached(
-    task_names: tuple[str, ...], languages: tuple[str, ...] | None
-):
+def _get_tasks_cached(task_names: tuple[str, ...], languages: tuple[str, ...] | None):
     """Memoized `mteb.get_tasks` for leaderboard callbacks (tuples for hashability)."""
     return mteb.get_tasks(
         tasks=list(task_names),
@@ -472,9 +470,7 @@ def get_leaderboard_app(  # noqa: PLR0914
     # Warm each benchmark's `_df_cache` with the task-level long df so filtered
     # child scopes reuse the parent via isin() instead of rebuilding.
     precompute_start = time.time()
-    logger.info(
-        f"Precomputing task-level dfs for {len(benchmarks)} benchmarks..."
-    )
+    logger.info(f"Precomputing task-level dfs for {len(benchmarks)} benchmarks...")
     for name, br in all_benchmark_results.items():
         try:
             br.to_dataframe(format="long", aggregation_level="task")
@@ -482,9 +478,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             br._df_cache.pop(("__pre_agg__", False), None)
         except Exception as e:
             logger.warning(f"Precompute failed for {name}: {e}")
-    logger.info(
-        f"Precompute complete in {time.time() - precompute_start:.2f}s"
-    )
+    logger.info(f"Precompute complete in {time.time() - precompute_start:.2f}s")
 
     default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
     default_results = all_benchmark_results[default_benchmark.name]

@@ -396,8 +396,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             cache_key is not None
             and self._parent_results is not None
             and not (
-                aggregation_level == "language"
-                and self._filter_task_names is not None
+                aggregation_level == "language" and self._filter_task_names is not None
             )
         ):
             parent_cached = self._parent_results._df_cache.get(cache_key)
@@ -454,9 +453,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             result = result[result["task_name"].isin(self._filter_task_names)]
         return result
 
-    def _build_pre_agg_df(
-        self, include_model_revision: bool
-    ) -> pd.DataFrame | None:
+    def _build_pre_agg_df(self, include_model_revision: bool) -> pd.DataFrame | None:
         """Build (and cache) the pre-aggregation long df; returns `None` when no scores exist."""
         pre_agg_key = ("__pre_agg__", include_model_revision)
         cached = self._df_cache.get(pre_agg_key)
