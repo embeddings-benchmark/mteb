@@ -19,10 +19,8 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
     calculate_label_statistics,
-    calculate_text_statistics,
+    calculate_single_input_modality_statistics,
 )
 from .abstask import AbsTask
 
@@ -31,12 +29,13 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
-    from mteb.types import Array, EncodeKwargs, ScoresDict
+    from mteb.types import Array, EncodeKwargs, Modalities, ScoresDict
     from mteb.types.statistics import (
         AudioStatistics,
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -118,6 +117,7 @@ class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
         text_statistics: Statistics for text
         image_statistics: Statistics for images
         audio_statistics: Statistics for audio
+        video_statistics: Statistics for video
         labels_statistics: Statistics for labels
     """
 
@@ -126,6 +126,7 @@ class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
     labels_statistics: LabelStatistics
 
 
@@ -166,7 +167,7 @@ class AbsTaskClustering(AbsTask):
     k_mean_batch_size: int = 512
     max_depth = None
     abstask_prompt = "Identify categories in user passages."
-    input_column_name: str | Sequence[str] = "sentences"
+    input_column_name: str | Sequence[Modalities] = "sentences"
     label_column_name: str = "labels"
 
     def _evaluate_subset(
@@ -287,64 +288,41 @@ class AbsTaskClustering(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClusteringFastDescriptiveStatistics:
-        # Multi-column tasks (e.g. video+audio): only compute label statistics for now
-        if not isinstance(self.input_column_name, str):
-            if hf_subset:
-                labels = self.dataset[hf_subset][split][self.label_column_name]
-            elif compute_overall:
-                labels = []
-                for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
-                    labels.extend(
-                        self.dataset[hf_subset][split][self.label_column_name]
-                    )
-            else:
-                labels = self.dataset[split][self.label_column_name]
-            if isinstance(labels[0], list):
-                labels = [item for sublist in labels for item in sublist]
-            return ClusteringFastDescriptiveStatistics(
-                num_samples=len(labels),
-                text_statistics=None,
-                image_statistics=None,
-                audio_statistics=None,
-                labels_statistics=calculate_label_statistics(labels),
-            )
-
-        col = self.input_column_name
-        if hf_subset:
-            inputs = self.dataset[hf_subset][split][col]
-            labels = self.dataset[hf_subset][split][self.label_column_name]
-        elif compute_overall:
-            inputs = []
-            labels = []
-            for hf_subset in self.metadata.eval_langs:
-                inputs.extend(self.dataset[hf_subset][split][col])
-                labels.extend(self.dataset[hf_subset][split][self.label_column_name])
+        if isinstance(self.input_column_name, str):
+            col_map = {self.metadata.modalities[0]: self.input_column_name}
         else:
-            inputs = self.dataset[split][col]
-            labels = self.dataset[split][self.label_column_name]
+            col_map = {col: col for col in self.input_column_name}
 
-        if isinstance(inputs[0], list):
-            inputs = [item for sublist in inputs for item in sublist]
-        if isinstance(labels[0], list):
+        if hf_subset:
+            ds = self.dataset[hf_subset][split]
+            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
+            labels = ds[self.label_column_name]
+        elif compute_overall:
+            col_inputs = {mod: [] for mod in col_map}
+            labels = []
+            for subset in self.metadata.eval_langs:
+                ds = self.dataset[subset][split]
+                for mod, col in col_map.items():
+                    col_inputs[mod].extend(ds[col])
+                labels.extend(ds[self.label_column_name])
+        else:
+            ds = self.dataset[split]
+            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
+            labels = ds[self.label_column_name]
+
+        for mod in col_inputs:
+            if col_inputs[mod] and isinstance(col_inputs[mod][0], list):
+                col_inputs[mod] = [
+                    item for sublist in col_inputs[mod] for item in sublist
+                ]
+        if labels and isinstance(labels[0], list):
             labels = [item for sublist in labels for item in sublist]
 
-        text_statistics, image_statistics, audio_statistics = None, None, None
-        if "image" in self.metadata.modalities:
-            image_statistics = calculate_image_statistics(inputs)
-
-        if "text" in self.metadata.modalities:
-            text_statistics = calculate_text_statistics(inputs)
-        if "audio" in self.metadata.modalities:
-            audio_statistics = calculate_audio_statistics(inputs)
-
-        label_statistics = calculate_label_statistics(labels)
-
+        modality_stats = calculate_single_input_modality_statistics(col_inputs)
         return ClusteringFastDescriptiveStatistics(
-            num_samples=len(inputs),
-            text_statistics=text_statistics,
-            image_statistics=image_statistics,
-            audio_statistics=audio_statistics,
-            labels_statistics=label_statistics,
+            num_samples=len(labels),
+            **modality_stats,
+            labels_statistics=calculate_label_statistics(labels),
         )
 
     def _push_dataset_to_hub(
