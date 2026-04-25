@@ -364,14 +364,6 @@ def _filter_benchmark_results_for_tables(
             sorted(model_names)
         )
 
-    # Record parent + filter scope so `to_dataframe` on this instance can reuse
-    # the parent's cached dfs via an isin() filter.
-    filtered_benchmark_results._parent_results = benchmark_results
-    filtered_benchmark_results._filter_model_names = (
-        frozenset(model_names) if model_names else None
-    )
-    filtered_benchmark_results._filter_task_names = frozenset(task_names)
-
     return filtered_benchmark_results
 
 
@@ -466,19 +458,6 @@ def get_leaderboard_app(  # noqa: PLR0914
         logger.info(
             f"Step 3/7 complete: Processed 0 benchmarks in {process_time:.2f}s (avg N/A)"
         )
-
-    # Warm each benchmark's `_df_cache` with the task-level long df so filtered
-    # child scopes reuse the parent via isin() instead of rebuilding.
-    precompute_start = time.time()
-    logger.info(f"Precomputing task-level dfs for {len(benchmarks)} benchmarks...")
-    for name, br in all_benchmark_results.items():
-        try:
-            br.to_dataframe(format="long", aggregation_level="task")
-            # Evict the larger pre-agg df, it's rebuilt lazily on first per-language use.
-            br._df_cache.pop(("__pre_agg__", False), None)
-        except Exception as e:
-            logger.warning(f"Precompute failed for {name}: {e}")
-    logger.info(f"Precompute complete in {time.time() - precompute_start:.2f}s")
 
     default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
     default_results = all_benchmark_results[default_benchmark.name]
