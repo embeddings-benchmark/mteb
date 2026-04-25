@@ -94,52 +94,45 @@ class EBindWrapper(AbsEncoder):
 
     @torch.inference_mode()
     def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
-        """Encode all modalities in a batch, fusing by addition when mixed."""
-        embeddings = None
+        """Encode all modalities together in a single forward pass.
+
+        When multiple modalities are present (e.g. video+audio from the same
+        clip), embeddings are fused by element-wise addition and renormalised.
+        """
+        forward_kwargs: dict[str, torch.Tensor] = {}
 
         if batch.get("text"):
             processed = self.processor({"text": batch["text"]}, return_tensors="pt")
-            text_emb = self.model.forward(**processed)["text"]
-            embeddings = text_emb
+            forward_kwargs["text"] = processed["text"]
 
         if batch.get("image"):
-            img_tensors = torch.stack(
+            forward_kwargs["image"] = torch.stack(
                 [self._image_transform(img) for img in batch["image"]]
             ).to(self.device)
-            image_emb = self.model.forward(image=img_tensors)["image"]
-            embeddings = image_emb if embeddings is None else embeddings + image_emb
 
         if batch.get("video"):
-            processed = [self._process_video(v) for v in batch["video"]]
-            # Fixed frame count: stack into one batched forward pass
-            # Variable frame count (FPS mode): encode each video individually
-            if len({v.shape[0] for v in processed}) == 1:
-                stacked = torch.stack(processed).to(self.device)
-                video_emb = self.model.forward(video=stacked)["video"]
-            else:
+            video_tensors = [self._process_video(v) for v in batch["video"]]
+            if len({v.shape[0] for v in video_tensors}) != 1:
                 logger.warning(
-                    "Variable frame counts in batch — falling back to per-video encoding. "
-                    "Use fixed num_frames (default 8) instead of fps for batched processing."
+                    "Variable frame counts in batch — torch.stack will fail. "
+                    "Use batch_size=1 or fixed num_frames (default 8) instead of fps."
                 )
-                video_emb = torch.cat(
-                    [
-                        self.model.forward(video=v.unsqueeze(0).to(self.device))[
-                            "video"
-                        ]
-                        for v in processed
-                    ]
-                )
-            embeddings = video_emb if embeddings is None else embeddings + video_emb
+            forward_kwargs["video"] = torch.stack(video_tensors).to(self.device)
 
         if batch.get("audio"):
-            audio_tensors = self._process_audio_batch(batch["audio"])
-            audio_emb = self.model.forward(audio=audio_tensors)["audio"]
-            embeddings = audio_emb if embeddings is None else embeddings + audio_emb
+            forward_kwargs["audio"] = self._process_audio_batch(batch["audio"])
 
-        if embeddings is None:
+        if not forward_kwargs:
             raise ValueError(
                 f"No supported modality found in batch: {list(batch.keys())}"
             )
+
+        outputs = self.model.forward(**forward_kwargs)
+
+        # Fuse by addition when multiple modalities are present
+        embeddings = None
+        for emb in outputs.values():
+            embeddings = emb if embeddings is None else embeddings + emb
 
         return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
 
