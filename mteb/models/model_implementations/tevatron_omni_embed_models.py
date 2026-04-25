@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from mteb.models.model_implementations.colpali_models import COLPALI_TRAINING_DATA
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
@@ -87,11 +88,12 @@ omni_embed_v01 = ModelMeta(
         "MSMARCO",
         "FEVER",
         "SCIDOCS",
+        "MSRVTTV2T",
+        "MSRVTTT2V",
         "AudioCapsT2ARetrieval",
-        # "MSR-VTT",  # task exists but not registered in get_tasks()
+        *COLPALI_TRAINING_DATA,
         # "WikiSS-NQ",  # not in MTEB
         # "PixMo-Docs",  # not in MTEB
-        # "ColPali train",  # not in MTEB
     },
     adapted_from="Qwen/Qwen2.5-Omni-7B",
     superseded_by=None,
