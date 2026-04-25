@@ -83,10 +83,11 @@ def test_task_results_get_score(task_result: TaskResult):
 
 
 def test_task_results_to_dict(task_result: TaskResult):
+    mteb_ver = version("mteb")
     dict_repr = {
         "dataset_revision": "1.0",
         "task_name": "dummy_task",
-        "mteb_version": version("mteb"),
+        "mteb_version": mteb_ver,
         "evaluation_time": 100,
         "date": None,
         "kg_co2_emissions": None,
@@ -96,11 +97,13 @@ def test_task_results_to_dict(task_result: TaskResult):
                     "main_score": 0.5,
                     "hf_subset": "en-de",
                     "languages": ["eng-Latn", "deu-Latn"],
+                    "mteb_version": mteb_ver,
                 },
                 {
                     "main_score": 0.6,
                     "hf_subset": "en-fr",
                     "languages": ["eng-Latn", "fra-Latn"],
+                    "mteb_version": mteb_ver,
                 },
             ]
         },
@@ -151,6 +154,109 @@ def test_task_results_validate_and_filter():
     res3 = res.validate_and_filter_scores(task=task)
     assert res3.scores.keys() == {"train", "test"}
     assert res3.get_score() == (0.5 + 0.3) / 2  # only en-de scores
+
+
+def test_per_subset_mteb_version(task_result: TaskResult):
+    """Test that each subset score dict includes mteb_version."""
+    mteb_ver = version("mteb")
+    for split_scores in task_result.scores.values():
+        for subset_scores in split_scores:
+            assert "mteb_version" in subset_scores
+            assert subset_scores["mteb_version"] == mteb_ver
+
+
+def test_merge_across_mteb_versions():
+    """Test that results from different MTEB versions can be merged."""
+    existing = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="2.12.4",
+        scores={
+            "train": [
+                {
+                    "main_score": 0.5,
+                    "hf_subset": "en-de",
+                    "languages": ["eng-Latn", "deu-Latn"],
+                    "mteb_version": "2.12.4",
+                },
+            ]
+        },
+        evaluation_time=50,
+    )
+
+    new = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="2.20.1",
+        scores={
+            "train": [
+                {
+                    "main_score": 0.6,
+                    "hf_subset": "en-fr",
+                    "languages": ["eng-Latn", "fra-Latn"],
+                    "mteb_version": "2.20.1",
+                },
+            ]
+        },
+        evaluation_time=60,
+    )
+
+    assert existing.is_mergeable(new)
+    merged = existing.merge(new)
+
+    # Both subsets should be present
+    assert len(merged.scores["train"]) == 2
+    subsets = {s["hf_subset"]: s for s in merged.scores["train"]}
+    assert subsets["en-de"]["mteb_version"] == "2.12.4"
+    assert subsets["en-fr"]["mteb_version"] == "2.20.1"
+
+    # Top-level version should be a range when subsets differ
+    assert merged.mteb_version == "2.12.4-2.20.1"
+
+
+def test_merge_without_per_subset_version():
+    """Test merging old results that lack per-subset mteb_version."""
+    existing = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="2.12.4",
+        scores={
+            "train": [
+                {
+                    "main_score": 0.5,
+                    "hf_subset": "en-de",
+                    "languages": ["eng-Latn", "deu-Latn"],
+                },
+            ]
+        },
+        evaluation_time=50,
+    )
+
+    new = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="2.20.1",
+        scores={
+            "train": [
+                {
+                    "main_score": 0.6,
+                    "hf_subset": "en-fr",
+                    "languages": ["eng-Latn", "fra-Latn"],
+                    "mteb_version": "2.20.1",
+                },
+            ]
+        },
+        evaluation_time=60,
+    )
+
+    merged = existing.merge(new)
+    # Old subset has no per-subset version, new one does
+    subsets = {s["hf_subset"]: s for s in merged.scores["train"]}
+    assert "mteb_version" not in subsets["en-de"]
+    assert subsets["en-fr"]["mteb_version"] == "2.20.1"
+
+    # Top-level should be the latest found across subsets
+    assert merged.mteb_version == "2.20.1"
 
 
 @pytest.mark.parametrize(

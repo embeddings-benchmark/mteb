@@ -126,8 +126,9 @@ class AbsTaskAggregate(AbsTask):
             msg = f"All tasks of {self.metadata.name} is not run using the same version. different versions found are: {mteb_versions}"
             logger.warning(msg)
             warnings.warn(msg)
-            task_res.mteb_version = None
-        task_res.mteb_version = task_results[0].mteb_version
+        task_res.mteb_version = TaskResult._compute_top_level_mteb_version(
+            task_res.scores
+        )
         return task_res
 
     def evaluate(

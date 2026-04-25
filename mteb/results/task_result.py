@@ -194,6 +194,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
+        mteb_ver = version("mteb")
         flat_scores = defaultdict(list)
         for split, hf_subset_scores in scores.items():
             for hf_subset, hf_scores in hf_subset_scores.items():
@@ -213,13 +214,14 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     **hf_scores,
                     "hf_subset": hf_subset,
                     "languages": eval_langs,
+                    "mteb_version": mteb_ver,
                 }
                 flat_scores[split].append(_scores)
 
         return TaskResult(
             dataset_revision=task.metadata.revision,
             task_name=task.metadata.name,
-            mteb_version=version("mteb"),
+            mteb_version=mteb_ver,
             scores=flat_scores,
             evaluation_time=evaluation_time,
             kg_co2_emissions=kg_co2_emissions,
@@ -741,7 +743,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         self,
         result: TaskResult | AbsTask,
         criteria: list[str] | list[Criteria] = [
-            "mteb_version",
             "dataset_revision",
         ],
         raise_error: bool = False,
@@ -750,7 +751,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
         Args:
             result: The TaskResult or Task object to check against.
-            criteria: Additional criteria to check for merging. Can be "mteb_version" or "dataset_revision".
+            criteria: Additional criteria to check for merging. Can be "dataset_revision" or "mteb_version" (opt-in).
                 It will always check that the task name match.
             raise_error: If True, raises an error if the objects cannot be merged. If False, returns False.
 
@@ -800,7 +801,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         self,
         new_results: TaskResult,
         criteria: list[str] | list[Criteria] = [
-            "mteb_version",
             "dataset_revision",
         ],
     ) -> TaskResult:
@@ -842,10 +842,12 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         date = self.date
         if new_results.date is not None and (date is None or new_results.date > date):
             date = new_results.date
+        mteb_ver = self._compute_top_level_mteb_version(merged_scores)
+
         merged_results = TaskResult(
             dataset_revision=new_results.dataset_revision,
             task_name=new_results.task_name,
-            mteb_version=new_results.mteb_version,
+            mteb_version=mteb_ver,
             scores=merged_scores,
             evaluation_time=merged_evaluation_time,
             kg_co2_emissions=merged_kg_co2_emissions,
@@ -853,6 +855,30 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         )
 
         return merged_results
+
+    @staticmethod
+    def _compute_top_level_mteb_version(
+        scores: dict[SplitName, list[ScoresDict]],
+    ) -> str | None:
+        """Compute the top-level mteb_version from per-subset versions.
+
+        Returns a version range (e.g. "2.12.0-2.12.19") if subsets were
+        evaluated with different versions, a single version if all match,
+        or None if no per-subset versions are present.
+        """
+        versions: set[str] = set()
+        for split_scores in scores.values():
+            for subset_scores in split_scores:
+                v = subset_scores.get("mteb_version")
+                if v is not None:
+                    versions.add(v)
+        if not versions:
+            return None
+        min_ver = str(min(Version(v) for v in versions))
+        max_ver = str(max(Version(v) for v in versions))
+        if min_ver == max_ver:
+            return min_ver
+        return f"{min_ver}-{max_ver}"
 
     @staticmethod
     def _merge_split_scores(
