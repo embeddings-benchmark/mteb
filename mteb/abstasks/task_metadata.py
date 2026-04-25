@@ -119,6 +119,7 @@ TaskSubtype = Literal[
     "Question Answering Retrieval",
     "Reading Comprehension",
     "Intent Classification",
+    "Cross-Modal Retrieval",
 ]
 """The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". This list can be updated as needed."""
 
