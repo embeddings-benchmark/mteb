@@ -1539,10 +1539,9 @@ class ResultCache:
         except Exception as e:
             raise RuntimeError(f"Failed to authenticate with GitHub: {e}") from e
 
-        upstream_repo_name = "embeddings-benchmark/results"
         try:
-            upstream = gh.get_repo(upstream_repo_name)
-            logger.info(f"Connected to upstream: {upstream_repo_name}")
+            upstream = gh.get_repo("embeddings-benchmark/results")
+            logger.info("Connected to upstream: embeddings-benchmark/results")
         except Exception as e:
             raise RuntimeError(f"Failed to access upstream repository: {e}") from e
 
@@ -1593,17 +1592,18 @@ class ResultCache:
 
         try:
             rate_limit = gh.get_rate_limit()
+            core_limit = rate_limit.raw_data["resources"]["core"]["limit"]
+            core_remaining = rate_limit.raw_data["resources"]["core"]["remaining"]
             logger.info(
-                f"GitHub API rate limit: {rate_limit.core.remaining}/"  # type: ignore[attr-defined]
-                f"{rate_limit.core.limit} remaining"  # type: ignore[attr-defined]
+                f"GitHub API rate limit: {core_remaining}/{core_limit} remaining"
             )
-            if rate_limit.core.remaining < 5:  # type: ignore[attr-defined]
-                raise RuntimeError(
-                    f"GitHub API rate limit too low ({rate_limit.core.remaining} remaining). "  # type: ignore[attr-defined]
-                    f"Please try again later."
+            if core_remaining < 5:
+                logger.warning(
+                    f"GitHub API rate limit low ({core_remaining} remaining). "
+                    "Consider waiting before submitting more PRs."
                 )
         except Exception as e:
-            logger.warning(f"Could not check rate limit: {e}")
+            logger.debug(f"Could not check rate limit (non-critical): {e}")
 
         try:
             logger.info(f"Pushing to fork branch '{branch_name}'...")
