@@ -113,9 +113,10 @@ class EBindWrapper(AbsEncoder):
         if batch.get("video"):
             video_tensors = [self._process_video(v) for v in batch["video"]]
             if len({v.shape[0] for v in video_tensors}) != 1:
-                logger.warning(
-                    "Variable frame counts in batch — torch.stack will fail. "
-                    "Use batch_size=1 or fixed num_frames (default 8) instead of fps."
+                raise ValueError(
+                    "Variable frame counts in batch — cannot stack videos with "
+                    "different numbers of frames. Use batch_size=1 or fixed "
+                    "num_frames (default 8) instead of fps."
                 )
             forward_kwargs["video"] = torch.stack(video_tensors).to(self.device)
 
