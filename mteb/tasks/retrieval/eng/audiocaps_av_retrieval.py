@@ -182,3 +182,69 @@ class AudioCapsAVT2VARetrieval(AbsTaskRetrieval):
         _load_audiocaps_av(
             self, query_columns=["caption"], corpus_columns=["video", "audio"]
         )
+
+
+class AudioCapsAVV2ARetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="AudioCapsAVV2ARetrieval",
+        description=(
+            "Retrieve the audio track that matches a given video clip from "
+            "AudioCaps-AV, an audio-visual extension of the AudioCaps dataset "
+            "sourced from YouTube. Tests cross-modal alignment between video "
+            "frames and audio."
+        ),
+        reference="https://audiocaps.github.io/",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="v2a",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["video", "audio"],
+        date=("2018-01-01", "2018-12-31"),
+        domains=["Encyclopaedic", "Web"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="mit",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the audio that corresponds to the following video."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_audiocaps_av(self, query_columns=["video"], corpus_columns=["audio"])
+
+
+class AudioCapsAVA2VRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="AudioCapsAVA2VRetrieval",
+        description=(
+            "Retrieve the video clip that matches a given audio track from "
+            "AudioCaps-AV, an audio-visual extension of the AudioCaps dataset "
+            "sourced from YouTube. Tests cross-modal alignment between audio "
+            "and video frames."
+        ),
+        reference="https://audiocaps.github.io/",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="a2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["audio", "video"],
+        date=("2018-01-01", "2018-12-31"),
+        domains=["Encyclopaedic", "Web"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="mit",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the video that corresponds to the following audio."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_audiocaps_av(self, query_columns=["audio"], corpus_columns=["video"])
