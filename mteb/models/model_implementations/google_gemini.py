@@ -170,6 +170,7 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         contents: list,
         google_task_type: str | None = None,
         show_progress_bar: bool = False,
+        batch_size: int = 32,
     ) -> np.ndarray:
         from google.genai.types import EmbedContentConfig
 
@@ -179,7 +180,7 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         )
 
         async def run() -> list:
-            semaphore = asyncio.Semaphore(10)
+            semaphore = asyncio.Semaphore(batch_size)
 
             async def embed_one(item: Any) -> list[float]:
                 wait_time = 1.0
@@ -246,6 +247,7 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
             if "show_progress_bar" not in kwargs
             else kwargs.pop("show_progress_bar")
         )
+        batch_size = kwargs.pop("batch_size", 32)
 
         has_text = "text" in inputs.dataset.features
         has_image = "image" in inputs.dataset.features
@@ -293,6 +295,7 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
             contents,
             google_task_type=google_task_type,
             show_progress_bar=show_progress_bar,
+            batch_size=batch_size,
         )
 
 
