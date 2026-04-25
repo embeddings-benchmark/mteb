@@ -713,7 +713,8 @@ def test_submit_results_with_fake_remote(tmp_path):
     # Verify successful submission workflow
     result = subprocess.run(
         ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-        check=False, cwd=remote_path,
+        check=False,
+        cwd=remote_path,
         capture_output=True,
         text=True,
     )
@@ -729,7 +730,8 @@ def test_submit_results_with_fake_remote(tmp_path):
     commit_sha = result["commit_sha"]
     check = subprocess.run(
         ["git", "cat-file", "-t", commit_sha],
-        check=False, cwd=remote_path,
+        check=False,
+        cwd=remote_path,
         capture_output=True,
         text=True,
     )
@@ -739,7 +741,8 @@ def test_submit_results_with_fake_remote(tmp_path):
     for filename in result_files_copied:
         check = subprocess.run(
             ["git", "ls-tree", "-r", "--name-only", commit_sha],
-            check=False, cwd=remote_path,
+            check=False,
+            cwd=remote_path,
             capture_output=True,
             text=True,
         )
@@ -752,7 +755,8 @@ def test_submit_results_with_fake_remote(tmp_path):
     # Verify branch restoration: user should still be on original branch
     result_after = subprocess.run(
         ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-        check=False, cwd=remote_path,
+        check=False,
+        cwd=remote_path,
         capture_output=True,
         text=True,
     )
@@ -814,7 +818,8 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path):
     cache = ResultCache(cache_path=cache_path)
     result = subprocess.run(
         ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-        check=False, cwd=remote_path,
+        check=False,
+        cwd=remote_path,
         capture_output=True,
         text=True,
     )
@@ -830,7 +835,8 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path):
     # Verify user is back on original branch
     result = subprocess.run(
         ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-        check=False, cwd=remote_path,
+        check=False,
+        cwd=remote_path,
         capture_output=True,
         text=True,
     )
@@ -842,7 +848,8 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path):
     # Verify temporary branch was deleted (should not appear in branch list)
     result = subprocess.run(
         ["git", "branch"],
-        check=False, cwd=remote_path,
+        check=False,
+        cwd=remote_path,
         capture_output=True,
         text=True,
     )

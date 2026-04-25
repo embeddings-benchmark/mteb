@@ -16,15 +16,17 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
 import requests
-from mteb.cache._git_actions import (
-    CommitAction,
-    CopyResultsAction,
-    CreateBranchAction,
-)
-from mteb.cache._reversible_workflow import ReversibleWorkflow
 from pydantic import ValidationError
 
 from mteb._helpful_enum import HelpfulStrEnum
+from mteb._reversible_workflow.git_actions import (
+    CommitAction,
+    CreateBranchAction,
+)
+from mteb._reversible_workflow.reversible_workflow import (
+    ReversibleAction,
+    ReversibleWorkflow,
+)
 from mteb.abstasks import AbsTask
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.benchmarks.get_benchmark import get_benchmark
@@ -36,12 +38,70 @@ from mteb.results import BenchmarkResults, ModelResult, TaskResult
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
 
-    from mteb.cache._reversible_workflow import ReversibleAction
-
     from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
 _EXPERIMENTS_FOLDER_NAME = "experiments"
+
+
+class CopyResultsAction(ReversibleAction):
+    """Copy selected result files and optional model metadata files to the remote repo."""
+
+    def __init__(
+        self, unsubmitted: dict[ModelMeta, list[Path]], remote_path: Path
+    ) -> None:
+        """Initialize the action.
+
+        Args:
+            unsubmitted: Dict mapping ModelMeta to list of result file paths.
+            remote_path: Path to the remote repository.
+        """
+        self.unsubmitted = unsubmitted
+        self.remote_path = remote_path
+        self.copied_files: list[Path] = []
+
+    def do(self) -> None:
+        """Copy listed json result files and optional model_meta.json to remote paths."""
+        for model_meta, result_files in self.unsubmitted.items():
+            if model_meta.name is None or model_meta.revision is None:
+                logger.warning(
+                    f"Skipping model with None name or revision: {model_meta}"
+                )
+                continue
+
+            model_name_path = model_meta.model_name_as_path()
+            revision = model_meta.revision
+            dest_dir = self.remote_path / model_name_path / revision
+            dest_dir.mkdir(parents=True, exist_ok=True)
+
+            for result_file in result_files:
+                dest_file = dest_dir / result_file.name
+                shutil.copy2(result_file, dest_file)
+                self.copied_files.append(dest_file)
+                logger.debug(f"Copied {result_file} to {dest_file}")
+
+            # Copy model_meta.json if it exists in the source directory
+            source_model_dir = result_files[0].parent if result_files else None
+            if source_model_dir and source_model_dir.exists():
+                model_meta_file = source_model_dir / "model_meta.json"
+                if model_meta_file.exists():
+                    dest_model_meta = dest_dir / "model_meta.json"
+                    shutil.copy2(model_meta_file, dest_model_meta)
+                    self.copied_files.append(dest_model_meta)
+                    logger.debug(f"Copied {model_meta_file} to {dest_model_meta}")
+
+        logger.info(f"Copied {len(self.copied_files)} files to remote")
+
+    def undo(self) -> None:
+        """Deletion of files copied during do()."""
+        for file_path in self.copied_files:
+            try:
+                file_path.unlink()
+                logger.debug(f"Deleted {file_path}")
+            except Exception as e:
+                logger.warning(f"Failed to delete {file_path}: {e}")
+
+        logger.info(f"Deleted {len(self.copied_files)} copied files")
 
 
 class LoadExperimentEnum(HelpfulStrEnum):
@@ -1007,8 +1067,8 @@ class ResultCache:
 
         return unsubmitted
 
+    @staticmethod
     def _prepare_pr_body(
-        self,
         models: list[ModelMeta],
         unsubmitted: dict[ModelMeta, list[Path]],
     ) -> str:
@@ -1062,7 +1122,8 @@ class ResultCache:
         logger.info("\n📋 Please complete the checklist in the PR body before merging.")
         return body.strip()
 
-    def _check_uncommitted_changes(self, repo_path: Path) -> None:
+    @staticmethod
+    def _check_uncommitted_changes(repo_path: Path) -> None:
         """Detect staged/uncommitted changes that would corrupt result submission."""
         try:
             result = subprocess.run(
@@ -1081,7 +1142,8 @@ class ResultCache:
         except subprocess.CalledProcessError as e:
             logger.warning(f"Could not check uncommitted changes: {e}")
 
-    def _check_detached_head(self, repo_path: Path) -> None:
+    @staticmethod
+    def _check_detached_head(repo_path: Path) -> None:
         """Check if repository is in detached HEAD state.
 
         In detached HEAD state, branch operations fail and state is confusing.
@@ -1095,7 +1157,8 @@ class ResultCache:
         try:
             result = subprocess.run(
                 ["git", "symbolic-ref", "-q", "HEAD"],
-                check=False, cwd=repo_path,
+                check=False,
+                cwd=repo_path,
                 capture_output=True,
                 text=True,
             )
@@ -1129,7 +1192,8 @@ class ResultCache:
         self._check_detached_head(repo_path)
         logger.info("Pre-flight checks passed ✓")
 
-    def _get_current_branch(self, repo_path: Path) -> str:
+    @staticmethod
+    def _get_current_branch(repo_path: Path) -> str:
         """Get the current branch name.
 
         Args:
@@ -1156,7 +1220,8 @@ class ResultCache:
         except subprocess.CalledProcessError as e:
             raise RuntimeError(f"Failed to get current branch: {e}")
 
-    def _restore_branch(self, repo_path: Path, original_branch: str) -> None:
+    @staticmethod
+    def _restore_branch(repo_path: Path, original_branch: str) -> None:
         """Restore to the original branch after successful PR creation.
 
         Args:
@@ -1179,7 +1244,8 @@ class ResultCache:
         except subprocess.CalledProcessError as e:
             raise RuntimeError(f"Failed to restore to branch '{original_branch}': {e}")
 
-    def _delete_branch(self, repo_path: Path, branch_name: str) -> None:
+    @staticmethod
+    def _delete_branch(repo_path: Path, branch_name: str) -> None:
         """Delete a git branch to clean up after failed PR creation.
 
         Args:
@@ -1381,7 +1447,8 @@ class ResultCache:
             logger.error(f"Error during submit_results: {e}")
             raise
 
-    def _get_github_token(self) -> str:
+    @staticmethod
+    def _get_github_token() -> str:
         """Get GitHub token using gh CLI authentication.
 
         Returns:
@@ -1393,7 +1460,8 @@ class ResultCache:
         try:
             result = subprocess.run(
                 ["gh", "auth", "token"],
-                check=False, capture_output=True,
+                check=False,
+                capture_output=True,
                 text=True,
                 timeout=10,
             )
@@ -1408,7 +1476,8 @@ class ResultCache:
         try:
             result = subprocess.run(
                 ["git", "credential", "fill"],
-                check=False, input="protocol=https\nhost=github.com\n\n",
+                check=False,
+                input="protocol=https\nhost=github.com\n\n",
                 capture_output=True,
                 text=True,
                 timeout=10,
@@ -1502,7 +1571,8 @@ class ResultCache:
             # Get fork URL from gh CLI
             result = subprocess.run(
                 ["gh", "repo", "view", "--json", "url"],
-                check=False, capture_output=True,
+                check=False,
+                capture_output=True,
                 text=True,
                 timeout=10,
             )
