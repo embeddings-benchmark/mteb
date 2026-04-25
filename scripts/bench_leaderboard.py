@@ -32,7 +32,6 @@ logging.disable(logging.CRITICAL)
 warnings.filterwarnings("ignore")
 
 import mteb
-from mteb.cache import ResultCache
 from mteb.leaderboard.app import (
     _filter_benchmark_results_for_tables,
     _get_tasks_cached,
@@ -79,9 +78,21 @@ def time_fn(fn, n: int = 3) -> list[float]:
 
 hdr("Loading data (one-time cost)")
 
+import json
+from pathlib import Path
+from mteb.results.benchmark_results import BenchmarkResults
+
+CACHE_FILE = Path.home() / ".cache/mteb/leaderboard/__cached_results.json"
+
 t0 = time.perf_counter()
-cache = ResultCache()
-all_results = cache._load_from_cache()
+with open(CACHE_FILE) as f:
+    raw = json.load(f)
+# Fix null dataset_revision values present in older cache files
+for mr in raw.get("model_results", []):
+    for tr in mr.get("task_results", []):
+        if tr.get("dataset_revision") is None:
+            tr["dataset_revision"] = "unknown"
+all_results = BenchmarkResults.model_validate(raw)
 load_ms = (time.perf_counter() - t0) * 1000
 print(f"  JSON load + deserialize: {load_ms:.0f}ms")
 
@@ -101,7 +112,7 @@ build_ms = (time.perf_counter() - t0) * 1000
 print(f"  Build all_benchmark_results ({len(benchmarks)} benchmarks): {build_ms:.0f}ms")
 
 DEFAULT = "MTEB(eng, v2)"
-ALT     = "MTEB(multilingual, v2)"
+ALT     = "MTEB(Multilingual, v2)"
 for name in [DEFAULT, ALT]:
     if name not in all_br:
         name = list(all_br.keys())[0]
