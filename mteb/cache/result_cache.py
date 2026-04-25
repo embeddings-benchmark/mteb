@@ -331,10 +331,11 @@ class ResultCache:
         Returns:
             The path to the local cache directory.
         """
-        if not self.cache_path.exists() and not self.cache_path.is_dir():
+        if not self.cache_path.exists():
             logger.info(
                 f"Cache directory {self.cache_path} does not exist, creating it"
             )
+            self.cache_path.mkdir(parents=True, exist_ok=True)
 
         # if "results" folder already exists update it
         results_directory = self.cache_path / "remote"

@@ -688,86 +688,90 @@ def test_submit_results_with_fake_remote(tmp_path):
     revision = cast("str", test_model.revision)
     cache = ResultCache(cache_path=cache_path)
 
-    # Verify whether pre-flight checks detect uncommitted changes (error path)
-    unrelated_file = remote_path / "unrelated_staged_file.txt"
-    unrelated_file.write_text("This should not be committed with results")
+    # Avoid fetching from the remote so the test remains hermetic in CI.
+    with patch.object(cache, "download_from_remote", return_value=None):
+        # Verify whether pre-flight checks detect uncommitted changes (error path)
+        unrelated_file = remote_path / "unrelated_staged_file.txt"
+        unrelated_file.write_text("This should not be committed with results")
 
-    subprocess.run(
-        ["git", "add", "unrelated_staged_file.txt"],
-        cwd=remote_path,
-        check=True,
-        capture_output=True,
-    )
+        subprocess.run(
+            ["git", "add", "unrelated_staged_file.txt"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+        )
 
-    with pytest.raises(RuntimeError, match="uncommitted changes"):
-        cache.submit_results(models=[test_model], push=False)
+        with pytest.raises(RuntimeError, match="uncommitted changes"):
+            cache.submit_results(models=[test_model], push=False)
 
-    subprocess.run(
-        ["git", "reset", "HEAD", "unrelated_staged_file.txt"],
-        cwd=remote_path,
-        check=True,
-        capture_output=True,
-    )
-    unrelated_file.unlink()
+        subprocess.run(
+            ["git", "reset", "HEAD", "unrelated_staged_file.txt"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+        )
+        unrelated_file.unlink()
 
-    # Verify successful submission workflow
-    result = subprocess.run(
-        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-        check=False,
-        cwd=remote_path,
-        capture_output=True,
-        text=True,
-    )
-    original_branch = result.stdout.strip()
-    assert original_branch == "main"
+        # Verify successful submission workflow
+        result = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            check=False,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        )
+        original_branch = result.stdout.strip()
+        assert original_branch == "main"
 
-    result = cache.submit_results(models=[test_model], push=False)
+        result = cache.submit_results(models=[test_model], push=False)
 
-    assert result["status"] == "ready_for_submission"
-    assert result["result_count"] == len(result_files_copied)
-    assert result["commit_sha"]
+        assert result["status"] == "ready_for_submission"
+        assert result["result_count"] == len(result_files_copied)
+        assert result["commit_sha"]
 
-    commit_sha = result["commit_sha"]
-    check = subprocess.run(
-        ["git", "cat-file", "-t", commit_sha],
-        check=False,
-        cwd=remote_path,
-        capture_output=True,
-        text=True,
-    )
-    assert check.returncode == 0
-    assert check.stdout.strip() == "commit"
-
-    for filename in result_files_copied:
+        commit_sha = result["commit_sha"]
         check = subprocess.run(
-            ["git", "ls-tree", "-r", "--name-only", commit_sha],
+            ["git", "cat-file", "-t", commit_sha],
             check=False,
             cwd=remote_path,
             capture_output=True,
             text=True,
         )
         assert check.returncode == 0
-        expected_path = f"{model_name_path}/{revision}/{filename}"
-        assert expected_path in check.stdout, (
-            f"File {expected_path} not found in commit {commit_sha}"
-        )
+        assert check.stdout.strip() == "commit"
 
-    # Verify branch restoration: user should still be on original branch
-    result_after = subprocess.run(
-        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-        check=False,
-        cwd=remote_path,
-        capture_output=True,
-        text=True,
-    )
-    current_branch = result_after.stdout.strip()
-    assert current_branch == original_branch, (
-        f"Branch not restored: expected '{original_branch}' but got '{current_branch}'"
-    )
+        for filename in result_files_copied:
+            check = subprocess.run(
+                ["git", "ls-tree", "-r", "--name-only", commit_sha],
+                check=False,
+                cwd=remote_path,
+                capture_output=True,
+                text=True,
+            )
+            assert check.returncode == 0
+            expected_path = f"{model_name_path}/{revision}/{filename}"
+            assert expected_path in check.stdout, (
+                f"File {expected_path} not found in commit {commit_sha}"
+            )
+
+        # Verify branch restoration: user should still be on original branch
+        result_after = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            check=False,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        )
+        current_branch = result_after.stdout.strip()
+        assert current_branch == original_branch, (
+            f"Branch not restored: expected '{original_branch}' but got '{current_branch}'"
+        )
 
 
 def test_submit_results_handles_merge_conflict(tmp_path):
     """Test merge conflict detection/handling during result submission using submit_results."""
+    from unittest.mock import patch
+
     cache_path, remote_path = _setup_fake_remote(tmp_path)
     test_model = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
     result_files_copied = _setup_test_model_results(cache_path, test_model)
@@ -776,35 +780,37 @@ def test_submit_results_handles_merge_conflict(tmp_path):
     revision = cast("str", test_model.revision)
     cache = ResultCache(cache_path=cache_path)
 
-    initial_result = cache.submit_results(models=[test_model], push=False)
-    assert initial_result["status"] == "ready_for_submission"
+    # Avoid fetching from the remote so the test remains hermetic in CI.
+    with patch.object(cache, "download_from_remote", return_value=None):
+        initial_result = cache.submit_results(models=[test_model], push=False)
+        assert initial_result["status"] == "ready_for_submission"
 
-    result_dir = remote_path / "results" / model_name_path / revision
-    if result_files_copied:
-        conflict_file = result_dir / result_files_copied[0]
-        conflict_file.write_text('{"modified": "externally"}')
+        result_dir = remote_path / "results" / model_name_path / revision
+        if result_files_copied:
+            conflict_file = result_dir / result_files_copied[0]
+            conflict_file.write_text('{"modified": "externally"}')
 
-        subprocess.run(
-            ["git", "add", str(conflict_file)],
-            cwd=remote_path,
-            check=True,
-            capture_output=True,
-        )
-        subprocess.run(
-            ["git", "commit", "-m", "External modification"],
-            cwd=remote_path,
-            check=True,
-            capture_output=True,
-        )
+            subprocess.run(
+                ["git", "add", str(conflict_file)],
+                cwd=remote_path,
+                check=True,
+                capture_output=True,
+            )
+            subprocess.run(
+                ["git", "commit", "-m", "External modification"],
+                cwd=remote_path,
+                check=True,
+                capture_output=True,
+            )
 
-    try:
-        result = cache.submit_results(models=[test_model], push=False)
-        assert result["commit_sha"] is not None
-    except (RuntimeError, subprocess.CalledProcessError) as e:
-        error_msg = str(e).lower()
-        assert any(
-            term in error_msg for term in ["conflict", "merge", "failed", "error"]
-        )
+        try:
+            result = cache.submit_results(models=[test_model], push=False)
+            assert result["commit_sha"] is not None
+        except (RuntimeError, subprocess.CalledProcessError) as e:
+            error_msg = str(e).lower()
+            assert any(
+                term in error_msg for term in ["conflict", "merge", "failed", "error"]
+            )
 
 
 def test_pr_creation_failure_cleans_up_branch(tmp_path):
@@ -825,12 +831,14 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path):
     )
     original_branch = result.stdout.strip()
 
-    # Mock _create_pull_request to fail
-    with patch.object(
-        cache, "_create_pull_request", side_effect=Exception("GitHub API error")
-    ):
-        with pytest.raises(Exception, match="GitHub API error"):
-            cache.submit_results(models=[test_model], push=True)
+    # Avoid fetching from the remote so the test reliably reaches PR creation.
+    # Mock _create_pull_request to fail.
+    with patch.object(cache, "download_from_remote", return_value=None):
+        with patch.object(
+            cache, "_create_pull_request", side_effect=Exception("GitHub API error")
+        ):
+            with pytest.raises(Exception, match="GitHub API error"):
+                cache.submit_results(models=[test_model], push=True)
 
     # Verify user is back on original branch
     result = subprocess.run(
@@ -853,7 +861,10 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path):
         capture_output=True,
         text=True,
     )
-    branches = [b.strip() for b in result.stdout.split("\n") if b.strip()]
+    # Strip whitespace and the leading * (for current branch indicator)
+    branches = [
+        b.strip().lstrip("*").strip() for b in result.stdout.split("\n") if b.strip()
+    ]
     # Should only have 'main' branch, no temporary branches
     assert all(not b.startswith("mteb-results-") for b in branches), (
         f"Temporary branch should be deleted but found: {branches}"
