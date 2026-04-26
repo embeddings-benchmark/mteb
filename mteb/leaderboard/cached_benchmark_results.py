@@ -37,31 +37,31 @@ class CachedBenchmarkResults(BenchmarkResults):
     # --- property caches (each iterates all model_results; cache once per instance) ---
 
     @property
-    def languages(self) -> list[str]:
+    def languages(self) -> list[str]:  # noqa: D102
         if "languages" not in self._props_cache:
             self._props_cache["languages"] = super().languages
         return self._props_cache["languages"]
 
     @property
-    def domains(self) -> list[str]:
+    def domains(self) -> list[str]:  # noqa: D102
         if "domains" not in self._props_cache:
             self._props_cache["domains"] = super().domains
         return self._props_cache["domains"]
 
     @property
-    def task_types(self) -> list[str]:
+    def task_types(self) -> list[str]:  # noqa: D102
         if "task_types" not in self._props_cache:
             self._props_cache["task_types"] = super().task_types
         return self._props_cache["task_types"]
 
     @property
-    def task_names(self) -> list[str]:
+    def task_names(self) -> list[str]:  # noqa: D102
         if "task_names" not in self._props_cache:
             self._props_cache["task_names"] = super().task_names
         return self._props_cache["task_names"]
 
     @property
-    def modalities(self) -> list[str]:
+    def modalities(self) -> list[str]:  # noqa: D102
         if "modalities" not in self._props_cache:
             self._props_cache["modalities"] = super().modalities
         return self._props_cache["modalities"]
