@@ -22,6 +22,15 @@ def _get_tasks_cached(task_names: tuple[str, ...]):
     return get_tasks(tasks=list(task_names))
 
 
+@functools.lru_cache(maxsize=4096)
+def _zero_shot_pct_cached(model_name: str, task_names: tuple[str, ...]) -> int | None:
+    """Memoized zero_shot_percentage — expensive due to task-similarity graph traversal."""
+    meta = get_model_meta(model_name)
+    if meta is None:
+        return None
+    return meta.zero_shot_percentage(_get_tasks_cached(task_names))
+
+
 def _get_borda_rank(score_table: pd.DataFrame) -> pd.Series:
     n = len(score_table)
     borda_counts = n - score_table.rank(method="average", ascending=False, axis=0)
@@ -173,9 +182,9 @@ def _create_summary_table_from_benchmark_results(
     )
 
     # Add zero-shot percentage
-    tasks = _get_tasks_cached(tuple(sorted(data["task_name"].unique())))
+    _task_names_key = tuple(sorted(data["task_name"].unique()))
     joint_table.insert(
-        1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
+        1, "Zero-shot", model_metas.map(lambda m: _zero_shot_pct_cached(m.name, _task_names_key))
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
 
@@ -542,9 +551,9 @@ def _create_summary_table_mean_subset(
         model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
     )
     # Add zero-shot percentage
-    tasks = _get_tasks_cached(tuple(sorted(data["task_name"].unique())))
+    _task_names_key = tuple(sorted(data["task_name"].unique()))
     joint_table.insert(
-        1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
+        1, "Zero-shot", model_metas.map(lambda m: _zero_shot_pct_cached(m.name, _task_names_key))
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
 
@@ -663,9 +672,9 @@ def _create_summary_table_mean_task_type(
     )
 
     # Add zero-shot percentage
-    tasks = _get_tasks_cached(tuple(sorted(data["task_name"].unique())))
+    _task_names_key = tuple(sorted(data["task_name"].unique()))
     joint_table.insert(
-        1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
+        1, "Zero-shot", model_metas.map(lambda m: _zero_shot_pct_cached(m.name, _task_names_key))
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
 
