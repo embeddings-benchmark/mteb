@@ -17,6 +17,7 @@ import pandas as pd
 import mteb
 from mteb import BenchmarkResults
 from mteb.benchmarks._leaderboard_menu import GP_BENCHMARK_ENTRIES, R_BENCHMARK_ENTRIES
+from mteb.leaderboard.cached_benchmark_results import CachedBenchmarkResults
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.cache import ResultCache
 from mteb.get_tasks import _TASKS_REGISTRY
@@ -448,7 +449,9 @@ def get_leaderboard_app(  # noqa: PLR0914
     )
     process_start = time.time()
     all_benchmark_results = {
-        benchmark.name: all_results.select_tasks(benchmark.tasks).join_revisions()
+        benchmark.name: CachedBenchmarkResults.model_construct(
+            model_results=all_results.select_tasks(benchmark.tasks).join_revisions().model_results
+        )
         for benchmark in benchmarks
     }
     process_time = time.time() - process_start
