@@ -126,6 +126,7 @@ qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
 omnivinci = ["transformers==4.46.0", "torch==2.8.*", "einops>=0.8.0", "openai-whisper>=20240930", "soundfile>=0.13.1", "opencv-python-headless>=4.0.0", "kaldiio>=2.18.0", "decord>=0.6.0", "librosa>=0.10.0", "beartype>=0.18.0", "accelerate>=1.0.0", "s2wrapper @ git+https://github.com/bfshi/scaling_on_scales", "deepspeed>=0.9.0", "torchvision>=0.15.0", "torchaudio>=2.0.0", "torchcodec==0.7.0", "av>=10.0.0", "numpy>=1.23.0,<2.0.0", "flash-attn>=2.6.3"]
 qwen_omni_utils = ["qwen_omni_utils"]
 embeddinggemma = ["transformers>=4.56.0"]
+ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
 
 [dependency-groups]
 lint = [
@@ -428,6 +429,7 @@ conflicts = [
         { extra = "qwen-vl" },
         { extra = "omnivinci" },
         { extra = "embeddinggemma" },
+        { extra = "ebind" },
     ],
 ]
 
