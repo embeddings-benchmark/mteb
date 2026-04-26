@@ -25,16 +25,12 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           python-version: "3.10"
+          enable-cache: true
+          prune-cache: false
           version: "0.10.12"
 
-      - name: Cache venv
-        uses: actions/cache@v5
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ runner.arch }}-py3.10-sync-${{ hashFiles('uv.lock') }}
-
       - name: Install mteb
-        run: uv sync
+        run: uv sync --frozen
 
       - name: Generate model list
         run: uv run python scripts/generate_leaderboard_models.py > leaderboard_models.py

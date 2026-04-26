@@ -27,6 +27,7 @@ jobs:
         with:
           python-version: '3.11'
           enable-cache: true
+          prune-cache: false
 
       - name: Install FFmpeg
         shell: bash
@@ -36,12 +37,6 @@ jobs:
           sudo add-apt-repository -y ppa:ubuntuhandbook1/ffmpeg8
           sudo apt-get update
           sudo apt-get install -y ffmpeg
-
-      - name: Cache venv
-        uses: actions/cache@v5
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ runner.arch }}-py3.11-install-for-tests-${{ hashFiles('uv.lock') }}
 
       - name: Install dependencies
         run: |
