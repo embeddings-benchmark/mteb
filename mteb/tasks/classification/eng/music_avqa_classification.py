@@ -35,6 +35,7 @@ class MusicAVQACLSClassification(AbsTaskClassification):
   year = {2022},
 }
 """,
+        is_beta=True,
     )
     input_column_name = ("video", "audio")
     label_column_name: str = "label"
@@ -73,6 +74,7 @@ class MusicAVQACLSVideoClassification(AbsTaskClassification):
   year = {2022},
 }
 """,
+        is_beta=True,
     )
     input_column_name = "video"
     label_column_name: str = "label"
