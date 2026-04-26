@@ -30,10 +30,6 @@ from huggingface_hub.errors import (
 from packaging.requirements import Requirement
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
-from sentence_transformers import (
-    CrossEncoder,
-    SentenceTransformer,
-)
 from transformers import AutoConfig
 
 from mteb._helpful_enum import HelpfulStrEnum
@@ -58,7 +54,9 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from sentence_transformers import (
+        CrossEncoder,
         CrossEncoderModelCardData,
+        SentenceTransformer,
         SentenceTransformerModelCardData,
     )
     from typing_extensions import Self
@@ -747,6 +745,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         logger.info(
             "Calculating number of embedding parameters for SentenceTransformer model."
         )
+
+        from sentence_transformers import CrossEncoder, SentenceTransformer
 
         emb = None
         if isinstance(model, CrossEncoder) and hasattr(
