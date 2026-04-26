@@ -1,0 +1,83 @@
+{
+    "test": {
+        "num_samples": 1706,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 22,
+            "labels": {
+                "20": {
+                    "count": 205
+                },
+                "1": {
+                    "count": 117
+                },
+                "12": {
+                    "count": 59
+                },
+                "15": {
+                    "count": 97
+                },
+                "13": {
+                    "count": 158
+                },
+                "11": {
+                    "count": 98
+                },
+                "21": {
+                    "count": 38
+                },
+                "3": {
+                    "count": 49
+                },
+                "0": {
+                    "count": 104
+                },
+                "18": {
+                    "count": 72
+                },
+                "10": {
+                    "count": 56
+                },
+                "5": {
+                    "count": 130
+                },
+                "4": {
+                    "count": 72
+                },
+                "17": {
+                    "count": 74
+                },
+                "16": {
+                    "count": 24
+                },
+                "7": {
+                    "count": 21
+                },
+                "19": {
+                    "count": 88
+                },
+                "14": {
+                    "count": 46
+                },
+                "9": {
+                    "count": 28
+                },
+                "8": {
+                    "count": 53
+                },
+                "6": {
+                    "count": 81
+                },
+                "2": {
+                    "count": 36
+                }
+            }
+        }
+    }
+}
