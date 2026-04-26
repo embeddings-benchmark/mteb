@@ -563,7 +563,7 @@ class AbsTaskRetrieval(AbsTask):
         if "t" in queries_modalities:
             queries_ = queries
             if "instruction" in queries_[0]:
-                queries_ = queries_.map(_combine_queries_with_instruction_text)
+                queries_ = _combine_queries_with_instruction_text(queries_)
 
             if isinstance(queries_["text"][0], dict | list):
                 queries_ = queries_.map(_convert_conv_history_to_query)
