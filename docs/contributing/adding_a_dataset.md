@@ -385,12 +385,16 @@ Once we have decided on task, we can implement them as follows:
                     "query2": ["doc2", "doc1", "doc3"],
                 }
 
-                self.dataset["default"]["test"] = RetrievalSplitData(
-                    corpus=corpus,
-                    queries=queries,
-                    relevant_docs=qrels,
-                    top_ranked=top_ranked,  # only for reranking
-                )
+                self.dataset = {
+                    "default": {
+                        "test": RetrievalSplitData(
+                            corpus=corpus,
+                            queries=queries,
+                            relevant_docs=qrels,
+                            top_ranked=top_ranked,  # only for reranking
+                        )
+                    }
+                }
         ```
         which can then be run as follows:
         ```py
@@ -486,10 +490,11 @@ Once added, here is a checklist to ensure that everything works before you submi
 - [ ] I have outlined why this dataset is filling an existing gap in `mteb`
 - [ ] I have tested that the dataset runs with the `mteb` package.
 - [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.
-  - [ ] `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
-  - [ ] `intfloat/multilingual-e5-small`
-- [ ] I have checked that the performance is neither trivial (both models gain close to perfect scores) nor random (both models gain close to random scores).
-- [ ] I have considered the size of the dataset and reduced it if it is too big (2048 examples is typically large enough for most tasks)
+  - [ ] `mteb/baseline-random encoder`
+  - [ ] `intfloat/multilingual-e5-small` or another small model
+- [ ] I have checked that the performance is neither trivial (close to perfect scores) nor random.
+- [ ] I have considered the size of the dataset and reduced it if it is too big (e.g. 2048 examples for binary classification)
+- [ ] I reproduced scores from the original paper (if applicable) and added them to the PR description for reference.
 ```
 
 An easy way to test it is using:
@@ -498,14 +503,14 @@ An easy way to test it is using:
     ```python
     import mteb
     # sample model:
-    model = mteb.get_model("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+    model = mteb.get_model("mteb/baseline-random encoder")
     task = mteb.get_task("{name of your task}")
 
     results = mteb.evaluate(model, task)
     ```
 === "CLI"
     ```bash
-    mteb run -m sentence-transformers/paraphrase-multilingual-MiniLM -t {name of your task}
+    mteb run -m mteb/baseline-random encoder -t {name of your task}
     ```
 
 

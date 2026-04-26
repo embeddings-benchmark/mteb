@@ -6,7 +6,6 @@ import torch
 import torch.nn.functional as F
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -39,8 +38,6 @@ class NomicVisionModel(AbsEncoder):
         **kwargs: Any,
     ):
         from transformers import AutoImageProcessor, AutoModel, AutoTokenizer
-
-        requires_package(self, "einops", model_name, "pip install 'mteb[nomic]'")
 
         self.vision_model_name = model_name
         self.text_model_name = text_model_name
@@ -192,4 +189,5 @@ nomic_embed_vision_v1_5 = ModelMeta(
         # DFN-2B
     ),
     citation=NOMIC_EMBED_VISION_CITATION,
+    extra_requirements_groups=["nomic"],
 )
