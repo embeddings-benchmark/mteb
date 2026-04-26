@@ -156,6 +156,7 @@ class AbsTaskBitextMining(AbsTask):
         prediction_folder: Path | None = None,
         parallel: bool = False,
         num_proc: int | None = None,
+        corpus_chunk_size: int | None = None,
         **kwargs,
     ) -> BitextMiningMetrics | dict[str, BitextMiningMetrics]:
         pairs = self._get_pairs(parallel)
@@ -175,7 +176,12 @@ class AbsTaskBitextMining(AbsTask):
             else data_split["gold"]
         )
 
-        neighbours = evaluator(model, encode_kwargs=encode_kwargs, num_proc=num_proc)
+        neighbours = evaluator(
+            model,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+            corpus_chunk_size=corpus_chunk_size,
+        )
 
         if prediction_folder:
             self._save_task_predictions(
