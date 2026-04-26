@@ -75,10 +75,11 @@ def _aggregate_and_pivot(
             columns=columns,
             values="score",
             aggfunc=aggregation_fn,  # type: ignore[arg-type]
+            observed=True,
         ).reset_index()
     elif format == "long":
         return (
-            df.groupby(columns + index_columns)
+            df.groupby(columns + index_columns, observed=True)
             .agg(score=("score", aggregation_fn))
             .reset_index()
         )
