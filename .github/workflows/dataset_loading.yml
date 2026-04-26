@@ -44,6 +44,12 @@ jobs:
       with:
         python-version: '3.11'
 
+    - name: Cache venv
+      uses: actions/cache@v5
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ runner.arch }}-py3.11-install-${{ hashFiles('uv.lock') }}
+
     - name: Install dependencies
       run: |
         make install

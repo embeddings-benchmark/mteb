@@ -27,6 +27,12 @@ jobs:
           python-version: "3.10"
           version: "0.10.12"
 
+      - name: Cache venv
+        uses: actions/cache@v5
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ runner.arch }}-py3.10-sync-${{ hashFiles('uv.lock') }}
+
       - name: Install mteb
         run: uv sync
 
