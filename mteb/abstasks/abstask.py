@@ -547,6 +547,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         repo_name: str,
         fields: list[str] | dict[str, str],
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         if self.dataset is None:
             raise ValueError("Dataset not loaded")
@@ -575,6 +576,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                     config,
                     commit_message=f"Add {config} dataset",
                     num_proc=num_proc,
+                    **kwargs,
                 )
         else:
             sentences = {}
@@ -608,6 +610,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         num_proc: int | None = None,
         *,
         push_eval: bool = False,
+        **kwargs: Any,
     ) -> None:
         """Push the dataset to the HuggingFace Hub.
 
@@ -615,6 +618,8 @@ class AbsTask(ABC):  # noqa: PLR0904
             repo_name: The name of the repository to push the dataset to.
             num_proc: Number of processes to use for loading the dataset.
             push_eval: Whether to also push the eval.yaml file to the Hub
+            kwargs: Additional keyword arguments passed to the [push_to_hub](https://huggingface.co/docs/datasets/main/en/package_reference/main_classes#datasets.DatasetDict.push_to_hub).
+                This can include things like `private=True` to make the dataset private.
 
         Examples:
             >>> import mteb
@@ -626,28 +631,26 @@ class AbsTask(ABC):  # noqa: PLR0904
         if not self.data_loaded:
             self.load_data()
 
-        self._push_dataset_to_hub(repo_name, num_proc)
+        self._push_dataset_to_hub(repo_name, num_proc, **kwargs)
         # dataset repo not creating when pushing card
         self.metadata.push_dataset_card_to_hub(repo_name)
         if push_eval:
-            self.push_eval_to_hub(repo_name)
+            self.push_eval_to_hub()
 
     def push_eval_to_hub(
         self,
-        repo_name: str,
         *,
         create_pr: bool = False,
     ) -> None:
         """Push `eval.yaml` to the HuggingFace Hub
 
         Args:
-            repo_name: repository name
             create_pr: Whether to create the PR
         """
         eval_file_name = "eval.yaml"
 
         existing_eval_path = _get_file_on_hub(
-            repo_id=repo_name,
+            repo_id=self.metadata.dataset["name"],
             file_name=eval_file_name,
             repo_type="dataset",
         )
@@ -669,7 +672,7 @@ class AbsTask(ABC):  # noqa: PLR0904
             huggingface_hub.upload_file(
                 path_or_fileobj=tmp_file.name,
                 path_in_repo=eval_file_name,
-                repo_id=repo_name,
+                repo_id=self.metadata.dataset["name"],
                 repo_type="dataset",
                 commit_message="Add eval config",
                 create_pr=create_pr,

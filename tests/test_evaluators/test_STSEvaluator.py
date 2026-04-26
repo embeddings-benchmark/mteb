@@ -1,7 +1,7 @@
 import pytest
 
 import mteb
-from mteb._evaluators import AnySTSEvaluator  # noqa: PLC2701
+from mteb._evaluators import AnySTSEvaluator
 from tests.mock_tasks import MockSTSTask
 
 
