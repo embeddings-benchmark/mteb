@@ -75,6 +75,7 @@ class VALOR32KV2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the description that matches the following video."},
+        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
@@ -105,6 +106,7 @@ class VALOR32KT2VRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video clip that matches the given description."},
+        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
@@ -135,6 +137,7 @@ class VALOR32KVA2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the description that matches the following video."},
+        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
@@ -167,6 +170,7 @@ class VALOR32KT2VARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video clip that matches the given description."},
+        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
@@ -200,6 +204,7 @@ class VALOR32KV2ARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the audio that corresponds to the following video."},
+        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
@@ -231,6 +236,7 @@ class VALOR32KA2VRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video that corresponds to the following audio."},
+        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
