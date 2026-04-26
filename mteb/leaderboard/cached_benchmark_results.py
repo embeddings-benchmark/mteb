@@ -11,19 +11,21 @@ if TYPE_CHECKING:
 
 
 class CachedBenchmarkResults(BenchmarkResults):
-    """BenchmarkResults with a per-instance pre-agg DataFrame cache.
+    """BenchmarkResults with per-instance caches for the leaderboard.
 
-    Keeps the caching concern in the leaderboard layer so the core
-    BenchmarkResults stays free of cache state.
+    Keeps all cache state out of the core BenchmarkResults so it stays clean.
 
     Because all mutation methods (_filter_tasks, select_models, select_tasks)
     use ``type(self).model_construct(...)``, filtered children automatically
-    inherit this subclass and get their own empty cache.
+    inherit this subclass and get their own empty caches.
     """
 
     _pre_agg_df_cache: dict[bool, pd.DataFrame | None] = PrivateAttr(
         default_factory=dict
     )
+    _props_cache: dict[str, list[str]] = PrivateAttr(default_factory=dict)
+
+    # --- pre-agg DataFrame cache ---
 
     def _build_pre_agg_df(self, include_model_revision: bool) -> pd.DataFrame | None:
         if include_model_revision in self._pre_agg_df_cache:
@@ -31,3 +33,35 @@ class CachedBenchmarkResults(BenchmarkResults):
         result = super()._build_pre_agg_df(include_model_revision)
         self._pre_agg_df_cache[include_model_revision] = result
         return result
+
+    # --- property caches (each iterates all model_results; cache once per instance) ---
+
+    @property
+    def languages(self) -> list[str]:
+        if "languages" not in self._props_cache:
+            self._props_cache["languages"] = super().languages
+        return self._props_cache["languages"]
+
+    @property
+    def domains(self) -> list[str]:
+        if "domains" not in self._props_cache:
+            self._props_cache["domains"] = super().domains
+        return self._props_cache["domains"]
+
+    @property
+    def task_types(self) -> list[str]:
+        if "task_types" not in self._props_cache:
+            self._props_cache["task_types"] = super().task_types
+        return self._props_cache["task_types"]
+
+    @property
+    def task_names(self) -> list[str]:
+        if "task_names" not in self._props_cache:
+            self._props_cache["task_names"] = super().task_names
+        return self._props_cache["task_names"]
+
+    @property
+    def modalities(self) -> list[str]:
+        if "modalities" not in self._props_cache:
+            self._props_cache["modalities"] = super().modalities
+        return self._props_cache["modalities"]

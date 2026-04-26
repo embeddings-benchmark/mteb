@@ -522,41 +522,46 @@ def get_leaderboard_app(  # noqa: PLR0914
 
     logger.info("Step 6/7: Creating Gradio components...")
     component_start = time.time()
+    default_languages = sorted(default_results.languages)
+    default_task_types = sorted(default_results.task_types)
+    default_domains = sorted(default_results.domains)
+    default_task_names = sorted(default_results.task_names)
+    default_modalities = sorted(default_results.modalities)
     lang_select = gr.CheckboxGroup(
-        sorted(default_results.languages),
-        value=sorted(default_results.languages),
+        default_languages,
+        value=default_languages,
         show_label=True,
         show_select_all=True,
         label="Language",
         info="Select languages to include.",
     )
     type_select = gr.CheckboxGroup(
-        sorted(default_results.task_types),
-        value=sorted(default_results.task_types),
+        default_task_types,
+        value=default_task_types,
         show_label=True,
         show_select_all=True,
         label="Task Type",
         info="Select task types to include.",
     )
     domain_select = gr.CheckboxGroup(
-        sorted(default_results.domains),
-        value=sorted(default_results.domains),
+        default_domains,
+        value=default_domains,
         show_label=True,
         show_select_all=True,
         label="Domain",
         info="Select domains to include.",
     )
     task_select = gr.CheckboxGroup(
-        sorted(default_results.task_names),
-        value=sorted(default_results.task_names),
+        default_task_names,
+        value=default_task_names,
         show_label=True,
         show_select_all=True,
         label="Task",
         info="Select specific tasks to include",
     )
     modality_select = gr.CheckboxGroup(
-        sorted(default_results.modalities),
-        value=sorted(default_results.modalities),
+        default_modalities,
+        value=default_modalities,
         show_label=True,
         show_select_all=True,
         label="Modality",
@@ -607,9 +612,9 @@ def get_leaderboard_app(  # noqa: PLR0914
                 description = gr.Markdown(
                     _update_description(
                         default_benchmark.name,
-                        sorted(default_results.languages),
-                        sorted(default_results.task_types),
-                        sorted(default_results.domains),
+                        default_languages,
+                        default_task_types,
+                        default_domains,
                     )
                 )
 
@@ -760,7 +765,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             )
         with gr.Tab("Task information"):
             task_info_table = gr.DataFrame(
-                _update_task_info(sorted(default_results.task_names)),
+                _update_task_info(default_task_names),
                 datatype=["markdown"] + ["str"] * 6,
                 buttons=["copy", "fullscreen"],
                 show_search="filter",
