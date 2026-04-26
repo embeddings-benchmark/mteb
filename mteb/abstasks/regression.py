@@ -12,16 +12,17 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator
 from mteb.abstasks._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
     calculate_score_statistics,
-    calculate_text_statistics,
+    calculate_single_input_modality_statistics,
 )
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
 
-from .classification import AbsTaskClassification
+from .classification import (
+    AbsTaskClassification,
+    _count_samples_in_train,
+)
 
 if TYPE_CHECKING:
     from datasets import Dataset
@@ -33,6 +34,7 @@ if TYPE_CHECKING:
         ImageStatistics,
         ScoreStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -43,21 +45,23 @@ class RegressionDescriptiveStatistics(SplitDescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        num_texts_in_train: Number of texts in the train split
+        samples_in_train: Number of texts in the train split
 
         text_statistics: Statistics of texts
         image_statistics: Statistics of images
         audio_statistics: Statistics of audio
+        video_statistics: Statistics of video
 
         values_statistics: Statistics of values
     """
 
     num_samples: int
-    num_texts_in_train: int | None
+    samples_in_train: int | None
 
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
     values_statistics: ScoreStatistics
 
 
@@ -199,53 +203,17 @@ class AbsTaskRegression(AbsTaskClassification):
     def _calculate_descriptive_statistics_from_split(  # type: ignore[override]
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> RegressionDescriptiveStatistics:
-        train_text = []
-        if hf_subset:
-            inputs = self.dataset[hf_subset][split][self.input_column_name]
-            values = self.dataset[hf_subset][split][self.label_column_name]
-            if split != self.train_split:
-                train_text = self.dataset[hf_subset][self.train_split][
-                    self.input_column_name
-                ]
-        elif compute_overall:
-            inputs = []
-            values = []
-            for lang_subset in self.metadata.eval_langs:
-                inputs.extend(self.dataset[lang_subset][split][self.input_column_name])
-                values.extend(self.dataset[lang_subset][split][self.label_column_name])
-                if split != "train":
-                    train_text.extend(
-                        self.dataset[lang_subset][self.train_split][
-                            self.input_column_name
-                        ]
-                    )
-        else:
-            inputs = self.dataset[split][self.input_column_name]
-            values = self.dataset[split][self.label_column_name]
-            if split != "train":
-                train_text = self.dataset[self.train_split][self.input_column_name]
-
-        text_statistics = None
-        image_statistics = None
-        audio_statistics = None
-        num_texts_in_train = None
-        if self.metadata.modalities == ["text"]:
-            text_statistics = calculate_text_statistics(inputs)
-            num_texts_in_train = (
-                len(set(inputs) & set(train_text))
-                if split != self.train_split
-                else None
+        col_inputs, values, test_hashes, train_hashes = (
+            self._load_statistics_col_inputs_and_hashes(
+                split, hf_subset, compute_overall
             )
-        elif self.metadata.modalities == ["image"]:
-            image_statistics = calculate_image_statistics(inputs)
-        elif self.metadata.modalities == ["audio"]:
-            audio_statistics = calculate_audio_statistics(inputs)
-
+        )
+        modality_stats = calculate_single_input_modality_statistics(
+            col_inputs, test_hashes
+        )
         return RegressionDescriptiveStatistics(
-            num_samples=len(inputs),
-            num_texts_in_train=num_texts_in_train,
-            text_statistics=text_statistics,
-            image_statistics=image_statistics,
-            audio_statistics=audio_statistics,
+            num_samples=len(values),
+            samples_in_train=_count_samples_in_train(test_hashes, train_hashes),
+            **modality_stats,
             values_statistics=calculate_score_statistics(values),
         )

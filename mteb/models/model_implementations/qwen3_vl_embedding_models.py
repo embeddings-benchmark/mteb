@@ -8,7 +8,6 @@ import torch
 import torch.nn.functional as F
 from tqdm.autonotebook import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -155,15 +154,6 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
         visual_document_use_text: bool = False,
         **kwargs: Any,
     ):
-        requires_image_dependencies()
-        requires_package(
-            self, "transformers", model_name, "pip install 'mteb[qwen-vl]'"
-        )
-
-        requires_package(
-            self, "qwen_vl_utils", model_name, "pip install 'mteb[qwen-vl]'"
-        )
-
         from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
 
         self.visual_document_use_text = visual_document_use_text
@@ -405,6 +395,7 @@ qwen3_vl_embedding_2b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     citation=QWEN3_VL_EMBEDDING_CITATION,
+    extra_requirements_groups=["qwen-vl"],
 )
 
 qwen3_vl_embedding_8b = ModelMeta(
@@ -430,4 +421,5 @@ qwen3_vl_embedding_8b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     citation=QWEN3_VL_EMBEDDING_CITATION,
+    extra_requirements_groups=["qwen-vl"],
 )

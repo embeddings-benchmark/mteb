@@ -1,4 +1,4 @@
-from mteb._evaluators.retrieval_metrics import calculate_pmrr  # noqa: PLC2701
+from mteb._evaluators.retrieval_metrics import calculate_pmrr
 
 
 def test_p_mrr():
