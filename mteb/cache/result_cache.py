@@ -7,7 +7,6 @@ import logging
 import os
 import shutil
 import subprocess
-import textwrap
 import warnings
 from collections import defaultdict
 from collections.abc import Mapping
@@ -1095,31 +1094,27 @@ class ResultCache:
 
         model_details_str = "\n".join(model_details)
 
-        checklist = textwrap.dedent("""
-        ### Checklist
+        checklist = """### Checklist
 - [ ] My model has a model sheet, report, or similar
 - [ ] My model has a reference implementation in [`mteb/models/model_implementations/`](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/models/model_implementations), this can be as an API. Instruction on how to add a model can be found [here](https://embeddings-benchmark.github.io/mteb/contributing/adding_a_model/)
   - [ ] No, but there is an existing PR ___
 - [ ] The results submitted are obtained using the reference implementation
 - [ ] My model is available, either as a publicly accessible API or publicly on e.g., Huggingface
-- [ ] I *solemnly swear* that for all results submitted I have not trained on the evaluation dataset including training splits. If I have, I have disclosed it clearly.
-        """).strip()
+- [ ] I *solemnly swear* that for all results submitted I have not trained on the evaluation dataset including training splits. If I have, I have disclosed it clearly."""
 
-        body = textwrap.dedent(f"""
-        ### Models Submitted
-        {model_details_str}
+        body = f"""### Models Submitted
+{model_details_str}
 
-        **Total Results:** {total_results}
+**Total Results:** {total_results}
 
-        ---
+---
 
-        *This PR was created automatically using [`ResultCache.submit_results()`](https://embeddings-benchmark.github.io/mteb/api/result-cache/#submit_results). Please check the results carefully before merging.*
+*This PR was created automatically using [`ResultCache.submit_results()`](https://embeddings-benchmark.github.io/mteb/api/result-cache/#submit_results). Please check the results carefully before merging.*
 
-        {checklist}
-        """)
+{checklist}"""
 
         logger.info("\n📋 Please complete the checklist in the PR body before merging.")
-        return body.strip()
+        return body
 
     @staticmethod
     def _check_uncommitted_changes(repo_path: Path) -> None:
@@ -1264,6 +1259,41 @@ class ResultCache:
         except subprocess.CalledProcessError as e:
             logger.warning(f"Failed to delete temporary branch '{branch_name}': {e}")
 
+    @staticmethod
+    def _build_manual_submission_message(
+        commit_sha: str, remote_path: Path, result_count: int, model_count: int
+    ) -> str:
+        """Build the manual submission instructions message.
+
+        Args:
+            commit_sha: The git commit SHA.
+            remote_path: Path to the remote repository.
+            result_count: Number of result files submitted.
+            model_count: Number of models submitted.
+
+        Returns:
+            Formatted submission instructions as a single string.
+        """
+        lines = [
+            "\n" + "=" * 80,
+            f"✓ Commit created with {result_count} results for {model_count} model(s)",
+            "=" * 80,
+            f"\nCommit SHA: {commit_sha}",
+            f"Location: {remote_path}",
+            "\n📋 To submit these results, follow these steps:\n",
+            "1. Go to the remote repository:",
+            f"   {remote_path}\n",
+            "2. Create a fork (if you don't have one already):",
+            "   gh repo fork --remote --remote-name fork --clone=false\n",
+            "3. Push your changes to your fork:",
+            "   git push fork\n",
+            "4. Create a pull request:",
+            "   gh pr create --base main --head <your-username>:main\n",
+            "5. Provide details about your evaluation in the PR description\n",
+            "=" * 80,
+        ]
+        return "\n".join(lines)
+
     def submit_results(
         self,
         models: list[str] | list[ModelMeta] | str | ModelMeta | None = None,
@@ -1337,114 +1367,70 @@ class ResultCache:
             # Capture original branch before making any changes
             original_branch = self._get_current_branch(remote_path)
 
-            actions: list[ReversibleAction] = []
-
-            copy_action = CopyResultsAction(unsubmitted, self.remote_results_path)
-            actions.append(copy_action)
-
-            model_str = ", ".join(
-                model.name for model in normalized_models if model.name
-            )
-            result_count = sum(len(files) for files in unsubmitted.values())
-            commit_message = (
-                f"Add MTEB evaluation results for {model_str}\n\n"
-                f"Models: {model_str}\n"
-                f"Total results: {result_count}\n"
-                f"Submitted by MTEB ResultCache"
-            )
-
-            commit_action = CommitAction(remote_path, commit_message)
-            actions.append(commit_action)
-
-            if push and branch_name:
-                actions.append(
-                    CreateBranchAction(remote_path, branch_name, original_branch)
-                )
-
-            workflow = ReversibleWorkflow(steps=actions)
-            workflow.run()
-
-            commit_sha = commit_action.commit_sha
-            if not commit_sha:
-                raise RuntimeError("Failed to create commit: commit_sha is None")
-
-            if not push:
-                logger.info("\n" + "=" * 80)
-                logger.info(
-                    f"✓ Commit created with {result_count} results for {len(normalized_models)} model(s)"
-                )
-                logger.info("=" * 80)
-                logger.info(f"\nCommit SHA: {commit_sha}")
-                logger.info(f"Location: {remote_path}")
-                logger.info("\n📋 To submit these results, follow these steps:\n")
-
-                logger.info("1. Go to the remote repository:")
-                logger.info(f"   {remote_path}\n")
-
-                logger.info("2. Create a fork (if you don't have one already):\n")
-                logger.info(
-                    "   gh repo fork --remote --remote-name fork --clone=false\n"
-                )
-
-                logger.info("3. Push your changes to your fork:\n")
-                logger.info("   git push fork\n")
-
-                logger.info("4. Create a pull request:\n")
-                logger.info("   gh pr create --base main --head <your-username>:main\n")
-
-                logger.info(
-                    "5. Provide details about your evaluation in the PR description\n"
-                )
-                logger.info("=" * 80)
-
-                return {
-                    "status": "ready_for_submission",
-                    "models_submitted": [
-                        (m.name, m.revision) for m in normalized_models
-                    ],
-                    "result_count": result_count,
-                    "commit_sha": commit_sha,
-                    "path": str(remote_path),
-                }
-
-            else:
-                try:
-                    result = self._create_pull_request(
-                        commit_sha,
-                        normalized_models,
-                        unsubmitted,
-                        result_count,
-                        branch_name=branch_name,
-                    )
-                    # After successful PR, restore to original branch
-                    self._restore_branch(remote_path, original_branch)
-                    return result
-                except Exception as e:
-                    # PR creation failed, but workflow.run() already completed
-                    # Restore to original branch and delete temporary branch to clean up
-                    logger.error(f"PR creation failed: {e}")
-
-                    try:
-                        self._restore_branch(remote_path, original_branch)
-                    except Exception as restore_error:
-                        logger.error(
-                            f"Failed to restore branch on error: {restore_error}"
-                        )
-                        logger.warning(
-                            f"You may be on branch '{branch_name}'. "
-                            f"To restore, run: git checkout {original_branch}"
-                        )
-
-                    if branch_name:
-                        self._delete_branch(remote_path, branch_name)
-
-                    raise
         except RuntimeError as e:
-            logger.error(f"Workflow error during submit_results: {e}")
+            logger.error(f"Setup error during submit_results: {e}")
             raise
         except Exception as e:
-            logger.error(f"Error during submit_results: {e}")
+            logger.error(f"Error during submit_results setup: {e}")
             raise
+
+        actions: list[ReversibleAction] = []
+
+        copy_action = CopyResultsAction(unsubmitted, self.remote_results_path)
+        actions.append(copy_action)
+
+        model_str = ", ".join(model.name for model in normalized_models if model.name)
+        result_count = sum(len(files) for files in unsubmitted.values())
+        commit_message = (
+            f"Add MTEB evaluation results for {model_str}\n\n"
+            f"Models: {model_str}\n"
+            f"Total results: {result_count}\n"
+            f"Submitted by MTEB ResultCache"
+        )
+
+        commit_action = CommitAction(remote_path, commit_message)
+        actions.append(commit_action)
+
+        if push and branch_name:
+            actions.append(
+                CreateBranchAction(remote_path, branch_name, original_branch)
+            )
+
+        workflow = ReversibleWorkflow(steps=actions)
+        try:
+            workflow.run()
+        except Exception as e:
+            logger.error(f"Workflow error during submit_results: {e}")
+            raise
+
+        commit_sha = commit_action.commit_sha
+        if not commit_sha:
+            raise RuntimeError("Failed to create commit: commit_sha is None")
+
+        if not push:
+            message = self._build_manual_submission_message(
+                commit_sha, remote_path, result_count, len(normalized_models)
+            )
+            for line in message.split("\n"):
+                logger.info(line)
+
+            return {
+                "status": "ready_for_submission",
+                "models_submitted": [(m.name, m.revision) for m in normalized_models],
+                "result_count": result_count,
+                "commit_sha": commit_sha,
+                "path": str(remote_path),
+            }
+        else:
+            return self._handle_pr_creation_with_cleanup(
+                commit_sha,
+                normalized_models,
+                unsubmitted,
+                result_count,
+                branch_name,
+                remote_path,
+                original_branch,
+            )
 
     @staticmethod
     def _get_github_token() -> str:
@@ -1493,6 +1479,66 @@ class ResultCache:
             "GitHub token not found. Please set up gh CLI (gh auth login) or "
             "configure git credential helper."
         )
+
+    def _handle_pr_creation_with_cleanup(
+        self,
+        commit_sha: str,
+        models: list[ModelMeta],
+        unsubmitted: dict[ModelMeta, list[Path]],
+        result_count: int,
+        branch_name: str | None,
+        remote_path: Path,
+        original_branch: str,
+    ) -> dict[str, Any]:
+        """Create a pull request with proper cleanup on failure.
+
+        Args:
+            commit_sha: The commit SHA to reference.
+            models: List of ModelMeta objects.
+            unsubmitted: Dict mapping ModelMeta to list of result file paths.
+            result_count: Total number of results.
+            branch_name: Name of the branch to create.
+            remote_path: Path to the remote repository.
+            original_branch: Original branch name for restoration.
+
+        Returns:
+            Dictionary with PR information.
+
+        Raises:
+            RuntimeError: If PR creation or cleanup fails.
+        """
+        try:
+            result = self._create_pull_request(
+                commit_sha,
+                models,
+                unsubmitted,
+                result_count,
+                branch_name=branch_name,
+            )
+            # After successful PR, restore to original branch
+            self._restore_branch(remote_path, original_branch)
+            return result
+        except Exception as e:
+            # PR creation failed, but workflow.run() already completed
+            # Restore to original branch and delete temporary branch to clean up
+            logger.error(f"PR creation failed: {e}")
+
+            try:
+                self._restore_branch(remote_path, original_branch)
+            except Exception as restore_error:
+                logger.error(f"Failed to restore branch on error: {restore_error}")
+                logger.warning(
+                    f"You may be on branch '{branch_name}'. "
+                    f"To restore, run: git checkout {original_branch}"
+                )
+
+            if branch_name:
+                try:
+                    self._delete_branch(remote_path, branch_name)
+                except Exception as delete_error:
+                    logger.error(f"Failed to delete branch: {delete_error}")
+
+            raise
 
     def _create_pull_request(
         self,
