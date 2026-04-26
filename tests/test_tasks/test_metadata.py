@@ -135,7 +135,7 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         pytest.skip("Skipping audio tasks for now, see issue #3498")
 
     # TODO https://github.com/embeddings-benchmark/mteb/issues/4378
-    if task.metadata.name in _EXISTING_VIDEO_TASKS:
+    if "v" in task.metadata.category:
         assert task.metadata.descriptive_stats is None
         pytest.skip("Skipping video tasks for now, see issue #4378")
 
