@@ -40,6 +40,7 @@ class Kinetics400ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2017},
 }
 """,
+        is_beta=True,
     )
 
     def get_candidate_labels(self) -> list[str]:
