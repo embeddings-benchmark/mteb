@@ -250,8 +250,11 @@ for lang_label, langs, models in [
 
 hdr("Scenario: benchmark switch  (switch from default to alt benchmark, cold)")
 
+alt_tasks_set = {t.metadata.name for t in benchmark_alt.tasks}
+alt_models_set = {mr.model_name for mr in br_alt.model_results}
+
 def _bench_switch():
-    br = _filter_benchmark_results_for_tables(br_alt, all_tasks_set & {t.metadata.name for t in benchmark_alt.tasks}, set(), [])
+    br = _filter_benchmark_results_for_tables(br_alt, alt_tasks_set, alt_models_set, [])
     build_tables(benchmark_alt, br)
 
 ts = time_fn(_bench_switch)

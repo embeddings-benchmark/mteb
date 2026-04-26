@@ -399,13 +399,45 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         if include_model_revision is False:
             bench_results = bench_results.join_revisions()
 
-        scores_data = []
+        # Collect parallel arrays rather than a list of dicts:
+        # pd.DataFrame(dict_of_lists) is ~10x faster than pd.DataFrame(list_of_dicts).
+        col_model_name: list = []
+        col_model_rev: list = []
+        col_task_name: list = []
+        col_split: list = []
+        col_language: list = []
+        col_subset: list = []
+        col_score: list = []
+
         for model_result in bench_results:
-            scores_data.extend(model_result._get_score_for_table())
-        if not scores_data:
+            mn = model_result.model_name
+            mr = model_result.model_revision
+            for task_result in model_result.task_results:
+                tn = task_result.task_name
+                for split, scores_list in task_result.scores.items():
+                    for score_item in scores_list:
+                        col_model_name.append(mn)
+                        col_model_rev.append(mr)
+                        col_task_name.append(tn)
+                        col_split.append(split)
+                        col_language.append(score_item.get("languages", ["Unknown"]))
+                        col_subset.append(score_item.get("hf_subset", "default"))
+                        col_score.append(score_item.get("main_score", None))
+
+        if not col_model_name:
             return None
 
-        df = pd.DataFrame(scores_data)
+        df = pd.DataFrame(
+            {
+                "model_name": col_model_name,
+                "model_revision": col_model_rev,
+                "task_name": col_task_name,
+                "split": col_split,
+                "language": col_language,
+                "subset": col_subset,
+                "score": col_score,
+            }
+        )
         if include_model_revision is False:
             df = df.drop(columns=["model_revision"])
         # Categoricals shrink memory ~4x for high-cardinality string columns.
