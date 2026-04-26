@@ -184,7 +184,9 @@ def _create_summary_table_from_benchmark_results(
     # Add zero-shot percentage
     _task_names_key = tuple(sorted(data["task_name"].unique()))
     joint_table.insert(
-        1, "Zero-shot", model_metas.map(lambda m: _zero_shot_pct_cached(m.name, _task_names_key))
+        1,
+        "Zero-shot",
+        model_metas.map(lambda m: _zero_shot_pct_cached(m.name, _task_names_key)),
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
 
@@ -553,7 +555,9 @@ def _create_summary_table_mean_subset(
     # Add zero-shot percentage
     _task_names_key = tuple(sorted(data["task_name"].unique()))
     joint_table.insert(
-        1, "Zero-shot", model_metas.map(lambda m: _zero_shot_pct_cached(m.name, _task_names_key))
+        1,
+        "Zero-shot",
+        model_metas.map(lambda m: _zero_shot_pct_cached(m.name, _task_names_key)),
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
 
@@ -674,7 +678,9 @@ def _create_summary_table_mean_task_type(
     # Add zero-shot percentage
     _task_names_key = tuple(sorted(data["task_name"].unique()))
     joint_table.insert(
-        1, "Zero-shot", model_metas.map(lambda m: _zero_shot_pct_cached(m.name, _task_names_key))
+        1,
+        "Zero-shot",
+        model_metas.map(lambda m: _zero_shot_pct_cached(m.name, _task_names_key)),
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
 

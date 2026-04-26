@@ -21,6 +21,7 @@ Usage
 -----
   python scripts/bench_leaderboard.py
 """
+
 from __future__ import annotations
 
 import statistics
@@ -46,10 +47,11 @@ from mteb.benchmarks._create_table import _create_summary_table_from_benchmark_r
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 
+
 def hdr(title: str) -> None:
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"  {title}")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
 
 def row(label: str, cold_ms: float, warm_ms: float | None = None) -> None:
@@ -105,33 +107,34 @@ print(f"  get_benchmarks:          {bench_ms:.0f}ms")
 
 t0 = time.perf_counter()
 all_br = {
-    b.name: all_results.select_tasks(b.tasks).join_revisions()
-    for b in benchmarks
+    b.name: all_results.select_tasks(b.tasks).join_revisions() for b in benchmarks
 }
 build_ms = (time.perf_counter() - t0) * 1000
 print(f"  Build all_benchmark_results ({len(benchmarks)} benchmarks): {build_ms:.0f}ms")
 
 DEFAULT = "MTEB(eng, v2)"
-ALT     = "MTEB(Multilingual, v2)"
+ALT = "MTEB(Multilingual, v2)"
 for name in [DEFAULT, ALT]:
     if name not in all_br:
         name = list(all_br.keys())[0]
 
-benchmark     = next(b for b in benchmarks if b.name == DEFAULT)
+benchmark = next(b for b in benchmarks if b.name == DEFAULT)
 benchmark_alt = next(b for b in benchmarks if b.name == ALT)
-br_full       = all_br[DEFAULT]
-br_alt        = all_br[ALT]
+br_full = all_br[DEFAULT]
+br_alt = all_br[ALT]
 
 all_models = [mr.model_name for mr in br_full.model_results]
-all_tasks  = [t.metadata.name for t in benchmark.tasks]
-half_models = set(all_models[:len(all_models)//2])
-half_tasks  = set(all_tasks[:len(all_tasks)//2])
+all_tasks = [t.metadata.name for t in benchmark.tasks]
+half_models = set(all_models[: len(all_models) // 2])
+half_tasks = set(all_tasks[: len(all_tasks) // 2])
 all_models_set = set(all_models)
-all_tasks_set  = set(all_tasks)
+all_tasks_set = set(all_tasks)
 
 # Pick a language that actually filters (not present in all tasks)
 LANG = ["eng"]
-print(f"\n  Benchmark: {DEFAULT!r}  |  {len(all_models)} models  |  {len(all_tasks)} tasks")
+print(
+    f"\n  Benchmark: {DEFAULT!r}  |  {len(all_models)} models  |  {len(all_tasks)} tasks"
+)
 print(f"  Alt benchmark: {ALT!r}  |  {len(all_br[ALT].model_results)} models")
 
 # ── startup_full ──────────────────────────────────────────────────────────────
@@ -142,15 +145,19 @@ t0 = time.perf_counter()
 _create_summary_table_from_benchmark_results(br_full)
 table_ms = (time.perf_counter() - t0) * 1000
 print(f"  Default benchmark summary table (cold): {table_ms:.0f}ms")
-print(f"  Total startup (load + build + table):   {load_ms + build_ms + table_ms:.0f}ms")
+print(
+    f"  Total startup (load + build + table):   {load_ms + build_ms + table_ms:.0f}ms"
+)
 
 # ── filter_tasks_only ─────────────────────────────────────────────────────────
 
 hdr("Scenario: filter_tasks_only  (no model/language filter)")
 
+
 def _filter_tasks_only():
     br = _filter_benchmark_results_for_tables(br_full, all_tasks_set, set(), [])
     build_tables(benchmark, br)
+
 
 ts = time_fn(_filter_tasks_only)
 row("all tasks, no model/lang filter", ts[0], statistics.mean(ts[1:]))
@@ -160,13 +167,15 @@ row("all tasks, no model/lang filter", ts[0], statistics.mean(ts[1:]))
 hdr("Scenario: filter_models")
 
 for label, models in [
-    ("all models",  all_models_set),
+    ("all models", all_models_set),
     ("half models", half_models),
-    ("20 models",   set(all_models[:20])),
+    ("20 models", set(all_models[:20])),
 ]:
+
     def _run(mn=models):
         br = _filter_benchmark_results_for_tables(br_full, all_tasks_set, mn, [])
         build_tables(benchmark, br)
+
     ts = time_fn(_run)
     row(label, ts[0], statistics.mean(ts[1:]))
 
@@ -175,9 +184,10 @@ for label, models in [
 hdr("Scenario: filter_language  (no model filter)")
 
 for lang_label, langs in [
-    ("lang=['eng']",        ["eng"]),
-    ("lang=['eng','fra']",  ["eng", "fra"]),
+    ("lang=['eng']", ["eng"]),
+    ("lang=['eng','fra']", ["eng", "fra"]),
 ]:
+
     def _run_cold(la=langs):
         # Clear lru_cache so we measure the true cold cost
         _get_tasks_cached.cache_clear()
@@ -203,10 +213,11 @@ for lang_label, langs in [
 hdr("Scenario: filter_language + model  (model-first — current order)")
 
 for lang_label, langs, models in [
-    ("eng, half models",  ["eng"],        half_models),
-    ("eng, 20 models",    ["eng"],        set(all_models[:20])),
-    ("eng+fra, 20 models",["eng","fra"],  set(all_models[:20])),
+    ("eng, half models", ["eng"], half_models),
+    ("eng, 20 models", ["eng"], set(all_models[:20])),
+    ("eng+fra, 20 models", ["eng", "fra"], set(all_models[:20])),
 ]:
+
     def _run_model_first(la=langs, mn=models):
         # model-first is the current code path in _filter_benchmark_results_for_tables
         br = _filter_benchmark_results_for_tables(br_full, all_tasks_set, mn, la)
@@ -220,24 +231,30 @@ for lang_label, langs, models in [
 
 hdr("Scenario: filter_language + model  (language-first — old order, for comparison)")
 
+
 def _filter_language_first(br_src, task_names, model_names, languages):
     """Old ordering: task → language → model."""
     from mteb.leaderboard.app import _all_langs_for_tasks, _get_tasks_cached
+
     filtered = br_src._filter_tasks(task_names=sorted(task_names))
     if languages:
         all_task_langs = _all_langs_for_tasks(tuple(sorted(task_names)))
         if not set(languages).issuperset(all_task_langs):
-            filtered_tasks = _get_tasks_cached(tuple(sorted(task_names)), tuple(languages))
+            filtered_tasks = _get_tasks_cached(
+                tuple(sorted(task_names)), tuple(languages)
+            )
             filtered = filtered.select_tasks(filtered_tasks)
     if model_names:
         filtered = filtered.select_models(sorted(model_names))
     return filtered
 
+
 for lang_label, langs, models in [
-    ("eng, half models",  ["eng"],        half_models),
-    ("eng, 20 models",    ["eng"],        set(all_models[:20])),
-    ("eng+fra, 20 models",["eng","fra"],  set(all_models[:20])),
+    ("eng, half models", ["eng"], half_models),
+    ("eng, 20 models", ["eng"], set(all_models[:20])),
+    ("eng+fra, 20 models", ["eng", "fra"], set(all_models[:20])),
 ]:
+
     def _run_lang_first(la=langs, mn=models):
         br = _filter_language_first(br_full, all_tasks_set, mn, la)
         build_tables(benchmark, br)
@@ -253,9 +270,11 @@ hdr("Scenario: benchmark switch  (switch from default to alt benchmark, cold)")
 alt_tasks_set = {t.metadata.name for t in benchmark_alt.tasks}
 alt_models_set = {mr.model_name for mr in br_alt.model_results}
 
+
 def _bench_switch():
     br = _filter_benchmark_results_for_tables(br_alt, alt_tasks_set, alt_models_set, [])
     build_tables(benchmark_alt, br)
+
 
 ts = time_fn(_bench_switch)
 row(f"switch to {ALT!r}", ts[0], statistics.mean(ts[1:]))
@@ -264,6 +283,10 @@ row(f"switch to {ALT!r}", ts[0], statistics.mean(ts[1:]))
 
 hdr("Summary: startup costs")
 print(f"  JSON load + deserialize:                    {load_ms:>7.0f}ms")
-print(f"  Build all {len(benchmarks)} benchmark_results:              {build_ms:>7.0f}ms")
+print(
+    f"  Build all {len(benchmarks)} benchmark_results:              {build_ms:>7.0f}ms"
+)
 print(f"  Default benchmark table (cold, no filters): {table_ms:>7.0f}ms")
-print(f"  Total (realistic server startup):           {load_ms+build_ms+table_ms:>7.0f}ms")
+print(
+    f"  Total (realistic server startup):           {load_ms + build_ms + table_ms:>7.0f}ms"
+)
