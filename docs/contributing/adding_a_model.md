@@ -190,6 +190,51 @@ When submitting you models as a PR, please copy and paste the following checklis
 ```
 
 
+### Submitting Evaluation Results
+
+Use the [`ResultCache`][mteb.cache.result_cache.ResultCache] to submit results to the [official results repository](https://github.com/embeddings-benchmark/results):
+
+```python
+import mteb
+
+# Initialize and sync cache
+cache = mteb.ResultCache()
+cache.download_from_remote()
+
+# Evaluate your model
+model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
+model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+tasks = mteb.get_tasks(["STS12","STS13"])
+
+results = mteb.evaluate(model, tasks=tasks, cache=cache)
+
+# Save results to cache
+for task_result in results.task_results:
+    cache.save_to_cache(task_result, model_meta.name, model_meta.revision)
+
+# Submit results (manual review before pushing)
+cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], push=False)
+```
+
+**Manual submission** (recommended for first-time users):
+```python
+submission_info = cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], push=False)
+print(submission_info.get("manual_submission_instructions"))
+# Review changes and push manually
+```
+
+**Automated submission** (requires GitHub token):
+```python
+import os
+os.environ["GITHUB_TOKEN"] = "your-token"
+
+submission_info = cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], push=True)
+if submission_info.get("pr_url"):
+    print(f"✓ PR created: {submission_info['pr_url']}")
+```
+
+For more details, see the [result caching guide](../../get_started/advanced_usage/result_cache.md).
+
 ### Matryoshka embeddings
 
 To add support for matryoshka embeddings you can specify `embed_dim` as a list of dimensions.
