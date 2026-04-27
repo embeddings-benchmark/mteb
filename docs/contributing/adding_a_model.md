@@ -223,14 +223,11 @@ print(submission_info.get("manual_submission_instructions"))
 # Review changes and push manually
 ```
 
-**Automated submission** (requires GitHub token):
+**Automated submission** (requires GitHub integration to be configured):
 ```python
-import os
-os.environ["GITHUB_TOKEN"] = "your-token"
-
 submission_info = cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=True)
 if submission_info.get("pr_url"):
-    print(f"✓ PR created: {submission_info['pr_url']}")
+    print(f"PR created: {submission_info['pr_url']}")
 ```
 
 For more details, see the [result caching guide](../../get_started/advanced_usage/result_cache.md).

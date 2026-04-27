@@ -104,26 +104,7 @@ print(submission_info.get("manual_submission_instructions"))
 
 ### Automated Submission
 
-Automatically create a pull request (requires GitHub token). Choose one authentication method:
-
-**Method 1: Environment Variable**
-```bash
-export GITHUB_TOKEN="your-github-pat-token"
-```
-
-**Method 2: GitHub CLI (Recommended)**
-```bash
-# Install GitHub CLI if not already installed
-# https://cli.github.com
-
-# Authenticate
-gh auth login
-
-# Follow the prompts and select:
-# - GitHub.com
-# - HTTPS
-# - Authenticate with a token
-```
+Automatically create a pull request. GitHub integration must be configured first, either by signing in with `gh auth login` or setting up your Git credential helper.
 
 Then run your code:
 
@@ -137,7 +118,7 @@ if submission_info.get("pr_url"):
     print(f"PR created: {submission_info['pr_url']}")
 ```
 
-ResultCache will automatically detect credentials from either source.
+ResultCache will automatically use the configured GitHub integration.
 
 ### Batch Submission
 
@@ -151,26 +132,6 @@ models = [
 ]
 
 cache.submit_results(models=models, create_pr=False)
-```
-
-## Troubleshooting
-
-**"Cache directory not found"**
-```python
-cache = mteb.ResultCache()
-cache.download_from_remote()  # Creates directory structure
-```
-
-**"Failed to create pull request"**
-```bash
-gh auth status  # Verify GitHub setup
-export GITHUB_TOKEN="your-token"  # Or set token
-```
-
-**"Results already exist for this model"**
-Clear the cache to re-evaluate:
-```python
-cache.clear_cache()
 ```
 
 ## API Reference
