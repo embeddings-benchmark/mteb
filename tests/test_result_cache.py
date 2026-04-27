@@ -684,7 +684,6 @@ def test_submit_results_with_fake_remote(tmp_path):
     test_model = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
     result_files_copied = _setup_test_model_results(cache_path, test_model)
 
-    model_name_path = test_model.model_name_as_path()
     revision = cast("str", test_model.revision)
     cache = ResultCache(cache_path=cache_path)
 
@@ -748,7 +747,7 @@ def test_submit_results_with_fake_remote(tmp_path):
                 text=True,
             )
             assert check.returncode == 0
-            expected_path = f"{model_name_path}/{revision}/{filename}"
+            expected_path = f"{test_model.model_name_as_path()}/{revision}/{filename}"
             assert expected_path in check.stdout, (
                 f"File {expected_path} not found in commit {commit_sha}"
             )
@@ -765,6 +764,12 @@ def test_submit_results_with_fake_remote(tmp_path):
         assert current_branch == original_branch, (
             f"Branch not restored: expected '{original_branch}' but got '{current_branch}'"
         )
+
+        # Verify re-submission of the same model returns no changes
+        second_result = cache.submit_results(models=[test_model], create_pr=False)
+        assert second_result["status"] == "no_changes"
+        assert second_result["result_count"] == 0
+        assert second_result.get("commit_sha") is None
 
 
 def test_submit_results_handles_merge_conflict(tmp_path):

@@ -1067,7 +1067,7 @@ class ResultCache:
             require_model_meta=False,
             include_remote=False,
         )
-        remote_files_set: set[Path] = set()
+        remote_files_by_model_revision: dict[tuple[str, str], set[Path]] = {}
         for model in models:
             if model.name is None or model.revision is None:
                 logger.warning(f"Skipping model with None name or revision: {model}")
@@ -1077,9 +1077,11 @@ class ResultCache:
             remote_results_dir = (
                 self.remote_results_path / model_name_path / model.revision
             )
+            key = (model_name_path, model.revision)
+            remote_files_by_model_revision[key] = set()
 
             if remote_results_dir.exists():
-                remote_files_set.update(
+                remote_files_by_model_revision[key].update(
                     f.relative_to(remote_results_dir)
                     for f in remote_results_dir.rglob("*.json")
                     if f.name != "model_meta.json"
@@ -1088,8 +1090,17 @@ class ResultCache:
         for local_path in local_paths:
             model_name_path = local_path.parent.parent.name
             revision = local_path.parent.name
-            model_name = model_name_path.replace("__", "/").replace("_", " ")
-            relative_path = local_path.name
+            model_name = model_name_path.replace("__", "/")
+
+            local_results_dir = self.cache_path / "results" / model_name_path / revision
+            try:
+                relative_path = local_path.relative_to(local_results_dir)
+            except ValueError:
+                relative_path = Path(local_path.name)
+
+            remote_files_set = remote_files_by_model_revision.get(
+                (model_name_path, revision), set()
+            )
 
             if relative_path not in remote_files_set:
                 model_meta = None
