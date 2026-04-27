@@ -4,9 +4,9 @@ from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AVMemeClassification(AbsTaskClassification):
+class AVMemeAudioVideoClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="AVMemeClassification",
+        name="AVMemeAudioVideoClassification",
         description="AVMeme Exam is a multimodal, multilingual, and multicultural benchmark of over 1,000 iconic Internet audio-visual memes spanning speech, songs, music, and sound effects. Each meme is paired with a Q&A assessing levels of understanding from surface content to context, emotion, usage, and world knowledge. This classification task predicts the sound category of each meme clip.",
         reference="https://arxiv.org/pdf/2601.17645",
         dataset={

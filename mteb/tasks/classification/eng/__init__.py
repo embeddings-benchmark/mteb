@@ -49,7 +49,10 @@ from .ave_dataset_classification import (
     AVEDatasetClassification,
     AVEDatasetVideoClassification,
 )
-from .avmeme_exam_classification import AVMemeClassification, AVMemeVideoClassification
+from .avmeme_exam_classification import (
+    AVMemeAudioVideoClassification,
+    AVMemeVideoClassification,
+)
 from .banking77_classification import Banking77Classification, Banking77ClassificationV2
 from .birdsnap_classification import BirdsnapClassification
 from .breakfast_classification import BreakfastClassification
@@ -310,7 +313,7 @@ __all__ = [
     "FSDD",
     "AVEDatasetClassification",
     "AVEDatasetVideoClassification",
-    "AVMemeClassification",
+    "AVMemeAudioVideoClassification",
     "AVMemeVideoClassification",
     "AmazonPolarityClassification",
     "AmazonPolarityClassificationV2",
