@@ -18,11 +18,11 @@ import mteb
 cache = mteb.ResultCache()
 
 # Custom location
-cache = mteb.ResultCache(cache_dir="/path/to/cache")
+cache = mteb.ResultCache(cache_path="/path/to/cache")
 ```
 
 ```python
-# This clones/fetches the latest results from remote repository, creates the directory structure, and prepares for submissions.
+# Optional: clone/fetch the latest remote results before loading remote results or submitting.
 cache.download_from_remote()
 ```
 
@@ -31,9 +31,6 @@ cache.download_from_remote()
 ```bash
 # Set custom cache location
 export MTEB_CACHE=/path/to/cache
-
-# To clear cache if needed remove the directory or use:
-cache.clear_cache()
 ```
 
 ## Quick Start
@@ -45,25 +42,15 @@ import mteb
 
 # 1. Initialize cache
 cache = mteb.ResultCache()
-cache.download_from_remote()
 
 # 2. Evaluate model
 model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
-model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
-tasks = mteb.get_tasks(["STS12","STS13"])
+task = mteb.get_task("ArguAna")
 
-results = mteb.evaluate(model, tasks=tasks, cache=cache)
+mteb.evaluate(model, task, cache=cache)
 
-# 3. Save to cache
-for task_result in results.task_results:
-    cache.save_to_cache(
-        task_result=task_result,
-        model_name=model_meta.name,
-        model_revision=model_meta.revision
-    )
-
-# 4. Submit results (manual review before pushing)
-cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=False)
+# 3. Submit results (manual review before pushing)
+cache.submit_results(model, create_pr=False)
 ```
 
 ## Loading Results

@@ -199,21 +199,18 @@ import mteb
 
 # Initialize and sync cache
 cache = mteb.ResultCache()
-# cache.download_from_remote() # optional
+
+# Optional: start from a clean slate.
+# cache.clear_cache()
 
 # Evaluate your model
 model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
-model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
-tasks = mteb.get_tasks(["STS12","STS13"])
+task = mteb.get_task("ArguAna")
 
-results = mteb.evaluate(model, tasks=tasks, cache=cache)
-
-# Save results to cache
-for task_result in results.task_results:
-    cache.save_to_cache(task_result, model_meta.name, model_meta.revision)
+mteb.evaluate(model, task, cache=cache)
 
 # Submit results (manual review before pushing)
-cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=False)
+cache.submit_results(model, create_pr=False)
 ```
 
 **Manual submission** (recommended for first-time users):
