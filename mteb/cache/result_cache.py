@@ -59,6 +59,8 @@ class CopyResultsAction:
         self.unsubmitted = unsubmitted
         self.remote_path = remote_path
         self.copied_files: list[Path] = []
+        # Track prior file contents so undo can restore pre-existing tracked files.
+        self._overwritten_file_contents: dict[Path, bytes] = {}
 
     def do(self) -> None:
         """Copy listed json result files and optional model_meta.json to remote paths."""
@@ -76,6 +78,11 @@ class CopyResultsAction:
 
             for result_file in result_files:
                 dest_file = dest_dir / result_file.name
+                if (
+                    dest_file.exists()
+                    and dest_file not in self._overwritten_file_contents
+                ):
+                    self._overwritten_file_contents[dest_file] = dest_file.read_bytes()
                 shutil.copy2(result_file, dest_file)
                 self.copied_files.append(dest_file)
                 logger.debug(f"Copied {result_file} to {dest_file}")
@@ -86,6 +93,13 @@ class CopyResultsAction:
                 model_meta_file = source_model_dir / "model_meta.json"
                 if model_meta_file.exists():
                     dest_model_meta = dest_dir / "model_meta.json"
+                    if (
+                        dest_model_meta.exists()
+                        and dest_model_meta not in self._overwritten_file_contents
+                    ):
+                        self._overwritten_file_contents[dest_model_meta] = (
+                            dest_model_meta.read_bytes()
+                        )
                     shutil.copy2(model_meta_file, dest_model_meta)
                     self.copied_files.append(dest_model_meta)
                     logger.debug(f"Copied {model_meta_file} to {dest_model_meta}")
@@ -96,12 +110,20 @@ class CopyResultsAction:
         """Deletion of files copied during do()."""
         for file_path in self.copied_files:
             try:
-                file_path.unlink()
-                logger.debug(f"Deleted {file_path}")
+                if file_path in self._overwritten_file_contents:
+                    file_path.write_bytes(self._overwritten_file_contents[file_path])
+                    logger.debug(f"Restored original content for {file_path}")
+                elif file_path.exists():
+                    file_path.unlink()
+                    logger.debug(f"Deleted {file_path}")
             except Exception as e:
                 logger.warning(f"Failed to delete {file_path}: {e}")
 
-        logger.info(f"Deleted {len(self.copied_files)} copied files")
+        logger.info(
+            f"Rolled back {len(self.copied_files)} copied files "
+            f"({len(self._overwritten_file_contents)} restored, "
+            f"{len(self.copied_files) - len(self._overwritten_file_contents)} deleted)"
+        )
 
 
 class LoadExperimentEnum(HelpfulStrEnum):
