@@ -45,8 +45,13 @@ from .amazon_polarity_classification import (
     AmazonPolarityClassificationV2,
 )
 from .arxiv_classification import ArxivClassification, ArxivClassificationV2
+from .ave_dataset_classification import (
+    AVEDatasetClassification,
+    AVEDatasetVideoClassification,
+)
 from .banking77_classification import Banking77Classification, Banking77ClassificationV2
 from .birdsnap_classification import BirdsnapClassification
+from .breakfast_classification import BreakfastClassification
 from .caltech101_classification import Caltech101Classification
 from .cifar import CIFAR10Classification, CIFAR100Classification
 from .country211_classification import Country211Classification
@@ -63,6 +68,11 @@ from .financial_phrasebank_classification import (
 from .food101_classification import Food101Classification
 from .frenk_en_classification import FrenkEnClassification, FrenkEnClassificationV2
 from .gtsrb_classification import GTSRBClassification
+from .hmdb51_classification import HMDB51Classification
+from .human_animal_cartoon import (
+    HumanAnimalCartoonVAClassification,
+    HumanAnimalCartoonVClassification,
+)
 from .hume_emotion_classification import HUMEEmotionClassification
 from .hume_toxic_conversations_classification import (
     HUMEToxicConversationsClassification,
@@ -72,6 +82,7 @@ from .hume_tweet_sentiment_extraction_classification import (
 )
 from .imagenet1k import Imagenet1kClassification
 from .imdb_classification import ImdbClassification, ImdbClassificationV2
+from .kinetics400 import Kinetics400VAClassification, Kinetics400VClassification
 from .kinetics700 import Kinetics700VAClassification, Kinetics700VClassification
 from .legal_bench_classification import (
     CanadaTaxCourtOutcomesLegalBenchClassification,
@@ -205,6 +216,7 @@ from .poem_sentiment_classification import (
     PoemSentimentClassification,
     PoemSentimentClassificationV2,
 )
+from .ravdess_av_classification import RAVDESSAVClassification
 from .resisc45_classification import RESISC45Classification
 from .sds_eye_protection_classification import (
     SDSEyeProtectionClassification,
@@ -214,6 +226,7 @@ from .sds_gloves_classification import (
     SDSGlovesClassification,
     SDSGlovesClassificationV2,
 )
+from .something_something_v2_classification import SomethingSomethingV2Classification
 from .stanford_cars_classification import StanfordCarsClassification
 from .stl10_classification import STL10Classification
 from .sun397_classification import SUN397Classification
@@ -234,6 +247,7 @@ from .tweet_topic_single_classification import (
     TweetTopicSingleClassificationV2,
 )
 from .ucf101_classification import UCF101Classification
+from .vggsound import VGGSoundVAClassification, VGGSoundVClassification
 from .wikipedia_bio_met_chem_classification import (
     WikipediaBioMetChemClassification,
     WikipediaBioMetChemClassificationV2,
@@ -294,6 +308,8 @@ from .yelp_review_full_classification import (
 __all__ = [
     "CREMAD",
     "FSDD",
+    "AVEDatasetClassification",
+    "AVEDatasetVideoClassification",
     "AmazonPolarityClassification",
     "AmazonPolarityClassificationV2",
     "ArxivClassification",
@@ -301,6 +317,7 @@ __all__ = [
     "Banking77Classification",
     "Banking77ClassificationV2",
     "BirdsnapClassification",
+    "BreakfastClassification",
     "CIFAR10Classification",
     "CIFAR100Classification",
     "CSTRVCTKAccentID",
@@ -392,9 +409,12 @@ __all__ = [
     "GlobeV2GenderClassification",
     "GlobeV3AgeClassification",
     "GlobeV3GenderClassification",
+    "HMDB51Classification",
     "HUMEEmotionClassification",
     "HUMEToxicConversationsClassification",
     "HUMETweetSentimentExtractionClassification",
+    "HumanAnimalCartoonVAClassification",
+    "HumanAnimalCartoonVClassification",
     "IEMOCAPEmotionClassification",
     "IEMOCAPGenderClassification",
     "Imagenet1kClassification",
@@ -404,6 +424,8 @@ __all__ = [
     "InternationalCitizenshipQuestionsLegalBenchClassification",
     "JCrewBlockerLegalBenchClassification",
     "JCrewBlockerLegalBenchClassificationV2",
+    "Kinetics400VAClassification",
+    "Kinetics400VClassification",
     "Kinetics700VAClassification",
     "Kinetics700VClassification",
     "LearnedHandsBenefitsLegalBenchClassification",
@@ -456,6 +478,7 @@ __all__ = [
     "PersonalJurisdictionLegalBenchClassification",
     "PoemSentimentClassification",
     "PoemSentimentClassificationV2",
+    "RAVDESSAVClassification",
     "RESISC45Classification",
     "SCDBPAccountabilityLegalBenchClassification",
     "SCDBPAuditsLegalBenchClassification",
@@ -473,6 +496,7 @@ __all__ = [
     "SDSGlovesClassificationV2",
     "STL10Classification",
     "SUN397Classification",
+    "SomethingSomethingV2Classification",
     "SpeechCommandsClassification",
     "SpokeNEnglishClassification",
     "SpokenQAForIC",
@@ -491,6 +515,8 @@ __all__ = [
     "UCCVCommonLawLegalBenchClassification",
     "UCF101Classification",
     "UnfairTOSLegalBenchClassification",
+    "VGGSoundVAClassification",
+    "VGGSoundVClassification",
     "VocalSoundClassification",
     "VoxCelebSA",
     "VoxLingua107Top10",

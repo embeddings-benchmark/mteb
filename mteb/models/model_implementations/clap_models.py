@@ -8,9 +8,9 @@ from tqdm.auto import tqdm
 from transformers import ClapModel, ClapProcessor
 from transformers.modeling_outputs import BaseModelOutputWithPooling
 
-from mteb._create_dataloaders import AudioCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -47,7 +47,7 @@ class ClapZeroShotWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_features = []
 
@@ -95,7 +95,8 @@ class ClapZeroShotWrapper(AbsEncoder):
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
             text_features = self.model.get_text_features(**inputs)
-            # Normalize embeddings
+            if isinstance(text_features, BaseModelOutputWithPooling):
+                text_features = text_features.pooler_output
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)  # noqa: PLR6104
             text_embeddings.append(text_features.cpu().detach().numpy())
 
