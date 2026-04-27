@@ -23,7 +23,6 @@ from mteb._reversible_workflow.git_actions import (
     CreateBranchAction,
 )
 from mteb._reversible_workflow.reversible_workflow import (
-    ReversibleAction,
     ReversibleWorkflow,
 )
 from mteb.abstasks import AbsTask
@@ -38,13 +37,14 @@ from mteb.types import SubmitResultsResponse
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
 
+    from mteb._reversible_workflow.reversible_workflow import ReversibleAction
     from mteb.types import ModelName, Revision, SubmitResultsResponse
 
 logger = logging.getLogger(__name__)
 _EXPERIMENTS_FOLDER_NAME = "experiments"
 
 
-class CopyResultsAction(ReversibleAction):
+class CopyResultsAction:
     """Copy selected result files and optional model metadata files to the remote repo."""
 
     def __init__(
@@ -1354,7 +1354,7 @@ class ResultCache:
 
             if not unsubmitted:
                 logger.warning("No unsubmitted results found.")
-                response: SubmitResultsResponse = {
+                no_changes_response: SubmitResultsResponse = {
                     "status": "no_changes",
                     "models_submitted": [
                         (m.name, m.revision) for m in normalized_models
@@ -1362,7 +1362,7 @@ class ResultCache:
                     "result_count": 0,
                     "commit_sha": None,
                 }
-                return response
+                return no_changes_response
 
             remote_path = self.cache_path / "remote"
             self._run_preflight_checks(remote_path)
@@ -1417,14 +1417,14 @@ class ResultCache:
             for line in message.split("\n"):
                 logger.info(line)
 
-            response: SubmitResultsResponse = {
+            manual_submission_response: SubmitResultsResponse = {
                 "status": "ready_for_submission",
                 "models_submitted": [(m.name, m.revision) for m in normalized_models],
                 "result_count": result_count,
                 "commit_sha": commit_sha,
                 "path": str(remote_path),
             }
-            return response
+            return manual_submission_response
 
         return self._handle_pr_creation_with_cleanup(
             commit_sha,
