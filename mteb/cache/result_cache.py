@@ -160,13 +160,22 @@ class ResultCache:
         self.cache_path.mkdir(parents=True, exist_ok=True)
 
     @property
+    def remote_repo_path(self) -> Path:
+        """Get the path to the remote repository clone.
+
+        Returns:
+            The path to the remote repository clone.
+        """
+        return self.cache_path / "remote"
+
+    @property
     def has_remote(self) -> bool:
         """Check if the remote results repository exists in the cache directory.
 
         Returns:
             True if the remote results repository exists, False otherwise.
         """
-        return (self.cache_path / "remote").exists()
+        return self.remote_repo_path.exists()
 
     @property
     def remote_results_path(self) -> Path:
@@ -175,7 +184,7 @@ class ResultCache:
         Returns:
             The path to the remote results directory.
         """
-        return self.cache_path / "remote" / "results"
+        return self.remote_repo_path / "results"
 
     def get_task_result_path(
         self,
@@ -360,7 +369,7 @@ class ResultCache:
             self.cache_path.mkdir(parents=True, exist_ok=True)
 
         # if "results" folder already exists update it
-        results_directory = self.cache_path / "remote"
+        results_directory = self.remote_repo_path
 
         if results_directory.exists():
             # check repository in the directory is the same as the remote
@@ -960,7 +969,7 @@ class ResultCache:
 
     def _normalize_models(
         self,
-        models: list[str] | list[ModelMeta] | str | ModelMeta | None = None,
+        models: Sequence[str] | Sequence[ModelMeta] | str | ModelMeta | None = None,
     ) -> list[ModelMeta]:
         """Normalize model input to list of ModelMeta objects.
 
@@ -1383,7 +1392,7 @@ class ResultCache:
                     commit_sha=None,
                 )
 
-            remote_path = self.cache_path / "remote"
+            remote_path = self.remote_repo_path
             self._run_preflight_checks(remote_path)
 
             # Capture original branch before making any changes
@@ -1397,9 +1406,7 @@ class ResultCache:
             raise
 
         actions: list[ReversibleAction] = []
-
-        copy_action = CopyResultsAction(unsubmitted, self.remote_results_path)
-        actions.append(copy_action)
+        actions.append(CopyResultsAction(unsubmitted, self.remote_results_path))
 
         model_str = ", ".join(model.name for model in normalized_models if model.name)
         result_count = sum(len(files) for files in unsubmitted.values())
@@ -1625,7 +1632,7 @@ class ResultCache:
                     "--remote-name",
                     "fork",
                 ],
-                cwd=self.cache_path / "remote",
+                cwd=self.remote_repo_path,
                 check=True,
                 capture_output=True,
                 text=True,
@@ -1676,7 +1683,7 @@ class ResultCache:
             logger.info(f"Pushing to fork branch '{branch_name}'...")
             subprocess.run(
                 ["git", "push", "fork", f"HEAD:refs/heads/{branch_name}"],
-                cwd=self.cache_path / "remote",
+                cwd=self.remote_repo_path,
                 check=True,
                 capture_output=True,
                 text=True,
