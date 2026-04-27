@@ -60,6 +60,8 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
+          enable-cache: true
+          prune-cache: false
           version: "0.10.12"
 
       # required for evaluation the audio subset

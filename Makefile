@@ -1,11 +1,11 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
-	uv sync --extra image --group dev
+	uv sync --frozen --extra image --group dev
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	uv sync --extra bm25s --extra image --extra audio --extra leaderboard --extra faiss-cpu --extra github --group dev
+	uv sync --frozen --extra bm25s --extra image --extra audio --extra leaderboard --extra faiss-cpu --extra github --group dev
 
 lint:
 	@echo "--- 🧹 Running linters ---"
@@ -52,7 +52,7 @@ serve-docs:
 
 model-load-test:
 	@echo "--- 🚀 Running model load test ---"
-	uv sync --extra pylate --group dev
+	uv sync --frozen --extra pylate --group dev
 	uv run --no-sync python scripts/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
 	uv run --no-sync python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt
 
