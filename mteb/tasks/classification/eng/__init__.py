@@ -287,7 +287,7 @@ from .wikipedia_theoretical_applied_classification import (
     WikipediaTheoreticalAppliedClassificationV2,
 )
 from .worldsense_classification import (
-    WorldSenseClassification,
+    WorldSenseAudioVideoClassification,
     WorldSenseVideoClassification,
 )
 from .yahoo_answers_topics_classification import (
@@ -528,7 +528,7 @@ __all__ = [
     "WikipediaSolidStateColloidalClassification",
     "WikipediaTheoreticalAppliedClassification",
     "WikipediaTheoreticalAppliedClassificationV2",
-    "WorldSenseClassification",
+    "WorldSenseAudioVideoClassification",
     "WorldSenseVideoClassification",
     "YahooAnswersTopicsClassification",
     "YahooAnswersTopicsClassificationV2",

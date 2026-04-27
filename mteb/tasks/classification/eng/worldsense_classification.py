@@ -4,9 +4,9 @@ from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WorldSenseClassification(AbsTaskClassification):
+class WorldSenseAudioVideoClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="WorldSenseClassification",
+        name="WorldSenseAudioVideoClassification",
         description="WorldSense is a multimodal video understanding benchmark encompassing visual, audio, and text inputs. Videos are categorized into 8 primary domains across 67 fine-grained subcategories. This classification task predicts the domain category of a video clip",
         reference="https://arxiv.org/abs/2502.04326",
         dataset={
