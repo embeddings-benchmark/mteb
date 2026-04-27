@@ -1354,17 +1354,15 @@ class ResultCache:
 
             if not unsubmitted:
                 logger.warning("No unsubmitted results found.")
-                return cast(
-                    "SubmitResultsResponse",
-                    {
-                        "status": "no_changes",
-                        "models_submitted": [
-                            (m.name, m.revision) for m in normalized_models
-                        ],
-                        "result_count": 0,
-                        "commit_sha": None,
-                    },
-                )
+                response: SubmitResultsResponse = {
+                    "status": "no_changes",
+                    "models_submitted": [
+                        (m.name, m.revision) for m in normalized_models
+                    ],
+                    "result_count": 0,
+                    "commit_sha": None,
+                }
+                return response
 
             remote_path = self.cache_path / "remote"
             self._run_preflight_checks(remote_path)
@@ -1419,18 +1417,14 @@ class ResultCache:
             for line in message.split("\n"):
                 logger.info(line)
 
-            return cast(
-                "SubmitResultsResponse",
-                {
-                    "status": "ready_for_submission",
-                    "models_submitted": [
-                        (m.name, m.revision) for m in normalized_models
-                    ],
-                    "result_count": result_count,
-                    "commit_sha": commit_sha,
-                    "path": str(remote_path),
-                },
-            )
+            response: SubmitResultsResponse = {
+                "status": "ready_for_submission",
+                "models_submitted": [(m.name, m.revision) for m in normalized_models],
+                "result_count": result_count,
+                "commit_sha": commit_sha,
+                "path": str(remote_path),
+            }
+            return response
 
         return self._handle_pr_creation_with_cleanup(
             commit_sha,
@@ -1601,7 +1595,6 @@ class ResultCache:
         except Exception as e:
             raise RuntimeError(f"Failed to access upstream repository: {e}") from e
 
-        remote_path = self.cache_path / "remote"
         fork_url = None
         try:
             logger.info("Creating/configuring fork using gh CLI...")
@@ -1614,7 +1607,7 @@ class ResultCache:
                     "--remote-name",
                     "fork",
                 ],
-                cwd=remote_path,
+                cwd=self.cache_path / "remote",
                 check=True,
                 capture_output=True,
                 text=True,
@@ -1665,7 +1658,7 @@ class ResultCache:
             logger.info(f"Pushing to fork branch '{branch_name}'...")
             subprocess.run(
                 ["git", "push", "fork", f"HEAD:refs/heads/{branch_name}"],
-                cwd=remote_path,
+                cwd=self.cache_path / "remote",
                 check=True,
                 capture_output=True,
                 text=True,
@@ -1698,19 +1691,17 @@ class ResultCache:
             logger.info(f"Commit: {commit_sha}")
             logger.info("\n" + "=" * 80)
 
-            return cast(
-                "SubmitResultsResponse",
-                {
-                    "status": "pr_created",
-                    "models_submitted": [(m.name, m.revision) for m in models],
-                    "result_count": result_count,
-                    "commit_sha": commit_sha,
-                    "pr_url": pr.html_url,
-                    "pr_number": pr.number,
-                    "fork_url": fork_url,
-                    "branch_name": branch_name,
-                },
-            )
+            response: SubmitResultsResponse = {
+                "status": "pr_created",
+                "models_submitted": [(m.name, m.revision) for m in models],
+                "result_count": result_count,
+                "commit_sha": commit_sha,
+                "pr_url": pr.html_url,
+                "pr_number": pr.number,
+                "fork_url": fork_url,
+                "branch_name": branch_name,
+            }
+            return response
 
         except GithubException as e:
             raise RuntimeError(
