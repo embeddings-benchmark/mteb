@@ -26,6 +26,7 @@ class WorldSenseClassification(AbsTaskClassification):
         dialect=[],
         modalities=["video", "audio"],
         sample_creation="found",
+        is_beta=True,
         bibtex_citation=r"""
 @inproceedings{hong2025worldsense,
   author = {Hong, Jack and Yan, Shilin and Cai, Jiayin and Jiang, Xiaolong and Hu, Yao and Xie, Weidi},
@@ -63,6 +64,7 @@ class WorldSenseVideoClassification(AbsTaskClassification):
         dialect=[],
         modalities=["video"],
         sample_creation="found",
+        is_beta=True,
         bibtex_citation=r"""
 @inproceedings{hong2025worldsense,
   author = {Hong, Jack and Yan, Shilin and Cai, Jiayin and Jiang, Xiaolong and Hu, Yao and Xie, Weidi},
