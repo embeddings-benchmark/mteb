@@ -88,6 +88,7 @@ from .imagenet1k import Imagenet1kClassification
 from .imdb_classification import ImdbClassification, ImdbClassificationV2
 from .kinetics400 import Kinetics400VAClassification, Kinetics400VClassification
 from .kinetics600 import Kinetics600VAClassification, Kinetics600VClassification
+from .kinetics700 import Kinetics700VAClassification, Kinetics700VClassification
 from .legal_bench_classification import (
     CanadaTaxCourtOutcomesLegalBenchClassification,
     ContractNLIConfidentialityOfAgreementLegalBenchClassification,
@@ -443,6 +444,8 @@ __all__ = [
     "Kinetics400VClassification",
     "Kinetics600VAClassification",
     "Kinetics600VClassification",
+    "Kinetics700VAClassification",
+    "Kinetics700VClassification",
     "LearnedHandsBenefitsLegalBenchClassification",
     "LearnedHandsBusinessLegalBenchClassification",
     "LearnedHandsConsumerLegalBenchClassification",
