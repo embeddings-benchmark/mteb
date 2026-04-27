@@ -3,6 +3,7 @@ from .blink_it2t_multi_choice import BLINKIT2TMultiChoice
 from .cv_bench import CVBenchCount, CVBenchDepth, CVBenchDistance, CVBenchRelation
 from .egoschema import EgoSchemaVideoCentricQA
 from .nextqa import NExTQAVideoCentricQA
+from .daily_omni import DailyOmniVideoCentricQA
 
 __all__ = [
     "BLINKIT2IMultiChoice",
@@ -13,4 +14,5 @@ __all__ = [
     "CVBenchRelation",
     "EgoSchemaVideoCentricQA",
     "NExTQAVideoCentricQA",
+    "DailyOmniVideoCentricQA",
 ]
