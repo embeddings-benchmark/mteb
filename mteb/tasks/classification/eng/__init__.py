@@ -357,7 +357,6 @@ __all__ = [
     "ContractNLINoLicensingLegalBenchClassification",
     "ContractNLINoticeOnCompelledDisclosureLegalBenchClassification",
     "ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification",
-    "ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification",
     "ContractNLIPermissibleCopyLegalBenchClassification",
     "ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification",
     "ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification",
