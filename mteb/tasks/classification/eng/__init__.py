@@ -205,6 +205,7 @@ from .legal_bench_classification import (
     UCCVCommonLawLegalBenchClassification,
     UnfairTOSLegalBenchClassification,
 )
+from .meld_classification import MELDAudioVideoClassification, MELDVideoClassification
 from .mnist_classification import MNISTClassification
 from .music_avqa_classification import (
     MusicAVQACLSAudioVideoClassification,
@@ -450,6 +451,8 @@ __all__ = [
     "LibriCount",
     "MAUDLegalBenchClassification",
     "MAUDLegalBenchClassificationV2",
+    "MELDAudioVideoClassification",
+    "MELDVideoClassification",
     "MNISTClassification",
     "MusicAVQACLSAudioVideoClassification",
     "MusicAVQACLSVideoClassification",
