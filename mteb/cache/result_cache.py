@@ -38,7 +38,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
 
     from mteb._reversible_workflow.reversible_workflow import ReversibleAction
-    from mteb.types import ModelName, Revision, SubmitResultsResponse
+    from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
 _EXPERIMENTS_FOLDER_NAME = "experiments"
@@ -1319,7 +1319,7 @@ class ResultCache:
 
     def submit_results(
         self,
-        models: list[str] | list[ModelMeta] | str | ModelMeta | None = None,
+        models: Sequence[str] | Sequence[ModelMeta] | str | ModelMeta | None = None,
         *,
         create_pr: bool = False,
     ) -> SubmitResultsResponse:
@@ -1376,15 +1376,12 @@ class ResultCache:
 
             if not unsubmitted:
                 logger.warning("No unsubmitted results found.")
-                no_changes_response: SubmitResultsResponse = {
-                    "status": "no_changes",
-                    "models_submitted": [
-                        (m.name, m.revision) for m in normalized_models
-                    ],
-                    "result_count": 0,
-                    "commit_sha": None,
-                }
-                return no_changes_response
+                return SubmitResultsResponse(
+                    status="no_changes",
+                    models_submitted=[(m.name, m.revision) for m in normalized_models],
+                    result_count=0,
+                    commit_sha=None,
+                )
 
             remote_path = self.cache_path / "remote"
             self._run_preflight_checks(remote_path)
@@ -1439,14 +1436,13 @@ class ResultCache:
             for line in message.split("\n"):
                 logger.info(line)
 
-            manual_submission_response: SubmitResultsResponse = {
-                "status": "ready_for_submission",
-                "models_submitted": [(m.name, m.revision) for m in normalized_models],
-                "result_count": result_count,
-                "commit_sha": commit_sha,
-                "path": str(remote_path),
-            }
-            return manual_submission_response
+            return SubmitResultsResponse(
+                status="ready_for_submission",
+                models_submitted=[(m.name, m.revision) for m in normalized_models],
+                result_count=result_count,
+                commit_sha=commit_sha,
+                path=str(remote_path),
+            )
 
         return self._handle_pr_creation_with_cleanup(
             commit_sha,
@@ -1713,17 +1709,16 @@ class ResultCache:
             logger.info(f"Commit: {commit_sha}")
             logger.info("\n" + "=" * 80)
 
-            response: SubmitResultsResponse = {
-                "status": "pr_created",
-                "models_submitted": [(m.name, m.revision) for m in models],
-                "result_count": result_count,
-                "commit_sha": commit_sha,
-                "pr_url": pr.html_url,
-                "pr_number": pr.number,
-                "fork_url": fork_url,
-                "branch_name": branch_name,
-            }
-            return response
+            return SubmitResultsResponse(
+                status="pr_created",
+                models_submitted=[(m.name, m.revision) for m in models],
+                result_count=result_count,
+                commit_sha=commit_sha,
+                pr_url=pr.html_url,
+                pr_number=pr.number,
+                fork_url=fork_url,
+                branch_name=branch_name,
+            )
 
         except GithubException as e:
             raise RuntimeError(
