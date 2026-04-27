@@ -49,6 +49,10 @@ from .ave_dataset_classification import (
     AVEDatasetClassification,
     AVEDatasetVideoClassification,
 )
+from .avmeme_exam_classification import (
+    AVMemeAudioVideoClassification,
+    AVMemeVideoClassification,
+)
 from .banking77_classification import Banking77Classification, Banking77ClassificationV2
 from .birdsnap_classification import BirdsnapClassification
 from .breakfast_classification import BreakfastClassification
@@ -83,6 +87,7 @@ from .hume_tweet_sentiment_extraction_classification import (
 from .imagenet1k import Imagenet1kClassification
 from .imdb_classification import ImdbClassification, ImdbClassificationV2
 from .kinetics400 import Kinetics400VAClassification, Kinetics400VClassification
+from .kinetics600 import Kinetics600VAClassification, Kinetics600VClassification
 from .kinetics700 import Kinetics700VAClassification, Kinetics700VClassification
 from .legal_bench_classification import (
     CanadaTaxCourtOutcomesLegalBenchClassification,
@@ -206,7 +211,12 @@ from .legal_bench_classification import (
     UCCVCommonLawLegalBenchClassification,
     UnfairTOSLegalBenchClassification,
 )
+from .meld_classification import MELDAudioVideoClassification, MELDVideoClassification
 from .mnist_classification import MNISTClassification
+from .music_avqa_classification import (
+    MusicAVQACLSAudioVideoClassification,
+    MusicAVQACLSVideoClassification,
+)
 from .news_classification import NewsClassification, NewsClassificationV2
 from .oxford_flowers_classification import OxfordFlowersClassification
 from .oxford_pets_classification import OxfordPetsClassification
@@ -296,6 +306,10 @@ from .wikipedia_theoretical_applied_classification import (
     WikipediaTheoreticalAppliedClassification,
     WikipediaTheoreticalAppliedClassificationV2,
 )
+from .worldsense_classification import (
+    WorldSenseAudioVideoClassification,
+    WorldSenseVideoClassification,
+)
 from .yahoo_answers_topics_classification import (
     YahooAnswersTopicsClassification,
     YahooAnswersTopicsClassificationV2,
@@ -310,6 +324,8 @@ __all__ = [
     "FSDD",
     "AVEDatasetClassification",
     "AVEDatasetVideoClassification",
+    "AVMemeAudioVideoClassification",
+    "AVMemeVideoClassification",
     "AmazonPolarityClassification",
     "AmazonPolarityClassificationV2",
     "ArxivClassification",
@@ -426,6 +442,8 @@ __all__ = [
     "JCrewBlockerLegalBenchClassificationV2",
     "Kinetics400VAClassification",
     "Kinetics400VClassification",
+    "Kinetics600VAClassification",
+    "Kinetics600VClassification",
     "Kinetics700VAClassification",
     "Kinetics700VClassification",
     "LearnedHandsBenefitsLegalBenchClassification",
@@ -449,7 +467,11 @@ __all__ = [
     "LibriCount",
     "MAUDLegalBenchClassification",
     "MAUDLegalBenchClassificationV2",
+    "MELDAudioVideoClassification",
+    "MELDVideoClassification",
     "MNISTClassification",
+    "MusicAVQACLSAudioVideoClassification",
+    "MusicAVQACLSVideoClassification",
     "NYSJudicialEthicsLegalBenchClassification",
     "NewsClassification",
     "NewsClassificationV2",
@@ -541,6 +563,8 @@ __all__ = [
     "WikipediaSolidStateColloidalClassification",
     "WikipediaTheoreticalAppliedClassification",
     "WikipediaTheoreticalAppliedClassificationV2",
+    "WorldSenseAudioVideoClassification",
+    "WorldSenseVideoClassification",
     "YahooAnswersTopicsClassification",
     "YahooAnswersTopicsClassificationV2",
     "YelpReviewFullClassification",
