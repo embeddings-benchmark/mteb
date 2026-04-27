@@ -4,9 +4,9 @@ from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MELDClassification(AbsTaskClassification):
+class MELDAudioVideoClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="MELDClassification",
+        name="MELDAudioVideoClassification",
         description="MELD (Multimodal EmotionLines Dataset) is a multimodal emotion recognition dataset containing over 13,000 utterances from the Friends TV series, labeled with 7 emotion categories: Anger, Disgust, Sadness, Joy, Neutral, Surprise, and Fear",
         reference="https://aclanthology.org/P19-1050.pdf",
         dataset={

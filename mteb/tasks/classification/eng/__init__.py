@@ -196,7 +196,7 @@ from .legal_bench_classification import (
     UCCVCommonLawLegalBenchClassification,
     UnfairTOSLegalBenchClassification,
 )
-from .meld_classification import MELDClassification, MELDVideoClassification
+from .meld_classification import MELDAudioVideoClassification, MELDVideoClassification
 from .mnist_classification import MNISTClassification
 from .news_classification import NewsClassification, NewsClassificationV2
 from .oxford_flowers_classification import OxfordFlowersClassification
@@ -430,7 +430,7 @@ __all__ = [
     "LibriCount",
     "MAUDLegalBenchClassification",
     "MAUDLegalBenchClassificationV2",
-    "MELDClassification",
+    "MELDAudioVideoClassification",
     "MELDVideoClassification",
     "MNISTClassification",
     "NYSJudicialEthicsLegalBenchClassification",
