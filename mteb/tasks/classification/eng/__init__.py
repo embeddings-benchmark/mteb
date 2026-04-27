@@ -45,6 +45,10 @@ from .amazon_polarity_classification import (
     AmazonPolarityClassificationV2,
 )
 from .arxiv_classification import ArxivClassification, ArxivClassificationV2
+from .ave_dataset_classification import (
+    AVEDatasetClassification,
+    AVEDatasetVideoClassification,
+)
 from .avmeme_exam_classification import AVMemeClassification, AVMemeVideoClassification
 from .banking77_classification import Banking77Classification, Banking77ClassificationV2
 from .birdsnap_classification import BirdsnapClassification
@@ -66,6 +70,10 @@ from .food101_classification import Food101Classification
 from .frenk_en_classification import FrenkEnClassification, FrenkEnClassificationV2
 from .gtsrb_classification import GTSRBClassification
 from .hmdb51_classification import HMDB51Classification
+from .human_animal_cartoon import (
+    HumanAnimalCartoonVAClassification,
+    HumanAnimalCartoonVClassification,
+)
 from .hume_emotion_classification import HUMEEmotionClassification
 from .hume_toxic_conversations_classification import (
     HUMEToxicConversationsClassification,
@@ -208,6 +216,7 @@ from .poem_sentiment_classification import (
     PoemSentimentClassification,
     PoemSentimentClassificationV2,
 )
+from .ravdess_av_classification import RAVDESSAVClassification
 from .resisc45_classification import RESISC45Classification
 from .sds_eye_protection_classification import (
     SDSEyeProtectionClassification,
@@ -299,6 +308,8 @@ from .yelp_review_full_classification import (
 __all__ = [
     "CREMAD",
     "FSDD",
+    "AVEDatasetClassification",
+    "AVEDatasetVideoClassification",
     "AVMemeClassification",
     "AVMemeVideoClassification",
     "AmazonPolarityClassification",
@@ -404,6 +415,8 @@ __all__ = [
     "HUMEEmotionClassification",
     "HUMEToxicConversationsClassification",
     "HUMETweetSentimentExtractionClassification",
+    "HumanAnimalCartoonVAClassification",
+    "HumanAnimalCartoonVClassification",
     "IEMOCAPEmotionClassification",
     "IEMOCAPGenderClassification",
     "Imagenet1kClassification",
@@ -465,6 +478,7 @@ __all__ = [
     "PersonalJurisdictionLegalBenchClassification",
     "PoemSentimentClassification",
     "PoemSentimentClassificationV2",
+    "RAVDESSAVClassification",
     "RESISC45Classification",
     "SCDBPAccountabilityLegalBenchClassification",
     "SCDBPAuditsLegalBenchClassification",

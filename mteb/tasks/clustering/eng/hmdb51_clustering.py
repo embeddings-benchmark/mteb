@@ -31,12 +31,12 @@ class HMDB51Clustering(AbsTaskClustering):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{kuehne2011hmdb,
-    title = {HMDB: a large video database for human motion recognition},
-    author = {Kuehne, Hildegard and Jhuang, Hueihan and Garrote, Est{\'\i}baliz and Poggio, Tomaso and Serre, Thomas},
-    booktitle = {2011 International Conference on Computer Vision},
-    pages = {2556--2563},
-    year = {2011},
-    organization = {IEEE},
+  author = {Kuehne, Hildegard and Jhuang, Hueihan and Garrote, Est{\'\i}baliz and Poggio, Tomaso and Serre, Thomas},
+  booktitle = {2011 International Conference on Computer Vision},
+  organization = {IEEE},
+  pages = {2556--2563},
+  title = {HMDB: a large video database for human motion recognition},
+  year = {2011},
 }
 """,
         is_beta=True,

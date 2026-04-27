@@ -15,6 +15,8 @@ from mteb.similarity_functions import compute_pairwise_similarity
 from .evaluator import Evaluator
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from datasets import Dataset
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -44,7 +46,10 @@ class AnySTSEvaluator(Evaluator):
     def __init__(
         self,
         dataset: Dataset,
-        sentences_column_names: tuple[str, str],
+        sentences_column_names: (
+            tuple[str, str]
+            | tuple[Sequence[tuple[str, str]], Sequence[tuple[str, str]]]
+        ),
         *,
         task_metadata: TaskMetadata,
         hf_split: str,
@@ -70,11 +75,20 @@ class AnySTSEvaluator(Evaluator):
         num_proc: int | None = None,
     ) -> STSEvaluatorScores:
         logger.info("Running semantic similarity - Encoding samples (1/2)")
+
+        if isinstance(self.input_columns[0], str):
+            cols1: str | list[str] = self.input_columns[0]
+            ds1_col_names: dict[str, str] = {
+                self.input_columns[0]: self.task_metadata.modalities[0]
+            }
+        else:
+            cols1 = [col for col, _ in self.input_columns[0]]
+            ds1_col_names = dict(self.input_columns[0])
+
         embeddings1 = model.encode(
             create_dataloader(
-                self.dataset.select_columns([self.input_columns[0]]),
+                self.dataset.select_columns(cols1).rename_columns(ds1_col_names),
                 task_metadata=self.task_metadata,
-                input_column=self.input_columns[0],
                 num_proc=num_proc,
                 **encode_kwargs,
             ),
@@ -86,11 +100,19 @@ class AnySTSEvaluator(Evaluator):
         )
 
         logger.info("Running semantic similarity - Encoding samples (2/2)...")
+        if isinstance(self.input_columns[1], str):
+            cols2: str | list[str] = self.input_columns[1]
+            ds2_col_names: dict[str, str] = {
+                self.input_columns[1]: self.task_metadata.modalities[0]
+            }
+        else:
+            cols2 = [col for col, _ in self.input_columns[1]]
+            ds2_col_names = dict(self.input_columns[1])
+
         embeddings2 = model.encode(
             create_dataloader(
-                self.dataset.select_columns([self.input_columns[1]]),
+                self.dataset.select_columns(cols2).rename_columns(ds2_col_names),
                 task_metadata=self.task_metadata,
-                input_column=self.input_columns[1],
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
