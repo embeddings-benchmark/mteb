@@ -45,6 +45,10 @@ from .amazon_polarity_classification import (
     AmazonPolarityClassificationV2,
 )
 from .arxiv_classification import ArxivClassification, ArxivClassificationV2
+from .ave_dataset_classification import (
+    AVEDatasetClassification,
+    AVEDatasetVideoClassification,
+)
 from .banking77_classification import Banking77Classification, Banking77ClassificationV2
 from .birdsnap_classification import BirdsnapClassification
 from .breakfast_classification import BreakfastClassification
@@ -303,6 +307,8 @@ from .yelp_review_full_classification import (
 __all__ = [
     "CREMAD",
     "FSDD",
+    "AVEDatasetClassification",
+    "AVEDatasetVideoClassification",
     "AmazonPolarityClassification",
     "AmazonPolarityClassificationV2",
     "ArxivClassification",
