@@ -4,6 +4,7 @@ from .bird_clef import BirdCLEFClassification
 from .esc50 import ESC50Classification
 from .gtzan_genre import GTZANGenre
 from .gunshot_triangulation import GunshotTriangulation
+from .inat_sounds import INatSoundsMiniClassification
 from .mridingham_stroke import MridinghamStroke
 from .mridingham_tonic import MridinghamTonic
 from .n_synth import NSynth
@@ -18,6 +19,7 @@ __all__ = [
     "ESC50Classification",
     "GTZANGenre",
     "GunshotTriangulation",
+    "INatSoundsMiniClassification",
     "MridinghamStroke",
     "MridinghamTonic",
     "NSynth",

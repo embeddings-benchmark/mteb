@@ -1,0 +1,3663 @@
+{
+    "train": {
+        "num_samples": 2048,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 39864.89519274377,
+            "min_duration_seconds": 0.8864399092970522,
+            "average_duration_seconds": 19.465280855831917,
+            "max_duration_seconds": 889.997641723356,
+            "unique_audios": 2048,
+            "average_sampling_rate": 22050.0,
+            "sampling_rates": {
+                "22050": 2048
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 1212,
+            "labels": {
+                "Petrochelidon pyrrhonota": {
+                    "count": 1
+                },
+                "Thryothorus ludovicianus": {
+                    "count": 3
+                },
+                "Contopus virens": {
+                    "count": 3
+                },
+                "Strix varia": {
+                    "count": 1
+                },
+                "Vireo solitarius": {
+                    "count": 5
+                },
+                "Geothlypis philadelphia": {
+                    "count": 1
+                },
+                "Catharus ustulatus": {
+                    "count": 11
+                },
+                "Setophaga ruticilla": {
+                    "count": 3
+                },
+                "Muscicapa striata": {
+                    "count": 2
+                },
+                "Chloris chloris": {
+                    "count": 2
+                },
+                "Zonotrichia leucophrys": {
+                    "count": 6
+                },
+                "Toxostoma rufum": {
+                    "count": 2
+                },
+                "Zenaida macroura": {
+                    "count": 2
+                },
+                "Ptiliogonys cinereus": {
+                    "count": 1
+                },
+                "Setophaga caerulescens": {
+                    "count": 3
+                },
+                "Seiurus aurocapilla": {
+                    "count": 5
+                },
+                "Corvus corax": {
+                    "count": 2
+                },
+                "Catharus fuscescens": {
+                    "count": 2
+                },
+                "Neotibicen superbus": {
+                    "count": 1
+                },
+                "Cardinalis cardinalis": {
+                    "count": 1
+                },
+                "Vireo altiloquus": {
+                    "count": 1
+                },
+                "Cistothorus stellaris": {
+                    "count": 1
+                },
+                "Zosterops japonicus": {
+                    "count": 1
+                },
+                "Passerina cyanea": {
+                    "count": 5
+                },
+                "Cyanocitta cristata": {
+                    "count": 3
+                },
+                "Corvus ossifragus": {
+                    "count": 5
+                },
+                "Gastrophryne carolinensis": {
+                    "count": 5
+                },
+                "Geothlypis trichas": {
+                    "count": 4
+                },
+                "Pandion haliaetus": {
+                    "count": 1
+                },
+                "Pseudacris regilla": {
+                    "count": 3
+                },
+                "Sitta pygmaea": {
+                    "count": 1
+                },
+                "Zonotrichia albicollis": {
+                    "count": 3
+                },
+                "Neotibicen pruinosus": {
+                    "count": 3
+                },
+                "Turdus migratorius": {
+                    "count": 4
+                },
+                "Spizella passerina": {
+                    "count": 4
+                },
+                "Sitta canadensis": {
+                    "count": 3
+                },
+                "Baeolophus bicolor": {
+                    "count": 4
+                },
+                "Halcyon smyrnensis": {
+                    "count": 2
+                },
+                "Antrostomus carolinensis": {
+                    "count": 2
+                },
+                "Himatione sanguinea": {
+                    "count": 1
+                },
+                "Passer domesticus": {
+                    "count": 2
+                },
+                "Empidonax virescens": {
+                    "count": 5
+                },
+                "Glaucidium brasilianum": {
+                    "count": 3
+                },
+                "Strepera graculina": {
+                    "count": 2
+                },
+                "Spizella pusilla": {
+                    "count": 5
+                },
+                "Acris crepitans": {
+                    "count": 4
+                },
+                "Hyla cinerea": {
+                    "count": 2
+                },
+                "Vulpes vulpes": {
+                    "count": 3
+                },
+                "Falco sparverius": {
+                    "count": 3
+                },
+                "Sturnella magna": {
+                    "count": 3
+                },
+                "Gymnorhina tibicen": {
+                    "count": 3
+                },
+                "Hyla versicolor": {
+                    "count": 4
+                },
+                "Arthroleptella lightfooti": {
+                    "count": 1
+                },
+                "Charadrius vociferus": {
+                    "count": 3
+                },
+                "Menura alberti": {
+                    "count": 1
+                },
+                "Coccothraustes coccothraustes": {
+                    "count": 1
+                },
+                "Pica pica": {
+                    "count": 3
+                },
+                "Phylloscopus collybita": {
+                    "count": 2
+                },
+                "Turdus merula": {
+                    "count": 2
+                },
+                "Luscinia megarhynchos": {
+                    "count": 3
+                },
+                "Manorina melanocephala": {
+                    "count": 3
+                },
+                "Streptopelia turtur": {
+                    "count": 1
+                },
+                "Buteo jamaicensis": {
+                    "count": 2
+                },
+                "Colaptes auratus": {
+                    "count": 4
+                },
+                "Contopus cooperi": {
+                    "count": 4
+                },
+                "Turdus philomelos": {
+                    "count": 2
+                },
+                "Melospiza melodia": {
+                    "count": 2
+                },
+                "Antrostomus vociferus": {
+                    "count": 1
+                },
+                "Columba palumbus": {
+                    "count": 4
+                },
+                "Troglodytes troglodytes": {
+                    "count": 3
+                },
+                "Passerella iliaca": {
+                    "count": 1
+                },
+                "Oriolus oriolus": {
+                    "count": 2
+                },
+                "Pooecetes gramineus": {
+                    "count": 1
+                },
+                "Vireo bellii": {
+                    "count": 4
+                },
+                "Sturnella neglecta": {
+                    "count": 6
+                },
+                "Ammodramus savannarum": {
+                    "count": 1
+                },
+                "Sturnus vulgaris": {
+                    "count": 4
+                },
+                "Catharus guttatus": {
+                    "count": 2
+                },
+                "Poecile gambeli": {
+                    "count": 1
+                },
+                "Crex crex": {
+                    "count": 4
+                },
+                "Salpinctes obsoletus": {
+                    "count": 3
+                },
+                "Sylvia borin": {
+                    "count": 4
+                },
+                "Erithacus rubecula": {
+                    "count": 3
+                },
+                "Phoenicurus phoenicurus": {
+                    "count": 4
+                },
+                "Hypsipetes leucocephalus": {
+                    "count": 2
+                },
+                "Parus major": {
+                    "count": 2
+                },
+                "Sterna hirundo": {
+                    "count": 1
+                },
+                "Phylloscopus trochilus": {
+                    "count": 3
+                },
+                "Fringilla coelebs": {
+                    "count": 3
+                },
+                "Pomponia yayeyamana": {
+                    "count": 1
+                },
+                "Haemorhous mexicanus": {
+                    "count": 2
+                },
+                "Upupa epops": {
+                    "count": 2
+                },
+                "Canis familiaris": {
+                    "count": 1
+                },
+                "Tettigettalna argentata": {
+                    "count": 4
+                },
+                "Podiceps cristatus": {
+                    "count": 1
+                },
+                "Tettigettalna josei": {
+                    "count": 2
+                },
+                "Cicada barbara": {
+                    "count": 3
+                },
+                "Decticus albifrons": {
+                    "count": 1
+                },
+                "Emberiza citrinella": {
+                    "count": 3
+                },
+                "Pseudacris crucifer": {
+                    "count": 3
+                },
+                "Apus apus": {
+                    "count": 3
+                },
+                "Curruca curruca": {
+                    "count": 3
+                },
+                "Limnodynastes peronii": {
+                    "count": 2
+                },
+                "Dendrocopos major": {
+                    "count": 3
+                },
+                "Dryocopus pileatus": {
+                    "count": 2
+                },
+                "Sylvia atricapilla": {
+                    "count": 4
+                },
+                "Fulica atra": {
+                    "count": 2
+                },
+                "Carduelis carduelis": {
+                    "count": 2
+                },
+                "Botaurus stellaris": {
+                    "count": 2
+                },
+                "Setophaga americana": {
+                    "count": 6
+                },
+                "Dumetella carolinensis": {
+                    "count": 1
+                },
+                "Anthus trivialis": {
+                    "count": 3
+                },
+                "Dryocopus martius": {
+                    "count": 2
+                },
+                "Acrocephalus palustris": {
+                    "count": 2
+                },
+                "Icterus cucullatus": {
+                    "count": 1
+                },
+                "Corvus brachyrhynchos": {
+                    "count": 3
+                },
+                "Passerina ciris": {
+                    "count": 2
+                },
+                "Spiza americana": {
+                    "count": 2
+                },
+                "Capreolus capreolus": {
+                    "count": 2
+                },
+                "Streptopelia decaocto": {
+                    "count": 3
+                },
+                "Vireo olivaceus": {
+                    "count": 2
+                },
+                "Megascops kennicottii": {
+                    "count": 3
+                },
+                "Phoenicurus ochruros": {
+                    "count": 1
+                },
+                "Alauda arvensis": {
+                    "count": 4
+                },
+                "Buteo platypterus": {
+                    "count": 3
+                },
+                "Setophaga pensylvanica": {
+                    "count": 2
+                },
+                "Myiarchus crinitus": {
+                    "count": 3
+                },
+                "Vireo gilvus": {
+                    "count": 2
+                },
+                "Pitangus sulphuratus": {
+                    "count": 1
+                },
+                "Acrocephalus scirpaceus": {
+                    "count": 2
+                },
+                "Acrocephalus arundinaceus": {
+                    "count": 3
+                },
+                "Quiscalus quiscula": {
+                    "count": 1
+                },
+                "Locustella luscinioides": {
+                    "count": 4
+                },
+                "Bicolorana bicolor": {
+                    "count": 1
+                },
+                "Phasianus colchicus": {
+                    "count": 3
+                },
+                "Gryllus campestris": {
+                    "count": 3
+                },
+                "Aegithalos caudatus": {
+                    "count": 3
+                },
+                "Agelaius phoeniceus": {
+                    "count": 1
+                },
+                "Sayornis phoebe": {
+                    "count": 2
+                },
+                "Mimus polyglottos": {
+                    "count": 3
+                },
+                "Cicada orni": {
+                    "count": 3
+                },
+                "Oenanthe oenanthe": {
+                    "count": 2
+                },
+                "Garrulus glandarius": {
+                    "count": 2
+                },
+                "Curruca communis": {
+                    "count": 3
+                },
+                "Thryomanes bewickii": {
+                    "count": 1
+                },
+                "Empidonax difficilis": {
+                    "count": 1
+                },
+                "Chordeiles minor": {
+                    "count": 1
+                },
+                "Ixoreus naevius": {
+                    "count": 1
+                },
+                "Piranga olivacea": {
+                    "count": 5
+                },
+                "Junco hyemalis": {
+                    "count": 3
+                },
+                "Icteria virens": {
+                    "count": 1
+                },
+                "Phylloscopus sibilatrix": {
+                    "count": 1
+                },
+                "Poecile palustris": {
+                    "count": 3
+                },
+                "Serinus serinus": {
+                    "count": 3
+                },
+                "Bombina bombina": {
+                    "count": 3
+                },
+                "Corvus corone": {
+                    "count": 4
+                },
+                "Cardellina pusilla": {
+                    "count": 2
+                },
+                "Lanius collurio": {
+                    "count": 1
+                },
+                "Pholidoptera griseoaptera": {
+                    "count": 1
+                },
+                "Psittacula krameri": {
+                    "count": 2
+                },
+                "Pseudacris maculata": {
+                    "count": 3
+                },
+                "Colinus virginianus": {
+                    "count": 3
+                },
+                "Hylocichla mustelina": {
+                    "count": 4
+                },
+                "Branta canadensis": {
+                    "count": 4
+                },
+                "Toxostoma redivivum": {
+                    "count": 2
+                },
+                "Hirundo rustica": {
+                    "count": 2
+                },
+                "Icterus galbula": {
+                    "count": 2
+                },
+                "Cistothorus palustris": {
+                    "count": 3
+                },
+                "Poecile atricapillus": {
+                    "count": 1
+                },
+                "Setophaga petechia": {
+                    "count": 3
+                },
+                "Lithobates clamitans": {
+                    "count": 2
+                },
+                "Tachycineta bicolor": {
+                    "count": 1
+                },
+                "Anthornis melanura": {
+                    "count": 1
+                },
+                "Sitta carolinensis": {
+                    "count": 2
+                },
+                "Todiramphus chloris": {
+                    "count": 1
+                },
+                "Eleutherodactylus coqui": {
+                    "count": 1
+                },
+                "Athene noctua": {
+                    "count": 2
+                },
+                "Megaceryle alcyon": {
+                    "count": 3
+                },
+                "Spinus tristis": {
+                    "count": 2
+                },
+                "Troglodytes aedon": {
+                    "count": 3
+                },
+                "Dryobates villosus": {
+                    "count": 3
+                },
+                "Pipilo erythrophthalmus": {
+                    "count": 1
+                },
+                "Pipilo chlorurus": {
+                    "count": 1
+                },
+                "Chondestes grammacus": {
+                    "count": 1
+                },
+                "Pheucticus ludovicianus": {
+                    "count": 2
+                },
+                "Aplonis panayensis": {
+                    "count": 1
+                },
+                "Tibicinoides vanduzeei": {
+                    "count": 1
+                },
+                "Hyla squirella": {
+                    "count": 4
+                },
+                "Cuculus canorus": {
+                    "count": 1
+                },
+                "Spilopelia chinensis": {
+                    "count": 1
+                },
+                "Eudynamys scolopaceus": {
+                    "count": 3
+                },
+                "Geopelia striata": {
+                    "count": 1
+                },
+                "Columba livia": {
+                    "count": 1
+                },
+                "Oriolus chinensis": {
+                    "count": 2
+                },
+                "Aegithina tiphia": {
+                    "count": 1
+                },
+                "Melanerpes carolinus": {
+                    "count": 5
+                },
+                "Hyla chrysoscelis": {
+                    "count": 3
+                },
+                "Incilius nebulifer": {
+                    "count": 2
+                },
+                "Anthus pratensis": {
+                    "count": 1
+                },
+                "Lithobates catesbeianus": {
+                    "count": 3
+                },
+                "Progne subis": {
+                    "count": 2
+                },
+                "Ammospiza leconteii": {
+                    "count": 1
+                },
+                "Botaurus lentiginosus": {
+                    "count": 2
+                },
+                "Piranga ludoviciana": {
+                    "count": 5
+                },
+                "Leiothlypis ruficapilla": {
+                    "count": 2
+                },
+                "Mniotilta varia": {
+                    "count": 2
+                },
+                "Setophaga fusca": {
+                    "count": 3
+                },
+                "Leiothlypis peregrina": {
+                    "count": 1
+                },
+                "Setophaga magnolia": {
+                    "count": 3
+                },
+                "Coccothraustes vespertinus": {
+                    "count": 1
+                },
+                "Pheucticus melanocephalus": {
+                    "count": 1
+                },
+                "Porzana carolina": {
+                    "count": 2
+                },
+                "Pycnonotus goiavier": {
+                    "count": 1
+                },
+                "Bombycilla cedrorum": {
+                    "count": 3
+                },
+                "Acrocephalus dumetorum": {
+                    "count": 4
+                },
+                "Okanagana bella": {
+                    "count": 1
+                },
+                "Gastrophryne olivacea": {
+                    "count": 1
+                },
+                "Asio otus": {
+                    "count": 3
+                },
+                "Callocephalon fimbriatum": {
+                    "count": 1
+                },
+                "Ardea cinerea": {
+                    "count": 2
+                },
+                "Setophaga virens": {
+                    "count": 3
+                },
+                "Troglodytes hiemalis": {
+                    "count": 5
+                },
+                "Loxia leucoptera": {
+                    "count": 2
+                },
+                "Setophaga coronata": {
+                    "count": 3
+                },
+                "Rhipidura albiscapa": {
+                    "count": 2
+                },
+                "Emberiza calandra": {
+                    "count": 3
+                },
+                "Ficedula parva": {
+                    "count": 1
+                },
+                "Cicada mordoganensis": {
+                    "count": 1
+                },
+                "Dives dives": {
+                    "count": 1
+                },
+                "Sphyrapicus varius": {
+                    "count": 1
+                },
+                "Dryobates pubescens": {
+                    "count": 1
+                },
+                "Serinus canaria": {
+                    "count": 1
+                },
+                "Vireo griseus": {
+                    "count": 3
+                },
+                "Ficedula hypoleuca": {
+                    "count": 2
+                },
+                "Pycnonotus jocosus": {
+                    "count": 1
+                },
+                "Nycticorax nycticorax": {
+                    "count": 3
+                },
+                "Accipiter atricapillus": {
+                    "count": 2
+                },
+                "Regulus satrapa": {
+                    "count": 2
+                },
+                "Luscinia luscinia": {
+                    "count": 3
+                },
+                "Scolopax minor": {
+                    "count": 1
+                },
+                "Sialia sialis": {
+                    "count": 3
+                },
+                "Chamaea fasciata": {
+                    "count": 2
+                },
+                "Omocestus viridulus": {
+                    "count": 2
+                },
+                "Geothlypis formosa": {
+                    "count": 1
+                },
+                "Dolichonyx oryzivorus": {
+                    "count": 2
+                },
+                "Protonotaria citrea": {
+                    "count": 3
+                },
+                "Hyla femoralis": {
+                    "count": 1
+                },
+                "Lophophanes cristatus": {
+                    "count": 3
+                },
+                "Saxicola rubicola": {
+                    "count": 2
+                },
+                "Poecile carolinensis": {
+                    "count": 2
+                },
+                "Quiscalus mexicanus": {
+                    "count": 1
+                },
+                "Limnothlypis swainsonii": {
+                    "count": 1
+                },
+                "Zenaida asiatica": {
+                    "count": 2
+                },
+                "Dendrocygna autumnalis": {
+                    "count": 1
+                },
+                "Chlidonias niger": {
+                    "count": 1
+                },
+                "Picus viridis": {
+                    "count": 6
+                },
+                "Molothrus ater": {
+                    "count": 5
+                },
+                "Rallus crepitans": {
+                    "count": 1
+                },
+                "Thraupis sayaca": {
+                    "count": 1
+                },
+                "Actitis hypoleucos": {
+                    "count": 3
+                },
+                "Pseudochorthippus parallelus": {
+                    "count": 1
+                },
+                "Melospiza georgiana": {
+                    "count": 3
+                },
+                "Tyrannus tyrannus": {
+                    "count": 1
+                },
+                "Buteo lineatus": {
+                    "count": 3
+                },
+                "Tettigonia viridissima": {
+                    "count": 2
+                },
+                "Pipilo maculatus": {
+                    "count": 3
+                },
+                "Turdus pilaris": {
+                    "count": 5
+                },
+                "Melospiza lincolnii": {
+                    "count": 1
+                },
+                "Empidonax alnorum": {
+                    "count": 1
+                },
+                "Hippolais icterina": {
+                    "count": 3
+                },
+                "Gallinula chloropus": {
+                    "count": 1
+                },
+                "Leucophaeus atricilla": {
+                    "count": 2
+                },
+                "Caprimulgus europaeus": {
+                    "count": 1
+                },
+                "Oreortyx pictus": {
+                    "count": 1
+                },
+                "Riparia riparia": {
+                    "count": 1
+                },
+                "Oecanthus dulcisonans": {
+                    "count": 1
+                },
+                "Larus canus": {
+                    "count": 1
+                },
+                "Catherpes mexicanus": {
+                    "count": 2
+                },
+                "Spizella breweri": {
+                    "count": 1
+                },
+                "Geothlypis tolmiei": {
+                    "count": 2
+                },
+                "Haemorhous purpureus": {
+                    "count": 1
+                },
+                "Nyctidromus albicollis": {
+                    "count": 1
+                },
+                "Megascops choliba": {
+                    "count": 1
+                },
+                "Herpetotheres cachinnans": {
+                    "count": 2
+                },
+                "Pardalotus punctatus": {
+                    "count": 4
+                },
+                "Troglodytes pacificus": {
+                    "count": 1
+                },
+                "Rallus limicola": {
+                    "count": 2
+                },
+                "Ixobrychus exilis": {
+                    "count": 1
+                },
+                "Turdus grayi": {
+                    "count": 1
+                },
+                "Antigone canadensis": {
+                    "count": 1
+                },
+                "Strix aluco": {
+                    "count": 2
+                },
+                "Setophaga dominica": {
+                    "count": 1
+                },
+                "Coccyzus americanus": {
+                    "count": 3
+                },
+                "Periparus ater": {
+                    "count": 1
+                },
+                "Copsychus malabaricus": {
+                    "count": 1
+                },
+                "Falco columbarius": {
+                    "count": 1
+                },
+                "Eleutherodactylus planirostris": {
+                    "count": 1
+                },
+                "Piranga rubra": {
+                    "count": 3
+                },
+                "Chremistica ochracea": {
+                    "count": 1
+                },
+                "Gavia immer": {
+                    "count": 3
+                },
+                "Pica hudsonia": {
+                    "count": 1
+                },
+                "Lontra canadensis": {
+                    "count": 1
+                },
+                "Platypleura kaempferi": {
+                    "count": 1
+                },
+                "Prunella modularis": {
+                    "count": 4
+                },
+                "Zanda funerea": {
+                    "count": 3
+                },
+                "Cacatua galerita": {
+                    "count": 4
+                },
+                "Psilopogon nuchalis": {
+                    "count": 2
+                },
+                "Cryptotympana atrata": {
+                    "count": 1
+                },
+                "Ninox novaeseelandiae": {
+                    "count": 2
+                },
+                "Pholidoptera aptera": {
+                    "count": 1
+                },
+                "Tettigonia cantans": {
+                    "count": 2
+                },
+                "Tyrannus melancholicus": {
+                    "count": 2
+                },
+                "Roeseliana roeselii": {
+                    "count": 3
+                },
+                "Liocichla steerii": {
+                    "count": 1
+                },
+                "Tamias striatus": {
+                    "count": 4
+                },
+                "Tibicina haematodes": {
+                    "count": 1
+                },
+                "Acrocephalus schoenobaenus": {
+                    "count": 2
+                },
+                "Manorina melanophrys": {
+                    "count": 4
+                },
+                "Crinia signifera": {
+                    "count": 3
+                },
+                "Phylloscopus trochiloides": {
+                    "count": 2
+                },
+                "Bubo virginianus": {
+                    "count": 3
+                },
+                "Vireo flavifrons": {
+                    "count": 2
+                },
+                "Setophaga cerulea": {
+                    "count": 2
+                },
+                "Setophaga discolor": {
+                    "count": 4
+                },
+                "Setophaga kirtlandii": {
+                    "count": 1
+                },
+                "Falco subbuteo": {
+                    "count": 2
+                },
+                "Ficedula albicollis": {
+                    "count": 1
+                },
+                "Tapera naevia": {
+                    "count": 1
+                },
+                "Setophaga striata": {
+                    "count": 1
+                },
+                "Certhia americana": {
+                    "count": 3
+                },
+                "Cyanistes caeruleus": {
+                    "count": 3
+                },
+                "Corvus cornix": {
+                    "count": 3
+                },
+                "Aphelocoma californica": {
+                    "count": 3
+                },
+                "Pyrrhula pyrrhula": {
+                    "count": 2
+                },
+                "Otospermophilus beecheyi": {
+                    "count": 2
+                },
+                "Zonotrichia capensis": {
+                    "count": 2
+                },
+                "Vanellus chilensis": {
+                    "count": 2
+                },
+                "Locustella naevia": {
+                    "count": 3
+                },
+                "Pica nuttalli": {
+                    "count": 2
+                },
+                "Tringa solitaria": {
+                    "count": 2
+                },
+                "Anas platyrhynchos": {
+                    "count": 3
+                },
+                "Contopus sordidulus": {
+                    "count": 2
+                },
+                "Parkesia noveboracensis": {
+                    "count": 2
+                },
+                "Corthylio calendula": {
+                    "count": 5
+                },
+                "Neotibicen robinsonianus": {
+                    "count": 3
+                },
+                "Eumodicogryllus bordigalensis": {
+                    "count": 1
+                },
+                "Charadrius dubius": {
+                    "count": 1
+                },
+                "Lithobates sylvaticus": {
+                    "count": 1
+                },
+                "Porzana porzana": {
+                    "count": 2
+                },
+                "Hyla arborea": {
+                    "count": 7
+                },
+                "Callipepla californica": {
+                    "count": 3
+                },
+                "Limnodynastes dumerilii": {
+                    "count": 4
+                },
+                "Loxia curvirostra": {
+                    "count": 3
+                },
+                "Euphonia chlorotica": {
+                    "count": 1
+                },
+                "Sicalis flaveola": {
+                    "count": 1
+                },
+                "Regulus ignicapilla": {
+                    "count": 3
+                },
+                "Acrocephalus orientalis": {
+                    "count": 2
+                },
+                "Prosthemadera novaeseelandiae": {
+                    "count": 3
+                },
+                "Canis latrans": {
+                    "count": 6
+                },
+                "Cisticola exilis": {
+                    "count": 1
+                },
+                "Acris blanchardi": {
+                    "count": 2
+                },
+                "Motacilla alba": {
+                    "count": 1
+                },
+                "Nesoptilotis leucotis": {
+                    "count": 1
+                },
+                "Attila spadiceus": {
+                    "count": 1
+                },
+                "Megascops asio": {
+                    "count": 2
+                },
+                "Motacilla cinerea": {
+                    "count": 1
+                },
+                "Falco peregrinus": {
+                    "count": 2
+                },
+                "Tyto alba": {
+                    "count": 2
+                },
+                "Phylloscopus borealis": {
+                    "count": 1
+                },
+                "Zonotrichia atricapilla": {
+                    "count": 2
+                },
+                "Charadrius semipalmatus": {
+                    "count": 1
+                },
+                "Chroicocephalus ridibundus": {
+                    "count": 1
+                },
+                "Alytes obstetricans": {
+                    "count": 4
+                },
+                "Pelophylax perezi": {
+                    "count": 1
+                },
+                "Sitta europaea": {
+                    "count": 1
+                },
+                "Accipiter cooperii": {
+                    "count": 3
+                },
+                "Jynx torquilla": {
+                    "count": 2
+                },
+                "Calypte anna": {
+                    "count": 2
+                },
+                "Amaurornis phoenicurus": {
+                    "count": 1
+                },
+                "Dacelo novaeguineae": {
+                    "count": 1
+                },
+                "Osteopilus septentrionalis": {
+                    "count": 1
+                },
+                "Otus scops": {
+                    "count": 5
+                },
+                "Neotibicen lyricen": {
+                    "count": 1
+                },
+                "Emberiza schoeniclus": {
+                    "count": 3
+                },
+                "Saxicola rubetra": {
+                    "count": 2
+                },
+                "Melanerpes formicivorus": {
+                    "count": 1
+                },
+                "Chaetura pelagica": {
+                    "count": 5
+                },
+                "Pterophylla camellifolia": {
+                    "count": 4
+                },
+                "Pseudacris fouquettei": {
+                    "count": 5
+                },
+                "Arthroleptella villiersi": {
+                    "count": 2
+                },
+                "Centropus sinensis": {
+                    "count": 1
+                },
+                "Centronyx henslowii": {
+                    "count": 1
+                },
+                "Neotibicen linnei": {
+                    "count": 1
+                },
+                "Icterus spurius": {
+                    "count": 1
+                },
+                "Iduna caligata": {
+                    "count": 2
+                },
+                "Ochotona princeps": {
+                    "count": 1
+                },
+                "Empidonax minimus": {
+                    "count": 2
+                },
+                "Fringilla montifringilla": {
+                    "count": 1
+                },
+                "Ardea herodias": {
+                    "count": 3
+                },
+                "Poecile hudsonicus": {
+                    "count": 2
+                },
+                "Lyristes plebejus": {
+                    "count": 1
+                },
+                "Stelgidopteryx serripennis": {
+                    "count": 1
+                },
+                "Delichon urbicum": {
+                    "count": 1
+                },
+                "Setophaga palmarum": {
+                    "count": 1
+                },
+                "Spinus psaltria": {
+                    "count": 4
+                },
+                "Psophodes olivaceus": {
+                    "count": 2
+                },
+                "Quesada gigas": {
+                    "count": 1
+                },
+                "Columbina inca": {
+                    "count": 1
+                },
+                "Cyanocorax yncas": {
+                    "count": 1
+                },
+                "Toxostoma curvirostre": {
+                    "count": 1
+                },
+                "Leptodactylus gracilis": {
+                    "count": 1
+                },
+                "Acanthorhynchus tenuirostris": {
+                    "count": 1
+                },
+                "Corvus mellori": {
+                    "count": 2
+                },
+                "Platycercus elegans": {
+                    "count": 2
+                },
+                "Cormobates leucophaea": {
+                    "count": 2
+                },
+                "Acanthiza pusilla": {
+                    "count": 3
+                },
+                "Malurus cyaneus": {
+                    "count": 1
+                },
+                "Grallina cyanoleuca": {
+                    "count": 1
+                },
+                "Colluricincla harmonica": {
+                    "count": 2
+                },
+                "Litoria ewingii": {
+                    "count": 2
+                },
+                "Strepera versicolor": {
+                    "count": 1
+                },
+                "Procyon lotor": {
+                    "count": 1
+                },
+                "Phylidonyris novaehollandiae": {
+                    "count": 1
+                },
+                "Vanellus miles": {
+                    "count": 2
+                },
+                "Cacatua tenuirostris": {
+                    "count": 1
+                },
+                "Falco tinnunculus": {
+                    "count": 1
+                },
+                "Pyrrhocorax graculus": {
+                    "count": 1
+                },
+                "Menura novaehollandiae": {
+                    "count": 2
+                },
+                "Haematopus ostralegus": {
+                    "count": 1
+                },
+                "Locustella fluviatilis": {
+                    "count": 1
+                },
+                "Cyclarhis gujanensis": {
+                    "count": 2
+                },
+                "Aix sponsa": {
+                    "count": 2
+                },
+                "Ninox japonica": {
+                    "count": 2
+                },
+                "Coturnix coturnix": {
+                    "count": 3
+                },
+                "Corvus monedula": {
+                    "count": 3
+                },
+                "Lithobates septentrionalis": {
+                    "count": 1
+                },
+                "Rupornis magnirostris": {
+                    "count": 2
+                },
+                "Polioptila dumicola": {
+                    "count": 1
+                },
+                "Alouatta palliata": {
+                    "count": 2
+                },
+                "Cettia cetti": {
+                    "count": 1
+                },
+                "Anaxyrus quercicus": {
+                    "count": 1
+                },
+                "Corvus frugilegus": {
+                    "count": 1
+                },
+                "Furnarius rufus": {
+                    "count": 2
+                },
+                "Turdus rufiventris": {
+                    "count": 1
+                },
+                "Motacilla flava": {
+                    "count": 1
+                },
+                "Sayornis nigricans": {
+                    "count": 3
+                },
+                "Phylloscopus bonelli": {
+                    "count": 2
+                },
+                "Poecile montanus": {
+                    "count": 3
+                },
+                "Leiothlypis celata": {
+                    "count": 3
+                },
+                "Acanthis cabaret": {
+                    "count": 1
+                },
+                "Actitis macularius": {
+                    "count": 1
+                },
+                "Chordeiles gundlachii": {
+                    "count": 1
+                },
+                "Dicrurus bracteatus": {
+                    "count": 1
+                },
+                "Neotibicen canicularis": {
+                    "count": 2
+                },
+                "Myiarchus cinerascens": {
+                    "count": 3
+                },
+                "Caracara plancus": {
+                    "count": 1
+                },
+                "Empidonax traillii": {
+                    "count": 3
+                },
+                "Setophaga pinus": {
+                    "count": 2
+                },
+                "Bombina variegata": {
+                    "count": 1
+                },
+                "Castor canadensis": {
+                    "count": 1
+                },
+                "Linaria cannabina": {
+                    "count": 3
+                },
+                "Mixornis gularis": {
+                    "count": 1
+                },
+                "Chenonetta jubata": {
+                    "count": 2
+                },
+                "Anthochaera carunculata": {
+                    "count": 2
+                },
+                "Sitta pusilla": {
+                    "count": 1
+                },
+                "Passerina amoena": {
+                    "count": 1
+                },
+                "Sciurus vulgaris": {
+                    "count": 1
+                },
+                "Ixobrychus minutus": {
+                    "count": 1
+                },
+                "Phascolarctos cinereus": {
+                    "count": 2
+                },
+                "Sericornis frontalis": {
+                    "count": 2
+                },
+                "Adelotus brevis": {
+                    "count": 1
+                },
+                "Perdix perdix": {
+                    "count": 2
+                },
+                "Acheta domesticus": {
+                    "count": 1
+                },
+                "Mohoua novaeseelandiae": {
+                    "count": 1
+                },
+                "Passerina caerulea": {
+                    "count": 1
+                },
+                "Hierococcyx sparverioides": {
+                    "count": 2
+                },
+                "Nucifraga caryocatactes": {
+                    "count": 3
+                },
+                "Numenius arquata": {
+                    "count": 1
+                },
+                "Canis aureus": {
+                    "count": 1
+                },
+                "Neocicada hieroglyphica": {
+                    "count": 1
+                },
+                "Polioptila californica": {
+                    "count": 3
+                },
+                "Hyla meridionalis": {
+                    "count": 1
+                },
+                "Ictinia mississippiensis": {
+                    "count": 1
+                },
+                "Strongylopus fasciatus": {
+                    "count": 2
+                },
+                "Hypothymis azurea": {
+                    "count": 2
+                },
+                "Callipepla gambelii": {
+                    "count": 1
+                },
+                "Setophaga citrina": {
+                    "count": 1
+                },
+                "Tadorna ferruginea": {
+                    "count": 2
+                },
+                "Polioptila caerulea": {
+                    "count": 3
+                },
+                "Neotibicen tibicen": {
+                    "count": 2
+                },
+                "Scaphiopus holbrookii": {
+                    "count": 1
+                },
+                "Sciurus griseus": {
+                    "count": 1
+                },
+                "Baeolophus atricristatus": {
+                    "count": 3
+                },
+                "Tyrannus couchii": {
+                    "count": 1
+                },
+                "Dryobates scalaris": {
+                    "count": 1
+                },
+                "Auriparus flaviceps": {
+                    "count": 1
+                },
+                "Regulus regulus": {
+                    "count": 2
+                },
+                "Serpophaga griseicapilla": {
+                    "count": 1
+                },
+                "Serpophaga subcristata": {
+                    "count": 1
+                },
+                "Chrysomus ruficapillus": {
+                    "count": 1
+                },
+                "Icterus pyrrhopterus": {
+                    "count": 1
+                },
+                "Phleocryptes melanops": {
+                    "count": 1
+                },
+                "Felis catus": {
+                    "count": 2
+                },
+                "Pardalotus striatus": {
+                    "count": 4
+                },
+                "Parkesia motacilla": {
+                    "count": 3
+                },
+                "Spinus pinus": {
+                    "count": 1
+                },
+                "Orthotomus sutorius": {
+                    "count": 2
+                },
+                "Vireo huttoni": {
+                    "count": 2
+                },
+                "Rhinella horribilis": {
+                    "count": 2
+                },
+                "Zanda latirostris": {
+                    "count": 1
+                },
+                "Oriolus larvatus": {
+                    "count": 1
+                },
+                "Caprimulgus ruficollis": {
+                    "count": 3
+                },
+                "Cynomys ludovicianus": {
+                    "count": 1
+                },
+                "Sayornis saya": {
+                    "count": 1
+                },
+                "Cryptotympana facialis": {
+                    "count": 2
+                },
+                "Cardellina canadensis": {
+                    "count": 3
+                },
+                "Nucifraga columbiana": {
+                    "count": 1
+                },
+                "Setophaga graciae": {
+                    "count": 1
+                },
+                "Passer montanus": {
+                    "count": 4
+                },
+                "Psiloscops flammeolus": {
+                    "count": 1
+                },
+                "Himantopus mexicanus": {
+                    "count": 1
+                },
+                "Butorides virescens": {
+                    "count": 1
+                },
+                "Prinia flaviventris": {
+                    "count": 1
+                },
+                "Cryptotympana takasagona": {
+                    "count": 1
+                },
+                "Pycnonotus sinensis": {
+                    "count": 2
+                },
+                "Dendrocitta formosae": {
+                    "count": 2
+                },
+                "Otus lettia": {
+                    "count": 1
+                },
+                "Oreothlypis superciliosa": {
+                    "count": 1
+                },
+                "Certhia familiaris": {
+                    "count": 3
+                },
+                "Lithobates grylio": {
+                    "count": 3
+                },
+                "Grallaria ruficapilla": {
+                    "count": 1
+                },
+                "Gallinago delicata": {
+                    "count": 2
+                },
+                "Icterus parisorum": {
+                    "count": 1
+                },
+                "Ramphastos tucanus": {
+                    "count": 1
+                },
+                "Pinicola enucleator": {
+                    "count": 1
+                },
+                "Cracticus torquatus": {
+                    "count": 1
+                },
+                "Mimus saturninus": {
+                    "count": 1
+                },
+                "Hyla avivoca": {
+                    "count": 1
+                },
+                "Ramphastos ambiguus": {
+                    "count": 1
+                },
+                "Galerida cristata": {
+                    "count": 1
+                },
+                "Quiscalus major": {
+                    "count": 4
+                },
+                "Tamiasciurus hudsonicus": {
+                    "count": 2
+                },
+                "Tringa flavipes": {
+                    "count": 2
+                },
+                "Tyrannus verticalis": {
+                    "count": 1
+                },
+                "Andropadus importunus": {
+                    "count": 2
+                },
+                "Anthochaera chrysoptera": {
+                    "count": 1
+                },
+                "Tringa melanoleuca": {
+                    "count": 1
+                },
+                "Corvus splendens": {
+                    "count": 2
+                },
+                "Podargus strigoides": {
+                    "count": 1
+                },
+                "Hydroprogne caspia": {
+                    "count": 1
+                },
+                "Ninox strenua": {
+                    "count": 2
+                },
+                "Camptostoma obsoletum": {
+                    "count": 2
+                },
+                "Asthenes pyrrholeuca": {
+                    "count": 1
+                },
+                "Euscarthmus meloryphus": {
+                    "count": 1
+                },
+                "Vireo cassinii": {
+                    "count": 3
+                },
+                "Certhia brachydactyla": {
+                    "count": 3
+                },
+                "Iduna pallida": {
+                    "count": 2
+                },
+                "Apis mellifera": {
+                    "count": 1
+                },
+                "Larus argentatus": {
+                    "count": 1
+                },
+                "Psilopogon virens": {
+                    "count": 1
+                },
+                "Erythrogenys erythrocnemis": {
+                    "count": 1
+                },
+                "Catharus aurantiirostris": {
+                    "count": 1
+                },
+                "Cyanoderma ruficeps": {
+                    "count": 2
+                },
+                "Gryllus veletis": {
+                    "count": 1
+                },
+                "Pomatorhinus musicus": {
+                    "count": 1
+                },
+                "Myiopsitta monachus": {
+                    "count": 1
+                },
+                "Phylidonyris pyrrhopterus": {
+                    "count": 1
+                },
+                "Melanotis caerulescens": {
+                    "count": 1
+                },
+                "Myadestes occidentalis": {
+                    "count": 2
+                },
+                "Cuculus micropterus": {
+                    "count": 1
+                },
+                "Phalaenoptilus nuttallii": {
+                    "count": 1
+                },
+                "Zhangixalus moltrechti": {
+                    "count": 1
+                },
+                "Catharus minimus": {
+                    "count": 1
+                },
+                "Laniarius ferrugineus": {
+                    "count": 2
+                },
+                "Gorsachius melanolophus": {
+                    "count": 1
+                },
+                "Heterophasia auricularis": {
+                    "count": 2
+                },
+                "Muntiacus reevesi": {
+                    "count": 2
+                },
+                "Poodytes punctatus": {
+                    "count": 1
+                },
+                "Nemobius sylvestris": {
+                    "count": 1
+                },
+                "Pheugopedius maculipectus": {
+                    "count": 2
+                },
+                "Sturnella lilianae": {
+                    "count": 1
+                },
+                "Eudynamys orientalis": {
+                    "count": 3
+                },
+                "Remiz pendulinus": {
+                    "count": 1
+                },
+                "Bufotes viridis": {
+                    "count": 1
+                },
+                "Platypedia putnami": {
+                    "count": 1
+                },
+                "Anaxyrus woodhousii": {
+                    "count": 4
+                },
+                "Spinus spinus": {
+                    "count": 3
+                },
+                "Myiozetetes similis": {
+                    "count": 3
+                },
+                "Setophaga castanea": {
+                    "count": 1
+                },
+                "Aeronautes saxatalis": {
+                    "count": 1
+                },
+                "Eopsaltria australis": {
+                    "count": 2
+                },
+                "Phacellodomus ruber": {
+                    "count": 1
+                },
+                "Aramus guarauna": {
+                    "count": 1
+                },
+                "Poospiza nigrorufa": {
+                    "count": 1
+                },
+                "Synallaxis frontalis": {
+                    "count": 1
+                },
+                "Geothlypis velata": {
+                    "count": 1
+                },
+                "Leptotila verreauxi": {
+                    "count": 1
+                },
+                "Setophaga pitiayumi": {
+                    "count": 2
+                },
+                "Turdus amaurochalinus": {
+                    "count": 1
+                },
+                "Setophaga nigrescens": {
+                    "count": 1
+                },
+                "Caprimulgus affinis": {
+                    "count": 2
+                },
+                "Strongylopus grayii": {
+                    "count": 1
+                },
+                "Anthus spinoletta": {
+                    "count": 1
+                },
+                "Pycnonotus cafer": {
+                    "count": 2
+                },
+                "Marmota marmota": {
+                    "count": 1
+                },
+                "Emberiza cia": {
+                    "count": 1
+                },
+                "Luscinia svecica": {
+                    "count": 2
+                },
+                "Spilopelia senegalensis": {
+                    "count": 1
+                },
+                "Myiarchus tyrannulus": {
+                    "count": 2
+                },
+                "Tringa totanus": {
+                    "count": 1
+                },
+                "Caprimulgus pectoralis": {
+                    "count": 2
+                },
+                "Hyla intermedia": {
+                    "count": 2
+                },
+                "Poecile rufescens": {
+                    "count": 2
+                },
+                "Setophaga townsendi": {
+                    "count": 1
+                },
+                "Empidonax hammondii": {
+                    "count": 1
+                },
+                "Vireo plumbeus": {
+                    "count": 1
+                },
+                "Pterorhinus chinensis": {
+                    "count": 1
+                },
+                "Grus grus": {
+                    "count": 3
+                },
+                "Rhipidura leucophrys": {
+                    "count": 1
+                },
+                "Cervus canadensis": {
+                    "count": 1
+                },
+                "Empidonax oberholseri": {
+                    "count": 1
+                },
+                "Crinia parinsignifera": {
+                    "count": 1
+                },
+                "Myzomela sanguinolenta": {
+                    "count": 1
+                },
+                "Gracula religiosa": {
+                    "count": 1
+                },
+                "Hyla arenicolor": {
+                    "count": 1
+                },
+                "Haemorhous cassinii": {
+                    "count": 1
+                },
+                "Chrysococcyx lucidus": {
+                    "count": 2
+                },
+                "Ninox boobook": {
+                    "count": 3
+                },
+                "Ailuroedus crassirostris": {
+                    "count": 2
+                },
+                "Emberiza cirlus": {
+                    "count": 2
+                },
+                "Calyptorhynchus banksii": {
+                    "count": 1
+                },
+                "Zhangixalus arvalis": {
+                    "count": 3
+                },
+                "Dryobates minor": {
+                    "count": 2
+                },
+                "Accipiter nisus": {
+                    "count": 1
+                },
+                "Passerculus sandwichensis": {
+                    "count": 2
+                },
+                "Eleutherodactylus antillensis": {
+                    "count": 1
+                },
+                "Leptodactylus albilabris": {
+                    "count": 3
+                },
+                "Pycnonotus zeylanicus": {
+                    "count": 1
+                },
+                "Helmitheros vermivorum": {
+                    "count": 2
+                },
+                "Buteo buteo": {
+                    "count": 3
+                },
+                "Cyanocitta stelleri": {
+                    "count": 3
+                },
+                "Coereba flaveola": {
+                    "count": 1
+                },
+                "Gryllotalpa vineae": {
+                    "count": 1
+                },
+                "Cuculus solitarius": {
+                    "count": 1
+                },
+                "Peucaea cassinii": {
+                    "count": 1
+                },
+                "Schiffornis virescens": {
+                    "count": 1
+                },
+                "Philemon corniculatus": {
+                    "count": 1
+                },
+                "Chorthippus mollis": {
+                    "count": 3
+                },
+                "Sylvirana guentheri": {
+                    "count": 1
+                },
+                "Meimuna opalifera": {
+                    "count": 3
+                },
+                "Parus minor": {
+                    "count": 2
+                },
+                "Milvus milvus": {
+                    "count": 2
+                },
+                "Otus sunia": {
+                    "count": 1
+                },
+                "Rallus aquaticus": {
+                    "count": 3
+                },
+                "Psarocolius decumanus": {
+                    "count": 1
+                },
+                "Merops apiaster": {
+                    "count": 2
+                },
+                "Strongylopus bonaespei": {
+                    "count": 1
+                },
+                "Saltator grandis": {
+                    "count": 1
+                },
+                "Megarynchus pitangua": {
+                    "count": 1
+                },
+                "Coccyzus erythropthalmus": {
+                    "count": 2
+                },
+                "Athene cunicularia": {
+                    "count": 1
+                },
+                "Lullula arborea": {
+                    "count": 1
+                },
+                "Eremophila alpestris": {
+                    "count": 1
+                },
+                "Tyrannus forficatus": {
+                    "count": 1
+                },
+                "Glaucidium gnoma": {
+                    "count": 2
+                },
+                "Lithobates berlandieri": {
+                    "count": 1
+                },
+                "Antrostomus arizonae": {
+                    "count": 1
+                },
+                "Micrathene whitneyi": {
+                    "count": 1
+                },
+                "Melanerpes erythrocephalus": {
+                    "count": 2
+                },
+                "Arremonops rufivirgatus": {
+                    "count": 1
+                },
+                "Basileuterus culicivorus": {
+                    "count": 1
+                },
+                "Hippolais polyglotta": {
+                    "count": 2
+                },
+                "Zapornia parva": {
+                    "count": 2
+                },
+                "Vanellus vanellus": {
+                    "count": 2
+                },
+                "Sciurus niger": {
+                    "count": 1
+                },
+                "Columbina passerina": {
+                    "count": 1
+                },
+                "Sphyrapicus ruber": {
+                    "count": 1
+                },
+                "Archilochus colubris": {
+                    "count": 1
+                },
+                "Tachymarptis melba": {
+                    "count": 2
+                },
+                "Mimus gilvus": {
+                    "count": 1
+                },
+                "Colibri coruscans": {
+                    "count": 1
+                },
+                "Accipiter striatus": {
+                    "count": 1
+                },
+                "Tringa nebularia": {
+                    "count": 1
+                },
+                "Pyrrhocorax pyrrhocorax": {
+                    "count": 1
+                },
+                "Neoconocephalus ensiger": {
+                    "count": 1
+                },
+                "Icterus bullockii": {
+                    "count": 1
+                },
+                "Anaxyrus americanus": {
+                    "count": 1
+                },
+                "Megatibicen grossa": {
+                    "count": 1
+                },
+                "Dendragapus fuliginosus": {
+                    "count": 1
+                },
+                "Laterallus jamaicensis": {
+                    "count": 2
+                },
+                "Psarocolius montezuma": {
+                    "count": 1
+                },
+                "Lanius excubitor": {
+                    "count": 2
+                },
+                "Chorthippus brunneus": {
+                    "count": 1
+                },
+                "Aegolius acadicus": {
+                    "count": 1
+                },
+                "Otus spilocephalus": {
+                    "count": 1
+                },
+                "Trogon elegans": {
+                    "count": 2
+                },
+                "Pipistrellus pipistrellus": {
+                    "count": 1
+                },
+                "Camaroptera brachyura": {
+                    "count": 2
+                },
+                "Perisoreus canadensis": {
+                    "count": 1
+                },
+                "Haliaeetus leucocephalus": {
+                    "count": 3
+                },
+                "Synallaxis albescens": {
+                    "count": 1
+                },
+                "Phylloscopus fuscatus": {
+                    "count": 1
+                },
+                "Acridotheres tristis": {
+                    "count": 2
+                },
+                "Tamiasciurus douglasii": {
+                    "count": 1
+                },
+                "Mohoua albicilla": {
+                    "count": 1
+                },
+                "Anaxyrus fowleri": {
+                    "count": 1
+                },
+                "Corvus macrorhynchos": {
+                    "count": 1
+                },
+                "Larus michahellis": {
+                    "count": 1
+                },
+                "Bostrychia hagedash": {
+                    "count": 1
+                },
+                "Cygnus buccinator": {
+                    "count": 4
+                },
+                "Dryobates borealis": {
+                    "count": 1
+                },
+                "Dives warczewiczi": {
+                    "count": 1
+                },
+                "Laterallus melanophaius": {
+                    "count": 1
+                },
+                "Psaltriparus minimus": {
+                    "count": 2
+                },
+                "Daptrius chimachima": {
+                    "count": 1
+                },
+                "Gnorimopsar chopi": {
+                    "count": 1
+                },
+                "Carpodacus erythrinus": {
+                    "count": 1
+                },
+                "Trichoglossus moluccanus": {
+                    "count": 2
+                },
+                "Urocyon cinereoargenteus": {
+                    "count": 1
+                },
+                "Myadestes townsendi": {
+                    "count": 1
+                },
+                "Gallinula galeata": {
+                    "count": 1
+                },
+                "Oecanthus pellucens": {
+                    "count": 2
+                },
+                "Turdus falcklandii": {
+                    "count": 1
+                },
+                "Aramides ypecaha": {
+                    "count": 1
+                },
+                "Ruspolia nitidula": {
+                    "count": 2
+                },
+                "Melozone fusca": {
+                    "count": 1
+                },
+                "Neoconocephalus nebrascensis": {
+                    "count": 1
+                },
+                "Microcentrum rhombifolium": {
+                    "count": 2
+                },
+                "Corcorax melanorhamphos": {
+                    "count": 1
+                },
+                "Eunemobius carolinus": {
+                    "count": 1
+                },
+                "Phoeniculus purpureus": {
+                    "count": 1
+                },
+                "Larus delawarensis": {
+                    "count": 3
+                },
+                "Megatibicen pronotalis": {
+                    "count": 1
+                },
+                "Cistothorus platensis": {
+                    "count": 2
+                },
+                "Contopus pertinax": {
+                    "count": 1
+                },
+                "Sciurus carolinensis": {
+                    "count": 1
+                },
+                "Turdus rufopalliatus": {
+                    "count": 1
+                },
+                "Fulica americana": {
+                    "count": 1
+                },
+                "Bartramia longicauda": {
+                    "count": 1
+                },
+                "Sclerophrys gutturalis": {
+                    "count": 1
+                },
+                "Graptopsaltria nigrofuscata": {
+                    "count": 1
+                },
+                "Pteronemobius heydenii": {
+                    "count": 1
+                },
+                "Tachybaptus ruficollis": {
+                    "count": 1
+                },
+                "Pavo cristatus": {
+                    "count": 1
+                },
+                "Calliope calliope": {
+                    "count": 1
+                },
+                "Crotophaga sulcirostris": {
+                    "count": 1
+                },
+                "Otospermophilus variegatus": {
+                    "count": 2
+                },
+                "Lithobates sphenocephalus": {
+                    "count": 3
+                },
+                "Mogannia hebes": {
+                    "count": 1
+                },
+                "Cygnus columbianus": {
+                    "count": 2
+                },
+                "Brotogeris jugularis": {
+                    "count": 1
+                },
+                "Taraba major": {
+                    "count": 1
+                },
+                "Campylorhynchus rufinucha": {
+                    "count": 1
+                },
+                "Gekko gecko": {
+                    "count": 1
+                },
+                "Acris gryllus": {
+                    "count": 2
+                },
+                "Tanna japonensis": {
+                    "count": 1
+                },
+                "Chorthippus biguttulus": {
+                    "count": 2
+                },
+                "Antrostomus rufus": {
+                    "count": 1
+                },
+                "Saltator atriceps": {
+                    "count": 1
+                },
+                "Lanius borealis": {
+                    "count": 1
+                },
+                "Ramphocaenus melanurus": {
+                    "count": 1
+                },
+                "Myiarchus tuberculifer": {
+                    "count": 1
+                },
+                "Parabuteo unicinctus": {
+                    "count": 2
+                },
+                "Bonasa umbellus": {
+                    "count": 1
+                },
+                "Corvus orru": {
+                    "count": 1
+                },
+                "Myophonus insularis": {
+                    "count": 1
+                },
+                "Numida meleagris": {
+                    "count": 1
+                },
+                "Anser brachyrhynchus": {
+                    "count": 1
+                },
+                "Turdus iliacus": {
+                    "count": 2
+                },
+                "Setophaga chrysoparia": {
+                    "count": 1
+                },
+                "Zosterops lateralis": {
+                    "count": 3
+                },
+                "Thalasseus sandvicensis": {
+                    "count": 1
+                },
+                "Telophorus zeylonus": {
+                    "count": 1
+                },
+                "Tomopterna delalandii": {
+                    "count": 1
+                },
+                "Amietia fuscigula": {
+                    "count": 1
+                },
+                "Margarops fuscatus": {
+                    "count": 1
+                },
+                "Dryocopus lineatus": {
+                    "count": 2
+                },
+                "Poliocrania exsul": {
+                    "count": 2
+                },
+                "Aphelocoma woodhouseii": {
+                    "count": 2
+                },
+                "Mimus thenca": {
+                    "count": 1
+                },
+                "Mareca strepera": {
+                    "count": 1
+                },
+                "Alopochen aegyptiaca": {
+                    "count": 3
+                },
+                "Podilymbus podiceps": {
+                    "count": 1
+                },
+                "Pseudacris feriarum": {
+                    "count": 2
+                },
+                "Meliphaga lewinii": {
+                    "count": 1
+                },
+                "Aratinga nenday": {
+                    "count": 1
+                },
+                "Brotogeris chiriri": {
+                    "count": 1
+                },
+                "Glaucidium passerinum": {
+                    "count": 1
+                },
+                "Leptodactylus fuscus": {
+                    "count": 1
+                },
+                "Calyptocephalella gayi": {
+                    "count": 1
+                },
+                "Anser caerulescens": {
+                    "count": 1
+                },
+                "Strix occidentalis": {
+                    "count": 2
+                },
+                "Psilopogon haemacephalus": {
+                    "count": 2
+                },
+                "Tadorna variegata": {
+                    "count": 1
+                },
+                "Rhipidura fuliginosa": {
+                    "count": 1
+                },
+                "Orthotomus ruficeps": {
+                    "count": 2
+                },
+                "Cacomantis merulinus": {
+                    "count": 1
+                },
+                "Elaenia albiceps": {
+                    "count": 2
+                },
+                "Copsychus saularis": {
+                    "count": 1
+                },
+                "Spinus magellanicus": {
+                    "count": 1
+                },
+                "Baeolophus inornatus": {
+                    "count": 5
+                },
+                "Haematopus bachmani": {
+                    "count": 1
+                },
+                "Lipaugus vociferans": {
+                    "count": 2
+                },
+                "Alcedo atthis": {
+                    "count": 2
+                },
+                "Cisticola juncidis": {
+                    "count": 2
+                },
+                "Milvus migrans": {
+                    "count": 2
+                },
+                "Rallus elegans": {
+                    "count": 1
+                },
+                "Cacomantis flabelliformis": {
+                    "count": 2
+                },
+                "Lonchura punctulata": {
+                    "count": 1
+                },
+                "Bambusicola sonorivox": {
+                    "count": 3
+                },
+                "Dicrurus paradiseus": {
+                    "count": 1
+                },
+                "Nisaetus cirrhatus": {
+                    "count": 2
+                },
+                "Kaloula pulchra": {
+                    "count": 1
+                },
+                "Ortalis vetula": {
+                    "count": 2
+                },
+                "Amazona aestiva": {
+                    "count": 1
+                },
+                "Myiophobus fasciatus": {
+                    "count": 1
+                },
+                "Thamnophilus doliatus": {
+                    "count": 1
+                },
+                "Cariama cristata": {
+                    "count": 1
+                },
+                "Anas crecca": {
+                    "count": 1
+                },
+                "Ammospiza maritima": {
+                    "count": 1
+                },
+                "Melozone crissalis": {
+                    "count": 5
+                },
+                "Platycercus eximius": {
+                    "count": 1
+                },
+                "Arthroleptis wahlbergii": {
+                    "count": 1
+                },
+                "Mirafra africana": {
+                    "count": 1
+                },
+                "Trachyphonus vaillantii": {
+                    "count": 2
+                },
+                "Strix virgata": {
+                    "count": 2
+                },
+                "Ramphastos vitellinus": {
+                    "count": 1
+                },
+                "Meleagris gallopavo": {
+                    "count": 2
+                },
+                "Sporophila morelleti": {
+                    "count": 1
+                },
+                "Columba oenas": {
+                    "count": 1
+                },
+                "Apus pallidus": {
+                    "count": 1
+                },
+                "Hyalessa maculaticollis": {
+                    "count": 1
+                },
+                "Alligator mississippiensis": {
+                    "count": 1
+                },
+                "Tringa glareola": {
+                    "count": 1
+                },
+                "Lithobates pipiens": {
+                    "count": 1
+                },
+                "Melithreptus lunatus": {
+                    "count": 1
+                },
+                "Crotalus oreganus": {
+                    "count": 2
+                },
+                "Macropygia phasianella": {
+                    "count": 1
+                },
+                "Thraupis palmarum": {
+                    "count": 1
+                },
+                "Volatinia jacarina": {
+                    "count": 1
+                },
+                "Micrastur semitorquatus": {
+                    "count": 1
+                },
+                "Pycnonotus barbatus": {
+                    "count": 1
+                },
+                "Turdus leucomelas": {
+                    "count": 1
+                },
+                "Sturnus unicolor": {
+                    "count": 1
+                },
+                "Melanerpes candidus": {
+                    "count": 2
+                },
+                "Guira guira": {
+                    "count": 1
+                },
+                "Petroica macrocephala": {
+                    "count": 1
+                },
+                "Boana pulchella": {
+                    "count": 2
+                },
+                "Velarifictorus micado": {
+                    "count": 1
+                },
+                "Cacosternum australis": {
+                    "count": 2
+                },
+                "Dendrocoptes medius": {
+                    "count": 1
+                },
+                "Patagioenas fasciata": {
+                    "count": 1
+                },
+                "Decticus verrucivorus": {
+                    "count": 1
+                },
+                "Calyptorhynchus lathami": {
+                    "count": 1
+                },
+                "Tachycineta thalassina": {
+                    "count": 1
+                },
+                "Neoconocephalus retusus": {
+                    "count": 1
+                },
+                "Gryllus bimaculatus": {
+                    "count": 1
+                },
+                "Caprimulgus jotaka": {
+                    "count": 1
+                },
+                "Bubo africanus": {
+                    "count": 1
+                },
+                "Glaucomys volans": {
+                    "count": 1
+                },
+                "Selasphorus sasin": {
+                    "count": 1
+                },
+                "Aimophila ruficeps": {
+                    "count": 1
+                },
+                "Vireo atricapilla": {
+                    "count": 1
+                },
+                "Thryophilus sinaloa": {
+                    "count": 1
+                },
+                "Cossypha caffra": {
+                    "count": 1
+                },
+                "Hypoedaleus guttatus": {
+                    "count": 1
+                },
+                "Peucaea aestivalis": {
+                    "count": 1
+                },
+                "Tringa ochropus": {
+                    "count": 1
+                },
+                "Momotus lessonii": {
+                    "count": 1
+                },
+                "Pardirallus sanguinolentus": {
+                    "count": 1
+                },
+                "Amphispiza bilineata": {
+                    "count": 2
+                },
+                "Pteroptochos tarnii": {
+                    "count": 1
+                },
+                "Vireo flavoviridis": {
+                    "count": 2
+                },
+                "Crypturellus cinnamomeus": {
+                    "count": 1
+                },
+                "Pheugopedius felix": {
+                    "count": 1
+                },
+                "Yuhina brunneiceps": {
+                    "count": 1
+                },
+                "Buteo plagiatus": {
+                    "count": 1
+                },
+                "Pelargopsis capensis": {
+                    "count": 1
+                },
+                "Cracticus nigrogularis": {
+                    "count": 2
+                },
+                "Pachycephala pectoralis": {
+                    "count": 3
+                },
+                "Pelophylax ridibundus": {
+                    "count": 2
+                },
+                "Psittacara leucophthalmus": {
+                    "count": 1
+                },
+                "Myadestes unicolor": {
+                    "count": 1
+                },
+                "Melanerpes aurifrons": {
+                    "count": 2
+                },
+                "Turdus viscivorus": {
+                    "count": 6
+                },
+                "Agelaioides badius": {
+                    "count": 1
+                },
+                "Zosterops simplex": {
+                    "count": 2
+                },
+                "Piaya cayana": {
+                    "count": 1
+                },
+                "Glaucidium nana": {
+                    "count": 1
+                },
+                "Lichmera indistincta": {
+                    "count": 1
+                },
+                "Chrysococcyx basalis": {
+                    "count": 2
+                },
+                "Microbatrachella capensis": {
+                    "count": 1
+                },
+                "Phacellodomus striaticollis": {
+                    "count": 1
+                },
+                "Limnodynastes tasmaniensis": {
+                    "count": 1
+                },
+                "Pseudacris clarkii": {
+                    "count": 1
+                },
+                "Tyrannus vociferans": {
+                    "count": 1
+                },
+                "Buteo swainsoni": {
+                    "count": 1
+                },
+                "Pachyramphus aglaiae": {
+                    "count": 1
+                },
+                "Irena puella": {
+                    "count": 1
+                },
+                "Sphenoeacus afer": {
+                    "count": 2
+                },
+                "Yoyetta repetens": {
+                    "count": 1
+                },
+                "Aleeta curvicosta": {
+                    "count": 2
+                },
+                "Yoyetta celis": {
+                    "count": 3
+                },
+                "Campylorhynchus brunneicapillus": {
+                    "count": 3
+                },
+                "Pseudacris sierra": {
+                    "count": 1
+                },
+                "Urodynamis taitensis": {
+                    "count": 1
+                },
+                "Haemopsalta rubea": {
+                    "count": 1
+                },
+                "Haemopsalta aktites": {
+                    "count": 1
+                },
+                "Halcyon albiventris": {
+                    "count": 1
+                },
+                "Synallaxis spixi": {
+                    "count": 1
+                },
+                "Ptilonorhynchus violaceus": {
+                    "count": 2
+                },
+                "Bubo bubo": {
+                    "count": 2
+                },
+                "Litoria peronii": {
+                    "count": 1
+                },
+                "Ranoidea caerulea": {
+                    "count": 1
+                },
+                "Hemixos castanonotus": {
+                    "count": 1
+                },
+                "Branta hutchinsii": {
+                    "count": 1
+                },
+                "Psaltoda plaga": {
+                    "count": 3
+                },
+                "Pachycephala fuliginosa": {
+                    "count": 1
+                },
+                "Galanga labeculata": {
+                    "count": 1
+                },
+                "Gerygone igata": {
+                    "count": 1
+                },
+                "Ranoidea raniformis": {
+                    "count": 1
+                },
+                "Microhyla fissipes": {
+                    "count": 1
+                },
+                "Odocoileus virginianus": {
+                    "count": 1
+                },
+                "Ramphastos sulfuratus": {
+                    "count": 1
+                },
+                "Zalophus californianus": {
+                    "count": 1
+                },
+                "Curaeus curaeus": {
+                    "count": 1
+                },
+                "Cinclus mexicanus": {
+                    "count": 1
+                },
+                "Garrulax canorus": {
+                    "count": 1
+                },
+                "Tolmomyias sulphurescens": {
+                    "count": 1
+                },
+                "Psaltoda claripennis": {
+                    "count": 2
+                },
+                "Henicopsaltria eydouxii": {
+                    "count": 2
+                },
+                "Passer italiae": {
+                    "count": 2
+                },
+                "Quiscalus niger": {
+                    "count": 1
+                },
+                "Megascops trichopsis": {
+                    "count": 1
+                },
+                "Cantorchilus modestus": {
+                    "count": 1
+                },
+                "Procnias tricarunculatus": {
+                    "count": 1
+                },
+                "Physalaemus gracilis": {
+                    "count": 1
+                },
+                "Atrapsalta corticina": {
+                    "count": 1
+                },
+                "Gracupica nigricollis": {
+                    "count": 1
+                },
+                "Anaxyrus punctatus": {
+                    "count": 1
+                },
+                "Urocissa caerulea": {
+                    "count": 1
+                },
+                "Cuculus clamosus": {
+                    "count": 2
+                },
+                "Psaltoda moerens": {
+                    "count": 1
+                },
+                "Birrima varians": {
+                    "count": 1
+                },
+                "Bombycilla garrulus": {
+                    "count": 1
+                },
+                "Daptrius chimango": {
+                    "count": 1
+                },
+                "Megaceryle torquata": {
+                    "count": 2
+                },
+                "Cacomantis variolosus": {
+                    "count": 2
+                },
+                "Acrocephalus australis": {
+                    "count": 2
+                },
+                "Himantopus himantopus": {
+                    "count": 1
+                },
+                "Spilornis cheela": {
+                    "count": 1
+                },
+                "Callosciurus erythraeus": {
+                    "count": 1
+                },
+                "Pachycephala rufiventris": {
+                    "count": 2
+                },
+                "Gerygone olivacea": {
+                    "count": 4
+                },
+                "Chauna torquata": {
+                    "count": 1
+                },
+                "Oriolus sagittatus": {
+                    "count": 4
+                },
+                "Trogon mexicanus": {
+                    "count": 1
+                },
+                "Oecanthus fultoni": {
+                    "count": 2
+                },
+                "Amblycorypha oblongifolia": {
+                    "count": 2
+                },
+                "Arunta perulata": {
+                    "count": 1
+                },
+                "Patagioenas picazuro": {
+                    "count": 1
+                },
+                "Synoicus ypsilophorus": {
+                    "count": 1
+                },
+                "Picus canus": {
+                    "count": 3
+                },
+                "Euphagus carolinus": {
+                    "count": 1
+                },
+                "Turdus fuscater": {
+                    "count": 1
+                },
+                "Aramides cajaneus": {
+                    "count": 2
+                },
+                "Cinclus cinclus": {
+                    "count": 1
+                },
+                "Petroica australis": {
+                    "count": 1
+                },
+                "Phainopepla nitens": {
+                    "count": 1
+                },
+                "Chroicocephalus novaehollandiae": {
+                    "count": 1
+                },
+                "Horornis diphone": {
+                    "count": 1
+                },
+                "Auscala spinosa": {
+                    "count": 1
+                },
+                "Todiramphus sanctus": {
+                    "count": 3
+                },
+                "Trichosurus vulpecula": {
+                    "count": 1
+                },
+                "Caligavis chrysops": {
+                    "count": 2
+                },
+                "Ranoidea gracilenta": {
+                    "count": 1
+                },
+                "Colibri thalassinus": {
+                    "count": 1
+                },
+                "Vireo chivi": {
+                    "count": 1
+                },
+                "Lanius ludovicianus": {
+                    "count": 1
+                },
+                "Thalasseus maximus": {
+                    "count": 1
+                },
+                "Thopha saccata": {
+                    "count": 2
+                },
+                "Coracina novaehollandiae": {
+                    "count": 2
+                },
+                "Philesturnus rufusater": {
+                    "count": 1
+                },
+                "Curruca melanocephala": {
+                    "count": 1
+                },
+                "Duttaphrynus melanostictus": {
+                    "count": 1
+                },
+                "Cyclochila australasiae": {
+                    "count": 2
+                },
+                "Eolophus roseicapilla": {
+                    "count": 2
+                },
+                "Cyanopica cyanus": {
+                    "count": 1
+                },
+                "Apalis thoracica": {
+                    "count": 1
+                },
+                "Pseudacris hypochondriaca": {
+                    "count": 5
+                },
+                "Pluvialis squatarola": {
+                    "count": 2
+                },
+                "Phaps chalcoptera": {
+                    "count": 1
+                },
+                "Leucosarcia melanoleuca": {
+                    "count": 1
+                },
+                "Tauraco corythaix": {
+                    "count": 1
+                },
+                "Popplepsalta notialis": {
+                    "count": 3
+                },
+                "Litoria fallax": {
+                    "count": 2
+                },
+                "Cossypha natalensis": {
+                    "count": 1
+                },
+                "Pluvialis apricaria": {
+                    "count": 1
+                },
+                "Gryllus pennsylvanicus": {
+                    "count": 1
+                },
+                "Palapsalta circumdata": {
+                    "count": 1
+                },
+                "Tamasa tristigma": {
+                    "count": 2
+                },
+                "Popplepsalta aeroides": {
+                    "count": 1
+                },
+                "Hirundo neoxena": {
+                    "count": 2
+                },
+                "Cacatua sanguinea": {
+                    "count": 1
+                },
+                "Sclerophrys capensis": {
+                    "count": 1
+                },
+                "Gallirallus australis": {
+                    "count": 1
+                },
+                "Epidalea calamita": {
+                    "count": 3
+                },
+                "Henicorhina leucophrys": {
+                    "count": 1
+                },
+                "Myiodynastes maculatus": {
+                    "count": 1
+                },
+                "Cacosternum platys": {
+                    "count": 1
+                },
+                "Chorthippus dorsatus": {
+                    "count": 1
+                },
+                "Breviceps acutirostris": {
+                    "count": 1
+                },
+                "Selasphorus platycercus": {
+                    "count": 1
+                },
+                "Psaltoda harrisii": {
+                    "count": 2
+                },
+                "Neotibicen davisi": {
+                    "count": 1
+                },
+                "Spizelloides arborea": {
+                    "count": 3
+                },
+                "Hyperolius marmoratus": {
+                    "count": 1
+                },
+                "Nestor meridionalis": {
+                    "count": 1
+                },
+                "Geopelia humeralis": {
+                    "count": 1
+                },
+                "Abroscopus albogularis": {
+                    "count": 1
+                },
+                "Pteropus poliocephalus": {
+                    "count": 3
+                },
+                "Poodytes gramineus": {
+                    "count": 1
+                },
+                "Popplepsalta rubristrigata": {
+                    "count": 2
+                },
+                "Gallinago gallinago": {
+                    "count": 3
+                },
+                "Bufo bufo": {
+                    "count": 1
+                },
+                "Pauropsalta mneme": {
+                    "count": 3
+                },
+                "Atrapsalta encaustica": {
+                    "count": 1
+                },
+                "Hylocharis chrysura": {
+                    "count": 1
+                },
+                "Certhiaxis cinnamomeus": {
+                    "count": 1
+                },
+                "Dryobates nuttallii": {
+                    "count": 1
+                },
+                "Phylloscopus inornatus": {
+                    "count": 2
+                },
+                "Saltator coerulescens": {
+                    "count": 1
+                },
+                "Vireo vicinior": {
+                    "count": 1
+                },
+                "Toxostoma crissale": {
+                    "count": 2
+                },
+                "Corvus coronoides": {
+                    "count": 2
+                },
+                "Tringa semipalmata": {
+                    "count": 1
+                },
+                "Geococcyx californianus": {
+                    "count": 1
+                },
+                "Trogon melanocephalus": {
+                    "count": 1
+                },
+                "Zosterops virens": {
+                    "count": 1
+                },
+                "Petaurus australis": {
+                    "count": 1
+                },
+                "Petaurus breviceps": {
+                    "count": 1
+                },
+                "Strix woodfordii": {
+                    "count": 1
+                },
+                "Euphagus cyanocephalus": {
+                    "count": 2
+                },
+                "Physalaemus cuvieri": {
+                    "count": 2
+                },
+                "Dendropsophus minutus": {
+                    "count": 2
+                },
+                "Microhyla heymonsi": {
+                    "count": 2
+                },
+                "Calypte costae": {
+                    "count": 1
+                },
+                "Amphipsalta zelandica": {
+                    "count": 1
+                },
+                "Vermivora cyanoptera": {
+                    "count": 1
+                },
+                "Vermivora chrysoptera": {
+                    "count": 1
+                },
+                "Cacosternum nanum": {
+                    "count": 3
+                },
+                "Polioptila melanura": {
+                    "count": 1
+                },
+                "Empidonax flaviventris": {
+                    "count": 1
+                },
+                "Neocurtilla hexadactyla": {
+                    "count": 1
+                },
+                "Leptodactylus melanonotus": {
+                    "count": 1
+                },
+                "Thamnophilus caerulescens": {
+                    "count": 1
+                },
+                "Engystomops pustulosus": {
+                    "count": 1
+                },
+                "Allonemobius allardi": {
+                    "count": 2
+                },
+                "Dicrurus macrocercus": {
+                    "count": 1
+                },
+                "Pica serica": {
+                    "count": 1
+                },
+                "Burhinus grallarius": {
+                    "count": 3
+                },
+                "Cystosoma saundersii": {
+                    "count": 1
+                },
+                "Ninox scutulata": {
+                    "count": 1
+                },
+                "Alouatta pigra": {
+                    "count": 1
+                },
+                "Cyanopica cooki": {
+                    "count": 1
+                },
+                "Scythrops novaehollandiae": {
+                    "count": 1
+                },
+                "Saltator aurantiirostris": {
+                    "count": 1
+                },
+                "Anser albifrons": {
+                    "count": 2
+                },
+                "Psilorhinus morio": {
+                    "count": 1
+                },
+                "Henicorhina leucosticta": {
+                    "count": 1
+                },
+                "Litoria rubella": {
+                    "count": 1
+                },
+                "Canis lupus": {
+                    "count": 2
+                },
+                "Baeolophus ridgwayi": {
+                    "count": 1
+                },
+                "Breviceps gibbosus": {
+                    "count": 1
+                },
+                "Truljalia hibinonis": {
+                    "count": 1
+                },
+                "Alcippe morrisonia": {
+                    "count": 1
+                },
+                "Amazona viridigenalis": {
+                    "count": 1
+                },
+                "Alisterus scapularis": {
+                    "count": 2
+                },
+                "Centropus superciliosus": {
+                    "count": 1
+                },
+                "Kassina senegalensis": {
+                    "count": 1
+                },
+                "Caprimulgus macrurus": {
+                    "count": 1
+                },
+                "Fejervarya limnocharis": {
+                    "count": 1
+                },
+                "Trogon caligatus": {
+                    "count": 1
+                },
+                "Oporornis agilis": {
+                    "count": 1
+                },
+                "Elaenia parvirostris": {
+                    "count": 1
+                },
+                "Anser anser": {
+                    "count": 1
+                },
+                "Melanerpes uropygialis": {
+                    "count": 3
+                },
+                "Anthus rubescens": {
+                    "count": 1
+                },
+                "Smicrornis brevirostris": {
+                    "count": 1
+                },
+                "Gryllodes sigillatus": {
+                    "count": 1
+                },
+                "Cincloramphus mathewsi": {
+                    "count": 1
+                },
+                "Camptostoma imberbe": {
+                    "count": 1
+                },
+                "Numenius phaeopus": {
+                    "count": 2
+                },
+                "Psilopogon lineatus": {
+                    "count": 1
+                },
+                "Breviceps montanus": {
+                    "count": 1
+                },
+                "Picus sharpei": {
+                    "count": 1
+                },
+                "Cacicus solitarius": {
+                    "count": 1
+                },
+                "Clangula hyemalis": {
+                    "count": 1
+                },
+                "Paroaria coronata": {
+                    "count": 1
+                },
+                "Boana faber": {
+                    "count": 1
+                },
+                "Pteroglossus torquatus": {
+                    "count": 1
+                },
+                "Teleogryllus emma": {
+                    "count": 1
+                },
+                "Picoides arcticus": {
+                    "count": 2
+                },
+                "Spizella atrogularis": {
+                    "count": 1
+                },
+                "Eleutherodactylus campi": {
+                    "count": 1
+                },
+                "Alectoris rufa": {
+                    "count": 1
+                },
+                "Hapithus saltator": {
+                    "count": 2
+                },
+                "Mareca americana": {
+                    "count": 1
+                },
+                "Oecanthus rileyi": {
+                    "count": 1
+                },
+                "Megaptera novaeangliae": {
+                    "count": 1
+                },
+                "Alectoris chukar": {
+                    "count": 1
+                },
+                "Toxostoma longirostre": {
+                    "count": 1
+                },
+                "Leiothlypis luciae": {
+                    "count": 1
+                },
+                "Peucaea carpalis": {
+                    "count": 1
+                },
+                "Aphelocoma wollweberi": {
+                    "count": 1
+                },
+                "Baeolophus wollweberi": {
+                    "count": 1
+                },
+                "Hypsipetes amaurotis": {
+                    "count": 5
+                },
+                "Tyrannus dominicensis": {
+                    "count": 1
+                },
+                "Cygnus olor": {
+                    "count": 1
+                },
+                "Porphyrio melanotus": {
+                    "count": 1
+                },
+                "Psilopogon viridis": {
+                    "count": 1
+                },
+                "Myiothlypis leucoblephara": {
+                    "count": 1
+                },
+                "Pseudacris cadaverina": {
+                    "count": 1
+                },
+                "Atrapsalta collina": {
+                    "count": 1
+                },
+                "Schoeniparus brunneus": {
+                    "count": 1
+                },
+                "Dendrocitta vagabunda": {
+                    "count": 2
+                },
+                "Pachyramphus polychopterus": {
+                    "count": 1
+                },
+                "Rhinella marina": {
+                    "count": 1
+                },
+                "Legatus leucophaius": {
+                    "count": 1
+                },
+                "Cacosternum boettgeri": {
+                    "count": 1
+                },
+                "Petronia petronia": {
+                    "count": 1
+                },
+                "Conocephalus brevipennis": {
+                    "count": 1
+                },
+                "Cervus elaphus": {
+                    "count": 1
+                },
+                "Phylloscopus ibericus": {
+                    "count": 4
+                },
+                "Lithobates palustris": {
+                    "count": 3
+                },
+                "Aegolius funereus": {
+                    "count": 1
+                },
+                "Acanthis flammea": {
+                    "count": 2
+                },
+                "Cyanoliseus patagonus": {
+                    "count": 1
+                },
+                "Gallus gallus": {
+                    "count": 2
+                },
+                "Geocrinia victoriana": {
+                    "count": 1
+                },
+                "Strix uralensis": {
+                    "count": 1
+                },
+                "Falco novaeseelandiae": {
+                    "count": 1
+                },
+                "Gymnorhinus cyanocephalus": {
+                    "count": 1
+                },
+                "Estrilda astrild": {
+                    "count": 1
+                },
+                "Sialia mexicana": {
+                    "count": 1
+                },
+                "Rana temporaria": {
+                    "count": 1
+                },
+                "Pseudacris kalmi": {
+                    "count": 3
+                },
+                "Streptopelia capicola": {
+                    "count": 1
+                },
+                "Euphonia affinis": {
+                    "count": 1
+                },
+                "Pseudacris triseriata": {
+                    "count": 2
+                },
+                "Lithobates kauffeldi": {
+                    "count": 2
+                },
+                "Sphecotheres vieilloti": {
+                    "count": 2
+                },
+                "Panurus biarmicus": {
+                    "count": 2
+                },
+                "Chrysococcyx klaas": {
+                    "count": 1
+                },
+                "Tadarida brasiliensis": {
+                    "count": 1
+                },
+                "Cygnus cygnus": {
+                    "count": 1
+                },
+                "Vanellus armatus": {
+                    "count": 1
+                },
+                "Dicrurus adsimilis": {
+                    "count": 1
+                },
+                "Chiroxiphia caudata": {
+                    "count": 2
+                },
+                "Scelorchilus rubecula": {
+                    "count": 2
+                },
+                "Telmapsalta hackeri": {
+                    "count": 1
+                },
+                "Myadestes ralloides": {
+                    "count": 1
+                },
+                "Mareca penelope": {
+                    "count": 1
+                },
+                "Smilisca baudinii": {
+                    "count": 1
+                },
+                "Birrima castanea": {
+                    "count": 1
+                },
+                "Platypedia minor": {
+                    "count": 1
+                },
+                "Larus dominicanus": {
+                    "count": 1
+                },
+                "Emberiza hortulana": {
+                    "count": 1
+                },
+                "Vanellus indicus": {
+                    "count": 2
+                },
+                "Tetrastes bonasia": {
+                    "count": 1
+                },
+                "Ardea alba": {
+                    "count": 1
+                },
+                "Melozone aberti": {
+                    "count": 2
+                },
+                "Rana arvalis": {
+                    "count": 1
+                },
+                "Petroica longipes": {
+                    "count": 1
+                },
+                "Setophaga tigrina": {
+                    "count": 2
+                },
+                "Prinia inornata": {
+                    "count": 1
+                },
+                "Nyctibius griseus": {
+                    "count": 1
+                },
+                "Campylorhynchus turdinus": {
+                    "count": 1
+                },
+                "Yezoterpnosia obscura": {
+                    "count": 1
+                },
+                "Cuculus optatus": {
+                    "count": 2
+                },
+                "Icterus graduacauda": {
+                    "count": 1
+                },
+                "Monticola solitarius": {
+                    "count": 1
+                },
+                "Calcarius lapponicus": {
+                    "count": 1
+                },
+                "Glossopsitta concinna": {
+                    "count": 1
+                },
+                "Lithobates virgatipes": {
+                    "count": 2
+                },
+                "Clamator glandarius": {
+                    "count": 1
+                },
+                "Xanthocephalus xanthocephalus": {
+                    "count": 1
+                },
+                "Macaca cyclopis": {
+                    "count": 1
+                },
+                "Cacomantis pallidus": {
+                    "count": 1
+                },
+                "Leucophaeus pipixcan": {
+                    "count": 1
+                },
+                "Curruca nisoria": {
+                    "count": 1
+                },
+                "Burhinus oedicnemus": {
+                    "count": 1
+                },
+                "Atrapsalta fuscata": {
+                    "count": 1
+                },
+                "Scolopax rusticola": {
+                    "count": 2
+                },
+                "Pterorhinus perspicillatus": {
+                    "count": 2
+                },
+                "Anaxyrus terrestris": {
+                    "count": 1
+                },
+                "Horornis fortipes": {
+                    "count": 1
+                },
+                "Spizella pallida": {
+                    "count": 1
+                },
+                "Synallaxis azarae": {
+                    "count": 1
+                },
+                "Centropus phasianinus": {
+                    "count": 1
+                },
+                "Dicaeum hirundinaceum": {
+                    "count": 1
+                },
+                "Saltator similis": {
+                    "count": 1
+                },
+                "Leiothrix lutea": {
+                    "count": 1
+                },
+                "Pycnonotus capensis": {
+                    "count": 1
+                },
+                "Cinnyris chalybeus": {
+                    "count": 1
+                },
+                "Hyla gratiosa": {
+                    "count": 1
+                },
+                "Gryllotalpa gryllotalpa": {
+                    "count": 1
+                },
+                "Prinia subflava": {
+                    "count": 1
+                },
+                "Himantopus leucocephalus": {
+                    "count": 1
+                },
+                "Acrocephalus agricola": {
+                    "count": 1
+                },
+                "Magicicada cassinii": {
+                    "count": 1
+                },
+                "Kaloula borealis": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}
