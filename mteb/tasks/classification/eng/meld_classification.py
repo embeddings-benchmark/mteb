@@ -43,7 +43,9 @@ class MELDClassification(AbsTaskClassification):
     train_split: str = "test"
 
     def dataset_transform(self, num_proc=None, **kwargs) -> None:
-        self.dataset["test"] = self.dataset["test"].select(range(2048))
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"], n_samples=2048
+        )
 
 
 class MELDVideoClassification(AbsTaskClassification):
@@ -85,4 +87,6 @@ class MELDVideoClassification(AbsTaskClassification):
     train_split: str = "test"
 
     def dataset_transform(self, num_proc=None, **kwargs) -> None:
-        self.dataset["test"] = self.dataset["test"].select(range(2048))
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"], n_samples=2048
+        )
