@@ -702,7 +702,7 @@ def test_submit_results_with_fake_remote(tmp_path):
         )
 
         with pytest.raises(RuntimeError, match="uncommitted changes"):
-            cache.submit_results(models=[test_model], push=False)
+            cache.submit_results(models=[test_model], create_pr=False)
 
         subprocess.run(
             ["git", "reset", "HEAD", "unrelated_staged_file.txt"],
@@ -723,7 +723,7 @@ def test_submit_results_with_fake_remote(tmp_path):
         original_branch = result.stdout.strip()
         assert original_branch == "main"
 
-        result = cache.submit_results(models=[test_model], push=False)
+        result = cache.submit_results(models=[test_model], create_pr=False)
 
         assert result["status"] == "ready_for_submission"
         assert result["result_count"] == len(result_files_copied)
@@ -781,7 +781,7 @@ def test_submit_results_handles_merge_conflict(tmp_path):
 
     # Avoid fetching from the remote so the test remains hermetic in CI.
     with patch.object(cache, "download_from_remote", return_value=None):
-        initial_result = cache.submit_results(models=[test_model], push=False)
+        initial_result = cache.submit_results(models=[test_model], create_pr=False)
         assert initial_result["status"] == "ready_for_submission"
 
         result_dir = remote_path / "results" / model_name_path / revision
@@ -803,7 +803,7 @@ def test_submit_results_handles_merge_conflict(tmp_path):
             )
 
         try:
-            result = cache.submit_results(models=[test_model], push=False)
+            result = cache.submit_results(models=[test_model], create_pr=False)
             assert result.get("commit_sha") is not None
         except (RuntimeError, subprocess.CalledProcessError) as e:
             error_msg = str(e).lower()
@@ -837,7 +837,7 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path):
             cache, "_create_pull_request", side_effect=Exception("GitHub API error")
         ):
             with pytest.raises(Exception, match="GitHub API error"):
-                cache.submit_results(models=[test_model], push=True)
+                cache.submit_results(models=[test_model], create_pr=True)
 
     # Verify user is back on original branch
     result = subprocess.run(

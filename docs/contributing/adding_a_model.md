@@ -213,12 +213,12 @@ for task_result in results.task_results:
     cache.save_to_cache(task_result, model_meta.name, model_meta.revision)
 
 # Submit results (manual review before pushing)
-cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], push=False)
+cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=False)
 ```
 
 **Manual submission** (recommended for first-time users):
 ```python
-submission_info = cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], push=False)
+submission_info = cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=False)
 print(submission_info.get("manual_submission_instructions"))
 # Review changes and push manually
 ```
@@ -228,7 +228,7 @@ print(submission_info.get("manual_submission_instructions"))
 import os
 os.environ["GITHUB_TOKEN"] = "your-token"
 
-submission_info = cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], push=True)
+submission_info = cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=True)
 if submission_info.get("pr_url"):
     print(f"✓ PR created: {submission_info['pr_url']}")
 ```

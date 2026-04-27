@@ -63,7 +63,7 @@ for task_result in results.task_results:
     )
 
 # 4. Submit results (manual review before pushing)
-cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], push=False)
+cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=False)
 ```
 
 ## Loading Results
@@ -94,7 +94,7 @@ Prepare results without automatically creating a PR:
 ```python
 submission_info = cache.submit_results(
     models=["sentence-transformers/all-MiniLM-L6-v2"],
-    push=False
+    create_pr=False
 )
 
 # Review instructions
@@ -130,7 +130,7 @@ Then run your code:
 ```python
 submission_info = cache.submit_results(
     models=["sentence-transformers/all-MiniLM-L6-v2"],
-    push=True
+    create_pr=True
 )
 
 if submission_info.get("pr_url"):
@@ -150,7 +150,7 @@ models = [
     "BAAI/bge-base-en-v1.5"
 ]
 
-cache.submit_results(models=models, push=False)
+cache.submit_results(models=models, create_pr=False)
 ```
 
 ## Troubleshooting

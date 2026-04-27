@@ -1299,20 +1299,20 @@ class ResultCache:
         self,
         models: list[str] | list[ModelMeta] | str | ModelMeta | None = None,
         *,
-        push: bool = False,
+        create_pr: bool = False,
     ) -> SubmitResultsResponse:
         """Create a commit of the results to the official MTEB results repository (https://github.com/embeddings-benchmark/results).
 
         It does this by downloading the remote (if not downloaded already) and
         submitting the diff from the local result to the repository. Requires PyGithub
-        to be installed if `push=True`.
+        to be installed if `create_pr=True`.
 
         Args:
             models: Model(s) whose results should be submitted. Can be:
                 - None: submit all unsubmitted results
                 - str or ModelMeta: single model
                 - list[str] or list[ModelMeta]: multiple models
-            push: If True, create a PR directly to the remote. If False, prints
+            create_pr: If True, create a PR directly to the remote. If False, prints
                   instructions for manual submission.
 
         Returns:
@@ -1321,14 +1321,14 @@ class ResultCache:
                 - models_submitted: list of (model_name, revision) tuples
                 - result_count: number of result files submitted
                 - commit_sha: git commit hash
-                - pr_url: URL to created PR (only if push=True)
-                - pr_number: PR number (only if push=True)
-                - fork_url: URL to user's fork (only if push=True)
+                - pr_url: URL to created PR (only if create_pr=True)
+                - pr_number: PR number (only if create_pr=True)
+                - fork_url: URL to user's fork (only if create_pr=True)
 
         Raises:
             ValueError: If no models found or invalid input.
             RuntimeError: If git operations fail.
-            ImportError: If push=True and PyGithub is not installed.
+            ImportError: If create_pr=True and PyGithub is not installed.
             GithubException: If GitHub API operations fail.
 
         Examples:
@@ -1337,15 +1337,15 @@ class ResultCache:
             >>> results = mteb.evaluate(model, tasks, cache=cache)
             >>>
             >>> # Manual submission (step-by-step)
-            >>> submission = cache.submit_results(model, push=False)
+            >>> submission = cache.submit_results(model, create_pr=False)
             >>> # Follow printed instructions
             >>>
             >>> # Automated submission
-            >>> submission = cache.submit_results(model, push=True)
+            >>> submission = cache.submit_results(model, create_pr=True)
             >>> print(f"PR created: {submission['pr_url']}")
         """
         branch_name = (
-            f"mteb-results-{int(datetime.now().timestamp())}" if push else None
+            f"mteb-results-{int(datetime.now().timestamp())}" if create_pr else None
         )
         try:
             normalized_models = self._normalize_models(models)
@@ -1394,7 +1394,7 @@ class ResultCache:
         commit_action = CommitAction(remote_path, commit_message)
         actions.append(commit_action)
 
-        if push and branch_name:
+        if create_pr and branch_name:
             actions.append(
                 CreateBranchAction(remote_path, branch_name, original_branch)
             )
@@ -1410,7 +1410,7 @@ class ResultCache:
         if not commit_sha:
             raise RuntimeError("Failed to create commit: commit_sha is None")
 
-        if not push:
+        if not create_pr:
             message = self._build_manual_submission_message(
                 commit_sha, remote_path, result_count, len(normalized_models)
             )
