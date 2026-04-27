@@ -21,6 +21,7 @@ from .human_eval_retrieval import HumanEvalRetrieval
 from .japanese_code1_retrieval import JapaneseCode1Retrieval
 from .mbpp_retrieval import MBPPRetrieval
 from .stack_overflow_qa_retrieval import StackOverflowQARetrieval
+from .swebench_code_retrieval import SWEbenchCodeRetrieval
 from .synthetic_text2_sql_retrieval import SyntheticText2SQLRetrieval
 from .wiki_sql_retrieval import WikiSQLRetrieval
 
@@ -45,6 +46,7 @@ __all__ = [
     "HumanEvalRetrieval",
     "JapaneseCode1Retrieval",
     "MBPPRetrieval",
+    "SWEbenchCodeRetrieval",
     "StackOverflowQARetrieval",
     "SyntheticText2SQLRetrieval",
     "WikiSQLRetrieval",
