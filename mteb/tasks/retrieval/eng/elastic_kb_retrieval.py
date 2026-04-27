@@ -24,9 +24,10 @@ class ElasticKBRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="t2t",
         modalities=["text"],
-        eval_splits=["test"],
+        eval_splits=["synthetic_test", "real_chat_test"],
         eval_langs={"en": ["eng-Latn"]},
         main_score="ndcg_at_10",
+        is_public=False,
         date=["2015-01-01", "2026-04-01"],
         domains=["Written", "Engineering"],
         task_subtypes=["Question answering", "Conversational retrieval"],
@@ -36,6 +37,6 @@ class ElasticKBRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a support question, retrieve knowledge base articles that answer the question"
         },
-        sample_creation="found and created",
+        sample_creation="multiple",
         bibtex_citation="",
     )
