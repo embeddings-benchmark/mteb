@@ -1440,8 +1440,7 @@ class ResultCache:
             message = self._build_manual_submission_message(
                 commit_sha, remote_path, result_count, len(normalized_models)
             )
-            for line in message.split("\n"):
-                logger.info(line)
+            logger.info("%s", message)
 
             return SubmitResultsResponse(
                 status="ready_for_submission",
