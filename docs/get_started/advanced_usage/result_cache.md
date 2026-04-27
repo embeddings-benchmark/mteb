@@ -104,20 +104,40 @@ print(submission_info.get("manual_submission_instructions"))
 
 ### Automated Submission
 
-Automatically create a pull request (requires GitHub token):
+Automatically create a pull request (requires GitHub token). Choose one authentication method:
+
+**Method 1: Environment Variable**
+```bash
+export GITHUB_TOKEN="your-github-pat-token"
+```
+
+**Method 2: GitHub CLI (Recommended)**
+```bash
+# Install GitHub CLI if not already installed
+# https://cli.github.com
+
+# Authenticate
+gh auth login
+
+# Follow the prompts and select:
+# - GitHub.com
+# - HTTPS
+# - Authenticate with a token
+```
+
+Then run your code:
 
 ```python
-import os
-os.environ["GITHUB_TOKEN"] = "your-token"  # or use ~/.config/gh/hosts.yml
-
 submission_info = cache.submit_results(
     models=["sentence-transformers/all-MiniLM-L6-v2"],
     push=True
 )
 
 if submission_info.get("pr_url"):
-    print(f"✓ PR created: {submission_info['pr_url']}")
+    print(f"PR created: {submission_info['pr_url']}")
 ```
+
+ResultCache will automatically detect credentials from either source.
 
 ### Batch Submission
 

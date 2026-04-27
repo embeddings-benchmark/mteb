@@ -33,11 +33,12 @@ from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
+from mteb.types import SubmitResultsResponse
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
 
-    from mteb.types import ModelName, Revision
+    from mteb.types import ModelName, Revision, SubmitResultsResponse
 
 logger = logging.getLogger(__name__)
 _EXPERIMENTS_FOLDER_NAME = "experiments"
@@ -1299,7 +1300,7 @@ class ResultCache:
         models: list[str] | list[ModelMeta] | str | ModelMeta | None = None,
         *,
         push: bool = False,
-    ) -> dict[str, Any]:
+    ) -> SubmitResultsResponse:
         """Create a commit of the results to the official MTEB results repository (https://github.com/embeddings-benchmark/results).
 
         It does this by downloading the remote (if not downloaded already) and
@@ -1353,13 +1354,17 @@ class ResultCache:
 
             if not unsubmitted:
                 logger.warning("No unsubmitted results found.")
-                return {
-                    "status": "no_changes",
-                    "models_submitted": [
-                        (m.name, m.revision) for m in normalized_models
-                    ],
-                    "result_count": 0,
-                }
+                return cast(
+                    "SubmitResultsResponse",
+                    {
+                        "status": "no_changes",
+                        "models_submitted": [
+                            (m.name, m.revision) for m in normalized_models
+                        ],
+                        "result_count": 0,
+                        "commit_sha": None,
+                    },
+                )
 
             remote_path = self.cache_path / "remote"
             self._run_preflight_checks(remote_path)
@@ -1414,23 +1419,28 @@ class ResultCache:
             for line in message.split("\n"):
                 logger.info(line)
 
-            return {
-                "status": "ready_for_submission",
-                "models_submitted": [(m.name, m.revision) for m in normalized_models],
-                "result_count": result_count,
-                "commit_sha": commit_sha,
-                "path": str(remote_path),
-            }
-        else:
-            return self._handle_pr_creation_with_cleanup(
-                commit_sha,
-                normalized_models,
-                unsubmitted,
-                result_count,
-                branch_name,
-                remote_path,
-                original_branch,
+            return cast(
+                "SubmitResultsResponse",
+                {
+                    "status": "ready_for_submission",
+                    "models_submitted": [
+                        (m.name, m.revision) for m in normalized_models
+                    ],
+                    "result_count": result_count,
+                    "commit_sha": commit_sha,
+                    "path": str(remote_path),
+                },
             )
+
+        return self._handle_pr_creation_with_cleanup(
+            commit_sha,
+            normalized_models,
+            unsubmitted,
+            result_count,
+            branch_name,
+            remote_path,
+            original_branch,
+        )
 
     @staticmethod
     def _get_github_token() -> str:
@@ -1489,7 +1499,7 @@ class ResultCache:
         branch_name: str | None,
         remote_path: Path,
         original_branch: str,
-    ) -> dict[str, Any]:
+    ) -> SubmitResultsResponse:
         """Create a pull request with proper cleanup on failure.
 
         Args:
@@ -1547,7 +1557,7 @@ class ResultCache:
         unsubmitted: dict[ModelMeta, list[Path]],
         result_count: int,
         branch_name: str | None,
-    ) -> dict[str, Any]:
+    ) -> SubmitResultsResponse:
         """Create a pull request on GitHub using PyGithub.
 
         Args:
@@ -1688,16 +1698,19 @@ class ResultCache:
             logger.info(f"Commit: {commit_sha}")
             logger.info("\n" + "=" * 80)
 
-            return {
-                "status": "pr_created",
-                "models_submitted": [(m.name, m.revision) for m in models],
-                "result_count": result_count,
-                "commit_sha": commit_sha,
-                "pr_url": pr.html_url,
-                "pr_number": pr.number,
-                "fork_url": fork_url,
-                "branch_name": branch_name,
-            }
+            return cast(
+                "SubmitResultsResponse",
+                {
+                    "status": "pr_created",
+                    "models_submitted": [(m.name, m.revision) for m in models],
+                    "result_count": result_count,
+                    "commit_sha": commit_sha,
+                    "pr_url": pr.html_url,
+                    "pr_number": pr.number,
+                    "fork_url": fork_url,
+                    "branch_name": branch_name,
+                },
+            )
 
         except GithubException as e:
             raise RuntimeError(

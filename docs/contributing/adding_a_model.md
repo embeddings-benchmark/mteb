@@ -199,7 +199,7 @@ import mteb
 
 # Initialize and sync cache
 cache = mteb.ResultCache()
-cache.download_from_remote()
+# cache.download_from_remote() # optional
 
 # Evaluate your model
 model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")

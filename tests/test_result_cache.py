@@ -727,9 +727,8 @@ def test_submit_results_with_fake_remote(tmp_path):
 
         assert result["status"] == "ready_for_submission"
         assert result["result_count"] == len(result_files_copied)
-        assert result["commit_sha"]
-
-        commit_sha = result["commit_sha"]
+        commit_sha = result.get("commit_sha")
+        assert commit_sha is not None
         check = subprocess.run(
             ["git", "cat-file", "-t", commit_sha],
             check=False,
@@ -805,7 +804,7 @@ def test_submit_results_handles_merge_conflict(tmp_path):
 
         try:
             result = cache.submit_results(models=[test_model], push=False)
-            assert result["commit_sha"] is not None
+            assert result.get("commit_sha") is not None
         except (RuntimeError, subprocess.CalledProcessError) as e:
             error_msg = str(e).lower()
             assert any(
