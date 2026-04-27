@@ -7,6 +7,7 @@ class GatedSyntheticLEXRetrieval(AbsTaskRetrieval):
         name="GatedSyntheticLEXRetrieval",
         description="Synthetically generated dataset for LEX retrieval task.",
         category="t2t",
+        reference="chcaa/lex_articles10k_retrieval_eval_v2",
         main_score="ndcg_at_10",
         eval_langs=["dan-Latn"],
         eval_splits=["test"],
@@ -23,4 +24,11 @@ class GatedSyntheticLEXRetrieval(AbsTaskRetrieval):
         dialect=[],
         prompt="Given a question in Danish, retrieve the  documents that can answer the question.",
         task_subtypes=["Article retrieval"],
+        sample_creation="LM-generated and verified",
+        bibtex_citation=r"""@misc{private-lex,
+  author = {Aarhus University},
+  title = {Private Synthetic LEX Retrieval Evaluation Dataset},
+  year = {2026},
+}
+""",
     )
