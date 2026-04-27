@@ -199,7 +199,7 @@ from .legal_bench_classification import (
 )
 from .mnist_classification import MNISTClassification
 from .music_avqa_classification import (
-    MusicAVQACLSClassification,
+    MusicAVQACLSAudioVideoClassification,
     MusicAVQACLSVideoClassification,
 )
 from .news_classification import NewsClassification, NewsClassificationV2
@@ -438,7 +438,7 @@ __all__ = [
     "MAUDLegalBenchClassification",
     "MAUDLegalBenchClassificationV2",
     "MNISTClassification",
-    "MusicAVQACLSClassification",
+    "MusicAVQACLSAudioVideoClassification",
     "MusicAVQACLSVideoClassification",
     "NYSJudicialEthicsLegalBenchClassification",
     "NewsClassification",

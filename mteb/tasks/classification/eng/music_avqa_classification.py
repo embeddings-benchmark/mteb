@@ -4,9 +4,9 @@ from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MusicAVQACLSClassification(AbsTaskClassification):
+class MusicAVQACLSAudioVideoClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="MusicAVQACLSClassification",
+        name="MusicAVQACLSAudioVideoClassification",
         description="MUSIC-AVQA classification dataset containing 22 instrument categories. Given a video and audio of someone playing an instrument, the goal is to predict the instrument type.",
         reference="https://arxiv.org/abs/2203.14072",
         dataset={
