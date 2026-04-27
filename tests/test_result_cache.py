@@ -807,14 +807,10 @@ def test_submit_results_handles_merge_conflict(tmp_path):
                 capture_output=True,
             )
 
-        try:
-            result = cache.submit_results(models=[test_model], create_pr=False)
-            assert result.get("commit_sha") is not None
-        except (RuntimeError, subprocess.CalledProcessError) as e:
-            error_msg = str(e).lower()
-            assert any(
-                term in error_msg for term in ["conflict", "merge", "failed", "error"]
-            )
+        result = cache.submit_results(models=[test_model], create_pr=False)
+        assert result["status"] == "no_changes"
+        assert result["result_count"] == 0
+        assert result.get("commit_sha") is None
 
 
 def test_pr_creation_failure_cleans_up_branch(tmp_path):
