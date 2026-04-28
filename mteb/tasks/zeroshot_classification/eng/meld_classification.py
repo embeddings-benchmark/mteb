@@ -44,13 +44,15 @@ class MELDAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
 
     def dataset_transform(self, num_proc=None, **kwargs) -> None:
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"], label=self.label_column_name, n_samples=2048
+            self.dataset,
+            seed=self.seed,
+            splits=["test"],
+            label=self.label_column_name,
+            n_samples=2048,
         )
 
     def get_candidate_labels(self) -> list[str]:
-        return [
-            name for name in self.dataset["test"].features[self.label_column_name].names
-        ]
+        return self.dataset["test"].features[self.label_column_name].names
 
 
 class MELDVideoZeroShotClassification(AbsTaskZeroShotClassification):
@@ -83,10 +85,12 @@ class MELDVideoZeroShotClassification(AbsTaskZeroShotClassification):
 
     def dataset_transform(self, num_proc=None, **kwargs) -> None:
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"], label=self.label_column_name, n_samples=2048
+            self.dataset,
+            seed=self.seed,
+            splits=["test"],
+            label=self.label_column_name,
+            n_samples=2048,
         )
 
     def get_candidate_labels(self) -> list[str]:
-        return [
-            name for name in self.dataset["test"].features[self.label_column_name].names
-        ]
+        return self.dataset["test"].features[self.label_column_name].names
