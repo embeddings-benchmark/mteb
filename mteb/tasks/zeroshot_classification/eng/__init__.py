@@ -12,6 +12,10 @@ from .gtsrb import GTSRBZeroShotClassification
 from .human_animal_cartoon import HumanAnimalCartoonZeroShotClassification
 from .imagenet1k import Imagenet1kZeroShotClassification
 from .kinetics400 import Kinetics400ZeroShotClassification
+from .meld_classification import (
+    MELDAudioVideoZeroShotClassification,
+    MELDVideoZeroShotClassification,
+)
 from .mnist import MNISTZeroShotClassification
 from .oxford_pets import OxfordPetsZeroShotClassification
 from .patch_camelyon import PatchCamelyonZeroShotClassification
@@ -45,6 +49,8 @@ __all__ = [
     "HumanAnimalCartoonZeroShotClassification",
     "Imagenet1kZeroShotClassification",
     "Kinetics400ZeroShotClassification",
+    "MELDAudioVideoZeroShotClassification",
+    "MELDVideoZeroShotClassification",
     "MNISTZeroShotClassification",
     "OxfordPetsZeroShotClassification",
     "PatchCamelyonZeroShotClassification",
