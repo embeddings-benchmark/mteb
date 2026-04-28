@@ -125,9 +125,9 @@ class AVQAVideoAudioCentricQA(AbsTaskRetrieval):
             )
             ds = ds.add_column("id", [f"q{i}" for i in range(len(ds))])
 
-            queries = ds.select_columns(["id", "question", "video", "audio"]).rename_column(
-                "question", "text"
-            )
+            queries = ds.select_columns(
+                ["id", "question", "video", "audio"]
+            ).rename_column("question", "text")
 
             corpus_rows: list[dict] = []
             relevant_docs: dict[str, dict[str, int]] = {}
