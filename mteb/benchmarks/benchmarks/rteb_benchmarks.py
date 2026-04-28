@@ -2,7 +2,7 @@
 
 
 from mteb.benchmarks.benchmark import RtebBenchmark
-from mteb.get_tasks import get_tasks
+from mteb.get_tasks import get_task, get_tasks
 
 RTEB_CITATION = r"""@article{rteb2025,
   author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
@@ -75,7 +75,6 @@ RTEB_ENGLISH = RtebBenchmark(
             "WikiSQLRetrieval",
             "FreshStackRetrieval",
             "ChatDoctorRetrieval",
-            "CUREv1",
             # Closed datasets
             "Code1Retrieval",
             "EnglishFinance1Retrieval",
@@ -85,6 +84,12 @@ RTEB_ENGLISH = RtebBenchmark(
             "EnglishHealthcare1Retrieval",
         ],
         languages=["eng"],
+    )
+    + (
+        get_task(
+            "CureV1",
+            hf_subsets="en",
+        ),
     ),
     description="RTEB English is a subset of RTEB containing retrieval tasks in English across legal, finance, code, and healthcare domains. Includes diverse tasks covering specialized domains such as healthcare and finance. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues)."
     + removal_note,
