@@ -8,8 +8,8 @@ from transformers import (
     AutoProcessor,
 )
 
-from mteb._create_dataloaders import AudioCollator
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
@@ -20,14 +20,17 @@ if TYPE_CHECKING:
 
 
 class QwenOmniWrapper(AbsEncoder):
-    """Wrapper for Qwen Omni models supporting audio and images. Last token pooling is used to get the embedding."""
+    """Wrapper for Qwen Omni models supporting audio, images, and video. Last token pooling is used to get the embedding."""
 
     def __init__(
         self,
         model_name: str,
         revision: str,
         device: str | None = None,
-        max_audio_length_seconds: int = 10,
+        max_audio_length_seconds: int = 300,
+        fps: float | None = 2.0,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
         self.device = device or (
@@ -38,6 +41,9 @@ class QwenOmniWrapper(AbsEncoder):
             else "cpu"
         )
         self.max_audio_length_seconds = max_audio_length_seconds
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
 
         if "2.5" in model_name:
             from transformers import Qwen2_5OmniThinkerForConditionalGeneration
@@ -60,31 +66,27 @@ class QwenOmniWrapper(AbsEncoder):
 
     @staticmethod
     def _build_messages(
-        batch_texts: list[str],
-        batch_images: list[Any],
-        batch_audio: list[Any],
+        batch: BatchedInput,
     ) -> list[list[dict[str, Any]]]:
-        messages = []
-        batch_size = max(len(batch_texts), len(batch_images), len(batch_audio))
-        for i in range(batch_size):
-            text_content = batch_texts[i] if i < len(batch_texts) else ""
-            image_content = batch_images[i] if i < len(batch_images) else None
-            audio_content = batch_audio[i] if i < len(batch_audio) else None
+        """Build chat messages from a batch for apply_chat_template."""
+        texts = batch.get("text", [])
+        images = batch.get("image", [])
+        audios = batch.get("audio", [])
+        videos = batch.get("video", [])
+        batch_size = max(len(texts), len(images), len(audios), len(videos))
 
-            content = []
-            if audio_content is not None:
-                content.append({"type": "audio", "audio": audio_content})
-            if image_content is not None:
-                content.append(
-                    {
-                        "type": "image",
-                        "image": image_content,
-                    }
-                )
-            content.append({"type": "text", "text": text_content})
+        messages = []
+        for i in range(batch_size):
+            content: list[dict[str, Any]] = []
+            if i < len(videos) and videos[i] is not None:
+                content.append({"type": "video", "video": "placeholder"})
+            if i < len(audios) and audios[i] is not None:
+                content.append({"type": "audio", "audio": "placeholder"})
+            if i < len(images) and images[i] is not None:
+                content.append({"type": "image", "image": "placeholder"})
+            content.append({"type": "text", "text": texts[i] if i < len(texts) else ""})
             messages.append(
                 [
-                    # qwen2.5 audio output mode only works when using default system prompt
                     {
                         "role": "system",
                         "content": [
@@ -110,30 +112,26 @@ class QwenOmniWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        from qwen_omni_utils import process_mm_info
+        has_video = "video" in inputs.dataset.features
+        has_audio = "audio" in inputs.dataset.features
+        if has_video:
+            inputs.collate_fn = VideoCollator(
+                target_sampling_rate=self.sampling_rate,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+                max_samples=self.max_samples,
+            )
+        elif has_audio:
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.sampling_rate,
+                max_samples=self.max_samples,
+            )
 
         all_embeddings: list[torch.Tensor] = []
 
         for batch in tqdm(inputs, desc="Encoding"):
-            batch_texts = batch.get("text", [])
-            batch_images = batch.get("image", [])
-            raw_audio = batch.get("audio", [])
-
-            batch_audio = []
-            for audio_row in raw_audio:
-                if audio_row is None:
-                    batch_audio.append(None)
-                else:
-                    array = AudioCollator.resample_audio(
-                        {"audio": audio_row}, self.sampling_rate, self.max_samples
-                    )
-                    batch_audio.append(array)
-
-            messages = self._build_messages(
-                batch_texts=batch_texts,
-                batch_images=batch_images,
-                batch_audio=batch_audio,
-            )
+            messages = self._build_messages(batch)
 
             texts = [
                 self.processor.apply_chat_template(
@@ -142,26 +140,33 @@ class QwenOmniWrapper(AbsEncoder):
                 for msg in messages
             ]
 
-            audio_inputs, image_inputs, video_inputs = process_mm_info(
-                messages, use_audio_in_video=False
-            )
+            videos = batch.get("video")
+            images = batch.get("image")
+            audios = batch.get("audio")
+            if audios:
+                audios = [
+                    a["array"] if isinstance(a, dict) and "array" in a else a
+                    for a in audios
+                ]
 
             model_inputs = self.processor(
                 text=texts,
-                audio=audio_inputs,
-                images=image_inputs,
-                videos=video_inputs,
+                audio=audios or None,
+                images=images or None,
+                videos=videos or None,
                 padding=True,
                 return_tensors="pt",
-                use_audio_in_video=False,
+                videos_kwargs={
+                    "do_sample_frames": False,
+                    "use_audio_in_video": False,
+                },
+                audio_kwargs={"max_length": self.max_samples},
             ).to(self.device)
 
             outputs = self.model(
                 **model_inputs, output_hidden_states=True, return_dict=True
             )
-            embeddings = outputs.hidden_states[-1][
-                :, -1
-            ]  # select last hidden state ([-1]) and last token position ([:, -1]).
+            embeddings = outputs.hidden_states[-1][:, -1]
             embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
             all_embeddings.append(embeddings.cpu())
 
@@ -194,6 +199,7 @@ qwen25_omni_7b = ModelMeta(
         "text",
         "image",
         "audio",
+        "video",
     ],
     model_type=["dense"],
     citation="""
@@ -206,7 +212,6 @@ qwen25_omni_7b = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2503.20215},
 }""",
-    extra_requirements_groups=["qwen_omni_utils"],
 )
 
 qwen25_omni_3b = ModelMeta(
@@ -235,6 +240,7 @@ qwen25_omni_3b = ModelMeta(
         "text",
         "image",
         "audio",
+        "video",
     ],
     model_type=["dense"],
     citation="""
@@ -247,7 +253,6 @@ qwen25_omni_3b = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2503.20215},
 }""",
-    extra_requirements_groups=["qwen_omni_utils"],
 )
 
 
@@ -277,6 +282,7 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
         "text",
         "image",
         "audio",
+        "video",
     ],
     model_type=["dense"],
     citation="""
@@ -289,7 +295,6 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
-    extra_requirements_groups=["qwen_omni_utils"],
 )
 
 qwen3_omni_30b_a3b_thinking = ModelMeta(
@@ -318,6 +323,7 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
         "text",
         "image",
         "audio",
+        "video",
     ],
     model_type=["dense"],
     citation="""
@@ -330,7 +336,6 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
-    extra_requirements_groups=["qwen_omni_utils"],
 )
 
 qwen3_omni_30b_a3b_captioner = ModelMeta(
@@ -359,6 +364,7 @@ qwen3_omni_30b_a3b_captioner = ModelMeta(
         "text",
         "image",
         "audio",
+        "video",
     ],
     model_type=["dense"],
     citation="""
@@ -371,5 +377,4 @@ qwen3_omni_30b_a3b_captioner = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
-    extra_requirements_groups=["qwen_omni_utils"],
 )

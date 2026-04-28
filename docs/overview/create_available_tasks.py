@@ -102,7 +102,11 @@ def format_task_entry(task: mteb.AbsTask) -> str:  # noqa: PLR0914
     description = task.metadata.description
     if task.metadata.contributed_by:
         description += f" Contributed by {task.metadata.contributed_by}."
-    license = task.metadata.license or "not specified"
+    raw_license = task.metadata.license or "not specified"
+    if raw_license.startswith("http://") or raw_license.startswith("https://"):
+        license = f"[custom]({raw_license})"
+    else:
+        license = raw_license
     reference = task.metadata.reference
     dataset_name = task.metadata.dataset["path"]
     if not reference and not isinstance(task, AbsTaskAggregate):

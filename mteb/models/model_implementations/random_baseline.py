@@ -7,11 +7,11 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import VideoCollator
 from mteb._requires_package import (
     requires_audio_dependencies,
     requires_image_dependencies,
 )
+from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta
 from mteb.similarity_functions import (
     select_pairwise_similarity,
@@ -235,7 +235,7 @@ class RandomEncoderBaseline:
             requires_image_dependencies()
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=16000,
-                max_frames=10,
+                fps=2.0,
             )
         embedding = _batch_to_embeddings(inputs, self.embedding_dim)
         if self.array_framework == "torch":
@@ -317,7 +317,7 @@ class RandomCrossEncoderBaseline:
         if has_video or has_audio:
             collator = VideoCollator(
                 target_sampling_rate=16000,
-                max_frames=10,
+                fps=2.0,
             )
             inputs1.collate_fn = collator
             inputs2.collate_fn = collator

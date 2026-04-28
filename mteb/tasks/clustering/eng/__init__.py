@@ -14,6 +14,7 @@ from .built_bench_clustering_s2s import BuiltBenchClusteringS2S
 from .cifar import CIFAR10Clustering, CIFAR100Clustering
 from .clus_trec_covid import ClusTrecCovid
 from .crema_d_clustering import CREMADClustering
+from .hmdb51_clustering import HMDB51Clustering
 from .hume_arxiv_clustering_p2p import HUMEArxivClusteringP2P
 from .hume_reddit_clustering_p2p import HUMERedditClusteringP2P
 from .hume_wiki_cities_clustering import HUMEWikiCitiesClustering
@@ -37,6 +38,7 @@ from .twenty_newsgroups_clustering import (
     TwentyNewsgroupsClustering,
     TwentyNewsgroupsClusteringFast,
 )
+from .ucf101_clustering import UCF101Clustering
 from .voice_gender import VoiceGenderClustering
 from .vox_celeb_clustering import VoxCelebClustering
 from .vox_populi_accent_clustering import VoxPopuliAccentClustering
@@ -67,6 +69,7 @@ __all__ = [
     "CIFAR100Clustering",
     "CREMADClustering",
     "ClusTrecCovid",
+    "HMDB51Clustering",
     "HUMEArxivClusteringP2P",
     "HUMERedditClusteringP2P",
     "HUMEWikiCitiesClustering",
@@ -89,6 +92,7 @@ __all__ = [
     "TinyImageNet",
     "TwentyNewsgroupsClustering",
     "TwentyNewsgroupsClusteringFast",
+    "UCF101Clustering",
     "VoiceGenderClustering",
     "VoxCelebClustering",
     "VoxPopuliAccentClustering",
