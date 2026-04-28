@@ -16,7 +16,7 @@ CITATION = r"""
 DESCRIPTION = (
     "MELD (Multimodal EmotionLines Dataset) is a multimodal emotion recognition "
     "dataset containing over 13,000 utterances from the Friends TV series, "
-    "labeled with 7 emotion categories and ~100 speaker identities."
+    "labeled with 7 emotion categories and 100 speaker identities."
 )
 
 DATASET = {
