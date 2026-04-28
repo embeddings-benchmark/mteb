@@ -54,7 +54,7 @@ class SomethingSomethingV2ZeroShotClassification(AbsTaskZeroShotClassification):
             for name in self.dataset["test"].features[self.label_column_name].names
         ]
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc=None):
         self.dataset = self.stratified_subsampling(
             self.dataset,
             seed=self.seed,
