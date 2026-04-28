@@ -19,6 +19,9 @@ from .ravdess import RavdessZeroshotClassification
 from .rendered_sst2 import RenderedSST2
 from .resisc45 import RESISC45ZeroShotClassification
 from .sci_mmir import SciMMIR
+from .something_something_v2_classification import (
+    SomethingSomethingV2ZeroShotClassification,
+)
 from .speech_commands import (
     SpeechCommandsZeroshotClassificationV01,
     SpeechCommandsZeroshotClassificationv02,
@@ -54,6 +57,7 @@ __all__ = [
     "STL10ZeroShotClassification",
     "SUN397ZeroShotClassification",
     "SciMMIR",
+    "SomethingSomethingV2ZeroShotClassification",
     "SpeechCommandsZeroshotClassificationV01",
     "SpeechCommandsZeroshotClassificationv02",
     "StanfordCarsZeroShotClassification",
