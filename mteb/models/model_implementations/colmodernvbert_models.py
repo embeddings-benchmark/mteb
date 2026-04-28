@@ -4,10 +4,6 @@ from typing import Any
 
 import torch
 
-from mteb._requires_package import (
-    requires_image_dependencies,
-    requires_package,
-)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 from .colpali_models import COLPALI_TRAINING_DATA, ColPaliEngineWrapper
@@ -23,10 +19,6 @@ class ColModernVBertWrapper(ColPaliEngineWrapper):
         device: str | None = None,
         **kwargs: Any,
     ) -> None:
-        requires_image_dependencies()
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
         from colpali_engine.models import ColModernVBert, ColModernVBertProcessor
 
         super().__init__(
@@ -49,10 +41,6 @@ class BiModernVBertWrapper(ColPaliEngineWrapper):
         device: str | None = None,
         **kwargs: Any,
     ) -> None:
-        requires_image_dependencies()
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
         from colpali_engine.models import BiModernVBert, BiModernVBertProcessor
 
         super().__init__(
@@ -104,6 +92,7 @@ colmodernvbert = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLMODERNVBERT_CITATION,
+    extra_requirements_groups=["colpali_engine"],
 )
 
 
@@ -134,6 +123,7 @@ bimodernvbert = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLMODERNVBERT_CITATION,
+    extra_requirements_groups=["colpali_engine"],
 )
 
 # Generalist model, trained for single-vector embeddings.
@@ -164,4 +154,5 @@ modernvbert_embed = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLMODERNVBERT_CITATION,
+    extra_requirements_groups=["colpali_engine"],
 )
