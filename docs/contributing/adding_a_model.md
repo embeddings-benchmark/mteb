@@ -190,6 +190,41 @@ When submitting you models as a PR, please copy and paste the following checklis
 ```
 
 
+### Submitting Evaluation Results
+
+Use the [`ResultCache`][mteb.cache.result_cache.ResultCache] to submit results to the [official results repository](https://github.com/embeddings-benchmark/results):
+
+```python
+import mteb
+
+cache = mteb.ResultCache()
+
+# Evaluate your model
+model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
+task = mteb.get_task("ArguAna")
+
+mteb.evaluate(model, task, cache=cache)
+
+# Submit results (manual review before pushing)
+cache.submit_results(model, create_pr=False)
+```
+
+**Manual submission** (recommended for first-time users):
+```python
+submission_info = cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=False)
+print(submission_info.get("manual_submission_instructions"))
+# Review changes and push manually
+```
+
+**Automated submission** (requires GitHub integration to be configured):
+```python
+submission_info = cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=True)
+if submission_info.get("pr_url"):
+    print(f"PR created: {submission_info['pr_url']}")
+```
+
+For more details, see the [result caching guide](../../get_started/advanced_usage/result_cache.md).
+
 ### Matryoshka embeddings
 
 To add support for matryoshka embeddings you can specify `embed_dim` as a list of dimensions.

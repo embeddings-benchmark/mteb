@@ -1,5 +1,12 @@
+from __future__ import annotations
+
 from collections.abc import Mapping
-from typing import Any, NamedTuple
+from typing import TYPE_CHECKING, Any, Literal, NamedTuple
+
+from typing_extensions import TypedDict
+
+if TYPE_CHECKING:
+    from typing_extensions import NotRequired
 
 HFSubset = str
 """The name of a HuggingFace dataset subset, e.g. 'en-de', 'en', 'default' (default is used when there is no subset)."""
@@ -25,3 +32,17 @@ class RetrievalEvaluationResult(NamedTuple):
     mrr: dict[str, float]
     naucs_mrr: dict[str, float]
     hit_rate: dict[str, float]
+
+
+class SubmitResultsResponse(TypedDict):
+    """Metadata returned by ResultCache.submit_results()."""
+
+    status: Literal["no_changes", "ready_for_submission", "pr_created"]
+    models_submitted: list[tuple[str | None, str | None]]
+    result_count: int
+    commit_sha: str | None
+    path: NotRequired[str]
+    pr_url: NotRequired[str]
+    pr_number: NotRequired[int]
+    fork_url: NotRequired[str | None]
+    branch_name: NotRequired[str | None]
