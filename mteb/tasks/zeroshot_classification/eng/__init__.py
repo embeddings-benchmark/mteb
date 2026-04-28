@@ -1,6 +1,7 @@
 from .birdsnap import BirdsnapZeroShotClassification
 from .caltech101 import Caltech101ZeroShotClassification
-from .cifar import CIFAR10ZeroShotClassification, CIFAR100ZeroShotClassification
+from .cifar import (CIFAR10ZeroShotClassification,
+                    CIFAR100ZeroShotClassification)
 from .clevr import CLEVR, CLEVRCount
 from .country211 import Country211ZeroShotClassification
 from .dtd import DTDZeroShotClassification
@@ -19,14 +20,14 @@ from .ravdess import RavdessZeroshotClassification
 from .rendered_sst2 import RenderedSST2
 from .resisc45 import RESISC45ZeroShotClassification
 from .sci_mmir import SciMMIR
-from .speech_commands import (
-    SpeechCommandsZeroshotClassificationV01,
-    SpeechCommandsZeroshotClassificationv02,
-)
+from .speech_commands import (SpeechCommandsZeroshotClassificationV01,
+                              SpeechCommandsZeroshotClassificationv02)
 from .stanford_cars import StanfordCarsZeroShotClassification
 from .stl10 import STL10ZeroShotClassification
 from .sun397 import SUN397ZeroShotClassification
-from .ucf101 import UCF101ZeroShotClassification
+from .ucf101 import (UCF101VideoAudioZeroShotClassification,
+                     UCF101VideoZeroShotClassification,
+                     UCF101ZeroShotClassification)
 
 __all__ = [
     "CLEVR",
@@ -58,4 +59,6 @@ __all__ = [
     "SpeechCommandsZeroshotClassificationv02",
     "StanfordCarsZeroShotClassification",
     "UCF101ZeroShotClassification",
+    "UCF101VideoAudioZeroShotClassification",
+    "UCF101VideoZeroShotClassification",
 ]
