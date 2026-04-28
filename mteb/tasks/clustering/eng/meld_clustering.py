@@ -28,10 +28,17 @@ REFERENCE = "https://aclanthology.org/P19-1050.pdf"
 DATE = ("2019-01-01", "2019-07-28")
 
 
+EMOTION_DESCRIPTION_SUFFIX = (
+    " This task clusters by 6 emotion categories (Anger, Disgust, Fear, Joy, "
+    "Sadness, Surprise); the dominant Neutral class is excluded to mitigate "
+    "class imbalance."
+)
+
+
 class MELDEmotionAudioVideoClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="MELDEmotionAudioVideoClustering",
-        description=DESCRIPTION + " This task clusters by 7 emotion categories.",
+        description=DESCRIPTION + EMOTION_DESCRIPTION_SUFFIX,
         reference=REFERENCE,
         dataset=DATASET,
         type="VideoClustering",
@@ -56,15 +63,16 @@ class MELDEmotionAudioVideoClustering(AbsTaskClustering):
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         for split in self.metadata.eval_splits:
-            self.dataset[split] = self.dataset[split].select_columns(
-                ["video", "audio", "emotion"],
-            )
+            ds = self.dataset[split]
+            neutral_id = ds.features["emotion"].str2int("neutral")
+            ds = ds.filter(lambda x: x["emotion"] != neutral_id)
+            self.dataset[split] = ds.select_columns(["video", "audio", "emotion"])
 
 
 class MELDEmotionVideoClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="MELDEmotionVideoClustering",
-        description=DESCRIPTION + " This task clusters by 7 emotion categories.",
+        description=DESCRIPTION + EMOTION_DESCRIPTION_SUFFIX,
         reference=REFERENCE,
         dataset=DATASET,
         type="VideoClustering",
@@ -89,9 +97,10 @@ class MELDEmotionVideoClustering(AbsTaskClustering):
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         for split in self.metadata.eval_splits:
-            self.dataset[split] = self.dataset[split].select_columns(
-                ["video", "emotion"],
-            )
+            ds = self.dataset[split]
+            neutral_id = ds.features["emotion"].str2int("neutral")
+            ds = ds.filter(lambda x: x["emotion"] != neutral_id)
+            self.dataset[split] = ds.select_columns(["video", "emotion"])
 
 
 class MELDSpeakerAudioVideoClustering(AbsTaskClustering):
