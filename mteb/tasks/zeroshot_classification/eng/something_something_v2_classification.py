@@ -53,3 +53,12 @@ class SomethingSomethingV2ZeroShotClassification(AbsTaskZeroShotClassification):
             f"a photo of {name}"
             for name in self.dataset["test"].features[self.label_column_name].names
         ]
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            seed=self.seed,
+            splits=["test"],
+            label=self.label_column_name,
+            n_samples=2048,
+        )
