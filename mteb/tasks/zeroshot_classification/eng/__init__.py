@@ -1,4 +1,5 @@
 from .birdsnap import BirdsnapZeroShotClassification
+from .breakfast_classification import BreakfastZeroShotClassification
 from .caltech101 import Caltech101ZeroShotClassification
 from .cifar import CIFAR10ZeroShotClassification, CIFAR100ZeroShotClassification
 from .clevr import CLEVR, CLEVRCount
@@ -31,6 +32,7 @@ from .ucf101 import UCF101ZeroShotClassification
 __all__ = [
     "CLEVR",
     "BirdsnapZeroShotClassification",
+    "BreakfastZeroShotClassification",
     "CIFAR10ZeroShotClassification",
     "CIFAR100ZeroShotClassification",
     "CLEVRCount",
