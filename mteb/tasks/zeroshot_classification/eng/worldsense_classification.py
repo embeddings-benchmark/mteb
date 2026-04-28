@@ -43,9 +43,7 @@ class WorldSenseAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
     label_column_name: str = "domain"
 
     def get_candidate_labels(self) -> list[str]:
-        return [
-            name for name in self.dataset["test"].features[self.label_column_name].names
-        ]
+        return self.dataset["test"].features[self.label_column_name].names
 
 
 class WorldSenseVideoZeroShotClassification(AbsTaskZeroShotClassification):
@@ -78,6 +76,4 @@ class WorldSenseVideoZeroShotClassification(AbsTaskZeroShotClassification):
     label_column_name: str = "domain"
 
     def get_candidate_labels(self) -> list[str]:
-        return [
-            name for name in self.dataset["test"].features[self.label_column_name].names
-        ]
+        return self.dataset["test"].features[self.label_column_name].names
