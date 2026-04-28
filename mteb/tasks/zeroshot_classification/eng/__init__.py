@@ -29,7 +29,11 @@ from .speech_commands import (
 from .stanford_cars import StanfordCarsZeroShotClassification
 from .stl10 import STL10ZeroShotClassification
 from .sun397 import SUN397ZeroShotClassification
-from .ucf101 import UCF101ZeroShotClassification
+from .ucf101 import (
+    UCF101VideoAudioZeroShotClassification,
+    UCF101VideoZeroShotClassification,
+    UCF101ZeroShotClassification,
+)
 
 __all__ = [
     "CLEVR",
@@ -61,5 +65,7 @@ __all__ = [
     "SpeechCommandsZeroshotClassificationV01",
     "SpeechCommandsZeroshotClassificationv02",
     "StanfordCarsZeroShotClassification",
+    "UCF101VideoAudioZeroShotClassification",
+    "UCF101VideoZeroShotClassification",
     "UCF101ZeroShotClassification",
 ]
