@@ -8,6 +8,7 @@ from .perception_test import (
     PerceptionTestVideoAudioCentricQA,
     PerceptionTestVideoCentricQA,
 )
+from .video_mme import VideoMMEShortVideoAudioCentricQA, VideoMMEShortVideoCentricQA
 
 __all__ = [
     "AVQAVideoAudioCentricQA",
@@ -22,4 +23,6 @@ __all__ = [
     "NExTQAVideoCentricQA",
     "PerceptionTestVideoAudioCentricQA",
     "PerceptionTestVideoCentricQA",
+    "VideoMMEShortVideoAudioCentricQA",
+    "VideoMMEShortVideoCentricQA",
 ]
