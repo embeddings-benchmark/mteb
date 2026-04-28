@@ -7,7 +7,7 @@ class GatedSyntheticLEXRetrieval(AbsTaskRetrieval):
         name="GatedSyntheticLEXRetrieval",
         description="Synthetically generated dataset for LEX retrieval task.",
         category="t2t",
-        reference="chcaa/lex_articles10k_retrieval_eval_v2",
+        reference="https://huggingface.co/datasets/chcaa/lex_synth_retrieval_eval_v2",
         main_score="ndcg_at_10",
         eval_langs=["dan-Latn"],
         eval_splits=["test"],
