@@ -1,4 +1,5 @@
 from .birdsnap import BirdsnapZeroShotClassification
+from .breakfast_classification import BreakfastZeroShotClassification
 from .caltech101 import Caltech101ZeroShotClassification
 from .cifar import CIFAR10ZeroShotClassification, CIFAR100ZeroShotClassification
 from .clevr import CLEVR, CLEVRCount
@@ -11,7 +12,14 @@ from .food101 import Food101ZeroShotClassification
 from .gtsrb import GTSRBZeroShotClassification
 from .human_animal_cartoon import HumanAnimalCartoonZeroShotClassification
 from .imagenet1k import Imagenet1kZeroShotClassification
-from .kinetics400 import Kinetics400ZeroShotClassification
+from .kinetics400 import (
+    Kinetics400VAZeroShotClassification,
+    Kinetics400ZeroShotClassification,
+)
+from .meld_classification import (
+    MELDAudioVideoZeroShotClassification,
+    MELDVideoZeroShotClassification,
+)
 from .mnist import MNISTZeroShotClassification
 from .oxford_pets import OxfordPetsZeroShotClassification
 from .patch_camelyon import PatchCamelyonZeroShotClassification
@@ -26,7 +34,11 @@ from .speech_commands import (
 from .stanford_cars import StanfordCarsZeroShotClassification
 from .stl10 import STL10ZeroShotClassification
 from .sun397 import SUN397ZeroShotClassification
-from .ucf101 import UCF101ZeroShotClassification
+from .ucf101 import (
+    UCF101VideoAudioZeroShotClassification,
+    UCF101VideoZeroShotClassification,
+    UCF101ZeroShotClassification,
+)
 from .worldsense_classification import (
     WorldSenseAudioVideoZeroShotClassification,
     WorldSenseVideoZeroShotClassification,
@@ -35,6 +47,7 @@ from .worldsense_classification import (
 __all__ = [
     "CLEVR",
     "BirdsnapZeroShotClassification",
+    "BreakfastZeroShotClassification",
     "CIFAR10ZeroShotClassification",
     "CIFAR100ZeroShotClassification",
     "CLEVRCount",
@@ -48,7 +61,10 @@ __all__ = [
     "GTSRBZeroShotClassification",
     "HumanAnimalCartoonZeroShotClassification",
     "Imagenet1kZeroShotClassification",
+    "Kinetics400VAZeroShotClassification",
     "Kinetics400ZeroShotClassification",
+    "MELDAudioVideoZeroShotClassification",
+    "MELDVideoZeroShotClassification",
     "MNISTZeroShotClassification",
     "OxfordPetsZeroShotClassification",
     "PatchCamelyonZeroShotClassification",
@@ -61,6 +77,8 @@ __all__ = [
     "SpeechCommandsZeroshotClassificationV01",
     "SpeechCommandsZeroshotClassificationv02",
     "StanfordCarsZeroShotClassification",
+    "UCF101VideoAudioZeroShotClassification",
+    "UCF101VideoZeroShotClassification",
     "UCF101ZeroShotClassification",
     "WorldSenseAudioVideoZeroShotClassification",
     "WorldSenseVideoZeroShotClassification",

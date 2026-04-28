@@ -3,7 +3,6 @@ from __future__ import annotations
 import datetime
 import json
 import logging
-import warnings
 from collections import defaultdict
 from functools import cached_property
 from importlib.metadata import version
@@ -22,6 +21,7 @@ from mteb._hf_integration.eval_result_model import (
     HFEvalResults,
     HFEvalResultSource,
 )
+from mteb._log_once import LogOnce
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -47,6 +47,7 @@ if TYPE_CHECKING:
     )
 
 logger = logging.getLogger(__name__)
+log_once = LogOnce(logger)
 
 
 class Criteria(HelpfulStrEnum):
@@ -493,9 +494,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     if main_score in hf_subset_scores:
                         hf_subset_scores["main_score"] = hf_subset_scores[main_score]
                     else:
-                        msg = f"Main score {main_score} not found in scores"
-                        logger.warning(msg)
-                        warnings.warn(msg)
+                        log_once.warning(f"Main score {main_score} not found in scores")
                         hf_subset_scores["main_score"] = None
 
         # specific fixes:
@@ -703,9 +702,9 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                 else:
                     missing_subsets_str = str(missing_subsets)
 
-                msg = f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
-                logger.warning(msg)
-                warnings.warn(msg)
+                log_once.warning(
+                    f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
+                )
                 for missing_subset in missing_subsets:
                     new_scores[split].append(
                         {
@@ -718,9 +717,9 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     )
             seen_splits.add(split)
         if seen_splits != set(splits):
-            msg = f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
-            logger.warning(msg)
-            warnings.warn(msg)
+            log_once.warning(
+                f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
+            )
             for missing_split in set(splits) - seen_splits:
                 new_scores[missing_split] = []
                 for missing_subset in hf_subsets:
