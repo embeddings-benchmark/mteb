@@ -15,13 +15,13 @@ from pydantic import BaseModel, field_validator
 from typing_extensions import deprecated
 
 from mteb._helpful_enum import HelpfulStrEnum
-from mteb._log_once import LogOnce
 from mteb._hf_integration.eval_result_model import (
     HFEvalResult,
     HFEvalResultDataset,
     HFEvalResults,
     HFEvalResultSource,
 )
+from mteb._log_once import LogOnce
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
