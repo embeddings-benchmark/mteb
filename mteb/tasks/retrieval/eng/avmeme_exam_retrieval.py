@@ -247,3 +247,75 @@ class AVMemeExamA2VRetrieval(AbsTaskRetrieval):
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         _load_avmeme_exam(self, query_columns=["audio"], corpus_columns=["video"])
+
+
+class AVMemeExamVT2ARetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="AVMemeExamVT2ARetrieval",
+        description=(
+            "Retrieve the audio track that matches a given meme video clip and its "
+            "summary from AVMeme-Exam, a multilingual audio-visual meme understanding "
+            "benchmark."
+        ),
+        reference="https://huggingface.co/datasets/mteb/AVMeme-Exam",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="vt2a",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["video", "text", "audio"],
+        date=("2025-01-01", "2025-12-31"),
+        domains=["Web", "Social"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Find the audio that corresponds to the following meme video and its description."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_avmeme_exam(
+            self, query_columns=["video", "summary"], corpus_columns=["audio"]
+        )
+
+
+class AVMemeExamAT2VRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="AVMemeExamAT2VRetrieval",
+        description=(
+            "Retrieve the meme video clip that matches a given audio track and its "
+            "summary from AVMeme-Exam, a multilingual audio-visual meme understanding "
+            "benchmark."
+        ),
+        reference="https://huggingface.co/datasets/mteb/AVMeme-Exam",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="at2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["audio", "text", "video"],
+        date=("2025-01-01", "2025-12-31"),
+        domains=["Web", "Social"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Find the meme video that corresponds to the following audio and its description."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_avmeme_exam(
+            self, query_columns=["audio", "summary"], corpus_columns=["video"]
+        )
