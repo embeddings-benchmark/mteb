@@ -26,7 +26,10 @@ class GlobalNewsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="GlobalNewsRetrieval",
         description=_DESCRIPTION,
-        dataset={"path": "jinaai/global-news", "revision": "main"},
+        dataset={
+            "path": "jinaai/global-news",
+            "revision": "b4e5e3d5fe31b5bb0cb9fcd1218a3fa7784bc0e4",
+        },
         type="Retrieval",
         category="t2t",
         modalities=["text"],
@@ -50,7 +53,10 @@ class PublicNewsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="PublicNewsRetrieval",
         description=_DESCRIPTION,
-        dataset={"path": "jinaai/public-news", "revision": "main"},
+        dataset={
+            "path": "jinaai/public-news",
+            "revision": "bddbd5d01b9be88e16a570d13fa2245b37062ad8",
+        },
         type="Retrieval",
         category="t2t",
         modalities=["text"],
