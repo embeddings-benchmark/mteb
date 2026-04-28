@@ -27,6 +27,10 @@ from .stanford_cars import StanfordCarsZeroShotClassification
 from .stl10 import STL10ZeroShotClassification
 from .sun397 import SUN397ZeroShotClassification
 from .ucf101 import UCF101ZeroShotClassification
+from .worldsense_classification import (
+    WorldSenseAudioVideoZeroShotClassification,
+    WorldSenseVideoZeroShotClassification,
+)
 
 __all__ = [
     "CLEVR",
@@ -58,4 +62,6 @@ __all__ = [
     "SpeechCommandsZeroshotClassificationv02",
     "StanfordCarsZeroShotClassification",
     "UCF101ZeroShotClassification",
+    "WorldSenseAudioVideoZeroShotClassification",
+    "WorldSenseVideoZeroShotClassification",
 ]
