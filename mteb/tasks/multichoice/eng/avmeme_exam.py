@@ -32,10 +32,10 @@ class AVMemeExamVideoCentricQA(AbsTaskRetrieval):
         is_beta=True,
         bibtex_citation=r"""
 @article{jiang2026avmeme,
-  title={AVMeme Exam: A Multimodal Multilingual Multicultural Benchmark for LLMs' Contextual and Cultural Knowledge and Thinking},
-  author={Jiang, Xilin and Wang, Qiaolin and Wu, Junkai and others},
-  journal={arXiv preprint arXiv:2601.17645},
-  year={2026}
+  author = {Jiang, Xilin and Wang, Qiaolin and Wu, Junkai and others},
+  journal = {arXiv preprint arXiv:2601.17645},
+  title = {AVMeme Exam: A Multimodal Multilingual Multicultural Benchmark for LLMs' Contextual and Cultural Knowledge and Thinking},
+  year = {2026},
 }
 """,
     )
@@ -105,10 +105,10 @@ class AVMemeExamVideoAudioCentricQA(AbsTaskRetrieval):
         is_beta=True,
         bibtex_citation=r"""
 @article{jiang2026avmeme,
-  title={AVMeme Exam: A Multimodal Multilingual Multicultural Benchmark for LLMs' Contextual and Cultural Knowledge and Thinking},
-  author={Jiang, Xilin and Wang, Qiaolin and Wu, Junkai and others},
-  journal={arXiv preprint arXiv:2601.17645},
-  year={2026}
+  author = {Jiang, Xilin and Wang, Qiaolin and Wu, Junkai and others},
+  journal = {arXiv preprint arXiv:2601.17645},
+  title = {AVMeme Exam: A Multimodal Multilingual Multicultural Benchmark for LLMs' Contextual and Cultural Knowledge and Thinking},
+  year = {2026},
 }
 """,
     )
@@ -125,9 +125,9 @@ class AVMemeExamVideoAudioCentricQA(AbsTaskRetrieval):
             )
             ds = ds.add_column("id", [f"q{i}" for i in range(len(ds))])
 
-            queries = ds.select_columns(["id", "question", "video", "audio"]).rename_column(
-                "question", "text"
-            )
+            queries = ds.select_columns(
+                ["id", "question", "video", "audio"]
+            ).rename_column("question", "text")
 
             corpus_rows: list[dict] = []
             relevant_docs: dict[str, dict[str, int]] = {}
