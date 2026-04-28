@@ -16,6 +16,10 @@ from .kinetics400 import (
     Kinetics400VAZeroShotClassification,
     Kinetics400ZeroShotClassification,
 )
+from .meld_classification import (
+    MELDAudioVideoZeroShotClassification,
+    MELDVideoZeroShotClassification,
+)
 from .mnist import MNISTZeroShotClassification
 from .oxford_pets import OxfordPetsZeroShotClassification
 from .patch_camelyon import PatchCamelyonZeroShotClassification
@@ -55,6 +59,8 @@ __all__ = [
     "Imagenet1kZeroShotClassification",
     "Kinetics400VAZeroShotClassification",
     "Kinetics400ZeroShotClassification",
+    "MELDAudioVideoZeroShotClassification",
+    "MELDVideoZeroShotClassification",
     "MNISTZeroShotClassification",
     "OxfordPetsZeroShotClassification",
     "PatchCamelyonZeroShotClassification",
