@@ -1159,7 +1159,9 @@ def get_leaderboard_app(  # noqa: PLR0914
                     )
                 )
             scores_hash = hash(tuple(sorted(score_signature)))
-            tasks_hash = hash(tuple(sorted(tasks)))
+            tasks_hash = (
+                hash(tuple(sorted(tasks))) if tasks is not None else None
+            )
             # Sort models_to_keep to ensure consistent hash regardless of input order
             models_hash = (
                 hash(tuple(sorted(models_to_keep)))
@@ -1186,7 +1188,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             languages: list[str],
         ):
             start_time = time.time()
-            tasks = set(tasks)
+            tasks = set(tasks) if tasks is not None else None
             benchmark = mteb.get_benchmark(benchmark_name)
 
             # Extract filtered model and task names from scores (respects UI filters)
@@ -1194,7 +1196,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             filtered_task_names = set()
 
             for entry in scores:
-                if entry["task_name"] not in tasks:
+                if (tasks is not None) and (entry["task_name"] not in tasks):
                     continue
                 if (models_to_keep is not None) and (
                     entry["model_name"] not in models_to_keep
