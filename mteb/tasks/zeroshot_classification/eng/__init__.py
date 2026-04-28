@@ -24,6 +24,10 @@ from .meld_classification import (
     MELDAudioVideoZeroShotClassification,
     MELDVideoZeroShotClassification,
 )
+from .kinetics700 import (
+    Kinetics700VAZeroShotClassification,
+    Kinetics700VZeroShotClassification,
+)
 from .mnist import MNISTZeroShotClassification
 from .music_avqa import (
     MusicAVQACLSAudioVideoZeroShotClassification,
@@ -73,6 +77,8 @@ __all__ = [
     "Imagenet1kZeroShotClassification",
     "Kinetics400VAZeroShotClassification",
     "Kinetics400ZeroShotClassification",
+    "Kinetics700VAZeroShotClassification",
+    "Kinetics700VZeroShotClassification",
     "MELDAudioVideoZeroShotClassification",
     "MELDVideoZeroShotClassification",
     "MNISTZeroShotClassification",
