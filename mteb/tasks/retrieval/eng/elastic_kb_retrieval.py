@@ -16,7 +16,7 @@ class ElasticKBRetrieval(AbsTaskRetrieval):
             "(grounding doc that lead to self-served ticket for real-world queries "
             "and generating doc for synthetic queries)."
         ),
-        reference="",
+        reference=None,
         dataset={
             "path": "",
             "revision": "",
