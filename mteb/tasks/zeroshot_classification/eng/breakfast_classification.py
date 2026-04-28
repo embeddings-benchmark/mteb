@@ -14,7 +14,7 @@ class BreakfastZeroShotClassification(AbsTaskZeroShotClassification):
             "revision": "59a874899eb241993794a3454c37829727c3b559",
         },
         type="VideoZeroshotClassification",
-        category="v2t", 
+        category="v2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
