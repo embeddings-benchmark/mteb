@@ -980,12 +980,8 @@ class ResultCache:
         """Normalize model input to list of ModelMeta objects.
 
         Args:
-            models: Model(s) to normalize. Can be:
-                - None: get all models from local cache
-                - str: single model name
-                - ModelMeta: single model metadata object
-                - list[str]: list of model names
-                - list[ModelMeta]: list of model metadata objects
+            models: Model(s) to normalize. Can either a list of string or ModelMeta objects.
+            If None it will get all models from local cache.
 
         Returns:
             List of ModelMeta objects.
@@ -1200,6 +1196,30 @@ class ResultCache:
         ]
         return "\n".join(lines)
 
+    @staticmethod
+    def _build_commit_message(
+        normalized_models: list[ModelMeta],
+        unsubmitted: dict[ModelMeta, list[Path]],
+    ) -> tuple[str, int]:
+        """Build the commit message for submitted results.
+
+        Args:
+            normalized_models: Models being submitted.
+            unsubmitted: Result files grouped by model.
+
+        Returns:
+            Tuple containing the formatted commit message and result count.
+        """
+        model_str = ", ".join(model.name for model in normalized_models if model.name)
+        result_count = sum(len(files) for files in unsubmitted.values())
+        commit_message = (
+            f"Add MTEB evaluation results for {model_str}\n\n"
+            f"Models: {model_str}\n"
+            f"Total results: {result_count}\n"
+            f"Submitted by MTEB ResultCache"
+        )
+        return commit_message, result_count
+
     def submit_results(
         self,
         models: Sequence[str] | Sequence[ModelMeta] | str | ModelMeta | None = None,
@@ -1213,10 +1233,8 @@ class ResultCache:
         to be installed if `create_pr=True`.
 
         Args:
-            models: Model(s) whose results should be submitted. Can be:
-                - None: submit all unsubmitted results
-                - str or ModelMeta: single model
-                - list[str] or list[ModelMeta]: multiple models
+            models: Model(s) whose results should be submitted. Can either a list of string or ModelMeta objects.
+                If None it will get all models from local cache.
             create_pr: If True, create a PR directly to the remote. If False, prints
                   instructions for manual submission.
 
@@ -1282,13 +1300,8 @@ class ResultCache:
         actions: list[ReversibleAction] = []
         actions.append(CopyResultsAction(unsubmitted, self.remote_results_path))
 
-        model_str = ", ".join(model.name for model in normalized_models if model.name)
-        result_count = sum(len(files) for files in unsubmitted.values())
-        commit_message = (
-            f"Add MTEB evaluation results for {model_str}\n\n"
-            f"Models: {model_str}\n"
-            f"Total results: {result_count}\n"
-            f"Submitted by MTEB ResultCache"
+        commit_message, result_count = self._build_commit_message(
+            normalized_models, unsubmitted
         )
 
         commit_action = CommitAction(remote_path, commit_message)
@@ -1300,11 +1313,7 @@ class ResultCache:
             )
 
         workflow = ReversibleWorkflow(steps=actions)
-        try:
-            workflow.run()
-        except Exception as e:
-            logger.error(f"Workflow error during submit_results: {e}")
-            raise
+        workflow.run()
 
         commit_sha = commit_action.commit_sha
         if not commit_sha:

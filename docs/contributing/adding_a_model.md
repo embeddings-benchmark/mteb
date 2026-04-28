@@ -197,11 +197,7 @@ Use the [`ResultCache`][mteb.cache.result_cache.ResultCache] to submit results t
 ```python
 import mteb
 
-# Initialize and sync cache
 cache = mteb.ResultCache()
-
-# Optional: start from a clean slate.
-# cache.clear_cache()
 
 # Evaluate your model
 model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
