@@ -11,7 +11,10 @@ from .food101 import Food101ZeroShotClassification
 from .gtsrb import GTSRBZeroShotClassification
 from .human_animal_cartoon import HumanAnimalCartoonZeroShotClassification
 from .imagenet1k import Imagenet1kZeroShotClassification
-from .kinetics400 import Kinetics400ZeroShotClassification
+from .kinetics400 import (
+    Kinetics400VAZeroShotClassification,
+    Kinetics400ZeroShotClassification,
+)
 from .meld_classification import (
     MELDAudioVideoZeroShotClassification,
     MELDVideoZeroShotClassification,
@@ -48,6 +51,7 @@ __all__ = [
     "GTSRBZeroShotClassification",
     "HumanAnimalCartoonZeroShotClassification",
     "Imagenet1kZeroShotClassification",
+    "Kinetics400VAZeroShotClassification",
     "Kinetics400ZeroShotClassification",
     "MELDAudioVideoZeroShotClassification",
     "MELDVideoZeroShotClassification",
