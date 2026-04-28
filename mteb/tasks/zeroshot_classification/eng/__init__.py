@@ -13,6 +13,10 @@ from .human_animal_cartoon import HumanAnimalCartoonZeroShotClassification
 from .imagenet1k import Imagenet1kZeroShotClassification
 from .kinetics400 import Kinetics400ZeroShotClassification
 from .mnist import MNISTZeroShotClassification
+from .music_avqa import (
+    MusicAVQACLSAudioVideoZeroShotClassification,
+    MusicAVQACLSVideoZeroShotClassification,
+)
 from .oxford_pets import OxfordPetsZeroShotClassification
 from .patch_camelyon import PatchCamelyonZeroShotClassification
 from .ravdess import RavdessZeroshotClassification
@@ -46,6 +50,8 @@ __all__ = [
     "Imagenet1kZeroShotClassification",
     "Kinetics400ZeroShotClassification",
     "MNISTZeroShotClassification",
+    "MusicAVQACLSAudioVideoZeroShotClassification",
+    "MusicAVQACLSVideoZeroShotClassification",
     "OxfordPetsZeroShotClassification",
     "PatchCamelyonZeroShotClassification",
     "RESISC45ZeroShotClassification",
