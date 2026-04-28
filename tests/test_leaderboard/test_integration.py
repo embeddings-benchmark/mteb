@@ -11,7 +11,7 @@ class TestIntegrationScenarios:
     """Test integration scenarios that use ResultCache method."""
 
     @patch("mteb.cache.requests.get")
-    def test_full_caching_workflow_success(
+    def test_full_caching_workflow_success(  # noqa: PLR6301
         self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
     ):
         """Test the complete workflow from download to file write via ResultCache."""
@@ -38,7 +38,7 @@ class TestIntegrationScenarios:
         mock_response.raise_for_status.assert_called_once()
 
     @patch("mteb.cache.requests.get")
-    def test_download_failure_handling(self, mock_get, tmp_path):
+    def test_download_failure_handling(self, mock_get, tmp_path):  # noqa: PLR6301
         """Test that download failures are properly handled in the workflow."""
         cache = ResultCache(cache_path=tmp_path)
         mock_get.side_effect = Exception("Network error")

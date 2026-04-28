@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import io
 from typing import TYPE_CHECKING
 
 import datasets
 import numpy as np
+import pytest
 from datasets import Audio, Dataset, DatasetDict
 from sklearn.linear_model import LogisticRegression
 
@@ -22,7 +24,8 @@ from mteb.abstasks.multilabel_classification import (
 )
 from mteb.abstasks.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.regression import AbsTaskRegression
-from mteb.abstasks.retrieval import AbsTaskRetrieval, RetrievalSplitData
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
@@ -30,6 +33,7 @@ from mteb.abstasks.text.summarization import AbsTaskSummarization
 from mteb.abstasks.zeroshot_classification import (
     AbsTaskZeroShotClassification,
 )
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from PIL.Image import Image
@@ -126,6 +130,52 @@ def create_mock_images(np_rng: np.random.Generator, n: int = 2) -> list[Image]:
     return [Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images]
 
 
+def create_mock_video_bytes(
+    np_rng: np.random.Generator,
+    n: int = 2,
+    width: int = 64,
+    height: int = 64,
+    fps: int = 24,
+    duration_s: float = 1.0,
+) -> list[bytes]:
+    """Create minimal video bytes using PyAV.
+
+    Args:
+        np_rng: NumPy random generator used to produce distinct frame content per video.
+        n: Number of video clips to generate.
+        width: Frame width in pixels.
+        height: Frame height in pixels.
+        fps: Frames per second.
+        duration_s: Duration of each video clip in seconds.
+
+    Returns:
+        List of n videos, each encoded as MP4 bytes.
+    """
+    pytest.importorskip("av", reason="Please, install av to run mock video tasks")
+
+    import av
+
+    videos = []
+    num_frames = int(fps * duration_s)
+    for _ in range(n):
+        buf = io.BytesIO()
+        container = av.open(buf, mode="w", format="mp4")
+        stream = container.add_stream("h264", rate=fps)
+        stream.width = width
+        stream.height = height
+        stream.pix_fmt = "yuv420p"
+        for _ in range(num_frames):
+            frame_data = np_rng.integers(0, 255, (height, width, 3), dtype=np.uint8)
+            frame = av.VideoFrame.from_ndarray(frame_data, format="rgb24")
+            for pkt in stream.encode(frame):
+                container.mux(pkt)
+        for pkt in stream.encode():
+            container.mux(pkt)
+        container.close()
+        videos.append(buf.getvalue())
+    return videos
+
+
 def create_mock_audio(
     np_rng: np.random.Generator,
     n: int = 2,
@@ -151,7 +201,7 @@ class MockClassificationTask(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_texts_intersect_with_train": 1,
+            "samples_in_train": 1,
             "text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -161,6 +211,7 @@ class MockClassificationTask(AbsTaskClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -171,7 +222,7 @@ class MockClassificationTask(AbsTaskClassification):
         },
         "train": {
             "num_samples": 2,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": {
                 "total_text_length": 53,
                 "min_text_length": 23,
@@ -181,6 +232,7 @@ class MockClassificationTask(AbsTaskClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -229,7 +281,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "number_texts_intersect_with_train": 1,
+            "samples_in_train": 1,
             "text_statistics": {
                 "total_text_length": 104,
                 "min_text_length": 23,
@@ -239,6 +291,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -249,7 +302,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 2,
-                    "number_texts_intersect_with_train": 1,
+                    "samples_in_train": 1,
                     "text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -259,6 +312,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -269,7 +323,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                 },
                 "fra": {
                     "num_samples": 2,
-                    "number_texts_intersect_with_train": 1,
+                    "samples_in_train": 1,
                     "text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -279,6 +333,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -291,7 +346,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
         },
         "train": {
             "num_samples": 4,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": {
                 "total_text_length": 106,
                 "min_text_length": 23,
@@ -301,6 +356,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -311,7 +367,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 2,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": None,
                     "text_statistics": {
                         "total_text_length": 53,
                         "min_text_length": 23,
@@ -321,6 +377,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -331,7 +388,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                 },
                 "fra": {
                     "num_samples": 2,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": None,
                     "text_statistics": {
                         "total_text_length": 53,
                         "min_text_length": 23,
@@ -341,6 +398,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -641,6 +699,7 @@ class MockClusteringTask(AbsTaskClusteringLegacy):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -694,6 +753,7 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -713,6 +773,7 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -736,6 +797,7 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -804,6 +866,7 @@ class MockClusteringFastTask(AbsTaskClustering):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -858,6 +921,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClustering):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -877,6 +941,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClustering):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "labels_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -900,6 +965,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClustering):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "labels_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -964,6 +1030,7 @@ class MockPairClassificationTask(AbsTaskPairClassification):
             },
             "image1_statistics": None,
             "audio1_statistics": None,
+            "video1_statistics": None,
             "text2_statistics": {
                 "total_text_length": 61,
                 "min_text_length": 24,
@@ -973,6 +1040,7 @@ class MockPairClassificationTask(AbsTaskPairClassification):
             },
             "image2_statistics": None,
             "audio2_statistics": None,
+            "video2_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -1027,6 +1095,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
             },
             "image1_statistics": None,
             "audio1_statistics": None,
+            "video1_statistics": None,
             "text2_statistics": {
                 "total_text_length": 122,
                 "min_text_length": 24,
@@ -1036,6 +1105,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
             },
             "image2_statistics": None,
             "audio2_statistics": None,
+            "video2_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -1057,6 +1127,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                     },
                     "image1_statistics": None,
                     "audio1_statistics": None,
+                    "video1_statistics": None,
                     "text2_statistics": {
                         "total_text_length": 61,
                         "min_text_length": 24,
@@ -1066,6 +1137,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                     },
                     "image2_statistics": None,
                     "audio2_statistics": None,
+                    "video2_statistics": None,
                     "labels_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -1087,6 +1159,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                     },
                     "image1_statistics": None,
                     "audio1_statistics": None,
+                    "video1_statistics": None,
                     "text2_statistics": {
                         "total_text_length": 61,
                         "min_text_length": 24,
@@ -1096,6 +1169,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                     },
                     "image2_statistics": None,
                     "audio2_statistics": None,
+                    "video2_statistics": None,
                     "labels_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -1160,6 +1234,7 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
                 "unique_images": 2,
             },
             "audio1_statistics": None,
+            "video1_statistics": None,
             "text2_statistics": None,
             "image2_statistics": {
                 "min_image_width": 100,
@@ -1171,6 +1246,7 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
                 "unique_images": 2,
             },
             "audio2_statistics": None,
+            "video2_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -1235,7 +1311,9 @@ class MockSTSTask(AbsTaskSTS):
             "image1_statistics": None,
             "image2_statistics": None,
             "audio1_statistics": None,
+            "video1_statistics": None,
             "audio2_statistics": None,
+            "video2_statistics": None,
             "label_statistics": {"min_score": 0, "avg_score": 0.5, "max_score": 1},
         }
     }
@@ -1295,7 +1373,9 @@ class MockMultilingualSTSTask(AbsTaskSTS):
             "image1_statistics": None,
             "image2_statistics": None,
             "audio1_statistics": None,
+            "video1_statistics": None,
             "audio2_statistics": None,
+            "video2_statistics": None,
             "label_statistics": {"min_score": 0, "avg_score": 0.5, "max_score": 1},
             "hf_subset_descriptive_stats": {
                 "eng": {
@@ -1319,7 +1399,9 @@ class MockMultilingualSTSTask(AbsTaskSTS):
                     "image1_statistics": None,
                     "image2_statistics": None,
                     "audio1_statistics": None,
+                    "video1_statistics": None,
                     "audio2_statistics": None,
+                    "video2_statistics": None,
                     "label_statistics": {
                         "min_score": 0,
                         "avg_score": 0.5,
@@ -1347,7 +1429,9 @@ class MockMultilingualSTSTask(AbsTaskSTS):
                     "image1_statistics": None,
                     "image2_statistics": None,
                     "audio1_statistics": None,
+                    "video1_statistics": None,
                     "audio2_statistics": None,
+                    "video2_statistics": None,
                     "label_statistics": {
                         "min_score": 0,
                         "avg_score": 0.5,
@@ -1607,6 +1691,7 @@ class MockRerankingTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -1616,6 +1701,7 @@ class MockRerankingTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1660,6 +1746,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 104,
                 "min_text_length": 23,
@@ -1669,6 +1756,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -1695,6 +1783,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -1704,6 +1793,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -1730,6 +1820,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -1739,6 +1830,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -1789,6 +1881,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -1798,6 +1891,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1819,6 +1913,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -1828,6 +1923,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1869,6 +1965,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 117,
                 "min_text_length": 37,
@@ -1878,6 +1975,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1899,6 +1997,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 117,
                 "min_text_length": 37,
@@ -1908,6 +2007,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1966,6 +2066,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 104,
                 "min_text_length": 23,
@@ -1975,6 +2076,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -1996,6 +2098,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -2005,6 +2108,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2026,6 +2130,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -2035,6 +2140,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2058,6 +2164,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 104,
                 "min_text_length": 23,
@@ -2067,6 +2174,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -2088,6 +2196,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -2097,6 +2206,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2118,6 +2228,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -2127,6 +2238,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2163,7 +2275,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 6,
-            "number_texts_intersect_with_train": 1,
+            "samples_in_train": 1,
             "text_statistics": {
                 "total_text_length": 156,
                 "min_text_length": 23,
@@ -2173,6 +2285,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -2183,7 +2296,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
         },
         "train": {
             "num_samples": 6,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": {
                 "total_text_length": 159,
                 "min_text_length": 23,
@@ -2193,6 +2306,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -2238,7 +2352,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 12,
-            "number_texts_intersect_with_train": 1,
+            "samples_in_train": 1,
             "text_statistics": {
                 "total_text_length": 312,
                 "min_text_length": 23,
@@ -2248,6 +2362,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -2258,7 +2373,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 6,
-                    "number_texts_intersect_with_train": 1,
+                    "samples_in_train": 1,
                     "text_statistics": {
                         "total_text_length": 156,
                         "min_text_length": 23,
@@ -2268,6 +2383,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -2278,7 +2394,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                 },
                 "fra": {
                     "num_samples": 6,
-                    "number_texts_intersect_with_train": 1,
+                    "samples_in_train": 1,
                     "text_statistics": {
                         "total_text_length": 156,
                         "min_text_length": 23,
@@ -2288,6 +2404,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -2300,7 +2417,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
         },
         "train": {
             "num_samples": 12,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": {
                 "total_text_length": 318,
                 "min_text_length": 23,
@@ -2310,6 +2427,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -2320,7 +2438,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 6,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": None,
                     "text_statistics": {
                         "total_text_length": 159,
                         "min_text_length": 23,
@@ -2330,6 +2448,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -2340,7 +2459,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                 },
                 "fra": {
                     "num_samples": 6,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": None,
                     "text_statistics": {
                         "total_text_length": 159,
                         "min_text_length": 23,
@@ -2350,6 +2469,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                     },
                     "image_statistics": None,
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -2413,6 +2533,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 112,
                 "min_text_length": 50,
@@ -2422,6 +2543,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -2462,6 +2584,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 112,
                 "min_text_length": 50,
@@ -2471,6 +2594,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -2514,6 +2638,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 224,
                 "min_text_length": 50,
@@ -2523,6 +2648,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -2544,6 +2670,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 112,
                         "min_text_length": 50,
@@ -2553,6 +2680,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2574,6 +2702,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 112,
                         "min_text_length": 50,
@@ -2583,6 +2712,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2628,6 +2758,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 224,
                 "min_text_length": 50,
@@ -2637,6 +2768,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -2663,6 +2795,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 112,
                         "min_text_length": 50,
@@ -2672,6 +2805,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2698,6 +2832,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                     },
                     "documents_image_statistics": None,
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 112,
                         "min_text_length": 50,
@@ -2707,6 +2842,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                     },
                     "queries_image_statistics": None,
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2771,6 +2907,7 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
                 "unique_images": 2,
             },
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 60,
                 "min_text_length": 27,
@@ -2788,6 +2925,7 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
                 "unique_images": 2,
             },
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -2861,6 +2999,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                 "unique_images": 2,
             },
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 120,
                 "min_text_length": 27,
@@ -2878,6 +3017,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                 "unique_images": 2,
             },
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -2906,6 +3046,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "unique_images": 2,
                     },
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 60,
                         "min_text_length": 27,
@@ -2923,6 +3064,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "unique_images": 2,
                     },
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2951,6 +3093,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "unique_images": 2,
                     },
                     "documents_audio_statistics": None,
+                    "documents_video_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 60,
                         "min_text_length": 27,
@@ -2968,6 +3111,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "unique_images": 2,
                     },
                     "queries_audio_statistics": None,
+                    "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -3051,6 +3195,7 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": None,
             "queries_image_statistics": {
                 "min_image_width": 100,
@@ -3062,6 +3207,7 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
                 "unique_images": 2,
             },
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -3127,6 +3273,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
                 "unique_images": 2,
             },
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 60,
                 "min_text_length": 27,
@@ -3136,6 +3283,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -3189,7 +3337,7 @@ class MockImageClassificationTask(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": 2,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -3201,6 +3349,7 @@ class MockImageClassificationTask(AbsTaskClassification):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3211,7 +3360,7 @@ class MockImageClassificationTask(AbsTaskClassification):
         },
         "train": {
             "num_samples": 10,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -3223,6 +3372,7 @@ class MockImageClassificationTask(AbsTaskClassification):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3274,7 +3424,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": 2,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -3286,6 +3436,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3296,7 +3447,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 2,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": 2,
                     "text_statistics": None,
                     "image_statistics": {
                         "min_image_width": 100,
@@ -3308,6 +3459,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                         "unique_images": 2,
                     },
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -3318,7 +3470,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                 },
                 "fra": {
                     "num_samples": 2,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": 2,
                     "text_statistics": None,
                     "image_statistics": {
                         "min_image_width": 100,
@@ -3330,6 +3482,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                         "unique_images": 2,
                     },
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -3342,7 +3495,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
         },
         "train": {
             "num_samples": 20,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -3354,6 +3507,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3364,7 +3518,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 10,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": None,
                     "text_statistics": None,
                     "image_statistics": {
                         "min_image_width": 100,
@@ -3376,6 +3530,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                         "unique_images": 2,
                     },
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -3386,7 +3541,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                 },
                 "fra": {
                     "num_samples": 10,
-                    "number_texts_intersect_with_train": None,
+                    "samples_in_train": None,
                     "text_statistics": None,
                     "image_statistics": {
                         "min_image_width": 100,
@@ -3398,6 +3553,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                         "unique_images": 2,
                     },
                     "audio_statistics": None,
+                    "video_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -3463,6 +3619,7 @@ class MockImageClusteringTask(AbsTaskClusteringLegacy):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3515,6 +3672,7 @@ class MockImageClusteringFastTask(AbsTaskClustering):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3558,7 +3716,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": 2,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -3570,6 +3728,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -3585,7 +3744,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
         },
         "train": {
             "num_samples": 10,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -3597,6 +3756,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -3797,8 +3957,8 @@ class MockVisualSTSTask(AbsTaskSTS):
     expected_stats = {
         "test": {
             "num_samples": 2,
+            "unique_pairs": 2,
             "number_of_characters": None,
-            "unique_pairs": None,
             "text1_statistics": None,
             "text2_statistics": None,
             "image1_statistics": {
@@ -3820,7 +3980,9 @@ class MockVisualSTSTask(AbsTaskSTS):
                 "unique_images": 2,
             },
             "audio1_statistics": None,
+            "video1_statistics": None,
             "audio2_statistics": None,
+            "video2_statistics": None,
             "label_statistics": {"min_score": 0.5, "avg_score": 0.5, "max_score": 0.5},
         }
     }
@@ -3858,7 +4020,6 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_of_characters": None,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -3870,6 +4031,7 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3912,7 +4074,7 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
         )
         self.data_loaded = True
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         return ["This is a test sentence", "This is another test sentence"]
 
 
@@ -3920,7 +4082,6 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_of_characters": None,
             "text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -3930,6 +4091,7 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3973,7 +4135,7 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
         )
         self.data_loaded = True
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         return ["This is a test sentence", "This is another test sentence"]
 
 
@@ -3981,7 +4143,7 @@ class MockRegressionTask(AbsTaskRegression):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "num_texts_in_train": 1,
+            "samples_in_train": 1,
             "text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -3991,11 +4153,12 @@ class MockRegressionTask(AbsTaskRegression):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         },
         "train": {
             "num_samples": 2,
-            "num_texts_in_train": None,
+            "samples_in_train": None,
             "text_statistics": {
                 "total_text_length": 53,
                 "min_text_length": 23,
@@ -4005,6 +4168,7 @@ class MockRegressionTask(AbsTaskRegression):
             },
             "image_statistics": None,
             "audio_statistics": None,
+            "video_statistics": None,
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         },
     }
@@ -4045,7 +4209,7 @@ class MockImageRegressionTask(AbsTaskRegression):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "num_texts_in_train": None,
+            "samples_in_train": 0,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -4057,11 +4221,12 @@ class MockImageRegressionTask(AbsTaskRegression):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         },
         "train": {
             "num_samples": 2,
-            "num_texts_in_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -4073,6 +4238,7 @@ class MockImageRegressionTask(AbsTaskRegression):
                 "unique_images": 2,
             },
             "audio_statistics": None,
+            "video_statistics": None,
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         },
     }
@@ -4132,6 +4298,7 @@ class MockAudioClusteringTask(AbsTaskClustering):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 3},
             },
+            "video_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4173,7 +4340,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": 2,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -4185,6 +4352,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4195,7 +4363,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
         },
         "train": {
             "num_samples": 10,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -4207,6 +4375,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 10},
             },
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4249,7 +4418,6 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_of_characters": None,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -4261,6 +4429,7 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4303,7 +4472,7 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
         self.dataset = self.dataset.cast_column("audio", Audio())
         self.data_loaded = True
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         """Return the text candidates for zeroshot classification"""
         return ["This is sound type 0", "This is sound type 1"]
 
@@ -4332,6 +4501,7 @@ class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "documents_video_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 60,
                 "min_text_length": 27,
@@ -4341,6 +4511,7 @@ class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
             },
             "queries_image_statistics": None,
             "queries_audio_statistics": None,
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -4414,6 +4585,7 @@ class MockAny2AnyRetrievalA2TTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "documents_audio_statistics": None,
+            "documents_video_statistics": None,
             "queries_text_statistics": None,
             "queries_image_statistics": None,
             "queries_audio_statistics": {
@@ -4425,6 +4597,7 @@ class MockAny2AnyRetrievalA2TTask(AbsTaskRetrieval):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -4499,6 +4672,7 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "documents_video_statistics": None,
             "queries_text_statistics": None,
             "queries_image_statistics": None,
             "queries_audio_statistics": {
@@ -4510,6 +4684,7 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -4584,6 +4759,7 @@ class MockAudioReranking(AbsTaskRetrieval):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "documents_video_statistics": None,
             "queries_text_statistics": None,
             "queries_image_statistics": None,
             "queries_audio_statistics": {
@@ -4595,6 +4771,7 @@ class MockAudioReranking(AbsTaskRetrieval):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -4662,7 +4839,7 @@ class MockAudioClassification(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": 2,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -4674,6 +4851,7 @@ class MockAudioClassification(AbsTaskClassification):
                 "average_sampling_rate": 12000.0,
                 "sampling_rates": {16000: 1, 8000: 1},
             },
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4684,7 +4862,7 @@ class MockAudioClassification(AbsTaskClassification):
         },
         "train": {
             "num_samples": 10,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -4696,6 +4874,7 @@ class MockAudioClassification(AbsTaskClassification):
                 "average_sampling_rate": 12000.0,
                 "sampling_rates": {16000: 5, 8000: 5},
             },
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4762,6 +4941,7 @@ class MockAudioPairClassification(AbsTaskPairClassification):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "video1_statistics": None,
             "text2_statistics": None,
             "image2_statistics": None,
             "audio2_statistics": {
@@ -4773,6 +4953,7 @@ class MockAudioPairClassification(AbsTaskPairClassification):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
+            "video2_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4820,7 +5001,7 @@ class MockAudioClassificationCrossVal(AbsTaskClassification):
     expected_stats = {
         "train": {
             "num_samples": 10,
-            "number_texts_intersect_with_train": None,
+            "samples_in_train": None,
             "text_statistics": None,
             "image_statistics": None,
             "audio_statistics": {
@@ -4832,6 +5013,7 @@ class MockAudioClassificationCrossVal(AbsTaskClassification):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 10},
             },
+            "video_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4857,4 +5039,1737 @@ class MockAudioClassificationCrossVal(AbsTaskClassification):
         )
         self.dataset = self.dataset.cast_column("audio", Audio())
 
+        self.data_loaded = True
+
+
+class MockVideoClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        type="VideoClassification",
+        name="MockVideoClassification",
+        main_score="accuracy",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video"]
+    metadata.category = "v2c"
+    input_column_name = "video"
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "samples_in_train": 2,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": None,
+            "video_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 1}, "2": {"count": 1}},
+            },
+        },
+        "train": {
+            "num_samples": 10,
+            "samples_in_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": None,
+            "video_statistics": {
+                "total_duration_seconds": 10.0,
+                "total_frames": 240,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 10},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 10},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 5}, "2": {"count": 5}},
+            },
+        },
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video": mock_videos,
+                        "label": [1, 2],
+                    }
+                ),
+                "train": Dataset.from_dict(
+                    {
+                        "video": mock_videos * 5,
+                        "label": [1, 2] * 5,
+                    }
+                ),
+            }
+        )
+
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.data_loaded = True
+
+
+class MockVideoAudioClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        type="VideoClassification",
+        name="MockVideoAudioClassification",
+        main_score="accuracy",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video", "audio"]
+    metadata.category = "va2c"
+    input_column_name = ("video", "audio")
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "samples_in_train": 2,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 1}, "2": {"count": 1}},
+            },
+        },
+        "train": {
+            "num_samples": 10,
+            "samples_in_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 10.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 10},
+            },
+            "video_statistics": {
+                "total_duration_seconds": 10.0,
+                "total_frames": 240,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 10},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 10},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 5}, "2": {"count": 5}},
+            },
+        },
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video": mock_videos,
+                        "audio": mock_audio,
+                        "label": [1, 2],
+                    }
+                ),
+                "train": Dataset.from_dict(
+                    {
+                        "video": mock_videos * 5,
+                        "audio": mock_audio * 5,
+                        "label": [1, 2] * 5,
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.dataset = self.dataset.cast_column("audio", Audio())
+        self.data_loaded = True
+
+
+class MockVideoClusteringTask(AbsTaskClustering):
+    max_document_to_embed = 3
+    max_fraction_of_documents_to_embed = None
+    input_column_name = "video"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 3,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": None,
+            "video_statistics": {
+                "total_duration_seconds": 3.0,
+                "total_frames": 72,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 3,
+                "average_fps": 24.0,
+                "fps": {24: 3},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 3},
+            },
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 3,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
+            },
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="VideoClustering",
+        name="MockVideoClusteringTask",
+        main_score="v_measure",
+        **general_args,
+    )
+    metadata.modalities = ["video"]
+    metadata.category = "v2c"
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng, n=3)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video": mock_videos,
+                        "labels": [0, 1, 2],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.data_loaded = True
+
+
+class MockVideoAudioClusteringTask(AbsTaskClustering):
+    max_document_to_embed = 3
+    max_fraction_of_documents_to_embed = None
+    input_column_name = ("video", "audio")
+    label_column_name = "labels"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 3,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 3.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 3,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 3},
+            },
+            "video_statistics": {
+                "total_duration_seconds": 3.0,
+                "total_frames": 72,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 3,
+                "average_fps": 24.0,
+                "fps": {24: 3},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 3},
+            },
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 3,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
+            },
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="VideoClustering",
+        name="MockVideoAudioClusteringTask",
+        main_score="v_measure",
+        **general_args,
+    )
+    metadata.modalities = ["video", "audio"]
+    metadata.category = "va2c"
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng, n=3)
+        mock_audio = create_mock_audio(self.np_rng, n=3)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video": mock_videos,
+                        "audio": mock_audio,
+                        "labels": [0, 1, 2],
+                    }
+                ),
+            }
+        )
+
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.dataset = self.dataset.cast_column("audio", Audio())
+        self.data_loaded = True
+
+
+class MockVideoMultilabelClassificationTask(AbsTaskMultilabelClassification):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "samples_in_train": 2,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": None,
+            "video_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+        },
+        "train": {
+            "num_samples": 10,
+            "samples_in_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": None,
+            "video_statistics": {
+                "total_duration_seconds": 10.0,
+                "total_frames": 240,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 10},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 10},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 5}, "1": {"count": 5}},
+            },
+        },
+    }
+
+    metadata = TaskMetadata(
+        type="VideoMultilabelClassification",
+        name="MockVideoMultilabelClassification",
+        main_score="accuracy",
+        **general_args,
+    )
+    metadata.modalities = ["video"]
+    metadata.category = "v2c"
+    input_column_name = "video"
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        labels = [[0], [1]]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict({"video": mock_videos, "label": labels}),
+                "train": Dataset.from_dict(
+                    {"video": mock_videos * 5, "label": labels * 5}
+                ),
+            }
+        )
+
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.data_loaded = True
+
+
+class MockVideoAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "samples_in_train": 2,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+        },
+        "train": {
+            "num_samples": 10,
+            "samples_in_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 10.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 10},
+            },
+            "video_statistics": {
+                "total_duration_seconds": 10.0,
+                "total_frames": 240,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 10},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 10},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 5}, "1": {"count": 5}},
+            },
+        },
+    }
+
+    metadata = TaskMetadata(
+        type="VideoMultilabelClassification",
+        name="MockVideoAudioMultilabelClassification",
+        main_score="accuracy",
+        **general_args,
+    )
+    metadata.modalities = ["video", "audio"]
+    metadata.category = "va2c"
+    input_column_name = ("video", "audio")
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+        labels = [[0], [1]]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {"video": mock_videos, "audio": mock_audio, "label": labels}
+                ),
+                "train": Dataset.from_dict(
+                    {
+                        "video": mock_videos * 5,
+                        "audio": mock_audio * 5,
+                        "label": labels * 5,
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.dataset = self.dataset.cast_column("audio", Audio())
+        self.data_loaded = True
+
+
+class MockVideoZeroshotClassificationTask(AbsTaskZeroShotClassification):
+    input_column_name: str = "video"
+    label_column_name: str = "label"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": None,
+            "video_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+            "candidates_labels_text_statistics": {
+                "total_text_length": 40,
+                "min_text_length": 20,
+                "average_text_length": 20.0,
+                "max_text_length": 20,
+                "unique_texts": 2,
+            },
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="VideoZeroshotClassification",
+        name="MockVideoZeroshotClassification",
+        main_score="accuracy",
+        **general_args,
+    )
+    metadata.modalities = ["video"]
+    metadata.category = "v2c"
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        labels = np.array([0, 1])
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video": mock_videos,
+                        "label": labels,
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.data_loaded = True
+
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
+        return ["This is video type 0", "This is video type 1"]
+
+
+class MockVideoAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
+    input_column_name = ("video", "audio")
+    label_column_name = "label"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+            "candidates_labels_text_statistics": {
+                "total_text_length": 52,
+                "min_text_length": 26,
+                "average_text_length": 26.0,
+                "max_text_length": 26,
+                "unique_texts": 2,
+            },
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="VideoZeroshotClassification",
+        name="MockVideoZeroshotClassification",
+        main_score="accuracy",
+        **general_args,
+    )
+    metadata.modalities = ["video"]
+    metadata.category = "v2c"
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        labels = np.array([0, 1])
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video": mock_videos,
+                        "audio": mock_audio,
+                        "label": labels,
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.dataset = self.dataset.cast_column("audio", Audio())
+        self.data_loaded = True
+
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
+        return ["This is video audio type 0", "This is video audio type 1"]
+
+
+class MockVideoPairClassificationTask(AbsTaskPairClassification):
+    metadata = TaskMetadata(
+        type="VideoPairClassification",
+        name="MockVideoPairClassification",
+        main_score="max_ap",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video"]
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "unique_pairs": 2,
+            "number_of_characters": None,
+            "text1_statistics": None,
+            "image1_statistics": None,
+            "audio1_statistics": None,
+            "video1_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "text2_statistics": None,
+            "image2_statistics": None,
+            "audio2_statistics": None,
+            "video2_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+        }
+    }
+
+    input1_column_name = "video1"
+    input2_column_name = "video2"
+    label_column_name = "label"
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video1": mock_videos,
+                        "video2": mock_videos,
+                        "label": [0, 1],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video1", Video())
+        self.dataset = self.dataset.cast_column("video2", Video())
+        self.data_loaded = True
+
+
+class MockVideoAudioPairClassificationTask(AbsTaskPairClassification):
+    metadata = TaskMetadata(
+        type="VideoPairClassification",
+        name="MockVideoAudioPairClassification",
+        main_score="max_ap",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video", "audio"]
+    input1_column_name = [("video1", "video"), ("audio1", "audio")]
+    input2_column_name = [("video2", "video"), ("audio2", "audio")]
+
+    label_column_name = "label"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "unique_pairs": 2,
+            "number_of_characters": None,
+            "text1_statistics": None,
+            "image1_statistics": None,
+            "audio1_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video1_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "text2_statistics": None,
+            "image2_statistics": None,
+            "audio2_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video2_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+        }
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video1": mock_videos,
+                        "audio1": mock_audio,
+                        "video2": mock_videos,
+                        "audio2": mock_audio,
+                        "label": [0, 1],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video1", Video())
+        self.dataset = self.dataset.cast_column("video2", Video())
+        self.dataset = self.dataset.cast_column("audio1", Audio())
+        self.dataset = self.dataset.cast_column("audio2", Audio())
+        self.data_loaded = True
+
+
+class MockVideoAudioSTSTask(AbsTaskSTS):
+    metadata = TaskMetadata(
+        type="STS",
+        name="MockVideoAudioSTS",
+        main_score="cosine_spearman",
+        **general_args,
+    )
+    metadata.modalities = ["video", "audio"]
+    metadata.category = "va2va"
+    column_names = (
+        [("video1", "video"), ("audio1", "audio")],
+        [("video2", "video"), ("audio2", "audio")],
+    )
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "unique_pairs": 2,
+            "number_of_characters": None,
+            "text1_statistics": None,
+            "text2_statistics": None,
+            "image1_statistics": None,
+            "image2_statistics": None,
+            "audio1_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "audio2_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video1_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "video2_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "label_statistics": {"min_score": 0.5, "avg_score": 0.5, "max_score": 0.5},
+        }
+    }
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video1": mock_videos,
+                        "audio1": mock_audio,
+                        "video2": mock_videos,
+                        "audio2": mock_audio,
+                        "score": [0.5, 0.5],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video1", Video())
+        self.dataset = self.dataset.cast_column("video2", Video())
+        self.dataset = self.dataset.cast_column("audio1", Audio())
+        self.dataset = self.dataset.cast_column("audio2", Audio())
+        self.data_loaded = True
+
+
+_VIDEO_TEXTS = [
+    "This is a video of an action",
+    "This is another video of a scene",
+]
+
+
+class MockVideoRetrievalV2T(AbsTaskRetrieval):
+    """Video queries → text corpus (v2t)"""
+
+    metadata = TaskMetadata(
+        type="Any2AnyRetrieval",
+        name="MockVideoRetrievalV2T",
+        main_score="ndcg_at_10",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video", "text"]
+    metadata.category = "v2t"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "number_of_characters": 60,
+            "documents_text_statistics": {
+                "total_text_length": 60,
+                "min_text_length": 28,
+                "average_text_length": 30.0,
+                "max_text_length": 32,
+                "unique_texts": 2,
+            },
+            "documents_image_statistics": None,
+            "documents_audio_statistics": None,
+            "documents_video_statistics": None,
+            "queries_text_statistics": None,
+            "queries_image_statistics": None,
+            "queries_audio_statistics": None,
+            "queries_video_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 2,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 2,
+                "unique_relevant_docs": 2,
+            },
+            "top_ranked_statistics": None,
+        }
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+
+        queries = Dataset.from_dict(
+            {
+                "id": [f"q{i}" for i in range(2)],
+                "video": mock_videos,
+                "modality": ["video", "video"],
+            }
+        )
+        queries = queries.cast_column("video", Video())
+
+        corpus = Dataset.from_dict(
+            {
+                "id": ["d1", "d2"],
+                "text": _VIDEO_TEXTS,
+                "modality": ["text", "text"],
+            }
+        )
+
+        relevant_docs = {
+            "q0": {"d1": 1, "d2": 0},
+            "q1": {"d1": 0, "d2": 1},
+        }
+        self.dataset = {
+            "default": {
+                "test": RetrievalSplitData(
+                    queries=queries,
+                    corpus=corpus,
+                    relevant_docs=relevant_docs,
+                    top_ranked=None,
+                )
+            }
+        }
+        self.data_loaded = True
+
+
+class MockVideoRetrievalT2V(AbsTaskRetrieval):
+    """Text queries → video corpus (t2v)"""
+
+    metadata = TaskMetadata(
+        type="Any2AnyRetrieval",
+        name="MockVideoRetrievalT2V",
+        main_score="ndcg_at_10",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["text", "video"]
+    metadata.category = "t2v"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "number_of_characters": 60,
+            "documents_text_statistics": None,
+            "documents_image_statistics": None,
+            "documents_audio_statistics": None,
+            "documents_video_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "queries_text_statistics": {
+                "total_text_length": 60,
+                "min_text_length": 28,
+                "average_text_length": 30.0,
+                "max_text_length": 32,
+                "unique_texts": 2,
+            },
+            "queries_image_statistics": None,
+            "queries_audio_statistics": None,
+            "queries_video_statistics": None,
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 2,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 2,
+                "unique_relevant_docs": 2,
+            },
+            "top_ranked_statistics": None,
+        }
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+
+        queries = Dataset.from_dict(
+            {
+                "id": [f"q{i}" for i in range(2)],
+                "text": _VIDEO_TEXTS,
+                "modality": ["text", "text"],
+            }
+        )
+
+        corpus = Dataset.from_dict(
+            {
+                "id": ["d1", "d2"],
+                "video": mock_videos,
+                "modality": ["video", "video"],
+            }
+        )
+        corpus = corpus.cast_column("video", Video())
+
+        relevant_docs = {
+            "q0": {"d1": 1, "d2": 0},
+            "q1": {"d1": 0, "d2": 1},
+        }
+        self.dataset = {
+            "default": {
+                "test": RetrievalSplitData(
+                    queries=queries,
+                    corpus=corpus,
+                    relevant_docs=relevant_docs,
+                    top_ranked=None,
+                )
+            }
+        }
+        self.data_loaded = True
+
+
+class MockVideoAudioRetrievalVA2T(AbsTaskRetrieval):
+    """Video+audio queries → text corpus (va2t)"""
+
+    metadata = TaskMetadata(
+        type="Any2AnyRetrieval",
+        name="MockVideoAudioRetrievalVA2T",
+        main_score="ndcg_at_10",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video", "audio", "text"]
+    metadata.category = "va2t"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "number_of_characters": 60,
+            "documents_text_statistics": {
+                "total_text_length": 60,
+                "min_text_length": 28,
+                "average_text_length": 30.0,
+                "max_text_length": 32,
+                "unique_texts": 2,
+            },
+            "documents_image_statistics": None,
+            "documents_audio_statistics": None,
+            "documents_video_statistics": None,
+            "queries_text_statistics": None,
+            "queries_image_statistics": None,
+            "queries_audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "queries_video_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 2,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 2,
+                "unique_relevant_docs": 2,
+            },
+            "top_ranked_statistics": None,
+        }
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        queries = Dataset.from_dict(
+            {
+                "id": [f"q{i}" for i in range(2)],
+                "video": mock_videos,
+                "audio": mock_audio,
+                "modality": ["video_audio", "video_audio"],
+            }
+        )
+        queries = queries.cast_column("video", Video())
+        queries = queries.cast_column("audio", Audio())
+
+        corpus = Dataset.from_dict(
+            {
+                "id": ["d1", "d2"],
+                "text": _VIDEO_TEXTS,
+                "modality": ["text", "text"],
+            }
+        )
+
+        relevant_docs = {
+            "q0": {"d1": 1, "d2": 0},
+            "q1": {"d1": 0, "d2": 1},
+        }
+        self.dataset = {
+            "default": {
+                "test": RetrievalSplitData(
+                    queries=queries,
+                    corpus=corpus,
+                    relevant_docs=relevant_docs,
+                    top_ranked=None,
+                )
+            }
+        }
+        self.data_loaded = True
+
+
+class MockVideoAudioRetrievalT2VA(AbsTaskRetrieval):
+    """Text queries → video+audio corpus (t2va)"""
+
+    metadata = TaskMetadata(
+        type="Any2AnyRetrieval",
+        name="MockVideoAudioRetrievalT2VA",
+        main_score="ndcg_at_10",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["text", "video", "audio"]
+    metadata.category = "t2va"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "number_of_characters": 60,
+            "documents_text_statistics": None,
+            "documents_image_statistics": None,
+            "documents_audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "documents_video_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "queries_text_statistics": {
+                "total_text_length": 60,
+                "min_text_length": 28,
+                "average_text_length": 30.0,
+                "max_text_length": 32,
+                "unique_texts": 2,
+            },
+            "queries_image_statistics": None,
+            "queries_audio_statistics": None,
+            "queries_video_statistics": None,
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 2,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 2,
+                "unique_relevant_docs": 2,
+            },
+            "top_ranked_statistics": None,
+        }
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        queries = Dataset.from_dict(
+            {
+                "id": [f"q{i}" for i in range(2)],
+                "text": _VIDEO_TEXTS,
+                "modality": ["text", "text"],
+            }
+        )
+
+        corpus = Dataset.from_dict(
+            {
+                "id": ["d1", "d2"],
+                "video": mock_videos,
+                "audio": mock_audio,
+                "modality": ["video_audio", "video_audio"],
+            }
+        )
+        corpus = corpus.cast_column("video", Video())
+        corpus = corpus.cast_column("audio", Audio())
+
+        relevant_docs = {
+            "q0": {"d1": 1, "d2": 0},
+            "q1": {"d1": 0, "d2": 1},
+        }
+        self.dataset = {
+            "default": {
+                "test": RetrievalSplitData(
+                    queries=queries,
+                    corpus=corpus,
+                    relevant_docs=relevant_docs,
+                    top_ranked=None,
+                )
+            }
+        }
+        self.data_loaded = True
+
+
+class MockVideoAudioTextRetrievalVAT2T(AbsTaskRetrieval):
+    """Video+audio+text queries → text corpus (vat2t)"""
+
+    metadata = TaskMetadata(
+        type="Any2AnyRetrieval",
+        name="MockVideoAudioTextRetrievalVAT2T",
+        main_score="ndcg_at_10",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video", "audio", "text"]
+    metadata.category = "vat2t"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "number_of_characters": 120,
+            "documents_text_statistics": {
+                "total_text_length": 60,
+                "min_text_length": 28,
+                "average_text_length": 30.0,
+                "max_text_length": 32,
+                "unique_texts": 2,
+            },
+            "documents_image_statistics": None,
+            "documents_audio_statistics": None,
+            "documents_video_statistics": None,
+            "queries_text_statistics": {
+                "total_text_length": 60,
+                "min_text_length": 28,
+                "average_text_length": 30.0,
+                "max_text_length": 32,
+                "unique_texts": 2,
+            },
+            "queries_image_statistics": None,
+            "queries_audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "queries_video_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 2,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 2,
+                "unique_relevant_docs": 2,
+            },
+            "top_ranked_statistics": None,
+        }
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        queries = Dataset.from_dict(
+            {
+                "id": [f"q{i}" for i in range(2)],
+                "video": mock_videos,
+                "audio": mock_audio,
+                "text": _VIDEO_TEXTS,
+                "modality": ["video_audio_text", "video_audio_text"],
+            }
+        )
+        queries = queries.cast_column("video", Video())
+        queries = queries.cast_column("audio", Audio())
+
+        corpus = Dataset.from_dict(
+            {
+                "id": ["d1", "d2"],
+                "text": _VIDEO_TEXTS,
+                "modality": ["text", "text"],
+            }
+        )
+        relevant_docs = {
+            "q0": {"d1": 1, "d2": 0},
+            "q1": {"d1": 0, "d2": 1},
+        }
+        self.dataset = {
+            "default": {
+                "test": RetrievalSplitData(
+                    queries=queries,
+                    corpus=corpus,
+                    relevant_docs=relevant_docs,
+                    top_ranked=None,
+                )
+            }
+        }
+
+        self.data_loaded = True
+
+
+class MockAsymVideoAudioPairClassificationTask(AbsTaskPairClassification):
+    """Asymmetric pair classification: side-1 is video only, side-2 is audio only."""
+
+    metadata = TaskMetadata(
+        type="VideoPairClassification",
+        name="MockAsymVideoAudioPairClassificationTask",
+        main_score="max_ap",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video", "audio"]
+    metadata.category = "v2a"
+
+    input1_column_name = [("video1", "video")]
+    input2_column_name = [("audio2", "audio")]
+    input1_prompt_type = PromptType.query
+    input2_prompt_type = PromptType.document
+
+    label_column_name = "label"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "unique_pairs": 2,
+            "number_of_characters": None,
+            "text1_statistics": None,
+            "image1_statistics": None,
+            "audio1_statistics": None,
+            "video1_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "text2_statistics": None,
+            "image2_statistics": None,
+            "audio2_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video2_statistics": None,
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+        }
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video1": mock_videos,
+                        "audio2": mock_audio,
+                        "label": [0, 1],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video1", Video())
+        self.dataset = self.dataset.cast_column("audio2", Audio())
         self.data_loaded = True

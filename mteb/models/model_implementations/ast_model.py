@@ -7,10 +7,9 @@ import torch
 from tqdm.auto import tqdm
 from transformers import ASTFeatureExtractor, ASTModel
 
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -30,7 +29,6 @@ class ASTWrapper(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
         self.model_name = model_name
         self.device = device
 
@@ -48,7 +46,7 @@ class ASTWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
         all_embeddings = []
 
         for batch in tqdm(
@@ -116,7 +114,9 @@ ast_audioset = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/YuanGongND/ast",
     public_training_data="https://research.google.com/audioset/dataset/index.html",
-    training_datasets=set(),  # "AudioSet": ["train"]},
+    training_datasets={
+        "AudioSetMini",
+    },
     modalities=["audio"],
     citation="""
 @misc{gong2021astaudiospectrogramtransformer,

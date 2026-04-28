@@ -59,7 +59,7 @@ def _parse_version_cached(version_str: str | None) -> Version | None:
         return None
 
 
-class BenchmarkResults(BaseModel):
+class BenchmarkResults(BaseModel):  # noqa: PLR0904
     """Data class to hold the benchmark results of a model.
 
     Attributes:
@@ -83,6 +83,7 @@ class BenchmarkResults(BaseModel):
     def _filter_tasks(
         self,
         task_names: list[str] | None = None,
+        *,
         languages: list[str] | None = None,
         domains: list[TaskDomain] | None = None,
         task_types: list[TaskType] | None = None,
@@ -164,6 +165,7 @@ class BenchmarkResults(BaseModel):
     def _filter_models(
         self,
         model_names: Iterable[str] | None = None,
+        *,
         languages: Iterable[str] | None = None,
         open_weights: bool | None = None,
         frameworks: Iterable[str] | None = None,
@@ -279,6 +281,7 @@ class BenchmarkResults(BaseModel):
 
     def _get_scores(
         self,
+        *,
         splits: list[SplitName] | None = None,
         languages: list[ISOLanguage | ISOLanguageScript] | None = None,
         scripts: list[ISOLanguageScript] | None = None,
@@ -366,37 +369,119 @@ class BenchmarkResults(BaseModel):
         Returns:
             A DataFrame with the scores for all models and tasks.
         """
-        bench_results = self
-        if include_model_revision is False:
-            bench_results = bench_results.join_revisions()
-
-        scores_data = []
-        for model_result in bench_results:
-            scores_data.extend(model_result._get_score_for_table())
-
-        if not scores_data:
+        df = self._build_pre_agg_df(include_model_revision)
+        if df is None:
             msg = "No scores data available. Returning empty DataFrame."
             logger.warning(msg)
             warnings.warn(msg)
             return pd.DataFrame()
 
-        # Create DataFrame
-        df = pd.DataFrame(scores_data)
+        columns = ["model_name"]
+        if include_model_revision:
+            columns.append("model_revision")
 
-        _columns = ["model_name"]
-        if include_model_revision is False:
-            df = df.drop(columns=["model_revision"])
-        else:
-            _columns.append("model_revision")
-
-        # Aggregation
-        return _aggregate_and_pivot(
+        result = _aggregate_and_pivot(
             df,
-            columns=_columns,
+            columns=columns,
             aggregation_level=aggregation_level,
             aggregation_fn=aggregation_fn,
             format=format,
         )
+        # Cast categorical columns back to object so downstream string ops don't
+        # raise "can only concatenate str (not Categorical) to str".
+        for col in result.select_dtypes(include="category").columns:
+            result[col] = result[col].astype(object)
+        return result
+
+    def _build_pre_agg_df(self, include_model_revision: bool) -> pd.DataFrame | None:
+        """Build the pre-aggregation long DataFrame; returns None when no scores exist."""
+        bench_results = self
+        if include_model_revision is False:
+            bench_results = bench_results.join_revisions()
+
+        # Collect parallel arrays rather than a list of dicts:
+        # pd.DataFrame(dict_of_lists) is ~10x faster than pd.DataFrame(list_of_dicts).
+        col_model_name: list = []
+        col_model_rev: list = []
+        col_task_name: list = []
+        col_split: list = []
+        col_language: list = []
+        col_subset: list = []
+        col_score: list = []
+
+        for model_result in bench_results:
+            mn = model_result.model_name
+            mr = model_result.model_revision
+            for task_result in model_result.task_results:
+                tn = task_result.task_name
+                for split, scores_list in task_result.scores.items():
+                    for score_item in scores_list:
+                        col_model_name.append(mn)
+                        col_model_rev.append(mr)
+                        col_task_name.append(tn)
+                        col_split.append(split)
+                        col_language.append(score_item.get("languages", ["Unknown"]))
+                        col_subset.append(score_item.get("hf_subset", "default"))
+                        col_score.append(score_item.get("main_score", None))
+
+        if not col_model_name:
+            return None
+
+        df = pd.DataFrame(
+            {
+                "model_name": col_model_name,
+                "model_revision": col_model_rev,
+                "task_name": col_task_name,
+                "split": col_split,
+                "language": col_language,
+                "subset": col_subset,
+                "score": col_score,
+            }
+        )
+        if include_model_revision is False:
+            df = df.drop(columns=["model_revision"])
+        # Categoricals shrink memory ~4x for high-cardinality string columns.
+        for col in ("model_name", "task_name", "split", "subset"):
+            if col in df.columns:
+                df[col] = df[col].astype("category")
+        return df
+
+    def get_aggregated_scores(self) -> dict[str, dict[str, float | None]]:
+        """Get aggregated scores for each model.
+
+        When a benchmark is associated with these results, uses
+        :meth:`Benchmark.get_score` to compute scores.  Otherwise computes
+        the equivalent statistics directly from all task results.
+
+        Returns:
+            A dict mapping each model name to a dict with the keys:
+
+            - ``"Mean(Task)"``: mean score across all (benchmark) tasks.
+            - ``"Mean(TaskType)"``: mean of per-task-type means.
+
+        Examples:
+            >>> bench_results.get_aggregated_scores()
+            {
+                "model1": {"Mean(Task)": 0.5, "Mean(TaskType)": 0.52},
+                "model2": {"Mean(Task)": 0.45, "Mean(TaskType)": 0.48},
+            }
+        """
+        if self.benchmark is not None:
+            return self.benchmark.get_score(self)
+
+        from mteb.benchmarks._benchmark_metrics import (
+            _compute_mean_task,
+            _compute_mean_task_type,
+        )
+
+        bench_results = self.join_revisions()
+        return {
+            model_result.model_name: {
+                "Mean(Task)": _compute_mean_task(model_result.task_results),
+                "Mean(TaskType)": _compute_mean_task_type(model_result.task_results),
+            }
+            for model_result in bench_results
+        }
 
     def get_benchmark_result(self) -> pd.DataFrame:
         """Get aggregated scores for each model in the benchmark.

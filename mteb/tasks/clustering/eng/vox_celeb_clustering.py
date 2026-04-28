@@ -43,7 +43,7 @@ class VoxCelebClustering(AbsTaskClustering):
     def dataset_transform(self):
         ds = self.dataset
         # Remove 'Disagreement' samples and '<mixed>' samples
-        ds = ds.filter(lambda x: x["label"] not in ["Disagreement", "<mixed>"])
+        ds = ds.filter(lambda x: x["label"] not in ["Disagreement", "<mixed>"])  # noqa: PLR6201
         # Map string sentiment labels to numeric IDs
         label2id = {"Negative": 0, "Neutral": 1, "Positive": 2}
 

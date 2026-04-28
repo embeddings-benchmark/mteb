@@ -8,6 +8,8 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from tests.task_grid import (
     MOCK_MAEB_TASK_GRID,
     MOCK_MIEB_TASK_GRID,
+    MOCK_MULTIMODAL_TASKS,
+    MOCK_MVEB_TASK_GRID,
     MOCK_TASK_TEST_GRID,
 )
 
@@ -30,13 +32,29 @@ def test_descriptive_statistics_mock_tasks(task):
 
 @pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID)
 def test_descriptive_statistics_mock_mieb_tasks(task):
-    pytest.importorskip("PIL", reason="Image dependencies are not installed")
+    pytest.importorskip("torchvision", reason="Image dependencies are not installed")
     check_descriptive_stats(task)
 
 
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)
 def test_descriptive_statistics_mock_maeb_tasks(task):
     pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
+    check_descriptive_stats(task)
+
+
+@pytest.mark.parametrize("task", MOCK_MVEB_TASK_GRID)
+def test_descriptive_statistics_mock_mveb_tasks(task):
+    pytest.importorskip(
+        "torchcodec", reason="Video dependencies torchcodec are not installed"
+    )
+    check_descriptive_stats(task)
+
+
+@pytest.mark.parametrize("task", MOCK_MULTIMODAL_TASKS)
+def test_descriptive_statistics_mock_mmeb_tasks(task):
+    pytest.importorskip(
+        "torchcodec", reason="Video dependencies torchcodec are not installed"
+    )
     check_descriptive_stats(task)
 
 

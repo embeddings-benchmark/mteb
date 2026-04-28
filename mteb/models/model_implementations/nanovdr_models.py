@@ -7,7 +7,6 @@ import torch
 import torch.nn.functional as F
 from tqdm.autonotebook import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -43,13 +42,6 @@ class NanoVDRWrapper(AbsEncoder):
         device: str | None = None,
         **kwargs: Any,
     ):
-        requires_package(
-            self,
-            "sentence_transformers",
-            model_name,
-            "pip install sentence-transformers",
-        )
-
         self.device = device or (
             "cuda"
             if torch.cuda.is_available()
@@ -75,20 +67,6 @@ class NanoVDRWrapper(AbsEncoder):
         """Lazily load the Qwen3-VL-Embedding-2B teacher for document encoding."""
         if self._doc_model is not None:
             return
-
-        requires_image_dependencies()
-        requires_package(
-            self,
-            "transformers",
-            "Qwen/Qwen3-VL-Embedding-2B",
-            "pip install 'mteb[qwen-vl]'",
-        )
-        requires_package(
-            self,
-            "qwen_vl_utils",
-            "Qwen/Qwen3-VL-Embedding-2B",
-            "pip install 'mteb[qwen-vl]'",
-        )
 
         from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
 
@@ -118,7 +96,7 @@ class NanoVDRWrapper(AbsEncoder):
             convert_to_numpy=False,
         )
 
-    def _encode_documents(
+    def _encode_documents(  # noqa: PLR0914
         self,
         inputs: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
@@ -135,7 +113,7 @@ class NanoVDRWrapper(AbsEncoder):
 
         instruction = QUERY_INSTRUCTION.strip()
         if instruction and not unicodedata.category(instruction[-1]).startswith("P"):
-            instruction = instruction + "."
+            instruction = instruction + "."  # noqa: PLR6104
 
         all_embeddings: list[torch.Tensor] = []
         with torch.no_grad():
@@ -253,7 +231,7 @@ class NanoVDRWrapper(AbsEncoder):
         # Validate: reject tasks where queries contain images.
         # NanoVDR only supports text-query → image-document retrieval.
         if (
-            prompt_type in (PromptType.query, None)
+            prompt_type in (PromptType.query, None)  # noqa: PLR6201
             and "image" in inputs.dataset.features
         ):
             raise ValueError(
@@ -298,4 +276,5 @@ nanovdr_s_multi = ModelMeta(
         "VidoreArxivQARetrieval",
     },
     citation=NANOVDR_CITATION,
+    extra_requirements_groups=["qwen-vl"],
 )

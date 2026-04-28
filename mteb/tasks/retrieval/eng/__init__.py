@@ -1,9 +1,33 @@
+from .activitynet_captions_retrieval import (
+    ActivityNetCaptionsT2VRetrieval,
+    ActivityNetCaptionsV2TRetrieval,
+)
 from .aila_casedocs_retrieval import AILACasedocs
 from .aila_statutes_retrieval import AILAStatutes
 from .alpha_nli_retrieval import AlphaNLI
 from .arc_challenge_retrieval import ARCChallenge
 from .argu_ana_retrieval import ArguAna
 from .audio_set_strong import AudioSetStrongA2TRetrieval, AudioSetStrongT2ARetrieval
+from .audiocaps_av_retrieval import (
+    AudioCapsAVA2VRetrieval,
+    AudioCapsAVAT2VRetrieval,
+    AudioCapsAVT2VARetrieval,
+    AudioCapsAVT2VRetrieval,
+    AudioCapsAVV2ARetrieval,
+    AudioCapsAVV2TRetrieval,
+    AudioCapsAVVA2TRetrieval,
+    AudioCapsAVVT2ARetrieval,
+)
+from .avmeme_exam_retrieval import (
+    AVMemeExamA2VRetrieval,
+    AVMemeExamAT2VRetrieval,
+    AVMemeExamT2VARetrieval,
+    AVMemeExamT2VRetrieval,
+    AVMemeExamV2ARetrieval,
+    AVMemeExamV2TRetrieval,
+    AVMemeExamVA2TRetrieval,
+    AVMemeExamVT2ARetrieval,
+)
 from .bar_exam_qa_retrieval import BarExamQARetrieval
 from .bill_sum_ca_retrieval import BillSumCARetrieval
 from .bill_sum_us_retrieval import BillSumUSRetrieval
@@ -37,6 +61,7 @@ from .bright_v1_1_retrieval import (
     BrightTheoremQAQuestionsRetrieval,
     BrightTheoremQATheoremsRetrieval,
 )
+from .browse_comp_plus_retrieval import BrowseCompPlusRetrieval
 from .built_bench_retrieval import BuiltBenchRetrieval
 from .chat_doctor_retrieval import ChatDoctorRetrieval
 from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
@@ -85,6 +110,16 @@ from .dapfam_patent_retrieval import (
     DAPFAMOutTitlAbsToTitlAbsRetrieval,
 )
 from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives, DBPediaHardNegativesV2
+from .didemo_retrieval import (
+    DiDeMoA2VRetrieval,
+    DiDeMoAT2VRetrieval,
+    DiDeMoT2VARetrieval,
+    DiDeMoT2VRetrieval,
+    DiDeMoV2ARetrieval,
+    DiDeMoV2TRetrieval,
+    DiDeMoVA2TRetrieval,
+    DiDeMoVT2ARetrieval,
+)
 from .edis_t2it_retrieval import EDIST2ITRetrieval
 from .emo_vdb import EmoVDBA2TRetrieval, EmoVDBT2ARetrieval
 from .encyclopedia_vqa_it2it_retrieval import EncyclopediaVQAIT2ITRetrieval
@@ -153,6 +188,18 @@ from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval
 from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
 from .msmarc_ov2_retrieval import MSMARCOv2
 from .msmarco_retrieval import MSMARCO, MSMARCOHardNegatives
+from .msr_vtt import (
+    MSRVTTA2V,
+    MSRVTTAT2V,
+    MSRVTTT2V,
+    MSRVTTT2VA,
+    MSRVTTV2A,
+    MSRVTTV2T,
+    MSRVTTVA2T,
+    MSRVTTVT2A,
+)
+from .msvd_t2v_retrieval import MSVDT2VRetrieval
+from .msvd_v2t_retrieval import MSVDV2TRetrieval
 from .nano_argu_ana_retrieval import NanoArguAnaRetrieval
 from .nano_climate_fever_retrieval import NanoClimateFeverRetrieval
 from .nano_db_pedia_retrieval import NanoDBPediaRetrieval
@@ -173,6 +220,12 @@ from .nq_retrieval import NQ, NQHardNegatives
 from .okvqa_it2t_retrieval import OKVQAIT2TRetrieval
 from .oven_it2it_retrieval import OVENIT2ITRetrieval
 from .oven_it2t_retrieval import OVENIT2TRetrieval
+from .panda70m_retrieval import (
+    Panda70MT2VARetrieval,
+    Panda70MT2VRetrieval,
+    Panda70MV2TRetrieval,
+    Panda70MVA2TRetrieval,
+)
 from .piqa_retrieval import PIQA
 from .quail_retrieval import Quail
 from .quora_retrieval import (
@@ -208,6 +261,16 @@ from .sci_fact_retrieval import SciFact
 from .sci_mmir_i2t_retrieval import SciMMIRI2TRetrieval
 from .sci_mmir_t2i_retrieval import SciMMIRT2IRetrieval
 from .scidocs_retrieval import SCIDOCS
+from .shot2story_retrieval import (
+    Shot2Story20KA2VRetrieval,
+    Shot2Story20KAT2VRetrieval,
+    Shot2Story20KT2VARetrieval,
+    Shot2Story20KT2VRetrieval,
+    Shot2Story20KV2ARetrieval,
+    Shot2Story20KV2TRetrieval,
+    Shot2Story20KVA2TRetrieval,
+    Shot2Story20KVT2ARetrieval,
+)
 from .siqa_retrieval import SIQA
 from .sketchy_i2i_retrieval import SketchyI2IRetrieval
 from .sop_i2i_retrieval import SOPI2IRetrieval
@@ -226,6 +289,38 @@ from .touche2020_retrieval import Touche2020, Touche2020v3Retrieval
 from .treccovid_retrieval import TRECCOVID
 from .trecdl_retrieval import TRECDL2019, TRECDL2020
 from .tu_berlin_t2i_retrieval import TUBerlinT2IRetrieval
+from .tuna_bench_t2v_retrieval import TUNABenchT2VRetrieval
+from .tuna_bench_v2t_retrieval import TUNABenchV2TRetrieval
+from .valor_32k_retrieval import (
+    VALOR32KA2VRetrieval,
+    VALOR32KAT2VRetrieval,
+    VALOR32KT2VARetrieval,
+    VALOR32KT2VRetrieval,
+    VALOR32KV2ARetrieval,
+    VALOR32KV2TRetrieval,
+    VALOR32KVA2TRetrieval,
+    VALOR32KVT2ARetrieval,
+)
+from .vatex_retrieval import (
+    VATEXA2VRetrieval,
+    VATEXAT2VRetrieval,
+    VATEXT2VARetrieval,
+    VATEXT2VRetrieval,
+    VATEXV2ARetrieval,
+    VATEXV2TRetrieval,
+    VATEXVA2TRetrieval,
+    VATEXVT2ARetrieval,
+)
+from .vggsound_av_retrieval import (
+    VGGSoundAVA2VRetrieval,
+    VGGSoundAVAT2VRetrieval,
+    VGGSoundAVT2VARetrieval,
+    VGGSoundAVT2VRetrieval,
+    VGGSoundAVV2ARetrieval,
+    VGGSoundAVV2TRetrieval,
+    VGGSoundAVVA2TRetrieval,
+    VGGSoundAVVT2ARetrieval,
+)
 from .vidore_bench_retrieval import (
     VidoreArxivQARetrieval,
     VidoreDocVQARetrieval,
@@ -251,12 +346,30 @@ from .vqa2_it2t_retrieval import VQA2IT2TRetrieval
 from .web_qa_t2it_retrieval import WebQAT2ITRetrieval
 from .web_qa_t2t_retrieval import WebQAT2TRetrieval
 from .wino_grande_retrieval import WinoGrande
+from .youcook2_retrieval import (
+    YouCook2A2VRetrieval,
+    YouCook2AT2VRetrieval,
+    YouCook2T2VARetrieval,
+    YouCook2T2VRetrieval,
+    YouCook2V2ARetrieval,
+    YouCook2V2TRetrieval,
+    YouCook2VA2TRetrieval,
+    YouCook2VT2ARetrieval,
+)
 
 __all__ = [
     "CUB200I2I",
     "FEVER",
     "FORBI2I",
     "MSMARCO",
+    "MSRVTTA2V",
+    "MSRVTTAT2V",
+    "MSRVTTT2V",
+    "MSRVTTT2VA",
+    "MSRVTTV2A",
+    "MSRVTTV2T",
+    "MSRVTTVA2T",
+    "MSRVTTVT2A",
     "NQ",
     "PIQA",
     "SCIDOCS",
@@ -267,8 +380,26 @@ __all__ = [
     "AILACasedocs",
     "AILAStatutes",
     "ARCChallenge",
+    "AVMemeExamA2VRetrieval",
+    "AVMemeExamAT2VRetrieval",
+    "AVMemeExamT2VARetrieval",
+    "AVMemeExamT2VRetrieval",
+    "AVMemeExamV2ARetrieval",
+    "AVMemeExamV2TRetrieval",
+    "AVMemeExamVA2TRetrieval",
+    "AVMemeExamVT2ARetrieval",
+    "ActivityNetCaptionsT2VRetrieval",
+    "ActivityNetCaptionsV2TRetrieval",
     "AlphaNLI",
     "ArguAna",
+    "AudioCapsAVA2VRetrieval",
+    "AudioCapsAVAT2VRetrieval",
+    "AudioCapsAVT2VARetrieval",
+    "AudioCapsAVT2VRetrieval",
+    "AudioCapsAVV2ARetrieval",
+    "AudioCapsAVV2TRetrieval",
+    "AudioCapsAVVA2TRetrieval",
+    "AudioCapsAVVT2ARetrieval",
     "AudioSetStrongA2TRetrieval",
     "AudioSetStrongT2ARetrieval",
     "BIRCOArguAnaReranking",
@@ -303,6 +434,7 @@ __all__ = [
     "BrightSustainableLivingRetrieval",
     "BrightTheoremQAQuestionsRetrieval",
     "BrightTheoremQATheoremsRetrieval",
+    "BrowseCompPlusRetrieval",
     "BuiltBenchRetrieval",
     "CIRRIT2IRetrieval",
     "CMUArcticA2TRetrieval",
@@ -350,6 +482,14 @@ __all__ = [
     "DBPedia",
     "DBPediaHardNegatives",
     "DBPediaHardNegativesV2",
+    "DiDeMoA2VRetrieval",
+    "DiDeMoAT2VRetrieval",
+    "DiDeMoT2VARetrieval",
+    "DiDeMoT2VRetrieval",
+    "DiDeMoV2ARetrieval",
+    "DiDeMoV2TRetrieval",
+    "DiDeMoVA2TRetrieval",
+    "DiDeMoVT2ARetrieval",
     "EDIST2ITRetrieval",
     "EmoVDBA2TRetrieval",
     "EmoVDBT2ARetrieval",
@@ -421,6 +561,8 @@ __all__ = [
     "MSCOCOT2IRetrieval",
     "MSMARCOHardNegatives",
     "MSMARCOv2",
+    "MSVDT2VRetrieval",
+    "MSVDV2TRetrieval",
     "MedicalQARetrieval",
     "MemotionI2TRetrieval",
     "MemotionT2IRetrieval",
@@ -444,6 +586,10 @@ __all__ = [
     "OKVQAIT2TRetrieval",
     "OVENIT2ITRetrieval",
     "OVENIT2TRetrieval",
+    "Panda70MT2VARetrieval",
+    "Panda70MT2VRetrieval",
+    "Panda70MV2TRetrieval",
+    "Panda70MVA2TRetrieval",
     "Quail",
     "QuoraRetrieval",
     "QuoraRetrievalHardNegatives",
@@ -470,11 +616,21 @@ __all__ = [
     "SciFact",
     "SciMMIRI2TRetrieval",
     "SciMMIRT2IRetrieval",
+    "Shot2Story20KA2VRetrieval",
+    "Shot2Story20KAT2VRetrieval",
+    "Shot2Story20KT2VARetrieval",
+    "Shot2Story20KT2VRetrieval",
+    "Shot2Story20KV2ARetrieval",
+    "Shot2Story20KV2TRetrieval",
+    "Shot2Story20KVA2TRetrieval",
+    "Shot2Story20KVT2ARetrieval",
     "SketchyI2IRetrieval",
     "SpartQA",
     "SpokenSQuADT2ARetrieval",
     "StanfordCarsI2I",
     "TUBerlinT2IRetrieval",
+    "TUNABenchT2VRetrieval",
+    "TUNABenchV2TRetrieval",
     "TempReasonL1",
     "TempReasonL2Context",
     "TempReasonL2Fact",
@@ -486,6 +642,30 @@ __all__ = [
     "TopiOCQARetrievalHardNegatives",
     "Touche2020",
     "Touche2020v3Retrieval",
+    "VALOR32KA2VRetrieval",
+    "VALOR32KAT2VRetrieval",
+    "VALOR32KT2VARetrieval",
+    "VALOR32KT2VRetrieval",
+    "VALOR32KV2ARetrieval",
+    "VALOR32KV2TRetrieval",
+    "VALOR32KVA2TRetrieval",
+    "VALOR32KVT2ARetrieval",
+    "VATEXA2VRetrieval",
+    "VATEXAT2VRetrieval",
+    "VATEXT2VARetrieval",
+    "VATEXT2VRetrieval",
+    "VATEXV2ARetrieval",
+    "VATEXV2TRetrieval",
+    "VATEXVA2TRetrieval",
+    "VATEXVT2ARetrieval",
+    "VGGSoundAVA2VRetrieval",
+    "VGGSoundAVAT2VRetrieval",
+    "VGGSoundAVT2VARetrieval",
+    "VGGSoundAVT2VRetrieval",
+    "VGGSoundAVV2ARetrieval",
+    "VGGSoundAVV2TRetrieval",
+    "VGGSoundAVVA2TRetrieval",
+    "VGGSoundAVVT2ARetrieval",
     "VQA2IT2TRetrieval",
     "VidoreArxivQARetrieval",
     "VidoreDocVQARetrieval",
@@ -509,4 +689,12 @@ __all__ = [
     "WebQAT2ITRetrieval",
     "WebQAT2TRetrieval",
     "WinoGrande",
+    "YouCook2A2VRetrieval",
+    "YouCook2AT2VRetrieval",
+    "YouCook2T2VARetrieval",
+    "YouCook2T2VRetrieval",
+    "YouCook2V2ARetrieval",
+    "YouCook2V2TRetrieval",
+    "YouCook2VA2TRetrieval",
+    "YouCook2VT2ARetrieval",
 ]

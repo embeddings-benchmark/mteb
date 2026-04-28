@@ -78,6 +78,7 @@ from .mkqa_retrieval import MKQARetrieval
 from .mlqa_retrieval import MLQARetrieval
 from .mr_tidy_retrieval import MrTidyRetrieval
 from .multi_long_doc_retrieval import MultiLongDocRetrieval
+from .mupler_retrieval import MuPLeRRetrieval
 from .neu_clir2022_retrieval import (
     NeuCLIR2022Retrieval,
     NeuCLIR2022RetrievalHardNegatives,
@@ -198,6 +199,7 @@ __all__ = [
     "MLQARetrieval",
     "MintakaRetrieval",
     "MrTidyRetrieval",
+    "MuPLeRRetrieval",
     "MultiLongDocRetrieval",
     "NeuCLIR2022Retrieval",
     "NeuCLIR2022RetrievalHardNegatives",

@@ -70,7 +70,7 @@ def _load_data_retrieval(
             query_text = row["text"]
             queries[lang][split][query_id] = query_text
 
-        queries = queries
+        queries = queries  # noqa: PLW0127
         logger.info("Loaded %d %s Queries.", len(queries), split.upper())
 
     return corpus, queries, relevant_docs

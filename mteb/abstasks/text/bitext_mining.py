@@ -199,7 +199,7 @@ class AbsTaskBitextMining(AbsTask):
         self._add_main_score(metrics)
         return metrics
 
-    def _compute_metrics(
+    def _compute_metrics(  # noqa: PLR6301
         self,
         nearest_neighbors: list[dict[str, float]],
         gold: list[tuple[int, int]],
@@ -239,7 +239,7 @@ class AbsTaskBitextMining(AbsTask):
         elif compute_overall:
             sentence1, sentence2 = [], []
             if self.parallel_subsets:
-                for hf_subset in self.metadata.eval_langs:
+                for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                     sent_1, sent_2 = hf_subset.split("-")
                     sentence1.extend(self.dataset[split][sent_1])
                     sentence2.extend(self.dataset[split][sent_2])
@@ -272,6 +272,7 @@ class AbsTaskBitextMining(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         if self.dataset is None:
             raise ValueError("Dataset is not loaded.")
@@ -307,4 +308,4 @@ class AbsTaskBitextMining(AbsTask):
                     }
                 )
             sentences = DatasetDict(sentences)
-            sentences.push_to_hub(repo_name, num_proc=num_proc)
+            sentences.push_to_hub(repo_name, num_proc=num_proc, **kwargs)

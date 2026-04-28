@@ -33,7 +33,7 @@ def run(args: argparse.Namespace) -> None:
     elif args.verbosity == 3:
         logging.getLogger("mteb").setLevel(logging.DEBUG)
 
-    if args.benchmarks and (
+    if args.benchmarks and (  # noqa: PLR0916
         args.tasks
         or args.eval_splits
         or args.languages
@@ -277,7 +277,6 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
 def _create_meta(args: argparse.Namespace) -> None:
     model_name = args.model_name
     tasks_names = args.tasks
-    benchmarks = args.benchmarks
     results_folder = Path(args.results_folder) if args.results_folder else None
     output_path = Path(args.output_path)
     overwrite = args.overwrite
@@ -298,13 +297,13 @@ def _create_meta(args: argparse.Namespace) -> None:
     tasks: list[AbsTask] = []
     if tasks_names is not None:
         tasks = list(mteb.get_tasks(tasks_names))
-    if benchmarks is not None:
+    if args.benchmarks is not None:
         benchmarks = mteb.get_benchmarks(benchmarks)
 
     generate_model_card(
         model_name,
-        tasks,
-        benchmarks,
+        tasks=tasks,
+        benchmarks=benchmarks,
         existing_model_card_id_or_path=from_existing,
         results_cache=ResultCache(results_folder),
         output_path=output_path,

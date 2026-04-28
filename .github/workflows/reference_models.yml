@@ -1,0 +1,37 @@
+name: Reference Model Coverage Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "mteb/benchmarks/**"
+      - "tests/test_benchmarks/test_reference_models.py"
+      - ".github/workflows/reference_models.yml"
+  pull_request:
+    paths:
+      - "mteb/benchmarks/**"
+      - "tests/test_benchmarks/test_reference_models.py"
+      - ".github/workflows/reference_models.yml"
+  workflow_dispatch:
+
+jobs:
+  reference-models:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: '3.11'
+          enable-cache: true
+
+      - name: Install dependencies
+        run: |
+          make install-for-tests
+
+      - name: Run reference model coverage test
+        run: |
+          make reference-model-test

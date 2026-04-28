@@ -48,7 +48,7 @@ Mirco Ravanelli},
         # remove rows where age is "not_defined" or "eighties" <- only 1 label so messes up stratified subsampling
         for split in self.dataset.keys():
             self.dataset[split] = self.dataset[split].filter(
-                lambda example: example["age"] not in ["not_defined", "eighties"]
+                lambda example: example["age"] not in ["not_defined", "eighties"]  # noqa: PLR6201
             )
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"], label=self.label_column_name

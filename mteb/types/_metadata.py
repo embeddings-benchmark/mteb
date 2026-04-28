@@ -48,6 +48,7 @@ Licenses = (
         "msr-la-nc",
         "multiple",
         "gemma",
+        "eupl-1.2",
     ]
 )
 """The different licenses that a dataset or model can have. This list can be extended as needed."""
@@ -57,7 +58,6 @@ ModelName = str
 """The name of a model, typically as found on HuggingFace e.g. `sentence-transformers/all-MiniLM-L6-v2`."""
 Revision = str
 """The revision of a model, typically a git commit hash. For APIs this can be a version string e.g. `1`."""
-
 
 # MODALITY TYPES
 Modalities = Literal[

@@ -11,6 +11,8 @@ import requests
 
 TIMEOUT = 300
 
+pytest.importorskip("gradio", reason="Gradio not installed")
+
 
 def run_leaderboard_app():
     """Function to launch the leaderboard app."""
@@ -85,7 +87,7 @@ def test_leaderboard_app_does_not_crash():
     logger.info("Creating subprocess...")
     process = multiprocessing.Process(target=run_leaderboard_app)
 
-    try:
+    try:  # noqa: PLR1702
         logger.info("Starting subprocess...")
         process.start()
         logger.info(f"Subprocess started with PID: {process.pid}")

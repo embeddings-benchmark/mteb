@@ -5,10 +5,9 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies, requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -26,17 +25,9 @@ class CNN14Wrapper(AbsEncoder):
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
         self.model_name = model_name
         self.device = device
         self.max_audio_length_s = max_audio_length_s
-
-        requires_package(
-            self,
-            "speechbrain",
-            "speechbrain/cnn14-esc50",
-            "pip install 'mteb[speechbrain]'",
-        )
 
         from speechbrain.inference.classifiers import AudioClassifier
 
@@ -50,7 +41,7 @@ class CNN14Wrapper(AbsEncoder):
         # SpeechBrain uses a 16kHz sampling rate for audio
         self.sampling_rate = 16_000
 
-    def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:
+    def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:  # noqa: PLR6301
         max_len = max(w.shape[0] for w in batch)
         padded = [torch.nn.functional.pad(w, (0, max_len - w.shape[0])) for w in batch]
         return torch.stack(padded)
@@ -61,7 +52,7 @@ class CNN14Wrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []
 
@@ -136,7 +127,10 @@ cnn14_esc50 = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/speechbrain/speechbrain",
     public_training_data=None,
-    training_datasets=None,  # ["ESC-50", "VGGSound"],
+    training_datasets={
+        "ESC50",
+        # "VGGSound",  # not in MTEB
+    },
     modalities=["audio"],
     citation="""
 @inproceedings{wang2022CRL,
@@ -146,4 +140,5 @@ cnn14_esc50 = ModelMeta(
     booktitle={Accepted to IEEE Signal Processing Letters}
 }
 """,
+    extra_requirements_groups=["speechbrain"],
 )

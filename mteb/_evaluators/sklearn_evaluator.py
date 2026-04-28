@@ -8,6 +8,8 @@ from mteb._create_dataloaders import create_dataloader
 from .evaluator import Evaluator
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     import numpy as np
     from datasets import Dataset
     from numpy.typing import NDArray
@@ -38,7 +40,8 @@ class SklearnEvaluator(Evaluator):
         self,
         train_dataset: Dataset,
         eval_dataset: Dataset,
-        values_column_name: str,
+        *,
+        values_column_name: str | Sequence[str],
         label_column_name: str,
         task_metadata: TaskMetadata,
         hf_split: str,
@@ -65,14 +68,14 @@ class SklearnEvaluator(Evaluator):
     ) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
         dataloader_train = create_dataloader(
             self.train_dataset,
-            self.task_metadata,
+            task_metadata=self.task_metadata,
             input_column=self.values_column_name,
             num_proc=num_proc,
             **encode_kwargs,
         )
         dataloader_test = create_dataloader(
             self.eval_dataset,
-            self.task_metadata,
+            task_metadata=self.task_metadata,
             input_column=self.values_column_name,
             num_proc=num_proc,
             **encode_kwargs,

@@ -38,7 +38,7 @@ def _get_json_from_hub(
     if path is None:
         return None
 
-    with Path(path).open() as f:
+    with Path(path).open() as f:  # noqa: PLW1514
         js = json.load(f)
     return js
 

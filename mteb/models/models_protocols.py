@@ -94,6 +94,7 @@ class EncoderProtocol(Protocol):
         self,
         model_name: str,
         revision: str | None,
+        *,
         device: str | None = None,
         **kwargs: Any,
     ) -> None:
