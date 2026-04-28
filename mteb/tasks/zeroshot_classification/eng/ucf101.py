@@ -59,7 +59,7 @@ class UCF101VideoAudioZeroShotClassification(AbsTaskZeroShotClassification):
             "path": "mteb/UCF101-51VA",
             "revision": "866b006d84629d66d9927646db89bd43381925e7",
         },
-        type="VideozeroShotClassification",
+        type="VideoZeroshotClassification",
         category="va2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -97,7 +97,7 @@ class UCF101VideoAudioZeroShotClassification(AbsTaskZeroShotClassification):
 
     def get_candidate_labels(self) -> list[str]:
         return [
-            f"a photo of {name}"
+            f"a video of {name}"
             for name in self.dataset["test"].features[self.label_column_name].names
         ]
 
@@ -152,6 +152,6 @@ class UCF101VideoZeroShotClassification(AbsTaskZeroShotClassification):
 
     def get_candidate_labels(self) -> list[str]:
         return [
-            f"a photo of {name}"
+            f"a video of {name}"
             for name in self.dataset["test"].features[self.label_column_name].names
         ]
