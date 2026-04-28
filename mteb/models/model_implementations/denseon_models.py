@@ -13,17 +13,17 @@ denseon_lateon_unsupervised_data = {
 }
 
 denseon_lateon_supervised_data = {
-    "FiQA2018"
-    "NQ"
-    "HotpotQA"
-    "MSMARCO"
-    "TRECDL2019"
-    "TRECDL2020"
-    "FEVER"
-    "ClimateFEVER"
+    "FiQA2018",
+    "NQ",
+    "HotpotQA",
+    "MSMARCO",
+    "TRECDL2019",
+    "TRECDL2020",
+    "FEVER",
+    "ClimateFEVER",
 }
 
-denseon_lateon_citation = """@misc{sourty2026denseonlateon,
+denseon_lateon_citation = r"""@misc{sourty2026denseonlateon,
   title={DenseOn with LateOn: Open State-of-the-Art Single and Multi-Vector Models},
   author={Sourty, Raphael and Chaffin, Antoine and Weller, Orion and Moura Junior, Paulo Roberto and Chatelain, Amelie},
   year={2026},
@@ -38,7 +38,7 @@ lightonai__denseon_unsupervised = ModelMeta(
     languages=["eng-Latn"],
     open_weights=True,
     revision="0edbd55684eb782bce55ee74c95b25c97cbe7f43",
-    release_date="2026-04-21", 
+    release_date="2026-04-21",
     n_parameters=149014272,
     n_embedding_parameters=38682624,
     memory_usage_mb=568,
@@ -63,7 +63,6 @@ lightonai__denseon_unsupervised = ModelMeta(
 )
 
 
-
 lightonai__denseon = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="lightonai/DenseOn",
@@ -71,7 +70,7 @@ lightonai__denseon = ModelMeta(
     languages=["eng-Latn"],
     open_weights=True,
     revision="41b4bba613f8ef85c61a69ef7d66410e1478567d",
-    release_date="2026-04-21", 
+    release_date="2026-04-21",
     n_parameters=149014272,
     n_embedding_parameters=38682624,
     memory_usage_mb=568,

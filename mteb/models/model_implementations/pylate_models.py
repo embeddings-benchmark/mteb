@@ -909,17 +909,17 @@ denseon_lateon_unsupervised_data = {
 }
 
 denseon_lateon_supervised_data = {
-    "FiQA2018"
-    "NQ"
-    "HotpotQA"
-    "MSMARCO"
-    "TRECDL2019"
-    "TRECDL2020"
-    "FEVER"
-    "ClimateFEVER"
+    "FiQA2018",
+    "NQ",
+    "HotpotQA",
+    "MSMARCO",
+    "TRECDL2019",
+    "TRECDL2020",
+    "FEVER",
+    "ClimateFEVER",
 }
 
-denseon_lateon_citation = """@misc{sourty2026denseonlateon,
+denseon_lateon_citation = r"""@misc{sourty2026denseonlateon,
   title={DenseOn with LateOn: Open State-of-the-Art Single and Multi-Vector Models},
   author={Sourty, Raphael and Chaffin, Antoine and Weller, Orion and Moura Junior, Paulo Roberto and Chatelain, Amelie},
   year={2026},
