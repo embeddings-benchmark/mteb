@@ -87,7 +87,7 @@ RTEB_ENGLISH = RtebBenchmark(
     )
     + (
         get_task(
-            "CureV1",
+            "CUREv1",
             hf_subsets="en",
         ),
     ),
