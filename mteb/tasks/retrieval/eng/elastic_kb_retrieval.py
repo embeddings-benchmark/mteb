@@ -37,7 +37,7 @@ class ElasticKBRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a support question, retrieve knowledge base articles that answer the question"
         },
-        sample_creation="multiple",
+        sample_creation="multiple", # see description
         bibtex_citation="",
         contributed_by="Jina by Elastic",
     )
