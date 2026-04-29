@@ -1148,6 +1148,8 @@ class ResultCache:
         Examples:
             >>> import mteb
             >>> cache = mteb.ResultCache()
+            >>> model = mteb.get_model(...)
+            >>> tasks = mteb.get_tasks(...)
             >>> results = mteb.evaluate(model, tasks, cache=cache)
             >>>
             >>> # Manual submission (step-by-step)
@@ -1193,7 +1195,7 @@ class ResultCache:
             CopyResultsAction(unsubmitted, self.remote_results_path)
         ]
 
-        commit_message, result_count = build_commit_message(
+        commit_message, result_count = _build_commit_message(
             normalized_models, unsubmitted
         )
 
@@ -1208,7 +1210,7 @@ class ResultCache:
         workflow.run()
 
         if not create_pr:
-            message = build_manual_submission_message(
+            message = _build_manual_submission_message(
                 remote_path, result_count, len(normalized_models)
             )
             logger.info("%s", message)
@@ -1220,13 +1222,12 @@ class ResultCache:
                 path=str(remote_path),
             )
 
-        pr_body = prepare_pr_body(normalized_models, unsubmitted)
+        pr_body = _prepare_pr_body(normalized_models, unsubmitted)
         return handle_pr_creation_with_cleanup(
             remote_repo_path=remote_path,
             original_branch=original_branch,
             branch_name=branch_name,
             models=normalized_models,
-            unsubmitted=unsubmitted,
             result_count=result_count,
             pr_body=pr_body,
         )
@@ -1375,7 +1376,7 @@ class ResultCache:
         )
 
 
-def prepare_pr_body(
+def _prepare_pr_body(
     models: list[ModelMeta],
     unsubmitted: dict[ModelMeta, list[Path]],
 ) -> str:
@@ -1424,7 +1425,7 @@ def prepare_pr_body(
     return body
 
 
-def build_manual_submission_message(
+def _build_manual_submission_message(
     remote_path: Path, result_count: int, model_count: int
 ) -> str:
     """Build the manual submission instructions message.
@@ -1457,7 +1458,7 @@ def build_manual_submission_message(
     return "\n".join(lines)
 
 
-def build_commit_message(
+def _build_commit_message(
     normalized_models: list[ModelMeta],
     unsubmitted: dict[ModelMeta, list[Path]],
 ) -> tuple[str, int]:
