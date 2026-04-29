@@ -41,10 +41,10 @@ def check_detached_head(repo_path: Path) -> None:
     In detached HEAD state, branch operations fail and state is confusing.
 
     Args:
-            repo_path: Path to the git repository.
+        repo_path: Path to the git repository.
 
     Raises:
-            RuntimeError: If in detached HEAD state.
+        RuntimeError: If in detached HEAD state.
     """
     try:
         result = subprocess.run(
@@ -72,13 +72,13 @@ def get_current_branch(repo_path: Path) -> str:
     """Get the current branch name.
 
     Args:
-            repo_path: Path to the git repository.
+        repo_path: Path to the git repository.
 
     Returns:
-            Current branch name.
+        Current branch name.
 
     Raises:
-            RuntimeError: If unable to determine current branch.
+        RuntimeError: If unable to determine current branch.
     """
     try:
         result = subprocess.run(
@@ -100,11 +100,11 @@ def restore_branch(repo_path: Path, original_branch: str) -> None:
     """Restore to the original branch after successful PR creation.
 
     Args:
-            repo_path: Path to the git repository.
-            original_branch: Name of the branch to restore to.
+        repo_path: Path to the git repository.
+        original_branch: Name of the branch to restore to.
 
     Raises:
-            RuntimeError: If restoration fails.
+        RuntimeError: If restoration fails.
     """
     try:
         subprocess.run(
@@ -124,8 +124,8 @@ def delete_branch(repo_path: Path, branch_name: str) -> None:
     """Delete a git branch to clean up after failed PR creation.
 
     Args:
-            repo_path: Path to the git repository.
-            branch_name: Name of the branch to delete.
+        repo_path: Path to the git repository.
+        branch_name: Name of the branch to delete.
     """
     try:
         subprocess.run(
@@ -195,7 +195,6 @@ def handle_pr_creation_with_cleanup(
     original_branch: str,
     branch_name: str | None,
     models: list[ModelMeta],
-    unsubmitted: dict[ModelMeta, list[Path]],
     result_count: int,
     pr_body: str,
 ) -> SubmitResultsResponse:
@@ -204,7 +203,6 @@ def handle_pr_creation_with_cleanup(
     Args:
         remote_repo_path: Path to the remote repository.
         models: List of ModelMeta objects.
-        unsubmitted: Dict mapping ModelMeta to list of result file paths.
         result_count: Total number of results.
         branch_name: Name of the branch to create.
         original_branch: Original branch name for restoration.
