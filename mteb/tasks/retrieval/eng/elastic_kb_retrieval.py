@@ -9,7 +9,7 @@ class ElasticKBRetrieval(AbsTaskRetrieval):
         name="ElasticKBRetrieval",
         description=(
             "Retrieval benchmark built from the Elastic support knowledge base. "
-            "Contains 9,754 documents and 420 queries (232 from real-world support "
+            "Contains 9,754 documents (real documents from the Elastic support knowledge base) and 420 queries (232 from real-world support "
             "chat sessions, 188 synthetic queries generated from KB articles). "
             "Relevance judgments are augmented labels produced by exhaustive "
             "all-pairs LLM annotation using strict comparison to original doc "
