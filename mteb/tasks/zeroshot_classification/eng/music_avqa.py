@@ -36,7 +36,7 @@ class MusicAVQACLSAudioVideoZeroShotClassification(AbsTaskZeroShotClassification
         license="gpl-3.0",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["video", "audio"],
+        modalities=["video", "audio", "text"],
         sample_creation="found",
         bibtex_citation=CITATION,
         is_beta=True,
