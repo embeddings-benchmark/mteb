@@ -72,7 +72,7 @@ class MusicAVQACLSVideoZeroShotClassification(AbsTaskZeroShotClassification):
         license="gpl-3.0",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["video"],
+        modalities=["video", "text"],
         sample_creation="found",
         bibtex_citation=CITATION,
         is_beta=True,
