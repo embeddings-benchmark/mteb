@@ -66,7 +66,7 @@ class VJepaV2Wrapper(AbsEncoder):
     ) -> Array:
         inputs.collate_fn = FramesCollator(
             fps=self.fps,
-            max_frames=10,
+            max_frames=self.max_frames,
             num_frames=self.num_frames,
         )
 
