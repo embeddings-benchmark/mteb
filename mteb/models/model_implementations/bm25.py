@@ -84,10 +84,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             logger.info("Encoding Queries...")
             query_ids = list(queries["id"])
             results = {qid: {} for qid in query_ids}
-            processed = queries.map(
-                _combine_queries_with_instruction_text,
-                desc="Processing queries for dataloading",
-            )
+            processed = _combine_queries_with_instruction_text(queries)
             queries_texts = processed["text"]
             query_token_strs = self._encode(queries_texts)
 

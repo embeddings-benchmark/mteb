@@ -165,3 +165,129 @@ class MSRVTTT2VA(AbsTaskRetrieval):
         _load_msr_vtt(
             self, query_columns=["caption"], corpus_columns=["video", "audio"]
         )
+
+
+class MSRVTTV2A(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MSRVTTV2A",
+        description=(
+            "Retrieve the audio track that matches a given video clip from MSR-VTT. "
+            "Tests cross-modal alignment between video frames and audio."
+        ),
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        eval_langs=["eng-Latn"],
+        eval_splits=["test"],
+        main_score="ndcg_at_10",
+        reference="https://openaccess.thecvf.com/content_cvpr_2016/papers/Xu_MSR-VTT_A_Large_CVPR_2016_paper.pdf",
+        category="v2a",
+        modalities=["video", "audio"],
+        date=("2016-01-01", "2016-12-31"),
+        domains=[],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="created",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the audio that corresponds to the following video."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_msr_vtt(self, query_columns=["video"], corpus_columns=["audio"])
+
+
+class MSRVTTA2V(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MSRVTTA2V",
+        description=(
+            "Retrieve the video clip that matches a given audio track from MSR-VTT. "
+            "Tests cross-modal alignment between audio and video frames."
+        ),
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        eval_langs=["eng-Latn"],
+        eval_splits=["test"],
+        main_score="ndcg_at_10",
+        reference="https://openaccess.thecvf.com/content_cvpr_2016/papers/Xu_MSR-VTT_A_Large_CVPR_2016_paper.pdf",
+        category="a2v",
+        modalities=["audio", "video"],
+        date=("2016-01-01", "2016-12-31"),
+        domains=[],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="created",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the video that corresponds to the following audio."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_msr_vtt(self, query_columns=["audio"], corpus_columns=["video"])
+
+
+class MSRVTTVT2A(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MSRVTTVT2A",
+        description="A large video description dataset for bridging video and language",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        eval_langs=["eng-Latn"],
+        eval_splits=["test"],
+        main_score="ndcg_at_10",
+        reference="https://openaccess.thecvf.com/content_cvpr_2016/papers/Xu_MSR-VTT_A_Large_CVPR_2016_paper.pdf",
+        category="vt2a",
+        modalities=["video", "text", "audio"],
+        date=("2016-01-01", "2016-12-31"),
+        domains=[],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="created",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Find the audio that corresponds to the following video and its description."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_msr_vtt(
+            self, query_columns=["video", "caption"], corpus_columns=["audio"]
+        )
+
+
+class MSRVTTAT2V(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MSRVTTAT2V",
+        description="A large video description dataset for bridging video and language",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        eval_langs=["eng-Latn"],
+        eval_splits=["test"],
+        main_score="ndcg_at_10",
+        reference="https://openaccess.thecvf.com/content_cvpr_2016/papers/Xu_MSR-VTT_A_Large_CVPR_2016_paper.pdf",
+        category="at2v",
+        modalities=["audio", "text", "video"],
+        date=("2016-01-01", "2016-12-31"),
+        domains=[],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="created",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Find the video that corresponds to the following audio and its description."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_msr_vtt(
+            self, query_columns=["audio", "caption"], corpus_columns=["video"]
+        )
