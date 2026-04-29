@@ -10,6 +10,7 @@ from .perception_test import (
     PerceptionTestVideoCentricQA,
 )
 from .video_mme import VideoMMEShortVideoAudioCentricQA, VideoMMEShortVideoCentricQA
+from .worldsense import WorldSense1MinVideoAudioCentricQA, WorldSense1MinVideoCentricQA
 
 __all__ = [
     "AVMemeExamVideoAudioCentricQA",
@@ -28,4 +29,6 @@ __all__ = [
     "PerceptionTestVideoCentricQA",
     "VideoMMEShortVideoAudioCentricQA",
     "VideoMMEShortVideoCentricQA",
+    "WorldSense1MinVideoAudioCentricQA",
+    "WorldSense1MinVideoCentricQA",
 ]
