@@ -32,13 +32,13 @@ import mteb
 cache = mteb.ResultCache()
 
 # 2. Evaluate model
-model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
+model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
 task = mteb.get_task("ArguAna")
 
-mteb.evaluate(model, task, cache=cache)
+mteb.evaluate(model_meta, task, cache=cache)
 
 # 3. Submit results
-cache.submit_results(model, create_pr=False)  # manual review before pushing
+cache.submit_results(model_meta, create_pr=False)  # manual review before pushing
 ```
 
 ## Loading Results

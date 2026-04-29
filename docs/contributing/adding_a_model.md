@@ -200,20 +200,19 @@ import mteb
 cache = mteb.ResultCache()
 
 # Evaluate your model
-model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
+model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
 task = mteb.get_task("ArguAna")
 
-mteb.evaluate(model, task, cache=cache)
+mteb.evaluate(model_meta, task, cache=cache)
 
 # Submit results (manual review before pushing)
-cache.submit_results(model, create_pr=False)
+cache.submit_results(model_meta, create_pr=False)
 ```
 
 **Manual submission** (recommended for first-time users):
 ```python
 submission_info = cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=False)
-print(submission_info.get("manual_submission_instructions"))
-# Review changes and push manually
+# Follow logged submission instructions, review changes and push manually
 ```
 
 **Automated submission** (requires GitHub integration to be configured):

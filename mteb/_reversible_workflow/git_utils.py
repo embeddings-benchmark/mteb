@@ -31,8 +31,10 @@ def check_uncommitted_changes(repo_path: Path) -> None:
                 f"Repository has uncommitted changes:\n{result.stdout.strip()}\n"
                 "Please commit or clean these changes before submitting."
             )
-    except subprocess.CalledProcessError as e:
-        logger.warning(f"Could not check uncommitted changes: {e}")
+    except (subprocess.CalledProcessError, FileNotFoundError) as e:
+        raise RuntimeError(
+            f"Failed to verify repository has no uncommitted changes: {e}"
+        ) from e
 
 
 def check_detached_head(repo_path: Path) -> None:
@@ -46,26 +48,30 @@ def check_detached_head(repo_path: Path) -> None:
     Raises:
         RuntimeError: If in detached HEAD state.
     """
-    try:
-        result = subprocess.run(
-            ["git", "symbolic-ref", "-q", "HEAD"],
-            check=False,
-            cwd=repo_path,
-            capture_output=True,
-            text=True,
+    result = subprocess.run(
+        ["git", "symbolic-ref", "-q", "HEAD"],
+        check=False,
+        cwd=repo_path,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode == 0:  # on branch
+        return
+    if result.returncode == 1:  # detached HEAD
+        raise RuntimeError(
+            "Repository is in detached HEAD state. "
+            "Please checkout a branch before submitting results:\n"
+            "  git checkout main    # Checkout main branch\n"
+            "  OR\n"
+            "  git checkout -b my-branch  # Create new branch"
         )
 
-        if result.returncode != 0:
-            # Non-zero return = detached HEAD
-            raise RuntimeError(
-                "Repository is in detached HEAD state. "
-                "Please checkout a branch before submitting results:\n"
-                "  git checkout main    # Checkout main branch\n"
-                "  OR\n"
-                "  git checkout -b my-branch  # Create new branch"
-            )
-    except subprocess.CalledProcessError as e:
-        logger.warning(f"Could not check HEAD state: {e}")
+    error_output = (
+        result.stderr.strip()
+        or result.stdout.strip()
+        or f"`git symbolic-ref -q HEAD` exited with status {result.returncode}"
+    )
+    raise RuntimeError(f"Failed to check HEAD state: {error_output}")
 
 
 def get_current_branch(repo_path: Path) -> str:
@@ -321,6 +327,7 @@ def create_pull_request(
 
         result = subprocess.run(
             ["gh", "repo", "view", "--json", "url"],
+            cwd=remote_repo_path,
             check=False,
             capture_output=True,
             text=True,

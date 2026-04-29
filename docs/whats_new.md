@@ -18,17 +18,17 @@ The updated guide walks through the full flow in a few steps:
 import mteb
 
 cache = mteb.ResultCache()
-model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
+model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
 task = mteb.get_task("ArguAna")
 
 # evaluate and store results locally
-mteb.evaluate(model, task, cache=cache)
+mteb.evaluate(model_meta, task, cache=cache)
 
 # manual submission: prepare the results and follow the printed instructions
-cache.submit_results(model, create_pr=False)
+cache.submit_results(model_meta, create_pr=False)
 
 # automated submission: create a pull request directly
-cache.submit_results(model, create_pr=True)
+cache.submit_results(model_meta, create_pr=True)
 ```
 
 For the full explanation of the cache, submission flow, and GitHub setup, see the [ResultCache documentation](./get_started/advanced_usage/result_cache.md).

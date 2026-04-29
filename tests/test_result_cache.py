@@ -775,7 +775,14 @@ def test_submit_results_with_fake_remote(tmp_path):
 
 
 def test_submit_results_handles_merge_conflict(tmp_path):
-    """Test merge conflict detection/handling during result submission using submit_results."""
+    """Test merge conflict detection/handling when the same file is modified on both branches.
+
+    Simulates:
+    1. First successful submission commits result files
+    2. External modification of same result file on main branch
+    3. Attempt second submission which would cause merge conflict
+    4. Verify conflict is detected and cleanup happens gracefully
+    """
     from unittest.mock import patch
 
     cache_path, remote_path = _setup_fake_remote(tmp_path)
@@ -785,15 +792,22 @@ def test_submit_results_handles_merge_conflict(tmp_path):
     revision = cast("str", test_model.revision)
     cache = ResultCache(cache_path=cache_path)
 
-    # Avoid fetching from the remote so the test remains hermetic in CI.
     with patch.object(cache, "download_from_remote", return_value=None):
+        # Step 1: First submission succeeds
         initial_result = cache.submit_results(models=[test_model], create_pr=False)
         assert initial_result["status"] == "ready_for_submission"
+        assert initial_result["result_count"] > 0
 
+        # Step 2: Simulate external modification of the same result file on main to trigger merge conflict
         result_dir = remote_path / "results" / model_name_path / revision
         if result_files_copied:
             conflict_file = result_dir / result_files_copied[0]
-            conflict_file.write_text('{"modified": "externally"}')
+            original_content = conflict_file.read_text()
+            conflict_file.write_text(
+                '{"modified": "externally", "original": "'
+                + original_content[:50]
+                + '"}'
+            )
 
             subprocess.run(
                 ["git", "add", str(conflict_file)],
@@ -802,15 +816,42 @@ def test_submit_results_handles_merge_conflict(tmp_path):
                 capture_output=True,
             )
             subprocess.run(
-                ["git", "commit", "-m", "External modification"],
+                ["git", "commit", "-m", "External modification on main"],
                 cwd=remote_path,
                 check=True,
                 capture_output=True,
             )
 
-        result = cache.submit_results(models=[test_model], create_pr=False)
-        assert result["status"] == "no_changes"
-        assert result["result_count"] == 0
+            # Step 3: Try to submit again - should detect that file was modified externally
+            # Since the result file in cache is unchanged, it will try to commit the unchanged version
+            # This causes a conflict because main has a different version
+            second_result = cache.submit_results(models=[test_model], create_pr=False)
+
+            assert second_result["status"] == "no_changes"
+            assert second_result["result_count"] == 0
+
+            # Verify we're still on main branch
+            current_branch = subprocess.run(
+                ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                check=False,
+                cwd=remote_path,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+            assert current_branch == "main", (
+                f"Should be on main but got {current_branch}"
+            )
+
+            branches = subprocess.run(
+                ["git", "branch"],
+                check=False,
+                cwd=remote_path,
+                capture_output=True,
+                text=True,
+            ).stdout
+            assert not any(
+                b.strip().startswith("mteb-results-") for b in branches.split("\n")
+            ), "Temporary branches should be cleaned up"
 
 
 def test_pr_creation_failure_cleans_up_branch(tmp_path):
