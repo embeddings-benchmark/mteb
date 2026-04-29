@@ -31,7 +31,7 @@ class ElasticKBRetrieval(AbsTaskRetrieval):
         date=["2015-01-01", "2026-04-01"],
         domains=["Written", "Engineering"],
         task_subtypes=["Question answering", "Conversational retrieval"],
-        license="cc-by-4.0",
+        license="not specified", # shared as an evaluation dataset, results can be shared, and the dataset is allowed to be sent to embedding APIs
         annotations_creators="LM-generated",
         dialect=[],
         prompt={
