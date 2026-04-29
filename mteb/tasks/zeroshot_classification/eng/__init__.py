@@ -39,6 +39,10 @@ from .ucf101 import (
     UCF101VideoZeroShotClassification,
     UCF101ZeroShotClassification,
 )
+from .worldsense_classification import (
+    WorldSenseAudioVideoZeroShotClassification,
+    WorldSenseVideoZeroShotClassification,
+)
 
 __all__ = [
     "CLEVR",
@@ -76,4 +80,6 @@ __all__ = [
     "UCF101VideoAudioZeroShotClassification",
     "UCF101VideoZeroShotClassification",
     "UCF101ZeroShotClassification",
+    "WorldSenseAudioVideoZeroShotClassification",
+    "WorldSenseVideoZeroShotClassification",
 ]
