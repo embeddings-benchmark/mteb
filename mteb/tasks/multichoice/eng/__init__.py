@@ -1,3 +1,4 @@
+from .avmeme_exam import AVMemeExamVideoAudioCentricQA, AVMemeExamVideoCentricQA
 from .avqa import AVQAVideoAudioCentricQA, AVQAVideoCentricQA
 from .blink_it2i_multi_choice import BLINKIT2IMultiChoice
 from .blink_it2t_multi_choice import BLINKIT2TMultiChoice
@@ -11,6 +12,8 @@ from .perception_test import (
 from .video_mme import VideoMMEShortVideoAudioCentricQA, VideoMMEShortVideoCentricQA
 
 __all__ = [
+    "AVMemeExamVideoAudioCentricQA",
+    "AVMemeExamVideoCentricQA",
     "AVQAVideoAudioCentricQA",
     "AVQAVideoCentricQA",
     "BLINKIT2IMultiChoice",
