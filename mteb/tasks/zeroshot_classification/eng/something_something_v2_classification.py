@@ -50,7 +50,7 @@ class SomethingSomethingV2ZeroShotClassification(AbsTaskZeroShotClassification):
 
     def get_candidate_labels(self) -> list[str]:
         return [
-            f"a photo of {name}"
+            f"a video of {name}"
             for name in self.dataset["test"].features[self.label_column_name].names
         ]
 
