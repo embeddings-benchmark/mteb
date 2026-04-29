@@ -58,7 +58,7 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
     model_types_set = set(model_types) if model_types is not None else None
     modalities_set = set(modalities) if modalities is not None else None
 
-    model_metas = MODEL_REGISTRY.values()
+    model_metas: Iterable[ModelMeta] = MODEL_REGISTRY.values()
     if model_names is not None:
         model_metas = [get_model_meta(name) for name in model_names]
 
