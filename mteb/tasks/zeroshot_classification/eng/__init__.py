@@ -1,3 +1,7 @@
+from .ave_dataset import (
+    AVEDatasetVideoZeroShotClassification,
+    AVEDatasetZeroShotClassification,
+)
 from .birdsnap import BirdsnapZeroShotClassification
 from .breakfast_classification import BreakfastZeroShotClassification
 from .caltech101 import Caltech101ZeroShotClassification
@@ -46,6 +50,8 @@ from .worldsense_classification import (
 
 __all__ = [
     "CLEVR",
+    "AVEDatasetVideoZeroShotClassification",
+    "AVEDatasetZeroShotClassification",
     "BirdsnapZeroShotClassification",
     "BreakfastZeroShotClassification",
     "CIFAR10ZeroShotClassification",
