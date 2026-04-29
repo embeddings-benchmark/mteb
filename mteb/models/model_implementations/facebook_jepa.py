@@ -87,8 +87,9 @@ class VJepaV2Wrapper(AbsEncoder):
                 return_tensors="pt",
             ).to(self.device)
 
-            outputs = self.model.get_vision_features(**processed_videos)
-            embeddings.extend(outputs.cpu())
+            outputs = self.model(**processed_videos)
+            pooled = outputs.last_hidden_state.mean(dim=1)
+            embeddings.append(pooled.cpu())
         return torch.cat(embeddings, dim=0).numpy()
 
 
@@ -110,7 +111,6 @@ vjepa2_vitl_fpc64_256 = ModelMeta(
     release_date="2025-06-11",
     languages=None,
     n_parameters=325_971_328,
-    n_active_parameters_override=None,
     n_embedding_parameters=None,
     memory_usage_mb=1243,
     max_tokens=None,
@@ -141,7 +141,6 @@ vjepa2_vith_fpc64_256 = ModelMeta(
     release_date="2025-06-11",
     languages=None,
     n_parameters=653930880,
-    n_active_parameters_override=None,
     n_embedding_parameters=None,
     memory_usage_mb=2495,
     max_tokens=None,
@@ -172,7 +171,6 @@ vjepa2_vitg_fpc64_256 = ModelMeta(
     release_date="2025-06-11",
     languages=None,
     n_parameters=1034555264,
-    n_active_parameters_override=None,
     n_embedding_parameters=None,
     memory_usage_mb=3947,
     max_tokens=None,
@@ -203,7 +201,6 @@ vjepa2_vitg_fpc64_384 = ModelMeta(
     release_date="2025-06-11",
     languages=None,
     n_parameters=1034555264,
-    n_active_parameters_override=None,
     n_embedding_parameters=None,
     memory_usage_mb=3947,
     max_tokens=None,
@@ -234,7 +231,6 @@ vjepa2_vitg_fpc64_384_ssv2 = ModelMeta(
     release_date="2025-06-13",
     languages=None,
     n_parameters=1128049454,
-    n_active_parameters_override=None,
     n_embedding_parameters=None,
     memory_usage_mb=4303,
     max_tokens=None,
@@ -267,7 +263,6 @@ vjepa2_vitl_fpc16_256_ssv2 = ModelMeta(
     release_date="2025-06-13",
     languages=None,
     n_parameters=375485998,
-    n_active_parameters_override=None,
     n_embedding_parameters=None,
     memory_usage_mb=1432,
     max_tokens=None,
@@ -300,7 +295,6 @@ vjepa2_vitg_fpc32_384_diving48 = ModelMeta(
     release_date="2025-06-13",
     languages=None,
     n_parameters=1127871920,
-    n_active_parameters_override=None,
     n_embedding_parameters=None,
     memory_usage_mb=4302,
     max_tokens=None,
@@ -333,7 +327,6 @@ vjepa2_vitl_fpc32_256_diving48 = ModelMeta(
     release_date="2025-06-13",
     languages=None,
     n_parameters=375356848,
-    n_active_parameters_override=None,
     n_embedding_parameters=None,
     memory_usage_mb=1432,
     max_tokens=None,
