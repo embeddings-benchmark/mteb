@@ -11,6 +11,14 @@ GRANITE_EMBEDDING_CITATION = """@article{awasthy2025graniteembedding,
   year={2025}
 }"""
 
+GRANITE_EMBEDDING_R2_CITATION="""@article{awasthy2025graniteembeddingr2models,
+      title={Granite Embedding R2 Models}, 
+      author={Parul Awasthy and Aashka Trivedi and Yulong Li and Meet Doshi and Riyaz Bhat and Vignesh P and Vishwajeet Kumar and Yushu Yang and Bhavani Iyer and Abraham Daniels and Rudra Murthy and Ken Barker and Martin Franz and Madison Lee and Todd Ward and Salim Roukos and David Cox and Luis Lastras and Jaydeep Sen and Radu Florian},
+      year={2025},
+      journal={arXiv preprint arXiv:2508.21085},
+      url={https://arxiv.org/abs/2508.21085}, 
+}"""
+
 GRANITE_LANGUAGES = [
     "ara-Latn",
     "ces-Latn",
@@ -26,6 +34,8 @@ GRANITE_LANGUAGES = [
     "zho-Hant",
     "zho-Hans",
 ]
+
+GRANITE_R2_LANGUAGES = ['ara-Arab', 'aze-Latn', 'ben-Beng', 'bul-Cyrl', 'cat-Latn', 'ces-Latn', 'dan-Latn', 'deu-Latn', 'ell-Grek', 'eng-Latn', 'est-Latn', 'fas-Arab', 'fin-Latn', 'fra-Latn', 'heb-Hebr', 'hin-Deva', 'hrv-Latn', 'hun-Latn', 'ind-Latn', 'isl-Latn', 'ita-Latn', 'jpn-Jpan', 'kat-Geor', 'kaz-Cyrl', 'khm-Khmr', 'kor-Hang', 'lav-Latn', 'lit-Latn', 'mar-Deva', 'msa-Latn', 'nld-Latn', 'nor-Latn', 'pol-Latn', 'por-Latn', 'ron-Latn', 'rus-Cyrl', 'slk-Latn', 'slv-Latn', 'spa-Latn', 'sqi-Latn', 'srp-Cyrl', 'swa-Latn', 'swe-Latn', 'tel-Telu', 'tgl-Latn', 'tha-Thai', 'tur-Latn', 'ukr-Cyrl', 'urd-Arab', 'uzb-Latn', 'vie-Latn', 'zho-Hans']
 
 granite_training_data = {
     # Multilingual MC4
@@ -91,6 +101,30 @@ granite_training_data = {
     # IBM Internal Title-Body Pairs
 }
 
+granite_multilingual_r2_training_data = {
+    "DBPedia",
+    "FEVER",
+    "FEVERHardNegatives",
+    "HotPotQA",
+    "HotpotQAHardNegatives",
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MrTidyRetrieval",
+    "NQ",
+    "NQHardNegatives",
+    "SpartQA",
+    "StackOverflowDupQuestions",
+    "StatcanDialogueDatasetRetrieval",
+    "TempReasonL1",
+    "TempReasonL2Context",
+    "TempReasonL2Fact",
+    "TempReasonL2Pure",
+    "TempReasonL3Context",
+    "TempReasonL3Fact",
+    "TempReasonL3Pure",
+    "WinoGrande",
+    # Also includes synthetic data and IBM Internal data
+}
 granite_107m_multilingual = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="ibm-granite/granite-embedding-107m-multilingual",
@@ -243,7 +277,7 @@ granite_english_r2 = ModelMeta(
     public_training_data=None,
     use_instructions=False,
     training_datasets=granite_training_data,
-    citation=GRANITE_EMBEDDING_CITATION,
+    citation=GRANITE_EMBEDDING_R2_CITATION,
 )
 
 granite_small_english_r2 = ModelMeta(
@@ -269,5 +303,70 @@ granite_small_english_r2 = ModelMeta(
     public_training_data=None,
     use_instructions=False,
     training_datasets=granite_training_data,
-    citation=GRANITE_EMBEDDING_CITATION,
+    citation=GRANITE_EMBEDDING_R2_CITATION,
+)
+
+
+granite_311m_multilingual_r2 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs={},
+    name='ibm-granite/granite-embedding-311m-multilingual-r2',
+    revision='dba7b0ee9d789f330fecfb85df57699f9e7d9c42',
+    release_date='2026-04-29',
+    languages=GRANITE_R2_LANGUAGES,
+    n_parameters=311664384,
+    n_active_parameters_override=None,
+    n_embedding_parameters=201332736,
+    memory_usage_mb=594,
+    max_tokens=8192,
+    embed_dim=[128, 256, 384, 512, 768],
+    license='apache-2.0',
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=['Sentence Transformers', 'Transformers', 'ONNX', 'safetensors', 'OpenVINO'],
+    reference='https://huggingface.co/ibm-granite/granite-embedding-311m-multilingual-r2',
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets=granite_multilingual_r2_training_data,
+    adapted_from=None,
+    superseded_by=None,
+    modalities=['text'],
+    model_type=['dense'],
+    citation=GRANITE_EMBEDDING_R2_CITATION,
+    contacts=None,
+    output_dtypes=None,
+    extra_requirements_groups=None,
+)
+
+granite_97m_multilingual_r2 =ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs={},
+    name='ibm-granite/granite-embedding-97m-multilingual-r2',
+    revision='c61e626a6255c490879d0af885078b61929d51f6',
+    release_date='2026-04-29',
+    languages=GRANITE_R2_LANGUAGES,
+    n_parameters=97441152,
+    n_active_parameters_override=None,
+    n_embedding_parameters=69120000,
+    memory_usage_mb=186,
+    max_tokens=8192,
+    embed_dim=384,
+    license='apache-2.0',
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=['Sentence Transformers', 'Transformers', 'ONNX', 'safetensors', 'OpenVINO'],
+    reference='https://huggingface.co/ibm-granite/granite-embedding-97m-multilingual-r2',
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=None,
+    training_datasets=granite_multilingual_r2_training_data,
+    adapted_from=None,
+    superseded_by=None,
+    modalities=['text'],
+    model_type=['dense'],
+    citation=GRANITE_EMBEDDING_R2_CITATION,
+    contacts=None,
+    output_dtypes=None,
+    extra_requirements_groups=None,
 )
