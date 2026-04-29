@@ -23,10 +23,10 @@ from mteb._reversible_workflow.git_actions import (
     CreateBranchAction,
 )
 from mteb._reversible_workflow.git_utils import (
-    delete_branch,
+    check_detached_head,
+    check_uncommitted_changes,
     get_current_branch,
-    restore_branch,
-    run_preflight_checks,
+    handle_pr_creation_with_cleanup,
 )
 from mteb._reversible_workflow.reversible_workflow import (
     ReversibleWorkflow,
@@ -967,8 +967,8 @@ class ResultCache:
 
         try:
             with meta_file.open("r") as f:
-                meta_dict = json.load(f)
-            return ModelMeta(**meta_dict)
+                meta_dict = f.read()
+            return ModelMeta.model_validate_json(meta_dict)
         except Exception as e:
             logger.warning(f"Failed to load ModelMeta from {meta_file}: {e}")
             return None
@@ -1112,114 +1112,6 @@ class ResultCache:
 
         return unsubmitted
 
-    @staticmethod
-    def _prepare_pr_body(
-        models: list[ModelMeta],
-        unsubmitted: dict[ModelMeta, list[Path]],
-    ) -> str:
-        """Prepare the pull request body with results summary.
-
-        Args:
-            models: List of ModelMeta objects.
-            unsubmitted: Dict mapping ModelMeta to list of result file paths.
-
-        Returns:
-            Formatted PR body string.
-        """
-        model_details = []
-        total_results = 0
-
-        for model in models:
-            if model in unsubmitted:
-                result_count = len(unsubmitted[model])
-                total_results += result_count
-                model_details.append(
-                    f"- **{model.name}** (revision: `{model.revision}`): {result_count} results"
-                )
-
-        model_details_str = "\n".join(model_details)
-
-        checklist = """### Checklist
-- [ ] My model has a model sheet, report, or similar
-- [ ] My model has a reference implementation in [`mteb/models/model_implementations/`](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/models/model_implementations), this can be as an API. Instruction on how to add a model can be found [here](https://embeddings-benchmark.github.io/mteb/contributing/adding_a_model/)
-  - [ ] No, but there is an existing PR ___
-- [ ] The results submitted are obtained using the reference implementation
-- [ ] My model is available, either as a publicly accessible API or publicly on e.g., Huggingface
-- [ ] I *solemnly swear* that for all results submitted I have not trained on the evaluation dataset including training splits. If I have, I have disclosed it clearly."""
-
-        body = f"""### Models Submitted
-{model_details_str}
-
-**Total Results:** {total_results}
-
----
-
-*This PR was created automatically using [`ResultCache.submit_results()`](https://embeddings-benchmark.github.io/mteb/get_started/advanced_usage/result_cache/#submit_results). Please check the results carefully before merging.*
-
-{checklist}"""
-
-        logger.info("\n📋 Please complete the checklist in the PR body before merging.")
-        return body
-
-    @staticmethod
-    def _build_manual_submission_message(
-        commit_sha: str, remote_path: Path, result_count: int, model_count: int
-    ) -> str:
-        """Build the manual submission instructions message.
-
-        Args:
-            commit_sha: The git commit SHA.
-            remote_path: Path to the remote repository.
-            result_count: Number of result files submitted.
-            model_count: Number of models submitted.
-
-        Returns:
-            Formatted submission instructions as a single string.
-        """
-        lines = [
-            "\n" + "=" * 80,
-            f"✓ Commit created with {result_count} results for {model_count} model(s)",
-            "=" * 80,
-            f"\nCommit SHA: {commit_sha}",
-            f"Location: {remote_path}",
-            "\n📋 To submit these results, follow these steps:\n",
-            "1. Go to the remote repository:",
-            f"   {remote_path}\n",
-            "2. Create a fork (if you don't have one already):",
-            "   gh repo fork --remote --remote-name fork --clone=false\n",
-            "3. Push your changes to your fork:",
-            "   git push fork\n",
-            "4. Create a pull request:",
-            "   gh pr create --base main --head <your-username>:main\n",
-            "5. Provide details about your evaluation in the PR description\n",
-            "=" * 80,
-        ]
-        return "\n".join(lines)
-
-    @staticmethod
-    def _build_commit_message(
-        normalized_models: list[ModelMeta],
-        unsubmitted: dict[ModelMeta, list[Path]],
-    ) -> tuple[str, int]:
-        """Build the commit message for submitted results.
-
-        Args:
-            normalized_models: Models being submitted.
-            unsubmitted: Result files grouped by model.
-
-        Returns:
-            Tuple containing the formatted commit message and result count.
-        """
-        model_str = ", ".join(model.name for model in normalized_models if model.name)
-        result_count = sum(len(files) for files in unsubmitted.values())
-        commit_message = (
-            f"Add MTEB evaluation results for {model_str}\n\n"
-            f"Models: {model_str}\n"
-            f"Total results: {result_count}\n"
-            f"Submitted by MTEB ResultCache"
-        )
-        return commit_message, result_count
-
     def submit_results(
         self,
         models: Sequence[str] | Sequence[ModelMeta] | str | ModelMeta | None = None,
@@ -1243,7 +1135,6 @@ class ResultCache:
                 - status: "ready_for_submission" or "pr_created"
                 - models_submitted: list of (model_name, revision) tuples
                 - result_count: number of result files submitted
-                - commit_sha: git commit hash
                 - pr_url: URL to created PR (only if create_pr=True)
                 - pr_number: PR number (only if create_pr=True)
                 - fork_url: URL to user's fork (only if create_pr=True)
@@ -1281,11 +1172,12 @@ class ResultCache:
                     status="no_changes",
                     models_submitted=[(m.name, m.revision) for m in normalized_models],
                     result_count=0,
-                    commit_sha=None,
                 )
 
             remote_path = self.remote_repo_path
-            run_preflight_checks(remote_path)
+            check_uncommitted_changes(remote_path)
+            check_detached_head(remote_path)
+            logger.info("Pre-flight checks passed.")
 
             # Capture original branch before making any changes
             original_branch = get_current_branch(remote_path)
@@ -1297,15 +1189,15 @@ class ResultCache:
             logger.error(f"Error during submit_results setup: {e}")
             raise
 
-        actions: list[ReversibleAction] = []
-        actions.append(CopyResultsAction(unsubmitted, self.remote_results_path))
+        actions: list[ReversibleAction] = [
+            CopyResultsAction(unsubmitted, self.remote_results_path)
+        ]
 
-        commit_message, result_count = self._build_commit_message(
+        commit_message, result_count = build_commit_message(
             normalized_models, unsubmitted
         )
 
-        commit_action = CommitAction(remote_path, commit_message)
-        actions.append(commit_action)
+        actions.append(CommitAction(remote_path, commit_message))
 
         if create_pr and branch_name:
             actions.append(
@@ -1315,13 +1207,9 @@ class ResultCache:
         workflow = ReversibleWorkflow(steps=actions)
         workflow.run()
 
-        commit_sha = commit_action.commit_sha
-        if not commit_sha:
-            raise RuntimeError("Failed to create commit: commit_sha is None")
-
         if not create_pr:
-            message = self._build_manual_submission_message(
-                commit_sha, remote_path, result_count, len(normalized_models)
+            message = build_manual_submission_message(
+                remote_path, result_count, len(normalized_models)
             )
             logger.info("%s", message)
 
@@ -1329,293 +1217,19 @@ class ResultCache:
                 status="ready_for_submission",
                 models_submitted=[(m.name, m.revision) for m in normalized_models],
                 result_count=result_count,
-                commit_sha=commit_sha,
                 path=str(remote_path),
             )
 
-        return self._handle_pr_creation_with_cleanup(
-            commit_sha,
-            normalized_models,
-            unsubmitted,
-            result_count,
-            branch_name,
-            remote_path,
-            original_branch,
+        pr_body = prepare_pr_body(normalized_models, unsubmitted)
+        return handle_pr_creation_with_cleanup(
+            remote_repo_path=remote_path,
+            original_branch=original_branch,
+            branch_name=branch_name,
+            models=normalized_models,
+            unsubmitted=unsubmitted,
+            result_count=result_count,
+            pr_body=pr_body,
         )
-
-    @staticmethod
-    def _get_github_token() -> str:
-        """Get GitHub token using gh CLI authentication.
-
-        Returns:
-            GitHub token string
-
-        Raises:
-            RuntimeError: If authentication fails.
-        """
-        try:
-            result = subprocess.run(
-                ["gh", "auth", "token"],
-                check=False,
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-            if result.returncode == 0 and result.stdout.strip():
-                logger.debug("Using token from gh auth")
-                return result.stdout.strip()
-        except FileNotFoundError:
-            logger.debug("gh CLI not found, trying git credential helper")
-        except Exception as e:
-            logger.debug(f"Failed to get token from gh auth: {e}")
-
-        try:
-            result = subprocess.run(
-                ["git", "credential", "fill"],
-                check=False,
-                input="protocol=https\nhost=github.com\n\n",
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-            if result.returncode == 0:
-                for line in result.stdout.split("\n"):
-                    if line.startswith("password="):
-                        logger.debug("Using token from git credential helper")
-                        return line.split("=", 1)[1]
-        except Exception as e:
-            logger.debug(f"Failed to get token from git credential: {e}")
-
-        raise RuntimeError(
-            "GitHub token not found. Please set up gh CLI (gh auth login) or "
-            "configure git credential helper."
-        )
-
-    def _handle_pr_creation_with_cleanup(
-        self,
-        commit_sha: str,
-        models: list[ModelMeta],
-        unsubmitted: dict[ModelMeta, list[Path]],
-        result_count: int,
-        branch_name: str | None,
-        remote_path: Path,
-        original_branch: str,
-    ) -> SubmitResultsResponse:
-        """Create a pull request with proper cleanup on failure.
-
-        Args:
-            commit_sha: The commit SHA to reference.
-            models: List of ModelMeta objects.
-            unsubmitted: Dict mapping ModelMeta to list of result file paths.
-            result_count: Total number of results.
-            branch_name: Name of the branch to create.
-            remote_path: Path to the remote repository.
-            original_branch: Original branch name for restoration.
-
-        Returns:
-            Dictionary with PR information.
-
-        Raises:
-            RuntimeError: If PR creation or cleanup fails.
-        """
-        try:
-            result = self._create_pull_request(
-                commit_sha,
-                models,
-                unsubmitted,
-                result_count,
-                branch_name=branch_name,
-            )
-            # After successful PR, restore to original branch
-            restore_branch(remote_path, original_branch)
-            return result
-        except Exception as e:
-            # PR creation failed, but workflow.run() already completed
-            # Restore to original branch and delete temporary branch to clean up
-            logger.error(f"PR creation failed: {e}")
-
-            try:
-                restore_branch(remote_path, original_branch)
-            except Exception as restore_error:
-                logger.error(f"Failed to restore branch on error: {restore_error}")
-                logger.warning(
-                    f"You may be on branch '{branch_name}'. "
-                    f"To restore, run: git checkout {original_branch}"
-                )
-
-            if branch_name:
-                try:
-                    delete_branch(remote_path, branch_name)
-                except Exception as delete_error:
-                    logger.error(f"Failed to delete branch: {delete_error}")
-
-            raise
-
-    def _create_pull_request(
-        self,
-        commit_sha: str,
-        models: list[ModelMeta],
-        unsubmitted: dict[ModelMeta, list[Path]],
-        result_count: int,
-        branch_name: str | None,
-    ) -> SubmitResultsResponse:
-        """Create a pull request on GitHub using PyGithub.
-
-        Args:
-            commit_sha: The commit SHA to reference.
-            models: List of ModelMeta objects.
-            unsubmitted: Dict mapping ModelMeta to list of result file paths.
-            result_count: Total number of results.
-            branch_name: Name of the branch to create.
-
-        Returns:
-            Dictionary with PR information.
-
-        Raises:
-            RuntimeError: If authentication fails.
-            GithubException: If GitHub API call fails.
-        """
-        try:
-            from github import (  # type: ignore[import-not-found]
-                Auth,
-                Github,
-                GithubException,
-            )
-        except ImportError:
-            raise ImportError(
-                "PyGithub is not installed. Please install it using `pip install 'mteb[pygithub]'`"
-            )
-
-        logger.info("Creating PR using PyGithub")
-        token = self._get_github_token()
-
-        try:
-            auth = Auth.Token(token)
-            gh = Github(auth=auth)
-            user = gh.get_user()
-        except Exception as e:
-            raise RuntimeError(f"Failed to authenticate with GitHub: {e}") from e
-
-        try:
-            upstream = gh.get_repo("embeddings-benchmark/results")
-            logger.info("Connected to upstream: embeddings-benchmark/results")
-        except Exception as e:
-            raise RuntimeError(f"Failed to access upstream repository: {e}") from e
-
-        fork_url = None
-        try:
-            logger.info("Creating/configuring fork using gh CLI...")
-            subprocess.run(
-                [
-                    "gh",
-                    "repo",
-                    "fork",
-                    "--remote",
-                    "--remote-name",
-                    "fork",
-                ],
-                cwd=self.remote_repo_path,
-                check=True,
-                capture_output=True,
-                text=True,
-                timeout=30,
-            )
-            logger.info("Fork created/configured")
-
-            # Get fork URL from gh CLI
-            result = subprocess.run(
-                ["gh", "repo", "view", "--json", "url"],
-                check=False,
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-            if result.returncode == 0:
-                fork_data = json.loads(result.stdout)
-                fork_url = fork_data.get(
-                    "url", f"https://github.com/{user.login}/results"
-                )
-            else:
-                fork_url = f"https://github.com/{user.login}/results"
-
-            logger.info(f"Using fork: {fork_url}")
-        except subprocess.CalledProcessError as e:
-            raise RuntimeError(
-                f"Failed to create/configure fork: {e.stderr or e.stdout}"
-            ) from e
-        except Exception as e:
-            raise RuntimeError(f"Failed to setup fork: {e}") from e
-
-        try:
-            rate_limit = gh.get_rate_limit()
-            core_limit = rate_limit.raw_data["resources"]["core"]["limit"]
-            core_remaining = rate_limit.raw_data["resources"]["core"]["remaining"]
-            logger.info(
-                f"GitHub API rate limit: {core_remaining}/{core_limit} remaining"
-            )
-            if core_remaining < 5:
-                logger.warning(
-                    f"GitHub API rate limit low ({core_remaining} remaining). "
-                    "Consider waiting before submitting more PRs."
-                )
-        except Exception as e:
-            logger.debug(f"Could not check rate limit (non-critical): {e}")
-
-        try:
-            logger.info(f"Pushing to fork branch '{branch_name}'...")
-            subprocess.run(
-                ["git", "push", "fork", f"HEAD:refs/heads/{branch_name}"],
-                cwd=self.remote_repo_path,
-                check=True,
-                capture_output=True,
-                text=True,
-                timeout=60,
-            )
-            logger.info("Push successful")
-        except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"Failed to push to fork: {e.stderr or e.stdout}") from e
-
-        try:
-            pr_body = self._prepare_pr_body(models, unsubmitted)
-            model_str = ", ".join(model.name for model in models if model.name)
-
-            logger.info("Creating pull request...")
-            pr = upstream.create_pull(
-                title=f"MTEB Evaluation Results: {model_str}",
-                body=pr_body,
-                head=f"{user.login}:{branch_name}",
-                base="main",
-            )
-
-            logger.info("\n" + "=" * 80)
-            logger.info("✓ Pull request created successfully!")
-            logger.info("=" * 80)
-            logger.info(f"\nPR URL: {pr.html_url}")
-            logger.info(f"PR Number: #{pr.number}")
-            logger.info(f"Fork: {fork_url}")
-            logger.info(f"\nModels: {model_str}")
-            logger.info(f"Results: {result_count}")
-            logger.info(f"Commit: {commit_sha}")
-            logger.info("\n" + "=" * 80)
-
-            return SubmitResultsResponse(
-                status="pr_created",
-                models_submitted=[(m.name, m.revision) for m in models],
-                result_count=result_count,
-                commit_sha=commit_sha,
-                pr_url=pr.html_url,
-                pr_number=pr.number,
-                fork_url=fork_url,
-                branch_name=branch_name,
-            )
-
-        except GithubException as e:
-            raise RuntimeError(
-                f"Failed to create pull request: "
-                f"Status {e.status}: {e.data.get('message', str(e))}"
-            ) from e
-        except Exception as e:
-            raise RuntimeError(f"Unexpected error creating PR: {e}") from e
 
     def load_results(
         self,
@@ -1759,3 +1373,109 @@ class ResultCache:
             model_results=models_results_object,
             benchmark=tasks if isinstance(tasks, Benchmark) else None,
         )
+
+
+def prepare_pr_body(
+    models: list[ModelMeta],
+    unsubmitted: dict[ModelMeta, list[Path]],
+) -> str:
+    """Prepare the pull request body with results summary.
+
+    Args:
+        models: List of ModelMeta objects.
+        unsubmitted: Dict mapping ModelMeta to list of result file paths.
+
+    Returns:
+        Formatted PR body string.
+    """
+    model_details = []
+    total_results = 0
+
+    for model in models:
+        if model in unsubmitted:
+            result_count = len(unsubmitted[model])
+            total_results += result_count
+            model_details.append(
+                f"- **{model.name}** (revision: `{model.revision}`): {result_count} results"
+            )
+
+    model_details_str = "\n".join(model_details)
+
+    checklist = """### Checklist
+- [ ] My model has a model sheet, report, or similar
+- [ ] My model has a reference implementation in [`mteb/models/model_implementations/`](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/models/model_implementations), this can be as an API. Instruction on how to add a model can be found [here](https://embeddings-benchmark.github.io/mteb/contributing/adding_a_model/)
+  - [ ] No, but there is an existing PR ___
+- [ ] The results submitted are obtained using the reference implementation
+- [ ] My model is available, either as a publicly accessible API or publicly on e.g., Huggingface
+- [ ] I *solemnly swear* that for all results submitted I have not trained on the evaluation dataset including training splits. If I have, I have disclosed it clearly."""
+
+    body = f"""### Models Submitted
+{model_details_str}
+
+**Total Results:** {total_results}
+
+---
+
+*This PR was created automatically using [`ResultCache.submit_results()`](https://embeddings-benchmark.github.io/mteb/get_started/advanced_usage/result_cache/#submit_results). Please check the results carefully before merging.*
+
+{checklist}"""
+
+    logger.info("\n📋 Please complete the checklist in the PR body before merging.")
+    return body
+
+
+def build_manual_submission_message(
+    remote_path: Path, result_count: int, model_count: int
+) -> str:
+    """Build the manual submission instructions message.
+
+    Args:
+        remote_path: Path to the remote repository.
+        result_count: Number of result files submitted.
+        model_count: Number of models submitted.
+
+    Returns:
+        Formatted submission instructions as a single string.
+    """
+    lines = [
+        "\n" + "=" * 80,
+        f"✓ Commit created with {result_count} results for {model_count} model(s)",
+        "=" * 80,
+        f"Location: {remote_path}",
+        "\n📋 To submit these results, follow these steps:\n",
+        "1. Go to the remote repository:",
+        f"   {remote_path}\n",
+        "2. Create a fork (if you don't have one already):",
+        "   gh repo fork --remote --remote-name fork --clone=false\n",
+        "3. Push your changes to your fork:",
+        "   git push fork\n",
+        "4. Create a pull request:",
+        "   gh pr create --base main --head <your-username>:main\n",
+        "5. Provide details about your evaluation in the PR description\n",
+        "=" * 80,
+    ]
+    return "\n".join(lines)
+
+
+def build_commit_message(
+    normalized_models: list[ModelMeta],
+    unsubmitted: dict[ModelMeta, list[Path]],
+) -> tuple[str, int]:
+    """Build the commit message for submitted results.
+
+    Args:
+        normalized_models: Models being submitted.
+        unsubmitted: Result files grouped by model.
+
+    Returns:
+        Tuple containing the formatted commit message and result count.
+    """
+    model_str = ", ".join(model.name for model in normalized_models if model.name)
+    result_count = sum(len(files) for files in unsubmitted.values())
+    commit_message = (
+        f"Add MTEB evaluation results for {model_str}\n\n"
+        f"Models: {model_str}\n"
+        f"Total results: {result_count}\n"
+        f"Submitted by MTEB ResultCache"
+    )
+    return commit_message, result_count

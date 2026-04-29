@@ -726,8 +726,14 @@ def test_submit_results_with_fake_remote(tmp_path):
 
         assert result["status"] == "ready_for_submission"
         assert result["result_count"] == len(result_files_copied)
-        commit_sha = result.get("commit_sha")
-        assert commit_sha is not None
+        commit_sha = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            check=True,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        assert commit_sha
         check = subprocess.run(
             ["git", "cat-file", "-t", commit_sha],
             check=False,
@@ -769,7 +775,7 @@ def test_submit_results_with_fake_remote(tmp_path):
         second_result = cache.submit_results(models=[test_model], create_pr=False)
         assert second_result["status"] == "no_changes"
         assert second_result["result_count"] == 0
-        assert second_result.get("commit_sha") is None
+        assert "commit_sha" not in second_result
 
 
 def test_submit_results_handles_merge_conflict(tmp_path):
@@ -810,7 +816,6 @@ def test_submit_results_handles_merge_conflict(tmp_path):
         result = cache.submit_results(models=[test_model], create_pr=False)
         assert result["status"] == "no_changes"
         assert result["result_count"] == 0
-        assert result.get("commit_sha") is None
 
 
 def test_pr_creation_failure_cleans_up_branch(tmp_path):

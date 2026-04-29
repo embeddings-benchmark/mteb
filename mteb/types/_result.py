@@ -40,7 +40,6 @@ class SubmitResultsResponse(TypedDict):
     status: Literal["no_changes", "ready_for_submission", "pr_created"]
     models_submitted: list[tuple[str | None, str | None]]
     result_count: int
-    commit_sha: str | None
     path: NotRequired[str]
     pr_url: NotRequired[str]
     pr_number: NotRequired[int]
