@@ -18,7 +18,7 @@ class VideoConPairClassification(AbsTaskPairClassification):
         reference="https://arxiv.org/abs/2311.10111",
         dataset={
             "path": "zachz/VideoCon-PC",
-            "revision": "93a3f53b21061fc66538854e4005f4cceddc0cd8",
+            "revision": "b0cb7112a3edfccf8ae697602442a828712b056b",
         },
         type="VideoPairClassification",
         category="v2t",
@@ -49,10 +49,3 @@ class VideoConPairClassification(AbsTaskPairClassification):
     label_column_name: str = "label"
     input1_prompt_type: PromptType | None = PromptType.query
     input2_prompt_type: PromptType | None = PromptType.document
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
-        for split in self.metadata.eval_splits:
-            ds = self.dataset[split]
-            ds = ds.rename_column("caption", "text")
-            ds = ds.add_column("id", list(range(len(ds))))
-            self.dataset[split] = ds

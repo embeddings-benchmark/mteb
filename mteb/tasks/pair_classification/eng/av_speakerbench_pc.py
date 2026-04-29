@@ -3,8 +3,6 @@ from __future__ import annotations
 from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-from ._video_pair_helpers import build_pair_dataset, generate_pairs
-
 
 class AVSpeakerBenchPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
@@ -18,8 +16,8 @@ class AVSpeakerBenchPairClassification(AbsTaskPairClassification):
         ),
         reference="https://arxiv.org/abs/2512.02231",
         dataset={
-            "path": "mteb/AV-SpeakerBench",
-            "revision": "46da53344c6a968d30cd72e28862732adf747802",
+            "path": "zachz/AV-SpeakerBench-PC",
+            "revision": "f27f6a1c6c35be08ccc9305e1a9db0cf9d0621d5",
         },
         type="VideoPairClassification",
         category="v2v",
@@ -29,7 +27,7 @@ class AVSpeakerBenchPairClassification(AbsTaskPairClassification):
         date=("2025-12-01", "2025-12-31"),
         domains=["Spoken"],
         task_subtypes=["Duplicate Detection"],
-        license="not specified",
+        license="cc-by-nc-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["video"],
@@ -48,38 +46,3 @@ class AVSpeakerBenchPairClassification(AbsTaskPairClassification):
     input1_column_name: str = "video1"
     input2_column_name: str = "video2"
     label_column_name: str = "label"
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
-        import random
-
-        rng = random.Random(42)
-        for split in self.metadata.eval_splits:
-            ds = self.dataset[split]
-
-            # Deduplicate rows by video_id to avoid inflated positive pairs
-            video_ids = ds["video_id"]
-            seen: set[str] = set()
-            unique_indices: list[int] = []
-            for i, vid in enumerate(video_ids):
-                if vid not in seen:
-                    seen.add(vid)
-                    unique_indices.append(i)
-            ds = ds.select(unique_indices)
-
-            # Extract source video IDs from video_id field
-            # Format: h_O8ZvB3uEk_47_59.mp4 → h_O8ZvB3uEk (YouTube ID)
-            video_ids = ds["video_id"]
-            source_ids: list[str] = []
-            for vid in video_ids:
-                # Remove .mp4, split by _, remove last two parts (start, end)
-                parts = vid.replace(".mp4", "").split("_")
-                source_id = "_".join(parts[:-2])
-                source_ids.append(source_id)
-
-            # Map source IDs to integer labels for generate_pairs
-            unique_sources = sorted(set(source_ids))
-            source_to_label = {s: i for i, s in enumerate(unique_sources)}
-            class_labels = [source_to_label[s] for s in source_ids]
-
-            pairs = generate_pairs(class_labels, rng)
-            self.dataset[split] = build_pair_dataset(ds, pairs)

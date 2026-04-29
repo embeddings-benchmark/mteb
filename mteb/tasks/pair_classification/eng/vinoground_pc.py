@@ -3,8 +3,6 @@ from __future__ import annotations
 from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-from ._video_pair_helpers import build_pair_dataset, generate_pairs
-
 
 class VinogroundPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
@@ -20,7 +18,7 @@ class VinogroundPairClassification(AbsTaskPairClassification):
         reference="https://arxiv.org/abs/2410.02763",
         dataset={
             "path": "zachz/Vinoground-PC",
-            "revision": "ffaf8401703625840f3bf3bddc2670f1ff9d17e8",
+            "revision": "5c011c8755517a299294686f3c87ad7ae4c93e4a",
         },
         type="VideoPairClassification",
         category="v2v",
@@ -49,19 +47,3 @@ class VinogroundPairClassification(AbsTaskPairClassification):
     input1_column_name: str = "video1"
     input2_column_name: str = "video2"
     label_column_name: str = "label"
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
-        import random
-
-        rng = random.Random(42)
-        for split in self.metadata.eval_splits:
-            ds = self.dataset[split]
-
-            # Map major categories to integer labels
-            majors = ds["major"]
-            unique_majors = sorted({m for m in majors if m is not None})
-            major_to_label = {m: i for i, m in enumerate(unique_majors)}
-            class_labels = [major_to_label.get(m, len(unique_majors)) for m in majors]
-
-            pairs = generate_pairs(class_labels, rng)
-            self.dataset[split] = build_pair_dataset(ds, pairs)
