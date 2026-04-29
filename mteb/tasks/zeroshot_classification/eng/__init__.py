@@ -25,6 +25,10 @@ from .meld_classification import (
     MELDVideoZeroShotClassification,
 )
 from .mnist import MNISTZeroShotClassification
+from .music_avqa import (
+    MusicAVQACLSAudioVideoZeroShotClassification,
+    MusicAVQACLSVideoZeroShotClassification,
+)
 from .oxford_pets import OxfordPetsZeroShotClassification
 from .patch_camelyon import PatchCamelyonZeroShotClassification
 from .ravdess import RavdessZeroshotClassification
@@ -72,6 +76,8 @@ __all__ = [
     "MELDAudioVideoZeroShotClassification",
     "MELDVideoZeroShotClassification",
     "MNISTZeroShotClassification",
+    "MusicAVQACLSAudioVideoZeroShotClassification",
+    "MusicAVQACLSVideoZeroShotClassification",
     "OxfordPetsZeroShotClassification",
     "PatchCamelyonZeroShotClassification",
     "RESISC45ZeroShotClassification",
