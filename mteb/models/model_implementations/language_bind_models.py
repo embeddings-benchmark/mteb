@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import VideoCollator
+from mteb.models.modality_collators import VideoCollator
 from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -303,7 +303,7 @@ _LANGUAGE_BIND_COMMON = dict(
     citation=_LANGUAGE_BIND_CITATION,
     license="mit",
     reference="https://github.com/PKU-YuanGroup/LanguageBind",
-    extra_requirements_groups=["languagebind"],
+    extra_requirements_groups=[],
 )
 
 
@@ -316,7 +316,7 @@ language_bind_video_ft = ModelMeta(
     max_tokens=77,
     embed_dim=768,
     modalities=["video", "text"],
-    loader_kwargs=dict(model_name=_VIDEO_MODEL_NAME, num_frames=8),
+    loader_kwargs=dict(num_frames=8),
     **_LANGUAGE_BIND_COMMON,
 )
 
@@ -329,6 +329,6 @@ language_bind_audio_ft = ModelMeta(
     max_tokens=77,
     embed_dim=768,
     modalities=["audio", "text"],
-    loader_kwargs=dict(model_name=_AUDIO_MODEL_NAME),
+    loader_kwargs=dict(),
     **_LANGUAGE_BIND_COMMON,
 )
