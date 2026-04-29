@@ -14,24 +14,12 @@ The [`ResultCache`][mteb.cache.result_cache.ResultCache] class manages evaluatio
 ```python
 import mteb
 
-# Default cache location (~/.cache/mteb)
-cache = mteb.ResultCache()
-
-# Custom location
-cache = mteb.ResultCache(cache_path="/path/to/cache")
+cache = mteb.ResultCache(cache_path="~/.cache/mteb") # (1)! 
+cache.download_from_remote() # (2)!
 ```
 
-```python
-# Optional: clone/fetch the latest remote results before loading remote results or submitting.
-cache.download_from_remote()
-```
-
-### Environment Variables
-
-```bash
-# Set custom cache location
-export MTEB_CACHE=/path/to/cache
-```
+1. Also, possible to set via `MTEB_CACHE` environment variable
+2. Optional: clone/fetch the latest remote results before loading remote results or submitting.
 
 ## Quick Start
 
@@ -49,8 +37,8 @@ task = mteb.get_task("ArguAna")
 
 mteb.evaluate(model, task, cache=cache)
 
-# 3. Submit results (manual review before pushing)
-cache.submit_results(model, create_pr=False)
+# 3. Submit results
+cache.submit_results(model, create_pr=False)  # manual review before pushing
 ```
 
 ## Loading Results
@@ -66,46 +54,51 @@ results = cache.load_results(
     langs=["en"]
 )
 
-# Access results
 for model_name, model_results in results.items():
     for task_name, task_result in model_results.items():
-        print(f"{model_name} on {task_name}: {task_result.scores}")
+        print(f"{model_name} on {task_name}: {task_result.get_score()}")
 ```
 
 ## Submitting Results
+=== "Manual Submission"
+    !!! warning Requirements
+        Git is required for this action.
 
-### Manual Submission (Recommended)
+    Prepare results without automatically creating a PR:
+    
+    ```python
+    submission_info = cache.submit_results(
+        models=["sentence-transformers/all-MiniLM-L6-v2"],
+        create_pr=False
+    )
+    
+    # Review instructions
+    print(submission_info["manual_submission_instructions"])
+    ```
 
-Prepare results without automatically creating a PR:
+=== "Automated Submission"
+    !!! warning Requirements
+        Git, [Github CLI](https://cli.github.com) are required for this action. You also need to install the `mteb[github]` extra dependencies and configure GitHub integration by signing in with `gh auth login` or setting up your Git credential helper.
 
-```python
-submission_info = cache.submit_results(
-    models=["sentence-transformers/all-MiniLM-L6-v2"],
-    create_pr=False
-)
-
-# Review instructions
-print(submission_info.get("manual_submission_instructions"))
-# Manually review and push when ready
-```
-
-### Automated Submission
-
-Automatically create a pull request. GitHub integration must be configured first, either by signing in with `gh auth login` or setting up your Git credential helper.
-
-Then run your code:
-
-```python
-submission_info = cache.submit_results(
-    models=["sentence-transformers/all-MiniLM-L6-v2"],
-    create_pr=True
-)
-
-if submission_info.get("pr_url"):
-    print(f"PR created: {submission_info['pr_url']}")
-```
-
-ResultCache will automatically use the configured GitHub integration.
+        === "pip"
+            ```bash
+            pip install mteb[github]
+            ```
+        === "uv"
+            ```bash
+            uv pip install mteb[github]
+            ```
+    Then run your code:
+    
+    ```python
+    submission_info = cache.submit_results(
+        models=["sentence-transformers/all-MiniLM-L6-v2"],
+        create_pr=True
+    )
+    
+    if submission_info.get("pr_url"):
+        print(f"PR created: {submission_info['pr_url']}")
+    ```
 
 ### Batch Submission
 
