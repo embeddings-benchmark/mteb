@@ -1,31 +1,11 @@
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_LANGUAGES_GLOBAL = {
-    "ar": ["ara-Arab"],
-    "zh": ["zho-Hans"],
-    "en": ["eng-Latn"],
-    "fr": ["fra-Latn"],
-    "ru": ["rus-Cyrl"],
-    "es": ["spa-Latn"],
-    "pt": ["por-Latn"],
-    "sw": ["swa-Latn"],
-    "hi": ["hin-Deva"],
-    "ur": ["urd-Arab"],
-}
-
-_LANGUAGES_PUBLIC = {
-    "pl": ["pol-Latn"],
-    "pt": ["por-Latn"],
-}
-
-_DESCRIPTION = "Multilingual news article retrieval with synthetic multihop queries."
-
 
 class GlobalNewsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="GlobalNewsRetrieval",
-        description=_DESCRIPTION,
+        description="Multilingual news article retrieval with synthetic multihop queries.",
         dataset={
             "path": "jinaai/global-news",
             "revision": "b4e5e3d5fe31b5bb0cb9fcd1218a3fa7784bc0e4",
@@ -34,7 +14,18 @@ class GlobalNewsRetrieval(AbsTaskRetrieval):
         category="t2t",
         modalities=["text"],
         eval_splits=["test"],
-        eval_langs=_LANGUAGES_GLOBAL,
+        eval_langs={
+            "ar": ["ara-Arab"],
+            "zh": ["zho-Hans"],
+            "en": ["eng-Latn"],
+            "fr": ["fra-Latn"],
+            "ru": ["rus-Cyrl"],
+            "es": ["spa-Latn"],
+            "pt": ["por-Latn"],
+            "sw": ["swa-Latn"],
+            "hi": ["hin-Deva"],
+            "ur": ["urd-Arab"],
+        },
         main_score="ndcg_at_10",
         date=("2026-03-16", "2026-03-16"),
         domains=["News", "Written"],
@@ -52,7 +43,7 @@ class GlobalNewsRetrieval(AbsTaskRetrieval):
 class PublicNewsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="PublicNewsRetrieval",
-        description=_DESCRIPTION,
+        description="Multilingual news article retrieval with synthetic multihop queries.",
         dataset={
             "path": "jinaai/public-news",
             "revision": "bddbd5d01b9be88e16a570d13fa2245b37062ad8",
@@ -61,7 +52,10 @@ class PublicNewsRetrieval(AbsTaskRetrieval):
         category="t2t",
         modalities=["text"],
         eval_splits=["test"],
-        eval_langs=_LANGUAGES_PUBLIC,
+        eval_langs={
+            "pl": ["pol-Latn"],
+            "pt": ["por-Latn"],
+        },
         main_score="ndcg_at_10",
         date=("2026-03-16", "2026-03-16"),
         domains=["News", "Written"],
