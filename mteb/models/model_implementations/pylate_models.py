@@ -170,7 +170,7 @@ class PylateSearchEncoder:
         # Encode entire corpus via dataloader batching
         documents_loader = create_dataloader(
             self.task_corpus,
-            task_metadata,
+            task_metadata=task_metadata,
             prompt_type=PromptType.document,
             batch_size=encode_kwargs.get("batch_size", 32),
             num_proc=num_proc,
@@ -232,7 +232,7 @@ class PylateSearchEncoder:
         all_doc_embeddings = self._encode(
             create_dataloader(
                 self.task_corpus,
-                task_metadata,
+                task_metadata=task_metadata,
                 prompt_type=PromptType.document,
                 batch_size=encode_kwargs.get("batch_size", 32),
                 num_proc=num_proc,
