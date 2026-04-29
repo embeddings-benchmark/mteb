@@ -319,7 +319,9 @@ def test_fill_missing_parameter():
 def test_raise_on_invalid_model_name():
     """Test that an error is raised for invalid model names."""
     with pytest.raises(KeyError):
-        mteb.get_model_metas(["mteb/baseline-bm25"]) # invalid (but plausible user input)
+        mteb.get_model_metas(
+            ["mteb/baseline-bm25"]
+        )  # invalid (but plausible user input)
     mdls = mteb.get_model_metas(["mteb/baseline-bm25s"])  # valid
     assert len(mdls) == 1
 
