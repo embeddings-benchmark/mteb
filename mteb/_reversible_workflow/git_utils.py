@@ -207,7 +207,6 @@ def handle_pr_creation_with_cleanup(
         unsubmitted: Dict mapping ModelMeta to list of result file paths.
         result_count: Total number of results.
         branch_name: Name of the branch to create.
-        remote_path: Path to the remote repository.
         original_branch: Original branch name for restoration.
         pr_body: The body text for the pull request.
 
@@ -221,7 +220,6 @@ def handle_pr_creation_with_cleanup(
         result = create_pull_request(
             remote_repo_path=remote_repo_path,
             models=models,
-            unsubmitted=unsubmitted,
             result_count=result_count,
             branch_name=branch_name,
             pr_body=pr_body,
@@ -256,7 +254,6 @@ def create_pull_request(
     *,
     remote_repo_path: Path,
     models: list[ModelMeta],
-    unsubmitted: dict[ModelMeta, list[Path]],
     result_count: int,
     branch_name: str | None,
     pr_body: str,
@@ -266,7 +263,6 @@ def create_pull_request(
     Args:
         remote_repo_path: Path to the remote repository.
         models: List of ModelMeta objects.
-        unsubmitted: Dict mapping ModelMeta to list of result file paths.
         result_count: Total number of results.
         branch_name: Name of the branch to create.
         pr_body: The body text for the pull request.
@@ -286,7 +282,7 @@ def create_pull_request(
         )
     except ImportError:
         raise ImportError(
-            "PyGithub is not installed. Please install it using `pip install 'mteb[pygithub]'`"
+            "PyGithub is not installed. Please install it using `pip install 'mteb[github]'`"
         )
 
     logger.info("Creating PR using PyGithub")
