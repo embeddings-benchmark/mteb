@@ -1159,9 +1159,7 @@ def get_leaderboard_app(  # noqa: PLR0914
                     )
                 )
             scores_hash = hash(tuple(sorted(score_signature)))
-            tasks_hash = (
-                hash(tuple(sorted(tasks))) if tasks is not None else None
-            )
+            tasks_hash = hash(tuple(sorted(tasks))) if tasks is not None else None
             # Sort models_to_keep to ensure consistent hash regardless of input order
             models_hash = (
                 hash(tuple(sorted(models_to_keep)))
