@@ -2,7 +2,7 @@
 
 
 from mteb.benchmarks.benchmark import RtebBenchmark
-from mteb.get_tasks import get_task, get_tasks
+from mteb.get_tasks import MTEBTasks, get_task, get_tasks
 
 RTEB_CITATION = r"""@article{rteb2025,
   author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
@@ -60,36 +60,38 @@ RTEB_ENGLISH = RtebBenchmark(
     name="RTEB(eng, beta)",
     display_name="RTEB English",
     icon="https://github.com/lipis/flag-icons/raw/refs/heads/main/flags/4x3/us.svg",
-    tasks=get_tasks(
-        tasks=[
-            "AILACasedocs",
-            "AILAStatutes",
-            "LegalSummarization",
-            "FinanceBenchRetrieval",
-            "HC3FinanceRetrieval",
-            "FinQARetrieval",
-            "AppsRetrieval",
-            "DS1000Retrieval",
-            "HumanEvalRetrieval",
-            "MBPPRetrieval",
-            "WikiSQLRetrieval",
-            "FreshStackRetrieval",
-            "ChatDoctorRetrieval",
-            # Closed datasets
-            "Code1Retrieval",
-            "EnglishFinance1Retrieval",
-            "EnglishFinance2Retrieval",
-            "EnglishFinance3Retrieval",
-            "EnglishFinance4Retrieval",
-            "EnglishHealthcare1Retrieval",
-        ],
-        languages=["eng"],
-    )
-    + (
-        get_task(
-            "CUREv1",
-            hf_subsets="en",
-        ),
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                "AILACasedocs",
+                "AILAStatutes",
+                "LegalSummarization",
+                "FinanceBenchRetrieval",
+                "HC3FinanceRetrieval",
+                "FinQARetrieval",
+                "AppsRetrieval",
+                "DS1000Retrieval",
+                "HumanEvalRetrieval",
+                "MBPPRetrieval",
+                "WikiSQLRetrieval",
+                "FreshStackRetrieval",
+                "ChatDoctorRetrieval",
+                # Closed datasets
+                "Code1Retrieval",
+                "EnglishFinance1Retrieval",
+                "EnglishFinance2Retrieval",
+                "EnglishFinance3Retrieval",
+                "EnglishFinance4Retrieval",
+                "EnglishHealthcare1Retrieval",
+            ],
+            languages=["eng"],
+        )
+        + (
+            get_task(
+                "CUREv1",
+                hf_subsets="en",
+            ),
+        )
     ),
     description="RTEB English is a subset of RTEB containing retrieval tasks in English across legal, finance, code, and healthcare domains. Includes diverse tasks covering specialized domains such as healthcare and finance. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues)."
     + removal_note,
