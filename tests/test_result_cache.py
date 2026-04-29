@@ -12,6 +12,7 @@ import requests
 
 import mteb
 from mteb.cache import LoadExperimentEnum, ResultCache
+from mteb.models import ModelMeta
 from mteb.results import TaskResult
 from tests.mock_tasks import MockMultilingualClusteringTask, MockRetrievalTask
 
@@ -654,35 +655,30 @@ def _setup_fake_remote(tmp_path: Path) -> tuple[Path, Path]:
     return cache_path, remote_path
 
 
-def _setup_test_model_results(
-    cache_path: Path, test_model: mteb.models.ModelMeta
-) -> list[str]:
-    """Set up test model result files in cache directory."""
-    model_name_path = test_model.model_name_as_path()
-    revision = cast("str", test_model.revision)
-
+def _setup_test_model_results(cache_path: Path) -> tuple[ModelMeta, list[str]]:
+    """Generate test results by evaluating the baseline random encoder on a mock task."""
     cache = ResultCache(cache_path=cache_path)
+    task = MockRetrievalTask()
+    model = mteb.get_model("mteb/baseline-random-encoder")
+
+    mteb.evaluate(model, task, cache=cache)
+
+    model_meta = model.mteb_model_meta
+    model_name_path = model_meta.model_name_as_path()
+    revision = cast("str", model_meta.revision)
     model_dir = cache.cache_path / "results" / model_name_path / revision
-    model_dir.mkdir(parents=True, exist_ok=True)
-
-    source_model_dir = test_cache_path / "results" / model_name_path / revision
-    result_files = []
-    for result_file in source_model_dir.glob("*.json"):
-        if result_file.name != "model_meta.json":
-            (model_dir / result_file.name).write_text(result_file.read_text())
-            result_files.append(result_file.name)
-
-    (model_dir / "model_meta.json").write_text(
-        (source_model_dir / "model_meta.json").read_text()
-    )
-    return result_files
+    result_files = [
+        result_file.name
+        for result_file in model_dir.glob("*.json")
+        if result_file.name != "model_meta.json"
+    ]
+    return model_meta, result_files
 
 
 def test_submit_results_with_fake_remote(tmp_path):
     """Comprehensive test for submit_results workflow: verifies file copying, commit creation, branch restoration, and pre-flight checks."""
     cache_path, remote_path = _setup_fake_remote(tmp_path)
-    test_model = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
-    result_files_copied = _setup_test_model_results(cache_path, test_model)
+    test_model, result_files_copied = _setup_test_model_results(cache_path)
 
     revision = cast("str", test_model.revision)
     cache = ResultCache(cache_path=cache_path)
@@ -783,8 +779,7 @@ def test_submit_results_handles_merge_conflict(tmp_path):
     from unittest.mock import patch
 
     cache_path, remote_path = _setup_fake_remote(tmp_path)
-    test_model = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
-    result_files_copied = _setup_test_model_results(cache_path, test_model)
+    test_model, result_files_copied = _setup_test_model_results(cache_path)
 
     model_name_path = test_model.model_name_as_path()
     revision = cast("str", test_model.revision)
@@ -823,8 +818,7 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path):
     from unittest.mock import patch
 
     cache_path, remote_path = _setup_fake_remote(tmp_path)
-    test_model = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
-    _setup_test_model_results(cache_path, test_model)
+    test_model, _ = _setup_test_model_results(cache_path)
 
     cache = ResultCache(cache_path=cache_path)
     result = subprocess.run(
@@ -839,8 +833,9 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path):
     # Avoid fetching from the remote so the test reliably reaches PR creation.
     # Mock _create_pull_request to fail.
     with patch.object(cache, "download_from_remote", return_value=None):
-        with patch.object(
-            cache, "_create_pull_request", side_effect=Exception("GitHub API error")
+        with patch(
+            "mteb._reversible_workflow.git_utils.create_pull_request",
+            side_effect=Exception("GitHub API error"),
         ):
             with pytest.raises(Exception, match="GitHub API error"):
                 cache.submit_results(models=[test_model], create_pr=True)

@@ -68,25 +68,6 @@ def check_detached_head(repo_path: Path) -> None:
         logger.warning(f"Could not check HEAD state: {e}")
 
 
-def run_preflight_checks(repo_path: Path) -> None:
-    """Run all pre-flight validations before submission workflow.
-
-    These checks prevent common issues like uncommitted changes or detached HEAD
-        that would corrupt the repository or cause the workflow to fail mid-way without proper rollback.
-
-    Args:
-            repo_path: Path to the git repository.
-
-    Raises:
-            RuntimeError: If any validation fails.
-
-    """
-    logger.info("Running pre-flight checks...")
-    check_uncommitted_changes(repo_path)
-    check_detached_head(repo_path)
-    logger.info("Pre-flight checks passed ✓")
-
-
 def get_current_branch(repo_path: Path) -> str:
     """Get the current branch name.
 
