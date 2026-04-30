@@ -44,7 +44,7 @@ def _create_button(
         return label_to_value[label]
 
     state.change(_update_variant, inputs=[state], outputs=[button])
-    button.click(_update_value, inputs=[], outputs=[state])
+    button.click(_update_value, outputs=[state])
     return button
 
 
