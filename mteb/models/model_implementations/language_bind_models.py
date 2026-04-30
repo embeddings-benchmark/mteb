@@ -6,8 +6,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb.models.modality_collators import VideoCollator
-from mteb._requires_package import requires_package
+from mteb._create_dataloaders import VideoCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -16,7 +15,7 @@ if TYPE_CHECKING:
 
     from mteb import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
-    from mteb.types._encoder_io import AudioInput, TextInput, VideoInput
+    from mteb.types._encoder_io import AudioInput, ImageInput, TextInput, VideoInput
 
 
 # LanguageBind expects audio sampled at 16 kHz (its audio mel-spectrogram pipeline).
@@ -24,15 +23,16 @@ _LANGUAGE_BIND_AUDIO_SR = 16000
 
 _VIDEO_MODEL_NAME = "LanguageBind/LanguageBind_Video_FT"
 _AUDIO_MODEL_NAME = "LanguageBind/LanguageBind_Audio_FT"
+_IMAGE_MODEL_NAME = "LanguageBind/LanguageBind_Image"
 
 
 class LanguageBindWrapper(AbsEncoder):
-    """MTEB wrapper for LanguageBind (video / audio / text).
+    """MTEB wrapper for LanguageBind (video / audio / image / text).
 
-    LanguageBind aligns audio, video and text into a shared OpenCLIP-style
-    embedding space. The library exposes separate checkpoints for each
-    non-text modality but they share the same text encoder, so we load the
-    video and audio variants together and route encode calls per modality.
+    LanguageBind aligns video, audio, image and text into a shared
+    OpenCLIP-style embedding space. The library exposes separate checkpoints
+    per non-text modality but they share the same text encoder, so we load
+    all variants together and route encode calls per modality.
 
     Video frames arrive pre-decoded via the VideoCollator. The public
     LanguageBind processor expects file paths, so for video we apply the
@@ -50,16 +50,13 @@ class LanguageBindWrapper(AbsEncoder):
         max_samples: int | None = None,
         **kwargs: Any,
     ):
-        requires_package(
-            self,
-            "languagebind",
-            model_name,
-            install_instruction="pip install git+https://github.com/PKU-YuanGroup/LanguageBind.git",
-        )
         from languagebind import (
             LanguageBindAudio,
             LanguageBindAudioProcessor,
             LanguageBindAudioTokenizer,
+            LanguageBindImage,
+            LanguageBindImageProcessor,
+            LanguageBindImageTokenizer,
             LanguageBindVideo,
             LanguageBindVideoProcessor,
             LanguageBindVideoTokenizer,
@@ -95,12 +92,25 @@ class LanguageBindWrapper(AbsEncoder):
             self.audio_model.config, self.audio_tokenizer
         )
 
+        self.image_model = LanguageBindImage.from_pretrained(_IMAGE_MODEL_NAME).to(
+            self.device
+        )
+        self.image_model.eval()
+        self.image_tokenizer = LanguageBindImageTokenizer.from_pretrained(
+            _IMAGE_MODEL_NAME
+        )
+        self.image_processor = LanguageBindImageProcessor(
+            self.image_model.config, self.image_tokenizer
+        )
+
     def _text_model(self) -> Any:
-        # Audio and video checkpoints share the same text-tower architecture;
-        # use the video-aligned tower to match the joint space we expose.
+        # Audio, video and image checkpoints share the same text-tower
+        # architecture; use the video-aligned tower to match the joint space.
         return self.video_model
 
     def _tokenize(self, texts: list[str]) -> dict[str, torch.Tensor]:
+        # max_length=77 is the OpenCLIP / CLIP tokenizer default context length
+        # that LanguageBind inherits from its OpenCLIP base.
         tokens = self.video_tokenizer(
             texts,
             max_length=77,
@@ -219,6 +229,34 @@ class LanguageBindWrapper(AbsEncoder):
 
         return np.vstack(all_embeddings)
 
+    @torch.inference_mode()
+    def get_image_embeddings(
+        self,
+        inputs: DataLoader[ImageInput],
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        """Get image-only embeddings."""
+        all_embeddings = []
+
+        for batch in tqdm(
+            inputs,
+            disable=not show_progress_bar,
+            desc="Processing image batches",
+        ):
+            images = list(batch["image"])
+            processed = torch.stack(
+                [self.image_processor.transform(img) for img in images]
+            ).to(self.device)
+
+            with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                vision_outputs = self.image_model.vision_model(pixel_values=processed)
+                image_embeds = self.image_model.visual_projection(vision_outputs[1])
+                image_embeds /= image_embeds.norm(dim=-1, keepdim=True)
+                all_embeddings.append(image_embeds.cpu().float().numpy())
+
+        return np.vstack(all_embeddings)
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -229,9 +267,11 @@ class LanguageBindWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        has_text = "text" in inputs.dataset.features
-        has_video = "video" in inputs.dataset.features
-        has_audio = "audio" in inputs.dataset.features
+        features = inputs.dataset.features
+        has_text = "text" in features
+        has_video = "video" in features
+        has_audio = "audio" in features
+        has_image = "image" in features
 
         inputs.collate_fn = VideoCollator(
             target_sampling_rate=self.sampling_rate,
@@ -241,26 +281,13 @@ class LanguageBindWrapper(AbsEncoder):
             max_samples=self.max_samples,
         )
 
-        # Video-only
-        if has_video and not has_audio and not has_text:
-            return self.get_video_embeddings(inputs, **kwargs)
-
-        # Audio-only
-        if has_audio and not has_video and not has_text:
-            return self.get_audio_embeddings(inputs, **kwargs)
-
-        # Text-only
-        if has_text and not has_video and not has_audio:
-            return self.get_text_embeddings(inputs, prompt_type=prompt_type, **kwargs)
-
-        # Mixed modality: fuse embeddings by addition
         embeddings = None
 
         if has_text:
             text_emb = self.get_text_embeddings(
                 inputs, prompt_type=prompt_type, **kwargs
             )
-            embeddings = text_emb
+            embeddings = text_emb if embeddings is None else embeddings + text_emb
 
         if has_video:
             video_emb = self.get_video_embeddings(inputs, **kwargs)
@@ -270,11 +297,15 @@ class LanguageBindWrapper(AbsEncoder):
             audio_emb = self.get_audio_embeddings(inputs, **kwargs)
             embeddings = audio_emb if embeddings is None else embeddings + audio_emb
 
+        if has_image:
+            image_emb = self.get_image_embeddings(inputs, **kwargs)
+            embeddings = image_emb if embeddings is None else embeddings + image_emb
+
         if embeddings is not None:
             return embeddings
 
         raise ValueError(
-            f"No supported modality found in dataset features: {list(inputs.dataset.features.keys())}"
+            f"No supported modality found in dataset features: {list(features.keys())}"
         )
 
 
@@ -303,16 +334,17 @@ _LANGUAGE_BIND_COMMON = dict(
     citation=_LANGUAGE_BIND_CITATION,
     license="mit",
     reference="https://github.com/PKU-YuanGroup/LanguageBind",
-    extra_requirements_groups=[],
+    extra_requirements_groups=["languagebind"],
 )
 
 
 language_bind_video_ft = ModelMeta(
     loader=LanguageBindWrapper,
     name=_VIDEO_MODEL_NAME,
-    revision="main",
-    n_parameters=None,
-    memory_usage_mb=None,
+    revision="13f52c20ce666a7d017bcd00522039f4ab034a66",
+    n_parameters=427_616_513,
+    n_embedding_parameters=37_945_344,
+    memory_usage_mb=1631,
     max_tokens=77,
     embed_dim=768,
     modalities=["video", "text"],
@@ -323,12 +355,27 @@ language_bind_video_ft = ModelMeta(
 language_bind_audio_ft = ModelMeta(
     loader=LanguageBindWrapper,
     name=_AUDIO_MODEL_NAME,
-    revision="main",
-    n_parameters=None,
-    memory_usage_mb=None,
+    revision="4820c496563c46acfb1ff9a486fae5319f16257e",
+    n_parameters=345_000_000,
+    n_embedding_parameters=37_945_344,
+    memory_usage_mb=1316,
     max_tokens=77,
     embed_dim=768,
     modalities=["audio", "text"],
+    loader_kwargs=dict(),
+    **_LANGUAGE_BIND_COMMON,
+)
+
+language_bind_image = ModelMeta(
+    loader=LanguageBindWrapper,
+    name=_IMAGE_MODEL_NAME,
+    revision="d8c2e37b439f4fc47c649dc8b90cdcd3a4e0c80e",
+    n_parameters=427_616_513,
+    n_embedding_parameters=37_945_344,
+    memory_usage_mb=1631,
+    max_tokens=77,
+    embed_dim=768,
+    modalities=["image", "text"],
     loader_kwargs=dict(),
     **_LANGUAGE_BIND_COMMON,
 )
