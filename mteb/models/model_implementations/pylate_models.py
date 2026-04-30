@@ -899,3 +899,88 @@ year={2025}
 }""",
     extra_requirements_groups=["pylate"],
 )
+
+denseon_lateon_unsupervised_data = {
+    "CQADupstackRetrieval",
+    "DBPedia",
+    "QuoraRetrieval",
+    "SCIDOCS",
+    "SciFact",
+}
+
+denseon_lateon_supervised_data = {
+    "FiQA2018",
+    "NQ",
+    "HotpotQA",
+    "MSMARCO",
+    "TRECDL2019",
+    "TRECDL2020",
+    "FEVER",
+    "ClimateFEVER",
+}
+
+denseon_lateon_citation = r"""@misc{sourty2026denseonlateon,
+  title={DenseOn with LateOn: Open State-of-the-Art Single and Multi-Vector Models},
+  author={Sourty, Raphael and Chaffin, Antoine and Weller, Orion and Moura Junior, Paulo Roberto and Chatelain, Amelie},
+  year={2026},
+  howpublished={\url{https://huggingface.co/blog/lightonai/denseon-lateon}},
+}"""
+
+lightonai__lateon_unsupervised = ModelMeta(
+    loader=MultiVectorModel,
+    name="lightonai/LateOn-unsupervised",
+    model_type=["late-interaction"],
+    languages=[
+        "eng-Latn",
+    ],
+    open_weights=True,
+    revision="db4d2f0b4295e2169fee5c9b1415b6cc334b0585",
+    public_training_code="",  # We need to add the boilerplates
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-pre-training-curated",  # As detailed in the BP, the actual training data is proprietary Apache 2 compatible reproduction of this
+    release_date="2026-04-21",
+    n_parameters=149015808,
+    n_embedding_parameters=38684160,
+    memory_usage_mb=568,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name="MaxSim",
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/lightonai/LateOn",
+    use_instructions=False,
+    adapted_from="answerdotai/ModernBERT-base",
+    superseded_by=None,
+    training_datasets=denseon_lateon_unsupervised_data,
+    citation=denseon_lateon_citation,
+    extra_requirements_groups=["pylate"],
+)
+
+
+lightonai__lateon = ModelMeta(
+    loader=MultiVectorModel,
+    name="lightonai/LateOn",
+    model_type=["late-interaction"],
+    languages=[
+        "eng-Latn",
+    ],
+    open_weights=True,
+    revision="6bb4488a7a1f1769f7a69fa1ff0c74c6a7b98cbd",
+    public_training_code="",  # We need to add the boilerplates
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",  # As detailed in the BP, the actual training data is proprietary Apache 2 compatible reproduction of this
+    release_date="2026-04-21",
+    n_parameters=149015808,
+    n_embedding_parameters=38684160,
+    memory_usage_mb=568,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name="MaxSim",
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/lightonai/LateOn",
+    use_instructions=False,
+    adapted_from="ightonai/LateOn-unsupervised",
+    superseded_by=None,
+    training_datasets=denseon_lateon_unsupervised_data | denseon_lateon_supervised_data,
+    citation=denseon_lateon_citation,
+    extra_requirements_groups=["pylate"],
+)
