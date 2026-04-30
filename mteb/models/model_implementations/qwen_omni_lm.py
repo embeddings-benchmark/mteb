@@ -29,7 +29,7 @@ class QwenOmniWrapper(AbsEncoder):
         device: str | None = None,
         max_audio_length_seconds: int = 300,
         fps: float | None = 2.0,
-        max_frames: int | None = None,
+        max_frames: int | None = 64,
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
