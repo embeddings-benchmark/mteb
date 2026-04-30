@@ -69,11 +69,6 @@ mteb create-meta --results-folder mteb_output/sentence-transformers__average_wor
 This will create a model card at `model_card.md` containing the metadata for the model on MTEB within the YAML frontmatter. This will make the model
 discoverable on the MTEB leaderboard.
 
-An example frontmatter for a model card is shown below:
-
-```yaml
----
-
 ## Running the Leaderboard
 
 To run the MTEB leaderboard locally, use the `mteb leaderboard` command. For example:
@@ -96,21 +91,3 @@ Available options:
 - `--rebuild`: Force rebuild from full results repository, bypassing cached JSON
 
 For more details on running the leaderboard, see the [leaderboard documentation](leaderboard.md).
-tags:
-- mteb
-model-index:
-- name: SGPT-5.8B-weightedmean-msmarco-specb-bitfit
-  results:
-  - task:
-      type: classification
-    dataset:
-      type: mteb/banking77
-      name: MTEB Banking77
-      config: default
-      split: test
-      revision: 44fa15921b4c889113cc5df03dd4901b49161ab7
-    metrics:
-    - type: accuracy
-      value: 84.49350649350649
----
-```
