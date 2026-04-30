@@ -16,9 +16,11 @@ import mteb
 tasks = mteb.get_tasks(tasks=["STS12"])
 model_names = ["intfloat/multilingual-e5-large"]
 
-cache = mteb.ResultCache("~/.cache/mteb")
+cache = mteb.ResultCache("~/.cache/mteb")  # (1)!
 results = cache.load_results(models=model_names, tasks=tasks)
 ```
+
+1. The cache path can also be set via the `MTEB_CACHE` environment variable.
 
 From this you will get a `BenchmarkResults` object:
 ```python

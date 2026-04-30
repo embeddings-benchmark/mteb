@@ -7,19 +7,9 @@ icon: lucide/save
 
 The [`ResultCache`][mteb.cache.result_cache.ResultCache] class manages evaluation results locally and submits them to the [official results repository](https://github.com/embeddings-benchmark/results). Use it to cache results, avoid re-computation, and contribute results back to the community.
 
-## Setup
+## Loading Results
 
-### Create and Initialize Cache
-
-```python
-import mteb
-
-cache = mteb.ResultCache(cache_path="~/.cache/mteb") # (1)! 
-cache.download_from_remote() # (2)!
-```
-
-1. Also, possible to set via `MTEB_CACHE` environment variable
-2. Optional: clone/fetch the latest remote results before loading remote results or submitting.
+For a full guide on loading and working with results — including filtering, dataframe conversion, and benchmark scoring — see [Loading Results](../usage/loading_results.md).
 
 ## Quick Start
 
@@ -41,37 +31,19 @@ mteb.evaluate(model_meta, task, cache=cache)
 cache.submit_results(model_meta, create_pr=False)  # manual review before pushing
 ```
 
-## Loading Results
-
-```python
-# Load results for specific models
-results = cache.load_results(models=["sentence-transformers/all-MiniLM-L6-v2"])
-
-# Filter by tasks and language
-results = cache.load_results(
-    models=["sentence-transformers/all-MiniLM-L6-v2"],
-    tasks=["STS12", "STS13"],
-    langs=["en"]
-)
-
-for model_name, model_results in results.items():
-    for task_name, task_result in model_results.items():
-        print(f"{model_name} on {task_name}: {task_result.get_score()}")
-```
-
 ## Submitting Results
 === "Manual Submission"
     !!! warning Requirements
         Git is required for this action.
 
     Prepare results without automatically creating a PR:
-    
+
     ```python
     submission_info = cache.submit_results(
         models=["sentence-transformers/all-MiniLM-L6-v2"],
         create_pr=False
     )
-    
+
     # Review instructions
     print(submission_info["manual_submission_instructions"])
     ```
@@ -89,13 +61,13 @@ for model_name, model_results in results.items():
             uv pip install mteb[github]
             ```
     Then run your code:
-    
+
     ```python
     submission_info = cache.submit_results(
         models=["sentence-transformers/all-MiniLM-L6-v2"],
         create_pr=True
     )
-    
+
     if submission_info.get("pr_url"):
         print(f"PR created: {submission_info['pr_url']}")
     ```
