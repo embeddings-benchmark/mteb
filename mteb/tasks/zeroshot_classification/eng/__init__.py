@@ -2,6 +2,10 @@ from .ave_dataset import (
     AVEDatasetVideoZeroShotClassification,
     AVEDatasetZeroShotClassification,
 )
+from .avmeme_exam_classification import (
+    AVMemeAudioVideoZeroShotClassification,
+    AVMemeVideoZeroShotClassification,
+)
 from .birdsnap import BirdsnapZeroShotClassification
 from .breakfast_classification import BreakfastZeroShotClassification
 from .caltech101 import Caltech101ZeroShotClassification
@@ -65,6 +69,8 @@ __all__ = [
     "CLEVR",
     "AVEDatasetVideoZeroShotClassification",
     "AVEDatasetZeroShotClassification",
+    "AVMemeAudioVideoZeroShotClassification",
+    "AVMemeVideoZeroShotClassification",
     "BirdsnapZeroShotClassification",
     "BreakfastZeroShotClassification",
     "CIFAR10ZeroShotClassification",
