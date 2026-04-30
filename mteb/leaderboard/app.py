@@ -844,7 +844,6 @@ def get_leaderboard_app(  # noqa: PLR0914
                 _update_description,
                 inputs=[benchmark_select, lang_select, type_select, domain_select],
                 outputs=[description],
-                preprocess=False,
                 show_progress="hidden",
             )
         task_select.change(
@@ -1340,6 +1339,23 @@ if __name__ == "__main__":
     head = """
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     """
+
+    try:
+        import fastapi
+        from fastapi.responses import JSONResponse
+        from gradio.route_utils import FnIndexInferError
+
+        async def _handle_fn_index_infer_error(
+            request: fastapi.Request, exc: FnIndexInferError
+        ) -> JSONResponse:
+            return JSONResponse(status_code=404, content={"error": str(exc)})
+
+        extra_app_kwargs: dict = {
+            "exception_handlers": {FnIndexInferError: _handle_fn_index_infer_error}
+        }
+    except ImportError:
+        extra_app_kwargs = {}
+
     app.launch(
         server_name="0.0.0.0",
         server_port=7860,
@@ -1347,4 +1363,5 @@ if __name__ == "__main__":
             font=[gr.themes.GoogleFont("Roboto Mono"), "Arial", "sans-serif"],
         ),
         head=head,
+        app_kwargs=extra_app_kwargs,
     )
