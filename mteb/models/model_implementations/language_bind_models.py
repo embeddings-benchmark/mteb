@@ -309,7 +309,6 @@ class LanguageBindWrapper(AbsEncoder):
         )
 
 
-# --- Model Metadata ---
 
 _LANGUAGE_BIND_CITATION = r"""
 @inproceedings{zhu2024languagebind,

@@ -45,8 +45,6 @@ dependencies = [
     "pytrec-eval-terrier>=0.5.6",
     "pydantic>=2.11.0",
     "polars>=1.0.0",
-    "torchcodec>=0.10.0",
-    "gradio>=6.0.1",
 ]
 
 
