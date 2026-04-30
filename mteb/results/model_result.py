@@ -48,7 +48,7 @@ def _aggregate_and_pivot(
     columns: list[str],
     aggregation_level: Literal["subset", "split", "task", "language"],
     format: Literal["wide", "long"],
-    aggregation_fn: Callable[[list[Score]], Any] | None,
+    aggregation_fn: Callable[[list[Score]], Any] | str | None,
 ) -> pd.DataFrame:
     if aggregation_level == "subset":
         index_columns = ["task_name", "split", "subset"]
@@ -310,7 +310,7 @@ class ModelResult(BaseModel):
     def to_dataframe(
         self,
         aggregation_level: Literal["subset", "split", "task"] = "task",
-        aggregation_fn: Callable[[list[Score]], Any] | None = None,
+        aggregation_fn: Callable[[list[Score]], Any] | str | None = None,
         include_model_revision: bool = False,
         format: Literal["wide", "long"] = "wide",
     ) -> pd.DataFrame:
