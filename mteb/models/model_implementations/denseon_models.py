@@ -57,7 +57,7 @@ lightonai__denseon_unsupervised = ModelMeta(
     adapted_from="answerdotai/ModernBERT-base",
     superseded_by=None,
     public_training_code="",  # We need to add the boilerplates
-    public_training_data="lightonai/embeddings-pre-training-curated",  # As detailed in the BP, the actual training data is proprietary Apache 2 compatible reproduction of this
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-pre-training-curated",  # As detailed in the BP, the actual training data is proprietary Apache 2 compatible reproduction of this
     training_datasets=denseon_lateon_unsupervised_data,
     citation=denseon_lateon_citation,
 )
@@ -89,7 +89,7 @@ lightonai__denseon = ModelMeta(
     adapted_from="lightonai/DenseOn-unsupervised",
     superseded_by=None,
     public_training_code="",  # We need to add the boilerplates
-    public_training_data="lightonai/embeddings-fine-tuning",  # As detailed in the BP, the actual training data is proprietary Apache 2 compatible reproduction of this
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",  # As detailed in the BP, the actual training data is proprietary Apache 2 compatible reproduction of this
     training_datasets=denseon_lateon_unsupervised_data | denseon_lateon_supervised_data,
     citation=denseon_lateon_citation,
 )
