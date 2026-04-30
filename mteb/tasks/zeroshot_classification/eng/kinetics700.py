@@ -36,7 +36,7 @@ class Kinetics700VAZeroShotClassification(AbsTaskZeroShotClassification):
         license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["video", "audio"],
+        modalities=["video", "audio", "text"],
         sample_creation="found",
         bibtex_citation=CITATION,
         is_beta=True,
@@ -75,7 +75,7 @@ class Kinetics700VZeroShotClassification(AbsTaskZeroShotClassification):
         license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["video"],
+        modalities=["video", "text"],
         sample_creation="found",
         bibtex_citation=CITATION,
         is_beta=True,
@@ -86,6 +86,6 @@ class Kinetics700VZeroShotClassification(AbsTaskZeroShotClassification):
 
     def get_candidate_labels(self) -> list[str]:
         return [
-            "a video of {name}"
+            f"a video of {name}"
             for name in self.dataset["test"].features[self.label_column_name].names
         ]
