@@ -844,7 +844,6 @@ def get_leaderboard_app(  # noqa: PLR0914
                 _update_description,
                 inputs=[benchmark_select, lang_select, type_select, domain_select],
                 outputs=[description],
-                preprocess=False,
                 show_progress="hidden",
             )
         task_select.change(
@@ -1159,9 +1158,7 @@ def get_leaderboard_app(  # noqa: PLR0914
                     )
                 )
             scores_hash = hash(tuple(sorted(score_signature)))
-            tasks_hash = (
-                hash(tuple(sorted(tasks))) if tasks is not None else None
-            )
+            tasks_hash = hash(tuple(sorted(tasks))) if tasks is not None else None
             # Sort models_to_keep to ensure consistent hash regardless of input order
             models_hash = (
                 hash(tuple(sorted(models_to_keep)))
@@ -1340,6 +1337,7 @@ if __name__ == "__main__":
     head = """
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     """
+
     app.launch(
         server_name="0.0.0.0",
         server_port=7860,
