@@ -21,6 +21,14 @@ from .kinetics400 import (
     Kinetics400VAZeroShotClassification,
     Kinetics400ZeroShotClassification,
 )
+from .kinetics600 import (
+    Kinetics600VAZeroShotClassification,
+    Kinetics600VZeroShotClassification,
+)
+from .kinetics700 import (
+    Kinetics700VAZeroShotClassification,
+    Kinetics700VZeroShotClassification,
+)
 from .meld_classification import (
     MELDAudioVideoZeroShotClassification,
     MELDVideoZeroShotClassification,
@@ -75,6 +83,10 @@ __all__ = [
     "Imagenet1kZeroShotClassification",
     "Kinetics400VAZeroShotClassification",
     "Kinetics400ZeroShotClassification",
+    "Kinetics600VAZeroShotClassification",
+    "Kinetics600VZeroShotClassification",
+    "Kinetics700VAZeroShotClassification",
+    "Kinetics700VZeroShotClassification",
     "MELDAudioVideoZeroShotClassification",
     "MELDVideoZeroShotClassification",
     "MNISTZeroShotClassification",
