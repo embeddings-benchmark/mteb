@@ -16,7 +16,7 @@ class ElasticKBRetrieval(AbsTaskRetrieval):
             "(grounding doc that lead to self-served ticket for real-world queries "
             "and generating doc for synthetic queries)."
         ),
-        reference="https://huggingface.co/blog/rteb", # private set
+        reference="https://huggingface.co/blog/rteb",  # private set
         dataset={
             "path": "mteb-private/elastic-kb-retrieval",
             "revision": "21bdf1e024bf7c9f46720017559ce2f8c6116507",
@@ -28,16 +28,16 @@ class ElasticKBRetrieval(AbsTaskRetrieval):
         eval_langs={"en": ["eng-Latn"]},
         main_score="ndcg_at_10",
         is_public=False,
-        date=["2015-01-01", "2026-04-01"],
+        date=("2015-01-01", "2026-04-01"),
         domains=["Written", "Engineering"],
         task_subtypes=["Question answering", "Conversational retrieval"],
-        license="not specified", # shared as an evaluation dataset, results can be shared, and the dataset is allowed to be sent to embedding APIs
+        license="not specified",  # shared as an evaluation dataset, results can be shared, and the dataset is allowed to be sent to embedding APIs
         annotations_creators="LM-generated",
         dialect=[],
         prompt={
             "query": "Given a support question, retrieve knowledge base articles that answer the question"
         },
-        sample_creation="multiple", # see description
+        sample_creation="multiple",  # see description
         bibtex_citation="",
         contributed_by="Jina by Elastic",
     )
