@@ -5,7 +5,10 @@ from .arxiv_hierarchical_clustering import (
     ArXivHierarchicalClusteringP2P,
     ArXivHierarchicalClusteringS2S,
 )
-from .ave_dataset_clustering import AVEDatasetClustering
+from .ave_dataset_clustering import (
+    AVEDatasetAudioVideoClustering,
+    AVEDatasetVideoClustering,
+)
 from .big_patent_clustering import BigPatentClustering, BigPatentClusteringFast
 from .biorxiv_clustering_p2p import BiorxivClusteringP2P, BiorxivClusteringP2PFast
 from .biorxiv_clustering_s2s import BiorxivClusteringS2S, BiorxivClusteringS2SFast
@@ -27,7 +30,10 @@ from .meld_clustering import (
     MELDSpeakerAudioVideoClustering,
     MELDSpeakerVideoClustering,
 )
-from .music_avqa_clustering import MusicAVQAClustering
+from .music_avqa_clustering import (
+    MusicAVQACLSAudioVideoClustering,
+    MusicAVQACLSVideoClustering,
+)
 from .ravdess_av_clustering import RAVDESSAVClustering
 from .reddit_clustering import RedditClustering, RedditFastClusteringS2S
 from .reddit_clustering_p2p import RedditClusteringP2P, RedditFastClusteringP2P
@@ -44,7 +50,7 @@ from .twenty_newsgroups_clustering import (
     TwentyNewsgroupsClustering,
     TwentyNewsgroupsClusteringFast,
 )
-from .ucf101_clustering import UCF101Clustering
+from .ucf101_clustering import UCF101AudioVideoClustering, UCF101VideoClustering
 from .voice_gender import VoiceGenderClustering
 from .vox_celeb_clustering import VoxCelebClustering
 from .vox_populi_accent_clustering import VoxPopuliAccentClustering
@@ -53,10 +59,14 @@ from .wikipedia_chemistry_specialties_clustering import (
     WikipediaChemistrySpecialtiesClustering,
 )
 from .wikipedia_chemistry_topics_clustering import WikipediaChemistryTopicsClustering
-from .worldsense_1min_domain_clustering import WorldSense1MinDomainClustering
+from .worldsense_1min_domain_clustering import (
+    WorldSense1MinDomainAudioVideoClustering,
+    WorldSense1MinDomainVideoClustering,
+)
 
 __all__ = [
-    "AVEDatasetClustering",
+    "AVEDatasetAudioVideoClustering",
+    "AVEDatasetVideoClustering",
     "AmbientAcousticContextClustering",
     "ArXivHierarchicalClusteringP2P",
     "ArXivHierarchicalClusteringS2S",
@@ -89,7 +99,8 @@ __all__ = [
     "MedrxivClusteringP2PFast",
     "MedrxivClusteringS2S",
     "MedrxivClusteringS2SFast",
-    "MusicAVQAClustering",
+    "MusicAVQACLSAudioVideoClustering",
+    "MusicAVQACLSVideoClustering",
     "RAVDESSAVClustering",
     "RedditClustering",
     "RedditClusteringP2P",
@@ -102,12 +113,14 @@ __all__ = [
     "TinyImageNet",
     "TwentyNewsgroupsClustering",
     "TwentyNewsgroupsClusteringFast",
-    "UCF101Clustering",
+    "UCF101AudioVideoClustering",
+    "UCF101VideoClustering",
     "VoiceGenderClustering",
     "VoxCelebClustering",
     "VoxPopuliAccentClustering",
     "WikiCitiesClustering",
     "WikipediaChemistrySpecialtiesClustering",
     "WikipediaChemistryTopicsClustering",
-    "WorldSense1MinDomainClustering",
+    "WorldSense1MinDomainAudioVideoClustering",
+    "WorldSense1MinDomainVideoClustering",
 ]
