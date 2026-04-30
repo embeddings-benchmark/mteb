@@ -1337,7 +1337,6 @@ if __name__ == "__main__":
     head = """
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     """
-
     app.launch(
         server_name="0.0.0.0",
         server_port=7860,
