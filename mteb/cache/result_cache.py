@@ -1421,7 +1421,7 @@ def _prepare_pr_body(
 
 {checklist}"""
 
-    logger.info("\n📋 Please complete the checklist in the PR body before merging.")
+    logger.info("📋 Please complete the checklist in the PR body before merging.")
     return body
 
 
