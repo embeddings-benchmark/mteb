@@ -18,8 +18,8 @@ class ElasticKBRetrieval(AbsTaskRetrieval):
         ),
         reference=None,
         dataset={
-            "path": "",
-            "revision": "",
+            "path": "mteb-private/elastic-kb-retrieval",
+            "revision": "21bdf1e024bf7c9f46720017559ce2f8c6116507",
         },
         type="Retrieval",
         category="t2t",
