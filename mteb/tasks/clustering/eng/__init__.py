@@ -21,6 +21,12 @@ from .hume_wiki_cities_clustering import HUMEWikiCitiesClustering
 from .image_net import ImageNet10Clustering, ImageNetDog15Clustering
 from .medrxiv_clustering_p2p import MedrxivClusteringP2P, MedrxivClusteringP2PFast
 from .medrxiv_clustering_s2s import MedrxivClusteringS2S, MedrxivClusteringS2SFast
+from .meld_clustering import (
+    MELDEmotionAudioVideoClustering,
+    MELDEmotionVideoClustering,
+    MELDSpeakerAudioVideoClustering,
+    MELDSpeakerVideoClustering,
+)
 from .music_avqa_clustering import MusicAVQAClustering
 from .ravdess_av_clustering import RAVDESSAVClustering
 from .reddit_clustering import RedditClustering, RedditFastClusteringS2S
@@ -75,6 +81,10 @@ __all__ = [
     "HUMEWikiCitiesClustering",
     "ImageNet10Clustering",
     "ImageNetDog15Clustering",
+    "MELDEmotionAudioVideoClustering",
+    "MELDEmotionVideoClustering",
+    "MELDSpeakerAudioVideoClustering",
+    "MELDSpeakerVideoClustering",
     "MedrxivClusteringP2P",
     "MedrxivClusteringP2PFast",
     "MedrxivClusteringS2S",

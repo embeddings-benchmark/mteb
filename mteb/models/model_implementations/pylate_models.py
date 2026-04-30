@@ -89,7 +89,7 @@ class PylateSearchEncoder:
     ) -> RetrievalOutputType:
         queries_dataloader = create_dataloader(
             queries,
-            task_metadata,
+            task_metadata=task_metadata,
             prompt_type=PromptType.query,
             batch_size=encode_kwargs.get("batch_size", 32),
             num_proc=num_proc,
@@ -170,7 +170,7 @@ class PylateSearchEncoder:
         # Encode entire corpus via dataloader batching
         documents_loader = create_dataloader(
             self.task_corpus,
-            task_metadata,
+            task_metadata=task_metadata,
             prompt_type=PromptType.document,
             batch_size=encode_kwargs.get("batch_size", 32),
             num_proc=num_proc,
@@ -232,7 +232,7 @@ class PylateSearchEncoder:
         all_doc_embeddings = self._encode(
             create_dataloader(
                 self.task_corpus,
-                task_metadata,
+                task_metadata=task_metadata,
                 prompt_type=PromptType.document,
                 batch_size=encode_kwargs.get("batch_size", 32),
                 num_proc=num_proc,
@@ -457,7 +457,7 @@ jina_colbert_v2 = ModelMeta(
     pages = "159--166",
     abstract = "Multi-vector dense models, such as ColBERT, have proven highly effective in information retrieval. ColBERT`s late interaction scoring approximates the joint query-document attention seen in cross-encoders while maintaining inference efficiency closer to traditional dense retrieval models, thanks to its bi-encoder architecture and recent optimizations in indexing and search. In this paper, we introduce a novel architecture and a training framework to support long context window and multilingual retrieval. Leveraging Matryoshka Representation Loss, we further demonstrate that the reducing the embedding dimensionality from 128 to 64 has insignificant impact on the model`s retrieval performance and cut storage requirements by up to 50{\\%}. Our new model, Jina-ColBERT-v2, demonstrates strong performance across a range of English and multilingual retrieval tasks,"
 }""",
-    extra_requirements_groups=["pylate"],
+    extra_requirements_groups=["pylate", "jina"],
 )
 
 

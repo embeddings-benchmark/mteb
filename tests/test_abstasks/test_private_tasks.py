@@ -21,6 +21,7 @@ ACCEPTED_PRIVATE_TASKS = [
     "Vidore3NuclearRetrieval.v2",
     "GlobalNewsRetrieval",
     "PublicNewsRetrieval",
+    "LexRetrieval.v1",
     # Add task names here that are allowed to be private
 ]
 

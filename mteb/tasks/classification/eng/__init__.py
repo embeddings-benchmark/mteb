@@ -45,6 +45,14 @@ from .amazon_polarity_classification import (
     AmazonPolarityClassificationV2,
 )
 from .arxiv_classification import ArxivClassification, ArxivClassificationV2
+from .ave_dataset_classification import (
+    AVEDatasetClassification,
+    AVEDatasetVideoClassification,
+)
+from .avmeme_exam_classification import (
+    AVMemeAudioVideoClassification,
+    AVMemeVideoClassification,
+)
 from .banking77_classification import Banking77Classification, Banking77ClassificationV2
 from .birdsnap_classification import BirdsnapClassification
 from .breakfast_classification import BreakfastClassification
@@ -79,6 +87,8 @@ from .hume_tweet_sentiment_extraction_classification import (
 from .imagenet1k import Imagenet1kClassification
 from .imdb_classification import ImdbClassification, ImdbClassificationV2
 from .kinetics400 import Kinetics400VAClassification, Kinetics400VClassification
+from .kinetics600 import Kinetics600VAClassification, Kinetics600VClassification
+from .kinetics700 import Kinetics700VAClassification, Kinetics700VClassification
 from .legal_bench_classification import (
     CanadaTaxCourtOutcomesLegalBenchClassification,
     ContractNLIConfidentialityOfAgreementLegalBenchClassification,
@@ -201,7 +211,12 @@ from .legal_bench_classification import (
     UCCVCommonLawLegalBenchClassification,
     UnfairTOSLegalBenchClassification,
 )
+from .meld_classification import MELDAudioVideoClassification, MELDVideoClassification
 from .mnist_classification import MNISTClassification
+from .music_avqa_classification import (
+    MusicAVQACLSAudioVideoClassification,
+    MusicAVQACLSVideoClassification,
+)
 from .news_classification import NewsClassification, NewsClassificationV2
 from .oxford_flowers_classification import OxfordFlowersClassification
 from .oxford_pets_classification import OxfordPetsClassification
@@ -241,7 +256,11 @@ from .tweet_topic_single_classification import (
     TweetTopicSingleClassification,
     TweetTopicSingleClassificationV2,
 )
-from .ucf101_classification import UCF101Classification
+from .ucf101_classification import (
+    UCF101Classification,
+    UCF101VideoAudioClassification,
+    UCF101VideoClassification,
+)
 from .vggsound import VGGSoundVAClassification, VGGSoundVClassification
 from .wikipedia_bio_met_chem_classification import (
     WikipediaBioMetChemClassification,
@@ -291,6 +310,10 @@ from .wikipedia_theoretical_applied_classification import (
     WikipediaTheoreticalAppliedClassification,
     WikipediaTheoreticalAppliedClassificationV2,
 )
+from .worldsense_classification import (
+    WorldSenseAudioVideoClassification,
+    WorldSenseVideoClassification,
+)
 from .yahoo_answers_topics_classification import (
     YahooAnswersTopicsClassification,
     YahooAnswersTopicsClassificationV2,
@@ -303,6 +326,10 @@ from .yelp_review_full_classification import (
 __all__ = [
     "CREMAD",
     "FSDD",
+    "AVEDatasetClassification",
+    "AVEDatasetVideoClassification",
+    "AVMemeAudioVideoClassification",
+    "AVMemeVideoClassification",
     "AmazonPolarityClassification",
     "AmazonPolarityClassificationV2",
     "ArxivClassification",
@@ -419,6 +446,10 @@ __all__ = [
     "JCrewBlockerLegalBenchClassificationV2",
     "Kinetics400VAClassification",
     "Kinetics400VClassification",
+    "Kinetics600VAClassification",
+    "Kinetics600VClassification",
+    "Kinetics700VAClassification",
+    "Kinetics700VClassification",
     "LearnedHandsBenefitsLegalBenchClassification",
     "LearnedHandsBusinessLegalBenchClassification",
     "LearnedHandsConsumerLegalBenchClassification",
@@ -440,7 +471,11 @@ __all__ = [
     "LibriCount",
     "MAUDLegalBenchClassification",
     "MAUDLegalBenchClassificationV2",
+    "MELDAudioVideoClassification",
+    "MELDVideoClassification",
     "MNISTClassification",
+    "MusicAVQACLSAudioVideoClassification",
+    "MusicAVQACLSVideoClassification",
     "NYSJudicialEthicsLegalBenchClassification",
     "NewsClassification",
     "NewsClassificationV2",
@@ -505,6 +540,8 @@ __all__ = [
     "TweetTopicSingleClassificationV2",
     "UCCVCommonLawLegalBenchClassification",
     "UCF101Classification",
+    "UCF101VideoAudioClassification",
+    "UCF101VideoClassification",
     "UnfairTOSLegalBenchClassification",
     "VGGSoundVAClassification",
     "VGGSoundVClassification",
@@ -532,6 +569,8 @@ __all__ = [
     "WikipediaSolidStateColloidalClassification",
     "WikipediaTheoreticalAppliedClassification",
     "WikipediaTheoreticalAppliedClassificationV2",
+    "WorldSenseAudioVideoClassification",
+    "WorldSenseVideoClassification",
     "YahooAnswersTopicsClassification",
     "YahooAnswersTopicsClassificationV2",
     "YelpReviewFullClassification",
