@@ -111,5 +111,5 @@ class AVMemeVideoZeroShotClassification(AbsTaskZeroShotClassification):
 
     def get_candidate_labels(self) -> list[str]:
         return [
-            name for name in self.dataset["test"].features[self.label_column_name].names
+            f"a video of {name} emotion" for name in self.dataset["test"].features[self.label_column_name].names
         ]
