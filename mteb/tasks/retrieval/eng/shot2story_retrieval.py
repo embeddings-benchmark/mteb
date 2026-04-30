@@ -177,3 +177,137 @@ class Shot2Story20KT2VARetrieval(AbsTaskRetrieval):
         _load_shot2story(
             self, query_columns=["caption"], corpus_columns=["video", "audio"]
         )
+
+
+class Shot2Story20KV2ARetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Shot2Story20KV2ARetrieval",
+        description=(
+            "Retrieve the audio track that matches a given video clip from the "
+            "Shot2Story dataset. Tests cross-modal alignment between video frames "
+            "and audio."
+        ),
+        reference="https://arxiv.org/abs/2312.10300",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="v2a",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["video", "audio"],
+        date=("2023-12-01", "2023-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the audio that corresponds to the following video."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_shot2story(self, query_columns=["video"], corpus_columns=["audio"])
+
+
+class Shot2Story20KA2VRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Shot2Story20KA2VRetrieval",
+        description=(
+            "Retrieve the video clip that matches a given audio track from the "
+            "Shot2Story dataset. Tests cross-modal alignment between audio and "
+            "video frames."
+        ),
+        reference="https://arxiv.org/abs/2312.10300",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="a2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["audio", "video"],
+        date=("2023-12-01", "2023-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the video that corresponds to the following audio."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_shot2story(self, query_columns=["audio"], corpus_columns=["video"])
+
+
+class Shot2Story20KVT2ARetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Shot2Story20KVT2ARetrieval",
+        description=(
+            "Retrieve the audio track that matches a given video clip and its summary "
+            "caption from the Shot2Story20K benchmark of multi-shot videos."
+        ),
+        reference="https://arxiv.org/abs/2312.10300",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="vt2a",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["video", "text", "audio"],
+        date=("2023-12-01", "2023-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Find the audio that corresponds to the following video and its description."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_shot2story(
+            self, query_columns=["video", "caption"], corpus_columns=["audio"]
+        )
+
+
+class Shot2Story20KAT2VRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Shot2Story20KAT2VRetrieval",
+        description=(
+            "Retrieve the video clip that matches a given audio track and its summary "
+            "caption from the Shot2Story20K benchmark of multi-shot videos."
+        ),
+        reference="https://arxiv.org/abs/2312.10300",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="at2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["audio", "text", "video"],
+        date=("2023-12-01", "2023-12-31"),
+        domains=["Web", "Spoken"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Find the video that corresponds to the following audio and its description."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_shot2story(
+            self, query_columns=["audio", "caption"], corpus_columns=["video"]
+        )

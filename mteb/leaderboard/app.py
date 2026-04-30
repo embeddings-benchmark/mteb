@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import hashlib
 import itertools
 import logging
@@ -18,10 +19,12 @@ from mteb import BenchmarkResults
 from mteb.benchmarks._leaderboard_menu import GP_BENCHMARK_ENTRIES, R_BENCHMARK_ENTRIES
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.cache import ResultCache
+from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.leaderboard.benchmark_selector import (
     DEFAULT_BENCHMARK_NAME,
     _make_selector,
 )
+from mteb.leaderboard.cached_benchmark_results import CachedBenchmarkResults
 from mteb.leaderboard.event_logger import EventLogger
 from mteb.leaderboard.figures import (
     _performance_over_time_plot,
@@ -42,6 +45,15 @@ event_logger = EventLogger()
 
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 MODEL_TYPE_CHOICES = list(get_args(MODEL_TYPES))
+
+
+@functools.lru_cache(maxsize=128)
+def _get_tasks_cached(task_names: tuple[str, ...], languages: tuple[str, ...] | None):
+    """Memoized `mteb.get_tasks` for leaderboard callbacks (tuples for hashability)."""
+    return mteb.get_tasks(
+        tasks=list(task_names),
+        languages=list(languages) if languages is not None else None,
+    )
 
 
 def _produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
@@ -309,6 +321,18 @@ def _cache_update_task_list(
     return benchmark_tasks, tasks_to_keep
 
 
+@functools.lru_cache(maxsize=128)
+def _all_langs_for_tasks(task_names: tuple[str, ...]) -> frozenset[str]:
+    """Union of `metadata.languages` for the given tasks, read from the registry class to avoid instantiation."""
+    langs: set[str] = set()
+    for name in task_names:
+        cls = _TASKS_REGISTRY.get(name)
+        if cls is None:
+            continue
+        langs.update(cls.metadata.languages)
+    return frozenset(langs)
+
+
 def _filter_benchmark_results_for_tables(
     benchmark_results: BenchmarkResults,
     task_names: set[str] | None,
@@ -323,17 +347,25 @@ def _filter_benchmark_results_for_tables(
         task_names=sorted(task_names)
     )
 
-    # Keep only language-compatible subsets for each selected task.
-    if languages:
-        filtered_tasks = mteb.get_tasks(tasks=sorted(task_names), languages=languages)
-        filtered_benchmark_results = filtered_benchmark_results.select_tasks(
-            filtered_tasks
-        )
-
+    # Filter models first so the more expensive language subset pass runs on the
+    # smallest possible set of model results.
     if model_names:
         filtered_benchmark_results = filtered_benchmark_results.select_models(
             sorted(model_names)
         )
+
+    # Keep only language-compatible subsets for each selected task. Skip the
+    # get_tasks + select_tasks round-trip when the selected languages already
+    # cover every task language (the filter would be a no-op).
+    if languages:
+        all_task_langs = _all_langs_for_tasks(tuple(sorted(task_names)))
+        if not set(languages).issuperset(all_task_langs):
+            filtered_tasks = _get_tasks_cached(
+                tuple(sorted(task_names)), tuple(languages)
+            )
+            filtered_benchmark_results = filtered_benchmark_results.select_tasks(
+                filtered_tasks
+            )
 
     return filtered_benchmark_results
 
@@ -417,7 +449,11 @@ def get_leaderboard_app(  # noqa: PLR0914
     )
     process_start = time.time()
     all_benchmark_results = {
-        benchmark.name: all_results.select_tasks(benchmark.tasks).join_revisions()
+        benchmark.name: CachedBenchmarkResults.model_construct(
+            model_results=all_results.select_tasks(benchmark.tasks)
+            .join_revisions()
+            .model_results
+        )
         for benchmark in benchmarks
     }
     process_time = time.time() - process_start
@@ -486,41 +522,46 @@ def get_leaderboard_app(  # noqa: PLR0914
 
     logger.info("Step 6/7: Creating Gradio components...")
     component_start = time.time()
+    default_languages = sorted(default_results.languages)
+    default_task_types = sorted(default_results.task_types)
+    default_domains = sorted(default_results.domains)
+    default_task_names = sorted(default_results.task_names)
+    default_modalities = sorted(default_results.modalities)
     lang_select = gr.CheckboxGroup(
-        sorted(default_results.languages),
-        value=sorted(default_results.languages),
+        default_languages,
+        value=default_languages,
         show_label=True,
         show_select_all=True,
         label="Language",
         info="Select languages to include.",
     )
     type_select = gr.CheckboxGroup(
-        sorted(default_results.task_types),
-        value=sorted(default_results.task_types),
+        default_task_types,
+        value=default_task_types,
         show_label=True,
         show_select_all=True,
         label="Task Type",
         info="Select task types to include.",
     )
     domain_select = gr.CheckboxGroup(
-        sorted(default_results.domains),
-        value=sorted(default_results.domains),
+        default_domains,
+        value=default_domains,
         show_label=True,
         show_select_all=True,
         label="Domain",
         info="Select domains to include.",
     )
     task_select = gr.CheckboxGroup(
-        sorted(default_results.task_names),
-        value=sorted(default_results.task_names),
+        default_task_names,
+        value=default_task_names,
         show_label=True,
         show_select_all=True,
         label="Task",
         info="Select specific tasks to include",
     )
     modality_select = gr.CheckboxGroup(
-        sorted(default_results.modalities),
-        value=sorted(default_results.modalities),
+        default_modalities,
+        value=default_modalities,
         show_label=True,
         show_select_all=True,
         label="Modality",
@@ -571,9 +612,9 @@ def get_leaderboard_app(  # noqa: PLR0914
                 description = gr.Markdown(
                     _update_description(
                         default_benchmark.name,
-                        sorted(default_results.languages),
-                        sorted(default_results.task_types),
-                        sorted(default_results.domains),
+                        default_languages,
+                        default_task_types,
+                        default_domains,
                     )
                 )
 
@@ -724,7 +765,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             )
         with gr.Tab("Task information"):
             task_info_table = gr.DataFrame(
-                _update_task_info(sorted(default_results.task_names)),
+                _update_task_info(default_task_names),
                 datatype=["markdown"] + ["str"] * 6,
                 buttons=["copy", "fullscreen"],
                 show_search="filter",
@@ -1118,7 +1159,7 @@ def get_leaderboard_app(  # noqa: PLR0914
                     )
                 )
             scores_hash = hash(tuple(sorted(score_signature)))
-            tasks_hash = hash(tuple(sorted(tasks)))
+            tasks_hash = hash(tuple(sorted(tasks))) if tasks is not None else None
             # Sort models_to_keep to ensure consistent hash regardless of input order
             models_hash = (
                 hash(tuple(sorted(models_to_keep)))
@@ -1145,7 +1186,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             languages: list[str],
         ):
             start_time = time.time()
-            tasks = set(tasks)
+            tasks = set(tasks) if tasks is not None else None
             benchmark = mteb.get_benchmark(benchmark_name)
 
             # Extract filtered model and task names from scores (respects UI filters)
@@ -1153,7 +1194,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             filtered_task_names = set()
 
             for entry in scores:
-                if entry["task_name"] not in tasks:
+                if (tasks is not None) and (entry["task_name"] not in tasks):
                     continue
                 if (models_to_keep is not None) and (
                     entry["model_name"] not in models_to_keep

@@ -20,6 +20,11 @@ from tests.mock_tasks import (
     MockMultilingualRetrievalTask,
     MockRetrievalTask,
 )
+from tests.task_grid import (
+    MOCK_MAEB_TASK_GRID,
+    MOCK_MULTIMODAL_TASKS,
+    MOCK_MVEB_TASK_GRID,
+)
 
 mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 0.5)
 mock_retrieval = (
@@ -141,7 +146,7 @@ def test_cache_hit(task: AbsTask):
     model = mteb.get_model("mteb/baseline-random-encoder")
     with pytest.raises(
         ValueError,
-        match="overwrite_strategy is set to 'only-cache' and the results file exists",
+        match="overwrite_strategy is set to 'only-cache'",
     ):
         mteb.evaluate(model, task, overwrite_strategy="only-cache")
 
@@ -379,3 +384,24 @@ def test_precision_arg():
     assert (
         model.mteb_model_meta.experiment_kwargs["output_dtypes"] == OutputDType.FLOAT16
     )
+
+
+@pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)
+def test_mock_maeb_tasks(task: AbsTask):
+    pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
+    model = mteb.get_model_meta("mteb/baseline-random-encoder")
+    mteb.evaluate(model, task, cache=None)
+
+
+@pytest.mark.parametrize("task", MOCK_MVEB_TASK_GRID)
+def test_mock_mveb_tasks(task: AbsTask):
+    pytest.importorskip("torchcodec", reason="Audio dependencies are not installed")
+    model = mteb.get_model_meta("mteb/baseline-random-encoder")
+    mteb.evaluate(model, task, cache=None)
+
+
+@pytest.mark.parametrize("task", MOCK_MULTIMODAL_TASKS, ids=lambda x: x.metadata.name)
+def test_mock_mmeb_tasks(task: AbsTask):
+    pytest.importorskip("torchcodec", reason="Audio dependencies are not installed")
+    model = mteb.get_model_meta("mteb/baseline-random-encoder")
+    mteb.evaluate(model, task, cache=None)

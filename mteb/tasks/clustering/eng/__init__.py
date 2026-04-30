@@ -14,12 +14,19 @@ from .built_bench_clustering_s2s import BuiltBenchClusteringS2S
 from .cifar import CIFAR10Clustering, CIFAR100Clustering
 from .clus_trec_covid import ClusTrecCovid
 from .crema_d_clustering import CREMADClustering
+from .hmdb51_clustering import HMDB51Clustering
 from .hume_arxiv_clustering_p2p import HUMEArxivClusteringP2P
 from .hume_reddit_clustering_p2p import HUMERedditClusteringP2P
 from .hume_wiki_cities_clustering import HUMEWikiCitiesClustering
 from .image_net import ImageNet10Clustering, ImageNetDog15Clustering
 from .medrxiv_clustering_p2p import MedrxivClusteringP2P, MedrxivClusteringP2PFast
 from .medrxiv_clustering_s2s import MedrxivClusteringS2S, MedrxivClusteringS2SFast
+from .meld_clustering import (
+    MELDEmotionAudioVideoClustering,
+    MELDEmotionVideoClustering,
+    MELDSpeakerAudioVideoClustering,
+    MELDSpeakerVideoClustering,
+)
 from .music_avqa_clustering import MusicAVQAClustering
 from .ravdess_av_clustering import RAVDESSAVClustering
 from .reddit_clustering import RedditClustering, RedditFastClusteringS2S
@@ -68,11 +75,16 @@ __all__ = [
     "CIFAR100Clustering",
     "CREMADClustering",
     "ClusTrecCovid",
+    "HMDB51Clustering",
     "HUMEArxivClusteringP2P",
     "HUMERedditClusteringP2P",
     "HUMEWikiCitiesClustering",
     "ImageNet10Clustering",
     "ImageNetDog15Clustering",
+    "MELDEmotionAudioVideoClustering",
+    "MELDEmotionVideoClustering",
+    "MELDSpeakerAudioVideoClustering",
+    "MELDSpeakerVideoClustering",
     "MedrxivClusteringP2P",
     "MedrxivClusteringP2PFast",
     "MedrxivClusteringS2S",

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.12.26"
+version = "2.12.34"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -76,6 +76,7 @@ leaderboard = [
     "pymongo>=4.15.5",
 ]
 video = ["torchcodec"]
+github = ["PyGithub>=1.60"]
 
 # model specific optional dependencies:
 peft = ["peft>=0.11.0"]
@@ -111,6 +112,7 @@ llama-embed-nemotron = ["transformers==4.51.0"]
 llama-nemotron-colembed-vl = ["transformers[torch]==4.49.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 llama-nemotron-embed-vl-1b-v2 = ["transformers[torch]>=4.56.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
+multimodal-sbert = ["sentence-transformers>=5.4.0", "transformers>=5.3.0"]
 faiss-cpu = ["faiss-cpu>=1.12.0"]
 eager_embed = ["qwen_vl_utils>=0.0.14"]
 speechbrain = ["speechbrain>=0.5.12"]
@@ -121,8 +123,10 @@ vllm = ["vllm>=0.11.1"]
 mctct = ["transformers<5"]  # mctct was removed in transformers 5
 siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
 qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
+omnivinci = ["transformers==4.46.0", "torch==2.8.*", "einops>=0.8.0", "openai-whisper>=20240930", "soundfile>=0.13.1", "opencv-python-headless>=4.0.0", "kaldiio>=2.18.0", "decord>=0.6.0", "librosa>=0.10.0", "beartype>=0.18.0", "accelerate>=1.0.0", "s2wrapper @ git+https://github.com/bfshi/scaling_on_scales", "deepspeed>=0.9.0", "torchvision>=0.15.0", "torchaudio>=2.0.0", "torchcodec==0.7.0", "av>=10.0.0", "numpy>=1.23.0,<2.0.0", "flash-attn>=2.6.3"]
 qwen_omni_utils = ["qwen_omni_utils"]
 embeddinggemma = ["transformers>=4.56.0"]
+ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
 
 [dependency-groups]
 lint = [
@@ -140,6 +144,7 @@ test = [
     "GitPython>=3.0.0",
     "tabulate>=0.9.0",
     "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
+    "av>=17.0.0",
 ]
 docs = [
     "zensical>=0.0.11",
@@ -411,6 +416,7 @@ conflicts = [
         { extra = "llama-nemotron-colembed-vl" }, # conflicting versions of transformers
         { extra = "nemotron-colembed-vl-v2" }, # conflicting versions of transformers
         { extra = "llama-nemotron-embed-vl-1b-v2" }, # conflicting versions of transformers
+        { extra = "multimodal-sbert" }, # conflicting version of sentence-transformers
         { extra = "colpali_engine" },
         { extra = "colqwen3" },
         { extra = "jina-v4" },
@@ -421,7 +427,9 @@ conflicts = [
         { extra = "muq" },
         { extra = "mctct" },
         { extra = "qwen-vl" },
+        { extra = "omnivinci" },
         { extra = "embeddinggemma" },
+        { extra = "ebind" },
     ],
 ]
 
@@ -438,6 +446,8 @@ module = [
     "datasets.exceptions",
     "sklearn",
     "sklearn.*",
+    "github",
+    "github.*",
     "faiss",
     "vllm",
     "torchaudio",
