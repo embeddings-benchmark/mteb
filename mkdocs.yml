@@ -144,3 +144,6 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/embeddings-benchmark/mteb
+
+validation:
+  unresolved_references: false

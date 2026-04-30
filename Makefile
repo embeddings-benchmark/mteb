@@ -35,7 +35,7 @@ pr:
 
 build-docs: build-docs-overview
 	@echo "--- 📚 Building documentation ---"
-	uv run --no-sync --group docs zensical build --clean
+	uv run --no-sync --group docs zensical build --clean --strict
 
 
 build-docs-overview:

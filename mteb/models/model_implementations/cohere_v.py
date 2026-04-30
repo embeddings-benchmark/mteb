@@ -187,6 +187,7 @@ def cohere_v_loader(model_name, **kwargs):
         def __init__(
             self,
             model_name: str,
+            model_api_name: str,
             embedding_type: EmbeddingType = "float",
             output_dimension: int | None = None,
             **kwargs: Any,
@@ -200,7 +201,7 @@ def cohere_v_loader(model_name, **kwargs):
 
             from torchvision import transforms
 
-            self.model_name = model_name
+            self.model_name = model_api_name
             if embedding_type not in get_args(EmbeddingType):
                 raise ValueError(
                     f"Embedding type {embedding_type} not allowed. Choose from {get_args(EmbeddingType)}"
@@ -227,7 +228,11 @@ def cohere_v_loader(model_name, **kwargs):
             index = 0
             texts = [text for batch in inputs for text in batch["text"]]
 
-            pbar = tqdm(total=len(texts), desc="Encoding text sentences")
+            pbar = tqdm(
+                total=len(texts),
+                desc="Encoding text sentences",
+                disable=not show_progress_bar,
+            )
 
             while index < len(texts):
                 # Build batch respecting both count and token limits
@@ -255,10 +260,6 @@ def cohere_v_loader(model_name, **kwargs):
                     batch.append(texts[index])
                     index += 1
 
-                # Embed the batch with retry logic handled by client
-            for batch in tqdm(
-                texts, disable=not show_progress_bar, desc="Text Encoding"
-            ):
                 embed_kwargs = {
                     "texts": batch,
                     "model": self.model_name,
@@ -326,23 +327,23 @@ def cohere_v_loader(model_name, **kwargs):
                     if self.output_dimension is not None:
                         embed_kwargs["output_dimension"] = self.output_dimension
 
-                        response = self._embed_func(**embed_kwargs)
+                    response = self._embed_func(**embed_kwargs)
 
-                        # Get embeddings based on requested type
-                        if self.embedding_type == "float":
-                            embeddings = response.embeddings.float
-                        elif self.embedding_type == "int8":
-                            embeddings = response.embeddings.int8
-                        elif self.embedding_type == "uint8":
-                            embeddings = response.embeddings.uint8
-                        elif self.embedding_type == "binary":
-                            embeddings = response.embeddings.binary
-                        else:
-                            raise ValueError(
-                                f"Embedding type {self.embedding_type} not allowed"
-                            )
-                        all_image_embeddings.append(torch.tensor(embeddings))
-                        time.sleep(1.5)
+                    # Get embeddings based on requested type
+                    if self.embedding_type == "float":
+                        embeddings = response.embeddings.float
+                    elif self.embedding_type == "int8":
+                        embeddings = response.embeddings.int8
+                    elif self.embedding_type == "uint8":
+                        embeddings = response.embeddings.uint8
+                    elif self.embedding_type == "binary":
+                        embeddings = response.embeddings.binary
+                    else:
+                        raise ValueError(
+                            f"Embedding type {self.embedding_type} not allowed"
+                        )
+                    all_image_embeddings.append(torch.tensor(embeddings))
+                    time.sleep(1.5)
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
 
             # Post-process embeddings based on type
@@ -387,7 +388,7 @@ def cohere_v_loader(model_name, **kwargs):
 
 cohere_mult_3 = ModelMeta(
     loader=cohere_v_loader,
-    loader_kwargs={"model_name": "embed-multilingual-v3.0"},
+    loader_kwargs={"model_api_name": "embed-multilingual-v3.0"},
     name="cohere/embed-multilingual-v3.0",
     model_type=["dense"],
     languages=[],  # Unknown, but support >100 languages
@@ -414,7 +415,7 @@ cohere_mult_3 = ModelMeta(
 
 cohere_eng_3 = ModelMeta(
     loader=cohere_v_loader,
-    loader_kwargs={"model_name": "embed-english-v3.0"},
+    loader_kwargs={"model_api_name": "embed-english-v3.0"},
     name="cohere/embed-english-v3.0",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -441,7 +442,7 @@ cohere_eng_3 = ModelMeta(
 
 cohere_embed_v4_multimodal = ModelMeta(
     loader=cohere_v_loader,
-    loader_kwargs=dict(model_name="embed-v4.0"),
+    loader_kwargs=dict(model_api_name="embed-v4.0"),
     model_type=["dense"],
     name="Cohere/Cohere-embed-v4.0",
     languages=all_languages,
@@ -468,7 +469,7 @@ cohere_embed_v4_multimodal = ModelMeta(
 
 cohere_embed_v4_multimodal_binary = ModelMeta(
     loader=cohere_v_loader,
-    loader_kwargs=dict(embedding_type="binary"),
+    loader_kwargs=dict(model_api_name="embed-v4.0", embedding_type="binary"),
     name="Cohere/Cohere-embed-v4.0 (output_dtype=binary)",
     model_type=["dense"],
     languages=all_languages,
@@ -496,7 +497,7 @@ cohere_embed_v4_multimodal_binary = ModelMeta(
 
 cohere_embed_v4_multimodal_int8 = ModelMeta(
     loader=cohere_v_loader,
-    loader_kwargs=dict(embedding_type="int8"),
+    loader_kwargs=dict(model_api_name="embed-v4.0", embedding_type="int8"),
     name="Cohere/Cohere-embed-v4.0 (output_dtype=int8)",
     model_type=["dense"],
     languages=all_languages,

@@ -812,6 +812,7 @@ jina_embeddings_v5_text_small = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2602.15547},
 }""",
+    extra_requirements_groups=["peft"],
 )
 
 
@@ -867,6 +868,7 @@ jina_embeddings_v5_text_nano = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2602.15547},
 }""",
+    extra_requirements_groups=["peft"],
 )
 
 jina_reranker_v3 = ModelMeta(

@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Any
 
 import pandas as pd
 
+from mteb._log_once import LogOnce
 from mteb.abstasks import (
     AbsTask,
 )
@@ -22,6 +23,7 @@ if TYPE_CHECKING:
     from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
+log_once = LogOnce(logger)
 
 
 # Create task registry
@@ -281,16 +283,22 @@ def get_tasks(  # noqa: PLR0913, PLR0917
                 "When `tasks` is provided, other filters like domains, task_types, and categories are ignored. "
                 + "If you want to filter a list of tasks, please use `mteb.filter_tasks` instead."
             )
-        _tasks = [
-            get_task(
-                task,
-                languages=languages,
-                script=script,
-                eval_splits=eval_splits,
-                exclusive_language_filter=exclusive_language_filter,
-            )
-            for task in tasks
-        ]
+        _tasks = []
+        for task in tasks:
+            try:
+                _tasks.append(
+                    get_task(
+                        task,
+                        languages=languages,
+                        script=script,
+                        eval_splits=eval_splits,
+                        exclusive_language_filter=exclusive_language_filter,
+                    )
+                )
+            except ValueError:
+                log_once.warning(
+                    f"Skipping task '{task}': no subsets match the language filter {languages}."
+                )
         return MTEBTasks(_tasks)
 
     tasks_: Sequence[type[AbsTask]] = filter_tasks(
