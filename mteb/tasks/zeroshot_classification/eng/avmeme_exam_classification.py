@@ -56,7 +56,7 @@ class AVMemeAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
         is_beta=True,
     )
     input_column_name = ("video", "audio")
-    label_column_name: str = "category"
+    label_column_name: str = "emotion"
 
     def get_candidate_labels(self) -> list[str]:
         return [
@@ -108,7 +108,7 @@ class AVMemeVideoZeroShotClassification(AbsTaskZeroShotClassification):
         is_beta=True,
     )
     input_column_name = "video"
-    label_column_name: str = "category"
+    label_column_name: str = "emotion"
 
     def get_candidate_labels(self) -> list[str]:
         return [
