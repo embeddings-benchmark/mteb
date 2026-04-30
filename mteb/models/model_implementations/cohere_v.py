@@ -228,7 +228,11 @@ def cohere_v_loader(model_name, **kwargs):
             index = 0
             texts = [text for batch in inputs for text in batch["text"]]
 
-            pbar = tqdm(total=len(texts), desc="Encoding text sentences", disable=not show_progress_bar)
+            pbar = tqdm(
+                total=len(texts),
+                desc="Encoding text sentences",
+                disable=not show_progress_bar,
+            )
 
             while index < len(texts):
                 # Build batch respecting both count and token limits
