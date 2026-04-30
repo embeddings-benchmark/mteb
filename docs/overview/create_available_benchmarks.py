@@ -12,7 +12,6 @@ from mteb.abstasks.task_metadata import _TASKTYPE2SIMPLIFIEDTASKTYPE  # noqa: PL
 if TYPE_CHECKING:
     from mteb.get_tasks import MTEBTasks
 
-_TASKTYPE2FILENAME = {tt: stt for tt, stt in _TASKTYPE2SIMPLIFIEDTASKTYPE.items()}
 
 benchmark_entry = """
 ###  `{benchmark_name}` {{ .model-copy }}
@@ -50,7 +49,7 @@ def create_table(benchmark: mteb.Benchmark) -> str:
     # format: http://127.0.0.1:8000/overview/available_tasks/retrieval/#treccovid
     df["name"] = df.apply(
         lambda row: (
-            f"[{row['name']}](./available_tasks/{_TASKTYPE2FILENAME.get(row['type'], row['type'].lower())}.md"
+            f"[{row['name']}](./available_tasks/{_TASKTYPE2SIMPLIFIEDTASKTYPE.get(row['type'], row['type'].lower())}.md"
             f"#{slugify_anchor(row['name'])})"
         ),
         axis=1,
