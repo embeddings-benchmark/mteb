@@ -16,7 +16,7 @@ class ElasticKBRetrieval(AbsTaskRetrieval):
             "(grounding doc that lead to self-served ticket for real-world queries "
             "and generating doc for synthetic queries)."
         ),
-        reference=None,
+        reference="https://huggingface.co/blog/rteb", # private set
         dataset={
             "path": "mteb-private/elastic-kb-retrieval",
             "revision": "21bdf1e024bf7c9f46720017559ce2f8c6116507",
