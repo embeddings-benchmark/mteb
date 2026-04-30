@@ -1345,4 +1345,5 @@ if __name__ == "__main__":
             font=[gr.themes.GoogleFont("Roboto Mono"), "Arial", "sans-serif"],
         ),
         head=head,
+        app_kwargs=extra_app_kwargs,
     )
