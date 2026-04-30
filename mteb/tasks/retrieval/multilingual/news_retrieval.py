@@ -7,8 +7,8 @@ class GlobalNewsRetrieval(AbsTaskRetrieval):
         name="GlobalNewsRetrieval",
         description="Multilingual news article retrieval with synthetic multihop queries.",
         dataset={
-            "path": "jinaai/global-news",
-            "revision": "b4e5e3d5fe31b5bb0cb9fcd1218a3fa7784bc0e4",
+            "path": "mteb/global-news",
+            "revision": "234dcd32922d32c78e08bfe506a2b90a5401cf7c",
         },
         type="Retrieval",
         category="t2t",
@@ -45,8 +45,8 @@ class PublicNewsRetrieval(AbsTaskRetrieval):
         name="PublicNewsRetrieval",
         description="Multilingual news article retrieval with synthetic multihop queries.",
         dataset={
-            "path": "jinaai/public-news",
-            "revision": "bddbd5d01b9be88e16a570d13fa2245b37062ad8",
+            "path": "mteb/public-news",
+            "revision": "234dcd32922d32c78e08bfe506a2b90a5401cf7c",
         },
         type="Retrieval",
         category="t2t",
