@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
-from datasets import Dataset
+
+if TYPE_CHECKING:
+    from datasets import Dataset
 
 BIBTEX = r"""
 @misc{hong2025worldsense,
