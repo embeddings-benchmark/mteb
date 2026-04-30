@@ -316,6 +316,16 @@ def test_fill_missing_parameter():
     assert meta_with_compute.memory_usage_mb is not None
 
 
+def test_raise_on_invalid_model_name():
+    """Test that an error is raised for invalid model names."""
+    with pytest.raises(KeyError):
+        mteb.get_model_metas(
+            ["mteb/baseline-bm25"]
+        )  # invalid (but plausible user input)
+    mdls = mteb.get_model_metas(["mteb/baseline-bm25s"])  # valid
+    assert len(mdls) == 1
+
+
 @pytest.mark.parametrize(
     "model_meta",
     [m for m in mteb.get_model_metas(open_weights=True) if "text" in m.modalities],

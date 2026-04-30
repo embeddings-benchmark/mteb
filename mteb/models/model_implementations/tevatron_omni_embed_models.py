@@ -40,6 +40,7 @@ class TevatronOmniEmbedWrapper(SentenceTransformerMultimodalEncoderWrapper):
         self.model[0].processing_kwargs.update(
             {
                 "video": {
+                    "min_pixels": 32 * 14 * 14,
                     "max_pixels": 64
                     * 28
                     * 28,  # model card recommendation to save memory

@@ -1,4 +1,9 @@
+from .ave_dataset import (
+    AVEDatasetVideoZeroShotClassification,
+    AVEDatasetZeroShotClassification,
+)
 from .birdsnap import BirdsnapZeroShotClassification
+from .breakfast_classification import BreakfastZeroShotClassification
 from .caltech101 import Caltech101ZeroShotClassification
 from .cifar import CIFAR10ZeroShotClassification, CIFAR100ZeroShotClassification
 from .clevr import CLEVR, CLEVRCount
@@ -9,13 +14,22 @@ from .fer2013 import FER2013ZeroShotClassification
 from .fgvc_aircraft import FGVCAircraftZeroShotClassification
 from .food101 import Food101ZeroShotClassification
 from .gtsrb import GTSRBZeroShotClassification
+from .hmdb51 import HMDB51ZeroShotClassification
 from .human_animal_cartoon import HumanAnimalCartoonZeroShotClassification
 from .imagenet1k import Imagenet1kZeroShotClassification
 from .kinetics400 import (
     Kinetics400VAZeroShotClassification,
     Kinetics400ZeroShotClassification,
 )
+from .meld_classification import (
+    MELDAudioVideoZeroShotClassification,
+    MELDVideoZeroShotClassification,
+)
 from .mnist import MNISTZeroShotClassification
+from .music_avqa import (
+    MusicAVQACLSAudioVideoZeroShotClassification,
+    MusicAVQACLSVideoZeroShotClassification,
+)
 from .oxford_pets import OxfordPetsZeroShotClassification
 from .patch_camelyon import PatchCamelyonZeroShotClassification
 from .ravdess import RavdessZeroshotClassification
@@ -34,10 +48,17 @@ from .ucf101 import (
     UCF101VideoZeroShotClassification,
     UCF101ZeroShotClassification,
 )
+from .worldsense_classification import (
+    WorldSenseAudioVideoZeroShotClassification,
+    WorldSenseVideoZeroShotClassification,
+)
 
 __all__ = [
     "CLEVR",
+    "AVEDatasetVideoZeroShotClassification",
+    "AVEDatasetZeroShotClassification",
     "BirdsnapZeroShotClassification",
+    "BreakfastZeroShotClassification",
     "CIFAR10ZeroShotClassification",
     "CIFAR100ZeroShotClassification",
     "CLEVRCount",
@@ -49,11 +70,16 @@ __all__ = [
     "FGVCAircraftZeroShotClassification",
     "Food101ZeroShotClassification",
     "GTSRBZeroShotClassification",
+    "HMDB51ZeroShotClassification",
     "HumanAnimalCartoonZeroShotClassification",
     "Imagenet1kZeroShotClassification",
     "Kinetics400VAZeroShotClassification",
     "Kinetics400ZeroShotClassification",
+    "MELDAudioVideoZeroShotClassification",
+    "MELDVideoZeroShotClassification",
     "MNISTZeroShotClassification",
+    "MusicAVQACLSAudioVideoZeroShotClassification",
+    "MusicAVQACLSVideoZeroShotClassification",
     "OxfordPetsZeroShotClassification",
     "PatchCamelyonZeroShotClassification",
     "RESISC45ZeroShotClassification",
@@ -68,4 +94,6 @@ __all__ = [
     "UCF101VideoAudioZeroShotClassification",
     "UCF101VideoZeroShotClassification",
     "UCF101ZeroShotClassification",
+    "WorldSenseAudioVideoZeroShotClassification",
+    "WorldSenseVideoZeroShotClassification",
 ]

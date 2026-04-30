@@ -1,3 +1,4 @@
+import warnings
 from typing import ClassVar
 
 
@@ -18,8 +19,10 @@ class LogOnce:
             self._seen[self.logger.name].add(msg)
 
     def warning(self, msg):
+        """Log and emit a warnings.warn exactly once per unique message."""
         if msg not in self._seen[self.logger.name]:
             self.logger.warning(msg)
+            warnings.warn(msg, stacklevel=2)
             self._seen[self.logger.name].add(msg)
 
     def error(self, msg):

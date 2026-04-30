@@ -66,21 +66,21 @@ def _aggregate_and_pivot(
         )  # each language in its own row before aggregation
 
     # perform aggregation
-    if aggregation_fn is None:
-        aggregation_fn = "mean"
+    # Pass "mean" string rather than np.mean to avoid a pandas FutureWarning:
+    aggregation_fn_pandas = "mean" if aggregation_fn is None else aggregation_fn
 
     if format == "wide":
         return df.pivot_table(
             index=index_columns,
             columns=columns,
             values="score",
-            aggfunc=aggregation_fn,  # type: ignore[arg-type]
+            aggfunc=aggregation_fn_pandas,  # type: ignore[arg-type]
             observed=True,
         ).reset_index()
     elif format == "long":
         return (
             df.groupby(columns + index_columns, observed=True)
-            .agg(score=("score", aggregation_fn))
+            .agg(score=("score", aggregation_fn_pandas))
             .reset_index()
         )
 
