@@ -7,16 +7,23 @@ import pytest
 from datasets.exceptions import DatasetNotFoundError
 
 import mteb
+from mteb import SentenceTransformerEncoderWrapper
 from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
 from mteb.models import ModelMeta
 from mteb.models.models_protocols import EncoderProtocol
+from mteb.types import OutputDType
 from tests.mock_models import MockSentenceTransformer
 from tests.mock_tasks import (
     MockAggregatedTask,
     MockClassificationTask,
     MockMultilingualRetrievalTask,
     MockRetrievalTask,
+)
+from tests.task_grid import (
+    MOCK_MAEB_TASK_GRID,
+    MOCK_MULTIMODAL_TASKS,
+    MOCK_MVEB_TASK_GRID,
 )
 
 mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 0.5)
@@ -367,3 +374,34 @@ def test_mrl_unsupported_dim():
             "intfloat/multilingual-e5-small",
             embed_dim=100,
         )
+
+
+def test_precision_arg():
+    model = SentenceTransformerEncoderWrapper(MockSentenceTransformer())
+    task = MockRetrievalTask()
+    mteb.evaluate(model, task, cache=None, encode_kwargs={"precision": "float16"})
+
+    assert (
+        model.mteb_model_meta.experiment_kwargs["output_dtypes"] == OutputDType.FLOAT16
+    )
+
+
+@pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)
+def test_mock_maeb_tasks(task: AbsTask):
+    pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
+    model = mteb.get_model_meta("mteb/baseline-random-encoder")
+    mteb.evaluate(model, task, cache=None)
+
+
+@pytest.mark.parametrize("task", MOCK_MVEB_TASK_GRID)
+def test_mock_mveb_tasks(task: AbsTask):
+    pytest.importorskip("torchcodec", reason="Audio dependencies are not installed")
+    model = mteb.get_model_meta("mteb/baseline-random-encoder")
+    mteb.evaluate(model, task, cache=None)
+
+
+@pytest.mark.parametrize("task", MOCK_MULTIMODAL_TASKS, ids=lambda x: x.metadata.name)
+def test_mock_mmeb_tasks(task: AbsTask):
+    pytest.importorskip("torchcodec", reason="Audio dependencies are not installed")
+    model = mteb.get_model_meta("mteb/baseline-random-encoder")
+    mteb.evaluate(model, task, cache=None)

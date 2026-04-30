@@ -8,7 +8,6 @@ import torch
 import torch.nn.functional as F
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import (
     ModelMeta,
@@ -39,12 +38,8 @@ class RepLLaMAModel(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ):
-        from transformers import AutoModel, AutoTokenizer
-
-        requires_package(
-            self, "peft", peft_model_name_or_path, "pip install 'mteb[peft]'"
-        )
         from peft import PeftModel
+        from transformers import AutoModel, AutoTokenizer
 
         self.base_model = AutoModel.from_pretrained(
             base_model_name_or_path,
@@ -191,6 +186,7 @@ repllama_llama2_original = ModelMeta(
     citation=REPLLAMA_CITATION,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["peft"],
 )
 
 
@@ -222,4 +218,5 @@ repllama_llama2_reproduced = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    extra_requirements_groups=["peft"],
 )

@@ -119,6 +119,7 @@ TaskSubtype = Literal[
     "Question Answering Retrieval",
     "Reading Comprehension",
     "Intent Classification",
+    "Cross-Modal Retrieval",
 ]
 """The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". This list can be updated as needed."""
 
@@ -201,6 +202,7 @@ MAEB_TASK_TYPE = (
 MVEB_TASK_TYPE = (
     "VideoClassification",
     "VideoClustering",
+    "VideoMultilabelClassification",
     "VideoPairClassification",
     "VideoZeroshotClassification",
     "VideoCentricQA",
@@ -264,9 +266,12 @@ TaskCategory = Literal[
     "vt2vt",
     "va2c",
     "va2t",
+    "t2va",
     "vat2t",
     "v2a",
     "a2v",
+    "vt2a",
+    "at2v",
 ]
 """The category of the task.
 
@@ -301,9 +306,10 @@ TaskCategory = Literal[
 29. vt2vt: video+text to video+text
 30. va2c: video+audio to category
 31. va2t: video+audio to text
-32. vat2t: video+audio+text to text
-33. v2a: video to audio
-34. a2v: audio to video
+32. t2va: text to video+audio
+33. vat2t: video+audio+text to text
+34. v2a: video to audio
+35. a2v: audio to video
 """
 
 _MODALITY_CODES: dict[str, str] = {
@@ -377,6 +383,11 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {  # type: ig
     "Compositionality": "pair-classification",
     "AudioPairClassification": "pair-classification",
     "PairClassification": "pair-classification",
+    "VideoClassification": "classification",
+    "VideoClustering": "clustering",
+    # "VideoPairClassification": "pair-classification",  # TODO: uncomment when tasks exist
+    "VideoZeroshotClassification": "classification",
+    "VideoCentricQA": "retrieval",
 }
 
 
@@ -434,6 +445,9 @@ class TaskMetadata(BaseModel):
             where it may be harder to gather information about the source.
         superseded_by: Denotes the task that this task is superseded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
+        is_beta: Whether the dataset is in beta. This can be used to denote that the dataset is still being verified and may contain errors.
+            Users should be cautious when using beta datasets. We generally recommend against using beta datasets in published benchmarks, but they can be useful for internal testing and development. We
+            similarly discourage contributing beta datasets, unless there is a specific reason to do so.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -466,6 +480,7 @@ class TaskMetadata(BaseModel):
     is_public: bool = True
     contributed_by: str | None = None
     superseded_by: str | None = None
+    is_beta: bool = False
 
     def _validate_metadata(self) -> None:
         self._eval_langs_are_valid(self.eval_langs)
@@ -955,6 +970,8 @@ class TaskMetadata(BaseModel):
             "AudioZeroshotClassification": ["other"],
             "AudioClassification": ["audio-classification"],
             "AudioPairClassification": ["audio-classification"],
+            # video
+            "VideoCentricQA": ["visual-question-answering"],
         }
         if self.type == "ZeroShotClassification":
             if self.modalities == ["image"]:

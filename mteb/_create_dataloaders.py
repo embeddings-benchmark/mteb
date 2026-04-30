@@ -4,7 +4,6 @@ import logging
 import warnings
 from typing import TYPE_CHECKING, Any, cast
 
-import numpy as np
 import torch
 from datasets import Dataset, Image
 from torch.utils.data import DataLoader, default_collate
@@ -13,12 +12,9 @@ from mteb.types import (
     ConversationTurn,
     PromptType,
 )
-from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
-
-    from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import (
@@ -76,14 +72,19 @@ def _corpus_to_dict(
     return new_row
 
 
-def _combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str]:
-    row["query"] = row["text"]
-
-    if "instruction" in row and row["instruction"] is not None:
-        row["text"] = row["query"] + " " + row["instruction"]
-    else:
-        row["text"] = row["query"]
-    return row
+def _combine_queries_with_instruction_text(dataset: Dataset) -> Dataset:
+    texts = dataset["text"]
+    if "query" in dataset.column_names:
+        dataset = dataset.remove_columns(["query"])
+    dataset = dataset.add_column("query", texts)
+    if "instruction" in dataset.column_names:
+        instructions = dataset["instruction"]
+        new_texts = [
+            t + " " + instr if instr is not None else t
+            for t, instr in zip(texts, instructions, strict=True)
+        ]
+        dataset = dataset.remove_columns(["text"]).add_column("text", new_texts)
+    return dataset
 
 
 def _convert_conv_history_to_query(
@@ -272,11 +273,7 @@ def _prepare_dataset(
                     num_proc=num_proc,
                 )
             else:
-                dataset = dataset.map(
-                    _combine_queries_with_instruction_text,
-                    desc="Processing queries for dataloading",
-                    num_proc=num_proc,
-                )
+                dataset = _combine_queries_with_instruction_text(dataset)
 
     if "image" in modalities:
         dataset = _prepare_image_dataset(
@@ -292,6 +289,13 @@ def _prepare_dataset(
                 and modality not in dataset.column_names
             ):
                 dataset = dataset.rename_column(input_column, modality)
+
+    # Drop modality columns not needed for this prompt type to avoid
+    # None values in the collate function (e.g. text=None in image-only corpus)
+    all_modality_columns = {"text", "image", "audio", "video"}
+    for col in all_modality_columns - set(modalities):
+        if col in dataset.column_names:
+            dataset = dataset.remove_columns(col)
 
     return dataset
 
@@ -352,196 +356,3 @@ def create_dataloader(
         num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
         shuffle=False,
     )
-
-
-class AudioCollator:
-    """Collator for audio data that resamples audio to a target sampling rate and optionally truncates to a maximum number of samples."""
-
-    def __init__(
-        self,
-        target_sampling_rate: int,
-        max_samples: int | None = None,
-    ) -> None:
-        """Initialize the collator.
-
-        Args:
-            target_sampling_rate: The sampling rate to resample the audio to.
-            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
-        """
-        self.target_sampling_rate = target_sampling_rate
-        self.max_samples = max_samples
-
-    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
-        return self.resample_audios(
-            inputs,
-            target_sampling_rate=self.target_sampling_rate,
-            max_samples=self.max_samples,
-        )
-
-    @staticmethod
-    def resample_audios(
-        inputs: list[dict[str, Any]],
-        target_sampling_rate: int,
-        max_samples: int | None = None,
-    ) -> BatchedInput:
-        """Resample a batch of audio inputs to a target sampling rate and optionally truncate to a maximum number of samples.
-
-        Args:
-            inputs: A list of dictionaries containing audio data under the "audio" key, where each audio is a dictionary with "array" and "sampling_rate" keys.
-            target_sampling_rate: The sampling rate to resample the audio to.
-            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
-        """
-        collated_inputs = []
-        for row in inputs:
-            audio_array = AudioCollator.resample_audio(
-                row,
-                target_sampling_rate,
-                max_samples,
-            )
-            row["audio"] = AudioInputItem(
-                array=audio_array, sampling_rate=target_sampling_rate
-            )
-            collated_inputs.append(row)
-        return cast(
-            "BatchedInput",
-            {
-                key: [row[key] for row in collated_inputs]
-                for key in collated_inputs[0].keys()
-            },
-        )
-
-    @staticmethod
-    def resample_audio(
-        audio: dict[str, Any],
-        target_sampling_rate: int,
-        max_samples: int | None = None,
-    ) -> np.typing.NDArray[np.floating]:
-        """Resample an audio input to a target sampling rate and optionally truncate to a maximum number of samples.
-
-        Args:
-            audio: A list of dictionaries containing audio data under the "audio" key, where each audio is a dictionary with "array" and "sampling_rate" keys.
-            target_sampling_rate: The sampling rate to resample the audio to.
-            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
-        """
-        import torchaudio
-
-        audio = audio["audio"]
-        if audio["sampling_rate"] != target_sampling_rate:
-            logger.debug(
-                f"Resampling audio from {audio['sampling_rate']} Hz to {target_sampling_rate} Hz."
-            )
-            resampler = torchaudio.transforms.Resample(
-                orig_freq=audio["sampling_rate"],
-                new_freq=target_sampling_rate,
-            )
-            audio_array = torch.from_numpy(audio["array"]).float()
-            audio_array = resampler(audio_array)
-            audio_array = audio_array.numpy()
-        else:
-            audio_array = audio["array"]
-
-        # Convert to mono if needed
-        if audio_array.ndim > 1 and audio_array.shape[0] > 1:
-            audio_array = np.mean(audio_array, axis=0)
-
-        if max_samples is not None:
-            num_samples = audio_array.shape[-1]
-            if num_samples > max_samples:
-                audio_array = audio_array[..., :max_samples]
-        return audio_array
-
-
-class FramesCollator:
-    """Collator for video data that resamples video frames."""
-
-    def __init__(self, max_frames: int) -> None:
-        """Initialize the collator.
-
-        Args:
-            max_frames: The maximum number of frames to keep for each video.
-        """
-        self.max_frames = max_frames
-
-    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
-        collated_inputs = []
-        for row in inputs:
-            video = row.pop("video")
-            row["video"] = self.resample_video(video, self.max_frames)
-            collated_inputs.append(row)
-        return cast(
-            "BatchedInput",
-            {
-                key: [row[key] for row in collated_inputs]
-                for key in collated_inputs[0].keys()
-            },
-        )
-
-    @staticmethod
-    def resample_video(
-        video: VideoDecoder,
-        max_video_frames: int,
-    ) -> torch.Tensor:
-        """Resample a video input to a target number of frames.
-
-        Args:
-            video: A VideoDecoder object containing the video data.
-            max_video_frames: The maximum number of frames to keep for each video. If None, no truncation is applied.
-        """
-        video_frames = video.metadata.num_frames
-        frame_step = (
-            max(1, video_frames // max_video_frames)
-            if max_video_frames is not None
-            else 1
-        )
-        selected_frames = (
-            list(range(0, video_frames, frame_step))[:max_video_frames]
-            if max_video_frames is not None
-            else list(range(video_frames))
-        )
-        return video.get_frames_at(selected_frames).data
-
-
-class VideoCollator:
-    """Collator that handles any combination of video and audio modalities.
-
-    Uses FramesCollator and AudioCollator static methods to process each modality.
-    """
-
-    def __init__(
-        self,
-        target_sampling_rate: int,
-        max_frames: int = 16,
-        max_samples: int | None = None,
-    ) -> None:
-        """Initialize the collator.
-
-        Args:
-            target_sampling_rate: The sampling rate to resample audio to.
-            max_frames: Maximum number of frames to keep per video.
-            max_samples: Maximum number of audio samples to keep. If None, no truncation.
-        """
-        self.max_frames = max_frames
-        self.target_sampling_rate = target_sampling_rate
-        self.max_samples = max_samples
-
-    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
-        collated_inputs = []
-        for row in inputs:
-            if "video" in row:
-                video = row.pop("video")
-                row["video"] = FramesCollator.resample_video(video, self.max_frames)
-            if "audio" in row:
-                audio_array = AudioCollator.resample_audio(
-                    row, self.target_sampling_rate, self.max_samples
-                )
-                row["audio"] = AudioInputItem(
-                    array=audio_array, sampling_rate=self.target_sampling_rate
-                )
-            collated_inputs.append(row)
-        return cast(
-            "BatchedInput",
-            {
-                key: [row[key] for row in collated_inputs]
-                for key in collated_inputs[0].keys()
-            },
-        )

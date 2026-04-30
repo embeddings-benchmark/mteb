@@ -6,9 +6,9 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import VideoCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import VideoCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -32,14 +32,20 @@ class PEAudioVisualWrapper(AbsEncoder):
         self,
         model_name: str = "facebook/pe-av-large",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        num_frames: int = 16,
+        fps: float | None = 2.0,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        max_samples: int | None = None,
         **kwargs: Any,
     ):
         from transformers import PeAudioVideoModel, PeAudioVideoProcessor
 
         self.model_name = model_name
         self.device = device
+        self.fps = fps
+        self.max_frames = max_frames
         self.num_frames = num_frames
+        self.max_samples = max_samples
         self.model = PeAudioVideoModel.from_pretrained(model_name).to(self.device)
         self.model.eval()
         self.processor = PeAudioVideoProcessor.from_pretrained(model_name)
@@ -209,7 +215,10 @@ class PEAudioVisualWrapper(AbsEncoder):
 
         inputs.collate_fn = VideoCollator(
             target_sampling_rate=self.sampling_rate,
-            max_frames=self.num_frames,
+            fps=self.fps,
+            max_frames=self.max_frames,
+            num_frames=self.num_frames,
+            max_samples=self.max_samples,
         )
 
         # Joint audio-video embedding
@@ -295,6 +304,7 @@ pe_av_small_16_frame = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-small-16-frame",
+    loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
 )
 
@@ -308,6 +318,7 @@ pe_av_base_16_frame = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-base-16-frame",
+    loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
 )
 
@@ -321,6 +332,7 @@ pe_av_large_16_frame = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-large-16-frame",
+    loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
 )
 
