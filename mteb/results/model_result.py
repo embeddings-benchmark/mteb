@@ -48,7 +48,7 @@ def _aggregate_and_pivot(
     columns: list[str],
     aggregation_level: Literal["subset", "split", "task", "language"],
     format: Literal["wide", "long"],
-    aggregation_fn: Callable[[list[Score]], Any] | None,
+    aggregation_fn: Callable[[list[Score]], Any] | str | None,
 ) -> pd.DataFrame:
     if aggregation_level == "subset":
         index_columns = ["task_name", "split", "subset"]
@@ -67,7 +67,7 @@ def _aggregate_and_pivot(
 
     # perform aggregation
     if aggregation_fn is None:
-        aggregation_fn = np.mean
+        aggregation_fn = "mean"
 
     if format == "wide":
         return df.pivot_table(
