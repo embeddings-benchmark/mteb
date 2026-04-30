@@ -85,5 +85,5 @@ class Kinetics700VZeroShotClassification(AbsTaskZeroShotClassification):
 
     def get_candidate_labels(self) -> list[str]:
         return [
-            name for name in self.dataset["test"].features[self.label_column_name].names
+            "a video of {name}" for name in self.dataset["test"].features[self.label_column_name].names
         ]
