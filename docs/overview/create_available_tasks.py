@@ -11,6 +11,8 @@ from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.task_metadata import _TASKTYPE2SIMPLIFIEDTASKTYPE  # noqa: PLC2701
 from mteb.get_tasks import MTEBTasks
 
+_TASKTYPE2FILENAME = {tt: stt for tt, stt in _TASKTYPE2SIMPLIFIEDTASKTYPE.items()}
+
 task_entry = """
 #### `{task_name}` {{ .model-copy }}
 
@@ -89,7 +91,7 @@ def create_aggregate_table(task: AbsTaskAggregate) -> str:
     df = tasks.to_dataframe(["name", "type", "modalities", "languages"])
     df["name"] = df.apply(
         lambda row: (
-            f"[{row['name']}](./{row['type'].lower()}.md#{slugify_anchor(row['name'])})"
+            f"[{row['name']}](./{_TASKTYPE2FILENAME.get(row['type'], row['type'].lower())}.md#{slugify_anchor(row['name'])})"
         ),
         axis=1,
     )
