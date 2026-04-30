@@ -39,7 +39,8 @@ class E5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
         self.model[0].processing_kwargs.update(
             {
                 "video": {
-                    "max_pixels": 64 * 28 * 28,  # model card recommendation
+                    "min_pixels": 32 * 14 * 14,
+                    "max_pixels": 64 * 28 * 28,
                     "do_sample_frames": False,
                 },
             }
