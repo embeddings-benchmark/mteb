@@ -35,7 +35,7 @@ class OmniVinciWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        num_frames: int = 32,
+        num_frames: int = 64,
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ) -> None:
