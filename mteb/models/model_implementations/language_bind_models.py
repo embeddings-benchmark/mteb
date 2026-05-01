@@ -38,6 +38,12 @@ class LanguageBindWrapper(AbsEncoder):
     LanguageBind processor expects file paths, so for video we apply the
     processor's transform directly to the frame tensor and skip the
     file-loading step.
+
+    Setup::
+
+        git clone https://github.com/PKU-YuanGroup/LanguageBind.git
+        export PYTHONPATH="/path/to/LanguageBind:$PYTHONPATH"
+        pip install einops decord opencv-python-headless pytorchvideo peft
     """
 
     def __init__(
@@ -333,7 +339,7 @@ _LANGUAGE_BIND_COMMON = dict(
     citation=_LANGUAGE_BIND_CITATION,
     license="mit",
     reference="https://github.com/PKU-YuanGroup/LanguageBind",
-    extra_requirements_groups=["languagebind"],
+    extra_requirements_groups=[],
 )
 
 
