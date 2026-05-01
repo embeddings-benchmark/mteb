@@ -1417,7 +1417,7 @@ def _prepare_pr_body(
 
 ---
 
-*This PR was created automatically using [`ResultCache.submit_results()`](https://embeddings-benchmark.github.io/mteb/get_started/advanced_usage/result_cache/#submit_results). Please check the results carefully before merging.*
+*This PR was created automatically using [`ResultCache.submit_results()`](https://embeddings-benchmark.github.io/mteb/docs/get_started/usage/submitting_results.md). Please check the results carefully before merging.*
 
 {checklist}"""
 

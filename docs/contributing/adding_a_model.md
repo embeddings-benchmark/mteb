@@ -222,7 +222,7 @@ if submission_info.get("pr_url"):
     print(f"PR created: {submission_info['pr_url']}")
 ```
 
-For more details, see the [result caching guide](../../get_started/advanced_usage/result_cache.md).
+For more details, see the [result caching guide](../../get_started/usage/submitting_results.md).
 
 ### Matryoshka embeddings
 
