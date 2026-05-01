@@ -16,13 +16,6 @@ if TYPE_CHECKING:
 
 
 class PenguinEncoderModel(AbsEncoder):
-    """Wrapper for Penguin-Encoder, a vision encoder based on an LLM backbone.
-
-    The model outputs per-patch embeddings which are mean-pooled per image
-    to produce a single embedding vector.
-    Text encoding is not supported.
-    """
-
     def __init__(
         self,
         model_name: str,
@@ -30,15 +23,22 @@ class PenguinEncoderModel(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
-        from transformers import AutoImageProcessor, AutoModel
+        from transformers import AutoConfig, AutoImageProcessor, AutoModel
 
         self.model_name = model_name
         self.device = device
-        self.model = AutoModel.from_pretrained(
+        config = AutoConfig.from_pretrained(
             model_name,
             revision=revision,
             trust_remote_code=True,
-            torch_dtype=torch.bfloat16,
+        )
+        config.rope_type = "linear"  # for
+        self.model = AutoModel.from_pretrained(
+            model_name,
+            config=config,
+            revision=revision,
+            trust_remote_code=True,
+            dtype=torch.bfloat16,
         ).to(self.device)
         self.model.eval()
         self.processor = AutoImageProcessor.from_pretrained(
@@ -115,5 +115,8 @@ penguin_encoder = ModelMeta(
     citation=PENGUIN_CITATION,
     contacts=None,
     output_dtypes=None,
-    extra_requirements_groups=None,
+    extra_requirements_groups=[
+        "mctct",  # have rope init error with transformers v5
+        "flash_attention",
+    ],
 )
