@@ -205,7 +205,7 @@ class LanguageBindWrapper(AbsEncoder):
         waveform = torch.as_tensor(audio_array, dtype=torch.float32)
         if waveform.ndim == 1:
             waveform = waveform.unsqueeze(0)
-        return self.audio_processor.transform(waveform)
+        return self.audio_processor.transform((waveform, self.sampling_rate))
 
     @torch.inference_mode()
     def get_audio_embeddings(
