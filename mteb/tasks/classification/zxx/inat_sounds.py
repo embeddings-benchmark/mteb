@@ -41,4 +41,5 @@ class INatSoundsClassification(AbsTaskClassification):
     label_column_name: str = "label"
     n_experiments = 1
     is_cross_validation: bool = True
+    train_split = "test"
     n_splits = 3
