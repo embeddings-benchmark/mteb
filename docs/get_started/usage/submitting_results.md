@@ -1,6 +1,6 @@
 ---
-title: "Result Caching and Submission"
-icon: lucide/save
+title: "Submit results"
+icon: lucide/upload
 ---
 
 ## Overview
@@ -9,7 +9,7 @@ The [`ResultCache`][mteb.cache.result_cache.ResultCache] class manages evaluatio
 
 ## Loading Results
 
-For a full guide on loading and working with results — including filtering, dataframe conversion, and benchmark scoring — see [Loading Results](../usage/loading_results.md).
+For a full guide on loading and working with results — including filtering, dataframe conversion, and benchmark scoring — see [Loading Results](loading_results.md).
 
 ## Quick Start
 

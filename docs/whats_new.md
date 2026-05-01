@@ -10,7 +10,7 @@ This section is an overview of releases for more information check out the autog
 ## New in v2.13
 ### Documentation updates for result submission
 
-This release adds support for automated result submission to the [official results repository](https://github.com/embeddings-benchmark/results) through [`ResultCache`](./get_started/advanced_usage/result_cache.md), along with a simplified flow for evaluating, caching, and submitting results.
+This release adds support for automated result submission to the [official results repository](https://github.com/embeddings-benchmark/results) through [`ResultCache`](get_started/usage/submitting_results.md), along with a simplified flow for evaluating, caching, and submitting results.
 
 The updated guide walks through the full flow in a few steps:
 
@@ -31,7 +31,7 @@ cache.submit_results(model_meta, create_pr=False)
 cache.submit_results(model_meta, create_pr=True)
 ```
 
-For the full explanation of the cache, submission flow, and GitHub setup, see the [ResultCache documentation](./get_started/advanced_usage/result_cache.md).
+For the full explanation of the cache, submission flow, and GitHub setup, see the [ResultCache documentation](get_started/usage/submitting_results.md).
 
 ## New in v2.12
 ### Support for Embedding Compression
