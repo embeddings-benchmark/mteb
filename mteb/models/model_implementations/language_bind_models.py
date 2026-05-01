@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import VideoCollator
+from mteb.models.modality_collators import VideoCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
