@@ -39,3 +39,6 @@ class INatSoundsClassification(AbsTaskClassification):
 
     input_column_name: str = "audio"
     label_column_name: str = "label"
+    n_experiments = 1
+    is_cross_validation: bool = True
+    n_splits = 3
