@@ -357,8 +357,8 @@ class Benchmark:
             - ``"Mean(Task)"``: mean score across all benchmark tasks.
             - ``"Mean(TaskType)"``: mean of per-task-type means.
             - ``"Rank"``: Borda count rank (1 = best). Each model earns
-              ``n - rank`` points per task; points are summed and the model
-              with the highest total is ranked 1. Matches the leaderboard.
+                ``n - rank`` points per task; points are summed and the model
+                with the highest total is ranked 1. Matches the leaderboard.
         """
         from mteb.benchmarks._create_table import _get_borda_rank
 

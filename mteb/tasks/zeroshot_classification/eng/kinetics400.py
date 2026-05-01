@@ -27,7 +27,7 @@ class Kinetics400ZeroShotClassification(AbsTaskZeroShotClassification):
         license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["video"],
+        modalities=["video", "text"],
         sample_creation="found",
         bibtex_citation=r"""
 @misc{kay2017kineticshumanactionvideo,
@@ -45,7 +45,7 @@ class Kinetics400ZeroShotClassification(AbsTaskZeroShotClassification):
 
     def get_candidate_labels(self) -> list[str]:
         return [
-            {name}
+            f"a video of {name}"
             for name in self.dataset["test"].features[self.label_column_name].names
         ]
 
@@ -73,7 +73,7 @@ class Kinetics400VAZeroShotClassification(AbsTaskZeroShotClassification):
         license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["video", "audio"],
+        modalities=["video", "audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
 @misc{kay2017kineticshumanactionvideo,

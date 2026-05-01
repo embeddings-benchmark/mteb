@@ -2,6 +2,10 @@ from .ave_dataset import (
     AVEDatasetVideoZeroShotClassification,
     AVEDatasetZeroShotClassification,
 )
+from .avmeme_exam_classification import (
+    AVMemeAudioVideoZeroShotClassification,
+    AVMemeVideoZeroShotClassification,
+)
 from .birdsnap import BirdsnapZeroShotClassification
 from .breakfast_classification import BreakfastZeroShotClassification
 from .caltech101 import Caltech101ZeroShotClassification
@@ -14,17 +18,30 @@ from .fer2013 import FER2013ZeroShotClassification
 from .fgvc_aircraft import FGVCAircraftZeroShotClassification
 from .food101 import Food101ZeroShotClassification
 from .gtsrb import GTSRBZeroShotClassification
+from .hmdb51 import HMDB51ZeroShotClassification
 from .human_animal_cartoon import HumanAnimalCartoonZeroShotClassification
 from .imagenet1k import Imagenet1kZeroShotClassification
 from .kinetics400 import (
     Kinetics400VAZeroShotClassification,
     Kinetics400ZeroShotClassification,
 )
+from .kinetics600 import (
+    Kinetics600VAZeroShotClassification,
+    Kinetics600VZeroShotClassification,
+)
+from .kinetics700 import (
+    Kinetics700VAZeroShotClassification,
+    Kinetics700VZeroShotClassification,
+)
 from .meld_classification import (
     MELDAudioVideoZeroShotClassification,
     MELDVideoZeroShotClassification,
 )
 from .mnist import MNISTZeroShotClassification
+from .music_avqa import (
+    MusicAVQACLSAudioVideoZeroShotClassification,
+    MusicAVQACLSVideoZeroShotClassification,
+)
 from .oxford_pets import OxfordPetsZeroShotClassification
 from .patch_camelyon import PatchCamelyonZeroShotClassification
 from .ravdess import RavdessZeroshotClassification
@@ -52,6 +69,8 @@ __all__ = [
     "CLEVR",
     "AVEDatasetVideoZeroShotClassification",
     "AVEDatasetZeroShotClassification",
+    "AVMemeAudioVideoZeroShotClassification",
+    "AVMemeVideoZeroShotClassification",
     "BirdsnapZeroShotClassification",
     "BreakfastZeroShotClassification",
     "CIFAR10ZeroShotClassification",
@@ -65,13 +84,20 @@ __all__ = [
     "FGVCAircraftZeroShotClassification",
     "Food101ZeroShotClassification",
     "GTSRBZeroShotClassification",
+    "HMDB51ZeroShotClassification",
     "HumanAnimalCartoonZeroShotClassification",
     "Imagenet1kZeroShotClassification",
     "Kinetics400VAZeroShotClassification",
     "Kinetics400ZeroShotClassification",
+    "Kinetics600VAZeroShotClassification",
+    "Kinetics600VZeroShotClassification",
+    "Kinetics700VAZeroShotClassification",
+    "Kinetics700VZeroShotClassification",
     "MELDAudioVideoZeroShotClassification",
     "MELDVideoZeroShotClassification",
     "MNISTZeroShotClassification",
+    "MusicAVQACLSAudioVideoZeroShotClassification",
+    "MusicAVQACLSVideoZeroShotClassification",
     "OxfordPetsZeroShotClassification",
     "PatchCamelyonZeroShotClassification",
     "RESISC45ZeroShotClassification",
