@@ -6,9 +6,9 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb.models.modality_collators import VideoCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import VideoCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -313,7 +313,6 @@ class LanguageBindWrapper(AbsEncoder):
         raise ValueError(
             f"No supported modality found in dataset features: {list(features.keys())}"
         )
-
 
 
 _LANGUAGE_BIND_CITATION = r"""
