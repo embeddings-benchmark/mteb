@@ -71,10 +71,14 @@ class XCLIPModel(AbsEncoder):
         all_embeddings = []
 
         for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):
-            # XCLIPProcessor expects list of np arrays [num_frames, H, W, C]
-            video_list = [
-                v.numpy() if isinstance(v, torch.Tensor) else v for v in batch["video"]
-            ]
+            # Collator returns [N, C, H, W] tensors; XCLIPProcessor expects
+            # each video as a list of [H, W, C] numpy frames
+            video_list = []
+            for v in batch["video"]:
+                frames = (
+                    v.permute(0, 2, 3, 1).numpy() if isinstance(v, torch.Tensor) else v
+                )
+                video_list.append(list(frames))
             inputs = self.processor(
                 videos=video_list,
                 return_tensors="pt",
