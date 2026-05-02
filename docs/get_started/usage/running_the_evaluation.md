@@ -169,6 +169,21 @@ sentence_trf_model.half() # half precision
 A last option is to make a [custom implementation](defining_the_model.md#using-a-custom-model) of the model. This way you have full flexibility of how the model handles the input.
 
 
+### Reduce Memory During Evaluation
+
+For large retrieval corpora, MTEB encodes the corpus in chunks to avoid running out of memory. The default chunk size is 50,000 documents. You can lower it to reduce peak memory usage:
+
+```python
+import mteb
+
+model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
+task = mteb.get_task("NFCorpus")
+
+results = mteb.evaluate(model, task, encode_kwargs={"corpus_chunk_size": 10_000})
+```
+
+Passing a smaller value increases the number of encoding passes over the corpus but keeps GPU/CPU memory usage lower. This works for both retrieval tasks (via `SearchEncoderWrapper`) and bitext mining tasks (via `BitextMiningEvaluator`) and has no effect on other task types.
+
 ### Speeding Download
 
 The simplest way to speed up downloads is by using Huggingface's [`xet`](https://huggingface.co/blog/xet-on-the-hub). You can use this simply using:

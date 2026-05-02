@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import heapq
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import torch
 from datasets import Dataset
@@ -73,6 +73,9 @@ class SearchEncoderWrapper:
         """
         # Always retain corpus for potential reranking or fallback flows
         self.task_corpus = corpus
+        _encode_kwargs: dict[str, Any] = dict(encode_kwargs)
+        _encode_kwargs.pop("corpus_chunk_size", None)
+        encode_kwargs = cast("EncodeKwargs", _encode_kwargs)
         if self.index_backend is not None:
             all_doc_embeddings = self.model.encode(
                 create_dataloader(
@@ -121,6 +124,12 @@ class SearchEncoderWrapper:
         """
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
+
+        _encode_kwargs: dict[str, Any] = dict(encode_kwargs)
+        corpus_chunk_size: int = _encode_kwargs.pop(
+            "corpus_chunk_size", self.corpus_chunk_size
+        )
+        encode_kwargs = cast("EncodeKwargs", _encode_kwargs)
 
         queries_dataloader = create_dataloader(
             queries,
@@ -188,6 +197,7 @@ class SearchEncoderWrapper:
                     hf_split=hf_split,
                     top_k=top_k,
                     encode_kwargs=encode_kwargs,
+                    corpus_chunk_size=corpus_chunk_size,
                 )
             else:
                 cos_scores_top_k_values, cos_scores_top_k_idx = (
@@ -231,12 +241,14 @@ class SearchEncoderWrapper:
         hf_split: str,
         top_k: int,
         encode_kwargs: EncodeKwargs,
+        corpus_chunk_size: int | None = None,
     ) -> dict[str, list[tuple[float, str]]]:
         logger.info("Encoding Corpus in batches (this might take a while)...")
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
 
-        itr = range(0, len(self.task_corpus), self.corpus_chunk_size)
+        chunk_size = corpus_chunk_size if corpus_chunk_size is not None else self.corpus_chunk_size
+        itr = range(0, len(self.task_corpus), chunk_size)
 
         result_heaps: dict[str, list[tuple[float, str]]] = {
             qid: [] for qid in query_idx_to_id.values()
@@ -244,7 +256,7 @@ class SearchEncoderWrapper:
         for batch_num, corpus_start_idx in enumerate(itr):
             logger.info(f"Encoding Batch {batch_num + 1}/{len(itr)}...")
             corpus_end_idx = min(
-                corpus_start_idx + self.corpus_chunk_size,
+                corpus_start_idx + chunk_size,
                 len(self.task_corpus),
             )
             sub_corpus = self.task_corpus.select(
@@ -443,7 +455,8 @@ class SearchEncoderWrapper:
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        """Encode inputs using the model' s encode."""
+        """Encode inputs using the model's encode."""
+        kwargs.pop("corpus_chunk_size", None)
         return self.model.encode(
             inputs,
             task_metadata=task_metadata,

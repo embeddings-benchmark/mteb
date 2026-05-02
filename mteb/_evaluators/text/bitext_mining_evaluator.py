@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, cast
 
 import torch
 from datasets import Dataset
@@ -42,8 +42,11 @@ class BitextMiningEvaluator(Evaluator):
         *,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
-        corpus_chunk_size: int | None = None,
     ) -> dict[str, list[dict[str, float]]]:
+        _encode_kwargs: dict[str, Any] = dict(encode_kwargs)
+        corpus_chunk_size: int = _encode_kwargs.pop("corpus_chunk_size", 500_000)
+        encode_kwargs = cast("EncodeKwargs", _encode_kwargs)
+
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
             subsets = [
@@ -70,15 +73,11 @@ class BitextMiningEvaluator(Evaluator):
             )
 
         logger.info("Finding nearest neighbors...")
-        search_kwargs = (
-            {"corpus_chunk_size": corpus_chunk_size}
-            if corpus_chunk_size is not None
-            else {}
-        )
         neighbours = {}
         for i, (key1, key2) in enumerate(tqdm(self.pairs, desc="Matching sentences")):
             neighbours[f"{key1}-{key2}"] = self._similarity_search(
-                embeddings[key1], embeddings[key2], model, **search_kwargs
+                embeddings[key1], embeddings[key2], model,
+                corpus_chunk_size=corpus_chunk_size,
             )
         return neighbours
 
