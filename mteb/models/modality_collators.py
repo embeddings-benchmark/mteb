@@ -206,7 +206,9 @@ class FramesCollator:
 
         if num_frames is None and fps is None:
             # No resampling: return all frames
-            return video.get_frames_at(list(range(num_source_frames))).data
+            return video.get_frames_at(
+                torch.tensor(list(range(num_source_frames)), dtype=torch.long)
+            ).data
 
         if num_frames is not None:
             # Fixed-sample mode: always select exactly num_frames
@@ -218,9 +220,17 @@ class FramesCollator:
             if max_frames is not None:
                 target = min(target, max_frames)
 
-        frame_step = max(1, num_source_frames // target)
-        selected_frames = list(range(0, num_source_frames, frame_step))[:target]
-        return video.get_frames_at(selected_frames).data
+        if num_source_frames < target:
+            # Repeat frames to reach exactly ``target`` (fixed-count models break on shorter input).
+            selected_frames = (
+                list(range(num_source_frames)) * ((target // num_source_frames) + 1)
+            )[:target]
+        else:
+            frame_step = max(1, num_source_frames // target)
+            selected_frames = list(range(0, num_source_frames, frame_step))[:target]
+        return video.get_frames_at(
+            torch.tensor(selected_frames, dtype=torch.long)
+        ).data
 
 
 class VideoCollator:
