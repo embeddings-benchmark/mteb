@@ -1,3 +1,4 @@
+from .av_speaker_bench import AVSpeakerBenchVideoAudioCentricQA, AVSpeakerBenchVideoCentricQA
 from .avmeme_exam import AVMemeExamVideoAudioCentricQA, AVMemeExamVideoCentricQA
 from .avqa import AVQAVideoAudioCentricQA, AVQAVideoCentricQA
 from .blink_it2i_multi_choice import BLINKIT2IMultiChoice
@@ -14,6 +15,8 @@ from .video_mme import VideoMMEShortVideoAudioCentricQA, VideoMMEShortVideoCentr
 from .worldsense import WorldSense1MinVideoAudioCentricQA, WorldSense1MinVideoCentricQA
 
 __all__ = [
+    "AVSpeakerBenchVideoAudioCentricQA",
+    "AVSpeakerBenchVideoCentricQA",
     "AVMemeExamVideoAudioCentricQA",
     "AVMemeExamVideoCentricQA",
     "AVQAVideoAudioCentricQA",
