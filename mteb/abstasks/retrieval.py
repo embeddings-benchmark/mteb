@@ -78,7 +78,9 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for Retrieval
 
     Attributes:
-        num_samples: Number of queries and documents
+        num_samples: Total number of queries and documents
+        num_queries: Number of queries
+        num_documents: Number of documents
         number_of_characters: Total number of characters in queries and documents
 
         documents_text_statistics: Statistics for documents
@@ -94,6 +96,8 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     """
 
     num_samples: int
+    num_queries: int
+    num_documents: int
     number_of_characters: int
 
     documents_text_statistics: TextStatistics | None
@@ -600,6 +604,8 @@ class AbsTaskRetrieval(AbsTask):
 
         return RetrievalDescriptiveStatistics(
             num_samples=num_documents + num_queries,
+            num_queries=num_queries,
+            num_documents=num_documents,
             number_of_characters=number_of_characters,
             documents_text_statistics=corpus_stats["text_statistics"],
             documents_image_statistics=corpus_stats["image_statistics"],
