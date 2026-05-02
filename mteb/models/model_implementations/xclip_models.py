@@ -71,18 +71,17 @@ class XCLIPModel(AbsEncoder):
         all_embeddings = []
 
         for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):
-            # Collator returns [N, C, H, W] tensors; XCLIPProcessor expects
-            # each video as a list of [H, W, C] numpy frames
-            video_list = []
-            for v in batch["video"]:
-                frames = (
-                    v.permute(0, 2, 3, 1).numpy() if isinstance(v, torch.Tensor) else v
-                )
-                video_list.append(list(frames))
-            inputs = self.processor(
-                videos=video_list,
+            # XCLIPProcessor.__call__ doesn't route videos correctly;
+            # use image_processor directly which returns pixel_values.
+            # Collator returns [N, C, H, W] tensors; image_processor
+            # expects [H, W, C] numpy frames.
+            video_list = [
+                v.permute(0, 2, 3, 1).numpy() if isinstance(v, torch.Tensor) else v
+                for v in batch["video"]
+            ]
+            inputs = self.processor.image_processor(
+                video_list,
                 return_tensors="pt",
-                padding=True,
             )
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
             video_features = self.model.get_video_features(**inputs)
