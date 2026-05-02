@@ -10,6 +10,10 @@ from .cv_bench import CVBenchCount, CVBenchDepth, CVBenchDistance, CVBenchRelati
 from .daily_omni import DailyOmniVideoAudioCentricQA, DailyOmniVideoCentricQA
 from .egoschema import EgoSchemaVideoCentricQA
 from .nextqa import NExTQAVideoCentricQA
+from .omni_video_bench import (
+    OmniVideoBenchVideoAudioCentricQA,
+    OmniVideoBenchVideoCentricQA,
+)
 from .perception_test import (
     PerceptionTestVideoAudioCentricQA,
     PerceptionTestVideoCentricQA,
@@ -34,6 +38,8 @@ __all__ = [
     "DailyOmniVideoCentricQA",
     "EgoSchemaVideoCentricQA",
     "NExTQAVideoCentricQA",
+    "OmniVideoBenchVideoAudioCentricQA",
+    "OmniVideoBenchVideoCentricQA",
     "PerceptionTestVideoAudioCentricQA",
     "PerceptionTestVideoCentricQA",
     "VideoMMEShortVideoAudioCentricQA",
