@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Unpack
+from typing import TYPE_CHECKING, Any
 
 import torch
 from torch.nn.functional import normalize
@@ -10,6 +10,8 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    from typing_extensions import Unpack
+
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
