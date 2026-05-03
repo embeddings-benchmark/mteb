@@ -169,13 +169,39 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
             for split in self.metadata.eval_splits:
                 split_dataset = lang_dataset[split]
 
-                queries_ds = split_dataset.select_columns(["id", "audio"])
-                corpus_ds = split_dataset.select_columns(
-                    ["id", "transcription"]
-                ).rename_column("transcription", "text")
+                queries_ds = (
+                    split_dataset.select_columns(["id", "audio"])
+                    .cast(
+                        datasets.Features(
+                            {"id": datasets.Value("string"), "audio": datasets.Audio()}
+                        )
+                    )
+                    .map(
+                        lambda x: {"id": str(x["id"]), "audio": x["audio"]},
+                        desc="Converting query IDs to strings",
+                    )
+                )
+                corpus_ds = (
+                    split_dataset.select_columns(["id", "transcription"])
+                    .rename_column("transcription", "text")
+                    .cast(
+                        datasets.Features(
+                            {
+                                "id": datasets.Value("string"),
+                                "text": datasets.Value("string"),
+                            }
+                        )
+                    )
+                    .map(
+                        lambda x: {"id": str(x["id"]), "text": x["text"]},
+                        desc="Converting corpus IDs to strings",
+                    )
+                )
 
-                # Keep IDs as integers to match query dataset ID types
-                relevant_docs_ = {row["id"]: {row["id"]: 1} for row in split_dataset}
+                # Keep IDs as strings for pytrec_eval compatibility
+                relevant_docs_ = {
+                    str(row["id"]): {str(row["id"]): 1} for row in split_dataset
+                }
 
                 self.corpus[lang][split] = corpus_ds
                 self.queries[lang][split] = queries_ds
@@ -238,15 +264,41 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
                 split_dataset = lang_dataset[split]
 
                 # Create datasets directly without intermediate lists
-                queries_ds = split_dataset.select_columns(
-                    ["id", "transcription"]
-                ).rename_column("transcription", "text")
+                queries_ds = (
+                    split_dataset.select_columns(["id", "transcription"])
+                    .rename_column("transcription", "text")
+                    .cast(
+                        datasets.Features(
+                            {
+                                "id": datasets.Value("string"),
+                                "text": datasets.Value("string"),
+                            }
+                        )
+                    )
+                    .map(
+                        lambda x: {"id": str(x["id"]), "text": x["text"]},
+                        desc="Converting query IDs to strings",
+                    )
+                )
 
-                corpus_ds = split_dataset.select_columns(["id", "audio"])
+                corpus_ds = (
+                    split_dataset.select_columns(["id", "audio"])
+                    .cast(
+                        datasets.Features(
+                            {"id": datasets.Value("string"), "audio": datasets.Audio()}
+                        )
+                    )
+                    .map(
+                        lambda x: {"id": str(x["id"]), "audio": x["audio"]},
+                        desc="Converting corpus IDs to strings",
+                    )
+                )
 
                 # Create relevant_docs mapping
-                # Keep IDs as integers to match query dataset ID types
-                relevant_docs_ = {row["id"]: {row["id"]: 1} for row in split_dataset}
+                # Keep IDs as strings for pytrec_eval compatibility
+                relevant_docs_ = {
+                    str(row["id"]): {str(row["id"]): 1} for row in split_dataset
+                }
 
                 self.corpus[lang][split] = corpus_ds
                 self.queries[lang][split] = queries_ds
