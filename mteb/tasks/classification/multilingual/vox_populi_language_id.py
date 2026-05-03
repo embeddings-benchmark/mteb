@@ -65,7 +65,14 @@ Dupoux, Emmanuel},
         test_ds = self.dataset["train"]
 
         def is_valid_audio(example):
-            audio_arr = example.get("audio", {}).get("array", None)
+            audio = example.get("audio")
+            if audio is None:
+                return False
+            # Handle both dict-like and AudioDecoder objects
+            if isinstance(audio, dict):
+                audio_arr = audio.get("array", None)
+            else:
+                audio_arr = getattr(audio, "array", None)
             # require at least 500 samples (so that Kaldi fbank(window_size=400) won't fail)
             if (audio_arr is None) or (len(audio_arr) < 500):
                 return False
