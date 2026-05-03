@@ -17,14 +17,16 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# Prompt used during model training
 UME_R1_EMBED_PROMPT = (
     "Represent the above input text, images, videos, or any combination of the three as embeddings. "
     "First output the thinking process in <think> </think> tags and then summarize the entire input in a word or sentence. "
     "Finally, use the <gen_emb> tag to represent the entire input."
 )
 
+
 class UMER1Wrapper(AbsEncoder):
-    """Wrapper for UME-R1 multimodal models (uses discriminative embeddings for efficient evaluation)."""
+    """Wrapper for UME-R1 multimodal models (uses reasoning driven generative embeddings)."""
 
     def __init__(
         self,
@@ -187,11 +189,12 @@ class UMER1Wrapper(AbsEncoder):
         hidden_states: torch.Tensor, 
         emb_id: int | None
     ) -> torch.Tensor:
-        """Helper to extract embeddings for the <disc_emb> token or last token."""
+        """Helper to extract embeddings for the emb_id token or last token."""
         batch_reps = []
         for idx, input_ids in enumerate(input_ids_batch):
             token_idx = -1
             if emb_id is not None:
+                # Find the last occurrence of emb_id
                 # Find the last occurrence of <disc_emb>
                 indices = (input_ids == emb_id).nonzero(as_tuple=True)[0]
                 if indices.numel() > 0:
@@ -216,10 +219,6 @@ _UME_R1_BASE_KWARGS = dict(
     loader=UMER1Wrapper,
     model_type=["dense"],
     languages=["eng-Latn"],
-    # loader_kwargs=dict(
-    #     apply_instruction_to_passages=False,
-    #     trust_remote_code=True,
-    # ),
     release_date="2025-11-10",
     modalities=["image", "text", "video"],
     license="apache-2.0",
@@ -238,7 +237,7 @@ ume_r1_2b = ModelMeta(
     revision="e7aaa253cd315be20bd15c8704ad281b4fdf82c9",
     n_parameters=2_208_985_600,
     n_embedding_parameters=None,
-    memory_usage_mb=4500,
+    memory_usage_mb=8427,
     max_tokens=32768,
     embed_dim=1536,
     reference="https://huggingface.co/zhibinlan/UME-R1-2B",
@@ -250,7 +249,7 @@ ume_r1_7b = ModelMeta(
     revision="b5c08e3273d979e0f22445306717c39ca8d45df0",
     n_parameters=8_291_375_616,
     n_embedding_parameters=None,
-    memory_usage_mb=16000,
+    memory_usage_mb=31629,
     max_tokens=32768,
     embed_dim=3584,
     reference="https://huggingface.co/zhibinlan/UME-R1-7B",
