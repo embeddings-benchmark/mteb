@@ -48,14 +48,8 @@ class VGGSoundVideoZeroshotClassification(AbsTaskZeroShotClassification):
     input_column_name = "video"
     label_column_name: str = "label"
 
-    train_split: str = "test"
-    is_cross_validation: bool = True
-
     def get_candidate_labels(self) -> list[str]:
         return self.dataset["test"].features[self.label_column_name].names
-
-    def dataset_transform(self, num_proc=None, **kwargs) -> None:
-        self.dataset["test"] = self.dataset["test"].select(range(2048))
 
 
 class VGGSoundVideoAudioZeroshotClassification(AbsTaskZeroShotClassification):
@@ -90,11 +84,5 @@ class VGGSoundVideoAudioZeroshotClassification(AbsTaskZeroShotClassification):
     input_column_name = ("video", "audio")
     label_column_name: str = "label"
 
-    train_split: str = "test"
-    is_cross_validation: bool = True
-
     def get_candidate_labels(self) -> list[str]:
         return self.dataset["test"].features[self.label_column_name].names
-
-    def dataset_transform(self, num_proc=None, **kwargs) -> None:
-        self.dataset["test"] = self.dataset["test"].select(range(2048))
