@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Any
+
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.zeroshot_classification import (
     AbsTaskZeroShotClassification,
@@ -49,3 +53,13 @@ class BreakfastZeroShotClassification(AbsTaskZeroShotClassification):
             f"a video of {name}"
             for name in self.dataset["test"].features[self.label_column_name].names
         ]
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        super().dataset_transform(num_proc=num_proc, **kwargs)
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            seed=self.seed,
+            splits=["test"],
+            label=self.label_column_name,
+            n_samples=10,
+        )

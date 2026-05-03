@@ -8,26 +8,34 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
+
+UME_R1_EMBED_PROMPT = (
+    "Represent the above input text, images, videos, or any combination of the three as embeddings. "
+    "First output the thinking process in <think> </think> tags and then summarize the entire input in a word or sentence. "
+    "Finally, use the <gen_emb> tag to represent the entire input."
+)
 
 class UMER1Wrapper(AbsEncoder):
     """Wrapper for UME-R1 multimodal models (uses discriminative embeddings for efficient evaluation)."""
 
     def __init__(
         self,
-        model_name: str,
+        model: str,
         revision: str | None = None,
         device: str | None = None,
+        fps: float | None = 2.0,
+        max_frames: int | None = 64,
+        num_frames: int | None = None,
         **kwargs,
-    ):
+    ) -> None:
         from mteb._requires_package import requires_package
 
         requires_package(self, "qwen_vl_utils", "UME-R1", "pip install qwen_vl_utils")
@@ -41,20 +49,19 @@ class UMER1Wrapper(AbsEncoder):
             if torch.backends.mps.is_available()
             else "cpu"
         )
-        self.model_name = model_name
 
         attn_impl = kwargs.pop(
             "attn_implementation",
             "flash_attention_2" if is_flash_attn_2_available() else None,
         )
 
-        self.instruction_template = kwargs.pop("instruction_template", None)
-        self.apply_instruction_to_passages = kwargs.pop("apply_instruction_to_passages", False)
-        self.prompts_dict = kwargs.pop("prompts_dict", None)
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
 
         # Load model
         self.model = Qwen2VLForConditionalGeneration.from_pretrained(
-            model_name,
+            model,
             torch_dtype=torch.bfloat16,
             attn_implementation=attn_impl,
             **kwargs,
@@ -63,7 +70,7 @@ class UMER1Wrapper(AbsEncoder):
         self.model.eval()
 
         # Load processor
-        self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
+        self.processor = AutoProcessor.from_pretrained(model, revision=revision)
 
     def encode(
         self,
@@ -76,102 +83,112 @@ class UMER1Wrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         """Encode inputs (text and/or images) into discriminative embeddings."""
-        from qwen_vl_utils import process_vision_info
-        import torchvision.transforms.functional as F
-
         if "video" in inputs.dataset.features:
             from mteb.models.modality_collators import VideoCollator
 
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=16000,
-                fps=kwargs.get("fps", 2.0),
-                max_frames=kwargs.get("max_frames", 64),
+                fps=self.fps,
+                max_frames=self.max_frames,
             )
 
-        instruction = self.get_task_instruction(task_metadata, prompt_type)
-        # print(f"Instruction: {instruction}")
         all_embeddings: list[torch.Tensor] = []
         disc_emb_id = self.processor.tokenizer.get_vocab().get("<disc_emb>")
-        if disc_emb_id is None:
+        gen_emb_id = self.processor.tokenizer.get_vocab().get("<gen_emb>")
+
+        if disc_emb_id is None or gen_emb_id is None:
             logger.warning(
-                "<disc_emb> token not found in tokenizer. Extracting the last token instead."
+                "<disc_emb> or <gen_emb> token not found in tokenizer. Extracting the last token instead."
             )
 
         with torch.no_grad():
             for batch in tqdm(inputs, desc="Encoding"):
-                batch_texts = batch.get("text", [])
-                batch_images = batch.get("image", [])
-                batch_videos = batch.get("video", [])
-                batch_size = max(len(batch_texts), len(batch_images), len(batch_videos))
-
-                messages = []
-                for i in range(batch_size):
-                    text_content = batch_texts[i] if batch_texts else ""
-                    image_content = batch_images[i] if batch_images else None
-                    video_content = batch_videos[i] if batch_videos else None
-
-                    content = []
-                    
-                    if text_content:
-                        content.append({"type": "text", "text": text_content})
-                        
-                    if image_content is not None:
-                        images = image_content if isinstance(image_content, list) else [image_content]
-                        for img in images:
-                            content.append({"type": "image", "image": img})
-                            
-                    if video_content is not None:
-                        if isinstance(video_content, torch.Tensor):
-                            video_content = [F.to_pil_image(frame) for frame in video_content]
-                        content.append({"type": "video", "video": video_content})
-
-                    prompt = (
-                        "Represent the above input text, images, videos, or any combination of the three as embeddings. "
-                        "First output the thinking process in <think> </think> tags and then summarize the entire input in a word or sentence. "
-                        "Finally, use the <gen_emb> tag to represent the entire input."
-                    )
-                    instr_text = instruction if instruction else ""
-                    final_text = f"{instr_text}\n<disc_emb>\n{prompt}"
-                    
-                    content.append({"type": "text", "text": final_text})
-                    # print(f"Content: {content}")
-                    messages.append([{"role": "user", "content": content}])
-
-                texts = [
-                    self.processor.apply_chat_template(
-                        msg, tokenize=False, add_generation_prompt=True
-                    )
-                    for msg in messages
-                ]
+                messages = self._build_messages(batch)
+                model_inputs = self._process_to_model_inputs(messages)
                 
-                image_inputs, video_inputs = None, None
-                if batch_images or batch_videos:
-                    image_inputs, video_inputs = process_vision_info(messages)
+                # Perform forward pass
+                output = self.model(
+                    **model_inputs, 
+                    max_new_tokens=8192, 
+                    output_hidden_states=True, 
+                    return_dict_in_generate=True
+                )
 
-                model_inputs = self.processor(
-                    text=texts, images=image_inputs, videos=video_inputs, padding=True, return_tensors="pt"
-                ).to(self.device)
-
-                output = self.model(**model_inputs, return_dict=True, output_hidden_states=True)
-                hidden_states = output.hidden_states[-1]
-                embeddings = self._extract_disc_embeddings(model_inputs["input_ids"], hidden_states, disc_emb_id)
-                all_embeddings.append(embeddings)
+                # Extract embeddings from the reasoning path
+                gen_embedding = UMER1Wrapper._extract_embeddings(
+                    model_inputs["input_ids"], 
+                    output.hidden_states[-1], 
+                    gen_emb_id
+                )
+                all_embeddings.append(gen_embedding)
 
         return torch.cat(all_embeddings, dim=0)
 
-    def _extract_disc_embeddings(
-        self, 
+    @staticmethod
+    def _build_messages(batch: dict[str, Any]) -> list[list[dict]]:
+        import torchvision.transforms.functional as F
+        batch_texts = batch.get("text", [])
+        batch_images = batch.get("image", [])
+        batch_videos = batch.get("video", [])
+        batch_size = max(len(batch_texts), len(batch_images), len(batch_videos))
+        # print(batch)
+        messages = []
+        for i in range(batch_size):
+            content = []
+            
+            if batch_texts:
+                content.append({"type": "text", "text": batch_texts[i]})
+                
+            if batch_images:
+                image_content = batch_images[i]
+                images = image_content if isinstance(image_content, list) else [image_content]
+                for img in images:
+                    content.append({"type": "image", "image": img})
+                    
+            if batch_videos:
+                video_content = batch_videos[i]
+                if isinstance(video_content, torch.Tensor):
+                    video_content = [F.to_pil_image(frame) for frame in video_content]
+                content.append({"type": "video", "video": video_content})
+
+            final_text = f"<disc_emb>\n{UME_R1_EMBED_PROMPT}"
+            content.append({"type": "text", "text": final_text})
+            messages.append([{"role": "user", "content": content}])
+        
+        return messages
+
+    def _process_to_model_inputs(self, messages: list[list[dict]]) -> dict:
+        """Applies chat templates and processes vision info into model tensors."""
+        from qwen_vl_utils import process_vision_info
+        
+        texts = [
+            self.processor.apply_chat_template(msg, tokenize=False, add_generation_prompt=True)
+            for msg in messages
+        ]
+        
+        image_inputs, video_inputs = process_vision_info(messages)
+        
+        return self.processor(
+            text=texts, 
+            images=image_inputs, 
+            videos=video_inputs, 
+            padding=True, 
+            return_tensors="pt"
+        ).to(self.device)
+
+    @staticmethod
+    def _extract_embeddings(
         input_ids_batch: torch.Tensor, 
         hidden_states: torch.Tensor, 
-        disc_emb_id: int | None
+        emb_id: int | None
     ) -> torch.Tensor:
         """Helper to extract embeddings for the <disc_emb> token or last token."""
         batch_reps = []
         for idx, input_ids in enumerate(input_ids_batch):
             token_idx = -1
-            if disc_emb_id is not None:
+            if emb_id is not None:
                 # Find the last occurrence of <disc_emb>
-                indices = (input_ids == disc_emb_id).nonzero(as_tuple=True)[0]
+                indices = (input_ids == emb_id).nonzero(as_tuple=True)[0]
                 if indices.numel() > 0:
                     token_idx = indices[-1].item()
                 else:
@@ -181,21 +198,6 @@ class UMER1Wrapper(AbsEncoder):
             
         embeddings = torch.stack(batch_reps).cpu().to(torch.float32)
         return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
-
-
-ume_r1_task_prompts = {
-    "BreakfastClassification": "What is the breakfast dish?"
-}
-
-
-def instruction_template(
-    instruction: str, prompt_type: PromptType | None = None
-) -> str:
-    if not instruction or prompt_type == PromptType.document:
-        return ""
-    if isinstance(instruction, dict):
-        return instruction[prompt_type]
-    return f"{instruction}\n"
 
 
 _UME_R1_CITATION = """@article{lan2025ume,
@@ -209,12 +211,10 @@ _UME_R1_BASE_KWARGS = dict(
     loader=UMER1Wrapper,
     model_type=["dense"],
     languages=["eng-Latn"],
-    loader_kwargs=dict(
-        instruction_template=instruction_template,
-        apply_instruction_to_passages=False,
-        prompts_dict=ume_r1_task_prompts,
-        trust_remote_code=True,
-    ),
+    # loader_kwargs=dict(
+    #     apply_instruction_to_passages=False,
+    #     trust_remote_code=True,
+    # ),
     release_date="2025-11-10",
     modalities=["image", "text", "video"],
     license="apache-2.0",
