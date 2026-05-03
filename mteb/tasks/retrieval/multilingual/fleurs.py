@@ -174,9 +174,8 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
                     ["id", "transcription"]
                 ).rename_column("transcription", "text")
 
-                relevant_docs_ = {
-                    str(row["id"]): {str(row["id"]): 1} for row in split_dataset
-                }
+                # Keep IDs as integers to match query dataset ID types
+                relevant_docs_ = {row["id"]: {row["id"]: 1} for row in split_dataset}
 
                 self.corpus[lang][split] = corpus_ds
                 self.queries[lang][split] = queries_ds
@@ -246,9 +245,8 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
                 corpus_ds = split_dataset.select_columns(["id", "audio"])
 
                 # Create relevant_docs mapping
-                relevant_docs_ = {
-                    str(row["id"]): {str(row["id"]): 1} for row in split_dataset
-                }
+                # Keep IDs as integers to match query dataset ID types
+                relevant_docs_ = {row["id"]: {row["id"]: 1} for row in split_dataset}
 
                 self.corpus[lang][split] = corpus_ds
                 self.queries[lang][split] = queries_ds
