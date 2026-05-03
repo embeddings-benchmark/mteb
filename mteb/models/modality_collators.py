@@ -228,9 +228,7 @@ class FramesCollator:
         else:
             frame_step = max(1, num_source_frames // target)
             selected_frames = list(range(0, num_source_frames, frame_step))[:target]
-        return video.get_frames_at(
-            torch.tensor(selected_frames, dtype=torch.long)
-        ).data
+        return video.get_frames_at(torch.tensor(selected_frames, dtype=torch.long)).data
 
 
 class VideoCollator:
