@@ -43,7 +43,7 @@ class IEMOCAPEmotionClassification(AbsTaskClassification):
 
     is_cross_validation: bool = True
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         # Define emotion labels and their mapping to indices
         labels = [
             "angry",  # 0

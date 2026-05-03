@@ -59,7 +59,7 @@ Dupoux, Emmanuel},
     max_fraction_of_documents_to_embed = None
     input_column_name: str = "audio"
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         # Define label mapping
         label2id = {"female": 0, "male": 1}
 
