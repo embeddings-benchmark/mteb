@@ -47,7 +47,7 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
     label_column_name: str = "labels"
     samples_per_label: int = 21
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         """Rename ebird_code_multilabel → labels and turn IDs → bird names."""
         if "ebird_code_multilabel" in self.dataset.column_names[self.eval_splits[0]]:
             self.dataset = self.dataset.rename_column(
