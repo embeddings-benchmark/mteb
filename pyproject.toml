@@ -452,8 +452,6 @@ module = [
     "vllm",
     "torchaudio",
     "torchcodec",
-    "qwen_vl_utils",
-    "qwen_vl_utils.*",
 ]
 ignore_missing_imports = true
 
