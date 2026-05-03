@@ -17,7 +17,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-# Prompt used during model training
 UME_R1_EMBED_PROMPT = (
     "Represent the above input text, images, videos, or any combination of the three as embeddings. "
     "First output the thinking process in <think> </think> tags and then summarize the entire input in a word or sentence. "
@@ -38,9 +37,6 @@ class UMER1Wrapper(AbsEncoder):
         num_frames: int | None = None,
         **kwargs,
     ) -> None:
-        from mteb._requires_package import requires_package
-
-        requires_package(self, "qwen_vl_utils", "UME-R1", "pip install qwen_vl_utils")
         from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
         from transformers.utils.import_utils import is_flash_attn_2_available
 
@@ -52,11 +48,6 @@ class UMER1Wrapper(AbsEncoder):
             else "cpu"
         )
 
-        attn_impl = kwargs.pop(
-            "attn_implementation",
-            "flash_attention_2" if is_flash_attn_2_available() else None,
-        )
-
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
@@ -65,7 +56,7 @@ class UMER1Wrapper(AbsEncoder):
         self.model = Qwen2VLForConditionalGeneration.from_pretrained(
             model,
             torch_dtype=torch.bfloat16,
-            attn_implementation=attn_impl,
+            attn_implementation="flash_attention_2" if is_flash_attn_2_available() else None,
             **kwargs,
         )
         self.model = self.model.to(self.device)
@@ -73,6 +64,9 @@ class UMER1Wrapper(AbsEncoder):
 
         # Load processor
         self.processor = AutoProcessor.from_pretrained(model, revision=revision)
+        self.processor.tokenizer.padding_side = "left"
+
+        self.gen_emb_id = self.processor.tokenizer.get_vocab().get("<gen_emb>")
 
     def encode(
         self,
@@ -82,6 +76,7 @@ class UMER1Wrapper(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
         """Encode inputs (text and/or images) into discriminative embeddings."""
@@ -95,32 +90,24 @@ class UMER1Wrapper(AbsEncoder):
             )
 
         all_embeddings: list[torch.Tensor] = []
-        disc_emb_id = self.processor.tokenizer.get_vocab().get("<disc_emb>")
-        gen_emb_id = self.processor.tokenizer.get_vocab().get("<gen_emb>")
-
-        if disc_emb_id is None or gen_emb_id is None:
-            logger.warning(
-                "<disc_emb> or <gen_emb> token not found in tokenizer. Extracting the last token instead."
-            )
 
         with torch.no_grad():
-            for batch in tqdm(inputs, desc="Encoding"):
+            for batch in tqdm(inputs, desc="Encoding", disable=not show_progress_bar):
                 messages = self._build_messages(batch)
                 model_inputs = self._process_to_model_inputs(messages)
-                
-                # Perform forward pass
-                output = self.model(
-                    **model_inputs, 
-                    max_new_tokens=8192, 
-                    output_hidden_states=True, 
-                    return_dict_in_generate=True
+
+                # Inference: Generation of the output
+                output = self.model.generate(
+                    **model_inputs,
+                    max_new_tokens=8192,
+                    output_hidden_states=True,
+                    return_dict_in_generate=True,
+                    use_cache=True,
                 )
 
                 # Extract embeddings from the reasoning path
-                gen_embedding = UMER1Wrapper._extract_embeddings(
-                    model_inputs["input_ids"], 
-                    output.hidden_states[-1], 
-                    gen_emb_id
+                gen_embedding = self._extract_generative_reasoning_embeddings(
+                    output, model_inputs, self.gen_emb_id
                 )
                 all_embeddings.append(gen_embedding)
 
@@ -134,6 +121,7 @@ class UMER1Wrapper(AbsEncoder):
     @staticmethod
     def _build_messages(batch: dict[str, Any]) -> list[list[dict]]:
         import torchvision.transforms.functional as F
+
         batch_texts = batch.get("text", [])
         batch_images = batch.get("image", [])
         batch_videos = batch.get("video", [])
@@ -142,16 +130,20 @@ class UMER1Wrapper(AbsEncoder):
         messages = []
         for i in range(batch_size):
             content = []
-            
+
             if batch_texts:
                 content.append({"type": "text", "text": batch_texts[i]})
-                
+
             if batch_images:
                 image_content = batch_images[i]
-                images = image_content if isinstance(image_content, list) else [image_content]
+                images = (
+                    image_content
+                    if isinstance(image_content, list)
+                    else [image_content]
+                )
                 for img in images:
                     content.append({"type": "image", "image": img})
-                    
+
             if batch_videos:
                 video_content = batch_videos[i]
                 if isinstance(video_content, torch.Tensor):
@@ -161,49 +153,71 @@ class UMER1Wrapper(AbsEncoder):
             final_text = f"<disc_emb>\n{UME_R1_EMBED_PROMPT}"
             content.append({"type": "text", "text": final_text})
             messages.append([{"role": "user", "content": content}])
-        
+
         return messages
 
     def _process_to_model_inputs(self, messages: list[list[dict]]) -> dict:
         """Applies chat templates and processes vision info into model tensors."""
         from qwen_vl_utils import process_vision_info
-        
+
         texts = [
-            self.processor.apply_chat_template(msg, tokenize=False, add_generation_prompt=True)
+            self.processor.apply_chat_template(
+                msg, tokenize=False, add_generation_prompt=True
+            )
             for msg in messages
         ]
-        
+
         image_inputs, video_inputs = process_vision_info(messages)
-        
+
         return self.processor(
-            text=texts, 
-            images=image_inputs, 
-            videos=video_inputs, 
-            padding=True, 
-            return_tensors="pt"
+            text=texts,
+            images=image_inputs,
+            videos=video_inputs,
+            padding=True,
+            return_tensors="pt",
         ).to(self.device)
 
     @staticmethod
-    def _extract_embeddings(
-        input_ids_batch: torch.Tensor, 
-        hidden_states: torch.Tensor, 
-        emb_id: int | None
+    def _get_embedding_idx(generated_ids_trimmed: torch.Tensor, emb_id: int | None) -> list[int]:
+        """Finds the step index of the embedding token for each sequence in the batch."""
+        embedding_idx = []
+        if emb_id is None:
+            return [-1] * generated_ids_trimmed.shape[0]
+
+        for out_ids in generated_ids_trimmed:
+            indices = (out_ids == emb_id).nonzero(as_tuple=True)[0]
+            if indices.numel() > 0:
+                # Add 1 because step 0 in output.hidden_states is the prefill
+                embedding_idx.append(indices[-1].item() + 1)
+            else:
+                embedding_idx.append(-1)
+        return embedding_idx
+
+    @staticmethod
+    def _extract_generative_reasoning_embeddings(
+        output: Any, model_inputs: dict, emb_id: int | None
     ) -> torch.Tensor:
-        """Helper to extract embeddings for the emb_id token or last token."""
+        """Helper to extract embeddings from the generated output."""
+        sequences = output.sequences
+        input_len = model_inputs["input_ids"].shape[1]
+        
+        gen_sequences = sequences[:, input_len:]
+        
+        # Get the target steps for each sequence in the batch
+        embedding_idxs = UMER1Wrapper._get_embedding_idx(gen_sequences, emb_id)
+
         batch_reps = []
-        for idx, input_ids in enumerate(input_ids_batch):
-            token_idx = -1
-            if emb_id is not None:
-                # Find the last occurrence of emb_id
-                # Find the last occurrence of <disc_emb>
-                indices = (input_ids == emb_id).nonzero(as_tuple=True)[0]
-                if indices.numel() > 0:
-                    token_idx = indices[-1].item()
-                else:
-                    token_idx = -1
-            
-            batch_reps.append(hidden_states[idx, token_idx])
-            
+        for idx in range(sequences.shape[0]):
+            target_step = embedding_idxs[idx]
+
+            if len(gen_sequences[idx]) == 0:
+                # Fallback: take the last token of the prompt if nothing generated
+                emb = output.hidden_states[0][-1][idx, -1, :]
+            else:
+                emb = output.hidden_states[target_step][-1][idx, 0, :]
+                
+            batch_reps.append(emb)
+
         embeddings = torch.stack(batch_reps).cpu().to(torch.float32)
         return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
 
@@ -227,6 +241,7 @@ _UME_R1_BASE_KWARGS = dict(
     public_training_data="https://huggingface.co/datasets/zhibinlan/UME-sft-train",
     framework=["PyTorch", "Transformers", "safetensors"],
     similarity_fn_name=ScoringFunction.COSINE,
+    extra_requirements_groups=["qwen-vl"],
     use_instructions=True,
     training_datasets=None,
     citation=_UME_R1_CITATION,
