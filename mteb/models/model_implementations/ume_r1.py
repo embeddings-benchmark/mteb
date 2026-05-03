@@ -122,6 +122,11 @@ class UMER1Wrapper(AbsEncoder):
                 )
                 all_embeddings.append(gen_embedding)
 
+                # Explicitly clear large objects from GPU memory
+                del output, model_inputs, messages
+                if self.device.startswith("cuda"):
+                    torch.cuda.empty_cache()
+
         return torch.cat(all_embeddings, dim=0)
 
     @staticmethod
