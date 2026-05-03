@@ -22,10 +22,15 @@ class EncodeKwargs(TypedDict):
     Attributes:
         batch_size: The batch size to use for encoding.
         show_progress_bar: Whether to show a progress bar during encoding.
+        corpus_chunk_size: Number of corpus documents to encode and score at once during retrieval.
+            Intercepted by :class:`~mteb.models.SearchEncoderWrapper` and
+            :class:`~mteb.BitextMiningEvaluator` before reaching the underlying encoder.
+            Reducing this value lowers peak memory at the cost of more passes over the corpus.
     """
 
     batch_size: NotRequired[int]
     show_progress_bar: NotRequired[bool]
+    corpus_chunk_size: NotRequired[int]
 
 
 # --- Output types ---
