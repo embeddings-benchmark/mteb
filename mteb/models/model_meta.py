@@ -1407,7 +1407,11 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         self,
         user: str | None = None,
         *,
-        tasks: Iterable[AbsTask] | Sequence[str] | Benchmark | None = None,
+        tasks: Iterable[AbsTask]
+        | Sequence[str]
+        | Benchmark
+        | Sequence[Benchmark]
+        | None = None,
         cache: ResultCache | None = None,
         create_pr: bool = False,
     ) -> None:
@@ -1434,7 +1438,12 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         model_result.push_model_results(
             user=user,
             create_pr=create_pr,
-            benchmark=tasks if isinstance(tasks, Benchmark) else None,
+            benchmark=(
+                tasks  # type: ignore[arg-type]
+                if isinstance(tasks, Benchmark)
+                or (isinstance(tasks, Sequence) and isinstance(tasks[0], Benchmark))
+                else None
+            ),
         )
 
 

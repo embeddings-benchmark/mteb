@@ -4,6 +4,7 @@ import functools
 import json
 import logging
 import warnings
+from collections.abc import Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
@@ -67,7 +68,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
     """
 
     model_results: list[ModelResult]
-    benchmark: Benchmark | None = None
+    benchmark: Benchmark | Sequence[Benchmark] | None = None
     model_config = ConfigDict(
         protected_namespaces=(),  # to free up the name model_results which is otherwise protected
         arbitrary_types_allowed=True,  # Benchmark is dataclasses.dataclass
@@ -446,7 +447,12 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 df[col] = df[col].astype("category")
         return df
 
-    def get_aggregated_scores(self) -> dict[str, dict[str, float | None]]:
+    def get_aggregated_scores(
+        self,
+    ) -> (
+        dict[str, dict[str, float | None]]
+        | dict[str, dict[str, dict[str, float | None]]]  # multiple benchmarks
+    ):
         """Get aggregated scores for each model.
 
         When a benchmark is associated with these results, uses
@@ -467,6 +473,8 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             }
         """
         if self.benchmark is not None:
+            if isinstance(self.benchmark, Sequence):
+                return {b.name: b.get_score(self) for b in self.benchmark}
             return self.benchmark.get_score(self)
 
         from mteb.benchmarks._benchmark_metrics import (
@@ -497,6 +505,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 "To get benchmark results, load results with a Benchmark object. "
                 "`results = cache.load_results(tasks='MTEB(eng, v2)')`"
             )
+
+        if isinstance(self.benchmark, Sequence):
+            raise ValueError("Getting scores for multiple benchmarks is unsupported")
 
         return self.benchmark._create_summary_table(self)
 
