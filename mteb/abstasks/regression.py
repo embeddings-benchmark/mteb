@@ -201,7 +201,11 @@ class AbsTaskRegression(AbsTaskClassification):
         return dataset_dict
 
     def _calculate_descriptive_statistics_from_split(  # type: ignore[override]
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> RegressionDescriptiveStatistics:
         col_inputs, values, test_hashes, train_hashes = (
             self._load_statistics_col_inputs_and_hashes(
@@ -209,7 +213,7 @@ class AbsTaskRegression(AbsTaskClassification):
             )
         )
         modality_stats = calculate_single_input_modality_statistics(
-            col_inputs, test_hashes
+            col_inputs, test_hashes, max_workers=num_proc
         )
         return RegressionDescriptiveStatistics(
             num_samples=len(values),

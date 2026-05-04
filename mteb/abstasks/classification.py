@@ -558,7 +558,11 @@ class AbsTaskClassification(AbsTask):
         return col_inputs, label, test_hashes, train_hashes
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> ClassificationDescriptiveStatistics:
         col_inputs, label, test_hashes, train_hashes = (
             self._load_statistics_col_inputs_and_hashes(
@@ -566,7 +570,7 @@ class AbsTaskClassification(AbsTask):
             )
         )
         modality_stats = calculate_single_input_modality_statistics(
-            col_inputs, test_hashes
+            col_inputs, test_hashes, max_workers=num_proc
         )
         return ClassificationDescriptiveStatistics(
             num_samples=len(label),

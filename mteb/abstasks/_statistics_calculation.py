@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import hashlib
 from collections import Counter, defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any, cast
+
+from tqdm.auto import tqdm
 
 from mteb.types.statistics import (
     AudioStatistics,
@@ -27,51 +30,68 @@ if TYPE_CHECKING:
     from mteb.types._encoder_io import AudioInputItem
 
 
-def compute_text_hashes(texts: list[str]) -> list[str]:
+def compute_text_hashes(texts: list[str], max_workers: int | None = None) -> list[str]:
     """Return a hash per text — for text, the string itself is the identity key."""
     return texts
 
 
-def compute_image_hashes(images: list[Image.Image]) -> list[str]:
+def compute_image_hashes(
+    images: list[Image.Image], max_workers: int | None = None
+) -> list[str]:
     """Return a per-image MD5 hash of the raw pixel bytes."""
-    return [
-        hashlib.md5(img.tobytes(), usedforsecurity=False).hexdigest() for img in images
-    ]
+
+    def _hash_one(img: Image.Image) -> str:
+        return hashlib.md5(img.tobytes(), usedforsecurity=False).hexdigest()
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        return list(executor.map(_hash_one, images))
 
 
-def compute_audio_hashes(audios: list[AudioInputItem]) -> list[str]:
+def compute_audio_hashes(
+    audios: list[AudioInputItem], max_workers: int | None = None
+) -> list[str]:
     """Return a per-audio MD5 hash of the raw sample array bytes."""
-    return [
-        hashlib.md5(audio["array"].tobytes(), usedforsecurity=False).hexdigest()
-        for audio in audios
-    ]
+
+    def _hash_one(audio: AudioInputItem) -> str:
+        return hashlib.md5(audio["array"].tobytes(), usedforsecurity=False).hexdigest()
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        return list(executor.map(_hash_one, audios))
 
 
-def compute_video_hashes(videos: list[VideoDecoder]) -> list[str]:
+def compute_video_hashes(
+    videos: list[VideoDecoder], max_workers: int | None = None
+) -> list[str]:
     """Return a per-video MD5 hash derived from the first decoded frame.
 
     Decoding a frame is the most expensive part of video statistics; this function
     is extracted so callers can pass the resulting list to ``calculate_video_statistics``
     and avoid repeating the decode.
     """
-    hashes = []
-    for video in videos:
+
+    def _hash_one(video: VideoDecoder) -> str:
         meta = video.metadata
         num_frames = meta.num_frames
         avg_fps = meta.average_fps
 
         if num_frames is not None and avg_fps is not None and avg_fps > 0:
-            # Sample one frame per second: indices 0, fps, 2*fps, ...
             step = max(1, round(avg_fps))
             frame_indices = list(range(0, num_frames, step))
         else:
             frame_indices = [0]
 
         frames = video.get_frames_at(frame_indices).data
-        hashes.append(
-            hashlib.md5(frames.numpy().tobytes(), usedforsecurity=False).hexdigest()
+        return hashlib.md5(frames.numpy().tobytes(), usedforsecurity=False).hexdigest()
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = list(
+            tqdm(
+                executor.map(_hash_one, videos),
+                total=len(videos),
+                desc="Computing video hashes",
+            )
         )
-    return hashes
+    return futures
 
 
 def calculate_text_statistics(
@@ -82,7 +102,7 @@ def calculate_text_statistics(
 
     Args:
         texts: List of texts to analyze.
-        hashes: Optional pre-computed identity keys (from :func:`compute_text_hashes`).
+        hashes: Optional pre-computed identity keys (from `compute_text_hashes`).
             When provided the function skips recomputing them.
 
     Returns:
@@ -103,22 +123,24 @@ def calculate_text_statistics(
 def calculate_image_statistics(
     images: list[Image.Image],
     hashes: list[str] | None = None,
+    max_workers: int | None = None,
 ) -> ImageStatistics:
     """Calculate descriptive statistics for a list of images.
 
     Args:
         images: List of images to analyze. Each image should have a ``size``
             attribute returning ``(width, height)``.
-        hashes: Optional pre-computed MD5 hashes (from :func:`compute_image_hashes`).
+        hashes: Optional pre-computed MD5 hashes (from `compute_image_hashes`).
             When provided the function skips recomputing them.
+        max_workers: Maximum number of worker threads for parallel hash computation.
 
     Returns:
         ImageStatistics: A dictionary containing the descriptive statistics.
     """
     if hashes is None:
-        hashes = compute_image_hashes(images)
+        hashes = compute_image_hashes(images, max_workers=max_workers)
     img_widths, img_heights = [], []
-    for img in images:
+    for img in tqdm(images, desc="Computing image statistics"):
         width, height = img.size
         img_heights.append(height)
         img_widths.append(width)
@@ -137,24 +159,26 @@ def calculate_image_statistics(
 def calculate_audio_statistics(
     audios: list[AudioInputItem],
     hashes: list[str] | None = None,
+    max_workers: int | None = None,
 ) -> AudioStatistics:
     """Calculate descriptive statistics for a list of audio clips.
 
     Args:
         audios: List of audio clips to analyze. Each clip must have ``array``
             and ``sampling_rate`` keys.
-        hashes: Optional pre-computed MD5 hashes (from :func:`compute_audio_hashes`).
+        hashes: Optional pre-computed MD5 hashes (from `compute_audio_hashes`).
             When provided the function skips recomputing them.
+        max_workers: Maximum number of worker threads for parallel hash computation.
 
     Returns:
         A dictionary containing the descriptive statistics.
     """
     if hashes is None:
-        hashes = compute_audio_hashes(audios)
+        hashes = compute_audio_hashes(audios, max_workers=max_workers)
     audio_lengths = []
     sampling_rates: dict[int, int] = defaultdict(int)
 
-    for audio in audios:
+    for audio in tqdm(audios, desc="Computing audio statistics"):
         array = audio["array"]
         sampling_rate = audio["sampling_rate"]
         audio_lengths.append(len(array) / sampling_rate)
@@ -176,20 +200,22 @@ def calculate_audio_statistics(
 def calculate_video_statistics(  # noqa: PLR0914
     videos: list[VideoDecoder],
     hashes: list[str] | None = None,
+    max_workers: int | None = None,
 ) -> VideoStatistics:
     """Calculate descriptive statistics for a list of video clips.
 
     Args:
         videos: List of VideoDecoder objects to analyze.
-        hashes: Optional pre-computed MD5 hashes (from :func:`compute_video_hashes`).
+        hashes: Optional pre-computed MD5 hashes (from `compute_video_hashes`).
             When provided the function skips decoding the first frame again, which
             is the most expensive part of this function.
+        max_workers: Maximum number of worker threads for parallel hash computation.
 
     Returns:
         A dictionary containing the descriptive statistics.
     """
     if hashes is None:
-        hashes = compute_video_hashes(videos)
+        hashes = compute_video_hashes(videos, max_workers=max_workers)
     durations: list[float | None] = []
     frames_counts: list[int | None] = []
     widths: list[int | None] = []
@@ -197,7 +223,7 @@ def calculate_video_statistics(  # noqa: PLR0914
     fps_counts: dict[int, int] = defaultdict(int)
     resolution_counts: dict[str, int] = defaultdict(int)
 
-    for video in videos:
+    for video in tqdm(videos, desc="Computing video statistics"):
         meta = video.metadata
 
         num_frames = meta.num_frames
@@ -389,6 +415,7 @@ def calculate_relevant_docs_statistics(
 def calculate_single_input_modality_statistics(
     col_inputs: dict[Modalities, list[Any]],
     hashes: dict[str, list[str]] | None = None,
+    max_workers: int | None = None,
 ) -> SingleInputModalityStatistics:
     """Compute per-modality statistics for a single-input dataset."""
     _hashes = hashes or {}
@@ -399,17 +426,17 @@ def calculate_single_input_modality_statistics(
         if "text" in col_inputs
         else None,
         image_statistics=calculate_image_statistics(
-            col_inputs["image"], hashes=_hashes.get("image")
+            col_inputs["image"], hashes=_hashes.get("image"), max_workers=max_workers
         )
         if "image" in col_inputs
         else None,
         audio_statistics=calculate_audio_statistics(
-            col_inputs["audio"], hashes=_hashes.get("audio")
+            col_inputs["audio"], hashes=_hashes.get("audio"), max_workers=max_workers
         )
         if "audio" in col_inputs
         else None,
         video_statistics=calculate_video_statistics(
-            col_inputs["video"], hashes=_hashes.get("video")
+            col_inputs["video"], hashes=_hashes.get("video"), max_workers=max_workers
         )
         if "video" in col_inputs
         else None,
@@ -428,6 +455,7 @@ def _compute_side_statistics(
     col_modalities: list[tuple[str, str]],
     load_col: Callable[[str], list],
     n: int,
+    max_workers: int | None = None,
 ) -> tuple[dict[str, Any], list[list[str]]]:
     """Compute per-modality statistics and per-row hashes for one side of a pair.
 
@@ -436,6 +464,7 @@ def _compute_side_statistics(
             which dataset column carries which modality for this side.
         load_col: Callable that loads a column by name from the dataset.
         n: Number of samples.
+        max_workers: Maximum number of worker threads for hash computation.
 
     Returns a dict mapping ``{modality}_statistics`` keys to computed statistics
     objects (``None`` for absent modalities), and a list of per-row hash lists
@@ -450,7 +479,7 @@ def _compute_side_statistics(
     all_hashes: list[list[str]] = [[] for _ in range(n)]
     for col, modality in col_modalities:
         data = load_col(col)
-        hashes = _HASH_FN[modality](data)
+        hashes = _HASH_FN[modality](data, max_workers=max_workers)
         stats[f"{modality}_statistics"] = _STAT_FN[modality](data, hashes=hashes)
         for i, h in enumerate(hashes):
             all_hashes[i].append(h)
@@ -462,6 +491,7 @@ def calculate_pair_modality_statistics(
     col_modalities2: list[tuple[str, str]],
     load_col: Callable[[str], list],
     n: int,
+    max_workers: int | None = None,
 ) -> PairModalityStatistics:
     """Compute per-modality statistics for a paired dataset.
 
@@ -472,9 +502,14 @@ def calculate_pair_modality_statistics(
         col_modalities2: ``[(column_name, modality), ...]`` for side 2.
         load_col: Callable that loads a column by name from the dataset split.
         n: Number of samples.
+        max_workers: Maximum number of worker threads for hash computation.
     """
-    s1, all_h1 = _compute_side_statistics(col_modalities1, load_col, n)
-    s2, all_h2 = _compute_side_statistics(col_modalities2, load_col, n)
+    s1, all_h1 = _compute_side_statistics(
+        col_modalities1, load_col, n, max_workers=max_workers
+    )
+    s2, all_h2 = _compute_side_statistics(
+        col_modalities2, load_col, n, max_workers=max_workers
+    )
     unique_pairs = len({(tuple(r1), tuple(r2)) for r1, r2 in zip(all_h1, all_h2)})
 
     return PairModalityStatistics(
@@ -500,6 +535,7 @@ _HASH_FN: dict[str, Any] = {
 
 def _compute_modality_hashes(
     col_inputs: dict[Modalities, list[Any]],
+    max_workers: int | None = None,
 ) -> dict[str, list[str]]:
     """Compute per-sample hashes for each modality using the shared hash functions.
 
@@ -507,7 +543,10 @@ def _compute_modality_hashes(
     callers can pass the result to both statistics functions and intersection checks
     without decoding the data twice.
     """
-    return {mod: _HASH_FN[mod](values) for mod, values in col_inputs.items()}
+    return {
+        mod: _HASH_FN[mod](values, max_workers=max_workers)
+        for mod, values in col_inputs.items()
+    }
 
 
 def _count_samples_in_train(
@@ -517,7 +556,7 @@ def _count_samples_in_train(
     """Count unique test samples (by row-tuple hash) that also appear in the train split.
 
     Args:
-        test_hashes: Per-modality hash lists for the test split (from :func:`_compute_modality_hashes`).
+        test_hashes: Per-modality hash lists for the test split (from `_compute_modality_hashes`).
         train_hashes: Per-modality hash lists for the train split, or ``None`` when
             the evaluated split *is* the train split.
 

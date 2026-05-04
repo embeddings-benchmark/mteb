@@ -96,7 +96,11 @@ class AbsTaskZeroShotClassification(AbsTask):
                 del self.dataset[split]
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> ZeroShotClassificationDescriptiveStatistics:
         if isinstance(self.input_column_name, str):
             col_map = {self.metadata.modalities[0]: self.input_column_name}
@@ -120,7 +124,9 @@ class AbsTaskZeroShotClassification(AbsTask):
             col_inputs = {mod: ds[col] for mod, col in col_map.items()}
             labels = ds[self.label_column_name]
 
-        modality_stats = calculate_single_input_modality_statistics(col_inputs)
+        modality_stats = calculate_single_input_modality_statistics(
+            col_inputs, max_workers=num_proc
+        )
         return ZeroShotClassificationDescriptiveStatistics(
             num_samples=len(ds[self.label_column_name]),
             **modality_stats,

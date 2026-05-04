@@ -489,7 +489,8 @@ class AbsTaskRetrieval(AbsTask):
         split: str,
         hf_subset: str | None = None,
         compute_overall: bool = False,
-        num_proc: int | None = None,
+        num_proc: int
+        | None = None,  # used both for dataset conversion and hash computation
     ) -> RetrievalDescriptiveStatistics:
         self.convert_v1_dataset_format_to_v2(num_proc)
         if hf_subset and hf_subset in self.dataset:
@@ -579,8 +580,12 @@ class AbsTaskRetrieval(AbsTask):
         if "video" in queries_modalities:
             queries_col_inputs["video"] = queries["video"]
 
-        corpus_stats = calculate_single_input_modality_statistics(corpus_col_inputs)
-        queries_stats = calculate_single_input_modality_statistics(queries_col_inputs)
+        corpus_stats = calculate_single_input_modality_statistics(
+            corpus_col_inputs, max_workers=num_proc
+        )
+        queries_stats = calculate_single_input_modality_statistics(
+            queries_col_inputs, max_workers=num_proc
+        )
 
         number_of_characters = sum(
             stat["total_text_length"]
