@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import tempfile
 from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
@@ -25,6 +26,8 @@ from ._benchmark_metrics import (
 if TYPE_CHECKING:
     from mteb.abstasks.aggregated_task import AbsTaskAggregate
     from mteb.results import BenchmarkResults, ModelResult
+
+logger = logging.getLogger(__name__)
 
 
 @lru_cache
@@ -345,6 +348,8 @@ class Benchmark:
     def get_score(
         self,
         results: BenchmarkResults,
+        *,
+        raise_error: bool = False,
     ) -> dict[str, dict[str, float | None]]:
         """Get aggregated scores for all models in *results*.
 
@@ -354,6 +359,7 @@ class Benchmark:
         Args:
             results: A `BenchmarkResults` object containing the model
                 results to score.
+            raise_error: Weather to raise an error on missing results.
 
         Returns:
             A dict mapping each model name to a dict with the keys:
@@ -371,8 +377,21 @@ class Benchmark:
         per_task_rows: dict[str, dict[str, float | None]] = {}
 
         for model_result in bench_results:
-            scores[model_result.model_name] = self._get_model_score(model_result)
+            per_task_rows[model_result.model_name] = {}
             filtered = model_result.select_tasks(self.tasks).task_results
+            try:
+                scores[model_result.model_name] = self._get_model_score(model_result)
+            except ValueError:
+                if raise_error:
+                    raise
+                logger.warning(
+                    "Some task results are missing. Filling results with None"
+                )
+                scores[model_result.model_name] = {
+                    t.metadata.name: None for t in self.tasks
+                }
+                continue
+
             per_task_rows[model_result.model_name] = {
                 tr.task_name: tr.get_score() for tr in filtered
             }
