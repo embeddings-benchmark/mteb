@@ -10,7 +10,6 @@ from mteb.get_tasks import get_tasks
 _HISTORIC_DATASETS = []
 
 
-# TODO https://github.com/embeddings-benchmark/mteb/issues/4378
 @pytest.mark.parametrize(
     "task",
     get_tasks(exclude_superseded=False, exclude_aggregate=False, exclude_beta=False),
