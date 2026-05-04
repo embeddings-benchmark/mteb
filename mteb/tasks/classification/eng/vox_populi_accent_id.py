@@ -1,5 +1,8 @@
+from datasets import DatasetDict
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.tasks.classification._audio_validation import is_valid_audio_example
 
 
 class VoxPopuliAccentID(AbsTaskClassification):
@@ -54,21 +57,10 @@ Dupoux, Emmanuel},
     is_cross_validation: bool = True
 
     def dataset_transform(self, **kwargs):
-        import numpy as np
-        from datasets import DatasetDict
+        del kwargs
 
         test_ds = self.dataset["test"]
-
-        def is_valid_audio(example):
-            audio_arr = example.get("audio", {}).get("array", None)
-            # require at least 500 samples (so that Kaldi fbank(window_size=400) won't fail)
-            if (audio_arr is None) or (len(audio_arr) < 500):
-                return False
-            if np.isnan(audio_arr).any() or np.isinf(audio_arr).any():
-                return False
-            return True
-
-        filtered_test = test_ds.filter(is_valid_audio)
+        filtered_test = test_ds.filter(is_valid_audio_example)
 
         # Create a new DatasetDict that has both "train" and "test" = filtered_test
         self.dataset = DatasetDict(
