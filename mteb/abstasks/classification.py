@@ -239,7 +239,7 @@ class AbsTaskClassification(AbsTask):
 
         return scores  # type: ignore[return-value]
 
-    def _evaluate_subset(
+    def _evaluate_subset(  # noqa: PLR0914
         self,
         model: MTEBModels,
         data_split: DatasetDict,
@@ -257,6 +257,36 @@ class AbsTaskClassification(AbsTask):
         train_split = data_split[self.train_split]
         eval_split = data_split[hf_split]
 
+        # Phase 1: simulate all undersamplings (cheap — label lookups only) to
+        # collect exactly which training indices each experiment needs.
+        sim_idxs = None
+        all_selected_idxs: list[list[int]] = []
+        for i in range(self.n_experiments):
+            _, sim_idxs, selected_idx = self._undersample_data(train_split, i, sim_idxs)
+            all_selected_idxs.append(selected_idx)
+
+        # Phase 2: encode only the union of all needed training samples once.
+        union_idxs = sorted(set().union(*all_selected_idxs))
+        idx_to_pos = {orig: pos for pos, orig in enumerate(union_idxs)}
+        dataloader_train = create_dataloader(
+            train_split.select(union_idxs),
+            task_metadata=self.metadata,
+            input_column=self.input_column_name,
+            num_proc=num_proc,
+            **encode_kwargs,
+        )
+        logger.info(
+            f"Encoding {len(union_idxs)} unique training samples "
+            f"(union across {self.n_experiments} experiments)..."
+        )
+        union_cache = model.encode(
+            dataloader_train,
+            task_metadata=self.metadata,
+            hf_split=self.train_split,
+            hf_subset=hf_subset,
+            **encode_kwargs,
+        )
+
         scores = []
         # we store idxs to make the shuffling reproducible
         test_cache, idxs = None, None
@@ -264,6 +294,7 @@ class AbsTaskClassification(AbsTask):
         all_predictions = []
         for i in range(self.n_experiments):
             logger.info(f"Running experiment ({i}/{self.n_experiments})")
+            sub_train_cache = union_cache[[idx_to_pos[j] for j in all_selected_idxs[i]]]
             scores_exp, predictions, idxs, test_cache = self._run_experiment(
                 model,
                 train_split,
@@ -274,6 +305,7 @@ class AbsTaskClassification(AbsTask):
                 encode_kwargs=encode_kwargs,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
+                sub_train_cache=sub_train_cache,
                 num_proc=num_proc,
             )
 
@@ -386,6 +418,7 @@ class AbsTaskClassification(AbsTask):
         hf_split: str,
         hf_subset: str,
         train_cache: Array | None = None,
+        sub_train_cache: Array | None = None,
         num_proc: int | None = None,
     ) -> tuple[ClassificationMetrics, list[float], list[int], Array]:
         train_dataset, idxs, selected_idx = self._undersample_data(
@@ -393,8 +426,7 @@ class AbsTaskClassification(AbsTask):
             experiment_num,
             idxs,
         )
-        sub_train_cache = None
-        if train_cache is not None:
+        if sub_train_cache is None and train_cache is not None:
             sub_train_cache = train_cache[selected_idx]
 
         evaluator = self.evaluator(
