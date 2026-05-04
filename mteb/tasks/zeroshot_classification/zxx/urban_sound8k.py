@@ -54,7 +54,7 @@ class UrbanSound8kZeroshotClassification(AbsTaskZeroShotClassification):
             "This is a sound of street music",
         ]
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
         )

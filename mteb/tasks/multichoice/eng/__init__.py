@@ -1,3 +1,7 @@
+from .av_speaker_bench import (
+    AVSpeakerBenchVideoAudioCentricQA,
+    AVSpeakerBenchVideoCentricQA,
+)
 from .avmeme_exam import AVMemeExamVideoAudioCentricQA, AVMemeExamVideoCentricQA
 from .avqa import AVQAVideoAudioCentricQA, AVQAVideoCentricQA
 from .blink_it2i_multi_choice import BLINKIT2IMultiChoice
@@ -6,11 +10,16 @@ from .cv_bench import CVBenchCount, CVBenchDepth, CVBenchDistance, CVBenchRelati
 from .daily_omni import DailyOmniVideoAudioCentricQA, DailyOmniVideoCentricQA
 from .egoschema import EgoSchemaVideoCentricQA
 from .nextqa import NExTQAVideoCentricQA
+from .omni_video_bench import (
+    OmniVideoBenchVideoAudioCentricQA,
+    OmniVideoBenchVideoCentricQA,
+)
 from .perception_test import (
     PerceptionTestVideoAudioCentricQA,
     PerceptionTestVideoCentricQA,
 )
 from .video_mme import VideoMMEShortVideoAudioCentricQA, VideoMMEShortVideoCentricQA
+from .worldqa import WorldQAVideoAudioCentricQA, WorldQAVideoCentricQA
 from .worldsense import WorldSense1MinVideoAudioCentricQA, WorldSense1MinVideoCentricQA
 
 __all__ = [
@@ -18,6 +27,8 @@ __all__ = [
     "AVMemeExamVideoCentricQA",
     "AVQAVideoAudioCentricQA",
     "AVQAVideoCentricQA",
+    "AVSpeakerBenchVideoAudioCentricQA",
+    "AVSpeakerBenchVideoCentricQA",
     "BLINKIT2IMultiChoice",
     "BLINKIT2TMultiChoice",
     "CVBenchCount",
@@ -28,10 +39,14 @@ __all__ = [
     "DailyOmniVideoCentricQA",
     "EgoSchemaVideoCentricQA",
     "NExTQAVideoCentricQA",
+    "OmniVideoBenchVideoAudioCentricQA",
+    "OmniVideoBenchVideoCentricQA",
     "PerceptionTestVideoAudioCentricQA",
     "PerceptionTestVideoCentricQA",
     "VideoMMEShortVideoAudioCentricQA",
     "VideoMMEShortVideoCentricQA",
+    "WorldQAVideoAudioCentricQA",
+    "WorldQAVideoCentricQA",
     "WorldSense1MinVideoAudioCentricQA",
     "WorldSense1MinVideoCentricQA",
 ]
