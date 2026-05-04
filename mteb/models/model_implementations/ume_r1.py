@@ -97,7 +97,14 @@ class UMER1Wrapper(AbsEncoder):
         with torch.no_grad():
             for batch in tqdm(inputs, desc="Encoding", disable=not show_progress_bar):
                 messages = self._build_messages(batch)
-                model_inputs = self._process_to_model_inputs(messages)
+                model_inputs = self.processor.apply_chat_template(
+                    messages,
+                    tokenize=True,
+                    add_generation_prompt=True,
+                    return_dict=True,
+                    padding=True,
+                    return_tensors="pt",
+                ).to(self.device)
 
                 # Inference: Generation of the output
                 output = self.model.generate(
@@ -154,33 +161,6 @@ class UMER1Wrapper(AbsEncoder):
             messages.append([{"role": "user", "content": content}])
 
         return messages
-
-    def _process_to_model_inputs(self, messages: list[list[dict]]) -> dict:
-        """Applies chat templates and processes vision info natively."""
-        texts = [
-            self.processor.apply_chat_template(
-                msg, tokenize=False, add_generation_prompt=True
-            )
-            for msg in messages
-        ]
-
-        # Extract media from messages to pass to the processor
-        images = [
-            [c["image"] for c in m[0]["content"] if c["type"] == "image"]
-            for m in messages
-        ]
-        videos = [
-            [c["video"] for c in m[0]["content"] if c["type"] == "video"]
-            for m in messages
-        ]
-
-        return self.processor(
-            text=texts,
-            images=images if len(images) > 0 else None,
-            videos=videos if len(videos) > 0 else None,
-            padding=True,
-            return_tensors="pt",
-        ).to(self.device)
 
     def _get_embedding_idx(self, generated_ids_trimmed: torch.Tensor) -> list[int]:
         """Finds the step index of the embedding token for each sequence in the batch."""
