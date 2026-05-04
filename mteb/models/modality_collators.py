@@ -92,19 +92,29 @@ class AudioCollator:
         import torchaudio
 
         audio = audio["audio"]
-        if audio["sampling_rate"] != target_sampling_rate:
-            logger.debug(
-                f"Resampling audio from {audio['sampling_rate']} Hz to {target_sampling_rate} Hz."
+
+        try:
+            if audio["sampling_rate"] != target_sampling_rate:
+                logger.debug(
+                    f"Resampling audio from {audio['sampling_rate']} Hz to {target_sampling_rate} Hz."
+                )
+                resampler = torchaudio.transforms.Resample(
+                    orig_freq=audio["sampling_rate"],
+                    new_freq=target_sampling_rate,
+                )
+                audio_array = torch.from_numpy(audio["array"]).float()
+                audio_array = resampler(audio_array)
+                audio_array = audio_array.numpy()
+            else:
+                audio_array = audio["array"]
+        except (RuntimeError, ValueError) as e:
+            # Handle corrupted audio files by returning silent audio
+            logger.warning(f"Corrupted audio detected, replacing with silence: {e}")
+            # Create silent audio array with appropriate length
+            fallback_length = (
+                max_samples if max_samples is not None else target_sampling_rate
             )
-            resampler = torchaudio.transforms.Resample(
-                orig_freq=audio["sampling_rate"],
-                new_freq=target_sampling_rate,
-            )
-            audio_array = torch.from_numpy(audio["array"]).float()
-            audio_array = resampler(audio_array)
-            audio_array = audio_array.numpy()
-        else:
-            audio_array = audio["array"]
+            audio_array = np.zeros(fallback_length, dtype=np.float32)
 
         # Convert to mono if needed
         if audio_array.ndim > 1 and audio_array.shape[0] > 1:
