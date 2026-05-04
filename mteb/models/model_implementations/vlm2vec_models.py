@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Unpack
 
 import torch
 from tqdm.auto import tqdm
@@ -11,12 +11,13 @@ from mteb._requires_package import (
 )
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -210,7 +211,7 @@ class VLM2VecWrapper(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
             all_fused_embeddings = []
@@ -263,8 +264,247 @@ class VLM2VecWrapper(AbsEncoder):
         raise ValueError
 
 
+_VLM2VEC2_VIDEO_TOKEN = "<|video_pad|>"  # noqa: S105
+_VLM2VEC2_IMAGE_TOKEN = "<|image_pad|>"  # noqa: S105
+
+_VLM2VEC2_TASK_PROMPTS: dict[str, dict[str, str]] = {
+    # --- Video retrieval ---
+    "DiDeMoT2VRetrieval": {
+        "query": "Find a video that includes the following described scenes:",
+        "document": "Understand the content of the provided video.",
+    },
+    "DiDeMoV2TRetrieval": {
+        "query": "Understand the content of the provided video.",
+        "document": "Find a video that includes the following described scenes:",
+    },
+    "MSRVTTT2V": {
+        "query": "Find a video that contains the following visual content:",
+        "document": "Understand the content of the provided video.",
+    },
+    "MSRVTTV2T": {
+        "query": "Understand the content of the provided video.",
+        "document": "Find a video that contains the following visual content:",
+    },
+    "MSVDT2VRetrieval": {
+        "query": "Find the video snippet that corresponds to the given summary:",
+        "document": "Understand the content of the provided video.",
+    },
+    "MSVDV2TRetrieval": {
+        "query": "Understand the content of the provided video.",
+        "document": "Find the video snippet that corresponds to the given summary:",
+    },
+    "VATEXT2VRetrieval": {
+        "query": "Select a video that fits the description provided:",
+        "document": "Understand the content of the provided video.",
+    },
+    "VATEXV2TRetrieval": {
+        "query": "Understand the content of the provided video.",
+        "document": "Select a video that fits the description provided:",
+    },
+    "YouCook2T2VRetrieval": {
+        "query": "Find a video that demonstrates the following action while making a recipe:",
+        "document": "Understand the content of the provided video.",
+    },
+    "YouCook2V2TRetrieval": {
+        "query": "Understand the content of the provided video.",
+        "document": "Find a video that demonstrates the following action while making a recipe:",
+    },
+    # --- Image retrieval (VisRAG) ---
+    "VisRAGRetChartQA": {
+        "query": "Find a document image that matches the given query:",
+        "document": "Understand the content of the provided document image.",
+    },
+    "VisRAGRetInfoVQA": {
+        "query": "Find a document image that matches the given query:",
+        "document": "Understand the content of the provided document image.",
+    },
+    "VisRAGRetMPDocVQA": {
+        "query": "Find a document image that matches the given query:",
+        "document": "Understand the content of the provided document image.",
+    },
+    "VisRAGRetArxivQA": {
+        "query": "Find a document image that matches the given query:",
+        "document": "Understand the content of the provided document image.",
+    },
+    "VisRAGRetPlotQA": {
+        "query": "Find a document image that matches the given query:",
+        "document": "Understand the content of the provided document image.",
+    },
+    "VisRAGRetSlideVQA": {
+        "query": "Find a document image that matches the given query:",
+        "document": "Understand the content of the provided document image.",
+    },
+    # --- Image retrieval (Vidore) ---
+    **{
+        name: {
+            "query": "Find a document image that matches the given query:",
+            "document": "Understand the content of the provided document image.",
+        }
+        for name in (
+            "VidoreArxivQARetrieval",
+            "VidoreDocVQARetrieval",
+            "VidoreInfoVQARetrieval",
+            "VidoreTabfquadRetrieval",
+            "VidoreTatdqaRetrieval",
+            "VidoreShiftProjectRetrieval",
+            "VidoreSyntheticDocQAAIRetrieval",
+            "VidoreSyntheticDocQAEnergyRetrieval",
+            "VidoreSyntheticDocQAGovernmentReportsRetrieval",
+            "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
+            "Vidore2ESGReportsRetrieval",
+            "Vidore2EconomicsReportsRetrieval",
+            "Vidore2BioMedicalLecturesRetrieval",
+            "Vidore2ESGReportsHLRetrieval",
+            "Vidore3FinanceEnRetrieval",
+            "Vidore3FinanceEnRetrieval.v2",
+            "Vidore3FinanceFrRetrieval",
+            "Vidore3FinanceFrRetrieval.v2",
+            "Vidore3IndustrialRetrieval",
+            "Vidore3IndustrialRetrieval.v2",
+            "Vidore3PharmaceuticalsRetrieval",
+            "Vidore3PharmaceuticalsRetrieval.v2",
+            "Vidore3ComputerScienceRetrieval",
+            "Vidore3ComputerScienceRetrieval.v2",
+            "Vidore3HrRetrieval",
+            "Vidore3HrRetrieval.v2",
+            "Vidore3EnergyRetrieval",
+            "Vidore3EnergyRetrieval.v2",
+            "Vidore3PhysicsRetrieval",
+            "Vidore3PhysicsRetrieval.v2",
+            "Vidore3NuclearRetrieval",
+            "Vidore3NuclearRetrieval.v2",
+            "Vidore3TelecomRetrieval",
+            "Vidore3TelecomRetrieval.v2",
+            "KoVidore2CybersecurityRetrieval",
+            "KoVidore2EconomicRetrieval",
+            "KoVidore2EnergyRetrieval",
+            "KoVidore2HrRetrieval",
+        )
+    },
+}
+
+
+class VLM2VEC2Wrapper(AbsEncoder):
+    def __init__(
+        self,
+        model: str,
+        revision: str | None = None,
+        *,
+        device: str | None = None,
+        embed_dim: int | None = None,
+        **kwargs,
+    ) -> None:
+        self.device = device
+        from peft import PeftModel
+        from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
+
+        base_model_name = "Qwen/Qwen2-VL-2B-Instruct"
+        self.processor = AutoProcessor.from_pretrained(base_model_name)
+        self.processor.padding_side = "left"
+
+        base_model = Qwen2VLForConditionalGeneration.from_pretrained(
+            base_model_name, **kwargs
+        )
+        self.model = PeftModel.from_pretrained(base_model, model, revision=revision)
+        self.model.merge_and_unload()
+        self.model.to(device)
+        self.model.eval()
+
+    @staticmethod
+    def _pooling(
+        last_hidden_state: torch.Tensor, attention_mask: torch.Tensor
+    ) -> torch.Tensor:
+        left_padding = attention_mask[:, -1].sum() == attention_mask.shape[0]
+        batch_size = last_hidden_state.shape[0]
+        if left_padding:
+            reps = last_hidden_state[torch.arange(batch_size), -1, :]
+        else:
+            eos_indices = attention_mask.sum(dim=1) - 1
+            reps = last_hidden_state[
+                torch.arange(batch_size, device=last_hidden_state.device), eos_indices
+            ]
+        return torch.nn.functional.normalize(reps, p=2, dim=-1)
+
+    @torch.inference_mode()
+    def encode(  # noqa: PLR0914
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Unpack[EncodeKwargs],
+    ) -> Array:
+        features = inputs.dataset.features
+        has_text = "text" in features
+        has_image = "image" in features
+        has_video = "video" in features
+
+        show_progress_bar = kwargs.get("show_progress_bar", True)
+
+        all_embeddings: list[torch.Tensor] = []
+
+        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
+            batch_embeddings: list[torch.Tensor] = []
+            batch_size = len(next(iter(batch.values())))
+
+            for i in range(batch_size):
+                tokens = []
+                images = [batch["image"][i]] if has_image else None
+                videos = [batch["video"][i]] if has_video else None
+
+                if has_image:
+                    tokens.append(_VLM2VEC2_IMAGE_TOKEN)
+                if has_video:
+                    tokens.append(_VLM2VEC2_VIDEO_TOKEN)
+
+                text = batch["text"][i] if has_text else None
+                task_prompts = _VLM2VEC2_TASK_PROMPTS.get(task_metadata.name, {})
+                prompt_key = "query" if prompt_type == PromptType.query else "document"
+                instruction = task_prompts.get(prompt_key, "")
+                prefix = " ".join(tokens)
+                prompt = (
+                    f"{prefix} {instruction} {text}".strip()
+                    if text
+                    else f"{prefix} {instruction}".strip()
+                )
+
+                proc_inputs = self.processor(
+                    text=prompt,
+                    images=images,
+                    videos=videos,
+                    return_tensors="pt",
+                )
+                proc_inputs = {k: v.to(self.device) for k, v in proc_inputs.items()}
+
+                if has_video:
+                    proc_inputs["pixel_values_videos"] = proc_inputs[
+                        "pixel_values_videos"
+                    ].unsqueeze(0)
+                    proc_inputs["video_grid_thw"] = proc_inputs[
+                        "video_grid_thw"
+                    ].unsqueeze(0)
+
+                output = self.model(
+                    **proc_inputs, return_dict=True, output_hidden_states=True
+                )
+                hidden_states = output.hidden_states[-1]
+                emb = self._pooling(hidden_states, proc_inputs["attention_mask"])
+                batch_embeddings.append(emb.cpu().to(torch.float32))
+
+            if batch_embeddings:
+                all_embeddings.append(torch.cat(batch_embeddings, dim=0))
+
+        return torch.cat(all_embeddings, dim=0)
+
+
 vlm2vec_training_datasets = set(
     # MMEB-train
+)
+
+vlm2vec2_training_datasets = set(
+    # MMEBv2-train
 )
 
 vlm2vec_lora = ModelMeta(
@@ -316,5 +556,44 @@ vlm2vec_full = ModelMeta(
     use_instructions=True,
     training_datasets=vlm2vec_training_datasets,
     citation=VLM2VEC_CITATION,
+    extra_requirements_groups=["peft"],
+)
+
+vlm2vec2 = ModelMeta(
+    loader=VLM2VEC2Wrapper,
+    name="VLM2Vec/VLM2Vec-V2.0",
+    revision="e39ff079b8275ef876d3656da8c0bddbff3c4dde",
+    release_date="2025-04-30",
+    languages=["eng-Latn"],
+    n_parameters=2208985600,
+    n_embedding_parameters=233_373_696,
+    memory_usage_mb=4213,
+    max_tokens=32768,
+    embed_dim=1536,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["Transformers", "safetensors"],
+    reference="https://huggingface.co/VLM2Vec/VLM2Vec-V2.0",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=None,
+    training_datasets=vlm2vec_training_datasets | vlm2vec2_training_datasets,
+    adapted_from="Qwen/Qwen2-VL-2B-Instruct",
+    superseded_by=None,
+    modalities=["text", "image", "video"],
+    model_type=["dense"],
+    citation="""
+@misc{meng2025vlm2vecv2advancingmultimodalembedding,
+    title={VLM2Vec-V2: Advancing Multimodal Embedding for Videos, Images, and Visual Documents},
+    author={Rui Meng and Ziyan Jiang and Ye Liu and Mingyi Su and Xinyi Yang and Yuepeng Fu and Can Qin and Zeyuan Chen and Ran Xu and Caiming Xiong and Yingbo Zhou and Wenhu Chen and Semih Yavuz},
+    year={2025},
+    eprint={2507.04590},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV},
+    url={https://arxiv.org/abs/2507.04590},
+}""",
+    contacts=None,
+    output_dtypes=None,
     extra_requirements_groups=["peft"],
 )
