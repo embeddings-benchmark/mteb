@@ -466,6 +466,7 @@ class ModelResult(BaseModel):
         *,
         benchmark: Benchmark | None = None,
         create_pr: bool = False,
+        raise_error: bool = False,
     ) -> None:
         """Push the model results to the Hugging Face Hub.
 
@@ -473,10 +474,19 @@ class ModelResult(BaseModel):
             user: The user or organization of results source.
             benchmark: Whether to push the benchmark results.
             create_pr: Whether to create a pull request
+            raise_error: Whether to push results if model have missing scores.
         """
         benchmark_result = None
         if benchmark is not None:
-            benchmark_score = benchmark._get_model_score(self)["Mean(Task)"]
+            try:
+                benchmark_score = benchmark._get_model_score(self)["Mean(Task)"]
+            except ValueError:
+                if raise_error:
+                    raise
+                logger.warning(
+                    f"Model {self.model_name} have missing scores on {benchmark.name}. Skipping it"
+                )
+
             benchmark_result = HFEvalResult(
                 dataset=HFEvalResultDataset(
                     id=benchmark.benchmark_hf_repo,
