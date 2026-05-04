@@ -218,8 +218,8 @@ class FramesCollator:
             if max_frames is not None:
                 target = min(target, max_frames)
 
-        if num_source_frames < target:
-            # Repeat frames to reach exactly ``target`` (fixed-count models break on shorter input).
+        if num_frames is not None and num_source_frames < target:
+            # Repeat frames to reach exactly ``num_frames``.
             selected_frames = (
                 list(range(num_source_frames)) * ((target // num_source_frames) + 1)
             )[:target]
