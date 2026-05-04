@@ -74,6 +74,9 @@ def compute_video_hashes(
         num_frames = meta.num_frames
         avg_fps = meta.average_fps
 
+        if num_frames is None or num_frames == 0:
+            raise ValueError(f"Number of frames is {num_frames}")
+
         if num_frames is not None and avg_fps is not None and avg_fps > 0:
             step = max(1, round(avg_fps))
             frame_indices = list(range(0, num_frames, step))
