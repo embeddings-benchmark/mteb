@@ -123,8 +123,6 @@ class UMER1Wrapper(AbsEncoder):
 
     @staticmethod
     def _build_messages(batch: dict[str, Any]) -> list[list[dict]]:
-        import torchvision.transforms.functional as F
-
         batch_texts = batch.get("text", [])
         batch_images = batch.get("image", [])
         batch_videos = batch.get("video", [])
@@ -149,8 +147,6 @@ class UMER1Wrapper(AbsEncoder):
 
             if batch_videos:
                 video_content = batch_videos[i]
-                if isinstance(video_content, torch.Tensor):
-                    video_content = [F.to_pil_image(frame) for frame in video_content]
                 content.append({"type": "video", "video": video_content})
 
             final_text = f"<disc_emb>\n{UME_R1_EMBED_PROMPT}"
@@ -160,9 +156,7 @@ class UMER1Wrapper(AbsEncoder):
         return messages
 
     def _process_to_model_inputs(self, messages: list[list[dict]]) -> dict:
-        """Applies chat templates and processes vision info into model tensors."""
-        from qwen_vl_utils import process_vision_info
-
+        """Applies chat templates and processes vision info natively."""
         texts = [
             self.processor.apply_chat_template(
                 msg, tokenize=False, add_generation_prompt=True
@@ -170,12 +164,20 @@ class UMER1Wrapper(AbsEncoder):
             for msg in messages
         ]
 
-        image_inputs, video_inputs = process_vision_info(messages)
+        # Extract media from messages to pass to the processor
+        images = [
+            [c["image"] for c in m[0]["content"] if c["type"] == "image"]
+            for m in messages
+        ]
+        videos = [
+            [c["video"] for c in m[0]["content"] if c["type"] == "video"]
+            for m in messages
+        ]
 
         return self.processor(
             text=texts,
-            images=image_inputs,
-            videos=video_inputs,
+            images=images if len(images) > 0 else None,
+            videos=videos if len(videos) > 0 else None,
             padding=True,
             return_tensors="pt",
         ).to(self.device)
