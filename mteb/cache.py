@@ -9,7 +9,7 @@ import shutil
 import subprocess
 import warnings
 from collections import defaultdict
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
@@ -26,7 +26,7 @@ from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable, Sequence
+    from collections.abc import Iterable
 
     from mteb.types import ModelName, Revision
 
@@ -825,7 +825,12 @@ class ResultCache:
     def load_results(
         self,
         models: Sequence[str] | Iterable[ModelMeta] | None = None,
-        tasks: Sequence[str] | Iterable[AbsTask] | Benchmark | str | None = None,
+        tasks: Sequence[str]
+        | Iterable[AbsTask]
+        | Benchmark
+        | Sequence[Benchmark]
+        | str
+        | None = None,
         *,
         require_model_meta: bool = True,
         include_remote: bool = True,
@@ -866,6 +871,14 @@ class ResultCache:
         """
         if isinstance(tasks, str):
             tasks = get_benchmark(tasks)
+
+        benchmarks = None
+        if isinstance(tasks, Sequence) and isinstance(tasks[0], Benchmark):
+            benchmarks = tasks
+            tasks = [cast("Benchmark", task).tasks for task in tasks]
+
+        if isinstance(tasks, Benchmark):
+            benchmarks = tasks
 
         if isinstance(load_experiments, str):
             load_experiments = LoadExperimentEnum.from_str(load_experiments)
@@ -962,5 +975,5 @@ class ResultCache:
 
         return BenchmarkResults(
             model_results=models_results_object,
-            benchmark=tasks if isinstance(tasks, Benchmark) else None,
+            benchmark=benchmarks,
         )

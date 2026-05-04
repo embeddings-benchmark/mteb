@@ -1434,7 +1434,10 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         model_result.push_model_results(
             user=user,
             create_pr=create_pr,
-            benchmark=tasks if isinstance(tasks, Benchmark) else None,
+            benchmark=tasks
+            if isinstance(tasks, Benchmark)
+            or (isinstance(tasks, Sequence) and isinstance(tasks[0], Benchmark))
+            else None,
         )
 
 
