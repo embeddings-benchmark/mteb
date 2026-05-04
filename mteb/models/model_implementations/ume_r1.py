@@ -56,7 +56,10 @@ class UMER1Wrapper(AbsEncoder):
         self.model = Qwen2VLForConditionalGeneration.from_pretrained(
             model,
             torch_dtype=torch.bfloat16,
-            attn_implementation="flash_attention_2" if is_flash_attn_2_available() else None,
+            attn_implementation=kwargs.get(
+                "attn_implementation",
+                "flash_attention_2" if is_flash_attn_2_available() else None,
+            ),
             **kwargs,
         )
         self.model = self.model.to(self.device)
@@ -107,7 +110,7 @@ class UMER1Wrapper(AbsEncoder):
 
                 # Extract embeddings from the reasoning path
                 gen_embedding = self._extract_generative_reasoning_embeddings(
-                    output, model_inputs, self.gen_emb_id
+                    output, model_inputs
                 )
                 all_embeddings.append(gen_embedding)
 
@@ -126,7 +129,7 @@ class UMER1Wrapper(AbsEncoder):
         batch_images = batch.get("image", [])
         batch_videos = batch.get("video", [])
         batch_size = max(len(batch_texts), len(batch_images), len(batch_videos))
-        # print(batch)
+
         messages = []
         for i in range(batch_size):
             content = []
@@ -177,15 +180,14 @@ class UMER1Wrapper(AbsEncoder):
             return_tensors="pt",
         ).to(self.device)
 
-    @staticmethod
-    def _get_embedding_idx(generated_ids_trimmed: torch.Tensor, emb_id: int | None) -> list[int]:
+    def _get_embedding_idx(self, generated_ids_trimmed: torch.Tensor) -> list[int]:
         """Finds the step index of the embedding token for each sequence in the batch."""
         embedding_idx = []
-        if emb_id is None:
+        if self.gen_emb_id is None:
             return [-1] * generated_ids_trimmed.shape[0]
 
         for out_ids in generated_ids_trimmed:
-            indices = (out_ids == emb_id).nonzero(as_tuple=True)[0]
+            indices = (out_ids == self.gen_emb_id).nonzero(as_tuple=True)[0]
             if indices.numel() > 0:
                 # Add 1 because step 0 in output.hidden_states is the prefill
                 embedding_idx.append(indices[-1].item() + 1)
@@ -193,18 +195,17 @@ class UMER1Wrapper(AbsEncoder):
                 embedding_idx.append(-1)
         return embedding_idx
 
-    @staticmethod
     def _extract_generative_reasoning_embeddings(
-        output: Any, model_inputs: dict, emb_id: int | None
+        self, output: Any, model_inputs: dict
     ) -> torch.Tensor:
         """Helper to extract embeddings from the generated output."""
         sequences = output.sequences
         input_len = model_inputs["input_ids"].shape[1]
-        
+
         gen_sequences = sequences[:, input_len:]
-        
+
         # Get the target steps for each sequence in the batch
-        embedding_idxs = UMER1Wrapper._get_embedding_idx(gen_sequences, emb_id)
+        embedding_idxs = self._get_embedding_idx(gen_sequences)
 
         batch_reps = []
         for idx in range(sequences.shape[0]):
@@ -215,7 +216,7 @@ class UMER1Wrapper(AbsEncoder):
                 emb = output.hidden_states[0][-1][idx, -1, :]
             else:
                 emb = output.hidden_states[target_step][-1][idx, 0, :]
-                
+
             batch_reps.append(emb)
 
         embeddings = torch.stack(batch_reps).cpu().to(torch.float32)
@@ -251,7 +252,7 @@ ume_r1_2b = ModelMeta(
     name="zhibinlan/UME-R1-2B",
     revision="e7aaa253cd315be20bd15c8704ad281b4fdf82c9",
     n_parameters=2_208_985_600,
-    n_embedding_parameters=None,
+    n_embedding_parameters=233_373_696,
     memory_usage_mb=8427,
     max_tokens=32768,
     embed_dim=1536,
@@ -263,7 +264,7 @@ ume_r1_7b = ModelMeta(
     name="zhibinlan/UME-R1-7B",
     revision="b5c08e3273d979e0f22445306717c39ca8d45df0",
     n_parameters=8_291_375_616,
-    n_embedding_parameters=None,
+    n_embedding_parameters=544_997_376,
     memory_usage_mb=31629,
     max_tokens=32768,
     embed_dim=3584,
