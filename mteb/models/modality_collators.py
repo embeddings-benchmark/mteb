@@ -218,8 +218,14 @@ class FramesCollator:
             if max_frames is not None:
                 target = min(target, max_frames)
 
-        frame_step = max(1, num_source_frames // target)
-        selected_frames = list(range(0, num_source_frames, frame_step))[:target]
+        if num_frames is not None and num_source_frames < target:
+            # Repeat frames to reach exactly ``num_frames``.
+            selected_frames = (
+                list(range(num_source_frames)) * ((target // num_source_frames) + 1)
+            )[:target]
+        else:
+            frame_step = max(1, num_source_frames // target)
+            selected_frames = list(range(0, num_source_frames, frame_step))[:target]
         return video.get_frames_at(selected_frames).data
 
 
