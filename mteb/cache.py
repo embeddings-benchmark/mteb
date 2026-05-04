@@ -872,10 +872,10 @@ class ResultCache:
         if isinstance(tasks, str):
             tasks = get_benchmark(tasks)
 
-        benchmarks = None
+        benchmarks: Sequence[Benchmark] | Benchmark | None = None
         if isinstance(tasks, Sequence) and isinstance(tasks[0], Benchmark):
-            benchmarks = tasks
-            tasks = [cast("Benchmark", task).tasks for task in tasks]
+            benchmarks = tasks  # type: ignore[assignment]
+            tasks = [sub for task in tasks for sub in cast("Benchmark", task).tasks]
 
         if isinstance(tasks, Benchmark):
             benchmarks = tasks
@@ -898,7 +898,7 @@ class ResultCache:
 
         paths = self.get_cache_paths(
             models=models,
-            tasks=tasks,
+            tasks=tasks,  # type: ignore[arg-type]
             require_model_meta=require_model_meta,
             include_remote=include_remote,
             load_experiments=load_experiments,
@@ -911,7 +911,7 @@ class ResultCache:
                 if isinstance(task, AbsTask):
                     task_names[task.metadata.name] = task
                 else:
-                    task_names[task] = None
+                    task_names[cast("str", task)] = None
 
         experiment_names = set()
         if isinstance(experiment_kwargs, Mapping):

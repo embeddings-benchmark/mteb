@@ -475,7 +475,7 @@ class ModelResult(BaseModel):
             create_pr: Whether to create a pull request
         """
         benchmark_results: None | list[HFEvalResult] = None
-        benchmarks: None | list[Benchmark] = None
+        benchmarks: None | Sequence[Benchmark] = None
         if benchmark is not None:
             benchmark_results = []
             benchmarks = [benchmark] if isinstance(benchmark, Benchmark) else benchmark
