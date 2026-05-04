@@ -333,6 +333,10 @@ class Benchmark:
     ) -> dict[str, float | None]:
         """Compute aggregated scores for a single model."""
         filtered = model_result.select_tasks(self.tasks).task_results
+        if len(filtered) < len(self.tasks):
+            raise ValueError(
+                "Some scores of benchmark are missing. Please, run model on full benchmark tasks"
+            )
         return {
             "Mean(Task)": _compute_mean_task(filtered),
             "Mean(TaskType)": _compute_mean_task_type(filtered),
