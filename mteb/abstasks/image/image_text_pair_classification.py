@@ -81,7 +81,11 @@ class AbsTaskImageTextPairClassification(AbsTask):
     texts_column_names: str | Sequence[str] = "caption"
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> ImageTextPairClassificationDescriptiveStatistics:
         if compute_overall:
             dataset = concatenate_datasets(
@@ -122,7 +126,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         return ImageTextPairClassificationDescriptiveStatistics(
             num_samples=num_samples,
             text_statistics=calculate_text_statistics(texts),
-            image_statistics=calculate_image_statistics(images),
+            image_statistics=calculate_image_statistics(images, max_workers=num_proc),
         )
 
     def _evaluate_subset(

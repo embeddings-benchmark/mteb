@@ -185,7 +185,11 @@ class AbsTaskPairClassification(AbsTask):
         return output_scores
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> PairClassificationDescriptiveStatistics:
         if hf_subset:
             dataset = self.dataset[hf_subset][split]
@@ -237,6 +241,7 @@ class AbsTaskPairClassification(AbsTask):
             col_modalities2,
             _get_col_data,
             n,
+            max_workers=num_proc,
         )
 
         number_of_characters = (

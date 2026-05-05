@@ -286,7 +286,11 @@ class AbsTaskClustering(AbsTask):
         }
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> ClusteringFastDescriptiveStatistics:
         if isinstance(self.input_column_name, str):
             col_map = {self.metadata.modalities[0]: self.input_column_name}
@@ -318,7 +322,9 @@ class AbsTaskClustering(AbsTask):
         if labels and isinstance(labels[0], list):
             labels = [item for sublist in labels for item in sublist]
 
-        modality_stats = calculate_single_input_modality_statistics(col_inputs)
+        modality_stats = calculate_single_input_modality_statistics(
+            col_inputs, max_workers=num_proc
+        )
         return ClusteringFastDescriptiveStatistics(
             num_samples=len(labels),
             **modality_stats,

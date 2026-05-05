@@ -128,7 +128,11 @@ class AbsTaskSummarization(AbsTask):
         return evaluator._calculate_metrics(scores)
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> SummarizationDescriptiveStatistics:
         if hf_subset:
             text = self.dataset[hf_subset][split][self.text_column_name]

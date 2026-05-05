@@ -224,7 +224,11 @@ class AbsTaskBitextMining(AbsTask):
         )
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> BitextDescriptiveStatistics:
         pairs_cols = self._get_pairs(self.parallel_subsets)
         if hf_subset:

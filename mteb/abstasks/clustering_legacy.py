@@ -220,7 +220,11 @@ class AbsTaskClusteringLegacy(AbsTask):
         )
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> ClusteringDescriptiveStatistics:
         modality = self.metadata.modalities[0]
         if hf_subset:
@@ -247,7 +251,9 @@ class AbsTaskClusteringLegacy(AbsTask):
         if labels and isinstance(labels[0], list):
             labels = [item for sublist in labels for item in sublist]
 
-        modality_stats = calculate_single_input_modality_statistics(col_inputs)
+        modality_stats = calculate_single_input_modality_statistics(
+            col_inputs, max_workers=num_proc
+        )
         return ClusteringDescriptiveStatistics(
             num_samples=len(col_inputs[modality]),
             **modality_stats,
