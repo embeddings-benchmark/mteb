@@ -13,6 +13,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
+    SentenceTransformerMultimodalEncoderWrapper,
 )
 from mteb.types import PromptType
 
@@ -760,6 +761,81 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
         return embeddings
 
 
+class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        has_video = "video" in inputs.dataset.features
+        has_audio = "audio" in inputs.dataset.features
+        if has_video:
+            from mteb.models.modality_collators import VideoCollator
+
+            inputs.collate_fn = VideoCollator(
+                target_sampling_rate=self.target_sampling_rate or 16000,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+                max_samples=self.max_samples,
+            )
+        elif has_audio:
+            from mteb.models.modality_collators import AudioCollator
+
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.target_sampling_rate or 16000,
+                max_samples=self.max_samples,
+            )
+
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+        jina_task_name = (
+            self.model_prompts.get(prompt_name, None)
+            if self.model_prompts and prompt_name
+            else None
+        )
+        task = jina_task_name if jina_task_name else "retrieval"
+        prompt = (
+            "Query: "
+            if prompt_type and prompt_type == PromptType.query
+            else "Document: "
+        )
+
+        all_embeddings = []
+        modality_keys = ("text", "image", "audio", "video")
+        for batch in inputs:
+            if "audio" in batch:
+                batch["audio"] = [
+                    a["array"] if isinstance(a, dict) and "array" in a else a
+                    for a in batch["audio"]
+                ]
+
+            batch_column = next(iter(batch.keys()))
+            batch_inputs = []
+            for i in range(len(batch[batch_column])):
+                parts = [
+                    batch[key][i]
+                    for key in modality_keys
+                    if key in batch and batch[key][i] is not None
+                ]
+                batch_inputs.append(parts[0] if len(parts) == 1 else tuple(parts))
+
+            embeddings = self.model.encode(
+                batch_inputs,
+                task=task,
+                prompt=prompt,
+                **kwargs,
+            )
+            if isinstance(embeddings, torch.Tensor):
+                embeddings = embeddings.cpu().detach().float()
+            all_embeddings.append(embeddings)
+        return np.concatenate(all_embeddings, axis=0)
+
+
 jina_embeddings_v5_text_small = ModelMeta(
     loader=JinaV5TextWrapper,
     loader_kwargs=dict(
@@ -873,7 +949,7 @@ jina_embeddings_v5_text_nano = ModelMeta(
 
 
 jina_embeddings_v5_omni_small = ModelMeta(
-    loader=JinaV5TextWrapper,
+    loader=JinaV5OmniWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts={
@@ -929,7 +1005,7 @@ jina_embeddings_v5_omni_small = ModelMeta(
 
 
 jina_embeddings_v5_omni_nano = ModelMeta(
-    loader=JinaV5TextWrapper,
+    loader=JinaV5OmniWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts={
