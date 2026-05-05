@@ -55,10 +55,12 @@ class HumanConceptsClustering(AbsTaskClustering):
     label_column_name = "category"
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
-        self.dataset = DatasetDict({
-            sub: self.dataset["train"].filter(
-                lambda x, s=sub: x["subdataset"] == s,
-                num_proc=num_proc,
-            )
-            for sub in _SUBDATASETS
-        })
+        self.dataset = DatasetDict(
+            {
+                sub: self.dataset["train"].filter(
+                    lambda x, s=sub: x["subdataset"] == s,
+                    num_proc=num_proc,
+                )
+                for sub in _SUBDATASETS
+            }
+        )
