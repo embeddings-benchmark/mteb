@@ -30,7 +30,6 @@ class BM25Search:
         stemmer_language: str | None = "english",
         **kwargs,
     ):
-        requires_package(self, "bm25s", "bm25", "pip install 'mteb[bm25s]'")
         import Stemmer
 
         self.model = None
@@ -81,10 +80,7 @@ class BM25Search:
         logger.info("Encoding Queries...")
         query_ids = list(queries["id"])
         results = {qid: {} for qid in query_ids}
-        processed = queries.map(
-            _combine_queries_with_instruction_text,
-            desc="Processing queries for dataloading",
-        )
+        processed = _combine_queries_with_instruction_text(queries)
         queries_texts = processed["text"]
         query_token_strs = self._encode(queries_texts)
 
@@ -139,9 +135,6 @@ class BM25MultilingualSearch(BM25Search):
         tokenizer_name: str = "xlm-roberta-base",
         **kwargs,
     ):
-        requires_package(
-            self, "bm25s", "bm25-multilingual", "pip install 'mteb[bm25s]'"
-        )
         from tokenizers import Tokenizer
 
         self.model = None
@@ -322,6 +315,7 @@ bm25_s = ModelMeta(
 
 bm25_s_multilingual = ModelMeta(
     loader=bm25_multilingual_loader,
+    extra_requirements_groups=["bm25s"],
     name="mteb/baseline-bm25s-multilingual",
     model_type=["dense"],
     languages=None,
