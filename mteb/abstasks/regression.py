@@ -200,7 +200,7 @@ class AbsTaskRegression(AbsTaskClassification):
 
         return dataset_dict
 
-    def _calculate_descriptive_statistics_from_split(
+    def _calculate_descriptive_statistics_from_split(  # type: ignore[override]
         self,
         split: str,
         *,

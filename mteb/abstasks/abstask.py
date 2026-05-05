@@ -421,7 +421,7 @@ class AbsTask(ABC):  # noqa: PLR0904
             logger.info(f"Processing metadata for split {split}")
             if self.metadata.is_multilingual:
                 descriptive_stats[split] = (
-                    self._calculate_descriptive_statistics_from_split(
+                    self._calculate_descriptive_statistics_from_split(  # type: ignore[assignment]
                         split, compute_overall=True, num_proc=num_proc
                     )
                 )
