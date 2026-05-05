@@ -1,0 +1,39 @@
+{
+    "loader_kwargs": {},
+    "name": "mteb/baseline-bm25s-lang-aware-jieba-exp3",
+    "revision": "0_1_0",
+    "release_date": "2026-05-05",
+    "languages": null,
+    "n_parameters": 0,
+    "n_active_parameters_override": null,
+    "n_embedding_parameters": 0,
+    "memory_usage_mb": null,
+    "max_tokens": null,
+    "embed_dim": null,
+    "license": null,
+    "open_weights": true,
+    "public_training_code": "https://github.com/xhluca/bm25s",
+    "public_training_data": null,
+    "framework": [],
+    "reference": "https://github.com/xhluca/bm25s",
+    "similarity_fn_name": null,
+    "use_instructions": false,
+    "training_datasets": null,
+    "adapted_from": null,
+    "superseded_by": null,
+    "modalities": [
+        "text"
+    ],
+    "model_type": [
+        "dense"
+    ],
+    "citation": "@misc{bm25s,\n      title={BM25S: Orders of magnitude faster lexical search via eager sparse scoring},\n      author={Xing Han L\u00f9},\n      year={2024},\n      eprint={2407.03618},\n      archivePrefix={arXiv},\n      primaryClass={cs.IR},\n      url={https://arxiv.org/abs/2407.03618},\n}",
+    "contacts": null,
+    "experiment_kwargs": null,
+    "output_dtypes": null,
+    "extra_requirements_groups": [
+        "bm25s"
+    ],
+    "loader": "bm25_lang_aware_loader",
+    "is_cross_encoder": false
+}
