@@ -61,7 +61,7 @@ def _resolve_geevec_domain(
     task_metadata: TaskMetadata,
     hf_subset: str,
     explicit_domain: str | None = None,
-) -> str:
+) -> str | None:
     if explicit_domain:
         return explicit_domain
 
@@ -84,7 +84,7 @@ def _resolve_geevec_domain(
         or any(lang.endswith("-Code") for lang in languages)
     ):
         return "coding"
-    return "general"
+    return None
 
 
 # copied from https://github.com/QwenLM/Qwen3-Embedding/blob/main/evaluation/task_prompts.json
@@ -245,7 +245,10 @@ class GeeVecLiteModel(InstructSentenceTransformerModel):
     def encode(self, inputs, *, task_metadata, hf_split, hf_subset, prompt_type=None, **kwargs):
         sentences = [text for batch in inputs for text in batch["text"]]
         domain = _resolve_geevec_domain(task_metadata, hf_subset, kwargs.get("domain"))
-        kwargs["domain"] = domain
+        if domain is not None:
+            kwargs["domain"] = domain
+        else:
+            kwargs.pop("domain", None)
 
         if (
             not self.apply_instruction_to_passages
