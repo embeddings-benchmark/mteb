@@ -21,6 +21,7 @@ from .hmdb51_clustering import HMDB51Clustering
 from .hume_arxiv_clustering_p2p import HUMEArxivClusteringP2P
 from .hume_reddit_clustering_p2p import HUMERedditClusteringP2P
 from .hume_wiki_cities_clustering import HUMEWikiCitiesClustering
+from .human_concepts_clustering import HumanConceptsClustering
 from .image_net import ImageNet10Clustering, ImageNetDog15Clustering
 from .medrxiv_clustering_p2p import MedrxivClusteringP2P, MedrxivClusteringP2PFast
 from .medrxiv_clustering_s2s import MedrxivClusteringS2S, MedrxivClusteringS2SFast
@@ -89,6 +90,7 @@ __all__ = [
     "HUMEArxivClusteringP2P",
     "HUMERedditClusteringP2P",
     "HUMEWikiCitiesClustering",
+    "HumanConceptsClustering",
     "ImageNet10Clustering",
     "ImageNetDog15Clustering",
     "MELDEmotionAudioVideoClustering",
