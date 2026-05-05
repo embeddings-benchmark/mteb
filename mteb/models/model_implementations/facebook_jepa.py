@@ -50,7 +50,7 @@ class VJepaV2Wrapper(AbsEncoder):
 
         self.model = AutoModel.from_pretrained(model_name, revision=revision)
         self.model.eval()
-        self.model.to(device)
+        self.model.to(self.device)
 
     @torch.inference_mode()
     def encode(
