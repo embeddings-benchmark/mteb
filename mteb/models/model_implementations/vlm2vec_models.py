@@ -395,9 +395,16 @@ class VLM2VEC2Wrapper(AbsEncoder):
         embed_dim: int | None = None,
         **kwargs,
     ) -> None:
-        self.device = device
         from peft import PeftModel
         from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
+
+        self.device = device or (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
 
         base_model_name = "Qwen/Qwen2-VL-2B-Instruct"
         self.processor = AutoProcessor.from_pretrained(base_model_name)
@@ -408,7 +415,7 @@ class VLM2VEC2Wrapper(AbsEncoder):
         )
         self.model = PeftModel.from_pretrained(base_model, model, revision=revision)
         self.model.merge_and_unload()
-        self.model.to(device)
+        self.model.to(self.device)
         self.model.eval()
 
     @staticmethod
