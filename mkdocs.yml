@@ -79,7 +79,7 @@ nav:
         - Select Benchmarks: get_started/usage/selecting_tasks.md
         - Run the Evaluation: get_started/usage/running_the_evaluation.md
         - Load Results: get_started/usage/loading_results.md
-        - Submit results: docs/get_started/usage/submitting_results.md
+        - Submit results: get_started/usage/submitting_results.md
         - Command Line: get_started/usage/cli.md
         - Run the Leaderboard: get_started/usage/leaderboard.md
       - Advanced Usage:

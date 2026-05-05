@@ -44,8 +44,8 @@ cache.submit_results(model_meta, create_pr=False)  # manual review before pushin
         create_pr=False
     )
 
-    # Review instructions
-    print(submission_info["manual_submission_instructions"])
+    # submit_results logs the manual submission instructions
+    print(f"Prepared submission at: {submission_info['path']}")
     ```
 
 === "Automated Submission"

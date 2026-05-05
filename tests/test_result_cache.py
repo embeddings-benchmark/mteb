@@ -605,10 +605,9 @@ def _setup_fake_remote(tmp_path: Path) -> tuple[Path, Path]:
     remote_path = cache_path / "remote"
     remote_path.mkdir(parents=True)
 
-    subprocess.run(["git", "init"], cwd=remote_path, check=True, capture_output=True)
-    # Explicitly set the default branch to 'main' (not 'master')
+    # Initialize with explicit default branch to 'main' to avoids issues with git configurations that default to 'main' already
     subprocess.run(
-        ["git", "checkout", "-b", "main"],
+        ["git", "init", "-b", "main"],
         cwd=remote_path,
         check=True,
         capture_output=True,
@@ -774,14 +773,18 @@ def test_submit_results_with_fake_remote(tmp_path):
         assert "commit_sha" not in second_result
 
 
-def test_submit_results_handles_merge_conflict(tmp_path):
-    """Test merge conflict detection/handling when the same file is modified on both branches.
+def test_submit_results_with_external_modifications(tmp_path):
+    """Test that re-submission correctly identifies no new changes after external modifications.
 
     Simulates:
     1. First successful submission commits result files
     2. External modification of same result file on main branch
-    3. Attempt second submission which would cause merge conflict
-    4. Verify conflict is detected and cleanup happens gracefully
+    3. Attempt second submission - cache still has no new results to submit
+    4. Verify submission returns no_changes and cleanup happens gracefully
+
+    Note: This does NOT test merge conflict handling (which would occur during a merge/rebase
+    of conflicting branches). This tests the scenario where external changes are made to
+    already-submitted files, and the cache correctly identifies no new unsubmitted results.
     """
     from unittest.mock import patch
 
@@ -798,7 +801,7 @@ def test_submit_results_handles_merge_conflict(tmp_path):
         assert initial_result["status"] == "ready_for_submission"
         assert initial_result["result_count"] > 0
 
-        # Step 2: Simulate external modification of the same result file on main to trigger merge conflict
+        # Step 2: Simulate external modification of the same result file on main
         result_dir = remote_path / "results" / model_name_path / revision
         if result_files_copied:
             conflict_file = result_dir / result_files_copied[0]
@@ -822,9 +825,8 @@ def test_submit_results_handles_merge_conflict(tmp_path):
                 capture_output=True,
             )
 
-            # Step 3: Try to submit again - should detect that file was modified externally
-            # Since the result file in cache is unchanged, it will try to commit the unchanged version
-            # This causes a conflict because main has a different version
+            # Step 3: Try to submit again - the cache still has no new results to submit
+            # (the result was already committed in step 1), so it correctly returns no_changes
             second_result = cache.submit_results(models=[test_model], create_pr=False)
 
             assert second_result["status"] == "no_changes"
