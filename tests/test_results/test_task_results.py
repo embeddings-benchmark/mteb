@@ -250,13 +250,13 @@ def test_merge_without_per_subset_version():
     )
 
     merged = existing.merge(new)
-    # Old subset has no per-subset version, new one does
+    # Old subset has no per-subset version — backfilled from top-level
     subsets = {s["hf_subset"]: s for s in merged.scores["train"]}
-    assert "mteb_version" not in subsets["en-de"]
+    assert subsets["en-de"]["mteb_version"] == "2.12.4"
     assert subsets["en-fr"]["mteb_version"] == "2.20.1"
 
-    # Top-level should be the latest found across subsets
-    assert merged.mteb_version == "2.20.1"
+    # Top-level should be a range across all subset versions
+    assert merged.mteb_version == "2.12.4-2.20.1"
 
 
 @pytest.mark.parametrize(

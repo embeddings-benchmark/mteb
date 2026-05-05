@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from huggingface_hub import EvalResult
 from packaging.version import Version
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, model_validator
 from typing_extensions import deprecated
 
 from mteb._helpful_enum import HelpfulStrEnum
@@ -228,6 +228,17 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     raise ValueError("Scores should be a dictionary")
                 cls._validate_scores_dict(hf_subset_score)
         return v
+
+    @model_validator(mode="after")
+    def _backfill_per_subset_mteb_version(self) -> Self:
+        """Backfill mteb_version from top-level into subsets that lack it."""
+        if self.mteb_version is None:
+            return self
+        for split_scores in self.scores.values():
+            for subset_scores in split_scores:
+                if "mteb_version" not in subset_scores:
+                    subset_scores["mteb_version"] = self.mteb_version  # type: ignore[index]
+        return self
 
     @staticmethod
     def _validate_scores_dict(scores: ScoresDict) -> None:
