@@ -541,7 +541,7 @@ language_bind_omni = ModelMeta(
     name="LanguageBind/LanguageBind_Omni",
     revision="d8c2e37b439f4fc47c649dc8b90cdcd3a4e0c80e",
     n_parameters=427_616_513 + 345_000_000 + 427_616_513,
-    n_embedding_parameters=37_945_344 * 3,
+    n_embedding_parameters=37_945_344,
     memory_usage_mb=1631 + 1316 + 1631,
     modalities=["image", "text", "audio", "video"],
     loader_kwargs=dict(num_frames=8),
