@@ -30,6 +30,20 @@ GEEVEC_API_MODEL_BY_DOMAIN = {
     "general": "geevec-embeddings-general-1.0",
 }
 GEEVEC_API_INSTRUCTION_TEMPLATE = "Instruct: {instruction}\nQuery: {text}"
+GEEVEC_BRIGHT_REASONING_SUBSETS = {
+    "aops",
+    "biology",
+    "earth_science",
+    "economics",
+    "leetcode",
+    "pony",
+    "psychology",
+    "robotics",
+    "stackoverflow",
+    "sustainable_living",
+    "theoremqa_questions",
+    "theoremqa_theorems",
+}
 
 
 def _resolve_geevec_embeddings_endpoint(base_url: str) -> str:
@@ -41,6 +55,36 @@ def _resolve_geevec_embeddings_endpoint(base_url: str) -> str:
     if lower.endswith("/openapi"):
         return f"{normalized}/v1/embeddings"
     return f"{normalized}/openapi/v1/embeddings"
+
+
+def _resolve_geevec_domain(
+    task_metadata: TaskMetadata,
+    hf_subset: str,
+    explicit_domain: str | None = None,
+) -> str:
+    if explicit_domain:
+        return explicit_domain
+
+    eval_langs = task_metadata.eval_langs
+    if isinstance(eval_langs, dict):
+        languages = [lang for langs in eval_langs.values() for lang in langs]
+    else:
+        languages = eval_langs
+
+    if (
+        task_metadata.name in {"BrightRetrieval", "BrightLongRetrieval"}
+        and hf_subset in GEEVEC_BRIGHT_REASONING_SUBSETS
+    ):
+        return "reasoning"
+
+    task_subtypes = task_metadata.task_subtypes or []
+    if (
+        "Programming" in (task_metadata.domains or [])
+        or "Code retrieval" in task_subtypes
+        or any(lang.endswith("-Code") for lang in languages)
+    ):
+        return "coding"
+    return "general"
 
 
 # copied from https://github.com/QwenLM/Qwen3-Embedding/blob/main/evaluation/task_prompts.json
@@ -198,29 +242,10 @@ PROMPTS_DICT = {
 
 
 class GeeVecLiteModel(InstructSentenceTransformerModel):
-    def __init__(
-        self,
-        model_name: str,
-        revision: str,
-        device: str | None = None,
-        instruction_template: str | None = None,
-        max_seq_length: int | None = GEEVEC_MAX_SEQ_LENGTH,
-        **kwargs,
-    ) -> None:
-        super().__init__(
-            model_name,
-            revision=revision,
-            device=device,
-            instruction_template=instruction_template,
-            max_seq_length=max_seq_length,
-            prompts_dict=PROMPTS_DICT,
-            **kwargs,
-        )
-
     def encode(self, inputs, *, task_metadata, hf_split, hf_subset, prompt_type=None, **kwargs):
         sentences = [text for batch in inputs for text in batch["text"]]
-        domain = kwargs.get("domain") or None
-        # The GeeVec lite model uses `domain` to select its LoRA adapter.
+        domain = _resolve_geevec_domain(task_metadata, hf_subset, kwargs.get("domain"))
+        kwargs["domain"] = domain
 
         if (
             not self.apply_instruction_to_passages
@@ -325,8 +350,9 @@ class GeeVecAPIModel(AbsEncoder):
 
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         input_type = self.model_prompts.get(prompt_name, "document")
-        effective_domain = kwargs.get("domain") or None
-        # The API uses `domain` to select the matching domain-specific backend.
+        effective_domain = _resolve_geevec_domain(
+            task_metadata, hf_subset, kwargs.get("domain")
+        )
         sentences = self._prepare_texts(sentences, task_metadata, prompt_type)
 
         # Keep a safe default because the GeeVec API has a request batch limit.
@@ -593,6 +619,8 @@ geevec_embeddings_1_0_lite = ModelMeta(
     loader_kwargs=dict(
         instruction_template=GEEVEC_INSTRUCTION,
         apply_instruction_to_passages=False,
+        max_seq_length=GEEVEC_MAX_SEQ_LENGTH,
+        prompts_dict=PROMPTS_DICT,
         model_kwargs={"dtype": torch.bfloat16},
         trust_remote_code=True,
     ),
