@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Unpack
 
 import numpy as np
 import torch
 from tqdm.auto import tqdm
 
+from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
@@ -14,16 +15,12 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
-    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
     from mteb.types._encoder_io import AudioInput, ImageInput, TextInput, VideoInput
 
 
 # LanguageBind expects audio sampled at 16 kHz (its audio mel-spectrogram pipeline).
 _LANGUAGE_BIND_AUDIO_SR = 16000
-
-_VIDEO_MODEL_NAME = "LanguageBind/LanguageBind_Video_FT"
-_AUDIO_MODEL_NAME = "LanguageBind/LanguageBind_Audio_FT"
-_IMAGE_MODEL_NAME = "LanguageBind/LanguageBind_Image"
 
 _LANGUAGE_BIND_SETUP_DOC = """
     Setup::
@@ -99,11 +96,9 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
     transform directly to the frame tensor and skip the file-loading step.
     """
 
-    __doc__ = (__doc__ or "") + _LANGUAGE_BIND_SETUP_DOC
-
     def __init__(
         self,
-        model_name: str = _VIDEO_MODEL_NAME,
+        model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         fps: float | None = None,
         max_frames: int | None = None,
@@ -111,6 +106,12 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         max_samples: int | None = None,
         **kwargs: Any,
     ):
+        requires_package(
+            self,
+            package_name="languagebind",
+            model_name=model_name,
+            install_instruction=_LANGUAGE_BIND_SETUP_DOC,
+        )
         from languagebind import (
             LanguageBindVideo,
             LanguageBindVideoProcessor,
@@ -154,6 +155,13 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
     ) -> np.ndarray:
         """Get video-only embeddings."""
         all_embeddings = []
+        inputs.collate_fn = VideoCollator(
+            target_sampling_rate=self.sampling_rate,
+            fps=self.fps,
+            max_frames=self.max_frames,
+            num_frames=self.num_frames,
+            max_samples=self.max_samples,
+        )
 
         for batch in tqdm(
             inputs,
@@ -187,14 +195,6 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         has_text = "text" in features
         has_video = "video" in features
 
-        inputs.collate_fn = VideoCollator(
-            target_sampling_rate=self.sampling_rate,
-            fps=self.fps,
-            max_frames=self.max_frames,
-            num_frames=self.num_frames,
-            max_samples=self.max_samples,
-        )
-
         embeddings = None
         if has_text:
             text_emb = self.get_text_embeddings(
@@ -216,14 +216,19 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
 class LanguageBindAudioWrapper(_LanguageBindBase):
     """MTEB wrapper for LanguageBind audio + text."""
 
-    __doc__ = (__doc__ or "") + _LANGUAGE_BIND_SETUP_DOC
-
     def __init__(
         self,
-        model_name: str = _AUDIO_MODEL_NAME,
+        model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        requires_package(
+            self,
+            package_name="languagebind",
+            model_name=model_name,
+            install_instruction=_LANGUAGE_BIND_SETUP_DOC,
+        )
+
         from languagebind import (
             LanguageBindAudio,
             LanguageBindAudioProcessor,
@@ -255,6 +260,7 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
     ) -> np.ndarray:
         """Get audio-only embeddings."""
         all_embeddings = []
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         for batch in tqdm(
             inputs,
@@ -288,8 +294,6 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
         has_text = "text" in features
         has_audio = "audio" in features
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
-
         embeddings = None
         if has_text:
             text_emb = self.get_text_embeddings(
@@ -311,14 +315,19 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
 class LanguageBindImageWrapper(_LanguageBindBase):
     """MTEB wrapper for LanguageBind image + text."""
 
-    __doc__ = (__doc__ or "") + _LANGUAGE_BIND_SETUP_DOC
-
     def __init__(
         self,
-        model_name: str = _IMAGE_MODEL_NAME,
+        model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        requires_package(
+            self,
+            package_name="languagebind",
+            model_name=model_name,
+            install_instruction=_LANGUAGE_BIND_SETUP_DOC,
+        )
+
         from languagebind import (
             LanguageBindImage,
             LanguageBindImageProcessor,
@@ -393,6 +402,75 @@ class LanguageBindImageWrapper(_LanguageBindBase):
         )
 
 
+class LanguageBindOmniWrapper(AbsEncoder):
+    """MTEB wrapper for LanguageBind video + text.
+
+    Video frames arrive pre-decoded via the VideoCollator. The public
+    LanguageBind processor expects file paths, so we apply the processor's
+    transform directly to the frame tensor and skip the file-loading step.
+    """
+
+    def __init__(
+        self,
+        model_name: str,
+        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = 8,
+        max_samples: int | None = None,
+        **kwargs: Any,
+    ):
+        self.video_model = LanguageBindVideoWrapper(
+            "LanguageBind/LanguageBind_Video_FT",
+            device=device,
+            fps=fps,
+            max_frames=max_frames,
+            num_frames=num_frames,
+            max_samples=max_samples,
+        )
+        self.audio_model = LanguageBindAudioWrapper(
+            "LanguageBind/LanguageBind_Audio_FT",
+            device=device,
+        )
+        self.image_model = LanguageBindImageWrapper(
+            "LanguageBind/LanguageBind_Image",
+            device=device,
+        )
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Unpack[EncodeKwargs],
+    ) -> Array:
+        features = inputs.dataset.features
+        has_text = "text" in features
+        has_audio = "audio" in features
+        has_video = "video" in features
+        has_image = "image" in features
+
+        embeddings = None
+        if has_text:
+            text_emb = self.video_model.get_text_embeddings(
+                inputs, prompt_type=prompt_type, **kwargs
+            )
+            embeddings = text_emb if embeddings is None else embeddings + text_emb
+        if has_image:
+            image_emb = self.image_model.get_image_embeddings(inputs, **kwargs)
+            embeddings = image_emb if embeddings is None else embeddings + image_emb
+        if has_audio:
+            audio_emb = self.audio_model.get_audio_embeddings(inputs, **kwargs)
+            embeddings = audio_emb if embeddings is None else embeddings + audio_emb
+        if has_video:
+            video_emb = self.video_model.get_video_embeddings(inputs, **kwargs)
+            embeddings = video_emb if embeddings is None else embeddings + video_emb
+        return embeddings
+
+
 _LANGUAGE_BIND_CITATION = r"""
 @inproceedings{zhu2024languagebind,
       title={Language{B}ind: Extending Video-Language Pretraining to N-modality by Language-based Semantic Alignment},
@@ -417,6 +495,8 @@ _LANGUAGE_BIND_COMMON = dict(
     license="mit",
     reference="https://github.com/PKU-YuanGroup/LanguageBind",
     extra_requirements_groups=[],
+    max_tokens=77,
+    embed_dim=768,
 )
 
 
@@ -427,8 +507,6 @@ language_bind_video_ft = ModelMeta(
     n_parameters=427_616_513,
     n_embedding_parameters=37_945_344,
     memory_usage_mb=1631,
-    max_tokens=77,
-    embed_dim=768,
     modalities=["video", "text"],
     loader_kwargs=dict(num_frames=8),
     **_LANGUAGE_BIND_COMMON,
@@ -441,8 +519,6 @@ language_bind_audio_ft = ModelMeta(
     n_parameters=345_000_000,
     n_embedding_parameters=37_945_344,
     memory_usage_mb=1316,
-    max_tokens=77,
-    embed_dim=768,
     modalities=["audio", "text"],
     loader_kwargs=dict(),
     **_LANGUAGE_BIND_COMMON,
@@ -455,9 +531,19 @@ language_bind_image = ModelMeta(
     n_parameters=427_616_513,
     n_embedding_parameters=37_945_344,
     memory_usage_mb=1631,
-    max_tokens=77,
-    embed_dim=768,
     modalities=["image", "text"],
     loader_kwargs=dict(),
+    **_LANGUAGE_BIND_COMMON,
+)
+
+language_bind_omni = ModelMeta(
+    loader=LanguageBindOmniWrapper,
+    name="LanguageBind/LanguageBind_Omni",
+    revision="d8c2e37b439f4fc47c649dc8b90cdcd3a4e0c80e",
+    n_parameters=427_616_513 + 345_000_000 + 427_616_513,
+    n_embedding_parameters=37_945_344 * 3,
+    memory_usage_mb=1631 + 1316 + 1631,
+    modalities=["image", "text", "audio", "video"],
+    loader_kwargs=dict(num_frames=8),
     **_LANGUAGE_BIND_COMMON,
 )
