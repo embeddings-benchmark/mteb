@@ -1,25 +1,6 @@
 ---
 tags:
 - mteb
-model-index:
-- name: sentence-transformers/all-MiniLM-L6-v2
-  results:
-  - task:
-      type: text-classification
-      name: Classification
-    dataset:
-      name: Banking77Classification (default)
-      type: mteb/banking77
-      config: default
-      split: test
-      revision: 0fd18e25b25c072e09e0d92ab615fda904d66300
-    metrics:
-    - type: accuracy
-      value: 0.800422
-      name: accuracy
-    source:
-      url: https://github.com/embeddings-benchmark/mteb/
-      name: MTEB
 ---
 
 # Model Card for Model ID

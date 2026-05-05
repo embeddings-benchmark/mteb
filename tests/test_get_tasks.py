@@ -192,6 +192,8 @@ def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
             "Octen-Embedding-8B: A Fine-tuned Multilingual Text Embedding Model",
             "Qwen2.5-Omni Technical Report",
             "Qwen3-Omni Technical Report",
+            "Granite Embedding Models",
+            "Granite Embedding R2 Models",
         ):
             continue
         use_titles = all_titles - {title}

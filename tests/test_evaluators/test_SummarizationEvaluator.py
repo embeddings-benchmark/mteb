@@ -1,7 +1,7 @@
 import pytest
 
 import mteb
-from mteb._evaluators import SummarizationEvaluator  # noqa: PLC2701
+from mteb._evaluators import SummarizationEvaluator
 from tests.mock_tasks import MockSummarizationTask
 
 

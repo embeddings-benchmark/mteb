@@ -5,10 +5,6 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import (
-    requires_image_dependencies,
-    requires_package,
-)
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
@@ -31,10 +27,6 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         image_size: int = 784,
         **kwargs,
     ):
-        requires_image_dependencies()
-        requires_package(
-            self, "qwen_vl_utils", model_name, "pip install mteb[eager_embed]"
-        )
         from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -168,4 +160,5 @@ Eager_Embed_V1 = ModelMeta(
     adapted_from="https://huggingface.co/Qwen/Qwen3-VL-4B-Instruct",
     public_training_code="https://github.com/eagerworks/eager-embed",
     public_training_data="https://github.com/eagerworks/eager-embed/blob/main/dataset_config.yaml",
+    extra_requirements_groups=["eager_embed"],
 )

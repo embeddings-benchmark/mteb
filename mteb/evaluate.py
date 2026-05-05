@@ -451,6 +451,10 @@ def evaluate(  # noqa: PLR0913, PLR0914
         OverwriteStrategy.NEVER,
         OverwriteStrategy.ONLY_CACHE,
     ]:
+        if existing_results is None:
+            raise ValueError(
+                f"overwrite_strategy is set to '{overwrite_strategy.value}' but no results found in cache for task {task.metadata.name}."
+            )
         raise ValueError(
             f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists for task {task.metadata.name}. "
             + f"However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."

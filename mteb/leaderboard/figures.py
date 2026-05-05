@@ -32,7 +32,7 @@ def _failsafe_plot(fun):
         try:
             return fun(*args, **kwargs)
         except Exception as e:
-            logger.error(f"Plot generation failed: {e}")
+            logger.info(f"Plot generation failed: {e}")
             return _text_plot(f"Couldn't produce plot. Reason: {e}")
 
     return wrapper

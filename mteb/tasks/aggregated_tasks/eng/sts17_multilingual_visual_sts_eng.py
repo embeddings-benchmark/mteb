@@ -22,9 +22,6 @@ class STS17MultilingualVisualSTSEng(AbsTaskAggregate):
         modalities=["image"],
         annotations_creators="human-annotated",
         dialect=[""],
-        eval_langs={
-            "en-en": ["eng-Latn"]
-        },  # rely on subsets to filter scores in TaskResults.get_score_fast().
         sample_creation="rendered",
         main_score="cosine_spearman",
         type="VisualSTS(eng)",

@@ -4,7 +4,6 @@ import logging
 from typing import TYPE_CHECKING
 
 from mteb._create_dataloaders import _combine_queries_with_instruction_text
-from mteb._requires_package import requires_package
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
@@ -181,6 +180,106 @@ class BM25MultilingualSearch(BM25Search):
 
 
 def bm25_loader(model_name, **kwargs) -> SearchProtocol:
+    import bm25s
+    import Stemmer
+
+    class BM25Search:
+        """BM25 search"""
+
+        retriever: bm25s.BM25
+        corpus_idx_to_id: dict[int, str]
+
+        def __init__(
+            self,
+            previous_results: str | None = None,
+            stopwords: str = "en",
+            stemmer_language: str | None = "english",
+            **kwargs,
+        ):
+            self.model = None
+
+            self.stopwords = stopwords
+            self.stemmer = (
+                Stemmer.Stemmer(stemmer_language) if stemmer_language else None
+            )
+
+        def index(
+            self,
+            corpus: CorpusDatasetType,
+            *,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
+            encode_kwargs: EncodeKwargs,
+            num_proc: int | None = None,
+        ) -> None:
+            logger.info("Encoding Corpus...")
+            corpus_texts = [
+                "\n".join([doc.get("title", ""), doc["text"]]) for doc in corpus
+            ]  # concatenate all document values (title, text, ...)
+            encoded_corpus = self._encode(corpus_texts)
+
+            logger.info(
+                f"Indexing Corpus... {len(encoded_corpus.ids):,} documents, {len(encoded_corpus.vocab):,} vocab"
+            )
+
+            # Create the BM25 model and index the corpus
+            self.retriever = bm25s.BM25()
+            self.retriever.index(encoded_corpus)
+            self.corpus_idx_to_id = {i: row["id"] for i, row in enumerate(corpus)}
+
+        def search(
+            self,
+            queries: QueryDatasetType,
+            *,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
+            top_k: int,
+            encode_kwargs: EncodeKwargs,
+            top_ranked: TopRankedDocumentsType | None = None,
+            num_proc: int | None = None,
+        ) -> RetrievalOutputType:
+            logger.info("Encoding Queries...")
+            query_ids = list(queries["id"])
+            results = {qid: {} for qid in query_ids}
+            processed = _combine_queries_with_instruction_text(queries)
+            queries_texts = processed["text"]
+            query_token_strs = self._encode(queries_texts)
+
+            logger.info(f"Retrieving Results... {len(queries):,} queries")
+
+            queries_results, queries_scores = self.retriever.retrieve(
+                query_token_strs,
+                k=min(top_k, len(self.corpus_idx_to_id)),
+            )
+
+            # Iterate over queries
+            for qi, qid in enumerate(query_ids):
+                query_results = queries_results[qi]
+                scores = queries_scores[qi]
+                doc_id_to_score = {}
+                query_documents = (
+                    top_ranked[qid] if top_ranked and qid in top_ranked else None
+                )
+
+                # Iterate over results
+                for doc_idx, score in zip(query_results, scores):
+                    doc_id = self.corpus_idx_to_id[doc_idx]
+
+                    # handle reranking with a filtered set of documents
+                    if query_documents is not None and doc_id not in query_documents:
+                        continue
+                    doc_id_to_score[doc_id] = float(score)
+
+                results[qid] = doc_id_to_score
+
+            return results
+
+        def _encode(self, texts: list[str]):
+            """Tokenize texts using bm25s. Not to be confused with EncoderProtocol.encode()."""
+            return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
+
     return BM25Search(**kwargs)
 
 
@@ -190,6 +289,7 @@ def bm25_multilingual_loader(model_name, **kwargs) -> SearchProtocol:
 
 bm25_s = ModelMeta(
     loader=bm25_loader,
+    extra_requirements_groups=["bm25s"],
     name="mteb/baseline-bm25s",
     model_type=["dense"],
     languages=["eng-Latn"],

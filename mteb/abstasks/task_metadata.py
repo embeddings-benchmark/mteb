@@ -119,6 +119,7 @@ TaskSubtype = Literal[
     "Question Answering Retrieval",
     "Reading Comprehension",
     "Intent Classification",
+    "Cross-Modal Retrieval",
 ]
 """The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". This list can be updated as needed."""
 
@@ -200,10 +201,11 @@ MAEB_TASK_TYPE = (
 
 MVEB_TASK_TYPE = (
     "VideoClassification",
-    # "VideoClustering",  # TODO: uncomment when tasks exist
-    # "VideoPairClassification",  # TODO: uncomment when tasks exist
+    "VideoClustering",
+    "VideoMultilabelClassification",
+    "VideoPairClassification",
     "VideoZeroshotClassification",
-    # "VideoCentricQA",  # TODO: uncomment when tasks exist
+    "VideoCentricQA",
     "Any2AnyRetrieval",
 )
 
@@ -264,9 +266,12 @@ TaskCategory = Literal[
     "vt2vt",
     "va2c",
     "va2t",
+    "t2va",
     "vat2t",
     "v2a",
     "a2v",
+    "vt2a",
+    "at2v",
 ]
 """The category of the task.
 
@@ -301,9 +306,10 @@ TaskCategory = Literal[
 29. vt2vt: video+text to video+text
 30. va2c: video+audio to category
 31. va2t: video+audio to text
-32. vat2t: video+audio+text to text
-33. v2a: video to audio
-34. a2v: audio to video
+32. t2va: text to video+audio
+33. vat2t: video+audio+text to text
+34. v2a: video to audio
+35. a2v: audio to video
 """
 
 _MODALITY_CODES: dict[str, str] = {
@@ -378,10 +384,10 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {  # type: ig
     "AudioPairClassification": "pair-classification",
     "PairClassification": "pair-classification",
     "VideoClassification": "classification",
-    # "VideoClustering": "clustering",  # TODO: uncomment when tasks exist
-    # "VideoPairClassification": "pair-classification",  # TODO: uncomment when tasks exist
+    "VideoClustering": "clustering",
+    "VideoPairClassification": "pair-classification",
     "VideoZeroshotClassification": "classification",
-    # "VideoCentricQA": "retrieval",  # TODO: uncomment when tasks exist
+    "VideoCentricQA": "retrieval",
 }
 
 
@@ -474,7 +480,6 @@ class TaskMetadata(BaseModel):
     is_public: bool = True
     contributed_by: str | None = None
     superseded_by: str | None = None
-
     is_beta: bool = False
 
     def _validate_metadata(self) -> None:
@@ -965,6 +970,8 @@ class TaskMetadata(BaseModel):
             "AudioZeroshotClassification": ["other"],
             "AudioClassification": ["audio-classification"],
             "AudioPairClassification": ["audio-classification"],
+            # video
+            "VideoCentricQA": ["visual-question-answering"],
         }
         if self.type == "ZeroShotClassification":
             if self.modalities == ["image"]:

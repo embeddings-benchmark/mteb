@@ -6,7 +6,6 @@ import torch
 from tqdm.auto import tqdm
 from transformers import AutoModel, AutoProcessor
 
-from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -29,7 +28,6 @@ class OpsColQwen3Wrapper(AbsEncoder):
         trust_remote_code: bool = True,
         **kwargs,
     ):
-        requires_image_dependencies()
         from transformers.utils.import_utils import is_flash_attn_2_available
 
         if attn_implementation is None:

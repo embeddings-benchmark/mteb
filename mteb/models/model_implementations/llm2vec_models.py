@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 
-from mteb._requires_package import requires_package, suggest_package
+from mteb._requires_package import suggest_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -65,7 +65,6 @@ class LLM2VecModel(AbsEncoder):
         **kwargs,
     ):
         model_name = kwargs.get("model_name", "LLM2Vec")
-        requires_package(self, "llm2vec", model_name, "pip install 'mteb[llm2vec]'")
         from llm2vec import LLM2Vec
 
         extra_kwargs = {}
@@ -158,6 +157,7 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     training_datasets=llm2vec_supervised_training_data,
     public_training_data=None,
     citation=LLM2VEC_CITATION,
+    extra_requirements_groups=["llm2vec"],
 )
 
 llm2vec_llama3_8b_unsupervised = ModelMeta(
@@ -188,6 +188,7 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets=set(),
     public_training_data=None,
+    extra_requirements_groups=["llm2vec"],
 )
 
 llm2vec_mistral7b_supervised = ModelMeta(
@@ -218,6 +219,7 @@ llm2vec_mistral7b_supervised = ModelMeta(
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets=llm2vec_supervised_training_data,
     public_training_data=None,
+    extra_requirements_groups=["llm2vec"],
 )
 
 llm2vec_mistral7b_unsupervised = ModelMeta(
@@ -248,6 +250,7 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets=set(),
     public_training_data=None,
+    extra_requirements_groups=["llm2vec"],
 )
 
 llm2vec_llama2_7b_supervised = ModelMeta(
@@ -278,6 +281,7 @@ llm2vec_llama2_7b_supervised = ModelMeta(
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets=llm2vec_supervised_training_data,
     public_training_data=None,
+    extra_requirements_groups=["llm2vec"],
 )
 
 llm2vec_llama2_7b_unsupervised = ModelMeta(
@@ -308,6 +312,7 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     training_datasets=set(),
     public_training_data=None,
     citation=LLM2VEC_CITATION,
+    extra_requirements_groups=["llm2vec"],
 )
 
 llm2vec_sheared_llama_supervised = ModelMeta(
@@ -338,6 +343,7 @@ llm2vec_sheared_llama_supervised = ModelMeta(
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets=llm2vec_supervised_training_data,
     public_training_data=None,
+    extra_requirements_groups=["llm2vec"],
 )
 
 llm2vec_sheared_llama_unsupervised = ModelMeta(
@@ -368,4 +374,5 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets=set(),
     public_training_data=None,
+    extra_requirements_groups=["llm2vec"],
 )

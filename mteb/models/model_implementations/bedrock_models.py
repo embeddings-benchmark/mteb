@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -39,7 +38,6 @@ class BedrockModel(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        requires_package(self, "boto3", "The AWS SDK for Python")
         import boto3
 
         boto3_session = boto3.session.Session()
@@ -67,7 +65,6 @@ class BedrockModel(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         inputs = [text for batch in inputs for text in batch["text"]]
-        requires_package(self, "boto3", "Amazon Bedrock")
         show_progress_bar = (
             False
             if "show_progress_bar" not in kwargs
@@ -190,6 +187,7 @@ amazon_titan_embed_text_v1 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=False,
+    extra_requirements_groups=["boto3"],
 )
 
 amazon_titan_embed_text_v2 = ModelMeta(
@@ -218,6 +216,7 @@ amazon_titan_embed_text_v2 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=False,
+    extra_requirements_groups=["boto3"],
 )
 # Note: For the original Cohere API implementation, refer to:
 # https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/cohere_models.py
@@ -249,6 +248,7 @@ cohere_embed_english_v3 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
+    extra_requirements_groups=["boto3"],
 )
 
 cohere_embed_multilingual_v3 = ModelMeta(
@@ -278,4 +278,5 @@ cohere_embed_multilingual_v3 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
+    extra_requirements_groups=["boto3"],
 )

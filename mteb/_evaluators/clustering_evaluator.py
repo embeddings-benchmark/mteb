@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
-    from mteb.types import EncodeKwargs
+    from mteb.types import EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ class ClusteringEvaluator(Evaluator):
         self,
         dataset: Dataset,
         *,
-        input_column_name: str | Sequence[str],
+        input_column_name: str | Sequence[Modalities],
         label_column_name: str,
         task_metadata: TaskMetadata,
         hf_split: str,

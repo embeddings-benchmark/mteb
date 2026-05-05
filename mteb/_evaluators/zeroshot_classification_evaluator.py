@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
-    from mteb.types import Array, EncodeKwargs
+    from mteb.types import Array, EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset: Dataset,
-        input_column_name: str | Sequence[str],
+        input_column_name: str | Sequence[Modalities],
         candidate_labels: list[str],
         *,
         task_metadata: TaskMetadata,

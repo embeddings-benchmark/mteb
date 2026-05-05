@@ -9,7 +9,6 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType, PromptType
@@ -232,8 +231,6 @@ class CohereTextEmbeddingModel(AbsEncoder):
         output_dimension: int | None = None,
         **kwargs,
     ) -> None:
-        requires_package(self, "cohere", model_name, "pip install 'mteb[cohere]'")
-
         import cohere
 
         self.model_name = model_name.removeprefix("Cohere/Cohere-")
@@ -411,6 +408,7 @@ cohere_mult_3 = ModelMeta(
     public_training_data=None,  # assumed
     training_datasets=None,
     output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_eng_3 = ModelMeta(
@@ -438,6 +436,7 @@ cohere_eng_3 = ModelMeta(
     public_training_data=None,  # assumed
     training_datasets=None,
     output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_mult_light_3 = ModelMeta(
@@ -465,6 +464,7 @@ cohere_mult_light_3 = ModelMeta(
     public_training_data=None,  # assumed
     training_datasets=None,
     output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_eng_light_3 = ModelMeta(
@@ -492,4 +492,5 @@ cohere_eng_light_3 = ModelMeta(
     public_training_data=None,  # assumed
     training_datasets=None,
     output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )

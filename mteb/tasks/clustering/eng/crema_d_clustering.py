@@ -47,7 +47,7 @@ voice expression},
     max_fraction_of_documents_to_embed = None
     input_column_name: str = "audio"
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
         )

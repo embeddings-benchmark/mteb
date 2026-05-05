@@ -94,9 +94,9 @@ class RetrievalDatasetLoader:
         corpus = self._load_corpus(num_proc)
         queries = self._load_queries(num_proc)
 
-        queries = queries.filter(
-            lambda x: x["id"] in qrels.keys(), desc="Filtering queries by qrels"
-        )
+        ids_to_keep = set(qrels.keys())
+        indices = [i for i, id_ in enumerate(queries["id"]) if id_ in ids_to_keep]
+        queries = queries.select(indices)
 
         if any(c.endswith("top_ranked") for c in self.dataset_configs):
             top_ranked = self._load_top_ranked(num_proc)

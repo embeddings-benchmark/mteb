@@ -5,8 +5,8 @@ from attr import dataclass
 
 from mteb.languages import LanguageScripts
 from mteb.languages.iso_mappings import (
-    _hf_lang_to_iso_lang_script,  # noqa: PLC2701
-    _hf_langs_to_iso_lang_scripts,  # noqa: PLC2701
+    _hf_lang_to_iso_lang_script,
+    _hf_langs_to_iso_lang_scripts,
 )
 
 
