@@ -10,6 +10,7 @@ import subprocess
 import warnings
 from collections import defaultdict
 from collections.abc import Mapping
+from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
@@ -17,6 +18,19 @@ import requests
 from pydantic import ValidationError
 
 from mteb._helpful_enum import HelpfulStrEnum
+from mteb._reversible_workflow.git_actions import (
+    CommitAction,
+    CreateBranchAction,
+)
+from mteb._reversible_workflow.git_utils import (
+    check_detached_head,
+    check_uncommitted_changes,
+    get_current_branch,
+    handle_pr_creation_with_cleanup,
+)
+from mteb._reversible_workflow.reversible_workflow import (
+    ReversibleWorkflow,
+)
 from mteb.abstasks import AbsTask
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.benchmarks.get_benchmark import get_benchmark
@@ -24,14 +38,98 @@ from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
+from mteb.types import SubmitResultsResponse
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
 
+    from mteb._reversible_workflow.reversible_workflow import ReversibleAction
     from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
 _EXPERIMENTS_FOLDER_NAME = "experiments"
+
+
+class CopyResultsAction:
+    """Copy selected result files and optional model metadata files to the remote repo."""
+
+    def __init__(
+        self, unsubmitted: dict[ModelMeta, list[Path]], remote_path: Path
+    ) -> None:
+        """Initialize the action.
+
+        Args:
+            unsubmitted: Dict mapping ModelMeta to list of result file paths.
+            remote_path: Path to the remote repository.
+        """
+        self.unsubmitted = unsubmitted
+        self.remote_path = remote_path
+        self.copied_files: list[Path] = []
+        # Track prior file contents so undo can restore pre-existing tracked files.
+        self._overwritten_file_contents: dict[Path, bytes] = {}
+
+    def do(self) -> None:
+        """Copy listed json result files and optional model_meta.json to remote paths."""
+        for model_meta, result_files in self.unsubmitted.items():
+            if model_meta.name is None or model_meta.revision is None:
+                logger.warning(
+                    f"Skipping model with None name or revision: {model_meta}"
+                )
+                continue
+
+            model_name_path = model_meta.model_name_as_path()
+            revision = model_meta.revision
+            dest_dir = self.remote_path / model_name_path / revision
+            dest_dir.mkdir(parents=True, exist_ok=True)
+
+            for result_file in result_files:
+                dest_file = dest_dir / result_file.name
+                if (
+                    dest_file.exists()
+                    and dest_file not in self._overwritten_file_contents
+                ):
+                    self._overwritten_file_contents[dest_file] = dest_file.read_bytes()
+                shutil.copy2(result_file, dest_file)
+                self.copied_files.append(dest_file)
+                logger.debug(f"Copied {result_file} to {dest_file}")
+
+            # Copy model_meta.json if it exists in the source directory
+            source_model_dir = result_files[0].parent if result_files else None
+            if source_model_dir and source_model_dir.exists():
+                model_meta_file = source_model_dir / "model_meta.json"
+                if model_meta_file.exists():
+                    dest_model_meta = dest_dir / "model_meta.json"
+                    if (
+                        dest_model_meta.exists()
+                        and dest_model_meta not in self._overwritten_file_contents
+                    ):
+                        self._overwritten_file_contents[dest_model_meta] = (
+                            dest_model_meta.read_bytes()
+                        )
+                    shutil.copy2(model_meta_file, dest_model_meta)
+                    self.copied_files.append(dest_model_meta)
+                    logger.debug(f"Copied {model_meta_file} to {dest_model_meta}")
+
+        logger.info(f"Copied {len(self.copied_files)} files to remote")
+
+    def undo(self) -> None:
+        """Deletion of files copied during do()."""
+        for file_path in self.copied_files:
+            try:
+                if file_path in self._overwritten_file_contents:
+                    file_path.write_bytes(self._overwritten_file_contents[file_path])
+                    logger.debug(f"Restored original content for {file_path}")
+                elif file_path.exists():
+                    file_path.unlink()
+                    logger.debug(f"Deleted {file_path}")
+            except Exception as e:
+                logger.warning(f"Failed to delete {file_path}: {e}")
+
+        logger.info(
+            f"Rolled back {len(self.copied_files)} copied files "
+            f"({len(self._overwritten_file_contents)} restored, "
+            f"{len(self.copied_files) - len(self._overwritten_file_contents)} deleted)"
+        )
 
 
 class LoadExperimentEnum(HelpfulStrEnum):
@@ -68,13 +166,31 @@ class ResultCache:
         self.cache_path.mkdir(parents=True, exist_ok=True)
 
     @property
+    def remote_repo_path(self) -> Path:
+        """Get the path to the remote repository clone.
+
+        Returns:
+            The path to the remote repository clone.
+        """
+        return self.cache_path / "remote"
+
+    @property
     def has_remote(self) -> bool:
         """Check if the remote results repository exists in the cache directory.
 
         Returns:
             True if the remote results repository exists, False otherwise.
         """
-        return (self.cache_path / "remote").exists()
+        return self.remote_repo_path.exists()
+
+    @property
+    def remote_results_path(self) -> Path:
+        """Get the path to the remote results directory.
+
+        Returns:
+            The path to the remote results directory.
+        """
+        return self.remote_repo_path / "results"
 
     def get_task_result_path(
         self,
@@ -97,9 +213,7 @@ class ResultCache:
             The path to the results of the task.
         """
         results_folder = (
-            self.cache_path / "results"
-            if not remote
-            else self.cache_path / "remote" / "results"
+            self.cache_path / "results" if not remote else self.remote_results_path
         )
 
         if isinstance(model_name, ModelMeta):
@@ -254,13 +368,14 @@ class ResultCache:
         Returns:
             The path to the local cache directory.
         """
-        if not self.cache_path.exists() and not self.cache_path.is_dir():
+        if not self.cache_path.exists():
             logger.info(
                 f"Cache directory {self.cache_path} does not exist, creating it"
             )
+            self.cache_path.mkdir(parents=True, exist_ok=True)
 
         # if "results" folder already exists update it
-        results_directory = self.cache_path / "remote"
+        results_directory = self.remote_repo_path
 
         if results_directory.exists():
             # check repository in the directory is the same as the remote
@@ -286,6 +401,7 @@ class ResultCache:
                     ["git", "fetch", "--all", "--tags"],
                     cwd=results_directory,
                     check=True,
+                    text=True,
                 )
             else:
                 logger.debug(
@@ -299,6 +415,7 @@ class ResultCache:
                     ["git", "checkout", revision],
                     cwd=results_directory,
                     check=True,
+                    text=True,
                 )
             return results_directory
 
@@ -317,6 +434,7 @@ class ResultCache:
             clone_cmd,
             cwd=self.cache_path,
             check=True,
+            text=True,
         )
 
         return results_directory
@@ -638,7 +756,7 @@ class ResultCache:
             return paths
 
         results_path = self.cache_path / "results"
-        remote_path = self.cache_path / "remote" / "results"
+        remote_path = self.remote_results_path
 
         cache_paths = _get_paths(results_path, load_experiments)
 
@@ -822,6 +940,298 @@ class ResultCache:
             paths = [p for p in paths if p.stem in task_names]
         return paths
 
+    def _load_model_meta_from_cache(
+        self,
+        model_name: str,
+        revision: str,
+    ) -> ModelMeta | None:
+        """Load ModelMeta from cache directory.
+
+        Args:
+            model_name: The model name.
+            revision: The model revision.
+
+        Returns:
+            ModelMeta object if found, None otherwise.
+        """
+        model_name_path = model_name.replace("/", "__").replace(" ", "_")
+        meta_file = (
+            self.cache_path / "results" / model_name_path / revision / "model_meta.json"
+        )
+
+        if not meta_file.exists():
+            logger.warning(
+                f"model_meta.json not found for {model_name} (revision: {revision})"
+            )
+            return None
+
+        try:
+            with meta_file.open("r") as f:
+                meta_dict = f.read()
+            return ModelMeta.model_validate_json(meta_dict)
+        except Exception as e:
+            logger.warning(f"Failed to load ModelMeta from {meta_file}: {e}")
+            return None
+
+    def _normalize_models(
+        self,
+        models: Sequence[str] | Sequence[ModelMeta] | str | ModelMeta | None = None,
+    ) -> list[ModelMeta]:
+        """Normalize model input to list of ModelMeta objects.
+
+        Args:
+            models: Model(s) to normalize. Can either a list of string or ModelMeta objects.
+            If None it will get all models from local cache.
+
+        Returns:
+            List of ModelMeta objects.
+
+        Raises:
+            ValueError: If no models found or invalid input.
+        """
+        if models is None:
+            local_models = self.get_models(
+                require_model_meta=True, include_remote=False
+            )
+            if not local_models:
+                raise ValueError(
+                    "No models found in local cache. Please evaluate models first."
+                )
+            normalized = []
+            for model_name, revision in local_models:
+                model_meta = self._load_model_meta_from_cache(model_name, revision)
+                if model_meta:
+                    normalized.append(model_meta)
+            return normalized
+
+        if isinstance(models, (str, ModelMeta)):
+            models_to_process: list[str | ModelMeta] = [models]
+        else:
+            models_to_process = cast("list[str | ModelMeta]", models)
+
+        normalized = []
+        for model in models_to_process:
+            if isinstance(model, ModelMeta):
+                if model.revision is None or model.name is None:
+                    raise ValueError(
+                        f"ModelMeta {model.name} has no revision or name. "
+                        "Cannot submit results without both."
+                    )
+                normalized.append(model)
+            elif isinstance(model, str):
+                local_models = self.get_models(
+                    require_model_meta=False, include_remote=False
+                )
+                matching = [
+                    (name, rev)
+                    for name, rev in local_models
+                    if name == model.replace("/", "__")
+                ]
+                if not matching:
+                    raise ValueError(
+                        f"Model '{model}' not found in local cache. "
+                        "Please evaluate it first."
+                    )
+                for model_name, revision in matching:
+                    model_meta = self._load_model_meta_from_cache(model_name, revision)
+                    if model_meta:
+                        normalized.append(model_meta)
+            else:
+                raise TypeError(f"Invalid model type: {type(model)}")
+
+        if not normalized:
+            raise ValueError("No valid models to submit.")
+
+        return normalized
+
+    def _get_unsubmitted_results(
+        self,
+        models: list[ModelMeta],
+    ) -> dict[ModelMeta, list[Path]]:
+        """Find unsubmitted results by comparing local vs remote.
+
+        Args:
+            models: List of ModelMeta objects.
+
+        Returns:
+            Dict mapping ModelMeta to list of unsubmitted result file paths.
+        """
+        unsubmitted: dict[ModelMeta, list[Path]] = {}
+
+        local_paths = self.get_cache_paths(
+            models=models,
+            require_model_meta=False,
+            include_remote=False,
+        )
+        remote_files_by_model_revision: dict[tuple[str, str], set[Path]] = {}
+        for model in models:
+            if model.name is None or model.revision is None:
+                logger.warning(f"Skipping model with None name or revision: {model}")
+                continue
+
+            model_name_path = model.model_name_as_path()
+            remote_results_dir = (
+                self.remote_results_path / model_name_path / model.revision
+            )
+            key = (model_name_path, model.revision)
+            remote_files_by_model_revision[key] = set()
+
+            if remote_results_dir.exists():
+                remote_files_by_model_revision[key].update(
+                    f.relative_to(remote_results_dir)
+                    for f in remote_results_dir.rglob("*.json")
+                    if f.name != "model_meta.json"
+                )
+
+        for local_path in local_paths:
+            model_name_path = local_path.parent.parent.name
+            revision = local_path.parent.name
+            model_name = model_name_path.replace("__", "/")
+
+            local_results_dir = self.cache_path / "results" / model_name_path / revision
+            try:
+                relative_path = local_path.relative_to(local_results_dir)
+            except ValueError:
+                relative_path = Path(local_path.name)
+
+            remote_files_set = remote_files_by_model_revision.get(
+                (model_name_path, revision), set()
+            )
+
+            if relative_path not in remote_files_set:
+                model_meta = None
+                for m in models:
+                    if m.name == model_name and m.revision == revision:
+                        model_meta = m
+                        break
+
+                if model_meta is not None:
+                    if model_meta not in unsubmitted:
+                        unsubmitted[model_meta] = []
+                    unsubmitted[model_meta].append(local_path)
+
+        return unsubmitted
+
+    def submit_results(
+        self,
+        models: Sequence[str] | Sequence[ModelMeta] | str | ModelMeta | None = None,
+        *,
+        create_pr: bool = False,
+    ) -> SubmitResultsResponse:
+        """Create a commit of the results to the official MTEB results repository (https://github.com/embeddings-benchmark/results).
+
+        It does this by downloading the remote (if not downloaded already) and
+        submitting the diff from the local result to the repository. Requires PyGithub
+        to be installed if `create_pr=True`.
+
+        Args:
+            models: Model(s) whose results should be submitted. Can either a list of string or ModelMeta objects.
+                If None it will get all models from local cache.
+            create_pr: If True, create a PR directly to the remote. If False, prints
+                  instructions for manual submission.
+
+        Returns:
+            Dictionary containing submission metadata:
+                - status: "ready_for_submission" or "pr_created"
+                - models_submitted: list of (model_name, revision) tuples
+                - result_count: number of result files submitted
+                - pr_url: URL to created PR (only if create_pr=True)
+                - pr_number: PR number (only if create_pr=True)
+                - fork_url: URL to user's fork (only if create_pr=True)
+
+        Raises:
+            ValueError: If no models found or invalid input.
+            RuntimeError: If git operations fail.
+            ImportError: If create_pr=True and PyGithub is not installed.
+            GithubException: If GitHub API operations fail.
+
+        Examples:
+            >>> import mteb
+            >>> cache = mteb.ResultCache()
+            >>> model = mteb.get_model(...)
+            >>> tasks = mteb.get_tasks(...)
+            >>> results = mteb.evaluate(model, tasks, cache=cache)
+            >>>
+            >>> # Manual submission (step-by-step)
+            >>> submission = cache.submit_results(model, create_pr=False)
+            >>> # Follow printed instructions
+            >>>
+            >>> # Automated submission
+            >>> submission = cache.submit_results(model, create_pr=True)
+            >>> print(f"PR created: {submission['pr_url']}")
+        """
+        branch_name = (
+            f"mteb-results-{int(datetime.now().timestamp())}" if create_pr else None
+        )
+        try:
+            normalized_models = self._normalize_models(models)
+            self.download_from_remote()
+            unsubmitted = self._get_unsubmitted_results(normalized_models)
+
+            if not unsubmitted:
+                logger.warning("No unsubmitted results found.")
+                return SubmitResultsResponse(
+                    status="no_changes",
+                    models_submitted=[(m.name, m.revision) for m in normalized_models],
+                    result_count=0,
+                )
+
+            remote_path = self.remote_repo_path
+            check_uncommitted_changes(remote_path)
+            check_detached_head(remote_path)
+            logger.info("Pre-flight checks passed.")
+
+            # Capture original branch before making any changes
+            original_branch = get_current_branch(remote_path)
+
+        except RuntimeError as e:
+            logger.error(f"Setup error during submit_results: {e}")
+            raise
+        except Exception as e:
+            logger.error(f"Error during submit_results setup: {e}")
+            raise
+
+        actions: list[ReversibleAction] = [
+            CopyResultsAction(unsubmitted, self.remote_results_path)
+        ]
+
+        commit_message, result_count = _build_commit_message(
+            normalized_models, unsubmitted
+        )
+
+        actions.append(CommitAction(remote_path, commit_message))
+
+        if create_pr and branch_name:
+            actions.append(
+                CreateBranchAction(remote_path, branch_name, original_branch)
+            )
+
+        workflow = ReversibleWorkflow(steps=actions)
+        workflow.run()
+
+        if not create_pr:
+            message = _build_manual_submission_message(
+                remote_path, result_count, len(normalized_models)
+            )
+            logger.info("%s", message)
+
+            return SubmitResultsResponse(
+                status="ready_for_submission",
+                models_submitted=[(m.name, m.revision) for m in normalized_models],
+                result_count=result_count,
+                path=str(remote_path),
+            )
+
+        pr_body = _prepare_pr_body(normalized_models, unsubmitted)
+        return handle_pr_creation_with_cleanup(
+            remote_repo_path=remote_path,
+            original_branch=original_branch,
+            branch_name=branch_name,
+            models=normalized_models,
+            result_count=result_count,
+            pr_body=pr_body,
+        )
+
     def load_results(
         self,
         models: Sequence[str] | Iterable[ModelMeta] | None = None,
@@ -964,3 +1374,109 @@ class ResultCache:
             model_results=models_results_object,
             benchmark=tasks if isinstance(tasks, Benchmark) else None,
         )
+
+
+def _prepare_pr_body(
+    models: list[ModelMeta],
+    unsubmitted: dict[ModelMeta, list[Path]],
+) -> str:
+    """Prepare the pull request body with results summary.
+
+    Args:
+        models: List of ModelMeta objects.
+        unsubmitted: Dict mapping ModelMeta to list of result file paths.
+
+    Returns:
+        Formatted PR body string.
+    """
+    model_details = []
+    total_results = 0
+
+    for model in models:
+        if model in unsubmitted:
+            result_count = len(unsubmitted[model])
+            total_results += result_count
+            model_details.append(
+                f"- **{model.name}** (revision: `{model.revision}`): {result_count} results"
+            )
+
+    model_details_str = "\n".join(model_details)
+
+    checklist = """### Checklist
+- [ ] My model has a model sheet, report, or similar
+- [ ] My model has a reference implementation in [`mteb/models/model_implementations/`](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/models/model_implementations), this can be as an API. Instruction on how to add a model can be found [here](https://embeddings-benchmark.github.io/mteb/contributing/adding_a_model/)
+  - [ ] No, but there is an existing PR ___
+- [ ] The results submitted are obtained using the reference implementation
+- [ ] My model is available, either as a publicly accessible API or publicly on e.g., Huggingface
+- [ ] I *solemnly swear* that for all results submitted I have not trained on the evaluation dataset including training splits. If I have, I have disclosed it clearly."""
+
+    body = f"""### Models Submitted
+{model_details_str}
+
+**Total Results:** {total_results}
+
+---
+
+*This PR was created automatically using [`ResultCache.submit_results()`](https://embeddings-benchmark.github.io/mteb/docs/get_started/usage/submitting_results.md). Please check the results carefully before merging.*
+
+{checklist}"""
+
+    logger.info("📋 Please complete the checklist in the PR body before merging.")
+    return body
+
+
+def _build_manual_submission_message(
+    remote_path: Path, result_count: int, model_count: int
+) -> str:
+    """Build the manual submission instructions message.
+
+    Args:
+        remote_path: Path to the remote repository.
+        result_count: Number of result files submitted.
+        model_count: Number of models submitted.
+
+    Returns:
+        Formatted submission instructions as a single string.
+    """
+    lines = [
+        "\n" + "=" * 80,
+        f"✓ Commit created with {result_count} results for {model_count} model(s)",
+        "=" * 80,
+        f"Location: {remote_path}",
+        "\n📋 To submit these results, follow these steps:\n",
+        "1. Go to the remote repository:",
+        f"   {remote_path}\n",
+        "2. Create a fork (if you don't have one already):",
+        "   gh repo fork --remote --remote-name fork --clone=false\n",
+        "3. Push your changes to your fork:",
+        "   git push fork\n",
+        "4. Create a pull request:",
+        "   gh pr create --base main --head <your-username>:main\n",
+        "5. Provide details about your evaluation in the PR description\n",
+        "=" * 80,
+    ]
+    return "\n".join(lines)
+
+
+def _build_commit_message(
+    normalized_models: list[ModelMeta],
+    unsubmitted: dict[ModelMeta, list[Path]],
+) -> tuple[str, int]:
+    """Build the commit message for submitted results.
+
+    Args:
+        normalized_models: Models being submitted.
+        unsubmitted: Result files grouped by model.
+
+    Returns:
+        Tuple containing the formatted commit message and result count.
+    """
+    model_str = ", ".join(model.name for model in normalized_models if model.name)
+    result_count = sum(len(files) for files in unsubmitted.values())
+    commit_message = (
+        f"Add MTEB evaluation results for {model_str}\n\n"
+        f"Models: {model_str}\n"
+        f"Total results: {result_count}\n"
+        f"Submitted by MTEB ResultCache"
+    )
+    return commit_message, result_count
