@@ -41,6 +41,12 @@ class HeARS11AudioWrapper(AbsEncoder):
 
     @classmethod
     def _prepare_audio(cls, audio: np.ndarray) -> torch.Tensor:
+        """Convert decoded audio to the fixed 2-second, 16 kHz input expected by HeAR-s1.1.
+
+        MTEB's audio collator handles decoding and resampling, but audio clips can still
+        have different lengths and channel layouts. This normalizes each waveform to
+        mono float32 audio with exactly 32,000 samples so the batch can be stacked.
+        """
         audio = np.asarray(audio, dtype=np.float32)
         if audio.ndim > 1:
             audio = audio.mean(axis=0)
@@ -60,7 +66,6 @@ class HeARS11AudioWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):
@@ -85,6 +90,7 @@ class HeARS11AudioWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
         return self.get_audio_embeddings(inputs, **kwargs)
 
 
@@ -98,7 +104,7 @@ hear_s11_audio = ModelMeta(
     max_tokens=None,
     n_parameters=22_140_288,
     n_embedding_parameters=None,
-    memory_usage_mb=None,
+    memory_usage_mb=84,
     embed_dim=384,
     license="https://developers.google.com/health-ai-developer-foundations/terms",
     reference="https://huggingface.co/matthewagi/HeAR-s1.1",
