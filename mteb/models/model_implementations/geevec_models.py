@@ -3,12 +3,10 @@ from __future__ import annotations
 import logging
 import os
 import time
-from functools import lru_cache
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
-from huggingface_hub import snapshot_download
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
@@ -25,14 +23,13 @@ logger = logging.getLogger(__name__)
 
 GEEVEC_INSTRUCTION = "Instruct: {instruction}\nQuery: "
 GEEVEC_MAX_SEQ_LENGTH = 512
-GEEVEC_DEFAULT_BATCH_SIZE = 8
 GEEVEC_API_DEFAULT_BATCH_SIZE = 32
 GEEVEC_API_MODEL_BY_DOMAIN = {
     "coding": "geevec-embeddings-coding-1.0",
     "reasoning": "geevec-embeddings-reasoning-1.0",
     "general": "geevec-embeddings-general-1.0",
 }
-GEEVEC_DEFAULT_PROMPT_TEMPLATE = "Instruct: {}\nQuery: {}"
+GEEVEC_API_INSTRUCTION_TEMPLATE = "Instruct: {instruction}\nQuery: {text}"
 
 
 def _resolve_geevec_embeddings_endpoint(base_url: str) -> str:
@@ -45,23 +42,6 @@ def _resolve_geevec_embeddings_endpoint(base_url: str) -> str:
         return f"{normalized}/v1/embeddings"
     return f"{normalized}/openapi/v1/embeddings"
 
-
-def _resolve_hf_endpoint() -> str:
-    return os.environ.get("HF_ENDPOINT", "https://hf-mirror.com")
-
-
-def _resolve_hf_hub_cache() -> str:
-    return os.environ.get("HF_HUB_CACHE", "/data/share/project/shared_models")
-
-
-@lru_cache(maxsize=4)
-def _download_geevec_snapshot(model_name: str, revision: str) -> str:
-    return snapshot_download(
-        repo_id=model_name,
-        revision=revision,
-        endpoint=_resolve_hf_endpoint(),
-        cache_dir=_resolve_hf_hub_cache(),
-    )
 
 # copied from https://github.com/QwenLM/Qwen3-Embedding/blob/main/evaluation/task_prompts.json
 PROMPTS_DICT = {
@@ -227,10 +207,9 @@ class GeeVecLiteModel(InstructSentenceTransformerModel):
         max_seq_length: int | None = GEEVEC_MAX_SEQ_LENGTH,
         **kwargs,
     ) -> None:
-        local_model_path = _download_geevec_snapshot(model_name, revision)
         super().__init__(
-            local_model_path,
-            revision=None,
+            model_name,
+            revision=revision,
             device=device,
             instruction_template=instruction_template,
             max_seq_length=max_seq_length,
@@ -240,15 +219,16 @@ class GeeVecLiteModel(InstructSentenceTransformerModel):
 
     def encode(self, inputs, *, task_metadata, hf_split, hf_subset, prompt_type=None, **kwargs):
         sentences = [text for batch in inputs for text in batch["text"]]
-        # domain = self._resolve_domain(task_metadata)
         domain = kwargs.get("domain") or None
+        # The GeeVec lite model uses `domain` to select its LoRA adapter.
 
-        kwargs.setdefault("batch_size", GEEVEC_DEFAULT_BATCH_SIZE)
-        kwargs.setdefault("normalize_embeddings", True)
-        if domain is not None:
-            kwargs.setdefault("domain", domain)
-
-        instruction = self._resolve_instruction(task_metadata, prompt_type)
+        if (
+            not self.apply_instruction_to_passages
+            and prompt_type == PromptType.document
+        ):
+            instruction = None
+        else:
+            instruction = self.get_task_instruction(task_metadata, prompt_type)
 
         if instruction:
             logger.info(
@@ -268,27 +248,6 @@ class GeeVecLiteModel(InstructSentenceTransformerModel):
             embeddings = embeddings.cpu().detach().float().numpy()
         return embeddings
 
-    def _resolve_instruction(
-        self,
-        task_metadata: TaskMetadata,
-        prompt_type: PromptType | None,
-    ) -> str | None:
-        if (
-            not self.apply_instruction_to_passages
-            and prompt_type == PromptType.document
-        ):
-            return None
-
-        try:
-            instruction = self.get_instruction(task_metadata, prompt_type)
-        except KeyError:
-            # Some test/mocked tasks are not registered in mteb.get_task.
-            instruction = task_metadata.prompt or ""
-
-        if self.instruction_template and instruction:
-            return self.format_instruction(instruction, prompt_type)
-        return instruction or None
-
 
 class GeeVecAPIModel(AbsEncoder):
     def __init__(
@@ -298,7 +257,7 @@ class GeeVecAPIModel(AbsEncoder):
         timeout: int = 60,
         model_prompts: dict[str, str] | None = None,
         api_model_name: str = "geevec-embeddings-1.0",
-        prompt_template: str = GEEVEC_DEFAULT_PROMPT_TEMPLATE,
+        prompt_template: str = GEEVEC_API_INSTRUCTION_TEMPLATE,
         assert_prompts_exist: bool = True,
         apply_instruction_to_passages: bool = False,
         base_url: str | None = None,
@@ -366,10 +325,11 @@ class GeeVecAPIModel(AbsEncoder):
 
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         input_type = self.model_prompts.get(prompt_name, "document")
-        # domain = GeeVecLiteModel._resolve_domain(task_metadata)
         effective_domain = kwargs.get("domain") or None
+        # The API uses `domain` to select the matching domain-specific backend.
         sentences = self._prepare_texts(sentences, task_metadata, prompt_type)
 
+        # Keep a safe default because the GeeVec API has a request batch limit.
         max_batch_size = kwargs.get("batch_size", GEEVEC_API_DEFAULT_BATCH_SIZE)
         api_model_name = self._resolve_api_model_name(effective_domain)
 
@@ -429,6 +389,7 @@ class GeeVecAPIModel(AbsEncoder):
 
         optional_fields = {}
         if domain is not None:
+            # GeeVec API uses `domain` to route to coding/reasoning/general backends.
             optional_fields["domain"] = domain
         if input_type in {"query", "document"}:
             optional_fields["input_type"] = input_type
@@ -604,14 +565,7 @@ class GeeVecAPIModel(AbsEncoder):
             return str(prompt or "")
 
     def _format_query_with_instruction(self, instruction: str, text: str) -> str:
-        template = self._prompt_template
-        if "{instruction}" in template and "{text}" in template:
-            return template.format(instruction=instruction, text=text)
-        if template.count("{}") >= 2:
-            return template.format(instruction, text)
-        if "{instruction}" in template:
-            return f"{template.format(instruction=instruction)}{text}"
-        return f"{instruction}\n{text}"
+        return self._prompt_template.format(instruction=instruction, text=text)
 
     @staticmethod
     def _is_context_window_error(error_text: str) -> bool:
