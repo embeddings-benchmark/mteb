@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Unpack
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
@@ -13,6 +13,7 @@ from mteb.models.modality_collators import AudioCollator, VideoCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
 
     from mteb import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
