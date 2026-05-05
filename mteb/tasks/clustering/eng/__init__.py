@@ -18,6 +18,7 @@ from .cifar import CIFAR10Clustering, CIFAR100Clustering
 from .clus_trec_covid import ClusTrecCovid
 from .crema_d_clustering import CREMADClustering
 from .hmdb51_clustering import HMDB51Clustering
+from .human_concepts_clustering import HumanConceptsClustering
 from .hume_arxiv_clustering_p2p import HUMEArxivClusteringP2P
 from .hume_reddit_clustering_p2p import HUMERedditClusteringP2P
 from .hume_wiki_cities_clustering import HUMEWikiCitiesClustering
@@ -89,6 +90,7 @@ __all__ = [
     "HUMEArxivClusteringP2P",
     "HUMERedditClusteringP2P",
     "HUMEWikiCitiesClustering",
+    "HumanConceptsClustering",
     "ImageNet10Clustering",
     "ImageNetDog15Clustering",
     "MELDEmotionAudioVideoClustering",
