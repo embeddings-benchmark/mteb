@@ -487,10 +487,10 @@ class AbsTaskRetrieval(AbsTask):
     def _calculate_descriptive_statistics_from_split(  # noqa: PLR0914
         self,
         split: str,
+        *,
         hf_subset: str | None = None,
         compute_overall: bool = False,
-        num_proc: int
-        | None = None,  # used both for dataset conversion and hash computation
+        num_proc: int | None = None,
     ) -> RetrievalDescriptiveStatistics:
         self.convert_v1_dataset_format_to_v2(num_proc)
         if hf_subset and hf_subset in self.dataset:

@@ -421,7 +421,7 @@ class AbsTask(ABC):  # noqa: PLR0904
             logger.info(f"Processing metadata for split {split}")
             if self.metadata.is_multilingual:
                 descriptive_stats[split] = (
-                    self._calculate_descriptive_statistics_from_split(  # type: ignore[assignment]
+                    self._calculate_descriptive_statistics_from_split(
                         split, compute_overall=True, num_proc=num_proc
                     )
                 )
@@ -435,7 +435,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                     pbar_subsets.set_postfix_str(f"Huggingface subset: {hf_subset}")
                     logger.info(f"Processing metadata for subset {hf_subset}")
                     split_details = self._calculate_descriptive_statistics_from_split(
-                        split, hf_subset, num_proc=num_proc
+                        split, hf_subset=hf_subset, num_proc=num_proc
                     )
                     descriptive_stats[split][hf_subset_stat][hf_subset] = split_details
             else:
@@ -461,6 +461,7 @@ class AbsTask(ABC):  # noqa: PLR0904
     def _calculate_descriptive_statistics_from_split(
         self,
         split: str,
+        *,
         hf_subset: str | None = None,
         compute_overall: bool = False,
         num_proc: int | None = None,

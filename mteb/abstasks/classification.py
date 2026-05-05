@@ -560,6 +560,7 @@ class AbsTaskClassification(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self,
         split: str,
+        *,
         hf_subset: str | None = None,
         compute_overall: bool = False,
         num_proc: int | None = None,
