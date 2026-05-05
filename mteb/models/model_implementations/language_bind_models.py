@@ -358,7 +358,7 @@ language_bind_video_ft = ModelMeta(
 
 language_bind_audio_ft = ModelMeta(
     loader=LanguageBindWrapper,
-    name=_AUDIO_MODEL_NAME,
+    name="LanguageBind/LanguageBind_Audio_FT",
     revision="4820c496563c46acfb1ff9a486fae5319f16257e",
     n_parameters=345_000_000,
     n_embedding_parameters=37_945_344,
