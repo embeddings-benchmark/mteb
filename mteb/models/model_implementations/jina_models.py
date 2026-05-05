@@ -13,6 +13,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
+    SentenceTransformerMultimodalEncoderWrapper,
 )
 from mteb.types import PromptType
 
@@ -760,6 +761,81 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
         return embeddings
 
 
+class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        has_video = "video" in inputs.dataset.features
+        has_audio = "audio" in inputs.dataset.features
+        if has_video:
+            from mteb.models.modality_collators import VideoCollator
+
+            inputs.collate_fn = VideoCollator(
+                target_sampling_rate=self.target_sampling_rate or 16000,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+                max_samples=self.max_samples,
+            )
+        elif has_audio:
+            from mteb.models.modality_collators import AudioCollator
+
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.target_sampling_rate or 16000,
+                max_samples=self.max_samples,
+            )
+
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+        jina_task_name = (
+            self.model_prompts.get(prompt_name, None)
+            if self.model_prompts and prompt_name
+            else None
+        )
+        task = jina_task_name if jina_task_name else "retrieval"
+        prompt = (
+            "Query: "
+            if prompt_type and prompt_type == PromptType.query
+            else "Document: "
+        )
+
+        all_embeddings = []
+        modality_keys = ("text", "image", "audio", "video")
+        for batch in inputs:
+            if "audio" in batch:
+                batch["audio"] = [
+                    a["array"] if isinstance(a, dict) and "array" in a else a
+                    for a in batch["audio"]
+                ]
+
+            batch_column = next(iter(batch.keys()))
+            batch_inputs = []
+            for i in range(len(batch[batch_column])):
+                parts = [
+                    batch[key][i]
+                    for key in modality_keys
+                    if key in batch and batch[key][i] is not None
+                ]
+                batch_inputs.append(parts[0] if len(parts) == 1 else tuple(parts))
+
+            embeddings = self.model.encode(
+                batch_inputs,
+                task=task,
+                prompt=prompt,
+                **kwargs,
+            )
+            if isinstance(embeddings, torch.Tensor):
+                embeddings = embeddings.cpu().detach().float()
+            all_embeddings.append(embeddings)
+        return np.concatenate(all_embeddings, axis=0)
+
+
 jina_embeddings_v5_text_small = ModelMeta(
     loader=JinaV5TextWrapper,
     loader_kwargs=dict(
@@ -859,6 +935,118 @@ jina_embeddings_v5_text_nano = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="EuroBERT/EuroBERT-210m",
+    citation="""@misc{akram2026jinaembeddingsv5texttasktargetedembeddingdistillation,
+      title={jina-embeddings-v5-text: Task-Targeted Embedding Distillation},
+      author={Mohammad Kalim Akram and Saba Sturua and Nastia Havriushenko and Quentin Herreros and Michael Günther and Maximilian Werk and Han Xiao},
+      year={2026},
+      eprint={2602.15547},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2602.15547},
+}""",
+    extra_requirements_groups=["peft"],
+)
+
+
+jina_embeddings_v5_omni_small = ModelMeta(
+    loader=JinaV5OmniWrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        model_prompts={
+            "Retrieval": "retrieval",
+            "Clustering": "clustering",
+            "Classification": "classification",
+            "STS": "text-matching",
+            "PairClassification": "text-matching",
+            "BitextMining": "text-matching",
+            "MultilabelClassification": "classification",
+            "Reranking": "retrieval",
+            "Summarization": "text-matching",
+            "InstructionReranking": "retrieval",
+        },
+    ),
+    name="jinaai/jina-embeddings-v5-omni-small",
+    model_type=["dense"],
+    modalities=["text", "image", "audio", "video"],
+    languages=multilingual_langs,
+    open_weights=True,
+    revision="339ada4d0f649dd8edaa11e5113b25dacbdce68d",
+    release_date="2026-04-01",
+    n_parameters=1626268672,
+    n_embedding_parameters=155312128,
+    memory_usage_mb=3102,
+    max_tokens=32768,
+    embed_dim=[32, 64, 128, 256, 512, 768, 1024],
+    license="cc-by-nc-4.0",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "safetensors",
+    ],
+    use_instructions=True,
+    reference="https://huggingface.co/jinaai/jina-embeddings-v5-omni-small",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    adapted_from="jinaai/jina-embeddings-v5-text-small",
+    citation="""@misc{akram2026jinaembeddingsv5texttasktargetedembeddingdistillation,
+      title={jina-embeddings-v5-text: Task-Targeted Embedding Distillation},
+      author={Mohammad Kalim Akram and Saba Sturua and Nastia Havriushenko and Quentin Herreros and Michael Günther and Maximilian Werk and Han Xiao},
+      year={2026},
+      eprint={2602.15547},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2602.15547},
+}""",
+    extra_requirements_groups=["peft"],
+)
+
+
+jina_embeddings_v5_omni_nano = ModelMeta(
+    loader=JinaV5OmniWrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        model_prompts={
+            "Retrieval": "retrieval",
+            "Clustering": "clustering",
+            "Classification": "classification",
+            "STS": "text-matching",
+            "PairClassification": "text-matching",
+            "BitextMining": "text-matching",
+            "MultilabelClassification": "classification",
+            "Reranking": "retrieval",
+            "Summarization": "text-matching",
+            "InstructionReranking": "retrieval",
+        },
+    ),
+    name="jinaai/jina-embeddings-v5-omni-nano",
+    model_type=["dense"],
+    modalities=["text", "image", "audio", "video"],
+    languages=multilingual_langs,
+    open_weights=True,
+    revision="039cf99b1f35d62bf202b311f1052c31a14c5b4a",
+    release_date="2026-04-01",
+    n_parameters=985984512,
+    n_embedding_parameters=98503680,
+    memory_usage_mb=1881,
+    max_tokens=8192,
+    embed_dim=[32, 64, 128, 256, 512, 768],
+    license="cc-by-nc-4.0",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "safetensors",
+    ],
+    use_instructions=True,
+    reference="https://huggingface.co/jinaai/jina-embeddings-v5-omni-nano",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    adapted_from="jinaai/jina-embeddings-v5-text-nano",
     citation="""@misc{akram2026jinaembeddingsv5texttasktargetedembeddingdistillation,
       title={jina-embeddings-v5-text: Task-Targeted Embedding Distillation},
       author={Mohammad Kalim Akram and Saba Sturua and Nastia Havriushenko and Quentin Herreros and Michael Günther and Maximilian Werk and Han Xiao},
