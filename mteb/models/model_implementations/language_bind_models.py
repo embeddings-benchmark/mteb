@@ -344,7 +344,7 @@ _LANGUAGE_BIND_COMMON = dict(
 
 language_bind_video_ft = ModelMeta(
     loader=LanguageBindWrapper,
-    name=_VIDEO_MODEL_NAME,
+    name="LanguageBind/LanguageBind_Video_FT",
     revision="13f52c20ce666a7d017bcd00522039f4ab034a66",
     n_parameters=427_616_513,
     n_embedding_parameters=37_945_344,
