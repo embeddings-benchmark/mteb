@@ -44,6 +44,28 @@ GEEVEC_BRIGHT_REASONING_SUBSETS = {
     "theoremqa_questions",
     "theoremqa_theorems",
 }
+GEEVEC_BRIGHT_V1_1_REASONING_TASKS = {
+    "BrightAopsRetrieval",
+    "BrightBiologyRetrieval",
+    "BrightBiologyLongRetrieval",
+    "BrightEarthScienceRetrieval",
+    "BrightEarthScienceLongRetrieval",
+    "BrightEconomicsRetrieval",
+    "BrightEconomicsLongRetrieval",
+    "BrightLeetcodeRetrieval",
+    "BrightPonyRetrieval",
+    "BrightPonyLongRetrieval",
+    "BrightPsychologyRetrieval",
+    "BrightPsychologyLongRetrieval",
+    "BrightRoboticsRetrieval",
+    "BrightRoboticsLongRetrieval",
+    "BrightStackoverflowRetrieval",
+    "BrightStackoverflowLongRetrieval",
+    "BrightSustainableLivingRetrieval",
+    "BrightSustainableLivingLongRetrieval",
+    "BrightTheoremQAQuestionsRetrieval",
+    "BrightTheoremQATheoremsRetrieval",
+}
 
 
 def _resolve_geevec_embeddings_endpoint(base_url: str) -> str:
@@ -71,7 +93,7 @@ def _resolve_geevec_domain(
     else:
         languages = eval_langs
 
-    if (
+    if task_metadata.name in GEEVEC_BRIGHT_V1_1_REASONING_TASKS or (
         task_metadata.name in {"BrightRetrieval", "BrightLongRetrieval"}
         and hf_subset in GEEVEC_BRIGHT_REASONING_SUBSETS
     ):
