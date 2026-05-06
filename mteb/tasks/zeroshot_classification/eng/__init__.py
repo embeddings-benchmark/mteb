@@ -60,6 +60,10 @@ from .ucf101 import (
     UCF101VideoZeroShotClassification,
     UCF101ZeroShotClassification,
 )
+from .vggsound_zeroshot import (
+    VGGSoundVideoAudioZeroshotClassification,
+    VGGSoundVideoZeroshotClassification,
+)
 from .worldsense_classification import (
     WorldSenseAudioVideoZeroShotClassification,
     WorldSenseVideoZeroShotClassification,
@@ -112,6 +116,8 @@ __all__ = [
     "UCF101VideoAudioZeroShotClassification",
     "UCF101VideoZeroShotClassification",
     "UCF101ZeroShotClassification",
+    "VGGSoundVideoAudioZeroshotClassification",
+    "VGGSoundVideoZeroshotClassification",
     "WorldSenseAudioVideoZeroShotClassification",
     "WorldSenseVideoZeroShotClassification",
 ]
