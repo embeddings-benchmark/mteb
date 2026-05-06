@@ -102,8 +102,6 @@ _ISO3_TO_LANG: dict[str, tuple[str | None, str | None, str | None]] = {
     "yid": (None, "yiddish", None),
 }
 
-_LANG_AUTO = "auto"  # sentinel: derive language from task_metadata at index time
-
 _DEFAULT_LANG: tuple[str | None, str | None, str | None] = ("en", "english", None)
 
 
@@ -152,27 +150,41 @@ def _make_tokenizer_fn(name: str | None):
 
 
 class BM25Search:
-    """BM25 search using PyStemmer for stemming and bm25s for indexing.
+    """Language-aware BM25 retrieval model.
 
-    By default the stemmer and stopwords are derived automatically from the
-    task metadata at index time.  Pass explicit ``stopwords`` / ``stemmer_language``
-    values to override.
+    At index time the task's ``eval_langs`` metadata is inspected to select the
+    right stopword list, Snowball stemmer, and tokenizer automatically:
+
+    * **Stopwords** — bm25s built-in lists for EN/DE/NL/FR/ES/PT/IT/RU/SV/NO/ZH.
+    * **Stemmer** — PyStemmer (Snowball) for 30+ languages.
+    * **Tokenizer** — Jieba word segmentation for Chinese; character-level
+      unigrams for other logographic scripts (Japanese, Thai, …); default
+      whitespace tokenisation for everything else.
+    * **Freq-based stopwords** — for languages that have no named stopword list,
+      tokens appearing in ≥ ``freq_threshold`` fraction of corpus documents are
+      removed automatically (set ``freq_threshold=0`` to disable).
+
+    Pass explicit ``stopwords`` or ``stemmer_language`` to pin those settings and
+    skip auto-detection for the corresponding parameter.
     """
 
     def __init__(
         self,
         previous_results: str | None = None,
-        stopwords: str | None = _LANG_AUTO,
-        stemmer_language: str | None = _LANG_AUTO,
+        stopwords: str | None = None,
+        stemmer_language: str | None = None,
+        freq_threshold: float = 0.9,
         **kwargs,
     ):
         self.model = None
-        self._stopwords_cfg = stopwords
-        self._stemmer_cfg = stemmer_language
-        self.stopwords: str | None = "en"        # overwritten in index()
-        self.stemmer = None                       # overwritten in index()
-        self._tokenizer_fn = None                 # overwritten in index()
-        self._corpus_vocab: dict[str, int] = {}  # persisted for query encoding
+        self._stopwords_cfg = stopwords  # None → auto-detect in index()
+        self._stemmer_cfg = stemmer_language  # None → auto-detect in index()
+        self._freq_threshold = freq_threshold
+        self.stopwords: str | None = None
+        self.stemmer = None
+        self._tokenizer_fn = None
+        self._freq_stopwords: frozenset[str] = frozenset()
+        self._corpus_vocab: dict[str, int] = {}
         self.retriever = None
         self.corpus_idx_to_id: dict[int, str] = {}
 
@@ -186,30 +198,31 @@ class BM25Search:
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> None:
-        stopwords_cfg = self._stopwords_cfg
-        stemmer_cfg = self._stemmer_cfg
-        if _LANG_AUTO in (stopwords_cfg, stemmer_cfg):
-            detected_stopwords, detected_stemmer, tokenizer_name = _resolve_language(
-                task_metadata, hf_subset
-            )
-            self.stopwords = (
-                detected_stopwords if stopwords_cfg == _LANG_AUTO else stopwords_cfg
-            )
-            stemmer_lang = (
-                detected_stemmer if stemmer_cfg == _LANG_AUTO else stemmer_cfg
-            )
-        else:
-            self.stopwords = stopwords_cfg
-            stemmer_lang = stemmer_cfg
-            tokenizer_name = None
+        detected_stopwords, detected_stemmer, tokenizer_name = _resolve_language(
+            task_metadata, hf_subset
+        )
+        # Use explicit user values where provided; fall back to detected values.
+        self.stopwords = (
+            self._stopwords_cfg
+            if self._stopwords_cfg is not None
+            else detected_stopwords
+        )
+        stemmer_lang = (
+            self._stemmer_cfg if self._stemmer_cfg is not None else detected_stemmer
+        )
+        # Tokenizer is always derived from language detection (no explicit override yet).
+        if self._stopwords_cfg is not None or self._stemmer_cfg is not None:
+            tokenizer_name = None  # explicit config → don't inject a custom tokenizer
 
         if stemmer_lang:
             import Stemmer
+
             self.stemmer = Stemmer.Stemmer(stemmer_lang)
         else:
             self.stemmer = None
         self._tokenizer_fn = _make_tokenizer_fn(tokenizer_name)
         self._corpus_vocab = {}  # reset for this corpus
+        self._freq_stopwords = frozenset()
         logger.info(
             f"Language settings — stopwords: {self.stopwords!r}, "
             f"stemmer: {stemmer_lang!r}, tokenizer: {tokenizer_name!r}"
@@ -219,6 +232,10 @@ class BM25Search:
         corpus_texts = [
             "\n".join([doc.get("title", ""), doc["text"]]) for doc in corpus
         ]  # concatenate all document values (title, text, ...)
+
+        if self.stopwords is None and self._freq_threshold > 0:
+            self._freq_stopwords = self._build_freq_stopwords(corpus_texts)
+
         encoded_corpus = self._encode(corpus_texts)
 
         logger.info(
@@ -280,18 +297,58 @@ class BM25Search:
 
         return results
 
+    def _build_freq_stopwords(self, corpus_texts: list[str]) -> frozenset[str]:
+        """Return tokens appearing in >= freq_threshold fraction of corpus docs."""
+        n = len(corpus_texts)
+        if self._tokenizer_fn is not None:
+            token_lists: list[list[str]] = [self._tokenizer_fn(t) for t in corpus_texts]
+        else:
+            import bm25s
+
+            tokenized = bm25s.tokenize(
+                corpus_texts, stopwords=None, stemmer=self.stemmer
+            )
+            id_to_token = {v: k for k, v in tokenized.vocab.items()}
+            token_lists = [[id_to_token[i] for i in doc] for doc in tokenized.ids]
+
+        doc_freq: dict[str, int] = {}
+        for tokens in token_lists:
+            for t in set(tokens):
+                doc_freq[t] = doc_freq.get(t, 0) + 1
+
+        stops = frozenset(
+            t for t, df in doc_freq.items() if df / n >= self._freq_threshold
+        )
+        logger.info(
+            f"Freq-stopwords: {len(stops)} tokens removed (threshold={self._freq_threshold})"
+        )
+        return stops
+
     def _encode(self, texts: list[str]):
         """Tokenize texts using bm25s. Not to be confused with EncoderProtocol.encode()."""
         import bm25s
 
         if self._tokenizer_fn is None:
+            if self._freq_stopwords:
+                # Merge named stopwords with corpus-frequency stopwords.
+                # bm25s applies the stemmer before checking, so freq_stopwords (already
+                # stemmed from the pre-pass) will match correctly.
+                from bm25s.tokenization import _infer_stopwords
+
+                named = list(_infer_stopwords(self.stopwords)) if self.stopwords else []
+                combined = named + list(self._freq_stopwords)
+                return bm25s.tokenize(texts, stopwords=combined, stemmer=self.stemmer)
             return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
 
         # Custom tokenizer path — build Tokenized manually and persist corpus vocab
         # so query token IDs match the corpus index.
         from bm25s.tokenization import Tokenized, _infer_stopwords
 
-        stopwords_set = frozenset(_infer_stopwords(self.stopwords) if self.stopwords else [])
+        stopwords_set = (
+            frozenset(_infer_stopwords(self.stopwords))
+            if self.stopwords
+            else frozenset()
+        ) | self._freq_stopwords
         token_lists = [
             [t for t in self._tokenizer_fn(text) if t not in stopwords_set]
             for text in texts
@@ -317,19 +374,18 @@ class BM25Search:
         return Tokenized(ids=encoded_ids, vocab=vocab)
 
 
-class BM25MultilingualSearch(BM25Search):
+class BM25SubwordSearch(BM25Search):
     """BM25 search using a HuggingFace subword tokenizer for multilingual support.
 
     Unlike the standard BM25 model that relies on whitespace splitting and
-    PyStemmer, this uses a trained multilingual subword tokenizer (default:
-    xlm-roberta-base) that handles non-Latin scripts (Chinese, Japanese, etc.)
-    without requiring language-specific stemmers.
+    PyStemmer, this uses a trained subword tokenizer (default: Qwen/Qwen3-0.6B)
+    that handles non-Latin scripts without requiring language-specific knowledge.
     """
 
     def __init__(
         self,
         previous_results: str | None = None,
-        tokenizer_name: str = "xlm-roberta-base",
+        tokenizer_name: str = "Qwen/Qwen3-0.6B",
         **kwargs,
     ):
         from tokenizers import Tokenizer
@@ -337,9 +393,11 @@ class BM25MultilingualSearch(BM25Search):
         self.model = None
         self._stopwords_cfg = None
         self._stemmer_cfg = None
+        self._freq_threshold = 0.0
         self.stopwords = None
         self.stemmer = None
         self._tokenizer_fn = None
+        self._freq_stopwords: frozenset[str] = frozenset()
         self.retriever = None
         self.corpus_idx_to_id = {}
         self._corpus_vocab: dict[str, int] = {}
@@ -385,209 +443,13 @@ class BM25MultilingualSearch(BM25Search):
         return Tokenized(ids=encoded_ids, vocab=vocab)
 
 
-class BM25UnicodeSplitSearch(BM25Search):
-    """BM25 with script-aware Unicode tokenization; no language knowledge needed.
-
-    Uses character unigrams for logographic scripts (CJK, Thai, Khmer, etc.)
-    and whitespace-split words for Latin/Cyrillic/Arabic/Hebrew/etc., with
-    NFKC normalisation and lowercasing.  No external models or language
-    detection required.
-    """
-
-    def __init__(self, previous_results: str | None = None, **kwargs):
-        self.model = None
-        self.stemmer = None
-        self.stopwords = None
-        self.retriever = None
-        self.corpus_idx_to_id: dict[int, str] = {}
-        self._corpus_vocab: dict[str, int] = {}
-
-    def index(self, corpus, *, task_metadata, hf_split, hf_subset, encode_kwargs, num_proc=None):
-        self._corpus_vocab = {}  # reset so _encode rebuilds vocab from this corpus
-        super().index(
-            corpus,
-            task_metadata=task_metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            encode_kwargs=encode_kwargs,
-            num_proc=num_proc,
-        )
-
-    def _encode(self, texts: list[str]):
-        from bm25s.tokenization import Tokenized
-
-        token_lists = [_unicode_tokenize(t) for t in texts]
-
-        if self._corpus_vocab:
-            # Query encoding: reuse corpus vocab so token IDs match the index.
-            vocab = self._corpus_vocab
-            encoded_ids = [
-                [vocab[t] for t in tokens if t in vocab] for tokens in token_lists
-            ]
-        else:
-            # Corpus encoding: build vocab and persist it for later query calls.
-            vocab = {}
-            encoded_ids = []
-            for tokens in token_lists:
-                ids = []
-                for t in tokens:
-                    if t not in vocab:
-                        vocab[t] = len(vocab)
-                    ids.append(vocab[t])
-                encoded_ids.append(ids)
-            self._corpus_vocab = vocab
-
-        return Tokenized(ids=encoded_ids, vocab=vocab)
-
-
 def bm25_loader(model_name, **kwargs) -> SearchProtocol:
-    import bm25s
-    import Stemmer
-
-    class BM25Search:
-        """BM25 search"""
-
-        retriever: bm25s.BM25
-        corpus_idx_to_id: dict[int, str]
-
-        def __init__(
-            self,
-            previous_results: str | None = None,
-            stopwords: str = "en",
-            stemmer_language: str | None = "english",
-            **kwargs,
-        ):
-            self.model = None
-
-            self.stopwords = stopwords
-            self.stemmer = (
-                Stemmer.Stemmer(stemmer_language) if stemmer_language else None
-            )
-
-        def index(
-            self,
-            corpus: CorpusDatasetType,
-            *,
-            task_metadata: TaskMetadata,
-            hf_split: str,
-            hf_subset: str,
-            encode_kwargs: EncodeKwargs,
-            num_proc: int | None = None,
-        ) -> None:
-            logger.info("Encoding Corpus...")
-            corpus_texts = [
-                "\n".join([doc.get("title", ""), doc["text"]]) for doc in corpus
-            ]  # concatenate all document values (title, text, ...)
-            encoded_corpus = self._encode(corpus_texts)
-
-            logger.info(
-                f"Indexing Corpus... {len(encoded_corpus.ids):,} documents, {len(encoded_corpus.vocab):,} vocab"
-            )
-
-            # Create the BM25 model and index the corpus
-            self.retriever = bm25s.BM25()
-            self.retriever.index(encoded_corpus)
-            self.corpus_idx_to_id = {i: row["id"] for i, row in enumerate(corpus)}
-
-        def search(
-            self,
-            queries: QueryDatasetType,
-            *,
-            task_metadata: TaskMetadata,
-            hf_split: str,
-            hf_subset: str,
-            top_k: int,
-            encode_kwargs: EncodeKwargs,
-            top_ranked: TopRankedDocumentsType | None = None,
-            num_proc: int | None = None,
-        ) -> RetrievalOutputType:
-            logger.info("Encoding Queries...")
-            query_ids = list(queries["id"])
-            results = {qid: {} for qid in query_ids}
-            processed = _combine_queries_with_instruction_text(queries)
-            queries_texts = processed["text"]
-            query_token_strs = self._encode(queries_texts)
-
-            logger.info(f"Retrieving Results... {len(queries):,} queries")
-
-            queries_results, queries_scores = self.retriever.retrieve(
-                query_token_strs,
-                k=min(top_k, len(self.corpus_idx_to_id)),
-            )
-
-            # Iterate over queries
-            for qi, qid in enumerate(query_ids):
-                query_results = queries_results[qi]
-                scores = queries_scores[qi]
-                doc_id_to_score = {}
-                query_documents = (
-                    top_ranked[qid] if top_ranked and qid in top_ranked else None
-                )
-
-                # Iterate over results
-                for doc_idx, score in zip(query_results, scores):
-                    doc_id = self.corpus_idx_to_id[doc_idx]
-
-                    # handle reranking with a filtered set of documents
-                    if query_documents is not None and doc_id not in query_documents:
-                        continue
-                    doc_id_to_score[doc_id] = float(score)
-
-                results[qid] = doc_id_to_score
-
-            return results
-
-        def _encode(self, texts: list[str]):
-            """Tokenize texts using bm25s. Not to be confused with EncoderProtocol.encode()."""
-            return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
-
     return BM25Search(**kwargs)
 
 
-def bm25_multilingual_loader(model_name, **kwargs) -> SearchProtocol:
-    return BM25MultilingualSearch(**kwargs)
+def bm25_subword_loader(model_name, **kwargs) -> SearchProtocol:
+    return BM25SubwordSearch(**kwargs)
 
-
-def bm25_unicode_loader(model_name, **kwargs) -> SearchProtocol:
-    return BM25UnicodeSplitSearch(**kwargs)
-
-
-def bm25_lang_aware_loader(model_name, **kwargs) -> SearchProtocol:
-    return BM25Search(**kwargs)
-
-
-bm25_s = ModelMeta(
-    loader=bm25_loader,
-    extra_requirements_groups=["bm25s"],
-    name="mteb/baseline-bm25s",
-    model_type=["dense"],
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="0_1_10",
-    release_date="2024-07-10",  # release of version 0.1.10
-    n_parameters=None,
-    n_embedding_parameters=None,
-    memory_usage_mb=None,
-    embed_dim=None,
-    license=None,
-    max_tokens=None,
-    reference="https://github.com/xhluca/bm25s",
-    similarity_fn_name=None,
-    framework=[],
-    use_instructions=False,
-    public_training_code="https://github.com/xhluca/bm25s",
-    public_training_data=None,
-    training_datasets=None,
-    citation="""@misc{bm25s,
-      title={BM25S: Orders of magnitude faster lexical search via eager sparse scoring},
-      author={Xing Han Lù},
-      year={2024},
-      eprint={2407.03618},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2407.03618},
-}""",
-)
 
 _BM25_CITATION = """@misc{bm25s,
       title={BM25S: Orders of magnitude faster lexical search via eager sparse scoring},
@@ -599,15 +461,112 @@ _BM25_CITATION = """@misc{bm25s,
       url={https://arxiv.org/abs/2407.03618},
 }"""
 
-bm25_s_multilingual = ModelMeta(
-    loader=bm25_multilingual_loader,
+qwen_languages = [
+    "afr-Latn",
+    "ara-Arab",
+    "aze-Latn",
+    "bel-Cyrl",
+    "bul-Cyrl",
+    "ben-Beng",
+    "cat-Latn",
+    "ceb-Latn",
+    "ces-Latn",
+    "cym-Latn",
+    "dan-Latn",
+    "deu-Latn",
+    "ell-Grek",
+    "eng-Latn",
+    "spa-Latn",
+    "est-Latn",
+    "eus-Latn",
+    "fas-Arab",
+    "fin-Latn",
+    "fra-Latn",
+    "glg-Latn",
+    "guj-Gujr",
+    "heb-Hebr",
+    "hin-Deva",
+    "hrv-Latn",
+    "hat-Latn",
+    "hun-Latn",
+    "hye-Armn",
+    "ind-Latn",
+    "isl-Latn",
+    "ita-Latn",
+    "jpn-Jpan",
+    "jav-Latn",
+    "kat-Geor",
+    "kaz-Cyrl",
+    "khm-Khmr",
+    "kan-Knda",
+    "kor-Hang",
+    "kir-Cyrl",
+    "lao-Laoo",
+    "lit-Latn",
+    "lav-Latn",
+    "mkd-Cyrl",
+    "mal-Mlym",
+    "mon-Cyrl",
+    "mar-Deva",
+    "msa-Latn",
+    "mya-Mymr",
+    "nep-Deva",
+    "nld-Latn",
+    "nor-Latn",
+    "nob-Latn",
+    "nno-Latn",
+    "pan-Guru",
+    "pol-Latn",
+    "por-Latn",
+    "que-Latn",
+    "ron-Latn",
+    "rus-Cyrl",
+    "sin-Sinh",
+    "slk-Latn",
+    "slv-Latn",
+    "swa-Latn",
+    "tam-Taml",
+    "tel-Telu",
+    "tha-Thai",
+    "tgl-Latn",
+    "tur-Latn",
+    "ukr-Cyrl",
+    "urd-Arab",
+    "vie-Latn",
+    "yor-Latn",
+    "zho-Hans",
+]
+
+# bm25 likely supports more languages, but these are the ones that has a tokenizer and/or stopword list available in bm25s or PyStemmer
+bm25_s_languages = [
+    # Latin-script languages with bm25s stopword lists
+    "eng-Latn",
+    "deu-Latn",
+    "nld-Latn",
+    "fra-Latn",
+    "spa-Latn",
+    "por-Latn",
+    "ita-Latn",
+    "swe-Latn",
+    "nob-Latn",
+    "nno-Latn",
+    "nor-Latn",
+    # Chinese (Jieba word segmentation + bm25s "zh" stopwords)
+    "zho-Hans",
+    "zho-Hant",
+    "cmn-Hans",
+    "cmn-Hant",
+]
+
+bm25_s = ModelMeta(
+    loader=bm25_loader,
     extra_requirements_groups=["bm25s"],
-    name="mteb/baseline-bm25s-multilingual",
+    name="mteb/baseline-bm25s",
     model_type=["dense"],
-    languages=None,
+    languages=bm25_s_languages,
     open_weights=True,
-    revision="0_1_0",
-    release_date="2026-04-15",
+    revision="0_3_0",
+    release_date="2026-05-06",
     n_parameters=0,
     n_embedding_parameters=0,
     memory_usage_mb=None,
@@ -624,40 +583,15 @@ bm25_s_multilingual = ModelMeta(
     citation=_BM25_CITATION,
 )
 
-bm25_s_unicode = ModelMeta(
-    loader=bm25_unicode_loader,
+bm25_s_subword = ModelMeta(
+    loader=bm25_subword_loader,
     extra_requirements_groups=["bm25s"],
-    name="mteb/baseline-bm25s-unicode",
+    name="mteb/baseline-bm25s-subword",
     model_type=["dense"],
-    languages=None,
+    languages=qwen_languages,
     open_weights=True,
     revision="0_1_0",
-    release_date="2026-05-05",
-    n_parameters=0,
-    n_embedding_parameters=0,
-    memory_usage_mb=None,
-    embed_dim=None,
-    license=None,
-    max_tokens=None,
-    reference="https://github.com/xhluca/bm25s",
-    similarity_fn_name=None,
-    framework=[],
-    use_instructions=False,
-    public_training_code="https://github.com/xhluca/bm25s",
-    public_training_data=None,
-    training_datasets=None,
-    citation=_BM25_CITATION,
-)
-
-bm25_s_lang_aware = ModelMeta(
-    loader=bm25_lang_aware_loader,
-    extra_requirements_groups=["bm25s"],
-    name="mteb/baseline-bm25s-lang-aware",
-    model_type=["dense"],
-    languages=None,
-    open_weights=True,
-    revision="0_1_0",
-    release_date="2026-05-05",
+    release_date="2026-05-06",
     n_parameters=0,
     n_embedding_parameters=0,
     memory_usage_mb=None,
