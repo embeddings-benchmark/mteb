@@ -7,7 +7,7 @@ class GlobalNewsRetrieval(AbsTaskRetrieval):
         name="GlobalNewsRetrieval",
         description="Multilingual news article retrieval with synthetic multihop queries.",
         dataset={
-            "path": "mteb/global-news",
+            "path": "mteb-private/global-news",
             "revision": "234dcd32922d32c78e08bfe506a2b90a5401cf7c",
         },
         type="Retrieval",
@@ -45,8 +45,8 @@ class PublicNewsRetrieval(AbsTaskRetrieval):
         name="PublicNewsRetrieval",
         description="Multilingual news article retrieval with synthetic multihop queries.",
         dataset={
-            "path": "mteb/public-news",
-            "revision": "234dcd32922d32c78e08bfe506a2b90a5401cf7c",
+            "path": "mteb-private/public-news",
+            "revision": "82dad8c469646feae9631d69ba92bebfc0a586e9",
         },
         type="Retrieval",
         category="t2t",

@@ -9,7 +9,7 @@ import shutil
 import subprocess
 import warnings
 from collections import defaultdict
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
@@ -41,7 +41,7 @@ from mteb.results import BenchmarkResults, ModelResult, TaskResult
 from mteb.types import SubmitResultsResponse
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable, Sequence
+    from collections.abc import Iterable
 
     from mteb._reversible_workflow.reversible_workflow import ReversibleAction
     from mteb.types import ModelName, Revision
@@ -1236,7 +1236,12 @@ class ResultCache:
     def load_results(
         self,
         models: Sequence[str] | Iterable[ModelMeta] | None = None,
-        tasks: Sequence[str] | Iterable[AbsTask] | Benchmark | str | None = None,
+        tasks: Sequence[str]
+        | Iterable[AbsTask]
+        | Benchmark
+        | Sequence[Benchmark]
+        | str
+        | None = None,
         *,
         require_model_meta: bool = True,
         include_remote: bool = True,
@@ -1278,6 +1283,14 @@ class ResultCache:
         if isinstance(tasks, str):
             tasks = get_benchmark(tasks)
 
+        benchmarks: Sequence[Benchmark] | Benchmark | None = None
+        if isinstance(tasks, Sequence) and isinstance(tasks[0], Benchmark):
+            benchmarks = tasks  # type: ignore[assignment]
+            tasks = [sub for task in tasks for sub in cast("Benchmark", task).tasks]
+
+        if isinstance(tasks, Benchmark):
+            benchmarks = tasks
+
         if isinstance(load_experiments, str):
             load_experiments = LoadExperimentEnum.from_str(load_experiments)
 
@@ -1296,7 +1309,7 @@ class ResultCache:
 
         paths = self.get_cache_paths(
             models=models,
-            tasks=tasks,
+            tasks=tasks,  # type: ignore[arg-type]
             require_model_meta=require_model_meta,
             include_remote=include_remote,
             load_experiments=load_experiments,
@@ -1309,7 +1322,7 @@ class ResultCache:
                 if isinstance(task, AbsTask):
                     task_names[task.metadata.name] = task
                 else:
-                    task_names[task] = None
+                    task_names[cast("str", task)] = None
 
         experiment_names = set()
         if isinstance(experiment_kwargs, Mapping):
@@ -1373,7 +1386,7 @@ class ResultCache:
 
         return BenchmarkResults(
             model_results=models_results_object,
-            benchmark=tasks if isinstance(tasks, Benchmark) else None,
+            benchmark=benchmarks,
         )
 
 

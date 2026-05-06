@@ -21,7 +21,7 @@ class TevatronOmniEmbedWrapper(SentenceTransformerMultimodalEncoderWrapper):
         revision: str | None = None,
         device: str | None = None,
         fps: float | None = 2.0,
-        max_frames: int | None = None,
+        max_frames: int | None = 64,
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:

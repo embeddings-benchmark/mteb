@@ -1407,9 +1407,14 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         self,
         user: str | None = None,
         *,
-        tasks: Iterable[AbsTask] | Sequence[str] | Benchmark | None = None,
+        tasks: Iterable[AbsTask]
+        | Sequence[str]
+        | Benchmark
+        | Sequence[Benchmark]
+        | None = None,
         cache: ResultCache | None = None,
         create_pr: bool = False,
+        raise_error: bool = False,
     ) -> None:
         """Pushes the evaluation results of the model to the HuggingFace Hub.
 
@@ -1418,6 +1423,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             tasks: The tasks to push results for. If None, results for all tasks will be pushed.
             cache: The ResultCache containing the evaluation results to push.
             create_pr: Whether to create a pull request for the model card update if the model card already exists on the HuggingFace Hub. If False, the model card will be updated directly without a pull request.
+            raise_error: Whether to push results if model have missing scores.
         """
         from mteb.benchmarks.benchmark import Benchmark
         from mteb.cache import ResultCache
@@ -1434,7 +1440,13 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         model_result.push_model_results(
             user=user,
             create_pr=create_pr,
-            benchmark=tasks if isinstance(tasks, Benchmark) else None,
+            raise_error=raise_error,
+            benchmark=(
+                tasks  # type: ignore[arg-type]
+                if isinstance(tasks, Benchmark)
+                or (isinstance(tasks, Sequence) and isinstance(tasks[0], Benchmark))
+                else None
+            ),
         )
 
 

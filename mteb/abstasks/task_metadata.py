@@ -154,6 +154,7 @@ TaskDomain = Literal[
     "Spoken",
     "Music",
     "Bioacoustics",
+    "Sport",
 ]
 """
 The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though
@@ -385,7 +386,7 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {  # type: ig
     "PairClassification": "pair-classification",
     "VideoClassification": "classification",
     "VideoClustering": "clustering",
-    # "VideoPairClassification": "pair-classification",  # TODO: uncomment when tasks exist
+    "VideoPairClassification": "pair-classification",
     "VideoZeroshotClassification": "classification",
     "VideoCentricQA": "retrieval",
 }
