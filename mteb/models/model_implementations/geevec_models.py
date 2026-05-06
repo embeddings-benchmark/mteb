@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
+    from mteb.types import BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -169,7 +169,6 @@ PROMPTS_DICT = {
     "SICK-E-PL": "Retrieve semantically similar text",
     "SICK-R-PL": "Retrieve semantically similar text",
     "STS22": "Retrieve semantically similar text",
-    "AFQMC": "Retrieve semantically similar text",
     "AFQMC": "Retrieve semantically similar text",
     "BQ": "Retrieve semantically similar text",
     "LCQMC": "Retrieve semantically similar text",
@@ -700,8 +699,7 @@ geevec_embeddings_1_0 = ModelMeta(
         model_prompts={
             PromptType.query.value: "query",
             PromptType.document.value: "document",
-        },
-        api_model_name="geevec-embeddings-1.0",
+        }
     ),
     name="geevec-ai/geevec-embeddings-1.0",
     model_type=["dense"],
