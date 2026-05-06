@@ -1148,16 +1148,16 @@ class ResultCache:
         Examples:
             >>> import mteb
             >>> cache = mteb.ResultCache()
-            >>> model = mteb.get_model(...)
+            >>> model_meta = mteb.get_model_meta(...)
             >>> tasks = mteb.get_tasks(...)
-            >>> results = mteb.evaluate(model, tasks, cache=cache)
+            >>> results = mteb.evaluate(model_meta, tasks, cache=cache)
             >>>
             >>> # Manual submission (step-by-step)
-            >>> submission = cache.submit_results(model, create_pr=False)
+            >>> submission = cache.submit_results(model_meta, create_pr=False)
             >>> # Follow printed instructions
             >>>
             >>> # Automated submission
-            >>> submission = cache.submit_results(model, create_pr=True)
+            >>> submission = cache.submit_results(model_meta, create_pr=True)
             >>> print(f"PR created: {submission['pr_url']}")
         """
         branch_name = (
