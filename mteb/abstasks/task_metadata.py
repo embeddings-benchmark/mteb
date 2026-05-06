@@ -154,6 +154,7 @@ TaskDomain = Literal[
     "Spoken",
     "Music",
     "Bioacoustics",
+    "Sport",
 ]
 """
 The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though
