@@ -124,7 +124,10 @@ PROMPTS_DICT = {
     "CMedQAv2": "Given a Chinese community medical question, retrieve replies that best answer the question",
     "Ocnli": "Retrieve semantically similar text.",
     "Cmnli": "Retrieve semantically similar text.",
-    "ArguAna": {"query": "Given a claim, find documents that refute the claim", "passage": "Given a claim, find documents that refute the claim"},
+    "ArguAna": {
+        "query": "Given a claim, find documents that refute the claim",
+        "passage": "Given a claim, find documents that refute the claim",
+    },
     "ClimateFEVER": "Given a claim about climate change, retrieve documents that support or refute the claim",
     "ClimateFEVERHardNegatives": "Given a claim about climate change, retrieve documents that support or refute the claim",
     "DBPedia": "Given a query, retrieve relevant entity descriptions from DBPedia",
@@ -153,9 +156,9 @@ PROMPTS_DICT = {
     "STSBenchmarkMultilingualSTS": "Retrieve semantically similar text",
     "SICKFr": "Retrieve semantically similar text",
     "SummEvalFr": "Given a news summary, retrieve other semantically similar summaries",
-    "MasakhaNEWSClassification":  "Classify the News in the given texts into one of the seven category: politics,sports,health,business,entertainment,technology,religion ",
-    "OpusparcusPC":"Retrieve semantically similar text",
-    "PawsX":"Retrieve semantically similar text",
+    "MasakhaNEWSClassification": "Classify the News in the given texts into one of the seven category: politics,sports,health,business,entertainment,technology,religion ",
+    "OpusparcusPC": "Retrieve semantically similar text",
+    "PawsX": "Retrieve semantically similar text",
     "SyntecReranking": "Given a question, retrieve passages that answer the question",
     "AlloprofReranking": "Given a question, retrieve passages that answer the question",
     "AlloprofRetrieval": "Given a question, retrieve passages that answer the question",
@@ -254,17 +257,24 @@ PROMPTS_DICT = {
     "MIRACLRetrievalHardNegatives": "Retrieval relevant passage for the given query",
     "BIOSSES": "Retrieve semantically similar text",
     "CQADupstackRetrieval": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
-    "CQADupstackGamingRetrieval": {"query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question", "passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question"},
-    "CQADupstackUnixRetrieval": {"query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question", "passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question"},
+    "CQADupstackGamingRetrieval": {
+        "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    },
+    "CQADupstackUnixRetrieval": {
+        "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    },
     "STS16": "Retrieve semantically similar text",
     "SummEval": "Retrieve semantically similar text",
-    "ATEC": "Retrieve semantically similar text"
+    "ATEC": "Retrieve semantically similar text",
 }
 
 
-
 class GeeVecLiteModel(InstructSentenceTransformerModel):
-    def encode(self, inputs, *, task_metadata, hf_split, hf_subset, prompt_type=None, **kwargs):
+    def encode(
+        self, inputs, *, task_metadata, hf_split, hf_subset, prompt_type=None, **kwargs
+    ):
         sentences = [text for batch in inputs for text in batch["text"]]
         domain = _resolve_geevec_domain(task_metadata, hf_subset, kwargs.get("domain"))
         if domain is not None:
@@ -306,9 +316,7 @@ class GeeVecAPIModel(AbsEncoder):
         max_retries: int = 5,
         timeout: int = 60,
         model_prompts: dict[str, str] | None = None,
-        api_model_name: str = "geevec-embeddings-1.0",
         prompt_template: str = GEEVEC_API_INSTRUCTION_TEMPLATE,
-        assert_prompts_exist: bool = True,
         apply_instruction_to_passages: bool = False,
         base_url: str | None = None,
         api_key: str | None = None,
@@ -319,9 +327,11 @@ class GeeVecAPIModel(AbsEncoder):
 
         self._max_retries = max_retries
         self._timeout = timeout
-        self._default_api_model_name = api_model_name
+        self._default_api_model_name = model_name.rsplit("/", 1)[1]
         self._api_model_name_override = os.environ.get("GEEVEC_API_MODEL")
-        self._route_by_domain = os.environ.get("GEEVEC_ROUTE_BY_DOMAIN", "1").lower() in {
+        self._route_by_domain = os.environ.get(
+            "GEEVEC_ROUTE_BY_DOMAIN", "1"
+        ).lower() in {
             "1",
             "true",
             "yes",
@@ -329,10 +339,13 @@ class GeeVecAPIModel(AbsEncoder):
         }
         self._encoding_format = os.environ.get("GEEVEC_ENCODING_FORMAT", "float")
         # Guard against context overflow on very long retrieval passages.
-        self._max_input_chars = int(os.environ.get("GEEVEC_API_MAX_INPUT_CHARS", "32000"))
-        self._min_input_chars = int(os.environ.get("GEEVEC_API_MIN_INPUT_CHARS", "2048"))
+        self._max_input_chars = int(
+            os.environ.get("GEEVEC_API_MAX_INPUT_CHARS", "32000")
+        )
+        self._min_input_chars = int(
+            os.environ.get("GEEVEC_API_MIN_INPUT_CHARS", "2048")
+        )
         self._prompt_template = prompt_template
-        self._assert_prompts_exist = assert_prompts_exist
         self._apply_instruction_to_passages = apply_instruction_to_passages
         self.prompts_dict = PROMPTS_DICT
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
@@ -524,10 +537,14 @@ class GeeVecAPIModel(AbsEncoder):
                 optional_fields = {}
                 continue
 
-            if response.status_code == 400 and self._is_context_window_error(response.text):
+            if response.status_code == 400 and self._is_context_window_error(
+                response.text
+            ):
                 # Adaptive fallback: progressively shorten each input until it fits.
                 if current_max_chars > self._min_input_chars:
-                    next_max_chars = max(self._min_input_chars, int(current_max_chars * 0.8))
+                    next_max_chars = max(
+                        self._min_input_chars, int(current_max_chars * 0.8)
+                    )
                     if next_max_chars < current_max_chars:
                         logger.warning(
                             "GeeVec API context window exceeded; reducing max chars per text from %s to %s and retrying.",
@@ -535,7 +552,9 @@ class GeeVecAPIModel(AbsEncoder):
                             next_max_chars,
                         )
                         current_max_chars = next_max_chars
-                        req_texts = self._truncate_texts_by_chars(texts, current_max_chars)
+                        req_texts = self._truncate_texts_by_chars(
+                            texts, current_max_chars
+                        )
                         continue
 
             if response.status_code >= 400:
@@ -586,7 +605,10 @@ class GeeVecAPIModel(AbsEncoder):
         task_metadata: TaskMetadata,
         prompt_type: PromptType | None,
     ) -> list[str]:
-        if prompt_type == PromptType.document and not self._apply_instruction_to_passages:
+        if (
+            prompt_type == PromptType.document
+            and not self._apply_instruction_to_passages
+        ):
             return sentences
 
         if prompt_type == PromptType.document:
@@ -594,13 +616,11 @@ class GeeVecAPIModel(AbsEncoder):
 
         instruction = self._resolve_instruction(task_metadata, prompt_type)
         if not instruction:
-            if self._assert_prompts_exist:
-                raise ValueError(
-                    f"Prompt for task '{task_metadata.name}' not found in prompts_dict or task metadata."
-                )
             return sentences
 
-        return [self._format_query_with_instruction(instruction, text) for text in sentences]
+        return [
+            self._format_query_with_instruction(instruction, text) for text in sentences
+        ]
 
     def _resolve_instruction(
         self,
@@ -638,6 +658,7 @@ class GeeVecAPIModel(AbsEncoder):
             else:
                 truncated.append(text[:max_chars])
         return truncated
+
 
 geevec_embeddings_1_0_lite = ModelMeta(
     loader=GeeVecLiteModel,
