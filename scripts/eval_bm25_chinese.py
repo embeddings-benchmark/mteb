@@ -120,12 +120,32 @@ if __name__ == "__main__":
         update={"name": "mteb/baseline-bm25s-lang-aware-jieba-exp3"}
     )
 
+    exp4_meta = mteb.get_model_meta("mteb/baseline-bm25s-multilingual").model_copy(
+        update={
+            "name": "mteb/baseline-bm25s-gemma-exp4",
+            "loader": lambda model_name, **kwargs: BM25MultilingualSearch(
+                tokenizer_name="google/gemma-2-2b", **kwargs
+            ),
+        }
+    )
+
+    exp5_meta = mteb.get_model_meta("mteb/baseline-bm25s-multilingual").model_copy(
+        update={
+            "name": "mteb/baseline-bm25s-gemma-freq-stopwords-exp5",
+            "loader": lambda model_name, **kwargs: BM25MultilingualWithFreqStopwords(
+                tokenizer_name="google/gemma-2-2b", **kwargs
+            ),
+        }
+    )
+
     models = [
         mteb.get_model_meta("mteb/baseline-bm25s"),
         mteb.get_model_meta("mteb/baseline-bm25s-multilingual"),
         make_exp1_model(),
         exp2_meta,
         exp3_meta,
+        exp4_meta,
+        exp5_meta,
     ]
 
     for meta in models:

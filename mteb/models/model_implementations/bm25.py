@@ -186,8 +186,6 @@ class BM25Search:
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> None:
-        import Stemmer
-
         stopwords_cfg = self._stopwords_cfg
         stemmer_cfg = self._stemmer_cfg
         if _LANG_AUTO in (stopwords_cfg, stemmer_cfg):
@@ -205,7 +203,11 @@ class BM25Search:
             stemmer_lang = stemmer_cfg
             tokenizer_name = None
 
-        self.stemmer = Stemmer.Stemmer(stemmer_lang) if stemmer_lang else None
+        if stemmer_lang:
+            import Stemmer
+            self.stemmer = Stemmer.Stemmer(stemmer_lang)
+        else:
+            self.stemmer = None
         self._tokenizer_fn = _make_tokenizer_fn(tokenizer_name)
         self._corpus_vocab = {}  # reset for this corpus
         logger.info(
@@ -333,8 +335,11 @@ class BM25MultilingualSearch(BM25Search):
         from tokenizers import Tokenizer
 
         self.model = None
+        self._stopwords_cfg = None
+        self._stemmer_cfg = None
         self.stopwords = None
         self.stemmer = None
+        self._tokenizer_fn = None
         self.retriever = None
         self.corpus_idx_to_id = {}
         self._corpus_vocab: dict[str, int] = {}
