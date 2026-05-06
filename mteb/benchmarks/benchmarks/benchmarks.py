@@ -1324,6 +1324,53 @@ LONG_EMBED = Benchmark(
 """,
 )
 
+LMEB = Benchmark(
+    name="LMEB",
+    display_name="Long-Horizon Memory",
+    tasks=get_tasks(
+        tasks=[
+            "EPBench",
+            "KnowMeBench",
+            "LoCoMo",
+            "LongMemEval",
+            "REALTALK",
+            "TMD",
+            "MemBench",
+            "ConvoMem",
+            "QASPER",
+            "NovelQA",
+            "PeerQA",
+            "CovidQA",
+            "ESGReports",
+            "MLDR",
+            "LooGLE",
+            "LMEB_SciFact",
+            "Gorilla",
+            "ToolBench",
+            "ReMe",
+            "Proced_mem_bench",
+            "MemGovern",
+            "DeepPlanning",
+        ]
+    ),
+    description="""LMEB is a long-horizon memory retrieval benchmark that groups episodic, dialogue,
+    semantic, and procedural retrieval tasks under a single evaluation suite.
+    It is designed to measure how well embedding models retrieve evidence across long-term memory scenarios.
+    """,
+    reference="https://arxiv.org/abs/2603.12572",
+    citation=r"""
+@misc{zhao2026lmeb,
+  archiveprefix = {arXiv},
+  author = {Zhao, Xinping and Hu, Xinshuo and Xu, Jiaxin and Tang, Danyu and Zhang, Xin and Zhou, Mengjia and Zhong, Yan and Zhou, Yao and Shan, Zifei and Zhang, Meishan and Hu, Baotian and Zhang, Min},
+  eprint = {2603.12572},
+  primaryclass = {cs.CL},
+  title = {LMEB: Long-horizon Memory Embedding Benchmark},
+  url = {https://arxiv.org/abs/2603.12572},
+  year = {2026},
+}
+""",
+)
+
 BRIGHT = Benchmark(
     name="BRIGHT",
     display_name="Reasoning Retrieval",
