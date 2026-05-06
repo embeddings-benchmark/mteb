@@ -368,11 +368,14 @@ class ResultCache:
         Returns:
             The path to the local cache directory.
         """
-        if not self.cache_path.exists():
-            logger.info(
-                f"Cache directory {self.cache_path} does not exist, creating it"
+        # Validate cache_path is a directory (or doesn't exist yet)
+        if self.cache_path.exists() and not self.cache_path.is_dir():
+            raise ValueError(
+                f"Cache path '{self.cache_path}' exists but is not a directory. "
+                "Please remove it or specify a different cache path."
             )
-            self.cache_path.mkdir(parents=True, exist_ok=True)
+
+        self.cache_path.mkdir(parents=True, exist_ok=True)
 
         # if "results" folder already exists update it
         results_directory = self.remote_repo_path
@@ -1191,20 +1194,22 @@ class ResultCache:
             logger.error(f"Error during submit_results setup: {e}")
             raise
 
-        actions: list[ReversibleAction] = [
-            CopyResultsAction(unsubmitted, self.remote_results_path)
-        ]
+        actions: list[ReversibleAction] = []
+
+        # When creating a PR, switch to the submission branch first to keep original branch untouched
+        if create_pr and branch_name:
+            actions.append(
+                CreateBranchAction(remote_path, branch_name, original_branch)
+            )
+
+        # Then copy files and commit on the appropriate branch (original or submission)
+        actions.append(CopyResultsAction(unsubmitted, self.remote_results_path))
 
         commit_message, result_count = _build_commit_message(
             normalized_models, unsubmitted
         )
 
         actions.append(CommitAction(remote_path, commit_message))
-
-        if create_pr and branch_name:
-            actions.append(
-                CreateBranchAction(remote_path, branch_name, original_branch)
-            )
 
         workflow = ReversibleWorkflow(steps=actions)
         workflow.run()
