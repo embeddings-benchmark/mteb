@@ -70,7 +70,7 @@ class UCF101VideoAudioZeroShotClassification(AbsTaskZeroShotClassification):
         license="cc0-1.0",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["video", "audio"],
+        modalities=["video", "audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
 @misc{Soomro2012UCF101,
@@ -125,7 +125,7 @@ class UCF101VideoZeroShotClassification(AbsTaskZeroShotClassification):
         license="cc0-1.0",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["audio"],
+        modalities=["video", "text"],
         sample_creation="found",
         bibtex_citation=r"""
 @misc{Soomro2012UCF101,

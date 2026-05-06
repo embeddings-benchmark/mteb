@@ -169,11 +169,34 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
             for split in self.metadata.eval_splits:
                 split_dataset = lang_dataset[split]
 
-                queries_ds = split_dataset.select_columns(["id", "audio"])
-                corpus_ds = split_dataset.select_columns(
+                selected_queries = split_dataset.select_columns(["id", "audio"])
+                queries_ds = selected_queries.cast(
+                    datasets.Features(
+                        {
+                            "id": datasets.Value("string"),
+                            "audio": selected_queries.features["audio"],
+                        }
+                    )
+                ).map(
+                    lambda x: {"id": str(x["id"]), "audio": x["audio"]},
+                    desc="Converting query IDs to strings",
+                )
+                selected_corpus = split_dataset.select_columns(
                     ["id", "transcription"]
                 ).rename_column("transcription", "text")
+                corpus_ds = selected_corpus.cast(
+                    datasets.Features(
+                        {
+                            "id": datasets.Value("string"),
+                            "text": selected_corpus.features["text"],
+                        }
+                    )
+                ).map(
+                    lambda x: {"id": str(x["id"]), "text": x["text"]},
+                    desc="Converting corpus IDs to strings",
+                )
 
+                # Keep IDs as strings for pytrec_eval compatibility
                 relevant_docs_ = {
                     str(row["id"]): {str(row["id"]): 1} for row in split_dataset
                 }
@@ -239,13 +262,36 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
                 split_dataset = lang_dataset[split]
 
                 # Create datasets directly without intermediate lists
-                queries_ds = split_dataset.select_columns(
+                selected_queries = split_dataset.select_columns(
                     ["id", "transcription"]
                 ).rename_column("transcription", "text")
+                queries_ds = selected_queries.cast(
+                    datasets.Features(
+                        {
+                            "id": datasets.Value("string"),
+                            "text": selected_queries.features["text"],
+                        }
+                    )
+                ).map(
+                    lambda x: {"id": str(x["id"]), "text": x["text"]},
+                    desc="Converting query IDs to strings",
+                )
 
-                corpus_ds = split_dataset.select_columns(["id", "audio"])
+                selected_corpus = split_dataset.select_columns(["id", "audio"])
+                corpus_ds = selected_corpus.cast(
+                    datasets.Features(
+                        {
+                            "id": datasets.Value("string"),
+                            "audio": selected_corpus.features["audio"],
+                        }
+                    )
+                ).map(
+                    lambda x: {"id": str(x["id"]), "audio": x["audio"]},
+                    desc="Converting corpus IDs to strings",
+                )
 
                 # Create relevant_docs mapping
+                # Keep IDs as strings for pytrec_eval compatibility
                 relevant_docs_ = {
                     str(row["id"]): {str(row["id"]): 1} for row in split_dataset
                 }
