@@ -1163,9 +1163,9 @@ class ResultCache:
             >>> submission = cache.submit_results(model_meta, create_pr=True)
             >>> print(f"PR created: {submission['pr_url']}")
         """
-        branch_name = (
-            f"mteb-results-{int(datetime.now().timestamp())}" if create_pr else None
-        )
+        # Always create a new branch to keep the original branch clean
+        branch_name = f"mteb-results-{int(datetime.now().timestamp())}"
+
         try:
             normalized_models = self._normalize_models(models)
             self.download_from_remote()
@@ -1194,15 +1194,9 @@ class ResultCache:
             logger.error(f"Error during submit_results setup: {e}")
             raise
 
-        actions: list[ReversibleAction] = []
-
-        # When creating a PR, switch to the submission branch first to keep original branch untouched
-        if create_pr and branch_name:
-            actions.append(
-                CreateBranchAction(remote_path, branch_name, original_branch)
-            )
-
-        # Then copy files and commit on the appropriate branch (original or submission)
+        actions: list[ReversibleAction] = [
+            CreateBranchAction(remote_path, branch_name, original_branch)
+        ]
         actions.append(CopyResultsAction(unsubmitted, self.remote_results_path))
 
         commit_message, result_count = _build_commit_message(
