@@ -55,7 +55,7 @@ class QwenOmniWrapper(AbsEncoder):
             model_class = Qwen3OmniMoeThinkerForConditionalGeneration
 
         self.model = model_class.from_pretrained(
-            model_name, revision=revision, **kwargs
+            model_name, revision=revision, torch_dtype=torch.bfloat16, **kwargs
         )
         self.model.eval()
         self.model.to(self.device)
@@ -161,7 +161,7 @@ class QwenOmniWrapper(AbsEncoder):
                     "use_audio_in_video": False,
                 },
                 audio_kwargs={"max_length": self.max_samples},
-            ).to(self.device)
+            ).to(self.device, dtype=torch.bfloat16)
 
             outputs = self.model(
                 **model_inputs, output_hidden_states=True, return_dict=True
