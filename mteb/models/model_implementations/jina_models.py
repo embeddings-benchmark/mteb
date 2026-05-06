@@ -762,6 +762,22 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
 
 
 class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
+    def __init__(
+        self,
+        model: str,
+        revision: str | None = None,
+        device: str | None = None,
+        model_prompts: dict[str, str] | None = None,
+        **kwargs: Any,
+    ) -> None:
+        if model == "jinaai/jina-embeddings-v5-omni-nano":
+            model_kwargs = dict(kwargs.get("model_kwargs") or {})
+            model_kwargs.setdefault("torch_dtype", torch.float32)
+            kwargs["model_kwargs"] = model_kwargs
+        super().__init__(
+            model, revision, device=device, model_prompts=model_prompts, **kwargs
+        )
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],

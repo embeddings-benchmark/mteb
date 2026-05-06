@@ -3,9 +3,13 @@ from types import SimpleNamespace
 
 import numpy as np
 import pytest
+import torch
 
 import mteb
 from mteb.models.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import (
+    SentenceTransformerMultimodalEncoderWrapper,
+)
 from mteb.types import PromptType
 
 # Historic models with n_embedding_parameters=None. Do NOT add new models to this list.
@@ -461,6 +465,33 @@ def test_jina_v5_omni_models_use_multimodal_wrapper():
 
         assert model_meta.loader is JinaV5OmniWrapper
         assert set(model_meta.modalities) == {"text", "image", "audio", "video"}
+
+
+def test_jina_v5_omni_nano_loader_defaults_to_fp32(monkeypatch):
+    from mteb.models.model_implementations.jina_models import JinaV5OmniWrapper
+
+    calls = []
+
+    def fake_init(self, *args, **kwargs):
+        calls.append((args, kwargs))
+
+    monkeypatch.setattr(
+        SentenceTransformerMultimodalEncoderWrapper, "__init__", fake_init
+    )
+
+    JinaV5OmniWrapper("jinaai/jina-embeddings-v5-omni-nano")
+    JinaV5OmniWrapper(
+        "jinaai/jina-embeddings-v5-omni-small",
+        model_kwargs={"torch_dtype": torch.bfloat16},
+    )
+    JinaV5OmniWrapper(
+        "jinaai/jina-embeddings-v5-omni-nano",
+        model_kwargs={"torch_dtype": torch.bfloat16},
+    )
+
+    assert calls[0][1]["model_kwargs"]["torch_dtype"] is torch.float32
+    assert calls[1][1]["model_kwargs"]["torch_dtype"] is torch.bfloat16
+    assert calls[2][1]["model_kwargs"]["torch_dtype"] is torch.bfloat16
 
 
 def test_jina_v5_omni_wrapper_passes_modalities_and_task():
