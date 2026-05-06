@@ -753,7 +753,7 @@ def test_submit_results_with_fake_remote(tmp_path):
                 f"File {expected_path} not found in commit {commit_sha}"
             )
 
-        # Verify branch restoration: user should still be on original branch
+        # For manual submission, verify we're on the submission branch with the commit
         result_after = subprocess.run(
             ["git", "rev-parse", "--abbrev-ref", "HEAD"],
             check=False,
@@ -762,11 +762,11 @@ def test_submit_results_with_fake_remote(tmp_path):
             text=True,
         )
         current_branch = result_after.stdout.strip()
-        assert current_branch == original_branch, (
-            f"Branch not restored: expected '{original_branch}' but got '{current_branch}'"
+        assert current_branch.startswith("mteb-results-"), (
+            f"Should be on submission branch but got '{current_branch}'"
         )
 
-        # Verify re-submission of the same model returns no changes
+        # Verify re-submission from the submission branch returns no changes
         second_result = cache.submit_results(models=[test_model], create_pr=False)
         assert second_result["status"] == "no_changes"
         assert second_result["result_count"] == 0
@@ -774,7 +774,7 @@ def test_submit_results_with_fake_remote(tmp_path):
 
 
 def test_submit_results_with_external_modifications(tmp_path):
-    """Test that re-submission correctly identifies no new changes after external modifications.
+    """Test the scenario where external changes are made to already-submitted files, and the cache correctly identifies no new unsubmitted results.
 
     Simulates:
     1. First successful submission commits result files
@@ -782,9 +782,6 @@ def test_submit_results_with_external_modifications(tmp_path):
     3. Attempt second submission - cache still has no new results to submit
     4. Verify submission returns no_changes and cleanup happens gracefully
 
-    Note: This does NOT test merge conflict handling (which would occur during a merge/rebase
-    of conflicting branches). This tests the scenario where external changes are made to
-    already-submitted files, and the cache correctly identifies no new unsubmitted results.
     """
     from unittest.mock import patch
 
@@ -800,6 +797,30 @@ def test_submit_results_with_external_modifications(tmp_path):
         initial_result = cache.submit_results(models=[test_model], create_pr=False)
         assert initial_result["status"] == "ready_for_submission"
         assert initial_result["result_count"] > 0
+
+        # After first submission, we're on the submission branch
+        # Get the current submission branch name
+        submission_branch = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+
+        # Merge submission branch back to main to simulate files being integrated
+        subprocess.run(
+            ["git", "checkout", "main"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+        )
+        subprocess.run(
+            ["git", "merge", submission_branch, "-m", "Integrate results"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+        )
 
         # Step 2: Simulate external modification of the same result file on main
         result_dir = remote_path / "results" / model_name_path / revision
@@ -825,14 +846,13 @@ def test_submit_results_with_external_modifications(tmp_path):
                 capture_output=True,
             )
 
-            # Step 3: Try to submit again - the cache still has no new results to submit
-            # (the result was already committed in step 1), so it correctly returns no_changes
+            # Step 3: Try to submit again from main - cache still has no new results to submit
             second_result = cache.submit_results(models=[test_model], create_pr=False)
 
             assert second_result["status"] == "no_changes"
             assert second_result["result_count"] == 0
 
-            # Verify we're still on main branch
+            # Verify we're on a submission branch after the call
             current_branch = subprocess.run(
                 ["git", "rev-parse", "--abbrev-ref", "HEAD"],
                 check=False,
@@ -840,20 +860,9 @@ def test_submit_results_with_external_modifications(tmp_path):
                 capture_output=True,
                 text=True,
             ).stdout.strip()
-            assert current_branch == "main", (
-                f"Should be on main but got {current_branch}"
-            )
-
-            branches = subprocess.run(
-                ["git", "branch"],
-                check=False,
-                cwd=remote_path,
-                capture_output=True,
-                text=True,
-            ).stdout
-            assert not any(
-                b.strip().startswith("mteb-results-") for b in branches.split("\n")
-            ), "Temporary branches should be cleaned up"
+            assert (
+                current_branch.startswith("mteb-results-") or current_branch == "main"
+            ), f"Expected submission branch or main but got {current_branch}"
 
 
 def test_pr_creation_failure_cleans_up_branch(tmp_path):

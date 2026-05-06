@@ -1209,8 +1209,10 @@ class ResultCache:
         workflow.run()
 
         if not create_pr:
+            # For manual submission, stay on the submission branch so the commit is accessible
+            # The user will push this branch to their fork and create a PR
             message = _build_manual_submission_message(
-                remote_path, result_count, len(normalized_models)
+                remote_path, result_count, len(normalized_models), branch_name
             )
             logger.info("%s", message)
 
@@ -1425,7 +1427,7 @@ def _prepare_pr_body(
 
 
 def _build_manual_submission_message(
-    remote_path: Path, result_count: int, model_count: int
+    remote_path: Path, result_count: int, model_count: int, branch_name: str
 ) -> str:
     """Build the manual submission instructions message.
 
@@ -1433,6 +1435,7 @@ def _build_manual_submission_message(
         remote_path: Path to the remote repository.
         result_count: Number of result files submitted.
         model_count: Number of models submitted.
+        branch_name: Name of the submission branch.
 
     Returns:
         Formatted submission instructions as a single string.
@@ -1442,15 +1445,16 @@ def _build_manual_submission_message(
         f"✓ Commit created with {result_count} results for {model_count} model(s)",
         "=" * 80,
         f"Location: {remote_path}",
+        f"Branch: {branch_name}",
         "\n📋 To submit these results, follow these steps:\n",
         "1. Go to the remote repository:",
         f"   {remote_path}\n",
         "2. Create a fork (if you don't have one already):",
         "   gh repo fork --remote --remote-name fork --clone=false\n",
-        "3. Push your changes to your fork:",
-        "   git push fork\n",
-        "4. Create a pull request:",
-        "   gh pr create --base main --head <your-username>:main\n",
+        "3. Push your submission branch to your fork:",
+        f"   git push fork {branch_name}\n",
+        "4. Create a pull request from your fork:",
+        f"   gh pr create --base main --head <your-username>:{branch_name}\n",
         "5. Provide details about your evaluation in the PR description\n",
         "=" * 80,
     ]
