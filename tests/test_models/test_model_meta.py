@@ -11,6 +11,7 @@ from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerMultimodalEncoderWrapper,
 )
 from mteb.types import PromptType
+from tests.mock_tasks import MockRetrievalTask
 
 # Historic models with n_embedding_parameters=None. Do NOT add new models to this list.
 _MISSING_N_EMBEDDING_MODELS = [
@@ -531,7 +532,7 @@ def test_jina_v5_omni_wrapper_passes_modalities_and_task():
 
     embeddings = wrapper.encode(
         FakeInputs(),
-        task_metadata=SimpleNamespace(name="FakeTask", type="Retrieval"),
+        task_metadata=MockRetrievalTask().metadata,
         hf_split="test",
         hf_subset="default",
         prompt_type=PromptType.query,
