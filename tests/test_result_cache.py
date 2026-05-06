@@ -793,13 +793,10 @@ def test_submit_results_with_external_modifications(tmp_path):
     cache = ResultCache(cache_path=cache_path)
 
     with patch.object(cache, "download_from_remote", return_value=None):
-        # Step 1: First submission succeeds
         initial_result = cache.submit_results(models=[test_model], create_pr=False)
         assert initial_result["status"] == "ready_for_submission"
         assert initial_result["result_count"] > 0
 
-        # After first submission, we're on the submission branch
-        # Get the current submission branch name
         submission_branch = subprocess.run(
             ["git", "rev-parse", "--abbrev-ref", "HEAD"],
             cwd=remote_path,
@@ -822,7 +819,7 @@ def test_submit_results_with_external_modifications(tmp_path):
             capture_output=True,
         )
 
-        # Step 2: Simulate external modification of the same result file on main
+        # Simulate external modification of the same result file on main
         result_dir = remote_path / "results" / model_name_path / revision
         if result_files_copied:
             conflict_file = result_dir / result_files_copied[0]
@@ -846,13 +843,11 @@ def test_submit_results_with_external_modifications(tmp_path):
                 capture_output=True,
             )
 
-            # Step 3: Try to submit again from main - cache still has no new results to submit
             second_result = cache.submit_results(models=[test_model], create_pr=False)
 
             assert second_result["status"] == "no_changes"
             assert second_result["result_count"] == 0
 
-            # Verify we're on a submission branch after the call
             current_branch = subprocess.run(
                 ["git", "rev-parse", "--abbrev-ref", "HEAD"],
                 check=False,
