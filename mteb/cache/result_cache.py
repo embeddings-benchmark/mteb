@@ -1056,7 +1056,7 @@ class ResultCache:
         self,
         models: list[ModelMeta],
     ) -> dict[ModelMeta, list[Path]]:
-        """Find unsubmitted results by comparing local vs remote.
+        """Find unsubmitted results.
 
         Args:
             models: List of ModelMeta objects.
