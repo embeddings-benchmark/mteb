@@ -89,7 +89,12 @@ class CopyResultsAction:
                     and dest_file not in self._overwritten_file_contents
                 ):
                     self._overwritten_file_contents[dest_file] = dest_file.read_bytes()
-                shutil.copy2(result_file, dest_file)
+                    existing_results = TaskResult.from_disk(dest_file)
+                    new_results = TaskResult.from_disk(result_file)
+                    merged_results = existing_results.merge(new_results)
+                    merged_results.to_disk(dest_file)
+                else:
+                    shutil.copy2(result_file, dest_file)
                 self.copied_files.append(dest_file)
                 logger.debug(f"Copied {result_file} to {dest_file}")
 
@@ -1059,61 +1064,14 @@ class ResultCache:
         Returns:
             Dict mapping ModelMeta to list of unsubmitted result file paths.
         """
-        unsubmitted: dict[ModelMeta, list[Path]] = {}
-
-        local_paths = self.get_cache_paths(
-            models=models,
-            require_model_meta=False,
-            include_remote=False,
-        )
-        remote_files_by_model_revision: dict[tuple[str, str], set[Path]] = {}
-        for model in models:
-            if model.name is None or model.revision is None:
-                logger.warning(f"Skipping model with None name or revision: {model}")
-                continue
-
-            model_name_path = model.model_name_as_path()
-            remote_results_dir = (
-                self.remote_results_path / model_name_path / model.revision
+        return {
+            model: self.get_cache_paths(
+                models=[model],
+                require_model_meta=False,
+                include_remote=False,
             )
-            key = (model_name_path, model.revision)
-            remote_files_by_model_revision[key] = set()
-
-            if remote_results_dir.exists():
-                remote_files_by_model_revision[key].update(
-                    f.relative_to(remote_results_dir)
-                    for f in remote_results_dir.rglob("*.json")
-                    if f.name != "model_meta.json"
-                )
-
-        for local_path in local_paths:
-            model_name_path = local_path.parent.parent.name
-            revision = local_path.parent.name
-            model_name = model_name_path.replace("__", "/")
-
-            local_results_dir = self.cache_path / "results" / model_name_path / revision
-            try:
-                relative_path = local_path.relative_to(local_results_dir)
-            except ValueError:
-                relative_path = Path(local_path.name)
-
-            remote_files_set = remote_files_by_model_revision.get(
-                (model_name_path, revision), set()
-            )
-
-            if relative_path not in remote_files_set:
-                model_meta = None
-                for m in models:
-                    if m.name == model_name and m.revision == revision:
-                        model_meta = m
-                        break
-
-                if model_meta is not None:
-                    if model_meta not in unsubmitted:
-                        unsubmitted[model_meta] = []
-                    unsubmitted[model_meta].append(local_path)
-
-        return unsubmitted
+            for model in models
+        }
 
     def submit_results(
         self,
@@ -1165,9 +1123,9 @@ class ResultCache:
         """
         # Always create a new branch to keep the original branch clean
         branch_name = f"mteb-results-{int(datetime.now().timestamp())}"
+        normalized_models = self._normalize_models(models)
 
         try:
-            normalized_models = self._normalize_models(models)
             self.download_from_remote()
             unsubmitted = self._get_unsubmitted_results(normalized_models)
 
@@ -1195,9 +1153,9 @@ class ResultCache:
             raise
 
         actions: list[ReversibleAction] = [
-            CreateBranchAction(remote_path, branch_name, original_branch)
+            CreateBranchAction(remote_path, branch_name, original_branch),
+            CopyResultsAction(unsubmitted, self.remote_results_path),
         ]
-        actions.append(CopyResultsAction(unsubmitted, self.remote_results_path))
 
         commit_message, result_count = _build_commit_message(
             normalized_models, unsubmitted
