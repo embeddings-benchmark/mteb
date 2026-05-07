@@ -304,7 +304,7 @@ class GeeVecLiteModel(InstructSentenceTransformerModel):
         )
 
         if isinstance(embeddings, torch.Tensor):
-            embeddings = embeddings.cpu().detach().float().numpy()
+            embeddings = embeddings.cpu()
         return embeddings
 
 
