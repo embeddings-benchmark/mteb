@@ -488,7 +488,7 @@ class ModelResult(BaseModel):
                     if raise_error:
                         raise
                     logger.warning(
-                        f"Model {self.model_name} have missing scores on {benchmark.name}. Skipping it"
+                        f"Model {self.model_name} have missing scores on {cur_benchmark.name}. Skipping it"
                     )
                     benchmark_score = None
                 benchmark_results.append(
