@@ -45,7 +45,6 @@ class SomethingSomethingV2ZeroShotClassification(AbsTaskZeroShotClassification):
     input_column_name = "video"
     label_column_name: str = "label"
 
-    train_split: str = "test"
     is_cross_validation: bool = True
 
     def get_candidate_labels(self) -> list[str]:
