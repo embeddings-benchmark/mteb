@@ -50,7 +50,7 @@ cache.submit_results(model_meta, create_pr=False)  # manual review before pushin
 
 === "Automated Submission"
     !!! warning Requirements
-        Git, [Github CLI](https://cli.github.com) are required for this action. You also need to install the `mteb[github]` extra dependencies and configure GitHub integration by signing in with `gh auth login` or setting up your Git credential helper.
+        Git, [GitHub CLI](https://cli.github.com) are required for this action. You also need to install the `mteb[github]` extra dependencies and configure GitHub integration by signing in with `gh auth login` or setting up your Git credential helper.
 
         === "pip"
             ```bash
