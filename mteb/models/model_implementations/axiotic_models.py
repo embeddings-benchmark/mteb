@@ -199,25 +199,3 @@ ogma_base = ModelMeta(
     public_training_data=None,
     training_datasets=None,
 )
-
-ogma_large = ModelMeta(
-    loader=OgmaWrapper,
-    name="axiotic/ogma-large",
-    model_type=["dense"],
-    revision="f54d08762f2eb2ba1fec9a12e390d02e759e3a7f",
-    release_date="2026-04-23",
-    languages=["eng-Latn"],
-    open_weights=True,
-    framework=["PyTorch", "safetensors"],
-    n_parameters=32_365_472,
-    memory_usage_mb=123.5,
-    max_tokens=1024,
-    embed_dim=256,
-    license="cc-by-nc-4.0",
-    reference="https://huggingface.co/axiotic/ogma-large",
-    similarity_fn_name=ScoringFunction.COSINE,
-    use_instructions=False,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets=None,
-)
