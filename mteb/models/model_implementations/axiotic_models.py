@@ -25,9 +25,7 @@ class OgmaWrapper:
         device: str | None = None,
         **_: Any,
     ) -> None:
-        from huggingface_hub import hf_hub_download
-        from tokenizers import Tokenizer
-        from transformers import AutoModel
+        from transformers import AutoModel, AutoTokenizer
 
         self.model_name = model_name
         self.revision = revision
@@ -41,10 +39,9 @@ class OgmaWrapper:
         )
         self.model.to(self.device)
         self.model.eval()
-        tokenizer_file = hf_hub_download(
-            model_name, filename="tokenizer.json", revision=revision
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name, revision=revision, trust_remote_code=True, use_fast=True
         )
-        self.tokenizer = Tokenizer.from_file(tokenizer_file)
         self.n_special_tokens = int(getattr(self.model.config, "n_special_tokens", 7))
         self.max_length = int(getattr(self.model.config, "max_seq_len", 1024))
 
@@ -52,7 +49,8 @@ class OgmaWrapper:
         self.device = device
         self.model.to(device)
 
-    def _task_for_prompt(self, prompt_type: PromptType | None) -> Any:
+    @staticmethod
+    def _task_for_prompt(prompt_type: PromptType | None) -> Any:
         if prompt_type == PromptType.query:
             return "QRY"
         if prompt_type == PromptType.document:
@@ -60,20 +58,12 @@ class OgmaWrapper:
         return "SYM"
 
     def _tokenize(self, texts: list[str]) -> tuple[torch.Tensor, torch.Tensor]:
+        max_inner = self.max_length - 2
         encoded: list[list[int]] = []
         for text in texts:
-            enc = self.tokenizer.encode(text)
-            ids = enc.ids
-            tokens = enc.tokens
-            if tokens and tokens[0] in {"[CLS]", "<s>"}:
-                ids = ids[1:]
-                tokens = tokens[1:]
-            if tokens and tokens[-1] in {"[SEP]", "</s>"}:
-                ids = ids[:-1]
-            ogma_ids = (
-                [2] + [token_id + self.n_special_tokens for token_id in ids] + [3]
-            )
-            encoded.append(ogma_ids[: self.max_length])
+            ids = self.tokenizer.encode(text, add_special_tokens=False)
+            shifted = [token_id + self.n_special_tokens for token_id in ids][:max_inner]
+            encoded.append([2] + shifted + [3])
 
         max_len = max(len(ids) for ids in encoded)
         token_ids = torch.zeros(
@@ -98,7 +88,6 @@ class OgmaWrapper:
         prompt_type: PromptType | None = None,
         **_: Any,
     ) -> Array:
-        del task_metadata, hf_split, hf_subset
         task = self._task_for_prompt(prompt_type)
         embeddings: list[np.ndarray] = []
         with torch.no_grad():
@@ -121,7 +110,8 @@ ogma_micro = ModelMeta(
     languages=["eng-Latn"],
     open_weights=True,
     framework=["PyTorch", "safetensors"],
-    n_parameters=2_323_200,
+    n_parameters=2_323_136,
+    n_embedding_parameters=1_920_448,
     memory_usage_mb=8.9,
     max_tokens=1024,
     embed_dim=128,
@@ -143,7 +133,8 @@ ogma_mini = ModelMeta(
     languages=["eng-Latn"],
     open_weights=True,
     framework=["PyTorch", "safetensors"],
-    n_parameters=3_511_808,
+    n_parameters=3_511_744,
+    n_embedding_parameters=1_920_448,
     memory_usage_mb=13.4,
     max_tokens=1024,
     embed_dim=256,
@@ -165,7 +156,8 @@ ogma_small = ModelMeta(
     languages=["eng-Latn"],
     open_weights=True,
     framework=["PyTorch", "safetensors"],
-    n_parameters=8_596_544,
+    n_parameters=8_596_352,
+    n_embedding_parameters=3_840_896,
     memory_usage_mb=32.8,
     max_tokens=1024,
     embed_dim=256,
@@ -187,7 +179,8 @@ ogma_base = ModelMeta(
     languages=["eng-Latn"],
     open_weights=True,
     framework=["PyTorch", "safetensors"],
-    n_parameters=13_318_400,
+    n_parameters=13_318_016,
+    n_embedding_parameters=3_840_896,
     memory_usage_mb=50.8,
     max_tokens=1024,
     embed_dim=256,
