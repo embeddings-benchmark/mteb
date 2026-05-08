@@ -68,3 +68,36 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
             raise ValueError(
                 f"Task {task.metadata.name} has a dict prompt, but it should be a string. Please check the metadata of the task."
             )
+
+
+@pytest.mark.parametrize(
+    "task",
+    get_tasks(exclude_superseded=False, exclude_aggregate=True, exclude_beta=True),
+    ids=lambda x: x.metadata.name,
+)
+def test_input_columns_match_modalities(task: AbsTask):
+    if not hasattr(task, "input_column_name"):
+        return
+
+    input_columns = task.input_column_name
+    modalities = task.metadata.modalities
+
+    if isinstance(input_columns, str):
+        # Check if the task has more than one non-text modality as single string can only rename one non-text modality
+        non_text_modalities = [m for m in modalities if m != "text"]
+        assert len(non_text_modalities) <= 1, (
+            f"Task {task.metadata.name} has multiple non-text modalities {non_text_modalities} "
+            f"but a single input_column_name '{input_columns}'. "
+            "A single string can only rename one modality. Please use dataset_transform to rename columns "
+            "and set input_column_name to a sequence of default names."
+        )
+    else:
+        default_names = {"text", "image", "audio", "video"}
+        for col in input_columns:
+            assert col in default_names, (
+                f"Task {task.metadata.name} has input_column_name as a sequence {input_columns}, "
+                f"which disables automatic column renaming. "
+                f"However, it contains a non-default column name '{col}'. "
+                "You must rename your columns in dataset_transform to the default names "
+                "('text', 'image', 'audio', 'video') and use those in input_column_name."
+            )
