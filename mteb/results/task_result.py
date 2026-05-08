@@ -3,7 +3,6 @@ from __future__ import annotations
 import datetime
 import json
 import logging
-import warnings
 from collections import defaultdict
 from functools import cached_property
 from importlib.metadata import version
@@ -12,7 +11,7 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from huggingface_hub import EvalResult
 from packaging.version import Version
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, model_validator
 from typing_extensions import deprecated
 
 from mteb._helpful_enum import HelpfulStrEnum
@@ -22,6 +21,7 @@ from mteb._hf_integration.eval_result_model import (
     HFEvalResults,
     HFEvalResultSource,
 )
+from mteb._log_once import LogOnce
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -47,6 +47,7 @@ if TYPE_CHECKING:
     )
 
 logger = logging.getLogger(__name__)
+log_once = LogOnce(logger)
 
 
 class Criteria(HelpfulStrEnum):
@@ -194,21 +195,34 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
+        mteb_ver = version("mteb")
         flat_scores = defaultdict(list)
         for split, hf_subset_scores in scores.items():
             for hf_subset, hf_scores in hf_subset_scores.items():
-                eval_langs = subset2langscripts[hf_subset]
+                if hf_subset in subset2langscripts:
+                    eval_langs = subset2langscripts[hf_subset]
+                else:
+                    # For aggregated tasks, scores may use "default" subset
+                    # which isn't in the per-subset langscript mapping.
+                    # Collect all languages from the mapping.
+                    all_langs: list[str] = []
+                    for langs in subset2langscripts.values():
+                        all_langs.extend(
+                            lang for lang in langs if lang not in all_langs
+                        )
+                    eval_langs = all_langs
                 _scores = {
                     **hf_scores,
                     "hf_subset": hf_subset,
                     "languages": eval_langs,
+                    "mteb_version": mteb_ver,
                 }
                 flat_scores[split].append(_scores)
 
         return TaskResult(
             dataset_revision=task.metadata.revision,
             task_name=task.metadata.name,
-            mteb_version=version("mteb"),
+            mteb_version=mteb_ver,
             scores=flat_scores,
             evaluation_time=evaluation_time,
             kg_co2_emissions=kg_co2_emissions,
@@ -226,6 +240,17 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     raise ValueError("Scores should be a dictionary")
                 cls._validate_scores_dict(hf_subset_score)
         return v
+
+    @model_validator(mode="after")
+    def _backfill_per_subset_mteb_version(self) -> Self:
+        """Backfill mteb_version from top-level into subsets that lack it."""
+        if self.mteb_version is None:
+            return self
+        for split_scores in self.scores.values():
+            for subset_scores in split_scores:
+                if "mteb_version" not in subset_scores:
+                    subset_scores["mteb_version"] = self.mteb_version  # type: ignore[index]
+        return self
 
     @staticmethod
     def _validate_scores_dict(scores: ScoresDict) -> None:
@@ -482,9 +507,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     if main_score in hf_subset_scores:
                         hf_subset_scores["main_score"] = hf_subset_scores[main_score]
                     else:
-                        msg = f"Main score {main_score} not found in scores"
-                        logger.warning(msg)
-                        warnings.warn(msg)
+                        log_once.warning(f"Main score {main_score} not found in scores")
                         hf_subset_scores["main_score"] = None
 
         # specific fixes:
@@ -692,9 +715,9 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                 else:
                     missing_subsets_str = str(missing_subsets)
 
-                msg = f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
-                logger.warning(msg)
-                warnings.warn(msg)
+                log_once.warning(
+                    f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
+                )
                 for missing_subset in missing_subsets:
                     new_scores[split].append(
                         {
@@ -707,9 +730,9 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     )
             seen_splits.add(split)
         if seen_splits != set(splits):
-            msg = f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
-            logger.warning(msg)
-            warnings.warn(msg)
+            log_once.warning(
+                f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
+            )
             for missing_split in set(splits) - seen_splits:
                 new_scores[missing_split] = []
                 for missing_subset in hf_subsets:
@@ -730,7 +753,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         self,
         result: TaskResult | AbsTask,
         criteria: list[str] | list[Criteria] = [
-            "mteb_version",
             "dataset_revision",
         ],
         raise_error: bool = False,
@@ -739,7 +761,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
         Args:
             result: The TaskResult or Task object to check against.
-            criteria: Additional criteria to check for merging. Can be "mteb_version" or "dataset_revision".
+            criteria: Additional criteria to check for merging. Can be "dataset_revision" or "mteb_version" (opt-in).
                 It will always check that the task name match.
             raise_error: If True, raises an error if the objects cannot be merged. If False, returns False.
 
@@ -789,7 +811,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         self,
         new_results: TaskResult,
         criteria: list[str] | list[Criteria] = [
-            "mteb_version",
             "dataset_revision",
         ],
     ) -> TaskResult:
@@ -831,10 +852,12 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         date = self.date
         if new_results.date is not None and (date is None or new_results.date > date):
             date = new_results.date
+        mteb_ver = self._compute_top_level_mteb_version(merged_scores)
+
         merged_results = TaskResult(
             dataset_revision=new_results.dataset_revision,
             task_name=new_results.task_name,
-            mteb_version=new_results.mteb_version,
+            mteb_version=mteb_ver,
             scores=merged_scores,
             evaluation_time=merged_evaluation_time,
             kg_co2_emissions=merged_kg_co2_emissions,
@@ -842,6 +865,30 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         )
 
         return merged_results
+
+    @staticmethod
+    def _compute_top_level_mteb_version(
+        scores: dict[SplitName, list[ScoresDict]],
+    ) -> str | None:
+        """Compute the top-level mteb_version from per-subset versions.
+
+        Returns a version range (e.g. "2.12.0-2.12.19") if subsets were
+        evaluated with different versions, a single version if all match,
+        or None if no per-subset versions are present.
+        """
+        versions: set[str] = set()
+        for split_scores in scores.values():
+            for subset_scores in split_scores:
+                v = subset_scores.get("mteb_version")
+                if v is not None:
+                    versions.add(v)
+        if not versions:
+            return None
+        min_ver = str(min(Version(v) for v in versions))
+        max_ver = str(max(Version(v) for v in versions))
+        if min_ver == max_ver:
+            return min_ver
+        return f"{min_ver}-{max_ver}"
 
     @staticmethod
     def _merge_split_scores(

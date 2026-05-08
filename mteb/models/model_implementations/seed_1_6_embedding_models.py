@@ -12,7 +12,6 @@ import requests
 import torch
 from torch.utils.data import DataLoader
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.bge_models import bge_chinese_training_data
 from mteb.models.model_implementations.nvidia_models import nvidia_training_datasets
@@ -161,12 +160,6 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         **kwargs,
     ) -> None:
         """Wrapper for Seed embedding API."""
-        requires_package(
-            self,
-            "volcenginesdkarkruntime",
-            "pip install mteb[ark]",
-            "tiktoken",
-        )
         import tiktoken
 
         self._model_name = model_name
@@ -449,4 +442,5 @@ seed_embedding = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     modalities=["text", "image"],
+    extra_requirements_groups=["ark"],
 )

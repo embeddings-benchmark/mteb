@@ -58,7 +58,11 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
     model_types_set = set(model_types) if model_types is not None else None
     modalities_set = set(modalities) if modalities is not None else None
 
-    for model_meta in MODEL_REGISTRY.values():
+    model_metas: Iterable[ModelMeta] = MODEL_REGISTRY.values()
+    if model_names is not None:
+        model_metas = [get_model_meta(name) for name in model_names]
+
+    for model_meta in model_metas:
         if (model_names is not None) and (model_meta.name not in model_names):
             continue
         if languages is not None:
@@ -135,7 +139,7 @@ _MODEL_RENAMES: dict[str, str] = {
     # to store model's eval results to display on benchmark
     "baseline/bm25s": "mteb/baseline-bm25s",
     "baseline/random-cross-encoder-baseline": "mteb/baseline-random-cross-encoder",
-    "mteb/baseline-random-encoder": "mteb/baseline-random-encoder",
+    "baseline/random-encoder": "mteb/baseline-random-encoder",
     "baseline/bb25": "mteb/baseline-bb25",
 }
 

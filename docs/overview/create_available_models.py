@@ -122,7 +122,11 @@ def required_memory_string(mem_in_mb: int | None) -> str:
 
 def format_model_entry(meta: ModelMeta) -> str:
     revision = meta.revision or "not specified"
-    license = meta.license or "not specified"
+    raw_license = meta.license or "not specified"
+    if raw_license.startswith("http://") or raw_license.startswith("https://"):
+        license = f"[custom]({raw_license})"
+    else:
+        license = raw_license
     max_tokens = (
         human_readable_number(meta.max_tokens)
         if meta.max_tokens is not None

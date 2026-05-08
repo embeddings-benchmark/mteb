@@ -10,8 +10,11 @@ from mteb.get_tasks import get_tasks
 _HISTORIC_DATASETS = []
 
 
+# TODO https://github.com/embeddings-benchmark/mteb/issues/4378
 @pytest.mark.parametrize(
-    "task", get_tasks(exclude_superseded=False, exclude_aggregate=False)
+    "task",
+    get_tasks(exclude_superseded=False, exclude_aggregate=False, exclude_beta=True),
+    ids=lambda x: x.metadata.name,
 )
 def test_all_metadata_is_filled_and_valid(task: AbsTask):
     # --- test metadata is filled and valid ---
@@ -35,6 +38,9 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
 
     # --- Test is descriptive stats are present for all datasets ---
     if task.is_aggregate:  # aggregate tasks do not have descriptive stats
+        assert set(task.metadata.hf_subsets_to_langscripts.keys()) == {"default"}, (
+            f"Aggregate task {task.metadata.name} has incorrect eval_langs, only a default subset is allowed"
+        )
         return
 
     # TODO https://github.com/embeddings-benchmark/mteb/issues/3498

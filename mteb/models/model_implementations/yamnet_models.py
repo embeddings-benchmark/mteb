@@ -8,7 +8,6 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_audio_dependencies, requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -25,12 +24,6 @@ logger = logging.getLogger(__name__)
 
 def yamnet_loader(*args, **kwargs):
     """Factory function to create a YAMNet model wrapper."""
-    requires_package(
-        yamnet_loader,
-        "torch_vggish_yamnet",
-        "google/yamnet",
-        "pip install 'mteb[torch-vggish-yamnet]'",
-    )
     from torch_vggish_yamnet import yamnet
     from torch_vggish_yamnet.input_proc import WaveformToInput
 
@@ -41,7 +34,6 @@ def yamnet_loader(*args, **kwargs):
             max_audio_length_seconds: float = 30.0,
             **kwargs: Any,
         ):
-            requires_audio_dependencies()
             self.device = device
             self.max_audio_length_seconds = max_audio_length_seconds
             self.model = yamnet.yamnet(pretrained=True)
@@ -225,4 +217,5 @@ yamnet = ModelMeta(
   organization={IEEE}
 }
 """,
+    extra_requirements_groups=["torch-vggish-yamnet"],
 )

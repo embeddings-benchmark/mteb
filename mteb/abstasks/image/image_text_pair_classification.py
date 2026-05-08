@@ -222,6 +222,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         text_columns = (
             [self.texts_column_names]
@@ -238,4 +239,5 @@ class AbsTaskImageTextPairClassification(AbsTask):
             repo_name,
             [*text_columns, *image_columns],
             num_proc=num_proc,
+            **kwargs,
         )

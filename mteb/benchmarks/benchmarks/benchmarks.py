@@ -1039,6 +1039,7 @@ MTEB_multilingual_v2 = Benchmark(
     reference="https://arxiv.org/abs/2502.13595",
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
+    benchmark_hf_repo="mteb/MMTEB-Multilingual-v2",
 )
 
 MTEB_JPN = Benchmark(
@@ -1412,6 +1413,7 @@ BRIGHT_V1_1 = Benchmark(
   year = {2024},
 }
 """,
+    benchmark_hf_repo="mteb/BRIGHT",
 )
 
 

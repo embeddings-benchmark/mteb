@@ -26,7 +26,6 @@ class STSBenchmarkMultilingualVisualSTSEng(AbsTaskAggregate):
         main_score="cosine_spearman",
         type="VisualSTS(eng)",
         eval_splits=["test"],
-        eval_langs=["eng-Latn"],
         bibtex_citation=r"""
 @article{xiao2024pixel,
   author = {Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},

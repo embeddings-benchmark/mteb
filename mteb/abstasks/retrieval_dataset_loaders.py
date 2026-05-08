@@ -29,8 +29,8 @@ class RetrievalSplitData(TypedDict):
     """A dictionary containing the corpus, queries, relevant documents, instructions, and top-ranked documents for a retrieval task.
 
     Attributes:
-        corpus: The corpus dataset containing documents. Should have columns `id`, `title`, `text` or `image`.
-        queries: The queries dataset containing queries. Should have columns `id`, `text`, `instruction` (for instruction retrieval/reranking) or `image`.
+        corpus: The corpus dataset containing documents. Should have columns `id`, and at least one modality column (e.g. `text`, `video`, `audio`). Text corpus may also include `title`.
+        queries: The queries dataset containing queries. Should have columns `id`, and at least one modality column (e.g. `text`, `video`, `audio`). For instruction retrieval the column can also include `instruction`.
         relevant_docs: A mapping of query IDs to relevant document IDs and their relevance scores. Should have columns `query-id`, `corpus-id`, `score`.
         top_ranked: A mapping of query IDs to a list of top-ranked document IDs. Should have columns `query-id`, `corpus-ids` (list[str]). This is optional and used for reranking tasks.
     """
@@ -94,9 +94,9 @@ class RetrievalDatasetLoader:
         corpus = self._load_corpus(num_proc)
         queries = self._load_queries(num_proc)
 
-        queries = queries.filter(
-            lambda x: x["id"] in qrels.keys(), desc="Filtering queries by qrels"
-        )
+        ids_to_keep = set(qrels.keys())
+        indices = [i for i, id_ in enumerate(queries["id"]) if id_ in ids_to_keep]
+        queries = queries.select(indices)
 
         if any(c.endswith("top_ranked") for c in self.dataset_configs):
             top_ranked = self._load_top_ranked(num_proc)

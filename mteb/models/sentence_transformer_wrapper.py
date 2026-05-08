@@ -11,7 +11,7 @@ from packaging.version import Version
 
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 from .abs_encoder import AbsEncoder
 
@@ -174,6 +174,23 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         """
         from sentence_transformers import __version__ as st_version
 
+        if "precision" in kwargs:
+            existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
+            output_dtype = OutputDType.from_str(kwargs["precision"])  # type: ignore[typeddict-item]
+            if existing_experiment_kwargs is not None:
+                existing_experiment_kwargs["output_dtypes"] = output_dtype  # type: ignore[index]
+            else:
+                existing_experiment_kwargs = {"output_dtypes": output_dtype.value}
+            logger.warning(
+                f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {output_dtype.value}."
+            )
+            self.mteb_model_meta = self.mteb_model_meta.model_copy(
+                update={
+                    "experiment_kwargs": existing_experiment_kwargs,
+                },
+                deep=True,
+            )
+
         has_query_encode = (
             Version(st_version).release
             >= Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
@@ -220,6 +237,34 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
 class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrapper):
     """Wrapper for multimodal SentenceTransformer models."""
 
+    def __init__(
+        self,
+        *args,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        target_sampling_rate: int | None = None,
+        max_samples: int | None = None,
+        **kwargs,
+    ) -> None:
+        """Wrapper for multimodal SentenceTransformer models.
+
+        Args:
+            *args: Passed to SentenceTransformerEncoderWrapper.
+            fps: Target frames per second for video sampling.
+            max_frames: Safety cap on frames per video for FPS mode.
+            num_frames: If set, use fixed-sample mode instead of FPS-based.
+            target_sampling_rate: Sampling rate to resample audio to.
+            max_samples: Maximum number of audio samples to keep.
+            **kwargs: Passed to SentenceTransformerEncoderWrapper.
+        """
+        super().__init__(*args, **kwargs)
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -252,6 +297,26 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
         Returns:
             The encoded sentences.
         """
+        has_video = "video" in inputs.dataset.features  # type: ignore[attr-defined]
+        has_audio = "audio" in inputs.dataset.features  # type: ignore[attr-defined]
+        if has_video:
+            from mteb.models.modality_collators import VideoCollator
+
+            inputs.collate_fn = VideoCollator(
+                target_sampling_rate=self.target_sampling_rate or 16000,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+                max_samples=self.max_samples,
+            )
+        elif has_audio:
+            from mteb.models.modality_collators import AudioCollator
+
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.target_sampling_rate or 16000,
+                max_samples=self.max_samples,
+            )
+
         prompt = None
         prompt_name = None
         if self.model_prompts is not None:
@@ -267,7 +332,16 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
             )
 
         all_embeddings = []
+        _modality_keys = {"text", "image", "audio", "video"}
         for batch in inputs:
+            # Transformers' apply_chat_template expects audio as raw numpy arrays,
+            # not the {"array", "sampling_rate"} dict produced by AudioCollator.
+            # See https://github.com/huggingface/sentence-transformers/issues/3732
+            if "audio" in batch:
+                batch["audio"] = [
+                    a["array"] if isinstance(a, dict) and "array" in a else a
+                    for a in batch["audio"]
+                ]
             batch_column = next(iter(batch.keys()))
             batched_input: list[dict[str, Any]] = [
                 dict() for _ in range(len(batch[batch_column]))
@@ -275,7 +349,10 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
 
             # transform from {"text": [text1, text2], "image": [image1, image2]} to
             # [{"text": text1, "image": image1}, {"text": text2, "image": image2}]
+            # Only pass through recognized modality keys; ST rejects unknown keys.
             for key, values in batch.items():
+                if key not in _modality_keys:
+                    continue
                 for i, value in enumerate(values):
                     batched_input[i][key] = value
 
@@ -288,7 +365,7 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
                 # ensure everything is on CPU and is float
                 embeddings = embeddings.cpu().detach().float()
             all_embeddings.append(embeddings)
-        return np.stack(all_embeddings)
+        return np.concatenate(all_embeddings, axis=0)
 
 
 class CrossEncoderWrapper:

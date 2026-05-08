@@ -347,7 +347,9 @@ def _task_quality(task: AbsTask) -> list[str]:
 
 
 def test_dataset_quality():
-    tasks = get_tasks(exclude_superseded=False, exclude_aggregate=True)
+    tasks = get_tasks(
+        exclude_superseded=False, exclude_aggregate=True, exclude_beta=False
+    )
 
     errors: list[str] = []
     for task in tasks:

@@ -1,6 +1,8 @@
 import importlib.util
 import logging
 
+from typing_extensions import deprecated
+
 logger = logging.getLogger(__name__)
 
 
@@ -9,6 +11,9 @@ def _is_package_available(pkg_name: str) -> bool:
     return package_exists
 
 
+@deprecated(
+    "Use ModelMeta.extra_requirements_groups instead of requires_package. This function will be removed in a future version."
+)
 def requires_package(
     obj, package_name: str, model_name: str, install_instruction: str | None = None
 ) -> None:
@@ -60,6 +65,9 @@ def suggest_package(
     return True
 
 
+@deprecated(
+    "Use ModelMeta.extra_requirements_groups instead of requires_package. This function will be removed in a future version."
+)
 def requires_image_dependencies() -> None:
     """Check if the required dependencies for image tasks are available."""
     if not _is_package_available("torchvision"):
@@ -69,6 +77,9 @@ def requires_image_dependencies() -> None:
         )
 
 
+@deprecated(
+    "Use ModelMeta.extra_requirements_groups instead of requires_package. This function will be removed in a future version."
+)
 def requires_audio_dependencies() -> None:
     """Check if the required dependencies for audio tasks are available."""
     if not _is_package_available("torchaudio"):

@@ -85,6 +85,12 @@ def process_classification(
     """Process classification task dataset(s) with cleaning pipeline."""
     if not task.data_loaded:
         task.load_data()
+    if not isinstance(task.input_column_name, str):
+        raise NotImplementedError(
+            "Data cleaning is not yet supported for multi-column tasks "
+            f"(input_column_name={task.input_column_name})."
+        )
+
     if isinstance(task.dataset, DatasetDict):
         return clean_dataset(
             task.dataset,

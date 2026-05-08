@@ -102,9 +102,12 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
 
         if isinstance(data_split, DatasetDict):
-            data_split = data_split.select_columns(
+            select_columns = (
                 [self.input_column_name, self.label_column_name]
+                if isinstance(self.input_column_name, str)
+                else [*self.input_column_name, self.label_column_name]
             )
+            data_split = data_split.select_columns(select_columns)
         train_split = data_split[self.train_split]
         eval_split = data_split[hf_split]
 

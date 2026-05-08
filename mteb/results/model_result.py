@@ -12,12 +12,19 @@ import pandas as pd
 from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import overload
 
+from mteb._hf_integration.eval_result_model import (
+    HFEvalResult,
+    HFEvalResultDataset,
+    HFEvalResults,
+    HFEvalResultSource,
+)
+from mteb.benchmarks import Benchmark
 from mteb.types import Modalities
 
 from .task_result import TaskError, TaskResult
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable
+    from collections.abc import Callable, Iterable, Sequence
 
     from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import (
@@ -41,7 +48,7 @@ def _aggregate_and_pivot(
     columns: list[str],
     aggregation_level: Literal["subset", "split", "task", "language"],
     format: Literal["wide", "long"],
-    aggregation_fn: Callable[[list[Score]], Any] | None,
+    aggregation_fn: Callable[[list[Score]], Any] | str | None,
 ) -> pd.DataFrame:
     if aggregation_level == "subset":
         index_columns = ["task_name", "split", "subset"]
@@ -59,20 +66,21 @@ def _aggregate_and_pivot(
         )  # each language in its own row before aggregation
 
     # perform aggregation
-    if aggregation_fn is None:
-        aggregation_fn = np.mean
+    # Pass "mean" string rather than np.mean to avoid a pandas FutureWarning:
+    aggregation_fn_pandas = "mean" if aggregation_fn is None else aggregation_fn
 
     if format == "wide":
         return df.pivot_table(
             index=index_columns,
             columns=columns,
             values="score",
-            aggfunc=aggregation_fn,  # type: ignore[arg-type]
+            aggfunc=aggregation_fn_pandas,  # type: ignore[arg-type]
+            observed=True,
         ).reset_index()
     elif format == "long":
         return (
-            df.groupby(columns + index_columns)
-            .agg(score=("score", aggregation_fn))
+            df.groupby(columns + index_columns, observed=True)
+            .agg(score=("score", aggregation_fn_pandas))
             .reset_index()
         )
 
@@ -302,7 +310,7 @@ class ModelResult(BaseModel):
     def to_dataframe(
         self,
         aggregation_level: Literal["subset", "split", "task"] = "task",
-        aggregation_fn: Callable[[list[Score]], Any] | None = None,
+        aggregation_fn: Callable[[list[Score]], Any] | str | None = None,
         include_model_revision: bool = False,
         format: Literal["wide", "long"] = "wide",
     ) -> pd.DataFrame:
@@ -453,14 +461,53 @@ class ModelResult(BaseModel):
             return cls.model_validate_json(f.read())
 
     def push_model_results(
-        self, user: str | None = None, *, create_pr: bool = False
+        self,
+        user: str | None = None,
+        *,
+        benchmark: Benchmark | Sequence[Benchmark] | None = None,
+        create_pr: bool = False,
+        raise_error: bool = False,
     ) -> None:
         """Push the model results to the Hugging Face Hub.
 
         Args:
             user: The user or organization of results source.
+            benchmark: Whether to push the benchmark results.
             create_pr: Whether to create a pull request
+            raise_error: Whether to push results if model have missing scores.
         """
+        benchmark_results: None | list[HFEvalResult] = None
+        benchmarks: None | Sequence[Benchmark] = None
+        if benchmark is not None:
+            benchmark_results = []
+            benchmarks = [benchmark] if isinstance(benchmark, Benchmark) else benchmark
+            for cur_benchmark in benchmarks:
+                try:
+                    benchmark_score = cur_benchmark._get_model_score(self)["Mean(Task)"]
+                except ValueError:
+                    if raise_error:
+                        raise
+                    logger.warning(
+                        f"Model {self.model_name} have missing scores on {cur_benchmark.name}. Skipping it"
+                    )
+                    benchmark_score = None
+                benchmark_results.append(
+                    HFEvalResult(
+                        dataset=HFEvalResultDataset(
+                            id=cur_benchmark.benchmark_hf_repo,
+                            task_id=cur_benchmark.name,
+                            revision="1",
+                        ),
+                        value=benchmark_score,
+                        date=None,
+                        notes="Obtained using MTEB",
+                        source=HFEvalResultSource(
+                            url="https://github.com/embeddings-benchmark/mteb/",
+                            user=user,
+                            name="Obtained using MTEB",
+                        ),
+                    )
+                )
         with tempfile.TemporaryDirectory() as tmpdir:
             path = Path(tmpdir)
             for task_result in self.task_results:
@@ -469,6 +516,21 @@ class ModelResult(BaseModel):
                     "w", encoding="utf-8"
                 ) as f:
                     f.write(task_results.to_yaml())
+
+            if benchmark_results is not None and benchmarks is not None:
+                for cur_benchmark, benchmark_result in zip(
+                    benchmarks, benchmark_results
+                ):
+                    if cur_benchmark.name is None:
+                        raise ValueError(
+                            f"Benchmark {cur_benchmark} doesn't have name."
+                        )
+                    with (path / f"{cur_benchmark.name}.yaml").open(
+                        "w", encoding="utf-8"
+                    ) as f:
+                        f.write(
+                            HFEvalResults.model_validate([benchmark_result]).to_yaml()
+                        )
 
             huggingface_hub.upload_folder(
                 repo_id=self.model_name,
