@@ -72,7 +72,7 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
 
 @pytest.mark.parametrize(
     "task",
-    get_tasks(exclude_superseded=False, exclude_aggregate=True, exclude_beta=True),
+    get_tasks(exclude_superseded=False, exclude_aggregate=True, exclude_beta=False),
     ids=lambda x: x.metadata.name,
 )
 def test_input_columns_match_modalities(task: AbsTask):
