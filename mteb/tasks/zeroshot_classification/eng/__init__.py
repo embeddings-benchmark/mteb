@@ -19,7 +19,10 @@ from .fgvc_aircraft import FGVCAircraftZeroShotClassification
 from .food101 import Food101ZeroShotClassification
 from .gtsrb import GTSRBZeroShotClassification
 from .hmdb51 import HMDB51ZeroShotClassification
-from .human_animal_cartoon import HumanAnimalCartoonZeroShotClassification
+from .human_animal_cartoon import (
+    HumanAnimalCartoonVAZeroShotClassification,
+    HumanAnimalCartoonZeroShotClassification,
+)
 from .imagenet1k import Imagenet1kZeroShotClassification
 from .kinetics400 import (
     Kinetics400VAZeroShotClassification,
@@ -89,6 +92,7 @@ __all__ = [
     "Food101ZeroShotClassification",
     "GTSRBZeroShotClassification",
     "HMDB51ZeroShotClassification",
+    "HumanAnimalCartoonVAZeroShotClassification",
     "HumanAnimalCartoonZeroShotClassification",
     "Imagenet1kZeroShotClassification",
     "Kinetics400VAZeroShotClassification",
