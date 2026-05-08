@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import logging
 import subprocess
 from typing import TYPE_CHECKING
@@ -324,18 +323,16 @@ def create_pull_request(
             timeout=30,
         )
         logger.info("Fork created/configured")
-
         result = subprocess.run(
-            ["gh", "repo", "view", "--json", "url"],
+            ["git", "config", "--get", "remote.fork.url"],
             cwd=remote_repo_path,
             check=False,
             capture_output=True,
             text=True,
             timeout=10,
         )
-        if result.returncode == 0:
-            fork_data = json.loads(result.stdout)
-            fork_url = fork_data.get("url", f"https://github.com/{user.login}/results")
+        if result.returncode == 0 and result.stdout.strip():
+            fork_url = result.stdout.strip()
         else:
             fork_url = f"https://github.com/{user.login}/results"
 
