@@ -1,28 +1,22 @@
-"""Build & upload pre-baked VideoPairClassification datasets.
+"""Build and upload pre-baked VideoPairClassification datasets.
 
 For each of the five MVEB classification-source datasets
 (Human-Animal-Cartoon, AVE, MELD, MUSIC-AVQA, RAVDESS_AV) this script:
 
 1. Loads the source HF dataset.
-2. Generates a balanced same-class / different-class index pairing
-   (using :mod:`mteb.tasks.pair_classification.eng._video_pair_helpers`).
+2. Generates a balanced same-class / different-class index pairing.
 3. Materialises ``video1``/``video2`` (and optionally ``audio1``/``audio2``)
    columns plus an integer ``label`` column.
-4. Uploads the result as parquet shards to a target HF dataset repo
-   (default: ``mteb/<NAME>-PC``).
+4. Uploads the resulting dataset to a target HF repo via
+   ``datasets.Dataset.push_to_hub``.
 
-The shipped task classes load these baked repos directly (mirroring how
-``zachz/VideoCon-PC``, ``zachz/Vinoground-PC`` and
-``zachz/AV-SpeakerBench-PC`` are wired today) and do not perform any
-``dataset_transform`` at evaluation time.
+The shipped task classes load the resulting baked repos directly.
 
 Usage:
     python scripts/upload_video_pair_classification.py \
         --dataset all --owner mteb --token $HF_TOKEN
     python scripts/upload_video_pair_classification.py \
         --dataset meld --variant va
-
-The script never deletes existing repos; it only uploads parquet shards.
 """
 
 from __future__ import annotations
@@ -30,16 +24,10 @@ from __future__ import annotations
 import argparse
 import os
 import random
-import tempfile
+from collections import defaultdict
 from dataclasses import dataclass
 
-from datasets import Dataset, load_dataset
-from huggingface_hub import HfApi
-
-from mteb.tasks.pair_classification.eng._video_pair_helpers import (
-    build_pair_dataset,
-    generate_pairs,
-)
+from datasets import Dataset, concatenate_datasets, load_dataset
 
 
 @dataclass(frozen=True)
@@ -90,26 +78,93 @@ SOURCES: dict[str, SourceSpec] = {
 }
 
 
-def push_video_dataset(
-    api: HfApi, ds: Dataset, repo_id: str, split: str = "test"
-) -> None:
-    api.create_repo(repo_id, repo_type="dataset", exist_ok=True)
-    with tempfile.TemporaryDirectory() as tmpdir:
-        approx_shards = max(1, len(ds) // 256)
-        shard_size = max(1, len(ds) // approx_shards)
-        total_shards = (len(ds) + shard_size - 1) // shard_size
-        for shard_idx, start in enumerate(range(0, len(ds), shard_size)):
-            end = min(start + shard_size, len(ds))
-            fname = f"{split}-{shard_idx:05d}-of-{total_shards:05d}.parquet"
-            path = os.path.join(tmpdir, fname)
-            ds.select(range(start, end)).to_parquet(path)
-            api.upload_file(
-                path_or_fileobj=path,
-                path_in_repo=f"data/{fname}",
-                repo_id=repo_id,
-                repo_type="dataset",
-            )
-            print(f"  Uploaded {fname} ({end - start} rows)")
+def generate_pairs(
+    class_labels: list,
+    rng: random.Random,
+    max_per_side: int = 1024,
+) -> list[tuple[int, int, int]]:
+    """Generate balanced positive (same-class) and negative (different-class) pairs.
+
+    Args:
+        class_labels: Per-row class labels from the source classification dataset.
+        rng: Seeded ``random.Random`` instance for reproducibility.
+        max_per_side: Cap on the number of positive (and negative) pairs produced.
+
+    Returns:
+        A list of ``(idx_a, idx_b, label)`` triples where ``label`` is 1 for a
+        same-class pair and 0 for a different-class pair. Counts of positive and
+        negative pairs are equalised.
+    """
+    label_groups: dict[object, list[int]] = defaultdict(list)
+    for i, label in enumerate(class_labels):
+        label_groups[label].append(i)
+
+    all_labels = list(label_groups.keys())
+    pos_pairs: list[tuple[int, int]] = []
+    neg_pairs: list[tuple[int, int]] = []
+    indices = list(range(len(class_labels)))
+    rng.shuffle(indices)
+
+    for i in indices:
+        cls = class_labels[i]
+        same = [j for j in label_groups[cls] if j != i]
+        if same and len(pos_pairs) < max_per_side:
+            pos_pairs.append((i, rng.choice(same)))
+        others = [l for l in all_labels if l != cls]
+        if others and len(neg_pairs) < max_per_side:
+            neg_cls = rng.choice(others)
+            neg_pairs.append((i, rng.choice(label_groups[neg_cls])))
+        if len(pos_pairs) >= max_per_side and len(neg_pairs) >= max_per_side:
+            break
+
+    n = min(len(pos_pairs), len(neg_pairs))
+    pairs: list[tuple[int, int, int]] = [(a, b, 1) for a, b in pos_pairs[:n]]
+    pairs += [(a, b, 0) for a, b in neg_pairs[:n]]
+    rng.shuffle(pairs)
+    return pairs
+
+
+def build_pair_dataset(
+    ds: Dataset,
+    pairs: list[tuple[int, int, int]],
+    columns: tuple[str, ...] = ("video",),
+) -> Dataset:
+    """Materialise a paired dataset by selecting rows by index.
+
+    For each modality column ``c`` in ``columns`` two new columns are produced:
+    ``c1`` (left of pair) and ``c2`` (right of pair). A ``label`` column is
+    appended.
+
+    Args:
+        ds: Source dataset.
+        pairs: Output of ``generate_pairs``.
+        columns: Columns to copy into ``c1`` / ``c2``.
+
+    Returns:
+        A new ``Dataset`` with paired columns and an integer ``label`` column.
+    """
+    if not pairs:
+        raise ValueError("No pairs were generated from the source dataset")
+
+    idx1 = [p[0] for p in pairs]
+    idx2 = [p[1] for p in pairs]
+    labels = [p[2] for p in pairs]
+
+    cols = list(columns)
+    rename1 = {c: f"{c}1" for c in cols}
+    rename2 = {c: f"{c}2" for c in cols}
+
+    chunk_size = 64
+    chunks: list[Dataset] = []
+    for start in range(0, len(pairs), chunk_size):
+        end = min(start + chunk_size, len(pairs))
+        d1 = ds.select(idx1[start:end]).select_columns(cols).rename_columns(rename1)
+        d2 = ds.select(idx2[start:end]).select_columns(cols).rename_columns(rename2)
+        chunk = concatenate_datasets([d1, d2], axis=1)
+        chunk = chunk.add_column("label", labels[start:end])
+        chunks.append(chunk)
+
+    return concatenate_datasets(chunks) if len(chunks) > 1 else chunks[0]
 
 
 def build_pc(spec: SourceSpec, variant: str, seed: int = 42) -> Dataset:
@@ -126,11 +181,7 @@ def build_pc(spec: SourceSpec, variant: str, seed: int = 42) -> Dataset:
 
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument(
-        "--dataset",
-        choices=[*SOURCES.keys(), "all"],
-        default="all",
-    )
+    p.add_argument("--dataset", choices=[*SOURCES.keys(), "all"], default="all")
     p.add_argument(
         "--variant",
         choices=["v", "va", "both"],
@@ -148,7 +199,7 @@ def main() -> None:
     p.add_argument("--dry-run", action="store_true", help="Build but do not upload.")
     args = p.parse_args()
 
-    api = HfApi(token=args.token or os.environ.get("HF_TOKEN"))
+    token = args.token or os.environ.get("HF_TOKEN")
 
     keys = list(SOURCES) if args.dataset == "all" else [args.dataset]
     variants = ["v", "va"] if args.variant == "both" else [args.variant]
@@ -159,10 +210,10 @@ def main() -> None:
             out = build_pc(spec, variant)
             repo_id = f"{args.owner}/{spec.target_suffix}-{variant.upper()}"
             if args.dry_run:
-                print(f"  [dry-run] would upload to {repo_id}")
+                print(f"  [dry-run] would push to {repo_id}")
                 continue
-            push_video_dataset(api, out, repo_id)
-            print(f"  → {repo_id}")
+            out.push_to_hub(repo_id, split="test", token=token)
+            print(f"  -> {repo_id}")
 
 
 if __name__ == "__main__":
