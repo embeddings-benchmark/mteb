@@ -1,6 +1,10 @@
 from .av_speakerbench_pc import AVSpeakerBenchPairClassification
 from .cremad import CREMADPairClassification
 from .legal_bench_pc import LegalBenchPC
+from .meld_pc import (
+    MELDVAPairClassification,
+    MELDVPairClassification,
+)
 from .nmsqa import NMSQAPairClassification
 from .pub_chem_ai_sentence_paraphrase_pc import PubChemAISentenceParaphrasePC
 from .pub_chem_smilespc import PubChemSMILESPC
@@ -18,6 +22,8 @@ __all__ = [
     "AVSpeakerBenchPairClassification",
     "CREMADPairClassification",
     "LegalBenchPC",
+    "MELDVAPairClassification",
+    "MELDVPairClassification",
     "NMSQAPairClassification",
     "PubChemAISentenceParaphrasePC",
     "PubChemSMILESPC",
