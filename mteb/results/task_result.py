@@ -172,6 +172,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     evaluation_time: float | None
     kg_co2_emissions: float | None = None
     date: datetime.datetime | None = None
+    evaluation_phases: list[dict[str, Any]] | None = None
 
     @classmethod
     def from_task_results(
@@ -181,6 +182,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
         date: datetime.datetime | None = None,
+        evaluation_phases: list[dict[str, Any]] | None = None,
     ) -> TaskResult:
         """Create a TaskResult from the task and scores.
 
@@ -192,6 +194,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_time: The time taken to evaluate the model.
             kg_co2_emissions: The kg of CO2 emissions produced by the model during evaluation.
             date: The date the model was trained on.
+            evaluation_phases: A list of dicts describing the start, end, and name of each phase.
         """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
@@ -227,6 +230,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_time=evaluation_time,
             kg_co2_emissions=kg_co2_emissions,
             date=date,
+            evaluation_phases=evaluation_phases,
         )
 
     @field_validator("scores")
@@ -530,6 +534,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             scores,
             evaluation_time,
             kg_co2_emissions=None,
+            evaluation_phases=data.get("evaluation_phases"),
         )
         result.dataset_revision = dataset_revision
         result.mteb_version = mteb_version

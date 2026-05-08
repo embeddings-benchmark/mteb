@@ -298,14 +298,17 @@ class AbsTaskRetrieval(AbsTask):
                 num_proc=num_proc,
             )
 
-        if self.metadata.is_multilingual:
-            for lang in self.hf_subsets:
+        with self.timer("data_loading"):
+            if self.metadata.is_multilingual:
+                for lang in self.hf_subsets:
+                    for split in eval_splits:
+                        _process_data(split, lang)
+            else:
                 for split in eval_splits:
-                    _process_data(split, lang)
-        else:
-            for split in eval_splits:
-                _process_data(split)
-        self.dataset_transform(num_proc=num_proc)
+                    _process_data(split)
+
+        with self.timer("dataset_transform"):
+            self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
     def evaluate(
@@ -349,7 +352,7 @@ class AbsTaskRetrieval(AbsTask):
             **kwargs,
         )
 
-    def _evaluate_subset(
+    def _evaluate_subset(  # noqa: PLR0914
         self,
         model: MTEBModels,
         data_split: RetrievalSplitData,
@@ -390,6 +393,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset=hf_subset,
             top_ranked=data_split["top_ranked"],
             top_k=self._top_k,
+            timer=getattr(self, "timer", None),
             **kwargs,
         )
 
@@ -427,23 +431,32 @@ class AbsTaskRetrieval(AbsTask):
             )
 
         logger.info("Running retrieval task - Evaluating retrieval scores...")
-        (
-            all_scores,
-            ndcg,
-            _map,
-            recall,
-            precision,
-            naucs,
-            mrr,
-            naucs_mrr,
-            hit_rate,
-        ) = retriever.evaluate(
-            data_split["relevant_docs"],
-            results,
-            self.k_values,
-            ignore_identical_ids=self.ignore_identical_ids,
-            skip_first_result=self.skip_first_result,
+        import contextlib
+
+        timer_scoring = (
+            self.timer("scoring")
+            if hasattr(self, "timer")
+            else contextlib.nullcontext()
         )
+        with timer_scoring:
+            (
+                all_scores,
+                ndcg,
+                _map,
+                recall,
+                precision,
+                naucs,
+                mrr,
+                naucs_mrr,
+                hit_rate,
+            ) = retriever.evaluate(
+                data_split["relevant_docs"],
+                results,
+                self.k_values,
+                ignore_identical_ids=self.ignore_identical_ids,
+                skip_first_result=self.skip_first_result,
+            )
+
         task_specific_scores = self.task_specific_scores(
             all_scores,
             data_split["relevant_docs"],

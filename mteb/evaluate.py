@@ -180,6 +180,9 @@ def _evaluate_task(
         evaluation_time=evaluation_time,
         kg_co2_emissions=None,
         date=datetime.datetime.now(tz=datetime.timezone.utc),
+        evaluation_phases=getattr(task, "timer", None).phases
+        if hasattr(task, "timer")
+        else None,
     )
 
     if not data_preloaded:  # only unload if we loaded the data

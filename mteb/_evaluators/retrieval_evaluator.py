@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from .evaluator import Evaluator
 from .retrieval_metrics import (
@@ -39,6 +39,7 @@ class RetrievalEvaluator(Evaluator):
         top_k: int,
         top_ranked: TopRankedDocumentsType | None = None,
         qid: str | None = None,
+        timer: Any | None = None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -51,6 +52,7 @@ class RetrievalEvaluator(Evaluator):
         self.hf_subset = hf_subset
         self.qid = qid
         self.top_k = top_k
+        self.timer = timer
 
     def __call__(  # type: ignore[override]
         self,
@@ -58,26 +60,37 @@ class RetrievalEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> RetrievalOutputType:
+        import contextlib
+
+        timer_index = (
+            self.timer("encode_corpus") if self.timer else contextlib.nullcontext()
+        )
+        timer_search = (
+            self.timer("encode_queries") if self.timer else contextlib.nullcontext()
+        )
+
         logger.info("Running retrieval task - Indexing corpus...")
-        search_model.index(
-            corpus=self.corpus,
-            task_metadata=self.task_metadata,
-            hf_split=self.hf_split,
-            hf_subset=self.hf_subset,
-            encode_kwargs=encode_kwargs,
-            num_proc=num_proc,
-        )
+        with timer_index:
+            search_model.index(
+                corpus=self.corpus,
+                task_metadata=self.task_metadata,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
+                encode_kwargs=encode_kwargs,
+                num_proc=num_proc,
+            )
         logger.info("Running retrieval task - Searching queries...")
-        return search_model.search(
-            queries=self.queries,
-            top_k=self.top_k,
-            task_metadata=self.task_metadata,
-            hf_split=self.hf_split,
-            hf_subset=self.hf_subset,
-            encode_kwargs=encode_kwargs,
-            top_ranked=self.top_ranked,
-            num_proc=num_proc,
-        )
+        with timer_search:
+            return search_model.search(
+                queries=self.queries,
+                top_k=self.top_k,
+                task_metadata=self.task_metadata,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
+                encode_kwargs=encode_kwargs,
+                top_ranked=self.top_ranked,
+                num_proc=num_proc,
+            )
 
     def evaluate(  # noqa: PLR6301
         self,

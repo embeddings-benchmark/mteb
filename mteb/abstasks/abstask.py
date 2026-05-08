@@ -114,6 +114,10 @@ class AbsTask(ABC):  # noqa: PLR0904
         self.rng_state, self.np_rng = _set_seed(seed)
         self.hf_subsets = self.metadata.hf_subsets
 
+        from mteb.timing import TimingStack
+
+        self.timer = TimingStack()
+
         if self.metadata.is_beta:
             msg = f"The task '{self.metadata.name}' is currently in beta. This means that the dataset is still being tested and may be subject to changes. This means that the scores of this dataset is liable to change and should be used with caution."
             logger.warning(msg)
@@ -347,20 +351,23 @@ class AbsTask(ABC):  # noqa: PLR0904
         if self.data_loaded:
             return
         if self.metadata.is_multilingual:
-            if self.fast_loading:
-                self.fast_load()
-            else:
-                self.dataset = {}
-                for hf_subset in self.hf_subsets:
-                    self.dataset[hf_subset] = load_dataset(
-                        name=hf_subset,
-                        **self.metadata.dataset,
-                        num_proc=num_proc,
-                    )
+            with self.timer("data_loading"):
+                if self.fast_loading:
+                    self.fast_load()
+                else:
+                    self.dataset = {}
+                    for hf_subset in self.hf_subsets:
+                        self.dataset[hf_subset] = load_dataset(
+                            name=hf_subset,
+                            **self.metadata.dataset,
+                            num_proc=num_proc,
+                        )
         else:
-            # some of monolingual datasets explicitly adding the split name to the dataset name
-            self.dataset = load_dataset(**self.metadata.dataset, num_proc=num_proc)
-        self.dataset_transform(num_proc=num_proc)
+            with self.timer("data_loading"):
+                # some of monolingual datasets explicitly adding the split name to the dataset name
+                self.dataset = load_dataset(**self.metadata.dataset, num_proc=num_proc)
+        with self.timer("dataset_transform"):
+            self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
     def fast_load(self) -> None:
