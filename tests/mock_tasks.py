@@ -4526,38 +4526,36 @@ class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
     def load_data(self, **kwargs):
         mock_audio = create_mock_audio(self.np_rng)
 
-        self.queries = DatasetDict(
+        queries_ds = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "id": [f"q{i}" for i in range(2)],
-                        "text": [
-                            "This is a positive sentence",
-                            "This is another positive sentence",
-                        ],
-                        "modality": ["text" for _ in range(2)],
-                    }
-                )
+                "id": [f"q{i}" for i in range(2)],
+                "text": [
+                    "This is a positive sentence",
+                    "This is another positive sentence",
+                ],
+                "modality": ["text" for _ in range(2)],
             }
         )
-        self.corpus = DatasetDict(
+        corpus_ds = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "id": ["d1", "d2"],
-                        "audio": mock_audio,
-                        "modality": ["audio" for _ in range(2)],
-                    }
-                )
+                "id": ["d1", "d2"],
+                "audio": mock_audio,
+                "modality": ["audio" for _ in range(2)],
             }
-        )
-        self.corpus = self.corpus.cast_column("audio", Audio())
+        ).cast_column("audio", Audio())
 
-        self.relevant_docs = {
-            "test": {
-                "q0": {"d1": 1, "d2": 0},
-                "q1": {"d1": 0, "d2": 1},
-            },
+        self.dataset = {
+            "default": {
+                "test": {
+                    "corpus": corpus_ds,
+                    "queries": queries_ds,
+                    "relevant_docs": {
+                        "q0": {"d1": 1, "d2": 0},
+                        "q1": {"d1": 0, "d2": 1},
+                    },
+                    "top_ranked": None,
+                }
+            }
         }
         self.data_loaded = True
 
@@ -4699,37 +4697,33 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
     def load_data(self, **kwargs):
         mock_audio = create_mock_audio(self.np_rng)
 
-        self.queries = DatasetDict(
+        queries_ds = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "id": [f"q{i}" for i in range(2)],
-                        "audio": mock_audio,
-                        "modality": ["audio" for _ in range(2)],
-                    }
-                )
+                "id": [f"q{i}" for i in range(2)],
+                "audio": mock_audio,
+                "modality": ["audio" for _ in range(2)],
             }
-        )
-        self.corpus = DatasetDict(
+        ).cast_column("audio", Audio())
+        corpus_ds = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "id": ["d1", "d2"],
-                        "audio": mock_audio,
-                        "modality": ["audio" for _ in range(2)],
-                    }
-                )
+                "id": ["d1", "d2"],
+                "audio": mock_audio,
+                "modality": ["audio" for _ in range(2)],
             }
-        )
+        ).cast_column("audio", Audio())
 
-        self.queries = self.queries.cast_column("audio", Audio())
-        self.corpus = self.corpus.cast_column("audio", Audio())
-
-        self.relevant_docs = {
-            "test": {
-                "q0": {"d1": 1, "d2": 0},
-                "q1": {"d1": 0, "d2": 1},
-            },
+        self.dataset = {
+            "default": {
+                "test": {
+                    "corpus": corpus_ds,
+                    "queries": queries_ds,
+                    "relevant_docs": {
+                        "q0": {"d1": 1, "d2": 0},
+                        "q1": {"d1": 0, "d2": 1},
+                    },
+                    "top_ranked": None,
+                }
+            }
         }
         self.data_loaded = True
 

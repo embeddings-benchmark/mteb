@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from datasets import DatasetDict, load_dataset
+from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -12,16 +12,34 @@ def load_retrieval_data(dataset_path, eval_splits):
     queries_dataset = load_dataset(dataset_path, "queries")
     qrels = load_dataset(dataset_path + "-qrels")[eval_split]
 
-    corpus = {e["_id"]: {"text": e["text"]} for e in corpus_dataset["corpus"]}
-    queries = {e["_id"]: e["text"] for e in queries_dataset["queries"]}
+    corpus_dict = {
+        e["_id"]: {"text": e["text"], "title": ""} for e in corpus_dataset["corpus"]
+    }
+    queries_dict = {e["_id"]: e["text"] for e in queries_dataset["queries"]}
     relevant_docs = defaultdict(dict)
     for e in qrels:
         relevant_docs[e["query-id"]][e["corpus-id"]] = e["score"]
 
-    corpus = DatasetDict({eval_split: corpus})
-    queries = DatasetDict({eval_split: queries})
-    relevant_docs = DatasetDict({eval_split: relevant_docs})
-    return corpus, queries, relevant_docs
+    corpus_ds = Dataset.from_list(
+        [
+            {"id": k, "text": v["text"], "title": v["title"]}
+            for k, v in corpus_dict.items()
+        ]
+    )
+    queries_ds = Dataset.from_list(
+        [{"id": k, "text": v} for k, v in queries_dict.items()]
+    )
+
+    return {
+        "default": {
+            eval_split: {
+                "corpus": corpus_ds,
+                "queries": queries_ds,
+                "relevant_docs": dict(relevant_docs),
+                "top_ranked": None,
+            }
+        }
+    }
 
 
 class GermanQuADRetrieval(AbsTaskRetrieval):
@@ -62,7 +80,7 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
+        self.dataset = load_retrieval_data(
             self.metadata.dataset["path"], self.metadata.eval_splits
         )
         self.data_loaded = True

@@ -1,4 +1,5 @@
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -42,16 +43,35 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
             return
 
         query_list = datasets.load_dataset(**self.metadata.dataset)["queries"]
-        queries = {row["query-id"]: row["text"] for row in query_list}
+        queries_dict = {row["query-id"]: row["text"] for row in query_list}
 
         corpus_list = datasets.load_dataset(**self.metadata.dataset)["corpus"]
-        corpus = {row["corpus-id"]: {"text": row["text"]} for row in corpus_list}
+        corpus_dict = {
+            row["corpus-id"]: {"text": row["text"], "title": ""} for row in corpus_list
+        }
 
         qrels_list = datasets.load_dataset(**self.metadata.dataset)["qrels"]
-        qrels = {row["query-id"]: {row["corpus-id"]: 1} for row in qrels_list}
+        relevant_docs = {row["query-id"]: {row["corpus-id"]: 1} for row in qrels_list}
 
-        self.corpus = {self._EVAL_SPLIT: corpus}
-        self.queries = {self._EVAL_SPLIT: queries}
-        self.relevant_docs = {self._EVAL_SPLIT: qrels}
+        corpus_dataset = Dataset.from_list(
+            [
+                {"id": k, "text": v["text"], "title": v["title"]}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                self._EVAL_SPLIT: {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
+            }
+        }
 
         self.data_loaded = True

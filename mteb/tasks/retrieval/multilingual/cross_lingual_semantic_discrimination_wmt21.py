@@ -1,4 +1,5 @@
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -58,38 +59,28 @@ class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval):
         """Generic data loader function for original clsd datasets with the format shown in "hf_dataset_link".
         Loading the hf dataset, it populates the following three variables to be used for retrieval evaluation.
 
-        self.corpus
-
-        self.queries
-
-        self.relevant_docs
-
         Sets self.data_loaded to True.
         """
         if self.data_loaded:
             return
-        queries, corpus, relevant_docs = {}, {}, {}
-        dataset_raw = {}
+        self.dataset = {}
         for split in self.metadata.eval_splits:  # noqa: PLR1702
             for hf_subset, langs in _LANGUAGES.items():
                 lang_pair = _build_lang_pair(langs)
-                dataset_raw[lang_pair] = datasets.load_dataset(
+                dataset_raw = datasets.load_dataset(
                     name=hf_subset,
                     **self.metadata.dataset,
                 )[split]
 
-                queries[lang_pair] = {}
-                corpus[lang_pair] = {}
-                relevant_docs[lang_pair] = {}
-                queries[lang_pair][split] = {}
-                corpus[lang_pair][split] = {}
-                relevant_docs[lang_pair][split] = {}
+                queries_dict = {}
+                corpus_dict = {}
+                relevant_docs = {}
 
                 # Generate unique IDs for queries and documents
                 query_id_counter = 1
                 document_id_counter = 1
 
-                for row in dataset_raw[lang_pair]:
+                for row in dataset_raw:
                     query_text = row["Source"]
                     positive_text = [row["Target"]]
                     negative_texts = [
@@ -101,23 +92,42 @@ class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval):
 
                     # Assign unique ID to the query
                     query_id = f"Q{query_id_counter}"
-                    queries[lang_pair][split][query_id] = query_text
+                    queries_dict[query_id] = query_text
                     query_id_counter += 1
 
                     # Add true parallel and distractors to corpus with unique id.
                     for text in positive_text + negative_texts:
                         doc_id = f"D{document_id_counter}"
-                        corpus[lang_pair][split][doc_id] = {"text": text}
+                        corpus_dict[doc_id] = {"text": text}
                         document_id_counter += 1
 
                         # Add relevant document information to relevant_docs for positive texts only
                         if text in positive_text:
-                            if query_id not in relevant_docs[lang_pair][split]:
-                                relevant_docs[lang_pair][split][query_id] = {}
-                            relevant_docs[lang_pair][split][query_id][doc_id] = 1
+                            if query_id not in relevant_docs:
+                                relevant_docs[query_id] = {}
+                            relevant_docs[query_id][doc_id] = 1
 
-            self.corpus = datasets.DatasetDict(corpus)
-            self.queries = datasets.DatasetDict(queries)
-            self.relevant_docs = datasets.DatasetDict(relevant_docs)
+                corpus_ds = Dataset.from_list(
+                    [
+                        {
+                            "id": k,
+                            "text": v.get("text", "") if isinstance(v, dict) else v,
+                            "title": v.get("title", "") if isinstance(v, dict) else "",
+                        }
+                        for k, v in corpus_dict.items()
+                    ]
+                )
+                queries_ds = Dataset.from_list(
+                    [{"id": k, "text": v} for k, v in queries_dict.items()]
+                )
 
-            self.data_loaded = True
+                if lang_pair not in self.dataset:
+                    self.dataset[lang_pair] = {}
+                self.dataset[lang_pair][split] = {
+                    "corpus": corpus_ds,
+                    "queries": queries_ds,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
+
+        self.data_loaded = True

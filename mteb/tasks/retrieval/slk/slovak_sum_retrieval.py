@@ -1,4 +1,5 @@
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -39,7 +40,7 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
-        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
+        self.dataset = {}
         dataset_path = self.metadata.dataset["path"]
         n_sample = 600
 
@@ -48,15 +49,29 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
                 dataset_path, split=f"{split}[:{n_sample}]"
             )
             # Transforming news summary into retrieval task
-            queries = {f"q{e + 1}": x["sum"] for e, x in enumerate(split_ds)}
-            corpus = {
+            queries_dict = {f"q{e + 1}": x["sum"] for e, x in enumerate(split_ds)}
+            corpus_dict = {
                 f"d{e + 1}": {"title": x["title"], "text": x["text"]}
                 for e, x in enumerate(split_ds)
             }
-            qrels = {f"q{i + 1}": {f"d{i + 1}": 1} for i in range(split_ds.shape[0])}
-            self.corpus[split], self.queries[split], self.relevant_docs[split] = (
-                corpus,
-                queries,
-                qrels,
+            relevant_docs = {
+                f"q{i + 1}": {f"d{i + 1}": 1} for i in range(split_ds.shape[0])
+            }
+
+            corpus_dataset = Dataset.from_list(
+                [
+                    {"id": k, "text": v["text"], "title": v["title"]}
+                    for k, v in corpus_dict.items()
+                ]
             )
+            queries_dataset = Dataset.from_list(
+                [{"id": k, "text": v} for k, v in queries_dict.items()]
+            )
+
+            self.dataset.setdefault("default", {})[split] = {
+                "corpus": corpus_dataset,
+                "queries": queries_dataset,
+                "relevant_docs": relevant_docs,
+                "top_ranked": None,
+            }
         self.data_loaded = True

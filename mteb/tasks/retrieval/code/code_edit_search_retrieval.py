@@ -1,4 +1,5 @@
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -67,26 +68,31 @@ class CodeEditSearchRetrieval(AbsTaskRetrieval):
             for row in data:
                 lang_subs[lang].append(row)
 
-        self.queries = {}
-        self.corpus = {}
-        self.relevant_docs = {}
+        self.dataset = {}
 
         for lang, sub in lang_subs.items():
             sub = sub[:1000]  # noqa: PLW2901
 
-            self.queries[lang] = {
+            corpus_ds = Dataset.from_list(
+                [
+                    {"id": str(row["commit"]), "text": row["diff"], "title": ""}
+                    for row in sub
+                ]
+            )
+            queries_ds = Dataset.from_list(
+                [
+                    {"id": str(i), "text": row["instruction"]}
+                    for i, row in enumerate(sub)
+                ]
+            )
+            relevant_docs = {str(i): {row["commit"]: 1} for i, row in enumerate(sub)}
+
+            self.dataset[lang] = {
                 self._EVAL_SPLIT: {
-                    str(i): row["instruction"] for i, row in enumerate(sub)
-                }
-            }
-            self.corpus[lang] = {
-                self._EVAL_SPLIT: {
-                    str(row["commit"]): {"text": row["diff"]} for row in sub
-                }
-            }
-            self.relevant_docs[lang] = {
-                self._EVAL_SPLIT: {
-                    str(i): {row["commit"]: 1} for i, row in enumerate(sub)
+                    "corpus": corpus_ds,
+                    "queries": queries_ds,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
                 }
             }
 

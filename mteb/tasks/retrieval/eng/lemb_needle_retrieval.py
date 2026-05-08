@@ -1,4 +1,5 @@
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -50,9 +51,7 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = {}
-        self.queries = {}
-        self.relevant_docs = {}
+        self.dataset = {"default": {}}
 
         for split in self.metadata.eval_splits:
             context_length = int(split.split("_")[1])
@@ -62,7 +61,7 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
             query_list = query_list.filter(
                 lambda x: x["context_length"] == context_length
             )
-            queries = {row["qid"]: row["text"] for row in query_list}
+            queries_dict = {row["qid"]: row["text"] for row in query_list}
 
             corpus_list = datasets.load_dataset(**self.metadata.dataset)[
                 "corpus"
@@ -70,7 +69,7 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
             corpus_list = corpus_list.filter(
                 lambda x: x["context_length"] == context_length
             )
-            corpus = {row["doc_id"]: {"text": row["text"]} for row in corpus_list}
+            corpus_dict = {row["doc_id"]: {"text": row["text"]} for row in corpus_list}
 
             qrels_list = datasets.load_dataset(**self.metadata.dataset)[
                 "qrels"
@@ -80,8 +79,25 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
             )
             qrels = {row["qid"]: {row["doc_id"]: 1} for row in qrels_list}
 
-            self.corpus[split] = corpus
-            self.queries[split] = queries
-            self.relevant_docs[split] = qrels
+            corpus_dataset = Dataset.from_list(
+                [
+                    {
+                        "id": k,
+                        "text": v.get("text", "") if isinstance(v, dict) else v,
+                        "title": v.get("title", "") if isinstance(v, dict) else "",
+                    }
+                    for k, v in corpus_dict.items()
+                ]
+            )
+            queries_dataset = Dataset.from_list(
+                [{"id": k, "text": v} for k, v in queries_dict.items()]
+            )
+
+            self.dataset["default"][split] = {
+                "corpus": corpus_dataset,
+                "queries": queries_dataset,
+                "relevant_docs": qrels,
+                "top_ranked": None,
+            }
 
         self.data_loaded = True

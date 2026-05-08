@@ -9,9 +9,7 @@ def _load_data(
     splits: str,
     revision: str | None = None,
 ):
-    corpus = {}
-    queries = {}
-    relevant_docs = {}
+    dataset = {}
 
     for split in splits:
         query_ds = load_dataset(
@@ -28,7 +26,6 @@ def _load_data(
             },
             remove_columns=["query-id", "query"],
         )
-        queries[split] = query_ds
 
         corpus_ds = load_dataset(
             path,
@@ -43,7 +40,6 @@ def _load_data(
             },
             remove_columns=["corpus-id"],
         )
-        corpus[split] = corpus_ds
 
         qrels_ds = load_dataset(
             path,
@@ -51,15 +47,22 @@ def _load_data(
             split=split,
             revision=revision,
         )
-        relevant_docs[split] = {}
+        relevant_docs = {}
         for row in qrels_ds:
             qid = f"query-{split}-{row['query-id']}"
             did = f"corpus-{split}-{row['corpus-id']}"
-            if qid not in relevant_docs[split]:
-                relevant_docs[split][qid] = {}
-            relevant_docs[split][qid][did] = int(row["score"])
+            if qid not in relevant_docs:
+                relevant_docs[qid] = {}
+            relevant_docs[qid][did] = int(row["score"])
 
-    return corpus, queries, relevant_docs
+        dataset[split] = {
+            "corpus": corpus_ds,
+            "queries": query_ds,
+            "relevant_docs": relevant_docs,
+            "top_ranked": None,
+        }
+
+    return dataset
 
 
 class VidoreArxivQARetrieval(AbsTaskRetrieval):
@@ -96,11 +99,13 @@ class VidoreArxivQARetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+            )
+        }
 
         self.data_loaded = True
 
@@ -139,11 +144,13 @@ class VidoreDocVQARetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+            )
+        }
 
         self.data_loaded = True
 
@@ -182,11 +189,13 @@ class VidoreInfoVQARetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+            )
+        }
 
         self.data_loaded = True
 
@@ -225,11 +234,13 @@ class VidoreTabfquadRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+            )
+        }
 
         self.data_loaded = True
 
@@ -268,11 +279,13 @@ class VidoreTatdqaRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+            )
+        }
 
         self.data_loaded = True
 
@@ -311,11 +324,13 @@ class VidoreShiftProjectRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+            )
+        }
 
         self.data_loaded = True
 
@@ -355,11 +370,13 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+            )
+        }
 
         self.data_loaded = True
 
@@ -399,11 +416,13 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+            )
+        }
 
         self.data_loaded = True
 
@@ -443,11 +462,13 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+            )
+        }
 
         self.data_loaded = True
 
@@ -487,10 +508,12 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+            )
+        }
 
         self.data_loaded = True

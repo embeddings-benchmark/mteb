@@ -1,7 +1,5 @@
-from collections import defaultdict
-
 import datasets
-from datasets import Audio, DatasetDict
+from datasets import Audio
 from tqdm.auto import tqdm
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -74,9 +72,7 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
     def load_data(self, **kwargs):
         if getattr(self, "data_loaded", False):
             return
-        self.corpus = defaultdict(DatasetDict)
-        self.queries = defaultdict(DatasetDict)
-        self.relevant_docs = defaultdict(DatasetDict)
+        self.dataset = {}
         self.dataset_transform()
         self.data_loaded = True
 
@@ -124,9 +120,14 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
                     str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
                 }
 
-                self.corpus[locale][split] = corpus_ds
-                self.queries[locale][split] = queries_ds
-                self.relevant_docs[locale][split] = relevant_docs_
+                if locale not in self.dataset:
+                    self.dataset[locale] = {}
+                self.dataset[locale][split] = {
+                    "corpus": corpus_ds,
+                    "queries": queries_ds,
+                    "relevant_docs": relevant_docs_,
+                    "top_ranked": None,
+                }
 
 
 class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
@@ -166,9 +167,7 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
     def load_data(self, **kwargs):
         if getattr(self, "data_loaded", False):
             return
-        self.corpus = defaultdict(DatasetDict)
-        self.queries = defaultdict(DatasetDict)
-        self.relevant_docs = defaultdict(DatasetDict)
+        self.dataset = {}
         self.dataset_transform()
         self.data_loaded = True
 
@@ -214,6 +213,11 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
                     str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
                 }
 
-                self.corpus[locale][split] = corpus_ds
-                self.queries[locale][split] = queries_ds
-                self.relevant_docs[locale][split] = relevant_docs_
+                if locale not in self.dataset:
+                    self.dataset[locale] = {}
+                self.dataset[locale][split] = {
+                    "corpus": corpus_ds,
+                    "queries": queries_ds,
+                    "relevant_docs": relevant_docs_,
+                    "top_ranked": None,
+                }

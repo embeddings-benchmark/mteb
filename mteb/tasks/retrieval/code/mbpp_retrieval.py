@@ -1,3 +1,5 @@
+from datasets import Dataset
+
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -57,29 +59,43 @@ class MBPPRetrieval(AbsTaskRetrieval):
             revision=self.metadata.dataset["revision"],
         )["test"]
 
-        # Initialize data structures with 'test' split
-        corpus = {}
-        queries = {}
-        relevant_docs = {}
-
         # Process corpus
+        corpus_dict = {}
         for item in corpus_ds:
-            corpus[item["id"]] = {"title": "", "text": item["text"]}
+            corpus_dict[item["id"]] = {"title": "", "text": item["text"]}
 
         # Process queries
+        queries_dict = {}
         for item in queries_ds:
-            queries[item["id"]] = item["text"]
+            queries_dict[item["id"]] = item["text"]
 
         # Process qrels (relevant documents)
+        relevant_docs = {}
         for item in qrels_ds:
             query_id = item["query-id"]
             if query_id not in relevant_docs:
                 relevant_docs[query_id] = {}
             relevant_docs[query_id][item["corpus-id"]] = int(item["score"])
 
-        # Organize data by splits as expected by MTEB
-        self.corpus = {"test": corpus}
-        self.queries = {"test": queries}
-        self.relevant_docs = {"test": relevant_docs}
+        corpus_dataset = Dataset.from_list(
+            [
+                {"id": k, "text": v["text"], "title": v["title"]}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                "test": {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
+            }
+        }
 
         self.data_loaded = True

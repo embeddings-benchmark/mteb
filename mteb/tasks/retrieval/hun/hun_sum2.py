@@ -1,4 +1,4 @@
-from datasets import load_dataset
+from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -46,20 +46,35 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
-        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
+        self.dataset = {}
         ds = load_dataset(**self.metadata.dataset, split=self.metadata.eval_splits)
         ds = dict(zip(self.metadata.eval_splits, ds))
         for split_name, split in ds.items():
-            self.corpus[split_name] = {}
-            self.queries[split_name] = {}
-            self.relevant_docs[split_name] = {}
+            corpus_dict = {}
+            queries_dict = {}
+            relevant_docs = {}
             for record in split:
-                self.corpus[split_name]["d" + record["uuid"]] = {
+                corpus_dict["d" + record["uuid"]] = {
                     "title": record["title"],
                     "text": record["article"],
                 }
-                self.queries[split_name]["q" + record["uuid"]] = record["lead"]
-                self.relevant_docs[split_name]["q" + record["uuid"]] = {
-                    "d" + record["uuid"]: 1
-                }
+                queries_dict["q" + record["uuid"]] = record["lead"]
+                relevant_docs["q" + record["uuid"]] = {"d" + record["uuid"]: 1}
+
+            corpus_dataset = Dataset.from_list(
+                [
+                    {"id": k, "text": v["text"], "title": v["title"]}
+                    for k, v in corpus_dict.items()
+                ]
+            )
+            queries_dataset = Dataset.from_list(
+                [{"id": k, "text": v} for k, v in queries_dict.items()]
+            )
+
+            self.dataset.setdefault("default", {})[split_name] = {
+                "corpus": corpus_dataset,
+                "queries": queries_dataset,
+                "relevant_docs": relevant_docs,
+                "top_ranked": None,
+            }
         self.data_loaded = True

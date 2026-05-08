@@ -1,4 +1,4 @@
-from datasets import load_dataset
+from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -59,7 +59,7 @@ class _DAPFAMMixin:
     query_fields: list[str] = []  # noqa: RUF012
     corpus_fields: list[str] = []  # noqa: RUF012
 
-    def load_data(self, **kwargs) -> tuple[dict, dict, dict]:
+    def load_data(self, **kwargs) -> None:
         ds_c = load_dataset(
             self.metadata.dataset["path"],
             "corpus",
@@ -79,26 +79,20 @@ class _DAPFAMMixin:
             revision=self.metadata.dataset["revision"],
         )
 
-        self.corpus = {
-            "train": {
-                r["relevant_id"]: {
-                    "title": r["title_en"],
-                    "text": "\n".join(
-                        str(r[f])
-                        for f in self.corpus_fields
-                        if r.get(f) and f != "title_en"
-                    ),
-                }
-                for r in ds_c
+        corpus_dict = {
+            r["relevant_id"]: {
+                "title": r["title_en"],
+                "text": "\n".join(
+                    str(r[f])
+                    for f in self.corpus_fields
+                    if r.get(f) and f != "title_en"
+                ),
             }
+            for r in ds_c
         }
-        self.queries = {
-            "train": {
-                r["query_id"]: "\n".join(
-                    str(r[f]) for f in self.query_fields if r.get(f)
-                )
-                for r in ds_q
-            }
+        queries_dict = {
+            r["query_id"]: "\n".join(str(r[f]) for f in self.query_fields if r.get(f))
+            for r in ds_q
         }
 
         raw: dict[str, dict[str, tuple[float, str]]] = {}
@@ -124,9 +118,27 @@ class _DAPFAMMixin:
             if pos:
                 qrels_int[qid] = pos
 
-        self.relevant_docs = {"train": qrels_int}
+        corpus_dataset = Dataset.from_list(
+            [
+                {"id": k, "text": v.get("text", ""), "title": v.get("title", "")}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                "train": {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": qrels_int,
+                    "top_ranked": None,
+                }
+            }
+        }
         self.data_loaded = True
-        return self.corpus, self.queries, self.relevant_docs
 
 
 # ───────────────────────────────────────────────────

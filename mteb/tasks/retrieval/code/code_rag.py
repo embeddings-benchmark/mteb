@@ -1,4 +1,5 @@
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -55,28 +56,24 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
+        hf_dataset = datasets.load_dataset(**self.metadata.dataset)
+        self.dataset_transform(hf_dataset)
         self.data_loaded = True
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(
+        self, hf_dataset, num_proc: int | None = None, **kwargs
+    ) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
-        self.queries = Dict[query_id, str] #id => query
-        self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
+        self.dataset = {subset: {split: {"corpus": Dataset, "queries": Dataset, "relevant_docs": dict, "top_ranked": None}}}
         """
-        self.corpus = {}
-        self.relevant_docs = {}
-        self.queries = {}
-
         split = self.metadata.eval_splits[0]
-        ds: datasets.Dataset = self.dataset[split]
+        ds: datasets.Dataset = hf_dataset[split]
         ds = ds.shuffle(seed=42)
 
-        self.queries[split] = {}
-        self.relevant_docs[split] = {}
-        self.corpus[split] = {}
+        queries_dict = {}
+        corpus_dict = {}
+        relevant_docs = {}
 
         texts = ds["text"]
         meta = ds["meta"]
@@ -89,12 +86,31 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
 
             query_id = id
             doc_id = f"doc_{id}"
-            self.queries[split][query_id] = query
-            self.corpus[split][doc_id] = {"title": "", "text": doc}
+            queries_dict[query_id] = query
+            corpus_dict[doc_id] = {"title": "", "text": doc}
 
-            self.relevant_docs[split][query_id] = {
-                doc_id: 1
-            }  # only one correct matches
+            relevant_docs[query_id] = {doc_id: 1}  # only one correct matches
+
+        corpus_dataset = Dataset.from_list(
+            [
+                {"id": k, "text": v["text"], "title": v["title"]}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                split: {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
+            }
+        }
 
 
 class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
@@ -112,49 +128,64 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
+        hf_dataset = datasets.load_dataset(**self.metadata.dataset)
+        self.dataset_transform(hf_dataset)
         self.data_loaded = True
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(
+        self, hf_dataset, num_proc: int | None = None, **kwargs
+    ) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
-        self.queries = Dict[query_id, str] #id => query
-        self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
+        self.dataset = {subset: {split: {"corpus": Dataset, "queries": Dataset, "relevant_docs": dict, "top_ranked": None}}}
         """
-        self.corpus = {}
-        self.relevant_docs = {}
-        self.queries = {}
-
         split = self.metadata.eval_splits[0]
-        ds: datasets.Dataset = self.dataset[split]
+        ds: datasets.Dataset = hf_dataset[split]
         ds = ds.shuffle(seed=42)
 
-        self.queries[split] = {}
-        self.relevant_docs[split] = {}
-        self.corpus[split] = {}
+        queries_dict = {}
+        corpus_dict = {}
+        relevant_docs = {}
 
         titles = ds["title"]
         texts = ds["text"]
         parsed = ds["parsed"]
-        id = 0
+        idx = 0
         for title, text, mt in zip(titles, texts, parsed):
             # in code-rag-bench,
             # query=doc(code)
             # text=query+doc(code)
             query, doc = title, text
 
-            query_id = str(id)
-            doc_id = f"doc_{id}"
-            self.queries[split][query_id] = query
-            self.corpus[split][doc_id] = {"title": "", "text": doc}
+            query_id = str(idx)
+            doc_id = f"doc_{idx}"
+            queries_dict[query_id] = query
+            corpus_dict[doc_id] = {"title": "", "text": doc}
 
-            self.relevant_docs[split][query_id] = {
-                doc_id: 1
-            }  # only one correct matches
+            relevant_docs[query_id] = {doc_id: 1}  # only one correct matches
 
-            id += 1
+            idx += 1
+
+        corpus_dataset = Dataset.from_list(
+            [
+                {"id": k, "text": v["text"], "title": v["title"]}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                split: {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
+            }
+        }
 
 
 class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
@@ -172,32 +203,28 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
+        hf_dataset = datasets.load_dataset(**self.metadata.dataset)
+        self.dataset_transform(hf_dataset)
         self.data_loaded = True
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(
+        self, hf_dataset, num_proc: int | None = None, **kwargs
+    ) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
-        self.queries = Dict[query_id, str] #id => query
-        self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
+        self.dataset = {subset: {split: {"corpus": Dataset, "queries": Dataset, "relevant_docs": dict, "top_ranked": None}}}
         """
-        self.corpus = {}
-        self.relevant_docs = {}
-        self.queries = {}
-
         split = self.metadata.eval_splits[0]
-        ds: datasets.Dataset = self.dataset[split]
+        ds: datasets.Dataset = hf_dataset[split]
         ds = ds.shuffle(seed=42)
 
-        self.queries[split] = {}
-        self.relevant_docs[split] = {}
-        self.corpus[split] = {}
+        queries_dict = {}
+        corpus_dict = {}
+        relevant_docs = {}
 
         texts = ds["doc_content"]
 
-        id = 0
+        idx = 0
         for text in texts:
             # text format "document title \n document content"
             query, doc = split_by_first_newline(text)
@@ -205,13 +232,34 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
             # some library documents doesn't have query-doc pair
             if not doc:
                 continue
-            query_id = str(id)
-            doc_id = f"doc_{id}"
-            self.queries[split][query_id] = query
-            self.corpus[split][doc_id] = {"title": "", "text": doc}
+            query_id = str(idx)
+            doc_id = f"doc_{idx}"
+            queries_dict[query_id] = query
+            corpus_dict[doc_id] = {"title": "", "text": doc}
             # only one correct match
-            self.relevant_docs[split][query_id] = {doc_id: 1}
-            id += 1
+            relevant_docs[query_id] = {doc_id: 1}
+            idx += 1
+
+        corpus_dataset = Dataset.from_list(
+            [
+                {"id": k, "text": v["text"], "title": v["title"]}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                split: {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
+            }
+        }
 
 
 class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
@@ -229,42 +277,57 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
+        hf_dataset = datasets.load_dataset(**self.metadata.dataset)
+        self.dataset_transform(hf_dataset)
         self.data_loaded = True
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(
+        self, hf_dataset, num_proc: int | None = None, **kwargs
+    ) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
-        self.queries = Dict[query_id, str] #id => query
-        self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
+        self.dataset = {subset: {split: {"corpus": Dataset, "queries": Dataset, "relevant_docs": dict, "top_ranked": None}}}
         """
-        self.corpus = {}
-        self.relevant_docs = {}
-        self.queries = {}
-
         split = self.metadata.eval_splits[0]
-        ds: datasets.Dataset = self.dataset[split]
+        ds: datasets.Dataset = hf_dataset[split]
         ds = ds.shuffle(seed=42)
 
-        self.queries[split] = {}
-        self.relevant_docs[split] = {}
-        self.corpus[split] = {}
+        queries_dict = {}
+        corpus_dict = {}
+        relevant_docs = {}
 
         texts = ds["text"]
-        id = 0
+        idx = 0
         for text in texts:
             # in code-rag-bench,
             # text = query + "\n" + doc
             query, doc = split_by_first_newline(text)
 
-            query_id = str(id)
-            doc_id = f"doc_{id}"
-            self.queries[split][query_id] = query
-            self.corpus[split][doc_id] = {"title": "", "text": doc}
+            query_id = str(idx)
+            doc_id = f"doc_{idx}"
+            queries_dict[query_id] = query
+            corpus_dict[doc_id] = {"title": "", "text": doc}
 
-            self.relevant_docs[split][query_id] = {
-                doc_id: 1
-            }  # only one correct matches
-            id += 1
+            relevant_docs[query_id] = {doc_id: 1}  # only one correct matches
+            idx += 1
+
+        corpus_dataset = Dataset.from_list(
+            [
+                {"id": k, "text": v["text"], "title": v["title"]}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                split: {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
+            }
+        }

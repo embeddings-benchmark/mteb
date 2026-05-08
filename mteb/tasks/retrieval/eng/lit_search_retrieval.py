@@ -1,4 +1,5 @@
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -38,12 +39,11 @@ class LitSearchRetrieval(AbsTaskRetrieval):
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
-        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         dataset_path = self.metadata.dataset["path"]
 
         query_ds = datasets.load_dataset(dataset_path, "query")
 
-        self.queries["test"] = dict(
+        queries_dict = dict(
             zip(
                 [f"q{x + 1}" for x in range(len(query_ds["full"]))],
                 query_ds["full"]["query"],
@@ -52,7 +52,7 @@ class LitSearchRetrieval(AbsTaskRetrieval):
 
         corpus_ds = datasets.load_dataset(dataset_path, "corpus_clean")
 
-        self.corpus["test"] = {
+        corpus_dict = {
             f"d{c_id}": {"title": title, "text": txt}
             for c_id, title, txt in zip(
                 corpus_ds["full"]["corpusid"],
@@ -61,9 +61,30 @@ class LitSearchRetrieval(AbsTaskRetrieval):
             )
         }
 
-        self.relevant_docs["test"] = {
+        relevant_docs = {
             f"q{e + 1}": dict(zip([f"d{i}" for i in ids], range(1, len(ids) + 1)))
             for e, ids in enumerate(query_ds["full"]["corpusids"])
+        }
+
+        corpus_dataset = Dataset.from_list(
+            [
+                {"id": k, "text": v.get("text", ""), "title": v.get("title", "")}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                "test": {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
+            }
         }
 
         self.data_loaded = True

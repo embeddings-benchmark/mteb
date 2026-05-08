@@ -1,7 +1,7 @@
 import warnings
-from collections import defaultdict
 
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -34,9 +34,7 @@ def load_bright_data(
     eval_splits: list,
     revision: str | None = None,
 ):
-    corpus = {domain: dict.fromkeys(eval_splits) for domain in domains}
-    queries = {domain: dict.fromkeys(eval_splits) for domain in domains}
-    relevant_docs = {domain: dict.fromkeys(eval_splits) for domain in domains}
+    result = {}
 
     for domain in domains:
         domain_corpus = datasets.load_dataset(
@@ -45,7 +43,41 @@ def load_bright_data(
         examples = datasets.load_dataset(
             path, "examples", split=domain, revision=revision
         )
-        queries[domain]["standard"] = {e["id"]: e["query"] for e in examples}
+
+        queries_dict = {e["id"]: e["query"] for e in examples}
+        corpus_dict = {e["id"]: {"text": e["content"]} for e in domain_corpus}
+
+        relevant_docs_standard: dict[str, dict[str, int]] = {}
+        for e in examples:
+            qid = e["id"]
+            gold_ids = e["gold_ids"]
+            relevant_docs_standard[qid] = {}
+            for gid in gold_ids:
+                relevant_docs_standard[qid][gid] = 1
+
+        corpus_ds = Dataset.from_list(
+            [
+                {
+                    "id": k,
+                    "text": v.get("text", "") if isinstance(v, dict) else v,
+                    "title": v.get("title", "") if isinstance(v, dict) else "",
+                }
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_ds = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        result[domain] = {
+            "standard": {
+                "corpus": corpus_ds,
+                "queries": queries_ds,
+                "relevant_docs": relevant_docs_standard,
+                "top_ranked": None,
+            }
+        }
+
         if domain in DOMAINS_LONG and self.is_long:
             domain_corpus_long = datasets.load_dataset(
                 path,
@@ -53,34 +85,36 @@ def load_bright_data(
                 split=domain,
                 revision=revision,
             )
-            corpus[domain]["long"] = {
+            corpus_long_dict = {
                 e["id"]: {"text": e["content"]} for e in domain_corpus_long
             }
-            queries[domain]["long"] = queries[domain]["standard"]
-            relevant_docs[domain]["long"] = {}
+            corpus_long_ds = Dataset.from_list(
+                [
+                    {
+                        "id": k,
+                        "text": v.get("text", "") if isinstance(v, dict) else v,
+                        "title": v.get("title", "") if isinstance(v, dict) else "",
+                    }
+                    for k, v in corpus_long_dict.items()
+                ]
+            )
 
-        corpus[domain]["standard"] = {
-            e["id"]: {"text": e["content"]} for e in domain_corpus
-        }
-
-        relevant_docs[domain]["standard"] = {}
-
-        for e in examples:
-            qid = e["id"]
-            gold_ids = e["gold_ids"]
-            relevant_docs[domain]["standard"][qid] = defaultdict(dict)
-            for gid in gold_ids:
-                relevant_docs[domain]["standard"][qid].update({gid: 1})
-            if domain in DOMAINS_LONG and self.is_long:
-                relevant_docs[domain]["long"][qid] = defaultdict(dict)
+            relevant_docs_long: dict[str, dict[str, int]] = {}
+            for e in examples:
+                qid = e["id"]
                 gold_ids_long = e["gold_ids_long"]
+                relevant_docs_long[qid] = {}
                 for gid in gold_ids_long:
-                    relevant_docs[domain]["long"][qid].update({gid: 1})
+                    relevant_docs_long[qid][gid] = 1
 
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-    return corpus, queries, relevant_docs
+            result[domain]["long"] = {
+                "corpus": corpus_long_ds,
+                "queries": queries_ds,
+                "relevant_docs": relevant_docs_long,
+                "top_ranked": None,
+            }
+
+    return result
 
 
 def load_data(self, num_proc: int | None = None, **kwargs) -> None:
@@ -93,7 +127,7 @@ def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         category=DeprecationWarning,
     )
 
-    self.corpus, self.queries, self.relevant_docs = self.load_bright_data(
+    self.dataset = self.load_bright_data(
         path=self.metadata.dataset["path"],
         domains=list(self.metadata.eval_langs.keys()),
         eval_splits=self.metadata.eval_splits,

@@ -1,6 +1,6 @@
 import random
 
-from datasets import load_dataset
+from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -52,7 +52,7 @@ Zong, Chengqing},
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:  # noqa: PLR0914
         if self.data_loaded:
             return
 
@@ -82,28 +82,49 @@ Zong, Chengqing},
         contexts = [contexts[idx] for idx in indices]
         answers = [answers[idx] for idx in indices]
 
-        self.corpus = {split: {}}
-        self.relevant_docs = {split: {}}
-        self.queries = {split: {}}
+        corpus_dict = {}
+        relevant_docs = {}
+        queries_dict = {}
 
         text2id = {}
         n = 0
         for t, q, cont, ans in zip(titles, questions, contexts, answers):
-            self.queries[split][str(n)] = q
+            queries_dict[str(n)] = q
             q_n = n
             n += 1
             if cont not in text2id:
                 text2id[cont] = n
-                self.corpus[split][str(n)] = {"title": t, "text": cont}
+                corpus_dict[str(n)] = {"title": t, "text": cont}
                 n += 1
             if ans not in text2id and ans:
                 text2id[ans] = n
-                self.corpus[split][str(n)] = {"title": t, "text": ans}
+                corpus_dict[str(n)] = {"title": t, "text": ans}
                 n += 1
 
-            self.relevant_docs[split][str(q_n)] = {
+            relevant_docs[str(q_n)] = {
                 str(text2id[ans]): 1,
                 str(text2id[cont]): 1,
             }  # only two correct matches
+
+        corpus_dataset = Dataset.from_list(
+            [
+                {"id": k, "text": v["text"], "title": v["title"]}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                split: {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
+            }
+        }
 
         self.data_loaded = True

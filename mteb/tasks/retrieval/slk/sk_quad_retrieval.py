@@ -1,6 +1,6 @@
 import logging
 
-from datasets import load_dataset
+from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -49,22 +49,39 @@ class SKQuadRetrieval(AbsTaskRetrieval):
 
         if "test" in eval_splits:
             # Corpus, Queries, and Relevance dictionary for 'test' split
-            self.corpus = {
-                "test": {
-                    row["_id"]: {"text": row["text"], "title": row["title"]}
-                    for row in ds_corpus["corpus"]
-                }
+            corpus_dict = {
+                row["_id"]: {"text": row["text"], "title": row["title"]}
+                for row in ds_corpus["corpus"]
             }
-            self.queries = {
-                "test": {row["_id"]: row["text"] for row in ds_query["queries"]}
-            }
-            self.relevant_docs = {"test": {}}
+            queries_dict = {row["_id"]: row["text"] for row in ds_query["queries"]}
+            relevant_docs = {}
 
             for row in ds_default["test"]:
-                self.relevant_docs["test"].setdefault(row["query-id"], {})[
-                    row["corpus-id"]
-                ] = int(row["score"])
+                relevant_docs.setdefault(row["query-id"], {})[row["corpus-id"]] = int(
+                    row["score"]
+                )
+
+            corpus_dataset = Dataset.from_list(
+                [
+                    {"id": k, "text": v["text"], "title": v["title"]}
+                    for k, v in corpus_dict.items()
+                ]
+            )
+            queries_dataset = Dataset.from_list(
+                [{"id": k, "text": v} for k, v in queries_dict.items()]
+            )
+
+            self.dataset = {
+                "default": {
+                    "test": {
+                        "corpus": corpus_dataset,
+                        "queries": queries_dataset,
+                        "relevant_docs": relevant_docs,
+                        "top_ranked": None,
+                    }
+                }
+            }
 
             logger.info(
-                f"Data Loaded:\n- Corpus size: {len(self.corpus['test'])}\n- Query size: {len(self.queries['test'])}\n- Relevance entries: {len(self.relevant_docs['test'])}"
+                f"Data Loaded:\n- Corpus size: {len(corpus_dict)}\n- Query size: {len(queries_dict)}\n- Relevance entries: {len(relevant_docs)}"
             )

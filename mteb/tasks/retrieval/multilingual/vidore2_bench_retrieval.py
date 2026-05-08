@@ -19,13 +19,9 @@ def _load_data(
     num_proc: int | None = None,
 ):
     if langs is None:
-        corpus = {}
-        queries = {}
-        relevant_docs = {}
+        dataset = {}
     else:
-        corpus = {lang: {} for lang in langs}
-        queries = {lang: {} for lang in langs}
-        relevant_docs = {lang: {} for lang in langs}
+        dataset = {lang: {} for lang in langs}
 
     for split in splits:
         query_ds = load_dataset(
@@ -71,31 +67,37 @@ def _load_data(
         )
 
         if langs is None:
-            queries[split] = query_ds.select_columns(["id", "text"])
-            corpus[split] = corpus_ds
-            relevant_docs[split] = {}
+            relevant_docs = {}
             for row in qrels_ds:
                 qid = f"query-{split}-{row['query-id']}"
                 did = f"corpus-{split}-{row['corpus-id']}"
-                if qid not in relevant_docs[split]:
-                    relevant_docs[split][qid] = {}
-                relevant_docs[split][qid][did] = int(row["score"])
+                if qid not in relevant_docs:
+                    relevant_docs[qid] = {}
+                relevant_docs[qid][did] = int(row["score"])
+            dataset[split] = {
+                "corpus": corpus_ds,
+                "queries": query_ds.select_columns(["id", "text"]),
+                "relevant_docs": relevant_docs,
+                "top_ranked": None,
+            }
         else:
             for lang in langs:
                 filtered_query_ds = query_ds.filter(lambda x: x["language"] == lang)
-                queries[lang][split] = filtered_query_ds.select_columns(["id", "text"])
-
-                corpus[lang][split] = corpus_ds
-
-                relevant_docs[lang][split] = {}
+                relevant_docs = {}
                 for row in qrels_ds:
                     qid = f"query-{split}-{row['query-id']}"
                     did = f"corpus-{split}-{row['corpus-id']}"
-                    if qid not in relevant_docs[lang][split]:
-                        relevant_docs[lang][split][qid] = {}
-                    relevant_docs[lang][split][qid][did] = int(row["score"])
+                    if qid not in relevant_docs:
+                        relevant_docs[qid] = {}
+                    relevant_docs[qid][did] = int(row["score"])
+                dataset[lang][split] = {
+                    "corpus": corpus_ds,
+                    "queries": filtered_query_ds.select_columns(["id", "text"]),
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
 
-    return corpus, queries, relevant_docs
+    return dataset
 
 
 class Vidore2ESGReportsRetrieval(AbsTaskRetrieval):
@@ -135,7 +137,7 @@ class Vidore2ESGReportsRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_data(
+        self.dataset = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=_LANGS.keys(),
@@ -183,7 +185,7 @@ class Vidore2EconomicsReportsRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_data(
+        self.dataset = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=_LANGS.keys(),
@@ -231,7 +233,7 @@ class Vidore2BioMedicalLecturesRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_data(
+        self.dataset = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=_LANGS.keys(),
@@ -279,11 +281,13 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-            num_proc=num_proc,
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+                num_proc=num_proc,
+            )
+        }
 
         self.data_loaded = True

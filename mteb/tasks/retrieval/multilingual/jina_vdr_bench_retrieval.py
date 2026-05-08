@@ -107,18 +107,13 @@ def _load_data(
     langs: list | None = None,
     revision: str | None = None,
 ):
-    if langs is None or len(langs) == 1:
-        corpus = {}
-        queries = {}
-        relevant_docs = {}
-        langs = ["default"]
-    else:
-        corpus = {lang: {} for lang in langs}
-        queries = {lang: {} for lang in langs}
-        relevant_docs = {lang: {} for lang in langs}
+    is_multilingual = langs is not None and len(langs) > 1
+    effective_langs = list(langs) if is_multilingual else ["default"]
+
+    dataset = {lang: {} for lang in effective_langs}
 
     for split in splits:
-        for lang in langs:
+        for lang in effective_langs:
             query_ds, corpus_ds, qrels_ds = _load_single_language(
                 path=path,
                 split=split,
@@ -126,33 +121,27 @@ def _load_data(
                 revision=revision,
             )
 
-            if lang == "default":
-                queries[split] = query_ds
-                corpus[split] = corpus_ds
-                relevant_docs[split] = defaultdict(dict)
-                for row in qrels_ds:
-                    qid = f"query-{split}-{row['query-id']}"
-                    did = f"corpus-{split}-{row['corpus-id']}"
-                    relevant_docs[split][qid][did] = int(row["score"])
-            else:
-                queries[lang][split] = query_ds
+            relevant_docs: dict = defaultdict(dict)
+            for row in qrels_ds:
+                qid = f"query-{split}-{row['query-id']}"
+                did = f"corpus-{split}-{row['corpus-id']}"
+                relevant_docs[qid][did] = int(row["score"])
 
-                corpus[lang][split] = corpus_ds
+            dataset[lang][split] = {
+                "corpus": corpus_ds,
+                "queries": query_ds,
+                "relevant_docs": dict(relevant_docs),
+                "top_ranked": None,
+            }
 
-                relevant_docs[lang][split] = defaultdict(dict)
-                for row in qrels_ds:
-                    qid = f"query-{split}-{row['query-id']}"
-                    did = f"corpus-{split}-{row['corpus-id']}"
-                    relevant_docs[lang][split][qid][did] = int(row["score"])
-
-    return corpus, queries, relevant_docs
+    return dataset
 
 
 def load_data(self, num_proc: int | None = None, **kwargs) -> None:
     if self.data_loaded:
         return
 
-    self.corpus, self.queries, self.relevant_docs = _load_data(
+    self.dataset = _load_data(
         path=self.metadata.dataset["path"],
         splits=self.metadata.eval_splits,
         langs=self.metadata.eval_langs,

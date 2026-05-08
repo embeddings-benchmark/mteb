@@ -1,6 +1,7 @@
 from hashlib import sha256
 
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -38,9 +39,9 @@ class GreekCivicsQA(AbsTaskRetrieval):
         eval_split = self.metadata.eval_splits[0]
         data_raw = datasets.load_dataset(**self.metadata.dataset)[eval_split]
 
-        queries = {eval_split: {}}
-        corpus = {eval_split: {}}
-        relevant_docs = {eval_split: {}}
+        queries_dict = {}
+        corpus_dict = {}
+        relevant_docs = {}
 
         question_ids = {
             question: str(id)
@@ -56,16 +57,33 @@ class GreekCivicsQA(AbsTaskRetrieval):
             question = row["question"]
             context = row["answer"]
             query_id = question_ids[question]
-            queries[eval_split][query_id] = question
+            queries_dict[query_id] = question
 
             doc_id = context_ids[context]
-            corpus[eval_split][doc_id] = {"text": context}
-            if query_id not in relevant_docs[eval_split]:
-                relevant_docs[eval_split][query_id] = {}
-            relevant_docs[eval_split][query_id][doc_id] = 1
+            corpus_dict[doc_id] = {"text": context, "title": ""}
+            if query_id not in relevant_docs:
+                relevant_docs[query_id] = {}
+            relevant_docs[query_id][doc_id] = 1
 
-        self.corpus = datasets.DatasetDict(corpus)
-        self.queries = datasets.DatasetDict(queries)
-        self.relevant_docs = datasets.DatasetDict(relevant_docs)
+        corpus_dataset = Dataset.from_list(
+            [
+                {"id": k, "text": v["text"], "title": v["title"]}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                eval_split: {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
+            }
+        }
 
         self.data_loaded = True

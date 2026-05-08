@@ -1,6 +1,7 @@
 from logging import getLogger
 
 import datasets
+from datasets import Dataset
 
 from mteb._evaluators.retrieval_metrics import evaluate_p_mrr_change
 from mteb.abstasks import AbsTaskRetrieval
@@ -47,12 +48,7 @@ def load_data(
     eval_splits: list,
     revision: str | None = None,
 ):
-    corpus = {lang: {EVAL_SPLIT: {}} for lang in langs}
-    queries = {lang: {EVAL_SPLIT: {}} for lang in langs}
-    relevant_docs = {lang: {EVAL_SPLIT: {}} for lang in langs}
-    instructions = {lang: {EVAL_SPLIT: {}} for lang in langs}
-    top_ranked = {lang: {EVAL_SPLIT: {}} for lang in langs}
-    qrel_diffs = {lang: {EVAL_SPLIT: {}} for lang in langs}
+    dataset = {lang: {} for lang in langs}
 
     for lang in langs:
         if "-" in lang:
@@ -67,47 +63,51 @@ def load_data(
             f"corpus-{loading_lang}",
             revision=revision,
         )
-        corpus[lang][EVAL_SPLIT] = {
-            row["_id"]: {"title": row["title"], "text": row["text"]}
-            for row in corpus_data["corpus"]
-        }
+        corpus_ds = Dataset.from_list(
+            [
+                {"id": row["_id"], "title": row["title"], "text": row["text"]}
+                for row in corpus_data["corpus"]
+            ]
+        )
 
-        # Load queries data
+        # Load queries + instructions combined
         queries_data = datasets.load_dataset(
             path,
             f"queries-{loading_lang}",
             revision=revision,
         )
-        queries[lang][EVAL_SPLIT] = {
-            row["_id"]: row["text"] for row in queries_data["queries"]
-        }
-
-        # Load instructions data
         instructions_data = datasets.load_dataset(
             path,
             f"instruction-{loading_lang}",
             revision=revision,
         )
-        instructions[lang][EVAL_SPLIT] = {
+        instructions_map = {
             row["query-id"]: row["instruction"]
             for row in instructions_data["instruction"]
         }
+        queries_ds = Dataset.from_list(
+            [
+                {
+                    "id": row["_id"],
+                    "text": row["text"],
+                    "instruction": instructions_map.get(row["_id"], ""),
+                }
+                for row in queries_data["queries"]
+            ]
+        )
 
-        # Load qrels_og data
+        # Load qrels
         qrels_og_data = datasets.load_dataset(
             path,
             f"default-{loading_lang}",
             revision=revision,
         )
+        relevant_docs: dict = {}
         for row in qrels_og_data[EVAL_SPLIT]:
-            if row["query-id"] not in relevant_docs[lang][EVAL_SPLIT]:
-                relevant_docs[lang][EVAL_SPLIT][row["query-id"]] = {
-                    row["corpus-id"]: int(row["score"])
-                }
-            else:
-                relevant_docs[lang][EVAL_SPLIT][row["query-id"]][row["corpus-id"]] = (
-                    int(row["score"])
-                )
+            qid = row["query-id"]
+            if qid not in relevant_docs:
+                relevant_docs[qid] = {}
+            relevant_docs[qid][row["corpus-id"]] = int(row["score"])
 
         # Load top_ranked data
         top_ranked_data = datasets.load_dataset(
@@ -115,21 +115,18 @@ def load_data(
             f"top_ranked-{loading_lang}",
             revision=revision,
         )
+        top_ranked: dict = {}
         for row in top_ranked_data["top_ranked"]:
-            top_ranked[lang][EVAL_SPLIT][row["query-id"]] = row["corpus-ids"]
+            top_ranked[row["query-id"]] = row["corpus-ids"]
 
-        qrel_diff = datasets.load_dataset(
-            path,
-            f"qrel_diff-{loading_lang}",
-            split="qrel_diff",
-            revision=revision,
-        )
-
-        qrel_diffs[lang][EVAL_SPLIT] = {
-            item["query-id"]: item["corpus-ids"] for item in qrel_diff
+        dataset[lang][EVAL_SPLIT] = {
+            "corpus": corpus_ds,
+            "queries": queries_ds,
+            "relevant_docs": relevant_docs,
+            "top_ranked": top_ranked,
         }
 
-    return corpus, queries, instructions, relevant_docs, top_ranked, qrel_diffs
+    return dataset
 
 
 def load_qrel_diff(metadata: TaskMetadata, hf_subset: str) -> dict[str, list[str]]:
@@ -179,14 +176,7 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):  # noqa: N801
         if self.data_loaded:
             return
 
-        (
-            self.corpus,
-            self.queries,
-            self.instructions,
-            self.relevant_docs,
-            self.top_ranked,
-            self.qrels_diff,
-        ) = load_data(
+        self.dataset = load_data(
             path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
             eval_splits=self.metadata.eval_splits,
@@ -247,14 +237,7 @@ class mFollowIR(AbsTaskRetrieval):  # noqa: N801
         if self.data_loaded:
             return
 
-        (
-            self.corpus,
-            self.queries,
-            self.instructions,
-            self.relevant_docs,
-            self.top_ranked,
-            self.qrels_diff,
-        ) = load_data(
+        self.dataset = load_data(
             path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
             eval_splits=self.metadata.eval_splits,

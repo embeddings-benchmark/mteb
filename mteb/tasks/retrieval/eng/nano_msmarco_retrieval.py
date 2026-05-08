@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from datasets import load_dataset
+from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -59,44 +59,43 @@ Li Deng},
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset(
+        corpus_hf = load_dataset(
             "zeta-alpha-ai/NanoMSMARCO",
             "corpus",
             revision="7b8ff22f2771dc65ac5b439f222eb19a1f56abda",
         )
-        self.queries = load_dataset(
+        queries_hf = load_dataset(
             "zeta-alpha-ai/NanoMSMARCO",
             "queries",
             revision="7b8ff22f2771dc65ac5b439f222eb19a1f56abda",
         )
-        self.relevant_docs = load_dataset(
+        qrels_hf = load_dataset(
             "zeta-alpha-ai/NanoMSMARCO",
             "qrels",
             revision="7b8ff22f2771dc65ac5b439f222eb19a1f56abda",
         )
 
-        self.corpus = {
-            split: {
-                sample["_id"]: {"_id": sample["_id"], "text": sample["text"]}
-                for sample in self.corpus[split]
-            }
-            for split in self.corpus
-        }
-
-        self.queries = {
-            split: {sample["_id"]: sample["text"] for sample in self.queries[split]}
-            for split in self.queries
-        }
-
-        relevant_docs = {}
-
-        for split in self.relevant_docs:
-            relevant_docs[split] = defaultdict(dict)
+        self.dataset = {}
+        for split in corpus_hf:
+            corpus_ds = Dataset.from_list(
+                [{"id": s["_id"], "text": s["text"]} for s in corpus_hf[split]]
+            )
+            queries_ds = Dataset.from_list(
+                [{"id": s["_id"], "text": s["text"]} for s in queries_hf[split]]
+            )
+            relevant_docs: dict = defaultdict(dict)
             for query_id, corpus_id in zip(
-                self.relevant_docs[split]["query-id"],
-                self.relevant_docs[split]["corpus-id"],
+                qrels_hf[split]["query-id"],
+                qrels_hf[split]["corpus-id"],
             ):
-                relevant_docs[split][query_id][corpus_id] = 1
-        self.relevant_docs = relevant_docs
+                relevant_docs[query_id][corpus_id] = 1
+            if "default" not in self.dataset:
+                self.dataset["default"] = {}
+            self.dataset["default"][split] = {
+                "corpus": corpus_ds,
+                "queries": queries_ds,
+                "relevant_docs": dict(relevant_docs),
+                "top_ranked": None,
+            }
 
         self.data_loaded = True

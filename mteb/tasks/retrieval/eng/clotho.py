@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from datasets import Dataset, DatasetDict, load_dataset
+from datasets import Dataset, load_dataset
 from tqdm.auto import tqdm
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -63,9 +63,16 @@ class ClothoA2TRetrieval(AbsTaskRetrieval):
                 corpus_data["text"].append(text)
                 qrels_dict[index][doc_id] = 1
 
-        self.corpus = DatasetDict({"test": Dataset.from_dict(corpus_data)})
-        self.queries = DatasetDict({"test": queries_ds})
-        self.relevant_docs = {"test": qrels_dict}
+        self.dataset = {
+            "default": {
+                "test": {
+                    "corpus": Dataset.from_dict(corpus_data),
+                    "queries": queries_ds,
+                    "relevant_docs": dict(qrels_dict),
+                    "top_ranked": None,
+                }
+            }
+        }
         self.data_loaded = True
 
 
@@ -125,7 +132,14 @@ class ClothoT2ARetrieval(AbsTaskRetrieval):
                 queries_data["text"].append(text)
                 qrels_dict[query_id][index] = 1
 
-        self.corpus = DatasetDict({"test": corpus_ds})
-        self.queries = DatasetDict({"test": Dataset.from_dict(queries_data)})
-        self.relevant_docs = {"test": qrels_dict}
+        self.dataset = {
+            "default": {
+                "test": {
+                    "corpus": corpus_ds,
+                    "queries": Dataset.from_dict(queries_data),
+                    "relevant_docs": dict(qrels_dict),
+                    "top_ranked": None,
+                }
+            }
+        }
         self.data_loaded = True

@@ -1,6 +1,6 @@
 from enum import Enum
 
-from datasets import DatasetDict, load_dataset
+from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -118,27 +118,35 @@ class CUREv1Retrieval(AbsTaskRetrieval):
         eval_splits = self.metadata.eval_splits
         languages = self.metadata.eval_langs
 
-        # Iterate over splits and languages
-        corpus = {language: dict.fromkeys(eval_splits) for language in languages}
-        queries = {language: dict.fromkeys(eval_splits) for language in languages}
-        relevant_docs = {language: dict.fromkeys(eval_splits) for language in languages}
+        self.dataset = {}
+
+        for language in languages:
+            self.dataset[language] = {}
+
         for split in eval_splits:
             # Since this is a cross-lingual dataset, the corpus and the relevant documents do not depend on the language
-            split_corpus = self._load_corpus(split=split)
+            split_corpus_dict = self._load_corpus(split=split)
             split_qrels = self._load_qrels(split=split)
+
+            split_corpus_ds = Dataset.from_list(
+                [
+                    {"id": k, "text": v.get("text", ""), "title": v.get("title", "")}
+                    for k, v in split_corpus_dict.items()
+                ]
+            )
 
             # Queries depend on the language
             for language in languages:
-                corpus[language][split] = split_corpus
-                relevant_docs[language][split] = split_qrels
-
-                queries[language][split] = self._load_queries(
-                    split=split, language=language
+                queries_dict = self._load_queries(split=split, language=language)
+                queries_ds = Dataset.from_list(
+                    [{"id": k, "text": v} for k, v in queries_dict.items()]
                 )
 
-        # Convert into DatasetDict
-        self.corpus = DatasetDict(corpus)
-        self.queries = DatasetDict(queries)
-        self.relevant_docs = DatasetDict(relevant_docs)
+                self.dataset[language][split] = {
+                    "corpus": split_corpus_ds,
+                    "queries": queries_ds,
+                    "relevant_docs": split_qrels,
+                    "top_ranked": None,
+                }
 
         self.data_loaded = True

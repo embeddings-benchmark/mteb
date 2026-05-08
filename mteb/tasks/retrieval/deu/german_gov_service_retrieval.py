@@ -1,6 +1,7 @@
 import hashlib
 
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -80,8 +81,25 @@ Lukas, Leon},
 
             relevant_docs[q_id][d_id] = 1  # 1 = relevant
 
-        self.queries = {_EVAL_SPLIT: queries}
-        self.corpus = {_EVAL_SPLIT: corpus}
-        self.relevant_docs = {_EVAL_SPLIT: relevant_docs}
+        corpus_dataset = Dataset.from_list(
+            [
+                {"id": k, "text": v["text"], "title": v["title"]}
+                for k, v in corpus.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                _EVAL_SPLIT: {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
+            }
+        }
 
         self.data_loaded = True

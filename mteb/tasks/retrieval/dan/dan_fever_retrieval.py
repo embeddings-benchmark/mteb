@@ -1,4 +1,5 @@
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -51,28 +52,26 @@ Derczynski, Leon},
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
+        hf_dataset = datasets.load_dataset(**self.metadata.dataset)
+        self.dataset_transform(hf_dataset)
         self.data_loaded = True
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(
+        self, hf_dataset, num_proc: int | None = None, **kwargs
+    ) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
-        self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text
-        self.queries = dict[query_id, str] #id => query
-        self.relevant_docs = dict[query_id, dict[[doc_id, score]]
+        self.dataset = {subset: {split: {"corpus": Dataset, "queries": Dataset, "relevant_docs": dict, "top_ranked": None}}}
         """
-        self.corpus = {}
-        self.relevant_docs = {}
-        self.queries = {}
+        self.dataset = {}
         text2id = {}
 
-        for split in self.dataset:
-            self.corpus[split] = {}
-            self.relevant_docs[split] = {}
-            self.queries[split] = {}
+        for split in hf_dataset:
+            corpus_dict = {}
+            relevant_docs = {}
+            queries_dict = {}
 
-            ds = self.dataset[split]
+            ds = hf_dataset[split]
             claims = ds["claim"]
             evidences = ds["evidence_extract"]
             labels = ds["label"]
@@ -93,13 +92,30 @@ Derczynski, Leon},
                 claim_id = "Q" + str(text2id[claim])
                 evidence_id = "C" + str(text2id[evidence])
 
-                self.queries[split][claim_id] = claim
-                self.corpus[split][evidence_id] = {"title": "", "text": evidence}
+                queries_dict[claim_id] = claim
+                corpus_dict[evidence_id] = {"title": "", "text": evidence}
 
-                if claim_id not in self.relevant_docs[split]:
-                    self.relevant_docs[split][claim_id] = {}
+                if claim_id not in relevant_docs:
+                    relevant_docs[claim_id] = {}
 
-                self.relevant_docs[split][claim_id][evidence_id] = sim
+                relevant_docs[claim_id][evidence_id] = sim
+
+            corpus_dataset = Dataset.from_list(
+                [
+                    {"id": k, "text": v["text"], "title": v["title"]}
+                    for k, v in corpus_dict.items()
+                ]
+            )
+            queries_dataset = Dataset.from_list(
+                [{"id": k, "text": v} for k, v in queries_dict.items()]
+            )
+
+            self.dataset.setdefault("default", {})[split] = {
+                "corpus": corpus_dataset,
+                "queries": queries_dataset,
+                "relevant_docs": relevant_docs,
+                "top_ranked": None,
+            }
 
 
 class DanFever(AbsTaskRetrieval):

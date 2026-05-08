@@ -1,8 +1,6 @@
-from collections import defaultdict
 from typing import Any
 
 import datasets
-from datasets import DatasetDict
 from tqdm.auto import tqdm
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -151,9 +149,7 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
-        self.corpus = defaultdict(DatasetDict)
-        self.queries = defaultdict(DatasetDict)
-        self.relevant_docs = defaultdict(DatasetDict)
+        self.dataset = {}
         self.dataset_transform()
         self.data_loaded = True
 
@@ -165,6 +161,9 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
                 lang,
                 revision=self.metadata.dataset["revision"],
             )
+
+            if lang not in self.dataset:
+                self.dataset[lang] = {}
 
             for split in self.metadata.eval_splits:
                 split_dataset = lang_dataset[split]
@@ -201,9 +200,12 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
                     str(row["id"]): {str(row["id"]): 1} for row in split_dataset
                 }
 
-                self.corpus[lang][split] = corpus_ds
-                self.queries[lang][split] = queries_ds
-                self.relevant_docs[lang][split] = relevant_docs_
+                self.dataset[lang][split] = {
+                    "corpus": corpus_ds,
+                    "queries": queries_ds,
+                    "relevant_docs": relevant_docs_,
+                    "top_ranked": None,
+                }
 
 
 class FleursT2ARetrieval(AbsTaskRetrieval):
@@ -243,9 +245,7 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
-        self.corpus = defaultdict(DatasetDict)
-        self.queries = defaultdict(DatasetDict)
-        self.relevant_docs = defaultdict(DatasetDict)
+        self.dataset = {}
         self.dataset_transform()
         self.data_loaded = True
 
@@ -257,6 +257,9 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
                 lang,
                 revision=self.metadata.dataset["revision"],
             )
+
+            if lang not in self.dataset:
+                self.dataset[lang] = {}
 
             for split in self.metadata.eval_splits:
                 split_dataset = lang_dataset[split]
@@ -296,6 +299,9 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
                     str(row["id"]): {str(row["id"]): 1} for row in split_dataset
                 }
 
-                self.corpus[lang][split] = corpus_ds
-                self.queries[lang][split] = queries_ds
-                self.relevant_docs[lang][split] = relevant_docs_
+                self.dataset[lang][split] = {
+                    "corpus": corpus_ds,
+                    "queries": queries_ds,
+                    "relevant_docs": relevant_docs_,
+                    "top_ranked": None,
+                }

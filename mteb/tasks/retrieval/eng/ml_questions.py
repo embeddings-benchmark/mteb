@@ -1,6 +1,7 @@
 import csv
 from pathlib import Path
 
+from datasets import Dataset
 from huggingface_hub import snapshot_download
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -58,19 +59,31 @@ Reddy, Siva},
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
-        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         dataset_path = self.metadata.dataset["path"]
         revision = self.metadata.dataset.get("revision", None)
         download_dir = snapshot_download(
             repo_id=dataset_path, repo_type="dataset", revision=revision
         )
+        self.dataset = {"default": {}}
         for split in self.metadata.eval_splits:
-            corpus, queries, qrels = self._load_data_for_split(download_dir, split)
-            self.corpus[split], self.queries[split], self.relevant_docs[split] = (
-                corpus,
-                queries,
-                qrels,
+            corpus_dict, queries_dict, qrels = self._load_data_for_split(
+                download_dir, split
             )
+            corpus_dataset = Dataset.from_list(
+                [
+                    {"id": k, "text": v.get("text", ""), "title": v.get("title", "")}
+                    for k, v in corpus_dict.items()
+                ]
+            )
+            queries_dataset = Dataset.from_list(
+                [{"id": k, "text": v} for k, v in queries_dict.items()]
+            )
+            self.dataset["default"][split] = {
+                "corpus": corpus_dataset,
+                "queries": queries_dataset,
+                "relevant_docs": qrels,
+                "top_ranked": None,
+            }
 
         self.data_loaded = True
 

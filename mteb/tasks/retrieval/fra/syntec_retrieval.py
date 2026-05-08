@@ -1,4 +1,5 @@
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -52,20 +53,39 @@ class SyntecRetrieval(AbsTaskRetrieval):
         )
 
         eval_split = self.metadata.eval_splits[0]
-        self.queries = {
-            eval_split: {
-                str(i): q["Question"] for i, q in enumerate(queries_raw[eval_split])
-            }
+        queries_dict = {
+            str(i): q["Question"] for i, q in enumerate(queries_raw[eval_split])
         }
 
-        corpus_raw = corpus_raw[eval_split]
-        corpus_raw = corpus_raw.rename_column("content", "text")
-        self.corpus = {eval_split: {str(row["id"]): row for row in corpus_raw}}
+        corpus_split = corpus_raw[eval_split]
+        corpus_split = corpus_split.rename_column("content", "text")
+        corpus_dict = {
+            str(row["id"]): {"title": "", "text": row["text"]} for row in corpus_split
+        }
 
-        self.relevant_docs = {
-            eval_split: {
-                str(i): {str(q["Article"]): 1}
-                for i, q in enumerate(queries_raw[eval_split])
+        relevant_docs = {
+            str(i): {str(q["Article"]): 1}
+            for i, q in enumerate(queries_raw[eval_split])
+        }
+
+        corpus_dataset = Dataset.from_list(
+            [
+                {"id": k, "text": v["text"], "title": v["title"]}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                eval_split: {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
             }
         }
 

@@ -1,4 +1,4 @@
-from datasets import DatasetDict, load_dataset
+from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -37,9 +37,9 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        queries = {_EVAL_SPLIT: {}}
-        corpus = {_EVAL_SPLIT: {}}
-        relevant_docs = {_EVAL_SPLIT: {}}
+        queries_dict = {}
+        corpus_dict = {}
+        relevant_docs = {}
 
         data = load_dataset(
             self.metadata.dataset["path"],
@@ -62,14 +62,31 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
             question = row["question"]
             answer = row["answer"]
             query_id = f"Q{question_ids[question]}"
-            queries[_EVAL_SPLIT][query_id] = question
+            queries_dict[query_id] = question
             doc_id = f"D{answer_ids[answer]}"
-            corpus[_EVAL_SPLIT][doc_id] = {"text": answer}
-            if query_id not in relevant_docs[_EVAL_SPLIT]:
-                relevant_docs[_EVAL_SPLIT][query_id] = {}
-            relevant_docs[_EVAL_SPLIT][query_id][doc_id] = 1
+            corpus_dict[doc_id] = {"text": answer, "title": ""}
+            if query_id not in relevant_docs:
+                relevant_docs[query_id] = {}
+            relevant_docs[query_id][doc_id] = 1
 
-        self.corpus = DatasetDict(corpus)
-        self.queries = DatasetDict(queries)
-        self.relevant_docs = DatasetDict(relevant_docs)
+        corpus_dataset = Dataset.from_list(
+            [
+                {"id": k, "text": v["text"], "title": v["title"]}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                _EVAL_SPLIT: {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
+            }
+        }
         self.data_loaded = True

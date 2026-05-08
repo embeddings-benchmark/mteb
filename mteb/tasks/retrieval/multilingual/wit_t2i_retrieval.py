@@ -1,4 +1,4 @@
-from datasets import Dataset, DatasetDict, load_dataset
+from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -73,13 +73,19 @@ def _load_wit_data(path: str, langs: list, splits: str, revision: str | None = N
                 "image": [None for _ in queries[lang][split]],
             }
         )
-    corpus = DatasetDict({lang: DatasetDict(splits) for lang, splits in corpus.items()})
-    queries = DatasetDict(
-        {lang: DatasetDict(splits) for lang, splits in queries.items()}
-    )
-    relevant_docs = DatasetDict(relevant_docs)
+    result = {}
+    for lang in langs:
+        result[lang] = {
+            split: {
+                "corpus": corpus[lang][split],
+                "queries": queries[lang][split],
+                "relevant_docs": relevant_docs[lang][split],
+                "top_ranked": None,
+            }
+            for split in corpus[lang]
+        }
 
-    return corpus, queries, relevant_docs
+    return result
 
 
 class WITT2IRetrieval(AbsTaskRetrieval):
@@ -120,7 +126,7 @@ class WITT2IRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_wit_data(
+        self.dataset = _load_wit_data(
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
             splits=self.metadata.eval_splits,

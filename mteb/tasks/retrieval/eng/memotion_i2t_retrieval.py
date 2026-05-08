@@ -77,7 +77,15 @@ def _load_data(path: str, splits: str, revision: str | None = None):
             if query_id not in relevant_docs[split]:
                 relevant_docs[split][query_id] = {}
             relevant_docs[split][query_id][doc_id] = 1
-    return corpus, queries, relevant_docs
+    result = {}
+    for split in splits:
+        result[split] = {
+            "corpus": corpus[split],
+            "queries": queries[split],
+            "relevant_docs": relevant_docs[split],
+            "top_ranked": None,
+        }
+    return {"default": result}
 
 
 class MemotionI2TRetrieval(AbsTaskRetrieval):
@@ -116,7 +124,7 @@ class MemotionI2TRetrieval(AbsTaskRetrieval):
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
-        self.corpus, self.queries, self.relevant_docs = _load_data(
+        self.dataset = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],

@@ -1,4 +1,5 @@
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -46,8 +47,6 @@ class CQADupstackTexNLRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        # fetch both subsets of the dataset, only test split
         corpus_raw = datasets.load_dataset(
             name="corpus",
             **self.metadata.dataset,
@@ -56,23 +55,36 @@ class CQADupstackTexNLRetrieval(AbsTaskRetrieval):
             name="queries",
             **self.metadata.dataset,
         )
-
         qrels_raw = datasets.load_dataset(
             name="test",
             **self.metadata.dataset,
         )
 
-        self.queries["test"] = {query["_id"]: query["text"] for query in queries_raw}
+        queries_ds = Dataset.from_list(
+            [{"id": q["_id"], "text": q["text"]} for q in queries_raw]
+        )
+        corpus_ds = Dataset.from_list(
+            [
+                {"id": d["_id"], "text": d["text"], "title": d["title"]}
+                for d in corpus_raw
+            ]
+        )
+        relevant_docs = {}
+        for q in qrels_raw:
+            qid = q["query-id"]
+            if qid not in relevant_docs:
+                relevant_docs[qid] = {}
+            relevant_docs[qid][q["corpus-id"]] = int(q["score"])
 
-        self.corpus["test"] = {
-            doc["_id"]: {
-                "text": doc["text"],
-                "title": doc["title"],
+        self.dataset = {
+            "default": {
+                "test": {
+                    "corpus": corpus_ds,
+                    "queries": queries_ds,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
             }
-            for doc in corpus_raw
-        }
-        self.relevant_docs["test"] = {
-            q["query-id"]: {q["corpus-id"]: int(q["score"])} for q in qrels_raw
         }
 
         self.data_loaded = True

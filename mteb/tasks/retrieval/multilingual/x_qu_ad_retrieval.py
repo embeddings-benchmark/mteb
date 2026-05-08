@@ -1,6 +1,7 @@
 from hashlib import sha256
 
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -69,9 +70,7 @@ class XQuADRetrieval(AbsTaskRetrieval):
             return
 
         split = "validation"
-        queries = {lang: {split: {}} for lang in self.hf_subsets}
-        corpus = {lang: {split: {}} for lang in self.hf_subsets}
-        relevant_docs = {lang: {split: {}} for lang in self.hf_subsets}
+        self.dataset = {}
 
         for lang in self.hf_subsets:
             data = datasets.load_dataset(name=f"xquad.{lang}", **self.metadata.dataset)[
@@ -87,20 +86,42 @@ class XQuADRetrieval(AbsTaskRetrieval):
                 for context in set(data["context"])
             }
 
+            queries_dict = {}
+            corpus_dict = {}
+            relevant_docs = {}
             for row in data:
                 question = row["question"]
                 context = row["context"]
                 query_id = question_ids[question]
-                queries[lang][split][query_id] = question
+                queries_dict[query_id] = question
 
                 doc_id = context_ids[context]
-                corpus[lang][split][doc_id] = {"text": context}
-                if query_id not in relevant_docs[lang][split]:
-                    relevant_docs[lang][split][query_id] = {}
-                relevant_docs[lang][split][query_id][doc_id] = 1
+                corpus_dict[doc_id] = {"text": context}
+                if query_id not in relevant_docs:
+                    relevant_docs[query_id] = {}
+                relevant_docs[query_id][doc_id] = 1
 
-        self.corpus = datasets.DatasetDict(corpus)
-        self.queries = datasets.DatasetDict(queries)
-        self.relevant_docs = datasets.DatasetDict(relevant_docs)
+            corpus_ds = Dataset.from_list(
+                [
+                    {
+                        "id": k,
+                        "text": v.get("text", "") if isinstance(v, dict) else v,
+                        "title": v.get("title", "") if isinstance(v, dict) else "",
+                    }
+                    for k, v in corpus_dict.items()
+                ]
+            )
+            queries_ds = Dataset.from_list(
+                [{"id": k, "text": v} for k, v in queries_dict.items()]
+            )
+
+            self.dataset[lang] = {
+                split: {
+                    "corpus": corpus_ds,
+                    "queries": queries_ds,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
+            }
 
         self.data_loaded = True

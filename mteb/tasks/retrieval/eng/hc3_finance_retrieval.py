@@ -41,7 +41,7 @@ class HC3FinanceRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        from datasets import load_dataset
+        from datasets import Dataset, load_dataset
 
         # Load the three configurations
         corpus_ds = load_dataset(
@@ -60,18 +60,18 @@ class HC3FinanceRetrieval(AbsTaskRetrieval):
             revision=self.metadata.dataset["revision"],
         )["test"]
 
-        # Initialize data structures with 'test' split
-        corpus = {}
-        queries = {}
+        # Initialize data structures
+        corpus_dict = {}
+        queries_dict = {}
         relevant_docs = {}
 
         # Process corpus
         for item in corpus_ds:
-            corpus[item["id"]] = {"title": "", "text": item["text"]}
+            corpus_dict[item["id"]] = {"title": "", "text": item["text"]}
 
         # Process queries
         for item in queries_ds:
-            queries[item["id"]] = item["text"]
+            queries_dict[item["id"]] = item["text"]
 
         # Process qrels (relevant documents)
         for item in qrels_ds:
@@ -80,9 +80,25 @@ class HC3FinanceRetrieval(AbsTaskRetrieval):
                 relevant_docs[query_id] = {}
             relevant_docs[query_id][item["corpus-id"]] = int(item["score"])
 
-        # Organize data by splits as expected by MTEB
-        self.corpus = {"test": corpus}
-        self.queries = {"test": queries}
-        self.relevant_docs = {"test": relevant_docs}
+        corpus_dataset = Dataset.from_list(
+            [
+                {"id": k, "text": v.get("text", ""), "title": v.get("title", "")}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                "test": {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
+            }
+        }
 
         self.data_loaded = True

@@ -1,4 +1,5 @@
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -65,20 +66,37 @@ Roark, Brian},
             split=self._EVAL_SPLIT,
             **self.metadata.dataset,
         )
-        self.queries = {
-            self._EVAL_SPLIT: {
-                str(i): row["question"]["text"] for i, row in enumerate(data)
-            }
+        queries_dict = {str(i): row["question"]["text"] for i, row in enumerate(data)}
+        corpus_dict = {
+            str(row["document"]["id"]): {"text": row["document"]["text"]}
+            for row in data
         }
-        self.corpus = {
-            self._EVAL_SPLIT: {
-                str(row["document"]["id"]): {"text": row["document"]["text"]}
-                for row in data
-            }
+        relevant_docs = {
+            str(i): {row["document"]["id"]: 1} for i, row in enumerate(data)
         }
-        self.relevant_docs = {
-            self._EVAL_SPLIT: {
-                str(i): {row["document"]["id"]: 1} for i, row in enumerate(data)
+
+        corpus_dataset = Dataset.from_list(
+            [
+                {
+                    "id": k,
+                    "text": v.get("text", "") if isinstance(v, dict) else v,
+                    "title": v.get("title", "") if isinstance(v, dict) else "",
+                }
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_dataset = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        self.dataset = {
+            "default": {
+                self._EVAL_SPLIT: {
+                    "corpus": corpus_dataset,
+                    "queries": queries_dataset,
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": None,
+                }
             }
         }
 

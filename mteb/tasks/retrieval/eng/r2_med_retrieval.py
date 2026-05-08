@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -12,9 +13,6 @@ def load_r2med_data(
     revision: str,
 ):
     eval_split = eval_splits[0]
-    corpus = {eval_split: None}
-    queries = {eval_split: None}
-    relevant_docs = {eval_split: None}
     domain_corpus = datasets.load_dataset(
         path, name="corpus", split="corpus", revision=revision
     )
@@ -24,18 +22,38 @@ def load_r2med_data(
     domain_qrels = datasets.load_dataset(
         path, name="qrels", split="qrels", revision=revision
     )
-    corpus[eval_split] = {e["id"]: {"text": e["text"]} for e in domain_corpus}
-    queries[eval_split] = {e["id"]: e["text"] for e in domain_queries}
-    relevant_docs[eval_split] = defaultdict(dict)
+    corpus_dict = {e["id"]: {"text": e["text"]} for e in domain_corpus}
+    queries_dict = {e["id"]: e["text"] for e in domain_queries}
+    relevant_docs: dict[str, dict[str, int]] = defaultdict(dict)
     for e in domain_qrels:
         qid = e["q_id"]
         pid = e["p_id"]
-        relevant_docs[eval_split][qid][pid] = int(e["score"])
+        relevant_docs[qid][pid] = int(e["score"])
 
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-    return corpus, queries, relevant_docs
+    corpus_dataset = Dataset.from_list(
+        [
+            {
+                "id": k,
+                "text": v.get("text", "") if isinstance(v, dict) else v,
+                "title": v.get("title", "") if isinstance(v, dict) else "",
+            }
+            for k, v in corpus_dict.items()
+        ]
+    )
+    queries_dataset = Dataset.from_list(
+        [{"id": k, "text": v} for k, v in queries_dict.items()]
+    )
+
+    return {
+        "default": {
+            eval_split: {
+                "corpus": corpus_dataset,
+                "queries": queries_dataset,
+                "relevant_docs": dict(relevant_docs),
+                "top_ranked": None,
+            }
+        }
+    }
 
 
 class R2MEDBiologyRetrieval(AbsTaskRetrieval):
@@ -74,7 +92,7 @@ class R2MEDBiologyRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+        self.dataset = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],
@@ -118,7 +136,7 @@ class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+        self.dataset = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],
@@ -162,7 +180,7 @@ class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+        self.dataset = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],
@@ -206,7 +224,7 @@ class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+        self.dataset = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],
@@ -250,7 +268,7 @@ class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+        self.dataset = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],
@@ -294,7 +312,7 @@ class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+        self.dataset = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],
@@ -338,7 +356,7 @@ class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+        self.dataset = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],
@@ -382,7 +400,7 @@ class R2MEDIIYiClinicalRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+        self.dataset = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],

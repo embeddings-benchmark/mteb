@@ -1,4 +1,5 @@
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -21,9 +22,7 @@ _LANGS = {
 def _load_publichealthqa_data(
     path: str, langs: list, split: str, revision: str | None = None
 ):
-    queries = {lang: {split: {}} for lang in langs}
-    corpus = {lang: {split: {}} for lang in langs}
-    relevant_docs = {lang: {split: {}} for lang in langs}
+    result = {}
 
     for lang in langs:
         data = datasets.load_dataset(
@@ -42,6 +41,10 @@ def _load_publichealthqa_data(
             if row["answer"] is not None and row["answer"] not in answer_ids:
                 answer_ids[row["answer"]] = len(answer_ids)
 
+        queries_dict = {}
+        corpus_dict = {}
+        relevant_docs = {}
+
         for row in data:
             if row["question"] is None or row["answer"] is None:
                 # There are some questions and answers that are None in the original dataset, specifically in the Arabic subset.
@@ -49,18 +52,37 @@ def _load_publichealthqa_data(
             question = row["question"]
             answer = row["answer"]
             query_id = f"Q{question_ids[question]}"
-            queries[lang][split][query_id] = question
+            queries_dict[query_id] = question
             doc_id = f"D{answer_ids[answer]}"
-            corpus[lang][split][doc_id] = {"text": answer}
-            if query_id not in relevant_docs[lang][split]:
-                relevant_docs[lang][split][query_id] = {}
-            relevant_docs[lang][split][query_id][doc_id] = 1
+            corpus_dict[doc_id] = {"text": answer}
+            if query_id not in relevant_docs:
+                relevant_docs[query_id] = {}
+            relevant_docs[query_id][doc_id] = 1
 
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
+        corpus_ds = Dataset.from_list(
+            [
+                {
+                    "id": k,
+                    "text": v.get("text", "") if isinstance(v, dict) else v,
+                    "title": v.get("title", "") if isinstance(v, dict) else "",
+                }
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_ds = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
 
-    return corpus, queries, relevant_docs
+        result[lang] = {
+            split: {
+                "corpus": corpus_ds,
+                "queries": queries_ds,
+                "relevant_docs": relevant_docs,
+                "top_ranked": None,
+            }
+        }
+
+    return result
 
 
 class PublicHealthQARetrieval(AbsTaskRetrieval):
@@ -101,7 +123,7 @@ class PublicHealthQARetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_publichealthqa_data(
+        self.dataset = _load_publichealthqa_data(
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
             split=self.metadata.eval_splits[0],

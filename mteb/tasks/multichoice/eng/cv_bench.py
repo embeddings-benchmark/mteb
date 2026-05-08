@@ -12,10 +12,7 @@ def _load_data(
     revision: str | None = None,
     subtask: str = "Count",
 ):
-    corpus = {}
-    queries = {}
-    relevant_docs = {}
-    top_ranked = defaultdict(lambda: defaultdict(list))
+    result = {}
 
     dataset = load_dataset(
         path,
@@ -41,7 +38,7 @@ def _load_data(
             ],
         )
 
-        queries[split] = split_dataset.map(
+        queries_ds = split_dataset.map(
             lambda x, idx: {
                 "id": f"query-{split}-{idx}",
                 "text": x["question"],
@@ -53,7 +50,7 @@ def _load_data(
 
         corpus_element = []
         corpus_to_id = {}
-        relevant_docs[split] = {}
+        relevant_docs: dict = {}
 
         for idx, entry in enumerate(split_dataset):
             choices = entry["choices"]
@@ -68,21 +65,29 @@ def _load_data(
                     corpus_to_id[choice] = f"corpus-{split}-{corpus_id}"
 
                 is_relevant = 1 if choice == answer else 0
-                if query_id not in relevant_docs[split]:
-                    relevant_docs[split][query_id] = {}
-                relevant_docs[split][query_id][corpus_to_id[choice]] = is_relevant
+                if query_id not in relevant_docs:
+                    relevant_docs[query_id] = {}
+                relevant_docs[query_id][corpus_to_id[choice]] = is_relevant
             corpus_ids = [corpus_id for _, corpus_id in corpus_to_id.items()]
             docs = [doc for doc, _ in corpus_to_id.items()]
         corpus_records = []
         for corpus_id, doc in zip(corpus_ids, docs):
             corpus_records.append({"id": corpus_id, "text": doc, "modality": "text"})
-        corpus[split] = Dataset.from_list(corpus_records)
+        corpus_ds = Dataset.from_list(corpus_records)
 
-        for query_id, relevant in relevant_docs[split].items():
-            for corpus_id, score in relevant.items():
-                top_ranked[split][query_id].append(corpus_id)
+        top_ranked: dict = defaultdict(list)
+        for query_id, relevant in relevant_docs.items():
+            for corpus_id in relevant:
+                top_ranked[query_id].append(corpus_id)
 
-    return corpus, queries, relevant_docs, top_ranked
+        result[split] = {
+            "corpus": corpus_ds,
+            "queries": queries_ds,
+            "relevant_docs": relevant_docs,
+            "top_ranked": dict(top_ranked),
+        }
+
+    return result
 
 
 def transform_choices(example):
@@ -124,12 +129,14 @@ class CVBenchCount(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-            subtask="Count",
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+                subtask="Count",
+            )
+        }
         self.data_loaded = True
 
 
@@ -166,12 +173,14 @@ class CVBenchRelation(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-            subtask="Relation",
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+                subtask="Relation",
+            )
+        }
         self.data_loaded = True
 
 
@@ -208,12 +217,14 @@ class CVBenchDepth(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-            subtask="Depth",
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+                subtask="Depth",
+            )
+        }
         self.data_loaded = True
 
 
@@ -250,10 +261,12 @@ class CVBenchDistance(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-            subtask="Distance",
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+                subtask="Distance",
+            )
+        }
         self.data_loaded = True

@@ -2,6 +2,7 @@ from collections import defaultdict
 from typing import cast
 
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -18,15 +19,7 @@ def load_ruscibench_data(
     eval_splits: list,
     revision: str | None = None,
 ):
-    corpus: dict[str, dict[str, dict[str, dict[str, str]] | None]] = {
-        lang: dict.fromkeys(eval_splits) for lang in langs
-    }
-    queries: dict[str, dict[str, dict[str, str] | None]] = {
-        lang: dict.fromkeys(eval_splits) for lang in langs
-    }
-    relevant_docs: dict[str, dict[str, dict[str, dict[str, int]] | None]] = {
-        lang: dict.fromkeys(eval_splits) for lang in langs
-    }
+    result = {}
 
     for lang in langs:
         lang_corpus = cast(
@@ -41,22 +34,37 @@ def load_ruscibench_data(
             "datasets.Dataset",
             datasets.load_dataset(path, f"{lang}", revision=revision),
         )["test"]
-        corpus[lang] = {
-            "test": {
-                str(e["_id"]): {"text": e["text"], "title": e["title"]}
-                for e in lang_corpus
-            }
+
+        corpus_dict = {
+            str(e["_id"]): {"text": e["text"], "title": e["title"]} for e in lang_corpus
         }
-        queries[lang] = {"test": {str(e["_id"]): e["text"] for e in lang_queries}}
-        relevant_docs[lang]["test"] = defaultdict(dict)
+        queries_dict = {str(e["_id"]): e["text"] for e in lang_queries}
+        relevant_docs: dict[str, dict[str, int]] = defaultdict(dict)
         for item in lang_qrels:
-            relevant_docs[lang]["test"][str(item["query-id"])].update(
+            relevant_docs[str(item["query-id"])].update(
                 {str(item["corpus-id"]): item["score"]}
             )
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-    return corpus, queries, relevant_docs
+
+        corpus_ds = Dataset.from_list(
+            [
+                {"id": k, "text": v.get("text", ""), "title": v.get("title", "")}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_ds = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        result[lang] = {
+            "test": {
+                "corpus": corpus_ds,
+                "queries": queries_ds,
+                "relevant_docs": dict(relevant_docs),
+                "top_ranked": None,
+            }
+        }
+
+    return result
 
 
 class RuSciBenchCiteRetrieval(AbsTaskRetrieval):
@@ -107,7 +115,7 @@ class RuSciBenchCiteRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_ruscibench_data(
+        self.dataset = load_ruscibench_data(
             path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
             eval_splits=self.metadata.eval_splits,
@@ -165,7 +173,7 @@ class RuSciBenchCociteRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_ruscibench_data(
+        self.dataset = load_ruscibench_data(
             path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
             eval_splits=self.metadata.eval_splits,

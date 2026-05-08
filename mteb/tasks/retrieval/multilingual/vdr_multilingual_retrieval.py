@@ -1,5 +1,5 @@
 import datasets
-from datasets import Dataset, DatasetDict
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -74,21 +74,24 @@ def _load_vdr_multilingual_data(
         queries_dict[lang_code][split] = Dataset.from_list(queries_records)
         relevant_docs_dict[lang_code][split] = relevant_dict
 
-    corpus_dataset_dict = {}
-    queries_dataset_dict = {}
-    relevant_docs_dataset_dict = {}
-
+    result = {}
     for lang_code in langs:
         if (
             lang_code in corpus_dict
             and lang_code in queries_dict
             and lang_code in relevant_docs_dict
         ):
-            corpus_dataset_dict[lang_code] = DatasetDict(corpus_dict[lang_code])
-            queries_dataset_dict[lang_code] = DatasetDict(queries_dict[lang_code])
-            relevant_docs_dataset_dict[lang_code] = relevant_docs_dict[lang_code]
+            result[lang_code] = {
+                split: {
+                    "corpus": corpus_dict[lang_code][split],
+                    "queries": queries_dict[lang_code][split],
+                    "relevant_docs": relevant_docs_dict[lang_code][split],
+                    "top_ranked": None,
+                }
+                for split in corpus_dict[lang_code]
+            }
 
-    return corpus_dataset_dict, queries_dataset_dict, relevant_docs_dataset_dict
+    return result
 
 
 class VDRMultilingualRetrieval(AbsTaskRetrieval):
@@ -130,7 +133,7 @@ class VDRMultilingualRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_vdr_multilingual_data(
+        self.dataset = _load_vdr_multilingual_data(
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
             split=_EVAL_SPLIT,

@@ -1,6 +1,7 @@
 import logging
 
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -11,13 +12,10 @@ _EVAL_SPLIT = "test"
 logger = logging.getLogger(__name__)
 
 
-def _load_code_search_code_retrieval(
+def _load_code_search_code_retrieval(  # noqa: PLR0914
     path: str, langs: list, splits: str, revision: str | None = None
 ):
-    corpus = {lang: {split: {} for split in splits} for lang in langs}
-    queries = {lang: {split: {} for split in splits} for lang in langs}
-    relevant_docs = {lang: {split: {} for split in splits} for lang in langs}
-
+    result = {}
     split = _EVAL_SPLIT
 
     for lang in langs:
@@ -27,13 +25,14 @@ def _load_code_search_code_retrieval(
             revision=revision,
         )[split]
 
+        relevant_docs = {}
         for row in qrels_data:
             query_id = row["query-id"]
             doc_id = row["corpus-id"]
             score = row["score"]
-            if query_id not in relevant_docs[lang][split]:
-                relevant_docs[lang][split][query_id] = {}
-            relevant_docs[lang][split][query_id][doc_id] = score
+            if query_id not in relevant_docs:
+                relevant_docs[query_id] = {}
+            relevant_docs[query_id][doc_id] = score
 
         corpus_data = datasets.load_dataset(
             path,
@@ -41,11 +40,12 @@ def _load_code_search_code_retrieval(
             revision=revision,
         )["corpus"]
 
+        corpus_dict = {}
         for row in corpus_data:
             doc_id = row["_id"]
             doc_title = row["title"]
             doc_text = row["text"]
-            corpus[lang][split][doc_id] = {"title": doc_title, "text": doc_text}
+            corpus_dict[doc_id] = {"title": doc_title, "text": doc_text}
 
         queries_data = datasets.load_dataset(
             path,
@@ -53,15 +53,34 @@ def _load_code_search_code_retrieval(
             revision=revision,
         )["queries"].filter(lambda x: x["partition"] == "test")
 
+        queries_dict = {}
         for row in queries_data:
             query_id = row["_id"]
             query_text = row["text"]
-            queries[lang][split][query_id] = query_text
+            queries_dict[query_id] = query_text
 
-        queries = queries  # noqa: PLW0127
-        logger.info("Loaded %d %s Queries.", len(queries), split.upper())
+        logger.info("Loaded %d %s Queries.", len(queries_dict), split.upper())
 
-    return corpus, queries, relevant_docs
+        corpus_ds = Dataset.from_list(
+            [
+                {"id": k, "text": v.get("text", ""), "title": v.get("title", "")}
+                for k, v in corpus_dict.items()
+            ]
+        )
+        queries_ds = Dataset.from_list(
+            [{"id": k, "text": v} for k, v in queries_dict.items()]
+        )
+
+        result[lang] = {
+            split: {
+                "corpus": corpus_ds,
+                "queries": queries_ds,
+                "relevant_docs": relevant_docs,
+                "top_ranked": None,
+            }
+        }
+
+    return result
 
 
 class CodeSearchNetCCRetrieval(AbsTaskRetrieval):
@@ -103,13 +122,11 @@ class CodeSearchNetCCRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = (
-            _load_code_search_code_retrieval(
-                path=self.metadata.dataset["path"],
-                langs=self.hf_subsets,
-                splits=self.metadata.eval_splits,
-                revision=self.metadata.dataset["revision"],
-            )
+        self.dataset = _load_code_search_code_retrieval(
+            path=self.metadata.dataset["path"],
+            langs=self.hf_subsets,
+            splits=self.metadata.eval_splits,
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

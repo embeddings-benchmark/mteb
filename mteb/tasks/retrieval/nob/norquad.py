@@ -1,4 +1,5 @@
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -54,32 +55,31 @@ Fishel, Mark},
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
+        hf_dataset = datasets.load_dataset(**self.metadata.dataset)
+        self.dataset_transform(hf_dataset)
         self.data_loaded = True
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(
+        self, hf_dataset, num_proc: int | None = None, **kwargs
+    ) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
-        self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text
-        self.queries = dict[query_id, str] #id => query
-        self.relevant_docs = dict[query_id, dict[[doc_id, score]]
+        self.dataset = {subset: {split: {"corpus": Dataset, "queries": Dataset, "relevant_docs": dict, "top_ranked": None}}}
         """
-        self.corpus = {}
-        self.relevant_docs = {}
-        self.queries = {}
+        self.dataset = {}
         text2id = {}
 
-        for split in self.dataset:
-            ds: datasets.Dataset = self.dataset[split]
+        for split in hf_dataset:
+            ds: datasets.Dataset = hf_dataset[split]
             ds = ds.shuffle(seed=42)
             max_samples = min(1024, len(ds))
             ds = ds.select(
                 range(max_samples)
             )  # limit the dataset size to make sure the task does not take too long to run
-            self.queries[split] = {}
-            self.relevant_docs[split] = {}
-            self.corpus[split] = {}
+
+            queries_dict = {}
+            corpus_dict = {}
+            relevant_docs = {}
 
             question = ds["question"]
             context = ds["context"]
@@ -87,19 +87,36 @@ Fishel, Mark},
 
             n = 0
             for q, cont, ans in zip(question, context, answer):
-                self.queries[split][str(n)] = q
+                queries_dict[str(n)] = q
                 q_n = n
                 n += 1
                 if cont not in text2id:
                     text2id[cont] = n
-                    self.corpus[split][str(n)] = {"title": "", "text": cont}
+                    corpus_dict[str(n)] = {"title": "", "text": cont}
                     n += 1
                 if ans not in text2id:
                     text2id[ans] = n
-                    self.corpus[split][str(n)] = {"title": "", "text": ans}
+                    corpus_dict[str(n)] = {"title": "", "text": ans}
                     n += 1
 
-                self.relevant_docs[split][str(q_n)] = {
+                relevant_docs[str(q_n)] = {
                     str(text2id[ans]): 1,
                     str(text2id[cont]): 1,
                 }  # only two correct matches
+
+            corpus_dataset = Dataset.from_list(
+                [
+                    {"id": k, "text": v["text"], "title": v["title"]}
+                    for k, v in corpus_dict.items()
+                ]
+            )
+            queries_dataset = Dataset.from_list(
+                [{"id": k, "text": v} for k, v in queries_dict.items()]
+            )
+
+            self.dataset.setdefault("default", {})[split] = {
+                "corpus": corpus_dataset,
+                "queries": queries_dataset,
+                "relevant_docs": relevant_docs,
+                "top_ranked": None,
+            }

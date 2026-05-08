@@ -105,7 +105,18 @@ def _load_miracl_data(  # noqa: PLR0914
                 relevant_docs[lang][split][query_id] = {}
             relevant_docs[lang][split][query_id][doc_id] = score
 
-    return corpus, queries, relevant_docs
+    result = {}
+    for lang in langs:
+        result[lang] = {
+            split: {
+                "corpus": corpus[lang][split],
+                "queries": queries[lang][split],
+                "relevant_docs": relevant_docs[lang][split],
+                "top_ranked": None,
+            }
+            for split in splits
+        }
+    return result
 
 
 class MIRACLVisionRetrieval(AbsTaskRetrieval):
@@ -147,7 +158,7 @@ class MIRACLVisionRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
+        self.dataset = _load_miracl_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=self.hf_subsets,
