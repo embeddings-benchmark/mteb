@@ -43,6 +43,8 @@ class Kinetics400ZeroShotClassification(AbsTaskZeroShotClassification):
         is_beta=True,
     )
 
+    input_column_name = "video"
+
     def get_candidate_labels(self) -> list[str]:
         return [
             f"a video of {name}"
