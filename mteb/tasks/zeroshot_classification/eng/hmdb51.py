@@ -11,7 +11,7 @@ class HMDB51ZeroShotClassification(AbsTaskZeroShotClassification):
         reference="https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/",
         dataset={
             "path": "mteb/HMDB51",
-            "revision": "73e5ac9cd9536c406d0046f3d6046785885f7ebe",
+            "revision": "7f9af5438a855e9348fb23ecb5ec740a9c21daf3",
         },
         type="VideoZeroshotClassification",
         category="v2t",
