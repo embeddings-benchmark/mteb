@@ -27,7 +27,7 @@ class HMDB51ZeroShotClassification(AbsTaskZeroShotClassification):
         license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["video"],
+        modalities=["video", "text"],
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{6126543,
