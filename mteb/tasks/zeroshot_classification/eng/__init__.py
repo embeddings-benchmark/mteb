@@ -45,6 +45,10 @@ from .music_avqa import (
 from .oxford_pets import OxfordPetsZeroShotClassification
 from .patch_camelyon import PatchCamelyonZeroShotClassification
 from .ravdess import RavdessZeroshotClassification
+from .ravdess_av import (
+    RAVDESSAVZeroShotClassification,
+    RAVDESSVZeroShotClassification,
+)
 from .rendered_sst2 import RenderedSST2
 from .resisc45 import RESISC45ZeroShotClassification
 from .sci_mmir import SciMMIR
@@ -104,6 +108,8 @@ __all__ = [
     "MusicAVQACLSVideoZeroShotClassification",
     "OxfordPetsZeroShotClassification",
     "PatchCamelyonZeroShotClassification",
+    "RAVDESSAVZeroShotClassification",
+    "RAVDESSVZeroShotClassification",
     "RESISC45ZeroShotClassification",
     "RavdessZeroshotClassification",
     "RenderedSST2",
