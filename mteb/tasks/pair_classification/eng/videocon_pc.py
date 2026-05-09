@@ -44,8 +44,8 @@ class VideoConPairClassification(AbsTaskPairClassification):
 """,
     )
 
-    input1_column_name: str = "video"
-    input2_column_name: str = "text"
+    input1_column_name = (("video", "video"),)
+    input2_column_name = (("text", "text"),)
     label_column_name: str = "label"
     input1_prompt_type: PromptType | None = PromptType.query
     input2_prompt_type: PromptType | None = PromptType.document
