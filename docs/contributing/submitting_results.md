@@ -3,6 +3,8 @@ title: "Submit results"
 icon: lucide/upload
 ---
 
+# Submit Results
+
 ## Overview
 
 The [`ResultCache`][mteb.cache.result_cache.ResultCache] class manages evaluation results locally and submits them to the [official results repository](https://github.com/embeddings-benchmark/results). Use it to cache results, avoid re-computation, and contribute results back to the community.
@@ -33,7 +35,7 @@ cache.submit_results(model_meta, create_pr=False)  # manual review before pushin
 
 ## Submitting Results
 === "Manual Submission"
-    !!! warning Requirements
+    !!! note Requirements
         Git is required for this action.
 
     Prepare results without automatically creating a PR:
@@ -49,7 +51,7 @@ cache.submit_results(model_meta, create_pr=False)  # manual review before pushin
     ```
 
 === "Automated Submission"
-    !!! warning Requirements
+    !!! note Requirements
         Git, [GitHub CLI](https://cli.github.com) are required for this action. You also need to install the `mteb[github]` extra dependencies and configure GitHub integration by signing in with `gh auth login` or setting up your Git credential helper.
 
         === "pip"
@@ -85,6 +87,12 @@ models = [
 
 cache.submit_results(models=models, create_pr=False)
 ```
+
+
+### After submission
+
+Once the PR is created your result will now wait for review, we aim for this to take less than a week. To speed up the review please make sure the fill
+out the checklist. During the review process we might ask you about suspicious results or ask you to check for potential data leakage.
 
 ## API Reference
 

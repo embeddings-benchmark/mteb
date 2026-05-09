@@ -12,6 +12,9 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 2. [Evaluate](../get_started/usage/get_started.md#evaluating-a-model) the desired model using `mteb` on the [benchmarks](../get_started/usage/selecting_tasks.md#selecting-a-benchmark)
 3. Push the results to the [results repository](https://github.com/embeddings-benchmark/results) via a PR. Once merged they will appear on the leaderboard after a day.
 
+!!! info Submitting Evaluation Results
+
+    This section contains info on how to submit a model implementation. If you wish to submit a model results see [submit results](./submitting_results.md).
 
 ## Adding a model implementation
 
@@ -166,13 +169,18 @@ As it is an optional dependency, you can't use top-level dependencies, but will 
 
 ??? example "Adding optional dependencies"
     ```python
-    from mteb._requires_package import requires_package
 
     class VoyageAIModel:
         def __init__(self, model_name: str, revision: str, **kwargs) -> None:
-            requires_package(self, "voyageai", model_name, "pip install 'mteb[voyageai]'")
             import voyageai
             ...
+    
+    # in the model meta specify the requirement group:
+    voyage_model = ModelMeta(
+        model_name = "...",
+        extra_requirements_groups=["voyageai"],
+        ...
+    )
     ```
 
 ### Submitting your model as a PR
@@ -188,41 +196,6 @@ When submitting you models as a PR, please copy and paste the following checklis
 - [ ] The model is public, i.e., is available either as an API or the weights are publicly available to download
 - [ ] I reproduced results from the original paper (if applicable) on at least one benchmark, and I am including the results in the PR description.
 ```
-
-
-### Submitting Evaluation Results
-
-Use the [`ResultCache`][mteb.cache.result_cache.ResultCache] to submit results to the [official results repository](https://github.com/embeddings-benchmark/results):
-
-```python
-import mteb
-
-cache = mteb.ResultCache()
-
-# Evaluate your model
-model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
-task = mteb.get_task("ArguAna")
-
-mteb.evaluate(model_meta, task, cache=cache)
-
-# Submit results (manual review before pushing)
-cache.submit_results(model_meta, create_pr=False)
-```
-
-**Manual submission** (recommended for first-time users):
-```python
-submission_info = cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=False)
-# Follow logged submission instructions, review changes and push manually
-```
-
-**Automated submission** (requires GitHub integration to be configured):
-```python
-submission_info = cache.submit_results(models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=True)
-if submission_info.get("pr_url"):
-    print(f"PR created: {submission_info['pr_url']}")
-```
-
-For more details, see the [result caching guide](../../get_started/usage/submitting_results.md).
 
 ### Matryoshka embeddings
 
