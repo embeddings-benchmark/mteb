@@ -26,7 +26,7 @@ class NumpyCache:
         self.index_file = self.directory / "index.json"
         self.dimension_file = self.directory / "dimension"
         self.hash_to_index: dict[str, int] = {}
-        self.vectors: np.memmap | None = None
+        self.vectors: np.memmap[tuple[int, ...], np.dtype[np.floating]] | None = None
         self.vector_dim: int | None = None
         self.initial_vectors = initial_vectors
         logger.info(f"Initialized VectorCacheMap in directory: {self.directory}")

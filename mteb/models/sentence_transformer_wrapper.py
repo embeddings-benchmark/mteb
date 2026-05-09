@@ -368,7 +368,7 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
                 # ensure everything is on CPU and is float
                 embeddings = embeddings.cpu().detach().float()
             all_embeddings.append(embeddings)
-        return np.concatenate(all_embeddings, axis=0)
+        return cast("Array", np.concatenate(all_embeddings, axis=0))
 
 
 class CrossEncoderWrapper:

@@ -763,7 +763,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 logger.warning(msg)
             embedding_dimensions = model.get_sentence_embedding_dimension()
             if embedding_dimensions is not None and vocab is not None:
-                return vocab * embedding_dimensions
+                return int(vocab * embedding_dimensions)
 
         logger.warning(
             f"Model does not have a recognized architecture for calculating embedding parameters (model={model.model_card_data.model_name})."

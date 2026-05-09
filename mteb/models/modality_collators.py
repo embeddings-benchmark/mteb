@@ -231,7 +231,7 @@ class FramesCollator:
             frame_step = max(1, num_source_frames // target)
             selected_frames = list(range(0, num_source_frames, frame_step))[:target]
         frames = video.get_frames_at(selected_frames).data
-        frames =  cast("torch.Tensor", frames)
+        frames = cast("torch.Tensor", frames)
         return frames
 
 
