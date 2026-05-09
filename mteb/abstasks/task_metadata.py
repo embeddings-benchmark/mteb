@@ -355,7 +355,7 @@ SimplifiedTaskType = Literal[
     "pair-classification",
 ]
 
-_TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {  # type: ignore[type-arg]
+_TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
     "Any2AnyRetrieval": "retrieval",
     "Any2AnyMultilingualRetrieval": "retrieval",
     "VisionCentricQA": "retrieval",
@@ -458,7 +458,7 @@ class TaskMetadata(BaseModel):
     name: str
     description: str
     prompt: str | PromptDict | None = None
-    type: TaskType  # type: ignore[valid-type]
+    type: TaskType
     modalities: list[Modalities] = ["text"]
     category: TaskCategory | None = None
     reference: StrURL | None = None
@@ -603,7 +603,7 @@ class TaskMetadata(BaseModel):
         """Return the descriptive statistics for the dataset."""
         if self.descriptive_stat_path.exists():
             with self.descriptive_stat_path.open("r") as f:
-                return json.load(f)
+                return cast("dict[str, DescriptiveStatistics]", json.load(f))
         return None
 
     @property
@@ -612,7 +612,7 @@ class TaskMetadata(BaseModel):
         descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
         if self.type in MIEB_TASK_TYPE:
             descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"  # noqa: PLR6104
-        task_type_dir = descriptive_stat_base_dir / self.type
+        task_type_dir = descriptive_stat_base_dir / str(self.type)
         if not descriptive_stat_base_dir.exists():
             descriptive_stat_base_dir.mkdir()
         if not task_type_dir.exists():
@@ -728,7 +728,7 @@ class TaskMetadata(BaseModel):
                     split_stat.pop("hf_subset_descriptive_stats", {})
             descriptive_stats = json.dumps(descriptive_stats_, indent=4)
 
-        dataset_card_data_params = existing_dataset_card_data.to_dict()
+        dataset_card_data_params = existing_dataset_card_data.to_dict()  # type: ignore[no-untyped-call]
         # override the existing values
         dataset_card_data_params.update(
             dict(
@@ -824,7 +824,7 @@ class TaskMetadata(BaseModel):
             template_path=str(path),
             **template_kwargs,
         )
-        return dataset_card
+        return cast("DatasetCard", dataset_card)
 
     def push_dataset_card_to_hub(self, repo_name: str) -> None:
         """Pushes the dataset card to the huggingface hub.

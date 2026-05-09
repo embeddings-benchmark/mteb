@@ -19,10 +19,8 @@ from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
 
-from .classification import (
-    AbsTaskClassification,
-    _count_samples_in_train,
-)
+from ._statistics_calculation import _count_samples_in_train
+from .classification import AbsTaskClassification
 
 if TYPE_CHECKING:
     from datasets import Dataset

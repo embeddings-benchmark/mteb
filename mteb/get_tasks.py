@@ -88,7 +88,7 @@ class MTEBTasks(tuple[AbsTask]):
         return "MTEBTasks" + super().__repr__()
 
     @staticmethod
-    def _extract_property_from_task(task: AbsTask, property: str):
+    def _extract_property_from_task(task: AbsTask, property: str) -> Any:
         if hasattr(task.metadata, property):
             return getattr(task.metadata, property)
         elif hasattr(task, property):
@@ -97,15 +97,15 @@ class MTEBTasks(tuple[AbsTask]):
             raise KeyError("Property neither in Task attribute or in task metadata.")
 
     @property
-    def languages(self) -> set:
+    def languages(self) -> set[str]:
         """Return all languages from tasks"""
-        langs = set()
+        langs: set[str] = set()
         for task in self:
             for lg in task.languages:
                 langs.add(lg)
         return langs
 
-    def count_languages(self) -> Counter:
+    def count_languages(self) -> Counter[str]:
         """Summarize count of all languages from tasks
 
         Returns:
@@ -132,7 +132,7 @@ class MTEBTasks(tuple[AbsTask]):
             string with a markdown table.
         """
 
-        def _limit_entries_in_cell_inner(cell: Any):
+        def _limit_entries_in_cell_inner(cell: Any) -> Any:
             if isinstance(cell, list | set):
                 return self._limit_entries_in_cell(cell, limit_n_entries)
             return cell
@@ -172,7 +172,7 @@ class MTEBTasks(tuple[AbsTask]):
 
     @staticmethod
     def _limit_entries_in_cell(
-        cell: list | set, limit_n_entries: int | None = 3
+        cell: list[Any] | set[Any], limit_n_entries: int | None = 3
     ) -> str:
         if limit_n_entries and len(cell) > limit_n_entries:
             ending = "]" if isinstance(cell, list) else "}"
@@ -202,7 +202,7 @@ class MTEBTasks(tuple[AbsTask]):
         """
         if include_citation_in_name and "name" in properties:
             df = self.to_dataframe(tuple(properties) + ("intext_citation",))
-            df["name"] = df["name"] + " " + df["intext_citation"]  # type: ignore[operator]
+            df["name"] = df["name"] + " " + df["intext_citation"]
             df = df.drop(columns=["intext_citation"])
         else:
             df = self.to_dataframe(properties)

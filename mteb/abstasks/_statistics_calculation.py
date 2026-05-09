@@ -246,15 +246,15 @@ def calculate_video_statistics(  # noqa: PLR0914
         total_duration_seconds=sum(all_durations)  # type: ignore[arg-type]
         if all_durations is not None
         else None,
-        total_frames=sum(all_frames) if all_frames is not None else None,  # type: ignore[type-var,arg-type]
+        total_frames=sum(all_frames) if all_frames is not None else None,  # type: ignore[arg-type]
         min_width=min(all_widths) if all_widths is not None else None,  # type: ignore[type-var]
-        average_width=sum(all_widths) / n if all_widths is not None else None,  # type: ignore[type-var,arg-type]
+        average_width=sum(all_widths) / n if all_widths is not None else None,  # type: ignore[arg-type]
         max_width=max(all_widths) if all_widths is not None else None,  # type: ignore[type-var]
         min_height=min(all_heights) if all_heights is not None else None,  # type: ignore[type-var]
-        average_height=sum(all_heights) / n if all_heights is not None else None,  # type: ignore[type-var,arg-type]
+        average_height=sum(all_heights) / n if all_heights is not None else None,  # type: ignore[arg-type]
         max_height=max(all_heights) if all_heights is not None else None,  # type: ignore[type-var]
         min_duration_seconds=min(all_durations) if all_durations is not None else None,  # type: ignore[type-var]
-        average_duration_seconds=sum(all_durations) / n  # type: ignore[type-var,arg-type]
+        average_duration_seconds=sum(all_durations) / n  # type: ignore[arg-type]
         if all_durations is not None
         else None,
         max_duration_seconds=max(all_durations) if all_durations is not None else None,  # type: ignore[type-var]
@@ -426,7 +426,7 @@ _STAT_FN: dict[str, Any] = {
 
 def _compute_side_statistics(
     col_modalities: list[tuple[str, str]],
-    load_col: Callable[[str], list],
+    load_col: Callable[[str], list[Any]],
     n: int,
 ) -> tuple[dict[str, Any], list[list[str]]]:
     """Compute per-modality statistics and per-row hashes for one side of a pair.
@@ -460,7 +460,7 @@ def _compute_side_statistics(
 def calculate_pair_modality_statistics(
     col_modalities1: list[tuple[str, str]],
     col_modalities2: list[tuple[str, str]],
-    load_col: Callable[[str], list],
+    load_col: Callable[[str], list[Any]],
     n: int,
 ) -> PairModalityStatistics:
     """Compute per-modality statistics for a paired dataset.

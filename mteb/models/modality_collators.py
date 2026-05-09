@@ -114,7 +114,9 @@ class AudioCollator:
             num_samples = audio_array.shape[-1]
             if num_samples > max_samples:
                 audio_array = audio_array[..., :max_samples]
-        return audio_array
+        return cast(
+            "np.ndarray[tuple[Any, ...], np.dtype[np.floating[Any]]]", audio_array
+        )
 
 
 class FramesCollator:
@@ -206,7 +208,9 @@ class FramesCollator:
 
         if num_frames is None and fps is None:
             # No resampling: return all frames
-            return video.get_frames_at(list(range(num_source_frames))).data
+            return cast(
+                "torch.Tensor", video.get_frames_at(list(range(num_source_frames))).data
+            )
 
         if num_frames is not None:
             # Fixed-sample mode: always select exactly num_frames
@@ -220,7 +224,7 @@ class FramesCollator:
 
         frame_step = max(1, num_source_frames // target)
         selected_frames = list(range(0, num_source_frames, frame_step))[:target]
-        return video.get_frames_at(selected_frames).data
+        return cast("torch.Tensor", video.get_frames_at(selected_frames).data)
 
 
 class VideoCollator:

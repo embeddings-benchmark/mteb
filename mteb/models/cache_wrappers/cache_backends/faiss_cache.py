@@ -4,7 +4,7 @@ import json
 import logging
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 
@@ -74,7 +74,7 @@ class FaissCache:
             return None
         idx = self.hash_to_index[item_hash]
         try:
-            return self.index.reconstruct(idx)
+            return cast("np.ndarray[Any, Any]", self.index.reconstruct(idx))
         except Exception:
             msg = f"Vector id {idx} missing for hash {item_hash}"
             logger.warning(msg)
@@ -116,5 +116,5 @@ class FaissCache:
     def __contains__(self, item: BatchedInput) -> bool:
         return _hash_item(item) in self.hash_to_index
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.close()

@@ -4,7 +4,7 @@ import json
 import logging
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 
@@ -194,7 +194,7 @@ class NumpyCache:
                 logger.debug(f"Item hash not found in index: {item_hash}")
                 return None
             index = self.hash_to_index[item_hash]
-            return self.vectors[index]
+            return cast("np.ndarray[Any, Any]", self.vectors[index])
         except Exception as e:
             logger.error(f"Error retrieving vector for item: {str(e)}")
             raise
@@ -202,7 +202,7 @@ class NumpyCache:
     def __contains__(self, item: dict[str, Any]) -> bool:
         return _hash_item(item) in self.hash_to_index
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.close()
 
     def close(self) -> None:

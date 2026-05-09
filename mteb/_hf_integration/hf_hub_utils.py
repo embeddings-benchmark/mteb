@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 from huggingface_hub import (
     hf_hub_download,
@@ -40,7 +40,7 @@ def _get_json_from_hub(
 
     with Path(path).open() as f:  # noqa: PLW1514
         js = json.load(f)
-    return js
+    return cast("dict[str, Any]", js)
 
 
 def _get_file_on_hub(

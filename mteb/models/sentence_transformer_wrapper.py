@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import sys
 import warnings
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 import torch
@@ -37,7 +37,10 @@ SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
     "sentence_transformers_loader is deprecated, use SentenceTransformerEncoderWrapper directly instead."
 )
 def sentence_transformers_loader(
-    model_name: str, revision: str | None = None, device: str | None = None, **kwargs
+    model_name: str,
+    revision: str | None = None,
+    device: str | None = None,
+    **kwargs: Any,
 ) -> SentenceTransformerEncoderWrapper:
     """Loads a SentenceTransformer model and wraps it in a SentenceTransformerEncoderWrapper.
 
@@ -68,7 +71,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         *,
         embed_dim: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for SentenceTransformer models.
 
@@ -138,7 +141,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         """Compute the similarity between two collections of embeddings."""
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
-            return self.model.similarity(embeddings1, embeddings2)
+            return cast("Array", self.model.similarity(embeddings1, embeddings2))
         return super().similarity(embeddings1, embeddings2)
 
     def encode(
@@ -176,7 +179,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
 
         if "precision" in kwargs:
             existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
-            output_dtype = OutputDType.from_str(kwargs["precision"])  # type: ignore[typeddict-item]
+            output_dtype = OutputDType.from_str(kwargs["precision"])
             if existing_experiment_kwargs is not None:
                 existing_experiment_kwargs["output_dtypes"] = output_dtype  # type: ignore[index]
             else:
@@ -231,7 +234,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         if isinstance(embeddings, torch.Tensor):
             # ensure everything is on CPU and is float
             embeddings = embeddings.cpu().detach().float()
-        return embeddings
+        return cast("Array", embeddings)
 
 
 class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrapper):
@@ -239,13 +242,13 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
 
     def __init__(
         self,
-        *args,
+        *args: Any,
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = None,
         target_sampling_rate: int | None = None,
         max_samples: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for multimodal SentenceTransformer models.
 
@@ -387,7 +390,7 @@ class CrossEncoderWrapper:
         device: str | None = None,
         query_prefix: str = "",
         passage_prefix: str = "",
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         from sentence_transformers import CrossEncoder
 
@@ -439,7 +442,10 @@ class CrossEncoderWrapper:
             self.passage_prefix + text for batch in inputs2 for text in batch["text"]
         ]
 
-        return self.model.predict(
-            list(zip(all_queries_with_instructions, all_corpus_with_instructions)),
-            **kwargs,
+        return cast(
+            "Array",
+            self.model.predict(
+                list(zip(all_queries_with_instructions, all_corpus_with_instructions)),
+                **kwargs,
+            ),
         )

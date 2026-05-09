@@ -140,7 +140,7 @@ class AbsTaskZeroShotClassification(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> ZeroShotClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
             raise TypeError("Expected model to be an instance of EncoderProtocol")

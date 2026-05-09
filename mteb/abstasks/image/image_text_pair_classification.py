@@ -170,7 +170,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         )
         scores: list[torch.Tensor] = evaluator(
             model, encode_kwargs=encode_kwargs, num_proc=num_proc
-        )  # type: ignore[assignment]
+        )
         if prediction_folder:
             self._save_task_predictions(
                 [score.tolist() for score in scores],

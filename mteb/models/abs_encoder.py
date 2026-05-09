@@ -425,7 +425,7 @@ def get_prompt_name(  # noqa: PLR0911
     ):
         return f"{task_type}-{prompt_type_value}"
     if task_type and task_type in model_prompts:
-        return task_type
+        return cast("str", task_type)
     if prompt_type and prompt_type_value in model_prompts:
         return prompt_type_value
     logger.info(

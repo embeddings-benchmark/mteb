@@ -111,8 +111,8 @@ def _get_loader_name(
     if loader is None:
         return None
     if hasattr(loader, "func"):  # partial class wrapper
-        return loader.func.__name__
-    return loader.__name__
+        return str(loader.func.__name__)
+    return str(loader.__name__)
 
 
 class ModelMeta(BaseModel):  # noqa: PLR0904
@@ -240,7 +240,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         return "cross-encoder" in self.model_type
 
     @property
-    def n_active_parameters(self):
+    def n_active_parameters(self) -> int | None:
         """Number of active parameters. Assumed to be `n_parameters - n_embedding_parameters`. Can be overwritten using `n_active_parameters_override` e.g. for MoE models."""
         if self.n_active_parameters_override is not None:
             return self.n_active_parameters_override
@@ -274,7 +274,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             return mapping[value]
         raise ValueError(f"Invalid similarity function name: {value}")
 
-    def to_dict(self):
+    def to_dict(self) -> dict[str, Any]:
         """Returns a dictionary representation of the model metadata."""
         meta = self.model_copy(deep=True)
         dict_repr = meta.model_dump()
@@ -944,7 +944,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                     "Model name is not set in metadata extracted from SentenceTransformer model. Cannot fetch additional metadata from HuggingFace Hub."
                 )
             else:
-                name = cast("str", meta.name)
+                name = meta.name
                 meta_hub = cls._from_hub(name, revision)
                 # prioritize metadata from the model card but fill missing fields from the hub
                 meta = meta_hub.merge(meta)
@@ -1184,7 +1184,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 f"Could not calculate embedding parameters for {model_name} as hidden_size/hidden_dim is missing from config"
             )
             return None
-        return vocab_size * hidden_size
+        return int(vocab_size * hidden_size)
 
     @staticmethod
     def _calculate_memory_usage_mb(
@@ -1523,7 +1523,7 @@ def _value_to_code(value: Any, indent: int) -> str:  # noqa: PLR0911
     if callable(value):
         if isinstance(value, partial):
             return value.func.__name__
-        return value.__name__
+        return str(value.__name__)
 
     if isinstance(value, Enum):
         return f"{value.__class__.__name__}.{value.name}"
@@ -1601,10 +1601,10 @@ def _serialize_experiment_kwargs_to_name(
     def _serialize_value(value: Any) -> str:
         """Convert value to deterministic string representation."""
         if isinstance(value, (str, int, float, bool)) or value is None:
-            value = str(value)
+            str_value = str(value)
             for invalid_char in invalid_chars:
-                value = value.replace(invalid_char, "_")
-            return value
+                str_value = str_value.replace(invalid_char, "_")
+            return str_value
         if isinstance(value, (list, tuple)):
             return f"[{','.join(_serialize_value(v) for v in value)}]"
         if isinstance(value, dict):

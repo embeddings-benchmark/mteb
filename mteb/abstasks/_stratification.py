@@ -87,7 +87,7 @@ def _fold_tie_break(
     desired_samples_per_fold: NDArray[np.floating],
     M: NDArray[np.integer],  # noqa: N803
     random_state: np.random.RandomState,
-):
+) -> int:
     """Helper function to split a tie between folds with same desirability of a given sample
 
     Args:
@@ -99,15 +99,15 @@ def _fold_tie_break(
         The selected fold index to put samples into
     """
     if len(M) == 1:
-        return M[0]
+        return int(M[0])
     else:
         max_val = max(desired_samples_per_fold[M])
         m_prim = np.where(np.array(desired_samples_per_fold) == max_val)[0]
         m_prim = np.array([x for x in m_prim if x in M])
-        return random_state.choice(m_prim, 1)[0]
+        return int(random_state.choice(m_prim, 1)[0])
 
 
-def _get_most_desired_combination(samples_with_combination: dict):
+def _get_most_desired_combination(samples_with_combination: dict[Any, Any]) -> Any:
     """Select the next most desired combination whose evidence should be split among folds
 
     Args:
@@ -139,7 +139,7 @@ def _get_most_desired_combination(samples_with_combination: dict):
     return currently_chosen
 
 
-class IterativeStratification(_BaseKFold):
+class IterativeStratification(_BaseKFold):  # type: ignore[misc]
     """Iteratively stratify a multi-label data set into folds
 
     Construct an iterative stratifier that splits the data set into folds trying to maintain balanced representation
@@ -219,7 +219,7 @@ class IterativeStratification(_BaseKFold):
         rows_used = dict.fromkeys(range(self.n_samples), False)
         all_combinations = []
         per_row_combinations: list[list[Any]] = [[] for i in range(self.n_samples)]
-        samples_with_combination: dict[str, list[Any]] = {}
+        samples_with_combination: dict[Any, list[Any]] = {}
         folds: list[list[int]] = [[] for _ in range(self.n_splits)]
 
         # for every row
@@ -255,8 +255,12 @@ class IterativeStratification(_BaseKFold):
         )
 
     def _distribute_positive_evidence(
-        self, rows_used, folds, samples_with_combination, per_row_combinations
-    ):
+        self,
+        rows_used: dict[int, bool],
+        folds: list[list[int]],
+        samples_with_combination: dict[Any, list[Any]],
+        per_row_combinations: list[list[Any]],
+    ) -> None:
         """Internal method to distribute evidence for labeled samples across folds
 
         For params, see documentation of :code:`self._prepare_stratification`. Does not return anything,
@@ -274,20 +278,22 @@ class IterativeStratification(_BaseKFold):
                     np.array(self.desired_samples_per_combination_per_fold[l])
                     == max_val
                 )[0]
-                m = _fold_tie_break(
+                fold_idx = _fold_tie_break(
                     self.desired_samples_per_combination_per_fold[l], m, self._rng_state
                 )
-                folds[m].append(row)
+                folds[fold_idx].append(row)
                 rows_used[row] = True
                 for i in per_row_combinations[row]:
                     if row in samples_with_combination[i]:
                         samples_with_combination[i].remove(row)
-                    self.desired_samples_per_combination_per_fold[i][m] -= 1
-                self.desired_samples_per_fold[m] -= 1
+                    self.desired_samples_per_combination_per_fold[i][fold_idx] -= 1
+                self.desired_samples_per_fold[fold_idx] -= 1
 
             l = _get_most_desired_combination(samples_with_combination)
 
-    def _distribute_negative_evidence(self, rows_used, folds):
+    def _distribute_negative_evidence(
+        self, rows_used: dict[int, bool], folds: list[list[int]]
+    ) -> None:
         """Internal method to distribute evidence for unlabeled samples across folds
 
         For params, see documentation of :code:`self._prepare_stratification`. Does not return anything,
@@ -306,7 +312,7 @@ class IterativeStratification(_BaseKFold):
             self.desired_samples_per_fold[fold_selected] -= 1
             folds[fold_selected].append(row)
 
-    def _iter_test_indices(self, X, y=None, groups=None):
+    def _iter_test_indices(self, X: Any, y: Any = None, groups: Any = None) -> Any:
         """Internal method for providing scikit-learn's split with folds
 
         Args:

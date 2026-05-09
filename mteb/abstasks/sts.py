@@ -242,8 +242,8 @@ class AbsTaskSTS(AbsTask):
             score = self.dataset[hf_subset][split]["score"]
             n = len(score)
 
-            def _load_col(col: str) -> list:
-                return self.dataset[hf_subset][split][col]  # type: ignore[index]
+            def _load_col(col: str) -> list[Any]:
+                return list(self.dataset[hf_subset][split][col])
 
         elif compute_overall:
             score = []
@@ -251,8 +251,8 @@ class AbsTaskSTS(AbsTask):
                 score.extend(self.dataset[_subset][split]["score"])
             n = len(score)
 
-            def _load_col(col: str) -> list:  # type: ignore[misc]
-                result = []
+            def _load_col(col: str) -> list[Any]:
+                result: list[Any] = []
                 for subset in self.metadata.eval_langs:
                     result.extend(self.dataset[subset][split][col])
                 return result
@@ -261,17 +261,21 @@ class AbsTaskSTS(AbsTask):
             score = self.dataset[split]["score"]
             n = len(score)
 
-            def _load_col(col: str) -> list:  # type: ignore[misc]
-                return self.dataset[split][col]
+            def _load_col(col: str) -> list[Any]:
+                return list(self.dataset[split][col])
 
         if isinstance(self.column_names[0], str):
             modality1 = self.metadata.get_modalities(self.input1_prompt_type)[0]
             modality2 = self.metadata.get_modalities(self.input2_prompt_type)[0]
-            col_modalities1: list[tuple[str, str]] = [(self.column_names[0], modality1)]  # type: ignore[index]
-            col_modalities2: list[tuple[str, str]] = [(self.column_names[1], modality2)]  # type: ignore[index]
+            col_modalities1: list[tuple[str, str]] = [
+                (str(self.column_names[0]), modality1)
+            ]
+            col_modalities2: list[tuple[str, str]] = [
+                (str(self.column_names[1]), modality2)
+            ]
         else:
-            col_modalities1 = list(self.column_names[0])  # type: ignore[arg-type]
-            col_modalities2 = list(self.column_names[1])  # type: ignore[arg-type]
+            col_modalities1 = list(self.column_names[0])
+            col_modalities2 = list(self.column_names[1])
 
         pair_stats = calculate_pair_modality_statistics(
             col_modalities1,
