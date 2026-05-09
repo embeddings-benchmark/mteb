@@ -332,7 +332,7 @@ class AbsTaskRetrieval(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        timer: Any | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.

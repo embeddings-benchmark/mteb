@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import contextlib
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from .evaluator import Evaluator
 from .retrieval_metrics import (
@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import SearchProtocol
+    from mteb.timing import TimingStack
     from mteb.types import (
         CorpusDatasetType,
         EncodeKwargs,
@@ -40,7 +41,7 @@ class RetrievalEvaluator(Evaluator):
         top_k: int,
         top_ranked: TopRankedDocumentsType | None = None,
         qid: str | None = None,
-        timer: Any | None = None,
+        timer: TimingStack | None = None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
