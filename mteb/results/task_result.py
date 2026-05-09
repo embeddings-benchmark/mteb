@@ -27,6 +27,7 @@ from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
+from mteb.timing import PhaseTiming
 from mteb.types import (
     ScoresDict,
     SplitName,
@@ -172,7 +173,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     evaluation_time: float | None
     kg_co2_emissions: float | None = None
     date: datetime.datetime | None = None
-    evaluation_phases: list[dict[str, Any]] | None = None
+    evaluation_phases: list[PhaseTiming] | None = None
 
     @classmethod
     def from_task_results(
@@ -182,7 +183,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
         date: datetime.datetime | None = None,
-        evaluation_phases: list[dict[str, Any]] | None = None,
+        evaluation_phases: list[PhaseTiming] | None = None,
     ) -> TaskResult:
         """Create a TaskResult from the task and scores.
 

@@ -2,6 +2,7 @@ import logging
 import sys
 from collections import defaultdict
 from copy import copy
+from typing import Any
 
 import datasets
 from datasets import Dataset
@@ -34,7 +35,12 @@ class AbsTaskReranking(AbsTaskRetrieval):
         For dataformat and other information, see [AbsTaskRetrieval][mteb.abstasks.retrieval.AbsTaskRetrieval].
     """
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(
+        self,
+        num_proc: int | None = None,
+        timer: Any | None = None,
+        **kwargs,
+    ) -> None:
         """Load the dataset."""
         if self.data_loaded:
             return

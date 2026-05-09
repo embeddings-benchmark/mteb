@@ -37,6 +37,7 @@ if TYPE_CHECKING:
     from mteb.models import (
         MTEBModels,
     )
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict
     from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
@@ -234,6 +235,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(
@@ -341,7 +343,7 @@ class AbsTask(ABC):  # noqa: PLR0904
     def load_data(
         self,
         num_proc: int | None = None,
-        timer: Any | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> None:
         """Loads dataset from HuggingFace hub
