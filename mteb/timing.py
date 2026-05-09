@@ -7,20 +7,30 @@ from typing import TypedDict
 logger = logging.getLogger(__name__)
 
 
-class PhaseTiming(TypedDict):
+class PhaseTiming(TypedDict, total=False):
     """A dictionary representing the timing of a single phase."""
 
     name: str
     start: float
     end: float
+    split: str
+    subset: str
 
 
 class TimingContext:
-    """A context manager to track the duration of a single phase."""
+    """A context manager for timing a specific phase."""
 
-    def __init__(self, timer: TimingStack, name: str):
-        self.timer = timer
+    def __init__(
+        self,
+        stack: TimingStack,
+        name: str,
+        split: str | None = None,
+        subset: str | None = None,
+    ):
+        self.stack = stack
         self.name = name
+        self.split = split
+        self.subset = subset
         self.start = 0.0
 
     def __enter__(self):
@@ -29,7 +39,9 @@ class TimingContext:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         end = time.time()
-        self.timer.add_phase(self.name, self.start, end)
+        self.stack.add_phase(
+            self.name, self.start, end, split=self.split, subset=self.subset
+        )
 
 
 class TimingStack:
@@ -49,23 +61,37 @@ class TimingStack:
         self.phases: list[PhaseTiming] = []
         self._start_time: float | None = None
 
-    def __call__(self, name: str) -> TimingContext:
+    def __call__(
+        self, name: str, split: str | None = None, subset: str | None = None
+    ) -> TimingContext:
         """Returns a TimingContext for the specified phase name."""
         if self._start_time is None:
             self._start_time = time.time()
-        return TimingContext(self, name)
+        return TimingContext(self, name, split=split, subset=subset)
 
-    def add_phase(self, name: str, start: float, end: float):
+    def add_phase(
+        self,
+        name: str,
+        start: float,
+        end: float,
+        split: str | None = None,
+        subset: str | None = None,
+    ):
         """Adds a phase timing record."""
         if self._start_time is None:
             self._start_time = start
-        self.phases.append(
-            {
-                "name": name,
-                "start": start - self._start_time,
-                "end": end - self._start_time,
-            }
-        )
+
+        phase: PhaseTiming = {
+            "name": name,
+            "start": start - self._start_time,
+            "end": end - self._start_time,
+        }
+        if split:
+            phase["split"] = split
+        if subset:
+            phase["subset"] = subset
+
+        self.phases.append(phase)
 
     def quick_plot(self):
         """Plots a text-based bar chart of the recorded timing phases."""

@@ -62,10 +62,14 @@ class RetrievalEvaluator(Evaluator):
         num_proc: int | None = None,
     ) -> RetrievalOutputType:
         timer_index = (
-            self.timer("encode_corpus") if self.timer else contextlib.nullcontext()
+            self.timer("encode_corpus", split=self.hf_split, subset=self.hf_subset)
+            if self.timer
+            else contextlib.nullcontext()
         )
         timer_search = (
-            self.timer("encode_queries") if self.timer else contextlib.nullcontext()
+            self.timer("encode_queries", split=self.hf_split, subset=self.hf_subset)
+            if self.timer
+            else contextlib.nullcontext()
         )
 
         logger.info("Running retrieval task - Indexing corpus...")

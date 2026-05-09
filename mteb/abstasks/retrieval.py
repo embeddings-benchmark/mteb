@@ -270,7 +270,12 @@ class AbsTaskRetrieval(AbsTask):
         if hasattr(self, "top_ranked"):
             del self.top_ranked
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(
+        self,
+        num_proc: int | None = None,
+        timer: Any | None = None,
+        **kwargs: Any,
+    ) -> None:
         """Load the dataset for the retrieval task."""
         if self.data_loaded:
             return
@@ -299,7 +304,6 @@ class AbsTaskRetrieval(AbsTask):
                 num_proc=num_proc,
             )
 
-        timer = kwargs.get("timer")
         timer_loading = timer("data_loading") if timer else contextlib.nullcontext()
         timer_transform = (
             timer("dataset_transform") if timer else contextlib.nullcontext()
@@ -439,7 +443,11 @@ class AbsTaskRetrieval(AbsTask):
 
         logger.info("Running retrieval task - Evaluating retrieval scores...")
         timer = kwargs.get("timer")
-        timer_scoring = timer("scoring") if timer else contextlib.nullcontext()
+        timer_scoring = (
+            timer("scoring", split=hf_split, subset=hf_subset)
+            if timer
+            else contextlib.nullcontext()
+        )
         with timer_scoring:
             (
                 all_scores,

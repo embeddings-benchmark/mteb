@@ -335,7 +335,12 @@ class AbsTask(ABC):  # noqa: PLR0904
             )  # only take the specified test split.
         return dataset_dict
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+    def load_data(
+        self,
+        num_proc: int | None = None,
+        timer: Any | None = None,
+        **kwargs: Any,
+    ) -> None:
         """Loads dataset from HuggingFace hub
 
         This is the main loading function for Task. Do not overwrite this, instead we recommend using `dataset_transform`, which is called after the
@@ -343,12 +348,12 @@ class AbsTask(ABC):  # noqa: PLR0904
 
         Args:
             num_proc: Number of processes to use for loading the dataset.
+            timer: TimingStack object to track phases.
             kwargs: Additional keyword arguments passed to the load_dataset function. Keep for forward compatibility.
         """
         if self.data_loaded:
             return
 
-        timer = kwargs.get("timer")
         timer_loading = timer("data_loading") if timer else contextlib.nullcontext()
         timer_transform = (
             timer("dataset_transform") if timer else contextlib.nullcontext()
