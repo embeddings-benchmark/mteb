@@ -103,6 +103,7 @@ _ISO3_TO_LANG: dict[str, tuple[str | None, str | None, str | None]] = {
     "yid": (None, "yiddish", None),
 }
 
+
 # Public-constant stopword lookup for bm25s keys (avoids importing the private helper).
 def _get_stopwords(key: str) -> frozenset[str]:
     from bm25s import tokenization as _tok
@@ -158,7 +159,7 @@ class BM25Tokenizer:
 
     def __init__(
         self,
-        language: str | None = None,
+        language: str,
         stopwords_key: str | None = None,
         stemmer_language: str | None = None,
         freq_threshold: float = 0.9,
@@ -166,14 +167,15 @@ class BM25Tokenizer:
     ):
         # Resolve language defaults, then apply explicit overrides.
         # language=None means "no language assumptions" — no stopwords, stemmer, or tokenizer.
-        detected_sw, detected_stemmer, detected_tok = (
-            _ISO3_TO_LANG.get(language, _DEFAULT_LANG) if language is not None else (None, None, None)
-        )
+        detected_sw, detected_stemmer, detected_tok = _ISO3_TO_LANG[language]
         self.stopwords_key = stopwords_key if stopwords_key is not None else detected_sw
-        stemmer_lang = stemmer_language if stemmer_language is not None else detected_stemmer
+        stemmer_lang = (
+            stemmer_language if stemmer_language is not None else detected_stemmer
+        )
         # Explicit stopwords/stemmer override → skip language-specific tokenizer
         if stopwords_key is not None or stemmer_language is not None:
-            self._tok_arg = tokenizer  # tokenizer kwarg still honoured if passed explicitly
+            # tokenizer kwarg still honoured if passed explicitly
+            self._tok_arg = tokenizer
         else:
             self._tok_arg = tokenizer if tokenizer is not None else detected_tok
 
@@ -377,7 +379,11 @@ class BM25Search:
 
         def _tok(text: str) -> list[str]:
             raw = hf_tok.encode(text, add_special_tokens=False).tokens
-            return [t.replace(" ", "").replace("▁", "") for t in raw if t.replace(" ", "").replace("▁", "")]
+            return [
+                t.replace(" ", "").replace("▁", "")
+                for t in raw
+                if t.replace(" ", "").replace("▁", "")
+            ]
 
         return _tok
 
@@ -393,9 +399,15 @@ class BM25Search:
     ) -> None:
         import bm25s
 
-        corpus_texts = ["\n".join([doc.get("title", ""), doc["text"]]) for doc in corpus]
+        corpus_texts = [
+            "\n".join([doc.get("title", ""), doc["text"]]) for doc in corpus
+        ]
         # When a custom tokenizer callable is provided, skip language-based preprocessing.
-        language = None if self._tokenizer_cfg else (_get_language(task_metadata, hf_subset) or "eng")
+        language = (
+            None
+            if self._tokenizer_cfg
+            else (_get_language(task_metadata, hf_subset) or "eng")
+        )
         self._tokenizer = BM25Tokenizer(
             language=language,
             stopwords_key=self._stopwords_cfg,
