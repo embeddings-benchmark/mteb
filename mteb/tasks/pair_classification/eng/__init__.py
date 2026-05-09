@@ -9,6 +9,10 @@ from .human_animal_cartoon_pc import (
     HumanAnimalCartoonVPairClassification,
 )
 from .legal_bench_pc import LegalBenchPC
+from .meld_pc import (
+    MELDVAPairClassification,
+    MELDVPairClassification,
+)
 from .nmsqa import NMSQAPairClassification
 from .pub_chem_ai_sentence_paraphrase_pc import PubChemAISentenceParaphrasePC
 from .pub_chem_smilespc import PubChemSMILESPC
@@ -30,6 +34,8 @@ __all__ = [
     "HumanAnimalCartoonVAPairClassification",
     "HumanAnimalCartoonVPairClassification",
     "LegalBenchPC",
+    "MELDVAPairClassification",
+    "MELDVPairClassification",
     "NMSQAPairClassification",
     "PubChemAISentenceParaphrasePC",
     "PubChemSMILESPC",
