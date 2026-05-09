@@ -1,4 +1,8 @@
 from .av_speakerbench_pc import AVSpeakerBenchPairClassification
+from .ave_dataset_pc import (
+    AVEDatasetVAPairClassification,
+    AVEDatasetVPairClassification,
+)
 from .cremad import CREMADPairClassification
 from .human_animal_cartoon_pc import (
     HumanAnimalCartoonVAPairClassification,
@@ -19,6 +23,8 @@ from .vocal_sound import VocalSoundPairClassification
 from .vox_populi_accent import VoxPopuliAccentPairClassification
 
 __all__ = [
+    "AVEDatasetVAPairClassification",
+    "AVEDatasetVPairClassification",
     "AVSpeakerBenchPairClassification",
     "CREMADPairClassification",
     "HumanAnimalCartoonVAPairClassification",
