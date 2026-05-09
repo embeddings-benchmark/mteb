@@ -103,9 +103,6 @@ _ISO3_TO_LANG: dict[str, tuple[str | None, str | None, str | None]] = {
     "yid": (None, "yiddish", None),
 }
 
-_DEFAULT_LANG: tuple[str | None, str | None, str | None] = ("en", "english", None)
-
-
 # Public-constant stopword lookup for bm25s keys (avoids importing the private helper).
 def _get_stopwords(key: str) -> frozenset[str]:
     from bm25s import tokenization as _tok
