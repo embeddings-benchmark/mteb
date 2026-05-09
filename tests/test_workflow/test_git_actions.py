@@ -136,10 +136,7 @@ def test_commit_action_saves_shas_and_undo_resets(git_repo: Path) -> None:
 
     action = CommitAction(repo_path=git_repo, message="Add new file")
     action.do()
-
     assert action.previous_sha == initial_sha
-    assert action.commit_sha is not None
-    assert action.commit_sha != initial_sha
 
     result = subprocess.run(
         ["git", "rev-parse", "HEAD"],
@@ -148,7 +145,8 @@ def test_commit_action_saves_shas_and_undo_resets(git_repo: Path) -> None:
         capture_output=True,
         text=True,
     )
-    assert result.stdout.strip() == action.commit_sha
+    head_sha = result.stdout.strip()
+    assert head_sha != initial_sha
 
     action.undo()
     result = subprocess.run(

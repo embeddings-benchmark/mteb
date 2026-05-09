@@ -78,7 +78,6 @@ class CommitAction:
         self.repo_path = repo_path
         self.message = message
         self.previous_sha: str | None = None
-        self.commit_sha: str | None = None
 
     def do(self) -> None:
         """Stage and commit all changes."""
@@ -115,8 +114,6 @@ class CommitAction:
             capture_output=True,
             text=True,
         )
-        self.commit_sha = result.stdout.strip()
-        logger.info(f"Created commit {self.commit_sha}")
 
     def undo(self) -> None:
         """Reset to the previous commit."""
