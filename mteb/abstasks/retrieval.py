@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import json
 import logging
 from collections import defaultdict
@@ -298,7 +299,13 @@ class AbsTaskRetrieval(AbsTask):
                 num_proc=num_proc,
             )
 
-        with self.timer("data_loading"):
+        timer = kwargs.get("timer")
+        timer_loading = timer("data_loading") if timer else contextlib.nullcontext()
+        timer_transform = (
+            timer("dataset_transform") if timer else contextlib.nullcontext()
+        )
+
+        with timer_loading:
             if self.metadata.is_multilingual:
                 for lang in self.hf_subsets:
                     for split in eval_splits:
@@ -307,7 +314,7 @@ class AbsTaskRetrieval(AbsTask):
                 for split in eval_splits:
                     _process_data(split)
 
-        with self.timer("dataset_transform"):
+        with timer_transform:
             self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
@@ -338,7 +345,7 @@ class AbsTaskRetrieval(AbsTask):
             Dictionary mapping subsets to their evaluation scores
         """
         if not self.data_loaded:
-            self.load_data(num_proc=num_proc)
+            self.load_data(num_proc=num_proc, **kwargs)
         # TODO: convert all tasks directly https://github.com/embeddings-benchmark/mteb/issues/2030
         self.convert_v1_dataset_format_to_v2(num_proc=num_proc)
 
@@ -393,7 +400,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset=hf_subset,
             top_ranked=data_split["top_ranked"],
             top_k=self._top_k,
-            timer=getattr(self, "timer", None),
+            timer=kwargs.get("timer"),
             **kwargs,
         )
 
@@ -431,13 +438,8 @@ class AbsTaskRetrieval(AbsTask):
             )
 
         logger.info("Running retrieval task - Evaluating retrieval scores...")
-        import contextlib
-
-        timer_scoring = (
-            self.timer("scoring")
-            if hasattr(self, "timer")
-            else contextlib.nullcontext()
-        )
+        timer = kwargs.get("timer")
+        timer_scoring = timer("scoring") if timer else contextlib.nullcontext()
         with timer_scoring:
             (
                 all_scores,

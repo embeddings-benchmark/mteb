@@ -136,10 +136,14 @@ def _evaluate_task(
 
     task.check_if_dataset_is_superseded()
 
+    from mteb.timing import TimingStack
+
+    timer = TimingStack()
+
     data_preloaded = task.data_loaded
     if not data_preloaded:
         try:
-            task.load_data(num_proc=num_proc)
+            task.load_data(num_proc=num_proc, timer=timer)
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
                 msg = (
@@ -166,6 +170,7 @@ def _evaluate_task(
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             num_proc=num_proc,
+            timer=timer,
         )
         tock = time()
 
@@ -180,9 +185,7 @@ def _evaluate_task(
         evaluation_time=evaluation_time,
         kg_co2_emissions=None,
         date=datetime.datetime.now(tz=datetime.timezone.utc),
-        evaluation_phases=getattr(task, "timer", None).phases
-        if hasattr(task, "timer")
-        else None,
+        evaluation_phases=timer.phases if timer.phases else None,
     )
 
     if not data_preloaded:  # only unload if we loaded the data

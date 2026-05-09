@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import logging
 from typing import TYPE_CHECKING, Any
 
@@ -60,8 +61,6 @@ class RetrievalEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> RetrievalOutputType:
-        import contextlib
-
         timer_index = (
             self.timer("encode_corpus") if self.timer else contextlib.nullcontext()
         )

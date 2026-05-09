@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import json
 import logging
 import tempfile
@@ -113,10 +114,6 @@ class AbsTask(ABC):  # noqa: PLR0904
         self.seed = seed
         self.rng_state, self.np_rng = _set_seed(seed)
         self.hf_subsets = self.metadata.hf_subsets
-
-        from mteb.timing import TimingStack
-
-        self.timer = TimingStack()
 
         if self.metadata.is_beta:
             msg = f"The task '{self.metadata.name}' is currently in beta. This means that the dataset is still being tested and may be subject to changes. This means that the scores of this dataset is liable to change and should be used with caution."
@@ -350,8 +347,15 @@ class AbsTask(ABC):  # noqa: PLR0904
         """
         if self.data_loaded:
             return
+
+        timer = kwargs.get("timer")
+        timer_loading = timer("data_loading") if timer else contextlib.nullcontext()
+        timer_transform = (
+            timer("dataset_transform") if timer else contextlib.nullcontext()
+        )
+
         if self.metadata.is_multilingual:
-            with self.timer("data_loading"):
+            with timer_loading:
                 if self.fast_loading:
                     self.fast_load()
                 else:
@@ -363,10 +367,10 @@ class AbsTask(ABC):  # noqa: PLR0904
                             num_proc=num_proc,
                         )
         else:
-            with self.timer("data_loading"):
+            with timer_loading:
                 # some of monolingual datasets explicitly adding the split name to the dataset name
                 self.dataset = load_dataset(**self.metadata.dataset, num_proc=num_proc)
-        with self.timer("dataset_transform"):
+        with timer_transform:
             self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
