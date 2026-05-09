@@ -13,6 +13,10 @@ from .meld_pc import (
     MELDVAPairClassification,
     MELDVPairClassification,
 )
+from .music_avqa_pc import (
+    MusicAVQAVAPairClassification,
+    MusicAVQAVPairClassification,
+)
 from .nmsqa import NMSQAPairClassification
 from .pub_chem_ai_sentence_paraphrase_pc import PubChemAISentenceParaphrasePC
 from .pub_chem_smilespc import PubChemSMILESPC
@@ -40,6 +44,8 @@ __all__ = [
     "LegalBenchPC",
     "MELDVAPairClassification",
     "MELDVPairClassification",
+    "MusicAVQAVAPairClassification",
+    "MusicAVQAVPairClassification",
     "NMSQAPairClassification",
     "PubChemAISentenceParaphrasePC",
     "PubChemSMILESPC",
