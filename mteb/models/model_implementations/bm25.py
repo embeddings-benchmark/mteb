@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import re
 import unicodedata
+from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 from mteb._create_dataloaders import _combine_queries_with_instruction_text
@@ -105,48 +106,218 @@ _ISO3_TO_LANG: dict[str, tuple[str | None, str | None, str | None]] = {
 _DEFAULT_LANG: tuple[str | None, str | None, str | None] = ("en", "english", None)
 
 
-def _resolve_language(
-    task_metadata: TaskMetadata, hf_subset: str
-) -> tuple[str | None, str | None, str | None]:
-    """Return (bm25s_stopwords_key, pystemmer_lang, tokenizer_name) for the task's language.
+# Public-constant stopword lookup for bm25s keys (avoids importing the private helper).
+def _get_stopwords(key: str) -> frozenset[str]:
+    from bm25s import tokenization as _tok
 
-    Falls back to English defaults when the task covers multiple languages or
-    the language is not in the supported mapping.
-    """
+    _map = {
+        "en": _tok.STOPWORDS_EN,
+        "de": _tok.STOPWORDS_GERMAN,
+        "nl": _tok.STOPWORDS_DUTCH,
+        "fr": _tok.STOPWORDS_FRENCH,
+        "es": _tok.STOPWORDS_SPANISH,
+        "pt": _tok.STOPWORDS_PORTUGUESE,
+        "it": _tok.STOPWORDS_ITALIAN,
+        "ru": _tok.STOPWORDS_RUSSIAN,
+        "sv": _tok.STOPWORDS_SWEDISH,
+        "no": _tok.STOPWORDS_NORWEGIAN,
+        "zh": _tok.STOPWORDS_CHINESE,
+    }
+    return frozenset(_map[key])
+
+
+def _get_language(task_metadata: TaskMetadata, hf_subset: str) -> str | None:
+    """Return the ISO 639-3 language code for the task subset, or None if multilingual."""
     eval_langs = task_metadata.eval_langs
-    langs: list[str] = (
+    langs = (
         eval_langs.get(hf_subset, []) if isinstance(eval_langs, dict) else eval_langs
     )
     iso3_codes = {lang.split("-")[0] for lang in langs}
-
     if len(iso3_codes) != 1:
-        return _DEFAULT_LANG
-
-    iso3 = next(iter(iso3_codes))
-    return _ISO3_TO_LANG.get(iso3, _DEFAULT_LANG)
-
-
-def _make_tokenizer_fn(name: str | None):
-    """Return a callable ``text -> list[str]``, or None for the bm25s default."""
-    if name is None:
         return None
-    if name == "char":
-        return _unicode_tokenize
-    if name == "jieba":
-        try:
+    return next(iter(iso3_codes))
+
+
+class BM25Tokenizer:
+    """sklearn-style tokenizer for BM25 retrieval.
+
+    Supports two backends selected via ``tokenizer``:
+
+    * ``None`` — bm25s native whitespace tokeniser (+ optional Snowball stemmer).
+    * ``str`` — named custom tokeniser: ``"jieba"`` or ``"char"``.
+    * ``callable`` — any ``text -> list[str]`` function (e.g. a subword tokeniser).
+
+    For languages without a named stopword list, tokens appearing in ≥
+    ``freq_threshold`` of corpus documents are removed automatically
+    (set ``freq_threshold=0`` to disable).  ``fit_transform`` is efficient: the
+    bm25s path tokenises the corpus only once; the custom path applies the
+    freq-stop computation in a single pass.
+
+    ``transform`` reuses the stopword set learned during ``fit_transform``, so
+    query tokenisation is consistent with the index.  bm25s reconciles
+    query/corpus token IDs internally, so each ``transform`` call may build a
+    fresh vocab without breaking retrieval.
+    """
+
+    def __init__(
+        self,
+        language: str | None = None,
+        stopwords_key: str | None = None,
+        stemmer_language: str | None = None,
+        freq_threshold: float = 0.9,
+        tokenizer: Callable[[str], list[str]] | None = None,
+    ):
+        # Resolve language defaults, then apply explicit overrides.
+        # language=None means "no language assumptions" — no stopwords, stemmer, or tokenizer.
+        detected_sw, detected_stemmer, detected_tok = (
+            _ISO3_TO_LANG.get(language, _DEFAULT_LANG) if language is not None else (None, None, None)
+        )
+        self.stopwords_key = stopwords_key if stopwords_key is not None else detected_sw
+        stemmer_lang = stemmer_language if stemmer_language is not None else detected_stemmer
+        # Explicit stopwords/stemmer override → skip language-specific tokenizer
+        if stopwords_key is not None or stemmer_language is not None:
+            self._tok_arg = tokenizer  # tokenizer kwarg still honoured if passed explicitly
+        else:
+            self._tok_arg = tokenizer if tokenizer is not None else detected_tok
+
+        self.freq_threshold = freq_threshold
+        self._raw_tok = None  # resolved callable (custom path only)
+        self._combined_stops: frozenset[str] = frozenset()
+        self._combined_list: list[str] | None = None  # bm25s path cache
+        if stemmer_lang:
+            import Stemmer
+
+            self.stemmer = Stemmer.Stemmer(stemmer_lang)
+        else:
+            self.stemmer = None
+
+        logger.info(
+            f"Language settings — stopwords: {self.stopwords_key!r}, "
+            f"stemmer: {stemmer_lang!r}, tokenizer: {self._tok_arg!r}"
+        )
+
+    def fit(self, corpus_texts: list[str]) -> BM25Tokenizer:
+        self.fit_transform(corpus_texts)
+        return self
+
+    def fit_transform(self, corpus_texts: list[str]):
+        """Fit on corpus and return the encoded corpus as a ``Tokenized``."""
+        if self._tok_arg is None:
+            return self._fit_transform_bm25s(corpus_texts)
+        self._raw_tok = (
+            self._tok_arg if callable(self._tok_arg) else self._named_tok(self._tok_arg)
+        )
+        return self._fit_transform_custom(corpus_texts)
+
+    def transform(self, texts: list[str]):
+        """Tokenize ``texts`` using the stopword set learned during ``fit_transform``."""
+        if self._tok_arg is None:
+            return self._transform_bm25s(texts)
+        return self._transform_custom(texts)
+
+    def _fit_transform_bm25s(self, corpus_texts: list[str]):
+        import bm25s
+        from bm25s.tokenization import Tokenized
+
+        raw = bm25s.tokenize(corpus_texts, stopwords=None, stemmer=self.stemmer)
+
+        freq_stops: frozenset[str] = frozenset()
+        if self.stopwords_key is None and self.freq_threshold > 0:
+            id_to_token = {v: k for k, v in raw.vocab.items()}
+            n = len(corpus_texts)
+            doc_freq: dict[str, int] = {}
+            for doc_ids in raw.ids:
+                for t in {id_to_token[i] for i in doc_ids}:
+                    doc_freq[t] = doc_freq.get(t, 0) + 1
+            freq_stops = frozenset(
+                t for t, df in doc_freq.items() if df / n >= self.freq_threshold
+            )
+            logger.info(
+                f"Freq-stopwords: {len(freq_stops)} tokens removed (threshold={self.freq_threshold})"
+            )
+
+        named_stops = (
+            _get_stopwords(self.stopwords_key) if self.stopwords_key else frozenset()
+        )
+        self._combined_stops = named_stops | freq_stops
+        self._combined_list = (
+            list(self._combined_stops) if self._combined_stops else None
+        )
+
+        stop_ids = frozenset(
+            raw.vocab[t] for t in self._combined_stops if t in raw.vocab
+        )
+        filtered_ids = [
+            [i for i in doc_ids if i not in stop_ids] for doc_ids in raw.ids
+        ]
+        return Tokenized(ids=filtered_ids, vocab=raw.vocab)
+
+    def _transform_bm25s(self, texts: list[str]):
+        import bm25s
+
+        return bm25s.tokenize(
+            texts, stopwords=self._combined_list, stemmer=self.stemmer
+        )
+
+    def _fit_transform_custom(self, corpus_texts: list[str]):
+        raw_token_lists = [self._raw_tok(text) for text in corpus_texts]
+
+        freq_stops: frozenset[str] = frozenset()
+        if self.stopwords_key is None and self.freq_threshold > 0:
+            n = len(corpus_texts)
+            doc_freq: dict[str, int] = {}
+            for tokens in raw_token_lists:
+                for t in set(tokens):
+                    doc_freq[t] = doc_freq.get(t, 0) + 1
+            freq_stops = frozenset(
+                t for t, df in doc_freq.items() if df / n >= self.freq_threshold
+            )
+            logger.info(
+                f"Freq-stopwords: {len(freq_stops)} tokens removed (threshold={self.freq_threshold})"
+            )
+
+        named_stops = (
+            _get_stopwords(self.stopwords_key) if self.stopwords_key else frozenset()
+        )
+        self._combined_stops = named_stops | freq_stops
+
+        filtered = [
+            [t for t in toks if t not in self._combined_stops]
+            for toks in raw_token_lists
+        ]
+        return self._to_tokenized(filtered)
+
+    def _transform_custom(self, texts: list[str]):
+        token_lists = [
+            [t for t in self._raw_tok(text) if t not in self._combined_stops]
+            for text in texts
+        ]
+        return self._to_tokenized(token_lists)
+
+    @staticmethod
+    def _named_tok(name: str):
+        if name == "char":
+            return _unicode_tokenize
+        if name == "jieba":
             import jieba
 
-            def _jieba_tok(text: str) -> list[str]:
-                return [t for t in jieba.lcut(text) if t.strip()]
+            return lambda text: [t for t in jieba.lcut(text) if t.strip()]
+        raise ValueError(f"Unknown tokenizer name: {name!r}")
 
-            return _jieba_tok
-        except ImportError:
-            logger.warning(
-                "jieba not installed — falling back to character-level tokenization. "
-                "Install with: pip install jieba"
-            )
-            return _unicode_tokenize
-    raise ValueError(f"Unknown tokenizer name: {name!r}")
+    @staticmethod
+    def _to_tokenized(token_lists: list[list[str]]):
+        from bm25s.tokenization import Tokenized
+
+        vocab: dict[str, int] = {}
+        ids = []
+        for tokens in token_lists:
+            row = []
+            for t in tokens:
+                if t not in vocab:
+                    vocab[t] = len(vocab)
+                row.append(vocab[t])
+            ids.append(row)
+        return Tokenized(ids=ids, vocab=vocab)
 
 
 class BM25Search:
@@ -174,19 +345,44 @@ class BM25Search:
         stopwords: str | None = None,
         stemmer_language: str | None = None,
         freq_threshold: float = 0.9,
+        tokenizer: str | Callable[[str], list[str]] | None = None,
         **kwargs,
     ):
+        """
+        Args:
+            stopwords: bm25s stopwords key (e.g. ``"en"``, ``"zh"``). ``None`` auto-detects
+                from task language at index time.
+            stemmer_language: PyStemmer language name (e.g. ``"english"``). ``None`` auto-detects.
+            freq_threshold: Remove tokens appearing in this fraction of corpus docs when no
+                named stopword list is available. Set to ``0`` to disable.
+            tokenizer: Custom tokenizer. A HuggingFace tokenizer name (str) or any
+                ``text -> list[str]`` callable. When set, language-based stopwords and
+                stemmer are skipped.
+        """
         self.model = None
-        self._stopwords_cfg = stopwords  # None → auto-detect in index()
-        self._stemmer_cfg = stemmer_language  # None → auto-detect in index()
+        self._stopwords_cfg = stopwords
+        self._stemmer_cfg = stemmer_language
         self._freq_threshold = freq_threshold
-        self.stopwords: str | None = None
-        self.stemmer = None
-        self._tokenizer_fn = None
-        self._freq_stopwords: frozenset[str] = frozenset()
-        self._corpus_vocab: dict[str, int] = {}
+        self._tokenizer_cfg = self._resolve_tokenizer(tokenizer)
+        self._tokenizer = None
         self.retriever = None
         self.corpus_idx_to_id: dict[int, str] = {}
+
+    @staticmethod
+    def _resolve_tokenizer(
+        tokenizer: str | Callable[[str], list[str]] | None,
+    ) -> Callable[[str], list[str]] | None:
+        if tokenizer is None or callable(tokenizer):
+            return tokenizer
+        from tokenizers import Tokenizer
+
+        hf_tok = Tokenizer.from_pretrained(tokenizer)
+
+        def _tok(text: str) -> list[str]:
+            raw = hf_tok.encode(text, add_special_tokens=False).tokens
+            return [t.replace(" ", "").replace("▁", "") for t in raw if t.replace(" ", "").replace("▁", "")]
+
+        return _tok
 
     def index(
         self,
@@ -198,53 +394,23 @@ class BM25Search:
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> None:
-        detected_stopwords, detected_stemmer, tokenizer_name = _resolve_language(
-            task_metadata, hf_subset
-        )
-        # Use explicit user values where provided; fall back to detected values.
-        self.stopwords = (
-            self._stopwords_cfg
-            if self._stopwords_cfg is not None
-            else detected_stopwords
-        )
-        stemmer_lang = (
-            self._stemmer_cfg if self._stemmer_cfg is not None else detected_stemmer
-        )
-        # Tokenizer is always derived from language detection (no explicit override yet).
-        if self._stopwords_cfg is not None or self._stemmer_cfg is not None:
-            tokenizer_name = None  # explicit config → don't inject a custom tokenizer
+        import bm25s
 
-        if stemmer_lang:
-            import Stemmer
-
-            self.stemmer = Stemmer.Stemmer(stemmer_lang)
-        else:
-            self.stemmer = None
-        self._tokenizer_fn = _make_tokenizer_fn(tokenizer_name)
-        self._corpus_vocab = {}  # reset for this corpus
-        self._freq_stopwords = frozenset()
-        logger.info(
-            f"Language settings — stopwords: {self.stopwords!r}, "
-            f"stemmer: {stemmer_lang!r}, tokenizer: {tokenizer_name!r}"
+        corpus_texts = ["\n".join([doc.get("title", ""), doc["text"]]) for doc in corpus]
+        # When a custom tokenizer callable is provided, skip language-based preprocessing.
+        language = None if self._tokenizer_cfg else (_get_language(task_metadata, hf_subset) or "eng")
+        self._tokenizer = BM25Tokenizer(
+            language=language,
+            stopwords_key=self._stopwords_cfg,
+            stemmer_language=self._stemmer_cfg,
+            freq_threshold=self._freq_threshold,
+            tokenizer=self._tokenizer_cfg,
         )
-
         logger.info("Encoding Corpus...")
-        corpus_texts = [
-            "\n".join([doc.get("title", ""), doc["text"]]) for doc in corpus
-        ]  # concatenate all document values (title, text, ...)
-
-        if self.stopwords is None and self._freq_threshold > 0:
-            self._freq_stopwords = self._build_freq_stopwords(corpus_texts)
-
-        encoded_corpus = self._encode(corpus_texts)
-
+        encoded_corpus = self._tokenizer.fit_transform(corpus_texts)
         logger.info(
             f"Indexing Corpus... {len(encoded_corpus.ids):,} documents, {len(encoded_corpus.vocab):,} vocab"
         )
-
-        # Create the BM25 model and index the corpus
-        import bm25s
-
         self.retriever = bm25s.BM25()
         self.retriever.index(encoded_corpus)
         self.corpus_idx_to_id = {i: row["id"] for i, row in enumerate(corpus)}
@@ -261,12 +427,17 @@ class BM25Search:
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None = None,
     ) -> RetrievalOutputType:
+        if self._tokenizer is None:
+            raise ValueError("Tokenizer not initialized. Call `index` first.")
+        if self.retriever is None:
+            raise ValueError("Retriever not initialized. Call `index` first.")
+
         logger.info("Encoding Queries...")
         query_ids = list(queries["id"])
         results = {qid: {} for qid in query_ids}
         processed = _combine_queries_with_instruction_text(queries)
-        queries_texts = processed["text"]
-        query_token_strs = self._encode(queries_texts)
+        queries_texts = list(processed["text"])
+        query_token_strs = self._tokenizer.transform(queries_texts)
 
         logger.info(f"Retrieving Results... {len(queries):,} queries")
 
@@ -297,158 +468,9 @@ class BM25Search:
 
         return results
 
-    def _build_freq_stopwords(self, corpus_texts: list[str]) -> frozenset[str]:
-        """Return tokens appearing in >= freq_threshold fraction of corpus docs."""
-        n = len(corpus_texts)
-        if self._tokenizer_fn is not None:
-            token_lists: list[list[str]] = [self._tokenizer_fn(t) for t in corpus_texts]
-        else:
-            import bm25s
-
-            tokenized = bm25s.tokenize(
-                corpus_texts, stopwords=None, stemmer=self.stemmer
-            )
-            id_to_token = {v: k for k, v in tokenized.vocab.items()}
-            token_lists = [[id_to_token[i] for i in doc] for doc in tokenized.ids]
-
-        doc_freq: dict[str, int] = {}
-        for tokens in token_lists:
-            for t in set(tokens):
-                doc_freq[t] = doc_freq.get(t, 0) + 1
-
-        stops = frozenset(
-            t for t, df in doc_freq.items() if df / n >= self._freq_threshold
-        )
-        logger.info(
-            f"Freq-stopwords: {len(stops)} tokens removed (threshold={self._freq_threshold})"
-        )
-        return stops
-
-    def _encode(self, texts: list[str]):
-        """Tokenize texts using bm25s. Not to be confused with EncoderProtocol.encode()."""
-        import bm25s
-
-        if self._tokenizer_fn is None:
-            if self._freq_stopwords:
-                # Merge named stopwords with corpus-frequency stopwords.
-                # bm25s applies the stemmer before checking, so freq_stopwords (already
-                # stemmed from the pre-pass) will match correctly.
-                from bm25s.tokenization import _infer_stopwords
-
-                named = list(_infer_stopwords(self.stopwords)) if self.stopwords else []
-                combined = named + list(self._freq_stopwords)
-                return bm25s.tokenize(texts, stopwords=combined, stemmer=self.stemmer)
-            return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
-
-        # Custom tokenizer path — build Tokenized manually and persist corpus vocab
-        # so query token IDs match the corpus index.
-        from bm25s.tokenization import Tokenized, _infer_stopwords
-
-        stopwords_set = (
-            frozenset(_infer_stopwords(self.stopwords))
-            if self.stopwords
-            else frozenset()
-        ) | self._freq_stopwords
-        token_lists = [
-            [t for t in self._tokenizer_fn(text) if t not in stopwords_set]
-            for text in texts
-        ]
-
-        if self._corpus_vocab:
-            vocab = self._corpus_vocab
-            encoded_ids = [
-                [vocab[t] for t in tokens if t in vocab] for tokens in token_lists
-            ]
-        else:
-            vocab = {}
-            encoded_ids = []
-            for tokens in token_lists:
-                ids = []
-                for t in tokens:
-                    if t not in vocab:
-                        vocab[t] = len(vocab)
-                    ids.append(vocab[t])
-                encoded_ids.append(ids)
-            self._corpus_vocab = vocab
-
-        return Tokenized(ids=encoded_ids, vocab=vocab)
-
-
-class BM25SubwordSearch(BM25Search):
-    """BM25 search using a HuggingFace subword tokenizer for multilingual support.
-
-    Unlike the standard BM25 model that relies on whitespace splitting and
-    PyStemmer, this uses a trained subword tokenizer (default: Qwen/Qwen3-0.6B)
-    that handles non-Latin scripts without requiring language-specific knowledge.
-    """
-
-    def __init__(
-        self,
-        previous_results: str | None = None,
-        tokenizer_name: str = "Qwen/Qwen3-0.6B",
-        **kwargs,
-    ):
-        from tokenizers import Tokenizer
-
-        self.model = None
-        self._stopwords_cfg = None
-        self._stemmer_cfg = None
-        self._freq_threshold = 0.0
-        self.stopwords = None
-        self.stemmer = None
-        self._tokenizer_fn = None
-        self._freq_stopwords: frozenset[str] = frozenset()
-        self.retriever = None
-        self.corpus_idx_to_id = {}
-        self._corpus_vocab: dict[str, int] = {}
-        self.hf_tokenizer = Tokenizer.from_pretrained(tokenizer_name)
-
-    def _tokenize_raw(self, texts: list[str]) -> list[list[str]]:
-        token_lists = []
-        for text in texts:
-            raw_tokens = self.hf_tokenizer.encode(text, add_special_tokens=False).tokens
-            clean = [
-                t.replace(" ", "").replace("\u2581", "")
-                for t in raw_tokens
-                if t.replace(" ", "").replace("\u2581", "")
-            ]
-            token_lists.append(clean)
-        return token_lists
-
-    def _encode(self, texts: list[str]):
-        """Tokenize texts using a HuggingFace subword tokenizer, then wrap for bm25s."""
-        from bm25s.tokenization import Tokenized
-
-        token_lists = self._tokenize_raw(texts)
-
-        if self._corpus_vocab:
-            # Query encoding: reuse corpus vocab so token IDs match the index.
-            vocab = self._corpus_vocab
-            encoded_ids = [
-                [vocab[t] for t in tokens if t in vocab] for tokens in token_lists
-            ]
-        else:
-            # Corpus encoding: build vocab and persist it for later query calls.
-            vocab = {}
-            encoded_ids = []
-            for tokens in token_lists:
-                ids = []
-                for t in tokens:
-                    if t not in vocab:
-                        vocab[t] = len(vocab)
-                    ids.append(vocab[t])
-                encoded_ids.append(ids)
-            self._corpus_vocab = vocab
-
-        return Tokenized(ids=encoded_ids, vocab=vocab)
-
 
 def bm25_loader(model_name, **kwargs) -> SearchProtocol:
     return BM25Search(**kwargs)
-
-
-def bm25_subword_loader(model_name, **kwargs) -> SearchProtocol:
-    return BM25SubwordSearch(**kwargs)
 
 
 _BM25_CITATION = """@misc{bm25s,
@@ -584,7 +606,8 @@ bm25_s = ModelMeta(
 )
 
 bm25_s_subword = ModelMeta(
-    loader=bm25_subword_loader,
+    loader=bm25_loader,
+    loader_kwargs={"tokenizer": "Qwen/Qwen3-0.6B"},
     extra_requirements_groups=["bm25s"],
     name="mteb/baseline-bm25s-subword",
     model_type=["dense"],
