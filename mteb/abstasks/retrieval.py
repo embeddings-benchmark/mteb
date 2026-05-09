@@ -50,6 +50,7 @@ if TYPE_CHECKING:
     from mteb.models import (
         MTEBModels,
     )
+    from mteb.timing import TimingStack
     from mteb.types import (
         EncodeKwargs,
         HFSubset,
@@ -273,7 +274,7 @@ class AbsTaskRetrieval(AbsTask):
     def load_data(
         self,
         num_proc: int | None = None,
-        timer: Any | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> None:
         """Load the dataset for the retrieval task."""
@@ -376,7 +377,7 @@ class AbsTaskRetrieval(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        timer: Any | None = None,
+        timer: TimingStack | None = None,
         **kwargs,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
