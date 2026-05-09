@@ -126,7 +126,7 @@ class TimingStack:
         prev_group: tuple[str | None, str | None] = (None, None)
         for phase, label in zip(self.phases, labels):
             cur_group = (phase.get("split"), phase.get("subset"))
-            if cur_group != prev_group and prev_group != (None, None):
+            if prev_group not in {cur_group, (None, None)}:
                 logger.info("")
             prev_group = cur_group
 
@@ -150,4 +150,3 @@ class TimingStack:
         logger.info(
             f"{' ' * max_label_len}  {total_time:.1f}s (untracked: {untracked:.1f}s)"
         )
-

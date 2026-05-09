@@ -88,7 +88,8 @@ def test_task_results_to_dict(task_result: TaskResult):
         "dataset_revision": "1.0",
         "task_name": "dummy_task",
         "mteb_version": mteb_ver,
-        "evaluation_time": 100,
+        "evaluation_time": 100.0,
+        "evaluation_phases": None,
         "date": None,
         "kg_co2_emissions": None,
         "scores": {

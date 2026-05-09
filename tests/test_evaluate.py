@@ -231,7 +231,9 @@ def test_run_private_task_warning(caplog):
     task = mteb.get_task("Code1Retrieval")
 
     def load_data_dataset_not_found(
-        num_proc: int | None,
+        num_proc: int | None = None,
+        timer: object = None,
+        **kwargs: object,
     ):
         raise DatasetNotFoundError
 
@@ -260,7 +262,9 @@ def test_run_task_raise_error():
     task = MockRetrievalTask()
 
     def load_error(
-        num_proc: int | None,
+        num_proc: int | None = None,
+        timer: object = None,
+        **kwargs: object,
     ):
         raise RuntimeError("Test error")
 
