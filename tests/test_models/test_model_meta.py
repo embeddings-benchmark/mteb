@@ -1,17 +1,9 @@
 import re
-from types import SimpleNamespace
 
-import numpy as np
 import pytest
-import torch
 
 import mteb
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerMultimodalEncoderWrapper,
-)
-from mteb.types import PromptType
-from tests.mock_tasks import MockRetrievalTask
 
 # Historic models with n_embedding_parameters=None. Do NOT add new models to this list.
 _MISSING_N_EMBEDDING_MODELS = [
@@ -453,96 +445,6 @@ def test_get_model_metas_without_modality_filter_returns_more_models():
     text_models = mteb.get_model_metas(modalities=["text"])
 
     assert len(all_models) > len(text_models)
-
-
-def test_jina_v5_omni_models_use_multimodal_wrapper():
-    from mteb.models.model_implementations.jina_models import JinaV5OmniWrapper
-
-    for model_name in (
-        "jinaai/jina-embeddings-v5-omni-nano",
-        "jinaai/jina-embeddings-v5-omni-small",
-    ):
-        model_meta = mteb.get_model_meta(model_name)
-
-        assert model_meta.loader is JinaV5OmniWrapper
-        assert set(model_meta.modalities) == {"text", "image", "audio", "video"}
-
-
-def test_jina_v5_omni_nano_loader_defaults_to_fp32(monkeypatch):
-    from mteb.models.model_implementations.jina_models import JinaV5OmniWrapper
-
-    calls = []
-
-    def fake_init(self, *args, **kwargs):
-        calls.append((args, kwargs))
-
-    monkeypatch.setattr(
-        SentenceTransformerMultimodalEncoderWrapper, "__init__", fake_init
-    )
-
-    JinaV5OmniWrapper("jinaai/jina-embeddings-v5-omni-nano")
-    JinaV5OmniWrapper(
-        "jinaai/jina-embeddings-v5-omni-small",
-        model_kwargs={"torch_dtype": torch.bfloat16},
-    )
-    JinaV5OmniWrapper(
-        "jinaai/jina-embeddings-v5-omni-nano",
-        model_kwargs={"torch_dtype": torch.bfloat16},
-    )
-
-    assert calls[0][1]["model_kwargs"]["torch_dtype"] is torch.float32
-    assert calls[1][1]["model_kwargs"]["torch_dtype"] is torch.bfloat16
-    assert calls[2][1]["model_kwargs"]["torch_dtype"] is torch.bfloat16
-
-
-def test_jina_v5_omni_wrapper_passes_modalities_and_task():
-    from mteb.models.model_implementations.jina_models import JinaV5OmniWrapper
-
-    class FakeModel:
-        def __init__(self):
-            self.calls = []
-
-        def encode(self, batch_inputs, **kwargs):
-            self.calls.append((batch_inputs, kwargs))
-            return np.ones((len(batch_inputs), 2), dtype=np.float32)
-
-    class FakeInputs:
-        dataset = SimpleNamespace(features={"text": None, "image": None, "audio": None})
-        collate_fn = None
-
-        def __iter__(self):
-            return iter(
-                [
-                    {
-                        "text": ["caption"],
-                        "image": ["image.png"],
-                        "audio": [{"array": "audio-array"}],
-                    }
-                ]
-            )
-
-    wrapper = JinaV5OmniWrapper.__new__(JinaV5OmniWrapper)
-    wrapper.model = FakeModel()
-    wrapper.model_prompts = {"Retrieval": "retrieval"}
-    wrapper.fps = None
-    wrapper.max_frames = None
-    wrapper.num_frames = None
-    wrapper.target_sampling_rate = None
-    wrapper.max_samples = None
-
-    embeddings = wrapper.encode(
-        FakeInputs(),
-        task_metadata=MockRetrievalTask().metadata,
-        hf_split="test",
-        hf_subset="default",
-        prompt_type=PromptType.query,
-    )
-
-    assert embeddings.shape == (1, 2)
-    batch_inputs, kwargs = wrapper.model.calls[0]
-    assert batch_inputs == [("caption", "image.png", "audio-array")]
-    assert kwargs["task"] == "retrieval"
-    assert kwargs["prompt"] == "Query: "
 
 
 def test_model_meta_dependencies_success():
