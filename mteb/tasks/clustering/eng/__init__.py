@@ -34,7 +34,7 @@ from .music_avqa_clustering import (
     MusicAVQACLSAudioVideoClustering,
     MusicAVQACLSVideoClustering,
 )
-from .ravdess_av_clustering import RAVDESSAVClustering
+from .ravdess_av_clustering import RAVDESSAVClustering, RAVDESSVideoClustering
 from .reddit_clustering import RedditClustering, RedditFastClusteringS2S
 from .reddit_clustering_p2p import RedditClusteringP2P, RedditFastClusteringP2P
 from .stack_exchange_clustering import (
@@ -102,6 +102,7 @@ __all__ = [
     "MusicAVQACLSAudioVideoClustering",
     "MusicAVQACLSVideoClustering",
     "RAVDESSAVClustering",
+    "RAVDESSVideoClustering",
     "RedditClustering",
     "RedditClusteringP2P",
     "RedditFastClusteringP2P",
