@@ -1264,6 +1264,7 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
         **general_args,
     )
     metadata.modalities = ["image"]
+    metadata.category = "i2i"
 
     input1_column_name = "image1"
     input2_column_name = "image2"
@@ -4924,6 +4925,7 @@ class MockAudioPairClassification(AbsTaskPairClassification):
         **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio"]
+    metadata.modalities = "a2a"
 
     expected_stats = {
         "test": {
@@ -5829,6 +5831,7 @@ class MockVideoPairClassificationTask(AbsTaskPairClassification):
         **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["video"]
+    metadata.category = "v2v"
 
     expected_stats = {
         "test": {
