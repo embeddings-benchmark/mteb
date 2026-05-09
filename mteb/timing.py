@@ -93,8 +93,13 @@ class TimingStack:
 
         self.phases.append(phase)
 
-    def quick_plot(self):
-        """Plots a text-based bar chart of the recorded timing phases."""
+    def quick_plot(self) -> None:
+        """Plots a text-based bar chart of the recorded timing phases.
+
+        When phases have ``subset`` or ``split`` metadata, the row label is
+        prefixed with ``<split>/<subset>`` so multi-lingual / multi-split runs
+        are easy to read at a glance.
+        """
         if not self.phases:
             logger.info("No timing phases recorded.")
             return
@@ -104,10 +109,27 @@ class TimingStack:
             return
 
         bar_length = 50
-        max_name_len = max(len(p["name"]) for p in self.phases)
 
-        for phase in self.phases:
-            name = phase["name"]
+        def _label(phase: PhaseTiming) -> str:
+            parts = []
+            if "split" in phase:
+                parts.append(phase["split"])
+            if "subset" in phase:
+                parts.append(phase["subset"])
+            if parts:
+                return "/".join(parts) + "/" + phase["name"]
+            return phase["name"]
+
+        labels = [_label(p) for p in self.phases]
+        max_label_len = max(len(la) for la in labels)
+
+        prev_group: tuple[str | None, str | None] = (None, None)
+        for phase, label in zip(self.phases, labels):
+            cur_group = (phase.get("split"), phase.get("subset"))
+            if cur_group != prev_group and prev_group != (None, None):
+                logger.info("")
+            prev_group = cur_group
+
             start = phase["start"]
             end = phase["end"]
             duration = end - start
@@ -121,10 +143,11 @@ class TimingStack:
                 + "█" * bar_len
                 + " " * (bar_length - start_pos - bar_len)
             )
-            logger.info(f"{name:<{max_name_len}} |{bar}| {duration:.1f}s")
+            logger.info(f"{label:<{max_label_len}} |{bar}| {duration:.1f}s")
 
         tracked_time = sum(p["end"] - p["start"] for p in self.phases)
         untracked = total_time - tracked_time
         logger.info(
-            f"{' ' * max_name_len}  {total_time:.1f}s (untracked: {untracked:.1f}s)"
+            f"{' ' * max_label_len}  {total_time:.1f}s (untracked: {untracked:.1f}s)"
         )
+
