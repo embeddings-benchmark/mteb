@@ -32,7 +32,7 @@ cache.submit_results(model_meta, create_pr=False)
 cache.submit_results(model_meta, create_pr=True)
 ```
 
-For the full explanation of the cache, submission flow, and GitHub setup, see the [ResultCache documentation](get_started/usage/submitting_results.md).
+For the full explanation of the cache, submission flow, and GitHub setup, see the [ResultCache documentation](contributing/submitting_results.md).
 
 
 ### Reference models
