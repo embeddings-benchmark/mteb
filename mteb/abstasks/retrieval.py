@@ -409,7 +409,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset=hf_subset,
             top_ranked=data_split["top_ranked"],
             top_k=self._top_k,
-            timer=kwargs.get("timer"),
+            timer=timer,
             **kwargs,
         )
 

@@ -188,7 +188,7 @@ class AbsTask(ABC):  # noqa: PLR0904
             )
 
         if not self.data_loaded:
-            self.load_data()
+            self.load_data(timer=timer)
 
         self.dataset = cast("dict[HFSubset, DatasetDict]", self.dataset)
 
@@ -217,6 +217,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 num_proc=num_proc,
+                timer=timer,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
