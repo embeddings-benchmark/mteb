@@ -49,7 +49,7 @@ REFERENCE_MODELS = [
 ]
 ```
 
-You can see an up to date list of reference models within the [test suite](https://github.com/embeddings-benchmark/mteb/blob/main/tests/test_benchmarks/test_reference_models.py#L14). 
+You can see an up to date list of reference models within the [test suite](https://github.com/embeddings-benchmark/mteb/blob/edc2e3a3e9434a92921ee2263cbfcb1d8962682d/tests/test_benchmarks/test_reference_models.py#L14-L19). 
 
 ## New in v2.12
 ### Support for Embedding Compression
