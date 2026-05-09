@@ -1,0 +1,76 @@
+{
+    "test": {
+        "num_samples": 3752,
+        "number_of_characters": 117440,
+        "documents_text_statistics": {
+            "total_text_length": 59507,
+            "min_text_length": 1,
+            "average_text_length": 21.14676616915423,
+            "max_text_length": 140,
+            "unique_texts": 477
+        },
+        "documents_image_statistics": null,
+        "documents_audio_statistics": null,
+        "documents_video_statistics": null,
+        "queries_text_statistics": {
+            "total_text_length": 57933,
+            "min_text_length": 20,
+            "average_text_length": 61.76226012793177,
+            "max_text_length": 156,
+            "unique_texts": 119
+        },
+        "queries_image_statistics": null,
+        "queries_audio_statistics": null,
+        "queries_video_statistics": {
+            "total_duration_seconds": 19843.270002999972,
+            "total_frames": 593064,
+            "min_width": 1280,
+            "average_width": 1555.6503198294242,
+            "max_width": 1920,
+            "min_height": 720,
+            "average_height": 875.496801705757,
+            "max_height": 1080,
+            "min_duration_seconds": 9.266667,
+            "average_duration_seconds": 21.154872071428542,
+            "max_duration_seconds": 35.06316,
+            "unique_videos": 296,
+            "average_fps": 29.949893390191896,
+            "fps": {
+                "30": 897,
+                "28": 6,
+                "29": 35
+            },
+            "min_resolution": [
+                1280,
+                720
+            ],
+            "average_resolution": [
+                1555.6503198294242,
+                875.496801705757
+            ],
+            "max_resolution": [
+                1920,
+                1080
+            ],
+            "resolutions": {
+                "1920x1080": 388,
+                "1280x720": 520,
+                "1280x960": 14,
+                "1920x896": 16
+            }
+        },
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 938,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 1,
+            "unique_relevant_docs": 938
+        },
+        "top_ranked_statistics": {
+            "num_top_ranked": 2814,
+            "min_top_ranked_per_query": 3,
+            "average_top_ranked_per_query": 3.0,
+            "max_top_ranked_per_query": 3
+        }
+    }
+}
