@@ -331,6 +331,7 @@ class AbsTaskRetrieval(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: Any | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.
@@ -343,13 +344,14 @@ class AbsTaskRetrieval(AbsTask):
             encode_kwargs: Keyword arguments passed to the encoder
             prediction_folder: Folder to save model predictions
             num_proc: Number of processes to use
+            timer: TimingStack object to track evaluation phases
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
             Dictionary mapping subsets to their evaluation scores
         """
         if not self.data_loaded:
-            self.load_data(num_proc=num_proc, **kwargs)
+            self.load_data(num_proc=num_proc, timer=timer, **kwargs)
         # TODO: convert all tasks directly https://github.com/embeddings-benchmark/mteb/issues/2030
         self.convert_v1_dataset_format_to_v2(num_proc=num_proc)
 
@@ -360,6 +362,7 @@ class AbsTaskRetrieval(AbsTask):
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             num_proc=num_proc,
+            timer=timer,
             **kwargs,
         )
 
@@ -373,6 +376,7 @@ class AbsTaskRetrieval(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: Any | None = None,
         **kwargs,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
@@ -385,6 +389,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset: Subset to evaluate on
             prediction_folder: Folder with results prediction
             num_proc: Number of processes to use
+            timer: TimingStack object to track evaluation phases
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
@@ -442,7 +447,6 @@ class AbsTaskRetrieval(AbsTask):
             )
 
         logger.info("Running retrieval task - Evaluating retrieval scores...")
-        timer = kwargs.get("timer")
         timer_scoring = (
             timer("scoring", split=hf_split, subset=hf_subset)
             if timer

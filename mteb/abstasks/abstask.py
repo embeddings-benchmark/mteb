@@ -148,6 +148,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: Any | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluates an MTEB compatible model on the task.
@@ -159,6 +160,7 @@ class AbsTask(ABC):  # noqa: PLR0904
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             prediction_folder: Folder to save model predictions
             num_proc: Number of processes to use for loading the dataset or processing.
+            timer: TimingStack object to track evaluation phases.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
 
         Returns:
