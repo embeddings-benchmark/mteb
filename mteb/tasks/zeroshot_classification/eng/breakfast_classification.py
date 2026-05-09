@@ -27,7 +27,7 @@ class BreakfastZeroShotClassification(AbsTaskZeroShotClassification):
         license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["video"],
+        modalities=["video", "text"],
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""

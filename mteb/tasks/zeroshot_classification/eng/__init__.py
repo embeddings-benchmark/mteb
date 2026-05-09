@@ -19,7 +19,10 @@ from .fgvc_aircraft import FGVCAircraftZeroShotClassification
 from .food101 import Food101ZeroShotClassification
 from .gtsrb import GTSRBZeroShotClassification
 from .hmdb51 import HMDB51ZeroShotClassification
-from .human_animal_cartoon import HumanAnimalCartoonZeroShotClassification
+from .human_animal_cartoon import (
+    HumanAnimalCartoonVAZeroShotClassification,
+    HumanAnimalCartoonZeroShotClassification,
+)
 from .imagenet1k import Imagenet1kZeroShotClassification
 from .kinetics400 import (
     Kinetics400VAZeroShotClassification,
@@ -45,6 +48,10 @@ from .music_avqa import (
 from .oxford_pets import OxfordPetsZeroShotClassification
 from .patch_camelyon import PatchCamelyonZeroShotClassification
 from .ravdess import RavdessZeroshotClassification
+from .ravdess_av import (
+    RAVDESSAVZeroShotClassification,
+    RAVDESSVZeroShotClassification,
+)
 from .rendered_sst2 import RenderedSST2
 from .resisc45 import RESISC45ZeroShotClassification
 from .sci_mmir import SciMMIR
@@ -89,6 +96,7 @@ __all__ = [
     "Food101ZeroShotClassification",
     "GTSRBZeroShotClassification",
     "HMDB51ZeroShotClassification",
+    "HumanAnimalCartoonVAZeroShotClassification",
     "HumanAnimalCartoonZeroShotClassification",
     "Imagenet1kZeroShotClassification",
     "Kinetics400VAZeroShotClassification",
@@ -104,6 +112,8 @@ __all__ = [
     "MusicAVQACLSVideoZeroShotClassification",
     "OxfordPetsZeroShotClassification",
     "PatchCamelyonZeroShotClassification",
+    "RAVDESSAVZeroShotClassification",
+    "RAVDESSVZeroShotClassification",
     "RESISC45ZeroShotClassification",
     "RavdessZeroshotClassification",
     "RenderedSST2",
