@@ -71,7 +71,9 @@ def compute_video_hashes(
 
     def _hash_one(video: VideoDecoder) -> str:
         meta = video.metadata
-        num_frames = meta.num_frames
+        # Drop the last frame index because some container metadata over-counts
+        # by one (the final claimed frame fails to decode).
+        num_frames = meta.num_frames - 1 if meta.num_frames else meta.num_frames
         avg_fps = meta.average_fps
 
         if num_frames is None or num_frames == 0:
