@@ -159,7 +159,7 @@ class BM25Tokenizer:
 
     def __init__(
         self,
-        language: str,
+        language: str | None,
         stopwords_key: str | None = None,
         stemmer_language: str | None = None,
         freq_threshold: float = 0.9,
@@ -167,7 +167,10 @@ class BM25Tokenizer:
     ):
         # Resolve language defaults, then apply explicit overrides.
         # language=None means "no language assumptions" — no stopwords, stemmer, or tokenizer.
-        detected_sw, detected_stemmer, detected_tok = _ISO3_TO_LANG[language]
+        if language is None:
+            detected_sw, detected_stemmer, detected_tok = None, None, None
+        else:
+            detected_sw, detected_stemmer, detected_tok = _ISO3_TO_LANG[language]
         self.stopwords_key = stopwords_key if stopwords_key is not None else detected_sw
         stemmer_lang = (
             stemmer_language if stemmer_language is not None else detected_stemmer
