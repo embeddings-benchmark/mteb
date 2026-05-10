@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 from .bge_models import bge_training_data
 
@@ -148,6 +150,12 @@ class Model2VecModel(AbsEncoder):
         """
         from model2vec import StaticModel
 
+        warnings.warn(
+            "Model2VecModel is deprecated. Please use SentenceTransformerEncoderWrapper instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         self.model_name = model_name
         self.model = StaticModel.from_pretrained(self.model_name)
 
@@ -166,7 +174,7 @@ class Model2VecModel(AbsEncoder):
 
 
 m2v_base_glove_subword = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/M2V_base_glove_subword",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -194,7 +202,7 @@ m2v_base_glove_subword = ModelMeta(
 
 
 m2v_base_glove = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/M2V_base_glove",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -221,7 +229,7 @@ m2v_base_glove = ModelMeta(
 )
 
 m2v_base_output = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/M2V_base_output",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -248,7 +256,7 @@ m2v_base_output = ModelMeta(
 )
 
 m2v_multilingual_output = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/M2V_multilingual_output",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -275,7 +283,7 @@ m2v_multilingual_output = ModelMeta(
 )
 
 potion_base_2m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/potion-base-2M",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -302,7 +310,7 @@ potion_base_2m = ModelMeta(
 )
 
 potion_base_4m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/potion-base-4M",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -329,7 +337,7 @@ potion_base_4m = ModelMeta(
 )
 
 potion_base_8m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/potion-base-8M",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -356,7 +364,7 @@ potion_base_8m = ModelMeta(
 )
 
 potion_base_32m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/potion-base-32M",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -383,7 +391,7 @@ potion_base_32m = ModelMeta(
 )
 
 potion_retrieval_32m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/potion-retrieval-32M",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -410,7 +418,7 @@ potion_retrieval_32m = ModelMeta(
 )
 
 potion_multilingual_128m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/potion-multilingual-128M",
     model_type=["dense"],
     languages=_POTION_MULTILINGUAL_128M_LANGUAGES,
@@ -437,7 +445,7 @@ potion_multilingual_128m = ModelMeta(
 )
 
 pubmed_bert_100k = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="NeuML/pubmedbert-base-embeddings-100K",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -463,7 +471,7 @@ pubmed_bert_100k = ModelMeta(
 )
 
 pubmed_bert_500k = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="NeuML/pubmedbert-base-embeddings-500K",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -489,7 +497,7 @@ pubmed_bert_500k = ModelMeta(
 )
 
 pubmed_bert_1m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="NeuML/pubmedbert-base-embeddings-1M",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -515,7 +523,7 @@ pubmed_bert_1m = ModelMeta(
 )
 
 pubmed_bert_2m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="NeuML/pubmedbert-base-embeddings-2M",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -541,7 +549,7 @@ pubmed_bert_2m = ModelMeta(
 )
 
 pubmed_bert_8m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="NeuML/pubmedbert-base-embeddings-8M",
     model_type=["dense"],
     languages=["eng-Latn"],
