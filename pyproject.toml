@@ -410,7 +410,6 @@ conflicts = [
         { extra = "timm" },
         { extra = "blip2" },
         { extra = "llm2vec" },
-        { extra = "model2vec" },
         { extra = "pylate" }, # conflicting versions of transformers
         { extra = "llama-embed-nemotron" }, # conflicting versions of transformers
         { extra = "llama-nemotron-colembed-vl" }, # conflicting versions of transformers
