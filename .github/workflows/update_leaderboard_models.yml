@@ -28,7 +28,7 @@ jobs:
           version: "0.10.12"
 
       - name: Install mteb
-        run: uv sync
+        run: uv sync --frozen
 
       - name: Generate model list
         run: uv run python scripts/generate_leaderboard_models.py > leaderboard_models.py
