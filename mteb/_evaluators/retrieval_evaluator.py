@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-import contextlib
 import logging
 from typing import TYPE_CHECKING
+
+from mteb.timing import TimingStack
 
 from .evaluator import Evaluator
 from .retrieval_metrics import (
@@ -14,7 +15,6 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import SearchProtocol
-    from mteb.timing import TimingStack
     from mteb.types import (
         CorpusDatasetType,
         EncodeKwargs,
@@ -54,7 +54,7 @@ class RetrievalEvaluator(Evaluator):
         self.hf_subset = hf_subset
         self.qid = qid
         self.top_k = top_k
-        self.timer = timer
+        self.timer = timer or TimingStack()
 
     def __call__(  # type: ignore[override]
         self,
@@ -62,18 +62,19 @@ class RetrievalEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> RetrievalOutputType:
-        timer_index = (
-            self.timer("encode_corpus", split=self.hf_split, subset=self.hf_subset)
-            if self.timer
-            else contextlib.nullcontext()
+        timer_index = self.timer(
+            "Encoding corpus",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running retrieval task - Indexing corpus...",
         )
-        timer_search = (
-            self.timer("encode_queries", split=self.hf_split, subset=self.hf_subset)
-            if self.timer
-            else contextlib.nullcontext()
+        timer_search = self.timer(
+            "Encoding queries",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running retrieval task - Searching queries...",
         )
 
-        logger.info("Running retrieval task - Indexing corpus...")
         with timer_index:
             search_model.index(
                 corpus=self.corpus,
@@ -83,7 +84,6 @@ class RetrievalEvaluator(Evaluator):
                 encode_kwargs=encode_kwargs,
                 num_proc=num_proc,
             )
-        logger.info("Running retrieval task - Searching queries...")
         with timer_search:
             return search_model.search(
                 queries=self.queries,

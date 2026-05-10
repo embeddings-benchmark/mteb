@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import contextlib
 import json
 import logging
 import tempfile
@@ -27,6 +26,7 @@ from mteb.models import (
     EncoderProtocol,
     SearchProtocol,
 )
+from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -37,9 +37,9 @@ if TYPE_CHECKING:
     from mteb.models import (
         MTEBModels,
     )
-    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict
     from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
+
 
 logger = logging.getLogger(__name__)
 
@@ -171,6 +171,7 @@ class AbsTask(ABC):  # noqa: PLR0904
             TypeError: If the model is a CrossEncoder and the task does not support CrossEncoders.
             TypeError: If the model is a SearchProtocol and the task does not support Search.
         """
+        timer = timer or TimingStack()
         if isinstance(model, CrossEncoderProtocol) and not self._support_cross_encoder:
             raise TypeError(
                 f"Model {model} is a CrossEncoder, but this task {self.metadata.name} does not support CrossEncoders. "
@@ -359,13 +360,14 @@ class AbsTask(ABC):  # noqa: PLR0904
         if self.data_loaded:
             return
 
-        timer_loading = timer("data_loading") if timer else contextlib.nullcontext()
-        timer_transform = (
-            timer("dataset_transform") if timer else contextlib.nullcontext()
+        timer = timer or TimingStack()
+        timer_loading = timer(
+            "Data loading", log_message=f"Loading dataset {self.metadata.name}..."
         )
+        timer_transform = timer("Dataset transform")
 
-        if self.metadata.is_multilingual:
-            with timer_loading:
+        with timer_loading:
+            if self.metadata.is_multilingual:
                 if self.fast_loading:
                     self.fast_load()
                 else:
@@ -376,8 +378,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                             **self.metadata.dataset,
                             num_proc=num_proc,
                         )
-        else:
-            with timer_loading:
+            else:
                 # some of monolingual datasets explicitly adding the split name to the dataset name
                 self.dataset = load_dataset(**self.metadata.dataset, num_proc=num_proc)
         with timer_transform:

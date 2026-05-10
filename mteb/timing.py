@@ -26,14 +26,18 @@ class TimingContext:
         name: str,
         split: str | None = None,
         subset: str | None = None,
+        log_message: str | None = None,
     ):
         self.stack = stack
         self.name = name
         self.split = split
         self.subset = subset
+        self.log_message = log_message
         self.start = 0.0
 
     def __enter__(self):
+        if self.log_message:
+            logger.info(self.log_message)
         self.start = time.time()
         return self
 
@@ -62,12 +66,18 @@ class TimingStack:
         self._start_time: float | None = None
 
     def __call__(
-        self, name: str, split: str | None = None, subset: str | None = None
+        self,
+        name: str,
+        split: str | None = None,
+        subset: str | None = None,
+        log_message: str | None = None,
     ) -> TimingContext:
         """Returns a TimingContext for the specified phase name."""
         if self._start_time is None:
             self._start_time = time.time()
-        return TimingContext(self, name, split=split, subset=subset)
+        return TimingContext(
+            self, name, split=split, subset=subset, log_message=log_message
+        )
 
     def add_phase(
         self,

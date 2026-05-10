@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import contextlib
 import json
 import logging
 from collections import defaultdict
@@ -24,6 +23,7 @@ from mteb.models import (
     SearchEncoderWrapper,
     SearchProtocol,
 )
+from mteb.timing import TimingStack
 from mteb.types import (
     PromptType,
 )
@@ -50,7 +50,6 @@ if TYPE_CHECKING:
     from mteb.models import (
         MTEBModels,
     )
-    from mteb.timing import TimingStack
     from mteb.types import (
         EncodeKwargs,
         HFSubset,
@@ -274,6 +273,7 @@ class AbsTaskRetrieval(AbsTask):
     def load_data(
         self,
         num_proc: int | None = None,
+        *,
         timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> None:
@@ -305,10 +305,11 @@ class AbsTaskRetrieval(AbsTask):
                 num_proc=num_proc,
             )
 
-        timer_loading = timer("data_loading") if timer else contextlib.nullcontext()
-        timer_transform = (
-            timer("dataset_transform") if timer else contextlib.nullcontext()
+        timer = timer or TimingStack()
+        timer_loading = timer(
+            "Data loading", log_message=f"Loading dataset {self.metadata.name}..."
         )
+        timer_transform = timer("Dataset transform")
 
         with timer_loading:
             if self.metadata.is_multilingual:
@@ -351,6 +352,7 @@ class AbsTaskRetrieval(AbsTask):
         Returns:
             Dictionary mapping subsets to their evaluation scores
         """
+        timer = timer or TimingStack()
         if not self.data_loaded:
             self.load_data(num_proc=num_proc, timer=timer, **kwargs)
         # TODO: convert all tasks directly https://github.com/embeddings-benchmark/mteb/issues/2030
@@ -396,6 +398,7 @@ class AbsTaskRetrieval(AbsTask):
         Returns:
             Dictionary of evaluation scores
         """
+        timer = timer or TimingStack()
         # ensure queries format (see #3030)
         data_split["relevant_docs"], data_split["queries"] = (
             _filter_queries_without_positives(
@@ -447,11 +450,11 @@ class AbsTaskRetrieval(AbsTask):
                 hf_split=hf_split,
             )
 
-        logger.info("Running retrieval task - Evaluating retrieval scores...")
-        timer_scoring = (
-            timer("scoring", split=hf_split, subset=hf_subset)
-            if timer
-            else contextlib.nullcontext()
+        timer_scoring = timer(
+            "Scoring",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running retrieval task - Evaluating retrieval scores...",
         )
         with timer_scoring:
             (

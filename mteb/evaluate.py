@@ -23,6 +23,7 @@ from mteb.models.sentence_transformer_wrapper import (
 )
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
+from mteb.timing import TimingStack
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
@@ -35,6 +36,7 @@ if TYPE_CHECKING:
     )
     from mteb.types import EncodeKwargs, HFSubset, SplitName
     from mteb.types._metadata import ModelName, Revision
+
 
 logger = logging.getLogger(__name__)
 
@@ -93,6 +95,7 @@ def _evaluate_task(
     prediction_folder: Path | None,
     public_only: bool | None,
     num_proc: int | None = None,
+    timer: TimingStack | None = None,
 ) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
 
@@ -135,10 +138,7 @@ def _evaluate_task(
     task_results = {}
 
     task.check_if_dataset_is_superseded()
-
-    from mteb.timing import TimingStack
-
-    timer = TimingStack()
+    timer = timer or TimingStack()
 
     data_preloaded = task.data_loaded
     if not data_preloaded:
@@ -291,6 +291,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
     show_progress_bar: bool = True,
     public_only: bool | None = None,
     num_proc: int | None = None,
+    timer: TimingStack | None = None,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -316,6 +317,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
         public_only: Run only public tasks. If None, it will attempt to run the private task.
         num_proc: Number of processes to use during data loading and transformation. Defaults to 1.
+        timer: TimingStack object to track evaluation time.
 
     Returns:
         The results of the evaluation.
@@ -369,6 +371,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             show_progress_bar=show_progress_bar,
             public_only=public_only,
             num_proc=num_proc,
+            timer=timer,
         )
         combined_results = aggregated_task.combine_task_results(results.task_results)
         if cache:
@@ -405,6 +408,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 show_progress_bar=False,
                 public_only=public_only,
                 num_proc=num_proc,
+                timer=timer,
             )
             evaluate_results.extend(_res.task_results)
             if _res.exceptions:
