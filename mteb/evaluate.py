@@ -143,7 +143,11 @@ def _evaluate_task(
     data_preloaded = task.data_loaded
     if not data_preloaded:
         try:
+            num_phases_before = len(timer.phases)
+            start_load = time()
             task.load_data(num_proc=num_proc, timer=timer)
+            if len(timer.phases) == num_phases_before:
+                timer.add_phase("Data loading", start_load, time())
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
                 msg = (
@@ -163,6 +167,7 @@ def _evaluate_task(
 
     for split, hf_subsets in splits.items():
         tick = time()
+        num_phases_before = len(timer.phases)
         task_results[split] = task.evaluate(
             model,
             split,
@@ -173,10 +178,13 @@ def _evaluate_task(
             timer=timer,
         )
         tock = time()
+        if len(timer.phases) == num_phases_before:
+            timer.add_phase("Evaluation", tick, tock, split=split)
 
         logger.debug(
             f"Evaluation for {task.metadata.name} on {split} took {tock - tick:.2f} seconds"
         )
+
         evaluation_time += tock - tick
 
     result = TaskResult.from_task_results(
