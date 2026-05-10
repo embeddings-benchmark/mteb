@@ -38,6 +38,15 @@ from .birco_relic_reranking import BIRCORelicReranking
 from .birco_whats_that_book_reranking import BIRCOWhatsThatBookReranking
 from .blink_it2i_retrieval import BLINKIT2IRetrieval
 from .blink_it2t_retrieval import BLINKIT2TRetrieval
+from .bright_pro_retrieval import (
+    BrightProBiologyRetrieval,
+    BrightProEarthScienceRetrieval,
+    BrightProEconomicsRetrieval,
+    BrightProPsychologyRetrieval,
+    BrightProRoboticsRetrieval,
+    BrightProStackoverflowRetrieval,
+    BrightProSustainableLivingRetrieval,
+)
 from .bright_retrieval import BrightLongRetrieval, BrightRetrieval
 from .bright_v1_1_retrieval import (
     BrightAopsRetrieval,
@@ -424,6 +433,13 @@ __all__ = [
     "BrightLongRetrieval",
     "BrightPonyLongRetrieval",
     "BrightPonyRetrieval",
+    "BrightProBiologyRetrieval",
+    "BrightProEarthScienceRetrieval",
+    "BrightProEconomicsRetrieval",
+    "BrightProPsychologyRetrieval",
+    "BrightProRoboticsRetrieval",
+    "BrightProStackoverflowRetrieval",
+    "BrightProSustainableLivingRetrieval",
     "BrightPsychologyLongRetrieval",
     "BrightPsychologyRetrieval",
     "BrightRetrieval",
