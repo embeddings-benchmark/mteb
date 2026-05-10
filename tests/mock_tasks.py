@@ -4925,7 +4925,7 @@ class MockAudioPairClassification(AbsTaskPairClassification):
         **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio"]
-    metadata.modalities = "a2a"
+    metadata.category = "a2a"
 
     expected_stats = {
         "test": {
