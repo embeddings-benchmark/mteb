@@ -229,8 +229,8 @@ class AbsTask(ABC):  # noqa: PLR0904
             if cache is not None and model_meta is not None:
                 try:
                     # Create a TaskResult with ONLY the subset that was just evaluated
-                    only_current_subset = {hf_subset: scores[hf_subset]}
-                    partial_task_results = {split: only_current_subset}
+                    current_subset = {hf_subset: scores[hf_subset]}
+                    partial_task_results = {split: current_subset}
                     new_result = TaskResult.from_task_results(
                         self,
                         partial_task_results,
