@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import logging
 import time
-from typing import TypedDict
+
+from typing_extensions import TypedDict
 
 logger = logging.getLogger(__name__)
 

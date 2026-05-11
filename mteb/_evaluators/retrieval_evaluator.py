@@ -62,20 +62,12 @@ class RetrievalEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> RetrievalOutputType:
-        timer_index = self.timer(
+        with self.timer(
             "Encoding corpus",
             split=self.hf_split,
             subset=self.hf_subset,
             log_message="Running retrieval task - Indexing corpus...",
-        )
-        timer_search = self.timer(
-            "Encoding queries",
-            split=self.hf_split,
-            subset=self.hf_subset,
-            log_message="Running retrieval task - Searching queries...",
-        )
-
-        with timer_index:
+        ):
             search_model.index(
                 corpus=self.corpus,
                 task_metadata=self.task_metadata,
@@ -84,7 +76,12 @@ class RetrievalEvaluator(Evaluator):
                 encode_kwargs=encode_kwargs,
                 num_proc=num_proc,
             )
-        with timer_search:
+        with self.timer(
+            "Encoding queries",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running retrieval task - Searching queries...",
+        ):
             return search_model.search(
                 queries=self.queries,
                 top_k=self.top_k,
