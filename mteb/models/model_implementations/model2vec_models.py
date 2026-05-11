@@ -435,7 +435,7 @@ potion_multilingual_128m = ModelMeta(
 )
 
 pubmed_bert_100k = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
+    loader=Model2VecModel,
     name="NeuML/pubmedbert-base-embeddings-100K",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -457,10 +457,11 @@ pubmed_bert_100k = ModelMeta(
     training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-100K#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
+    extra_requirements_groups=["model2vec"],
 )
 
 pubmed_bert_500k = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
+    loader=Model2VecModel,
     name="NeuML/pubmedbert-base-embeddings-500K",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -482,10 +483,11 @@ pubmed_bert_500k = ModelMeta(
     training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-500K#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
+    extra_requirements_groups=["model2vec"],
 )
 
 pubmed_bert_1m = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
+    loader=Model2VecModel,
     name="NeuML/pubmedbert-base-embeddings-1M",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -507,6 +509,7 @@ pubmed_bert_1m = ModelMeta(
     training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-1M#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
+    extra_requirements_groups=["model2vec"],
 )
 
 pubmed_bert_2m = ModelMeta(
