@@ -177,7 +177,7 @@ from .limit_retrieval import LIMITRetrieval, LIMITSmallRetrieval
 from .lit_search_retrieval import LitSearchRetrieval
 from .llava_it2t_retrieval import LLaVAIT2TRetrieval
 from .lmeb_retrieval import (
-    MLDR,
+    LMEBMLDR,
     QASPER,
     REALTALK,
     TMD,
@@ -188,7 +188,7 @@ from .lmeb_retrieval import (
     ESGReports,
     Gorilla,
     KnowMeBench,
-    LMEB_SciFact,
+    LMEBSciFact,
     LoCoMo,
     LongMemEval,
     LooGLE,
@@ -196,7 +196,7 @@ from .lmeb_retrieval import (
     MemGovern,
     NovelQA,
     PeerQA,
-    Proced_mem_bench,
+    ProceduralMemBench,
     ReMe,
     ToolBench,
 )
@@ -386,7 +386,7 @@ __all__ = [
     "CUB200I2I",
     "FEVER",
     "FORBI2I",
-    "MLDR",
+    "LMEBMLDR",
     "MSMARCO",
     "MSRVTTA2V",
     "MSRVTTAT2V",
@@ -581,7 +581,7 @@ __all__ = [
     "LIMITRetrieval",
     "LIMITSmallRetrieval",
     "LLaVAIT2TRetrieval",
-    "LMEB_SciFact",
+    "LMEBSciFact",
     "LegalBenchConsumerContractsQA",
     "LegalBenchCorporateLobbying",
     "LegalSummarization",
@@ -635,7 +635,7 @@ __all__ = [
     "Panda70MV2TRetrieval",
     "Panda70MVA2TRetrieval",
     "PeerQA",
-    "Proced_mem_bench",
+    "ProceduralMemBench",
     "Quail",
     "QuoraRetrieval",
     "QuoraRetrievalHardNegatives",
