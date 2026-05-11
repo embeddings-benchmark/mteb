@@ -762,30 +762,6 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
 
 
 class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
-    def __init__(
-        self,
-        model: str,
-        revision: str | None = None,
-        device: str | None = None,
-        fps: float | None = 2.0,
-        max_frames: int | None = 64,
-        num_frames: int | None = None,
-        target_sampling_rate: int | None = 16000,
-        max_samples: int | None = 30 * 16000,  # 30s * sampling rate
-        **kwargs: Any,
-    ) -> None:
-        super().__init__(
-            model,
-            revision=revision,
-            device=device,
-            fps=fps,
-            max_frames=max_frames,
-            num_frames=num_frames,
-            target_sampling_rate=target_sampling_rate,
-            max_samples=max_samples,
-            **kwargs,
-        )
-
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -976,6 +952,10 @@ jina_embeddings_v5_omni_small = ModelMeta(
     loader=JinaV5OmniWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
+        fps=2.0,
+        max_frames=64,
+        target_sampling_rate=16000,
+        max_samples=30 * 16000,
         model_prompts={
             "Retrieval": "retrieval",
             "Clustering": "clustering",
@@ -1033,6 +1013,10 @@ jina_embeddings_v5_omni_nano = ModelMeta(
     loader_kwargs=dict(
         trust_remote_code=True,
         model_kwargs={"torch_dtype": torch.float32},
+        fps=2.0,
+        max_frames=64,
+        target_sampling_rate=16000,
+        max_samples=30 * 16000,
         model_prompts={
             "Retrieval": "retrieval",
             "Clustering": "clustering",
