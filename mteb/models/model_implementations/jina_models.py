@@ -764,7 +764,9 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
 class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
     def __init__(
         self,
-        *args: Any,
+        model: str,
+        revision: str | None = None,
+        device: str | None = None,
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
@@ -773,7 +775,9 @@ class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
         **kwargs: Any,
     ) -> None:
         super().__init__(
-            *args,
+            model,
+            revision=revision,
+            device=device,
             fps=fps,
             max_frames=max_frames,
             num_frames=num_frames,
