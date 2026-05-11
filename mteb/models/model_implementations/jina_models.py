@@ -952,6 +952,10 @@ jina_embeddings_v5_omni_small = ModelMeta(
     loader=JinaV5OmniWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
+        fps=2.0,
+        max_frames=64,
+        target_sampling_rate=16000,
+        max_samples=30 * 16000,
         model_prompts={
             "Retrieval": "retrieval",
             "Clustering": "clustering",
@@ -1009,6 +1013,10 @@ jina_embeddings_v5_omni_nano = ModelMeta(
     loader_kwargs=dict(
         trust_remote_code=True,
         model_kwargs={"torch_dtype": torch.float32},
+        fps=2.0,
+        max_frames=64,
+        target_sampling_rate=16000,
+        max_samples=30 * 16000,
         model_prompts={
             "Retrieval": "retrieval",
             "Clustering": "clustering",
