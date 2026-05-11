@@ -40,11 +40,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-_METRIC_FUNCS = {
-    "v_measure": v_measure_score,
-    "ami": adjusted_mutual_info_score,
-}
-
 
 MultilingualDataset = dict[HFSubset, DatasetDict]
 
@@ -70,8 +65,12 @@ def _evaluate_clustering_bootstrapped(
         - A dictionary mapping metric names to per-level score lists (e.g., {"v_measure": {"Level 0": [0.5, ...]}, ...}).
         - A dictionary where keys are level names and values are lists of cluster assignments for each clustering experiment at that level.
     """
+    metric_funcs = {
+        "v_measure": v_measure_score,
+        "ami": adjusted_mutual_info_score,
+    }
     scores: dict[str, dict[str, list[float]]] = {
-        m: defaultdict(list) for m in _METRIC_FUNCS
+        m: defaultdict(list) for m in metric_funcs
     }
     cluster_assignments: dict[str, list[list[int]]] = defaultdict(list)
 
@@ -109,7 +108,7 @@ def _evaluate_clustering_bootstrapped(
             _embeddings = level_embeddings[cluster_indices]
             _labels = np_level_labels[cluster_indices]
             cluster_assignment = clustering_model.fit_predict(_embeddings)
-            for metric, func in _METRIC_FUNCS.items():
+            for metric, func in metric_funcs.items():
                 scores[metric][f"Level {i_level}"].append(
                     float(func(_labels, cluster_assignment))
                 )
