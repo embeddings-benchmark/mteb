@@ -344,6 +344,7 @@ class AbsTask(ABC):  # noqa: PLR0904
     def load_data(
         self,
         num_proc: int | None = None,
+        *,
         timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> None:

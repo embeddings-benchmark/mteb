@@ -38,6 +38,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
     def load_data(
         self,
         num_proc: int | None = None,
+        *,
         timer: TimingStack | None = None,
         **kwargs,
     ) -> None:
