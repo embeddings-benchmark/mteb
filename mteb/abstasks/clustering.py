@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any, cast
 import numpy as np
 from datasets import Dataset, DatasetDict
 from sklearn.cluster import MiniBatchKMeans
-from sklearn.metrics.cluster import v_measure_score
+from sklearn.metrics.cluster import adjusted_mutual_info_score, v_measure_score
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
@@ -40,6 +40,11 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+_METRIC_FUNCS = {
+    "v_measure": v_measure_score,
+    "ami": adjusted_mutual_info_score,
+}
+
 
 MultilingualDataset = dict[HFSubset, DatasetDict]
 
@@ -54,19 +59,22 @@ def _evaluate_clustering_bootstrapped(
     max_depth: int | None,
     rng_state: random.Random,
     seed: int,
-) -> tuple[dict[str, list[float]], dict[str, list[list[int]]]]:
-    """Bootstrapped evaluation of clustering performance using V-measure.
+) -> tuple[dict[str, dict[str, list[float]]], dict[str, list[list[int]]]]:
+    """Bootstrapped evaluation of clustering performance.
 
     The bootstrapping is done by sampling N samples from the corpus and clustering them. It is done without replacement to get a diverse set of
     samples.
 
     Returns:
         A tuple containing:
-        - A dictionary where keys are level names (e.g., "Level 0", "Level 1", etc.) and values are lists of V-measure scores for each clustering experiment at that level.
+        - A dictionary mapping metric names to per-level score lists (e.g., {"v_measure": {"Level 0": [0.5, ...]}, ...}).
         - A dictionary where keys are level names and values are lists of cluster assignments for each clustering experiment at that level.
     """
-    v_measures = defaultdict(list)
-    cluster_assignments = defaultdict(list)
+    scores: dict[str, dict[str, list[float]]] = {
+        m: defaultdict(list) for m in _METRIC_FUNCS
+    }
+    cluster_assignments: dict[str, list[list[int]]] = defaultdict(list)
+
     if max_depth is not None:
         max_depth = min(max_depth, max(map(len, labels)))
     else:
@@ -101,11 +109,13 @@ def _evaluate_clustering_bootstrapped(
             _embeddings = level_embeddings[cluster_indices]
             _labels = np_level_labels[cluster_indices]
             cluster_assignment = clustering_model.fit_predict(_embeddings)
-            v_measure = v_measure_score(_labels, cluster_assignment)
-            v_measures[f"Level {i_level}"].append(v_measure)
+            for metric, func in _METRIC_FUNCS.items():
+                scores[metric][f"Level {i_level}"].append(
+                    float(func(_labels, cluster_assignment))
+                )
             cluster_assignments[f"Level {i_level}"].append(cluster_assignment.tolist())
 
-    return v_measures, cluster_assignments
+    return scores, cluster_assignments
 
 
 class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
@@ -254,7 +264,7 @@ class AbsTaskClustering(AbsTask):
                 label = [label]  # noqa: PLW2901
             labels.append(label)
 
-        all_v_scores, all_assignments = _evaluate_clustering_bootstrapped(
+        all_scores, all_assignments = _evaluate_clustering_bootstrapped(
             embeddings,
             labels,
             n_clusters=self.n_clusters,
@@ -274,16 +284,16 @@ class AbsTaskClustering(AbsTask):
                 hf_split=hf_split,
             )
 
-        v_measures = list(itertools.chain.from_iterable(all_v_scores.values()))
-
         logger.info("Running clustering - Finished.")
-        mean_v_measure = np.mean(v_measures)
-        v_std = np.std(v_measures)
-        return {
-            "v_measures": all_v_scores,
-            "v_measure": float(mean_v_measure),
-            "v_measure_std": v_std,
-        }
+        result: dict[str, Any] = {}
+        for metric, scores_by_level in all_scores.items():
+            flat = list(itertools.chain.from_iterable(scores_by_level.values()))
+            # keep "v_measures" key for backward compatibility
+            scores_key = "v_measures" if metric == "v_measure" else f"{metric}_scores"
+            result[scores_key] = scores_by_level
+            result[metric] = float(np.mean(flat))
+            result[f"{metric}_std"] = float(np.std(flat))
+        return result
 
     def _calculate_descriptive_statistics_from_split(
         self,
