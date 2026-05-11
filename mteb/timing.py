@@ -2,9 +2,12 @@ from __future__ import annotations
 
 import logging
 import time
+from typing import TYPE_CHECKING
 
 from typing_extensions import TypedDict
 
+if TYPE_CHECKING:
+    from types import TracebackType
 logger = logging.getLogger(__name__)
 
 
@@ -39,11 +42,16 @@ class TimingContext:
     def __enter__(self):
         if self.log_message:
             logger.info(self.log_message)
-        self.start = time.time()
+        self.start = time.monotonic()
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        end = time.time()
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ):
+        end = time.monotonic()
         self.stack.add_phase(
             self.name, self.start, end, split=self.split, subset=self.subset
         )
@@ -75,7 +83,7 @@ class TimingStack:
     ) -> TimingContext:
         """Returns a TimingContext for the specified phase name."""
         if self._start_time is None:
-            self._start_time = time.time()
+            self._start_time = time.monotonic()
         return TimingContext(
             self, name, split=split, subset=subset, log_message=log_message
         )
@@ -120,7 +128,11 @@ class TimingStack:
             return ""
 
         def _get_label(p: PhaseTiming) -> str:
-            parts = [p.get(k) for k in ("split", "subset") if p.get(k)]
+            parts: list[str] = []
+            if p.get("split"):
+                parts.append(p["split"])
+            if p.get("subset"):
+                parts.append(p["subset"])
             return "/".join(parts + [p["name"]]) if parts else p["name"]
 
         labels = [_get_label(p) for p in self.phases]
