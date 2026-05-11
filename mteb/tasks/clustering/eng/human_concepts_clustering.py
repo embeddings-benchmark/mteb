@@ -38,7 +38,7 @@ class HumanConceptsClustering(AbsTaskClustering):
         modalities=["text"],
         eval_splits=_SUBDATASETS,
         eval_langs=["eng-Latn"],
-        main_score="v_measure",
+        main_score="ami",
         date=("1973-01-01", "2025-05-22"),
         domains=["Academic"],
         task_subtypes=["Thematic clustering"],
