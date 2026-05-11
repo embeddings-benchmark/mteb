@@ -92,6 +92,8 @@ def _evaluate_task(
     encode_kwargs: EncodeKwargs,
     prediction_folder: Path | None,
     public_only: bool | None,
+    cache: ResultCache | None = None,
+    model_meta: ModelMeta | None = None,
     num_proc: int | None = None,
 ) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
@@ -126,6 +128,8 @@ def _evaluate_task(
                 co2_tracker=False,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
+                cache=cache,
+                model_meta=model_meta,
                 num_proc=num_proc,
             )
         if isinstance(result, TaskResult):
@@ -166,6 +170,8 @@ def _evaluate_task(
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             num_proc=num_proc,
+            cache=cache,
+            model_meta=model_meta,
         )
         tock = time()
 
@@ -482,6 +488,8 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
+                cache=cache,
+                model_meta=meta,
                 num_proc=num_proc,
             )
         except Exception as e:
@@ -498,6 +506,8 @@ def evaluate(  # noqa: PLR0913, PLR0914
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             public_only=public_only,
+            cache=cache,
+            model_meta=meta,
             num_proc=num_proc,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")

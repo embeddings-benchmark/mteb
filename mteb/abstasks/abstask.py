@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 import json
 import logging
 import tempfile
@@ -26,6 +27,7 @@ from mteb.models import (
     EncoderProtocol,
     SearchProtocol,
 )
+from mteb.results import TaskResult
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -33,9 +35,11 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.cache import ResultCache
     from mteb.models import (
         MTEBModels,
     )
+    from mteb.models.model_meta import ModelMeta
     from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict
     from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
@@ -147,6 +151,8 @@ class AbsTask(ABC):  # noqa: PLR0904
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        cache: ResultCache | None = None,
+        model_meta: ModelMeta | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluates an MTEB compatible model on the task.
@@ -158,6 +164,8 @@ class AbsTask(ABC):  # noqa: PLR0904
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             prediction_folder: Folder to save model predictions
             num_proc: Number of processes to use for loading the dataset or processing.
+            cache: Cache to save results to after evaluating each subset.
+            model_meta: Model meta required to save subset results in the cache.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
 
         Returns:
@@ -217,6 +225,37 @@ class AbsTask(ABC):  # noqa: PLR0904
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
+
+            if cache is not None and model_meta is not None:
+                try:
+                    # Create a TaskResult with ONLY the subset that was just evaluated
+                    only_current_subset = {hf_subset: scores[hf_subset]}
+                    partial_task_results = {split: only_current_subset}
+                    new_result = TaskResult.from_task_results(
+                        self,
+                        partial_task_results,
+                        evaluation_time=0.0,
+                        kg_co2_emissions=None,
+                        date=datetime.datetime.now(tz=datetime.timezone.utc),
+                    )
+
+                    existing_cached = cache.load_task_result(
+                        self.metadata.name, model_meta
+                    )
+
+                    # Merge: existing subsets + new subset
+                    if existing_cached is not None:
+                        final_result = new_result.merge(existing_cached)
+                    else:
+                        final_result = new_result
+
+                    cache.save_to_cache(final_result, model_meta)
+                    logger.debug(
+                        f"Saved intermediate results after evaluating {self.metadata.name} on {split} subset {hf_subset}"
+                    )
+                except Exception as e:
+                    logger.warning(f"Failed to save intermediate results: {e}")
+
         return scores
 
     @abstractmethod
