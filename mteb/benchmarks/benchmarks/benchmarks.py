@@ -3194,7 +3194,6 @@ MAEB_PLUS = Benchmark(
             "CommonLanguageLanguageDetection",
             "CREMA_D",
             "ESC50",
-            "FSD2019Kaggle",
             "FSD50K",
             "FSDD",
             "GTZANGenre",
@@ -3289,6 +3288,10 @@ MAEB_PLUS = Benchmark(
             "SpokenSQuADT2ARetrieval",
             "UrbanSound8KT2ARetrieval",
         ]
+    )
+    + (
+        # FSD2019Kaggle, curated only (noisy has uncurated labels)
+        get_task("FSD2019Kaggle", hf_subsets=["curated"]),
     ),
     description="""MAEB+ is the full Massive Audio Embedding Benchmark (v1), containing 98 tasks with audio modality across 6 task types: classification, clustering, pair classification, reranking, zero-shot classification, and retrieval. The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
@@ -3345,7 +3348,6 @@ MAEB_EXTENDED = Benchmark(
             # === Audio-only tasks (53) ===
             # AudioMultilabelClassification (3)
             "FSD50K",
-            "FSD2019Kaggle",
             "AudioSetMini",
             # AudioClassification (29)
             "VoxPopuliAccentID",
@@ -3446,6 +3448,10 @@ MAEB_EXTENDED = Benchmark(
             "CommonVoiceMini21A2TRetrieval",
             "CommonVoiceMini21T2ARetrieval",
         ]
+    )
+    + (
+        # FSD2019Kaggle, curated only (noisy has uncurated labels)
+        get_task("FSD2019Kaggle", hf_subsets=["curated"]),
     ),
     description="""MAEB(extended) is an intermediate benchmark used during task selection, containing 89 tasks that combine audio-only and audio-text evaluation before filtering to MAEB. Audio-only (53 tasks): classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), audio-to-audio retrieval (1). Audio-text (36 tasks): audio-text retrieval (31), zero-shot classification (5). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
@@ -3485,8 +3491,6 @@ MAEB = Benchmark(
             "CREMA_DClustering",
             "VehicleSoundClustering",
             "VoxPopuliGenderClustering",
-            # AudioMultilabelClassification (1)
-            "FSD2019Kaggle",
             # AudioPairClassification (3)
             "CREMADPairClassification",
             "NMSQAPairClassification",
@@ -3497,6 +3501,10 @@ MAEB = Benchmark(
             "RavdessZeroshot",
             "SpeechCommandsZeroshotv0.02",
         ]
+    )
+    + (
+        # AudioMultilabelClassification (1), curated only (noisy has uncurated labels)
+        get_task("FSD2019Kaggle", hf_subsets=["curated"]),
     ),
     description="""MAEB is a comprehensive audio benchmark with 30 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (11), clustering (3), multilabel classification (1), pair classification (3), reranking (1), and zero-shot classification (2). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
