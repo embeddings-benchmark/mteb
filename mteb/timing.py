@@ -28,14 +28,14 @@ class TimingContext:
         self,
         stack: TimingStack,
         name: str,
-        split: str | None = None,
-        subset: str | None = None,
+        split: str = "",
+        subset: str = "",
         log_message: str | None = None,
     ):
         self.stack = stack
         self.name = name
-        self.split = split or ""
-        self.subset = subset or ""
+        self.split = split
+        self.subset = subset
         self.log_message = log_message
         self.start = 0.0
 
@@ -77,8 +77,8 @@ class TimingStack:
     def __call__(
         self,
         name: str,
-        split: str | None = None,
-        subset: str | None = None,
+        split: str = "",
+        subset: str = "",
         log_message: str | None = None,
     ) -> TimingContext:
         """Returns a TimingContext for the specified phase name."""
