@@ -18,7 +18,7 @@ class FSD2019KaggleMultilingualClassification(AbsTaskMultilabelClassification):
         type="AudioMultilabelClassification",
         category="a2t",
         eval_splits=["test"],
-        eval_langs={"curated": ["eng-Latn"], "noisy": ["eng-Latn"]},
+        eval_langs={"curated": ["eng-Latn"]},
         main_score="lrap",
         date=(
             "2020-01-01",
