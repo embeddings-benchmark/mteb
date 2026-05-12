@@ -147,7 +147,7 @@ class EPBench(AbsTaskRetrieval):
         name="EPBench",
         dataset={
             "path": "mteb/EPBench",
-            "revision": "6896e32cc351315ec8db8ea2c5594b3660c2d61c",
+            "revision": "c0c0877aab7085655b446b2adcb86a25bbf14459",
         },
         description=(
             "LMEB episodic-memory retrieval task based on EPBench, evaluating "
@@ -155,7 +155,7 @@ class EPBench(AbsTaskRetrieval):
         ),
         eval_langs=_make_eval_langs(
             [
-                f"{scenario}/{query_type}"
+                f"{scenario}__{query_type}"
                 for scenario in _EPBENCH_SCENARIOS
                 for query_type in _EPBENCH_QUERY_TYPES
             ]
@@ -303,7 +303,7 @@ class ReMe(AbsTaskRetrieval):
         name="ReMe",
         dataset={
             "path": "mteb/ReMe",
-            "revision": "4de55cf7700086127b4ff7f177ff1e4e79b0f100",
+            "revision": "bc2bcb9d91dcca55f7d4ecec2c155d82ecaf5437",
         },
         description=(
             "LMEB procedural retrieval task based on ReMe, retrieving past successful experiences "
@@ -311,7 +311,7 @@ class ReMe(AbsTaskRetrieval):
         ),
         eval_langs=_make_eval_langs(
             [
-                f"{variant}/{subset}"
+                f"{variant}__{subset}"
                 for variant, subsets in _REME_VARIANTS.items()
                 for subset in subsets
             ]
@@ -1001,11 +1001,11 @@ class KnowMeBench(AbsTaskRetrieval):
         ),
         dataset={
             "path": "mteb/KnowMeBench",
-            "revision": "eed7c9419d3a51d71ff86fc9b7efc11b296fa85a",
+            "revision": "3b817ee68361f2b005bc065910e55f63a8f9ab77",
         },
         eval_langs=_make_eval_langs(
             [
-                f"{scenario}/{query_type}"
+                f"{scenario}__{query_type}"
                 for scenario in _KNOWMEBENCH_SCENARIOS
                 for query_type in _KNOWMEBENCH_QUERY_TYPES
             ]
