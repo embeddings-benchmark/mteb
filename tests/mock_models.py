@@ -57,15 +57,8 @@ class MockSentenceTransformer(SentenceTransformer):
     ) -> (
         list[Tensor] | np.ndarray | Tensor | dict[str, Tensor] | list[dict[str, Tensor]]
     ):
-        import hashlib
-
-        embeddings = []
-        for inp in inputs:
-            seed = int(
-                hashlib.md5(str(inp).encode(), usedforsecurity=False).hexdigest(), 16
-            ) % (2**31)
-            embeddings.append(np.random.RandomState(seed).randn(10))
-        return np.array(embeddings)
+        rng_state = np.random.RandomState(42)
+        return rng_state.randn(len(inputs), 10)
 
     @staticmethod
     def get_sentence_embedding_dimension() -> int:
