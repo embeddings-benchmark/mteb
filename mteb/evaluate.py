@@ -147,7 +147,7 @@ def _evaluate_task(
             start_load = time()
             task.load_data(num_proc=num_proc, timer=timer)
             if len(timer.phases) == num_phases_before:
-                timer.add_phase("Data loading", start_load, time())
+                timer.add_phase("Data loading", start_load, time(), split="", subset="")
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
                 msg = (
@@ -179,7 +179,7 @@ def _evaluate_task(
         )
         tock = time()
         if len(timer.phases) == num_phases_before:
-            timer.add_phase("Evaluation", tick, tock, split=split)
+            timer.add_phase("Evaluation", tick, tock, split=split, subset="")
 
         logger.debug(
             f"Evaluation for {task.metadata.name} on {split} took {tock - tick:.2f} seconds"

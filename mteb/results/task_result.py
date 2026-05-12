@@ -911,11 +911,13 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             else:
                 avg_start = sum(p["start"] for p in ps) / len(ps)
                 avg_end = sum(p["end"] for p in ps) / len(ps)
-                phase_time = {"name": name, "start": avg_start, "end": avg_end}
-                if split:
-                    phase_time["split"] = split
-                if subset:
-                    phase_time["subset"] = subset
+                phase_time = {
+                    "name": name,
+                    "start": avg_start,
+                    "end": avg_end,
+                    "split": split or "",
+                    "subset": subset or "",
+                }
 
             merged_phases.append(phase_time)
             total_time += avg_duration

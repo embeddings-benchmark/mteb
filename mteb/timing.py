@@ -34,8 +34,8 @@ class TimingContext:
     ):
         self.stack = stack
         self.name = name
-        self.split = split
-        self.subset = subset
+        self.split = split or ""
+        self.subset = subset or ""
         self.log_message = log_message
         self.start = 0.0
 
