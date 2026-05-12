@@ -8,6 +8,10 @@ from typing_extensions import TypedDict
 
 if TYPE_CHECKING:
     from types import TracebackType
+
+    from typing_extensions import Self
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -31,7 +35,7 @@ class TimingContext:
         split: str = "",
         subset: str = "",
         log_message: str | None = None,
-    ):
+    ) -> None:
         self.stack = stack
         self.name = name
         self.split = split
@@ -39,7 +43,7 @@ class TimingContext:
         self.log_message = log_message
         self.start = 0.0
 
-    def __enter__(self):
+    def __enter__(self) -> Self:
         if self.log_message:
             logger.info(self.log_message)
         self.start = time.monotonic()
@@ -50,7 +54,7 @@ class TimingContext:
         exc_type: type[BaseException] | None,
         exc_val: BaseException | None,
         exc_tb: TracebackType | None,
-    ):
+    ) -> None:
         end = time.monotonic()
         self.stack.add_phase(
             self.name, self.start, end, split=self.split, subset=self.subset
@@ -70,7 +74,7 @@ class TimingStack:
         timing.quick_plot()
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.phases: list[PhaseTiming] = []
         self._start_time: float | None = None
 
@@ -95,7 +99,7 @@ class TimingStack:
         end: float,
         split: str,
         subset: str,
-    ):
+    ) -> None:
         """Adds a phase timing record."""
         if self._start_time is None:
             self._start_time = start
