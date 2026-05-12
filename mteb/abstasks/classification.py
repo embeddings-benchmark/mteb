@@ -266,26 +266,32 @@ class AbsTaskClassification(AbsTask):
             all_selected_idxs.append(selected_idx)
 
         # Phase 2: encode only the union of all needed training samples once.
+        # Falls back to per-experiment encoding when _undersample_data does not
+        # return indices (e.g. AbsTaskRegression returns selected_idx=[]).
         union_idxs = sorted(set().union(*all_selected_idxs))
-        idx_to_pos = {orig: pos for pos, orig in enumerate(union_idxs)}
-        dataloader_train = create_dataloader(
-            train_split.select(union_idxs),
-            task_metadata=self.metadata,
-            input_column=self.input_column_name,
-            num_proc=num_proc,
-            **encode_kwargs,
-        )
-        logger.info(
-            f"Encoding {len(union_idxs)} unique training samples "
-            f"(union across {self.n_experiments} experiments)..."
-        )
-        union_cache = model.encode(
-            dataloader_train,
-            task_metadata=self.metadata,
-            hf_split=self.train_split,
-            hf_subset=hf_subset,
-            **encode_kwargs,
-        )
+        if union_idxs:
+            dataloader_train = create_dataloader(
+                train_split.select(union_idxs),
+                task_metadata=self.metadata,
+                input_column=self.input_column_name,
+                num_proc=num_proc,
+                **encode_kwargs,
+            )
+            logger.info(
+                f"Encoding {len(union_idxs)} unique training samples "
+                f"(union across {self.n_experiments} experiments)..."
+            )
+            union_cache = model.encode(
+                dataloader_train,
+                task_metadata=self.metadata,
+                hf_split=self.train_split,
+                hf_subset=hf_subset,
+                **encode_kwargs,
+            )
+            idx_to_pos = {orig: pos for pos, orig in enumerate(union_idxs)}
+        else:
+            union_cache = None
+            idx_to_pos = {}
 
         scores = []
         # we store idxs to make the shuffling reproducible
@@ -294,7 +300,11 @@ class AbsTaskClassification(AbsTask):
         all_predictions = []
         for i in range(self.n_experiments):
             logger.info(f"Running experiment ({i}/{self.n_experiments})")
-            sub_train_cache = union_cache[[idx_to_pos[j] for j in all_selected_idxs[i]]]
+            sub_train_cache = (
+                union_cache[[idx_to_pos[j] for j in all_selected_idxs[i]]]
+                if union_cache is not None
+                else None
+            )
             scores_exp, predictions, idxs, test_cache = self._run_experiment(
                 model,
                 train_split,
