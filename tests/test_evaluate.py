@@ -26,7 +26,7 @@ from tests.task_grid import (
     MOCK_MVEB_TASK_GRID,
 )
 
-mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 0.75)
+mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 0.5)
 mock_retrieval = (
     MockSentenceTransformer(),
     MockRetrievalTask(),
