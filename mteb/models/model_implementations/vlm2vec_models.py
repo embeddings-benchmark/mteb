@@ -407,9 +407,7 @@ class VLM2VEC2Wrapper(AbsEncoder):
         )
 
         base_model_name = "Qwen/Qwen2-VL-2B-Instruct"
-        self.processor = AutoProcessor.from_pretrained(base_model_name)
-        self.processor.image_processor.min_pixels = 28 * 28 * 4
-        self.processor.image_processor.max_pixels = 28 * 28 * 1280
+        self.processor = AutoProcessor.from_pretrained(model, revision=revision)
         self.processor.padding_side = "left"
 
         base_model = Qwen2VLForConditionalGeneration.from_pretrained(
