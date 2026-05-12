@@ -264,48 +264,36 @@ class AbsTaskClassification(AbsTask):
             _, sim_idxs, selected_idx = self._undersample_data(train_split, i, sim_idxs)
             all_selected_idxs.append(selected_idx)
 
-        # Falls back to per-experiment encoding when _undersample_data does not
-        # return indices (e.g. AbsTaskRegression returns selected_idx=[]).
         union_idxs = sorted(set().union(*all_selected_idxs))
-        if union_idxs:
-            dataloader_train = create_dataloader(
-                train_split.select(union_idxs),
-                task_metadata=self.metadata,
-                input_column=self.input_column_name,
-                num_proc=num_proc,
-                **encode_kwargs,
-            )
-            logger.info(
-                f"Encoding {len(union_idxs)} unique training samples "
-                f"(union across {self.n_experiments} experiments)..."
-            )
-            union_cache = model.encode(
-                dataloader_train,
-                task_metadata=self.metadata,
-                hf_split=self.train_split,
-                hf_subset=hf_subset,
-                **encode_kwargs,
-            )
-            idx_to_pos = {orig: pos for pos, orig in enumerate(union_idxs)}
-        else:
-            union_cache = None
-            idx_to_pos = {}
+        dataloader_train = create_dataloader(
+            train_split.select(union_idxs),
+            task_metadata=self.metadata,
+            input_column=self.input_column_name,
+            num_proc=num_proc,
+            **encode_kwargs,
+        )
+        logger.info(
+            f"Encoding {len(union_idxs)} unique training samples "
+            f"(union across {self.n_experiments} experiments)..."
+        )
+        union_cache = model.encode(
+            dataloader_train,
+            task_metadata=self.metadata,
+            hf_split=self.train_split,
+            hf_subset=hf_subset,
+            **encode_kwargs,
+        )
+        idx_to_pos = {orig: pos for pos, orig in enumerate(union_idxs)}
 
         scores = []
         test_cache = None
         all_predictions = []
         for i in range(self.n_experiments):
             logger.info(f"Running experiment ({i}/{self.n_experiments})")
-            train_cache = (
-                union_cache[[idx_to_pos[j] for j in all_selected_idxs[i]]]
-                if union_cache is not None
-                else None
-            )
+            train_cache = union_cache[[idx_to_pos[j] for j in all_selected_idxs[i]]]
             scores_exp, predictions, test_cache = self._run_experiment(
                 model,
-                train_split.select(all_selected_idxs[i])
-                if all_selected_idxs[i]
-                else train_split,
+                train_split.select(all_selected_idxs[i]),
                 eval_split,
                 test_cache=test_cache,
                 encode_kwargs=encode_kwargs,

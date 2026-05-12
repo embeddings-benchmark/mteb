@@ -118,16 +118,18 @@ class AbsTaskRegression(AbsTaskClassification):
         self, dataset: Dataset, experiment_num: int, idxs: list[int] | None = None
     ) -> tuple[Dataset, list[int], list[int]]:
         if self.n_samples >= len(dataset):
-            train_split_sampled = dataset
-        else:
-            train_split_sampled = self.stratified_subsampling(
-                datasets.DatasetDict({"train": dataset}),
-                seed=self.seed + experiment_num,
-                splits=["train"],
-                label=self.label_column_name,
-                n_samples=self.n_samples,
-            )["train"]
-        return train_split_sampled, [], []
+            return dataset, [], list(range(len(dataset)))
+        # Tag rows with their original position so we can recover indices after subsampling.
+        indexed = dataset.add_column("__idx__", list(range(len(dataset))))
+        subsampled = self.stratified_subsampling(
+            datasets.DatasetDict({"train": indexed}),
+            seed=self.seed + experiment_num,
+            splits=["train"],
+            label=self.label_column_name,
+            n_samples=self.n_samples,
+        )["train"]
+        selected_idx = subsampled["__idx__"]
+        return subsampled.remove_columns(["__idx__"]), [], selected_idx
 
     def _calculate_scores(  # type: ignore[override]  # noqa: PLR6301
         self,
