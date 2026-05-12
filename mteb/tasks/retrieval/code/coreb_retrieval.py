@@ -15,7 +15,14 @@ coreb_bibtex = r"""
 }
 """
 
-coreb_languages = ["eng-Latn", "python-Code", "ruby-Code", "java-Code", "go-Code", "c++-Code"]
+coreb_languages = [
+    "eng-Latn",
+    "python-Code",
+    "ruby-Code",
+    "java-Code",
+    "go-Code",
+    "c++-Code",
+]
 
 
 class CorebC2TRetrieval(AbsTaskRetrieval):
@@ -41,8 +48,9 @@ class CorebC2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=coreb_bibtex,
-        prompt="Retrieve the most relevant problem description for the given code implementation."
+        prompt="Retrieve the most relevant problem description for the given code implementation.",
     )
+
 
 class CorebC2CRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -67,8 +75,9 @@ class CorebC2CRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=coreb_bibtex,
-        prompt="Retrieve equivalent code implementations across languages."
+        prompt="Retrieve equivalent code implementations across languages.",
     )
+
 
 class CorebT2CRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -93,5 +102,5 @@ class CorebT2CRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=coreb_bibtex,
-        prompt="Retrieve the most relevant code implementation for the given problem description."
+        prompt="Retrieve the most relevant code implementation for the given problem description.",
     )
