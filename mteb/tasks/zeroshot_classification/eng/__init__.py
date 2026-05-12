@@ -2,6 +2,10 @@ from .ave_dataset import (
     AVEDatasetVideoZeroShotClassification,
     AVEDatasetZeroShotClassification,
 )
+from .avmeme_exam_classification import (
+    AVMemeAudioVideoZeroShotClassification,
+    AVMemeVideoZeroShotClassification,
+)
 from .birdsnap import BirdsnapZeroShotClassification
 from .breakfast_classification import BreakfastZeroShotClassification
 from .caltech101 import Caltech101ZeroShotClassification
@@ -14,11 +18,23 @@ from .fer2013 import FER2013ZeroShotClassification
 from .fgvc_aircraft import FGVCAircraftZeroShotClassification
 from .food101 import Food101ZeroShotClassification
 from .gtsrb import GTSRBZeroShotClassification
-from .human_animal_cartoon import HumanAnimalCartoonZeroShotClassification
+from .hmdb51 import HMDB51ZeroShotClassification
+from .human_animal_cartoon import (
+    HumanAnimalCartoonVAZeroShotClassification,
+    HumanAnimalCartoonZeroShotClassification,
+)
 from .imagenet1k import Imagenet1kZeroShotClassification
 from .kinetics400 import (
     Kinetics400VAZeroShotClassification,
     Kinetics400ZeroShotClassification,
+)
+from .kinetics600 import (
+    Kinetics600VAZeroShotClassification,
+    Kinetics600VZeroShotClassification,
+)
+from .kinetics700 import (
+    Kinetics700VAZeroShotClassification,
+    Kinetics700VZeroShotClassification,
 )
 from .meld_classification import (
     MELDAudioVideoZeroShotClassification,
@@ -32,6 +48,10 @@ from .music_avqa import (
 from .oxford_pets import OxfordPetsZeroShotClassification
 from .patch_camelyon import PatchCamelyonZeroShotClassification
 from .ravdess import RavdessZeroshotClassification
+from .ravdess_av import (
+    RAVDESSAVZeroShotClassification,
+    RAVDESSVZeroShotClassification,
+)
 from .rendered_sst2 import RenderedSST2
 from .resisc45 import RESISC45ZeroShotClassification
 from .sci_mmir import SciMMIR
@@ -47,6 +67,10 @@ from .ucf101 import (
     UCF101VideoZeroShotClassification,
     UCF101ZeroShotClassification,
 )
+from .vggsound_zeroshot import (
+    VGGSoundVideoAudioZeroshotClassification,
+    VGGSoundVideoZeroshotClassification,
+)
 from .worldsense_classification import (
     WorldSenseAudioVideoZeroShotClassification,
     WorldSenseVideoZeroShotClassification,
@@ -56,6 +80,8 @@ __all__ = [
     "CLEVR",
     "AVEDatasetVideoZeroShotClassification",
     "AVEDatasetZeroShotClassification",
+    "AVMemeAudioVideoZeroShotClassification",
+    "AVMemeVideoZeroShotClassification",
     "BirdsnapZeroShotClassification",
     "BreakfastZeroShotClassification",
     "CIFAR10ZeroShotClassification",
@@ -69,10 +95,16 @@ __all__ = [
     "FGVCAircraftZeroShotClassification",
     "Food101ZeroShotClassification",
     "GTSRBZeroShotClassification",
+    "HMDB51ZeroShotClassification",
+    "HumanAnimalCartoonVAZeroShotClassification",
     "HumanAnimalCartoonZeroShotClassification",
     "Imagenet1kZeroShotClassification",
     "Kinetics400VAZeroShotClassification",
     "Kinetics400ZeroShotClassification",
+    "Kinetics600VAZeroShotClassification",
+    "Kinetics600VZeroShotClassification",
+    "Kinetics700VAZeroShotClassification",
+    "Kinetics700VZeroShotClassification",
     "MELDAudioVideoZeroShotClassification",
     "MELDVideoZeroShotClassification",
     "MNISTZeroShotClassification",
@@ -80,6 +112,8 @@ __all__ = [
     "MusicAVQACLSVideoZeroShotClassification",
     "OxfordPetsZeroShotClassification",
     "PatchCamelyonZeroShotClassification",
+    "RAVDESSAVZeroShotClassification",
+    "RAVDESSVZeroShotClassification",
     "RESISC45ZeroShotClassification",
     "RavdessZeroshotClassification",
     "RenderedSST2",
@@ -92,6 +126,8 @@ __all__ = [
     "UCF101VideoAudioZeroShotClassification",
     "UCF101VideoZeroShotClassification",
     "UCF101ZeroShotClassification",
+    "VGGSoundVideoAudioZeroshotClassification",
+    "VGGSoundVideoZeroshotClassification",
     "WorldSenseAudioVideoZeroShotClassification",
     "WorldSenseVideoZeroShotClassification",
 ]

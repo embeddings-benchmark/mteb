@@ -89,7 +89,7 @@ def create_aggregate_table(task: AbsTaskAggregate) -> str:
     df = tasks.to_dataframe(["name", "type", "modalities", "languages"])
     df["name"] = df.apply(
         lambda row: (
-            f"[{row['name']}](./{row['type'].lower()}.md#{slugify_anchor(row['name'])})"
+            f"[{row['name']}](./{_TASKTYPE2SIMPLIFIEDTASKTYPE.get(row['type'], row['type'].lower())}.md#{slugify_anchor(row['name'])})"
         ),
         axis=1,
     )

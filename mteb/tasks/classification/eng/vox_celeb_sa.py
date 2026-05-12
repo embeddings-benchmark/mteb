@@ -42,7 +42,7 @@ class VoxCelebSA(AbsTaskClassification):
 
     is_cross_validation: bool = True
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         # remove disagreement data
         self.dataset = self.dataset.filter(lambda x: x["label"] != "Disagreement")
         self.dataset["train"] = self.dataset.pop("test")

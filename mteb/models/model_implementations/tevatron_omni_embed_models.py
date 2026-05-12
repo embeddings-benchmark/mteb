@@ -21,7 +21,7 @@ class TevatronOmniEmbedWrapper(SentenceTransformerMultimodalEncoderWrapper):
         revision: str | None = None,
         device: str | None = None,
         fps: float | None = 2.0,
-        max_frames: int | None = None,
+        max_frames: int | None = 64,
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
@@ -40,6 +40,7 @@ class TevatronOmniEmbedWrapper(SentenceTransformerMultimodalEncoderWrapper):
         self.model[0].processing_kwargs.update(
             {
                 "video": {
+                    "min_pixels": 32 * 14 * 14,
                     "max_pixels": 64
                     * 28
                     * 28,  # model card recommendation to save memory

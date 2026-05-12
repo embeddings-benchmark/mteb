@@ -62,3 +62,44 @@ class HumanAnimalCartoonZeroShotClassification(AbsTaskZeroShotClassification):
             LABEL_PROMPTS.get(name, f"a video of {name}")
             for name in self.dataset["test"].features[self.label_column_name].names
         ]
+
+
+class HumanAnimalCartoonVAZeroShotClassification(AbsTaskZeroShotClassification):
+    metadata = TaskMetadata(
+        name="HumanAnimalCartoonVAZeroShot",
+        description=(
+            "Human-Animal-Cartoon (HAC) is a multi-domain action recognition "
+            "dataset containing clips of humans, animals, and cartoon figures. "
+            "The zero-shot task matches each (video, audio) pair to a text "
+            "prompt for one of seven action labels."
+        ),
+        reference="https://arxiv.org/abs/2310.19795",
+        dataset={
+            "path": "mteb/Human-Animal-Cartoon",
+            "revision": "d38566c4bb055c7325314d3e46610792c2799c4b",
+        },
+        type="VideoZeroshotClassification",
+        category="va2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2023-10-30", "2023-10-30"),
+        domains=["Web", "Scene"],
+        task_subtypes=["Activity recognition"],
+        license="apache-2.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        modalities=["video", "audio", "text"],
+        sample_creation="found",
+        bibtex_citation=CITATION,
+        is_beta=True,
+    )
+
+    input_column_name = ("video", "audio")
+    label_column_name: str = "action"
+
+    def get_candidate_labels(self) -> list[str]:
+        return [
+            LABEL_PROMPTS.get(name, f"a video of {name}")
+            for name in self.dataset["test"].features[self.label_column_name].names
+        ]

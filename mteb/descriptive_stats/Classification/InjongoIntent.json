@@ -1,0 +1,5082 @@
+{
+    "test": {
+        "num_samples": 10860,
+        "number_texts_intersect_with_train": 623,
+        "text_statistics": {
+            "total_text_length": 613227,
+            "min_text_length": 6,
+            "average_text_length": 56.46657458563536,
+            "max_text_length": 229,
+            "unique_texts": 10860
+        },
+        "image_statistics": null,
+        "audio_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 40,
+            "labels": {
+                "alarm": {
+                    "count": 272
+                },
+                "balance": {
+                    "count": 270
+                },
+                "bill_balance": {
+                    "count": 272
+                },
+                "book_flight": {
+                    "count": 272
+                },
+                "book_hotel": {
+                    "count": 272
+                },
+                "calendar_update": {
+                    "count": 272
+                },
+                "cancel_reservation": {
+                    "count": 272
+                },
+                "car_rental": {
+                    "count": 272
+                },
+                "confirm_reservation": {
+                    "count": 270
+                },
+                "cook_time": {
+                    "count": 272
+                },
+                "exchange_rate": {
+                    "count": 272
+                },
+                "food_last": {
+                    "count": 272
+                },
+                "freeze_account": {
+                    "count": 270
+                },
+                "ingredients_list": {
+                    "count": 272
+                },
+                "interest_rate": {
+                    "count": 272
+                },
+                "international_visa": {
+                    "count": 272
+                },
+                "make_call": {
+                    "count": 272
+                },
+                "meal_suggestion": {
+                    "count": 272
+                },
+                "min_payment": {
+                    "count": 272
+                },
+                "pay_bill": {
+                    "count": 272
+                },
+                "pin_change": {
+                    "count": 272
+                },
+                "play_music": {
+                    "count": 270
+                },
+                "plug_type": {
+                    "count": 272
+                },
+                "recipe": {
+                    "count": 272
+                },
+                "restaurant_reservation": {
+                    "count": 270
+                },
+                "restaurant_reviews": {
+                    "count": 272
+                },
+                "restaurant_suggestion": {
+                    "count": 272
+                },
+                "share_location": {
+                    "count": 272
+                },
+                "shopping_list_update": {
+                    "count": 270
+                },
+                "spending_history": {
+                    "count": 272
+                },
+                "text": {
+                    "count": 272
+                },
+                "time": {
+                    "count": 270
+                },
+                "timezone": {
+                    "count": 270
+                },
+                "transactions": {
+                    "count": 272
+                },
+                "transfer": {
+                    "count": 270
+                },
+                "translate": {
+                    "count": 270
+                },
+                "travel_notification": {
+                    "count": 272
+                },
+                "travel_suggestion": {
+                    "count": 272
+                },
+                "update_playlist": {
+                    "count": 272
+                },
+                "weather": {
+                    "count": 272
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "amh": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 21120,
+                    "min_text_length": 6,
+                    "average_text_length": 33.0,
+                    "max_text_length": 74,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "ewe": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 30955,
+                    "min_text_length": 11,
+                    "average_text_length": 48.3671875,
+                    "max_text_length": 113,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "hau": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 30476,
+                    "min_text_length": 14,
+                    "average_text_length": 47.61875,
+                    "max_text_length": 91,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "ibo": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 33327,
+                    "min_text_length": 10,
+                    "average_text_length": 52.0734375,
+                    "max_text_length": 126,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "kin": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 38603,
+                    "min_text_length": 14,
+                    "average_text_length": 60.3171875,
+                    "max_text_length": 218,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "lin": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 30322,
+                    "min_text_length": 10,
+                    "average_text_length": 47.378125,
+                    "max_text_length": 120,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "lug": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 41352,
+                    "min_text_length": 19,
+                    "average_text_length": 64.6125,
+                    "max_text_length": 152,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "orm": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 41473,
+                    "min_text_length": 18,
+                    "average_text_length": 64.8015625,
+                    "max_text_length": 129,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "sna": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 48598,
+                    "min_text_length": 13,
+                    "average_text_length": 75.934375,
+                    "max_text_length": 229,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "sot": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 28790,
+                    "min_text_length": 10,
+                    "average_text_length": 44.984375,
+                    "max_text_length": 95,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "swa": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 44714,
+                    "min_text_length": 17,
+                    "average_text_length": 69.865625,
+                    "max_text_length": 168,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "twi": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 39462,
+                    "min_text_length": 18,
+                    "average_text_length": 61.659375,
+                    "max_text_length": 152,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "wol": {
+                "num_samples": 638,
+                "number_texts_intersect_with_train": 1,
+                "text_statistics": {
+                    "total_text_length": 34252,
+                    "min_text_length": 16,
+                    "average_text_length": 53.68652037617555,
+                    "max_text_length": 110,
+                    "unique_texts": 638
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 14
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "xho": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 38246,
+                    "min_text_length": 15,
+                    "average_text_length": 59.759375,
+                    "max_text_length": 118,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "yor": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 37207,
+                    "min_text_length": 23,
+                    "average_text_length": 58.1359375,
+                    "max_text_length": 125,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "zul": {
+                "num_samples": 640,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 41817,
+                    "min_text_length": 18,
+                    "average_text_length": 65.3390625,
+                    "max_text_length": 161,
+                    "unique_texts": 640
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 16
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 16
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 16
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 16
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 16
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 16
+                        },
+                        "timezone": {
+                            "count": 16
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 16
+                        },
+                        "translate": {
+                            "count": 16
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            },
+            "eng": {
+                "num_samples": 622,
+                "number_texts_intersect_with_train": 622,
+                "text_statistics": {
+                    "total_text_length": 32513,
+                    "min_text_length": 8,
+                    "average_text_length": 52.27170418006431,
+                    "max_text_length": 139,
+                    "unique_texts": 622
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 16
+                        },
+                        "balance": {
+                            "count": 14
+                        },
+                        "bill_balance": {
+                            "count": 16
+                        },
+                        "book_flight": {
+                            "count": 16
+                        },
+                        "book_hotel": {
+                            "count": 16
+                        },
+                        "calendar_update": {
+                            "count": 16
+                        },
+                        "cancel_reservation": {
+                            "count": 16
+                        },
+                        "car_rental": {
+                            "count": 16
+                        },
+                        "confirm_reservation": {
+                            "count": 14
+                        },
+                        "cook_time": {
+                            "count": 16
+                        },
+                        "exchange_rate": {
+                            "count": 16
+                        },
+                        "food_last": {
+                            "count": 16
+                        },
+                        "freeze_account": {
+                            "count": 14
+                        },
+                        "ingredients_list": {
+                            "count": 16
+                        },
+                        "interest_rate": {
+                            "count": 16
+                        },
+                        "international_visa": {
+                            "count": 16
+                        },
+                        "make_call": {
+                            "count": 16
+                        },
+                        "meal_suggestion": {
+                            "count": 16
+                        },
+                        "min_payment": {
+                            "count": 16
+                        },
+                        "pay_bill": {
+                            "count": 16
+                        },
+                        "pin_change": {
+                            "count": 16
+                        },
+                        "play_music": {
+                            "count": 16
+                        },
+                        "plug_type": {
+                            "count": 16
+                        },
+                        "recipe": {
+                            "count": 16
+                        },
+                        "restaurant_reservation": {
+                            "count": 14
+                        },
+                        "restaurant_reviews": {
+                            "count": 16
+                        },
+                        "restaurant_suggestion": {
+                            "count": 16
+                        },
+                        "share_location": {
+                            "count": 16
+                        },
+                        "shopping_list_update": {
+                            "count": 14
+                        },
+                        "spending_history": {
+                            "count": 16
+                        },
+                        "text": {
+                            "count": 16
+                        },
+                        "time": {
+                            "count": 14
+                        },
+                        "timezone": {
+                            "count": 14
+                        },
+                        "transactions": {
+                            "count": 16
+                        },
+                        "transfer": {
+                            "count": 14
+                        },
+                        "translate": {
+                            "count": 14
+                        },
+                        "travel_notification": {
+                            "count": 16
+                        },
+                        "travel_suggestion": {
+                            "count": 16
+                        },
+                        "update_playlist": {
+                            "count": 16
+                        },
+                        "weather": {
+                            "count": 16
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 37619,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 2130457,
+            "min_text_length": 7,
+            "average_text_length": 56.63247295249741,
+            "max_text_length": 1642,
+            "unique_texts": 37618
+        },
+        "image_statistics": null,
+        "audio_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 40,
+            "labels": {
+                "alarm": {
+                    "count": 943
+                },
+                "balance": {
+                    "count": 933
+                },
+                "bill_balance": {
+                    "count": 943
+                },
+                "book_flight": {
+                    "count": 942
+                },
+                "book_hotel": {
+                    "count": 943
+                },
+                "calendar_update": {
+                    "count": 943
+                },
+                "cancel_reservation": {
+                    "count": 943
+                },
+                "car_rental": {
+                    "count": 943
+                },
+                "confirm_reservation": {
+                    "count": 932
+                },
+                "cook_time": {
+                    "count": 943
+                },
+                "exchange_rate": {
+                    "count": 942
+                },
+                "food_last": {
+                    "count": 943
+                },
+                "freeze_account": {
+                    "count": 933
+                },
+                "ingredients_list": {
+                    "count": 943
+                },
+                "interest_rate": {
+                    "count": 942
+                },
+                "international_visa": {
+                    "count": 943
+                },
+                "make_call": {
+                    "count": 943
+                },
+                "meal_suggestion": {
+                    "count": 942
+                },
+                "min_payment": {
+                    "count": 942
+                },
+                "pay_bill": {
+                    "count": 943
+                },
+                "pin_change": {
+                    "count": 943
+                },
+                "play_music": {
+                    "count": 943
+                },
+                "plug_type": {
+                    "count": 943
+                },
+                "recipe": {
+                    "count": 943
+                },
+                "restaurant_reservation": {
+                    "count": 933
+                },
+                "restaurant_reviews": {
+                    "count": 942
+                },
+                "restaurant_suggestion": {
+                    "count": 943
+                },
+                "share_location": {
+                    "count": 943
+                },
+                "shopping_list_update": {
+                    "count": 932
+                },
+                "spending_history": {
+                    "count": 943
+                },
+                "text": {
+                    "count": 943
+                },
+                "time": {
+                    "count": 932
+                },
+                "timezone": {
+                    "count": 933
+                },
+                "transactions": {
+                    "count": 939
+                },
+                "transfer": {
+                    "count": 933
+                },
+                "translate": {
+                    "count": 935
+                },
+                "travel_notification": {
+                    "count": 943
+                },
+                "travel_suggestion": {
+                    "count": 943
+                },
+                "update_playlist": {
+                    "count": 943
+                },
+                "weather": {
+                    "count": 943
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "amh": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 75447,
+                    "min_text_length": 7,
+                    "average_text_length": 33.68169642857143,
+                    "max_text_length": 87,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "ewe": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 109128,
+                    "min_text_length": 13,
+                    "average_text_length": 48.71785714285714,
+                    "max_text_length": 117,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "hau": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 108194,
+                    "min_text_length": 11,
+                    "average_text_length": 48.300892857142856,
+                    "max_text_length": 97,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "ibo": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 114212,
+                    "min_text_length": 11,
+                    "average_text_length": 50.9875,
+                    "max_text_length": 130,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "kin": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 135801,
+                    "min_text_length": 13,
+                    "average_text_length": 60.62544642857143,
+                    "max_text_length": 230,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "lin": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 104357,
+                    "min_text_length": 9,
+                    "average_text_length": 46.58794642857143,
+                    "max_text_length": 105,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "lug": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 144834,
+                    "min_text_length": 20,
+                    "average_text_length": 64.65803571428572,
+                    "max_text_length": 158,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "orm": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 147994,
+                    "min_text_length": 17,
+                    "average_text_length": 66.06875,
+                    "max_text_length": 147,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "sna": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 169265,
+                    "min_text_length": 10,
+                    "average_text_length": 75.56473214285714,
+                    "max_text_length": 257,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "sot": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 100777,
+                    "min_text_length": 9,
+                    "average_text_length": 44.98973214285714,
+                    "max_text_length": 118,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "swa": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 156860,
+                    "min_text_length": 11,
+                    "average_text_length": 70.02678571428571,
+                    "max_text_length": 1642,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "twi": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 140304,
+                    "min_text_length": 14,
+                    "average_text_length": 62.635714285714286,
+                    "max_text_length": 185,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "wol": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 120458,
+                    "min_text_length": 7,
+                    "average_text_length": 53.77589285714286,
+                    "max_text_length": 116,
+                    "unique_texts": 2239
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "xho": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 136094,
+                    "min_text_length": 13,
+                    "average_text_length": 60.75625,
+                    "max_text_length": 126,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "yor": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 128735,
+                    "min_text_length": 19,
+                    "average_text_length": 57.470982142857146,
+                    "max_text_length": 131,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "zul": {
+                "num_samples": 2240,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 145747,
+                    "min_text_length": 11,
+                    "average_text_length": 65.065625,
+                    "max_text_length": 163,
+                    "unique_texts": 2240
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "alarm": {
+                            "count": 56
+                        },
+                        "balance": {
+                            "count": 56
+                        },
+                        "bill_balance": {
+                            "count": 56
+                        },
+                        "book_flight": {
+                            "count": 56
+                        },
+                        "book_hotel": {
+                            "count": 56
+                        },
+                        "calendar_update": {
+                            "count": 56
+                        },
+                        "cancel_reservation": {
+                            "count": 56
+                        },
+                        "car_rental": {
+                            "count": 56
+                        },
+                        "confirm_reservation": {
+                            "count": 56
+                        },
+                        "cook_time": {
+                            "count": 56
+                        },
+                        "exchange_rate": {
+                            "count": 56
+                        },
+                        "food_last": {
+                            "count": 56
+                        },
+                        "freeze_account": {
+                            "count": 56
+                        },
+                        "ingredients_list": {
+                            "count": 56
+                        },
+                        "interest_rate": {
+                            "count": 56
+                        },
+                        "international_visa": {
+                            "count": 56
+                        },
+                        "make_call": {
+                            "count": 56
+                        },
+                        "meal_suggestion": {
+                            "count": 56
+                        },
+                        "min_payment": {
+                            "count": 56
+                        },
+                        "pay_bill": {
+                            "count": 56
+                        },
+                        "pin_change": {
+                            "count": 56
+                        },
+                        "play_music": {
+                            "count": 56
+                        },
+                        "plug_type": {
+                            "count": 56
+                        },
+                        "recipe": {
+                            "count": 56
+                        },
+                        "restaurant_reservation": {
+                            "count": 56
+                        },
+                        "restaurant_reviews": {
+                            "count": 56
+                        },
+                        "restaurant_suggestion": {
+                            "count": 56
+                        },
+                        "share_location": {
+                            "count": 56
+                        },
+                        "shopping_list_update": {
+                            "count": 56
+                        },
+                        "spending_history": {
+                            "count": 56
+                        },
+                        "text": {
+                            "count": 56
+                        },
+                        "time": {
+                            "count": 56
+                        },
+                        "timezone": {
+                            "count": 56
+                        },
+                        "transactions": {
+                            "count": 56
+                        },
+                        "transfer": {
+                            "count": 56
+                        },
+                        "translate": {
+                            "count": 56
+                        },
+                        "travel_notification": {
+                            "count": 56
+                        },
+                        "travel_suggestion": {
+                            "count": 56
+                        },
+                        "update_playlist": {
+                            "count": 56
+                        },
+                        "weather": {
+                            "count": 56
+                        }
+                    }
+                }
+            },
+            "eng": {
+                "num_samples": 1779,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 92250,
+                    "min_text_length": 8,
+                    "average_text_length": 51.85497470489039,
+                    "max_text_length": 178,
+                    "unique_texts": 1779
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 40,
+                    "labels": {
+                        "translate": {
+                            "count": 39
+                        },
+                        "transfer": {
+                            "count": 37
+                        },
+                        "time": {
+                            "count": 36
+                        },
+                        "shopping_list_update": {
+                            "count": 36
+                        },
+                        "restaurant_reservation": {
+                            "count": 37
+                        },
+                        "balance": {
+                            "count": 37
+                        },
+                        "confirm_reservation": {
+                            "count": 36
+                        },
+                        "freeze_account": {
+                            "count": 37
+                        },
+                        "timezone": {
+                            "count": 37
+                        },
+                        "transactions": {
+                            "count": 43
+                        },
+                        "restaurant_suggestion": {
+                            "count": 47
+                        },
+                        "pay_bill": {
+                            "count": 47
+                        },
+                        "spending_history": {
+                            "count": 47
+                        },
+                        "travel_suggestion": {
+                            "count": 47
+                        },
+                        "travel_notification": {
+                            "count": 47
+                        },
+                        "food_last": {
+                            "count": 47
+                        },
+                        "cook_time": {
+                            "count": 47
+                        },
+                        "make_call": {
+                            "count": 47
+                        },
+                        "alarm": {
+                            "count": 47
+                        },
+                        "restaurant_reviews": {
+                            "count": 46
+                        },
+                        "plug_type": {
+                            "count": 47
+                        },
+                        "exchange_rate": {
+                            "count": 46
+                        },
+                        "pin_change": {
+                            "count": 47
+                        },
+                        "ingredients_list": {
+                            "count": 47
+                        },
+                        "book_hotel": {
+                            "count": 47
+                        },
+                        "weather": {
+                            "count": 47
+                        },
+                        "min_payment": {
+                            "count": 46
+                        },
+                        "international_visa": {
+                            "count": 47
+                        },
+                        "interest_rate": {
+                            "count": 46
+                        },
+                        "book_flight": {
+                            "count": 46
+                        },
+                        "text": {
+                            "count": 47
+                        },
+                        "bill_balance": {
+                            "count": 47
+                        },
+                        "share_location": {
+                            "count": 47
+                        },
+                        "play_music": {
+                            "count": 47
+                        },
+                        "calendar_update": {
+                            "count": 47
+                        },
+                        "update_playlist": {
+                            "count": 47
+                        },
+                        "cancel_reservation": {
+                            "count": 47
+                        },
+                        "car_rental": {
+                            "count": 47
+                        },
+                        "meal_suggestion": {
+                            "count": 46
+                        },
+                        "recipe": {
+                            "count": 47
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

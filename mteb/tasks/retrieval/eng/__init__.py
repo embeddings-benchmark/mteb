@@ -121,6 +121,7 @@ from .didemo_retrieval import (
     DiDeMoVT2ARetrieval,
 )
 from .edis_t2it_retrieval import EDIST2ITRetrieval
+from .elastic_kb_retrieval import ElasticKBRetrieval
 from .emo_vdb import EmoVDBA2TRetrieval, EmoVDBT2ARetrieval
 from .encyclopedia_vqa_it2it_retrieval import EncyclopediaVQAIT2ITRetrieval
 from .english_finance1_retrieval import EnglishFinance1Retrieval
@@ -491,6 +492,7 @@ __all__ = [
     "DiDeMoVA2TRetrieval",
     "DiDeMoVT2ARetrieval",
     "EDIST2ITRetrieval",
+    "ElasticKBRetrieval",
     "EmoVDBA2TRetrieval",
     "EmoVDBT2ARetrieval",
     "EncyclopediaVQAIT2ITRetrieval",

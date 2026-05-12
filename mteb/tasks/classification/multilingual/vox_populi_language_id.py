@@ -58,14 +58,18 @@ Dupoux, Emmanuel},
     label_column_name: str = "language"
     is_cross_validation: bool = True
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         import numpy as np
         from datasets import DatasetDict
 
         test_ds = self.dataset["train"]
 
         def is_valid_audio(example):
-            audio_arr = example.get("audio", {}).get("array", None)
+            try:
+                audio = example["audio"]
+                audio_arr = audio["array"]
+            except (KeyError, TypeError):
+                return False
             # require at least 500 samples (so that Kaldi fbank(window_size=400) won't fail)
             if (audio_arr is None) or (len(audio_arr) < 500):
                 return False

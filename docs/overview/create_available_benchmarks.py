@@ -7,9 +7,11 @@ from prettify_list import pretty_long_list
 from slugify import slugify_anchor
 
 import mteb
+from mteb.abstasks.task_metadata import _TASKTYPE2SIMPLIFIEDTASKTYPE  # noqa: PLC2701
 
 if TYPE_CHECKING:
     from mteb.get_tasks import MTEBTasks
+
 
 benchmark_entry = """
 ###  `{benchmark_name}` {{ .model-copy }}
@@ -47,7 +49,7 @@ def create_table(benchmark: mteb.Benchmark) -> str:
     # format: http://127.0.0.1:8000/overview/available_tasks/retrieval/#treccovid
     df["name"] = df.apply(
         lambda row: (
-            f"[{row['name']}](./available_tasks/{row['type'].lower()}.md"
+            f"[{row['name']}](./available_tasks/{_TASKTYPE2SIMPLIFIEDTASKTYPE.get(row['type'], row['type'].lower())}.md"
             f"#{slugify_anchor(row['name'])})"
         ),
         axis=1,

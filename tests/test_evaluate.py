@@ -146,7 +146,7 @@ def test_cache_hit(task: AbsTask):
     model = mteb.get_model("mteb/baseline-random-encoder")
     with pytest.raises(
         ValueError,
-        match="overwrite_strategy is set to 'only-cache' and the results file exists",
+        match="overwrite_strategy is set to 'only-cache'",
     ):
         mteb.evaluate(model, task, overwrite_strategy="only-cache")
 

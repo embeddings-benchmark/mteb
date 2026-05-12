@@ -844,7 +844,6 @@ def get_leaderboard_app(  # noqa: PLR0914
                 _update_description,
                 inputs=[benchmark_select, lang_select, type_select, domain_select],
                 outputs=[description],
-                preprocess=False,
                 show_progress="hidden",
             )
         task_select.change(

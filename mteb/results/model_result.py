@@ -18,19 +18,19 @@ from mteb._hf_integration.eval_result_model import (
     HFEvalResults,
     HFEvalResultSource,
 )
+from mteb.benchmarks import Benchmark
 from mteb.types import Modalities
 
 from .task_result import TaskError, TaskResult
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable
+    from collections.abc import Callable, Iterable, Sequence
 
     from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import (
         TaskDomain,
         TaskType,
     )
-    from mteb.benchmarks import Benchmark
     from mteb.types import (
         ISOLanguage,
         ISOLanguageScript,
@@ -48,7 +48,7 @@ def _aggregate_and_pivot(
     columns: list[str],
     aggregation_level: Literal["subset", "split", "task", "language"],
     format: Literal["wide", "long"],
-    aggregation_fn: Callable[[list[Score]], Any] | None,
+    aggregation_fn: Callable[[list[Score]], Any] | str | None,
 ) -> pd.DataFrame:
     if aggregation_level == "subset":
         index_columns = ["task_name", "split", "subset"]
@@ -310,7 +310,7 @@ class ModelResult(BaseModel):
     def to_dataframe(
         self,
         aggregation_level: Literal["subset", "split", "task"] = "task",
-        aggregation_fn: Callable[[list[Score]], Any] | None = None,
+        aggregation_fn: Callable[[list[Score]], Any] | str | None = None,
         include_model_revision: bool = False,
         format: Literal["wide", "long"] = "wide",
     ) -> pd.DataFrame:
@@ -464,8 +464,9 @@ class ModelResult(BaseModel):
         self,
         user: str | None = None,
         *,
-        benchmark: Benchmark | None = None,
+        benchmark: Benchmark | Sequence[Benchmark] | None = None,
         create_pr: bool = False,
+        raise_error: bool = False,
     ) -> None:
         """Push the model results to the Hugging Face Hub.
 
@@ -473,25 +474,40 @@ class ModelResult(BaseModel):
             user: The user or organization of results source.
             benchmark: Whether to push the benchmark results.
             create_pr: Whether to create a pull request
+            raise_error: Whether to push results if model have missing scores.
         """
-        benchmark_result = None
+        benchmark_results: None | list[HFEvalResult] = None
+        benchmarks: None | Sequence[Benchmark] = None
         if benchmark is not None:
-            benchmark_score = benchmark._get_model_score(self)["Mean(Task)"]
-            benchmark_result = HFEvalResult(
-                dataset=HFEvalResultDataset(
-                    id=benchmark.benchmark_hf_repo,
-                    task_id=benchmark.name,
-                    revision="1",
-                ),
-                value=benchmark_score,
-                date=None,
-                notes="Obtained using MTEB",
-                source=HFEvalResultSource(
-                    url="https://github.com/embeddings-benchmark/mteb/",
-                    user=user,
-                    name="Obtained using MTEB",
-                ),
-            )
+            benchmark_results = []
+            benchmarks = [benchmark] if isinstance(benchmark, Benchmark) else benchmark
+            for cur_benchmark in benchmarks:
+                try:
+                    benchmark_score = cur_benchmark._get_model_score(self)["Mean(Task)"]
+                except ValueError:
+                    if raise_error:
+                        raise
+                    logger.warning(
+                        f"Model {self.model_name} have missing scores on {cur_benchmark.name}. Skipping it"
+                    )
+                    benchmark_score = None
+                benchmark_results.append(
+                    HFEvalResult(
+                        dataset=HFEvalResultDataset(
+                            id=cur_benchmark.benchmark_hf_repo,
+                            task_id=cur_benchmark.name,
+                            revision="1",
+                        ),
+                        value=benchmark_score,
+                        date=None,
+                        notes="Obtained using MTEB",
+                        source=HFEvalResultSource(
+                            url="https://github.com/embeddings-benchmark/mteb/",
+                            user=user,
+                            name="Obtained using MTEB",
+                        ),
+                    )
+                )
         with tempfile.TemporaryDirectory() as tmpdir:
             path = Path(tmpdir)
             for task_result in self.task_results:
@@ -501,13 +517,20 @@ class ModelResult(BaseModel):
                 ) as f:
                     f.write(task_results.to_yaml())
 
-            if (
-                benchmark_result is not None
-                and benchmark is not None
-                and benchmark.name is not None
-            ):
-                with (path / f"{benchmark.name}.yaml").open("w", encoding="utf-8") as f:
-                    f.write(HFEvalResults.model_validate([benchmark_result]).to_yaml())
+            if benchmark_results is not None and benchmarks is not None:
+                for cur_benchmark, benchmark_result in zip(
+                    benchmarks, benchmark_results
+                ):
+                    if cur_benchmark.name is None:
+                        raise ValueError(
+                            f"Benchmark {cur_benchmark} doesn't have name."
+                        )
+                    with (path / f"{cur_benchmark.name}.yaml").open(
+                        "w", encoding="utf-8"
+                    ) as f:
+                        f.write(
+                            HFEvalResults.model_validate([benchmark_result]).to_yaml()
+                        )
 
             huggingface_hub.upload_folder(
                 repo_id=self.model_name,

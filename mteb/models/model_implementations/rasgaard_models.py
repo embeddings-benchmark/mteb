@@ -1,10 +1,10 @@
 import numpy as np
 
-from mteb.models.model_implementations.model2vec_models import Model2VecModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 potion_base_8m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="rasgaard/m2v-dfm-large",
     model_type=["dense"],
     languages=["dan-Latn"],

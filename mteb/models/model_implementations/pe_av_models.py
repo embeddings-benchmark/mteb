@@ -33,9 +33,9 @@ class PEAudioVisualWrapper(AbsEncoder):
         model_name: str = "facebook/pe-av-large",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         fps: float | None = 2.0,
-        max_frames: int | None = None,
+        max_frames: int | None = 64,
         num_frames: int | None = None,
-        max_samples: int | None = None,
+        max_samples: int | None = 30 * 48000,  # 30s * sampling rate
         **kwargs: Any,
     ):
         from transformers import PeAudioVideoModel, PeAudioVideoProcessor
