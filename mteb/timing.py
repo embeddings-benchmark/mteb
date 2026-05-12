@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class PhaseTiming(TypedDict, total=False):
+class PhaseTiming(TypedDict):
     """A dictionary representing the timing of a single phase."""
 
     name: str
@@ -93,23 +93,20 @@ class TimingStack:
         name: str,
         start: float,
         end: float,
-        split: str | None = None,
-        subset: str | None = None,
+        split: str,
+        subset: str,
     ):
         """Adds a phase timing record."""
         if self._start_time is None:
             self._start_time = start
 
-        phase: PhaseTiming = {
-            "name": name,
-            "start": start - self._start_time,
-            "end": end - self._start_time,
-        }
-        if split:
-            phase["split"] = split
-        if subset:
-            phase["subset"] = subset
-
+        phase = PhaseTiming(
+            name=name,
+            start=start - self._start_time,
+            end=end - self._start_time,
+            split=split,
+            subset=subset,
+        )
         self.phases.append(phase)
 
     def quick_plot(self) -> str:
