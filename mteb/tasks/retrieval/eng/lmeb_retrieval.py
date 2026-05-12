@@ -994,6 +994,11 @@ class KnowMeBench(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="KnowMeBench",
+        description=(
+            "Evaluate retrieval over long-horizon fictional narratives requiring "
+            "character knowledge, temporal reasoning, and adversarial abstention "
+            "across KnowMeBench scenarios."
+        ),
         dataset={
             "path": "mteb/KnowMeBench",
             "revision": "eed7c9419d3a51d71ff86fc9b7efc11b296fa85a",

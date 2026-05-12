@@ -460,7 +460,7 @@ def make_score_dict(
 
 
 def parse_metrics_from_scores(
-    scores: dict[str, dict[str, float]], k_values: list[int]
+    scores: dict[str, dict[str, float]], k_values: Sequence[int]
 ) -> tuple[
     dict[str, float],
     dict[str, float],
