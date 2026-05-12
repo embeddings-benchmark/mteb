@@ -10,6 +10,7 @@ from mteb._requires_package import (
     suggest_package,
 )
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
@@ -392,11 +393,17 @@ class VLM2VEC2Wrapper(AbsEncoder):
         revision: str | None = None,
         *,
         device: str | None = None,
-        embed_dim: int | None = None,
+        fps: float | None = 8,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
         **kwargs,
     ) -> None:
         from peft import PeftModel
         from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
+
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
 
         self.device = device or (
             "cuda"
@@ -448,6 +455,13 @@ class VLM2VEC2Wrapper(AbsEncoder):
         has_text = "text" in features
         has_image = "image" in features
         has_video = "video" in features
+
+        if has_video:
+            inputs.collate_fn = FramesCollator(
+                num_frames=self.num_frames,
+                fps=self.fps,
+                max_frames=self.max_frames,
+            )
 
         show_progress_bar = kwargs.get("show_progress_bar", True)
 
