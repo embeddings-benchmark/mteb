@@ -7,7 +7,7 @@ from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _DATASET_PATH = "mteb/AudioCaps_AV"
-_DATASET_REVISION = "dd2fe8cc347f590957ddf061ce3d3f179196ff03"
+_DATASET_REVISION = "5fd062d13a1ea8cdf36923faaacc32c43e6de14e"
 _BIBTEX = r"""
 @inproceedings{kim2019audiocaps,
   author = {Kim, Chris Dongjoo and Kim, Byeongchang and Lee, Hyunmin and Kim, Gunhee},

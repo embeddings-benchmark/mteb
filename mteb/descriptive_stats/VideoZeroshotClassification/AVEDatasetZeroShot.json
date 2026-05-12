@@ -1,0 +1,202 @@
+{
+    "test": {
+        "num_samples": 402,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 4025.644374999997,
+            "min_duration_seconds": 9.9845625,
+            "average_duration_seconds": 10.01404073383084,
+            "max_duration_seconds": 10.05425,
+            "unique_audios": 402,
+            "average_sampling_rate": 16000.0,
+            "sampling_rates": {
+                "16000": 402
+            }
+        },
+        "video_statistics": {
+            "total_duration_seconds": 4026.542646000018,
+            "total_frames": 115005,
+            "min_width": 192,
+            "average_width": 769.9601990049752,
+            "max_width": 1280,
+            "min_height": 144,
+            "average_height": 484.2587064676617,
+            "max_height": 720,
+            "min_duration_seconds": 10.0,
+            "average_duration_seconds": 10.016275238806015,
+            "max_duration_seconds": 10.061281,
+            "unique_videos": 402,
+            "average_fps": 28.579601990049753,
+            "fps": {
+                "30": 289,
+                "25": 87,
+                "24": 18,
+                "27": 1,
+                "29": 4,
+                "21": 1,
+                "28": 1,
+                "20": 1
+            },
+            "min_resolution": [
+                192,
+                144
+            ],
+            "average_resolution": [
+                769.9601990049752,
+                484.2587064676617
+            ],
+            "max_resolution": [
+                1280,
+                720
+            ],
+            "resolutions": {
+                "640x360": 25,
+                "1280x720": 143,
+                "480x360": 112,
+                "640x352": 3,
+                "960x720": 9,
+                "490x360": 1,
+                "480x270": 3,
+                "320x240": 30,
+                "512x288": 2,
+                "480x352": 1,
+                "540x360": 11,
+                "492x360": 3,
+                "406x720": 3,
+                "450x360": 6,
+                "640x354": 1,
+                "484x360": 1,
+                "352x288": 2,
+                "322x240": 1,
+                "360x288": 1,
+                "384x288": 5,
+                "192x144": 2,
+                "480x272": 2,
+                "352x240": 2,
+                "1080x720": 1,
+                "568x320": 3,
+                "640x290": 1,
+                "270x360": 2,
+                "638x360": 1,
+                "636x360": 1,
+                "426x240": 2,
+                "720x720": 1,
+                "422x360": 1,
+                "480x268": 1,
+                "480x318": 1,
+                "1170x720": 1,
+                "480x266": 1,
+                "202x360": 2,
+                "400x328": 1,
+                "480x320": 4,
+                "204x360": 3,
+                "198x360": 1,
+                "312x234": 1,
+                "398x238": 1,
+                "352x264": 1,
+                "480x356": 1,
+                "400x226": 1
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 28,
+            "labels": {
+                "8": {
+                    "count": 18
+                },
+                "17": {
+                    "count": 17
+                },
+                "4": {
+                    "count": 17
+                },
+                "11": {
+                    "count": 18
+                },
+                "20": {
+                    "count": 18
+                },
+                "10": {
+                    "count": 17
+                },
+                "15": {
+                    "count": 17
+                },
+                "27": {
+                    "count": 18
+                },
+                "12": {
+                    "count": 17
+                },
+                "26": {
+                    "count": 16
+                },
+                "13": {
+                    "count": 18
+                },
+                "25": {
+                    "count": 13
+                },
+                "22": {
+                    "count": 10
+                },
+                "19": {
+                    "count": 9
+                },
+                "1": {
+                    "count": 18
+                },
+                "24": {
+                    "count": 17
+                },
+                "9": {
+                    "count": 16
+                },
+                "3": {
+                    "count": 18
+                },
+                "14": {
+                    "count": 10
+                },
+                "2": {
+                    "count": 8
+                },
+                "5": {
+                    "count": 6
+                },
+                "7": {
+                    "count": 16
+                },
+                "6": {
+                    "count": 6
+                },
+                "16": {
+                    "count": 6
+                },
+                "23": {
+                    "count": 18
+                },
+                "21": {
+                    "count": 10
+                },
+                "0": {
+                    "count": 15
+                },
+                "18": {
+                    "count": 15
+                }
+            }
+        },
+        "candidates_labels_text_statistics": {
+            "total_text_length": 623,
+            "min_text_length": 14,
+            "average_text_length": 22.25,
+            "max_text_length": 40,
+            "unique_texts": 28
+        }
+    }
+}

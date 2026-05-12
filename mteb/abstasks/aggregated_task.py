@@ -126,8 +126,9 @@ class AbsTaskAggregate(AbsTask):
             msg = f"All tasks of {self.metadata.name} is not run using the same version. different versions found are: {mteb_versions}"
             logger.warning(msg)
             warnings.warn(msg)
-            task_res.mteb_version = None
-        task_res.mteb_version = task_results[0].mteb_version
+        task_res.mteb_version = TaskResult._compute_top_level_mteb_version(
+            task_res.scores
+        )
         return task_res
 
     def evaluate(
@@ -158,7 +159,12 @@ class AbsTaskAggregate(AbsTask):
         )
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> DescriptiveStatistics:
         raise NotImplementedError(
             "Aggregate tasks does not implement a _calculate_metrics_from_split. Instead use the individual tasks."

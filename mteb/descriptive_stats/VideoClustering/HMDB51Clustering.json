@@ -1,0 +1,228 @@
+{
+    "test": {
+        "num_samples": 1530,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": {
+            "total_duration_seconds": 4833.7666850000005,
+            "total_frames": 145013,
+            "min_width": 288,
+            "average_width": 359.01437908496735,
+            "max_width": 592,
+            "min_height": 240,
+            "average_height": 240.0,
+            "max_height": 240,
+            "min_duration_seconds": 0.733333,
+            "average_duration_seconds": 3.1593246307189546,
+            "max_duration_seconds": 21.6,
+            "unique_videos": 1530,
+            "average_fps": 30.0,
+            "fps": {
+                "30": 1530
+            },
+            "min_resolution": [
+                288,
+                240
+            ],
+            "average_resolution": [
+                359.01437908496735,
+                240.0
+            ],
+            "max_resolution": [
+                592,
+                240
+            ],
+            "resolutions": {
+                "320x240": 885,
+                "352x240": 158,
+                "416x240": 103,
+                "424x240": 42,
+                "480x240": 29,
+                "360x240": 32,
+                "288x240": 29,
+                "304x240": 4,
+                "560x240": 79,
+                "440x240": 3,
+                "428x240": 7,
+                "432x240": 62,
+                "448x240": 6,
+                "576x240": 12,
+                "592x240": 14,
+                "300x240": 26,
+                "348x240": 6,
+                "312x240": 14,
+                "332x240": 2,
+                "316x240": 1,
+                "292x240": 3,
+                "420x240": 7,
+                "568x240": 1,
+                "308x240": 2,
+                "452x240": 1,
+                "496x240": 1,
+                "400x240": 1
+            }
+        },
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 51,
+            "labels": {
+                "0": {
+                    "count": 30
+                },
+                "1": {
+                    "count": 30
+                },
+                "2": {
+                    "count": 30
+                },
+                "3": {
+                    "count": 30
+                },
+                "4": {
+                    "count": 30
+                },
+                "5": {
+                    "count": 30
+                },
+                "6": {
+                    "count": 30
+                },
+                "7": {
+                    "count": 30
+                },
+                "8": {
+                    "count": 30
+                },
+                "9": {
+                    "count": 30
+                },
+                "10": {
+                    "count": 30
+                },
+                "11": {
+                    "count": 30
+                },
+                "12": {
+                    "count": 30
+                },
+                "13": {
+                    "count": 30
+                },
+                "14": {
+                    "count": 30
+                },
+                "15": {
+                    "count": 30
+                },
+                "16": {
+                    "count": 30
+                },
+                "17": {
+                    "count": 30
+                },
+                "18": {
+                    "count": 30
+                },
+                "19": {
+                    "count": 30
+                },
+                "20": {
+                    "count": 30
+                },
+                "21": {
+                    "count": 30
+                },
+                "22": {
+                    "count": 30
+                },
+                "23": {
+                    "count": 30
+                },
+                "24": {
+                    "count": 30
+                },
+                "25": {
+                    "count": 30
+                },
+                "26": {
+                    "count": 30
+                },
+                "27": {
+                    "count": 30
+                },
+                "28": {
+                    "count": 30
+                },
+                "29": {
+                    "count": 30
+                },
+                "30": {
+                    "count": 30
+                },
+                "31": {
+                    "count": 30
+                },
+                "32": {
+                    "count": 30
+                },
+                "33": {
+                    "count": 30
+                },
+                "34": {
+                    "count": 30
+                },
+                "35": {
+                    "count": 30
+                },
+                "36": {
+                    "count": 30
+                },
+                "37": {
+                    "count": 30
+                },
+                "38": {
+                    "count": 30
+                },
+                "39": {
+                    "count": 30
+                },
+                "40": {
+                    "count": 30
+                },
+                "41": {
+                    "count": 30
+                },
+                "42": {
+                    "count": 30
+                },
+                "43": {
+                    "count": 30
+                },
+                "44": {
+                    "count": 30
+                },
+                "45": {
+                    "count": 30
+                },
+                "46": {
+                    "count": 30
+                },
+                "47": {
+                    "count": 30
+                },
+                "48": {
+                    "count": 30
+                },
+                "49": {
+                    "count": 30
+                },
+                "50": {
+                    "count": 30
+                }
+            }
+        }
+    }
+}
