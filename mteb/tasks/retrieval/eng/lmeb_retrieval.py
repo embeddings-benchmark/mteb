@@ -303,7 +303,7 @@ class ReMe(AbsTaskRetrieval):
         name="ReMe",
         dataset={
             "path": "mteb/ReMe",
-            "revision": "bc2bcb9d91dcca55f7d4ecec2c155d82ecaf5437",
+            "revision": "7bbb4456dade71ab22c9373c9a2f3504cfdccc18",
         },
         description=(
             "LMEB procedural retrieval task based on ReMe, retrieving past successful experiences "
