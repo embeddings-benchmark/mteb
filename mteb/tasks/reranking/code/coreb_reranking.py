@@ -49,6 +49,7 @@ class CorebC2TReranking(AbsTaskRetrieval):
         prompt="Retrieve the most relevant problem description for the given code implementation.",
     )
 
+
 class CorebC2CReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CorebC2CReranking",
@@ -74,6 +75,7 @@ class CorebC2CReranking(AbsTaskRetrieval):
         bibtex_citation=coreb_bibtex,
         prompt="Retrieve equivalent code implementations across languages.",
     )
+
 
 class CorebT2CReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(

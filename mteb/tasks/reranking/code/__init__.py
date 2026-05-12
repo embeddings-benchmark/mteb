@@ -4,7 +4,6 @@ from .coreb_reranking import (
     CorebT2CReranking,
 )
 
-
 __all__ = [
     "CorebC2CReranking",
     "CorebC2TReranking",
