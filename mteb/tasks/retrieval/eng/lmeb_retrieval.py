@@ -265,7 +265,7 @@ class ProceduralMemBench(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ProceduralMemBench",
         dataset={
-            "path": "mteb/MemGovern",
+            "path": "mteb/Proced_mem_bench",
             "revision": "5e4517cf2f768957b83917ef1961a5bd880675cd",
         },
         description=(
