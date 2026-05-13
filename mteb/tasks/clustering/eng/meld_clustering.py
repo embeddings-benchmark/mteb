@@ -38,7 +38,7 @@ EMOTION_DESCRIPTION_SUFFIX = (
 class MELDEmotionAudioVideoClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="MELDEmotionAudioVideoClustering",
-        description=DESCRIPTION + EMOTION_DESCRIPTION_SUFFIX,
+        description=DESCRIPTION + EMOTION_DESCRIPTION_SUFFIX + " Sampled the test split (~2,610 examples).",
         reference=REFERENCE,
         dataset=DATASET,
         type="VideoClustering",
@@ -72,7 +72,7 @@ class MELDEmotionAudioVideoClustering(AbsTaskClustering):
 class MELDEmotionVideoClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="MELDEmotionVideoClustering",
-        description=DESCRIPTION + EMOTION_DESCRIPTION_SUFFIX,
+        description=DESCRIPTION + EMOTION_DESCRIPTION_SUFFIX + " Sampled the test split (~2,610 examples).",
         reference=REFERENCE,
         dataset=DATASET,
         type="VideoClustering",
@@ -106,7 +106,7 @@ class MELDEmotionVideoClustering(AbsTaskClustering):
 class MELDSpeakerAudioVideoClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="MELDSpeakerAudioVideoClustering",
-        description=DESCRIPTION + " This task clusters by speaker identity.",
+        description=DESCRIPTION + " This task clusters by speaker identity. Sampled the test split (~2,610 examples).",
         reference=REFERENCE,
         dataset=DATASET,
         type="VideoClustering",
@@ -139,7 +139,7 @@ class MELDSpeakerAudioVideoClustering(AbsTaskClustering):
 class MELDSpeakerVideoClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="MELDSpeakerVideoClustering",
-        description=DESCRIPTION + " This task clusters by speaker identity.",
+        description=DESCRIPTION + " This task clusters by speaker identity. Sampled the test split (~2,610 examples).",
         reference=REFERENCE,
         dataset=DATASET,
         type="VideoClustering",

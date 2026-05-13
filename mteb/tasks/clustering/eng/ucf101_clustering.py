@@ -28,7 +28,7 @@ DESCRIPTION_BASE = (
 class UCF101AudioVideoClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="UCF101AudioVideoClustering",
-        description=DESCRIPTION_BASE + " Uses synchronized video and audio.",
+        description=DESCRIPTION_BASE + " Uses synchronized video and audio. Used official split 1 restricted to a 51-class audio-bearing subset (~4,890 train / ~1,944 test).",
         reference="https://arxiv.org/abs/1212.0402",
         dataset=DATASET,
         type="VideoClustering",
@@ -61,7 +61,7 @@ class UCF101AudioVideoClustering(AbsTaskClustering):
 class UCF101VideoClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="UCF101VideoClustering",
-        description=DESCRIPTION_BASE + " Uses video only.",
+        description=DESCRIPTION_BASE + " Uses video only. Used official split 1 restricted to a 51-class audio-bearing subset (~4,890 train / ~1,944 test).",
         reference="https://arxiv.org/abs/1212.0402",
         dataset=DATASET,
         type="VideoClustering",

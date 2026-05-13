@@ -37,7 +37,7 @@ def _emotion_prompts(names: list[str]) -> list[str]:
 class RAVDESSAVZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="RAVDESSAVZeroShot",
-        description=DESCRIPTION_BASE + " This variant uses both video and audio.",
+        description=DESCRIPTION_BASE + " This variant uses both video and audio. Used the metadata train split remapped to audio-visual filenames (~1,440 examples).",
         reference="https://doi.org/10.1371/journal.pone.0196391",
         dataset=DATASET,
         type="VideoZeroshotClassification",
@@ -69,7 +69,7 @@ class RAVDESSAVZeroShotClassification(AbsTaskZeroShotClassification):
 class RAVDESSVZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="RAVDESSVZeroShot",
-        description=DESCRIPTION_BASE + " This variant uses video only.",
+        description=DESCRIPTION_BASE + " This variant uses video only. Used the metadata train split remapped to audio-visual filenames (~1,440 examples).",
         reference="https://doi.org/10.1371/journal.pone.0196391",
         dataset=DATASET,
         type="VideoZeroshotClassification",

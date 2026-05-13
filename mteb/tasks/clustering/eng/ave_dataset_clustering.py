@@ -28,7 +28,7 @@ DESCRIPTION_BASE = (
 class AVEDatasetAudioVideoClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="AVEDatasetAudioVideoClustering",
-        description=DESCRIPTION_BASE + " Uses synchronized video and audio.",
+        description=DESCRIPTION_BASE + " Uses synchronized video and audio. Used the official train and test splits across 28 audio-visual event classes (~3,312 train / ~402 test).",
         reference="https://openaccess.thecvf.com/content_ECCV_2018/html/Yapeng_Tian_Audio-Visual_Event_Localization_ECCV_2018_paper.html",
         dataset=DATASET,
         type="VideoClustering",
@@ -61,7 +61,7 @@ class AVEDatasetAudioVideoClustering(AbsTaskClustering):
 class AVEDatasetVideoClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="AVEDatasetVideoClustering",
-        description=DESCRIPTION_BASE + " Uses video only.",
+        description=DESCRIPTION_BASE + " Uses video only. Used the official train and test splits across 28 audio-visual event classes (~3,312 train / ~402 test).",
         reference="https://openaccess.thecvf.com/content_ECCV_2018/html/Yapeng_Tian_Audio-Visual_Event_Localization_ECCV_2018_paper.html",
         dataset=DATASET,
         type="VideoClustering",
