@@ -1,13 +1,13 @@
 {
     "test": {
-        "num_samples": 1105,
-        "number_of_characters": 976952,
+        "num_samples": 1885,
+        "number_of_characters": 2788213,
         "documents_text_statistics": {
-            "total_text_length": 137370,
+            "total_text_length": 1948631,
             "min_text_length": 550,
-            "average_text_length": 1446.0,
-            "max_text_length": 2958,
-            "unique_texts": 95
+            "average_text_length": 2227.006857142857,
+            "max_text_length": 6588,
+            "unique_texts": 875
         },
         "documents_image_statistics": null,
         "documents_audio_statistics": null,
