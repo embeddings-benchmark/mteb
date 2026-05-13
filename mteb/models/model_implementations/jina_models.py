@@ -799,11 +799,19 @@ class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
             else None
         )
         task = jina_task_name if jina_task_name else "retrieval"
-        prompt = (
-            "Query: "
-            if prompt_type and prompt_type == PromptType.query
-            else "Document: "
-        )
+        # Only the retrieval LoRA adapter was trained with "Query: "/"Document: "
+        # prefixes. Clustering / text-matching / classification variants were
+        # trained without them; injecting the prefix collapses their scores.
+        # Matches harness evaluator.py:578-579 which sets instructions={"query":"","document":""}
+        # for non-retrieval variants.
+        if task == "retrieval":
+            prompt = (
+                "Query: "
+                if prompt_type and prompt_type == PromptType.query
+                else "Document: "
+            )
+        else:
+            prompt = ""
 
         all_embeddings = []
         modality_keys = ("text", "image", "audio", "video")
@@ -1032,7 +1040,6 @@ jina_embeddings_v5_omni_nano = ModelMeta(
     loader=JinaV5OmniWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
-        model_kwargs={"torch_dtype": torch.float32},
         fps=2.0,
         max_frames=64,
         target_sampling_rate=16000,
