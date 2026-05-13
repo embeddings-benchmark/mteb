@@ -6,13 +6,21 @@ import numpy as np
 import torch
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
+    from mteb.types import Array, BatchedInput, PromptType
+
+
+# Task types that route both sides (queries and corpus) through the QRY token.
+# Ogma's published MTEB numbers are produced with (QRY, QRY) for retrieval-style
+# tasks; (QRY, DOC) underperforms by ~4pp on ArguAna / AskUbuntuDupQuestions.
+# See axiotic/ogma docs/SUBMISSION_NOTES.md.
+_QRY_TASK_TYPES = frozenset(
+    {"Retrieval", "Reranking", "InstructionRetrieval", "InstructionReranking"}
+)
 
 
 class OgmaWrapper:
@@ -49,11 +57,9 @@ class OgmaWrapper:
         self.model.to(device)
 
     @staticmethod
-    def _task_for_prompt(prompt_type: PromptType | None) -> str:
-        if prompt_type == PromptType.query:
+    def _resolve_task_token(task_metadata: TaskMetadata | None) -> str:
+        if task_metadata is not None and task_metadata.type in _QRY_TASK_TYPES:
             return "QRY"
-        if prompt_type == PromptType.document:
-            return "DOC"
         return "SYM"
 
     def encode(
@@ -66,7 +72,7 @@ class OgmaWrapper:
         prompt_type: PromptType | None = None,
         **_: Any,
     ) -> Array:
-        task = self._task_for_prompt(prompt_type)
+        task = self._resolve_task_token(task_metadata)
         embeddings: list[np.ndarray] = []
         with torch.no_grad():
             for batch in inputs:
