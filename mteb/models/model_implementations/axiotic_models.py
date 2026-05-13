@@ -42,7 +42,6 @@ class OgmaWrapper:
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_name, revision=revision, trust_remote_code=True, use_fast=True
         )
-        self.n_special_tokens = int(getattr(self.model.config, "n_special_tokens", 7))
         self.max_length = int(getattr(self.model.config, "max_seq_len", 1024))
 
     def to(self, device: torch.device) -> None:
@@ -50,33 +49,12 @@ class OgmaWrapper:
         self.model.to(device)
 
     @staticmethod
-    def _task_for_prompt(prompt_type: PromptType | None) -> Any:
+    def _task_for_prompt(prompt_type: PromptType | None) -> str:
         if prompt_type == PromptType.query:
             return "QRY"
         if prompt_type == PromptType.document:
             return "DOC"
         return "SYM"
-
-    def _tokenize(self, texts: list[str]) -> tuple[torch.Tensor, torch.Tensor]:
-        max_inner = self.max_length - 2
-        encoded: list[list[int]] = []
-        for text in texts:
-            ids = self.tokenizer.encode(text, add_special_tokens=False)
-            shifted = [token_id + self.n_special_tokens for token_id in ids][:max_inner]
-            encoded.append([2] + shifted + [3])
-
-        max_len = max(len(ids) for ids in encoded)
-        token_ids = torch.zeros(
-            len(encoded), max_len, dtype=torch.long, device=self.device
-        )
-        attention_mask = torch.zeros(
-            len(encoded), max_len, dtype=torch.long, device=self.device
-        )
-        for row, ids in enumerate(encoded):
-            tensor_ids = torch.tensor(ids, dtype=torch.long, device=self.device)
-            token_ids[row, : len(ids)] = tensor_ids
-            attention_mask[row, : len(ids)] = 1
-        return token_ids, attention_mask
 
     def encode(
         self,
@@ -93,9 +71,15 @@ class OgmaWrapper:
         with torch.no_grad():
             for batch in inputs:
                 texts = [str(text) for text in batch["text"]]
-                token_ids, attention_mask = self._tokenize(texts)
+                enc = self.tokenizer(
+                    texts,
+                    padding=True,
+                    truncation=True,
+                    max_length=self.max_length,
+                    return_tensors="pt",
+                ).to(self.device)
                 batch_embeddings = self.model.encode(
-                    token_ids, attention_mask, task=task
+                    enc["input_ids"], enc["attention_mask"], task=task
                 )
                 embeddings.append(batch_embeddings.detach().cpu().float().numpy())
         return np.concatenate(embeddings, axis=0)
@@ -105,7 +89,7 @@ ogma_micro = ModelMeta(
     loader=OgmaWrapper,
     name="axiotic/ogma-micro",
     model_type=["dense"],
-    revision="d9d323709ab60f7833fc44dc2455a29b98ab324d",
+    revision="c9a793dacd593d1c0e336113ef1ac174a070217a",
     release_date="2026-04-23",
     languages=["eng-Latn"],
     open_weights=True,
@@ -128,7 +112,7 @@ ogma_mini = ModelMeta(
     loader=OgmaWrapper,
     name="axiotic/ogma-mini",
     model_type=["dense"],
-    revision="300b6184ef8e53268171df68b10fd31d6cec1ea1",
+    revision="580266301b651f100b19c928a65352e5fb57518a",
     release_date="2026-04-23",
     languages=["eng-Latn"],
     open_weights=True,
@@ -151,7 +135,7 @@ ogma_small = ModelMeta(
     loader=OgmaWrapper,
     name="axiotic/ogma-small",
     model_type=["dense"],
-    revision="9c3f997130f37ac632bf06408f7a93390a3dcf91",
+    revision="761deba3f4d6f19cf799495417aeb7ee23abf7cd",
     release_date="2026-04-23",
     languages=["eng-Latn"],
     open_weights=True,
@@ -174,7 +158,7 @@ ogma_base = ModelMeta(
     loader=OgmaWrapper,
     name="axiotic/ogma-base",
     model_type=["dense"],
-    revision="7524c6e1b23ee1581748e6be39ab0ea91a336898",
+    revision="6c9cd11d41a04bae4b881c1f02cf6462511708b9",
     release_date="2026-04-23",
     languages=["eng-Latn"],
     open_weights=True,
