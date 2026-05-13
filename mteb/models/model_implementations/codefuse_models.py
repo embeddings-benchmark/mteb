@@ -588,6 +588,12 @@ f2llmv2_prompts_dict.update(
         "BuiltBenchClusteringS2S": "Identify the category of the built asset entities based on the names or titles.",
         "BuiltBenchRetrieval": "Given a query, retrieve relevant entity descriptions from built asset classification systems such as IFC and Uniclass.",
         "BuiltBenchReranking": "Given a query, retrieve relevant entity descriptions from built asset classification systems such as IFC and Uniclass.",
+        "CorebC2TRetrieval": "Retrieve the most relevant problem description for the given code implementation.",
+        "CorebC2TReranking": "Retrieve the most relevant problem description for the given code implementation.",
+        "CorebC2CRetrieval": "Retrieve equivalent code implementations across languages.",
+        "CorebC2CReranking": "Retrieve equivalent code implementations across languages.",
+        "CorebT2CRetrieval": "Retrieve the most relevant code implementation for the given problem description.",
+        "CorebT2CReranking": "Retrieve the most relevant code implementation for the given problem description.",
     }
 )
 

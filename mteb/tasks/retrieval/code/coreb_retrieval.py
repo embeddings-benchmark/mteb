@@ -32,7 +32,7 @@ class CorebC2TRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2605.04615",
         dataset={
             "path": "hq-bench/coreb-c2t-retrieval",
-            "revision": "a5bb69191efd5b777675a23fb8c7266e144208c7",
+            "revision": "dc306b20b36df58d87171763f7db5bb7ce0f418b",
         },
         type="Retrieval",
         category="t2t",
@@ -59,7 +59,7 @@ class CorebC2CRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2605.04615",
         dataset={
             "path": "hq-bench/coreb-c2c-retrieval",
-            "revision": "7747a297b965e9a0153434630ca03810a8feb2dc",
+            "revision": "7fc3acd92e887f8ea4a2eaf724f22cdafe45ec3d",
         },
         type="Retrieval",
         category="t2t",
@@ -86,7 +86,7 @@ class CorebT2CRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2605.04615",
         dataset={
             "path": "hq-bench/coreb-t2c-retrieval",
-            "revision": "3ee0421a5a1b45dfb67b50f99d11e57222ed8f21",
+            "revision": "227a84ee19db93beeccfff0188299ed95c808742",
         },
         type="Retrieval",
         category="t2t",
