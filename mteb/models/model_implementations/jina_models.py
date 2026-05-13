@@ -761,6 +761,18 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
         return embeddings
 
 
+# Default routing from mteb's simplified_task_type to the Jina v5 omni LoRA
+# adapter. Concrete MTEB types whose harness routing diverges from this default
+# go in the ModelMeta's `model_prompts` dict (which takes precedence).
+_SIMPLIFIED_TO_JINA_TASK = {
+    "retrieval": "retrieval",
+    "clustering": "clustering",
+    "classification": "classification",
+    "semantic-similarity": "text-matching",
+    "pair-classification": "text-matching",
+}
+
+
 class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
     def encode(
         self,
@@ -792,13 +804,24 @@ class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
                 max_samples=self.max_samples,
             )
 
+        # Resolve the Jina LoRA adapter in two steps:
+        #   1. Per-MTEB-type override from `model_prompts` (covers harness
+        #      routing that diverges from mteb's simplified_task_type, e.g.
+        #      *Classification simplified="classification" → retrieval LoRA,
+        #      Compositionality simplified="pair-classification" → clustering).
+        #   2. Otherwise fall back to task_metadata.simplified_task_type so new
+        #      MTEB task types route automatically without wrapper changes.
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         jina_task_name = (
             self.model_prompts.get(prompt_name, None)
             if self.model_prompts and prompt_name
             else None
         )
-        task = jina_task_name if jina_task_name else "retrieval"
+        if jina_task_name is None:
+            jina_task_name = _SIMPLIFIED_TO_JINA_TASK.get(
+                task_metadata.simplified_task_type
+            )
+        task = jina_task_name or "retrieval"
         # Only the retrieval LoRA adapter was trained with "Query: "/"Document: "
         # prefixes. Clustering / text-matching / classification variants were
         # trained without them; injecting the prefix collapses their scores.
@@ -964,37 +987,22 @@ jina_embeddings_v5_omni_small = ModelMeta(
         max_frames=64,
         target_sampling_rate=16000,
         max_samples=30 * 16000,
+        # Only list MTEB types whose Jina LoRA adapter diverges from
+        # task_metadata.simplified_task_type. Everything else is routed
+        # automatically by the wrapper via _SIMPLIFIED_TO_JINA_TASK.
         model_prompts={
-            # text task-types (parent JinaV5Text)
-            "Retrieval": "retrieval",
-            "Clustering": "clustering",
-            "Classification": "classification",
-            "STS": "text-matching",
-            "PairClassification": "text-matching",
-            "BitextMining": "text-matching",
-            "MultilabelClassification": "classification",
-            "Reranking": "retrieval",
-            "Summarization": "text-matching",
-            "InstructionReranking": "retrieval",
-            # image task-types (MIEB) — route to the matching LoRA adapter
-            "Any2AnyRetrieval": "retrieval",
-            "Any2AnyMultilingualRetrieval": "retrieval",
-            "DocumentUnderstanding": "retrieval",
-            "ZeroShotClassification": "retrieval",
+            # multimodal *Classification → retrieval (the classification LoRA
+            # is empty in our training/eval pipeline for non-text modalities)
             "ImageClassification": "retrieval",
-            "VisionCentricQA": "retrieval",
-            "ImageClustering": "clustering",
-            "Compositionality": "clustering",
-            "VisualSTS(eng)": "text-matching",
-            "VisualSTS(multi)": "text-matching",
-            # audio task-types (MAEB)
+            "ZeroShotClassification": "retrieval",
             "AudioClassification": "retrieval",
             "AudioZeroshotClassification": "retrieval",
-            "AudioRetrieval": "retrieval",
             "AudioMultilabelClassification": "retrieval",
-            "AudioReranking": "retrieval",
-            "AudioClustering": "clustering",
-            "AudioPairClassification": "text-matching",
+            "VideoClassification": "retrieval",
+            "VideoZeroshotClassification": "retrieval",
+            # Compositionality is simplified="pair-classification" but our
+            # harness routes it through the clustering adapter.
+            "Compositionality": "clustering",
         },
     ),
     name="jinaai/jina-embeddings-v5-omni-small",
@@ -1044,37 +1052,17 @@ jina_embeddings_v5_omni_nano = ModelMeta(
         max_frames=64,
         target_sampling_rate=16000,
         max_samples=30 * 16000,
+        # See `jina_embeddings_v5_omni_small.loader_kwargs.model_prompts` for
+        # the rationale — same overrides apply.
         model_prompts={
-            # text task-types (parent JinaV5Text)
-            "Retrieval": "retrieval",
-            "Clustering": "clustering",
-            "Classification": "classification",
-            "STS": "text-matching",
-            "PairClassification": "text-matching",
-            "BitextMining": "text-matching",
-            "MultilabelClassification": "classification",
-            "Reranking": "retrieval",
-            "Summarization": "text-matching",
-            "InstructionReranking": "retrieval",
-            # image task-types (MIEB) — route to the matching LoRA adapter
-            "Any2AnyRetrieval": "retrieval",
-            "Any2AnyMultilingualRetrieval": "retrieval",
-            "DocumentUnderstanding": "retrieval",
-            "ZeroShotClassification": "retrieval",
             "ImageClassification": "retrieval",
-            "VisionCentricQA": "retrieval",
-            "ImageClustering": "clustering",
-            "Compositionality": "clustering",
-            "VisualSTS(eng)": "text-matching",
-            "VisualSTS(multi)": "text-matching",
-            # audio task-types (MAEB)
+            "ZeroShotClassification": "retrieval",
             "AudioClassification": "retrieval",
             "AudioZeroshotClassification": "retrieval",
-            "AudioRetrieval": "retrieval",
             "AudioMultilabelClassification": "retrieval",
-            "AudioReranking": "retrieval",
-            "AudioClustering": "clustering",
-            "AudioPairClassification": "text-matching",
+            "VideoClassification": "retrieval",
+            "VideoZeroshotClassification": "retrieval",
+            "Compositionality": "clustering",
         },
     ),
     name="jinaai/jina-embeddings-v5-omni-nano",

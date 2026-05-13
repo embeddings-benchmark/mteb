@@ -22,6 +22,7 @@ import torch
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_implementations.jina_models import (
+    _SIMPLIFIED_TO_JINA_TASK,
     JinaV5OmniWrapper,
     jina_embeddings_v5_omni_nano,
     jina_embeddings_v5_omni_small,
@@ -75,14 +76,16 @@ _VARIANT_MAP = {
 }
 
 
-def _make_wrapper() -> tuple[JinaV5OmniWrapper, _StubSTModel]:
+def _make_wrapper(
+    model_prompts: dict[str, str] | None = _VARIANT_MAP,
+) -> tuple[JinaV5OmniWrapper, _StubSTModel]:
     stub = _StubSTModel()
     # Skip the metadata-from-SentenceTransformer path, which reads attributes
     # our stub doesn't have. We only care about the encode-time prompt logic.
     with patch.object(
         ModelMeta, "from_sentence_transformer_model", return_value=ModelMeta.create_empty()
     ):
-        wrapper = JinaV5OmniWrapper(model=stub, model_prompts=_VARIANT_MAP)
+        wrapper = JinaV5OmniWrapper(model=stub, model_prompts=model_prompts)
     return wrapper, stub
 
 
@@ -160,6 +163,119 @@ def test_pair_classification_variant_drops_prefix():
     _encode(wrapper, PromptType.query, "PairClassification")
     assert stub.captured[-1]["task"] == "text-matching"
     assert stub.captured[-1]["prompt"] == ""
+
+
+# --- Samoed's review suggestion: simplified_task_type fallback ----------
+# The wrapper should route any task whose MTEB type is not in `model_prompts`
+# via `task_metadata.simplified_task_type`, so new MTEB types don't require a
+# wrapper change.
+
+
+def test_simplified_fallback_retrieval():
+    wrapper, stub = _make_wrapper(model_prompts={})
+    _encode(wrapper, PromptType.query, "Any2AnyRetrieval")
+    assert stub.captured[-1]["task"] == "retrieval"
+    assert stub.captured[-1]["prompt"] == "Query: "
+
+
+def test_simplified_fallback_image_clustering():
+    wrapper, stub = _make_wrapper(model_prompts={})
+    _encode(wrapper, PromptType.document, "ImageClustering")
+    assert stub.captured[-1]["task"] == "clustering"
+    assert stub.captured[-1]["prompt"] == ""
+
+
+def test_simplified_fallback_visual_sts_to_text_matching():
+    wrapper, stub = _make_wrapper(model_prompts={})
+    _encode(wrapper, PromptType.query, "VisualSTS(eng)")
+    assert stub.captured[-1]["task"] == "text-matching"
+    assert stub.captured[-1]["prompt"] == ""
+
+
+def test_simplified_fallback_audio_pair_classification_to_text_matching():
+    wrapper, stub = _make_wrapper(model_prompts={})
+    _encode(wrapper, PromptType.query, "AudioPairClassification")
+    assert stub.captured[-1]["task"] == "text-matching"
+    assert stub.captured[-1]["prompt"] == ""
+
+
+# --- Per-MTEB-type override path (model_prompts wins over simplified) ---
+# These are the cases where harness routing diverges from simplified_task_type.
+
+
+def _omni_model_prompts():
+    """The overrides shipped with the omni ModelMeta."""
+    return jina_embeddings_v5_omni_small.loader_kwargs["model_prompts"]
+
+
+def test_override_image_classification_routes_to_retrieval():
+    wrapper, stub = _make_wrapper(model_prompts=_omni_model_prompts())
+    _encode(wrapper, PromptType.query, "ImageClassification")
+    assert stub.captured[-1]["task"] == "retrieval"
+
+
+def test_override_audio_classification_routes_to_retrieval():
+    wrapper, stub = _make_wrapper(model_prompts=_omni_model_prompts())
+    _encode(wrapper, PromptType.query, "AudioClassification")
+    assert stub.captured[-1]["task"] == "retrieval"
+
+
+def test_override_zero_shot_classification_routes_to_retrieval():
+    wrapper, stub = _make_wrapper(model_prompts=_omni_model_prompts())
+    _encode(wrapper, PromptType.query, "ZeroShotClassification")
+    assert stub.captured[-1]["task"] == "retrieval"
+
+
+def test_override_compositionality_routes_to_clustering():
+    wrapper, stub = _make_wrapper(model_prompts=_omni_model_prompts())
+    _encode(wrapper, PromptType.document, "Compositionality")
+    assert stub.captured[-1]["task"] == "clustering"
+    assert stub.captured[-1]["prompt"] == ""
+
+
+def test_omni_overrides_are_minimal():
+    """Only list MTEB types whose Jina LoRA differs from simplified_task_type."""
+    overrides = _omni_model_prompts()
+    for task_type, jina_task in overrides.items():
+        simplified = TaskMetadata.__pydantic_validator__.validate_python(
+            {
+                "name": f"Mock{task_type}",
+                "description": "mock",
+                "reference": None,
+                "dataset": {"path": "mock", "revision": "mock"},
+                "type": task_type,
+                "category": "t2t",
+                "modalities": ["text"],
+                "eval_splits": ["test"],
+                "eval_langs": ["eng-Latn"],
+                "main_score": "ndcg_at_10",
+                "date": None,
+                "domains": None,
+                "task_subtypes": None,
+                "license": None,
+                "annotations_creators": None,
+                "dialect": None,
+                "sample_creation": None,
+                "bibtex_citation": None,
+            }
+        ).simplified_task_type
+        default = _SIMPLIFIED_TO_JINA_TASK.get(simplified)
+        assert default != jina_task, (
+            f"Override for {task_type} -> {jina_task} matches the simplified "
+            f"default ({default}); remove it from model_prompts."
+        )
+
+
+def test_simplified_to_jina_task_covers_all_simplified_types():
+    """Every SimplifiedTaskType in mteb must have a Jina LoRA mapping."""
+    from mteb.abstasks.task_metadata import SimplifiedTaskType
+    import typing
+
+    expected = set(typing.get_args(SimplifiedTaskType))
+    assert set(_SIMPLIFIED_TO_JINA_TASK.keys()) == expected, (
+        "Drift between mteb SimplifiedTaskType and our routing map. "
+        "Add new entries to _SIMPLIFIED_TO_JINA_TASK."
+    )
 
 
 def test_nano_does_not_force_float32_dtype():
