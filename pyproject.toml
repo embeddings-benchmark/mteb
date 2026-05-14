@@ -402,6 +402,7 @@ markers = [
 ]
 
 [tool.uv]
+required-version = ">=0.10.0"
 default-groups = ["test", "docs", "typing", "lint"]
 override-dependencies = [
     "salesforce-lavis", # salesforce-lavis is not valid with sentence transformers >=3.0.0
