@@ -28,7 +28,8 @@ coreb_languages = [
 class CorebC2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CorebC2TRetrieval",
-        description=coreb_description,
+        description=coreb_description
+        + " The Code-to-Text (C2T) task aims to retrieve the problem statement that a code snippet solves.",
         reference="https://arxiv.org/abs/2605.04615",
         dataset={
             "path": "hq-bench/coreb-c2t-retrieval",
@@ -55,7 +56,8 @@ class CorebC2TRetrieval(AbsTaskRetrieval):
 class CorebC2CRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CorebC2CRetrieval",
-        description=coreb_description,
+        description=coreb_description
+        + " The Code-to-Code (C2C) task aims to retrieve equivalent implementations across different programming languages.",
         reference="https://arxiv.org/abs/2605.04615",
         dataset={
             "path": "hq-bench/coreb-c2c-retrieval",
@@ -82,7 +84,8 @@ class CorebC2CRetrieval(AbsTaskRetrieval):
 class CorebT2CRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CorebT2CRetrieval",
-        description=coreb_description,
+        description=coreb_description
+        + " The Text-to-Code (T2C) task aims to retrieve code implementations from problem descriptions.",
         reference="https://arxiv.org/abs/2605.04615",
         dataset={
             "path": "hq-bench/coreb-t2c-retrieval",

@@ -26,7 +26,8 @@ coreb_languages = [
 class CorebC2TReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CorebC2TReranking",
-        description=coreb_description,
+        description=coreb_description
+        + " The Code-to-Text (C2T) task aims to retrieve the problem statement that a code snippet solves.",
         reference="https://arxiv.org/abs/2605.04615",
         dataset={
             "path": "hq-bench/coreb-c2t-reranking",
@@ -37,7 +38,7 @@ class CorebC2TReranking(AbsTaskRetrieval):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=coreb_languages,
-        main_score="map_at_1000",
+        main_score="map_at_10",
         date=("2026-03-01", "2026-05-01"),
         domains=["Programming", "Written"],
         task_subtypes=["Code retrieval"],
@@ -53,7 +54,8 @@ class CorebC2TReranking(AbsTaskRetrieval):
 class CorebC2CReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CorebC2CReranking",
-        description=coreb_description,
+        description=coreb_description
+        + " The Code-to-Code (C2C) task aims to retrieve equivalent implementations across different programming languages.",
         reference="https://arxiv.org/abs/2605.04615",
         dataset={
             "path": "hq-bench/coreb-c2c-reranking",
@@ -64,7 +66,7 @@ class CorebC2CReranking(AbsTaskRetrieval):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=coreb_languages,
-        main_score="map_at_1000",
+        main_score="map_at_10",
         date=("2026-03-01", "2026-05-01"),
         domains=["Programming", "Written"],
         task_subtypes=["Code retrieval"],
@@ -80,7 +82,8 @@ class CorebC2CReranking(AbsTaskRetrieval):
 class CorebT2CReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CorebT2CReranking",
-        description=coreb_description,
+        description=coreb_description
+        + " The Text-to-Code (T2C) task aims to retrieve code implementations from problem descriptions.",
         reference="https://arxiv.org/abs/2605.04615",
         dataset={
             "path": "hq-bench/coreb-t2c-reranking",
@@ -91,7 +94,7 @@ class CorebT2CReranking(AbsTaskRetrieval):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=coreb_languages,
-        main_score="map_at_1000",
+        main_score="map_at_10",
         date=("2026-03-01", "2026-05-01"),
         domains=["Programming", "Written"],
         task_subtypes=["Code retrieval"],
