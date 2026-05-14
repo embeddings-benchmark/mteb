@@ -8,8 +8,8 @@ class SoundDescsA2TRetrieval(AbsTaskRetrieval):
         description="Natural language description for different audio sources from the BBC Sound Effects webpage.",
         reference="https://github.com/akoepke/audio-retrieval-benchmark",
         dataset={
-            "path": "mteb/sounddescs_a2t",
-            "revision": "581617dc897ac566c8b9eaba96762102bbc0d663",
+            "path": "mteb/SoundDescsA2TRetrieval",
+            "revision": "27f6d092e00721205296ebbb44f28ff2498d6b7e",
         },
         type="Any2AnyRetrieval",
         category="a2t",
@@ -41,8 +41,8 @@ class SoundDescsT2ARetrieval(AbsTaskRetrieval):
         description="Natural language description for different audio sources from the BBC Sound Effects webpage.",
         reference="https://github.com/akoepke/audio-retrieval-benchmark",
         dataset={
-            "path": "mteb/sounddescs_t2a",
-            "revision": "5804523a933cf8dff1e737052467d106e718e202",
+            "path": "mteb/SoundDescsT2ARetrieval",
+            "revision": "cfb2f05e4b75512e650468b1bf4d15891eec5be7",
         },
         type="Any2AnyRetrieval",
         category="t2a",

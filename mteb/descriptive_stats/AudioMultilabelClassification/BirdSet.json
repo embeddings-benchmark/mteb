@@ -1,0 +1,174 @@
+{
+    "test_5s": {
+        "num_samples": 2050,
+        "samples_in_train": 0,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 10247.0026875,
+            "min_duration_seconds": 2.0026875,
+            "average_duration_seconds": 4.998537896341464,
+            "max_duration_seconds": 5.0,
+            "unique_audios": 2050,
+            "average_sampling_rate": 32000.0,
+            "sampling_rates": {
+                "32000": 2050
+            }
+        },
+        "video_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.1624390243902438,
+            "max_labels_per_text": 3,
+            "unique_labels": 19,
+            "labels": {
+                "Gray-crowned Rosy-Finch": {
+                    "count": 256
+                },
+                "White-crowned Sparrow": {
+                    "count": 1019
+                },
+                "American Pipit": {
+                    "count": 412
+                },
+                "Spotted Sandpiper": {
+                    "count": 8
+                },
+                "Rock Wren": {
+                    "count": 280
+                },
+                "Dark-eyed Junco": {
+                    "count": 67
+                },
+                "Clark's Nutcracker": {
+                    "count": 122
+                },
+                "Mountain Bluebird": {
+                    "count": 10
+                },
+                "Fox Sparrow": {
+                    "count": 11
+                },
+                "Mallard": {
+                    "count": 1
+                },
+                "Hermit Thrush": {
+                    "count": 101
+                },
+                "American Robin": {
+                    "count": 48
+                },
+                "Yellow-rumped Warbler": {
+                    "count": 7
+                },
+                "Cassin's Finch": {
+                    "count": 6
+                },
+                "Dusky Flycatcher": {
+                    "count": 2
+                },
+                "Mountain Chickadee": {
+                    "count": 24
+                },
+                "Orange-crowned Warbler": {
+                    "count": 3
+                },
+                "Warbling Vireo": {
+                    "count": 3
+                },
+                "Northern Flicker": {
+                    "count": 3
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 5460,
+        "samples_in_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 318765.00225,
+            "min_duration_seconds": 0.184,
+            "average_duration_seconds": 58.381868543956045,
+            "max_duration_seconds": 1190.092,
+            "unique_audios": 5449,
+            "average_sampling_rate": 32000.0,
+            "sampling_rates": {
+                "32000": 5460
+            }
+        },
+        "video_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 21,
+            "labels": {
+                "Mallard": {
+                    "count": 891
+                },
+                "Spotted Sandpiper": {
+                    "count": 132
+                },
+                "Northern Flicker": {
+                    "count": 316
+                },
+                "Dusky Flycatcher": {
+                    "count": 143
+                },
+                "Warbling Vireo": {
+                    "count": 499
+                },
+                "Clark's Nutcracker": {
+                    "count": 94
+                },
+                "Brewer's Blackbird": {
+                    "count": 74
+                },
+                "Orange-crowned Warbler": {
+                    "count": 266
+                },
+                "Yellow Warbler": {
+                    "count": 167
+                },
+                "Yellow-rumped Warbler": {
+                    "count": 223
+                },
+                "Hermit Thrush": {
+                    "count": 353
+                },
+                "Mountain Chickadee": {
+                    "count": 193
+                },
+                "American Robin": {
+                    "count": 604
+                },
+                "American Pipit": {
+                    "count": 154
+                },
+                "Gray-crowned Rosy-Finch": {
+                    "count": 17
+                },
+                "Cassin's Finch": {
+                    "count": 142
+                },
+                "Rock Wren": {
+                    "count": 116
+                },
+                "Mountain Bluebird": {
+                    "count": 34
+                },
+                "Fox Sparrow": {
+                    "count": 189
+                },
+                "Dark-eyed Junco": {
+                    "count": 478
+                },
+                "White-crowned Sparrow": {
+                    "count": 375
+                }
+            }
+        }
+    }
+}
