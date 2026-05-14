@@ -24,9 +24,9 @@
         "queries_video_statistics": null,
         "relevant_docs_statistics": {
             "num_relevant_docs": 623,
-            "min_relevant_docs_per_query": 17,
+            "min_relevant_docs_per_query": 1,
             "average_relevant_docs_per_query": 2.241007194244604,
-            "max_relevant_docs_per_query": 59,
+            "max_relevant_docs_per_query": 4,
             "unique_relevant_docs": 1735
         },
         "top_ranked_statistics": {
