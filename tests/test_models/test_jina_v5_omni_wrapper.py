@@ -61,7 +61,11 @@ class _StubSTModel:
 
     def encode(self, inputs, **kwargs):  # noqa: D401, ANN001
         self.captured.append(
-            {"inputs": inputs, "task": kwargs.get("task"), "prompt": kwargs.get("prompt")}
+            {
+                "inputs": inputs,
+                "task": kwargs.get("task"),
+                "prompt": kwargs.get("prompt"),
+            }
         )
         return np.zeros((len(inputs), 4), dtype=np.float32)
 
@@ -83,7 +87,9 @@ def _make_wrapper(
     # Skip the metadata-from-SentenceTransformer path, which reads attributes
     # our stub doesn't have. We only care about the encode-time prompt logic.
     with patch.object(
-        ModelMeta, "from_sentence_transformer_model", return_value=ModelMeta.create_empty()
+        ModelMeta,
+        "from_sentence_transformer_model",
+        return_value=ModelMeta.create_empty(),
     ):
         wrapper = JinaV5OmniWrapper(model=stub, model_prompts=model_prompts)
     return wrapper, stub
