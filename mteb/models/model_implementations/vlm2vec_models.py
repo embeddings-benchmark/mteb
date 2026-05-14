@@ -505,14 +505,6 @@ class VLM2VEC2Wrapper(AbsEncoder):
                 )
                 proc_inputs = {k: v.to(self.device) for k, v in proc_inputs.items()}
 
-                if has_video:
-                    proc_inputs["pixel_values_videos"] = proc_inputs[
-                        "pixel_values_videos"
-                    ].unsqueeze(0)
-                    proc_inputs["video_grid_thw"] = proc_inputs[
-                        "video_grid_thw"
-                    ].unsqueeze(0)
-
                 output = self.model(
                     **proc_inputs, return_dict=True, output_hidden_states=True
                 )
