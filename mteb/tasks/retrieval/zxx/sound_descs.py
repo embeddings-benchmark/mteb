@@ -9,7 +9,7 @@ class SoundDescsA2TRetrieval(AbsTaskRetrieval):
         reference="https://github.com/akoepke/audio-retrieval-benchmark",
         dataset={
             "path": "mteb/sounddescs_a2t",
-            "revision": "dbdd4928c401ff122c5b0d6c66accee653b3355c",
+            "revision": "581617dc897ac566c8b9eaba96762102bbc0d663",
         },
         type="Any2AnyRetrieval",
         category="a2t",
@@ -42,7 +42,7 @@ class SoundDescsT2ARetrieval(AbsTaskRetrieval):
         reference="https://github.com/akoepke/audio-retrieval-benchmark",
         dataset={
             "path": "mteb/sounddescs_t2a",
-            "revision": "140da665f966e3871682813cf3d3030eb87d68bb",
+            "revision": "5804523a933cf8dff1e737052467d106e718e202",
         },
         type="Any2AnyRetrieval",
         category="t2a",
