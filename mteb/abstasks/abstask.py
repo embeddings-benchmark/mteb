@@ -444,7 +444,10 @@ class AbsTask(ABC):  # noqa: PLR0904
                 )
                 descriptive_stats[split] = split_details  # type: ignore[assignment]
 
-        with self.metadata.descriptive_stat_path.open("w") as f:
+        stat_path = self.metadata.descriptive_stat_path
+        if not stat_path.parent.exists():
+            stat_path.parent.mkdir(parents=True, exist_ok=True)
+        with stat_path.open("w") as f:
             json.dump(descriptive_stats, f, indent=4)
 
         return descriptive_stats
