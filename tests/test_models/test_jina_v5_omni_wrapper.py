@@ -59,7 +59,7 @@ class _StubSTModel:
         self.prompts: dict[str, str] | None = None
         self.captured: list[dict[str, Any]] = []
 
-    def encode(self, inputs, **kwargs):  # noqa: D401, ANN001
+    def encode(self, inputs, **kwargs):
         self.captured.append(
             {
                 "inputs": inputs,
@@ -147,28 +147,28 @@ def test_clustering_variant_drops_prefix():
     wrapper, stub = _make_wrapper()
     _encode(wrapper, PromptType.document, "Clustering")
     assert stub.captured[-1]["task"] == "clustering"
-    assert stub.captured[-1]["prompt"] == ""
+    assert not stub.captured[-1]["prompt"]
 
 
 def test_text_matching_variant_drops_prefix():
     wrapper, stub = _make_wrapper()
     _encode(wrapper, PromptType.query, "STS")
     assert stub.captured[-1]["task"] == "text-matching"
-    assert stub.captured[-1]["prompt"] == ""
+    assert not stub.captured[-1]["prompt"]
 
 
 def test_classification_variant_drops_prefix():
     wrapper, stub = _make_wrapper()
     _encode(wrapper, PromptType.document, "Classification")
     assert stub.captured[-1]["task"] == "classification"
-    assert stub.captured[-1]["prompt"] == ""
+    assert not stub.captured[-1]["prompt"]
 
 
 def test_pair_classification_variant_drops_prefix():
     wrapper, stub = _make_wrapper()
     _encode(wrapper, PromptType.query, "PairClassification")
     assert stub.captured[-1]["task"] == "text-matching"
-    assert stub.captured[-1]["prompt"] == ""
+    assert not stub.captured[-1]["prompt"]
 
 
 # --- Samoed's review suggestion: simplified_task_type fallback ----------
@@ -188,21 +188,21 @@ def test_simplified_fallback_image_clustering():
     wrapper, stub = _make_wrapper(model_prompts={})
     _encode(wrapper, PromptType.document, "ImageClustering")
     assert stub.captured[-1]["task"] == "clustering"
-    assert stub.captured[-1]["prompt"] == ""
+    assert not stub.captured[-1]["prompt"]
 
 
 def test_simplified_fallback_visual_sts_to_text_matching():
     wrapper, stub = _make_wrapper(model_prompts={})
     _encode(wrapper, PromptType.query, "VisualSTS(eng)")
     assert stub.captured[-1]["task"] == "text-matching"
-    assert stub.captured[-1]["prompt"] == ""
+    assert not stub.captured[-1]["prompt"]
 
 
 def test_simplified_fallback_audio_pair_classification_to_text_matching():
     wrapper, stub = _make_wrapper(model_prompts={})
     _encode(wrapper, PromptType.query, "AudioPairClassification")
     assert stub.captured[-1]["task"] == "text-matching"
-    assert stub.captured[-1]["prompt"] == ""
+    assert not stub.captured[-1]["prompt"]
 
 
 # --- Per-MTEB-type override path (model_prompts wins over simplified) ---
@@ -236,7 +236,7 @@ def test_override_compositionality_routes_to_clustering():
     wrapper, stub = _make_wrapper(model_prompts=_omni_model_prompts())
     _encode(wrapper, PromptType.document, "Compositionality")
     assert stub.captured[-1]["task"] == "clustering"
-    assert stub.captured[-1]["prompt"] == ""
+    assert not stub.captured[-1]["prompt"]
 
 
 def test_omni_overrides_are_minimal():
@@ -274,8 +274,9 @@ def test_omni_overrides_are_minimal():
 
 def test_simplified_to_jina_task_covers_all_simplified_types():
     """Every SimplifiedTaskType in mteb must have a Jina LoRA mapping."""
-    from mteb.abstasks.task_metadata import SimplifiedTaskType
     import typing
+
+    from mteb.abstasks.task_metadata import SimplifiedTaskType
 
     expected = set(typing.get_args(SimplifiedTaskType))
     assert set(_SIMPLIFIED_TO_JINA_TASK.keys()) == expected, (
