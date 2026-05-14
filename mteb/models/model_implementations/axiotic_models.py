@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 import torch
 
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
@@ -23,7 +24,7 @@ _QRY_TASK_TYPES = frozenset(
 )
 
 
-class OgmaWrapper:
+class OgmaWrapper(AbsEncoder):
     """MTEB wrapper for Axiotic Ogma embedding models."""
 
     def __init__(
