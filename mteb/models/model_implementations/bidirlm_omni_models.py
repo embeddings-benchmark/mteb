@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
 
@@ -78,7 +79,21 @@ POOLING_DIM = 2048
 
 
 class BidirLMOmniEncoder(AbsEncoder):
-    """MTEB-compatible multimodal encoder for BidirLM-Omni (text / image / audio)."""
+    """MTEB-compatible multimodal encoder for BidirLM-Omni.
+
+    Native modalities (per the model card): text, image, audio.
+
+    Video support here is a frame-bag baseline: the video is decoded into N
+    uniformly-sampled frames, each frame is encoded as an independent image
+    input under the task instruction, and the per-frame embeddings are
+    mean-pooled into one video embedding. There is no temporal modeling —
+    this mirrors the CLIP4Clip-meanP baseline pattern. When ``text`` co-occurs
+    with ``video`` in the same row (e.g. grounded retrieval), the text is
+    attached to every frame before pooling.
+
+    Audio co-occurring with video is not handled; for audio-video tasks,
+    invoke the model on audio-only inputs.
+    """
 
     def __init__(
         self,
@@ -88,6 +103,9 @@ class BidirLMOmniEncoder(AbsEncoder):
         attn_implementation: str = "eager",
         trust_remote_code: bool = True,
         max_text_length: int = 1024,
+        num_frames: int | None = 8,
+        fps: float | None = None,
+        max_frames: int | None = 64,
         **kwargs: Any,
     ) -> None:
         self.model = SentenceTransformer(
@@ -99,6 +117,9 @@ class BidirLMOmniEncoder(AbsEncoder):
         )
         self.model.eval()
         self.max_text_length = max_text_length
+        self.num_frames = num_frames
+        self.fps = fps
+        self.max_frames = max_frames
 
         self.task_prompts = TASK_PROMPTS
 
@@ -148,12 +169,17 @@ class BidirLMOmniEncoder(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
-        """Implements AbsEncoder.encode with multimodal support (text, image, audio).
+        """Implements AbsEncoder.encode with multimodal support (text, image, audio, video).
 
         Builds conversation messages from whichever modalities are present and
         delegates to SentenceTransformer.encode() via the native 'message' modality.
+        Video is handled via a frame-bag pathway: see :meth:`_encode_video`.
         """
         ds_features = inputs.dataset.features
+        if "video" in ds_features and inputs.dataset[0].get("video") is not None:
+            return self._encode_video(
+                inputs, task_metadata=task_metadata, prompt_type=prompt_type, **kwargs
+            )
 
         active_cols = [
             col
@@ -182,6 +208,63 @@ class BidirLMOmniEncoder(AbsEncoder):
             **kwargs,
         )
 
+    def _encode_video(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        prompt_type: PromptType | None,
+        **kwargs: Unpack[EncodeKwargs],
+    ) -> Array:
+        """Frame-bag video encoding: sample N frames, encode each as image, mean-pool.
+
+        When a ``text`` column is present alongside ``video`` in the same row,
+        the text is attached to every frame so each frame is encoded under the
+        same textual condition before pooling.
+        """
+        import torchvision.transforms.functional as F
+
+        from mteb.models.modality_collators import FramesCollator
+
+        inputs.collate_fn = FramesCollator(
+            num_frames=self.num_frames,
+            fps=self.fps,
+            max_frames=self.max_frames,
+        )
+
+        instruction = self._get_instruction(task_metadata, prompt_type)
+        has_text = "text" in inputs.dataset.features
+
+        # Multimodal inputs require the model's full context length to avoid
+        # truncating image/video special tokens.
+        self.model.max_seq_length = 32768
+
+        all_embeddings: list[np.ndarray] = []
+        for batch in inputs:
+            videos = batch["video"]
+            texts = batch.get("text") if has_text else None
+            for i, video_tensor in enumerate(videos):
+                # video_tensor: torchcodec frames, shape [T, C, H, W], uint8.
+                frames = [
+                    F.to_pil_image(video_tensor[t].cpu())
+                    for t in range(video_tensor.shape[0])
+                ]
+                frame_inputs: list[dict[str, Any]] = [{"image": f} for f in frames]
+                if texts is not None and texts[i] is not None:
+                    for fi in frame_inputs:
+                        fi["text"] = texts[i]
+                frame_embs = self.model.encode(
+                    frame_inputs,
+                    prompt=instruction,
+                    **kwargs,
+                )
+                if isinstance(frame_embs, torch.Tensor):
+                    frame_embs = frame_embs.cpu().numpy()
+                video_emb = frame_embs.mean(axis=0, keepdims=True)
+                all_embeddings.append(video_emb)
+
+        return np.concatenate(all_embeddings, axis=0)
+
 
 bidirlm_omni_2_5b = ModelMeta(
     name="BidirLM/BidirLM-Omni-2.5B-Embedding",
@@ -189,6 +272,8 @@ bidirlm_omni_2_5b = ModelMeta(
     loader_kwargs=dict(
         trust_remote_code=True,
         max_text_length=1024,
+        num_frames=8,
+        max_frames=64,
     ),
     languages=BIDIRLM_LANGUAGES,
     open_weights=True,
@@ -203,7 +288,7 @@ bidirlm_omni_2_5b = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    modalities=["text", "image", "audio"],
+    modalities=["text", "image", "audio", "video"],
     model_type=["dense"],
     reference="https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding",
     public_training_code=None,
