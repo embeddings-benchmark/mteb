@@ -393,10 +393,9 @@ class VLM2VEC2Wrapper(AbsEncoder):
         revision: str | None = None,
         *,
         device: str | None = None,
-        fps: float | None = 1.0,
+        fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        max_pixels: int = 360 * 420,
         **kwargs,
     ) -> None:
         from peft import PeftModel
@@ -417,9 +416,6 @@ class VLM2VEC2Wrapper(AbsEncoder):
         base_model_name = "Qwen/Qwen2-VL-2B-Instruct"
         self.processor = AutoProcessor.from_pretrained(model, revision=revision)
         self.processor.padding_side = "left"
-        # Cap per-frame resolution to match VLM2Vec-V2's official inference setup.
-        if hasattr(self.processor, "image_processor"):
-            self.processor.image_processor.max_pixels = max_pixels
 
         torch_dtype = kwargs.pop("torch_dtype", torch.bfloat16)
         base_model = Qwen2VLForConditionalGeneration.from_pretrained(
