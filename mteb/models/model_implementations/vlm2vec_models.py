@@ -416,6 +416,10 @@ class VLM2VEC2Wrapper(AbsEncoder):
         base_model_name = "Qwen/Qwen2-VL-2B-Instruct"
         self.processor = AutoProcessor.from_pretrained(model, revision=revision)
         self.processor.padding_side = "left"
+        # Cap per-frame resolution to VLM2Vec-V2's official inference value
+        # (Qwen2-VL-2B default is 12.8M pixels — way too high for video).
+        if hasattr(self.processor, "image_processor"):
+            self.processor.image_processor.max_pixels = 360 * 420
 
         torch_dtype = kwargs.pop("torch_dtype", torch.bfloat16)
         base_model = Qwen2VLForConditionalGeneration.from_pretrained(
