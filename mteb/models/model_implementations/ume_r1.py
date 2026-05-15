@@ -32,7 +32,7 @@ class UMER1Wrapper(AbsEncoder):
         model: str,
         revision: str | None = None,
         device: str | None = None,
-        fps: float | None = 2.0,
+        fps: float | None = 1.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
         **kwargs,
@@ -68,6 +68,8 @@ class UMER1Wrapper(AbsEncoder):
         # Load processor
         self.processor = AutoProcessor.from_pretrained(model, revision=revision)
         self.processor.tokenizer.padding_side = "left"
+        if hasattr(self.processor, "image_processor"):
+            self.processor.image_processor.max_pixels = 360 * 420
 
         self.gen_emb_id = self.processor.tokenizer.get_vocab().get("<gen_emb>")
 
