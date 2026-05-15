@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #!/bin/bash
 # Usage: sbatch scripts/run_eval_script.sh <model_name> <batch_size> [num_frames] [tasks_comma_separated]
 
