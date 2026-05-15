@@ -5,7 +5,8 @@ import json
 import logging
 from collections import defaultdict
 from functools import cached_property
-from importlib.metadata import version
+from importlib.metadata import version as get_version
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -137,6 +138,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             the dataset.
         evaluation_time: The time taken to evaluate the model.
         kg_co2_emissions: The kg of CO2 emissions produced by the model during evaluation.
+        version: A dictionary containing version information of libraries used during evaluation (e.g., torch, flash-attn).
+        encode_kwargs: The keyword arguments passed to the model's encode method during evaluation.
 
     Examples:
         >>> scores = {
@@ -172,6 +175,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     evaluation_time: float | None
     kg_co2_emissions: float | None = None
     date: datetime.datetime | None = None
+    version: dict[str, str | None] | None = None
+    encode_kwargs: dict[str, Any] | None = None
 
     @classmethod
     def from_task_results(
@@ -181,6 +186,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
         date: datetime.datetime | None = None,
+        version: dict[str, str | None] | None = None,
+        encode_kwargs: dict[str, Any] | None = None,
     ) -> TaskResult:
         """Create a TaskResult from the task and scores.
 
@@ -192,10 +199,16 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_time: The time taken to evaluate the model.
             kg_co2_emissions: The kg of CO2 emissions produced by the model during evaluation.
             date: The date the model was trained on.
+            version: A dictionary containing version information of libraries used during evaluation.
+            encode_kwargs: The keyword arguments passed to the model's encode method during evaluation.
         """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
-        mteb_ver = version("mteb")
+        mteb_ver = (
+            version.get("mteb", get_version("mteb"))  # type: ignore[union-attr]
+            if version is not None
+            else get_version("mteb")
+        )
         flat_scores = defaultdict(list)
         for split, hf_subset_scores in scores.items():
             for hf_subset, hf_scores in hf_subset_scores.items():
@@ -227,6 +240,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_time=evaluation_time,
             kg_co2_emissions=kg_co2_emissions,
             date=date,
+            version=version,
+            encode_kwargs=encode_kwargs,
         )
 
     @field_validator("scores")
@@ -774,7 +789,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             revision = result.dataset_revision
             mteb_version = result.mteb_version
         elif isinstance(result, AbsTask):
-            mteb_version = version("mteb")
+            mteb_version = get_version("mteb")
             name = result.metadata.name
             revision = result.metadata.revision
         else:
@@ -1020,3 +1035,89 @@ class TaskError(BaseModel):
 
     task_name: str
     exception: str
+
+
+class RunSettings(BaseModel):
+    """Data class to hold the run settings of a task evaluation.
+
+    Tracks the specific settings and versions used when running a model on a task,
+    including library versions and encode parameters. This information is saved per
+    task/split/subset combination in a run_settings.jsonl file in the results directory.
+
+    Attributes:
+        task: The name of the task.
+        split: The split of the task (e.g., "test", "train", "validation").
+        subset: The subset of the task (e.g., "en", "da", "default").
+        version: A dictionary containing version information of libraries used (e.g., mteb, torch, flash-attn).
+        encode_kwargs: The keyword arguments passed to the model's encode method.
+    """
+
+    task: str
+    split: str
+    subset: str
+    version: dict[str, str | None]
+    encode_kwargs: dict[str, Any]
+
+    def to_json_line(self) -> str:
+        """Convert RunSettings to a JSON line (JSONL format).
+
+        Returns:
+            A JSON string suitable for JSONL format (single line).
+        """
+        return json.dumps(self.model_dump(), separators=(",", ": "))
+
+    @classmethod
+    def from_json_line(cls, line: str) -> RunSettings:
+        """Create RunSettings from a JSON line (JSONL format).
+
+        Args:
+            line: A JSON string from JSONL format.
+
+        Returns:
+            The created RunSettings object.
+        """
+        data = json.loads(line)
+        return cls.model_validate(data)
+
+
+def append_run_settings_to_file(
+    path: Path,
+    run_settings: list[RunSettings],
+) -> None:
+    """Append RunSettings to a JSONL file.
+
+    If the file doesn't exist, it will be created.
+
+    Args:
+        path: The path to the JSONL file.
+        run_settings: A list of RunSettings objects to append.
+    """
+    with path.open("a", encoding="utf-8") as f:
+        for settings in run_settings:
+            f.write(settings.to_json_line() + "\n")
+
+
+def read_run_settings_from_file(path: Path) -> list[RunSettings]:
+    """Read RunSettings from a JSONL file.
+
+    Args:
+        path: The path to the JSONL file.
+
+    Returns:
+        A list of RunSettings objects.
+    """
+    if not path.exists():
+        return []
+
+    run_settings = []
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            stripped_line = line.strip()
+            if stripped_line:
+                try:
+                    run_settings.append(RunSettings.from_json_line(stripped_line))
+                except Exception as e:
+                    logger.warning(
+                        f"Could not parse run_settings line '{stripped_line}': {e}"
+                    )
+    return run_settings

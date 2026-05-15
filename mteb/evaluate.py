@@ -3,9 +3,10 @@ from __future__ import annotations
 import datetime
 import logging
 import warnings
+from importlib.metadata import version
 from pathlib import Path
 from time import time
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Any, cast
 
 from datasets.exceptions import DatasetNotFoundError
 from tqdm.auto import tqdm
@@ -56,6 +57,24 @@ class OverwriteStrategy(HelpfulStrEnum):
     ONLY_CACHE = "only-cache"
 
 
+def _get_package_versions() -> dict[str, str | None]:
+    """Collect version information of key packages used during evaluation.
+
+    Returns:
+        A dictionary with package names as keys and versions (or None if not installed) as values.
+    """
+    packages = ["mteb", "torch", "sentence-transformers", "flash-attn", "transformers"]
+    versions: dict[str, str | None] = {}
+
+    for pkg_name in packages:
+        try:
+            versions[pkg_name] = version(pkg_name)
+        except Exception:
+            versions[pkg_name] = None
+
+    return versions
+
+
 def _sanitize_model(
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
 ) -> tuple[MTEBModels | ModelMeta, ModelMeta, ModelName, Revision]:
@@ -93,6 +112,7 @@ def _evaluate_task(
     prediction_folder: Path | None,
     public_only: bool | None,
     num_proc: int | None = None,
+    version_info: dict[str, str | None] | None = None,
 ) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
 
@@ -127,6 +147,7 @@ def _evaluate_task(
                 prediction_folder=prediction_folder,
                 public_only=public_only,
                 num_proc=num_proc,
+                version_info=version_info,
             )
         if isinstance(result, TaskResult):
             result.kg_co2_emissions = tracker.final_emissions
@@ -180,6 +201,8 @@ def _evaluate_task(
         evaluation_time=evaluation_time,
         kg_co2_emissions=None,
         date=datetime.datetime.now(tz=datetime.timezone.utc),
+        version=version_info,
+        encode_kwargs=cast("dict[str, Any]", encode_kwargs),
     )
 
     if not data_preloaded:  # only unload if we loaded the data
@@ -347,6 +370,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
 
     model, meta, model_name, model_revision = _sanitize_model(model)
     _check_model_modalities(meta, tasks)
+    version_info = _get_package_versions()
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
@@ -478,6 +502,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 model=model,
                 splits=missing_eval,
                 task=task,
+                version_info=version_info,
                 co2_tracker=co2_tracker,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
@@ -499,6 +524,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             prediction_folder=prediction_folder,
             public_only=public_only,
             num_proc=num_proc,
+            version_info=version_info,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 
