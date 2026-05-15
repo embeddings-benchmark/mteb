@@ -480,7 +480,7 @@ Once you have your task you can create a pull request (PR) to the main repositor
 
 Before creating a pull request, it is important to calculate some descriptive statistics about the dataset. This is to ensure that the dataset is not too small, does not contain duplicates and that the documents are not too short. This is important to ensure that the dataset is of high quality and that it can be used to evaluate models in a meaningful way.
 
-To calculate the descriptive statistics, you can run [`task.calculate_descriptive_statistics()`][mteb.AbsTask.calculate_descriptive_statistics]. 
+To calculate the descriptive statistics, you can run [`task.calculate_descriptive_statistics()`][mteb.AbsTask.calculate_descriptive_statistics].
 By default, this method caches the results and loads them from cache on subsequent calls. To recalculate the statistics (overwriting the cached results), use the `overwrite_results=True` parameter:
 
 ```python
