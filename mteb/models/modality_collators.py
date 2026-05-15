@@ -202,7 +202,9 @@ class FramesCollator:
             num_frames: If set, select exactly this many frames uniformly
                 (fixed-sample mode).
         """
-        num_source_frames = video.metadata.num_frames
+        # Guard against torchcodec.num_frames over-counting by 1.
+        meta_num_frames = video.metadata.num_frames
+        num_source_frames = meta_num_frames - 1 if meta_num_frames else meta_num_frames
 
         if num_frames is None and fps is None:
             # No resampling: return all frames
