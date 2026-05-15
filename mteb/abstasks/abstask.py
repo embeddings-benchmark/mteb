@@ -390,8 +390,19 @@ class AbsTask(ABC):  # noqa: PLR0904
         """Calculates descriptive statistics from the dataset.
 
         Args:
-            overwrite_results: Whether to overwrite existing results. If False and results already exist, the existing results will be loaded from cache.
-            num_proc: Number of processes to use for loading the dataset and for parallel hash computation across image/audio/video modalities.
+            overwrite_results: Whether to recalculate and overwrite existing results.
+                If False and results already exist, the cached results will be loaded instead.
+                Use True to force recalculation.
+            num_proc: Number of processes to use for loading the dataset and for parallel hash computation
+                across image/audio/video modalities.
+
+        Examples:
+                    >>> task = get_task("STS12")
+                    >>> # Load from cache if available
+                    >>> stats = task.calculate_descriptive_statistics()
+                    >>> # Force recalculation
+                    >>> stats = task.calculate_descriptive_statistics(overwrite_results=True)
+
 
         Returns:
             A dictionary containing descriptive statistics for each split.
@@ -401,6 +412,10 @@ class AbsTask(ABC):  # noqa: PLR0904
         existing_stats = self.metadata.descriptive_stats
 
         if existing_stats is not None and not overwrite_results:
+            logger.info(
+                f"Loaded descriptive statistics from cache for task '{self.metadata.name}'. "
+                "To recalculate statistics, use calculate_descriptive_statistics(overwrite_results=True)."
+            )
             logger.info("Loading metadata descriptive statistics from cache.")
             return existing_stats
 
