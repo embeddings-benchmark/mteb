@@ -413,10 +413,9 @@ class AbsTask(ABC):  # noqa: PLR0904
 
         if existing_stats is not None and not overwrite_results:
             logger.info(
-                f"Loaded descriptive statistics from cache for task '{self.metadata.name}'. "
+                f"Loaded metadata descriptive statistics from cache for task '{self.metadata.name}'. "
                 "To recalculate statistics, use calculate_descriptive_statistics(overwrite_results=True)."
             )
-            logger.info("Loading metadata descriptive statistics from cache.")
             return existing_stats
 
         if not self.data_loaded:
