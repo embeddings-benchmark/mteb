@@ -416,16 +416,9 @@ class VLM2VEC2Wrapper(AbsEncoder):
         base_model_name = "Qwen/Qwen2-VL-2B-Instruct"
         self.processor = AutoProcessor.from_pretrained(model, revision=revision)
         self.processor.padding_side = "left"
-        # Match the video-specific max_pixels the authors use in the official
-        # HF inference example. The processor's preprocessor_config ships a
-        # generic ~1M image default; video needs a tighter per-frame cap
-        # because tokens multiply across many frames.
         if hasattr(self.processor, "image_processor"):
             self.processor.image_processor.max_pixels = 360 * 420
 
-        # "auto" reads torch_dtype from the model's config (bfloat16 for both
-        # VLM2Vec-V2 and the Qwen2-VL-2B base). Works on transformers v4 and
-        # v5 — v5 already defaults to "auto" but being explicit is harmless.
         torch_dtype = kwargs.pop("torch_dtype", "auto")
         base_model = Qwen2VLForConditionalGeneration.from_pretrained(
             base_model_name, torch_dtype=torch_dtype, **kwargs
