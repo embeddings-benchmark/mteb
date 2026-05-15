@@ -49,7 +49,7 @@ else
     OUTPUT_FOLDER="results"
 fi
 
-uv run --no-sync python scripts/mveb_paper/eval_suite.py \
+python scripts/mveb_paper/eval_suite.py \
     --model "$MODEL" \
     --output-folder "$OUTPUT_FOLDER" \
     $FRAME_ARG \
