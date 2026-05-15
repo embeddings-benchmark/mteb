@@ -92,8 +92,10 @@ def test_task_results_to_dict(task_result: TaskResult):
         "dataset_revision": "1.0",
         "task_name": "dummy_task",
         "mteb_version": mteb_ver,
+        "encode_kwargs": None,
         "evaluation_time": 100,
         "date": None,
+        "version": None,
         "kg_co2_emissions": None,
         "scores": {
             "train": [

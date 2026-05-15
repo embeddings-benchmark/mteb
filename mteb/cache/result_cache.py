@@ -38,7 +38,10 @@ from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
-from mteb.results.task_result import RunSettings, append_run_settings_to_file
+from mteb.results.task_result import (
+    RunSettings,
+    read_run_settings_from_file,
+)
 from mteb.types import SubmitResultsResponse
 
 if TYPE_CHECKING:
@@ -347,23 +350,32 @@ class ResultCache:
             with model_meta_path.open("w") as f:
                 json.dump(meta.to_dict(), f, default=str, indent=4)
 
-        if task_result.version is not None or task_result.encode_kwargs is not None:
-            run_settings_list = []
-            for split, split_scores in task_result.scores.items():
-                for score_entry in split_scores:
-                    hf_subset = score_entry.get("hf_subset", "default")
-                    run_settings = RunSettings(
-                        task=task_result.task_name,
-                        split=split,
-                        subset=hf_subset,
-                        version=task_result.version or {},
-                        encode_kwargs=task_result.encode_kwargs or {},
-                    )
-                    run_settings_list.append(run_settings)
+        run_settings_list = []
+        for split, split_scores in task_result.scores.items():
+            for score_entry in split_scores:
+                hf_subset = score_entry.get("hf_subset", "default")
+                run_settings = RunSettings(
+                    task=task_result.task_name,
+                    split=split,
+                    subset=hf_subset,
+                    version=task_result.version or {},
+                    encode_kwargs=task_result.encode_kwargs or {},
+                )
+                run_settings_list.append(run_settings)
 
-            if run_settings_list:
-                run_settings_path = result_path.parent / "run_settings.jsonl"
-                append_run_settings_to_file(run_settings_path, run_settings_list)
+        if run_settings_list:
+            run_settings_path = result_path.parent / "run_settings.jsonl"
+            existing_entries = read_run_settings_from_file(run_settings_path)
+            new_keys = {(rs.task, rs.split, rs.subset) for rs in run_settings_list}
+            filtered_existing = [
+                rs
+                for rs in existing_entries
+                if (rs.task, rs.split, rs.subset) not in new_keys
+            ]
+            all_entries = filtered_existing + run_settings_list
+            with run_settings_path.open("w", encoding="utf-8") as f:
+                for entry in all_entries:
+                    f.write(entry.to_json_line() + "\n")
 
     @property
     def default_cache_path(self) -> Path:
