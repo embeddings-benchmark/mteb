@@ -419,7 +419,7 @@ class VLM2VEC2Wrapper(AbsEncoder):
         if hasattr(self.processor, "image_processor"):
             self.processor.image_processor.max_pixels = 360 * 420
 
-        torch_dtype = kwargs.pop("torch_dtype", "auto")
+        torch_dtype = kwargs.pop("torch_dtype", torch.bfloat16)
         base_model = Qwen2VLForConditionalGeneration.from_pretrained(
             base_model_name, torch_dtype=torch_dtype, **kwargs
         )
