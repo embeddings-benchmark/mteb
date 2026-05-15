@@ -396,16 +396,15 @@ class AbsTask(ABC):  # noqa: PLR0904
             num_proc: Number of processes to use for loading the dataset and for parallel hash computation
                 across image/audio/video modalities.
 
-        Examples:
-                    >>> task = get_task("STS12")
-                    >>> # Load from cache if available
-                    >>> stats = task.calculate_descriptive_statistics()
-                    >>> # Force recalculation
-                    >>> stats = task.calculate_descriptive_statistics(overwrite_results=True)
-
-
         Returns:
             A dictionary containing descriptive statistics for each split.
+
+        Examples:
+            >>> task = get_task("STS12")
+            >>> # Load from cache if available
+            >>> stats = task.calculate_descriptive_statistics()
+            >>> # Force recalculation
+            >>> stats = task.calculate_descriptive_statistics(overwrite_results=True)
         """
         from mteb.abstasks import AbsTaskClassification
 
