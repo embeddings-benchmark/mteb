@@ -12,13 +12,6 @@ import os
 import mteb
 import torch
 
-# Since you are on a Slurm cluster where you can't easily increase the system's /dev/shm size,
-# the industry-standard workaround is to tell PyTorch to use standard disk storage for data 
-# sharing instead of RAM.
-import torch.multiprocessing
-
-torch.multiprocessing.set_sharing_strategy("file_system")
-
 MVEB_TASKS = [
     # Any2AnyRetrieval (8)
     "AVMemeExamVA2TRetrieval",

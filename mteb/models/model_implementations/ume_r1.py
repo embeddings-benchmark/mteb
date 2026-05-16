@@ -94,8 +94,13 @@ class UMER1Wrapper(AbsEncoder):
 
         all_embeddings: list[torch.Tensor] = []
 
+        import time
         with torch.no_grad():
+            t_start = time.time()
             for batch in tqdm(inputs, desc="Encoding", disable=not show_progress_bar):
+                t_batch_loaded = time.time()
+                logger.info(f"[Profiler] DataLoader fetch time: {t_batch_loaded - t_start:.2f}s")
+                
                 messages = self._build_messages(batch)
                 model_inputs = self.processor.apply_chat_template(
                     messages,
@@ -106,6 +111,7 @@ class UMER1Wrapper(AbsEncoder):
                     return_tensors="pt",
                 ).to(self.device)
 
+                t_gen_start = time.time()
                 # Inference: Generation of the output
                 output = self.model.generate(
                     **model_inputs,
@@ -114,6 +120,8 @@ class UMER1Wrapper(AbsEncoder):
                     return_dict_in_generate=True,
                     use_cache=True,
                 )
+                t_gen_end = time.time()
+                logger.info(f"[Profiler] GPU Generation time: {t_gen_end - t_gen_start:.2f}s")
 
                 # Extract embeddings from the reasoning path
                 gen_embedding = self._extract_generative_reasoning_embeddings(
@@ -125,6 +133,8 @@ class UMER1Wrapper(AbsEncoder):
                 del output, model_inputs, messages
                 if self.device.startswith("cuda"):
                     torch.cuda.empty_cache()
+                
+                t_start = time.time()
 
         return torch.cat(all_embeddings, dim=0)
 

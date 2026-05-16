@@ -130,7 +130,16 @@ class QwenOmniWrapper(AbsEncoder):
 
         all_embeddings: list[torch.Tensor] = []
 
+        import time
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        t_start = time.time()
         for batch in tqdm(inputs, desc="Encoding"):
+            t_batch_loaded = time.time()
+            logger.info(f"[Profiler] DataLoader fetch time: {t_batch_loaded - t_start:.2f}s")
+            
+            t_proc_start = time.time()
             messages = self._build_messages(batch)
 
             texts = [
@@ -162,13 +171,20 @@ class QwenOmniWrapper(AbsEncoder):
                 },
                 audio_kwargs={"max_length": self.max_samples},
             ).to(self.device, dtype=torch.bfloat16)
+            t_proc_end = time.time()
+            logger.info(f"[Profiler] HuggingFace Processor time: {t_proc_end - t_proc_start:.2f}s")
 
+            t_fwd_start = time.time()
             outputs = self.model(
                 **model_inputs, output_hidden_states=True, return_dict=True
             )
             embeddings = outputs.hidden_states[-1][:, -1]
             embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
             all_embeddings.append(embeddings.cpu())
+            t_fwd_end = time.time()
+            logger.info(f"[Profiler] GPU Forward Pass time: {t_fwd_end - t_fwd_start:.2f}s")
+            
+            t_start = time.time()
 
         return torch.cat(all_embeddings, dim=0).float()
 
