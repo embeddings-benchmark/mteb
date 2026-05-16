@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+import os
 
 import mteb
 import torch
@@ -65,10 +66,29 @@ def main():
 
     model = mteb.get_model(args.model, **model_kwargs)
 
+    # DataLoader Multi-GPU approach: Wrap the underlying model for batch distribution
+    num_gpus = torch.cuda.device_count()
+    if num_gpus > 1:
+        print(f"Detected {num_gpus} GPUs. Wrapping model with DataParallel...")
+        
+        # Scale batch size to feed all available GPUs simultaneously
+        args.batch_size = args.batch_size * num_gpus
+        
+        if hasattr(model, "model") and isinstance(model.model, torch.nn.Module):
+            model.model = torch.nn.DataParallel(model.model)
+        elif isinstance(model, torch.nn.Module):
+            model = torch.nn.DataParallel(model)
+        else:
+            print("Warning: Could not dynamically wrap the model. DataParallel may not be applied.")
+
     task_names = args.tasks if args.tasks else list(MVEB_TASKS)
 
     tasks = mteb.get_tasks(tasks=task_names)
     print(f"Running {len(tasks)} tasks on {args.model} (fps={args.fps}, batch={args.batch_size})")
+
+    # Automatically detect Slurm CPU allocation for PyTorch DataLoader workers
+    num_workers = int(os.environ.get("SLURM_CPUS_PER_TASK", 0))
+    print(f"Using {num_workers} CPU workers for data loading and video preprocessing.")
 
     evaluation = mteb.MTEB(tasks=tasks)
     evaluation.run(
@@ -76,7 +96,7 @@ def main():
         output_folder=args.output_folder,
         verbosity=2,
         raise_error=False,
-        encode_kwargs={"batch_size": args.batch_size},
+        encode_kwargs={"batch_size": args.batch_size, "num_workers": num_workers},
     )
 
 
