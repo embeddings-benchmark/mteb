@@ -5,7 +5,7 @@ import logging
 import warnings
 from pathlib import Path
 from time import time
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Any, cast
 
 from datasets.exceptions import DatasetNotFoundError
 from tqdm.auto import tqdm
@@ -366,7 +366,11 @@ def evaluate(  # noqa: PLR0913, PLR0914
         )
         combined_results = aggregated_task.combine_task_results(results.task_results)
         if cache:
-            cache.save_to_cache(combined_results, meta)
+            cache.save_to_cache(
+                combined_results,
+                meta,
+                encode_kwargs=cast("dict[str, Any] | None", encode_kwargs),
+            )
 
         return ModelResult(
             model_name=results.model_name,
@@ -514,7 +518,9 @@ def evaluate(  # noqa: PLR0913, PLR0914
         result = result.merge(existing_results)
 
     if cache:
-        cache.save_to_cache(result, meta)
+        cache.save_to_cache(
+            result, meta, encode_kwargs=cast("dict[str, Any] | None", encode_kwargs)
+        )
 
     return ModelResult(
         model_name=model_name,

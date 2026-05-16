@@ -325,6 +325,7 @@ class ResultCache:
         task_result: TaskResult,
         model_name: str | ModelMeta,
         model_revision: str | None = None,
+        encode_kwargs: Mapping[str, Any] | None = None,
     ) -> None:
         """Save the task results to the local cache directory in the location {model_name}/{model_revision}/{task_name}.json.
 
@@ -335,6 +336,7 @@ class ResultCache:
             task_result: The results of the task.
             model_name: The name of the model as a valid directory name or a ModelMeta object.
             model_revision: The revision of the model. Must be specified if model_name is a string.
+            encode_kwargs: The keyword arguments passed to the model's encode method during evaluation.
         """
         result_path = self.get_task_result_path(
             model_name=model_name,
@@ -361,7 +363,7 @@ class ResultCache:
                     split=split,
                     subset=hf_subset,
                     version=version_dict,
-                    encode_kwargs={},
+                    encode_kwargs=encode_kwargs or {},
                 )
                 run_settings_list.append(run_settings)
 
