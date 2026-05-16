@@ -616,10 +616,6 @@ class TaskMetadata(BaseModel):
         if self.type in MIEB_TASK_TYPE:
             descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"  # noqa: PLR6104
         task_type_dir = descriptive_stat_base_dir / str(self.type)
-        if not descriptive_stat_base_dir.exists():
-            descriptive_stat_base_dir.mkdir()
-        if not task_type_dir.exists():
-            task_type_dir.mkdir()
         return task_type_dir / f"{self.name}.json"
 
     @property

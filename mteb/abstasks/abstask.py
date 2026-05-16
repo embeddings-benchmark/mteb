@@ -390,18 +390,31 @@ class AbsTask(ABC):  # noqa: PLR0904
         """Calculates descriptive statistics from the dataset.
 
         Args:
-            overwrite_results: Whether to overwrite existing results. If False and results already exist, the existing results will be loaded from cache.
-            num_proc: Number of processes to use for loading the dataset and for parallel hash computation across image/audio/video modalities.
+            overwrite_results: Whether to recalculate and overwrite existing results.
+                If False and results already exist, the cached results will be loaded instead.
+                Use True to force recalculation.
+            num_proc: Number of processes to use for loading the dataset and for parallel hash computation
+                across image/audio/video modalities.
 
         Returns:
             A dictionary containing descriptive statistics for each split.
+
+        Examples:
+            >>> task = get_task("STS12")
+            >>> # Calculate desc. stats if not already calculated
+            >>> stats = task.calculate_descriptive_statistics()
+            >>> # Force recalculation
+            >>> stats = task.calculate_descriptive_statistics(overwrite_results=True)
         """
         from mteb.abstasks import AbsTaskClassification
 
         existing_stats = self.metadata.descriptive_stats
 
         if existing_stats is not None and not overwrite_results:
-            logger.info("Loading metadata descriptive statistics from cache.")
+            logger.info(
+                f"Loaded metadata descriptive statistics from cache for task '{self.metadata.name}'. "
+                "To recalculate statistics, use calculate_descriptive_statistics(overwrite_results=True)."
+            )
             return existing_stats
 
         if not self.data_loaded:
@@ -444,7 +457,10 @@ class AbsTask(ABC):  # noqa: PLR0904
                 )
                 descriptive_stats[split] = split_details  # type: ignore[assignment]
 
-        with self.metadata.descriptive_stat_path.open("w") as f:
+        stat_path = self.metadata.descriptive_stat_path
+        if not stat_path.parent.exists():
+            stat_path.parent.mkdir(parents=True, exist_ok=True)
+        with stat_path.open("w") as f:
             json.dump(descriptive_stats, f, indent=4)
 
         return descriptive_stats
