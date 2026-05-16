@@ -1,4 +1,4 @@
-from datasets import Sequence, Value
+from datasets import Audio, DatasetDict
 from sklearn.linear_model import LogisticRegression
 from sklearn.multioutput import MultiOutputClassifier
 
@@ -48,11 +48,10 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
     samples_per_label: int = 21
 
     def dataset_transform(self, **kwargs):
-        """Rename ebird_code_multilabel → labels and turn IDs → bird names."""
         if "ebird_code_multilabel" in self.dataset.column_names[self.eval_splits[0]]:
             self.dataset = self.dataset.rename_column(
                 original_column_name="ebird_code_multilabel",
-                new_column_name=self.label_column_name,  # "labels"
+                new_column_name=self.label_column_name,
             )
 
         id2name = {
@@ -79,35 +78,26 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
             20: "Northern Flicker",
         }
 
-        def ids_to_names(example):
-            """Convert a list of ints to a list of bird-name strings."""
-            labels = example[self.label_column_name]
-            if labels is None:
-                return {self.label_column_name: []}
-            return {self.label_column_name: [id2name[i] for i in labels]}
+        new_dataset = {}
+        for split, ds in self.dataset.items():
+            converted = [
+                [id2name[int(i)] for i in example[self.label_column_name]]
+                if example[self.label_column_name]
+                else []
+                for example in ds
+            ]
+            new_dataset[split] = (
+                ds.remove_columns(self.label_column_name)
+                .add_column(self.label_column_name, converted)
+                .filter(lambda x: bool(x[self.label_column_name]))
+            )
 
-        # Cast to int64 to remove ClassLabel schema before mapping to strings
-        self.dataset = self.dataset.cast_column(
-            self.label_column_name, Sequence(Value("int64"))
-        )
+        self.dataset = DatasetDict(new_dataset)
 
-        self.dataset = self.dataset.map(
-            ids_to_names,
-            num_proc=4,
-        )
-
-        # Filter out empty labels
-        self.dataset = self.dataset.filter(
-            lambda x: x[self.label_column_name] is not None
-            and len(x[self.label_column_name]) > 0
-        )
-
-        # Only subsample splits that are larger than n_samples to avoid division by zero
         n_samples = 2048
         splits_to_subsample = [
             split for split in self.eval_splits if len(self.dataset[split]) > n_samples
         ]
-
         if splits_to_subsample:
             self.dataset = self.stratified_subsampling(
                 self.dataset,
@@ -116,3 +106,6 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
                 label=self.label_column_name,
                 n_samples=n_samples,
             )
+
+        for split, ds in self.dataset.items():
+            self.dataset[split] = ds.cast_column("audio", Audio(sampling_rate=32000))
