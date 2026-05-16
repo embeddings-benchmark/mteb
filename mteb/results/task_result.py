@@ -1059,12 +1059,12 @@ class RunSettings(BaseModel):
     encode_kwargs: dict[str, Any]
 
     def to_json_line(self) -> str:
-        """Convert RunSettings to a JSON line (JSONL format).
+        """Convert RunSettings to a JSONL format.
 
         Returns:
-            A JSON string suitable for JSONL format (single line).
+            A JSON string suitable for JSONL format.
         """
-        return json.dumps(self.model_dump(), separators=(",", ": "))
+        return self.model_dump_json()
 
     @classmethod
     def from_json_line(cls, line: str) -> RunSettings:
@@ -1076,8 +1076,7 @@ class RunSettings(BaseModel):
         Returns:
             The created RunSettings object.
         """
-        data = json.loads(line)
-        return cls.model_validate(data)
+        return cls.model_validate_json(line)
 
 
 def append_run_settings_to_file(
