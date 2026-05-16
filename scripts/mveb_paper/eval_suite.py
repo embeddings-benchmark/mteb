@@ -96,7 +96,8 @@ def main():
         output_folder=args.output_folder,
         verbosity=2,
         raise_error=False,
-        encode_kwargs={"batch_size": args.batch_size, "num_workers": num_workers},
+        encode_kwargs={"batch_size": args.batch_size},
+        num_proc=num_workers,
     )
 
 
