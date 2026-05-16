@@ -3,7 +3,7 @@
 
 #SBATCH --job-name=misc-pm
 #SBATCH --partition=guest
-#SBATCH --gres=gpu:4
+#SBATCH --gres=gpu:1
 #SBATCH --exclude=slinky-5
 #SBATCH --time=72:00:00
 #SBATCH --output=logs/misc_pm_%j.out
