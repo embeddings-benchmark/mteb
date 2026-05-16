@@ -98,23 +98,32 @@ class AudioCollator:
             max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
         """
         audio = audio["audio"]
-        if audio["sampling_rate"] != target_sampling_rate:
-            logger.debug(
-                f"Resampling audio from {audio['sampling_rate']} Hz to {target_sampling_rate} Hz."
-            )
-            resampler = _get_resampler(
-                orig_freq=audio["sampling_rate"],
-                new_freq=target_sampling_rate,
-            )
-            audio_array = torch.from_numpy(audio["array"]).float()
-            audio_array = resampler(audio_array)
-            audio_array = audio_array.numpy()
-        else:
-            audio_array = audio["array"]
+        audio_array = audio["array"]
+        orig_sr = audio["sampling_rate"]
 
-        # Convert to mono if needed
+        # Convert to mono if needed before resampling to save compute
         if audio_array.ndim > 1 and audio_array.shape[0] > 1:
             audio_array = np.mean(audio_array, axis=0)
+
+        # Truncate in the original sampling rate to avoid resampling discarded data
+        if max_samples is not None and orig_sr != target_sampling_rate:
+            import math
+
+            max_orig_samples = math.ceil(max_samples * orig_sr / target_sampling_rate)
+            if audio_array.shape[-1] > max_orig_samples:
+                audio_array = audio_array[..., :max_orig_samples]
+
+        if orig_sr != target_sampling_rate:
+            logger.debug(
+                f"Resampling audio from {orig_sr} Hz to {target_sampling_rate} Hz."
+            )
+            resampler = _get_resampler(
+                orig_freq=orig_sr,
+                new_freq=target_sampling_rate,
+            )
+            audio_tensor = torch.from_numpy(audio_array).float()
+            audio_tensor = resampler(audio_tensor)
+            audio_array = audio_tensor.numpy()
 
         if max_samples is not None:
             num_samples = audio_array.shape[-1]
