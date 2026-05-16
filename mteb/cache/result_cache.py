@@ -11,6 +11,7 @@ import warnings
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from datetime import datetime
+from importlib.metadata import version
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
@@ -38,10 +39,7 @@ from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
-from mteb.results.task_result import (
-    RunSettings,
-    read_run_settings_from_file,
-)
+from mteb.results.task_result import json_serialize_kwargs, write_to_keyed_json
 from mteb.types import SubmitResultsResponse
 
 if TYPE_CHECKING:
@@ -52,6 +50,30 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 _EXPERIMENTS_FOLDER_NAME = "experiments"
+
+
+def get_package_versions() -> dict[str, str | None]:
+    """Get current package versions from the environment.
+
+    Returns:
+        A dictionary with package names as keys and versions (or None if not installed) as values.
+    """
+    packages = [
+        "mteb",
+        "torch",
+        "sentence-transformers",
+        "flash-attn",
+        "transformers",
+    ]
+    versions: dict[str, str | None] = {}
+
+    for pkg_name in packages:
+        try:
+            versions[pkg_name] = version(pkg_name)
+        except Exception:
+            versions[pkg_name] = None
+
+    return versions
 
 
 class CopyResultsAction:
@@ -352,60 +374,24 @@ class ResultCache:
             with model_meta_path.open("w") as f:
                 json.dump(meta.to_dict(), f, default=str, indent=4)
 
-        version_dict = self._get_package_versions()
+        version_dict = get_package_versions()
 
-        run_settings_list = []
+        run_settings_list: list[dict[str, Any]] = []
         for split, split_scores in task_result.scores.items():
             for score_entry in split_scores:
                 hf_subset = score_entry.get("hf_subset", "default")
-                run_settings = RunSettings(
-                    task=task_result.task_name,
-                    split=split,
-                    subset=hf_subset,
-                    version=version_dict,
-                    encode_kwargs=encode_kwargs or {},
-                )
+                run_settings = {
+                    "task": task_result.task_name,
+                    "split": split,
+                    "subset": hf_subset,
+                    "version": version_dict,
+                    "encode_kwargs": json_serialize_kwargs(encode_kwargs),
+                }
                 run_settings_list.append(run_settings)
 
         if run_settings_list:
             run_settings_path = result_path.parent / "run_settings.jsonl"
-            existing_entries = read_run_settings_from_file(run_settings_path)
-            new_keys = {(rs.task, rs.split, rs.subset) for rs in run_settings_list}
-            filtered_existing = [
-                rs
-                for rs in existing_entries
-                if (rs.task, rs.split, rs.subset) not in new_keys
-            ]
-            all_entries = filtered_existing + run_settings_list
-            with run_settings_path.open("w", encoding="utf-8") as f:
-                for entry in all_entries:
-                    f.write(entry.to_json_line() + "\n")
-
-    @staticmethod
-    def _get_package_versions() -> dict[str, str | None]:
-        """Get current package versions from the environment.
-
-        Returns:
-            A dictionary with package names as keys and versions (or None if not installed) as values.
-        """
-        from importlib.metadata import version
-
-        packages = [
-            "mteb",
-            "torch",
-            "sentence-transformers",
-            "flash-attn",
-            "transformers",
-        ]
-        versions: dict[str, str | None] = {}
-
-        for pkg_name in packages:
-            try:
-                versions[pkg_name] = version(pkg_name)
-            except Exception:
-                versions[pkg_name] = None
-
-        return versions
+            write_to_keyed_json(run_settings_path, run_settings_list)
 
     @property
     def default_cache_path(self) -> Path:

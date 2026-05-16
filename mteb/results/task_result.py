@@ -1023,86 +1023,50 @@ class TaskError(BaseModel):
     exception: str
 
 
-class RunSettings(BaseModel):
-    """Data class to hold the run settings of a task evaluation.
-
-    Tracks the specific settings and versions used when running a model on a task,
-    including library versions and encode parameters. This information is saved per
-    task/split/subset combination in a run_settings.jsonl file in the results directory.
-
-    Attributes:
-        task: The name of the task.
-        split: The split of the task (e.g., "test", "train", "validation").
-        subset: The subset of the task (e.g., "en", "da", "default").
-        version: A dictionary containing version information of libraries used (e.g., mteb, torch, flash-attn).
-        encode_kwargs: The keyword arguments passed to the model's encode method.
-    """
-
-    task: str
-    split: str
-    subset: str
-    version: dict[str, str | None]
-    encode_kwargs: dict[str, Any]
-
-    def to_json_line(self) -> str:
-        """Convert RunSettings to a JSONL format.
-
-        Returns:
-            A JSON string suitable for JSONL format.
-        """
-        return self.model_dump_json()
-
-    @classmethod
-    def from_json_line(cls, line: str) -> RunSettings:
-        """Create RunSettings from a JSON line (JSONL format).
-
-        Args:
-            line: A JSON string from JSONL format.
-
-        Returns:
-            The created RunSettings object.
-        """
-        return cls.model_validate_json(line)
+def json_serialize_kwargs(kwargs: Any | None) -> Any:
+    """Convert keyword arguments into a JSON-serializable structure."""
+    return json.loads(json.dumps(kwargs, default=str)) if kwargs is not None else {}
 
 
-def append_run_settings_to_file(
-    path: Path,
-    run_settings: list[RunSettings],
-) -> None:
-    """Append RunSettings to a JSONL file.
-
-    If the file doesn't exist, it will be created.
-
-    Args:
-        path: The path to the JSONL file.
-        run_settings: A list of RunSettings objects to append.
-    """
-    with path.open("a", encoding="utf-8") as f:
-        for settings in run_settings:
-            f.write(settings.to_json_line() + "\n")
-
-
-def read_run_settings_from_file(path: Path) -> list[RunSettings]:
-    """Read RunSettings from a JSONL file.
-
-    Args:
-        path: The path to the JSONL file.
-
-    Returns:
-        A list of RunSettings objects.
-    """
+def read_run_settings_from_file(path: Path) -> list[dict[str, Any]]:
+    """Read run settings entries from a JSONL file."""
     if not path.exists():
         return []
 
-    run_settings = []
+    run_settings: list[dict[str, Any]] = []
     with path.open("r", encoding="utf-8") as f:
         for line in f:
             stripped_line = line.strip()
-            if stripped_line:
-                try:
-                    run_settings.append(RunSettings.from_json_line(stripped_line))
-                except Exception as e:
-                    logger.warning(
-                        f"Could not parse run_settings line '{stripped_line}': {e}"
-                    )
+            if not stripped_line:
+                continue
+            try:
+                parsed = json.loads(stripped_line)
+            except Exception as e:
+                logger.warning(
+                    f"Could not parse run_settings line '{stripped_line}': {e}"
+                )
+                continue
+            if isinstance(parsed, dict):
+                run_settings.append(parsed)
     return run_settings
+
+
+def write_to_keyed_json(
+    path: Path,
+    entries: list[dict[str, Any]],
+    *,
+    key_fields: tuple[str, ...] = ("task", "split", "subset"),
+) -> None:
+    """Write JSONL entries, replacing any existing entries with the same key."""
+    existing_entries = read_run_settings_from_file(path)
+    new_keys = {tuple(entry.get(field) for field in key_fields) for entry in entries}
+    filtered_existing = [
+        entry
+        for entry in existing_entries
+        if tuple(entry.get(field) for field in key_fields) not in new_keys
+    ]
+    all_entries = filtered_existing + entries
+
+    with path.open("w", encoding="utf-8") as f:
+        for entry in all_entries:
+            f.write(json.dumps(entry, default=str) + "\n")
