@@ -401,7 +401,7 @@ class AbsTask(ABC):  # noqa: PLR0904
 
         Examples:
             >>> task = get_task("STS12")
-            >>> # Load from cache if available
+            >>> # Calculate desc. stats if not already calculated
             >>> stats = task.calculate_descriptive_statistics()
             >>> # Force recalculation
             >>> stats = task.calculate_descriptive_statistics(overwrite_results=True)
