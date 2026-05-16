@@ -12,6 +12,13 @@ import os
 import mteb
 import torch
 
+# Since you are on a Slurm cluster where you can't easily increase the system's /dev/shm size,
+# the industry-standard workaround is to tell PyTorch to use standard disk storage for data 
+# sharing instead of RAM.
+import torch.multiprocessing
+
+torch.multiprocessing.set_sharing_strategy("file_system")
+
 MVEB_TASKS = [
     # Any2AnyRetrieval (8)
     "AVMemeExamVA2TRetrieval",
@@ -44,13 +51,18 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True)
     parser.add_argument("--output-folder", required=True)
-    parser.add_argument("--fps", type=float, default=None,
-                        help="If unset, falls back to the wrapper default (e.g. None for EBind).")
+    parser.add_argument(
+        "--fps",
+        type=float,
+        default=None,
+        help="If unset, falls back to the wrapper default (e.g. None for EBind).",
+    )
     parser.add_argument("--max-frames", type=int, default=None)
     parser.add_argument("--num-frames", type=int, default=None)
     parser.add_argument("--batch-size", type=int, default=4)
-    parser.add_argument("--tasks", nargs="*", default=None,
-                        help="Override the default task list.")
+    parser.add_argument(
+        "--tasks", nargs="*", default=None, help="Override the default task list."
+    )
     args = parser.parse_args()
 
     torch.set_float32_matmul_precision("high")
@@ -70,21 +82,25 @@ def main():
     num_gpus = torch.cuda.device_count()
     if num_gpus > 1:
         print(f"Detected {num_gpus} GPUs. Wrapping model with DataParallel...")
-        
+
         # Scale batch size to feed all available GPUs simultaneously
         args.batch_size = args.batch_size * num_gpus
-        
+
         if hasattr(model, "model") and isinstance(model.model, torch.nn.Module):
             model.model = torch.nn.DataParallel(model.model)
         elif isinstance(model, torch.nn.Module):
             model = torch.nn.DataParallel(model)
         else:
-            print("Warning: Could not dynamically wrap the model. DataParallel may not be applied.")
+            print(
+                "Warning: Could not dynamically wrap the model. DataParallel may not be applied."
+            )
 
     task_names = args.tasks if args.tasks else list(MVEB_TASKS)
 
     tasks = mteb.get_tasks(tasks=task_names)
-    print(f"Running {len(tasks)} tasks on {args.model} (fps={args.fps}, batch={args.batch_size})")
+    print(
+        f"Running {len(tasks)} tasks on {args.model} (fps={args.fps}, batch={args.batch_size})"
+    )
 
     # Automatically detect Slurm CPU allocation for PyTorch DataLoader workers
     num_workers = int(os.environ.get("SLURM_CPUS_PER_TASK", 0))
