@@ -194,7 +194,8 @@ class NumpyCache:
                 logger.debug(f"Item hash not found in index: {item_hash}")
                 return None
             index = self.hash_to_index[item_hash]
-            return cast("np.ndarray[Any, Any]", self.vectors[index])
+            vector = cast("np.typing.NDArray[np.floating]", self.vectors[index])
+            return vector
         except Exception as e:
             logger.error(f"Error retrieving vector for item: {str(e)}")
             raise

@@ -74,7 +74,10 @@ class FaissCache:
             return None
         idx = self.hash_to_index[item_hash]
         try:
-            return cast("np.ndarray[Any, Any]", self.index.reconstruct(idx))
+            reconstructed = cast(
+                "np.typing.NDArray[np.floating]", self.index.reconstruct(idx)
+            )
+            return reconstructed
         except Exception:
             msg = f"Vector id {idx} missing for hash {item_hash}"
             logger.warning(msg)

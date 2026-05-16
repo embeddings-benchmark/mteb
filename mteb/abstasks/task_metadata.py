@@ -605,7 +605,8 @@ class TaskMetadata(BaseModel):
         """Return the descriptive statistics for the dataset."""
         if self.descriptive_stat_path.exists():
             with self.descriptive_stat_path.open("r") as f:
-                return cast("dict[str, DescriptiveStatistics]", json.load(f))
+                js = cast("dict[str, DescriptiveStatistics]", json.load(f))
+                return js
         return None
 
     @property
@@ -821,12 +822,16 @@ class TaskMetadata(BaseModel):
         dataset_card_data, template_kwargs = self._create_dataset_card_data(
             existing_dataset_card_data
         )
-        dataset_card = DatasetCard.from_template(
-            card_data=dataset_card_data,
-            template_path=str(path),
-            **template_kwargs,
+        # HF hub, don't specify return type
+        dataset_card = cast(
+            "DatasetCard",
+            DatasetCard.from_template(
+                card_data=dataset_card_data,
+                template_path=str(path),
+                **template_kwargs,
+            ),
         )
-        return cast("DatasetCard", dataset_card)
+        return dataset_card
 
     def push_dataset_card_to_hub(self, repo_name: str) -> None:
         """Pushes the dataset card to the huggingface hub.

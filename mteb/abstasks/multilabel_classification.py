@@ -3,7 +3,7 @@ from __future__ import annotations
 import itertools
 import logging
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any, TypedDict, cast
+from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
 from datasets import DatasetDict
@@ -201,17 +201,14 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
                 hf_split=hf_split,
             )
 
-        avg_scores: dict[str, Any] = {
+        avg_scores: dict[str, np.floating[Any]] = {
             k: np.mean([s[k] for s in scores])  # type: ignore[literal-required]
             for k in scores[0].keys()
         }
         logger.info("Running multilabel classification - Finished.")
-        return cast(
-            "FullMultilabelClassificationMetrics",
-            FullMultilabelClassificationMetrics(
-                scores_per_experiment=scores,
-                **avg_scores,  # type: ignore[typeddict-item]
-            ),
+        return FullMultilabelClassificationMetrics(  # type: ignore[no-any-return]
+            scores_per_experiment=scores,
+            **avg_scores,  # type: ignore[typeddict-item]
         )
 
     def _calculate_scores(  # type: ignore[override]  # noqa: PLR6301

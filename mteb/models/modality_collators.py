@@ -100,9 +100,7 @@ class AudioCollator:
                 orig_freq=audio["sampling_rate"],
                 new_freq=target_sampling_rate,
             )
-            audio_array = torch.from_numpy(audio["array"]).float()
-            audio_array = resampler(audio_array)
-            audio_array = audio_array.numpy()
+            audio_array = resampler(torch.from_numpy(audio["array"]).float()).numpy()
         else:
             audio_array = audio["array"]
 
@@ -114,9 +112,12 @@ class AudioCollator:
             num_samples = audio_array.shape[-1]
             if num_samples > max_samples:
                 audio_array = audio_array[..., :max_samples]
-        return cast(
-            "np.ndarray[tuple[Any, ...], np.dtype[np.floating[Any]]]", audio_array
+
+        audio_array = cast(
+            "np.ndarray[tuple[Any, ...], np.dtype[np.floating[Any]]]",
+            audio_array,
         )
+        return audio_array
 
 
 class FramesCollator:
@@ -208,9 +209,10 @@ class FramesCollator:
 
         if num_frames is None and fps is None:
             # No resampling: return all frames
-            return cast(
+            frames = cast(
                 "torch.Tensor", video.get_frames_at(list(range(num_source_frames))).data
             )
+            return frames
 
         if num_frames is not None:
             # Fixed-sample mode: always select exactly num_frames

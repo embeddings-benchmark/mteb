@@ -38,9 +38,10 @@ def _get_json_from_hub(
     if path is None:
         return None
 
-    with Path(path).open() as f:  # noqa: PLW1514
+    with Path(path).open(encoding="utf-8") as f:
         js = json.load(f)
-    return cast("dict[str, Any]", js)
+    js = cast("dict[str, Any]", js)
+    return js
 
 
 def _get_file_on_hub(

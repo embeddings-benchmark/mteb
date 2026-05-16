@@ -284,13 +284,16 @@ class InstructSentenceTransformerModel(AbsEncoder):
                 f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
             )
 
-        embeddings = self.model.encode(
-            sentences,
-            prompt=instruction,
-            **kwargs,
+        embeddings = cast(
+            "Array",
+            self.model.encode(
+                sentences,
+                prompt=instruction,
+                **kwargs,
+            ),
         )
 
         if isinstance(embeddings, torch.Tensor):
             # sometimes in kwargs can be return_tensors=True
             embeddings = embeddings.cpu().detach().float().numpy()
-        return cast("Array", embeddings)
+        return embeddings

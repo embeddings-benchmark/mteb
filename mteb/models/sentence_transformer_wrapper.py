@@ -226,15 +226,18 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         else:
             encode_function = self.model.encode
 
-        embeddings = encode_function(
-            _inputs,
-            prompt=prompt,
-            **kwargs,
+        embeddings = cast(
+            "Array",
+            encode_function(
+                _inputs,
+                prompt=prompt,
+                **kwargs,
+            ),
         )
         if isinstance(embeddings, torch.Tensor):
             # ensure everything is on CPU and is float
             embeddings = embeddings.cpu().detach().float()
-        return cast("Array", embeddings)
+        return embeddings
 
 
 class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrapper):
