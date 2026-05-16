@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import logging
 from typing import TYPE_CHECKING, Any, cast
 
@@ -14,6 +15,13 @@ if TYPE_CHECKING:
     from mteb.types import BatchedInput
 
 logger = logging.getLogger(__name__)
+
+
+@functools.lru_cache(maxsize=None)
+def _get_resampler(orig_freq: int, new_freq: int):
+    import torchaudio
+
+    return torchaudio.transforms.Resample(orig_freq=orig_freq, new_freq=new_freq)
 
 
 class AudioCollator:
@@ -89,14 +97,12 @@ class AudioCollator:
             target_sampling_rate: The sampling rate to resample the audio to.
             max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
         """
-        import torchaudio
-
         audio = audio["audio"]
         if audio["sampling_rate"] != target_sampling_rate:
             logger.debug(
                 f"Resampling audio from {audio['sampling_rate']} Hz to {target_sampling_rate} Hz."
             )
-            resampler = torchaudio.transforms.Resample(
+            resampler = _get_resampler(
                 orig_freq=audio["sampling_rate"],
                 new_freq=target_sampling_rate,
             )
