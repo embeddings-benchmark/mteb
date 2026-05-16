@@ -350,6 +350,8 @@ class ResultCache:
             with model_meta_path.open("w") as f:
                 json.dump(meta.to_dict(), f, default=str, indent=4)
 
+        version_dict = self._get_package_versions()
+
         run_settings_list = []
         for split, split_scores in task_result.scores.items():
             for score_entry in split_scores:
@@ -358,8 +360,8 @@ class ResultCache:
                     task=task_result.task_name,
                     split=split,
                     subset=hf_subset,
-                    version=task_result.version or {},
-                    encode_kwargs=task_result.encode_kwargs or {},
+                    version=version_dict,
+                    encode_kwargs={},
                 )
                 run_settings_list.append(run_settings)
 
@@ -376,6 +378,32 @@ class ResultCache:
             with run_settings_path.open("w", encoding="utf-8") as f:
                 for entry in all_entries:
                     f.write(entry.to_json_line() + "\n")
+
+    @staticmethod
+    def _get_package_versions() -> dict[str, str | None]:
+        """Get current package versions from the environment.
+
+        Returns:
+            A dictionary with package names as keys and versions (or None if not installed) as values.
+        """
+        from importlib.metadata import version
+
+        packages = [
+            "mteb",
+            "torch",
+            "sentence-transformers",
+            "flash-attn",
+            "transformers",
+        ]
+        versions: dict[str, str | None] = {}
+
+        for pkg_name in packages:
+            try:
+                versions[pkg_name] = version(pkg_name)
+            except Exception:
+                versions[pkg_name] = None
+
+        return versions
 
     @property
     def default_cache_path(self) -> Path:

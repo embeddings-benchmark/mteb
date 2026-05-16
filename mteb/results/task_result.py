@@ -138,8 +138,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             the dataset.
         evaluation_time: The time taken to evaluate the model.
         kg_co2_emissions: The kg of CO2 emissions produced by the model during evaluation.
-        version: A dictionary containing version information of libraries used during evaluation (e.g., torch, flash-attn).
-        encode_kwargs: The keyword arguments passed to the model's encode method during evaluation.
 
     Examples:
         >>> scores = {
@@ -175,8 +173,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     evaluation_time: float | None
     kg_co2_emissions: float | None = None
     date: datetime.datetime | None = None
-    version: dict[str, str | None] | None = None
-    encode_kwargs: dict[str, Any] | None = None
 
     @classmethod
     def from_task_results(
@@ -186,8 +182,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
         date: datetime.datetime | None = None,
-        version: dict[str, str | None] | None = None,
-        encode_kwargs: dict[str, Any] | None = None,
     ) -> TaskResult:
         """Create a TaskResult from the task and scores.
 
@@ -199,16 +193,10 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_time: The time taken to evaluate the model.
             kg_co2_emissions: The kg of CO2 emissions produced by the model during evaluation.
             date: The date the model was trained on.
-            version: A dictionary containing version information of libraries used during evaluation.
-            encode_kwargs: The keyword arguments passed to the model's encode method during evaluation.
         """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
-        mteb_ver = (
-            version.get("mteb", get_version("mteb"))  # type: ignore[union-attr]
-            if version is not None
-            else get_version("mteb")
-        )
+        mteb_ver = get_version("mteb")
         flat_scores = defaultdict(list)
         for split, hf_subset_scores in scores.items():
             for hf_subset, hf_scores in hf_subset_scores.items():
@@ -240,8 +228,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_time=evaluation_time,
             kg_co2_emissions=kg_co2_emissions,
             date=date,
-            version=version,
-            encode_kwargs=encode_kwargs,
         )
 
     @field_validator("scores")
