@@ -334,7 +334,12 @@ class AbsTaskClassification(AbsTask):
         )
         timer = timer or TimingStack()
         # precompute all embeddings for cross-validation to not recomupute them in different k-folds
-        with timer("Encoding training samples", split=hf_split, subset=hf_subset, log_message="Running cross-validation - Encoding samples..."):
+        with timer(
+            "Encoding training samples",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running cross-validation - Encoding samples...",
+        ):
             dataset_embeddings = model.encode(
                 dataloader_train,
                 task_metadata=self.metadata,

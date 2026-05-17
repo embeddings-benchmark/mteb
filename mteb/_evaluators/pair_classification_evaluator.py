@@ -13,6 +13,7 @@ from sklearn.metrics.pairwise import (
 from mteb._create_dataloaders import _create_dataloader_from_texts, create_dataloader
 from mteb._evaluators.evaluator import Evaluator
 from mteb.similarity_functions import compute_pairwise_similarity
+from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -72,6 +73,7 @@ class PairClassificationEvaluator(Evaluator):
         hf_subset: str,
         input1_prompt_type: PromptType | None,
         input2_prompt_type: PromptType | None,
+        timer: TimingStack | None = None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -83,6 +85,7 @@ class PairClassificationEvaluator(Evaluator):
         self.hf_subset = hf_subset
         self.input1_prompt_type = input1_prompt_type
         self.input2_prompt_type = input2_prompt_type
+        self.timer = timer or TimingStack()
 
     def __call__(
         self,
@@ -90,7 +93,6 @@ class PairClassificationEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> PairClassificationDistances:
-        logger.info("Running pair classification - Encoding samples (1/2)")
         if isinstance(self.input1_column_name, str):
             cols1: str | list[str] = self.input1_column_name
             ds1_col_names: dict[str, str] = {
@@ -100,23 +102,28 @@ class PairClassificationEvaluator(Evaluator):
             cols1 = [col for col, _ in self.input1_column_name]
             ds1_col_names = dict(self.input1_column_name)
 
-        embeddings1 = model.encode(
-            create_dataloader(
-                self.dataset.select_columns(cols1).rename_columns(ds1_col_names),
+        with self.timer(
+            "Encoding samples 1",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running pair classification - Encoding samples (1/2)",
+        ):
+            embeddings1 = model.encode(
+                create_dataloader(
+                    self.dataset.select_columns(cols1).rename_columns(ds1_col_names),
+                    task_metadata=self.task_metadata,
+                    input_column=self.task_metadata.modalities[0]
+                    if isinstance(self.input1_column_name, str)
+                    else None,
+                    num_proc=num_proc,
+                    **encode_kwargs,
+                ),
                 task_metadata=self.task_metadata,
-                input_column=self.task_metadata.modalities[0]
-                if isinstance(self.input1_column_name, str)
-                else None,
-                num_proc=num_proc,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
+                prompt_type=self.input1_prompt_type,
                 **encode_kwargs,
-            ),
-            task_metadata=self.task_metadata,
-            hf_split=self.hf_split,
-            hf_subset=self.hf_subset,
-            prompt_type=self.input1_prompt_type,
-            **encode_kwargs,
-        )
-        logger.info("Running pair classification - Encoding samples (2/2)")
+            )
         if isinstance(self.input2_column_name, str):
             cols2: str | list[str] = self.input2_column_name
             ds2_col_names: dict[str, str] = {
@@ -126,38 +133,51 @@ class PairClassificationEvaluator(Evaluator):
             cols2 = [col for col, _ in self.input2_column_name]
             ds2_col_names = dict(self.input2_column_name)
 
-        embeddings2 = model.encode(
-            create_dataloader(
-                self.dataset.select_columns(cols2).rename_columns(ds2_col_names),
+        with self.timer(
+            "Encoding samples 2",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running pair classification - Encoding samples (2/2)",
+        ):
+            embeddings2 = model.encode(
+                create_dataloader(
+                    self.dataset.select_columns(cols2).rename_columns(ds2_col_names),
+                    task_metadata=self.task_metadata,
+                    input_column=self.task_metadata.modalities[0]
+                    if isinstance(self.input2_column_name, str)
+                    else None,
+                    num_proc=num_proc,
+                    **encode_kwargs,
+                ),
                 task_metadata=self.task_metadata,
-                input_column=self.task_metadata.modalities[0]
-                if isinstance(self.input2_column_name, str)
-                else None,
-                num_proc=num_proc,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
+                prompt_type=self.input2_prompt_type,
                 **encode_kwargs,
-            ),
-            task_metadata=self.task_metadata,
-            hf_split=self.hf_split,
-            hf_subset=self.hf_subset,
-            prompt_type=self.input2_prompt_type,
-            **encode_kwargs,
-        )
+            )
 
-        logger.info("Running pair classification - Evaluating pair similarity...")
-        cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)
-        manhattan_distances = paired_manhattan_distances(embeddings1, embeddings2)
-        euclidean_distances = paired_euclidean_distances(embeddings1, embeddings2)
+        with self.timer(
+            "Scoring",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running pair classification - Evaluating pair similarity...",
+        ):
+            cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)
+            manhattan_distances = paired_manhattan_distances(embeddings1, embeddings2)
+            euclidean_distances = paired_euclidean_distances(embeddings1, embeddings2)
 
-        similarity_scores = compute_pairwise_similarity(model, embeddings1, embeddings2)
+            similarity_scores = compute_pairwise_similarity(
+                model, embeddings1, embeddings2
+            )
 
-        embeddings1_np = np.asarray(embeddings1)
-        embeddings2_np = np.asarray(embeddings2)
-        dot_scores = np.asarray(
-            [
-                np.dot(embeddings1_np[i], embeddings2_np[i])
-                for i in range(len(embeddings1_np))
-            ]
-        )
+            embeddings1_np = np.asarray(embeddings1)
+            embeddings2_np = np.asarray(embeddings2)
+            dot_scores = np.asarray(
+                [
+                    np.dot(embeddings1_np[i], embeddings2_np[i])
+                    for i in range(len(embeddings1_np))
+                ]
+            )
         return PairClassificationDistances(
             cosine_scores=cosine_scores.tolist(),
             euclidean_distances=euclidean_distances.tolist(),

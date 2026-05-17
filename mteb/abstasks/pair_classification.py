@@ -16,6 +16,7 @@ from mteb.abstasks._statistics_calculation import (
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ScoringFunction
 from mteb.models.models_protocols import EncoderProtocol
+from mteb.timing import TimingStack
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
@@ -109,6 +110,7 @@ class AbsTaskPairClassification(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs,
     ) -> dict[str, float]:
         if not isinstance(model, EncoderProtocol):
@@ -128,6 +130,7 @@ class AbsTaskPairClassification(AbsTask):
             hf_subset=hf_subset,
             input1_prompt_type=self.input1_prompt_type,
             input2_prompt_type=self.input2_prompt_type,
+            timer=timer,
             **kwargs,
         )
         similarity_scores = evaluator(
