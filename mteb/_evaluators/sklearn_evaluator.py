@@ -4,6 +4,7 @@ import logging
 from typing import TYPE_CHECKING, Any, Protocol, cast
 
 from mteb._create_dataloaders import create_dataloader
+from mteb.timing import TimingStack
 
 from .evaluator import Evaluator
 
@@ -47,6 +48,7 @@ class SklearnEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         evaluator_model: SklearnModelProtocol,
+        timer: TimingStack | None = None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -60,6 +62,7 @@ class SklearnEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
         self.evaluator_model = evaluator_model
+        self.timer = timer or TimingStack()
 
     def create_dataloaders(
         self,
@@ -90,6 +93,7 @@ class SklearnEvaluator(Evaluator):
         test_cache: Array | None = None,
         train_cache: Array | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
     ) -> tuple[NDArray[np.integer | np.floating], Array]:
         """Classification evaluation by training a sklearn classifier on the embeddings of the training set and evaluating on the embeddings of the test set.
 
@@ -109,29 +113,45 @@ class SklearnEvaluator(Evaluator):
             num_proc=num_proc,
         )
 
-        logger.info("Running - Encoding samples...")
         if train_cache is None:
-            train_cache = model.encode(
-                dataloader_train,
-                task_metadata=self.task_metadata,
-                hf_split="train",
-                hf_subset=self.hf_subset,
-                **encode_kwargs,
-            )
+            with self.timer(
+                "Encoding training samples",
+                split="train",
+                subset=self.hf_subset,
+                log_message="Running - Encoding samples...",
+            ):
+                train_cache = model.encode(
+                    dataloader_train,
+                    task_metadata=self.task_metadata,
+                    hf_split="train",
+                    hf_subset=self.hf_subset,
+                    **encode_kwargs,
+                )
         if test_cache is None:
-            test_cache = model.encode(
-                dataloader_test,
-                task_metadata=self.task_metadata,
-                hf_split=self.hf_split,
-                hf_subset=self.hf_subset,
-                **encode_kwargs,
-            )
+            with self.timer(
+                "Encoding test samples",
+                split=self.hf_split,
+                subset=self.hf_subset,
+            ):
+                test_cache = model.encode(
+                    dataloader_test,
+                    task_metadata=self.task_metadata,
+                    hf_split=self.hf_split,
+                    hf_subset=self.hf_subset,
+                    **encode_kwargs,
+                )
             test_cache = cast("Array", test_cache)
 
-        logger.info("Running - Fitting classifier...")
-        y_train = self.train_dataset[self.label_column_name]
-        self.evaluator_model.fit(train_cache, y_train)
+        with self.timer(
+            "Scoring",
+            split=self.hf_split,
+            subset=self.hf_subset,
+        ):
+            logger.info("Running - Fitting classifier...")
+            y_train = self.train_dataset[self.label_column_name]
+            self.evaluator_model.fit(train_cache, y_train)
 
-        logger.info("Running - Evaluating classifier...")
-        y_pred = self.evaluator_model.predict(test_cache)
+            logger.info("Running - Evaluating classifier...")
+            y_pred = self.evaluator_model.predict(test_cache)
+
         return y_pred, test_cache
