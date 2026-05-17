@@ -14,6 +14,7 @@ from mteb.abstasks._statistics_calculation import (
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.models_protocols import EncoderProtocol
+from mteb.timing import TimingStack
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
@@ -135,6 +136,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> ImageTextPairClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -166,6 +168,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
             num_images_per_sample=num_images_per_sample,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         scores: list[torch.Tensor] = evaluator(

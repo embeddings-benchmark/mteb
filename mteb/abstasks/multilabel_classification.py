@@ -138,7 +138,12 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         )
 
         timer = timer or TimingStack()
-        with timer("Encoding training samples", split=hf_split, subset=hf_subset, log_message="Running multilabel classification - Encoding training set..."):
+        with timer(
+            "Encoding training samples",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running multilabel classification - Encoding training set...",
+        ):
             _unique_train_embeddings = model.encode(
                 dataloader_train,
                 task_metadata=self.metadata,
@@ -167,7 +172,12 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             **encode_kwargs,
         )
 
-        with timer("Encoding test samples", split=hf_split, subset=hf_subset, log_message="Running multilabel classification - Encoding test set..."):
+        with timer(
+            "Encoding test samples",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running multilabel classification - Encoding test set...",
+        ):
             X_test = model.encode(
                 dataloader_test,
                 task_metadata=self.metadata,
@@ -179,7 +189,12 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         y_test = binarizer.fit_transform(test_dataset[self.label_column_name])
 
         all_predictions = []
-        with timer("Scoring", split=hf_split, subset=hf_subset, log_message="Running multilabel classification - Evaluating classifiers..."):
+        with timer(
+            "Scoring",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running multilabel classification - Evaluating classifiers...",
+        ):
             for _, sample_indices in enumerate(train_samples):
                 X_train = np.stack(
                     [unique_train_embeddings[idx] for idx in sample_indices]
