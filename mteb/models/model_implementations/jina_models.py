@@ -987,13 +987,24 @@ jina_embeddings_v5_omni_small = ModelMeta(
         max_frames=64,
         target_sampling_rate=16000,
         max_samples=30 * 16000,
-        # Only list MTEB types whose Jina LoRA adapter diverges from
-        # task_metadata.simplified_task_type. Everything else is routed
-        # automatically by the wrapper via _SIMPLIFIED_TO_JINA_TASK.
-        # Routing chosen from a full crosswise eval (145 tasks × 4 variants
-        # × 2 models): for each task type we pick the variant that produces
-        # the highest average main_score across all tasks in that type.
+        # The wrapper resolves adapter routing in two steps: per-MTEB-type
+        # override here, then fall back to task_metadata.simplified_task_type
+        # via _SIMPLIFIED_TO_JINA_TASK. Routing chosen from a full crosswise
+        # eval (145 tasks × 4 variants × 2 models).
         model_prompts={
+            # Text MTEB types — explicit even though the simplified fallback
+            # resolves to the same adapter, so the routing is stable against
+            # upstream changes to _TASKTYPE2SIMPLIFIEDTASKTYPE.
+            "Retrieval": "retrieval",
+            "Clustering": "clustering",
+            "Classification": "classification",
+            "STS": "text-matching",
+            "PairClassification": "text-matching",
+            "BitextMining": "text-matching",
+            "MultilabelClassification": "classification",
+            "Reranking": "retrieval",
+            "Summarization": "text-matching",
+            "InstructionReranking": "retrieval",
             # multimodal *Classification → retrieval (the classification LoRA
             # is empty in our training/eval pipeline for non-text modalities)
             "ImageClassification": "retrieval",
@@ -1070,6 +1081,16 @@ jina_embeddings_v5_omni_nano = ModelMeta(
         # See `jina_embeddings_v5_omni_small.loader_kwargs.model_prompts` for
         # the rationale — same overrides apply.
         model_prompts={
+            "Retrieval": "retrieval",
+            "Clustering": "clustering",
+            "Classification": "classification",
+            "STS": "text-matching",
+            "PairClassification": "text-matching",
+            "BitextMining": "text-matching",
+            "MultilabelClassification": "classification",
+            "Reranking": "retrieval",
+            "Summarization": "text-matching",
+            "InstructionReranking": "retrieval",
             "ImageClassification": "retrieval",
             "ZeroShotClassification": "retrieval",
             "AudioClassification": "retrieval",

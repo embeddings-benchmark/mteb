@@ -254,39 +254,6 @@ def test_override_image_clustering_routes_to_text_matching():
     assert not stub.captured[-1]["prompt"]
 
 
-def test_omni_overrides_are_minimal():
-    """Only list MTEB types whose Jina LoRA differs from simplified_task_type."""
-    overrides = _omni_model_prompts()
-    for task_type, jina_task in overrides.items():
-        simplified = TaskMetadata.__pydantic_validator__.validate_python(
-            {
-                "name": f"Mock{task_type}",
-                "description": "mock",
-                "reference": None,
-                "dataset": {"path": "mock", "revision": "mock"},
-                "type": task_type,
-                "category": "t2t",
-                "modalities": ["text"],
-                "eval_splits": ["test"],
-                "eval_langs": ["eng-Latn"],
-                "main_score": "ndcg_at_10",
-                "date": None,
-                "domains": None,
-                "task_subtypes": None,
-                "license": None,
-                "annotations_creators": None,
-                "dialect": None,
-                "sample_creation": None,
-                "bibtex_citation": None,
-            }
-        ).simplified_task_type
-        default = _SIMPLIFIED_TO_JINA_TASK.get(simplified)
-        assert default != jina_task, (
-            f"Override for {task_type} -> {jina_task} matches the simplified "
-            f"default ({default}); remove it from model_prompts."
-        )
-
-
 def test_simplified_to_jina_task_covers_all_simplified_types():
     """Every SimplifiedTaskType in mteb must have a Jina LoRA mapping."""
     import typing
