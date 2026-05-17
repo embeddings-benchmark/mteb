@@ -98,7 +98,6 @@ stable_static_embedding_mrl_en_v2 = ModelMeta(
     model_type=["dense"],
     adapted_from="RikkaBotan/stable-static-embedding-fast-retrieval-mrl-en",
     superseded_by=None,
-    contacts=["Rikka-Botan"],
     citation=SSE_CITATION,
 )
 
@@ -126,7 +125,6 @@ stable_static_embedding_mrl_ja = ModelMeta(
     training_datasets=_SSE_JA_TRAINING_DATASETS,
     modalities=["text"],
     model_type=["dense"],
-    contacts=["Rikka-Botan"],
     citation=SSE_CITATION,
 )
 
@@ -154,7 +152,6 @@ stable_static_embedding_mrl_bilingual_ja_en = ModelMeta(
     training_datasets=_SSE_EN_TRAINING_DATASETS | _SSE_JA_TRAINING_DATASETS,
     modalities=["text"],
     model_type=["dense"],
-    contacts=["Rikka-Botan"],
     citation=SSE_CITATION,
 )
 
@@ -184,7 +181,6 @@ quantized_stable_static_embedding_mrl_en = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
     adapted_from="RikkaBotan/stable-static-embedding-fast-retrieval-mrl-en",
-    contacts=["Rikka-Botan"],
     citation=SSE_CITATION,
 )
 
@@ -213,7 +209,6 @@ quantized_stable_static_embedding_mrl_ja = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
     adapted_from="RikkaBotan/stable-static-embedding-fast-retrieval-mrl-ja",
-    contacts=["Rikka-Botan"],
     citation=SSE_CITATION,
 )
 
@@ -242,6 +237,5 @@ quantized_stable_static_embedding_mrl_bilingual_ja_en = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
     adapted_from="RikkaBotan/stable-static-embedding-fast-retrieval-mrl-bilingual-ja-en",
-    contacts=["Rikka-Botan"],
     citation=SSE_CITATION,
 )
