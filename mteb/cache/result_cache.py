@@ -39,7 +39,7 @@ from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
-from mteb.results.task_result import json_serialize_kwargs, write_to_keyed_json
+from mteb.results.task_result import _json_serialize_kwargs, _write_to_keyed_json
 from mteb.types import SubmitResultsResponse
 
 if TYPE_CHECKING:
@@ -385,13 +385,13 @@ class ResultCache:
                     "split": split,
                     "subset": hf_subset,
                     "version": version_dict,
-                    "encode_kwargs": json_serialize_kwargs(encode_kwargs),
+                    "encode_kwargs": _json_serialize_kwargs(encode_kwargs),
                 }
                 run_settings_list.append(run_settings)
 
         if run_settings_list:
             run_settings_path = result_path.parent / "run_settings.jsonl"
-            write_to_keyed_json(run_settings_path, run_settings_list)
+            _write_to_keyed_json(run_settings_path, run_settings_list)
 
     @property
     def default_cache_path(self) -> Path:

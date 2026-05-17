@@ -1023,12 +1023,19 @@ class TaskError(BaseModel):
     exception: str
 
 
-def json_serialize_kwargs(kwargs: Any | None) -> Any:
+def _json_serialize_kwargs(kwargs: Mapping[str, Any] | None) -> dict[str, Any]:
     """Convert keyword arguments into a JSON-serializable structure."""
-    return json.loads(json.dumps(kwargs, default=str)) if kwargs is not None else {}
+    if kwargs is None:
+        return {}
+
+    try:
+        return json.loads(json.dumps(kwargs, default=str))
+    except Exception as e:
+        logger.warning(f"Could not serialize encode_kwargs to JSON: {e}")
+        return {}
 
 
-def read_run_settings_from_file(path: Path) -> list[dict[str, Any]]:
+def _read_run_settings_from_file(path: Path) -> list[dict[str, Any]]:
     """Read run settings entries from a JSONL file."""
     if not path.exists():
         return []
@@ -1051,14 +1058,14 @@ def read_run_settings_from_file(path: Path) -> list[dict[str, Any]]:
     return run_settings
 
 
-def write_to_keyed_json(
+def _write_to_keyed_json(
     path: Path,
     entries: list[dict[str, Any]],
     *,
-    key_fields: tuple[str, ...] = ("task", "split", "subset"),
+    key_fields: tuple[str, str, str] = ("task", "split", "subset"),
 ) -> None:
     """Write JSONL entries, replacing any existing entries with the same key."""
-    existing_entries = read_run_settings_from_file(path)
+    existing_entries = _read_run_settings_from_file(path)
     new_keys = {tuple(entry.get(field) for field in key_fields) for entry in entries}
     filtered_existing = [
         entry
