@@ -66,7 +66,12 @@ class UMER1Wrapper(AbsEncoder):
         self.model.eval()
 
         # Load processor
-        self.processor = AutoProcessor.from_pretrained(model, revision=revision)
+        self.processor = AutoProcessor.from_pretrained(
+            model,
+            revision=revision,
+            min_pixels=4 * 28 * 28,
+            max_pixels=256 * 28 * 28,
+        )
         self.processor.tokenizer.padding_side = "left"
 
         self.gen_emb_id = self.processor.tokenizer.get_vocab().get("<gen_emb>")

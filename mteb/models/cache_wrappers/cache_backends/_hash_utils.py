@@ -19,7 +19,7 @@ def _hash_item(item: Mapping[str, Any]) -> str:
         image: Image.Image = item["image"]
         item_hash += hashlib.sha256(image.tobytes()).hexdigest()
 
-    if item_hash == 0:
+    if len(item_hash) == 0:
         raise TypeError(f"Unsupported cache key type: {type(item)}")
 
     return item_hash

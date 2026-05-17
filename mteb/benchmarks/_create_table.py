@@ -13,13 +13,14 @@ from mteb.get_tasks import _TASKS_REGISTRY, get_tasks
 from mteb.models.get_model_meta import get_model_meta
 
 if TYPE_CHECKING:
+    from mteb.get_tasks import MTEBTasks
     from mteb.results.benchmark_results import BenchmarkResults
 
 
 @functools.lru_cache(maxsize=128)
-def _get_tasks_cached(task_names: tuple[str, ...]):
+def _get_tasks_cached(task_names: tuple[str, ...]) -> MTEBTasks:
     """Memoized `get_tasks(tasks=...)` for table-creation hot paths."""
-    return get_tasks(tasks=list(task_names))
+    return get_tasks(tasks=task_names)
 
 
 @functools.lru_cache(maxsize=4096)
@@ -47,7 +48,7 @@ def _split_on_capital(s: str) -> str:
     return " ".join(re.findall(r"[A-Z]?[a-z]+|[A-Z]+(?=[A-Z]|$)", s))
 
 
-def _format_n_parameters(n_parameters) -> float | None:
+def _format_n_parameters(n_parameters: float | int | None) -> float | None:
     """Format n_parameters to be in billions with decimals down to 1 million. I.e. 7M -> 0.007B, 1.5B -> 1.5B, None -> None"""
     if n_parameters:
         n_parameters = float(n_parameters)
@@ -55,7 +56,9 @@ def _format_n_parameters(n_parameters) -> float | None:
     return None
 
 
-def _format_n_active_parameters(n_active_parameters) -> float | None:
+def _format_n_active_parameters(
+    n_active_parameters: float | int | None,
+) -> float | None:
     """Format n_active_parameters to be in billions with decimals down to 1 million. I.e. 7M -> 0.007B, 1.5B -> 1.5B, None -> None"""
     if n_active_parameters is not None:
         n_active_parameters = float(n_active_parameters)
@@ -79,7 +82,7 @@ def _get_embedding_size(embed_dim: int | list[int] | None) -> int | None:
     return None
 
 
-def _get_means_per_types(per_task: pd.DataFrame):
+def _get_means_per_types(per_task: pd.DataFrame) -> pd.DataFrame:
     task_names_per_type = defaultdict(list)
     for task_name in per_task.columns:
         # Read from the registered class to skip instantiation (get_task() runs filter_languages()).

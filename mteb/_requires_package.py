@@ -15,7 +15,10 @@ def _is_package_available(pkg_name: str) -> bool:
     "Use ModelMeta.extra_requirements_groups instead of requires_package. This function will be removed in a future version."
 )
 def requires_package(
-    obj, package_name: str, model_name: str, install_instruction: str | None = None
+    obj: object,
+    package_name: str,
+    model_name: str,
+    install_instruction: str | None = None,
 ) -> None:
     """Check if a package is available and raise an error with installation instructions if it's not.
 

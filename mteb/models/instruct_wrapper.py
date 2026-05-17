@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import logging
-import sys
 import warnings
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import torch
+from typing_extensions import deprecated
 
 from mteb._requires_package import _is_package_available
 from mteb.types import OutputDType, PromptType
@@ -16,14 +16,10 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
-
-if sys.version_info >= (3, 13):
-    from warnings import deprecated
-else:
-    from typing_extensions import deprecated
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 
 logger = logging.getLogger(__name__)
@@ -38,8 +34,8 @@ def instruct_wrapper(
     mode: str,
     instruction_template: str | Callable[[str, PromptType | None], str] | None = None,
     device: str | None = None,
-    **kwargs,
-):
+    **kwargs: Any,
+) -> Any:
     """Instruct wrapper for models. Uses GritLM to pass instructions to the model.
 
     It's recommended to use `InstructSentenceTransformerModel` instead of this wrapper for models.
@@ -61,13 +57,13 @@ def instruct_wrapper(
         raise ImportError(
             f"gritlm is required for {model_name_or_path}. Please install with `pip install mteb[gritlm]`."
         )
-    from gritlm import GritLM  # type: ignore[import]
+    from gritlm import GritLM  # type: ignore[import-not-found]
 
     @deprecated(
         "`instruct_wrapper` is deprecated and will be removed in future versions. "
         "Please use `InstructSentenceTransformerModel` instead."
     )
-    class InstructGritLMModel(GritLM, AbsEncoder):
+    class InstructGritLMModel(GritLM, AbsEncoder):  # type: ignore[misc]
         def __init__(
             self,
             model_name_or_path: str,
@@ -76,8 +72,8 @@ def instruct_wrapper(
             instruction_template: str
             | Callable[[str, PromptType | None], str]
             | None = None,
-            **kwargs,
-        ):
+            **kwargs: Any,
+        ) -> None:
             if (
                 isinstance(instruction_template, str)
                 and "{instruction}" not in instruction_template
@@ -106,7 +102,7 @@ def instruct_wrapper(
         def encode(
             self,
             inputs: DataLoader[BatchedInput],
-            *args,
+            *args: Any,
             task_metadata: TaskMetadata,
             hf_split: str,
             hf_subset: str,
@@ -228,7 +224,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Encodes the given sentences using the encoder.
 
@@ -258,7 +254,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
 
         if "precision" in kwargs and self.mteb_model_meta is not None:
             existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
-            output_dtype = OutputDType.from_str(kwargs["precision"])  # type: ignore[typeddict-item]
+            output_dtype = OutputDType.from_str(kwargs["precision"])
             if existing_experiment_kwargs is not None:
                 existing_experiment_kwargs["output_dtypes"] = output_dtype  # type: ignore[index]
             else:
@@ -288,10 +284,13 @@ class InstructSentenceTransformerModel(AbsEncoder):
                 f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
             )
 
-        embeddings = self.model.encode(
-            sentences,
-            prompt=instruction,
-            **kwargs,
+        embeddings = cast(
+            "Array",
+            self.model.encode(
+                sentences,
+                prompt=instruction,
+                **kwargs,
+            ),
         )
 
         if isinstance(embeddings, torch.Tensor):

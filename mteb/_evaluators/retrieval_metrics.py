@@ -144,15 +144,19 @@ def get_rank_from_dict(
     return len(sorted_by_score) + 1, 0
 
 
-def calculate_pmrr(original_run, new_run, changed_qrels):
+def calculate_pmrr(
+    original_run: dict[str, dict[str, float]],
+    new_run: dict[str, dict[str, float]],
+    changed_qrels: dict[str, list[str]],
+) -> float:
     changes = []
-    for qid in changed_qrels.keys():
+    for qid, cur_changed_qrels in changed_qrels.items():
         if qid + "-og" not in original_run or qid + "-changed" not in new_run:
             logger.warning(f"Query {qid} not found in the runs for calculating p-MRR")
             continue
         original_qid_run = original_run[qid + "-og"]
         new_qid_run = new_run[qid + "-changed"]
-        for idx, changed_doc in enumerate(changed_qrels[qid]):
+        for idx, changed_doc in enumerate(cur_changed_qrels):
             original_rank, original_score = get_rank_from_dict(
                 original_qid_run, changed_doc
             )

@@ -278,7 +278,7 @@ def create_pull_request(
         GithubException: If GitHub API call fails.
     """
     try:
-        from github import (  # type: ignore[import-not-found]
+        from github import (
             Auth,
             Github,
             GithubException,

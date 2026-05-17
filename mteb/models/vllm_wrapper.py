@@ -109,7 +109,7 @@ class VllmWrapperBase:
             model=model_name,
             revision=revision,
             runner="pooling",
-            convert=self.convert,  # type: ignore[arg-type]
+            convert=self.convert,
             max_model_len=max_model_len,
             max_num_batched_tokens=max_num_batched_tokens,
             max_num_seqs=max_num_seqs,
@@ -132,7 +132,7 @@ class VllmWrapperBase:
 
         atexit.register(self.cleanup)
 
-    def cleanup(self):
+    def cleanup(self) -> None:
         """Clean up the VLLM distributed runtime environment and release GPU resources."""
         if self.llm is None:
             return
@@ -145,7 +145,7 @@ class VllmWrapperBase:
         gc.collect()
         cleanup_dist_env_and_memory()
 
-    def __del__(self):
+    def __del__(self) -> None:
         try:
             self.cleanup()
         except Exception:
