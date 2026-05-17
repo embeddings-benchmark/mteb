@@ -61,8 +61,12 @@ class ClusteringEvaluator(Evaluator):
             **encode_kwargs,
         )
 
-        logger.info("Running clustering - Encoding samples...")
-        with self.timer("Encoding", split=self.hf_split, subset=self.hf_subset):
+        with self.timer(
+            "Encoding",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running clustering - Encoding samples...",
+        ):
             embeddings = model.encode(
                 data_loader,
                 task_metadata=self.task_metadata,
@@ -73,8 +77,12 @@ class ClusteringEvaluator(Evaluator):
 
         labels = self.dataset[self.label_column_name]
 
-        logger.info("Running clustering - Fitting Mini-Batch K-Means...")
-        with self.timer("Scoring", split=self.hf_split, subset=self.hf_subset):
+        with self.timer(
+            "Scoring",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running clustering - Fitting Mini-Batch K-Means...",
+        ):
             clustering_model = cluster.MiniBatchKMeans(
                 n_clusters=len(set(labels)),
                 batch_size=self.clustering_batch_size,

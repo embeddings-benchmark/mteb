@@ -234,9 +234,13 @@ class AbsTaskClustering(AbsTask):
 
         downsampled_dataset = downsampled_dataset.select_columns(list(columns_to_keep))
 
-        logger.info("Running clustering - Encoding samples...")
         timer = timer or TimingStack()
-        with timer("Encoding", split=hf_split, subset=hf_subset):
+        with timer(
+            "Encoding",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running clustering - Encoding samples...",
+        ):
             embeddings = model.encode(
                 create_dataloader(
                     downsampled_dataset,
@@ -251,14 +255,18 @@ class AbsTaskClustering(AbsTask):
                 **encode_kwargs,
             )
 
-        logger.info("Running clustering - Evaluating clustering...")
         labels = []
         for label in downsampled_dataset[self.label_column_name]:
             if not isinstance(label, list):
                 label = [label]  # noqa: PLW2901
             labels.append(label)
 
-        with timer("Scoring", split=hf_split, subset=hf_subset):
+        with timer(
+            "Scoring",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running clustering - Evaluating clustering...",
+        ):
             all_v_scores, all_assignments = _evaluate_clustering_bootstrapped(
                 embeddings,
                 labels,
