@@ -10,6 +10,7 @@ from sklearn import metrics
 
 from mteb._evaluators import ClusteringEvaluator
 from mteb.models import EncoderProtocol
+from mteb.timing import TimingStack
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
@@ -101,6 +102,7 @@ class AbsTaskClusteringLegacy(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
         if not isinstance(model, EncoderProtocol):
@@ -135,6 +137,7 @@ class AbsTaskClusteringLegacy(AbsTask):
                     task_metadata=self.metadata,
                     hf_split=hf_split,
                     hf_subset=hf_subset,
+                    timer=timer,
                     **kwargs,
                 )
                 clusters_assignment = evaluator(model, encode_kwargs=encode_kwargs)
@@ -171,6 +174,7 @@ class AbsTaskClusteringLegacy(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         evaluate_clusters = evaluator(

@@ -13,6 +13,7 @@ from sklearn.metrics.cluster import v_measure_score
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
+from mteb.timing import TimingStack
 from mteb.types import Array, HFSubset
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
@@ -180,6 +181,7 @@ class AbsTaskClustering(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
         if not isinstance(model, EncoderProtocol):
@@ -233,19 +235,21 @@ class AbsTaskClustering(AbsTask):
         downsampled_dataset = downsampled_dataset.select_columns(list(columns_to_keep))
 
         logger.info("Running clustering - Encoding samples...")
-        embeddings = model.encode(
-            create_dataloader(
-                downsampled_dataset,
+        timer = timer or TimingStack()
+        with timer("Encoding", split=hf_split, subset=hf_subset):
+            embeddings = model.encode(
+                create_dataloader(
+                    downsampled_dataset,
+                    task_metadata=self.metadata,
+                    input_column=self.input_column_name,
+                    num_proc=num_proc,
+                    **encode_kwargs,
+                ),
                 task_metadata=self.metadata,
-                input_column=self.input_column_name,
-                num_proc=num_proc,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
                 **encode_kwargs,
-            ),
-            task_metadata=self.metadata,
-            hf_subset=hf_subset,
-            hf_split=hf_split,
-            **encode_kwargs,
-        )
+            )
 
         logger.info("Running clustering - Evaluating clustering...")
         labels = []
@@ -254,16 +258,17 @@ class AbsTaskClustering(AbsTask):
                 label = [label]  # noqa: PLW2901
             labels.append(label)
 
-        all_v_scores, all_assignments = _evaluate_clustering_bootstrapped(
-            embeddings,
-            labels,
-            n_clusters=self.n_clusters,
-            cluster_size=self.max_documents_per_cluster,
-            kmean_batch_size=self.k_mean_batch_size,
-            max_depth=self.max_depth,
-            rng_state=self.rng_state,
-            seed=self.seed,
-        )
+        with timer("Scoring", split=hf_split, subset=hf_subset):
+            all_v_scores, all_assignments = _evaluate_clustering_bootstrapped(
+                embeddings,
+                labels,
+                n_clusters=self.n_clusters,
+                cluster_size=self.max_documents_per_cluster,
+                kmean_batch_size=self.k_mean_batch_size,
+                max_depth=self.max_depth,
+                rng_state=self.rng_state,
+                seed=self.seed,
+            )
 
         if prediction_folder:
             self._save_task_predictions(

@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 from sklearn import cluster
 
 from mteb._create_dataloaders import create_dataloader
+from mteb.timing import TimingStack
 
 from .evaluator import Evaluator
 
@@ -32,6 +33,7 @@ class ClusteringEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         clustering_batch_size: int = 500,
+        timer: TimingStack | None = None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -42,6 +44,7 @@ class ClusteringEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
+        self.timer = timer or TimingStack()
 
     def __call__(
         self,
@@ -59,23 +62,25 @@ class ClusteringEvaluator(Evaluator):
         )
 
         logger.info("Running clustering - Encoding samples...")
-        embeddings = model.encode(
-            data_loader,
-            task_metadata=self.task_metadata,
-            hf_subset=self.hf_subset,
-            hf_split=self.hf_split,
-            **encode_kwargs,
-        )
+        with self.timer("Encoding", split=self.hf_split, subset=self.hf_subset):
+            embeddings = model.encode(
+                data_loader,
+                task_metadata=self.task_metadata,
+                hf_subset=self.hf_subset,
+                hf_split=self.hf_split,
+                **encode_kwargs,
+            )
 
         labels = self.dataset[self.label_column_name]
 
         logger.info("Running clustering - Fitting Mini-Batch K-Means...")
-        clustering_model = cluster.MiniBatchKMeans(
-            n_clusters=len(set(labels)),
-            batch_size=self.clustering_batch_size,
-            n_init="auto",
-            compute_labels=True,
-            random_state=self.seed,
-        )
-        clustering_model.fit(embeddings)
+        with self.timer("Scoring", split=self.hf_split, subset=self.hf_subset):
+            clustering_model = cluster.MiniBatchKMeans(
+                n_clusters=len(set(labels)),
+                batch_size=self.clustering_batch_size,
+                n_init="auto",
+                compute_labels=True,
+                random_state=self.seed,
+            )
+            clustering_model.fit(embeddings)
         return clustering_model.labels_.tolist()
