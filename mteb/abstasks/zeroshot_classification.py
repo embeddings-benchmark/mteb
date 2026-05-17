@@ -9,6 +9,7 @@ from sklearn import metrics
 
 from mteb._evaluators import ZeroShotClassificationEvaluator
 from mteb.models import EncoderProtocol
+from mteb.timing import TimingStack
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
@@ -140,6 +141,7 @@ class AbsTaskZeroShotClassification(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs,
     ) -> ZeroShotClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -158,6 +160,7 @@ class AbsTaskZeroShotClassification(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         probs = evaluator(

@@ -17,6 +17,7 @@ from typing_extensions import override
 from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.classification_metrics import hamming_score
 from mteb.models import EncoderProtocol
+from mteb.timing import TimingStack
 
 from .classification import AbsTaskClassification
 
@@ -96,6 +97,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> FullMultilabelClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -135,14 +137,15 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             **encode_kwargs,
         )
 
-        logger.info("Running multilabel classification - Encoding training set...")
-        _unique_train_embeddings = model.encode(
-            dataloader_train,
-            task_metadata=self.metadata,
-            hf_split=self.train_split,
-            hf_subset=hf_subset,
-            **encode_kwargs,
-        )
+        timer = timer or TimingStack()
+        with timer("Encoding training samples", split=hf_split, subset=hf_subset, log_message="Running multilabel classification - Encoding training set..."):
+            _unique_train_embeddings = model.encode(
+                dataloader_train,
+                task_metadata=self.metadata,
+                hf_split=self.train_split,
+                hf_subset=hf_subset,
+                **encode_kwargs,
+            )
         unique_train_embeddings = dict(
             zip(unique_train_indices, _unique_train_embeddings)
         )
@@ -164,33 +167,35 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             **encode_kwargs,
         )
 
-        logger.info("Running multilabel classification - Encoding test set...")
-        X_test = model.encode(
-            dataloader_test,
-            task_metadata=self.metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            **encode_kwargs,
-        )
+        with timer("Encoding test samples", split=hf_split, subset=hf_subset, log_message="Running multilabel classification - Encoding test set..."):
+            X_test = model.encode(
+                dataloader_test,
+                task_metadata=self.metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                **encode_kwargs,
+            )
         binarizer = MultiLabelBinarizer()
         y_test = binarizer.fit_transform(test_dataset[self.label_column_name])
 
-        logger.info("Running multilabel classification - Evaluating classifiers...")
         all_predictions = []
-        for _, sample_indices in enumerate(train_samples):
-            X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])
-            y_train = train_split.select(sample_indices)[self.label_column_name]
-            y_train = binarizer.transform(y_train)
-            y_pred, current_classifier = _evaluate_classifier(
-                X_train, y_train, X_test, self.evaluator_model
-            )
-            if prediction_folder:
-                all_predictions.append(y_pred.tolist())
+        with timer("Scoring", split=hf_split, subset=hf_subset, log_message="Running multilabel classification - Evaluating classifiers..."):
+            for _, sample_indices in enumerate(train_samples):
+                X_train = np.stack(
+                    [unique_train_embeddings[idx] for idx in sample_indices]
+                )
+                y_train = train_split.select(sample_indices)[self.label_column_name]
+                y_train = binarizer.transform(y_train)
+                y_pred, current_classifier = _evaluate_classifier(
+                    X_train, y_train, X_test, self.evaluator_model
+                )
+                if prediction_folder:
+                    all_predictions.append(y_pred.tolist())
 
-            scores_exp = self._calculate_scores(
-                y_test, y_pred, X_test, current_classifier
-            )
-            scores.append(scores_exp)
+                scores_exp = self._calculate_scores(
+                    y_test, y_pred, X_test, current_classifier
+                )
+                scores.append(scores_exp)
 
         if prediction_folder:
             self._save_task_predictions(

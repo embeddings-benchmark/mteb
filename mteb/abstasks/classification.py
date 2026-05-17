@@ -19,6 +19,7 @@ from sklearn.model_selection import KFold
 from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator
 from mteb.models import EncoderProtocol
+from mteb.timing import TimingStack
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
@@ -249,6 +250,7 @@ class AbsTaskClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -275,6 +277,7 @@ class AbsTaskClassification(AbsTask):
                 hf_split=hf_split,
                 hf_subset=hf_subset,
                 num_proc=num_proc,
+                timer=timer,
             )
 
             if prediction_folder:
@@ -302,6 +305,7 @@ class AbsTaskClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if self.train_split != hf_split:
@@ -328,15 +332,16 @@ class AbsTaskClassification(AbsTask):
             num_proc=num_proc,
             **encode_kwargs,
         )
-        logger.info("Running cross-validation - Encoding samples...")
+        timer = timer or TimingStack()
         # precompute all embeddings for cross-validation to not recomupute them in different k-folds
-        dataset_embeddings = model.encode(
-            dataloader_train,
-            task_metadata=self.metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            **encode_kwargs,
-        )
+        with timer("Encoding training samples", split=hf_split, subset=hf_subset, log_message="Running cross-validation - Encoding samples..."):
+            dataset_embeddings = model.encode(
+                dataloader_train,
+                task_metadata=self.metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                **encode_kwargs,
+            )
         for i, (train_idx, val_idx) in enumerate(
             cross_validation_splitter.split(range(num_samples))
         ):
@@ -357,6 +362,7 @@ class AbsTaskClassification(AbsTask):
                 test_cache=test_cache,
                 train_cache=train_cache,
                 num_proc=num_proc,
+                timer=timer,
             )
 
             if prediction_folder:
@@ -387,6 +393,7 @@ class AbsTaskClassification(AbsTask):
         hf_subset: str,
         train_cache: Array | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
     ) -> tuple[ClassificationMetrics, list[float], list[int], Array]:
         train_dataset, idxs, selected_idx = self._undersample_data(
             train_split,
@@ -413,6 +420,7 @@ class AbsTaskClassification(AbsTask):
             test_cache=test_cache,
             train_cache=sub_train_cache,
             num_proc=num_proc,
+            timer=timer,
         )
         y_test = eval_split[self.label_column_name]
         return self._calculate_scores(y_test, y_pred), y_pred.tolist(), idxs, test_cache
