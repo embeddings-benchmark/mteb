@@ -773,6 +773,47 @@ _SIMPLIFIED_TO_JINA_TASK = {
 }
 
 
+# Per-MTEB-type override for both omni-{small,nano}. The wrapper resolves
+# adapter routing in two steps: this dict first, then fall back to
+# task_metadata.simplified_task_type via _SIMPLIFIED_TO_JINA_TASK. The text
+# entries (Retrieval / Clustering / STS / ...) duplicate the simplified
+# fallback intentionally — explicit pins are stable against upstream drift in
+# _TASKTYPE2SIMPLIFIEDTASKTYPE. The multimodal entries are genuine overrides
+# from a 145-task × 4-variant × 2-model crosswise eval:
+#   * *Classification → retrieval: the classification LoRA's task list is
+#     empty for non-text modalities; eval runs through the retrieval adapter.
+#   * Compositionality → clustering: clustering beats text-matching by
+#     +0.01 to +0.27 main_score on the word-order-sensitive subset
+#     (AROFlickrOrder, AROCocoOrder, SugarCrepe, Winoground, ImageCoDe);
+#     AROVisualRelation / AROVisualAttribution are insensitive (Δ<0.005).
+#   * AudioPairClassification → retrieval: retrieval wins by +0.06-0.08
+#     across NMSQAPair / CREMADPair / VoxPopuliAccentPair on both sizes.
+#   * ImageClustering → text-matching: text-matching beats clustering by
+#     +0.004-0.08 across CIFAR10/100, TinyImageNet, ImageNet10/Dog15.
+_OMNI_MODEL_PROMPTS = {
+    "Retrieval": "retrieval",
+    "Clustering": "clustering",
+    "Classification": "classification",
+    "STS": "text-matching",
+    "PairClassification": "text-matching",
+    "BitextMining": "text-matching",
+    "MultilabelClassification": "classification",
+    "Reranking": "retrieval",
+    "Summarization": "text-matching",
+    "InstructionReranking": "retrieval",
+    "ImageClassification": "retrieval",
+    "ZeroShotClassification": "retrieval",
+    "AudioClassification": "retrieval",
+    "AudioZeroshotClassification": "retrieval",
+    "AudioMultilabelClassification": "retrieval",
+    "VideoClassification": "retrieval",
+    "VideoZeroshotClassification": "retrieval",
+    "Compositionality": "clustering",
+    "AudioPairClassification": "retrieval",
+    "ImageClustering": "text-matching",
+}
+
+
 class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
     def encode(
         self,
@@ -987,49 +1028,7 @@ jina_embeddings_v5_omni_small = ModelMeta(
         max_frames=64,
         target_sampling_rate=16000,
         max_samples=30 * 16000,
-        # The wrapper resolves adapter routing in two steps: per-MTEB-type
-        # override here, then fall back to task_metadata.simplified_task_type
-        # via _SIMPLIFIED_TO_JINA_TASK. Routing chosen from a full crosswise
-        # eval (145 tasks × 4 variants × 2 models).
-        model_prompts={
-            # Text MTEB types — explicit even though the simplified fallback
-            # resolves to the same adapter, so the routing is stable against
-            # upstream changes to _TASKTYPE2SIMPLIFIEDTASKTYPE.
-            "Retrieval": "retrieval",
-            "Clustering": "clustering",
-            "Classification": "classification",
-            "STS": "text-matching",
-            "PairClassification": "text-matching",
-            "BitextMining": "text-matching",
-            "MultilabelClassification": "classification",
-            "Reranking": "retrieval",
-            "Summarization": "text-matching",
-            "InstructionReranking": "retrieval",
-            # multimodal *Classification → retrieval (the classification LoRA
-            # is empty in our training/eval pipeline for non-text modalities)
-            "ImageClassification": "retrieval",
-            "ZeroShotClassification": "retrieval",
-            "AudioClassification": "retrieval",
-            "AudioZeroshotClassification": "retrieval",
-            "AudioMultilabelClassification": "retrieval",
-            "VideoClassification": "retrieval",
-            "VideoZeroshotClassification": "retrieval",
-            # Compositionality: simplified-task fallback would send these to
-            # text-matching (pair-classification → text-matching). For the
-            # word-order-sensitive subset (AROFlickrOrder, AROCocoOrder,
-            # SugarCrepe, Winoground, ImageCoDe) clustering beats text-matching
-            # by +0.01 to +0.27 main_score on both sizes; AROVisualRelation /
-            # AROVisualAttribution are insensitive (Δ<0.005). Route to clustering.
-            "Compositionality": "clustering",
-            # AudioPairClassification: simplified default is text-matching,
-            # but retrieval adapter wins across all 3 tasks (NMSQAPair,
-            # CREMADPair, VoxPopuliAccentPair) by +0.06-0.08 on both sizes.
-            "AudioPairClassification": "retrieval",
-            # ImageClustering: clustering adapter is the simplified default,
-            # but text-matching outperforms across all 5 tasks (CIFAR10/100,
-            # TinyImageNet, ImageNet10/Dog15 Clustering) by +0.004-0.08.
-            "ImageClustering": "text-matching",
-        },
+        model_prompts=_OMNI_MODEL_PROMPTS,
     ),
     name="jinaai/jina-embeddings-v5-omni-small",
     model_type=["dense"],
@@ -1078,30 +1077,7 @@ jina_embeddings_v5_omni_nano = ModelMeta(
         max_frames=64,
         target_sampling_rate=16000,
         max_samples=30 * 16000,
-        # See `jina_embeddings_v5_omni_small.loader_kwargs.model_prompts` for
-        # the rationale — same overrides apply.
-        model_prompts={
-            "Retrieval": "retrieval",
-            "Clustering": "clustering",
-            "Classification": "classification",
-            "STS": "text-matching",
-            "PairClassification": "text-matching",
-            "BitextMining": "text-matching",
-            "MultilabelClassification": "classification",
-            "Reranking": "retrieval",
-            "Summarization": "text-matching",
-            "InstructionReranking": "retrieval",
-            "ImageClassification": "retrieval",
-            "ZeroShotClassification": "retrieval",
-            "AudioClassification": "retrieval",
-            "AudioZeroshotClassification": "retrieval",
-            "AudioMultilabelClassification": "retrieval",
-            "VideoClassification": "retrieval",
-            "VideoZeroshotClassification": "retrieval",
-            "Compositionality": "clustering",
-            "AudioPairClassification": "retrieval",
-            "ImageClustering": "text-matching",
-        },
+        model_prompts=_OMNI_MODEL_PROMPTS,
     ),
     name="jinaai/jina-embeddings-v5-omni-nano",
     model_type=["dense"],
