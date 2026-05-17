@@ -96,7 +96,7 @@ class BrightProBiologyRetrieval(AbsTaskRetrieval):
         ),
         type="Retrieval",
         prompt={
-            "query": "Represent this biology post for searching relevant passages: "
+            "query": "Given a biology post, retrieve relevant passages that help answer the post"
         },
         category="t2t",
         eval_splits=["standard"],
@@ -143,7 +143,7 @@ class BrightProEarthScienceRetrieval(AbsTaskRetrieval):
         ),
         type="Retrieval",
         prompt={
-            "query": "Represent this earth_science post for searching relevant passages: "
+            "query": "Given a earth_science post, retrieve relevant passages that help answer the post"
         },
         category="t2t",
         eval_splits=["standard"],
@@ -190,7 +190,7 @@ class BrightProEconomicsRetrieval(AbsTaskRetrieval):
         ),
         type="Retrieval",
         prompt={
-            "query": "Represent this economics post for searching relevant passages: "
+            "query": "Given a economics post, retrieve relevant passages that help answer the post"
         },
         category="t2t",
         eval_splits=["standard"],
@@ -237,7 +237,7 @@ class BrightProPsychologyRetrieval(AbsTaskRetrieval):
         ),
         type="Retrieval",
         prompt={
-            "query": "Represent this psychology post for searching relevant passages: "
+            "query": "Given a psychology post, retrieve relevant passages that help answer the post"
         },
         category="t2t",
         eval_splits=["standard"],
@@ -284,7 +284,7 @@ class BrightProRoboticsRetrieval(AbsTaskRetrieval):
         ),
         type="Retrieval",
         prompt={
-            "query": "Represent this robotics post for searching relevant passages: "
+            "query": "Given a robotics post, retrieve relevant passages that help answer the post"
         },
         category="t2t",
         eval_splits=["standard"],
@@ -331,7 +331,7 @@ class BrightProStackoverflowRetrieval(AbsTaskRetrieval):
         ),
         type="Retrieval",
         prompt={
-            "query": "Represent this stackoverflow post for searching relevant passages: "
+            "query": "Given a stackoverflow post, retrieve relevant passages that help answer the post"
         },
         category="t2t",
         eval_splits=["standard"],
@@ -378,7 +378,7 @@ class BrightProSustainableLivingRetrieval(AbsTaskRetrieval):
         ),
         type="Retrieval",
         prompt={
-            "query": "Represent this sustainable_living post for searching relevant passages: "
+            "query": "Given a sustainable_living post, retrieve relevant passages that help answer the post"
         },
         category="t2t",
         eval_splits=["standard"],
