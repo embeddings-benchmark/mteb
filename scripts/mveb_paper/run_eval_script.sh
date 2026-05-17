@@ -32,6 +32,7 @@ for TASK in "${TASKS_ARRAY[@]}"; do
     fi
 
     if [ -n "$NUM_FRAMES" ]; then
+        JOB_NAME="${JOB_NAME}_nf${NUM_FRAMES}"
         FRAME_ARG="--num-frames $NUM_FRAMES"
         OUTPUT_FOLDER="results/num_frame_${NUM_FRAMES}"
     else
