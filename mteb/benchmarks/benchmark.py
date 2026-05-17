@@ -234,13 +234,16 @@ class Benchmark:
             for task in self.tasks
         ]
 
-        return DatasetCard.from_template(
-            card_data=DatasetCardData(tags=["mteb", "benchmark"]),
-            template_path=str(template_path),
-            benchmark_name=self.name,
-            benchmark_description=self.description,
-            tasks=task_rows,
-            citation=self.citation,
+        return cast(
+            "DatasetCard",
+            DatasetCard.from_template(
+                card_data=DatasetCardData(tags=["mteb", "benchmark"]),
+                template_path=str(template_path),
+                benchmark_name=self.name,
+                benchmark_description=self.description,
+                tasks=task_rows,
+                citation=self.citation,
+            ),
         )
 
     def push_benchmark_card_to_hub(

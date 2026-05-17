@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, Protocol, cast
+from typing import TYPE_CHECKING, Any, Protocol
 
 from mteb._create_dataloaders import create_dataloader
 
@@ -47,7 +47,7 @@ class SklearnEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         evaluator_model: SklearnModelProtocol,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
         self.train_dataset = train_dataset
@@ -82,7 +82,7 @@ class SklearnEvaluator(Evaluator):
         )
         return dataloader_train, dataloader_test
 
-    def __call__(  # type: ignore[override]
+    def __call__(
         self,
         model: EncoderProtocol,
         *,
@@ -126,7 +126,6 @@ class SklearnEvaluator(Evaluator):
                 hf_subset=self.hf_subset,
                 **encode_kwargs,
             )
-            test_cache = cast("Array", test_cache)
 
         logger.info("Running - Fitting classifier...")
         y_train = self.train_dataset[self.label_column_name]
