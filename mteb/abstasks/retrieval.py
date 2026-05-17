@@ -200,13 +200,13 @@ class AbsTaskRetrieval(AbsTask):
             return queries, corpus
 
         if self.metadata.is_multilingual:
-            for subset in self.queries:  # type: ignore[attr-defined]
+            for subset in self.queries:
                 if subset not in self.dataset:
                     self.dataset[subset] = {}
-                for split in self.queries[subset]:  # type: ignore[attr-defined]
+                for split in self.queries[subset]:
                     if split not in self.dataset[subset]:
                         self.dataset[subset][split] = {}  # type: ignore[typeddict-item]
-                    queries = self.queries[subset][split]  # type: ignore[attr-defined]
+                    queries = self.queries[subset][split]
                     corpus = self.corpus[subset][split]  # type: ignore[attr-defined]
 
                     (
@@ -236,10 +236,10 @@ class AbsTaskRetrieval(AbsTask):
             subset = "default"
             if subset not in self.dataset:
                 self.dataset[subset] = {}
-            for split in self.queries:  # type: ignore[attr-defined]
+            for split in self.queries:
                 if split not in self.dataset[subset]:
                     self.dataset[subset][split] = {}  # type: ignore[typeddict-item]
-                queries = self.queries[split]  # type: ignore[attr-defined]
+                queries = self.queries[split]
                 corpus = self.corpus[split]  # type: ignore[attr-defined]
                 (
                     self.dataset[subset][split]["queries"],
@@ -265,7 +265,7 @@ class AbsTaskRetrieval(AbsTask):
                 else:
                     self.dataset[subset][split]["top_ranked"] = None
 
-        del self.queries  # type: ignore[attr-defined]
+        del self.queries
         del self.corpus  # type: ignore[attr-defined]
         del self.relevant_docs  # type: ignore[attr-defined]
         if hasattr(self, "instructions"):

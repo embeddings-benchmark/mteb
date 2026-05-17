@@ -101,9 +101,10 @@ def _convert_conv_history_to_query(
     conversation = row["text"]
     # if it's a list of strings, just join them
     if isinstance(conversation, list) and isinstance(conversation[0], str):
-        conv_str = "; ".join(conversation)
+        conv_str = "; ".join(conversation)  # type: ignore[arg-type]
         current_conversation = [
-            ConversationTurn(role="user", content=message) for message in conversation
+            ConversationTurn(role="user", content=message)  # type: ignore[typeddict-item]
+            for message in conversation
         ]
         warnings.warn(
             "Conversations are a list of strings. Used 'user' role for all turns.",
