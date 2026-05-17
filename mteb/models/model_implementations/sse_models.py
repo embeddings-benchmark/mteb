@@ -69,7 +69,6 @@ stable_static_embedding_mrl_en = ModelMeta(
     training_datasets=_SSE_EN_TRAINING_DATASETS,
     modalities=["text"],
     model_type=["dense"],
-    contacts=["Rikka-Botan"],
     citation=SSE_CITATION,
 )
 
