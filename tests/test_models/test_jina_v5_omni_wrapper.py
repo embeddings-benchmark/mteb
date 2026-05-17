@@ -239,6 +239,21 @@ def test_override_compositionality_routes_to_clustering():
     assert not stub.captured[-1]["prompt"]
 
 
+def test_override_audio_pair_classification_routes_to_retrieval():
+    """retrieval beats text-matching by +0.06-0.08 on the 3 AudioPair tasks."""
+    wrapper, stub = _make_wrapper(model_prompts=_omni_model_prompts())
+    _encode(wrapper, PromptType.query, "AudioPairClassification")
+    assert stub.captured[-1]["task"] == "retrieval"
+
+
+def test_override_image_clustering_routes_to_text_matching():
+    """text-matching beats clustering by +0.004-0.08 on the 5 ImageClustering tasks."""
+    wrapper, stub = _make_wrapper(model_prompts=_omni_model_prompts())
+    _encode(wrapper, PromptType.document, "ImageClustering")
+    assert stub.captured[-1]["task"] == "text-matching"
+    assert not stub.captured[-1]["prompt"]
+
+
 def test_omni_overrides_are_minimal():
     """Only list MTEB types whose Jina LoRA differs from simplified_task_type."""
     overrides = _omni_model_prompts()

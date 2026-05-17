@@ -990,6 +990,9 @@ jina_embeddings_v5_omni_small = ModelMeta(
         # Only list MTEB types whose Jina LoRA adapter diverges from
         # task_metadata.simplified_task_type. Everything else is routed
         # automatically by the wrapper via _SIMPLIFIED_TO_JINA_TASK.
+        # Routing chosen from a full crosswise eval (145 tasks × 4 variants
+        # × 2 models): for each task type we pick the variant that produces
+        # the highest average main_score across all tasks in that type.
         model_prompts={
             # multimodal *Classification → retrieval (the classification LoRA
             # is empty in our training/eval pipeline for non-text modalities)
@@ -1003,6 +1006,14 @@ jina_embeddings_v5_omni_small = ModelMeta(
             # Compositionality is simplified="pair-classification" but our
             # harness routes it through the clustering adapter.
             "Compositionality": "clustering",
+            # AudioPairClassification: simplified default is text-matching,
+            # but retrieval adapter wins across all 3 tasks (NMSQAPair,
+            # CREMADPair, VoxPopuliAccentPair) by +0.06-0.08 on both sizes.
+            "AudioPairClassification": "retrieval",
+            # ImageClustering: clustering adapter is the simplified default,
+            # but text-matching outperforms across all 5 tasks (CIFAR10/100,
+            # TinyImageNet, ImageNet10/Dog15 Clustering) by +0.004-0.08.
+            "ImageClustering": "text-matching",
         },
     ),
     name="jinaai/jina-embeddings-v5-omni-small",
@@ -1063,6 +1074,8 @@ jina_embeddings_v5_omni_nano = ModelMeta(
             "VideoClassification": "retrieval",
             "VideoZeroshotClassification": "retrieval",
             "Compositionality": "clustering",
+            "AudioPairClassification": "retrieval",
+            "ImageClustering": "text-matching",
         },
     ),
     name="jinaai/jina-embeddings-v5-omni-nano",
