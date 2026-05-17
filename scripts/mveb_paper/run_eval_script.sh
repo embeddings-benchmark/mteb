@@ -14,6 +14,8 @@ fi
 # Create log dir before anything else
 mkdir -p /data/home/niklas/deepshah/mteb/logs
 
+# Switch directory allowing the bash to find if result already exists or not
+cd /data/home/niklas/deepshah/mteb
 if [ -z "$TASKS" ]; then
     TASKS_ARRAY=("")
 else
