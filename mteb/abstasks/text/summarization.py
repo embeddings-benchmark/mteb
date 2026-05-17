@@ -12,6 +12,7 @@ from mteb.abstasks._statistics_calculation import (
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models import EncoderProtocol
+from mteb.timing import TimingStack
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
@@ -95,6 +96,7 @@ class AbsTaskSummarization(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs,
     ) -> SummarizationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -114,6 +116,7 @@ class AbsTaskSummarization(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs, num_proc=num_proc)

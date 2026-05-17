@@ -12,6 +12,7 @@ from tqdm.auto import tqdm
 from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
 from mteb.similarity_functions import cos_sim, dot_score
+from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -73,6 +74,7 @@ class SummarizationEvaluator(Evaluator):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
+        timer: TimingStack | None = None,
         **kwargs,
     ) -> None:
         """Summarization Evaluator
@@ -95,6 +97,7 @@ class SummarizationEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
+        self.timer = timer or TimingStack()
 
     def __call__(  # noqa: PLR0914
         self,
@@ -109,38 +112,48 @@ class SummarizationEvaluator(Evaluator):
             len(machine_summaries) for machine_summaries in self.machine_summaries
         ]
 
-        logger.info("Encoding human summaries...")
-        embs_human_summaries_all = model.encode(
-            _create_dataloader_from_texts(
-                [
-                    summary
-                    for human_summaries in self.human_summaries
-                    for summary in human_summaries
-                ],
-                num_proc=num_proc,
+        with self.timer(
+            "Encoding human summaries",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Encoding human summaries...",
+        ):
+            embs_human_summaries_all = model.encode(
+                _create_dataloader_from_texts(
+                    [
+                        summary
+                        for human_summaries in self.human_summaries
+                        for summary in human_summaries
+                    ],
+                    num_proc=num_proc,
+                    **encode_kwargs,
+                ),
+                task_metadata=self.task_metadata,
+                hf_subset=self.hf_subset,
+                hf_split=self.hf_split,
                 **encode_kwargs,
-            ),
-            task_metadata=self.task_metadata,
-            hf_subset=self.hf_subset,
-            hf_split=self.hf_split,
-            **encode_kwargs,
-        )
+            )
 
-        logger.info("Encoding machine summaries...")
-        embs_machine_summaries_all = model.encode(
-            _create_dataloader_from_texts(
-                [
-                    summary
-                    for machine_summaries in self.machine_summaries
-                    for summary in machine_summaries
-                ],
+        with self.timer(
+            "Encoding machine summaries",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Encoding machine summaries...",
+        ):
+            embs_machine_summaries_all = model.encode(
+                _create_dataloader_from_texts(
+                    [
+                        summary
+                        for machine_summaries in self.machine_summaries
+                        for summary in machine_summaries
+                    ],
+                    **encode_kwargs,
+                ),
+                task_metadata=self.task_metadata,
+                hf_subset=self.hf_subset,
+                hf_split=self.hf_split,
                 **encode_kwargs,
-            ),
-            task_metadata=self.task_metadata,
-            hf_subset=self.hf_subset,
-            hf_split=self.hf_split,
-            **encode_kwargs,
-        )
+            )
 
         # Split the embeddings into the original human & machine summaries
         embs_human_summaries_all_split = np.split(
@@ -155,51 +168,54 @@ class SummarizationEvaluator(Evaluator):
         all_sim_scores = []
         all_human_scores = []
 
-        for i, (embs_human_summaries, embs_machine_summaries) in tqdm(
-            enumerate(
-                zip(embs_human_summaries_all_split, embs_machine_summaries_all_split)
-            ),
-            desc="Scoring",
-            total=len(self.human_summaries),
-        ):
-            cosine_pred_scores = []  # Predicted quality score for a summary
-            dot_pred_scores = []  # Predicted quality score for a summary
-            sim_scores = []
-            human_scores = []  # Human score for a summary
-
-            for emb_machine_summary, human_eval_score in zip(
-                embs_machine_summaries, self.gold_scores[i]
-            ):  # Iterate through all machine summaries + scores for a single sample
-                cosine_scores = cos_sim(emb_machine_summary, embs_human_summaries)
-                dot_scores = dot_score(emb_machine_summary, embs_human_summaries)
-
-                _sim_score = [
-                    float(model.similarity(emb_machine_summary, emb_human_summary))
-                    for emb_human_summary in embs_human_summaries
-                ]
-                sim_score = torch.tensor(_sim_score)
-
-                cosine_max_score = torch.max(cosine_scores).item()
-                dot_max_score = torch.max(dot_scores).item()
-                sim_max_score = torch.max(sim_score).item()
-
-                cosine_pred_scores.append(cosine_max_score)
-                dot_pred_scores.append(dot_max_score)
-                sim_scores.append(sim_max_score)
-                human_scores.append(human_eval_score)
-
-            if (
-                (len(set(human_scores)) == 1)
-                or (len(set(dot_pred_scores)) == 1)
-                or (len(set(cosine_pred_scores)) == 1)
+        with self.timer("Scoring", split=self.hf_split, subset=self.hf_subset):
+            for i, (embs_human_summaries, embs_machine_summaries) in tqdm(
+                enumerate(
+                    zip(
+                        embs_human_summaries_all_split, embs_machine_summaries_all_split
+                    )
+                ),
+                desc="Scoring",
+                total=len(self.human_summaries),
             ):
-                logger.info(f"Skipping sample {i} due to equal scores")
-                continue
+                cosine_pred_scores = []  # Predicted quality score for a summary
+                dot_pred_scores = []  # Predicted quality score for a summary
+                sim_scores = []
+                human_scores = []  # Human score for a summary
 
-            all_cosine_scores.append(cosine_pred_scores)
-            all_dot_scores.append(dot_pred_scores)
-            all_sim_scores.append(sim_scores)
-            all_human_scores.append(human_scores)
+                for emb_machine_summary, human_eval_score in zip(
+                    embs_machine_summaries, self.gold_scores[i]
+                ):  # Iterate through all machine summaries + scores for a single sample
+                    cosine_scores = cos_sim(emb_machine_summary, embs_human_summaries)
+                    dot_scores = dot_score(emb_machine_summary, embs_human_summaries)
+
+                    _sim_score = [
+                        float(model.similarity(emb_machine_summary, emb_human_summary))
+                        for emb_human_summary in embs_human_summaries
+                    ]
+                    sim_score = torch.tensor(_sim_score)
+
+                    cosine_max_score = torch.max(cosine_scores).item()
+                    dot_max_score = torch.max(dot_scores).item()
+                    sim_max_score = torch.max(sim_score).item()
+
+                    cosine_pred_scores.append(cosine_max_score)
+                    dot_pred_scores.append(dot_max_score)
+                    sim_scores.append(sim_max_score)
+                    human_scores.append(human_eval_score)
+
+                if (
+                    (len(set(human_scores)) == 1)
+                    or (len(set(dot_pred_scores)) == 1)
+                    or (len(set(cosine_pred_scores)) == 1)
+                ):
+                    logger.info(f"Skipping sample {i} due to equal scores")
+                    continue
+
+                all_cosine_scores.append(cosine_pred_scores)
+                all_dot_scores.append(dot_pred_scores)
+                all_sim_scores.append(sim_scores)
+                all_human_scores.append(human_scores)
         return SummarizationDistances(
             cosine_scores=all_cosine_scores,
             dot_scores=all_dot_scores,
