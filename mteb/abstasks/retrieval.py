@@ -4,7 +4,6 @@ import json
 import logging
 from collections import defaultdict
 from pathlib import Path
-from time import time
 from typing import TYPE_CHECKING, Any, Literal
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
@@ -346,7 +345,7 @@ class AbsTaskRetrieval(AbsTask):
             encode_kwargs: Keyword arguments passed to the encoder
             prediction_folder: Folder to save model predictions
             num_proc: Number of processes to use
-            timer: TimingStack object to track evaluation phases
+            timer: A context manager that tracks the timing of evaluation phases.
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
@@ -369,7 +368,7 @@ class AbsTaskRetrieval(AbsTask):
             **kwargs,
         )
 
-    def _evaluate_subset(  # noqa: PLR0914
+    def _evaluate_subset(
         self,
         model: MTEBModels,
         data_split: RetrievalSplitData,
@@ -392,7 +391,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset: Subset to evaluate on
             prediction_folder: Folder with results prediction
             num_proc: Number of processes to use
-            timer: TimingStack object to track evaluation phases
+            timer: A context manager that tracks the timing of evaluation phases.
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
@@ -430,15 +429,10 @@ class AbsTaskRetrieval(AbsTask):
                 f"RetrievalEvaluator expects a SearchInterface, Encoder, or CrossEncoder, got {type(model)}"
             )
 
-        start_time = time()
         results = retriever(
             search_model,
             encode_kwargs=encode_kwargs,
             num_proc=num_proc,
-        )
-        end_time = time()
-        logger.debug(
-            f"Running retrieval task - Time taken to retrieve: {end_time - start_time:.2f} seconds"
         )
 
         if prediction_folder:

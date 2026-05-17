@@ -325,7 +325,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
         public_only: Run only public tasks. If None, it will attempt to run the private task.
         num_proc: Number of processes to use during data loading and transformation. Defaults to 1.
-        timer: TimingStack object to track evaluation time.
+        timer: A context manager that tracks the timing of evaluation phases.
 
     Returns:
         The results of the evaluation.

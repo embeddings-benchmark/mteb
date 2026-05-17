@@ -161,7 +161,7 @@ class AbsTask(ABC):  # noqa: PLR0904
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             prediction_folder: Folder to save model predictions
             num_proc: Number of processes to use for loading the dataset or processing.
-            timer: TimingStack object to track evaluation phases.
+            timer: A context manager that tracks the timing of evaluation phases.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
 
         Returns:
@@ -355,7 +355,7 @@ class AbsTask(ABC):  # noqa: PLR0904
 
         Args:
             num_proc: Number of processes to use for loading the dataset.
-            timer: TimingStack object to track phases.
+            timer: A context manager that tracks the timing of evaluation phases.
             kwargs: Additional keyword arguments passed to the load_dataset function. Keep for forward compatibility.
         """
         if self.data_loaded:
