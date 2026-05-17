@@ -30,11 +30,11 @@ _SSE_EN_TRAINING_DATASETS = {
     "MrTidyRetrieval",
     # tomaarsen/natural-questions-hard-negatives
     "NQ",
-    "NQHardNegatives",
-    "NanoNQRetrieval",
     # nthakur/swim-ir-monolingual, sentence-transformers/{squad,trivia-qa-triplet,
     # all-nli,pubmedqa,s2orc,paq} are listed on the cards but do not have a direct
     # mteb counterpart (or are not used as evaluation tasks), so they are omitted.
+    "SCIDOCS",
+    "MultiLongDocRetrieval",
 }
 
 _SSE_JA_TRAINING_DATASETS = {
