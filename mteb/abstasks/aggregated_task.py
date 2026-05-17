@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from datasets import Dataset, DatasetDict
 
     from mteb.models.models_protocols import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, HFSubset, ScoresDict
     from mteb.types.statistics import DescriptiveStatistics
 
@@ -151,7 +152,13 @@ class AbsTaskAggregate(AbsTask):
         self,
         model: MTEBModels,
         data_split: DatasetDict | Dataset,
+        *,
         encode_kwargs: EncodeKwargs,
+        hf_split: str,
+        hf_subset: str,
+        prediction_folder: Path | None = None,
+        num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(

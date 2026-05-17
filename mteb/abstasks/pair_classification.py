@@ -16,7 +16,6 @@ from mteb.abstasks._statistics_calculation import (
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ScoringFunction
 from mteb.models.models_protocols import EncoderProtocol
-from mteb.timing import TimingStack
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
@@ -31,6 +30,7 @@ if TYPE_CHECKING:
         PairClassificationDistances,
     )
     from mteb.models.models_protocols import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, Modalities, PromptType
     from mteb.types.statistics import (
         AudioStatistics,

@@ -14,7 +14,6 @@ from mteb.abstasks._statistics_calculation import (
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.models_protocols import EncoderProtocol
-from mteb.timing import TimingStack
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
@@ -25,6 +24,7 @@ if TYPE_CHECKING:
     from datasets import Dataset
 
     from mteb.models.models_protocols import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs
     from mteb.types.statistics import (
         ImageStatistics,

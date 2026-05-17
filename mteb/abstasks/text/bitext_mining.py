@@ -11,13 +11,13 @@ from mteb._evaluators import BitextMiningEvaluator
 from mteb.abstasks._statistics_calculation import calculate_text_statistics
 from mteb.abstasks.abstask import AbsTask
 from mteb.models import EncoderProtocol
-from mteb.timing import TimingStack
 from mteb.types.statistics import SplitDescriptiveStatistics
 
 if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, HFSubset, ScoresDict
     from mteb.types.statistics import TextStatistics
 

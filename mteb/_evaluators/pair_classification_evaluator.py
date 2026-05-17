@@ -60,6 +60,7 @@ class PairClassificationEvaluator(Evaluator):
         input2_column_name: The second column of sentences
         labels: labels[i] is the label for the pair (sentences1[i], sentences2[i]). Must be 0 or 1
         batch_size: Batch size used to compute embeddings
+        timer: A context manager that tracks the timing of evaluation phases.
     """
 
     def __init__(

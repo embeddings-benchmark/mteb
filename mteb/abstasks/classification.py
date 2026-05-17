@@ -295,7 +295,7 @@ class AbsTaskClassification(AbsTask):
 
         return self._calculate_avg_scores(scores)
 
-    def _evaluate_subset_cross_validation(
+    def _evaluate_subset_cross_validation(  # noqa: PLR0914
         self,
         model: EncoderProtocol,
         data_split: DatasetDict,

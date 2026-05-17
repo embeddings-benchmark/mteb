@@ -87,6 +87,7 @@ class SummarizationEvaluator(Evaluator):
         task_metadata: Name of the task
         hf_split: Split of task
         hf_subset: Subset of task
+        timer: A context manager that tracks the timing of evaluation phases.
         **kwargs: Additional arguments to pass to the Evaluator
         """
         super().__init__(**kwargs)

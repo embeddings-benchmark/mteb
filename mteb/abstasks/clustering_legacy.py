@@ -10,7 +10,6 @@ from sklearn import metrics
 
 from mteb._evaluators import ClusteringEvaluator
 from mteb.models import EncoderProtocol
-from mteb.timing import TimingStack
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
@@ -25,6 +24,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, ScoresDict
     from mteb.types.statistics import (
         AudioStatistics,

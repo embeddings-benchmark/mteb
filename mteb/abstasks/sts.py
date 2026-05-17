@@ -7,7 +7,6 @@ from scipy.stats import pearsonr, spearmanr
 
 from mteb._evaluators import AnySTSEvaluator
 from mteb.models import EncoderProtocol
-from mteb.timing import TimingStack
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
@@ -26,6 +25,7 @@ if TYPE_CHECKING:
 
     from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
     from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, Modalities, PromptType
     from mteb.types.statistics import (
         AudioStatistics,

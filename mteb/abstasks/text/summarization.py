@@ -12,7 +12,6 @@ from mteb.abstasks._statistics_calculation import (
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models import EncoderProtocol
-from mteb.timing import TimingStack
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
@@ -24,6 +23,7 @@ if TYPE_CHECKING:
 
     from mteb._evaluators.text.summarization_evaluator import SummarizationMetrics
     from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs
     from mteb.types.statistics import (
         ScoreStatistics,

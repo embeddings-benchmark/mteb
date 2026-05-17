@@ -103,6 +103,7 @@ class SklearnEvaluator(Evaluator):
             test_cache: embeddings of the test set, if already computed
             train_cache: embeddings of the train set, if already computed. Used for cross-validation.
             num_proc: number of processes to use
+            timer: A context manager that tracks the timing of evaluation phases.
 
         Returns:
             Tuple of test predictions and embeddings

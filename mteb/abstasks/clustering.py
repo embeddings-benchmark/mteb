@@ -171,7 +171,7 @@ class AbsTaskClustering(AbsTask):
     input_column_name: str | Sequence[Modalities] = "sentences"
     label_column_name: str = "labels"
 
-    def _evaluate_subset(
+    def _evaluate_subset(  # noqa: PLR0914
         self,
         model: MTEBModels,
         data_split: Dataset,
