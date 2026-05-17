@@ -39,7 +39,7 @@ from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
-from mteb.results.task_result import _json_serialize_kwargs, _write_to_keyed_json
+from mteb.results.task_result import _json_serialize_kwargs, _write_and_merge_keyed_json
 from mteb.types import SubmitResultsResponse
 
 if TYPE_CHECKING:
@@ -52,7 +52,7 @@ logger = logging.getLogger(__name__)
 _EXPERIMENTS_FOLDER_NAME = "experiments"
 
 
-def get_package_versions() -> dict[str, str | None]:
+def _get_package_versions() -> dict[str, str | None]:
     """Get current package versions from the environment.
 
     Returns:
@@ -347,6 +347,7 @@ class ResultCache:
         task_result: TaskResult,
         model_name: str | ModelMeta,
         model_revision: str | None = None,
+        *,
         encode_kwargs: Mapping[str, Any] | None = None,
     ) -> None:
         """Save the task results to the local cache directory in the location {model_name}/{model_revision}/{task_name}.json.
@@ -374,7 +375,7 @@ class ResultCache:
             with model_meta_path.open("w") as f:
                 json.dump(meta.to_dict(), f, default=str, indent=4)
 
-        version_dict = get_package_versions()
+        version_dict = _get_package_versions()
 
         run_settings_list: list[dict[str, Any]] = []
         for split, split_scores in task_result.scores.items():
@@ -391,7 +392,7 @@ class ResultCache:
 
         if run_settings_list:
             run_settings_path = result_path.parent / "run_settings.jsonl"
-            _write_to_keyed_json(run_settings_path, run_settings_list)
+            _write_and_merge_keyed_json(run_settings_path, run_settings_list)
 
     @property
     def default_cache_path(self) -> Path:

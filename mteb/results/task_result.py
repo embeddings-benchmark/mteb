@@ -5,7 +5,7 @@ import json
 import logging
 from collections import defaultdict
 from functools import cached_property
-from importlib.metadata import version as get_version
+from importlib.metadata import version
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -196,7 +196,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
-        mteb_ver = get_version("mteb")
+        mteb_ver = version("mteb")
         flat_scores = defaultdict(list)
         for split, hf_subset_scores in scores.items():
             for hf_subset, hf_scores in hf_subset_scores.items():
@@ -775,7 +775,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             revision = result.dataset_revision
             mteb_version = result.mteb_version
         elif isinstance(result, AbsTask):
-            mteb_version = get_version("mteb")
+            mteb_version = version("mteb")
             name = result.metadata.name
             revision = result.metadata.revision
         else:
@@ -1053,13 +1053,13 @@ def _read_run_settings_from_file(path: Path) -> list[dict[str, Any]]:
     return run_settings
 
 
-def _write_to_keyed_json(
+def _write_and_merge_keyed_json(
     path: Path,
     entries: list[dict[str, Any]],
     *,
     key_fields: tuple[str, str, str] = ("task", "split", "subset"),
 ) -> None:
-    """Write JSONL entries, replacing any existing entries with the same key."""
+    """Write entries to `.jsonl`, if it already exist it will merge it, replacing any existing entries with the same key."""
     existing_entries = _read_run_settings_from_file(path)
     new_keys = {tuple(entry.get(field) for field in key_fields) for entry in entries}
     filtered_existing = [
