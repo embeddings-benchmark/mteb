@@ -285,22 +285,33 @@ class AbsTaskClassification(AbsTask):
         )
         idx_to_pos = {orig: pos for pos, orig in enumerate(union_idxs)}
 
+        dataloader_test = create_dataloader(
+            eval_split,
+            task_metadata=self.metadata,
+            input_column=self.input_column_name,
+            num_proc=num_proc,
+            **encode_kwargs,
+        )
+        test_embeddings = model.encode(
+            dataloader_test,
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            **encode_kwargs,
+        )
+
         scores = []
-        test_cache = None
         all_predictions = []
         for i in range(self.n_experiments):
             logger.info(f"Running experiment ({i}/{self.n_experiments})")
-            train_cache = union_cache[[idx_to_pos[j] for j in all_selected_idxs[i]]]
-            scores_exp, predictions, test_cache = self._run_experiment(
-                model,
+            train_embeddings = union_cache[
+                [idx_to_pos[j] for j in all_selected_idxs[i]]
+            ]
+            scores_exp, predictions = self._run_experiment(
                 train_split.select(all_selected_idxs[i]),
                 eval_split,
-                test_cache=test_cache,
-                encode_kwargs=encode_kwargs,
-                hf_split=hf_split,
-                hf_subset=hf_subset,
-                train_cache=train_cache,
-                num_proc=num_proc,
+                train_embeddings,
+                test_embeddings,
             )
 
             if prediction_folder:
@@ -318,7 +329,7 @@ class AbsTaskClassification(AbsTask):
 
         return self._calculate_avg_scores(scores)
 
-    def _evaluate_subset_cross_validation(  # noqa: PLR0914
+    def _evaluate_subset_cross_validation(
         self,
         model: EncoderProtocol,
         data_split: DatasetDict,
@@ -368,22 +379,15 @@ class AbsTaskClassification(AbsTask):
         ):
             train_split = ds.select(train_idx)
             eval_split = ds.select(val_idx)
-            train_cache = dataset_embeddings[train_idx]
-            test_cache = dataset_embeddings[val_idx]
             train_dataset, idxs, selected_idx = self._undersample_data(
                 train_split, i, idxs
             )
             logger.info(f"Running experiment ({i}/{self.n_experiments})")
-            scores_exp, predictions, _ = self._run_experiment(
-                model,
+            scores_exp, predictions = self._run_experiment(
                 train_dataset,
                 eval_split,
-                encode_kwargs=encode_kwargs,
-                hf_split=hf_split,
-                hf_subset=hf_subset,
-                test_cache=test_cache,
-                train_cache=train_cache[selected_idx],
-                num_proc=num_proc,
+                dataset_embeddings[train_idx][selected_idx],
+                dataset_embeddings[val_idx],
             )
 
             if prediction_folder:
@@ -402,36 +406,20 @@ class AbsTaskClassification(AbsTask):
 
     def _run_experiment(
         self,
-        model: EncoderProtocol,
         train_split: Dataset,
         eval_split: Dataset,
-        *,
-        test_cache: Array | None,
-        encode_kwargs: EncodeKwargs,
-        hf_split: str,
-        hf_subset: str,
-        train_cache: Array | None = None,
-        num_proc: int | None = None,
-    ) -> tuple[ClassificationMetrics, list[float], Array]:
+        train_embeddings: Array,
+        test_embeddings: Array,
+    ) -> tuple[ClassificationMetrics, list[float]]:
         evaluator = self.evaluator(
             train_split,
             eval_split,
-            values_column_name=self.input_column_name,
             label_column_name=self.label_column_name,
-            task_metadata=self.metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
             evaluator_model=self.evaluator_model,
         )
-        y_pred, test_cache = evaluator(
-            model,
-            encode_kwargs=encode_kwargs,
-            test_cache=test_cache,
-            train_cache=train_cache,
-            num_proc=num_proc,
-        )
+        y_pred = evaluator(train_embeddings, test_embeddings)
         y_test = eval_split[self.label_column_name]
-        return self._calculate_scores(y_test, y_pred), y_pred.tolist(), test_cache
+        return self._calculate_scores(y_test, y_pred), y_pred.tolist()
 
     def _calculate_avg_scores(
         self, scores: list[ClassificationMetrics]
