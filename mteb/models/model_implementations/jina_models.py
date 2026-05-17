@@ -1003,11 +1003,13 @@ jina_embeddings_v5_omni_small = ModelMeta(
             "AudioMultilabelClassification": "retrieval",
             "VideoClassification": "retrieval",
             "VideoZeroshotClassification": "retrieval",
-            # Compositionality: experiments on a 23-task / 2-model A2 run showed
-            # routing AROVisualRelation/AROVisualAttribution off retrieval costs
-            # 0.03-0.10 cosine on average (both clustering and text-matching
-            # adapter underperform retrieval), so we leave them on the retrieval
-            # default. (Other routings in this dict were verified to help.)
+            # Compositionality: simplified-task fallback would send these to
+            # text-matching (pair-classification → text-matching). For the
+            # word-order-sensitive subset (AROFlickrOrder, AROCocoOrder,
+            # SugarCrepe, Winoground, ImageCoDe) clustering beats text-matching
+            # by +0.01 to +0.27 main_score on both sizes; AROVisualRelation /
+            # AROVisualAttribution are insensitive (Δ<0.005). Route to clustering.
+            "Compositionality": "clustering",
             # AudioPairClassification: simplified default is text-matching,
             # but retrieval adapter wins across all 3 tasks (NMSQAPair,
             # CREMADPair, VoxPopuliAccentPair) by +0.06-0.08 on both sizes.
@@ -1075,6 +1077,7 @@ jina_embeddings_v5_omni_nano = ModelMeta(
             "AudioMultilabelClassification": "retrieval",
             "VideoClassification": "retrieval",
             "VideoZeroshotClassification": "retrieval",
+            "Compositionality": "clustering",
             "AudioPairClassification": "retrieval",
             "ImageClustering": "text-matching",
         },
