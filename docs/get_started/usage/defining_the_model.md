@@ -111,3 +111,52 @@ model = mteb.evaluate(model, tasks=tasks)
 ```
 
 If you want to submit your implementation to be included in the leaderboard see the section on [submitting a model](../../contributing/adding_a_model.md).
+
+## Using BM25 Baselines
+
+MTEB includes language-aware BM25 baselines that can be loaded like any other model:
+
+```python
+import mteb
+
+# Language-aware BM25: auto-selects stopwords, stemmer, and tokenizer from task metadata
+model = mteb.get_model("mteb/baseline-bm25s")
+
+# Subword BM25: uses a HuggingFace subword tokenizer (Qwen3) for better multilingual coverage
+model = mteb.get_model("mteb/baseline-bm25s-subword")
+```
+
+??? info "Performance comparison on Chinese retrieval"
+
+    The tokenizer choice has a large impact for non-Latin scripts. Results on [LeCaRDv2](https://huggingface.co/datasets/mteb/LeCaRDv2) (Chinese legal case retrieval, 3 795 docs, 159 queries):
+
+    | Model / tokenizer | ndcg@10 |
+    |---|---|
+    | `mteb/baseline-bm25s` (mteb<=2.13.5) | 0.359 |
+    | `mteb/baseline-bm25s` (mteb>2.13.6) | 0.567 |
+    | `mteb/baseline-bm25s-subword` (Qwen3-0.6B) | 0.631 |
+    | Custom Jieba tokenizer (see example below) | 0.641 |
+
+    We recommend using a bm25s-subword as a language agnostic baseline, as it performs reasonably on non-latin as well as latin languages,
+    but if you know the language you can often obtain better performance using a language-specific tokenizer. The differences in the mteb implementation
+    stems for PR [4405](https://github.com/embeddings-benchmark/mteb/pull/4405) which either uses a white-space or character level tokenization depending on the language.
+    For Chinese it is character level.  
+
+### Custom tokenizer
+
+You can pass any `text -> list[str]` callable as a custom tokenizer, or provide a HuggingFace tokenizer name:
+
+```python
+import mteb
+
+# Using a HuggingFace tokenizer by name (e.g. for a specific language)
+model = mteb.get_model("mteb/baseline-bm25s", tokenizer="bert-base-multilingual-cased")
+
+# Using a custom callable (e.g. Jieba for Chinese)
+import jieba
+
+def jieba_tokenize(text: str) -> list[str]:
+    return [t for t in jieba.lcut(text) if t.strip()]
+
+model = mteb.get_model("mteb/baseline-bm25s", tokenizer=jieba_tokenize)
+```

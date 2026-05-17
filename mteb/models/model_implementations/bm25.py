@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-import re
 import unicodedata
 from collections.abc import Callable
 from typing import TYPE_CHECKING
@@ -22,40 +21,14 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-# Logographic/no-space scripts where each character is its own token.
-# Includes CJK, Japanese kana, Hangul, Thai, Khmer, Myanmar.
-_NO_SPACE_SCRIPT = (
-    r"一-鿿"  # CJK Unified Ideographs
-    r"㐀-䶿"  # CJK Extension A
-    r"豈-﫿"  # CJK Compatibility Ideographs
-    r"぀-ゟ"  # Hiragana
-    r"゠-ヿ"  # Katakana
-    r"가-힣"  # Hangul Syllables
-    r"฀-๿"  # Thai
-    r"ក-៿"  # Khmer
-    r"က-႟"  # Myanmar
-)
-# Matches a single logographic character OR a sequence of non-logographic word characters.
-_TOKEN_RE = re.compile(
-    rf"[{_NO_SPACE_SCRIPT}]|[^{_NO_SPACE_SCRIPT}\W]+",
-    re.UNICODE,
-)
-
 
 def _unicode_tokenize(text: str) -> list[str]:
-    """Language-agnostic tokenizer using Unicode script detection.
-
-    Yields character unigrams for logographic scripts (CJK, Thai, etc.) and
-    whitespace-split words for Latin/Cyrillic/Arabic/etc.  No language
-    knowledge or external models required.
-    """
-    return _TOKEN_RE.findall(unicodedata.normalize("NFKC", text).lower())
-
+    return list(unicodedata.normalize("NFKC", text).lower().replace(" ", ""))
 
 # ISO 639-3 → (bm25s stopwords key, PyStemmer language name, custom tokenizer name).
 # bm25s keys: en, de, nl, fr, es, pt, it, ru, sv, no, zh (or None = no stopwords).
 # PyStemmer names: full English name as returned by Stemmer.algorithms() (or None = no stemmer).
-# tokenizer: None = bm25s default, "jieba" = Jieba word segmenter, "char" = Unicode char split.
+# tokenizer: None = bm25s default, "char" = Unicode char split.
 _ISO3_TO_LANG: dict[str, tuple[str | None, str | None, str | None]] = {
     # Both bm25s stopwords and PyStemmer
     "eng": ("en", "english", None),
@@ -70,9 +43,9 @@ _ISO3_TO_LANG: dict[str, tuple[str | None, str | None, str | None]] = {
     "nob": ("no", "norwegian", None),  # Norwegian Bokmål
     "nno": ("no", "norwegian", None),  # Norwegian Nynorsk
     "nor": ("no", "norwegian", None),
-    # Chinese: bm25s stopwords + Jieba word segmenter (falls back to char-level if unavailable)
-    "zho": ("zh", None, "jieba"),
-    "cmn": ("zh", None, "jieba"),
+    # Chinese: bm25s stopwords + char-level tokenizer
+    "zho": ("zh", None, "char"),
+    "cmn": ("zh", None, "char"),
     # No-space scripts without a dedicated tokenizer: character-level split
     "jpn": (None, None, "char"),  # Japanese (could add MeCab later)
     "tha": (None, None, "char"),  # Thai (could add pythainlp later)
@@ -142,7 +115,7 @@ class BM25Tokenizer:
     Supports two backends selected via ``tokenizer``:
 
     * ``None`` — bm25s native whitespace tokeniser (+ optional Snowball stemmer).
-    * ``str`` — named custom tokeniser: ``"jieba"`` or ``"char"``.
+    * ``str`` — named custom tokeniser: ``"char"``.
     * ``callable`` — any ``text -> list[str]`` function (e.g. a subword tokeniser).
 
     For languages without a named stopword list, tokens appearing in ≥
@@ -300,10 +273,6 @@ class BM25Tokenizer:
     def _named_tok(name: str):
         if name == "char":
             return _unicode_tokenize
-        if name == "jieba":
-            import jieba
-
-            return lambda text: [t for t in jieba.lcut(text) if t.strip()]
         raise ValueError(f"Unknown tokenizer name: {name!r}")
 
     @staticmethod
@@ -330,9 +299,8 @@ class BM25Search:
 
     * **Stopwords** — bm25s built-in lists for EN/DE/NL/FR/ES/PT/IT/RU/SV/NO/ZH.
     * **Stemmer** — PyStemmer (Snowball) for 30+ languages.
-    * **Tokenizer** — Jieba word segmentation for Chinese; character-level
-      unigrams for other logographic scripts (Japanese, Thai, …); default
-      whitespace tokenisation for everything else.
+    * **Tokenizer** — character-level unigrams for logographic scripts (CJK,
+      Japanese, Thai, …); default whitespace tokenisation for everything else.
     * **Freq-based stopwords** — for languages that have no named stopword list,
       tokens appearing in ≥ ``freq_threshold`` fraction of corpus documents are
       removed automatically (set ``freq_threshold=0`` to disable).
