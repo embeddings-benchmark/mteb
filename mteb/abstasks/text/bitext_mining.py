@@ -11,6 +11,7 @@ from mteb._evaluators import BitextMiningEvaluator
 from mteb.abstasks._statistics_calculation import calculate_text_statistics
 from mteb.abstasks.abstask import AbsTask
 from mteb.models import EncoderProtocol
+from mteb.timing import TimingStack
 from mteb.types.statistics import SplitDescriptiveStatistics
 
 if TYPE_CHECKING:
@@ -156,6 +157,7 @@ class AbsTaskBitextMining(AbsTask):
         prediction_folder: Path | None = None,
         parallel: bool = False,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs,
     ) -> BitextMiningMetrics | dict[str, BitextMiningMetrics]:
         pairs = self._get_pairs(parallel)
@@ -166,6 +168,7 @@ class AbsTaskBitextMining(AbsTask):
             pair_columns=pairs,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         # NOTE: used only by BUCC

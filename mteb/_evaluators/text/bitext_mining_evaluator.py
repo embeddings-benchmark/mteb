@@ -9,6 +9,7 @@ from tqdm.auto import tqdm
 
 from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
+from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -26,6 +27,7 @@ class BitextMiningEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         pair_columns: list[tuple[str, str]],
+        timer: TimingStack | None = None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -35,6 +37,7 @@ class BitextMiningEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
         self.task_metadata = task_metadata
+        self.timer = timer or TimingStack()
 
     def __call__(
         self,
@@ -59,21 +62,29 @@ class BitextMiningEvaluator(Evaluator):
                 num_proc=num_proc,
                 **encode_kwargs,
             )
-            embeddings[sub] = model.encode(
-                dataloader,
-                task_metadata=self.task_metadata,
-                # parallel datasets have lang pairs for subset
-                hf_subset=self.hf_subset if self.hf_subset != "parallel" else sub,
-                hf_split=self.hf_split,
-                **encode_kwargs,
-            )
+            with self.timer("Encoding", split=self.hf_split, subset=self.hf_subset):
+                embeddings[sub] = model.encode(
+                    dataloader,
+                    task_metadata=self.task_metadata,
+                    # parallel datasets have lang pairs for subset
+                    hf_subset=self.hf_subset if self.hf_subset != "parallel" else sub,
+                    hf_split=self.hf_split,
+                    **encode_kwargs,
+                )
 
-        logger.info("Finding nearest neighbors...")
         neighbours = {}
-        for i, (key1, key2) in enumerate(tqdm(self.pairs, desc="Matching sentences")):
-            neighbours[f"{key1}-{key2}"] = self._similarity_search(
-                embeddings[key1], embeddings[key2], model
-            )
+        with self.timer(
+            "Scoring",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Finding nearest neighbors...",
+        ):
+            for i, (key1, key2) in enumerate(
+                tqdm(self.pairs, desc="Matching sentences")
+            ):
+                neighbours[f"{key1}-{key2}"] = self._similarity_search(
+                    embeddings[key1], embeddings[key2], model
+                )
         return neighbours
 
     def _similarity_search(  # noqa: PLR6301
