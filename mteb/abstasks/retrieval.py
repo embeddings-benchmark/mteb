@@ -512,6 +512,7 @@ class AbsTaskRetrieval(AbsTask):
     def _calculate_descriptive_statistics_from_split(  # noqa: PLR0914
         self,
         split: str,
+        *,
         hf_subset: str | None = None,
         compute_overall: bool = False,
         num_proc: int | None = None,
@@ -604,8 +605,12 @@ class AbsTaskRetrieval(AbsTask):
         if "video" in queries_modalities:
             queries_col_inputs["video"] = queries["video"]
 
-        corpus_stats = calculate_single_input_modality_statistics(corpus_col_inputs)
-        queries_stats = calculate_single_input_modality_statistics(queries_col_inputs)
+        corpus_stats = calculate_single_input_modality_statistics(
+            corpus_col_inputs, max_workers=num_proc
+        )
+        queries_stats = calculate_single_input_modality_statistics(
+            queries_col_inputs, max_workers=num_proc
+        )
 
         number_of_characters = sum(
             stat["total_text_length"]

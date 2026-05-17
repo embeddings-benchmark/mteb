@@ -48,7 +48,11 @@ class DummyTask(AbsTask):
         pass
 
     def _calculate_descriptive_statistics_from_split(  # noqa: PLR6301
-        self, split: str, hf_subset: str | None = None, compute_overall=False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
     ) -> dict[str, float]:
         return {}
 
