@@ -1027,7 +1027,7 @@ def _json_serialize_kwargs(kwargs: Mapping[str, Any] | None) -> dict[str, Any]:
     """Convert keyword arguments into a JSON-serializable structure."""
     if kwargs is None:
         return {}
-    return json.loads(json.dumps(kwargs, default=str))
+    return cast("dict[str, Any]", json.loads(json.dumps(kwargs, default=str)))
 
 
 def _read_run_settings_from_file(path: Path) -> list[dict[str, Any]]:

@@ -18,7 +18,7 @@ For every evaluation run, this file tracks:
 - **Library versions**: The exact versions of the packages in your python environment (including `mteb`, `torch`, `sentence-transformers`, `transformers`, and `flash-attn`).
 - **Encode settings**: The keyword arguments passed to the model's `encode` method (`encode_kwargs`).
 
-This metadata is automatically saved and merged under `{model_name}/{model_revision}/run_settings.jsonl` whenever you use `ResultCache.save_to_cache()`, making it incredibly easy to review or share the exact settings behind your results.
+This metadata is automatically saved and merged under `{model_name}/{model_revision}/run_settings.jsonl` whenever you use `ResultCache.save_to_cache()`, and is also copied and merged to the results repository clone when submitting results via `ResultCache.submit_results()`, making it easy to review or share the exact settings behind your results.
 
 ## New in v2.13
 

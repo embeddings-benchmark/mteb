@@ -39,7 +39,11 @@ from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
-from mteb.results.task_result import _json_serialize_kwargs, _write_and_merge_keyed_json
+from mteb.results.task_result import (
+    _json_serialize_kwargs,
+    _read_run_settings_from_file,
+    _write_and_merge_keyed_json,
+)
 from mteb.types import SubmitResultsResponse
 
 if TYPE_CHECKING:
@@ -144,6 +148,25 @@ class CopyResultsAction:
                     shutil.copy2(model_meta_file, dest_model_meta)
                     self.copied_files.append(dest_model_meta)
                     logger.debug(f"Copied {model_meta_file} to {dest_model_meta}")
+
+                run_settings_file = source_model_dir / "run_settings.jsonl"
+                if run_settings_file.exists():
+                    dest_run_settings = dest_dir / "run_settings.jsonl"
+                    if (
+                        dest_run_settings.exists()
+                        and dest_run_settings not in self._overwritten_file_contents
+                    ):
+                        self._overwritten_file_contents[dest_run_settings] = (
+                            dest_run_settings.read_bytes()
+                        )
+                        local_entries = _read_run_settings_from_file(run_settings_file)
+                        _write_and_merge_keyed_json(dest_run_settings, local_entries)
+                    else:
+                        shutil.copy2(run_settings_file, dest_run_settings)
+                    self.copied_files.append(dest_run_settings)
+                    logger.debug(
+                        f"Copied/merged {run_settings_file} to {dest_run_settings}"
+                    )
 
         logger.info(f"Copied {len(self.copied_files)} files to remote")
 
