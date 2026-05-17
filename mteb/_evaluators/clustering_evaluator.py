@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, cast
 
 from sklearn import cluster
 
@@ -34,7 +34,7 @@ class ClusteringEvaluator(Evaluator):
         hf_subset: str,
         clustering_batch_size: int = 500,
         timer: TimingStack | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
         self.dataset = dataset
@@ -91,4 +91,5 @@ class ClusteringEvaluator(Evaluator):
                 random_state=self.seed,
             )
             clustering_model.fit(embeddings)
-        return clustering_model.labels_.tolist()
+        predicted_labels = cast("list[int]", clustering_model.labels_.tolist())
+        return predicted_labels

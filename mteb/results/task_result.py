@@ -6,7 +6,7 @@ import logging
 from collections import defaultdict
 from functools import cached_property
 from importlib.metadata import version
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 from huggingface_hub import EvalResult
@@ -299,7 +299,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     @property
     def task_type(self) -> str:
         """Get the type of the task."""
-        return self.task.metadata.type
+        return cast("str", self.task.metadata.type)
 
     @property
     def is_public(self) -> bool:
@@ -325,7 +325,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         """Get the eval splits present in the scores."""
         return list(self.scores.keys())
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         """Convert the TaskResult to a dictionary.
 
         Returns:
@@ -334,7 +334,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         return self.model_dump()
 
     @classmethod
-    def from_dict(cls, data: dict) -> Self:
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         """Create a TaskResult from a dictionary.
 
         Args:
@@ -447,7 +447,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                             hf_subset_scores.pop(key)  # type: ignore[attr-defined]
 
     @classmethod
-    def _convert_from_before_v1_11_0(cls, data: dict) -> TaskResult:
+    def _convert_from_before_v1_11_0(cls, data: dict[str, Any]) -> TaskResult:
         from mteb.get_tasks import _TASKS_REGISTRY
 
         # in case the task name is not found in the registry, try to find a lower case version
@@ -547,8 +547,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         languages: list[ISOLanguage | ISOLanguageScript] | None = None,
         scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
-        aggregation: Callable[[list[Score]], Any] = np.mean,
-    ) -> Any:
+        aggregation: Callable[[list[Score]], float] = np.mean,
+    ) -> float:
         """Get a score for the specified splits, languages, scripts and aggregation function.
 
         Args:
@@ -632,7 +632,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         return val_sum / n_val
 
     @classmethod
-    def from_validated(cls, **data) -> TaskResult:
+    def from_validated(cls, **data: Any) -> TaskResult:
         """Create a TaskResult from validated data.
 
         Returns:

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 from sklearn.metrics.pairwise import (
     paired_cosine_distances,
@@ -58,7 +58,7 @@ class AnySTSEvaluator(Evaluator):
         input1_prompt_type: PromptType | None,
         input2_prompt_type: PromptType | None,
         timer: TimingStack | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
         self.dataset = dataset

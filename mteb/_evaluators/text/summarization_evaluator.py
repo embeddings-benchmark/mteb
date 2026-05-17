@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import sys
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
 import torch
@@ -75,7 +75,7 @@ class SummarizationEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         timer: TimingStack | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Summarization Evaluator
 

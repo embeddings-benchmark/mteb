@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from datasets import Dataset
 
@@ -37,7 +37,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         timer: TimingStack | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
 

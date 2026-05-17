@@ -277,15 +277,15 @@ def calculate_video_statistics(  # noqa: PLR0914
         total_duration_seconds=sum(all_durations)  # type: ignore[arg-type]
         if all_durations is not None
         else None,
-        total_frames=sum(all_frames) if all_frames is not None else None,  # type: ignore[type-var,arg-type]
+        total_frames=sum(all_frames) if all_frames is not None else None,  # type: ignore[arg-type]
         min_width=min(all_widths) if all_widths is not None else None,  # type: ignore[type-var]
-        average_width=sum(all_widths) / n if all_widths is not None else None,  # type: ignore[type-var,arg-type]
+        average_width=sum(all_widths) / n if all_widths is not None else None,  # type: ignore[arg-type]
         max_width=max(all_widths) if all_widths is not None else None,  # type: ignore[type-var]
         min_height=min(all_heights) if all_heights is not None else None,  # type: ignore[type-var]
-        average_height=sum(all_heights) / n if all_heights is not None else None,  # type: ignore[type-var,arg-type]
+        average_height=sum(all_heights) / n if all_heights is not None else None,  # type: ignore[arg-type]
         max_height=max(all_heights) if all_heights is not None else None,  # type: ignore[type-var]
         min_duration_seconds=min(all_durations) if all_durations is not None else None,  # type: ignore[type-var]
-        average_duration_seconds=sum(all_durations) / n  # type: ignore[type-var,arg-type]
+        average_duration_seconds=sum(all_durations) / n  # type: ignore[arg-type]
         if all_durations is not None
         else None,
         max_duration_seconds=max(all_durations) if all_durations is not None else None,  # type: ignore[type-var]
@@ -399,17 +399,16 @@ def calculate_top_ranked_statistics(
 def calculate_relevant_docs_statistics(
     relevant_docs: Mapping[str, Mapping[str, int]],
 ) -> RelevantDocsStatistics:
-    qrels_lengths = [len(relevant_docs[qid]) for qid in relevant_docs]
     unique_qrels = len({doc for qid in relevant_docs for doc in relevant_docs[qid]})
     # number of qrels that are not 0
-    num_qrels_non_zero = sum(
+    qrels_lengths = [
         sum(1 for doc_id in docs if docs[doc_id] != 0)
         for docs in relevant_docs.values()
-    )
-    qrels_per_doc = num_qrels_non_zero / len(relevant_docs)
+    ]
+    qrels_per_doc = sum(qrels_lengths) / len(relevant_docs)
 
     return RelevantDocsStatistics(
-        num_relevant_docs=num_qrels_non_zero,
+        num_relevant_docs=sum(qrels_lengths),
         min_relevant_docs_per_query=min(qrels_lengths),
         average_relevant_docs_per_query=qrels_per_doc,
         max_relevant_docs_per_query=max(qrels_lengths),
@@ -458,7 +457,7 @@ _STAT_FN: dict[str, Any] = {
 
 def _compute_side_statistics(
     col_modalities: list[tuple[str, str]],
-    load_col: Callable[[str], list],
+    load_col: Callable[[str], list[Any]],
     n: int,
     max_workers: int | None = None,
 ) -> tuple[dict[str, Any], list[list[str]]]:
@@ -494,7 +493,7 @@ def _compute_side_statistics(
 def calculate_pair_modality_statistics(
     col_modalities1: list[tuple[str, str]],
     col_modalities2: list[tuple[str, str]],
-    load_col: Callable[[str], list],
+    load_col: Callable[[str], list[Any]],
     n: int,
     max_workers: int | None = None,
 ) -> PairModalityStatistics:

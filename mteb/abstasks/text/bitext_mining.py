@@ -99,15 +99,13 @@ class AbsTaskBitextMining(AbsTask):
         if subsets_to_run is not None:
             hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
-        encoder_model = cast("EncoderProtocol", model)
-
         if self.dataset is None:
             raise ValueError("Dataset is not loaded.")
 
         scores: dict[str, BitextMiningMetrics] = {}
         if self.parallel_subsets:
             scores = self._evaluate_subset(  # type: ignore[assignment]
-                encoder_model,
+                model,
                 self.dataset[split],
                 parallel=True,
                 hf_split=split,
@@ -128,7 +126,7 @@ class AbsTaskBitextMining(AbsTask):
                 else:
                     data_split = self.dataset[hf_subset][split]
                 scores[hf_subset] = self._evaluate_subset(  # type: ignore[assignment]
-                    encoder_model,
+                    model,
                     data_split,
                     hf_split=split,
                     hf_subset=hf_subset,
@@ -158,7 +156,7 @@ class AbsTaskBitextMining(AbsTask):
         parallel: bool = False,
         num_proc: int | None = None,
         timer: TimingStack | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> BitextMiningMetrics | dict[str, BitextMiningMetrics]:
         pairs = self._get_pairs(parallel)
 

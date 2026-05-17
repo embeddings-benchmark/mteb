@@ -17,6 +17,7 @@ from mteb.timing import TimingStack
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    from datasets import Dataset
     from PIL.Image import Image
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -27,7 +28,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class CustomImageDataset(torch.utils.data.Dataset):
+class CustomImageDataset(torch.utils.data.Dataset[dict[str, Any]]):
     def __init__(
         self,
         images: list[Image],
@@ -64,7 +65,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
 
     def __init__(
         self,
-        dataset,
+        dataset: Dataset,
         *,
         images_column_names: str | Sequence[str],
         texts_column_names: str | Sequence[str],
@@ -74,7 +75,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         timer: TimingStack | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         super().__init__(**kwargs)
 
@@ -88,7 +89,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         self.hf_subset = hf_subset
         self.timer = timer or TimingStack()
 
-    def __call__(  # type: ignore[override]
+    def __call__(
         self,
         model: EncoderProtocol,
         *,
@@ -134,19 +135,19 @@ class ImageTextPairClassificationEvaluator(Evaluator):
             dim=-1,
         ).view(len(self.dataset), self.num_texts_per_sample, -1)
 
-        def _image_collate_fn(batch):
+        def _image_collate_fn(batch: list[dict[str, Any]]) -> dict[str, list[Any]]:
             """Collate function for image batches."""
             return {"image": [item["image"] for item in batch]}
 
+        _image_dl = DataLoader(
+            CustomImageDataset(images),
+            collate_fn=_image_collate_fn,
+            num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
+        )
+
         with self.timer("Encoding images", split=self.hf_split, subset=self.hf_subset):
             image_embeddings = model.encode(
-                DataLoader(
-                    CustomImageDataset(images),
-                    collate_fn=_image_collate_fn,
-                    num_workers=num_proc
-                    if num_proc is not None and num_proc > 1
-                    else 0,
-                ),
+                _image_dl,  # type: ignore[arg-type]
                 task_metadata=self.task_metadata,
                 hf_subset=self.hf_subset,
                 hf_split=self.hf_split,

@@ -75,7 +75,7 @@ class PairClassificationEvaluator(Evaluator):
         input1_prompt_type: PromptType | None,
         input2_prompt_type: PromptType | None,
         timer: TimingStack | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
         self.dataset = dataset

@@ -2,6 +2,7 @@ import logging
 import sys
 from collections import defaultdict
 from copy import copy
+from typing import Any
 
 import datasets
 from datasets import Dataset
@@ -40,7 +41,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
         num_proc: int | None = None,
         *,
         timer: TimingStack | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Load the dataset."""
         if self.data_loaded:
@@ -54,7 +55,12 @@ class AbsTaskReranking(AbsTaskRetrieval):
             # use AbsTaskRetrieval default to load the data
             return super().load_data(num_proc=num_proc, timer=timer)
 
-    def _process_example(self, example: dict, split: str, query_idx: int) -> dict:  # noqa: PLR6301
+    def _process_example(  # noqa: PLR6301
+        self,
+        example: dict[str, Any],
+        split: str,
+        query_idx: int,
+    ) -> dict[str, Any]:
         """Process a single example from the dataset.
 
         Args:
@@ -100,7 +106,9 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
         return example_data
 
-    def transform_old_dataset_format(self, given_dataset: Dataset | None = None):
+    def transform_old_dataset_format(
+        self, given_dataset: Dataset | None = None
+    ) -> None:
         """Transform the old format to the new format using HF datasets mapping. This is a one-time transformation for datasets which are in the old format.
 
         Args:

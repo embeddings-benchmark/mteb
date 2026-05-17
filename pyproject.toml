@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.13.5"
+version = "2.13.7"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -133,6 +133,8 @@ ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b
 
 
 
+
+
 [dependency-groups]
 lint = [
     "ruff==0.14.0", # locked so we don't get PRs which fail only due to a lint update
@@ -157,7 +159,7 @@ docs = [
     "tabulate>=0.9.0",
 ]
 typing = [
-    "mypy==1.19.1",
+    "mypy==2.1.0",
     "types-cachetools>=6.2.0.20250827",
     "types-pysocks>=1.7.1.20250828",
     "types-pyyaml>=6.0.12.20250822",
@@ -444,6 +446,7 @@ flash-attn = [{ requirement = "torch", match-runtime = true }]
 
 [tool.mypy]
 plugins = ['pydantic.mypy']
+strict = true
 
 [[tool.mypy.overrides]]
 # these modules not typed and don't have stubs

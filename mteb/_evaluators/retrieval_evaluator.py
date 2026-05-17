@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from mteb.timing import TimingStack
 
@@ -42,7 +42,7 @@ class RetrievalEvaluator(Evaluator):
         top_ranked: TopRankedDocumentsType | None = None,
         qid: str | None = None,
         timer: TimingStack | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
         self.corpus = corpus

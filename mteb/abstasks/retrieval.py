@@ -161,13 +161,17 @@ class AbsTaskRetrieval(AbsTask):
     ) -> None:
         """Convert dataset from v1 (from `self.queries`, `self.document`) format to v2 format (`self.dotaset`)."""
         # check if dataset is `v1` version
-        if not hasattr(self, "queries"):
+        if (
+            not hasattr(self, "queries")
+            and not hasattr(self, "corpus")
+            and not hasattr(self, "relevant_docs")
+        ):
             return
 
         self.dataset = {}
 
         def _process_split(
-            ds_queries: dict | Dataset, ds_corpus: dict | Dataset
+            ds_queries: dict[str, Any] | Dataset, ds_corpus: dict[str, Any] | Dataset
         ) -> tuple[Dataset, Dataset]:
             if isinstance(ds_queries, dict):
                 queries = Dataset.from_list(
@@ -196,13 +200,13 @@ class AbsTaskRetrieval(AbsTask):
             return queries, corpus
 
         if self.metadata.is_multilingual:
-            for subset in self.queries:  # type: ignore[attr-defined]
+            for subset in self.queries:
                 if subset not in self.dataset:
                     self.dataset[subset] = {}
-                for split in self.queries[subset]:  # type: ignore[attr-defined]
+                for split in self.queries[subset]:
                     if split not in self.dataset[subset]:
                         self.dataset[subset][split] = {}  # type: ignore[typeddict-item]
-                    queries = self.queries[subset][split]  # type: ignore[attr-defined]
+                    queries = self.queries[subset][split]
                     corpus = self.corpus[subset][split]  # type: ignore[attr-defined]
 
                     (
@@ -232,10 +236,10 @@ class AbsTaskRetrieval(AbsTask):
             subset = "default"
             if subset not in self.dataset:
                 self.dataset[subset] = {}
-            for split in self.queries:  # type: ignore[attr-defined]
+            for split in self.queries:
                 if split not in self.dataset[subset]:
                     self.dataset[subset][split] = {}  # type: ignore[typeddict-item]
-                queries = self.queries[split]  # type: ignore[attr-defined]
+                queries = self.queries[split]
                 corpus = self.corpus[split]  # type: ignore[attr-defined]
                 (
                     self.dataset[subset][split]["queries"],
@@ -261,7 +265,7 @@ class AbsTaskRetrieval(AbsTask):
                 else:
                     self.dataset[subset][split]["top_ranked"] = None
 
-        del self.queries  # type: ignore[attr-defined]
+        del self.queries
         del self.corpus  # type: ignore[attr-defined]
         del self.relevant_docs  # type: ignore[attr-defined]
         if hasattr(self, "instructions"):
@@ -286,7 +290,7 @@ class AbsTaskRetrieval(AbsTask):
         trust_remote_code = self.metadata.dataset.get("trust_remote_code", False)
         revision = self.metadata.dataset["revision"]
 
-        def _process_data(split: str, hf_subset: str = "default"):
+        def _process_data(split: str, hf_subset: str = "default") -> None:
             """Helper function to load and process data for a given split and language"""
             logger.debug(
                 f"Loading {split} split for {hf_subset} subset of {self.metadata.name}"
@@ -379,7 +383,7 @@ class AbsTaskRetrieval(AbsTask):
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
         timer: TimingStack | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
 
@@ -579,7 +583,7 @@ class AbsTaskRetrieval(AbsTask):
             )
 
         # Build corpus col_inputs — text needs special mapping from the corpus dict format.
-        corpus_col_inputs: dict[Modalities, list] = {}
+        corpus_col_inputs: dict[Modalities, list[Any]] = {}
         if "text" in corpus_modalities:
             corpus_col_inputs["text"] = corpus.map(_corpus_to_dict)["text"]
         if "image" in corpus_modalities:
@@ -590,7 +594,7 @@ class AbsTaskRetrieval(AbsTask):
             corpus_col_inputs["video"] = corpus["video"]
 
         # Build queries col_inputs — text may need instruction/conversation transformations.
-        queries_col_inputs: dict[Modalities, list] = {}
+        queries_col_inputs: dict[Modalities, list[Any]] = {}
         if "text" in queries_modalities:
             queries_ = queries
             if "instruction" in queries_[0]:
