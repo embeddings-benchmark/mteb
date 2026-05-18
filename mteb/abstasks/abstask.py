@@ -362,10 +362,9 @@ class AbsTask(ABC):  # noqa: PLR0904
             return
 
         timer = timer or TimingStack()
-        timer_loading = timer(
+        with timer(
             "Data loading", log_message=f"Loading dataset {self.metadata.name}..."
-        )
-        with timer_loading:
+        ):
             if self.metadata.is_multilingual:
                 if self.fast_loading:
                     self.fast_load()
@@ -381,8 +380,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                 # some of monolingual datasets explicitly adding the split name to the dataset name
                 self.dataset = load_dataset(**self.metadata.dataset, num_proc=num_proc)
 
-        timer_transform = timer("Dataset transform")
-        with timer_transform:
+        with timer("Dataset transform"):
             self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 

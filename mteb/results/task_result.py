@@ -4,6 +4,7 @@ import datetime
 import json
 import logging
 from collections import defaultdict
+from collections.abc import Sequence
 from functools import cached_property
 from importlib.metadata import version
 from typing import TYPE_CHECKING, Any, cast
@@ -173,7 +174,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     evaluation_time: float | None
     kg_co2_emissions: float | None = None
     date: datetime.datetime | None = None
-    evaluation_phases: list[PhaseTiming] | None = None
+    evaluation_phases: Sequence[PhaseTiming] | None = None
 
     @classmethod
     def from_task_results(

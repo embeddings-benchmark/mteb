@@ -166,26 +166,32 @@ def _evaluate_task(
     evaluation_time = 0.0
 
     for split, hf_subsets in splits.items():
-        tick = time()
         num_phases_before = len(timer.phases)
-        task_results[split] = task.evaluate(
-            model,
-            split,
-            subsets_to_run=hf_subsets,
-            encode_kwargs=encode_kwargs,
-            prediction_folder=prediction_folder,
-            num_proc=num_proc,
-            timer=timer,
-        )
-        tock = time()
+        with timer(
+            "Evaluation",
+            split=split,
+        ):
+            task_results[split] = task.evaluate(
+                model,
+                split,
+                subsets_to_run=hf_subsets,
+                encode_kwargs=encode_kwargs,
+                prediction_folder=prediction_folder,
+                num_proc=num_proc,
+                timer=timer,
+            )
+
+        evaluation_phase = timer.phases.pop()
+        duration = evaluation_phase["end"] - evaluation_phase["start"]
+
         if len(timer.phases) == num_phases_before:
-            timer.add_phase("Evaluation", tick, tock, split=split, subset="")
+            timer.phases.append(evaluation_phase)
 
         logger.debug(
-            f"Evaluation for {task.metadata.name} on {split} took {tock - tick:.2f} seconds"
+            f"Evaluation for {task.metadata.name} on {split} took {duration:.2f} seconds"
         )
 
-        evaluation_time += tock - tick
+        evaluation_time += duration
 
     result = TaskResult.from_task_results(
         task,

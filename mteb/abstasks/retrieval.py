@@ -309,12 +309,9 @@ class AbsTaskRetrieval(AbsTask):
             )
 
         timer = timer or TimingStack()
-        timer_loading = timer(
+        with timer(
             "Data loading", log_message=f"Loading dataset {self.metadata.name}..."
-        )
-        timer_transform = timer("Dataset transform")
-
-        with timer_loading:
+        ):
             if self.metadata.is_multilingual:
                 for lang in self.hf_subsets:
                     for split in eval_splits:
@@ -323,7 +320,7 @@ class AbsTaskRetrieval(AbsTask):
                 for split in eval_splits:
                     _process_data(split)
 
-        with timer_transform:
+        with timer("Dataset transform"):
             self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
