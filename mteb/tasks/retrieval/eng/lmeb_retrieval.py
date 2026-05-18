@@ -24,6 +24,7 @@ _LMEB_CITATION = r"""
 _DIALOGUE_DOMAINS = ["Social", "Spoken"]
 _DOCUMENT_DOMAINS = ["Written"]
 _PROCEDURAL_DOMAINS = ["Programming", "Web"]
+_LMEB_K_VALUES = (1, 3, 5, 10, 20, 25, 50, 100, 1000)
 
 _EPBENCH_SCENARIOS = [
     "default_claude_long",
@@ -129,10 +130,6 @@ _common_metadata = dict(
 )
 
 
-def _make_eval_langs(subsets: list[str]) -> dict[str, list[str]]:
-    return {subset: ["eng-Latn"] for subset in subsets}
-
-
 def _average_optional(values: list[float | None]) -> float:
     valid = [value for value in values if value is not None]
     if not valid:
@@ -141,7 +138,7 @@ def _average_optional(values: list[float | None]) -> float:
 
 
 class EPBench(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="EPBench",
@@ -150,16 +147,16 @@ class EPBench(AbsTaskRetrieval):
             "revision": "c0c0877aab7085655b446b2adcb86a25bbf14459",
         },
         description=(
-            "LMEB episodic-memory retrieval task based on EPBench, evaluating "
-            "event-centric retrieval across generator, context-length, and query-type variants."
+            "LMEB episodic-memory retrieval task based on EPBench. Queries ask "
+            "about entities, event contents, spaces, times, and full event details "
+            "in synthetic event narratives; the corpus contains generated event "
+            "memories, and the goal is to retrieve the relevant event records."
         ),
-        eval_langs=_make_eval_langs(
-            [
-                f"{scenario}__{query_type}"
-                for scenario in _EPBENCH_SCENARIOS
-                for query_type in _EPBENCH_QUERY_TYPES
-            ]
-        ),
+        eval_langs={
+            f"{scenario}__{query_type}": ["eng-Latn"]
+            for scenario in _EPBENCH_SCENARIOS
+            for query_type in _EPBENCH_QUERY_TYPES
+        },
         reference="https://doi.org/10.6084/m9.figshare.28244480",
         license="mit",
         domains=["Fiction", "News", "Written"],
@@ -184,7 +181,7 @@ class EPBench(AbsTaskRetrieval):
 
 
 class DeepPlanning(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="DeepPlanning",
@@ -193,12 +190,15 @@ class DeepPlanning(AbsTaskRetrieval):
             "revision": "802c327a8b88bf36b17a39d12df7e233efe8d079",
         },
         description=(
-            "LMEB procedural retrieval task based on DeepPlanning, retrieving shopping items "
-            "needed to support long-horizon planning queries."
+            "LMEB procedural retrieval task based on DeepPlanning. Queries "
+            "describe long-horizon shopping and planning needs; the corpus "
+            "contains shopping item memories, and the goal is to retrieve the "
+            "items needed to support the plan."
         ),
-        eval_langs=_make_eval_langs(
-            ["shopping_level1", "shopping_level2", "shopping_level3"]
-        ),
+        eval_langs={
+            subset: ["eng-Latn"]
+            for subset in ["shopping_level1", "shopping_level2", "shopping_level3"]
+        },
         reference="https://huggingface.co/datasets/Qwen/DeepPlanning",
         license="apache-2.0",
         domains=["E-commerce", "Written"],
@@ -223,7 +223,7 @@ class DeepPlanning(AbsTaskRetrieval):
 
 
 class MemGovern(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="MemGovern",
@@ -232,10 +232,12 @@ class MemGovern(AbsTaskRetrieval):
             "revision": "2dc71218b15aa0e987ecc2f35ece6a1bc769e19c",
         },
         description=(
-            "LMEB procedural retrieval task based on MemGovern, retrieving governed human "
-            "experiences from software-engineering repositories."
+            "LMEB procedural retrieval task based on MemGovern. Queries ask "
+            "software-engineering governance questions over repository histories; "
+            "the corpus contains human experience records from software projects, "
+            "and the goal is to retrieve the relevant governed experiences."
         ),
-        eval_langs=_make_eval_langs(_MEMGOVERN_REPOS),
+        eval_langs={repo: ["eng-Latn"] for repo in _MEMGOVERN_REPOS},
         reference="https://github.com/QuantaAlpha/MemGovern/blob/main/data",
         license="mit",
         domains=_PROCEDURAL_DOMAINS,
@@ -260,7 +262,7 @@ class MemGovern(AbsTaskRetrieval):
 
 
 class ProceduralMemBench(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="ProceduralMemBench",
@@ -269,10 +271,12 @@ class ProceduralMemBench(AbsTaskRetrieval):
             "revision": "5e4517cf2f768957b83917ef1961a5bd880675cd",
         },
         description=(
-            "LMEB procedural retrieval task based on ProceduralMemBench, retrieving useful "
-            "multi-step procedures for downstream user queries."
+            "LMEB procedural retrieval task based on ProceduralMemBench. Queries "
+            "describe downstream user goals that require procedures; the corpus "
+            "contains multi-step procedural memories, and the goal is to retrieve "
+            "the procedure useful for the query."
         ),
-        eval_langs=_make_eval_langs(["easy", "medium", "hard"]),
+        eval_langs={subset: ["eng-Latn"] for subset in ["easy", "medium", "hard"]},
         reference="https://github.com/qpiai/Proced_mem_bench/tree/main/procedural_memory_benchmark",
         license="apache-2.0",
         domains=["Web", "Written"],
@@ -297,7 +301,7 @@ class ProceduralMemBench(AbsTaskRetrieval):
 
 
 class ReMe(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="ReMe",
@@ -306,16 +310,16 @@ class ReMe(AbsTaskRetrieval):
             "revision": "7bbb4456dade71ab22c9373c9a2f3504cfdccc18",
         },
         description=(
-            "LMEB procedural retrieval task based on ReMe, retrieving past successful experiences "
-            "and procedures for agentic execution."
+            "LMEB procedural retrieval task based on ReMe. Queries are generalized "
+            "or task-specific agent execution requests; the corpus contains past "
+            "successful agent experiences and procedures, and the goal is to "
+            "retrieve experience that can guide the next execution."
         ),
-        eval_langs=_make_eval_langs(
-            [
-                f"{variant}__{subset}"
-                for variant, subsets in _REME_VARIANTS.items()
-                for subset in subsets
-            ]
-        ),
+        eval_langs={
+            f"{variant}__{subset}": ["eng-Latn"]
+            for variant, subsets in _REME_VARIANTS.items()
+            for subset in subsets
+        },
         reference="https://github.com/agentscope-ai/ReMe/tree/main/docs/library/paper_data/task",
         license="apache-2.0",
         domains=_PROCEDURAL_DOMAINS,
@@ -340,7 +344,7 @@ class ReMe(AbsTaskRetrieval):
 
 
 class ToolBench(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="ToolBench",
@@ -349,10 +353,11 @@ class ToolBench(AbsTaskRetrieval):
             "revision": "6f868e5b4c46a9f04c89f7179ddc7c8f162c1068",
         },
         description=(
-            "LMEB procedural retrieval task based on ToolBench, retrieving API documentation "
-            "relevant to a tool-use query."
+            "LMEB procedural retrieval task based on ToolBench. Queries describe "
+            "tool-use and API needs; the corpus contains API and tool documentation, "
+            "and the goal is to retrieve documentation relevant to the requested tool."
         ),
-        eval_langs=_make_eval_langs(["ToolBench"]),
+        eval_langs={"ToolBench": ["eng-Latn"]},
         reference="https://huggingface.co/datasets/mangopy/ToolRet-Queries",
         license="apache-2.0",
         domains=_PROCEDURAL_DOMAINS,
@@ -377,7 +382,7 @@ class ToolBench(AbsTaskRetrieval):
 
 
 class Gorilla(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="Gorilla",
@@ -386,12 +391,15 @@ class Gorilla(AbsTaskRetrieval):
             "revision": "ed4eb0d3e13cd43fd4edff0f150de3b501511244",
         },
         description=(
-            "LMEB procedural retrieval task based on Gorilla, retrieving model and API documentation "
-            "for tool-use and code-generation requests."
+            "LMEB procedural retrieval task based on Gorilla. Queries are model, "
+            "API, and code-generation requests; the corpus contains Hugging Face, "
+            "PyTorch, and TensorFlow documentation, and the goal is to retrieve "
+            "the documentation needed for correct API use."
         ),
-        eval_langs=_make_eval_langs(
-            ["gorilla_huggingface", "gorilla_pytorch", "gorilla_tensor"]
-        ),
+        eval_langs={
+            subset: ["eng-Latn"]
+            for subset in ["gorilla_huggingface", "gorilla_pytorch", "gorilla_tensor"]
+        },
         reference="https://huggingface.co/datasets/mangopy/ToolRet-Queries",
         license="apache-2.0",
         domains=_PROCEDURAL_DOMAINS,
@@ -416,7 +424,7 @@ class Gorilla(AbsTaskRetrieval):
 
 
 class LMEBSciFact(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="LMEB_SciFact",
@@ -425,10 +433,12 @@ class LMEBSciFact(AbsTaskRetrieval):
             "revision": "432cf48c879c2de792720d5c0af6900312ebe7b6",
         },
         description=(
-            "LMEB semantic retrieval task based on SciFact, retrieving scientific evidence "
-            "passages for claim verification."
+            "LMEB-formatted SciFact retrieval task. Queries are scientific claims "
+            "from LMEB; the corpus contains scientific evidence passages, and the "
+            "goal is to retrieve evidence for claim verification under the LMEB "
+            "converted retrieval data and scoring setup."
         ),
-        eval_langs=_make_eval_langs(["LMEB_SciFact"]),
+        eval_langs={"LMEB_SciFact": ["eng-Latn"]},
         reference="https://huggingface.co/datasets/allenai/scifact",
         license="cc-by-nc-3.0",
         domains=["Academic", "Written"],
@@ -453,7 +463,7 @@ class LMEBSciFact(AbsTaskRetrieval):
 
 
 class LooGLE(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="LooGLE",
@@ -462,10 +472,12 @@ class LooGLE(AbsTaskRetrieval):
             "revision": "df52bb043564336892a1eb9127559130fcb0e62c",
         },
         description=(
-            "LMEB semantic retrieval task based on LooGLE, evaluating long- and short-dependency "
-            "question answering over long documents."
+            "LMEB semantic retrieval task based on LooGLE. Queries ask long- and "
+            "short-dependency questions over long documents; the corpus contains "
+            "document passages, and the goal is to retrieve the evidence passages "
+            "needed to answer each query."
         ),
-        eval_langs=_make_eval_langs(["LongDepQA", "ShortDepQA"]),
+        eval_langs={subset: ["eng-Latn"] for subset in ["LongDepQA", "ShortDepQA"]},
         reference="https://huggingface.co/datasets/bigai-nlco/LooGLE",
         license="cc-by-sa-4.0",
         domains=["Web", "Written"],
@@ -490,7 +502,7 @@ class LooGLE(AbsTaskRetrieval):
 
 
 class LMEBMLDR(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="LMEBMLDR",
@@ -499,10 +511,12 @@ class LMEBMLDR(AbsTaskRetrieval):
             "revision": "ebc723b2474ef92d098a47e8f131aa7d3542b7b0",
         },
         description=(
-            "LMEB semantic retrieval task based on MLDR, focused on long-document retrieval "
-            "for question answering in English."
+            "LMEB semantic retrieval task based on MLDR. Queries are English "
+            "long-document question-answering requests; the corpus contains long "
+            "document passages, and the goal is to retrieve passages that answer "
+            "the query."
         ),
-        eval_langs=_make_eval_langs(["MLDR"]),
+        eval_langs={"MLDR": ["eng-Latn"]},
         reference="https://huggingface.co/datasets/illuin-conteb/mldr-conteb-eval",
         license="mit",
         domains=["Web", "Written"],
@@ -527,7 +541,7 @@ class LMEBMLDR(AbsTaskRetrieval):
 
 
 class ESGReports(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="ESGReports",
@@ -536,10 +550,12 @@ class ESGReports(AbsTaskRetrieval):
             "revision": "6757300d912abd580dda453bced37cb7f5b44c78",
         },
         description=(
-            "LMEB semantic retrieval task based on ESG-Reports, retrieving long-form report "
-            "passages relevant to environmental, social, and governance questions."
+            "LMEB semantic retrieval task based on ESG-Reports. Queries ask "
+            "environmental, social, and governance questions; the corpus contains "
+            "passages from long-form ESG reports, and the goal is to retrieve "
+            "the relevant report evidence."
         ),
-        eval_langs=_make_eval_langs(["ESG-Reports"]),
+        eval_langs={"ESG-Reports": ["eng-Latn"]},
         reference="https://huggingface.co/datasets/illuin-conteb/esg-reports",
         license="not specified",
         domains=["Financial", "Written"],
@@ -564,7 +580,7 @@ class ESGReports(AbsTaskRetrieval):
 
 
 class CovidQA(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="CovidQA",
@@ -573,10 +589,11 @@ class CovidQA(AbsTaskRetrieval):
             "revision": "bf110dabd08865a8aff2d40d03696984e76085e0",
         },
         description=(
-            "LMEB semantic retrieval task based on COVID-QA, retrieving relevant biomedical "
-            "evidence for COVID-19 questions."
+            "LMEB semantic retrieval task based on COVID-QA. Queries are COVID-19 "
+            "biomedical questions; the corpus contains scientific and medical "
+            "evidence passages, and the goal is to retrieve answer-supporting evidence."
         ),
-        eval_langs=_make_eval_langs(["Covid-QA"]),
+        eval_langs={"Covid-QA": ["eng-Latn"]},
         reference="https://huggingface.co/datasets/illuin-conteb/covid-qa",
         license="apache-2.0",
         domains=["Academic", "Medical", "Written"],
@@ -601,7 +618,7 @@ class CovidQA(AbsTaskRetrieval):
 
 
 class PeerQA(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="PeerQA",
@@ -610,10 +627,12 @@ class PeerQA(AbsTaskRetrieval):
             "revision": "6b2010c691a435a7a920088d32e55c898afa97f5",
         },
         description=(
-            "LMEB semantic retrieval task based on PeerQA, retrieving evidence from peer-review "
-            "material and scholarly writing to answer questions."
+            "LMEB semantic retrieval task based on PeerQA. Queries ask questions "
+            "about peer reviews and scholarly content; the corpus contains peer-review "
+            "material and scholarly writing, and the goal is to retrieve evidence "
+            "that answers each query."
         ),
-        eval_langs=_make_eval_langs(["PeerQA"]),
+        eval_langs={"PeerQA": ["eng-Latn"]},
         reference="https://huggingface.co/datasets/UKPLab/PeerQA",
         license="cc-by-nc-sa-4.0",
         domains=["Academic", "Written"],
@@ -638,7 +657,7 @@ class PeerQA(AbsTaskRetrieval):
 
 
 class NovelQA(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="NovelQA",
@@ -647,12 +666,23 @@ class NovelQA(AbsTaskRetrieval):
             "revision": "8e4b220f482d1cdceb2f7589900c3ba6cb3cca45",
         },
         description=(
-            "LMEB semantic retrieval task based on NovelQA, retrieving passages from long-form "
-            "fiction for character, plot, setting, relation, and temporal questions."
+            "LMEB semantic retrieval task based on NovelQA. Queries ask about "
+            "characters, meaning, plot, relations, settings, spans, and time in "
+            "long-form fiction; the corpus contains novel passages, and the goal "
+            "is to retrieve supporting passages."
         ),
-        eval_langs=_make_eval_langs(
-            ["Character", "Meaning", "Plot", "Relation", "Setting", "Span", "Times"]
-        ),
+        eval_langs={
+            subset: ["eng-Latn"]
+            for subset in [
+                "Character",
+                "Meaning",
+                "Plot",
+                "Relation",
+                "Setting",
+                "Span",
+                "Times",
+            ]
+        },
         reference="https://huggingface.co/datasets/NovelQA/NovelQA",
         license="not specified",
         domains=["Fiction", "Written"],
@@ -677,7 +707,7 @@ class NovelQA(AbsTaskRetrieval):
 
 
 class QASPER(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="QASPER",
@@ -686,10 +716,12 @@ class QASPER(AbsTaskRetrieval):
             "revision": "898f2eced48890f19b6a88f1b616e9ca6c5dda1c",
         },
         description=(
-            "LMEB semantic retrieval task based on QASPER, retrieving evidence passages "
-            "from research papers for information-seeking questions."
+            "LMEB semantic retrieval task based on QASPER. Queries are "
+            "information-seeking questions about research papers; the corpus "
+            "contains paper passages, and the goal is to retrieve evidence "
+            "passages that support the answer."
         ),
-        eval_langs=_make_eval_langs(["QASPER"]),
+        eval_langs={"QASPER": ["eng-Latn"]},
         reference="https://huggingface.co/datasets/allenai/qasper",
         license="cc-by-nc-4.0",
         domains=["Academic", "Written"],
@@ -714,7 +746,7 @@ class QASPER(AbsTaskRetrieval):
 
 
 class ConvoMem(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="ConvoMem",
@@ -723,11 +755,14 @@ class ConvoMem(AbsTaskRetrieval):
             "revision": "ae79aabf8da23508a1ba2e982c2552ea14b14a1c",
         },
         description=(
-            "LMEB dialogue-memory retrieval task based on ConvoMem, centered on evidence "
-            "retrieval for facts, preferences, abstention, and changing user state."
+            "LMEB dialogue-memory retrieval task based on ConvoMem. Queries ask "
+            "for conversation memories about facts, preferences, abstention, "
+            "implicit connections, and changing user state; the corpus contains "
+            "dialogue evidence, and the goal is to retrieve the relevant memory snippets."
         ),
-        eval_langs=_make_eval_langs(
-            [
+        eval_langs={
+            subset: ["eng-Latn"]
+            for subset in [
                 "abstention_evidence",
                 "assistant_facts_evidence",
                 "changing_evidence",
@@ -735,7 +770,7 @@ class ConvoMem(AbsTaskRetrieval):
                 "preference_evidence",
                 "user_evidence",
             ]
-        ),
+        },
         reference="https://huggingface.co/datasets/Salesforce/ConvoMem",
         license="cc-by-nc-4.0",
         domains=_DIALOGUE_DOMAINS,
@@ -760,7 +795,7 @@ class ConvoMem(AbsTaskRetrieval):
 
 
 class MemBench(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="MemBench",
@@ -769,11 +804,14 @@ class MemBench(AbsTaskRetrieval):
             "revision": "1dd519e4d91573e2818d850eb4405fb290663ac2",
         },
         description=(
-            "LMEB dialogue-memory retrieval task based on MemBench, measuring retrieval "
-            "for preference, emotion, recommendation, update, and multi-hop memory cues."
+            "LMEB dialogue-memory retrieval task based on MemBench. Queries probe "
+            "preference, emotion, recommendation, update, aggregation, comparison, "
+            "single-hop, and multi-hop memory cues; the corpus contains conversational "
+            "memory records, and the goal is to retrieve the relevant memories."
         ),
-        eval_langs=_make_eval_langs(
-            [
+        eval_langs={
+            subset: ["eng-Latn"]
+            for subset in [
                 "aggregative",
                 "comparative",
                 "emotion",
@@ -785,7 +823,7 @@ class MemBench(AbsTaskRetrieval):
                 "single_hop",
                 "single_session_assistant",
             ]
-        ),
+        },
         reference="https://github.com/import-myself/Membench/tree/main/MemData",
         license="mit",
         domains=_DIALOGUE_DOMAINS,
@@ -810,7 +848,7 @@ class MemBench(AbsTaskRetrieval):
 
 
 class TMD(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="TMD",
@@ -819,11 +857,14 @@ class TMD(AbsTaskRetrieval):
             "revision": "7d7b04a28215ca574fcf20e2c42af233864c8e67",
         },
         description=(
-            "LMEB dialogue-memory retrieval task based on the Temporal Memory Dataset, "
-            "evaluating date, session, and relative-time retrieval over dialogues."
+            "LMEB dialogue-memory retrieval task based on the Temporal Memory "
+            "Dataset. Queries ask date, session, and relative-time questions; "
+            "the corpus contains time-anchored dialogue memories, and the goal "
+            "is to retrieve the temporal evidence needed for each query."
         ),
-        eval_langs=_make_eval_langs(
-            [
+        eval_langs={
+            subset: ["eng-Latn"]
+            for subset in [
                 "content_time_qs",
                 "date_span_time_qs",
                 "dates_time_qs",
@@ -837,7 +878,7 @@ class TMD(AbsTaskRetrieval):
                 "session_span_time_qs",
                 "session_time_qs",
             ]
-        ),
+        },
         reference="https://github.com/Zyphra/TemporalMemoryDataset",
         license="not specified",
         domains=_DIALOGUE_DOMAINS,
@@ -862,7 +903,7 @@ class TMD(AbsTaskRetrieval):
 
 
 class REALTALK(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="REALTALK",
@@ -871,10 +912,15 @@ class REALTALK(AbsTaskRetrieval):
             "revision": "3ae98b689841a900700ac3594f8e63b8108ae4fe",
         },
         description=(
-            "LMEB dialogue-memory retrieval task based on REALTALK, targeting commonsense, "
-            "multi-hop, and temporal reasoning over realistic conversations."
+            "LMEB dialogue-memory retrieval task based on REALTALK. Queries ask "
+            "commonsense, multi-hop, and temporal questions over realistic "
+            "conversations; the corpus contains conversation evidence, and the "
+            "goal is to retrieve supporting turns or memories."
         ),
-        eval_langs=_make_eval_langs(["commonsense", "multi_hop", "temporal_reasoning"]),
+        eval_langs={
+            subset: ["eng-Latn"]
+            for subset in ["commonsense", "multi_hop", "temporal_reasoning"]
+        },
         reference="https://github.com/danny911kr/REALTALK/tree/main/data",
         license="not specified",
         domains=_DIALOGUE_DOMAINS,
@@ -899,7 +945,7 @@ class REALTALK(AbsTaskRetrieval):
 
 
 class LongMemEval(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="LongMemEval",
@@ -908,11 +954,14 @@ class LongMemEval(AbsTaskRetrieval):
             "revision": "9dc1a8fdcf9b5676f87c2cdccac021988f6ff5af",
         },
         description=(
-            "LMEB dialogue-memory retrieval task based on LongMemEval, evaluating "
-            "single-session, multi-session, preference, knowledge-update, and temporal queries."
+            "LMEB dialogue-memory retrieval task based on LongMemEval. Queries "
+            "cover single-session, multi-session, preference, knowledge-update, "
+            "and temporal reasoning needs; the corpus contains long-term conversation "
+            "memory records, and the goal is to retrieve the relevant evidence."
         ),
-        eval_langs=_make_eval_langs(
-            [
+        eval_langs={
+            subset: ["eng-Latn"]
+            for subset in [
                 "knowledge_update",
                 "multi_session",
                 "single_session_assistant",
@@ -920,7 +969,7 @@ class LongMemEval(AbsTaskRetrieval):
                 "single_session_user",
                 "temporal_reasoning",
             ]
-        ),
+        },
         reference="https://huggingface.co/datasets/xiaowu0162/longmemeval-cleaned",
         license="mit",
         domains=_DIALOGUE_DOMAINS,
@@ -945,7 +994,7 @@ class LongMemEval(AbsTaskRetrieval):
 
 
 class LoCoMo(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="LoCoMo",
@@ -954,18 +1003,21 @@ class LoCoMo(AbsTaskRetrieval):
             "revision": "02e2c3dea15d9fdfd1cd7a0f65f5f8ae2ed4c1ac",
         },
         description=(
-            "LMEB dialogue-memory retrieval task based on LoCoMo, covering single-hop, "
-            "multi-hop, temporal, open-domain, and adversarial long-conversation questions."
+            "LMEB dialogue-memory retrieval task based on LoCoMo. Queries are "
+            "single-hop, multi-hop, temporal, open-domain, and adversarial "
+            "questions over long conversations; the corpus contains conversation "
+            "memories, and the goal is to retrieve supporting memories."
         ),
-        eval_langs=_make_eval_langs(
-            [
+        eval_langs={
+            subset: ["eng-Latn"]
+            for subset in [
                 "single_hop",
                 "multi_hop",
                 "temporal_reasoning",
                 "open_domain",
                 "adversarial",
             ]
-        ),
+        },
         reference="https://github.com/snap-research/locomo/tree/main/data",
         license="cc-by-nc-4.0",
         domains=_DIALOGUE_DOMAINS,
@@ -990,26 +1042,26 @@ class LoCoMo(AbsTaskRetrieval):
 
 
 class KnowMeBench(AbsTaskRetrieval):
-    k_values = (1, 5, 10, 25, 50)
+    k_values = _LMEB_K_VALUES
 
     metadata = TaskMetadata(
         name="KnowMeBench",
         description=(
-            "Evaluate retrieval over long-horizon fictional narratives requiring "
-            "character knowledge, temporal reasoning, and adversarial abstention "
-            "across KnowMeBench scenarios."
+            "LMEB episodic-memory retrieval task based on KnowMeBench. Queries "
+            "require character knowledge, temporal reasoning, mind-body interaction, "
+            "information extraction, and adversarial abstention over fictional "
+            "narratives; the corpus contains scenario narrative memories, and "
+            "the goal is to retrieve the relevant narrative evidence."
         ),
         dataset={
             "path": "mteb/KnowMeBench",
             "revision": "3b817ee68361f2b005bc065910e55f63a8f9ab77",
         },
-        eval_langs=_make_eval_langs(
-            [
-                f"{scenario}__{query_type}"
-                for scenario in _KNOWMEBENCH_SCENARIOS
-                for query_type in _KNOWMEBENCH_QUERY_TYPES
-            ]
-        ),
+        eval_langs={
+            f"{scenario}__{query_type}": ["eng-Latn"]
+            for scenario in _KNOWMEBENCH_SCENARIOS
+            for query_type in _KNOWMEBENCH_QUERY_TYPES
+        },
         reference="https://github.com/QuantaAlpha/KnowMeBench/tree/main/KnowmeBench",
         license="apache-2.0",
         domains=["Fiction", "Written"],
