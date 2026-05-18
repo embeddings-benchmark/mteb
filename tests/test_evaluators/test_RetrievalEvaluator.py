@@ -20,6 +20,8 @@ class TestRetrievalEvaluator:
 
         setup_method is invoked for every test method of a class.
         """
+        from mteb.timing import TimingStack
+
         self.evaluator = RetrievalEvaluator(
             corpus=None,
             queries=None,
@@ -30,6 +32,7 @@ class TestRetrievalEvaluator:
             top_ranked=None,
             qid=None,
             top_k=5,
+            timer=TimingStack(),
         )
 
     @pytest.mark.parametrize(

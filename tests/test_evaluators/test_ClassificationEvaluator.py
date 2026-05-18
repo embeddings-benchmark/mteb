@@ -4,6 +4,7 @@ from sklearn.linear_model import LogisticRegression
 
 import mteb
 from mteb._evaluators import SklearnEvaluator
+from mteb.timing import TimingStack
 from tests.mock_tasks import MockClassificationTask
 
 
@@ -34,6 +35,7 @@ def test_expected_scores(model, mock_task):
         hf_split="test",
         hf_subset="default",
         evaluator_model=LogisticRegression(max_iter=10),
+        timer=TimingStack(),
     )
     y_pred, test_cache = evaluator(model, encode_kwargs={"batch_size": 32})
 
@@ -75,6 +77,7 @@ def test_cache_usage_binary(model):
         hf_split="test",
         hf_subset="default",
         evaluator_model=LogisticRegression(max_iter=10),
+        timer=TimingStack(),
     )
     _, test_cache_initial = evaluator_initial(model, encode_kwargs={"batch_size": 32})
 
@@ -88,6 +91,7 @@ def test_cache_usage_binary(model):
         hf_split="test",
         hf_subset="default",
         evaluator_model=LogisticRegression(max_iter=10),
+        timer=TimingStack(),
     )
     y_pred, test_cache_after_cache_usage = evaluator_with_cache(
         model, encode_kwargs={"batch_size": 32}, test_cache=test_cache_initial

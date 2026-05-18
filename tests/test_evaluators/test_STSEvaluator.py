@@ -2,6 +2,7 @@ import pytest
 
 import mteb
 from mteb._evaluators import AnySTSEvaluator
+from mteb.timing import TimingStack
 from tests.mock_tasks import MockSTSTask
 
 
@@ -31,6 +32,7 @@ def test_output_structure(model, mock_task):
         hf_split="test",
         input1_prompt_type=None,
         input2_prompt_type=None,
+        timer=TimingStack(),
     )
     scores = evaluator(model, encode_kwargs={"batch_size": 32})
 
