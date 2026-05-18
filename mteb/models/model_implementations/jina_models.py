@@ -773,23 +773,8 @@ _SIMPLIFIED_TO_JINA_TASK = {
 }
 
 
-# Per-MTEB-type override for both omni-{small,nano}. The wrapper resolves
-# adapter routing in two steps: this dict first, then fall back to
-# task_metadata.simplified_task_type via _SIMPLIFIED_TO_JINA_TASK. The text
-# entries (Retrieval / Clustering / STS / ...) duplicate the simplified
-# fallback intentionally — explicit pins are stable against upstream drift in
-# _TASKTYPE2SIMPLIFIEDTASKTYPE. The multimodal entries are genuine overrides
-# from a 145-task × 4-variant × 2-model crosswise eval:
-#   * *Classification → retrieval: the classification LoRA's task list is
-#     empty for non-text modalities; eval runs through the retrieval adapter.
-#   * Compositionality → clustering: clustering beats text-matching by
-#     +0.01 to +0.27 main_score on the word-order-sensitive subset
-#     (AROFlickrOrder, AROCocoOrder, SugarCrepe, Winoground, ImageCoDe);
-#     AROVisualRelation / AROVisualAttribution are insensitive (Δ<0.005).
-#   * AudioPairClassification → retrieval: retrieval wins by +0.06-0.08
-#     across NMSQAPair / CREMADPair / VoxPopuliAccentPair on both sizes.
-#   * ImageClustering → text-matching: text-matching beats clustering by
-#     +0.004-0.08 across CIFAR10/100, TinyImageNet, ImageNet10/Dog15.
+# Per-MTEB-type adapter routing for omni-{small,nano}. Tasks not listed fall
+# back to task_metadata.simplified_task_type via _SIMPLIFIED_TO_JINA_TASK.
 _OMNI_MODEL_PROMPTS = {
     "Retrieval": "retrieval",
     "Clustering": "clustering",
@@ -845,13 +830,7 @@ class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
                 max_samples=self.max_samples,
             )
 
-        # Resolve the Jina LoRA adapter in two steps:
-        #   1. Per-MTEB-type override from `model_prompts` (covers harness
-        #      routing that diverges from mteb's simplified_task_type, e.g.
-        #      *Classification simplified="classification" → retrieval LoRA,
-        #      Compositionality simplified="pair-classification" → clustering).
-        #   2. Otherwise fall back to task_metadata.simplified_task_type so new
-        #      MTEB task types route automatically without wrapper changes.
+        # Resolve adapter: per-type model_prompts override, else simplified fallback.
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         jina_task_name = (
             self.model_prompts.get(prompt_name, None)
@@ -863,11 +842,7 @@ class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
                 task_metadata.simplified_task_type
             )
         task = jina_task_name or "retrieval"
-        # Only the retrieval LoRA adapter was trained with "Query: "/"Document: "
-        # prefixes. Clustering / text-matching / classification variants were
-        # trained without them; injecting the prefix collapses their scores.
-        # Matches harness evaluator.py:578-579 which sets instructions={"query":"","document":""}
-        # for non-retrieval variants.
+        # Non-retrieval adapters were trained without the Query/Document prefix.
         if task == "retrieval":
             prompt = (
                 "Query: "
