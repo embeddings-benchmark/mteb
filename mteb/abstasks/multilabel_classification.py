@@ -17,7 +17,6 @@ from typing_extensions import override
 from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.classification_metrics import hamming_score
 from mteb.models import EncoderProtocol
-from mteb.timing import TimingStack
 
 from .classification import AbsTaskClassification
 
@@ -28,6 +27,7 @@ if TYPE_CHECKING:
 
     from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
     from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import Array, EncodeKwargs
 
 logger = logging.getLogger(__name__)
@@ -97,7 +97,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> FullMultilabelClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -137,7 +137,6 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             **encode_kwargs,
         )
 
-        timer = timer or TimingStack()
         with timer(
             "Encoding training samples",
             split=hf_split,

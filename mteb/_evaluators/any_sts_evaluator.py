@@ -11,7 +11,6 @@ from sklearn.metrics.pairwise import (
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.similarity_functions import compute_pairwise_similarity
-from mteb.timing import TimingStack
 
 from .evaluator import Evaluator
 
@@ -22,6 +21,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, PromptType
 
 logger = logging.getLogger(__name__)
@@ -57,7 +57,7 @@ class AnySTSEvaluator(Evaluator):
         hf_subset: str,
         input1_prompt_type: PromptType | None,
         input2_prompt_type: PromptType | None,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
@@ -68,7 +68,7 @@ class AnySTSEvaluator(Evaluator):
         self.hf_subset = hf_subset
         self.input1_prompt_type = input1_prompt_type
         self.input2_prompt_type = input2_prompt_type
-        self.timer = timer or TimingStack()
+        self.timer = timer
 
     def __call__(
         self,

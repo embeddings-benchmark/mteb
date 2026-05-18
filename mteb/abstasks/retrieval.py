@@ -379,7 +379,7 @@ class AbsTaskRetrieval(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
@@ -398,7 +398,6 @@ class AbsTaskRetrieval(AbsTask):
         Returns:
             Dictionary of evaluation scores
         """
-        timer = timer or TimingStack()
         # ensure queries format (see #3030)
         data_split["relevant_docs"], data_split["queries"] = (
             _filter_queries_without_positives(

@@ -9,11 +9,11 @@ from tqdm.auto import tqdm
 
 from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
-from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
+    from mteb.timing import TimingStack
     from mteb.types import Array, EncodeKwargs
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ class BitextMiningEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         pair_columns: list[tuple[str, str]],
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
@@ -37,7 +37,7 @@ class BitextMiningEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
         self.task_metadata = task_metadata
-        self.timer = timer or TimingStack()
+        self.timer = timer
 
     def __call__(
         self,

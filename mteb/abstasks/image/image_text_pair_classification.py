@@ -141,7 +141,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ImageTextPairClassificationMetrics:
         if not isinstance(model, EncoderProtocol):

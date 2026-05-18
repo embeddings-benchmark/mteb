@@ -13,7 +13,6 @@ from sklearn.metrics.cluster import adjusted_mutual_info_score, v_measure_score
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
-from mteb.timing import TimingStack
 from mteb.types import Array, HFSubset
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
@@ -30,6 +29,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import Array, EncodeKwargs, Modalities, ScoresDict
     from mteb.types.statistics import (
         AudioStatistics,
@@ -180,7 +180,7 @@ class AbsTaskClustering(AbsTask):
     input_column_name: str | Sequence[Modalities] = "sentences"
     label_column_name: str = "labels"
 
-    def _evaluate_subset(  # noqa: PLR0914
+    def _evaluate_subset(
         self,
         model: MTEBModels,
         data_split: Dataset,
@@ -190,7 +190,7 @@ class AbsTaskClustering(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ScoresDict:
         if not isinstance(model, EncoderProtocol):
@@ -243,7 +243,6 @@ class AbsTaskClustering(AbsTask):
 
         downsampled_dataset = downsampled_dataset.select_columns(list(columns_to_keep))
 
-        timer = timer or TimingStack()
         with timer(
             "Encoding",
             split=hf_split,

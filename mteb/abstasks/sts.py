@@ -152,7 +152,7 @@ class AbsTaskSTS(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> STSMetrics:
         if not isinstance(model, EncoderProtocol):

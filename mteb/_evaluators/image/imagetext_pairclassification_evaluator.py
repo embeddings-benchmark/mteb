@@ -12,7 +12,6 @@ from mteb._create_dataloaders import (
     _transform_image_to_rgb,
 )
 from mteb._evaluators.evaluator import Evaluator
-from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -22,6 +21,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import EncoderProtocol
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs
 
 
@@ -74,7 +74,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ):
         super().__init__(**kwargs)
@@ -87,7 +87,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
-        self.timer = timer or TimingStack()
+        self.timer = timer
 
     def __call__(
         self,

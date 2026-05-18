@@ -10,7 +10,6 @@ from mteb._create_dataloaders import (
     create_dataloader,
 )
 from mteb.similarity_functions import similarity
-from mteb.timing import TimingStack
 
 from .evaluator import Evaluator
 
@@ -21,6 +20,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
+    from mteb.timing import TimingStack
     from mteb.types import Array, EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
@@ -47,7 +47,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
-        self.timer = timer or TimingStack()
+        self.timer = timer
 
     def __call__(
         self,

@@ -3,8 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-from mteb.timing import TimingStack
-
 from .evaluator import Evaluator
 from .retrieval_metrics import (
     calculate_retrieval_scores,
@@ -15,6 +13,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import SearchProtocol
+    from mteb.timing import TimingStack
     from mteb.types import (
         CorpusDatasetType,
         EncodeKwargs,
@@ -41,7 +40,7 @@ class RetrievalEvaluator(Evaluator):
         top_k: int,
         top_ranked: TopRankedDocumentsType | None = None,
         qid: str | None = None,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
@@ -54,7 +53,7 @@ class RetrievalEvaluator(Evaluator):
         self.hf_subset = hf_subset
         self.qid = qid
         self.top_k = top_k
-        self.timer = timer or TimingStack()
+        self.timer = timer
 
     def __call__(  # type: ignore[override]
         self,

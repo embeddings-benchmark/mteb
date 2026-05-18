@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any, cast
 from sklearn import cluster
 
 from mteb._create_dataloaders import create_dataloader
-from mteb.timing import TimingStack
 
 from .evaluator import Evaluator
 
@@ -17,6 +16,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
@@ -33,7 +33,7 @@ class ClusteringEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         clustering_batch_size: int = 500,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
@@ -44,7 +44,7 @@ class ClusteringEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
-        self.timer = timer or TimingStack()
+        self.timer = timer
 
     def __call__(
         self,

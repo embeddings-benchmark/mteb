@@ -12,11 +12,11 @@ from tqdm.auto import tqdm
 from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
 from mteb.similarity_functions import cos_sim, dot_score
-from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs
 
 # if later than python 3.13 use typing module
@@ -74,7 +74,7 @@ class SummarizationEvaluator(Evaluator):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> None:
         """Summarization Evaluator
@@ -98,7 +98,7 @@ class SummarizationEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
-        self.timer = timer or TimingStack()
+        self.timer = timer
 
     def __call__(  # noqa: PLR0914
         self,

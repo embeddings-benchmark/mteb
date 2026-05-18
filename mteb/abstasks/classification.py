@@ -163,6 +163,7 @@ class AbsTaskClassification(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate a model on the classification task.
@@ -189,6 +190,8 @@ class AbsTaskClassification(AbsTask):
         hf_subsets = self.hf_subsets
         if subsets_to_run is not None:
             hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
+
+        timer = timer or TimingStack()
 
         for hf_subset in hf_subsets:
             logger.info(
@@ -234,6 +237,7 @@ class AbsTaskClassification(AbsTask):
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 num_proc=num_proc,
+                timer=timer,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
@@ -250,7 +254,7 @@ class AbsTaskClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -295,7 +299,7 @@ class AbsTaskClassification(AbsTask):
 
         return self._calculate_avg_scores(scores)
 
-    def _evaluate_subset_cross_validation(  # noqa: PLR0914
+    def _evaluate_subset_cross_validation(
         self,
         model: EncoderProtocol,
         data_split: DatasetDict,
@@ -305,7 +309,7 @@ class AbsTaskClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if self.train_split != hf_split:
@@ -332,7 +336,6 @@ class AbsTaskClassification(AbsTask):
             num_proc=num_proc,
             **encode_kwargs,
         )
-        timer = timer or TimingStack()
         # precompute all embeddings for cross-validation to not recomupute them in different k-folds
         with timer(
             "Encoding training samples",
@@ -398,7 +401,7 @@ class AbsTaskClassification(AbsTask):
         hf_subset: str,
         train_cache: Array | None = None,
         num_proc: int | None = None,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
     ) -> tuple[ClassificationMetrics, list[float], list[int], Array]:
         train_dataset, idxs, selected_idx = self._undersample_data(
             train_split,
@@ -418,6 +421,7 @@ class AbsTaskClassification(AbsTask):
             hf_split=hf_split,
             hf_subset=hf_subset,
             evaluator_model=self.evaluator_model,
+            timer=timer,
         )
         y_pred, test_cache = evaluator(
             model,
@@ -425,7 +429,6 @@ class AbsTaskClassification(AbsTask):
             test_cache=test_cache,
             train_cache=sub_train_cache,
             num_proc=num_proc,
-            timer=timer,
         )
         y_test = eval_split[self.label_column_name]
         return self._calculate_scores(y_test, y_pred), y_pred.tolist(), idxs, test_cache

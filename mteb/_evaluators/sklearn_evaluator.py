@@ -4,7 +4,6 @@ import logging
 from typing import TYPE_CHECKING, Any, Protocol
 
 from mteb._create_dataloaders import create_dataloader
-from mteb.timing import TimingStack
 
 from .evaluator import Evaluator
 
@@ -19,6 +18,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
+    from mteb.timing import TimingStack
     from mteb.types import Array, BatchedInput, EncodeKwargs
 
 logger = logging.getLogger(__name__)
@@ -48,7 +48,7 @@ class SklearnEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         evaluator_model: SklearnModelProtocol,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
@@ -62,7 +62,7 @@ class SklearnEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
         self.evaluator_model = evaluator_model
-        self.timer = timer or TimingStack()
+        self.timer = timer
 
     def create_dataloaders(
         self,
@@ -93,7 +93,6 @@ class SklearnEvaluator(Evaluator):
         test_cache: Array | None = None,
         train_cache: Array | None = None,
         num_proc: int | None = None,
-        timer: TimingStack | None = None,
     ) -> tuple[NDArray[np.integer | np.floating], Array]:
         """Classification evaluation by training a sklearn classifier on the embeddings of the training set and evaluating on the embeddings of the test set.
 

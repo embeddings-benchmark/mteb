@@ -13,7 +13,6 @@ from sklearn.metrics.pairwise import (
 from mteb._create_dataloaders import _create_dataloader_from_texts, create_dataloader
 from mteb._evaluators.evaluator import Evaluator
 from mteb.similarity_functions import compute_pairwise_similarity
-from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -23,6 +22,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, PromptType
 
 logger = logging.getLogger(__name__)
@@ -74,7 +74,7 @@ class PairClassificationEvaluator(Evaluator):
         hf_subset: str,
         input1_prompt_type: PromptType | None,
         input2_prompt_type: PromptType | None,
-        timer: TimingStack | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
@@ -86,7 +86,7 @@ class PairClassificationEvaluator(Evaluator):
         self.hf_subset = hf_subset
         self.input1_prompt_type = input1_prompt_type
         self.input2_prompt_type = input2_prompt_type
-        self.timer = timer or TimingStack()
+        self.timer = timer
 
     def __call__(
         self,
