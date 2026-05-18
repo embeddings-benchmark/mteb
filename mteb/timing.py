@@ -45,7 +45,7 @@ class TimingContext:
 
     def __enter__(self) -> Self:
         if self.log_message:
-            logger.info(self.log_message)
+            logger.info(self.log_message, stacklevel=2)
         self.start = time.monotonic()
         return self
 
