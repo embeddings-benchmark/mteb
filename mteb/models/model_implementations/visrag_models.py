@@ -22,7 +22,6 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
-    from PIL import Image
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -122,7 +121,6 @@ class VisRAGRetWrapper(AbsEncoder):
             placeholders = [""] * len(imgs)
             all_embeds.append(self._encode(texts=placeholders, images=imgs))
         return torch.cat(all_embeds, dim=0)
-
 
     def encode(
         self,
