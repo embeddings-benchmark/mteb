@@ -24,6 +24,7 @@ from mteb.models import (
     SentenceTransformerEncoderWrapper,
 )
 from mteb.results import TaskResult
+from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
@@ -182,6 +183,7 @@ class MTEB:
         subsets_to_run: list[str] | None = None,
         *,
         encode_kwargs: EncodeKwargs,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> tuple[Any, float, float]:
         tick = time()
@@ -190,6 +192,7 @@ class MTEB:
             split,
             subsets_to_run=subsets_to_run,
             encode_kwargs=encode_kwargs,
+            timer=timer,
             **kwargs,
         )
         tock = time()
@@ -456,6 +459,7 @@ class MTEB:
                 task.check_if_dataset_is_superseded()
                 task.load_data()
 
+                timer = TimingStack()
                 task_results: dict[str, dict[str, dict[str, Any]]] = {}
                 evaluation_time: float = 0
                 kg_co2_emissions: int | None = 0 if co2_tracker else None
@@ -479,50 +483,64 @@ class MTEB:
                     ) and task_subsets is None:
                         subsets_to_run = ["default"]
 
-                    if co2_tracker:
-                        try:
-                            from codecarbon import (  # type: ignore[import-not-found]
-                                EmissionsTracker,
-                            )
-                        except ImportError:
-                            raise ImportError(
-                                "codecarbon is not installed. Please install it using `pip install 'mteb[codecarbon]'` to track CO₂ emissions."
-                            )
-                        msg = "Evaluating multiple MTEB runs simultaneously will produce incorrect CO₂ results"
-                        logger.warning(msg)
-                        warnings.warn(msg)
-                        with EmissionsTracker(
-                            save_to_file=False,
-                            save_to_api=False,
-                            logging_logger=logger,
-                            allow_multiple_runs=True,
-                        ) as tracker:
+                    num_phases_before = len(timer.phases)
+                    with timer(
+                        "Evaluation",
+                        split=split,
+                        log_message=f"Evaluating {task.metadata.name} on split {split}...",
+                    ):
+                        if co2_tracker:
+                            try:
+                                from codecarbon import (  # type: ignore[import-not-found]
+                                    EmissionsTracker,
+                                )
+                            except ImportError:
+                                raise ImportError(
+                                    "codecarbon is not installed. Please install it using `pip install 'mteb[codecarbon]'` to track CO₂ emissions."
+                                )
+                            msg = "Evaluating multiple MTEB runs simultaneously will produce incorrect CO₂ results"
+                            logger.warning(msg)
+                            warnings.warn(msg)
+                            with EmissionsTracker(
+                                save_to_file=False,
+                                save_to_api=False,
+                                logging_logger=logger,
+                                allow_multiple_runs=True,
+                            ) as tracker:
+                                results, tick, tock = self._run_eval(
+                                    task,
+                                    mteb_model,
+                                    split,
+                                    encode_kwargs=encode_kwargs,
+                                    subsets_to_run=subsets_to_run,
+                                    timer=timer,
+                                    **kwargs,
+                                )
+
+                            kg_co2_emissions += (
+                                tracker.final_emissions
+                            )  # expressed as kilograms of CO₂-equivalents
+                        else:
                             results, tick, tock = self._run_eval(
                                 task,
                                 mteb_model,
                                 split,
-                                encode_kwargs=encode_kwargs,
                                 subsets_to_run=subsets_to_run,
+                                encode_kwargs=encode_kwargs,
+                                timer=timer,
                                 **kwargs,
                             )
 
-                        kg_co2_emissions += (
-                            tracker.final_emissions
-                        )  # expressed as kilograms of CO₂-equivalents
-                    else:
-                        results, tick, tock = self._run_eval(
-                            task,
-                            mteb_model,
-                            split,
-                            subsets_to_run=subsets_to_run,
-                            encode_kwargs=encode_kwargs,
-                            **kwargs,
-                        )
+                    evaluation_phase = timer.phases.pop()
+                    duration = evaluation_phase["end"] - evaluation_phase["start"]
+
+                    if len(timer.phases) == num_phases_before:
+                        timer.phases.append(evaluation_phase)
 
                     logger.info(
-                        f"Evaluation for {task.metadata.name} on {split} took {tock - tick:.2f} seconds"
+                        f"Evaluation for {task.metadata.name} on {split} took {duration:.2f} seconds"
                     )
-                    evaluation_time += tock - tick
+                    evaluation_time += duration
 
                     task_results[split] = results
                     if verbosity >= 1:
@@ -536,6 +554,7 @@ class MTEB:
                     task_results,  # type: ignore[arg-type]
                     evaluation_time=evaluation_time,
                     kg_co2_emissions=kg_co2_emissions,
+                    evaluation_phases=timer.phases if timer.phases else None,
                 )
 
                 # Merge with existing if needed
