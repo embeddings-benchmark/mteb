@@ -12,7 +12,7 @@ if [ -z "$MODEL" ]; then
 fi
 
 # Create log dir before anything else
-mkdir -p /data/home/niklas/deepshah/mteb/logs
+mkdir -p /data/home/niklas/deepshah/logs
 
 # Switch directory allowing the bash to find if result already exists or not
 cd /data/home/niklas/deepshah/mteb
@@ -58,8 +58,8 @@ for TASK in "${TASKS_ARRAY[@]}"; do
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=8G
 #SBATCH --time=72:00:00
-#SBATCH --output=/data/home/niklas/deepshah/mteb/logs/${JOB_NAME}_%j.out
-#SBATCH --error=/data/home/niklas/deepshah/mteb/logs/${JOB_NAME}_%j.err
+#SBATCH --output=/data/home/niklas/deepshah/logs/${JOB_NAME}_%j.out
+#SBATCH --error=/data/home/niklas/deepshah/logs/${JOB_NAME}_%j.err
 
 cd /data/home/niklas/deepshah/mteb
 
