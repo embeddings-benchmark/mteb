@@ -123,21 +123,6 @@ class VisRAGRetWrapper(AbsEncoder):
             all_embeds.append(self._encode(texts=placeholders, images=imgs))
         return torch.cat(all_embeds, dim=0)
 
-    def get_fused_embeddings(
-        self,
-        texts: list[str] | None = None,
-        images: list[Image.Image] | DataLoader | None = None,
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
-        fusion_mode: str = "sum",
-        **kwargs: Any,
-    ):
-        raise NotImplementedError(
-            "VisRAG-Ret is trained as a single-modality retriever (text queries "
-            "↔ image documents). Use get_text_embeddings or get_image_embeddings."
-        )
 
     def encode(
         self,
