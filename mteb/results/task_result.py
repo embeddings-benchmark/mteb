@@ -1023,13 +1023,6 @@ class TaskError(BaseModel):
     exception: str
 
 
-def _json_serialize_kwargs(kwargs: Mapping[str, Any] | None) -> dict[str, Any]:
-    """Convert keyword arguments into a JSON-serializable structure."""
-    if kwargs is None:
-        return {}
-    return cast("dict[str, Any]", json.loads(json.dumps(kwargs, default=str)))
-
-
 def _read_run_settings_from_file(path: Path) -> list[dict[str, Any]]:
     """Read run settings entries from a JSONL file."""
     if not path.exists():

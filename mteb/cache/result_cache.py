@@ -40,7 +40,6 @@ from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
 from mteb.results.task_result import (
-    _json_serialize_kwargs,
     _read_run_settings_from_file,
     _write_and_merge_keyed_json,
 )
@@ -409,7 +408,9 @@ class ResultCache:
                     "split": split,
                     "subset": hf_subset,
                     "version": version_dict,
-                    "encode_kwargs": _json_serialize_kwargs(encode_kwargs),
+                    "encode_kwargs": json.loads(json.dumps(encode_kwargs, default=str))
+                    if encode_kwargs is not None
+                    else {},
                 }
                 run_settings_list.append(run_settings)
 
