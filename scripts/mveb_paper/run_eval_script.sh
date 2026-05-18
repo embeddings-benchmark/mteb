@@ -1,13 +1,14 @@
 #!/bin/bash
-# Usage: bash scripts/mveb_paper/run_eval_script.sh <model_name> <batch_size> [num_frames] [tasks_comma_separated]
+# Usage: bash scripts/mveb_paper/run_eval_script.sh <model_name> <batch_size> [num_frames] [tasks_comma_separated] [prefetch_factor]
 
 MODEL="$1"
 BATCH="${2:-4}"
 NUM_FRAMES="$3"
 TASKS="$4"
+PREFETCH_FACTOR="$5"
 
 if [ -z "$MODEL" ]; then
-    echo "Usage: bash scripts/mveb_paper/run_eval_script.sh <model_name> <batch_size> [num_frames] [tasks_comma_separated]"
+    echo "Usage: bash scripts/mveb_paper/run_eval_script.sh <model_name> <batch_size> [num_frames] [tasks_comma_separated] [prefetch_factor]"
     exit 1
 fi
 
@@ -40,6 +41,12 @@ for TASK in "${TASKS_ARRAY[@]}"; do
         OUTPUT_FOLDER="results"
     fi
 
+    if [ -n "$PREFETCH_FACTOR" ]; then
+        PREFETCH_ARG="--prefetch-factor $PREFETCH_FACTOR"
+    else
+        PREFETCH_ARG=""
+    fi
+
     if [ -n "$TASK" ]; then
         MODEL_SAFE="${MODEL//\//__}"
         if ls "${OUTPUT_FOLDER}/${MODEL_SAFE}"/*/"${TASK}.json" >/dev/null 2>&1; then
@@ -56,7 +63,7 @@ for TASK in "${TASKS_ARRAY[@]}"; do
 #SBATCH --partition=guest
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=8G
+#SBATCH --mem=16G
 #SBATCH --time=72:00:00
 #SBATCH --output=/data/home/niklas/deepshah/logs/${JOB_NAME}_%j.out
 #SBATCH --error=/data/home/niklas/deepshah/logs/${JOB_NAME}_%j.err
@@ -83,6 +90,7 @@ python scripts/mveb_paper/eval_suite.py \\
     --output-folder "$OUTPUT_FOLDER" \\
     $FRAME_ARG \\
     --batch-size $BATCH \\
+    $PREFETCH_ARG \
     $TASK_ARG
 EXIT_CODE=\$?
 

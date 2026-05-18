@@ -45,11 +45,17 @@ def _create_dataloader_from_texts(
     Returns:
         A dataloader with the text.
     """
+    num_workers = num_proc if num_proc is not None and num_proc > 1 else 0
+    dataloader_kwargs = {}
+    if num_workers > 0 and "prefetch_factor" in kwargs:
+        dataloader_kwargs["prefetch_factor"] = kwargs["prefetch_factor"]
+
     dataset = Dataset.from_dict({"text": text})
     return DataLoader(
         dataset,
         batch_size=batch_size,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
+        num_workers=num_workers,
+        **dataloader_kwargs,
     )
 
 
@@ -339,6 +345,8 @@ def create_dataloader(
         return _create_dataloader_from_texts(
             dataset[_input_column],
             batch_size=batch_size,
+            num_proc=num_proc,
+            **kwargs,
         )
 
     prepared = _prepare_dataset(
@@ -349,10 +357,16 @@ def create_dataloader(
         num_proc=num_proc,
     )
 
+    num_workers = num_proc if num_proc is not None and num_proc > 1 else 0
+    dataloader_kwargs = {}
+    if num_workers > 0 and "prefetch_factor" in kwargs:
+        dataloader_kwargs["prefetch_factor"] = kwargs["prefetch_factor"]
+
     return DataLoader(
         prepared,
         batch_size=batch_size,
         collate_fn=_custom_collate_fn,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
+        num_workers=num_workers,
         shuffle=False,
+        **dataloader_kwargs,
     )

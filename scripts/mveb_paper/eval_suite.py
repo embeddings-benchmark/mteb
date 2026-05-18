@@ -53,6 +53,7 @@ def main():
     parser.add_argument("--max-frames", type=int, default=None)
     parser.add_argument("--num-frames", type=int, default=None)
     parser.add_argument("--batch-size", type=int, default=4)
+    parser.add_argument("--prefetch-factor", type=int, default=None)
     parser.add_argument(
         "--tasks", nargs="*", default=None, help="Override the default task list."
     )
@@ -99,13 +100,17 @@ def main():
     num_workers = int(os.environ.get("SLURM_CPUS_PER_TASK", 0))
     print(f"Using {num_workers} CPU workers for data loading and video preprocessing.")
 
+    encode_kwargs = {"batch_size": args.batch_size}
+    if args.prefetch_factor is not None:
+        encode_kwargs["prefetch_factor"] = args.prefetch_factor
+
     evaluation = mteb.MTEB(tasks=tasks)
     evaluation.run(
         model,
         output_folder=args.output_folder,
         verbosity=2,
         raise_error=False,
-        encode_kwargs={"batch_size": args.batch_size},
+        encode_kwargs=encode_kwargs,
         num_proc=num_workers,
     )
 
