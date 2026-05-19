@@ -205,45 +205,31 @@ class FramesCollator:
             num_frames: If set, select exactly this many frames uniformly
                 (fixed-sample mode).
         """
-        # Probe backwards: trailing frames may not decode.
-        num_source_frames = video.metadata.num_frames
-        while num_source_frames > 0:
+
+        def _indices(n_source: int) -> list[int]:
+            if num_frames is None and fps is None:
+                return list(range(n_source))
+            if num_frames is not None:
+                target = num_frames
+            else:
+                duration = video.metadata.end_stream_seconds
+                target = max(1, int(duration * fps))
+                if max_frames is not None:
+                    target = min(target, max_frames)
+            if num_frames is not None and n_source < target:
+                return (list(range(n_source)) * ((target // n_source) + 1))[:target]
+            step = max(1, n_source // target)
+            return list(range(0, n_source, step))[:target]
+
+        # Retry on the actual call: decrement source count when trailing
+        # frames fail to decode.
+        n = video.metadata.num_frames
+        while n > 0:
             try:
-                video.get_frame_at(num_source_frames - 1)
-                break
+                return cast("torch.Tensor", video.get_frames_at(_indices(n)).data)
             except Exception:
-                num_source_frames -= 1
-        if num_source_frames == 0:
-            raise RuntimeError("video has no decodable frames")
-
-        if num_frames is None and fps is None:
-            # No resampling: return all frames
-            frames = cast(
-                "torch.Tensor", video.get_frames_at(list(range(num_source_frames))).data
-            )
-            return frames
-
-        if num_frames is not None:
-            # Fixed-sample mode: always select exactly num_frames
-            target = num_frames
-        else:
-            # FPS-based mode: scale with duration
-            duration = video.metadata.end_stream_seconds
-            target = max(1, int(duration * fps))
-            if max_frames is not None:
-                target = min(target, max_frames)
-
-        if num_frames is not None and num_source_frames < target:
-            # Repeat frames to reach exactly ``num_frames``.
-            selected_frames = (
-                list(range(num_source_frames)) * ((target // num_source_frames) + 1)
-            )[:target]
-        else:
-            frame_step = max(1, num_source_frames // target)
-            selected_frames = list(range(0, num_source_frames, frame_step))[:target]
-        frames = video.get_frames_at(selected_frames).data
-        frames = cast("torch.Tensor", frames)
-        return frames
+                n -= 1
+        raise RuntimeError("video has no decodable frames")
 
 
 class VideoCollator:
