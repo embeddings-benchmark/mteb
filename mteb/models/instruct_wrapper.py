@@ -4,6 +4,7 @@ import logging
 import warnings
 from typing import TYPE_CHECKING, Any, cast
 
+import numpy as np
 import torch
 from typing_extensions import deprecated
 
@@ -297,3 +298,105 @@ class InstructSentenceTransformerModel(AbsEncoder):
             # sometimes in kwargs can be return_tensors=True
             embeddings = embeddings.cpu().detach().float().numpy()
         return embeddings
+
+
+class MultimodalInstructSentenceTransformerModel(InstructSentenceTransformerModel):
+    """Instruction wrapper for multimodal SentenceTransformer models (text + image + video).
+
+    Extends InstructSentenceTransformerModel with multimodal batch handling and
+    video collator support for models that do not encode instructions natively via
+    their SentenceTransformers config.
+    """
+
+    def __init__(
+        self,
+        model_name: str,
+        revision: str,
+        *,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(model_name, revision, **kwargs)
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Unpack[EncodeKwargs],
+    ) -> Array:
+        """Encodes the given sentences using the encoder.
+
+        Args:
+            inputs: Batch of inputs to encode.
+            task_metadata: The metadata of the task. Encoders (e.g. SentenceTransformers) use to
+                select the appropriate prompts, with priority given to more specific task/prompt combinations over general ones.
+
+                The order of priorities for prompt selection are:
+                    1. Composed prompt of task name + prompt type (query or passage)
+                    2. Specific task prompt
+                    3. Composed prompt of task type + prompt type (query or passage)
+                    4. Specific task type prompt
+                    5. Specific prompt type (query or passage)
+            hf_split: Split of current task, allows to know some additional information about current split.
+                E.g. Current language
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
+            prompt_type: The name type of prompt. (query or passage)
+            **kwargs: Additional arguments to pass to the encoder.
+
+        Returns:
+            The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
+        """
+        has_video = "video" in inputs.dataset.features  # type: ignore[attr-defined]
+        if has_video:
+            from mteb.models.modality_collators import VideoCollator
+
+            inputs.collate_fn = VideoCollator(
+                target_sampling_rate=16000,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+            )
+
+        instruction: str | None = self.get_task_instruction(task_metadata, prompt_type)
+        if (
+            not self.apply_instruction_to_passages
+            and prompt_type == PromptType.document
+        ):
+            instruction = None
+
+        if instruction:
+            logger.info(
+                f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
+            )
+
+        _modality_keys = {"text", "image", "video"}
+        all_embeddings = []
+        for batch in inputs:
+            batch_column = next(iter(batch.keys()))
+            batched_input: list[dict[str, Any]] = [
+                {} for _ in range(len(batch[batch_column]))
+            ]
+            for key, values in batch.items():
+                if key not in _modality_keys:
+                    continue
+                for i, value in enumerate(values):
+                    batched_input[i][key] = value
+
+            embeddings = cast(
+                "Array",
+                self.model.encode(batched_input, prompt=instruction, **kwargs),
+            )
+            if isinstance(embeddings, torch.Tensor):
+                embeddings = embeddings.cpu().detach().float()
+            all_embeddings.append(embeddings)
+
+        return cast("Array", np.concatenate(all_embeddings, axis=0))

@@ -566,6 +566,7 @@ extend-ignore-re = [
 
 [tool.typos.type.py.extend-identifiers]
 BulgarianStoreReviewSentimentClassfication = "BulgarianStoreReviewSentimentClassfication"
+LaBSE = "LaBSE"
 
 [tool.typos.type.py.extend-words]
 wdth = "wdth"
