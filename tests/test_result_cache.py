@@ -753,6 +753,13 @@ def test_submit_results_with_fake_remote(tmp_path):
                 f"File {expected_path} not found in commit {commit_sha}"
             )
 
+        expected_run_settings = (
+            f"{test_model.model_name_as_path()}/{revision}/run_settings.jsonl"
+        )
+        assert expected_run_settings in check.stdout, (
+            f"File {expected_run_settings} not found in commit {commit_sha}"
+        )
+
         # For manual submission, verify we're on the submission branch with the commit
         result_after = subprocess.run(
             ["git", "rev-parse", "--abbrev-ref", "HEAD"],
@@ -787,6 +794,25 @@ def test_submit_results(tmp_path):
             capture_output=True,
             text=True,
         ).stdout.strip()
+
+        commit_sha = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            check=True,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        check = subprocess.run(
+            ["git", "ls-tree", "-r", "--name-only", commit_sha],
+            check=True,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        )
+        expected_run_settings = f"{test_model.model_name_as_path()}/{test_model.revision}/run_settings.jsonl"
+        assert expected_run_settings in check.stdout, (
+            f"File {expected_run_settings} not found in commit {commit_sha}"
+        )
 
         # Merge submission branch back to main to simulate files being integrated
         subprocess.run(

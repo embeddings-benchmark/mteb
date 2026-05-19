@@ -11,6 +11,7 @@ import warnings
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from datetime import datetime
+from importlib.metadata import version
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
@@ -38,6 +39,10 @@ from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
+from mteb.results.task_result import (
+    _read_run_settings_from_file,
+    _write_and_merge_keyed_json,
+)
 from mteb.types import SubmitResultsResponse
 
 if TYPE_CHECKING:
@@ -48,6 +53,30 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 _EXPERIMENTS_FOLDER_NAME = "experiments"
+
+
+def _get_package_versions() -> dict[str, str | None]:
+    """Get current package versions from the environment.
+
+    Returns:
+        A dictionary with package names as keys and versions (or None if not installed) as values.
+    """
+    packages = [
+        "mteb",
+        "torch",
+        "sentence-transformers",
+        "flash-attn",
+        "transformers",
+    ]
+    versions: dict[str, str | None] = {}
+
+    for pkg_name in packages:
+        try:
+            versions[pkg_name] = version(pkg_name)
+        except Exception:
+            versions[pkg_name] = None
+
+    return versions
 
 
 class CopyResultsAction:
@@ -118,6 +147,25 @@ class CopyResultsAction:
                     shutil.copy2(model_meta_file, dest_model_meta)
                     self.copied_files.append(dest_model_meta)
                     logger.debug(f"Copied {model_meta_file} to {dest_model_meta}")
+
+                run_settings_file = source_model_dir / "run_settings.jsonl"
+                if run_settings_file.exists():
+                    dest_run_settings = dest_dir / "run_settings.jsonl"
+                    if (
+                        dest_run_settings.exists()
+                        and dest_run_settings not in self._overwritten_file_contents
+                    ):
+                        self._overwritten_file_contents[dest_run_settings] = (
+                            dest_run_settings.read_bytes()
+                        )
+                        local_entries = _read_run_settings_from_file(run_settings_file)
+                        _write_and_merge_keyed_json(dest_run_settings, local_entries)
+                    else:
+                        shutil.copy2(run_settings_file, dest_run_settings)
+                    self.copied_files.append(dest_run_settings)
+                    logger.debug(
+                        f"Copied/merged {run_settings_file} to {dest_run_settings}"
+                    )
 
         logger.info(f"Copied {len(self.copied_files)} files to remote")
 
@@ -321,6 +369,8 @@ class ResultCache:
         task_result: TaskResult,
         model_name: str | ModelMeta,
         model_revision: str | None = None,
+        *,
+        encode_kwargs: Mapping[str, Any] | None = None,
     ) -> None:
         """Save the task results to the local cache directory in the location {model_name}/{model_revision}/{task_name}.json.
 
@@ -331,6 +381,7 @@ class ResultCache:
             task_result: The results of the task.
             model_name: The name of the model as a valid directory name or a ModelMeta object.
             model_revision: The revision of the model. Must be specified if model_name is a string.
+            encode_kwargs: The keyword arguments passed to the model's encode method during evaluation.
         """
         result_path = self.get_task_result_path(
             model_name=model_name,
@@ -345,6 +396,27 @@ class ResultCache:
             meta = model_name
             with model_meta_path.open("w") as f:
                 json.dump(meta.to_dict(), f, default=str, indent=4)
+
+        version_dict = _get_package_versions()
+
+        run_settings_list: list[dict[str, Any]] = []
+        for split, split_scores in task_result.scores.items():
+            for score_entry in split_scores:
+                hf_subset = score_entry.get("hf_subset", "default")
+                run_settings = {
+                    "task": task_result.task_name,
+                    "split": split,
+                    "subset": hf_subset,
+                    "version": version_dict,
+                    "encode_kwargs": json.loads(json.dumps(encode_kwargs, default=str))
+                    if encode_kwargs is not None
+                    else {},
+                }
+                run_settings_list.append(run_settings)
+
+        if run_settings_list:
+            run_settings_path = result_path.parent / "run_settings.jsonl"
+            _write_and_merge_keyed_json(run_settings_path, run_settings_list)
 
     @property
     def default_cache_path(self) -> Path:
