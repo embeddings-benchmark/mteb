@@ -224,9 +224,15 @@ class FramesCollator:
         # Retry on the actual call: decrement source count when trailing
         # frames fail to decode.
         n = video.metadata.num_frames
+        original_n = n
         while n > 0:
             try:
                 frames: torch.Tensor = video.get_frames_at(_indices(n)).data
+                if n < original_n:
+                    logger.warning(
+                        "Dropped %d undecodable trailing frame(s) from video",
+                        original_n - n,
+                    )
                 return frames
             except RuntimeError as e:
                 if "no more frames" not in str(e):
