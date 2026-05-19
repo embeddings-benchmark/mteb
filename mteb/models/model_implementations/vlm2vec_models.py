@@ -612,5 +612,5 @@ vlm2vec2 = ModelMeta(
 }""",
     contacts=None,
     output_dtypes=None,
-    extra_requirements_groups=["peft"],
+    extra_requirements_groups=["peft", "transformers-v4"],
 )
