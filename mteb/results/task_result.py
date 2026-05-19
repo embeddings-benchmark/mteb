@@ -837,18 +837,23 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                 merged_scores[split] = scores
 
         existing_kg_co2_emissions = (
-            self.kg_co2_emissions if self.kg_co2_emissions else 0
+            self.kg_co2_emissions if self.kg_co2_emissions else 0.0
         )
         new_kg_co2_emissions = (
-            new_results.kg_co2_emissions if new_results.kg_co2_emissions else 0
+            new_results.kg_co2_emissions if new_results.kg_co2_emissions else 0.0
         )
         merged_kg_co2_emissions = None
-        if existing_kg_co2_emissions and new_kg_co2_emissions:
+        if (
+            self.kg_co2_emissions is not None
+            or new_results.kg_co2_emissions is not None
+        ):
             merged_kg_co2_emissions = existing_kg_co2_emissions + new_kg_co2_emissions
 
         merged_evaluation_time = None
-        if self.evaluation_time and new_results.evaluation_time:
-            merged_evaluation_time = self.evaluation_time + new_results.evaluation_time
+        if self.evaluation_time is not None or new_results.evaluation_time is not None:
+            merged_evaluation_time = (self.evaluation_time or 0.0) + (
+                new_results.evaluation_time or 0.0
+            )
         date = self.date
         if new_results.date is not None and (date is None or new_results.date > date):
             date = new_results.date

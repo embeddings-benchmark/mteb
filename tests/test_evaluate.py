@@ -477,3 +477,28 @@ def test_evaluate_intermediate_cache_on_crash(tmp_path: Path):
     assert len(scores) == 1
     assert scores[0]["hf_subset"] == "subset1"
     assert scores[0]["main_score"] == 0.8
+
+
+def test_evaluate_bitext_mining_caching(tmp_path: Path):
+    from tests.mock_tasks import MockBitextMiningTask
+
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockBitextMiningTask()
+    cache = ResultCache(tmp_path)
+
+    results = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+    assert len(results.task_results) == 1
+
+    path = cache.get_task_result_path(
+        task.metadata.name,
+        model.mteb_model_meta.name,
+        model.mteb_model_meta.revision,
+    )
+    assert path.exists() and path.is_file()
+
+    from mteb.results import TaskResult
+
+    cached_result = TaskResult.from_disk(path)
+    assert "test" in cached_result.scores
+    scores = cached_result.scores["test"]
+    assert len(scores) == len(task.hf_subsets)

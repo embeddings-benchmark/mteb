@@ -90,6 +90,7 @@ def _save_intermediate_cache(
     res: Mapping[HFSubset, ScoresDict],
     cache: ResultCache | None,
     model_meta: ModelMeta | None,
+    evaluation_time: float,
 ) -> None:
     if cache is None or model_meta is None:
         return
@@ -102,7 +103,7 @@ def _save_intermediate_cache(
         new_result = TaskResult.from_task_results(
             task,
             partial_task_results,
-            evaluation_time=0.0,
+            evaluation_time=evaluation_time,
             kg_co2_emissions=None,
             date=datetime.datetime.now(tz=datetime.timezone.utc),
         )
@@ -119,8 +120,11 @@ def _save_intermediate_cache(
         logger.debug(
             f"Saved intermediate results after evaluating {task.metadata.name} on {split} subset {ss}"
         )
-    except Exception as e:
-        logger.warning(f"Failed to save intermediate results: {e}")
+    except (OSError, TypeError, ValueError) as e:
+        logger.error(
+            f"Failed to save intermediate results: {e}",
+            exc_info=True,
+        )
 
 
 def _evaluate_task(  # noqa: PLR0913
@@ -203,6 +207,8 @@ def _evaluate_task(  # noqa: PLR0913
 
     for split, hf_subsets in splits.items():
         tick = time()
+        # BitextMining tasks evaluate all subsets together (e.g. for parallel subsets), so they
+        # are not run subset-by-subset or incrementally cached here. Their final results are cached at the end of evaluate.
         if isinstance(task, AbsTaskBitextMining):
             task_results[split] = dict(
                 task.evaluate(
@@ -219,6 +225,7 @@ def _evaluate_task(  # noqa: PLR0913
         else:
             task_results[split] = {}
             for ss in hf_subsets:
+                tick_ss = time()
                 res = task.evaluate(
                     model,
                     split,
@@ -229,9 +236,27 @@ def _evaluate_task(  # noqa: PLR0913
                     cache=cache,
                     model_meta=model_meta,
                 )
+                tock_ss = time()
                 if res and ss in res:
                     task_results[split].update(res)
-                    _save_intermediate_cache(task, split, ss, res, cache, model_meta)
+                    _save_intermediate_cache(
+                        task,
+                        split,
+                        ss,
+                        res,
+                        cache,
+                        model_meta,
+                        evaluation_time=tock_ss - tick_ss,
+                    )
+                else:
+                    logger.warning(
+                        "Requested subset %r for task %s on split %s produced no result; "
+                        "evaluation returned %s",
+                        ss,
+                        task.metadata.name,
+                        split,
+                        "no data" if not res else f"keys {list(res.keys())!r}",
+                    )
         tock = time()
 
         logger.debug(
