@@ -11,7 +11,7 @@ from datasets.exceptions import DatasetNotFoundError
 from tqdm.auto import tqdm
 
 from mteb._helpful_enum import HelpfulStrEnum
-from mteb.abstasks import AbsTaskRetrieval
+from mteb.abstasks import AbsTaskBitextMining, AbsTaskRetrieval
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.benchmarks.benchmark import Benchmark
@@ -26,14 +26,14 @@ from mteb.results.task_result import TaskError
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Iterable, Mapping
 
     from sentence_transformers import CrossEncoder, SentenceTransformer
 
     from mteb.models.models_protocols import (
         MTEBModels,
     )
-    from mteb.types import EncodeKwargs, HFSubset, SplitName
+    from mteb.types import EncodeKwargs, HFSubset, ScoresDict, SplitName
     from mteb.types._metadata import ModelName, Revision
 
 logger = logging.getLogger(__name__)
@@ -83,7 +83,47 @@ def _sanitize_model(
     return wrapped_model, meta, model_name, model_revision
 
 
-def _evaluate_task(
+def _save_intermediate_cache(
+    task: AbsTask,
+    split: str,
+    ss: HFSubset,
+    res: Mapping[HFSubset, ScoresDict],
+    cache: ResultCache | None,
+    model_meta: ModelMeta | None,
+) -> None:
+    if cache is None or model_meta is None:
+        return
+    try:
+        # Create a TaskResult with ONLY the subset that was just evaluated
+        current_subset = {ss: res[ss]}
+        partial_task_results: dict[SplitName, Mapping[HFSubset, ScoresDict]] = {
+            split: current_subset
+        }
+        new_result = TaskResult.from_task_results(
+            task,
+            partial_task_results,
+            evaluation_time=0.0,
+            kg_co2_emissions=None,
+            date=datetime.datetime.now(tz=datetime.timezone.utc),
+        )
+
+        existing_cached = cache.load_task_result(task.metadata.name, model_meta)
+
+        # Merge: existing subsets + new subset
+        if existing_cached is not None:
+            final_result = new_result.merge(existing_cached)
+        else:
+            final_result = new_result
+
+        cache.save_to_cache(final_result, model_meta)
+        logger.debug(
+            f"Saved intermediate results after evaluating {task.metadata.name} on {split} subset {ss}"
+        )
+    except Exception as e:
+        logger.warning(f"Failed to save intermediate results: {e}")
+
+
+def _evaluate_task(  # noqa: PLR0913
     model: MTEBModels,
     task: AbsTask,
     *,
@@ -136,7 +176,7 @@ def _evaluate_task(
             result.kg_co2_emissions = tracker.final_emissions
         return result
 
-    task_results = {}
+    task_results: dict[SplitName, dict[HFSubset, ScoresDict]] = {}
 
     task.check_if_dataset_is_superseded()
 
@@ -163,16 +203,35 @@ def _evaluate_task(
 
     for split, hf_subsets in splits.items():
         tick = time()
-        task_results[split] = task.evaluate(
-            model,
-            split,
-            subsets_to_run=hf_subsets,
-            encode_kwargs=encode_kwargs,
-            prediction_folder=prediction_folder,
-            num_proc=num_proc,
-            cache=cache,
-            model_meta=model_meta,
-        )
+        if isinstance(task, AbsTaskBitextMining):
+            task_results[split] = dict(
+                task.evaluate(
+                    model,
+                    split,
+                    subsets_to_run=hf_subsets,
+                    encode_kwargs=encode_kwargs,
+                    prediction_folder=prediction_folder,
+                    num_proc=num_proc,
+                    cache=cache,
+                    model_meta=model_meta,
+                )
+            )
+        else:
+            task_results[split] = {}
+            for ss in hf_subsets:
+                res = task.evaluate(
+                    model,
+                    split,
+                    subsets_to_run=[ss],
+                    encode_kwargs=encode_kwargs,
+                    prediction_folder=prediction_folder,
+                    num_proc=num_proc,
+                    cache=cache,
+                    model_meta=model_meta,
+                )
+                if res and ss in res:
+                    task_results[split].update(res)
+                    _save_intermediate_cache(task, split, ss, res, cache, model_meta)
         tock = time()
 
         logger.debug(

@@ -405,3 +405,75 @@ def test_mock_mmeb_tasks(task: AbsTask):
     pytest.importorskip("torchcodec", reason="Audio dependencies are not installed")
     model = mteb.get_model_meta("mteb/baseline-random-encoder")
     mteb.evaluate(model, task, cache=None)
+
+
+class MockCrashTask(MockClassificationTask):
+    metadata = copy(MockClassificationTask.metadata)
+    metadata.name = "MockCrashTask"
+
+    def __init__(self):
+        super().__init__()
+        self.hf_subsets = ["subset1", "subset2"]
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        from datasets import Dataset, DatasetDict
+
+        train_texts = ["This is a test sentence", "This is another train sentence"]
+        test_texts = ["This is a test sentence", "This is another test sentence"]
+        labels = [0, 1]
+
+        self.dataset = DatasetDict(
+            {
+                "subset1": DatasetDict(
+                    {
+                        "test": Dataset.from_dict(
+                            {"text": test_texts, "label": labels}
+                        ),
+                        "train": Dataset.from_dict(
+                            {"text": train_texts, "label": labels}
+                        ),
+                    }
+                ),
+                "subset2": DatasetDict(
+                    {
+                        "test": Dataset.from_dict(
+                            {"text": test_texts, "label": labels}
+                        ),
+                        "train": Dataset.from_dict(
+                            {"text": train_texts, "label": labels}
+                        ),
+                    }
+                ),
+            }
+        )
+        self.data_loaded = True
+
+    def _evaluate_subset(self, model, data_split, hf_split, hf_subset, **kwargs):  # noqa: PLR6301
+        if hf_subset == "subset2":
+            raise RuntimeError("Crash on subset2")
+        return {"accuracy": 0.8}
+
+
+def test_evaluate_intermediate_cache_on_crash(tmp_path: Path):
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockCrashTask()
+    cache = ResultCache(tmp_path)
+
+    with pytest.raises(RuntimeError, match="Crash on subset2"):
+        mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+
+    path = cache.get_task_result_path(
+        task.metadata.name,
+        model.mteb_model_meta.name,
+        model.mteb_model_meta.revision,
+    )
+    assert path.exists() and path.is_file()
+
+    from mteb.results import TaskResult
+
+    cached_result = TaskResult.from_disk(path)
+    assert "test" in cached_result.scores
+    scores = cached_result.scores["test"]
+    assert len(scores) == 1
+    assert scores[0]["hf_subset"] == "subset1"
+    assert scores[0]["main_score"] == 0.8

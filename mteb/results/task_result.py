@@ -177,7 +177,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def from_task_results(
         cls,
         task: AbsTask | type[AbsTask],
-        scores: dict[SplitName, Mapping[HFSubset, ScoresDict]],
+        scores: Mapping[SplitName, Mapping[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
         date: datetime.datetime | None = None,
