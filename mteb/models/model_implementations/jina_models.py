@@ -852,6 +852,10 @@ class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
         else:
             prompt = ""
 
+        logger.info(
+            f"Using prompt=`{prompt}` and task={task} for task={task_metadata.name} prompt_type={prompt_type}"
+        )
+
         all_embeddings = []
         modality_keys = ("text", "image", "audio", "video")
         for batch in inputs:
