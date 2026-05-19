@@ -196,34 +196,38 @@ class BM25Tokenizer:
         import bm25s
         from bm25s.tokenization import Tokenized
 
+        # Fast path: named stopword list available, no freq-based stops needed.
+        # Delegate entirely to bm25s to preserve its internal vocab/ID mapping.
+        if self.stopwords_key is not None or self.freq_threshold == 0:
+            named_stops = (
+                _get_stopwords(self.stopwords_key) if self.stopwords_key else frozenset()
+            )
+            self._combined_stops = named_stops
+            self._combined_list = list(named_stops) if named_stops else None
+            return bm25s.tokenize(
+                corpus_texts, stopwords=self._combined_list, stemmer=self.stemmer
+            )
+
+        # Slow path: no named stopword list — compute freq-based stops from corpus.
         raw = bm25s.tokenize(corpus_texts, stopwords=None, stemmer=self.stemmer)
 
-        freq_stops: frozenset[str] = frozenset()
-        if self.stopwords_key is None and self.freq_threshold > 0:
-            id_to_token = {v: k for k, v in raw.vocab.items()}
-            n = len(corpus_texts)
-            doc_freq: dict[str, int] = {}
-            for doc_ids in raw.ids:
-                for t in {id_to_token[i] for i in doc_ids}:
-                    doc_freq[t] = doc_freq.get(t, 0) + 1
-            freq_stops = frozenset(
-                t for t, df in doc_freq.items() if df / n >= self.freq_threshold
-            )
-            logger.info(
-                f"Freq-stopwords: {len(freq_stops)} tokens removed (threshold={self.freq_threshold})"
-            )
-
-        named_stops = (
-            _get_stopwords(self.stopwords_key) if self.stopwords_key else frozenset()
+        id_to_token = {v: k for k, v in raw.vocab.items()}
+        n = len(corpus_texts)
+        doc_freq: dict[str, int] = {}
+        for doc_ids in raw.ids:
+            for t in {id_to_token[i] for i in doc_ids}:
+                doc_freq[t] = doc_freq.get(t, 0) + 1
+        freq_stops = frozenset(
+            t for t, df in doc_freq.items() if df / n >= self.freq_threshold
         )
-        self._combined_stops = named_stops | freq_stops
-        self._combined_list = (
-            list(self._combined_stops) if self._combined_stops else None
+        logger.info(
+            f"Freq-stopwords: {len(freq_stops)} tokens removed (threshold={self.freq_threshold})"
         )
 
-        stop_ids = frozenset(
-            raw.vocab[t] for t in self._combined_stops if t in raw.vocab
-        )
+        self._combined_stops = freq_stops
+        self._combined_list = list(freq_stops) if freq_stops else None
+
+        stop_ids = frozenset(raw.vocab[t] for t in freq_stops if t in raw.vocab)
         filtered_ids = [
             [i for i in doc_ids if i not in stop_ids] for doc_ids in raw.ids
         ]
