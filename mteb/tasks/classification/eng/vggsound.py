@@ -19,7 +19,7 @@ CITATION = r"""
 class VGGSoundVAClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="VGGSoundVA",
-        description="VGGSound is a large-scale audio-visual dataset of short YouTube clips spanning 308 sound classes (e.g. 'playing piano', 'dog barking'). Audio is the primary signal. This variant uses both video and audio modalities.",
+        description="VGGSound is a large-scale audio-visual dataset of short YouTube clips spanning 308 sound classes (e.g. 'playing piano', 'dog barking'). Audio is the primary signal. This variant uses both video and audio modalities. Filtered the test split, capped at 32 per class across 309 classes (~9,888 examples).",
         reference="https://arxiv.org/abs/2004.14368",
         dataset={
             "path": "mteb/VGGSound",
@@ -55,7 +55,7 @@ class VGGSoundVAClassification(AbsTaskClassification):
 class VGGSoundVClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="VGGSoundV",
-        description="VGGSound is a large-scale audio-visual dataset of short YouTube clips spanning 308 sound classes (e.g. 'playing piano', 'dog barking'). This variant uses video only as a baseline; audio is the primary signal in the original task.",
+        description="VGGSound is a large-scale audio-visual dataset of short YouTube clips spanning 308 sound classes (e.g. 'playing piano', 'dog barking'). This variant uses video only as a baseline; audio is the primary signal in the original task. Filtered the test split, capped at 32 per class across 309 classes (~9,888 examples).",
         reference="https://arxiv.org/abs/2004.14368",
         dataset={
             "path": "mteb/VGGSound",

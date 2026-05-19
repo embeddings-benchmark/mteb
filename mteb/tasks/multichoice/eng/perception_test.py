@@ -10,7 +10,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class PerceptionTestVideoCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="PerceptionTestVideoCentricQA",
-        description="Perception Test is a multimodal benchmark designed to evaluate perception and reasoning skills of video models across memory, abstraction, physics, and semantics. Each example pairs a video with a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate.",
+        description="Perception Test is a multimodal benchmark designed to evaluate perception and reasoning skills of video models across memory, abstraction, physics, and semantics. Each example pairs a video with a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate. Used the `mc_question_val` validation split (~938 examples).",
         reference="https://arxiv.org/abs/2305.13786",
         dataset={
             "path": "mteb/PerceptionTest_val",
@@ -83,7 +83,7 @@ class PerceptionTestVideoCentricQA(AbsTaskRetrieval):
 class PerceptionTestVideoAudioCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="PerceptionTestVideoAudioCentricQA",
-        description="Perception Test is a multimodal benchmark designed to evaluate perception and reasoning skills of video models across memory, abstraction, physics, and semantics. Each example pairs a video with audio and a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate.",
+        description="Perception Test is a multimodal benchmark designed to evaluate perception and reasoning skills of video models across memory, abstraction, physics, and semantics. Each example pairs a video with audio and a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate. Used the `mc_question_val` validation split (~938 examples).",
         reference="https://arxiv.org/abs/2305.13786",
         dataset={
             "path": "mteb/PerceptionTest_val",
