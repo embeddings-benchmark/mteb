@@ -775,11 +775,16 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         """Generates a ModelMeta from only a CrossEncoder model, without fetching any additional metadata from HuggingFace Hub."""
         from mteb.models import CrossEncoderWrapper
 
+        inner_model = model.model
+        config = model.config
+        assert inner_model is not None and config is not None, (
+            "CrossEncoder must be loaded before generating ModelMeta"
+        )
         return cls.create_empty(
             overwrites=dict(
                 loader=CrossEncoderWrapper,
-                name=model.model.name_or_path,
-                revision=model.config._commit_hash,
+                name=inner_model.name_or_path,
+                revision=config._commit_hash,
                 framework=["Sentence Transformers", "PyTorch"],
                 model_type=["cross-encoder"],
                 n_embedding_parameters=cls._get_n_embedding_parameters_from_sentence_transformers(
