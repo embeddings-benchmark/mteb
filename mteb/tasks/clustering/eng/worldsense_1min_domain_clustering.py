@@ -46,7 +46,8 @@ def _dedupe_one_per_video_id(ds: Dataset) -> Dataset:
 class WorldSense1MinDomainAudioVideoClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="WorldSense1MinDomainAudioVideoClustering",
-        description=DESCRIPTION_BASE + " Uses synchronized video and audio. Filtered the test split to short (<1min) clips (~1,047 examples).",
+        description=DESCRIPTION_BASE
+        + " Uses synchronized video and audio. Filtered the test split to short (<1min) clips (~1,047 examples).",
         reference="https://arxiv.org/abs/2502.04326",
         dataset=DATASET,
         type="VideoClustering",
@@ -81,7 +82,8 @@ class WorldSense1MinDomainAudioVideoClustering(AbsTaskClustering):
 class WorldSense1MinDomainVideoClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="WorldSense1MinDomainVideoClustering",
-        description=DESCRIPTION_BASE + " Uses video only. Filtered the test split to short (<1min) clips (~1,047 examples).",
+        description=DESCRIPTION_BASE
+        + " Uses video only. Filtered the test split to short (<1min) clips (~1,047 examples).",
         reference="https://arxiv.org/abs/2502.04326",
         dataset=DATASET,
         type="VideoClustering",
