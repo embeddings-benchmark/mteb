@@ -9,6 +9,7 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
+import numpy as np
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -134,6 +135,12 @@ class LCOEmbedding(AbsEncoder):
             ]
 
             videos = batch.get("video")
+            if videos:
+                # Cast the numpy arrays back to Tensors in the main thread
+                videos = [
+                    torch.from_numpy(v) if isinstance(v, np.ndarray) else v 
+                    for v in videos
+                ]
             images = batch.get("image")
             audios = batch.get("audio")
             if audios:
