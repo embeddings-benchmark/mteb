@@ -777,9 +777,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
         inner_model = model.model
         config = model.config
-        assert inner_model is not None and config is not None, (
-            "CrossEncoder must be loaded before generating ModelMeta"
-        )
+        if inner_model is None or config is None:
+            raise ValueError("CrossEncoder must be loaded before generating ModelMeta")
         return cls.create_empty(
             overwrites=dict(
                 loader=CrossEncoderWrapper,
