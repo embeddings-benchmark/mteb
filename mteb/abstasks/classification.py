@@ -239,7 +239,7 @@ class AbsTaskClassification(AbsTask):
 
         return scores  # type: ignore[return-value]
 
-    def _evaluate_subset(
+    def _evaluate_subset(  # noqa: PLR0914
         self,
         model: MTEBModels,
         data_split: DatasetDict,
@@ -257,24 +257,61 @@ class AbsTaskClassification(AbsTask):
         train_split = data_split[self.train_split]
         eval_split = data_split[hf_split]
 
-        scores = []
-        # we store idxs to make the shuffling reproducible
-        test_cache, idxs = None, None
+        # Simulate all undersamplings to collect exactly which training indices each experiment needs.
+        sim_idxs = None
+        all_selected_idxs: list[list[int]] = []
+        for i in range(self.n_experiments):
+            _, sim_idxs, selected_idx = self._undersample_data(train_split, i, sim_idxs)
+            all_selected_idxs.append(selected_idx)
 
+        union_idxs = sorted(set().union(*all_selected_idxs))
+        dataloader_train = create_dataloader(
+            train_split.select(union_idxs),
+            task_metadata=self.metadata,
+            input_column=self.input_column_name,
+            num_proc=num_proc,
+            **encode_kwargs,
+        )
+        logger.info(
+            f"Encoding {len(union_idxs)} unique training samples "
+            f"(union across {self.n_experiments} experiments)..."
+        )
+        union_cache = model.encode(
+            dataloader_train,
+            task_metadata=self.metadata,
+            hf_split=self.train_split,
+            hf_subset=hf_subset,
+            **encode_kwargs,
+        )
+        idx_to_pos = {orig: pos for pos, orig in enumerate(union_idxs)}
+
+        dataloader_test = create_dataloader(
+            eval_split,
+            task_metadata=self.metadata,
+            input_column=self.input_column_name,
+            num_proc=num_proc,
+            **encode_kwargs,
+        )
+        test_embeddings = model.encode(
+            dataloader_test,
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            **encode_kwargs,
+        )
+
+        scores = []
         all_predictions = []
         for i in range(self.n_experiments):
             logger.info(f"Running experiment ({i}/{self.n_experiments})")
-            scores_exp, predictions, idxs, test_cache = self._run_experiment(
-                model,
-                train_split,
+            train_embeddings = union_cache[
+                [idx_to_pos[j] for j in all_selected_idxs[i]]
+            ]
+            scores_exp, predictions = self._run_experiment(
+                train_split.select(all_selected_idxs[i]),
                 eval_split,
-                experiment_num=i,
-                idxs=idxs,
-                test_cache=test_cache,
-                encode_kwargs=encode_kwargs,
-                hf_split=hf_split,
-                hf_subset=hf_subset,
-                num_proc=num_proc,
+                train_embeddings,
+                test_embeddings,
             )
 
             if prediction_folder:
@@ -342,21 +379,15 @@ class AbsTaskClassification(AbsTask):
         ):
             train_split = ds.select(train_idx)
             eval_split = ds.select(val_idx)
-            train_cache = dataset_embeddings[train_idx]
-            test_cache = dataset_embeddings[val_idx]
+            train_dataset, idxs, selected_idx = self._undersample_data(
+                train_split, i, idxs
+            )
             logger.info(f"Running experiment ({i}/{self.n_experiments})")
-            scores_exp, predictions, idxs, _ = self._run_experiment(
-                model,
-                train_split,
+            scores_exp, predictions = self._run_experiment(
+                train_dataset,
                 eval_split,
-                experiment_num=i,
-                idxs=idxs,
-                encode_kwargs=encode_kwargs,
-                hf_split=hf_split,
-                hf_subset=hf_subset,
-                test_cache=test_cache,
-                train_cache=train_cache,
-                num_proc=num_proc,
+                dataset_embeddings[train_idx][selected_idx],
+                dataset_embeddings[val_idx],
             )
 
             if prediction_folder:
@@ -373,49 +404,22 @@ class AbsTaskClassification(AbsTask):
             )
         return self._calculate_avg_scores(scores)
 
-    def _run_experiment(  # noqa: PLR0913
+    def _run_experiment(
         self,
-        model: EncoderProtocol,
         train_split: Dataset,
         eval_split: Dataset,
-        *,
-        experiment_num: int,
-        idxs: list[int] | None,
-        test_cache: Array | None,
-        encode_kwargs: EncodeKwargs,
-        hf_split: str,
-        hf_subset: str,
-        train_cache: Array | None = None,
-        num_proc: int | None = None,
-    ) -> tuple[ClassificationMetrics, list[float], list[int], Array]:
-        train_dataset, idxs, selected_idx = self._undersample_data(
-            train_split,
-            experiment_num,
-            idxs,
-        )
-        sub_train_cache = None
-        if train_cache is not None:
-            sub_train_cache = train_cache[selected_idx]
-
+        train_embeddings: Array,
+        test_embeddings: Array,
+    ) -> tuple[ClassificationMetrics, list[float]]:
         evaluator = self.evaluator(
-            train_dataset,
+            train_split,
             eval_split,
-            values_column_name=self.input_column_name,
             label_column_name=self.label_column_name,
-            task_metadata=self.metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
             evaluator_model=self.evaluator_model,
         )
-        y_pred, test_cache = evaluator(
-            model,
-            encode_kwargs=encode_kwargs,
-            test_cache=test_cache,
-            train_cache=sub_train_cache,
-            num_proc=num_proc,
-        )
+        y_pred = evaluator(train_embeddings, test_embeddings)
         y_test = eval_split[self.label_column_name]
-        return self._calculate_scores(y_test, y_pred), y_pred.tolist(), idxs, test_cache
+        return self._calculate_scores(y_test, y_pred), y_pred.tolist()
 
     def _calculate_avg_scores(
         self, scores: list[ClassificationMetrics]
