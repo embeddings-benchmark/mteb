@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import logging
 import unicodedata
-from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 from mteb._create_dataloaders import _combine_queries_with_instruction_text
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import SearchProtocol
     from mteb.types import (
@@ -24,6 +25,7 @@ logger = logging.getLogger(__name__)
 
 def _unicode_tokenize(text: str) -> list[str]:
     return list(unicodedata.normalize("NFKC", text).lower().replace(" ", ""))
+
 
 # ISO 639-3 → (bm25s stopwords key, PyStemmer language name, custom tokenizer name).
 # bm25s keys: en, de, nl, fr, es, pt, it, ru, sv, no, zh (or None = no stopwords).
