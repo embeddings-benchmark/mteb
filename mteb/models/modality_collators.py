@@ -226,8 +226,9 @@ class FramesCollator:
         n = video.metadata.num_frames
         while n > 0:
             try:
-                return cast("torch.Tensor", video.get_frames_at(_indices(n)).data)
-            except Exception:
+                frames: torch.Tensor = video.get_frames_at(_indices(n)).data
+                return frames
+            except RuntimeError:
                 n -= 1
         raise RuntimeError("video has no decodable frames")
 
