@@ -33,11 +33,9 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.cache import ResultCache
     from mteb.models import (
         MTEBModels,
     )
-    from mteb.models.model_meta import ModelMeta
     from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict
     from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
@@ -149,8 +147,6 @@ class AbsTask(ABC):  # noqa: PLR0904
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        cache: ResultCache | None = None,
-        model_meta: ModelMeta | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluates an MTEB compatible model on the task.
@@ -162,8 +158,6 @@ class AbsTask(ABC):  # noqa: PLR0904
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             prediction_folder: Folder to save model predictions
             num_proc: Number of processes to use for loading the dataset or processing.
-            cache: Cache to save results to after evaluating each subset.
-            model_meta: Model meta required to save subset results in the cache.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
 
         Returns:
@@ -223,7 +217,6 @@ class AbsTask(ABC):  # noqa: PLR0904
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
-
         return scores
 
     @abstractmethod
