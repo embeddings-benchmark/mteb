@@ -7,11 +7,11 @@ coreb_description = "CoREB is a contamination-limited, graded-relevance benchmar
 
 coreb_bibtex = r"""
 @article{xue2026coreb,
-    author = {Xue, Siqiao and Liao, Zihan and Qin, Jin and Zhang, Ziyin and Mu, Yixiang and Zhou, Fan and Yu, Hang},
-    journal = {arXiv preprint arXiv:2605.04615},
-    title = {Beyond Retrieval: A Multitask Benchmark and Model for Code Search},
-    url = {https://arxiv.org/abs/2605.04615},
-    year = {2026},
+  author = {Xue, Siqiao and Liao, Zihan and Qin, Jin and Zhang, Ziyin and Mu, Yixiang and Zhou, Fan and Yu, Hang},
+  journal = {arXiv preprint arXiv:2605.04615},
+  title = {Beyond Retrieval: A Multitask Benchmark and Model for Code Search},
+  url = {https://arxiv.org/abs/2605.04615},
+  year = {2026},
 }
 """
 
