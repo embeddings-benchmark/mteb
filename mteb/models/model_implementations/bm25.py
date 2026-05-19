@@ -200,7 +200,9 @@ class BM25Tokenizer:
         # Delegate entirely to bm25s to preserve its internal vocab/ID mapping.
         if self.stopwords_key is not None or self.freq_threshold == 0:
             named_stops = (
-                _get_stopwords(self.stopwords_key) if self.stopwords_key else frozenset()
+                _get_stopwords(self.stopwords_key)
+                if self.stopwords_key
+                else frozenset()
             )
             self._combined_stops = named_stops
             self._combined_list = list(named_stops) if named_stops else None
