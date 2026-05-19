@@ -36,7 +36,7 @@ class SklearnEvaluator(Evaluator):
         *,
         label_column_name: str,
         evaluator_model: SklearnModelProtocol,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
         self.train_dataset = train_dataset

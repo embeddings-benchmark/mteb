@@ -278,6 +278,7 @@ KNOWN_ISSUES = {
     "RuSciBenchYearPublRegression",
     # Add new datasets below with an explanation of why it is added
     # "name" # explanation
+    "HumanConceptsClustering",  # single-word concept items (e.g. "Bat", "Cat") are intentionally short by design
 }
 
 

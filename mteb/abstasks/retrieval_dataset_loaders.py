@@ -123,7 +123,7 @@ class RetrievalDatasetLoader:
         if self.split in splits:
             return self.split
         if len(splits) == 1:
-            return splits[0]
+            return str(splits[0])
         raise ValueError(
             f"Split {self.split} not found in {splits}. Please specify a valid split."
         )

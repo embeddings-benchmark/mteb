@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING, TypedDict, cast
 
 import numpy as np
 import torch
@@ -22,10 +22,12 @@ class EncodeKwargs(TypedDict):
     Attributes:
         batch_size: The batch size to use for encoding.
         show_progress_bar: Whether to show a progress bar during encoding.
+        precision: Quantization embeddings settings for sentence transformers
     """
 
     batch_size: NotRequired[int]
     show_progress_bar: NotRequired[bool]
+    precision: NotRequired[str]
 
 
 # --- Output types ---
@@ -184,7 +186,7 @@ class OutputDType(HelpfulStrEnum):
             return torch.int8
         elif self == OutputDType.BINARY:
             return torch.bool
-        return getattr(torch, self.value)
+        return cast("torch.dtype", getattr(torch, self.value))
 
 
 BatchedInput = (

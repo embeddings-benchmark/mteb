@@ -80,6 +80,10 @@ class CopyResultsAction:
             model_name_path = model_meta.model_name_as_path()
             revision = model_meta.revision
             dest_dir = self.remote_path / model_name_path / revision
+            if model_meta.experiment_name:
+                dest_dir = (
+                    dest_dir / _EXPERIMENTS_FOLDER_NAME / model_meta.experiment_name
+                )
             dest_dir.mkdir(parents=True, exist_ok=True)
 
             for result_file in result_files:
@@ -1069,6 +1073,7 @@ class ResultCache:
                 models=[model],
                 require_model_meta=False,
                 include_remote=False,
+                load_experiments=LoadExperimentEnum.MATCH_KWARGS,
             )
             for model in models
         }
@@ -1389,7 +1394,7 @@ def _prepare_pr_body(
 
 ---
 
-*This PR was created automatically using [`ResultCache.submit_results()`](https://embeddings-benchmark.github.io/mteb/docs/contributing/submitting_results.md). Please check the results carefully before merging.*
+*This PR was created automatically using [`ResultCache.submit_results()`](https://embeddings-benchmark.github.io/mteb/contributing/submitting_results/). Please check the results carefully before merging.*
 
 {checklist}"""
 

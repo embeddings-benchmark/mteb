@@ -25,8 +25,8 @@ class VJepaV2Wrapper(AbsEncoder):
         revision: str | None,
         *,
         device: str | None = None,
-        fps: float | None = 2.0,
-        max_frames: int | None = 64,  # pretrained on 64 frames
+        fps: float | None = None,
+        max_frames: int | None = None,
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
@@ -106,6 +106,7 @@ _JEPA_CITATION = """
 
 vjepa2_vitl_fpc64_256 = ModelMeta(
     loader=VJepaV2Wrapper,
+    loader_kwargs=dict(num_frames=64),
     name="facebook/vjepa2-vitl-fpc64-256",
     revision="b3c1679b7c34d3255ef3547f27c7b226aefab26f",
     release_date="2025-06-11",
@@ -136,6 +137,7 @@ vjepa2_vitl_fpc64_256 = ModelMeta(
 
 vjepa2_vith_fpc64_256 = ModelMeta(
     loader=VJepaV2Wrapper,
+    loader_kwargs=dict(num_frames=64),
     name="facebook/vjepa2-vith-fpc64-256",
     revision="b5eac8703e3efdc1547fbb6ddfbeb133dc0bdee5",
     release_date="2025-06-11",
@@ -166,6 +168,7 @@ vjepa2_vith_fpc64_256 = ModelMeta(
 
 vjepa2_vitg_fpc64_256 = ModelMeta(
     loader=VJepaV2Wrapper,
+    loader_kwargs=dict(num_frames=64),
     name="facebook/vjepa2-vitg-fpc64-256",
     revision="875c192b7b704b87d1e1d99345769632dd5f739a",
     release_date="2025-06-11",
@@ -196,6 +199,7 @@ vjepa2_vitg_fpc64_256 = ModelMeta(
 
 vjepa2_vitg_fpc64_384 = ModelMeta(
     loader=VJepaV2Wrapper,
+    loader_kwargs=dict(num_frames=64),
     name="facebook/vjepa2-vitg-fpc64-384",
     revision="12ca91694b230e0d4b5b0078af6f4ae1d51e933d",
     release_date="2025-06-11",
@@ -226,6 +230,7 @@ vjepa2_vitg_fpc64_384 = ModelMeta(
 
 vjepa2_vitg_fpc64_384_ssv2 = ModelMeta(
     loader=VJepaV2Wrapper,
+    loader_kwargs=dict(num_frames=64),
     name="facebook/vjepa2-vitg-fpc64-384-ssv2",
     revision="9f5fd615cb6f79065a28edcf1cc3ef25010dddfa",
     release_date="2025-06-13",
@@ -258,6 +263,7 @@ vjepa2_vitg_fpc64_384_ssv2 = ModelMeta(
 
 vjepa2_vitl_fpc16_256_ssv2 = ModelMeta(
     loader=VJepaV2Wrapper,
+    loader_kwargs=dict(num_frames=16),
     name="facebook/vjepa2-vitl-fpc16-256-ssv2",
     revision="4aa02df83918538fc21cfaf576382fa20e489a80",
     release_date="2025-06-13",
@@ -290,6 +296,7 @@ vjepa2_vitl_fpc16_256_ssv2 = ModelMeta(
 
 vjepa2_vitg_fpc32_384_diving48 = ModelMeta(
     loader=VJepaV2Wrapper,
+    loader_kwargs=dict(num_frames=32),
     name="facebook/vjepa2-vitg-fpc32-384-diving48",
     revision="0b48243375319bd8e03e3cd5560d957095429189",
     release_date="2025-06-13",
@@ -322,6 +329,7 @@ vjepa2_vitg_fpc32_384_diving48 = ModelMeta(
 
 vjepa2_vitl_fpc32_256_diving48 = ModelMeta(
     loader=VJepaV2Wrapper,
+    loader_kwargs=dict(num_frames=32),
     name="facebook/vjepa2-vitl-fpc32-256-diving48",
     revision="71ae2a8b1ff5a297aeeaae9b5e64c7a2e5e6a633",
     release_date="2025-06-13",

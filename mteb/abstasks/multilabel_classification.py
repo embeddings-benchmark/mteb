@@ -201,12 +201,12 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
                 hf_split=hf_split,
             )
 
-        avg_scores: dict[str, Any] = {
+        avg_scores: dict[str, np.floating[Any]] = {
             k: np.mean([s[k] for s in scores])  # type: ignore[literal-required]
             for k in scores[0].keys()
         }
         logger.info("Running multilabel classification - Finished.")
-        return FullMultilabelClassificationMetrics(
+        return FullMultilabelClassificationMetrics(  # type: ignore[no-any-return]
             scores_per_experiment=scores,
             **avg_scores,  # type: ignore[typeddict-item]
         )

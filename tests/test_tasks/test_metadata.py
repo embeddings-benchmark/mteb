@@ -43,18 +43,6 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         )
         return
 
-    # TODO https://github.com/embeddings-benchmark/mteb/issues/3498
-    if task.metadata.name in (  # noqa: PLR6201
-        "FleursA2TRetrieval",
-        "FleursT2ARetrieval",
-        "SoundDescsA2TRetrieval",
-        "SoundDescsT2ARetrieval",
-        "BirdSet",
-        "AudioSet",
-    ):
-        assert task.metadata.descriptive_stats is None
-        pytest.skip("Skipping audio tasks for now, see issue #3498")
-
     assert task.metadata.descriptive_stats is not None, (
         f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YourTask().calculate_descriptive_statistics()`"
     )

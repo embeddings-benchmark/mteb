@@ -434,7 +434,7 @@ class AbsTaskClassification(AbsTask):
             for k in scores[0].keys()
         }
         logger.info(f"Running {self.metadata.name} - Finished.")
-        return FullClassificationMetrics(
+        return FullClassificationMetrics(  # type: ignore[no-any-return]
             scores_per_experiment=scores,
             **avg_scores,  # type: ignore[typeddict-item]
         )
@@ -502,7 +502,7 @@ class AbsTaskClassification(AbsTask):
         self, split: str, hf_subset: str | None, compute_overall: bool
     ) -> tuple[
         dict[Modalities, list[Any]],
-        list,
+        list[Any],
         dict[str, list[str]],
         dict[str, list[str]] | None,
     ]:
