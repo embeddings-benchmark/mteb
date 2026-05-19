@@ -205,8 +205,16 @@ class FramesCollator:
             num_frames: If set, select exactly this many frames uniformly
                 (fixed-sample mode).
         """
-        # Guard against torchcodec.num_frames over-counting by 1.
-        num_source_frames = video.metadata.num_frames - 1
+        # Probe backwards: trailing frames may not decode.
+        num_source_frames = video.metadata.num_frames
+        while num_source_frames > 0:
+            try:
+                video.get_frame_at(num_source_frames - 1)
+                break
+            except Exception:
+                num_source_frames -= 1
+        if num_source_frames == 0:
+            raise RuntimeError("video has no decodable frames")
 
         if num_frames is None and fps is None:
             # No resampling: return all frames
