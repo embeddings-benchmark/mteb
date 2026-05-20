@@ -102,6 +102,8 @@ class BidirLMOmniEncoder(AbsEncoder):
             **kwargs,
         )
         self.model.eval()
+        # VideoCollator already samples frames; skip inner sampling.
+        self.model[0].processor.video_processor.do_sample_frames = False
         self.max_text_length = max_text_length
         self.fps = fps
         self.max_frames = max_frames
