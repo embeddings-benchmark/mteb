@@ -16,7 +16,7 @@ CITATION = r"""
 class WorldSenseAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="WorldSenseAudioVideoZeroShot",
-        description="WorldSense is a multimodal video understanding benchmark encompassing visual, audio, and text inputs. Videos are categorized into 8 primary domains across 67 fine-grained subcategories. This zero-shot classification task predicts the domain category of a video clip",
+        description="WorldSense is a multimodal video understanding benchmark encompassing visual, audio, and text inputs. Videos are categorized into 8 primary domains across 67 fine-grained subcategories. This zero-shot classification task predicts the domain category of a video clip Filtered the test split to short (<1min) clips (~1,047 examples).",
         reference="https://arxiv.org/abs/2502.04326",
         dataset={
             "path": "mteb/WorldSense_1min",
@@ -49,7 +49,7 @@ class WorldSenseAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
 class WorldSenseVideoZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="WorldSenseVideoZeroShot",
-        description="WorldSense is a multimodal video understanding benchmark encompassing visual, audio, and text inputs. Videos are categorized into 8 primary domains across 67 fine-grained subcategories. This zero-shot classification task predicts the domain category of a video clip",
+        description="WorldSense is a multimodal video understanding benchmark encompassing visual, audio, and text inputs. Videos are categorized into 8 primary domains across 67 fine-grained subcategories. This zero-shot classification task predicts the domain category of a video clip Filtered the test split to short (<1min) clips (~1,047 examples).",
         reference="https://arxiv.org/abs/2502.04326",
         dataset={
             "path": "mteb/WorldSense_1min",

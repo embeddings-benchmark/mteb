@@ -393,8 +393,8 @@ class VLM2VEC2Wrapper(AbsEncoder):
         revision: str | None = None,
         *,
         device: str | None = None,
-        fps: float | None = 8,
-        max_frames: int | None = None,
+        fps: float | None = 2.0,
+        max_frames: int | None = 64,
         num_frames: int | None = None,
         **kwargs,
     ) -> None:
@@ -416,12 +416,15 @@ class VLM2VEC2Wrapper(AbsEncoder):
         base_model_name = "Qwen/Qwen2-VL-2B-Instruct"
         self.processor = AutoProcessor.from_pretrained(model, revision=revision)
         self.processor.padding_side = "left"
+        if hasattr(self.processor, "image_processor"):
+            self.processor.image_processor.max_pixels = 360 * 420
 
+        torch_dtype = kwargs.pop("torch_dtype", torch.bfloat16)
         base_model = Qwen2VLForConditionalGeneration.from_pretrained(
-            base_model_name, **kwargs
+            base_model_name, torch_dtype=torch_dtype, **kwargs
         )
         self.model = PeftModel.from_pretrained(base_model, model, revision=revision)
-        self.model.merge_and_unload()
+        self.model = self.model.merge_and_unload()
         self.model.to(self.device)
         self.model.eval()
 
@@ -499,14 +502,6 @@ class VLM2VEC2Wrapper(AbsEncoder):
                     return_tensors="pt",
                 )
                 proc_inputs = {k: v.to(self.device) for k, v in proc_inputs.items()}
-
-                if has_video:
-                    proc_inputs["pixel_values_videos"] = proc_inputs[
-                        "pixel_values_videos"
-                    ].unsqueeze(0)
-                    proc_inputs["video_grid_thw"] = proc_inputs[
-                        "video_grid_thw"
-                    ].unsqueeze(0)
 
                 output = self.model(
                     **proc_inputs, return_dict=True, output_hidden_states=True
@@ -617,5 +612,5 @@ vlm2vec2 = ModelMeta(
 }""",
     contacts=None,
     output_dtypes=None,
-    extra_requirements_groups=["peft"],
+    extra_requirements_groups=["peft", "transformers-v4"],
 )

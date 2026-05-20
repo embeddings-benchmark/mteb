@@ -13,7 +13,7 @@ from sklearn.metrics import auc
 from mteb.types import RetrievalEvaluationResult
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Mapping, Sequence
 
     from numpy.typing import NDArray
 
@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 def mrr(
     qrels: RelevantDocumentsType,
     results: Mapping[str, Mapping[str, float]],
-    k_values: list[int],
+    k_values: Sequence[int],
 ) -> dict[str, list[float]]:
     mrr_metrics = defaultdict(list)
 
@@ -53,7 +53,7 @@ def mrr(
 def recall_cap(
     qrels: RelevantDocumentsType,
     results: dict[str, dict[str, float]],
-    k_values: list[int],
+    k_values: Sequence[int],
 ) -> dict[str, list[float | None]]:
     capped_recall: dict[str, list[float | None]] = defaultdict(list)
 
@@ -80,7 +80,7 @@ def recall_cap(
 def hole(
     qrels: RelevantDocumentsType,
     results: dict[str, dict[str, float]],
-    k_values: list[int],
+    k_values: Sequence[int],
 ) -> dict[str, list[float]]:
     hole = defaultdict(list)
 
@@ -106,7 +106,7 @@ def hole(
 def top_k_accuracy(
     qrels: RelevantDocumentsType,
     results: dict[str, dict[str, float]],
-    k_values: list[int],
+    k_values: Sequence[int],
 ) -> dict[str, list[float]]:
     top_k_acc = defaultdict(list)
 
@@ -186,7 +186,7 @@ def evaluate_p_mrr_change(
     qrels: RelevantDocumentsType,
     results: dict[str, dict[str, float]],
     changed_qrels: dict[str, list[str]],
-    k_values: list[int],
+    k_values: Sequence[int],
 ) -> dict[str, float | dict[str, float]]:
     """Computes the scores needed for FollowIR datasets.
 
@@ -464,7 +464,7 @@ def make_score_dict(
 
 
 def parse_metrics_from_scores(
-    scores: dict[str, dict[str, float]], k_values: list[int]
+    scores: dict[str, dict[str, float]], k_values: Sequence[int]
 ) -> tuple[
     dict[str, float],
     dict[str, float],
@@ -519,7 +519,7 @@ def parse_metrics_from_scores(
 def max_over_subqueries(
     qrels: RelevantDocumentsType,
     results: dict[str, dict[str, float]],
-    k_values: list[int],
+    k_values: Sequence[int],
 ) -> dict[str, float]:
     """Computes the max over subqueries scores when merging.
 
@@ -570,7 +570,7 @@ def max_over_subqueries(
 def calculate_retrieval_scores(  # noqa: PLR0914
     results: Mapping[str, Mapping[str, float]],
     qrels: RelevantDocumentsType,
-    k_values: list[int],
+    k_values: Sequence[int],
     skip_first_result: bool = False,
 ) -> RetrievalEvaluationResult:
     if skip_first_result:

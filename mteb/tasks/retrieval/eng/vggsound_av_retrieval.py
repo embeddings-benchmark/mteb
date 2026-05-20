@@ -71,6 +71,7 @@ class VGGSoundAVV2TRetrieval(AbsTaskRetrieval):
             "Retrieve the caption that describes the visual content of a given video "
             "clip from the VGGSound-AV dataset, a large-scale audio-visual dataset "
             "sourced from YouTube."
+            " Used the VGGSound-T2AV test split (~696 examples)."
         ),
         reference="https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -105,6 +106,7 @@ class VGGSoundAVT2VRetrieval(AbsTaskRetrieval):
             "Retrieve the video clip that matches a given caption describing its "
             "visual content, from the VGGSound-AV dataset, a large-scale "
             "audio-visual dataset sourced from YouTube."
+            " Used the VGGSound-T2AV test split (~696 examples)."
         ),
         reference="https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -139,6 +141,7 @@ class VGGSoundAVVA2TRetrieval(AbsTaskRetrieval):
             "Retrieve the caption covering both what is seen and what is heard in a "
             "given video+audio clip from the VGGSound-AV dataset, a large-scale "
             "audio-visual dataset sourced from YouTube."
+            " Used the VGGSound-T2AV test split (~696 examples)."
         ),
         reference="https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -175,6 +178,7 @@ class VGGSoundAVT2VARetrieval(AbsTaskRetrieval):
             "Retrieve the video+audio clip that matches a given caption covering "
             "both what is seen and what is heard, from the VGGSound-AV dataset, a "
             "large-scale audio-visual dataset sourced from YouTube."
+            " Used the VGGSound-T2AV test split (~696 examples)."
         ),
         reference="https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -211,6 +215,7 @@ class VGGSoundAVV2ARetrieval(AbsTaskRetrieval):
             "Retrieve the audio track that matches a given video clip from the "
             "VGGSound-AV dataset, a large-scale audio-visual dataset sourced from "
             "YouTube. Tests cross-modal alignment between video frames and audio."
+            " Used the VGGSound-T2AV test split (~696 examples)."
         ),
         reference="https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -243,6 +248,7 @@ class VGGSoundAVA2VRetrieval(AbsTaskRetrieval):
             "Retrieve the video clip that matches a given audio track from the "
             "VGGSound-AV dataset, a large-scale audio-visual dataset sourced from "
             "YouTube. Tests cross-modal alignment between audio and video frames."
+            " Used the VGGSound-T2AV test split (~696 examples)."
         ),
         reference="https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -275,6 +281,7 @@ class VGGSoundAVVT2ARetrieval(AbsTaskRetrieval):
             "Retrieve the audio track that matches a given video clip and its "
             "caption from the VGGSound-AV dataset, a large-scale audio-visual "
             "dataset sourced from YouTube."
+            " Used the VGGSound-T2AV test split (~696 examples)."
         ),
         reference="https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -311,6 +318,7 @@ class VGGSoundAVAT2VRetrieval(AbsTaskRetrieval):
             "Retrieve the video clip that matches a given audio track and its "
             "caption from the VGGSound-AV dataset, a large-scale audio-visual "
             "dataset sourced from YouTube."
+            " Used the VGGSound-T2AV test split (~696 examples)."
         ),
         reference="https://www.robots.ox.ac.uk/~vgg/data/vggsound/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
