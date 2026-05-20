@@ -91,5 +91,6 @@ class ClusteringEvaluator(Evaluator):
                 random_state=self.seed,
             )
             clustering_model.fit(embeddings)
-        predicted_labels = cast("list[int]", clustering_model.labels_.tolist())
+        clustering_labels = clustering_model.labels_.tolist()
+        predicted_labels = cast("list[int]", clustering_labels)
         return predicted_labels
