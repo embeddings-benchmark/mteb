@@ -6,6 +6,7 @@ import logging
 from collections import defaultdict
 from functools import cached_property
 from importlib.metadata import version
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
@@ -1020,3 +1021,47 @@ class TaskError(BaseModel):
 
     task_name: str
     exception: str
+
+
+def _read_run_settings_from_file(path: Path) -> list[dict[str, Any]]:
+    """Read run settings entries from a JSONL file."""
+    if not path.exists():
+        return []
+
+    run_settings: list[dict[str, Any]] = []
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            stripped_line = line.strip()
+            if not stripped_line:
+                continue
+            try:
+                parsed = json.loads(stripped_line)
+            except Exception as e:
+                logger.warning(
+                    f"Could not parse run_settings line '{stripped_line}': {e}"
+                )
+                continue
+            if isinstance(parsed, dict):
+                run_settings.append(parsed)
+    return run_settings
+
+
+def _write_and_merge_keyed_json(
+    path: Path,
+    entries: list[dict[str, Any]],
+    *,
+    key_fields: tuple[str, str, str] = ("task", "split", "subset"),
+) -> None:
+    """Write entries to `.jsonl`, if it already exist it will merge it, replacing any existing entries with the same key."""
+    existing_entries = _read_run_settings_from_file(path)
+    new_keys = {tuple(entry.get(field) for field in key_fields) for entry in entries}
+    filtered_existing = [
+        entry
+        for entry in existing_entries
+        if tuple(entry.get(field) for field in key_fields) not in new_keys
+    ]
+    all_entries = filtered_existing + entries
+
+    with path.open("w", encoding="utf-8") as f:
+        for entry in all_entries:
+            f.write(json.dumps(entry, default=str) + "\n")
