@@ -232,6 +232,15 @@ class VoyageModel(AbsEncoder):
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         input_type = self.model_prompts.get(prompt_name, "document")
         sentences = [text for batch in inputs for text in batch["text"]]
+
+        if self._evolved_prompts:
+            dataset_name = task_metadata.name
+            if input_type == "query":
+                template = QUERY_PROMPTS.get(dataset_name, "{text}")
+            else:
+                template = CORPUS_PROMPTS.get(dataset_name, "{text}")
+            sentences = [template.format(text=s) for s in sentences]
+
         return self._batched_encode(sentences, batch_size, input_type)
 
     def _batched_encode(
@@ -345,7 +354,7 @@ model_prompts = {
 }
 
 voyage_4_large_2048d_evolved = ModelMeta(
-    name="voyageai/voyage-4-large (embed_dim=2048)",
+    name="voyageai/voyage-4-large (embed_dim=2048) (evolved_prompts=True)",
     model_type=["dense"],
     revision="1",
     release_date="2026-01-15",
@@ -372,6 +381,7 @@ voyage_4_large_2048d_evolved = ModelMeta(
     public_training_data=None,
     output_dtypes=OUTPUT_TYPES,
     extra_requirements_groups=["voyageai"],
+    adapted_from="voyageai/voyage-4-large (embed_dim=2048)",
     experiment_kwargs={"evolved_prompts": True},
 )
 
