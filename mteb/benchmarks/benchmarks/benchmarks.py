@@ -3505,7 +3505,8 @@ MAEB = Benchmark(
 )
 
 CoREB = Benchmark(
-    name="CoREB",
+    name="CoREB(v1)",
+    aliases=["CoREB"],
     display_name="CoREB",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
     tasks=get_tasks(
@@ -3529,4 +3530,5 @@ CoREB = Benchmark(
   year = {2026},
 }
 """,
+    contacts=["Geralt-Targaryen"],
 )
