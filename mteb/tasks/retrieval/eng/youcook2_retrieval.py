@@ -58,6 +58,7 @@ class YouCook2V2TRetrieval(AbsTaskRetrieval):
             "Retrieve the English sentence that describes a given cooking video "
             "clip (video only) from the YouCook2 dataset of instructional cooking "
             "videos."
+            " Used the official validation annotations cut into ~3 per-step segments per video (3,104 examples)."
         ),
         reference="https://arxiv.org/abs/1703.09788",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -90,6 +91,7 @@ class YouCook2T2VRetrieval(AbsTaskRetrieval):
             "Retrieve the cooking video clip (video only) that matches a given "
             "English sentence from the YouCook2 dataset of instructional cooking "
             "videos."
+            " Used the official validation annotations cut into ~3 per-step segments per video (3,104 examples)."
         ),
         reference="https://arxiv.org/abs/1703.09788",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -121,6 +123,7 @@ class YouCook2VA2TRetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the English sentence that describes a given cooking video "
             "clip from the YouCook2 dataset of instructional cooking videos."
+            " Used the official validation annotations cut into ~3 per-step segments per video (3,104 examples)."
         ),
         reference="https://arxiv.org/abs/1703.09788",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -154,6 +157,7 @@ class YouCook2T2VARetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the cooking video clip that matches a given English sentence "
             "from the YouCook2 dataset of instructional cooking videos."
+            " Used the official validation annotations cut into ~3 per-step segments per video (3,104 examples)."
         ),
         reference="https://arxiv.org/abs/1703.09788",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -188,6 +192,7 @@ class YouCook2V2ARetrieval(AbsTaskRetrieval):
             "Retrieve the audio track that matches a given video clip from the "
             "YouCook2 dataset of instructional cooking videos. Tests cross-modal "
             "alignment between video frames and audio narration."
+            " Used the official validation annotations cut into ~3 per-step segments per video (3,104 examples)."
         ),
         reference="https://arxiv.org/abs/1703.09788",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -220,6 +225,7 @@ class YouCook2A2VRetrieval(AbsTaskRetrieval):
             "Retrieve the video clip that matches a given audio track from the "
             "YouCook2 dataset of instructional cooking videos. Tests cross-modal "
             "alignment between audio narration and video frames."
+            " Used the official validation annotations cut into ~3 per-step segments per video (3,104 examples)."
         ),
         reference="https://arxiv.org/abs/1703.09788",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -252,6 +258,7 @@ class YouCook2VT2ARetrieval(AbsTaskRetrieval):
             "Retrieve the audio track that matches a given cooking video clip and "
             "its sentence description from the YouCook2 dataset of instructional "
             "cooking videos."
+            " Used the official validation annotations cut into ~3 per-step segments per video (3,104 examples)."
         ),
         reference="https://arxiv.org/abs/1703.09788",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -288,6 +295,7 @@ class YouCook2AT2VRetrieval(AbsTaskRetrieval):
             "Retrieve the cooking video clip that matches a given audio track and "
             "its sentence description from the YouCook2 dataset of instructional "
             "cooking videos."
+            " Used the official validation annotations cut into ~3 per-step segments per video (3,104 examples)."
         ),
         reference="https://arxiv.org/abs/1703.09788",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},

@@ -10,7 +10,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class OmniVideoBenchVideoCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="OmniVideoBenchVideoCentricQA",
-        description="OmniVideoBench is a comprehensive audio-visual video question answering benchmark evaluating omni-modal understanding in multimodal LLMs. Each example pairs a video with a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate.",
+        description="OmniVideoBench is a comprehensive audio-visual video question answering benchmark evaluating omni-modal understanding in multimodal LLMs. Each example pairs a video with a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate. Filtered the test split to clips under 5 minutes (~509 examples).",
         reference="https://arxiv.org/abs/2510.10689",
         dataset={
             "path": "mteb/OmniVideoBench_subset",
@@ -83,7 +83,7 @@ class OmniVideoBenchVideoCentricQA(AbsTaskRetrieval):
 class OmniVideoBenchVideoAudioCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="OmniVideoBenchVideoAudioCentricQA",
-        description="OmniVideoBench is a comprehensive audio-visual video question answering benchmark evaluating omni-modal understanding in multimodal LLMs. Each example pairs a video with audio and a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate.",
+        description="OmniVideoBench is a comprehensive audio-visual video question answering benchmark evaluating omni-modal understanding in multimodal LLMs. Each example pairs a video with audio and a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate. Filtered the test split to clips under 5 minutes (~509 examples).",
         reference="https://arxiv.org/abs/2510.10689",
         dataset={
             "path": "mteb/OmniVideoBench_subset",

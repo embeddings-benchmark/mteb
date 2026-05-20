@@ -7,7 +7,7 @@ from mteb.abstasks.zeroshot_classification import (
 class HMDB51ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="HMDB51ZeroShot",
-        description="HMDB51 is a large video database for human motion recognition with 51 action categories from digitized movies and online sources.",
+        description="HMDB51 is a large video database for human motion recognition with 51 action categories from digitized movies and online sources. Used official split 1 across 51 action classes (~3,570 train / ~1,530 test).",
         reference="https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/",
         dataset={
             "path": "mteb/HMDB51",
