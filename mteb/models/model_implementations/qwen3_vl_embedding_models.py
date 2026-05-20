@@ -76,14 +76,11 @@ class Qwen3VLEmbeddingWrapper(MultimodalInstructSentenceTransformerModel):
 
 qwen3_vl_embedding_2b = ModelMeta(
     loader=Qwen3VLEmbeddingWrapper,
-    loader_kwargs={
-        "trust_remote_code": True,
-    },
     name="Qwen/Qwen3-VL-Embedding-2B",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="2a50926d213628c727f38025982a76f655673f54",
+    revision="9f2f7e710d6d81056aa5c0a4f04764fec6bb7bda",
     release_date="2026-01-08",
     modalities=["image", "text", "video"],
     n_parameters=2_127_532_032,
@@ -105,14 +102,11 @@ qwen3_vl_embedding_2b = ModelMeta(
 
 qwen3_vl_embedding_8b = ModelMeta(
     loader=Qwen3VLEmbeddingWrapper,
-    loader_kwargs={
-        "trust_remote_code": True,
-    },
     name="Qwen/Qwen3-VL-Embedding-8B",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="418d03899aeb9d954e776dfa762006616519a914",
+    revision="2c4565515e0f265c6511776e7193b22c0968ddc7",
     release_date="2026-01-08",
     modalities=["image", "text", "video"],
     n_parameters=8_144_793_840,
