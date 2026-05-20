@@ -41,7 +41,22 @@ from mteb.cache import ResultCache
 
 
 # Correlation thresholds to evaluate
-THRESHOLDS = [0.95, 0.93, 0.9, 0.85, 0.8, 0.7, 0.6, 0.5, 0.4]
+THRESHOLDS = [
+    0.95,
+    0.93,
+    0.9,
+    0.88,
+    0.87,
+    0.85,
+    0.84,
+    0.83,
+    0.82,
+    0.81,
+    0.8,
+    0.7,
+    0.6,
+    0.5,
+]
 
 # Models for evaluation time calculation
 EVAL_TIME_MODELS = [
@@ -1249,13 +1264,16 @@ def main():
     if results_df is not None and corr_matrix is not None:
         # Drop tasks with no results (else they survive iterative pruning by
         # never appearing in correlation pairs).
-        missing = [t for t in source_task_names
-                   if t not in TASKS_TO_EXCLUDE and t not in results_df.columns]
+        missing = [
+            t
+            for t in source_task_names
+            if t not in TASKS_TO_EXCLUDE and t not in results_df.columns
+        ]
         if missing:
-            print(f"Note: {len(missing)} task(s) dropped (no model results): "
-                  f"{missing}")
+            print(f"Note: {len(missing)} task(s) dropped (no model results): {missing}")
         filtered_source_tasks = [
-            t for t in source_task_names
+            t
+            for t in source_task_names
             if t not in TASKS_TO_EXCLUDE and t in results_df.columns
         ]
         excluded_count = sum(1 for t in source_task_names if t in TASKS_TO_EXCLUDE)

@@ -3731,42 +3731,37 @@ MVEB = Benchmark(
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
-            # Any2AnyRetrieval (13)
+            # Any2AnyRetrieval (10)
             "AVMemeExamAT2VRetrieval",
             "AudioCapsAVVA2TRetrieval",
-            "DiDeMoT2VARetrieval",
             "MSRVTTA2V",
             "MSVDT2VRetrieval",
             "Panda70MVA2TRetrieval",
-            "Shot2Story20KT2VRetrieval",
             "TUNABenchT2VRetrieval",
             "VALOR32KVT2ARetrieval",
             "VATEXT2VARetrieval",
             "VATEXV2ARetrieval",
             "VGGSoundAVT2VARetrieval",
-            "YouCook2VT2ARetrieval",
             # VideoCentricQA (2)
             "OmniVideoBenchVideoCentricQA",
             "WorldSense1MinVideoAudioCentricQA",
-            # VideoClassification (7)
+            # VideoClassification (6)
             "AVEDatasetClassification",
             "AVMemeVideoClassification",
+            "BreakfastClassification",
             "Diving48Classification.V2",
             "HMDB51Classification",
-            "RAVDESSAVClassification",
             "UCF101VideoAudioClassification",
-            "VGGSoundVA",
             # VideoClustering (1)
             "MusicAVQACLSVideoClustering",
             # VideoPairClassification (1)
-            "VinogroundPairClassification",
-            # VideoZeroshotClassification (3)
-            "BreakfastZeroShot",
+            "RAVDESSAVVAPairClassification",
+            # VideoZeroshotClassification (2)
             "Kinetics600VAZeroShot",
             "MELDVideoZeroShot",
         ]
     ),
-    description="""MVEB (Massive Video Embedding Benchmark) is a curated video benchmark with 27 tasks selected from MVEB(extended) via correlation-based redundancy removal at Spearman threshold 0.85, followed by deduplication within (family, task_type) and a cap of 1 non-retrieval task per source dataset family. Retrieval is exempt from the family cap since different modality directions (e.g. T2V vs A2V) from the same dataset exercise distinct measurements. The final benchmark has Spearman=0.96 with the full 184-task pool across the 13 MVEB-capable models. Tasks span 6 task types: retrieval (13), classification (7), clustering (1), pair classification (1), zero-shot classification (1), and video-centric QA (2). The benchmark covers video-only and audio-video modalities across 9 domains and 17 languages.""",
+    description="""MVEB (Massive Video Embedding Benchmark) is a curated video benchmark with 22 tasks selected from MVEB(extended) via correlation-based redundancy removal (threshold=0.83, Spearman=0.982 with full pool). Tasks span 6 task types: retrieval (10), classification (6), clustering (1), pair classification (1), zero-shot classification (2), and video-centric QA (2). The benchmark covers video-only and audio-video modalities across 9 domains and 17 languages.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
