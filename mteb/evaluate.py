@@ -93,7 +93,6 @@ def _evaluate_task(  # noqa: PLR0913
     prediction_folder: Path | None,
     public_only: bool | None,
     cache: ResultCache | None = None,
-    model_meta: ModelMeta | None = None,
     num_proc: int | None = None,
     existing_results: TaskResult | None = None,
 ) -> TaskResult | TaskError:
@@ -130,7 +129,6 @@ def _evaluate_task(  # noqa: PLR0913
                 prediction_folder=prediction_folder,
                 public_only=public_only,
                 cache=cache,
-                model_meta=model_meta,
                 num_proc=num_proc,
                 existing_results=existing_results,
             )
@@ -140,6 +138,8 @@ def _evaluate_task(  # noqa: PLR0913
 
     task_results: dict[SplitName, dict[HFSubset, ScoresDict]] = {}
     evaluation_time = 0.0
+
+    model_meta = model.mteb_model_meta
 
     if existing_results is not None:
         for split, scores_list in existing_results.scores.items():
@@ -168,8 +168,6 @@ def _evaluate_task(  # noqa: PLR0913
             if public_only is False:
                 raise e
 
-    evaluation_time = 0.0
-
     for split, hf_subsets in splits.items():
         tick = time()
         # BitextMining tasks evaluate all subsets together (e.g. for parallel subsets), so they
@@ -189,37 +187,24 @@ def _evaluate_task(  # noqa: PLR0913
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 num_proc=num_proc,
-                cache=cache,
-                model_meta=model_meta,
             )
-            tock = time()
-
-            if res:
-                task_results[split].update(res)
-                # Save intermediate cache
-                if cache and model_meta:
-                    try:
-                        new_result = TaskResult.from_task_results(
-                            task,
-                            task_results,
-                            evaluation_time=evaluation_time + (tock - tick),
-                            kg_co2_emissions=None,
-                            date=datetime.datetime.now(tz=datetime.timezone.utc),
-                        )
-                        cache.save_to_cache(new_result, model_meta)
-                    except (OSError, TypeError, ValueError) as e:
-                        logger.error(
-                            f"Failed to save intermediate results: {e}",
-                            exc_info=True,
-                        )
-            else:
-                for ss in batch:
-                    logger.warning(
-                        "Requested subset %r for task %s on split %s produced no result; "
-                        "evaluation returned no data",
-                        ss,
-                        task.metadata.name,
-                        split,
+            tock_ss = time()
+            task_results[split].update(res)
+            # Save intermediate cache
+            if cache and model_meta:
+                try:
+                    new_result = TaskResult.from_task_results(
+                        task,
+                        task_results,
+                        evaluation_time=evaluation_time + (tock_ss - tick),
+                        kg_co2_emissions=None,
+                        date=datetime.datetime.now(tz=datetime.timezone.utc),
+                    )
+                    cache.save_to_cache(new_result, model_meta)
+                except (OSError, TypeError, ValueError) as e:
+                    logger.error(
+                        f"Failed to save intermediate results: {e}",
+                        exc_info=True,
                     )
         tock = time()
 
@@ -537,7 +522,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 prediction_folder=prediction_folder,
                 public_only=public_only,
                 cache=cache,
-                model_meta=meta,
                 num_proc=num_proc,
                 existing_results=existing_results,
             )
@@ -556,7 +540,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
             prediction_folder=prediction_folder,
             public_only=public_only,
             cache=cache,
-            model_meta=meta,
             num_proc=num_proc,
             existing_results=existing_results,
         )
