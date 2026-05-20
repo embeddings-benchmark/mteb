@@ -1631,6 +1631,33 @@ BRIGHT_V1_1 = Benchmark(
 )
 
 
+BRIGHT_PRO = Benchmark(
+    name="BRIGHT-Pro",
+    display_name="Reasoning Retrieval (Pro)",
+    tasks=get_tasks(
+        tasks=[
+            "BrightProBiologyRetrieval",
+            "BrightProEarthScienceRetrieval",
+            "BrightProEconomicsRetrieval",
+            "BrightProPsychologyRetrieval",
+            "BrightProRoboticsRetrieval",
+            "BrightProStackoverflowRetrieval",
+            "BrightProSustainableLivingRetrieval",
+        ],
+    ),
+    description="""BRIGHT-Pro extends BRIGHT with multi-aspect gold evidence for reasoning-intensive retrieval in agentic search settings. Each StackExchange query is paired with a long-form reference answer whose cited passages collectively cover several reasoning aspects; the benchmark evaluates retrievers on their ability to surface this aspect-diverse evidence set.""",
+    reference="https://huggingface.co/datasets/yale-nlp/Bright-Pro",
+    citation=r"""
+@article{Zhao2026RethinkingRR,
+  author = {Yilun Zhao and Jinbiao Wei and Tingyu Song and Siyue Zhang and Chen Zhao and Arman Cohan},
+  journal = {arXiv preprint arXiv:2605.04018},
+  title = {Rethinking Reasoning-Intensive Retrieval: Evaluating and Advancing Retrievers in Agentic Search Systems},
+  year = {2026},
+}
+""",
+)
+
+
 CODE_RAG = Benchmark(
     name="CodeRAG",
     tasks=get_tasks(
