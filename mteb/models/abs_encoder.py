@@ -267,20 +267,7 @@ class AbsEncoder(ABC):
         """
         instruction = self.get_instruction(task_metadata, prompt_type)
         if self.instruction_template:
-            # `str` templates use `"{instruction}".format(...)` and produce
-            # malformed prefixes like "Instruct: \nQuery: " when called with
-            # an empty instruction (the common case for documents under
-            # tasks that only specify `prompt={"query": ...}`). Keep the
-            # empty-instruction gate for those.
-            #
-            # `Callable` templates are expected to handle the empty case
-            # themselves — and several models (ReasonIR-8B, GritLM-7B,
-            # Octen, Sarashina v2, BMRetriever) rely on this to emit a
-            # non-empty document prefix (e.g. ReasonIR/GritLM's
-            # `"<|embed|>\n"`). Always invoke callables so that prefix is
-            # not silently dropped, which previously caused those models'
-            # documents to be encoded without the prefix they were
-            # trained with.
+            # Always invoke callables. Issue https://github.com/embeddings-benchmark/mteb/issues/4683
             if callable(self.instruction_template) or len(instruction) > 0:
                 return self.format_instruction(instruction, prompt_type)
         return instruction

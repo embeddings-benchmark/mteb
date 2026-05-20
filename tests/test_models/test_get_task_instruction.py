@@ -53,6 +53,7 @@ QUERY_INSTR = "Given a biology post, retrieve relevant passages"
     ],
 )
 def test_get_task_instruction(template, prompt_type, expected):
+    """Regression test for issue https://github.com/embeddings-benchmark/mteb/issues/4683"""
     enc = _FakeEncoder(instruction_template=template)
     meta = _meta(prompt={"query": QUERY_INSTR})
     result = enc.get_task_instruction(meta, prompt_type)
