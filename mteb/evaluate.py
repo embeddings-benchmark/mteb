@@ -26,7 +26,7 @@ from mteb.results.task_result import TaskError
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable, Mapping
+    from collections.abc import Iterable
 
     from sentence_transformers import CrossEncoder, SentenceTransformer
 
@@ -83,50 +83,6 @@ def _sanitize_model(
     return wrapped_model, meta, model_name, model_revision
 
 
-def _save_intermediate_cache(
-    task: AbsTask,
-    split: str,
-    ss: HFSubset,
-    res: Mapping[HFSubset, ScoresDict],
-    cache: ResultCache | None,
-    model_meta: ModelMeta | None,
-    evaluation_time: float,
-) -> None:
-    if cache is None or model_meta is None:
-        return
-    try:
-        # Create a TaskResult with ONLY the subset that was just evaluated
-        current_subset = {ss: res[ss]}
-        partial_task_results: dict[SplitName, Mapping[HFSubset, ScoresDict]] = {
-            split: current_subset
-        }
-        new_result = TaskResult.from_task_results(
-            task,
-            partial_task_results,
-            evaluation_time=evaluation_time,
-            kg_co2_emissions=None,
-            date=datetime.datetime.now(tz=datetime.timezone.utc),
-        )
-
-        existing_cached = cache.load_task_result(task.metadata.name, model_meta)
-
-        # Merge: existing subsets + new subset
-        if existing_cached is not None:
-            final_result = new_result.merge(existing_cached)
-        else:
-            final_result = new_result
-
-        cache.save_to_cache(final_result, model_meta)
-        logger.debug(
-            f"Saved intermediate results after evaluating {task.metadata.name} on {split} subset {ss}"
-        )
-    except (OSError, TypeError, ValueError) as e:
-        logger.error(
-            f"Failed to save intermediate results: {e}",
-            exc_info=True,
-        )
-
-
 def _evaluate_task(  # noqa: PLR0913
     model: MTEBModels,
     task: AbsTask,
@@ -139,6 +95,7 @@ def _evaluate_task(  # noqa: PLR0913
     cache: ResultCache | None = None,
     model_meta: ModelMeta | None = None,
     num_proc: int | None = None,
+    existing_results: TaskResult | None = None,
 ) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
 
@@ -175,12 +132,20 @@ def _evaluate_task(  # noqa: PLR0913
                 cache=cache,
                 model_meta=model_meta,
                 num_proc=num_proc,
+                existing_results=existing_results,
             )
         if isinstance(result, TaskResult):
             result.kg_co2_emissions = tracker.final_emissions
         return result
 
     task_results: dict[SplitName, dict[HFSubset, ScoresDict]] = {}
+    evaluation_time = 0.0
+
+    if existing_results is not None:
+        for split, scores_list in existing_results.scores.items():
+            task_results[split] = {score["hf_subset"]: score for score in scores_list}
+        if existing_results.evaluation_time:
+            evaluation_time = existing_results.evaluation_time
 
     task.check_if_dataset_is_superseded()
 
@@ -208,54 +173,53 @@ def _evaluate_task(  # noqa: PLR0913
     for split, hf_subsets in splits.items():
         tick = time()
         # BitextMining tasks evaluate all subsets together (e.g. for parallel subsets), so they
-        # are not run subset-by-subset or incrementally cached here. Their final results are cached at the end of evaluate.
+        # are not run subset-by-subset. Other tasks are run subset-by-subset for intermediate caching.
         if isinstance(task, AbsTaskBitextMining):
-            task_results[split] = dict(
-                task.evaluate(
-                    model,
-                    split,
-                    subsets_to_run=hf_subsets,
-                    encode_kwargs=encode_kwargs,
-                    prediction_folder=prediction_folder,
-                    num_proc=num_proc,
-                    cache=cache,
-                    model_meta=model_meta,
-                )
-            )
+            subsets_batches = [hf_subsets]
         else:
+            subsets_batches = [[ss] for ss in hf_subsets]
+
+        if split not in task_results:
             task_results[split] = {}
-            for ss in hf_subsets:
-                tick_ss = time()
-                res = task.evaluate(
-                    model,
-                    split,
-                    subsets_to_run=[ss],
-                    encode_kwargs=encode_kwargs,
-                    prediction_folder=prediction_folder,
-                    num_proc=num_proc,
-                    cache=cache,
-                    model_meta=model_meta,
-                )
-                tock_ss = time()
-                if res and ss in res:
-                    task_results[split].update(res)
-                    _save_intermediate_cache(
-                        task,
-                        split,
-                        ss,
-                        res,
-                        cache,
-                        model_meta,
-                        evaluation_time=tock_ss - tick_ss,
-                    )
-                else:
+        for batch in subsets_batches:
+            res = task.evaluate(
+                model,
+                split,
+                subsets_to_run=batch,
+                encode_kwargs=encode_kwargs,
+                prediction_folder=prediction_folder,
+                num_proc=num_proc,
+                cache=cache,
+                model_meta=model_meta,
+            )
+            tock = time()
+
+            if res:
+                task_results[split].update(res)
+                # Save intermediate cache
+                if cache and model_meta:
+                    try:
+                        new_result = TaskResult.from_task_results(
+                            task,
+                            task_results,
+                            evaluation_time=evaluation_time + (tock - tick),
+                            kg_co2_emissions=None,
+                            date=datetime.datetime.now(tz=datetime.timezone.utc),
+                        )
+                        cache.save_to_cache(new_result, model_meta)
+                    except (OSError, TypeError, ValueError) as e:
+                        logger.error(
+                            f"Failed to save intermediate results: {e}",
+                            exc_info=True,
+                        )
+            else:
+                for ss in batch:
                     logger.warning(
                         "Requested subset %r for task %s on split %s produced no result; "
-                        "evaluation returned %s",
+                        "evaluation returned no data",
                         ss,
                         task.metadata.name,
                         split,
-                        "no data" if not res else f"keys {list(res.keys())!r}",
                     )
         tock = time()
 
@@ -575,6 +539,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 cache=cache,
                 model_meta=meta,
                 num_proc=num_proc,
+                existing_results=existing_results,
             )
         except Exception as e:
             logger.error(
@@ -593,6 +558,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             cache=cache,
             model_meta=meta,
             num_proc=num_proc,
+            existing_results=existing_results,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 
@@ -603,9 +569,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
             task_results=[],
             exceptions=[result],
         )
-
-    if existing_results:
-        result = result.merge(existing_results)
 
     if cache:
         cache.save_to_cache(result, meta)

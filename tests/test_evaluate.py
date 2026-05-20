@@ -4,6 +4,7 @@ from copy import copy
 from pathlib import Path
 
 import pytest
+from datasets import Dataset, DatasetDict
 from datasets.exceptions import DatasetNotFoundError
 
 import mteb
@@ -16,6 +17,7 @@ from mteb.types import OutputDType
 from tests.mock_models import MockSentenceTransformer
 from tests.mock_tasks import (
     MockAggregatedTask,
+    MockBitextMiningTask,
     MockClassificationTask,
     MockMultilingualRetrievalTask,
     MockRetrievalTask,
@@ -408,16 +410,11 @@ def test_mock_mmeb_tasks(task: AbsTask):
 
 
 class MockCrashTask(MockClassificationTask):
-    metadata = copy(MockClassificationTask.metadata)
-    metadata.name = "MockCrashTask"
-
     def __init__(self):
         super().__init__()
         self.hf_subsets = ["subset1", "subset2"]
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        from datasets import Dataset, DatasetDict
-
         train_texts = ["This is a test sentence", "This is another train sentence"]
         test_texts = ["This is a test sentence", "This is another test sentence"]
         labels = [0, 1]
@@ -462,16 +459,8 @@ def test_evaluate_intermediate_cache_on_crash(tmp_path: Path):
     with pytest.raises(RuntimeError, match="Crash on subset2"):
         mteb.evaluate(model, task, cache=cache, co2_tracker=False)
 
-    path = cache.get_task_result_path(
-        task.metadata.name,
-        model.mteb_model_meta.name,
-        model.mteb_model_meta.revision,
-    )
-    assert path.exists() and path.is_file()
-
-    from mteb.results import TaskResult
-
-    cached_result = TaskResult.from_disk(path)
+    cached_result = cache.load_task_result(task.metadata.name, model.mteb_model_meta)
+    assert cached_result is not None
     assert "test" in cached_result.scores
     scores = cached_result.scores["test"]
     assert len(scores) == 1
@@ -480,8 +469,6 @@ def test_evaluate_intermediate_cache_on_crash(tmp_path: Path):
 
 
 def test_evaluate_bitext_mining_caching(tmp_path: Path):
-    from tests.mock_tasks import MockBitextMiningTask
-
     model = mteb.get_model("mteb/baseline-random-encoder")
     task = MockBitextMiningTask()
     cache = ResultCache(tmp_path)
@@ -489,16 +476,8 @@ def test_evaluate_bitext_mining_caching(tmp_path: Path):
     results = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
     assert len(results.task_results) == 1
 
-    path = cache.get_task_result_path(
-        task.metadata.name,
-        model.mteb_model_meta.name,
-        model.mteb_model_meta.revision,
-    )
-    assert path.exists() and path.is_file()
-
-    from mteb.results import TaskResult
-
-    cached_result = TaskResult.from_disk(path)
+    cached_result = cache.load_task_result(task.metadata.name, model.mteb_model_meta)
+    assert cached_result is not None
     assert "test" in cached_result.scores
     scores = cached_result.scores["test"]
     assert len(scores) == len(task.hf_subsets)
