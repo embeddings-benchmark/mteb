@@ -761,6 +761,44 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
         return embeddings
 
 
+# Default routing from mteb's simplified_task_type to the Jina v5 omni LoRA
+# adapter. Concrete MTEB types whose harness routing diverges from this default
+# go in the ModelMeta's `model_prompts` dict (which takes precedence).
+_SIMPLIFIED_TO_JINA_TASK = {
+    "retrieval": "retrieval",
+    "clustering": "clustering",
+    "classification": "classification",
+    "semantic-similarity": "text-matching",
+    "pair-classification": "text-matching",
+}
+
+
+# Per-MTEB-type adapter routing for omni-{small,nano}. Tasks not listed fall
+# back to task_metadata.simplified_task_type via _SIMPLIFIED_TO_JINA_TASK.
+_OMNI_MODEL_PROMPTS = {
+    "Retrieval": "retrieval",
+    "Clustering": "clustering",
+    "Classification": "classification",
+    "STS": "text-matching",
+    "PairClassification": "text-matching",
+    "BitextMining": "text-matching",
+    "MultilabelClassification": "classification",
+    "Reranking": "retrieval",
+    "Summarization": "text-matching",
+    "InstructionReranking": "retrieval",
+    "ImageClassification": "retrieval",
+    "ZeroShotClassification": "retrieval",
+    "AudioClassification": "retrieval",
+    "AudioZeroshotClassification": "retrieval",
+    "AudioMultilabelClassification": "retrieval",
+    "VideoClassification": "retrieval",
+    "VideoZeroshotClassification": "retrieval",
+    "Compositionality": "clustering",
+    "AudioPairClassification": "retrieval",
+    "ImageClustering": "text-matching",
+}
+
+
 class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
     def encode(
         self,
@@ -792,17 +830,30 @@ class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
                 max_samples=self.max_samples,
             )
 
+        # Resolve adapter: per-type model_prompts override, else simplified fallback.
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         jina_task_name = (
             self.model_prompts.get(prompt_name, None)
             if self.model_prompts and prompt_name
             else None
         )
-        task = jina_task_name if jina_task_name else "retrieval"
-        prompt = (
-            "Query: "
-            if prompt_type and prompt_type == PromptType.query
-            else "Document: "
+        if jina_task_name is None:
+            jina_task_name = _SIMPLIFIED_TO_JINA_TASK.get(
+                task_metadata.simplified_task_type
+            )
+        task = jina_task_name or "retrieval"
+        # Non-retrieval adapters were trained without the Query/Document prefix.
+        if task == "retrieval":
+            prompt = (
+                "Query: "
+                if prompt_type and prompt_type == PromptType.query
+                else "Document: "
+            )
+        else:
+            prompt = ""
+
+        logger.info(
+            f"Using prompt=`{prompt}` and task={task} for task={task_metadata.name} prompt_type={prompt_type}"
         )
 
         all_embeddings = []
@@ -956,18 +1007,7 @@ jina_embeddings_v5_omni_small = ModelMeta(
         max_frames=64,
         target_sampling_rate=16000,
         max_samples=30 * 16000,
-        model_prompts={
-            "Retrieval": "retrieval",
-            "Clustering": "clustering",
-            "Classification": "classification",
-            "STS": "text-matching",
-            "PairClassification": "text-matching",
-            "BitextMining": "text-matching",
-            "MultilabelClassification": "classification",
-            "Reranking": "retrieval",
-            "Summarization": "text-matching",
-            "InstructionReranking": "retrieval",
-        },
+        model_prompts=_OMNI_MODEL_PROMPTS,
     ),
     name="jinaai/jina-embeddings-v5-omni-small",
     model_type=["dense"],
@@ -1012,23 +1052,11 @@ jina_embeddings_v5_omni_nano = ModelMeta(
     loader=JinaV5OmniWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
-        model_kwargs={"torch_dtype": torch.float32},
         fps=2.0,
         max_frames=64,
         target_sampling_rate=16000,
         max_samples=30 * 16000,
-        model_prompts={
-            "Retrieval": "retrieval",
-            "Clustering": "clustering",
-            "Classification": "classification",
-            "STS": "text-matching",
-            "PairClassification": "text-matching",
-            "BitextMining": "text-matching",
-            "MultilabelClassification": "classification",
-            "Reranking": "retrieval",
-            "Summarization": "text-matching",
-            "InstructionReranking": "retrieval",
-        },
+        model_prompts=_OMNI_MODEL_PROMPTS,
     ),
     name="jinaai/jina-embeddings-v5-omni-nano",
     model_type=["dense"],
