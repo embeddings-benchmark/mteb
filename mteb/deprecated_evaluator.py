@@ -484,10 +484,14 @@ class MTEB:
                         subsets_to_run = ["default"]
 
                     num_phases_before = len(timer.phases)
-                    with timer(
+                    logger.info(f"Evaluating {task.metadata.name} on split {split}...")
+                    general_timer = TimingStack()
+                    if timer._start_time is not None:
+                        general_timer._start_time = timer._start_time
+
+                    with general_timer(
                         "Evaluation",
                         split=split,
-                        log_message=f"Evaluating {task.metadata.name} on split {split}...",
                     ):
                         if co2_tracker:
                             try:
@@ -531,11 +535,15 @@ class MTEB:
                                 **kwargs,
                             )
 
-                    evaluation_phase = timer.phases.pop()
-                    duration = evaluation_phase["end"] - evaluation_phase["start"]
+                    duration = (
+                        general_timer.phases[0]["end"]
+                        - general_timer.phases[0]["start"]
+                    )
 
                     if len(timer.phases) == num_phases_before:
-                        timer.phases.append(evaluation_phase)
+                        if timer._start_time is None:
+                            timer._start_time = general_timer._start_time
+                        timer.phases.append(general_timer.phases[0])
 
                     logger.info(
                         f"Evaluation for {task.metadata.name} on {split} took {duration:.2f} seconds"

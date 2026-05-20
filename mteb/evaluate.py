@@ -167,7 +167,11 @@ def _evaluate_task(
 
     for split, hf_subsets in splits.items():
         num_phases_before = len(timer.phases)
-        with timer(
+        general_timer = TimingStack()
+        if timer._start_time is not None:
+            general_timer._start_time = timer._start_time
+
+        with general_timer(
             "Evaluation",
             split=split,
         ):
@@ -181,11 +185,12 @@ def _evaluate_task(
                 timer=timer,
             )
 
-        evaluation_phase = timer.phases.pop()
-        duration = evaluation_phase["end"] - evaluation_phase["start"]
+        duration = general_timer.phases[0]["end"] - general_timer.phases[0]["start"]
 
         if len(timer.phases) == num_phases_before:
-            timer.phases.append(evaluation_phase)
+            if timer._start_time is None:
+                timer._start_time = general_timer._start_time
+            timer.phases.append(general_timer.phases[0])
 
         logger.debug(
             f"Evaluation for {task.metadata.name} on {split} took {duration:.2f} seconds"
