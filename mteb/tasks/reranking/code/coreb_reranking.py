@@ -30,8 +30,8 @@ class CorebC2TReranking(AbsTaskRetrieval):
         + " The Code-to-Text (C2T) task aims to retrieve the problem statement that a code snippet solves.",
         reference="https://arxiv.org/abs/2605.04615",
         dataset={
-            "path": "hq-bench/coreb-c2t-reranking",
-            "revision": "7b389786924b7f5a7586297aa9f94be15a58dea1",
+            "path": "mteb/coreb-c2t-reranking",
+            "revision": "79beb7ee1b271cfd03966a3f5c553aa2c1cd8a95",
         },
         type="Reranking",
         category="t2t",
@@ -58,8 +58,8 @@ class CorebC2CReranking(AbsTaskRetrieval):
         + " The Code-to-Code (C2C) task aims to retrieve equivalent implementations across different programming languages.",
         reference="https://arxiv.org/abs/2605.04615",
         dataset={
-            "path": "hq-bench/coreb-c2c-reranking",
-            "revision": "320667716b6b9c45768ff05f5ebb356e900741ce",
+            "path": "mteb/coreb-c2c-reranking",
+            "revision": "92c6923fc428dd176d4a7379f3dac7564313ae37",
         },
         type="Reranking",
         category="t2t",
@@ -86,8 +86,8 @@ class CorebT2CReranking(AbsTaskRetrieval):
         + " The Text-to-Code (T2C) task aims to retrieve code implementations from problem descriptions.",
         reference="https://arxiv.org/abs/2605.04615",
         dataset={
-            "path": "hq-bench/coreb-t2c-reranking",
-            "revision": "c9f6a726da9e288a6f0c89dc4b960a52c704360e",
+            "path": "mteb/coreb-t2c-reranking",
+            "revision": "11aaa91e8c4915be01ba73fa89fadd0cebbf4972",
         },
         type="Reranking",
         category="t2t",
