@@ -1,9 +1,14 @@
 from __future__ import annotations
 
-from typing import Any
+import unicodedata
+from typing import TYPE_CHECKING, Any
 
 from mteb.models.instruct_wrapper import MultimodalInstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+
+if TYPE_CHECKING:
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import PromptType
 
 QWEN3_VL_EMBEDDING_CITATION = """@article{qwen3vlembedding,
   title={Qwen3-VL-Embedding and Qwen3-VL-Reranker: A Unified Framework for State-of-the-Art Multimodal Retrieval and Ranking},
@@ -32,6 +37,19 @@ class Qwen3VLEmbeddingWrapper(MultimodalInstructSentenceTransformerModel):
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
+        processor_kwargs = kwargs.get("processor_kwargs", {})
+        if "image" not in processor_kwargs:
+            processor_kwargs["image"] = {
+                "min_pixels": min_pixels,
+                "max_pixels": max_pixels,
+            }
+        if "video" not in processor_kwargs:
+            processor_kwargs["video"] = {
+                "min_pixels": min_pixels,
+                "max_pixels": max_pixels,
+            }
+        kwargs["processor_kwargs"] = processor_kwargs
+
         super().__init__(
             model_name,
             revision=revision,
@@ -41,19 +59,19 @@ class Qwen3VLEmbeddingWrapper(MultimodalInstructSentenceTransformerModel):
             num_frames=num_frames,
             **kwargs,
         )
-        self.model[0].processing_kwargs.update(
-            {
-                "image": {
-                    "min_pixels": min_pixels,
-                    "max_pixels": max_pixels,
-                },
-                "video": {
-                    "min_pixels": min_pixels,
-                    "max_pixels": max_pixels,
-                    "do_sample_frames": False,
-                },
-            }
-        )
+
+    def get_task_instruction(
+        self,
+        task_metadata: TaskMetadata,
+        prompt_type: PromptType | None,
+    ) -> str:
+        instruction = super().get_task_instruction(task_metadata, prompt_type)
+        instruction = instruction or DEFAULT_INSTRUCTION
+        instruction = instruction.strip()
+        # Checks if the last character is not punctuation and appends "." then
+        if instruction and not unicodedata.category(instruction[-1]).startswith("P"):
+            instruction += "."
+        return instruction
 
 
 qwen3_vl_embedding_2b = ModelMeta(

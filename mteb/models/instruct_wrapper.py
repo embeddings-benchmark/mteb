@@ -316,12 +316,16 @@ class MultimodalInstructSentenceTransformerModel(InstructSentenceTransformerMode
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = None,
+        target_sampling_rate: int | None = None,
+        max_samples: int | None,
         **kwargs: Any,
     ) -> None:
         super().__init__(model_name, revision, **kwargs)
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
 
     def encode(
         self,
@@ -356,14 +360,23 @@ class MultimodalInstructSentenceTransformerModel(InstructSentenceTransformerMode
             The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
         """
         has_video = "video" in inputs.dataset.features  # type: ignore[attr-defined]
+        has_audio = "audio" in inputs.dataset.features  # type: ignore[attr-defined]
         if has_video:
             from mteb.models.modality_collators import VideoCollator
 
             inputs.collate_fn = VideoCollator(
-                target_sampling_rate=16000,
+                target_sampling_rate=self.target_sampling_rate or 16000,
                 fps=self.fps,
                 max_frames=self.max_frames,
                 num_frames=self.num_frames,
+                max_samples=self.max_samples,
+            )
+        elif has_audio:
+            from mteb.models.modality_collators import AudioCollator
+
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.target_sampling_rate or 16000,
+                max_samples=self.max_samples,
             )
 
         instruction: str | None = self.get_task_instruction(task_metadata, prompt_type)
@@ -378,7 +391,7 @@ class MultimodalInstructSentenceTransformerModel(InstructSentenceTransformerMode
                 f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
             )
 
-        _modality_keys = {"text", "image", "video"}
+        _modality_keys = {"text", "image", "audio", "video"}
         all_embeddings = []
         for batch in inputs:
             batch_column = next(iter(batch.keys()))
@@ -391,12 +404,7 @@ class MultimodalInstructSentenceTransformerModel(InstructSentenceTransformerMode
                 for i, value in enumerate(values):
                     batched_input[i][key] = value
 
-            embeddings = cast(
-                "Array",
-                self.model.encode(batched_input, prompt=instruction, **kwargs),
-            )
-            if isinstance(embeddings, torch.Tensor):
-                embeddings = embeddings.cpu().detach().float()
+            embeddings = self.model.encode(batched_input, prompt=instruction, **kwargs)
             all_embeddings.append(embeddings)
 
         return cast("Array", np.concatenate(all_embeddings, axis=0))
