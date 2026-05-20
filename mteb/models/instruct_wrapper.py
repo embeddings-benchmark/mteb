@@ -317,7 +317,7 @@ class MultimodalInstructSentenceTransformerModel(InstructSentenceTransformerMode
         max_frames: int | None = None,
         num_frames: int | None = None,
         target_sampling_rate: int | None = None,
-        max_samples: int | None,
+        max_samples: int | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(model_name, revision, **kwargs)
