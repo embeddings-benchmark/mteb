@@ -86,12 +86,12 @@ class BidirLMOmniEncoder(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        attn_implementation: str = "eager",
         trust_remote_code: bool = True,
         max_text_length: int = 1024,
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
+        max_samples: int | None = None,
         **kwargs: Any,
     ) -> None:
         self.model = SentenceTransformer(
@@ -99,16 +99,17 @@ class BidirLMOmniEncoder(AbsEncoder):
             revision=revision,
             device=device,
             trust_remote_code=trust_remote_code,
-            model_kwargs={"attn_implementation": attn_implementation},
+            **kwargs,
         )
         self.model.eval()
         self.max_text_length = max_text_length
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
-        self.sampling_rate = self.processor.sampling_rate
 
         self.task_prompts = TASK_PROMPTS
+        self.sampling_rate = 16_000
+        self.max_samples = max_samples
 
     def _get_instruction(
         self,
@@ -169,8 +170,8 @@ class BidirLMOmniEncoder(AbsEncoder):
             if col in ds_features and inputs.dataset[0].get(col) is not None
         ]
         is_text_only = active_cols == ["text"]
-        has_video = "video" in inputs.dataset.features
-        has_audio = "audio" in inputs.dataset.features
+        has_video = "video" in ds_features
+        has_audio = "audio" in ds_features
 
         if has_video:
             inputs.collate_fn = VideoCollator(
@@ -178,12 +179,12 @@ class BidirLMOmniEncoder(AbsEncoder):
                 fps=self.fps,
                 max_frames=self.max_frames,
                 num_frames=self.num_frames,
-                max_samples=self.max_audio_length,
+                max_samples=self.max_samples,
             )
         elif has_audio:
             inputs.collate_fn = AudioCollator(
                 target_sampling_rate=self.sampling_rate,
-                max_samples=self.max_audio_length,
+                max_samples=self.max_samples,
             )
         instruction = self._get_instruction(task_metadata, prompt_type)
 
