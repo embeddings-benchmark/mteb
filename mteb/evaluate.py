@@ -388,7 +388,11 @@ def evaluate(  # noqa: PLR0913, PLR0914
         )
         combined_results = tasks.combine_task_results(results.task_results)
         if cache:
-            cache.save_to_cache(combined_results, meta)
+            cache.save_to_cache(
+                combined_results,
+                meta,
+                encode_kwargs=encode_kwargs,
+            )
 
         return ModelResult(
             model_name=results.model_name,
@@ -536,7 +540,11 @@ def evaluate(  # noqa: PLR0913, PLR0914
         result = result.merge(existing_results)
 
     if cache:
-        cache.save_to_cache(result, meta)
+        cache.save_to_cache(
+            result,
+            meta,
+            encode_kwargs=encode_kwargs,
+        )
 
     return ModelResult(
         model_name=model_name,

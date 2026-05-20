@@ -10,7 +10,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class WorldQAVideoCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WorldQAVideoCentricQA",
-        description="WorldQA is a multimodal long video benchmark evaluating world knowledge through long-chain reasoning. Each example pairs a video with a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate.",
+        description="WorldQA is a multimodal long video benchmark evaluating world knowledge through long-chain reasoning. Each example pairs a video with a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate. Used the `MC` config test split keyed by (video, question_idx) (~3,284 examples).",
         reference="https://arxiv.org/abs/2405.03272",
         dataset={
             "path": "mteb/worldqa",
@@ -83,7 +83,7 @@ class WorldQAVideoCentricQA(AbsTaskRetrieval):
 class WorldQAVideoAudioCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WorldQAVideoAudioCentricQA",
-        description="WorldQA is a multimodal long video benchmark evaluating world knowledge through long-chain reasoning. Each example pairs a video with audio and a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate.",
+        description="WorldQA is a multimodal long video benchmark evaluating world knowledge through long-chain reasoning. Each example pairs a video with audio and a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate. Used the `MC` config test split keyed by (video, question_idx) (~3,284 examples).",
         reference="https://arxiv.org/abs/2405.03272",
         dataset={
             "path": "mteb/worldqa",

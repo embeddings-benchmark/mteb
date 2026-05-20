@@ -56,6 +56,7 @@ class AVMemeExamV2TRetrieval(AbsTaskRetrieval):
             "Retrieve the summary that describes a given meme video clip (video "
             "only) from AVMeme-Exam, a multilingual audio-visual meme understanding "
             "benchmark."
+            " Used the `full`/`test` split (~900 examples)."
         ),
         reference="https://huggingface.co/datasets/mteb/AVMeme-Exam",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -88,6 +89,7 @@ class AVMemeExamT2VRetrieval(AbsTaskRetrieval):
             "Retrieve the meme video clip (video only) that matches a given summary "
             "from AVMeme-Exam, a multilingual audio-visual meme understanding "
             "benchmark."
+            " Used the `full`/`test` split (~900 examples)."
         ),
         reference="https://huggingface.co/datasets/mteb/AVMeme-Exam",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -120,6 +122,7 @@ class AVMemeExamVA2TRetrieval(AbsTaskRetrieval):
             "Retrieve the summary that describes a given meme video+audio clip "
             "from AVMeme-Exam, a multilingual audio-visual meme understanding "
             "benchmark."
+            " Used the `full`/`test` split (~900 examples)."
         ),
         reference="https://huggingface.co/datasets/mteb/AVMeme-Exam",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -154,6 +157,7 @@ class AVMemeExamT2VARetrieval(AbsTaskRetrieval):
             "Retrieve the meme video+audio clip that matches a given summary "
             "from AVMeme-Exam, a multilingual audio-visual meme understanding "
             "benchmark."
+            " Used the `full`/`test` split (~900 examples)."
         ),
         reference="https://huggingface.co/datasets/mteb/AVMeme-Exam",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -188,6 +192,7 @@ class AVMemeExamV2ARetrieval(AbsTaskRetrieval):
             "Retrieve the audio track that matches a given meme video clip (video "
             "only) from AVMeme-Exam. Tests cross-modal alignment between meme visual "
             "content and its paired audio."
+            " Used the `full`/`test` split (~900 examples)."
         ),
         reference="https://huggingface.co/datasets/mteb/AVMeme-Exam",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -222,6 +227,7 @@ class AVMemeExamA2VRetrieval(AbsTaskRetrieval):
             "Retrieve the meme video clip that matches a given audio track from "
             "AVMeme-Exam. Tests cross-modal alignment between meme audio and its "
             "paired visual content."
+            " Used the `full`/`test` split (~900 examples)."
         ),
         reference="https://huggingface.co/datasets/mteb/AVMeme-Exam",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -256,6 +262,7 @@ class AVMemeExamVT2ARetrieval(AbsTaskRetrieval):
             "Retrieve the audio track that matches a given meme video clip and its "
             "summary from AVMeme-Exam, a multilingual audio-visual meme understanding "
             "benchmark."
+            " Used the `full`/`test` split (~900 examples)."
         ),
         reference="https://huggingface.co/datasets/mteb/AVMeme-Exam",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -292,6 +299,7 @@ class AVMemeExamAT2VRetrieval(AbsTaskRetrieval):
             "Retrieve the meme video clip that matches a given audio track and its "
             "summary from AVMeme-Exam, a multilingual audio-visual meme understanding "
             "benchmark."
+            " Used the `full`/`test` split (~900 examples)."
         ),
         reference="https://huggingface.co/datasets/mteb/AVMeme-Exam",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},

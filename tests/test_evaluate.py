@@ -26,7 +26,7 @@ from tests.task_grid import (
     MOCK_MVEB_TASK_GRID,
 )
 
-mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 0.5)
+mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 1)
 mock_retrieval = (
     MockSentenceTransformer(),
     MockRetrievalTask(),
@@ -105,7 +105,7 @@ def test_evaluate_with_cache(
 @pytest.mark.parametrize(
     "model, task, expected_score,splits",
     [
-        (MockSentenceTransformer(), MockClassificationTask(), 0.5, ["train"])
+        (MockSentenceTransformer(), MockClassificationTask(), 1, ["train"])
     ],  # default split is "test" so this will run "train" and then ["test", "train"], also means that expected score can be different
     ids=["mock_classification"],
 )

@@ -57,6 +57,7 @@ class VATEXV2TRetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the English caption that describes a given video clip (video "
             "only) from VATEX, a large-scale multilingual video description dataset."
+            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -88,6 +89,7 @@ class VATEXT2VRetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the video clip (video only) that matches a given English "
             "caption from VATEX, a large-scale multilingual video description dataset."
+            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -119,6 +121,7 @@ class VATEXVA2TRetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the English caption that describes a given video clip from "
             "VATEX, a large-scale multilingual video description dataset."
+            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -150,6 +153,7 @@ class VATEXT2VARetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the video clip that matches a given English caption from "
             "VATEX, a large-scale multilingual video description dataset."
+            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -181,6 +185,7 @@ class VATEXV2ARetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the audio track that matches a given video clip from the "
             "VATEX dataset. Tests cross-modal alignment between video frames and audio."
+            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -212,6 +217,7 @@ class VATEXA2VRetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the video clip that matches a given audio track from the "
             "VATEX dataset. Tests cross-modal alignment between audio and video frames."
+            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -243,6 +249,7 @@ class VATEXVT2ARetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the audio track that matches a given video clip and its English "
             "caption from VATEX, a large-scale multilingual video description dataset."
+            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -276,6 +283,7 @@ class VATEXAT2VRetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the video clip that matches a given audio track and its English "
             "caption from VATEX, a large-scale multilingual video description dataset."
+            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},

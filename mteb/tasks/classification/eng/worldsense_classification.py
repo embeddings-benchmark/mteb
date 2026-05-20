@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class WorldSenseAudioVideoClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WorldSenseAudioVideoClassification",
-        description="WorldSense is a multimodal video understanding benchmark encompassing visual, audio, and text inputs. Videos are categorized into 8 primary domains across 67 fine-grained subcategories. This classification task predicts the domain category of a video clip",
+        description="WorldSense is a multimodal video understanding benchmark encompassing visual, audio, and text inputs. Videos are categorized into 8 primary domains across 67 fine-grained subcategories. This classification task predicts the domain category of a video clip Filtered the test split to short (<1min) clips (~1,047 examples).",
         reference="https://arxiv.org/abs/2502.04326",
         dataset={
             "path": "mteb/WorldSense_1min",
@@ -45,7 +45,7 @@ class WorldSenseAudioVideoClassification(AbsTaskClassification):
 class WorldSenseVideoClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WorldSenseVideoClassification",
-        description="WorldSense is a multimodal video understanding benchmark encompassing visual, audio, and text inputs. Videos are categorized into 8 primary domains across 67 fine-grained subcategories. This classification task predicts the domain category of a video clip",
+        description="WorldSense is a multimodal video understanding benchmark encompassing visual, audio, and text inputs. Videos are categorized into 8 primary domains across 67 fine-grained subcategories. This classification task predicts the domain category of a video clip Filtered the test split to short (<1min) clips (~1,047 examples).",
         reference="https://arxiv.org/abs/2502.04326",
         dataset={
             "path": "mteb/WorldSense_1min",

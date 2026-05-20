@@ -1,0 +1,74 @@
+{
+    "test": {
+        "num_samples": 2443,
+        "number_of_characters": 2018285,
+        "documents_text_statistics": {
+            "total_text_length": 2016201,
+            "min_text_length": 33,
+            "average_text_length": 837.6406314914832,
+            "max_text_length": 998,
+            "unique_texts": 2403
+        },
+        "documents_image_statistics": null,
+        "documents_audio_statistics": null,
+        "queries_text_statistics": {
+            "total_text_length": 2084,
+            "min_text_length": 11,
+            "average_text_length": 57.888888888888886,
+            "max_text_length": 110,
+            "unique_texts": 36
+        },
+        "queries_image_statistics": null,
+        "queries_audio_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 72,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 2.0,
+            "max_relevant_docs_per_query": 6,
+            "unique_relevant_docs": 69
+        },
+        "top_ranked_statistics": {
+            "num_top_ranked": 5131,
+            "min_top_ranked_per_query": 46,
+            "average_top_ranked_per_query": 142.52777777777777,
+            "max_top_ranked_per_query": 316
+        },
+        "hf_subset_descriptive_stats": {
+            "ESG-Reports": {
+                "num_samples": 2443,
+                "number_of_characters": 2018285,
+                "documents_text_statistics": {
+                    "total_text_length": 2016201,
+                    "min_text_length": 33,
+                    "average_text_length": 837.6406314914832,
+                    "max_text_length": 998,
+                    "unique_texts": 2403
+                },
+                "documents_image_statistics": null,
+                "documents_audio_statistics": null,
+                "queries_text_statistics": {
+                    "total_text_length": 2084,
+                    "min_text_length": 11,
+                    "average_text_length": 57.888888888888886,
+                    "max_text_length": 110,
+                    "unique_texts": 36
+                },
+                "queries_image_statistics": null,
+                "queries_audio_statistics": null,
+                "relevant_docs_statistics": {
+                    "num_relevant_docs": 72,
+                    "min_relevant_docs_per_query": 1,
+                    "average_relevant_docs_per_query": 2.0,
+                    "max_relevant_docs_per_query": 6,
+                    "unique_relevant_docs": 69
+                },
+                "top_ranked_statistics": {
+                    "num_top_ranked": 5131,
+                    "min_top_ranked_per_query": 46,
+                    "average_top_ranked_per_query": 142.52777777777777,
+                    "max_top_ranked_per_query": 316
+                }
+            }
+        }
+    }
+}

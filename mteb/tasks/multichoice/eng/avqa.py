@@ -10,7 +10,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class AVQAVideoCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AVQAVideoCentricQA",
-        description="AVQA is an audio-visual question answering benchmark requiring models to understand both the audio and visual content of videos to answer questions. Each example pairs a video with a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate.",
+        description="AVQA is an audio-visual question answering benchmark requiring models to understand both the audio and visual content of videos to answer questions. Each example pairs a video with a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate. Used the test QA split keyed by (video, question) (~921 examples).",
         reference="https://arxiv.org/abs/2207.10489",
         dataset={
             "path": "mteb/AVQA_val",
@@ -83,7 +83,7 @@ class AVQAVideoCentricQA(AbsTaskRetrieval):
 class AVQAVideoAudioCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AVQAVideoAudioCentricQA",
-        description="AVQA is an audio-visual question answering benchmark requiring models to understand both the audio and visual content of videos to answer questions. Each example pairs a video with audio and a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate.",
+        description="AVQA is an audio-visual question answering benchmark requiring models to understand both the audio and visual content of videos to answer questions. Each example pairs a video with audio and a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate. Used the test QA split keyed by (video, question) (~921 examples).",
         reference="https://arxiv.org/abs/2207.10489",
         dataset={
             "path": "mteb/AVQA_val",
