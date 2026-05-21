@@ -242,6 +242,7 @@ from .narrative_qa_retrieval import NarrativeQARetrieval
 from .nf_corpus_retrieval import NFCorpus
 from .nights_i2i_retrieval import NIGHTSI2IRetrieval
 from .nq_retrieval import NQ, NQHardNegatives
+from .obliq_bench_retrieval import OBLIQBenchRetrieval
 from .okvqa_it2t_retrieval import OKVQAIT2TRetrieval
 from .oven_it2it_retrieval import OVENIT2ITRetrieval
 from .oven_it2t_retrieval import OVENIT2TRetrieval
@@ -627,6 +628,7 @@ __all__ = [
     "NanoTouche2020Retrieval",
     "NarrativeQARetrieval",
     "NovelQA",
+    "OBLIQBenchRetrieval",
     "OKVQAIT2TRetrieval",
     "OVENIT2ITRetrieval",
     "OVENIT2TRetrieval",
