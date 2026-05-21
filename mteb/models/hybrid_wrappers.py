@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -16,6 +17,8 @@ from mteb.models.search_wrappers import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import MTEBModels
     from mteb.types import (
@@ -27,20 +30,21 @@ if TYPE_CHECKING:
     )
 
 
-class BaseHybridSearch(SearchProtocol):
+class BaseHybridSearch(ABC):
     """Base class for hybrid search wrappers implementing the SearchProtocol."""
 
     fusion_name: str | None = None
 
     def __init__(
         self,
-        model1: MTEBModels,
-        model2: MTEBModels,
-        *models: MTEBModels,
+        models: Sequence[MTEBModels],
         weights: list[float] | None = None,
         sub_model_top_k: int | None = None,
     ) -> None:
-        self.models = [model1, model2] + list(models)
+        self.models = list(models)
+        if len(self.models) < 2:
+            raise ValueError("At least two models must be provided for hybrid search.")
+
         self.wrapped_models: list[SearchProtocol] = []
         for model in self.models:
             if isinstance(model, EncoderProtocol) and not isinstance(
@@ -63,6 +67,9 @@ class BaseHybridSearch(SearchProtocol):
                 raise ValueError("Length of weights must match the number of models.")
             self.weights = list(weights)
 
+        if sub_model_top_k is not None:
+            if sub_model_top_k <= 0:
+                raise ValueError("sub_model_top_k must be greater than 0")
         self.sub_model_top_k = sub_model_top_k
 
     def index(
@@ -102,8 +109,6 @@ class BaseHybridSearch(SearchProtocol):
         if self.sub_model_top_k is None:
             sub_top_k = max(top_k, 100)
         else:
-            if self.sub_model_top_k <= 0:
-                raise ValueError("sub_model_top_k must be greater than 0")
             sub_top_k = max(top_k, self.sub_model_top_k)
 
         cross_encoder_models = []
@@ -165,16 +170,12 @@ class BaseHybridSearch(SearchProtocol):
                 )
                 cross_encoder_results.append(res)
 
-            all_results = []
-            ret_idx = 0
-            ce_idx = 0
-            for is_ce in model_is_cross_encoder:
-                if is_ce:
-                    all_results.append(cross_encoder_results[ce_idx])
-                    ce_idx += 1
-                else:
-                    all_results.append(retriever_results[ret_idx])
-                    ret_idx += 1
+            ret_iter = iter(retriever_results)
+            ce_iter = iter(cross_encoder_results)
+            all_results = [
+                next(ce_iter) if is_ce else next(ret_iter)
+                for is_ce in model_is_cross_encoder
+            ]
         else:
             all_results = []
             for model in self.wrapped_models:
@@ -207,6 +208,7 @@ class BaseHybridSearch(SearchProtocol):
 
         return fused_results
 
+    @abstractmethod
     def fuse(self, query_scores_list: list[dict[str, float]]) -> dict[str, float]:
         """Fuse the query scores from multiple sub-models."""
         raise NotImplementedError("Subclasses must implement the fuse method.")
@@ -288,16 +290,16 @@ class RRFHybridSearch(BaseHybridSearch):
 
     def __init__(
         self,
-        model1: MTEBModels,
-        model2: MTEBModels,
-        *models: MTEBModels,
+        models: Sequence[MTEBModels],
         weights: list[float] | None = None,
         sub_model_top_k: int | None = None,
         rrf_k: int = 60,
     ) -> None:
-        super().__init__(
-            model1, model2, *models, weights=weights, sub_model_top_k=sub_model_top_k
-        )
+        super().__init__(models, weights=weights, sub_model_top_k=sub_model_top_k)
+        if not isinstance(rrf_k, int):
+            raise TypeError("rrf_k must be an integer")
+        if rrf_k < 0:
+            raise ValueError("rrf_k must be greater than or equal to 0")
         self.rrf_k = rrf_k
 
     def fuse(self, query_scores_list: list[dict[str, float]]) -> dict[str, float]:

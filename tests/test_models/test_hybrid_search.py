@@ -13,13 +13,13 @@ def test_hybrid_search_init_and_meta():
     m1 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=32)
     m2 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=10)
 
-    hybrid = DBSFHybridSearch(m1, m2)
+    hybrid = DBSFHybridSearch([m1, m2])
     assert len(hybrid.models) == 2
     assert len(hybrid.wrapped_models) == 2
     assert len(hybrid.weights) == 2
     assert hybrid.weights == [0.5, 0.5]
 
-    hybrid_weighted = DBSFHybridSearch(m1, m2, weights=[0.7, 0.3])
+    hybrid_weighted = DBSFHybridSearch([m1, m2], weights=[0.7, 0.3])
     assert hybrid_weighted.weights == [0.7, 0.3]
 
     meta = hybrid.mteb_model_meta
@@ -30,26 +30,34 @@ def test_hybrid_search_init_and_meta():
     m2.mteb_model_meta = m2.mteb_model_meta.model_copy(
         update={"model_type": ["sparse"]}
     )
-    hybrid_mixed = DBSFHybridSearch(m1, m2)
+    hybrid_mixed = DBSFHybridSearch([m1, m2])
     assert hybrid_mixed.mteb_model_meta.model_type == ["dense", "sparse"]
 
     with pytest.raises(
         ValueError, match="Length of weights must match the number of models"
     ):
-        DBSFHybridSearch(m1, m2, weights=[0.5])
+        DBSFHybridSearch([m1, m2], weights=[0.5])
 
     with pytest.raises(
         TypeError,
         match="Expected a SearchProtocol, EncoderProtocol, or CrossEncoderProtocol",
     ):
-        DBSFHybridSearch(m1, "not-a-model")
+        DBSFHybridSearch([m1, "not-a-model"])
+
+    with pytest.raises(
+        ValueError, match="At least two models must be provided for hybrid search"
+    ):
+        DBSFHybridSearch([m1])
+
+    with pytest.raises(ValueError, match="sub_model_top_k must be greater than 0"):
+        DBSFHybridSearch([m1, m2], sub_model_top_k=0)
 
 
 def test_dbsf_fusion_logic():
     """Verify that Distribution-Based Score Fusion (DBSF) normalizes and fuses scores correctly."""
     m1 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=32)
     m2 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=10)
-    hybrid = DBSFHybridSearch(m1, m2, weights=[0.6, 0.4])
+    hybrid = DBSFHybridSearch([m1, m2], weights=[0.6, 0.4])
 
     scores1 = {"doc1": 1.0, "doc2": 2.0, "doc3": 3.0}
     scores2 = {"doc1": 10.0, "doc2": 10.0}
@@ -75,7 +83,7 @@ def test_rrf_fusion_logic():
     """Verify that Reciprocal Rank Fusion (RRF) computes rank reciprocal scores correctly."""
     m1 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=32)
     m2 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=10)
-    hybrid = RRFHybridSearch(m1, m2, weights=[0.5, 0.5], rrf_k=60)
+    hybrid = RRFHybridSearch([m1, m2], weights=[0.5, 0.5], rrf_k=60)
 
     scores1 = {"doc1": 10.0, "doc2": 5.0}
     scores2 = {"doc2": 8.0, "doc1": 2.0}
@@ -92,7 +100,7 @@ def test_relative_score_fusion_logic():
     """Verify that Relative Score Fusion normalizes and fuses scores using min-max scaling."""
     m1 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=32)
     m2 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=10)
-    hybrid = RelativeScoreFusionHybridSearch(m1, m2, weights=[0.7, 0.3])
+    hybrid = RelativeScoreFusionHybridSearch([m1, m2], weights=[0.7, 0.3])
 
     scores1 = {
         "doc1": 1.0,
@@ -118,7 +126,7 @@ def test_hybrid_search_e2e_retrieval():
         RRFHybridSearch,
         RelativeScoreFusionHybridSearch,
     ]:
-        hybrid = hybrid_cls(m1, m2)
+        hybrid = hybrid_cls([m1, m2])
         task = MockRetrievalTask()
         results = mteb.evaluate(hybrid, task, cache=None)
         assert len(results) > 0
@@ -130,7 +138,7 @@ def test_hybrid_search_with_cross_encoder():
     retriever = mteb.get_model("mteb/baseline-random-encoder", embed_dim=32)
     cross_encoder = mteb.get_model("mteb/baseline-random-cross-encoder")
 
-    hybrid = DBSFHybridSearch(retriever, cross_encoder)
+    hybrid = DBSFHybridSearch([retriever, cross_encoder])
     task = MockRetrievalTask()
     results = mteb.evaluate(hybrid, task, cache=None)
     assert len(results) > 0
@@ -140,7 +148,7 @@ def test_hybrid_search_with_cross_encoder():
         ValueError,
         match="CrossEncoder sub-models require top_ranked documents for reranking",
     ):
-        hybrid_only_ce = DBSFHybridSearch(cross_encoder, cross_encoder)
+        hybrid_only_ce = DBSFHybridSearch([cross_encoder, cross_encoder])
         hybrid_only_ce.search(
             queries=[{"id": "q1", "text": "query"}],
             task_metadata=task.metadata,
