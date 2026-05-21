@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 from sentence_transformers import SentenceTransformer
-from transformers import AutoVideoProcessor
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
@@ -95,6 +94,8 @@ class BidirLMOmniEncoder(AbsEncoder):
         max_samples: int | None = None,
         **kwargs: Any,
     ) -> None:
+        from transformers import AutoVideoProcessor
+
         processor_kwargs = kwargs.get("processor_kwargs", {})
 
         # VideoCollator already samples frames; skip inner sampling.
