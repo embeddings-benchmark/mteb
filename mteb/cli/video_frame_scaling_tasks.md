@@ -1,24 +1,24 @@
---- Passing minimum frames and duration threshold (> 30.0 avg frames and > 10.0 avg duration) ---
+--- Passing minimum frames and duration threshold (> 30.0 avg frames and > 15.0 avg duration) ---
 Task: MSRVTTA2V                                | Average Frames: 415.79   | Average Duration: 15.21s
 Task: MSRVTTAT2V                               | Average Frames: 415.79   | Average Duration: 15.21s
-Task: MSVDT2VRetrieval                         | Average Frames: 292.96   | Average Duration: 10.06s
-Task: Panda70MVA2TRetrieval                    | Average Frames: 332.61   | Average Duration: 11.04s
-Task: TUNABenchT2VRetrieval                    | Average Frames: 338.45   | Average Duration: 14.25s
 Task: VATEXT2VARetrieval                       | Average Frames: 4262.09  | Average Duration: 157.62s
 Task: VATEXV2ARetrieval                        | Average Frames: 4262.09  | Average Duration: 157.62s
 Task: OmniVideoBenchVideoCentricQA             | Average Frames: 3879.81  | Average Duration: 129.97s
 Task: WorldSense1MinVideoAudioCentricQA        | Average Frames: 1705.43  | Average Duration: 47.98s
-Task: AVEDatasetClassification                 | Average Frames: 286.26   | Average Duration: 10.02s
 Task: BreakfastClassification                  | Average Frames: 2172.41  | Average Duration: 144.83s
 Task: MusicAVQACLSVideoClustering              | Average Frames: 3562.22  | Average Duration: 59.37s
 Task: VideoConPairClassification               | Average Frames: 1034.31  | Average Duration: 37.21s
 
---- Not passing minimum frames and duration threshold (<= 30.0 avg frames or <= 10.0 avg duration) ---
+--- Not passing minimum frames and duration threshold (<= 30.0 avg frames or <= 15.0 avg duration) ---
 Task: AVMemeExamAT2VRetrieval                  | Average Frames: 12.23    | Average Duration: 12.23s
 Task: AVMemeExamVA2TRetrieval                  | Average Frames: 12.23    | Average Duration: 12.23s
 Task: AudioCapsAVVA2TRetrieval                 | Average Frames: 264.85   | Average Duration: 9.84s
+Task: MSVDT2VRetrieval                         | Average Frames: 292.96   | Average Duration: 10.06s
+Task: Panda70MVA2TRetrieval                    | Average Frames: 332.61   | Average Duration: 11.04s
+Task: TUNABenchT2VRetrieval                    | Average Frames: 338.45   | Average Duration: 14.25s
 Task: VALOR32KVT2ARetrieval                    | Average Frames: 269.25   | Average Duration: 9.92s
 Task: VGGSoundAVT2VARetrieval                  | Average Frames: 288.29   | Average Duration: 9.99s
+Task: AVEDatasetClassification                 | Average Frames: 286.26   | Average Duration: 10.02s
 Task: AVMemeVideoClassification                | Average Frames: 12.23    | Average Duration: 12.23s
 Task: HMDB51Classification                     | Average Frames: 94.78    | Average Duration: 3.16s
 Task: UCF101VideoAudioClassification           | Average Frames: 171.09   | Average Duration: 6.84s
