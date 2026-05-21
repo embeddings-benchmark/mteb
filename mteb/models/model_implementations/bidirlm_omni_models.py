@@ -94,6 +94,23 @@ class BidirLMOmniEncoder(AbsEncoder):
         max_samples: int | None = None,
         **kwargs: Any,
     ) -> None:
+        from transformers import AutoVideoProcessor
+
+        processor_kwargs = kwargs.get("processor_kwargs", {})
+
+        # VideoCollator already samples frames; skip inner sampling.
+        video_processor = AutoVideoProcessor.from_pretrained(
+            model_name,
+            revision=revision,
+            trust_remote_code=True,
+            do_sample_frames=False,
+            **kwargs,
+        )
+        processor_kwargs |= {
+            "video_processor": video_processor,
+        }
+
+        kwargs["processor_kwargs"] = processor_kwargs
         self.model = SentenceTransformer(
             model_name,
             revision=revision,
