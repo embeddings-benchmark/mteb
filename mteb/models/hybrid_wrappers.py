@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -26,8 +25,6 @@ if TYPE_CHECKING:
         RetrievalOutputType,
         TopRankedDocumentsType,
     )
-
-logger = logging.getLogger(__name__)
 
 
 class BaseHybridSearch(SearchProtocol):
@@ -89,7 +86,7 @@ class BaseHybridSearch(SearchProtocol):
                 num_proc=num_proc,
             )
 
-    def search(
+    def search(  # noqa: PLR0914
         self,
         queries: QueryDatasetType,
         *,
@@ -109,19 +106,89 @@ class BaseHybridSearch(SearchProtocol):
                 raise ValueError("sub_model_top_k must be greater than 0")
             sub_top_k = max(top_k, self.sub_model_top_k)
 
-        all_results = []
+        cross_encoder_models = []
+        retriever_models = []
+        model_is_cross_encoder = []
         for model in self.wrapped_models:
-            res = model.search(
-                queries=queries,
-                top_k=sub_top_k,
-                task_metadata=task_metadata,
-                hf_split=hf_split,
-                hf_subset=hf_subset,
-                encode_kwargs=encode_kwargs,
-                top_ranked=top_ranked,
-                num_proc=num_proc,
-            )
-            all_results.append(res)
+            if isinstance(model, SearchCrossEncoderWrapper):
+                cross_encoder_models.append(model)
+                model_is_cross_encoder.append(True)
+            else:
+                retriever_models.append(model)
+                model_is_cross_encoder.append(False)
+
+        effective_top_ranked = top_ranked
+
+        if cross_encoder_models and effective_top_ranked is None:
+            if not retriever_models:
+                raise ValueError(
+                    "CrossEncoder sub-models require top_ranked documents for reranking, "
+                    "or at least one retriever sub-model in the hybrid wrapper to generate candidates."
+                )
+
+            retriever_results = []
+            for model in retriever_models:
+                res = model.search(
+                    queries=queries,
+                    top_k=sub_top_k,
+                    task_metadata=task_metadata,
+                    hf_split=hf_split,
+                    hf_subset=hf_subset,
+                    encode_kwargs=encode_kwargs,
+                    top_ranked=None,
+                    num_proc=num_proc,
+                )
+                retriever_results.append(res)
+
+            generated_top_ranked: dict[str, list[str]] = {}
+            for row in queries:
+                qid = row["id"]
+                candidates = set()
+                for res in retriever_results:
+                    if qid in res:
+                        candidates.update(res[qid].keys())
+                generated_top_ranked[qid] = list(candidates)
+
+            effective_top_ranked = generated_top_ranked
+
+            cross_encoder_results = []
+            for model in cross_encoder_models:
+                res = model.search(
+                    queries=queries,
+                    top_k=sub_top_k,
+                    task_metadata=task_metadata,
+                    hf_split=hf_split,
+                    hf_subset=hf_subset,
+                    encode_kwargs=encode_kwargs,
+                    top_ranked=effective_top_ranked,
+                    num_proc=num_proc,
+                )
+                cross_encoder_results.append(res)
+
+            all_results = []
+            ret_idx = 0
+            ce_idx = 0
+            for is_ce in model_is_cross_encoder:
+                if is_ce:
+                    all_results.append(cross_encoder_results[ce_idx])
+                    ce_idx += 1
+                else:
+                    all_results.append(retriever_results[ret_idx])
+                    ret_idx += 1
+        else:
+            all_results = []
+            for model in self.wrapped_models:
+                res = model.search(
+                    queries=queries,
+                    top_k=sub_top_k,
+                    task_metadata=task_metadata,
+                    hf_split=hf_split,
+                    hf_subset=hf_subset,
+                    encode_kwargs=encode_kwargs,
+                    top_ranked=effective_top_ranked,
+                    num_proc=num_proc,
+                )
+                all_results.append(res)
 
         fused_results: RetrievalOutputType = {}
         for row in queries:

@@ -26,7 +26,6 @@ def test_hybrid_search_init_and_meta():
     assert "hybrid-dbsf/baseline-random-encoder-baseline-random-encoder" in meta.name
     assert meta.model_type == ["dense"]
 
-    # Test model_type propagation
     m1.mteb_model_meta = m1.mteb_model_meta.model_copy(update={"model_type": ["dense"]})
     m2.mteb_model_meta = m2.mteb_model_meta.model_copy(
         update={"model_type": ["sparse"]}
@@ -124,3 +123,30 @@ def test_hybrid_search_e2e_retrieval():
         results = mteb.evaluate(hybrid, task, cache=None)
         assert len(results) > 0
         assert results[0].scores is not None
+
+
+def test_hybrid_search_with_cross_encoder():
+    """Verify that hybrid search can fuse a CrossEncoder and a retriever model even when top_ranked is None."""
+    retriever = mteb.get_model("mteb/baseline-random-encoder", embed_dim=32)
+    cross_encoder = mteb.get_model("mteb/baseline-random-cross-encoder")
+
+    hybrid = DBSFHybridSearch(retriever, cross_encoder)
+    task = MockRetrievalTask()
+    results = mteb.evaluate(hybrid, task, cache=None)
+    assert len(results) > 0
+    assert results[0].scores is not None
+
+    with pytest.raises(
+        ValueError,
+        match="CrossEncoder sub-models require top_ranked documents for reranking",
+    ):
+        hybrid_only_ce = DBSFHybridSearch(cross_encoder, cross_encoder)
+        hybrid_only_ce.search(
+            queries=[{"id": "q1", "text": "query"}],
+            task_metadata=task.metadata,
+            hf_split="test",
+            hf_subset="default",
+            top_k=5,
+            encode_kwargs={},
+            top_ranked=None,
+        )
