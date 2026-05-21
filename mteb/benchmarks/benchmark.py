@@ -22,7 +22,6 @@ from ._benchmark_metrics import (
     _compute_mean_task,
     _compute_mean_task_type,
 )
-from ._create_table import _get_embedding_size
 
 if TYPE_CHECKING:
     from mteb.abstasks.aggregated_task import AbsTaskAggregate
@@ -490,6 +489,7 @@ class VidoreBenchmark(Benchmark):
             _format_max_tokens,
             _format_n_active_parameters,
             _format_n_parameters,
+            _get_embedding_size,
             _get_means_per_types,
             _split_on_capital,
         )
