@@ -12,8 +12,11 @@ from mteb.load_results import load_results
 from mteb.models import (
     CacheBackendProtocol,
     CrossEncoderProtocol,
+    DBSFHybridSearch,
     EncoderProtocol,
     IndexEncoderSearchProtocol,
+    RelativeScoreFusionHybridSearch,
+    RRFHybridSearch,
     SearchProtocol,
     SentenceTransformerEncoderWrapper,
 )
@@ -32,8 +35,11 @@ __all__ = [
     "BenchmarkResults",
     "CacheBackendProtocol",
     "CrossEncoderProtocol",
+    "DBSFHybridSearch",
     "EncoderProtocol",
     "IndexEncoderSearchProtocol",
+    "RRFHybridSearch",
+    "RelativeScoreFusionHybridSearch",
     "ResultCache",
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
