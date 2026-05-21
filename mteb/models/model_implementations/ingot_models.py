@@ -67,7 +67,7 @@ Ingot_8B_R3 = ModelMeta(
     revision="09e3bdb941f1faec98c0326c7c8e22635189d83e",
     release_date="2026-05-21",
     n_parameters=7_567_295_488,
-    n_embedding_parameters=None,
+    n_embedding_parameters=621_219_840,
     memory_usage_mb=14433,
     embed_dim=4096,
     max_tokens=32768,
@@ -78,5 +78,18 @@ Ingot_8B_R3 = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=set(),
+    training_datasets={
+        # Inherited from Qwen3-Embedding-8B base model
+        "T2Retrieval",
+        "DuRetrieval",
+        "MMarcoReranking",
+        "CMedQAv2-reranking",
+        "NQ",
+        "MSMARCO",
+        "HotpotQA",
+        "FEVER",
+        "MrTidyRetrieval",
+        "MIRACLRetrieval",
+        "CodeSearchNet",
+    },
 )
