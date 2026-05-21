@@ -22,6 +22,7 @@ from ._benchmark_metrics import (
     _compute_mean_task,
     _compute_mean_task_type,
 )
+from ._create_table import _get_embedding_size
 
 if TYPE_CHECKING:
     from mteb.abstasks.aggregated_task import AbsTaskAggregate
@@ -558,7 +559,7 @@ class VidoreBenchmark(Benchmark):
         joint_table.insert(
             1,
             "Embedding Dimensions",
-            model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
+            model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
         )
         joint_table.insert(
             1,
