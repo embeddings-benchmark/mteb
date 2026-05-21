@@ -56,7 +56,7 @@ To submit a benchmark to the leaderboard, you need to:
 
 1. Have added the benchmark to MTEB as described in the previous section
 2. Evalaute a set of models on the benchmark and submit a PR with the results to the [results repository](https://github.com/embeddings-benchmark/results) with the results of the models on the benchmark.
-3. When your PR with benchmarks results is merged, you can add your benchmark to the most fitting section in [benchmark_selector.py](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/leaderboard/benchmark_selector.py) to be shown on the leaderboard. You can check that the leaderboard looks correctly by [running the leaderboard locally](../get_started/usage/leaderboard.md#running-the-leaderboard-locally).
+3. When your PR with benchmarks results is merged, you can add your benchmark to the most fitting section in [benchmark_selector.py](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/benchmarks/_leaderboard_menu.py) to be shown on the leaderboard. You can check that the leaderboard looks correctly by [running the leaderboard locally](../get_started/usage/leaderboard.md#running-the-leaderboard-locally).
 4. When PRs are merged, your benchmark will be added to the leaderboard automatically after the next workflow trigger (every day at midnight Pacific Time (8 AM UTC)).
 
 
