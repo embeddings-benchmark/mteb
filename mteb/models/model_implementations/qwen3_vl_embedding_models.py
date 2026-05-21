@@ -3,8 +3,6 @@ from __future__ import annotations
 import unicodedata
 from typing import TYPE_CHECKING, Any
 
-from transformers import AutoImageProcessor, AutoVideoProcessor
-
 from mteb.models.instruct_wrapper import MultimodalInstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -39,6 +37,8 @@ class Qwen3VLEmbeddingWrapper(MultimodalInstructSentenceTransformerModel):
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
+        from transformers import AutoImageProcessor, AutoVideoProcessor
+
         processor_kwargs = kwargs.get("processor_kwargs", {})
 
         image_processor = AutoImageProcessor.from_pretrained(
