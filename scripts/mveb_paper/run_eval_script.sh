@@ -85,7 +85,7 @@ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export TORCHDYNAMO_DISABLE=1
 
 # ── Run evaluation ──────────────────────────────────────────────────
-python scripts/mveb_paper/eval_suite.py \\
+/data/home/niklas/deepshah/mteb_env_ds/bin/python3 scripts/mveb_paper/eval_suite.py \\
     --model "$MODEL" \\
     --output-folder "$OUTPUT_FOLDER" \\
     $FRAME_ARG \\
