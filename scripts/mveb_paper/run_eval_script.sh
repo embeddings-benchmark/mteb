@@ -62,8 +62,8 @@ for TASK in "${TASKS_ARRAY[@]}"; do
 #SBATCH --job-name=${JOB_NAME}
 #SBATCH --partition=guest
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=32G
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=16G
 #SBATCH --time=72:00:00
 #SBATCH --output=/data/home/niklas/deepshah/logs/${JOB_NAME}_%j.out
 #SBATCH --error=/data/home/niklas/deepshah/logs/${JOB_NAME}_%j.err
