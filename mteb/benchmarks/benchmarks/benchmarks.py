@@ -3564,3 +3564,32 @@ MAEB = Benchmark(
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
+
+CoREB = Benchmark(
+    name="CoREB(v1)",
+    aliases=["CoREB"],
+    display_name="CoREB",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
+    tasks=get_tasks(
+        tasks=[
+            "CorebC2TRetrieval",
+            "CorebC2CRetrieval",
+            "CorebT2CRetrieval",
+            "CorebC2TReranking",
+            "CorebC2CReranking",
+            "CorebT2CReranking",
+        ],
+    ),
+    description="CoREB is a contamination-limited, graded-relevance benchmark for evaluating code embedding and reranking models across three retrieval tasks (code2text, text2code, code2code), built from counterfactually rewritten LiveCodeBench problems in five programming languages.",
+    reference="https://arxiv.org/abs/2605.04615",
+    citation=r"""
+@article{xue2026coreb,
+  author = {Xue, Siqiao and Liao, Zihan and Qin, Jin and Zhang, Ziyin and Mu, Yixiang and Zhou, Fan and Yu, Hang},
+  journal = {arXiv preprint arXiv:2605.04615},
+  title = {Beyond Retrieval: A Multitask Benchmark and Model for Code Search},
+  url = {https://arxiv.org/abs/2605.04615},
+  year = {2026},
+}
+""",
+    contacts=["Geralt-Targaryen"],
+)
