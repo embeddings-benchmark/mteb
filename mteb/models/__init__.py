@@ -9,6 +9,7 @@ from .model_meta import ModelMeta
 from .models_protocols import (
     CrossEncoderProtocol,
     EncoderProtocol,
+    HybridSearchProtocol,
     MTEBModels,
     SearchProtocol,
 )
@@ -28,6 +29,7 @@ __all__ = [
     "CrossEncoderWrapper",
     "DBSFHybridSearch",
     "EncoderProtocol",
+    "HybridSearchProtocol",
     "IndexEncoderSearchProtocol",
     "MTEBModels",
     "ModelMeta",

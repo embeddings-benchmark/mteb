@@ -148,11 +148,22 @@ class BaseHybridSearch(ABC):
             generated_top_ranked: dict[str, list[str]] = {}
             for row in queries:
                 qid = row["id"]
-                candidates = set()
+                candidate_rrf: dict[str, float] = {}
                 for res in retriever_results:
                     if qid in res:
-                        candidates.update(res[qid].keys())
-                generated_top_ranked[qid] = list(candidates)
+                        scores = res[qid]
+                        sorted_docs = sorted(
+                            scores.keys(), key=lambda d: scores[d], reverse=True
+                        )
+                        for rank_idx, doc_id in enumerate(sorted_docs):
+                            rank = rank_idx + 1
+                            candidate_rrf[doc_id] = candidate_rrf.get(
+                                doc_id, 0.0
+                            ) + 1.0 / (60 + rank)
+                sorted_candidates = sorted(
+                    candidate_rrf.keys(), key=lambda d: candidate_rrf[d], reverse=True
+                )
+                generated_top_ranked[qid] = sorted_candidates[:sub_top_k]
 
             effective_top_ranked = generated_top_ranked
 
