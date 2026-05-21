@@ -33,6 +33,8 @@ logger = logging.getLogger(__name__)
 class BaseHybridSearch(SearchProtocol):
     """Base class for hybrid search wrappers implementing the SearchProtocol."""
 
+    fusion_name: str | None = None
+
     def __init__(
         self,
         model1: MTEBModels,
@@ -100,7 +102,12 @@ class BaseHybridSearch(SearchProtocol):
         num_proc: int | None = None,
     ) -> RetrievalOutputType:
         """Search the queries using all sub-models and fuse the results."""
-        sub_top_k = self.sub_model_top_k or max(top_k, 100)
+        if self.sub_model_top_k is None:
+            sub_top_k = max(top_k, 100)
+        else:
+            if self.sub_model_top_k <= 0:
+                raise ValueError("sub_model_top_k must be greater than 0")
+            sub_top_k = max(top_k, self.sub_model_top_k)
 
         all_results = []
         for model in self.wrapped_models:
@@ -141,6 +148,7 @@ class BaseHybridSearch(SearchProtocol):
     def mteb_model_meta(self) -> ModelMeta:
         """Generate combined ModelMeta for the hybrid model."""
         names = []
+        model_types = set()
         for model in self.wrapped_models:
             meta = getattr(model, "mteb_model_meta", None)
             if meta and meta.name:
@@ -148,19 +156,35 @@ class BaseHybridSearch(SearchProtocol):
             else:
                 names.append("unknown")
 
-        class_name = self.__class__.__name__
-        combined_name = f"hybrid-{class_name.lower()}/{'-'.join(names)}"
+            if meta and getattr(meta, "model_type", None):
+                for m_type in meta.model_type:
+                    model_types.add(m_type)
+
+        if self.fusion_name:
+            fusion_name = self.fusion_name
+        else:
+            class_name = self.__class__.__name__
+            fusion_name = class_name
+            for suffix in ["HybridSearch", "Search"]:
+                if fusion_name.endswith(suffix):
+                    fusion_name = fusion_name[: -len(suffix)]
+            fusion_name = fusion_name.lower()
+
+        combined_name = f"hybrid-{fusion_name}/{'-'.join(names)}"
+        final_model_types = sorted(model_types) if model_types else ["dense"]
 
         return ModelMeta.create_empty(
             overwrites={
                 "name": combined_name,
-                "model_type": ["dense"],
+                "model_type": final_model_types,
             }
         )
 
 
 class DBSFHybridSearch(BaseHybridSearch):
     """Distribution-Based Score Fusion (DBSF) hybrid search wrapper."""
+
+    fusion_name = "dbsf"
 
     def fuse(self, query_scores_list: list[dict[str, float]]) -> dict[str, float]:
         """Fuse the query scores using Distribution-Based Score Fusion. (https://arxiv.org/html/2410.20878v1)"""
@@ -193,6 +217,8 @@ class DBSFHybridSearch(BaseHybridSearch):
 class RRFHybridSearch(BaseHybridSearch):
     """Reciprocal Rank Fusion (RRF) hybrid search wrapper."""
 
+    fusion_name = "rrf"
+
     def __init__(
         self,
         model1: MTEBModels,
@@ -222,6 +248,8 @@ class RRFHybridSearch(BaseHybridSearch):
 
 class RelativeScoreFusionHybridSearch(BaseHybridSearch):
     """Relative Score Fusion (MinMax) hybrid search wrapper."""
+
+    fusion_name = "relative-score-fusion"
 
     def fuse(self, query_scores_list: list[dict[str, float]]) -> dict[str, float]:
         """Fuse the query scores using Relative Score MinMax normalisation."""

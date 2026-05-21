@@ -23,10 +23,16 @@ def test_hybrid_search_init_and_meta():
     assert hybrid_weighted.weights == [0.7, 0.3]
 
     meta = hybrid.mteb_model_meta
-    assert (
-        "hybrid-dbsfhybridsearch/baseline-random-encoder-baseline-random-encoder"
-        in meta.name
+    assert "hybrid-dbsf/baseline-random-encoder-baseline-random-encoder" in meta.name
+    assert meta.model_type == ["dense"]
+
+    # Test model_type propagation
+    m1.mteb_model_meta = m1.mteb_model_meta.model_copy(update={"model_type": ["dense"]})
+    m2.mteb_model_meta = m2.mteb_model_meta.model_copy(
+        update={"model_type": ["sparse"]}
     )
+    hybrid_mixed = DBSFHybridSearch(m1, m2)
+    assert hybrid_mixed.mteb_model_meta.model_type == ["dense", "sparse"]
 
     with pytest.raises(
         ValueError, match="Length of weights must match the number of models"
