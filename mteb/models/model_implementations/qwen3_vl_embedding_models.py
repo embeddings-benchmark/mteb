@@ -3,6 +3,8 @@ from __future__ import annotations
 import unicodedata
 from typing import TYPE_CHECKING, Any
 
+from transformers import AutoImageProcessor, AutoVideoProcessor
+
 from mteb.models.instruct_wrapper import MultimodalInstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -38,16 +40,30 @@ class Qwen3VLEmbeddingWrapper(MultimodalInstructSentenceTransformerModel):
         **kwargs: Any,
     ) -> None:
         processor_kwargs = kwargs.get("processor_kwargs", {})
-        if "image" not in processor_kwargs:
-            processor_kwargs["image"] = {
-                "min_pixels": min_pixels,
-                "max_pixels": max_pixels,
-            }
-        if "video" not in processor_kwargs:
-            processor_kwargs["video"] = {
-                "min_pixels": min_pixels,
-                "max_pixels": max_pixels,
-            }
+
+        image_processor = AutoImageProcessor.from_pretrained(
+            model_name,
+            revision=revision,
+            trust_remote_code=True,
+            min_pixels=min_pixels,
+            max_pixels=max_pixels,
+            **kwargs,
+        )
+        # VideoCollator already samples frames; skip inner sampling.
+        video_processor = AutoVideoProcessor.from_pretrained(
+            model_name,
+            revision=revision,
+            trust_remote_code=True,
+            do_sample_frames=False,
+            min_pixels=min_pixels,
+            max_pixels=max_pixels,
+            **kwargs,
+        )
+        processor_kwargs |= {
+            "video_processor": video_processor,
+            "image_processor": image_processor,
+        }
+
         kwargs["processor_kwargs"] = processor_kwargs
 
         super().__init__(
