@@ -41,7 +41,22 @@ from mteb.cache import ResultCache
 
 
 # Correlation thresholds to evaluate
-THRESHOLDS = [0.95, 0.93, 0.9, 0.85, 0.8, 0.7, 0.6, 0.5, 0.4]
+THRESHOLDS = [
+    0.95,
+    0.93,
+    0.9,
+    0.88,
+    0.87,
+    0.85,
+    0.84,
+    0.83,
+    0.82,
+    0.81,
+    0.8,
+    0.7,
+    0.6,
+    0.5,
+]
 
 # Models for evaluation time calculation
 EVAL_TIME_MODELS = [
@@ -171,10 +186,13 @@ def deduplicate_same_source_families(
     results_df: pd.DataFrame,
     metadata_df: pd.DataFrame,
 ) -> tuple[list[str], list[tuple[str, str, float]]]:
-    """Remove same-type tasks from the same source family, keeping the one with lowest correlation.
+    """Cap tasks per source dataset family.
 
-    For each family with multiple tasks of the same type, keeps only one task
-    (the one with lowest average correlation to other retained tasks).
+    Two passes:
+      1. Within (family, task_type): keep only one task (lowest avg corr to rest).
+      2. Across non-retrieval task types within a family: keep only one task
+         (lowest avg corr to rest). Retrieval is exempt so different
+         modality directions (e.g. T2V vs A2V) from the same dataset can coexist.
 
     Args:
         task_names: List of selected task names
@@ -198,51 +216,73 @@ def deduplicate_same_source_families(
                     task_to_family[task] = (family, task_meta["type"])
                 break
 
-    # Group tasks by (family, type)
+    def pick_lowest_corr(candidates: list[str]) -> str | None:
+        """Among candidates, return the one with lowest mean abs Spearman to
+        the rest of `remaining`. None if none have results."""
+        best = None
+        best_avg = float("inf")
+        for cand in candidates:
+            if cand not in results_df.columns:
+                continue
+            others = [t for t in remaining if t != cand and t in results_df.columns]
+            if not others:
+                continue
+            corrs = []
+            for o in others:
+                c = results_df[[cand, o]].corr(method="spearman").iloc[0, 1]
+                if not np.isnan(c):
+                    corrs.append(abs(c))
+            if corrs:
+                avg = np.mean(corrs)
+                if avg < best_avg:
+                    best_avg = avg
+                    best = cand
+        return best
+
+    # Pass 1: dedup within (family, task_type)
     family_type_groups = defaultdict(list)
     for task, (family, task_type) in task_to_family.items():
         family_type_groups[(family, task_type)].append(task)
 
-    # For groups with >1 task, keep only the one with lowest avg correlation
     for (family, task_type), tasks in family_type_groups.items():
         if len(tasks) <= 1:
             continue
-
-        # Compute average correlation for each task with all other retained tasks
-        best_task = None
-        best_avg_corr = float("inf")
-
-        for candidate in tasks:
-            if candidate not in results_df.columns:
-                continue
-
-            other_tasks = [
-                t for t in remaining if t != candidate and t in results_df.columns
-            ]
-            if not other_tasks:
-                continue
-
-            correlations = []
-            for other in other_tasks:
-                corr = results_df[[candidate, other]].corr(method="spearman").iloc[0, 1]
-                if not np.isnan(corr):
-                    correlations.append(abs(corr))
-
-            if correlations:
-                avg_corr = np.mean(correlations)
-                if avg_corr < best_avg_corr:
-                    best_avg_corr = avg_corr
-                    best_task = candidate
-
-        # Remove all but the best task
-        if best_task:
-            for task in tasks:
-                if task != best_task and task in remaining:
-                    remaining.remove(task)
+        keep = pick_lowest_corr(tasks)
+        if keep:
+            for t in tasks:
+                if t != keep and t in remaining:
+                    remaining.remove(t)
                     removed.append(
                         (
-                            task,
-                            f"Same-family ({family}) same-type ({task_type}) redundancy, keeping {best_task}",
+                            t,
+                            f"Same-family ({family}) same-type ({task_type}) redundancy, keeping {keep}",
+                            0.0,
+                        )
+                    )
+
+    # Pass 2: cap to 1 non-retrieval task per family (retrieval directions
+    # from the same dataset are distinct measurements, not redundant).
+    family_nonret_groups = defaultdict(list)
+    for task in remaining:
+        if task not in task_to_family:
+            continue
+        family, task_type = task_to_family[task]
+        if task_type and "retrieval" in task_type.lower():
+            continue
+        family_nonret_groups[family].append(task)
+
+    for family, tasks in family_nonret_groups.items():
+        if len(tasks) <= 1:
+            continue
+        keep = pick_lowest_corr(tasks)
+        if keep:
+            for t in tasks:
+                if t != keep and t in remaining:
+                    remaining.remove(t)
+                    removed.append(
+                        (
+                            t,
+                            f"Same-family ({family}) non-retrieval cap, keeping {keep}",
                             0.0,
                         )
                     )
@@ -1222,11 +1262,21 @@ def main():
 
     # Run iterative task selection if we have correlation data
     if results_df is not None and corr_matrix is not None:
-        # Filter out excluded tasks
-        filtered_source_tasks = [
-            t for t in source_task_names if t not in TASKS_TO_EXCLUDE
+        # Drop tasks with no results (else they survive iterative pruning by
+        # never appearing in correlation pairs).
+        missing = [
+            t
+            for t in source_task_names
+            if t not in TASKS_TO_EXCLUDE and t not in results_df.columns
         ]
-        excluded_count = len(source_task_names) - len(filtered_source_tasks)
+        if missing:
+            print(f"Note: {len(missing)} task(s) dropped (no model results): {missing}")
+        filtered_source_tasks = [
+            t
+            for t in source_task_names
+            if t not in TASKS_TO_EXCLUDE and t in results_df.columns
+        ]
+        excluded_count = sum(1 for t in source_task_names if t in TASKS_TO_EXCLUDE)
 
         # Build output for markdown file
         output_lines = []

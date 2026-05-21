@@ -3731,33 +3731,37 @@ MVEB = Benchmark(
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
-            # Any2AnyRetrieval (8)
-            "AVMemeExamVA2TRetrieval",
+            # Any2AnyRetrieval (10)
+            "AVMemeExamAT2VRetrieval",
             "AudioCapsAVVA2TRetrieval",
             "MSRVTTA2V",
-            "MSRVTTAT2V",
             "MSVDT2VRetrieval",
+            "Panda70MVA2TRetrieval",
+            "TUNABenchT2VRetrieval",
             "VALOR32KVT2ARetrieval",
             "VATEXT2VARetrieval",
             "VATEXV2ARetrieval",
+            "VGGSoundAVT2VARetrieval",
             # VideoCentricQA (2)
             "OmniVideoBenchVideoCentricQA",
             "WorldSense1MinVideoAudioCentricQA",
-            # VideoClassification (3)
+            # VideoClassification (6)
             "AVEDatasetClassification",
             "AVMemeVideoClassification",
+            "BreakfastClassification",
             "Diving48Classification.V2",
+            "HMDB51Classification",
+            "UCF101VideoAudioClassification",
             # VideoClustering (1)
-            "MELDEmotionAudioVideoClustering",
-            # VideoPairClassification (3)
-            "MELDVPairClassification",
+            "MusicAVQACLSVideoClustering",
+            # VideoPairClassification (1)
             "RAVDESSAVVAPairClassification",
-            "VideoConPairClassification",
-            # VideoZeroshotClassification (1)
+            # VideoZeroshotClassification (2)
+            "Kinetics600VAZeroShot",
             "MELDVideoZeroShot",
         ]
     ),
-    description="""MVEB (Massive Video Embedding Benchmark) is a curated video benchmark with 18 tasks selected from MVEB(extended) via correlation-based redundancy removal (threshold=0.5, Spearman=0.989 with full pool). Tasks span 6 task types: retrieval (8), classification (3), clustering (1), pair classification (3), zero-shot classification (1), and video-centric QA (2). The benchmark covers video-only and audio-video modalities.""",
+    description="""MVEB (Massive Video Embedding Benchmark) is a curated video benchmark with 22 tasks selected from MVEB(extended) via correlation-based redundancy removal (threshold=0.83, Spearman=0.982 with full pool). Tasks span 6 task types: retrieval (10), classification (6), clustering (1), pair classification (1), zero-shot classification (2), and video-centric QA (2). The benchmark covers video-only and audio-video modalities across 9 domains and 17 languages.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],

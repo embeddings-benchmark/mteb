@@ -2,7 +2,7 @@
 
 ## Overview
 - **Source pool**: MVEB(extended) with 184 tasks
-- **Working pool**: 184 tasks
+- **Working pool**: 183 tasks
 - **Goal**: Select non-redundant tasks while preserving coverage
 
 ## Selection Rules
@@ -264,32 +264,37 @@
 
 | Model | Time | Tasks w/ data |
 |-------|------|---------------|
-| ebind-av (encord-team/ebind-audio-vision) | 122h 40m | 183/184 |
-| pe-av-small (facebook/pe-av-small) | 159h 40m | 183/184 |
-| LCO-Embedding-Omni-7B (LCO-Embedding/LCO-Embedding-Omni-7B) | 302h 39m | 183/184 |
-| Qwen2.5-Omni-7B (Qwen/Qwen2.5-Omni-7B) | 267h 15m | 183/184 |
+| ebind-av (encord-team/ebind-audio-vision) | 122h 40m | 183/183 |
+| pe-av-small (facebook/pe-av-small) | 159h 40m | 183/183 |
+| LCO-Embedding-Omni-7B (LCO-Embedding/LCO-Embedding-Omni-7B) | 302h 39m | 183/183 |
+| Qwen2.5-Omni-7B (Qwen/Qwen2.5-Omni-7B) | 267h 15m | 183/183 |
 
 ## Selection Results Summary
 
 | Threshold | Tasks | Retr | Class | Clust | MLC | Pair | ZS | QA | Langs | Doms | Spearman | Pearson | ebind-av | pe-av-small | LCO-Embedding-Omni-7B | Qwen2.5-Omni-7B |
 |-----------|-------|------|-------|-------|-----|------|----|----|-------|------|----------|---------|--- | --- | --- | ---|
-| 0.95 | 79 | 34 | 15 | 6 | 0 | 8 | 12 | 4 | 17 | 9 | 0.9945 | 0.9993 | 60h 48m | 69h 8m | 126h 41m | 119h 34m |
-| 0.93 | 66 | 28 | 14 | 6 | 0 | 7 | 8 | 3 | 17 | 9 | 0.9890 | 0.9979 | 47h 53m | 53h 52m | 99h 11m | 95h 24m |
-| 0.9 | 55 | 21 | 12 | 5 | 0 | 7 | 8 | 2 | 17 | 9 | 0.9890 | 0.9986 | 46h 10m | 44h 6m | 86h 49m | 81h 9m |
-| 0.85 | 41 | 14 | 9 | 5 | 0 | 5 | 6 | 2 | 17 | 9 | 0.9890 | 0.9980 | 26h 10m | 25h 20m | 47h 22m | 42h 4m |
-| 0.8 | 30 | 10 | 8 | 3 | 0 | 3 | 4 | 2 | 17 | 9 | 0.9615 | 0.9968 | 16h 46m | 18h 21m | 32h 45m | 29h 19m |
-| 0.7 | 21 | 9 | 4 | 2 | 0 | 3 | 1 | 2 | 17 | 9 | 0.9945 | 0.9938 | 7h 30m | 10h 49m | 18h 16m | 14h 34m |
-| 0.6 | 20 | 8 | 4 | 2 | 0 | 3 | 1 | 2 | 17 | 9 | 0.9890 | 0.9887 | 7h 16m | 10h 35m | 17h 47m | 14h 5m |
-| 0.5 | 18 | 8 | 3 | 1 | 0 | 3 | 1 | 2 | 17 | 9 | 0.9890 | 0.9869 | 5h 58m | 10h 4m | 16h 23m | 12h 38m |
-| 0.4 | 18 | 8 | 3 | 1 | 0 | 3 | 1 | 2 | 17 | 9 | 0.9890 | 0.9869 | 5h 58m | 10h 4m | 16h 23m | 12h 38m |
+| 0.95 | 55 | 34 | 8 | 3 | 0 | 3 | 3 | 4 | 17 | 9 | 0.9780 | 0.9978 | 46h 19m | 57h 33m | 104h 18m | 94h 27m |
+| 0.93 | 47 | 27 | 7 | 3 | 0 | 2 | 4 | 4 | 17 | 9 | 0.9615 | 0.9974 | 41h 4m | 50h 5m | 88h 26m | 80h 15m |
+| 0.9 | 38 | 19 | 9 | 1 | 0 | 3 | 3 | 3 | 17 | 9 | 0.9821 | 0.9974 | 39h 50m | 39h 34m | 76h 0m | 69h 53m |
+| 0.88 | 35 | 18 | 7 | 1 | 0 | 3 | 4 | 2 | 17 | 9 | 0.9546 | 0.9958 | 28h 39m | 29h 26m | 55h 50m | 50h 0m |
+| 0.87 | 32 | 16 | 7 | 1 | 0 | 2 | 4 | 2 | 17 | 9 | 0.9656 | 0.9973 | 26h 28m | 25h 46m | 48h 28m | 42h 43m |
+| 0.85 | 27 | 13 | 7 | 1 | 0 | 1 | 3 | 2 | 17 | 9 | 0.9601 | 0.9963 | 21h 20m | 22h 14m | 40h 12m | 34h 33m |
+| 0.84 | 23 | 10 | 6 | 1 | 0 | 2 | 2 | 2 | 17 | 9 | 0.9821 | 0.9965 | 13h 38m | 17h 17m | 30h 11m | 26h 26m |
+| 0.83 | 22 | 10 | 6 | 1 | 0 | 1 | 2 | 2 | 17 | 9 | 0.9821 | 0.9965 | 13h 18m | 16h 55m | 29h 24m | 25h 37m |
+| 0.82 | 21 | 9 | 6 | 1 | 0 | 1 | 2 | 2 | 17 | 9 | 0.9931 | 0.9970 | 13h 16m | 16h 50m | 29h 13m | 25h 27m |
+| 0.81 | 21 | 9 | 7 | 1 | 0 | 0 | 2 | 2 | 17 | 9 | 0.9931 | 0.9973 | 13h 25m | 16h 34m | 28h 26m | 24h 53m |
+| 0.8 | 21 | 9 | 7 | 1 | 0 | 0 | 2 | 2 | 17 | 8 | 0.9931 | 0.9965 | 13h 27m | 16h 16m | 27h 43m | 24h 29m |
+| 0.7 | 14 | 7 | 3 | 0 | 0 | 1 | 1 | 2 | 17 | 8 | 0.9381 | 0.9924 | 5h 15m | 9h 56m | 15h 52m | 12h 12m |
+| 0.6 | 13 | 7 | 2 | 0 | 0 | 1 | 1 | 2 | 17 | 7 | 0.9381 | 0.9908 | 4h 43m | 9h 31m | 14h 56m | 11h 33m |
+| 0.5 | 13 | 7 | 2 | 0 | 0 | 1 | 1 | 2 | 17 | 7 | 0.9381 | 0.9908 | 4h 43m | 9h 31m | 14h 56m | 11h 33m |
 
-*Working pool: 184 tasks, 17 langs, 9 doms*
+*Working pool: 183 tasks, 17 langs, 9 doms*
 
 *Spearman/Pearson: Correlation of average model scores between selected tasks and full MVEB(extended)*
 
 ## Threshold 0.95
 
-**184 → 79 tasks** (105 removed)
+**184 → 55 tasks** (128 removed)
 
 ### Remaining Tasks
 
@@ -335,54 +340,30 @@
 - **PerceptionTestVideoCentricQA** - vt2t, Web
 - **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
 
-#### VideoClassification (15)
+#### VideoClassification (8)
 - **AVEDatasetClassification** - va2c, Web, AudioScene
 - **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
 - **BreakfastClassification** - v2c, Scene
 - **Diving48Classification.V2** - v2c, Sport
 - **HMDB51Classification** - v2c, Scene
-- **HumanAnimalCartoonVA** - va2c, Web, Scene
 - **Kinetics400VA** - va2c, Web, Scene
-- **Kinetics600V** - v2c, Web, Scene
 - **Kinetics700V** - v2c, Web, Scene
-- **MELDAudioVideoClassification** - va2c, Entertainment
-- **MusicAVQACLSVideoClassification** - v2c, Music
-- **RAVDESSAVClassification** - va2c, Spoken
-- **UCF101VideoAudioClassification** - va2c, Web, Scene
 - **VGGSoundVA** - va2c, Web
-- **WorldSenseVideoClassification** - v2c, Scene, AudioScene, Music, Entertainment
 
-#### VideoClustering (6)
-- **AVEDatasetAudioVideoClustering** - va2c, Spoken, Scene, Music
-- **MELDEmotionAudioVideoClustering** - va2c, Entertainment
+#### VideoClustering (3)
 - **MusicAVQACLSVideoClustering** - v2c, Music
 - **RAVDESSAVClustering** - va2c, Spoken
 - **UCF101AudioVideoClustering** - va2c, Web, Scene
-- **WorldSense1MinDomainAudioVideoClustering** - va2c, Scene, Web, Entertainment
 
-#### VideoPairClassification (8)
-- **AVEDatasetVAPairClassification** - va2va, Web, AudioScene
+#### VideoPairClassification (3)
 - **AVSpeakerBenchPairClassification** - v2v, Spoken
-- **HumanAnimalCartoonVAPairClassification** - va2va, Web, Scene
-- **MELDVAPairClassification** - va2va, Entertainment
 - **MusicAVQAVAPairClassification** - va2va, Music
-- **RAVDESSAVVAPairClassification** - va2va, Spoken
-- **VideoConPairClassification** - v2t, Scene
 - **VinogroundPairClassification** - v2v, Scene
 
-#### VideoZeroshotClassification (12)
-- **AVEDatasetZeroShot** - va2t, Web, AudioScene
-- **AVMemeVideoZeroShot** - v2t, Web, Entertainment, Music
-- **BreakfastZeroShot** - v2t, Scene
-- **HMDB51ZeroShot** - v2t, Scene
+#### VideoZeroshotClassification (3)
 - **HumanAnimalCartoonZeroShot** - v2t, Web, Scene
 - **Kinetics600VAZeroShot** - va2t, Web, Scene
 - **MELDVideoZeroShot** - v2t, Entertainment
-- **MusicAVQACLSAudioVideoZeroShot** - va2t, Music
-- **RAVDESSAVZeroShot** - va2t, Spoken
-- **UCF101VideoZeroShotClassification** - va2t, Web, Scene
-- **VGGSoundVideoAudioZeroshot** - va2t, Web
-- **WorldSenseAudioVideoZeroShot** - va2t, Scene, AudioScene, Music, Entertainment
 
 ### Coverage
 - Languages: 17 (was 17)
@@ -392,19 +373,18 @@
 
 ## Threshold 0.93
 
-**184 → 66 tasks** (118 removed)
+**184 → 47 tasks** (136 removed)
 
 ### Remaining Tasks
 
-#### Any2AnyRetrieval (28)
-- **AVMemeExamVA2TRetrieval** - va2t, Web, Social
+#### Any2AnyRetrieval (27)
+- **AVMemeExamAT2VRetrieval** - at2v, Web, Social
 - **AudioCapsAVA2VRetrieval** - a2v, Encyclopaedic, Web
 - **AudioCapsAVT2VRetrieval** - t2v, Encyclopaedic, Web
 - **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
 - **DiDeMoT2VARetrieval** - t2va, Web, Spoken
 - **DiDeMoVA2TRetrieval** - va2t, Web, Spoken
 - **MSRVTTA2V** - a2v, N/A
-- **MSRVTTAT2V** - at2v, N/A
 - **MSRVTTV2A** - v2a, N/A
 - **MSRVTTVT2A** - vt2a, N/A
 - **MSVDT2VRetrieval** - t2v, Web, Spoken
@@ -426,75 +406,56 @@
 - **YouCook2T2VRetrieval** - t2v, Web, Spoken
 - **YouCook2VT2ARetrieval** - vt2a, Web, Spoken
 
-#### VideoCentricQA (3)
+#### VideoCentricQA (4)
 - **OmniVideoBenchVideoAudioCentricQA** - vat2t, Web
 - **OmniVideoBenchVideoCentricQA** - vt2t, Web
+- **PerceptionTestVideoCentricQA** - vt2t, Web
 - **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
 
-#### VideoClassification (14)
+#### VideoClassification (7)
 - **AVEDatasetClassification** - va2c, Web, AudioScene
 - **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
-- **BreakfastClassification** - v2c, Scene
 - **Diving48Classification.V2** - v2c, Sport
 - **HMDB51Classification** - v2c, Scene
-- **HumanAnimalCartoonVA** - va2c, Web, Scene
 - **Kinetics400VA** - va2c, Web, Scene
 - **Kinetics700V** - v2c, Web, Scene
-- **MELDAudioVideoClassification** - va2c, Entertainment
-- **MusicAVQACLSAudioVideoClassification** - va2c, Music
-- **RAVDESSAVClassification** - va2c, Spoken
-- **UCF101VideoAudioClassification** - va2c, Web, Scene
-- **VGGSoundV** - v2c, Web
-- **WorldSenseVideoClassification** - v2c, Scene, AudioScene, Music, Entertainment
+- **VGGSoundVA** - va2c, Web
 
-#### VideoClustering (6)
-- **AVEDatasetAudioVideoClustering** - va2c, Spoken, Scene, Music
-- **MELDEmotionAudioVideoClustering** - va2c, Entertainment
+#### VideoClustering (3)
 - **MusicAVQACLSVideoClustering** - v2c, Music
 - **RAVDESSAVClustering** - va2c, Spoken
 - **UCF101AudioVideoClustering** - va2c, Web, Scene
-- **WorldSense1MinDomainAudioVideoClustering** - va2c, Scene, Web, Entertainment
 
-#### VideoPairClassification (7)
-- **AVEDatasetVAPairClassification** - va2va, Web, AudioScene
+#### VideoPairClassification (2)
 - **AVSpeakerBenchPairClassification** - v2v, Spoken
-- **HumanAnimalCartoonVAPairClassification** - va2va, Web, Scene
-- **MELDVAPairClassification** - va2va, Entertainment
-- **RAVDESSAVVAPairClassification** - va2va, Spoken
-- **VideoConPairClassification** - v2t, Scene
 - **VinogroundPairClassification** - v2v, Scene
 
-#### VideoZeroshotClassification (8)
-- **AVEDatasetZeroShot** - va2t, Web, AudioScene
+#### VideoZeroshotClassification (4)
 - **BreakfastZeroShot** - v2t, Scene
 - **HumanAnimalCartoonZeroShot** - v2t, Web, Scene
 - **Kinetics600VAZeroShot** - va2t, Web, Scene
 - **MELDVideoZeroShot** - v2t, Entertainment
-- **RAVDESSAVZeroShot** - va2t, Spoken
-- **UCF101VideoZeroShotClassification** - va2t, Web, Scene
-- **WorldSenseAudioVideoZeroShot** - va2t, Scene, AudioScene, Music, Entertainment
 
 ### Coverage
 - Languages: 17 (was 17)
 - Domains: 9 (was 9)
-- Categories: 14 (was 14)
+- Categories: 13 (was 14)
 - Types: 6 (was 6)
 
 ## Threshold 0.9
 
-**184 → 55 tasks** (129 removed)
+**184 → 38 tasks** (145 removed)
 
 ### Remaining Tasks
 
-#### Any2AnyRetrieval (21)
-- **AVMemeExamVA2TRetrieval** - va2t, Web, Social
+#### Any2AnyRetrieval (19)
+- **AVMemeExamAT2VRetrieval** - at2v, Web, Social
 - **AudioCapsAVA2VRetrieval** - a2v, Encyclopaedic, Web
 - **AudioCapsAVT2VRetrieval** - t2v, Encyclopaedic, Web
 - **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
 - **DiDeMoT2VARetrieval** - t2va, Web, Spoken
 - **DiDeMoVA2TRetrieval** - va2t, Web, Spoken
 - **MSRVTTA2V** - a2v, N/A
-- **MSRVTTAT2V** - at2v, N/A
 - **MSVDT2VRetrieval** - t2v, Web, Spoken
 - **Panda70MT2VARetrieval** - t2va, Web, Spoken
 - **Panda70MVA2TRetrieval** - va2t, Web, Spoken
@@ -504,54 +465,153 @@
 - **VALOR32KVT2ARetrieval** - vt2a, Web, Spoken
 - **VATEXT2VARetrieval** - t2va, Web, Spoken
 - **VATEXV2ARetrieval** - v2a, Web, Spoken
-- **VATEXVT2ARetrieval** - vt2a, Web, Spoken
 - **VGGSoundAVT2VARetrieval** - t2va, Web, Spoken
 - **YouCook2T2VRetrieval** - t2v, Web, Spoken
+- **YouCook2VT2ARetrieval** - vt2a, Web, Spoken
+
+#### VideoCentricQA (3)
+- **OmniVideoBenchVideoCentricQA** - vt2t, Web
+- **PerceptionTestVideoCentricQA** - vt2t, Web
+- **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
+
+#### VideoClassification (9)
+- **AVEDatasetClassification** - va2c, Web, AudioScene
+- **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
+- **Diving48Classification.V2** - v2c, Sport
+- **HMDB51Classification** - v2c, Scene
+- **Kinetics400VA** - va2c, Web, Scene
+- **Kinetics700V** - v2c, Web, Scene
+- **RAVDESSAVClassification** - va2c, Spoken
+- **UCF101VideoAudioClassification** - va2c, Web, Scene
+- **VGGSoundVA** - va2c, Web
+
+#### VideoClustering (1)
+- **MusicAVQACLSVideoClustering** - v2c, Music
+
+#### VideoPairClassification (3)
+- **AVSpeakerBenchPairClassification** - v2v, Spoken
+- **HumanAnimalCartoonVAPairClassification** - va2va, Web, Scene
+- **VinogroundPairClassification** - v2v, Scene
+
+#### VideoZeroshotClassification (3)
+- **BreakfastZeroShot** - v2t, Scene
+- **Kinetics600VAZeroShot** - va2t, Web, Scene
+- **MELDVideoZeroShot** - v2t, Entertainment
+
+### Coverage
+- Languages: 17 (was 17)
+- Domains: 9 (was 9)
+- Categories: 14 (was 14)
+- Types: 6 (was 6)
+
+## Threshold 0.88
+
+**184 → 35 tasks** (148 removed)
+
+### Remaining Tasks
+
+#### Any2AnyRetrieval (18)
+- **AVMemeExamAT2VRetrieval** - at2v, Web, Social
+- **AudioCapsAVA2VRetrieval** - a2v, Encyclopaedic, Web
+- **AudioCapsAVT2VRetrieval** - t2v, Encyclopaedic, Web
+- **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
+- **DiDeMoT2VARetrieval** - t2va, Web, Spoken
+- **DiDeMoVA2TRetrieval** - va2t, Web, Spoken
+- **MSRVTTA2V** - a2v, N/A
+- **MSVDT2VRetrieval** - t2v, Web, Spoken
+- **Panda70MT2VARetrieval** - t2va, Web, Spoken
+- **Panda70MVA2TRetrieval** - va2t, Web, Spoken
+- **Shot2Story20KT2VRetrieval** - t2v, Web, Spoken
+- **TUNABenchT2VRetrieval** - t2v, Web, Spoken
+- **VALOR32KT2VARetrieval** - t2va, Web, Spoken
+- **VALOR32KVT2ARetrieval** - vt2a, Web, Spoken
+- **VATEXT2VARetrieval** - t2va, Web, Spoken
+- **VATEXV2ARetrieval** - v2a, Web, Spoken
+- **VGGSoundAVT2VARetrieval** - t2va, Web, Spoken
 - **YouCook2VT2ARetrieval** - vt2a, Web, Spoken
 
 #### VideoCentricQA (2)
 - **OmniVideoBenchVideoCentricQA** - vt2t, Web
 - **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
 
-#### VideoClassification (12)
+#### VideoClassification (7)
 - **AVEDatasetClassification** - va2c, Web, AudioScene
 - **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
-- **BreakfastClassification** - v2c, Scene
 - **Diving48Classification.V2** - v2c, Sport
 - **HMDB51Classification** - v2c, Scene
-- **Kinetics400VA** - va2c, Web, Scene
 - **Kinetics700V** - v2c, Web, Scene
-- **MELDAudioVideoClassification** - va2c, Entertainment
-- **MusicAVQACLSAudioVideoClassification** - va2c, Music
-- **RAVDESSAVClassification** - va2c, Spoken
 - **UCF101VideoAudioClassification** - va2c, Web, Scene
 - **VGGSoundVA** - va2c, Web
 
-#### VideoClustering (5)
-- **AVEDatasetAudioVideoClustering** - va2c, Spoken, Scene, Music
-- **MELDEmotionAudioVideoClustering** - va2c, Entertainment
+#### VideoClustering (1)
 - **MusicAVQACLSVideoClustering** - v2c, Music
-- **RAVDESSAVClustering** - va2c, Spoken
-- **WorldSense1MinDomainAudioVideoClustering** - va2c, Scene, Web, Entertainment
 
-#### VideoPairClassification (7)
-- **AVEDatasetVAPairClassification** - va2va, Web, AudioScene
+#### VideoPairClassification (3)
 - **AVSpeakerBenchPairClassification** - v2v, Spoken
-- **HumanAnimalCartoonVAPairClassification** - va2va, Web, Scene
-- **MELDVAPairClassification** - va2va, Entertainment
 - **RAVDESSAVVAPairClassification** - va2va, Spoken
-- **VideoConPairClassification** - v2t, Scene
 - **VinogroundPairClassification** - v2v, Scene
 
-#### VideoZeroshotClassification (8)
-- **AVEDatasetZeroShot** - va2t, Web, AudioScene
+#### VideoZeroshotClassification (4)
 - **BreakfastZeroShot** - v2t, Scene
 - **HumanAnimalCartoonZeroShot** - v2t, Web, Scene
 - **Kinetics600VAZeroShot** - va2t, Web, Scene
 - **MELDVideoZeroShot** - v2t, Entertainment
-- **RAVDESSAVZeroShot** - va2t, Spoken
-- **UCF101VideoAudioZeroShotClassification** - va2t, Web, Scene
-- **WorldSenseAudioVideoZeroShot** - va2t, Scene, AudioScene, Music, Entertainment
+
+### Coverage
+- Languages: 17 (was 17)
+- Domains: 9 (was 9)
+- Categories: 14 (was 14)
+- Types: 6 (was 6)
+
+## Threshold 0.87
+
+**184 → 32 tasks** (151 removed)
+
+### Remaining Tasks
+
+#### Any2AnyRetrieval (16)
+- **AVMemeExamAT2VRetrieval** - at2v, Web, Social
+- **AudioCapsAVT2VRetrieval** - t2v, Encyclopaedic, Web
+- **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
+- **DiDeMoT2VARetrieval** - t2va, Web, Spoken
+- **DiDeMoVA2TRetrieval** - va2t, Web, Spoken
+- **MSRVTTA2V** - a2v, N/A
+- **MSVDT2VRetrieval** - t2v, Web, Spoken
+- **Panda70MVA2TRetrieval** - va2t, Web, Spoken
+- **Shot2Story20KT2VRetrieval** - t2v, Web, Spoken
+- **TUNABenchT2VRetrieval** - t2v, Web, Spoken
+- **VALOR32KT2VARetrieval** - t2va, Web, Spoken
+- **VALOR32KVT2ARetrieval** - vt2a, Web, Spoken
+- **VATEXT2VARetrieval** - t2va, Web, Spoken
+- **VATEXV2ARetrieval** - v2a, Web, Spoken
+- **VGGSoundAVT2VARetrieval** - t2va, Web, Spoken
+- **YouCook2VT2ARetrieval** - vt2a, Web, Spoken
+
+#### VideoCentricQA (2)
+- **OmniVideoBenchVideoCentricQA** - vt2t, Web
+- **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
+
+#### VideoClassification (7)
+- **AVEDatasetClassification** - va2c, Web, AudioScene
+- **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
+- **Diving48Classification.V2** - v2c, Sport
+- **HMDB51Classification** - v2c, Scene
+- **Kinetics700V** - v2c, Web, Scene
+- **UCF101VideoAudioClassification** - va2c, Web, Scene
+- **VGGSoundVA** - va2c, Web
+
+#### VideoClustering (1)
+- **MusicAVQACLSVideoClustering** - v2c, Music
+
+#### VideoPairClassification (2)
+- **RAVDESSAVVAPairClassification** - va2va, Spoken
+- **VinogroundPairClassification** - v2v, Scene
+
+#### VideoZeroshotClassification (4)
+- **BreakfastZeroShot** - v2t, Scene
+- **HumanAnimalCartoonZeroShot** - v2t, Web, Scene
+- **Kinetics600VAZeroShot** - va2t, Web, Scene
+- **MELDVideoZeroShot** - v2t, Entertainment
 
 ### Coverage
 - Languages: 17 (was 17)
@@ -561,16 +621,15 @@
 
 ## Threshold 0.85
 
-**184 → 41 tasks** (143 removed)
+**184 → 27 tasks** (156 removed)
 
 ### Remaining Tasks
 
-#### Any2AnyRetrieval (14)
-- **AVMemeExamVA2TRetrieval** - va2t, Web, Social
+#### Any2AnyRetrieval (13)
+- **AVMemeExamAT2VRetrieval** - at2v, Web, Social
 - **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
 - **DiDeMoT2VARetrieval** - t2va, Web, Spoken
 - **MSRVTTA2V** - a2v, N/A
-- **MSRVTTAT2V** - at2v, N/A
 - **MSVDT2VRetrieval** - t2v, Web, Spoken
 - **Panda70MVA2TRetrieval** - va2t, Web, Spoken
 - **Shot2Story20KT2VRetrieval** - t2v, Web, Spoken
@@ -585,58 +644,45 @@
 - **OmniVideoBenchVideoCentricQA** - vt2t, Web
 - **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
 
-#### VideoClassification (9)
+#### VideoClassification (7)
 - **AVEDatasetClassification** - va2c, Web, AudioScene
 - **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
-- **BreakfastClassification** - v2c, Scene
 - **Diving48Classification.V2** - v2c, Sport
 - **HMDB51Classification** - v2c, Scene
-- **MELDAudioVideoClassification** - va2c, Entertainment
 - **RAVDESSAVClassification** - va2c, Spoken
 - **UCF101VideoAudioClassification** - va2c, Web, Scene
 - **VGGSoundVA** - va2c, Web
 
-#### VideoClustering (5)
-- **AVEDatasetAudioVideoClustering** - va2c, Spoken, Scene, Music
-- **MELDEmotionAudioVideoClustering** - va2c, Entertainment
+#### VideoClustering (1)
 - **MusicAVQACLSVideoClustering** - v2c, Music
-- **RAVDESSAVClustering** - va2c, Spoken
-- **WorldSense1MinDomainVideoClustering** - v2c, Scene, Web, Entertainment
 
-#### VideoPairClassification (5)
-- **AVEDatasetVAPairClassification** - va2va, Web, AudioScene
-- **MELDVAPairClassification** - va2va, Entertainment
-- **RAVDESSAVVAPairClassification** - va2va, Spoken
-- **VideoConPairClassification** - v2t, Scene
+#### VideoPairClassification (1)
 - **VinogroundPairClassification** - v2v, Scene
 
-#### VideoZeroshotClassification (6)
+#### VideoZeroshotClassification (3)
 - **BreakfastZeroShot** - v2t, Scene
 - **Kinetics600VAZeroShot** - va2t, Web, Scene
 - **MELDVideoZeroShot** - v2t, Entertainment
-- **RAVDESSVZeroShot** - v2t, Spoken
-- **UCF101VideoAudioZeroShotClassification** - va2t, Web, Scene
-- **WorldSenseAudioVideoZeroShot** - va2t, Scene, AudioScene, Music, Entertainment
 
 ### Coverage
 - Languages: 17 (was 17)
 - Domains: 9 (was 9)
-- Categories: 14 (was 14)
+- Categories: 13 (was 14)
 - Types: 6 (was 6)
 
-## Threshold 0.8
+## Threshold 0.84
 
-**184 → 30 tasks** (154 removed)
+**184 → 23 tasks** (160 removed)
 
 ### Remaining Tasks
 
 #### Any2AnyRetrieval (10)
-- **AVMemeExamVA2TRetrieval** - va2t, Web, Social
+- **AVMemeExamAT2VRetrieval** - at2v, Web, Social
 - **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
 - **MSRVTTA2V** - a2v, N/A
-- **MSRVTTAT2V** - at2v, N/A
 - **MSVDT2VRetrieval** - t2v, Web, Spoken
 - **Panda70MVA2TRetrieval** - va2t, Web, Spoken
+- **TUNABenchT2VRetrieval** - t2v, Web, Spoken
 - **VALOR32KVT2ARetrieval** - vt2a, Web, Spoken
 - **VATEXT2VARetrieval** - t2va, Web, Spoken
 - **VATEXV2ARetrieval** - v2a, Web, Spoken
@@ -646,31 +692,70 @@
 - **OmniVideoBenchVideoCentricQA** - vt2t, Web
 - **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
 
-#### VideoClassification (8)
+#### VideoClassification (6)
 - **AVEDatasetClassification** - va2c, Web, AudioScene
 - **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
 - **BreakfastClassification** - v2c, Scene
 - **Diving48Classification.V2** - v2c, Sport
 - **HMDB51Classification** - v2c, Scene
-- **MELDAudioVideoClassification** - va2c, Entertainment
-- **RAVDESSAVClassification** - va2c, Spoken
 - **UCF101VideoAudioClassification** - va2c, Web, Scene
 
-#### VideoClustering (3)
-- **MELDEmotionAudioVideoClustering** - va2c, Entertainment
+#### VideoClustering (1)
 - **MusicAVQACLSVideoClustering** - v2c, Music
-- **RAVDESSAVClustering** - va2c, Spoken
 
-#### VideoPairClassification (3)
-- **MELDVAPairClassification** - va2va, Entertainment
+#### VideoPairClassification (2)
 - **RAVDESSAVVAPairClassification** - va2va, Spoken
-- **VideoConPairClassification** - v2t, Scene
+- **VinogroundPairClassification** - v2v, Scene
 
-#### VideoZeroshotClassification (4)
+#### VideoZeroshotClassification (2)
 - **Kinetics600VAZeroShot** - va2t, Web, Scene
 - **MELDVideoZeroShot** - v2t, Entertainment
-- **RAVDESSAVZeroShot** - va2t, Spoken
-- **WorldSenseAudioVideoZeroShot** - va2t, Scene, AudioScene, Music, Entertainment
+
+### Coverage
+- Languages: 17 (was 17)
+- Domains: 9 (was 9)
+- Categories: 14 (was 14)
+- Types: 6 (was 6)
+
+## Threshold 0.83
+
+**184 → 22 tasks** (161 removed)
+
+### Remaining Tasks
+
+#### Any2AnyRetrieval (10)
+- **AVMemeExamAT2VRetrieval** - at2v, Web, Social
+- **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
+- **MSRVTTA2V** - a2v, N/A
+- **MSVDT2VRetrieval** - t2v, Web, Spoken
+- **Panda70MVA2TRetrieval** - va2t, Web, Spoken
+- **TUNABenchT2VRetrieval** - t2v, Web, Spoken
+- **VALOR32KVT2ARetrieval** - vt2a, Web, Spoken
+- **VATEXT2VARetrieval** - t2va, Web, Spoken
+- **VATEXV2ARetrieval** - v2a, Web, Spoken
+- **VGGSoundAVT2VARetrieval** - t2va, Web, Spoken
+
+#### VideoCentricQA (2)
+- **OmniVideoBenchVideoCentricQA** - vt2t, Web
+- **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
+
+#### VideoClassification (6)
+- **AVEDatasetClassification** - va2c, Web, AudioScene
+- **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
+- **BreakfastClassification** - v2c, Scene
+- **Diving48Classification.V2** - v2c, Sport
+- **HMDB51Classification** - v2c, Scene
+- **UCF101VideoAudioClassification** - va2c, Web, Scene
+
+#### VideoClustering (1)
+- **MusicAVQACLSVideoClustering** - v2c, Music
+
+#### VideoPairClassification (1)
+- **RAVDESSAVVAPairClassification** - va2va, Spoken
+
+#### VideoZeroshotClassification (2)
+- **Kinetics600VAZeroShot** - va2t, Web, Scene
+- **MELDVideoZeroShot** - v2t, Entertainment
 
 ### Coverage
 - Languages: 17 (was 17)
@@ -678,18 +763,106 @@
 - Categories: 13 (was 14)
 - Types: 6 (was 6)
 
-## Threshold 0.7
+## Threshold 0.82
 
-**184 → 21 tasks** (163 removed)
+**184 → 21 tasks** (162 removed)
 
 ### Remaining Tasks
 
 #### Any2AnyRetrieval (9)
-- **AVMemeExamVA2TRetrieval** - va2t, Web, Social
+- **AVMemeExamAT2VRetrieval** - at2v, Web, Social
 - **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
 - **MSRVTTA2V** - a2v, N/A
-- **MSRVTTAT2V** - at2v, N/A
-- **MSVDT2VRetrieval** - t2v, Web, Spoken
+- **Panda70MVA2TRetrieval** - va2t, Web, Spoken
+- **TUNABenchT2VRetrieval** - t2v, Web, Spoken
+- **VALOR32KVT2ARetrieval** - vt2a, Web, Spoken
+- **VATEXT2VARetrieval** - t2va, Web, Spoken
+- **VATEXV2ARetrieval** - v2a, Web, Spoken
+- **VGGSoundAVT2VARetrieval** - t2va, Web, Spoken
+
+#### VideoCentricQA (2)
+- **OmniVideoBenchVideoCentricQA** - vt2t, Web
+- **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
+
+#### VideoClassification (6)
+- **AVEDatasetClassification** - va2c, Web, AudioScene
+- **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
+- **BreakfastClassification** - v2c, Scene
+- **Diving48Classification.V2** - v2c, Sport
+- **HMDB51Classification** - v2c, Scene
+- **UCF101VideoAudioClassification** - va2c, Web, Scene
+
+#### VideoClustering (1)
+- **MusicAVQACLSVideoClustering** - v2c, Music
+
+#### VideoPairClassification (1)
+- **RAVDESSAVVAPairClassification** - va2va, Spoken
+
+#### VideoZeroshotClassification (2)
+- **Kinetics600VAZeroShot** - va2t, Web, Scene
+- **MELDVideoZeroShot** - v2t, Entertainment
+
+### Coverage
+- Languages: 17 (was 17)
+- Domains: 9 (was 9)
+- Categories: 13 (was 14)
+- Types: 6 (was 6)
+
+## Threshold 0.81
+
+**184 → 21 tasks** (162 removed)
+
+### Remaining Tasks
+
+#### Any2AnyRetrieval (9)
+- **AVMemeExamAT2VRetrieval** - at2v, Web, Social
+- **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
+- **MSRVTTA2V** - a2v, N/A
+- **Panda70MVA2TRetrieval** - va2t, Web, Spoken
+- **TUNABenchT2VRetrieval** - t2v, Web, Spoken
+- **VALOR32KVT2ARetrieval** - vt2a, Web, Spoken
+- **VATEXT2VARetrieval** - t2va, Web, Spoken
+- **VATEXV2ARetrieval** - v2a, Web, Spoken
+- **VGGSoundAVT2VARetrieval** - t2va, Web, Spoken
+
+#### VideoCentricQA (2)
+- **OmniVideoBenchVideoCentricQA** - vt2t, Web
+- **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
+
+#### VideoClassification (7)
+- **AVEDatasetClassification** - va2c, Web, AudioScene
+- **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
+- **BreakfastClassification** - v2c, Scene
+- **Diving48Classification.V2** - v2c, Sport
+- **HMDB51Classification** - v2c, Scene
+- **MusicAVQACLSAudioVideoClassification** - va2c, Music
+- **UCF101VideoAudioClassification** - va2c, Web, Scene
+
+#### VideoClustering (1)
+- **RAVDESSAVClustering** - va2c, Spoken
+
+#### VideoZeroshotClassification (2)
+- **Kinetics600VAZeroShot** - va2t, Web, Scene
+- **MELDVideoZeroShot** - v2t, Entertainment
+
+### Coverage
+- Languages: 17 (was 17)
+- Domains: 9 (was 9)
+- Categories: 12 (was 14)
+- Types: 5 (was 6)
+
+## Threshold 0.8
+
+**184 → 21 tasks** (162 removed)
+
+### Remaining Tasks
+
+#### Any2AnyRetrieval (9)
+- **AVMemeExamAT2VRetrieval** - at2v, Web, Social
+- **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
+- **MSRVTTA2V** - a2v, N/A
+- **Panda70MVA2TRetrieval** - va2t, Web, Spoken
+- **TUNABenchT2VRetrieval** - t2v, Web, Spoken
 - **VALOR32KVT2ARetrieval** - vt2a, Web, Spoken
 - **VATEXT2VARetrieval** - t2va, Web, Spoken
 - **VATEXV2ARetrieval** - v2a, Web, Spoken
@@ -699,42 +872,75 @@
 - **OmniVideoBenchVideoCentricQA** - vt2t, Web
 - **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
 
-#### VideoClassification (4)
+#### VideoClassification (7)
+- **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
+- **BreakfastClassification** - v2c, Scene
+- **Diving48Classification.V2** - v2c, Sport
+- **HMDB51Classification** - v2c, Scene
+- **MusicAVQACLSAudioVideoClassification** - va2c, Music
+- **RAVDESSAVClassification** - va2c, Spoken
+- **UCF101VideoAudioClassification** - va2c, Web, Scene
+
+#### VideoClustering (1)
+- **AVEDatasetAudioVideoClustering** - va2c, Spoken, Scene, Music
+
+#### VideoZeroshotClassification (2)
+- **Kinetics600VAZeroShot** - va2t, Web, Scene
+- **MELDVideoZeroShot** - v2t, Entertainment
+
+### Coverage
+- Languages: 17 (was 17)
+- Domains: 8 (was 9)
+- Categories: 12 (was 14)
+- Types: 5 (was 6)
+
+## Threshold 0.7
+
+**184 → 14 tasks** (169 removed)
+
+### Remaining Tasks
+
+#### Any2AnyRetrieval (7)
+- **AVMemeExamAT2VRetrieval** - at2v, Web, Social
+- **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
+- **MSRVTTA2V** - a2v, N/A
+- **TUNABenchT2VRetrieval** - t2v, Web, Spoken
+- **VALOR32KVT2ARetrieval** - vt2a, Web, Spoken
+- **VATEXT2VARetrieval** - t2va, Web, Spoken
+- **VATEXV2ARetrieval** - v2a, Web, Spoken
+
+#### VideoCentricQA (2)
+- **OmniVideoBenchVideoCentricQA** - vt2t, Web
+- **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
+
+#### VideoClassification (3)
 - **AVEDatasetClassification** - va2c, Web, AudioScene
 - **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
 - **Diving48Classification.V2** - v2c, Sport
-- **MELDAudioVideoClassification** - va2c, Entertainment
 
-#### VideoClustering (2)
-- **MELDEmotionAudioVideoClustering** - va2c, Entertainment
-- **RAVDESSAVClustering** - va2c, Spoken
-
-#### VideoPairClassification (3)
-- **MELDVAPairClassification** - va2va, Entertainment
+#### VideoPairClassification (1)
 - **RAVDESSAVVAPairClassification** - va2va, Spoken
-- **VideoConPairClassification** - v2t, Scene
 
 #### VideoZeroshotClassification (1)
 - **MELDVideoZeroShot** - v2t, Entertainment
 
 ### Coverage
 - Languages: 17 (was 17)
-- Domains: 9 (was 9)
+- Domains: 8 (was 9)
 - Categories: 13 (was 14)
-- Types: 6 (was 6)
+- Types: 5 (was 6)
 
 ## Threshold 0.6
 
-**184 → 20 tasks** (164 removed)
+**184 → 13 tasks** (170 removed)
 
 ### Remaining Tasks
 
-#### Any2AnyRetrieval (8)
-- **AVMemeExamVA2TRetrieval** - va2t, Web, Social
+#### Any2AnyRetrieval (7)
+- **AVMemeExamAT2VRetrieval** - at2v, Web, Social
 - **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
 - **MSRVTTA2V** - a2v, N/A
-- **MSRVTTAT2V** - at2v, N/A
-- **MSVDT2VRetrieval** - t2v, Web, Spoken
+- **TUNABenchT2VRetrieval** - t2v, Web, Spoken
 - **VALOR32KVT2ARetrieval** - vt2a, Web, Spoken
 - **VATEXT2VARetrieval** - t2va, Web, Spoken
 - **VATEXV2ARetrieval** - v2a, Web, Spoken
@@ -743,42 +949,33 @@
 - **OmniVideoBenchVideoCentricQA** - vt2t, Web
 - **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
 
-#### VideoClassification (4)
-- **AVEDatasetClassification** - va2c, Web, AudioScene
+#### VideoClassification (2)
 - **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
 - **Diving48Classification.V2** - v2c, Sport
-- **MELDAudioVideoClassification** - va2c, Entertainment
 
-#### VideoClustering (2)
-- **MELDEmotionAudioVideoClustering** - va2c, Entertainment
-- **RAVDESSAVClustering** - va2c, Spoken
-
-#### VideoPairClassification (3)
-- **MELDVAPairClassification** - va2va, Entertainment
+#### VideoPairClassification (1)
 - **RAVDESSAVVAPairClassification** - va2va, Spoken
-- **VideoConPairClassification** - v2t, Scene
 
 #### VideoZeroshotClassification (1)
 - **MELDVideoZeroShot** - v2t, Entertainment
 
 ### Coverage
 - Languages: 17 (was 17)
-- Domains: 9 (was 9)
-- Categories: 13 (was 14)
-- Types: 6 (was 6)
+- Domains: 7 (was 9)
+- Categories: 12 (was 14)
+- Types: 5 (was 6)
 
 ## Threshold 0.5
 
-**184 → 18 tasks** (166 removed)
+**184 → 13 tasks** (170 removed)
 
 ### Remaining Tasks
 
-#### Any2AnyRetrieval (8)
-- **AVMemeExamVA2TRetrieval** - va2t, Web, Social
+#### Any2AnyRetrieval (7)
+- **AVMemeExamAT2VRetrieval** - at2v, Web, Social
 - **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
 - **MSRVTTA2V** - a2v, N/A
-- **MSRVTTAT2V** - at2v, N/A
-- **MSVDT2VRetrieval** - t2v, Web, Spoken
+- **TUNABenchT2VRetrieval** - t2v, Web, Spoken
 - **VALOR32KVT2ARetrieval** - vt2a, Web, Spoken
 - **VATEXT2VARetrieval** - t2va, Web, Spoken
 - **VATEXV2ARetrieval** - v2a, Web, Spoken
@@ -787,80 +984,31 @@
 - **OmniVideoBenchVideoCentricQA** - vt2t, Web
 - **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
 
-#### VideoClassification (3)
-- **AVEDatasetClassification** - va2c, Web, AudioScene
+#### VideoClassification (2)
 - **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
 - **Diving48Classification.V2** - v2c, Sport
 
-#### VideoClustering (1)
-- **MELDEmotionAudioVideoClustering** - va2c, Entertainment
-
-#### VideoPairClassification (3)
-- **MELDVPairClassification** - v2v, Entertainment
+#### VideoPairClassification (1)
 - **RAVDESSAVVAPairClassification** - va2va, Spoken
-- **VideoConPairClassification** - v2t, Scene
 
 #### VideoZeroshotClassification (1)
 - **MELDVideoZeroShot** - v2t, Entertainment
 
 ### Coverage
 - Languages: 17 (was 17)
-- Domains: 9 (was 9)
-- Categories: 14 (was 14)
-- Types: 6 (was 6)
-
-## Threshold 0.4
-
-**184 → 18 tasks** (166 removed)
-
-### Remaining Tasks
-
-#### Any2AnyRetrieval (8)
-- **AVMemeExamVA2TRetrieval** - va2t, Web, Social
-- **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
-- **MSRVTTA2V** - a2v, N/A
-- **MSRVTTAT2V** - at2v, N/A
-- **MSVDT2VRetrieval** - t2v, Web, Spoken
-- **VALOR32KVT2ARetrieval** - vt2a, Web, Spoken
-- **VATEXT2VARetrieval** - t2va, Web, Spoken
-- **VATEXV2ARetrieval** - v2a, Web, Spoken
-
-#### VideoCentricQA (2)
-- **OmniVideoBenchVideoCentricQA** - vt2t, Web
-- **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
-
-#### VideoClassification (3)
-- **AVEDatasetClassification** - va2c, Web, AudioScene
-- **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
-- **Diving48Classification.V2** - v2c, Sport
-
-#### VideoClustering (1)
-- **MELDEmotionAudioVideoClustering** - va2c, Entertainment
-
-#### VideoPairClassification (3)
-- **MELDVPairClassification** - v2v, Entertainment
-- **RAVDESSAVVAPairClassification** - va2va, Spoken
-- **VideoConPairClassification** - v2t, Scene
-
-#### VideoZeroshotClassification (1)
-- **MELDVideoZeroShot** - v2t, Entertainment
-
-### Coverage
-- Languages: 17 (was 17)
-- Domains: 9 (was 9)
-- Categories: 14 (was 14)
-- Types: 6 (was 6)
+- Domains: 7 (was 9)
+- Categories: 12 (was 14)
+- Types: 5 (was 6)
 
 ## Recommended MVEB Task List (threshold=0.85)
 
-**Total: 41 tasks**
+**Total: 27 tasks**
 
-### Any2AnyRetrieval (14)
-- **AVMemeExamVA2TRetrieval** - va2t, Web, Social
+### Any2AnyRetrieval (13)
+- **AVMemeExamAT2VRetrieval** - at2v, Web, Social
 - **AudioCapsAVVA2TRetrieval** - va2t, Encyclopaedic, Web
 - **DiDeMoT2VARetrieval** - t2va, Web, Spoken
 - **MSRVTTA2V** - a2v, N/A
-- **MSRVTTAT2V** - at2v, N/A
 - **MSVDT2VRetrieval** - t2v, Web, Spoken
 - **Panda70MVA2TRetrieval** - va2t, Web, Spoken
 - **Shot2Story20KT2VRetrieval** - t2v, Web, Spoken
@@ -875,50 +1023,36 @@
 - **OmniVideoBenchVideoCentricQA** - vt2t, Web
 - **WorldSense1MinVideoAudioCentricQA** - vat2t, Web
 
-### VideoClassification (9)
+### VideoClassification (7)
 - **AVEDatasetClassification** - va2c, Web, AudioScene
 - **AVMemeVideoClassification** - v2c, Web, Entertainment, Music
-- **BreakfastClassification** - v2c, Scene
 - **Diving48Classification.V2** - v2c, Sport
 - **HMDB51Classification** - v2c, Scene
-- **MELDAudioVideoClassification** - va2c, Entertainment
 - **RAVDESSAVClassification** - va2c, Spoken
 - **UCF101VideoAudioClassification** - va2c, Web, Scene
 - **VGGSoundVA** - va2c, Web
 
-### VideoClustering (5)
-- **AVEDatasetAudioVideoClustering** - va2c, Spoken, Scene, Music
-- **MELDEmotionAudioVideoClustering** - va2c, Entertainment
+### VideoClustering (1)
 - **MusicAVQACLSVideoClustering** - v2c, Music
-- **RAVDESSAVClustering** - va2c, Spoken
-- **WorldSense1MinDomainVideoClustering** - v2c, Scene, Web, Entertainment
 
-### VideoPairClassification (5)
-- **AVEDatasetVAPairClassification** - va2va, Web, AudioScene
-- **MELDVAPairClassification** - va2va, Entertainment
-- **RAVDESSAVVAPairClassification** - va2va, Spoken
-- **VideoConPairClassification** - v2t, Scene
+### VideoPairClassification (1)
 - **VinogroundPairClassification** - v2v, Scene
 
-### VideoZeroshotClassification (6)
+### VideoZeroshotClassification (3)
 - **BreakfastZeroShot** - v2t, Scene
 - **Kinetics600VAZeroShot** - va2t, Web, Scene
 - **MELDVideoZeroShot** - v2t, Entertainment
-- **RAVDESSVZeroShot** - v2t, Spoken
-- **UCF101VideoAudioZeroShotClassification** - va2t, Web, Scene
-- **WorldSenseAudioVideoZeroShot** - va2t, Scene, AudioScene, Music, Entertainment
 
 ### Code for benchmarks.py
 
 ```python
 tasks=get_tasks(
     tasks=[
-        # Any2AnyRetrieval (14)
-        "AVMemeExamVA2TRetrieval",
+        # Any2AnyRetrieval (13)
+        "AVMemeExamAT2VRetrieval",
         "AudioCapsAVVA2TRetrieval",
         "DiDeMoT2VARetrieval",
         "MSRVTTA2V",
-        "MSRVTTAT2V",
         "MSVDT2VRetrieval",
         "Panda70MVA2TRetrieval",
         "Shot2Story20KT2VRetrieval",
@@ -931,35 +1065,22 @@ tasks=get_tasks(
         # VideoCentricQA (2)
         "OmniVideoBenchVideoCentricQA",
         "WorldSense1MinVideoAudioCentricQA",
-        # VideoClassification (9)
+        # VideoClassification (7)
         "AVEDatasetClassification",
         "AVMemeVideoClassification",
-        "BreakfastClassification",
         "Diving48Classification.V2",
         "HMDB51Classification",
-        "MELDAudioVideoClassification",
         "RAVDESSAVClassification",
         "UCF101VideoAudioClassification",
         "VGGSoundVA",
-        # VideoClustering (5)
-        "AVEDatasetAudioVideoClustering",
-        "MELDEmotionAudioVideoClustering",
+        # VideoClustering (1)
         "MusicAVQACLSVideoClustering",
-        "RAVDESSAVClustering",
-        "WorldSense1MinDomainVideoClustering",
-        # VideoPairClassification (5)
-        "AVEDatasetVAPairClassification",
-        "MELDVAPairClassification",
-        "RAVDESSAVVAPairClassification",
-        "VideoConPairClassification",
+        # VideoPairClassification (1)
         "VinogroundPairClassification",
-        # VideoZeroshotClassification (6)
+        # VideoZeroshotClassification (3)
         "BreakfastZeroShot",
         "Kinetics600VAZeroShot",
         "MELDVideoZeroShot",
-        "RAVDESSVZeroShot",
-        "UCF101VideoAudioZeroShotClassification",
-        "WorldSenseAudioVideoZeroShot",
     ]
 ),
 ```
