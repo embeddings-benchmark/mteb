@@ -23,6 +23,7 @@ __all__ = ["BenchmarkResults", "ModelResult"]
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator
 
+    import datasets
     from typing_extensions import Self
 
     from mteb.abstasks.abstask import AbsTask
@@ -447,7 +448,63 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         for col in ("model_name", "task_name", "split", "subset"):
             if col in df.columns:
                 df[col] = df[col].astype("category")
+
+        # Add is_public flag from task registry (one lookup per unique task name).
+        from mteb.get_tasks import _TASKS_REGISTRY
+
+        unique_tasks = (
+            df["task_name"].cat.categories
+            if hasattr(df["task_name"], "cat")
+            else df["task_name"].unique()
+        )
+        is_public_map = {
+            t: _TASKS_REGISTRY[t].metadata.is_public if t in _TASKS_REGISTRY else True
+            for t in unique_tasks
+        }
+        df["is_public"] = df["task_name"].map(is_public_map)
+
         return df
+
+    def to_dataset(
+        self,
+        include_model_revision: bool = True,
+        push_to_hub: bool = False,
+        repo_id: str | None = None,
+        **push_kwargs: Any,
+    ) -> datasets.Dataset:
+        """Export benchmark results to a HuggingFace Dataset (parquet-backed).
+
+        The dataset contains one row per model/task/split/subset combination and
+        includes an ``is_public`` column derived from task metadata.
+
+        Args:
+            include_model_revision: Whether to include the model_revision column.
+            push_to_hub: Push the dataset to the HuggingFace Hub.
+            repo_id: Hub repository ID. Required when push_to_hub=True.
+            **push_kwargs: Forwarded to ``datasets.Dataset.push_to_hub()``
+                (e.g. token, private, commit_message).
+
+        Returns:
+            A datasets.Dataset with columns: model_name, [model_revision],
+            task_name, split, subset, language, score, is_public.
+        """
+        if push_to_hub and repo_id is None:
+            raise ValueError("`repo_id` must be provided when `push_to_hub=True`.")
+
+        import datasets as ds
+        import polars as pl
+
+        df = self._build_pre_agg_df(include_model_revision=include_model_revision)
+        if df is None or df.empty:
+            return ds.Dataset.from_dict({})
+
+        pl_df = pl.from_pandas(df)
+        dataset = ds.Dataset.from_polars(pl_df)
+
+        if push_to_hub:
+            dataset.push_to_hub(repo_id, **push_kwargs)
+
+        return dataset
 
     def get_aggregated_scores(
         self,

@@ -57,7 +57,8 @@ def _aggregate_and_pivot(
         index_columns = ["task_name", "split"]
 
     elif aggregation_level == "task":
-        index_columns = ["task_name"]
+        extra = ["is_public"] if "is_public" in df.columns else []
+        index_columns = ["task_name"] + extra
 
     elif aggregation_level == "language":
         index_columns = ["language"]

@@ -502,8 +502,20 @@ class VidoreBenchmark(Benchmark):
                 {"No results": ["You can try relaxing your criteria"]}
             )
             return no_results_frame
-        public_task_name = benchmark_results._filter_tasks(is_public=True).task_names
-        private_task_name = benchmark_results._filter_tasks(is_public=False).task_names
+        if "is_public" in data.columns:
+            public_task_name = list(
+                data.loc[data["is_public"] == True, "task_name"].unique()  # noqa: E712
+            )
+            private_task_name = list(
+                data.loc[data["is_public"] == False, "task_name"].unique()  # noqa: E712
+            )
+        else:
+            public_task_name = benchmark_results._filter_tasks(
+                is_public=True
+            ).task_names
+            private_task_name = benchmark_results._filter_tasks(
+                is_public=False
+            ).task_names
         # Convert to DataFrame and pivot
         per_task = data.pivot(index="model_name", columns="task_name", values="score")
 

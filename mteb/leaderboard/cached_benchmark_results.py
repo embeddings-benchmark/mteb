@@ -25,6 +25,20 @@ class CachedBenchmarkResults(BenchmarkResults):
     )
     _props_cache: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
+    @classmethod
+    def from_pre_agg_df(cls, pd_df: pd.DataFrame) -> CachedBenchmarkResults:
+        """Build a shell instance backed by an already-computed pre-agg DataFrame.
+
+        model_results is empty; _pre_agg_df_cache is pre-populated so
+        to_dataframe() works without iterating model_results.
+        """
+        result = cls(model_results=[])
+        result._pre_agg_df_cache = {
+            False: pd_df.drop(columns=["model_revision"], errors="ignore"),
+            True: pd_df if "model_revision" in pd_df.columns else None,
+        }
+        return result
+
     # --- pre-agg DataFrame cache ---
 
     def _build_pre_agg_df(self, include_model_revision: bool) -> pd.DataFrame | None:

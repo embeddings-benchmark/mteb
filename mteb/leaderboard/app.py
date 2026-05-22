@@ -13,6 +13,7 @@ from urllib.parse import urlencode
 import cachetools
 import gradio as gr
 import pandas as pd
+import polars as pl
 
 import mteb
 from mteb import BenchmarkResults
@@ -241,8 +242,7 @@ def _cache_on_benchmark_select(benchmark_name, all_benchmark_results):
         sorted(modalities),
     )
     elapsed = time.time() - start_time
-    benchmark_results = all_benchmark_results[benchmark_name]
-    scores = benchmark_results._get_scores(format="long")
+    scores = _pl_df_to_scores(all_benchmark_results[benchmark_name])
     logger.debug(f"on_benchmark_select callback: {elapsed}s")
     show_zero_shot = _should_show_zero_shot_filter(benchmark_name)
 
@@ -370,6 +370,20 @@ def _filter_benchmark_results_for_tables(
     return filtered_benchmark_results
 
 
+def _pl_df_to_scores(pl_df: pl.DataFrame) -> list[dict]:
+    """Convert a polars pre-agg DataFrame to the scores list used by leaderboard callbacks."""
+    return (
+        pl_df.group_by(["model_name", "task_name"])
+        .agg(pl.col("score").mean())
+        .to_dicts()
+    )
+
+
+def _pl_df_to_cached_results(pl_df: pl.DataFrame) -> CachedBenchmarkResults:
+    """Build a CachedBenchmarkResults shell backed by a polars pre-agg DataFrame."""
+    return CachedBenchmarkResults.from_pre_agg_df(pl_df.to_pandas())
+
+
 def _get_session_id(request: gr.Request) -> str:
     """Derive a stable session ID from Gradio's built-in session hash.
 
@@ -430,7 +444,7 @@ def get_leaderboard_app(  # noqa: PLR0914
 
     logger.info("Step 1/7: Loading all benchmark results...")
     load_start = time.time()
-    all_results = cache._load_from_cache(rebuild=rebuild)
+    all_results = cache._load_from_cache(rebuild=True)
     load_time = time.time() - load_start
     logger.info(f"Step 1/7 complete: Loaded results in {load_time:.2f}s")
 
@@ -448,12 +462,11 @@ def get_leaderboard_app(  # noqa: PLR0914
         "Step 3/7: Processing all benchmarks (select_tasks + join_revisions)..."
     )
     process_start = time.time()
-    all_benchmark_results = {
-        benchmark.name: CachedBenchmarkResults.model_construct(
-            model_results=all_results.select_tasks(benchmark.tasks)
-            .join_revisions()
-            .model_results
-        )
+    all_benchmark_results: dict[str, pl.DataFrame] = {
+        benchmark.name: all_results.select_tasks(benchmark.tasks)
+        .join_revisions()
+        .to_dataset(include_model_revision=True)
+        .to_polars()
         for benchmark in benchmarks
     }
     process_time = time.time() - process_start
@@ -467,22 +480,26 @@ def get_leaderboard_app(  # noqa: PLR0914
         )
 
     default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
-    default_results = all_benchmark_results[default_benchmark.name]
+    default_pl_df = all_benchmark_results[default_benchmark.name]
     default_task_types = {
-        task_type
-        for task_type in default_results.task_types
-        if task_type != "InstructionRetrieval"
+        _TASKS_REGISTRY[t].metadata.type
+        for t in default_pl_df["task_name"].unique().to_list()
+        if t in _TASKS_REGISTRY
+        and _TASKS_REGISTRY[t].metadata.type != "InstructionRetrieval"
     }
     display_radar_chart = len(default_task_types) > 1
 
     logger.info("Step 4/7: Filtering models...")
     filter_start = time.time()
 
-    default_scores = default_results._get_scores(format="long")
-    all_models = list({entry["model_name"] for entry in default_scores})
+    default_scores = _pl_df_to_scores(default_pl_df)
+    all_models = list(default_pl_df["model_name"].unique().to_list())
+    default_task_names_for_filter = sorted(
+        default_pl_df["task_name"].unique().to_list()
+    )
     filtered_models = _filter_models(
         all_models,
-        default_results.task_names,
+        default_task_names_for_filter,
         availability=None,
         compatibility=[],
         instructions=None,
@@ -494,9 +511,14 @@ def get_leaderboard_app(  # noqa: PLR0914
         entry for entry in default_scores if entry["model_name"] in filtered_models
     ]
 
-    # Filter BenchmarkResults based on default filtered models (as required by Kenneth)
-    filtered_model_names = [entry["model_name"] for entry in default_filtered_scores]
-    filtered_benchmark_results = default_results.select_models(filtered_model_names)
+    # Filter polars DataFrame to the filtered models and create a CachedBenchmarkResults shell
+    filtered_model_names = list(
+        {entry["model_name"] for entry in default_filtered_scores}
+    )
+    filtered_pl_df = default_pl_df.filter(
+        pl.col("model_name").is_in(filtered_model_names)
+    )
+    filtered_benchmark_results = _pl_df_to_cached_results(filtered_pl_df)
     filter_time = time.time() - filter_start
     logger.info(
         f"Step 4/7 complete: Filtered {len(filtered_model_names)} models in {filter_time:.2f}s"
@@ -522,11 +544,33 @@ def get_leaderboard_app(  # noqa: PLR0914
 
     logger.info("Step 6/7: Creating Gradio components...")
     component_start = time.time()
-    default_languages = sorted(default_results.languages)
-    default_task_types = sorted(default_results.task_types)
-    default_domains = sorted(default_results.domains)
-    default_task_names = sorted(default_results.task_names)
-    default_modalities = sorted(default_results.modalities)
+    default_languages = sorted(
+        default_pl_df["language"].explode().drop_nulls().unique().to_list()
+    )
+    default_task_types = sorted(
+        {
+            _TASKS_REGISTRY[t].metadata.type
+            for t in default_pl_df["task_name"].unique().to_list()
+            if t in _TASKS_REGISTRY
+        }
+    )
+    default_domains = sorted(
+        {
+            d
+            for t in default_pl_df["task_name"].unique().to_list()
+            if t in _TASKS_REGISTRY
+            for d in (_TASKS_REGISTRY[t].metadata.domains or [])
+        }
+    )
+    default_task_names = sorted(default_pl_df["task_name"].unique().to_list())
+    default_modalities = sorted(
+        {
+            m
+            for t in default_pl_df["task_name"].unique().to_list()
+            if t in _TASKS_REGISTRY
+            for m in (_TASKS_REGISTRY[t].metadata.modalities or [])
+        }
+    )
     lang_select = gr.CheckboxGroup(
         default_languages,
         value=default_languages,
@@ -794,15 +838,17 @@ def get_leaderboard_app(  # noqa: PLR0914
                     properties={"visitor_id": _get_visitor_id(request)},
                 )
 
-            benchmark_results = all_benchmark_results[benchmark_name]
+            bm_pl_df = all_benchmark_results[benchmark_name]
             eligible_task_types = {
-                task_type
-                for task_type in benchmark_results.task_types
-                if task_type != "InstructionRetrieval"
+                _TASKS_REGISTRY[t].metadata.type
+                for t in bm_pl_df["task_name"].unique().to_list()
+                if t in _TASKS_REGISTRY
+                and _TASKS_REGISTRY[t].metadata.type != "InstructionRetrieval"
             }
             display_radar = len(eligible_task_types) > 1
             _, summary_raw = apply_summary_styling_from_benchmark(
-                mteb.get_benchmark(benchmark_name), benchmark_results
+                mteb.get_benchmark(benchmark_name),
+                _pl_df_to_cached_results(bm_pl_df),
             )
             return (
                 gr.update(choices=languages, value=languages),
@@ -863,8 +909,16 @@ def get_leaderboard_app(  # noqa: PLR0914
             start_time = time.time()
             if not len(languages):
                 return []
-            benchmark_results = all_benchmark_results[benchmark_name]
-            scores = benchmark_results._get_scores(languages=languages, format="long")
+            # lang_select stores 3-letter ISO codes ("eng") while the language
+            # column stores full language-script codes ("eng-Latn"). Strip the
+            # script suffix before comparing.
+            lang_set = set(languages)
+            filtered = all_benchmark_results[benchmark_name].filter(
+                pl.col("language")
+                .list.eval(pl.element().str.split("-").list.first().is_in(lang_set))
+                .list.any()
+            )
+            scores = _pl_df_to_scores(filtered)
             elapsed = time.time() - start_time
             logger.debug(f"update_scores callback: {elapsed}s")
             return scores
@@ -1202,12 +1256,18 @@ def get_leaderboard_app(  # noqa: PLR0914
                 filtered_model_names.add(entry["model_name"])
                 filtered_task_names.add(entry["task_name"])
 
-            filtered_benchmark_results = _filter_benchmark_results_for_tables(
-                benchmark_results=all_benchmark_results[benchmark_name],
-                task_names=filtered_task_names,
-                model_names=filtered_model_names,
-                languages=languages,
-            )
+            bm_pl_df = all_benchmark_results[benchmark_name]
+            if not filtered_task_names or bm_pl_df.is_empty():
+                filtered_df = bm_pl_df.clear()
+            else:
+                # filtered_task_names already comes from language-filtered scores
+                # (update_scores_on_lang_change), so task-level filtering here is
+                # sufficient — no need for an additional subset/split-level pass.
+                mask = pl.col("model_name").is_in(filtered_model_names) & pl.col(
+                    "task_name"
+                ).is_in(filtered_task_names)
+                filtered_df = bm_pl_df.filter(mask)
+            filtered_benchmark_results = _pl_df_to_cached_results(filtered_df)
 
             summary, summary_raw = apply_summary_styling_from_benchmark(
                 benchmark, filtered_benchmark_results
