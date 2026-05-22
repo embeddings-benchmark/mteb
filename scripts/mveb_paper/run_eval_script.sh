@@ -1,14 +1,16 @@
 #!/bin/bash
-# Usage: bash scripts/mveb_paper/run_eval_script.sh <model_name> <batch_size> [num_frames] [tasks_comma_separated] [prefetch_factor]
+# Usage: bash scripts/mveb_paper/run_eval_script.sh <model_name> <batch_size> [num_frames] [tasks_comma_separated] [prefetch_factor] [cpus_per_task] [mem]
 
 MODEL="$1"
 BATCH="${2:-4}"
 NUM_FRAMES="$3"
 TASKS="$4"
 PREFETCH_FACTOR="$5"
+CPUS="${6:-1}"
+MEM="${7:-16G}"
 
 if [ -z "$MODEL" ]; then
-    echo "Usage: bash scripts/mveb_paper/run_eval_script.sh <model_name> <batch_size> [num_frames] [tasks_comma_separated] [prefetch_factor]"
+    echo "Usage: bash scripts/mveb_paper/run_eval_script.sh <model_name> <batch_size> [num_frames] [tasks_comma_separated] [prefetch_factor] [cpus_per_task] [mem]"
     exit 1
 fi
 
@@ -62,8 +64,8 @@ for TASK in "${TASKS_ARRAY[@]}"; do
 #SBATCH --job-name=${JOB_NAME}
 #SBATCH --partition=guest
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=16G
+#SBATCH --cpus-per-task=${CPUS}
+#SBATCH --mem=${MEM}
 #SBATCH --time=72:00:00
 #SBATCH --output=/data/home/niklas/deepshah/logs/${JOB_NAME}_%j.out
 #SBATCH --error=/data/home/niklas/deepshah/logs/${JOB_NAME}_%j.err
