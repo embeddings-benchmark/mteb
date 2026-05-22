@@ -230,7 +230,7 @@ class AbsTaskPairClassification(AbsTask):
                 (self.input1_column_name, modality1)
             ]
         else:
-            col_modalities1 = self.input1_column_name
+            col_modalities1 = self.input1_column_name  # type: ignore[assignment]
 
         if (
             isinstance(self.input2_column_name, str)
@@ -241,7 +241,7 @@ class AbsTaskPairClassification(AbsTask):
                 (self.input2_column_name, modality2)
             ]
         else:
-            col_modalities2 = self.input2_column_name
+            col_modalities2 = self.input2_column_name  # type: ignore[assignment]
 
         pair_stats = calculate_pair_modality_statistics(
             col_modalities1,

@@ -271,15 +271,11 @@ class AbsTaskSTS(AbsTask):
 
         if isinstance(self.column_names[0], str) and len(self.metadata.modalities) == 1:
             modality = self.metadata.modalities[0]
-            col_modalities1: list[tuple[str, str]] = [
-                (str(self.column_names[0]), modality)
-            ]
-            col_modalities2: list[tuple[str, str]] = [
-                (str(self.column_names[1]), modality)
-            ]
+            col_modalities1 = [(str(self.column_names[0]), modality)]
+            col_modalities2 = [(str(self.column_names[1]), modality)]
         else:
-            col_modalities1 = self.column_names[0]
-            col_modalities2 = self.column_names[1]
+            col_modalities1 = self.column_names[0]  # type: ignore[assignment]
+            col_modalities2 = self.column_names[1]  # type: ignore[assignment]
 
         pair_stats = calculate_pair_modality_statistics(
             col_modalities1,

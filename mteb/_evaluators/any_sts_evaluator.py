@@ -85,8 +85,8 @@ class AnySTSEvaluator(Evaluator):
                 self.input_columns[0]: self.task_metadata.modalities[0]
             }
         else:
-            cols1 = [col for col, _ in self.input_columns[0]]
-            ds1_col_names = dict(self.input_columns[0])
+            cols1 = [col for col, _ in self.input_columns[0]]  # type: ignore[str-unpack]
+            ds1_col_names = dict(self.input_columns[0])  # type: ignore[arg-type]
 
         embeddings1 = model.encode(
             create_dataloader(
@@ -112,8 +112,8 @@ class AnySTSEvaluator(Evaluator):
                 self.input_columns[1]: self.task_metadata.modalities[0]
             }
         else:
-            cols2 = [col for col, _ in self.input_columns[1]]
-            ds2_col_names = dict(self.input_columns[1])
+            cols2 = [col for col, _ in self.input_columns[1]]  # type: ignore[str-unpack]
+            ds2_col_names = dict(self.input_columns[1])  # type: ignore[arg-type]
 
         embeddings2 = model.encode(
             create_dataloader(
