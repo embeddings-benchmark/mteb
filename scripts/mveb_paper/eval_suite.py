@@ -70,7 +70,14 @@ def main():
     if args.num_frames is not None:
         model_kwargs["num_frames"] = args.num_frames
 
-    model = mteb.get_model(args.model, **model_kwargs)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    
+    model_kwargs["model_kwargs"] = {
+        "device_map": device,
+        "torch_dtype": torch.bfloat16
+    }
+
+    model = mteb.get_model(args.model, device=device, **model_kwargs)
 
     # DataLoader Multi-GPU approach: Wrap the underlying model for batch distribution
     num_gpus = torch.cuda.device_count()
