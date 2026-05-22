@@ -58,9 +58,6 @@ class OBLIQBenchRetrieval(AbsTaskRetrieval):
   title = {OBLIQ-Bench: Exposing Overlooked Bottlenecks in Modern Retrievers with Latent and Implicit Queries},
   year = {2026},
 }""",
-        prompt={
-            "query": "Given an oblique query expressing a latent or implicit property, retrieve documents that instantiate that property."
-        },
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
