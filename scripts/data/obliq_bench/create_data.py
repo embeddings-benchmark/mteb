@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import csv
+import json
 import logging
 
-from datasets import Dataset, Features, Value
+from datasets import Dataset, Features, Sequence, Value
 from huggingface_hub import hf_hub_download
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -23,6 +24,9 @@ SUBSET_PREFIXES: dict[str, str] = {
     "congress": "tip-of-tongue/congress",
 }
 
+# Subsets that ship per_query_excluded_ids.json (same-source docs to drop per query).
+EXCLUSION_SUBSETS = ("math", "writing")
+
 CORPUS_FEATURES = Features({"id": Value("string"), "text": Value("string")})
 QUERIES_FEATURES = Features({"id": Value("string"), "text": Value("string")})
 QRELS_FEATURES = Features(
@@ -30,6 +34,12 @@ QRELS_FEATURES = Features(
         "query-id": Value("string"),
         "corpus-id": Value("string"),
         "score": Value("int32"),
+    }
+)
+EXCLUDED_FEATURES = Features(
+    {
+        "query-id": Value("string"),
+        "excluded-corpus-ids": Sequence(Value("string")),
     }
 )
 
@@ -66,6 +76,15 @@ def _read_qrels(path: str) -> Dataset:
     return Dataset.from_list(rows, features=QRELS_FEATURES)
 
 
+def _read_excluded(path: str) -> Dataset:
+    with open(path, encoding="utf-8") as fh:
+        d = json.load(fh)
+    rows = [
+        {"query-id": qid, "excluded-corpus-ids": list(excl)} for qid, excl in d.items()
+    ]
+    return Dataset.from_list(rows, features=EXCLUDED_FEATURES)
+
+
 def _push(ds: Dataset, config_name: str, split: str = "test") -> None:
     logger.info(
         "Pushing config %s (split=%s, rows=%d) to %s",
@@ -92,11 +111,17 @@ def process_subset(subset: str, prefix: str) -> None:
     qrels = _read_qrels(qrels_path)
     _push(qrels, f"{subset}-qrels")
 
+    if subset in EXCLUSION_SUBSETS:
+        excluded_path = _download(prefix, "queries+qrels/per_query_excluded_ids.json")
+        excluded = _read_excluded(excluded_path)
+        _push(excluded, f"{subset}-excluded")
+
 
 def main() -> None:
     for subset, prefix in SUBSET_PREFIXES.items():
         process_subset(subset, prefix)
-    logger.info("Done. Pushed %d configs.", len(SUBSET_PREFIXES) * 3)
+    pushed = sum(4 if s in EXCLUSION_SUBSETS else 3 for s in SUBSET_PREFIXES)
+    logger.info("Done. Pushed %d configs.", pushed)
 
 
 if __name__ == "__main__":

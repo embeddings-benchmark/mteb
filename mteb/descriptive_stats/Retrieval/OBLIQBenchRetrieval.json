@@ -29,7 +29,12 @@
             "max_relevant_docs_per_query": 156,
             "unique_relevant_docs": 4488
         },
-        "top_ranked_statistics": null,
+        "top_ranked_statistics": {
+            "num_top_ranked": 5848142,
+            "min_top_ranked_per_query": 3507,
+            "average_top_ranked_per_query": 4723.862681744749,
+            "max_top_ranked_per_query": 10388
+        },
         "hf_subset_descriptive_stats": {
             "twitter": {
                 "num_samples": 72403,
@@ -125,7 +130,12 @@
                     "max_relevant_docs_per_query": 37,
                     "unique_relevant_docs": 180
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": {
+                    "num_top_ranked": 529557,
+                    "min_top_ranked_per_query": 3507,
+                    "average_top_ranked_per_query": 3507.0,
+                    "max_top_ranked_per_query": 3507
+                }
             },
             "writing": {
                 "num_samples": 10901,
@@ -157,7 +167,12 @@
                     "max_relevant_docs_per_query": 19,
                     "unique_relevant_docs": 513
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": {
+                    "num_top_ranked": 5318585,
+                    "min_top_ranked_per_query": 10386,
+                    "average_top_ranked_per_query": 10387.861328125,
+                    "max_top_ranked_per_query": 10388
+                }
             },
             "congress": {
                 "num_samples": 213904,
