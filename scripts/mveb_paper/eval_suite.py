@@ -77,7 +77,29 @@ def main():
         "torch_dtype": torch.bfloat16
     }
 
+    print(f"Loading model: {args.model}...")
     model = mteb.get_model(args.model, device=device, **model_kwargs)
+    print("Model loading complete.")
+
+    # Verify actual device placement
+    try:
+        if hasattr(model, "model") and isinstance(model.model, torch.nn.Module):
+            param_device = next(model.model.parameters()).device
+        elif hasattr(model, "model") and hasattr(model.model, "device"):
+            param_device = model.model.device
+        else:
+            param_device = "unknown"
+
+        if "cuda" in str(param_device):
+            print(f"✅ Model successfully loaded on GPU (device: {param_device}).")
+        else:
+            print(f"❌ WARNING: Model is loaded on {param_device}, NOT on GPU!")
+            if not torch.cuda.is_available():
+                print("   Reason: torch.cuda.is_available() is False. SLURM might not have allocated a GPU, or your PyTorch environment lacks CUDA support.")
+            else:
+                print("   Reason: CUDA is available, but the model failed to move to GPU. It might have run out of VRAM and silently dropped to CPU, or this specific custom architecture does not support `device_map='cuda'` properly.")
+    except Exception as e:
+        print(f"⚠️ Could not verify model device automatically: {e}")
 
     # DataLoader Multi-GPU approach: Wrap the underlying model for batch distribution
     num_gpus = torch.cuda.device_count()
