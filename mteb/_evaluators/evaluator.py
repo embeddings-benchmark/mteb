@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any
 
-from mteb.abstasks.abstask import _set_seed
+from mteb._set_seed import _set_seed
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Mapping

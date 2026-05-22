@@ -1,6 +1,7 @@
 """Test cases for the ResultCache class in the mteb.cache module."""
 
 import gzip
+import subprocess
 from pathlib import Path
 from typing import cast
 from unittest.mock import Mock, patch
@@ -11,6 +12,7 @@ import requests
 
 import mteb
 from mteb.cache import LoadExperimentEnum, ResultCache
+from mteb.models import ModelMeta
 from mteb.results import TaskResult
 from tests.mock_tasks import MockMultilingualClusteringTask, MockRetrievalTask
 
@@ -595,3 +597,354 @@ class TestDownloadCachedResultsFromBranch:
                 max_size_mb=max_size_mb
             )
             assert result_path.exists()
+
+
+def _setup_fake_remote(tmp_path: Path) -> tuple[Path, Path]:
+    """Set up a fake remote git repository with initial commit."""
+    cache_path = tmp_path / "cache"
+    remote_path = cache_path / "remote"
+    remote_path.mkdir(parents=True)
+
+    # Initialize with explicit default branch to 'main' to avoids issues with git configurations that default to 'main' already
+    subprocess.run(
+        ["git", "init", "-b", "main"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.email", "test@mteb.com"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "MTEB Test"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        [
+            "git",
+            "remote",
+            "add",
+            "origin",
+            "https://github.com/embeddings-benchmark/results",
+        ],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+
+    (remote_path / "README.md").write_text("# MTEB Results\n")
+    subprocess.run(
+        ["git", "add", "README.md"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "commit", "-m", "Initial commit"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+
+    return cache_path, remote_path
+
+
+def _setup_test_model_results(cache_path: Path) -> tuple[ModelMeta, list[str]]:
+    """Generate test results by evaluating the baseline random encoder on a mock task."""
+    cache = ResultCache(cache_path=cache_path)
+    task = MockRetrievalTask()
+    model = mteb.get_model("mteb/baseline-random-encoder")
+
+    mteb.evaluate(model, task, cache=cache)
+
+    model_meta = model.mteb_model_meta
+    model_name_path = model_meta.model_name_as_path()
+    revision = cast("str", model_meta.revision)
+    model_dir = cache.cache_path / "results" / model_name_path / revision
+    result_files = [
+        result_file.name
+        for result_file in model_dir.glob("*.json")
+        if result_file.name != "model_meta.json"
+    ]
+    return model_meta, result_files
+
+
+def test_submit_results_with_fake_remote(tmp_path):
+    """Comprehensive test for submit_results workflow: verifies file copying, commit creation, branch restoration, and pre-flight checks."""
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, result_files_copied = _setup_test_model_results(cache_path)
+
+    revision = cast("str", test_model.revision)
+    cache = ResultCache(cache_path=cache_path)
+
+    # Avoid fetching from the remote so the test remains hermetic in CI.
+    with patch.object(cache, "download_from_remote", return_value=None):
+        # Verify whether pre-flight checks detect uncommitted changes (error path)
+        unrelated_file = remote_path / "unrelated_staged_file.txt"
+        unrelated_file.write_text("This should not be committed with results")
+
+        subprocess.run(
+            ["git", "add", "unrelated_staged_file.txt"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+        )
+
+        with pytest.raises(RuntimeError, match="uncommitted changes"):
+            cache.submit_results(models=[test_model], create_pr=False)
+
+        subprocess.run(
+            ["git", "reset", "HEAD", "unrelated_staged_file.txt"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+        )
+        unrelated_file.unlink()
+
+        # Verify successful submission workflow
+        result = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            check=False,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        )
+        original_branch = result.stdout.strip()
+        assert original_branch == "main"
+
+        result = cache.submit_results(models=[test_model], create_pr=False)
+
+        assert result["status"] == "ready_for_submission"
+        assert result["result_count"] == len(result_files_copied)
+        commit_sha = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            check=True,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        assert commit_sha
+        check = subprocess.run(
+            ["git", "cat-file", "-t", commit_sha],
+            check=False,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        )
+        assert check.returncode == 0
+        assert check.stdout.strip() == "commit"
+
+        for filename in result_files_copied:
+            check = subprocess.run(
+                ["git", "ls-tree", "-r", "--name-only", commit_sha],
+                check=False,
+                cwd=remote_path,
+                capture_output=True,
+                text=True,
+            )
+            assert check.returncode == 0
+            expected_path = f"{test_model.model_name_as_path()}/{revision}/{filename}"
+            assert expected_path in check.stdout, (
+                f"File {expected_path} not found in commit {commit_sha}"
+            )
+
+        expected_run_settings = (
+            f"{test_model.model_name_as_path()}/{revision}/run_settings.jsonl"
+        )
+        assert expected_run_settings in check.stdout, (
+            f"File {expected_run_settings} not found in commit {commit_sha}"
+        )
+
+        # For manual submission, verify we're on the submission branch with the commit
+        result_after = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            check=False,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        )
+        current_branch = result_after.stdout.strip()
+        assert current_branch.startswith("mteb-results-"), (
+            f"Should be on submission branch but got '{current_branch}'"
+        )
+
+
+def test_submit_results(tmp_path):
+    from unittest.mock import patch
+
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, result_files_copied = _setup_test_model_results(cache_path)
+
+    cache = ResultCache(cache_path=cache_path)
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        initial_result = cache.submit_results(models=[test_model], create_pr=False)
+        assert initial_result["status"] == "ready_for_submission"
+        assert initial_result["result_count"] > 0
+
+        submission_branch = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+
+        commit_sha = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            check=True,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        check = subprocess.run(
+            ["git", "ls-tree", "-r", "--name-only", commit_sha],
+            check=True,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        )
+        expected_run_settings = f"{test_model.model_name_as_path()}/{test_model.revision}/run_settings.jsonl"
+        assert expected_run_settings in check.stdout, (
+            f"File {expected_run_settings} not found in commit {commit_sha}"
+        )
+
+        # Merge submission branch back to main to simulate files being integrated
+        subprocess.run(
+            ["git", "checkout", "main"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+        )
+        subprocess.run(
+            ["git", "merge", submission_branch, "-m", "Integrate results"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+        )
+
+
+def test_pr_creation_failure_cleans_up_branch(tmp_path):
+    """Verify that failed PR creation cleans up temporary branch and restores original branch."""
+    from unittest.mock import patch
+
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, _ = _setup_test_model_results(cache_path)
+
+    cache = ResultCache(cache_path=cache_path)
+    result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        check=False,
+        cwd=remote_path,
+        capture_output=True,
+        text=True,
+    )
+    original_branch = result.stdout.strip()
+
+    # Avoid fetching from the remote so the test reliably reaches PR creation.
+    # Mock _create_pull_request to fail.
+    with patch.object(cache, "download_from_remote", return_value=None):
+        with patch(
+            "mteb._reversible_workflow.git_utils.create_pull_request",
+            side_effect=Exception("GitHub API error"),
+        ):
+            with pytest.raises(Exception, match="GitHub API error"):
+                cache.submit_results(models=[test_model], create_pr=True)
+
+    # Verify user is back on original branch
+    result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        check=False,
+        cwd=remote_path,
+        capture_output=True,
+        text=True,
+    )
+    current_branch = result.stdout.strip()
+    assert current_branch == original_branch, (
+        f"Should be on original branch '{original_branch}' but got '{current_branch}'"
+    )
+
+    # Verify temporary branch was deleted (should not appear in branch list)
+    result = subprocess.run(
+        ["git", "branch"],
+        check=False,
+        cwd=remote_path,
+        capture_output=True,
+        text=True,
+    )
+    # Strip whitespace and the leading * (for current branch indicator)
+    branches = [
+        b.strip().lstrip("*").strip() for b in result.stdout.split("\n") if b.strip()
+    ]
+    # Should only have 'main' branch, no temporary branches
+    assert all(not b.startswith("mteb-results-") for b in branches), (
+        f"Temporary branch should be deleted but found: {branches}"
+    )
+
+
+def _setup_experiment_model_results(
+    cache_path: Path, **kwargs
+) -> tuple[ModelMeta, list[str]]:
+    """Generate experiment results by evaluating the baseline random encoder with experiment kwargs."""
+    cache = ResultCache(cache_path=cache_path)
+    task = MockRetrievalTask()
+    model = mteb.get_model("mteb/baseline-random-encoder", **kwargs)
+    mteb.evaluate(model, task, cache=cache)
+
+    model_meta = model.mteb_model_meta
+    revision = cast("str", model_meta.revision)
+    experiment_name = cast("str", model_meta.experiment_name)
+    model_dir = (
+        cache.cache_path
+        / "results"
+        / model_meta.model_name_as_path()
+        / revision
+        / "experiments"
+        / experiment_name
+    )
+    result_files = [
+        f.name for f in model_dir.glob("*.json") if f.name != "model_meta.json"
+    ]
+    return model_meta, result_files
+
+
+def _committed_files(remote_path: Path) -> str:
+    commit_sha = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    return subprocess.run(
+        ["git", "ls-tree", "-r", "--name-only", commit_sha],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout
+
+
+def test_submit_results_experiments_only(tmp_path):
+    """Submit results for a model that only has experiment results (no base results)."""
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, result_files = _setup_experiment_model_results(cache_path, a="test")
+    revision = cast("str", test_model.revision)
+    experiment_name = cast("str", test_model.experiment_name)
+    cache = ResultCache(cache_path=cache_path)
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        result = cache.submit_results(models=[test_model], create_pr=False)
+
+    assert result["status"] == "ready_for_submission"
+    assert result["result_count"] == len(result_files)
+
+    committed = _committed_files(remote_path)
+    for filename in result_files:
+        expected = f"{test_model.model_name_as_path()}/{revision}/experiments/{experiment_name}/{filename}"
+        assert expected in committed, f"{expected} not found in commit"

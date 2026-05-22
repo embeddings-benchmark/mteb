@@ -101,7 +101,7 @@ def _evaluate_task(
     """
     if co2_tracker is None or co2_tracker is True:
         try:
-            from codecarbon import EmissionsTracker  # type: ignore[import]
+            from codecarbon import EmissionsTracker  # type: ignore[import-not-found]
         except ImportError:
             if co2_tracker is True:
                 raise ImportError(
@@ -115,7 +115,7 @@ def _evaluate_task(
         with EmissionsTracker(
             save_to_file=False,
             save_to_api=False,
-            logging_logger=logger,  # type: ignore[arg-type]
+            logging_logger=logger,
             allow_multiple_runs=False,
         ) as tracker:
             result = _evaluate_task(
@@ -208,10 +208,10 @@ def _check_model_modalities(
     if isinstance(tasks, AbsTask):
         check_tasks = [tasks]
     elif isinstance(tasks, Benchmark):
-        benchmark = cast("Benchmark", tasks)
+        benchmark = tasks
         check_tasks = benchmark.tasks
     else:
-        check_tasks = cast("Iterable[AbsTask]", tasks)
+        check_tasks = tasks
 
     warnings, errors = [], []
 
@@ -350,10 +350,9 @@ def evaluate(  # noqa: PLR0913, PLR0914
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
-        aggregated_task = cast("AbsTaskAggregate", tasks)
         results = evaluate(
             model,
-            aggregated_task.metadata.tasks,
+            tasks.metadata.tasks,
             co2_tracker=co2_tracker,
             raise_error=raise_error,
             encode_kwargs=encode_kwargs,
@@ -364,9 +363,13 @@ def evaluate(  # noqa: PLR0913, PLR0914
             public_only=public_only,
             num_proc=num_proc,
         )
-        combined_results = aggregated_task.combine_task_results(results.task_results)
+        combined_results = tasks.combine_task_results(results.task_results)
         if cache:
-            cache.save_to_cache(combined_results, meta)
+            cache.save_to_cache(
+                combined_results,
+                meta,
+                encode_kwargs=encode_kwargs,
+            )
 
         return ModelResult(
             model_name=results.model_name,
@@ -377,7 +380,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
     if isinstance(tasks, AbsTask):
         task = tasks
     else:
-        tasks = cast("Iterable[AbsTask]", tasks)
         evaluate_results = []
         exceptions = []
         tasks_tqdm = tqdm(
@@ -514,7 +516,11 @@ def evaluate(  # noqa: PLR0913, PLR0914
         result = result.merge(existing_results)
 
     if cache:
-        cache.save_to_cache(result, meta)
+        cache.save_to_cache(
+            result,
+            meta,
+            encode_kwargs=encode_kwargs,
+        )
 
     return ModelResult(
         model_name=model_name,

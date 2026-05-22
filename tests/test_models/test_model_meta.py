@@ -25,8 +25,6 @@ _MISSING_N_EMBEDDING_MODELS = [
     "TomoroAI/tomoro-colqwen3-embed-4b",
     "TomoroAI/tomoro-colqwen3-embed-8b",
     "ai-sage/Giga-Embeddings-instruct",
-    "mteb/baseline-bb25",
-    "mteb/baseline-bm25s",
     "consciousAI/cai-stellaris-text-embeddings",
     "deepvk/USER2-base",
     "deepvk/USER2-small",

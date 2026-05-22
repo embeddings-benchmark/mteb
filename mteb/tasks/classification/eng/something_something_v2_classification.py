@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class SomethingSomethingV2Classification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SomethingSomethingV2Classification",
-        description="Something-Something V2 contains 220,847 short video clips of humans performing pre-defined basic actions with everyday objects. This subset of 5,444 clips is used for action classification into 174 fine-grained categories.",
+        description="Something-Something V2 contains 220,847 short video clips of humans performing pre-defined basic actions with everyday objects. This subset of 5,444 clips is used for action classification into 174 fine-grained categories. Used the official validation as test, capped at 32 per class across 174 classes (~5,444 examples).",
         reference="https://developer.qualcomm.com/software/ai-datasets/something-something",
         dataset={
             "path": "mteb/SomethingSomethingV2",

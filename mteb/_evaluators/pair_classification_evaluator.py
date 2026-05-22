@@ -73,7 +73,7 @@ class PairClassificationEvaluator(Evaluator):
         hf_subset: str,
         input1_prompt_type: PromptType | None,
         input2_prompt_type: PromptType | None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
         self.dataset = dataset

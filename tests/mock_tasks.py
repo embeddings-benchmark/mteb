@@ -1705,9 +1705,9 @@ class MockRerankingTask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": {
@@ -1760,9 +1760,9 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
             },
             "top_ranked_statistics": {
@@ -1797,9 +1797,9 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                     "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
-                        "min_relevant_docs_per_query": 2,
+                        "min_relevant_docs_per_query": 1,
                         "average_relevant_docs_per_query": 1.0,
-                        "max_relevant_docs_per_query": 2,
+                        "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
                     "top_ranked_statistics": {
@@ -1834,9 +1834,9 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                     "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
-                        "min_relevant_docs_per_query": 2,
+                        "min_relevant_docs_per_query": 1,
                         "average_relevant_docs_per_query": 1.0,
-                        "max_relevant_docs_per_query": 2,
+                        "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
                     "top_ranked_statistics": {
@@ -1895,9 +1895,9 @@ class MockRetrievalTask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,
@@ -1927,9 +1927,9 @@ class MockRetrievalTask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,
@@ -1979,9 +1979,9 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,
@@ -2011,9 +2011,9 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,
@@ -2080,9 +2080,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
             },
             "top_ranked_statistics": None,
@@ -2112,9 +2112,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
-                        "min_relevant_docs_per_query": 2,
+                        "min_relevant_docs_per_query": 1,
                         "average_relevant_docs_per_query": 1.0,
-                        "max_relevant_docs_per_query": 2,
+                        "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
                     "top_ranked_statistics": None,
@@ -2144,9 +2144,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
-                        "min_relevant_docs_per_query": 2,
+                        "min_relevant_docs_per_query": 1,
                         "average_relevant_docs_per_query": 1.0,
-                        "max_relevant_docs_per_query": 2,
+                        "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
                     "top_ranked_statistics": None,
@@ -2178,9 +2178,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
             },
             "top_ranked_statistics": None,
@@ -2210,9 +2210,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
-                        "min_relevant_docs_per_query": 2,
+                        "min_relevant_docs_per_query": 1,
                         "average_relevant_docs_per_query": 1.0,
-                        "max_relevant_docs_per_query": 2,
+                        "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
                     "top_ranked_statistics": None,
@@ -2242,9 +2242,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
-                        "min_relevant_docs_per_query": 2,
+                        "min_relevant_docs_per_query": 1,
                         "average_relevant_docs_per_query": 1.0,
-                        "max_relevant_docs_per_query": 2,
+                        "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
                     "top_ranked_statistics": None,
@@ -2547,9 +2547,9 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,
@@ -2598,9 +2598,9 @@ class MockInstructionReranking(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": {
@@ -2652,9 +2652,9 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
             },
             "top_ranked_statistics": None,
@@ -2684,9 +2684,9 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                     "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
-                        "min_relevant_docs_per_query": 2,
+                        "min_relevant_docs_per_query": 1,
                         "average_relevant_docs_per_query": 1.0,
-                        "max_relevant_docs_per_query": 2,
+                        "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
                     "top_ranked_statistics": None,
@@ -2716,9 +2716,9 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                     "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
-                        "min_relevant_docs_per_query": 2,
+                        "min_relevant_docs_per_query": 1,
                         "average_relevant_docs_per_query": 1.0,
-                        "max_relevant_docs_per_query": 2,
+                        "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
                     "top_ranked_statistics": None,
@@ -2772,9 +2772,9 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
             },
             "top_ranked_statistics": {
@@ -2809,9 +2809,9 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                     "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
-                        "min_relevant_docs_per_query": 2,
+                        "min_relevant_docs_per_query": 1,
                         "average_relevant_docs_per_query": 1.0,
-                        "max_relevant_docs_per_query": 2,
+                        "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
                     "top_ranked_statistics": {
@@ -2846,9 +2846,9 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                     "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
-                        "min_relevant_docs_per_query": 2,
+                        "min_relevant_docs_per_query": 1,
                         "average_relevant_docs_per_query": 1.0,
-                        "max_relevant_docs_per_query": 2,
+                        "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
                     "top_ranked_statistics": {
@@ -2929,9 +2929,9 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": {
@@ -3021,9 +3021,9 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
             },
             "top_ranked_statistics": {
@@ -3068,9 +3068,9 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                     "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
-                        "min_relevant_docs_per_query": 2,
+                        "min_relevant_docs_per_query": 1,
                         "average_relevant_docs_per_query": 1.0,
-                        "max_relevant_docs_per_query": 2,
+                        "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
                     "top_ranked_statistics": {
@@ -3115,9 +3115,9 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                     "queries_video_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
-                        "min_relevant_docs_per_query": 2,
+                        "min_relevant_docs_per_query": 1,
                         "average_relevant_docs_per_query": 1.0,
-                        "max_relevant_docs_per_query": 2,
+                        "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
                     "top_ranked_statistics": {
@@ -3130,7 +3130,6 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
             },
         }
     }
-
     metadata = TaskMetadata(
         type="VisionCentricQA",
         name="MockMultilingualVisionCentricQA",
@@ -3211,9 +3210,9 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,
@@ -3287,15 +3286,14 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,
         }
     }
-
     metadata = TaskMetadata(
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalT2I",
@@ -4515,9 +4513,9 @@ class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,
@@ -4601,9 +4599,9 @@ class MockAny2AnyRetrievalA2TTask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,
@@ -4688,9 +4686,9 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,
@@ -4775,9 +4773,9 @@ class MockAudioReranking(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": {
@@ -6204,9 +6202,9 @@ class MockVideoRetrievalV2T(AbsTaskRetrieval):
             },
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,
@@ -6303,9 +6301,9 @@ class MockVideoRetrievalT2V(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,
@@ -6410,9 +6408,9 @@ class MockVideoAudioRetrievalVA2T(AbsTaskRetrieval):
             },
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,
@@ -6520,9 +6518,9 @@ class MockVideoAudioRetrievalT2VA(AbsTaskRetrieval):
             "queries_video_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,
@@ -6636,9 +6634,9 @@ class MockVideoAudioTextRetrievalVAT2T(AbsTaskRetrieval):
             },
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
-                "min_relevant_docs_per_query": 2,
+                "min_relevant_docs_per_query": 1,
                 "average_relevant_docs_per_query": 1.0,
-                "max_relevant_docs_per_query": 2,
+                "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
             "top_ranked_statistics": None,

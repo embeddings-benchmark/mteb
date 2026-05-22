@@ -111,3 +111,4 @@ model = mteb.evaluate(model, tasks=tasks)
 ```
 
 If you want to submit your implementation to be included in the leaderboard see the section on [submitting a model](../../contributing/adding_a_model.md).
+
