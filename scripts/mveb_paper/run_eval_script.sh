@@ -17,6 +17,13 @@ fi
 # Create log dir before anything else
 mkdir -p /data/home/niklas/deepshah/logs
 
+# Determine python environment based on model name
+if echo "$MODEL" | grep -qi "ebind"; then
+    PYTHON_EXEC="/data/home/niklas/adnan/mteb-ebind/.venv/bin/python3"
+else
+    PYTHON_EXEC="/data/home/niklas/adnan/mteb-omni-sbert/.venv/bin/python3"
+fi
+
 # Switch directory allowing the bash to find if result already exists or not
 cd /data/home/niklas/deepshah/mteb
 if [ -z "$TASKS" ]; then
@@ -87,7 +94,7 @@ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export TORCHDYNAMO_DISABLE=1
 
 # ── Run evaluation ──────────────────────────────────────────────────
-/data/home/niklas/adnan/mteb-omni-sbert/.venv/bin/python3 scripts/mveb_paper/eval_suite.py \\
+${PYTHON_EXEC} scripts/mveb_paper/eval_suite.py \
     --model "$MODEL" \\
     --output-folder "$OUTPUT_FOLDER" \\
     $FRAME_ARG \\
