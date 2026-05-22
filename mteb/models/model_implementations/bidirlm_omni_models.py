@@ -180,15 +180,10 @@ class BidirLMOmniEncoder(AbsEncoder):
         delegates to SentenceTransformer.encode() via the native 'message' modality.
         """
         ds_features = inputs.dataset.features
-
-        active_cols = [
-            col
-            for col in ("image", "audio", "text", "video")
-            if col in ds_features and inputs.dataset[0].get(col) is not None
-        ]
-        is_text_only = active_cols == ["text"]
-        has_video = "video" in ds_features
+        has_text = "text" in ds_features
+        has_image = "image" in ds_features
         has_audio = "audio" in ds_features
+        has_video = "video" in ds_features
 
         if has_video:
             inputs.collate_fn = VideoCollator(
@@ -205,18 +200,25 @@ class BidirLMOmniEncoder(AbsEncoder):
             )
         instruction = self._get_instruction(task_metadata, prompt_type)
 
-        all_inputs = [
-            {col: batch[col][i] for col in active_cols}
-            for batch in inputs
-            for i in range(len(batch[active_cols[0]]))
-        ]
+        # Truncate only when the schema is pure text; for multimodal schemas
+        # we keep the full context to avoid chopping off special tokens.
+        is_text_only_schema = has_text and not (has_image or has_audio or has_video)
+        self.model.max_seq_length = (
+            self.max_text_length if is_text_only_schema else 32768
+        )
 
-        # Limit text length if no image/audio is present, otherwise use the model's max context length (32768 tokens).
-        # This prevents truncating special tokens in multimodal which raised error while still enabling to limit text-only inputs.
-        if is_text_only:
-            self.model.max_seq_length = self.max_text_length
-        else:
-            self.model.max_seq_length = 32768
+        modality_keys = ("image", "audio", "text", "video")
+        all_inputs: list[dict[str, Any]] = []
+        for batch in inputs:
+            batch_size = len(next(iter(batch.values())))
+            for i in range(batch_size):
+                row = {
+                    key: batch[key][i]
+                    for key in modality_keys
+                    if key in batch and batch[key][i] is not None
+                }
+                all_inputs.append(row)
+
         return self.model.encode(
             all_inputs,
             prompt=instruction,
