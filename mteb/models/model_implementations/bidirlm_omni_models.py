@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
 
@@ -208,22 +209,27 @@ class BidirLMOmniEncoder(AbsEncoder):
         )
 
         modality_keys = ("image", "audio", "text", "video")
-        all_inputs: list[dict[str, Any]] = []
+        all_embeddings: list = []
         for batch in inputs:
             batch_size = len(next(iter(batch.values())))
+            batch_inputs: list[dict[str, Any]] = []
             for i in range(batch_size):
                 row = {
                     key: batch[key][i]
                     for key in modality_keys
                     if key in batch and batch[key][i] is not None
                 }
-                all_inputs.append(row)
+                batch_inputs.append(row)
 
-        return self.model.encode(
-            all_inputs,
-            prompt=instruction,
-            **kwargs,
-        )
+            embeddings = self.model.encode(
+                batch_inputs,
+                prompt=instruction,
+                **kwargs,
+            )
+            if isinstance(embeddings, torch.Tensor):
+                embeddings = embeddings.cpu().detach().float()
+            all_embeddings.append(embeddings)
+        return np.concatenate(all_embeddings, axis=0)
 
 
 bidirlm_omni_2_5b = ModelMeta(
