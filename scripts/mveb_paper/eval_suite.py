@@ -108,8 +108,8 @@ def main():
     print(f"Using {num_workers} CPU workers for data loading and video preprocessing.")
 
     encode_kwargs = {"batch_size": args.batch_size}
-    if args.prefetch_factor is not None:
-        encode_kwargs["prefetch_factor"] = args.prefetch_factor
+    # if args.prefetch_factor is not None:
+    #     encode_kwargs["prefetch_factor"] = args.prefetch_factor
 
     evaluation = mteb.MTEB(tasks=tasks)
     evaluation.run(
