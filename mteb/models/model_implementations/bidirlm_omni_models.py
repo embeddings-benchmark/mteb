@@ -38,15 +38,15 @@ TASK_PROMPTS: dict[str, str | dict[str, str]] = {
     # MTEB tasks
     "ArguAna": {
         "query": "Given a claim, retrieve documents that support or refute the claim",
-        "passage": "Given a claim, retrieve documents that support or refute the claim",
+        "document": "Given a claim, retrieve documents that support or refute the claim",
     },
     "CQADupstackGamingRetrieval": {
         "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
-        "passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "document": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
     },
     "CQADupstackUnixRetrieval": {
         "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
-        "passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "document": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
     },
     # MIEB tasks
     "AROCocoOrder": "Compositionality Evaluation of images to their captions.Each capation has four hard negatives created by order permutations.",
@@ -141,11 +141,11 @@ class BidirLMOmniEncoder(AbsEncoder):
         entry = self.task_prompts.get(task_metadata.name)
 
         # Asymmetric retrieval: documents get no instruction unless the prompt
-        # dict explicitly provides a "passage" key.
+        # dict explicitly provides a "document" key.
         if (
             task_metadata.simplified_task_type == "retrieval"
             and prompt_type == PromptType.document
-            and not (isinstance(entry, dict) and "passage" in entry)
+            and not (isinstance(entry, dict) and "document" in entry)
         ):
             return None
 
