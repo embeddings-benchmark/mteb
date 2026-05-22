@@ -82,13 +82,12 @@ nvidia-smi --query-gpu=index,name,memory.total,memory.free --format=csv,noheader
 echo "----------------------------------------------------------------"
 
 # ── Environment ─────────────────────────────────────────────────────
-export LD_LIBRARY_PATH=/data/home/niklas/deepshah/mteb_env_ds/lib/python3.13/site-packages/torch/lib:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=/data/home/niklas/adnan/mteb/.ffmpeg/lib:\$LD_LIBRARY_PATH
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export TORCHDYNAMO_DISABLE=1
 
 # ── Run evaluation ──────────────────────────────────────────────────
-/data/home/niklas/deepshah/mteb_env_ds/bin/python3 scripts/mveb_paper/eval_suite.py \\
+/data/home/niklas/adnan/mteb-ume/.venv/bin/python3 scripts/mveb_paper/eval_suite.py \\
     --model "$MODEL" \\
     --output-folder "$OUTPUT_FOLDER" \\
     $FRAME_ARG \\
