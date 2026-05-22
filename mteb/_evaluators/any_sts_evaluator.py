@@ -76,7 +76,10 @@ class AnySTSEvaluator(Evaluator):
     ) -> STSEvaluatorScores:
         logger.info("Running semantic similarity - Encoding samples (1/2)")
 
-        if isinstance(self.input_columns[0], str):
+        if (
+            isinstance(self.input_columns[0], str)
+            and len(self.task_metadata.modalities) == 1
+        ):
             cols1: str | list[str] = self.input_columns[0]
             ds1_col_names: dict[str, str] = {
                 self.input_columns[0]: self.task_metadata.modalities[0]
@@ -100,7 +103,10 @@ class AnySTSEvaluator(Evaluator):
         )
 
         logger.info("Running semantic similarity - Encoding samples (2/2)...")
-        if isinstance(self.input_columns[1], str):
+        if (
+            isinstance(self.input_columns[1], str)
+            and len(self.task_metadata.modalities) == 1
+        ):
             cols2: str | list[str] = self.input_columns[1]
             ds2_col_names: dict[str, str] = {
                 self.input_columns[1]: self.task_metadata.modalities[0]

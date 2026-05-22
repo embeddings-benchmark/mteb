@@ -13,7 +13,6 @@ from sklearn.metrics.pairwise import (
 from mteb._create_dataloaders import _create_dataloader_from_texts, create_dataloader
 from mteb._evaluators.evaluator import Evaluator
 from mteb.similarity_functions import compute_pairwise_similarity
-from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -23,7 +22,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
-    from mteb.types import EncodeKwargs
+    from mteb.types import EncodeKwargs, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -106,10 +105,12 @@ class PairClassificationEvaluator(Evaluator):
                 self.dataset.select_columns(cols1).rename_columns(ds1_col_names),
                 task_metadata=self.task_metadata,
                 input_column=self.task_metadata.modalities[0]
-                if isinstance(self.input1_column_name, str)
+                if (
+                    isinstance(self.input1_column_name, str)
+                    and len(self.task_metadata.modalities) == 1
+                )
                 else None,
                 num_proc=num_proc,
-                prompt_type=PromptType.query,  # explicitly pass prompt type to correctly get modality
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
@@ -122,9 +123,7 @@ class PairClassificationEvaluator(Evaluator):
         if isinstance(self.input2_column_name, str):
             cols2: str | list[str] = self.input2_column_name
             ds2_col_names: dict[str, str] = {
-                self.input2_column_name: self.task_metadata.modalities[
-                    0 if len(self.task_metadata.modalities) == 1 else 1
-                ]
+                self.input2_column_name: self.task_metadata.modalities[0]
             }
         else:
             cols2 = [col for col, _ in self.input2_column_name]
@@ -134,13 +133,13 @@ class PairClassificationEvaluator(Evaluator):
             create_dataloader(
                 self.dataset.select_columns(cols2).rename_columns(ds2_col_names),
                 task_metadata=self.task_metadata,
-                input_column=self.task_metadata.modalities[
-                    0 if len(self.task_metadata.modalities) == 1 else 1
-                ]
-                if isinstance(self.input2_column_name, str)
+                input_column=self.task_metadata.modalities[0]
+                if (
+                    isinstance(self.input2_column_name, str)
+                    and len(self.task_metadata.modalities) == 1
+                )
                 else None,
                 num_proc=num_proc,
-                prompt_type=PromptType.document,  # explicitly pass prompt type to correctly get modality
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,

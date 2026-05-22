@@ -269,18 +269,17 @@ class AbsTaskSTS(AbsTask):
             def _load_col(col: str) -> list[Any]:
                 return list(self.dataset[split][col])
 
-        if isinstance(self.column_names[0], str):
-            modality1 = self.metadata.get_modalities(self.input1_prompt_type)[0]
-            modality2 = self.metadata.get_modalities(self.input2_prompt_type)[0]
+        if isinstance(self.column_names[0], str) and len(self.metadata.modalities) == 1:
+            modality = self.metadata.modalities[0]
             col_modalities1: list[tuple[str, str]] = [
-                (str(self.column_names[0]), modality1)
+                (str(self.column_names[0]), modality)
             ]
             col_modalities2: list[tuple[str, str]] = [
-                (str(self.column_names[1]), modality2)
+                (str(self.column_names[1]), modality)
             ]
         else:
-            col_modalities1 = list(self.column_names[0])
-            col_modalities2 = list(self.column_names[1])
+            col_modalities1 = self.column_names[0]
+            col_modalities2 = self.column_names[1]
 
         pair_stats = calculate_pair_modality_statistics(
             col_modalities1,

@@ -21,7 +21,7 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Mapping
+    from collections.abc import Callable, Mapping, Sequence
 
     from PIL import Image
     from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
@@ -456,7 +456,7 @@ _STAT_FN: dict[str, Any] = {
 
 
 def _compute_side_statistics(
-    col_modalities: list[tuple[str, str]],
+    col_modalities: Sequence[tuple[str, str]],
     load_col: Callable[[str], list[Any]],
     n: int,
     max_workers: int | None = None,
@@ -491,8 +491,8 @@ def _compute_side_statistics(
 
 
 def calculate_pair_modality_statistics(
-    col_modalities1: list[tuple[str, str]],
-    col_modalities2: list[tuple[str, str]],
+    col_modalities1: Sequence[tuple[str, str]],
+    col_modalities2: Sequence[tuple[str, str]],
     load_col: Callable[[str], list[Any]],
     n: int,
     max_workers: int | None = None,

@@ -258,7 +258,7 @@ def _prepare_dataset(
     """
     modalities = task_metadata.get_modalities(prompt_type)
 
-    if "text" in modalities and task_metadata.simplified_task_type == "retrieval":
+    if "text" in modalities:
         if prompt_type == PromptType.document:
             dataset = dataset.map(
                 _corpus_to_dict,

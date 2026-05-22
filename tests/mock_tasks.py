@@ -6789,8 +6789,18 @@ class MockAsymVideoAudioPairClassificationTaskV2(AbsTaskPairClassification):
     metadata.modalities = ["video", "audio"]
     metadata.category = "v2a"
 
-    input1_column_name = "video"
-    input2_column_name = "audio"
+    input1_column_name = [
+        (
+            "video",
+            "video",
+        )
+    ]
+    input2_column_name = [
+        (
+            "audio",
+            "audio",
+        )
+    ]
     input1_prompt_type = PromptType.query
     input2_prompt_type = PromptType.document
 
@@ -6859,6 +6869,203 @@ class MockAsymVideoAudioPairClassificationTaskV2(AbsTaskPairClassification):
                         "video": mock_videos,
                         "audio": mock_audio,
                         "label": [0, 1],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.dataset = self.dataset.cast_column("audio", Audio())
+        self.data_loaded = True
+
+
+class MockSymCustomVideoAudioPairClassificationTaskV2(AbsTaskPairClassification):
+    """Asymmetric pair classification: side-1 is video only, side-2 is audio only. Differs from v1 by `input_column_name` is str instead of list"""
+
+    metadata = TaskMetadata(
+        type="VideoPairClassification",
+        name="MockSymCustomVideoAudioPairClassificationTaskV2",
+        main_score="max_ap",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video", "audio"]
+    metadata.category = "v2a"
+
+    input1_column_name = [
+        (
+            "video",
+            "video",
+        )
+    ]
+    input2_column_name = [
+        (
+            "audio",
+            "audio",
+        )
+    ]
+    input1_prompt_type = PromptType.document
+    input2_prompt_type = PromptType.document
+
+    label_column_name = "label"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "unique_pairs": 2,
+            "number_of_characters": None,
+            "text1_statistics": None,
+            "image1_statistics": None,
+            "audio1_statistics": None,
+            "video1_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "text2_statistics": None,
+            "image2_statistics": None,
+            "audio2_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video2_statistics": None,
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+        }
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video": mock_videos,
+                        "audio": mock_audio,
+                        "label": [0, 1],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.dataset = self.dataset.cast_column("audio", Audio())
+        self.data_loaded = True
+
+
+class MockSymCustomVideoAudiSTSTask(AbsTaskSTS):
+    """Asymmetric pair classification: side-1 is video only, side-2 is audio only. Differs from v1 by `input_column_name` is str instead of list"""
+
+    metadata = TaskMetadata(
+        type="VideoPairClassification",
+        name="STS",
+        main_score="cosine_spearman",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video", "audio"]
+    metadata.category = "v2a"
+
+    column_names = (
+        [
+            (
+                "video",
+                "video",
+            )
+        ],
+        [
+            (
+                "audio",
+                "audio",
+            )
+        ],
+    )
+
+    input1_prompt_type = PromptType.document
+    input2_prompt_type = PromptType.document
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "number_of_characters": None,
+            "unique_pairs": 2,
+            "text1_statistics": None,
+            "text2_statistics": None,
+            "image1_statistics": None,
+            "image2_statistics": None,
+            "audio1_statistics": None,
+            "audio2_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video1_statistics": {
+                "total_duration_seconds": 2,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "video2_statistics": None,
+            "label_statistics": {"min_score": 0, "avg_score": 0.5, "max_score": 1},
+        }
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video": mock_videos,
+                        "audio": mock_audio,
+                        "score": [0, 1],
                     }
                 ),
             }

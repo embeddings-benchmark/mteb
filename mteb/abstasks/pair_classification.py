@@ -221,21 +221,27 @@ class AbsTaskPairClassification(AbsTask):
         labels = _get_col_data(self.label_column_name)
         n = len(labels)
 
-        if isinstance(self.input1_column_name, str):
-            modality1 = self.metadata.get_modalities(self.input1_prompt_type)[0]
-            col_modalities1: list[tuple[str, str]] = [
+        if (
+            isinstance(self.input1_column_name, str)
+            and len(self.metadata.modalities) == 1
+        ):
+            modality1 = self.metadata.modalities[0]
+            col_modalities1: Sequence[tuple[str, str]] = [
                 (self.input1_column_name, modality1)
             ]
         else:
-            col_modalities1 = list(self.input1_column_name)
+            col_modalities1 = self.input1_column_name
 
-        if isinstance(self.input2_column_name, str):
-            modality2 = self.metadata.get_modalities(self.input2_prompt_type)[0]
-            col_modalities2: list[tuple[str, str]] = [
+        if (
+            isinstance(self.input2_column_name, str)
+            and len(self.metadata.modalities) == 1
+        ):
+            modality2 = self.metadata.modalities[0]
+            col_modalities2: Sequence[tuple[str, str]] = [
                 (self.input2_column_name, modality2)
             ]
         else:
-            col_modalities2 = list(self.input2_column_name)
+            col_modalities2 = self.input2_column_name
 
         pair_stats = calculate_pair_modality_statistics(
             col_modalities1,
