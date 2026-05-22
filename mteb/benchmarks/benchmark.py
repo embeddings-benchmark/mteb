@@ -19,6 +19,7 @@ from mteb.abstasks.abstask import AbsTask
 from mteb.types import StrURL
 
 from ._benchmark_metrics import (
+    LeaderboardMetrics,
     _compute_mean_task,
     _compute_mean_task_type,
 )
@@ -107,7 +108,7 @@ class Benchmark:
     def __getitem__(self, index: int) -> AbsTask:
         return self.tasks[index]
 
-    def _create_summary_table(  # noqa: PLR6301
+    def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         """Create summary table. Called by the leaderboard app.
@@ -115,11 +116,35 @@ class Benchmark:
         Returns:
             A pandas DataFrame representing the summary results.
         """
-        from mteb.benchmarks._create_table import (
-            _create_summary_table_from_benchmark_results,
-        )
+        from mteb.benchmarks._create_table import _add_model_metadata
 
-        return _create_summary_table_from_benchmark_results(benchmark_results)
+        scores = self.get_score(benchmark_results)
+        if not scores:
+            return pd.DataFrame({"No results": ["You can try relaxing your criteria"]})
+
+        joint_table = pd.DataFrame.from_dict(scores, orient="index")
+        rank_cols = {LeaderboardMetrics.rank_borda}
+        score_cols = [c for c in joint_table.columns if c not in rank_cols]
+        joint_table = joint_table[joint_table[score_cols].notna().any(axis=1)]
+        if joint_table.empty:
+            return pd.DataFrame({"No results": ["You can try relaxing your criteria"]})
+
+        joint_table.index.name = "model_name"
+        joint_table = joint_table.sort_values(
+            LeaderboardMetrics.rank_borda, ascending=True
+        )
+        joint_table = joint_table.reset_index()
+
+        _task_names_key = tuple(sorted(t.metadata.name for t in self.tasks))
+        joint_table = _add_model_metadata(
+            joint_table, _task_names_key, include_zero_shot=True
+        )
+        joint_table.insert(
+            0,
+            LeaderboardMetrics.rank_borda,
+            joint_table.pop(LeaderboardMetrics.rank_borda),
+        )
+        return joint_table
 
     def _create_per_task_table(  # noqa: PLR6301
         self, benchmark_results: BenchmarkResults
@@ -338,14 +363,43 @@ class Benchmark:
         model_result: ModelResult,
     ) -> dict[str, float | None]:
         """Compute aggregated scores for a single model."""
+        from collections import defaultdict
+
+        import numpy as np
+
+        from mteb.benchmarks._create_table import _split_on_capital
+
         filtered = model_result.select_tasks(self.tasks).task_results
         if len(filtered) < len(self.tasks):
             raise ValueError(
                 "Some scores of benchmark are missing. Please, run model on full benchmark tasks"
             )
+
+        type_to_scores: dict[str, list[float]] = defaultdict(list)
+        type_has_none: set[str] = set()
+        for tr in filtered:
+            score = tr.get_score()
+            task_type = tr.task.metadata.type
+            if score is None or np.isnan(score):
+                type_has_none.add(task_type)
+            else:
+                type_to_scores[task_type].append(score)
+
+        type_means: dict[str, float | None] = {
+            _split_on_capital(task_type): (
+                None
+                if task_type in type_has_none
+                else sum(scores) / len(scores)
+                if scores
+                else None
+            )
+            for task_type, scores in type_to_scores.items()
+        }
+
         return {
-            "Mean(Task)": _compute_mean_task(filtered),
-            "Mean(TaskType)": _compute_mean_task_type(filtered),
+            LeaderboardMetrics.mean_task: _compute_mean_task(filtered),
+            LeaderboardMetrics.mean_task_type: _compute_mean_task_type(filtered),
+            **type_means,
         }
 
     def get_score(
@@ -367,9 +421,10 @@ class Benchmark:
         Returns:
             A dict mapping each model name to a dict with the keys:
 
-            - ``"Mean(Task)"``: mean score across all benchmark tasks.
-            - ``"Mean(TaskType)"``: mean of per-task-type means.
-            - ``"Rank"``: Borda count rank (1 = best). Each model earns
+            - ``LeaderboardMetrics.mean_task``: mean score across all benchmark tasks.
+            - ``LeaderboardMetrics.mean_task_type``: mean of per-task-type means.
+            - per-task-type means (e.g. ``"Retrieval"``, ``"Classification"``).
+            - ``LeaderboardMetrics.rank_borda``: Borda count rank (1 = best). Each model earns
                 ``n - rank`` points per task; points are summed and the model
                 with the highest total is ranked 1. Matches the leaderboard.
         """
@@ -391,7 +446,8 @@ class Benchmark:
                     "Some task results are missing. Filling results with None"
                 )
                 scores[model_result.model_name] = {
-                    t.metadata.name: None for t in self.tasks
+                    LeaderboardMetrics.mean_task: None,
+                    LeaderboardMetrics.mean_task_type: None,
                 }
                 continue
 
@@ -406,13 +462,13 @@ class Benchmark:
             if per_task_df.shape[1] > 0:
                 borda_ranks = _get_borda_rank(per_task_df)
                 for name, rank in borda_ranks.items():
-                    scores[name]["Rank"] = int(rank)  # type: ignore[index]
+                    scores[name][LeaderboardMetrics.rank_borda] = int(rank)  # type: ignore[index]
             else:
                 for name, model_scores in scores.items():
-                    model_scores["Rank"] = None
+                    model_scores[LeaderboardMetrics.rank_borda] = None
         else:
             for name, model_scores in scores.items():
-                model_scores["Rank"] = None
+                model_scores[LeaderboardMetrics.rank_borda] = None
 
         return scores
 
@@ -420,201 +476,419 @@ class Benchmark:
 class RtebBenchmark(Benchmark):
     """Wrapper for RTEB benchmark."""
 
-    def _create_summary_table(  # noqa: PLR6301
+    def get_score(
+        self,
+        results: BenchmarkResults,
+        *,
+        raise_error: bool = False,
+    ) -> dict[str, dict[str, float | None]]:
+        """Get scores for RTEB: mean of public tasks only, Borda rank on public tasks."""
+        from mteb.benchmarks._create_table import _get_borda_rank
+
+        bench_results = results.join_revisions()
+        data = results.to_dataframe(format="long")
+        if "is_public" in data.columns:
+            public_task_names = set(
+                data.loc[data["is_public"] == True, "task_name"].unique()  # noqa: E712
+            )
+        else:
+            public_task_names = set(results._filter_tasks(is_public=True).task_names)
+
+        scores: dict[str, dict[str, float | None]] = {}
+        per_task_rows: dict[str, dict[str, float | None]] = {}
+
+        for model_result in bench_results:
+            filtered = model_result.select_tasks(self.tasks).task_results
+            public_filtered = [
+                tr for tr in filtered if tr.task_name in public_task_names
+            ]
+            try:
+                if len(filtered) < len(self.tasks):
+                    raise ValueError(
+                        "Some scores of benchmark are missing. Please, run model on full benchmark tasks"
+                    )
+                scores[model_result.model_name] = {
+                    LeaderboardMetrics.mean_task: _compute_mean_task(public_filtered),
+                }
+            except ValueError:
+                if raise_error:
+                    raise
+                logger.warning(
+                    "Some task results are missing. Filling results with None"
+                )
+                scores[model_result.model_name] = {LeaderboardMetrics.mean_task: None}
+                continue
+
+            per_task_rows[model_result.model_name] = {
+                tr.task_name: tr.get_score() for tr in public_filtered
+            }
+
+        if per_task_rows:
+            per_task_df = pd.DataFrame.from_dict(per_task_rows, orient="index").reindex(
+                list(per_task_rows.keys())
+            )
+            if per_task_df.shape[1] > 0:
+                borda_ranks = _get_borda_rank(per_task_df)
+                for name, rank in borda_ranks.items():
+                    scores[name][LeaderboardMetrics.rank_borda] = int(rank)
+            else:
+                for name, model_scores in scores.items():
+                    model_scores[LeaderboardMetrics.rank_borda] = None
+        else:
+            for name, model_scores in scores.items():
+                model_scores[LeaderboardMetrics.rank_borda] = None
+
+        return scores
+
+    def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        from mteb.benchmarks._create_table import (
-            _create_summary_table_mean_public_private,
-        )
+        from mteb.benchmarks._create_table import _add_model_metadata
 
-        joint_table = _create_summary_table_mean_public_private(
-            benchmark_results, exclude_private_from_borda=True
-        )
-        # issue 3902: temporary remove the private column from RTEB summary table
-        if "Mean (Private)" in joint_table.columns:
-            joint_table = joint_table.drop(columns=["Mean (Private)"])
-        # For RTEB: all tasks are Retrieval type, so Retrieval column = Mean (Task)
-        # but due to 3902, if Private column existed, Mean (Task) was the mean of Public and Private so instead we drop Mean (Task) and rename Mean (Public) to Mean (Task)
-        joint_table = joint_table.rename(columns={"Retrieval": "Mean (Task)"})
-        if "Mean (Task)" in joint_table.columns:
-            joint_table = joint_table.drop(columns=["Mean (Task)"])
-        joint_table = joint_table.rename(columns={"Mean (Public)": "Mean (Task)"})
+        scores = self.get_score(benchmark_results)
+        if not scores:
+            return pd.DataFrame({"No results": ["You can try relaxing your criteria"]})
 
+        joint_table = pd.DataFrame.from_dict(scores, orient="index")
+        joint_table = joint_table[
+            joint_table[[LeaderboardMetrics.mean_task]].notna().any(axis=1)
+        ]
+        if joint_table.empty:
+            return pd.DataFrame({"No results": ["You can try relaxing your criteria"]})
+
+        joint_table.index.name = "model_name"
+        joint_table = joint_table.sort_values(
+            LeaderboardMetrics.rank_borda, ascending=True
+        )
+        joint_table = joint_table.reset_index()
+
+        joint_table = _add_model_metadata(joint_table, include_zero_shot=False)
+        joint_table.insert(
+            0,
+            LeaderboardMetrics.rank_borda,
+            joint_table.pop(LeaderboardMetrics.rank_borda),
+        )
         return joint_table
 
 
 class HUMEBenchmark(Benchmark):
     """Wrapper for HUME benchmark."""
 
-    def _create_summary_table(  # noqa: PLR6301
+    def get_score(
+        self,
+        results: BenchmarkResults,
+        *,
+        raise_error: bool = False,
+    ) -> dict[str, dict[str, float | None]]:
+        """Get scores for HUME: subset-weighted mean, Borda rank on per-subset matrix."""
+        from mteb.benchmarks._create_table import (
+            _get_borda_rank,
+            _get_means_per_types,
+            _split_on_capital,
+        )
+
+        results = results.select_tasks(self.tasks)
+        data = results.to_dataframe(format="long")
+        if data.empty:
+            return {}
+
+        per_task = data.pivot(index="model_name", columns="task_name", values="score")
+        to_remove = per_task.isna().all(axis="columns")
+        per_task = per_task.drop(per_task[to_remove].index)
+        if per_task.empty:
+            return {}
+
+        mean_per_type = _get_means_per_types(per_task)
+        mean_per_type_wide = mean_per_type.pivot(
+            index="model_name", columns="task_type", values="score"
+        )
+        mean_per_type_wide.columns = [
+            _split_on_capital(col) for col in mean_per_type_wide.columns
+        ]
+
+        detailed_data = results.to_dataframe(aggregation_level="subset", format="long")
+        overall_subset_mean = detailed_data.groupby("model_name")["score"].mean()
+        per_subset = detailed_data.pivot(
+            index="model_name", columns=["task_name", "subset"], values="score"
+        )
+        borda_ranks = _get_borda_rank(per_subset)
+
+        scores: dict[str, dict[str, float | None]] = {}
+        for model_name in per_task.index:
+            subset_mean = overall_subset_mean.get(model_name)
+            model_scores: dict[str, float | None] = {
+                LeaderboardMetrics.mean_subset: None
+                if subset_mean is None or pd.isna(subset_mean)
+                else float(subset_mean),
+            }
+            for col in mean_per_type_wide.columns:
+                val = (
+                    mean_per_type_wide.loc[model_name, col]
+                    if model_name in mean_per_type_wide.index
+                    else None
+                )
+                model_scores[col] = None if val is None or pd.isna(val) else float(val)
+            model_scores[LeaderboardMetrics.rank_borda] = (
+                int(borda_ranks[model_name])
+                if model_name in borda_ranks.index
+                else None
+            )
+            scores[model_name] = model_scores
+
+        return scores
+
+    def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        from mteb.benchmarks._create_table import _create_summary_table_mean_subset
+        from mteb.benchmarks._create_table import _add_model_metadata
 
-        return _create_summary_table_mean_subset(benchmark_results)
+        scores = self.get_score(benchmark_results)
+        if not scores:
+            return pd.DataFrame({"No results": ["You can try relaxing your criteria"]})
+
+        joint_table = pd.DataFrame.from_dict(scores, orient="index")
+        rank_cols = {LeaderboardMetrics.rank_borda}
+        score_cols = [c for c in joint_table.columns if c not in rank_cols]
+        joint_table = joint_table[joint_table[score_cols].notna().any(axis=1)]
+        if joint_table.empty:
+            return pd.DataFrame({"No results": ["You can try relaxing your criteria"]})
+
+        joint_table.index.name = "model_name"
+        joint_table = joint_table.sort_values(
+            LeaderboardMetrics.mean_subset, ascending=False
+        )
+        joint_table = joint_table.reset_index()
+
+        _task_names_key = tuple(sorted(t.metadata.name for t in self.tasks))
+        joint_table = _add_model_metadata(
+            joint_table, _task_names_key, include_zero_shot=True
+        )
+        joint_table.insert(
+            0,
+            LeaderboardMetrics.rank_borda,
+            joint_table.pop(LeaderboardMetrics.rank_borda),
+        )
+        return joint_table
 
 
 class MIEBBenchmark(Benchmark):
     """Wrapper for MIEB benchmark."""
 
-    def _create_summary_table(  # noqa: PLR6301
+    def get_score(
+        self,
+        results: BenchmarkResults,
+        *,
+        raise_error: bool = False,
+    ) -> dict[str, dict[str, float | None]]:
+        """Get scores for MIEB: typed mean as 'Mean (Task)', Borda rank, sequential rank."""
+        from mteb.benchmarks._create_table import (
+            _get_borda_rank,
+            _get_means_per_types,
+            _split_on_capital,
+        )
+
+        results = results.select_tasks(self.tasks)
+        data = results.to_dataframe(format="long")
+        if data.empty:
+            return {}
+
+        per_task = data.pivot(index="model_name", columns="task_name", values="score")
+        to_remove = per_task.isna().all(axis="columns")
+        per_task = per_task.drop(per_task[to_remove].index)
+        if per_task.empty:
+            return {}
+
+        mean_per_type = _get_means_per_types(per_task)
+        mean_per_type_wide = mean_per_type.pivot(
+            index="model_name", columns="task_type", values="score"
+        )
+        mean_per_type_wide.columns = [
+            _split_on_capital(col) for col in mean_per_type_wide.columns
+        ]
+        if "Any Any Multilingual Retrieval" in mean_per_type_wide.columns:
+            mean_per_type_wide = mean_per_type_wide.rename(
+                columns={"Any Any Multilingual Retrieval": "Multilingual Retrieval"}
+            )
+        if "Any Any Retrieval" in mean_per_type_wide.columns:
+            mean_per_type_wide = mean_per_type_wide.rename(
+                columns={"Any Any Retrieval": "Retrieval"}
+            )
+
+        typed_mean = mean_per_type_wide.mean(skipna=False, axis=1)
+        borda_ranks = _get_borda_rank(per_task)
+        sorted_models = typed_mean.sort_values(ascending=False).index.tolist()
+        sequential_rank = {model: i + 1 for i, model in enumerate(sorted_models)}
+
+        scores: dict[str, dict[str, float | None]] = {}
+        for model_name in per_task.index:
+            tm = typed_mean.get(model_name)
+            model_scores: dict[str, float | None] = {
+                LeaderboardMetrics.mean_task: None
+                if tm is None or pd.isna(tm)
+                else float(tm),
+            }
+            for col in mean_per_type_wide.columns:
+                val = (
+                    mean_per_type_wide.loc[model_name, col]
+                    if model_name in mean_per_type_wide.index
+                    else None
+                )
+                model_scores[col] = None if val is None or pd.isna(val) else float(val)
+            model_scores[LeaderboardMetrics.rank_borda] = (
+                int(borda_ranks[model_name])
+                if model_name in borda_ranks.index
+                else None
+            )
+            model_scores[LeaderboardMetrics.rank] = sequential_rank.get(model_name)
+            scores[model_name] = model_scores
+
+        return scores
+
+    def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        from mteb.benchmarks._create_table import _create_summary_table_mean_task_type
+        from mteb.benchmarks._create_table import _add_model_metadata
 
-        return _create_summary_table_mean_task_type(
-            benchmark_results, mean_column_name="Mean (Task)"
+        scores = self.get_score(benchmark_results)
+        if not scores:
+            return pd.DataFrame({"No results": ["You can try relaxing your criteria"]})
+
+        joint_table = pd.DataFrame.from_dict(scores, orient="index")
+        rank_cols = {LeaderboardMetrics.rank_borda, LeaderboardMetrics.rank}
+        score_cols = [c for c in joint_table.columns if c not in rank_cols]
+        joint_table = joint_table[joint_table[score_cols].notna().any(axis=1)]
+        if joint_table.empty:
+            return pd.DataFrame({"No results": ["You can try relaxing your criteria"]})
+
+        joint_table.index.name = "model_name"
+        joint_table = joint_table.sort_values(LeaderboardMetrics.rank, ascending=True)
+        joint_table = joint_table.reset_index()
+
+        _task_names_key = tuple(sorted(t.metadata.name for t in self.tasks))
+        joint_table = _add_model_metadata(
+            joint_table, _task_names_key, include_zero_shot=True
         )
+        joint_table.insert(
+            0,
+            LeaderboardMetrics.rank_borda,
+            joint_table.pop(LeaderboardMetrics.rank_borda),
+        )
+        joint_table.insert(
+            0, LeaderboardMetrics.rank, joint_table.pop(LeaderboardMetrics.rank)
+        )
+        return joint_table
 
 
 class VidoreBenchmark(Benchmark):
     """Wrapper for Vidore3 benchmark."""
 
-    def _create_vidore_summary_table(  # noqa: PLR6301
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
-        """Create summary table from BenchmarkResults.
-
-        Returns a DataFrame with one row per model containing summary statistics
-        and task type averages. Customized for Vidore benchmark.
-
-        Args:
-            benchmark_results: BenchmarkResults object containing model results
-
-        Returns:
-            DataFrame with model summaries, ready for styling in the leaderboard
-        """
-        import mteb
+    def get_score(
+        self,
+        results: BenchmarkResults,
+        *,
+        raise_error: bool = False,
+    ) -> dict[str, dict[str, float | None]]:
+        """Get scores for Vidore: public/private means, task-type mean as 'Mean (Task)', sequential rank."""
         from mteb.benchmarks._create_table import (
-            _format_max_tokens,
-            _format_n_active_parameters,
-            _format_n_parameters,
-            _get_embedding_size,
             _get_means_per_types,
             _split_on_capital,
         )
-        from mteb.get_tasks import get_task
 
-        data = benchmark_results.to_dataframe(format="long")
-
+        results = results.select_tasks(self.tasks)
+        data = results.to_dataframe(format="long")
         if data.empty:
-            no_results_frame = pd.DataFrame(
-                {"No results": ["You can try relaxing your criteria"]}
+            return {}
+
+        if "is_public" in data.columns:
+            public_task_names = list(
+                data.loc[data["is_public"] == True, "task_name"].unique()  # noqa: E712
             )
-            return no_results_frame
-        public_task_name = benchmark_results._filter_tasks(is_public=True).task_names
-        private_task_name = benchmark_results._filter_tasks(is_public=False).task_names
-        # Convert to DataFrame and pivot
+            private_task_names = list(
+                data.loc[data["is_public"] == False, "task_name"].unique()  # noqa: E712
+            )
+        else:
+            public_task_names = results._filter_tasks(is_public=True).task_names
+            private_task_names = results._filter_tasks(is_public=False).task_names
+
         per_task = data.pivot(index="model_name", columns="task_name", values="score")
-
-        # Remove models with no scores
         to_remove = per_task.isna().all(axis="columns")
-        if to_remove.all():
-            no_results_frame = pd.DataFrame(
-                {"No results": ["You can try relaxing your criteria"]}
-            )
-            return no_results_frame
+        per_task = per_task.drop(per_task[to_remove].index)
+        if per_task.empty:
+            return {}
 
-        models_to_remove = list(per_task[to_remove].index)
-        per_task = per_task.drop(models_to_remove, axis=0)
-
-        # Calculate means by task type
         mean_per_type = _get_means_per_types(per_task)
-        mean_per_type = mean_per_type.pivot(
+        mean_per_type_wide = mean_per_type.pivot(
             index="model_name", columns="task_type", values="score"
         )
-        mean_per_type.columns = [
-            _split_on_capital(column) for column in mean_per_type.columns
+        mean_per_type_wide.columns = [
+            _split_on_capital(col) for col in mean_per_type_wide.columns
         ]
+        task_type_col = mean_per_type_wide.columns[0]  # "Document Understanding"
 
-        # Calculate overall means
-        public_mean = per_task[public_task_name].mean(skipna=False, axis=1)
-        private_mean = per_task[private_task_name].mean(skipna=False, axis=1)
-
-        # Build joint table
-        joint_table = mean_per_type.copy()
-        joint_table.insert(1, "mean(public)", public_mean)
-        joint_table.insert(2, "mean(private)", private_mean)
-        task_type = get_task(
-            per_task.columns[0]
-        ).metadata.type  # "DocumentUnderstanding"
-        joint_table = joint_table.sort_values(
-            [_split_on_capital(task_type), "mean(public)", "mean(private)"],
-            ascending=False,
+        public_cols = [c for c in per_task.columns if c in public_task_names]
+        private_cols = [c for c in per_task.columns if c in private_task_names]
+        public_mean = (
+            per_task[public_cols].mean(skipna=False, axis=1)
+            if public_cols
+            else pd.Series(None, index=per_task.index, dtype=float)
+        )
+        private_mean = (
+            per_task[private_cols].mean(skipna=False, axis=1)
+            if private_cols
+            else pd.Series(None, index=per_task.index, dtype=float)
         )
 
-        joint_table = joint_table.reset_index()
-
-        # Add model metadata
-        model_metas = joint_table["model_name"].map(mteb.get_model_meta)
-        joint_table = joint_table[model_metas.notna()]
-        joint_table["model_link"] = model_metas.map(lambda m: m.reference)
-
-        # Insert model metadata columns
-        joint_table.insert(
-            1,
-            "Max Tokens",
-            model_metas.map(lambda m: _format_max_tokens(m.max_tokens)),
+        sort_df = pd.DataFrame(
+            {
+                task_type_col: mean_per_type_wide[task_type_col],
+                "Mean (Public)": public_mean,
+                "Mean (Private)": private_mean,
+            }
         )
-        joint_table.insert(
-            1,
-            "Embedding Dimensions",
-            model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
-        )
-        joint_table.insert(
-            1,
-            "Total Parameters (B)",
-            model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
-        )
-        joint_table.insert(
-            1,
-            "Active Parameters (B)",
-            model_metas.map(
-                lambda m: _format_n_active_parameters(m.n_active_parameters)
-            ),
+        sort_df = sort_df.sort_values(
+            [task_type_col, "Mean (Public)", "Mean (Private)"], ascending=False
         )
 
-        # Add release date from model metadata
-        joint_table["Release Date"] = model_metas.map(
-            lambda m: str(m.release_date) if m.release_date else None
-        )
+        def _to_float(v: object) -> float | None:
+            return None if v is None or pd.isna(v) else float(v)  # type: ignore[arg-type]
 
-        # Clean up model names (remove HF organization)
-        joint_table["model_name"] = joint_table["model_name"].map(
-            lambda name: name.split("/")[-1]
-        )
+        scores: dict[str, dict[str, float | None]] = {}
+        for i, (model_name, row) in enumerate(sort_df.iterrows()):
+            scores[model_name] = {
+                LeaderboardMetrics.mean_task: _to_float(row[task_type_col]),
+                "Mean (Public)": _to_float(row["Mean (Public)"]),
+                "Mean (Private)": _to_float(row["Mean (Private)"]),
+                LeaderboardMetrics.rank_mean_task: i + 1,
+            }
 
-        # Add markdown links to model names
-        name_w_link = (
-            "[" + joint_table["model_name"] + "](" + joint_table["model_link"] + ")"
-        )
-        joint_table["model_name"] = joint_table["model_name"].mask(
-            joint_table["model_link"].notna(), name_w_link
-        )
-        joint_table = joint_table.drop(columns=["model_link"])
-
-        # Rename columns
-        rename_dict = {
-            "model_name": "Model",
-            "mean(public)": "Mean (Public)",
-            "mean(private)": "Mean (Private)",
-        }
-
-        joint_table = joint_table.rename(columns=rename_dict)
-
-        # Add Rank column
-        joint_table.insert(
-            0, "Rank (Mean Task)", [i + 1 for i in range(len(joint_table))]
-        )
-
-        return joint_table
+        return scores
 
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        joint_table = self._create_vidore_summary_table(benchmark_results)
-        # For ViDoRe (V1, V2, V3): all tasks are Document Understanding type, so Document Understanding column = Mean (Task)
-        joint_table = joint_table.rename(
-            columns={"Document Understanding": "Mean (Task)"}
+        from mteb.benchmarks._create_table import _add_model_metadata
+
+        scores = self.get_score(benchmark_results)
+        if not scores:
+            return pd.DataFrame({"No results": ["You can try relaxing your criteria"]})
+
+        joint_table = pd.DataFrame.from_dict(scores, orient="index")
+        rank_cols = {LeaderboardMetrics.rank_mean_task}
+        score_cols = [c for c in joint_table.columns if c not in rank_cols]
+        joint_table = joint_table[joint_table[score_cols].notna().any(axis=1)]
+        if joint_table.empty:
+            return pd.DataFrame({"No results": ["You can try relaxing your criteria"]})
+
+        joint_table.index.name = "model_name"
+        joint_table = joint_table.sort_values(
+            LeaderboardMetrics.rank_mean_task, ascending=True
+        )
+        joint_table = joint_table.reset_index()
+
+        joint_table = _add_model_metadata(joint_table, include_zero_shot=False)
+        joint_table.insert(
+            0,
+            LeaderboardMetrics.rank_mean_task,
+            joint_table.pop(LeaderboardMetrics.rank_mean_task),
         )
         return joint_table

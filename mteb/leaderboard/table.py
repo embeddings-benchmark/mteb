@@ -9,6 +9,8 @@ import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap
 from pandas.api.types import is_numeric_dtype
 
+from mteb.benchmarks._benchmark_metrics import LeaderboardMetrics
+
 if TYPE_CHECKING:
     from mteb.benchmarks.benchmark import Benchmark
     from mteb.results.benchmark_results import BenchmarkResults
@@ -156,8 +158,8 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         Styled gr.DataFrame ready for display in the leaderboard
     """
     excluded_columns = [
-        "Rank (Borda)",
-        "Rank (Mean Task)",
+        LeaderboardMetrics.rank_borda,
+        LeaderboardMetrics.rank_mean_task,
         "Rank",
         "Model",
         "Total Parameters (B)",
@@ -185,10 +187,10 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(_format_zero_shot)
     joint_table[score_columns] = joint_table[score_columns].map(_format_scores)
 
-    if "Rank (Borda)" in joint_table.columns:
-        rank_column = "Rank (Borda)"
-    elif "Rank (Mean Task)" in joint_table.columns:
-        rank_column = "Rank (Mean Task)"
+    if LeaderboardMetrics.rank_borda in joint_table.columns:
+        rank_column = LeaderboardMetrics.rank_borda
+    elif LeaderboardMetrics.rank_mean_task in joint_table.columns:
+        rank_column = LeaderboardMetrics.rank_mean_task
     else:
         raise ValueError("No rank column found in the result table.")
 

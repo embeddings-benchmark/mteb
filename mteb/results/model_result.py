@@ -19,6 +19,7 @@ from mteb._hf_integration.eval_result_model import (
     HFEvalResultSource,
 )
 from mteb.benchmarks import Benchmark
+from mteb.benchmarks._benchmark_metrics import LeaderboardMetrics
 
 from .task_result import TaskError, TaskResult
 
@@ -480,7 +481,9 @@ class ModelResult(BaseModel):
             benchmarks = [benchmark] if isinstance(benchmark, Benchmark) else benchmark
             for cur_benchmark in benchmarks:
                 try:
-                    benchmark_score = cur_benchmark._get_model_score(self)["Mean(Task)"]
+                    benchmark_score = cur_benchmark._get_model_score(self)[
+                        LeaderboardMetrics.mean_task
+                    ]
                 except ValueError:
                     if raise_error:
                         raise

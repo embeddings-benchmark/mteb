@@ -3,17 +3,18 @@ import numpy as np
 import mteb
 from mteb import ResultCache
 from mteb.benchmarks._benchmark_metrics import (
+    LeaderboardMetrics,
     _compute_mean_task,
     _compute_mean_task_type,
 )
 from mteb.benchmarks.benchmark import Benchmark
 
 MODELS_SCORES = {
-    "Mean(Task)": {
+    LeaderboardMetrics.mean_task: {
         "mteb/baseline-random-encoder": 0.005604,
         "sentence-transformers/all-MiniLM-L6-v2": 0.59396733,
     },
-    "Mean(TaskType)": {
+    LeaderboardMetrics.mean_task_type: {
         "mteb/baseline-random-encoder": 0.007336,
         "sentence-transformers/all-MiniLM-L6-v2": 0.645581,
     },
@@ -34,18 +35,22 @@ def _make_benchmark(extra_tasks: list[str] | None = None):
 
 
 def test_benchmark_get_score(mock_mteb_cache: ResultCache):
-    """get_score returns Mean(Task), Mean(TaskType), and Borda Rank for each model."""
+    """get_score returns Mean (Task), Mean (TaskType), per-task-type means and Borda Rank for each model."""
     mock_benchmark = _make_benchmark()
     mock_results = mock_mteb_cache.load_results()
 
     scores = mock_benchmark.get_score(mock_results)
 
-    for model_name, expected in MODELS_SCORES["Mean(Task)"].items():
+    for model_name, expected in MODELS_SCORES[LeaderboardMetrics.mean_task].items():
         assert model_name in scores, f"{model_name} missing from scores"
-        assert np.allclose(scores[model_name]["Mean(Task)"], expected)
+        assert np.allclose(scores[model_name][LeaderboardMetrics.mean_task], expected)
 
-    for model_name, expected in MODELS_SCORES["Mean(TaskType)"].items():
-        assert np.allclose(scores[model_name]["Mean(TaskType)"], expected)
+    for model_name, expected in MODELS_SCORES[
+        LeaderboardMetrics.mean_task_type
+    ].items():
+        assert np.allclose(
+            scores[model_name][LeaderboardMetrics.mean_task_type], expected
+        )
 
 
 def test_benchmark_get_score_missing_tasks(mock_mteb_cache: ResultCache):
@@ -55,9 +60,9 @@ def test_benchmark_get_score_missing_tasks(mock_mteb_cache: ResultCache):
 
     scores = mock_benchmark.get_score(mock_results)
 
-    for model_name in MODELS_SCORES["Mean(Task)"]:
-        assert scores[model_name]["Mean(Task)"] is None
-        assert scores[model_name]["Mean(TaskType)"] is None
+    for model_name in MODELS_SCORES[LeaderboardMetrics.mean_task]:
+        assert scores[model_name][LeaderboardMetrics.mean_task] is None
+        assert scores[model_name][LeaderboardMetrics.mean_task_type] is None
 
 
 def test_compute_mean_task(mock_mteb_cache: ResultCache):
@@ -72,7 +77,7 @@ def test_compute_mean_task(mock_mteb_cache: ResultCache):
 
     assert np.allclose(
         _compute_mean_task(task_results),
-        MODELS_SCORES["Mean(Task)"][mock_model_name],
+        MODELS_SCORES[LeaderboardMetrics.mean_task][mock_model_name],
     )
 
 
@@ -88,7 +93,7 @@ def test_compute_mean_task_type(mock_mteb_cache: ResultCache):
 
     assert np.allclose(
         _compute_mean_task_type(task_results),
-        MODELS_SCORES["Mean(TaskType)"][mock_model_name],
+        MODELS_SCORES[LeaderboardMetrics.mean_task_type][mock_model_name],
     )
 
 

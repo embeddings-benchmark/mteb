@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Literal
 import numpy as np
 import pandas as pd
 
+from mteb.benchmarks._benchmark_metrics import LeaderboardMetrics
 from mteb.get_tasks import _TASKS_REGISTRY, get_tasks
 from mteb.models.get_model_meta import get_model_meta
 
@@ -98,6 +99,75 @@ def _get_means_per_types(per_task: pd.DataFrame) -> pd.DataFrame:
     return wide.reset_index().melt(
         id_vars="model_name", var_name="task_type", value_name="score"
     )
+
+
+def _add_model_metadata(
+    joint_table: pd.DataFrame,
+    task_names: tuple[str, ...] | None = None,
+    *,
+    include_zero_shot: bool = True,
+) -> pd.DataFrame:
+    """Add model metadata columns to a summary table and format model names as links.
+
+    Args:
+        joint_table: DataFrame with a ``model_name`` column.
+        task_names: Sorted task names for zero-shot percentage. Required when
+            *include_zero_shot* is ``True``.
+        include_zero_shot: Whether to add the Zero-shot percentage column.
+
+    Returns:
+        DataFrame with metadata columns inserted. ``model_name`` is formatted as
+        a markdown link and renamed to ``Model``.
+    """
+    model_metas = joint_table["model_name"].map(get_model_meta)
+    joint_table = joint_table[model_metas.notna()].copy()
+    model_metas = joint_table["model_name"].map(get_model_meta)
+    joint_table["model_link"] = model_metas.map(lambda m: m.reference)
+
+    joint_table.insert(
+        1, "Max Tokens", model_metas.map(lambda m: _format_max_tokens(m.max_tokens))
+    )
+    joint_table.insert(
+        1,
+        "Embedding Dimensions",
+        model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
+    )
+    joint_table.insert(
+        1,
+        "Total Parameters (B)",
+        model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
+    )
+    joint_table.insert(
+        1,
+        "Active Parameters (B)",
+        model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
+    )
+
+    if include_zero_shot:
+        if task_names is None:
+            raise ValueError("task_names must be provided when include_zero_shot=True")
+        joint_table.insert(
+            1,
+            "Zero-shot",
+            model_metas.map(lambda m: _zero_shot_pct_cached(m.name, task_names)),
+        )
+        joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
+
+    joint_table["Release Date"] = model_metas.map(
+        lambda m: str(m.release_date) if m.release_date else None
+    )
+
+    joint_table["model_name"] = joint_table["model_name"].map(
+        lambda name: name.split("/")[-1]
+    )
+    name_w_link = (
+        "[" + joint_table["model_name"] + "](" + joint_table["model_link"] + ")"
+    )
+    joint_table["model_name"] = joint_table["model_name"].mask(
+        joint_table["model_link"].notna(), name_w_link
+    )
+    joint_table = joint_table.drop(columns=["model_link"])
+    return joint_table.rename(columns={"model_name": "Model"})
 
 
 def _create_summary_table_from_benchmark_results(
@@ -216,13 +286,13 @@ def _create_summary_table_from_benchmark_results(
     joint_table = joint_table.rename(
         columns={
             "model_name": "Model",
-            "mean_by_task_type": "Mean (TaskType)",
-            "mean": "Mean (Task)",
+            "mean_by_task_type": LeaderboardMetrics.mean_task_type,
+            "mean": LeaderboardMetrics.mean_task,
         }
     )
 
     # Move borda rank to front
-    joint_table.insert(0, "Rank (Borda)", joint_table.pop("borda_rank"))
+    joint_table.insert(0, LeaderboardMetrics.rank_borda, joint_table.pop("borda_rank"))
 
     return joint_table
 
@@ -461,7 +531,7 @@ def _create_summary_table_mean_public_private(
     joint_table = joint_table.rename(columns=rename_dict)
 
     # Move borda rank to front
-    joint_table.insert(0, "Rank (Borda)", joint_table.pop("borda_rank"))
+    joint_table.insert(0, LeaderboardMetrics.rank_borda, joint_table.pop("borda_rank"))
 
     return joint_table
 
@@ -586,18 +656,19 @@ def _create_summary_table_mean_subset(
     # Rename columns
     rename_dict = {
         "model_name": "Model",
-        "mean(subset)": "Mean (Subset)",
+        "mean(subset)": LeaderboardMetrics.mean_subset,
     }
     joint_table = joint_table.rename(columns=rename_dict)
 
     # Move borda rank to front
-    joint_table.insert(0, "Rank (Borda)", joint_table.pop("borda_rank"))
+    joint_table.insert(0, LeaderboardMetrics.rank_borda, joint_table.pop("borda_rank"))
 
     return joint_table
 
 
 def _create_summary_table_mean_task_type(
-    benchmark_results: BenchmarkResults, mean_column_name: str = "Mean (TaskType)"
+    benchmark_results: BenchmarkResults,
+    mean_column_name: str = LeaderboardMetrics.mean_task_type,
 ) -> pd.DataFrame:
     """Create summary table from BenchmarkResults.
 
@@ -606,7 +677,7 @@ def _create_summary_table_mean_task_type(
 
     Args:
         benchmark_results: BenchmarkResults object containing model results
-        mean_column_name: Name for the mean-by-task-type column. Defaults to "Mean (TaskType)".
+        mean_column_name: Name for the mean-by-task-type column. Defaults to `Mean (TaskType)`.
 
     Returns:
         DataFrame with model summaries, ready for styling in the leaderboard
@@ -711,7 +782,7 @@ def _create_summary_table_mean_task_type(
         columns={
             "model_name": "Model",
             "mean_by_task_type": mean_column_name,
-            "borda_rank": "Rank (Borda)",
+            "borda_rank": LeaderboardMetrics.rank_borda,
         }
     )
 

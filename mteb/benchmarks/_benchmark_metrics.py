@@ -1,12 +1,27 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from enum import Enum
 from typing import TYPE_CHECKING
 
 import numpy as np
 
 if TYPE_CHECKING:
     from mteb.results.task_result import TaskResult
+
+
+class LeaderboardMetrics(str, Enum):
+    """Column-name constants shared across benchmark classes and leaderboard code."""
+
+    def __str__(self) -> str:
+        return self.value
+
+    mean_task = "Mean (Task)"
+    mean_task_type = "Mean (TaskType)"
+    mean_subset = "Mean (Subset)"
+    rank_borda = "Rank (Borda)"
+    rank_mean_task = "Rank (Mean Task)"
+    rank = "Rank"
 
 
 def _compute_mean_task(task_results: list[TaskResult]) -> float | None:

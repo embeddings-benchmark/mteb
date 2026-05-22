@@ -7,6 +7,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 from mteb.abstasks.task_metadata import TaskType
+from mteb.benchmarks._benchmark_metrics import LeaderboardMetrics
 
 logger = logging.getLogger(__name__)
 
@@ -102,21 +103,34 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df["Embedding Dimensions"] = df["Embedding Dimensions"].map(_parse_float)
     df["Max Tokens"] = df["Max Tokens"].map(_parse_float)
     df["Log(Tokens)"] = np.log10(df["Max Tokens"])
-    df["Mean (Task)"] = df["Mean (Task)"].map(_parse_float)
+    df[LeaderboardMetrics.mean_task] = df[LeaderboardMetrics.mean_task].map(
+        _parse_float
+    )
     df = df.dropna(
-        subset=["Mean (Task)", "Number of Active Parameters", "Embedding Dimensions"]
+        subset=[
+            LeaderboardMetrics.mean_task,
+            "Number of Active Parameters",
+            "Embedding Dimensions",
+        ]
     )
     if not len(df.index):
         return go.Figure()
-    min_score, max_score = df["Mean (Task)"].min(), df["Mean (Task)"].max()
+    min_score, max_score = (
+        df[LeaderboardMetrics.mean_task].min(),
+        df[LeaderboardMetrics.mean_task].max(),
+    )
     df["sqrt(dim)"] = np.sqrt(df["Embedding Dimensions"].clip(upper=clip_embed_size))
     df["Max Tokens"] = df["Max Tokens"].apply(lambda x: _process_max_tokens(x))  # noqa: PLW0108
-    rank_column = "Rank (Borda)" if "Rank (Borda)" in df.columns else "Rank (Mean Task)"
+    rank_column = (
+        LeaderboardMetrics.rank_borda
+        if LeaderboardMetrics.rank_borda in df.columns
+        else LeaderboardMetrics.rank_mean_task
+    )
     df["_x_display"] = df["Number of Active Parameters"].replace(0, 1)
     fig = px.scatter(
         df,
         x="_x_display",
-        y="Mean (Task)",
+        y=LeaderboardMetrics.mean_task,
         labels={
             "_x_display": "Number of Active Parameters",
         },
@@ -132,7 +146,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
             "Embedding Dimensions": True,
             "Number of Active Parameters": True,
             "_x_display": False,
-            "Mean (Task)": True,
+            LeaderboardMetrics.mean_task: True,
             rank_column: True,
             "Log(Tokens)": False,
             "sqrt(dim)": False,
@@ -182,7 +196,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
 @_failsafe_plot
 def _performance_over_time_plot(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
-    score_column = "Mean (Task)"
+    score_column = LeaderboardMetrics.mean_task
     if score_column not in df.columns or "Model" not in df.columns:
         return _text_plot(
             "Couldn't produce timeline plot. Required columns are missing."
