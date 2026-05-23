@@ -16,6 +16,22 @@ def get_task_type(task_name: str) -> str:
     except Exception:
         return "Unknown"
 
+ALLOWED_MODELS = {
+    "nvidia__omni-embed-nemotron-3b",
+    "facebook__pe-av-small",
+    "encord-team__ebind-full"
+}
+
+ALLOWED_TASKS = {
+    "MSRVTTT2V",
+    "VATEXT2VARetrieval",
+    "VATEXV2ARetrieval",
+    "OmniVideoBenchVideoCentricQA",
+    "WorldSense1MinVideoAudioCentricQA",
+    "BreakfastClassification",
+    "MusicAVQACLSVideoClustering"
+}
+
 def main():
     parser = argparse.ArgumentParser(description="Parse MTEB results across varying frame counts.")
     parser.add_argument("results_dir", type=str, help="Path to the root results directory")
@@ -51,6 +67,12 @@ def main():
         model_name = parts[num_frame_idx + 1]
         task_name = json_path.stem
         
+        if model_name not in ALLOWED_MODELS:
+            continue
+            
+        if task_name not in ALLOWED_TASKS:
+            continue
+
         # 2. Avoid duplicates: If task x model x num_frame is already recorded, skip
         key = (task_name, model_name, num_frames)
         if key in records:
@@ -96,6 +118,9 @@ def main():
     # Table 2: Model name as row x num_frames as col, mean performance across tasks
     table2 = df.groupby(["model_name", "num_frames"])["main_score"].mean().unstack()
 
+    # Table 3: Overall mean performance across all allowed tasks and models per num_frames
+    table3 = df.groupby("num_frames")["main_score"].mean().to_frame("Overall Mean").T
+
     # 5. Output tables
     print("\n" + "="*80)
     print("Table 1: Mean Performance by Task Type and Num Frames (Averaged across models)")
@@ -106,6 +131,11 @@ def main():
     print("Table 2: Mean Performance by Model and Num Frames (Averaged across tasks)")
     print("="*80)
     print(table2.to_markdown(floatfmt=".4f"))
+
+    print("\n" + "="*80)
+    print("Table 3: Overall Mean Performance by Num Frames")
+    print("="*80)
+    print(table3.to_markdown(floatfmt=".4f"))
 
 
 if __name__ == "__main__":
