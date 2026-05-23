@@ -24,12 +24,12 @@ ALLOWED_MODELS = {
 
 ALLOWED_TASKS = {
     "MSRVTTT2V",
-    "VATEXT2VARetrieval",
-    "VATEXV2ARetrieval",
-    "OmniVideoBenchVideoCentricQA",
-    "WorldSense1MinVideoAudioCentricQA",
+    # "VATEXT2VARetrieval",
+    # "VATEXV2ARetrieval",
+    # "OmniVideoBenchVideoCentricQA",
+    # "WorldSense1MinVideoAudioCentricQA",
     "BreakfastClassification",
-    "MusicAVQACLSVideoClustering"
+    # "MusicAVQACLSVideoClustering"
 }
 
 def main():
