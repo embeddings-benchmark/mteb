@@ -133,16 +133,18 @@ def _evaluate_task(  # noqa: PLR0913
                 existing_results=existing_results,
             )
         if isinstance(result, TaskResult):
-            existing_co2 = (
+            existing_co2_val = (
                 existing_results.kg_co2_emissions
                 if (existing_results and existing_results.kg_co2_emissions is not None)
                 else 0.0
             )
-            result.kg_co2_emissions = existing_co2 + (tracker.final_emissions or 0.0)
+            result.kg_co2_emissions = existing_co2_val + (
+                tracker.final_emissions or 0.0
+            )
         return result
 
     task_results: dict[SplitName, dict[HFSubset, ScoresDict]] = {}
-    evaluation_time = 0.0
+    evaluation_time: float = 0.0
 
     model_meta = model.mteb_model_meta
 
@@ -150,7 +152,7 @@ def _evaluate_task(  # noqa: PLR0913
     if existing_results is not None:
         for split, scores_list in existing_results.scores.items():
             task_results[split] = {score["hf_subset"]: score for score in scores_list}
-        if existing_results.evaluation_time:
+        if existing_results.evaluation_time is not None:
             evaluation_time = existing_results.evaluation_time
 
     task.check_if_dataset_is_superseded()

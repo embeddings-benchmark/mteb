@@ -196,7 +196,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
         mteb_ver = version("mteb")
-        flat_scores = defaultdict(list)
+        flat_scores: dict[SplitName, list[ScoresDict]] = defaultdict(list)
         for split, hf_subset_scores in scores.items():
             for hf_subset, hf_scores in hf_subset_scores.items():
                 if hf_subset in subset2langscripts:
