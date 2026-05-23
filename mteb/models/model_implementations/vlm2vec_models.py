@@ -393,9 +393,9 @@ class VLM2VEC2Wrapper(AbsEncoder):
         revision: str | None = None,
         *,
         device: str | None = None,
-        fps: float | None = 2.0,
-        max_frames: int | None = 64,
-        num_frames: int | None = None,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = 8,
         **kwargs,
     ) -> None:
         from peft import PeftModel
