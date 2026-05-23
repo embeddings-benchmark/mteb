@@ -71,7 +71,7 @@ class TimingStack:
         with timing("encode"):
             embeddings = model.encode(dataset)
 
-        timing.quick_plot()
+        timing.plot()
     """
 
     def __init__(self) -> None:
@@ -113,7 +113,7 @@ class TimingStack:
         )
         self.phases.append(phase)
 
-    def quick_plot(self) -> str:
+    def plot(self) -> str:
         """Plots a text-based bar chart of the recorded timing phases.
 
         When phases have ``subset`` or ``split`` metadata, the row label is

@@ -28,7 +28,7 @@ from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
-from mteb.timing import PhaseTiming
+from mteb.timing import PhaseTiming, TimingStack
 from mteb.types import (
     ScoresDict,
     SplitName,
@@ -325,6 +325,14 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def eval_splits(self) -> list[str]:
         """Get the eval splits present in the scores."""
         return list(self.scores.keys())
+
+    @property
+    def timings(self) -> TimingStack:
+        """Get the timings (TimingStack) of the evaluation."""
+        ts = TimingStack()
+        if self.evaluation_phases:
+            ts.phases = self.evaluation_phases
+        return ts
 
     def to_dict(self) -> dict[str, Any]:
         """Convert the TaskResult to a dictionary.

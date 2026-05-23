@@ -11,6 +11,7 @@ from mteb._hf_integration.eval_result_model import (
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.results import TaskResult
+from mteb.timing import PhaseTiming
 
 tests_folder = Path(__file__).parent.parent
 
@@ -323,3 +324,38 @@ def test_to_hf_result(mock_mteb_cache: ResultCache):
     user: test_user
 """
     )
+
+
+def test_task_result_timings():
+    """Test that TaskResult.timings correctly loads evaluation_phases and supports plotting."""
+
+    phases: list[PhaseTiming] = [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 1.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {"name": "encode", "start": 1.5, "end": 4.5, "split": "test", "subset": "en"},
+    ]
+
+    task_result = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="1.0.0",
+        scores={},
+        evaluation_time=4.5,
+        evaluation_phases=phases,
+    )
+
+    timings = task_result.timings
+    assert timings is not None
+    assert len(timings.phases) == 2
+    assert timings.phases[0]["name"] == "load data"
+    assert timings.phases[1]["name"] == "encode"
+
+    plot_output = timings.plot()
+    assert "load data" in plot_output
+    assert "encode" in plot_output
+    assert "3.0s" in plot_output  # duration of encode phase is 4.5 - 1.5 = 3.0s
