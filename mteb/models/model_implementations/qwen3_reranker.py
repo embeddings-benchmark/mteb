@@ -51,25 +51,17 @@ class Qwen3RerankerWrapper:
         self.model.to(self.device)
         self.model.eval()
 
-        self.suffix = "<|im_start|>assistant\n<think>\n\n</think>\n\n"
         self.token_false_id = self.tokenizer.convert_tokens_to_ids("no")
         self.token_true_id = self.tokenizer.convert_tokens_to_ids("yes")
 
-        self.prefix = '<|im_start|>system\nJudge whether the Document meets the requirements based on the Query and the Instruct provided. Note that the answer can only be "yes" or "no".<|im_end|>\n<|im_start|>user\n'
         self.suffix = "<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
-        self.prefix_tokens = self.tokenizer.encode(
-            self.prefix, add_special_tokens=False
-        )
         self.suffix_tokens = self.tokenizer.encode(
             self.suffix, add_special_tokens=False
         )
-        self.true_token = self.tokenizer("yes", add_special_tokens=False).input_ids[0]
-        self.false_token = self.tokenizer("no", add_special_tokens=False).input_ids[0]
 
         self.generation_config = GenerationConfig(
             max_new_tokens=1,
-            do_sample=True,
-            top_p=0.95,
+            do_sample=False,
             output_logits=True,
             return_dict_in_generate=True,
         )
@@ -81,14 +73,9 @@ class Qwen3RerankerWrapper:
         if instruction is None:
             instruction = "Given a web search query, retrieve relevant passages that answer the query"
         text = [
-            {
-                "role": "system",
-                "content": 'Judge whether the Document meets the requirements based on the Query and the Instruct provided. Note that the answer can only be "yes" or "no".',
-            },
-            {
-                "role": "user",
-                "content": f"<Instruct>: {instruction}\n\n<Query>: {query}\n\n<Document>: {doc}",
-            },
+            {"role": "system", "content": instruction},
+            {"role": "query", "content": query},
+            {"role": "document", "content": doc},
         ]
         return text
 
@@ -96,10 +83,17 @@ class Qwen3RerankerWrapper:
         inputs = self.tokenizer.apply_chat_template(
             pairs, tokenize=True, add_generation_prompt=False, enable_thinking=False
         )
-        for i, ele in enumerate(inputs["input_ids"]):
-            inputs["input_ids"][i] = (
-                ele[: self.max_length - len(self.suffix_tokens)] + self.suffix_tokens
-            )
+        for i in range(len(inputs["input_ids"])):
+            ele = inputs["input_ids"][i]
+            if len(ele) > self.max_length:
+                inputs["input_ids"][i] = (
+                    ele[: self.max_length - len(self.suffix_tokens)]
+                    + self.suffix_tokens
+                )
+                if "attention_mask" in inputs:
+                    inputs["attention_mask"][i] = inputs["attention_mask"][i][
+                        : self.max_length - len(self.suffix_tokens)
+                    ] + [1] * len(self.suffix_tokens)
 
         inputs = self.tokenizer.pad(
             inputs,
@@ -114,7 +108,7 @@ class Qwen3RerankerWrapper:
     @torch.no_grad()
     def compute_logits(self, inputs: dict) -> list[float]:
         outputs = self.model.generate(
-            input_ids=inputs["input_ids"],
+            **inputs,
             generation_config=self.generation_config,
         )
         last_token_logits = outputs.logits[0]
