@@ -119,7 +119,9 @@ def main():
     table2 = df.groupby(["model_name", "num_frames"])["main_score"].mean().unstack()
 
     # Table 3: Overall mean performance across all allowed tasks and models per num_frames
-    table3 = df.groupby("num_frames")["main_score"].mean().to_frame("Overall Mean").T
+    table3_mean = df.groupby("num_frames")["main_score"].mean().to_frame("Overall Mean").T
+    table3_count = df.groupby("num_frames")["main_score"].count().to_frame("Entry Count").T
+    table3 = pd.concat([table3_mean, table3_count])
 
     # 5. Output tables
     print("\n" + "="*80)
