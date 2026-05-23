@@ -248,9 +248,7 @@ def test_evaluate_aggregated_task_with_cache(tmp_path):
     model = mteb.get_model("mteb/baseline-random-encoder")
     task = MockAggregatedTask()
     cache = ResultCache(tmp_path)
-
-    for subtask in task.metadata.tasks:
-        mteb.evaluate(model, subtask, cache=cache)
+    mteb.evaluate(model, task.metadata.tasks, cache=cache)
 
     path = cache.get_task_result_path(
         task.metadata.name,

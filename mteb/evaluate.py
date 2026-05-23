@@ -407,7 +407,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             if agg_strategy != OverwriteStrategy.ONLY_CACHE:
                 raise
             existing_results = None
-            missing_eval = True
+            missing_eval = dict.fromkeys(tasks.eval_splits, tasks.hf_subsets)
 
         if (
             existing_results
