@@ -133,7 +133,12 @@ def _evaluate_task(  # noqa: PLR0913
                 existing_results=existing_results,
             )
         if isinstance(result, TaskResult):
-            result.kg_co2_emissions = tracker.final_emissions
+            existing_co2 = (
+                existing_results.kg_co2_emissions
+                if (existing_results and existing_results.kg_co2_emissions is not None)
+                else 0.0
+            )
+            result.kg_co2_emissions = existing_co2 + (tracker.final_emissions or 0.0)
         return result
 
     task_results: dict[SplitName, dict[HFSubset, ScoresDict]] = {}
@@ -141,6 +146,7 @@ def _evaluate_task(  # noqa: PLR0913
 
     model_meta = model.mteb_model_meta
 
+    existing_co2 = existing_results.kg_co2_emissions if existing_results else None
     if existing_results is not None:
         for split, scores_list in existing_results.scores.items():
             task_results[split] = {score["hf_subset"]: score for score in scores_list}
@@ -191,21 +197,15 @@ def _evaluate_task(  # noqa: PLR0913
             tock_ss = time()
             task_results[split].update(res)
             # Save intermediate cache
-            if cache and model_meta:
-                try:
-                    new_result = TaskResult.from_task_results(
-                        task,
-                        task_results,
-                        evaluation_time=evaluation_time + (tock_ss - tick),
-                        kg_co2_emissions=None,
-                        date=datetime.datetime.now(tz=datetime.timezone.utc),
-                    )
-                    cache.save_to_cache(new_result, model_meta)
-                except (OSError, TypeError, ValueError) as e:
-                    logger.error(
-                        f"Failed to save intermediate results: {e}",
-                        exc_info=True,
-                    )
+            if cache:
+                new_result = TaskResult.from_task_results(
+                    task,
+                    task_results,
+                    evaluation_time=evaluation_time + (tock_ss - tick),
+                    kg_co2_emissions=existing_co2,
+                    date=datetime.datetime.now(tz=datetime.timezone.utc),
+                )
+                cache.save_to_cache(new_result, model_meta)
         tock = time()
 
         logger.debug(
@@ -217,7 +217,7 @@ def _evaluate_task(  # noqa: PLR0913
         task,
         task_results,
         evaluation_time=evaluation_time,
-        kg_co2_emissions=None,
+        kg_co2_emissions=existing_co2,
         date=datetime.datetime.now(tz=datetime.timezone.utc),
     )
 
