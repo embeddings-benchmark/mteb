@@ -248,9 +248,9 @@ vjepa2_vitg_fpc64_384_ssv2 = ModelMeta(
     reference="https://huggingface.co/facebook/vjepa2-vitg-fpc64-384-ssv2",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=set(
+    training_datasets={
         "SomethingSomethingV2Classification",
-    ),
+    },
     adapted_from="facebook/vjepa2-vitg-fpc64-384",
     superseded_by=None,
     modalities=["video"],
@@ -281,9 +281,9 @@ vjepa2_vitl_fpc16_256_ssv2 = ModelMeta(
     reference="https://huggingface.co/facebook/vjepa2-vitl-fpc16-256-ssv2",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=set(
+    training_datasets={
         "SomethingSomethingV2Classification",
-    ),
+    },
     adapted_from="facebook/vjepa2-vitl-fpc64-256",
     superseded_by=None,
     modalities=["video"],
@@ -314,9 +314,9 @@ vjepa2_vitg_fpc32_384_diving48 = ModelMeta(
     reference="https://huggingface.co/facebook/vjepa2-vitg-fpc32-384-diving48",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=set(
-        # "Diving48Classification",
-    ),
+    training_datasets={
+        "Diving48ClassificationV1",
+    },
     adapted_from="facebook/vjepa2-vitg-fpc64-384",
     superseded_by=None,
     modalities=["video"],
@@ -347,9 +347,9 @@ vjepa2_vitl_fpc32_256_diving48 = ModelMeta(
     reference="https://huggingface.co/facebook/vjepa2-vitl-fpc32-256-diving48",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=set(
-        # "Diving48Classification",
-    ),
+    training_datasets={
+        "Diving48ClassificationV1",
+    },
     adapted_from="facebook/vjepa2-vitl-fpc64-256",
     superseded_by=None,
     modalities=["video"],
