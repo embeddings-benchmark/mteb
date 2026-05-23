@@ -20,7 +20,8 @@ ALLOWED_MODELS = {
     "nvidia__omni-embed-nemotron-3b",
     "facebook__pe-av-small",
     "encord-team__ebind-full",
-    "LCO-Embedding__LCO-Embedding-Omni-3B"
+    "LCO-Embedding__LCO-Embedding-Omni-3B",
+    "Haon-Chen__e5-omni-3B"
 }
 
 ALLOWED_TASKS = {
@@ -117,7 +118,8 @@ def main():
     table1 = df.groupby(["task_type", "num_frames"])["main_score"].mean().unstack()
     
     # Table 2: Model name as row x num_frames as col, mean performance across tasks
-    table2 = df.groupby(["model_name", "num_frames"])["main_score"].mean().unstack()
+    table2 = df.groupby(["model_name", "num_frames"])["main_score"].agg(["mean", "count"]).unstack()
+    table2 = table2.swaplevel(axis=1).sort_index(axis=1)
 
     # Table 3: Overall mean performance across all allowed tasks and models per num_frames
     table3_mean = df.groupby("num_frames")["main_score"].mean().to_frame("Overall Mean").T
