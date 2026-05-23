@@ -20,6 +20,8 @@ mkdir -p /data/home/niklas/deepshah/logs
 # Determine python environment based on model name
 if echo "$MODEL" | grep -qi "ebind"; then
     PYTHON_EXEC="/data/home/niklas/adnan/mteb-ebind/.venv/bin/python3"
+elif echo "$MODEL" | grep -qi "lco"; then
+    PYTHON_EXEC="/data/home/niklas/adnan/mteb-qwen3vl/.venv/bin/python3"
 else
     PYTHON_EXEC="/data/home/niklas/adnan/mteb-omni-sbert/.venv/bin/python3"
 fi
