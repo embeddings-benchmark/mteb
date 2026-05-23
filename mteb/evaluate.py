@@ -287,11 +287,14 @@ def _check_cache(
 
     if (
         existing_results
-        and overwrite_strategy
-        not in (OverwriteStrategy.ALWAYS, OverwriteStrategy.NEVER)  # noqa: PLR6201
+        and overwrite_strategy != OverwriteStrategy.ALWAYS
         and (
-            not _requires_merge(task, existing_results)
-            or existing_results.is_mergeable(task)
+            overwrite_strategy
+            in [OverwriteStrategy.NEVER, OverwriteStrategy.ONLY_CACHE]  # noqa: PLR6201
+            or (
+                not _requires_merge(task, existing_results)
+                or existing_results.is_mergeable(task)
+            )
         )
     ):
         missing_eval = existing_results.get_missing_evaluations(task)
@@ -304,13 +307,15 @@ def _check_cache(
         OverwriteStrategy.ONLY_CACHE,
     ]:
         if existing_results is None:
+            if overwrite_strategy == OverwriteStrategy.ONLY_CACHE:
+                raise ValueError(
+                    f"overwrite_strategy is set to '{overwrite_strategy.value}' but no results found in cache for task {task.metadata.name}."
+                )
+        else:
             raise ValueError(
-                f"overwrite_strategy is set to '{overwrite_strategy.value}' but no results found in cache for task {task.metadata.name}."
+                f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists for task {task.metadata.name}. "
+                + f"However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
             )
-        raise ValueError(
-            f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists for task {task.metadata.name}. "
-            + f"However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
-        )
 
     return existing_results, missing_eval
 
@@ -394,7 +399,15 @@ def evaluate(  # noqa: PLR0913, PLR0914
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
         agg_strategy = OverwriteStrategy.from_str(overwrite_strategy)
-        existing_results, missing_eval = _check_cache(tasks, meta, cache, agg_strategy)
+        try:
+            existing_results, missing_eval = _check_cache(
+                tasks, meta, cache, agg_strategy
+            )
+        except Exception:
+            if agg_strategy != OverwriteStrategy.ONLY_CACHE:
+                raise
+            existing_results = None
+            missing_eval = True
 
         if (
             existing_results
@@ -426,7 +439,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
         combined_results = tasks.combine_task_results(results.task_results)
 
         if existing_results:
-            combined_results = combined_results.merge(existing_results)
+            combined_results = existing_results.merge(combined_results)
 
         if cache:
             cache.save_to_cache(

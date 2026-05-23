@@ -101,6 +101,16 @@ def test_evaluate_with_cache(
         "main score should match the expected value"
     )
 
+    # test cache never strategy
+    never_results = mteb.evaluate(model, task, cache=cache, overwrite_strategy="never")
+    assert never_results[0].get_score() == expected_score
+
+    cache_empty = ResultCache(tmp_path / "empty")
+    results_empty = mteb.evaluate(
+        model, task, cache=cache_empty, overwrite_strategy="never"
+    )
+    assert len(results_empty.task_results) == 1
+
 
 @pytest.mark.parametrize(
     "model, task, expected_score,splits",
@@ -227,20 +237,33 @@ def test_evaluate_aggregated_task():
 
 
 def test_evaluate_aggregated_task_with_cache(tmp_path):
+    """Test evaluating an aggregate task with caching.
+
+    Verifies both that:
+    1. If the aggregate file is missing but all sub-tasks are cached, it falls back
+       to combining the cached subtask results under ONLY_CACHE strategy.
+    2. Once the aggregate file is generated and saved, it can be loaded directly
+       on subsequent runs without re-evaluating or calling fallback.
+    """
     model = mteb.get_model("mteb/baseline-random-encoder")
     task = MockAggregatedTask()
     cache = ResultCache(tmp_path)
 
-    results = mteb.evaluate(model, task, cache=cache)
-    assert len(results.task_results) == 1
-    score1 = results.task_results[0].get_score()
+    for subtask in task.metadata.tasks:
+        mteb.evaluate(model, subtask, cache=cache)
 
     path = cache.get_task_result_path(
         task.metadata.name,
-        results.model_name.replace("/", "__"),
-        results.model_revision,
+        model.mteb_model_meta.model_name_as_path(),
+        model.mteb_model_meta.revision,
     )
-    assert path.exists() and path.is_file()
+    assert not path.exists()
+
+    results = mteb.evaluate(model, task, cache=cache, overwrite_strategy="only-cache")
+    assert len(results.task_results) == 1
+    score1 = results.task_results[0].get_score()
+    assert path.exists()
+
     cached_results = mteb.evaluate(
         model, task, cache=cache, overwrite_strategy="only-cache"
     )
