@@ -19,17 +19,18 @@ def get_task_type(task_name: str) -> str:
 ALLOWED_MODELS = {
     "nvidia__omni-embed-nemotron-3b",
     "facebook__pe-av-small",
-    "encord-team__ebind-full"
+    "encord-team__ebind-full",
+    "LCO-Embedding__LCO-Embedding-Omni-3B"
 }
 
 ALLOWED_TASKS = {
     "MSRVTTT2V",
-    # "VATEXT2VARetrieval",
-    # "VATEXV2ARetrieval",
-    # "OmniVideoBenchVideoCentricQA",
-    # "WorldSense1MinVideoAudioCentricQA",
+    "VATEXT2VARetrieval",
+    "VATEXV2ARetrieval",
+    "OmniVideoBenchVideoCentricQA",
+    "WorldSense1MinVideoAudioCentricQA",
     "BreakfastClassification",
-    # "MusicAVQACLSVideoClustering"
+    "MusicAVQACLSVideoClustering"
 }
 
 def main():
