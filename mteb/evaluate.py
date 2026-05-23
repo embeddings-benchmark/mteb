@@ -535,7 +535,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             model=model,
             splits=missing_eval,
             task=task,
-            co2_tracker=False,
+            co2_tracker=co2_tracker,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             public_only=public_only,

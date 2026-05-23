@@ -1,6 +1,7 @@
 import json
 import logging
 from copy import copy
+from importlib.metadata import version
 from pathlib import Path
 
 import pytest
@@ -13,6 +14,7 @@ from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
 from mteb.models import ModelMeta
 from mteb.models.models_protocols import EncoderProtocol
+from mteb.results.task_result import TaskResult
 from mteb.types import OutputDType
 from tests.mock_models import MockSentenceTransformer
 from tests.mock_tasks import (
@@ -465,3 +467,49 @@ def test_evaluate_intermediate_cache_on_crash(tmp_path: Path):
     assert len(scores) == 1
     assert scores[0]["hf_subset"] == "subset1"
     assert scores[0]["main_score"] == 0.8
+
+
+def test_task_result_from_task_results_merging():
+    task = MockClassificationTask()
+    scores = {
+        "test": {
+            "subset1": {
+                "main_score": 0.8,
+                "accuracy": 0.8,
+                "mteb_version": "1.0.0",
+            },
+            "subset2": {
+                "main_score": 0.9,
+                "accuracy": 0.9,
+            },
+        }
+    }
+
+    current_version = version("mteb")
+    result = TaskResult.from_task_results(
+        task=task,
+        scores=scores,
+        evaluation_time=12.5,
+        kg_co2_emissions=0.07,
+    )
+
+    assert result.kg_co2_emissions == 0.07
+    assert result.evaluation_time == 12.5
+    assert len(result.scores["test"]) == 2
+
+    subset1_score = next(
+        s for s in result.scores["test"] if s["hf_subset"] == "subset1"
+    )
+    subset2_score = next(
+        s for s in result.scores["test"] if s["hf_subset"] == "subset2"
+    )
+
+    assert subset1_score["accuracy"] == 0.8
+    assert subset2_score["accuracy"] == 0.9
+    assert subset1_score["mteb_version"] == "1.0.0"
+    assert subset2_score["mteb_version"] == current_version
+
+    if current_version == "1.0.0":
+        assert result.mteb_version == "1.0.0"
+    else:
+        assert result.mteb_version == f"1.0.0-{current_version}"
