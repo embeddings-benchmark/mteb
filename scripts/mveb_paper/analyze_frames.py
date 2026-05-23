@@ -3,6 +3,7 @@ import json
 import logging
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import pandas as pd
 import mteb
 
@@ -15,6 +16,39 @@ def get_task_type(task_name: str) -> str:
         return task.metadata.type
     except Exception:
         return "Unknown"
+
+def plot_performance(df_to_plot: pd.DataFrame, title: str, ylabel: str, output_path: Path, ymin: float = None):
+    """Reusable function to generate and save a line plot for performance scaling."""
+    # Ensure index is numeric to prevent categorical spacing
+    df_to_plot.index = pd.to_numeric(df_to_plot.index)
+
+    ax = df_to_plot.plot(kind='line', marker='o', figsize=(10, 6))
+    ax.set_title(title)
+    ax.set_xlabel("Number of Frames")
+    ax.set_ylabel(ylabel)
+
+    # Use standard linear scale for X-Axis to accurately reflect the frame count distance
+    ax.set_xticks(df_to_plot.index)
+    ax.set_xticklabels(df_to_plot.index)
+
+    ax.grid(True)
+
+    # Adjust y-axis to make the scaling impact clear
+    y_min_data, y_max_data = df_to_plot.min().min(), df_to_plot.max().max()
+    padding = (y_max_data - y_min_data) * 0.1
+    if pd.notna(y_min_data) and pd.notna(y_max_data) and padding > 0:
+        calculated_ymin = y_min_data - padding if ymin is None else ymin
+        ax.set_ylim(calculated_ymin, y_max_data + padding)
+    elif ymin is not None:
+        ax.set_ylim(bottom=ymin)
+
+    # Add legend at the bottom right
+    ax.legend(loc='lower right')
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.close() # Close figure so subsequent plots don't overlap
+    logging.info(f"Plot saved to {output_path}")
 
 ALLOWED_MODELS = {
     "nvidia__omni-embed-nemotron-3b",
@@ -37,6 +71,7 @@ ALLOWED_TASKS = {
 def main():
     parser = argparse.ArgumentParser(description="Parse MTEB results across varying frame counts.")
     parser.add_argument("results_dir", type=str, help="Path to the root results directory")
+    parser.add_argument("--plot_dir", type=str, default=None, help="Directory to output diagrams/plots")
     args = parser.parse_args()
 
     results_dir = Path(args.results_dir)
@@ -116,15 +151,21 @@ def main():
     # Table 1: Task type as row x num_frames as col, mean performance across models
     # `unstack()` pivots the `num_frames` from a row index to columns.
     table1 = df.groupby(["task_type", "num_frames"])["main_score"].mean().unstack()
+    if 64 in table1.columns:
+        table1 = table1.sort_values(by=64, ascending=False)
     
     # Table 2: Model name as row x num_frames as col, mean performance across tasks
     table2 = df.groupby(["model_name", "num_frames"])["main_score"].mean().unstack()
+    if 64 in table2.columns:
+        table2 = table2.sort_values(by=64, ascending=False)
 
     # Table 3: Overall mean performance across all allowed tasks and models per num_frames
     table3 = df.groupby("num_frames")["main_score"].mean().to_frame("Overall Mean").T
 
     # Table 4: Task name as row x num_frames as col, mean performance across models
     table4 = df.groupby(["task_name", "num_frames"])["main_score"].mean().unstack()
+    if 64 in table4.columns:
+        table4 = table4.sort_values(by=64, ascending=False)
 
     # 5. Output tables
     print("\n" + "="*80)
@@ -147,6 +188,35 @@ def main():
     print("="*80)
     print(table4.to_markdown(floatfmt=".4f"))
 
+    # 6. Generate and save plots if requested
+    if args.plot_dir:
+        plot_dir = Path(args.plot_dir)
+        plot_dir.mkdir(parents=True, exist_ok=True)
+
+        # Plot model performance scaling
+        plot_performance(
+            df_to_plot=table2.T,
+            title="Effect of Frame Count on Model Performance",
+            ylabel="Mean Performance",
+            output_path=plot_dir / "model_performance_scaling.png"
+        )
+
+        # Plot overall performance scaling
+        plot_performance(
+            df_to_plot=table3.T,
+            title="Overall Performance vs. Frame Count",
+            ylabel="Overall Mean Performance",
+            output_path=plot_dir / "overall_performance_scaling.png"
+        )
+
+        # Plot task performance scaling
+        plot_performance(
+            df_to_plot=table4.T,
+            title="Effect of Frame Count Across Tasks",
+            ylabel="Mean Performance",
+            output_path=plot_dir / "task_performance_scaling.png",
+            ymin=0.0
+        )
 
 if __name__ == "__main__":
     main()
