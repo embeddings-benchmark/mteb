@@ -72,10 +72,13 @@ def main():
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
-    model_kwargs["model_kwargs"] = {
-        "device_map": device,
-        "torch_dtype": torch.bfloat16
-    }
+    if "lco" in args.model.lower():
+        model_kwargs["device_map"] = device
+    else:
+        model_kwargs["model_kwargs"] = {
+            "device_map": device,
+            "torch_dtype": torch.bfloat16
+        }
 
     print(f"Loading model: {args.model}...")
     model = mteb.get_model(args.model, device=device, **model_kwargs)
