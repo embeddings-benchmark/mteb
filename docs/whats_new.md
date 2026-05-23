@@ -9,6 +9,14 @@ This section is an overview of releases for more information check out the autog
 
 ## New in v2.14
 
+### Tracking and plotting phase timings
+
+MTEB now supports retrieving and plotting detailed evaluation phase timings directly from the `TaskResult` object returned by `mteb.evaluate`.
+
+The `TaskResult` object exposes a `.timings` property, which reconstructs a `TimingStack` object from the saved evaluation phases. You can plot the timing bar chart with a simple call to `.timings.plot()`.
+
+For more details, see the [Results API documentation](./api/results.md#timing-and-phase-plotting).
+
 ### Tracking of run settings
 
 To improve reproducibility and auditing of evaluations, MTEB now automatically tracks the settings used for each run by generating and maintaining a `run_settings.jsonl` file under each model revision's directory.
