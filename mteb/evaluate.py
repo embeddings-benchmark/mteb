@@ -272,6 +272,49 @@ def _requires_merge(task: AbsTask, existing_results: TaskResult) -> bool:
     return False
 
 
+def _check_cache(
+    task: AbsTask,
+    meta: ModelMeta,
+    cache: ResultCache | None,
+    overwrite_strategy: OverwriteStrategy,
+) -> tuple[TaskResult | None, dict[str, list[str]]]:
+    """Load cached results, handle early skipping if up-to-date, or validate compatibility."""
+    existing_results: TaskResult | None = None
+    if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
+        cache_results = cache.load_task_result(task.metadata.name, meta)
+        if cache_results:
+            existing_results = cache_results
+
+    if (
+        existing_results
+        and overwrite_strategy
+        not in (OverwriteStrategy.ALWAYS, OverwriteStrategy.NEVER)  # noqa: PLR6201
+        and (
+            not _requires_merge(task, existing_results)
+            or existing_results.is_mergeable(task)
+        )
+    ):
+        missing_eval = existing_results.get_missing_evaluations(task)
+    else:
+        missing_eval = dict.fromkeys(task.eval_splits, task.hf_subsets)
+        existing_results = None
+
+    if missing_eval and overwrite_strategy in [  # noqa: PLR6201
+        OverwriteStrategy.NEVER,
+        OverwriteStrategy.ONLY_CACHE,
+    ]:
+        if existing_results is None:
+            raise ValueError(
+                f"overwrite_strategy is set to '{overwrite_strategy.value}' but no results found in cache for task {task.metadata.name}."
+            )
+        raise ValueError(
+            f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists for task {task.metadata.name}. "
+            + f"However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
+        )
+
+    return existing_results, missing_eval
+
+
 def evaluate(  # noqa: PLR0913, PLR0914
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
     tasks: AbsTask | Iterable[AbsTask],
@@ -350,6 +393,23 @@ def evaluate(  # noqa: PLR0913, PLR0914
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
+        agg_strategy = OverwriteStrategy.from_str(overwrite_strategy)
+        existing_results, missing_eval = _check_cache(tasks, meta, cache, agg_strategy)
+
+        if (
+            existing_results
+            and not missing_eval
+            and agg_strategy != OverwriteStrategy.ALWAYS
+        ):
+            logger.info(
+                f"Results for {tasks.metadata.name} already exist in cache. Skipping evaluation and loading results."
+            )
+            return ModelResult(
+                model_name=model_name,
+                model_revision=model_revision,
+                task_results=[existing_results],
+            )
+
         results = evaluate(
             model,
             tasks.metadata.tasks,
@@ -364,6 +424,10 @@ def evaluate(  # noqa: PLR0913, PLR0914
             num_proc=num_proc,
         )
         combined_results = tasks.combine_task_results(results.task_results)
+
+        if existing_results:
+            combined_results = combined_results.merge(existing_results)
+
         if cache:
             cache.save_to_cache(
                 combined_results,
@@ -375,6 +439,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             model_name=results.model_name,
             model_revision=results.model_revision,
             task_results=[combined_results],
+            exceptions=results.exceptions,
         )
 
     if isinstance(tasks, AbsTask):
@@ -413,27 +478,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
         )
 
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
-
-    existing_results: TaskResult | None = None
-    if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
-        cache_results = cache.load_task_result(task.metadata.name, meta)
-        if cache_results:
-            existing_results = cache_results
-
-    if (
-        existing_results
-        and overwrite_strategy
-        not in (OverwriteStrategy.ALWAYS, OverwriteStrategy.NEVER)  # noqa: PLR6201
-        and (
-            not _requires_merge(task, existing_results)
-            or existing_results.is_mergeable(task)
-        )
-    ):
-        missing_eval = existing_results.get_missing_evaluations(task)
-    else:
-        missing_eval = dict.fromkeys(task.eval_splits, task.hf_subsets)
-        # Will be fully recomputed so we set it to None to avoid merging:
-        existing_results = None
+    existing_results, missing_eval = _check_cache(task, meta, cache, overwrite_strategy)
 
     if (
         existing_results
@@ -449,19 +494,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
             model_revision=model_revision,
             task_results=[existing_results],
         )
-    if missing_eval and overwrite_strategy in [  # noqa: PLR6201
-        OverwriteStrategy.NEVER,
-        OverwriteStrategy.ONLY_CACHE,
-    ]:
-        if existing_results is None:
-            raise ValueError(
-                f"overwrite_strategy is set to '{overwrite_strategy.value}' but no results found in cache for task {task.metadata.name}."
-            )
-        raise ValueError(
-            f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists for task {task.metadata.name}. "
-            + f"However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
-        )
-
     if existing_results:
         logger.info(
             f"Found existing results for {task.metadata.name}, only running missing splits (subsets): {missing_eval}"

@@ -226,6 +226,28 @@ def test_evaluate_aggregated_task():
     mteb.evaluate(model, task, cache=None)
 
 
+def test_evaluate_aggregated_task_with_cache(tmp_path):
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockAggregatedTask()
+    cache = ResultCache(tmp_path)
+
+    results = mteb.evaluate(model, task, cache=cache)
+    assert len(results.task_results) == 1
+    score1 = results.task_results[0].get_score()
+
+    path = cache.get_task_result_path(
+        task.metadata.name,
+        results.model_name.replace("/", "__"),
+        results.model_revision,
+    )
+    assert path.exists() and path.is_file()
+    cached_results = mteb.evaluate(
+        model, task, cache=cache, overwrite_strategy="only-cache"
+    )
+    assert len(cached_results.task_results) == 1
+    assert cached_results.task_results[0].get_score() == pytest.approx(score1)
+
+
 def test_run_private_task_warning(caplog):
     """Test that a warning is correctly logged in an attempt run a private dataset is made"""
     task = mteb.get_task("Code1Retrieval")
