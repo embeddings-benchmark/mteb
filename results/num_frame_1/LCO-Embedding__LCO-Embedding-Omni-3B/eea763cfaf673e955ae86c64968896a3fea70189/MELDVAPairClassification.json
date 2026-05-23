@@ -1,0 +1,50 @@
+{
+  "dataset_revision": "487f8f9d0f43331c8bee469746e84e665e733dff",
+  "task_name": "MELDVAPairClassification",
+  "mteb_version": "2.13.0",
+  "scores": {
+    "test": [
+      {
+        "similarity_accuracy": 0.529297,
+        "similarity_f1": 0.666884,
+        "similarity_precision": 0.500244,
+        "similarity_recall": 1.0,
+        "similarity_ap": 0.540345,
+        "cosine_accuracy": 0.529297,
+        "cosine_f1": 0.666884,
+        "cosine_precision": 0.500244,
+        "cosine_recall": 1.0,
+        "cosine_ap": 0.540345,
+        "manhattan_accuracy": 0.530273,
+        "manhattan_f1": 0.666884,
+        "manhattan_precision": 0.500244,
+        "manhattan_recall": 1.0,
+        "manhattan_ap": 0.539533,
+        "euclidean_accuracy": 0.529785,
+        "euclidean_f1": 0.666884,
+        "euclidean_precision": 0.500244,
+        "euclidean_recall": 1.0,
+        "euclidean_ap": 0.540372,
+        "dot_accuracy": 0.528809,
+        "dot_f1": 0.666884,
+        "dot_precision": 0.500244,
+        "dot_recall": 1.0,
+        "dot_ap": 0.540487,
+        "max_accuracy": 0.530273,
+        "max_f1": 0.666884,
+        "max_precision": 0.500244,
+        "max_recall": 1.0,
+        "max_ap": 0.540487,
+        "main_score": 0.540487,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "mteb_version": "2.13.0"
+      }
+    ]
+  },
+  "evaluation_time": 111783.86525058746,
+  "kg_co2_emissions": null,
+  "date": null
+}

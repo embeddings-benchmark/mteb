@@ -1,0 +1,36 @@
+{
+  "dataset_revision": "13af08387c3ce5e86c179a3718eb158669268d65",
+  "task_name": "RAVDESSAVClustering",
+  "mteb_version": "2.13.0",
+  "scores": {
+    "test": [
+      {
+        "v_measures": {
+          "Level 0": [
+            0.047077,
+            0.041855,
+            0.042463,
+            0.065235,
+            0.06431,
+            0.046992,
+            0.053189,
+            0.065629,
+            0.046093,
+            0.062876
+          ]
+        },
+        "v_measure": 0.053572,
+        "v_measure_std": 0.00941,
+        "main_score": 0.053572,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "mteb_version": "2.13.0"
+      }
+    ]
+  },
+  "evaluation_time": 100792.54864048958,
+  "kg_co2_emissions": null,
+  "date": null
+}

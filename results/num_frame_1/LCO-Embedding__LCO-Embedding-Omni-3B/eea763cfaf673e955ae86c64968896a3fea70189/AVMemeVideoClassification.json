@@ -1,0 +1,101 @@
+{
+  "dataset_revision": "7070d1979d9a4943dd49b2e72858eb1e54f6bd5b",
+  "task_name": "AVMemeVideoClassification",
+  "mteb_version": "2.13.0",
+  "scores": {
+    "test": [
+      {
+        "scores_per_experiment": [
+          {
+            "accuracy": 0.483333,
+            "f1": 0.489638,
+            "f1_weighted": 0.478863,
+            "precision": 0.471053,
+            "precision_weighted": 0.509708,
+            "recall": 0.559384,
+            "recall_weighted": 0.483333,
+            "ap": null,
+            "ap_weighted": null
+          },
+          {
+            "accuracy": 0.4,
+            "f1": 0.394431,
+            "f1_weighted": 0.392642,
+            "precision": 0.391141,
+            "precision_weighted": 0.412823,
+            "recall": 0.422499,
+            "recall_weighted": 0.4,
+            "ap": null,
+            "ap_weighted": null
+          },
+          {
+            "accuracy": 0.466667,
+            "f1": 0.440702,
+            "f1_weighted": 0.469172,
+            "precision": 0.444547,
+            "precision_weighted": 0.482562,
+            "recall": 0.451622,
+            "recall_weighted": 0.466667,
+            "ap": null,
+            "ap_weighted": null
+          },
+          {
+            "accuracy": 0.35,
+            "f1": 0.320819,
+            "f1_weighted": 0.357656,
+            "precision": 0.335471,
+            "precision_weighted": 0.379589,
+            "recall": 0.336358,
+            "recall_weighted": 0.35,
+            "ap": null,
+            "ap_weighted": null
+          },
+          {
+            "accuracy": 0.45,
+            "f1": 0.432103,
+            "f1_weighted": 0.451942,
+            "precision": 0.486139,
+            "precision_weighted": 0.521965,
+            "recall": 0.47916,
+            "recall_weighted": 0.45,
+            "ap": null,
+            "ap_weighted": null
+          }
+        ],
+        "accuracy": 0.43,
+        "f1": 0.415538,
+        "f1_weighted": 0.430055,
+        "precision": 0.42567,
+        "precision_weighted": 0.46133,
+        "recall": 0.449804,
+        "recall_weighted": 0.43,
+        "ap": NaN,
+        "ap_weighted": NaN,
+        "main_score": 0.43,
+        "hf_subset": "default",
+        "languages": [
+          "bos-Latn",
+          "bre-Latn",
+          "deu-Latn",
+          "eng-Latn",
+          "fas-Arab",
+          "fin-Latn",
+          "fra-Latn",
+          "hin-Deva",
+          "ita-Latn",
+          "jpn-Jpan",
+          "kor-Hang",
+          "por-Latn",
+          "rus-Cyrl",
+          "spa-Latn",
+          "tel-Telu",
+          "zho-Hans"
+        ],
+        "mteb_version": "2.13.0"
+      }
+    ]
+  },
+  "evaluation_time": 24553.72660803795,
+  "kg_co2_emissions": null,
+  "date": null
+}

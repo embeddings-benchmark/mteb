@@ -1,0 +1,21 @@
+{
+  "dataset_revision": "59a874899eb241993794a3454c37829727c3b559",
+  "task_name": "BreakfastZeroShot",
+  "mteb_version": "2.13.0",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.08545,
+        "main_score": 0.08545,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "mteb_version": "2.13.0"
+      }
+    ]
+  },
+  "evaluation_time": 3776.2626276016235,
+  "kg_co2_emissions": null,
+  "date": null
+}

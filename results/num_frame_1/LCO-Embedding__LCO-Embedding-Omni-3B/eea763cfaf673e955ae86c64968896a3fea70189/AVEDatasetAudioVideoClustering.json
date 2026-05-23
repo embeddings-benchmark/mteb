@@ -1,0 +1,36 @@
+{
+  "dataset_revision": "f6eb93b4e89456277a242583b5565b801bc1981d",
+  "task_name": "AVEDatasetAudioVideoClustering",
+  "mteb_version": "2.13.0",
+  "scores": {
+    "test": [
+      {
+        "v_measures": {
+          "Level 0": [
+            0.848442,
+            0.858615,
+            0.862303,
+            0.833461,
+            0.843274,
+            0.864601,
+            0.805232,
+            0.874875,
+            0.860292,
+            0.851852
+          ]
+        },
+        "v_measure": 0.850295,
+        "v_measure_std": 0.018685,
+        "main_score": 0.850295,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "mteb_version": "2.13.0"
+      }
+    ]
+  },
+  "evaluation_time": 22018.288928747177,
+  "kg_co2_emissions": null,
+  "date": null
+}

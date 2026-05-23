@@ -1,0 +1,36 @@
+{
+  "dataset_revision": "6c0bf58845b1acccefc450b131c304378c1e38d5",
+  "task_name": "MELDEmotionAudioVideoClustering",
+  "mteb_version": "2.13.0",
+  "scores": {
+    "test": [
+      {
+        "v_measures": {
+          "Level 0": [
+            0.084132,
+            0.080704,
+            0.062576,
+            0.060866,
+            0.083672,
+            0.079311,
+            0.074529,
+            0.048271,
+            0.068089,
+            0.062762
+          ]
+        },
+        "v_measure": 0.070491,
+        "v_measure_std": 0.011282,
+        "main_score": 0.070491,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "mteb_version": "2.13.0"
+      }
+    ]
+  },
+  "evaluation_time": 98481.75963950157,
+  "kg_co2_emissions": null,
+  "date": null
+}
