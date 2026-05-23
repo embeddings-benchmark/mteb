@@ -118,13 +118,13 @@ def main():
     table1 = df.groupby(["task_type", "num_frames"])["main_score"].mean().unstack()
     
     # Table 2: Model name as row x num_frames as col, mean performance across tasks
-    table2 = df.groupby(["model_name", "num_frames"])["main_score"].agg(["mean", "count"]).unstack()
-    table2 = table2.swaplevel(axis=1).sort_index(axis=1)
+    table2 = df.groupby(["model_name", "num_frames"])["main_score"].mean().unstack()
 
     # Table 3: Overall mean performance across all allowed tasks and models per num_frames
-    table3_mean = df.groupby("num_frames")["main_score"].mean().to_frame("Overall Mean").T
-    table3_count = df.groupby("num_frames")["main_score"].count().to_frame("Entry Count").T
-    table3 = pd.concat([table3_mean, table3_count])
+    table3 = df.groupby("num_frames")["main_score"].mean().to_frame("Overall Mean").T
+
+    # Table 4: Task name as row x num_frames as col, mean performance across models
+    table4 = df.groupby(["task_name", "num_frames"])["main_score"].mean().unstack()
 
     # 5. Output tables
     print("\n" + "="*80)
@@ -141,6 +141,11 @@ def main():
     print("Table 3: Overall Mean Performance by Num Frames")
     print("="*80)
     print(table3.to_markdown(floatfmt=".4f"))
+    
+    print("\n" + "="*80)
+    print("Table 4: Mean Performance by Task Name and Num Frames (Averaged across models)")
+    print("="*80)
+    print(table4.to_markdown(floatfmt=".4f"))
 
 
 if __name__ == "__main__":
