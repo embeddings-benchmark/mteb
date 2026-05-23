@@ -73,6 +73,7 @@ for TASK in "${TASKS_ARRAY[@]}"; do
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=${CPUS}
 #SBATCH --mem=${MEM}
+#SBATCH --exclude=slinky-5
 #SBATCH --time=72:00:00
 #SBATCH --output=/data/home/niklas/deepshah/logs/${JOB_NAME}_%j.out
 #SBATCH --error=/data/home/niklas/deepshah/logs/${JOB_NAME}_%j.err
