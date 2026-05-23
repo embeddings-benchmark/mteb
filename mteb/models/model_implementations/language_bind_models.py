@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import sys
 import warnings
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -63,8 +65,6 @@ def _patch_compatibility() -> None:
         warnings.warn(f"LanguageBind compat patch `clip_loss` failed: {e}")
 
     try:
-        import sys
-
         try:
             import torchvision.transforms.functional_tensor  # type: ignore[import-not-found] # noqa: F401
         except ImportError:
@@ -88,6 +88,43 @@ def _patch_compatibility() -> None:
 
 
 _patch_compatibility()
+
+
+_LANGUAGEBIND_HF_REPO = "myang333/languagebind-source"
+_LANGUAGEBIND_HF_REVISION = "e857f973b672e783ca4100e444bec75363979324"
+_LANGUAGEBIND_CACHE = Path.home() / ".cache" / "mteb" / "languagebind"
+
+
+def _ensure_languagebind_source() -> Path:
+    """Download LanguageBind source from HF mirror at pinned revision.
+
+    Returns the local snapshot path (already added to sys.path).
+    """
+    try:
+        from huggingface_hub import snapshot_download
+
+        path = Path(
+            snapshot_download(
+                repo_id=_LANGUAGEBIND_HF_REPO,
+                revision=_LANGUAGEBIND_HF_REVISION,
+                cache_dir=_LANGUAGEBIND_CACHE,
+            )
+        )
+    except ImportError as e:
+        raise RuntimeError(
+            "LanguageBind requires `huggingface_hub`. Install via: "
+            "pip install mteb[languagebind]"
+        ) from e
+    except Exception as e:
+        raise RuntimeError(
+            f"Failed to download LanguageBind source from HF "
+            f"({_LANGUAGEBIND_HF_REPO} at revision {_LANGUAGEBIND_HF_REVISION}). "
+            f"Check your internet connection. Original error: {e}"
+        ) from e
+
+    if str(path) not in sys.path:
+        sys.path.insert(0, str(path))
+    return path
 
 
 def _patch_languagebind_tokenizer(tokenizer_cls: type) -> None:
@@ -146,14 +183,6 @@ if TYPE_CHECKING:
 # LanguageBind expects audio sampled at 16 kHz (its audio mel-spectrogram pipeline).
 _LANGUAGE_BIND_AUDIO_SR = 16000
 
-_LANGUAGE_BIND_SETUP_DOC = """
-    Setup::
-
-        git clone https://github.com/PKU-YuanGroup/LanguageBind.git
-        export PYTHONPATH="/path/to/LanguageBind:$PYTHONPATH"
-        pip install einops decord opencv-python-headless pytorchvideo peft
-"""
-
 
 class _LanguageBindBase(AbsEncoder):
     """Shared text-encoding logic for the LanguageBind modality wrappers.
@@ -163,6 +192,15 @@ class _LanguageBindBase(AbsEncoder):
     ``get_*_embeddings`` plus ``encode`` methods. The text tower is the same
     OpenCLIP encoder across all LanguageBind variants, so the tokenization
     and text-projection path lives here.
+
+    Setup::
+
+        pip install mteb[languagebind]
+
+    The LanguageBind source code is automatically downloaded from HuggingFace
+    (myang333/languagebind-source) at a pinned revision on first use.
+
+    Note: a working FFmpeg installation is also required for video tasks.
     """
 
     model: Any
@@ -230,6 +268,7 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         max_samples: int | None = None,
         **kwargs: Any,
     ):
+        _ensure_languagebind_source()
         from languagebind import (
             LanguageBindVideo,
             LanguageBindVideoProcessor,
@@ -342,6 +381,7 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        _ensure_languagebind_source()
         from languagebind import (
             LanguageBindAudio,
             LanguageBindAudioProcessor,
@@ -436,6 +476,7 @@ class LanguageBindImageWrapper(_LanguageBindBase):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        _ensure_languagebind_source()
         from languagebind import (
             LanguageBindImage,
             LanguageBindImageProcessor,
@@ -513,16 +554,18 @@ class LanguageBindImageWrapper(_LanguageBindBase):
 
 
 class LanguageBindOmniWrapper(AbsEncoder):
-    """MTEB wrapper for LanguageBind video + text.
+    """MTEB wrapper composing the LanguageBind video, audio, and image models.
 
-    Video frames arrive pre-decoded via the VideoCollator. The public
-    LanguageBind processor expects file paths, so we apply the processor's
-    transform directly to the frame tensor and skip the file-loading step.
+    Wraps :class:`LanguageBindVideoWrapper`, :class:`LanguageBindAudioWrapper`,
+    and :class:`LanguageBindImageWrapper`, dispatching each input to the
+    sub-model for its modality. Text is encoded via the shared OpenCLIP text
+    tower. For inputs spanning multiple modalities the per-modality embeddings
+    are summed, producing a single embedding for text / image / audio / video.
     """
 
     def __init__(
         self,
-        model_name: str,
+        *args: Any,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         fps: float | None = None,
         max_frames: int | None = None,
@@ -530,6 +573,8 @@ class LanguageBindOmniWrapper(AbsEncoder):
         max_samples: int | None = None,
         **kwargs: Any,
     ):
+        # The composite model has no checkpoint of its own; the model name that
+        # ModelMeta passes positionally is unused and absorbed by *args.
         self.video_model = LanguageBindVideoWrapper(
             "LanguageBind/LanguageBind_Video_FT",
             device=device,
@@ -578,7 +623,13 @@ class LanguageBindOmniWrapper(AbsEncoder):
         if has_video:
             video_emb = self.video_model.get_video_embeddings(inputs, **kwargs)
             embeddings = video_emb if embeddings is None else embeddings + video_emb
-        return embeddings
+
+        if embeddings is not None:
+            return embeddings
+
+        raise ValueError(
+            f"No supported modality found in dataset features: {list(features.keys())}"
+        )
 
 
 _LANGUAGE_BIND_CITATION = r"""
@@ -604,7 +655,7 @@ _LANGUAGE_BIND_COMMON = dict(
     citation=_LANGUAGE_BIND_CITATION,
     license="mit",
     reference="https://github.com/PKU-YuanGroup/LanguageBind",
-    extra_requirements_groups=[],
+    extra_requirements_groups=["languagebind"],
     max_tokens=77,
     embed_dim=768,
 )
