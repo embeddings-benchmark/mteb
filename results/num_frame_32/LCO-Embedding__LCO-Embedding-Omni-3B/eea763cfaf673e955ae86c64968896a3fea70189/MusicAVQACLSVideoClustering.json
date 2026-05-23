@@ -1,0 +1,36 @@
+{
+  "dataset_revision": "29f50ae80ad4e8c1cfdbc0148aefe6fe050833dd",
+  "task_name": "MusicAVQACLSVideoClustering",
+  "mteb_version": "2.12.32",
+  "scores": {
+    "test": [
+      {
+        "v_measures": {
+          "Level 0": [
+            0.499199,
+            0.469641,
+            0.485719,
+            0.477989,
+            0.491764,
+            0.496084,
+            0.480629,
+            0.507857,
+            0.485139,
+            0.483126
+          ]
+        },
+        "v_measure": 0.487715,
+        "v_measure_std": 0.010617,
+        "main_score": 0.487715,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "mteb_version": "2.12.32"
+      }
+    ]
+  },
+  "evaluation_time": 1233.6295092105865,
+  "kg_co2_emissions": null,
+  "date": null
+}

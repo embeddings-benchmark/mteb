@@ -1,0 +1,50 @@
+{
+  "dataset_revision": "322c081c78af9f771e3ef52b27c30b47056db41a",
+  "task_name": "AVEDatasetVAPairClassification",
+  "mteb_version": "2.13.0",
+  "scores": {
+    "test": [
+      {
+        "similarity_accuracy": 0.880597,
+        "similarity_f1": 0.882641,
+        "similarity_precision": 0.867788,
+        "similarity_recall": 0.89801,
+        "similarity_ap": 0.938822,
+        "cosine_accuracy": 0.880597,
+        "cosine_f1": 0.882641,
+        "cosine_precision": 0.867788,
+        "cosine_recall": 0.89801,
+        "cosine_ap": 0.938822,
+        "manhattan_accuracy": 0.883085,
+        "manhattan_f1": 0.885086,
+        "manhattan_precision": 0.870192,
+        "manhattan_recall": 0.900498,
+        "manhattan_ap": 0.941897,
+        "euclidean_accuracy": 0.880597,
+        "euclidean_f1": 0.882139,
+        "euclidean_precision": 0.862233,
+        "euclidean_recall": 0.902985,
+        "euclidean_ap": 0.938647,
+        "dot_accuracy": 0.880597,
+        "dot_f1": 0.882641,
+        "dot_precision": 0.867788,
+        "dot_recall": 0.89801,
+        "dot_ap": 0.938861,
+        "max_accuracy": 0.883085,
+        "max_f1": 0.885086,
+        "max_precision": 0.870192,
+        "max_recall": 0.902985,
+        "max_ap": 0.941897,
+        "main_score": 0.941897,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "mteb_version": "2.13.0"
+      }
+    ]
+  },
+  "evaluation_time": 32059.30112028122,
+  "kg_co2_emissions": null,
+  "date": null
+}

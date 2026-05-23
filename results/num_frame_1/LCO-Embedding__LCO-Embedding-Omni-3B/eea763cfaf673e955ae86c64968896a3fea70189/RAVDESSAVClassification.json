@@ -1,0 +1,86 @@
+{
+  "dataset_revision": "13af08387c3ce5e86c179a3718eb158669268d65",
+  "task_name": "RAVDESSAVClassification",
+  "mteb_version": "2.13.0",
+  "scores": {
+    "test": [
+      {
+        "scores_per_experiment": [
+          {
+            "accuracy": 0.222222,
+            "f1": 0.168124,
+            "f1_weighted": 0.182628,
+            "precision": 0.470858,
+            "precision_weighted": 0.477176,
+            "recall": 0.199707,
+            "recall_weighted": 0.222222,
+            "ap": null,
+            "ap_weighted": null
+          },
+          {
+            "accuracy": 0.145833,
+            "f1": 0.091113,
+            "f1_weighted": 0.106605,
+            "precision": 0.342136,
+            "precision_weighted": 0.386469,
+            "recall": 0.135562,
+            "recall_weighted": 0.145833,
+            "ap": null,
+            "ap_weighted": null
+          },
+          {
+            "accuracy": 0.190972,
+            "f1": 0.149651,
+            "f1_weighted": 0.155515,
+            "precision": 0.37591,
+            "precision_weighted": 0.391934,
+            "recall": 0.1785,
+            "recall_weighted": 0.190972,
+            "ap": null,
+            "ap_weighted": null
+          },
+          {
+            "accuracy": 0.166667,
+            "f1": 0.133835,
+            "f1_weighted": 0.150662,
+            "precision": 0.259068,
+            "precision_weighted": 0.301185,
+            "recall": 0.155979,
+            "recall_weighted": 0.166667,
+            "ap": null,
+            "ap_weighted": null
+          },
+          {
+            "accuracy": 0.197917,
+            "f1": 0.125345,
+            "f1_weighted": 0.144612,
+            "precision": 0.276392,
+            "precision_weighted": 0.323983,
+            "recall": 0.180189,
+            "recall_weighted": 0.197917,
+            "ap": null,
+            "ap_weighted": null
+          }
+        ],
+        "accuracy": 0.184722,
+        "f1": 0.133614,
+        "f1_weighted": 0.148005,
+        "precision": 0.344873,
+        "precision_weighted": 0.376149,
+        "recall": 0.169988,
+        "recall_weighted": 0.184722,
+        "ap": NaN,
+        "ap_weighted": NaN,
+        "main_score": 0.184722,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "mteb_version": "2.13.0"
+      }
+    ]
+  },
+  "evaluation_time": 101249.38776755333,
+  "kg_co2_emissions": null,
+  "date": null
+}
