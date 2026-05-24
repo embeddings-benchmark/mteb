@@ -99,7 +99,7 @@ def split_train_test(
     train_split: str,
     label_column: str,
 ) -> DatasetDict:
-    if train_split in ds and metadata.eval_splits == train_split:
+    if train_split in ds and metadata.eval_splits == [train_split]:
         before = len(ds[train_split])
         logger.info(
             f"[split_train_test] eval_splits == train_split; performing split on {before} examples"

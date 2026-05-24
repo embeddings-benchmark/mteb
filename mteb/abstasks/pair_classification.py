@@ -109,7 +109,7 @@ class AbsTaskPairClassification(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> dict[str, float]:
         if not isinstance(model, EncoderProtocol):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
@@ -214,8 +214,8 @@ class AbsTaskPairClassification(AbsTask):
         if isinstance(dataset, list):
             dataset = dataset[0]
 
-        def _get_col_data(col: str) -> list:
-            raw = dataset[col]
+        def _get_col_data(col: str) -> list[Any]:
+            raw: list[Any] = dataset[col]
             return raw[0] if len(raw) == 1 else raw
 
         labels = _get_col_data(self.label_column_name)
@@ -227,7 +227,7 @@ class AbsTaskPairClassification(AbsTask):
                 (self.input1_column_name, modality1)
             ]
         else:
-            col_modalities1 = list(self.input1_column_name)  # type: ignore[arg-type]
+            col_modalities1 = list(self.input1_column_name)
 
         if isinstance(self.input2_column_name, str):
             modality2 = self.metadata.get_modalities(self.input2_prompt_type)[0]
@@ -235,7 +235,7 @@ class AbsTaskPairClassification(AbsTask):
                 (self.input2_column_name, modality2)
             ]
         else:
-            col_modalities2 = list(self.input2_column_name)  # type: ignore[arg-type]
+            col_modalities2 = list(self.input2_column_name)
 
         pair_stats = calculate_pair_modality_statistics(
             col_modalities1,
@@ -369,7 +369,7 @@ class AbsTaskPairClassification(AbsTask):
         return max_acc, best_threshold
 
     def _find_best_f1_and_threshold(  # noqa: PLR6301
-        self, scores, labels: NDArray[np.int64], high_score_more_similar: bool
+        self, scores: Any, labels: NDArray[np.int64], high_score_more_similar: bool
     ) -> tuple[float, float, float, float]:
         scores = np.asarray(scores)
 

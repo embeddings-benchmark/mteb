@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 from .bge_models import bge_training_data
 
@@ -148,6 +150,12 @@ class Model2VecModel(AbsEncoder):
         """
         from model2vec import StaticModel
 
+        warnings.warn(
+            "Model2VecModel is deprecated. Please use SentenceTransformerEncoderWrapper instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         self.model_name = model_name
         self.model = StaticModel.from_pretrained(self.model_name)
 
@@ -166,12 +174,12 @@ class Model2VecModel(AbsEncoder):
 
 
 m2v_base_glove_subword = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/M2V_base_glove_subword",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="5f4f5ca159b7321a8b39739bba0794fa0debddf4",
+    revision="26cc9fcfb6f4f144b174d6b22e4b885f73fe5cf9",
     release_date="2024-09-21",
     n_parameters=int(103 * 1e6),
     n_embedding_parameters=int(103 * 1e6),
@@ -189,17 +197,16 @@ m2v_base_glove_subword = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
-    extra_requirements_groups=["model2vec"],
 )
 
 
 m2v_base_glove = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/M2V_base_glove",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="38ebd7f10f71e67fa8db898290f92b82e9cfff2b",
+    revision="1d84d24b086580d886e36fb15f1973e0c04bad87",
     release_date="2024-09-21",
     n_parameters=int(102 * 1e6),
     n_embedding_parameters=int(102 * 1e6),
@@ -217,16 +224,15 @@ m2v_base_glove = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
-    extra_requirements_groups=["model2vec"],
 )
 
 m2v_base_output = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/M2V_base_output",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="02460ae401a22b09d2c6652e23371398329551e2",
+    revision="0b86653131492ba2a858911d5ccf84ae774b40f3",
     release_date="2024-09-21",
     n_parameters=int(7.56 * 1e6),
     n_embedding_parameters=int(7.56 * 1e6),
@@ -244,16 +250,15 @@ m2v_base_output = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
-    extra_requirements_groups=["model2vec"],
 )
 
 m2v_multilingual_output = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/M2V_multilingual_output",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="2cf4ec4e1f51aeca6c55cf9b93097d00711a6305",
+    revision="62144420694cbf4ebe8f3b0fe3c1c49d8a0724b5",
     release_date="2024-09-21",
     n_parameters=int(128 * 1e6),
     n_embedding_parameters=int(128 * 1e6),
@@ -271,16 +276,15 @@ m2v_multilingual_output = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
-    extra_requirements_groups=["model2vec"],
 )
 
 potion_base_2m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/potion-base-2M",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="86db093558fbced2072b929eb1690bce5272bd4b",
+    revision="389b9f64be5aa4ae7a6bc6fe95ef20ce485ae5da",
     release_date="2024-10-29",
     n_parameters=int(2 * 1e6),
     n_embedding_parameters=int(2 * 1e6),
@@ -298,16 +302,15 @@ potion_base_2m = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
-    extra_requirements_groups=["model2vec"],
 )
 
 potion_base_4m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/potion-base-4M",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="81b1802ada41afcd0987a37dc15e569c9fa76f04",
+    revision="9b3cff412d30be9ae8603fe10224c224f3401869",
     release_date="2024-10-29",
     n_parameters=int(3.78 * 1e6),
     n_embedding_parameters=int(3.78 * 1e6),
@@ -325,16 +328,15 @@ potion_base_4m = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
-    extra_requirements_groups=["model2vec"],
 )
 
 potion_base_8m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/potion-base-8M",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="dcbec7aa2d52fc76754ac6291803feedd8c619ce",
+    revision="bf8b056651a2c21b8d2565580b8569da283cab23",
     release_date="2024-10-29",
     n_parameters=int(7.56 * 1e6),
     n_embedding_parameters=int(7.56 * 1e6),
@@ -352,16 +354,15 @@ potion_base_8m = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
-    extra_requirements_groups=["model2vec"],
 )
 
 potion_base_32m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/potion-base-32M",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="fc914ed07732443f18799169a2571d427209c51d",
+    revision="1e5a03f8eeb2c98b928fbbd846f22f816360919f",
     release_date="2025-01-22",
     n_parameters=32302592,
     n_embedding_parameters=32302592,
@@ -379,16 +380,15 @@ potion_base_32m = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
-    extra_requirements_groups=["model2vec"],
 )
 
 potion_retrieval_32m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/potion-retrieval-32M",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="3c52220caac03b85ca0730a4cdbbe77b92db0a39",
+    revision="6fc8051fab2a1e0ee76689cf08c853792ac285e7",
     release_date="2025-01-23",
     n_parameters=32302592,
     n_embedding_parameters=32302592,
@@ -406,16 +406,15 @@ potion_retrieval_32m = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
-    extra_requirements_groups=["model2vec"],
 )
 
 potion_multilingual_128m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="minishlab/potion-multilingual-128M",
     model_type=["dense"],
     languages=_POTION_MULTILINGUAL_128M_LANGUAGES,
     open_weights=True,
-    revision="38ebd7f10f71e67fa8db898290f92b82e9cfff2a",
+    revision="73908c3438cf03b6a01bcb9611d62b23d0726f08",
     release_date="2025-05-23",
     n_parameters=128 * 1e6,
     n_embedding_parameters=128 * 1e6,
@@ -433,7 +432,6 @@ potion_multilingual_128m = ModelMeta(
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
     citation=MODEL2VEC_CITATION,
-    extra_requirements_groups=["model2vec"],
 )
 
 pubmed_bert_100k = ModelMeta(
@@ -442,7 +440,7 @@ pubmed_bert_100k = ModelMeta(
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="bac5e3b12fb8c650e92a19c41b436732c4f16e9e",
+    revision="abb836b5d47e22ec27e3e64d8c76ece100dbb3a8",
     release_date="2025-01-03",
     n_parameters=1 * 1e5,
     n_embedding_parameters=1 * 1e5,
@@ -468,7 +466,7 @@ pubmed_bert_500k = ModelMeta(
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="34ba71e35c393fdad7ed695113f653feb407b16b",
+    revision="71f65d59ddf416f7c2dbf5580ebaa70b6bec7707",
     release_date="2025-01-03",
     n_parameters=5 * 1e5,
     n_embedding_parameters=5 * 1e5,
@@ -494,7 +492,7 @@ pubmed_bert_1m = ModelMeta(
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="2b7fed222594708da6d88bcda92ae9b434b7ddd1",
+    revision="f09981510cfaaab2ccbc4890e4511d9116631e87",
     release_date="2025-01-03",
     n_parameters=1 * 1e6,
     n_embedding_parameters=1 * 1e6,
@@ -515,12 +513,12 @@ pubmed_bert_1m = ModelMeta(
 )
 
 pubmed_bert_2m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="NeuML/pubmedbert-base-embeddings-2M",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="1d7bbe04d6713e425161146bfdc71473cbed498a",
+    revision="175c20e200ec8780103bb998e1018df0b704a64b",
     release_date="2025-01-03",
     n_parameters=1.95 * 1e6,
     n_embedding_parameters=1.95 * 1e6,
@@ -537,16 +535,15 @@ pubmed_bert_2m = ModelMeta(
     training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-2M#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
-    extra_requirements_groups=["model2vec"],
 )
 
 pubmed_bert_8m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="NeuML/pubmedbert-base-embeddings-8M",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="387d350015e963744f4fafe56a574b7cd48646c9",
+    revision="b6a0de4964b05d69fea61532cd6ae1241a3ee9fd",
     release_date="2025-01-03",
     n_parameters=7.81 * 1e6,
     n_embedding_parameters=7.81 * 1e6,
@@ -563,5 +560,4 @@ pubmed_bert_8m = ModelMeta(
     training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-8M#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
-    extra_requirements_groups=["model2vec"],
 )
