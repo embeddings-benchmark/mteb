@@ -17,7 +17,7 @@ def get_task_type(task_name: str) -> str:
     except Exception:
         return "Unknown"
 
-def plot_performance(df_to_plot: pd.DataFrame, title: str, ylabel: str, output_path: Path, ymin: float = None, legend_ncol: int = 1, overall_line: pd.Series = None):
+def plot_performance(df_to_plot: pd.DataFrame, title: str, ylabel: str, output_path: Path, ymin: float = None, legend_ncol: int = 1, overall_line: pd.Series = None, legend_fontsize: int = 14):
     """Reusable function to generate and save a line plot for performance scaling."""
     # Scale to 100 format
     df_to_plot = df_to_plot * 100
@@ -60,7 +60,7 @@ def plot_performance(df_to_plot: pd.DataFrame, title: str, ylabel: str, output_p
         ax.set_ylim(bottom=ymin)
 
     # Add legend at the bottom right
-    ax.legend(loc='lower right', fontsize=12, ncol=legend_ncol)
+    ax.legend(loc='lower right', fontsize=legend_fontsize, ncol=legend_ncol)
 
     plt.tight_layout()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
@@ -242,7 +242,8 @@ def main():
             title="Effect of Frame Count on Model Performance (with Overall)",
             ylabel="Mean Performance",
             output_path=plot_dir / "model_performance_scaling_with_overall.png",
-            overall_line=table3.loc["Overall Mean"]
+            overall_line=table3.loc["Overall Mean"],
+            legend_fontsize=16
         )
 
 if __name__ == "__main__":
