@@ -17,17 +17,24 @@ def get_task_type(task_name: str) -> str:
     except Exception:
         return "Unknown"
 
-def plot_performance(df_to_plot: pd.DataFrame, title: str, ylabel: str, output_path: Path, ymin: float = None, legend_ncol: int = 1):
+def plot_performance(df_to_plot: pd.DataFrame, title: str, ylabel: str, output_path: Path, ymin: float = None, legend_ncol: int = 1, overall_line: pd.Series = None):
     """Reusable function to generate and save a line plot for performance scaling."""
     # Scale to 100 format
     df_to_plot = df_to_plot * 100
     if ymin is not None:
         ymin = ymin * 100
 
+    if overall_line is not None:
+        overall_line = overall_line * 100
+
     # Ensure index is string to make points equidistant
     df_to_plot.index = df_to_plot.index.astype(str)
 
     ax = df_to_plot.plot(kind='line', marker='o', figsize=(10, 6), fontsize=14)
+
+    if overall_line is not None:
+        ax.plot(range(len(overall_line)), overall_line.values, color='black', linestyle=':', linewidth=2, marker='o', label='Overall Performance')
+
     ax.set_title(title, fontsize=18)
     ax.set_xlabel("Number of Frames", fontsize=16)
     ax.set_ylabel(ylabel, fontsize=16)
@@ -40,6 +47,11 @@ def plot_performance(df_to_plot: pd.DataFrame, title: str, ylabel: str, output_p
 
     # Adjust y-axis to make the scaling impact clear
     y_min_data, y_max_data = df_to_plot.min().min(), df_to_plot.max().max()
+    
+    if overall_line is not None:
+        y_min_data = min(y_min_data, overall_line.min())
+        y_max_data = max(y_max_data, overall_line.max())
+        
     padding = (y_max_data - y_min_data) * 0.1
     if pd.notna(y_min_data) and pd.notna(y_max_data) and padding > 0:
         calculated_ymin = y_min_data - padding if ymin is None else ymin
@@ -222,6 +234,15 @@ def main():
             output_path=plot_dir / "task_performance_scaling.png",
             ymin=0.0,
             legend_ncol=2
+        )
+
+        # Plot model performance scaling with overall performance
+        plot_performance(
+            df_to_plot=table2.T,
+            title="Effect of Frame Count on Model Performance (with Overall)",
+            ylabel="Mean Performance",
+            output_path=plot_dir / "model_performance_scaling_with_overall.png",
+            overall_line=table3.loc["Overall Mean"]
         )
 
 if __name__ == "__main__":
