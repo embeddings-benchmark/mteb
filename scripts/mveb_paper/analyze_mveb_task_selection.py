@@ -85,28 +85,35 @@ VIDEO_ONLY_FAMILIES = {
 }
 
 
-# Standard video-embedding datasets that must survive every filter,
-# restricted to annotation-valid directions.
+# Tasks that must end up in the final benchmark — either standard datasets
+# the field expects, V-only variants needed for the nested MVEB(video) subset,
+# or AV-joint variants needed for AV task-type coverage in the master.
 MUST_INCLUDE = {
-    "MSRVTTT2V", "MSRVTTV2T",
-    "MSVDT2VRetrieval", "VATEXT2VRetrieval",
+    # Retrieval — standard T2V/V2T canonicals:
+    "MSRVTTT2V", "MSRVTTV2T", "MSVDT2VRetrieval", "VATEXT2VRetrieval",
     "DiDeMoT2VRetrieval", "YouCook2T2VRetrieval",
     "ActivityNetCaptionsT2VRetrieval",
+    # Retrieval — audio-conditioned on AV-aware families:
     "AudioCapsAVAT2VRetrieval", "AudioCapsAVVA2TRetrieval",
     "VALOR32KT2VARetrieval", "VALOR32KVT2ARetrieval", "VALOR32KA2VRetrieval",
     "AVMemeExamAT2VRetrieval",
+    # Classification — standard action recognition + V-only variants for V subset:
     "HMDB51Classification", "BreakfastClassification",
-    "SomethingSomethingV2Classification",
-    "VGGSoundVA", "AVEDatasetClassification",
-    "AVMemeVideoClassification", "MELDVideoClassification",
-    "WorldSenseVideoClassification", "AVMemeAudioVideoClassification",
-    "RAVDESSVideoClustering", "AVEDatasetVideoClustering",
+    "SomethingSomethingV2Classification", "VGGSoundVA",
+    "AVEDatasetClassification", "AVMemeVideoClassification",
+    "MELDVideoClassification", "WorldSenseVideoClassification",
+    "AVMemeAudioVideoClassification",
+    # Clustering — V variants for V subset + AV variants for master:
+    "AVEDatasetVideoClustering", "RAVDESSVideoClustering",
     "AVEDatasetAudioVideoClustering", "WorldSense1MinDomainAudioVideoClustering",
+    # QA:
     "EgoSchemaVideoCentricQA", "NExTQAVideoCentricQA",
     "VideoMMEShortVideoCentricQA", "OmniVideoBenchVideoCentricQA",
     "WorldSense1MinVideoAudioCentricQA", "DailyOmniVideoAudioCentricQA",
+    # Pair-cls:
     "VinogroundPairClassification", "RAVDESSAVVAPairClassification",
     "HumanAnimalCartoonVPairClassification",
+    # Zero-shot:
     "HMDB51ZeroShot", "UCF101VideoZeroShotClassification", "MELDVideoZeroShot",
     "WorldSenseAudioVideoZeroShot",
 }
