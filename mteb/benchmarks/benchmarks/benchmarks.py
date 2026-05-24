@@ -3726,42 +3726,142 @@ MVEB_EXTENDED = Benchmark(
 
 MVEB = Benchmark(
     name="MVEB",
-    aliases=["MVEB"],
+    aliases=["MVEB", "MVEB(text, audio, video)"],
     display_name="MVEB",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
-            # Any2AnyRetrieval (10)
+            # Any2AnyRetrieval (14)
             "AVMemeExamAT2VRetrieval",
+            "ActivityNetCaptionsT2VRetrieval",
+            "AudioCapsAVAT2VRetrieval",
             "AudioCapsAVVA2TRetrieval",
-            "MSRVTTA2V",
+            "DiDeMoT2VRetrieval",
+            "MSRVTTT2V",
+            "MSRVTTV2T",
             "MSVDT2VRetrieval",
-            "Panda70MVA2TRetrieval",
-            "TUNABenchT2VRetrieval",
+            "VALOR32KA2VRetrieval",
+            "VALOR32KT2VARetrieval",
             "VALOR32KVT2ARetrieval",
-            "VATEXT2VARetrieval",
+            "VATEXT2VRetrieval",
             "VATEXV2ARetrieval",
-            "VGGSoundAVT2VARetrieval",
-            # VideoCentricQA (2)
+            "YouCook2T2VRetrieval",
+            # VideoCentricQA (6)
+            "DailyOmniVideoAudioCentricQA",
+            "EgoSchemaVideoCentricQA",
+            "NExTQAVideoCentricQA",
             "OmniVideoBenchVideoCentricQA",
+            "VideoMMEShortVideoCentricQA",
             "WorldSense1MinVideoAudioCentricQA",
-            # VideoClassification (6)
+            # VideoClassification (9)
             "AVEDatasetClassification",
+            "AVMemeAudioVideoClassification",
             "AVMemeVideoClassification",
             "BreakfastClassification",
-            "Diving48Classification.V2",
             "HMDB51Classification",
-            "UCF101VideoAudioClassification",
-            # VideoClustering (1)
+            "MELDVideoClassification",
+            "SomethingSomethingV2Classification",
+            "VGGSoundVA",
+            "WorldSenseVideoClassification",
+            # VideoClustering (5)
+            "AVEDatasetAudioVideoClustering",
+            "AVEDatasetVideoClustering",
             "MusicAVQACLSVideoClustering",
-            # VideoPairClassification (1)
+            "RAVDESSVideoClustering",
+            "WorldSense1MinDomainAudioVideoClustering",
+            # VideoPairClassification (3)
+            "HumanAnimalCartoonVPairClassification",
             "RAVDESSAVVAPairClassification",
-            # VideoZeroshotClassification (2)
+            "VinogroundPairClassification",
+            # VideoZeroshotClassification (5)
+            "HMDB51ZeroShot",
             "Kinetics600VAZeroShot",
             "MELDVideoZeroShot",
+            "UCF101VideoZeroShotClassification",
+            "WorldSenseAudioVideoZeroShot",
         ]
     ),
-    description="""MVEB (Massive Video Embedding Benchmark) is a curated video benchmark with 22 tasks selected from MVEB(extended) via correlation-based redundancy removal (threshold=0.83, Spearman=0.982 with full pool). Tasks span 6 task types: retrieval (10), classification (6), clustering (1), pair classification (1), zero-shot classification (2), and video-centric QA (2). The benchmark covers video-only and audio-video modalities across 9 domains and 17 languages.""",
+    description="""MVEB (Massive Video Embedding Benchmark) is a curated audio-visual video benchmark with 42 tasks selected from MVEB(extended) via annotation-provenance, saturation/floor, and correlation-based redundancy filters (threshold=0.85, Spearman=0.955 with full pool). Tasks span 6 task types: retrieval (14), classification (9), clustering (5), pair classification (3), zero-shot classification (5), and video-centric QA (6), with 19 of them exercising joint audio-visual inputs.""",
+    reference=None,
+    citation="",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
+
+
+MVEB_TEXT_VIDEO = Benchmark(
+    name="MVEB(text, video)",
+    aliases=["MVEB(text, video)"],
+    display_name="Text+Video",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Any2AnyRetrieval (10)
+            "AVMemeExamV2TRetrieval",
+            "ActivityNetCaptionsT2VRetrieval",
+            "AudioCapsAVT2VRetrieval",
+            "DiDeMoT2VRetrieval",
+            "MSRVTTT2V",
+            "MSRVTTV2T",
+            "MSVDT2VRetrieval",
+            "VALOR32KT2VRetrieval",
+            "VATEXT2VRetrieval",
+            "YouCook2T2VRetrieval",
+            # VideoCentricQA (4)
+            "EgoSchemaVideoCentricQA",
+            "NExTQAVideoCentricQA",
+            "OmniVideoBenchVideoCentricQA",
+            "VideoMMEShortVideoCentricQA",
+            # VideoClassification (6)
+            "AVMemeVideoClassification",
+            "BreakfastClassification",
+            "HMDB51Classification",
+            "MELDVideoClassification",
+            "SomethingSomethingV2Classification",
+            "WorldSenseVideoClassification",
+            # VideoClustering (3)
+            "AVEDatasetVideoClustering",
+            "MusicAVQACLSVideoClustering",
+            "RAVDESSVideoClustering",
+            # VideoPairClassification (2)
+            "HumanAnimalCartoonVPairClassification",
+            "VinogroundPairClassification",
+            # VideoZeroshotClassification (4)
+            "HMDB51ZeroShot",
+            "Kinetics400ZeroShot",
+            "MELDVideoZeroShot",
+            "UCF101VideoZeroShotClassification",
+        ]
+    ),
+    description="""MVEB(text, video) is the text+video scope of MVEB — 29 tasks restricted to data modalities ⊆ {video, text, image}, intended for models without an audio encoder (e.g. xclip, UME-R1, ebind-points-vision). Selected from MVEB(extended) with the same annotation/saturation/redundancy pipeline as MVEB. Spearman=0.911 with the full pool.""",
+    reference=None,
+    citation="",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
+
+
+MVEB_VIDEO = Benchmark(
+    name="MVEB(video)",
+    aliases=["MVEB(video)"],
+    display_name="Video",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=get_tasks(
+        tasks=[
+            # VideoClassification (6)
+            "AVMemeVideoClassification",
+            "BreakfastClassification",
+            "HMDB51Classification",
+            "MELDVideoClassification",
+            "SomethingSomethingV2Classification",
+            "WorldSenseVideoClassification",
+            # VideoClustering (2)
+            "AVEDatasetVideoClustering",
+            "RAVDESSVideoClustering",
+            # VideoPairClassification (2)
+            "HumanAnimalCartoonVPairClassification",
+            "VinogroundPairClassification",
+        ]
+    ),
+    description="""MVEB(video) is the video-only scope of MVEB — 10 tasks whose data modality is {video}, intended for V-only encoders (e.g. vjepa2). Retrieval, QA, and zero-shot tasks are excluded by construction since they require a text encoder. Selected from MVEB(extended) with the same pipeline as MVEB.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],

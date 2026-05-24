@@ -1,29 +1,32 @@
 #!/usr/bin/env python3
-"""
-Analyze MVEB task selection to identify redundancies and optimize coverage.
+"""Generate MVEB task selection per modality scope.
 
-This script:
-1. Loads task metadata from MVEB(extended)
-2. Groups tasks by source dataset to identify same-source task families
-3. Computes task-to-task correlation matrix using model results
-4. Analyzes language/domain/category coverage
-5. Recommends task removals based on redundancy and coverage preservation
+Pipeline:
+  1. Filter MVEB(extended) by scope (`audio-video`, `video-text`, `video`).
+  2. Drop tasks whose audio use is invalid given the dataset's annotation
+     provenance (e.g. audio-conditioned retrieval on MSRVTT).
+  3. Drop saturated / floor / low-support tasks.
+  4. Apply T2V-direction preference, family caps, and ρ-based redundancy
+     pruning, with `MUST_INCLUDE` tasks bypassing every filter above.
+
+Writes a markdown report per scope and prints a summary to stdout.
 
 Usage:
-    python scripts/mveb_paper/analyze_mveb_task_selection.py
+    python scripts/mveb_paper/analyze_mveb_task_selection.py --scope audio-video \\
+        --results-dir /path/to/results/results
 """
 
 from __future__ import annotations
 
 import json
+import logging
+import os
+import sys
 import warnings
 from collections import Counter, defaultdict
 from pathlib import Path
 
 warnings.filterwarnings("ignore")
-import logging
-import os
-
 os.environ["PYTHONWARNINGS"] = "ignore"
 logging.getLogger("mteb").setLevel(logging.ERROR)
 
@@ -31,48 +34,105 @@ import numpy as np
 import pandas as pd
 from scipy.stats import pearsonr, spearmanr
 
-import sys
-
-# Add root directory to path to import mteb
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
 import mteb
 from mteb.cache import ResultCache
 
 
-# Correlation thresholds to evaluate
-THRESHOLDS = [
-    0.95,
-    0.93,
-    0.9,
-    0.88,
-    0.87,
-    0.85,
-    0.84,
-    0.83,
-    0.82,
-    0.81,
-    0.8,
-    0.7,
-    0.6,
-    0.5,
-]
+# Correlation thresholds we sweep to report selection at each cut. The
+# recommended operating point is 0.85.
+THRESHOLDS = [0.95, 0.93, 0.9, 0.88, 0.87, 0.85, 0.84, 0.83, 0.82, 0.81, 0.8, 0.7, 0.6, 0.5]
 
-# Models for evaluation time calculation
+# Reference models used to estimate eval time of the selected subset.
 EVAL_TIME_MODELS = [
-    ("ebind-av", "encord-team/ebind-audio-vision"),  # 764M (smallest)
+    ("ebind-av", "encord-team/ebind-audio-vision"),       # 764M (smallest AV)
     ("pe-av-small", "facebook/pe-av-small"),
     ("LCO-Embedding-Omni-7B", "LCO-Embedding/LCO-Embedding-Omni-7B"),
     ("Qwen2.5-Omni-7B", "Qwen/Qwen2.5-Omni-7B"),
 ]
 
-# Manually protected tasks (user preferences)
-MANUALLY_PROTECTED_TASKS = [
-    "Diving48Classification.V1",  # Only representative of Sport domain
-]
+# Manually protected (the only sport-domain representative).
+MANUALLY_PROTECTED_TASKS = ["Diving48Classification.V1"]
 
-# Tasks to exclude (redundant with manually protected tasks)
-TASKS_TO_EXCLUDE = []
+TASKS_TO_EXCLUDE: list[str] = []
+
+
+# Datasets where audio carries label-relevant signal: AV-aware captions,
+# AV-required QA, emotion (prosody), or action classes whose audio is
+# typically informative.
+AV_AWARE_FAMILIES = {
+    "VALOR32K", "AudioCapsAV", "Shot2Story20K",
+    "VGGSoundAV", "AVEDataset",
+    "MELD", "RAVDESS",
+    "MusicAVQA", "MusicAVQACLS",
+    "AVQA", "AVMeme", "AVMemeExam",
+    "WorldSense", "WorldSense1Min", "DailyOmni",
+    "OmniVideoBench", "VideoMME", "VideoMMEShort", "PerceptionTest",
+    "AVSpeakerBench",
+    "Kinetics400", "Kinetics600", "Kinetics700",
+    "UCF101", "HMDB51", "Breakfast", "HumanAnimalCartoon",
+    "VATEX", "ActivityNetCaptions", "YouCook2",
+}
+
+# Datasets where labels describe visual content only — audio on these is
+# incidental and would not match the label.
+VIDEO_ONLY_FAMILIES = {
+    "MSRVTT", "MSVD", "DiDeMo", "Panda70M",
+    "TUNABench", "Charades-STA",
+    "SomethingSomethingV2", "Diving48",
+    "Vinoground", "VideoCon",
+    "NExTQA", "EgoSchema",
+}
+
+
+# Tasks that must survive every filter (industry-canonical from MMEB-V2 and
+# PE-AV, restricted to annotation-valid directions).
+MUST_INCLUDE = {
+    "MSRVTTT2V", "MSRVTTV2T",
+    "MSVDT2VRetrieval", "VATEXT2VRetrieval",
+    "DiDeMoT2VRetrieval", "YouCook2T2VRetrieval",
+    "ActivityNetCaptionsT2VRetrieval",
+    "AudioCapsAVAT2VRetrieval", "AudioCapsAVVA2TRetrieval",
+    "VALOR32KT2VARetrieval", "VALOR32KVT2ARetrieval", "VALOR32KA2VRetrieval",
+    "AVMemeExamAT2VRetrieval",
+    "HMDB51Classification", "BreakfastClassification",
+    "SomethingSomethingV2Classification",
+    "VGGSoundVA", "AVEDatasetClassification",
+    "AVMemeVideoClassification", "MELDVideoClassification",
+    "WorldSenseVideoClassification", "AVMemeAudioVideoClassification",
+    "RAVDESSVideoClustering", "AVEDatasetVideoClustering",
+    "AVEDatasetAudioVideoClustering", "WorldSense1MinDomainAudioVideoClustering",
+    "EgoSchemaVideoCentricQA", "NExTQAVideoCentricQA",
+    "VideoMMEShortVideoCentricQA", "OmniVideoBenchVideoCentricQA",
+    "WorldSense1MinVideoAudioCentricQA", "DailyOmniVideoAudioCentricQA",
+    "VinogroundPairClassification", "RAVDESSAVVAPairClassification",
+    "HumanAnimalCartoonVPairClassification",
+    "HMDB51ZeroShot", "UCF101VideoZeroShotClassification", "MELDVideoZeroShot",
+    "WorldSenseAudioVideoZeroShot",
+}
+
+
+# Discriminative-power filter thresholds.
+SAT_BEST_THRESHOLD = 0.93
+FLOOR_SPREAD_THRESHOLD = 0.05
+MIN_MODEL_SUPPORT = 5
+
+
+# Each scope keeps tasks whose modalities ⊆ `allowed_task_modalities`.
+SCOPES = {
+    "video": {
+        "description": "MVEB(video) — V-only encoders (vjepa2, etc.)",
+        "allowed_task_modalities": {"video"},
+    },
+    "video-text": {
+        "description": "MVEB(text, video) — T+V encoders (xclip, UME-R1, ebind-points-vision, +)",
+        "allowed_task_modalities": {"video", "text", "image"},
+    },
+    "audio-video": {
+        "description": "MVEB(text, audio, video) — full A+V+T encoders (pe-av, ebind-av, omni, +)",
+        "allowed_task_modalities": {"audio", "video", "text", "image"},
+    },
+}
 
 # Retrieval task families - for each family, prefer T2V over V2T
 # If both V2TRetrieval and T2VRetrieval exist, remove V2T
@@ -112,27 +172,164 @@ SAME_SOURCE_FAMILIES = [
 ]
 
 
+def family_of(task_name: str) -> str | None:
+    """Return the family prefix this task belongs to, or None.
+
+    Longer prefixes are checked first so e.g. "MusicAVQACLS" wins over "MusicAVQA".
+    """
+    families = sorted(
+        AV_AWARE_FAMILIES | VIDEO_ONLY_FAMILIES, key=len, reverse=True
+    )
+    for fam in families:
+        if task_name.startswith(fam):
+            return fam
+    return None
+
+
+def is_annotation_valid(
+    task_name: str, metadata_df: pd.DataFrame
+) -> tuple[bool, str]:
+    """Whether using audio on this task is principled given the dataset's
+    annotation protocol. Audio is only fair on AV-aware families.
+    """
+    fam = family_of(task_name)
+    if fam is None or fam not in VIDEO_ONLY_FAMILIES:
+        return True, ""
+
+    rows = metadata_df[metadata_df["name"] == task_name]
+    if not rows.empty and "audio" in set(rows.iloc[0]["modalities"]):
+        return False, f"uses audio but '{fam}' has visual-only labels"
+    return True, ""
+
+
+def filter_invalid_annotation(
+    tasks: list[str], protected: set[str], metadata_df: pd.DataFrame
+) -> tuple[list[str], list[tuple[str, str]]]:
+    kept, dropped = [], []
+    for t in tasks:
+        if t in protected:
+            kept.append(t)
+            continue
+        valid, reason = is_annotation_valid(t, metadata_df)
+        if valid:
+            kept.append(t)
+        else:
+            dropped.append((t, reason))
+    return kept, dropped
+
+
+def filter_by_scope(
+    tasks: list[str], metadata_df: pd.DataFrame, scope_key: str
+) -> tuple[list[str], list[tuple[str, str]]]:
+    """Keep tasks whose modalities ⊆ scope's allowed set."""
+    allowed = SCOPES[scope_key]["allowed_task_modalities"]
+    kept, dropped = [], []
+    for t in tasks:
+        rows = metadata_df[metadata_df["name"] == t]
+        if rows.empty:
+            dropped.append((t, "no metadata"))
+            continue
+        task_mods = set(rows.iloc[0]["modalities"])
+        if task_mods.issubset(allowed):
+            kept.append(t)
+        else:
+            dropped.append((t, f"modalities {sorted(task_mods - allowed)} outside scope"))
+    return kept, dropped
+
+
+def load_model_modalities(results_dir: Path | str) -> dict[str, set[str]]:
+    """{model_name: modalities_set} read from each model's model_meta.json."""
+    results_dir = Path(results_dir)
+    out: dict[str, set[str]] = {}
+    for model_dir in results_dir.iterdir():
+        if not model_dir.is_dir():
+            continue
+        revs = [d for d in model_dir.iterdir() if d.is_dir()]
+        if not revs:
+            continue
+        revs.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+        meta_path = revs[0] / "model_meta.json"
+        if not meta_path.exists():
+            continue
+        try:
+            meta = json.loads(meta_path.read_text())
+            out[model_dir.name.replace("__", "/")] = set(meta.get("modalities") or [])
+        except (json.JSONDecodeError, OSError):
+            continue
+    return out
+
+
+def compute_task_stats(
+    results_df: pd.DataFrame,
+    tasks: list[str],
+    metadata_df: pd.DataFrame,
+    model_modalities: dict[str, set[str]],
+) -> dict[str, dict]:
+    """{task: {best, worst, spread, n}} across models whose modalities ⊇ task's."""
+    empty = {"best": None, "worst": None, "spread": None, "n": 0}
+    stats: dict[str, dict] = {}
+    for t in tasks:
+        if t not in results_df.columns:
+            stats[t] = dict(empty); continue
+        rows = metadata_df[metadata_df["name"] == t]
+        if rows.empty:
+            stats[t] = dict(empty); continue
+        task_mods = set(rows.iloc[0]["modalities"])
+        capable = [m for m, mods in model_modalities.items() if task_mods.issubset(mods)]
+        capable_in_df = [m for m in capable if m in results_df.index]
+        scores = (
+            results_df.loc[capable_in_df, t].dropna()
+            if capable_in_df else pd.Series(dtype=float)
+        )
+        if scores.empty:
+            stats[t] = dict(empty); continue
+        stats[t] = {
+            "best": float(scores.max()),
+            "worst": float(scores.min()),
+            "spread": float(scores.max() - scores.min()),
+            "n": int(len(scores)),
+        }
+    return stats
+
+
+def filter_saturation_floor(
+    tasks: list[str],
+    stats: dict[str, dict],
+    protected: set[str],
+    sat_threshold: float = SAT_BEST_THRESHOLD,
+    floor_spread: float = FLOOR_SPREAD_THRESHOLD,
+    min_support: int = MIN_MODEL_SUPPORT,
+) -> tuple[list[str], list[tuple[str, str]]]:
+    """Drop saturated / floor / low-support tasks. Protected tasks bypass."""
+    kept, dropped = [], []
+    for t in tasks:
+        if t in protected:
+            kept.append(t)
+            continue
+        s = stats.get(t)
+        if s is None or s.get("best") is None:
+            dropped.append((t, "no model results from capable models"))
+            continue
+        if s["n"] < min_support:
+            dropped.append((t, f"low support (only {s['n']} capable models with results)"))
+            continue
+        if s["best"] > sat_threshold:
+            dropped.append((t, f"saturated (best={s['best']:.3f} > {sat_threshold})"))
+            continue
+        if s["spread"] < floor_spread:
+            dropped.append((t, f"floor (spread={s['spread']:.3f} < {floor_spread})"))
+            continue
+        kept.append(t)
+    return kept, dropped
+
+
 def deduplicate_retrieval_directions(
     task_names: list[str],
 ) -> tuple[list[str], list[tuple[str, str]]]:
-    """Remove V2T retrieval tasks when T2V exists for the same family.
-
-    For retrieval tasks, T2V (text-to-video) is generally preferred over V2T
-    (video-to-text) as it represents a more common use case.
-
-    Args:
-        task_names: List of task names
-
-    Returns:
-        Tuple of (filtered task names, list of (removed_task, reason) tuples)
-    """
-    removed = []
-    remaining = []
-
-    # Build sets of V2T and T2V tasks by family
-    v2t_tasks = {}  # family -> task name
-    t2v_tasks = {}  # family -> task name
-
+    """For each family that has both T2V and V2T, drop V2T (T2V is the
+    more commonly reported direction)."""
+    v2t_tasks: dict[str, str] = {}
+    t2v_tasks: dict[str, str] = {}
     for task in task_names:
         for family in RETRIEVAL_FAMILIES:
             if task.startswith(family):
@@ -142,41 +339,23 @@ def deduplicate_retrieval_directions(
                     t2v_tasks[family] = task
                 break
 
-    # Remove V2T if T2V exists for same family
     tasks_to_remove = set()
+    removed = []
     for family, v2t_task in v2t_tasks.items():
         if family in t2v_tasks:
             tasks_to_remove.add(v2t_task)
-            removed.append(
-                (
-                    v2t_task,
-                    f"Prefer T2V over V2T for {family} family (keeping {t2v_tasks[family]})",
-                )
-            )
+            removed.append((v2t_task, f"Prefer T2V over V2T for {family} (keeping {t2v_tasks[family]})"))
 
-    for task in task_names:
-        if task not in tasks_to_remove:
-            remaining.append(task)
-
+    remaining = [t for t in task_names if t not in tasks_to_remove]
     return remaining, removed
 
 
 def enforce_retrieval_direction_preference(
     task_names: list[str],
 ) -> tuple[list[str], list[tuple[str, str, float]]]:
-    """Post-processing step: Remove V2T retrieval tasks when T2V exists for the same family.
-
-    This is applied after correlation-based selection to ensure we never keep
-    both V2T and T2V for the same retrieval family.
-
-    Args:
-        task_names: List of selected task names
-
-    Returns:
-        Tuple of (filtered task names, list of (removed_task, reason, 0.0) tuples)
-    """
+    """Same as `deduplicate_retrieval_directions` but returns the
+    (task, reason, correlation) tuple shape used by the selection pipeline."""
     remaining, removed_pairs = deduplicate_retrieval_directions(task_names)
-    # Convert to the expected format with correlation value
     removed = [(task, reason, 0.0) for task, reason in removed_pairs]
     return remaining, removed
 
@@ -185,27 +364,22 @@ def deduplicate_same_source_families(
     task_names: list[str],
     results_df: pd.DataFrame,
     metadata_df: pd.DataFrame,
+    protected_tasks: set[str] | None = None,
 ) -> tuple[list[str], list[tuple[str, str, float]]]:
-    """Cap tasks per source dataset family.
+    """Cap tasks per source dataset family in two passes:
 
-    Two passes:
-      1. Within (family, task_type): keep only one task (lowest avg corr to rest).
-      2. Across non-retrieval task types within a family: keep only one task
-         (lowest avg corr to rest). Retrieval is exempt so different
-         modality directions (e.g. T2V vs A2V) from the same dataset can coexist.
+    1. Within (family, task_type): keep one task (lowest avg ρ to the rest).
+    2. Across non-retrieval task types within a family: keep one task.
+       Retrieval is exempt — different directions (T2V, A2V, ...) from
+       the same dataset are distinct measurements.
 
-    Args:
-        task_names: List of selected task names
-        results_df: Model results DataFrame for correlation calculation
-        metadata_df: Task metadata DataFrame
-
-    Returns:
-        Tuple of (filtered task names, list of (removed_task, reason, 0.0) tuples)
+    Protected tasks always survive; if two protected tasks fall in the same
+    group, both are kept.
     """
     remaining = task_names.copy()
     removed = []
+    protected_tasks = set(protected_tasks) if protected_tasks else set()
 
-    # Build task -> (family, type) mapping
     task_to_family = {}
     for task in task_names:
         for family in SAME_SOURCE_FAMILIES:
@@ -217,8 +391,7 @@ def deduplicate_same_source_families(
                 break
 
     def pick_lowest_corr(candidates: list[str]) -> str | None:
-        """Among candidates, return the one with lowest mean abs Spearman to
-        the rest of `remaining`. None if none have results."""
+        """The candidate with the lowest mean |ρ| against the rest of `remaining`."""
         best = None
         best_avg = float("inf")
         for cand in candidates:
@@ -247,6 +420,22 @@ def deduplicate_same_source_families(
     for (family, task_type), tasks in family_type_groups.items():
         if len(tasks) <= 1:
             continue
+        protected_here = [t for t in tasks if t in protected_tasks]
+        # If any protected tasks are in this group, keep all of them; only
+        # consider removing non-protected siblings.
+        if protected_here:
+            for t in tasks:
+                if t not in protected_tasks and t in remaining:
+                    remaining.remove(t)
+                    removed.append(
+                        (
+                            t,
+                            f"Same-family ({family}) same-type ({task_type}) "
+                            f"redundancy, keeping protected {protected_here}",
+                            0.0,
+                        )
+                    )
+            continue
         keep = pick_lowest_corr(tasks)
         if keep:
             for t in tasks:
@@ -274,6 +463,21 @@ def deduplicate_same_source_families(
     for family, tasks in family_nonret_groups.items():
         if len(tasks) <= 1:
             continue
+        protected_here = [t for t in tasks if t in protected_tasks]
+        if protected_here:
+            # Keep all protected; remove only non-protected siblings.
+            for t in tasks:
+                if t not in protected_tasks and t in remaining:
+                    remaining.remove(t)
+                    removed.append(
+                        (
+                            t,
+                            f"Same-family ({family}) non-retrieval cap, "
+                            f"keeping protected {protected_here}",
+                            0.0,
+                        )
+                    )
+            continue
         keep = pick_lowest_corr(tasks)
         if keep:
             for t in tasks:
@@ -291,100 +495,54 @@ def deduplicate_same_source_families(
 
 
 def load_eval_times(
-    results_dir: Path,
-    model_name: str,
-    task_names: list[str],
+    results_dir: Path, model_name: str, task_names: list[str]
 ) -> dict[str, float]:
-    """Load evaluation_time from task JSON files for a model.
-
-    Args:
-        results_dir: Path to results directory (e.g., ~/.cache/mteb/results)
-        model_name: Model name (e.g., "encord-team/ebind-audio-vision")
-        task_names: List of task names to load times for
-
-    Returns:
-        Dictionary mapping task name to evaluation time in seconds
-    """
-    model_folder_name = model_name.replace("/", "__").replace(" ", "_")
-    model_folder = results_dir / model_folder_name
-
+    """Read `evaluation_time` (seconds) from each task's result JSON for `model_name`."""
+    model_folder = results_dir / model_name.replace("/", "__").replace(" ", "_")
     if not model_folder.exists():
         return {}
 
-    # Find revision folder (use latest if multiple)
-    revision_folders = [f for f in model_folder.iterdir() if f.is_dir()]
-    if not revision_folders:
+    revs = sorted(
+        [f for f in model_folder.iterdir() if f.is_dir()],
+        key=lambda p: p.stat().st_mtime, reverse=True,
+    )
+    if not revs:
         return {}
 
-    # Sort by modification time, use latest
-    revision_folders.sort(key=lambda p: p.stat().st_mtime, reverse=True)
-    revision_folder = revision_folders[0]
-
-    eval_times = {}
+    eval_times: dict[str, float] = {}
     for task_name in task_names:
-        task_file = revision_folder / f"{task_name}.json"
-        if task_file.exists():
-            try:
-                with open(task_file) as f:
-                    data = json.load(f)
-                if "evaluation_time" in data and data["evaluation_time"] is not None:
-                    eval_times[task_name] = data["evaluation_time"]
-            except (json.JSONDecodeError, KeyError):
-                pass
-
+        task_file = revs[0] / f"{task_name}.json"
+        if not task_file.exists():
+            continue
+        try:
+            data = json.loads(task_file.read_text())
+            if data.get("evaluation_time") is not None:
+                eval_times[task_name] = data["evaluation_time"]
+        except json.JSONDecodeError:
+            pass
     return eval_times
 
 
 def compute_total_eval_time(
-    eval_times: dict[str, float],
-    task_names: list[str],
+    eval_times: dict[str, float], task_names: list[str]
 ) -> tuple[float, int]:
-    """Compute total evaluation time for a set of tasks.
-
-    Args:
-        eval_times: Dictionary mapping task name to evaluation time
-        task_names: List of task names to sum
-
-    Returns:
-        Tuple of (total_seconds, tasks_with_times)
-    """
-    total = 0.0
-    count = 0
-    for task in task_names:
-        if task in eval_times:
-            total += eval_times[task]
-            count += 1
+    """Sum eval times across `task_names`. Returns (total_seconds, tasks_with_data)."""
+    total = sum(eval_times[t] for t in task_names if t in eval_times)
+    count = sum(1 for t in task_names if t in eval_times)
     return total, count
 
 
 def format_duration(seconds: float) -> str:
-    """Format duration in seconds to human-readable string.
-
-    Args:
-        seconds: Duration in seconds
-
-    Returns:
-        Formatted string like "1h 23m" or "45m 30s"
-    """
+    """Format `seconds` as "1h 23m" or "45m 30s"."""
     hours = int(seconds // 3600)
     minutes = int((seconds % 3600) // 60)
-
     if hours > 0:
         return f"{hours}h {minutes}m"
-    else:
-        secs = int(seconds % 60)
-        return f"{minutes}m {secs}s"
+    return f"{minutes}m {int(seconds % 60)}s"
 
 
 def get_task_metadata_df(benchmark_name: str) -> pd.DataFrame:
-    """Extract task metadata into a DataFrame.
-
-    Args:
-        benchmark_name: Name of the benchmark to analyze
-
-    Returns:
-        DataFrame with columns: name, languages, domains, type, category, dataset_path
-    """
+    """Build a DataFrame of task metadata for the given benchmark."""
     benchmark = mteb.get_benchmark(benchmark_name)
 
     rows = []
@@ -405,78 +563,19 @@ def get_task_metadata_df(benchmark_name: str) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def get_same_source_groups(df: pd.DataFrame) -> dict[str, list[str]]:
-    """Group tasks by source dataset.
-
-    Args:
-        df: DataFrame with task metadata (must have 'name' and 'dataset_path' columns)
-
-    Returns:
-        Dictionary mapping dataset path to list of task names
-    """
-    groups = defaultdict(list)
-    for _, row in df.iterrows():
-        dataset_path = row["dataset_path"]
-        # Normalize dataset path - extract the base dataset name
-        base_path = dataset_path.split("/")[-1] if "/" in dataset_path else dataset_path
-        # Remove common suffixes that indicate variants
-        for suffix in ["-retrieval", "-classification", "-clustering"]:
-            if base_path.lower().endswith(suffix):
-                base_path = base_path[: -len(suffix)]
-        groups[row["dataset_path"]].append(row["name"])
-
-    # Only return groups with multiple tasks
-    return {path: tasks for path, tasks in groups.items() if len(tasks) > 1}
-
-
 def identify_task_families(df: pd.DataFrame) -> dict[str, list[str]]:
-    """Identify task families based on shared naming patterns.
-
-    Tasks like UCF101Classification, UCF101Clustering, UCF101ZeroshotClassification
-    all share "UCF101" as a common prefix.
-
-    Args:
-        df: DataFrame with task metadata
-
-    Returns:
-        Dictionary mapping family name to list of task names
-    """
+    """Group tasks by their source-dataset prefix (e.g. UCF101 → UCF101Classification,
+    UCF101Clustering, UCF101ZeroshotClassification). Returns families with >1 task."""
     families = defaultdict(list)
-    task_names = df["name"].tolist()
-
-    # Common dataset prefixes to look for
     common_prefixes = [
-        "MSVD",
-        "TUNABench",
-        "VATEX",
-        "Panda70M",
-        "YouCook2",
-        "Shot2Story20K",
-        "VALOR32K",
-        "DiDeMo",
-        "MSRVTT",
-        "ActivityNetCaptions",
-        "AudioCapsAV",
-        "AVMemeExam",
-        "VGGSoundAV",
-        "Kinetics400",
-        "Kinetics600",
-        "Kinetics700",
-        "UCF101",
-        "HMDB51",
-        "MELD",
-        "WorldSense",
-        "AVEDataset",
-        "MusicAVQACLS",
-        "RAVDESS",
-        "HumanAnimalCartoon",
-        "Breakfast",
-        "VGGSound",
-        "AVMeme",
-        "Diving48",
+        "MSVD", "TUNABench", "VATEX", "Panda70M", "YouCook2", "Shot2Story20K",
+        "VALOR32K", "DiDeMo", "MSRVTT", "ActivityNetCaptions",
+        "AudioCapsAV", "AVMemeExam", "VGGSoundAV",
+        "Kinetics400", "Kinetics600", "Kinetics700", "UCF101", "HMDB51",
+        "MELD", "WorldSense", "AVEDataset", "MusicAVQACLS", "RAVDESS",
+        "HumanAnimalCartoon", "Breakfast", "VGGSound", "AVMeme", "Diving48",
     ]
-
-    for task_name in task_names:
+    for task_name in df["name"].tolist():
         matched = False
         for prefix in common_prefixes:
             if task_name.startswith(prefix) or prefix.lower() in task_name.lower():
@@ -493,23 +592,16 @@ def identify_task_families(df: pd.DataFrame) -> dict[str, list[str]]:
 
 
 def load_model_results(results_dir: Path | str) -> tuple[pd.DataFrame, list[str]]:
-    """Load model results from ResultCache.
+    """Load all video-task results via mteb's ResultCache.
 
-    Args:
-        results_dir: Path to results directory
-
-    Returns:
-        Tuple of (results DataFrame, list of task names with results)
+    Returns (results_df indexed by model with tasks as columns, list_of_task_names).
+    Drops models with > 10 NaN tasks so the correlation matrix isn't dominated
+    by sparse rows.
     """
     results_dir = Path(results_dir)
-    model_names = [
-        folder.name.replace("__", "/")
-        for folder in results_dir.iterdir()
-        if folder.is_dir()
-    ]
+    model_names = [d.name.replace("__", "/") for d in results_dir.iterdir() if d.is_dir()]
     print(f"Found {len(model_names)} models")
 
-    # Get model metadata, skipping unregistered models
     models = []
     for name in model_names:
         try:
@@ -518,42 +610,24 @@ def load_model_results(results_dir: Path | str) -> tuple[pd.DataFrame, list[str]
             pass
     print(f"Models with metadata: {len(models)}")
 
-    # Load all video tasks
+    # cache_path is the parent of results_dir; works for both
+    # ~/.cache/mteb/remote/results and ~/repo/results/results layouts.
+    cache = ResultCache(cache_path=str(results_dir.parent))
     video_tasks = mteb.get_tasks(modalities=["video"], exclude_beta=False)
-
-    # Load results
-    cache = ResultCache(cache_path=str(results_dir.parent.parent))
     mteb_results = cache.load_results(
         models=models, tasks=video_tasks, require_model_meta=False
     )
 
-    # Create DataFrame
     full_df = mteb_results.to_dataframe().set_index("task_name").T
-
-    # Filter models with too many NaN values
-    nan_counts = full_df.isna().sum(axis=1)
-    results_df = full_df[nan_counts <= 10]
-
+    results_df = full_df[full_df.isna().sum(axis=1) <= 10]
     print(f"Models after NaN filter (<=10 NaN): {len(results_df)}")
     print(f"Tasks with results: {len(results_df.columns)}")
-
     return results_df, list(results_df.columns)
 
 
-def compute_task_correlation(
-    results_df: pd.DataFrame, tasks: list[str]
-) -> pd.DataFrame:
-    """Compute pairwise Spearman correlation matrix between tasks.
-
-    Args:
-        results_df: DataFrame with model results (rows=models, cols=tasks)
-        tasks: List of task names to compute correlations for
-
-    Returns:
-        Correlation matrix as DataFrame
-    """
-    task_df = results_df[tasks].select_dtypes(include=["number"])
-    return task_df.corr(method="spearman")
+def compute_task_correlation(results_df: pd.DataFrame, tasks: list[str]) -> pd.DataFrame:
+    """Pairwise Spearman correlation across tasks (rows=models, cols=tasks)."""
+    return results_df[tasks].select_dtypes(include=["number"]).corr(method="spearman")
 
 
 def compute_benchmark_correlation(
@@ -561,38 +635,23 @@ def compute_benchmark_correlation(
     source_tasks: list[str],
     selected_tasks: list[str],
 ) -> tuple[float, float]:
-    """Compute correlation between source benchmark and selected subset.
-
-    Args:
-        results_df: DataFrame with model results (rows=models, cols=tasks)
-        source_tasks: List of source benchmark task names
-        selected_tasks: List of selected task names (subset of source)
-
-    Returns:
-        Tuple of (spearman_correlation, pearson_correlation)
-    """
-    # Filter to available tasks
+    """How well does the per-model mean over `selected_tasks` rank-correlate with
+    the per-model mean over `source_tasks`. Returns (spearman, pearson) or NaN
+    if fewer than 3 models have data on both."""
     source_available = [t for t in source_tasks if t in results_df.columns]
     selected_available = [t for t in selected_tasks if t in results_df.columns]
-
     if not source_available or not selected_available:
         return float("nan"), float("nan")
 
-    # Compute average performance per model
     source_avg = results_df[source_available].mean(axis=1)
     selected_avg = results_df[selected_available].mean(axis=1)
-
-    # Drop any NaN values
-    valid_mask = ~(source_avg.isna() | selected_avg.isna())
-    source_avg = source_avg[valid_mask]
-    selected_avg = selected_avg[valid_mask]
-
+    mask = ~(source_avg.isna() | selected_avg.isna())
+    source_avg, selected_avg = source_avg[mask], selected_avg[mask]
     if len(source_avg) < 3:
         return float("nan"), float("nan")
 
     spearman_corr, _ = spearmanr(source_avg, selected_avg)
     pearson_corr, _ = pearsonr(source_avg, selected_avg)
-
     return spearman_corr, pearson_corr
 
 
@@ -647,227 +706,47 @@ def get_coverage_analysis(task_names: list[str]) -> dict:
 def get_highly_correlated_pairs(
     corr_matrix: pd.DataFrame, threshold: float = 0.8
 ) -> list[tuple[str, str, float]]:
-    """Get all task pairs with correlation above threshold.
-
-    Args:
-        corr_matrix: Correlation matrix
-        threshold: Minimum correlation threshold
-
-    Returns:
-        List of (task1, task2, correlation) tuples, sorted by correlation descending
-    """
-    pairs = []
+    """All (task1, task2, ρ) pairs with ρ above `threshold`, sorted descending."""
     cols = corr_matrix.columns.tolist()
-
-    for i, task1 in enumerate(cols):
-        for task2 in cols[i + 1 :]:
-            corr_val = corr_matrix.loc[task1, task2]
-            if not np.isnan(corr_val) and corr_val > threshold:
-                pairs.append((task1, task2, corr_val))
-
+    pairs = [
+        (t1, t2, corr_matrix.loc[t1, t2])
+        for i, t1 in enumerate(cols)
+        for t2 in cols[i + 1:]
+        if not np.isnan(corr_matrix.loc[t1, t2]) and corr_matrix.loc[t1, t2] > threshold
+    ]
     return sorted(pairs, key=lambda x: x[2], reverse=True)
 
 
-def get_unique_coverage_tasks(
-    task_names: list[str],
-) -> dict[str, list[str]]:
-    """Identify tasks that provide unique language/domain/category coverage.
-
-    Args:
-        task_names: List of task names
-
-    Returns:
-        Dictionary with lists of tasks that are unique for each dimension
-    """
+def get_unique_coverage_tasks(task_names: list[str]) -> dict[str, list[str]]:
+    """For each of (language, domain, category, type), find tasks that are the
+    only carrier of a given value. These are auto-protected from pruning."""
     tasks = mteb.get_tasks(tasks=task_names)
-
-    # Build reverse mappings
-    lang_to_tasks = defaultdict(list)
-    domain_to_tasks = defaultdict(list)
-    category_to_tasks = defaultdict(list)
-    type_to_tasks = defaultdict(list)
+    lang_to_tasks: dict = defaultdict(list)
+    domain_to_tasks: dict = defaultdict(list)
+    category_to_tasks: dict = defaultdict(list)
+    type_to_tasks: dict = defaultdict(list)
 
     for task in tasks:
         meta = task.metadata
         name = meta.name
-        if meta.languages:
-            for lang in meta.languages:
-                lang_to_tasks[lang].append(name)
-        if meta.domains:
-            for domain in meta.domains:
-                domain_to_tasks[domain].append(name)
+        for lang in meta.languages or []:
+            lang_to_tasks[lang].append(name)
+        for domain in meta.domains or []:
+            domain_to_tasks[domain].append(name)
         if meta.category:
             category_to_tasks[meta.category].append(name)
         type_to_tasks[meta.type].append(name)
 
-    # Find tasks with unique coverage
-    unique_lang_tasks = []
-    unique_domain_tasks = []
-    unique_category_tasks = []
-    unique_type_tasks = []
-
-    for lang, task_list in lang_to_tasks.items():
-        if len(task_list) == 1:
-            unique_lang_tasks.append((task_list[0], lang))
-
-    for domain, task_list in domain_to_tasks.items():
-        if len(task_list) == 1:
-            unique_domain_tasks.append((task_list[0], domain))
-
-    for category, task_list in category_to_tasks.items():
-        if len(task_list) == 1:
-            unique_category_tasks.append((task_list[0], category))
-
-    for task_type, task_list in type_to_tasks.items():
-        if len(task_list) == 1:
-            unique_type_tasks.append((task_list[0], task_type))
+    unique_lang_tasks = [(ts[0], k) for k, ts in lang_to_tasks.items() if len(ts) == 1]
+    unique_domain_tasks = [(ts[0], k) for k, ts in domain_to_tasks.items() if len(ts) == 1]
+    unique_category_tasks = [(ts[0], k) for k, ts in category_to_tasks.items() if len(ts) == 1]
+    unique_type_tasks = [(ts[0], k) for k, ts in type_to_tasks.items() if len(ts) == 1]
 
     return {
         "unique_language": unique_lang_tasks,
         "unique_domain": unique_domain_tasks,
         "unique_category": unique_category_tasks,
         "unique_type": unique_type_tasks,
-    }
-
-
-def recommend_removals(
-    corr_matrix: pd.DataFrame,
-    metadata_df: pd.DataFrame,
-    threshold: float = 0.8,
-    protected_tasks: list[str] | None = None,
-) -> list[dict]:
-    """Recommend tasks to remove based on correlation and redundancy analysis.
-
-    Args:
-        corr_matrix: Pairwise task correlation matrix
-        metadata_df: DataFrame with task metadata
-        threshold: Correlation threshold for considering pairs redundant
-        protected_tasks: Tasks that should not be removed (e.g., provide unique coverage)
-
-    Returns:
-        List of removal recommendations with justification
-    """
-    if protected_tasks is None:
-        protected_tasks = []
-
-    recommendations = []
-    current_tasks = list(corr_matrix.columns)
-    task_families = identify_task_families(metadata_df)
-
-    # Get highly correlated pairs
-    high_corr_pairs = get_highly_correlated_pairs(corr_matrix, threshold)
-
-    for task1, task2, corr_val in high_corr_pairs:
-        if task1 not in current_tasks or task2 not in current_tasks:
-            continue
-
-        # Determine which task to potentially remove
-        # Preference: keep t2v over v2t for retrieval, keep classification over clustering
-
-        task1_meta = metadata_df[metadata_df["name"] == task1].iloc[0]
-        task2_meta = metadata_df[metadata_df["name"] == task2].iloc[0]
-
-        # Check if either is protected
-        if task1 in protected_tasks and task2 in protected_tasks:
-            recommendations.append(
-                {
-                    "pair": (task1, task2),
-                    "correlation": corr_val,
-                    "action": "keep_both",
-                    "reason": "Both tasks provide unique coverage",
-                }
-            )
-            continue
-
-        # Score each task for removal (higher = more likely to remove)
-        def removal_score(task_name: str, meta: pd.Series) -> float:
-            score = 0
-            # Prefer removing v2t over t2v for retrieval tasks
-            if meta["category"] == "v2t":
-                score += 1
-            elif meta["category"] == "t2v":
-                score -= 1
-            # Prefer keeping classification over clustering of same source
-            if "Clustering" in task_name:
-                score += 0.5
-            if "Classification" in task_name or "ID" in task_name:
-                score -= 0.5
-            # Penalize if protected
-            if task_name in protected_tasks:
-                score -= 10
-            return score
-
-        score1 = removal_score(task1, task1_meta)
-        score2 = removal_score(task2, task2_meta)
-
-        if score1 > score2:
-            remove, keep = task1, task2
-        else:
-            remove, keep = task2, task1
-
-        # Check if in same family
-        in_same_family = False
-        for family, members in task_families.items():
-            if task1 in members and task2 in members:
-                in_same_family = True
-                break
-
-        recommendations.append(
-            {
-                "pair": (task1, task2),
-                "correlation": corr_val,
-                "recommend_remove": remove,
-                "recommend_keep": keep,
-                "same_family": in_same_family,
-                "reason": f"High correlation ({corr_val:.3f})"
-                + (", same source dataset" if in_same_family else ""),
-            }
-        )
-
-    return recommendations
-
-
-def analyze_mveb_vs_extended(mveb_tasks: list[str], extended_tasks: list[str]) -> dict:
-    """Compare MVEB selection against MVEB(extended).
-
-    Args:
-        mveb_tasks: List of task names in MVEB
-        extended_tasks: List of task names in MVEB(extended)
-
-    Returns:
-        Comparison analysis
-    """
-    mveb_coverage = get_coverage_analysis(mveb_tasks)
-    extended_coverage = get_coverage_analysis(extended_tasks)
-
-    # Languages lost
-    mveb_langs = set(mveb_coverage["languages"])
-    extended_langs = set(extended_coverage["languages"])
-    lost_langs = extended_langs - mveb_langs
-
-    # Domains lost
-    mveb_domains = set(mveb_coverage["domains"])
-    extended_domains = set(extended_coverage["domains"])
-    lost_domains = extended_domains - mveb_domains
-
-    # Categories lost
-    mveb_cats = set(mveb_coverage["categories"])
-    extended_cats = set(extended_coverage["categories"])
-    lost_cats = extended_cats - mveb_cats
-
-    # Types lost
-    mveb_types = set(mveb_coverage["types"])
-    extended_types = set(extended_coverage["types"])
-    lost_types = extended_types - mveb_types
-
-    return {
-        "mveb_coverage": mveb_coverage,
-        "extended_coverage": extended_coverage,
-        "lost_languages": sorted(lost_langs),
-        "lost_domains": sorted(lost_domains),
-        "lost_categories": sorted(lost_cats),
-        "lost_types": sorted(lost_types),
-        "compression_ratio": len(mveb_tasks) / len(extended_tasks),
     }
 
 
@@ -938,75 +817,46 @@ def iterative_task_selection(
     protected_tasks: set[str] | None = None,
     prefer_remove_same_source: bool = True,
 ) -> tuple[list[str], list[tuple[str, str, float]]]:
-    """Iteratively remove highly correlated tasks while preserving coverage.
-
-    Args:
-        results_df: Model results DataFrame
-        initial_tasks: Starting list of tasks
-        metadata_df: Task metadata DataFrame
-        threshold: Correlation threshold for removal
-        protected_tasks: Tasks that must not be removed
-        prefer_remove_same_source: Prefer removing tasks from same source family
-
-    Returns:
-        Tuple of (remaining tasks, list of removed (task, reason, correlation))
-    """
-    if protected_tasks is None:
-        protected_tasks = set()
-
+    """Iteratively drop the highest-correlated pair member whose removal still
+    preserves coverage (language, domain, type, category) and isn't protected.
+    Returns (remaining_tasks, [(removed_task, reason, ρ_at_removal), ...])."""
+    protected_tasks = set(protected_tasks) if protected_tasks else set()
     current_tasks = initial_tasks.copy()
     removed_tasks = []
     task_families = identify_task_families(metadata_df)
-
-    # Build reverse mapping: task -> family
-    task_to_family = {}
-    for family, members in task_families.items():
-        for member in members:
-            task_to_family[member] = family
+    task_to_family = {m: f for f, members in task_families.items() for m in members}
 
     while True:
-        # Recompute correlation for remaining tasks
         available = [t for t in current_tasks if t in results_df.columns]
         if len(available) < 2:
             break
-
         corr_matrix = compute_task_correlation(results_df, available)
         pairs = get_highly_correlated_pairs(corr_matrix, threshold)
-
         if not pairs:
             break
 
         removed_this_round = False
-
         for task1, task2, corr_val in pairs:
             if task1 not in current_tasks or task2 not in current_tasks:
                 continue
-
-            # Get metadata
             meta1 = metadata_df[metadata_df["name"] == task1].iloc[0]
             meta2 = metadata_df[metadata_df["name"] == task2].iloc[0]
 
-            # Score tasks for removal (higher = prefer to remove)
             def removal_priority(task_name: str, meta: pd.Series) -> float:
+                """Higher = prefer to remove. V2T retrieval (when a T2V sibling
+                exists) is the biggest signal — we always want T2V over V2T."""
                 score = 0
-
-                # RULE: For retrieval families, strongly prefer removing V2T when T2V exists
-                # And strongly protect T2V when V2T exists (so we keep T2V, not V2T)
                 if "V2TRetrieval" in task_name:
                     for family in RETRIEVAL_FAMILIES:
                         if task_name.startswith(family):
-                            # Check if T2V exists for this family in current tasks
-                            t2v_task = f"{family}T2VRetrieval"
-                            if t2v_task in current_tasks:
-                                score += 100  # Very high priority to remove V2T when T2V exists
+                            if f"{family}T2VRetrieval" in current_tasks:
+                                score += 100
                             break
                 elif "T2VRetrieval" in task_name:
                     for family in RETRIEVAL_FAMILIES:
                         if task_name.startswith(family):
-                            # Check if V2T exists for this family in current tasks
-                            v2t_task = f"{family}V2TRetrieval"
-                            if v2t_task in current_tasks:
-                                score -= 100  # Strongly protect T2V when V2T exists
+                            if f"{family}V2TRetrieval" in current_tasks:
+                                score -= 100
                             break
 
                 # Prefer removing v2t over t2v for retrieval (general preference)
@@ -1021,238 +871,80 @@ def iterative_task_selection(
                 if "Classification" in task_name or "ID" in task_name:
                     score -= 0.5
 
-                # Count how many tasks from same family are still present
+                # Prefer removing redundant siblings from the same source family.
                 family = task_to_family.get(task_name)
                 if family and prefer_remove_same_source:
-                    family_count = sum(
-                        1 for t in current_tasks if task_to_family.get(t) == family
-                    )
+                    family_count = sum(1 for t in current_tasks if task_to_family.get(t) == family)
                     if family_count > 1:
-                        score += (
-                            family_count  # More redundant = higher removal priority
-                        )
-
+                        score += family_count
                 return score
 
-            score1 = removal_priority(task1, meta1)
-            score2 = removal_priority(task2, meta2)
-
-            # Try to remove the higher-scored task first
             candidates = sorted(
-                [(task1, score1, meta1), (task2, score2, meta2)],
-                key=lambda x: x[1],
-                reverse=True,
+                [(task1, removal_priority(task1, meta1)),
+                 (task2, removal_priority(task2, meta2))],
+                key=lambda x: x[1], reverse=True,
             )
 
-            for task_name, _, meta in candidates:
+            for task_name, _ in candidates:
                 if is_removal_valid(current_tasks, task_name, protected_tasks):
                     current_tasks.remove(task_name)
+                    other = task1 if task_name == task2 else task2
                     family = task_to_family.get(task_name, "")
-                    reason = f"corr={corr_val:.3f} with {task1 if task_name == task2 else task2}"
+                    reason = f"corr={corr_val:.3f} with {other}"
                     if family:
                         reason += f", family={family}"
                     removed_tasks.append((task_name, reason, corr_val))
                     removed_this_round = True
                     break
-
             if removed_this_round:
                 break
 
         if not removed_this_round:
-            # No more removable pairs above threshold
             break
 
     return current_tasks, removed_tasks
 
 
-def print_report(
-    metadata_df: pd.DataFrame,
-    corr_matrix: pd.DataFrame | None,
-    mveb_tasks: list[str],
-    extended_tasks: list[str],
-):
-    """Print comprehensive analysis report.
-
-    Args:
-        metadata_df: Task metadata DataFrame
-        corr_matrix: Correlation matrix (or None if not available)
-        mveb_tasks: Current MVEB task list
-        extended_tasks: MVEB(extended) task list
-    """
-    print("=" * 80)
-    print("MVEB Task Selection Analysis Report")
-    print("=" * 80)
-
-    # Task family analysis
-    print("\n## Task Families (Same Source Dataset)")
-    print("-" * 60)
-    families = identify_task_families(metadata_df)
-    for family, tasks in sorted(families.items(), key=lambda x: -len(x[1])):
-        print(f"\n### {family} ({len(tasks)} tasks)")
-        for task in tasks:
-            in_mveb = "✓" if task in mveb_tasks else "✗"
-            task_meta = metadata_df[metadata_df["name"] == task].iloc[0]
-            print(
-                f"  [{in_mveb}] {task} ({task_meta['type']}, {task_meta['category']})"
-            )
-
-    # Coverage comparison
-    print("\n## Coverage Comparison: MVEB vs MVEB(extended)")
-    print("-" * 60)
-    comparison = analyze_mveb_vs_extended(mveb_tasks, extended_tasks)
-
-    print(f"\nTask counts: MVEB={len(mveb_tasks)}, Extended={len(extended_tasks)}")
-    print(f"Compression ratio: {comparison['compression_ratio']:.1%}")
-
-    print(
-        f"\nLanguages: MVEB={comparison['mveb_coverage']['n_languages']}, Extended={comparison['extended_coverage']['n_languages']}"
-    )
-    if comparison["lost_languages"]:
-        print(f"  Languages lost: {len(comparison['lost_languages'])}")
-        print(
-            f"  {comparison['lost_languages'][:10]}{'...' if len(comparison['lost_languages']) > 10 else ''}"
-        )
-
-    print(
-        f"\nDomains: MVEB={comparison['mveb_coverage']['n_domains']}, Extended={comparison['extended_coverage']['n_domains']}"
-    )
-    if comparison["lost_domains"]:
-        print(f"  Domains lost: {comparison['lost_domains']}")
-
-    print(
-        f"\nCategories: MVEB={comparison['mveb_coverage']['n_categories']}, Extended={comparison['extended_coverage']['n_categories']}"
-    )
-    if comparison["lost_categories"]:
-        print(f"  Categories lost: {comparison['lost_categories']}")
-
-    print(
-        f"\nTask types: MVEB={comparison['mveb_coverage']['n_types']}, Extended={comparison['extended_coverage']['n_types']}"
-    )
-    if comparison["lost_types"]:
-        print(f"  Types lost: {comparison['lost_types']}")
-
-    # Type distribution
-    print("\n## Task Type Distribution")
-    print("-" * 60)
-    print("\nMVEB:")
-    for t, count in comparison["mveb_coverage"]["type_counts"].items():
-        print(f"  {t}: {count}")
-    print("\nMVEB(extended):")
-    for t, count in comparison["extended_coverage"]["type_counts"].items():
-        print(f"  {t}: {count}")
-
-    # Category distribution
-    print("\n## Category Distribution")
-    print("-" * 60)
-    print("\nMVEB:")
-    for cat, count in comparison["mveb_coverage"]["category_counts"].items():
-        print(f"  {cat}: {count}")
-    print("\nMVEB(extended):")
-    for cat, count in comparison["extended_coverage"]["category_counts"].items():
-        print(f"  {cat}: {count}")
-
-    # Correlation analysis (if available)
-    if corr_matrix is not None:
-        print("\n## Highly Correlated Task Pairs (threshold=0.8)")
-        print("-" * 60)
-
-        # Filter to tasks in current MVEB
-        mveb_corr = corr_matrix.loc[
-            [t for t in mveb_tasks if t in corr_matrix.index],
-            [t for t in mveb_tasks if t in corr_matrix.columns],
-        ]
-
-        high_corr = get_highly_correlated_pairs(mveb_corr, threshold=0.8)
-        if high_corr:
-            print(f"\nFound {len(high_corr)} highly correlated pairs in MVEB:")
-            for task1, task2, corr_val in high_corr[:20]:
-                task1_meta = metadata_df[metadata_df["name"] == task1].iloc[0]
-                task2_meta = metadata_df[metadata_df["name"] == task2].iloc[0]
-                print(f"\n  {task1} <-> {task2}: {corr_val:.3f}")
-                print(f"    {task1}: {task1_meta['type']}, {task1_meta['category']}")
-                print(f"    {task2}: {task2_meta['type']}, {task2_meta['category']}")
-        else:
-            print("\nNo pairs above threshold 0.8 in current MVEB selection.")
-
-        # Recommendations
-        print("\n## Removal Recommendations")
-        print("-" * 60)
-
-        # Get unique coverage tasks
-        unique_tasks = get_unique_coverage_tasks(mveb_tasks)
-        protected = set()
-        for dim, task_list in unique_tasks.items():
-            for task, coverage in task_list:
-                protected.add(task)
-
-        print(f"\nProtected tasks (unique coverage): {len(protected)}")
-        for dim, task_list in unique_tasks.items():
-            if task_list:
-                print(f"  {dim}:")
-                for task, coverage in task_list:
-                    print(f"    - {task} (unique: {coverage})")
-
-        recommendations = recommend_removals(
-            mveb_corr, metadata_df, threshold=0.8, protected_tasks=list(protected)
-        )
-
-        if recommendations:
-            print(f"\nRecommendations for {len(recommendations)} pairs:")
-            for rec in recommendations:
-                print(f"\n  Pair: {rec['pair'][0]} <-> {rec['pair'][1]}")
-                print(f"  Correlation: {rec['correlation']:.3f}")
-                if "recommend_remove" in rec:
-                    print(f"  Recommend remove: {rec['recommend_remove']}")
-                    print(f"  Recommend keep: {rec['recommend_keep']}")
-                print(f"  Reason: {rec['reason']}")
-
-    # Unique coverage analysis for MVEB(extended) not in MVEB
-    print("\n## Tasks in MVEB(extended) but not MVEB with Unique Coverage")
-    print("-" * 60)
-    excluded_tasks = [t for t in extended_tasks if t not in mveb_tasks]
-    if excluded_tasks:
-        excluded_unique = get_unique_coverage_tasks(excluded_tasks)
-        for dim, task_list in excluded_unique.items():
-            if task_list:
-                print(f"\n  {dim}:")
-                for task, coverage in task_list:
-                    print(f"    - {task} (unique: {coverage})")
+def _parse_args():
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--scope", choices=list(SCOPES.keys()), default="audio-video",
+                        help="Modality scope of the variant to select.")
+    parser.add_argument("--results-dir", type=Path,
+                        default=Path("/Users/isaac/.cache/mteb/remote/results"),
+                        help="Path to the mteb results cache.")
+    parser.add_argument("--sat-threshold", type=float, default=SAT_BEST_THRESHOLD,
+                        help="Drop if best capable-model score exceeds this.")
+    parser.add_argument("--floor-spread", type=float, default=FLOOR_SPREAD_THRESHOLD,
+                        help="Drop if (max - min) across capable models is below this.")
+    parser.add_argument("--min-support", type=int, default=MIN_MODEL_SUPPORT,
+                        help="Drop if fewer than this many capable models have results.")
+    return parser.parse_args()
 
 
 def main():
-    """Run the MVEB task selection analysis."""
-    # Load benchmarks
+    args = _parse_args()
+    scope_key = args.scope
+    scope_meta = SCOPES[scope_key]
+    print(f"Scope: {scope_key} — {scope_meta['description']}")
+
     mveb_extended = mteb.get_benchmark("MVEB(extended)")
-
-    # Start from MVEB(extended) as the source pool
     source_task_names = [t.metadata.name for t in mveb_extended.tasks]
-
     print(f"Source pool - MVEB(extended) tasks: {len(source_task_names)}")
-
-    # Get metadata for all extended tasks
     metadata_df = get_task_metadata_df("MVEB(extended)")
 
-    # Try to load model results for correlation analysis
-    results_dir = Path("/Users/isaac/.cache/mteb/remote/results")
+    results_dir = args.results_dir
     corr_matrix = None
     results_df = None
-
     if results_dir.exists():
         print("\nLoading model results for correlation analysis...")
         try:
             results_df, tasks_with_results = load_model_results(results_dir)
-
-            # Filter to tasks in extended benchmark
             available_tasks = [t for t in source_task_names if t in tasks_with_results]
-            print(
-                f"Tasks with results: {len(available_tasks)}/{len(source_task_names)}"
-            )
-
+            print(f"Tasks with results: {len(available_tasks)}/{len(source_task_names)}")
             if available_tasks:
                 corr_matrix = compute_task_correlation(results_df, available_tasks)
-                print(
-                    f"Computed {len(corr_matrix)}x{len(corr_matrix)} correlation matrix"
-                )
+                print(f"Computed {len(corr_matrix)}x{len(corr_matrix)} correlation matrix")
         except Exception as e:
             print(f"Warning: Could not load model results: {e}")
             print("Continuing without correlation analysis...")
@@ -1260,26 +952,102 @@ def main():
         print(f"\nResults directory not found: {results_dir}")
         print("Skipping correlation analysis...")
 
-    # Run iterative task selection if we have correlation data
     if results_df is not None and corr_matrix is not None:
-        # Drop tasks with no results (else they survive iterative pruning by
-        # never appearing in correlation pairs).
-        missing = [
-            t
-            for t in source_task_names
-            if t not in TASKS_TO_EXCLUDE and t not in results_df.columns
-        ]
+        # Drop tasks with no results — they would survive iterative pruning by
+        # never appearing in correlation pairs.
+        missing = [t for t in source_task_names
+                   if t not in TASKS_TO_EXCLUDE and t not in results_df.columns]
         if missing:
             print(f"Note: {len(missing)} task(s) dropped (no model results): {missing}")
-        filtered_source_tasks = [
-            t
-            for t in source_task_names
-            if t not in TASKS_TO_EXCLUDE and t in results_df.columns
-        ]
+        filtered_source_tasks = [t for t in source_task_names
+                                 if t not in TASKS_TO_EXCLUDE and t in results_df.columns]
         excluded_count = sum(1 for t in source_task_names if t in TASKS_TO_EXCLUDE)
+
+        # Pre-selection: scope → annotation → saturation. Then T2V-pref /
+        # family-cap / ρ-prune runs on the survivors.
+        scoped_tasks, scope_dropped = filter_by_scope(
+            filtered_source_tasks, metadata_df, scope_key
+        )
+        print(f"Scope filter: {len(filtered_source_tasks)} → {len(scoped_tasks)}")
+
+        must_keep = MUST_INCLUDE & set(scoped_tasks)
+        annotation_valid, annotation_dropped = filter_invalid_annotation(
+            scoped_tasks, must_keep, metadata_df
+        )
+        print(f"Annotation filter: {len(scoped_tasks)} → {len(annotation_valid)}")
+
+        model_modalities = load_model_modalities(results_dir)
+        task_stats = compute_task_stats(
+            results_df, annotation_valid, metadata_df, model_modalities
+        )
+        working_pool, sat_dropped = filter_saturation_floor(
+            annotation_valid, task_stats, must_keep,
+            sat_threshold=args.sat_threshold,
+            floor_spread=args.floor_spread,
+            min_support=args.min_support,
+        )
+        print(f"Saturation/floor filter: {len(annotation_valid)} → {len(working_pool)}")
+
+        filtered_source_tasks = working_pool
 
         # Build output for markdown file
         output_lines = []
+        output_lines.append(f"# MVEB Task Selection — scope: `{scope_key}`")
+        output_lines.append("")
+        output_lines.append(scope_meta["description"])
+        output_lines.append("")
+        output_lines.append("## Pre-selection filters")
+        output_lines.append("")
+        output_lines.append(f"- Source MVEB(extended): **{len(source_task_names)}** tasks")
+        output_lines.append(
+            f"- After scope filter (`{scope_key}`): **{len(scoped_tasks)}** "
+            f"(-{len(scope_dropped)})"
+        )
+        output_lines.append(
+            f"- After annotation-provenance filter: **{len(annotation_valid)}** "
+            f"(-{len(annotation_dropped)})"
+        )
+        output_lines.append(
+            f"- After saturation/floor filter (best≤{args.sat_threshold}, "
+            f"spread≥{args.floor_spread}, n≥{args.min_support}): "
+            f"**{len(working_pool)}** (-{len(sat_dropped)})"
+        )
+        output_lines.append("")
+        output_lines.append(
+            f"- Must-include tasks in scope: **{len(must_keep)}** "
+            "(bypass annotation and saturation filters)"
+        )
+        output_lines.append("")
+        if annotation_dropped:
+            output_lines.append("### Dropped — annotation provenance")
+            output_lines.append("")
+            for t, reason in annotation_dropped[:30]:
+                output_lines.append(f"- `{t}` — {reason}")
+            if len(annotation_dropped) > 30:
+                output_lines.append(f"- ... and {len(annotation_dropped) - 30} more")
+            output_lines.append("")
+        if sat_dropped:
+            output_lines.append("### Dropped — saturated, floor, or low-support")
+            output_lines.append("")
+            for t, reason in sat_dropped[:30]:
+                output_lines.append(f"- `{t}` — {reason}")
+            if len(sat_dropped) > 30:
+                output_lines.append(f"- ... and {len(sat_dropped) - 30} more")
+            output_lines.append("")
+        if must_keep:
+            output_lines.append("### Must-include tasks (kept regardless)")
+            output_lines.append("")
+            for t in sorted(must_keep):
+                output_lines.append(f"- `{t}`")
+            output_lines.append("")
+            missing = MUST_INCLUDE - set(scoped_tasks)
+            if missing:
+                output_lines.append("### Must-include tasks not in this scope (review)")
+                output_lines.append("")
+                for t in sorted(missing):
+                    note = "" if t in source_task_names else "  *(not in MVEB(extended))*"
+                    output_lines.append(f"- `{t}`{note}")
+                output_lines.append("")
         output_lines.append("# MVEB Task Selection Analysis")
         output_lines.append("")
         output_lines.append("## Overview")
@@ -1320,6 +1088,9 @@ def main():
         for task in MANUALLY_PROTECTED_TASKS:
             if task in filtered_source_tasks:
                 protected.add(task)
+
+        # Must-include tasks bypass redundancy pruning too.
+        protected |= must_keep
 
         output_lines.append(f"## Protected Tasks (Unique Coverage): {len(protected)}")
         output_lines.append("")
@@ -1375,7 +1146,7 @@ def main():
 
             # Post-processing: deduplicate same-source families
             remaining, family_removed = deduplicate_same_source_families(
-                remaining, results_df, metadata_df
+                remaining, results_df, metadata_df, protected_tasks=protected
             )
             removed = removed + family_removed
             results_by_threshold[threshold] = (remaining, removed)
@@ -1613,7 +1384,9 @@ def main():
         output_lines.append("")
 
         # Write to markdown file
-        output_path = Path("scripts/mveb_paper/mveb_task_selection_analysis.md")
+        output_path = Path(
+            f"scripts/mveb_paper/mveb_task_selection_analysis.{scope_key}.md"
+        )
         output_path.write_text("\n".join(output_lines))
         print(f"\nAnalysis written to: {output_path}")
 
