@@ -222,6 +222,7 @@ def _fmt_rank(rank, global_best, group_best) -> str:
 
 SCOPE_META = {
     "mveb":    {"name": "MVEB",              "label": "tab:mveb-main-results",        "caption_scope": "MVEB"},
+    "ext":     {"name": "MVEB(extended)",    "label": "tab:mveb-extended-results",    "caption_scope": "MVEB(extended)"},
     "tv":      {"name": "MVEB(text, video)", "label": "tab:mveb-text-video-results", "caption_scope": "MVEB(text, video)"},
     "v":       {"name": "MVEB(video)",       "label": "tab:mveb-video-results",       "caption_scope": "MVEB(video)"},
 }
@@ -368,17 +369,19 @@ def main() -> None:
     args = parser.parse_args()
 
     mveb = mteb.get_benchmark("MVEB")
+    mveb_ext = mteb.get_benchmark("MVEB(extended)")
     mveb_tv = mteb.get_benchmark("MVEB(text, video)")
     mveb_v = mteb.get_benchmark("MVEB(video)")
 
     tasks_by_scope = {
         "mveb": [t.metadata.name for t in mveb.tasks],
+        "ext":  [t.metadata.name for t in mveb_ext.tasks],
         "tv":   [t.metadata.name for t in mveb_tv.tasks],
         "v":    [t.metadata.name for t in mveb_v.tasks],
     }
 
     task_type_lookup: dict[str, str] = {}
-    for b in (mveb, mveb_tv, mveb_v):
+    for b in (mveb, mveb_ext, mveb_tv, mveb_v):
         for t in b.tasks:
             task_type_lookup[t.metadata.name] = task_category(
                 t.metadata.name, t.metadata.type
@@ -392,7 +395,8 @@ def main() -> None:
     df = load_results(args.results_dir, all_tasks)
     print(f"Loaded {len(df)} models with at least one task result")
 
-    # Group models by their natural scope
+    # Group models by their natural scope. MVEB(extended) is the audio+video+text
+    # superset, so it shares the mveb-scope model list.
     models_by_scope: dict[str, list[str]] = {"mveb": [], "tv": [], "v": []}
     for m in df.index:
         short = m.split("/")[-1]
@@ -401,13 +405,15 @@ def main() -> None:
             models_by_scope[scope].append(m)
         else:
             print(f"  unknown model (skipped): {m}")
+    models_by_scope["ext"] = list(models_by_scope["mveb"])
 
     outputs = {
         "mveb": args.tables_dir / "mveb_main_results.tex",
+        "ext":  args.tables_dir / "mveb_extended_results.tex",
         "tv":   args.tables_dir / "mveb_text_video_results.tex",
         "v":    args.tables_dir / "mveb_video_results.tex",
     }
-    for scope_key in ("mveb", "tv", "v"):
+    for scope_key in ("mveb", "ext", "tv", "v"):
         emit_scope_table(
             df,
             tasks_by_scope[scope_key],
