@@ -306,7 +306,6 @@ MTEB_MAIN_RU_v1_1 = Benchmark(
     contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
 )
 
-
 RU_SCI_BENCH = Benchmark(
     name="RuSciBench",
     tasks=get_tasks(
@@ -722,7 +721,8 @@ MTEB_KOR = Benchmark(
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
     tasks=get_tasks(
         languages=["kor"],
-        tasks=[  # @KennethEnevoldsen: We could probably expand this to a more solid benchmark, but for now I have left it as is.
+        tasks=[
+            # @KennethEnevoldsen: We could probably expand this to a more solid benchmark, but for now I have left it as is.
             # Classification
             "KLUE-TC",
             # Reranking
@@ -1006,7 +1006,6 @@ MTEB_multilingual_v1 = Benchmark(
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
-
 MTEB_multilingual_v2 = Benchmark(
     name="MTEB(Multilingual, v2)",
     aliases=["MTEB(Multilingual)", "MMTEB"],
@@ -1078,7 +1077,6 @@ MTEB_JPN = Benchmark(
     reference="https://github.com/sbintuitions/JMTEB",
     citation=None,
 )
-
 
 indic_languages = [
     "asm",
@@ -1327,7 +1325,6 @@ MTEB_AFRICA_LITE = Benchmark(
     citation=MMTEB_CITATION,
     contacts=["Kosei1227"],
 )
-
 
 eu_languages = [
     # official EU languages (56) - we could include the whole economic area e.g. Norway - additionally we could include minority languages (probably a good idea?)
@@ -1629,7 +1626,6 @@ BRIGHT_V1_1 = Benchmark(
 """,
     benchmark_hf_repo="mteb/BRIGHT",
 )
-
 
 CODE_RAG = Benchmark(
     name="CodeRAG",
@@ -2566,7 +2562,6 @@ BEIR_PL = Benchmark(
 """,
 )
 
-
 BUILT_MTEB = Benchmark(
     name="BuiltBench(eng)",
     tasks=get_tasks(
@@ -2833,7 +2828,6 @@ R2MED = Benchmark(
 """,
 )
 
-
 VN_MTEB = Benchmark(
     name="VN-MTEB (vie, v1)",
     display_name="Vietnamese",
@@ -3014,7 +3008,6 @@ JINA_VDR = Benchmark(
   year = {2025},
 }""",
 )
-
 
 HUME = HUMEBenchmark(
     name="HUME(v1)",
@@ -3222,17 +3215,15 @@ VISRAG_RETRIEVAL = Benchmark(
 """,
 )
 
-_MAEB_CITATION = """
-@misc{assadi2026maebmassiveaudioembedding,
-    title={MAEB: Massive Audio Embedding Benchmark},
-    author={Adnan El Assadi and Isaac Chung and Chenghao Xiao and Roman Solomatin and Animesh Jha and Rahul Chand and Silky Singh and Kaitlyn Wang and Ali Sartaz Khan and Marc Moussa Nasser and Sufen Fong and Pengfei He and Alan Xiao and Ayush Sunil Munot and Aditya Shrivastava and Artem Gazizov and Niklas Muennighoff and Kenneth Enevoldsen},
-    year={2026},
-    eprint={2602.16008},
-    archivePrefix={arXiv},
-    primaryClass={cs.SD},
-    url={https://arxiv.org/abs/2602.16008},
-}
-"""
+_MAEB_CITATION = """@misc{assadi2026maebmassiveaudioembedding,
+  archiveprefix = {arXiv},
+  author = {Adnan El Assadi and Isaac Chung and Chenghao Xiao and Roman Solomatin and Animesh Jha and Rahul Chand and Silky Singh and Kaitlyn Wang and Ali Sartaz Khan and Marc Moussa Nasser and Sufen Fong and Pengfei He and Alan Xiao and Ayush Sunil Munot and Aditya Shrivastava and Artem Gazizov and Niklas Muennighoff and Kenneth Enevoldsen},
+  eprint = {2602.16008},
+  primaryclass = {cs.SD},
+  title = {MAEB: Massive Audio Embedding Benchmark},
+  url = {https://arxiv.org/abs/2602.16008},
+  year = {2026},
+}"""
 
 MAEB_PLUS = Benchmark(
     name="MAEB+(beta)",
