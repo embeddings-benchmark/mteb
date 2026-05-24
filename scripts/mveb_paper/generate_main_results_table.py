@@ -44,9 +44,10 @@ _AUDIO_RETRIEVAL_SUFFIXES = (
 
 def task_category(task_name: str, mteb_task_type: str) -> str:
     """Map mteb task type → display category. Retrieval is split into
-    'AV-Retrieval' and 'TV-Retrieval' for richer reporting."""
+    'A-V Retr' (audio-conditioned) and 'T-V Retr' (text-video) for richer
+    reporting."""
     if mteb_task_type == "Any2AnyRetrieval":
-        return "AV-Retr" if any(task_name.endswith(s) for s in _AUDIO_RETRIEVAL_SUFFIXES) else "TV-Retr"
+        return "A-V Retr" if any(task_name.endswith(s) for s in _AUDIO_RETRIEVAL_SUFFIXES) else "T-V Retr"
     return {
         "VideoCentricQA": "QA",
         "VideoClassification": "Cls",
@@ -56,7 +57,7 @@ def task_category(task_name: str, mteb_task_type: str) -> str:
     }.get(mteb_task_type, mteb_task_type)
 
 
-CATEGORY_ORDER = ["TV-Retr", "AV-Retr", "QA", "Cls", "Clust", "Pair", "ZS"]
+CATEGORY_ORDER = ["T-V Retr", "A-V Retr", "QA", "Cls", "Clust", "Pair", "ZS"]
 
 
 # ---------------------------------------------------------------------------
@@ -101,6 +102,17 @@ MODEL_GROUP: dict[str, str] = {
 }
 
 MODEL_GROUP_ORDER = ["Omni multimodal", "Audio-visual", "Vision-language", "Vision-only", "Other"]
+
+# Each model class is naturally evaluated on a specific scope. Within a group
+# we sort by that group's natural rank, since cross-scope comparison
+# (e.g. a vision-only model against an omni model on MVEB) is not meaningful.
+GROUP_NATURAL_SCOPE: dict[str, str] = {
+    "Omni multimodal": "mveb",
+    "Audio-visual": "mveb",
+    "Vision-language": "tv",
+    "Vision-only": "v",
+    "Other": "mveb",
+}
 
 
 # ---------------------------------------------------------------------------
@@ -300,10 +312,15 @@ def emit_table(
     out.append(r"    \centering")
     out.append(
         r"    \caption{"
-        r"Models on MVEB (audio-video, " + str(len(available_mveb)) + r" tasks) ranked by Borda count. "
-        r"The \textbf{TV} and \textbf{V} rank columns show each model's rank on MVEB(text-video) and MVEB(video) respectively. "
-        r"\textbf{All} is the arithmetic mean over MVEB tasks; \textbf{Cat.} is the macro-average across task categories. "
-        r"Task categories: TV-Retr (text-video retrieval), AV-Retr (audio-conditioned retrieval), QA, Cls (classification), "
+        r"Model leaderboard for MVEB and its scope variants. Each model class is "
+        r"sorted by its natural-scope rank: Omni multimodal and Audio-visual on \textbf{MVEB} "
+        r"(" + str(len(available_mveb)) + r" tasks), Vision-language on \textbf{MVEB(text-video)}, "
+        r"Vision-only on \textbf{MVEB(video)}. The other rank columns are shown for cross-scope "
+        r"reference. Within each scope, ranking is by Borda count over the scope's tasks; "
+        r"missing tasks do not contribute Borda points. "
+        r"\textbf{All} is the arithmetic mean over MVEB tasks the model evaluated; \textbf{Cat.} "
+        r"is the macro-average across task categories. Task categories: T-V Retr (text--video "
+        r"retrieval), A-V Retr (audio-conditioned retrieval), QA, Cls (classification), "
         r"Clust (clustering), Pair (pair classification), ZS (zero-shot classification). "
         r"Best score per column in \textbf{bold}; best within model group highlighted in grey.}"
     )
@@ -331,24 +348,35 @@ def emit_table(
     )
     out.append(r"    \midrule")
 
+    rank_by_scope = {"mveb": mveb_rank, "tv": tv_rank, "v": v_rank}
+
     for g_i, group in enumerate(MODEL_GROUP_ORDER):
         if group not in groups:
             continue
         idx = groups[group]
+        natural = GROUP_NATURAL_SCOPE.get(group, "mveb")
+        natural_rank = rank_by_scope[natural]
         out.append(r"    \textbf{" + group + r"} \\")
         out.append(r"    \midrule")
-        # Sort within group by MVEB rank
-        idx_sorted = mveb_rank.loc[idx].sort_values(na_position="last").index
+        idx_sorted = natural_rank.loc[idx].sort_values(na_position="last").index
         gb = group_best[group]
         for m in idx_sorted:
             row = df.loc[m]
-            display = m.split("/")[-1]
-            display = display.replace("_", "\\_")
+            display = m.split("/")[-1].replace("_", "\\_")
+            # Underline the rank in the group's natural scope to mark it as primary.
+            ranks_fmt = []
+            for scope_key, scope_rank in [("mveb", mveb_rank), ("tv", tv_rank), ("v", v_rank)]:
+                cell = _fmt_rank(
+                    scope_rank.loc[m],
+                    g_best[f"{scope_key}_rank"],
+                    gb.get(f"{scope_key}_rank"),
+                )
+                if scope_key == natural and cell != "-":
+                    cell = r"\underline{" + cell + r"}"
+                ranks_fmt.append(cell)
             cells = [
                 display,
-                _fmt_rank(mveb_rank.loc[m], g_best["mveb_rank"], gb.get("mveb_rank")),
-                _fmt_rank(tv_rank.loc[m], g_best["tv_rank"], gb.get("tv_rank")),
-                _fmt_rank(v_rank.loc[m], g_best["v_rank"], gb.get("v_rank")),
+                *ranks_fmt,
                 _fmt_score(row["mean"], g_best["mean"], gb.get("mean")),
                 _fmt_score(row["weighted_mean"], g_best["weighted_mean"], gb.get("weighted_mean")),
             ]
@@ -356,11 +384,7 @@ def emit_table(
                 v = cat_avgs[cat].get(m, np.nan)
                 cells.append(_fmt_score(v, g_best.get(cat), gb.get(cat)))
             out.append("    " + " & ".join(cells) + r" \\")
-        # Midrule between groups (except last)
-        remaining = [
-            g for g in MODEL_GROUP_ORDER[g_i+1:]
-            if g in groups
-        ]
+        remaining = [g for g in MODEL_GROUP_ORDER[g_i+1:] if g in groups]
         if remaining:
             out.append(r"    \midrule")
 
