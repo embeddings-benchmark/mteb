@@ -3222,6 +3222,18 @@ VISRAG_RETRIEVAL = Benchmark(
 """,
 )
 
+_MAEB_CITATION = """
+@misc{assadi2026maebmassiveaudioembedding,
+    title={MAEB: Massive Audio Embedding Benchmark},
+    author={Adnan El Assadi and Isaac Chung and Chenghao Xiao and Roman Solomatin and Animesh Jha and Rahul Chand and Silky Singh and Kaitlyn Wang and Ali Sartaz Khan and Marc Moussa Nasser and Sufen Fong and Pengfei He and Alan Xiao and Ayush Sunil Munot and Aditya Shrivastava and Artem Gazizov and Niklas Muennighoff and Kenneth Enevoldsen},
+    year={2026},
+    eprint={2602.16008},
+    archivePrefix={arXiv},
+    primaryClass={cs.SD},
+    url={https://arxiv.org/abs/2602.16008},
+}
+"""
+
 MAEB_PLUS = Benchmark(
     name="MAEB+(beta)",
     aliases=["MAEB+"],
@@ -3344,7 +3356,7 @@ MAEB_PLUS = Benchmark(
     ),
     description="""MAEB+ is the full Massive Audio Embedding Benchmark (v1), containing 98 tasks with audio modality across 6 task types: classification, clustering, pair classification, reranking, zero-shot classification, and retrieval. The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
-    citation="",
+    citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
@@ -3383,7 +3395,7 @@ MAEB_AUDIO = Benchmark(
     ),
     description="""MAEB(audio-only) is the audio-only subset of MAEB with 19 tasks spanning 5 task types: classification (11), clustering (3), pair classification (3), reranking (1), and retrieval (1). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
-    citation="",
+    citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
@@ -3506,7 +3518,7 @@ MAEB_EXTENDED = Benchmark(
     ),
     description="""MAEB(extended) is an intermediate benchmark used during task selection, containing 89 tasks that combine audio-only and audio-text evaluation before filtering to MAEB. Audio-only (53 tasks): classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), audio-to-audio retrieval (1). Audio-text (36 tasks): audio-text retrieval (31), zero-shot classification (5). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
-    citation="",
+    citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 MAEB = Benchmark(
@@ -3561,7 +3573,7 @@ MAEB = Benchmark(
     ),
     description="""MAEB is a comprehensive audio benchmark with 30 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (11), clustering (3), multilabel classification (1), pair classification (3), reranking (1), and zero-shot classification (2). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
-    citation="",
+    citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
