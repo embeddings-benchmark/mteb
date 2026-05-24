@@ -33,22 +33,10 @@ import mteb
 # Task type → display category
 # ---------------------------------------------------------------------------
 
-# Retrieval split into audio-conditioned vs text-video, because the AV
-# directions are MVEB's differentiator.
-_AUDIO_RETRIEVAL_SUFFIXES = (
-    "A2VRetrieval", "V2ARetrieval", "T2VARetrieval", "VA2TRetrieval",
-    "AT2VRetrieval", "VT2ARetrieval",
-    "A2V", "V2A", "T2VA", "VA2T", "AT2V", "VT2A",  # MSRVTT naming
-)
-
-
 def task_category(task_name: str, mteb_task_type: str) -> str:
-    """Map mteb task type → display category. Retrieval is split into
-    'Audio Retr' (audio is in query or target) and 'Text Retr' (text-video,
-    no audio involved)."""
-    if mteb_task_type == "Any2AnyRetrieval":
-        return "Audio Retr" if any(task_name.endswith(s) for s in _AUDIO_RETRIEVAL_SUFFIXES) else "Text Retr"
+    """Map mteb task type → display category."""
     return {
+        "Any2AnyRetrieval": "Retr",
         "VideoCentricQA": "QA",
         "VideoClassification": "Cls",
         "VideoClustering": "Clust",
@@ -57,7 +45,7 @@ def task_category(task_name: str, mteb_task_type: str) -> str:
     }.get(mteb_task_type, mteb_task_type)
 
 
-CATEGORY_ORDER = ["Text Retr", "Audio Retr", "QA", "Cls", "Clust", "Pair", "ZS"]
+CATEGORY_ORDER = ["Retr", "QA", "Cls", "Clust", "Pair", "ZS"]
 
 
 # ---------------------------------------------------------------------------
@@ -295,8 +283,7 @@ def emit_scope_table(
 
     cat_glossary = (
         ", ".join({
-            "Text Retr": r"Text Retr (text $\leftrightarrow$ video retrieval, no audio)",
-            "Audio Retr": r"Audio Retr (any retrieval where audio is in the query or target)",
+            "Retr": r"Retr (retrieval; per-direction breakdown in appendix)",
             "QA": "QA",
             "Cls": "Cls (classification)",
             "Clust": "Clust (clustering)",
