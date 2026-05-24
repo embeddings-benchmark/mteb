@@ -61,57 +61,46 @@ CATEGORY_ORDER = ["T-V Retr", "A-V Retr", "QA", "Cls", "Clust", "Pair", "ZS"]
 
 
 # ---------------------------------------------------------------------------
-# Model family grouping for the leaderboard
+# Which scope each model belongs to (its natural evaluation surface).
+# Models with audio + video + text capability go on MVEB. Text + video
+# models go on MVEB(text-video). Video-only encoders go on MVEB(video).
+# Each scope's leaderboard table lists only the models that naturally
+# belong there — no cross-scope comparison.
 # ---------------------------------------------------------------------------
 
-# Display name (stripped of org/) → group
-MODEL_GROUP: dict[str, str] = {
-    # Omni multimodal (a, i, t, v)
-    "e5-omni-3B": "Omni multimodal",
-    "e5-omni-7B": "Omni multimodal",
-    "LCO-Embedding-Omni-3B": "Omni multimodal",
-    "LCO-Embedding-Omni-7B": "Omni multimodal",
-    "Qwen2.5-Omni-3B": "Omni multimodal",
-    "Qwen2.5-Omni-7B": "Omni multimodal",
-    "OmniEmbed-v0.1": "Omni multimodal",
-    "omni-embed-nemotron-3b": "Omni multimodal",
-    "jina-embeddings-v5-omni-nano": "Omni multimodal",
-    "jina-embeddings-v5-omni-small": "Omni multimodal",
-    # Audio-visual specialized
-    "ebind-audio-vision": "Audio-visual",
-    "ebind-full": "Audio-visual",
-    "pe-av-small": "Audio-visual",
-    "pe-av-base": "Audio-visual",
-    "pe-av-large": "Audio-visual",
-    # Vision-language (no audio)
-    "ebind-points-vision": "Vision-language",
-    "UME-R1-2B": "Vision-language",
-    "UME-R1-7B": "Vision-language",
-    "xclip-base-patch16": "Vision-language",
-    "xclip-base-patch32": "Vision-language",
-    "xclip-large-patch14": "Vision-language",
-    # Vision-only (no audio, no text encoder)
-    "vjepa2-vitg-fpc64-256": "Vision-only",
-    "vjepa2-vitg-fpc64-384": "Vision-only",
-    "vjepa2-vitg-fpc64-384-ssv2": "Vision-only",
-    "vjepa2-vitg-fpc32-384-diving48": "Vision-only",
-    "vjepa2-vith-fpc64-256": "Vision-only",
-    "vjepa2-vitl-fpc64-256": "Vision-only",
-    "vjepa2-vitl-fpc16-256-ssv2": "Vision-only",
-    "vjepa2-vitl-fpc32-256-diving48": "Vision-only",
-}
-
-MODEL_GROUP_ORDER = ["Omni multimodal", "Audio-visual", "Vision-language", "Vision-only", "Other"]
-
-# Each model class is naturally evaluated on a specific scope. Within a group
-# we sort by that group's natural rank, since cross-scope comparison
-# (e.g. a vision-only model against an omni model on MVEB) is not meaningful.
-GROUP_NATURAL_SCOPE: dict[str, str] = {
-    "Omni multimodal": "mveb",
-    "Audio-visual": "mveb",
-    "Vision-language": "tv",
-    "Vision-only": "v",
-    "Other": "mveb",
+MODEL_SCOPE: dict[str, str] = {
+    # Audio + video + text (MVEB):
+    "e5-omni-3B": "mveb",
+    "e5-omni-7B": "mveb",
+    "LCO-Embedding-Omni-3B": "mveb",
+    "LCO-Embedding-Omni-7B": "mveb",
+    "Qwen2.5-Omni-3B": "mveb",
+    "Qwen2.5-Omni-7B": "mveb",
+    "OmniEmbed-v0.1": "mveb",
+    "omni-embed-nemotron-3b": "mveb",
+    "jina-embeddings-v5-omni-nano": "mveb",
+    "jina-embeddings-v5-omni-small": "mveb",
+    "ebind-audio-vision": "mveb",
+    "ebind-full": "mveb",
+    "pe-av-small": "mveb",
+    "pe-av-base": "mveb",
+    "pe-av-large": "mveb",
+    # Text + video (MVEB(text-video)):
+    "ebind-points-vision": "tv",
+    "UME-R1-2B": "tv",
+    "UME-R1-7B": "tv",
+    "xclip-base-patch16": "tv",
+    "xclip-base-patch32": "tv",
+    "xclip-large-patch14": "tv",
+    # Video-only (MVEB(video)):
+    "vjepa2-vitg-fpc64-256": "v",
+    "vjepa2-vitg-fpc64-384": "v",
+    "vjepa2-vitg-fpc64-384-ssv2": "v",
+    "vjepa2-vitg-fpc32-384-diving48": "v",
+    "vjepa2-vith-fpc64-256": "v",
+    "vjepa2-vitl-fpc64-256": "v",
+    "vjepa2-vitl-fpc16-256-ssv2": "v",
+    "vjepa2-vitl-fpc32-256-diving48": "v",
 }
 
 
@@ -225,174 +214,131 @@ def _fmt_rank(rank, global_best, group_best) -> str:
     return f"{cell}{int(rank)}"
 
 
-def emit_table(
+SCOPE_META = {
+    "mveb":    {"name": "MVEB",              "label": "tab:mveb-main-results",        "caption_scope": "MVEB"},
+    "tv":      {"name": "MVEB(text, video)", "label": "tab:mveb-text-video-results", "caption_scope": "MVEB(text, video)"},
+    "v":       {"name": "MVEB(video)",       "label": "tab:mveb-video-results",       "caption_scope": "MVEB(video)"},
+}
+
+
+def emit_scope_table(
     df: pd.DataFrame,
-    mveb_tasks: list[str],
-    tv_tasks: list[str],
-    v_tasks: list[str],
+    scope_tasks: list[str],
+    scope_key: str,
+    scope_models: list[str],
     task_type_lookup: dict[str, str],
     output_path: Path,
 ) -> None:
-    # Ranks per benchmark
-    _, mveb_rank = borda_ranks(df, mveb_tasks)
-    _, tv_rank = borda_ranks(df, tv_tasks)
-    _, v_rank = borda_ranks(df, v_tasks)
+    """Render a single leaderboard table for one scope.
 
-    # Filter to models with at least one MVEB result
-    available_mveb = [t for t in mveb_tasks if t in df.columns]
-    keep = df[available_mveb].notna().any(axis=1)
-    df = df[keep].copy()
-    mveb_rank = mveb_rank.reindex(df.index)
-    tv_rank = tv_rank.reindex(df.index)
-    v_rank = v_rank.reindex(df.index)
+    Only models in `scope_models` (those that naturally belong on this scope)
+    are included. Borda rank is computed within those models on the scope's
+    tasks.
+    """
+    # Restrict df to this scope's models
+    in_scope = [m for m in scope_models if m in df.index]
+    if not in_scope:
+        print(f"  [{scope_key}] no models with results — skipping")
+        return
+    df = df.loc[in_scope].copy()
 
-    # Category averages over MVEB tasks
-    cat_avgs = category_averages(df, mveb_tasks, task_type_lookup)
-    # Overall mean (over MVEB tasks)
-    df["mean"] = df[available_mveb].mean(axis=1) * 100
-    # Weighted (macro across categories)
-    cat_stack = pd.DataFrame({c: s for c, s in cat_avgs.items()})
-    df["weighted_mean"] = cat_stack.mean(axis=1)
+    available = [t for t in scope_tasks if t in df.columns]
+    _, rank = borda_ranks(df, scope_tasks)
 
-    # Sort by MVEB rank (low number = better)
-    df = df.assign(_rank=mveb_rank).sort_values("_rank", na_position="last").drop(columns="_rank")
-    mveb_rank = mveb_rank.reindex(df.index)
-    tv_rank = tv_rank.reindex(df.index)
-    v_rank = v_rank.reindex(df.index)
+    # Per-category averages over the scope's tasks
+    cat_avgs = category_averages(df, scope_tasks, task_type_lookup)
+    df["mean"] = df[available].mean(axis=1) * 100
+    df["macro"] = pd.DataFrame({c: s for c, s in cat_avgs.items()}).mean(axis=1)
 
-    # Group models
-    def model_group(model: str) -> str:
-        short = model.split("/")[-1]
-        return MODEL_GROUP.get(short, "Other")
+    # Sort by Borda rank
+    df = df.assign(_r=rank).sort_values("_r", na_position="last").drop(columns="_r")
+    rank = rank.reindex(df.index)
 
-    df["group"] = df["model"].apply(model_group)
-    groups: dict[str, pd.Index] = {
-        g: df.index[df["group"] == g]
-        for g in MODEL_GROUP_ORDER
-        if (df["group"] == g).any()
-    }
-
-    # Global bests
-    g_best = {
+    # Bests (global within this table)
+    best = {
         "mean": df["mean"].max(),
-        "weighted_mean": df["weighted_mean"].max(),
-        "mveb_rank": mveb_rank.min(),
-        "tv_rank": tv_rank.min(),
-        "v_rank": v_rank.min(),
+        "macro": df["macro"].max(),
+        "rank": rank.min(),
     }
     for cat in CATEGORY_ORDER:
         if cat in cat_avgs:
-            g_best[cat] = cat_avgs[cat].max()
-
-    # Per-group bests
-    group_best: dict[str, dict] = {}
-    for g, idx in groups.items():
-        gb = {
-            "mean": df.loc[idx, "mean"].max(),
-            "weighted_mean": df.loc[idx, "weighted_mean"].max(),
-            "mveb_rank": mveb_rank.loc[idx].min(),
-            "tv_rank": tv_rank.loc[idx].min(),
-            "v_rank": v_rank.loc[idx].min(),
-        }
-        for cat in CATEGORY_ORDER:
-            if cat in cat_avgs:
-                gb[cat] = cat_avgs[cat].loc[idx].max()
-        group_best[g] = gb
+            best[cat] = cat_avgs[cat].max()
 
     cats_present = [c for c in CATEGORY_ORDER if c in cat_avgs]
     cat_counts: dict[str, int] = defaultdict(int)
-    for t in available_mveb:
+    for t in available:
         if t in task_type_lookup:
             cat_counts[task_type_lookup[t]] += 1
 
-    # Build LaTeX
+    meta = SCOPE_META[scope_key]
+    cap_scope = meta["caption_scope"]
+    n_tasks = len(available)
+    n_models = len(df)
+
+    cat_glossary = (
+        ", ".join({
+            "T-V Retr": r"T-V Retr (text--video retrieval)",
+            "A-V Retr": r"A-V Retr (audio-conditioned retrieval)",
+            "QA": "QA",
+            "Cls": "Cls (classification)",
+            "Clust": "Clust (clustering)",
+            "Pair": "Pair (pair classification)",
+            "ZS": "ZS (zero-shot classification)",
+        }[c] for c in cats_present)
+    )
+
     out: list[str] = []
     out.append(r"% AUTOGENERATED by scripts/mveb_paper/generate_main_results_table.py — do not edit by hand.")
     out.append(r"\begin{table*}[!th]")
     out.append(r"    \centering")
     out.append(
-        r"    \caption{"
-        r"Model leaderboard for MVEB and its scope variants. Each model class is "
-        r"sorted by its natural-scope rank: Omni multimodal and Audio-visual on \textbf{MVEB} "
-        r"(" + str(len(available_mveb)) + r" tasks), Vision-language on \textbf{MVEB(text-video)}, "
-        r"Vision-only on \textbf{MVEB(video)}. The other rank columns are shown for cross-scope "
-        r"reference. Within each scope, ranking is by Borda count over the scope's tasks; "
-        r"missing tasks do not contribute Borda points. "
-        r"\textbf{All} is the arithmetic mean over MVEB tasks the model evaluated; \textbf{Cat.} "
-        r"is the macro-average across task categories. Task categories: T-V Retr (text--video "
-        r"retrieval), A-V Retr (audio-conditioned retrieval), QA, Cls (classification), "
-        r"Clust (clustering), Pair (pair classification), ZS (zero-shot classification). "
-        r"Best score per column in \textbf{bold}; best within model group highlighted in grey.}"
+        r"    \caption{Models on \textbf{" + cap_scope + r"} ranked by Borda count over "
+        f"{n_tasks} tasks. "
+        r"\textbf{Mean} is the arithmetic mean over the model's evaluated tasks; "
+        r"\textbf{Macro} is the macro-average across task categories (each category "
+        r"weighted equally regardless of task count). Task categories: " + cat_glossary +
+        r". Best score per column in \textbf{bold}.}"
     )
-    out.append(r"    \label{tab:mveb-main-results}")
+    out.append(r"    \label{" + meta["label"] + r"}")
     out.append(r"    \resizebox{\textwidth}{!}{\setlength{\tabcolsep}{4pt}{\footnotesize")
-    ncols = 1 + 3 + 2 + len(cats_present)
-    col_spec = "l" + "c"*3 + "|" + "c"*2 + "|" + "c"*len(cats_present)
+    col_spec = "l" + "c" + "|" + "c"*2 + "|" + "c"*len(cats_present)
+    ncols = 1 + 1 + 2 + len(cats_present)
     out.append(r"    \begin{tabular}{" + col_spec + r"}")
     out.append(r"    \toprule")
     out.append(
-        r"     & \multicolumn{3}{c|}{\textbf{Rank} ($\downarrow$)} & "
-        r"\multicolumn{2}{c|}{\textbf{Average}} & "
+        r"     & \textbf{Rank} ($\downarrow$) & \multicolumn{2}{c|}{\textbf{Average}} & "
         r"\multicolumn{" + str(len(cats_present)) + r"}{c}{\textbf{Average per Category}} \\"
     )
-    out.append(r"    \cmidrule(r){2-4} \cmidrule(lr){5-6} \cmidrule(l){7-" + str(ncols) + r"}")
+    out.append(r"    \cmidrule(r){2-2} \cmidrule(lr){3-4} \cmidrule(l){5-" + str(ncols) + r"}")
     cat_headers = " & ".join(f"\\textbf{{{c}}}" for c in cats_present)
-    out.append(r"    \textbf{Model} & MVEB & TV & V & All & Cat. & " + cat_headers + r" \\")
+    out.append(r"    \textbf{Model} & " + cap_scope + r" & Mean & Macro & " + cat_headers + r" \\")
     out.append(r"    \midrule")
-    # Count row
     count_cells = " & ".join(f"\\textcolor{{gray}}{{({cat_counts[c]})}}" for c in cats_present)
     out.append(
-        r"    \textcolor{gray}{Number of tasks} & & & & "
-        f"\\textcolor{{gray}}{{({len(available_mveb)})}} & "
-        f"\\textcolor{{gray}}{{({len(available_mveb)})}} & {count_cells} \\\\"
+        r"    \textcolor{gray}{Number of tasks} & & & & " + count_cells + r" \\"
     )
     out.append(r"    \midrule")
 
-    rank_by_scope = {"mveb": mveb_rank, "tv": tv_rank, "v": v_rank}
-
-    for g_i, group in enumerate(MODEL_GROUP_ORDER):
-        if group not in groups:
-            continue
-        idx = groups[group]
-        natural = GROUP_NATURAL_SCOPE.get(group, "mveb")
-        natural_rank = rank_by_scope[natural]
-        out.append(r"    \textbf{" + group + r"} \\")
-        out.append(r"    \midrule")
-        idx_sorted = natural_rank.loc[idx].sort_values(na_position="last").index
-        gb = group_best[group]
-        for m in idx_sorted:
-            row = df.loc[m]
-            display = m.split("/")[-1].replace("_", "\\_")
-            # Underline the rank in the group's natural scope to mark it as primary.
-            ranks_fmt = []
-            for scope_key, scope_rank in [("mveb", mveb_rank), ("tv", tv_rank), ("v", v_rank)]:
-                cell = _fmt_rank(
-                    scope_rank.loc[m],
-                    g_best[f"{scope_key}_rank"],
-                    gb.get(f"{scope_key}_rank"),
-                )
-                if scope_key == natural and cell != "-":
-                    cell = r"\underline{" + cell + r"}"
-                ranks_fmt.append(cell)
-            cells = [
-                display,
-                *ranks_fmt,
-                _fmt_score(row["mean"], g_best["mean"], gb.get("mean")),
-                _fmt_score(row["weighted_mean"], g_best["weighted_mean"], gb.get("weighted_mean")),
-            ]
-            for cat in cats_present:
-                v = cat_avgs[cat].get(m, np.nan)
-                cells.append(_fmt_score(v, g_best.get(cat), gb.get(cat)))
-            out.append("    " + " & ".join(cells) + r" \\")
-        remaining = [g for g in MODEL_GROUP_ORDER[g_i+1:] if g in groups]
-        if remaining:
-            out.append(r"    \midrule")
+    for m in df.index:
+        row = df.loc[m]
+        display = m.split("/")[-1].replace("_", "\\_")
+        cells = [
+            display,
+            _fmt_rank(rank.loc[m], best["rank"], best["rank"]),
+            _fmt_score(row["mean"], best["mean"], best["mean"]),
+            _fmt_score(row["macro"], best["macro"], best["macro"]),
+        ]
+        for cat in cats_present:
+            v = cat_avgs[cat].get(m, np.nan)
+            cells.append(_fmt_score(v, best.get(cat), best.get(cat)))
+        out.append("    " + " & ".join(cells) + r" \\")
 
     out.append(r"    \bottomrule")
     out.append(r"    \end{tabular}}}")
     out.append(r"\end{table*}")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text("\n".join(out) + "\n")
+    print(f"  [{scope_key}] {n_models} models, {n_tasks} tasks → {output_path.name}")
 
 
 # ---------------------------------------------------------------------------
@@ -407,9 +353,9 @@ def main() -> None:
         help="Per-model results directory (e.g. embeddings-benchmark/results clone).",
     )
     parser.add_argument(
-        "--output", type=Path,
-        default=Path("/Users/adnan/research/mveb/699f18a1b6536d2f9f06230a/tables/mveb_main_results.tex"),
-        help="Where to write the LaTeX table.",
+        "--tables-dir", type=Path,
+        default=Path("/Users/adnan/research/mveb/699f18a1b6536d2f9f06230a/tables"),
+        help="Where to write the LaTeX tables.",
     )
     args = parser.parse_args()
 
@@ -417,11 +363,12 @@ def main() -> None:
     mveb_tv = mteb.get_benchmark("MVEB(text, video)")
     mveb_v = mteb.get_benchmark("MVEB(video)")
 
-    mveb_tasks = [t.metadata.name for t in mveb.tasks]
-    tv_tasks = [t.metadata.name for t in mveb_tv.tasks]
-    v_tasks = [t.metadata.name for t in mveb_v.tasks]
+    tasks_by_scope = {
+        "mveb": [t.metadata.name for t in mveb.tasks],
+        "tv":   [t.metadata.name for t in mveb_tv.tasks],
+        "v":    [t.metadata.name for t in mveb_v.tasks],
+    }
 
-    # Task type lookup across all benchmark tasks
     task_type_lookup: dict[str, str] = {}
     for b in (mveb, mveb_tv, mveb_v):
         for t in b.tasks:
@@ -429,13 +376,38 @@ def main() -> None:
                 t.metadata.name, t.metadata.type
             )
 
-    all_tasks = set(mveb_tasks) | set(tv_tasks) | set(v_tasks)
+    all_tasks: set[str] = set()
+    for ts in tasks_by_scope.values():
+        all_tasks.update(ts)
+
     print(f"Loading results for {len(all_tasks)} unique tasks from {args.results_dir}")
     df = load_results(args.results_dir, all_tasks)
     print(f"Loaded {len(df)} models with at least one task result")
 
-    emit_table(df, mveb_tasks, tv_tasks, v_tasks, task_type_lookup, args.output)
-    print(f"Wrote table to {args.output}")
+    # Group models by their natural scope
+    models_by_scope: dict[str, list[str]] = {"mveb": [], "tv": [], "v": []}
+    for m in df.index:
+        short = m.split("/")[-1]
+        scope = MODEL_SCOPE.get(short)
+        if scope in models_by_scope:
+            models_by_scope[scope].append(m)
+        else:
+            print(f"  unknown model (skipped): {m}")
+
+    outputs = {
+        "mveb": args.tables_dir / "mveb_main_results.tex",
+        "tv":   args.tables_dir / "mveb_text_video_results.tex",
+        "v":    args.tables_dir / "mveb_video_results.tex",
+    }
+    for scope_key in ("mveb", "tv", "v"):
+        emit_scope_table(
+            df,
+            tasks_by_scope[scope_key],
+            scope_key,
+            models_by_scope[scope_key],
+            task_type_lookup,
+            outputs[scope_key],
+        )
 
 
 if __name__ == "__main__":
