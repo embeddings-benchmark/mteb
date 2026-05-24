@@ -41,11 +41,30 @@ from mteb.cache import ResultCache
 
 # Correlation thresholds we sweep to report selection at each cut. The
 # recommended operating point is 0.85.
-THRESHOLDS = [0.95, 0.93, 0.9, 0.88, 0.87, 0.85, 0.84, 0.83, 0.82, 0.81, 0.8, 0.7, 0.6, 0.5]
+THRESHOLDS = [
+    0.99,
+    0.98,
+    0.97,
+    0.96,
+    0.95,
+    0.93,
+    0.9,
+    0.88,
+    0.87,
+    0.85,
+    0.84,
+    0.83,
+    0.82,
+    0.81,
+    0.8,
+    0.7,
+    0.6,
+    0.5,
+]
 
 # Reference models used to estimate eval time of the selected subset.
 EVAL_TIME_MODELS = [
-    ("ebind-av", "encord-team/ebind-audio-vision"),       # 764M (smallest AV)
+    ("ebind-av", "encord-team/ebind-audio-vision"),  # 764M (smallest AV)
     ("pe-av-small", "facebook/pe-av-small"),
     ("LCO-Embedding-Omni-7B", "LCO-Embedding/LCO-Embedding-Omni-7B"),
     ("Qwen2.5-Omni-7B", "Qwen/Qwen2.5-Omni-7B"),
@@ -61,68 +80,94 @@ TASKS_TO_EXCLUDE: list[str] = []
 # AV-required QA, emotion (prosody), or action classes whose audio is
 # typically informative.
 AV_AWARE_FAMILIES = {
-    "VALOR32K", "AudioCapsAV", "Shot2Story20K",
-    "VGGSoundAV", "AVEDataset",
-    "MELD", "RAVDESS",
-    "MusicAVQA", "MusicAVQACLS",
-    "AVQA", "AVMeme", "AVMemeExam",
-    "WorldSense", "WorldSense1Min", "DailyOmni",
-    "OmniVideoBench", "VideoMME", "VideoMMEShort", "PerceptionTest",
+    "VALOR32K",
+    "AudioCapsAV",
+    "Shot2Story20K",
+    "VGGSoundAV",
+    "AVEDataset",
+    "MELD",
+    "RAVDESS",
+    "MusicAVQA",
+    "MusicAVQACLS",
+    "AVQA",
+    "AVMeme",
+    "AVMemeExam",
+    "WorldSense",
+    "WorldSense1Min",
+    "DailyOmni",
+    "OmniVideoBench",
+    "VideoMME",
+    "VideoMMEShort",
+    "PerceptionTest",
     "AVSpeakerBench",
-    "Kinetics400", "Kinetics600", "Kinetics700",
-    "UCF101", "HMDB51", "Breakfast", "HumanAnimalCartoon",
-    "VATEX", "ActivityNetCaptions", "YouCook2",
+    "Kinetics400",
+    "Kinetics600",
+    "Kinetics700",
+    "UCF101",
+    "HMDB51",
+    "Breakfast",
+    "HumanAnimalCartoon",
+    "VATEX",
+    "ActivityNetCaptions",
+    "YouCook2",
 }
 
 # Datasets where labels describe visual content only — audio on these is
 # incidental and would not match the label.
 VIDEO_ONLY_FAMILIES = {
-    "MSRVTT", "MSVD", "DiDeMo", "Panda70M",
-    "TUNABench", "Charades-STA",
-    "SomethingSomethingV2", "Diving48",
-    "Vinoground", "VideoCon",
-    "NExTQA", "EgoSchema",
+    "MSRVTT",
+    "MSVD",
+    "DiDeMo",
+    "Panda70M",
+    "TUNABench",
+    "Charades-STA",
+    "SomethingSomethingV2",
+    "Diving48",
+    "Vinoground",
+    "VideoCon",
+    "NExTQA",
+    "EgoSchema",
 }
 
 
 # Tasks that must end up in the final benchmark — either standard datasets
 # the field expects, V-only variants needed for the nested MVEB(video) subset,
 # or AV-joint variants needed for AV task-type coverage in the master.
-MUST_INCLUDE = {
-    # Retrieval — standard T2V/V2T canonicals:
-    "MSRVTTT2V", "MSRVTTV2T", "MSVDT2VRetrieval", "VATEXT2VRetrieval",
-    "DiDeMoT2VRetrieval", "YouCook2T2VRetrieval",
-    "ActivityNetCaptionsT2VRetrieval",
-    # Retrieval — audio-conditioned on AV-aware families:
-    "AudioCapsAVAT2VRetrieval", "AudioCapsAVVA2TRetrieval",
-    "VALOR32KT2VARetrieval", "VALOR32KVT2ARetrieval", "VALOR32KA2VRetrieval",
-    "AVMemeExamAT2VRetrieval",
-    # Classification — standard action recognition + V-only variants for V subset:
-    "HMDB51Classification", "BreakfastClassification",
-    "SomethingSomethingV2Classification", "VGGSoundVA",
-    "AVEDatasetClassification", "AVMemeVideoClassification",
-    "MELDVideoClassification", "WorldSenseVideoClassification",
-    "AVMemeAudioVideoClassification",
-    # Clustering — V variants for V subset + AV variants for master:
-    "AVEDatasetVideoClustering", "RAVDESSVideoClustering",
-    "AVEDatasetAudioVideoClustering", "WorldSense1MinDomainAudioVideoClustering",
-    # QA:
-    "EgoSchemaVideoCentricQA", "NExTQAVideoCentricQA",
-    "VideoMMEShortVideoCentricQA", "OmniVideoBenchVideoCentricQA",
-    "WorldSense1MinVideoAudioCentricQA", "DailyOmniVideoAudioCentricQA",
-    # Pair-cls:
-    "VinogroundPairClassification", "RAVDESSAVVAPairClassification",
-    "HumanAnimalCartoonVPairClassification",
-    # Zero-shot:
-    "HMDB51ZeroShot", "UCF101VideoZeroShotClassification", "MELDVideoZeroShot",
-    "WorldSenseAudioVideoZeroShot",
-}
+MUST_INCLUDE: set[str] = set()
+#     # Retrieval — standard T2V/V2T canonicals:
+#     "MSRVTTT2V", "MSRVTTV2T", "MSVDT2VRetrieval", "VATEXT2VRetrieval",
+#     "DiDeMoT2VRetrieval", "YouCook2T2VRetrieval",
+#     "ActivityNetCaptionsT2VRetrieval",
+#     # Retrieval — audio-conditioned on AV-aware families:
+#     "AudioCapsAVAT2VRetrieval", "AudioCapsAVVA2TRetrieval",
+#     "VALOR32KT2VARetrieval", "VALOR32KVT2ARetrieval", "VALOR32KA2VRetrieval",
+#     "AVMemeExamAT2VRetrieval",
+#     # Classification — standard action recognition + V-only variants for V subset:
+#     "HMDB51Classification", "BreakfastClassification",
+#     "SomethingSomethingV2Classification", "VGGSoundVA",
+#     "AVEDatasetClassification", "AVMemeVideoClassification",
+#     "MELDVideoClassification", "WorldSenseVideoClassification",
+#     "AVMemeAudioVideoClassification",
+#     # Clustering — V variants for V subset + AV variants for master:
+#     "AVEDatasetVideoClustering", "RAVDESSVideoClustering",
+#     "AVEDatasetAudioVideoClustering", "WorldSense1MinDomainAudioVideoClustering",
+#     # QA:
+#     "EgoSchemaVideoCentricQA", "NExTQAVideoCentricQA",
+#     "VideoMMEShortVideoCentricQA", "OmniVideoBenchVideoCentricQA",
+#     "WorldSense1MinVideoAudioCentricQA", "DailyOmniVideoAudioCentricQA",
+#     # Pair-cls:
+#     "VinogroundPairClassification", "RAVDESSAVVAPairClassification",
+#     "HumanAnimalCartoonVPairClassification",
+#     # Zero-shot:
+#     "HMDB51ZeroShot", "UCF101VideoZeroShotClassification", "MELDVideoZeroShot",
+#     "WorldSenseAudioVideoZeroShot",
+# }
 
 
 # Discriminative-power filter thresholds.
 SAT_BEST_THRESHOLD = 0.93
 FLOOR_SPREAD_THRESHOLD = 0.05
-MIN_MODEL_SUPPORT = 5
+MIN_MODEL_SUPPORT = 3
 
 
 # Each scope keeps tasks whose modalities ⊆ `allowed_task_modalities`.
@@ -136,7 +181,7 @@ SCOPES = {
         "allowed_task_modalities": {"video", "text", "image"},
     },
     "audio-video": {
-        "description": "MVEB(text, audio, video) — full A+V+T encoders (pe-av, ebind-av, omni, +)",
+        "description": "MVEB — full A+V+T encoders (pe-av, ebind-av, omni, +)",
         "allowed_task_modalities": {"audio", "video", "text", "image"},
     },
 }
@@ -184,18 +229,14 @@ def family_of(task_name: str) -> str | None:
 
     Longer prefixes are checked first so e.g. "MusicAVQACLS" wins over "MusicAVQA".
     """
-    families = sorted(
-        AV_AWARE_FAMILIES | VIDEO_ONLY_FAMILIES, key=len, reverse=True
-    )
+    families = sorted(AV_AWARE_FAMILIES | VIDEO_ONLY_FAMILIES, key=len, reverse=True)
     for fam in families:
         if task_name.startswith(fam):
             return fam
     return None
 
 
-def is_annotation_valid(
-    task_name: str, metadata_df: pd.DataFrame
-) -> tuple[bool, str]:
+def is_annotation_valid(task_name: str, metadata_df: pd.DataFrame) -> tuple[bool, str]:
     """Whether using audio on this task is principled given the dataset's
     annotation protocol. Audio is only fair on AV-aware families.
     """
@@ -240,7 +281,70 @@ def filter_by_scope(
         if task_mods.issubset(allowed):
             kept.append(t)
         else:
-            dropped.append((t, f"modalities {sorted(task_mods - allowed)} outside scope"))
+            dropped.append(
+                (t, f"modalities {sorted(task_mods - allowed)} outside scope")
+            )
+    return kept, dropped
+
+
+def prefer_av_variants(
+    tasks: list[str], metadata_df: pd.DataFrame, scope_key: str
+) -> tuple[list[str], list[tuple[str, str]]]:
+    """For the audio-video scope, if a family has both AV variants (tasks with
+    audio in their modalities) and non-AV variants (no audio), drop the non-AV
+    variants so that task selection focuses on genuinely multimodal tasks."""
+    if scope_key != "audio-video":
+        return tasks, []
+
+    all_families = sorted(
+        AV_AWARE_FAMILIES | VIDEO_ONLY_FAMILIES, key=len, reverse=True
+    )
+
+    def _family(name: str) -> str | None:
+        for fam in all_families:
+            if name.startswith(fam):
+                return fam
+        return None
+
+    # Group tasks by family
+    family_tasks: dict[str, list[str]] = defaultdict(list)
+    no_family: list[str] = []
+    for t in tasks:
+        fam = _family(t)
+        if fam:
+            family_tasks[fam].append(t)
+        else:
+            no_family.append(t)
+
+    kept, dropped = list(no_family), []
+    for fam, members in family_tasks.items():
+        av_members = []
+        non_av_members = []
+        for t in members:
+            rows = metadata_df[metadata_df["name"] == t]
+            if rows.empty:
+                av_members.append(t)  # keep if unknown
+                continue
+            task_mods = set(rows.iloc[0]["modalities"])
+            if "audio" in task_mods:
+                av_members.append(t)
+            else:
+                non_av_members.append(t)
+
+        if av_members:
+            # Family has AV variants — keep only those
+            kept.extend(av_members)
+            for t in non_av_members:
+                dropped.append(
+                    (t, f"non-AV variant dropped; family '{fam}' has AV variants")
+                )
+        else:
+            # No AV variants exist — keep all
+            kept.extend(non_av_members)
+
+    # Preserve original ordering
+    task_order = {t: i for i, t in enumerate(tasks)}
+    kept.sort(key=lambda t: task_order.get(t, 0))
     return kept, dropped
 
 
@@ -277,19 +381,25 @@ def compute_task_stats(
     stats: dict[str, dict] = {}
     for t in tasks:
         if t not in results_df.columns:
-            stats[t] = dict(empty); continue
+            stats[t] = dict(empty)
+            continue
         rows = metadata_df[metadata_df["name"] == t]
         if rows.empty:
-            stats[t] = dict(empty); continue
+            stats[t] = dict(empty)
+            continue
         task_mods = set(rows.iloc[0]["modalities"])
-        capable = [m for m, mods in model_modalities.items() if task_mods.issubset(mods)]
+        capable = [
+            m for m, mods in model_modalities.items() if task_mods.issubset(mods)
+        ]
         capable_in_df = [m for m in capable if m in results_df.index]
         scores = (
             results_df.loc[capable_in_df, t].dropna()
-            if capable_in_df else pd.Series(dtype=float)
+            if capable_in_df
+            else pd.Series(dtype=float)
         )
         if scores.empty:
-            stats[t] = dict(empty); continue
+            stats[t] = dict(empty)
+            continue
         stats[t] = {
             "best": float(scores.max()),
             "worst": float(scores.min()),
@@ -318,7 +428,9 @@ def filter_saturation_floor(
             dropped.append((t, "no model results from capable models"))
             continue
         if s["n"] < min_support:
-            dropped.append((t, f"low support (only {s['n']} capable models with results)"))
+            dropped.append(
+                (t, f"low support (only {s['n']} capable models with results)")
+            )
             continue
         if s["best"] > sat_threshold:
             dropped.append((t, f"saturated (best={s['best']:.3f} > {sat_threshold})"))
@@ -351,7 +463,12 @@ def deduplicate_retrieval_directions(
     for family, v2t_task in v2t_tasks.items():
         if family in t2v_tasks:
             tasks_to_remove.add(v2t_task)
-            removed.append((v2t_task, f"Prefer T2V over V2T for {family} (keeping {t2v_tasks[family]})"))
+            removed.append(
+                (
+                    v2t_task,
+                    f"Prefer T2V over V2T for {family} (keeping {t2v_tasks[family]})",
+                )
+            )
 
     remaining = [t for t in task_names if t not in tasks_to_remove]
     return remaining, removed
@@ -511,7 +628,8 @@ def load_eval_times(
 
     revs = sorted(
         [f for f in model_folder.iterdir() if f.is_dir()],
-        key=lambda p: p.stat().st_mtime, reverse=True,
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
     )
     if not revs:
         return {}
@@ -575,12 +693,34 @@ def identify_task_families(df: pd.DataFrame) -> dict[str, list[str]]:
     UCF101Clustering, UCF101ZeroshotClassification). Returns families with >1 task."""
     families = defaultdict(list)
     common_prefixes = [
-        "MSVD", "TUNABench", "VATEX", "Panda70M", "YouCook2", "Shot2Story20K",
-        "VALOR32K", "DiDeMo", "MSRVTT", "ActivityNetCaptions",
-        "AudioCapsAV", "AVMemeExam", "VGGSoundAV",
-        "Kinetics400", "Kinetics600", "Kinetics700", "UCF101", "HMDB51",
-        "MELD", "WorldSense", "AVEDataset", "MusicAVQACLS", "RAVDESS",
-        "HumanAnimalCartoon", "Breakfast", "VGGSound", "AVMeme", "Diving48",
+        "MSVD",
+        "TUNABench",
+        "VATEX",
+        "Panda70M",
+        "YouCook2",
+        "Shot2Story20K",
+        "VALOR32K",
+        "DiDeMo",
+        "MSRVTT",
+        "ActivityNetCaptions",
+        "AudioCapsAV",
+        "AVMemeExam",
+        "VGGSoundAV",
+        "Kinetics400",
+        "Kinetics600",
+        "Kinetics700",
+        "UCF101",
+        "HMDB51",
+        "MELD",
+        "WorldSense",
+        "AVEDataset",
+        "MusicAVQACLS",
+        "RAVDESS",
+        "HumanAnimalCartoon",
+        "Breakfast",
+        "VGGSound",
+        "AVMeme",
+        "Diving48",
     ]
     for task_name in df["name"].tolist():
         matched = False
@@ -606,7 +746,9 @@ def load_model_results(results_dir: Path | str) -> tuple[pd.DataFrame, list[str]
     by sparse rows.
     """
     results_dir = Path(results_dir)
-    model_names = [d.name.replace("__", "/") for d in results_dir.iterdir() if d.is_dir()]
+    model_names = [
+        d.name.replace("__", "/") for d in results_dir.iterdir() if d.is_dir()
+    ]
     print(f"Found {len(model_names)} models")
 
     models = []
@@ -632,7 +774,9 @@ def load_model_results(results_dir: Path | str) -> tuple[pd.DataFrame, list[str]
     return results_df, list(results_df.columns)
 
 
-def compute_task_correlation(results_df: pd.DataFrame, tasks: list[str]) -> pd.DataFrame:
+def compute_task_correlation(
+    results_df: pd.DataFrame, tasks: list[str]
+) -> pd.DataFrame:
     """Pairwise Spearman correlation across tasks (rows=models, cols=tasks)."""
     return results_df[tasks].select_dtypes(include=["number"]).corr(method="spearman")
 
@@ -718,7 +862,7 @@ def get_highly_correlated_pairs(
     pairs = [
         (t1, t2, corr_matrix.loc[t1, t2])
         for i, t1 in enumerate(cols)
-        for t2 in cols[i + 1:]
+        for t2 in cols[i + 1 :]
         if not np.isnan(corr_matrix.loc[t1, t2]) and corr_matrix.loc[t1, t2] > threshold
     ]
     return sorted(pairs, key=lambda x: x[2], reverse=True)
@@ -745,8 +889,12 @@ def get_unique_coverage_tasks(task_names: list[str]) -> dict[str, list[str]]:
         type_to_tasks[meta.type].append(name)
 
     unique_lang_tasks = [(ts[0], k) for k, ts in lang_to_tasks.items() if len(ts) == 1]
-    unique_domain_tasks = [(ts[0], k) for k, ts in domain_to_tasks.items() if len(ts) == 1]
-    unique_category_tasks = [(ts[0], k) for k, ts in category_to_tasks.items() if len(ts) == 1]
+    unique_domain_tasks = [
+        (ts[0], k) for k, ts in domain_to_tasks.items() if len(ts) == 1
+    ]
+    unique_category_tasks = [
+        (ts[0], k) for k, ts in category_to_tasks.items() if len(ts) == 1
+    ]
     unique_type_tasks = [(ts[0], k) for k, ts in type_to_tasks.items() if len(ts) == 1]
 
     return {
@@ -881,15 +1029,20 @@ def iterative_task_selection(
                 # Prefer removing redundant siblings from the same source family.
                 family = task_to_family.get(task_name)
                 if family and prefer_remove_same_source:
-                    family_count = sum(1 for t in current_tasks if task_to_family.get(t) == family)
+                    family_count = sum(
+                        1 for t in current_tasks if task_to_family.get(t) == family
+                    )
                     if family_count > 1:
                         score += family_count
                 return score
 
             candidates = sorted(
-                [(task1, removal_priority(task1, meta1)),
-                 (task2, removal_priority(task2, meta2))],
-                key=lambda x: x[1], reverse=True,
+                [
+                    (task1, removal_priority(task1, meta1)),
+                    (task2, removal_priority(task2, meta2)),
+                ],
+                key=lambda x: x[1],
+                reverse=True,
             )
 
             for task_name, _ in candidates:
@@ -914,18 +1067,38 @@ def iterative_task_selection(
 
 def _parse_args():
     import argparse
+
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scope", choices=list(SCOPES.keys()), default="audio-video",
-                        help="Modality scope of the variant to select.")
-    parser.add_argument("--results-dir", type=Path,
-                        default=Path("/Users/isaac/.cache/mteb/remote/results"),
-                        help="Path to the mteb results cache.")
-    parser.add_argument("--sat-threshold", type=float, default=SAT_BEST_THRESHOLD,
-                        help="Drop if best capable-model score exceeds this.")
-    parser.add_argument("--floor-spread", type=float, default=FLOOR_SPREAD_THRESHOLD,
-                        help="Drop if (max - min) across capable models is below this.")
-    parser.add_argument("--min-support", type=int, default=MIN_MODEL_SUPPORT,
-                        help="Drop if fewer than this many capable models have results.")
+    parser.add_argument(
+        "--scope",
+        choices=list(SCOPES.keys()),
+        default="audio-video",
+        help="Modality scope of the variant to select.",
+    )
+    parser.add_argument(
+        "--results-dir",
+        type=Path,
+        default=Path("/Users/isaac/.cache/mteb/remote/results"),
+        help="Path to the mteb results cache.",
+    )
+    parser.add_argument(
+        "--sat-threshold",
+        type=float,
+        default=SAT_BEST_THRESHOLD,
+        help="Drop if best capable-model score exceeds this.",
+    )
+    parser.add_argument(
+        "--floor-spread",
+        type=float,
+        default=FLOOR_SPREAD_THRESHOLD,
+        help="Drop if (max - min) across capable models is below this.",
+    )
+    parser.add_argument(
+        "--min-support",
+        type=int,
+        default=MIN_MODEL_SUPPORT,
+        help="Drop if fewer than this many capable models have results.",
+    )
     return parser.parse_args()
 
 
@@ -948,10 +1121,14 @@ def main():
         try:
             results_df, tasks_with_results = load_model_results(results_dir)
             available_tasks = [t for t in source_task_names if t in tasks_with_results]
-            print(f"Tasks with results: {len(available_tasks)}/{len(source_task_names)}")
+            print(
+                f"Tasks with results: {len(available_tasks)}/{len(source_task_names)}"
+            )
             if available_tasks:
                 corr_matrix = compute_task_correlation(results_df, available_tasks)
-                print(f"Computed {len(corr_matrix)}x{len(corr_matrix)} correlation matrix")
+                print(
+                    f"Computed {len(corr_matrix)}x{len(corr_matrix)} correlation matrix"
+                )
         except Exception as e:
             print(f"Warning: Could not load model results: {e}")
             print("Continuing without correlation analysis...")
@@ -962,12 +1139,18 @@ def main():
     if results_df is not None and corr_matrix is not None:
         # Drop tasks with no results — they would survive iterative pruning by
         # never appearing in correlation pairs.
-        missing = [t for t in source_task_names
-                   if t not in TASKS_TO_EXCLUDE and t not in results_df.columns]
+        missing = [
+            t
+            for t in source_task_names
+            if t not in TASKS_TO_EXCLUDE and t not in results_df.columns
+        ]
         if missing:
             print(f"Note: {len(missing)} task(s) dropped (no model results): {missing}")
-        filtered_source_tasks = [t for t in source_task_names
-                                 if t not in TASKS_TO_EXCLUDE and t in results_df.columns]
+        filtered_source_tasks = [
+            t
+            for t in source_task_names
+            if t not in TASKS_TO_EXCLUDE and t in results_df.columns
+        ]
         excluded_count = sum(1 for t in source_task_names if t in TASKS_TO_EXCLUDE)
 
         # Pre-selection: scope → annotation → saturation. Then T2V-pref /
@@ -976,6 +1159,14 @@ def main():
             filtered_source_tasks, metadata_df, scope_key
         )
         print(f"Scope filter: {len(filtered_source_tasks)} → {len(scoped_tasks)}")
+
+        scoped_tasks, av_pref_dropped = prefer_av_variants(
+            scoped_tasks, metadata_df, scope_key
+        )
+        if av_pref_dropped:
+            print(
+                f"AV-variant preference: dropped {len(av_pref_dropped)} non-AV variants"
+            )
 
         must_keep = MUST_INCLUDE & set(scoped_tasks)
         annotation_valid, annotation_dropped = filter_invalid_annotation(
@@ -988,7 +1179,9 @@ def main():
             results_df, annotation_valid, metadata_df, model_modalities
         )
         working_pool, sat_dropped = filter_saturation_floor(
-            annotation_valid, task_stats, must_keep,
+            annotation_valid,
+            task_stats,
+            must_keep,
             sat_threshold=args.sat_threshold,
             floor_spread=args.floor_spread,
             min_support=args.min_support,
@@ -1005,11 +1198,18 @@ def main():
         output_lines.append("")
         output_lines.append("## Pre-selection filters")
         output_lines.append("")
-        output_lines.append(f"- Source MVEB(extended): **{len(source_task_names)}** tasks")
         output_lines.append(
-            f"- After scope filter (`{scope_key}`): **{len(scoped_tasks)}** "
+            f"- Source MVEB(extended): **{len(source_task_names)}** tasks"
+        )
+        output_lines.append(
+            f"- After scope filter (`{scope_key}`): **{len(scoped_tasks) + len(av_pref_dropped)}** "
             f"(-{len(scope_dropped)})"
         )
+        if av_pref_dropped:
+            output_lines.append(
+                f"- After AV-variant preference: **{len(scoped_tasks)}** "
+                f"(-{len(av_pref_dropped)})"
+            )
         output_lines.append(
             f"- After annotation-provenance filter: **{len(annotation_valid)}** "
             f"(-{len(annotation_dropped)})"
@@ -1025,6 +1225,14 @@ def main():
             "(bypass annotation and saturation filters)"
         )
         output_lines.append("")
+        if av_pref_dropped:
+            output_lines.append("### Dropped — non-AV variant (AV variant exists)")
+            output_lines.append("")
+            for t, reason in av_pref_dropped[:30]:
+                output_lines.append(f"- `{t}` — {reason}")
+            if len(av_pref_dropped) > 30:
+                output_lines.append(f"- ... and {len(av_pref_dropped) - 30} more")
+            output_lines.append("")
         if annotation_dropped:
             output_lines.append("### Dropped — annotation provenance")
             output_lines.append("")
@@ -1052,7 +1260,9 @@ def main():
                 output_lines.append("### Must-include tasks not in this scope (review)")
                 output_lines.append("")
                 for t in sorted(missing):
-                    note = "" if t in source_task_names else "  *(not in MVEB(extended))*"
+                    note = (
+                        "" if t in source_task_names else "  *(not in MVEB(extended))*"
+                    )
                     output_lines.append(f"- `{t}`{note}")
                 output_lines.append("")
         output_lines.append("# MVEB Task Selection Analysis")

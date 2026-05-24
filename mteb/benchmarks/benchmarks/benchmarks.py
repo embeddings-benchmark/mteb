@@ -3726,62 +3726,43 @@ MVEB_EXTENDED = Benchmark(
 
 MVEB = Benchmark(
     name="MVEB",
-    aliases=["MVEB", "MVEB(text, audio, video)"],
+    aliases=["MVEB"],
     display_name="MVEB",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
-            # Any2AnyRetrieval (14)
+            # Any2AnyRetrieval (10)
             "AVMemeExamAT2VRetrieval",
             "ActivityNetCaptionsT2VRetrieval",
-            "AudioCapsAVAT2VRetrieval",
             "AudioCapsAVVA2TRetrieval",
-            "DiDeMoT2VRetrieval",
-            "MSRVTTT2V",
-            "MSRVTTV2T",
+            "AudioCapsAVVT2ARetrieval",
             "MSVDT2VRetrieval",
-            "VALOR32KA2VRetrieval",
             "VALOR32KT2VARetrieval",
-            "VALOR32KVT2ARetrieval",
-            "VATEXT2VRetrieval",
             "VATEXV2ARetrieval",
-            "YouCook2T2VRetrieval",
-            # VideoCentricQA (6)
-            "DailyOmniVideoAudioCentricQA",
+            "VATEXVA2TRetrieval",
+            "VGGSoundAVA2VRetrieval",
+            "YouCook2T2VARetrieval",
+            # VideoCentricQA (1)
             "EgoSchemaVideoCentricQA",
-            "NExTQAVideoCentricQA",
-            "OmniVideoBenchVideoCentricQA",
-            "VideoMMEShortVideoCentricQA",
-            "WorldSense1MinVideoAudioCentricQA",
-            # VideoClassification (9)
+            # VideoClassification (6)
             "AVEDatasetClassification",
             "AVMemeAudioVideoClassification",
-            "AVMemeVideoClassification",
             "BreakfastClassification",
-            "HMDB51Classification",
-            "MELDVideoClassification",
-            "SomethingSomethingV2Classification",
-            "VGGSoundVA",
-            "WorldSenseVideoClassification",
-            # VideoClustering (5)
-            "AVEDatasetAudioVideoClustering",
-            "AVEDatasetVideoClustering",
-            "MusicAVQACLSVideoClustering",
-            "RAVDESSVideoClustering",
-            "WorldSense1MinDomainAudioVideoClustering",
-            # VideoPairClassification (3)
-            "HumanAnimalCartoonVPairClassification",
-            "RAVDESSAVVAPairClassification",
-            "VinogroundPairClassification",
-            # VideoZeroshotClassification (5)
+            "Kinetics700VA",
+            "RAVDESSAVClassification",
+            "UCF101VideoAudioClassification",
+            # VideoClustering (2)
+            "MELDEmotionAudioVideoClustering",
+            "MusicAVQACLSAudioVideoClustering",
+            # VideoPairClassification (2)
+            "HumanAnimalCartoonVAPairClassification",
+            "MusicAVQAVAPairClassification",
+            # VideoZeroshotClassification (2)
             "HMDB51ZeroShot",
-            "Kinetics600VAZeroShot",
-            "MELDVideoZeroShot",
-            "UCF101VideoZeroShotClassification",
             "WorldSenseAudioVideoZeroShot",
         ]
     ),
-    description="""MVEB (Massive Video Embedding Benchmark) is a curated audio-visual video benchmark with 42 tasks across 6 task types: retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA. 19 of the 42 tasks exercise joint audio-visual inputs.""",
+    description="""MVEB (Massive Video Embedding Benchmark) is a curated audio-visual video benchmark with 23 tasks across 6 task types: retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA. Tasks are selected to maximise coverage of audio-video joint modality inputs.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -3795,44 +3776,34 @@ MVEB_TEXT_VIDEO = Benchmark(
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
-            # Any2AnyRetrieval (10)
-            "AVMemeExamV2TRetrieval",
+            # Any2AnyRetrieval (8)
+            "AVMemeExamT2VRetrieval",
             "ActivityNetCaptionsT2VRetrieval",
             "AudioCapsAVT2VRetrieval",
-            "DiDeMoT2VRetrieval",
-            "MSRVTTT2V",
-            "MSRVTTV2T",
-            "MSVDT2VRetrieval",
+            "DiDeMoV2TRetrieval",
+            "MSVDV2TRetrieval",
+            "Panda70MT2VRetrieval",
             "VALOR32KT2VRetrieval",
             "VATEXT2VRetrieval",
-            "YouCook2T2VRetrieval",
-            # VideoCentricQA (4)
-            "EgoSchemaVideoCentricQA",
-            "NExTQAVideoCentricQA",
+            # VideoCentricQA (1)
             "OmniVideoBenchVideoCentricQA",
-            "VideoMMEShortVideoCentricQA",
-            # VideoClassification (6)
+            # VideoClassification (4)
             "AVMemeVideoClassification",
             "BreakfastClassification",
-            "HMDB51Classification",
-            "MELDVideoClassification",
-            "SomethingSomethingV2Classification",
-            "WorldSenseVideoClassification",
-            # VideoClustering (3)
-            "AVEDatasetVideoClustering",
-            "MusicAVQACLSVideoClustering",
+            "Kinetics700V",
+            "VGGSoundV",
+            # VideoClustering (1)
             "RAVDESSVideoClustering",
-            # VideoPairClassification (2)
+            # VideoPairClassification (1)
             "HumanAnimalCartoonVPairClassification",
-            "VinogroundPairClassification",
             # VideoZeroshotClassification (4)
-            "HMDB51ZeroShot",
             "Kinetics400ZeroShot",
             "MELDVideoZeroShot",
             "UCF101VideoZeroShotClassification",
+            "WorldSenseVideoZeroShot",
         ]
     ),
-    description="""MVEB(text, video) is the text+video scope of MVEB with 29 tasks for models without an audio encoder, covering retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA.""",
+    description="""MVEB(text, video) is the text+video scope of MVEB with 19 tasks for models without an audio encoder, covering retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -3850,18 +3821,16 @@ MVEB_VIDEO = Benchmark(
             "AVMemeVideoClassification",
             "BreakfastClassification",
             "HMDB51Classification",
+            "Kinetics600V",
             "MELDVideoClassification",
-            "SomethingSomethingV2Classification",
             "WorldSenseVideoClassification",
-            # VideoClustering (2)
-            "AVEDatasetVideoClustering",
-            "RAVDESSVideoClustering",
-            # VideoPairClassification (2)
+            # VideoPairClassification (3)
             "HumanAnimalCartoonVPairClassification",
-            "VinogroundPairClassification",
+            "MusicAVQAVPairClassification",
+            "RAVDESSAVVPairClassification",
         ]
     ),
-    description="""MVEB(video) is the video-only scope of MVEB with 10 tasks for V-only encoders, covering classification, clustering, and pair classification. Retrieval, QA, and zero-shot tasks are excluded since they require a text encoder.""",
+    description="""MVEB(video) is the video-only scope of MVEB with 9 tasks for V-only encoders, covering classification and pair classification. Retrieval, QA, and zero-shot tasks are excluded since they require a text encoder.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
