@@ -44,9 +44,10 @@ _AUDIO_RETRIEVAL_SUFFIXES = (
 
 def task_category(task_name: str, mteb_task_type: str) -> str:
     """Map mteb task type → display category. Retrieval is split into
-    'AV Retr' (audio-conditioned) and 'TV Retr' (text-video)."""
+    'Audio Retr' (audio is in query or target) and 'Text Retr' (text-video,
+    no audio involved)."""
     if mteb_task_type == "Any2AnyRetrieval":
-        return "AV Retr" if any(task_name.endswith(s) for s in _AUDIO_RETRIEVAL_SUFFIXES) else "TV Retr"
+        return "Audio Retr" if any(task_name.endswith(s) for s in _AUDIO_RETRIEVAL_SUFFIXES) else "Text Retr"
     return {
         "VideoCentricQA": "QA",
         "VideoClassification": "Cls",
@@ -56,7 +57,7 @@ def task_category(task_name: str, mteb_task_type: str) -> str:
     }.get(mteb_task_type, mteb_task_type)
 
 
-CATEGORY_ORDER = ["TV Retr", "AV Retr", "QA", "Cls", "Clust", "Pair", "ZS"]
+CATEGORY_ORDER = ["Text Retr", "Audio Retr", "QA", "Cls", "Clust", "Pair", "ZS"]
 
 
 # ---------------------------------------------------------------------------
@@ -294,8 +295,8 @@ def emit_scope_table(
 
     cat_glossary = (
         ", ".join({
-            "TV Retr": r"TV Retr (text--video retrieval)",
-            "AV Retr": r"AV Retr (audio-conditioned retrieval)",
+            "Text Retr": r"Text Retr (text $\leftrightarrow$ video retrieval, no audio)",
+            "Audio Retr": r"Audio Retr (any retrieval where audio is in the query or target)",
             "QA": "QA",
             "Cls": "Cls (classification)",
             "Clust": "Clust (clustering)",
