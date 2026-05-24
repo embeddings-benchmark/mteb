@@ -85,8 +85,8 @@ VIDEO_ONLY_FAMILIES = {
 }
 
 
-# Tasks that must survive every filter (industry-canonical from MMEB-V2 and
-# PE-AV, restricted to annotation-valid directions).
+# Standard video-embedding datasets that must survive every filter,
+# restricted to annotation-valid directions.
 MUST_INCLUDE = {
     "MSRVTTT2V", "MSRVTTV2T",
     "MSVDT2VRetrieval", "VATEXT2VRetrieval",

@@ -3781,7 +3781,7 @@ MVEB = Benchmark(
             "WorldSenseAudioVideoZeroShot",
         ]
     ),
-    description="""MVEB (Massive Video Embedding Benchmark) is a curated audio-visual video benchmark with 42 tasks selected from MVEB(extended) via annotation-provenance, saturation/floor, and correlation-based redundancy filters (threshold=0.85, Spearman=0.955 with full pool). Tasks span 6 task types: retrieval (14), classification (9), clustering (5), pair classification (3), zero-shot classification (5), and video-centric QA (6), with 19 of them exercising joint audio-visual inputs.""",
+    description="""MVEB (Massive Video Embedding Benchmark) is a curated audio-visual video benchmark with 42 tasks across 6 task types: retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA. 19 of the 42 tasks exercise joint audio-visual inputs.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -3832,7 +3832,7 @@ MVEB_TEXT_VIDEO = Benchmark(
             "UCF101VideoZeroShotClassification",
         ]
     ),
-    description="""MVEB(text, video) is the text+video scope of MVEB — 29 tasks restricted to data modalities ⊆ {video, text, image}, intended for models without an audio encoder (e.g. xclip, UME-R1, ebind-points-vision). Selected from MVEB(extended) with the same annotation/saturation/redundancy pipeline as MVEB. Spearman=0.911 with the full pool.""",
+    description="""MVEB(text, video) is the text+video scope of MVEB with 29 tasks for models without an audio encoder, covering retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -3861,7 +3861,7 @@ MVEB_VIDEO = Benchmark(
             "VinogroundPairClassification",
         ]
     ),
-    description="""MVEB(video) is the video-only scope of MVEB — 10 tasks whose data modality is {video}, intended for V-only encoders (e.g. vjepa2). Retrieval, QA, and zero-shot tasks are excluded by construction since they require a text encoder. Selected from MVEB(extended) with the same pipeline as MVEB.""",
+    description="""MVEB(video) is the video-only scope of MVEB with 10 tasks for V-only encoders, covering classification, clustering, and pair classification. Retrieval, QA, and zero-shot tasks are excluded since they require a text encoder.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
