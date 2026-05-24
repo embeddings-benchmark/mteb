@@ -17,19 +17,24 @@ def get_task_type(task_name: str) -> str:
     except Exception:
         return "Unknown"
 
-def plot_performance(df_to_plot: pd.DataFrame, title: str, ylabel: str, output_path: Path, ymin: float = None):
+def plot_performance(df_to_plot: pd.DataFrame, title: str, ylabel: str, output_path: Path, ymin: float = None, legend_ncol: int = 1):
     """Reusable function to generate and save a line plot for performance scaling."""
-    # Ensure index is numeric to prevent categorical spacing
-    df_to_plot.index = pd.to_numeric(df_to_plot.index)
+    # Scale to 100 format
+    df_to_plot = df_to_plot * 100
+    if ymin is not None:
+        ymin = ymin * 100
 
-    ax = df_to_plot.plot(kind='line', marker='o', figsize=(10, 6))
-    ax.set_title(title)
-    ax.set_xlabel("Number of Frames")
-    ax.set_ylabel(ylabel)
+    # Ensure index is string to make points equidistant
+    df_to_plot.index = df_to_plot.index.astype(str)
 
-    # Use standard linear scale for X-Axis to accurately reflect the frame count distance
-    ax.set_xticks(df_to_plot.index)
-    ax.set_xticklabels(df_to_plot.index)
+    ax = df_to_plot.plot(kind='line', marker='o', figsize=(10, 6), fontsize=14)
+    ax.set_title(title, fontsize=18)
+    ax.set_xlabel("Number of Frames", fontsize=16)
+    ax.set_ylabel(ylabel, fontsize=16)
+
+    # Use categorical x-ticks
+    ax.set_xticks(range(len(df_to_plot.index)))
+    ax.set_xticklabels(df_to_plot.index, fontsize=14)
 
     ax.grid(True)
 
@@ -43,7 +48,7 @@ def plot_performance(df_to_plot: pd.DataFrame, title: str, ylabel: str, output_p
         ax.set_ylim(bottom=ymin)
 
     # Add legend at the bottom right
-    ax.legend(loc='lower right')
+    ax.legend(loc='lower right', fontsize=12, ncol=legend_ncol)
 
     plt.tight_layout()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
@@ -215,7 +220,8 @@ def main():
             title="Effect of Frame Count Across Tasks",
             ylabel="Mean Performance",
             output_path=plot_dir / "task_performance_scaling.png",
-            ymin=0.0
+            ymin=0.0,
+            legend_ncol=2
         )
 
 if __name__ == "__main__":
