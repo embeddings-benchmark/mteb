@@ -44,10 +44,9 @@ _AUDIO_RETRIEVAL_SUFFIXES = (
 
 def task_category(task_name: str, mteb_task_type: str) -> str:
     """Map mteb task type → display category. Retrieval is split into
-    'A-V Retr' (audio-conditioned) and 'T-V Retr' (text-video) for richer
-    reporting."""
+    'AV Retr' (audio-conditioned) and 'TV Retr' (text-video)."""
     if mteb_task_type == "Any2AnyRetrieval":
-        return "A-V Retr" if any(task_name.endswith(s) for s in _AUDIO_RETRIEVAL_SUFFIXES) else "T-V Retr"
+        return "AV Retr" if any(task_name.endswith(s) for s in _AUDIO_RETRIEVAL_SUFFIXES) else "TV Retr"
     return {
         "VideoCentricQA": "QA",
         "VideoClassification": "Cls",
@@ -57,7 +56,7 @@ def task_category(task_name: str, mteb_task_type: str) -> str:
     }.get(mteb_task_type, mteb_task_type)
 
 
-CATEGORY_ORDER = ["T-V Retr", "A-V Retr", "QA", "Cls", "Clust", "Pair", "ZS"]
+CATEGORY_ORDER = ["TV Retr", "AV Retr", "QA", "Cls", "Clust", "Pair", "ZS"]
 
 
 # ---------------------------------------------------------------------------
@@ -192,6 +191,24 @@ def category_averages(
 # LaTeX emission
 # ---------------------------------------------------------------------------
 
+def _fmt_params(n_params: int | None) -> str:
+    """Format param count as "847M" or "8.9B"."""
+    if n_params is None or pd.isna(n_params):
+        return "--"
+    if n_params >= 1_000_000_000:
+        return f"{n_params / 1_000_000_000:.1f}B"
+    return f"{n_params / 1_000_000:.0f}M"
+
+
+def _model_params(model_name: str) -> int | None:
+    """Look up parameter count via mteb model metadata; None if unknown."""
+    try:
+        meta = mteb.get_model_meta(model_name)
+        return meta.n_parameters
+    except Exception:
+        return None
+
+
 def _fmt_score(value: float, global_best: float, group_best: float) -> str:
     if pd.isna(value):
         return "-"
@@ -277,8 +294,8 @@ def emit_scope_table(
 
     cat_glossary = (
         ", ".join({
-            "T-V Retr": r"T-V Retr (text--video retrieval)",
-            "A-V Retr": r"A-V Retr (audio-conditioned retrieval)",
+            "TV Retr": r"TV Retr (text--video retrieval)",
+            "AV Retr": r"AV Retr (audio-conditioned retrieval)",
             "QA": "QA",
             "Cls": "Cls (classification)",
             "Clust": "Clust (clustering)",
@@ -297,40 +314,43 @@ def emit_scope_table(
         r"\textbf{Mean} is the arithmetic mean over the model's evaluated tasks; "
         r"\textbf{Macro} is the macro-average across task categories (each category "
         r"weighted equally regardless of task count). Task categories: " + cat_glossary +
-        r". Best score per column in \textbf{bold}.}"
+        r". \textbf{Bold} = best per column.}"
     )
     out.append(r"    \label{" + meta["label"] + r"}")
     out.append(r"    \resizebox{\textwidth}{!}{\setlength{\tabcolsep}{4pt}{\footnotesize")
-    col_spec = "l" + "c" + "|" + "c"*2 + "|" + "c"*len(cats_present)
-    ncols = 1 + 1 + 2 + len(cats_present)
+    col_spec = "l" + "c" + "|" + "c" + "|" + "c"*2 + "|" + "c"*len(cats_present)
+    ncols = 1 + 1 + 1 + 2 + len(cats_present)
     out.append(r"    \begin{tabular}{" + col_spec + r"}")
     out.append(r"    \toprule")
     out.append(
-        r"     & \textbf{Rank} ($\downarrow$) & \multicolumn{2}{c|}{\textbf{Average}} & "
+        r"     & & \textbf{Rank} ($\downarrow$) & \multicolumn{2}{c|}{\textbf{Average}} & "
         r"\multicolumn{" + str(len(cats_present)) + r"}{c}{\textbf{Average per Category}} \\"
     )
-    out.append(r"    \cmidrule(r){2-2} \cmidrule(lr){3-4} \cmidrule(l){5-" + str(ncols) + r"}")
+    out.append(r"    \cmidrule(r){3-3} \cmidrule(lr){4-5} \cmidrule(l){6-" + str(ncols) + r"}")
     cat_headers = " & ".join(f"\\textbf{{{c}}}" for c in cats_present)
-    out.append(r"    \textbf{Model} & " + cap_scope + r" & Mean & Macro & " + cat_headers + r" \\")
+    out.append(r"    \textbf{Model} & \textbf{Params} & " + cap_scope + r" & Mean & Macro & " + cat_headers + r" \\")
     out.append(r"    \midrule")
     count_cells = " & ".join(f"\\textcolor{{gray}}{{({cat_counts[c]})}}" for c in cats_present)
     out.append(
-        r"    \textcolor{gray}{Number of tasks} & & & & " + count_cells + r" \\"
+        r"    \textcolor{gray}{Number of tasks} & & & & & " + count_cells + r" \\"
     )
     out.append(r"    \midrule")
 
     for m in df.index:
         row = df.loc[m]
         display = m.split("/")[-1].replace("_", "\\_")
+        params = _fmt_params(_model_params(m))
+        # Single-group tables: no grey highlight needed. Only bold for best.
         cells = [
             display,
-            _fmt_rank(rank.loc[m], best["rank"], best["rank"]),
-            _fmt_score(row["mean"], best["mean"], best["mean"]),
-            _fmt_score(row["macro"], best["macro"], best["macro"]),
+            params,
+            _fmt_rank(rank.loc[m], best["rank"], None),
+            _fmt_score(row["mean"], best["mean"], None),
+            _fmt_score(row["macro"], best["macro"], None),
         ]
         for cat in cats_present:
             v = cat_avgs[cat].get(m, np.nan)
-            cells.append(_fmt_score(v, best.get(cat), best.get(cat)))
+            cells.append(_fmt_score(v, best.get(cat), None))
         out.append("    " + " & ".join(cells) + r" \\")
 
     out.append(r"    \bottomrule")
