@@ -196,30 +196,22 @@ _EBIND_COMMON = dict(
     extra_requirements_groups=["ebind"],
 )
 
-# Audio + video tasks built on the eBind training data (E-MM1, paper Table 4:
-# Valor, GCC, AudioSet, Flickr, VGGSound, AudioCaps, OpenShape, COCO, ImageNet).
 _EBIND_AV_TRAINING = {
-    # VALOR-32K
     "VALOR32KA2VRetrieval", "VALOR32KAT2VRetrieval", "VALOR32KT2VARetrieval",
     "VALOR32KT2VRetrieval", "VALOR32KV2ARetrieval", "VALOR32KV2TRetrieval",
     "VALOR32KVA2TRetrieval", "VALOR32KVT2ARetrieval",
-    # VGGSound
     "VGGSoundV", "VGGSoundVA", "VGGSoundVideoZeroshot", "VGGSoundVideoAudioZeroshot",
     "VGGSoundAVA2VRetrieval", "VGGSoundAVAT2VRetrieval", "VGGSoundAVT2VRetrieval",
     "VGGSoundAVT2VARetrieval", "VGGSoundAVV2ARetrieval", "VGGSoundAVV2TRetrieval",
     "VGGSoundAVVA2TRetrieval", "VGGSoundAVVT2ARetrieval",
-    # AudioCaps
     "AudioCapsA2TRetrieval", "AudioCapsT2ARetrieval",
     "AudioCapsAVA2VRetrieval", "AudioCapsAVAT2VRetrieval", "AudioCapsAVT2VRetrieval",
     "AudioCapsAVT2VARetrieval", "AudioCapsAVV2ARetrieval", "AudioCapsAVV2TRetrieval",
     "AudioCapsAVVA2TRetrieval", "AudioCapsAVVT2ARetrieval",
-    # ImageNet (image tower training data)
     "Imagenet1k", "Imagenet1kZeroShot",
 }
 
 _EBIND_POINTS_TRAINING = {
-    # eBind points-vision shares the image tower with the full model;
-    # ImageNet is the only MTEB-mappable training source for that branch.
     "Imagenet1k", "Imagenet1kZeroShot",
 }
 

@@ -217,39 +217,26 @@ _UME_R1_CITATION = """@article{lan2025ume,
   year={2025}
 }"""
 
-# UME-sft-train mixes ~1.46M pairs from MMEB-V1/V2 in-distribution
-# sources (paper appendix). MVEB-mappable video subset:
 _UME_R1_TRAINING = {
-    # Kinetics-700
     "Kinetics700V", "Kinetics700VA",
     "Kinetics700VZeroShot", "Kinetics700VAZeroShot",
-    # SomethingSomethingV2
     "SomethingSomethingV2Classification",
-    # HMDB51
     "HMDB51Classification", "HMDB51Clustering", "HMDB51ZeroShot",
-    # UCF101
     "UCF101", "UCF101VideoClassification", "UCF101VideoAudioClassification",
     "UCF101VideoClustering", "UCF101AudioVideoClustering",
-    # Breakfast
     "BreakfastClassification",
-    # DiDeMo
     "DiDeMoA2VRetrieval", "DiDeMoAT2VRetrieval", "DiDeMoT2VRetrieval",
     "DiDeMoT2VARetrieval", "DiDeMoV2ARetrieval", "DiDeMoV2TRetrieval",
     "DiDeMoVA2TRetrieval", "DiDeMoVT2ARetrieval",
-    # MSR-VTT
     "MSRVTTA2V", "MSRVTTAT2V", "MSRVTTT2V", "MSRVTTT2VA",
     "MSRVTTV2A", "MSRVTTV2T", "MSRVTTVA2T", "MSRVTTVT2A",
-    # MSVD
     "MSVDT2VRetrieval", "MSVDV2TRetrieval",
-    # VATEX
     "VATEXA2VRetrieval", "VATEXAT2VRetrieval", "VATEXT2VRetrieval",
     "VATEXT2VARetrieval", "VATEXV2ARetrieval", "VATEXV2TRetrieval",
     "VATEXVA2TRetrieval", "VATEXVT2ARetrieval",
-    # YouCook2
     "YouCook2A2VRetrieval", "YouCook2AT2VRetrieval", "YouCook2T2VRetrieval",
     "YouCook2T2VARetrieval", "YouCook2V2ARetrieval", "YouCook2V2TRetrieval",
     "YouCook2VA2TRetrieval", "YouCook2VT2ARetrieval",
-    # Image / classification in-dist MMEB sources
     "Imagenet1k", "Imagenet1kZeroShot",
 }
 

@@ -278,40 +278,26 @@ _PE_AV_CITATION = r"""
 }
 """
 
-# PE-AV data engine (paper Table 1) builds synthetic captions on top of
-# these public clip sources, all of which are used as training data:
-# AudioCaps, Clotho-V2, VALOR-32K, VGGSound, Kinetics-400, Kinetics-700,
-# HMDB, MSR-VTT, MSVD, ActivityNet, DiDeMo (plus several non-MVEB audio
-# sets: GTzan, US8K, NSynth, ESC50, CREMA-D, VCTK, Common Voice 13).
 _PE_AV_TRAINING = {
-    # AudioCaps
     "AudioCapsA2TRetrieval", "AudioCapsT2ARetrieval",
     "AudioCapsAVA2VRetrieval", "AudioCapsAVAT2VRetrieval",
     "AudioCapsAVT2VRetrieval", "AudioCapsAVT2VARetrieval",
     "AudioCapsAVV2ARetrieval", "AudioCapsAVV2TRetrieval",
     "AudioCapsAVVA2TRetrieval", "AudioCapsAVVT2ARetrieval",
-    # VALOR-32K
     "VALOR32KA2VRetrieval", "VALOR32KAT2VRetrieval", "VALOR32KT2VARetrieval",
     "VALOR32KT2VRetrieval", "VALOR32KV2ARetrieval", "VALOR32KV2TRetrieval",
     "VALOR32KVA2TRetrieval", "VALOR32KVT2ARetrieval",
-    # VGGSound
     "VGGSoundV", "VGGSoundVA", "VGGSoundVideoZeroshot", "VGGSoundVideoAudioZeroshot",
     "VGGSoundAVA2VRetrieval", "VGGSoundAVAT2VRetrieval", "VGGSoundAVT2VRetrieval",
     "VGGSoundAVT2VARetrieval", "VGGSoundAVV2ARetrieval", "VGGSoundAVV2TRetrieval",
     "VGGSoundAVVA2TRetrieval", "VGGSoundAVVT2ARetrieval",
-    # Kinetics-400 / Kinetics-700
     "Kinetics400V", "Kinetics400VA", "Kinetics400ZeroShot", "Kinetics400VAZeroShot",
     "Kinetics700V", "Kinetics700VA", "Kinetics700VZeroShot", "Kinetics700VAZeroShot",
-    # HMDB51
     "HMDB51Classification", "HMDB51Clustering", "HMDB51ZeroShot",
-    # MSR-VTT
     "MSRVTTA2V", "MSRVTTAT2V", "MSRVTTT2V", "MSRVTTT2VA",
     "MSRVTTV2A", "MSRVTTV2T", "MSRVTTVA2T", "MSRVTTVT2A",
-    # MSVD
     "MSVDT2VRetrieval", "MSVDV2TRetrieval",
-    # ActivityNet Captions
     "ActivityNetCaptionsT2VRetrieval", "ActivityNetCaptionsV2TRetrieval",
-    # DiDeMo
     "DiDeMoA2VRetrieval", "DiDeMoAT2VRetrieval", "DiDeMoT2VRetrieval",
     "DiDeMoT2VARetrieval", "DiDeMoV2ARetrieval", "DiDeMoV2TRetrieval",
     "DiDeMoVA2TRetrieval", "DiDeMoVT2ARetrieval",
