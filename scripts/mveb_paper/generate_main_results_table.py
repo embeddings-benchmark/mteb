@@ -440,17 +440,30 @@ def main() -> None:
     df = load_results(args.results_dir, all_tasks)
     print(f"Loaded {len(df)} models with at least one task result")
 
-    # Group models by their natural scope. MVEB(extended) is the audio+video+text
-    # superset, so it shares the mveb-scope model list.
-    models_by_scope: dict[str, list[str]] = {"mveb": [], "tv": [], "v": []}
+    # Each model's natural scope is the most-demanding tier it can run.
+    # Subset tables include every model that can run the subset's tasks:
+    #   - MVEB and MVEB(extended): only audio+video+text omni models.
+    #   - MVEB(text, video):       omni + text-video models.
+    #   - MVEB(video):             omni + text-video + video-only models (all).
+    natural_scope: dict[str, str] = {}
     for m in df.index:
         short = m.split("/")[-1]
         scope = MODEL_SCOPE.get(short)
-        if scope in models_by_scope:
-            models_by_scope[scope].append(m)
-        else:
+        if scope is None:
             print(f"  unknown model (skipped): {m}")
-    models_by_scope["ext"] = list(models_by_scope["mveb"])
+            continue
+        natural_scope[m] = scope
+
+    eligible = {
+        "mveb": {"mveb"},
+        "ext":  {"mveb"},
+        "tv":   {"mveb", "tv"},
+        "v":    {"mveb", "tv", "v"},
+    }
+    models_by_scope: dict[str, list[str]] = {
+        k: [m for m, s in natural_scope.items() if s in eligible[k]]
+        for k in ("mveb", "ext", "tv", "v")
+    }
 
     outputs = {
         "mveb": args.tables_dir / "mveb_main_results.tex",
