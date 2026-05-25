@@ -354,7 +354,7 @@ class AbsTaskRetrieval(AbsTask):
         """
         timer = timer or TimingStack()
         if not self.data_loaded:
-            self.load_data(num_proc=num_proc, timer=timer, **kwargs)
+            self.load_data(num_proc=num_proc, timer=timer)
         # TODO: convert all tasks directly https://github.com/embeddings-benchmark/mteb/issues/2030
         self.convert_v1_dataset_format_to_v2(num_proc=num_proc)
 

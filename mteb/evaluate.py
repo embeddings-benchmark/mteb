@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import datetime
 import logging
+import time
 import warnings
 from pathlib import Path
-from time import time
 from typing import TYPE_CHECKING, cast
 
 from datasets.exceptions import DatasetNotFoundError
@@ -144,10 +144,12 @@ def _evaluate_task(
     if not data_preloaded:
         try:
             num_phases_before = len(timer.phases)
-            start_load = time()
+            start_load = time.monotonic()
             task.load_data(num_proc=num_proc, timer=timer)
             if len(timer.phases) == num_phases_before:
-                timer.add_phase("Data loading", start_load, time(), split="", subset="")
+                timer.add_phase(
+                    "Data loading", start_load, time.monotonic(), split="", subset=""
+                )
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
                 msg = (

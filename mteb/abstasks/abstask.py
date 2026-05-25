@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import tempfile
+import time
 import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
@@ -190,7 +191,13 @@ class AbsTask(ABC):  # noqa: PLR0904
             )
 
         if not self.data_loaded:
-            self.load_data(timer=timer)
+            num_phases_before = len(timer.phases)
+            start_load = time.monotonic()
+            self.load_data(num_proc=num_proc, timer=timer)
+            if len(timer.phases) == num_phases_before:
+                timer.add_phase(
+                    "Data loading", start_load, time.monotonic(), split="", subset=""
+                )
 
         self.dataset = cast("dict[HFSubset, DatasetDict]", self.dataset)
 
