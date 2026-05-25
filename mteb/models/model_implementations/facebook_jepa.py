@@ -316,6 +316,7 @@ vjepa2_vitg_fpc32_384_diving48 = ModelMeta(
     use_instructions=False,
     training_datasets={
         "Diving48ClassificationV1",
+        "Diving48Classification.V2",
     },
     adapted_from="facebook/vjepa2-vitg-fpc64-384",
     superseded_by=None,
@@ -349,6 +350,7 @@ vjepa2_vitl_fpc32_256_diving48 = ModelMeta(
     use_instructions=False,
     training_datasets={
         "Diving48ClassificationV1",
+        "Diving48Classification.V2",
     },
     adapted_from="facebook/vjepa2-vitl-fpc64-256",
     superseded_by=None,
