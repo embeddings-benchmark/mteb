@@ -109,7 +109,9 @@ def compute_deltas(
         v_name = v_task.metadata.name
         va_name = va_task.metadata.name
         dataset_path = v_task.metadata.dataset.get("path", "")
-        dataset_short = dataset_path.split("/")[-1] if "/" in dataset_path else dataset_path
+        dataset_short = (
+            dataset_path.split("/")[-1] if "/" in dataset_path else dataset_path
+        )
         task_type = v_task.metadata.type
         av_intent = dataset_path in AV_INTENTIONAL
 
@@ -141,9 +143,7 @@ def load_cross_modal_scores(
     models: list[str] | None,
 ) -> pd.DataFrame:
     """Load scores for v2a / a2v retrieval tasks."""
-    cross_tasks = [
-        t for t in all_tasks if t.metadata.category in ("v2a", "a2v")
-    ]
+    cross_tasks = [t for t in all_tasks if t.metadata.category in ("v2a", "a2v")]
     if not cross_tasks:
         return pd.DataFrame()
     scores = load_scores(cache, cross_tasks, models)
@@ -152,7 +152,9 @@ def load_cross_modal_scores(
         name = t.metadata.name
         cat = t.metadata.category
         dataset_path = t.metadata.dataset.get("path", "")
-        dataset_short = dataset_path.split("/")[-1] if "/" in dataset_path else dataset_path
+        dataset_short = (
+            dataset_path.split("/")[-1] if "/" in dataset_path else dataset_path
+        )
         for model, score in scores.get(name, {}).items():
             rows.append(
                 {
@@ -173,7 +175,9 @@ def print_section(title: str) -> None:
     print(f"{'=' * width}")
 
 
-def main(models: list[str] | None, output: str | None, cache: mteb.ResultCache | None = None) -> None:
+def main(
+    models: list[str] | None, output: str | None, cache: mteb.ResultCache | None = None
+) -> None:
     if cache is None:
         cache = mteb.ResultCache()
 
@@ -221,13 +225,17 @@ def main(models: list[str] | None, output: str | None, cache: mteb.ResultCache |
     model_summary = (
         df.groupby("model")["delta"]
         .agg(["mean", "std", "count"])
-        .rename(columns={"mean": "mean_delta", "std": "std_delta", "count": "n_datasets"})
+        .rename(
+            columns={"mean": "mean_delta", "std": "std_delta", "count": "n_datasets"}
+        )
         .sort_values("mean_delta", ascending=False)
     )
     print(model_summary.to_string())
 
     print_section("Cross-modal retrieval scores  (v2a / a2v)")
-    print("High score ≈ audio and video embeddings are well-aligned → audio may be redundant")
+    print(
+        "High score ≈ audio and video embeddings are well-aligned → audio may be redundant"
+    )
     cross_df = load_cross_modal_scores(cache, all_tasks, models)
     if cross_df.empty:
         print("No cross-modal retrieval results found.")
@@ -246,7 +254,9 @@ def main(models: list[str] | None, output: str | None, cache: mteb.ResultCache |
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument(
         "--models",
         nargs="*",
