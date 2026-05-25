@@ -19,16 +19,21 @@ import pandas as pd
 
 import mteb
 from scripts.mveb_paper._common import (
-    MVEB_BENCHMARK,
     OUT_DIR,
-    cache,
     fetch_model_meta,
     load_benchmark_means,
 )
 
+BENCHMARKS = ["MVEB", "MVEB(text, video)", "MVEB(video)"]
+XLIM_LEFT = {
+    "MVEB": np.log10(500e6),
+    "MVEB(text, video)": np.log10(100e6),
+    "MVEB(video)": np.log10(100e6),
+}
 
-def build_df() -> pd.DataFrame:
-    means = load_benchmark_means(MVEB_BENCHMARK, require_all_tasks=True)
+
+def build_df(benchmark_name: str) -> pd.DataFrame:
+    means = load_benchmark_means(benchmark_name, require_all_tasks=True)
     rows = []
     for model_name in means.index:
         meta = fetch_model_meta(model_name)
@@ -44,7 +49,9 @@ def build_df() -> pd.DataFrame:
     return result
 
 
-def plot_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
+def plot_panel(
+    ax: plt.Axes, df: pd.DataFrame, benchmark_name: str, xlim_left: float | None = None
+) -> None:
     ax.scatter(
         df["log_params"],
         df["mean"],
@@ -56,7 +63,6 @@ def plot_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
         zorder=3,
     )
 
-    # Pareto frontier (best score achievable at each model size)
     df_sorted = df.sort_values("log_params")
     best_mean = -np.inf
     pareto_rows = []
@@ -89,14 +95,16 @@ def plot_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
             color="#333333",
         )
 
-    xtick_labels = {9: "1B", 10: "10B"}
+    left = xlim_left if xlim_left is not None else np.log10(500e6)
+    all_ticks = {8: "100M", 9: "1B", 10: "10B"}
+    xtick_labels = {k: v for k, v in all_ticks.items() if k >= left}
     xticks = sorted(xtick_labels)
     ax.set_xticks(xticks)
     ax.set_xticklabels([xtick_labels[x] for x in xticks])
-    ax.set_xlim(np.log10(500e6), 10)
+    ax.set_xlim(left, 10)
     ax.set_xlabel("Number of Parameters", fontsize=10)
-    ax.set_ylabel("MVEB Mean Score (%)", fontsize=10)
-    ax.set_title("Model Size vs. MVEB Performance", fontsize=11)
+    ax.set_ylabel(f"{benchmark_name} Mean Score (%)", fontsize=10)
+    ax.set_title(f"Model Size vs. {benchmark_name}", fontsize=11)
     ax.legend(fontsize=9, frameon=False)
     ax.grid(True, alpha=0.3)
     ax.spines["top"].set_visible(False)
@@ -106,26 +114,33 @@ def plot_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
 def main() -> None:
     print(f"mteb version: {mteb.__version__}")
 
-    print("Loading MVEB results...")
-    df = build_df()
-    print(f"  {len(df)} models with parameter info")
-    if df.empty:
-        print("No models with parameter metadata found.")
-        return
+    fig, axes = plt.subplots(1, 3, figsize=(22, 5))
 
-    fig, ax = plt.subplots(figsize=(8, 5))
-    plot_panel(ax, df)
+    for ax, bench in zip(axes, BENCHMARKS):
+        print(f"Loading {bench} results...")
+        df = build_df(bench)
+        print(f"  {len(df)} models with parameter info")
+        if df.empty:
+            ax.text(
+                0.5, 0.5, "No data", ha="center", va="center", transform=ax.transAxes
+            )
+            ax.set_title(bench)
+            continue
+        plot_panel(ax, df, bench, xlim_left=XLIM_LEFT.get(bench))
+
+        print(f"  Top models:")
+        for _, row in df.nlargest(5, "mean").iterrows():
+            print(
+                f"    {row['mean']:5.1f}%  {int(row['n_parameters']):>12,}  {row['model']}"
+            )
+
     fig.tight_layout()
 
     out_pdf = OUT_DIR / "plot_size_vs_performance.pdf"
     out_png = OUT_DIR / "plot_size_vs_performance.png"
     fig.savefig(out_pdf, bbox_inches="tight")
     fig.savefig(out_png, dpi=150, bbox_inches="tight")
-    print(f"Saved to {out_pdf}")
-
-    print("\nTop models by mean score:")
-    for _, row in df.nlargest(10, "mean").iterrows():
-        print(f"  {row['mean']:5.1f}%  {int(row['n_parameters']):>12,}  {row['model']}")
+    print(f"\nSaved to {out_pdf}")
 
 
 if __name__ == "__main__":

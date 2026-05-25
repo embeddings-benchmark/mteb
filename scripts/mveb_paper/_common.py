@@ -13,7 +13,7 @@ sys.path.insert(0, str(ROOT))
 import mteb
 from mteb.cache import ResultCache
 
-RESULTS_PATH = Path("../../../results")
+RESULTS_PATH = ROOT.parent / "results"
 OUT_DIR = Path(__file__).parent
 
 MVEB_BENCHMARK = "MVEB"
