@@ -104,6 +104,20 @@ _JEPA_CITATION = """
     url={https://arxiv.org/abs/2506.09985},
 }"""
 
+# VideoMix22M (paper Table 1): SSv2 + Kinetics-400/600/700 + HowTo100M
+# + YT-Temporal-1B + ImageNet. Shared by all V-JEPA-2 checkpoints
+# (base variants and finetuned variants).
+_VJEPA2_PRETRAIN = {
+    "SomethingSomethingV2Classification",
+    "Kinetics400V", "Kinetics400VA",
+    "Kinetics400ZeroShot", "Kinetics400VAZeroShot",
+    "Kinetics600V", "Kinetics600VA",
+    "Kinetics600VZeroShot", "Kinetics600VAZeroShot",
+    "Kinetics700V", "Kinetics700VA",
+    "Kinetics700VZeroShot", "Kinetics700VAZeroShot",
+    "Imagenet1k", "Imagenet1kZeroShot",
+}
+
 vjepa2_vitl_fpc64_256 = ModelMeta(
     loader=VJepaV2Wrapper,
     loader_kwargs=dict(num_frames=64),
@@ -124,7 +138,7 @@ vjepa2_vitl_fpc64_256 = ModelMeta(
     reference="https://huggingface.co/facebook/vjepa2-vitl-fpc64-256",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
+    training_datasets=_VJEPA2_PRETRAIN,
     adapted_from=None,
     superseded_by=None,
     modalities=["video"],
@@ -155,7 +169,7 @@ vjepa2_vith_fpc64_256 = ModelMeta(
     reference="https://huggingface.co/facebook/vjepa2-vith-fpc64-256",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
+    training_datasets=_VJEPA2_PRETRAIN,
     adapted_from=None,
     superseded_by=None,
     modalities=["video"],
@@ -186,7 +200,7 @@ vjepa2_vitg_fpc64_256 = ModelMeta(
     reference="https://huggingface.co/facebook/vjepa2-vitg-fpc64-256",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
+    training_datasets=_VJEPA2_PRETRAIN,
     adapted_from=None,
     superseded_by=None,
     modalities=["video"],
@@ -217,7 +231,7 @@ vjepa2_vitg_fpc64_384 = ModelMeta(
     reference="https://huggingface.co/facebook/vjepa2-vitg-fpc64-384",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
+    training_datasets=_VJEPA2_PRETRAIN,
     adapted_from=None,
     superseded_by=None,
     modalities=["video"],
@@ -248,9 +262,7 @@ vjepa2_vitg_fpc64_384_ssv2 = ModelMeta(
     reference="https://huggingface.co/facebook/vjepa2-vitg-fpc64-384-ssv2",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets={
-        "SomethingSomethingV2Classification",
-    },
+    training_datasets=_VJEPA2_PRETRAIN,  # SSv2 fine-tune; already in pretrain mix
     adapted_from="facebook/vjepa2-vitg-fpc64-384",
     superseded_by=None,
     modalities=["video"],
@@ -281,9 +293,7 @@ vjepa2_vitl_fpc16_256_ssv2 = ModelMeta(
     reference="https://huggingface.co/facebook/vjepa2-vitl-fpc16-256-ssv2",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets={
-        "SomethingSomethingV2Classification",
-    },
+    training_datasets=_VJEPA2_PRETRAIN,  # SSv2 fine-tune; already in pretrain mix
     adapted_from="facebook/vjepa2-vitl-fpc64-256",
     superseded_by=None,
     modalities=["video"],
@@ -314,10 +324,7 @@ vjepa2_vitg_fpc32_384_diving48 = ModelMeta(
     reference="https://huggingface.co/facebook/vjepa2-vitg-fpc32-384-diving48",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets={
-        "Diving48ClassificationV1",
-        "Diving48Classification.V2",
-    },
+    training_datasets=_VJEPA2_PRETRAIN | {"Diving48ClassificationV1", "Diving48Classification.V2"},
     adapted_from="facebook/vjepa2-vitg-fpc64-384",
     superseded_by=None,
     modalities=["video"],
@@ -348,10 +355,7 @@ vjepa2_vitl_fpc32_256_diving48 = ModelMeta(
     reference="https://huggingface.co/facebook/vjepa2-vitl-fpc32-256-diving48",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets={
-        "Diving48ClassificationV1",
-        "Diving48Classification.V2",
-    },
+    training_datasets=_VJEPA2_PRETRAIN | {"Diving48ClassificationV1", "Diving48Classification.V2"},
     adapted_from="facebook/vjepa2-vitl-fpc64-256",
     superseded_by=None,
     modalities=["video"],

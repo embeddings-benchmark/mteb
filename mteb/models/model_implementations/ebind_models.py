@@ -197,7 +197,7 @@ _EBIND_COMMON = dict(
 )
 
 # Audio + video tasks built on the eBind training data (E-MM1, paper Table 4:
-# VALOR, VGGSound, AudioCaps as audio/video sources).
+# Valor, GCC, AudioSet, Flickr, VGGSound, AudioCaps, OpenShape, COCO, ImageNet).
 _EBIND_AV_TRAINING = {
     # VALOR-32K
     "VALOR32KA2VRetrieval", "VALOR32KAT2VRetrieval", "VALOR32KT2VARetrieval",
@@ -213,6 +213,14 @@ _EBIND_AV_TRAINING = {
     "AudioCapsAVA2VRetrieval", "AudioCapsAVAT2VRetrieval", "AudioCapsAVT2VRetrieval",
     "AudioCapsAVT2VARetrieval", "AudioCapsAVV2ARetrieval", "AudioCapsAVV2TRetrieval",
     "AudioCapsAVVA2TRetrieval", "AudioCapsAVVT2ARetrieval",
+    # ImageNet (image tower training data)
+    "Imagenet1k", "Imagenet1kZeroShot",
+}
+
+_EBIND_POINTS_TRAINING = {
+    # eBind points-vision shares the image tower with the full model;
+    # ImageNet is the only MTEB-mappable training source for that branch.
+    "Imagenet1k", "Imagenet1kZeroShot",
 }
 
 # n_parameters is the total loaded at runtime (backbone encoders + projectors).
@@ -253,6 +261,6 @@ ebind_points_vision = ModelMeta(
     embed_dim=1024,
     modalities=["text", "image", "video"],
     reference="https://huggingface.co/encord-team/ebind-points-vision",
-    training_datasets=set(),
+    training_datasets=_EBIND_POINTS_TRAINING,
     **_EBIND_COMMON,
 )
