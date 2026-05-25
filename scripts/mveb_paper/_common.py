@@ -25,7 +25,16 @@ COUNTERPART_COLORS: dict[str, str] = {
     "MAEB(beta)": "#f28e2b",
 }
 
-# MVEB task-type colours and display labels
+# MVEB task-type order, colours and display labels
+TYPE_ORDER: list[str] = [
+    "VideoClassification",
+    "VideoZeroshotClassification",
+    "VideoPairClassification",
+    "VideoClustering",
+    "VideoCentricQA",
+    "Any2AnyRetrieval",
+]
+
 TYPE_COLORS: dict[str, str] = {
     "Any2AnyRetrieval": "#4e79a7",
     "VideoClassification": "#e15759",
