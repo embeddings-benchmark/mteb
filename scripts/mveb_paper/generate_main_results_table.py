@@ -93,36 +93,37 @@ MODEL_SCOPE: dict[str, str] = {
 
 
 # Embedding paradigm shown in the leaderboard "Type" column.
+# Labels match the family table in section 2 (Methodology).
 MODEL_FAMILY: dict[str, str] = {
-    "e5-omni-3B": "MLLM",
-    "e5-omni-7B": "MLLM",
-    "LCO-Embedding-Omni-3B": "MLLM",
-    "LCO-Embedding-Omni-7B": "MLLM",
-    "OmniEmbed-v0.1": "MLLM",
-    "omni-embed-nemotron-3b": "MLLM",
-    "jina-embeddings-v5-omni-nano": "MLLM",
-    "jina-embeddings-v5-omni-small": "MLLM",
-    "UME-R1-2B": "MLLM",
-    "UME-R1-7B": "MLLM",
+    "e5-omni-3B": "MLLM Embed",
+    "e5-omni-7B": "MLLM Embed",
+    "LCO-Embedding-Omni-3B": "MLLM Embed",
+    "LCO-Embedding-Omni-7B": "MLLM Embed",
+    "OmniEmbed-v0.1": "MLLM Embed",
+    "omni-embed-nemotron-3b": "MLLM Embed",
+    "jina-embeddings-v5-omni-nano": "MLLM Embed",
+    "jina-embeddings-v5-omni-small": "MLLM Embed",
+    "UME-R1-2B": "MLLM Embed",
+    "UME-R1-7B": "MLLM Embed",
     "Qwen2.5-Omni-3B": "Gen-MLLM",
     "Qwen2.5-Omni-7B": "Gen-MLLM",
-    "ebind-audio-vision": "Bind",
-    "ebind-full": "Bind",
-    "ebind-points-vision": "Bind",
-    "pe-av-small": "AV-Contr",
-    "pe-av-base": "AV-Contr",
-    "pe-av-large": "AV-Contr",
-    "xclip-base-patch16": "VT-Contr",
-    "xclip-base-patch32": "VT-Contr",
-    "xclip-large-patch14": "VT-Contr",
-    "vjepa2-vitg-fpc64-256": "SSL-Vid",
-    "vjepa2-vitg-fpc64-384": "SSL-Vid",
-    "vjepa2-vitg-fpc64-384-ssv2": "SSL-Vid",
-    "vjepa2-vitg-fpc32-384-diving48": "SSL-Vid",
-    "vjepa2-vith-fpc64-256": "SSL-Vid",
-    "vjepa2-vitl-fpc64-256": "SSL-Vid",
-    "vjepa2-vitl-fpc16-256-ssv2": "SSL-Vid",
-    "vjepa2-vitl-fpc32-256-diving48": "SSL-Vid",
+    "ebind-audio-vision": "Multi-Bind",
+    "ebind-full": "Multi-Bind",
+    "ebind-points-vision": "Multi-Bind",
+    "pe-av-small": "Aud-Vis Contr",
+    "pe-av-base": "Aud-Vis Contr",
+    "pe-av-large": "Aud-Vis Contr",
+    "xclip-base-patch16": "Vid-Text Contr",
+    "xclip-base-patch32": "Vid-Text Contr",
+    "xclip-large-patch14": "Vid-Text Contr",
+    "vjepa2-vitg-fpc64-256": "Self-sup Vid",
+    "vjepa2-vitg-fpc64-384": "Self-sup Vid",
+    "vjepa2-vitg-fpc64-384-ssv2": "Self-sup Vid",
+    "vjepa2-vitg-fpc32-384-diving48": "Self-sup Vid",
+    "vjepa2-vith-fpc64-256": "Self-sup Vid",
+    "vjepa2-vitl-fpc64-256": "Self-sup Vid",
+    "vjepa2-vitl-fpc16-256-ssv2": "Self-sup Vid",
+    "vjepa2-vitl-fpc32-256-diving48": "Self-sup Vid",
 }
 
 
@@ -377,9 +378,7 @@ def emit_scope_table(
         r"\textbf{Mean} is the arithmetic mean over the model's evaluated tasks; "
         r"\textbf{Macro} is the macro-average across task categories (each category "
         r"weighted equally regardless of task count). Task categories: " + cat_glossary +
-        r". Model types: MLLM (MLLM-based embedding), Gen-MLLM (generative MLLM used as embedder), "
-        r"AV-Contr (audio-visual contrastive), VT-Contr (video-text contrastive), "
-        r"Bind (multimodal binding), SSL-Vid (self-supervised video encoder). "
+        r". Model types are defined in Table~\ref{tab:model-families}. "
         r"\textbf{Bold} = best per column.}"
     )
     out.append(r"    \label{" + meta["label"] + r"}")
