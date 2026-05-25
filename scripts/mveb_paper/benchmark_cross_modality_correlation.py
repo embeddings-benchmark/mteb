@@ -117,7 +117,7 @@ def main() -> None:
     print(f"mteb version: {mteb.__version__}")
 
     print("\nLoading MVEB scores...", end=" ", flush=True)
-    mveb_scores = load_benchmark_means(MVEB_BENCHMARK)
+    mveb_scores = load_benchmark_means(MVEB_BENCHMARK, require_all_tasks=True)
     print(f"{len(mveb_scores)} models")
 
     print("Loading counterpart benchmark scores:")

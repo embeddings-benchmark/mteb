@@ -13,7 +13,7 @@ sys.path.insert(0, str(ROOT))
 import mteb
 from mteb.cache import ResultCache
 
-RESULTS_PATH = Path("/Users/samoed/Desktop/results")
+RESULTS_PATH = Path("../../../results")
 OUT_DIR = Path(__file__).parent
 
 MVEB_BENCHMARK = "MVEB"
@@ -56,8 +56,13 @@ TYPE_ABBREV: dict[str, str] = {
 cache = ResultCache(cache_path=RESULTS_PATH)
 
 
-def load_benchmark_means(benchmark_name: str) -> pd.Series:
-    """Per-model mean score (0–1) across all available tasks in the benchmark."""
+def load_benchmark_means(
+    benchmark_name: str, require_all_tasks: bool = False
+) -> pd.Series:
+    """Per-model mean score (0–1) across all available tasks in the benchmark.
+
+    If require_all_tasks is True, models missing any task are excluded.
+    """
     bench = mteb.get_benchmark(benchmark_name)
     tasks = bench.tasks
     results = cache.load_results(tasks=tasks, require_model_meta=False)
@@ -65,7 +70,11 @@ def load_benchmark_means(benchmark_name: str) -> pd.Series:
     available = [t.metadata.name for t in tasks if t.metadata.name in df.index]
     if not available:
         return pd.Series(dtype=float)
-    return df.loc[available].mean(axis=0, skipna=True).dropna()
+    sub = df.loc[available]
+    if require_all_tasks:
+        complete = sub.columns[sub.notna().sum(axis=0) == len(available)]
+        sub = sub[complete]
+    return sub.mean(axis=0, skipna=True).dropna()
 
 
 def fetch_model_meta(name: str) -> dict:

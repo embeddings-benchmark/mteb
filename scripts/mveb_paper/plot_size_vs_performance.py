@@ -28,7 +28,7 @@ from scripts.mveb_paper._common import (
 
 
 def build_df() -> pd.DataFrame:
-    means = load_benchmark_means(MVEB_BENCHMARK)
+    means = load_benchmark_means(MVEB_BENCHMARK, require_all_tasks=True)
     rows = []
     for model_name in means.index:
         meta = fetch_model_meta(model_name)
@@ -89,11 +89,11 @@ def plot_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
             color="#333333",
         )
 
-    xtick_labels = {8: "100M", 9: "1B", 10: "10B"}
+    xtick_labels = {9: "1B", 10: "10B"}
     xticks = sorted(xtick_labels)
     ax.set_xticks(xticks)
     ax.set_xticklabels([xtick_labels[x] for x in xticks])
-    ax.set_xlim(8, 10)
+    ax.set_xlim(np.log10(500e6), 10)
     ax.set_xlabel("Number of Parameters", fontsize=10)
     ax.set_ylabel("MVEB Mean Score (%)", fontsize=10)
     ax.set_title("Model Size vs. MVEB Performance", fontsize=11)
