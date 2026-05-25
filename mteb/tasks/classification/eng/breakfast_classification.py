@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class BreakfastClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="BreakfastClassification",
-        description="The Breakfast Actions dataset contains 433 videos of 10 breakfast-related activities (e.g. making coffee, preparing cereal, frying eggs) recorded in 18 different kitchens. The task is to classify each video into the correct activity.",
+        description="The Breakfast Actions dataset contains 433 videos of 10 breakfast-related activities (e.g. making coffee, preparing cereal, frying eggs) recorded in 18 different kitchens. The task is to classify each video into the correct activity. Used only camera-01 clips, capped at 50 per class across 10 meal classes (~433 test).",
         reference="https://ieeexplore.ieee.org/document/6909500",
         dataset={
             "path": "mteb/Breakfast",

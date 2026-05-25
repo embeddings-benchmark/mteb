@@ -19,7 +19,7 @@ CITATION = r"""
 class MusicAVQACLSAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="MusicAVQACLSAudioVideoZeroShot",
-        description="MUSIC-AVQA classification dataset containing 22 instrument categories. Given a video and audio of someone playing an instrument, the goal is to predict the instrument type. This zero-shot variant uses both video and audio modalities.",
+        description="MUSIC-AVQA classification dataset containing 22 instrument categories. Given a video and audio of someone playing an instrument, the goal is to predict the instrument type. This zero-shot variant uses both video and audio modalities. Filtered the test split to rows with a 22-class instrument answer (~1,706 examples).",
         reference="https://arxiv.org/abs/2203.14072",
         dataset={
             "path": "mteb/MUSIC-AVQA_cls-preprocessed",
@@ -55,7 +55,7 @@ class MusicAVQACLSAudioVideoZeroShotClassification(AbsTaskZeroShotClassification
 class MusicAVQACLSVideoZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="MusicAVQACLSVideoZeroShot",
-        description="MUSIC-AVQA classification dataset containing 22 instrument categories. Given a video and audio of someone playing an instrument, the goal is to predict the instrument type. This zero-shot variant uses video only.",
+        description="MUSIC-AVQA classification dataset containing 22 instrument categories. Given a video and audio of someone playing an instrument, the goal is to predict the instrument type. This zero-shot variant uses video only. Filtered the test split to rows with a 22-class instrument answer (~1,706 examples).",
         reference="https://arxiv.org/abs/2203.14072",
         dataset={
             "path": "mteb/MUSIC-AVQA_cls-preprocessed",

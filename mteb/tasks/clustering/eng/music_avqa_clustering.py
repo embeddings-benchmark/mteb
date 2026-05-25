@@ -4,7 +4,7 @@ from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 BIBTEX = r"""
-@article{Li2022Learning,
+@article{li2022learning,
   author = {Guangyao li, Yake Wei, Yapeng Tian, Chenliang Xu, Ji-Rong Wen, Di Hu},
   journal = {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
   title = {Learning to Answer Questions in Dynamic Audio-Visual Scenarios},
@@ -26,7 +26,8 @@ DESCRIPTION_BASE = (
 class MusicAVQACLSAudioVideoClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="MusicAVQACLSAudioVideoClustering",
-        description=DESCRIPTION_BASE + " Uses synchronized video and audio.",
+        description=DESCRIPTION_BASE
+        + " Uses synchronized video and audio. Filtered the test split to rows with a 22-class instrument answer (~1,706 examples).",
         reference="https://gewu-lab.github.io/MUSIC-AVQA/",
         dataset=DATASET,
         type="VideoClustering",
@@ -59,7 +60,8 @@ class MusicAVQACLSAudioVideoClustering(AbsTaskClustering):
 class MusicAVQACLSVideoClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="MusicAVQACLSVideoClustering",
-        description=DESCRIPTION_BASE + " Uses video only.",
+        description=DESCRIPTION_BASE
+        + " Uses video only. Filtered the test split to rows with a 22-class instrument answer (~1,706 examples).",
         reference="https://gewu-lab.github.io/MUSIC-AVQA/",
         dataset=DATASET,
         type="VideoClustering",

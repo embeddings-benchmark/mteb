@@ -266,8 +266,10 @@ class AbsEncoder(ABC):
             The instruction to be used for encoding sentences.
         """
         instruction = self.get_instruction(task_metadata, prompt_type)
-        if self.instruction_template and len(instruction) > 0:
-            return self.format_instruction(instruction, prompt_type)
+        if self.instruction_template:
+            # Always invoke callables. Issue https://github.com/embeddings-benchmark/mteb/issues/4683
+            if callable(self.instruction_template) or len(instruction) > 0:
+                return self.format_instruction(instruction, prompt_type)
         return instruction
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
@@ -425,7 +427,7 @@ def get_prompt_name(  # noqa: PLR0911
     ):
         return f"{task_type}-{prompt_type_value}"
     if task_type and task_type in model_prompts:
-        return task_type
+        return cast("str", task_type)
     if prompt_type and prompt_type_value in model_prompts:
         return prompt_type_value
     logger.info(

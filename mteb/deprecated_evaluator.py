@@ -50,6 +50,7 @@ class MTEB:
 
     _tasks: Iterable[str | AbsTask] | None
     tasks: list[AbsTask]
+    benchmarks: Iterable[Benchmark]
 
     @deprecated(
         "MTEB is deprecated and will be removed in future versions. "
@@ -69,7 +70,7 @@ class MTEB:
             err_logs_path: Path to save error logs.
         """
         if isinstance(next(iter(tasks)), Benchmark):
-            self.benchmarks = tasks
+            self.benchmarks = cast("Iterable[Benchmark]", tasks)
             self.tasks = list(chain.from_iterable(cast("Iterable[Benchmark]", tasks)))
         elif isinstance(next(iter(tasks)), AbsTask):
             self.tasks = list(cast("Iterable[AbsTask]", tasks))
@@ -92,7 +93,9 @@ class MTEB:
         """Set of available task categories."""
         return {x.metadata.category for x in self.tasks}
 
-    def _display_tasks(self, task_list: Iterable[AbsTask], name: str | None = None):
+    def _display_tasks(
+        self, task_list: Iterable[AbsTask], name: str | None = None
+    ) -> None:
         from rich.console import Console
 
         # disable logging for other ranks
@@ -124,7 +127,7 @@ class MTEB:
                     console.print(f"{prefix}{name}{category}{multilingual}")
                 console.print("\n")
 
-    def mteb_benchmarks(self):
+    def mteb_benchmarks(self) -> None:
         """Get all benchmarks available in the MTEB."""
         from mteb.get_tasks import MTEBTasks
 
@@ -154,17 +157,17 @@ class MTEB:
             self._display_tasks(benchmark.tasks, name=name)
 
     @classmethod
-    def mteb_tasks(cls):
+    def mteb_tasks(cls) -> None:
         """Get all tasks available in the MTEB."""
         tasks = get_tasks()
         instance = cls(tasks)
         instance._display_tasks(tasks, name="MTEB tasks")
 
-    def print_selected_tasks(self):
+    def print_selected_tasks(self) -> None:
         """Print the selected tasks."""
         self._display_tasks(self.tasks, name="Selected tasks")
 
-    def load_tasks_data(self):
+    def load_tasks_data(self) -> None:
         """Load datasets for the selected tasks."""
         logger.info(f"\n\n## Loading datasets for {len(self.tasks)} tasks")
         for task in self.tasks:
@@ -180,7 +183,7 @@ class MTEB:
         *,
         encode_kwargs: EncodeKwargs,
         **kwargs: Any,
-    ):
+    ) -> tuple[Any, float, float]:
         tick = time()
         results = task.evaluate(
             model,
@@ -269,7 +272,7 @@ class MTEB:
         raise_error: bool = True,
         co2_tracker: bool = False,
         encode_kwargs: EncodeKwargs | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> list[TaskResult]:
         """Run the evaluation pipeline on the selected tasks.
 
@@ -454,7 +457,7 @@ class MTEB:
                 task.load_data()
 
                 task_results: dict[str, dict[str, dict[str, Any]]] = {}
-                evaluation_time = 0
+                evaluation_time: float = 0
                 kg_co2_emissions: int | None = 0 if co2_tracker else None
 
                 self._last_evaluated_splits[task.metadata.name] = []
@@ -478,7 +481,7 @@ class MTEB:
 
                     if co2_tracker:
                         try:
-                            from codecarbon import (  # type: ignore[import-not-found,import-untyped]
+                            from codecarbon import (  # type: ignore[import-not-found]
                                 EmissionsTracker,
                             )
                         except ImportError:

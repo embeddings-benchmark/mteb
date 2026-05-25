@@ -19,7 +19,7 @@ CITATION = r"""
 class Kinetics400VAClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Kinetics400VA",
-        description="Kinetics-400 is a large-scale action recognition dataset containing 400 human action classes from YouTube videos. Each clip is approximately 10 seconds long.",
+        description="Kinetics-400 is a large-scale action recognition dataset containing 400 human action classes from YouTube videos. Each clip is approximately 10 seconds long. Sampled 25 random shard files from each official path list, capped at 10 per class across 400 classes (~3,970 train / ~4,000 test).",
         reference="https://arxiv.org/abs/1705.06950",
         dataset={
             "path": "mteb/kinetics-400",
@@ -54,7 +54,7 @@ class Kinetics400VAClassification(AbsTaskClassification):
 class Kinetics400VClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Kinetics400V",
-        description="Kinetics-400 is a large-scale action recognition dataset containing 400 human action classes from YouTube videos. Each clip is approximately 10 seconds long.",
+        description="Kinetics-400 is a large-scale action recognition dataset containing 400 human action classes from YouTube videos. Each clip is approximately 10 seconds long. Sampled 25 random shard files from each official path list, capped at 10 per class across 400 classes (~3,970 train / ~4,000 test).",
         reference="https://arxiv.org/abs/1705.06950",
         dataset={
             "path": "mteb/kinetics-400",

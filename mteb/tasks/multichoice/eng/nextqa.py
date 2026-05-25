@@ -10,7 +10,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class NExTQAVideoCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NExTQAVideoCentricQA",
-        description="NExT-QA is a video question answering benchmark targeting causal and temporal reasoning over everyday videos. Each example pairs a short video with a natural language question and 5 candidate answers, of which exactly one is correct. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate from its 5 choices.",
+        description="NExT-QA is a video question answering benchmark targeting causal and temporal reasoning over everyday videos. Each example pairs a short video with a natural language question and 5 candidate answers, of which exactly one is correct. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate from its 5 choices. Sampled the test split (~993 examples).",
         reference="https://arxiv.org/abs/2105.08276",
         dataset={
             "path": "mteb/NExT-QA",

@@ -10,6 +10,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from mteb import get_tasks
+from mteb.benchmarks.benchmarks.benchmarks import MVEB, MVEB_TEXT_VIDEO, MVEB_VIDEO
+
+# Build sets of task names in each benchmark scope
+_MVEB_TASKS = {t.metadata.name for t in MVEB.tasks}
+_MVEB_TV_TASKS = {t.metadata.name for t in MVEB_TEXT_VIDEO.tasks}
+_MVEB_V_TASKS = {t.metadata.name for t in MVEB_VIDEO.tasks}
 
 
 def extract_citation_key(citation):
@@ -121,6 +127,27 @@ def generate_single_table(tasks, caption, label):
     if not tasks:
         return ""
 
+    # Determine which benchmark columns are needed for this table
+    task_names = {t.metadata.name for t in tasks}
+    bench_cols = []  # list of (header, task_set)
+    if task_names & _MVEB_TASKS:
+        bench_cols.append(("MVEB", _MVEB_TASKS))
+    if task_names & _MVEB_TV_TASKS:
+        bench_cols.append(("TV", _MVEB_TV_TASKS))
+    if task_names & _MVEB_V_TASKS:
+        bench_cols.append(("V", _MVEB_V_TASKS))
+
+    n_bench = len(bench_cols)
+    # Column spec: l (name) + c (citation) + c*n_bench + r r r + c c
+    col_spec = "lc" + "c" * n_bench + "rrrcc"
+    total_cols = (
+        2 + n_bench + 5
+    )  # name, cite, benchmarks, samples, duration, langs, domains, metric
+
+    bench_headers = " & ".join(f"\\textbf{{{h}}}" for h, _ in bench_cols)
+    if bench_headers:
+        bench_headers = " & " + bench_headers
+
     latex_content = []
 
     # Table header
@@ -128,12 +155,10 @@ def generate_single_table(tasks, caption, label):
         [
             f"\\begin{{table*}}[ht]",
             "\\centering",
-            f"\\caption{{{caption}}}",
-            f"\\label{{{label}}}",
             "\\resizebox{\\linewidth}{!}{",
-            "\\begin{tabular}{lccrrrcc}",
+            f"\\begin{{tabular}}{{{col_spec}}}",
             "\\toprule",
-            "\\textbf{Dataset} & \\textbf{Citation} & \\textbf{MVEB} & \\textbf{N.samples} & \\textbf{Total Duration(s)} & \\textbf{N.Langs} & \\textbf{Domains} & \\textbf{Main metric} \\\\",
+            f"\\textbf{{Dataset}} & \\textbf{{Citation}}{bench_headers} & \\textbf{{N.samples}} & \\textbf{{Total Duration(s)}} & \\textbf{{N.Langs}} & \\textbf{{Domains}} & \\textbf{{Main metric}} \\\\",
             "\\midrule",
         ]
     )
@@ -169,7 +194,7 @@ def generate_single_table(tasks, caption, label):
         first_section = False
 
         latex_content.append(
-            f"\\multicolumn{{8}}{{l}}{{\\textbf{{{display_name}}}}} \\\\"
+            f"\\multicolumn{{{total_cols}}}{{l}}{{\\textbf{{{display_name}}}}} \\\\"
         )
 
         # Sort tasks by name for consistent ordering
@@ -264,9 +289,18 @@ def generate_single_table(tasks, caption, label):
             domains_str = domains_str.replace("_", "\\_")
             main_metric = main_metric.replace("_", "\\_")
 
+            # Benchmark membership checkmarks
+            raw_name = task.metadata.name
+            if bench_cols:
+                bench_marks = " & " + " & ".join(
+                    "\\checkmark" if raw_name in bset else "" for _, bset in bench_cols
+                )
+            else:
+                bench_marks = ""
+
             # Create table row
             latex_content.append(
-                f"{dataset_name} & \\cite{{{citation_key}}} & \\checkmark & {n_samples} & {total_duration} & {n_langs} & {domains_str} & {main_metric} \\\\"
+                f"{dataset_name} & \\cite{{{citation_key}}}{bench_marks} & {n_samples} & {total_duration} & {n_langs} & {domains_str} & {main_metric} \\\\"
             )
 
     # Table footer
@@ -275,6 +309,8 @@ def generate_single_table(tasks, caption, label):
             "\\bottomrule",
             "\\end{tabular}",
             "}",
+            f"\\caption{{{caption}}}",
+            f"\\label{{{label}}}",
             "\\end{table*}",
         ]
     )
