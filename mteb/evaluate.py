@@ -146,6 +146,8 @@ def _evaluate_task(
             num_phases_before = len(timer.phases)
             start_load = time.monotonic()
             task.load_data(num_proc=num_proc, timer=timer)
+            # If load_data did not record its own timing phases, add a fallback "Data loading" phase
+            # using the outer timing measured around the load_data call.
             if len(timer.phases) == num_phases_before:
                 timer.add_phase(
                     "Data loading", start_load, time.monotonic(), split="", subset=""
@@ -189,6 +191,7 @@ def _evaluate_task(
 
         duration = general_timer.phases[0]["end"] - general_timer.phases[0]["start"]
 
+        # If the task evaluation did not record internal phases, append the overall evaluation phase
         if len(timer.phases) == num_phases_before:
             if timer._start_time is None:
                 timer._start_time = general_timer._start_time

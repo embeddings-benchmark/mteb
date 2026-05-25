@@ -540,6 +540,7 @@ class MTEB:
                         - general_timer.phases[0]["start"]
                     )
 
+                    # If the task evaluation did not record internal phases, append the overall evaluation phase
                     if len(timer.phases) == num_phases_before:
                         if timer._start_time is None:
                             timer._start_time = general_timer._start_time

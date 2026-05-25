@@ -194,6 +194,8 @@ class AbsTask(ABC):  # noqa: PLR0904
             num_phases_before = len(timer.phases)
             start_load = time.monotonic()
             self.load_data(num_proc=num_proc, timer=timer)
+            # If load_data did not record its own timing phases, add a fallback "Data loading" phase
+            # using the outer timing measured around the load_data call.
             if len(timer.phases) == num_phases_before:
                 timer.add_phase(
                     "Data loading", start_load, time.monotonic(), split="", subset=""
