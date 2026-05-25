@@ -151,8 +151,8 @@ ingot_8b_r3 = ModelMeta(
     max_tokens=32768,
     embed_dim=4096,
     open_weights=False,
-    n_parameters=8_000_000_000,
-    n_embedding_parameters=8_000_000_000,
+    n_parameters=7_567_295_488,
+    n_embedding_parameters=621_219_840,
     memory_usage_mb=None,
     license=None,
     reference="https://voxell.ai/engineering/ingot_poured/",
@@ -162,6 +162,20 @@ ingot_8b_r3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
+        # Inherited from Qwen3-Embedding-8B base model, matching #4707 and
+        # upstream MTEB's Qwen3_Embedding_8B metadata.
+        "T2Retrieval",
+        "DuRetrieval",
+        "MMarcoReranking",
+        "CMedQAv2-reranking",
+        "NQ",
+        "MSMARCO",
+        "HotpotQA",
+        "FEVER",
+        "MrTidyRetrieval",
+        "MIRACLRetrieval",
+        "CodeSearchNet",
+        # Ingot R3 specialist training.
         "SprintDuplicateQuestions",
         "TwitterSemEval2015",
         "TwitterURLCorpus",
