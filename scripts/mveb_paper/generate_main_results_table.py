@@ -92,6 +92,40 @@ MODEL_SCOPE: dict[str, str] = {
 }
 
 
+# Embedding paradigm shown in the leaderboard "Type" column.
+MODEL_FAMILY: dict[str, str] = {
+    "e5-omni-3B": "MLLM",
+    "e5-omni-7B": "MLLM",
+    "LCO-Embedding-Omni-3B": "MLLM",
+    "LCO-Embedding-Omni-7B": "MLLM",
+    "OmniEmbed-v0.1": "MLLM",
+    "omni-embed-nemotron-3b": "MLLM",
+    "jina-embeddings-v5-omni-nano": "MLLM",
+    "jina-embeddings-v5-omni-small": "MLLM",
+    "UME-R1-2B": "MLLM",
+    "UME-R1-7B": "MLLM",
+    "Qwen2.5-Omni-3B": "Gen-MLLM",
+    "Qwen2.5-Omni-7B": "Gen-MLLM",
+    "ebind-audio-vision": "Bind",
+    "ebind-full": "Bind",
+    "ebind-points-vision": "Bind",
+    "pe-av-small": "AV-Contr",
+    "pe-av-base": "AV-Contr",
+    "pe-av-large": "AV-Contr",
+    "xclip-base-patch16": "VT-Contr",
+    "xclip-base-patch32": "VT-Contr",
+    "xclip-large-patch14": "VT-Contr",
+    "vjepa2-vitg-fpc64-256": "SSL-Vid",
+    "vjepa2-vitg-fpc64-384": "SSL-Vid",
+    "vjepa2-vitg-fpc64-384-ssv2": "SSL-Vid",
+    "vjepa2-vitg-fpc32-384-diving48": "SSL-Vid",
+    "vjepa2-vith-fpc64-256": "SSL-Vid",
+    "vjepa2-vitl-fpc64-256": "SSL-Vid",
+    "vjepa2-vitl-fpc16-256-ssv2": "SSL-Vid",
+    "vjepa2-vitl-fpc32-256-diving48": "SSL-Vid",
+}
+
+
 # ---------------------------------------------------------------------------
 # Result loading (fixes the MAEB single-subset bug)
 # ---------------------------------------------------------------------------
@@ -298,30 +332,33 @@ def emit_scope_table(
     out.append(r"\begin{table*}[!th]")
     out.append(r"    \centering")
     out.append(r"    \resizebox{\textwidth}{!}{\setlength{\tabcolsep}{4pt}{\footnotesize")
-    col_spec = "l" + "c" + "|" + "c" + "|" + "c"*2 + "|" + "c"*len(cats_present)
-    ncols = 1 + 1 + 1 + 2 + len(cats_present)
+    col_spec = "l" + "ll" + "|" + "c" + "|" + "c"*2 + "|" + "c"*len(cats_present)
+    ncols = 1 + 2 + 1 + 2 + len(cats_present)
     out.append(r"    \begin{tabular}{" + col_spec + r"}")
     out.append(r"    \toprule")
     out.append(
-        r"     & & \textbf{Rank} ($\downarrow$) & \multicolumn{2}{c|}{\textbf{Average}} & "
+        r"     & & & \textbf{Rank} ($\downarrow$) & \multicolumn{2}{c|}{\textbf{Average}} & "
         r"\multicolumn{" + str(len(cats_present)) + r"}{c}{\textbf{Average per Category}} \\"
     )
-    out.append(r"    \cmidrule(r){3-3} \cmidrule(lr){4-5} \cmidrule(l){6-" + str(ncols) + r"}")
+    out.append(r"    \cmidrule(r){4-4} \cmidrule(lr){5-6} \cmidrule(l){7-" + str(ncols) + r"}")
     cat_headers = " & ".join(f"\\textbf{{{c}}}" for c in cats_present)
-    out.append(r"    \textbf{Model} & \textbf{Params} & " + cap_scope + r" & Mean & Macro & " + cat_headers + r" \\")
+    out.append(r"    \textbf{Model} & \textbf{Type} & \textbf{Params} & " + cap_scope + r" & Mean & Macro & " + cat_headers + r" \\")
     out.append(r"    \midrule")
     count_cells = " & ".join(f"\\textcolor{{gray}}{{({cat_counts[c]})}}" for c in cats_present)
     out.append(
-        r"    \textcolor{gray}{Number of tasks} & & & & & " + count_cells + r" \\"
+        r"    \textcolor{gray}{Number of tasks} & & & & & & " + count_cells + r" \\"
     )
     out.append(r"    \midrule")
 
     for m in df.index:
         row = df.loc[m]
-        display = m.split("/")[-1].replace("_", "\\_")
+        short = m.split("/")[-1]
+        display = short.replace("_", "\\_")
+        family = MODEL_FAMILY.get(short, "--")
         params = _fmt_params(_model_params(m))
         cells = [
             display,
+            family,
             params,
             _fmt_rank(rank.loc[m], best["rank"], None),
             _fmt_score(row["mean"], best["mean"], None),
@@ -340,7 +377,10 @@ def emit_scope_table(
         r"\textbf{Mean} is the arithmetic mean over the model's evaluated tasks; "
         r"\textbf{Macro} is the macro-average across task categories (each category "
         r"weighted equally regardless of task count). Task categories: " + cat_glossary +
-        r". \textbf{Bold} = best per column.}"
+        r". Model types: MLLM (MLLM-based embedding), Gen-MLLM (generative MLLM used as embedder), "
+        r"AV-Contr (audio-visual contrastive), VT-Contr (video-text contrastive), "
+        r"Bind (multimodal binding), SSL-Vid (self-supervised video encoder). "
+        r"\textbf{Bold} = best per column.}"
     )
     out.append(r"    \label{" + meta["label"] + r"}")
     out.append(r"\end{table*}")
