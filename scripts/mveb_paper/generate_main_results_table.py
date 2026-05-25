@@ -92,38 +92,45 @@ MODEL_SCOPE: dict[str, str] = {
 }
 
 
-# Embedding paradigm shown in the leaderboard "Type" column. Codes are
-# defined in section 2 (Methodology) under the Models paragraph.
+# Embedding paradigm shown in the leaderboard "Type" column. Defined in
+# section 2 (Methodology) under the Models paragraphs.
+_MLLM = "MLLM-based embedding"
+_GEN_MLLM = "Generative MLLM"
+_BIND = "Multimodal binding"
+_AVC = "Audio-visual contrastive"
+_VTC = "Video-text contrastive"
+_SSL = "Self-supervised video"
+
 MODEL_FAMILY: dict[str, str] = {
-    "e5-omni-3B": "MLLM",
-    "e5-omni-7B": "MLLM",
-    "LCO-Embedding-Omni-3B": "MLLM",
-    "LCO-Embedding-Omni-7B": "MLLM",
-    "OmniEmbed-v0.1": "MLLM",
-    "omni-embed-nemotron-3b": "MLLM",
-    "jina-embeddings-v5-omni-nano": "MLLM",
-    "jina-embeddings-v5-omni-small": "MLLM",
-    "UME-R1-2B": "MLLM",
-    "UME-R1-7B": "MLLM",
-    "Qwen2.5-Omni-3B": "Gen-MLLM",
-    "Qwen2.5-Omni-7B": "Gen-MLLM",
-    "ebind-audio-vision": "Bind",
-    "ebind-full": "Bind",
-    "ebind-points-vision": "Bind",
-    "pe-av-small": "AV-Contr",
-    "pe-av-base": "AV-Contr",
-    "pe-av-large": "AV-Contr",
-    "xclip-base-patch16": "VT-Contr",
-    "xclip-base-patch32": "VT-Contr",
-    "xclip-large-patch14": "VT-Contr",
-    "vjepa2-vitg-fpc64-256": "SSL-Vid",
-    "vjepa2-vitg-fpc64-384": "SSL-Vid",
-    "vjepa2-vitg-fpc64-384-ssv2": "SSL-Vid",
-    "vjepa2-vitg-fpc32-384-diving48": "SSL-Vid",
-    "vjepa2-vith-fpc64-256": "SSL-Vid",
-    "vjepa2-vitl-fpc64-256": "SSL-Vid",
-    "vjepa2-vitl-fpc16-256-ssv2": "SSL-Vid",
-    "vjepa2-vitl-fpc32-256-diving48": "SSL-Vid",
+    "e5-omni-3B": _MLLM,
+    "e5-omni-7B": _MLLM,
+    "LCO-Embedding-Omni-3B": _MLLM,
+    "LCO-Embedding-Omni-7B": _MLLM,
+    "OmniEmbed-v0.1": _MLLM,
+    "omni-embed-nemotron-3b": _MLLM,
+    "jina-embeddings-v5-omni-nano": _MLLM,
+    "jina-embeddings-v5-omni-small": _MLLM,
+    "UME-R1-2B": _MLLM,
+    "UME-R1-7B": _MLLM,
+    "Qwen2.5-Omni-3B": _GEN_MLLM,
+    "Qwen2.5-Omni-7B": _GEN_MLLM,
+    "ebind-audio-vision": _BIND,
+    "ebind-full": _BIND,
+    "ebind-points-vision": _BIND,
+    "pe-av-small": _AVC,
+    "pe-av-base": _AVC,
+    "pe-av-large": _AVC,
+    "xclip-base-patch16": _VTC,
+    "xclip-base-patch32": _VTC,
+    "xclip-large-patch14": _VTC,
+    "vjepa2-vitg-fpc64-256": _SSL,
+    "vjepa2-vitg-fpc64-384": _SSL,
+    "vjepa2-vitg-fpc64-384-ssv2": _SSL,
+    "vjepa2-vitg-fpc32-384-diving48": _SSL,
+    "vjepa2-vith-fpc64-256": _SSL,
+    "vjepa2-vitl-fpc64-256": _SSL,
+    "vjepa2-vitl-fpc16-256-ssv2": _SSL,
+    "vjepa2-vitl-fpc32-256-diving48": _SSL,
 }
 
 
@@ -378,9 +385,7 @@ def emit_scope_table(
         r"\textbf{Mean} is the arithmetic mean over the model's evaluated tasks; "
         r"\textbf{Macro} is the macro-average across task categories (each category "
         r"weighted equally regardless of task count). Task categories: " + cat_glossary +
-        r". Model types: SSL-Vid (self-supervised video), VT-Contr (video-text contrastive), "
-        r"AV-Contr (audio-visual contrastive), Bind (multimodal binding), MLLM (MLLM-based embedding), "
-        r"Gen-MLLM (generative MLLM used as embedder); see \S\ref{sec:methodology-models} for definitions. "
+        r". Model types are defined in \S\ref{sec:methodology-models}. "
         r"\textbf{Bold} = best per column.}"
     )
     out.append(r"    \label{" + meta["label"] + r"}")
