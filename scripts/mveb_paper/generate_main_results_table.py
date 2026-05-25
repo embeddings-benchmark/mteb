@@ -80,6 +80,7 @@ MODEL_SCOPE: dict[str, str] = {
     "xclip-base-patch16": "tv",
     "xclip-base-patch32": "tv",
     "xclip-large-patch14": "tv",
+    "VLM2Vec-V2.0": "tv",
     # Video-only (MVEB(video)):
     "vjepa2-vitg-fpc64-256": "v",
     "vjepa2-vitg-fpc64-384": "v",
@@ -123,6 +124,7 @@ MODEL_FAMILY: dict[str, str] = {
     "xclip-base-patch16": _VTC,
     "xclip-base-patch32": _VTC,
     "xclip-large-patch14": _VTC,
+    "VLM2Vec-V2.0": _MLLM,
     "vjepa2-vitg-fpc64-256": _SSL,
     "vjepa2-vitg-fpc64-384": _SSL,
     "vjepa2-vitg-fpc64-384-ssv2": _SSL,
