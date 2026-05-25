@@ -76,8 +76,7 @@ def plot_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
         label="Efficiency frontier",
     )
 
-    # Annotate top-5 by mean score
-    for _, row in df.nlargest(5, "mean").iterrows():
+    for _, row in pareto.iterrows():
         label = row["model"].split("/")[-1]
         if len(label) > 22:
             label = label[:20] + ".."
