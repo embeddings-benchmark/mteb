@@ -35,7 +35,11 @@ AV_INTENTIONAL = {
     "mteb/MELD",
     "mteb/MUSIC-AVQA_cls-preprocessed",
     "mteb/AVMeme-Exam",
-    "mteb/Human-Animal-Cartoon",
+    "mteb/AV-SpeakerBench",
+    "mteb/AVQA_val",
+    "mteb/Shot2Story20K_test",
+    "mteb/VALOR-32K",
+    "mteb/VGGSound_AV_RETRIEVAL"
 }
 
 # v-only category (va counterpart)
