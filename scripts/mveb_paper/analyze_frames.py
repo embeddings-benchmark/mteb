@@ -19,6 +19,14 @@ def get_task_type(task_name: str) -> str:
 
 def plot_performance(df_to_plot: pd.DataFrame, title: str, ylabel: str, output_path: Path, ymin: float = None, legend_ncol: int = 1, overall_line: pd.Series = None, legend_fontsize: int = 14):
     """Reusable function to generate and save a line plot for performance scaling."""
+    # Apply publication-ready styling
+    plt.rcParams.update({
+        'font.family': 'Arial',
+        'axes.linewidth': 1.5,
+        'grid.linestyle': '--',
+        'grid.alpha': 0.6
+    })
+
     # Scale to 100 format
     df_to_plot = df_to_plot * 100
     if ymin is not None:
@@ -30,18 +38,18 @@ def plot_performance(df_to_plot: pd.DataFrame, title: str, ylabel: str, output_p
     # Ensure index is string to make points equidistant
     df_to_plot.index = df_to_plot.index.astype(str)
 
-    ax = df_to_plot.plot(kind='line', marker='o', figsize=(10, 6), fontsize=14)
+    ax = df_to_plot.plot(kind='line', marker='o', figsize=(8, 6), fontsize=18, linewidth=2.5, markersize=8)
 
     if overall_line is not None:
-        ax.plot(range(len(overall_line)), overall_line.values, color='black', linestyle=':', linewidth=2, marker='o', label='Overall Performance')
+        ax.plot(range(len(overall_line)), overall_line.values, color='black', linestyle=':', linewidth=3, marker='o', markersize=9, label='Overall Performance')
 
-    ax.set_title(title, fontsize=18)
-    ax.set_xlabel("Number of Frames", fontsize=16)
-    ax.set_ylabel(ylabel, fontsize=16)
+    ax.set_title(title, fontsize=20, pad=15)
+    ax.set_xlabel("Number of Frames", fontsize=18, labelpad=10)
+    ax.set_ylabel(ylabel, fontsize=18, labelpad=10)
 
     # Use categorical x-ticks
     ax.set_xticks(range(len(df_to_plot.index)))
-    ax.set_xticklabels(df_to_plot.index, fontsize=14)
+    ax.set_xticklabels(df_to_plot.index, fontsize=16)
 
     ax.grid(True)
 
@@ -60,10 +68,19 @@ def plot_performance(df_to_plot: pd.DataFrame, title: str, ylabel: str, output_p
         ax.set_ylim(bottom=ymin)
 
     # Add legend at the bottom right
-    ax.legend(loc='lower right', fontsize=legend_fontsize, ncol=legend_ncol)
+    handles, labels = ax.get_legend_handles_labels()
+    ax.legend(
+        handles,
+        labels,
+        loc='lower right',
+        fontsize=legend_fontsize,
+        ncol=legend_ncol,
+        # framealpha=0.0,
+        # markerfirst=False
+    )
 
     plt.tight_layout()
-    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.savefig(output_path, format='pdf', bbox_inches='tight')
     plt.close() # Close figure so subsequent plots don't overlap
     logging.info(f"Plot saved to {output_path}")
 
@@ -149,7 +166,7 @@ def main():
                 
                 records[key] = {
                     "task_name": task_name,
-                    "model_name": model_name,
+                    "model_name": model_name.split("__")[-1] if "__" in model_name else model_name,
                     "num_frames": num_frames,
                     "task_type": get_task_type(task_name),
                     "main_score": avg_main_score
@@ -215,7 +232,7 @@ def main():
             df_to_plot=table2.T,
             title="Effect of Frame Count on Model Performance",
             ylabel="Mean Performance",
-            output_path=plot_dir / "model_performance_scaling.png"
+            output_path=plot_dir / "model_performance_scaling.pdf"
         )
 
         # Plot overall performance scaling
@@ -223,7 +240,7 @@ def main():
             df_to_plot=table3.T,
             title="Overall Performance vs. Frame Count",
             ylabel="Overall Mean Performance",
-            output_path=plot_dir / "overall_performance_scaling.png"
+            output_path=plot_dir / "overall_performance_scaling.pdf"
         )
 
         # Plot task performance scaling
@@ -231,9 +248,10 @@ def main():
             df_to_plot=table4.T,
             title="Effect of Frame Count Across Tasks",
             ylabel="Mean Performance",
-            output_path=plot_dir / "task_performance_scaling.png",
+            output_path=plot_dir / "task_performance_scaling.pdf",
             ymin=0.0,
-            legend_ncol=2
+            legend_ncol=2,
+            legend_fontsize=10
         )
 
         # Plot model performance scaling with overall performance
@@ -241,7 +259,7 @@ def main():
             df_to_plot=table2.T,
             title="Effect of Frame Count on Model Performance (with Overall)",
             ylabel="Mean Performance",
-            output_path=plot_dir / "model_performance_scaling_with_overall.png",
+            output_path=plot_dir / "model_performance_scaling_with_overall.pdf",
             overall_line=table3.loc["Overall Mean"],
             legend_fontsize=16
         )
