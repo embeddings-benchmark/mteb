@@ -23,7 +23,7 @@ class HMDB51Clustering(AbsTaskClustering):
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=("2011-01-01", "2011-12-31"),
-        domains=["Scene"],
+        domains=["Scene", "Web"],
         task_subtypes=["Activity recognition"],
         license="not specified",
         annotations_creators="human-annotated",

@@ -26,7 +26,7 @@ class MSVDV2TRetrieval(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2010-01-01", "2012-12-31"),
-        domains=["Web", "Spoken"],
+        domains=["Web"],
         task_subtypes=["Caption Pairing"],
         license="not specified",
         annotations_creators="human-annotated",

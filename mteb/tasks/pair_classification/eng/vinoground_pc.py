@@ -26,7 +26,7 @@ class VinogroundPairClassification(AbsTaskPairClassification):
         eval_langs=["eng-Latn"],
         main_score="max_ap",
         date=("2024-10-01", "2024-10-31"),
-        domains=["Scene"],
+        domains=["Scene", "Web"],
         task_subtypes=["Activity recognition"],
         license="apache-2.0",
         annotations_creators="human-annotated",

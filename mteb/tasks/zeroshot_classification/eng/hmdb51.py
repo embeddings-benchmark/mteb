@@ -22,7 +22,7 @@ class HMDB51ZeroShotClassification(AbsTaskZeroShotClassification):
             "2011-01-01",
             "2011-12-31",
         ),
-        domains=["Scene"],
+        domains=["Scene", "Web"],
         task_subtypes=["Activity recognition"],
         license="not specified",
         annotations_creators="human-annotated",
