@@ -30,10 +30,11 @@ def plot_grouped_bar(plot_df, output_path="grouped_bar_spread.pdf"):
         palette='viridis'
     )
     
-    plt.xlabel('MTEB Category', fontsize=14, fontweight='bold')
-    plt.ylabel('Max Score', fontsize=14, fontweight='bold')
-    plt.xticks(rotation=45, fontsize=12)
-    plt.legend(title='Model Family', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=11)
+    plt.xlabel('MTEB Category', fontsize=18, fontweight='bold')
+    plt.ylabel('Max Score', fontsize=18, fontweight='bold')
+    plt.xticks(rotation=45, fontsize=16)
+    plt.yticks(fontsize=14)
+    plt.legend(title='Model Family', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=15, title_fontsize=15)
     
     plt.tight_layout()
     out_p = Path(output_path)
@@ -46,6 +47,9 @@ def plot_radar_chart(plot_df, categories, output_path="radar_chart_spread.pdf"):
     """Creates a radar/fan chart showing category spreads for the top families."""
     # Pivot data so rows are Families and columns are Categories
     pivot_df = plot_df.pivot(index='Family', columns='Category', values='Score').fillna(0)
+    
+    # Ensure columns match the exact order of the provided categories list
+    pivot_df = pivot_df[categories]
     families = pivot_df.index.tolist()
     
     num_vars = len(categories)
@@ -55,11 +59,11 @@ def plot_radar_chart(plot_df, categories, output_path="radar_chart_spread.pdf"):
     fig, ax = plt.subplots(figsize=(10, 10), subplot_kw=dict(polar=True))
     
     # Draw one axe per variable and add labels
-    plt.xticks(angles[:-1], categories, size=12, fontweight='bold')
+    plt.xticks(angles[:-1], categories, size=16, fontweight='bold')
     
     # Draw ylabels
     ax.set_rlabel_position(0)
-    plt.yticks([20, 40, 60, 80], ["20", "40", "60", "80"], color="grey", size=10)
+    plt.yticks([20, 40, 60, 80], ["20", "40", "60", "80"], color="grey", size=14)
     plt.ylim(0, 100) # Assuming scores are 0-100. Change to 0-1 if scores are 0.0-1.0
     
     # Plot each family
@@ -71,7 +75,7 @@ def plot_radar_chart(plot_df, categories, output_path="radar_chart_spread.pdf"):
         ax.plot(angles, values, linewidth=2, linestyle='solid', label=family, color=colors[i % len(colors)])
         ax.fill(angles, values, color=colors[i % len(colors)], alpha=0.1)
         
-    plt.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1), title="Model Family")
+    plt.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1), title="Model Family", fontsize=14, title_fontsize=15)
     
     plt.tight_layout()
     out_p = Path(output_path)
@@ -104,13 +108,15 @@ def plot_size_vs_rank(plot_df, output_path="size_vs_rank.pdf"):
     plt.xscale('log', base=2)
     from matplotlib.ticker import FuncFormatter
     ax.xaxis.set_major_formatter(FuncFormatter(lambda x, _: f'{x:g}B'))
+    plt.xticks(fontsize=14)
     
     # Invert Y-axis so rank 1 is at the top
     plt.gca().invert_yaxis()
+    plt.yticks(fontsize=14)
     
-    plt.xlabel('Model Size', fontsize=14, fontweight='bold')
-    plt.ylabel('Borda Rank', fontsize=14, fontweight='bold')
-    plt.legend(title='Model Family', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=11)
+    plt.xlabel('Model Size', fontsize=18, fontweight='bold')
+    plt.ylabel('Borda Rank', fontsize=18, fontweight='bold')
+    plt.legend(title='Model Family', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=15, title_fontsize=15)
     
     plt.tight_layout()
     out_p = Path(output_path)
