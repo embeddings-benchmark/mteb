@@ -70,7 +70,8 @@ def plot_radar_chart(plot_df, categories, output_path="radar_chart_spread.pdf"):
     fig, ax = plt.subplots(figsize=(10, 10), subplot_kw=dict(polar=True))
     
     # Draw one axe per variable and add labels
-    plt.xticks(angles[:-1], categories, size=16, fontweight='bold')
+    plt.xticks(angles[:-1], categories, size=20, fontweight='bold')
+    ax.tick_params(axis='x', pad=15)
     
     # Draw ylabels
     ax.set_rlabel_position(0)
@@ -86,7 +87,7 @@ def plot_radar_chart(plot_df, categories, output_path="radar_chart_spread.pdf"):
         ax.plot(angles, values, linewidth=2, linestyle='solid', label=family, color=colors[i % len(colors)])
         ax.fill(angles, values, color=colors[i % len(colors)], alpha=0.1)
         
-    leg = plt.legend(loc='lower right', bbox_to_anchor=(1.3, 0.0), title="Model Family", fontsize=20, title_fontsize=24)
+    leg = plt.legend(loc='upper right', bbox_to_anchor=(1.3, 1.3), title="Model Family", fontsize=20, title_fontsize=24)
     for t in leg.get_texts():
         t.set_text(textwrap.fill(t.get_text(), width=15))
     
