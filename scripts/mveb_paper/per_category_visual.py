@@ -15,13 +15,21 @@ def extract_family(model_name):
         return model_str.split("-")[0]
     return "Other"
 
-def plot_grouped_bar(plot_df, output_path="grouped_bar_spread.pdf"):
+def plot_grouped_bar(plot_df, output_path="grouped_bar_spread.pdf", relative=False):
     """Creates a grouped bar chart showing the spread of top families across categories."""
     plt.figure(figsize=(14, 7))
     
     # Set a clean theme
     sns.set_theme(style="whitegrid")
     
+    plot_df = plot_df.copy()
+    ylabel = 'Max Score'
+    
+    if relative:
+        max_per_cat = plot_df.groupby('Category')['Score'].transform('max')
+        plot_df['Score'] = (plot_df['Score'] / max_per_cat) * 100
+        ylabel = 'Relative Score (% of Category Max)'
+
     ax = sns.barplot(
         data=plot_df, 
         x='Category', 
@@ -31,7 +39,7 @@ def plot_grouped_bar(plot_df, output_path="grouped_bar_spread.pdf"):
     )
     
     plt.xlabel('MTEB Category', fontsize=18, fontweight='bold')
-    plt.ylabel('Max Score', fontsize=18, fontweight='bold')
+    plt.ylabel(ylabel, fontsize=18, fontweight='bold')
     plt.xticks(rotation=45, fontsize=16)
     plt.yticks(fontsize=14)
     plt.legend(title='Model Family', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=15, title_fontsize=15)
@@ -129,6 +137,7 @@ def main():
     parser = argparse.ArgumentParser(description="Generate per-category visualizations.")
     parser.add_argument("--csv_path", type=str, required=True, help="Path to the result CSV file")
     parser.add_argument("--plot_dir", type=str, default=".", help="Directory to save the PDF plots")
+    parser.add_argument("--relative", action="store_true", help="Plot relative scores (percentage of max per category)")
     args = parser.parse_args()
 
     plot_dir = Path(args.plot_dir)
@@ -193,7 +202,7 @@ def main():
         plot_df.loc[:, 'Score'] = plot_df['Score'] * 100
 
     # 5. Generate Visualizations
-    plot_grouped_bar(plot_df, output_path=plot_dir / "grouped_bar_spread.pdf")
+    plot_grouped_bar(plot_df, output_path=plot_dir / "grouped_bar_spread.pdf", relative=args.relative)
     plot_radar_chart(plot_df, available_categories, output_path=plot_dir / "radar_chart_spread.pdf")
 
 if __name__ == "__main__":
