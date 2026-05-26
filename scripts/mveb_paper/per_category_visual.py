@@ -36,8 +36,10 @@ def plot_grouped_bar(plot_df, output_path="grouped_bar_spread.pdf"):
     plt.legend(title='Model Family', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=11)
     
     plt.tight_layout()
-    plt.savefig(output_path, format='pdf', bbox_inches='tight')
-    print(f"Grouped bar chart saved to {output_path}")
+    out_p = Path(output_path)
+    plt.savefig(out_p.with_suffix('.pdf'), format='pdf', bbox_inches='tight')
+    plt.savefig(out_p.with_suffix('.png'), format='png', dpi=300, bbox_inches='tight')
+    print(f"Grouped bar chart saved to {out_p.with_suffix('.pdf')} and .png")
     plt.show()
 
 def plot_radar_chart(plot_df, categories, output_path="radar_chart_spread.pdf"):
@@ -72,8 +74,10 @@ def plot_radar_chart(plot_df, categories, output_path="radar_chart_spread.pdf"):
     plt.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1), title="Model Family")
     
     plt.tight_layout()
-    plt.savefig(output_path, format='pdf', bbox_inches='tight')
-    print(f"Radar chart saved to {output_path}")
+    out_p = Path(output_path)
+    plt.savefig(out_p.with_suffix('.pdf'), format='pdf', bbox_inches='tight')
+    plt.savefig(out_p.with_suffix('.png'), format='png', dpi=300, bbox_inches='tight')
+    print(f"Radar chart saved to {out_p.with_suffix('.pdf')} and .png")
     plt.show()
 
 def plot_size_vs_rank(plot_df, output_path="size_vs_rank.pdf"):
@@ -109,8 +113,10 @@ def plot_size_vs_rank(plot_df, output_path="size_vs_rank.pdf"):
     plt.legend(title='Model Family', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=11)
     
     plt.tight_layout()
-    plt.savefig(output_path, format='pdf', bbox_inches='tight')
-    print(f"Scatter plot saved to {output_path}")
+    out_p = Path(output_path)
+    plt.savefig(out_p.with_suffix('.pdf'), format='pdf', bbox_inches='tight')
+    plt.savefig(out_p.with_suffix('.png'), format='png', dpi=300, bbox_inches='tight')
+    print(f"Scatter plot saved to {out_p.with_suffix('.pdf')} and .png")
     plt.show()
 
 def main():
