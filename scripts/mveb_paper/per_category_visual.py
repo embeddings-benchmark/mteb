@@ -134,8 +134,8 @@ def plot_size_vs_rank(plot_df, output_path="size_vs_rank.pdf"):
     plt.gca().invert_yaxis()
     plt.yticks(fontsize=18)
     
-    plt.xlabel('Model Size', fontsize=18, fontweight='bold')
-    plt.ylabel('Borda Rank', fontsize=18, fontweight='bold')
+    plt.xlabel('Model Size', fontsize=24, fontweight='bold')
+    plt.ylabel('Borda Rank', fontsize=24, fontweight='bold')
     leg = plt.legend(title='Model Family', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=20, title_fontsize=24)
     for t in leg.get_texts():
         t.set_text(textwrap.fill(t.get_text(), width=15))
