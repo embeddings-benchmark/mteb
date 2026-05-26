@@ -243,11 +243,13 @@ def test_evaluate_aggregated_task_with_cache(tmp_path):
     1. If the aggregate file is missing but all sub-tasks are cached, it falls back
        to combining the cached subtask results under ONLY_CACHE strategy.
     2. Once the aggregate file is generated and saved, it can be loaded directly
-       on subsequent runs without re-evaluating or calling fallback.
+       on subsequent runs without re-evaluating or calling fallback (verified
+       by deleting the individual sub-task cache files prior to the second call).
     """
     model = mteb.get_model("mteb/baseline-random-encoder")
     task = MockAggregatedTask()
     cache = ResultCache(tmp_path)
+    # evaluate tasks individually
     mteb.evaluate(model, task.metadata.tasks, cache=cache)
 
     path = cache.get_task_result_path(
@@ -256,11 +258,21 @@ def test_evaluate_aggregated_task_with_cache(tmp_path):
         model.mteb_model_meta.revision,
     )
     assert not path.exists()
-
+    # should be able to load results even if aggregated task results do not exist
     results = mteb.evaluate(model, task, cache=cache, overwrite_strategy="only-cache")
     assert len(results.task_results) == 1
     score1 = results.task_results[0].get_score()
     assert path.exists()
+
+    # Delete individual sub-task cache files to ensure we load from the aggregate file
+    for subtask in task.metadata.tasks:
+        sub_path = cache.get_task_result_path(
+            subtask.metadata.name,
+            model.mteb_model_meta.model_name_as_path(),
+            model.mteb_model_meta.revision,
+        )
+        sub_path.unlink()
+        assert not sub_path.exists()
 
     cached_results = mteb.evaluate(
         model, task, cache=cache, overwrite_strategy="only-cache"

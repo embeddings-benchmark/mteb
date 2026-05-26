@@ -285,27 +285,26 @@ def _check_cache(
         if cache_results:
             existing_results = cache_results
 
+    dont_overwrite = overwrite_strategy in {
+        OverwriteStrategy.NEVER,
+        OverwriteStrategy.ONLY_CACHE,
+    }
+    is_mergable = existing_results is not None and (
+        not _requires_merge(task, existing_results)
+        or existing_results.is_mergeable(task)
+    )
+
     if (
         existing_results
         and overwrite_strategy != OverwriteStrategy.ALWAYS
-        and (
-            overwrite_strategy
-            in [OverwriteStrategy.NEVER, OverwriteStrategy.ONLY_CACHE]  # noqa: PLR6201
-            or (
-                not _requires_merge(task, existing_results)
-                or existing_results.is_mergeable(task)
-            )
-        )
+        and (dont_overwrite or is_mergable)
     ):
         missing_eval = existing_results.get_missing_evaluations(task)
     else:
         missing_eval = dict.fromkeys(task.eval_splits, task.hf_subsets)
         existing_results = None
 
-    if missing_eval and overwrite_strategy in [  # noqa: PLR6201
-        OverwriteStrategy.NEVER,
-        OverwriteStrategy.ONLY_CACHE,
-    ]:
+    if missing_eval and dont_overwrite:
         if existing_results is None:
             if overwrite_strategy == OverwriteStrategy.ONLY_CACHE:
                 raise ValueError(
