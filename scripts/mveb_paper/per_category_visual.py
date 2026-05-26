@@ -71,7 +71,7 @@ def plot_radar_chart(plot_df, categories, output_path="radar_chart_spread.pdf"):
     
     # Draw ylabels
     ax.set_rlabel_position(0)
-    plt.yticks([20, 40, 60, 80], ["20", "40", "60", "80"], color="grey", size=14)
+    plt.yticks([20, 40, 60, 80], ["20", "40", "60", "80"], color="grey", size=20)
     plt.ylim(0, 100) # Assuming scores are 0-100. Change to 0-1 if scores are 0.0-1.0
     
     # Plot each family
@@ -83,7 +83,7 @@ def plot_radar_chart(plot_df, categories, output_path="radar_chart_spread.pdf"):
         ax.plot(angles, values, linewidth=2, linestyle='solid', label=family, color=colors[i % len(colors)])
         ax.fill(angles, values, color=colors[i % len(colors)], alpha=0.1)
         
-    plt.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1), title="Model Family", fontsize=14, title_fontsize=15)
+    plt.legend(loc='lower right', bbox_to_anchor=(1.3, 0.0), title="Model Family", fontsize=16, title_fontsize=16)
     
     plt.tight_layout()
     out_p = Path(output_path)
@@ -103,11 +103,18 @@ def plot_size_vs_rank(plot_df, output_path="size_vs_rank.pdf"):
     plot_df['Borda Rank'] = pd.to_numeric(plot_df['Borda Rank'], errors='coerce')
     plot_df = plot_df.dropna(subset=['Model size', 'Borda Rank'])
     
+    # Ensure we have enough distinct markers for all families
+    unique_families = plot_df['Family'].unique()
+    available_markers = ['o', 's', '^', 'D', 'v', '<', '>', 'p', '*', 'X', 'P', 'h', 'H', '+', 'x']
+    markers = {fam: available_markers[i % len(available_markers)] for i, fam in enumerate(unique_families)}
+    
     ax = sns.scatterplot(
         data=plot_df, 
         x='Model size', 
         y='Borda Rank', 
         hue='Family',
+        style='Family',
+        markers=markers,
         s=120,
         palette='tab10'
     )
@@ -116,11 +123,11 @@ def plot_size_vs_rank(plot_df, output_path="size_vs_rank.pdf"):
     plt.xscale('log', base=2)
     from matplotlib.ticker import FuncFormatter
     ax.xaxis.set_major_formatter(FuncFormatter(lambda x, _: f'{x:g}B'))
-    plt.xticks(fontsize=14)
+    plt.xticks(fontsize=18)
     
     # Invert Y-axis so rank 1 is at the top
     plt.gca().invert_yaxis()
-    plt.yticks(fontsize=14)
+    plt.yticks(fontsize=18)
     
     plt.xlabel('Model Size', fontsize=18, fontweight='bold')
     plt.ylabel('Borda Rank', fontsize=18, fontweight='bold')
@@ -160,7 +167,7 @@ def main():
 
     # 2. Define the target categories
     target_categories = [
-        'Retr', 'QA', 'CLs', 'Clust', 'Pair', 'ZS'
+        'Retr', 'QA', 'Cls', 'Clust', 'Pair', 'ZS'
     ]
     
     # Filter to only the categories actually present in the CSV

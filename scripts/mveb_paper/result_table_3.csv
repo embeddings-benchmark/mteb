@@ -1,4 +1,4 @@
-Model Name,Model Family,Type,Params,Model size,Borda Rank,Average Mean,Average Macro,Retr,QA,CLs,Clust,Pair,ZS
+Model Name,Model Family,Type,Params,Model size,Borda Rank,Average Mean,Average Macro,Retr,QA,Cls,Clust,Pair,ZS
 LCO-Embedding-Omni-7B,LCO-Embedding,MLLM-based embedding,8.9B,8.9,1,57.6,56.2,58.7,57,59.2,27.3,79.6,55.5
 e5-omni-7B,e5-omni,MLLM-based embedding,8.9B,8.9,2,55,51.2,59.4,43.8,54.7,21.5,77.3,50.2
 ebind-full,ebind,Multimodal binding,1.8B,1.8,3,55.5,50.3,62.3,31.4,51.3,20.1,75.4,61.1
