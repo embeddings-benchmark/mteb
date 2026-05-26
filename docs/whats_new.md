@@ -13,7 +13,38 @@ This section is an overview of releases for more information check out the autog
 
 MTEB now supports retrieving and plotting detailed evaluation phase timings directly from the `TaskResult` object returned by `mteb.evaluate`.
 
-The `TaskResult` object exposes a `.timings` property, which reconstructs a `TimingStack` object from the saved evaluation phases. You can plot the timing bar chart with a simple call to `.timings.plot()`.
+You can plot the timing bar chart with a simple call to `task_result.plot_evaluation_phases()`.
+
+Example: Inspecting and Plotting Runtime Timings
+
+```python
+import mteb
+
+model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
+task = mteb.get_task("SciFact")
+
+# Evaluate returns a ModelResult container holding TaskResult instances
+results = mteb.evaluate(model, task)
+task_result = results.task_results[0]
+
+# Print the overall evaluation time
+print(f"Evaluation took: {task_result.evaluation_time:.2f}s")
+
+# Plot the timings from the cached results
+task_result.plot_evaluation_phases()
+```
+
+This will print a text-based Gantt/bar chart of the recorded evaluation phases:
+
+```text
+Data loading                  |███████████████████████████████                   | 19.4s
+Dataset transform             |                               █                  | 0.0s
+
+test/default/Encoding corpus  |                               █                  | 0.0s
+test/default/Encoding queries |                               ██████████████████ | 11.1s
+test/default/Scoring          |                                                 █| 0.1s
+                               30.6s (untracked: 0.0s)
+```
 
 For more details, see the [Results API documentation](./api/results.md#timing-and-phase-plotting).
 

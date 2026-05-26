@@ -37,11 +37,7 @@ type(models_results) # mteb.results.TaskResult
 
 ## Timing and Phase Plotting
 
-To analyze where evaluation time is spent, you can inspect the evaluation phases. The timing data is stored inside `TaskResult.evaluation_phases` as a list of `PhaseTiming` objects, and can also be retrieved as a `TimingStack` object via `TaskResult.timings`.
-
-:::mteb.timing.PhaseTiming
-
-:::mteb.timing.TimingStack
+To analyze where evaluation time is spent, you can inspect the evaluation phases. The timing data is stored inside `TaskResult.evaluation_phases` as a list of `PhaseTiming` objects, and can be plotted directly using the `TaskResult.plot_evaluation_phases()` method.
 
 <details>
 <summary><b>Example: Inspecting and Plotting Runtime Timings</b> (click to expand)</summary>
@@ -60,10 +56,10 @@ task_result = results.task_results[0]
 print(f"Evaluation took: {task_result.evaluation_time:.2f}s")
 
 # Plot the timings from the cached results
-task_result.timings.plot()
+task_result.plot_evaluation_phases()
 ```
 
-This will print a text-based Gantt/bar chart of the recorded evaluation phases:
+This will print a text-based Gantt chart of the recorded evaluation phases:
 
 ```text
 Data loading                  |███████████████████████████████                   | 19.4s

@@ -326,13 +326,12 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         """Get the eval splits present in the scores."""
         return list(self.scores.keys())
 
-    @property
-    def timings(self) -> TimingStack:
-        """Get the timings (TimingStack) of the evaluation."""
+    def plot_evaluation_phases(self) -> str:
+        """Plots a text-based bar chart of the recorded evaluation phases."""
         ts = TimingStack()
         if self.evaluation_phases:
             ts.phases = self.evaluation_phases
-        return ts
+        return ts.plot()
 
     def to_dict(self) -> dict[str, Any]:
         """Convert the TaskResult to a dictionary.

@@ -327,7 +327,7 @@ def test_to_hf_result(mock_mteb_cache: ResultCache):
 
 
 def test_task_result_timings():
-    """Test that TaskResult.timings correctly loads evaluation_phases and supports plotting."""
+    """Test that TaskResult.plot_evaluation_phases correctly loads evaluation_phases and supports plotting."""
 
     phases: list[PhaseTiming] = [
         {
@@ -349,13 +349,7 @@ def test_task_result_timings():
         evaluation_phases=phases,
     )
 
-    timings = task_result.timings
-    assert timings is not None
-    assert len(timings.phases) == 2
-    assert timings.phases[0]["name"] == "load data"
-    assert timings.phases[1]["name"] == "encode"
-
-    plot_output = timings.plot()
+    plot_output = task_result.plot_evaluation_phases()
     assert "load data" in plot_output
     assert "encode" in plot_output
     assert "3.0s" in plot_output  # duration of encode phase is 4.5 - 1.5 = 3.0s
