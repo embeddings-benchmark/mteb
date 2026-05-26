@@ -1,6 +1,20 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
+import numpy as np
+from tqdm.auto import tqdm
+
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
 from mteb.types import OutputDType, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 
 def instruction_template(
@@ -336,4 +350,175 @@ Octen_Embedding_8B_INT8_dim_1024 = ModelMeta(
     citation=OCTEN_CITATION,
     output_dtypes=OutputDType.FLOAT16,
     adapted_from="Qwen/Qwen3-Embedding-8B",
+)
+
+
+class OctenVLEmbeddingModel(AbsEncoder):
+    def __init__(
+        self,
+        model_name: str,
+        model_prompts: dict[str, str] | None = None,
+        **kwargs,
+    ) -> None:
+        import os
+
+        from octen import Octen
+
+        self._client = Octen(api_key=os.environ.get("OCTEN_API_KEY"))
+        self._model_name = model_name.rsplit("/", maxsplit=1)[-1]
+        self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        batch_size: int = 20,
+        **kwargs: Any,
+    ) -> Array:
+        if prompt_type == PromptType.document:
+            instruct = None
+        else:
+            prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+            raw_instruct = self.model_prompts.get(prompt_name)
+            instruct = instruction_template(raw_instruct, prompt_type) or None
+        sentences = []
+        for batch in inputs:
+            sentences.extend(batch["text"])
+        return self._batched_encode(sentences, batch_size, instruct)
+
+    def _batched_encode(
+        self,
+        sentences: list[str],
+        batch_size: int,
+        instruct: str | None,
+    ) -> Array:
+        # ~4 chars/token; cap well below max_tokens=32000 to avoid silent batch failures
+        max_chars = 100_000
+
+        import concurrent.futures as cf
+        import os
+
+        concurrency = max(1, int(os.environ.get("OCTEN_API_CONCURRENCY", "1")))
+
+        def _build_call(batch: list[str]) -> tuple[dict, list[dict]]:
+            # prefix_instruct: instruct is prefixed into the user content text;
+            prefix = f"{instruct.rstrip()} " if instruct else ""
+            contents = [
+                {"text": f"{prefix}{(txt[:max_chars] if txt else ' ')}"}
+                for txt in batch
+            ]
+            kwargs = {"model": self._model_name, "contents": contents}
+            return kwargs, contents
+
+        def _encode_batch(start: int) -> tuple[int, list[list[float] | None]]:
+            batch = sentences[start : start + batch_size]
+            call_kwargs, contents = _build_call(batch)
+            response = self._client.vl_embedding.create(**call_kwargs)
+            returned = sorted(response.items, key=lambda x: x.index)
+
+            if len(returned) != len(batch):
+                # Silent-failure fallback: retry one by one.
+                returned = []
+                for content in contents:
+                    try:
+                        r = self._client.vl_embedding.create(
+                            **{**call_kwargs, "contents": [content]}
+                        )
+                        items = sorted(r.items, key=lambda x: x.index)
+                        returned.append(items[0] if items else None)
+                    except Exception:
+                        returned.append(None)
+            embed_dim = next(
+                (len(it.embedding) for it in returned if it is not None), 2048
+            )
+            return start, [
+                it.embedding if it is not None else [0.0] * embed_dim for it in returned
+            ]
+
+        # Slots indexed by sentence position so final embeddings align with input order.
+        slot: list[list[float] | None] = [None] * len(sentences)
+        starts = list(range(0, len(sentences), batch_size))
+
+        pbar = tqdm(total=len(sentences), desc="Encoding sentences")
+        if concurrency == 1:
+            for s in starts:
+                _, embs = _encode_batch(s)
+                for k, e in enumerate(embs):
+                    slot[s + k] = e
+                pbar.update(len(embs))
+        else:
+            with cf.ThreadPoolExecutor(max_workers=concurrency) as ex:
+                futures = [ex.submit(_encode_batch, s) for s in starts]
+                for fut in cf.as_completed(futures):
+                    s, embs = fut.result()
+                    for k, e in enumerate(embs):
+                        slot[s + k] = e
+                    pbar.update(len(embs))
+        pbar.close()
+
+        # Any unexpected None (should not happen): fill with zeros.
+        embed_dim = next((len(e) for e in slot if e is not None), 2048)
+        embeddings = [e if e is not None else [0.0] * embed_dim for e in slot]
+        return np.array(embeddings)
+
+
+_octen_vl_model_prompts = {
+    PromptType.query.value: "Represent this query for searching relevant documents",
+    **_PREDEFINED_PROMPTS,
+}
+
+Octen_VL_Embedding = ModelMeta(
+    loader=OctenVLEmbeddingModel,
+    loader_kwargs=dict(
+        model_prompts=_octen_vl_model_prompts,
+    ),
+    name="Octen/octen-vl-embedding",
+    model_type=["dense"],
+    languages=multilingual_langs,
+    open_weights=False,
+    revision="1",
+    release_date="2026-05-15",
+    n_parameters=None,
+    memory_usage_mb=None,
+    embed_dim=2048,
+    max_tokens=32000,
+    license=None,
+    reference="https://docs.octen.ai/api-reference/vl-embedding",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=training_data,
+    citation=OCTEN_CITATION,
+)
+
+Octen_VL_Embedding_Large = ModelMeta(
+    loader=OctenVLEmbeddingModel,
+    loader_kwargs=dict(
+        model_prompts=_octen_vl_model_prompts,
+    ),
+    name="Octen/octen-vl-embedding-large",
+    model_type=["dense"],
+    languages=multilingual_langs,
+    open_weights=False,
+    revision="1",
+    release_date="2026-05-15",
+    n_parameters=None,
+    memory_usage_mb=None,
+    embed_dim=4096,
+    max_tokens=32000,
+    license=None,
+    reference="https://docs.octen.ai/api-reference/vl-embedding",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=training_data,
+    citation=OCTEN_CITATION,
 )
