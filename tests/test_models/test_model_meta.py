@@ -355,6 +355,7 @@ def test_model_to_python():
     languages=['eng-Latn'],
     n_parameters=22713216,
     n_active_parameters_override=None,
+    n_active_parameters_by_modality=None,
     n_embedding_parameters=11720448,
     memory_usage_mb=87.0,
     max_tokens=256.0,
@@ -483,3 +484,21 @@ def test_model_meta_dependencies_not_installed_group():
         ),
     ):
         model_meta._check_requirements()
+
+
+def test_n_active_parameters_for_modality():
+    meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2").model_copy(
+        update={
+            "n_active_parameters_by_modality": {
+                "text": 100,
+                "image": 500,
+                "audio": 900,
+            }
+        }
+    )
+    assert meta.n_active_parameters_for({"text"}) == 100
+    assert meta.n_active_parameters_for({"text", "image"}) == 500
+    assert meta.n_active_parameters_for({"audio", "text"}) == 900
+    assert meta.n_active_parameters_for(None) == meta.n_active_parameters
+    bare = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+    assert bare.n_active_parameters_for({"text"}) == bare.n_active_parameters

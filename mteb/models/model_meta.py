@@ -168,6 +168,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     languages: list[ISOLanguageScript] | None
     n_parameters: int | None
     n_active_parameters_override: int | None = None
+    n_active_parameters_by_modality: dict[Modalities, int] | None = None
     n_embedding_parameters: int | None = None
     memory_usage_mb: float | None
     max_tokens: float | None
@@ -248,6 +249,16 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         if self.n_parameters is not None and self.n_embedding_parameters is not None:
             return self.n_parameters - self.n_embedding_parameters
         return None
+
+    def n_active_parameters_for(
+        self, modalities: Iterable[str] | None = None
+    ) -> int | None:
+        """Active parameter count for the given input modalities, falling back to `n_active_parameters`."""
+        if self.n_active_parameters_by_modality and modalities:
+            for key in ("audio", "video", "image", "text"):
+                if key in modalities and key in self.n_active_parameters_by_modality:
+                    return self.n_active_parameters_by_modality[key]
+        return self.n_active_parameters
 
     @field_validator("similarity_fn_name", mode="before")
     @classmethod
