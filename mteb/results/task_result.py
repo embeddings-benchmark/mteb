@@ -837,10 +837,10 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                 merged_scores[split] = scores
 
         existing_kg_co2_emissions = (
-            self.kg_co2_emissions if self.kg_co2_emissions else 0.0
+            self.kg_co2_emissions if self.kg_co2_emissions else 0
         )
         new_kg_co2_emissions = (
-            new_results.kg_co2_emissions if new_results.kg_co2_emissions else 0.0
+            new_results.kg_co2_emissions if new_results.kg_co2_emissions else 0
         )
         merged_kg_co2_emissions = None
         if (
