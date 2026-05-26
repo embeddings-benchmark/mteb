@@ -5,6 +5,7 @@ import seaborn as sns
 import numpy as np
 from math import pi
 from pathlib import Path
+import textwrap
 
 def extract_family(model_name):
     """Heuristic to extract model family from HuggingFace-style names (org/model)."""
@@ -42,7 +43,9 @@ def plot_grouped_bar(plot_df, output_path="grouped_bar_spread.pdf", relative=Fal
     plt.ylabel(ylabel, fontsize=18, fontweight='bold')
     plt.xticks(rotation=45, fontsize=16)
     plt.yticks(fontsize=14)
-    plt.legend(title='Model Family', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=15, title_fontsize=15)
+    leg = plt.legend(title='Model Family', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=20, title_fontsize=24)
+    for t in leg.get_texts():
+        t.set_text(textwrap.fill(t.get_text(), width=15))
     
     plt.tight_layout()
     out_p = Path(output_path)
@@ -83,7 +86,9 @@ def plot_radar_chart(plot_df, categories, output_path="radar_chart_spread.pdf"):
         ax.plot(angles, values, linewidth=2, linestyle='solid', label=family, color=colors[i % len(colors)])
         ax.fill(angles, values, color=colors[i % len(colors)], alpha=0.1)
         
-    plt.legend(loc='lower right', bbox_to_anchor=(1.3, 0.0), title="Model Family", fontsize=16, title_fontsize=16)
+    leg = plt.legend(loc='lower right', bbox_to_anchor=(1.3, 0.0), title="Model Family", fontsize=20, title_fontsize=24)
+    for t in leg.get_texts():
+        t.set_text(textwrap.fill(t.get_text(), width=15))
     
     plt.tight_layout()
     out_p = Path(output_path)
@@ -115,7 +120,7 @@ def plot_size_vs_rank(plot_df, output_path="size_vs_rank.pdf"):
         hue='Family',
         style='Family',
         markers=markers,
-        s=120,
+        s=200,
         palette='tab10'
     )
     
@@ -131,7 +136,9 @@ def plot_size_vs_rank(plot_df, output_path="size_vs_rank.pdf"):
     
     plt.xlabel('Model Size', fontsize=18, fontweight='bold')
     plt.ylabel('Borda Rank', fontsize=18, fontweight='bold')
-    plt.legend(title='Model Family', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=15, title_fontsize=15)
+    leg = plt.legend(title='Model Family', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=20, title_fontsize=24)
+    for t in leg.get_texts():
+        t.set_text(textwrap.fill(t.get_text(), width=15))
     
     plt.tight_layout()
     out_p = Path(output_path)
