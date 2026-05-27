@@ -379,13 +379,36 @@ def _get_session_id(request: gr.Request) -> str:
     return f"session_{request.session_hash}"
 
 
+def _get_client_ip(request: gr.Request) -> str:
+    """Common proxy/CDN headers. X-Forwarded-For may contain:
+    client, proxy1, proxy2
+    """
+    headers = request.headers
+
+    # Common proxy/CDN headers. X-Forwarded-For may contain:
+    # client, proxy1, proxy2
+    forwarded_for = headers.get("x-forwarded-for")
+    if forwarded_for:
+        return forwarded_for.split(",")[0].strip()
+
+    real_ip = headers.get("x-real-ip")
+    if real_ip:
+        return real_ip.strip()
+
+    cf_ip = headers.get("cf-connecting-ip")
+    if cf_ip:
+        return cf_ip.strip()
+
+    return request.client.host if request.client else "unknown"
+
+
 def _get_visitor_id(request: gr.Request) -> str:
     """Derive a cross-session visitor fingerprint from HTTP request headers.
 
     Hashes IP + User-Agent + Accept-Language so the same browser gets the same
     visitor_id across separate visits, enabling DAU-style analysis.
     """
-    ip = request.client.host if request.client else "unknown"
+    ip = _get_client_ip(request)
     fingerprint = "|".join(
         [
             ip,
