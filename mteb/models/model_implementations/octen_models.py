@@ -360,12 +360,14 @@ class OctenVLEmbeddingModel(AbsEncoder):
         self,
         model_name: str,
         model_prompts: dict[str, str] | None = None,
+        embed_dim: int | None = None,
         **kwargs,
     ) -> None:
         from octen import Octen
 
         self._client = Octen(api_key=os.environ.get("OCTEN_API_KEY"))
         self._model_name = model_name.rsplit("/", maxsplit=1)[-1]
+        self._embed_dim = embed_dim
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
     def encode(
@@ -432,11 +434,10 @@ class OctenVLEmbeddingModel(AbsEncoder):
                         returned.append(items[0] if items else None)
                     except Exception:
                         returned.append(None)
-            embed_dim = next(
-                (len(it.embedding) for it in returned if it is not None), 2048
-            )
+            # Leave failed items as None; zero-fill is deferred until the global
+            # embedding dimension is known (a fully-failed batch has no local dim).
             return start, [
-                it.embedding if it is not None else [0.0] * embed_dim for it in returned
+                it.embedding if it is not None else None for it in returned
             ]
 
         # Slots indexed by sentence position so final embeddings align with input order.
@@ -460,8 +461,14 @@ class OctenVLEmbeddingModel(AbsEncoder):
                     pbar.update(len(embs))
         pbar.close()
 
-        # Any unexpected None (should not happen): fill with zeros.
-        embed_dim = next((len(e) for e in slot if e is not None), 2048)
+        # Zero-fill failed slots using the dimension of any successful slot;
+        # fall back to the model's declared embed_dim when every call failed.
+        embed_dim = next((len(e) for e in slot if e is not None), self._embed_dim)
+        if embed_dim is None:
+            raise RuntimeError(
+                "Could not determine embedding dimension: every API call failed "
+                "and no embed_dim was provided to the model."
+            )
         embeddings = [e if e is not None else [0.0] * embed_dim for e in slot]
         return np.array(embeddings)
 
@@ -475,6 +482,7 @@ Octen_VL_Embedding = ModelMeta(
     loader=OctenVLEmbeddingModel,
     loader_kwargs=dict(
         model_prompts=_octen_vl_model_prompts,
+        embed_dim=2048,
     ),
     name="Octen/octen-vl-embedding",
     model_type=["dense"],
@@ -501,6 +509,7 @@ Octen_VL_Embedding_Large = ModelMeta(
     loader=OctenVLEmbeddingModel,
     loader_kwargs=dict(
         model_prompts=_octen_vl_model_prompts,
+        embed_dim=4096,
     ),
     name="Octen/octen-vl-embedding-large",
     model_type=["dense"],
