@@ -394,16 +394,16 @@ def evaluate(  # noqa: PLR0913, PLR0914
 
     model, meta, model_name, model_revision = _sanitize_model(model)
     _check_model_modalities(meta, tasks)
+    overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
-        agg_strategy = OverwriteStrategy.from_str(overwrite_strategy)
         try:
             existing_results, missing_eval = _check_cache(
-                tasks, meta, cache, agg_strategy
+                tasks, meta, cache, overwrite_strategy
             )
         except Exception:
-            if agg_strategy == OverwriteStrategy.NEVER:
+            if overwrite_strategy == OverwriteStrategy.NEVER:
                 raise
             existing_results = None
             missing_eval = dict.fromkeys(tasks.eval_splits, tasks.hf_subsets)
@@ -411,7 +411,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
         if (
             existing_results
             and not missing_eval
-            and agg_strategy != OverwriteStrategy.ALWAYS
+            and overwrite_strategy != OverwriteStrategy.ALWAYS
         ):
             logger.info(
                 f"Results for {tasks.metadata.name} already exist in cache. Skipping evaluation and loading results."
@@ -489,7 +489,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
             exceptions=exceptions,
         )
 
-    overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
     existing_results, missing_eval = _check_cache(task, meta, cache, overwrite_strategy)
 
     if (
