@@ -436,9 +436,7 @@ class OctenVLEmbeddingModel(AbsEncoder):
                         returned.append(None)
             # Leave failed items as None; zero-fill is deferred until the global
             # embedding dimension is known (a fully-failed batch has no local dim).
-            return start, [
-                it.embedding if it is not None else None for it in returned
-            ]
+            return start, [it.embedding if it is not None else None for it in returned]
 
         # Slots indexed by sentence position so final embeddings align with input order.
         slot: list[list[float] | None] = [None] * len(sentences)
