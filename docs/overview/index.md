@@ -33,7 +33,7 @@ This section provides an overview of available tasks, models and benchmarks in M
 
     Our comprehensive collection of tasks for evaluating embeddings
 
-    [:lucide-corner-down-right: See tasks](./available_tasks/retrieval.md)
+    [:lucide-corner-down-right: See tasks](_available_tasks/retrieval.md)
 
 
 
@@ -108,7 +108,7 @@ While MTEB covers multiple task types, we categorize them into 5 broad categorie
 
     Asymmetric matching between queries and a corpus across different embedding regions.
 
-    [:lucide-corner-down-right: See tasks](./available_tasks/retrieval.md)
+    [:lucide-corner-down-right: See tasks](_available_tasks/retrieval.md)
 
 
 -   :lucide-shapes: __Classification__
@@ -117,7 +117,7 @@ While MTEB covers multiple task types, we categorize them into 5 broad categorie
 
     Embeddings linearly separable by category, evaluated using a classifier or regression probe.
 
-    [:lucide-corner-down-right: See tasks](./available_tasks/classification.md)
+    [:lucide-corner-down-right: See tasks](_available_tasks/classification.md)
 
 -   :lucide-chart-network: __Clustering__
 
@@ -125,7 +125,7 @@ While MTEB covers multiple task types, we categorize them into 5 broad categorie
 
     Globally coherent embeddings where distances reflect semantic grouping.
 
-    [:lucide-corner-down-right: See tasks](./available_tasks/clustering.md)
+    [:lucide-corner-down-right: See tasks](_available_tasks/clustering.md)
 
 -   :lucide-spline: __Semantic similarity__
 
@@ -133,7 +133,7 @@ While MTEB covers multiple task types, we categorize them into 5 broad categorie
 
     Fine-grained similarity between item pairs, where cosine similarity reflects human judgments.
 
-    [:lucide-corner-down-right: See tasks](./available_tasks/semantic-similarity.md)
+    [:lucide-corner-down-right: See tasks](_available_tasks/semantic-similarity.md)
 
 
 -   :lucide-git-compare: __Pair classification__
@@ -142,6 +142,6 @@ While MTEB covers multiple task types, we categorize them into 5 broad categorie
 
     Embeddings capturing relationships between item pairs, such as entailment or paraphrase.
 
-    [:lucide-corner-down-right: See tasks](./available_tasks/pair-classification.md)
+    [:lucide-corner-down-right: See tasks](_available_tasks/pair-classification.md)
 
 </div>
