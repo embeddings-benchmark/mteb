@@ -531,7 +531,7 @@ We've added a lot of new documentation to make it easier to get started with MTE
 
 - You can see api of our models in tasks in [API documentation](api/index.md).
 - We've added a [getting started guide](get_started/usage/get_started.md) to help you get started with MTEB.
-- You can see implemented [tasks](overview/_available_tasks/retrieval.md) and [models](overview/available_models/text.md) in MTEB.
+- You can see implemented [tasks](overview/available_tasks/retrieval.md) and [models](overview/available_models/text.md) in MTEB.
 
 #### Better support for loading and comparing results
 
