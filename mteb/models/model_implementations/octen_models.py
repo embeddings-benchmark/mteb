@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import concurrent.futures as cf
+import os
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -360,8 +362,6 @@ class OctenVLEmbeddingModel(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        import os
-
         from octen import Octen
 
         self._client = Octen(api_key=os.environ.get("OCTEN_API_KEY"))
@@ -376,7 +376,8 @@ class OctenVLEmbeddingModel(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        batch_size: int = 20,
+        batch_size: int = 32,
+        concurrency: int = 1,
         **kwargs: Any,
     ) -> Array:
         if prompt_type == PromptType.document:
@@ -388,21 +389,20 @@ class OctenVLEmbeddingModel(AbsEncoder):
         sentences = []
         for batch in inputs:
             sentences.extend(batch["text"])
-        return self._batched_encode(sentences, batch_size, instruct)
+        return self._batched_encode(sentences, batch_size, instruct, concurrency)
 
     def _batched_encode(
         self,
         sentences: list[str],
         batch_size: int,
         instruct: str | None,
+        concurrency: int = 1,
     ) -> Array:
         # ~4 chars/token; cap well below max_tokens=32000 to avoid silent batch failures
         max_chars = 100_000
-
-        import concurrent.futures as cf
-        import os
-
-        concurrency = max(1, int(os.environ.get("OCTEN_API_CONCURRENCY", "1")))
+        # The API accepts at most 20 contents per request, regardless of batch_size.
+        batch_size = min(batch_size, 20)
+        concurrency = max(1, concurrency)
 
         def _build_call(batch: list[str]) -> tuple[dict, list[dict]]:
             # prefix_instruct: instruct is prefixed into the user content text;
