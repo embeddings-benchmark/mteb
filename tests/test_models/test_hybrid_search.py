@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from unittest.mock import patch
+
 import numpy as np
 import pytest
 
@@ -203,3 +205,16 @@ def test_candidate_trimming():
         top_ranked=None,
     )
     assert res is not None
+
+
+def test_registered_hybrid_model_retrieval():
+    """Verify that the registered hybrid-bm25s-e5-small model can be loaded and its metadata is correct."""
+    meta = mteb.get_model_meta("mteb/hybrid-bm25s-e5-small")
+    assert meta is not None
+    assert meta.name == "mteb/hybrid-bm25s-e5-small"
+    assert meta.model_type == ["hybrid"]
+
+    with patch("mteb.models.model_meta.ModelMeta._check_requirements"):
+        model = mteb.get_model("mteb/hybrid-bm25s-e5-small")
+        assert isinstance(model, HybridSearch)
+        assert len(model.models) == 2

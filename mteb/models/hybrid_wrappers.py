@@ -322,6 +322,9 @@ class HybridSearch:
     @property
     def mteb_model_meta(self) -> ModelMeta:
         """Generate combined ModelMeta for the hybrid model."""
+        if hasattr(self, "_mteb_model_meta"):
+            return self._mteb_model_meta
+
         names = []
         for model in self.wrapped_models:
             meta = getattr(model, "mteb_model_meta", None)
@@ -338,3 +341,7 @@ class HybridSearch:
                 "model_type": ["hybrid"],
             }
         )
+
+    @mteb_model_meta.setter
+    def mteb_model_meta(self, value: ModelMeta) -> None:
+        self._mteb_model_meta = value
