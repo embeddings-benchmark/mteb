@@ -1,10 +1,6 @@
 from .cache_wrappers import CacheBackendProtocol, CachedEmbeddingWrapper
 from .compression_wrappers import CompressionWrapper
-from .hybrid_wrappers import (
-    DBSFHybridSearch,
-    RelativeScoreFusionHybridSearch,
-    RRFHybridSearch,
-)
+from .hybrid_wrappers import HybridSearch
 from .model_meta import ModelMeta
 from .models_protocols import (
     CrossEncoderProtocol,
@@ -27,14 +23,12 @@ __all__ = [
     "CompressionWrapper",
     "CrossEncoderProtocol",
     "CrossEncoderWrapper",
-    "DBSFHybridSearch",
     "EncoderProtocol",
+    "HybridSearch",
     "HybridSearchProtocol",
     "IndexEncoderSearchProtocol",
     "MTEBModels",
     "ModelMeta",
-    "RRFHybridSearch",
-    "RelativeScoreFusionHybridSearch",
     "SearchCrossEncoderWrapper",
     "SearchEncoderWrapper",
     "SearchProtocol",

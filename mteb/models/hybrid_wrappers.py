@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 import numpy as np
 
@@ -17,7 +16,7 @@ from mteb.models.search_wrappers import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Callable, Sequence
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import MTEBModels
@@ -30,16 +29,17 @@ if TYPE_CHECKING:
     )
 
 
-class BaseHybridSearch(ABC):
-    """Base class for hybrid search wrappers implementing the SearchProtocol."""
-
-    fusion_name: str | None = None
+class HybridSearch:
+    """Hybrid search wrapper that combines multiple models using a specified fusion strategy."""
 
     def __init__(
         self,
         models: Sequence[MTEBModels],
         weights: list[float] | None = None,
         sub_model_top_k: int | None = None,
+        fusion_strategy: Literal["rrf", "dbsf", "relative-score-fusion"]
+        | Callable[[list[dict[str, float]], list[float]], dict[str, float]] = "rrf",
+        rrf_k: int = 60,
     ) -> None:
         self.models = list(models)
         if len(self.models) < 2:
@@ -71,6 +71,32 @@ class BaseHybridSearch(ABC):
             if sub_model_top_k <= 0:
                 raise ValueError("sub_model_top_k must be greater than 0")
         self.sub_model_top_k = sub_model_top_k
+
+        if not isinstance(rrf_k, int):
+            raise TypeError("rrf_k must be an integer")
+        if rrf_k < 0:
+            raise ValueError("rrf_k must be greater than or equal to 0")
+        self.rrf_k = rrf_k
+
+        self.fusion_name: str
+        self._fuse_fn: Callable[[list[dict[str, float]], list[float]], dict[str, float]]
+
+        if isinstance(fusion_strategy, str):
+            self.fusion_name = fusion_strategy
+            if fusion_strategy == "rrf":
+                self._fuse_fn = self._fuse_rrf
+            elif fusion_strategy == "dbsf":
+                self._fuse_fn = self._fuse_dbsf
+            elif fusion_strategy in {"relative-score-fusion", "relative_score_fusion"}:
+                self.fusion_name = "relative-score-fusion"
+                self._fuse_fn = self._fuse_relative_score_fusion
+            else:
+                raise ValueError(f"Unknown fusion strategy: {fusion_strategy}")
+        elif callable(fusion_strategy):
+            self.fusion_name = getattr(fusion_strategy, "__name__", "custom")
+            self._fuse_fn = fusion_strategy
+        else:
+            raise TypeError("fusion_strategy must be a string or a callable")
 
     def index(
         self,
@@ -219,57 +245,17 @@ class BaseHybridSearch(ABC):
 
         return fused_results
 
-    @abstractmethod
     def fuse(self, query_scores_list: list[dict[str, float]]) -> dict[str, float]:
         """Fuse the query scores from multiple sub-models."""
-        raise NotImplementedError("Subclasses must implement the fuse method.")
+        return self._fuse_fn(query_scores_list, self.weights)
 
-    @property
-    def mteb_model_meta(self) -> ModelMeta:
-        """Generate combined ModelMeta for the hybrid model."""
-        names = []
-        model_types = set()
-        for model in self.wrapped_models:
-            meta = getattr(model, "mteb_model_meta", None)
-            if meta and meta.name:
-                names.append(meta.name.split("/")[-1])
-            else:
-                names.append("unknown")
-
-            if meta and getattr(meta, "model_type", None):
-                for m_type in meta.model_type:
-                    model_types.add(m_type)
-
-        if self.fusion_name:
-            fusion_name = self.fusion_name
-        else:
-            class_name = self.__class__.__name__
-            fusion_name = class_name
-            for suffix in ["HybridSearch", "Search"]:
-                if fusion_name.endswith(suffix):
-                    fusion_name = fusion_name[: -len(suffix)]
-            fusion_name = fusion_name.lower()
-
-        combined_name = f"hybrid-{fusion_name}/{'-'.join(names)}"
-        final_model_types = sorted(model_types) if model_types else ["dense"]
-
-        return ModelMeta.create_empty(
-            overwrites={
-                "name": combined_name,
-                "model_type": final_model_types,
-            }
-        )
-
-
-class DBSFHybridSearch(BaseHybridSearch):
-    """Distribution-Based Score Fusion (DBSF) hybrid search wrapper."""
-
-    fusion_name = "dbsf"
-
-    def fuse(self, query_scores_list: list[dict[str, float]]) -> dict[str, float]:
-        """Fuse the query scores using Distribution-Based Score Fusion. (https://arxiv.org/html/2410.20878v1)"""
+    @staticmethod
+    def _fuse_dbsf(
+        query_scores_list: list[dict[str, float]], weights: list[float]
+    ) -> dict[str, float]:
+        """Fuse the query scores using Distribution-Based Score Fusion."""
         fused: dict[str, float] = {}
-        for scores, weight in zip(query_scores_list, self.weights):
+        for scores, weight in zip(query_scores_list, weights):
             if not scores:
                 continue
 
@@ -293,30 +279,12 @@ class DBSFHybridSearch(BaseHybridSearch):
 
         return fused
 
-
-class RRFHybridSearch(BaseHybridSearch):
-    """Reciprocal Rank Fusion (RRF) hybrid search wrapper."""
-
-    fusion_name = "rrf"
-
-    def __init__(
-        self,
-        models: Sequence[MTEBModels],
-        weights: list[float] | None = None,
-        sub_model_top_k: int | None = None,
-        rrf_k: int = 60,
-    ) -> None:
-        super().__init__(models, weights=weights, sub_model_top_k=sub_model_top_k)
-        if not isinstance(rrf_k, int):
-            raise TypeError("rrf_k must be an integer")
-        if rrf_k < 0:
-            raise ValueError("rrf_k must be greater than or equal to 0")
-        self.rrf_k = rrf_k
-
-    def fuse(self, query_scores_list: list[dict[str, float]]) -> dict[str, float]:
+    def _fuse_rrf(
+        self, query_scores_list: list[dict[str, float]], weights: list[float]
+    ) -> dict[str, float]:
         """Fuse the query scores using Reciprocal Rank Fusion."""
         fused: dict[str, float] = {}
-        for scores, weight in zip(query_scores_list, self.weights):
+        for scores, weight in zip(query_scores_list, weights):
             sorted_docs = sorted(scores.keys(), key=lambda d: scores[d], reverse=True)
             for rank_idx, doc_id in enumerate(sorted_docs):
                 rank = rank_idx + 1
@@ -325,16 +293,13 @@ class RRFHybridSearch(BaseHybridSearch):
                 )
         return fused
 
-
-class RelativeScoreFusionHybridSearch(BaseHybridSearch):
-    """Relative Score Fusion (MinMax) hybrid search wrapper."""
-
-    fusion_name = "relative-score-fusion"
-
-    def fuse(self, query_scores_list: list[dict[str, float]]) -> dict[str, float]:
+    @staticmethod
+    def _fuse_relative_score_fusion(
+        query_scores_list: list[dict[str, float]], weights: list[float]
+    ) -> dict[str, float]:
         """Fuse the query scores using Relative Score MinMax normalisation."""
         fused: dict[str, float] = {}
-        for scores, weight in zip(query_scores_list, self.weights):
+        for scores, weight in zip(query_scores_list, weights):
             if not scores:
                 continue
 
@@ -353,3 +318,23 @@ class RelativeScoreFusionHybridSearch(BaseHybridSearch):
                 fused[doc_id] = fused.get(doc_id, 0.0) + weight * float(norm_score)
 
         return fused
+
+    @property
+    def mteb_model_meta(self) -> ModelMeta:
+        """Generate combined ModelMeta for the hybrid model."""
+        names = []
+        for model in self.wrapped_models:
+            meta = getattr(model, "mteb_model_meta", None)
+            if meta and meta.name:
+                names.append(meta.name.split("/")[-1])
+            else:
+                names.append("unknown")
+
+        combined_name = f"hybrid-{self.fusion_name}/{'-'.join(names)}"
+
+        return ModelMeta.create_empty(
+            overwrites={
+                "name": combined_name,
+                "model_type": ["hybrid"],
+            }
+        )

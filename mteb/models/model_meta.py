@@ -91,7 +91,9 @@ FRAMEWORKS = Literal[
     "Transformers",
 ]
 
-MODEL_TYPES = Literal["dense", "cross-encoder", "late-interaction", "sparse", "router"]
+MODEL_TYPES = Literal[
+    "dense", "cross-encoder", "late-interaction", "sparse", "router", "hybrid"
+]
 
 
 class ScoringFunction(HelpfulStrEnum):
