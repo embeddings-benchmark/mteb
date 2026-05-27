@@ -2322,14 +2322,13 @@ MIEB_ENG = MIEBBenchmark(
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation=r"""
-@article{xiao2025mieb,
-  author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
-  doi = {10.48550/ARXIV.2504.10471},
-  journal = {arXiv preprint arXiv:2504.10471},
-  publisher = {arXiv},
-  title = {MIEB: Massive Image Embedding Benchmark},
-  url = {https://arxiv.org/abs/2504.10471},
-  year = {2025},
+@InProceedings{xiao2025mieb,
+    author    = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
+    title     = {MIEB: Massive Image Embedding Benchmark},
+    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+    month     = {October},
+    year      = {2025},
+    pages     = {22187-22198}
 }
 """,
 )
