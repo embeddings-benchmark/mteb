@@ -92,7 +92,7 @@ class BidirLMOmniEncoder(AbsEncoder):
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        max_samples: int | None = None,
+        max_samples: int | None = 30 * 16_000,
         **kwargs: Any,
     ) -> None:
         from transformers import AutoVideoProcessor

@@ -67,6 +67,7 @@ GP_BENCHMARK_ENTRIES = [
                         "MTEB(Law, v1)",
                         "MTEB(Medical, v1)",
                         "ChemTEB",
+                        "CoREB(v1)",
                     ]
                 ),
             ),
