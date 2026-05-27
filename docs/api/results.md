@@ -62,12 +62,12 @@ task_result.plot_evaluation_phases()
 This will print a text-based Gantt chart of the recorded evaluation phases:
 
 ```text
-Data loading                  |███████████████████████████████                   | 19.4s
-Dataset transform             |                               █                  | 0.0s
+Data loading                     |███████████████████████████████                   | 19.4s
+Dataset transform                |                               █                  | 0.0s
 
-test/default/Encoding corpus  |                               █                  | 0.0s
-test/default/Encoding queries |                               ██████████████████ | 11.1s
-test/default/Scoring          |                                                 █| 0.1s
-                               30.6s (untracked: 0.0s)
+Encoding corpus (test, default)  |                               █                  | 0.0s
+Encoding queries (test, default) |                               ██████████████████ | 11.1s
+Scoring (test, default)          |                                                 █| 0.1s
+                                  30.6s (untracked: 0.0s)
 ```
 </details>

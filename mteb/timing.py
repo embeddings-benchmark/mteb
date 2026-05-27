@@ -117,7 +117,7 @@ class TimingStack:
         """Plots a text-based bar chart of the recorded timing phases.
 
         When phases have ``subset`` or ``split`` metadata, the row label is
-        prefixed with ``<split>/<subset>`` so multi-lingual / multi-split runs
+        suffixed with ``(<split>, <subset>)`` so multi-lingual / multi-split runs
         are easy to read at a glance.
         """
         if not self.phases:
@@ -134,7 +134,10 @@ class TimingStack:
                 parts.append(p["split"])
             if p.get("subset"):
                 parts.append(p["subset"])
-            return "/".join(parts + [p["name"]]) if parts else p["name"]
+            if parts:
+                suffix = ", ".join(parts)
+                return f"{p['name']} ({suffix})"
+            return p["name"]
 
         labels = [_get_label(p) for p in self.phases]
         max_label_len = max(len(la) for la in labels)
