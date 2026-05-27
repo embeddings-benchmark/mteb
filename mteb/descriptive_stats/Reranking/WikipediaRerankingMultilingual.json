@@ -63,7 +63,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "bn": {
                 "num_samples": 15000,
@@ -96,7 +98,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "cs": {
                 "num_samples": 15000,
@@ -129,7 +133,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "da": {
                 "num_samples": 15000,
@@ -162,7 +168,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "de": {
                 "num_samples": 15000,
@@ -195,7 +203,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "en": {
                 "num_samples": 15000,
@@ -228,7 +238,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "fa": {
                 "num_samples": 15000,
@@ -261,7 +273,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "fi": {
                 "num_samples": 15000,
@@ -294,7 +308,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "hi": {
                 "num_samples": 15000,
@@ -327,7 +343,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "it": {
                 "num_samples": 15000,
@@ -360,7 +378,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "nl": {
                 "num_samples": 15000,
@@ -393,7 +413,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "pt": {
                 "num_samples": 15000,
@@ -426,7 +448,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "ro": {
                 "num_samples": 15000,
@@ -459,7 +483,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "sr": {
                 "num_samples": 15000,
@@ -492,7 +518,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "no": {
                 "num_samples": 15000,
@@ -525,7 +553,9 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             },
             "sv": {
                 "num_samples": 15000,
@@ -558,8 +588,12 @@
                     "min_top_ranked_per_query": 9,
                     "average_top_ranked_per_query": 9.0,
                     "max_top_ranked_per_query": 9
-                }
+                },
+                "num_documents": 13500,
+                "num_queries": 1500
             }
-        }
+        },
+        "num_documents": 216000,
+        "num_queries": 24000
     }
 }
