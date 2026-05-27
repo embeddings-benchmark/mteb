@@ -6,7 +6,8 @@ import logging
 from collections import defaultdict
 from functools import cached_property
 from importlib.metadata import version
-from typing import TYPE_CHECKING, Any
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 from huggingface_hub import EvalResult
@@ -294,7 +295,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     @property
     def task_type(self) -> str:
         """Get the type of the task."""
-        return self.task.metadata.type
+        return cast("str", self.task.metadata.type)
 
     @property
     def is_public(self) -> bool:
@@ -320,7 +321,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         """Get the eval splits present in the scores."""
         return list(self.scores.keys())
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         """Convert the TaskResult to a dictionary.
 
         Returns:
@@ -329,7 +330,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         return self.model_dump()
 
     @classmethod
-    def from_dict(cls, data: dict) -> Self:
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         """Create a TaskResult from a dictionary.
 
         Args:
@@ -442,7 +443,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                             hf_subset_scores.pop(key)  # type: ignore[attr-defined]
 
     @classmethod
-    def _convert_from_before_v1_11_0(cls, data: dict) -> TaskResult:
+    def _convert_from_before_v1_11_0(cls, data: dict[str, Any]) -> TaskResult:
         from mteb.get_tasks import _TASKS_REGISTRY
 
         # in case the task name is not found in the registry, try to find a lower case version
@@ -541,8 +542,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         languages: list[ISOLanguage | ISOLanguageScript] | None = None,
         scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
-        aggregation: Callable[[list[Score]], Any] = np.mean,
-    ) -> Any:
+        aggregation: Callable[[list[Score]], float] = np.mean,
+    ) -> float:
         """Get a score for the specified splits, languages, scripts and aggregation function.
 
         Args:
@@ -626,7 +627,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         return val_sum / n_val
 
     @classmethod
-    def from_validated(cls, **data) -> TaskResult:
+    def from_validated(cls, **data: Any) -> TaskResult:
         """Create a TaskResult from validated data.
 
         Returns:
@@ -1020,3 +1021,47 @@ class TaskError(BaseModel):
 
     task_name: str
     exception: str
+
+
+def _read_run_settings_from_file(path: Path) -> list[dict[str, Any]]:
+    """Read run settings entries from a JSONL file."""
+    if not path.exists():
+        return []
+
+    run_settings: list[dict[str, Any]] = []
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            stripped_line = line.strip()
+            if not stripped_line:
+                continue
+            try:
+                parsed = json.loads(stripped_line)
+            except Exception as e:
+                logger.warning(
+                    f"Could not parse run_settings line '{stripped_line}': {e}"
+                )
+                continue
+            if isinstance(parsed, dict):
+                run_settings.append(parsed)
+    return run_settings
+
+
+def _write_and_merge_keyed_json(
+    path: Path,
+    entries: list[dict[str, Any]],
+    *,
+    key_fields: tuple[str, str, str] = ("task", "split", "subset"),
+) -> None:
+    """Write entries to `.jsonl`, if it already exist it will merge it, replacing any existing entries with the same key."""
+    existing_entries = _read_run_settings_from_file(path)
+    new_keys = {tuple(entry.get(field) for field in key_fields) for entry in entries}
+    filtered_existing = [
+        entry
+        for entry in existing_entries
+        if tuple(entry.get(field) for field in key_fields) not in new_keys
+    ]
+    all_entries = filtered_existing + entries
+
+    with path.open("w", encoding="utf-8") as f:
+        for entry in all_entries:
+            f.write(json.dumps(entry, default=str) + "\n")

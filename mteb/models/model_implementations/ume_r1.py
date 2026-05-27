@@ -66,7 +66,12 @@ class UMER1Wrapper(AbsEncoder):
         self.model.eval()
 
         # Load processor
-        self.processor = AutoProcessor.from_pretrained(model, revision=revision)
+        self.processor = AutoProcessor.from_pretrained(
+            model,
+            revision=revision,
+            min_pixels=4 * 28 * 28,
+            max_pixels=256 * 28 * 28,
+        )
         self.processor.tokenizer.padding_side = "left"
 
         self.gen_emb_id = self.processor.tokenizer.get_vocab().get("<gen_emb>")
@@ -212,6 +217,59 @@ _UME_R1_CITATION = """@article{lan2025ume,
   year={2025}
 }"""
 
+_UME_R1_TRAINING = {
+    "Kinetics700V",
+    "Kinetics700VA",
+    "Kinetics700VZeroShot",
+    "Kinetics700VAZeroShot",
+    "SomethingSomethingV2Classification",
+    "HMDB51Classification",
+    "HMDB51Clustering",
+    "HMDB51ZeroShot",
+    "UCF101",
+    "UCF101VideoClassification",
+    "UCF101VideoAudioClassification",
+    "UCF101VideoClustering",
+    "UCF101AudioVideoClustering",
+    "BreakfastClassification",
+    "DiDeMoA2VRetrieval",
+    "DiDeMoAT2VRetrieval",
+    "DiDeMoT2VRetrieval",
+    "DiDeMoT2VARetrieval",
+    "DiDeMoV2ARetrieval",
+    "DiDeMoV2TRetrieval",
+    "DiDeMoVA2TRetrieval",
+    "DiDeMoVT2ARetrieval",
+    "MSRVTTA2V",
+    "MSRVTTAT2V",
+    "MSRVTTT2V",
+    "MSRVTTT2VA",
+    "MSRVTTV2A",
+    "MSRVTTV2T",
+    "MSRVTTVA2T",
+    "MSRVTTVT2A",
+    "MSVDT2VRetrieval",
+    "MSVDV2TRetrieval",
+    "VATEXA2VRetrieval",
+    "VATEXAT2VRetrieval",
+    "VATEXT2VRetrieval",
+    "VATEXT2VARetrieval",
+    "VATEXV2ARetrieval",
+    "VATEXV2TRetrieval",
+    "VATEXVA2TRetrieval",
+    "VATEXVT2ARetrieval",
+    "YouCook2A2VRetrieval",
+    "YouCook2AT2VRetrieval",
+    "YouCook2T2VRetrieval",
+    "YouCook2T2VARetrieval",
+    "YouCook2V2ARetrieval",
+    "YouCook2V2TRetrieval",
+    "YouCook2VA2TRetrieval",
+    "YouCook2VT2ARetrieval",
+    "Imagenet1k",
+    "Imagenet1kZeroShot",
+}
+
 _UME_R1_BASE_KWARGS = dict(
     loader=UMER1Wrapper,
     model_type=["dense"],
@@ -226,7 +284,7 @@ _UME_R1_BASE_KWARGS = dict(
     similarity_fn_name=ScoringFunction.COSINE,
     extra_requirements_groups=["qwen-vl"],
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=_UME_R1_TRAINING,
     citation=_UME_R1_CITATION,
 )
 

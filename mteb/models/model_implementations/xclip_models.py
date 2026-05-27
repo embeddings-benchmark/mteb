@@ -151,7 +151,12 @@ _XCLIP_COMMON = dict(
     framework=["PyTorch", "Transformers"],
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
+    training_datasets={
+        "Kinetics400V",
+        "Kinetics400VA",
+        "Kinetics400ZeroShot",
+        "Kinetics400VAZeroShot",
+    },
     citation=XCLIP_CITATION,
 )
 

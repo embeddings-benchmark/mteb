@@ -753,6 +753,13 @@ def test_submit_results_with_fake_remote(tmp_path):
                 f"File {expected_path} not found in commit {commit_sha}"
             )
 
+        expected_run_settings = (
+            f"{test_model.model_name_as_path()}/{revision}/run_settings.jsonl"
+        )
+        assert expected_run_settings in check.stdout, (
+            f"File {expected_run_settings} not found in commit {commit_sha}"
+        )
+
         # For manual submission, verify we're on the submission branch with the commit
         result_after = subprocess.run(
             ["git", "rev-parse", "--abbrev-ref", "HEAD"],
@@ -787,6 +794,25 @@ def test_submit_results(tmp_path):
             capture_output=True,
             text=True,
         ).stdout.strip()
+
+        commit_sha = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            check=True,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        check = subprocess.run(
+            ["git", "ls-tree", "-r", "--name-only", commit_sha],
+            check=True,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        )
+        expected_run_settings = f"{test_model.model_name_as_path()}/{test_model.revision}/run_settings.jsonl"
+        assert expected_run_settings in check.stdout, (
+            f"File {expected_run_settings} not found in commit {commit_sha}"
+        )
 
         # Merge submission branch back to main to simulate files being integrated
         subprocess.run(
@@ -859,3 +885,66 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path):
     assert all(not b.startswith("mteb-results-") for b in branches), (
         f"Temporary branch should be deleted but found: {branches}"
     )
+
+
+def _setup_experiment_model_results(
+    cache_path: Path, **kwargs
+) -> tuple[ModelMeta, list[str]]:
+    """Generate experiment results by evaluating the baseline random encoder with experiment kwargs."""
+    cache = ResultCache(cache_path=cache_path)
+    task = MockRetrievalTask()
+    model = mteb.get_model("mteb/baseline-random-encoder", **kwargs)
+    mteb.evaluate(model, task, cache=cache)
+
+    model_meta = model.mteb_model_meta
+    revision = cast("str", model_meta.revision)
+    experiment_name = cast("str", model_meta.experiment_name)
+    model_dir = (
+        cache.cache_path
+        / "results"
+        / model_meta.model_name_as_path()
+        / revision
+        / "experiments"
+        / experiment_name
+    )
+    result_files = [
+        f.name for f in model_dir.glob("*.json") if f.name != "model_meta.json"
+    ]
+    return model_meta, result_files
+
+
+def _committed_files(remote_path: Path) -> str:
+    commit_sha = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    return subprocess.run(
+        ["git", "ls-tree", "-r", "--name-only", commit_sha],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout
+
+
+def test_submit_results_experiments_only(tmp_path):
+    """Submit results for a model that only has experiment results (no base results)."""
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, result_files = _setup_experiment_model_results(cache_path, a="test")
+    revision = cast("str", test_model.revision)
+    experiment_name = cast("str", test_model.experiment_name)
+    cache = ResultCache(cache_path=cache_path)
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        result = cache.submit_results(models=[test_model], create_pr=False)
+
+    assert result["status"] == "ready_for_submission"
+    assert result["result_count"] == len(result_files)
+
+    committed = _committed_files(remote_path)
+    for filename in result_files:
+        expected = f"{test_model.model_name_as_path()}/{revision}/experiments/{experiment_name}/{filename}"
+        assert expected in committed, f"{expected} not found in commit"

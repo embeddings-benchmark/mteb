@@ -17,6 +17,28 @@ F2LLM_CITATION = """@article{2025F2LLM,
     eprint={2510.02294}
 }"""
 
+F2LLMV2_CITATION = """
+@misc{f2llm-v2,
+    title={F2LLM-v2: Inclusive, Performant, and Efficient Embeddings for a Multilingual World},
+    author={Ziyin Zhang and Zihan Liao and Hang Yu and Peng Di and Rui Wang},
+    year={2026},
+    eprint={2603.19223},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL},
+    url={https://arxiv.org/abs/2603.19223},
+}"""
+
+C2LLM_CITATION = """
+@misc{qin2025c2llmtechnicalreportnew,
+    title={C2LLM Technical Report: A New Frontier in Code Retrieval via Adaptive Cross-Attention Pooling},
+    author={Jin Qin and Zihan Liao and Ziyin Zhang and Hang Yu and Peng Di and Rui Wang},
+    year={2025},
+    eprint={2512.21332},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL},
+    url={https://arxiv.org/abs/2512.21332},
+}"""
+
 training_datasets = {
     "MSMARCO",
     "ArguAna",
@@ -588,6 +610,12 @@ f2llmv2_prompts_dict.update(
         "BuiltBenchClusteringS2S": "Identify the category of the built asset entities based on the names or titles.",
         "BuiltBenchRetrieval": "Given a query, retrieve relevant entity descriptions from built asset classification systems such as IFC and Uniclass.",
         "BuiltBenchReranking": "Given a query, retrieve relevant entity descriptions from built asset classification systems such as IFC and Uniclass.",
+        "CorebC2TRetrieval": "Retrieve the most relevant problem description for the given code implementation.",
+        "CorebC2TReranking": "Retrieve the most relevant problem description for the given code implementation.",
+        "CorebC2CRetrieval": "Retrieve equivalent code implementations across languages.",
+        "CorebC2CReranking": "Retrieve equivalent code implementations across languages.",
+        "CorebT2CRetrieval": "Retrieve the most relevant code implementation for the given problem description.",
+        "CorebT2CReranking": "Retrieve the most relevant code implementation for the given problem description.",
     }
 )
 
@@ -889,8 +917,7 @@ C2LLM_0B5 = ModelMeta(
     adapted_from=None,
     superseded_by=None,
     modalities=["text"],
-    is_cross_encoder=None,
-    citation=None,
+    citation=C2LLM_CITATION,
     contacts=None,
 )
 
@@ -918,8 +945,7 @@ C2LLM_7B = ModelMeta(
     adapted_from=None,
     superseded_by=None,
     modalities=["text"],
-    is_cross_encoder=None,
-    citation=None,
+    citation=C2LLM_CITATION,
     contacts=None,
 )
 
@@ -937,7 +963,7 @@ F2LLM_v2_80M = ModelMeta(
         },
     ),
     name="codefuse-ai/F2LLM-v2-80M",
-    revision="35baae5091e26211dbe628f1723448c146fafdf2",
+    revision="6faa7738f343cd4321f9b2fa92fdb7cae3c117a5",
     release_date="2026-03-09",
     languages=f2llmv2_languages,
     n_parameters=80084288,
@@ -959,7 +985,7 @@ F2LLM_v2_80M = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=F2LLMV2_CITATION,
     contacts=None,
 )
 
@@ -977,7 +1003,7 @@ F2LLM_v2_160M = ModelMeta(
         },
     ),
     name="codefuse-ai/F2LLM-v2-160M",
-    revision="9eb35007d12e8624e6bf3e9e35d2255b5269597f",
+    revision="4013fb02c4b37ae14fc567fb190051b6cad652f6",
     release_date="2026-03-09",
     languages=f2llmv2_languages,
     n_parameters=159185024,
@@ -999,7 +1025,7 @@ F2LLM_v2_160M = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=F2LLMV2_CITATION,
     contacts=None,
 )
 
@@ -1017,7 +1043,7 @@ F2LLM_v2_330M = ModelMeta(
         },
     ),
     name="codefuse-ai/F2LLM-v2-330M",
-    revision="b0e8e19bdf603b9826422852572c0d18d482c414",
+    revision="e8ef9a8eb907a9dffdd9442424a967ba73e70d31",
     release_date="2026-03-09",
     languages=f2llmv2_languages,
     n_parameters=334349184,
@@ -1039,7 +1065,7 @@ F2LLM_v2_330M = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=F2LLMV2_CITATION,
     contacts=None,
 )
 
@@ -1079,7 +1105,7 @@ F2LLM_v2_0B6 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=F2LLMV2_CITATION,
     contacts=None,
 )
 
@@ -1119,7 +1145,7 @@ F2LLM_v2_1B7 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=F2LLMV2_CITATION,
     contacts=None,
 )
 
@@ -1159,7 +1185,7 @@ F2LLM_v2_4B = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=F2LLMV2_CITATION,
     contacts=None,
 )
 
@@ -1199,7 +1225,7 @@ F2LLM_v2_8B = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=F2LLMV2_CITATION,
     contacts=None,
 )
 
@@ -1239,6 +1265,6 @@ F2LLM_v2_14B = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=F2LLMV2_CITATION,
     contacts=None,
 )

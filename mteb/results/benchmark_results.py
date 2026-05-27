@@ -18,6 +18,8 @@ from mteb.models.get_model_meta import get_model_metas
 
 from .model_result import ModelResult, _aggregate_and_pivot
 
+__all__ = ["BenchmarkResults", "ModelResult"]
+
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator
 
@@ -289,8 +291,8 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         getter: Callable[[ScoresDict], Score] | None = None,
         aggregation: Callable[[list[Score]], Any] | None = None,
         format: Literal["wide", "long"] = "wide",
-    ) -> list[dict]:
-        entries = []
+    ) -> list[dict[str, Any]]:
+        entries: list[dict[str, Any]] = []
         if format == "wide":
             for model_res in self:
                 try:
@@ -402,13 +404,13 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
         # Collect parallel arrays rather than a list of dicts:
         # pd.DataFrame(dict_of_lists) is ~10x faster than pd.DataFrame(list_of_dicts).
-        col_model_name: list = []
-        col_model_rev: list = []
-        col_task_name: list = []
-        col_split: list = []
-        col_language: list = []
-        col_subset: list = []
-        col_score: list = []
+        col_model_name: list[Any] = []
+        col_model_rev: list[Any] = []
+        col_task_name: list[Any] = []
+        col_split: list[Any] = []
+        col_language: list[Any] = []
+        col_subset: list[Any] = []
+        col_score: list[Any] = []
 
         for model_result in bench_results:
             mn = model_result.model_name
@@ -517,12 +519,12 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
     def __getitem__(self, index: int) -> ModelResult:
         return self.model_results[index]
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         """Convert BenchmarkResults to a dictionary."""
         return self.model_dump()
 
     @classmethod
-    def from_dict(cls, data: dict) -> Self:
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         """Create BenchmarkResults from a dictionary."""
         return cls.model_validate(data)
 

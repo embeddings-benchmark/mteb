@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any, Literal, cast
 import huggingface_hub
 import numpy as np
 import pandas as pd
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 from typing_extensions import overload
 
 from mteb._hf_integration.eval_result_model import (
@@ -19,7 +19,6 @@ from mteb._hf_integration.eval_result_model import (
     HFEvalResultSource,
 )
 from mteb.benchmarks import Benchmark
-from mteb.types import Modalities
 
 from .task_result import TaskError, TaskResult
 
@@ -34,6 +33,7 @@ if TYPE_CHECKING:
     from mteb.types import (
         ISOLanguage,
         ISOLanguageScript,
+        Modalities,
         Score,
         ScoresDict,
         SplitName,
@@ -97,9 +97,6 @@ class ModelResult(BaseModel):
     model_name: str
     model_revision: str | None
     task_results: list[TaskResult]
-    default_modalities: list[Modalities] = Field(
-        default_factory=lambda: [cast("Modalities", "text")], alias="modalities"
-    )
     model_config = (
         ConfigDict(  # to free up the name model_* which is otherwise protected
             protected_namespaces=(),
@@ -196,7 +193,7 @@ class ModelResult(BaseModel):
         getter: Callable[[ScoresDict], Score] | None = None,
         aggregation: Callable[[list[Score]], Any] | None = None,
         format: Literal["wide"] = "wide",
-    ) -> dict: ...
+    ) -> dict[str, float]: ...
 
     @overload
     def _get_scores(
@@ -208,7 +205,7 @@ class ModelResult(BaseModel):
         getter: Callable[[ScoresDict], Score] | None = None,
         aggregation: Callable[[list[Score]], Any] | None = None,
         format: Literal["long"] = "long",
-    ) -> list: ...
+    ) -> list[dict[str, str | float | None]]: ...
 
     def _get_scores(
         self,
@@ -219,7 +216,7 @@ class ModelResult(BaseModel):
         getter: Callable[[ScoresDict], Score] | None = None,
         aggregation: Callable[[list[Score]], Any] | None = None,
         format: Literal["wide", "long"] = "wide",
-    ) -> dict | list:
+    ) -> dict[str, float] | list[dict[str, str | float | None]]:
         if (getter is not None) or (aggregation is not None) or (scripts is not None):
             use_fast = False
             getter = (
@@ -374,7 +371,7 @@ class ModelResult(BaseModel):
     def __iter__(self) -> Iterable[TaskResult]:  # type: ignore[override]
         return iter(self.task_results)
 
-    def __getitem__(self, index) -> TaskResult:
+    def __getitem__(self, index: int) -> TaskResult:
         return self.task_results[index]
 
     def __len__(self) -> int:
@@ -435,7 +432,7 @@ class ModelResult(BaseModel):
             task_modalities = getattr(task_res, "modalities", [])
             mods.extend(task_modalities)
         if not mods:
-            mods = self.default_modalities
+            mods = ["text"]
         return list(set(mods))
 
     def to_disk(self, path: Path) -> None:

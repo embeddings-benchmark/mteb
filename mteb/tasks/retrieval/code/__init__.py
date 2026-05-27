@@ -14,6 +14,11 @@ from .code_search_net_retrieval import CodeSearchNetRetrieval
 from .code_trans_ocean_contest_retrieval import CodeTransOceanContestRetrieval
 from .code_trans_ocean_dl_retrieval import CodeTransOceanDLRetrieval
 from .coir_code_search_net_retrieval import COIRCodeSearchNetRetrieval
+from .coreb_retrieval import (
+    CorebC2CRetrieval,
+    CorebC2TRetrieval,
+    CorebT2CRetrieval,
+)
 from .cos_qa_retrieval import CosQARetrieval
 from .ds1000_retrieval import DS1000Retrieval
 from .fresh_stack_retrieval import FreshStackRetrieval
@@ -40,6 +45,9 @@ __all__ = [
     "CodeSearchNetRetrieval",
     "CodeTransOceanContestRetrieval",
     "CodeTransOceanDLRetrieval",
+    "CorebC2CRetrieval",
+    "CorebC2TRetrieval",
+    "CorebT2CRetrieval",
     "CosQARetrieval",
     "DS1000Retrieval",
     "FreshStackRetrieval",

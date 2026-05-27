@@ -234,13 +234,16 @@ class Benchmark:
             for task in self.tasks
         ]
 
-        return DatasetCard.from_template(
-            card_data=DatasetCardData(tags=["mteb", "benchmark"]),
-            template_path=str(template_path),
-            benchmark_name=self.name,
-            benchmark_description=self.description,
-            tasks=task_rows,
-            citation=self.citation,
+        return cast(
+            "DatasetCard",
+            DatasetCard.from_template(
+                card_data=DatasetCardData(tags=["mteb", "benchmark"]),
+                template_path=str(template_path),
+                benchmark_name=self.name,
+                benchmark_description=self.description,
+                tasks=task_rows,
+                citation=self.citation,
+            ),
         )
 
     def push_benchmark_card_to_hub(
@@ -486,6 +489,7 @@ class VidoreBenchmark(Benchmark):
             _format_max_tokens,
             _format_n_active_parameters,
             _format_n_parameters,
+            _get_embedding_size,
             _get_means_per_types,
             _split_on_capital,
         )
@@ -555,7 +559,7 @@ class VidoreBenchmark(Benchmark):
         joint_table.insert(
             1,
             "Embedding Dimensions",
-            model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
+            model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
         )
         joint_table.insert(
             1,

@@ -59,6 +59,7 @@ class AudioCapsAVV2TRetrieval(AbsTaskRetrieval):
             "Retrieve the English caption that describes a given video clip (video "
             "only) from AudioCaps-AV, an audio-visual extension of the AudioCaps "
             "dataset sourced from YouTube."
+            " Sampled the test split (~665 examples)."
         ),
         reference="https://audiocaps.github.io/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -91,6 +92,7 @@ class AudioCapsAVT2VRetrieval(AbsTaskRetrieval):
             "Retrieve the video clip (video only) that matches a given English "
             "caption from AudioCaps-AV, an audio-visual extension of the AudioCaps "
             "dataset sourced from YouTube."
+            " Sampled the test split (~665 examples)."
         ),
         reference="https://audiocaps.github.io/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -123,6 +125,7 @@ class AudioCapsAVVA2TRetrieval(AbsTaskRetrieval):
             "Retrieve the English caption that describes a given video+audio clip "
             "from AudioCaps-AV, an audio-visual extension of the AudioCaps dataset "
             "sourced from YouTube."
+            " Sampled the test split (~665 examples)."
         ),
         reference="https://audiocaps.github.io/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -157,6 +160,7 @@ class AudioCapsAVT2VARetrieval(AbsTaskRetrieval):
             "Retrieve the video+audio clip that matches a given English caption "
             "from AudioCaps-AV, an audio-visual extension of the AudioCaps dataset "
             "sourced from YouTube."
+            " Sampled the test split (~665 examples)."
         ),
         reference="https://audiocaps.github.io/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -192,6 +196,7 @@ class AudioCapsAVV2ARetrieval(AbsTaskRetrieval):
             "AudioCaps-AV, an audio-visual extension of the AudioCaps dataset "
             "sourced from YouTube. Tests cross-modal alignment between video "
             "frames and audio."
+            " Sampled the test split (~665 examples)."
         ),
         reference="https://audiocaps.github.io/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -225,6 +230,7 @@ class AudioCapsAVA2VRetrieval(AbsTaskRetrieval):
             "AudioCaps-AV, an audio-visual extension of the AudioCaps dataset "
             "sourced from YouTube. Tests cross-modal alignment between audio "
             "and video frames."
+            " Sampled the test split (~665 examples)."
         ),
         reference="https://audiocaps.github.io/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -257,6 +263,7 @@ class AudioCapsAVVT2ARetrieval(AbsTaskRetrieval):
             "Retrieve the audio track that matches a given video clip and its "
             "caption from AudioCaps-AV, an audio-visual extension of the AudioCaps "
             "dataset sourced from YouTube."
+            " Sampled the test split (~665 examples)."
         ),
         reference="https://audiocaps.github.io/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -293,6 +300,7 @@ class AudioCapsAVAT2VRetrieval(AbsTaskRetrieval):
             "Retrieve the video clip that matches a given audio track and its "
             "caption from AudioCaps-AV, an audio-visual extension of the AudioCaps "
             "dataset sourced from YouTube."
+            " Sampled the test split (~665 examples)."
         ),
         reference="https://audiocaps.github.io/",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
