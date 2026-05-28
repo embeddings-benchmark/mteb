@@ -7,6 +7,9 @@ title: "Semantic Similarity"
 .nowrap-table th {
   white-space: nowrap;
 }
+.md-content__button {
+    display: none;
+}
 </style>
 
 # Semantic Similarity
