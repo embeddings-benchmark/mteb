@@ -4,9 +4,10 @@ from unittest.mock import patch
 
 import numpy as np
 import pytest
+from datasets import Dataset
 
 import mteb
-from mteb import HybridSearch
+from mteb import HybridSearch, HybridSearchProtocol
 from tests.mock_tasks import MockRetrievalTask
 
 
@@ -16,6 +17,7 @@ def test_hybrid_search_init_and_meta():
     m2 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=10)
 
     hybrid = HybridSearch([m1, m2], fusion_strategy="dbsf")
+    assert isinstance(hybrid, HybridSearchProtocol)
     assert len(hybrid.models) == 2
     assert len(hybrid.wrapped_models) == 2
     assert len(hybrid.weights) == 2
@@ -126,8 +128,8 @@ def test_hybrid_search_e2e_retrieval():
         hybrid = HybridSearch([m1, m2], fusion_strategy=strategy)
         task = MockRetrievalTask()
         results = mteb.evaluate(hybrid, task, cache=None)
-        assert len(results) > 0
-        assert results[0].scores is not None
+        assert len(results) == 1
+        assert results[0].get_score() == pytest.approx(0.63093)
 
 
 def test_hybrid_search_with_cross_encoder():
@@ -138,8 +140,8 @@ def test_hybrid_search_with_cross_encoder():
     hybrid = HybridSearch([retriever, cross_encoder], fusion_strategy="dbsf")
     task = MockRetrievalTask()
     results = mteb.evaluate(hybrid, task, cache=None)
-    assert len(results) > 0
-    assert results[0].scores is not None
+    assert len(results) == 1
+    assert results[0].get_score() == pytest.approx(0.81546)
 
     with pytest.raises(
         ValueError,
@@ -161,42 +163,42 @@ def test_hybrid_search_with_cross_encoder():
 
 def test_candidate_trimming():
     """Verify that candidates generated from multiple retrievers are trimmed to sub_top_k."""
-    from mteb.models import SearchCrossEncoderWrapper
+    m1 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=32)
+    m2 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=10)
+    cross_encoder = mteb.get_model("mteb/baseline-random-cross-encoder")
 
-    class MockRetriever:
-        mteb_model_meta = None
-
-        def index(self, *args, **kwargs):
-            pass
-
-        def search(self, queries, top_k, **kwargs):  # noqa: PLR6301
-            return {"q1": {f"doc_{i}": float(i) for i in range(10)}}
-
-    class MockSearchCrossEncoderWrapper(SearchCrossEncoderWrapper):
-        mteb_model_meta = None
-
-        def __init__(self):
-            pass
-
-        def search(self, queries, top_k, top_ranked, **kwargs):  # noqa: PLR6301
-            assert top_ranked is not None
-            assert len(top_ranked["q1"]) == top_k
-            return {"q1": dict.fromkeys(top_ranked["q1"], 1.0)}
-
-    retriever1 = MockRetriever()
-    retriever2 = MockRetriever()
-    cross_encoder = MockSearchCrossEncoderWrapper()
+    # Patch predict to act as a mock returning constant scores
+    cross_encoder.predict = lambda inputs1, inputs2, **kwargs: np.ones(
+        len(inputs2.dataset)
+    )
 
     hybrid = HybridSearch(
-        [retriever1, retriever2, cross_encoder],
+        [m1, m2, cross_encoder],
         sub_model_top_k=3,
         fusion_strategy="dbsf",
     )
-    from tests.mock_tasks import MockRetrievalTask
+
+    corpus = Dataset.from_list(
+        [
+            {"id": "doc1", "text": "document one"},
+            {"id": "doc2", "text": "document two"},
+            {"id": "doc3", "text": "document three"},
+            {"id": "doc4", "text": "document four"},
+            {"id": "doc5", "text": "document five"},
+        ]
+    )
 
     task = MockRetrievalTask()
+    hybrid.index(
+        corpus=corpus,
+        task_metadata=task.metadata,
+        hf_split="test",
+        hf_subset="default",
+        encode_kwargs={},
+    )
+
     res = hybrid.search(
-        queries=[{"id": "q1", "text": "query"}],
+        queries=Dataset.from_list([{"id": "q1", "text": "query"}]),
         task_metadata=task.metadata,
         hf_split="test",
         hf_subset="default",
@@ -204,7 +206,10 @@ def test_candidate_trimming():
         encode_kwargs={},
         top_ranked=None,
     )
-    assert res is not None
+    assert list(res.keys()) == ["q1"]
+    assert len(res["q1"]) == 2
+    assert res["q1"]["doc4"] == pytest.approx(0.5748068685695726)
+    assert res["q1"]["doc3"] == pytest.approx(0.4209643094972072)
 
 
 def test_registered_hybrid_model_retrieval():
@@ -218,3 +223,4 @@ def test_registered_hybrid_model_retrieval():
         model = mteb.get_model("mteb/hybrid-bm25s-e5-small")
         assert isinstance(model, HybridSearch)
         assert len(model.models) == 2
+        assert len(model.wrapped_models) == 2

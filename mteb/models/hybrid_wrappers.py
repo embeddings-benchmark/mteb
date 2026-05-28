@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Literal
 
 import numpy as np
+from tqdm import tqdm
 
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import (
@@ -14,6 +16,8 @@ from mteb.models.search_wrappers import (
     SearchCrossEncoderWrapper,
     SearchEncoderWrapper,
 )
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
@@ -41,12 +45,13 @@ class HybridSearch:
         | Callable[[list[dict[str, float]], list[float]], dict[str, float]] = "rrf",
         rrf_k: int = 60,
     ) -> None:
-        self.models = list(models)
-        if len(self.models) < 2:
+        models = list(models)
+        if len(models) < 2:
             raise ValueError("At least two models must be provided for hybrid search.")
+        self.models = models
 
         self.wrapped_models: list[SearchProtocol] = []
-        for model in self.models:
+        for model in models:
             if isinstance(model, EncoderProtocol) and not isinstance(
                 model, SearchProtocol
             ):
@@ -61,9 +66,9 @@ class HybridSearch:
                 )
 
         if weights is None:
-            self.weights = [1.0 / len(self.models)] * len(self.models)
+            self.weights = [1.0 / len(models)] * len(models)
         else:
-            if len(weights) != len(self.models):
+            if len(weights) != len(models):
                 raise ValueError("Length of weights must match the number of models.")
             self.weights = list(weights)
 
@@ -97,6 +102,33 @@ class HybridSearch:
             self._fuse_fn = fusion_strategy
         else:
             raise TypeError("fusion_strategy must be a string or a callable")
+
+        self.cross_encoder_models: list[SearchCrossEncoderWrapper] = []
+        self.retriever_models: list[SearchProtocol] = []
+        self.model_is_cross_encoder: list[bool] = []
+        for model in self.wrapped_models:
+            if isinstance(model, SearchCrossEncoderWrapper):
+                self.cross_encoder_models.append(model)
+                self.model_is_cross_encoder.append(True)
+            else:
+                self.retriever_models.append(model)
+                self.model_is_cross_encoder.append(False)
+
+        names = []
+        for model in self.wrapped_models:
+            meta = model.mteb_model_meta
+            if meta and meta.name:
+                names.append(meta.name.rsplit("/", 1)[-1])
+            else:
+                names.append("unknown")
+
+        combined_name = f"hybrid-{self.fusion_name}/{'-'.join(names)}"
+        self.mteb_model_meta = ModelMeta.create_empty(
+            overwrites={
+                "name": combined_name,
+                "model_type": ["hybrid"],
+            }
+        )
 
     def index(
         self,
@@ -137,16 +169,9 @@ class HybridSearch:
         else:
             sub_top_k = max(top_k, self.sub_model_top_k)
 
-        cross_encoder_models = []
-        retriever_models = []
-        model_is_cross_encoder = []
-        for model in self.wrapped_models:
-            if isinstance(model, SearchCrossEncoderWrapper):
-                cross_encoder_models.append(model)
-                model_is_cross_encoder.append(True)
-            else:
-                retriever_models.append(model)
-                model_is_cross_encoder.append(False)
+        cross_encoder_models = self.cross_encoder_models
+        retriever_models = self.retriever_models
+        model_is_cross_encoder = self.model_is_cross_encoder
 
         effective_top_ranked = top_ranked
 
@@ -157,8 +182,9 @@ class HybridSearch:
                     "or at least one retriever sub-model in the hybrid wrapper to generate candidates."
                 )
 
+            logger.info("Running retriever sub-models...")
             retriever_results = []
-            for model in retriever_models:
+            for model in tqdm(retriever_models, desc="Retriever sub-models"):
                 res = model.search(
                     queries=queries,
                     top_k=sub_top_k,
@@ -193,8 +219,9 @@ class HybridSearch:
 
             effective_top_ranked = generated_top_ranked
 
+            logger.info("Running cross-encoder sub-models...")
             cross_encoder_results = []
-            for model in cross_encoder_models:
+            for model in tqdm(cross_encoder_models, desc="Cross-encoder sub-models"):
                 res = model.search(
                     queries=queries,
                     top_k=sub_top_k,
@@ -214,8 +241,10 @@ class HybridSearch:
                 for is_ce in model_is_cross_encoder
             ]
         else:
+            logger.info("Running all sub-models...")
+
             all_results = []
-            for model in self.wrapped_models:
+            for model in tqdm(self.wrapped_models, desc="Sub-models"):
                 res = model.search(
                     queries=queries,
                     top_k=sub_top_k,
@@ -318,30 +347,3 @@ class HybridSearch:
                 fused[doc_id] = fused.get(doc_id, 0.0) + weight * float(norm_score)
 
         return fused
-
-    @property
-    def mteb_model_meta(self) -> ModelMeta:
-        """Generate combined ModelMeta for the hybrid model."""
-        if hasattr(self, "_mteb_model_meta"):
-            return self._mteb_model_meta
-
-        names = []
-        for model in self.wrapped_models:
-            meta = getattr(model, "mteb_model_meta", None)
-            if meta and meta.name:
-                names.append(meta.name.split("/")[-1])
-            else:
-                names.append("unknown")
-
-        combined_name = f"hybrid-{self.fusion_name}/{'-'.join(names)}"
-
-        return ModelMeta.create_empty(
-            overwrites={
-                "name": combined_name,
-                "model_type": ["hybrid"],
-            }
-        )
-
-    @mteb_model_meta.setter
-    def mteb_model_meta(self, value: ModelMeta) -> None:
-        self._mteb_model_meta = value
