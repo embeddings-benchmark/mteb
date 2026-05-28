@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import time
 from typing import TYPE_CHECKING, Any
 
 from .evaluator import Evaluator
@@ -61,22 +62,36 @@ class RetrievalEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> RetrievalOutputType:
-        with self.timer(
-            "Encoding corpus",
-            split=self.hf_split,
-            subset=self.hf_subset,
-            log_message="Running retrieval task - Indexing corpus...",
-        ):
-            search_model.index(
-                corpus=self.corpus,
-                task_metadata=self.task_metadata,
-                hf_split=self.hf_split,
-                hf_subset=self.hf_subset,
-                encode_kwargs=encode_kwargs,
-                num_proc=num_proc,
+        logger.info("Running retrieval task - Indexing corpus...")
+        start_time = time.monotonic()
+        search_model.index(
+            corpus=self.corpus,
+            task_metadata=self.task_metadata,
+            hf_split=self.hf_split,
+            hf_subset=self.hf_subset,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
+        end_time = time.monotonic()
+        corpus_duration = end_time - start_time
+
+        if corpus_duration >= 1.0:
+            self.timer.add_phase(
+                "Encoding corpus",
+                start=start_time,
+                end=end_time,
+                split=self.hf_split,
+                subset=self.hf_subset,
             )
+
+        search_phase_name = (
+            "Encoding queries"
+            if corpus_duration >= 1.0
+            else "Encoding queries and documents"
+        )
+
         with self.timer(
-            "Encoding queries",
+            search_phase_name,
             split=self.hf_split,
             subset=self.hf_subset,
             log_message="Running retrieval task - Searching queries...",
