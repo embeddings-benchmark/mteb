@@ -63,7 +63,9 @@
                     "min_top_ranked_per_query": 7,
                     "average_top_ranked_per_query": 7.0,
                     "max_top_ranked_per_query": 7
-                }
+                },
+                "num_documents": 210,
+                "num_queries": 30
             },
             "da": {
                 "num_samples": 240,
@@ -96,7 +98,9 @@
                     "min_top_ranked_per_query": 7,
                     "average_top_ranked_per_query": 7.0,
                     "max_top_ranked_per_query": 7
-                }
+                },
+                "num_documents": 210,
+                "num_queries": 30
             },
             "no": {
                 "num_samples": 240,
@@ -129,8 +133,12 @@
                     "min_top_ranked_per_query": 7,
                     "average_top_ranked_per_query": 7.0,
                     "max_top_ranked_per_query": 7
-                }
+                },
+                "num_documents": 210,
+                "num_queries": 30
             }
-        }
+        },
+        "num_documents": 630,
+        "num_queries": 90
     }
 }

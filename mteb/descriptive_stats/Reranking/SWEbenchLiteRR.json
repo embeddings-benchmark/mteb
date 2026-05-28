@@ -30,6 +30,8 @@
             "min_top_ranked_per_query": 351,
             "average_top_ranked_per_query": 9914.34306569343,
             "max_top_ranked_per_query": 29356
-        }
+        },
+        "num_documents": 2716530,
+        "num_queries": 274
     }
 }
