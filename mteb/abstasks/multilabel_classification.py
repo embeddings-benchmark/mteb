@@ -194,22 +194,29 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             subset=hf_subset,
             log_message="Running multilabel classification - Evaluating classifiers...",
         ):
-            for _, sample_indices in enumerate(train_samples):
-                X_train = np.stack(
-                    [unique_train_embeddings[idx] for idx in sample_indices]
-                )
-                y_train = train_split.select(sample_indices)[self.label_column_name]
-                y_train = binarizer.transform(y_train)
-                y_pred, current_classifier = _evaluate_classifier(
-                    X_train, y_train, X_test, self.evaluator_model
-                )
-                if prediction_folder:
-                    all_predictions.append(y_pred.tolist())
+            for i, sample_indices in enumerate(train_samples):
+                msg = f"Running experiment ({i}/{self.n_experiments})"
+                with timer(
+                    msg,
+                    split=hf_split,
+                    subset=hf_subset,
+                    log_message=msg,
+                ):
+                    X_train = np.stack(
+                        [unique_train_embeddings[idx] for idx in sample_indices]
+                    )
+                    y_train = train_split.select(sample_indices)[self.label_column_name]
+                    y_train = binarizer.transform(y_train)
+                    y_pred, current_classifier = _evaluate_classifier(
+                        X_train, y_train, X_test, self.evaluator_model
+                    )
+                    if prediction_folder:
+                        all_predictions.append(y_pred.tolist())
 
-                scores_exp = self._calculate_scores(
-                    y_test, y_pred, X_test, current_classifier
-                )
-                scores.append(scores_exp)
+                    scores_exp = self._calculate_scores(
+                        y_test, y_pred, X_test, current_classifier
+                    )
+                    scores.append(scores_exp)
 
         if prediction_folder:
             self._save_task_predictions(

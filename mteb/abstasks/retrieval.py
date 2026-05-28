@@ -444,13 +444,12 @@ class AbsTaskRetrieval(AbsTask):
                 hf_split=hf_split,
             )
 
-        timer_scoring = timer(
+        with timer(
             "Scoring",
             split=hf_split,
             subset=hf_subset,
             log_message="Running retrieval task - Evaluating retrieval scores...",
-        )
-        with timer_scoring:
+        ):
             (
                 all_scores,
                 ndcg,
