@@ -1,0 +1,50 @@
+{
+  "dataset_revision": "5c011c8755517a299294686f3c87ad7ae4c93e4a",
+  "task_name": "VinogroundPairClassification",
+  "mteb_version": "2.13.0",
+  "scores": {
+    "test": [
+      {
+        "similarity_accuracy": 0.52,
+        "similarity_f1": 0.667111,
+        "similarity_precision": 0.500501,
+        "similarity_recall": 1.0,
+        "similarity_ap": 0.521332,
+        "cosine_accuracy": 0.52,
+        "cosine_f1": 0.667111,
+        "cosine_precision": 0.500501,
+        "cosine_recall": 1.0,
+        "cosine_ap": 0.521332,
+        "manhattan_accuracy": 0.516,
+        "manhattan_f1": 0.666444,
+        "manhattan_precision": 0.500251,
+        "manhattan_recall": 0.998,
+        "manhattan_ap": 0.5169,
+        "euclidean_accuracy": 0.5195,
+        "euclidean_f1": 0.666889,
+        "euclidean_precision": 0.50025,
+        "euclidean_recall": 1.0,
+        "euclidean_ap": 0.521089,
+        "dot_accuracy": 0.5205,
+        "dot_f1": 0.667111,
+        "dot_precision": 0.500501,
+        "dot_recall": 1.0,
+        "dot_ap": 0.521522,
+        "max_accuracy": 0.5205,
+        "max_f1": 0.667111,
+        "max_precision": 0.500501,
+        "max_recall": 1.0,
+        "max_ap": 0.521522,
+        "main_score": 0.521522,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "mteb_version": "2.13.0"
+      }
+    ]
+  },
+  "evaluation_time": 106350.08560729027,
+  "kg_co2_emissions": null,
+  "date": null
+}

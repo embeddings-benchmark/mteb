@@ -1,0 +1,36 @@
+{
+  "dataset_revision": "10c7ce0eb32d620f1f685bfedde2724066068a1c",
+  "task_name": "WorldSense1MinDomainVideoClustering",
+  "mteb_version": "2.13.0",
+  "scores": {
+    "test": [
+      {
+        "v_measures": {
+          "Level 0": [
+            0.341827,
+            0.341329,
+            0.358111,
+            0.344523,
+            0.317852,
+            0.339988,
+            0.349396,
+            0.329699,
+            0.349656,
+            0.331008
+          ]
+        },
+        "v_measure": 0.340339,
+        "v_measure_std": 0.011007,
+        "main_score": 0.340339,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "mteb_version": "2.13.0"
+      }
+    ]
+  },
+  "evaluation_time": 4660.03532743454,
+  "kg_co2_emissions": null,
+  "date": null
+}
