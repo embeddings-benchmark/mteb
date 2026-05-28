@@ -236,7 +236,7 @@ def test_run_private_task_warning(caplog):
     def load_data_dataset_not_found(
         num_proc: int | None = None,
         timer: TimingStack | None = None,
-        **kwargs: object,
+        **kwargs: Any,
     ):
         raise DatasetNotFoundError
 

@@ -13,17 +13,28 @@ def test_timing_stack():
     assert timer1._start_time is None
     assert timer1.plot() == "No timing phases recorded."
 
-    with timer1("test_phase", split="test", subset="default"):
+    with timer1("Load Data", split="test", subset="en"):
+        time.sleep(0.01)
+
+    with timer1("Encode", split="test", subset="en"):
         time.sleep(0.01)
 
     assert timer1._start_time is not None
-    assert len(timer1.phases) == 1
-    phase = timer1.phases[0]
-    assert phase["name"] == "test_phase"
-    assert phase["split"] == "test"
-    assert phase["subset"] == "default"
-    assert phase["start"] == pytest.approx(0.0, abs=1e-3)
-    assert phase["end"] > 0.0
+    assert len(timer1.phases) == 2
+
+    phases_no_time = [
+        {k: v for k, v in phase.items() if k not in {"start", "end"}}
+        for phase in timer1.phases
+    ]
+    assert phases_no_time == [
+        {"name": "Load Data", "split": "test", "subset": "en"},
+        {"name": "Encode", "split": "test", "subset": "en"},
+    ]
+
+    assert timer1.phases[0]["start"] == pytest.approx(0.0, abs=1e-3)
+    assert timer1.phases[0]["end"] > 0.0
+    assert timer1.phases[1]["start"] == pytest.approx(timer1.phases[0]["end"], abs=1e-3)
+    assert timer1.phases[1]["end"] > timer1.phases[1]["start"]
 
     timer2 = TimingStack()
     timer2.add_phase(
@@ -36,29 +47,30 @@ def test_timing_stack():
     )
 
     assert timer2._start_time == 1000.0
-    assert len(timer2.phases) == 4
-
-    assert timer2.phases[0]["name"] == "Load Data"
-    assert timer2.phases[0]["start"] == 0.0
-    assert timer2.phases[0]["end"] == 2.5
-    assert timer2.phases[0]["split"] == "test"
-    assert timer2.phases[0]["subset"] == "en"
-
-    assert timer2.phases[1]["name"] == "Encode"
-    assert timer2.phases[1]["start"] == 2.5
-    assert timer2.phases[1]["end"] == 6.0
-
-    assert timer2.phases[2]["name"] == "Scoring"
-    assert timer2.phases[2]["start"] == 6.0
-    assert timer2.phases[2]["end"] == 8.0
-    assert not timer2.phases[2]["split"]
-    assert not timer2.phases[2]["subset"]
-
-    assert timer2.phases[3]["name"] == "Evaluate"
-    assert timer2.phases[3]["start"] == 8.0
-    assert timer2.phases[3]["end"] == 10.0
-    assert timer2.phases[3]["split"] == "validation"
-    assert not timer2.phases[3]["subset"]
+    assert timer2.phases == [
+        {
+            "name": "Load Data",
+            "start": 0.0,
+            "end": 2.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {
+            "name": "Encode",
+            "start": 2.5,
+            "end": 6.0,
+            "split": "test",
+            "subset": "en",
+        },
+        {"name": "Scoring", "start": 6.0, "end": 8.0, "split": "", "subset": ""},
+        {
+            "name": "Evaluate",
+            "start": 8.0,
+            "end": 10.0,
+            "split": "validation",
+            "subset": "",
+        },
+    ]
 
     plot_output = timer2.plot()
     assert "Load Data (test, en)" in plot_output
