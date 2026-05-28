@@ -379,6 +379,7 @@ def _get_session_id(request: gr.Request) -> str:
 
 def _get_client_ip(request: gr.Request) -> str:
     """Common proxy/CDN headers. X-Forwarded-For may contain:
+
     client, proxy1, proxy2
     """
     headers = request.headers
