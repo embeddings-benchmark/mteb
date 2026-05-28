@@ -1,17 +1,21 @@
 from __future__ import annotations
 
+import logging
+import time
 from typing import TYPE_CHECKING
 
 import gradio as gr
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import polars as pl
 from matplotlib.colors import LinearSegmentedColormap
 from pandas.api.types import is_numeric_dtype
 
 if TYPE_CHECKING:
     from mteb.benchmarks.benchmark import Benchmark
-    from mteb.results.benchmark_results import BenchmarkResults
+
+logger = logging.getLogger(__name__)
 
 
 def _borda_count(scores: pd.Series) -> pd.Series:
@@ -29,6 +33,34 @@ def _get_borda_rank(score_table: pd.DataFrame) -> pd.Series:
 
 def _format_scores(score: float) -> float:
     return round(score * 100, 2)
+
+
+def _pl_to_task_df(pl_df: pl.DataFrame) -> pd.DataFrame:
+    """Aggregate polars pre-agg DF to task level: one row per (model_name, task_name)."""
+    agg = [pl.col("score").mean()]
+    if "is_public" in pl_df.columns:
+        agg.append(pl.col("is_public").first())
+    return pl_df.group_by(["model_name", "task_name"]).agg(agg).to_pandas()
+
+
+def _pl_to_language_df(pl_df: pl.DataFrame) -> pd.DataFrame:
+    """Aggregate polars pre-agg DF to language level: one row per (model_name, language)."""
+    return (
+        pl_df.explode("language")
+        .drop_nulls("language")
+        .group_by(["model_name", "language"])
+        .agg(pl.col("score").mean())
+        .to_pandas()
+    )
+
+
+def _pl_to_subset_df(pl_df: pl.DataFrame) -> pd.DataFrame:
+    """Aggregate polars pre-agg DF to subset level: one row per (model_name, task_name, subset)."""
+    return (
+        pl_df.group_by(["model_name", "task_name", "subset"])
+        .agg(pl.col("score").mean())
+        .to_pandas()
+    )
 
 
 def _get_column_widths(df: pd.DataFrame) -> list[str]:
@@ -66,7 +98,7 @@ def _create_light_green_cmap():
 
 
 def apply_summary_styling_from_benchmark(
-    benchmark_instance: Benchmark, benchmark_results: BenchmarkResults
+    benchmark_instance: Benchmark, pl_df: pl.DataFrame
 ) -> tuple[gr.DataFrame, pd.DataFrame]:
     """Apply styling to summary table created by the benchmark instance's _create_summary_table method.
 
@@ -74,25 +106,46 @@ def apply_summary_styling_from_benchmark(
 
     Args:
         benchmark_instance: The benchmark instance
-        benchmark_results: BenchmarkResults object containing model results (may be pre-filtered)
+        pl_df: Polars pre-aggregation DataFrame containing model results (may be pre-filtered)
 
     Returns:
         Tuple of (styled gr.DataFrame for display, raw pd.DataFrame with metadata for plots)
     """
-    # Use the instance method to support polymorphism
-    summary_df = benchmark_instance._create_summary_table(benchmark_results)
+    t0 = time.time()
+    task_df = _pl_to_task_df(pl_df)
+    t1 = time.time()
+    subset_df = _pl_to_subset_df(pl_df)
+    t2 = time.time()
+    summary_df = benchmark_instance._create_summary_table(task_df, subset_df)
+    t3 = time.time()
 
-    # If it's a no-results DataFrame, return it as-is
     if "No results" in summary_df.columns:
+        logger.info(
+            "apply_summary_styling [%s]: task_df=%.3fs subset_df=%.3fs create_table=%.3fs (no results)",
+            benchmark_instance.name,
+            t1 - t0,
+            t2 - t1,
+            t3 - t2,
+        )
         return gr.DataFrame(summary_df), summary_df
 
-    # Keep full data for plots, drop metadata columns from display
     display_df = summary_df.drop(columns=["Release Date"], errors="ignore")
-    return _apply_summary_table_styling(display_df), summary_df
+    result = _apply_summary_table_styling(display_df), summary_df
+    t4 = time.time()
+    logger.debug(
+        "apply_summary_styling [%s]: task_df=%.3fs subset_df=%.3fs create_table=%.3fs styling=%.3fs total=%.3fs",
+        benchmark_instance.name,
+        t1 - t0,
+        t2 - t1,
+        t3 - t2,
+        t4 - t3,
+        t4 - t0,
+    )
+    return result
 
 
 def apply_per_task_styling_from_benchmark(
-    benchmark_instance: Benchmark, benchmark_results: BenchmarkResults
+    benchmark_instance: Benchmark, pl_df: pl.DataFrame
 ) -> gr.DataFrame:
     """Apply styling to per-task table created by the benchmark instance's _create_per_task_table method.
 
@@ -100,24 +153,41 @@ def apply_per_task_styling_from_benchmark(
 
     Args:
         benchmark_instance: The benchmark instance
-        benchmark_results: BenchmarkResults object containing model results (may be pre-filtered)
+        pl_df: Polars pre-aggregation DataFrame containing model results (may be pre-filtered)
 
     Returns:
         Styled gr.DataFrame ready for display in the leaderboard
     """
-    # Use the instance method to support polymorphism
-    per_task_df = benchmark_instance._create_per_task_table(benchmark_results)
+    t0 = time.time()
+    task_df = _pl_to_task_df(pl_df)
+    t1 = time.time()
+    per_task_df = benchmark_instance._create_per_task_table(task_df)
+    t2 = time.time()
 
-    # If it's a no-results DataFrame, return it as-is
     if "No results" in per_task_df.columns:
+        logger.info(
+            "apply_per_task_styling [%s]: task_df=%.3fs create_table=%.3fs (no results)",
+            benchmark_instance.name,
+            t1 - t0,
+            t2 - t1,
+        )
         return gr.DataFrame(per_task_df)
 
-    # Apply the styling
-    return _apply_per_task_table_styling(per_task_df)
+    result = _apply_per_task_table_styling(per_task_df)
+    t3 = time.time()
+    logger.debug(
+        "apply_per_task_styling [%s]: task_df=%.3fs create_table=%.3fs styling=%.3fs total=%.3fs",
+        benchmark_instance.name,
+        t1 - t0,
+        t2 - t1,
+        t3 - t2,
+        t3 - t0,
+    )
+    return result
 
 
 def apply_per_language_styling_from_benchmark(
-    benchmark_instance: Benchmark, benchmark_results: BenchmarkResults
+    benchmark_instance: Benchmark, pl_df: pl.DataFrame
 ) -> gr.DataFrame:
     """Apply styling to per-language table created by the benchmark instance's _create_per_language_table method.
 
@@ -125,20 +195,37 @@ def apply_per_language_styling_from_benchmark(
 
     Args:
         benchmark_instance: The benchmark instance
-        benchmark_results: BenchmarkResults object containing model results (may be pre-filtered)
+        pl_df: Polars pre-aggregation DataFrame containing model results (may be pre-filtered)
 
     Returns:
         Styled gr.DataFrame ready for display in the leaderboard
     """
-    # Use the instance method to support polymorphism
-    per_language_df = benchmark_instance._create_per_language_table(benchmark_results)
+    t0 = time.time()
+    language_df = _pl_to_language_df(pl_df)
+    t1 = time.time()
+    per_language_df = benchmark_instance._create_per_language_table(language_df)
+    t2 = time.time()
 
-    # If it's a no-results DataFrame, return it as-is
     if "No results" in per_language_df.columns:
+        logger.info(
+            "apply_per_language_styling [%s]: language_df=%.3fs create_table=%.3fs (no results)",
+            benchmark_instance.name,
+            t1 - t0,
+            t2 - t1,
+        )
         return gr.DataFrame(per_language_df)
 
-    # Apply the styling
-    return _apply_per_language_table_styling(per_language_df)
+    result = _apply_per_language_table_styling(per_language_df)
+    t3 = time.time()
+    logger.debug(
+        "apply_per_language_styling [%s]: language_df=%.3fs create_table=%.3fs styling=%.3fs total=%.3fs",
+        benchmark_instance.name,
+        t1 - t0,
+        t2 - t1,
+        t3 - t2,
+        t3 - t0,
+    )
+    return result
 
 
 def _style_number_of_parameters(num_params: float) -> str:

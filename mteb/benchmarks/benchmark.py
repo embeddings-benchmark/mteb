@@ -108,7 +108,7 @@ class Benchmark:
         return self.tasks[index]
 
     def _create_summary_table(  # noqa: PLR6301
-        self, benchmark_results: BenchmarkResults
+        self, data: pd.DataFrame, subset_data: pd.DataFrame | None = None
     ) -> pd.DataFrame:
         """Create summary table. Called by the leaderboard app.
 
@@ -119,10 +119,10 @@ class Benchmark:
             _create_summary_table_from_benchmark_results,
         )
 
-        return _create_summary_table_from_benchmark_results(benchmark_results)
+        return _create_summary_table_from_benchmark_results(data)
 
     def _create_per_task_table(  # noqa: PLR6301
-        self, benchmark_results: BenchmarkResults
+        self, data: pd.DataFrame
     ) -> pd.DataFrame:
         """Create per-task table. Called by the leaderboard app.
 
@@ -133,11 +133,9 @@ class Benchmark:
             _create_per_task_table_from_benchmark_results,
         )
 
-        return _create_per_task_table_from_benchmark_results(benchmark_results)
+        return _create_per_task_table_from_benchmark_results(data)
 
-    def _create_per_language_table(
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
+    def _create_per_language_table(self, data: pd.DataFrame) -> pd.DataFrame:
         """Create per-language table. Called by the leaderboard app.
 
         Returns:
@@ -149,7 +147,7 @@ class Benchmark:
 
         if self.language_view == "all" or len(self.language_view) > 0:
             return _create_per_language_table_from_benchmark_results(
-                benchmark_results, self.language_view
+                data, self.language_view
             )
         else:
             no_results_frame = pd.DataFrame(
@@ -421,14 +419,14 @@ class RtebBenchmark(Benchmark):
     """Wrapper for RTEB benchmark."""
 
     def _create_summary_table(  # noqa: PLR6301
-        self, benchmark_results: BenchmarkResults
+        self, data: pd.DataFrame, subset_data: pd.DataFrame | None = None
     ) -> pd.DataFrame:
         from mteb.benchmarks._create_table import (
             _create_summary_table_mean_public_private,
         )
 
         joint_table = _create_summary_table_mean_public_private(
-            benchmark_results, exclude_private_from_borda=True
+            data, exclude_private_from_borda=True
         )
         # issue 3902: temporary remove the private column from RTEB summary table
         if "Mean (Private)" in joint_table.columns:
@@ -447,23 +445,25 @@ class HUMEBenchmark(Benchmark):
     """Wrapper for HUME benchmark."""
 
     def _create_summary_table(  # noqa: PLR6301
-        self, benchmark_results: BenchmarkResults
+        self, data: pd.DataFrame, subset_data: pd.DataFrame | None = None
     ) -> pd.DataFrame:
         from mteb.benchmarks._create_table import _create_summary_table_mean_subset
 
-        return _create_summary_table_mean_subset(benchmark_results)
+        return _create_summary_table_mean_subset(
+            data, subset_data if subset_data is not None else pd.DataFrame()
+        )
 
 
 class MIEBBenchmark(Benchmark):
     """Wrapper for MIEB benchmark."""
 
     def _create_summary_table(  # noqa: PLR6301
-        self, benchmark_results: BenchmarkResults
+        self, data: pd.DataFrame, subset_data: pd.DataFrame | None = None
     ) -> pd.DataFrame:
         from mteb.benchmarks._create_table import _create_summary_table_mean_task_type
 
         return _create_summary_table_mean_task_type(
-            benchmark_results, mean_column_name="Mean (Task)"
+            data, mean_column_name="Mean (Task)"
         )
 
 
@@ -471,7 +471,7 @@ class VidoreBenchmark(Benchmark):
     """Wrapper for Vidore3 benchmark."""
 
     def _create_vidore_summary_table(  # noqa: PLR6301
-        self, benchmark_results: BenchmarkResults
+        self, data: pd.DataFrame
     ) -> pd.DataFrame:
         """Create summary table from BenchmarkResults.
 
@@ -479,7 +479,7 @@ class VidoreBenchmark(Benchmark):
         and task type averages. Customized for Vidore benchmark.
 
         Args:
-            benchmark_results: BenchmarkResults object containing model results
+            data: DataFrame with columns model_name, task_name, score, is_public (long format)
 
         Returns:
             DataFrame with model summaries, ready for styling in the leaderboard
@@ -495,27 +495,17 @@ class VidoreBenchmark(Benchmark):
         )
         from mteb.get_tasks import get_task
 
-        data = benchmark_results.to_dataframe(format="long")
-
         if data.empty:
             no_results_frame = pd.DataFrame(
                 {"No results": ["You can try relaxing your criteria"]}
             )
             return no_results_frame
-        if "is_public" in data.columns:
-            public_task_name = list(
-                data.loc[data["is_public"] == True, "task_name"].unique()  # noqa: E712
-            )
-            private_task_name = list(
-                data.loc[data["is_public"] == False, "task_name"].unique()  # noqa: E712
-            )
-        else:
-            public_task_name = benchmark_results._filter_tasks(
-                is_public=True
-            ).task_names
-            private_task_name = benchmark_results._filter_tasks(
-                is_public=False
-            ).task_names
+        public_task_name = list(
+            data.loc[data["is_public"] == True, "task_name"].unique()  # noqa: E712
+        )
+        private_task_name = list(
+            data.loc[data["is_public"] == False, "task_name"].unique()  # noqa: E712
+        )
         # Convert to DataFrame and pivot
         per_task = data.pivot(index="model_name", columns="task_name", values="score")
 
@@ -622,9 +612,9 @@ class VidoreBenchmark(Benchmark):
         return joint_table
 
     def _create_summary_table(
-        self, benchmark_results: BenchmarkResults
+        self, data: pd.DataFrame, subset_data: pd.DataFrame | None = None
     ) -> pd.DataFrame:
-        joint_table = self._create_vidore_summary_table(benchmark_results)
+        joint_table = self._create_vidore_summary_table(data)
         # For ViDoRe (V1, V2, V3): all tasks are Document Understanding type, so Document Understanding column = Mean (Task)
         joint_table = joint_table.rename(
             columns={"Document Understanding": "Mean (Task)"}

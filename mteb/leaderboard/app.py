@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import functools
 import hashlib
 import itertools
 import logging
@@ -16,7 +15,6 @@ import pandas as pd
 import polars as pl
 
 import mteb
-from mteb import BenchmarkResults
 from mteb.benchmarks._leaderboard_menu import GP_BENCHMARK_ENTRIES, R_BENCHMARK_ENTRIES
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.cache import ResultCache
@@ -25,7 +23,6 @@ from mteb.leaderboard.benchmark_selector import (
     DEFAULT_BENCHMARK_NAME,
     _make_selector,
 )
-from mteb.leaderboard.cached_benchmark_results import CachedBenchmarkResults
 from mteb.leaderboard.event_logger import EventLogger
 from mteb.leaderboard.figures import (
     _performance_over_time_plot,
@@ -46,15 +43,6 @@ event_logger = EventLogger()
 
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 MODEL_TYPE_CHOICES = list(get_args(MODEL_TYPES))
-
-
-@functools.lru_cache(maxsize=128)
-def _get_tasks_cached(task_names: tuple[str, ...], languages: tuple[str, ...] | None):
-    """Memoized `mteb.get_tasks` for leaderboard callbacks (tuples for hashability)."""
-    return mteb.get_tasks(
-        tasks=list(task_names),
-        languages=list(languages) if languages is not None else None,
-    )
 
 
 def _produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
@@ -321,55 +309,6 @@ def _cache_update_task_list(
     return benchmark_tasks, tasks_to_keep
 
 
-@functools.lru_cache(maxsize=128)
-def _all_langs_for_tasks(task_names: tuple[str, ...]) -> frozenset[str]:
-    """Union of `metadata.languages` for the given tasks, read from the registry class to avoid instantiation."""
-    langs: set[str] = set()
-    for name in task_names:
-        cls = _TASKS_REGISTRY.get(name)
-        if cls is None:
-            continue
-        langs.update(cls.metadata.languages)
-    return frozenset(langs)
-
-
-def _filter_benchmark_results_for_tables(
-    benchmark_results: BenchmarkResults,
-    task_names: set[str] | None,
-    model_names: set[str],
-    languages: list[str] | None,
-) -> BenchmarkResults:
-    """Apply task/model/language filters to BenchmarkResults for table rendering."""
-    if not task_names:
-        return benchmark_results._filter_tasks(task_names=[])
-
-    filtered_benchmark_results = benchmark_results._filter_tasks(
-        task_names=sorted(task_names)
-    )
-
-    # Filter models first so the more expensive language subset pass runs on the
-    # smallest possible set of model results.
-    if model_names:
-        filtered_benchmark_results = filtered_benchmark_results.select_models(
-            sorted(model_names)
-        )
-
-    # Keep only language-compatible subsets for each selected task. Skip the
-    # get_tasks + select_tasks round-trip when the selected languages already
-    # cover every task language (the filter would be a no-op).
-    if languages:
-        all_task_langs = _all_langs_for_tasks(tuple(sorted(task_names)))
-        if not set(languages).issuperset(all_task_langs):
-            filtered_tasks = _get_tasks_cached(
-                tuple(sorted(task_names)), tuple(languages)
-            )
-            filtered_benchmark_results = filtered_benchmark_results.select_tasks(
-                filtered_tasks
-            )
-
-    return filtered_benchmark_results
-
-
 def _pl_df_to_scores(pl_df: pl.DataFrame) -> list[dict]:
     """Convert a polars pre-agg DataFrame to the scores list used by leaderboard callbacks."""
     return (
@@ -377,11 +316,6 @@ def _pl_df_to_scores(pl_df: pl.DataFrame) -> list[dict]:
         .agg(pl.col("score").mean())
         .to_dicts()
     )
-
-
-def _pl_df_to_cached_results(pl_df: pl.DataFrame) -> CachedBenchmarkResults:
-    """Build a CachedBenchmarkResults shell backed by a polars pre-agg DataFrame."""
-    return CachedBenchmarkResults.from_pre_agg_df(pl_df.to_pandas())
 
 
 def _get_session_id(request: gr.Request) -> str:
@@ -439,6 +373,17 @@ def get_leaderboard_app(  # noqa: PLR0914
     Returns:
         gr.Blocks: A Gradio Blocks application configured with the MTEB leaderboard interface
     """
+    # Ensure leaderboard timing logs are visible regardless of the caller's
+    # logging configuration (e.g. Gradio/uvicorn may leave the root logger at WARNING).
+    _lb_logger = logging.getLogger("mteb.leaderboard")
+    _lb_logger.setLevel(logging.INFO)
+    if not _lb_logger.handlers and not logging.root.handlers:
+        _handler = logging.StreamHandler()
+        _handler.setFormatter(
+            logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        )
+        _lb_logger.addHandler(_handler)
+
     app_start = time.time()
     logger.info("=== Starting leaderboard app initialization ===")
 
@@ -511,14 +456,13 @@ def get_leaderboard_app(  # noqa: PLR0914
         entry for entry in default_scores if entry["model_name"] in filtered_models
     ]
 
-    # Filter polars DataFrame to the filtered models and create a CachedBenchmarkResults shell
+    # Filter polars DataFrame to the filtered models
     filtered_model_names = list(
         {entry["model_name"] for entry in default_filtered_scores}
     )
     filtered_pl_df = default_pl_df.filter(
         pl.col("model_name").is_in(filtered_model_names)
     )
-    filtered_benchmark_results = _pl_df_to_cached_results(filtered_pl_df)
     filter_time = time.time() - filter_start
     logger.info(
         f"Step 4/7 complete: Filtered {len(filtered_model_names)} models in {filter_time:.2f}s"
@@ -527,14 +471,14 @@ def get_leaderboard_app(  # noqa: PLR0914
     logger.info("Step 5/7: Generating tables...")
     table_start = time.time()
     summary_table, summary_raw = apply_summary_styling_from_benchmark(
-        default_benchmark, filtered_benchmark_results
+        default_benchmark, filtered_pl_df
     )
     per_task_table = apply_per_task_styling_from_benchmark(
-        default_benchmark, filtered_benchmark_results
+        default_benchmark, filtered_pl_df
     )
     per_language_table = apply_per_language_styling_from_benchmark(
         default_benchmark,
-        filtered_benchmark_results,
+        filtered_pl_df,
     )
     table_time = time.time() - table_start
     logger.info(f"Step 5/7 complete: Generated tables in {table_time:.2f}s")
@@ -818,7 +762,8 @@ def get_leaderboard_app(  # noqa: PLR0914
         # This sets the benchmark from the URL query parameters
         demo.load(_set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
 
-        def on_benchmark_select(benchmark_name, request: gr.Request | None = None):
+        def on_benchmark_select(benchmark_name, request: gr.Request | None = None):  # noqa: PLR0914
+            t0 = time.time()
             (
                 languages,
                 domains,
@@ -829,6 +774,7 @@ def get_leaderboard_app(  # noqa: PLR0914
                 show_zero_shot,
                 initial_models,
             ) = _cache_on_benchmark_select(benchmark_name, all_benchmark_results)
+            t1 = time.time()
 
             if request:
                 event_logger.log_benchmark_change(
@@ -846,9 +792,28 @@ def get_leaderboard_app(  # noqa: PLR0914
                 and _TASKS_REGISTRY[t].metadata.type != "InstructionRetrieval"
             }
             display_radar = len(eligible_task_types) > 1
+            t2 = time.time()
             _, summary_raw = apply_summary_styling_from_benchmark(
                 mteb.get_benchmark(benchmark_name),
-                _pl_df_to_cached_results(bm_pl_df),
+                bm_pl_df,
+            )
+            t3 = time.time()
+            size_plot = _performance_size_plot(summary_raw)
+            t4 = time.time()
+            time_plot = _performance_over_time_plot(summary_raw)
+            t5 = time.time()
+            radar = _radar_chart(summary_raw)
+            t6 = time.time()
+            logger.info(
+                "on_benchmark_select [%s]: cache=%.3fs task_types=%.3fs summary=%.3fs size_plot=%.3fs time_plot=%.3fs radar=%.3fs total=%.3fs",
+                benchmark_name,
+                t1 - t0,
+                t2 - t1,
+                t3 - t2,
+                t4 - t3,
+                t5 - t4,
+                t6 - t5,
+                t6 - t0,
             )
             return (
                 gr.update(choices=languages, value=languages),
@@ -861,9 +826,9 @@ def get_leaderboard_app(  # noqa: PLR0914
                 initial_models,
                 gr.update(visible=display_radar),
                 gr.update(value=summary_raw),
-                _performance_size_plot(summary_raw),
-                _performance_over_time_plot(summary_raw),
-                _radar_chart(summary_raw),
+                size_plot,
+                time_plot,
+                radar,
             )
 
         benchmark_select.change(
@@ -1231,7 +1196,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             cache={},
             key=_cache_key_for_update_tables,
         )
-        def update_tables(
+        def update_tables(  # noqa: PLR0914
             scores,
             tasks,
             models_to_keep,
@@ -1256,6 +1221,7 @@ def get_leaderboard_app(  # noqa: PLR0914
                 filtered_model_names.add(entry["model_name"])
                 filtered_task_names.add(entry["task_name"])
 
+            t_filter0 = time.time()
             bm_pl_df = all_benchmark_results[benchmark_name]
             if not filtered_task_names or bm_pl_df.is_empty():
                 filtered_df = bm_pl_df.clear()
@@ -1267,20 +1233,28 @@ def get_leaderboard_app(  # noqa: PLR0914
                     "task_name"
                 ).is_in(filtered_task_names)
                 filtered_df = bm_pl_df.filter(mask)
-            filtered_benchmark_results = _pl_df_to_cached_results(filtered_df)
-
+            t_filter1 = time.time()
             summary, summary_raw = apply_summary_styling_from_benchmark(
-                benchmark, filtered_benchmark_results
+                benchmark, filtered_df
             )
-            per_task = apply_per_task_styling_from_benchmark(
-                benchmark, filtered_benchmark_results
-            )
+            t_summary = time.time()
+            per_task = apply_per_task_styling_from_benchmark(benchmark, filtered_df)
+            t_per_task = time.time()
             per_language = apply_per_language_styling_from_benchmark(
                 benchmark,
-                filtered_benchmark_results,
+                filtered_df,
             )
             elapsed = time.time() - start_time
-            logger.debug(f"update_tables callback: {elapsed}s")
+            logger.info(
+                "update_tables [%s]: scores_filter=%.3fs pl_filter=%.3fs summary=%.3fs per_task=%.3fs per_language=%.3fs total=%.3fs",
+                benchmark_name,
+                t_filter0 - start_time,
+                t_filter1 - t_filter0,
+                t_summary - t_filter1,
+                t_per_task - t_summary,
+                elapsed - (t_per_task - start_time),
+                elapsed,
+            )
             return (
                 summary,
                 summary_raw,

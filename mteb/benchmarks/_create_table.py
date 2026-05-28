@@ -14,7 +14,6 @@ from mteb.models.get_model_meta import get_model_meta
 
 if TYPE_CHECKING:
     from mteb.get_tasks import MTEBTasks
-    from mteb.results.benchmark_results import BenchmarkResults
 
 
 @functools.lru_cache(maxsize=128)
@@ -101,7 +100,7 @@ def _get_means_per_types(per_task: pd.DataFrame) -> pd.DataFrame:
 
 
 def _create_summary_table_from_benchmark_results(
-    benchmark_results: BenchmarkResults,
+    data: pd.DataFrame,
 ) -> pd.DataFrame:
     """Create summary table from BenchmarkResults.
 
@@ -109,13 +108,11 @@ def _create_summary_table_from_benchmark_results(
     and task type averages.
 
     Args:
-        benchmark_results: BenchmarkResults object containing model results
+        data: DataFrame with columns model_name, task_name, score (long format)
 
     Returns:
         DataFrame with model summaries, ready for styling in the leaderboard
     """
-    data = benchmark_results.to_dataframe(format="long")
-
     if data.empty:
         no_results_frame = pd.DataFrame(
             {"No results": ["You can try relaxing your criteria"]}
@@ -228,21 +225,18 @@ def _create_summary_table_from_benchmark_results(
 
 
 def _create_per_task_table_from_benchmark_results(
-    benchmark_results: BenchmarkResults,
+    data: pd.DataFrame,
 ) -> pd.DataFrame:
     """Create per-task table from BenchmarkResults.
 
     Returns a DataFrame with one row per model and one column per task.
 
     Args:
-        benchmark_results: BenchmarkResults object containing model results
+        data: DataFrame with columns model_name, task_name, score (long format)
 
     Returns:
         DataFrame with per-task scores, ready for styling in the leaderboard
     """
-    # Get scores in long format
-    data = benchmark_results.to_dataframe(format="long")
-
     if data.empty:
         no_results_frame = pd.DataFrame(
             {"No results": ["You can try relaxing your criteria"]}
@@ -283,7 +277,7 @@ def _create_per_task_table_from_benchmark_results(
 
 
 def _create_per_language_table_from_benchmark_results(
-    benchmark_results: BenchmarkResults,
+    data: pd.DataFrame,
     language_view: list[str] | Literal["all"],
 ) -> pd.DataFrame:
     """Create per-language table from BenchmarkResults.
@@ -291,15 +285,13 @@ def _create_per_language_table_from_benchmark_results(
     Returns a DataFrame with one row per model and one column per language.
 
     Args:
-        benchmark_results: BenchmarkResults object containing model results
+        data: DataFrame with columns model_name, language, score (language-level long format)
         language_view: List of languages to include in the per-language table, or "all" for all languages present in the results
     Returns:
         DataFrame with per-language scores, ready for styling in the leaderboard
     """
     if language_view != "all" and not isinstance(language_view, list):
         raise ValueError("language_view must be a list of languages or 'all'")
-
-    data = benchmark_results.to_dataframe(aggregation_level="language", format="long")
 
     if data.empty:
         no_results_frame = pd.DataFrame(
@@ -342,7 +334,7 @@ def _create_per_language_table_from_benchmark_results(
 
 
 def _create_summary_table_mean_public_private(
-    benchmark_results: BenchmarkResults,
+    data: pd.DataFrame,
     exclude_private_from_borda: bool = False,
 ) -> pd.DataFrame:
     """Create summary table from BenchmarkResults.
@@ -351,29 +343,23 @@ def _create_summary_table_mean_public_private(
     and task type averages.
 
     Args:
-        benchmark_results: BenchmarkResults object containing model results
+        data: DataFrame with columns model_name, task_name, score, is_public (long format)
         exclude_private_from_borda: If True, calculate Borda rank using only public tasks
 
     Returns:
         DataFrame with model summaries, ready for styling in the leaderboard
     """
-    data = benchmark_results.to_dataframe(format="long")
-
     if data.empty:
         no_results_frame = pd.DataFrame(
             {"No results": ["You can try relaxing your criteria"]}
         )
         return no_results_frame
-    if "is_public" in data.columns:
-        public_task_name = list(
-            data.loc[data["is_public"] == True, "task_name"].unique()  # noqa: E712
-        )
-        private_task_name = list(
-            data.loc[data["is_public"] == False, "task_name"].unique()  # noqa: E712
-        )
-    else:
-        public_task_name = benchmark_results._filter_tasks(is_public=True).task_names
-        private_task_name = benchmark_results._filter_tasks(is_public=False).task_names
+    public_task_name = list(
+        data.loc[data["is_public"] == True, "task_name"].unique()  # noqa: E712
+    )
+    private_task_name = list(
+        data.loc[data["is_public"] == False, "task_name"].unique()  # noqa: E712
+    )
     # Convert to DataFrame and pivot
     per_task = data.pivot(index="model_name", columns="task_name", values="score")
 
@@ -475,7 +461,8 @@ def _create_summary_table_mean_public_private(
 
 
 def _create_summary_table_mean_subset(
-    benchmark_results: BenchmarkResults,
+    data: pd.DataFrame,
+    subset_data: pd.DataFrame,
 ) -> pd.DataFrame:
     """Create summary table from BenchmarkResults.
 
@@ -484,13 +471,12 @@ def _create_summary_table_mean_subset(
     is weighted equally.
 
     Args:
-        benchmark_results: BenchmarkResults object containing model results
+        data: DataFrame with columns model_name, task_name, score (task-level long format)
+        subset_data: DataFrame with columns model_name, task_name, subset, score (subset-level long format)
 
     Returns:
         DataFrame with model summaries, ready for styling in the leaderboard
     """
-    data = benchmark_results.to_dataframe(format="long")
-
     if data.empty:
         no_results_frame = pd.DataFrame(
             {"No results": ["You can try relaxing your criteria"]}
@@ -521,9 +507,7 @@ def _create_summary_table_mean_subset(
     ]
 
     # Calculate subset means (each task-language combination weighted equally)
-    detailed_data = benchmark_results.to_dataframe(
-        aggregation_level="subset", format="long"
-    )
+    detailed_data = subset_data
     overall_subset_mean = detailed_data.groupby("model_name")["score"].mean()
 
     per_subset = detailed_data.pivot(
@@ -605,7 +589,7 @@ def _create_summary_table_mean_subset(
 
 
 def _create_summary_table_mean_task_type(
-    benchmark_results: BenchmarkResults, mean_column_name: str = "Mean (TaskType)"
+    data: pd.DataFrame, mean_column_name: str = "Mean (TaskType)"
 ) -> pd.DataFrame:
     """Create summary table from BenchmarkResults.
 
@@ -613,14 +597,12 @@ def _create_summary_table_mean_task_type(
     and task type averages.
 
     Args:
-        benchmark_results: BenchmarkResults object containing model results
+        data: DataFrame with columns model_name, task_name, score (long format)
         mean_column_name: Name for the mean-by-task-type column. Defaults to "Mean (TaskType)".
 
     Returns:
         DataFrame with model summaries, ready for styling in the leaderboard
     """
-    data = benchmark_results.to_dataframe(format="long")
-
     if data.empty:
         no_results_frame = pd.DataFrame(
             {"No results": ["You can try relaxing your criteria"]}
