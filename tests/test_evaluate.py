@@ -5,7 +5,6 @@ from importlib.metadata import version
 from pathlib import Path
 
 import pytest
-from datasets import Dataset, DatasetDict
 from datasets.exceptions import DatasetNotFoundError
 
 import mteb
@@ -20,6 +19,7 @@ from tests.mock_models import MockSentenceTransformer
 from tests.mock_tasks import (
     MockAggregatedTask,
     MockClassificationTask,
+    MockMultilingualClassificationTask,
     MockMultilingualRetrievalTask,
     MockRetrievalTask,
 )
@@ -410,45 +410,10 @@ def test_mock_mmeb_tasks(task: AbsTask):
     mteb.evaluate(model, task, cache=None)
 
 
-class MockCrashTask(MockClassificationTask):
-    def __init__(self):
-        super().__init__()
-        self.hf_subsets = ["subset1", "subset2"]
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        train_texts = ["This is a test sentence", "This is another train sentence"]
-        test_texts = ["This is a test sentence", "This is another test sentence"]
-        labels = [0, 1]
-
-        self.dataset = DatasetDict(
-            {
-                "subset1": DatasetDict(
-                    {
-                        "test": Dataset.from_dict(
-                            {"text": test_texts, "label": labels}
-                        ),
-                        "train": Dataset.from_dict(
-                            {"text": train_texts, "label": labels}
-                        ),
-                    }
-                ),
-                "subset2": DatasetDict(
-                    {
-                        "test": Dataset.from_dict(
-                            {"text": test_texts, "label": labels}
-                        ),
-                        "train": Dataset.from_dict(
-                            {"text": train_texts, "label": labels}
-                        ),
-                    }
-                ),
-            }
-        )
-        self.data_loaded = True
-
+class MockCrashTask(MockMultilingualClassificationTask):
     def _evaluate_subset(self, model, data_split, hf_split, hf_subset, **kwargs):  # noqa: PLR6301
-        if hf_subset == "subset2":
-            raise RuntimeError("Crash on subset2")
+        if hf_subset == "fra":
+            raise RuntimeError("Crash on fra")
         return {"accuracy": 0.8}
 
 
@@ -457,7 +422,7 @@ def test_evaluate_intermediate_cache_on_crash(tmp_path: Path):
     task = MockCrashTask()
     cache = ResultCache(tmp_path)
 
-    with pytest.raises(RuntimeError, match="Crash on subset2"):
+    with pytest.raises(RuntimeError, match="Crash on fra"):
         mteb.evaluate(model, task, cache=cache, co2_tracker=False)
 
     cached_result = cache.load_task_result(task.metadata.name, model.mteb_model_meta)
@@ -465,7 +430,7 @@ def test_evaluate_intermediate_cache_on_crash(tmp_path: Path):
     assert "test" in cached_result.scores
     scores = cached_result.scores["test"]
     assert len(scores) == 1
-    assert scores[0]["hf_subset"] == "subset1"
+    assert scores[0]["hf_subset"] == "eng"
     assert scores[0]["main_score"] == 0.8
 
 
