@@ -520,7 +520,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         config: dict[str, Any] | None,
         encoder_loader: Callable[..., MTEBModels],
         cross_encoder_loader: Callable[..., MTEBModels],
-    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
+    ) -> tuple[Callable[..., MTEBModels], MODEL_TYPES]:
         """Detect if model is CrossEncoder or default to dense."""
         if not config:
             logger.warning(
@@ -898,6 +898,55 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 embed_dim=embedding_dim,
                 similarity_fn_name=similarity_fn_name,
                 adapted_from=_get_source_model(card_data),
+            )
+        )
+
+    @classmethod
+    def _from_local(cls, model_path: str) -> Self:
+        """Generates a ModelMeta from a local model directory.
+
+        Args:
+            model_path: Absolute or relative path to a local model directory.
+
+        Returns:
+            The generated ModelMeta.
+        """
+        from mteb.models import CrossEncoderWrapper, SentenceTransformerEncoderWrapper
+
+        path = Path(model_path)
+
+        def _read_local_json(filename: str) -> dict[str, Any] | None:
+            f = path / filename
+            if f.exists():
+                with f.open(encoding="utf-8") as fp:
+                    return json.load(fp)  # type: ignore[no-any-return]
+            return None
+
+        modules_config = _read_local_json("modules.json")
+        config = _read_local_json("config.json")
+
+        if modules_config:
+            loader: Callable[..., MTEBModels] = SentenceTransformerEncoderWrapper
+            model_type: MODEL_TYPES = "dense"
+        else:
+            loader, model_type = cls._detect_cross_encoder_or_dense(
+                model_path,
+                None,
+                config,
+                SentenceTransformerEncoderWrapper,
+                cross_encoder_loader=CrossEncoderWrapper,
+            )
+
+        embedding_dim = config.get("hidden_size") if config else None
+        max_tokens = config.get("max_position_embeddings") if config else None
+
+        return cls.create_empty(
+            overwrites=dict(
+                loader=loader,
+                name=model_path,
+                model_type=[model_type],
+                embed_dim=embedding_dim,
+                max_tokens=max_tokens,
             )
         )
 

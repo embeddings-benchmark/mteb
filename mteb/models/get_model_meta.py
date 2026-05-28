@@ -3,6 +3,7 @@ from __future__ import annotations
 import difflib
 import logging
 import warnings
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from mteb.models import (
@@ -168,6 +169,9 @@ def get_model_meta(
         msg = f"The model '{model_name}' has been renamed to '{new_name}'. To prevent this warning use the new name."
         warnings.warn(msg, DeprecationWarning, stacklevel=2)
         model_name = new_name
+
+    if Path(model_name).is_dir():
+        return ModelMeta._from_local(model_name)
 
     if model_name in MODEL_REGISTRY:
         model_meta = MODEL_REGISTRY[model_name]
