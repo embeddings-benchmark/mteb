@@ -29,6 +29,12 @@ h1_header = """
 icon: {icon}
 title: "{modalities} Model"
 ---
+<!-- Workaround until https://github.com/zensical/backlog/issues/120 is implemented. -->
+<style>
+.md-content__button {{
+    display: none;
+}}
+</style>
 
 # {modalities} Model
 

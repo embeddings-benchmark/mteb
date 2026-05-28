@@ -489,6 +489,7 @@ class VidoreBenchmark(Benchmark):
             _format_max_tokens,
             _format_n_active_parameters,
             _format_n_parameters,
+            _get_embedding_size,
             _get_means_per_types,
             _split_on_capital,
         )
@@ -558,7 +559,7 @@ class VidoreBenchmark(Benchmark):
         joint_table.insert(
             1,
             "Embedding Dimensions",
-            model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
+            model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
         )
         joint_table.insert(
             1,

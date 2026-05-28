@@ -1,6 +1,7 @@
 import json
 import logging
 from copy import copy
+from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
@@ -14,11 +15,13 @@ from mteb.cache import ResultCache
 from mteb.models import ModelMeta
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.timing import TimingStack
+from mteb.results.task_result import TaskResult
 from mteb.types import OutputDType
 from tests.mock_models import MockSentenceTransformer
 from tests.mock_tasks import (
     MockAggregatedTask,
     MockClassificationTask,
+    MockMultilingualClassificationTask,
     MockMultilingualRetrievalTask,
     MockRetrievalTask,
 )
@@ -412,3 +415,73 @@ def test_mock_mmeb_tasks(task: AbsTask):
     pytest.importorskip("torchcodec", reason="Audio dependencies are not installed")
     model = mteb.get_model_meta("mteb/baseline-random-encoder")
     mteb.evaluate(model, task, cache=None)
+
+
+class MockCrashTask(MockMultilingualClassificationTask):
+    def _evaluate_subset(self, model, data_split, hf_split, hf_subset, **kwargs):  # noqa: PLR6301
+        if hf_subset == "fra":
+            raise RuntimeError("Crash on fra")
+        return {"accuracy": 0.8}
+
+
+def test_evaluate_intermediate_cache_on_crash(tmp_path: Path):
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockCrashTask()
+    cache = ResultCache(tmp_path)
+
+    with pytest.raises(RuntimeError, match="Crash on fra"):
+        mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+
+    cached_result = cache.load_task_result(task.metadata.name, model.mteb_model_meta)
+    assert cached_result is not None
+    assert "test" in cached_result.scores
+    scores = cached_result.scores["test"]
+    assert len(scores) == 1
+    assert scores[0]["hf_subset"] == "eng"
+    assert scores[0]["main_score"] == 0.8
+
+
+def test_task_result_from_task_results_merging():
+    task = MockClassificationTask()
+    scores = {
+        "test": {
+            "subset1": {
+                "main_score": 0.8,
+                "accuracy": 0.8,
+                "mteb_version": "1.0.0",
+            },
+            "subset2": {
+                "main_score": 0.9,
+                "accuracy": 0.9,
+            },
+        }
+    }
+
+    current_version = version("mteb")
+    result = TaskResult.from_task_results(
+        task=task,
+        scores=scores,
+        evaluation_time=12.5,
+        kg_co2_emissions=0.07,
+    )
+
+    assert result.kg_co2_emissions == 0.07
+    assert result.evaluation_time == 12.5
+    assert len(result.scores["test"]) == 2
+
+    subset1_score = next(
+        s for s in result.scores["test"] if s["hf_subset"] == "subset1"
+    )
+    subset2_score = next(
+        s for s in result.scores["test"] if s["hf_subset"] == "subset2"
+    )
+
+    assert subset1_score["accuracy"] == 0.8
+    assert subset2_score["accuracy"] == 0.9
+    assert subset1_score["mteb_version"] == "1.0.0"
+    assert subset2_score["mteb_version"] == current_version
+
+    if current_version == "1.0.0":
+        assert result.mteb_version == "1.0.0"
+    else:
+        assert result.mteb_version == f"1.0.0-{current_version}"

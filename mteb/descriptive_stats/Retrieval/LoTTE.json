@@ -53,7 +53,9 @@
                     "max_relevant_docs_per_query": 20,
                     "unique_relevant_docs": 2703
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 199994,
+                "num_queries": 1071
             },
             "writing_forum": {
                 "num_samples": 201994,
@@ -81,7 +83,9 @@
                     "max_relevant_docs_per_query": 110,
                     "unique_relevant_docs": 12906
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 199994,
+                "num_queries": 2000
             },
             "recreation_search": {
                 "num_samples": 167899,
@@ -109,7 +113,9 @@
                     "max_relevant_docs_per_query": 14,
                     "unique_relevant_docs": 1563
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 166975,
+                "num_queries": 924
             },
             "recreation_forum": {
                 "num_samples": 168977,
@@ -137,7 +143,9 @@
                     "max_relevant_docs_per_query": 26,
                     "unique_relevant_docs": 6947
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 166975,
+                "num_queries": 2002
             },
             "science_search": {
                 "num_samples": 1694781,
@@ -165,7 +173,9 @@
                     "max_relevant_docs_per_query": 18,
                     "unique_relevant_docs": 1327
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 1694164,
+                "num_queries": 617
             },
             "science_forum": {
                 "num_samples": 1696181,
@@ -193,7 +203,9 @@
                     "max_relevant_docs_per_query": 141,
                     "unique_relevant_docs": 15515
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 1694164,
+                "num_queries": 2017
             },
             "technology_search": {
                 "num_samples": 639105,
@@ -221,7 +233,9 @@
                     "max_relevant_docs_per_query": 55,
                     "unique_relevant_docs": 1578
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 638509,
+                "num_queries": 596
             },
             "technology_forum": {
                 "num_samples": 640513,
@@ -249,7 +263,9 @@
                     "max_relevant_docs_per_query": 292,
                     "unique_relevant_docs": 15890
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 638509,
+                "num_queries": 2004
             },
             "lifestyle_search": {
                 "num_samples": 120122,
@@ -277,7 +293,9 @@
                     "max_relevant_docs_per_query": 13,
                     "unique_relevant_docs": 1250
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 119461,
+                "num_queries": 661
             },
             "lifestyle_forum": {
                 "num_samples": 121463,
@@ -305,9 +323,13 @@
                     "max_relevant_docs_per_query": 56,
                     "unique_relevant_docs": 10278
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 119461,
+                "num_queries": 2002
             }
-        }
+        },
+        "num_documents": 5638206,
+        "num_queries": 13894
     },
     "dev": {
         "num_samples": 4870736,
@@ -363,7 +385,9 @@
                     "max_relevant_docs_per_query": 14,
                     "unique_relevant_docs": 1027
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 277072,
+                "num_queries": 497
             },
             "writing_forum": {
                 "num_samples": 279075,
@@ -391,7 +415,9 @@
                     "max_relevant_docs_per_query": 38,
                     "unique_relevant_docs": 15098
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 277072,
+                "num_queries": 2003
             },
             "recreation_search": {
                 "num_samples": 263588,
@@ -419,7 +445,9 @@
                     "max_relevant_docs_per_query": 14,
                     "unique_relevant_docs": 1414
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 263025,
+                "num_queries": 563
             },
             "recreation_forum": {
                 "num_samples": 265027,
@@ -447,7 +475,9 @@
                     "max_relevant_docs_per_query": 41,
                     "unique_relevant_docs": 12752
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 263025,
+                "num_queries": 2002
             },
             "science_search": {
                 "num_samples": 344180,
@@ -475,7 +505,9 @@
                     "max_relevant_docs_per_query": 20,
                     "unique_relevant_docs": 1140
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 343642,
+                "num_queries": 538
             },
             "science_forum": {
                 "num_samples": 345655,
@@ -503,7 +535,9 @@
                     "max_relevant_docs_per_query": 150,
                     "unique_relevant_docs": 12271
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 343642,
+                "num_queries": 2013
             },
             "technology_search": {
                 "num_samples": 1277138,
@@ -531,7 +565,9 @@
                     "max_relevant_docs_per_query": 17,
                     "unique_relevant_docs": 2173
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 1276222,
+                "num_queries": 916
             },
             "technology_forum": {
                 "num_samples": 1278225,
@@ -559,7 +595,9 @@
                     "max_relevant_docs_per_query": 149,
                     "unique_relevant_docs": 15741
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 1276222,
+                "num_queries": 2003
             },
             "lifestyle_search": {
                 "num_samples": 269310,
@@ -587,7 +625,9 @@
                     "max_relevant_docs_per_query": 18,
                     "unique_relevant_docs": 1122
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 268893,
+                "num_queries": 417
             },
             "lifestyle_forum": {
                 "num_samples": 270969,
@@ -615,8 +655,12 @@
                     "max_relevant_docs_per_query": 77,
                     "unique_relevant_docs": 12823
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 268893,
+                "num_queries": 2076
             }
-        }
+        },
+        "num_documents": 4857708,
+        "num_queries": 13028
     }
 }

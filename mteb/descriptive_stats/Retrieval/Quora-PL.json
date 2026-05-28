@@ -25,7 +25,9 @@
             "max_relevant_docs_per_query": 84,
             "unique_relevant_docs": 7626
         },
-        "top_ranked_statistics": null
+        "top_ranked_statistics": null,
+        "num_documents": 522931,
+        "num_queries": 5000
     },
     "test": {
         "num_samples": 532931,
@@ -53,6 +55,8 @@
             "max_relevant_docs_per_query": 75,
             "unique_relevant_docs": 15675
         },
-        "top_ranked_statistics": null
+        "top_ranked_statistics": null,
+        "num_documents": 522931,
+        "num_queries": 10000
     }
 }

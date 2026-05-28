@@ -165,7 +165,7 @@ def format_task_entry(task: mteb.AbsTask) -> str:  # noqa: PLR0914
     return entry
 
 
-def insert_content(doc_path: Path, content: str, tag: str) -> None:
+def insert_content(input_path: Path, output_path: Path, content: str, tag: str) -> None:
     """Insert content into a markdown file between tags.
 
     If the file does not exist, it will be created with the content between the tags.
@@ -174,8 +174,8 @@ def insert_content(doc_path: Path, content: str, tag: str) -> None:
     start_tag = f"<!-- START-{tag} -->"
     end_tag = f"<!-- END-{tag} -->"
 
-    if doc_path.exists():
-        doc_content = doc_path.read_text()  # noqa: PLW1514
+    if input_path.exists():
+        doc_content = input_path.read_text()  # noqa: PLW1514
         if start_tag in doc_content and end_tag in doc_content:
             before = doc_content.split(start_tag)[0]
             after = doc_content.split(end_tag)[1]
@@ -189,11 +189,11 @@ def insert_content(doc_path: Path, content: str, tag: str) -> None:
         # Create new file with content between tags
         new_content = start_tag + "\n" + content + "\n" + end_tag
 
-    doc_path.write_text(new_content)  # noqa: PLW1514
+    output_path.write_text(new_content)  # noqa: PLW1514
 
 
-def main(folder: Path) -> None:
-    folder.mkdir(exist_ok=True)
+def main(input_path: Path, output_path: Path) -> None:
+    output_path.mkdir(exist_ok=True)
 
     tasks = mteb.get_tasks(
         exclude_superseded=False,
@@ -234,12 +234,13 @@ def main(folder: Path) -> None:
 
             mds.append(md)
 
-        doc_path = tasks_path / f"{stt}.md"
+        doc_path = f"{stt}.md"
         doc_content = "\n\n".join(mds)
-        insert_content(doc_path, doc_content, tag="TASKS")
+        insert_content(
+            input_path / doc_path, output_path / doc_path, doc_content, tag="TASKS"
+        )
 
 
 if __name__ == "__main__":
     root = Path(__file__).parent
-    tasks_path = root / "available_tasks"
-    main(tasks_path)
+    main(root / "task_templates", root / "available_tasks")

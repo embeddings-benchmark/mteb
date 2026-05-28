@@ -89,6 +89,12 @@ def format_benchmark_entry(benchmark: mteb.Benchmark) -> str:
 header = """---
 icon: lucide/square-stack
 ---
+<!-- Workaround until https://github.com/zensical/backlog/issues/120 is implemented. -->
+<style>
+.md-content__button {
+    display: none;
+}
+</style>
 
 # Available Benchmarks
 

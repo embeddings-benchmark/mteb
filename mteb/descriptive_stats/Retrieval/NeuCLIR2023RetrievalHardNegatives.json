@@ -53,7 +53,9 @@
                     "max_relevant_docs_per_query": 801,
                     "unique_relevant_docs": 24476
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 15921,
+                "num_queries": 74
             },
             "rus": {
                 "num_samples": 16322,
@@ -81,7 +83,9 @@
                     "max_relevant_docs_per_query": 730,
                     "unique_relevant_docs": 24619
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 16247,
+                "num_queries": 75
             },
             "zho": {
                 "num_samples": 17340,
@@ -109,8 +113,12 @@
                     "max_relevant_docs_per_query": 777,
                     "unique_relevant_docs": 26178
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 17265,
+                "num_queries": 75
             }
-        }
+        },
+        "num_documents": 49433,
+        "num_queries": 224
     }
 }
