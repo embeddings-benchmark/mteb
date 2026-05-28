@@ -133,17 +133,11 @@ class AbsTaskPairClassification(AbsTask):
             timer=timer,
             **kwargs,
         )
-        with timer(
-            "Scoring",
-            split=hf_split,
-            subset=hf_subset,
-            log_message="Running pair classification - Evaluating pair similarity...",
-        ):
-            similarity_scores = evaluator(
-                model,
-                encode_kwargs=encode_kwargs,
-                num_proc=num_proc,
-            )
+        similarity_scores = evaluator(
+            model,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
 
         if prediction_folder:
             self._save_task_predictions(

@@ -176,15 +176,9 @@ class AbsTaskImageTextPairClassification(AbsTask):
             timer=timer,
             **kwargs,
         )
-        with timer(
-            "Scoring",
-            split=hf_split,
-            subset=hf_subset,
-            log_message="Running image-text pair classification - Evaluating pair similarity...",
-        ):
-            scores: list[torch.Tensor] = evaluator(
-                model, encode_kwargs=encode_kwargs, num_proc=num_proc
-            )
+        scores: list[torch.Tensor] = evaluator(
+            model, encode_kwargs=encode_kwargs, num_proc=num_proc
+        )
         if prediction_folder:
             self._save_task_predictions(
                 [score.tolist() for score in scores],

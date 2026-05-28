@@ -98,9 +98,14 @@ class ZeroShotClassificationEvaluator(Evaluator):
                 hf_split=self.hf_split,
                 **encode_kwargs,
             )
-
-        if self.task_metadata.modalities == ["image", "text"]:
-            probs = similarity(text_label_embeddings, input_embeddings)
-        else:
-            probs = model.similarity(input_embeddings, text_label_embeddings)
+        with self.timer(
+            "Scoring",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running zero-shot classification - Evaluating accuracy...",
+        ):
+            if self.task_metadata.modalities == ["image", "text"]:
+                probs = similarity(text_label_embeddings, input_embeddings)
+            else:
+                probs = model.similarity(input_embeddings, text_label_embeddings)
         return probs
