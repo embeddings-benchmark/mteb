@@ -14,8 +14,8 @@ from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
 from mteb.models import ModelMeta
 from mteb.models.models_protocols import EncoderProtocol
-from mteb.timing import TimingStack
 from mteb.results.task_result import TaskResult
+from mteb.timing import TimingStack
 from mteb.types import OutputDType
 from tests.mock_models import MockSentenceTransformer
 from tests.mock_tasks import (

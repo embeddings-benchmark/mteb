@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import datetime
 import logging
-import time
 import warnings
 from pathlib import Path
+from time import monotonic, time
 from typing import TYPE_CHECKING, cast
 
 from datasets.exceptions import DatasetNotFoundError
@@ -85,7 +85,7 @@ def _sanitize_model(
     return wrapped_model, meta, model_name, model_revision
 
 
-def _evaluate_task(  # noqa: PLR0913
+def _evaluate_task(  # noqa: PLR0913, PLR0914
     model: MTEBModels,
     task: AbsTask,
     *,
@@ -165,13 +165,13 @@ def _evaluate_task(  # noqa: PLR0913
     if not data_preloaded:
         try:
             num_phases_before = len(timer.phases)
-            start_load = time.monotonic()
+            start_load = monotonic()
             task.load_data(num_proc=num_proc, timer=timer)
             # If load_data did not record its own timing phases, add a fallback "Data loading" phase
             # using the outer timing measured around the load_data call.
             if len(timer.phases) == num_phases_before:
                 timer.add_phase(
-                    "Data loading", start_load, time.monotonic(), split="", subset=""
+                    "Data loading", start_load, monotonic(), split="", subset=""
                 )
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
@@ -199,7 +199,7 @@ def _evaluate_task(  # noqa: PLR0913
 
         if split not in task_results:
             task_results[split] = {}
-            
+
         num_phases_before = len(timer.phases)
         general_timer = TimingStack()
         if timer._start_time is not None:
@@ -232,7 +232,7 @@ def _evaluate_task(  # noqa: PLR0913
                         evaluation_phases=timer.phases if timer.phases else None,
                     )
                     cache.save_to_cache(new_result, model_meta)
-                    
+
         duration = general_timer.phases[0]["end"] - general_timer.phases[0]["start"]
 
         # If the task evaluation did not record internal phases, append the overall evaluation phase
@@ -240,7 +240,6 @@ def _evaluate_task(  # noqa: PLR0913
             if timer._start_time is None:
                 timer._start_time = general_timer._start_time
             timer.phases.append(general_timer.phases[0])
-        
 
         logger.debug(
             f"Evaluation for {task.metadata.name} on {split} took {duration:.2f} seconds"

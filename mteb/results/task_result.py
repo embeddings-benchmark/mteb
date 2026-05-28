@@ -863,6 +863,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         ):
             merged_kg_co2_emissions = existing_kg_co2_emissions + new_kg_co2_emissions
 
+        merged_evaluation_phases: list[PhaseTiming] | None
+        merged_evaluation_time: float | None
         merged_evaluation_phases, merged_evaluation_time = (
             self._merge_evaluation_phases(
                 self.evaluation_phases, new_results.evaluation_phases
@@ -870,7 +872,10 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         )
         if merged_evaluation_phases is None:
             merged_evaluation_time = None
-            if self.evaluation_time is not None or new_results.evaluation_time is not None:
+            if (
+                self.evaluation_time is not None
+                or new_results.evaluation_time is not None
+            ):
                 merged_evaluation_time = (self.evaluation_time or 0.0) + (
                     new_results.evaluation_time or 0.0
                 )
