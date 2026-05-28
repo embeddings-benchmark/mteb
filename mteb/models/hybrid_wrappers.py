@@ -42,7 +42,7 @@ class HybridSearch:
         weights: list[float] | None = None,
         sub_model_top_k: int | None = None,
         fusion_strategy: Literal["rrf", "dbsf", "relative-score-fusion"]
-        | Callable[[list[dict[str, float]], list[float]], dict[str, float]] = "rrf",
+        | Callable[[RetrievalOutputType, Sequence[float]], dict[str, float]] = "rrf",
         rrf_k: int = 60,
     ) -> None:
         models = list(models)
@@ -84,17 +84,21 @@ class HybridSearch:
         self.rrf_k = rrf_k
 
         self.fusion_name: str
-        self._fuse_fn: Callable[[list[dict[str, float]], list[float]], dict[str, float]]
+        self._fuse_fn: Callable[
+            [RetrievalOutputType, Sequence[float]], dict[str, float]
+        ]
 
         if isinstance(fusion_strategy, str):
             self.fusion_name = fusion_strategy
             if fusion_strategy == "rrf":
-                self._fuse_fn = self._fuse_rrf
+                self._fuse_fn = lambda q_scores, w: fuse_rrf(
+                    q_scores, w, rrf_k=self.rrf_k
+                )
             elif fusion_strategy == "dbsf":
-                self._fuse_fn = self._fuse_dbsf
+                self._fuse_fn = fuse_dbsf
             elif fusion_strategy in {"relative-score-fusion", "relative_score_fusion"}:
                 self.fusion_name = "relative-score-fusion"
-                self._fuse_fn = self._fuse_relative_score_fusion
+                self._fuse_fn = fuse_relative_score_fusion
             else:
                 raise ValueError(f"Unknown fusion strategy: {fusion_strategy}")
         elif callable(fusion_strategy):
@@ -265,7 +269,7 @@ class HybridSearch:
             for res in all_results:
                 query_scores_list.append(res.get(qid, {}))
 
-            fused_query_scores = self.fuse(query_scores_list)
+            fused_query_scores = self.fuse(query_scores_list)  # type: ignore[arg-type]
 
             sorted_fused = sorted(
                 fused_query_scores.items(), key=lambda x: x[1], reverse=True
@@ -274,76 +278,80 @@ class HybridSearch:
 
         return fused_results
 
-    def fuse(self, query_scores_list: list[dict[str, float]]) -> dict[str, float]:
+    def fuse(self, query_scores_list: RetrievalOutputType) -> dict[str, float]:
         """Fuse the query scores from multiple sub-models."""
         return self._fuse_fn(query_scores_list, self.weights)
 
-    @staticmethod
-    def _fuse_dbsf(
-        query_scores_list: list[dict[str, float]], weights: list[float]
-    ) -> dict[str, float]:
-        """Fuse the query scores using Distribution-Based Score Fusion."""
-        fused: dict[str, float] = {}
-        for scores, weight in zip(query_scores_list, weights):
-            if not scores:
-                continue
 
-            doc_ids = list(scores.keys())
-            raw_scores = np.array(list(scores.values()), dtype=float)
+def fuse_dbsf(
+    query_scores_list: RetrievalOutputType, weights: Sequence[float]
+) -> dict[str, float]:
+    """Fuse the query scores using Distribution-Based Score Fusion. (https://arxiv.org/html/2410.20878v1)"""
+    fused: dict[str, float] = {}
+    scores_list: list[dict[str, float]] = query_scores_list  # type: ignore[assignment]
+    for scores, weight in zip(scores_list, weights):
+        if not scores:
+            continue
 
-            mu = np.mean(raw_scores)
-            sigma = np.std(raw_scores)
+        doc_ids = list(scores.keys())
+        raw_scores = np.array(list(scores.values()), dtype=float)
 
-            if sigma < 1e-9:
-                normalized = np.full_like(raw_scores, 0.5)
-            else:
-                lower_limit = mu - 3 * sigma
-                upper_limit = mu + 3 * sigma
-                denom = upper_limit - lower_limit
-                normalized = (raw_scores - lower_limit) / denom
-                normalized = np.clip(normalized, 0.0, 1.0)
+        mu = np.mean(raw_scores)
+        sigma = np.std(raw_scores)
 
-            for doc_id, norm_score in zip(doc_ids, normalized):
-                fused[doc_id] = fused.get(doc_id, 0.0) + weight * float(norm_score)
+        if sigma < 1e-9:
+            normalized = np.full_like(raw_scores, 0.5)
+        else:
+            lower_limit = mu - 3 * sigma
+            upper_limit = mu + 3 * sigma
+            denom = upper_limit - lower_limit
+            normalized = (raw_scores - lower_limit) / denom
+            normalized = np.clip(normalized, 0.0, 1.0)
 
-        return fused
+        for doc_id, norm_score in zip(doc_ids, normalized):
+            fused[doc_id] = fused.get(doc_id, 0.0) + weight * float(norm_score)
 
-    def _fuse_rrf(
-        self, query_scores_list: list[dict[str, float]], weights: list[float]
-    ) -> dict[str, float]:
-        """Fuse the query scores using Reciprocal Rank Fusion."""
-        fused: dict[str, float] = {}
-        for scores, weight in zip(query_scores_list, weights):
-            sorted_docs = sorted(scores.keys(), key=lambda d: scores[d], reverse=True)
-            for rank_idx, doc_id in enumerate(sorted_docs):
-                rank = rank_idx + 1
-                fused[doc_id] = fused.get(doc_id, 0.0) + weight * (
-                    1.0 / (self.rrf_k + rank)
-                )
-        return fused
+    return fused
 
-    @staticmethod
-    def _fuse_relative_score_fusion(
-        query_scores_list: list[dict[str, float]], weights: list[float]
-    ) -> dict[str, float]:
-        """Fuse the query scores using Relative Score MinMax normalisation."""
-        fused: dict[str, float] = {}
-        for scores, weight in zip(query_scores_list, weights):
-            if not scores:
-                continue
 
-            doc_ids = list(scores.keys())
-            raw_scores = np.array(list(scores.values()), dtype=float)
+def fuse_rrf(
+    query_scores_list: RetrievalOutputType,
+    weights: Sequence[float],
+    rrf_k: int = 60,
+) -> dict[str, float]:
+    """Fuse the query scores using Reciprocal Rank Fusion."""
+    fused: dict[str, float] = {}
+    scores_list: list[dict[str, float]] = query_scores_list  # type: ignore[assignment]
+    for scores, weight in zip(scores_list, weights):
+        sorted_docs = sorted(scores.keys(), key=lambda d: scores[d], reverse=True)
+        for rank_idx, doc_id in enumerate(sorted_docs):
+            rank = rank_idx + 1
+            fused[doc_id] = fused.get(doc_id, 0.0) + weight * (1.0 / (rrf_k + rank))
+    return fused
 
-            min_s = np.min(raw_scores)
-            max_s = np.max(raw_scores)
 
-            if max_s == min_s:
-                normalized = np.full_like(raw_scores, 0.5)
-            else:
-                normalized = (raw_scores - min_s) / (max_s - min_s)
+def fuse_relative_score_fusion(
+    query_scores_list: RetrievalOutputType, weights: Sequence[float]
+) -> dict[str, float]:
+    """Fuse the query scores using Relative Score MinMax normalisation."""
+    fused: dict[str, float] = {}
+    scores_list: list[dict[str, float]] = query_scores_list  # type: ignore[assignment]
+    for scores, weight in zip(scores_list, weights):
+        if not scores:
+            continue
 
-            for doc_id, norm_score in zip(doc_ids, normalized):
-                fused[doc_id] = fused.get(doc_id, 0.0) + weight * float(norm_score)
+        doc_ids = list(scores.keys())
+        raw_scores = np.array(list(scores.values()), dtype=float)
 
-        return fused
+        min_s = np.min(raw_scores)
+        max_s = np.max(raw_scores)
+
+        if max_s == min_s:
+            normalized = np.full_like(raw_scores, 0.5)
+        else:
+            normalized = (raw_scores - min_s) / (max_s - min_s)
+
+        for doc_id, norm_score in zip(doc_ids, normalized):
+            fused[doc_id] = fused.get(doc_id, 0.0) + weight * float(norm_score)
+
+    return fused
