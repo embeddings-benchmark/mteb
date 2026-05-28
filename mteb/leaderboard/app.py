@@ -276,7 +276,11 @@ def _cache_on_benchmark_select(benchmark_name, all_benchmark_results):
 
 @cachetools.cached(
     cache={},
-    key=lambda benchmark_name, type_select, domain_select, lang_select, modality_select: (
+    key=lambda benchmark_name,
+    type_select,
+    domain_select,
+    lang_select,
+    modality_select: (
         hash(
             (
                 hash(benchmark_name),
@@ -977,7 +981,15 @@ def get_leaderboard_app(  # noqa: PLR0914
 
         @cachetools.cached(
             cache={},
-            key=lambda scores, tasks, availability, compatibility, instructions, max_model_size, zero_shot, model_type_select, request=None: (
+            key=lambda scores,
+            tasks,
+            availability,
+            compatibility,
+            instructions,
+            max_model_size,
+            zero_shot,
+            model_type_select,
+            request=None: (
                 hash(
                     (
                         id(scores),
