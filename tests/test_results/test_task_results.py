@@ -363,3 +363,123 @@ def test_task_result_timings():
     assert "load data" in plot_output
     assert "encode" in plot_output
     assert "3.0s" in plot_output  # duration of encode phase is 4.5 - 1.5 = 3.0s
+
+
+def test_merge_evaluation_phases() -> None:
+    """Test that TaskResult.merge() correctly concatenates evaluation_phases with proper offset and sums evaluation_time."""
+    phases1: list[PhaseTiming] = [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 1.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {"name": "encode", "start": 1.5, "end": 4.5, "split": "test", "subset": "en"},
+    ]
+    phases2: list[PhaseTiming] = [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 2.0,
+            "split": "test",
+            "subset": "fr",
+        },
+        {"name": "encode", "start": 2.0, "end": 6.0, "split": "test", "subset": "fr"},
+    ]
+
+    task_result1 = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="1.0.0",
+        scores={},
+        evaluation_time=5.0,
+        evaluation_phases=phases1,
+    )
+
+    task_result2 = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="1.0.0",
+        scores={},
+        evaluation_time=8.0,
+        evaluation_phases=phases2,
+    )
+
+    merged = task_result1.merge(task_result2)
+
+    assert merged.evaluation_time == 13.0
+    assert merged.evaluation_phases is not None
+    # The second set of phases should be offset by task_result1.evaluation_time (5.0s)
+    assert merged.evaluation_phases == [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 1.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {
+            "name": "encode",
+            "start": 1.5,
+            "end": 4.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {
+            "name": "load data",
+            "start": 5.0,
+            "end": 7.0,
+            "split": "test",
+            "subset": "fr",
+        },
+        {
+            "name": "encode",
+            "start": 7.0,
+            "end": 11.0,
+            "split": "test",
+            "subset": "fr",
+        },
+    ]
+
+    # Also test merging where evaluation_time is None on the first result
+    task_result_no_time = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="1.0.0",
+        scores={},
+        evaluation_time=None,
+        evaluation_phases=phases1,
+    )
+    merged_fallback = task_result_no_time.merge(task_result2)
+    assert merged_fallback.evaluation_time == 8.0
+    assert merged_fallback.evaluation_phases == [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 1.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {
+            "name": "encode",
+            "start": 1.5,
+            "end": 4.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {
+            "name": "load data",
+            "start": 4.5,
+            "end": 6.5,
+            "split": "test",
+            "subset": "fr",
+        },
+        {
+            "name": "encode",
+            "start": 6.5,
+            "end": 10.5,
+            "split": "test",
+            "subset": "fr",
+        },
+    ]

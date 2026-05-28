@@ -863,22 +863,32 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         ):
             merged_kg_co2_emissions = existing_kg_co2_emissions + new_kg_co2_emissions
 
-        merged_evaluation_phases: list[PhaseTiming] | None
-        merged_evaluation_time: float | None
-        merged_evaluation_phases, merged_evaluation_time = (
-            self._merge_evaluation_phases(
-                self.evaluation_phases, new_results.evaluation_phases
+        merged_evaluation_time = None
+        if self.evaluation_time is not None or new_results.evaluation_time is not None:
+            merged_evaluation_time = (self.evaluation_time or 0.0) + (
+                new_results.evaluation_time or 0.0
             )
-        )
-        if merged_evaluation_phases is None:
-            merged_evaluation_time = None
-            if (
-                self.evaluation_time is not None
-                or new_results.evaluation_time is not None
-            ):
-                merged_evaluation_time = (self.evaluation_time or 0.0) + (
-                    new_results.evaluation_time or 0.0
+
+        merged_evaluation_phases: list[PhaseTiming] | None = None
+        if (
+            self.evaluation_phases is not None
+            or new_results.evaluation_phases is not None
+        ):
+            merged_evaluation_phases = []
+            if self.evaluation_phases is not None:
+                merged_evaluation_phases.extend(self.evaluation_phases)
+            if new_results.evaluation_phases is not None:
+                offset = self.evaluation_time or (
+                    max(p["end"] for p in self.evaluation_phases)
+                    if self.evaluation_phases
+                    else 0.0
                 )
+                for phase in new_results.evaluation_phases:
+                    merged_phase = phase.copy()
+                    merged_phase["start"] += offset
+                    merged_phase["end"] += offset
+                    merged_evaluation_phases.append(merged_phase)
+
         date = self.date
 
         if new_results.date is not None and (date is None or new_results.date > date):
@@ -897,53 +907,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         )
 
         return merged_results
-
-    @staticmethod
-    def _merge_evaluation_phases(
-        phases1: list[PhaseTiming] | None, phases2: list[PhaseTiming] | None
-    ) -> tuple[list[PhaseTiming] | None, float]:
-        """Merges two lists of evaluation phases.
-
-        Overlapping phases (same name, split, and subset) are averaged.
-        Also returns the adjusted total evaluation time.
-        """
-        if not phases1 and not phases2:
-            return None, 0.0
-
-        p1 = phases1 or []
-        p2 = phases2 or []
-
-        # Group by (name, split, subset) to identify overlaps
-        groups: dict[tuple[str, str | None, str | None], list[PhaseTiming]] = (
-            defaultdict(list)
-        )
-        for p in p1 + p2:
-            groups[(p["name"], p.get("split"), p.get("subset"))].append(p)
-
-        merged_phases: list[PhaseTiming] = []
-        total_time = 0.0
-        for (name, split, subset), ps in groups.items():
-            durations = [p["end"] - p["start"] for p in ps]
-            avg_duration = sum(durations) / len(ps)
-
-            phase_time: PhaseTiming
-            if len(ps) == 1:
-                phase_time = ps[0]
-            else:
-                avg_start = sum(p["start"] for p in ps) / len(ps)
-                avg_end = sum(p["end"] for p in ps) / len(ps)
-                phase_time = PhaseTiming(
-                    name=name,
-                    start=avg_start,
-                    end=avg_end,
-                    split=split or "",
-                    subset=subset or "",
-                )
-
-            merged_phases.append(phase_time)
-            total_time += avg_duration
-
-        return merged_phases, total_time
 
     @staticmethod
     def _compute_top_level_mteb_version(

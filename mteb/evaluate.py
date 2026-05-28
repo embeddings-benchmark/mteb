@@ -4,7 +4,7 @@ import datetime
 import logging
 import warnings
 from pathlib import Path
-from time import monotonic, time
+from time import monotonic
 from typing import TYPE_CHECKING, cast
 
 from datasets.exceptions import DatasetNotFoundError
@@ -167,11 +167,13 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
             num_phases_before = len(timer.phases)
             start_load = monotonic()
             task.load_data(num_proc=num_proc, timer=timer)
+            end_load = monotonic()
+            evaluation_time += end_load - start_load
             # If load_data did not record its own timing phases, add a fallback "Data loading" phase
             # using the outer timing measured around the load_data call.
             if len(timer.phases) == num_phases_before:
                 timer.add_phase(
-                    "Data loading", start_load, monotonic(), split="", subset=""
+                    "Data loading", start_load, end_load, split="", subset=""
                 )
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
@@ -189,7 +191,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
                 raise e
 
     for split, hf_subsets in splits.items():
-        tick = time()
+        tick = monotonic()
         # BitextMining tasks evaluate all subsets together (e.g. for parallel subsets), so they
         # are not run subset-by-subset. Other tasks are run subset-by-subset for intermediate caching.
         if isinstance(task, AbsTaskBitextMining):
@@ -219,7 +221,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
                     num_proc=num_proc,
                     timer=timer,
                 )
-                tock_ss = time()
+                tock_ss = monotonic()
                 task_results[split].update(res)
                 # Save intermediate cache
                 if cache:

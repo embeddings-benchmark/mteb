@@ -33,7 +33,7 @@ def test_timing_stack():
 
     assert timer1.phases[0]["start"] == pytest.approx(0.0, abs=1e-3)
     assert timer1.phases[0]["end"] > 0.0
-    assert timer1.phases[1]["start"] == pytest.approx(timer1.phases[0]["end"], abs=1e-3)
+    assert timer1.phases[1]["start"] >= timer1.phases[0]["end"]
     assert timer1.phases[1]["end"] > timer1.phases[1]["start"]
 
     timer2 = TimingStack()

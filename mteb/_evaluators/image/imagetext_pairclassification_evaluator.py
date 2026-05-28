@@ -76,7 +76,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         hf_subset: str,
         timer: TimingStack,
         **kwargs: Any,
-    ):
+    ) -> None:
         super().__init__(**kwargs)
 
         self.dataset = dataset
