@@ -13,6 +13,7 @@ from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
 from mteb.models import ModelMeta
 from mteb.models.models_protocols import EncoderProtocol
+from mteb.timing import TimingStack
 from mteb.types import OutputDType
 from tests.mock_models import MockSentenceTransformer
 from tests.mock_tasks import (
@@ -230,10 +231,11 @@ def test_evaluate_aggregated_task():
 def test_run_private_task_warning(caplog):
     """Test that a warning is correctly logged in an attempt run a private dataset is made"""
     task = mteb.get_task("Code1Retrieval")
+    from mteb.timing import TimingStack
 
     def load_data_dataset_not_found(
         num_proc: int | None = None,
-        timer: object = None,
+        timer: TimingStack | None = None,
         **kwargs: object,
     ):
         raise DatasetNotFoundError
@@ -264,7 +266,7 @@ def test_run_task_raise_error():
 
     def load_error(
         num_proc: int | None = None,
-        timer: TimerStack | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ):
         raise RuntimeError("Test error")
