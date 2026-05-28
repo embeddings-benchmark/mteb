@@ -20,7 +20,7 @@ hybrid_model = HybridSearch(
 )
 
 # Evaluate the hybrid model on your selected tasks
-tasks = mteb.get_tasks(tasks=["Banking77Classification"])
+tasks = mteb.get_tasks(tasks=["NFCorpus"])
 results = mteb.evaluate(hybrid_model, tasks=tasks)
 ```
 

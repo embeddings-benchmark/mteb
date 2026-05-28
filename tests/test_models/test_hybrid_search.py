@@ -217,11 +217,11 @@ def test_candidate_trimming():
 
 def test_registered_hybrid_model_retrieval():
     """Verify that the registered hybrid-baseline_encoder-e5-small model can be loaded and its metadata is correct."""
-    meta = mteb.get_model_meta("mteb/hybrid-baseline_encoder-e5-small")
+    meta = mteb.get_model_meta("mteb/hybrid-baseline-encoder-e5-small")
     assert meta is not None
-    assert meta.name == "mteb/hybrid-baseline_encoder-e5-small"
+    assert meta.name == "mteb/hybrid-baseline-encoder-e5-small"
     assert meta.model_type == ["hybrid"]
 
-    model = mteb.get_model("mteb/hybrid-baseline_encoder-e5-small")
+    model = mteb.get_model("mteb/hybrid-baseline-encoder-e5-small")
     assert isinstance(model, HybridSearch)
     assert len(model.wrapped_models) == 2

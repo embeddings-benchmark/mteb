@@ -28,8 +28,8 @@ hybrid_model = HybridSearch(
     weights=[0.5, 0.5],
 )
 
-# Evaluate as normal
-tasks = mteb.get_tasks(tasks=["Banking77Classification"])
+# Evaluate on a retrieval task
+tasks = mteb.get_tasks(tasks=["NFCorpus"])
 results = mteb.evaluate(hybrid_model, tasks=tasks)
 ```
 

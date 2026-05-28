@@ -20,7 +20,7 @@ hybrid_bm25s_e5 = ModelMeta(
     model_type=["hybrid"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="0_1_0",
+    revision="0.1.0",
     release_date="2026-05-27",
     n_parameters=0,
     n_embedding_parameters=None,
@@ -50,11 +50,11 @@ def hybrid_baseline_encoder_e5_loader(model_name: str, **kwargs) -> HybridSearch
 
 hybrid_baseline_encoder_e5 = ModelMeta(
     loader=hybrid_baseline_encoder_e5_loader,
-    name="mteb/hybrid-baseline_encoder-e5-small",
+    name="mteb/hybrid-baseline-encoder-e5-small",
     model_type=["hybrid"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="0_1_0",
+    revision="0.1.0",
     release_date="2026-05-27",
     n_parameters=0,
     n_embedding_parameters=None,
