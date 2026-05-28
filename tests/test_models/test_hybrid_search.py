@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from unittest.mock import patch
-
 import numpy as np
 import pytest
 from datasets import Dataset
@@ -18,7 +16,6 @@ def test_hybrid_search_init_and_meta():
 
     hybrid = HybridSearch([m1, m2], fusion_strategy="dbsf")
     assert isinstance(hybrid, HybridSearchProtocol)
-    assert len(hybrid.models) == 2
     assert len(hybrid.wrapped_models) == 2
     assert len(hybrid.weights) == 2
     assert hybrid.weights == [0.5, 0.5]
@@ -143,6 +140,12 @@ def test_hybrid_search_with_cross_encoder():
     assert len(results) == 1
     assert results[0].get_score() == pytest.approx(0.81546)
 
+
+def test_hybrid_search_cross_encoder_requires_candidates():
+    """Verify that a hybrid search with only CrossEncoders raises ValueError when top_ranked is None."""
+    cross_encoder = mteb.get_model("mteb/baseline-random-cross-encoder")
+    task = MockRetrievalTask()
+
     with pytest.raises(
         ValueError,
         match="CrossEncoder sub-models require top_ranked documents for reranking",
@@ -213,14 +216,12 @@ def test_candidate_trimming():
 
 
 def test_registered_hybrid_model_retrieval():
-    """Verify that the registered hybrid-bm25s-e5-small model can be loaded and its metadata is correct."""
-    meta = mteb.get_model_meta("mteb/hybrid-bm25s-e5-small")
+    """Verify that the registered hybrid-baseline_encoder-e5-small model can be loaded and its metadata is correct."""
+    meta = mteb.get_model_meta("mteb/hybrid-baseline_encoder-e5-small")
     assert meta is not None
-    assert meta.name == "mteb/hybrid-bm25s-e5-small"
+    assert meta.name == "mteb/hybrid-baseline_encoder-e5-small"
     assert meta.model_type == ["hybrid"]
 
-    with patch("mteb.models.model_meta.ModelMeta._check_requirements"):
-        model = mteb.get_model("mteb/hybrid-bm25s-e5-small")
-        assert isinstance(model, HybridSearch)
-        assert len(model.models) == 2
-        assert len(model.wrapped_models) == 2
+    model = mteb.get_model("mteb/hybrid-baseline_encoder-e5-small")
+    assert isinstance(model, HybridSearch)
+    assert len(model.wrapped_models) == 2

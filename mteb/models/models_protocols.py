@@ -257,6 +257,6 @@ MTEBModels = EncoderProtocol | CrossEncoderProtocol | SearchProtocol
 class HybridSearchProtocol(SearchProtocol, Protocol):
     """Interface for hybrid search models that combine multiple sub-models."""
 
-    models: Sequence[MTEBModels]
+    wrapped_models: Sequence[SearchProtocol]
     weights: list[float]
     sub_model_top_k: int | None

@@ -228,7 +228,7 @@ class HybridSearch:
                             rank = rank_idx + 1
                             candidate_rrf[doc_id] = candidate_rrf.get(
                                 doc_id, 0.0
-                            ) + 1.0 / (60 + rank)
+                            ) + 1.0 / (self.rrf_k + rank)
                 sorted_candidates = sorted(
                     candidate_rrf.keys(), key=lambda d: candidate_rrf[d], reverse=True
                 )
