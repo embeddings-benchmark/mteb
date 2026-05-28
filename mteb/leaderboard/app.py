@@ -280,13 +280,15 @@ def _cache_on_benchmark_select(benchmark_name, all_benchmark_results):
     type_select,
     domain_select,
     lang_select,
-    modality_select: hash(
-        (
-            hash(benchmark_name),
-            hash(tuple(type_select)),
-            hash(tuple(domain_select)),
-            hash(tuple(lang_select)),
-            hash(tuple(modality_select)),
+    modality_select: (
+        hash(
+            (
+                hash(benchmark_name),
+                hash(tuple(type_select)),
+                hash(tuple(domain_select)),
+                hash(tuple(lang_select)),
+                hash(tuple(modality_select)),
+            )
         )
     ),
 )
@@ -379,13 +381,37 @@ def _get_session_id(request: gr.Request) -> str:
     return f"session_{request.session_hash}"
 
 
+def _get_client_ip(request: gr.Request) -> str:
+    """Common proxy/CDN headers. X-Forwarded-For may contain:
+
+    client, proxy1, proxy2
+    """
+    headers = request.headers
+
+    # Common proxy/CDN headers. X-Forwarded-For may contain:
+    # client, proxy1, proxy2
+    forwarded_for = headers.get("x-forwarded-for")
+    if forwarded_for:
+        return forwarded_for.split(",")[0].strip()
+
+    real_ip = headers.get("x-real-ip")
+    if real_ip:
+        return real_ip.strip()
+
+    cf_ip = headers.get("cf-connecting-ip")
+    if cf_ip:
+        return cf_ip.strip()
+
+    return request.client.host if request.client else "unknown"
+
+
 def _get_visitor_id(request: gr.Request) -> str:
     """Derive a cross-session visitor fingerprint from HTTP request headers.
 
     Hashes IP + User-Agent + Accept-Language so the same browser gets the same
     visitor_id across separate visits, enabling DAU-style analysis.
     """
-    ip = request.client.host if request.client else "unknown"
+    ip = _get_client_ip(request)
     fingerprint = "|".join(
         [
             ip,
@@ -405,7 +431,7 @@ def on_page_load(request: gr.Request):
             "user_agent": request.headers.get("user-agent", ""),
             "accept_language": request.headers.get("accept-language", ""),
             "referer": request.headers.get("referer", ""),
-            "ip": request.client.host if request.client else "unknown",
+            "ip": _get_client_ip(request),
         },
     )
 
@@ -963,16 +989,18 @@ def get_leaderboard_app(  # noqa: PLR0914
             max_model_size,
             zero_shot,
             model_type_select,
-            request=None: hash(
-                (
-                    id(scores),
-                    hash(tuple(tasks)),
-                    hash(availability),
-                    hash(tuple(compatibility)),
-                    hash(instructions),
-                    hash(max_model_size),
-                    hash(zero_shot),
-                    hash(tuple(model_type_select)),
+            request=None: (
+                hash(
+                    (
+                        id(scores),
+                        hash(tuple(tasks)),
+                        hash(availability),
+                        hash(tuple(compatibility)),
+                        hash(instructions),
+                        hash(max_model_size),
+                        hash(zero_shot),
+                        hash(tuple(model_type_select)),
+                    )
                 )
             ),
         )
