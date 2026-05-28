@@ -2,6 +2,7 @@ import json
 import logging
 from copy import copy
 from pathlib import Path
+from typing import Any
 
 import pytest
 from datasets.exceptions import DatasetNotFoundError
@@ -263,8 +264,8 @@ def test_run_task_raise_error():
 
     def load_error(
         num_proc: int | None = None,
-        timer: object = None,
-        **kwargs: object,
+        timer: TimerStack | None = None,
+        **kwargs: Any,
     ):
         raise RuntimeError("Test error")
 
