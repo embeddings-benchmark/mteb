@@ -318,24 +318,30 @@ class AbsTaskClassification(AbsTask):
 
         scores = []
         all_predictions = []
-        for i in range(self.n_experiments):
-            logger.info(f"Running experiment ({i}/{self.n_experiments})")
-            train_embeddings = union_cache[
-                [idx_to_pos[j] for j in all_selected_idxs[i]]
-            ]
-            msg = f"Running experiment ({i}/{self.n_experiments})"
-            with timer(msg, split=hf_split, subset=hf_subset, log_message=msg):
-                scores_exp, predictions = self._run_experiment(
-                    train_split.select(all_selected_idxs[i]),
-                    eval_split,
-                    train_embeddings,
-                    test_embeddings,
-                    timer=timer,
-                )
+        with timer(
+            "Scoring",
+            split=hf_split,
+            subset=hf_subset,
+            log_message=f"Running {self.metadata.name} - Evaluating classifiers...",
+        ):
+            for i in range(self.n_experiments):
+                logger.info(f"Running experiment ({i}/{self.n_experiments})")
+                train_embeddings = union_cache[
+                    [idx_to_pos[j] for j in all_selected_idxs[i]]
+                ]
+                msg = f"Running experiment ({i}/{self.n_experiments})"
+                with timer(msg, split=hf_split, subset=hf_subset, log_message=msg):
+                    scores_exp, predictions = self._run_experiment(
+                        train_split.select(all_selected_idxs[i]),
+                        eval_split,
+                        train_embeddings,
+                        test_embeddings,
+                        timer=timer,
+                    )
 
-            if prediction_folder:
-                all_predictions.append(predictions)
-            scores.append(scores_exp)
+                if prediction_folder:
+                    all_predictions.append(predictions)
+                scores.append(scores_exp)
 
         if prediction_folder:
             self._save_task_predictions(
@@ -399,27 +405,33 @@ class AbsTaskClassification(AbsTask):
                 hf_subset=hf_subset,
                 **encode_kwargs,
             )
-        for i, (train_idx, val_idx) in enumerate(
-            cross_validation_splitter.split(range(num_samples))
+        with timer(
+            "Scoring",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running cross-validation - Evaluating classifiers...",
         ):
-            train_split = ds.select(train_idx)
-            eval_split = ds.select(val_idx)
-            train_dataset, idxs, selected_idx = self._undersample_data(
-                train_split, i, idxs
-            )
-            msg = f"Running experiment ({i}/{self.n_experiments})"
-            with timer(msg, split=hf_split, subset=hf_subset, log_message=msg):
-                scores_exp, predictions = self._run_experiment(
-                    train_dataset,
-                    eval_split,
-                    dataset_embeddings[train_idx][selected_idx],
-                    dataset_embeddings[val_idx],
-                    timer=timer,
+            for i, (train_idx, val_idx) in enumerate(
+                cross_validation_splitter.split(range(num_samples))
+            ):
+                train_split = ds.select(train_idx)
+                eval_split = ds.select(val_idx)
+                train_dataset, idxs, selected_idx = self._undersample_data(
+                    train_split, i, idxs
                 )
+                msg = f"Running experiment ({i}/{self.n_experiments})"
+                with timer(msg, split=hf_split, subset=hf_subset, log_message=msg):
+                    scores_exp, predictions = self._run_experiment(
+                        train_dataset,
+                        eval_split,
+                        dataset_embeddings[train_idx][selected_idx],
+                        dataset_embeddings[val_idx],
+                        timer=timer,
+                    )
 
-            if prediction_folder:
-                all_predictions.append(predictions)
-            scores.append(scores_exp)
+                if prediction_folder:
+                    all_predictions.append(predictions)
+                scores.append(scores_exp)
 
         if prediction_folder:
             self._save_task_predictions(

@@ -170,11 +170,17 @@ class AbsTaskZeroShotClassification(AbsTask):
             timer=timer,
             **kwargs,
         )
-        probs = evaluator(
-            model,
-            encode_kwargs=encode_kwargs,
-            num_proc=num_proc,
-        )
+        with timer(
+            "Scoring",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running zero-shot classification - Evaluating accuracy...",
+        ):
+            probs = evaluator(
+                model,
+                encode_kwargs=encode_kwargs,
+                num_proc=num_proc,
+            )
 
         if prediction_folder:
             self._save_task_predictions(

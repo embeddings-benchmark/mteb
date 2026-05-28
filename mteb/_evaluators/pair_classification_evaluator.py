@@ -157,28 +157,20 @@ class PairClassificationEvaluator(Evaluator):
                 **encode_kwargs,
             )
 
-        with self.timer(
-            "Scoring",
-            split=self.hf_split,
-            subset=self.hf_subset,
-            log_message="Running pair classification - Evaluating pair similarity...",
-        ):
-            cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)
-            manhattan_distances = paired_manhattan_distances(embeddings1, embeddings2)
-            euclidean_distances = paired_euclidean_distances(embeddings1, embeddings2)
+        cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)
+        manhattan_distances = paired_manhattan_distances(embeddings1, embeddings2)
+        euclidean_distances = paired_euclidean_distances(embeddings1, embeddings2)
 
-            similarity_scores = compute_pairwise_similarity(
-                model, embeddings1, embeddings2
-            )
+        similarity_scores = compute_pairwise_similarity(model, embeddings1, embeddings2)
 
-            embeddings1_np = np.asarray(embeddings1)
-            embeddings2_np = np.asarray(embeddings2)
-            dot_scores = np.asarray(
-                [
-                    np.dot(embeddings1_np[i], embeddings2_np[i])
-                    for i in range(len(embeddings1_np))
-                ]
-            )
+        embeddings1_np = np.asarray(embeddings1)
+        embeddings2_np = np.asarray(embeddings2)
+        dot_scores = np.asarray(
+            [
+                np.dot(embeddings1_np[i], embeddings2_np[i])
+                for i in range(len(embeddings1_np))
+            ]
+        )
         return PairClassificationDistances(
             cosine_scores=cosine_scores.tolist(),
             euclidean_distances=euclidean_distances.tolist(),
