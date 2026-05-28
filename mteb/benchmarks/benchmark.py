@@ -486,6 +486,7 @@ class VidoreBenchmark(Benchmark):
         """
         import mteb
         from mteb.benchmarks._create_table import (
+            _benchmark_modalities,
             _format_max_tokens,
             _format_n_active_parameters,
             _format_n_parameters,
@@ -570,7 +571,11 @@ class VidoreBenchmark(Benchmark):
             1,
             "Active Parameters (B)",
             model_metas.map(
-                lambda m: _format_n_active_parameters(m.n_active_parameters)
+                lambda m: _format_n_active_parameters(
+                    m.n_active_parameters_for(
+                        _benchmark_modalities(data["task_name"].unique())
+                    )
+                )
             ),
         )
 
