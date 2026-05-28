@@ -18,7 +18,7 @@ from mteb.models.search_wrappers import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Sequence
+    from collections.abc import Callable, Sequence
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import MTEBModels
@@ -42,7 +42,9 @@ class HybridSearch:
         weights: list[float] | None = None,
         sub_model_top_k: int | None = None,
         fusion_strategy: Literal["rrf", "dbsf", "relative-score-fusion"]
-        | Callable[[RetrievalOutputType, Sequence[float]], dict[str, float]] = "rrf",
+        | Callable[
+            [Sequence[dict[str, float]], Sequence[float]], dict[str, float]
+        ] = "rrf",
         rrf_k: int = 60,
     ) -> None:
         """Initialize the HybridSearch wrapper.
@@ -114,7 +116,7 @@ class HybridSearch:
 
         self.fusion_name: str
         self._fuse_fn: Callable[
-            [RetrievalOutputType, Sequence[float]], dict[str, float]
+            [Sequence[dict[str, float]], Sequence[float]], dict[str, float]
         ]
 
         if isinstance(fusion_strategy, str):
@@ -282,7 +284,7 @@ class HybridSearch:
             for res in all_results:
                 query_scores_list.append(res.get(qid, {}))
 
-            fused_query_scores = self.fuse(query_scores_list)  # type: ignore[arg-type]
+            fused_query_scores = self.fuse(query_scores_list)
 
             sorted_fused = sorted(
                 fused_query_scores.items(), key=lambda x: x[1], reverse=True
@@ -291,26 +293,17 @@ class HybridSearch:
 
         return fused_results
 
-    def fuse(self, query_scores_list: RetrievalOutputType) -> dict[str, float]:
+    def fuse(self, query_scores_list: Sequence[dict[str, float]]) -> dict[str, float]:
         """Fuse the query scores from multiple sub-models."""
         return self._fuse_fn(query_scores_list, self.weights)
 
 
-def _get_scores(
-    query_scores_list: RetrievalOutputType | Sequence[dict[str, float]],
-) -> Iterable[dict[str, float]]:
-    """Helper to retrieve iterable score dicts from either a list or a RetrievalOutputType dict."""
-    if isinstance(query_scores_list, dict):
-        return query_scores_list.values()
-    return query_scores_list
-
-
 def fuse_dbsf(
-    query_scores_list: RetrievalOutputType, weights: Sequence[float]
+    query_scores_list: Sequence[dict[str, float]], weights: Sequence[float]
 ) -> dict[str, float]:
     """Fuse the query scores using Distribution-Based Score Fusion. (https://arxiv.org/html/2410.20878v1)"""
     fused: dict[str, float] = {}
-    for scores, weight in zip(_get_scores(query_scores_list), weights):
+    for scores, weight in zip(query_scores_list, weights, strict=True):
         if not scores:
             continue
 
@@ -336,13 +329,13 @@ def fuse_dbsf(
 
 
 def fuse_rrf(
-    query_scores_list: RetrievalOutputType,
+    query_scores_list: Sequence[dict[str, float]],
     weights: Sequence[float],
     rrf_k: int = 60,
 ) -> dict[str, float]:
     """Fuse the query scores using Reciprocal Rank Fusion."""
     fused: dict[str, float] = {}
-    for scores, weight in zip(_get_scores(query_scores_list), weights):
+    for scores, weight in zip(query_scores_list, weights, strict=True):
         sorted_docs = sorted(scores.keys(), key=lambda d: scores[d], reverse=True)
         for rank_idx, doc_id in enumerate(sorted_docs):
             rank = rank_idx + 1
@@ -351,11 +344,11 @@ def fuse_rrf(
 
 
 def fuse_relative_score_fusion(
-    query_scores_list: RetrievalOutputType, weights: Sequence[float]
+    query_scores_list: Sequence[dict[str, float]], weights: Sequence[float]
 ) -> dict[str, float]:
     """Fuse the query scores using Relative Score MinMax normalisation."""
     fused: dict[str, float] = {}
-    for scores, weight in zip(_get_scores(query_scores_list), weights):
+    for scores, weight in zip(query_scores_list, weights, strict=True):
         if not scores:
             continue
 
