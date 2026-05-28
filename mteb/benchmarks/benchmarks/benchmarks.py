@@ -306,7 +306,6 @@ MTEB_MAIN_RU_v1_1 = Benchmark(
     contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
 )
 
-
 RU_SCI_BENCH = Benchmark(
     name="RuSciBench",
     tasks=get_tasks(
@@ -722,7 +721,8 @@ MTEB_KOR = Benchmark(
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
     tasks=get_tasks(
         languages=["kor"],
-        tasks=[  # @KennethEnevoldsen: We could probably expand this to a more solid benchmark, but for now I have left it as is.
+        tasks=[
+            # @KennethEnevoldsen: We could probably expand this to a more solid benchmark, but for now I have left it as is.
             # Classification
             "KLUE-TC",
             # Reranking
@@ -1006,7 +1006,6 @@ MTEB_multilingual_v1 = Benchmark(
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
-
 MTEB_multilingual_v2 = Benchmark(
     name="MTEB(Multilingual, v2)",
     aliases=["MTEB(Multilingual)", "MMTEB"],
@@ -1078,7 +1077,6 @@ MTEB_JPN = Benchmark(
     reference="https://github.com/sbintuitions/JMTEB",
     citation=None,
 )
-
 
 indic_languages = [
     "asm",
@@ -1327,7 +1325,6 @@ MTEB_AFRICA_LITE = Benchmark(
     citation=MMTEB_CITATION,
     contacts=["Kosei1227"],
 )
-
 
 eu_languages = [
     # official EU languages (56) - we could include the whole economic area e.g. Norway - additionally we could include minority languages (probably a good idea?)
@@ -1629,7 +1626,6 @@ BRIGHT_V1_1 = Benchmark(
 """,
     benchmark_hf_repo="mteb/BRIGHT",
 )
-
 
 CODE_RAG = Benchmark(
     name="CodeRAG",
@@ -2566,7 +2562,6 @@ BEIR_PL = Benchmark(
 """,
 )
 
-
 BUILT_MTEB = Benchmark(
     name="BuiltBench(eng)",
     tasks=get_tasks(
@@ -2833,7 +2828,6 @@ R2MED = Benchmark(
 """,
 )
 
-
 VN_MTEB = Benchmark(
     name="VN-MTEB (vie, v1)",
     display_name="Vietnamese",
@@ -3014,7 +3008,6 @@ JINA_VDR = Benchmark(
   year = {2025},
 }""",
 )
-
 
 HUME = HUMEBenchmark(
     name="HUME(v1)",
@@ -3222,6 +3215,16 @@ VISRAG_RETRIEVAL = Benchmark(
 """,
 )
 
+_MAEB_CITATION = """@misc{assadi2026maebmassiveaudioembedding,
+  archiveprefix = {arXiv},
+  author = {Adnan El Assadi and Isaac Chung and Chenghao Xiao and Roman Solomatin and Animesh Jha and Rahul Chand and Silky Singh and Kaitlyn Wang and Ali Sartaz Khan and Marc Moussa Nasser and Sufen Fong and Pengfei He and Alan Xiao and Ayush Sunil Munot and Aditya Shrivastava and Artem Gazizov and Niklas Muennighoff and Kenneth Enevoldsen},
+  eprint = {2602.16008},
+  primaryclass = {cs.SD},
+  title = {MAEB: Massive Audio Embedding Benchmark},
+  url = {https://arxiv.org/abs/2602.16008},
+  year = {2026},
+}"""
+
 MAEB_PLUS = Benchmark(
     name="MAEB+(beta)",
     aliases=["MAEB+"],
@@ -3344,7 +3347,7 @@ MAEB_PLUS = Benchmark(
     ),
     description="""MAEB+ is the full Massive Audio Embedding Benchmark (v1), containing 98 tasks with audio modality across 6 task types: classification, clustering, pair classification, reranking, zero-shot classification, and retrieval. The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
-    citation="",
+    citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
@@ -3383,7 +3386,7 @@ MAEB_AUDIO = Benchmark(
     ),
     description="""MAEB(audio-only) is the audio-only subset of MAEB with 19 tasks spanning 5 task types: classification (11), clustering (3), pair classification (3), reranking (1), and retrieval (1). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
-    citation="",
+    citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
@@ -3506,7 +3509,7 @@ MAEB_EXTENDED = Benchmark(
     ),
     description="""MAEB(extended) is an intermediate benchmark used during task selection, containing 89 tasks that combine audio-only and audio-text evaluation before filtering to MAEB. Audio-only (53 tasks): classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), audio-to-audio retrieval (1). Audio-text (36 tasks): audio-text retrieval (31), zero-shot classification (5). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
-    citation="",
+    citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 MAEB = Benchmark(
@@ -3561,7 +3564,7 @@ MAEB = Benchmark(
     ),
     description="""MAEB is a comprehensive audio benchmark with 30 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (11), clustering (3), multilabel classification (1), pair classification (3), reranking (1), and zero-shot classification (2). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
-    citation="",
+    citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 

@@ -16,6 +16,7 @@ REFERENCE_MODELS = [
     "sentence-transformers/static-similarity-mrl-multilingual-v1",
     "minishlab/potion-multilingual-128M",
     "mteb/baseline-bm25s",
+    "codefuse-ai/F2LLM-v2-80M",
 ]
 
 # Models that implement SearchProtocol only (retrieval/reranking tasks)

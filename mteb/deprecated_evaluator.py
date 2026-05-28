@@ -533,7 +533,7 @@ class MTEB:
                 # Create new TaskResult
                 new_results = TaskResult.from_task_results(
                     task,
-                    task_results,  # type: ignore[arg-type]
+                    task_results,
                     evaluation_time=evaluation_time,
                     kg_co2_emissions=kg_co2_emissions,
                 )

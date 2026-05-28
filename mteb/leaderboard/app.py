@@ -1165,20 +1165,14 @@ def get_leaderboard_app(  # noqa: PLR0914
         def _cache_key_for_update_tables(
             scores, tasks, models_to_keep, benchmark_name, languages
         ):
-            # Build a deterministic fingerprint from score content.
-            # This keeps cache hits for equivalent data while invalidating on language-driven score changes.
-            score_signature = []
-            for entry in scores:
-                score_signature.append(
-                    (
-                        entry.get("model_name"),
-                        entry.get("task_name"),
-                        entry.get("score"),
-                    )
-                )
-            scores_hash = hash(tuple(sorted(score_signature)))
+            # `scores` is uniquely determined by `(benchmark_name, languages)` via
+            # `update_scores_on_lang_change`'s cache (and by `_cache_on_benchmark_select`
+            # for the no-language-filter initial state, where languages == full benchmark
+            # languages). Hashing those is O(#languages) instead of iterating + sorting the
+            # `scores` list, which is O(N log N) over up to ~10^5 entries on large
+            # benchmarks like MTEB(Multilingual, v2) and dominates per-click latency since
+            # `update_tables` fires from three triggers per filter change.
             tasks_hash = hash(tuple(sorted(tasks))) if tasks is not None else None
-            # Sort models_to_keep to ensure consistent hash regardless of input order
             models_hash = (
                 hash(tuple(sorted(models_to_keep)))
                 if models_to_keep is not None
@@ -1188,9 +1182,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             lang_hash = (
                 hash(tuple(sorted(languages))) if languages is not None else None
             )
-            key = hash((scores_hash, tasks_hash, models_hash, bench_hash, lang_hash))
-
-            return key
+            return hash((bench_hash, lang_hash, tasks_hash, models_hash))
 
         @cachetools.cached(
             cache={},

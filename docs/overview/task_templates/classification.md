@@ -8,6 +8,9 @@ title: "Classification"
 .nowrap-table th {
   white-space: nowrap;
 }
+.md-content__button {
+    display: none;
+}
 </style>
 
 # Classification

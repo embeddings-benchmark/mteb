@@ -468,50 +468,54 @@ class VLM2VEC2Wrapper(AbsEncoder):
 
         show_progress_bar = kwargs.get("show_progress_bar", True)
 
+        task_prompts = _VLM2VEC2_TASK_PROMPTS.get(task_metadata.name, {})
+        prompt_key = "query" if prompt_type == PromptType.query else "document"
+        instruction = task_prompts.get(prompt_key, "")
+
+        prefix_tokens: list[str] = []
+        if has_image:
+            prefix_tokens.append(_VLM2VEC2_IMAGE_TOKEN)
+        if has_video:
+            prefix_tokens.append(_VLM2VEC2_VIDEO_TOKEN)
+        prefix = " ".join(prefix_tokens)
+
         all_embeddings: list[torch.Tensor] = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
-            batch_embeddings: list[torch.Tensor] = []
             batch_size = len(next(iter(batch.values())))
 
+            prompts: list[str] = []
+            batch_images: list | None = [] if has_image else None
+            batch_videos: list | None = [] if has_video else None
+
             for i in range(batch_size):
-                tokens = []
-                images = [batch["image"][i]] if has_image else None
-                videos = [batch["video"][i]] if has_video else None
-
-                if has_image:
-                    tokens.append(_VLM2VEC2_IMAGE_TOKEN)
-                if has_video:
-                    tokens.append(_VLM2VEC2_VIDEO_TOKEN)
-
                 text = batch["text"][i] if has_text else None
-                task_prompts = _VLM2VEC2_TASK_PROMPTS.get(task_metadata.name, {})
-                prompt_key = "query" if prompt_type == PromptType.query else "document"
-                instruction = task_prompts.get(prompt_key, "")
-                prefix = " ".join(tokens)
                 prompt = (
                     f"{prefix} {instruction} {text}".strip()
                     if text
                     else f"{prefix} {instruction}".strip()
                 )
+                prompts.append(prompt)
+                if has_image:
+                    batch_images.append(batch["image"][i])
+                if has_video:
+                    batch_videos.append(batch["video"][i])
 
-                proc_inputs = self.processor(
-                    text=prompt,
-                    images=images,
-                    videos=videos,
-                    return_tensors="pt",
-                )
-                proc_inputs = {k: v.to(self.device) for k, v in proc_inputs.items()}
+            proc_inputs = self.processor(
+                text=prompts,
+                images=batch_images,
+                videos=batch_videos,
+                padding=True,
+                return_tensors="pt",
+            )
+            proc_inputs = {k: v.to(self.device) for k, v in proc_inputs.items()}
 
-                output = self.model(
-                    **proc_inputs, return_dict=True, output_hidden_states=True
-                )
-                hidden_states = output.hidden_states[-1]
-                emb = self._pooling(hidden_states, proc_inputs["attention_mask"])
-                batch_embeddings.append(emb.cpu().to(torch.float32))
-
-            if batch_embeddings:
-                all_embeddings.append(torch.cat(batch_embeddings, dim=0))
+            output = self.model(
+                **proc_inputs, return_dict=True, output_hidden_states=True
+            )
+            hidden_states = output.hidden_states[-1]
+            embs = self._pooling(hidden_states, proc_inputs["attention_mask"])
+            all_embeddings.append(embs.cpu().to(torch.float32))
 
         return torch.cat(all_embeddings, dim=0)
 

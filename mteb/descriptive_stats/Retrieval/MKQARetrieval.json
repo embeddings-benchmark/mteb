@@ -53,7 +53,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6658
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6658,
+                "num_queries": 6747
             },
             "da": {
                 "num_samples": 13396,
@@ -81,7 +83,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6652
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6652,
+                "num_queries": 6744
             },
             "de": {
                 "num_samples": 13381,
@@ -109,7 +113,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6632
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6632,
+                "num_queries": 6749
             },
             "en": {
                 "num_samples": 13436,
@@ -137,7 +143,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6678
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6678,
+                "num_queries": 6758
             },
             "es": {
                 "num_samples": 13400,
@@ -165,7 +173,9 @@
                     "max_relevant_docs_per_query": 10,
                     "unique_relevant_docs": 6648
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6648,
+                "num_queries": 6752
             },
             "fi": {
                 "num_samples": 13376,
@@ -193,7 +203,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6634
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6634,
+                "num_queries": 6742
             },
             "fr": {
                 "num_samples": 13368,
@@ -221,7 +233,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6617
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6617,
+                "num_queries": 6751
             },
             "he": {
                 "num_samples": 13373,
@@ -249,7 +263,9 @@
                     "max_relevant_docs_per_query": 30,
                     "unique_relevant_docs": 6663
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6663,
+                "num_queries": 6710
             },
             "hu": {
                 "num_samples": 13402,
@@ -277,7 +293,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6660
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6660,
+                "num_queries": 6742
             },
             "it": {
                 "num_samples": 13388,
@@ -305,7 +323,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6647
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6647,
+                "num_queries": 6741
             },
             "ja": {
                 "num_samples": 13448,
@@ -333,7 +353,9 @@
                     "max_relevant_docs_per_query": 11,
                     "unique_relevant_docs": 6693
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6693,
+                "num_queries": 6755
             },
             "ko": {
                 "num_samples": 13363,
@@ -361,7 +383,9 @@
                     "max_relevant_docs_per_query": 11,
                     "unique_relevant_docs": 6658
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6658,
+                "num_queries": 6705
             },
             "km": {
                 "num_samples": 13390,
@@ -389,7 +413,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6653
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6653,
+                "num_queries": 6737
             },
             "ms": {
                 "num_samples": 13641,
@@ -417,7 +443,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6891
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6891,
+                "num_queries": 6750
             },
             "nl": {
                 "num_samples": 13390,
@@ -445,7 +473,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6660
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6660,
+                "num_queries": 6730
             },
             "no": {
                 "num_samples": 13461,
@@ -473,7 +503,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6747
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6747,
+                "num_queries": 6714
             },
             "pl": {
                 "num_samples": 13388,
@@ -501,7 +533,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6640
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6640,
+                "num_queries": 6748
             },
             "pt": {
                 "num_samples": 13393,
@@ -529,7 +563,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6655
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6655,
+                "num_queries": 6738
             },
             "ru": {
                 "num_samples": 13397,
@@ -557,7 +593,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6652
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6652,
+                "num_queries": 6745
             },
             "sv": {
                 "num_samples": 13382,
@@ -585,7 +623,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6654
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6654,
+                "num_queries": 6728
             },
             "th": {
                 "num_samples": 13386,
@@ -613,7 +653,9 @@
                     "max_relevant_docs_per_query": 10,
                     "unique_relevant_docs": 6655
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6655,
+                "num_queries": 6731
             },
             "tr": {
                 "num_samples": 13405,
@@ -641,7 +683,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6661
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6661,
+                "num_queries": 6744
             },
             "vi": {
                 "num_samples": 13412,
@@ -669,7 +713,9 @@
                     "max_relevant_docs_per_query": 12,
                     "unique_relevant_docs": 6670
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6670,
+                "num_queries": 6742
             },
             "zh_cn": {
                 "num_samples": 13381,
@@ -697,7 +743,9 @@
                     "max_relevant_docs_per_query": 11,
                     "unique_relevant_docs": 6656
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6656,
+                "num_queries": 6725
             },
             "zh_hk": {
                 "num_samples": 13386,
@@ -725,7 +773,9 @@
                     "max_relevant_docs_per_query": 10,
                     "unique_relevant_docs": 6646
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6646,
+                "num_queries": 6740
             },
             "zh_tw": {
                 "num_samples": 13382,
@@ -753,8 +803,12 @@
                     "max_relevant_docs_per_query": 10,
                     "unique_relevant_docs": 6638
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 6638,
+                "num_queries": 6744
             }
-        }
+        },
+        "num_documents": 173318,
+        "num_queries": 175212
     }
 }

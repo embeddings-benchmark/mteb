@@ -11,7 +11,7 @@ from datasets.exceptions import DatasetNotFoundError
 from tqdm.auto import tqdm
 
 from mteb._helpful_enum import HelpfulStrEnum
-from mteb.abstasks import AbsTaskRetrieval
+from mteb.abstasks import AbsTaskBitextMining, AbsTaskRetrieval
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.benchmarks.benchmark import Benchmark
@@ -33,7 +33,7 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import (
         MTEBModels,
     )
-    from mteb.types import EncodeKwargs, HFSubset, SplitName
+    from mteb.types import EncodeKwargs, HFSubset, ScoresDict, SplitName
     from mteb.types._metadata import ModelName, Revision
 
 logger = logging.getLogger(__name__)
@@ -83,7 +83,7 @@ def _sanitize_model(
     return wrapped_model, meta, model_name, model_revision
 
 
-def _evaluate_task(
+def _evaluate_task(  # noqa: PLR0913
     model: MTEBModels,
     task: AbsTask,
     *,
@@ -92,7 +92,9 @@ def _evaluate_task(
     encode_kwargs: EncodeKwargs,
     prediction_folder: Path | None,
     public_only: bool | None,
+    cache: ResultCache | None = None,
     num_proc: int | None = None,
+    existing_results: TaskResult | None = None,
 ) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
 
@@ -126,13 +128,32 @@ def _evaluate_task(
                 co2_tracker=False,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
+                cache=cache,
                 num_proc=num_proc,
+                existing_results=existing_results,
             )
         if isinstance(result, TaskResult):
-            result.kg_co2_emissions = tracker.final_emissions
+            existing_co2_val = (
+                existing_results.kg_co2_emissions
+                if (existing_results and existing_results.kg_co2_emissions is not None)
+                else 0.0
+            )
+            result.kg_co2_emissions = existing_co2_val + (
+                tracker.final_emissions or 0.0
+            )
         return result
 
-    task_results = {}
+    task_results: dict[SplitName, dict[HFSubset, ScoresDict]] = {}
+    evaluation_time: float = 0.0
+
+    model_meta = model.mteb_model_meta
+
+    existing_co2 = existing_results.kg_co2_emissions if existing_results else None
+    if existing_results is not None:
+        for split, scores_list in existing_results.scores.items():
+            task_results[split] = {score["hf_subset"]: score for score in scores_list}
+        if existing_results.evaluation_time is not None:
+            evaluation_time = existing_results.evaluation_time
 
     task.check_if_dataset_is_superseded()
 
@@ -155,18 +176,38 @@ def _evaluate_task(
             if public_only is False:
                 raise e
 
-    evaluation_time = 0.0
-
     for split, hf_subsets in splits.items():
         tick = time()
-        task_results[split] = task.evaluate(
-            model,
-            split,
-            subsets_to_run=hf_subsets,
-            encode_kwargs=encode_kwargs,
-            prediction_folder=prediction_folder,
-            num_proc=num_proc,
-        )
+        # BitextMining tasks evaluate all subsets together (e.g. for parallel subsets), so they
+        # are not run subset-by-subset. Other tasks are run subset-by-subset for intermediate caching.
+        if isinstance(task, AbsTaskBitextMining):
+            subsets_batches = [hf_subsets]
+        else:
+            subsets_batches = [[ss] for ss in hf_subsets]
+
+        if split not in task_results:
+            task_results[split] = {}
+        for batch in subsets_batches:
+            res = task.evaluate(
+                model,
+                split,
+                subsets_to_run=batch,
+                encode_kwargs=encode_kwargs,
+                prediction_folder=prediction_folder,
+                num_proc=num_proc,
+            )
+            tock_ss = time()
+            task_results[split].update(res)
+            # Save intermediate cache
+            if cache:
+                new_result = TaskResult.from_task_results(
+                    task,
+                    task_results,
+                    evaluation_time=evaluation_time + (tock_ss - tick),
+                    kg_co2_emissions=existing_co2,
+                    date=datetime.datetime.now(tz=datetime.timezone.utc),
+                )
+                cache.save_to_cache(new_result, model_meta)
         tock = time()
 
         logger.debug(
@@ -178,7 +219,7 @@ def _evaluate_task(
         task,
         task_results,
         evaluation_time=evaluation_time,
-        kg_co2_emissions=None,
+        kg_co2_emissions=existing_co2,
         date=datetime.datetime.now(tz=datetime.timezone.utc),
     )
 
@@ -484,7 +525,9 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
+                cache=cache,
                 num_proc=num_proc,
+                existing_results=existing_results,
             )
         except Exception as e:
             logger.error(
@@ -496,11 +539,13 @@ def evaluate(  # noqa: PLR0913, PLR0914
             model=model,
             splits=missing_eval,
             task=task,
-            co2_tracker=False,
+            co2_tracker=co2_tracker,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             public_only=public_only,
+            cache=cache,
             num_proc=num_proc,
+            existing_results=existing_results,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 
@@ -511,9 +556,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
             task_results=[],
             exceptions=[result],
         )
-
-    if existing_results:
-        result = result.merge(existing_results)
 
     if cache:
         cache.save_to_cache(

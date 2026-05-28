@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
 
@@ -38,15 +39,15 @@ TASK_PROMPTS: dict[str, str | dict[str, str]] = {
     # MTEB tasks
     "ArguAna": {
         "query": "Given a claim, retrieve documents that support or refute the claim",
-        "passage": "Given a claim, retrieve documents that support or refute the claim",
+        "document": "Given a claim, retrieve documents that support or refute the claim",
     },
     "CQADupstackGamingRetrieval": {
         "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
-        "passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "document": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
     },
     "CQADupstackUnixRetrieval": {
         "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
-        "passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "document": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
     },
     # MIEB tasks
     "AROCocoOrder": "Compositionality Evaluation of images to their captions.Each capation has four hard negatives created by order permutations.",
@@ -91,9 +92,26 @@ class BidirLMOmniEncoder(AbsEncoder):
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        max_samples: int | None = None,
+        max_samples: int | None = 30 * 16_000,
         **kwargs: Any,
     ) -> None:
+        from transformers import AutoVideoProcessor
+
+        processor_kwargs = kwargs.get("processor_kwargs", {})
+
+        # VideoCollator already samples frames; skip inner sampling.
+        video_processor = AutoVideoProcessor.from_pretrained(
+            model_name,
+            revision=revision,
+            trust_remote_code=True,
+            do_sample_frames=False,
+            **kwargs,
+        )
+        processor_kwargs |= {
+            "video_processor": video_processor,
+        }
+
+        kwargs["processor_kwargs"] = processor_kwargs
         self.model = SentenceTransformer(
             model_name,
             revision=revision,
@@ -124,11 +142,11 @@ class BidirLMOmniEncoder(AbsEncoder):
         entry = self.task_prompts.get(task_metadata.name)
 
         # Asymmetric retrieval: documents get no instruction unless the prompt
-        # dict explicitly provides a "passage" key.
+        # dict explicitly provides a "document" key.
         if (
             task_metadata.simplified_task_type == "retrieval"
             and prompt_type == PromptType.document
-            and not (isinstance(entry, dict) and "passage" in entry)
+            and not (isinstance(entry, dict) and "document" in entry)
         ):
             return None
 
@@ -163,15 +181,10 @@ class BidirLMOmniEncoder(AbsEncoder):
         delegates to SentenceTransformer.encode() via the native 'message' modality.
         """
         ds_features = inputs.dataset.features
-
-        active_cols = [
-            col
-            for col in ("image", "audio", "text", "video")
-            if col in ds_features and inputs.dataset[0].get(col) is not None
-        ]
-        is_text_only = active_cols == ["text"]
-        has_video = "video" in ds_features
+        has_text = "text" in ds_features
+        has_image = "image" in ds_features
         has_audio = "audio" in ds_features
+        has_video = "video" in ds_features
 
         if has_video:
             inputs.collate_fn = VideoCollator(
@@ -188,23 +201,35 @@ class BidirLMOmniEncoder(AbsEncoder):
             )
         instruction = self._get_instruction(task_metadata, prompt_type)
 
-        all_inputs = [
-            {col: batch[col][i] for col in active_cols}
-            for batch in inputs
-            for i in range(len(batch[active_cols[0]]))
-        ]
-
-        # Limit text length if no image/audio is present, otherwise use the model's max context length (32768 tokens).
-        # This prevents truncating special tokens in multimodal which raised error while still enabling to limit text-only inputs.
-        if is_text_only:
-            self.model.max_seq_length = self.max_text_length
-        else:
-            self.model.max_seq_length = 32768
-        return self.model.encode(
-            all_inputs,
-            prompt=instruction,
-            **kwargs,
+        # Truncate only when the schema is pure text; for multimodal schemas
+        # we keep the full context to avoid chopping off special tokens.
+        is_text_only_schema = has_text and not (has_image or has_audio or has_video)
+        self.model.max_seq_length = (
+            self.max_text_length if is_text_only_schema else 32768
         )
+
+        modality_keys = ("image", "audio", "text", "video")
+        all_embeddings: list = []
+        for batch in inputs:
+            batch_size = len(next(iter(batch.values())))
+            batch_inputs: list[dict[str, Any]] = []
+            for i in range(batch_size):
+                row = {
+                    key: batch[key][i]
+                    for key in modality_keys
+                    if key in batch and batch[key][i] is not None
+                }
+                batch_inputs.append(row)
+
+            embeddings = self.model.encode(
+                batch_inputs,
+                prompt=instruction,
+                **kwargs,
+            )
+            if isinstance(embeddings, torch.Tensor):
+                embeddings = embeddings.cpu().detach().float()
+            all_embeddings.append(embeddings)
+        return np.concatenate(all_embeddings, axis=0)
 
 
 bidirlm_omni_2_5b = ModelMeta(

@@ -25,7 +25,9 @@
             "max_relevant_docs_per_query": 5,
             "unique_relevant_docs": 245838
         },
-        "top_ranked_statistics": null
+        "top_ranked_statistics": null,
+        "num_documents": 13747022,
+        "num_queries": 124894320
     },
     "dev": {
         "num_samples": 138368101,
@@ -53,7 +55,9 @@
             "max_relevant_docs_per_query": 3,
             "unique_relevant_docs": 4003
         },
-        "top_ranked_statistics": null
+        "top_ranked_statistics": null,
+        "num_documents": 13747022,
+        "num_queries": 124621079
     },
     "dev2": {
         "num_samples": 138368479,
@@ -81,6 +85,8 @@
             "max_relevant_docs_per_query": 3,
             "unique_relevant_docs": 4400
         },
-        "top_ranked_statistics": null
+        "top_ranked_statistics": null,
+        "num_documents": 13747022,
+        "num_queries": 124621457
     }
 }
