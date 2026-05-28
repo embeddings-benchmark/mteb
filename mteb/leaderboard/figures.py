@@ -1,4 +1,5 @@
 import logging
+import time
 from typing import get_args
 
 import numpy as np
@@ -29,10 +30,16 @@ def _failsafe_plot(fun):
     """
 
     def wrapper(*args, **kwargs):
+        t0 = time.time()
         try:
-            return fun(*args, **kwargs)
+            result = fun(*args, **kwargs)
+            elapsed = time.time() - t0
+            n_rows = len(args[0].index) if args and hasattr(args[0], "index") else None
+            logger.info("plot %s: %.3fs (input_rows=%s)", fun.__name__, elapsed, n_rows)
+            return result
         except Exception as e:
-            logger.info(f"Plot generation failed: {e}")
+            elapsed = time.time() - t0
+            logger.info(f"Plot generation failed after {elapsed:.3f}s: {e}")
             return _text_plot(f"Couldn't produce plot. Reason: {e}")
 
     return wrapper

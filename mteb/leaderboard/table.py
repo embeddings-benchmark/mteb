@@ -37,6 +37,8 @@ def _format_scores(score: float) -> float:
 
 def _pl_to_task_df(pl_df: pl.DataFrame) -> pd.DataFrame:
     """Aggregate polars pre-agg DF to task level: one row per (model_name, task_name)."""
+    if pl_df.is_empty() or "model_name" not in pl_df.columns:
+        return pd.DataFrame(columns=["model_name", "task_name", "score"])
     agg = [pl.col("score").mean()]
     if "is_public" in pl_df.columns:
         agg.append(pl.col("is_public").first())
@@ -45,6 +47,8 @@ def _pl_to_task_df(pl_df: pl.DataFrame) -> pd.DataFrame:
 
 def _pl_to_language_df(pl_df: pl.DataFrame) -> pd.DataFrame:
     """Aggregate polars pre-agg DF to language level: one row per (model_name, language)."""
+    if pl_df.is_empty() or "model_name" not in pl_df.columns:
+        return pd.DataFrame(columns=["model_name", "language", "score"])
     return (
         pl_df.explode("language")
         .drop_nulls("language")
@@ -56,6 +60,8 @@ def _pl_to_language_df(pl_df: pl.DataFrame) -> pd.DataFrame:
 
 def _pl_to_subset_df(pl_df: pl.DataFrame) -> pd.DataFrame:
     """Aggregate polars pre-agg DF to subset level: one row per (model_name, task_name, subset)."""
+    if pl_df.is_empty() or "model_name" not in pl_df.columns:
+        return pd.DataFrame(columns=["model_name", "task_name", "subset", "score"])
     return (
         pl_df.group_by(["model_name", "task_name", "subset"])
         .agg(pl.col("score").mean())
