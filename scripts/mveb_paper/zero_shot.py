@@ -11,9 +11,8 @@ logging.disable(logging.WARNING)
 benchmark = mteb.get_benchmark("MVEB")
 task_names = set(t.metadata.name for t in benchmark.tasks)
 
-# Find models with MVEB task results in the local results cache
-cache = mteb.ResultCache()
-results_path = cache.remote_repo_path / "results"
+import pathlib
+results_path = pathlib.Path("/Users/adnan/research/mveb/results/results")
 
 models_with_results = []
 for model_dir in sorted(results_path.iterdir()):
