@@ -23,7 +23,7 @@ hybrid_bm25s_e5 = ModelMeta(
     revision="0_1_0",
     release_date="2026-05-27",
     n_parameters=0,
-    n_embedding_parameters=0,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     embed_dim=None,
     license=None,
@@ -35,7 +35,7 @@ hybrid_bm25s_e5 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    citation="",
+    citation=None,
 )
 
 
@@ -57,7 +57,7 @@ hybrid_baseline_encoder_e5 = ModelMeta(
     revision="0_1_0",
     release_date="2026-05-27",
     n_parameters=0,
-    n_embedding_parameters=0,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     embed_dim=None,
     license=None,
@@ -69,5 +69,5 @@ hybrid_baseline_encoder_e5 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    citation="",
+    citation=None,
 )

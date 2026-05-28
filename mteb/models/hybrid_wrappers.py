@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING, Literal
 
 import numpy as np
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import (
@@ -17,10 +17,8 @@ from mteb.models.search_wrappers import (
     SearchEncoderWrapper,
 )
 
-logger = logging.getLogger(__name__)
-
 if TYPE_CHECKING:
-    from collections.abc import Callable, Sequence
+    from collections.abc import Callable, Iterable, Sequence
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import MTEBModels
@@ -31,6 +29,8 @@ if TYPE_CHECKING:
         RetrievalOutputType,
         TopRankedDocumentsType,
     )
+
+logger = logging.getLogger(__name__)
 
 
 class HybridSearch:
@@ -45,25 +45,19 @@ class HybridSearch:
         | Callable[[RetrievalOutputType, Sequence[float]], dict[str, float]] = "rrf",
         rrf_k: int = 60,
     ) -> None:
-        models = list(models)
+        """Initialize the HybridSearch wrapper.
+
+        Args:
+            models: Sequence of sub-models to combine. Must contain at least two models.
+            weights: Optional list of weights for each sub-model. If None, equal weights are assigned.
+            sub_model_top_k: Optional top-k documents to retrieve from individual retriever sub-models.
+            fusion_strategy: Fusion strategy to combine sub-model scores.
+                Options: "rrf" (Reciprocal Rank Fusion), "dbsf" (Distribution-Based Score Fusion),
+                "relative-score-fusion", or a custom Callable.
+            rrf_k: The rank constant used for Reciprocal Rank Fusion (default: 60).
+        """
         if len(models) < 2:
             raise ValueError("At least two models must be provided for hybrid search.")
-        self.models = models
-
-        self.wrapped_models: list[SearchProtocol] = []
-        for model in models:
-            if isinstance(model, EncoderProtocol) and not isinstance(
-                model, SearchProtocol
-            ):
-                self.wrapped_models.append(SearchEncoderWrapper(model))
-            elif isinstance(model, CrossEncoderProtocol):
-                self.wrapped_models.append(SearchCrossEncoderWrapper(model))
-            elif isinstance(model, SearchProtocol):
-                self.wrapped_models.append(model)
-            else:
-                raise TypeError(
-                    f"Expected a SearchProtocol, EncoderProtocol, or CrossEncoderProtocol, got {type(model)}"
-                )
 
         if weights is None:
             self.weights = [1.0 / len(models)] * len(models)
@@ -72,9 +66,8 @@ class HybridSearch:
                 raise ValueError("Length of weights must match the number of models.")
             self.weights = list(weights)
 
-        if sub_model_top_k is not None:
-            if sub_model_top_k <= 0:
-                raise ValueError("sub_model_top_k must be greater than 0")
+        if sub_model_top_k is not None and sub_model_top_k <= 0:
+            raise ValueError("sub_model_top_k must be greater than 0")
         self.sub_model_top_k = sub_model_top_k
 
         if not isinstance(rrf_k, int):
@@ -82,6 +75,42 @@ class HybridSearch:
         if rrf_k < 0:
             raise ValueError("rrf_k must be greater than or equal to 0")
         self.rrf_k = rrf_k
+
+        self.wrapped_models: list[SearchProtocol] = []
+        self.cross_encoder_models: list[SearchCrossEncoderWrapper] = []
+        self.retriever_models: list[SearchProtocol] = []
+        self.model_is_cross_encoder: list[bool] = []
+        names = []
+
+        for model in models:
+            wrapped: SearchProtocol
+            if isinstance(model, EncoderProtocol) and not isinstance(
+                model, SearchProtocol
+            ):
+                wrapped = SearchEncoderWrapper(model)
+            elif isinstance(model, CrossEncoderProtocol):
+                wrapped = SearchCrossEncoderWrapper(model)
+            elif isinstance(model, SearchProtocol):
+                wrapped = model
+            else:
+                raise TypeError(
+                    f"Expected a SearchProtocol, EncoderProtocol, or CrossEncoderProtocol, got {type(model)}"
+                )
+
+            self.wrapped_models.append(wrapped)
+
+            if isinstance(wrapped, SearchCrossEncoderWrapper):
+                self.cross_encoder_models.append(wrapped)
+                self.model_is_cross_encoder.append(True)
+            else:
+                self.retriever_models.append(wrapped)
+                self.model_is_cross_encoder.append(False)
+
+            meta = wrapped.mteb_model_meta
+            if meta and meta.name:
+                names.append(meta.name.rsplit("/", 1)[-1])
+            else:
+                names.append("unknown")
 
         self.fusion_name: str
         self._fuse_fn: Callable[
@@ -105,26 +134,9 @@ class HybridSearch:
             self.fusion_name = getattr(fusion_strategy, "__name__", "custom")
             self._fuse_fn = fusion_strategy
         else:
-            raise TypeError("fusion_strategy must be a string or a callable")
-
-        self.cross_encoder_models: list[SearchCrossEncoderWrapper] = []
-        self.retriever_models: list[SearchProtocol] = []
-        self.model_is_cross_encoder: list[bool] = []
-        for model in self.wrapped_models:
-            if isinstance(model, SearchCrossEncoderWrapper):
-                self.cross_encoder_models.append(model)
-                self.model_is_cross_encoder.append(True)
-            else:
-                self.retriever_models.append(model)
-                self.model_is_cross_encoder.append(False)
-
-        names = []
-        for model in self.wrapped_models:
-            meta = model.mteb_model_meta
-            if meta and meta.name:
-                names.append(meta.name.rsplit("/", 1)[-1])
-            else:
-                names.append("unknown")
+            raise TypeError(
+                "fusion_strategy must be one of 'rrf', 'dbsf', 'relative-score-fusion', or a callable"
+            )
 
         combined_name = f"hybrid-{self.fusion_name}/{'-'.join(names)}"
         self.mteb_model_meta = ModelMeta.create_empty(
@@ -145,7 +157,8 @@ class HybridSearch:
         num_proc: int | None = None,
     ) -> None:
         """Index the corpus dataset using all sub-models."""
-        for model in self.wrapped_models:
+        logger.info("Indexing corpus using sub-models...")
+        for model in tqdm(self.wrapped_models, desc="Indexing sub-models"):
             model.index(
                 corpus,
                 task_metadata=task_metadata,
@@ -283,13 +296,21 @@ class HybridSearch:
         return self._fuse_fn(query_scores_list, self.weights)
 
 
+def _get_scores(
+    query_scores_list: RetrievalOutputType | Sequence[dict[str, float]],
+) -> Iterable[dict[str, float]]:
+    """Helper to retrieve iterable score dicts from either a list or a RetrievalOutputType dict."""
+    if isinstance(query_scores_list, dict):
+        return query_scores_list.values()
+    return query_scores_list
+
+
 def fuse_dbsf(
     query_scores_list: RetrievalOutputType, weights: Sequence[float]
 ) -> dict[str, float]:
     """Fuse the query scores using Distribution-Based Score Fusion. (https://arxiv.org/html/2410.20878v1)"""
     fused: dict[str, float] = {}
-    scores_list: list[dict[str, float]] = query_scores_list  # type: ignore[assignment]
-    for scores, weight in zip(scores_list, weights):
+    for scores, weight in zip(_get_scores(query_scores_list), weights):
         if not scores:
             continue
 
@@ -321,8 +342,7 @@ def fuse_rrf(
 ) -> dict[str, float]:
     """Fuse the query scores using Reciprocal Rank Fusion."""
     fused: dict[str, float] = {}
-    scores_list: list[dict[str, float]] = query_scores_list  # type: ignore[assignment]
-    for scores, weight in zip(scores_list, weights):
+    for scores, weight in zip(_get_scores(query_scores_list), weights):
         sorted_docs = sorted(scores.keys(), key=lambda d: scores[d], reverse=True)
         for rank_idx, doc_id in enumerate(sorted_docs):
             rank = rank_idx + 1
@@ -335,8 +355,7 @@ def fuse_relative_score_fusion(
 ) -> dict[str, float]:
     """Fuse the query scores using Relative Score MinMax normalisation."""
     fused: dict[str, float] = {}
-    scores_list: list[dict[str, float]] = query_scores_list  # type: ignore[assignment]
-    for scores, weight in zip(scores_list, weights):
+    for scores, weight in zip(_get_scores(query_scores_list), weights):
         if not scores:
             continue
 
