@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator
 
     import datasets
+    import polars as pl
     from typing_extensions import Self
 
     from mteb.abstasks.abstask import AbsTask
@@ -42,6 +43,11 @@ if TYPE_CHECKING:
 
 
 logger = logging.getLogger(__name__)
+
+# Column tagging each row with its benchmark name in the combined leaderboard cache
+# (per-benchmark frames are validated differently, so they cannot be merged into one
+# untagged frame — see `BenchmarkResults.save_leaderboard_cache`).
+_BENCHMARK_COLUMN = "__benchmark__"
 
 
 @functools.lru_cache
@@ -620,6 +626,97 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         with path.open() as in_file:
             data = json.loads(in_file.read())
         return cls.from_dict(data)
+
+    def to_results_df(self, tasks: Iterable[AbsTask] | None = None) -> pl.DataFrame:
+        """Return results as a long polars frame (one row per score).
+
+        Revisions are joined and, when ``tasks`` is given, scores are validated and
+        filtered against each task's metadata (via :meth:`select_tasks`) so the frame
+        matches what the leaderboard renders for that task set.
+
+        Args:
+            tasks: Tasks to validate/restrict scores to (e.g. one benchmark's tasks).
+                If None, all results are exported as-is (no per-task validation).
+        """
+        results = self if tasks is None else self.select_tasks(tasks)
+        return (
+            results.join_revisions().to_dataset(include_model_revision=True).to_polars()
+        )
+
+    @staticmethod
+    def _combine_leaderboard_frames(
+        per_benchmark: dict[str, pl.DataFrame],
+    ) -> pl.DataFrame:
+        """Concatenate per-benchmark frames into one, tagged with ``__benchmark__``.
+
+        Per-benchmark frames are validated differently (split/subset config and NaN
+        padding vary by benchmark), so each is tagged rather than merged. Empty frames
+        contribute no rows; absent benchmarks are reconstructed as empty on load.
+        """
+        import polars as pl
+
+        frames = [
+            df.with_columns(pl.lit(name).alias(_BENCHMARK_COLUMN))
+            for name, df in per_benchmark.items()
+            if not df.is_empty()
+        ]
+        with pl.StringCache():
+            return (
+                pl.concat(frames, how="vertical_relaxed")
+                if frames
+                else pl.DataFrame(schema={_BENCHMARK_COLUMN: pl.Utf8})
+            )
+
+    @staticmethod
+    def _split_leaderboard_frame(combined: pl.DataFrame) -> dict[str, pl.DataFrame]:
+        """Split a ``__benchmark__``-tagged frame back into the per-benchmark dict."""
+        parts: dict[str, pl.DataFrame] = {}
+        if _BENCHMARK_COLUMN in combined.columns and combined.height > 0:
+            for key, df in combined.partition_by(
+                _BENCHMARK_COLUMN, as_dict=True
+            ).items():
+                name = key[0] if isinstance(key, tuple) else key
+                parts[name] = df.drop(_BENCHMARK_COLUMN)
+        return parts
+
+    @staticmethod
+    def save_leaderboard_cache(
+        per_benchmark: dict[str, pl.DataFrame], path: Path | str
+    ) -> None:
+        """Save the per-benchmark leaderboard frames to a single parquet file."""
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        BenchmarkResults._combine_leaderboard_frames(per_benchmark).write_parquet(path)
+
+    @staticmethod
+    def push_leaderboard_cache(
+        per_benchmark: dict[str, pl.DataFrame], repo_id: str, **push_kwargs: Any
+    ) -> None:
+        """Push the per-benchmark leaderboard frames to the HF Hub as a dataset."""
+        import datasets as ds
+
+        combined = BenchmarkResults._combine_leaderboard_frames(per_benchmark)
+        ds.Dataset.from_polars(combined).push_to_hub(repo_id, **push_kwargs)
+
+    @staticmethod
+    def load_leaderboard_cache(
+        source: str | Path, *, from_hub: bool = False
+    ) -> dict[str, pl.DataFrame]:
+        """Load the per-benchmark leaderboard frames saved/pushed by this class.
+
+        Args:
+            source: Local parquet path, or a HF dataset repo id when ``from_hub=True``.
+            from_hub: Load from the HF Hub via ``datasets`` instead of a local path.
+        """
+        import polars as pl
+
+        if from_hub:
+            import datasets as ds
+
+            combined = ds.load_dataset(str(source), split="train").to_polars()
+        else:
+            combined = pl.read_parquet(source)
+        return BenchmarkResults._split_leaderboard_frame(combined)
 
     @property
     def languages(self) -> list[str]:

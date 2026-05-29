@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import functools
 import hashlib
 import itertools
 import logging
 import tempfile
 import time
 import warnings
-from typing import Literal, get_args
+from typing import TYPE_CHECKING, Literal, get_args
 from urllib.parse import urlencode
 
 import cachetools
@@ -15,6 +16,7 @@ import pandas as pd
 import polars as pl
 
 import mteb
+from mteb.benchmarks._create_table import _is_zero_shot_cached
 from mteb.benchmarks._leaderboard_menu import GP_BENCHMARK_ENTRIES, R_BENCHMARK_ENTRIES
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.cache import ResultCache
@@ -36,6 +38,10 @@ from mteb.leaderboard.table import (
 )
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 from mteb.models.model_meta import MODEL_TYPES
+from mteb.results.benchmark_results import BenchmarkResults
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 logger = logging.getLogger(__name__)
 event_logger = EventLogger()
@@ -196,9 +202,15 @@ def _filter_models(
         model_types=model_types,
     )
 
+    # In "allow_all" mode the zero-shot status never filters anything, so skip the
+    # (expensive) per-model is_zero_shot_on() traversal entirely.
+    if zero_shot_setting == "allow_all":
+        return list({model_meta.name for model_meta in model_metas})
+
+    task_name_set = set(task_select) if task_select else set()
     models_to_keep = set()
     for model_meta in model_metas:
-        is_model_zero_shot = model_meta.is_zero_shot_on(task_select)
+        is_model_zero_shot = _is_zero_shot_cached(model_meta.name, task_name_set)
         if is_model_zero_shot is None:
             if zero_shot_setting in ["remove_unknown", "only_zero_shot"]:  # noqa: PLR6201
                 continue
@@ -321,6 +333,22 @@ def _cache_update_task_list(
     return benchmark_tasks, tasks_to_keep
 
 
+def _leaderboard_parquet_path(cache: ResultCache) -> Path:
+    """Path to the local per-benchmark leaderboard cache (single parquet file)."""
+    return cache.cache_path / "leaderboard" / "benchmark_results.parquet"
+
+
+@functools.lru_cache(maxsize=256)
+def _benchmark_full_languages(benchmark_name: str) -> frozenset[str]:
+    """All languages covered by a benchmark's tasks (3-letter ISO codes)."""
+    benchmark = mteb.get_benchmark(benchmark_name)
+    langs: set[str] = set()
+    for task in benchmark.tasks:
+        if task.languages:
+            langs.update(task.languages)
+    return frozenset(langs)
+
+
 def _pl_df_to_scores(pl_df: pl.DataFrame) -> list[dict]:
     """Convert a polars pre-agg DataFrame to the scores list used by leaderboard callbacks."""
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
@@ -373,16 +401,29 @@ def on_page_load(request: gr.Request):
 
 
 def get_leaderboard_app(  # noqa: PLR0914
-    cache: ResultCache = ResultCache(), rebuild: bool = False
+    cache: ResultCache = ResultCache(),
+    rebuild: bool = False,
+    cache_repo_id: str | None = None,
+    push_cache: bool = False,
 ) -> gr.Blocks:
     """Returns a Gradio Blocks app for the MTEB leaderboard.
 
     Args:
         cache: ResultCache instance for managing benchmark data
-        rebuild: If True, bypasses any pre-computed JSON cache and forces a full rebuild
-                from the results repository. This clones/pulls the full results git repo,
-                builds BenchmarkResults from individual model files, and overwrites the
-                existing cache. Useful for ensuring the freshest data or debugging cache issues.
+        rebuild: If True, bypasses the processed parquet cache and rebuilds the
+                per-benchmark leaderboard data from results, then rewrites the parquet
+                cache. When False (default), startup loads the per-benchmark polars
+                frames directly from the parquet cache if present (skipping the results
+                load + per-benchmark processing); otherwise it builds them and saves the
+                parquet for next time. Use rebuild=True to pick up newly added results.
+        cache_repo_id: Optional HF dataset repo id (e.g. "mteb/results"). When set and
+                rebuild/push_cache are False, startup loads the parquet cache from the hub
+                (``hf://datasets/{cache_repo_id}/leaderboard/benchmark_results.parquet``)
+                before falling back to the local parquet cache or a full rebuild.
+        push_cache: If True, build the parquet cache from results and upload it (and its
+                manifest) to ``cache_repo_id`` (which is then required). Needs write
+                access to the repo (HF token). Combine with rebuild=True to publish the
+                freshest results.
 
     Returns:
         gr.Blocks: A Gradio Blocks application configured with the MTEB leaderboard interface
@@ -401,42 +442,69 @@ def get_leaderboard_app(  # noqa: PLR0914
     app_start = time.time()
     logger.info("=== Starting leaderboard app initialization ===")
 
-    logger.info("Step 1/7: Loading all benchmark results...")
-    load_start = time.time()
-    all_results = cache._load_from_cache(rebuild=True)
-    load_time = time.time() - load_start
-    logger.info(f"Step 1/7 complete: Loaded results in {load_time:.2f}s")
-
-    logger.info("Step 2/7: Fetching benchmarks...")
+    logger.info("Step 1/6: Fetching benchmarks...")
     bench_start = time.time()
     benchmarks = sorted(
         mteb.get_benchmarks(display_on_leaderboard=True), key=lambda x: x.name
     )
     bench_time = time.time() - bench_start
     logger.info(
-        f"Step 2/7 complete: Fetched {len(benchmarks)} benchmarks in {bench_time:.2f}s"
+        f"Step 1/6 complete: Fetched {len(benchmarks)} benchmarks in {bench_time:.2f}s"
     )
 
-    logger.info(
-        "Step 3/7: Processing all benchmarks (select_tasks + join_revisions)..."
-    )
-    process_start = time.time()
+    logger.info("Step 2/6: Loading benchmark results...")
+    load_start = time.time()
+    parquet_path = _leaderboard_parquet_path(cache)
+    loaded: dict[str, pl.DataFrame] | None = None
+    use_cache = not rebuild and not push_cache
+
+    def _try_load(source_label: str, loader) -> dict[str, pl.DataFrame] | None:
+        try:
+            cached = loader()
+        except Exception as e:
+            logger.warning(f"Failed to load leaderboard cache from {source_label}: {e}")
+            return None
+        if not cached:
+            logger.info(f"{source_label} cache is empty/outdated; trying next source.")
+            return None
+        logger.info(
+            f"Step 2/6 complete: Loaded {len(cached)} benchmarks from "
+            f"{source_label} in {time.time() - load_start:.2f}s"
+        )
+        return cached
+
+    if use_cache and cache_repo_id:
+        loaded = _try_load(
+            f"hub '{cache_repo_id}'",
+            lambda: BenchmarkResults.load_leaderboard_cache(
+                cache_repo_id, from_hub=True
+            ),
+        )
+    if loaded is None and use_cache and parquet_path.exists():
+        loaded = _try_load(
+            f"local parquet {parquet_path}",
+            lambda: BenchmarkResults.load_leaderboard_cache(parquet_path),
+        )
+
+    if loaded is None:
+        all_results = cache._load_from_cache(rebuild=rebuild)
+        # Per-benchmark validated frames (scores filtered to each benchmark's task config).
+        loaded = {b.name: all_results.to_results_df(b.tasks) for b in benchmarks}
+        BenchmarkResults.save_leaderboard_cache(loaded, parquet_path)
+        if push_cache:
+            if not cache_repo_id:
+                raise ValueError("push_cache=True requires cache_repo_id to be set.")
+            logger.info(f"Pushing leaderboard cache to hub '{cache_repo_id}'...")
+            BenchmarkResults.push_leaderboard_cache(loaded, cache_repo_id)
+        logger.info(
+            f"Step 2/6 complete: Built {len(benchmarks)} benchmarks and saved "
+            f"{parquet_path} in {time.time() - load_start:.2f}s"
+        )
+
+    # Benchmarks absent from the cache (e.g. empty results) become empty frames.
     all_benchmark_results: dict[str, pl.DataFrame] = {
-        benchmark.name: all_results.select_tasks(benchmark.tasks)
-        .join_revisions()
-        .to_dataset(include_model_revision=True)
-        .to_polars()
-        for benchmark in benchmarks
+        b.name: loaded.get(b.name, pl.DataFrame()) for b in benchmarks
     }
-    process_time = time.time() - process_start
-    if len(benchmarks) > 0:
-        logger.info(
-            f"Step 3/7 complete: Processed {len(benchmarks)} benchmarks in {process_time:.2f}s (avg {process_time / len(benchmarks):.2f}s/benchmark)"
-        )
-    else:
-        logger.info(
-            f"Step 3/7 complete: Processed 0 benchmarks in {process_time:.2f}s (avg N/A)"
-        )
 
     default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
     default_pl_df = all_benchmark_results[default_benchmark.name]
@@ -448,7 +516,7 @@ def get_leaderboard_app(  # noqa: PLR0914
     }
     display_radar_chart = len(default_task_types) > 1
 
-    logger.info("Step 4/7: Filtering models...")
+    logger.info("Step 3/6: Filtering models...")
     filter_start = time.time()
 
     default_scores = _pl_df_to_scores(default_pl_df)
@@ -479,10 +547,10 @@ def get_leaderboard_app(  # noqa: PLR0914
     )
     filter_time = time.time() - filter_start
     logger.info(
-        f"Step 4/7 complete: Filtered {len(filtered_model_names)} models in {filter_time:.2f}s"
+        f"Step 3/6 complete: Filtered {len(filtered_model_names)} models in {filter_time:.2f}s"
     )
 
-    logger.info("Step 5/7: Generating tables...")
+    logger.info("Step 4/6: Generating tables...")
     table_start = time.time()
     summary_table, summary_raw = apply_summary_styling_from_benchmark(
         default_benchmark, filtered_pl_df
@@ -495,12 +563,12 @@ def get_leaderboard_app(  # noqa: PLR0914
         filtered_pl_df,
     )
     table_time = time.time() - table_start
-    logger.info(f"Step 5/7 complete: Generated tables in {table_time:.2f}s")
+    logger.info(f"Step 4/6 complete: Generated tables in {table_time:.2f}s")
 
     # Check if this benchmark displays per-language results
     display_language_table = len(default_benchmark.language_view) > 0
 
-    logger.info("Step 6/7: Creating Gradio components...")
+    logger.info("Step 5/6: Creating Gradio components...")
     component_start = time.time()
     default_languages = sorted(
         default_pl_df["language"].explode().drop_nulls().unique().to_list()
@@ -571,10 +639,10 @@ def get_leaderboard_app(  # noqa: PLR0914
     )
     component_time = time.time() - component_start
     logger.info(
-        f"Step 6/7 complete: Created Gradio components in {component_time:.2f}s"
+        f"Step 5/6 complete: Created Gradio components in {component_time:.2f}s"
     )
 
-    logger.info("Step 7/7: Building Gradio interface and callbacks...")
+    logger.info("Step 6/6: Building Gradio interface and callbacks...")
     interface_start = time.time()
     with gr.Blocks(  # noqa: PLR1702
         title="MTEB Leaderboard",
@@ -1141,12 +1209,24 @@ def get_leaderboard_app(  # noqa: PLR0914
             if not filtered_task_names or bm_pl_df.is_empty():
                 filtered_df = bm_pl_df.clear()
             else:
-                # filtered_task_names already comes from language-filtered scores
-                # (update_scores_on_lang_change), so task-level filtering here is
-                # sufficient — no need for an additional subset/split-level pass.
                 mask = pl.col("model_name").is_in(filtered_model_names) & pl.col(
                     "task_name"
                 ).is_in(filtered_task_names)
+                # Restrict to the selected languages so the displayed scores reflect
+                # the language filter, not just which tasks/models are shown. Mirrors
+                # the row filter in `update_scores_on_lang_change`. Skipped when the
+                # selection already covers every benchmark language (a no-op filter).
+                if languages is not None and not set(languages).issuperset(
+                    _benchmark_full_languages(benchmark_name)
+                ):
+                    lang_set = set(languages)
+                    mask &= (
+                        pl.col("language")
+                        .list.eval(
+                            pl.element().str.split("-").list.first().is_in(lang_set)
+                        )
+                        .list.any()
+                    )
                 filtered_df = bm_pl_df.filter(mask)
             t_filter1 = time.time()
             summary, summary_raw = apply_summary_styling_from_benchmark(
@@ -1218,7 +1298,6 @@ def get_leaderboard_app(  # noqa: PLR0914
                 inputs=[benchmark_select, lang_select, type_select, domain_select],
                 outputs=[description],
                 show_progress="hidden",
-                preprocess=False,
             )
 
         # Language filter chain: scores -> task list -> task info -> models -> tables.
@@ -1226,7 +1305,6 @@ def get_leaderboard_app(  # noqa: PLR0914
             update_scores_on_lang_change,
             inputs=[benchmark_select, lang_select],
             outputs=[scores],
-            preprocess=False,
         ).then(
             update_task_list,
             inputs=_task_list_inputs,
@@ -1251,7 +1329,6 @@ def get_leaderboard_app(  # noqa: PLR0914
                 update_task_list,
                 inputs=_task_list_inputs,
                 outputs=[task_select],
-                preprocess=False,
             ).then(
                 _update_task_info,
                 inputs=[task_select],
@@ -1271,7 +1348,6 @@ def get_leaderboard_app(  # noqa: PLR0914
             _update_task_info,
             inputs=[task_select],
             outputs=[task_info_table],
-            preprocess=False,
         ).then(
             update_models,
             inputs=_model_filter_inputs,
@@ -1295,7 +1371,6 @@ def get_leaderboard_app(  # noqa: PLR0914
                 update_models,
                 inputs=_model_filter_inputs,
                 outputs=[models],
-                preprocess=False,
             ).then(
                 update_tables,
                 inputs=_table_inputs,
@@ -1304,7 +1379,7 @@ def get_leaderboard_app(  # noqa: PLR0914
 
         gr.Markdown(ACKNOWLEDGEMENT, elem_id="ack_markdown")
     interface_time = time.time() - interface_start
-    logger.info(f"Step 7/7 complete: Built Gradio interface in {interface_time:.2f}s")
+    logger.info(f"Step 6/6 complete: Built Gradio interface in {interface_time:.2f}s")
 
     logger.info("Starting prerun on all benchmarks to populate caches...")
     prerun_start = time.time()

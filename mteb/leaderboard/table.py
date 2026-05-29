@@ -5,11 +5,8 @@ import time
 from typing import TYPE_CHECKING
 
 import gradio as gr
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import polars as pl
-from matplotlib.colors import LinearSegmentedColormap
 from pandas.api.types import is_numeric_dtype
 
 if TYPE_CHECKING:
@@ -90,17 +87,6 @@ def _format_zero_shot(zero_shot_percentage: int):
     if zero_shot_percentage == -1:
         return "⚠️ NA"
     return f"{zero_shot_percentage:.0f}%"
-
-
-def _create_light_green_cmap():
-    cmap = plt.cm.get_cmap("Greens")
-    num_colors = 256
-    half_colors = np.linspace(0, 0.5, num_colors)
-    half_cmap = [cmap(val) for val in half_colors]
-    light_green_cmap = LinearSegmentedColormap.from_list(
-        "LightGreens", half_cmap, N=256
-    )
-    return light_green_cmap
 
 
 def apply_summary_styling_from_benchmark(
@@ -243,7 +229,7 @@ def _style_number_of_parameters(num_params: float) -> str:
 
 
 def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
-    """Apply styling to a raw summary DataFrame
+    """Apply pandas-Styler formatting to a raw summary DataFrame.
 
     Returns:
         Styled gr.DataFrame ready for display in the leaderboard
@@ -259,21 +245,12 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         "Max Tokens",
     ]
 
-    gradient_columns = [
-        col for col in joint_table.columns if col not in excluded_columns
-    ]
-    light_green_cmap = _create_light_green_cmap()
-
-    # Determine score columns (before formatting)
     score_columns = [
         col
         for col in joint_table.columns
         if col not in excluded_columns + ["Zero-shot"]
     ]
 
-    numeric_data = joint_table.copy()
-
-    # Format data for display
     if "Zero-shot" in joint_table.columns:
         joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(_format_zero_shot)
     joint_table[score_columns] = joint_table[score_columns].map(_format_scores)
@@ -300,29 +277,6 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         rank_column, props="font-weight: bold"
     ).highlight_max(subset=score_columns, props="font-weight: bold")
 
-    # Apply background gradients for each selected column
-    for col in gradient_columns:
-        if col in joint_table.columns:
-            mask = numeric_data[col].notna()
-            if col != "Zero-shot":
-                gmap_values = numeric_data[col] * 100
-                cmap = light_green_cmap
-                joint_table_style = joint_table_style.background_gradient(
-                    cmap=cmap,
-                    subset=pd.IndexSlice[mask, col],
-                    gmap=gmap_values.loc[mask],
-                )
-            else:
-                gmap_values = numeric_data[col]
-                cmap = "RdYlGn"
-                joint_table_style = joint_table_style.background_gradient(
-                    cmap=cmap,
-                    subset=pd.IndexSlice[mask, col],
-                    vmin=50,
-                    vmax=100,
-                    gmap=gmap_values.loc[mask],
-                )
-
     column_types = ["auto" for _ in joint_table_style.data.columns]
     # setting model name column to markdown
     if len(column_types) > 1:
@@ -346,7 +300,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
 
 
 def _apply_per_task_table_styling(per_task: pd.DataFrame) -> gr.DataFrame:
-    """Apply styling to a raw per-task DataFrame
+    """Apply pandas-Styler formatting to a raw per-task DataFrame.
 
     Returns:
         Styled gr.DataFrame ready for display in the leaderboard
@@ -374,28 +328,23 @@ def _apply_per_task_table_styling(per_task: pd.DataFrame) -> gr.DataFrame:
 
 
 def _apply_per_language_table_styling(per_language: pd.DataFrame) -> gr.DataFrame:
-    """Apply styling to a raw per-task DataFrame
+    """Format a raw per-language DataFrame for display.
 
     Returns:
-        Styled gr.DataFrame ready for display in the leaderboard
+        gr.DataFrame ready for display in the leaderboard
     """
     language_score_columns = per_language.select_dtypes("number").columns
-    per_language[language_score_columns] *= 100
-
-    if len(per_language.columns) > 100:  # Avoid gradio error on very wide tables
-        per_language_style = per_language.round(2)
-    else:
-        per_language_style = per_language.style.format(
-            "{:.2f}", subset=language_score_columns, na_rep=""
-        ).highlight_max(subset=language_score_columns, props="font-weight: bold")
+    per_language[language_score_columns] = (
+        per_language[language_score_columns] * 100
+    ).round(2)
 
     # setting task name column width to 250px
-    column_widths = _get_column_widths(per_language_style.data)
+    column_widths = _get_column_widths(per_language)
     if len(column_widths) > 0:
         column_widths[0] = "250px"
 
     return gr.DataFrame(
-        per_language_style,
+        per_language,
         interactive=False,
         pinned_columns=1,
         column_widths=column_widths,

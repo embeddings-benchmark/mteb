@@ -4,31 +4,61 @@ import functools
 import re
 from collections import defaultdict
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Literal
+from typing import Literal
 
 import numpy as np
 import pandas as pd
 
-from mteb.get_tasks import _TASKS_REGISTRY, get_tasks
+from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.models.get_model_meta import get_model_meta
 
-if TYPE_CHECKING:
-    from mteb.get_tasks import MTEBTasks
 
+@functools.lru_cache(maxsize=4096)
+def _training_datasets_cached(model_name: str) -> frozenset[str] | None:
+    """Memoized training datasets (with similar tasks) for a model.
 
-@functools.lru_cache(maxsize=128)
-def _get_tasks_cached(task_names: tuple[str, ...]) -> MTEBTasks:
-    """Memoized `get_tasks(tasks=...)` for table-creation hot paths."""
-    return get_tasks(tasks=task_names)
+    The similar-task graph traversal in ``ModelMeta.get_training_datasets()`` is
+    expensive and depends only on the model, so cache it per model name here at the
+    leaderboard layer (rather than polluting ``ModelMeta``). Both the summary's
+    zero-shot column and ``_filter_models``' zero-shot check share this cache.
+    """
+    meta = get_model_meta(model_name)
+    if meta is None:
+        return None
+    training_datasets = meta.get_training_datasets()
+    if training_datasets is None:
+        return None
+    return frozenset(training_datasets)
 
 
 @functools.lru_cache(maxsize=4096)
 def _zero_shot_pct_cached(model_name: str, task_names: tuple[str, ...]) -> int | None:
-    """Memoized zero_shot_percentage — expensive due to task-similarity graph traversal."""
-    meta = get_model_meta(model_name)
-    if meta is None:
+    """Memoized zero-shot percentage for a model over the given task names."""
+    if not task_names:
         return None
-    return meta.zero_shot_percentage(_get_tasks_cached(task_names))
+    training_datasets = _training_datasets_cached(model_name)
+    if training_datasets is None:
+        return None
+    overlap = training_datasets & set(task_names)
+    return int(100 - 100 * (len(overlap) / len(task_names)))
+
+
+def _is_zero_shot_cached(
+    model_name: str, task_name_set: set[str] | frozenset[str]
+) -> bool | None:
+    """Cached equivalent of ``ModelMeta.is_zero_shot_on(task_names)`` for the leaderboard.
+
+    Returns True if the model was not trained on any of the given tasks, False if it
+    was, or None when the model has no training-data info. Reuses
+    :func:`_training_datasets_cached`, so repeat calls (e.g. across model-filter
+    interactions) avoid recomputing the similar-task graph traversal.
+    """
+    if not task_name_set:
+        return True
+    training_datasets = _training_datasets_cached(model_name)
+    if training_datasets is None:
+        return None
+    return not bool(training_datasets & task_name_set)
 
 
 def _get_borda_rank(score_table: pd.DataFrame) -> pd.Series:
