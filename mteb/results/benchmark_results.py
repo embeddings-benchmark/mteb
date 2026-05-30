@@ -576,7 +576,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
         return self.benchmark._create_summary_table(
             self.to_results_df(self.benchmark.tasks)
-        )
+        ).to_pandas()
 
     def __iter__(self) -> Iterator[ModelResult]:  # type: ignore[override]
         return iter(self.model_results)

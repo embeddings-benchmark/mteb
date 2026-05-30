@@ -69,17 +69,18 @@ def apply_summary_styling_from_benchmark(
         Tuple of (styled gr.DataFrame for display, raw pd.DataFrame with metadata for plots)
     """
     t0 = time.time()
-    summary_df = benchmark_instance._create_summary_table(pl_df)
+    summary_pl = benchmark_instance._create_summary_table(pl_df)
     t1 = time.time()
 
-    if "No results" in summary_df.columns:
+    if "No results" in summary_pl.columns:
         logger.info(
             "apply_summary_styling [%s]: create_table=%.3fs (no results)",
             benchmark_instance.name,
             t1 - t0,
         )
-        return gr.DataFrame(summary_df), summary_df
+        return gr.DataFrame(summary_pl), summary_pl.to_pandas()
 
+    summary_df = summary_pl.to_pandas()
     display_df = summary_df.drop(columns=["Release Date"], errors="ignore")
     result = _apply_summary_table_styling(display_df), summary_df
     t2 = time.time()
@@ -108,18 +109,18 @@ def apply_per_task_styling_from_benchmark(
         Styled gr.DataFrame ready for display in the leaderboard
     """
     t0 = time.time()
-    per_task_df = benchmark_instance._create_per_task_table(pl_df)
+    per_task_pl = benchmark_instance._create_per_task_table(pl_df)
     t1 = time.time()
 
-    if "No results" in per_task_df.columns:
+    if "No results" in per_task_pl.columns:
         logger.info(
             "apply_per_task_styling [%s]: create_table=%.3fs (no results)",
             benchmark_instance.name,
             t1 - t0,
         )
-        return gr.DataFrame(per_task_df)
+        return gr.DataFrame(per_task_pl)
 
-    result = _apply_per_task_table_styling(per_task_df)
+    result = _apply_per_task_table_styling(per_task_pl.to_pandas())
     t2 = time.time()
     logger.debug(
         "apply_per_task_styling [%s]: create_table=%.3fs styling=%.3fs total=%.3fs",
@@ -146,18 +147,18 @@ def apply_per_language_styling_from_benchmark(
         Styled gr.DataFrame ready for display in the leaderboard
     """
     t0 = time.time()
-    per_language_df = benchmark_instance._create_per_language_table(pl_df)
+    per_language_pl = benchmark_instance._create_per_language_table(pl_df)
     t1 = time.time()
 
-    if "No results" in per_language_df.columns:
+    if "No results" in per_language_pl.columns:
         logger.info(
             "apply_per_language_styling [%s]: create_table=%.3fs (no results)",
             benchmark_instance.name,
             t1 - t0,
         )
-        return gr.DataFrame(per_language_df)
+        return gr.DataFrame(per_language_pl)
 
-    result = _apply_per_language_table_styling(per_language_df)
+    result = _apply_per_language_table_styling(per_language_pl.to_pandas())
     t2 = time.time()
     logger.debug(
         "apply_per_language_styling [%s]: create_table=%.3fs styling=%.3fs total=%.3fs",
