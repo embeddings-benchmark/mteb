@@ -574,7 +574,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         if isinstance(self.benchmark, Sequence):
             raise ValueError("Getting scores for multiple benchmarks is unsupported")
 
-        return self.benchmark._create_summary_table(self)
+        return self.benchmark._create_summary_table(
+            self.to_results_df(self.benchmark.tasks)
+        )
 
     def __iter__(self) -> Iterator[ModelResult]:  # type: ignore[override]
         return iter(self.model_results)

@@ -261,18 +261,18 @@ def _cache_on_benchmark_select(benchmark_name, all_benchmark_results):
     # Calculate initial models for this benchmark to avoid race conditions
     benchmark_tasks = sorted([task.metadata.name for task in benchmark.tasks])
     all_models_in_scores = list({entry["model_name"] for entry in scores})
-    initial_models = _filter_models(
-        all_models_in_scores,
-        benchmark_tasks,
-        availability=None,
-        compatibility=[],
-        instructions=None,
-        max_model_size=MAX_MODEL_SIZE,
-        zero_shot_setting="allow_all",
-        model_types=MODEL_TYPE_CHOICES,
+    initial_models = sorted(
+        _filter_models(
+            all_models_in_scores,
+            benchmark_tasks,
+            availability=None,
+            compatibility=[],
+            instructions=None,
+            max_model_size=MAX_MODEL_SIZE,
+            zero_shot_setting="allow_all",
+            model_types=MODEL_TYPE_CHOICES,
+        )
     )
-    # Sort to ensure consistency with update_models
-    initial_models = sorted(initial_models)
 
     return (
         languages,
@@ -538,7 +538,6 @@ def get_leaderboard_app(  # noqa: PLR0914
         entry for entry in default_scores if entry["model_name"] in filtered_models
     ]
 
-    # Filter polars DataFrame to the filtered models
     filtered_model_names = list(
         {entry["model_name"] for entry in default_filtered_scores}
     )
@@ -565,7 +564,6 @@ def get_leaderboard_app(  # noqa: PLR0914
     table_time = time.time() - table_start
     logger.info(f"Step 4/6 complete: Generated tables in {table_time:.2f}s")
 
-    # Check if this benchmark displays per-language results
     display_language_table = len(default_benchmark.language_view) > 0
 
     logger.info("Step 5/6: Creating Gradio components...")
@@ -648,8 +646,6 @@ def get_leaderboard_app(  # noqa: PLR0914
         title="MTEB Leaderboard",
         fill_width=True,
     ) as demo:
-        # Log page view on session start; session_id is derived from request.session_hash
-        # in every callback, so no gr.State is needed to carry it around.
         demo.load(fn=on_page_load)
 
         with gr.Sidebar(
@@ -1143,13 +1139,8 @@ def get_leaderboard_app(  # noqa: PLR0914
         def _cache_key_for_update_tables(
             scores, tasks, models_to_keep, benchmark_name, languages
         ):
-            # `scores` is uniquely determined by `(benchmark_name, languages)` via
-            # `update_scores_on_lang_change`'s cache (and by `_cache_on_benchmark_select`
-            # for the no-language-filter initial state, where languages == full benchmark
-            # languages). Hashing those is O(#languages) instead of iterating + sorting the
-            # `scores` list, which is O(N log N) over up to ~10^5 entries on large
-            # benchmarks like MTEB(Multilingual, v2) and dominates per-click latency since
-            # `update_tables` fires from three triggers per filter change.
+            # `scores` is fully determined by `(benchmark_name, languages)` upstream,
+            # so we hash those instead of the O(N log N) sort over the scores list.
             tasks_hash = hash(tuple(sorted(tasks))) if tasks is not None else None
             models_hash = (
                 hash(tuple(sorted(models_to_keep)))
@@ -1175,10 +1166,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             benchmark_name: str,
             languages: list[str],
         ):
-            # A real call here means the cache missed for this argument tuple —
-            # the cachetools wrapper returns immediately on a hit and never enters
-            # the function body. Log so we can spot unexpected cache misses on
-            # benchmark switch (which should be served from the prerun-populated cache).
+            # Reaching the body means cachetools missed — log so unexpected misses surface.
             logger.info(
                 "update_tables cache MISS [%s] tasks=%d models=%d langs=%d",
                 benchmark_name,
@@ -1190,7 +1178,6 @@ def get_leaderboard_app(  # noqa: PLR0914
             tasks = set(tasks) if tasks is not None else None
             benchmark = mteb.get_benchmark(benchmark_name)
 
-            # Extract filtered model and task names from scores (respects UI filters)
             filtered_model_names = set()
             filtered_task_names = set()
 
@@ -1212,10 +1199,8 @@ def get_leaderboard_app(  # noqa: PLR0914
                 mask = pl.col("model_name").is_in(filtered_model_names) & pl.col(
                     "task_name"
                 ).is_in(filtered_task_names)
-                # Restrict to the selected languages so the displayed scores reflect
-                # the language filter, not just which tasks/models are shown. Mirrors
-                # the row filter in `update_scores_on_lang_change`. Skipped when the
-                # selection already covers every benchmark language (a no-op filter).
+                # Restrict to selected languages (mirrors update_scores_on_lang_change);
+                # skipped when the selection covers every benchmark language.
                 if languages is not None and not set(languages).issuperset(
                     _benchmark_full_languages(benchmark_name)
                 ):
@@ -1258,13 +1243,8 @@ def get_leaderboard_app(  # noqa: PLR0914
                 gr.update(visible=len(benchmark.language_view) > 0),
             )
 
-        # === Event wiring ===
-        # Use .input (not .change) so programmatic gr.update() from on_benchmark_select
-        # does NOT re-fire these handlers — on_benchmark_select already returns the
-        # tables/task_info/description directly, so re-firing on benchmark switch is
-        # what was causing 4-5× duplicate update_tables runs and the browser slowdown.
-        # State-triggered cascades (scores.change, models.change) have been removed in
-        # favor of explicit .then() chains attached to each user input.
+        # Event wiring. Handlers use .input (not .change) so programmatic gr.update()
+        # from on_benchmark_select does not re-fire them.
         _task_list_inputs = [
             benchmark_select,
             type_select,
@@ -1383,11 +1363,7 @@ def get_leaderboard_app(  # noqa: PLR0914
 
     logger.info("Starting prerun on all benchmarks to populate caches...")
     prerun_start = time.time()
-    # Prerun on all benchmarks, so that results of callbacks get cached.
-    # on_benchmark_select now itself calls update_tables internally, so the
-    # initial-state cache entry is populated by the call below. We additionally
-    # prime the cache for the filtered-tasks scenario (when a user toggles a
-    # type/domain/modality filter on the default benchmark view).
+    # Prime the initial-state + filtered-tasks cache entries for every benchmark.
     for benchmark in benchmarks:
         (
             bench_languages,
@@ -1410,9 +1386,6 @@ def get_leaderboard_app(  # noqa: PLR0914
             _task_info_val,
             _description_val,
         ) = on_benchmark_select(benchmark.name)
-        # Prime cache for the filtered-tasks scenario (type/domain/modality
-        # filter applied on the default benchmark view). `_cache_update_task_list`
-        # returns the (all_tasks, tasks_to_keep) tuple — pass `tasks_to_keep`.
         _, tasks_to_keep = _cache_update_task_list(
             benchmark.name,
             bench_types,

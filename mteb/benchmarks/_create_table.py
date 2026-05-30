@@ -8,9 +8,44 @@ from typing import Literal
 
 import numpy as np
 import pandas as pd
+import polars as pl
 
 from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.models.get_model_meta import get_model_meta
+
+
+def _pl_to_task_df(pl_df: pl.DataFrame) -> pd.DataFrame:
+    """Aggregate polars pre-agg DF to task level: one row per (model_name, task_name)."""
+    if pl_df.is_empty() or "model_name" not in pl_df.columns:
+        return pd.DataFrame(columns=["model_name", "task_name", "score"])
+    agg = [pl.col("score").mean()]
+    if "is_public" in pl_df.columns:
+        agg.append(pl.col("is_public").first())
+    return pl_df.group_by(["model_name", "task_name"]).agg(agg).to_pandas()
+
+
+def _pl_to_subset_df(pl_df: pl.DataFrame) -> pd.DataFrame:
+    """Aggregate polars pre-agg DF to subset level: one row per (model_name, task_name, subset)."""
+    if pl_df.is_empty() or "model_name" not in pl_df.columns:
+        return pd.DataFrame(columns=["model_name", "task_name", "subset", "score"])
+    return (
+        pl_df.group_by(["model_name", "task_name", "subset"])
+        .agg(pl.col("score").mean())
+        .to_pandas()
+    )
+
+
+def _pl_to_language_df(pl_df: pl.DataFrame) -> pd.DataFrame:
+    """Aggregate polars pre-agg DF to language level: one row per (model_name, language)."""
+    if pl_df.is_empty() or "model_name" not in pl_df.columns:
+        return pd.DataFrame(columns=["model_name", "language", "score"])
+    return (
+        pl_df.explode("language")
+        .drop_nulls("language")
+        .group_by(["model_name", "language"])
+        .agg(pl.col("score").mean())
+        .to_pandas()
+    )
 
 
 @functools.lru_cache(maxsize=4096)
@@ -78,21 +113,10 @@ def _split_on_capital(s: str) -> str:
 
 
 def _format_n_parameters(n_parameters: float | int | None) -> float | None:
-    """Format n_parameters to be in billions with decimals down to 1 million. I.e. 7M -> 0.007B, 1.5B -> 1.5B, None -> None"""
-    if n_parameters:
-        n_parameters = float(n_parameters)
-        return round(n_parameters / 1e9, 3)
-    return None
-
-
-def _format_n_active_parameters(
-    n_active_parameters: float | int | None,
-) -> float | None:
-    """Format n_active_parameters to be in billions with decimals down to 1 million. I.e. 7M -> 0.007B, 1.5B -> 1.5B, None -> None"""
-    if n_active_parameters is not None:
-        n_active_parameters = float(n_active_parameters)
-        return round(n_active_parameters / 1e9, 3)
-    return None
+    """Convert a parameter count to billions with 1M-precision (7M -> 0.007, 1.5B -> 1.5, None -> None)."""
+    if n_parameters is None:
+        return None
+    return round(float(n_parameters) / 1e9, 3)
 
 
 def _format_max_tokens(max_tokens: float | None) -> float | None:
@@ -208,7 +232,7 @@ def _create_summary_table_from_benchmark_results(
     joint_table.insert(
         1,
         "Active Parameters (B)",
-        model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
+        model_metas.map(lambda m: _format_n_parameters(m.n_active_parameters)),
     )
 
     # Add zero-shot percentage
@@ -453,7 +477,7 @@ def _create_summary_table_mean_public_private(
     joint_table.insert(
         1,
         "Active Parameters (B)",
-        model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
+        model_metas.map(lambda m: _format_n_parameters(m.n_active_parameters)),
     )
 
     # Add release date from model metadata
@@ -575,7 +599,7 @@ def _create_summary_table_mean_subset(
     joint_table.insert(
         1,
         "Active Parameters (B)",
-        model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
+        model_metas.map(lambda m: _format_n_parameters(m.n_active_parameters)),
     )
     # Add zero-shot percentage
     _task_names_key = tuple(sorted(data["task_name"].unique()))
@@ -695,7 +719,7 @@ def _create_summary_table_mean_task_type(
     joint_table.insert(
         1,
         "Active Parameters (B)",
-        model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
+        model_metas.map(lambda m: _format_n_parameters(m.n_active_parameters)),
     )
 
     # Add zero-shot percentage

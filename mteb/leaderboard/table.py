@@ -5,11 +5,12 @@ import time
 from typing import TYPE_CHECKING
 
 import gradio as gr
-import pandas as pd
-import polars as pl
 from pandas.api.types import is_numeric_dtype
 
 if TYPE_CHECKING:
+    import pandas as pd
+    import polars as pl
+
     from mteb.benchmarks.benchmark import Benchmark
 
 logger = logging.getLogger(__name__)
@@ -32,44 +33,8 @@ def _format_scores(score: float) -> float:
     return round(score * 100, 2)
 
 
-def _pl_to_task_df(pl_df: pl.DataFrame) -> pd.DataFrame:
-    """Aggregate polars pre-agg DF to task level: one row per (model_name, task_name)."""
-    if pl_df.is_empty() or "model_name" not in pl_df.columns:
-        return pd.DataFrame(columns=["model_name", "task_name", "score"])
-    agg = [pl.col("score").mean()]
-    if "is_public" in pl_df.columns:
-        agg.append(pl.col("is_public").first())
-    return pl_df.group_by(["model_name", "task_name"]).agg(agg).to_pandas()
-
-
-def _pl_to_language_df(pl_df: pl.DataFrame) -> pd.DataFrame:
-    """Aggregate polars pre-agg DF to language level: one row per (model_name, language)."""
-    if pl_df.is_empty() or "model_name" not in pl_df.columns:
-        return pd.DataFrame(columns=["model_name", "language", "score"])
-    return (
-        pl_df.explode("language")
-        .drop_nulls("language")
-        .group_by(["model_name", "language"])
-        .agg(pl.col("score").mean())
-        .to_pandas()
-    )
-
-
-def _pl_to_subset_df(pl_df: pl.DataFrame) -> pd.DataFrame:
-    """Aggregate polars pre-agg DF to subset level: one row per (model_name, task_name, subset)."""
-    if pl_df.is_empty() or "model_name" not in pl_df.columns:
-        return pd.DataFrame(columns=["model_name", "task_name", "subset", "score"])
-    return (
-        pl_df.group_by(["model_name", "task_name", "subset"])
-        .agg(pl.col("score").mean())
-        .to_pandas()
-    )
-
-
 def _get_column_widths(df: pd.DataFrame) -> list[str]:
-    # Please do not remove this function when refactoring.
-    # Column width calculation seeminlgy changes regularly with Gradio releases,
-    # and this piece of logic is good enough to quickly fix related issues.
+    # Keep this helper around: Gradio's column-width behavior changes between releases.
     widths = []
     for column_name in df.columns:
         column_word_lengths = [len(word) for word in column_name.split()]
@@ -104,34 +69,26 @@ def apply_summary_styling_from_benchmark(
         Tuple of (styled gr.DataFrame for display, raw pd.DataFrame with metadata for plots)
     """
     t0 = time.time()
-    task_df = _pl_to_task_df(pl_df)
+    summary_df = benchmark_instance._create_summary_table(pl_df)
     t1 = time.time()
-    subset_df = _pl_to_subset_df(pl_df)
-    t2 = time.time()
-    summary_df = benchmark_instance._create_summary_table(task_df, subset_df)
-    t3 = time.time()
 
     if "No results" in summary_df.columns:
         logger.info(
-            "apply_summary_styling [%s]: task_df=%.3fs subset_df=%.3fs create_table=%.3fs (no results)",
+            "apply_summary_styling [%s]: create_table=%.3fs (no results)",
             benchmark_instance.name,
             t1 - t0,
-            t2 - t1,
-            t3 - t2,
         )
         return gr.DataFrame(summary_df), summary_df
 
     display_df = summary_df.drop(columns=["Release Date"], errors="ignore")
     result = _apply_summary_table_styling(display_df), summary_df
-    t4 = time.time()
+    t2 = time.time()
     logger.debug(
-        "apply_summary_styling [%s]: task_df=%.3fs subset_df=%.3fs create_table=%.3fs styling=%.3fs total=%.3fs",
+        "apply_summary_styling [%s]: create_table=%.3fs styling=%.3fs total=%.3fs",
         benchmark_instance.name,
         t1 - t0,
         t2 - t1,
-        t3 - t2,
-        t4 - t3,
-        t4 - t0,
+        t2 - t0,
     )
     return result
 
@@ -151,29 +108,25 @@ def apply_per_task_styling_from_benchmark(
         Styled gr.DataFrame ready for display in the leaderboard
     """
     t0 = time.time()
-    task_df = _pl_to_task_df(pl_df)
+    per_task_df = benchmark_instance._create_per_task_table(pl_df)
     t1 = time.time()
-    per_task_df = benchmark_instance._create_per_task_table(task_df)
-    t2 = time.time()
 
     if "No results" in per_task_df.columns:
         logger.info(
-            "apply_per_task_styling [%s]: task_df=%.3fs create_table=%.3fs (no results)",
+            "apply_per_task_styling [%s]: create_table=%.3fs (no results)",
             benchmark_instance.name,
             t1 - t0,
-            t2 - t1,
         )
         return gr.DataFrame(per_task_df)
 
     result = _apply_per_task_table_styling(per_task_df)
-    t3 = time.time()
+    t2 = time.time()
     logger.debug(
-        "apply_per_task_styling [%s]: task_df=%.3fs create_table=%.3fs styling=%.3fs total=%.3fs",
+        "apply_per_task_styling [%s]: create_table=%.3fs styling=%.3fs total=%.3fs",
         benchmark_instance.name,
         t1 - t0,
         t2 - t1,
-        t3 - t2,
-        t3 - t0,
+        t2 - t0,
     )
     return result
 
@@ -193,29 +146,25 @@ def apply_per_language_styling_from_benchmark(
         Styled gr.DataFrame ready for display in the leaderboard
     """
     t0 = time.time()
-    language_df = _pl_to_language_df(pl_df)
+    per_language_df = benchmark_instance._create_per_language_table(pl_df)
     t1 = time.time()
-    per_language_df = benchmark_instance._create_per_language_table(language_df)
-    t2 = time.time()
 
     if "No results" in per_language_df.columns:
         logger.info(
-            "apply_per_language_styling [%s]: language_df=%.3fs create_table=%.3fs (no results)",
+            "apply_per_language_styling [%s]: create_table=%.3fs (no results)",
             benchmark_instance.name,
             t1 - t0,
-            t2 - t1,
         )
         return gr.DataFrame(per_language_df)
 
     result = _apply_per_language_table_styling(per_language_df)
-    t3 = time.time()
+    t2 = time.time()
     logger.debug(
-        "apply_per_language_styling [%s]: language_df=%.3fs create_table=%.3fs styling=%.3fs total=%.3fs",
+        "apply_per_language_styling [%s]: create_table=%.3fs styling=%.3fs total=%.3fs",
         benchmark_instance.name,
         t1 - t0,
         t2 - t1,
-        t3 - t2,
-        t3 - t0,
+        t2 - t0,
     )
     return result
 

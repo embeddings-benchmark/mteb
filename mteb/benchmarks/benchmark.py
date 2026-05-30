@@ -24,6 +24,8 @@ from ._benchmark_metrics import (
 )
 
 if TYPE_CHECKING:
+    import polars as pl
+
     from mteb.abstasks.aggregated_task import AbsTaskAggregate
     from mteb.results import BenchmarkResults, ModelResult
 
@@ -107,57 +109,42 @@ class Benchmark:
     def __getitem__(self, index: int) -> AbsTask:
         return self.tasks[index]
 
-    def _create_summary_table(  # noqa: PLR6301
-        self, data: pd.DataFrame, subset_data: pd.DataFrame | None = None
-    ) -> pd.DataFrame:
-        """Create summary table. Called by the leaderboard app.
-
-        Returns:
-            A pandas DataFrame representing the summary results.
-        """
+    def _create_summary_table(self, pl_df: pl.DataFrame) -> pd.DataFrame:  # noqa: PLR6301
+        """Create summary table from a long polars pre-agg frame. Called by the leaderboard app."""
         from mteb.benchmarks._create_table import (
             _create_summary_table_from_benchmark_results,
+            _pl_to_task_df,
         )
 
-        return _create_summary_table_from_benchmark_results(data)
+        return _create_summary_table_from_benchmark_results(_pl_to_task_df(pl_df))
 
-    def _create_per_task_table(  # noqa: PLR6301
-        self, data: pd.DataFrame
-    ) -> pd.DataFrame:
-        """Create per-task table. Called by the leaderboard app.
-
-        Returns:
-            A pandas DataFrame representing the per-task results.
-        """
+    def _create_per_task_table(self, pl_df: pl.DataFrame) -> pd.DataFrame:  # noqa: PLR6301
+        """Create per-task table from a long polars pre-agg frame. Called by the leaderboard app."""
         from mteb.benchmarks._create_table import (
             _create_per_task_table_from_benchmark_results,
+            _pl_to_task_df,
         )
 
-        return _create_per_task_table_from_benchmark_results(data)
+        return _create_per_task_table_from_benchmark_results(_pl_to_task_df(pl_df))
 
-    def _create_per_language_table(self, data: pd.DataFrame) -> pd.DataFrame:
-        """Create per-language table. Called by the leaderboard app.
-
-        Returns:
-            A pandas DataFrame representing the per-language results.
-        """
+    def _create_per_language_table(self, pl_df: pl.DataFrame) -> pd.DataFrame:
+        """Create per-language table from a long polars pre-agg frame. Called by the leaderboard app."""
         from mteb.benchmarks._create_table import (
             _create_per_language_table_from_benchmark_results,
+            _pl_to_language_df,
         )
 
         if self.language_view == "all" or len(self.language_view) > 0:
             return _create_per_language_table_from_benchmark_results(
-                data, self.language_view
+                _pl_to_language_df(pl_df), self.language_view
             )
-        else:
-            no_results_frame = pd.DataFrame(
-                {
-                    "No results": [
-                        "The per-language table is not available for this benchmark."
-                    ]
-                }
-            )
-            return no_results_frame
+        return pd.DataFrame(
+            {
+                "No results": [
+                    "The per-language table is not available for this benchmark."
+                ]
+            }
+        )
 
     def push_collection_to_hub(
         self,
@@ -418,15 +405,14 @@ class Benchmark:
 class RtebBenchmark(Benchmark):
     """Wrapper for RTEB benchmark."""
 
-    def _create_summary_table(  # noqa: PLR6301
-        self, data: pd.DataFrame, subset_data: pd.DataFrame | None = None
-    ) -> pd.DataFrame:
+    def _create_summary_table(self, pl_df: pl.DataFrame) -> pd.DataFrame:  # noqa: PLR6301
         from mteb.benchmarks._create_table import (
             _create_summary_table_mean_public_private,
+            _pl_to_task_df,
         )
 
         joint_table = _create_summary_table_mean_public_private(
-            data, exclude_private_from_borda=True
+            _pl_to_task_df(pl_df), exclude_private_from_borda=True
         )
         # issue 3902: temporary remove the private column from RTEB summary table
         if "Mean (Private)" in joint_table.columns:
@@ -444,26 +430,29 @@ class RtebBenchmark(Benchmark):
 class HUMEBenchmark(Benchmark):
     """Wrapper for HUME benchmark."""
 
-    def _create_summary_table(  # noqa: PLR6301
-        self, data: pd.DataFrame, subset_data: pd.DataFrame | None = None
-    ) -> pd.DataFrame:
-        from mteb.benchmarks._create_table import _create_summary_table_mean_subset
+    def _create_summary_table(self, pl_df: pl.DataFrame) -> pd.DataFrame:  # noqa: PLR6301
+        from mteb.benchmarks._create_table import (
+            _create_summary_table_mean_subset,
+            _pl_to_subset_df,
+            _pl_to_task_df,
+        )
 
         return _create_summary_table_mean_subset(
-            data, subset_data if subset_data is not None else pd.DataFrame()
+            _pl_to_task_df(pl_df), _pl_to_subset_df(pl_df)
         )
 
 
 class MIEBBenchmark(Benchmark):
     """Wrapper for MIEB benchmark."""
 
-    def _create_summary_table(  # noqa: PLR6301
-        self, data: pd.DataFrame, subset_data: pd.DataFrame | None = None
-    ) -> pd.DataFrame:
-        from mteb.benchmarks._create_table import _create_summary_table_mean_task_type
+    def _create_summary_table(self, pl_df: pl.DataFrame) -> pd.DataFrame:  # noqa: PLR6301
+        from mteb.benchmarks._create_table import (
+            _create_summary_table_mean_task_type,
+            _pl_to_task_df,
+        )
 
         return _create_summary_table_mean_task_type(
-            data, mean_column_name="Mean (Task)"
+            _pl_to_task_df(pl_df), mean_column_name="Mean (Task)"
         )
 
 
@@ -487,7 +476,6 @@ class VidoreBenchmark(Benchmark):
         import mteb
         from mteb.benchmarks._create_table import (
             _format_max_tokens,
-            _format_n_active_parameters,
             _format_n_parameters,
             _get_embedding_size,
             _get_means_per_types,
@@ -571,9 +559,7 @@ class VidoreBenchmark(Benchmark):
         joint_table.insert(
             1,
             "Active Parameters (B)",
-            model_metas.map(
-                lambda m: _format_n_active_parameters(m.n_active_parameters)
-            ),
+            model_metas.map(lambda m: _format_n_parameters(m.n_active_parameters)),
         )
 
         # Add release date from model metadata
@@ -611,10 +597,10 @@ class VidoreBenchmark(Benchmark):
 
         return joint_table
 
-    def _create_summary_table(
-        self, data: pd.DataFrame, subset_data: pd.DataFrame | None = None
-    ) -> pd.DataFrame:
-        joint_table = self._create_vidore_summary_table(data)
+    def _create_summary_table(self, pl_df: pl.DataFrame) -> pd.DataFrame:
+        from mteb.benchmarks._create_table import _pl_to_task_df
+
+        joint_table = self._create_vidore_summary_table(_pl_to_task_df(pl_df))
         # For ViDoRe (V1, V2, V3): all tasks are Document Understanding type, so Document Understanding column = Mean (Task)
         joint_table = joint_table.rename(
             columns={"Document Understanding": "Mean (Task)"}
