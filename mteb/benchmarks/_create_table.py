@@ -78,22 +78,23 @@ def _skipna_false_mean(cols: list[str]) -> pl.Expr:
     return pl.when(any_null).then(None).otherwise(pl.mean_horizontal(cols))
 
 
-def _get_borda_rank(wide: pl.DataFrame, score_cols: list[str]) -> pl.Series:
-    """Borda rank for each row across ``score_cols``.
+def _get_borda_rank(score_cols: list[str]) -> pl.Expr:
+    """Borda rank for each row across ``score_cols``, as a polars expression.
 
     Per-column rank (higher score → lower rank number) is converted to a borda count
-    (``n - rank``), summed row-wise, and ranked again with ``method="min"``. Returns a
-    polars ``Int64`` Series in the same row order as ``wide``.
+    (``n - rank``), summed row-wise, and ranked again with ``method="min"``. The row
+    count ``n`` is taken from the evaluation context via ``pl.len()`` so the expression
+    can be plugged into any ``with_columns`` / ``select`` without an intermediate
+    materialisation.
     """
-    n = wide.height
-    return wide.select(
+    n = pl.len()
+    return (
         pl.sum_horizontal(
             [n - pl.col(c).rank(method="average", descending=True) for c in score_cols]
         )
         .rank(method="min", descending=True)
         .cast(pl.Int64)
-        .alias("rank")
-    ).to_series()
+    )
 
 
 def _split_on_capital(s: str) -> str:
@@ -129,14 +130,16 @@ def _get_embedding_size(embed_dim: int | list[int] | None) -> int | None:
 
 
 def _get_means_per_types(
-    per_task: pl.DataFrame, task_cols: list[str]
-) -> tuple[pl.DataFrame, list[str]]:
-    """Compute per-task-type means in polars.
+    task_cols: list[str],
+) -> tuple[list[pl.Expr], list[str]]:
+    """Per-task-type mean expressions for a given task-column set.
 
-    Returns ``(wide_frame, type_cols)`` where ``wide_frame`` has ``model_name`` plus
-    one column per task type (column names already passed through ``_split_on_capital``),
-    and ``type_cols`` lists those column names in insertion order. Means are computed
-    with ``skipna=False`` semantics (matches the prior pandas implementation).
+    Returns ``(type_exprs, type_cols)``: a list of polars expressions (one per task
+    type, each already aliased via ``_split_on_capital``) and the matching column-name
+    list. The expressions can be splatted into a ``select`` / ``with_columns`` on the
+    wide task frame so we don't materialise an intermediate ``mean_per_type`` frame
+    and don't need a join to bring the type means back into the summary pipeline.
+    Means use ``skipna=False`` semantics (matches the prior pandas implementation).
     """
     task_names_per_type: dict[str, list[str]] = defaultdict(list)
     for task_name in task_cols:
@@ -144,17 +147,48 @@ def _get_means_per_types(
         task_type = _TASKS_REGISTRY[task_name].metadata.type
         task_names_per_type[task_type].append(task_name)
 
-    type_cols = [_split_on_capital(t) for t in task_names_per_type]
-    return (
-        per_task.select(
-            pl.col("model_name"),
-            *(
-                _skipna_false_mean(tasks).alias(_split_on_capital(task_type))
-                for task_type, tasks in task_names_per_type.items()
-            ),
-        ),
-        type_cols,
-    )
+    type_cols: list[str] = []
+    type_exprs: list[pl.Expr] = []
+    for task_type, tasks in task_names_per_type.items():
+        col_name = _split_on_capital(task_type)
+        type_cols.append(col_name)
+        type_exprs.append(_skipna_false_mean(tasks).alias(col_name))
+    return type_exprs, type_cols
+
+
+_META_STRUCT_FIELDS: dict[str, pl.DataType] = {
+    "Max Tokens": pl.Float64,
+    "Embedding Dimensions": pl.Int64,
+    "Total Parameters (B)": pl.Float64,
+    "Active Parameters (B)": pl.Float64,
+    "Release Date": pl.Utf8,
+    "_model_link": pl.Utf8,
+}
+_META_STRUCT_DTYPE = pl.Struct(_META_STRUCT_FIELDS)
+_META_STRUCT_DTYPE_WITH_ZS = pl.Struct({**_META_STRUCT_FIELDS, "Zero-shot": pl.Int64})
+
+
+@functools.lru_cache(maxsize=1)
+def _static_model_meta() -> dict[str, dict]:
+    """Cached per-model metadata dict keyed by ``model_name``.
+
+    Built once from ``MODEL_REGISTRY`` (which is static after import) so that
+    repeat leaderboard renders reuse the same dict objects instead of
+    re-constructing one per model on every call to :func:`_attach_model_metadata`.
+    Zero-shot is not stored here — it depends on the active task set and is
+    layered on per call.
+    """
+    return {
+        name: {
+            "Max Tokens": _format_max_tokens(m.max_tokens),
+            "Embedding Dimensions": _get_embedding_size(m.embed_dim),
+            "Total Parameters (B)": _format_n_parameters(m.n_parameters),
+            "Active Parameters (B)": _format_n_parameters(m.n_active_parameters),
+            "Release Date": str(m.release_date) if m.release_date else None,
+            "_model_link": m.reference,
+        }
+        for name, m in MODEL_REGISTRY.items()
+    }
 
 
 def _attach_model_metadata(
@@ -169,36 +203,21 @@ def _attach_model_metadata(
     column, and optionally adds a ``Zero-shot`` column when ``task_names_key`` is
     provided (None → -1 to mirror the previous ``.fillna(-1)``).
     """
-    # Build the metadata via polars map_batches: model_name -> struct of meta fields,
-    # then unnest. Missing models become null structs and are dropped before unnest.
-    struct_fields: dict[str, pl.DataType] = {
-        "Max Tokens": pl.Float64,
-        "Embedding Dimensions": pl.Int64,
-        "Total Parameters (B)": pl.Float64,
-        "Active Parameters (B)": pl.Float64,
-        "Release Date": pl.Utf8,
-        "_model_link": pl.Utf8,
-    }
-    if task_names_key is not None:
-        struct_fields["Zero-shot"] = pl.Int64
-    meta_dtype = pl.Struct(struct_fields)
+    meta_lookup = _static_model_meta()
+    meta_dtype = (
+        _META_STRUCT_DTYPE_WITH_ZS if task_names_key is not None else _META_STRUCT_DTYPE
+    )
 
-    def _resolve(name: str) -> dict | None:
-        m = MODEL_REGISTRY.get(name)
-        if m is None:
-            return None
-        row: dict = {
-            "Max Tokens": _format_max_tokens(m.max_tokens),
-            "Embedding Dimensions": _get_embedding_size(m.embed_dim),
-            "Total Parameters (B)": _format_n_parameters(m.n_parameters),
-            "Active Parameters (B)": _format_n_parameters(m.n_active_parameters),
-            "Release Date": str(m.release_date) if m.release_date else None,
-            "_model_link": m.reference,
-        }
-        if task_names_key is not None:
-            z = _zero_shot_pct_cached(m.name, task_names_key)
-            row["Zero-shot"] = -1 if z is None else z
-        return row
+    if task_names_key is None:
+        _resolve = meta_lookup.get
+    else:
+
+        def _resolve(name: str) -> dict | None:
+            base = meta_lookup.get(name)
+            if base is None:
+                return None
+            z = _zero_shot_pct_cached(name, task_names_key)
+            return {**base, "Zero-shot": -1 if z is None else z}
 
     def _fetch(names: pl.Series) -> pl.Series:
         return pl.Series("_meta", [_resolve(n) for n in names], dtype=meta_dtype)
@@ -258,21 +277,16 @@ def _create_summary_table_from_benchmark_results(
     if per_task.is_empty():
         return _no_results_frame()
 
-    mean_per_type, type_cols = _get_means_per_types(per_task, task_cols)
+    type_exprs, type_cols = _get_means_per_types(task_cols)
 
     joint_table = (
-        mean_per_type.with_columns(
-            _skipna_false_mean(type_cols).alias("Mean (TaskType)"),
+        per_task.select(
+            "model_name",
+            *type_exprs,
+            _skipna_false_mean(task_cols).alias("Mean (Task)"),
+            _get_borda_rank(task_cols).alias("Rank (Borda)"),
         )
-        .join(
-            per_task.select(
-                "model_name",
-                _skipna_false_mean(task_cols).alias("Mean (Task)"),
-            ),
-            on="model_name",
-            how="left",
-        )
-        .with_columns(_get_borda_rank(per_task, task_cols).alias("Rank (Borda)"))
+        .with_columns(_skipna_false_mean(type_cols).alias("Mean (TaskType)"))
         .sort("Rank (Borda)")
     )
 
@@ -331,9 +345,7 @@ def _create_per_task_table_from_benchmark_results(
         return _no_results_frame()
 
     per_task = (
-        per_task.with_columns(_get_borda_rank(per_task, task_cols).alias("_borda"))
-        .sort("_borda")
-        .drop("_borda")
+        per_task.sort(_get_borda_rank(task_cols))
         .with_columns(pl.col("model_name").str.split("/").list.last().alias("Model"))
         .drop("model_name")
         .select(["Model", *task_cols])
@@ -364,11 +376,12 @@ def _create_per_language_table_from_benchmark_results(
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return _no_results_frame()
 
-    # Lazy pipeline so polars can fuse explode + filter + group_by. When a language
-    # subset is selected, push the predicate *before* the explode by keeping only
-    # rows whose language list intersects the selection — this avoids materialising
+    # Lazy pipeline so polars can fuse explode + filter + group_by. Project only
+    # the columns we need so the explode has narrower rows. When a language subset
+    # is selected, push the predicate *before* the explode by keeping only rows
+    # whose language list intersects the selection — this avoids materialising
     # exploded rows we'll discard.
-    lazy = pl_df.lazy()
+    lazy = pl_df.lazy().select("model_name", "language", "score")
     if language_view != "all":
         lazy = lazy.filter(
             pl.col("language").list.eval(pl.element().is_in(language_view)).list.any()
@@ -376,8 +389,12 @@ def _create_per_language_table_from_benchmark_results(
     lazy = lazy.explode("language").drop_nulls("language")
     if language_view != "all":
         lazy = lazy.filter(pl.col("language").is_in(language_view))
+    # Streaming engine handles the explode → group_by chain on tens of millions of
+    # post-explode rows ~3-4× faster than the default in-memory engine here.
     lang_df = (
-        lazy.group_by(["model_name", "language"]).agg(pl.col("score").mean()).collect()
+        lazy.group_by(["model_name", "language"])
+        .agg(pl.col("score").mean())
+        .collect(engine="streaming")
     )
     if lang_df.is_empty():
         return _no_results_frame()
@@ -392,19 +409,10 @@ def _create_per_language_table_from_benchmark_results(
     if per_language.is_empty():
         return _no_results_frame()
 
-    # Borda over hundreds of language columns is the main cost. With a single
-    # surviving column the borda sort is equivalent to ranking by that score, so
-    # skip borda entirely (~free vs. ~500 polars rank ops on "all").
     if len(lang_cols) == 1:
         per_language = per_language.sort(lang_cols[0], descending=True, nulls_last=True)
     else:
-        per_language = (
-            per_language.with_columns(
-                _get_borda_rank(per_language, lang_cols).alias("_borda")
-            )
-            .sort("_borda")
-            .drop("_borda")
-        )
+        per_language = per_language.sort(_get_borda_rank(lang_cols))
 
     return (
         per_language.with_columns(
@@ -458,7 +466,7 @@ def _create_summary_table_mean_public_private(
     if per_task.is_empty():
         return _no_results_frame()
 
-    mean_per_type, type_cols = _get_means_per_types(per_task, task_cols)
+    type_exprs, type_cols = _get_means_per_types(task_cols)
 
     public_present = [c for c in public_tasks if c in task_cols]
     private_present = [c for c in private_tasks if c in task_cols]
@@ -466,27 +474,24 @@ def _create_summary_table_mean_public_private(
         public_present if exclude_private_from_borda and public_present else task_cols
     )
 
-    joint_table = (
-        mean_per_type.join(
-            per_task.select(
-                "model_name",
-                (
-                    _skipna_false_mean(public_present).alias("Mean (Public)")
-                    if public_present
-                    else pl.lit(None).cast(pl.Float64).alias("Mean (Public)")
-                ),
-                (
-                    _skipna_false_mean(private_present).alias("Mean (Private)")
-                    if private_present
-                    else pl.lit(None).cast(pl.Float64).alias("Mean (Private)")
-                ),
-            ),
-            on="model_name",
-            how="left",
-        )
-        .with_columns(_get_borda_rank(per_task, borda_cols).alias("Rank (Borda)"))
-        .sort("Rank (Borda)")
+    public_mean_expr = (
+        _skipna_false_mean(public_present).alias("Mean (Public)")
+        if public_present
+        else pl.lit(None).cast(pl.Float64).alias("Mean (Public)")
     )
+    private_mean_expr = (
+        _skipna_false_mean(private_present).alias("Mean (Private)")
+        if private_present
+        else pl.lit(None).cast(pl.Float64).alias("Mean (Private)")
+    )
+
+    joint_table = per_task.select(
+        "model_name",
+        *type_exprs,
+        public_mean_expr,
+        private_mean_expr,
+        _get_borda_rank(borda_cols).alias("Rank (Borda)"),
+    ).sort("Rank (Borda)")
 
     joint_table = _attach_model_metadata(joint_table)
 
@@ -538,7 +543,7 @@ def _create_summary_table_mean_subset(
     if per_task.is_empty():
         return _no_results_frame()
 
-    mean_per_type, type_cols = _get_means_per_types(per_task, task_cols)
+    type_exprs, type_cols = _get_means_per_types(task_cols)
 
     # Mean over all subset rows per model (each task-language subset weighted equally).
     overall_subset_mean = per_subset_long.group_by("model_name").agg(
@@ -552,11 +557,12 @@ def _create_summary_table_mean_subset(
     subset_cols = [c for c in per_subset_wide.columns if c != "model_name"]
 
     joint_table = (
-        mean_per_type.join(overall_subset_mean, on="model_name", how="left")
+        per_task.select("model_name", *type_exprs)
+        .join(overall_subset_mean, on="model_name", how="left")
         .join(
             per_subset_wide.select(
                 "model_name",
-                _get_borda_rank(per_subset_wide, subset_cols).alias("Rank (Borda)"),
+                _get_borda_rank(subset_cols).alias("Rank (Borda)"),
             ),
             on="model_name",
             how="left",
@@ -613,17 +619,17 @@ def _create_summary_table_mean_task_type(
     if per_task.is_empty():
         return _no_results_frame()
 
-    mean_per_type, type_cols = _get_means_per_types(per_task, task_cols)
+    type_exprs, type_cols = _get_means_per_types(task_cols)
 
     joint_table = (
-        mean_per_type.with_columns(
-            _skipna_false_mean(type_cols).alias(mean_column_name),
+        per_task.select(
+            "model_name",
+            *type_exprs,
+            _get_borda_rank(task_cols).alias("Rank (Borda)"),
         )
+        .with_columns(_skipna_false_mean(type_cols).alias(mean_column_name))
         .sort(mean_column_name, descending=True, nulls_last=True)
-        .with_columns(
-            _get_borda_rank(per_task, task_cols).alias("Rank (Borda)"),
-            (pl.int_range(0, pl.len()) + 1).cast(pl.Int64).alias("Rank"),
-        )
+        .with_columns((pl.int_range(0, pl.len()) + 1).cast(pl.Int64).alias("Rank"))
     )
 
     joint_table = _attach_model_metadata(

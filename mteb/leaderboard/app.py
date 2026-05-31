@@ -1203,7 +1203,9 @@ def get_leaderboard_app(  # noqa: PLR0914
                         )
                         .list.any()
                     )
-                filtered_df = bm_pl_df.filter(mask)
+                # Streaming engine evaluates the is_in mask on the ~9M-row frame
+                # ~4× faster than the default in-memory engine here.
+                filtered_df = bm_pl_df.lazy().filter(mask).collect(engine="streaming")
             t_filter1 = time.time()
             summary, summary_raw = apply_summary_styling_from_benchmark(
                 benchmark, filtered_df

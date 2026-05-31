@@ -389,7 +389,9 @@ class Benchmark:
                     per_task_df.reset_index(names="model_name")
                 )
                 task_cols = list(per_task_df.columns)
-                borda_list = _get_borda_rank(per_task_pl, task_cols).to_list()
+                borda_list = (
+                    per_task_pl.select(_get_borda_rank(task_cols)).to_series().to_list()
+                )
                 for name, rank in zip(per_task_df.index, borda_list):
                     scores[name]["Rank"] = int(rank)  # type: ignore[index]
             else:
@@ -501,29 +503,29 @@ class VidoreBenchmark(Benchmark):
         if per_task.is_empty():
             return _no_results_frame()
 
-        mean_per_type, type_cols = _get_means_per_types(per_task, task_cols)
+        type_exprs, type_cols = _get_means_per_types(task_cols)
         # Vidore tasks share a single task type — sort primarily by it, then by means.
         primary_type_col = _split_on_capital(get_task(task_cols[0]).metadata.type)
 
         public_present = [c for c in public_tasks if c in task_cols]
         private_present = [c for c in private_tasks if c in task_cols]
 
-        joint_table = mean_per_type.join(
-            per_task.select(
-                "model_name",
-                (
-                    _skipna_false_mean(public_present).alias("Mean (Public)")
-                    if public_present
-                    else pl.lit(None).cast(pl.Float64).alias("Mean (Public)")
-                ),
-                (
-                    _skipna_false_mean(private_present).alias("Mean (Private)")
-                    if private_present
-                    else pl.lit(None).cast(pl.Float64).alias("Mean (Private)")
-                ),
-            ),
-            on="model_name",
-            how="left",
+        public_mean_expr = (
+            _skipna_false_mean(public_present).alias("Mean (Public)")
+            if public_present
+            else pl.lit(None).cast(pl.Float64).alias("Mean (Public)")
+        )
+        private_mean_expr = (
+            _skipna_false_mean(private_present).alias("Mean (Private)")
+            if private_present
+            else pl.lit(None).cast(pl.Float64).alias("Mean (Private)")
+        )
+
+        joint_table = per_task.select(
+            "model_name",
+            *type_exprs,
+            public_mean_expr,
+            private_mean_expr,
         ).sort(
             [primary_type_col, "Mean (Public)", "Mean (Private)"],
             descending=True,

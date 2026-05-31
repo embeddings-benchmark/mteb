@@ -109,7 +109,7 @@ def filter_df(
             .list.eval(pl.element().str.split("-").list.first().is_in(lang_set))
             .list.any()
         )
-    return pl_df.filter(mask)
+    return pl_df.lazy().filter(mask).collect(engine="streaming")
 
 
 def build_tables(benchmark, pl_df: pl.DataFrame) -> None:
