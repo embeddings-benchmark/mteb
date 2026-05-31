@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
 import pandas as pd
+import polars as pl
+from datasets import Dataset, load_dataset
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 
@@ -18,13 +20,10 @@ from mteb.models.get_model_meta import get_model_metas
 
 from .model_result import ModelResult, _aggregate_and_pivot
 
-__all__ = ["BenchmarkResults", "ModelResult"]
-
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator
 
     import datasets
-    import polars as pl
     from typing_extensions import Self
 
     from mteb.abstasks.abstask import AbsTask
@@ -44,9 +43,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-# Column tagging each row with its benchmark name in the combined leaderboard cache
-# (per-benchmark frames are validated differently, so they cannot be merged into one
-# untagged frame — see `BenchmarkResults.save_leaderboard_cache`).
 _BENCHMARK_COLUMN = "__benchmark__"
 
 
@@ -473,6 +469,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     def to_dataset(
         self,
+        *,
         include_model_revision: bool = True,
         push_to_hub: bool = False,
         repo_id: str | None = None,
@@ -497,15 +494,12 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         if push_to_hub and repo_id is None:
             raise ValueError("`repo_id` must be provided when `push_to_hub=True`.")
 
-        import datasets as ds
-        import polars as pl
-
         df = self._build_pre_agg_df(include_model_revision=include_model_revision)
         if df is None or df.empty:
-            return ds.Dataset.from_dict({})
+            return Dataset.from_dict({})
 
         pl_df = pl.from_pandas(df)
-        dataset = ds.Dataset.from_polars(pl_df)
+        dataset = Dataset.from_polars(pl_df)
 
         if push_to_hub:
             dataset.push_to_hub(repo_id, **push_kwargs)
@@ -691,16 +685,6 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         BenchmarkResults._combine_leaderboard_frames(per_benchmark).write_parquet(path)
 
     @staticmethod
-    def push_leaderboard_cache(
-        per_benchmark: dict[str, pl.DataFrame], repo_id: str, **push_kwargs: Any
-    ) -> None:
-        """Push the per-benchmark leaderboard frames to the HF Hub as a dataset."""
-        import datasets as ds
-
-        combined = BenchmarkResults._combine_leaderboard_frames(per_benchmark)
-        ds.Dataset.from_polars(combined).push_to_hub(repo_id, **push_kwargs)
-
-    @staticmethod
     def load_leaderboard_cache(
         source: str | Path, *, from_hub: bool = False
     ) -> dict[str, pl.DataFrame]:
@@ -710,12 +694,8 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             source: Local parquet path, or a HF dataset repo id when ``from_hub=True``.
             from_hub: Load from the HF Hub via ``datasets`` instead of a local path.
         """
-        import polars as pl
-
         if from_hub:
-            import datasets as ds
-
-            combined = ds.load_dataset(str(source), split="train").to_polars()
+            combined = load_dataset(str(source), split="train").to_polars()
         else:
             combined = pl.read_parquet(source)
         return BenchmarkResults._split_leaderboard_frame(combined)

@@ -254,13 +254,18 @@ def _cache_on_benchmark_select(benchmark_name, all_benchmark_results):
         sorted(modalities),
     )
     elapsed = time.time() - start_time
-    scores = _pl_df_to_scores(all_benchmark_results[benchmark_name])
+    bm_pl_df = all_benchmark_results[benchmark_name]
+    scores = (
+        bm_pl_df.select("model_name", "task_name").unique()
+        if not bm_pl_df.is_empty() and "model_name" in bm_pl_df.columns
+        else _EMPTY_SCORES_FRAME
+    )
     logger.debug(f"on_benchmark_select callback: {elapsed}s")
     show_zero_shot = _should_show_zero_shot_filter(benchmark_name)
 
     # Calculate initial models for this benchmark to avoid race conditions
     benchmark_tasks = sorted([task.metadata.name for task in benchmark.tasks])
-    all_models_in_scores = list({entry["model_name"] for entry in scores})
+    all_models_in_scores = scores["model_name"].unique().to_list()
     initial_models = sorted(
         _filter_models(
             all_models_in_scores,
@@ -349,15 +354,7 @@ def _benchmark_full_languages(benchmark_name: str) -> frozenset[str]:
     return frozenset(langs)
 
 
-def _pl_df_to_scores(pl_df: pl.DataFrame) -> list[dict]:
-    """Convert a polars pre-agg DataFrame to the scores list used by leaderboard callbacks."""
-    if pl_df.is_empty() or "model_name" not in pl_df.columns:
-        return []
-    return (
-        pl_df.group_by(["model_name", "task_name"])
-        .agg(pl.col("score").mean())
-        .to_dicts()
-    )
+_EMPTY_SCORES_FRAME = pl.DataFrame(schema={"model_name": pl.Utf8, "task_name": pl.Utf8})
 
 
 def _get_session_id(request: gr.Request) -> str:
@@ -510,8 +507,8 @@ def get_leaderboard_app(  # noqa: PLR0914
     logger.info("Step 3/6: Filtering models...")
     filter_start = time.time()
 
-    default_scores = _pl_df_to_scores(default_pl_df)
-    all_models = list(default_pl_df["model_name"].unique().to_list())
+    default_scores = default_pl_df.select("model_name", "task_name").unique()
+    all_models = default_pl_df["model_name"].unique().to_list()
     default_task_names_for_filter = sorted(
         default_pl_df["task_name"].unique().to_list()
     )
@@ -525,12 +522,12 @@ def get_leaderboard_app(  # noqa: PLR0914
         zero_shot_setting="allow_all",
         model_types=MODEL_TYPE_CHOICES,
     )
-    default_filtered_scores = [
-        entry for entry in default_scores if entry["model_name"] in filtered_models
-    ]
-
-    filtered_model_names = list(
-        {entry["model_name"] for entry in default_filtered_scores}
+    filtered_model_names = (
+        default_scores.filter(pl.col("model_name").is_in(set(filtered_models)))[
+            "model_name"
+        ]
+        .unique()
+        .to_list()
     )
     filtered_pl_df = default_pl_df.filter(
         pl.col("model_name").is_in(filtered_model_names)
@@ -1016,17 +1013,21 @@ def get_leaderboard_app(  # noqa: PLR0914
         def update_scores_on_lang_change(benchmark_name, languages):
             start_time = time.time()
             if not len(languages):
-                return []
+                return _EMPTY_SCORES_FRAME
             # lang_select stores 3-letter ISO codes ("eng") while the language
             # column stores full language-script codes ("eng-Latn"). Strip the
             # script suffix before comparing.
             lang_set = set(languages)
-            filtered = all_benchmark_results[benchmark_name].filter(
-                pl.col("language")
-                .list.eval(pl.element().str.split("-").list.first().is_in(lang_set))
-                .list.any()
+            scores = (
+                all_benchmark_results[benchmark_name]
+                .filter(
+                    pl.col("language")
+                    .list.eval(pl.element().str.split("-").list.first().is_in(lang_set))
+                    .list.any()
+                )
+                .select("model_name", "task_name")
+                .unique()
             )
-            scores = _pl_df_to_scores(filtered)
             elapsed = time.time() - start_time
             logger.debug(f"update_scores callback: {elapsed}s")
             return scores
@@ -1083,7 +1084,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             ),
         )
         def update_models(
-            scores: list[dict],
+            scores: pl.DataFrame,
             tasks: list[str],
             availability: bool | None,
             compatibility: list[str],
@@ -1094,7 +1095,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             request: gr.Request | None = None,
         ):
             start_time = time.time()
-            model_names = list({entry["model_name"] for entry in scores})
+            model_names = scores["model_name"].unique().to_list()
             filtered_models = _filter_models(
                 model_names,
                 tasks,
@@ -1166,21 +1167,19 @@ def get_leaderboard_app(  # noqa: PLR0914
                 len(languages) if languages is not None else -1,
             )
             start_time = time.time()
-            tasks = set(tasks) if tasks is not None else None
+            tasks_set = set(tasks) if tasks is not None else None
             benchmark = mteb.get_benchmark(benchmark_name)
 
-            filtered_model_names = set()
-            filtered_task_names = set()
-
-            for entry in scores:
-                if (tasks is not None) and (entry["task_name"] not in tasks):
-                    continue
-                if (models_to_keep is not None) and (
-                    entry["model_name"] not in models_to_keep
-                ):
-                    continue
-                filtered_model_names.add(entry["model_name"])
-                filtered_task_names.add(entry["task_name"])
+            # Restrict the (model, task) pair set to current UI selections in polars,
+            # then extract the unique model and task name sets the polars filter below
+            # will use as ``is_in`` predicates on the full pre-aggregation frame.
+            scored = scores
+            if tasks_set is not None:
+                scored = scored.filter(pl.col("task_name").is_in(tasks_set))
+            if models_to_keep is not None:
+                scored = scored.filter(pl.col("model_name").is_in(set(models_to_keep)))
+            filtered_model_names = set(scored["model_name"].unique().to_list())
+            filtered_task_names = set(scored["task_name"].unique().to_list())
 
             t_filter0 = time.time()
             bm_pl_df = all_benchmark_results[benchmark_name]
@@ -1265,13 +1264,13 @@ def get_leaderboard_app(  # noqa: PLR0914
         ]
 
         # Description updates from user changes to language/type/domain filters.
-        for trigger in [lang_select, type_select, domain_select]:
-            trigger.input(
-                _update_description,
-                inputs=[benchmark_select, lang_select, type_select, domain_select],
-                outputs=[description],
-                show_progress="hidden",
-            )
+        gr.on(
+            triggers=[lang_select.input, type_select.input, domain_select.input],
+            fn=_update_description,
+            inputs=[benchmark_select, lang_select, type_select, domain_select],
+            outputs=[description],
+            show_progress="hidden",
+        )
 
         # Language filter chain: scores -> task list -> task info -> models -> tables.
         lang_select.input(
@@ -1297,24 +1296,24 @@ def get_leaderboard_app(  # noqa: PLR0914
         )
 
         # Type / domain / modality chains: task list -> task info -> models -> tables.
-        for trigger in [type_select, domain_select, modality_select]:
-            trigger.input(
-                update_task_list,
-                inputs=_task_list_inputs,
-                outputs=[task_select],
-            ).then(
-                _update_task_info,
-                inputs=[task_select],
-                outputs=[task_info_table],
-            ).then(
-                update_models,
-                inputs=_model_filter_inputs,
-                outputs=[models],
-            ).then(
-                update_tables,
-                inputs=_table_inputs,
-                outputs=_table_outputs,
-            )
+        gr.on(
+            triggers=[type_select.input, domain_select.input, modality_select.input],
+            fn=update_task_list,
+            inputs=_task_list_inputs,
+            outputs=[task_select],
+        ).then(
+            _update_task_info,
+            inputs=[task_select],
+            outputs=[task_info_table],
+        ).then(
+            update_models,
+            inputs=_model_filter_inputs,
+            outputs=[models],
+        ).then(
+            update_tables,
+            inputs=_table_inputs,
+            outputs=_table_outputs,
+        )
 
         # Direct task selection by user: task info -> models -> tables.
         task_select.input(
@@ -1332,23 +1331,23 @@ def get_leaderboard_app(  # noqa: PLR0914
         )
 
         # Model-filter inputs: models -> tables.
-        for filter_trigger in [
-            availability,
-            compatibility,
-            instructions,
-            max_model_size,
-            zero_shot,
-            model_type_select,
-        ]:
-            filter_trigger.input(
-                update_models,
-                inputs=_model_filter_inputs,
-                outputs=[models],
-            ).then(
-                update_tables,
-                inputs=_table_inputs,
-                outputs=_table_outputs,
-            )
+        gr.on(
+            triggers=[
+                availability.input,
+                compatibility.input,
+                instructions.input,
+                max_model_size.input,
+                zero_shot.input,
+                model_type_select.input,
+            ],
+            fn=update_models,
+            inputs=_model_filter_inputs,
+            outputs=[models],
+        ).then(
+            update_tables,
+            inputs=_table_inputs,
+            outputs=_table_outputs,
+        )
 
         gr.Markdown(ACKNOWLEDGEMENT, elem_id="ack_markdown")
     interface_time = time.time() - interface_start
