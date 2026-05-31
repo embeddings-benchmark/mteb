@@ -14,7 +14,7 @@ from mteb.cache import ResultCache
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.results import BenchmarkResults, ModelResult
 
-_POLARS_TOO_OLD = Version(pl.__version__) < Version("1.0.0")
+_POLARS_TOO_OLD = Version(pl.__version__) < Version("1.40.0")
 
 
 @pytest.fixture
@@ -172,7 +172,7 @@ def test_utility_properties(
     assert isinstance(br.domains, list) and isinstance(br.domains[0], str)
 
 
-@pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.0.0")
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
 def test_benchmark_results(cache_path: Path) -> None:
     cache = ResultCache(cache_path)
     bench = Benchmark(
@@ -199,7 +199,7 @@ def test_benchmark_results(cache_path: Path) -> None:
     assert df.at[0, "Mean (Task)"] == pytest.approx(0.616616)
 
 
-@pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.0.0")
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
 def test_generate_model_card_with_table_and_benchmarks(
     cache_path: Path, tmp_path: Path
 ) -> None:
