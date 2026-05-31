@@ -382,7 +382,7 @@ voyage_4_large_2048d_evolved = ModelMeta(
     output_dtypes=OUTPUT_TYPES,
     extra_requirements_groups=["voyageai"],
     adapted_from="voyageai/voyage-4-large (embed_dim=2048)",
-    experiment_kwargs={"evolved_prompts": True},
+    experiment_kwargs=None,
 )
 
 voyage_4_large_2048d = ModelMeta(
