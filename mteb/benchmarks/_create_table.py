@@ -10,7 +10,7 @@ import numpy as np
 import polars as pl
 
 from mteb.get_tasks import _TASKS_REGISTRY
-from mteb.models.get_model_meta import get_model_meta
+from mteb.models.model_implementations import MODEL_REGISTRY
 
 
 @functools.lru_cache(maxsize=4096)
@@ -21,8 +21,11 @@ def _training_datasets_cached(model_name: str) -> frozenset[str] | None:
     expensive and depends only on the model, so cache it per model name here at the
     leaderboard layer (rather than polluting ``ModelMeta``). Both the summary's
     zero-shot column and ``_filter_models``' zero-shot check share this cache.
+
+    Reads ``MODEL_REGISTRY`` directly (skips the rename check + KeyError path in
+    ``get_model_meta``) — this is a hot-path lookup.
     """
-    meta = get_model_meta(model_name)
+    meta = MODEL_REGISTRY.get(model_name)
     if meta is None:
         return None
     training_datasets = meta.get_training_datasets()
@@ -166,55 +169,54 @@ def _attach_model_metadata(
     column, and optionally adds a ``Zero-shot`` column when ``task_names_key`` is
     provided (None → -1 to mirror the previous ``.fillna(-1)``).
     """
-    # Single pass over the models — each meta is touched once and accumulated into
-    # parallel lists, then assembled into a polars frame. Avoids the previous N
-    # separate comprehensions which each re-walked the metas list.
-    names: list[str] = []
-    max_tokens: list[float | None] = []
-    embed_dims: list[int | None] = []
-    total_params: list[float | None] = []
-    active_params: list[float | None] = []
-    release_dates: list[str | None] = []
-    model_links: list[str | None] = []
-    zero_shots: list[int] | None = [] if task_names_key is not None else None
-
-    for name in joint_table.get_column("model_name").to_list():
-        m = get_model_meta(name)
-        if m is None:
-            continue
-        names.append(name)
-        max_tokens.append(_format_max_tokens(m.max_tokens))
-        embed_dims.append(_get_embedding_size(m.embed_dim))
-        total_params.append(_format_n_parameters(m.n_parameters))
-        active_params.append(_format_n_parameters(m.n_active_parameters))
-        release_dates.append(str(m.release_date) if m.release_date else None)
-        model_links.append(m.reference)
-        if zero_shots is not None:
-            z = _zero_shot_pct_cached(m.name, task_names_key)
-            zero_shots.append(-1 if z is None else z)
-
-    rows: dict[str, list] = {
-        "model_name": names,
-        "Max Tokens": max_tokens,
-        "Embedding Dimensions": embed_dims,
-        "Total Parameters (B)": total_params,
-        "Active Parameters (B)": active_params,
-        "Release Date": release_dates,
-        "_model_link": model_links,
+    # Build the metadata via polars map_batches: model_name -> struct of meta fields,
+    # then unnest. Missing models become null structs and are dropped before unnest.
+    struct_fields: dict[str, pl.DataType] = {
+        "Max Tokens": pl.Float64,
+        "Embedding Dimensions": pl.Int64,
+        "Total Parameters (B)": pl.Float64,
+        "Active Parameters (B)": pl.Float64,
+        "Release Date": pl.Utf8,
+        "_model_link": pl.Utf8,
     }
-    if zero_shots is not None:
-        rows["Zero-shot"] = zero_shots
-    meta_df = pl.DataFrame(rows)
+    if task_names_key is not None:
+        struct_fields["Zero-shot"] = pl.Int64
+    meta_dtype = pl.Struct(struct_fields)
+
+    def _resolve(name: str) -> dict | None:
+        m = MODEL_REGISTRY.get(name)
+        if m is None:
+            return None
+        row: dict = {
+            "Max Tokens": _format_max_tokens(m.max_tokens),
+            "Embedding Dimensions": _get_embedding_size(m.embed_dim),
+            "Total Parameters (B)": _format_n_parameters(m.n_parameters),
+            "Active Parameters (B)": _format_n_parameters(m.n_active_parameters),
+            "Release Date": str(m.release_date) if m.release_date else None,
+            "_model_link": m.reference,
+        }
+        if task_names_key is not None:
+            z = _zero_shot_pct_cached(m.name, task_names_key)
+            row["Zero-shot"] = -1 if z is None else z
+        return row
+
+    def _fetch(names: pl.Series) -> pl.Series:
+        return pl.Series("_meta", [_resolve(n) for n in names], dtype=meta_dtype)
+
     return (
-        joint_table.join(meta_df, on="model_name", how="inner")
+        joint_table.with_columns(
+            _meta=pl.col("model_name").map_batches(_fetch, return_dtype=meta_dtype),
+        )
+        .filter(pl.col("_meta").is_not_null())
+        .unnest("_meta")
         .with_columns(
-            pl.col("model_name").str.split("/").list.last().alias("_short_name")
+            pl.col("model_name").str.split("/").list.last().alias("_short_name"),
         )
         .with_columns(
             pl.when(pl.col("_model_link").is_not_null())
             .then("[" + pl.col("_short_name") + "](" + pl.col("_model_link") + ")")
             .otherwise(pl.col("_short_name"))
-            .alias("Model")
+            .alias("Model"),
         )
         .drop(["_model_link", "_short_name", "model_name"])
     )
@@ -362,14 +364,21 @@ def _create_per_language_table_from_benchmark_results(
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return _no_results_frame()
 
-    lang_df = (
-        pl_df.explode("language")
-        .drop_nulls("language")
-        .group_by(["model_name", "language"])
-        .agg(pl.col("score").mean())
-    )
+    # Lazy pipeline so polars can fuse explode + filter + group_by. When a language
+    # subset is selected, push the predicate *before* the explode by keeping only
+    # rows whose language list intersects the selection — this avoids materialising
+    # exploded rows we'll discard.
+    lazy = pl_df.lazy()
     if language_view != "all":
-        lang_df = lang_df.filter(pl.col("language").is_in(language_view))
+        lazy = lazy.filter(
+            pl.col("language").list.eval(pl.element().is_in(language_view)).list.any()
+        )
+    lazy = lazy.explode("language").drop_nulls("language")
+    if language_view != "all":
+        lazy = lazy.filter(pl.col("language").is_in(language_view))
+    lang_df = (
+        lazy.group_by(["model_name", "language"]).agg(pl.col("score").mean()).collect()
+    )
     if lang_df.is_empty():
         return _no_results_frame()
 
@@ -383,17 +392,27 @@ def _create_per_language_table_from_benchmark_results(
     if per_language.is_empty():
         return _no_results_frame()
 
-    per_language = (
-        per_language.with_columns(
-            _get_borda_rank(per_language, lang_cols).alias("_borda")
+    # Borda over hundreds of language columns is the main cost. With a single
+    # surviving column the borda sort is equivalent to ranking by that score, so
+    # skip borda entirely (~free vs. ~500 polars rank ops on "all").
+    if len(lang_cols) == 1:
+        per_language = per_language.sort(lang_cols[0], descending=True, nulls_last=True)
+    else:
+        per_language = (
+            per_language.with_columns(
+                _get_borda_rank(per_language, lang_cols).alias("_borda")
+            )
+            .sort("_borda")
+            .drop("_borda")
         )
-        .sort("_borda")
-        .drop("_borda")
-        .with_columns(pl.col("model_name").str.split("/").list.last().alias("Model"))
+
+    return (
+        per_language.with_columns(
+            pl.col("model_name").str.split("/").list.last().alias("Model")
+        )
         .drop("model_name")
         .select(["Model", *lang_cols])
     )
-    return per_language
 
 
 def _create_summary_table_mean_public_private(

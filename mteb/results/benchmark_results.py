@@ -641,7 +641,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 If None, all results are exported as-is (no per-task validation).
         """
         results = self if tasks is None else self.select_tasks(tasks)
-        return (
+        return (  # type: ignore[no-any-return]
             results.join_revisions().to_dataset(include_model_revision=True).to_polars()
         )
 

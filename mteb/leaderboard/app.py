@@ -403,8 +403,7 @@ def on_page_load(request: gr.Request):
 def get_leaderboard_app(  # noqa: PLR0914
     cache: ResultCache = ResultCache(),
     rebuild: bool = False,
-    cache_repo_id: str | None = None,
-    push_cache: bool = False,
+    cache_repo_id: str = "mteb/results",
 ) -> gr.Blocks:
     """Returns a Gradio Blocks app for the MTEB leaderboard.
 
@@ -420,10 +419,6 @@ def get_leaderboard_app(  # noqa: PLR0914
                 rebuild/push_cache are False, startup loads the parquet cache from the hub
                 (``hf://datasets/{cache_repo_id}/leaderboard/benchmark_results.parquet``)
                 before falling back to the local parquet cache or a full rebuild.
-        push_cache: If True, build the parquet cache from results and upload it (and its
-                manifest) to ``cache_repo_id`` (which is then required). Needs write
-                access to the repo (HF token). Combine with rebuild=True to publish the
-                freshest results.
 
     Returns:
         gr.Blocks: A Gradio Blocks application configured with the MTEB leaderboard interface
@@ -456,7 +451,7 @@ def get_leaderboard_app(  # noqa: PLR0914
     load_start = time.time()
     parquet_path = _leaderboard_parquet_path(cache)
     loaded: dict[str, pl.DataFrame] | None = None
-    use_cache = not rebuild and not push_cache
+    use_cache = not rebuild
 
     def _try_load(source_label: str, loader) -> dict[str, pl.DataFrame] | None:
         try:
@@ -477,7 +472,8 @@ def get_leaderboard_app(  # noqa: PLR0914
         loaded = _try_load(
             f"hub '{cache_repo_id}'",
             lambda: BenchmarkResults.load_leaderboard_cache(
-                cache_repo_id, from_hub=True
+                cache_repo_id,
+                from_hub=True,
             ),
         )
     if loaded is None and use_cache and parquet_path.exists():
@@ -487,15 +483,10 @@ def get_leaderboard_app(  # noqa: PLR0914
         )
 
     if loaded is None:
-        all_results = cache._load_from_cache(rebuild=rebuild)
+        all_results = cache._load_from_cache(rebuild=True)
         # Per-benchmark validated frames (scores filtered to each benchmark's task config).
         loaded = {b.name: all_results.to_results_df(b.tasks) for b in benchmarks}
         BenchmarkResults.save_leaderboard_cache(loaded, parquet_path)
-        if push_cache:
-            if not cache_repo_id:
-                raise ValueError("push_cache=True requires cache_repo_id to be set.")
-            logger.info(f"Pushing leaderboard cache to hub '{cache_repo_id}'...")
-            BenchmarkResults.push_leaderboard_cache(loaded, cache_repo_id)
         logger.info(
             f"Step 2/6 complete: Built {len(benchmarks)} benchmarks and saved "
             f"{parquet_path} in {time.time() - load_start:.2f}s"

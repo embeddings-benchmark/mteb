@@ -413,16 +413,17 @@ class RtebBenchmark(Benchmark):
         joint_table = _create_summary_table_mean_public_private(
             pl_df, exclude_private_from_borda=True
         )
+        if "No results" in joint_table.columns:
+            return joint_table
         # issue 3902: temporary remove the private column from RTEB summary table
         joint_table = joint_table.drop("Mean (Private)", strict=False)
         # For RTEB: all tasks are Retrieval type, so Retrieval column = Mean (Task)
         # but due to 3902, if Private column existed, Mean (Task) was the mean of Public and Private so instead we drop Mean (Task) and rename Mean (Public) to Mean (Task)
         if "Retrieval" in joint_table.columns:
             joint_table = joint_table.rename({"Retrieval": "Mean (Task)"})
-        joint_table = joint_table.drop("Mean (Task)", strict=False).rename(
+        return joint_table.drop("Mean (Task)", strict=False).rename(
             {"Mean (Public)": "Mean (Task)"}
         )
-        return joint_table
 
 
 class HUMEBenchmark(Benchmark):
