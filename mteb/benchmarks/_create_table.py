@@ -4,7 +4,7 @@ import functools
 import re
 from collections import defaultdict
 from collections.abc import Sequence
-from typing import Literal
+from typing import Any, Literal
 
 import numpy as np
 import polars as pl
@@ -119,7 +119,7 @@ def _format_max_tokens(max_tokens: float | None) -> float | None:
     return float(max_tokens)
 
 
-def _get_embedding_size(embed_dim: int | list[int] | None) -> int | None:
+def _get_embedding_size(embed_dim: int | Sequence[int] | None) -> int | None:
     if embed_dim is None:
         return None
     if isinstance(embed_dim, int):
@@ -156,7 +156,7 @@ def _get_means_per_types(
     return type_exprs, type_cols
 
 
-_META_STRUCT_FIELDS: dict[str, pl.DataType] = {
+_META_STRUCT_FIELDS = {
     "Max Tokens": pl.Float64,
     "Embedding Dimensions": pl.Int64,
     "Total Parameters (B)": pl.Float64,
@@ -169,7 +169,7 @@ _META_STRUCT_DTYPE_WITH_ZS = pl.Struct({**_META_STRUCT_FIELDS, "Zero-shot": pl.I
 
 
 @functools.lru_cache(maxsize=1)
-def _static_model_meta() -> dict[str, dict]:
+def _static_model_meta() -> dict[str, dict[str, Any]]:
     """Cached per-model metadata dict keyed by ``model_name``.
 
     Built once from ``MODEL_REGISTRY`` (which is static after import) so that
@@ -212,7 +212,7 @@ def _attach_model_metadata(
         _resolve = meta_lookup.get
     else:
 
-        def _resolve(name: str) -> dict | None:
+        def _resolve(name: str) -> dict[str, Any] | None:  # type: ignore[misc]
             base = meta_lookup.get(name)
             if base is None:
                 return None
