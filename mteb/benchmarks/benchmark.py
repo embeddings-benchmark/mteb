@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Literal, cast
 
 import huggingface_hub
 import pandas as pd
+import polars as pl
 import yaml
 from huggingface_hub import DatasetCard, DatasetCardData
 
@@ -107,59 +108,39 @@ class Benchmark:
     def __getitem__(self, index: int) -> AbsTask:
         return self.tasks[index]
 
-    def _create_summary_table(  # noqa: PLR6301
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
-        """Create summary table. Called by the leaderboard app.
-
-        Returns:
-            A pandas DataFrame representing the summary results.
-        """
+    def _create_summary_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:  # noqa: PLR6301
+        """Create summary table from a long polars pre-agg frame. Called by the leaderboard app."""
         from mteb.benchmarks._create_table import (
             _create_summary_table_from_benchmark_results,
         )
 
-        return _create_summary_table_from_benchmark_results(benchmark_results)
+        return _create_summary_table_from_benchmark_results(pl_df)
 
-    def _create_per_task_table(  # noqa: PLR6301
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
-        """Create per-task table. Called by the leaderboard app.
-
-        Returns:
-            A pandas DataFrame representing the per-task results.
-        """
+    def _create_per_task_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:  # noqa: PLR6301
+        """Create per-task table from a long polars pre-agg frame. Called by the leaderboard app."""
         from mteb.benchmarks._create_table import (
             _create_per_task_table_from_benchmark_results,
         )
 
-        return _create_per_task_table_from_benchmark_results(benchmark_results)
+        return _create_per_task_table_from_benchmark_results(pl_df)
 
-    def _create_per_language_table(
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
-        """Create per-language table. Called by the leaderboard app.
-
-        Returns:
-            A pandas DataFrame representing the per-language results.
-        """
+    def _create_per_language_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:
+        """Create per-language table from a long polars pre-agg frame. Called by the leaderboard app."""
         from mteb.benchmarks._create_table import (
             _create_per_language_table_from_benchmark_results,
         )
 
         if self.language_view == "all" or len(self.language_view) > 0:
             return _create_per_language_table_from_benchmark_results(
-                benchmark_results, self.language_view
+                pl_df, self.language_view
             )
-        else:
-            no_results_frame = pd.DataFrame(
-                {
-                    "No results": [
-                        "The per-language table is not available for this benchmark."
-                    ]
-                }
-            )
-            return no_results_frame
+        return pl.DataFrame(
+            {
+                "No results": [
+                    "The per-language table is not available for this benchmark."
+                ]
+            }
+        )
 
     def push_collection_to_hub(
         self,
@@ -404,9 +385,15 @@ class Benchmark:
                 list(per_task_rows.keys())
             )
             if per_task_df.shape[1] > 0:
-                borda_ranks = _get_borda_rank(per_task_df)
-                for name, rank in borda_ranks.items():
-                    scores[name]["Rank"] = int(rank)  # type: ignore[index]
+                per_task_pl = pl.from_pandas(
+                    per_task_df.reset_index(names="model_name")
+                )
+                task_cols = list(per_task_df.columns)
+                borda_list = (
+                    per_task_pl.select(_get_borda_rank(task_cols)).to_series().to_list()
+                )
+                for name, rank in zip(per_task_df.index, borda_list):
+                    scores[name]["Rank"] = int(rank)
             else:
                 for name, model_scores in scores.items():
                     model_scores["Rank"] = None
@@ -420,50 +407,44 @@ class Benchmark:
 class RtebBenchmark(Benchmark):
     """Wrapper for RTEB benchmark."""
 
-    def _create_summary_table(  # noqa: PLR6301
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
+    def _create_summary_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:  # noqa: PLR6301
         from mteb.benchmarks._create_table import (
             _create_summary_table_mean_public_private,
         )
 
         joint_table = _create_summary_table_mean_public_private(
-            benchmark_results, exclude_private_from_borda=True
+            pl_df, exclude_private_from_borda=True
         )
+        if "No results" in joint_table.columns:
+            return joint_table
         # issue 3902: temporary remove the private column from RTEB summary table
-        if "Mean (Private)" in joint_table.columns:
-            joint_table = joint_table.drop(columns=["Mean (Private)"])
+        joint_table = joint_table.drop("Mean (Private)", strict=False)
         # For RTEB: all tasks are Retrieval type, so Retrieval column = Mean (Task)
         # but due to 3902, if Private column existed, Mean (Task) was the mean of Public and Private so instead we drop Mean (Task) and rename Mean (Public) to Mean (Task)
-        joint_table = joint_table.rename(columns={"Retrieval": "Mean (Task)"})
-        if "Mean (Task)" in joint_table.columns:
-            joint_table = joint_table.drop(columns=["Mean (Task)"])
-        joint_table = joint_table.rename(columns={"Mean (Public)": "Mean (Task)"})
-
-        return joint_table
+        if "Retrieval" in joint_table.columns:
+            joint_table = joint_table.rename({"Retrieval": "Mean (Task)"})
+        return joint_table.drop("Mean (Task)", strict=False).rename(
+            {"Mean (Public)": "Mean (Task)"}
+        )
 
 
 class HUMEBenchmark(Benchmark):
     """Wrapper for HUME benchmark."""
 
-    def _create_summary_table(  # noqa: PLR6301
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
+    def _create_summary_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:  # noqa: PLR6301
         from mteb.benchmarks._create_table import _create_summary_table_mean_subset
 
-        return _create_summary_table_mean_subset(benchmark_results)
+        return _create_summary_table_mean_subset(pl_df)
 
 
 class MIEBBenchmark(Benchmark):
     """Wrapper for MIEB benchmark."""
 
-    def _create_summary_table(  # noqa: PLR6301
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
+    def _create_summary_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:  # noqa: PLR6301
         from mteb.benchmarks._create_table import _create_summary_table_mean_task_type
 
         return _create_summary_table_mean_task_type(
-            benchmark_results, mean_column_name="Mean (Task)"
+            pl_df, mean_column_name="Mean (Task)"
         )
 
 
@@ -471,150 +452,108 @@ class VidoreBenchmark(Benchmark):
     """Wrapper for Vidore3 benchmark."""
 
     def _create_vidore_summary_table(  # noqa: PLR6301
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
-        """Create summary table from BenchmarkResults.
-
-        Returns a DataFrame with one row per model containing summary statistics
-        and task type averages. Customized for Vidore benchmark.
+        self, pl_df: pl.DataFrame
+    ) -> pl.DataFrame:
+        """Create the Vidore summary frame fully in polars.
 
         Args:
-            benchmark_results: BenchmarkResults object containing model results
+            pl_df: Long polars frame with ``model_name``, ``task_name``, ``score``,
+                and ``is_public`` columns.
 
         Returns:
-            DataFrame with model summaries, ready for styling in the leaderboard
+            Polars frame with one row per model, ready for further renames.
         """
-        import mteb
         from mteb.benchmarks._create_table import (
-            _format_max_tokens,
-            _format_n_active_parameters,
-            _format_n_parameters,
-            _get_embedding_size,
+            _attach_model_metadata,
             _get_means_per_types,
+            _no_results_frame,
+            _skipna_false_mean,
             _split_on_capital,
         )
         from mteb.get_tasks import get_task
 
-        data = benchmark_results.to_dataframe(format="long")
+        if pl_df.is_empty() or "model_name" not in pl_df.columns:
+            return _no_results_frame()
 
-        if data.empty:
-            no_results_frame = pd.DataFrame(
-                {"No results": ["You can try relaxing your criteria"]}
-            )
-            return no_results_frame
-        public_task_name = benchmark_results._filter_tasks(is_public=True).task_names
-        private_task_name = benchmark_results._filter_tasks(is_public=False).task_names
-        # Convert to DataFrame and pivot
-        per_task = data.pivot(index="model_name", columns="task_name", values="score")
-
-        # Remove models with no scores
-        to_remove = per_task.isna().all(axis="columns")
-        if to_remove.all():
-            no_results_frame = pd.DataFrame(
-                {"No results": ["You can try relaxing your criteria"]}
-            )
-            return no_results_frame
-
-        models_to_remove = list(per_task[to_remove].index)
-        per_task = per_task.drop(models_to_remove, axis=0)
-
-        # Calculate means by task type
-        mean_per_type = _get_means_per_types(per_task)
-        mean_per_type = mean_per_type.pivot(
-            index="model_name", columns="task_type", values="score"
+        per_task_long = pl_df.group_by(["model_name", "task_name"]).agg(
+            pl.col("score").mean(),
+            pl.col("is_public").first(),
         )
-        mean_per_type.columns = [
-            _split_on_capital(column) for column in mean_per_type.columns
-        ]
+        public_tasks = (
+            per_task_long.filter(pl.col("is_public"))
+            .get_column("task_name")
+            .unique()
+            .to_list()
+        )
+        private_tasks = (
+            per_task_long.filter(~pl.col("is_public"))
+            .get_column("task_name")
+            .unique()
+            .to_list()
+        )
+        per_task = per_task_long.pivot(
+            on="task_name", index="model_name", values="score"
+        )
+        task_cols = [c for c in per_task.columns if c != "model_name"]
+        if not task_cols:
+            return _no_results_frame()
+        per_task = per_task.filter(
+            pl.any_horizontal([pl.col(c).is_not_null() for c in task_cols])
+        )
+        if per_task.is_empty():
+            return _no_results_frame()
 
-        # Calculate overall means
-        public_mean = per_task[public_task_name].mean(skipna=False, axis=1)
-        private_mean = per_task[private_task_name].mean(skipna=False, axis=1)
+        type_exprs, type_cols = _get_means_per_types(task_cols)
+        # Vidore tasks share a single task type — sort primarily by it, then by means.
+        primary_type_col = _split_on_capital(get_task(task_cols[0]).metadata.type)
 
-        # Build joint table
-        joint_table = mean_per_type.copy()
-        joint_table.insert(1, "mean(public)", public_mean)
-        joint_table.insert(2, "mean(private)", private_mean)
-        task_type = get_task(
-            per_task.columns[0]
-        ).metadata.type  # "DocumentUnderstanding"
-        joint_table = joint_table.sort_values(
-            [_split_on_capital(task_type), "mean(public)", "mean(private)"],
-            ascending=False,
+        public_present = [c for c in public_tasks if c in task_cols]
+        private_present = [c for c in private_tasks if c in task_cols]
+
+        public_mean_expr = (
+            _skipna_false_mean(public_present).alias("Mean (Public)")
+            if public_present
+            else pl.lit(None).cast(pl.Float64).alias("Mean (Public)")
+        )
+        private_mean_expr = (
+            _skipna_false_mean(private_present).alias("Mean (Private)")
+            if private_present
+            else pl.lit(None).cast(pl.Float64).alias("Mean (Private)")
         )
 
-        joint_table = joint_table.reset_index()
+        joint_table = per_task.select(
+            "model_name",
+            *type_exprs,
+            public_mean_expr,
+            private_mean_expr,
+        ).sort(
+            [primary_type_col, "Mean (Public)", "Mean (Private)"],
+            descending=True,
+            nulls_last=True,
+        )
 
-        # Add model metadata
-        model_metas = joint_table["model_name"].map(mteb.get_model_meta)
-        joint_table = joint_table[model_metas.notna()]
-        joint_table["model_link"] = model_metas.map(lambda m: m.reference)
+        joint_table = _attach_model_metadata(joint_table).with_columns(
+            (pl.int_range(0, pl.len()) + 1).cast(pl.Int64).alias("Rank (Mean Task)")
+        )
 
-        # Insert model metadata columns
-        joint_table.insert(
-            1,
-            "Max Tokens",
-            model_metas.map(lambda m: _format_max_tokens(m.max_tokens)),
-        )
-        joint_table.insert(
-            1,
-            "Embedding Dimensions",
-            model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
-        )
-        joint_table.insert(
-            1,
-            "Total Parameters (B)",
-            model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
-        )
-        joint_table.insert(
-            1,
+        final_cols = [
+            "Rank (Mean Task)",
+            "Model",
             "Active Parameters (B)",
-            model_metas.map(
-                lambda m: _format_n_active_parameters(m.n_active_parameters)
-            ),
-        )
+            "Total Parameters (B)",
+            "Embedding Dimensions",
+            "Max Tokens",
+            "Mean (Public)",
+            "Mean (Private)",
+            *type_cols,
+            "Release Date",
+        ]
+        return joint_table.select([c for c in final_cols if c in joint_table.columns])
 
-        # Add release date from model metadata
-        joint_table["Release Date"] = model_metas.map(
-            lambda m: str(m.release_date) if m.release_date else None
-        )
-
-        # Clean up model names (remove HF organization)
-        joint_table["model_name"] = joint_table["model_name"].map(
-            lambda name: name.split("/")[-1]
-        )
-
-        # Add markdown links to model names
-        name_w_link = (
-            "[" + joint_table["model_name"] + "](" + joint_table["model_link"] + ")"
-        )
-        joint_table["model_name"] = joint_table["model_name"].mask(
-            joint_table["model_link"].notna(), name_w_link
-        )
-        joint_table = joint_table.drop(columns=["model_link"])
-
-        # Rename columns
-        rename_dict = {
-            "model_name": "Model",
-            "mean(public)": "Mean (Public)",
-            "mean(private)": "Mean (Private)",
-        }
-
-        joint_table = joint_table.rename(columns=rename_dict)
-
-        # Add Rank column
-        joint_table.insert(
-            0, "Rank (Mean Task)", [i + 1 for i in range(len(joint_table))]
-        )
-
-        return joint_table
-
-    def _create_summary_table(
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
-        joint_table = self._create_vidore_summary_table(benchmark_results)
-        # For ViDoRe (V1, V2, V3): all tasks are Document Understanding type, so Document Understanding column = Mean (Task)
-        joint_table = joint_table.rename(
-            columns={"Document Understanding": "Mean (Task)"}
-        )
+    def _create_summary_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:
+        joint_table = self._create_vidore_summary_table(pl_df)
+        # For ViDoRe (V1, V2, V3): all tasks are Document Understanding type, so
+        # Document Understanding column == Mean (Task).
+        if "Document Understanding" in joint_table.columns:
+            joint_table = joint_table.rename({"Document Understanding": "Mean (Task)"})
         return joint_table
