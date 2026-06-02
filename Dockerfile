@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.7
 # Hugging Face Spaces Dockerfile for the mteb FastAPI service.
 #
 # Clones embeddings-benchmark/mteb @ api, installs the project with its
@@ -42,6 +43,14 @@ WORKDIR /home/user/app
 # older branches the explicit pins are the fallback.
 RUN pip install --user ".[api]" \
  || pip install --user . "fastapi>=0.110" "uvicorn[standard]>=0.27"
+
+# Pre-warm the HF dataset cache from mteb/results so the first request
+# doesn't have to clone the GitHub repo from cold. Goes to the
+# huggingface_hub default cache under $HF_HOME. `|| true` keeps the
+# build alive while the dataset is still being populated upstream —
+# the API falls back to the GitHub clone on first request when the
+# snapshot is empty.
+RUN hf download mteb/results --repo-type dataset || true
 
 EXPOSE 7860
 
