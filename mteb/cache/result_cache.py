@@ -232,6 +232,17 @@ class ResultCache:
         return self.cache_path / "remote"
 
     @property
+    def leaderboard_parquet_path(self) -> Path:
+        """Local per-benchmark leaderboard cache (single parquet file).
+
+        Lives next to :class:`ResultCache` rather than the Gradio leaderboard
+        module so consumers that don't need gradio/pandas/cachetools (e.g.
+        the FastAPI service in :mod:`mteb.api`) can reach it without
+        importing the full leaderboard stack.
+        """
+        return self.cache_path / "leaderboard" / "benchmark_results.parquet"
+
+    @property
     def has_remote(self) -> bool:
         """Check if the remote results repository exists in the cache directory.
 

@@ -7,7 +7,7 @@ import logging
 import tempfile
 import time
 import warnings
-from typing import TYPE_CHECKING, Literal, get_args
+from typing import Literal, get_args
 from urllib.parse import urlencode
 
 import cachetools
@@ -39,9 +39,6 @@ from mteb.leaderboard.table import (
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 from mteb.models.model_meta import MODEL_TYPES
 from mteb.results.benchmark_results import BenchmarkResults
-
-if TYPE_CHECKING:
-    from pathlib import Path
 
 logger = logging.getLogger(__name__)
 event_logger = EventLogger()
@@ -340,11 +337,6 @@ def _cache_update_task_list(
     return benchmark_tasks, tasks_to_keep
 
 
-def _leaderboard_parquet_path(cache: ResultCache) -> Path:
-    """Path to the local per-benchmark leaderboard cache (single parquet file)."""
-    return cache.cache_path / "leaderboard" / "benchmark_results.parquet"
-
-
 @functools.lru_cache(maxsize=256)
 def _benchmark_full_languages(benchmark_name: str) -> frozenset[str]:
     """All languages covered by a benchmark's tasks (3-letter ISO codes)."""
@@ -472,7 +464,7 @@ def get_leaderboard_app(  # noqa: PLR0914
 
     logger.info("Step 2/6: Loading benchmark results...")
     load_start = time.time()
-    parquet_path = _leaderboard_parquet_path(cache)
+    parquet_path = cache.leaderboard_parquet_path
     loaded: dict[str, pl.DataFrame] | None = None
     use_cache = not rebuild
 

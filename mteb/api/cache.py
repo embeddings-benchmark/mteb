@@ -116,11 +116,10 @@ def _load_per_benchmark_frames() -> _LoadedFrames:
       deduped across benchmarks, ready for direct task-scope filtering.
     """
     import mteb
-    from mteb.leaderboard.app import _leaderboard_parquet_path
     from mteb.results.benchmark_results import BenchmarkResults
 
     cache = get_cache()
-    parquet_path = _leaderboard_parquet_path(cache)
+    parquet_path = cache.leaderboard_parquet_path
 
     def _try(
         source: str, loader: Callable[[], dict[str, pl.DataFrame]]
