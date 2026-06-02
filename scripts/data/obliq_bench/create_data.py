@@ -27,6 +27,10 @@ SUBSET_PREFIXES: dict[str, str] = {
 # Subsets that ship per_query_excluded_ids.json (same-source docs to drop per query).
 EXCLUSION_SUBSETS = ("math", "writing")
 
+# Subsets that ship qrels_pool.tsv (pooled + judged superset of gold qrels.tsv).
+# Writing and congress only ship gold qrels, so fall back to that.
+POOLED_QRELS_SUBSETS = ("twitter", "wildchat", "math")
+
 CORPUS_FEATURES = Features({"id": Value("string"), "text": Value("string")})
 QUERIES_FEATURES = Features({"id": Value("string"), "text": Value("string")})
 QRELS_FEATURES = Features(
@@ -36,10 +40,10 @@ QRELS_FEATURES = Features(
         "score": Value("int32"),
     }
 )
-EXCLUDED_FEATURES = Features(
+TOP_RANKED_FEATURES = Features(
     {
         "query-id": Value("string"),
-        "excluded-corpus-ids": Sequence(Value("string")),
+        "corpus-ids": Sequence(Value("string")),
     }
 )
 
@@ -76,13 +80,24 @@ def _read_qrels(path: str) -> Dataset:
     return Dataset.from_list(rows, features=QRELS_FEATURES)
 
 
-def _read_excluded(path: str) -> Dataset:
+def _build_top_ranked(path: str, corpus_ids: list[str]) -> Dataset:
+    """Convert per_query_excluded_ids.json into a top_ranked dataset.
+
+    Output rows are (query-id, corpus-ids) where corpus-ids is the candidate
+    pool for that query: the full corpus minus same-source exclusions.
+    """
     with open(path, encoding="utf-8") as fh:
-        d = json.load(fh)
-    rows = [
-        {"query-id": qid, "excluded-corpus-ids": list(excl)} for qid, excl in d.items()
-    ]
-    return Dataset.from_list(rows, features=EXCLUDED_FEATURES)
+        excluded_by_qid: dict[str, list[str]] = json.load(fh)
+    rows = []
+    for qid, excluded in excluded_by_qid.items():
+        excl_set = set(excluded)
+        rows.append(
+            {
+                "query-id": qid,
+                "corpus-ids": [cid for cid in corpus_ids if cid not in excl_set],
+            }
+        )
+    return Dataset.from_list(rows, features=TOP_RANKED_FEATURES)
 
 
 def _push(ds: Dataset, config_name: str, split: str = "test") -> None:
@@ -107,14 +122,21 @@ def process_subset(subset: str, prefix: str) -> None:
     queries = _load_jsonl_with_id(queries_path).cast(QUERIES_FEATURES)
     _push(queries, f"{subset}-queries")
 
-    qrels_path = _download(prefix, "queries+qrels/qrels.tsv")
+    # qrels_pool.tsv is the pooled judgment set: original gold qrels plus
+    # extra docs surfaced by retrievers and judged during pooling. Dataset
+    # author recommends evaluating on the pool over the sparser gold qrels.
+    # Only twitter/wildchat/math ship a pool; writing/congress use gold qrels.
+    qrels_filename = "qrels_pool.tsv" if subset in POOLED_QRELS_SUBSETS else "qrels.tsv"
+    qrels_path = _download(prefix, f"queries+qrels/{qrels_filename}")
     qrels = _read_qrels(qrels_path)
+    logger.info("  Using %s for %s (%d judgments)", qrels_filename, subset, len(qrels))
     _push(qrels, f"{subset}-qrels")
 
     if subset in EXCLUSION_SUBSETS:
         excluded_path = _download(prefix, "queries+qrels/per_query_excluded_ids.json")
-        excluded = _read_excluded(excluded_path)
-        _push(excluded, f"{subset}-excluded")
+        corpus_ids = list(corpus["id"])
+        top_ranked = _build_top_ranked(excluded_path, corpus_ids)
+        _push(top_ranked, f"{subset}-top_ranked")
 
 
 def main() -> None:

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from datasets import load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -12,9 +10,6 @@ _SUBSETS = [
     "writing",
     "congress",
 ]
-
-# Subsets that ship per-query corpus exclusions in the original release.
-_EXCLUSION_SUBSETS = ("math", "writing")
 
 
 class OBLIQBenchRetrieval(AbsTaskRetrieval):
@@ -29,15 +24,17 @@ class OBLIQBenchRetrieval(AbsTaskRetrieval):
             "(writing), and tip-of-tongue recollection of congressional hearings "
             "(congress). The benchmark isolates an asymmetry where reasoning LLMs can "
             "verify latent relevance once a document is surfaced, but retrievers fail "
-            "to surface it in the first place. For the math and writing subsets, the "
-            "original release ships per-query exclusion lists (same-source documents "
-            "that the paper drops from the candidate pool before scoring); this task "
-            "applies them via per-query top_ranked candidate restrictions."
+            "to surface it in the first place. The math and writing subsets ship a "
+            "per-query top_ranked candidate set (full corpus minus same-source "
+            "documents that the paper drops before scoring). Relevance is evaluated "
+            "against pooled judgments (qrels_pool) for twitter, wildchat, and math, "
+            "which extend the gold set with retriever-pooled documents judged during "
+            "annotation; writing and congress use the gold qrels (no pool available)."
         ),
         reference="https://arxiv.org/abs/2605.06235",
         dataset={
             "path": "mteb/OBLIQBenchRetrieval",
-            "revision": "de1f23fbf7e9f8a4510d6bb17db5eb417c1eb3c6",
+            "revision": "b630be644e0dbdc2fa5f712ae8383ebbb9cbee7e",
         },
         type="Retrieval",
         category="t2t",
@@ -59,26 +56,3 @@ class OBLIQBenchRetrieval(AbsTaskRetrieval):
   year = {2026},
 }""",
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        if self.data_loaded:
-            return
-        super().load_data(num_proc=num_proc, **kwargs)
-        for subset in _EXCLUSION_SUBSETS:
-            if subset not in self.dataset:
-                continue
-            split_data = self.dataset[subset]["test"]
-            corpus_ids = list(split_data["corpus"]["id"])
-            excluded_ds = load_dataset(
-                self.metadata.dataset["path"],
-                name=f"{subset}-excluded",
-                split="test",
-                revision=self.metadata.dataset["revision"],
-            )
-            excluded = dict(
-                zip(excluded_ds["query-id"], excluded_ds["excluded-corpus-ids"])
-            )
-            split_data["top_ranked"] = {
-                qid: [cid for cid in corpus_ids if cid not in set(excl)]
-                for qid, excl in excluded.items()
-            }
