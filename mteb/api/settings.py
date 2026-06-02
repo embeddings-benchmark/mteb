@@ -19,9 +19,10 @@ from __future__ import annotations
 from collections.abc import (
     Sequence,  # noqa: TC003 — pydantic evaluates field annotations at runtime
 )
+from typing import Annotated
 
 from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 _DEFAULT_CORS_ORIGINS: tuple[str, ...] = (
     "http://localhost:5173",
@@ -40,7 +41,12 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    cors_origins: Sequence[str] = Field(default_factory=lambda: _DEFAULT_CORS_ORIGINS)
+    # NoDecode disables pydantic-settings' default JSON parsing for the env
+    # value so the field_validator below sees the raw comma-separated string
+    # documented in the README / Dockerfile instead of a JSONDecodeError.
+    cors_origins: Annotated[Sequence[str], NoDecode] = Field(
+        default_factory=lambda: _DEFAULT_CORS_ORIGINS
+    )
     preload: bool = False
 
     @field_validator("cors_origins", mode="before")
