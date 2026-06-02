@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.14.2"
+version = "2.14.3"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -104,6 +104,7 @@ voyage_v = ["voyageai>0.3.0,<2.0.0", "tenacity>9.0.0"]
 cohere = ["cohere==5.14.0"]
 vertexai = ["vertexai==1.71.1"]
 google_genai = ["google-genai>=1.7.0"]
+octen = ["octen>=0.4.0"]
 llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
 timm = ["timm>=1.0.15,<1.1.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
@@ -134,6 +135,7 @@ omnivinci = ["transformers==4.46.0", "torch==2.8.*", "einops>=0.8.0", "openai-wh
 qwen_omni_utils = ["qwen_omni_utils"]
 embeddinggemma = ["transformers>=4.56.0"]
 ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
+
 
 
 
