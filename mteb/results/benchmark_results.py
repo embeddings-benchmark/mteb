@@ -467,7 +467,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
         return df
 
-    def to_dataset(
+    def _to_dataset(
         self,
         *,
         include_model_revision: bool = True,
@@ -569,7 +569,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             raise ValueError("Getting scores for multiple benchmarks is unsupported")
 
         return self.benchmark._create_summary_table(
-            self.to_results_df(self.benchmark.tasks)
+            self._to_results_df(self.benchmark.tasks)
         ).to_pandas()
 
     def __iter__(self) -> Iterator[ModelResult]:  # type: ignore[override]
@@ -623,7 +623,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             data = json.loads(in_file.read())
         return cls.from_dict(data)
 
-    def to_results_df(self, tasks: Iterable[AbsTask] | None = None) -> pl.DataFrame:
+    def _to_results_df(self, tasks: Iterable[AbsTask] | None = None) -> pl.DataFrame:
         """Return results as a long polars frame (one row per score).
 
         Revisions are joined and, when ``tasks`` is given, scores are validated and
@@ -636,7 +636,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         """
         results = self if tasks is None else self.select_tasks(tasks)
         return (  # type: ignore[no-any-return]
-            results.join_revisions().to_dataset(include_model_revision=True).to_polars()
+            results.join_revisions()
+            ._to_dataset(include_model_revision=True)
+            .to_polars()
         )
 
     @staticmethod
