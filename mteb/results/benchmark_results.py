@@ -13,6 +13,7 @@ import polars as pl
 from datasets import Dataset, load_dataset
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
+from tqdm.auto import tqdm
 
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
@@ -798,7 +799,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         has_split = "split" in combined.columns
         has_subset = "subset" in combined.columns
 
-        for bench in mteb.get_benchmarks(display_on_leaderboard=True):
+        for bench in tqdm(mteb.get_benchmarks()):
             triples = _build_valid_triples(bench.tasks, has_split, has_subset)
             if triples.is_empty():
                 continue

@@ -21,12 +21,10 @@ from __future__ import annotations
 import asyncio
 import functools
 import logging
-import re
 import threading
 from typing import TYPE_CHECKING
 
 import polars as pl
-from tqdm.auto import tqdm
 
 from mteb.api.aggregators import build_benchmark_summary
 from mteb.api.settings import cache_repo, preload_full
@@ -40,22 +38,6 @@ if TYPE_CHECKING:
     from mteb.cache.result_cache import ResultCache
 
 logger = logging.getLogger(__name__)
-
-# HF Datasets requires split names match `^\w+(\.\w+)*$` — that's
-# `[A-Za-z0-9_]` runs separated by dots, nothing else. So `BEIR-NL`,
-# `MTEB(eng, v2)`, etc. all fail until we slug them. Keep `_` and `.`;
-# everything else (hyphens, parens, commas, spaces, …) folds to `_`.
-_BENCHMARK_SLUG_RE = re.compile(r"[^A-Za-z0-9_.]+")
-
-
-def _slug_benchmark_name(name: str) -> str:
-    r"""Slugify a benchmark name to a filesystem- and HF-Hub-safe form.
-
-    Producer and consumer both call this so the mapping stays
-    deterministic without a lookup table. The output is constrained to
-    HF Datasets' split-name regex ``^\w+(\.\w+)*$``.
-    """
-    return _BENCHMARK_SLUG_RE.sub("_", name).strip("_.") or "benchmark"
 
 
 @functools.lru_cache(maxsize=1)
@@ -100,47 +82,21 @@ def _dedupe_unified(combined: pl.DataFrame) -> pl.DataFrame:
 _DEFAULT_CONFIG = "default"
 
 
-def _load_from_hub(repo_id: str) -> tuple[dict[str, pl.DataFrame], pl.DataFrame | None]:
-    """Pull every HF dataset config and route them to view kind.
+def _load_default_from_hub(repo_id: str) -> pl.DataFrame | None:
+    """Fetch only the ``default`` HF config — the all-results dump.
 
-    The producer (``scripts/push_leaderboard_parquet.py`` in the
-    results repo) now writes each scope as its own HF config:
-    ``"default"`` for every result, plus one config per benchmark
-    (key = slug of ``benchmark.name``). We enumerate configs once and
-    `load_dataset(repo_id, name=<cfg>, split="train")` each.
-
-    Returns ``(per_benchmark, default_frame_or_None)``.
+    Per-benchmark views are derived locally via
+    :meth:`BenchmarkResults.split_leaderboard_frame` rather than
+    fetching ``N`` configs from the hub one at a time, which was the
+    dominant cost at startup (one HTTP round-trip per benchmark).
     """
-    from datasets import get_dataset_config_names, load_dataset
-
-    import mteb
-    from mteb.cache.result_cache import _slug_benchmark_name
+    from datasets import load_dataset
 
     try:
-        config_names = get_dataset_config_names(repo_id)
+        return load_dataset(repo_id, name=_DEFAULT_CONFIG, split="train").to_polars()
     except Exception as exc:
-        logger.warning("Hub config enumeration failed for %s: %s", repo_id, exc)
-        return {}, None
-
-    slug_to_name = {_slug_benchmark_name(b.name): b.name for b in mteb.get_benchmarks()}
-    per_benchmark: dict[str, pl.DataFrame] = {}
-    default_frame: pl.DataFrame | None = None
-    for cfg in tqdm(config_names, desc="Loading dataset from repo"):
-        try:
-            df = load_dataset(repo_id, name=cfg, split="train").to_polars()
-        except Exception as exc:
-            logger.warning("Hub load failed for %s/%s: %s", repo_id, cfg, exc)
-            continue
-        if df.is_empty():
-            continue
-        if cfg == _DEFAULT_CONFIG:
-            default_frame = df
-            continue
-        # Unknown slugs (e.g. a benchmark dropped from mteb but still
-        # in the snapshot) keep their slug as the key — harmless if no
-        # caller looks them up.
-        per_benchmark[slug_to_name.get(cfg, cfg)] = df
-    return per_benchmark, default_frame
+        logger.warning("Hub load failed for %s/%s: %s", repo_id, _DEFAULT_CONFIG, exc)
+        return None
 
 
 @functools.lru_cache(maxsize=1)
@@ -149,53 +105,50 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
 
     Two paths only:
 
-    1. Hub: ``load_dataset({MTEB_API_CACHE_REPO})`` (default
-       ``mteb/results``) — one HF config per benchmark plus
-       ``default`` with every result.
+    1. Hub: pull the ``default`` config from ``MTEB_API_CACHE_REPO``
+       (default ``mteb/results``) — one round-trip — then split it
+       in-memory.
     2. Cold rebuild from the local ``ResultCache`` if the hub returns
        nothing usable.
 
-    When the hub provides a ``default`` config we use it directly for
-    the unified view; otherwise we concat the per-benchmark frames.
+    Per-benchmark views are derived from the combined frame via
+    :meth:`BenchmarkResults.split_leaderboard_frame`, which inner-joins
+    each benchmark's ``(task_name, split, subset)`` triples — same
+    filter the legacy per-task validator would have applied.
     """
     import mteb
+    from mteb.results.benchmark_results import BenchmarkResults
 
     cache = get_cache()
-
-    loaded: dict[str, pl.DataFrame] = {}
-    default_frame: pl.DataFrame | None = None
+    combined: pl.DataFrame | None = None
 
     repo_id = cache_repo()
     if repo_id:
-        loaded, default_frame = _load_from_hub(repo_id)
-        if loaded or default_frame is not None:
+        combined = _load_default_from_hub(repo_id)
+        if combined is not None and not combined.is_empty():
             logger.info(
-                "Loaded %d benchmarks (default config %s) from hub '%s'",
-                len(loaded),
-                "present" if default_frame is not None else "missing",
+                "Loaded default config (%d rows) from hub '%s'",
+                combined.height,
                 repo_id,
             )
+        else:
+            combined = None
 
-    if not loaded:
-        logger.info("Building per-benchmark frames from local ResultCache")
+    if combined is None:
+        logger.info("Building combined results frame from local ResultCache")
         all_results = cache._load_from_cache(rebuild=True)
-        for bench in mteb.get_benchmarks():
-            df = all_results._to_results_df(bench.tasks)
-            if df.is_empty():
-                continue
-            loaded[bench.name] = df
+        combined = all_results._to_results_df()
 
-    # Prefer the hub-supplied default split — it already contains every
-    # result the producer saw, so we skip recomputing the concat.
-    if default_frame is not None and not default_frame.is_empty():
-        combined = default_frame
-    else:
-        non_empty = [df for df in loaded.values() if not df.is_empty()]
-        combined = (
-            pl.concat(non_empty, how="vertical_relaxed")
-            if non_empty
-            else pl.DataFrame(schema=_UNIFIED_SCHEMA)
-        )
+    # Per-benchmark dict is derived from the same combined frame —
+    # no extra hub round-trips, no per-benchmark cold rebuilds.
+    loaded = BenchmarkResults.split_leaderboard_frame(combined)
+    # Add explicit empty frames for any leaderboard benchmark missing
+    # from the split, so callers using `.get(name)` always see a
+    # consistent key set (kept the previous behaviour for callers that
+    # check membership before reading).
+    for bench in mteb.get_benchmarks():
+        loaded.setdefault(bench.name, pl.DataFrame(schema=combined.schema))
+
     unified = _dedupe_unified(combined)
     logger.info(
         "Built unified results frame: %d rows / %d unique tasks",
