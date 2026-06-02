@@ -59,13 +59,13 @@ async def build_benchmark_summary(  # noqa: PLR0914
     benchmarks not in the parquet cache.
     """
     import mteb
-    from mteb.api.cache import get_all_benchmark_frames
+    from mteb.api.cache import _load_per_benchmark_frames
 
     bench = mteb.get_benchmark(name)
     bench_schema = benchmark_to_schema(bench)
     tasks_meta: list[TaskMetaSchema] = [task_to_meta_schema(t) for t in bench.tasks]
 
-    frames = get_all_benchmark_frames()
+    frames, _ = _load_per_benchmark_frames()
     long_df = frames.get(bench.name)
     if long_df is None:
         # Fallback for benchmarks missing from the parquet cache (e.g. recently
@@ -287,7 +287,7 @@ def build_task_scores(name: str, cache: ResultCache) -> TaskScoresSchema:
     """
     import polars as pl
 
-    from mteb.api.cache import get_all_results_df
+    from mteb.api.cache import _load_per_benchmark_frames
     from mteb.get_tasks import _TASKS_REGISTRY
 
     # Read directly from the registry — schema + metadata are class-level, so
@@ -305,7 +305,7 @@ def build_task_scores(name: str, cache: ResultCache) -> TaskScoresSchema:
     # selection, so multilingual tasks like AmazonReviewsClassification could
     # surface as little as one subset even when the underlying results
     # covered all six.
-    all_df = get_all_results_df()
+    _, all_df = _load_per_benchmark_frames()
     task_frame = all_df.filter(pl.col("task_name") == name)
 
     seen: dict[str, dict[str, float]] = {}

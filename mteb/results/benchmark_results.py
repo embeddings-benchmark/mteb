@@ -46,6 +46,43 @@ logger = logging.getLogger(__name__)
 _BENCHMARK_COLUMN = "__benchmark__"
 
 
+def _build_valid_triples(
+    tasks: Sequence[Any], has_split: bool, has_subset: bool
+) -> pl.DataFrame:
+    """Cross each task's ``eval_splits`` and ``hf_subsets`` into a join table.
+
+    Returned as a polars frame with ``task_name`` plus (when those
+    columns exist in the source frame) ``split`` and ``subset``. The
+    consumer inner-joins against it to keep only rows whose full triple
+    is one the benchmark's tasks actually expect.
+    """
+    names: list[str] = []
+    splits: list[str] = []
+    subsets: list[str] = []
+    for task in tasks:
+        md = task.metadata
+        task_splits: Sequence[str | None] = (
+            list(md.eval_splits) if md.eval_splits else [None]
+        )
+        task_subsets: Sequence[str | None] = (
+            list(md.hf_subsets) if md.hf_subsets else [None]
+        )
+        for sp in task_splits:
+            for ss in task_subsets:
+                names.append(md.name)
+                if sp is not None:
+                    splits.append(sp)
+                if ss is not None:
+                    subsets.append(ss)
+
+    cols: dict[str, list[str]] = {"task_name": names}
+    if has_split and len(splits) == len(names):
+        cols["split"] = splits
+    if has_subset and len(subsets) == len(names):
+        cols["subset"] = subsets
+    return pl.DataFrame(cols) if names else pl.DataFrame({"task_name": []})
+
+
 @functools.lru_cache
 def _get_cached_model_metas() -> dict[str, str | None]:
     """Cache model metas to avoid repeated calls."""
@@ -687,20 +724,91 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         BenchmarkResults._combine_leaderboard_frames(per_benchmark).write_parquet(path)
 
     @staticmethod
-    def load_leaderboard_cache(
+    def load_leaderboard_frame(
         source: str | Path, *, from_hub: bool = False
-    ) -> dict[str, pl.DataFrame]:
-        """Load the per-benchmark leaderboard frames saved/pushed by this class.
+    ) -> pl.DataFrame:
+        """Read the raw combined leaderboard cache parquet — no splitting.
 
         Args:
             source: Local parquet path, or a HF dataset repo id when ``from_hub=True``.
             from_hub: Load from the HF Hub via ``datasets`` instead of a local path.
         """
         if from_hub:
-            combined = load_dataset(str(source), split="train").to_polars()
-        else:
-            combined = pl.read_parquet(source)
-        return BenchmarkResults._split_leaderboard_frame(combined)
+            return load_dataset(str(source), split="train").to_polars()
+        return pl.read_parquet(source)
+
+    @staticmethod
+    def load_leaderboard_cache(
+        source: str | Path, *, from_hub: bool = False
+    ) -> dict[str, pl.DataFrame]:
+        """Load and split the leaderboard cache into per-benchmark frames.
+
+        Convenience wrapper for callers that want the historical
+        ``{benchmark_name: frame}`` shape in one call. Internally it
+        reads the raw combined frame and then routes through the right
+        splitter for the on-disk format.
+        """
+        combined = BenchmarkResults.load_leaderboard_frame(source, from_hub=from_hub)
+        return BenchmarkResults.split_leaderboard_frame(combined)
+
+    @staticmethod
+    def split_leaderboard_frame(combined: pl.DataFrame) -> dict[str, pl.DataFrame]:
+        """Split a combined leaderboard frame into per-benchmark frames.
+
+        Two on-disk formats are recognised:
+
+        * Tagged: rows carry a ``__benchmark__`` column —
+          :meth:`save_leaderboard_cache` writes this shape.
+        * Raw: a single all-results dump with no benchmark tag —
+          produced by ``scripts/push_leaderboard_parquet.py`` in the
+          results repo. The split is reconstructed here from each
+          leaderboard benchmark's ``task_name`` set.
+        """
+        if _BENCHMARK_COLUMN in combined.columns:
+            return BenchmarkResults._split_leaderboard_frame(combined)
+        return BenchmarkResults._split_by_benchmark_tasks(combined)
+
+    @staticmethod
+    def _split_by_benchmark_tasks(combined: pl.DataFrame) -> dict[str, pl.DataFrame]:
+        """Bucket an untagged all-results frame into per-benchmark frames.
+
+        Used when the cache parquet was produced without the
+        ``__benchmark__`` tag column. Per benchmark, we build the set of
+        valid ``(task_name, split, subset)`` triples — one entry per
+        cross of each task's ``eval_splits`` × ``hf_subsets`` — and
+        inner-join the combined frame against it. Joining on tuples
+        (rather than two independent ``is_in`` filters) keeps the
+        membership check honest at the row level: a row only survives
+        when its full ``(task, split, subset)`` triple is one a task in
+        this benchmark actually expects, not just when the components
+        happen to appear in some task's lists.
+
+        Without this gate, off-spec rows (a multilingual task's
+        non-English subset, a non-eval split, …) would pass through
+        ``_create_summary_table``'s ``group_by(model_name, task_name)
+        .mean(score)`` and quietly pull the score around.
+        """
+        # Local import to avoid `mteb.results` ↔ `mteb.benchmarks`
+        # cycles at module-import time.
+        import mteb
+
+        parts: dict[str, pl.DataFrame] = {}
+        if "task_name" not in combined.columns or combined.height == 0:
+            return parts
+        has_split = "split" in combined.columns
+        has_subset = "subset" in combined.columns
+
+        for bench in mteb.get_benchmarks(display_on_leaderboard=True):
+            triples = _build_valid_triples(bench.tasks, has_split, has_subset)
+            if triples.is_empty():
+                continue
+            join_keys = [
+                c for c in ("task_name", "split", "subset") if c in triples.columns
+            ]
+            sub = combined.join(triples, on=join_keys, how="inner")
+            if not sub.is_empty():
+                parts[bench.name] = sub
+        return parts
 
     @property
     def languages(self) -> list[str]:

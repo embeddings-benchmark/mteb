@@ -12,6 +12,9 @@ Environment variables (all optional):
   The four ``localhost``/``127.0.0.1`` dev ports are always allowed.
 * ``MTEB_API_PRELOAD`` — set to ``1`` to pre-build every benchmark summary
   in the background warmup. Off by default (light warmup only).
+* ``MTEB_API_CACHE_REPO`` — HF dataset id the leaderboard parquet cache
+  is pulled from. Defaults to ``mteb/results``. Set to ``""`` (empty
+  string) to disable the hub load and force a local cold rebuild.
 """
 
 from __future__ import annotations
@@ -48,6 +51,10 @@ class Settings(BaseSettings):
         default_factory=lambda: _DEFAULT_CORS_ORIGINS
     )
     preload: bool = False
+    # ``MTEB_API_CACHE_REPO``. Empty string disables hub load entirely
+    # and forces the cold-rebuild path. ``None`` means "use the default
+    # repo id" (matches the env-unset case).
+    cache_repo: str | None = "mteb/results"
 
     @field_validator("cors_origins", mode="before")
     @classmethod
@@ -85,3 +92,13 @@ def cors_origins() -> Sequence[str]:
 def preload_full() -> bool:
     """``True`` when ``MTEB_API_PRELOAD=1`` is set."""
     return get_settings().preload
+
+
+def cache_repo() -> str:
+    """HF dataset id that holds the leaderboard parquet cache.
+
+    Empty string disables hub load (caller falls back to a local cold
+    rebuild). Always returns a string — never ``None``.
+    """
+    val = get_settings().cache_repo
+    return val if val is not None else ""

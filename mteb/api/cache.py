@@ -19,21 +19,19 @@ concurrent requests for the same benchmark only run the polars pipeline once
 from __future__ import annotations
 
 import asyncio
-import dataclasses
 import functools
 import logging
-import os
-import threading  # still needed for warmup daemon thread
+import re
+import threading
 from typing import TYPE_CHECKING
 
 import polars as pl
+from tqdm.auto import tqdm
 
 from mteb.api.aggregators import build_benchmark_summary
-from mteb.api.settings import preload_full
+from mteb.api.settings import cache_repo, preload_full
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-
     from mteb.api.schemas import (
         BenchmarkSummarySchema,
         ModelScoresSchema,
@@ -42,6 +40,22 @@ if TYPE_CHECKING:
     from mteb.cache.result_cache import ResultCache
 
 logger = logging.getLogger(__name__)
+
+# HF Datasets requires split names match `^\w+(\.\w+)*$` — that's
+# `[A-Za-z0-9_]` runs separated by dots, nothing else. So `BEIR-NL`,
+# `MTEB(eng, v2)`, etc. all fail until we slug them. Keep `_` and `.`;
+# everything else (hyphens, parens, commas, spaces, …) folds to `_`.
+_BENCHMARK_SLUG_RE = re.compile(r"[^A-Za-z0-9_.]+")
+
+
+def _slug_benchmark_name(name: str) -> str:
+    r"""Slugify a benchmark name to a filesystem- and HF-Hub-safe form.
+
+    Producer and consumer both call this so the mapping stays
+    deterministic without a lookup table. The output is constrained to
+    HF Datasets' split-name regex ``^\w+(\.\w+)*$``.
+    """
+    return _BENCHMARK_SLUG_RE.sub("_", name).strip("_.") or "benchmark"
 
 
 @functools.lru_cache(maxsize=1)
@@ -52,43 +66,30 @@ def get_cache() -> ResultCache:
     return ResultCache()
 
 
-_DEFAULT_CACHE_REPO_ID = "mteb/results"
+# ``_load_per_benchmark_frames`` returns ``(per_benchmark, all_results)``:
+#   * per_benchmark — long polars frame per benchmark name
+#   * all_results  — deduped (model_name, task_name, subset, score) frame
+#     covering every task; built once during the same load so callers that
+#     want the unified view never have to recompute.
 
 
-def _cache_repo_id() -> str:
-    """HF dataset id the Gradio leaderboard pulls its parquet from.
+_UNIFIED_SCHEMA = {
+    "model_name": pl.Utf8,
+    "task_name": pl.Utf8,
+    "subset": pl.Utf8,
+    "score": pl.Float64,
+}
 
-    Override with ``MTEB_API_CACHE_REPO`` (set to ``""`` to disable hub load).
+
+def _dedupe_unified(combined: pl.DataFrame) -> pl.DataFrame:
+    """Reduce the combined frame to one row per (model, task, subset).
+
+    Multiple splits/languages/benchmark tags collapse into ``max(score)``
+    so the unified view is a single point per task — what task-scope
+    filtering (`/tasks/{name}` etc.) needs.
     """
-    val = os.environ.get("MTEB_API_CACHE_REPO")
-    if val is None:
-        return _DEFAULT_CACHE_REPO_ID
-    return val
-
-
-@dataclasses.dataclass(frozen=True)
-class _LoadedFrames:
-    """Pair of views over the same parquet load: per-benchmark + unified."""
-
-    per_benchmark: dict[str, pl.DataFrame]
-    # Schema: (model_name, task_name, subset, score) deduped via max(score)
-    # across splits/languages/benchmarks. Built once during the same load so
-    # callers that want the unified view never have to recompute.
-    all_results: pl.DataFrame
-
-
-def _build_unified_frame(frames: dict[str, pl.DataFrame]) -> pl.DataFrame:
-    non_empty = [df for df in frames.values() if not df.is_empty()]
-    if not non_empty:
-        return pl.DataFrame(
-            schema={
-                "model_name": pl.Utf8,
-                "task_name": pl.Utf8,
-                "subset": pl.Utf8,
-                "score": pl.Float64,
-            }
-        )
-    combined = pl.concat(non_empty, how="vertical_relaxed")
+    if combined.is_empty():
+        return pl.DataFrame(schema=_UNIFIED_SCHEMA)
     return (
         combined.drop_nulls("score")
         .group_by(["model_name", "task_name", "subset"])
@@ -96,85 +97,112 @@ def _build_unified_frame(frames: dict[str, pl.DataFrame]) -> pl.DataFrame:
     )
 
 
+_DEFAULT_CONFIG = "default"
+
+
+def _load_from_hub(repo_id: str) -> tuple[dict[str, pl.DataFrame], pl.DataFrame | None]:
+    """Pull every HF dataset config and route them to view kind.
+
+    The producer (``scripts/push_leaderboard_parquet.py`` in the
+    results repo) now writes each scope as its own HF config:
+    ``"default"`` for every result, plus one config per benchmark
+    (key = slug of ``benchmark.name``). We enumerate configs once and
+    `load_dataset(repo_id, name=<cfg>, split="train")` each.
+
+    Returns ``(per_benchmark, default_frame_or_None)``.
+    """
+    from datasets import get_dataset_config_names, load_dataset
+
+    import mteb
+    from mteb.cache.result_cache import _slug_benchmark_name
+
+    try:
+        config_names = get_dataset_config_names(repo_id)
+    except Exception as exc:
+        logger.warning("Hub config enumeration failed for %s: %s", repo_id, exc)
+        return {}, None
+
+    slug_to_name = {_slug_benchmark_name(b.name): b.name for b in mteb.get_benchmarks()}
+    per_benchmark: dict[str, pl.DataFrame] = {}
+    default_frame: pl.DataFrame | None = None
+    for cfg in tqdm(config_names, desc="Loading dataset from repo"):
+        try:
+            df = load_dataset(repo_id, name=cfg, split="train").to_polars()
+        except Exception as exc:
+            logger.warning("Hub load failed for %s/%s: %s", repo_id, cfg, exc)
+            continue
+        if df.is_empty():
+            continue
+        if cfg == _DEFAULT_CONFIG:
+            default_frame = df
+            continue
+        # Unknown slugs (e.g. a benchmark dropped from mteb but still
+        # in the snapshot) keep their slug as the key — harmless if no
+        # caller looks them up.
+        per_benchmark[slug_to_name.get(cfg, cfg)] = df
+    return per_benchmark, default_frame
+
+
 @functools.lru_cache(maxsize=1)
-def _load_per_benchmark_frames() -> _LoadedFrames:
-    """Mirror of the Gradio leaderboard's bootstrap loader.
+def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]:
+    """Bootstrap loader for per-benchmark + unified-results frames.
 
-    Priority order (same as :func:`mteb.leaderboard.app.get_leaderboard_app`):
+    Two paths only:
 
-    1. ``hf://datasets/{MTEB_API_CACHE_REPO}/leaderboard/benchmark_results.parquet``
-       (default ``mteb/results``)
-    2. Local parquet at ``{ResultCache.cache_path}/leaderboard/benchmark_results.parquet``
-    3. Cold rebuild via ``cache._load_from_cache(rebuild=True)`` + persist
-       the parquet for next time.
+    1. Hub: ``load_dataset({MTEB_API_CACHE_REPO})`` (default
+       ``mteb/results``) — one HF config per benchmark plus
+       ``default`` with every result.
+    2. Cold rebuild from the local ``ResultCache`` if the hub returns
+       nothing usable.
 
-    Returns a :class:`_LoadedFrames` with both views computed once:
-
-    * ``per_benchmark`` — ``{benchmark_name: long polars frame}`` for the
-      Gradio-compatible per-benchmark summary path.
-    * ``all_results`` — one ``(model_name, task_name, subset, score)`` frame
-      deduped across benchmarks, ready for direct task-scope filtering.
+    When the hub provides a ``default`` config we use it directly for
+    the unified view; otherwise we concat the per-benchmark frames.
     """
     import mteb
-    from mteb.results.benchmark_results import BenchmarkResults
 
     cache = get_cache()
-    parquet_path = cache.leaderboard_parquet_path
 
-    def _try(
-        source: str, loader: Callable[[], dict[str, pl.DataFrame]]
-    ) -> dict[str, pl.DataFrame] | None:
-        try:
-            loaded = loader()
-        except Exception as exc:
-            logger.warning("Leaderboard cache load failed for %s: %s", source, exc)
-            return None
-        if not loaded:
-            logger.info("Leaderboard cache from %s is empty/outdated", source)
-            return None
-        logger.info("Loaded %d benchmark frames from %s", len(loaded), source)
-        return loaded
+    loaded: dict[str, pl.DataFrame] = {}
+    default_frame: pl.DataFrame | None = None
 
-    loaded: dict[str, pl.DataFrame] | None = None
-    repo_id = _cache_repo_id()
+    repo_id = cache_repo()
     if repo_id:
-        loaded = _try(
-            f"hub '{repo_id}'",
-            lambda: BenchmarkResults.load_leaderboard_cache(repo_id, from_hub=True),
-        )
+        loaded, default_frame = _load_from_hub(repo_id)
+        if loaded or default_frame is not None:
+            logger.info(
+                "Loaded %d benchmarks (default config %s) from hub '%s'",
+                len(loaded),
+                "present" if default_frame is not None else "missing",
+                repo_id,
+            )
 
-    if loaded is None and parquet_path.exists():
-        loaded = _try(
-            f"local parquet {parquet_path}",
-            lambda: BenchmarkResults.load_leaderboard_cache(parquet_path),
-        )
-
-    if loaded is None:
-        logger.info(
-            "Building leaderboard parquet cache from scratch at %s", parquet_path
-        )
+    if not loaded:
+        logger.info("Building per-benchmark frames from local ResultCache")
         all_results = cache._load_from_cache(rebuild=True)
-        benchmarks = mteb.get_benchmarks(display_on_leaderboard=True)
-        loaded = {b.name: all_results.to_results_df(b.tasks) for b in benchmarks}
-        BenchmarkResults.save_leaderboard_cache(loaded, parquet_path)
+        for bench in mteb.get_benchmarks():
+            df = all_results._to_results_df(bench.tasks)
+            if df.is_empty():
+                continue
+            loaded[bench.name] = df
 
-    unified = _build_unified_frame(loaded)
+    # Prefer the hub-supplied default split — it already contains every
+    # result the producer saw, so we skip recomputing the concat.
+    if default_frame is not None and not default_frame.is_empty():
+        combined = default_frame
+    else:
+        non_empty = [df for df in loaded.values() if not df.is_empty()]
+        combined = (
+            pl.concat(non_empty, how="vertical_relaxed")
+            if non_empty
+            else pl.DataFrame(schema=_UNIFIED_SCHEMA)
+        )
+    unified = _dedupe_unified(combined)
     logger.info(
         "Built unified results frame: %d rows / %d unique tasks",
         unified.height,
         unified.select(pl.col("task_name").n_unique()).item() if unified.height else 0,
     )
-    return _LoadedFrames(per_benchmark=loaded, all_results=unified)
-
-
-def get_all_benchmark_frames() -> dict[str, pl.DataFrame]:
-    """Per-benchmark long polars frames keyed by benchmark name (Gradio-compatible)."""
-    return _load_per_benchmark_frames().per_benchmark
-
-
-def get_all_results_df() -> pl.DataFrame:
-    """One unified ``(model_name, task_name, subset, score)`` frame for every task."""
-    return _load_per_benchmark_frames().all_results
+    return loaded, unified
 
 
 # Plain-dict schema caches. We rely on the GIL for dict atomicity and on
@@ -293,7 +321,7 @@ def warmup_in_background() -> None:
         # _collect_similar_tasks and the first /tasks call doesn't burn
         # ~400ms instantiating + serialising 1000 task schemas.
         try:
-            get_all_benchmark_frames()
+            _load_per_benchmark_frames()
             _prewarm_training_datasets()
             prewarm_schema_caches()
             _prewarm_list_schemas()

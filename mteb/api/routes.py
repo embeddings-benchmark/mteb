@@ -74,6 +74,23 @@ async def health() -> dict[str, bool]:
     return {"ok": True}
 
 
+# Crawlers (and the Spaces health checker) probe this on every cold start.
+# Serving a tiny disallow-everything body keeps the log clean and tells
+# search engines not to index the JSON API. Cached aggressively because
+# the response never changes.
+_ROBOTS_TXT = "User-agent: *\nDisallow: /\n"
+
+
+@router.get("/robots.txt", include_in_schema=False)
+async def robots_txt() -> Response:
+    """Cached `Disallow: /` body so crawler probes stop 404-ing in the log."""
+    return Response(
+        content=_ROBOTS_TXT,
+        media_type="text/plain",
+        headers={"Cache-Control": "public, max-age=86400"},
+    )
+
+
 @router.get("/icon/{name:path}")
 async def benchmark_icon(name: str) -> Response:
     """Proxy and long-cache the benchmark's icon.

@@ -13,6 +13,7 @@ from collections.abc import (  # noqa: TC003 — used at runtime by middleware s
     Callable,
 )
 
+import uvicorn
 from fastapi import (  # noqa: TC002 — Request needed at runtime by middleware
     FastAPI,
     Request,
@@ -106,3 +107,6 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
+
+if __name__ == "__main__":
+    uvicorn.run(app)
