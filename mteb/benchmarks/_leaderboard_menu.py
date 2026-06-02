@@ -34,7 +34,7 @@ GP_BENCHMARK_ENTRIES = [
     MenuEntry(
         name="General Purpose",
         description="",
-        open=False,
+        open=True,
         benchmarks=mteb.get_benchmarks(
             ["MTEB(Multilingual, v2)", "MTEB(eng, v2)", "HUME(v1)"]
         )
@@ -123,7 +123,7 @@ R_BENCHMARK_ENTRIES = [
     MenuEntry(
         name="Retrieval",
         description=None,
-        open=False,
+        open=True,
         benchmarks=[
             mteb.get_benchmark("RTEB(beta)"),
             mteb.get_benchmark("RTEB(eng, beta)"),

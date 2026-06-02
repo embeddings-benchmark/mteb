@@ -76,6 +76,11 @@ leaderboard = [
     "matplotlib>=3.9.4",
     "pymongo>=4.15.5",
 ]
+api = [
+    "fastapi>=0.110",
+    "pydantic-settings>=2.0",
+    "uvicorn[standard]>=0.27",
+]
 video = ["torchcodec"]
 github = ["PyGithub>=1.60"]
 

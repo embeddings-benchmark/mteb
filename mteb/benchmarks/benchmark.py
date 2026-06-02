@@ -4,9 +4,10 @@ import logging
 import tempfile
 from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
+from enum import Enum
 from functools import lru_cache
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal, cast
+from typing import TYPE_CHECKING, ClassVar, Literal, cast
 
 import huggingface_hub
 import pandas as pd
@@ -29,6 +30,23 @@ if TYPE_CHECKING:
     from mteb.results import BenchmarkResults, ModelResult
 
 logger = logging.getLogger(__name__)
+
+
+class BenchmarkAggregation(str, Enum):
+    """Aggregation columns a benchmark can surface in its leaderboard summary.
+
+    Inherits from ``str`` so the values serialise as plain strings in JSON
+    and round-trip cleanly through pydantic without a custom encoder.
+    """
+
+    MEAN_TASK = "mean_task"
+    """Show the ``Mean (Task)`` aggregate column."""
+    MEAN_TASK_TYPE = "mean_task_type"
+    """Show the ``Mean (TaskType)`` aggregate column."""
+    TASK_TYPES = "task_types"
+    """Show one column per per-task-type mean."""
+    PUBLIC_PRIVATE = "public_private"
+    """Show ``Mean (Public)`` and ``Mean (Private)`` (split-aware benchmarks)."""
 
 
 @lru_cache
@@ -69,6 +87,7 @@ class Benchmark:
         reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
         citation: A bibtex citation
         contacts: The people to contact in case of a problem in the benchmark, preferably a GitHub handle.
+        new_version: Benchmark name with newer version of benchmark
 
     Examples:
         >>> Benchmark(
@@ -81,6 +100,17 @@ class Benchmark:
         ... )
     """
 
+    # Declarative aggregation columns the benchmark surfaces in its
+    # leaderboard summary table. Lets the API and frontend render only the
+    # relevant columns without inspecting the polars frame's column names.
+    # ClassVar (not a dataclass field) so subclasses can override without
+    # re-declaring the dataclass.
+    aggregations: ClassVar[Sequence[BenchmarkAggregation]] = (
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.MEAN_TASK_TYPE,
+        BenchmarkAggregation.TASK_TYPES,
+    )
+
     name: str
     tasks: Sequence[AbsTask]
     aliases: Sequence[str] = field(default_factory=tuple)
@@ -92,6 +122,7 @@ class Benchmark:
     display_name: str | None = None
     language_view: list[str] | Literal["all"] = field(default_factory=list)
     benchmark_hf_repo: str | None = None
+    new_version: Sequence[str] | None = None
 
     @property
     def display_on_leaderboard(self) -> bool:
@@ -407,6 +438,12 @@ class Benchmark:
 class RtebBenchmark(Benchmark):
     """Wrapper for RTEB benchmark."""
 
+    # RTEB collapses its private split into the public mean and renames it to
+    # `Mean (Task)`. The leaderboard surfaces only that one mean column.
+    aggregations: ClassVar[Sequence[BenchmarkAggregation]] = (
+        BenchmarkAggregation.MEAN_TASK,
+    )
+
     def _create_summary_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:  # noqa: PLR6301
         from mteb.benchmarks._create_table import (
             _create_summary_table_mean_public_private,
@@ -440,6 +477,13 @@ class HUMEBenchmark(Benchmark):
 class MIEBBenchmark(Benchmark):
     """Wrapper for MIEB benchmark."""
 
+    # MIEB shows Mean (Task) (computed as the mean of per-type means) plus
+    # the per-task-type breakdown. No public/private split.
+    aggregations: ClassVar[Sequence[BenchmarkAggregation]] = (
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.TASK_TYPES,
+    )
+
     def _create_summary_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:  # noqa: PLR6301
         from mteb.benchmarks._create_table import _create_summary_table_mean_task_type
 
@@ -450,6 +494,14 @@ class MIEBBenchmark(Benchmark):
 
 class VidoreBenchmark(Benchmark):
     """Wrapper for Vidore3 benchmark."""
+
+    # ViDoRe's tasks share a single task type (Document Understanding → Mean
+    # (Task)). Surfaces the public / private split rather than a per-type
+    # breakdown.
+    aggregations: ClassVar[Sequence[BenchmarkAggregation]] = (
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.PUBLIC_PRIVATE,
+    )
 
     def _create_vidore_summary_table(  # noqa: PLR6301
         self, pl_df: pl.DataFrame

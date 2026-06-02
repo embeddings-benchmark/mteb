@@ -183,6 +183,7 @@ We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benc
 }
 """,
     contacts=["Muennighoff"],
+    new_version=["MTEB(eng, v2)"],
 )
 
 MTEB_MAIN_RU = Benchmark(
@@ -244,6 +245,7 @@ MTEB_MAIN_RU = Benchmark(
 }
 """,
     contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
+    new_version=["MTEB(rus, v1.1)"],
 )
 
 MTEB_MAIN_RU_v1_1 = Benchmark(
@@ -1555,6 +1557,7 @@ BRIGHT = Benchmark(
   year = {2024},
 }
 """,
+    new_version=["BRIGHT(v1.1)"],
 )
 
 BRIGHT_LONG = Benchmark(
@@ -1585,6 +1588,7 @@ This is the long version of the benchmark, which only filter longer documents.
   year = {2024},
 }
 """,
+    new_version=["BRIGHT(v1.1)"],
 )
 
 BRIGHT_V1_1 = Benchmark(

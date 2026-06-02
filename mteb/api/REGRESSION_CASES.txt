@@ -1,0 +1,248 @@
+mteb.api regression cases
+=========================
+
+A running log of bugs hit while building the leaderboard API + frontend.
+Each entry is a regression-test seed: what to assert, against which task /
+benchmark / model, and why the obvious naive code gets it wrong. Add a
+pytest case for each as the test suite grows.
+
+Use the live cache or a small fixture cache where noted; the per-benchmark
+counts can shift as new results land, but the *shape* of the answers
+(subset union, ordering rules, schema fields) should stay stable.
+
+
+-----------------------------------------------------------------------
+1. /tasks/{name}/scores must union subsets across hosting benchmarks
+-----------------------------------------------------------------------
+Case: AmazonReviewsClassification
+
+The task is hosted by MTEB(deu, v1), MTEB(eng, v1), MTEB(fra, v1),
+JMTEB(v2), and MTEB(jpn, v1). Each per-benchmark parquet frame is scoped
+to that benchmark's locale selection (one subset per host). A naive
+"break at first non-empty per-benchmark frame" returns only one subset.
+
+Expected:
+  /tasks/AmazonReviewsClassification/scores .subsets == ["de","en","fr","ja"]
+  .rows[0].subsetScores has all 4 keys
+  .rows[0].score == mean of those 4 subset values
+
+Sentinel for regression: if `.subsets` length drops to 1, the per-benchmark
+scope leaked back into the task-scores path. Build the unified results frame
+in mteb.api.cache._load_per_benchmark_frames (LoadedFrames.all_results) and
+filter by task_name there.
+
+
+-----------------------------------------------------------------------
+2. Partial-coverage models must not outrank fully-evaluated peers
+-----------------------------------------------------------------------
+Case: AmazonCounterfactualClassification (subsets en, de, ja, en-ext)
+
+Some models only ran on `en`. TaskResult.get_score() returns NaN when not
+every subset is present, Pydantic JSON-serialises NaN as `null`, and the
+sort key `(-score, ...)` puts null above 0.96.
+
+Expected:
+  - .rows[0].subsetScores has all 4 keys (full coverage).
+  - .rows[0].score is a real float, not null.
+  - Any row with score == null sorts strictly *below* every scored row,
+    regardless of `?sort=` direction.
+  - .rows[0].model.name is one of the fully-evaluated leaders
+    (e.g. Bytedance/Seed1.6-embedding-1215), NOT GeoGPT-Research-Project/
+    GeoEmbedding (en-only).
+
+Implementation rule: aggregator.build_task_scores returns score=None
+when subset_scores doesn't cover the task's full subset union.
+
+
+-----------------------------------------------------------------------
+3. Leaderboard rank must match Gradio (Borda), not Mean(Task)
+-----------------------------------------------------------------------
+Case: /explorer/MTEB(eng,%20v2)
+
+The Gradio leaderboard ranks by Borda count across per-task columns. A
+model with a single very-high score (e.g. spartan8806/atles-champion-
+embedding, meanTask=0.82) ranks far down (#283) under Borda even though
+its meanTask is the highest.
+
+Expected:
+  - API row #1 for MTEB(eng, v2) is infgrad/Jasper-Token-Compression-600M
+    (Borda-rank 1, meanTask 0.7475).
+  - Frontend filters.applyFilters preserves the API's rank order
+    (`.sort((a, b) => a.rank - b.rank)`).
+  - applyFilters never recomputes ranks from meanTask.
+
+
+-----------------------------------------------------------------------
+4. Summary scores must match BenchmarkResults.get_benchmark_result()
+-----------------------------------------------------------------------
+Case: any benchmark, but spot-check MTEB(eng, v2)
+
+build_benchmark_summary must feed BenchmarkResults.to_results_df(bench.tasks)
+into bench._create_summary_table(...) — the exact polars frame and helper
+the Gradio leaderboard uses. Reinventing the long-frame aggregation with
+task_result.get_score() drifts because the leaderboard collapses splits
+differently.
+
+Expected (sample row, top 5 for MTEB(eng, v2)):
+  Jasper-Token-Compression-600M  Mean(Task)=0.7475  Classification=0.9035
+  QZhou-Embedding                Mean(Task)=0.7597  Classification=0.8897
+  Seed1.5-Embedding              Mean(Task)=0.7476  Classification=0.8988
+  Qwen3-Embedding-8B             Mean(Task)=0.7523  Classification=0.9043
+
+These exactly match `mteb.ResultCache().load_results(tasks='MTEB(eng, v2)')
+                       .get_benchmark_result()`.
+
+
+-----------------------------------------------------------------------
+5. TaskMeta.modalities must keep every modality
+-----------------------------------------------------------------------
+Case: BLINKIT2IRetrieval, AudioSetStrongA2TRetrieval
+
+`mteb.get_task(...).metadata.modalities` is a list. The API field is
+`modalities: list[str]`, not the singular `modality: str` we shipped
+originally.
+
+Expected:
+  /tasks/BLINKIT2IRetrieval.modalities      == ["text","image"]
+  /tasks/AudioSetStrongA2TRetrieval.modalities == ["text","audio"]
+
+Frontend must defend with `t.modalities ?? []` for forward/backward
+schema compatibility while a tab is on a cached old payload.
+
+
+-----------------------------------------------------------------------
+6. Languages come back as display names, not ISO codes
+-----------------------------------------------------------------------
+Case: STS22.v2
+
+Expected:
+  /tasks/STS22.v2 .languages contains "English", "German",
+  "Mandarin Chinese", "Arabic", "Russian", ... (NOT "eng-Latn", "deu-Latn").
+  Default-script suffix is dropped; non-default scripts use a friendly
+  alias: zho-Hant -> "Chinese (Traditional)" (NOT "Chinese (Han (Traditional
+  variant))").
+
+Source of truth: mteb.languages.language_label. Backend adapters route
+every code through it.
+
+
+-----------------------------------------------------------------------
+7. ModelMetaSchema must not ship org/displayName
+-----------------------------------------------------------------------
+Case: any model
+
+Expected payload shape:
+  /models/Qwen/Qwen3-Embedding-8B has fields: name, url, zeroShotPct,
+  activeParamsB, totalParamsB, embeddingDim, maxTokens, releaseDate,
+  modelType, instructionTuned, openWeights, sentenceTransformersCompatible.
+  No `org`, no `displayName` — those are derived client-side from
+  `name.split("/")`.
+
+
+-----------------------------------------------------------------------
+8. Simplified task type ships from the API
+-----------------------------------------------------------------------
+Case: any task
+
+Expected:
+  /tasks/STS22.v2 .simplifiedType == "semantic-similarity"
+  /tasks/ArguAna  .simplifiedType == "retrieval"
+  /tasks/<any classification task> .simplifiedType == "classification"
+
+Frontend must never re-derive this from `.type` — the API is the source
+of truth (mteb.api.schemas.TaskMetaSchema.from_task_metadata).
+
+
+-----------------------------------------------------------------------
+9. Per-benchmark size-slider bounds
+-----------------------------------------------------------------------
+Cases: MTEB(eng, v2) -> ~1M-100B, HUME(v1) -> ~20M-10B,
+       MIEB(lite)   -> ~20M-10B
+
+Expected:
+  filters.availableMinModelSizeM / availableMaxModelSizeM are derived
+  from the loaded summary's `model.totalParamsB > 0`, rounded outward via
+  niceDown/niceUp.
+  Slider ticks include the bounds themselves (no gap on the right edge
+  like the old "10.0B label but 6.3B last tick").
+
+
+-----------------------------------------------------------------------
+10. Response caching: ETag + Gzip + Cache-Control: no-cache
+-----------------------------------------------------------------------
+Case: every JSON endpoint
+
+Expected on /benchmarks/MTEB(eng,%20v2)/summary:
+  - First hit: 200, Content-Encoding: gzip, body ~100 KB.
+  - Repeat hit with If-None-Match=<ETag>: 304, 0 bytes.
+  - Cache-Control: no-cache (so browsers always revalidate -> ETag flow).
+  - CORS exposes ETag header so devtools can see it.
+
+
+-----------------------------------------------------------------------
+11. /tasks must return the full mteb registry, not the default benchmark
+-----------------------------------------------------------------------
+Case: /tasks (no filters)
+
+Expected:
+  - Returns ~1300 tasks (mteb.get_tasks(exclude_aggregate=True) cardinality).
+  - First page renders "1355 / 1355" in /explorer/tasks, not "131 / 131".
+
+If the count drops back to a single benchmark's task list, the frontend
+regressed to summary.tasksMeta as the source.
+
+
+-----------------------------------------------------------------------
+12. /tasks/{name} (card) is independent from /tasks/{name}/scores
+-----------------------------------------------------------------------
+Case: any cold task (e.g. a task that's never been requested)
+
+Expected (with both endpoints behind separate $effects):
+  - Card hero (h1, description, modality badges, hosting benchmarks)
+    renders within ~50ms — only depends on /tasks/{name} + cached menu.
+  - Scores table shows "Fetching scores..." until /tasks/{name}/scores
+    lands; the card stays visible the whole time.
+
+If the card waits for scores you've coupled the two fetches again.
+
+
+-----------------------------------------------------------------------
+13. Data loader chain mirrors Gradio (no rebuild=True on the hot path)
+-----------------------------------------------------------------------
+Case: API startup
+
+Expected order in mteb.api.cache._load_per_benchmark_frames:
+  1. hf://datasets/{MTEB_API_CACHE_REPO}/leaderboard/benchmark_results.parquet
+     (default MTEB_API_CACHE_REPO=mteb/results, set to "" to disable)
+  2. local parquet at {ResultCache.cache_path}/leaderboard/benchmark_results.parquet
+  3. cold rebuild via cache._load_from_cache(rebuild=True) + save parquet
+
+The cold rebuild path is a fallback only — it must never fire when (2)
+or (1) succeed. The returned _LoadedFrames carries both per_benchmark
+(dict) and all_results (unified) views — both are computed in this one
+load; don't recompute the unified frame in a second pass.
+
+
+-----------------------------------------------------------------------
+14. Task index card layout fits long unbroken names
+-----------------------------------------------------------------------
+Case: XM3600T2IRetrieval, Kowshik24/bangla-sentence-transformer-ft-
+matryoshka-paraphrase-multilingual-mpnet-base-v2
+
+Expected on /explorer/tasks:
+  - Card title fits in the fixed-width Model column (260px) — row height
+    grows; column width never does.
+  - .title uses overflow-wrap: anywhere (camelCase break OK).
+  - No per-raw-type chip on the card; simplifiedType drives the accent
+    color via data-stype.
+
+
+-----------------------------------------------------------------------
+15. Models index page subset of /models endpoint
+-----------------------------------------------------------------------
+Case: filter Modality=image on /explorer/models
+
+Expected:
+  GET /models?modalities=image returns ~157 models (subject to drift as
+  new image models land). The filter ships from FilterSidebar's
+  filters.modelModalities state, NOT a local toolbar control.
