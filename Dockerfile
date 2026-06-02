@@ -50,7 +50,7 @@ RUN pip install --user ".[api]" \
 # build alive while the dataset is still being populated upstream —
 # the API falls back to the GitHub clone on first request when the
 # snapshot is empty.
-RUN hf download mteb/results --repo-type dataset || true
+RUN hf download mteb/results_new --repo-type dataset || true
 
 EXPOSE 7860
 
