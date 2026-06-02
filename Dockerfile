@@ -25,11 +25,15 @@ ENV PATH="/home/user/.local/bin:$PATH" \
 
 # Frontend Space origin allowed through CORS. Add others comma-separated
 # if you front this API with a different host.
-ENV MTEB_API_CORS_ORIGINS="https://embeddings-benchmark-leaderboard-frontend.hf.space,http://localhost:5173,http://localhost:4173"
+ENV MTEB_API_CORS_ORIGINS="https://mteb-leaderboardv2.hf.space,http://localhost:5173,http://localhost:4173"
 
 USER user
 WORKDIR /home/user
 
+# Bust the clone layer cache whenever the `api` branch advances on
+# GitHub. The ADD response (the latest commit SHA) changes per push, so
+# Docker can no longer reuse a stale checkout when you rebuild.
+ADD --chown=user:user https://api.github.com/repos/embeddings-benchmark/mteb/commits/api /tmp/.git-sha
 RUN git clone --depth=1 --branch api \
         https://github.com/embeddings-benchmark/mteb.git app
 WORKDIR /home/user/app
