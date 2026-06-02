@@ -81,11 +81,7 @@ def _read_qrels(path: str) -> Dataset:
 
 
 def _build_top_ranked(path: str, corpus_ids: list[str]) -> Dataset:
-    """Convert per_query_excluded_ids.json into a top_ranked dataset.
-
-    Output rows are (query-id, corpus-ids) where corpus-ids is the candidate
-    pool for that query: the full corpus minus same-source exclusions.
-    """
+    """Build top_ranked rows (query-id, corpus_ids = corpus minus per-query exclusions)."""
     with open(path, encoding="utf-8") as fh:
         excluded_by_qid: dict[str, list[str]] = json.load(fh)
     rows = []
@@ -122,10 +118,8 @@ def process_subset(subset: str, prefix: str) -> None:
     queries = _load_jsonl_with_id(queries_path).cast(QUERIES_FEATURES)
     _push(queries, f"{subset}-queries")
 
-    # qrels_pool.tsv is the pooled judgment set: original gold qrels plus
-    # extra docs surfaced by retrievers and judged during pooling. Dataset
-    # author recommends evaluating on the pool over the sparser gold qrels.
-    # Only twitter/wildchat/math ship a pool; writing/congress use gold qrels.
+    # Use pooled judgments where the dataset publishes them (gold + retriever-
+    # surfaced docs judged during annotation). Writing/congress have no pool.
     qrels_filename = "qrels_pool.tsv" if subset in POOLED_QRELS_SUBSETS else "qrels.tsv"
     qrels_path = _download(prefix, f"queries+qrels/{qrels_filename}")
     qrels = _read_qrels(qrels_path)
