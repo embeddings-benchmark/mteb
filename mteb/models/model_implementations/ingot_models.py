@@ -10,6 +10,7 @@ Environment:
                   your MTEB PR/eval); 200 rpm slot, audited per tenant.
     MTEB_API_URL  Override the base URL (default https://api-mteb.voxell.ai).
 """
+
 from __future__ import annotations
 
 import json
@@ -48,7 +49,9 @@ class IngotAPIEncoder(AbsEncoder):
         **_kwargs: Any,
     ) -> None:
         self.model_name = model_name
-        self.base_url = (base_url or os.environ.get("MTEB_API_URL") or DEFAULT_BASE_URL).rstrip("/")
+        self.base_url = (
+            base_url or os.environ.get("MTEB_API_URL") or DEFAULT_BASE_URL
+        ).rstrip("/")
         self.api_key = api_key or os.environ.get("MTEB_API_KEY") or MTEB_API_DEMO_KEY
         if self.api_key is None:
             raise RuntimeError(
@@ -62,10 +65,12 @@ class IngotAPIEncoder(AbsEncoder):
         # Identity encoding: float-vector responses don't compress meaningfully and
         # we saw brotli decode errors on large STS responses through Cloudflare
         # (Inc-4 C3 smoke). Skip compression altogether.
-        self._session.headers.update({
-            "Authorization": f"Bearer {self.api_key}",
-            "Accept-Encoding": "identity",
-        })
+        self._session.headers.update(
+            {
+                "Authorization": f"Bearer {self.api_key}",
+                "Accept-Encoding": "identity",
+            }
+        )
 
     def encode(
         self,
@@ -99,7 +104,9 @@ class IngotAPIEncoder(AbsEncoder):
             )
 
         data = self._post_with_retry(f"{self.base_url}/v1/embeddings", payload)
-        return np.asarray([item["embedding"] for item in data["data"]], dtype=np.float32)
+        return np.asarray(
+            [item["embedding"] for item in data["data"]], dtype=np.float32
+        )
 
     def _post_with_retry(self, url: str, payload: dict[str, Any]) -> dict[str, Any]:
         backoff = 1.5
@@ -108,15 +115,15 @@ class IngotAPIEncoder(AbsEncoder):
             try:
                 r = self._session.post(url, json=payload, timeout=self.timeout_s)
                 status = r.status_code
-                if status in (401, 403):
+                if status in {401, 403}:
                     raise RuntimeError(
                         f"ingot api auth failed (status {status}): "
                         f"MTEB_API_KEY rejected. Request a per-reviewer key via https://voxell.ai."
                     )
                 if status == 413:
                     raise RuntimeError(
-                        f"ingot api rejected body (status 413): "
-                        f"server limit exceeded; raise MTEB_API_MAX_BODY_MB or shrink task"
+                        "ingot api rejected body (status 413): "
+                        "server limit exceeded; raise MTEB_API_MAX_BODY_MB or shrink task"
                     )
                 if status == 429:
                     retry_after = float(r.headers.get("Retry-After", backoff))
