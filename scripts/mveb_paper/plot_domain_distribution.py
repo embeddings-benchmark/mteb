@@ -47,7 +47,9 @@ def main(fig_dir: Path):
             dataset_counter[d] += 1
     n_datasets = len(dataset_domains)
 
-    print(f"\nTask-level domain counts ({len(tasks)} tasks, multi-domain tasks counted in each):")
+    print(
+        f"\nTask-level domain counts ({len(tasks)} tasks, multi-domain tasks counted in each):"
+    )
     for d, c in task_counter.most_common():
         print(f"  {d:18s} {c}")
 
@@ -60,13 +62,20 @@ def main(fig_dir: Path):
     counts = [dataset_counter[d] for d in domains]
 
     fig, ax = plt.subplots(figsize=(6.0, 3.0))
-    bars = ax.barh(domains[::-1], counts[::-1], color="#4C72B0", edgecolor="black", linewidth=0.5)
+    bars = ax.barh(
+        domains[::-1], counts[::-1], color="#4C72B0", edgecolor="black", linewidth=0.5
+    )
     ax.set_xlabel(f"Number of source datasets (of {n_datasets} total)")
     ax.set_ylabel("Domain")
     ax.grid(axis="x", linestyle=":", alpha=0.5)
     for bar, count in zip(bars, counts[::-1]):
-        ax.text(count + max(counts) * 0.01, bar.get_y() + bar.get_height() / 2,
-                str(count), va="center", fontsize=9)
+        ax.text(
+            count + max(counts) * 0.01,
+            bar.get_y() + bar.get_height() / 2,
+            str(count),
+            va="center",
+            fontsize=9,
+        )
     ax.set_axisbelow(True)
     plt.tight_layout()
 

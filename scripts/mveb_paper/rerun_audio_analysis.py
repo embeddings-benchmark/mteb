@@ -107,7 +107,9 @@ def load_score_table(cache: mteb.ResultCache, tasks) -> pd.DataFrame:
     )
 
 
-def read_task_score(scores: pd.DataFrame, model_name: str, task_name: str) -> float | None:
+def read_task_score(
+    scores: pd.DataFrame, model_name: str, task_name: str
+) -> float | None:
     if task_name not in scores.index or model_name not in scores.columns:
         return None
     val = scores.at[task_name, model_name]
@@ -161,19 +163,21 @@ def main(cache: mteb.ResultCache, out_dir: Path):
             if v_score is None or va_score is None:
                 continue
             dataset_path = v_task.metadata.dataset.get("path", "")
-            rows.append({
-                "model": model_name,
-                "paradigm": PARADIGM_MAP.get(model_name, "Other"),
-                "dataset": dataset_path.split("/")[-1],
-                "dataset_path": dataset_path,
-                "task_type": v_task.metadata.type,
-                "v_task": v_task.metadata.name,
-                "va_task": va_task.metadata.name,
-                "v_score": v_score,
-                "va_score": va_score,
-                "delta": va_score - v_score,
-                "av_grounded": dataset_path in AV_GROUNDED,
-            })
+            rows.append(
+                {
+                    "model": model_name,
+                    "paradigm": PARADIGM_MAP.get(model_name, "Other"),
+                    "dataset": dataset_path.split("/")[-1],
+                    "dataset_path": dataset_path,
+                    "task_type": v_task.metadata.type,
+                    "v_task": v_task.metadata.name,
+                    "va_task": va_task.metadata.name,
+                    "v_score": v_score,
+                    "va_score": va_score,
+                    "delta": va_score - v_score,
+                    "av_grounded": dataset_path in AV_GROUNDED,
+                }
+            )
 
     if not rows:
         print("No paired (v, va) results found in results/results.")
@@ -204,12 +208,24 @@ def main(cache: mteb.ResultCache, out_dir: Path):
             std=("delta", "std"),
             n_models=("model", "nunique"),
             N=("delta", "count"),
-            min_per_model=("delta", lambda x: x.groupby(df.loc[x.index, "model"]).mean().min()),
-            max_per_model=("delta", lambda x: x.groupby(df.loc[x.index, "model"]).mean().max()),
+            min_per_model=(
+                "delta",
+                lambda x: x.groupby(df.loc[x.index, "model"]).mean().min(),
+            ),
+            max_per_model=(
+                "delta",
+                lambda x: x.groupby(df.loc[x.index, "model"]).mean().max(),
+            ),
         )
         .sort_values("mean_delta", ascending=False)
     )
-    print(paradigm_summary.to_string(float_format=lambda x: f"{x:+.4f}" if isinstance(x, float) and abs(x) < 1 else f"{x}"))
+    print(
+        paradigm_summary.to_string(
+            float_format=lambda x: f"{x:+.4f}"
+            if isinstance(x, float) and abs(x) < 1
+            else f"{x}"
+        )
+    )
     print(f"\nModels evaluated (n={len(audio_capable)}): {sorted(audio_capable)}")
     print()
 
@@ -227,7 +243,11 @@ def main(cache: mteb.ResultCache, out_dir: Path):
         )
         .sort_values("mean_delta", ascending=False)
     )
-    print(model_summary.to_string(float_format=lambda x: f"{x:+.4f}" if isinstance(x, float) else f"{x}"))
+    print(
+        model_summary.to_string(
+            float_format=lambda x: f"{x:+.4f}" if isinstance(x, float) else f"{x}"
+        )
+    )
     print()
 
     # ---------- Per-dataset ----------
@@ -240,9 +260,17 @@ def main(cache: mteb.ResultCache, out_dir: Path):
         .rename(columns={"mean": "mean_delta", "std": "std", "count": "N"})
         .reset_index()
     )
-    ds_summary["group"] = ds_summary["av_grounded"].map({True: "AV-grounded", False: "V-grounded"})
-    ds_summary = ds_summary.sort_values(["av_grounded", "mean_delta"], ascending=[False, False])
-    print(ds_summary[["group", "dataset", "task_type", "mean_delta", "std", "N"]].to_string(index=False, float_format=lambda x: f"{x:+.4f}"))
+    ds_summary["group"] = ds_summary["av_grounded"].map(
+        {True: "AV-grounded", False: "V-grounded"}
+    )
+    ds_summary = ds_summary.sort_values(
+        ["av_grounded", "mean_delta"], ascending=[False, False]
+    )
+    print(
+        ds_summary[
+            ["group", "dataset", "task_type", "mean_delta", "std", "N"]
+        ].to_string(index=False, float_format=lambda x: f"{x:+.4f}")
+    )
     print()
 
     # ---------- Cross-modal v2a/a2v ----------
@@ -259,12 +287,14 @@ def main(cache: mteb.ResultCache, out_dir: Path):
             score = read_task_score(scores, model_name, t.metadata.name)
             if score is None:
                 continue
-            cross_rows.append({
-                "dataset": t.metadata.dataset.get("path", "").split("/")[-1],
-                "direction": t.metadata.category,
-                "model": model_name,
-                "score": score,
-            })
+            cross_rows.append(
+                {
+                    "dataset": t.metadata.dataset.get("path", "").split("/")[-1],
+                    "direction": t.metadata.category,
+                    "model": model_name,
+                    "score": score,
+                }
+            )
     if cross_rows:
         cross_df = pd.DataFrame(cross_rows)
         cross_sum = (
@@ -378,11 +408,13 @@ def emit_tables(df, cross_df, out_dir: Path):
         lines.append(
             f"{r['display']:25s} & {r['tt_display']:18s} & {_fmt_signed(r['mean_delta'])} & {_fmt_unsigned(r['std'])} & ${int(r['N'])}$ \\\\"
         )
-    lines.extend([
-        r"\midrule",
-        r"\multicolumn{5}{l}{\textit{V-grounded datasets}} \\",
-        r"\midrule",
-    ])
+    lines.extend(
+        [
+            r"\midrule",
+            r"\multicolumn{5}{l}{\textit{V-grounded datasets}} \\",
+            r"\midrule",
+        ]
+    )
     for _, r in v_rows.iterrows():
         lines.append(
             f"{r['display']:25s} & {r['tt_display']:18s} & {_fmt_signed(r['mean_delta'])} & {_fmt_unsigned(r['std'])} & ${int(r['N'])}$ \\\\"
