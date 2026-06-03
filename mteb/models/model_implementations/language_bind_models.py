@@ -73,9 +73,6 @@ def _patch_compatibility() -> None:
         )
 
 
-_patch_compatibility()
-
-
 _LANGUAGEBIND_HF_REPO = "myang333/languagebind-source"
 _LANGUAGEBIND_HF_REVISION = "e857f973b672e783ca4100e444bec75363979324"
 
@@ -83,8 +80,12 @@ _LANGUAGEBIND_HF_REVISION = "e857f973b672e783ca4100e444bec75363979324"
 def _ensure_languagebind_source() -> Path:
     """Download LanguageBind source from HF mirror at pinned revision.
 
+    Applies the compatibility shims first, so they only run when a
+    LanguageBind model is actually loaded rather than at module import.
+
     Returns the local snapshot path (already added to sys.path).
     """
+    _patch_compatibility()
     try:
         from huggingface_hub import snapshot_download
 
