@@ -63,10 +63,9 @@ GP_BENCHMARK_ENTRIES = [
                 "Video",
                 mteb.get_benchmarks(
                     [
-                        "MVEB",
-                        "MVEB(video)",
-                        "MVEB(text, video)",
-                        "MVEB(beta, extended)",
+                        "MVEB(beta)",
+                        "MVEB(video, beta)",
+                        "MVEB(text, video, beta)",
                     ]
                 ),
             ),

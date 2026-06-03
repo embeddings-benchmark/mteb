@@ -3789,7 +3789,7 @@ MVEB_EXTENDED = Benchmark(
 )
 
 MVEB = Benchmark(
-    name="MVEB",
+    name="MVEB(beta)",
     aliases=["MVEB"],
     display_name="MVEB",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
@@ -3834,7 +3834,7 @@ MVEB = Benchmark(
 
 
 MVEB_TEXT_VIDEO = Benchmark(
-    name="MVEB(text, video)",
+    name="MVEB(text, video, beta)",
     aliases=["MVEB(text, video)"],
     display_name="Text+Video",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
@@ -3875,7 +3875,7 @@ MVEB_TEXT_VIDEO = Benchmark(
 
 
 MVEB_VIDEO = Benchmark(
-    name="MVEB(video)",
+    name="MVEB(video, beta)",
     aliases=["MVEB(video)"],
     display_name="Video",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
