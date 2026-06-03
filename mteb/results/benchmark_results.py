@@ -56,21 +56,27 @@ def _build_valid_triples(
     columns exist in the source frame) ``split`` and ``subset``. The
     consumer inner-joins against it to keep only rows whose full triple
     is one the benchmark's tasks actually expect.
+
+    Reads the **instance** ``eval_splits`` / ``hf_subsets`` (not
+    ``metadata.*``) so per-benchmark filters apply — e.g. MTEB(eng, v2)
+    calls ``filter_languages()`` on MassiveScenarioClassification to
+    pin ``hf_subsets`` to just ``["en"]``, but
+    ``metadata.hf_subsets`` still lists all six languages and would
+    pull every locale's rows into the mean.
     """
     names: list[str] = []
     splits: list[str] = []
     subsets: list[str] = []
     for task in tasks:
-        md = task.metadata
         task_splits: Sequence[str | None] = (
-            list(md.eval_splits) if md.eval_splits else [None]
+            list(task.eval_splits) if task.eval_splits else [None]
         )
         task_subsets: Sequence[str | None] = (
-            list(md.hf_subsets) if md.hf_subsets else [None]
+            list(task.hf_subsets) if task.hf_subsets else [None]
         )
         for sp in task_splits:
             for ss in task_subsets:
-                names.append(md.name)
+                names.append(task.metadata.name)
                 if sp is not None:
                     splits.append(sp)
                 if ss is not None:
