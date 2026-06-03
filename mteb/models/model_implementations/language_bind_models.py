@@ -23,15 +23,21 @@ if TYPE_CHECKING:
 
 
 def _patch_compatibility() -> None:
-    """Compatibility shims so the unmaintained LanguageBind library imports
-    cleanly against current ``transformers`` / ``torchvision`` / ``torchaudio``.
+    """Compatibility shims required for the unmaintained LanguageBind
+    library to import against the pinned ``transformers`` (4.45.2) and
+    ``torchvision`` (0.20.1) versions.
 
-    Each shim is independent and fail-soft: a single broken patch only emits a
-    warning so the rest of the module still imports.
+    Both shims patch modules that LanguageBind, or its ``pytorchvideo``
+    dependency, hard-imports at load time; without them the import fails
+    outright. Each is wrapped in a fail-soft ``try`` so a broken shim only warns.
     """
     try:
         import transformers.models.clip.modeling_clip as _clip_mod
 
+        # LanguageBind's modeling_image.py does a top-level
+        # `from transformers.models.clip.modeling_clip import _expand_mask`.
+        # Newer transformers (incl. the pinned 4.45.2) no longer export it, so we
+        # re-inject a compatible implementation before LanguageBind is imported.
         if not hasattr(_clip_mod, "_expand_mask"):
 
             def _expand_mask(
@@ -52,27 +58,9 @@ def _patch_compatibility() -> None:
         warnings.warn(f"LanguageBind compat patch `_expand_mask` failed: {e}")
 
     try:
-        import transformers.models.clip.modeling_clip as _clip_mod
-
-        if not hasattr(_clip_mod, "clip_loss"):
-            import torch.nn as _nn
-
-            def clip_loss(similarity: torch.Tensor) -> torch.Tensor:
-                caption_loss = _nn.functional.cross_entropy(
-                    similarity,
-                    torch.arange(len(similarity), device=similarity.device),
-                )
-                image_loss = _nn.functional.cross_entropy(
-                    similarity.t(),
-                    torch.arange(len(similarity), device=similarity.device),
-                )
-                return (caption_loss + image_loss) / 2.0
-
-            _clip_mod.clip_loss = clip_loss  # type: ignore[attr-defined]
-    except Exception as e:
-        warnings.warn(f"LanguageBind compat patch `clip_loss` failed: {e}")
-
-    try:
+        # pytorchvideo's augmentations.py does a top-level
+        # `import torchvision.transforms.functional_tensor`, which newer torchvision
+        # (incl. the pinned 0.20.1) removed. Alias it to the current functional module.
         try:
             import torchvision.transforms.functional_tensor  # type: ignore[import-not-found] # noqa: F401
         except ImportError:
@@ -82,16 +70,6 @@ def _patch_compatibility() -> None:
     except Exception as e:
         warnings.warn(
             f"LanguageBind compat patch `torchvision.transforms.functional_tensor` failed: {e}"
-        )
-
-    try:
-        import torchaudio  # type: ignore[import-not-found]
-
-        if not hasattr(torchaudio, "set_audio_backend"):
-            torchaudio.set_audio_backend = lambda backend: None  # type: ignore[attr-defined]
-    except Exception as e:
-        warnings.warn(
-            f"LanguageBind compat patch `torchaudio.set_audio_backend` failed: {e}"
         )
 
 
