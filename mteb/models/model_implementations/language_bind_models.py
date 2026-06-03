@@ -13,6 +13,14 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
 
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
+    from mteb.types._encoder_io import AudioInput, ImageInput, TextInput, VideoInput
+
 
 def _patch_compatibility() -> None:
     """Compatibility shims so the unmaintained LanguageBind library imports
@@ -92,7 +100,6 @@ _patch_compatibility()
 
 _LANGUAGEBIND_HF_REPO = "myang333/languagebind-source"
 _LANGUAGEBIND_HF_REVISION = "e857f973b672e783ca4100e444bec75363979324"
-_LANGUAGEBIND_CACHE = Path.home() / ".cache" / "mteb" / "languagebind"
 
 
 def _ensure_languagebind_source() -> Path:
@@ -107,19 +114,13 @@ def _ensure_languagebind_source() -> Path:
             snapshot_download(
                 repo_id=_LANGUAGEBIND_HF_REPO,
                 revision=_LANGUAGEBIND_HF_REVISION,
-                cache_dir=_LANGUAGEBIND_CACHE,
             )
         )
-    except ImportError as e:
-        raise RuntimeError(
-            "LanguageBind requires `huggingface_hub`. Install via: "
-            "pip install mteb[languagebind]"
-        ) from e
     except Exception as e:
         raise RuntimeError(
             f"Failed to download LanguageBind source from HF "
             f"({_LANGUAGEBIND_HF_REPO} at revision {_LANGUAGEBIND_HF_REVISION}). "
-            f"Check your internet connection. Original error: {e}"
+            f"Original error: {e}"
         ) from e
 
     if str(path) not in sys.path:
@@ -171,15 +172,6 @@ def _patch_languagebind_tokenizer(tokenizer_cls: type) -> None:
         )
 
 
-if TYPE_CHECKING:
-    from torch.utils.data import DataLoader
-    from typing_extensions import Unpack
-
-    from mteb import TaskMetadata
-    from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
-    from mteb.types._encoder_io import AudioInput, ImageInput, TextInput, VideoInput
-
-
 # LanguageBind expects audio sampled at 16 kHz (its audio mel-spectrogram pipeline).
 _LANGUAGE_BIND_AUDIO_SR = 16000
 
@@ -198,7 +190,8 @@ class _LanguageBindBase(AbsEncoder):
         pip install mteb[languagebind]
 
     The LanguageBind source code is automatically downloaded from HuggingFace
-    (myang333/languagebind-source) at a pinned revision on first use.
+    (myang333/languagebind-source) at a pinned revision on first use, cached in
+    HuggingFace Hub's standard cache location.
 
     Note: a working FFmpeg installation is also required for video tasks.
     """
@@ -262,6 +255,7 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         self,
         model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        revision: str | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = 8,
@@ -285,9 +279,13 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         self.max_samples = max_samples
         self.sampling_rate = _LANGUAGE_BIND_AUDIO_SR
 
-        self.model = LanguageBindVideo.from_pretrained(model_name).to(self.device)
+        self.model = LanguageBindVideo.from_pretrained(
+            model_name, revision=revision
+        ).to(self.device)
         self.model.eval()
-        self.tokenizer = LanguageBindVideoTokenizer.from_pretrained(model_name)
+        self.tokenizer = LanguageBindVideoTokenizer.from_pretrained(
+            model_name, revision=revision
+        )
         self.processor = LanguageBindVideoProcessor(self.model.config, self.tokenizer)
 
     def _transform_video_frames(self, frames: torch.Tensor) -> torch.Tensor:
@@ -379,6 +377,7 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
         self,
         model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        revision: str | None = None,
         **kwargs: Any,
     ):
         _ensure_languagebind_source()
@@ -394,9 +393,13 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
         self.device = device
         self.sampling_rate = _LANGUAGE_BIND_AUDIO_SR
 
-        self.model = LanguageBindAudio.from_pretrained(model_name).to(self.device)
+        self.model = LanguageBindAudio.from_pretrained(
+            model_name, revision=revision
+        ).to(self.device)
         self.model.eval()
-        self.tokenizer = LanguageBindAudioTokenizer.from_pretrained(model_name)
+        self.tokenizer = LanguageBindAudioTokenizer.from_pretrained(
+            model_name, revision=revision
+        )
         self.processor = LanguageBindAudioProcessor(self.model.config, self.tokenizer)
 
     def _transform_audio(self, audio_array: np.ndarray) -> torch.Tensor:
@@ -474,6 +477,7 @@ class LanguageBindImageWrapper(_LanguageBindBase):
         self,
         model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        revision: str | None = None,
         **kwargs: Any,
     ):
         _ensure_languagebind_source()
@@ -488,9 +492,13 @@ class LanguageBindImageWrapper(_LanguageBindBase):
         self.model_name = model_name
         self.device = device
 
-        self.model = LanguageBindImage.from_pretrained(model_name).to(self.device)
+        self.model = LanguageBindImage.from_pretrained(
+            model_name, revision=revision
+        ).to(self.device)
         self.model.eval()
-        self.tokenizer = LanguageBindImageTokenizer.from_pretrained(model_name)
+        self.tokenizer = LanguageBindImageTokenizer.from_pretrained(
+            model_name, revision=revision
+        )
         self.processor = LanguageBindImageProcessor(self.model.config, self.tokenizer)
 
     @torch.inference_mode()
@@ -633,12 +641,14 @@ class LanguageBindOmniWrapper(AbsEncoder):
 
 
 _LANGUAGE_BIND_CITATION = r"""
-@inproceedings{zhu2024languagebind,
-      title={Language{B}ind: Extending Video-Language Pretraining to N-modality by Language-based Semantic Alignment},
-      author={Bin Zhu and Bin Lin and Munan Ning and Yang Yan and Jiaxi Cui and Wang HongFa and Yatian Pang and Wenhao Jiang and Junwu Zhang and Zongwei Li and Cai Wan Zhang and Zhifeng Li and Wei Liu and Li Yuan},
-      booktitle={The Twelfth International Conference on Learning Representations},
-      year={2024},
-      url={https://openreview.net/forum?id=QmZKc7UZCy},
+@misc{zhu2024languagebind,
+    title={LanguageBind: Extending Video-Language Pretraining to N-modality by Language-based Semantic Alignment},
+    author={Bin Zhu and Bin Lin and Munan Ning and Yang Yan and Jiaxi Cui and Wang HongFa and Yatian Pang and Wenhao Jiang and Junwu Zhang and Zongwei Li and Cai Wan Zhang and Zhifeng Li and Wei Liu and Li Yuan},
+    year={2024},
+    eprint={2310.01852},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV},
+    url={https://arxiv.org/abs/2310.01852},
 }
 """
 
