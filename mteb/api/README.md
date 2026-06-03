@@ -14,7 +14,7 @@ pip install -e ".[api]"
 uvicorn mteb.api.app:app --reload --port 8000
 ```
 
-First call to `/benchmarks/{name}/summary` downloads the results repo to
+First call to `/benchmarks/{name}/scores` downloads the results repo to
 `~/.cache/mteb` (slow once, fast forever after). Set `MTEB_API_PRELOAD=1` to
 warm the cache on startup in a background thread.
 
@@ -26,7 +26,7 @@ warm the cache on startup in a background thread.
 | GET | `/benchmarks/menu` | Nested menu tree (matches frontend `MenuEntry[]`). |
 | GET | `/benchmarks` | Flat list of leaderboard benchmarks. |
 | GET | `/benchmarks/{name}` | Single benchmark metadata. |
-| GET | `/benchmarks/{name}/summary` | Full summary with rows, per-task scores, per-task-type means. |
+| GET | `/benchmarks/{name}/scores` | Full summary with rows, per-task scores, per-task-type means. (Legacy alias: `/summary`.) |
 
 JSON keys are emitted in `camelCase` to match the frontend types in
 `leaderboardv2/src/lib/types.ts`.

@@ -180,8 +180,8 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
 # uncached benchmark may both kick off ``build_benchmark_summary`` and the
 # second to finish "wins" the cache slot — wasteful but correctness-safe.
 # In practice this happens only during a cold boot before
-# ``warmup_in_background`` lands a result, and the warmup itself sequences
-# them via ``asyncio.gather`` on a single loop.
+# ``preload_summaries_in_background`` lands a result, and the preload
+# itself sequences them via ``asyncio.gather`` on a single loop.
 _summary_schemas: dict[str, BenchmarkSummarySchema] = {}
 _task_score_schemas: dict[str, TaskScoresSchema] = {}
 _model_score_schemas: dict[str, ModelScoresSchema] = {}
@@ -265,42 +265,46 @@ def _prewarm_list_schemas() -> None:
     _filtered_model_schemas(None, None, None, None, None, None, None, False, None)
 
 
-def warmup_in_background() -> None:
-    """Warm shared API caches at process startup.
+def warmup_blocking() -> None:
+    """Prepare the shared caches **synchronously** at process startup.
 
-    Runs on a daemon thread so the HTTP listener comes up immediately. The
-    *light* path is always on (parquet frames + per-model training-datasets +
-    pydantic schema caches + unfiltered list JSONs) because every dollar
-    spent here turns a per-request cold path into a hot one. The *heavy*
-    path — actually building every benchmark summary — is gated by
-    ``MTEB_API_PRELOAD=1`` because it dominates cold boot (~2-4s per
-    benchmark × 56 benchmarks even with parallelism).
+    Called from the FastAPI startup hook so the HTTP listener doesn't begin
+    accepting requests until the per-benchmark parquet frames + per-model
+    training-datasets + pydantic schema caches + unfiltered list JSONs are
+    populated. Previously this path ran on a background daemon thread and
+    the first incoming request paid the ~2.5 s ``_collect_similar_tasks``
+    walk + ~400 ms task-schema serialisation; doing it inline trades a
+    slower boot for a hot first response.
 
-    Per-benchmark failures are logged but never crash startup; mteb's
+    Per-benchmark failures are logged but never propagate — mteb's
     registries are static after import, so a thrown exception almost always
     means a benchmark or a model is mis-configured rather than a transient
-    error.
+    error. Aborting startup on one bad entry would take the whole API down.
     """
+    from mteb.api.adapters import prewarm_schema_caches
+
+    try:
+        _load_per_benchmark_frames()
+        _prewarm_training_datasets()
+        prewarm_schema_caches()
+        _prewarm_list_schemas()
+    except Exception as exc:
+        logger.warning("light warmup failed: %s", exc)
+
+
+def preload_summaries_in_background() -> None:
+    """Pre-build every benchmark summary on a daemon thread.
+
+    Gated by ``MTEB_API_PRELOAD=1`` because it dominates cold boot
+    (~2-4 s per benchmark × 56 benchmarks even with parallelism). The
+    light caches loaded by :func:`warmup_blocking` already cover the
+    per-request hot path; this only helps when you want the very first
+    visit to every benchmark to be instant.
+    """
+    if not preload_full():
+        return
 
     def _run() -> None:
-        from mteb.api.adapters import prewarm_schema_caches
-
-        # Light path (always on): load shared frames + memoised metadata so
-        # the first call to /benchmarks/X/summary doesn't burn ~2.5s in
-        # _collect_similar_tasks and the first /tasks call doesn't burn
-        # ~400ms instantiating + serialising 1000 task schemas.
-        try:
-            _load_per_benchmark_frames()
-            _prewarm_training_datasets()
-            prewarm_schema_caches()
-            _prewarm_list_schemas()
-        except Exception as exc:
-            logger.warning("light warmup failed: %s", exc)
-            return
-
-        if not preload_full():
-            return
-
         from mteb.api.aggregators import _flat_leaderboard_benchmarks
 
         all_names = [b.name for b in _flat_leaderboard_benchmarks()]
@@ -320,4 +324,4 @@ def warmup_in_background() -> None:
 
         asyncio.run(_build_all())
 
-    threading.Thread(target=_run, name="mteb-api-warmup", daemon=True).start()
+    threading.Thread(target=_run, name="mteb-api-preload", daemon=True).start()

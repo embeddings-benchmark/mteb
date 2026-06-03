@@ -5,13 +5,16 @@ Run with ``uvicorn mteb.api.app:app --reload --port 8000``.
 
 from __future__ import annotations
 
+import asyncio
 import functools
 import hashlib
 import logging
 from collections.abc import (  # noqa: TC003 — used at runtime by middleware signature
+    AsyncIterator,
     Awaitable,
     Callable,
 )
+from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import (  # noqa: TC002 — Request needed at runtime by middleware
@@ -23,7 +26,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from mteb.api.cache import warmup_in_background
+from mteb.api.cache import preload_summaries_in_background, warmup_blocking
 from mteb.api.routes import router
 from mteb.api.settings import cors_origins
 
@@ -79,9 +82,30 @@ class ETagMiddleware(BaseHTTPMiddleware):
         )
 
 
+@asynccontextmanager
+async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
+    """ASGI lifespan: prepare caches before the HTTP listener accepts traffic.
+
+    Replaces the deprecated ``@app.on_event("startup")`` hook with FastAPI's
+    lifespan context manager. ``warmup_blocking`` is dispatched via
+    :func:`asyncio.to_thread` so it can run its synchronous polars +
+    pydantic-schema work without freezing the event loop — uvicorn waits
+    for the ``yield`` before flipping the app into "ready" state, so by
+    the time the first request arrives every shared cache is populated.
+
+    The heavy ``preload_summaries_in_background`` is still spawned as a
+    daemon thread (gated on ``MTEB_API_PRELOAD=1``); blocking on it would
+    keep the listener down for minutes while 56 benchmarks are built.
+    """
+    await asyncio.to_thread(warmup_blocking)
+    preload_summaries_in_background()
+    yield
+    # No shutdown work — registry / pydantic caches die with the process.
+
+
 def create_app() -> FastAPI:
     """Build and return the FastAPI app instance for the leaderboard API."""
-    app = FastAPI(title="MTEB Leaderboard API")
+    app = FastAPI(title="MTEB Leaderboard API", lifespan=lifespan)
     # ETag middleware first (outermost): runs after Gzip/CORS, so it hashes the
     # uncompressed body and the 304 short-circuit avoids paying any
     # downstream serialisation cost on revalidation. Gzip second so all
@@ -98,11 +122,6 @@ def create_app() -> FastAPI:
         expose_headers=["ETag", "Cache-Control"],
     )
     app.include_router(router)
-
-    @app.on_event("startup")
-    def _startup() -> None:
-        warmup_in_background()
-
     return app
 
 

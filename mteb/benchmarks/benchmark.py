@@ -584,13 +584,21 @@ class VidoreBenchmark(Benchmark):
             nulls_last=True,
         )
 
-        joint_table = _attach_model_metadata(joint_table).with_columns(
+        # Pass `task_names_key` so the joined meta carries a "Zero-shot"
+        # column. Without it, ViDoRe rows always served zero_shot_pct=NA
+        # — even for models with declared training_datasets that don't
+        # intersect the benchmark's tasks. Mirrors the RTEB fix in
+        # `_create_summary_table_mean_public_private`.
+        joint_table = _attach_model_metadata(
+            joint_table, task_names_key=tuple(sorted(task_cols))
+        ).with_columns(
             (pl.int_range(0, pl.len()) + 1).cast(pl.Int64).alias("Rank (Mean Task)")
         )
 
         final_cols = [
             "Rank (Mean Task)",
             "Model",
+            "Zero-shot",
             "Active Parameters (B)",
             "Total Parameters (B)",
             "Embedding Dimensions",

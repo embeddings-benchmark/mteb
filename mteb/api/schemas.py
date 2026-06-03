@@ -179,6 +179,11 @@ class TaskMetaSchema(_CamelModel):
     annotations_creators: str | None = None
     dialect: list[str] | None = None
     sample_creation: str | None = None
+    # Count of distinct models that have at least one score on this task,
+    # derived at request time by ``routes._task_num_models_map`` from the
+    # unified results frame. Surfaced on the /tasks overview cards as
+    # "Models evaluated". Zero when the task has no recorded results.
+    num_models: int = 0
 
     @classmethod
     def from_task_metadata(cls, metadata: TaskMetadata) -> TaskMetaSchema:
@@ -395,7 +400,7 @@ class SummaryRowSchema(_CamelModel):
 
 
 class BenchmarkSummarySchema(_CamelModel):
-    """Response from ``/benchmarks/{name}/summary``."""
+    """Response from ``/benchmarks/{name}/scores`` (formerly ``/summary``)."""
 
     benchmark_name: str
     task_types: list[str]

@@ -16,6 +16,7 @@ import functools
 import logging
 from typing import Annotated
 
+import polars as pl
 from fastapi import APIRouter, HTTPException, Query, Response
 
 from mteb.api.adapters import (
@@ -74,6 +75,41 @@ def _with_num_models(schema: BenchmarkSchema) -> BenchmarkSchema:
     ``adapters._benchmark_schema_cache`` and shared across requests.
     """
     n = _num_models_map().get(schema.name, 0)
+    if n == schema.num_models:
+        return schema
+    return schema.model_copy(update={"num_models": n})
+
+
+@functools.lru_cache(maxsize=1)
+def _task_num_models_map() -> dict[str, int]:
+    """{task_name -> distinct model count}.
+
+    Cheap: reads the in-memory unified results frame, groups by
+    ``task_name`` and counts distinct ``model_name``. Cached for the
+    process lifetime so every ``TaskMetaSchema`` returned by ``/tasks``
+    or ``/tasks/{name}`` can carry a real ``num_models`` without a
+    polars roundtrip per task.
+    """
+    from mteb.api.cache import _load_per_benchmark_frames
+
+    try:
+        _, unified = _load_per_benchmark_frames()
+    except Exception:
+        return {}
+    if unified.is_empty() or "task_name" not in unified.columns:
+        return {}
+    grouped = (
+        unified.lazy()
+        .group_by("task_name")
+        .agg(pl.col("model_name").n_unique().alias("n"))
+        .collect()
+    )
+    return {row["task_name"]: int(row["n"]) for row in grouped.to_dicts()}
+
+
+def _with_task_num_models(schema: TaskMetaSchema) -> TaskMetaSchema:
+    """Overlay the cached ``num_models`` count onto a ``TaskMetaSchema``."""
+    n = _task_num_models_map().get(schema.name, 0)
     if n == schema.num_models:
         return schema
     return schema.model_copy(update={"num_models": n})
@@ -199,9 +235,14 @@ async def list_benchmarks(include_hidden: bool = False) -> list[BenchmarkSchema]
     return _benchmark_schemas(include_hidden)
 
 
-@router.get("/benchmarks/{name:path}/summary")
-async def benchmark_summary(name: str) -> BenchmarkSummarySchema:
-    """Return the full summary payload (one row per model) for benchmark ``name``."""
+@router.get("/benchmarks/{name:path}/scores")
+async def benchmark_scores(name: str) -> BenchmarkSummarySchema:
+    """Return the full summary payload (one row per model) for benchmark ``name``.
+
+    Path is ``/scores`` (mirrors ``/tasks/{name}/scores`` and
+    ``/models/{name}/scores``); the legacy ``/summary`` URL is kept as
+    an alias below for back-compat during the frontend deploy window.
+    """
     import mteb
 
     try:
@@ -209,6 +250,15 @@ async def benchmark_summary(name: str) -> BenchmarkSummarySchema:
     except KeyError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     return await get_summary(name)
+
+
+@router.get("/benchmarks/{name:path}/summary", include_in_schema=False)
+async def benchmark_summary(name: str) -> BenchmarkSummarySchema:
+    """Deprecated alias for ``/benchmarks/{name}/scores``.
+
+    Remove once every deployed frontend bundle is on the new path.
+    """
+    return await benchmark_scores(name)
 
 
 @router.get("/benchmarks/{name:path}")
@@ -256,7 +306,7 @@ def _filtered_task_schemas(
     if name_query:
         q = name_query.lower()
         task_classes = [c for c in task_classes if q in c.metadata.name.lower()]
-    return [task_to_meta_schema(c) for c in task_classes]
+    return [_with_task_num_models(task_to_meta_schema(c)) for c in task_classes]
 
 
 def _as_tuple(values: list[str] | None) -> tuple[str, ...] | None:
@@ -309,7 +359,7 @@ async def task_detail(name: str) -> TaskMetaSchema:
 
     if name not in _TASKS_REGISTRY:
         raise HTTPException(status_code=404, detail=f"Unknown task: {name}")
-    return task_to_meta_schema(_TASKS_REGISTRY[name])
+    return _with_task_num_models(task_to_meta_schema(_TASKS_REGISTRY[name]))
 
 
 # ---------------------------------------------------------------------------
