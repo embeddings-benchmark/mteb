@@ -387,6 +387,11 @@ class SummaryRowSchema(_CamelModel):
     mean_private: float | None = None
     scores_by_task_type: dict[str, float]
     scores_by_task: dict[str, float]
+    # Tasks (within this benchmark) the model declares in its training
+    # datasets — used by the frontend to surface a ⚠️ next to scores that
+    # the model isn't zero-shot on. Empty list when the model has no
+    # training-set declarations or no overlap with this benchmark.
+    trained_on_tasks: list[str] = []
 
 
 class BenchmarkSummarySchema(_CamelModel):

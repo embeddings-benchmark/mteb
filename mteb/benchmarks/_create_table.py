@@ -493,11 +493,14 @@ def _create_summary_table_mean_public_private(
         _get_borda_rank(borda_cols).alias("Rank (Borda)"),
     ).sort("Rank (Borda)")
 
-    joint_table = _attach_model_metadata(joint_table)
+    joint_table = _attach_model_metadata(
+        joint_table, task_names_key=tuple(sorted(task_cols))
+    )
 
     final_cols = [
         "Rank (Borda)",
         "Model",
+        "Zero-shot",
         "Active Parameters (B)",
         "Total Parameters (B)",
         "Embedding Dimensions",

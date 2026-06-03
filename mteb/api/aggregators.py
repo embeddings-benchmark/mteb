@@ -16,6 +16,8 @@ import functools
 import logging
 from typing import TYPE_CHECKING
 
+import polars as pl
+
 from mteb.api.adapters import (
     benchmark_to_schema,
     model_meta_to_schema,
@@ -132,6 +134,25 @@ async def build_benchmark_summary(  # noqa: PLR0914
                 col: float(v) for col in task_cols_pt if (v := prow[col]) is not None
             }
 
+    # Per-(model, task) `trained_on` flag — written into the parquet by
+    # `_build_pre_agg_df` so we don't have to reload ModelMeta here. Collapse
+    # the long frame into {model_name -> sorted[task_name]} of tasks the model
+    # was trained on. Empty list when the column isn't in the cache (older
+    # parquet versions) or the model declares no overlap.
+    trained_on_by_model: dict[str, list[str]] = {}
+    if "trained_on" in long_df.columns:
+        trained_pl = (
+            long_df.lazy()
+            .filter(pl.col("trained_on"))
+            .select(["model_name", "task_name"])
+            .unique()
+            .collect()
+        )
+        for mn, tn in trained_pl.iter_rows():
+            trained_on_by_model.setdefault(mn, []).append(tn)
+        for lst in trained_on_by_model.values():
+            lst.sort()
+
     # Identify which rank column to use (the summary frames produced by the
     # various builders use one of these names — same logic as the Gradio styler).
     summary_cols = summary_pl.columns
@@ -229,6 +250,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
                 mean_private=float(mean_private) if mean_private is not None else None,
                 scores_by_task_type=scores_by_task_type,
                 scores_by_task=scores_by_task,
+                trained_on_tasks=trained_on_by_model.get(full, []),
             )
         )
 

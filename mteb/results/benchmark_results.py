@@ -443,7 +443,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             result[col] = result[col].astype(object)
         return result
 
-    def _build_pre_agg_df(self, include_model_revision: bool) -> pd.DataFrame | None:
+    def _build_pre_agg_df(self, include_model_revision: bool) -> pd.DataFrame | None:  # noqa: PLR0914
         """Build the pre-aggregation long DataFrame; returns None when no scores exist."""
         bench_results = self
         if include_model_revision is False:
@@ -508,6 +508,31 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             for t in unique_tasks
         }
         df["is_public"] = df["task_name"].map(is_public_map)
+
+        # `trained_on`: true when the model declares this task (or a
+        # similar-task expansion of it) in its training_datasets. Used
+        # by the leaderboard to surface a ⚠️ next to scores that the
+        # model is not zero-shot on. Computed once per unique
+        # (model_name, task_name) pair so the parquet stays cheap.
+        from mteb.benchmarks._create_table import _training_datasets_cached
+
+        unique_models = (
+            df["model_name"].cat.categories
+            if hasattr(df["model_name"], "cat")
+            else df["model_name"].unique()
+        )
+        training_sets: dict[str, frozenset[str]] = {}
+        for m in unique_models:
+            ts = _training_datasets_cached(m)
+            if ts is not None:
+                training_sets[m] = ts
+        if training_sets:
+            df["trained_on"] = [
+                tn in training_sets.get(mn, frozenset())
+                for mn, tn in zip(df["model_name"], df["task_name"])
+            ]
+        else:
+            df["trained_on"] = False
 
         return df
 

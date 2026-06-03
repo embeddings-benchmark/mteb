@@ -54,7 +54,7 @@ class Settings(BaseSettings):
     # ``MTEB_API_CACHE_REPO``. Empty string disables hub load entirely
     # and forces the cold-rebuild path. ``None`` means "use the default
     # repo id" (matches the env-unset case).
-    cache_repo: str | None = "mteb/results_new"
+    cache_repo: str | None = "mteb/results"
 
     @field_validator("cors_origins", mode="before")
     @classmethod
