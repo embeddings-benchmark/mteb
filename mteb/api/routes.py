@@ -45,13 +45,63 @@ router = APIRouter()
 
 
 @functools.lru_cache(maxsize=1)
+def _num_models_map() -> dict[str, int]:
+    """{benchmark_name -> distinct model count}.
+
+    Cheap: reads the in-memory per-benchmark polars frames, computes a
+    distinct-count on ``model_name``, returns a dict. Cached for the
+    process lifetime so every BenchmarkSchema served by the API — list,
+    detail, or menu — can carry a real ``num_models`` without repeating
+    the polars work per request.
+    """
+    from mteb.api.cache import _load_per_benchmark_frames
+
+    try:
+        frames, _ = _load_per_benchmark_frames()
+    except Exception:
+        return {}
+    counts: dict[str, int] = {}
+    for name, frame in frames.items():
+        if "model_name" in frame.columns:
+            counts[name] = int(frame["model_name"].n_unique())
+    return counts
+
+
+def _with_num_models(schema: BenchmarkSchema) -> BenchmarkSchema:
+    """Overlay the cached ``num_models`` count onto a ``BenchmarkSchema``.
+
+    Never mutates the input — schemas are memoised in
+    ``adapters._benchmark_schema_cache`` and shared across requests.
+    """
+    n = _num_models_map().get(schema.name, 0)
+    if n == schema.num_models:
+        return schema
+    return schema.model_copy(update={"num_models": n})
+
+
+def _patch_menu_counts(entries: list[MenuEntrySchema]) -> list[MenuEntrySchema]:
+    """Walk the menu tree and overlay ``num_models`` on every benchmark child."""
+    patched: list[MenuEntrySchema] = []
+    for entry in entries:
+        new_children: list[BenchmarkSchema | MenuEntrySchema] = []
+        for child in entry.children:
+            if isinstance(child, BenchmarkSchema):
+                new_children.append(_with_num_models(child))
+            else:
+                new_children.extend(_patch_menu_counts([child]))
+        patched.append(entry.model_copy(update={"children": new_children}))
+    return patched
+
+
+@functools.lru_cache(maxsize=1)
 def _menu_schemas() -> list[MenuEntrySchema]:
     from mteb.benchmarks._leaderboard_menu import (
         GP_BENCHMARK_ENTRIES,
         R_BENCHMARK_ENTRIES,
     )
 
-    return menus_to_schemas(list(GP_BENCHMARK_ENTRIES) + list(R_BENCHMARK_ENTRIES))
+    raw = menus_to_schemas(list(GP_BENCHMARK_ENTRIES) + list(R_BENCHMARK_ENTRIES))
+    return _patch_menu_counts(raw)
 
 
 @functools.lru_cache(maxsize=2)
@@ -65,7 +115,7 @@ def _benchmark_schemas(include_hidden: bool = False) -> list[BenchmarkSchema]:
         benches = mteb.get_benchmarks()
     else:
         benches = mteb.get_benchmarks(display_on_leaderboard=True)
-    return [benchmark_to_schema(b) for b in benches]
+    return [_with_num_models(benchmark_to_schema(b)) for b in benches]
 
 
 @router.get("/health")

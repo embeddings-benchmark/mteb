@@ -95,6 +95,12 @@ class BenchmarkSchema(_CamelModel):
     # ``Benchmark.aggregations`` so the frontend can hide irrelevant columns
     # (e.g. ViDoRe has no per-type breakdown; RTEB has only Mean (Task)).
     aggregations: list[str]
+    # Distinct models that have at least one score on this benchmark. Set by
+    # ``_benchmark_schemas`` from the cached per-benchmark frames so the
+    # /benchmarks list page can show a model count without loading every
+    # summary. Zero when the benchmark has no scored model yet (or the
+    # cache hasn't been populated).
+    num_models: int = 0
 
     @classmethod
     def from_benchmark(cls, benchmark: Benchmark) -> BenchmarkSchema:
@@ -266,6 +272,10 @@ class ModelMetaSchema(_CamelModel):
     instruction_tuned: bool
     open_weights: bool
     sentence_transformers_compatible: bool
+    # Modalities the model can encode. Mirrors ``ModelMeta.modalities``
+    # — typically ["text"], but vision / audio / video models declare
+    # one or more additional entries.
+    modalities: list[str] = ["text"]
     citation: str | None = None
     # Extended metadata surfaced on the model detail card. All optional —
     # missing values render as "—" on the frontend rather than blocking.
@@ -330,6 +340,7 @@ class ModelMetaSchema(_CamelModel):
             if meta.open_weights is not None
             else False,
             sentence_transformers_compatible="Sentence Transformers" in framework,
+            modalities=[str(m) for m in (meta.modalities or ["text"])],
             citation=meta.citation or None,
             memory_usage_mb=float(meta.memory_usage_mb)
             if meta.memory_usage_mb is not None
