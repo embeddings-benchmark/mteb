@@ -60,7 +60,7 @@ GP_BENCHMARK_ENTRIES = [
                 ),
             ),
             MenuEntry(
-                "Domain-Specific ",
+                "Domain-Specific",
                 mteb.get_benchmarks(
                     [
                         "MTEB(Code, v1)",
@@ -90,28 +90,6 @@ GP_BENCHMARK_ENTRIES = [
                         "MTEB(fas, v2)",
                         "VN-MTEB (vie, v1)",
                         "MTEB(spa, v1)",
-                    ]
-                )
-                + [
-                    MenuEntry(
-                        "Other",
-                        mteb.get_benchmarks(
-                            [
-                                "MTEB(eng, v1)",
-                                "MTEB(fas, v1)",
-                                "MTEB(rus, v1)",
-                                "MTEB(jpn, v1)",
-                            ]
-                        ),
-                    )
-                ],
-            ),
-            MenuEntry(
-                "Miscellaneous",  # All of these are retrieval benchmarks
-                mteb.get_benchmarks(
-                    [
-                        "BuiltBench(eng)",
-                        "MINERSBitextMining",
                     ]
                 ),
             ),
@@ -163,16 +141,6 @@ R_BENCHMARK_ENTRIES = [
                     mteb.get_benchmark("BEIR"),
                     mteb.get_benchmark("BEIR-NL"),
                 ],
-            ),
-            MenuEntry(
-                "Miscellaneous",
-                mteb.get_benchmarks(
-                    [
-                        "NanoBEIR",
-                        "BRIGHT (long)",
-                        "RAR-b",
-                    ]
-                ),
             ),
         ],
     )

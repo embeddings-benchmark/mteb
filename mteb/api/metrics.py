@@ -137,6 +137,9 @@ def _route_template(request: Request) -> str:
     return "<unmatched>"
 
 
+_UNMATCHED = "<unmatched>"
+
+
 class PrometheusMiddleware(BaseHTTPMiddleware):
     """Record per-request Prometheus metrics around the downstream handler.
 
@@ -148,7 +151,11 @@ class PrometheusMiddleware(BaseHTTPMiddleware):
     * ``http_request_exceptions_total{method, handler, exception}`` — counted on raise,
       then re-raised so the standard ASGI 500 response still goes out.
 
-    ``/metrics`` itself is excluded so Prometheus scrapes don't show up as
+    Unmatched (404) requests are kept out of the latency histogram and the
+    in-flight gauge — bot scans of random URLs would otherwise pollute the
+    p95/p99 latency story — but their *count* is still recorded under
+    ``handler="<unmatched>"`` so scan volume stays visible. ``/metrics``
+    itself is excluded entirely so Prometheus scrapes don't show up as
     application traffic.
     """
 
@@ -163,8 +170,16 @@ class PrometheusMiddleware(BaseHTTPMiddleware):
 
         method = request.method
         handler = _route_template(request)
-        in_progress = REQUESTS_IN_PROGRESS.labels(method=method, handler=handler)
-        in_progress.inc()
+        matched = handler != _UNMATCHED
+        # Only matched routes contribute to in-flight / latency. Unmatched
+        # paths still get a count below so 404 rate stays visible.
+        in_progress = (
+            REQUESTS_IN_PROGRESS.labels(method=method, handler=handler)
+            if matched
+            else None
+        )
+        if in_progress is not None:
+            in_progress.inc()
         start = time.perf_counter()
         try:
             response = await call_next(request)
@@ -177,13 +192,16 @@ class PrometheusMiddleware(BaseHTTPMiddleware):
             REQUEST_COUNT.labels(method=method, handler=handler, status="500").inc()
             raise
         finally:
-            REQUEST_LATENCY.labels(method=method, handler=handler).observe(
-                time.perf_counter() - start
-            )
-            in_progress.dec()
-        # Re-resolve the template post-handler — for unmatched URLs the
-        # router will have stamped scope["route"] by now, but a 404 keeps
-        # the fallback string. Either way, status is what matters.
+            if matched:
+                REQUEST_LATENCY.labels(method=method, handler=handler).observe(
+                    time.perf_counter() - start
+                )
+            if in_progress is not None:
+                in_progress.dec()
+        # Re-resolve the template post-handler — for routes that only got
+        # stamped onto ``scope["route"]`` after ``call_next``, this catches
+        # them. ``<unmatched>`` paths still get counted; only the histogram
+        # was skipped.
         REQUEST_COUNT.labels(
             method=method,
             handler=_route_template(request),
