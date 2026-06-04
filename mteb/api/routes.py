@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import functools
 import logging
+from importlib.resources import files
 from typing import Annotated
 
 import polars as pl
@@ -31,6 +32,12 @@ from mteb.api.cache import (
     get_task_scores,
 )
 from mteb.api.icons import get_icon
+from mteb.api.metrics import (
+    BENCHMARK_SELECTIONS,
+    MODEL_SELECTIONS,
+    TASK_SELECTIONS,
+    render_metrics,
+)
 from mteb.api.schemas import (  # noqa: TC001 — FastAPI inspects return annotations at registration
     BenchmarkSchema,
     BenchmarkSummarySchema,
@@ -160,6 +167,13 @@ async def health() -> dict[str, bool]:
     return {"ok": True}
 
 
+@router.get("/metrics", include_in_schema=False)
+async def metrics() -> Response:
+    """Prometheus scrape endpoint — exposes per-route counters and latency histograms."""
+    body, content_type = render_metrics()
+    return Response(content=body, media_type=content_type)
+
+
 # Crawlers (and the Spaces health checker) probe this on every cold start.
 # Serving a tiny disallow-everything body keeps the log clean and tells
 # search engines not to index the JSON API. Cached aggressively because
@@ -174,6 +188,29 @@ async def robots_txt() -> Response:
         content=_ROBOTS_TXT,
         media_type="text/plain",
         headers={"Cache-Control": "public, max-age=86400"},
+    )
+
+
+# Shipped as package data via pyproject's ``[tool.setuptools.package-data]``
+# so the file is present whether mteb was installed via ``pip install`` or
+# checked out as source. Read once at import — the bytes are ~29 KB and
+# don't change at runtime.
+_FAVICON_BYTES = (files("mteb.api") / "static" / "favicon.png").read_bytes()
+
+
+@router.get("/favicon.ico", include_in_schema=False)
+async def favicon() -> Response:
+    """Serve the MTEB logo as the browser-tab favicon for every API page.
+
+    Browsers request ``/favicon.ico`` for any URL they navigate to (Swagger,
+    ReDoc, the JSON responses) so a single ``.ico`` route is enough. The
+    body is actually a PNG — every modern browser accepts a PNG payload
+    under the ``.ico`` URL.
+    """
+    return Response(
+        content=_FAVICON_BYTES,
+        media_type="image/png",
+        headers={"Cache-Control": "public, max-age=31536000, immutable"},
     )
 
 
@@ -210,6 +247,7 @@ async def benchmark_icon(name: str) -> Response:
     if cached is None:
         raise HTTPException(status_code=502, detail="Upstream icon fetch failed")
 
+    BENCHMARK_SELECTIONS.labels(name=name, endpoint="icon").inc()
     return Response(
         content=cached.body,
         media_type=cached.content_type,
@@ -249,6 +287,7 @@ async def benchmark_scores(name: str) -> BenchmarkSummarySchema:
         mteb.get_benchmark(name)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+    BENCHMARK_SELECTIONS.labels(name=name, endpoint="scores").inc()
     return await get_summary(name)
 
 
@@ -270,6 +309,7 @@ async def benchmark_detail(name: str) -> BenchmarkSchema:
         bench = mteb.get_benchmark(name)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+    BENCHMARK_SELECTIONS.labels(name=name, endpoint="detail").inc()
     return benchmark_to_schema(bench)
 
 
@@ -349,6 +389,7 @@ async def task_scores(name: str) -> TaskScoresSchema:
 
     if name not in _TASKS_REGISTRY:
         raise HTTPException(status_code=404, detail=f"Unknown task: {name}")
+    TASK_SELECTIONS.labels(name=name, endpoint="scores").inc()
     return await get_task_scores(name)
 
 
@@ -359,6 +400,7 @@ async def task_detail(name: str) -> TaskMetaSchema:
 
     if name not in _TASKS_REGISTRY:
         raise HTTPException(status_code=404, detail=f"Unknown task: {name}")
+    TASK_SELECTIONS.labels(name=name, endpoint="detail").inc()
     return _with_task_num_models(task_to_meta_schema(_TASKS_REGISTRY[name]))
 
 
@@ -433,9 +475,11 @@ async def model_scores(name: str) -> ModelScoresSchema:
     if name not in MODEL_REGISTRY:
         raise HTTPException(status_code=404, detail=f"Unknown model: {name}")
     try:
-        return await get_model_scores(name)
+        result = await get_model_scores(name)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+    MODEL_SELECTIONS.labels(name=name, endpoint="scores").inc()
+    return result
 
 
 @router.get("/models/{name:path}")
@@ -446,4 +490,5 @@ async def model_detail(name: str) -> ModelMetaSchema:
 
     if name not in MODEL_REGISTRY:
         raise HTTPException(status_code=404, detail=f"Unknown model: {name}")
+    MODEL_SELECTIONS.labels(name=name, endpoint="detail").inc()
     return model_meta_to_schema(get_model_meta(name))

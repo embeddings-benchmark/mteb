@@ -15,6 +15,14 @@ Environment variables (all optional):
 * ``MTEB_API_CACHE_REPO`` — HF dataset id the leaderboard parquet cache
   is pulled from. Defaults to ``mteb/results``. Set to ``""`` (empty
   string) to disable the hub load and force a local cold rebuild.
+* ``OTEL_EXPORTER_OTLP_ENDPOINT`` — collector base URL (e.g.
+  ``http://localhost:4318``). When unset, OpenTelemetry is a no-op.
+* ``OTEL_SERVICE_NAME`` — service name tagged on every signal. Defaults
+  to ``mteb-api``.
+
+The OTEL fields keep their standard ``OTEL_*`` names (no ``MTEB_API_``
+prefix) so the same env vars also feed the OpenTelemetry SDK directly
+for everything else it auto-discovers (resource attrs, headers, etc.).
 """
 
 from __future__ import annotations
@@ -42,6 +50,7 @@ class Settings(BaseSettings):
         env_prefix="MTEB_API_",
         env_file=None,
         extra="ignore",
+        populate_by_name=True,
     )
 
     # NoDecode disables pydantic-settings' default JSON parsing for the env
@@ -55,6 +64,24 @@ class Settings(BaseSettings):
     # and forces the cold-rebuild path. ``None`` means "use the default
     # repo id" (matches the env-unset case).
     cache_repo: str | None = "mteb/results"
+
+    # OTEL fields opt out of the ``MTEB_API_`` prefix via ``validation_alias``
+    # so the standard ``OTEL_*`` env vars apply unchanged. That way the
+    # OpenTelemetry SDK and our Settings read the *same* environment
+    # variables, instead of forcing the operator to set both.
+    #
+    # An empty / unset endpoint means "telemetry disabled" — keeps local
+    # dev and CI from spamming connection-refused errors at a non-existent
+    # collector. The service name defaults to ``mteb-api`` so traces /
+    # logs / metrics land in a sensible bucket even without explicit config.
+    otel_endpoint: str | None = Field(
+        default=None,
+        validation_alias="OTEL_EXPORTER_OTLP_ENDPOINT",
+    )
+    otel_service_name: str = Field(
+        default="mteb-api",
+        validation_alias="OTEL_SERVICE_NAME",
+    )
 
     @field_validator("cors_origins", mode="before")
     @classmethod
@@ -102,3 +129,14 @@ def cache_repo() -> str:
     """
     val = get_settings().cache_repo
     return val if val is not None else ""
+
+
+def otel_endpoint() -> str | None:
+    """OTLP collector base URL, or ``None`` when telemetry should stay off."""
+    val = get_settings().otel_endpoint
+    return val.strip() if val and val.strip() else None
+
+
+def otel_service_name() -> str:
+    """``service.name`` resource attribute applied to every OTEL signal."""
+    return get_settings().otel_service_name

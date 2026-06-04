@@ -27,6 +27,8 @@ from fastapi.middleware.gzip import GZipMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from mteb.api.cache import preload_summaries_in_background, warmup_blocking
+from mteb.api.metrics import PrometheusMiddleware
+from mteb.api.otel import setup_telemetry, shutdown_telemetry
 from mteb.api.routes import router
 from mteb.api.settings import cors_origins
 
@@ -100,12 +102,19 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     await asyncio.to_thread(warmup_blocking)
     preload_summaries_in_background()
     yield
-    # No shutdown work — registry / pydantic caches die with the process.
+    # Flush OTEL batch processors so the final spans / logs / metrics
+    # reach the collector. Registry / pydantic caches die with the process.
+    shutdown_telemetry()
 
 
 def create_app() -> FastAPI:
     """Build and return the FastAPI app instance for the leaderboard API."""
     app = FastAPI(title="MTEB Leaderboard API", lifespan=lifespan)
+    # OpenTelemetry instrumentation must be attached before the
+    # middleware stack is finalised so the FastAPI instrumentor can
+    # inject its ASGI middleware. No-op unless
+    # OTEL_EXPORTER_OTLP_ENDPOINT is set.
+    setup_telemetry(app)
     # ETag middleware first (outermost): runs after Gzip/CORS, so it hashes the
     # uncompressed body and the 304 short-circuit avoids paying any
     # downstream serialisation cost on revalidation. Gzip second so all
@@ -121,6 +130,12 @@ def create_app() -> FastAPI:
         # can confirm 304 revalidation is happening.
         expose_headers=["ETag", "Cache-Control"],
     )
+    # Prometheus is added last so it ends up as the outermost middleware —
+    # request latency is measured around the full middleware stack, and
+    # every response (including CORS-modified or 304-short-circuited ones)
+    # is counted. The /metrics scrape itself is excluded inside the
+    # middleware to keep self-traffic out of the series.
+    app.add_middleware(PrometheusMiddleware)
     app.include_router(router)
     return app
 
