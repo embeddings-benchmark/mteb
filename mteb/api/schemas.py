@@ -101,6 +101,12 @@ class BenchmarkSchema(_CamelModel):
     # summary. Zero when the benchmark has no scored model yet (or the
     # cache hasn't been populated).
     num_models: int = 0
+    # Mirrors ``Benchmark.language_view`` — the explicit subset of language
+    # codes the per-language leaderboard view should display columns for.
+    # ``"all"`` means "every language present in the data"; ``None``/missing
+    # means the benchmark didn't opt into a per-language view and the
+    # frontend should hide that tab entirely.
+    language_view: list[str] | Literal["all"] | None = None
 
     @classmethod
     def from_benchmark(cls, benchmark: Benchmark) -> BenchmarkSchema:
@@ -150,6 +156,21 @@ class BenchmarkSchema(_CamelModel):
             display_on_leaderboard=bool(benchmark.display_on_leaderboard),
             new_version=list(benchmark.new_version) if benchmark.new_version else None,
             aggregations=[a.value for a in benchmark.aggregations],
+            # Resolve each language code to its human label (same helper
+            # the ``languages`` field above uses) so the frontend renders
+            # ``"German"`` instead of ``"deu-Latn"``. The empty default is
+            # collapsed to ``None`` so the frontend can treat "no language
+            # view" as a single missing-value check rather than juggling
+            # empty arrays.
+            language_view=(
+                "all"
+                if benchmark.language_view == "all"
+                else (
+                    _dedupe_strs([language_label(c) for c in benchmark.language_view])
+                    if benchmark.language_view
+                    else None
+                )
+            ),
         )
 
 
