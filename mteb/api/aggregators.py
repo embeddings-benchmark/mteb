@@ -153,11 +153,16 @@ async def build_benchmark_summary(  # noqa: PLR0914
         for lst in trained_on_by_model.values():
             lst.sort()
 
-    # Identify which rank column to use (the summary frames produced by the
-    # various builders use one of these names — same logic as the Gradio styler).
+    # Identify which rank column to use. The mean-task-type builder
+    # (MIEB, ViDoRe-style) writes BOTH "Rank" (the primary, assigned
+    # in sort-by-Mean-(Task) order) and "Rank (Borda)" (kept for back-
+    # compat). Prefer the explicit "Rank" — falling back to "Rank
+    # (Borda)" first would shuffle MIEB rows so the actual top model
+    # showed as e.g. #11. Standard builders only emit "Rank (Borda)",
+    # so the fallback still applies there.
     summary_cols = summary_pl.columns
     rank_col = next(
-        (c for c in ("Rank (Borda)", "Rank (Mean Task)", "Rank") if c in summary_cols),
+        (c for c in ("Rank", "Rank (Mean Task)", "Rank (Borda)") if c in summary_cols),
         None,
     )
 
