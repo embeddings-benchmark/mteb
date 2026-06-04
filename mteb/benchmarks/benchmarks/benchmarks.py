@@ -2323,12 +2323,12 @@ MIEB_ENG = MIEBBenchmark(
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation=r"""
 @inproceedings{xiao2025mieb,
-    author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
-    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
-    month = {October},
-    pages = {22187-22198},
-    title = {MIEB: Massive Image Embedding Benchmark},
-    year = {2025},
+  author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
+  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+  month = {October},
+  pages = {22187-22198},
+  title = {MIEB: Massive Image Embedding Benchmark},
+  year = {2025},
 }
 """,
 )
@@ -2357,12 +2357,12 @@ MIEB_MULTILINGUAL = MIEBBenchmark(
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation=r"""
 @inproceedings{xiao2025mieb,
-    author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
-    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
-    month = {October},
-    pages = {22187-22198},
-    title = {MIEB: Massive Image Embedding Benchmark},
-    year = {2025},
+  author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
+  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+  month = {October},
+  pages = {22187-22198},
+  title = {MIEB: Massive Image Embedding Benchmark},
+  year = {2025},
 }
 """,
 )
@@ -2440,12 +2440,12 @@ MIEB_LITE = MIEBBenchmark(
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation=r"""
 @inproceedings{xiao2025mieb,
-    author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
-    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
-    month = {October},
-    pages = {22187-22198},
-    title = {MIEB: Massive Image Embedding Benchmark},
-    year = {2025},
+  author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
+  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+  month = {October},
+  pages = {22187-22198},
+  title = {MIEB: Massive Image Embedding Benchmark},
+  year = {2025},
 }
 """,
 )
@@ -2511,12 +2511,12 @@ MIEB_IMG = MIEBBenchmark(
     reference="https://arxiv.org/abs/2504.10471",
     citation=r"""
 @inproceedings{xiao2025mieb,
-    author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
-    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
-    month = {October},
-    pages = {22187-22198},
-    title = {MIEB: Massive Image Embedding Benchmark},
-    year = {2025},
+  author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
+  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+  month = {October},
+  pages = {22187-22198},
+  title = {MIEB: Massive Image Embedding Benchmark},
+  year = {2025},
 }
 """,
     contacts=["gowitheflow-1998", "isaac-chung"],
