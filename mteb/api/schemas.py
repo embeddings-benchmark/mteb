@@ -433,6 +433,65 @@ class BenchmarkSummarySchema(_CamelModel):
     aggregations: list[str] = []
 
 
+class LeaderModelSchema(_CamelModel):
+    """Slim model identity for the leaders endpoint.
+
+    Returned per-bucket from ``/benchmarks/{name}/leaders`` — just the
+    fields the home page needs to render a one-line ``org/name``
+    leaderboard entry with the right model-type tint and an
+    internal link to ``/models/[name]``. Strip everything else
+    (release date, max tokens, embedding dim, …) so the payload is
+    tiny vs. ``/scores``'s full ``ModelMetaSchema``.
+    """
+
+    name: str
+    display_name: str
+    org: str
+    model_type: _ModelType
+
+
+class LeaderRowSchema(_CamelModel):
+    """One bucket's leader row.
+
+    The highest-meanTask model in the size range. Carries just enough
+    fields to render a single rank + org/name + score line + link to
+    the model page.
+    """
+
+    rank: int
+    model: LeaderModelSchema
+    mean_task: float | None = None
+    total_params_b: float
+
+
+class BucketLeaderSchema(_CamelModel):
+    """Result of one size-bucket query.
+
+    ``max`` is ``None`` to mean ``+inf`` so callers can stream the
+    last bucket as e.g. ``5,`` or ``5,inf`` and we serialise the
+    ceiling honestly. ``leader`` is ``None`` when no model in the
+    benchmark falls inside the [min, max) range — the frontend
+    drops the row rather than padding with a placeholder.
+    """
+
+    min: float
+    max: float | None = None
+    leader: LeaderRowSchema | None = None
+
+
+class BenchmarkLeadersSchema(_CamelModel):
+    """Response from ``/benchmarks/{name}/leaders?bucket=…&bucket=…``.
+
+    Bucket order in the response mirrors the query string so the
+    caller can render them by index without re-sorting. Payload is
+    typically a few hundred bytes (cf. several MB for a full
+    ``/scores`` request on multilingual benchmarks).
+    """
+
+    benchmark_name: str
+    buckets: list[BucketLeaderSchema]
+
+
 class TaskScoreRowSchema(_CamelModel):
     """One row of `/tasks/{name}/scores` — per-model score on a single task.
 

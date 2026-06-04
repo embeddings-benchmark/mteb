@@ -39,6 +39,7 @@ from mteb.api.metrics import (
     render_metrics,
 )
 from mteb.api.schemas import (  # noqa: TC001 — FastAPI inspects return annotations at registration
+    BenchmarkLeadersSchema,
     BenchmarkSchema,
     BenchmarkSummarySchema,
     MenuEntrySchema,
@@ -298,6 +299,113 @@ async def benchmark_summary(name: str) -> BenchmarkSummarySchema:
     Remove once every deployed frontend bundle is on the new path.
     """
     return await benchmark_scores(name)
+
+
+def _parse_buckets_json(raw: str) -> list[tuple[float, float | None]]:
+    """Parse the `buckets` query param.
+
+    Wire format is a JSON-encoded array of two-element tuples in
+    millions of parameters: ``[[min, max], ...]``. Millions read more
+    naturally for small-model cuts (``<500`` vs ``<0.5``). Use
+    ``null`` (or omit the second element) for an open-ended top
+    bucket.
+
+    Examples (URL-decoded for readability):
+        ``[[0,500],[500,1000],[1000,5000],[5000,null]]``   four buckets
+        ``[[0,1000]]``                                     single 0–1 B
+
+    Returned tuples are in MILLIONS — callers convert downstream
+    when comparing against ``ModelMeta.total_params_b`` (which stays
+    in billions, matching the schema).
+
+    Raises ``HTTPException(422)`` on malformed JSON or out-of-range
+    values so the route hands the caller a clear error.
+    """
+    import json
+
+    try:
+        decoded = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise HTTPException(
+            status_code=422, detail=f"Invalid `buckets` JSON: {exc.msg}"
+        ) from exc
+    if not isinstance(decoded, list) or not decoded:
+        raise HTTPException(
+            status_code=422,
+            detail="`buckets` must be a non-empty JSON array of [min, max] pairs",
+        )
+    if len(decoded) > 8:
+        raise HTTPException(status_code=422, detail="`buckets` is capped at 8 entries")
+
+    out: list[tuple[float, float | None]] = []
+    for i, entry in enumerate(decoded):
+        if not isinstance(entry, list) or not (1 <= len(entry) <= 2):
+            raise HTTPException(
+                status_code=422,
+                detail=f"`buckets[{i}]` must be a 1- or 2-element array (got {entry!r})",
+            )
+        lo_raw = entry[0]
+        if not isinstance(lo_raw, (int, float)):
+            raise HTTPException(
+                status_code=422, detail=f"`buckets[{i}][0]` must be a number"
+            )
+        lo = float(lo_raw)
+        if lo < 0:
+            raise HTTPException(
+                status_code=422, detail=f"`buckets[{i}][0]` must be ≥ 0"
+            )
+        hi: float | None = None
+        if len(entry) == 2 and entry[1] is not None:
+            hi_raw = entry[1]
+            if not isinstance(hi_raw, (int, float)):
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"`buckets[{i}][1]` must be a number or null",
+                )
+            hi = float(hi_raw)
+            if hi <= lo:
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"`buckets[{i}]`: max ({hi}) must be > min ({lo})",
+                )
+        out.append((lo, hi))
+    return out
+
+
+@router.get("/benchmarks/{name:path}/leaders")
+async def benchmark_leaders(
+    name: str,
+    buckets: Annotated[
+        str,
+        Query(
+            description=(
+                "JSON-encoded array of [min, max] tuples in millions of "
+                "parameters. Use `null` (or omit) for the second element "
+                "to leave the top bucket open-ended. Example: "
+                "`?buckets=[[0,500],[500,1000],[1000,5000],[5000,null]]`."
+            ),
+        ),
+    ],
+) -> BenchmarkLeadersSchema:
+    """Return the highest-`mean_task` model in each size bucket.
+
+    Use this instead of ``/scores`` when the frontend only needs a
+    one-line leader per size band (typically a few hundred bytes vs.
+    megabytes for the full summary). Shares the warm summary cache,
+    so repeat calls are essentially free.
+    """
+    import mteb
+
+    try:
+        mteb.get_benchmark(name)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    from mteb.api.aggregators import build_benchmark_leaders
+
+    parsed = _parse_buckets_json(buckets)
+    BENCHMARK_SELECTIONS.labels(name=name, endpoint="leaders").inc()
+    return await build_benchmark_leaders(name, parsed)
 
 
 @router.get("/benchmarks/{name:path}")

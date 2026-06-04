@@ -24,7 +24,11 @@ from mteb.api.adapters import (
     task_to_meta_schema,
 )
 from mteb.api.schemas import (
+    BenchmarkLeadersSchema,
     BenchmarkSummarySchema,
+    BucketLeaderSchema,
+    LeaderModelSchema,
+    LeaderRowSchema,
     ModelScoreRowSchema,
     ModelScoresSchema,
     SummaryRowSchema,
@@ -478,3 +482,121 @@ async def build_model_scores(name: str) -> ModelScoresSchema:
 
     rows.sort(key=lambda r: r.rank)
     return ModelScoresSchema(model=model_meta, rows=rows)
+
+
+# ---------------------------------------------------------------------------
+# /benchmarks/{name}/leaders — slim per-size-bucket top model.
+# ---------------------------------------------------------------------------
+
+# `(min, max)` ranges sized in MILLIONS of parameters (matches the
+# `/benchmarks/{name}/leaders?buckets=…` wire format). `max=None`
+# means "open-ended" (>= min). Bucket order in the request is preserved.
+Bucket = tuple[float, float | None]
+
+# `total_params_b` on `ModelMetaSchema` stays in billions for
+# backwards compatibility with `/scores`. Convert each bucket's
+# millions → billions exactly once before scanning rows.
+_M_PER_B = 1000.0
+
+
+def _row_score(row: SummaryRowSchema) -> float | None:
+    """Pick whichever mean column the benchmark's builder populates.
+
+    Standard benchmarks emit ``Mean (Task)`` (→ ``mean_task`` on the
+    schema). MIEB / ViDoRe-style builders only populate
+    ``mean_task_type`` because their primary aggregate is the mean
+    of per-type means — `mean_task` is left null. Falling back keeps
+    `_pick_leader` honest across both shapes.
+    """
+    if row.mean_task is not None:
+        return row.mean_task
+    return row.mean_task_type
+
+
+def _pick_leader(
+    rows: list[SummaryRowSchema], lo_b: float, hi_b: float | None
+) -> tuple[SummaryRowSchema | None, float | None]:
+    """Pick the highest-scoring row inside ``[lo_b, hi_b)`` (billions).
+
+    Returns ``(row, score)`` or ``(None, None)`` if the bucket is
+    empty. Excludes rows with `total_params_b <= 0` (unknown /
+    missing). The upper bound is exclusive so callers can stitch
+    buckets together without double-counting boundary models (e.g.
+    a 1 B model belongs in `[0.5, 1)` for one query and `[1, 5)` in
+    the next).
+    """
+    best: SummaryRowSchema | None = None
+    best_score: float | None = None
+    for r in rows:
+        if r.total_params_b <= 0:
+            continue
+        if r.total_params_b < lo_b:
+            continue
+        if hi_b is not None and r.total_params_b >= hi_b:
+            continue
+        score = _row_score(r)
+        if score is None:
+            continue
+        if best_score is None or score > best_score:
+            best_score = score
+            best = r
+    return best, best_score
+
+
+async def build_benchmark_leaders(
+    name: str, buckets: list[Bucket]
+) -> BenchmarkLeadersSchema:
+    """Build the per-size-bucket leaders payload for a benchmark.
+
+    Reuses the already-cached :class:`BenchmarkSummarySchema` (computed
+    on demand by `get_summary`), so the additional cost vs. an
+    on-demand full payload is just a per-bucket linear scan plus the
+    slim schema construction — typically a few hundred bytes vs.
+    megabytes for `/scores` on a multilingual benchmark.
+
+    Buckets arrive in MILLIONS of parameters (matching the request
+    wire format) and are converted to billions for the row scan;
+    the response echoes back the original million-unit bounds so the
+    caller doesn't have to remember the conversion.
+    """
+    # Local import to mirror the `build_model_scores` pattern above —
+    # avoids a top-level cycle since `mteb.api.cache` imports
+    # `build_benchmark_summary` from this module.
+    from mteb.api.cache import get_summary
+
+    summary = await get_summary(name)
+    out_buckets: list[BucketLeaderSchema] = []
+    for lo_m, hi_m in buckets:
+        lo_b = lo_m / _M_PER_B
+        hi_b = hi_m / _M_PER_B if hi_m is not None else None
+        row, score = _pick_leader(summary.rows, lo_b, hi_b)
+        leader: LeaderRowSchema | None = None
+        if row is not None:
+            # `ModelMetaSchema.name` is the canonical `org/name`
+            # HuggingFace identifier — split it here so the leaders
+            # response is self-contained (the frontend's `/scores`
+            # enrichment doesn't run on this endpoint's payload).
+            full = row.model.name
+            slash = full.find("/")
+            if slash > 0:
+                org, display = full[:slash], full[slash + 1 :]
+            else:
+                org, display = "", full
+            leader = LeaderRowSchema(
+                rank=row.rank,
+                model=LeaderModelSchema(
+                    name=full,
+                    display_name=display,
+                    org=org,
+                    model_type=row.model.model_type,
+                ),
+                # `mean_task` here is the score that was used for the
+                # bucket comparison — falls back to `mean_task_type`
+                # when the benchmark builder didn't emit a Mean (Task).
+                # Keeps the frontend rendering "Leader: … · {score}"
+                # honest across both builder shapes.
+                mean_task=score,
+                total_params_b=row.total_params_b,
+            )
+        out_buckets.append(BucketLeaderSchema(min=lo_m, max=hi_m, leader=leader))
+    return BenchmarkLeadersSchema(benchmark_name=name, buckets=out_buckets)
