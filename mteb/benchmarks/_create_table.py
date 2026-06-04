@@ -593,7 +593,9 @@ def _create_summary_table_mean_subset(
 
 
 def _create_summary_table_mean_task_type(
-    pl_df: pl.DataFrame, mean_column_name: str = "Mean (TaskType)"
+    pl_df: pl.DataFrame,
+    mean_column_name: str = "Mean (TaskType)",
+    sort_by: str | None = None,
 ) -> pl.DataFrame:
     """Create summary table where the overall mean is the mean of per-task-type means.
 
@@ -601,6 +603,10 @@ def _create_summary_table_mean_task_type(
         pl_df: Long polars frame with at least ``model_name``, ``task_name``,
             and ``score`` columns.
         mean_column_name: Name for the mean-by-task-type column. Defaults to "Mean (TaskType)".
+        sort_by: Column to sort the rows by (and to populate ``Rank``). When
+            ``None`` falls back to ``mean_column_name`` (historical behaviour).
+            Pass a non-None value when the benchmark wants to rank by a
+            column that differs from its primary mean column.
 
     Returns:
         DataFrame with model summaries, ready for styling in the leaderboard.
@@ -624,6 +630,7 @@ def _create_summary_table_mean_task_type(
 
     type_exprs, type_cols = _get_means_per_types(task_cols)
 
+    sort_col = sort_by or mean_column_name
     joint_table = (
         per_task.select(
             "model_name",
@@ -631,7 +638,7 @@ def _create_summary_table_mean_task_type(
             _get_borda_rank(task_cols).alias("Rank (Borda)"),
         )
         .with_columns(_skipna_false_mean(type_cols).alias(mean_column_name))
-        .sort(mean_column_name, descending=True, nulls_last=True)
+        .sort(sort_col, descending=True, nulls_last=True)
         .with_columns((pl.int_range(0, pl.len()) + 1).cast(pl.Int64).alias("Rank"))
     )
 

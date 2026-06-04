@@ -110,6 +110,13 @@ class Benchmark:
         BenchmarkAggregation.MEAN_TASK_TYPE,
         BenchmarkAggregation.TASK_TYPES,
     )
+    # Polars column used to sort rows in the summary table (and to
+    # populate the displayed ``Rank``). Default ``None`` means "use the
+    # builder's intrinsic default" — Borda count for the standard
+    # builder, the configured mean column for ``mean_task_type`` / ViDoRe
+    # variants. Override in a subclass to surface a different rank, e.g.
+    # ``MIEBBenchmark`` sorts by ``Mean (TaskType)``.
+    summary_sort_column: ClassVar[str | None] = None
 
     name: str
     tasks: Sequence[AbsTask]
@@ -477,18 +484,28 @@ class HUMEBenchmark(Benchmark):
 class MIEBBenchmark(Benchmark):
     """Wrapper for MIEB benchmark."""
 
-    # MIEB shows Mean (Task) (computed as the mean of per-type means) plus
-    # the per-task-type breakdown. No public/private split.
+    # MIEB surfaces a Mean (TaskType) column (mean of per-type means —
+    # giving each task type equal weight regardless of how many tasks
+    # populate it) plus the per-type breakdown. The label is explicit
+    # because the column ISN'T a simple per-task mean; mislabelling it
+    # as "Mean (Task)" caused the frontend to recompute and disagree
+    # with the canonical value.
     aggregations: ClassVar[Sequence[BenchmarkAggregation]] = (
-        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.MEAN_TASK_TYPE,
         BenchmarkAggregation.TASK_TYPES,
     )
+    # Rank rows by the per-type mean column rather than Borda count — the
+    # builder writes both, and Mean (TaskType) is the metric MIEB
+    # actually wants to surface as the leaderboard order.
+    summary_sort_column: ClassVar[str] = "Mean (TaskType)"
 
-    def _create_summary_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:  # noqa: PLR6301
+    def _create_summary_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:
         from mteb.benchmarks._create_table import _create_summary_table_mean_task_type
 
         return _create_summary_table_mean_task_type(
-            pl_df, mean_column_name="Mean (Task)"
+            pl_df,
+            mean_column_name="Mean (TaskType)",
+            sort_by=self.summary_sort_column,
         )
 
 
