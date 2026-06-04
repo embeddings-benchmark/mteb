@@ -15,7 +15,7 @@ def get_test_nodes(node):
     return nodes
 
 
-def main():
+def main():  # noqa: D103, PLR0914
     parser = argparse.ArgumentParser()
     parser.add_argument("--min_avg_frames", type=float, default=None)
     parser.add_argument("--min_duration_seconds", type=float, default=None)
@@ -27,11 +27,11 @@ def main():
     # Assuming this script is at mteb/cli/descriptive_stats_analysis.py
     # Therefore, descriptive_stats is at mteb/descriptive_stats/
     base_dir = Path(__file__).resolve().parent.parent / "descriptive_stats"
-    
+
     if not base_dir.exists():
-        print(f"Directory not found: {base_dir}")
+        print(f"Directory not found: {base_dir}")  # noqa: T201
         return
-        
+
     target_keys = [
         "queries_video_statistics",
         "documents_video_statistics",
@@ -39,32 +39,32 @@ def main():
         "video1_statistics",
         "video2_statistics",
     ]
-    
+
     task_stats = {}
 
-    for file_path in sorted(base_dir.rglob("*.json")):
-        with open(file_path, "r", encoding="utf-8") as f:
+    for file_path in sorted(base_dir.rglob("*.json")):  # noqa: PLR1702
+        with Path(file_path).open("r", encoding="utf-8") as f:
             try:
                 data = json.load(f)
             except json.JSONDecodeError:
                 continue
-        
+
         max_avg_frames = -1.0
         test_nodes = get_test_nodes(data)
-        
+
         for test_node in test_nodes:
             for key in target_keys:
                 if key in test_node and isinstance(test_node[key], dict):
                     stats = test_node[key]
                     avg_fps = stats.get("average_fps")
                     avg_duration = stats.get("average_duration_seconds")
-                    
+
                     if avg_fps is not None and avg_duration is not None:
                         avg_frames = avg_fps * avg_duration
                         if avg_frames > max_avg_frames:
                             max_avg_frames = avg_frames
                             max_avg_duration = avg_duration
-                            
+
         if max_avg_frames >= 0:
             task_stats[file_path.stem] = (max_avg_frames, max_avg_duration)
 
@@ -74,9 +74,14 @@ def main():
 
     for task_name, (avg_frames, avg_duration) in task_stats.items():
         if target_tasks and task_name in target_tasks:
-            pass_frames = args.min_avg_frames is None or avg_frames > args.min_avg_frames
-            pass_duration = args.min_duration_seconds is None or avg_duration > args.min_duration_seconds
-            
+            pass_frames = (
+                args.min_avg_frames is None or avg_frames > args.min_avg_frames
+            )
+            pass_duration = (
+                args.min_duration_seconds is None
+                or avg_duration > args.min_duration_seconds
+            )
+
             if pass_frames and pass_duration:
                 group_above.append((task_name, avg_frames, avg_duration))
             else:
@@ -98,17 +103,23 @@ def main():
         below_labels.append(f"<= {args.min_duration_seconds} avg duration")
     below_str = " or ".join(below_labels) if below_labels else "None"
 
-    print(f"--- Passing minimum frames and duration threshold ({above_str}) ---")
+    print(f"--- Passing minimum frames and duration threshold ({above_str}) ---")  # noqa: T201
     for task_name, avg_frames, avg_duration in group_above:
-        print(f"Task: {task_name:<40} | Average Frames: {avg_frames:<8.2f} | Average Duration: {avg_duration:.2f}s")
+        print(  # noqa: T201
+            f"Task: {task_name:<40} | Average Frames: {avg_frames:<8.2f} | Average Duration: {avg_duration:.2f}s"
+        )
 
-    print(f"\n--- Not passing minimum frames and duration threshold ({below_str}) ---")
+    print(f"\n--- Not passing minimum frames and duration threshold ({below_str}) ---")  # noqa: T201
     for task_name, avg_frames, avg_duration in group_below:
-        print(f"Task: {task_name:<40} | Average Frames: {avg_frames:<8.2f} | Average Duration: {avg_duration:.2f}s")
+        print(  # noqa: T201
+            f"Task: {task_name:<40} | Average Frames: {avg_frames:<8.2f} | Average Duration: {avg_duration:.2f}s"
+        )
 
-    print("\n--- Rest of the tasks ---")
+    print("\n--- Rest of the tasks ---")  # noqa: T201
     for task_name, avg_frames, avg_duration in group_rest:
-        print(f"Task: {task_name:<40} | Average Frames: {avg_frames:<8.2f} | Average Duration: {avg_duration:.2f}s")
+        print(  # noqa: T201
+            f"Task: {task_name:<40} | Average Frames: {avg_frames:<8.2f} | Average Duration: {avg_duration:.2f}s"
+        )
 
 
 if __name__ == "__main__":
