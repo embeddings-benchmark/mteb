@@ -18,7 +18,7 @@ from mteb.models.search_wrappers import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Sequence
+    from collections.abc import Callable, Mapping, Sequence
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import MTEBModels
@@ -39,11 +39,11 @@ class HybridSearch:
     def __init__(
         self,
         models: Sequence[MTEBModels],
-        weights: list[float] | None = None,
+        weights: Sequence[float] | None = None,
         sub_model_top_k: int | None = None,
         fusion_strategy: Literal["rrf", "dbsf", "relative-score-fusion"]
         | Callable[
-            [Sequence[dict[str, float]], Sequence[float]], dict[str, float]
+            [Sequence[Mapping[str, float]], Sequence[float]], Mapping[str, float]
         ] = "rrf",
         rrf_k: int = 60,
     ) -> None:
@@ -51,7 +51,7 @@ class HybridSearch:
 
         Args:
             models: Sequence of sub-models to combine. Must contain at least two models.
-            weights: Optional list of weights for each sub-model. If None, equal weights are assigned.
+            weights: Optional Sequence of weights for each sub-model. If None, equal weights are assigned.
             sub_model_top_k: Optional top-k documents to retrieve from individual retriever sub-models.
             fusion_strategy: Fusion strategy to combine sub-model scores.
                 Options: "rrf" (Reciprocal Rank Fusion), "dbsf" (Distribution-Based Score Fusion),
@@ -61,12 +61,11 @@ class HybridSearch:
         if len(models) < 2:
             raise ValueError("At least two models must be provided for hybrid search.")
 
-        if weights is None:
-            self.weights = [1.0 / len(models)] * len(models)
-        else:
-            if len(weights) != len(models):
-                raise ValueError("Length of weights must match the number of models.")
-            self.weights = list(weights)
+        self.weights: Sequence[float] = (
+            [1.0 / len(models)] * len(models) if weights is None else weights
+        )
+        if len(self.weights) != len(models):
+            raise ValueError("Length of weights must match the number of models.")
 
         if sub_model_top_k is not None and sub_model_top_k <= 0:
             raise ValueError("sub_model_top_k must be greater than 0")
@@ -116,7 +115,7 @@ class HybridSearch:
 
         self.fusion_name: str
         self._fuse_fn: Callable[
-            [Sequence[dict[str, float]], Sequence[float]], dict[str, float]
+            [Sequence[Mapping[str, float]], Sequence[float]], Mapping[str, float]
         ]
 
         if isinstance(fusion_strategy, str):
@@ -293,14 +292,16 @@ class HybridSearch:
 
         return fused_results
 
-    def fuse(self, query_scores_list: Sequence[dict[str, float]]) -> dict[str, float]:
+    def fuse(
+        self, query_scores_list: Sequence[Mapping[str, float]]
+    ) -> Mapping[str, float]:
         """Fuse the query scores from multiple sub-models."""
         return self._fuse_fn(query_scores_list, self.weights)
 
 
 def fuse_dbsf(
-    query_scores_list: Sequence[dict[str, float]], weights: Sequence[float]
-) -> dict[str, float]:
+    query_scores_list: Sequence[Mapping[str, float]], weights: Sequence[float]
+) -> Mapping[str, float]:
     """Fuse the query scores using Distribution-Based Score Fusion. (https://arxiv.org/html/2410.20878v1)"""
     fused: dict[str, float] = {}
     for scores, weight in zip(query_scores_list, weights, strict=True):
@@ -329,10 +330,10 @@ def fuse_dbsf(
 
 
 def fuse_rrf(
-    query_scores_list: Sequence[dict[str, float]],
+    query_scores_list: Sequence[Mapping[str, float]],
     weights: Sequence[float],
     rrf_k: int = 60,
-) -> dict[str, float]:
+) -> Mapping[str, float]:
     """Fuse the query scores using Reciprocal Rank Fusion."""
     fused: dict[str, float] = {}
     for scores, weight in zip(query_scores_list, weights, strict=True):
@@ -344,8 +345,8 @@ def fuse_rrf(
 
 
 def fuse_relative_score_fusion(
-    query_scores_list: Sequence[dict[str, float]], weights: Sequence[float]
-) -> dict[str, float]:
+    query_scores_list: Sequence[Mapping[str, float]], weights: Sequence[float]
+) -> Mapping[str, float]:
     """Fuse the query scores using Relative Score MinMax normalisation."""
     fused: dict[str, float] = {}
     for scores, weight in zip(query_scores_list, weights, strict=True):

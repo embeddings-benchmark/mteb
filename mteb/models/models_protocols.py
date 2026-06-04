@@ -258,5 +258,5 @@ class HybridSearchProtocol(SearchProtocol, Protocol):
     """Interface for hybrid search models that combine multiple sub-models."""
 
     wrapped_models: Sequence[SearchProtocol]
-    weights: list[float]
+    weights: Sequence[float]
     sub_model_top_k: int | None
