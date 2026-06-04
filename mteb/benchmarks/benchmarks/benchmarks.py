@@ -306,7 +306,6 @@ MTEB_MAIN_RU_v1_1 = Benchmark(
     contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
 )
 
-
 RU_SCI_BENCH = Benchmark(
     name="RuSciBench",
     tasks=get_tasks(
@@ -722,7 +721,8 @@ MTEB_KOR = Benchmark(
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
     tasks=get_tasks(
         languages=["kor"],
-        tasks=[  # @KennethEnevoldsen: We could probably expand this to a more solid benchmark, but for now I have left it as is.
+        tasks=[
+            # @KennethEnevoldsen: We could probably expand this to a more solid benchmark, but for now I have left it as is.
             # Classification
             "KLUE-TC",
             # Reranking
@@ -1006,7 +1006,6 @@ MTEB_multilingual_v1 = Benchmark(
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
-
 MTEB_multilingual_v2 = Benchmark(
     name="MTEB(Multilingual, v2)",
     aliases=["MTEB(Multilingual)", "MMTEB"],
@@ -1078,7 +1077,6 @@ MTEB_JPN = Benchmark(
     reference="https://github.com/sbintuitions/JMTEB",
     citation=None,
 )
-
 
 indic_languages = [
     "asm",
@@ -1327,7 +1325,6 @@ MTEB_AFRICA_LITE = Benchmark(
     citation=MMTEB_CITATION,
     contacts=["Kosei1227"],
 )
-
 
 eu_languages = [
     # official EU languages (56) - we could include the whole economic area e.g. Norway - additionally we could include minority languages (probably a good idea?)
@@ -1629,7 +1626,6 @@ BRIGHT_V1_1 = Benchmark(
 """,
     benchmark_hf_repo="mteb/BRIGHT",
 )
-
 
 CODE_RAG = Benchmark(
     name="CodeRAG",
@@ -2566,7 +2562,6 @@ BEIR_PL = Benchmark(
 """,
 )
 
-
 BUILT_MTEB = Benchmark(
     name="BuiltBench(eng)",
     tasks=get_tasks(
@@ -2833,7 +2828,6 @@ R2MED = Benchmark(
 """,
 )
 
-
 VN_MTEB = Benchmark(
     name="VN-MTEB (vie, v1)",
     display_name="Vietnamese",
@@ -3014,7 +3008,6 @@ JINA_VDR = Benchmark(
   year = {2025},
 }""",
 )
-
 
 HUME = HUMEBenchmark(
     name="HUME(v1)",
@@ -3222,6 +3215,16 @@ VISRAG_RETRIEVAL = Benchmark(
 """,
 )
 
+_MAEB_CITATION = """@misc{assadi2026maebmassiveaudioembedding,
+  archiveprefix = {arXiv},
+  author = {Adnan El Assadi and Isaac Chung and Chenghao Xiao and Roman Solomatin and Animesh Jha and Rahul Chand and Silky Singh and Kaitlyn Wang and Ali Sartaz Khan and Marc Moussa Nasser and Sufen Fong and Pengfei He and Alan Xiao and Ayush Sunil Munot and Aditya Shrivastava and Artem Gazizov and Niklas Muennighoff and Kenneth Enevoldsen},
+  eprint = {2602.16008},
+  primaryclass = {cs.SD},
+  title = {MAEB: Massive Audio Embedding Benchmark},
+  url = {https://arxiv.org/abs/2602.16008},
+  year = {2026},
+}"""
+
 MAEB_PLUS = Benchmark(
     name="MAEB+(beta)",
     aliases=["MAEB+"],
@@ -3344,7 +3347,7 @@ MAEB_PLUS = Benchmark(
     ),
     description="""MAEB+ is the full Massive Audio Embedding Benchmark (v1), containing 98 tasks with audio modality across 6 task types: classification, clustering, pair classification, reranking, zero-shot classification, and retrieval. The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
-    citation="",
+    citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
@@ -3383,7 +3386,7 @@ MAEB_AUDIO = Benchmark(
     ),
     description="""MAEB(audio-only) is the audio-only subset of MAEB with 19 tasks spanning 5 task types: classification (11), clustering (3), pair classification (3), reranking (1), and retrieval (1). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
-    citation="",
+    citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
@@ -3506,7 +3509,7 @@ MAEB_EXTENDED = Benchmark(
     ),
     description="""MAEB(extended) is an intermediate benchmark used during task selection, containing 89 tasks that combine audio-only and audio-text evaluation before filtering to MAEB. Audio-only (53 tasks): classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), audio-to-audio retrieval (1). Audio-text (36 tasks): audio-text retrieval (31), zero-shot classification (5). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
-    citation="",
+    citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 MAEB = Benchmark(
@@ -3561,339 +3564,7 @@ MAEB = Benchmark(
     ),
     description="""MAEB is a comprehensive audio benchmark with 30 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (11), clustering (3), multilabel classification (1), pair classification (3), reranking (1), and zero-shot classification (2). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
-    citation="",
-    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
-)
-
-MVEB_EXTENDED = Benchmark(
-    name="MVEB(beta, extended)",
-    aliases=["MVEB(extended)"],
-    display_name="Extended",
-    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
-    tasks=get_tasks(
-        tasks=[
-            # === Video-only tasks ===
-            # VideoClassification
-            "AVEDatasetVideoClassification",
-            "AVMemeVideoClassification",
-            "BreakfastClassification",
-            "Diving48Classification.V2",
-            "HMDB51Classification",
-            "HumanAnimalCartoonV",
-            "Kinetics400V",
-            "Kinetics600V",
-            "Kinetics700V",
-            "MELDVideoClassification",
-            "MusicAVQACLSVideoClassification",
-            "RAVDESSVClassification",
-            "SomethingSomethingV2Classification",
-            "UCF101VideoClassification",
-            "VGGSoundV",
-            "WorldSenseVideoClassification",
-            # VideoClassification (audio-video)
-            "AVEDatasetClassification",
-            "AVMemeAudioVideoClassification",
-            "HumanAnimalCartoonVA",
-            "Kinetics400VA",
-            "Kinetics600VA",
-            "Kinetics700VA",
-            "MELDAudioVideoClassification",
-            "MusicAVQACLSAudioVideoClassification",
-            "RAVDESSAVClassification",
-            "UCF101VideoAudioClassification",
-            "VGGSoundVA",
-            "WorldSenseAudioVideoClassification",
-            # VideoClustering
-            "AVEDatasetVideoClustering",
-            "HMDB51Clustering",
-            "MELDEmotionVideoClustering",
-            "MELDSpeakerVideoClustering",
-            "MusicAVQACLSVideoClustering",
-            "RAVDESSVideoClustering",
-            "UCF101VideoClustering",
-            "WorldSense1MinDomainVideoClustering",
-            # VideoClustering (audio-video)
-            "AVEDatasetAudioVideoClustering",
-            "MELDEmotionAudioVideoClustering",
-            "MELDSpeakerAudioVideoClustering",
-            "MusicAVQACLSAudioVideoClustering",
-            "UCF101AudioVideoClustering",
-            "WorldSense1MinDomainAudioVideoClustering",
-            "RAVDESSAVClustering",
-            # VideoZeroshotClassification
-            "AVEDatasetVideoZeroShot",
-            "AVMemeVideoZeroShot",
-            "BreakfastZeroShot",
-            "HMDB51ZeroShot",
-            "HumanAnimalCartoonZeroShot",
-            "Kinetics400ZeroShot",
-            "Kinetics600VZeroShot",
-            "Kinetics700VZeroShot",
-            "MELDVideoZeroShot",
-            "MusicAVQACLSVideoZeroShot",
-            "RAVDESSVZeroShot",
-            "UCF101VideoZeroShotClassification",
-            "VGGSoundVideoZeroshot",
-            "WorldSenseVideoZeroShot",
-            # VideoZeroshotClassification (audio-video)
-            "AVEDatasetZeroShot",
-            "AVMemeAudioVideoZeroShot",
-            "HumanAnimalCartoonVAZeroShot",
-            "Kinetics400VAZeroShot",
-            "Kinetics600VAZeroShot",
-            "Kinetics700VAZeroShot",
-            "MELDAudioVideoZeroShot",
-            "MusicAVQACLSAudioVideoZeroShot",
-            "RAVDESSAVZeroShot",
-            "UCF101VideoAudioZeroShotClassification",
-            "VGGSoundVideoAudioZeroshot",
-            "WorldSenseAudioVideoZeroShot",
-            # VideoPairClassification
-            "AVEDatasetVPairClassification",
-            "AVSpeakerBenchPairClassification",
-            "HumanAnimalCartoonVPairClassification",
-            "MELDVPairClassification",
-            "MusicAVQAVPairClassification",
-            "RAVDESSAVVPairClassification",
-            "VideoConPairClassification",
-            "VinogroundPairClassification",
-            # VideoPairClassification (audio-video)
-            "AVEDatasetVAPairClassification",
-            "HumanAnimalCartoonVAPairClassification",
-            "MELDVAPairClassification",
-            "MusicAVQAVAPairClassification",
-            "RAVDESSAVVAPairClassification",
-            # VideoCentricQA
-            "AVMemeExamVideoCentricQA",
-            "AVQAVideoCentricQA",
-            "AVSpeakerBenchVideoCentricQA",
-            "DailyOmniVideoCentricQA",
-            "EgoSchemaVideoCentricQA",
-            "NExTQAVideoCentricQA",
-            "OmniVideoBenchVideoCentricQA",
-            "PerceptionTestVideoCentricQA",
-            "VideoMMEShortVideoCentricQA",
-            "WorldQAVideoCentricQA",
-            "WorldSense1MinVideoCentricQA",
-            # VideoCentricQA (audio-video)
-            "AVMemeExamVideoAudioCentricQA",
-            "AVQAVideoAudioCentricQA",
-            "AVSpeakerBenchVideoAudioCentricQA",
-            "DailyOmniVideoAudioCentricQA",
-            "OmniVideoBenchVideoAudioCentricQA",
-            "PerceptionTestVideoAudioCentricQA",
-            "VideoMMEShortVideoAudioCentricQA",
-            "WorldQAVideoAudioCentricQA",
-            "WorldSense1MinVideoAudioCentricQA",
-            # Any2AnyRetrieval (T2V)
-            "ActivityNetCaptionsT2VRetrieval",
-            "AudioCapsAVT2VRetrieval",
-            "AVMemeExamT2VRetrieval",
-            "DiDeMoT2VRetrieval",
-            "MSRVTTT2V",
-            "MSVDT2VRetrieval",
-            "Panda70MT2VRetrieval",
-            "Shot2Story20KT2VRetrieval",
-            "TUNABenchT2VRetrieval",
-            "VALOR32KT2VRetrieval",
-            "VATEXT2VRetrieval",
-            "VGGSoundAVT2VRetrieval",
-            "YouCook2T2VRetrieval",
-            # Any2AnyRetrieval (V2T)
-            "ActivityNetCaptionsV2TRetrieval",
-            "AudioCapsAVV2TRetrieval",
-            "AVMemeExamV2TRetrieval",
-            "DiDeMoV2TRetrieval",
-            "MSRVTTV2T",
-            "MSVDV2TRetrieval",
-            "Panda70MV2TRetrieval",
-            "Shot2Story20KV2TRetrieval",
-            "TUNABenchV2TRetrieval",
-            "VALOR32KV2TRetrieval",
-            "VATEXV2TRetrieval",
-            "VGGSoundAVV2TRetrieval",
-            "YouCook2V2TRetrieval",
-            # Any2AnyRetrieval (T2VA)
-            "AudioCapsAVT2VARetrieval",
-            "AVMemeExamT2VARetrieval",
-            "DiDeMoT2VARetrieval",
-            "MSRVTTT2VA",
-            "Panda70MT2VARetrieval",
-            "Shot2Story20KT2VARetrieval",
-            "VALOR32KT2VARetrieval",
-            "VATEXT2VARetrieval",
-            "VGGSoundAVT2VARetrieval",
-            "YouCook2T2VARetrieval",
-            # Any2AnyRetrieval (VA2T)
-            "AudioCapsAVVA2TRetrieval",
-            "DiDeMoVA2TRetrieval",
-            "MSRVTTVA2T",
-            "Panda70MVA2TRetrieval",
-            "Shot2Story20KVA2TRetrieval",
-            "VALOR32KVA2TRetrieval",
-            "VATEXVA2TRetrieval",
-            "VGGSoundAVVA2TRetrieval",
-            "YouCook2VA2TRetrieval",
-            # Any2AnyRetrieval (AT2V)
-            "AudioCapsAVAT2VRetrieval",
-            "AVMemeExamAT2VRetrieval",
-            "DiDeMoAT2VRetrieval",
-            "Shot2Story20KAT2VRetrieval",
-            "VALOR32KAT2VRetrieval",
-            "VATEXAT2VRetrieval",
-            "VGGSoundAVAT2VRetrieval",
-            "YouCook2AT2VRetrieval",
-            # Any2AnyRetrieval (V2A)
-            "AudioCapsAVV2ARetrieval",
-            "AVMemeExamV2ARetrieval",
-            "DiDeMoV2ARetrieval",
-            "MSRVTTV2A",
-            "Shot2Story20KV2ARetrieval",
-            "VALOR32KV2ARetrieval",
-            "VATEXV2ARetrieval",
-            "VGGSoundAVV2ARetrieval",
-            "YouCook2V2ARetrieval",
-            # Any2AnyRetrieval (A2V)
-            "AudioCapsAVA2VRetrieval",
-            "AVMemeExamA2VRetrieval",
-            "DiDeMoA2VRetrieval",
-            "Shot2Story20KA2VRetrieval",
-            "VALOR32KA2VRetrieval",
-            "VATEXA2VRetrieval",
-            "VGGSoundAVA2VRetrieval",
-            "YouCook2A2VRetrieval",
-            # Any2AnyRetrieval (VT2A)
-            "AudioCapsAVVT2ARetrieval",
-            "AVMemeExamVT2ARetrieval",
-            "DiDeMoVT2ARetrieval",
-            "MSRVTTVT2A",
-            "Shot2Story20KVT2ARetrieval",
-            "VALOR32KVT2ARetrieval",
-            "VATEXVT2ARetrieval",
-            "VGGSoundAVVT2ARetrieval",
-            "YouCook2VT2ARetrieval",
-            # Any2AnyRetrieval (MSRVTT additional)
-            "MSRVTTA2V",
-            "MSRVTTAT2V",
-            # Any2AnyRetrieval (VA2T, additional)
-            "AVMemeExamVA2TRetrieval",
-        ]
-    ),
-    description="""MVEB(extended) is the full pool of video embedding tasks used for selecting the MVEB benchmark. It contains 184 tasks spanning video-only and audio-video modalities across 7 task types: classification, clustering, zero-shot classification, pair classification, video-centric QA, and retrieval (multiple directions).""",
-    reference=None,
-    citation="",
-    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
-)
-
-MVEB = Benchmark(
-    name="MVEB",
-    aliases=["MVEB"],
-    display_name="MVEB",
-    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
-    tasks=get_tasks(
-        tasks=[
-            # Any2AnyRetrieval (10)
-            "AVMemeExamAT2VRetrieval",
-            "ActivityNetCaptionsT2VRetrieval",
-            "AudioCapsAVVA2TRetrieval",
-            "AudioCapsAVVT2ARetrieval",
-            "MSVDT2VRetrieval",
-            "VALOR32KT2VARetrieval",
-            "VATEXV2ARetrieval",
-            "VATEXVA2TRetrieval",
-            "VGGSoundAVA2VRetrieval",
-            "YouCook2T2VARetrieval",
-            # VideoCentricQA (1)
-            "EgoSchemaVideoCentricQA",
-            # VideoClassification (6)
-            "AVEDatasetClassification",
-            "AVMemeAudioVideoClassification",
-            "BreakfastClassification",
-            "Kinetics700VA",
-            "RAVDESSAVClassification",
-            "UCF101VideoAudioClassification",
-            # VideoClustering (2)
-            "MELDEmotionAudioVideoClustering",
-            "MusicAVQACLSAudioVideoClustering",
-            # VideoPairClassification (2)
-            "HumanAnimalCartoonVAPairClassification",
-            "MusicAVQAVAPairClassification",
-            # VideoZeroshotClassification (2)
-            "HMDB51ZeroShot",
-            "WorldSenseAudioVideoZeroShot",
-        ]
-    ),
-    description="""MVEB (Massive Video Embedding Benchmark) is a curated audio-visual video benchmark with 23 tasks across 6 task types: retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA. Tasks are selected to maximise coverage of audio-video joint modality inputs.""",
-    reference=None,
-    citation="",
-    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
-)
-
-
-MVEB_TEXT_VIDEO = Benchmark(
-    name="MVEB(text, video)",
-    aliases=["MVEB(text, video)"],
-    display_name="Text+Video",
-    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
-    tasks=get_tasks(
-        tasks=[
-            # Any2AnyRetrieval (8)
-            "AVMemeExamT2VRetrieval",
-            "ActivityNetCaptionsT2VRetrieval",
-            "AudioCapsAVT2VRetrieval",
-            "DiDeMoV2TRetrieval",
-            "MSVDV2TRetrieval",
-            "Panda70MT2VRetrieval",
-            "VALOR32KT2VRetrieval",
-            "VATEXT2VRetrieval",
-            # VideoCentricQA (1)
-            "OmniVideoBenchVideoCentricQA",
-            # VideoClassification (4)
-            "AVMemeVideoClassification",
-            "BreakfastClassification",
-            "Kinetics700V",
-            "VGGSoundV",
-            # VideoClustering (1)
-            "RAVDESSVideoClustering",
-            # VideoPairClassification (1)
-            "HumanAnimalCartoonVPairClassification",
-            # VideoZeroshotClassification (4)
-            "Kinetics400ZeroShot",
-            "MELDVideoZeroShot",
-            "UCF101VideoZeroShotClassification",
-            "WorldSenseVideoZeroShot",
-        ]
-    ),
-    description="""MVEB(text, video) is the text+video scope of MVEB with 19 tasks for models without an audio encoder, covering retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA.""",
-    reference=None,
-    citation="",
-    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
-)
-
-
-MVEB_VIDEO = Benchmark(
-    name="MVEB(video)",
-    aliases=["MVEB(video)"],
-    display_name="Video",
-    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
-    tasks=get_tasks(
-        tasks=[
-            # VideoClassification (6)
-            "AVMemeVideoClassification",
-            "BreakfastClassification",
-            "HMDB51Classification",
-            "Kinetics600V",
-            "MELDVideoClassification",
-            "WorldSenseVideoClassification",
-            # VideoPairClassification (3)
-            "HumanAnimalCartoonVPairClassification",
-            "MusicAVQAVPairClassification",
-            "RAVDESSAVVPairClassification",
-        ]
-    ),
-    description="""MVEB(video) is the video-only scope of MVEB with 9 tasks for V-only encoders, covering classification and pair classification. Retrieval, QA, and zero-shot tasks are excluded since they require a text encoder.""",
-    reference=None,
-    citation="",
+    citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
