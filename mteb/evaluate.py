@@ -306,15 +306,22 @@ def _check_cache(
 
     if missing_eval and dont_overwrite:
         if existing_results is None:
-            if overwrite_strategy == OverwriteStrategy.ONLY_CACHE:
+            if (
+                not isinstance(task, AbsTaskAggregate)
+                and overwrite_strategy == OverwriteStrategy.ONLY_CACHE
+            ):
                 raise ValueError(
                     f"overwrite_strategy is set to '{overwrite_strategy.value}' but no results found in cache for task {task.metadata.name}."
                 )
-        else:
+        elif (
+            not isinstance(task, AbsTaskAggregate)
+            or overwrite_strategy == OverwriteStrategy.NEVER
+        ):
             raise ValueError(
                 f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists for task {task.metadata.name}. "
                 + f"However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
             )
+        existing_results = None
 
     return existing_results, missing_eval
 
@@ -398,15 +405,9 @@ def evaluate(  # noqa: PLR0913, PLR0914
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
-        try:
-            existing_results, missing_eval = _check_cache(
-                tasks, meta, cache, overwrite_strategy
-            )
-        except Exception:
-            if overwrite_strategy == OverwriteStrategy.NEVER:
-                raise
-            existing_results = None
-            missing_eval = dict.fromkeys(tasks.eval_splits, tasks.hf_subsets)
+        existing_results, missing_eval = _check_cache(
+            tasks, meta, cache, overwrite_strategy
+        )
 
         if (
             existing_results
