@@ -117,7 +117,7 @@ def cors_origins() -> Sequence[str]:
 
 
 def preload_full() -> bool:
-    """``True`` when ``MTEB_API_PRELOAD=1`` is set."""
+    """Return ``True`` when ``MTEB_API_PRELOAD=1`` is set."""
     return get_settings().preload
 
 

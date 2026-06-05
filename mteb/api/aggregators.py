@@ -21,10 +21,13 @@ import polars as pl
 from mteb.api.adapters import (
     benchmark_to_schema,
     model_meta_to_schema,
+    scoped_task_meta_schema,
     task_to_meta_schema,
 )
 from mteb.api.schemas import (
     BenchmarkLeadersSchema,
+    BenchmarkPerLanguageRowSchema,
+    BenchmarkPerLanguageSchema,
     BenchmarkSummarySchema,
     BucketLeaderSchema,
     LeaderModelSchema,
@@ -69,7 +72,12 @@ async def build_benchmark_summary(  # noqa: PLR0914
 
     bench = mteb.get_benchmark(name)
     bench_schema = benchmark_to_schema(bench)
-    tasks_meta: list[TaskMetaSchema] = [task_to_meta_schema(t) for t in bench.tasks]
+    # Use the scoped variant: when a benchmark registers a task with a
+    # language restriction (e.g. MIRACL pinned to ``['eng']``), the per-task
+    # `languages` field reflects that restriction instead of leaking the
+    # task class's full unscoped language union into the benchmark's
+    # tasksMeta. The frontend's filter sidebar populates from this list.
+    tasks_meta: list[TaskMetaSchema] = [scoped_task_meta_schema(t) for t in bench.tasks]
 
     frames, _ = _load_per_benchmark_frames()
     long_df = frames.get(bench.name)
@@ -125,9 +133,10 @@ async def build_benchmark_summary(  # noqa: PLR0914
             return cell[1 : cell.index("](")]
         return cell
 
-    # Build a per-model dict of task scores from the per_task frame. Iterating
-    # the polars frame via ``iter_rows(named=True)`` skips the
-    # ``to_pandas()`` + ``iterrows()`` overhead (the previous hot loop).
+    # Flat per-task means in the summary (cheap, drives existing UI
+    # consumers without waiting). The (task, subset, language) grid
+    # lives in `/v1/benchmarks/{name}/per-task` and is loaded lazily
+    # by the frontend only when needed (language filter).
     per_task_rows: dict[str, dict[str, float]] = {}
     if "No results" not in per_task_pl.columns and "Model" in per_task_pl.columns:
         task_cols_pt = [c for c in per_task_pl.columns if c != "Model"]
@@ -275,6 +284,59 @@ async def build_benchmark_summary(  # noqa: PLR0914
         tasks_meta=tasks_meta,
         rows=rows,
         aggregations=bench_schema.aggregations,
+    )
+
+
+async def build_benchmark_per_language(name: str) -> BenchmarkPerLanguageSchema:
+    """Per-(model, language) mean main_score for one benchmark.
+
+    Builds from the long results frame: explode the per-row ``language``
+    list so each (task, subset) contributes one entry per language it
+    covers, then group by (model_name, language) and mean. Codes are
+    mapped to human labels via ``language_label`` so the keys line up
+    with the column labels PerLanguageTab renders.
+    """
+    import mteb
+    from mteb.api.cache import _load_per_benchmark_frames
+    from mteb.languages import language_label
+
+    bench = mteb.get_benchmark(name)
+    frames, _ = _load_per_benchmark_frames()
+    long_df = frames.get(bench.name)
+    if (
+        long_df is None
+        or long_df.is_empty()
+        or "model_name" not in long_df.columns
+        or "language" not in long_df.columns
+    ):
+        return BenchmarkPerLanguageSchema(benchmark_name=bench.name, rows=[])
+
+    # Explode the list-typed `language` column → one (model, task, subset, lang)
+    # per row; then mean across all those score samples per (model, language).
+    grouped = (
+        long_df.lazy()
+        .explode("language")
+        .group_by(["model_name", "language"])
+        .agg(pl.col("score").mean().alias("score"))
+        .collect(engine="streaming")
+    )
+
+    rows: dict[str, dict[str, float]] = {}
+    for row in grouped.iter_rows(named=True):
+        mn = row["model_name"]
+        code = row.get("language")
+        score = row.get("score")
+        if not mn or code is None or score is None:
+            continue
+        label = language_label(str(code)) if code != "Unknown" else "Unknown"
+        rows.setdefault(mn, {})[label] = float(score)
+
+    return BenchmarkPerLanguageSchema(
+        benchmark_name=bench.name,
+        rows=[
+            BenchmarkPerLanguageRowSchema(model_name=mn, scores_by_language=s)
+            for mn, s in rows.items()
+        ],
     )
 
 
@@ -572,22 +634,10 @@ async def build_benchmark_leaders(
         row, score = _pick_leader(summary.rows, lo_b, hi_b)
         leader: LeaderRowSchema | None = None
         if row is not None:
-            # `ModelMetaSchema.name` is the canonical `org/name`
-            # HuggingFace identifier — split it here so the leaders
-            # response is self-contained (the frontend's `/scores`
-            # enrichment doesn't run on this endpoint's payload).
-            full = row.model.name
-            slash = full.find("/")
-            if slash > 0:
-                org, display = full[:slash], full[slash + 1 :]
-            else:
-                org, display = "", full
             leader = LeaderRowSchema(
                 rank=row.rank,
                 model=LeaderModelSchema(
-                    name=full,
-                    display_name=display,
-                    org=org,
+                    name=row.model.name,
                     model_type=row.model.model_type,
                 ),
                 # `mean_task` here is the score that was used for the

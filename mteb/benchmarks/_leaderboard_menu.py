@@ -155,3 +155,98 @@ R_BENCHMARK_ENTRIES = [
         ],
     )
 ]
+
+
+# Flat 4-section layout for the leaderboardv2 home page. Same benchmarks
+# as `GP_BENCHMARK_ENTRIES` + `R_BENCHMARK_ENTRIES`, regrouped under
+# Language / Modality / Retrieval / Domain so the frontend can render
+# each as a collapsible card grid (2 rows visible + "Show more"). The
+# Gradio leaderboard keeps using GP + R unchanged.
+HOME_BENCHMARK_ENTRIES = [
+    MenuEntry(
+        name="Language",
+        description="Multilingual + per-language leaderboards.",
+        open=True,
+        benchmarks=mteb.get_benchmarks(
+            [
+                "MTEB(Multilingual, v2)",
+                "MTEB(eng, v2)",
+                "HUME(v1)",
+                "MTEB(Europe, v1)",
+                "MTEB(Indic, v1)",
+                "MTEB(Scandinavian, v1)",
+                "MTEB(cmn, v1)",
+                "MTEB(deu, v1)",
+                "MTEB(fra, v1)",
+                "JMTEB(v2)",
+                "MTEB(kor, v1)",
+                "MTEB(nld, v1)",
+                "MTEB(pol, v1)",
+                "MTEB(rus, v1.1)",
+                "MTEB(tha, v1)",
+                "MTEB(fas, v2)",
+                "VN-MTEB (vie, v1)",
+                "MTEB(spa, v1)",
+            ]
+        ),
+    ),
+    MenuEntry(
+        name="Modality",
+        description="Image, audio and video leaderboards.",
+        open=True,
+        benchmarks=mteb.get_benchmarks(
+            [
+                "MIEB(Multilingual)",
+                "MAEB(beta)",
+                "MVEB(beta)",
+                "MIEB(eng)",
+                "MIEB(lite)",
+                "MIEB(Img)",
+                "MAEB(beta, audio-only)",
+                "MVEB(video, beta)",
+                "MVEB(text, video, beta)",
+            ]
+        ),
+    ),
+    MenuEntry(
+        name="Retrieval",
+        description="Retrieval-focused leaderboards across languages and modalities.",
+        open=True,
+        benchmarks=mteb.get_benchmarks(
+            [
+                "RTEB(beta)",
+                "RTEB(eng, beta)",
+                "ViDoRe(v3)",
+                "JinaVDR",
+                "ViDoRe(v1&v2)",
+                "RTEB(fra, beta)",
+                "RTEB(deu, beta)",
+                "RTEB(jpn, beta)",
+                "BEIR",
+                "BEIR-NL",
+            ]
+        ),
+    ),
+    MenuEntry(
+        name="Domain",
+        description="Domain-specialised leaderboards (code, law, medicine, chemistry).",
+        open=True,
+        benchmarks=mteb.get_benchmarks(
+            [
+                "MTEB(Code, v1)",
+                "MTEB(Law, v1)",
+                "MTEB(Medical, v1)",
+                "ChemTEB",
+                "CoREB(v1)",
+                "RTEB(fin, beta)",
+                "RTEB(Law, beta)",
+                "RTEB(Code, beta)",
+                "CoIR",
+                "RTEB(Health, beta)",
+                "FollowIR",
+                "LongEmbed",
+                "BRIGHT",
+            ]
+        ),
+    ),
+]

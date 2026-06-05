@@ -138,7 +138,7 @@ class BenchmarkSchema(_CamelModel):
 
         icon_value: str | None
         if benchmark.icon and _is_url(benchmark.icon):
-            icon_value = f"/icon/{quote(benchmark.name, safe='')}"
+            icon_value = f"/v1/icon/{quote(benchmark.name, safe='')}"
         else:
             icon_value = benchmark.icon or None
         return cls(
@@ -200,6 +200,11 @@ class TaskMetaSchema(_CamelModel):
     annotations_creators: str | None = None
     dialect: list[str] | None = None
     sample_creation: str | None = None
+    # Primary metric the task is scored on (e.g. ``ndcg_at_10``,
+    # ``cosine_spearman``). Mirrors ``TaskMetadata.main_score`` — surfaced
+    # on the /tasks overview cards + the task detail page + the PerTaskTab
+    # column tooltip so users can tell what the cell value represents.
+    main_score: str | None = None
     # Count of distinct models that have at least one score on this task,
     # derived at request time by ``routes._task_num_models_map`` from the
     # unified results frame. Surfaced on the /tasks overview cards as
@@ -275,6 +280,7 @@ class TaskMetaSchema(_CamelModel):
             sample_creation=(
                 str(metadata.sample_creation) if metadata.sample_creation else None
             ),
+            main_score=str(metadata.main_score) if metadata.main_score else None,
         )
 
 
@@ -433,20 +439,45 @@ class BenchmarkSummarySchema(_CamelModel):
     aggregations: list[str] = []
 
 
+class BenchmarkPerLanguageRowSchema(_CamelModel):
+    """One model's per-language scores for a benchmark.
+
+    ``scores_by_language`` keys are human-readable labels (``"English"``,
+    ``"Chinese (Traditional)"``) — same form the frontend filter sidebar
+    shows. Values are the mean main_score over every (task, subset)
+    tagged with that language.
+    """
+
+    model_name: str
+    scores_by_language: dict[str, float]
+
+
+class BenchmarkPerLanguageSchema(_CamelModel):
+    """Response from ``/v1/benchmarks/{name}/per-language``.
+
+    Replaces the synthetic placeholder PerLanguageTab used to render.
+    Lazily fetched by the tab on mount so the per-language aggregate
+    (long-frame explode + group_by) only runs when a user opens it.
+    """
+
+    benchmark_name: str
+    rows: list[BenchmarkPerLanguageRowSchema]
+
+
 class LeaderModelSchema(_CamelModel):
     """Slim model identity for the leaders endpoint.
 
     Returned per-bucket from ``/benchmarks/{name}/leaders`` — just the
-    fields the home page needs to render a one-line ``org/name``
-    leaderboard entry with the right model-type tint and an
-    internal link to ``/models/[name]``. Strip everything else
-    (release date, max tokens, embedding dim, …) so the payload is
-    tiny vs. ``/scores``'s full ``ModelMetaSchema``.
+    fields the home page needs to render a one-line leaderboard entry
+    with the right model-type tint and an internal link to
+    ``/models/[name]``. Strip everything else (release date, max tokens,
+    embedding dim, …) so the payload is tiny vs. ``/scores``'s full
+    ``ModelMetaSchema``. ``name`` is the canonical ``org/name``
+    HuggingFace identifier; the frontend splits on ``/`` when it needs
+    a display-only name.
     """
 
     name: str
-    display_name: str
-    org: str
     model_type: _ModelType
 
 

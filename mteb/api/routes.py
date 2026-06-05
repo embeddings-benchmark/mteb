@@ -28,6 +28,7 @@ from mteb.api.adapters import (
 )
 from mteb.api.cache import (
     get_model_scores,
+    get_per_language,
     get_summary,
     get_task_scores,
 )
@@ -40,6 +41,7 @@ from mteb.api.metrics import (
 )
 from mteb.api.schemas import (  # noqa: TC001 — FastAPI inspects return annotations at registration
     BenchmarkLeadersSchema,
+    BenchmarkPerLanguageSchema,
     BenchmarkSchema,
     BenchmarkSummarySchema,
     MenuEntrySchema,
@@ -50,6 +52,11 @@ from mteb.api.schemas import (  # noqa: TC001 — FastAPI inspects return annota
 )
 
 logger = logging.getLogger(__name__)
+# Infra surface — health / metrics / asset proxies. Stays at root
+# so external probes and the favicon don't need to know about the
+# API version.
+infra_router = APIRouter()
+# Versioned API surface. Mounted under `/v1` from `create_app`.
 router = APIRouter()
 
 
@@ -139,12 +146,16 @@ def _patch_menu_counts(entries: list[MenuEntrySchema]) -> list[MenuEntrySchema]:
 
 @functools.lru_cache(maxsize=1)
 def _menu_schemas() -> list[MenuEntrySchema]:
-    from mteb.benchmarks._leaderboard_menu import (
-        GP_BENCHMARK_ENTRIES,
-        R_BENCHMARK_ENTRIES,
-    )
+    """Menu tree served at ``GET /v1/benchmarks/menu``.
 
-    raw = menus_to_schemas(list(GP_BENCHMARK_ENTRIES) + list(R_BENCHMARK_ENTRIES))
+    Uses ``HOME_BENCHMARK_ENTRIES`` — the flat 4-section
+    (Language / Modality / Retrieval / Domain) layout the leaderboardv2
+    home page renders. ``GP_BENCHMARK_ENTRIES + R_BENCHMARK_ENTRIES``
+    stay reserved for the Gradio leaderboard's nested view.
+    """
+    from mteb.benchmarks._leaderboard_menu import HOME_BENCHMARK_ENTRIES
+
+    raw = menus_to_schemas(list(HOME_BENCHMARK_ENTRIES))
     return _patch_menu_counts(raw)
 
 
@@ -162,13 +173,13 @@ def _benchmark_schemas(include_hidden: bool = False) -> list[BenchmarkSchema]:
     return [_with_num_models(benchmark_to_schema(b)) for b in benches]
 
 
-@router.get("/health")
+@infra_router.get("/health")
 async def health() -> dict[str, bool]:
     """Liveness probe — returns ``{"ok": True}`` once the app is up."""
     return {"ok": True}
 
 
-@router.get("/metrics", include_in_schema=False)
+@infra_router.get("/metrics", include_in_schema=False)
 async def metrics() -> Response:
     """Prometheus scrape endpoint — exposes per-route counters and latency histograms."""
     body, content_type = render_metrics()
@@ -182,7 +193,7 @@ async def metrics() -> Response:
 _ROBOTS_TXT = "User-agent: *\nDisallow: /\n"
 
 
-@router.get("/robots.txt", include_in_schema=False)
+@infra_router.get("/robots.txt", include_in_schema=False)
 async def robots_txt() -> Response:
     """Cached `Disallow: /` body so crawler probes stop 404-ing in the log."""
     return Response(
@@ -199,7 +210,7 @@ async def robots_txt() -> Response:
 _FAVICON_BYTES = (files("mteb.api") / "static" / "favicon.png").read_bytes()
 
 
-@router.get("/favicon.ico", include_in_schema=False)
+@infra_router.get("/favicon.ico", include_in_schema=False)
 async def favicon() -> Response:
     """Serve the MTEB logo as the browser-tab favicon for every API page.
 
@@ -299,6 +310,23 @@ async def benchmark_summary(name: str) -> BenchmarkSummarySchema:
     Remove once every deployed frontend bundle is on the new path.
     """
     return await benchmark_scores(name)
+
+
+@router.get("/benchmarks/{name:path}/per-language")
+async def benchmark_per_language(name: str) -> BenchmarkPerLanguageSchema:
+    """Per-(model, language) mean main_score for benchmark ``name``.
+
+    Lazy-loaded by the frontend when the Per-language tab opens —
+    keeps the heavier explode + group_by off the summary fetch.
+    """
+    import mteb
+
+    try:
+        mteb.get_benchmark(name)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    BENCHMARK_SELECTIONS.labels(name=name, endpoint="per-language").inc()
+    return await get_per_language(name)
 
 
 def _parse_buckets_json(raw: str) -> list[tuple[float, float | None]]:

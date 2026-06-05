@@ -29,7 +29,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from mteb.api.cache import preload_summaries_in_background, warmup_blocking
 from mteb.api.metrics import PrometheusMiddleware
 from mteb.api.otel import setup_telemetry, shutdown_telemetry
-from mteb.api.routes import router
+from mteb.api.routes import infra_router, router
 from mteb.api.settings import cors_origins
 
 logger = logging.getLogger(__name__)
@@ -94,10 +94,6 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     pydantic-schema work without freezing the event loop — uvicorn waits
     for the ``yield`` before flipping the app into "ready" state, so by
     the time the first request arrives every shared cache is populated.
-
-    The heavy ``preload_summaries_in_background`` is still spawned as a
-    daemon thread (gated on ``MTEB_API_PRELOAD=1``); blocking on it would
-    keep the listener down for minutes while 56 benchmarks are built.
     """
     await asyncio.to_thread(warmup_blocking)
     preload_summaries_in_background()
@@ -136,7 +132,10 @@ def create_app() -> FastAPI:
     # is counted. The /metrics scrape itself is excluded inside the
     # middleware to keep self-traffic out of the series.
     app.add_middleware(PrometheusMiddleware)
-    app.include_router(router)
+    # Versioned API surface (/v1/benchmarks, /v1/tasks, /v1/models, /v1/icon, …)
+    # plus the infra endpoints at root (/health, /metrics, …).
+    app.include_router(router, prefix="/v1")
+    app.include_router(infra_router)
     return app
 
 

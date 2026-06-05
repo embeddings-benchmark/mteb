@@ -31,6 +31,7 @@ from mteb.api.settings import cache_repo, preload_full
 
 if TYPE_CHECKING:
     from mteb.api.schemas import (
+        BenchmarkPerLanguageSchema,
         BenchmarkSummarySchema,
         ModelScoresSchema,
         TaskScoresSchema,
@@ -185,6 +186,7 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
 _summary_schemas: dict[str, BenchmarkSummarySchema] = {}
 _task_score_schemas: dict[str, TaskScoresSchema] = {}
 _model_score_schemas: dict[str, ModelScoresSchema] = {}
+_per_language_schemas: dict[str, BenchmarkPerLanguageSchema] = {}
 
 
 async def get_summary(name: str) -> BenchmarkSummarySchema:
@@ -195,6 +197,19 @@ async def get_summary(name: str) -> BenchmarkSummarySchema:
     logger.info("Building summary for %s", name)
     schema = await build_benchmark_summary(name, get_cache())
     _summary_schemas[name] = schema
+    return schema
+
+
+async def get_per_language(name: str) -> BenchmarkPerLanguageSchema:
+    """Return the cached :class:`BenchmarkPerLanguageSchema` for ``name``."""
+    cached = _per_language_schemas.get(name)
+    if cached is not None:
+        return cached
+    from mteb.api.aggregators import build_benchmark_per_language
+
+    logger.info("Building per-language scores for %s", name)
+    schema = await build_benchmark_per_language(name)
+    _per_language_schemas[name] = schema
     return schema
 
 
@@ -293,13 +308,11 @@ def warmup_blocking() -> None:
 
 
 def preload_summaries_in_background() -> None:
-    """Pre-build every benchmark summary on a daemon thread.
+    """Pre-build every benchmark summary + per-language schema on a daemon thread.
 
-    Gated by ``MTEB_API_PRELOAD=1`` because it dominates cold boot
-    (~2-4 s per benchmark × 56 benchmarks even with parallelism). The
-    light caches loaded by :func:`warmup_blocking` already cover the
-    per-request hot path; this only helps when you want the very first
-    visit to every benchmark to be instant.
+    Both are derived from the same long results frame, so warming them
+    together amortises the disk read. PerLanguageTab opens to instant
+    real data instead of triggering an explode + group_by on first hit.
     """
     if not preload_full():
         return
@@ -313,7 +326,11 @@ def preload_summaries_in_background() -> None:
             try:
                 await get_summary(name)
             except Exception as exc:
-                logger.warning("warmup: %s failed (%s)", name, exc)
+                logger.warning("warmup summary: %s failed (%s)", name, exc)
+            try:
+                await get_per_language(name)
+            except Exception as exc:
+                logger.warning("warmup per-language: %s failed (%s)", name, exc)
 
         async def _build_all() -> None:
             # ``asyncio.gather`` fans out every benchmark summary onto the

@@ -57,6 +57,28 @@ def task_to_meta_schema(task: AbsTask | type[AbsTask]) -> TaskMetaSchema:
     return schema
 
 
+def scoped_task_meta_schema(task: AbsTask) -> TaskMetaSchema:
+    """Build a TaskMetaSchema that respects the instance's scoped languages.
+
+    Variant of :func:`task_to_meta_schema` that uses ``task.languages``
+    (post ``filter_languages`` / hf_subsets) instead of the full
+    ``metadata.languages`` union.
+
+    Some benchmarks register a shared task with a language restriction (e.g.
+    ``mteb.get_task("MIRACLRetrievalHardNegatives", languages=["eng"])``).
+    The instance's ``task.languages`` property already does the right thing:
+    when ``hf_subsets`` is set it returns just the scoped codes (``['eng']``),
+    otherwise it falls back to ``self.metadata.languages``. So we always copy
+    over it — the override is a no-op for unscoped tasks and trims correctly
+    for scoped ones.
+    """
+    from mteb.languages import language_label
+
+    base = task_to_meta_schema(task)
+    labels = sorted({language_label(c) for c in task.languages if c})
+    return base.model_copy(update={"languages": labels})
+
+
 def benchmark_to_schema(b: Benchmark) -> BenchmarkSchema:
     """Return the cached :class:`BenchmarkSchema` for ``b`` (memoised by name)."""
     cached = _benchmark_schema_cache.get(b.name)
