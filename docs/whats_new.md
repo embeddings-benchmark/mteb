@@ -34,7 +34,7 @@ print(f"Evaluation took: {task_result.evaluation_time:.2f}s")
 task_result.plot_evaluation_phases()
 ```
 
-This will print a text-based Gantt/bar chart of the recorded evaluation phases:
+This will print a chart of the recorded evaluation phases:
 
 ```text
 Data loading                     |███████████████████████████████                   | 19.4s

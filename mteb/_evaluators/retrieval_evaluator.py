@@ -4,6 +4,8 @@ import logging
 import time
 from typing import TYPE_CHECKING, Any
 
+from mteb.models.search_wrappers import SearchCrossEncoderWrapper
+
 from .evaluator import Evaluator
 from .retrieval_metrics import (
     calculate_retrieval_scores,
@@ -73,9 +75,8 @@ class RetrievalEvaluator(Evaluator):
             num_proc=num_proc,
         )
         end_time = time.monotonic()
-        corpus_duration = end_time - start_time
-
-        if corpus_duration >= 1.0:
+        is_cross_encoder = isinstance(search_model, SearchCrossEncoderWrapper)
+        if not is_cross_encoder:
             self.timer.add_phase(
                 "Encoding corpus",
                 start=start_time,
@@ -85,9 +86,7 @@ class RetrievalEvaluator(Evaluator):
             )
 
         search_phase_name = (
-            "Encoding queries"
-            if corpus_duration >= 1.0
-            else "Encoding queries and documents"
+            "Encoding queries and documents" if is_cross_encoder else "Encoding queries"
         )
 
         with self.timer(
