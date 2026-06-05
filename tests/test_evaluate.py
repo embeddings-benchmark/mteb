@@ -119,7 +119,9 @@ def test_evaluate_with_overwrite_strategy_never(tmp_path: Path):
         data = json.load(f)
 
     dummy_score = 999.0
-    data["scores"]["test"][0]["main_score"] = dummy_score
+    for split in data["scores"]:
+        for score_dict in data["scores"][split]:
+            score_dict["main_score"] = dummy_score
 
     with Path(path).open("w", encoding="utf-8") as f:
         json.dump(data, f)
