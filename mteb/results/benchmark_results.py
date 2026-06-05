@@ -590,6 +590,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
     def to_disk(self, path: Path | str) -> None:
         """Save the BenchmarkResults to a JSON file."""
         path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("w") as out_file:
             out_file.write(self.model_dump_json(indent=2))
 
