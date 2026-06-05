@@ -149,7 +149,7 @@ class IngotAPIEncoder(AbsEncoder):
 
 ingot_8b_r3 = ModelMeta(
     name="jcorners/ingot-8b-r3",
-    revision="r3",
+    revision="3",
     release_date="2026-05-23",
     languages=["eng-Latn"],
     loader=IngotAPIEncoder,
