@@ -101,15 +101,53 @@ def test_evaluate_with_cache(
         "main score should match the expected value"
     )
 
-    # test cache never strategy
-    never_results = mteb.evaluate(model, task, cache=cache, overwrite_strategy="never")
-    assert never_results[0].get_score() == expected_score
 
+def test_evaluate_with_overwrite_strategy_never(tmp_path: Path):
+    model = MockSentenceTransformer()
+    task = MockClassificationTask()
+    cache = ResultCache(tmp_path)
+
+    # First run should run evaluation and write to cache
+    results = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+    path = cache.get_task_result_path(
+        task.metadata.name,
+        results.model_name.replace("/", "__"),
+        results.model_revision,
+    )
+    assert path.exists(), "cache file should be written"
+    with Path(path).open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    dummy_score = 999.0
+    data["scores"]["test"][0]["main_score"] = dummy_score
+
+    with Path(path).open("w", encoding="utf-8") as f:
+        json.dump(data, f)
+
+    initial_mtime = path.stat().st_mtime
+
+    # Second run with "never" should load from cache and NOT overwrite it
+    never_results = mteb.evaluate(
+        model, task, cache=cache, overwrite_strategy="never", co2_tracker=False
+    )
+
+    assert never_results[0].get_score() == dummy_score
+    assert path.stat().st_mtime == initial_mtime
+    with Path(path).open("r", encoding="utf-8") as f:
+        assert json.load(f)["scores"]["test"][0]["main_score"] == dummy_score
+
+    # Third run with an empty cache should run and write to cache
     cache_empty = ResultCache(tmp_path / "empty")
     results_empty = mteb.evaluate(
-        model, task, cache=cache_empty, overwrite_strategy="never"
+        model, task, cache=cache_empty, overwrite_strategy="never", co2_tracker=False
     )
     assert len(results_empty.task_results) == 1
+    empty_path = cache_empty.get_task_result_path(
+        task.metadata.name,
+        results_empty.model_name.replace("/", "__"),
+        results_empty.model_revision,
+    )
+    assert empty_path.exists()
 
 
 @pytest.mark.parametrize(
