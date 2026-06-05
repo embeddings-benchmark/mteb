@@ -84,8 +84,6 @@ _MISSING_N_EMBEDDING_MODELS = [
     "microsoft/speecht5_asr",
     "microsoft/speecht5_tts",
     "microsoft/speecht5_multimodal",
-    "mteb/hybrid-baseline-encoder-e5-small",
-    "mteb/hybrid-bm25s-e5-small",
 ]
 
 
