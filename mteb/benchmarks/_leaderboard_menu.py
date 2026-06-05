@@ -60,6 +60,16 @@ GP_BENCHMARK_ENTRIES = [
                 ),
             ),
             MenuEntry(
+                "Video",
+                mteb.get_benchmarks(
+                    [
+                        "MVEB(beta)",
+                        "MVEB(video, beta)",
+                        "MVEB(text, video, beta)",
+                    ]
+                ),
+            ),
+            MenuEntry(
                 "Domain-Specific",
                 mteb.get_benchmarks(
                     [
