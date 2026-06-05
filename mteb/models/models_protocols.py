@@ -3,8 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
-
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -251,12 +249,3 @@ class CrossEncoderProtocol(Protocol):
 
 MTEBModels = EncoderProtocol | CrossEncoderProtocol | SearchProtocol
 """Type alias for all MTEB model types as many models implement multiple protocols and many tasks can be solved by multiple model types."""
-
-
-@runtime_checkable
-class HybridSearchProtocol(SearchProtocol, Protocol):
-    """Interface for hybrid search models that combine multiple sub-models."""
-
-    wrapped_models: Sequence[SearchProtocol]
-    weights: Sequence[float]
-    sub_model_top_k: int | None

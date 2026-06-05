@@ -5,7 +5,7 @@ import pytest
 from datasets import Dataset
 
 import mteb
-from mteb import HybridSearch, HybridSearchProtocol
+from mteb import HybridSearch
 from tests.mock_tasks import MockRetrievalTask
 
 
@@ -15,7 +15,6 @@ def test_hybrid_search_init_and_meta():
     m2 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=10)
 
     hybrid = HybridSearch([m1, m2], fusion_strategy="dbsf")
-    assert isinstance(hybrid, HybridSearchProtocol)
     assert len(hybrid.wrapped_models) == 2
     assert len(hybrid.weights) == 2
     assert hybrid.weights == [0.5, 0.5]

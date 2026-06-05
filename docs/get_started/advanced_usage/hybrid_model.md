@@ -15,22 +15,11 @@ dense = mteb.get_model("intfloat/multilingual-e5-small")
 # Create the hybrid model combining both sub-models
 hybrid_model = HybridSearch(
     models=[bm25, dense],
-    fusion_strategy="rrf",  # Options: "rrf", "dbsf", "relative-score-fusion", or a custom Callable
+    fusion_strategy="rrf",
     weights=[0.5, 0.5],     # Optional: weight assigned to each model
 )
 
 # Evaluate the hybrid model on your selected tasks
 tasks = mteb.get_tasks(tasks=["NFCorpus"])
 results = mteb.evaluate(hybrid_model, tasks=tasks)
-```
-
-### Registered Hybrid Models
-
-You can also register pre-configured hybrid models by adding a custom loader function and model metadata under `mteb/models/model_implementations/hybrid_models.py`. Once registered, the hybrid model can be loaded by name:
-
-```python
-import mteb
-
-# Load pre-registered hybrid model directly
-hybrid_model = mteb.get_model("mteb/hybrid-bm25s-e5-small")
 ```
