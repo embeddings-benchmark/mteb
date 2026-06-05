@@ -278,7 +278,22 @@ def _check_cache(
     cache: ResultCache | None,
     overwrite_strategy: OverwriteStrategy,
 ) -> tuple[TaskResult | None, dict[str, list[str]]]:
-    """Load cached results, handle early skipping if up-to-date, or validate compatibility."""
+    """Load cached results, handle early skipping if up-to-date, or validate compatibility.
+
+    Args:
+        task: The task to evaluate.
+        meta: Metadata of the model being evaluated.
+        cache: The cache database or file system layer.
+        overwrite_strategy: The strategy to handle existing cache results.
+
+    Returns:
+        A tuple containing:
+            - The cached TaskResult if it is compatible and we want to resume/skip.
+              Returns None if we need to re-run from scratch.
+            - A dictionary mapping evaluation split names to a list of missing subset names.
+              Returns an empty dict if no splits or subsets are missing.
+    """
+    # Load results from the cache if the overwrite strategy allows it
     existing_results: TaskResult | None = None
     if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
         cache_results = cache.load_task_result(task.metadata.name, meta)
@@ -289,23 +304,32 @@ def _check_cache(
         OverwriteStrategy.NEVER,
         OverwriteStrategy.ONLY_CACHE,
     }
+
+    # Check if the cached results are compatible/mergeable with the current task definition
     is_mergable = existing_results is not None and (
         not _requires_merge(task, existing_results)
         or existing_results.is_mergeable(task)
     )
 
+    # Determine missing splits and subsets
     if (
         existing_results
         and overwrite_strategy != OverwriteStrategy.ALWAYS
         and (dont_overwrite or is_mergable)
     ):
+        # Cache exists and is compatible, compute missing evaluations to potentially resume
         missing_eval = existing_results.get_missing_evaluations(task)
     else:
+        # Cache is missing, incompatible, or we are forcing an overwrite: re-run all splits/subsets
         missing_eval = dict.fromkeys(task.eval_splits, task.hf_subsets)
         existing_results = None
 
+    # Enforce dont_overwrite constraints (NEVER and ONLY_CACHE strategies)
     if missing_eval and dont_overwrite:
         if existing_results is None:
+            # Cache is completely missing (or incompatible)
+            # - For normal tasks, ONLY_CACHE strategy must raise ValueError since it cannot evaluate.
+            # - For AbsTaskAggregate, we don't raise here; it will fall back to evaluating subtasks recursively.
             if (
                 not isinstance(task, AbsTaskAggregate)
                 and overwrite_strategy == OverwriteStrategy.ONLY_CACHE
@@ -313,6 +337,10 @@ def _check_cache(
                 raise ValueError(
                     f"overwrite_strategy is set to '{overwrite_strategy.value}' but no results found in cache for task {task.metadata.name}."
                 )
+        # Cache results file exists but some splits/subsets are missing
+        # - For normal tasks, raising ValueError prevents silent overwrite under NEVER or ONLY_CACHE.
+        # - For AbsTaskAggregate, NEVER must raise to prevent overwriting the existing incomplete result file,
+        #   but ONLY_CACHE skips raising here to allow merging cached subtask results.
         elif (
             not isinstance(task, AbsTaskAggregate)
             or overwrite_strategy == OverwriteStrategy.NEVER
