@@ -54,6 +54,7 @@ logger = logging.getLogger(__name__)
 async def build_benchmark_summary(  # noqa: PLR0914
     name: str,
     cache: ResultCache,
+    languages: tuple[str, ...] = (),
 ) -> BenchmarkSummarySchema:
     """Build the full summary payload the frontend expects for one benchmark.
 
@@ -66,6 +67,14 @@ async def build_benchmark_summary(  # noqa: PLR0914
     and we don't pay ``cache.load_results(tasks=bench)`` (~4s) per benchmark.
     The ``cache`` argument is kept for API compatibility and as a fallback for
     benchmarks not in the parquet cache.
+
+    When ``languages`` is non-empty the long frame is pre-filtered to subsets
+    whose ``language`` list intersects the picks (matched by raw code OR by
+    ``language_label``) before the summary builders run — so the resulting
+    ``mean_task`` / ``mean_task_type`` / per-task scores reflect ONLY the
+    selected languages. Used by the frontend filter sidebar to recompute
+    scores when the user narrows the language set, instead of fudging the
+    aggregation client-side.
     """
     import mteb
     from mteb.api.cache import _load_per_benchmark_frames
@@ -96,6 +105,38 @@ async def build_benchmark_summary(  # noqa: PLR0914
             tasks_meta=tasks_meta,
             rows=[],
             aggregations=bench_schema.aggregations,
+        )
+
+    if languages and "language" in long_df.columns:
+        from mteb.languages import language_label
+
+        # The frontend filter holds human labels (``"English"``); the polars
+        # frame holds raw codes (``"eng-Latn"``). Enumerate codes present in
+        # this frame, map each through ``language_label``, keep codes whose
+        # code OR label is in the picked set. Cached at the ``get_summary``
+        # layer so this scan runs once per (benchmark, slice).
+        picked_set = set(languages)
+        all_codes_series = (
+            long_df.lazy()
+            .select(pl.col("language").explode().unique())
+            .collect(engine="streaming")["language"]
+        )
+        code_match = [
+            c
+            for c in all_codes_series.to_list()
+            if c is not None and (c in picked_set or language_label(c) in picked_set)
+        ]
+        if not code_match:
+            return BenchmarkSummarySchema(
+                benchmark_name=bench.name,
+                task_types=bench_schema.task_types,
+                tasks=bench_schema.tasks,
+                tasks_meta=tasks_meta,
+                rows=[],
+                aggregations=bench_schema.aggregations,
+            )
+        long_df = long_df.filter(
+            pl.col("language").list.eval(pl.element().is_in(code_match)).list.any()
         )
 
     # Both builders aggregate the same long frame independently, so build them
@@ -221,6 +262,25 @@ async def build_benchmark_summary(  # noqa: PLR0914
     has_public = "Mean (Public)" in summary_cols and mean_task_col != "Mean (Public)"
     has_private = "Mean (Private)" in summary_cols
 
+    # When the user has narrowed by language, the strict-skipna policy
+    # (any missing task → null aggregate) is too punishing: most models
+    # don't run every task in every selected language, so almost every
+    # row ends up null. Switch to a lenient mean over the tasks the
+    # model HAS data for. The unfiltered case keeps the canonical strict
+    # values so partial-coverage models can't outrank full-coverage peers.
+    lenient_means = bool(languages)
+    # Pre-index task → canonical type once for the per-row recompute.
+    # Uses the same `_split_on_capital` + space-strip transform the
+    # summary builder applies to column names so the keys here match
+    # the canonical strings used in `scores_by_task_type`.
+    task_to_type: dict[str, str] = {}
+    if lenient_means:
+        from mteb.benchmarks._create_table import _split_on_capital
+
+        task_to_type = {
+            tm.name: _split_on_capital(tm.type).replace(" ", "") for tm in tasks_meta
+        }
+
     rows: list[SummaryRowSchema] = []
     for idx, row in enumerate(summary_pl.iter_rows(named=True)):
         short = _parse_model_cell(row["Model"])
@@ -247,11 +307,32 @@ async def build_benchmark_summary(  # noqa: PLR0914
         }
         scores_by_task = per_task_rows.get(full, {})
 
-        # mteb's _skipna_false_mean returns None when the row is missing a
-        # single task or task-type cell. Pass that through as null — averaging
-        # over partial coverage would surface a misleading number that ranks
-        # alongside (or above) fully-evaluated peers. Clients render '—' for
-        # null and sort null rows to the bottom.
+        if lenient_means and scores_by_task:
+            # Lenient per-type means: mean over tasks the model actually
+            # ran (in the picked-language slice), grouped by canonical
+            # type. Models with partial coverage now surface a score
+            # instead of '—'.
+            type_buckets: dict[str, list[float]] = {}
+            for tname, score in scores_by_task.items():
+                ttype = task_to_type.get(tname)
+                if ttype is None:
+                    continue
+                type_buckets.setdefault(ttype, []).append(float(score))
+            scores_by_task_type = {
+                ttype: sum(vals) / len(vals)
+                for ttype, vals in type_buckets.items()
+                if vals
+            }
+            # Lenient Mean (Task) = mean across the model's present per-task
+            # scores; Mean (TaskType) = mean across the lenient per-type means
+            # (still treats every type uniformly so dense-Classification doesn't
+            # dominate broad-coverage retrieval).
+            if scores_by_task:
+                vals = list(scores_by_task.values())
+                mean_task = sum(vals) / len(vals)
+            if scores_by_task_type:
+                vals = list(scores_by_task_type.values())
+                mean_type = sum(vals) / len(vals)
 
         rows.append(
             SummaryRowSchema(

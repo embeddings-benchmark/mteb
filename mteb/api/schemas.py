@@ -79,6 +79,14 @@ class BenchmarkSchema(_CamelModel):
     citation: str | None = None
     languages: list[str]
     task_types: list[str]
+    # Simplified (Borda-compatible) task type buckets the benchmark
+    # touches. Each task contributes its ``metadata.simplified_task_type``
+    # (one of ``retrieval``, ``classification``, ``pair-classification``,
+    # ``clustering``, ``semantic-similarity``, …). Used by the
+    # /benchmarks "Task group" filter facet on the index page so the
+    # client doesn't have to maintain a parallel raw-→-simplified
+    # mapping table.
+    simplified_task_types: list[str] = []
     tasks: list[str]
     domains: list[str]
     modalities: list[str]
@@ -115,6 +123,7 @@ class BenchmarkSchema(_CamelModel):
 
         languages: set[str] = set()
         task_types: set[str] = set()
+        simplified_types: set[str] = set()
         task_names: list[str] = []
         domains: set[str] = set()
         modalities: set[str] = set()
@@ -122,6 +131,9 @@ class BenchmarkSchema(_CamelModel):
             for lang in _flatten_task_languages(task):
                 languages.add(language_label(lang))
             task_types.add(str(task.metadata.type))
+            simp = getattr(task.metadata, "simplified_task_type", None)
+            if simp:
+                simplified_types.add(str(simp))
             task_names.append(task.metadata.name)
             for dom in task.metadata.domains or []:
                 domains.add(str(dom))
@@ -150,6 +162,7 @@ class BenchmarkSchema(_CamelModel):
             citation=benchmark.citation,
             languages=sorted(languages),
             task_types=sorted(task_types),
+            simplified_task_types=sorted(simplified_types),
             tasks=task_names,
             domains=sorted(domains),
             modalities=sorted(modalities),
@@ -308,6 +321,12 @@ class ModelMetaSchema(_CamelModel):
     # — typically ["text"], but vision / audio / video models declare
     # one or more additional entries.
     modalities: list[str] = ["text"]
+    # Human-readable display labels for the languages the model is
+    # intended for. Mapped from ``ModelMeta.languages`` (ISO codes like
+    # ``eng-Latn``) via ``mteb.languages.language_label``. Empty when
+    # the upstream meta declares ``languages=None`` (no explicit
+    # language scope). Used by the /models filter sidebar.
+    languages: list[str] = []
     citation: str | None = None
     # Extended metadata surfaced on the model detail card. All optional —
     # missing values render as "—" on the frontend rather than blocking.
@@ -355,6 +374,15 @@ class ModelMetaSchema(_CamelModel):
         total_b = _format_n_parameters(meta.n_parameters)
         embed_dim = _get_embedding_size(meta.embed_dim)
         max_tokens = _format_max_tokens(meta.max_tokens)
+        # Map raw ISO codes (eng-Latn, …) → display labels (English).
+        # `language_label` handles the unknown / missing-mapping cases by
+        # echoing the code, so we de-dup after the map call. Sorted for
+        # stable output so the schema hash is deterministic.
+        from mteb.languages import language_label as _language_label
+
+        lang_labels = sorted(
+            {_language_label(code) for code in (meta.languages or []) if code}
+        )
         return cls(
             name=meta.name or "",
             url=str(meta.reference) if meta.reference else None,
@@ -373,6 +401,7 @@ class ModelMetaSchema(_CamelModel):
             else False,
             sentence_transformers_compatible="Sentence Transformers" in framework,
             modalities=[str(m) for m in (meta.modalities or ["text"])],
+            languages=lang_labels,
             citation=meta.citation or None,
             memory_usage_mb=float(meta.memory_usage_mb)
             if meta.memory_usage_mb is not None

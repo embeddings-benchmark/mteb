@@ -157,11 +157,6 @@ R_BENCHMARK_ENTRIES = [
 ]
 
 
-# Flat 4-section layout for the leaderboardv2 home page. Same benchmarks
-# as `GP_BENCHMARK_ENTRIES` + `R_BENCHMARK_ENTRIES`, regrouped under
-# Language / Modality / Retrieval / Domain so the frontend can render
-# each as a collapsible card grid (2 rows visible + "Show more"). The
-# Gradio leaderboard keeps using GP + R unchanged.
 HOME_BENCHMARK_ENTRIES = [
     MenuEntry(
         name="Language",
@@ -171,7 +166,6 @@ HOME_BENCHMARK_ENTRIES = [
             [
                 "MTEB(Multilingual, v2)",
                 "MTEB(eng, v2)",
-                "HUME(v1)",
                 "MTEB(Europe, v1)",
                 "MTEB(Indic, v1)",
                 "MTEB(Scandinavian, v1)",

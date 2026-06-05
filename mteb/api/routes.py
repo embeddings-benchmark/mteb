@@ -286,12 +286,30 @@ async def list_benchmarks(include_hidden: bool = False) -> list[BenchmarkSchema]
 
 
 @router.get("/benchmarks/{name:path}/scores")
-async def benchmark_scores(name: str) -> BenchmarkSummarySchema:
+async def benchmark_scores(
+    name: str,
+    languages: Annotated[
+        list[str] | None,
+        Query(
+            description=(
+                "Restrict the summary aggregation to subsets whose language list "
+                "intersects this set. Comma-separated or repeated; accepts either "
+                "raw codes (`eng-Latn`) or human labels (`English`). Omit to fetch "
+                "the unfiltered, preload-warmed summary."
+            ),
+        ),
+    ] = None,
+) -> BenchmarkSummarySchema:
     """Return the full summary payload (one row per model) for benchmark ``name``.
 
     Path is ``/scores`` (mirrors ``/tasks/{name}/scores`` and
     ``/models/{name}/scores``); the legacy ``/summary`` URL is kept as
     an alias below for back-compat during the frontend deploy window.
+
+    When ``languages=`` is set, the long results frame is pre-filtered
+    to subsets covering those languages before the summary builders
+    run — so ``meanTask`` / ``meanTaskType`` / per-task scores in the
+    response are scoped to the picked languages.
     """
     import mteb
 
@@ -300,7 +318,17 @@ async def benchmark_scores(name: str) -> BenchmarkSummarySchema:
     except KeyError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     BENCHMARK_SELECTIONS.labels(name=name, endpoint="scores").inc()
-    return await get_summary(name)
+    # Comma-split + dedupe + sort so the cache key is order-independent.
+    picked: tuple[str, ...] = ()
+    if languages:
+        flat: list[str] = []
+        for entry in languages:
+            for chunk in entry.split(","):
+                stripped = chunk.strip()
+                if stripped:
+                    flat.append(stripped)
+        picked = tuple(sorted(set(flat)))
+    return await get_summary(name, picked)
 
 
 @router.get("/benchmarks/{name:path}/summary", include_in_schema=False)

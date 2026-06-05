@@ -184,19 +184,40 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
 # ``preload_summaries_in_background`` lands a result, and the preload
 # itself sequences them via ``asyncio.gather`` on a single loop.
 _summary_schemas: dict[str, BenchmarkSummarySchema] = {}
+# Separate cache for language-scoped summaries keyed by (name, sorted langs).
+# Empty langs falls through to ``_summary_schemas`` so the unfiltered
+# request stays on the warmed path.
+_summary_lang_schemas: dict[tuple[str, tuple[str, ...]], BenchmarkSummarySchema] = {}
 _task_score_schemas: dict[str, TaskScoresSchema] = {}
 _model_score_schemas: dict[str, ModelScoresSchema] = {}
 _per_language_schemas: dict[str, BenchmarkPerLanguageSchema] = {}
 
 
-async def get_summary(name: str) -> BenchmarkSummarySchema:
-    """Return the cached :class:`BenchmarkSummarySchema` for ``name`` (build on miss)."""
-    cached = _summary_schemas.get(name)
+async def get_summary(
+    name: str, languages: tuple[str, ...] = ()
+) -> BenchmarkSummarySchema:
+    """Return the cached :class:`BenchmarkSummarySchema` for ``name``.
+
+    ``languages`` is a sorted tuple of picks (raw codes or human labels —
+    either form works). Empty tuple = unfiltered (uses the preload-warmed
+    cache); any other value hits a separate cache slot so language filter
+    toggles never invalidate the canonical schema.
+    """
+    if not languages:
+        cached = _summary_schemas.get(name)
+        if cached is not None:
+            return cached
+        logger.info("Building summary for %s", name)
+        schema = await build_benchmark_summary(name, get_cache())
+        _summary_schemas[name] = schema
+        return schema
+    key = (name, languages)
+    cached = _summary_lang_schemas.get(key)
     if cached is not None:
         return cached
-    logger.info("Building summary for %s", name)
-    schema = await build_benchmark_summary(name, get_cache())
-    _summary_schemas[name] = schema
+    logger.info("Building summary for %s (langs=%s)", name, languages)
+    schema = await build_benchmark_summary(name, get_cache(), languages=languages)
+    _summary_lang_schemas[key] = schema
     return schema
 
 
