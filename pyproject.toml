@@ -85,6 +85,12 @@ api = [
     "opentelemetry-exporter-otlp-proto-http>=1.27",
     "opentelemetry-instrumentation-fastapi>=0.48b0",
 ]
+# Open Graph hero-card generation. Pulled in only by the Dockerfile's
+# builder stage — the runtime image strips this back out so it doesn't
+# carry Playwright or a Chromium install.
+og = [
+    "playwright>=1.49.0",
+]
 video = ["torchcodec"]
 github = ["PyGithub>=1.60"]
 

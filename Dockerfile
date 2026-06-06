@@ -1,17 +1,40 @@
 # syntax=docker/dockerfile:1.7
-# Hugging Face Spaces Dockerfile for the mteb FastAPI service.
 #
-# Clones embeddings-benchmark/mteb @ api, installs the project with its
-# [api] extra (fastapi + uvicorn), and serves it on :7860 as the
-# non-root `user` (UID 1000) that Spaces expects.
+# Multi-stage Dockerfile for the mteb FastAPI service.
 #
-# Everything is hardcoded — Spaces does not pass build args. Edit and
-# rebuild to change repo or branch.
+# Three stages share the heavy "clone + pip install + HF dataset
+# warmup" work via a common base image:
+#
+#   base        — python:3.12-bookworm + git + a non-root user + mteb
+#                 cloned and installed with the [api] extra + the
+#                 mteb/results parquet cache pre-warmed.
+#   og-builder  — extends `base` with Chromium runtime libs + the
+#                 [og] extra (Playwright). Renders one OG hero PNG per
+#                 benchmark / task / model into /og-cache, then exits.
+#                 Nothing downstream of this stage ships.
+#   runtime     — extends `base`, copies the rendered PNG files out of
+#                 og-builder. Stays small: no Playwright, no Chromium,
+#                 no Node. FastAPI serves the cached PNG files at /og.
+#
+# Result: the deployed image is the lean base + ~50 MB of pre-rendered
+# PNG files, not the ~700 MB hit of baking Chromium into runtime. The repo
+# is cloned once, [api] is installed once, the HF dataset cache is
+# downloaded once — both downstream stages reuse the same layers.
 
-FROM python:3.12-bookworm
+ARG MTEB_BRANCH=api
+ARG MTEB_REPO=https://github.com/embeddings-benchmark/mteb.git
 
+
+# ─── Stage: base ────────────────────────────────────────────────────
+FROM python:3.12-bookworm AS base
+
+ARG MTEB_BRANCH
+ARG MTEB_REPO
+
+# Just enough to clone + build pip wheels. Chromium libs are added in
+# the og-builder stage so the runtime layer doesn't carry them.
 RUN apt-get update \
- && apt-get install -y --no-install-recommends git curl build-essential \
+ && apt-get install -y --no-install-recommends git curl build-essential ca-certificates \
  && rm -rf /var/lib/apt/lists/* \
  && useradd -m -u 1000 user
 
@@ -24,33 +47,94 @@ ENV PATH="/home/user/.local/bin:$PATH" \
     HF_HOME=/home/user/.cache/huggingface \
     XDG_CACHE_HOME=/home/user/.cache
 
+USER user
+WORKDIR /home/user
+
+# Bust the clone cache whenever the API branch advances upstream. The
+# ADD response (latest commit SHA) changes per push, so Docker can no
+# longer reuse a stale checkout when you rebuild.
+ADD --chown=user:user https://api.github.com/repos/embeddings-benchmark/mteb/commits/${MTEB_BRANCH} /tmp/.git-sha
+RUN git clone --depth=1 --branch ${MTEB_BRANCH} ${MTEB_REPO} app
+WORKDIR /home/user/app
+
+# Branches that define an [api] extra get fastapi + uvicorn from it; on
+# older branches the explicit pins are the fallback. The PyTorch CPU
+# wheel index is added alongside default PyPI so the torch / torchvision
+# / torchaudio transitive deps resolve to ``2.x.x+cpu`` (~200 MB total)
+# instead of the default CUDA wheels (~2 GB across torch +
+# nvidia-cu* deps). PEP 440 ranks the ``+cpu`` local version above the
+# plain release, so pip picks it without an explicit version pin.
+RUN pip install --user --extra-index-url https://download.pytorch.org/whl/cpu ".[api]" \
+ || pip install --user --extra-index-url https://download.pytorch.org/whl/cpu . \
+        "fastapi>=0.110" "uvicorn[standard]>=0.27"
+
+# Pre-warm the HF dataset cache from mteb/results so the OG builder
+# (which calls warmup_blocking()) and the runtime first request both
+# skip the multi-minute cold clone. `|| true` keeps the build alive
+# when the dataset is still being populated upstream — the API falls
+# back to the GitHub clone on first request when the snapshot is empty.
+RUN hf download mteb/results --repo-type dataset || true
+
+
+# ─── Stage: og-builder ──────────────────────────────────────────────
+FROM base AS og-builder
+
+ENV PLAYWRIGHT_BROWSERS_PATH=/home/user/.cache/playwright \
+    MTEB_API_OG_DIR=/og-cache
+
+# Chromium runtime libs Playwright drives. Listing them explicitly
+# instead of running `playwright install --with-deps` keeps the layer
+# cacheable across rebuilds (the deps list rarely changes).
+USER root
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+        libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 \
+        libxkbcommon0 libatspi2.0-0 libxcomposite1 libxdamage1 \
+        libxfixes3 libxrandr2 libgbm1 libdrm2 libasound2 \
+        fonts-noto-color-emoji fonts-liberation \
+ && rm -rf /var/lib/apt/lists/* \
+ && mkdir -p /og-cache && chown user:user /og-cache
+USER user
+
+# Add Playwright on top of the [api] install already in base. We
+# install the bare package instead of re-resolving ``.[og]`` because
+# pip will skip extras when ``.`` is already "satisfied" from the
+# base stage's install, which silently drops playwright. Pinning the
+# bare package guarantees it lands.
+RUN pip install --user "playwright>=1.49.0"
+# Invoke via ``python -m playwright`` instead of the ``playwright``
+# shim — the shim lives at /home/user/.local/bin/playwright and
+# ``$PATH`` does include that directory, but Docker's ``RUN`` shells
+# sometimes resolve PATH before the pip layer's new bin entry is
+# visible. ``-m`` skips the shim entirely and is the recommended
+# invocation in Playwright's own Docker docs.
+RUN python -m playwright install chromium
+
+# Render every per-entity OG card. The script imports the mteb
+# registry directly (no HTTP, no uvicorn boot) and loads the template
+# from a file:// URL under scripts/og-template/, so this is a single
+# self-contained Python invocation. Output lands in /og-cache and the
+# runtime stage copies it out.
+RUN python scripts/generate_og_images.py --out=/og-cache
+
+
+# ─── Stage: runtime ─────────────────────────────────────────────────
+FROM base AS runtime
+
+ENV MTEB_API_OG_DIR=/data/og
+
 # Frontend Space origin allowed through CORS. Add others comma-separated
 # if you front this API with a different host.
 ENV MTEB_API_CORS_ORIGINS="https://mteb-leaderboardv2.hf.space,http://localhost:5173,http://localhost:4173"
 
+# Mount point for the rendered OG hero PNG files. /data is the conventional
+# Spaces persistent-volume mount: if Spaces mounts an empty volume over
+# /data at runtime, the served /og 404s until someone re-runs the
+# generator. With no mount, the baked-in cache wins.
+USER root
+RUN mkdir -p /data/og && chown -R user:user /data
+COPY --from=og-builder --chown=user:user /og-cache /data/og
 USER user
-WORKDIR /home/user
-
-# Bust the clone layer cache whenever the `api` branch advances on
-# GitHub. The ADD response (the latest commit SHA) changes per push, so
-# Docker can no longer reuse a stale checkout when you rebuild.
-ADD --chown=user:user https://api.github.com/repos/embeddings-benchmark/mteb/commits/api /tmp/.git-sha
-RUN git clone --depth=1 --branch api \
-        https://github.com/embeddings-benchmark/mteb.git app
-WORKDIR /home/user/app
-
-# Branches that define an [api] extra get fastapi + uvicorn from it; on
-# older branches the explicit pins are the fallback.
-RUN pip install --user ".[api]" \
- || pip install --user . "fastapi>=0.110" "uvicorn[standard]>=0.27"
-
-# Pre-warm the HF dataset cache from mteb/results so the first request
-# doesn't have to clone the GitHub repo from cold. Goes to the
-# huggingface_hub default cache under $HF_HOME. `|| true` keeps the
-# build alive while the dataset is still being populated upstream —
-# the API falls back to the GitHub clone on first request when the
-# snapshot is empty.
-RUN hf download mteb/results_new --repo-type dataset || true
 
 EXPOSE 7860
 

@@ -64,6 +64,12 @@ class Settings(BaseSettings):
     # and forces the cold-rebuild path. ``None`` means "use the default
     # repo id" (matches the env-unset case).
     cache_repo: str | None = "mteb/results"
+    # ``MTEB_API_OG_DIR`` — filesystem path where the generated Open Graph
+    # hero PNG files live. The startup mount uses this as the StaticFiles root
+    # for ``/og``. Defaults to ``/data/og`` so deployments mount a
+    # persistent volume at that path; in local dev override with
+    # ``MTEB_API_OG_DIR=./.og-cache``.
+    og_dir: str = "/data/og"
 
     # OTEL fields opt out of the ``MTEB_API_`` prefix via ``validation_alias``
     # so the standard ``OTEL_*`` env vars apply unchanged. That way the
@@ -119,6 +125,17 @@ def cors_origins() -> Sequence[str]:
 def preload_full() -> bool:
     """Return ``True`` when ``MTEB_API_PRELOAD=1`` is set."""
     return get_settings().preload
+
+
+def og_dir() -> str:
+    """Filesystem path that holds the generated Open Graph hero PNG files.
+
+    The :func:`mteb.api.app.create_app` mount uses this as the
+    ``StaticFiles`` directory for ``/og``. Caller-side code that
+    needs to write into the directory (e.g. the ``generate.mjs``
+    script invoked from CI) reads it from the env directly.
+    """
+    return get_settings().og_dir
 
 
 def cache_repo() -> str:

@@ -9,6 +9,7 @@ import asyncio
 import functools
 import hashlib
 import logging
+import pathlib
 from collections.abc import (  # noqa: TC003 — used at runtime by middleware signature
     AsyncIterator,
     Awaitable,
@@ -24,13 +25,14 @@ from fastapi import (  # noqa: TC002 — Request needed at runtime by middleware
 )
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from mteb.api.cache import preload_summaries_in_background, warmup_blocking
 from mteb.api.metrics import PrometheusMiddleware
 from mteb.api.otel import setup_telemetry, shutdown_telemetry
 from mteb.api.routes import infra_router, router
-from mteb.api.settings import cors_origins
+from mteb.api.settings import cors_origins, og_dir
 
 logger = logging.getLogger(__name__)
 
@@ -136,7 +138,59 @@ def create_app() -> FastAPI:
     # plus the infra endpoints at root (/health, /metrics, …).
     app.include_router(router, prefix="/v1")
     app.include_router(infra_router)
+    _mount_og_assets(app)
     return app
+
+
+def _mount_og_assets(app: FastAPI) -> None:
+    """Mount the directory of pre-rendered Open Graph hero PNG files.
+
+    The directory (``MTEB_API_OG_DIR``, default ``/data/og``) is populated
+    out-of-band by ``scripts/generate_og_images.py`` — typically inside
+    the Dockerfile's builder stage. Mounted with a long ``Cache-Control``
+    because each filename is content-hashed against its rendering
+    inputs: a real change writes a fresh hash sidecar, never a stale
+    overwrite of an in-flight URL.
+
+    Mount is skipped silently when the directory is missing — keeps
+    local-dev startup green even before the operator has run the
+    generator.
+    """
+    cache_dir = og_dir()
+    if pathlib.Path(cache_dir).is_dir():
+        # ``check_dir=False`` so the mount survives the directory being
+        # empty at boot — the generator may populate it in-place without
+        # an app restart.
+        app.mount(
+            "/og",
+            _CachedStatic(directory=cache_dir, check_dir=False),
+            name="og",
+        )
+    else:
+        logger.warning(
+            "OG cache directory %s does not exist; /og will 404 until generated.",
+            cache_dir,
+        )
+
+
+class _CachedStatic(StaticFiles):
+    """``StaticFiles`` that adds a long ``Cache-Control`` to every response.
+
+    The PNG filename embeds ``encodeURIComponent(entity_name)``; the
+    generator overwrites in place when inputs change but the URL never
+    rolls over. To keep CDNs and crawlers from serving forever-stale
+    images on entity-data change, the sidecar hash flow handles
+    invalidation via Cloudflare-style ``Cache-Control: public,
+    max-age=86400`` — one day. Short enough that an updated card
+    propagates within a day; long enough that crawlers don't re-fetch
+    on every share.
+    """
+
+    async def get_response(self, path, scope):  # type: ignore[override]
+        response = await super().get_response(path, scope)
+        if response.status_code == 200:
+            response.headers.setdefault("Cache-Control", "public, max-age=86400")
+        return response
 
 
 app = create_app()
