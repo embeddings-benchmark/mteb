@@ -647,9 +647,11 @@ def _row_score(row: SummaryRowSchema) -> float | None:
 
     Standard benchmarks emit ``Mean (Task)`` (→ ``mean_task`` on the
     schema). MIEB / ViDoRe-style builders only populate
-    ``mean_task_type`` because their primary aggregate is the mean
-    of per-type means — `mean_task` is left null. Falling back keeps
-    `_pick_leader` honest across both shapes.
+    ``mean_task_type``. Used purely for the response's ``mean_task``
+    echo (so the tile can still print "Leader: … · {score}") — the
+    bucket comparison itself runs on ``row.rank``, which the summary
+    builder fills in via Borda even when the strict-skipna aggregate
+    nulls the headline mean.
     """
     if row.mean_task is not None:
         return row.mean_task
@@ -659,17 +661,23 @@ def _row_score(row: SummaryRowSchema) -> float | None:
 def _pick_leader(
     rows: list[SummaryRowSchema], lo_b: float, hi_b: float | None
 ) -> tuple[SummaryRowSchema | None, float | None]:
-    """Pick the highest-scoring row inside ``[lo_b, hi_b)`` (billions).
+    """Pick the best-ranked row inside ``[lo_b, hi_b)`` (billions).
+
+    "Best" = lowest ``row.rank`` (Borda from the summary builder).
+    Ranking is partial-coverage-tolerant: every row in the summary
+    frame gets a Borda rank from its per-task results, so even when
+    strict-skipna nulls ``mean_task`` (one task missing), the bucket
+    still has a deterministic leader.
 
     Returns ``(row, score)`` or ``(None, None)`` if the bucket is
-    empty. Excludes rows with `total_params_b <= 0` (unknown /
+    empty. Excludes rows with ``total_params_b <= 0`` (unknown /
     missing). The upper bound is exclusive so callers can stitch
     buckets together without double-counting boundary models (e.g.
     a 1 B model belongs in `[0.5, 1)` for one query and `[1, 5)` in
     the next).
     """
     best: SummaryRowSchema | None = None
-    best_score: float | None = None
+    best_rank: int | None = None
     for r in rows:
         if r.total_params_b <= 0:
             continue
@@ -677,13 +685,12 @@ def _pick_leader(
             continue
         if hi_b is not None and r.total_params_b >= hi_b:
             continue
-        score = _row_score(r)
-        if score is None:
-            continue
-        if best_score is None or score > best_score:
-            best_score = score
+        if best_rank is None or r.rank < best_rank:
+            best_rank = r.rank
             best = r
-    return best, best_score
+    if best is None:
+        return None, None
+    return best, _row_score(best)
 
 
 async def build_benchmark_leaders(
