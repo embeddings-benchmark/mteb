@@ -289,22 +289,26 @@ def plan_tasks(entries: Iterable[TaskMetaSchema], out_dir: Path) -> list[RenderJ
     """Build the render jobs for task cards. Pure registry metadata."""
     jobs: list[RenderJob] = []
     for t in entries:
+        # Prefer the simplified group (retrieval / classification /
+        # pair-classification / …) over the raw type — matches the
+        # task-group chip on TaskCard and the type-badge on the
+        # /tasks/[name] hero, keeps the surfaces consistent.
+        group = t.simplified_type or t.type or ""
         tagline = _trim_description(
-            t.description or f"{t.type or ''} task on the MTEB Leaderboard."
+            t.description or f"{group} task on the MTEB Leaderboard."
         )
         stats = ",".join(
             [
-                f"Type|{t.type or '—'}",
+                f"Type|{group or '—'}",
                 f"Languages|{_fmt_num(len(t.languages))}",
                 f"Domains|{_fmt_num(len(t.domains))}",
             ]
         )
         params: CardParams = {
             "kind": "Task",
-            # Task type (e.g. STS / Classification / Retrieval) goes on
-            # the secondary badge — single most useful classifier at a
-            # glance without parsing the stats grid.
-            "typeLabel": t.type or "",
+            # Simplified task group on the secondary badge — single
+            # most useful classifier at a glance.
+            "typeLabel": group,
             "eyebrow": "Task",
             "title": t.name,
             "tagline": tagline,

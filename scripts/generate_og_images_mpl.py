@@ -338,19 +338,23 @@ def plan_benchmarks(
 def plan_tasks(entries: Iterable[TaskMetaSchema], out_dir: Path) -> list[RenderJob]:
     jobs: list[RenderJob] = []
     for t in entries:
+        # Prefer the simplified group (retrieval / classification / …)
+        # over the raw type so the OG card matches the task-group chip
+        # on TaskCard and the type-badge on /tasks/[name].
+        group = t.simplified_type or t.type or ""
         tagline = _trim_description(
-            t.description or f"{t.type or ''} task on the MTEB Leaderboard."
+            t.description or f"{group} task on the MTEB Leaderboard."
         )
         stats = ",".join(
             [
-                f"Type|{t.type or '—'}",
+                f"Type|{group or '—'}",
                 f"Languages|{_fmt_num(len(t.languages))}",
                 f"Domains|{_fmt_num(len(t.domains))}",
             ]
         )
         params: CardParams = {
             "kind": "Task",
-            "typeLabel": t.type or "",
+            "typeLabel": group,
             "eyebrow": "Task",
             "title": t.name,
             "tagline": tagline,
