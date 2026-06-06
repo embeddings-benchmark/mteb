@@ -31,6 +31,7 @@ RTEB_MAIN = RtebBenchmark(
             "MBPPRetrieval",
             "WikiSQLRetrieval",
             "FreshStackRetrieval",
+            "SWEbenchCodeRetrieval",
             "ChatDoctorRetrieval",
             "CUREv1",
             "MIRACLRetrievalHardNegatives",
@@ -75,6 +76,7 @@ RTEB_ENGLISH = RtebBenchmark(
                 "MBPPRetrieval",
                 "WikiSQLRetrieval",
                 "FreshStackRetrieval",
+                "SWEbenchCodeRetrieval",
                 "ChatDoctorRetrieval",
                 # Closed datasets
                 "Code1Retrieval",
@@ -210,6 +212,7 @@ RTEB_CODE = RtebBenchmark(
             "MBPPRetrieval",
             "WikiSQLRetrieval",
             "FreshStackRetrieval",
+            "SWEbenchCodeRetrieval",
             # Closed datasets
             "Code1Retrieval",
             "JapaneseCode1Retrieval",
