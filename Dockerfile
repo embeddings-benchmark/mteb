@@ -123,9 +123,10 @@ FROM base AS runtime
 
 ENV MTEB_API_OG_DIR=/data/og
 
-# Frontend Space origin allowed through CORS. Add others comma-separated
-# if you front this API with a different host.
-ENV MTEB_API_CORS_ORIGINS="https://mteb-leaderboardv2.hf.space,http://localhost:5173,http://localhost:4173"
+# CORS deliberately left to its default (``*``) — every endpoint here
+# is public read-only, and the OG hero images are meant to be embedded
+# cross-origin by share-card validators and chat clients. Lock down
+# via ``MTEB_API_CORS_ORIGINS`` only if a specific deployment needs it.
 
 # Mount point for the rendered OG hero PNG files. /data is the conventional
 # Spaces persistent-volume mount: if Spaces mounts an empty volume over

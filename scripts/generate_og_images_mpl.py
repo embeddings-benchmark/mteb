@@ -187,7 +187,17 @@ _HASH_FIELDS: Final[tuple[str, ...]] = (
 
 
 def _slug(name: str) -> str:
-    return quote(name, safe="")
+    """URL-encode an entity name to a relative filesystem path matching
+    what the frontend ``ShareMeta`` requests.
+
+    Per-segment ``encodeURIComponent``-equivalent encoding (``()!*'``
+    stay literal), with raw ``/`` preserved between segments so model
+    names like ``microsoft/harrier-oss-v1-27b`` land at the nested
+    URL Starlette's ``StaticFiles`` actually resolves. A flat slug
+    with ``%2F`` 404s because Starlette decodes that to ``/`` before
+    the file lookup.
+    """
+    return "/".join(quote(p, safe="!*'()") for p in name.split("/"))
 
 
 def _params_hash(params: CardParams) -> str:
@@ -283,8 +293,12 @@ def _wrap_tagline(text: str, chars_per_line: int = 70, max_lines: int = 2) -> st
 
 def _plan_job(out_dir: Path, kind: Kind, name: str, params: CardParams) -> RenderJob:
     file = _slug(name)
+    out_path = out_dir / kind / f"{file}.png"
+    # Nested slugs (e.g. `microsoft/harrier-...`) need their org-named
+    # parent directory in place before the renderer writes the PNG.
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     return RenderJob(
-        out=out_dir / kind / f"{file}.png",
+        out=out_path,
         hash_path=out_dir / kind / f"{file}.hash",
         hash=_params_hash(params),
         params=params,

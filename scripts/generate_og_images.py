@@ -156,13 +156,25 @@ _HASH_FIELDS: Final[tuple[str, ...]] = (
 
 
 def _slug(name: str) -> str:
-    """URL-encode an entity name. Matches the frontend ``encodeURIComponent``.
+    """URL-encode an entity name into a filesystem-relative path that
+    matches what the frontend's ``ShareMeta`` requests.
 
-    Output PNG filenames are this slug so the FastAPI mount serves them
-    at ``/og/{kind}/{encodeURIComponent(name)}.png`` — the exact URL
-    that ``ShareMeta`` builds at render time.
+    Two things going on:
+
+    1. Each path segment is encoded with the same unreserved set
+       JavaScript's ``encodeURIComponent`` uses (``()!*'`` stay
+       literal; everything else gets percent-encoded). Python's
+       ``quote(safe="")`` over-encodes parens, so benchmark names
+       like ``MTEB(eng, v2)`` would 404 against the JS URL.
+
+    2. ``/`` is preserved between segments instead of being
+       percent-encoded. Starlette's ``StaticFiles`` decodes
+       ``%2F`` → ``/`` before the file lookup, so a flat filename
+       of ``org%2Fname.png`` never resolves; we have to store
+       the file at ``org/name.png`` and let the mount serve it
+       at the nested URL the frontend already builds.
     """
-    return quote(name, safe="")
+    return "/".join(quote(p, safe="!*'()") for p in name.split("/"))
 
 
 def _params_hash(params: CardParams) -> str:
@@ -225,8 +237,13 @@ def _trim_description(desc: str | None, max_len: int = 140) -> str:
 
 def _plan_job(out_dir: Path, kind: Kind, name: str, params: CardParams) -> RenderJob:
     file = _slug(name)
+    out_path = out_dir / kind / f"{file}.png"
+    # Slugs with embedded `/` (e.g. `microsoft/harrier-...`) write into
+    # an org-named subdirectory — ensure it exists before the renderer
+    # tries to write the PNG.
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     return RenderJob(
-        out=out_dir / kind / f"{file}.png",
+        out=out_path,
         hash_path=out_dir / kind / f"{file}.hash",
         hash=_params_hash(params),
         params=params,

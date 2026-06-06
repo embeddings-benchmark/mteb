@@ -35,12 +35,19 @@ from typing import Annotated
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
-_DEFAULT_CORS_ORIGINS: tuple[str, ...] = (
-    "http://localhost:5173",
-    "http://localhost:4173",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:4173",
-)
+_DEFAULT_CORS_ORIGINS: tuple[str, ...] = ("*",)
+"""Open the API to every origin by default.
+
+This is a public, read-only service — there's no auth, no secrets, and
+the OG hero images are explicitly designed to be embedded cross-origin
+from any social-media crawler or share-card validator. The narrower
+"only the leaderboard frontend" allowlist that lived here previously
+broke client-side OG previewers like opengraph.xyz with no
+corresponding security gain (the data they were "guarding" is already
+public). Operators who want a tighter list can set
+``MTEB_API_CORS_ORIGINS`` — that value *replaces* this default, it
+doesn't merge.
+"""
 
 
 class Settings(BaseSettings):
@@ -92,10 +99,12 @@ class Settings(BaseSettings):
     @field_validator("cors_origins", mode="before")
     @classmethod
     def _parse_cors_origins(cls, v: object) -> list[str]:
-        """Accept either a comma-separated string (from env) or a list.
+        """Accept a comma-separated string (from env) or a list, dedup, return.
 
-        Always merges with the default dev origins so devs don't have to
-        re-specify them when overriding via env.
+        Falls back to :data:`_DEFAULT_CORS_ORIGINS` (``["*"]``) when the
+        env var is unset or parses to an empty list. Setting the env var
+        *replaces* the default — operators who want to lock down to a
+        specific allow-list spell it out in full.
         """
         if isinstance(v, str):
             parts = [o.strip() for o in v.split(",") if o.strip()]
@@ -103,9 +112,11 @@ class Settings(BaseSettings):
             parts = [str(o).strip() for o in v if str(o).strip()]
         else:
             parts = []
+        if not parts:
+            return list(_DEFAULT_CORS_ORIGINS)
         seen: set[str] = set()
         out: list[str] = []
-        for o in (*_DEFAULT_CORS_ORIGINS, *parts):
+        for o in parts:
             if o not in seen:
                 seen.add(o)
                 out.append(o)
