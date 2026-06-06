@@ -16,8 +16,8 @@ re-renders the one model.
 
 Output layout::
 
-    <OG_DIR>/benchmark/<urlquote(name)>.png
-    <OG_DIR>/benchmark/<urlquote(name)>.hash
+    <OG_DIR>/benchmark/<name>.png
+    <OG_DIR>/benchmark/<name>.hash
     <OG_DIR>/task/...
     <OG_DIR>/model/...
     <OG_DIR>/manifest.json
@@ -44,7 +44,6 @@ import time
 from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Final, Literal, TypedDict
-from urllib.parse import quote
 
 from playwright.async_api import Browser, BrowserContext, Page, async_playwright
 
@@ -156,25 +155,23 @@ _HASH_FIELDS: Final[tuple[str, ...]] = (
 
 
 def _slug(name: str) -> str:
-    """URL-encode an entity name into a filesystem-relative path that
-    matches what the frontend's ``ShareMeta`` requests.
+    """Return ``name`` unchanged for use as a filesystem-relative path.
 
-    Two things going on:
+    Starlette's ``StaticFiles`` percent-decodes the URL path *before*
+    the file lookup — so it expects the on-disk filename to use
+    literal characters. Earlier versions of this slug called
+    ``quote(name)`` and tried to match the frontend's encoded URL
+    character-for-character; that 404s because the URL is decoded
+    on the way in. Letting ``/`` survive as a real path separator
+    is the only transformation we need (it gets us the nested
+    ``model/{org}/{name}.png`` layout for free via :mod:`pathlib`).
 
-    1. Each path segment is encoded with the same unreserved set
-       JavaScript's ``encodeURIComponent`` uses (``()!*'`` stay
-       literal; everything else gets percent-encoded). Python's
-       ``quote(safe="")`` over-encodes parens, so benchmark names
-       like ``MTEB(eng, v2)`` would 404 against the JS URL.
-
-    2. ``/`` is preserved between segments instead of being
-       percent-encoded. Starlette's ``StaticFiles`` decodes
-       ``%2F`` → ``/`` before the file lookup, so a flat filename
-       of ``org%2Fname.png`` never resolves; we have to store
-       the file at ``org/name.png`` and let the mount serve it
-       at the nested URL the frontend already builds.
+    On Linux containers — our deployment target — every character
+    that can appear in a benchmark / task / model name (``(``, ``)``,
+    ``,``, space, ``=``, …) is a legal filename character, so no
+    sanitisation is needed.
     """
-    return "/".join(quote(p, safe="!*'()") for p in name.split("/"))
+    return name
 
 
 def _params_hash(params: CardParams) -> str:

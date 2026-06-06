@@ -48,7 +48,6 @@ import time
 from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Final, Literal, TypedDict
-from urllib.parse import quote
 
 import matplotlib
 
@@ -187,17 +186,15 @@ _HASH_FIELDS: Final[tuple[str, ...]] = (
 
 
 def _slug(name: str) -> str:
-    """URL-encode an entity name to a relative filesystem path matching
-    what the frontend ``ShareMeta`` requests.
+    """Return ``name`` unchanged for use as a filesystem-relative path.
 
-    Per-segment ``encodeURIComponent``-equivalent encoding (``()!*'``
-    stay literal), with raw ``/`` preserved between segments so model
-    names like ``microsoft/harrier-oss-v1-27b`` land at the nested
-    URL Starlette's ``StaticFiles`` actually resolves. A flat slug
-    with ``%2F`` 404s because Starlette decodes that to ``/`` before
-    the file lookup.
+    Starlette's ``StaticFiles`` percent-decodes the URL path before
+    the file lookup, so the on-disk filename must use literal
+    characters. The only transformation we need is for ``/`` to
+    survive as a real path separator — pathlib turns "org/name" into
+    a nested ``org/name.png`` for free.
     """
-    return "/".join(quote(p, safe="!*'()") for p in name.split("/"))
+    return name
 
 
 def _params_hash(params: CardParams) -> str:
