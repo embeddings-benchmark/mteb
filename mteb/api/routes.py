@@ -474,7 +474,11 @@ async def benchmark_detail(name: str) -> BenchmarkSchema:
     except KeyError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     BENCHMARK_SELECTIONS.labels(name=name, endpoint="detail").inc()
-    return benchmark_to_schema(bench)
+    # Overlay the unified-frame model count so the detail endpoint matches
+    # the list endpoint (`/v1/benchmarks`) — the home-page primary tile
+    # falls back to /v1/benchmarks/{name} for benchmarks pulled off the
+    # curated menu and was getting num_models=0 without this.
+    return _with_num_models(benchmark_to_schema(bench))
 
 
 # ---------------------------------------------------------------------------
