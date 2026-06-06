@@ -160,18 +160,16 @@ R_BENCHMARK_ENTRIES = [
 HOME_BENCHMARK_ENTRIES = [
     MenuEntry(
         name="Language",
-        description="Multilingual + per-language leaderboards.",
+        description="Multilingual and per-language leaderboards",
         open=True,
         benchmarks=mteb.get_benchmarks(
             [
-                "MTEB(Multilingual, v2)",
-                "MTEB(eng, v2)",
-                "MTEB(Europe, v1)",
-                "MTEB(Indic, v1)",
-                "MTEB(Scandinavian, v1)",
                 "MTEB(cmn, v1)",
+                "MTEB(Indic, v1)",
                 "MTEB(deu, v1)",
                 "MTEB(fra, v1)",
+                "MTEB(Europe, v1)",
+                "MTEB(Scandinavian, v1)",
                 "JMTEB(v2)",
                 "MTEB(kor, v1)",
                 "MTEB(nld, v1)",
@@ -186,7 +184,7 @@ HOME_BENCHMARK_ENTRIES = [
     ),
     MenuEntry(
         name="Modality",
-        description="Image, audio and video leaderboards.",
+        description="Image, audio and video leaderboards",
         open=True,
         benchmarks=mteb.get_benchmarks(
             [
@@ -204,26 +202,25 @@ HOME_BENCHMARK_ENTRIES = [
     ),
     MenuEntry(
         name="Retrieval",
-        description="Retrieval-focused leaderboards across languages and modalities.",
+        description="Retrieval-focused leaderboards across languages and modalities",
         open=True,
         benchmarks=mteb.get_benchmarks(
             [
-                "RTEB(beta)",
                 "RTEB(eng, beta)",
                 "ViDoRe(v3)",
-                "JinaVDR",
-                "ViDoRe(v1&v2)",
                 "RTEB(fra, beta)",
                 "RTEB(deu, beta)",
                 "RTEB(jpn, beta)",
+                "ViDoRe(v1&v2)",
                 "BEIR",
                 "BEIR-NL",
+                "JinaVDR",
             ]
         ),
     ),
     MenuEntry(
         name="Domain",
-        description="Domain-specialised leaderboards (code, law, medicine, chemistry).",
+        description="Domain-specialised leaderboards such as code, law, medicine, chemistry",
         open=True,
         benchmarks=mteb.get_benchmarks(
             [
