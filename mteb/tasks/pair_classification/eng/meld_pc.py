@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import ClassVar
+
 from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -78,6 +80,12 @@ class MELDVAPairClassification(AbsTaskPairClassification):
         is_beta=True,
     )
 
-    input1_column_name = (("video1", "video"), ("audio1", "audio"))
-    input2_column_name = (("video2", "video"), ("audio2", "audio"))
+    input1_column_name: ClassVar[dict[str, str]] = {
+        "video1": "video",
+        "audio1": "audio",
+    }
+    input2_column_name: ClassVar[dict[str, str]] = {
+        "video2": "video",
+        "audio2": "audio",
+    }
     label_column_name: str = "label"

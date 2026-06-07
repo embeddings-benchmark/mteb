@@ -283,10 +283,10 @@ Once we have decided on task, we can implement them as follows:
 
 === "Multimodal Pair Classification"
 
-    For multimodal PairClassification task, you need to specify columns types in `input1_column_name` & `input2_column_name` in format `(column_name, modality)`, e.g.
+    For multimodal PairClassification task, you need to specify columns types in `input1_column_name` & `input2_column_name` as a mapping `{column_name: modality}`, e.g.
     ```python
-    input1_column_name = (("video_column_name", "video"),)
-    input2_column_name = (("audio_column_name", "audio"),)
+    input1_column_name = {"video_column_name": "video"}
+    input2_column_name = {"audio_column_name": "audio"}
     ```
     Full example:
     ```python
@@ -333,8 +333,8 @@ Once we have decided on task, we can implement them as follows:
     """,
         )
 
-        input1_column_name = (("video", "video"),)
-        input2_column_name = (("text", "text"),)
+        input1_column_name = {"video": "video"}
+        input2_column_name = {"text": "text"}
         label_column_name: str = "label"
     ```
 

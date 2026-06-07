@@ -43,6 +43,6 @@ class VideoConPairClassification(AbsTaskPairClassification):
 """,
     )
 
-    input1_column_name = (("video", "video"),)
-    input2_column_name = (("text", "text"),)
+    input1_column_name = ({"video": "video"},)
+    input2_column_name = ({"text": "text"},)
     label_column_name: str = "label"

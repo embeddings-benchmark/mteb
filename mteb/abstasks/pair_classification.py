@@ -21,7 +21,7 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Mapping
     from pathlib import Path
 
     from numpy.typing import NDArray
@@ -93,8 +93,8 @@ class AbsTaskPairClassification(AbsTask):
     """
 
     abstask_prompt = "Retrieve text that are semantically similar to the given text."
-    input1_column_name: str | Sequence[tuple[str, Modalities]] = "sentence1"
-    input2_column_name: str | Sequence[tuple[str, Modalities]] = "sentence2"
+    input1_column_name: str | Mapping[str, Modalities] = "sentence1"
+    input2_column_name: str | Mapping[str, Modalities] = "sentence2"
     label_column_name: str = "labels"
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
@@ -226,9 +226,7 @@ class AbsTaskPairClassification(AbsTask):
             and len(self.metadata.modalities) == 1
         ):
             modality1 = self.metadata.modalities[0]
-            col_modalities1: Sequence[tuple[str, str]] = [
-                (self.input1_column_name, modality1)
-            ]
+            col_modalities1: Mapping[str, str] = {self.input1_column_name: modality1}
         else:
             col_modalities1 = self.input1_column_name  # type: ignore[assignment]
 
@@ -237,9 +235,7 @@ class AbsTaskPairClassification(AbsTask):
             and len(self.metadata.modalities) == 1
         ):
             modality2 = self.metadata.modalities[0]
-            col_modalities2: Sequence[tuple[str, str]] = [
-                (self.input2_column_name, modality2)
-            ]
+            col_modalities2: Mapping[str, str] = {self.input2_column_name: modality2}
         else:
             col_modalities2 = self.input2_column_name  # type: ignore[assignment]
 
@@ -298,11 +294,11 @@ class AbsTaskPairClassification(AbsTask):
         if isinstance(self.input1_column_name, str):
             cols1 = [self.input1_column_name]
         else:
-            cols1 = [col for col, _ in self.input1_column_name]
+            cols1 = list(self.input1_column_name)
         if isinstance(self.input2_column_name, str):
             cols2 = [self.input2_column_name]
         else:
-            cols2 = [col for col, _ in self.input2_column_name]
+            cols2 = list(self.input2_column_name)
         self._upload_dataset_to_hub(
             repo_name,
             [*cols1, *cols2, self.label_column_name],

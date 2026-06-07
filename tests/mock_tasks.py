@@ -5926,8 +5926,8 @@ class MockVideoAudioPairClassificationTask(AbsTaskPairClassification):
     )
     metadata.modalities = ["video", "audio"]
     metadata.category = "va2va"
-    input1_column_name = [("video1", "video"), ("audio1", "audio")]
-    input2_column_name = [("video2", "video"), ("audio2", "audio")]
+    input1_column_name = {"video1": "video", "audio1": "audio"}
+    input2_column_name = {"video2": "video", "audio2": "audio"}
 
     label_column_name = "label"
 
@@ -6044,8 +6044,8 @@ class MockVideoAudioSTSTask(AbsTaskSTS):
     metadata.modalities = ["video", "audio"]
     metadata.category = "va2va"
     column_names = (
-        [("video1", "video"), ("audio1", "audio")],
-        [("video2", "video"), ("audio2", "audio")],
+        {"video1": "video", "audio1": "audio"},
+        {"video2": "video", "audio2": "audio"},
     )
 
     expected_stats = {
@@ -6698,8 +6698,8 @@ class MockAsymVideoAudioPairClassificationTask(AbsTaskPairClassification):
     metadata.modalities = ["video", "audio"]
     metadata.category = "v2a"
 
-    input1_column_name = [("video1", "video")]
-    input2_column_name = [("audio2", "audio")]
+    input1_column_name = {"video1": "video"}
+    input2_column_name = {"audio2": "audio"}
     input1_prompt_type = PromptType.query
     input2_prompt_type = PromptType.document
 
@@ -6789,18 +6789,8 @@ class MockAsymVideoAudioPairClassificationTaskV2(AbsTaskPairClassification):
     metadata.modalities = ["video", "audio"]
     metadata.category = "v2a"
 
-    input1_column_name = [
-        (
-            "video",
-            "video",
-        )
-    ]
-    input2_column_name = [
-        (
-            "audio",
-            "audio",
-        )
-    ]
+    input1_column_name = {"video": "video"}
+    input2_column_name = {"audio": "audio"}
     input1_prompt_type = PromptType.query
     input2_prompt_type = PromptType.document
 
@@ -6890,18 +6880,8 @@ class MockSymCustomVideoAudioPairClassificationTaskV2(AbsTaskPairClassification)
     metadata.modalities = ["video", "audio"]
     metadata.category = "v2a"
 
-    input1_column_name = [
-        (
-            "video",
-            "video",
-        )
-    ]
-    input2_column_name = [
-        (
-            "audio",
-            "audio",
-        )
-    ]
+    input1_column_name = {"video": "video"}
+    input2_column_name = {"audio": "audio"}
     input1_prompt_type = PromptType.document
     input2_prompt_type = PromptType.document
 
@@ -6992,18 +6972,8 @@ class MockSymCustomVideoAudiSTSTask(AbsTaskSTS):
     metadata.category = "v2a"
 
     column_names = (
-        [
-            (
-                "video",
-                "video",
-            )
-        ],
-        [
-            (
-                "audio",
-                "audio",
-            )
-        ],
+        {"video": "video"},
+        {"audio": "audio"},
     )
 
     input1_prompt_type = PromptType.document

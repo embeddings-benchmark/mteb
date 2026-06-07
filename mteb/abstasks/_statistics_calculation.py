@@ -21,7 +21,7 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Mapping, Sequence
+    from collections.abc import Callable, Mapping
 
     from PIL import Image
     from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
@@ -456,7 +456,7 @@ _STAT_FN: dict[str, Any] = {
 
 
 def _compute_side_statistics(
-    col_modalities: Sequence[tuple[str, str]],
+    col_modalities: Mapping[str, str],
     load_col: Callable[[str], list[Any]],
     n: int,
     max_workers: int | None = None,
@@ -464,8 +464,8 @@ def _compute_side_statistics(
     """Compute per-modality statistics and per-row hashes for one side of a pair.
 
     Args:
-        col_modalities: List of ``(column_name, modality)`` pairs describing
-            which dataset column carries which modality for this side.
+        col_modalities: ``{column_name: modality}`` mapping describing which
+            dataset columns carry which modalities for this side.
         load_col: Callable that loads a column by name from the dataset.
         n: Number of samples.
         max_workers: Maximum number of worker threads for hash computation.
@@ -481,7 +481,7 @@ def _compute_side_statistics(
         "video_statistics": None,
     }
     all_hashes: list[list[str]] = [[] for _ in range(n)]
-    for col, modality in col_modalities:
+    for col, modality in col_modalities.items():
         data = load_col(col)
         hashes = _HASH_FN[modality](data, max_workers=max_workers)
         stats[f"{modality}_statistics"] = _STAT_FN[modality](data, hashes=hashes)
@@ -491,8 +491,8 @@ def _compute_side_statistics(
 
 
 def calculate_pair_modality_statistics(
-    col_modalities1: Sequence[tuple[str, str]],
-    col_modalities2: Sequence[tuple[str, str]],
+    col_modalities1: Mapping[str, str],
+    col_modalities2: Mapping[str, str],
     load_col: Callable[[str], list[Any]],
     n: int,
     max_workers: int | None = None,
@@ -502,8 +502,8 @@ def calculate_pair_modality_statistics(
     This is shared between STS and PairClassification tasks.
 
     Args:
-        col_modalities1: ``[(column_name, modality), ...]`` for side 1.
-        col_modalities2: ``[(column_name, modality), ...]`` for side 2.
+        col_modalities1: ``{column_name: modality}`` for side 1.
+        col_modalities2: ``{column_name: modality}`` for side 2.
         load_col: Callable that loads a column by name from the dataset split.
         n: Number of samples.
         max_workers: Maximum number of worker threads for hash computation.

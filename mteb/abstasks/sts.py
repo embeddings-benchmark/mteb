@@ -18,7 +18,7 @@ from ._statistics_calculation import (
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Mapping
     from pathlib import Path
 
     from datasets import Dataset
@@ -129,8 +129,8 @@ class AbsTaskSTS(AbsTask):
     column_names: (
         tuple[str, str]
         | tuple[
-            Sequence[tuple[str, Modalities]],
-            Sequence[tuple[str, Modalities]],
+            Mapping[str, Modalities],
+            Mapping[str, Modalities],
         ]
     ) = (
         "sentence1",
@@ -271,8 +271,8 @@ class AbsTaskSTS(AbsTask):
 
         if isinstance(self.column_names[0], str) and len(self.metadata.modalities) == 1:
             modality = self.metadata.modalities[0]
-            col_modalities1 = [(str(self.column_names[0]), modality)]
-            col_modalities2 = [(str(self.column_names[1]), modality)]
+            col_modalities1 = {str(self.column_names[0]): modality}
+            col_modalities2 = {str(self.column_names[1]): modality}
         else:
             col_modalities1 = self.column_names[0]  # type: ignore[assignment]
             col_modalities2 = self.column_names[1]  # type: ignore[assignment]
@@ -315,9 +315,7 @@ class AbsTaskSTS(AbsTask):
         if isinstance(self.column_names[0], str):
             cols = [self.column_names[0], self.column_names[1]]
         else:
-            cols = [col for col, _ in self.column_names[0]] + [
-                col for col, _ in self.column_names[1]
-            ]
+            cols = list(self.column_names[0]) + list(self.column_names[1])
         self._upload_dataset_to_hub(
             repo_name, [*cols, "score"], num_proc=num_proc, **kwargs
         )
