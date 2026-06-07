@@ -60,6 +60,8 @@ jobs:
           auto-update-conda: true
           miniconda-version: "latest"
           activate-environment: ffmpeg
+          channels: conda-forge
+          conda-remove-defaults: true
 
       - name: Install FFmpeg (Windows)
         if: runner.os == 'Windows'
