@@ -20,9 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Free disk space
-        uses: ./.github/actions/free-disk-space
-
       - name: Install uv
         uses: astral-sh/setup-uv@v8
         with:

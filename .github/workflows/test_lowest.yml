@@ -19,9 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Free disk space
-        uses: ./.github/actions/free-disk-space
-
       - name: Cache Hugging Face
         id: cache-hf
         uses: actions/cache@v5

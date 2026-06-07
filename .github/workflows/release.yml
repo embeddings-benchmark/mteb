@@ -29,9 +29,6 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.RELEASE }}
 
-      - name: Free disk space
-        uses: ./.github/actions/free-disk-space
-
       - name: Python Semantic Release
         id: release
         uses: python-semantic-release/python-semantic-release@v9.8.9
