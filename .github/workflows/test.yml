@@ -36,7 +36,7 @@ jobs:
           key: ${{ runner.os }}-hf
 
       - name: Install uv and set the Python version
-        uses: astral-sh/setup-uv@v8
+        uses: astral-sh/setup-uv@v8.2.0
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
