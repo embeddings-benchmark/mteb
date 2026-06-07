@@ -82,16 +82,13 @@ def _cached_json(
     ``Cache-Control: no-cache``.
     """
     cache_control = f"public, max-age={max_age}" if max_age is not None else "no-cache"
-    if request.headers.get("if-none-match") == payload.etag:
-        return Response(
-            status_code=304,
-            headers={"etag": payload.etag, "cache-control": cache_control},
-        )
     headers = {
         "etag": payload.etag,
         "vary": "accept-encoding",
         "cache-control": cache_control,
     }
+    if request.headers.get("if-none-match") == payload.etag:
+        return Response(status_code=304, headers=headers)
     use_gzip = (
         payload.body_gzip is not None
         and "gzip" in request.headers.get("accept-encoding", "").lower()
@@ -479,10 +476,10 @@ async def benchmark_leaders(
 ) -> BenchmarkLeadersSchema:
     """Highest-mean-task model in each size bucket — slim payload for home tiles."""
     _require_benchmark(name)
+    BENCHMARK_SELECTIONS.labels(name=name, endpoint="leaders").inc()
     from mteb.api.aggregators import build_benchmark_leaders
 
     parsed = _parse_buckets_json(buckets)
-    BENCHMARK_SELECTIONS.labels(name=name, endpoint="leaders").inc()
     return await build_benchmark_leaders(name, parsed)
 
 

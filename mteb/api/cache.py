@@ -180,14 +180,13 @@ _task_score_bytes: dict[str, Serialized] = {}
 _model_score_bytes: dict[str, Serialized] = {}
 _per_language_bytes: dict[str, Serialized] = {}
 
+_summary_bytes_locks: dict[str, asyncio.Lock] = {}
+_summary_lang_bytes_locks: dict[tuple[str, tuple[str, ...]], asyncio.Lock] = {}
+_task_score_bytes_locks: dict[str, asyncio.Lock] = {}
+_model_score_bytes_locks: dict[str, asyncio.Lock] = {}
+_per_language_bytes_locks: dict[str, asyncio.Lock] = {}
+
 _K = TypeVar("_K")
-_bytes_locks: dict[str, dict] = {
-    "summary": {},
-    "summary_lang": {},
-    "task_scores": {},
-    "model_scores": {},
-    "per_language": {},
-}
 
 
 def _lock_for(locks: dict[_K, asyncio.Lock], key: _K) -> asyncio.Lock:
@@ -246,7 +245,7 @@ async def get_summary_bytes(name: str, languages: tuple[str, ...] = ()) -> Seria
     """JSON bytes + gzip + ETag for the summary endpoint."""
     if not languages:
         return await _cached_bytes(
-            _summary_bytes, _bytes_locks["summary"], name, lambda: get_summary(name)
+            _summary_bytes, _summary_bytes_locks, name, lambda: get_summary(name)
         )
 
     key = (name, languages)
@@ -254,8 +253,7 @@ async def get_summary_bytes(name: str, languages: tuple[str, ...] = ()) -> Seria
     if cached is not None:
         _summary_lang_bytes.move_to_end(key)
         return cached
-    locks = _bytes_locks["summary_lang"]
-    async with _lock_for(locks, key):
+    async with _lock_for(_summary_lang_bytes_locks, key):
         cached = _summary_lang_bytes.get(key)
         if cached is not None:
             _summary_lang_bytes.move_to_end(key)
@@ -266,7 +264,7 @@ async def get_summary_bytes(name: str, languages: tuple[str, ...] = ()) -> Seria
         _summary_lang_bytes[key] = cached
         if len(_summary_lang_bytes) > _SUMMARY_LANG_MAX:
             evicted, _ = _summary_lang_bytes.popitem(last=False)
-            locks.pop(evicted, None)
+            _summary_lang_bytes_locks.pop(evicted, None)
         return cached
 
 
@@ -276,7 +274,7 @@ async def get_per_language_bytes(name: str) -> Serialized:
 
     return await _cached_bytes(
         _per_language_bytes,
-        _bytes_locks["per_language"],
+        _per_language_bytes_locks,
         name,
         lambda: build_benchmark_per_language(name),
     )
@@ -289,9 +287,7 @@ async def get_task_scores_bytes(name: str) -> Serialized:
     async def _build():
         return await asyncio.to_thread(build_task_scores, name, get_cache())
 
-    return await _cached_bytes(
-        _task_score_bytes, _bytes_locks["task_scores"], name, _build
-    )
+    return await _cached_bytes(_task_score_bytes, _task_score_bytes_locks, name, _build)
 
 
 async def get_model_scores_bytes(name: str) -> Serialized:
@@ -300,7 +296,7 @@ async def get_model_scores_bytes(name: str) -> Serialized:
 
     return await _cached_bytes(
         _model_score_bytes,
-        _bytes_locks["model_scores"],
+        _model_score_bytes_locks,
         name,
         lambda: build_model_scores(name),
     )
