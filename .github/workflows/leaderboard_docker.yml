@@ -17,6 +17,10 @@ on:
       - 'uv.lock'
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test-dockerfile:
     runs-on: ubuntu-latest
