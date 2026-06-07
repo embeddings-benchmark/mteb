@@ -25,6 +25,6 @@ jobs:
         run: |
           make install-for-tests
 
-      - name: Build and Deploy
+      - name: Run typecheck
         run: |
           make typecheck

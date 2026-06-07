@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: uv sync --group docs
 
-      - name: Build
+      - name: Build docs
         run: make build-docs
 
       - name: Upload docs artifact
