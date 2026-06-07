@@ -443,31 +443,12 @@ def _flat_leaderboard_benchmarks() -> tuple[Benchmark, ...]:
     return tuple(mteb.get_benchmarks(display_on_leaderboard=True))
 
 
-_row_index_cache: dict[int, dict[str, SummaryRowSchema]] = {}
-
-
-def _summary_row_index(
-    summary: BenchmarkSummarySchema,
-) -> dict[str, SummaryRowSchema]:
-    """O(1) ``model_name -> SummaryRowSchema`` lookup for one cached summary.
-
-    Indexed by ``id(summary)`` and cached for the summary's lifetime — since
-    the summary itself is held in the schema cache, repeat lookups skip the
-    full ``rows`` scan.
-    """
-    key = id(summary)
-    idx = _row_index_cache.get(key)
-    if idx is None:
-        idx = {row.model.name: row for row in summary.rows}
-        _row_index_cache[key] = idx
-    return idx
-
-
 async def build_model_scores(name: str) -> ModelScoresSchema:
     """Per-benchmark scores for a single model.
 
     Fans out the cold summary builds with ``asyncio.gather`` so wall time is
-    max() instead of sum(); per-benchmark indexes give O(1) model lookup.
+    max() instead of sum(). A linear scan per benchmark is cheap (~500 rows ×
+    50 benchmarks ≈ microseconds) so we don't memoise the per-summary index.
     """
     from mteb.api.cache import get_summary
 
@@ -483,8 +464,7 @@ async def build_model_scores(name: str) -> ModelScoresSchema:
     for bench, summary in zip(all_benchmarks, results):
         if isinstance(summary, BaseException):
             continue
-        index = _summary_row_index(summary)
-        row = index.get(name)
+        row = next((r for r in summary.rows if r.model.name == name), None)
         if row is None:
             continue
         if model_meta is None:

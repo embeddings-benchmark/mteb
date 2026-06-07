@@ -1,8 +1,9 @@
 """FastAPI routes for the leaderboard.
 
-Handlers return pydantic schemas directly — FastAPI serialises them via
-pydantic-core on the way out. ETag-based 304 revalidation is handled by
-:class:`mteb.api.app.ETagMiddleware`.
+Cached endpoints serve pre-built JSON bytes via :func:`_cached_json`, which
+also handles 304 revalidation, gzip negotiation, and ``Cache-Control``.
+Non-cached endpoints return pydantic schemas directly — FastAPI serialises
+them via pydantic-core.
 """
 
 from __future__ import annotations
@@ -86,15 +87,20 @@ def _cached_json(
             status_code=304,
             headers={"etag": payload.etag, "cache-control": cache_control},
         )
-    use_gzip = "gzip" in request.headers.get("accept-encoding", "").lower()
-    body = payload.body_gzip if use_gzip else payload.body
     headers = {
         "etag": payload.etag,
         "vary": "accept-encoding",
         "cache-control": cache_control,
     }
-    if use_gzip and payload.body_gzip is not payload.body:
+    use_gzip = (
+        payload.body_gzip is not None
+        and "gzip" in request.headers.get("accept-encoding", "").lower()
+    )
+    if use_gzip:
         headers["content-encoding"] = "gzip"
+        body = payload.body_gzip
+    else:
+        body = payload.body
     return Response(content=body, media_type="application/json", headers=headers)
 
 
@@ -370,15 +376,8 @@ async def benchmark_scores(
     """
     _require_benchmark(name)
     BENCHMARK_SELECTIONS.labels(name=name, endpoint="scores").inc()
-    picked: tuple[str, ...] = ()
-    if languages:
-        flat: list[str] = []
-        for entry in languages:
-            for chunk in entry.split(","):
-                stripped = chunk.strip()
-                if stripped:
-                    flat.append(stripped)
-        picked = tuple(sorted(set(flat)))
+    # Sort+dedupe so the cache key is order-independent.
+    picked = tuple(sorted(set(_as_tuple(languages) or ())))
     return _cached_json(request, await get_summary_bytes(name, picked))
 
 

@@ -1,8 +1,13 @@
 """Process-wide caches for the leaderboard API.
 
-Holds both pydantic schemas and their pre-serialised JSON bytes + ETag. Routes
-that hit a warm cache return the bytes directly; cold builds run the schema
-constructor once, then serialise once.
+Holds pre-serialised JSON bytes + gzipped bytes + ETag per endpoint. Routes
+read straight from the bytes cache; cold builds run the schema constructor,
+serialise on a worker thread (to keep gzip off the event loop), and store the
+result.
+
+Only ``_summary_schemas`` keeps the pydantic schema around — ``build_model_scores``
+and ``build_benchmark_leaders`` scan its rows. Other endpoints discard the schema
+after serialising.
 """
 
 from __future__ import annotations
@@ -15,7 +20,7 @@ import logging
 import threading
 from collections import OrderedDict
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypeVar
 
 import polars as pl
 
@@ -23,14 +28,11 @@ from mteb.api.aggregators import build_benchmark_summary
 from mteb.api.settings import cache_repo, preload_full
 
 if TYPE_CHECKING:
+    from collections.abc import Awaitable, Callable
+
     from pydantic import BaseModel
 
-    from mteb.api.schemas import (
-        BenchmarkPerLanguageSchema,
-        BenchmarkSummarySchema,
-        ModelScoresSchema,
-        TaskScoresSchema,
-    )
+    from mteb.api.schemas import BenchmarkSummarySchema
     from mteb.cache.result_cache import ResultCache
 
 logger = logging.getLogger(__name__)
@@ -38,29 +40,32 @@ logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True, slots=True)
 class Serialized:
-    """Pre-serialised schema response — raw + gzipped JSON bytes + ETag."""
+    """Pre-serialised schema response — raw bytes + optional gzipped variant + ETag."""
 
     body: bytes
-    body_gzip: bytes
+    body_gzip: bytes | None  # None when payload is too small to bother compressing
     etag: str
 
 
-# Skip the gzip variant for tiny payloads — gzip framing adds overhead and
-# clients on a fast link don't gain anything from compressing a few KB.
+# Tiny payloads don't gain from gzip; framing alone is ~20 bytes of overhead.
 _GZIP_MIN_BYTES = 1024
 
 
 def serialize_bytes(body: bytes) -> Serialized:
-    """Wrap raw JSON bytes with a gzipped variant + matching ETag."""
+    """Wrap raw JSON bytes with a gzipped variant (when worth it) + matching ETag.
+
+    Synchronous — callers that hit this on a cold path should run it through
+    :func:`asyncio.to_thread` so the gzip pass doesn't stall the event loop on
+    multi-MB payloads.
+    """
     body_gzip = (
-        gzip.compress(body, compresslevel=6) if len(body) >= _GZIP_MIN_BYTES else body
+        gzip.compress(body, compresslevel=6) if len(body) >= _GZIP_MIN_BYTES else None
     )
     etag = '"' + hashlib.sha1(body, usedforsecurity=False).hexdigest() + '"'
     return Serialized(body=body, body_gzip=body_gzip, etag=etag)
 
 
 def _serialize(schema: BaseModel) -> Serialized:
-    """Dump a schema to JSON, gzip-compress, and compute its ETag."""
     return serialize_bytes(schema.model_dump_json(by_alias=True).encode())
 
 
@@ -157,20 +162,16 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
     return loaded, unified
 
 
-# Schema caches. Bounded by the registry size for benchmarks/tasks/models;
-# _summary_lang_schemas keys by (name, sorted_langs) so clients can in
-# principle expand it — gated by an LRU eviction limit.
+# Only kept because aggregators (build_model_scores, build_benchmark_leaders)
+# scan ``summary.rows`` for individual models. Every other endpoint serialises
+# once and throws the schema away.
 _summary_schemas: dict[str, BenchmarkSummarySchema] = {}
-_summary_lang_schemas: OrderedDict[
-    tuple[str, tuple[str, ...]], BenchmarkSummarySchema
-] = OrderedDict()
-_SUMMARY_LANG_MAX = 256
-_task_score_schemas: dict[str, TaskScoresSchema] = {}
-_model_score_schemas: dict[str, ModelScoresSchema] = {}
-_per_language_schemas: dict[str, BenchmarkPerLanguageSchema] = {}
+_summary_locks: dict[str, asyncio.Lock] = {}
 
-# Parallel serialised caches — same keys as the schema caches above. Routes
-# that just stream bytes back to the client read from these.
+# Serialised-bytes caches — one per endpoint, keyed by name (plus languages tuple
+# for the lang-scoped summary variant). Bounded by registry size except for the
+# language variant, which has an LRU cap.
+_SUMMARY_LANG_MAX = 256
 _summary_bytes: dict[str, Serialized] = {}
 _summary_lang_bytes: OrderedDict[tuple[str, tuple[str, ...]], Serialized] = (
     OrderedDict()
@@ -179,162 +180,130 @@ _task_score_bytes: dict[str, Serialized] = {}
 _model_score_bytes: dict[str, Serialized] = {}
 _per_language_bytes: dict[str, Serialized] = {}
 
+_K = TypeVar("_K")
+_bytes_locks: dict[str, dict] = {
+    "summary": {},
+    "summary_lang": {},
+    "task_scores": {},
+    "model_scores": {},
+    "per_language": {},
+}
 
-# Per-key asyncio.Lock so two concurrent cold requests don't both run a build.
-_summary_locks: dict[str, asyncio.Lock] = {}
-_summary_lang_locks: dict[tuple[str, tuple[str, ...]], asyncio.Lock] = {}
-_per_language_locks: dict[str, asyncio.Lock] = {}
-_task_score_locks: dict[str, asyncio.Lock] = {}
-_model_score_locks: dict[str, asyncio.Lock] = {}
 
-
-def _lock_for(locks: dict, key) -> asyncio.Lock:
+def _lock_for(locks: dict[_K, asyncio.Lock], key: _K) -> asyncio.Lock:
     lock = locks.get(key)
     if lock is None:
         lock = locks.setdefault(key, asyncio.Lock())
     return lock
 
 
-async def get_summary(
-    name: str, languages: tuple[str, ...] = ()
-) -> BenchmarkSummarySchema:
-    """Return the cached summary for ``name``, optionally scoped to ``languages``."""
-    if not languages:
+async def _cached_bytes(
+    store: dict,
+    locks: dict,
+    key,
+    schema_builder: Callable[[], Awaitable[BaseModel]],
+) -> Serialized:
+    """Generic single-flight cache-or-build for serialised bytes.
+
+    Builds the schema under the per-key lock so concurrent cold requests share
+    one schema build; serialises on a worker thread because ``gzip.compress``
+    on a multi-MB body would otherwise pin the event loop.
+    """
+    cached = store.get(key)
+    if cached is not None:
+        return cached
+    async with _lock_for(locks, key):
+        cached = store.get(key)
+        if cached is not None:
+            return cached
+        schema = await schema_builder()
+        cached = await asyncio.to_thread(_serialize, schema)
+        store[key] = cached
+        return cached
+
+
+async def get_summary(name: str) -> BenchmarkSummarySchema:
+    """Cached unfiltered summary schema for ``name``.
+
+    Lang-scoped summaries are not exposed as schemas — only
+    :func:`get_summary_bytes` builds them, and it discards the schema after
+    serialisation.
+    """
+    cached = _summary_schemas.get(name)
+    if cached is not None:
+        return cached
+    async with _lock_for(_summary_locks, name):
         cached = _summary_schemas.get(name)
         if cached is not None:
             return cached
-        async with _lock_for(_summary_locks, name):
-            cached = _summary_schemas.get(name)
-            if cached is not None:
-                return cached
-            logger.info("Building summary for %s", name)
-            schema = await build_benchmark_summary(name, get_cache())
-            _summary_schemas[name] = schema
-            return schema
-
-    key = (name, languages)
-    cached = _summary_lang_schemas.get(key)
-    if cached is not None:
-        _summary_lang_schemas.move_to_end(key)
-        return cached
-    async with _lock_for(_summary_lang_locks, key):
-        cached = _summary_lang_schemas.get(key)
-        if cached is not None:
-            _summary_lang_schemas.move_to_end(key)
-            return cached
-        logger.info("Building summary for %s (langs=%s)", name, languages)
-        schema = await build_benchmark_summary(name, get_cache(), languages=languages)
-        _summary_lang_schemas[key] = schema
-        if len(_summary_lang_schemas) > _SUMMARY_LANG_MAX:
-            evicted, _ = _summary_lang_schemas.popitem(last=False)
-            _summary_lang_locks.pop(evicted, None)
-            _summary_lang_bytes.pop(evicted, None)
+        logger.info("Building summary for %s", name)
+        schema = await build_benchmark_summary(name, get_cache())
+        _summary_schemas[name] = schema
         return schema
 
 
 async def get_summary_bytes(name: str, languages: tuple[str, ...] = ()) -> Serialized:
-    """Return JSON bytes + ETag for ``get_summary(name, languages)``."""
+    """JSON bytes + gzip + ETag for the summary endpoint."""
     if not languages:
-        cached = _summary_bytes.get(name)
-        if cached is not None:
-            return cached
-        schema = await get_summary(name)
-        cached = _serialize(schema)
-        _summary_bytes[name] = cached
-        return cached
+        return await _cached_bytes(
+            _summary_bytes, _bytes_locks["summary"], name, lambda: get_summary(name)
+        )
+
     key = (name, languages)
     cached = _summary_lang_bytes.get(key)
     if cached is not None:
         _summary_lang_bytes.move_to_end(key)
         return cached
-    schema = await get_summary(name, languages)
-    cached = _serialize(schema)
-    _summary_lang_bytes[key] = cached
-    if len(_summary_lang_bytes) > _SUMMARY_LANG_MAX:
-        _summary_lang_bytes.popitem(last=False)
-    return cached
-
-
-async def get_per_language(name: str) -> BenchmarkPerLanguageSchema:
-    """Return the cached per-language schema for ``name``."""
-    cached = _per_language_schemas.get(name)
-    if cached is not None:
-        return cached
-    async with _lock_for(_per_language_locks, name):
-        cached = _per_language_schemas.get(name)
+    locks = _bytes_locks["summary_lang"]
+    async with _lock_for(locks, key):
+        cached = _summary_lang_bytes.get(key)
         if cached is not None:
+            _summary_lang_bytes.move_to_end(key)
             return cached
-        from mteb.api.aggregators import build_benchmark_per_language
-
-        logger.info("Building per-language scores for %s", name)
-        schema = await build_benchmark_per_language(name)
-        _per_language_schemas[name] = schema
-        return schema
+        logger.info("Building summary for %s (langs=%s)", name, languages)
+        schema = await build_benchmark_summary(name, get_cache(), languages=languages)
+        cached = await asyncio.to_thread(_serialize, schema)
+        _summary_lang_bytes[key] = cached
+        if len(_summary_lang_bytes) > _SUMMARY_LANG_MAX:
+            evicted, _ = _summary_lang_bytes.popitem(last=False)
+            locks.pop(evicted, None)
+        return cached
 
 
 async def get_per_language_bytes(name: str) -> Serialized:
-    """JSON bytes + ETag for ``get_per_language(name)``."""
-    cached = _per_language_bytes.get(name)
-    if cached is not None:
-        return cached
-    schema = await get_per_language(name)
-    cached = _serialize(schema)
-    _per_language_bytes[name] = cached
-    return cached
+    """JSON bytes + gzip + ETag for the per-language endpoint."""
+    from mteb.api.aggregators import build_benchmark_per_language
 
-
-async def get_task_scores(name: str) -> TaskScoresSchema:
-    """Return the cached task-scores schema for ``name``."""
-    cached = _task_score_schemas.get(name)
-    if cached is not None:
-        return cached
-    async with _lock_for(_task_score_locks, name):
-        cached = _task_score_schemas.get(name)
-        if cached is not None:
-            return cached
-        from mteb.api.aggregators import build_task_scores
-
-        schema = await asyncio.to_thread(build_task_scores, name, get_cache())
-        _task_score_schemas[name] = schema
-        return schema
+    return await _cached_bytes(
+        _per_language_bytes,
+        _bytes_locks["per_language"],
+        name,
+        lambda: build_benchmark_per_language(name),
+    )
 
 
 async def get_task_scores_bytes(name: str) -> Serialized:
-    """JSON bytes + ETag for ``get_task_scores(name)``."""
-    cached = _task_score_bytes.get(name)
-    if cached is not None:
-        return cached
-    schema = await get_task_scores(name)
-    cached = _serialize(schema)
-    _task_score_bytes[name] = cached
-    return cached
+    """JSON bytes + gzip + ETag for the task-scores endpoint."""
+    from mteb.api.aggregators import build_task_scores
 
+    async def _build():
+        return await asyncio.to_thread(build_task_scores, name, get_cache())
 
-async def get_model_scores(name: str) -> ModelScoresSchema:
-    """Return the cached model-scores schema for ``name``."""
-    cached = _model_score_schemas.get(name)
-    if cached is not None:
-        return cached
-    async with _lock_for(_model_score_locks, name):
-        cached = _model_score_schemas.get(name)
-        if cached is not None:
-            return cached
-        from mteb.api.aggregators import build_model_scores
-
-        schema = await build_model_scores(name)
-        _model_score_schemas[name] = schema
-        return schema
+    return await _cached_bytes(
+        _task_score_bytes, _bytes_locks["task_scores"], name, _build
+    )
 
 
 async def get_model_scores_bytes(name: str) -> Serialized:
-    """JSON bytes + ETag for ``get_model_scores(name)``."""
-    cached = _model_score_bytes.get(name)
-    if cached is not None:
-        return cached
-    schema = await get_model_scores(name)
-    cached = _serialize(schema)
-    _model_score_bytes[name] = cached
-    return cached
+    """JSON bytes + gzip + ETag for the model-scores endpoint."""
+    from mteb.api.aggregators import build_model_scores
+
+    return await _cached_bytes(
+        _model_score_bytes,
+        _bytes_locks["model_scores"],
+        name,
+        lambda: build_model_scores(name),
+    )
 
 
 def _prewarm_training_datasets() -> None:
@@ -353,7 +322,12 @@ def _prewarm_training_datasets() -> None:
 
 
 def _prewarm_list_schemas() -> None:
-    """Pre-build the unfiltered list schemas + their serialised bytes."""
+    """Pre-build the unfiltered list schemas + their serialised bytes.
+
+    The four builders are independent — run them on a small thread pool.
+    """
+    from concurrent.futures import ThreadPoolExecutor
+
     from mteb.api.routes import (
         _benchmark_schemas_bytes,
         _filtered_model_schemas_bytes,
@@ -361,10 +335,25 @@ def _prewarm_list_schemas() -> None:
         _menu_schemas_bytes,
     )
 
-    _menu_schemas_bytes()
-    _benchmark_schemas_bytes()
-    _filtered_task_schemas_bytes(None, None, None, None, None)
-    _filtered_model_schemas_bytes(None, None, None, None, None, None, None, False)
+    with ThreadPoolExecutor(max_workers=4, thread_name_prefix="warm-list") as ex:
+        futures = [
+            ex.submit(_menu_schemas_bytes),
+            ex.submit(_benchmark_schemas_bytes),
+            ex.submit(_filtered_task_schemas_bytes, None, None, None, None, None),
+            ex.submit(
+                _filtered_model_schemas_bytes,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                False,
+            ),
+        ]
+        for f in futures:
+            f.result()
 
 
 def warmup_blocking() -> None:
