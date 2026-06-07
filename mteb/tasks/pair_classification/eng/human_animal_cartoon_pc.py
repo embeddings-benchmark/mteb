@@ -1,9 +1,12 @@
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import TYPE_CHECKING, ClassVar
 
 from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 BIBTEX = r"""
 @inproceedings{dong2023simmmdg,
@@ -79,11 +82,11 @@ class HumanAnimalCartoonVAPairClassification(AbsTaskPairClassification):
         is_beta=True,
     )
 
-    input1_column_name: ClassVar[dict[str, str]] = {
+    input1_column_name: ClassVar[Mapping[str, str]] = {
         "video1": "video",
         "audio1": "audio",
     }
-    input2_column_name: ClassVar[dict[str, str]] = {
+    input2_column_name: ClassVar[Mapping[str, str]] = {
         "video2": "video",
         "audio2": "audio",
     }
