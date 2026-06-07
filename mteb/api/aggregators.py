@@ -1,12 +1,9 @@
-"""Build :class:`BenchmarkSummarySchema` from real mteb results.
+"""Build :class:`BenchmarkSummarySchema` and friends from real mteb results.
 
-Bypasses ``_create_summary_table_from_benchmark_results`` because that helper
-collapses ``model_name`` into a markdown-linked ``Model`` column for the Gradio
-Styler. We need to keep the raw ``model_name`` so we can look up each row in
-``MODEL_REGISTRY`` and emit a structured ``ModelMetaSchema``. We *do* reuse the
-arithmetic primitives in ``_create_table`` so per-task-type means, the Borda
-rank, and the zero-shot percentage stay identical to what the Gradio leaderboard
-shows.
+Bypasses ``_create_summary_table_from_benchmark_results`` (which collapses
+``model_name`` into a markdown-linked column for the Gradio Styler) but reuses
+``_create_table`` primitives so per-task-type means, Borda rank, and zero-shot
+% match what the Gradio leaderboard shows.
 """
 
 from __future__ import annotations
@@ -18,6 +15,7 @@ from typing import TYPE_CHECKING
 
 import polars as pl
 
+import mteb
 from mteb.api.adapters import (
     benchmark_to_schema,
     model_meta_to_schema,
@@ -38,17 +36,37 @@ from mteb.api.schemas import (
     TaskScoreRowSchema,
     TaskScoresSchema,
 )
+from mteb.languages import language_label
 from mteb.models.model_implementations import MODEL_REGISTRY
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
-
     from mteb.api.schemas import ModelMetaSchema, TaskMetaSchema
-    from mteb.benchmarks._leaderboard_menu import MenuEntry
     from mteb.benchmarks.benchmark import Benchmark
     from mteb.cache.result_cache import ResultCache
 
 logger = logging.getLogger(__name__)
+
+# Non-score metadata columns from `_create_summary_table` — stripped when
+# building `scores_by_task_type`.
+_SUMMARY_META_COLS = frozenset(
+    {
+        "Rank (Borda)",
+        "Rank (Mean Task)",
+        "Rank",
+        "Model",
+        "Zero-shot",
+        "Active Parameters (B)",
+        "Total Parameters (B)",
+        "Embedding Dimensions",
+        "Max Tokens",
+        "Mean (Task)",
+        "Mean (TaskType)",
+        "Mean (Subset)",
+        "Mean (Public)",
+        "Mean (Private)",
+        "Release Date",
+    }
+)
 
 
 async def build_benchmark_summary(  # noqa: PLR0914
@@ -56,44 +74,29 @@ async def build_benchmark_summary(  # noqa: PLR0914
     cache: ResultCache,
     languages: tuple[str, ...] = (),
 ) -> BenchmarkSummarySchema:
-    """Build the full summary payload the frontend expects for one benchmark.
+    """Build the summary payload for one benchmark.
 
-    Delegates to the benchmark's own ``_create_summary_table`` (so RTEB/MIEB/
-    ViDoRe subclasses get their custom aggregation) and to the existing
-    per-task table builder, then matches each row back onto MODEL_REGISTRY so
-    we can return structured ModelMetaSchema + per-task / per-type score maps.
-    The long polars frame comes from the same parquet-backed cache the Gradio
-    leaderboard uses, so the numbers here match the leaderboard byte-for-byte
-    and we don't pay ``cache.load_results(tasks=bench)`` (~4s) per benchmark.
-    The ``cache`` argument is kept for API compatibility and as a fallback for
-    benchmarks not in the parquet cache.
+    Delegates to the benchmark's own ``_create_summary_table`` and the per-task
+    table builder, then matches each row back onto ``MODEL_REGISTRY`` for
+    structured ``ModelMetaSchema`` + per-task / per-type score maps.
 
     When ``languages`` is non-empty the long frame is pre-filtered to subsets
     whose ``language`` list intersects the picks (matched by raw code OR by
-    ``language_label``) before the summary builders run — so the resulting
-    ``mean_task`` / ``mean_task_type`` / per-task scores reflect ONLY the
-    selected languages. Used by the frontend filter sidebar to recompute
-    scores when the user narrows the language set, instead of fudging the
-    aggregation client-side.
+    ``language_label``) before the summary builders run.
     """
-    import mteb
     from mteb.api.cache import _load_per_benchmark_frames
 
     bench = mteb.get_benchmark(name)
     bench_schema = benchmark_to_schema(bench)
-    # Use the scoped variant: when a benchmark registers a task with a
-    # language restriction (e.g. MIRACL pinned to ``['eng']``), the per-task
-    # `languages` field reflects that restriction instead of leaking the
-    # task class's full unscoped language union into the benchmark's
-    # tasksMeta. The frontend's filter sidebar populates from this list.
+    # Scoped variant: when a benchmark pins a shared task to specific languages
+    # (e.g. MIRACL → ['eng']), the per-task `languages` reflects that pin.
     tasks_meta: list[TaskMetaSchema] = [scoped_task_meta_schema(t) for t in bench.tasks]
 
     frames, _ = _load_per_benchmark_frames()
     long_df = frames.get(bench.name)
     if long_df is None:
-        # Fallback for benchmarks missing from the parquet cache (e.g. recently
-        # added). Costly on first call; the parquet rebuild path in
-        # ``get_all_benchmark_frames`` should normally cover everything.
+        # Benchmark missing from the parquet cache (newly added). Costly first
+        # call; the parquet rebuild normally covers everything.
         results = cache.load_results(tasks=bench, require_model_meta=True)
         long_df = results.to_results_df(bench.tasks)
 
@@ -108,13 +111,8 @@ async def build_benchmark_summary(  # noqa: PLR0914
         )
 
     if languages and "language" in long_df.columns:
-        from mteb.languages import language_label
-
-        # The frontend filter holds human labels (``"English"``); the polars
-        # frame holds raw codes (``"eng-Latn"``). Enumerate codes present in
-        # this frame, map each through ``language_label``, keep codes whose
-        # code OR label is in the picked set. Cached at the ``get_summary``
-        # layer so this scan runs once per (benchmark, slice).
+        # The frontend filter holds labels ("English"); the frame holds codes
+        # ("eng-Latn"). Map both ways and keep codes whose code or label is picked.
         picked_set = set(languages)
         all_codes_series = (
             long_df.lazy()
@@ -139,12 +137,8 @@ async def build_benchmark_summary(  # noqa: PLR0914
             pl.col("language").list.eval(pl.element().is_in(code_match)).list.any()
         )
 
-    # Both builders aggregate the same long frame independently, so build them
-    # in parallel — polars releases the GIL during heavy aggregations. Wall
-    # time drops from sum(summary, per_task) to max(...) (typically 30-40%).
-    # ``asyncio.to_thread`` dispatches onto the default executor; combined
-    # with ``asyncio.gather`` it replaces the previous explicit
-    # ThreadPoolExecutor without a per-request thread-pool spin-up.
+    # Both builders are independent and release the GIL inside polars — run
+    # them concurrently so wall time is max() instead of sum().
     summary_pl, per_task_pl = await asyncio.gather(
         asyncio.to_thread(bench._create_summary_table, long_df),
         asyncio.to_thread(bench._create_per_task_table, long_df),
@@ -159,25 +153,17 @@ async def build_benchmark_summary(  # noqa: PLR0914
             aggregations=bench_schema.aggregations,
         )
 
-    # The summary frame replaces ``model_name`` with a markdown-linked ``Model``
-    # column. We need the raw name to look up MODEL_REGISTRY, so rebuild a
-    # ``short -> full`` map from the long frame's unique model names. ``.unique``
-    # is much cheaper than the previous ``group_by(...).agg(pl.len())`` round
-    # trip we used purely for ordering — we don't depend on order anywhere.
+    # Summary frame replaces ``model_name`` with markdown-linked ``Model``;
+    # rebuild a short→full map to look up MODEL_REGISTRY.
     short_to_full: dict[str, str] = {}
     for full_name in long_df.get_column("model_name").unique().to_list():
         short_to_full.setdefault(full_name.split("/")[-1], full_name)
 
     def _parse_model_cell(cell: str) -> str:
-        # cell is either "[short](url)" markdown or a bare short name.
         if cell.startswith("[") and "](" in cell:
             return cell[1 : cell.index("](")]
         return cell
 
-    # Flat per-task means in the summary (cheap, drives existing UI
-    # consumers without waiting). The (task, subset, language) grid
-    # lives in `/v1/benchmarks/{name}/per-task` and is loaded lazily
-    # by the frontend only when needed (language filter).
     per_task_rows: dict[str, dict[str, float]] = {}
     if "No results" not in per_task_pl.columns and "Model" in per_task_pl.columns:
         task_cols_pt = [c for c in per_task_pl.columns if c != "Model"]
@@ -188,11 +174,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
                 col: float(v) for col in task_cols_pt if (v := prow[col]) is not None
             }
 
-    # Per-(model, task) `trained_on` flag — written into the parquet by
-    # `_build_pre_agg_df` so we don't have to reload ModelMeta here. Collapse
-    # the long frame into {model_name -> sorted[task_name]} of tasks the model
-    # was trained on. Empty list when the column isn't in the cache (older
-    # parquet versions) or the model declares no overlap.
+    # `trained_on` is pre-baked into the parquet by `_build_pre_agg_df`.
     trained_on_by_model: dict[str, list[str]] = {}
     if "trained_on" in long_df.columns:
         trained_pl = (
@@ -207,43 +189,18 @@ async def build_benchmark_summary(  # noqa: PLR0914
         for lst in trained_on_by_model.values():
             lst.sort()
 
-    # Identify which rank column to use. The mean-task-type builder
-    # (MIEB, ViDoRe-style) writes BOTH "Rank" (the primary, assigned
-    # in sort-by-Mean-(Task) order) and "Rank (Borda)" (kept for back-
-    # compat). Prefer the explicit "Rank" — falling back to "Rank
-    # (Borda)" first would shuffle MIEB rows so the actual top model
-    # showed as e.g. #11. Standard builders only emit "Rank (Borda)",
-    # so the fallback still applies there.
+    # Prefer "Rank" when present — MIEB/ViDoRe emit both "Rank" and
+    # "Rank (Borda)" but Borda-first would shuffle MIEB rows.
     summary_cols = summary_pl.columns
     rank_col = next(
         (c for c in ("Rank", "Rank (Mean Task)", "Rank (Borda)") if c in summary_cols),
         None,
     )
 
-    # Non-score metadata columns we strip out of `scores_by_task_type`.
-    meta_cols = {
-        "Rank (Borda)",
-        "Rank (Mean Task)",
-        "Rank",
-        "Model",
-        "Zero-shot",
-        "Active Parameters (B)",
-        "Total Parameters (B)",
-        "Embedding Dimensions",
-        "Max Tokens",
-        "Mean (Task)",
-        "Mean (TaskType)",
-        "Mean (Subset)",
-        "Mean (Public)",
-        "Mean (Private)",
-        "Release Date",
-    }
-    type_cols = [c for c in summary_cols if c not in meta_cols]
-    # mteb's _create_summary_table humanises type names via _split_on_capital
-    # ("BitextMining" → "Bitext Mining"). tasksMeta carries the raw CamelCase
-    # form, so the frontend's applyFilters silently drops every multi-word
-    # type when comparing summary.taskTypes against tasksMeta[].type. Strip
-    # the inserted spaces here so both sides agree on a single canonical key.
+    type_cols = [c for c in summary_cols if c not in _SUMMARY_META_COLS]
+    # _create_summary_table humanises CamelCase ("BitextMining" → "Bitext
+    # Mining"); strip the inserted spaces so the canonical keys match the
+    # raw type names tasksMeta carries.
     type_cols_canonical = [c.replace(" ", "") for c in type_cols]
     canonical_to_display = dict(zip(type_cols_canonical, type_cols))
     mean_task_col = next(
@@ -255,24 +212,13 @@ async def build_benchmark_summary(  # noqa: PLR0914
         None,
     )
     mean_type_col = "Mean (TaskType)" if "Mean (TaskType)" in summary_cols else None
-    # Split-aware benchmarks (ViDoRe family currently — RTEB renames these
-    # away in its own wrapper) expose Mean (Public) / Mean (Private) as first-
-    # class summary columns. Surface them when present so the frontend can
-    # render the extra columns.
     has_public = "Mean (Public)" in summary_cols and mean_task_col != "Mean (Public)"
     has_private = "Mean (Private)" in summary_cols
 
-    # When the user has narrowed by language, the strict-skipna policy
-    # (any missing task → null aggregate) is too punishing: most models
-    # don't run every task in every selected language, so almost every
-    # row ends up null. Switch to a lenient mean over the tasks the
-    # model HAS data for. The unfiltered case keeps the canonical strict
-    # values so partial-coverage models can't outrank full-coverage peers.
+    # Language-filtered: switch to lenient means so partial-coverage models
+    # don't all collapse to null. Unfiltered stays strict so partial-coverage
+    # peers can't outrank full-coverage ones.
     lenient_means = bool(languages)
-    # Pre-index task → canonical type once for the per-row recompute.
-    # Uses the same `_split_on_capital` + space-strip transform the
-    # summary builder applies to column names so the keys here match
-    # the canonical strings used in `scores_by_task_type`.
     task_to_type: dict[str, str] = {}
     if lenient_means:
         from mteb.benchmarks._create_table import _split_on_capital
@@ -308,10 +254,8 @@ async def build_benchmark_summary(  # noqa: PLR0914
         scores_by_task = per_task_rows.get(full, {})
 
         if lenient_means and scores_by_task:
-            # Lenient per-type means: mean over tasks the model actually
-            # ran (in the picked-language slice), grouped by canonical
-            # type. Models with partial coverage now surface a score
-            # instead of '—'.
+            # Lenient: mean over tasks the model actually ran; per-type bucket
+            # then re-mean so dense-Classification doesn't dominate.
             type_buckets: dict[str, list[float]] = {}
             for tname, score in scores_by_task.items():
                 ttype = task_to_type.get(tname)
@@ -323,10 +267,6 @@ async def build_benchmark_summary(  # noqa: PLR0914
                 for ttype, vals in type_buckets.items()
                 if vals
             }
-            # Lenient Mean (Task) = mean across the model's present per-task
-            # scores; Mean (TaskType) = mean across the lenient per-type means
-            # (still treats every type uniformly so dense-Classification doesn't
-            # dominate broad-coverage retrieval).
             if scores_by_task:
                 vals = list(scores_by_task.values())
                 mean_task = sum(vals) / len(vals)
@@ -334,8 +274,11 @@ async def build_benchmark_summary(  # noqa: PLR0914
                 vals = list(scores_by_task_type.values())
                 mean_type = sum(vals) / len(vals)
 
+        # ``model_construct`` skips pydantic validation — fields are produced
+        # internally with already-correct types so the per-row validation cost
+        # (run ~500× per benchmark) is wasted work.
         rows.append(
-            SummaryRowSchema(
+            SummaryRowSchema.model_construct(
                 rank=int(rank_value) if rank_value is not None else (idx + 1),
                 model=model_schema,
                 zero_shot_pct=model_schema.zero_shot_pct,
@@ -353,7 +296,6 @@ async def build_benchmark_summary(  # noqa: PLR0914
             )
         )
 
-    # `task_cols` is whatever the per-task frame produced (real task names).
     task_cols_out: list[str] = []
     if "No results" not in per_task_pl.columns:
         task_cols_out = [c for c in per_task_pl.columns if c != "Model"]
@@ -369,17 +311,8 @@ async def build_benchmark_summary(  # noqa: PLR0914
 
 
 async def build_benchmark_per_language(name: str) -> BenchmarkPerLanguageSchema:
-    """Per-(model, language) mean main_score for one benchmark.
-
-    Builds from the long results frame: explode the per-row ``language``
-    list so each (task, subset) contributes one entry per language it
-    covers, then group by (model_name, language) and mean. Codes are
-    mapped to human labels via ``language_label`` so the keys line up
-    with the column labels PerLanguageTab renders.
-    """
-    import mteb
+    """Per-(model, language) mean main_score for one benchmark."""
     from mteb.api.cache import _load_per_benchmark_frames
-    from mteb.languages import language_label
 
     bench = mteb.get_benchmark(name)
     frames, _ = _load_per_benchmark_frames()
@@ -392,8 +325,6 @@ async def build_benchmark_per_language(name: str) -> BenchmarkPerLanguageSchema:
     ):
         return BenchmarkPerLanguageSchema(benchmark_name=bench.name, rows=[])
 
-    # Explode the list-typed `language` column → one (model, task, subset, lang)
-    # per row; then mean across all those score samples per (model, language).
     grouped = (
         long_df.lazy()
         .explode("language")
@@ -409,13 +340,14 @@ async def build_benchmark_per_language(name: str) -> BenchmarkPerLanguageSchema:
         score = row.get("score")
         if not mn or code is None or score is None:
             continue
-        label = language_label(str(code)) if code != "Unknown" else "Unknown"
-        rows.setdefault(mn, {})[label] = float(score)
+        rows.setdefault(mn, {})[language_label(str(code))] = float(score)
 
     return BenchmarkPerLanguageSchema(
         benchmark_name=bench.name,
         rows=[
-            BenchmarkPerLanguageRowSchema(model_name=mn, scores_by_language=s)
+            BenchmarkPerLanguageRowSchema.model_construct(
+                model_name=mn, scores_by_language=s
+            )
             for mn, s in rows.items()
         ],
     )
@@ -423,15 +355,7 @@ async def build_benchmark_per_language(name: str) -> BenchmarkPerLanguageSchema:
 
 @functools.lru_cache(maxsize=1)
 def _task_to_hosting_benchmarks() -> dict[str, list[str]]:
-    """Reverse index: task name -> list of benchmark names that include it.
-
-    Building this lazily on first call costs the same as a single
-    ``build_task_scores`` invocation (and is amortised across all subsequent
-    calls). Before this, every call iterated every benchmark and did an
-    ``any()`` scan of its tasks — O(benchmarks × tasks_per_benchmark).
-    """
-    import mteb
-
+    """Reverse index: task name -> list of benchmarks that include it."""
     out: dict[str, list[str]] = {}
     for bench in mteb.get_benchmarks(display_on_leaderboard=True):
         for t in bench.tasks:
@@ -440,52 +364,27 @@ def _task_to_hosting_benchmarks() -> dict[str, list[str]]:
 
 
 def build_task_scores(name: str, cache: ResultCache) -> TaskScoresSchema:
-    """Per-model scores for a single task across all benchmarks that include it.
+    """Per-model scores for a single task across every benchmark hosting it.
 
-    For each model we emit:
-
-    * ``score`` — mean of that model's per-subset scores (matches what the
-      leaderboard's per-task column shows; tolerates partial subset coverage).
-    * ``subset_scores`` — per-``hf_subset`` main score (real, not synthesised).
-
-    Models with zero usable subset scores are dropped from the response so
-    they can't sort to the top with a NaN/null score.
-
-    Implementation: reuse the parquet-backed per-benchmark polars frames the
-    Gradio leaderboard already loads (``get_all_benchmark_frames``) instead of
-    re-scanning every JSON file under the result cache. The frame has one row
-    per ``(model, task, split, subset, language)`` so taking
-    ``max(score)`` per ``(model_name, subset)`` matches the previous
-    "max across splits per ``hf_subset``" semantics from
-    ``_extract_subset_scores``.
+    ``score`` is the mean of the model's per-subset scores when it has covered
+    every subset; ``null`` otherwise so partial-coverage models can't outrank
+    fully-evaluated peers.
     """
-    import polars as pl
-
     from mteb.api.cache import _load_per_benchmark_frames
     from mteb.get_tasks import _TASKS_REGISTRY
 
-    # Read directly from the registry — schema + metadata are class-level, so
-    # the ``cls().filter_languages()`` work ``mteb.get_task`` does is pure
-    # overhead here.
     cls = _TASKS_REGISTRY[name]
     task_meta = task_to_meta_schema(cls)
 
-    # Reverse-indexed lookup (cached across all build_task_scores calls).
     hosting_benchmarks = list(_task_to_hosting_benchmarks().get(name, ()))
 
-    # Pull straight from the all-results frame (every model × every subset
-    # this task was ever scored on), no benchmark scoping. The previous
-    # per-benchmark frames were each trimmed to their host benchmark's locale
-    # selection, so multilingual tasks like AmazonReviewsClassification could
-    # surface as little as one subset even when the underlying results
-    # covered all six.
+    # Pull from the all-results frame so multilingual tasks aren't trimmed to
+    # one benchmark's locale selection.
     _, all_df = _load_per_benchmark_frames()
     task_frame = all_df.filter(pl.col("task_name") == name)
 
     seen: dict[str, dict[str, float]] = {}
     if not task_frame.is_empty():
-        # Max across splits/languages per (model, hf_subset). Drop null
-        # scores so a stray null can't outrank a real one through ``max``.
         per_subset = (
             task_frame.drop_nulls("score")
             .group_by(["model_name", "subset"])
@@ -505,25 +404,21 @@ def build_task_scores(name: str, cache: ResultCache) -> TaskScoresSchema:
         meta = MODEL_REGISTRY.get(model_name)
         if meta is None:
             continue
-        # Headline score is the mean of *every* subset this task offers — if
-        # the model is missing any of them, leave the score null so it can't
-        # outrank a fully-evaluated peer with a higher-but-narrower number.
         score: float | None
         if all_subsets <= subset_scores.keys():
             score = sum(subset_scores.values()) / len(subset_scores)
         else:
             score = None
         rows.append(
-            TaskScoreRowSchema(
+            TaskScoreRowSchema.model_construct(
                 rank=0,
-                model=model_meta_to_schema(meta, zero_shot_pct=None),
+                model=model_meta_to_schema(meta),
                 score=score,
                 subset_scores=subset_scores,
                 benchmarks=list(hosting_benchmarks),
             )
         )
-    # Sort: scored rows by score desc, then null-score rows alphabetically
-    # at the bottom. Rank is then assigned in display order.
+    # Scored rows by score desc, null-score rows alphabetically at the bottom.
     rows.sort(
         key=lambda r: (
             r.score is None,
@@ -542,44 +437,37 @@ def build_task_scores(name: str, cache: ResultCache) -> TaskScoresSchema:
     )
 
 
-@functools.lru_cache(maxsize=128)
+@functools.lru_cache(maxsize=1)
 def _flat_leaderboard_benchmarks() -> tuple[Benchmark, ...]:
-    """Flattened, ordered tuple of every leaderboard ``Benchmark`` (cached)."""
-    from mteb.benchmarks._leaderboard_menu import (
-        GP_BENCHMARK_ENTRIES,
-        R_BENCHMARK_ENTRIES,
-    )
-    from mteb.benchmarks.benchmark import Benchmark
+    """Cached tuple of every benchmark on the leaderboard menu."""
+    return tuple(mteb.get_benchmarks(display_on_leaderboard=True))
 
-    def _flatten(entries: Sequence[Benchmark | MenuEntry]) -> list[Benchmark]:
-        out: list[Benchmark] = []
-        for e in entries:
-            if isinstance(e, Benchmark):
-                out.append(e)
-            else:
-                out.extend(_flatten(e.benchmarks))
-        return out
 
-    return tuple(_flatten([*GP_BENCHMARK_ENTRIES, *R_BENCHMARK_ENTRIES]))
+_row_index_cache: dict[int, dict[str, SummaryRowSchema]] = {}
 
 
 def _summary_row_index(
     summary: BenchmarkSummarySchema,
 ) -> dict[str, SummaryRowSchema]:
-    """O(1) ``model_name -> SummaryRowSchema`` lookup for one cached summary."""
-    return {row.model.name: row for row in summary.rows}
+    """O(1) ``model_name -> SummaryRowSchema`` lookup for one cached summary.
+
+    Indexed by ``id(summary)`` and cached for the summary's lifetime — since
+    the summary itself is held in the schema cache, repeat lookups skip the
+    full ``rows`` scan.
+    """
+    key = id(summary)
+    idx = _row_index_cache.get(key)
+    if idx is None:
+        idx = {row.model.name: row for row in summary.rows}
+        _row_index_cache[key] = idx
+    return idx
 
 
 async def build_model_scores(name: str) -> ModelScoresSchema:
     """Per-benchmark scores for a single model.
 
-    Each ``/models/{name}/scores`` request would otherwise sequentially trigger
-    a cold summary build per benchmark (~4s × ~50 benchmarks ≈ 3 minutes on the
-    first call). ``asyncio.gather`` fans out every benchmark summary onto the
-    default thread executor (polars releases the GIL inside
-    ``_create_summary_table``) so they overlap, and the per-benchmark
-    ``model_name -> row`` index lets us pluck the target model in O(1)
-    instead of scanning ``summary.rows`` (~700 entries) for each.
+    Fans out the cold summary builds with ``asyncio.gather`` so wall time is
+    max() instead of sum(); per-benchmark indexes give O(1) model lookup.
     """
     from mteb.api.cache import get_summary
 
@@ -602,7 +490,7 @@ async def build_model_scores(name: str) -> ModelScoresSchema:
         if model_meta is None:
             model_meta = row.model
         rows.append(
-            ModelScoreRowSchema(
+            ModelScoreRowSchema.model_construct(
                 benchmark_name=bench.name,
                 benchmark_display_name=bench.display_name or bench.name,
                 rank=row.rank,
@@ -616,12 +504,12 @@ async def build_model_scores(name: str) -> ModelScoresSchema:
         )
 
     if model_meta is None:
-        # Fall back to MODEL_REGISTRY so /models/{name}/scores returns a
-        # meaningful 200 even when the model has no benchmark results yet.
+        # Fall back to MODEL_REGISTRY so the response is meaningful even when
+        # the model has no benchmark results yet.
         meta = MODEL_REGISTRY.get(name)
         if meta is None:
             raise KeyError(name)
-        model_meta = model_meta_to_schema(meta, zero_shot_pct=None)
+        model_meta = model_meta_to_schema(meta)
 
     rows.sort(key=lambda r: r.rank)
     return ModelScoresSchema(model=model_meta, rows=rows)
@@ -631,108 +519,52 @@ async def build_model_scores(name: str) -> ModelScoresSchema:
 # /benchmarks/{name}/leaders — slim per-size-bucket top model.
 # ---------------------------------------------------------------------------
 
-# `(min, max)` ranges sized in MILLIONS of parameters (matches the
-# `/benchmarks/{name}/leaders?buckets=…` wire format). `max=None`
-# means "open-ended" (>= min). Bucket order in the request is preserved.
+# (min, max) in MILLIONS of parameters; max=None ⇒ open-ended.
 Bucket = tuple[float, float | None]
-
-# `total_params_b` on `ModelMetaSchema` stays in billions for
-# backwards compatibility with `/scores`. Convert each bucket's
-# millions → billions exactly once before scanning rows.
-_M_PER_B = 1000.0
-
-
-def _row_score(row: SummaryRowSchema) -> float | None:
-    """Pick whichever mean column the benchmark's builder populates.
-
-    Standard benchmarks emit ``Mean (Task)`` (→ ``mean_task`` on the
-    schema). MIEB / ViDoRe-style builders only populate
-    ``mean_task_type``. Used purely for the response's ``mean_task``
-    echo (so the tile can still print "Leader: … · {score}") — the
-    bucket comparison itself runs on ``row.rank``, which the summary
-    builder fills in via Borda even when the strict-skipna aggregate
-    nulls the headline mean.
-    """
-    if row.mean_task is not None:
-        return row.mean_task
-    return row.mean_task_type
 
 
 def _pick_leader(
     rows: list[SummaryRowSchema], lo_b: float, hi_b: float | None
-) -> tuple[SummaryRowSchema | None, float | None]:
-    """Pick the best-ranked row inside ``[lo_b, hi_b)`` (billions).
+) -> SummaryRowSchema | None:
+    """Best-ranked row inside ``[lo_b, hi_b)`` (billions).
 
-    "Best" = lowest ``row.rank`` (Borda from the summary builder).
-    Ranking is partial-coverage-tolerant: every row in the summary
-    frame gets a Borda rank from its per-task results, so even when
-    strict-skipna nulls ``mean_task`` (one task missing), the bucket
-    still has a deterministic leader.
-
-    Returns ``(row, score)`` or ``(None, None)`` if the bucket is
-    empty. Excludes rows with ``total_params_b <= 0`` (unknown /
-    missing). The upper bound is exclusive so callers can stitch
-    buckets together without double-counting boundary models (e.g.
-    a 1 B model belongs in `[0.5, 1)` for one query and `[1, 5)` in
-    the next).
+    Best = lowest ``row.rank`` (Borda). Excludes rows with ``total_params_b
+    <= 0``. Upper bound exclusive so buckets stitch without double-counting.
     """
     best: SummaryRowSchema | None = None
     best_rank: int | None = None
     for r in rows:
-        if r.total_params_b <= 0:
-            continue
-        if r.total_params_b < lo_b:
+        if r.total_params_b <= 0 or r.total_params_b < lo_b:
             continue
         if hi_b is not None and r.total_params_b >= hi_b:
             continue
         if best_rank is None or r.rank < best_rank:
             best_rank = r.rank
             best = r
-    if best is None:
-        return None, None
-    return best, _row_score(best)
+    return best
 
 
 async def build_benchmark_leaders(
     name: str, buckets: list[Bucket]
 ) -> BenchmarkLeadersSchema:
-    """Build the per-size-bucket leaders payload for a benchmark.
-
-    Reuses the already-cached :class:`BenchmarkSummarySchema` (computed
-    on demand by `get_summary`), so the additional cost vs. an
-    on-demand full payload is just a per-bucket linear scan plus the
-    slim schema construction — typically a few hundred bytes vs.
-    megabytes for `/scores` on a multilingual benchmark.
-
-    Buckets arrive in MILLIONS of parameters (matching the request
-    wire format) and are converted to billions for the row scan;
-    the response echoes back the original million-unit bounds so the
-    caller doesn't have to remember the conversion.
-    """
-    # Local import to mirror the `build_model_scores` pattern above —
-    # avoids a top-level cycle since `mteb.api.cache` imports
-    # `build_benchmark_summary` from this module.
+    """Per-size-bucket leaders payload — reuses the cached summary."""
     from mteb.api.cache import get_summary
 
     summary = await get_summary(name)
     out_buckets: list[BucketLeaderSchema] = []
     for lo_m, hi_m in buckets:
-        lo_b = lo_m / _M_PER_B
-        hi_b = hi_m / _M_PER_B if hi_m is not None else None
-        row, score = _pick_leader(summary.rows, lo_b, hi_b)
+        lo_b = lo_m / 1000.0
+        hi_b = hi_m / 1000.0 if hi_m is not None else None
+        row = _pick_leader(summary.rows, lo_b, hi_b)
         leader: LeaderRowSchema | None = None
         if row is not None:
+            score = row.mean_task if row.mean_task is not None else row.mean_task_type
             leader = LeaderRowSchema(
                 rank=row.rank,
                 model=LeaderModelSchema(
                     name=row.model.name,
                     model_type=row.model.model_type,
                 ),
-                # `mean_task` here is the score that was used for the
-                # bucket comparison — falls back to `mean_task_type`
-                # when the benchmark builder didn't emit a Mean (Task).
-                # Keeps the frontend rendering "Leader: … · {score}"
-                # honest across both builder shapes.
                 mean_task=score,
                 total_params_b=row.total_params_b,
             )

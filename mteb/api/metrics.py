@@ -1,13 +1,8 @@
-"""Prometheus instrumentation for the leaderboard API.
+"""Prometheus instrumentation.
 
-Defines the metric collectors and an ASGI middleware that records request
-count, in-flight requests, and request latency per matched route. Route
-templates (e.g. ``/benchmarks/{name:path}/scores``) are used as the
-``handler`` label so cardinality stays bounded — raw URL paths would
-explode the time series count by every benchmark / task / model name.
-
-Use :func:`render_metrics` to render the exposition body for the
-``/metrics`` endpoint.
+The ASGI middleware records request count / in-flight / latency per matched
+route template (handler label is the template, not the raw URL, to keep
+cardinality bounded). :func:`render_metrics` produces the exposition body.
 """
 
 from __future__ import annotations
@@ -33,9 +28,7 @@ from prometheus_client import (
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.routing import Match
 
-# Buckets tuned for an ETag-cached read API: most warm requests finish under
-# 50 ms, cold benchmark builds can spike into the seconds. Wider than the
-# Prometheus default so the long tail isn't squashed into ``+Inf``.
+# Tuned for an ETag-cached read API: warm <50 ms, cold builds into seconds.
 _LATENCY_BUCKETS = (
     0.005,
     0.01,
@@ -50,9 +43,7 @@ _LATENCY_BUCKETS = (
     10.0,
 )
 
-# A dedicated registry keeps the API's series out of the global default —
-# avoids double-registration in tests and any future in-process Prometheus
-# collectors from other libraries leaking in.
+# Dedicated registry avoids double-registration in tests and leaks from other libs.
 REGISTRY = CollectorRegistry()
 
 REQUEST_COUNT = Counter(
@@ -84,15 +75,8 @@ EXCEPTIONS_TOTAL = Counter(
     registry=REGISTRY,
 )
 
-# Per-entity selection counters. Cardinality is bounded by the registries
-# (one ``name`` label value per registered benchmark / task / model). Only
-# incremented after the route handler has confirmed the name exists, so
-# bot scans of unknown names don't balloon the series count.
-#
-# The ``endpoint`` label distinguishes the kind of view: ``detail`` for
-# bare metadata, ``scores`` for the heavy scores payload, and ``icon`` for
-# the benchmark icon proxy. That lets queries answer "top viewed scores
-# pages" separately from "top metadata lookups".
+# Per-entity counters; cardinality bounded by the registries. Only incremented
+# after the handler confirms the name exists.
 BENCHMARK_SELECTIONS = Counter(
     "mteb_benchmark_selections_total",
     "Times a benchmark was requested, by name and endpoint kind.",
@@ -115,48 +99,47 @@ MODEL_SELECTIONS = Counter(
 )
 
 
-def _route_template(request: Request) -> str:
-    """Return the matched route's path template, or ``"<unmatched>"``.
+_UNMATCHED = "<unmatched>"
+_ROUTE_TEMPLATE_KEY = "_mteb_route_template"
 
-    Starlette only fills ``scope["route"]`` after the router runs — which for
-    BaseHTTPMiddleware happens inside ``call_next``. As a fallback we re-run
-    ``matches`` against the app's router, which is what the router itself
-    does and is cheap (a few regex tests).
-    """
+
+def _resolve_route_template(request: Request) -> str:
     route = request.scope.get("route")
     if route is not None and hasattr(route, "path"):
         return str(route.path)
     app = request.scope.get("app")
     router = getattr(app, "router", None) if app is not None else None
     if router is None:
-        return "<unmatched>"
+        return _UNMATCHED
     for candidate in router.routes:
         match, _ = candidate.matches(request.scope)
         if match == Match.FULL and hasattr(candidate, "path"):
             return str(candidate.path)
-    return "<unmatched>"
+    return _UNMATCHED
 
 
-_UNMATCHED = "<unmatched>"
+def _route_template(request: Request) -> str:
+    """Return the matched route's path template, or ``"<unmatched>"``.
+
+    Starlette only fills ``scope["route"]`` after the router runs — which for
+    BaseHTTPMiddleware happens inside ``call_next``. As a fallback we re-run
+    ``matches`` against the app's router; the result is memoised on the scope
+    so the post-handler re-resolution doesn't repeat the scan.
+    """
+    cached = request.scope.get(_ROUTE_TEMPLATE_KEY)
+    if cached is not None and cached != _UNMATCHED:
+        return cached
+    resolved = _resolve_route_template(request)
+    request.scope[_ROUTE_TEMPLATE_KEY] = resolved
+    return resolved
 
 
 class PrometheusMiddleware(BaseHTTPMiddleware):
-    """Record per-request Prometheus metrics around the downstream handler.
+    """Record per-request metrics around the downstream handler.
 
-    Records four series:
-
-    * ``http_requests_total{method, handler, status}`` — incremented once per response.
-    * ``http_request_duration_seconds{method, handler}`` — observed once per response.
-    * ``http_requests_in_progress{method, handler}`` — gauged for the call duration.
-    * ``http_request_exceptions_total{method, handler, exception}`` — counted on raise,
-      then re-raised so the standard ASGI 500 response still goes out.
-
-    Unmatched (404) requests are kept out of the latency histogram and the
-    in-flight gauge — bot scans of random URLs would otherwise pollute the
-    p95/p99 latency story — but their *count* is still recorded under
-    ``handler="<unmatched>"`` so scan volume stays visible. ``/metrics``
-    itself is excluded entirely so Prometheus scrapes don't show up as
-    application traffic.
+    Unmatched (404) requests stay out of the latency histogram + in-flight gauge
+    so bot scans don't pollute p95/p99, but their count still increments. The
+    ``/metrics`` route is excluded entirely to keep scrapes off the series.
     """
 
     async def dispatch(  # noqa: PLR6301 — must be a method on BaseHTTPMiddleware
@@ -171,8 +154,6 @@ class PrometheusMiddleware(BaseHTTPMiddleware):
         method = request.method
         handler = _route_template(request)
         matched = handler != _UNMATCHED
-        # Only matched routes contribute to in-flight / latency. Unmatched
-        # paths still get a count below so 404 rate stays visible.
         in_progress = (
             REQUESTS_IN_PROGRESS.labels(method=method, handler=handler)
             if matched
@@ -198,10 +179,8 @@ class PrometheusMiddleware(BaseHTTPMiddleware):
                 )
             if in_progress is not None:
                 in_progress.dec()
-        # Re-resolve the template post-handler — for routes that only got
-        # stamped onto ``scope["route"]`` after ``call_next``, this catches
-        # them. ``<unmatched>`` paths still get counted; only the histogram
-        # was skipped.
+        # Re-resolve post-handler — catches routes only stamped onto
+        # scope["route"] after call_next.
         REQUEST_COUNT.labels(
             method=method,
             handler=_route_template(request),

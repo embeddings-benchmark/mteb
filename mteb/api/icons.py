@@ -1,16 +1,7 @@
 """Benchmark-icon proxy with long-lived in-process cache.
 
-Why proxy at all: upstream icons live on github.com which (a) issues a
-redirect to ``raw.githubusercontent.com`` that is never cached and (b) serves
-the SVG itself with ``Cache-Control: max-age=300``. That means every page
-navigation re-pulls the same handful of flag SVGs. Proxying lets us serve
-them once, then hand the browser ``max-age=31536000, immutable`` so subsequent
-visits hit the local HTTP cache without even revalidating.
-
-We keep the bytes in process rather than on disk — the entire icon corpus is
-a few KB per benchmark, total under a couple of MB even at thousands of
-entries. ``lru_cache`` would suffice but we want explicit eviction control
-and a synchronous "is this cached?" peek for tests.
+Upstream icons live on github.com (redirects to raw, ``max-age=300``).
+Proxying lets us hand the browser ``max-age=31536000, immutable``.
 """
 
 from __future__ import annotations
@@ -23,15 +14,10 @@ from urllib.error import URLError
 
 logger = logging.getLogger(__name__)
 
-# Upstream timeout. SVGs are tiny; if the fetch takes longer than this
-# something's wrong on github's end and we'd rather 404 fast than block
-# request handlers.
+# SVGs are tiny — if a fetch exceeds this, 404 fast instead of blocking handlers.
 _FETCH_TIMEOUT_S = 5.0
 
-# Max size we'll cache per icon. Defensive: any URL the registry advertises
-# could in theory be huge. 2 MB comfortably fits the largest legitimate icons
-# we've seen (ViDoRe V3's PNG is ~790 KB) while still catching misconfigured
-# URLs before they balloon process memory.
+# Defensive cap on cached body size to bound process memory.
 _MAX_BYTES = 2 * 1024 * 1024  # 2MB
 
 _DEFAULT_CONTENT_TYPE = "image/svg+xml"
@@ -49,11 +35,7 @@ _cache: dict[str, CachedIcon] = {}
 
 
 def _fetch_sync(url: str) -> CachedIcon | None:
-    """Pull an icon from ``url``. Returns ``None`` on any fetch failure.
-
-    Failures are intentionally swallowed: a missing icon shouldn't break the
-    benchmark card UI. The caller renders a placeholder when ``None``.
-    """
+    """Pull an icon; ``None`` on any failure so the caller renders a placeholder."""
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "mteb-api/icon-proxy"})  # noqa: S310 — URL is from a trusted registry
         with urllib.request.urlopen(req, timeout=_FETCH_TIMEOUT_S) as resp:  # noqa: S310 — URL is from a trusted registry
@@ -73,11 +55,10 @@ def _fetch_sync(url: str) -> CachedIcon | None:
 
 
 async def get_icon(name: str, url: str) -> CachedIcon | None:
-    """Return the cached icon for ``name``, fetching from ``url`` on miss.
+    """Cached icon for ``name``, fetched from ``url`` on miss.
 
-    Cache key is the benchmark name (not the URL): if mteb's icon URL ever
-    changes for a benchmark, a server restart picks up the new one. Per-name
-    keying also dedupes when multiple benchmarks happen to share a URL.
+    Keyed by name so a URL change picks up at server restart and multiple
+    benchmarks sharing a URL dedupe.
     """
     cached = _cache.get(name)
     if cached is not None:

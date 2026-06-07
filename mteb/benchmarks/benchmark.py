@@ -52,12 +52,11 @@ class BenchmarkAggregation(str, Enum):
 @lru_cache
 def _get_benchmarks_on_leaderboard() -> set[str]:
     from mteb.benchmarks._leaderboard_menu import (
-        GP_BENCHMARK_ENTRIES,
-        R_BENCHMARK_ENTRIES,
+        HOME_BENCHMARK_ENTRIES,
         MenuEntry,
     )
 
-    entries = GP_BENCHMARK_ENTRIES + R_BENCHMARK_ENTRIES
+    entries = HOME_BENCHMARK_ENTRIES
 
     def __extract_benchmarks(
         entries: Sequence[Benchmark | MenuEntry],

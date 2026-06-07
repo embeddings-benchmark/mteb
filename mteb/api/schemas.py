@@ -8,7 +8,8 @@ still be constructed with Python-style keyword args from adapters.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated, Literal, Union
+from typing import TYPE_CHECKING, Literal, Union
+from urllib.parse import quote
 
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic.alias_generators import to_camel
@@ -35,29 +36,24 @@ def _dedupe_strs(values: list[str]) -> list[str]:
 
 
 def _is_url(value: str) -> bool:
-    """Return True iff ``value`` is an http(s) or data URL.
-
-    Used to decide whether a benchmark's ``icon`` should be proxied through
-    our cache-friendly /icon route or passed through verbatim (for short
-    text/emoji icons like "🌍").
-    """
+    """True iff ``value`` is an http(s) or data URL (vs. emoji/text icon)."""
     head = value[:7].lower()
     return head.startswith(("http://", "https:/", "data:"))
 
 
-def _flatten_task_languages(task: AbsTask | type[AbsTask]) -> list[str]:
-    """Flatten the ``eval_langs`` of a task (list or ``dict[subset, list]``) into a deduped list."""
-    eval_langs = task.metadata.eval_langs
+def _flatten_eval_langs(eval_langs: dict[str, list[str]] | list[str]) -> list[str]:
+    """Flatten ``eval_langs`` (list or ``dict[subset, list]``) into a deduped list."""
     if isinstance(eval_langs, dict):
-        out: list[str] = []
-        seen: set[str] = set()
+        flat: list[str] = []
         for langs in eval_langs.values():
-            for lang in langs:
-                if lang not in seen:
-                    seen.add(lang)
-                    out.append(lang)
-        return out
+            flat.extend(langs)
+        return _dedupe_strs(flat)
     return list(eval_langs)
+
+
+def _flatten_task_languages(task: AbsTask | type[AbsTask]) -> list[str]:
+    """Flatten ``task.metadata.eval_langs`` into a deduped list."""
+    return _flatten_eval_langs(task.metadata.eval_langs)
 
 
 class _CamelModel(BaseModel):
@@ -79,41 +75,20 @@ class BenchmarkSchema(_CamelModel):
     citation: str | None = None
     languages: list[str]
     task_types: list[str]
-    # Simplified (Borda-compatible) task type buckets the benchmark
-    # touches. Each task contributes its ``metadata.simplified_task_type``
-    # (one of ``retrieval``, ``classification``, ``pair-classification``,
-    # ``clustering``, ``semantic-similarity``, …). Used by the
-    # /benchmarks "Task group" filter facet on the index page so the
-    # client doesn't have to maintain a parallel raw-→-simplified
-    # mapping table.
+    # Borda-compatible buckets (retrieval, classification, …). Drives the
+    # /benchmarks "Task group" filter facet.
     simplified_task_types: list[str] = []
     tasks: list[str]
     domains: list[str]
     modalities: list[str]
-    # True when the benchmark is part of the curated leaderboard menu.
-    # Off-menu benchmarks (`display_on_leaderboard=False`) are emitted by
-    # ``/benchmarks?include_hidden=true`` for the all-benchmarks page.
     display_on_leaderboard: bool = True
-    # Names of newer benchmarks that supersede this one (mirrors
-    # ``Benchmark.new_version``). Off-menu cards use this to surface
-    # "newer version available" instead of just "not on the menu".
     new_version: list[str] | None = None
-    # Declarative list of aggregations the leaderboard view should render
-    # ("mean_task", "mean_task_type", "task_types", "public_private"). Mirrors
-    # ``Benchmark.aggregations`` so the frontend can hide irrelevant columns
-    # (e.g. ViDoRe has no per-type breakdown; RTEB has only Mean (Task)).
+    # Mirrors ``Benchmark.aggregations`` so the frontend hides columns the
+    # benchmark doesn't produce.
     aggregations: list[str]
-    # Distinct models that have at least one score on this benchmark. Set by
-    # ``_benchmark_schemas`` from the cached per-benchmark frames so the
-    # /benchmarks list page can show a model count without loading every
-    # summary. Zero when the benchmark has no scored model yet (or the
-    # cache hasn't been populated).
+    # Distinct models with at least one score on this benchmark.
     num_models: int = 0
-    # Mirrors ``Benchmark.language_view`` — the explicit subset of language
-    # codes the per-language leaderboard view should display columns for.
-    # ``"all"`` means "every language present in the data"; ``None``/missing
-    # means the benchmark didn't opt into a per-language view and the
-    # frontend should hide that tab entirely.
+    # ``"all"`` = every language in the data; ``None`` = no per-language view.
     language_view: list[str] | Literal["all"] | None = None
 
     @classmethod
@@ -142,17 +117,22 @@ class BenchmarkSchema(_CamelModel):
                     modalities.add(str(mod))
             else:
                 modalities.add("text")
-        # The icon field is intentionally polymorphic: it can be a URL (flag
-        # SVG, hosted PNG) or short text/emoji ("🌍"). URLs get rewritten to
-        # our cache-friendly proxy; everything else is passed through
-        # verbatim so the frontend can render it as text instead of <img>.
-        from urllib.parse import quote
-
+        # icon is polymorphic — URLs go through the /icon proxy; emoji/text
+        # are passed verbatim.
         icon_value: str | None
         if benchmark.icon and _is_url(benchmark.icon):
             icon_value = f"/v1/icon/{quote(benchmark.name, safe='')}"
         else:
             icon_value = benchmark.icon or None
+        language_view: list[str] | Literal["all"] | None
+        if benchmark.language_view == "all":
+            language_view = "all"
+        elif benchmark.language_view:
+            language_view = _dedupe_strs(
+                [language_label(c) for c in benchmark.language_view]
+            )
+        else:
+            language_view = None
         return cls(
             name=benchmark.name,
             display_name=benchmark.display_name or benchmark.name,
@@ -169,21 +149,7 @@ class BenchmarkSchema(_CamelModel):
             display_on_leaderboard=bool(benchmark.display_on_leaderboard),
             new_version=list(benchmark.new_version) if benchmark.new_version else None,
             aggregations=[a.value for a in benchmark.aggregations],
-            # Resolve each language code to its human label (same helper
-            # the ``languages`` field above uses) so the frontend renders
-            # ``"German"`` instead of ``"deu-Latn"``. The empty default is
-            # collapsed to ``None`` so the frontend can treat "no language
-            # view" as a single missing-value check rather than juggling
-            # empty arrays.
-            language_view=(
-                "all"
-                if benchmark.language_view == "all"
-                else (
-                    _dedupe_strs([language_label(c) for c in benchmark.language_view])
-                    if benchmark.language_view
-                    else None
-                )
-            ),
+            language_view=language_view,
         )
 
 
@@ -199,47 +165,24 @@ class TaskMetaSchema(_CamelModel):
     description: str
     reference: str | None = None
     citation: str | None = None
-    # Whether the task's dataset is openly published. Frontend uses this to
-    # recompute Mean (Public) / Mean (Private) when the user filters tasks on
-    # benchmarks that surface the public/private split (ViDoRe family).
+    # Recompute target for Mean (Public) / Mean (Private) on ViDoRe-family benches.
     is_public: bool = True
-    # Extended dataset metadata for the task detail card.
     source_dataset: str | None = None
     license: str | None = None
-    # Date range the source data was collected over, formatted as ISO strings.
-    # ``None`` when the upstream `date` tuple is unset.
     date_from: str | None = None
     date_to: str | None = None
     annotations_creators: str | None = None
     dialect: list[str] | None = None
     sample_creation: str | None = None
-    # Primary metric the task is scored on (e.g. ``ndcg_at_10``,
-    # ``cosine_spearman``). Mirrors ``TaskMetadata.main_score`` — surfaced
-    # on the /tasks overview cards + the task detail page + the PerTaskTab
-    # column tooltip so users can tell what the cell value represents.
     main_score: str | None = None
-    # Count of distinct models that have at least one score on this task,
-    # derived at request time by ``routes._task_num_models_map`` from the
-    # unified results frame. Surfaced on the /tasks overview cards as
-    # "Models evaluated". Zero when the task has no recorded results.
     num_models: int = 0
 
     @classmethod
     def from_task_metadata(cls, metadata: TaskMetadata) -> TaskMetaSchema:
-        """Build the API schema view of a :class:`TaskMetadata` (no instantiation needed)."""
+        """Build the API schema view of a :class:`TaskMetadata`."""
         from mteb.languages import language_label
 
-        if isinstance(metadata.eval_langs, dict):
-            seen_codes: set[str] = set()
-            lang_codes: list[str] = []
-            for ls in metadata.eval_langs.values():
-                for code in ls:
-                    if code not in seen_codes:
-                        seen_codes.add(code)
-                        lang_codes.append(code)
-        else:
-            lang_codes = list(metadata.eval_langs)
-
+        lang_codes = _flatten_eval_langs(metadata.eval_langs)
         labels = _dedupe_strs([language_label(code) for code in lang_codes])
         domains = _dedupe_strs([str(d) for d in (metadata.domains or [])])
         modalities_raw = list(metadata.modalities) if metadata.modalities else ["text"]
@@ -247,11 +190,8 @@ class TaskMetaSchema(_CamelModel):
         try:
             simplified = str(metadata.simplified_task_type)
         except KeyError:
-            # Some niche task types aren't in ``_TASKTYPE2SIMPLIFIEDTASKTYPE``;
-            # fall back to the raw type rather than 500-ing the whole tasks list.
+            # Some niche task types aren't in _TASKTYPE2SIMPLIFIEDTASKTYPE.
             simplified = str(metadata.type)
-        # Source dataset path: prefer the loader's ``dataset["path"]`` (HF
-        # repo id, etc.); fall back to ``None`` when unset.
         dataset_path: str | None = None
         try:
             ds = metadata.dataset
@@ -300,9 +240,7 @@ class TaskMetaSchema(_CamelModel):
 class ModelMetaSchema(_CamelModel):
     """Static model metadata + per-benchmark zero-shot label.
 
-    Note: ``name`` is the canonical HuggingFace-style identifier (``org/name``).
-    Splitting it into org and display name is left to the client so the API
-    isn't in the business of deciding what's a "display name".
+    ``name`` is the canonical ``org/name`` HuggingFace identifier.
     """
 
     name: str
@@ -317,46 +255,24 @@ class ModelMetaSchema(_CamelModel):
     instruction_tuned: bool
     open_weights: bool
     sentence_transformers_compatible: bool
-    # Modalities the model can encode. Mirrors ``ModelMeta.modalities``
-    # — typically ["text"], but vision / audio / video models declare
-    # one or more additional entries.
     modalities: list[str] = ["text"]
-    # Human-readable display labels for the languages the model is
-    # intended for. Mapped from ``ModelMeta.languages`` (ISO codes like
-    # ``eng-Latn``) via ``mteb.languages.language_label``. Empty when
-    # the upstream meta declares ``languages=None`` (no explicit
-    # language scope). Used by the /models filter sidebar.
     languages: list[str] = []
     citation: str | None = None
-    # Extended metadata surfaced on the model detail card. All optional —
-    # missing values render as "—" on the frontend rather than blocking.
     memory_usage_mb: float | None = None
     license: str | None = None
     public_training_code: str | None = None
-    # Upstream allows either a URL or a bool ("yes/no, no link"); we serialise
-    # both as a string so the frontend can render uniformly.
+    # Upstream allows URL or bool; serialised as string either way.
     public_training_data: str | None = None
     adapted_from: str | None = None
     superseded_by: str | None = None
-    # Optional pip extras users need to install for this model
-    # (e.g. ["api", "vision"]).
     extra_requirements_groups: list[str] | None = None
-    # Dataset names this model was trained on. Entries that exist in mteb's
-    # task registry can be linked to /tasks/<name>; others render as plain
-    # text on the frontend.
     training_datasets: list[str] | None = None
 
     @classmethod
     def from_model_meta(
         cls, meta: ModelMeta, *, zero_shot_pct: int | None = None
     ) -> ModelMetaSchema:
-        """Build the API schema view of a :class:`ModelMeta`.
-
-        ``zero_shot_pct`` is the only per-call varying field; callers that need
-        to swap it on a pre-built base instance should use
-        ``schema.model_copy(update={"zero_shot_pct": pct})`` (the
-        :mod:`mteb.api.adapters` cache does this).
-        """
+        """Build the API schema view of a :class:`ModelMeta`."""
         from mteb.benchmarks._create_table import (
             _format_max_tokens,
             _format_n_parameters,
@@ -374,10 +290,6 @@ class ModelMetaSchema(_CamelModel):
         total_b = _format_n_parameters(meta.n_parameters)
         embed_dim = _get_embedding_size(meta.embed_dim)
         max_tokens = _format_max_tokens(meta.max_tokens)
-        # Map raw ISO codes (eng-Latn, …) → display labels (English).
-        # `language_label` handles the unknown / missing-mapping cases by
-        # echoing the code, so we de-dup after the map call. Sorted for
-        # stable output so the schema hash is deterministic.
         from mteb.languages import language_label as _language_label
 
         lang_labels = sorted(
@@ -440,42 +352,28 @@ class SummaryRowSchema(_CamelModel):
     max_tokens: int
     mean_task: float | None
     mean_task_type: float | None
-    # Public/Private split means, when the benchmark separates evaluation
-    # tasks into a published subset and a held-out subset (RTEB/ViDoRe
-    # family). Most benchmarks have neither — both are null and the frontend
-    # omits the corresponding columns.
+    # Public/Private split means (RTEB/ViDoRe family); null elsewhere.
     mean_public: float | None = None
     mean_private: float | None = None
     scores_by_task_type: dict[str, float]
     scores_by_task: dict[str, float]
-    # Tasks (within this benchmark) the model declares in its training
-    # datasets — used by the frontend to surface a ⚠️ next to scores that
-    # the model isn't zero-shot on. Empty list when the model has no
-    # training-set declarations or no overlap with this benchmark.
+    # Tasks the model trained on (drives the frontend's ⚠️ on non-zero-shot scores).
     trained_on_tasks: list[str] = []
 
 
 class BenchmarkSummarySchema(_CamelModel):
-    """Response from ``/benchmarks/{name}/scores`` (formerly ``/summary``)."""
+    """Response from ``/benchmarks/{name}/scores``."""
 
     benchmark_name: str
     task_types: list[str]
     tasks: list[str]
     tasks_meta: list[TaskMetaSchema]
     rows: list[SummaryRowSchema]
-    # Declarative list mirroring ``Benchmark.aggregations`` so the frontend
-    # can render only the columns this benchmark actually surfaces.
     aggregations: list[str] = []
 
 
 class BenchmarkPerLanguageRowSchema(_CamelModel):
-    """One model's per-language scores for a benchmark.
-
-    ``scores_by_language`` keys are human-readable labels (``"English"``,
-    ``"Chinese (Traditional)"``) — same form the frontend filter sidebar
-    shows. Values are the mean main_score over every (task, subset)
-    tagged with that language.
-    """
+    """One model's per-language scores; keys are human labels (``"English"``)."""
 
     model_name: str
     scores_by_language: dict[str, float]
@@ -511,12 +409,7 @@ class LeaderModelSchema(_CamelModel):
 
 
 class LeaderRowSchema(_CamelModel):
-    """One bucket's leader row.
-
-    The highest-meanTask model in the size range. Carries just enough
-    fields to render a single rank + org/name + score line + link to
-    the model page.
-    """
+    """The highest-meanTask model in one size bucket."""
 
     rank: int
     model: LeaderModelSchema
@@ -525,14 +418,7 @@ class LeaderRowSchema(_CamelModel):
 
 
 class BucketLeaderSchema(_CamelModel):
-    """Result of one size-bucket query.
-
-    ``max`` is ``None`` to mean ``+inf`` so callers can stream the
-    last bucket as e.g. ``5,`` or ``5,inf`` and we serialise the
-    ceiling honestly. ``leader`` is ``None`` when no model in the
-    benchmark falls inside the [min, max) range — the frontend
-    drops the row rather than padding with a placeholder.
-    """
+    """One size-bucket result; ``max=None`` means ``+inf``, ``leader=None`` means empty."""
 
     min: float
     max: float | None = None
@@ -540,26 +426,17 @@ class BucketLeaderSchema(_CamelModel):
 
 
 class BenchmarkLeadersSchema(_CamelModel):
-    """Response from ``/benchmarks/{name}/leaders?bucket=…&bucket=…``.
-
-    Bucket order in the response mirrors the query string so the
-    caller can render them by index without re-sorting. Payload is
-    typically a few hundred bytes (cf. several MB for a full
-    ``/scores`` request on multilingual benchmarks).
-    """
+    """Response from ``/benchmarks/{name}/leaders``; bucket order matches request."""
 
     benchmark_name: str
     buckets: list[BucketLeaderSchema]
 
 
 class TaskScoreRowSchema(_CamelModel):
-    """One row of `/tasks/{name}/scores` — per-model score on a single task.
+    """One row of `/tasks/{name}/scores`.
 
-    ``subset_scores`` maps the HuggingFace subset id (often a language pair or
-    split label) to that model's main-metric value for that subset, taken
-    straight from the result's ``scores`` dict. ``score`` is the mean across
-    *all* of the task's subsets — set to ``null`` when the model is missing
-    any subset, since a partial mean isn't comparable to a full one.
+    ``score`` is the mean across every subset the task offers, or ``null`` when
+    the model is missing any subset (partial means aren't comparable).
     """
 
     rank: int
@@ -599,17 +476,12 @@ class ModelScoresSchema(_CamelModel):
     rows: list[ModelScoreRowSchema]
 
 
-# Recursive menu type. The frontend discriminates by `'displayName' in item`, so
-# BenchmarkSchema (which has `displayName`) and MenuEntrySchema (which doesn't)
-# coexist in a Union.
-MenuChild = Annotated[
-    Union["MenuEntrySchema", BenchmarkSchema],
-    Field(discriminator=None),
-]
+# Frontend discriminates by `'displayName' in item`, so the two coexist in a Union.
+MenuChild = Union["MenuEntrySchema", BenchmarkSchema]
 
 
 class MenuEntrySchema(_CamelModel):
-    """Recursive menu entry — children may be ``MenuEntrySchema`` or ``BenchmarkSchema``."""
+    """Recursive menu entry; children are ``MenuEntrySchema`` or ``BenchmarkSchema``."""
 
     name: str
     description: str | None = None
@@ -618,7 +490,7 @@ class MenuEntrySchema(_CamelModel):
 
     @classmethod
     def from_menu_entry(cls, entry: MtebMenuEntry) -> MenuEntrySchema:
-        """Recursively translate an mteb menu entry tree into its API schema."""
+        """Recursively translate an mteb menu entry tree."""
         from mteb.benchmarks.benchmark import Benchmark
 
         children: list[BenchmarkSchema | MenuEntrySchema] = []

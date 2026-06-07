@@ -1,27 +1,20 @@
-"""Process-wide caches for the API.
+"""Process-wide caches for the leaderboard API.
 
-``ResultCache`` is cheap to construct but :meth:`ResultCache.load_results`
-downloads / scans the on-disk results tree (slow first-call, ~tens of seconds).
-We keep one ``ResultCache`` instance per process and memoise the per-benchmark
-summary so repeat requests cost nothing.
-
-Caches hold **pydantic schemas** (one per endpoint) instead of pre-serialised
-JSON bytes. Pydantic v2's ``model_dump_json`` runs in Rust (``pydantic-core``)
-and ends up I/O-bound on a ~500 KB payload, so serialising once per warm
-request was measured to add only single-digit ms — well within the headroom
-freed by skipping the bytes cache layer.
-
-Cold builds are serialised through a per-benchmark threading lock so that ten
-concurrent requests for the same benchmark only run the polars pipeline once
-— previously they each kicked off their own build, saturating the threadpool.
+Holds both pydantic schemas and their pre-serialised JSON bytes + ETag. Routes
+that hit a warm cache return the bytes directly; cold builds run the schema
+constructor once, then serialise once.
 """
 
 from __future__ import annotations
 
 import asyncio
 import functools
+import gzip
+import hashlib
 import logging
 import threading
+from collections import OrderedDict
+from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 import polars as pl
@@ -30,6 +23,8 @@ from mteb.api.aggregators import build_benchmark_summary
 from mteb.api.settings import cache_repo, preload_full
 
 if TYPE_CHECKING:
+    from pydantic import BaseModel
+
     from mteb.api.schemas import (
         BenchmarkPerLanguageSchema,
         BenchmarkSummarySchema,
@@ -41,19 +36,40 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+@dataclass(frozen=True, slots=True)
+class Serialized:
+    """Pre-serialised schema response — raw + gzipped JSON bytes + ETag."""
+
+    body: bytes
+    body_gzip: bytes
+    etag: str
+
+
+# Skip the gzip variant for tiny payloads — gzip framing adds overhead and
+# clients on a fast link don't gain anything from compressing a few KB.
+_GZIP_MIN_BYTES = 1024
+
+
+def serialize_bytes(body: bytes) -> Serialized:
+    """Wrap raw JSON bytes with a gzipped variant + matching ETag."""
+    body_gzip = (
+        gzip.compress(body, compresslevel=6) if len(body) >= _GZIP_MIN_BYTES else body
+    )
+    etag = '"' + hashlib.sha1(body, usedforsecurity=False).hexdigest() + '"'
+    return Serialized(body=body, body_gzip=body_gzip, etag=etag)
+
+
+def _serialize(schema: BaseModel) -> Serialized:
+    """Dump a schema to JSON, gzip-compress, and compute its ETag."""
+    return serialize_bytes(schema.model_dump_json(by_alias=True).encode())
+
+
 @functools.lru_cache(maxsize=1)
 def get_cache() -> ResultCache:
-    """Return the process-wide :class:`ResultCache` (one instance per API process)."""
+    """Return the process-wide :class:`ResultCache`."""
     from mteb.cache.result_cache import ResultCache
 
     return ResultCache()
-
-
-# ``_load_per_benchmark_frames`` returns ``(per_benchmark, all_results)``:
-#   * per_benchmark — long polars frame per benchmark name
-#   * all_results  — deduped (model_name, task_name, subset, score) frame
-#     covering every task; built once during the same load so callers that
-#     want the unified view never have to recompute.
 
 
 _UNIFIED_SCHEMA = {
@@ -65,12 +81,7 @@ _UNIFIED_SCHEMA = {
 
 
 def _dedupe_unified(combined: pl.DataFrame) -> pl.DataFrame:
-    """Reduce the combined frame to one row per (model, task, subset).
-
-    Multiple splits/languages/benchmark tags collapse into ``max(score)``
-    so the unified view is a single point per task — what task-scope
-    filtering (`/tasks/{name}` etc.) needs.
-    """
+    """Reduce the combined frame to one row per (model, task, subset) with max score."""
     if combined.is_empty():
         return pl.DataFrame(schema=_UNIFIED_SCHEMA)
     return (
@@ -84,25 +95,16 @@ _DEFAULT_CONFIG = "default"
 
 
 def _load_default_from_hub(repo_id: str) -> pl.DataFrame | None:
-    """Fetch only the ``default`` HF config — the all-results dump.
+    """Fetch the ``default`` HF config (all-results dump) via direct parquet read.
 
-    Per-benchmark views are derived locally via
-    :meth:`BenchmarkResults.split_leaderboard_frame` rather than
-    fetching ``N`` configs from the hub one at a time, which was the
-    dominant cost at startup (one HTTP round-trip per benchmark).
-
-    Reads parquet shards directly with polars (which understands the
-    ``hf://`` scheme + globbing) instead of going through
-    ``datasets.load_dataset`` so a stale README ``dataset_info`` block
-    (e.g. when a new column like ``trained_on`` lands in the parquet
-    but the YAML wasn't refreshed) doesn't fail the cast.
+    Reads parquet shards with polars rather than ``datasets.load_dataset`` so a
+    stale README ``dataset_info`` block (e.g. when a new column lands in the
+    parquet but the YAML wasn't refreshed) doesn't fail the cast.
     """
     try:
         return pl.read_parquet(f"hf://datasets/{repo_id}/data/train-*.parquet")
     except Exception as exc:
         logger.warning("Hub load failed for %s: %s", repo_id, exc)
-        # Best-effort fallback: try the legacy datasets path. Useful when
-        # the parquet layout is something other than data/train-*.parquet.
         try:
             from datasets import load_dataset
 
@@ -118,21 +120,7 @@ def _load_default_from_hub(repo_id: str) -> pl.DataFrame | None:
 
 @functools.lru_cache(maxsize=1)
 def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]:
-    """Bootstrap loader for per-benchmark + unified-results frames.
-
-    Two paths only:
-
-    1. Hub: pull the ``default`` config from ``MTEB_API_CACHE_REPO``
-       (default ``mteb/results``) — one round-trip — then split it
-       in-memory.
-    2. Cold rebuild from the local ``ResultCache`` if the hub returns
-       nothing usable.
-
-    Per-benchmark views are derived from the combined frame via
-    :meth:`BenchmarkResults.split_leaderboard_frame`, which inner-joins
-    each benchmark's ``(task_name, split, subset)`` triples — same
-    filter the legacy per-task validator would have applied.
-    """
+    """Return ``(per_benchmark_frames, unified_frame)``, loaded once."""
     import mteb
     from mteb.results.benchmark_results import BenchmarkResults
 
@@ -156,13 +144,7 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
         all_results = cache._load_from_cache(rebuild=True)
         combined = all_results._to_results_df()
 
-    # Per-benchmark dict is derived from the same combined frame —
-    # no extra hub round-trips, no per-benchmark cold rebuilds.
     loaded = BenchmarkResults.split_leaderboard_frame(combined)
-    # Add explicit empty frames for any leaderboard benchmark missing
-    # from the split, so callers using `.get(name)` always see a
-    # consistent key set (kept the previous behaviour for callers that
-    # check membership before reading).
     for bench in mteb.get_benchmarks():
         loaded.setdefault(bench.name, pl.DataFrame(schema=combined.schema))
 
@@ -175,101 +157,191 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
     return loaded, unified
 
 
-# Plain-dict schema caches. We rely on the GIL for dict atomicity and on
-# pydantic schemas being immutable-by-convention. There's no explicit
-# serialisation around the cold build: two requests racing the same
-# uncached benchmark may both kick off ``build_benchmark_summary`` and the
-# second to finish "wins" the cache slot — wasteful but correctness-safe.
-# In practice this happens only during a cold boot before
-# ``preload_summaries_in_background`` lands a result, and the preload
-# itself sequences them via ``asyncio.gather`` on a single loop.
+# Schema caches. Bounded by the registry size for benchmarks/tasks/models;
+# _summary_lang_schemas keys by (name, sorted_langs) so clients can in
+# principle expand it — gated by an LRU eviction limit.
 _summary_schemas: dict[str, BenchmarkSummarySchema] = {}
-# Separate cache for language-scoped summaries keyed by (name, sorted langs).
-# Empty langs falls through to ``_summary_schemas`` so the unfiltered
-# request stays on the warmed path.
-_summary_lang_schemas: dict[tuple[str, tuple[str, ...]], BenchmarkSummarySchema] = {}
+_summary_lang_schemas: OrderedDict[
+    tuple[str, tuple[str, ...]], BenchmarkSummarySchema
+] = OrderedDict()
+_SUMMARY_LANG_MAX = 256
 _task_score_schemas: dict[str, TaskScoresSchema] = {}
 _model_score_schemas: dict[str, ModelScoresSchema] = {}
 _per_language_schemas: dict[str, BenchmarkPerLanguageSchema] = {}
+
+# Parallel serialised caches — same keys as the schema caches above. Routes
+# that just stream bytes back to the client read from these.
+_summary_bytes: dict[str, Serialized] = {}
+_summary_lang_bytes: OrderedDict[tuple[str, tuple[str, ...]], Serialized] = (
+    OrderedDict()
+)
+_task_score_bytes: dict[str, Serialized] = {}
+_model_score_bytes: dict[str, Serialized] = {}
+_per_language_bytes: dict[str, Serialized] = {}
+
+
+# Per-key asyncio.Lock so two concurrent cold requests don't both run a build.
+_summary_locks: dict[str, asyncio.Lock] = {}
+_summary_lang_locks: dict[tuple[str, tuple[str, ...]], asyncio.Lock] = {}
+_per_language_locks: dict[str, asyncio.Lock] = {}
+_task_score_locks: dict[str, asyncio.Lock] = {}
+_model_score_locks: dict[str, asyncio.Lock] = {}
+
+
+def _lock_for(locks: dict, key) -> asyncio.Lock:
+    lock = locks.get(key)
+    if lock is None:
+        lock = locks.setdefault(key, asyncio.Lock())
+    return lock
 
 
 async def get_summary(
     name: str, languages: tuple[str, ...] = ()
 ) -> BenchmarkSummarySchema:
-    """Return the cached :class:`BenchmarkSummarySchema` for ``name``.
-
-    ``languages`` is a sorted tuple of picks (raw codes or human labels —
-    either form works). Empty tuple = unfiltered (uses the preload-warmed
-    cache); any other value hits a separate cache slot so language filter
-    toggles never invalidate the canonical schema.
-    """
+    """Return the cached summary for ``name``, optionally scoped to ``languages``."""
     if not languages:
         cached = _summary_schemas.get(name)
         if cached is not None:
             return cached
-        logger.info("Building summary for %s", name)
-        schema = await build_benchmark_summary(name, get_cache())
-        _summary_schemas[name] = schema
-        return schema
+        async with _lock_for(_summary_locks, name):
+            cached = _summary_schemas.get(name)
+            if cached is not None:
+                return cached
+            logger.info("Building summary for %s", name)
+            schema = await build_benchmark_summary(name, get_cache())
+            _summary_schemas[name] = schema
+            return schema
+
     key = (name, languages)
     cached = _summary_lang_schemas.get(key)
     if cached is not None:
+        _summary_lang_schemas.move_to_end(key)
         return cached
-    logger.info("Building summary for %s (langs=%s)", name, languages)
-    schema = await build_benchmark_summary(name, get_cache(), languages=languages)
-    _summary_lang_schemas[key] = schema
-    return schema
+    async with _lock_for(_summary_lang_locks, key):
+        cached = _summary_lang_schemas.get(key)
+        if cached is not None:
+            _summary_lang_schemas.move_to_end(key)
+            return cached
+        logger.info("Building summary for %s (langs=%s)", name, languages)
+        schema = await build_benchmark_summary(name, get_cache(), languages=languages)
+        _summary_lang_schemas[key] = schema
+        if len(_summary_lang_schemas) > _SUMMARY_LANG_MAX:
+            evicted, _ = _summary_lang_schemas.popitem(last=False)
+            _summary_lang_locks.pop(evicted, None)
+            _summary_lang_bytes.pop(evicted, None)
+        return schema
+
+
+async def get_summary_bytes(name: str, languages: tuple[str, ...] = ()) -> Serialized:
+    """Return JSON bytes + ETag for ``get_summary(name, languages)``."""
+    if not languages:
+        cached = _summary_bytes.get(name)
+        if cached is not None:
+            return cached
+        schema = await get_summary(name)
+        cached = _serialize(schema)
+        _summary_bytes[name] = cached
+        return cached
+    key = (name, languages)
+    cached = _summary_lang_bytes.get(key)
+    if cached is not None:
+        _summary_lang_bytes.move_to_end(key)
+        return cached
+    schema = await get_summary(name, languages)
+    cached = _serialize(schema)
+    _summary_lang_bytes[key] = cached
+    if len(_summary_lang_bytes) > _SUMMARY_LANG_MAX:
+        _summary_lang_bytes.popitem(last=False)
+    return cached
 
 
 async def get_per_language(name: str) -> BenchmarkPerLanguageSchema:
-    """Return the cached :class:`BenchmarkPerLanguageSchema` for ``name``."""
+    """Return the cached per-language schema for ``name``."""
     cached = _per_language_schemas.get(name)
     if cached is not None:
         return cached
-    from mteb.api.aggregators import build_benchmark_per_language
+    async with _lock_for(_per_language_locks, name):
+        cached = _per_language_schemas.get(name)
+        if cached is not None:
+            return cached
+        from mteb.api.aggregators import build_benchmark_per_language
 
-    logger.info("Building per-language scores for %s", name)
-    schema = await build_benchmark_per_language(name)
-    _per_language_schemas[name] = schema
-    return schema
+        logger.info("Building per-language scores for %s", name)
+        schema = await build_benchmark_per_language(name)
+        _per_language_schemas[name] = schema
+        return schema
+
+
+async def get_per_language_bytes(name: str) -> Serialized:
+    """JSON bytes + ETag for ``get_per_language(name)``."""
+    cached = _per_language_bytes.get(name)
+    if cached is not None:
+        return cached
+    schema = await get_per_language(name)
+    cached = _serialize(schema)
+    _per_language_bytes[name] = cached
+    return cached
 
 
 async def get_task_scores(name: str) -> TaskScoresSchema:
-    """Return the cached :class:`TaskScoresSchema` for ``name`` (build on miss)."""
+    """Return the cached task-scores schema for ``name``."""
     cached = _task_score_schemas.get(name)
     if cached is not None:
         return cached
-    from mteb.api.aggregators import build_task_scores
+    async with _lock_for(_task_score_locks, name):
+        cached = _task_score_schemas.get(name)
+        if cached is not None:
+            return cached
+        from mteb.api.aggregators import build_task_scores
 
-    # ``build_task_scores`` is sync polars work — hop to the default executor
-    # so we don't block the event loop while it runs.
-    schema = await asyncio.to_thread(build_task_scores, name, get_cache())
-    _task_score_schemas[name] = schema
-    return schema
+        schema = await asyncio.to_thread(build_task_scores, name, get_cache())
+        _task_score_schemas[name] = schema
+        return schema
+
+
+async def get_task_scores_bytes(name: str) -> Serialized:
+    """JSON bytes + ETag for ``get_task_scores(name)``."""
+    cached = _task_score_bytes.get(name)
+    if cached is not None:
+        return cached
+    schema = await get_task_scores(name)
+    cached = _serialize(schema)
+    _task_score_bytes[name] = cached
+    return cached
 
 
 async def get_model_scores(name: str) -> ModelScoresSchema:
-    """Return the cached :class:`ModelScoresSchema` for ``name`` (build on miss)."""
+    """Return the cached model-scores schema for ``name``."""
     cached = _model_score_schemas.get(name)
     if cached is not None:
         return cached
-    from mteb.api.aggregators import build_model_scores
+    async with _lock_for(_model_score_locks, name):
+        cached = _model_score_schemas.get(name)
+        if cached is not None:
+            return cached
+        from mteb.api.aggregators import build_model_scores
 
-    schema = await build_model_scores(name)
-    _model_score_schemas[name] = schema
-    return schema
+        schema = await build_model_scores(name)
+        _model_score_schemas[name] = schema
+        return schema
+
+
+async def get_model_scores_bytes(name: str) -> Serialized:
+    """JSON bytes + ETag for ``get_model_scores(name)``."""
+    cached = _model_score_bytes.get(name)
+    if cached is not None:
+        return cached
+    schema = await get_model_scores(name)
+    cached = _serialize(schema)
+    _model_score_bytes[name] = cached
+    return cached
 
 
 def _prewarm_training_datasets() -> None:
     """Populate ``_training_datasets_cached`` for every registered model.
 
-    The first ``build_benchmark_summary`` call pays ~2.5s on
-    ``_collect_similar_tasks`` (a per-model difflib walk) because every model
-    seen for the first time forces a similar-task graph traversal.
-    ``_training_datasets_cached`` memoises that result and is process-wide, so
-    once it's filled every subsequent benchmark summary builds in O(polars
-    aggregation) only. Running this in parallel at startup shifts the cost
-    from request time to boot.
+    Without this, the first summary build pays ~2.5s on ``_collect_similar_tasks``
+    per first-seen model.
     """
     from concurrent.futures import ThreadPoolExecutor
 
@@ -281,60 +353,48 @@ def _prewarm_training_datasets() -> None:
 
 
 def _prewarm_list_schemas() -> None:
-    """Pre-build the unfiltered ``/tasks`` / ``/models`` / ``/benchmarks`` schema lists.
-
-    These are bounded-size pydantic lists (1000+ entries) cached at the route
-    layer. Building them once at startup turns the first hit on each list
-    endpoint into a cached lookup + a single pydantic serialisation pass
-    instead of also paying the per-task / per-model schema construction.
-    """
+    """Pre-build the unfiltered list schemas + their serialised bytes."""
     from mteb.api.routes import (
-        _benchmark_schemas,
-        _filtered_model_schemas,
-        _filtered_task_schemas,
-        _menu_schemas,
+        _benchmark_schemas_bytes,
+        _filtered_model_schemas_bytes,
+        _filtered_task_schemas_bytes,
+        _menu_schemas_bytes,
     )
 
-    _menu_schemas()
-    _benchmark_schemas()
-    _filtered_task_schemas(None, None, None, None, None, None)
-    _filtered_model_schemas(None, None, None, None, None, None, None, False, None)
+    _menu_schemas_bytes()
+    _benchmark_schemas_bytes()
+    _filtered_task_schemas_bytes(None, None, None, None, None)
+    _filtered_model_schemas_bytes(None, None, None, None, None, None, None, False)
 
 
 def warmup_blocking() -> None:
-    """Prepare the shared caches **synchronously** at process startup.
+    """Populate shared caches synchronously before accepting requests.
 
-    Called from the FastAPI startup hook so the HTTP listener doesn't begin
-    accepting requests until the per-benchmark parquet frames + per-model
-    training-datasets + pydantic schema caches + unfiltered list JSONs are
-    populated. Previously this path ran on a background daemon thread and
-    the first incoming request paid the ~2.5 s ``_collect_similar_tasks``
-    walk + ~400 ms task-schema serialisation; doing it inline trades a
-    slower boot for a hot first response.
-
-    Per-benchmark failures are logged but never propagate — mteb's
-    registries are static after import, so a thrown exception almost always
-    means a benchmark or a model is mis-configured rather than a transient
-    error. Aborting startup on one bad entry would take the whole API down.
+    Phases 1-3 are independent (network I/O / CPU / pydantic-core); they run
+    on a small thread pool so wall time is max() instead of sum(). Phase 4
+    (list schemas) depends on phases 1-3 because it reads them through the
+    benchmark / task / model caches, so it runs serially afterwards.
     """
+    from concurrent.futures import ThreadPoolExecutor
+
     from mteb.api.adapters import prewarm_schema_caches
 
     try:
-        _load_per_benchmark_frames()
-        _prewarm_training_datasets()
-        prewarm_schema_caches()
+        with ThreadPoolExecutor(max_workers=3, thread_name_prefix="warmup") as ex:
+            futures = [
+                ex.submit(_load_per_benchmark_frames),
+                ex.submit(_prewarm_training_datasets),
+                ex.submit(prewarm_schema_caches),
+            ]
+            for f in futures:
+                f.result()
         _prewarm_list_schemas()
     except Exception as exc:
         logger.warning("light warmup failed: %s", exc)
 
 
 def preload_summaries_in_background() -> None:
-    """Pre-build every benchmark summary + per-language schema on a daemon thread.
-
-    Both are derived from the same long results frame, so warming them
-    together amortises the disk read. PerLanguageTab opens to instant
-    real data instead of triggering an explode + group_by on first hit.
-    """
+    """Pre-build every benchmark summary + per-language schema on a daemon thread."""
     if not preload_full():
         return
 
@@ -345,19 +405,15 @@ def preload_summaries_in_background() -> None:
 
         async def _build_one(name: str) -> None:
             try:
-                await get_summary(name)
+                await get_summary_bytes(name)
             except Exception as exc:
                 logger.warning("warmup summary: %s failed (%s)", name, exc)
             try:
-                await get_per_language(name)
+                await get_per_language_bytes(name)
             except Exception as exc:
                 logger.warning("warmup per-language: %s failed (%s)", name, exc)
 
         async def _build_all() -> None:
-            # ``asyncio.gather`` fans out every benchmark summary onto the
-            # default thread executor via ``asyncio.to_thread`` (inside the
-            # cache + aggregators). Default pool size is ``min(32, cpu+4)``,
-            # which covers 56 benchmarks comfortably.
             await asyncio.gather(*(_build_one(n) for n in all_names))
 
         asyncio.run(_build_all())
