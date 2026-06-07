@@ -26,23 +26,7 @@ jobs:
       uses: actions/checkout@v6
 
     - name: Free disk space
-      run: |
-        sudo rm -rf \
-          "$AGENT_TOOLSDIRECTORY" \
-          /opt/ghc \
-          /opt/google/chrome \
-          /opt/microsoft/msedge \
-          /opt/microsoft/powershell \
-          /opt/pipx \
-          /usr/lib/mono \
-          /usr/local/julia* \
-          /usr/local/lib/android \
-          /usr/local/lib/node_modules \
-          /usr/local/share/chromium \
-          /usr/local/share/powershell \
-          /usr/share/dotnet \
-          /usr/share/swift
-        docker system prune -af
+      uses: ./.github/actions/free-disk-space
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v4
@@ -55,7 +39,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and push Docker image
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v7
       with:
         context: .
         file: ./Dockerfile
