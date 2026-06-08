@@ -227,7 +227,7 @@ class FramesCollator:
         original_n = n
         while n > 0:
             try:
-                frames: torch.Tensor = video.get_frames_at(_indices(n)).data
+                frames: torch.Tensor = video.get_frames_at(_indices(n)).data.clone()
                 if n < original_n:
                     logger.warning(
                         "Dropped %d undecodable trailing frame(s) from video",
