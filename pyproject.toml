@@ -458,7 +458,6 @@ module = [
     "faiss",
     "vllm",
     "torchaudio",
-    "torchcodec",
 ]
 ignore_missing_imports = true
 
