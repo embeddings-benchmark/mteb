@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from datasets import Dataset
+from sklearn.metrics import v_measure_score
 from torch.utils.data import DataLoader
 
 from mteb._evaluators import ClusteringEvaluator
@@ -42,4 +43,4 @@ class TestClusteringEvaluator:
         )
         result = clusterer(model, encode_kwargs={"batch_size": 32})
 
-        assert result == [2, 1, 0]
+        assert v_measure_score(labels, result) == 1.0
