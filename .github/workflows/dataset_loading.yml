@@ -6,10 +6,6 @@ on:
     paths:
       - "mteb/tasks/**.py"
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   dataset-loading-check:
     runs-on: ubuntu-latest
