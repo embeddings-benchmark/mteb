@@ -10,6 +10,7 @@ from .mock_tasks import (
     MockAny2AnyRetrievalT2ATask,
     MockAny2AnyRetrievalT2ITask,
     MockAsymVideoAudioPairClassificationTask,
+    MockAsymVideoAudioPairClassificationTaskV2,
     MockAudioClassification,
     MockAudioClassificationCrossVal,
     MockAudioClusteringTask,
@@ -55,6 +56,8 @@ from .mock_tasks import (
     MockRetrievalTask,
     MockSTSTask,
     MockSummarizationTask,
+    MockSymCustomVideoAudioPairClassificationTaskV2,
+    MockSymCustomVideoAudiSTSTask,
     MockTextZeroShotClassificationTask,
     MockVideoAudioClassification,
     MockVideoAudioClusteringTask,
@@ -204,6 +207,9 @@ MOCK_MULTIMODAL_TASKS = (
     MockVideoAudioTextRetrievalVAT2T(),
     MockVideoAudioZeroshotClassificationTask(),
     MockAsymVideoAudioPairClassificationTask(),
+    MockAsymVideoAudioPairClassificationTaskV2(),
+    MockSymCustomVideoAudioPairClassificationTaskV2(),
+    MockSymCustomVideoAudiSTSTask(),
 )
 
 ALL_TASK_TEST_GRID = (

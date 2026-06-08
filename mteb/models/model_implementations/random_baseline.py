@@ -211,12 +211,18 @@ class RandomEncoderBaseline:
         array_framework: Literal["numpy", "torch"] = "numpy",
         dtype: torch.dtype | np.floating = np.float32,
         embed_dim: int | None = None,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = 10,
         **kwargs: Any,
     ) -> None:
         self.rng_state = np.random.default_rng(42)
         self.embedding_dim = embed_dim or _EMBEDDING_DIM
         self.array_framework = array_framework
         self.dtype = dtype
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
 
     def encode(
         self,
@@ -235,7 +241,9 @@ class RandomEncoderBaseline:
             requires_image_dependencies()
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=16000,
-                fps=2.0,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
             )
         embedding = _batch_to_embeddings(inputs, self.embedding_dim)
         if self.array_framework == "torch":
