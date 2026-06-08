@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.14.2"
+version = "2.14.6"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -99,6 +99,7 @@ voyage_v = ["voyageai>0.3.0,<2.0.0", "tenacity>9.0.0"]
 cohere = ["cohere==5.14.0"]
 vertexai = ["vertexai==1.71.1"]
 google_genai = ["google-genai>=1.7.0"]
+octen = ["octen>=0.4.0"]
 llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
 timm = ["timm>=1.0.15,<1.1.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
@@ -125,17 +126,10 @@ vllm = ["vllm>=0.11.1"]
 transformers-v4 = ["transformers<5"]
 siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
 qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
-omnivinci = ["transformers==4.46.0", "torch==2.8.*", "einops>=0.8.0", "openai-whisper>=20240930", "soundfile>=0.13.1", "opencv-python-headless>=4.0.0", "kaldiio>=2.18.0", "decord>=0.6.0", "librosa>=0.10.0", "beartype>=0.18.0", "accelerate>=1.0.0", "s2wrapper @ git+https://github.com/bfshi/scaling_on_scales", "deepspeed>=0.9.0", "torchvision>=0.15.0", "torchaudio>=2.0.0", "torchcodec==0.7.0", "av>=10.0.0", "numpy>=1.23.0,<2.0.0", "flash-attn>=2.6.3"]
+# omnivinci = ["transformers==4.46.0", "torch==2.8.*", "einops>=0.8.0", "openai-whisper>=20240930", "soundfile>=0.13.1", "opencv-python-headless>=4.0.0", "kaldiio>=2.18.0", "decord>=0.6.0", "librosa>=0.10.0", "beartype>=0.18.0", "accelerate>=1.0.0", "s2wrapper @ git+https://github.com/bfshi/scaling_on_scales", "deepspeed>=0.9.0", "torchvision>=0.15.0", "torchaudio>=2.0.0", "torchcodec==0.7.0", "av>=10.0.0", "numpy>=1.23.0,<2.0.0", "flash-attn>=2.6.3"]
 qwen_omni_utils = ["qwen_omni_utils"]
 embeddinggemma = ["transformers>=4.56.0"]
-ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
-
-
-
-
-
-
-
+# ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
 
 
 
@@ -441,9 +435,9 @@ conflicts = [
         { extra = "muq" },
         { extra = "transformers-v4" },
         { extra = "qwen-vl" },
-        { extra = "omnivinci" },
+#        { extra = "omnivinci" },
         { extra = "embeddinggemma" },
-        { extra = "ebind" },
+#        { extra = "ebind" },
         { extra = "visrag-ret" }, # conflicting version of timm with blip2
     ],
 ]

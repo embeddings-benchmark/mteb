@@ -196,6 +196,8 @@ class VoyageModel(AbsEncoder):
         max_tokens: int | None = None,
         model_prompts: dict[str, str] | None = None,
         output_dtype: str | None = None,
+        api_model_name: str | None = None,
+        evolved_prompts: bool = False,
         **kwargs,
     ) -> None:
         import voyageai
@@ -203,7 +205,11 @@ class VoyageModel(AbsEncoder):
         self._client = voyageai.Client(max_retries=max_retries)
         self._embed_func = rate_limit(max_rpm)(token_limit(max_tpm)(self._client.embed))
 
-        self._model_name = model_name.split("/")[-1].split()[0]  # noqa: PLC0207
+        if api_model_name:
+            self._model_name = api_model_name
+        else:
+            self._model_name = model_name.rsplit("/", maxsplit=1)[-1].split()[0]
+        self._evolved_prompts = evolved_prompts
         self._max_tpm = max_tpm
         self._max_tokens = max_tokens
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
@@ -226,6 +232,15 @@ class VoyageModel(AbsEncoder):
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         input_type = self.model_prompts.get(prompt_name, "document")
         sentences = [text for batch in inputs for text in batch["text"]]
+
+        if self._evolved_prompts:
+            dataset_name = task_metadata.name
+            if input_type == "query":
+                template = QUERY_PROMPTS.get(dataset_name, "{text}")
+            else:
+                template = CORPUS_PROMPTS.get(dataset_name, "{text}")
+            sentences = [template.format(text=s) for s in sentences]
+
         return self._batched_encode(sentences, batch_size, input_type)
 
     def _batched_encode(
@@ -294,10 +309,81 @@ class VoyageModel(AbsEncoder):
         return embeddings_array
 
 
+QUERY_PROMPTS = {
+    "AILACasedocs": "{text}",
+    "AILAStatutes": "Explore applicable legislative provisions for: {text}",
+    "AppsRetrieval": "{text}",
+    "CUREv1": "Find targeted clinical knowledge: {text}",
+    "ChatDoctorRetrieval": "Consult medical knowledge to address: {text}",
+    "DS1000Retrieval": "Locate Python programming solutions to handle the described issue: {text}",
+    "FinQARetrieval": "Financial report analysis for query: {text}",
+    "FinanceBenchRetrieval": "Compute the necessary financial data from the query: {text}",
+    "FreshStackRetrieval": "Programming question addressed on Stack Overflow: {text}",
+    "HC3FinanceRetrieval": "Obtain documents that closely reflect the user's finance query: {text}",
+    "HumanEvalRetrieval": "Retrieve the Python code that correctly implements the solution: {text}",
+    "LegalQuAD": "Locate enforceable legal rules for: {text}",
+    "LegalSummarization": "Seek clarity in legal information: {text}",
+    "MBPPRetrieval": "Programming task: {text}",
+    "MIRACLRetrievalHardNegatives": "Uncover comprehensive background: {text}",
+    "WikiSQLRetrieval": "Unveil the SQL instruction to fulfill: {text}",
+}
+
+CORPUS_PROMPTS = {
+    "AILACasedocs": "Precedent snippet: {text}",
+    "AILAStatutes": "Schema of binding legal principles: {text}",
+    "AppsRetrieval": "Operational code blueprint: {text}",
+    "CUREv1": "Focused study passage: {text}",
+    "ChatDoctorRetrieval": "Seek reliable clinical advice: {text}",
+    "DS1000Retrieval": "Python code solution: {text}",
+    "FinQARetrieval": "Focus on financial tables: {text}",
+    "FinanceBenchRetrieval": "{text}",
+    "FreshStackRetrieval": "Software insight document: {text}",
+    "HC3FinanceRetrieval": "Expert-level finance discussion: {text}",
+    "HumanEvalRetrieval": "Python solution: {text}",
+    "LegalQuAD": "Relevant statute: {text}",
+    "LegalSummarization": "{text}",
+    "MBPPRetrieval": "Python function: {text}",
+    "MIRACLRetrievalHardNegatives": "Reference passage: {text}",
+    "WikiSQLRetrieval": "SQL statement execution: {text}",
+}
+
+
 model_prompts = {
     PromptType.query.value: "query",
     PromptType.document.value: "document",
 }
+
+voyage_4_large_2048d_evolved = ModelMeta(
+    name="voyageai/voyage-4-large (embed_dim=2048, evolved_prompts=True)",
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-01-15",
+    languages=None,
+    loader=VoyageModel,
+    loader_kwargs=dict(
+        max_tokens=32000,
+        model_prompts=model_prompts,
+        api_model_name="voyage-4-large",
+        evolved_prompts=True,
+    ),
+    max_tokens=32000,
+    embed_dim=2048,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2026/01/15/voyage-4/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["voyageai"],
+    adapted_from="voyageai/voyage-4-large (embed_dim=2048)",
+    experiment_kwargs=None,
+)
 
 voyage_4_large_2048d = ModelMeta(
     name="voyageai/voyage-4-large (embed_dim=2048)",

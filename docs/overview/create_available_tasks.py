@@ -199,6 +199,7 @@ def main(input_path: Path, output_path: Path) -> None:
         exclude_superseded=False,
         exclude_aggregate=False,
         exclude_private=False,
+        exclude_beta=False,
     )
 
     task_types = sorted({task.metadata.type for task in tasks})
