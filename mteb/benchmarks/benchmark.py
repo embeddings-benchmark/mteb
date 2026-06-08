@@ -99,16 +99,6 @@ class Benchmark:
         ... )
     """
 
-    # Declarative aggregation columns the benchmark surfaces in its
-    # leaderboard summary table. Lets the API and frontend render only the
-    # relevant columns without inspecting the polars frame's column names.
-    # ClassVar (not a dataclass field) so subclasses can override without
-    # re-declaring the dataclass.
-    aggregations: ClassVar[Sequence[BenchmarkAggregation]] = (
-        BenchmarkAggregation.MEAN_TASK,
-        BenchmarkAggregation.MEAN_TASK_TYPE,
-        BenchmarkAggregation.TASK_TYPES,
-    )
     # Polars column used to sort rows in the summary table (and to
     # populate the displayed ``Rank``). Default ``None`` means "use the
     # builder's intrinsic default" — Borda count for the standard
@@ -129,6 +119,16 @@ class Benchmark:
     language_view: list[str] | Literal["all"] = field(default_factory=list)
     benchmark_hf_repo: str | None = None
     new_version: Sequence[str] | None = None
+    # Declarative aggregation columns the benchmark surfaces in its
+    # leaderboard summary table. Lets the API and frontend render only the
+    # relevant columns without inspecting the polars frame's column names.
+    # ClassVar (not a dataclass field) so subclasses can override without
+    # re-declaring the dataclass.
+    aggregations: Sequence[BenchmarkAggregation] = (
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.MEAN_TASK_TYPE,
+        BenchmarkAggregation.TASK_TYPES,
+    )
 
     @property
     def display_on_leaderboard(self) -> bool:
@@ -514,7 +514,7 @@ class VidoreBenchmark(Benchmark):
     # ViDoRe's tasks share a single task type (Document Understanding → Mean
     # (Task)). Surfaces the public / private split rather than a per-type
     # breakdown.
-    aggregations: ClassVar[Sequence[BenchmarkAggregation]] = (
+    aggregations: Sequence[BenchmarkAggregation] = (
         BenchmarkAggregation.MEAN_TASK,
         BenchmarkAggregation.PUBLIC_PRIVATE,
     )

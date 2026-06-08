@@ -1,5 +1,6 @@
 from mteb.benchmarks.benchmark import (
     Benchmark,
+    BenchmarkAggregation,
     HUMEBenchmark,
     MIEBBenchmark,
     VidoreBenchmark,
@@ -2796,6 +2797,7 @@ VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
   year = {2025},
 }
 """,
+    aggregations=(BenchmarkAggregation.MEAN_TASK,),
 )
 
 R2MED = Benchmark(
