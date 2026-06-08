@@ -115,8 +115,8 @@ class PairClassificationEvaluator(Evaluator):
                     task_metadata=self.task_metadata,
                     input_column=self.task_metadata.modalities[0]
                     if (
-                    isinstance(self.input1_column_name, str)
-                    and len(self.task_metadata.modalities) == 1
+                        isinstance(self.input1_column_name, str)
+                        and len(self.task_metadata.modalities) == 1
                     )
                     else None,
                     num_proc=num_proc,
@@ -149,8 +149,8 @@ class PairClassificationEvaluator(Evaluator):
                     task_metadata=self.task_metadata,
                     input_column=self.task_metadata.modalities[0]
                     if (
-                    isinstance(self.input2_column_name, str)
-                    and len(self.task_metadata.modalities) == 1
+                        isinstance(self.input2_column_name, str)
+                        and len(self.task_metadata.modalities) == 1
                     )
                     else None,
                     num_proc=num_proc,
