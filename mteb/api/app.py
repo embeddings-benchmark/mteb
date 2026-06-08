@@ -12,6 +12,7 @@ from collections.abc import (  # noqa: TC003 — used at runtime by lifespan sig
     AsyncIterator,
 )
 from contextlib import asynccontextmanager
+from typing import TYPE_CHECKING
 
 import uvicorn
 from fastapi import FastAPI
@@ -24,6 +25,10 @@ from mteb.api.metrics import PrometheusMiddleware
 from mteb.api.otel import setup_telemetry, shutdown_telemetry
 from mteb.api.routes import infra_router, router
 from mteb.api.settings import cors_origins, og_dir
+
+if TYPE_CHECKING:
+    from starlette.responses import Response
+    from starlette.types import Scope
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +94,7 @@ class _CachedStatic(StaticFiles):
     rolls over — the short max-age caps how long crawlers serve stale images.
     """
 
-    async def get_response(self, path, scope):  # type: ignore[override]
+    async def get_response(self, path: str, scope: Scope) -> Response:
         response = await super().get_response(path, scope)
         if response.status_code == 200:
             response.headers.setdefault("Cache-Control", "public, max-age=86400")

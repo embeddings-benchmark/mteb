@@ -19,8 +19,9 @@ import hashlib
 import logging
 import threading
 from collections import OrderedDict
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING, TypeVar, cast
 
 import polars as pl
 
@@ -29,6 +30,7 @@ from mteb.api.settings import cache_repo, preload_full
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
+    from concurrent.futures import Future
 
     from pydantic import BaseModel
 
@@ -113,9 +115,10 @@ def _load_default_from_hub(repo_id: str) -> pl.DataFrame | None:
         try:
             from datasets import load_dataset
 
-            return load_dataset(
-                repo_id, name=_DEFAULT_CONFIG, split="train"
-            ).to_polars()
+            return cast(
+                "pl.DataFrame",
+                load_dataset(repo_id, name=_DEFAULT_CONFIG, split="train").to_polars(),
+            )
         except Exception as exc2:
             logger.warning(
                 "Hub fallback also failed for %s/%s: %s", repo_id, _DEFAULT_CONFIG, exc2
@@ -197,9 +200,9 @@ def _lock_for(locks: dict[_K, asyncio.Lock], key: _K) -> asyncio.Lock:
 
 
 async def _cached_bytes(
-    store: dict,
-    locks: dict,
-    key,
+    store: dict[_K, Serialized],
+    locks: dict[_K, asyncio.Lock],
+    key: _K,
     schema_builder: Callable[[], Awaitable[BaseModel]],
 ) -> Serialized:
     """Generic single-flight cache-or-build for serialised bytes.
@@ -284,7 +287,7 @@ async def get_task_scores_bytes(name: str) -> Serialized:
     """JSON bytes + gzip + ETag for the task-scores endpoint."""
     from mteb.api.aggregators import build_task_scores
 
-    async def _build():
+    async def _build() -> BaseModel:
         return await asyncio.to_thread(build_task_scores, name, get_cache())
 
     return await _cached_bytes(_task_score_bytes, _task_score_bytes_locks, name, _build)
@@ -360,13 +363,11 @@ def warmup_blocking() -> None:
     (list schemas) depends on phases 1-3 because it reads them through the
     benchmark / task / model caches, so it runs serially afterwards.
     """
-    from concurrent.futures import ThreadPoolExecutor
-
     from mteb.api.adapters import prewarm_schema_caches
 
     try:
         with ThreadPoolExecutor(max_workers=3, thread_name_prefix="warmup") as ex:
-            futures = [
+            futures: list[Future[object]] = [
                 ex.submit(_load_per_benchmark_frames),
                 ex.submit(_prewarm_training_datasets),
                 ex.submit(prewarm_schema_caches),

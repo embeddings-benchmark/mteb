@@ -173,16 +173,14 @@ def _patch_menu_counts(entries: list[MenuEntrySchema]) -> list[MenuEntrySchema]:
         new_children: list[BenchmarkSchema | MenuEntrySchema] = []
         any_changed = False
         for child in entry.children:
+            patched_child: BenchmarkSchema | MenuEntrySchema
             if isinstance(child, BenchmarkSchema):
                 patched_child = _with_num_models(child)
-                if patched_child is not child:
-                    any_changed = True
-                new_children.append(patched_child)
             else:
                 [patched_child] = _patch_menu_counts([child])
-                if patched_child is not child:
-                    any_changed = True
-                new_children.append(patched_child)
+            if patched_child is not child:
+                any_changed = True
+            new_children.append(patched_child)
         if any_changed:
             patched.append(entry.model_copy(update={"children": new_children}))
         else:

@@ -8,6 +8,7 @@ still be constructed with Python-style keyword args from adapters.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Literal, Union
 from urllib.parse import quote
 
@@ -41,9 +42,11 @@ def _is_url(value: str) -> bool:
     return head.startswith(("http://", "https:/", "data:"))
 
 
-def _flatten_eval_langs(eval_langs: dict[str, list[str]] | list[str]) -> list[str]:
-    """Flatten ``eval_langs`` (list or ``dict[subset, list]``) into a deduped list."""
-    if isinstance(eval_langs, dict):
+def _flatten_eval_langs(
+    eval_langs: Mapping[str, list[str]] | list[str],
+) -> list[str]:
+    """Flatten ``eval_langs`` (list or ``Mapping[subset, list]``) into a deduped list."""
+    if isinstance(eval_langs, Mapping):
         flat: list[str] = []
         for langs in eval_langs.values():
             flat.extend(langs)

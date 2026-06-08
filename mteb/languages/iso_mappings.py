@@ -79,7 +79,7 @@ def language_label(code: str) -> str:
         lang, script = code.split("-", 1)
     else:
         lang, script = code, ""
-    name = ISO_TO_LANGUAGE.get(lang, code)
+    name = str(ISO_TO_LANGUAGE.get(lang, code))
     if script and _get_iso3_to_default_script().get(lang) != script:
         script_name = _SCRIPT_DISPLAY_ALIASES.get(
             script, ISO_TO_SCRIPT.get(script, script)

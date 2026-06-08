@@ -126,7 +126,7 @@ def _route_template(request: Request) -> str:
     ``matches`` against the app's router; the result is memoised on the scope
     so the post-handler re-resolution doesn't repeat the scan.
     """
-    cached = request.scope.get(_ROUTE_TEMPLATE_KEY)
+    cached: str | None = request.scope.get(_ROUTE_TEMPLATE_KEY)
     if cached is not None and cached != _UNMATCHED:
         return cached
     resolved = _resolve_route_template(request)

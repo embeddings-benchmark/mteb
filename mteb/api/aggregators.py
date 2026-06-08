@@ -97,7 +97,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
         # Benchmark missing from the parquet cache (newly added). Costly first
         # call; the parquet rebuild normally covers everything.
         results = cache.load_results(tasks=bench, require_model_meta=True)
-        long_df = results.to_results_df(bench.tasks)
+        long_df = results._to_results_df(bench.tasks)
 
     if long_df.is_empty() or "model_name" not in long_df.columns:
         return BenchmarkSummarySchema(

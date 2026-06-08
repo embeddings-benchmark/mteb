@@ -767,7 +767,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             from_hub: Load from the HF Hub via ``datasets`` instead of a local path.
         """
         if from_hub:
-            return load_dataset(str(source), split="train").to_polars()
+            return cast(
+                "pl.DataFrame", load_dataset(str(source), split="train").to_polars()
+            )
         return pl.read_parquet(source)
 
     @staticmethod

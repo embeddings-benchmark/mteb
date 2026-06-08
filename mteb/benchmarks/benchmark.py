@@ -122,8 +122,8 @@ class Benchmark:
     # Declarative aggregation columns the benchmark surfaces in its
     # leaderboard summary table. Lets the API and frontend render only the
     # relevant columns without inspecting the polars frame's column names.
-    # ClassVar (not a dataclass field) so subclasses can override without
-    # re-declaring the dataclass.
+    # Dataclass field (not ClassVar) so instances can override at
+    # construction time — see VISUAL_DOCUMENT_RETRIEVAL.
     aggregations: Sequence[BenchmarkAggregation] = (
         BenchmarkAggregation.MEAN_TASK,
         BenchmarkAggregation.MEAN_TASK_TYPE,
@@ -446,9 +446,7 @@ class RtebBenchmark(Benchmark):
 
     # RTEB collapses its private split into the public mean and renames it to
     # `Mean (Task)`. The leaderboard surfaces only that one mean column.
-    aggregations: ClassVar[Sequence[BenchmarkAggregation]] = (
-        BenchmarkAggregation.MEAN_TASK,
-    )
+    aggregations: Sequence[BenchmarkAggregation] = (BenchmarkAggregation.MEAN_TASK,)
 
     def _create_summary_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:  # noqa: PLR6301
         from mteb.benchmarks._create_table import (
@@ -489,7 +487,7 @@ class MIEBBenchmark(Benchmark):
     # because the column ISN'T a simple per-task mean; mislabelling it
     # as "Mean (Task)" caused the frontend to recompute and disagree
     # with the canonical value.
-    aggregations: ClassVar[Sequence[BenchmarkAggregation]] = (
+    aggregations: Sequence[BenchmarkAggregation] = (
         BenchmarkAggregation.MEAN_TASK_TYPE,
         BenchmarkAggregation.TASK_TYPES,
     )
