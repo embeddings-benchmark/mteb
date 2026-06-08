@@ -41,7 +41,6 @@ from mteb.models.model_implementations import MODEL_REGISTRY
 
 if TYPE_CHECKING:
     from mteb.api.schemas import ModelMetaSchema, TaskMetaSchema
-    from mteb.benchmarks.benchmark import Benchmark
     from mteb.cache.result_cache import ResultCache
 
 logger = logging.getLogger(__name__)
@@ -437,22 +436,20 @@ def build_task_scores(name: str, cache: ResultCache) -> TaskScoresSchema:
     )
 
 
-@functools.lru_cache(maxsize=1)
-def _flat_leaderboard_benchmarks() -> tuple[Benchmark, ...]:
-    """Cached tuple of every benchmark on the leaderboard menu."""
-    return tuple(mteb.get_benchmarks(display_on_leaderboard=True))
-
-
 async def build_model_scores(name: str) -> ModelScoresSchema:
     """Per-benchmark scores for a single model.
 
     Fans out the cold summary builds with ``asyncio.gather`` so wall time is
     max() instead of sum(). A linear scan per benchmark is cheap (~500 rows ×
     50 benchmarks ≈ microseconds) so we don't memoise the per-summary index.
+
+    Iterates every registered benchmark — including off-menu ones
+    (``display_on_leaderboard=False``) — so submissions to hidden benchmarks
+    still surface on the model detail page.
     """
     from mteb.api.cache import get_summary
 
-    all_benchmarks = _flat_leaderboard_benchmarks()
+    all_benchmarks = mteb.get_benchmarks()
     results = await asyncio.gather(
         *(get_summary(b.name) for b in all_benchmarks),
         return_exceptions=True,

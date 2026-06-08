@@ -384,9 +384,13 @@ def preload_summaries_in_background() -> None:
         return
 
     def _run() -> None:
-        from mteb.api.aggregators import _flat_leaderboard_benchmarks
+        import mteb
 
-        all_names = [b.name for b in _flat_leaderboard_benchmarks()]
+        # Preload every registered benchmark — including off-menu
+        # ones — so hidden-benchmark requests also hit the warmed cache
+        # and the model detail page (which iterates all benchmarks) is
+        # cold-path-free.
+        all_names = [b.name for b in mteb.get_benchmarks()]
 
         async def _build_one(name: str) -> None:
             try:
