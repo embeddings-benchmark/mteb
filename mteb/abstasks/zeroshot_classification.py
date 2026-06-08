@@ -182,15 +182,17 @@ class AbsTaskZeroShotClassification(AbsTask):
                 hf_split=hf_split,
             )
 
+        prediction_indices = torch.tensor(probs).argmax(dim=1).tolist()
+        predictions = [candidate_labels[i] for i in prediction_indices]
         return self._calculate_scores(
             data_split[self.label_column_name],
-            torch.tensor(probs).argmax(dim=1).tolist(),
+            predictions,
         )
 
     def _calculate_scores(  # noqa: PLR6301
         self,
-        labels: list[int],
-        predictions: list[float],
+        labels: list[str],
+        predictions: list[str],
     ) -> ZeroShotClassificationMetrics:
         return ZeroShotClassificationMetrics(
             accuracy=metrics.accuracy_score(labels, predictions),
