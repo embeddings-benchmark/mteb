@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, TypedDict, cast
+from typing import TYPE_CHECKING, TypeAlias, TypedDict, cast
 
 import numpy as np
 import torch
@@ -189,7 +189,7 @@ class OutputDType(HelpfulStrEnum):
         return cast("torch.dtype", getattr(torch, self.value))
 
 
-BatchedInput = (
+BatchedInput: TypeAlias = (
     TextInput
     | CorpusInput
     | QueryInput
