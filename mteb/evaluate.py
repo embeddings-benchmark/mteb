@@ -296,9 +296,7 @@ def _check_cache(
     # Load results from the cache if the overwrite strategy allows it
     existing_results: TaskResult | None = None
     if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
-        cache_results = cache.load_task_result(task.metadata.name, meta)
-        if cache_results:
-            existing_results = cache_results
+        existing_results = cache.load_task_result(task.metadata.name, meta)
 
     dont_overwrite = overwrite_strategy in {
         OverwriteStrategy.NEVER,
@@ -306,17 +304,13 @@ def _check_cache(
     }
 
     # Check if the cached results are compatible/mergeable with the current task definition
-    is_mergable = existing_results is not None and (
+    is_mergeable = existing_results is not None and (
         not _requires_merge(task, existing_results)
         or existing_results.is_mergeable(task)
     )
 
     # Determine missing splits and subsets
-    if (
-        existing_results
-        and overwrite_strategy != OverwriteStrategy.ALWAYS
-        and (dont_overwrite or is_mergable)
-    ):
+    if existing_results and (dont_overwrite or is_mergeable):
         # Cache exists and is compatible, compute missing evaluations to potentially resume
         missing_eval = existing_results.get_missing_evaluations(task)
     else:
