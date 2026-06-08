@@ -266,8 +266,10 @@ class AbsEncoder(ABC):
             The instruction to be used for encoding sentences.
         """
         instruction = self.get_instruction(task_metadata, prompt_type)
-        if self.instruction_template and len(instruction) > 0:
-            return self.format_instruction(instruction, prompt_type)
+        if self.instruction_template:
+            # Always invoke callables. Issue https://github.com/embeddings-benchmark/mteb/issues/4683
+            if callable(self.instruction_template) or len(instruction) > 0:
+                return self.format_instruction(instruction, prompt_type)
         return instruction
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:

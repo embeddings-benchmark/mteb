@@ -1264,6 +1264,7 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
         **general_args,
     )
     metadata.modalities = ["image"]
+    metadata.category = "i2i"
 
     input1_column_name = "image1"
     input2_column_name = "image2"
@@ -1681,6 +1682,8 @@ class MockRerankingTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 136,
             "documents_text_statistics": {
                 "total_text_length": 84,
@@ -1736,6 +1739,8 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
+            "num_queries": 4,
+            "num_documents": 4,
             "number_of_characters": 272,
             "documents_text_statistics": {
                 "total_text_length": 168,
@@ -1773,6 +1778,8 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 136,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -1810,6 +1817,8 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 136,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -1871,6 +1880,8 @@ class MockRetrievalTask(AbsTaskRetrieval):
     expected_stats = {
         "val": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 136,
             "documents_text_statistics": {
                 "total_text_length": 84,
@@ -1903,6 +1914,8 @@ class MockRetrievalTask(AbsTaskRetrieval):
         },
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 136,
             "documents_text_statistics": {
                 "total_text_length": 84,
@@ -1955,6 +1968,8 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
     expected_stats = {
         "val": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 201,
             "documents_text_statistics": {
                 "total_text_length": 84,
@@ -1987,6 +2002,8 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
         },
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 201,
             "documents_text_statistics": {
                 "total_text_length": 84,
@@ -2056,6 +2073,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
     expected_stats = {
         "val": {
             "num_samples": 8,
+            "num_queries": 4,
+            "num_documents": 4,
             "number_of_characters": 272,
             "documents_text_statistics": {
                 "total_text_length": 168,
@@ -2088,6 +2107,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 136,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2120,6 +2141,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 136,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2154,6 +2177,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
         },
         "test": {
             "num_samples": 8,
+            "num_queries": 4,
+            "num_documents": 4,
             "number_of_characters": 272,
             "documents_text_statistics": {
                 "total_text_length": 168,
@@ -2186,6 +2211,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 136,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2218,6 +2245,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 136,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2523,6 +2552,8 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 196,
             "documents_text_statistics": {
                 "total_text_length": 84,
@@ -2574,6 +2605,8 @@ class MockInstructionReranking(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 196,
             "documents_text_statistics": {
                 "total_text_length": 84,
@@ -2628,6 +2661,8 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
+            "num_queries": 4,
+            "num_documents": 4,
             "number_of_characters": 392,
             "documents_text_statistics": {
                 "total_text_length": 168,
@@ -2660,6 +2695,8 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 196,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2692,6 +2729,8 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 196,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2748,6 +2787,8 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
+            "num_queries": 4,
+            "num_documents": 4,
             "number_of_characters": 392,
             "documents_text_statistics": {
                 "total_text_length": 168,
@@ -2785,6 +2826,8 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 196,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2822,6 +2865,8 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 196,
                     "documents_text_statistics": {
                         "total_text_length": 84,
@@ -2895,6 +2940,8 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 60,
             "documents_text_statistics": None,
             "documents_image_statistics": {
@@ -2987,6 +3034,8 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
+            "num_queries": 4,
+            "num_documents": 4,
             "number_of_characters": 120,
             "documents_text_statistics": None,
             "documents_image_statistics": {
@@ -3034,6 +3083,8 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 60,
                     "documents_text_statistics": None,
                     "documents_image_statistics": {
@@ -3081,6 +3132,8 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "number_of_characters": 60,
                     "documents_text_statistics": None,
                     "documents_image_statistics": {
@@ -3184,6 +3237,8 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 60,
             "documents_text_statistics": {
                 "total_text_length": 60,
@@ -3260,6 +3315,8 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 60,
             "documents_text_statistics": None,
             "documents_image_statistics": {
@@ -4487,6 +4544,8 @@ class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 60,
             "documents_text_statistics": None,
             "documents_image_statistics": None,
@@ -4573,6 +4632,8 @@ class MockAny2AnyRetrievalA2TTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 60,
             "documents_text_statistics": {
                 "total_text_length": 60,
@@ -4658,6 +4719,8 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 0,
             "documents_text_statistics": None,
             "documents_image_statistics": None,
@@ -4745,6 +4808,8 @@ class MockAudioReranking(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 0,
             "documents_text_statistics": None,
             "documents_image_statistics": None,
@@ -4922,6 +4987,7 @@ class MockAudioPairClassification(AbsTaskPairClassification):
         **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio"]
+    metadata.category = "a2a"
 
     expected_stats = {
         "test": {
@@ -5827,6 +5893,7 @@ class MockVideoPairClassificationTask(AbsTaskPairClassification):
         **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["video"]
+    metadata.category = "v2v"
 
     expected_stats = {
         "test": {
@@ -5922,8 +5989,9 @@ class MockVideoAudioPairClassificationTask(AbsTaskPairClassification):
         **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["video", "audio"]
-    input1_column_name = [("video1", "video"), ("audio1", "audio")]
-    input2_column_name = [("video2", "video"), ("audio2", "audio")]
+    metadata.category = "va2va"
+    input1_column_name = {"video1": "video", "audio1": "audio"}
+    input2_column_name = {"video2": "video", "audio2": "audio"}
 
     label_column_name = "label"
 
@@ -6040,8 +6108,8 @@ class MockVideoAudioSTSTask(AbsTaskSTS):
     metadata.modalities = ["video", "audio"]
     metadata.category = "va2va"
     column_names = (
-        [("video1", "video"), ("audio1", "audio")],
-        [("video2", "video"), ("audio2", "audio")],
+        {"video1": "video", "audio1": "audio"},
+        {"video2": "video", "audio2": "audio"},
     )
 
     expected_stats = {
@@ -6162,6 +6230,8 @@ class MockVideoRetrievalV2T(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 60,
             "documents_text_statistics": {
                 "total_text_length": 60,
@@ -6261,6 +6331,8 @@ class MockVideoRetrievalT2V(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 60,
             "documents_text_statistics": None,
             "documents_image_statistics": None,
@@ -6360,6 +6432,8 @@ class MockVideoAudioRetrievalVA2T(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 60,
             "documents_text_statistics": {
                 "total_text_length": 60,
@@ -6470,6 +6544,8 @@ class MockVideoAudioRetrievalT2VA(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 60,
             "documents_text_statistics": None,
             "documents_image_statistics": None,
@@ -6580,6 +6656,8 @@ class MockVideoAudioTextRetrievalVAT2T(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
             "number_of_characters": 120,
             "documents_text_statistics": {
                 "total_text_length": 60,
@@ -6694,8 +6772,8 @@ class MockAsymVideoAudioPairClassificationTask(AbsTaskPairClassification):
     metadata.modalities = ["video", "audio"]
     metadata.category = "v2a"
 
-    input1_column_name = [("video1", "video")]
-    input2_column_name = [("audio2", "audio")]
+    input1_column_name = {"video1": "video"}
+    input2_column_name = {"audio2": "audio"}
     input1_prompt_type = PromptType.query
     input2_prompt_type = PromptType.document
 
@@ -6770,4 +6848,272 @@ class MockAsymVideoAudioPairClassificationTask(AbsTaskPairClassification):
         )
         self.dataset = self.dataset.cast_column("video1", Video())
         self.dataset = self.dataset.cast_column("audio2", Audio())
+        self.data_loaded = True
+
+
+class MockAsymVideoAudioPairClassificationTaskV2(AbsTaskPairClassification):
+    """Asymmetric pair classification: side-1 is video only, side-2 is audio only. Differs from v1 by `input_column_name` is str instead of list"""
+
+    metadata = TaskMetadata(
+        type="VideoPairClassification",
+        name="MockAsymVideoAudioPairClassificationTaskV2",
+        main_score="max_ap",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video", "audio"]
+    metadata.category = "v2a"
+
+    input1_column_name = {"video": "video"}
+    input2_column_name = {"audio": "audio"}
+    input1_prompt_type = PromptType.query
+    input2_prompt_type = PromptType.document
+
+    label_column_name = "label"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "unique_pairs": 2,
+            "number_of_characters": None,
+            "text1_statistics": None,
+            "image1_statistics": None,
+            "audio1_statistics": None,
+            "video1_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "text2_statistics": None,
+            "image2_statistics": None,
+            "audio2_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video2_statistics": None,
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+        }
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video": mock_videos,
+                        "audio": mock_audio,
+                        "label": [0, 1],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.dataset = self.dataset.cast_column("audio", Audio())
+        self.data_loaded = True
+
+
+class MockSymCustomVideoAudioPairClassificationTaskV2(AbsTaskPairClassification):
+    """Asymmetric pair classification: side-1 is video only, side-2 is audio only. Differs from v1 by `input_column_name` is str instead of list"""
+
+    metadata = TaskMetadata(
+        type="VideoPairClassification",
+        name="MockSymCustomVideoAudioPairClassificationTaskV2",
+        main_score="max_ap",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video", "audio"]
+    metadata.category = "v2a"
+
+    input1_column_name = {"video": "video"}
+    input2_column_name = {"audio": "audio"}
+    input1_prompt_type = PromptType.document
+    input2_prompt_type = PromptType.document
+
+    label_column_name = "label"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "unique_pairs": 2,
+            "number_of_characters": None,
+            "text1_statistics": None,
+            "image1_statistics": None,
+            "audio1_statistics": None,
+            "video1_statistics": {
+                "total_duration_seconds": 2.0,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "text2_statistics": None,
+            "image2_statistics": None,
+            "audio2_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video2_statistics": None,
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+        }
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video": mock_videos,
+                        "audio": mock_audio,
+                        "label": [0, 1],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.dataset = self.dataset.cast_column("audio", Audio())
+        self.data_loaded = True
+
+
+class MockSymCustomVideoAudiSTSTask(AbsTaskSTS):
+    """Asymmetric pair classification: side-1 is video only, side-2 is audio only. Differs from v1 by `input_column_name` is str instead of list"""
+
+    metadata = TaskMetadata(
+        type="VideoPairClassification",
+        name="STS",
+        main_score="cosine_spearman",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["video", "audio"]
+    metadata.category = "v2a"
+
+    column_names = (
+        {"video": "video"},
+        {"audio": "audio"},
+    )
+
+    input1_prompt_type = PromptType.document
+    input2_prompt_type = PromptType.document
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "number_of_characters": None,
+            "unique_pairs": 2,
+            "text1_statistics": None,
+            "text2_statistics": None,
+            "image1_statistics": None,
+            "image2_statistics": None,
+            "audio1_statistics": None,
+            "audio2_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "video1_statistics": {
+                "total_duration_seconds": 2,
+                "total_frames": 48,
+                "min_width": 64,
+                "average_width": 64.0,
+                "max_width": 64,
+                "min_height": 64,
+                "average_height": 64.0,
+                "max_height": 64,
+                "min_duration_seconds": 1,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1,
+                "unique_videos": 2,
+                "average_fps": 24.0,
+                "fps": {24: 2},
+                "min_resolution": (64, 64),
+                "average_resolution": (64.0, 64.0),
+                "max_resolution": (64, 64),
+                "resolutions": {"64x64": 2},
+            },
+            "video2_statistics": None,
+            "label_statistics": {"min_score": 0, "avg_score": 0.5, "max_score": 1},
+        }
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Video
+
+        mock_videos = create_mock_video_bytes(self.np_rng)
+        mock_audio = create_mock_audio(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "video": mock_videos,
+                        "audio": mock_audio,
+                        "score": [0, 1],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("video", Video())
+        self.dataset = self.dataset.cast_column("audio", Audio())
         self.data_loaded = True

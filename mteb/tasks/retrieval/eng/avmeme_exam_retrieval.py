@@ -9,9 +9,11 @@ from mteb.abstasks.task_metadata import TaskMetadata
 _DATASET_PATH = "mteb/AVMeme-Exam"
 _DATASET_REVISION = "7070d1979d9a4943dd49b2e72858eb1e54f6bd5b"
 _BIBTEX = r"""
-@article{avmeme2025,
-  title = {AVMeme: A Benchmark for Audio-Visual Meme Understanding},
-  year = {2025},
+@article{jiang2026avmeme,
+  author = {Jiang, Xilin and Wang, Qiaolin and Wu, Junkai and others},
+  journal = {arXiv preprint arXiv:2601.17645},
+  title = {AVMeme Exam: A Multimodal Multilingual Multicultural Benchmark for LLMs' Contextual and Cultural Knowledge and Thinking},
+  year = {2026},
 }
 """
 
