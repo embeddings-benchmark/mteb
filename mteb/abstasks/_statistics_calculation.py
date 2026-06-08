@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Mapping
 
     from PIL import Image
-    from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
+    from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
 
     from mteb.types import Modalities, TopRankedDocumentsType
     from mteb.types._encoder_io import AudioInputItem
