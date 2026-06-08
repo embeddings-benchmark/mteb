@@ -3,7 +3,7 @@ from __future__ import annotations
 import unicodedata
 from typing import TYPE_CHECKING, Any
 
-from mteb.models.instruct_wrapper import MultimodalInstructSentenceTransformerModel
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
@@ -24,7 +24,7 @@ MAX_PIXELS = 1800 * IMAGE_FACTOR * IMAGE_FACTOR
 DEFAULT_INSTRUCTION = "Represent the user's input."
 
 
-class Qwen3VLEmbeddingWrapper(MultimodalInstructSentenceTransformerModel):
+class Qwen3VLEmbeddingWrapper(InstructSentenceTransformerModel):
     def __init__(
         self,
         model_name: str,

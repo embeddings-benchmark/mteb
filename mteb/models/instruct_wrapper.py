@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 import torch
+from tqdm.auto import tqdm
 from typing_extensions import deprecated
 
 from mteb._requires_package import _is_package_available
@@ -136,7 +137,12 @@ def instruct_wrapper(
 
 
 class InstructSentenceTransformerModel(AbsEncoder):
-    """Instruction wrapper for Sentence Transformer models."""
+    """Instruction wrapper for Sentence Transformer models.
+
+    Supports both text-only and multimodal (text + image + audio + video) inputs.
+    When the input dataset exposes image/audio/video features, the encode method
+    builds per-sample modality dicts and applies the appropriate collator.
+    """
 
     def __init__(  # noqa: PLR0913
         self,
@@ -154,11 +160,16 @@ class InstructSentenceTransformerModel(AbsEncoder):
         prompts_dict: dict[str, str] | None = None,
         include_prompt: bool = True,
         embed_dim: int | None = None,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        target_sampling_rate: int | None = None,
+        max_samples: int | None = None,
         **kwargs: Any,
     ):
         """Instruct Sentence Transformer Wrapper. Wrapper that passes instructions to the Sentence Transformer model.
 
-        Applied for models like e5-instruct, jasper, etc.
+        Applied for models like e5-instruct, jasper, qwen3-vl-embedding, etc.
 
         Arguments:
             model_name: Model name of the sentence transformers model.
@@ -173,6 +184,11 @@ class InstructSentenceTransformerModel(AbsEncoder):
                 AbsTask.abstask_prompt will be used.
             include_prompt: Whether to include the prompt tokens in the pooling.
             embed_dim: The embedding dimension of the model to use.
+            fps: Target frames per second for video sampling (multimodal inputs only).
+            max_frames: Maximum number of video frames to sample (multimodal inputs only).
+            num_frames: Fixed number of video frames to sample (multimodal inputs only).
+            target_sampling_rate: Audio target sampling rate (multimodal inputs only). Defaults to 16000 when an audio/video collator is applied.
+            max_samples: Audio maximum number of samples (multimodal inputs only).
             **kwargs: Kwargs for Sentence Transformer model.
         """
         from sentence_transformers import SentenceTransformer
@@ -216,111 +232,6 @@ class InstructSentenceTransformerModel(AbsEncoder):
             self.model.set_pooling_include_prompt(include_prompt=False)
         self.apply_instruction_to_passages = apply_instruction_to_passages
         self.prompts_dict = prompts_dict
-
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Unpack[EncodeKwargs],
-    ) -> Array:
-        """Encodes the given sentences using the encoder.
-
-        Args:
-            inputs: Batch of inputs to encode.
-            task_metadata: The metadata of the task. Encoders (e.g. SentenceTransformers) use to
-                select the appropriate prompts, with priority given to more specific task/prompt combinations over general ones.
-
-                The order of priorities for prompt selection are:
-                    1. Composed prompt of task name + prompt type (query or passage)
-                    2. Specific task prompt
-                    3. Composed prompt of task type + prompt type (query or passage)
-                    4. Specific task type prompt
-                    5. Specific prompt type (query or passage)
-            hf_split: Split of current task, allows to know some additional information about current split.
-                E.g. Current language
-            hf_subset: Subset of current task. Similar to `hf_split` to get more information
-            prompt_type: The name type of prompt. (query or passage)
-            **kwargs: Additional arguments to pass to the encoder.
-
-        Returns:
-            The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
-        """
-        sentences = [text for batch in inputs for text in batch["text"]]
-        instruction: str | None
-        instruction = self.get_task_instruction(task_metadata, prompt_type)
-
-        if "precision" in kwargs and self.mteb_model_meta is not None:
-            existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
-            output_dtype = OutputDType.from_str(kwargs["precision"])
-            if existing_experiment_kwargs is not None:
-                existing_experiment_kwargs["output_dtypes"] = output_dtype  # type: ignore[index]
-            else:
-                existing_experiment_kwargs = {"output_dtypes": output_dtype.value}
-            logger.warning(
-                f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {output_dtype.value}."
-            )
-            self.mteb_model_meta = self.mteb_model_meta.model_copy(
-                update={
-                    "experiment_kwargs": existing_experiment_kwargs,
-                },
-                deep=True,
-            )
-
-        # to passage prompts won't be applied to passages
-        if (
-            not self.apply_instruction_to_passages
-            and prompt_type == PromptType.document
-        ):
-            instruction = None
-            logger.info(
-                f"No instruction used, because prompt type = {prompt_type.document}"
-            )
-
-        if instruction:
-            logger.info(
-                f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
-            )
-
-        embeddings = cast(
-            "Array",
-            self.model.encode(
-                sentences,
-                prompt=instruction,
-                **kwargs,
-            ),
-        )
-
-        if isinstance(embeddings, torch.Tensor):
-            # sometimes in kwargs can be return_tensors=True
-            embeddings = embeddings.cpu().detach().float().numpy()
-        return embeddings
-
-
-class MultimodalInstructSentenceTransformerModel(InstructSentenceTransformerModel):
-    """Instruction wrapper for multimodal SentenceTransformer models (text + image + video).
-
-    Extends InstructSentenceTransformerModel with multimodal batch handling and
-    video collator support for models that do not encode instructions natively via
-    their SentenceTransformers config.
-    """
-
-    def __init__(
-        self,
-        model_name: str,
-        revision: str,
-        *,
-        fps: float | None = None,
-        max_frames: int | None = None,
-        num_frames: int | None = None,
-        target_sampling_rate: int | None = None,
-        max_samples: int | None = None,
-        **kwargs: Any,
-    ) -> None:
-        super().__init__(model_name, revision, **kwargs)
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
@@ -359,8 +270,45 @@ class MultimodalInstructSentenceTransformerModel(InstructSentenceTransformerMode
         Returns:
             The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
         """
-        has_video = "video" in inputs.dataset.features  # type: ignore[attr-defined]
-        has_audio = "audio" in inputs.dataset.features  # type: ignore[attr-defined]
+        instruction: str | None = self.get_task_instruction(task_metadata, prompt_type)
+
+        if "precision" in kwargs and self.mteb_model_meta is not None:
+            existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
+            output_dtype = OutputDType.from_str(kwargs["precision"])
+            if existing_experiment_kwargs is not None:
+                existing_experiment_kwargs["output_dtypes"] = output_dtype  # type: ignore[index]
+            else:
+                existing_experiment_kwargs = {"output_dtypes": output_dtype.value}
+            logger.warning(
+                f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {output_dtype.value}."
+            )
+            self.mteb_model_meta = self.mteb_model_meta.model_copy(
+                update={
+                    "experiment_kwargs": existing_experiment_kwargs,
+                },
+                deep=True,
+            )
+
+        # to passage prompts won't be applied to passages
+        if (
+            not self.apply_instruction_to_passages
+            and prompt_type == PromptType.document
+        ):
+            instruction = None
+            logger.info(
+                f"No instruction used, because prompt type = {prompt_type.document}"
+            )
+
+        if instruction:
+            logger.info(
+                f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
+            )
+
+        features = inputs.dataset.features
+        has_video = "video" in features
+        has_audio = "audio" in features
+        is_multimodal = has_video or has_audio or "image" in features
+
         if has_video:
             from mteb.models.modality_collators import VideoCollator
 
@@ -379,32 +327,30 @@ class MultimodalInstructSentenceTransformerModel(InstructSentenceTransformerMode
                 max_samples=self.max_samples,
             )
 
-        instruction: str | None = self.get_task_instruction(task_metadata, prompt_type)
-        if (
-            not self.apply_instruction_to_passages
-            and prompt_type == PromptType.document
-        ):
-            instruction = None
+        if is_multimodal:
+            _modality_keys = {"text", "image", "audio", "video"}
+            all_embeddings = []
+            for batch in tqdm(inputs, desc="Building multimodal embeddings"):
+                modality_batch = {k: v for k, v in batch.items() if k in _modality_keys}
+                batched_input = [
+                    dict(zip(modality_batch, sample))
+                    for sample in zip(*modality_batch.values())
+                ]
 
-        if instruction:
-            logger.info(
-                f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
-            )
+                embeddings = self.model.encode(
+                    batched_input, prompt=instruction, **kwargs
+                )
+                all_embeddings.append(embeddings)
 
-        _modality_keys = {"text", "image", "audio", "video"}
-        all_embeddings = []
-        for batch in inputs:
-            batch_column = next(iter(batch.keys()))
-            batched_input: list[dict[str, Any]] = [
-                {} for _ in range(len(batch[batch_column]))
-            ]
-            for key, values in batch.items():
-                if key not in _modality_keys:
-                    continue
-                for i, value in enumerate(values):
-                    batched_input[i][key] = value
+            return cast("Array", np.concatenate(all_embeddings, axis=0))
 
-            embeddings = self.model.encode(batched_input, prompt=instruction, **kwargs)
-            all_embeddings.append(embeddings)
-
-        return cast("Array", np.concatenate(all_embeddings, axis=0))
+        sentences = [text for batch in inputs for text in batch["text"]]
+        embeddings = cast(
+            "Array",
+            self.model.encode(
+                sentences,
+                prompt=instruction,
+                **kwargs,
+            ),
+        )
+        return embeddings
