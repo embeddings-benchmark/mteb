@@ -37,13 +37,12 @@ task_result.plot_evaluation_phases()
 This will print a chart of the recorded evaluation phases:
 
 ```text
-Data loading                     |███████████████████████████████                   | 19.4s
-Dataset transform                |                               █                  | 0.0s
+Data loading                                   |███████████████████████████                       | 14.2s
+Dataset transform                              |                           █                      | 0.0s
 
-Encoding corpus (test, default)  |                               █                  | 0.0s
-Encoding queries (test, default) |                               ██████████████████ | 11.1s
-Scoring (test, default)          |                                                 █| 0.1s
-                                  30.6s (untracked: 0.0s)
+Encoding queries and documents (test, default) |                           ██████████████████████ | 11.7s
+Scoring (test, default)                        |                                                 █| 0.2s
+                                                26.1s (untracked: 0.0s)
 ```
 
 For more details, see the [Results API documentation](./api/results.md#timing-and-phase-plotting).
