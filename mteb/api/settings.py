@@ -6,6 +6,8 @@ Environment variables (all optional):
 * ``CACHE_REPO`` — HF dataset id (default ``mteb/results``).
   Empty string disables hub load and forces a local cold rebuild.
 * ``OG_DIR`` — OG hero PNG directory (default ``/data/og``).
+* ``PREWARM_MAX_WORKERS`` — thread-pool size for the schema-cache prewarm
+  (default 16). Tune down on small-memory hosts; tune up on large ones.
 * ``OTEL_EXPORTER_OTLP_ENDPOINT`` / ``OTEL_SERVICE_NAME`` — standard OTEL.
 """
 
@@ -43,6 +45,9 @@ class Settings(BaseSettings):
     # Empty string disables hub load (cold rebuild)
     cache_repo: str | None = "mteb/results"
     og_dir: str = "/data/og"
+    # Thread-pool size for prewarm_schema_caches; pydantic-core construction
+    # releases the GIL so this scales with cores.
+    prewarm_max_workers: int = Field(default=16, ge=1)
 
     otel_endpoint: str | None = Field(
         default=None,
@@ -70,7 +75,7 @@ class Settings(BaseSettings):
 
 @functools.cache
 def get_settings() -> Settings:
-    """Return a process-singleton :class:`Settings` parsed from environment.
+    """Return a process-singleton `Settings` parsed from environment.
 
     Memoised because hot paths (cache loaders, app factory, OG mount) call
     this on every request; env is stable for the process lifetime.

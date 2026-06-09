@@ -1,6 +1,6 @@
 """OpenTelemetry tracing.
 
-Configures one :class:`TracerProvider` + OTLP HTTP exporter and instruments
+Configures one `TracerProvider` + OTLP HTTP exporter and instruments
 FastAPI for per-request spans. No-op when ``OTEL_EXPORTER_OTLP_ENDPOINT`` is
 unset. Metrics live at ``/metrics`` (Prometheus); logs stay on stdlib.
 """

@@ -24,9 +24,28 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, TypeVar, cast
 
 import polars as pl
+from datasets import load_dataset
 
-from mteb.api.aggregators import build_benchmark_summary
+import mteb
+from mteb.api.adapters import prewarm_schema_caches
+from mteb.api.aggregators import (
+    build_benchmark_per_language,
+    build_benchmark_summary,
+    build_model_scores,
+    build_task_scores,
+)
+from mteb.api.metrics import CACHE_OUTCOMES
+from mteb.api.routes import (
+    _benchmark_schemas_bytes,
+    _filtered_model_schemas_bytes,
+    _filtered_task_schemas_bytes,
+    _menu_schemas_bytes,
+)
 from mteb.api.settings import get_settings
+from mteb.benchmarks._create_table import _training_datasets_cached
+from mteb.cache.result_cache import ResultCache
+from mteb.models.model_implementations import MODEL_REGISTRY
+from mteb.results.benchmark_results import BenchmarkResults
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
@@ -35,7 +54,6 @@ if TYPE_CHECKING:
     from pydantic import BaseModel
 
     from mteb.api.schemas import BenchmarkSummarySchema
-    from mteb.cache.result_cache import ResultCache
 
 logger = logging.getLogger(__name__)
 
@@ -73,9 +91,7 @@ def _serialize(schema: BaseModel) -> Serialized:
 
 @functools.cache
 def get_cache() -> ResultCache:
-    """Return the process-wide :class:`ResultCache`."""
-    from mteb.cache.result_cache import ResultCache
-
+    """Return the process-wide `ResultCache`."""
     return ResultCache()
 
 
@@ -125,8 +141,6 @@ def _load_default_from_hub(repo_id: str) -> pl.DataFrame | None:
             "Hub load failed for %s: %s: %s", repo_id, type(exc).__name__, exc
         )
         try:
-            from datasets import load_dataset
-
             return cast(
                 "pl.DataFrame",
                 load_dataset(repo_id, name=_DEFAULT_CONFIG, split="train").to_polars(),
@@ -150,9 +164,6 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
     whole process. Polars frames are practically immutable from the Python
     API, but ``.with_columns`` etc. should be called on `.lazy()` clones.
     """
-    import mteb
-    from mteb.results.benchmark_results import BenchmarkResults
-
     cache = get_cache()
     combined: pl.DataFrame | None = None
 
@@ -235,8 +246,6 @@ async def _cached_bytes(
     on a multi-MB body would otherwise pin the event loop. ``layer`` labels
     the hit/miss counter so ops can split warm/cold by endpoint family.
     """
-    from mteb.api.metrics import CACHE_OUTCOMES
-
     cached = store.get(key)
     if cached is not None:
         CACHE_OUTCOMES.labels(layer=layer, outcome="hit").inc()
@@ -275,8 +284,6 @@ async def get_summary(name: str) -> BenchmarkSummarySchema:
 
 async def get_summary_bytes(name: str, languages: tuple[str, ...] = ()) -> Serialized:
     """JSON bytes + gzip + ETag for the summary endpoint."""
-    from mteb.api.metrics import CACHE_OUTCOMES
-
     if not languages:
         return await _cached_bytes(
             _summary_bytes,
@@ -311,8 +318,6 @@ async def get_summary_bytes(name: str, languages: tuple[str, ...] = ()) -> Seria
 
 async def get_per_language_bytes(name: str) -> Serialized:
     """JSON bytes + gzip + ETag for the per-language endpoint."""
-    from mteb.api.aggregators import build_benchmark_per_language
-
     return await _cached_bytes(
         _per_language_bytes,
         _per_language_bytes_locks,
@@ -324,7 +329,6 @@ async def get_per_language_bytes(name: str) -> Serialized:
 
 async def get_task_scores_bytes(name: str) -> Serialized:
     """JSON bytes + gzip + ETag for the task-scores endpoint."""
-    from mteb.api.aggregators import build_task_scores
 
     async def _build() -> BaseModel:
         return await asyncio.to_thread(build_task_scores, name, get_cache())
@@ -340,8 +344,6 @@ async def get_task_scores_bytes(name: str) -> Serialized:
 
 async def get_model_scores_bytes(name: str) -> Serialized:
     """JSON bytes + gzip + ETag for the model-scores endpoint."""
-    from mteb.api.aggregators import build_model_scores
-
     return await _cached_bytes(
         _model_score_bytes,
         _model_score_bytes_locks,
@@ -357,11 +359,6 @@ def _prewarm_training_datasets() -> None:
     Without this, the first summary build pays ~2.5s on ``_collect_similar_tasks``
     per first-seen model.
     """
-    from concurrent.futures import ThreadPoolExecutor
-
-    from mteb.benchmarks._create_table import _training_datasets_cached
-    from mteb.models.model_implementations import MODEL_REGISTRY
-
     with ThreadPoolExecutor(max_workers=16, thread_name_prefix="warm-td") as ex:
         list(ex.map(_training_datasets_cached, MODEL_REGISTRY))
 
@@ -371,15 +368,6 @@ def _prewarm_list_schemas() -> None:
 
     The four builders are independent — run them on a small thread pool.
     """
-    from concurrent.futures import ThreadPoolExecutor
-
-    from mteb.api.routes import (
-        _benchmark_schemas_bytes,
-        _filtered_model_schemas_bytes,
-        _filtered_task_schemas_bytes,
-        _menu_schemas_bytes,
-    )
-
     with ThreadPoolExecutor(max_workers=4, thread_name_prefix="warm-list") as ex:
         futures = [
             ex.submit(_menu_schemas_bytes),
@@ -409,8 +397,6 @@ def warmup_blocking() -> None:
     (list schemas) depends on phases 1-3 because it reads them through the
     benchmark / task / model caches, so it runs serially afterwards.
     """
-    from mteb.api.adapters import prewarm_schema_caches
-
     try:
         with ThreadPoolExecutor(max_workers=3, thread_name_prefix="warmup") as ex:
             futures: list[Future[object]] = [
@@ -439,8 +425,6 @@ def preload_summaries_in_background() -> None:
         return
 
     def _run() -> None:
-        import mteb
-
         # Preload every registered benchmark — including off-menu
         # ones — so hidden-benchmark requests also hit the warmed cache
         # and the model detail page (which iterates all benchmarks) is

@@ -24,7 +24,7 @@ from mteb.languages import language_label
 
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.benchmarks._leaderboard_menu import MenuEntry as MtebMenuEntry
+    from mteb.benchmarks._leaderboard_menu import MenuEntry
     from mteb.models.model_meta import ModelMeta
 
 _ModelType = Literal["dense", "cross-encoder", "late-interaction", "sparse", "router"]
@@ -150,7 +150,7 @@ class TaskMetaSchema(_CamelModel):
 
     @classmethod
     def from_task_metadata(cls, metadata: TaskMetadata) -> TaskMetaSchema:
-        """Build the API schema view of a :class:`TaskMetadata`."""
+        """Build the API schema view of a `TaskMetadata`."""
         labels = [language_label(code) for code in metadata.languages]
         date_from: str | None = None
         date_to: str | None = None
@@ -216,7 +216,7 @@ class ModelMetaSchema(_CamelModel):
     def from_model_meta(
         cls, meta: ModelMeta, *, zero_shot_pct: int | None = None
     ) -> ModelMetaSchema:
-        """Build the API schema view of a :class:`ModelMeta`."""
+        """Build the API schema view of a `ModelMeta`."""
         framework = list(meta.framework or [])
         model_type = (meta.model_type or ["dense"])[0]
         n_active = (
@@ -417,7 +417,7 @@ class MenuEntrySchema(_CamelModel):
     children: list[MenuEntrySchema | BenchmarkSchema] = Field(default_factory=list)
 
     @classmethod
-    def from_menu_entry(cls, entry: MtebMenuEntry) -> MenuEntrySchema:
+    def from_menu_entry(cls, entry: MenuEntry) -> MenuEntrySchema:
         """Recursively translate an mteb menu entry tree."""
         children: list[BenchmarkSchema | MenuEntrySchema] = []
         for child in entry.benchmarks:

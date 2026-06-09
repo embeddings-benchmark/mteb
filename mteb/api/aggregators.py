@@ -1,11 +1,3 @@
-"""Build :class:`BenchmarkSummarySchema` and friends from real mteb results.
-
-Bypasses ``_create_summary_table_from_benchmark_results`` (which collapses
-``model_name`` into a markdown-linked column for the Gradio Styler) but reuses
-``_create_table`` primitives so per-task-type means, Borda rank, and zero-shot
-% match what the Gradio leaderboard shows.
-"""
-
 from __future__ import annotations
 
 import asyncio
@@ -22,6 +14,7 @@ from mteb.api.adapters import (
     scoped_task_meta_schema,
     task_to_meta_schema,
 )
+from mteb.api.cache import _load_per_benchmark_frames, get_summary
 from mteb.api.schemas import (
     BenchmarkLeadersSchema,
     BenchmarkPerLanguageRowSchema,
@@ -37,6 +30,7 @@ from mteb.api.schemas import (
     TaskScoresSchema,
 )
 from mteb.benchmarks._create_table import _format_max_tokens
+from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.languages import language_label
 from mteb.models.model_implementations import MODEL_REGISTRY
 
@@ -104,8 +98,6 @@ async def build_benchmark_summary(  # noqa: PLR0914
     whose ``language`` list intersects the picks (matched by raw code OR by
     ``language_label``) before the summary builders run.
     """
-    from mteb.api.cache import _load_per_benchmark_frames
-
     bench = mteb.get_benchmark(name)
     bench_schema = benchmark_to_schema(bench)
     # Scoped variant: when a benchmark pins a shared task to specific languages
@@ -311,8 +303,6 @@ async def build_benchmark_summary(  # noqa: PLR0914
 
 async def build_benchmark_per_language(name: str) -> BenchmarkPerLanguageSchema:
     """Per-(model, language) mean main_score for one benchmark."""
-    from mteb.api.cache import _load_per_benchmark_frames
-
     bench = mteb.get_benchmark(name)
     frames, _ = _load_per_benchmark_frames()
     long_df = frames.get(bench.name)
@@ -369,9 +359,6 @@ def build_task_scores(name: str, cache: ResultCache) -> TaskScoresSchema:
     every subset; ``null`` otherwise so partial-coverage models can't outrank
     fully-evaluated peers.
     """
-    from mteb.api.cache import _load_per_benchmark_frames
-    from mteb.get_tasks import _TASKS_REGISTRY
-
     cls = _TASKS_REGISTRY[name]
     task_meta = task_to_meta_schema(cls)
 
@@ -456,8 +443,6 @@ async def build_model_scores(name: str) -> ModelScoresSchema:
     (``display_on_leaderboard=False``) — so submissions to hidden benchmarks
     still surface on the model detail page.
     """
-    from mteb.api.cache import get_summary
-
     all_benchmarks = mteb.get_benchmarks()
     results = await asyncio.gather(
         *(get_summary(b.name) for b in all_benchmarks),
@@ -501,11 +486,6 @@ async def build_model_scores(name: str) -> ModelScoresSchema:
     return ModelScoresSchema(model=model_meta, rows=rows)
 
 
-# ---------------------------------------------------------------------------
-# /benchmarks/{name}/leaders — slim per-size-bucket top model.
-# ---------------------------------------------------------------------------
-
-# (min, max) in MILLIONS of parameters; max=None ⇒ open-ended.
 Bucket = tuple[float, float | None]
 
 
@@ -539,8 +519,6 @@ async def build_benchmark_leaders(
     name: str, buckets: list[Bucket]
 ) -> BenchmarkLeadersSchema:
     """Per-size-bucket leaders payload — reuses the cached summary."""
-    from mteb.api.cache import get_summary
-
     summary = await get_summary(name)
     out_buckets: list[BucketLeaderSchema] = []
     for lo_m, hi_m in buckets:

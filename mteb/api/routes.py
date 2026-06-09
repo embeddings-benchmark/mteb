@@ -9,6 +9,7 @@ them via pydantic-core.
 from __future__ import annotations
 
 import functools
+import json
 import logging
 from importlib.resources import files
 from typing import TYPE_CHECKING, Annotated
@@ -30,8 +31,11 @@ from mteb.api.adapters import (
     model_meta_to_schema,
     task_to_meta_schema,
 )
+from mteb.api.aggregators import build_benchmark_leaders
 from mteb.api.cache import (  # noqa: TC001 — Serialized is a runtime type annotation
     Serialized,
+    _cached_bytes,
+    _load_per_benchmark_frames,
     get_model_scores_bytes,
     get_per_language_bytes,
     get_summary_bytes,
@@ -55,7 +59,13 @@ from mteb.api.schemas import (
     ModelScoresSchema,
     TaskMetaSchema,
     TaskScoresSchema,
+    _is_url,
 )
+from mteb.benchmarks._leaderboard_menu import HOME_BENCHMARK_ENTRIES
+from mteb.filter_tasks import filter_tasks
+from mteb.get_tasks import _TASKS_REGISTRY, TASK_LIST
+from mteb.models.get_model_meta import get_model_meta, get_model_metas
+from mteb.models.model_implementations import MODEL_REGISTRY
 
 if TYPE_CHECKING:
     import asyncio
@@ -76,7 +86,7 @@ _DEFAULT_MAX_AGE = 4 * 60 * 60
 def _cached_json(
     request: Request, payload: Serialized, *, max_age: int | None = _DEFAULT_MAX_AGE
 ) -> Response:
-    """Return a JSON response from a cached :class:`Serialized` payload.
+    """Return a JSON response from a cached `Serialized` payload.
 
     Short-circuits to ``304 Not Modified`` when the client revalidates with a
     matching ``If-None-Match``. Picks the pre-gzipped body when the client
@@ -128,8 +138,6 @@ _FRAME_LOAD_ERRORS: tuple[type[BaseException], ...] = (
 @functools.cache
 def _num_models_map() -> dict[str, int]:
     """{benchmark_name -> distinct model count}, cached for the process lifetime."""
-    from mteb.api.cache import _load_per_benchmark_frames
-
     try:
         frames, _ = _load_per_benchmark_frames()
     except _FRAME_LOAD_ERRORS as exc:
@@ -145,8 +153,6 @@ def _num_models_map() -> dict[str, int]:
 @functools.cache
 def _task_num_models_map() -> dict[str, int]:
     """{task_name -> distinct model count}, cached for the process lifetime."""
-    from mteb.api.cache import _load_per_benchmark_frames
-
     try:
         _, unified = _load_per_benchmark_frames()
     except _FRAME_LOAD_ERRORS as exc:
@@ -207,8 +213,6 @@ def _patch_menu_counts(entries: list[MenuEntrySchema]) -> list[MenuEntrySchema]:
 
 @functools.cache
 def _menu_schemas() -> list[MenuEntrySchema]:
-    from mteb.benchmarks._leaderboard_menu import HOME_BENCHMARK_ENTRIES
-
     raw = menus_to_schemas(list(HOME_BENCHMARK_ENTRIES))
     return _patch_menu_counts(raw)
 
@@ -334,8 +338,6 @@ async def benchmark_icon(name: str) -> Response:
     if not bench.icon:
         raise HTTPException(status_code=404, detail=f"{name} has no icon")
 
-    from mteb.api.schemas import _is_url
-
     if not _is_url(bench.icon):
         raise HTTPException(status_code=404, detail=f"{name} icon is not a URL")
 
@@ -421,8 +423,6 @@ def _parse_buckets_json(raw: str) -> list[tuple[float, float | None]]:
     Returned tuples stay in MILLIONS — callers convert when comparing against
     ``ModelMeta.total_params_b`` (billions).
     """
-    import json
-
     try:
         decoded = json.loads(raw)
     except json.JSONDecodeError as exc:
@@ -496,8 +496,6 @@ async def benchmark_leaders(
     """Highest-mean-task model in each size bucket — slim payload for home tiles."""
     _require_benchmark(name)
     BENCHMARK_SELECTIONS.labels(name=name, endpoint="leaders").inc()
-    from mteb.api.aggregators import build_benchmark_leaders
-    from mteb.api.cache import _cached_bytes
 
     parsed = _parse_buckets_json(buckets)
     key = (name, tuple(parsed))
@@ -522,11 +520,6 @@ async def benchmark_detail(name: str) -> BenchmarkSchema:
     return _with_num_models(benchmark_to_schema(bench))
 
 
-# ---------------------------------------------------------------------------
-# Tasks
-# ---------------------------------------------------------------------------
-
-
 @functools.lru_cache(maxsize=128)
 def _filtered_task_schemas(
     languages: tuple[str, ...] | None,
@@ -537,9 +530,6 @@ def _filtered_task_schemas(
 ) -> list[TaskMetaSchema]:
     # Filter class refs directly — get_tasks() instantiates and runs
     # filter_languages per task (~2.5s) for metadata we don't need here.
-    from mteb.filter_tasks import filter_tasks
-    from mteb.get_tasks import TASK_LIST
-
     task_classes = filter_tasks(  # type: ignore[misc]
         TASK_LIST,  # type: ignore[arg-type]
         languages=list(languages) if languages else None,
@@ -612,8 +602,6 @@ def _filtered_task_schemas_bytes_named(
 @router.get("/tasks/{name:path}/scores", response_model=TaskScoresSchema)
 async def task_scores(request: Request, name: str) -> Response:
     """Per-model scores on task ``name`` across every benchmark that hosts it."""
-    from mteb.get_tasks import _TASKS_REGISTRY
-
     if name not in _TASKS_REGISTRY:
         raise HTTPException(status_code=404, detail=f"Unknown task: {name}")
     TASK_SELECTIONS.labels(name=name, endpoint="scores").inc()
@@ -623,17 +611,10 @@ async def task_scores(request: Request, name: str) -> Response:
 @router.get("/tasks/{name:path}", response_model=TaskMetaSchema)
 async def task_detail(name: str) -> TaskMetaSchema:
     """Static metadata for task ``name``."""
-    from mteb.get_tasks import _TASKS_REGISTRY
-
     if name not in _TASKS_REGISTRY:
         raise HTTPException(status_code=404, detail=f"Unknown task: {name}")
     TASK_SELECTIONS.labels(name=name, endpoint="detail").inc()
     return _with_task_num_models(task_to_meta_schema(_TASKS_REGISTRY[name]))
-
-
-# ---------------------------------------------------------------------------
-# Models
-# ---------------------------------------------------------------------------
 
 
 @functools.lru_cache(maxsize=128)
@@ -647,8 +628,6 @@ def _filtered_model_schemas(
     modalities: tuple[str, ...] | None,
     exclusive_modality: bool,
 ) -> list[ModelMetaSchema]:
-    from mteb.models.get_model_meta import get_model_metas
-
     lower = int(min_params_b * 1e9) if min_params_b is not None else None
     upper = int(max_params_b * 1e9) if max_params_b is not None else None
 
@@ -718,8 +697,6 @@ def _filtered_model_schemas_bytes_named(
 @router.get("/models/{name:path}/scores", response_model=ModelScoresSchema)
 async def model_scores(request: Request, name: str) -> Response:
     """Per-benchmark scores for model ``name``."""
-    from mteb.models.model_implementations import MODEL_REGISTRY
-
     if name not in MODEL_REGISTRY:
         raise HTTPException(status_code=404, detail=f"Unknown model: {name}")
     try:
@@ -733,9 +710,6 @@ async def model_scores(request: Request, name: str) -> Response:
 @router.get("/models/{name:path}", response_model=ModelMetaSchema)
 async def model_detail(name: str) -> ModelMetaSchema:
     """Static metadata for model ``name``."""
-    from mteb.models.get_model_meta import get_model_meta
-    from mteb.models.model_implementations import MODEL_REGISTRY
-
     if name not in MODEL_REGISTRY:
         raise HTTPException(status_code=404, detail=f"Unknown model: {name}")
     MODEL_SELECTIONS.labels(name=name, endpoint="detail").inc()
