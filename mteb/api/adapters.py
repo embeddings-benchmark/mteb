@@ -8,7 +8,7 @@ Safe because mteb's registries are static after import.
 from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from mteb.api.schemas import (
     BenchmarkSchema,
@@ -19,6 +19,7 @@ from mteb.api.schemas import (
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+    from concurrent.futures import Future
 
     from mteb.abstasks.abstask import AbsTask
     from mteb.benchmarks._leaderboard_menu import MenuEntry as MtebMenuEntry
@@ -105,10 +106,14 @@ def prewarm_schema_caches() -> None:
     benches = list(mteb.get_benchmarks(display_on_leaderboard=True))
     models = list(MODEL_REGISTRY.values())
 
+    # All three batches submitted together so workers stay saturated across
+    # phases instead of draining at each boundary — tasks dominate (~1700
+    # entries), so models + benches happily backfill the pool's tail.
     with ThreadPoolExecutor(max_workers=16, thread_name_prefix="warm-schema") as ex:
-        # All three iterables share the executor: tasks are the bulk of the work
-        # (~1700 entries) so submitting them alongside the smaller batches keeps
-        # workers saturated without stalling on a single phase.
-        list(ex.map(task_to_meta_schema, tasks))
-        list(ex.map(benchmark_to_schema, benches))
-        list(ex.map(model_meta_to_schema, models))
+        futures: list[Future[Any]] = [
+            *(ex.submit(task_to_meta_schema, t) for t in tasks),
+            *(ex.submit(benchmark_to_schema, b) for b in benches),
+            *(ex.submit(model_meta_to_schema, m) for m in models),
+        ]
+        for f in futures:
+            f.result()

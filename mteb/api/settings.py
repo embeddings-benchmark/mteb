@@ -11,10 +11,11 @@ Environment variables (all optional):
 
 from __future__ import annotations
 
+import functools
 from collections.abc import (
     Sequence,  # noqa: TC003 — pydantic evaluates field annotations at runtime
 )
-from typing import Annotated
+from typing import Annotated, Any
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
@@ -54,10 +55,8 @@ class Settings(BaseSettings):
 
     @field_validator("cors_origins", mode="before")
     @classmethod
-    def _parse_cors_origins(cls, v: object) -> list[str]:
+    def _parse_cors_origins(cls, v: Any) -> list[str]:
         """Parse a comma-separated string (or list), dedup. Empty falls back to default."""
-        from mteb.api.schemas import _dedupe_strs
-
         if isinstance(v, str):
             parts = [o.strip() for o in v.split(",") if o.strip()]
         elif isinstance(v, list):
@@ -66,9 +65,14 @@ class Settings(BaseSettings):
             parts = []
         if not parts:
             return list(_DEFAULT_CORS_ORIGINS)
-        return _dedupe_strs(parts)
+        return parts
 
 
+@functools.cache
 def get_settings() -> Settings:
-    """Return a freshly-parsed :class:`Settings` instance from the current environment."""
+    """Return a process-singleton :class:`Settings` parsed from environment.
+
+    Memoised because hot paths (cache loaders, app factory, OG mount) call
+    this on every request; env is stable for the process lifetime.
+    """
     return Settings()

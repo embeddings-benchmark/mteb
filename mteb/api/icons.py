@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import time
 import urllib.request
 from dataclasses import dataclass
 from urllib.error import URLError
@@ -22,6 +23,12 @@ _MAX_BYTES = 2 * 1024 * 1024  # 2MB
 
 _DEFAULT_CONTENT_TYPE = "image/svg+xml"
 
+# Negative cache TTL: how long to remember a failed upstream fetch before
+# retrying. Short enough that a transient GitHub outage doesn't kill icons
+# for a deploy cycle, long enough to stop the API from amplifying upstream
+# unavailability into a per-request reverse-DDoS.
+_FAILURE_TTL_S = 60.0
+
 
 @dataclass(frozen=True, slots=True)
 class CachedIcon:
@@ -32,6 +39,17 @@ class CachedIcon:
 
 
 _cache: dict[str, CachedIcon] = {}
+# name -> monotonic expiry timestamp. Pruned lazily on read.
+_failure_cache: dict[str, float] = {}
+# Per-name async lock so concurrent cold requests share one upstream call.
+_fetch_locks: dict[str, asyncio.Lock] = {}
+
+
+def _lock_for(name: str) -> asyncio.Lock:
+    lock = _fetch_locks.get(name)
+    if lock is None:
+        lock = _fetch_locks.setdefault(name, asyncio.Lock())
+    return lock
 
 
 def _fetch_sync(url: str) -> CachedIcon | None:
@@ -58,17 +76,34 @@ async def get_icon(name: str, url: str) -> CachedIcon | None:
     """Cached icon for ``name``, fetched from ``url`` on miss.
 
     Keyed by name so a URL change picks up at server restart and multiple
-    benchmarks sharing a URL dedupe.
+    benchmarks sharing a URL dedupe. A per-name lock makes concurrent cold
+    requests share one upstream call; failures are negatively cached for
+    :data:`_FAILURE_TTL_S` seconds to keep us off a flapping upstream.
     """
     cached = _cache.get(name)
     if cached is not None:
         return cached
 
-    fetched = await asyncio.to_thread(_fetch_sync, url)
-    if fetched is None:
+    now = time.monotonic()
+    failure_until = _failure_cache.get(name)
+    if failure_until is not None and failure_until > now:
         return None
-    _cache[name] = fetched
-    return fetched
+
+    async with _lock_for(name):
+        cached = _cache.get(name)
+        if cached is not None:
+            return cached
+        failure_until = _failure_cache.get(name)
+        if failure_until is not None and failure_until > time.monotonic():
+            return None
+
+        fetched = await asyncio.to_thread(_fetch_sync, url)
+        if fetched is None:
+            _failure_cache[name] = time.monotonic() + _FAILURE_TTL_S
+            return None
+        _cache[name] = fetched
+        _failure_cache.pop(name, None)
+        return fetched
 
 
 def has_cached(name: str) -> bool:
@@ -79,3 +114,5 @@ def has_cached(name: str) -> bool:
 def cache_clear() -> None:
     """Used by tests to start from an empty cache."""
     _cache.clear()
+    _failure_cache.clear()
+    _fetch_locks.clear()

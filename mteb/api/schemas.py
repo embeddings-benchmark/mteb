@@ -8,55 +8,32 @@ still be constructed with Python-style keyword args from adapters.
 
 from __future__ import annotations
 
-from collections.abc import Mapping
-from typing import TYPE_CHECKING, Literal, Union
+from typing import TYPE_CHECKING, Literal
 from urllib.parse import quote
 
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic.alias_generators import to_camel
 
+from mteb.benchmarks._create_table import (
+    _format_max_tokens,
+    _format_n_parameters,
+    _get_embedding_size,
+)
+from mteb.benchmarks.benchmark import Benchmark
+from mteb.languages import language_label
+
 if TYPE_CHECKING:
-    from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.benchmarks._leaderboard_menu import MenuEntry as MtebMenuEntry
-    from mteb.benchmarks.benchmark import Benchmark
     from mteb.models.model_meta import ModelMeta
 
 _ModelType = Literal["dense", "cross-encoder", "late-interaction", "sparse", "router"]
-
-
-def _dedupe_strs(values: list[str]) -> list[str]:
-    """Order-preserving unique on a list of strings."""
-    seen: set[str] = set()
-    out: list[str] = []
-    for v in values:
-        if v not in seen:
-            seen.add(v)
-            out.append(v)
-    return out
 
 
 def _is_url(value: str) -> bool:
     """True iff ``value`` is an http(s) or data URL (vs. emoji/text icon)."""
     head = value[:7].lower()
     return head.startswith(("http://", "https:/", "data:"))
-
-
-def _flatten_eval_langs(
-    eval_langs: Mapping[str, list[str]] | list[str],
-) -> list[str]:
-    """Flatten ``eval_langs`` (list or ``Mapping[subset, list]``) into a deduped list."""
-    if isinstance(eval_langs, Mapping):
-        flat: list[str] = []
-        for langs in eval_langs.values():
-            flat.extend(langs)
-        return _dedupe_strs(flat)
-    return list(eval_langs)
-
-
-def _flatten_task_languages(task: AbsTask | type[AbsTask]) -> list[str]:
-    """Flatten ``task.metadata.eval_langs`` into a deduped list."""
-    return _flatten_eval_langs(task.metadata.eval_langs)
 
 
 class _CamelModel(BaseModel):
@@ -80,7 +57,7 @@ class BenchmarkSchema(_CamelModel):
     task_types: list[str]
     # Borda-compatible buckets (retrieval, classification, …). Drives the
     # /benchmarks "Task group" filter facet.
-    simplified_task_types: list[str] = []
+    simplified_task_types: list[str] = Field(default_factory=list)
     tasks: list[str]
     domains: list[str]
     modalities: list[str]
@@ -97,8 +74,6 @@ class BenchmarkSchema(_CamelModel):
     @classmethod
     def from_benchmark(cls, benchmark: Benchmark) -> BenchmarkSchema:
         """Aggregate per-task metadata up to the benchmark level."""
-        from mteb.languages import language_label
-
         languages: set[str] = set()
         task_types: set[str] = set()
         simplified_types: set[str] = set()
@@ -106,20 +81,15 @@ class BenchmarkSchema(_CamelModel):
         domains: set[str] = set()
         modalities: set[str] = set()
         for task in benchmark.tasks:
-            for lang in _flatten_task_languages(task):
+            for lang in task.languages:
                 languages.add(language_label(lang))
-            task_types.add(str(task.metadata.type))
-            simp = getattr(task.metadata, "simplified_task_type", None)
-            if simp:
-                simplified_types.add(str(simp))
+            task_types.add(task.metadata.type)
+            simplified_types.add(task.metadata.simplified_task_type)
             task_names.append(task.metadata.name)
             for dom in task.metadata.domains or []:
                 domains.add(str(dom))
-            if task.metadata.modalities:
-                for mod in task.metadata.modalities:
-                    modalities.add(str(mod))
-            else:
-                modalities.add("text")
+            for mod in task.metadata.modalities:
+                modalities.add(str(mod))
         # icon is polymorphic — URLs go through the /icon proxy; emoji/text
         # are passed verbatim.
         icon_value: str | None
@@ -131,9 +101,7 @@ class BenchmarkSchema(_CamelModel):
         if benchmark.language_view == "all":
             language_view = "all"
         elif benchmark.language_view:
-            language_view = _dedupe_strs(
-                [language_label(c) for c in benchmark.language_view]
-            )
+            language_view = sorted([language_label(c) for c in benchmark.language_view])
         else:
             language_view = None
         return cls(
@@ -183,27 +151,7 @@ class TaskMetaSchema(_CamelModel):
     @classmethod
     def from_task_metadata(cls, metadata: TaskMetadata) -> TaskMetaSchema:
         """Build the API schema view of a :class:`TaskMetadata`."""
-        from mteb.languages import language_label
-
-        lang_codes = _flatten_eval_langs(metadata.eval_langs)
-        labels = _dedupe_strs([language_label(code) for code in lang_codes])
-        domains = _dedupe_strs([str(d) for d in (metadata.domains or [])])
-        modalities_raw = list(metadata.modalities) if metadata.modalities else ["text"]
-        modalities = _dedupe_strs([str(m) for m in modalities_raw])
-        try:
-            simplified = str(metadata.simplified_task_type)
-        except KeyError:
-            # Some niche task types aren't in _TASKTYPE2SIMPLIFIEDTASKTYPE.
-            simplified = str(metadata.type)
-        dataset_path: str | None = None
-        try:
-            ds = metadata.dataset
-            if isinstance(ds, dict):
-                p = ds.get("path")
-                if p:
-                    dataset_path = str(p)
-        except Exception:
-            dataset_path = None
+        labels = [language_label(code) for code in metadata.languages]
         date_from: str | None = None
         date_to: str | None = None
         if metadata.date:
@@ -215,28 +163,22 @@ class TaskMetaSchema(_CamelModel):
         return cls(
             name=metadata.name,
             type=str(metadata.type),
-            simplified_type=simplified,
+            simplified_type=metadata.simplified_task_type,
             languages=labels,
-            domains=domains,
-            modalities=modalities,
-            description=metadata.description or "",
-            reference=str(metadata.reference) if metadata.reference else None,
-            citation=metadata.bibtex_citation or None,
-            is_public=bool(getattr(metadata, "is_public", True)),
-            source_dataset=dataset_path,
-            license=str(metadata.license) if metadata.license else None,
+            domains=metadata.domains or None,
+            modalities=metadata.modalities,
+            description=metadata.description,
+            reference=metadata.reference,
+            citation=metadata.bibtex_citation,
+            is_public=metadata.is_public,
+            source_dataset=metadata.dataset["path"],
+            license=metadata.license,
             date_from=date_from,
             date_to=date_to,
-            annotations_creators=(
-                str(metadata.annotations_creators)
-                if metadata.annotations_creators
-                else None
-            ),
-            dialect=list(metadata.dialect) if metadata.dialect else None,
-            sample_creation=(
-                str(metadata.sample_creation) if metadata.sample_creation else None
-            ),
-            main_score=str(metadata.main_score) if metadata.main_score else None,
+            annotations_creators=metadata.annotations_creators,
+            dialect=metadata.dialect,
+            sample_creation=metadata.sample_creation,
+            main_score=metadata.main_score,
         )
 
 
@@ -249,22 +191,21 @@ class ModelMetaSchema(_CamelModel):
     name: str
     url: str | None = None
     zero_shot_pct: int
-    active_params_b: float
-    total_params_b: float
-    embedding_dim: int
-    max_tokens: int
+    active_params_b: float | None
+    total_params_b: float | None
+    embedding_dim: int | None
+    max_tokens: float | None
     release_date: str | None = None
     model_type: _ModelType
     instruction_tuned: bool
     open_weights: bool
     sentence_transformers_compatible: bool
-    modalities: list[str] = ["text"]
-    languages: list[str] = []
+    modalities: list[str] = Field(default_factory=lambda: ["text"])
+    languages: list[str] = Field(default_factory=list)
     citation: str | None = None
     memory_usage_mb: float | None = None
     license: str | None = None
     public_training_code: str | None = None
-    # Upstream allows URL or bool; serialised as string either way.
     public_training_data: str | None = None
     adapted_from: str | None = None
     superseded_by: str | None = None
@@ -276,12 +217,6 @@ class ModelMetaSchema(_CamelModel):
         cls, meta: ModelMeta, *, zero_shot_pct: int | None = None
     ) -> ModelMetaSchema:
         """Build the API schema view of a :class:`ModelMeta`."""
-        from mteb.benchmarks._create_table import (
-            _format_max_tokens,
-            _format_n_parameters,
-            _get_embedding_size,
-        )
-
         framework = list(meta.framework or [])
         model_type = (meta.model_type or ["dense"])[0]
         n_active = (
@@ -289,23 +224,18 @@ class ModelMetaSchema(_CamelModel):
             if meta.n_active_parameters_override is not None
             else meta.n_parameters
         )
-        active_b = _format_n_parameters(n_active)
-        total_b = _format_n_parameters(meta.n_parameters)
-        embed_dim = _get_embedding_size(meta.embed_dim)
-        max_tokens = _format_max_tokens(meta.max_tokens)
-        from mteb.languages import language_label as _language_label
 
         lang_labels = sorted(
-            {_language_label(code) for code in (meta.languages or []) if code}
+            {language_label(code) for code in (meta.languages or []) if code}
         )
         return cls(
             name=meta.name or "",
-            url=str(meta.reference) if meta.reference else None,
+            url=meta.reference,
             zero_shot_pct=-1 if zero_shot_pct is None else int(zero_shot_pct),
-            active_params_b=float(active_b) if active_b is not None else 0.0,
-            total_params_b=float(total_b) if total_b is not None else 0.0,
-            embedding_dim=int(embed_dim) if embed_dim is not None else 0,
-            max_tokens=int(max_tokens) if max_tokens is not None else 0,
+            active_params_b=_format_n_parameters(n_active),
+            total_params_b=_format_n_parameters(meta.n_parameters),
+            embedding_dim=_get_embedding_size(meta.embed_dim),
+            max_tokens=_format_max_tokens(meta.max_tokens),
             release_date=str(meta.release_date) if meta.release_date else None,
             model_type=model_type,
             instruction_tuned=bool(meta.use_instructions)
@@ -349,19 +279,17 @@ class SummaryRowSchema(_CamelModel):
     rank: int
     model: ModelMetaSchema
     zero_shot_pct: int
-    active_params_b: float
-    total_params_b: float
-    embedding_dim: int
-    max_tokens: int
+    active_params_b: float | None
+    total_params_b: float | None
+    embedding_dim: int | None
+    max_tokens: int | None
     mean_task: float | None
     mean_task_type: float | None
-    # Public/Private split means (RTEB/ViDoRe family); null elsewhere.
     mean_public: float | None = None
     mean_private: float | None = None
     scores_by_task_type: dict[str, float]
     scores_by_task: dict[str, float]
-    # Tasks the model trained on (drives the frontend's ⚠️ on non-zero-shot scores).
-    trained_on_tasks: list[str] = []
+    trained_on_tasks: list[str] = Field(default_factory=list)
 
 
 class BenchmarkSummarySchema(_CamelModel):
@@ -372,7 +300,7 @@ class BenchmarkSummarySchema(_CamelModel):
     tasks: list[str]
     tasks_meta: list[TaskMetaSchema]
     rows: list[SummaryRowSchema]
-    aggregations: list[str] = []
+    aggregations: list[str] = Field(default_factory=list)
 
 
 class BenchmarkPerLanguageRowSchema(_CamelModel):
@@ -417,7 +345,7 @@ class LeaderRowSchema(_CamelModel):
     rank: int
     model: LeaderModelSchema
     mean_task: float | None = None
-    total_params_b: float
+    total_params_b: float | None = None
 
 
 class BucketLeaderSchema(_CamelModel):
@@ -447,9 +375,6 @@ class TaskScoreRowSchema(_CamelModel):
     score: float | None
     subset_scores: dict[str, float]
     benchmarks: list[str]
-    # Three-state: True = task is in `model.training_datasets`, False = it
-    # isn't, None = the model didn't declare `training_datasets` at all
-    # (frontend renders the same NA marker it uses for `zero_shot_pct=-1`).
     trained_on: bool | None = None
 
 
@@ -483,23 +408,17 @@ class ModelScoresSchema(_CamelModel):
     rows: list[ModelScoreRowSchema]
 
 
-# Frontend discriminates by `'displayName' in item`, so the two coexist in a Union.
-MenuChild = Union["MenuEntrySchema", BenchmarkSchema]
-
-
 class MenuEntrySchema(_CamelModel):
     """Recursive menu entry; children are ``MenuEntrySchema`` or ``BenchmarkSchema``."""
 
     name: str
     description: str | None = None
     open: bool = False
-    children: list[MenuChild] = Field(default_factory=list)
+    children: list[MenuEntrySchema | BenchmarkSchema] = Field(default_factory=list)
 
     @classmethod
     def from_menu_entry(cls, entry: MtebMenuEntry) -> MenuEntrySchema:
         """Recursively translate an mteb menu entry tree."""
-        from mteb.benchmarks.benchmark import Benchmark
-
         children: list[BenchmarkSchema | MenuEntrySchema] = []
         for child in entry.benchmarks:
             if isinstance(child, Benchmark):
@@ -512,6 +431,3 @@ class MenuEntrySchema(_CamelModel):
             open=entry.open,
             children=children,
         )
-
-
-MenuEntrySchema.model_rebuild()

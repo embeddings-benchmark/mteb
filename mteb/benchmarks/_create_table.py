@@ -113,10 +113,10 @@ def _format_n_parameters(n_parameters: float | int | None) -> float | None:
     return round(float(n_parameters) / 1e9, 3)
 
 
-def _format_max_tokens(max_tokens: float | None) -> float | None:
+def _format_max_tokens(max_tokens: float | None) -> int | None:
     if max_tokens is None or max_tokens == np.inf:
         return None
-    return float(max_tokens)
+    return int(max_tokens)
 
 
 def _get_embedding_size(embed_dim: int | Sequence[int] | None) -> int | None:

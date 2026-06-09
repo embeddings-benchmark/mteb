@@ -93,6 +93,14 @@ MODEL_SELECTIONS = Counter(
     registry=REGISTRY,
 )
 
+# Hit/miss per cache layer; lets ops verify warmup landed and tune preload.
+CACHE_OUTCOMES = Counter(
+    "mteb_cache_total",
+    "Cache hits and misses for the serialised-bytes layer.",
+    labelnames=("layer", "outcome"),
+    registry=REGISTRY,
+)
+
 
 _UNMATCHED = "<unmatched>"
 _ROUTE_TEMPLATE_KEY = "_mteb_route_template"
@@ -129,30 +137,13 @@ def _route_template(scope: Scope) -> str:
 
 
 class PrometheusMiddleware:
-    """Pure-ASGI middleware that records per-request Prometheus metrics.
-
-    Unmatched (404) requests stay out of the latency histogram + in-flight gauge
-    so bot scans don't pollute p95/p99, but their count still increments. The
-    ``/metrics`` route and non-HTTP scopes (lifespan, websocket) are short-
-    circuited so scrapes and ASGI control messages stay off the series.
-
-    Implemented as raw ASGI (``__call__(scope, receive, send)``) rather than
-    :class:`BaseHTTPMiddleware` because the latter buffers the response body
-    through an internal queue — adds ~1 ms per request and breaks streaming.
-    """
+    """Middleware that records per-request Prometheus metrics"""
 
     def __init__(self, app: ASGIApp) -> None:
         self.app = app
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
-        """Time the inner app and emit method/handler/status metrics.
-
-        Short-circuits non-HTTP scopes (lifespan / websocket) and the
-        ``/metrics`` scrape so neither pollutes the series. The ``send``
-        callable is wrapped to capture the response status from the
-        ``http.response.start`` ASGI message; status defaults to ``"500"`` so
-        that a downstream crash before any response is sent still records.
-        """
+        """Time the inner app and emit method/handler/status metrics"""
         if scope["type"] != "http" or scope["path"] == "/metrics":
             await self.app(scope, receive, send)
             return

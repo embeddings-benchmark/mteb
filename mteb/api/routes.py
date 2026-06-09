@@ -11,7 +11,7 @@ from __future__ import annotations
 import functools
 import logging
 from importlib.resources import files
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated
 
 import polars as pl
 from fastapi import (  # noqa: TC002 — Request needed at runtime for FastAPI DI
@@ -45,7 +45,7 @@ from mteb.api.metrics import (
     TASK_SELECTIONS,
     render_metrics,
 )
-from mteb.api.schemas import (  # noqa: TC001 — FastAPI inspects return annotations at registration
+from mteb.api.schemas import (
     BenchmarkLeadersSchema,
     BenchmarkPerLanguageSchema,
     BenchmarkSchema,
@@ -56,6 +56,9 @@ from mteb.api.schemas import (  # noqa: TC001 — FastAPI inspects return annota
     TaskMetaSchema,
     TaskScoresSchema,
 )
+
+if TYPE_CHECKING:
+    import asyncio
 
 logger = logging.getLogger(__name__)
 # Root-level infra (health / metrics / asset proxies); not under /v1.
@@ -101,7 +104,7 @@ def _cached_json(
     return Response(content=body, media_type="application/json", headers=headers)
 
 
-@functools.lru_cache(maxsize=1)
+@functools.cache
 def _benchmark_name_set() -> frozenset[str]:
     """All registered benchmark names — for fast 404 validation."""
     return frozenset(b.name for b in mteb.get_benchmarks())
@@ -112,14 +115,25 @@ def _require_benchmark(name: str) -> None:
         raise HTTPException(status_code=404, detail=f"Unknown benchmark: {name}")
 
 
-@functools.lru_cache(maxsize=1)
+# Narrow exception set: a parquet-load failure should fall back to empty maps,
+# but programmer bugs (TypeError, AttributeError) must surface.
+_FRAME_LOAD_ERRORS: tuple[type[BaseException], ...] = (
+    OSError,
+    ValueError,
+    KeyError,
+    pl.exceptions.PolarsError,
+)
+
+
+@functools.cache
 def _num_models_map() -> dict[str, int]:
     """{benchmark_name -> distinct model count}, cached for the process lifetime."""
     from mteb.api.cache import _load_per_benchmark_frames
 
     try:
         frames, _ = _load_per_benchmark_frames()
-    except Exception:
+    except _FRAME_LOAD_ERRORS as exc:
+        logger.warning("num_models map unavailable: %s: %s", type(exc).__name__, exc)
         return {}
     return {
         name: int(frame["model_name"].n_unique())
@@ -128,14 +142,17 @@ def _num_models_map() -> dict[str, int]:
     }
 
 
-@functools.lru_cache(maxsize=1)
+@functools.cache
 def _task_num_models_map() -> dict[str, int]:
     """{task_name -> distinct model count}, cached for the process lifetime."""
     from mteb.api.cache import _load_per_benchmark_frames
 
     try:
         _, unified = _load_per_benchmark_frames()
-    except Exception:
+    except _FRAME_LOAD_ERRORS as exc:
+        logger.warning(
+            "task num_models map unavailable: %s: %s", type(exc).__name__, exc
+        )
         return {}
     if unified.is_empty() or "task_name" not in unified.columns:
         return {}
@@ -188,7 +205,7 @@ def _patch_menu_counts(entries: list[MenuEntrySchema]) -> list[MenuEntrySchema]:
     return patched
 
 
-@functools.lru_cache(maxsize=1)
+@functools.cache
 def _menu_schemas() -> list[MenuEntrySchema]:
     from mteb.benchmarks._leaderboard_menu import HOME_BENCHMARK_ENTRIES
 
@@ -214,7 +231,7 @@ _TASK_LIST_ADAPTER = TypeAdapter(list[TaskMetaSchema])
 _MODEL_LIST_ADAPTER = TypeAdapter(list[ModelMetaSchema])
 
 
-@functools.lru_cache(maxsize=1)
+@functools.cache
 def _menu_schemas_bytes() -> Serialized:
     return serialize_bytes(_MENU_LIST_ADAPTER.dump_json(_menu_schemas(), by_alias=True))
 
@@ -277,14 +294,11 @@ async def metrics() -> Response:
     return Response(content=body, media_type=content_type)
 
 
-_ROBOTS_TXT = "User-agent: *\nDisallow: /\n"
-
-
 @infra_router.get("/robots.txt", include_in_schema=False)
 async def robots_txt() -> Response:
     """Cached ``Disallow: /`` body so crawler probes stop 404-ing."""
     return Response(
-        content=_ROBOTS_TXT,
+        content="User-agent: *\nAllow: /\n",
         media_type="text/plain",
         headers={"Cache-Control": "public, max-age=86400"},
     )
@@ -304,7 +318,7 @@ async def favicon() -> Response:
     )
 
 
-@router.get("/icon/{name:path}")
+@router.get("/icon/{name:path}", include_in_schema=False)
 async def benchmark_icon(name: str) -> Response:
     """Proxy and long-cache the benchmark's icon.
 
@@ -458,8 +472,15 @@ def _parse_buckets_json(raw: str) -> list[tuple[float, float | None]]:
     return out
 
 
-@router.get("/benchmarks/{name:path}/leaders")
+_leader_bytes: dict[tuple[str, tuple[tuple[float, float | None], ...]], Serialized] = {}
+_leader_bytes_locks: dict[
+    tuple[str, tuple[tuple[float, float | None], ...]], asyncio.Lock
+] = {}
+
+
+@router.get("/benchmarks/{name:path}/leaders", response_model=BenchmarkLeadersSchema)
 async def benchmark_leaders(
+    request: Request,
     name: str,
     buckets: Annotated[
         str,
@@ -471,17 +492,26 @@ async def benchmark_leaders(
             ),
         ),
     ],
-) -> BenchmarkLeadersSchema:
+) -> Response:
     """Highest-mean-task model in each size bucket — slim payload for home tiles."""
     _require_benchmark(name)
     BENCHMARK_SELECTIONS.labels(name=name, endpoint="leaders").inc()
     from mteb.api.aggregators import build_benchmark_leaders
+    from mteb.api.cache import _cached_bytes
 
     parsed = _parse_buckets_json(buckets)
-    return await build_benchmark_leaders(name, parsed)
+    key = (name, tuple(parsed))
+
+    async def _build() -> BenchmarkLeadersSchema:
+        return await build_benchmark_leaders(name, parsed)
+
+    payload = await _cached_bytes(
+        _leader_bytes, _leader_bytes_locks, key, _build, layer="leaders"
+    )
+    return _cached_json(request, payload)
 
 
-@router.get("/benchmarks/{name:path}")
+@router.get("/benchmarks/{name:path}", response_model=BenchmarkSchema)
 async def benchmark_detail(name: str) -> BenchmarkSchema:
     """Static metadata for benchmark ``name``."""
     try:
@@ -555,13 +585,28 @@ async def list_tasks(
     )
     if not name:
         return _cached_json(request, _filtered_task_schemas_bytes(*filter_key))
-    # Name filter is high-cardinality; serialize the filtered subset on the fly.
-    q = name.lower()
-    schemas = [s for s in _filtered_task_schemas(*filter_key) if q in s.name.lower()]
+    # Name filter is high-cardinality but typeahead repeats heavily —
+    # cache by (filter_key, name_lower) so each keystroke is a hit not a rebuild.
     return _cached_json(
-        request,
-        serialize_bytes(_TASK_LIST_ADAPTER.dump_json(schemas, by_alias=True)),
+        request, _filtered_task_schemas_bytes_named(filter_key, name.lower())
     )
+
+
+@functools.lru_cache(maxsize=256)
+def _filtered_task_schemas_bytes_named(
+    filter_key: tuple[
+        tuple[str, ...] | None,
+        tuple[str, ...] | None,
+        tuple[str, ...] | None,
+        tuple[str, ...] | None,
+        tuple[str, ...] | None,
+    ],
+    name_lower: str,
+) -> Serialized:
+    schemas = [
+        s for s in _filtered_task_schemas(*filter_key) if name_lower in s.name.lower()
+    ]
+    return serialize_bytes(_TASK_LIST_ADAPTER.dump_json(schemas, by_alias=True))
 
 
 @router.get("/tasks/{name:path}/scores", response_model=TaskScoresSchema)
@@ -575,7 +620,7 @@ async def task_scores(request: Request, name: str) -> Response:
     return _cached_json(request, await get_task_scores_bytes(name))
 
 
-@router.get("/tasks/{name:path}")
+@router.get("/tasks/{name:path}", response_model=TaskMetaSchema)
 async def task_detail(name: str) -> TaskMetaSchema:
     """Static metadata for task ``name``."""
     from mteb.get_tasks import _TASKS_REGISTRY
@@ -645,12 +690,29 @@ async def list_models(  # noqa: PLR0913, PLR0917 — FastAPI Query params can't 
     )
     if not name:
         return _cached_json(request, _filtered_model_schemas_bytes(*filter_key))
-    q = name.lower()
-    schemas = [s for s in _filtered_model_schemas(*filter_key) if q in s.name.lower()]
     return _cached_json(
-        request,
-        serialize_bytes(_MODEL_LIST_ADAPTER.dump_json(schemas, by_alias=True)),
+        request, _filtered_model_schemas_bytes_named(filter_key, name.lower())
     )
+
+
+@functools.lru_cache(maxsize=256)
+def _filtered_model_schemas_bytes_named(
+    filter_key: tuple[
+        tuple[str, ...] | None,
+        tuple[str, ...] | None,
+        bool | None,
+        bool | None,
+        float | None,
+        float | None,
+        tuple[str, ...] | None,
+        bool,
+    ],
+    name_lower: str,
+) -> Serialized:
+    schemas = [
+        s for s in _filtered_model_schemas(*filter_key) if name_lower in s.name.lower()
+    ]
+    return serialize_bytes(_MODEL_LIST_ADAPTER.dump_json(schemas, by_alias=True))
 
 
 @router.get("/models/{name:path}/scores", response_model=ModelScoresSchema)
@@ -668,7 +730,7 @@ async def model_scores(request: Request, name: str) -> Response:
     return _cached_json(request, payload)
 
 
-@router.get("/models/{name:path}")
+@router.get("/models/{name:path}", response_model=ModelMetaSchema)
 async def model_detail(name: str) -> ModelMetaSchema:
     """Static metadata for model ``name``."""
     from mteb.models.get_model_meta import get_model_meta

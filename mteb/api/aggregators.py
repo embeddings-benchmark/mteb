@@ -36,11 +36,16 @@ from mteb.api.schemas import (
     TaskScoreRowSchema,
     TaskScoresSchema,
 )
+from mteb.benchmarks._create_table import _format_max_tokens
 from mteb.languages import language_label
 from mteb.models.model_implementations import MODEL_REGISTRY
 
 if TYPE_CHECKING:
-    from mteb.api.schemas import ModelMetaSchema, TaskMetaSchema
+    from mteb.api.schemas import (
+        BenchmarkSchema,
+        ModelMetaSchema,
+        TaskMetaSchema,
+    )
     from mteb.cache.result_cache import ResultCache
 
 logger = logging.getLogger(__name__)
@@ -66,6 +71,22 @@ _SUMMARY_META_COLS = frozenset(
         "Release Date",
     }
 )
+
+
+def _empty_summary(
+    bench_name: str,
+    bench_schema: BenchmarkSchema,
+    tasks_meta: list[TaskMetaSchema],
+) -> BenchmarkSummarySchema:
+    """Empty-row summary used by every early-return path in build_benchmark_summary."""
+    return BenchmarkSummarySchema(
+        benchmark_name=bench_name,
+        task_types=bench_schema.task_types,
+        tasks=bench_schema.tasks,
+        tasks_meta=tasks_meta,
+        rows=[],
+        aggregations=bench_schema.aggregations,
+    )
 
 
 async def build_benchmark_summary(  # noqa: PLR0914
@@ -100,14 +121,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
         long_df = results._to_results_df(bench.tasks)
 
     if long_df.is_empty() or "model_name" not in long_df.columns:
-        return BenchmarkSummarySchema(
-            benchmark_name=bench.name,
-            task_types=bench_schema.task_types,
-            tasks=bench_schema.tasks,
-            tasks_meta=tasks_meta,
-            rows=[],
-            aggregations=bench_schema.aggregations,
-        )
+        return _empty_summary(bench.name, bench_schema, tasks_meta)
 
     if languages and "language" in long_df.columns:
         # The frontend filter holds labels ("English"); the frame holds codes
@@ -124,14 +138,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
             if c is not None and (c in picked_set or language_label(c) in picked_set)
         ]
         if not code_match:
-            return BenchmarkSummarySchema(
-                benchmark_name=bench.name,
-                task_types=bench_schema.task_types,
-                tasks=bench_schema.tasks,
-                tasks_meta=tasks_meta,
-                rows=[],
-                aggregations=bench_schema.aggregations,
-            )
+            return _empty_summary(bench.name, bench_schema, tasks_meta)
         long_df = long_df.filter(
             pl.col("language").list.eval(pl.element().is_in(code_match)).list.any()
         )
@@ -143,14 +150,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
         asyncio.to_thread(bench._create_per_task_table, long_df),
     )
     if "No results" in summary_pl.columns:
-        return BenchmarkSummarySchema(
-            benchmark_name=bench.name,
-            task_types=bench_schema.task_types,
-            tasks=bench_schema.tasks,
-            tasks_meta=tasks_meta,
-            rows=[],
-            aggregations=bench_schema.aggregations,
-        )
+        return _empty_summary(bench.name, bench_schema, tasks_meta)
 
     # Summary frame replaces ``model_name`` with markdown-linked ``Model``;
     # rebuild a short→full map to look up MODEL_REGISTRY.
@@ -284,7 +284,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
                 active_params_b=model_schema.active_params_b,
                 total_params_b=model_schema.total_params_b,
                 embedding_dim=model_schema.embedding_dim,
-                max_tokens=model_schema.max_tokens,
+                max_tokens=_format_max_tokens(model_schema.max_tokens),
                 mean_task=float(mean_task) if mean_task is not None else None,
                 mean_task_type=float(mean_type) if mean_type is not None else None,
                 mean_public=float(mean_public) if mean_public is not None else None,
@@ -352,7 +352,7 @@ async def build_benchmark_per_language(name: str) -> BenchmarkPerLanguageSchema:
     )
 
 
-@functools.lru_cache(maxsize=1)
+@functools.cache
 def _task_to_hosting_benchmarks() -> dict[str, list[str]]:
     """Reverse index: task name -> list of benchmarks that include it."""
     out: dict[str, list[str]] = {}
@@ -520,7 +520,12 @@ def _pick_leader(
     best: SummaryRowSchema | None = None
     best_rank: int | None = None
     for r in rows:
-        if r.total_params_b <= 0 or r.total_params_b < lo_b:
+        if (
+            r.total_params_b is None
+            or r.total_params_b is None
+            or r.total_params_b <= 0
+            or r.total_params_b < lo_b
+        ):
             continue
         if hi_b is not None and r.total_params_b >= hi_b:
             continue
@@ -545,14 +550,16 @@ async def build_benchmark_leaders(
         leader: LeaderRowSchema | None = None
         if row is not None:
             score = row.mean_task if row.mean_task is not None else row.mean_task_type
-            leader = LeaderRowSchema(
+            leader = LeaderRowSchema.model_construct(
                 rank=row.rank,
-                model=LeaderModelSchema(
+                model=LeaderModelSchema.model_construct(
                     name=row.model.name,
                     model_type=row.model.model_type,
                 ),
                 mean_task=score,
                 total_params_b=row.total_params_b,
             )
-        out_buckets.append(BucketLeaderSchema(min=lo_m, max=hi_m, leader=leader))
+        out_buckets.append(
+            BucketLeaderSchema.model_construct(min=lo_m, max=hi_m, leader=leader)
+        )
     return BenchmarkLeadersSchema(benchmark_name=name, buckets=out_buckets)

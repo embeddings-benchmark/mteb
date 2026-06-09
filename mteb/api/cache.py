@@ -71,7 +71,7 @@ def _serialize(schema: BaseModel) -> Serialized:
     return serialize_bytes(schema.model_dump_json(by_alias=True).encode())
 
 
-@functools.lru_cache(maxsize=1)
+@functools.cache
 def get_cache() -> ResultCache:
     """Return the process-wide :class:`ResultCache`."""
     from mteb.cache.result_cache import ResultCache
@@ -92,9 +92,11 @@ def _dedupe_unified(combined: pl.DataFrame) -> pl.DataFrame:
     if combined.is_empty():
         return pl.DataFrame(schema=_UNIFIED_SCHEMA)
     return (
-        combined.drop_nulls("score")
+        combined.lazy()
+        .drop_nulls("score")
         .group_by(["model_name", "task_name", "subset"])
         .agg(pl.col("score").max())
+        .collect(engine="streaming")
     )
 
 
@@ -140,9 +142,14 @@ def _load_default_from_hub(repo_id: str) -> pl.DataFrame | None:
             return None
 
 
-@functools.lru_cache(maxsize=1)
+@functools.cache
 def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]:
-    """Return ``(per_benchmark_frames, unified_frame)``, loaded once."""
+    """Return ``(per_benchmark_frames, unified_frame)``, loaded once.
+
+    Callers MUST NOT mutate the returned frames — they are shared across the
+    whole process. Polars frames are practically immutable from the Python
+    API, but ``.with_columns`` etc. should be called on `.lazy()` clones.
+    """
     import mteb
     from mteb.results.benchmark_results import BenchmarkResults
 
@@ -218,20 +225,28 @@ async def _cached_bytes(
     locks: dict[_K, asyncio.Lock],
     key: _K,
     schema_builder: Callable[[], Awaitable[BaseModel]],
+    *,
+    layer: str = "bytes",
 ) -> Serialized:
     """Generic single-flight cache-or-build for serialised bytes.
 
     Builds the schema under the per-key lock so concurrent cold requests share
     one schema build; serialises on a worker thread because ``gzip.compress``
-    on a multi-MB body would otherwise pin the event loop.
+    on a multi-MB body would otherwise pin the event loop. ``layer`` labels
+    the hit/miss counter so ops can split warm/cold by endpoint family.
     """
+    from mteb.api.metrics import CACHE_OUTCOMES
+
     cached = store.get(key)
     if cached is not None:
+        CACHE_OUTCOMES.labels(layer=layer, outcome="hit").inc()
         return cached
     async with _lock_for(locks, key):
         cached = store.get(key)
         if cached is not None:
+            CACHE_OUTCOMES.labels(layer=layer, outcome="hit").inc()
             return cached
+        CACHE_OUTCOMES.labels(layer=layer, outcome="miss").inc()
         schema = await schema_builder()
         cached = await asyncio.to_thread(_serialize, schema)
         store[key] = cached
@@ -260,21 +275,30 @@ async def get_summary(name: str) -> BenchmarkSummarySchema:
 
 async def get_summary_bytes(name: str, languages: tuple[str, ...] = ()) -> Serialized:
     """JSON bytes + gzip + ETag for the summary endpoint."""
+    from mteb.api.metrics import CACHE_OUTCOMES
+
     if not languages:
         return await _cached_bytes(
-            _summary_bytes, _summary_bytes_locks, name, lambda: get_summary(name)
+            _summary_bytes,
+            _summary_bytes_locks,
+            name,
+            lambda: get_summary(name),
+            layer="summary",
         )
 
     key = (name, languages)
     cached = _summary_lang_bytes.get(key)
     if cached is not None:
         _summary_lang_bytes.move_to_end(key)
+        CACHE_OUTCOMES.labels(layer="summary_lang", outcome="hit").inc()
         return cached
     async with _lock_for(_summary_lang_bytes_locks, key):
         cached = _summary_lang_bytes.get(key)
         if cached is not None:
             _summary_lang_bytes.move_to_end(key)
+            CACHE_OUTCOMES.labels(layer="summary_lang", outcome="hit").inc()
             return cached
+        CACHE_OUTCOMES.labels(layer="summary_lang", outcome="miss").inc()
         logger.info("Building summary for %s (langs=%s)", name, languages)
         schema = await build_benchmark_summary(name, get_cache(), languages=languages)
         cached = await asyncio.to_thread(_serialize, schema)
@@ -294,6 +318,7 @@ async def get_per_language_bytes(name: str) -> Serialized:
         _per_language_bytes_locks,
         name,
         lambda: build_benchmark_per_language(name),
+        layer="per_language",
     )
 
 
@@ -304,7 +329,13 @@ async def get_task_scores_bytes(name: str) -> Serialized:
     async def _build() -> BaseModel:
         return await asyncio.to_thread(build_task_scores, name, get_cache())
 
-    return await _cached_bytes(_task_score_bytes, _task_score_bytes_locks, name, _build)
+    return await _cached_bytes(
+        _task_score_bytes,
+        _task_score_bytes_locks,
+        name,
+        _build,
+        layer="task_scores",
+    )
 
 
 async def get_model_scores_bytes(name: str) -> Serialized:
@@ -316,6 +347,7 @@ async def get_model_scores_bytes(name: str) -> Serialized:
         _model_score_bytes_locks,
         name,
         lambda: build_model_scores(name),
+        layer="model_scores",
     )
 
 
@@ -389,8 +421,10 @@ def warmup_blocking() -> None:
             for f in futures:
                 f.result()
         _prewarm_list_schemas()
-    except Exception as exc:
-        logger.warning("light warmup failed: %s", exc)
+    except (OSError, ValueError, KeyError, pl.exceptions.PolarsError) as exc:
+        # Warmup failure isn't fatal — the routes will rebuild on first request.
+        # Narrow set lets programmer errors (TypeError, AttributeError) surface.
+        logger.warning("light warmup failed: %s: %s", type(exc).__name__, exc)
 
 
 # Cap how many summaries build concurrently during preload. Each in-flight
@@ -413,15 +447,33 @@ def preload_summaries_in_background() -> None:
         # cold-path-free.
         all_names = [b.name for b in mteb.get_benchmarks()]
 
+        expected = (
+            OSError,
+            ValueError,
+            KeyError,
+            AttributeError,
+            pl.exceptions.PolarsError,
+        )
+
         async def _build_one(name: str) -> None:
             try:
                 await get_summary_bytes(name)
-            except Exception as exc:
-                logger.warning("warmup summary: %s failed (%s)", name, exc)
+            except expected as exc:
+                logger.warning(
+                    "warmup summary: %s failed (%s: %s)",
+                    name,
+                    type(exc).__name__,
+                    exc,
+                )
             try:
                 await get_per_language_bytes(name)
-            except Exception as exc:
-                logger.warning("warmup per-language: %s failed (%s)", name, exc)
+            except expected as exc:
+                logger.warning(
+                    "warmup per-language: %s failed (%s: %s)",
+                    name,
+                    type(exc).__name__,
+                    exc,
+                )
 
         async def _build_all() -> None:
             sem = asyncio.Semaphore(_PRELOAD_CONCURRENCY)
