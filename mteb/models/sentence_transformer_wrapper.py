@@ -1,24 +1,20 @@
 from __future__ import annotations
 
 import logging
-import sys
 import warnings
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 import torch
 from packaging.version import Version
+from tqdm.auto import tqdm
+from typing_extensions import deprecated
 
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
 from mteb.types import OutputDType, PromptType
 
 from .abs_encoder import AbsEncoder
-
-if sys.version_info >= (3, 13):
-    from warnings import deprecated
-else:
-    from typing_extensions import deprecated
 
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder, SentenceTransformer
@@ -58,12 +54,66 @@ def sentence_transformers_loader(
     )
 
 
+_MODALITY_KEYS = frozenset({"text", "image", "audio", "video"})
+
+
+def _setup_modality_collator(
+    inputs: DataLoader[BatchedInput],
+    *,
+    fps: float | None,
+    max_frames: int | None,
+    num_frames: int | None,
+    target_sampling_rate: int | None,
+    max_samples: int | None,
+) -> bool:
+    """Attach a VideoCollator/AudioCollator to ``inputs`` if needed.
+
+    Returns True when any modality feature (image/audio/video) is present on
+    the dataset so the caller can take the multimodal path.
+    """
+    features = inputs.dataset.features  # type: ignore[attr-defined]
+    has_video = "video" in features
+    has_audio = "audio" in features
+    if has_video:
+        from mteb.models.modality_collators import VideoCollator
+
+        inputs.collate_fn = VideoCollator(
+            target_sampling_rate=target_sampling_rate or 16000,
+            fps=fps,
+            max_frames=max_frames,
+            num_frames=num_frames,
+            max_samples=max_samples,
+        )
+    elif has_audio:
+        from mteb.models.modality_collators import AudioCollator
+
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=target_sampling_rate or 16000,
+            max_samples=max_samples,
+        )
+    return has_video or has_audio or "image" in features
+
+
+def _batch_to_modality_dicts(batch: dict[str, Any]) -> list[dict[str, Any]]:
+    modality_batch = {k: v for k, v in batch.items() if k in _MODALITY_KEYS}
+    return [
+        dict(zip(modality_batch, sample)) for sample in zip(*modality_batch.values())
+    ]
+
+
 class SentenceTransformerEncoderWrapper(AbsEncoder):
-    """Multimodal wrapper for SentenceTransformer models."""
+    """Wrapper for SentenceTransformer models.
+
+    Supports both text-only and multimodal (text + image + audio + video)
+    inputs. When the input dataset exposes image/audio/video features, the
+    encode method attaches the matching collator and feeds the model per-sample
+    modality dicts; otherwise it falls back to the text-only fast path that
+    uses ``encode_query``/``encode_document`` where available.
+    """
 
     mteb_model_meta: ModelMeta
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         model: str | SentenceTransformer,
         revision: str | None = None,
@@ -71,6 +121,11 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         *,
         embed_dim: int | None = None,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        target_sampling_rate: int | None = None,
+        max_samples: int | None = None,
         **kwargs: Any,
     ) -> None:
         """Wrapper for SentenceTransformer models.
@@ -84,6 +139,11 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
             embed_dim: The embedding dimension of the model to use.
+            fps: Target frames per second for video sampling (multimodal inputs only).
+            max_frames: Safety cap on frames per video for FPS mode (multimodal inputs only).
+            num_frames: If set, use fixed-sample mode instead of FPS-based (multimodal inputs only).
+            target_sampling_rate: Sampling rate to resample audio to (multimodal inputs only). Defaults to 16000 when an audio/video collator is applied.
+            max_samples: Maximum number of audio samples to keep (multimodal inputs only).
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
         """
         from sentence_transformers import SentenceTransformer
@@ -100,7 +160,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 overwrites=dict(
                     name=model,
                     revision=revision,
-                    loader=sentence_transformers_loader,
+                    loader=type(self),
                 )
             )
         else:
@@ -137,6 +197,12 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             msg = f"SentenceTransformers that use prompts most often need to be configured with at least 'query' and 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
             logger.warning(msg)
             warnings.warn(msg)
+
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         """Compute the similarity between two collections of embeddings."""
@@ -175,8 +241,6 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         Returns:
             The encoded sentences.
         """
-        from sentence_transformers import __version__ as st_version
-
         if "precision" in kwargs:
             existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
             output_dtype = OutputDType.from_str(kwargs["precision"])
@@ -194,13 +258,6 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 deep=True,
             )
 
-        has_query_encode = (
-            Version(st_version).release
-            >= Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
-        )
-
-        _inputs = [text for batch in inputs for text in batch["text"]]
-
         prompt = None
         prompt_name = None
         if self.model_prompts is not None:
@@ -212,10 +269,22 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             prompt_log = (
                 f"No model prompts found for task={task_metadata.name} {prompt_type=}"
             )
-
         LogOnce(logger).info(prompt_log)
-        logger.debug(f"Encoding {len(_inputs)} sentences.")
 
+        is_multimodal = _setup_modality_collator(
+            inputs,
+            fps=self.fps,
+            max_frames=self.max_frames,
+            num_frames=self.num_frames,
+            target_sampling_rate=self.target_sampling_rate,
+            max_samples=self.max_samples,
+        )
+        from sentence_transformers import __version__ as st_version
+
+        has_query_encode = (
+            Version(st_version).release
+            >= Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
+        )
         if prompt_type and has_query_encode:
             if prompt_type == PromptType.query:
                 encode_function = self.model.encode_query
@@ -226,152 +295,49 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         else:
             encode_function = self.model.encode
 
-        embeddings = cast(
-            "Array",
-            encode_function(
-                _inputs,
-                prompt=prompt,
-                **kwargs,
-            ),
+        if is_multimodal:
+            all_embeddings = []
+            for batch in tqdm(inputs, desc="Building multimodal embeddings"):
+                batched_input = _batch_to_modality_dicts(batch)
+                embeddings = encode_function(
+                    batched_input,
+                    prompt=prompt,
+                    **kwargs,
+                )
+                if isinstance(embeddings, torch.Tensor):
+                    embeddings = embeddings.cpu().detach().float()
+                all_embeddings.append(embeddings)
+            return cast("Array", np.concatenate(all_embeddings, axis=0))
+
+        _inputs = [text for batch in inputs for text in batch["text"]]
+        logger.debug(f"Encoding {len(_inputs)} sentences.")
+        embeddings = encode_function(
+            _inputs,
+            prompt=prompt,
+            **kwargs,
         )
         if isinstance(embeddings, torch.Tensor):
             # ensure everything is on CPU and is float
             embeddings = embeddings.cpu().detach().float()
-        return embeddings
+        return cast("Array", embeddings)
 
 
 class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrapper):
-    """Wrapper for multimodal SentenceTransformer models."""
+    """Backwards-compatible alias for `SentenceTransformerEncoderWrapper`.
 
+    The base wrapper now auto-detects multimodal inputs, so this subclass is
+    kept only to avoid breaking existing ``loader=...`` references.
+    """
+
+    @deprecated(
+        "This wrapper is deprecated. Use `SentenceTransformerMultimodalEncoderWrapper` for using processing multimodal inputs.",
+    )
     def __init__(
         self,
         *args: Any,
-        fps: float | None = None,
-        max_frames: int | None = None,
-        num_frames: int | None = None,
-        target_sampling_rate: int | None = None,
-        max_samples: int | None = None,
         **kwargs: Any,
     ) -> None:
-        """Wrapper for multimodal SentenceTransformer models.
-
-        Args:
-            *args: Passed to SentenceTransformerEncoderWrapper.
-            fps: Target frames per second for video sampling.
-            max_frames: Safety cap on frames per video for FPS mode.
-            num_frames: If set, use fixed-sample mode instead of FPS-based.
-            target_sampling_rate: Sampling rate to resample audio to.
-            max_samples: Maximum number of audio samples to keep.
-            **kwargs: Passed to SentenceTransformerEncoderWrapper.
-        """
         super().__init__(*args, **kwargs)
-        self.fps = fps
-        self.max_frames = max_frames
-        self.num_frames = num_frames
-        self.target_sampling_rate = target_sampling_rate
-        self.max_samples = max_samples
-
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Unpack[EncodeKwargs],
-    ) -> Array:
-        """Encodes the given sentences using the encoder.
-
-        Args:
-            inputs: The sentences to encode.
-            task_metadata: The metadata of the task. Sentence-transformers uses this to
-                determine which prompt to use from a specified dictionary.
-            prompt_type: The name type of prompt. (query or passage)
-            hf_split: Split of current task
-            hf_subset: Subset of current task
-            **kwargs: Additional arguments to pass to the encoder.
-
-            The order of priorities for prompt selection are:
-                1. Composed prompt of task name + prompt type (query or passage)
-                2. Specific task prompt
-                3. Composed prompt of task type + prompt type (query or passage)
-                4. Specific task type prompt
-                5. Specific prompt type (query or passage)
-
-
-        Returns:
-            The encoded sentences.
-        """
-        has_video = "video" in inputs.dataset.features  # type: ignore[attr-defined]
-        has_audio = "audio" in inputs.dataset.features  # type: ignore[attr-defined]
-        if has_video:
-            from mteb.models.modality_collators import VideoCollator
-
-            inputs.collate_fn = VideoCollator(
-                target_sampling_rate=self.target_sampling_rate or 16000,
-                fps=self.fps,
-                max_frames=self.max_frames,
-                num_frames=self.num_frames,
-                max_samples=self.max_samples,
-            )
-        elif has_audio:
-            from mteb.models.modality_collators import AudioCollator
-
-            inputs.collate_fn = AudioCollator(
-                target_sampling_rate=self.target_sampling_rate or 16000,
-                max_samples=self.max_samples,
-            )
-
-        prompt = None
-        prompt_name = None
-        if self.model_prompts is not None:
-            prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-            prompt = self.model_prompts.get(prompt_name, None)  # type: ignore[arg-type]
-        if prompt_name:
-            logger.info(
-                f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
-            )
-        else:
-            logger.info(
-                f"No model prompts found for task={task_metadata.name} {prompt_type=}"
-            )
-
-        all_embeddings = []
-        _modality_keys = {"text", "image", "audio", "video"}
-        for batch in inputs:
-            # Transformers' apply_chat_template expects audio as raw numpy arrays,
-            # not the {"array", "sampling_rate"} dict produced by AudioCollator.
-            # See https://github.com/huggingface/sentence-transformers/issues/3732
-            if "audio" in batch:
-                batch["audio"] = [
-                    a["array"] if isinstance(a, dict) and "array" in a else a
-                    for a in batch["audio"]
-                ]
-            batch_column = next(iter(batch.keys()))
-            batched_input: list[dict[str, Any]] = [
-                dict() for _ in range(len(batch[batch_column]))
-            ]
-
-            # transform from {"text": [text1, text2], "image": [image1, image2]} to
-            # [{"text": text1, "image": image1}, {"text": text2, "image": image2}]
-            # Only pass through recognized modality keys; ST rejects unknown keys.
-            for key, values in batch.items():
-                if key not in _modality_keys:
-                    continue
-                for i, value in enumerate(values):
-                    batched_input[i][key] = value
-
-            embeddings = self.model.encode(
-                batched_input,
-                prompt=prompt,
-                **kwargs,
-            )
-            if isinstance(embeddings, torch.Tensor):
-                # ensure everything is on CPU and is float
-                embeddings = embeddings.cpu().detach().float()
-            all_embeddings.append(embeddings)
-        return cast("Array", np.concatenate(all_embeddings, axis=0))
 
 
 class CrossEncoderWrapper:
@@ -386,13 +352,19 @@ class CrossEncoderWrapper:
         **kwargs: Additional arguments to pass to the CrossEncoder model.
     """
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         model: CrossEncoder | str,
         revision: str | None = None,
         device: str | None = None,
         query_prefix: str = "",
         passage_prefix: str = "",
+        *,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        target_sampling_rate: int | None = None,
+        max_samples: int | None = None,
         **kwargs: Any,
     ) -> None:
         from sentence_transformers import CrossEncoder
@@ -411,6 +383,40 @@ class CrossEncoderWrapper:
             )
         self.query_prefix = query_prefix
         self.passage_prefix = passage_prefix
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
+
+    def _collect_inputs(
+        self,
+        loader: DataLoader[BatchedInput],
+        prefix: str,
+    ) -> list[Any]:
+        """Return a list of items to feed to the cross-encoder.
+
+        For text-only inputs this is a list of prefix-prepended strings; for
+        multimodal inputs it is a list of per-sample modality dicts.
+        """
+        is_multimodal = _setup_modality_collator(
+            loader,
+            fps=self.fps,
+            max_frames=self.max_frames,
+            num_frames=self.num_frames,
+            target_sampling_rate=self.target_sampling_rate,
+            max_samples=self.max_samples,
+        )
+        if not is_multimodal:
+            return [prefix + text for batch in loader for text in batch["text"]]
+
+        items: list[dict[str, Any]] = []
+        for batch in tqdm(loader, desc="Collecting multimodal inputs"):
+            for sample in _batch_to_modality_dicts(batch):
+                if prefix and "text" in sample:
+                    sample["text"] = prefix + sample["text"]
+                items.append(sample)
+        return items
 
     def predict(
         self,
@@ -438,17 +444,13 @@ class CrossEncoderWrapper:
         Returns:
             The predicted relevance scores for each inputs pair.
         """
-        all_queries_with_instructions = [
-            self.query_prefix + text for batch in inputs1 for text in batch["text"]
-        ]
-        all_corpus_with_instructions = [
-            self.passage_prefix + text for batch in inputs2 for text in batch["text"]
-        ]
+        queries = self._collect_inputs(inputs1, self.query_prefix)
+        corpus = self._collect_inputs(inputs2, self.passage_prefix)
 
         return cast(
             "Array",
             self.model.predict(
-                list(zip(all_queries_with_instructions, all_corpus_with_instructions)),
+                list(zip(queries, corpus)),
                 **kwargs,
             ),
         )
