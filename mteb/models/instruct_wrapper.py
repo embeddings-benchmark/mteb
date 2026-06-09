@@ -304,7 +304,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
                 f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
             )
 
-        features = inputs.dataset.features
+        features = inputs.dataset.features  # type: ignore[attr-defined]
         has_video = "video" in features
         has_audio = "audio" in features
         is_multimodal = has_video or has_audio or "image" in features
