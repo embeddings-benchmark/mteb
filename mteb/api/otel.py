@@ -17,28 +17,26 @@ from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
-from mteb.api.settings import otel_endpoint, otel_service_name
-
 if TYPE_CHECKING:
     from fastapi import FastAPI
+
+    from mteb.api.settings import Settings
 
 logger = logging.getLogger(__name__)
 
 _tracer_provider: TracerProvider | None = None
 
 
-def setup_telemetry(app: FastAPI) -> None:
+def setup_telemetry(app: FastAPI, settings: Settings) -> None:
     """Initialise the tracer provider + FastAPI instrumentation. Idempotent."""
     global _tracer_provider  # noqa: PLW0603 — single-process singleton by design
 
-    endpoint = otel_endpoint()
-    if endpoint is None:
+    if settings.otel_endpoint is None:
         logger.info("OTEL_EXPORTER_OTLP_ENDPOINT unset; tracing disabled.")
         return
     if _tracer_provider is not None:
         return
-
-    resource = Resource.create({SERVICE_NAME: otel_service_name()})
+    resource = Resource.create({SERVICE_NAME: settings.otel_service_name})
     _tracer_provider = TracerProvider(resource=resource)
     _tracer_provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
     trace.set_tracer_provider(_tracer_provider)
@@ -46,8 +44,8 @@ def setup_telemetry(app: FastAPI) -> None:
 
     logger.info(
         "OpenTelemetry tracing initialised (endpoint=%s, service=%s).",
-        endpoint,
-        otel_service_name(),
+        settings.otel_endpoint,
+        settings.otel_service_name,
     )
 
 

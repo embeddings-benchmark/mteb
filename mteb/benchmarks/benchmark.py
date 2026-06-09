@@ -4,7 +4,6 @@ import logging
 import tempfile
 from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
-from enum import Enum
 from functools import lru_cache
 from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar, Literal, cast
@@ -15,6 +14,7 @@ import polars as pl
 import yaml
 from huggingface_hub import DatasetCard, DatasetCardData
 
+from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.eval_model import HFEvalMeta, HFEvalTaskConfig
 from mteb._hf_integration.hf_hub_utils import _get_file_on_hub
 from mteb.abstasks.abstask import AbsTask
@@ -32,7 +32,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class BenchmarkAggregation(str, Enum):
+class BenchmarkAggregation(HelpfulStrEnum):
     """Aggregation columns a benchmark can surface in its leaderboard summary.
 
     Inherits from ``str`` so the values serialise as plain strings in JSON
@@ -87,6 +87,8 @@ class Benchmark:
         citation: A bibtex citation
         contacts: The people to contact in case of a problem in the benchmark, preferably a GitHub handle.
         new_version: Benchmark name with newer version of benchmark
+        aggregations: Which aggregations to use in on leaderboard
+        summary_sort_column: The column to sort benchmarks by on leaderboard
 
     Examples:
         >>> Benchmark(
@@ -98,14 +100,6 @@ class Benchmark:
         ...     description="A custom benchmark"
         ... )
     """
-
-    # Polars column used to sort rows in the summary table (and to
-    # populate the displayed ``Rank``). Default ``None`` means "use the
-    # builder's intrinsic default" — Borda count for the standard
-    # builder, the configured mean column for ``mean_task_type`` / ViDoRe
-    # variants. Override in a subclass to surface a different rank, e.g.
-    # ``MIEBBenchmark`` sorts by ``Mean (TaskType)``.
-    summary_sort_column: ClassVar[str | None] = None
 
     name: str
     tasks: Sequence[AbsTask]
@@ -119,16 +113,13 @@ class Benchmark:
     language_view: list[str] | Literal["all"] = field(default_factory=list)
     benchmark_hf_repo: str | None = None
     new_version: Sequence[str] | None = None
-    # Declarative aggregation columns the benchmark surfaces in its
-    # leaderboard summary table. Lets the API and frontend render only the
-    # relevant columns without inspecting the polars frame's column names.
-    # Dataclass field (not ClassVar) so instances can override at
-    # construction time — see VISUAL_DOCUMENT_RETRIEVAL.
+    # Api aggregation functions
     aggregations: Sequence[BenchmarkAggregation] = (
         BenchmarkAggregation.MEAN_TASK,
         BenchmarkAggregation.MEAN_TASK_TYPE,
         BenchmarkAggregation.TASK_TYPES,
     )
+    summary_sort_column: ClassVar[str | None] = None
 
     @property
     def display_on_leaderboard(self) -> bool:
@@ -444,8 +435,6 @@ class Benchmark:
 class RtebBenchmark(Benchmark):
     """Wrapper for RTEB benchmark."""
 
-    # RTEB collapses its private split into the public mean and renames it to
-    # `Mean (Task)`. The leaderboard surfaces only that one mean column.
     aggregations: Sequence[BenchmarkAggregation] = (BenchmarkAggregation.MEAN_TASK,)
 
     def _create_summary_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:  # noqa: PLR6301
@@ -481,19 +470,11 @@ class HUMEBenchmark(Benchmark):
 class MIEBBenchmark(Benchmark):
     """Wrapper for MIEB benchmark."""
 
-    # MIEB surfaces a Mean (TaskType) column (mean of per-type means —
-    # giving each task type equal weight regardless of how many tasks
-    # populate it) plus the per-type breakdown. The label is explicit
-    # because the column ISN'T a simple per-task mean; mislabelling it
-    # as "Mean (Task)" caused the frontend to recompute and disagree
-    # with the canonical value.
     aggregations: Sequence[BenchmarkAggregation] = (
         BenchmarkAggregation.MEAN_TASK_TYPE,
         BenchmarkAggregation.TASK_TYPES,
     )
-    # Rank rows by the per-type mean column rather than Borda count — the
-    # builder writes both, and Mean (TaskType) is the metric MIEB
-    # actually wants to surface as the leaderboard order.
+    # Rank rows by the per-type mean column rather than Borda count
     summary_sort_column: ClassVar[str] = "Mean (TaskType)"
 
     def _create_summary_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:
@@ -509,9 +490,6 @@ class MIEBBenchmark(Benchmark):
 class VidoreBenchmark(Benchmark):
     """Wrapper for Vidore3 benchmark."""
 
-    # ViDoRe's tasks share a single task type (Document Understanding → Mean
-    # (Task)). Surfaces the public / private split rather than a per-type
-    # breakdown.
     aggregations: Sequence[BenchmarkAggregation] = (
         BenchmarkAggregation.MEAN_TASK,
         BenchmarkAggregation.PUBLIC_PRIVATE,
@@ -598,11 +576,6 @@ class VidoreBenchmark(Benchmark):
             nulls_last=True,
         )
 
-        # Pass `task_names_key` so the joined meta carries a "Zero-shot"
-        # column. Without it, ViDoRe rows always served zero_shot_pct=NA
-        # — even for models with declared training_datasets that don't
-        # intersect the benchmark's tasks. Mirrors the RTEB fix in
-        # `_create_summary_table_mean_public_private`.
         joint_table = _attach_model_metadata(
             joint_table, task_names_key=tuple(sorted(task_cols))
         ).with_columns(

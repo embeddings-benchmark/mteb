@@ -67,9 +67,9 @@ def language_label(code: str) -> str:
     """Convert an ``ISOLanguageScript`` (e.g. ``"eng-Latn"``) to a display name.
 
     Default-script suffixes are dropped so the common case reads naturally
-    (``"eng-Latn"`` ⇒ ``"English"``), and non-default scripts are appended in
+    (``"eng-Latn"`` => ``"English"``), and non-default scripts are appended in
     parentheses so multi-script languages stay distinguishable
-    (``"zho-Hant"`` ⇒ ``"Chinese (Traditional)"``). Bare ISO 639-3 codes
+    (``"zho-Hant"`` => ``"Chinese (Traditional)"``). Bare ISO 639-3 codes
     (``"eng"``) are also accepted. Unknown codes pass through verbatim so the
     caller never sees an empty string.
     """

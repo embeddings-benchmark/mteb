@@ -26,7 +26,7 @@ from typing import TYPE_CHECKING, TypeVar, cast
 import polars as pl
 
 from mteb.api.aggregators import build_benchmark_summary
-from mteb.api.settings import cache_repo, preload_full
+from mteb.api.settings import get_settings
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
@@ -135,7 +135,7 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
     cache = get_cache()
     combined: pl.DataFrame | None = None
 
-    repo_id = cache_repo()
+    repo_id = get_settings().cache_repo
     if repo_id:
         combined = _load_default_from_hub(repo_id)
         if combined is not None and not combined.is_empty():
@@ -381,7 +381,7 @@ def warmup_blocking() -> None:
 
 def preload_summaries_in_background() -> None:
     """Pre-build every benchmark summary + per-language schema on a daemon thread."""
-    if not preload_full():
+    if not get_settings().preload:
         return
 
     def _run() -> None:

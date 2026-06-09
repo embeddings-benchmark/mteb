@@ -24,7 +24,7 @@ from mteb.api.cache import preload_summaries_in_background, warmup_blocking
 from mteb.api.metrics import PrometheusMiddleware
 from mteb.api.otel import setup_telemetry, shutdown_telemetry
 from mteb.api.routes import infra_router, router
-from mteb.api.settings import cors_origins, og_dir
+from mteb.api.settings import get_settings
 
 if TYPE_CHECKING:
     from starlette.responses import Response
@@ -45,9 +45,10 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
 def create_app() -> FastAPI:
     """Build and return the FastAPI app instance for the leaderboard API."""
     app = FastAPI(title="MTEB Leaderboard API", lifespan=lifespan)
+    settings = get_settings()
     # OTEL instrumentation must attach before middleware finalises so the
     # FastAPI instrumentor can inject its ASGI middleware.
-    setup_telemetry(app)
+    setup_telemetry(app, settings)
     # GZip compresses 200 responses that aren't already encoded (cached routes
     # set Content-Encoding: gzip themselves and skip recompression). CORS adds
     # headers next; Prometheus is the outermost middleware so it sees the full
@@ -55,7 +56,7 @@ def create_app() -> FastAPI:
     app.add_middleware(GZipMiddleware, minimum_size=1024)
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=cors_origins(),
+        allow_origins=settings.cors_origins,
         allow_methods=["GET"],
         allow_headers=["*"],
         expose_headers=["ETag", "Cache-Control"],
@@ -73,7 +74,7 @@ def _mount_og_assets(app: FastAPI) -> None:
     Skipped silently when the directory is missing so local dev doesn't error
     before the operator has run the generator.
     """
-    cache_dir = og_dir()
+    cache_dir = get_settings().og_dir
     if pathlib.Path(cache_dir).is_dir():
         app.mount(
             "/og",
