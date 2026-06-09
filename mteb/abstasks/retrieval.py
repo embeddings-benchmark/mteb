@@ -4,7 +4,6 @@ import json
 import logging
 from collections import defaultdict
 from pathlib import Path
-from time import time
 from typing import TYPE_CHECKING, Any, Literal
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
@@ -23,6 +22,7 @@ from mteb.models import (
     SearchEncoderWrapper,
     SearchProtocol,
 )
+from mteb.timing import TimingStack
 from mteb.types import (
     PromptType,
 )
@@ -78,7 +78,9 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for Retrieval
 
     Attributes:
-        num_samples: Number of queries and documents
+        num_samples: Total number of queries and documents
+        num_queries: Number of queries
+        num_documents: Number of documents
         number_of_characters: Total number of characters in queries and documents
 
         documents_text_statistics: Statistics for documents
@@ -94,6 +96,8 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     """
 
     num_samples: int
+    num_queries: int
+    num_documents: int
     number_of_characters: int
 
     documents_text_statistics: TextStatistics | None
@@ -163,8 +167,8 @@ class AbsTaskRetrieval(AbsTask):
         # check if dataset is `v1` version
         if (
             not hasattr(self, "queries")
-            and not hasattr(self, "corpus")
-            and not hasattr(self, "relevant_docs")
+            or not hasattr(self, "corpus")
+            or not hasattr(self, "relevant_docs")
         ):
             return
 
@@ -207,14 +211,14 @@ class AbsTaskRetrieval(AbsTask):
                     if split not in self.dataset[subset]:
                         self.dataset[subset][split] = {}  # type: ignore[typeddict-item]
                     queries = self.queries[subset][split]
-                    corpus = self.corpus[subset][split]  # type: ignore[attr-defined]
+                    corpus = self.corpus[subset][split]
 
                     (
                         self.dataset[subset][split]["queries"],
                         self.dataset[subset][split]["corpus"],
                     ) = _process_split(queries, corpus)
 
-                    self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[  # type: ignore[attr-defined]
+                    self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
                         subset
                     ][split]
                     if hasattr(self, "instructions"):
@@ -240,13 +244,13 @@ class AbsTaskRetrieval(AbsTask):
                 if split not in self.dataset[subset]:
                     self.dataset[subset][split] = {}  # type: ignore[typeddict-item]
                 queries = self.queries[split]
-                corpus = self.corpus[split]  # type: ignore[attr-defined]
+                corpus = self.corpus[split]
                 (
                     self.dataset[subset][split]["queries"],
                     self.dataset[subset][split]["corpus"],
                 ) = _process_split(queries, corpus)
 
-                self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[  # type: ignore[attr-defined]
+                self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
                     split
                 ].copy()
                 if hasattr(self, "instructions"):
@@ -266,14 +270,20 @@ class AbsTaskRetrieval(AbsTask):
                     self.dataset[subset][split]["top_ranked"] = None
 
         del self.queries
-        del self.corpus  # type: ignore[attr-defined]
-        del self.relevant_docs  # type: ignore[attr-defined]
+        del self.corpus
+        del self.relevant_docs
         if hasattr(self, "instructions"):
             del self.instructions
         if hasattr(self, "top_ranked"):
             del self.top_ranked
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+    def load_data(
+        self,
+        num_proc: int | None = None,
+        *,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
+    ) -> None:
         """Load the dataset for the retrieval task."""
         if self.data_loaded:
             return
@@ -302,14 +312,20 @@ class AbsTaskRetrieval(AbsTask):
                 num_proc=num_proc,
             )
 
-        if self.metadata.is_multilingual:
-            for lang in self.hf_subsets:
+        timer = timer or TimingStack()
+        with timer(
+            "Data loading", log_message=f"Loading dataset {self.metadata.name}..."
+        ):
+            if self.metadata.is_multilingual:
+                for lang in self.hf_subsets:
+                    for split in eval_splits:
+                        _process_data(split, lang)
+            else:
                 for split in eval_splits:
-                    _process_data(split, lang)
-        else:
-            for split in eval_splits:
-                _process_data(split)
-        self.dataset_transform(num_proc=num_proc)
+                    _process_data(split)
+
+        with timer("Dataset transform"):
+            self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
     def evaluate(
@@ -321,6 +337,7 @@ class AbsTaskRetrieval(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.
@@ -333,13 +350,15 @@ class AbsTaskRetrieval(AbsTask):
             encode_kwargs: Keyword arguments passed to the encoder
             prediction_folder: Folder to save model predictions
             num_proc: Number of processes to use
+            timer: A context manager that tracks the timing of evaluation phases.
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
             Dictionary mapping subsets to their evaluation scores
         """
+        timer = timer or TimingStack()
         if not self.data_loaded:
-            self.load_data(num_proc=num_proc)
+            self.load_data(num_proc=num_proc, timer=timer)
         # TODO: convert all tasks directly https://github.com/embeddings-benchmark/mteb/issues/2030
         self.convert_v1_dataset_format_to_v2(num_proc=num_proc)
 
@@ -350,6 +369,7 @@ class AbsTaskRetrieval(AbsTask):
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             num_proc=num_proc,
+            timer=timer,
             **kwargs,
         )
 
@@ -363,6 +383,7 @@ class AbsTaskRetrieval(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
@@ -375,6 +396,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset: Subset to evaluate on
             prediction_folder: Folder with results prediction
             num_proc: Number of processes to use
+            timer: A context manager that tracks the timing of evaluation phases.
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
@@ -394,6 +416,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset=hf_subset,
             top_ranked=data_split["top_ranked"],
             top_k=self._top_k,
+            timer=timer,
             **kwargs,
         )
 
@@ -410,15 +433,10 @@ class AbsTaskRetrieval(AbsTask):
                 f"RetrievalEvaluator expects a SearchInterface, Encoder, or CrossEncoder, got {type(model)}"
             )
 
-        start_time = time()
         results = retriever(
             search_model,
             encode_kwargs=encode_kwargs,
             num_proc=num_proc,
-        )
-        end_time = time()
-        logger.debug(
-            f"Running retrieval task - Time taken to retrieve: {end_time - start_time:.2f} seconds"
         )
 
         if prediction_folder:
@@ -430,24 +448,30 @@ class AbsTaskRetrieval(AbsTask):
                 hf_split=hf_split,
             )
 
-        logger.info("Running retrieval task - Evaluating retrieval scores...")
-        (
-            all_scores,
-            ndcg,
-            _map,
-            recall,
-            precision,
-            naucs,
-            mrr,
-            naucs_mrr,
-            hit_rate,
-        ) = retriever.evaluate(
-            data_split["relevant_docs"],
-            results,
-            self.k_values,
-            ignore_identical_ids=self.ignore_identical_ids,
-            skip_first_result=self.skip_first_result,
-        )
+        with timer(
+            "Scoring",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running retrieval task - Evaluating retrieval scores...",
+        ):
+            (
+                all_scores,
+                ndcg,
+                _map,
+                recall,
+                precision,
+                naucs,
+                mrr,
+                naucs_mrr,
+                hit_rate,
+            ) = retriever.evaluate(
+                data_split["relevant_docs"],
+                results,
+                self.k_values,
+                ignore_identical_ids=self.ignore_identical_ids,
+                skip_first_result=self.skip_first_result,
+            )
+
         task_specific_scores = self.task_specific_scores(
             all_scores,
             data_split["relevant_docs"],
@@ -609,6 +633,8 @@ class AbsTaskRetrieval(AbsTask):
 
         return RetrievalDescriptiveStatistics(
             num_samples=num_documents + num_queries,
+            num_queries=num_queries,
+            num_documents=num_documents,
             number_of_characters=number_of_characters,
             documents_text_statistics=corpus_stats["text_statistics"],
             documents_image_statistics=corpus_stats["image_statistics"],

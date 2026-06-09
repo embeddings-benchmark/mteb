@@ -501,6 +501,24 @@ class ResultCache:
                     check=True,
                     text=True,
                 )
+            elif download_latest:
+                # `git fetch` alone leaves the working tree on the old commit, so a
+                # fresh clone here would silently use stale result files. Move HEAD to
+                # the remote's default branch so the rebuild actually sees new results.
+                default_branch = subprocess.run(
+                    ["git", "rev-parse", "--abbrev-ref", "origin/HEAD"],
+                    cwd=results_directory,
+                    check=True,
+                    text=True,
+                    capture_output=True,
+                ).stdout.strip()  # e.g. "origin/main"
+                logger.info(f"Updating working tree to {default_branch}")
+                subprocess.run(
+                    ["git", "reset", "--hard", default_branch],
+                    cwd=results_directory,
+                    check=True,
+                    text=True,
+                )
             return results_directory
 
         logger.info(

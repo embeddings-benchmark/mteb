@@ -1,17 +1,19 @@
 from __future__ import annotations
 
+import logging
+import time
 from typing import TYPE_CHECKING
 
 import gradio as gr
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-from matplotlib.colors import LinearSegmentedColormap
 from pandas.api.types import is_numeric_dtype
 
 if TYPE_CHECKING:
+    import pandas as pd
+    import polars as pl
+
     from mteb.benchmarks.benchmark import Benchmark
-    from mteb.results.benchmark_results import BenchmarkResults
+
+logger = logging.getLogger(__name__)
 
 
 def _borda_count(scores: pd.Series) -> pd.Series:
@@ -32,9 +34,7 @@ def _format_scores(score: float) -> float:
 
 
 def _get_column_widths(df: pd.DataFrame) -> list[str]:
-    # Please do not remove this function when refactoring.
-    # Column width calculation seeminlgy changes regularly with Gradio releases,
-    # and this piece of logic is good enough to quickly fix related issues.
+    # Keep this helper around: Gradio's column-width behavior changes between releases.
     widths = []
     for column_name in df.columns:
         column_word_lengths = [len(word) for word in column_name.split()]
@@ -54,19 +54,8 @@ def _format_zero_shot(zero_shot_percentage: int):
     return f"{zero_shot_percentage:.0f}%"
 
 
-def _create_light_green_cmap():
-    cmap = plt.cm.get_cmap("Greens")
-    num_colors = 256
-    half_colors = np.linspace(0, 0.5, num_colors)
-    half_cmap = [cmap(val) for val in half_colors]
-    light_green_cmap = LinearSegmentedColormap.from_list(
-        "LightGreens", half_cmap, N=256
-    )
-    return light_green_cmap
-
-
 def apply_summary_styling_from_benchmark(
-    benchmark_instance: Benchmark, benchmark_results: BenchmarkResults
+    benchmark_instance: Benchmark, pl_df: pl.DataFrame
 ) -> tuple[gr.DataFrame, pd.DataFrame]:
     """Apply styling to summary table created by the benchmark instance's _create_summary_table method.
 
@@ -74,25 +63,39 @@ def apply_summary_styling_from_benchmark(
 
     Args:
         benchmark_instance: The benchmark instance
-        benchmark_results: BenchmarkResults object containing model results (may be pre-filtered)
+        pl_df: Polars pre-aggregation DataFrame containing model results (may be pre-filtered)
 
     Returns:
         Tuple of (styled gr.DataFrame for display, raw pd.DataFrame with metadata for plots)
     """
-    # Use the instance method to support polymorphism
-    summary_df = benchmark_instance._create_summary_table(benchmark_results)
+    t0 = time.time()
+    summary_pl = benchmark_instance._create_summary_table(pl_df)
+    t1 = time.time()
 
-    # If it's a no-results DataFrame, return it as-is
-    if "No results" in summary_df.columns:
-        return gr.DataFrame(summary_df), summary_df
+    if "No results" in summary_pl.columns:
+        logger.info(
+            "apply_summary_styling [%s]: create_table=%.3fs (no results)",
+            benchmark_instance.name,
+            t1 - t0,
+        )
+        return gr.DataFrame(summary_pl), summary_pl.to_pandas()
 
-    # Keep full data for plots, drop metadata columns from display
+    summary_df = summary_pl.to_pandas()
     display_df = summary_df.drop(columns=["Release Date"], errors="ignore")
-    return _apply_summary_table_styling(display_df), summary_df
+    result = _apply_summary_table_styling(display_df), summary_df
+    t2 = time.time()
+    logger.debug(
+        "apply_summary_styling [%s]: create_table=%.3fs styling=%.3fs total=%.3fs",
+        benchmark_instance.name,
+        t1 - t0,
+        t2 - t1,
+        t2 - t0,
+    )
+    return result
 
 
 def apply_per_task_styling_from_benchmark(
-    benchmark_instance: Benchmark, benchmark_results: BenchmarkResults
+    benchmark_instance: Benchmark, pl_df: pl.DataFrame
 ) -> gr.DataFrame:
     """Apply styling to per-task table created by the benchmark instance's _create_per_task_table method.
 
@@ -100,24 +103,37 @@ def apply_per_task_styling_from_benchmark(
 
     Args:
         benchmark_instance: The benchmark instance
-        benchmark_results: BenchmarkResults object containing model results (may be pre-filtered)
+        pl_df: Polars pre-aggregation DataFrame containing model results (may be pre-filtered)
 
     Returns:
         Styled gr.DataFrame ready for display in the leaderboard
     """
-    # Use the instance method to support polymorphism
-    per_task_df = benchmark_instance._create_per_task_table(benchmark_results)
+    t0 = time.time()
+    per_task_pl = benchmark_instance._create_per_task_table(pl_df)
+    t1 = time.time()
 
-    # If it's a no-results DataFrame, return it as-is
-    if "No results" in per_task_df.columns:
-        return gr.DataFrame(per_task_df)
+    if "No results" in per_task_pl.columns:
+        logger.info(
+            "apply_per_task_styling [%s]: create_table=%.3fs (no results)",
+            benchmark_instance.name,
+            t1 - t0,
+        )
+        return gr.DataFrame(per_task_pl)
 
-    # Apply the styling
-    return _apply_per_task_table_styling(per_task_df)
+    result = _apply_per_task_table_styling(per_task_pl.to_pandas())
+    t2 = time.time()
+    logger.debug(
+        "apply_per_task_styling [%s]: create_table=%.3fs styling=%.3fs total=%.3fs",
+        benchmark_instance.name,
+        t1 - t0,
+        t2 - t1,
+        t2 - t0,
+    )
+    return result
 
 
 def apply_per_language_styling_from_benchmark(
-    benchmark_instance: Benchmark, benchmark_results: BenchmarkResults
+    benchmark_instance: Benchmark, pl_df: pl.DataFrame
 ) -> gr.DataFrame:
     """Apply styling to per-language table created by the benchmark instance's _create_per_language_table method.
 
@@ -125,20 +141,33 @@ def apply_per_language_styling_from_benchmark(
 
     Args:
         benchmark_instance: The benchmark instance
-        benchmark_results: BenchmarkResults object containing model results (may be pre-filtered)
+        pl_df: Polars pre-aggregation DataFrame containing model results (may be pre-filtered)
 
     Returns:
         Styled gr.DataFrame ready for display in the leaderboard
     """
-    # Use the instance method to support polymorphism
-    per_language_df = benchmark_instance._create_per_language_table(benchmark_results)
+    t0 = time.time()
+    per_language_pl = benchmark_instance._create_per_language_table(pl_df)
+    t1 = time.time()
 
-    # If it's a no-results DataFrame, return it as-is
-    if "No results" in per_language_df.columns:
-        return gr.DataFrame(per_language_df)
+    if "No results" in per_language_pl.columns:
+        logger.info(
+            "apply_per_language_styling [%s]: create_table=%.3fs (no results)",
+            benchmark_instance.name,
+            t1 - t0,
+        )
+        return gr.DataFrame(per_language_pl)
 
-    # Apply the styling
-    return _apply_per_language_table_styling(per_language_df)
+    result = _apply_per_language_table_styling(per_language_pl.to_pandas())
+    t2 = time.time()
+    logger.debug(
+        "apply_per_language_styling [%s]: create_table=%.3fs styling=%.3fs total=%.3fs",
+        benchmark_instance.name,
+        t1 - t0,
+        t2 - t1,
+        t2 - t0,
+    )
+    return result
 
 
 def _style_number_of_parameters(num_params: float) -> str:
@@ -150,7 +179,7 @@ def _style_number_of_parameters(num_params: float) -> str:
 
 
 def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
-    """Apply styling to a raw summary DataFrame
+    """Apply pandas-Styler formatting to a raw summary DataFrame.
 
     Returns:
         Styled gr.DataFrame ready for display in the leaderboard
@@ -166,21 +195,12 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         "Max Tokens",
     ]
 
-    gradient_columns = [
-        col for col in joint_table.columns if col not in excluded_columns
-    ]
-    light_green_cmap = _create_light_green_cmap()
-
-    # Determine score columns (before formatting)
     score_columns = [
         col
         for col in joint_table.columns
         if col not in excluded_columns + ["Zero-shot"]
     ]
 
-    numeric_data = joint_table.copy()
-
-    # Format data for display
     if "Zero-shot" in joint_table.columns:
         joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(_format_zero_shot)
     joint_table[score_columns] = joint_table[score_columns].map(_format_scores)
@@ -207,29 +227,6 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         rank_column, props="font-weight: bold"
     ).highlight_max(subset=score_columns, props="font-weight: bold")
 
-    # Apply background gradients for each selected column
-    for col in gradient_columns:
-        if col in joint_table.columns:
-            mask = numeric_data[col].notna()
-            if col != "Zero-shot":
-                gmap_values = numeric_data[col] * 100
-                cmap = light_green_cmap
-                joint_table_style = joint_table_style.background_gradient(
-                    cmap=cmap,
-                    subset=pd.IndexSlice[mask, col],
-                    gmap=gmap_values.loc[mask],
-                )
-            else:
-                gmap_values = numeric_data[col]
-                cmap = "RdYlGn"
-                joint_table_style = joint_table_style.background_gradient(
-                    cmap=cmap,
-                    subset=pd.IndexSlice[mask, col],
-                    vmin=50,
-                    vmax=100,
-                    gmap=gmap_values.loc[mask],
-                )
-
     column_types = ["auto" for _ in joint_table_style.data.columns]
     # setting model name column to markdown
     if len(column_types) > 1:
@@ -253,7 +250,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
 
 
 def _apply_per_task_table_styling(per_task: pd.DataFrame) -> gr.DataFrame:
-    """Apply styling to a raw per-task DataFrame
+    """Apply pandas-Styler formatting to a raw per-task DataFrame.
 
     Returns:
         Styled gr.DataFrame ready for display in the leaderboard
@@ -281,28 +278,23 @@ def _apply_per_task_table_styling(per_task: pd.DataFrame) -> gr.DataFrame:
 
 
 def _apply_per_language_table_styling(per_language: pd.DataFrame) -> gr.DataFrame:
-    """Apply styling to a raw per-task DataFrame
+    """Format a raw per-language DataFrame for display.
 
     Returns:
-        Styled gr.DataFrame ready for display in the leaderboard
+        gr.DataFrame ready for display in the leaderboard
     """
     language_score_columns = per_language.select_dtypes("number").columns
-    per_language[language_score_columns] *= 100
-
-    if len(per_language.columns) > 100:  # Avoid gradio error on very wide tables
-        per_language_style = per_language.round(2)
-    else:
-        per_language_style = per_language.style.format(
-            "{:.2f}", subset=language_score_columns, na_rep=""
-        ).highlight_max(subset=language_score_columns, props="font-weight: bold")
+    per_language[language_score_columns] = (
+        per_language[language_score_columns] * 100
+    ).round(2)
 
     # setting task name column width to 250px
-    column_widths = _get_column_widths(per_language_style.data)
+    column_widths = _get_column_widths(per_language)
     if len(column_widths) > 0:
         column_widths[0] = "250px"
 
     return gr.DataFrame(
-        per_language_style,
+        per_language,
         interactive=False,
         pinned_columns=1,
         column_widths=column_widths,

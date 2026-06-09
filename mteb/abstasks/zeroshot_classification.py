@@ -25,6 +25,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, Modalities
     from mteb.types.statistics import (
         AudioStatistics,
@@ -147,6 +148,7 @@ class AbsTaskZeroShotClassification(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ZeroShotClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -165,6 +167,7 @@ class AbsTaskZeroShotClassification(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         probs = evaluator(

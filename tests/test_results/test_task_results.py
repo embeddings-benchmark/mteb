@@ -11,6 +11,7 @@ from mteb._hf_integration.eval_result_model import (
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.results import TaskResult
+from mteb.timing import PhaseTiming
 
 tests_folder = Path(__file__).parent.parent
 
@@ -92,7 +93,8 @@ def test_task_results_to_dict(task_result: TaskResult):
         "dataset_revision": "1.0",
         "task_name": "dummy_task",
         "mteb_version": mteb_ver,
-        "evaluation_time": 100,
+        "evaluation_time": 100.0,
+        "evaluation_phases": None,
         "date": None,
         "kg_co2_emissions": None,
         "scores": {
@@ -186,6 +188,7 @@ def test_merge_across_mteb_versions():
             ]
         },
         evaluation_time=50,
+        kg_co2_emissions=0.05,
     )
 
     new = TaskResult(
@@ -203,6 +206,7 @@ def test_merge_across_mteb_versions():
             ]
         },
         evaluation_time=60,
+        kg_co2_emissions=0.02,
     )
 
     assert existing.is_mergeable(new)
@@ -216,6 +220,9 @@ def test_merge_across_mteb_versions():
 
     # Top-level version should be a range when subsets differ
     assert merged.mteb_version == "2.12.4-2.20.1"
+
+    # Verify that CO2 emissions are summed when both are present
+    assert merged.kg_co2_emissions == pytest.approx(0.07)
 
 
 def test_merge_without_per_subset_version():
@@ -234,6 +241,7 @@ def test_merge_without_per_subset_version():
             ]
         },
         evaluation_time=50,
+        kg_co2_emissions=0.05,
     )
 
     new = TaskResult(
@@ -251,6 +259,7 @@ def test_merge_without_per_subset_version():
             ]
         },
         evaluation_time=60,
+        kg_co2_emissions=None,
     )
 
     merged = existing.merge(new)
@@ -261,6 +270,9 @@ def test_merge_without_per_subset_version():
 
     # Top-level should be a range across all subset versions
     assert merged.mteb_version == "2.12.4-2.20.1"
+
+    # Verify that CO2 emissions are merged when one of them is present
+    assert merged.kg_co2_emissions == pytest.approx(0.05)
 
 
 @pytest.mark.parametrize(
@@ -322,3 +334,152 @@ def test_to_hf_result(mock_mteb_cache: ResultCache):
     user: test_user
 """
     )
+
+
+def test_task_result_timings():
+    """Test that TaskResult.plot_evaluation_phases correctly loads evaluation_phases and supports plotting."""
+
+    phases: list[PhaseTiming] = [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 1.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {"name": "encode", "start": 1.5, "end": 4.5, "split": "test", "subset": "en"},
+    ]
+
+    task_result = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="1.0.0",
+        scores={},
+        evaluation_time=4.5,
+        evaluation_phases=phases,
+    )
+
+    plot_output = task_result.plot_evaluation_phases()
+    assert "load data" in plot_output
+    assert "encode" in plot_output
+    assert "3.0s" in plot_output  # duration of encode phase is 4.5 - 1.5 = 3.0s
+
+
+def test_merge_evaluation_phases() -> None:
+    """Test that TaskResult.merge() correctly concatenates evaluation_phases with proper offset and sums evaluation_time."""
+    phases1: list[PhaseTiming] = [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 1.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {"name": "encode", "start": 1.5, "end": 4.5, "split": "test", "subset": "en"},
+    ]
+    phases2: list[PhaseTiming] = [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 2.0,
+            "split": "test",
+            "subset": "fr",
+        },
+        {"name": "encode", "start": 2.0, "end": 6.0, "split": "test", "subset": "fr"},
+    ]
+
+    task_result1 = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="1.0.0",
+        scores={},
+        evaluation_time=5.0,
+        evaluation_phases=phases1,
+    )
+
+    task_result2 = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="1.0.0",
+        scores={},
+        evaluation_time=8.0,
+        evaluation_phases=phases2,
+    )
+
+    merged = task_result1.merge(task_result2)
+
+    assert merged.evaluation_time == 13.0
+    assert merged.evaluation_phases is not None
+    # The second set of phases should be offset by task_result1.evaluation_time (5.0s)
+    assert merged.evaluation_phases == [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 1.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {
+            "name": "encode",
+            "start": 1.5,
+            "end": 4.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {
+            "name": "load data",
+            "start": 5.0,
+            "end": 7.0,
+            "split": "test",
+            "subset": "fr",
+        },
+        {
+            "name": "encode",
+            "start": 7.0,
+            "end": 11.0,
+            "split": "test",
+            "subset": "fr",
+        },
+    ]
+
+    # Also test merging where evaluation_time is None on the first result
+    task_result_no_time = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="1.0.0",
+        scores={},
+        evaluation_time=None,
+        evaluation_phases=phases1,
+    )
+    merged_fallback = task_result_no_time.merge(task_result2)
+    assert merged_fallback.evaluation_time == 8.0
+    assert merged_fallback.evaluation_phases == [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 1.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {
+            "name": "encode",
+            "start": 1.5,
+            "end": 4.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {
+            "name": "load data",
+            "start": 4.5,
+            "end": 6.5,
+            "split": "test",
+            "subset": "fr",
+        },
+        {
+            "name": "encode",
+            "start": 6.5,
+            "end": 10.5,
+            "split": "test",
+            "subset": "fr",
+        },
+    ]

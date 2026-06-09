@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, ScoresDict
     from mteb.types.statistics import (
         AudioStatistics,
@@ -101,6 +102,7 @@ class AbsTaskClusteringLegacy(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ScoresDict:
         if not isinstance(model, EncoderProtocol):
@@ -135,6 +137,7 @@ class AbsTaskClusteringLegacy(AbsTask):
                     task_metadata=self.metadata,
                     hf_split=hf_split,
                     hf_subset=hf_subset,
+                    timer=timer,
                     **kwargs,
                 )
                 clusters_assignment = evaluator(model, encode_kwargs=encode_kwargs)
@@ -171,6 +174,7 @@ class AbsTaskClusteringLegacy(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         evaluate_clusters = evaluator(

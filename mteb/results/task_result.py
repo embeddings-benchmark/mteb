@@ -28,6 +28,7 @@ from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
+from mteb.timing import PhaseTiming, TimingStack
 from mteb.types import (
     ScoresDict,
     SplitName,
@@ -173,15 +174,17 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     evaluation_time: float | None
     kg_co2_emissions: float | None = None
     date: datetime.datetime | None = None
+    evaluation_phases: list[PhaseTiming] | None = None
 
     @classmethod
     def from_task_results(
         cls,
         task: AbsTask | type[AbsTask],
-        scores: dict[SplitName, Mapping[HFSubset, ScoresDict]],
+        scores: Mapping[SplitName, Mapping[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
         date: datetime.datetime | None = None,
+        evaluation_phases: list[PhaseTiming] | None = None,
     ) -> TaskResult:
         """Create a TaskResult from the task and scores.
 
@@ -193,11 +196,12 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_time: The time taken to evaluate the model.
             kg_co2_emissions: The kg of CO2 emissions produced by the model during evaluation.
             date: The date the model was trained on.
+            evaluation_phases: A list of dicts describing the start, end, and name of each phase.
         """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
         mteb_ver = version("mteb")
-        flat_scores = defaultdict(list)
+        flat_scores: dict[SplitName, list[ScoresDict]] = defaultdict(list)
         for split, hf_subset_scores in scores.items():
             for hf_subset, hf_scores in hf_subset_scores.items():
                 if hf_subset in subset2langscripts:
@@ -216,18 +220,19 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     **hf_scores,
                     "hf_subset": hf_subset,
                     "languages": eval_langs,
-                    "mteb_version": mteb_ver,
+                    "mteb_version": hf_scores.get("mteb_version", mteb_ver),
                 }
                 flat_scores[split].append(_scores)
 
         return TaskResult(
             dataset_revision=task.metadata.revision,
             task_name=task.metadata.name,
-            mteb_version=mteb_ver,
+            mteb_version=cls._compute_top_level_mteb_version(flat_scores) or mteb_ver,
             scores=flat_scores,
             evaluation_time=evaluation_time,
             kg_co2_emissions=kg_co2_emissions,
             date=date,
+            evaluation_phases=evaluation_phases,
         )
 
     @field_validator("scores")
@@ -320,6 +325,13 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def eval_splits(self) -> list[str]:
         """Get the eval splits present in the scores."""
         return list(self.scores.keys())
+
+    def plot_evaluation_phases(self) -> str:
+        """Plots a text-based bar chart of the recorded evaluation phases."""
+        ts = TimingStack()
+        if self.evaluation_phases:
+            ts.phases = self.evaluation_phases
+        return ts.plot()
 
     def to_dict(self) -> dict[str, Any]:
         """Convert the TaskResult to a dictionary.
@@ -531,6 +543,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             scores,
             evaluation_time,
             kg_co2_emissions=None,
+            evaluation_phases=data.get("evaluation_phases"),
         )
         result.dataset_revision = dataset_revision
         result.mteb_version = mteb_version
@@ -844,13 +857,40 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             new_results.kg_co2_emissions if new_results.kg_co2_emissions else 0
         )
         merged_kg_co2_emissions = None
-        if existing_kg_co2_emissions and new_kg_co2_emissions:
+        if (
+            self.kg_co2_emissions is not None
+            or new_results.kg_co2_emissions is not None
+        ):
             merged_kg_co2_emissions = existing_kg_co2_emissions + new_kg_co2_emissions
 
         merged_evaluation_time = None
-        if self.evaluation_time and new_results.evaluation_time:
-            merged_evaluation_time = self.evaluation_time + new_results.evaluation_time
+        if self.evaluation_time is not None or new_results.evaluation_time is not None:
+            merged_evaluation_time = (self.evaluation_time or 0.0) + (
+                new_results.evaluation_time or 0.0
+            )
+
+        merged_evaluation_phases: list[PhaseTiming] | None = None
+        if (
+            self.evaluation_phases is not None
+            or new_results.evaluation_phases is not None
+        ):
+            merged_evaluation_phases = []
+            if self.evaluation_phases is not None:
+                merged_evaluation_phases.extend(self.evaluation_phases)
+            if new_results.evaluation_phases is not None:
+                offset = self.evaluation_time or (
+                    max(p["end"] for p in self.evaluation_phases)
+                    if self.evaluation_phases
+                    else 0.0
+                )
+                for phase in new_results.evaluation_phases:
+                    merged_phase = phase.copy()
+                    merged_phase["start"] += offset
+                    merged_phase["end"] += offset
+                    merged_evaluation_phases.append(merged_phase)
+
         date = self.date
+
         if new_results.date is not None and (date is None or new_results.date > date):
             date = new_results.date
         mteb_ver = self._compute_top_level_mteb_version(merged_scores)
@@ -863,6 +903,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_time=merged_evaluation_time,
             kg_co2_emissions=merged_kg_co2_emissions,
             date=date,
+            evaluation_phases=merged_evaluation_phases,
         )
 
         return merged_results
