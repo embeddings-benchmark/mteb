@@ -4,9 +4,11 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from datasets import Dataset
+from sklearn.metrics import v_measure_score
 from torch.utils.data import DataLoader
 
 from mteb._evaluators import ClusteringEvaluator
+from mteb.timing import TimingStack
 from tests.mock_tasks import MockClusteringTask
 
 if TYPE_CHECKING:
@@ -32,6 +34,7 @@ class TestClusteringEvaluator:
         sentences = ["dog walked home", "cat walked home", "robot walked to the park"]
         labels = [1, 2, 3]
         dataset = Dataset.from_dict({"text": sentences, "labels": labels})
+
         clusterer = ClusteringEvaluator(
             dataset,
             input_column_name="text",
@@ -39,7 +42,8 @@ class TestClusteringEvaluator:
             task_metadata=MockClusteringTask.metadata,  # typing: ignore
             hf_subset="",
             hf_split="",
+            timer=TimingStack(),
         )
         result = clusterer(model, encode_kwargs={"batch_size": 32})
 
-        assert result == [2, 1, 0]
+        assert v_measure_score(labels, result) == 1.0
