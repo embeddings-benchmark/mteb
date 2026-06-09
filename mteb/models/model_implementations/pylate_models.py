@@ -227,7 +227,7 @@ class PylateSearchEncoder:
             raise ValueError("Corpus must be set before reranking.")
 
         result_heaps = {qid: [] for qid in query_idx_to_id.values()}
-        doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
+        doc_id_to_idx = {doc: idx for idx, doc in enumerate(self.task_corpus["id"])}
 
         all_doc_embeddings = self._encode(
             create_dataloader(

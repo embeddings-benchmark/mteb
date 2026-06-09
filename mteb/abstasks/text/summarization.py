@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
@@ -95,7 +95,7 @@ class AbsTaskSummarization(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> SummarizationMetrics:
         if not isinstance(model, EncoderProtocol):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
@@ -128,7 +128,12 @@ class AbsTaskSummarization(AbsTask):
         return evaluator._calculate_metrics(scores)
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> SummarizationDescriptiveStatistics:
         if hf_subset:
             text = self.dataset[hf_subset][split][self.text_column_name]

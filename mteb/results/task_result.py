@@ -6,7 +6,8 @@ import logging
 from collections import defaultdict
 from functools import cached_property
 from importlib.metadata import version
-from typing import TYPE_CHECKING, Any
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 from huggingface_hub import EvalResult
@@ -177,7 +178,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def from_task_results(
         cls,
         task: AbsTask | type[AbsTask],
-        scores: dict[SplitName, Mapping[HFSubset, ScoresDict]],
+        scores: Mapping[SplitName, Mapping[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
         date: datetime.datetime | None = None,
@@ -196,7 +197,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
         mteb_ver = version("mteb")
-        flat_scores = defaultdict(list)
+        flat_scores: dict[SplitName, list[ScoresDict]] = defaultdict(list)
         for split, hf_subset_scores in scores.items():
             for hf_subset, hf_scores in hf_subset_scores.items():
                 if hf_subset in subset2langscripts:
@@ -215,14 +216,14 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     **hf_scores,
                     "hf_subset": hf_subset,
                     "languages": eval_langs,
-                    "mteb_version": mteb_ver,
+                    "mteb_version": hf_scores.get("mteb_version", mteb_ver),
                 }
                 flat_scores[split].append(_scores)
 
         return TaskResult(
             dataset_revision=task.metadata.revision,
             task_name=task.metadata.name,
-            mteb_version=mteb_ver,
+            mteb_version=cls._compute_top_level_mteb_version(flat_scores) or mteb_ver,
             scores=flat_scores,
             evaluation_time=evaluation_time,
             kg_co2_emissions=kg_co2_emissions,
@@ -294,7 +295,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     @property
     def task_type(self) -> str:
         """Get the type of the task."""
-        return self.task.metadata.type
+        return cast("str", self.task.metadata.type)
 
     @property
     def is_public(self) -> bool:
@@ -320,7 +321,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         """Get the eval splits present in the scores."""
         return list(self.scores.keys())
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         """Convert the TaskResult to a dictionary.
 
         Returns:
@@ -329,7 +330,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         return self.model_dump()
 
     @classmethod
-    def from_dict(cls, data: dict) -> Self:
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         """Create a TaskResult from a dictionary.
 
         Args:
@@ -442,7 +443,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                             hf_subset_scores.pop(key)  # type: ignore[attr-defined]
 
     @classmethod
-    def _convert_from_before_v1_11_0(cls, data: dict) -> TaskResult:
+    def _convert_from_before_v1_11_0(cls, data: dict[str, Any]) -> TaskResult:
         from mteb.get_tasks import _TASKS_REGISTRY
 
         # in case the task name is not found in the registry, try to find a lower case version
@@ -541,8 +542,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         languages: list[ISOLanguage | ISOLanguageScript] | None = None,
         scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
-        aggregation: Callable[[list[Score]], Any] = np.mean,
-    ) -> Any:
+        aggregation: Callable[[list[Score]], float] = np.mean,
+    ) -> float:
         """Get a score for the specified splits, languages, scripts and aggregation function.
 
         Args:
@@ -626,7 +627,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         return val_sum / n_val
 
     @classmethod
-    def from_validated(cls, **data) -> TaskResult:
+    def from_validated(cls, **data: Any) -> TaskResult:
         """Create a TaskResult from validated data.
 
         Returns:
@@ -843,12 +844,17 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             new_results.kg_co2_emissions if new_results.kg_co2_emissions else 0
         )
         merged_kg_co2_emissions = None
-        if existing_kg_co2_emissions and new_kg_co2_emissions:
+        if (
+            self.kg_co2_emissions is not None
+            or new_results.kg_co2_emissions is not None
+        ):
             merged_kg_co2_emissions = existing_kg_co2_emissions + new_kg_co2_emissions
 
         merged_evaluation_time = None
-        if self.evaluation_time and new_results.evaluation_time:
-            merged_evaluation_time = self.evaluation_time + new_results.evaluation_time
+        if self.evaluation_time is not None or new_results.evaluation_time is not None:
+            merged_evaluation_time = (self.evaluation_time or 0.0) + (
+                new_results.evaluation_time or 0.0
+            )
         date = self.date
         if new_results.date is not None and (date is None or new_results.date > date):
             date = new_results.date
@@ -1020,3 +1026,47 @@ class TaskError(BaseModel):
 
     task_name: str
     exception: str
+
+
+def _read_run_settings_from_file(path: Path) -> list[dict[str, Any]]:
+    """Read run settings entries from a JSONL file."""
+    if not path.exists():
+        return []
+
+    run_settings: list[dict[str, Any]] = []
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            stripped_line = line.strip()
+            if not stripped_line:
+                continue
+            try:
+                parsed = json.loads(stripped_line)
+            except Exception as e:
+                logger.warning(
+                    f"Could not parse run_settings line '{stripped_line}': {e}"
+                )
+                continue
+            if isinstance(parsed, dict):
+                run_settings.append(parsed)
+    return run_settings
+
+
+def _write_and_merge_keyed_json(
+    path: Path,
+    entries: list[dict[str, Any]],
+    *,
+    key_fields: tuple[str, str, str] = ("task", "split", "subset"),
+) -> None:
+    """Write entries to `.jsonl`, if it already exist it will merge it, replacing any existing entries with the same key."""
+    existing_entries = _read_run_settings_from_file(path)
+    new_keys = {tuple(entry.get(field) for field in key_fields) for entry in entries}
+    filtered_existing = [
+        entry
+        for entry in existing_entries
+        if tuple(entry.get(field) for field in key_fields) not in new_keys
+    ]
+    all_entries = filtered_existing + entries
+
+    with path.open("w", encoding="utf-8") as f:
+        for entry in all_entries:
+            f.write(json.dumps(entry, default=str) + "\n")

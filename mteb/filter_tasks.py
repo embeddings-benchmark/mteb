@@ -133,7 +133,7 @@ def filter_tasks(  # noqa: PLR0913
     if domains:
         domains_to_keep = set(domains)
 
-    def _convert_to_set(domain: list[TaskDomain] | None) -> set:
+    def _convert_to_set(domain: list[TaskDomain] | None) -> set[TaskDomain]:
         return set(domain) if domain is not None else set()
 
     task_types_to_keep = None

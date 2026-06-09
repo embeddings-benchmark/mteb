@@ -9,7 +9,8 @@ class HMDB51Clustering(AbsTaskClustering):
         name="HMDB51Clustering",
         description=(
             "Clustering of video clips into 51 human action categories from "
-            "HMDB51, a large video database for human motion recognition."
+            "HMDB51, a large video database for human motion recognition. "
+            "Used official split 1 across 51 action classes (~3,570 train / ~1,530 test)."
         ),
         reference="https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/",
         dataset={

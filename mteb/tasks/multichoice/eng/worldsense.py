@@ -10,7 +10,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class WorldSense1MinVideoCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WorldSense1MinVideoCentricQA",
-        description="WorldSense_1min is a video question answering benchmark covering diverse real-world domains including sports, culture, music, and daily life. Each example pairs a ~1-minute video with a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate.",
+        description="WorldSense_1min is a video question answering benchmark covering diverse real-world domains including sports, culture, music, and daily life. Each example pairs a ~1-minute video with a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate. Filtered the test split to short (<1min) clips (~1,047 examples).",
         reference="https://arxiv.org/abs/2502.04326",
         dataset={
             "path": "mteb/WorldSense_1min",
@@ -83,7 +83,7 @@ class WorldSense1MinVideoCentricQA(AbsTaskRetrieval):
 class WorldSense1MinVideoAudioCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WorldSense1MinVideoAudioCentricQA",
-        description="WorldSense_1min is a video question answering benchmark covering diverse real-world domains including sports, culture, music, and daily life. Each example pairs a ~1-minute video with audio and a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate.",
+        description="WorldSense_1min is a video question answering benchmark covering diverse real-world domains including sports, culture, music, and daily life. Each example pairs a ~1-minute video with audio and a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate. Filtered the test split to short (<1min) clips (~1,047 examples).",
         reference="https://arxiv.org/abs/2502.04326",
         dataset={
             "path": "mteb/WorldSense_1min",

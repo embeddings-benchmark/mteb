@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 import torch
 
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from mteb.types import Array
 
 
-def _use_torch_compile():
+def _use_torch_compile() -> bool:
     gpu_ok = False
     if torch.cuda.is_available():
         device_cap = torch.cuda.get_device_capability()
@@ -21,7 +21,7 @@ def _use_torch_compile():
     return gpu_ok
 
 
-def _convert_to_tensor(a: Array, dtype=torch.float32) -> torch.Tensor:
+def _convert_to_tensor(a: Array, dtype: torch.dtype = torch.float32) -> torch.Tensor:
     if not isinstance(a, torch.Tensor):
         a = torch.tensor(a, dtype=dtype)
     return a
@@ -124,7 +124,7 @@ def cos_sim(a: Array, b: Array) -> torch.Tensor:
     b = _convert_to_tensor(b)
 
     # The actual function to compile
-    def _cos_sim_core(a_tensor, b_tensor):
+    def _cos_sim_core(a_tensor: torch.Tensor, b_tensor: torch.Tensor) -> torch.Tensor:
         if len(a_tensor.shape) == 1:
             a_tensor = a_tensor.reshape(1, *a_tensor.shape)
         if len(b_tensor.shape) == 1:
@@ -192,7 +192,7 @@ def max_sim(a: Array, b: Array) -> torch.Tensor:
         b,
     )
 
-    return scores.max(axis=-1).values.sum(axis=-1)  # type: ignore[call-overload]
+    return cast("torch.Tensor", scores.max(axis=-1).values.sum(axis=-1))  # type: ignore[call-overload]
 
 
 # https://github.com/lightonai/pylate/blob/2d094a724866d6e15701781528368438081c0157/pylate/scores/scores.py#L67C1-L122C38
@@ -245,7 +245,7 @@ def dot_score(a: Array, b: Array) -> torch.Tensor:
     b = _convert_to_tensor(b)
 
     # The actual function to compile
-    def _dot_score_core(a_tensor, b_tensor):
+    def _dot_score_core(a_tensor: torch.Tensor, b_tensor: torch.Tensor) -> torch.Tensor:
         if len(a_tensor.shape) == 1:
             a_tensor = a_tensor.unsqueeze(0)
         if len(b_tensor.shape) == 1:

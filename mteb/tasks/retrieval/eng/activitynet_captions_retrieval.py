@@ -58,6 +58,7 @@ class ActivityNetCaptionsV2TRetrieval(AbsTaskRetrieval):
             "Retrieve the English caption that describes a given video clip from "
             "ActivityNet Captions. Each example pairs one video with one reference "
             "description (1:1 retrieval)."
+            " Used the upstream `val2` split as the test split (~4,884 examples)."
         ),
         reference="https://huggingface.co/datasets/mteb/ActivityNet_Captions_val2",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -90,6 +91,7 @@ class ActivityNetCaptionsT2VRetrieval(AbsTaskRetrieval):
             "Retrieve the video clip that matches a given English caption from "
             "ActivityNet Captions. Each example pairs one caption with one reference "
             "video (1:1 retrieval)."
+            " Used the upstream `val2` split as the test split (~4,884 examples)."
         ),
         reference="https://huggingface.co/datasets/mteb/ActivityNet_Captions_val2",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},

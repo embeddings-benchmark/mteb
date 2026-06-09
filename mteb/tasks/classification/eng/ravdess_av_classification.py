@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class RAVDESSAVClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="RAVDESSAVClassification",
-        description="Emotion classification task with video and audio data for 8 emotions: neutral, calm, happy, sad, angry, fearful, surprise, and disgust expressions.",
+        description="Emotion classification task with video and audio data for 8 emotions: neutral, calm, happy, sad, angry, fearful, surprise, and disgust expressions. Used the metadata train split remapped to audio-visual filenames (~1,440 examples).",
         reference="https://doi.org/10.1371/journal.pone.0196391",
         dataset={
             "path": "mteb/RAVDESS_AV",
@@ -52,7 +52,7 @@ class RAVDESSAVClassification(AbsTaskClassification):
 class RAVDESSVClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="RAVDESSVClassification",
-        description="Emotion classification task with video data only for 8 emotions: neutral, calm, happy, sad, angry, fearful, surprise, and disgust expressions.",
+        description="Emotion classification task with video data only for 8 emotions: neutral, calm, happy, sad, angry, fearful, surprise, and disgust expressions. Used the metadata train split remapped to audio-visual filenames (~1,440 examples).",
         reference="https://doi.org/10.1371/journal.pone.0196391",
         dataset={
             "path": "mteb/RAVDESS_AV",

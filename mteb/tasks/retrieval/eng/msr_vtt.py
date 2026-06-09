@@ -54,7 +54,7 @@ def _load_msr_vtt(
 class MSRVTTV2T(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSRVTTV2T",
-        description="A large video description dataset for bridging video and language",
+        description="A large video description dataset for bridging video and language. Used the msrvtt_ret_test1k retrieval split (879 examples).",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],
@@ -82,7 +82,7 @@ class MSRVTTV2T(AbsTaskRetrieval):
 class MSRVTTT2V(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSRVTTT2V",
-        description="A large video description dataset for bridging video and language",
+        description="A large video description dataset for bridging video and language. Used the msrvtt_ret_test1k retrieval split (879 examples).",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],
@@ -110,7 +110,7 @@ class MSRVTTT2V(AbsTaskRetrieval):
 class MSRVTTVA2T(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSRVTTVA2T",
-        description="A large video description dataset for bridging video and language",
+        description="A large video description dataset for bridging video and language. Used the msrvtt_ret_test1k retrieval split (879 examples).",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],
@@ -140,7 +140,7 @@ class MSRVTTVA2T(AbsTaskRetrieval):
 class MSRVTTT2VA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSRVTTT2VA",
-        description="A large video description dataset for bridging video and language",
+        description="A large video description dataset for bridging video and language. Used the msrvtt_ret_test1k retrieval split (879 examples).",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],
@@ -173,6 +173,7 @@ class MSRVTTV2A(AbsTaskRetrieval):
         description=(
             "Retrieve the audio track that matches a given video clip from MSR-VTT. "
             "Tests cross-modal alignment between video frames and audio."
+            " Used the msrvtt_ret_test1k retrieval split (879 examples)."
         ),
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
@@ -204,6 +205,7 @@ class MSRVTTA2V(AbsTaskRetrieval):
         description=(
             "Retrieve the video clip that matches a given audio track from MSR-VTT. "
             "Tests cross-modal alignment between audio and video frames."
+            " Used the msrvtt_ret_test1k retrieval split (879 examples)."
         ),
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
@@ -232,7 +234,7 @@ class MSRVTTA2V(AbsTaskRetrieval):
 class MSRVTTVT2A(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSRVTTVT2A",
-        description="A large video description dataset for bridging video and language",
+        description="A large video description dataset for bridging video and language. Used the msrvtt_ret_test1k retrieval split (879 examples).",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],
@@ -264,7 +266,7 @@ class MSRVTTVT2A(AbsTaskRetrieval):
 class MSRVTTAT2V(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSRVTTAT2V",
-        description="A large video description dataset for bridging video and language",
+        description="A large video description dataset for bridging video and language. Used the msrvtt_ret_test1k retrieval split (879 examples).",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],

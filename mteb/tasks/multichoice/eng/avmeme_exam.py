@@ -10,7 +10,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class AVMemeExamVideoCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AVMemeExamVideoCentricQA",
-        description="AVMeme-Exam is an audio-visual meme understanding benchmark testing models on humor, emotion, and cultural knowledge in meme videos. Each example pairs a video with a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate.",
+        description="AVMeme-Exam is an audio-visual meme understanding benchmark testing models on humor, emotion, and cultural knowledge in meme videos. Each example pairs a video with a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate. Used the `full`/`test` split (~900 examples).",
         reference="https://arxiv.org/abs/2601.17645",
         dataset={
             "path": "mteb/AVMeme-Exam",
@@ -83,7 +83,7 @@ class AVMemeExamVideoCentricQA(AbsTaskRetrieval):
 class AVMemeExamVideoAudioCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AVMemeExamVideoAudioCentricQA",
-        description="AVMeme-Exam is an audio-visual meme understanding benchmark testing models on humor, emotion, and cultural knowledge in meme videos. Each example pairs a video with audio and a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate.",
+        description="AVMeme-Exam is an audio-visual meme understanding benchmark testing models on humor, emotion, and cultural knowledge in meme videos. Each example pairs a video with audio and a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate. Used the `full`/`test` split (~900 examples).",
         reference="https://arxiv.org/abs/2601.17645",
         dataset={
             "path": "mteb/AVMeme-Exam",

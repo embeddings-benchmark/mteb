@@ -13,6 +13,7 @@ class MSVDV2TRetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the English caption that describes a given short video clip. "
             "Each example pairs one video with one reference sentence (1:1 retrieval)."
+            " Used the test split with the first caption per clip (~660 examples)."
         ),
         reference="https://huggingface.co/datasets/mteb/MSVD",
         dataset={

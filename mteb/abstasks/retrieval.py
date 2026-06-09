@@ -78,7 +78,9 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for Retrieval
 
     Attributes:
-        num_samples: Number of queries and documents
+        num_samples: Total number of queries and documents
+        num_queries: Number of queries
+        num_documents: Number of documents
         number_of_characters: Total number of characters in queries and documents
 
         documents_text_statistics: Statistics for documents
@@ -94,6 +96,8 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     """
 
     num_samples: int
+    num_queries: int
+    num_documents: int
     number_of_characters: int
 
     documents_text_statistics: TextStatistics | None
@@ -161,13 +165,17 @@ class AbsTaskRetrieval(AbsTask):
     ) -> None:
         """Convert dataset from v1 (from `self.queries`, `self.document`) format to v2 format (`self.dotaset`)."""
         # check if dataset is `v1` version
-        if not hasattr(self, "queries"):
+        if (
+            not hasattr(self, "queries")
+            or not hasattr(self, "corpus")
+            or not hasattr(self, "relevant_docs")
+        ):
             return
 
         self.dataset = {}
 
         def _process_split(
-            ds_queries: dict | Dataset, ds_corpus: dict | Dataset
+            ds_queries: dict[str, Any] | Dataset, ds_corpus: dict[str, Any] | Dataset
         ) -> tuple[Dataset, Dataset]:
             if isinstance(ds_queries, dict):
                 queries = Dataset.from_list(
@@ -196,21 +204,21 @@ class AbsTaskRetrieval(AbsTask):
             return queries, corpus
 
         if self.metadata.is_multilingual:
-            for subset in self.queries:  # type: ignore[attr-defined]
+            for subset in self.queries:
                 if subset not in self.dataset:
                     self.dataset[subset] = {}
-                for split in self.queries[subset]:  # type: ignore[attr-defined]
+                for split in self.queries[subset]:
                     if split not in self.dataset[subset]:
                         self.dataset[subset][split] = {}  # type: ignore[typeddict-item]
-                    queries = self.queries[subset][split]  # type: ignore[attr-defined]
-                    corpus = self.corpus[subset][split]  # type: ignore[attr-defined]
+                    queries = self.queries[subset][split]
+                    corpus = self.corpus[subset][split]
 
                     (
                         self.dataset[subset][split]["queries"],
                         self.dataset[subset][split]["corpus"],
                     ) = _process_split(queries, corpus)
 
-                    self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[  # type: ignore[attr-defined]
+                    self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
                         subset
                     ][split]
                     if hasattr(self, "instructions"):
@@ -232,17 +240,17 @@ class AbsTaskRetrieval(AbsTask):
             subset = "default"
             if subset not in self.dataset:
                 self.dataset[subset] = {}
-            for split in self.queries:  # type: ignore[attr-defined]
+            for split in self.queries:
                 if split not in self.dataset[subset]:
                     self.dataset[subset][split] = {}  # type: ignore[typeddict-item]
-                queries = self.queries[split]  # type: ignore[attr-defined]
-                corpus = self.corpus[split]  # type: ignore[attr-defined]
+                queries = self.queries[split]
+                corpus = self.corpus[split]
                 (
                     self.dataset[subset][split]["queries"],
                     self.dataset[subset][split]["corpus"],
                 ) = _process_split(queries, corpus)
 
-                self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[  # type: ignore[attr-defined]
+                self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
                     split
                 ].copy()
                 if hasattr(self, "instructions"):
@@ -261,15 +269,15 @@ class AbsTaskRetrieval(AbsTask):
                 else:
                     self.dataset[subset][split]["top_ranked"] = None
 
-        del self.queries  # type: ignore[attr-defined]
-        del self.corpus  # type: ignore[attr-defined]
-        del self.relevant_docs  # type: ignore[attr-defined]
+        del self.queries
+        del self.corpus
+        del self.relevant_docs
         if hasattr(self, "instructions"):
             del self.instructions
         if hasattr(self, "top_ranked"):
             del self.top_ranked
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load the dataset for the retrieval task."""
         if self.data_loaded:
             return
@@ -280,7 +288,7 @@ class AbsTaskRetrieval(AbsTask):
         trust_remote_code = self.metadata.dataset.get("trust_remote_code", False)
         revision = self.metadata.dataset["revision"]
 
-        def _process_data(split: str, hf_subset: str = "default"):
+        def _process_data(split: str, hf_subset: str = "default") -> None:
             """Helper function to load and process data for a given split and language"""
             logger.debug(
                 f"Loading {split} split for {hf_subset} subset of {self.metadata.name}"
@@ -359,7 +367,7 @@ class AbsTaskRetrieval(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
 
@@ -487,6 +495,7 @@ class AbsTaskRetrieval(AbsTask):
     def _calculate_descriptive_statistics_from_split(  # noqa: PLR0914
         self,
         split: str,
+        *,
         hf_subset: str | None = None,
         compute_overall: bool = False,
         num_proc: int | None = None,
@@ -553,7 +562,7 @@ class AbsTaskRetrieval(AbsTask):
             )
 
         # Build corpus col_inputs — text needs special mapping from the corpus dict format.
-        corpus_col_inputs: dict[Modalities, list] = {}
+        corpus_col_inputs: dict[Modalities, list[Any]] = {}
         if "text" in corpus_modalities:
             corpus_col_inputs["text"] = corpus.map(_corpus_to_dict)["text"]
         if "image" in corpus_modalities:
@@ -564,7 +573,7 @@ class AbsTaskRetrieval(AbsTask):
             corpus_col_inputs["video"] = corpus["video"]
 
         # Build queries col_inputs — text may need instruction/conversation transformations.
-        queries_col_inputs: dict[Modalities, list] = {}
+        queries_col_inputs: dict[Modalities, list[Any]] = {}
         if "text" in queries_modalities:
             queries_ = queries
             if "instruction" in queries_[0]:
@@ -579,8 +588,12 @@ class AbsTaskRetrieval(AbsTask):
         if "video" in queries_modalities:
             queries_col_inputs["video"] = queries["video"]
 
-        corpus_stats = calculate_single_input_modality_statistics(corpus_col_inputs)
-        queries_stats = calculate_single_input_modality_statistics(queries_col_inputs)
+        corpus_stats = calculate_single_input_modality_statistics(
+            corpus_col_inputs, max_workers=num_proc
+        )
+        queries_stats = calculate_single_input_modality_statistics(
+            queries_col_inputs, max_workers=num_proc
+        )
 
         number_of_characters = sum(
             stat["total_text_length"]
@@ -600,6 +613,8 @@ class AbsTaskRetrieval(AbsTask):
 
         return RetrievalDescriptiveStatistics(
             num_samples=num_documents + num_queries,
+            num_queries=num_queries,
+            num_documents=num_documents,
             number_of_characters=number_of_characters,
             documents_text_statistics=corpus_stats["text_statistics"],
             documents_image_statistics=corpus_stats["image_statistics"],

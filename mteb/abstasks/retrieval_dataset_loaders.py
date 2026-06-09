@@ -98,10 +98,16 @@ class RetrievalDatasetLoader:
         indices = [i for i, id_ in enumerate(queries["id"]) if id_ in ids_to_keep]
         queries = queries.select(indices)
 
-        if any(c.endswith("top_ranked") for c in self.dataset_configs):
+        top_ranked_config = (
+            f"{self.config}-top_ranked" if self.config is not None else "top_ranked"
+        )
+        if top_ranked_config in self.dataset_configs:
             top_ranked = self._load_top_ranked(num_proc)
 
-        if any(c.endswith("instruction") for c in self.dataset_configs):
+        instruction_config = (
+            f"{self.config}-instruction" if self.config is not None else "instruction"
+        )
+        if instruction_config in self.dataset_configs:
             instructions = self._load_instructions(num_proc)
             queries = _combine_queries_with_instructions_datasets(
                 queries, instructions, num_proc
@@ -123,7 +129,7 @@ class RetrievalDatasetLoader:
         if self.split in splits:
             return self.split
         if len(splits) == 1:
-            return splits[0]
+            return str(splits[0])
         raise ValueError(
             f"Split {self.split} not found in {splits}. Please specify a valid split."
         )

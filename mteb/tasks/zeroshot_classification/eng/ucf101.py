@@ -52,7 +52,8 @@ class UCF101VideoAudioZeroShotClassification(AbsTaskZeroShotClassification):
         name="UCF101VideoAudioZeroShotClassification",
         description=(
             "Classifying video clips with audio into 51 human "
-            "action categories from the UCF101 dataset."
+            "action categories from the UCF101 dataset. "
+            "Used official split 1 restricted to a 51-class audio-bearing subset (~4,890 train / ~1,944 test)."
         ),
         reference="https://arxiv.org/abs/1212.0402",
         dataset={
@@ -107,7 +108,8 @@ class UCF101VideoZeroShotClassification(AbsTaskZeroShotClassification):
         name="UCF101VideoZeroShotClassification",
         description=(
             "Classifying video clips with audio into 51 human "
-            "action categories from the UCF101 dataset."
+            "action categories from the UCF101 dataset. "
+            "Used official split 1 restricted to a 51-class audio-bearing subset (~4,890 train / ~1,944 test)."
         ),
         reference="https://arxiv.org/abs/1212.0402",
         dataset={

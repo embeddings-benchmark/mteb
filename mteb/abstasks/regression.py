@@ -19,10 +19,8 @@ from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
 
-from .classification import (
-    AbsTaskClassification,
-    _count_samples_in_train,
-)
+from ._statistics_calculation import _count_samples_in_train
+from .classification import AbsTaskClassification
 
 if TYPE_CHECKING:
     from datasets import Dataset
@@ -118,16 +116,18 @@ class AbsTaskRegression(AbsTaskClassification):
         self, dataset: Dataset, experiment_num: int, idxs: list[int] | None = None
     ) -> tuple[Dataset, list[int], list[int]]:
         if self.n_samples >= len(dataset):
-            train_split_sampled = dataset
-        else:
-            train_split_sampled = self.stratified_subsampling(
-                datasets.DatasetDict({"train": dataset}),
-                seed=self.seed + experiment_num,
-                splits=["train"],
-                label=self.label_column_name,
-                n_samples=self.n_samples,
-            )["train"]
-        return train_split_sampled, [], []
+            return dataset, [], list(range(len(dataset)))
+        # Tag rows with their original position so we can recover indices after subsampling.
+        indexed = dataset.add_column("__idx__", list(range(len(dataset))))
+        subsampled = self.stratified_subsampling(
+            datasets.DatasetDict({"train": indexed}),
+            seed=self.seed + experiment_num,
+            splits=["train"],
+            label=self.label_column_name,
+            n_samples=self.n_samples,
+        )["train"]
+        selected_idx = subsampled["__idx__"]
+        return subsampled.remove_columns(["__idx__"]), [], selected_idx
 
     def _calculate_scores(  # type: ignore[override]  # noqa: PLR6301
         self,
@@ -201,7 +201,12 @@ class AbsTaskRegression(AbsTaskClassification):
         return dataset_dict
 
     def _calculate_descriptive_statistics_from_split(  # type: ignore[override]
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> RegressionDescriptiveStatistics:
         col_inputs, values, test_hashes, train_hashes = (
             self._load_statistics_col_inputs_and_hashes(
@@ -209,7 +214,7 @@ class AbsTaskRegression(AbsTaskClassification):
             )
         )
         modality_stats = calculate_single_input_modality_statistics(
-            col_inputs, test_hashes
+            col_inputs, test_hashes, max_workers=num_proc
         )
         return RegressionDescriptiveStatistics(
             num_samples=len(values),

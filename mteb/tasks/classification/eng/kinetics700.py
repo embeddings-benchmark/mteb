@@ -16,7 +16,7 @@ CITATION = r"""
 class Kinetics700VAClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Kinetics700VA",
-        description="Kinetics-700-2020 is a large-scale action recognition dataset containing 700 human action classes from YouTube videos. Each clip is approximately 10 seconds long. This variant uses both video and audio modalities.",
+        description="Kinetics-700-2020 is a large-scale action recognition dataset containing 700 human action classes from YouTube videos. Each clip is approximately 10 seconds long. This variant uses both video and audio modalities. Sampled the official test split, capped at ~16 per class across 700 classes (~11,190 examples).",
         reference="https://arxiv.org/abs/2010.10864",
         dataset={
             "path": "mteb/kinetics-700-2020",
@@ -52,7 +52,7 @@ class Kinetics700VAClassification(AbsTaskClassification):
 class Kinetics700VClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Kinetics700V",
-        description="Kinetics-700-2020 is a large-scale action recognition dataset containing 700 human action classes from YouTube videos. Each clip is approximately 10 seconds long. This variant uses video only.",
+        description="Kinetics-700-2020 is a large-scale action recognition dataset containing 700 human action classes from YouTube videos. Each clip is approximately 10 seconds long. This variant uses video only. Sampled the official test split, capped at ~16 per class across 700 classes (~11,190 examples).",
         reference="https://arxiv.org/abs/2010.10864",
         dataset={
             "path": "mteb/kinetics-700-2020",

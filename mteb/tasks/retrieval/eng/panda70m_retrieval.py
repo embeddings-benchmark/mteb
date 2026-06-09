@@ -58,6 +58,7 @@ class Panda70MV2TRetrieval(AbsTaskRetrieval):
             "Retrieve the English caption that describes a given video clip (video "
             "only) from Panda-70M, a large-scale video captioning dataset sourced "
             "from YouTube."
+            " Sampled the test split (~3,395 examples)."
         ),
         reference="https://arxiv.org/abs/2402.19479",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -90,6 +91,7 @@ class Panda70MT2VRetrieval(AbsTaskRetrieval):
             "Retrieve the video clip (video only) that matches a given English "
             "caption from Panda-70M, a large-scale video captioning dataset sourced "
             "from YouTube."
+            " Sampled the test split (~3,395 examples)."
         ),
         reference="https://arxiv.org/abs/2402.19479",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -121,6 +123,7 @@ class Panda70MVA2TRetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the English caption that describes a given video clip from "
             "Panda-70M, a large-scale video captioning dataset sourced from YouTube."
+            " Sampled the test split (~3,395 examples)."
         ),
         reference="https://arxiv.org/abs/2402.19479",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -154,6 +157,7 @@ class Panda70MT2VARetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the video clip that matches a given English caption from "
             "Panda-70M, a large-scale video captioning dataset sourced from YouTube."
+            " Sampled the test split (~3,395 examples)."
         ),
         reference="https://arxiv.org/abs/2402.19479",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},

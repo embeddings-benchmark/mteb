@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
 import pandas as pd
+import polars as pl
+from datasets import Dataset, load_dataset
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 
@@ -21,6 +23,7 @@ from .model_result import ModelResult, _aggregate_and_pivot
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator
 
+    import datasets
     from typing_extensions import Self
 
     from mteb.abstasks.abstask import AbsTask
@@ -39,6 +42,8 @@ if TYPE_CHECKING:
 
 
 logger = logging.getLogger(__name__)
+
+_BENCHMARK_COLUMN = "__benchmark__"
 
 
 @functools.lru_cache
@@ -289,8 +294,8 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         getter: Callable[[ScoresDict], Score] | None = None,
         aggregation: Callable[[list[Score]], Any] | None = None,
         format: Literal["wide", "long"] = "wide",
-    ) -> list[dict]:
-        entries = []
+    ) -> list[dict[str, Any]]:
+        entries: list[dict[str, Any]] = []
         if format == "wide":
             for model_res in self:
                 try:
@@ -402,13 +407,13 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
         # Collect parallel arrays rather than a list of dicts:
         # pd.DataFrame(dict_of_lists) is ~10x faster than pd.DataFrame(list_of_dicts).
-        col_model_name: list = []
-        col_model_rev: list = []
-        col_task_name: list = []
-        col_split: list = []
-        col_language: list = []
-        col_subset: list = []
-        col_score: list = []
+        col_model_name: list[Any] = []
+        col_model_rev: list[Any] = []
+        col_task_name: list[Any] = []
+        col_split: list[Any] = []
+        col_language: list[Any] = []
+        col_subset: list[Any] = []
+        col_score: list[Any] = []
 
         for model_result in bench_results:
             mn = model_result.model_name
@@ -445,7 +450,61 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         for col in ("model_name", "task_name", "split", "subset"):
             if col in df.columns:
                 df[col] = df[col].astype("category")
+
+        # Add is_public flag from task registry (one lookup per unique task name).
+        from mteb.get_tasks import _TASKS_REGISTRY
+
+        unique_tasks = (
+            df["task_name"].cat.categories
+            if hasattr(df["task_name"], "cat")
+            else df["task_name"].unique()
+        )
+        is_public_map = {
+            t: _TASKS_REGISTRY[t].metadata.is_public if t in _TASKS_REGISTRY else True
+            for t in unique_tasks
+        }
+        df["is_public"] = df["task_name"].map(is_public_map)
+
         return df
+
+    def _to_dataset(
+        self,
+        *,
+        include_model_revision: bool = True,
+        push_to_hub: bool = False,
+        repo_id: str | None = None,
+        **push_kwargs: Any,
+    ) -> datasets.Dataset:
+        """Export benchmark results to a HuggingFace Dataset (parquet-backed).
+
+        The dataset contains one row per model/task/split/subset combination and
+        includes an ``is_public`` column derived from task metadata.
+
+        Args:
+            include_model_revision: Whether to include the model_revision column.
+            push_to_hub: Push the dataset to the HuggingFace Hub.
+            repo_id: Hub repository ID. Required when push_to_hub=True.
+            **push_kwargs: Forwarded to ``datasets.Dataset.push_to_hub()``
+                (e.g. token, private, commit_message).
+
+        Returns:
+            A datasets.Dataset with columns: model_name, [model_revision],
+            task_name, split, subset, language, score, is_public.
+        """
+        if push_to_hub and repo_id is None:
+            raise ValueError("`repo_id` must be provided when `push_to_hub=True`.")
+
+        df = self._build_pre_agg_df(include_model_revision=include_model_revision)
+        if df is None or df.empty:
+            return Dataset.from_dict({})
+
+        pl_df = pl.from_pandas(df)
+        dataset = Dataset.from_polars(pl_df)
+
+        if push_to_hub:
+            dataset.push_to_hub(repo_id, **push_kwargs)
+
+        return dataset
 
     def get_aggregated_scores(
         self,
@@ -509,7 +568,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         if isinstance(self.benchmark, Sequence):
             raise ValueError("Getting scores for multiple benchmarks is unsupported")
 
-        return self.benchmark._create_summary_table(self)
+        return self.benchmark._create_summary_table(
+            self._to_results_df(self.benchmark.tasks)
+        ).to_pandas()
 
     def __iter__(self) -> Iterator[ModelResult]:  # type: ignore[override]
         return iter(self.model_results)
@@ -517,18 +578,19 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
     def __getitem__(self, index: int) -> ModelResult:
         return self.model_results[index]
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         """Convert BenchmarkResults to a dictionary."""
         return self.model_dump()
 
     @classmethod
-    def from_dict(cls, data: dict) -> Self:
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         """Create BenchmarkResults from a dictionary."""
         return cls.model_validate(data)
 
     def to_disk(self, path: Path | str) -> None:
         """Save the BenchmarkResults to a JSON file."""
         path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("w") as out_file:
             out_file.write(self.model_dump_json(indent=2))
 
@@ -561,6 +623,85 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         with path.open() as in_file:
             data = json.loads(in_file.read())
         return cls.from_dict(data)
+
+    def _to_results_df(self, tasks: Iterable[AbsTask] | None = None) -> pl.DataFrame:
+        """Return results as a long polars frame (one row per score).
+
+        Revisions are joined and, when ``tasks`` is given, scores are validated and
+        filtered against each task's metadata (via :meth:`select_tasks`) so the frame
+        matches what the leaderboard renders for that task set.
+
+        Args:
+            tasks: Tasks to validate/restrict scores to (e.g. one benchmark's tasks).
+                If None, all results are exported as-is (no per-task validation).
+        """
+        results = self if tasks is None else self.select_tasks(tasks)
+        return (  # type: ignore[no-any-return]
+            results.join_revisions()
+            ._to_dataset(include_model_revision=True)
+            .to_polars()
+        )
+
+    @staticmethod
+    def _combine_leaderboard_frames(
+        per_benchmark: dict[str, pl.DataFrame],
+    ) -> pl.DataFrame:
+        """Concatenate per-benchmark frames into one, tagged with ``__benchmark__``.
+
+        Per-benchmark frames are validated differently (split/subset config and NaN
+        padding vary by benchmark), so each is tagged rather than merged. Empty frames
+        contribute no rows; absent benchmarks are reconstructed as empty on load.
+        """
+        import polars as pl
+
+        frames = [
+            df.with_columns(pl.lit(name).alias(_BENCHMARK_COLUMN))
+            for name, df in per_benchmark.items()
+            if not df.is_empty()
+        ]
+        with pl.StringCache():
+            return (
+                pl.concat(frames, how="vertical_relaxed")
+                if frames
+                else pl.DataFrame(schema={_BENCHMARK_COLUMN: pl.Utf8})
+            )
+
+    @staticmethod
+    def _split_leaderboard_frame(combined: pl.DataFrame) -> dict[str, pl.DataFrame]:
+        """Split a ``__benchmark__``-tagged frame back into the per-benchmark dict."""
+        parts: dict[str, pl.DataFrame] = {}
+        if _BENCHMARK_COLUMN in combined.columns and combined.height > 0:
+            for key, df in combined.partition_by(
+                _BENCHMARK_COLUMN, as_dict=True
+            ).items():
+                name = key[0] if isinstance(key, tuple) else key
+                parts[name] = df.drop(_BENCHMARK_COLUMN)
+        return parts
+
+    @staticmethod
+    def save_leaderboard_cache(
+        per_benchmark: dict[str, pl.DataFrame], path: Path | str
+    ) -> None:
+        """Save the per-benchmark leaderboard frames to a single parquet file."""
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        BenchmarkResults._combine_leaderboard_frames(per_benchmark).write_parquet(path)
+
+    @staticmethod
+    def load_leaderboard_cache(
+        source: str | Path, *, from_hub: bool = False
+    ) -> dict[str, pl.DataFrame]:
+        """Load the per-benchmark leaderboard frames saved/pushed by this class.
+
+        Args:
+            source: Local parquet path, or a HF dataset repo id when ``from_hub=True``.
+            from_hub: Load from the HF Hub via ``datasets`` instead of a local path.
+        """
+        if from_hub:
+            combined = load_dataset(str(source), split="train").to_polars()
+        else:
+            combined = pl.read_parquet(source)
+        return BenchmarkResults._split_leaderboard_frame(combined)
 
     @property
     def languages(self) -> list[str]:

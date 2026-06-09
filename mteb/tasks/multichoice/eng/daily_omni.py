@@ -10,7 +10,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class DailyOmniVideoCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="DailyOmniVideoCentricQA",
-        description="Daily-Omni is a video question answering benchmark covering everyday scenarios with audio-visual content. Each example pairs a video with a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate.",
+        description="Daily-Omni is a video question answering benchmark covering everyday scenarios with audio-visual content. Each example pairs a video with a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate. Used the upstream evaluation split keyed by (video, question) (~1,200 examples).",
         reference="https://arxiv.org/abs/2505.17862",
         dataset={
             "path": "mteb/Daily-Omni",
@@ -83,7 +83,7 @@ class DailyOmniVideoCentricQA(AbsTaskRetrieval):
 class DailyOmniVideoAudioCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="DailyOmniVideoAudioCentricQA",
-        description="Daily-Omni is a video question answering benchmark covering everyday scenarios with audio-visual content. Each example pairs a video with audio and a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate.",
+        description="Daily-Omni is a video question answering benchmark covering everyday scenarios with audio-visual content. Each example pairs a video with audio and a question and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate. Used the upstream evaluation split keyed by (video, question) (~1,200 examples).",
         reference="https://arxiv.org/abs/2505.17862",
         dataset={
             "path": "mteb/Daily-Omni",

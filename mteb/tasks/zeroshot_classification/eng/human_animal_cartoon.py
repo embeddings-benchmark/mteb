@@ -30,7 +30,8 @@ class HumanAnimalCartoonZeroShotClassification(AbsTaskZeroShotClassification):
             "Human-Animal-Cartoon (HAC) is a multi-domain action recognition "
             "dataset containing clips of humans, animals, and cartoon figures. "
             "The zero-shot task matches each video clip to a text prompt for "
-            "one of seven action labels."
+            "one of seven action labels. "
+            "Concatenated the three HAC test-only domain CSVs, capped at 32 per class across 7 action classes (~644 examples)."
         ),
         reference="https://arxiv.org/abs/2310.19795",
         dataset={
@@ -71,7 +72,8 @@ class HumanAnimalCartoonVAZeroShotClassification(AbsTaskZeroShotClassification):
             "Human-Animal-Cartoon (HAC) is a multi-domain action recognition "
             "dataset containing clips of humans, animals, and cartoon figures. "
             "The zero-shot task matches each (video, audio) pair to a text "
-            "prompt for one of seven action labels."
+            "prompt for one of seven action labels. "
+            "Concatenated the three HAC test-only domain CSVs, capped at 32 per class across 7 action classes (~644 examples)."
         ),
         reference="https://arxiv.org/abs/2310.19795",
         dataset={

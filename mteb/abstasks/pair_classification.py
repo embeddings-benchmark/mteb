@@ -21,7 +21,7 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Mapping
     from pathlib import Path
 
     from numpy.typing import NDArray
@@ -93,8 +93,8 @@ class AbsTaskPairClassification(AbsTask):
     """
 
     abstask_prompt = "Retrieve text that are semantically similar to the given text."
-    input1_column_name: str | Sequence[tuple[str, Modalities]] = "sentence1"
-    input2_column_name: str | Sequence[tuple[str, Modalities]] = "sentence2"
+    input1_column_name: str | Mapping[str, Modalities] = "sentence1"
+    input2_column_name: str | Mapping[str, Modalities] = "sentence2"
     label_column_name: str = "labels"
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
@@ -109,7 +109,7 @@ class AbsTaskPairClassification(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> dict[str, float]:
         if not isinstance(model, EncoderProtocol):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
@@ -185,7 +185,12 @@ class AbsTaskPairClassification(AbsTask):
         return output_scores
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> PairClassificationDescriptiveStatistics:
         if hf_subset:
             dataset = self.dataset[hf_subset][split]
@@ -209,34 +214,37 @@ class AbsTaskPairClassification(AbsTask):
         if isinstance(dataset, list):
             dataset = dataset[0]
 
-        def _get_col_data(col: str) -> list:
-            raw = dataset[col]
+        def _get_col_data(col: str) -> list[Any]:
+            raw: list[Any] = dataset[col]
             return raw[0] if len(raw) == 1 else raw
 
         labels = _get_col_data(self.label_column_name)
         n = len(labels)
 
-        if isinstance(self.input1_column_name, str):
-            modality1 = self.metadata.get_modalities(self.input1_prompt_type)[0]
-            col_modalities1: list[tuple[str, str]] = [
-                (self.input1_column_name, modality1)
-            ]
+        if (
+            isinstance(self.input1_column_name, str)
+            and len(self.metadata.modalities) == 1
+        ):
+            modality1 = self.metadata.modalities[0]
+            col_modalities1: Mapping[str, str] = {self.input1_column_name: modality1}
         else:
-            col_modalities1 = list(self.input1_column_name)  # type: ignore[arg-type]
+            col_modalities1 = self.input1_column_name  # type: ignore[assignment]
 
-        if isinstance(self.input2_column_name, str):
-            modality2 = self.metadata.get_modalities(self.input2_prompt_type)[0]
-            col_modalities2: list[tuple[str, str]] = [
-                (self.input2_column_name, modality2)
-            ]
+        if (
+            isinstance(self.input2_column_name, str)
+            and len(self.metadata.modalities) == 1
+        ):
+            modality2 = self.metadata.modalities[0]
+            col_modalities2: Mapping[str, str] = {self.input2_column_name: modality2}
         else:
-            col_modalities2 = list(self.input2_column_name)  # type: ignore[arg-type]
+            col_modalities2 = self.input2_column_name  # type: ignore[assignment]
 
         pair_stats = calculate_pair_modality_statistics(
             col_modalities1,
             col_modalities2,
             _get_col_data,
             n,
+            max_workers=num_proc,
         )
 
         number_of_characters = (
@@ -286,11 +294,11 @@ class AbsTaskPairClassification(AbsTask):
         if isinstance(self.input1_column_name, str):
             cols1 = [self.input1_column_name]
         else:
-            cols1 = [col for col, _ in self.input1_column_name]
+            cols1 = list(self.input1_column_name)
         if isinstance(self.input2_column_name, str):
             cols2 = [self.input2_column_name]
         else:
-            cols2 = [col for col, _ in self.input2_column_name]
+            cols2 = list(self.input2_column_name)
         self._upload_dataset_to_hub(
             repo_name,
             [*cols1, *cols2, self.label_column_name],
@@ -363,7 +371,7 @@ class AbsTaskPairClassification(AbsTask):
         return max_acc, best_threshold
 
     def _find_best_f1_and_threshold(  # noqa: PLR6301
-        self, scores, labels: NDArray[np.int64], high_score_more_similar: bool
+        self, scores: Any, labels: NDArray[np.int64], high_score_more_similar: bool
     ) -> tuple[float, float, float, float]:
         scores = np.asarray(scores)
 

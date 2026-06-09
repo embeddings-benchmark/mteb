@@ -10,9 +10,10 @@ from mteb.cache import ResultCache
 class TestIntegrationScenarios:
     """Test integration scenarios that use ResultCache method."""
 
-    @patch("mteb.cache.requests.get")
-    def test_full_caching_workflow_success(  # noqa: PLR6301
-        self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
+    @staticmethod
+    @patch("mteb.cache.result_cache.requests.get")
+    def test_full_caching_workflow_success(
+        mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
     ):
         """Test the complete workflow from download to file write via ResultCache."""
         cache = ResultCache(cache_path=tmp_path)
@@ -37,8 +38,9 @@ class TestIntegrationScenarios:
         mock_get.assert_called_once()
         mock_response.raise_for_status.assert_called_once()
 
-    @patch("mteb.cache.requests.get")
-    def test_download_failure_handling(self, mock_get, tmp_path):  # noqa: PLR6301
+    @staticmethod
+    @patch("mteb.cache.result_cache.requests.get")
+    def test_download_failure_handling(mock_get, tmp_path):
         """Test that download failures are properly handled in the workflow."""
         cache = ResultCache(cache_path=tmp_path)
         mock_get.side_effect = Exception("Network error")

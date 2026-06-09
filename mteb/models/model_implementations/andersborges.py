@@ -1,10 +1,10 @@
 import numpy as np
 
-from mteb.models.model_implementations.model2vec_models import Model2VecModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 model2vecdk = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="andersborges/model2vecdk",
     model_type=["dense"],
     languages=["dan-Latn"],
@@ -36,12 +36,12 @@ model2vecdk = ModelMeta(
 
 
 model2vecdk_stem = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="andersborges/model2vecdk-stem",
     model_type=["dense"],
     languages=["dan-Latn"],
     open_weights=True,
-    revision="cb576c78dcc1b729e4612645f61db59929d69e61",
+    revision="aa57f4b2450ca868106d900119fe1975e4d67ce3",
     release_date="2025-11-21",
     n_parameters=48578560,
     n_embedding_parameters=48578560,

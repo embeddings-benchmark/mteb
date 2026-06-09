@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class AVEDatasetClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AVEDatasetClassification",
-        description="Audio-Visual Event (AVE) classification dataset containing 28 event categories such as church bell, truck, dog barking, and other everyday sounds sourced from YouTube videos. The goal is to predict the sound event category from synchronized video and audio.",
+        description="Audio-Visual Event (AVE) classification dataset containing 28 event categories such as church bell, truck, dog barking, and other everyday sounds sourced from YouTube videos. The goal is to predict the sound event category from synchronized video and audio. Used the official train and test splits across 28 audio-visual event classes (~3,312 train / ~402 test).",
         reference="https://openaccess.thecvf.com/content_ECCV_2018/papers/Yapeng_Tian_Audio-Visual_Event_Localization_ECCV_2018_paper.pdf",
         dataset={
             "path": "mteb/AVE-Dataset",
@@ -48,7 +48,7 @@ class AVEDatasetClassification(AbsTaskClassification):
 class AVEDatasetVideoClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AVEDatasetVideoClassification",
-        description="Audio-Visual Event (AVE) classification dataset containing 28 event categories such as church bell, truck, dog barking, and other everyday sounds sourced from YouTube videos. The goal is to predict the sound event category from video only.",
+        description="Audio-Visual Event (AVE) classification dataset containing 28 event categories such as church bell, truck, dog barking, and other everyday sounds sourced from YouTube videos. The goal is to predict the sound event category from video only. Used the official train and test splits across 28 audio-visual event classes (~3,312 train / ~402 test).",
         reference="https://openaccess.thecvf.com/content_ECCV_2018/papers/Yapeng_Tian_Audio-Visual_Event_Localization_ECCV_2018_paper.pdf",
         dataset={
             "path": "mteb/AVE-Dataset",

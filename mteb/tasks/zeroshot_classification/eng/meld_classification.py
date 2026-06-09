@@ -17,7 +17,7 @@ CITATION = r"""
 class MELDAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="MELDAudioVideoZeroShot",
-        description="MELD (Multimodal EmotionLines Dataset) is a multimodal emotion recognition dataset containing over 13,000 utterances from the Friends TV series, labeled with 7 emotion categories: Anger, Disgust, Sadness, Joy, Neutral, Surprise, and Fear",
+        description="MELD (Multimodal EmotionLines Dataset) is a multimodal emotion recognition dataset containing over 13,000 utterances from the Friends TV series, labeled with 7 emotion categories: Anger, Disgust, Sadness, Joy, Neutral, Surprise, and Fear Sampled the test split (~2,610 examples).",
         reference="https://aclanthology.org/P19-1050.pdf",
         dataset={
             "path": "mteb/MELD",
@@ -58,7 +58,7 @@ class MELDAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
 class MELDVideoZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="MELDVideoZeroShot",
-        description="MELD (Multimodal EmotionLines Dataset) is a multimodal emotion recognition dataset containing over 13,000 utterances from the Friends TV series, labeled with 7 emotion categories: Anger, Disgust, Sadness, Joy, Neutral, Surprise, and Fear",
+        description="MELD (Multimodal EmotionLines Dataset) is a multimodal emotion recognition dataset containing over 13,000 utterances from the Friends TV series, labeled with 7 emotion categories: Anger, Disgust, Sadness, Joy, Neutral, Surprise, and Fear Sampled the test split (~2,610 examples).",
         reference="https://aclanthology.org/P19-1050.pdf",
         dataset={
             "path": "mteb/MELD",

@@ -19,7 +19,7 @@ CITATION = r"""
 class AVEDatasetZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="AVEDatasetZeroShot",
-        description="Audio-Visual Event (AVE) classification dataset containing 28 event categories such as church bell, truck, dog barking, and other everyday sounds sourced from YouTube videos. The goal is to predict the sound event category from synchronized video and audio. This variant uses both video and audio modalities.",
+        description="Audio-Visual Event (AVE) classification dataset containing 28 event categories such as church bell, truck, dog barking, and other everyday sounds sourced from YouTube videos. The goal is to predict the sound event category from synchronized video and audio. This variant uses both video and audio modalities. Used the official train and test splits across 28 audio-visual event classes (~3,312 train / ~402 test).",
         reference="https://openaccess.thecvf.com/content_ECCV_2018/papers/Yapeng_Tian_Audio-Visual_Event_Localization_ECCV_2018_paper.pdf",
         dataset={
             "path": "mteb/AVE-Dataset",
@@ -55,7 +55,7 @@ class AVEDatasetZeroShotClassification(AbsTaskZeroShotClassification):
 class AVEDatasetVideoZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="AVEDatasetVideoZeroShot",
-        description="Audio-Visual Event (AVE) classification dataset containing 28 event categories such as church bell, truck, dog barking, and other everyday sounds sourced from YouTube videos. The goal is to predict the sound event category from video only.",
+        description="Audio-Visual Event (AVE) classification dataset containing 28 event categories such as church bell, truck, dog barking, and other everyday sounds sourced from YouTube videos. The goal is to predict the sound event category from video only. Used the official train and test splits across 28 audio-visual event classes (~3,312 train / ~402 test).",
         reference="https://openaccess.thecvf.com/content_ECCV_2018/papers/Yapeng_Tian_Audio-Visual_Event_Localization_ECCV_2018_paper.pdf",
         dataset={
             "path": "mteb/AVE-Dataset",

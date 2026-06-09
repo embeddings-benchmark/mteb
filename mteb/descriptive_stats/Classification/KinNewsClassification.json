@@ -1,0 +1,372 @@
+{
+    "test": {
+        "num_samples": 5177,
+        "number_texts_intersect_with_train": 1294,
+        "text_statistics": {
+            "total_text_length": 9500557,
+            "min_text_length": 137,
+            "average_text_length": 1835.1471894919837,
+            "max_text_length": 32815,
+            "unique_texts": 3367
+        },
+        "image_statistics": null,
+        "audio_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 14,
+            "labels": {
+                "1": {
+                    "count": 926
+                },
+                "10": {
+                    "count": 162
+                },
+                "3": {
+                    "count": 408
+                },
+                "4": {
+                    "count": 680
+                },
+                "0": {
+                    "count": 1311
+                },
+                "6": {
+                    "count": 101
+                },
+                "2": {
+                    "count": 971
+                },
+                "8": {
+                    "count": 108
+                },
+                "13": {
+                    "count": 200
+                },
+                "9": {
+                    "count": 43
+                },
+                "12": {
+                    "count": 78
+                },
+                "11": {
+                    "count": 45
+                },
+                "5": {
+                    "count": 67
+                },
+                "7": {
+                    "count": 77
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "kinnews_cleaned": {
+                "num_samples": 4254,
+                "number_texts_intersect_with_train": 678,
+                "text_statistics": {
+                    "total_text_length": 7979747,
+                    "min_text_length": 137,
+                    "average_text_length": 1875.822049835449,
+                    "max_text_length": 32815,
+                    "unique_texts": 2686
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "1": {
+                            "count": 635
+                        },
+                        "10": {
+                            "count": 154
+                        },
+                        "3": {
+                            "count": 366
+                        },
+                        "4": {
+                            "count": 651
+                        },
+                        "0": {
+                            "count": 979
+                        },
+                        "6": {
+                            "count": 87
+                        },
+                        "2": {
+                            "count": 899
+                        },
+                        "8": {
+                            "count": 95
+                        },
+                        "13": {
+                            "count": 133
+                        },
+                        "9": {
+                            "count": 43
+                        },
+                        "12": {
+                            "count": 34
+                        },
+                        "11": {
+                            "count": 36
+                        },
+                        "5": {
+                            "count": 65
+                        },
+                        "7": {
+                            "count": 77
+                        }
+                    }
+                }
+            },
+            "kirnews_cleaned": {
+                "num_samples": 923,
+                "number_texts_intersect_with_train": 616,
+                "text_statistics": {
+                    "total_text_length": 1520810,
+                    "min_text_length": 153,
+                    "average_text_length": 1647.6814734561212,
+                    "max_text_length": 6449,
+                    "unique_texts": 681
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 12,
+                    "labels": {
+                        "1": {
+                            "count": 291
+                        },
+                        "0": {
+                            "count": 332
+                        },
+                        "13": {
+                            "count": 67
+                        },
+                        "12": {
+                            "count": 44
+                        },
+                        "2": {
+                            "count": 72
+                        },
+                        "8": {
+                            "count": 13
+                        },
+                        "4": {
+                            "count": 29
+                        },
+                        "10": {
+                            "count": 8
+                        },
+                        "3": {
+                            "count": 42
+                        },
+                        "11": {
+                            "count": 9
+                        },
+                        "6": {
+                            "count": 14
+                        },
+                        "5": {
+                            "count": 2
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 20703,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 38259142,
+            "min_text_length": 33,
+            "average_text_length": 1847.999903395643,
+            "max_text_length": 67385,
+            "unique_texts": 10824
+        },
+        "image_statistics": null,
+        "audio_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 14,
+            "labels": {
+                "2": {
+                    "count": 3835
+                },
+                "4": {
+                    "count": 2685
+                },
+                "1": {
+                    "count": 3578
+                },
+                "6": {
+                    "count": 408
+                },
+                "0": {
+                    "count": 5239
+                },
+                "10": {
+                    "count": 668
+                },
+                "11": {
+                    "count": 226
+                },
+                "3": {
+                    "count": 1770
+                },
+                "9": {
+                    "count": 162
+                },
+                "8": {
+                    "count": 380
+                },
+                "7": {
+                    "count": 301
+                },
+                "13": {
+                    "count": 928
+                },
+                "12": {
+                    "count": 314
+                },
+                "5": {
+                    "count": 209
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "kinnews_cleaned": {
+                "num_samples": 17014,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 31840528,
+                    "min_text_length": 33,
+                    "average_text_length": 1871.431056776772,
+                    "max_text_length": 67385,
+                    "unique_texts": 9075
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "2": {
+                            "count": 3519
+                        },
+                        "4": {
+                            "count": 2578
+                        },
+                        "1": {
+                            "count": 2469
+                        },
+                        "6": {
+                            "count": 352
+                        },
+                        "0": {
+                            "count": 3929
+                        },
+                        "10": {
+                            "count": 628
+                        },
+                        "11": {
+                            "count": 177
+                        },
+                        "3": {
+                            "count": 1548
+                        },
+                        "9": {
+                            "count": 162
+                        },
+                        "8": {
+                            "count": 341
+                        },
+                        "7": {
+                            "count": 301
+                        },
+                        "13": {
+                            "count": 667
+                        },
+                        "12": {
+                            "count": 152
+                        },
+                        "5": {
+                            "count": 191
+                        }
+                    }
+                }
+            },
+            "kirnews_cleaned": {
+                "num_samples": 3689,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 6418614,
+                    "min_text_length": 117,
+                    "average_text_length": 1739.9333152615884,
+                    "max_text_length": 10925,
+                    "unique_texts": 1749
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 12,
+                    "labels": {
+                        "0": {
+                            "count": 1310
+                        },
+                        "1": {
+                            "count": 1109
+                        },
+                        "3": {
+                            "count": 222
+                        },
+                        "4": {
+                            "count": 107
+                        },
+                        "2": {
+                            "count": 316
+                        },
+                        "10": {
+                            "count": 40
+                        },
+                        "6": {
+                            "count": 56
+                        },
+                        "8": {
+                            "count": 39
+                        },
+                        "5": {
+                            "count": 18
+                        },
+                        "13": {
+                            "count": 261
+                        },
+                        "12": {
+                            "count": 162
+                        },
+                        "11": {
+                            "count": 49
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -95,17 +95,6 @@ class MCTCTWrapper(AbsEncoder):
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
-        import transformers
-        from packaging import version
-
-        transformers_version = version.parse(transformers.__version__)
-        if transformers_version >= version.parse("5.0.0"):
-            raise RuntimeError(
-                f"transformers version {transformers.__version__} is not supported. "
-                "MCTCT requires transformers < 5.0.0. "
-                'You can run `pip install "mteb[mctct]"` to install the correct version.'
-            )
-
         from transformers import MCTCTFeatureExtractor, MCTCTModel
 
         self.model_name = model_name
@@ -241,4 +230,5 @@ mctct_large = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2111.00161},
 }""",
+    extra_requirements_groups=["transformers-v4"],
 )

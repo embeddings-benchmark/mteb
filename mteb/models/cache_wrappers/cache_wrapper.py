@@ -164,7 +164,7 @@ class CachedEmbeddingWrapper:
             self.cache_dict[task_name] = cache
         return self.cache_dict[task_name]
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.close()
 
     def close(self) -> None:

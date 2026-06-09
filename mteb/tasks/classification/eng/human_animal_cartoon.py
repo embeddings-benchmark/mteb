@@ -20,7 +20,8 @@ class HumanAnimalCartoonVAClassification(AbsTaskClassification):
             "Human-Animal-Cartoon (HAC) is a multi-domain action recognition "
             "dataset containing clips of humans, animals, and cartoon figures. "
             "This MTEB subset uses video and audio clips labelled with one of "
-            "seven actions. This variant uses both video and audio modalities."
+            "seven actions. This variant uses both video and audio modalities. "
+            "Concatenated the three HAC test-only domain CSVs, capped at 32 per class across 7 action classes (~644 examples)."
         ),
         reference="https://arxiv.org/abs/2310.19795",
         dataset={
@@ -57,7 +58,8 @@ class HumanAnimalCartoonVClassification(AbsTaskClassification):
             "Human-Animal-Cartoon (HAC) is a multi-domain action recognition "
             "dataset containing clips of humans, animals, and cartoon figures. "
             "This MTEB subset uses video and audio clips labelled with one of "
-            "seven actions. This variant uses only the video modality."
+            "seven actions. This variant uses only the video modality. "
+            "Concatenated the three HAC test-only domain CSVs, capped at 32 per class across 7 action classes (~644 examples)."
         ),
         reference="https://arxiv.org/abs/2310.19795",
         dataset={

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from .evaluator import Evaluator
 from .retrieval_metrics import (
@@ -39,7 +39,7 @@ class RetrievalEvaluator(Evaluator):
         top_k: int,
         top_ranked: TopRankedDocumentsType | None = None,
         qid: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
         self.corpus = corpus

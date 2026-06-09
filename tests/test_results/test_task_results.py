@@ -48,7 +48,11 @@ class DummyTask(AbsTask):
         pass
 
     def _calculate_descriptive_statistics_from_split(  # noqa: PLR6301
-        self, split: str, hf_subset: str | None = None, compute_overall=False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
     ) -> dict[str, float]:
         return {}
 
@@ -182,6 +186,7 @@ def test_merge_across_mteb_versions():
             ]
         },
         evaluation_time=50,
+        kg_co2_emissions=0.05,
     )
 
     new = TaskResult(
@@ -199,6 +204,7 @@ def test_merge_across_mteb_versions():
             ]
         },
         evaluation_time=60,
+        kg_co2_emissions=0.02,
     )
 
     assert existing.is_mergeable(new)
@@ -212,6 +218,9 @@ def test_merge_across_mteb_versions():
 
     # Top-level version should be a range when subsets differ
     assert merged.mteb_version == "2.12.4-2.20.1"
+
+    # Verify that CO2 emissions are summed when both are present
+    assert merged.kg_co2_emissions == pytest.approx(0.07)
 
 
 def test_merge_without_per_subset_version():
@@ -230,6 +239,7 @@ def test_merge_without_per_subset_version():
             ]
         },
         evaluation_time=50,
+        kg_co2_emissions=0.05,
     )
 
     new = TaskResult(
@@ -247,6 +257,7 @@ def test_merge_without_per_subset_version():
             ]
         },
         evaluation_time=60,
+        kg_co2_emissions=None,
     )
 
     merged = existing.merge(new)
@@ -257,6 +268,9 @@ def test_merge_without_per_subset_version():
 
     # Top-level should be a range across all subset versions
     assert merged.mteb_version == "2.12.4-2.20.1"
+
+    # Verify that CO2 emissions are merged when one of them is present
+    assert merged.kg_co2_emissions == pytest.approx(0.05)
 
 
 @pytest.mark.parametrize(

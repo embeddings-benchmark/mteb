@@ -14,6 +14,7 @@ class TUNABenchV2TRetrieval(AbsTaskRetrieval):
             "Retrieve the fine-grained English caption that describes a given video "
             "from the TUNA-Bench dataset of dense dynamic videos with detailed "
             "temporal descriptions."
+            " Used the `TUNA-1K` config test split (~1,000 examples)."
         ),
         reference="https://arxiv.org/abs/2505.20124",
         dataset={

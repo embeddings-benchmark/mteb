@@ -10,7 +10,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class EgoSchemaVideoCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="EgoSchemaVideoCentricQA",
-        description="EgoSchema is a long-form video language understanding benchmark built from egocentric video. Each example pairs a ~3-minute first-person video with a question and 5 candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate from its 5 choices.",
+        description="EgoSchema is a long-form video language understanding benchmark built from egocentric video. Each example pairs a ~3-minute first-person video with a question and 5 candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate from its 5 choices. Used the `Subset` config test split (500 examples).",
         reference="https://arxiv.org/abs/2308.09126",
         dataset={
             "path": "mteb/EgoSchema_subset",

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import torch
 from datasets import Dataset
@@ -26,7 +26,7 @@ class BitextMiningEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         pair_columns: list[tuple[str, str]],
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
         self.pairs = pair_columns

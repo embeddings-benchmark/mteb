@@ -18,7 +18,7 @@ from ._statistics_calculation import (
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Mapping
     from pathlib import Path
 
     from datasets import Dataset
@@ -129,8 +129,8 @@ class AbsTaskSTS(AbsTask):
     column_names: (
         tuple[str, str]
         | tuple[
-            Sequence[tuple[str, Modalities]],
-            Sequence[tuple[str, Modalities]],
+            Mapping[str, Modalities],
+            Mapping[str, Modalities],
         ]
     ) = (
         "sentence1",
@@ -224,7 +224,12 @@ class AbsTaskSTS(AbsTask):
         )
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> AnySTSDescriptiveStatistics:
         self.dataset = cast("dict[str, dict[str, Dataset]]", self.dataset)
 
@@ -242,8 +247,8 @@ class AbsTaskSTS(AbsTask):
             score = self.dataset[hf_subset][split]["score"]
             n = len(score)
 
-            def _load_col(col: str) -> list:
-                return self.dataset[hf_subset][split][col]  # type: ignore[index]
+            def _load_col(col: str) -> list[Any]:
+                return list(self.dataset[hf_subset][split][col])
 
         elif compute_overall:
             score = []
@@ -251,8 +256,8 @@ class AbsTaskSTS(AbsTask):
                 score.extend(self.dataset[_subset][split]["score"])
             n = len(score)
 
-            def _load_col(col: str) -> list:  # type: ignore[misc]
-                result = []
+            def _load_col(col: str) -> list[Any]:
+                result: list[Any] = []
                 for subset in self.metadata.eval_langs:
                     result.extend(self.dataset[subset][split][col])
                 return result
@@ -261,23 +266,23 @@ class AbsTaskSTS(AbsTask):
             score = self.dataset[split]["score"]
             n = len(score)
 
-            def _load_col(col: str) -> list:  # type: ignore[misc]
-                return self.dataset[split][col]
+            def _load_col(col: str) -> list[Any]:
+                return list(self.dataset[split][col])
 
-        if isinstance(self.column_names[0], str):
-            modality1 = self.metadata.get_modalities(self.input1_prompt_type)[0]
-            modality2 = self.metadata.get_modalities(self.input2_prompt_type)[0]
-            col_modalities1: list[tuple[str, str]] = [(self.column_names[0], modality1)]  # type: ignore[index]
-            col_modalities2: list[tuple[str, str]] = [(self.column_names[1], modality2)]  # type: ignore[index]
+        if isinstance(self.column_names[0], str) and len(self.metadata.modalities) == 1:
+            modality = self.metadata.modalities[0]
+            col_modalities1 = {str(self.column_names[0]): modality}
+            col_modalities2 = {str(self.column_names[1]): modality}
         else:
-            col_modalities1 = list(self.column_names[0])  # type: ignore[arg-type]
-            col_modalities2 = list(self.column_names[1])  # type: ignore[arg-type]
+            col_modalities1 = self.column_names[0]  # type: ignore[assignment]
+            col_modalities2 = self.column_names[1]  # type: ignore[assignment]
 
         pair_stats = calculate_pair_modality_statistics(
             col_modalities1,
             col_modalities2,
             _load_col,
             n,
+            max_workers=num_proc,
         )
         labels_statistics = calculate_score_statistics(score)
 
@@ -310,9 +315,7 @@ class AbsTaskSTS(AbsTask):
         if isinstance(self.column_names[0], str):
             cols = [self.column_names[0], self.column_names[1]]
         else:
-            cols = [col for col, _ in self.column_names[0]] + [
-                col for col, _ in self.column_names[1]
-            ]
+            cols = list(self.column_names[0]) + list(self.column_names[1])
         self._upload_dataset_to_hub(
             repo_name, [*cols, "score"], num_proc=num_proc, **kwargs
         )

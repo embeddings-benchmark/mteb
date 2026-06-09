@@ -14,6 +14,7 @@ class TUNABenchT2VRetrieval(AbsTaskRetrieval):
             "Retrieve the video clip that matches a given fine-grained English caption "
             "from the TUNA-Bench dataset of dense dynamic videos with detailed "
             "temporal descriptions."
+            " Used the `TUNA-1K` config test split (~1,000 examples)."
         ),
         reference="https://arxiv.org/abs/2505.20124",
         dataset={

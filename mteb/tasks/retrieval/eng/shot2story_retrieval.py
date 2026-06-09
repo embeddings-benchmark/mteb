@@ -57,6 +57,7 @@ class Shot2Story20KV2TRetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the detailed summary caption that describes a given video "
             "clip (video only) from the Shot2Story20K benchmark of multi-shot videos."
+            " Used the test split (~4,023 examples)."
         ),
         reference="https://arxiv.org/abs/2312.10300",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -88,6 +89,7 @@ class Shot2Story20KT2VRetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the video clip (video only) that matches a given detailed "
             "summary caption from the Shot2Story20K benchmark of multi-shot videos."
+            " Used the test split (~4,023 examples)."
         ),
         reference="https://arxiv.org/abs/2312.10300",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -119,6 +121,7 @@ class Shot2Story20KVA2TRetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the detailed summary caption that describes a given video "
             "clip from the Shot2Story20K benchmark of multi-shot videos."
+            " Used the test split (~4,023 examples)."
         ),
         reference="https://arxiv.org/abs/2312.10300",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -152,6 +155,7 @@ class Shot2Story20KT2VARetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the video clip that matches a given detailed summary caption "
             "from the Shot2Story20K benchmark of multi-shot videos."
+            " Used the test split (~4,023 examples)."
         ),
         reference="https://arxiv.org/abs/2312.10300",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -186,6 +190,7 @@ class Shot2Story20KV2ARetrieval(AbsTaskRetrieval):
             "Retrieve the audio track that matches a given video clip from the "
             "Shot2Story dataset. Tests cross-modal alignment between video frames "
             "and audio."
+            " Used the test split (~4,023 examples)."
         ),
         reference="https://arxiv.org/abs/2312.10300",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -218,6 +223,7 @@ class Shot2Story20KA2VRetrieval(AbsTaskRetrieval):
             "Retrieve the video clip that matches a given audio track from the "
             "Shot2Story dataset. Tests cross-modal alignment between audio and "
             "video frames."
+            " Used the test split (~4,023 examples)."
         ),
         reference="https://arxiv.org/abs/2312.10300",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -249,6 +255,7 @@ class Shot2Story20KVT2ARetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the audio track that matches a given video clip and its summary "
             "caption from the Shot2Story20K benchmark of multi-shot videos."
+            " Used the test split (~4,023 examples)."
         ),
         reference="https://arxiv.org/abs/2312.10300",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -284,6 +291,7 @@ class Shot2Story20KAT2VRetrieval(AbsTaskRetrieval):
         description=(
             "Retrieve the video clip that matches a given audio track and its summary "
             "caption from the Shot2Story20K benchmark of multi-shot videos."
+            " Used the test split (~4,023 examples)."
         ),
         reference="https://arxiv.org/abs/2312.10300",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},

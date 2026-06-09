@@ -19,7 +19,7 @@ CITATION = r"""
 class VGGSoundVideoZeroshotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="VGGSoundVideoZeroshot",
-        description="VGGSound is a large-scale audio-visual dataset of short YouTube clips spanning 308 sound classes (e.g. 'playing piano', 'dog barking'). Audio is the primary signal. This variant uses both video and audio modalities. This zero-shot classification task predicts the sound class of each video",
+        description="VGGSound is a large-scale audio-visual dataset of short YouTube clips spanning 308 sound classes (e.g. 'playing piano', 'dog barking'). Audio is the primary signal. This variant uses both video and audio modalities. This zero-shot classification task predicts the sound class of each video Filtered the test split, capped at 32 per class across 309 classes (~9,888 examples).",
         reference="https://arxiv.org/abs/2004.14368",
         dataset={
             "path": "mteb/VGGSound",
@@ -55,7 +55,7 @@ class VGGSoundVideoZeroshotClassification(AbsTaskZeroShotClassification):
 class VGGSoundVideoAudioZeroshotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="VGGSoundVideoAudioZeroshot",
-        description="VGGSound is a large-scale audio-visual dataset of short YouTube clips spanning 308 sound classes (e.g. 'playing piano', 'dog barking'). Audio is the primary signal. This variant uses both video and audio modalities. This zero-shot classification task predicts the sound class of each video + audio",
+        description="VGGSound is a large-scale audio-visual dataset of short YouTube clips spanning 308 sound classes (e.g. 'playing piano', 'dog barking'). Audio is the primary signal. This variant uses both video and audio modalities. This zero-shot classification task predicts the sound class of each video + audio Filtered the test split, capped at 32 per class across 309 classes (~9,888 examples).",
         reference="https://arxiv.org/abs/2004.14368",
         dataset={
             "path": "mteb/VGGSound",
