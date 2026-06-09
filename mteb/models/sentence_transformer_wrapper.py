@@ -311,15 +311,15 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
 
         _inputs = [text for batch in inputs for text in batch["text"]]
         logger.debug(f"Encoding {len(_inputs)} sentences.")
-        embeddings = cast(
-            "Array",
-            encode_function(
-                _inputs,
-                prompt=prompt,
-                **kwargs,
-            ),
+        embeddings = encode_function(
+            _inputs,
+            prompt=prompt,
+            **kwargs,
         )
-        return embeddings
+        if isinstance(embeddings, torch.Tensor):
+            # ensure everything is on CPU and is float
+            embeddings = embeddings.cpu().detach().float()
+        return cast("Array", embeddings)
 
 
 class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrapper):
