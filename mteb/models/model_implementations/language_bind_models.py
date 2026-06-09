@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 
 _LANGUAGEBIND_HF_REPO = "myang333/languagebind-source"
-_LANGUAGEBIND_HF_REVISION = "d2d0f6f14591989fa8d48a65e00c5bf2b96ec745"
+_LANGUAGEBIND_HF_REVISION = "a226c49bc5d7c68ce396d4c606c32222803c487a"
 
 
 def _ensure_languagebind_source() -> Path:

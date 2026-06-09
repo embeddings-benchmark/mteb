@@ -136,9 +136,6 @@ languagebind = [
     "opencv-python-headless",
     "pytorchvideo",
     "peft",
-    "huggingface_hub",
-    "librosa>=0.10.0",
-    "soundfile>=0.13.1",
 ]
 
 [dependency-groups]
