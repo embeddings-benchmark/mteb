@@ -204,10 +204,10 @@ class AbsTaskRetrieval(AbsTask):
             return queries, corpus
 
         if self.metadata.is_multilingual:
-            for subset in self.queries:  # type: ignore[attr-defined]
+            for subset in self.queries:
                 if subset not in self.dataset:
                     self.dataset[subset] = {}
-                for split in self.queries[subset]:  # type: ignore[attr-defined]
+                for split in self.queries[subset]:
                     if split not in self.dataset[subset]:
                         self.dataset[subset][split] = {}  # type: ignore[typeddict-item]
                     queries = self.queries[subset][split]
@@ -240,7 +240,7 @@ class AbsTaskRetrieval(AbsTask):
             subset = "default"
             if subset not in self.dataset:
                 self.dataset[subset] = {}
-            for split in self.queries:  # type: ignore[attr-defined]
+            for split in self.queries:
                 if split not in self.dataset[subset]:
                     self.dataset[subset][split] = {}  # type: ignore[typeddict-item]
                 queries = self.queries[split]
