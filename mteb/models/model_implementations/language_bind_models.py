@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import sys
-import warnings
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -22,59 +21,8 @@ if TYPE_CHECKING:
     from mteb.types._encoder_io import AudioInput, ImageInput, TextInput, VideoInput
 
 
-def _patch_compatibility() -> None:
-    """Compatibility shims required for the unmaintained LanguageBind
-    library to import against the pinned ``transformers`` (4.45.2) and
-    ``torchvision`` (0.20.1) versions.
-
-    Both shims patch modules that LanguageBind, or its ``pytorchvideo``
-    dependency, hard-imports at load time; without them the import fails
-    outright. Each is wrapped in a fail-soft ``try`` so a broken shim only warns.
-    """
-    try:
-        import transformers.models.clip.modeling_clip as _clip_mod
-
-        # LanguageBind's modeling_image.py does a top-level
-        # `from transformers.models.clip.modeling_clip import _expand_mask`.
-        # Newer transformers (incl. the pinned 4.45.2) no longer export it, so we
-        # re-inject a compatible implementation before LanguageBind is imported.
-        if not hasattr(_clip_mod, "_expand_mask"):
-
-            def _expand_mask(
-                mask: torch.Tensor,
-                dtype: torch.dtype,
-                tgt_len: int | None = None,
-            ) -> torch.Tensor:
-                bsz, src_len = mask.size()
-                tgt_len = tgt_len if tgt_len is not None else src_len
-                expanded_mask = (
-                    mask[:, None, None, :].expand(bsz, 1, tgt_len, src_len).to(dtype)
-                )
-                inverted_mask = 1.0 - expanded_mask
-                return inverted_mask.masked_fill(inverted_mask.to(bool), float("-inf"))
-
-            _clip_mod._expand_mask = _expand_mask  # type: ignore[attr-defined]
-    except Exception as e:
-        warnings.warn(f"LanguageBind compat patch `_expand_mask` failed: {e}")
-
-    try:
-        # pytorchvideo's augmentations.py does a top-level
-        # `import torchvision.transforms.functional_tensor`, which newer torchvision
-        # (incl. the pinned 0.20.1) removed. Alias it to the current functional module.
-        try:
-            import torchvision.transforms.functional_tensor  # type: ignore[import-not-found] # noqa: F401
-        except ImportError:
-            import torchvision.transforms.functional as _tv_functional
-
-            sys.modules["torchvision.transforms.functional_tensor"] = _tv_functional
-    except Exception as e:
-        warnings.warn(
-            f"LanguageBind compat patch `torchvision.transforms.functional_tensor` failed: {e}"
-        )
-
-
 _LANGUAGEBIND_HF_REPO = "myang333/languagebind-source"
-_LANGUAGEBIND_HF_REVISION = "e857f973b672e783ca4100e444bec75363979324"
+_LANGUAGEBIND_HF_REVISION = "d2d0f6f14591989fa8d48a65e00c5bf2b96ec745"
 
 
 def _ensure_languagebind_source() -> Path:
@@ -85,7 +33,6 @@ def _ensure_languagebind_source() -> Path:
 
     Returns the local snapshot path (already added to sys.path).
     """
-    _patch_compatibility()
     try:
         from huggingface_hub import snapshot_download
 
@@ -105,50 +52,6 @@ def _ensure_languagebind_source() -> Path:
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))
     return path
-
-
-def _patch_languagebind_tokenizer(tokenizer_cls: type) -> None:
-    """Force a LanguageBind tokenizer subclass to use ``CLIPTokenizer.__init__``.
-
-    LanguageBind's tokenizer subclasses inherit from ``CLIPTokenizer`` but
-    override ``__init__`` with a positional signature that breaks under
-    newer ``transformers`` releases. We re-route through
-    ``CLIPTokenizer.__init__`` with explicit keyword arguments.
-    """
-    if getattr(tokenizer_cls, "_mteb_patched", False):
-        return
-    try:
-        from transformers import CLIPTokenizer
-
-        def _patched_init(
-            self: Any,
-            vocab_file: str,
-            merges_file: str,
-            errors: str = "replace",
-            unk_token: str = "<|endoftext|>",  # noqa: S107
-            bos_token: str = "<|startoftext|>",  # noqa: S107
-            eos_token: str = "<|endoftext|>",  # noqa: S107
-            pad_token: str = "<|endoftext|>",  # noqa: S107
-            **kwargs: Any,
-        ) -> None:
-            CLIPTokenizer.__init__(
-                self,
-                vocab_file=vocab_file,
-                merges_file=merges_file,
-                errors=errors,
-                unk_token=unk_token,
-                bos_token=bos_token,
-                eos_token=eos_token,
-                pad_token=pad_token,
-                **kwargs,
-            )
-
-        tokenizer_cls.__init__ = _patched_init  # type: ignore[method-assign]
-        tokenizer_cls._mteb_patched = True  # type: ignore[attr-defined]
-    except Exception as e:
-        warnings.warn(
-            f"LanguageBind tokenizer patch for {tokenizer_cls.__name__} failed: {e}"
-        )
 
 
 # LanguageBind expects audio sampled at 16 kHz (its audio mel-spectrogram pipeline).
@@ -247,8 +150,6 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
             LanguageBindVideoProcessor,
             LanguageBindVideoTokenizer,
         )
-
-        _patch_languagebind_tokenizer(LanguageBindVideoTokenizer)
 
         self.model_name = model_name
         self.device = device
@@ -366,8 +267,6 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
             LanguageBindAudioTokenizer,
         )
 
-        _patch_languagebind_tokenizer(LanguageBindAudioTokenizer)
-
         self.model_name = model_name
         self.device = device
         self.sampling_rate = _LANGUAGE_BIND_AUDIO_SR
@@ -465,8 +364,6 @@ class LanguageBindImageWrapper(_LanguageBindBase):
             LanguageBindImageProcessor,
             LanguageBindImageTokenizer,
         )
-
-        _patch_languagebind_tokenizer(LanguageBindImageTokenizer)
 
         self.model_name = model_name
         self.device = device
