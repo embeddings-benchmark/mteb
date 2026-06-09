@@ -2,6 +2,7 @@ import pytest
 
 import mteb
 from mteb._evaluators import SummarizationEvaluator
+from mteb.timing import TimingStack
 from tests.mock_tasks import MockSummarizationTask
 
 
@@ -30,6 +31,7 @@ def test_basic_functionality(model, mock_task):
         task_metadata=mock_task.metadata,
         hf_split="test",
         hf_subset="default",
+        timer=TimingStack(),
     )
 
     # Check that data is properly stored
