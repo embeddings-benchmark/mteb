@@ -105,6 +105,56 @@ def test_evaluate_with_cache(
     )
 
 
+def test_evaluate_with_overwrite_strategy_never(tmp_path: Path):
+    model = MockSentenceTransformer()
+    task = MockClassificationTask()
+    cache = ResultCache(tmp_path)
+
+    # First run should run evaluation and write to cache
+    results = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+    path = cache.get_task_result_path(
+        task.metadata.name,
+        results.model_name.replace("/", "__"),
+        results.model_revision,
+    )
+    assert path.exists(), "cache file should be written"
+    with Path(path).open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    dummy_score = 999.0
+    for split in data["scores"]:
+        for score_dict in data["scores"][split]:
+            score_dict["main_score"] = dummy_score
+
+    with Path(path).open("w", encoding="utf-8") as f:
+        json.dump(data, f)
+
+    initial_mtime = path.stat().st_mtime
+
+    # Second run with "never" should load from cache and NOT overwrite it
+    never_results = mteb.evaluate(
+        model, task, cache=cache, overwrite_strategy="never", co2_tracker=False
+    )
+
+    assert never_results[0].get_score() == dummy_score
+    assert path.stat().st_mtime == initial_mtime
+    with Path(path).open("r", encoding="utf-8") as f:
+        assert json.load(f)["scores"]["test"][0]["main_score"] == dummy_score
+
+    # Third run with an empty cache should run and write to cache
+    cache_empty = ResultCache(tmp_path / "empty")
+    results_empty = mteb.evaluate(
+        model, task, cache=cache_empty, overwrite_strategy="never", co2_tracker=False
+    )
+    assert len(results_empty.task_results) == 1
+    empty_path = cache_empty.get_task_result_path(
+        task.metadata.name,
+        results_empty.model_name.replace("/", "__"),
+        results_empty.model_revision,
+    )
+    assert empty_path.exists()
+
+
 @pytest.mark.parametrize(
     "model, task, expected_score,splits",
     [
@@ -227,6 +277,51 @@ def test_evaluate_aggregated_task():
     model = mteb.get_model("mteb/baseline-random-encoder")
     task = MockAggregatedTask()
     mteb.evaluate(model, task, cache=None)
+
+
+def test_evaluate_aggregated_task_with_cache(tmp_path):
+    """Test evaluating an aggregate task with caching.
+
+    Verifies both that:
+    1. If the aggregate file is missing but all sub-tasks are cached, it falls back
+       to combining the cached subtask results under ONLY_CACHE strategy.
+    2. Once the aggregate file is generated and saved, it can be loaded directly
+       on subsequent runs without re-evaluating or calling fallback (verified
+       by deleting the individual sub-task cache files prior to the second call).
+    """
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockAggregatedTask()
+    cache = ResultCache(tmp_path)
+    # evaluate tasks individually
+    mteb.evaluate(model, task.metadata.tasks, cache=cache)
+
+    path = cache.get_task_result_path(
+        task.metadata.name,
+        model.mteb_model_meta.model_name_as_path(),
+        model.mteb_model_meta.revision,
+    )
+    assert not path.exists()
+    # should be able to load results even if aggregated task results do not exist
+    results = mteb.evaluate(model, task, cache=cache, overwrite_strategy="only-cache")
+    assert len(results.task_results) == 1
+    score1 = results.task_results[0].get_score()
+    assert path.exists()
+
+    # Delete individual sub-task cache files to ensure we load from the aggregate file
+    for subtask in task.metadata.tasks:
+        sub_path = cache.get_task_result_path(
+            subtask.metadata.name,
+            model.mteb_model_meta.model_name_as_path(),
+            model.mteb_model_meta.revision,
+        )
+        sub_path.unlink()
+        assert not sub_path.exists()
+
+    cached_results = mteb.evaluate(
+        model, task, cache=cache, overwrite_strategy="only-cache"
+    )
+    assert len(cached_results.task_results) == 1
+    assert cached_results.task_results[0].get_score() == pytest.approx(score1)
 
 
 def test_run_private_task_warning(caplog):

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict, cast
 
 from sklearn.metrics.pairwise import (
     paired_cosine_distances,
@@ -15,7 +15,7 @@ from mteb.similarity_functions import compute_pairwise_similarity
 from .evaluator import Evaluator
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Mapping
 
     from datasets import Dataset
 
@@ -47,8 +47,7 @@ class AnySTSEvaluator(Evaluator):
         self,
         dataset: Dataset,
         sentences_column_names: (
-            tuple[str, str]
-            | tuple[Sequence[tuple[str, str]], Sequence[tuple[str, str]]]
+            tuple[str, str] | tuple[Mapping[str, str], Mapping[str, str]]
         ),
         *,
         task_metadata: TaskMetadata,
@@ -76,14 +75,18 @@ class AnySTSEvaluator(Evaluator):
     ) -> STSEvaluatorScores:
         logger.info("Running semantic similarity - Encoding samples (1/2)")
 
-        if isinstance(self.input_columns[0], str):
+        if (
+            isinstance(self.input_columns[0], str)
+            and len(self.task_metadata.modalities) == 1
+        ):
             cols1: str | list[str] = self.input_columns[0]
-            ds1_col_names: dict[str, str] = {
+            ds1_col_names: Mapping[str, str] = {
                 self.input_columns[0]: self.task_metadata.modalities[0]
             }
         else:
-            cols1 = [col for col, _ in self.input_columns[0]]
-            ds1_col_names = dict(self.input_columns[0])
+            input1 = cast("Mapping[str, str]", self.input_columns[0])
+            cols1 = list(input1)
+            ds1_col_names = input1
 
         embeddings1 = model.encode(
             create_dataloader(
@@ -100,14 +103,18 @@ class AnySTSEvaluator(Evaluator):
         )
 
         logger.info("Running semantic similarity - Encoding samples (2/2)...")
-        if isinstance(self.input_columns[1], str):
+        if (
+            isinstance(self.input_columns[1], str)
+            and len(self.task_metadata.modalities) == 1
+        ):
             cols2: str | list[str] = self.input_columns[1]
-            ds2_col_names: dict[str, str] = {
+            ds2_col_names: Mapping[str, str] = {
                 self.input_columns[1]: self.task_metadata.modalities[0]
             }
         else:
-            cols2 = [col for col, _ in self.input_columns[1]]
-            ds2_col_names = dict(self.input_columns[1])
+            input2 = cast("Mapping[str, str]", self.input_columns[1])
+            cols2 = list(input2)
+            ds2_col_names = input2
 
         embeddings2 = model.encode(
             create_dataloader(

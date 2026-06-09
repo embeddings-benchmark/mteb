@@ -14,7 +14,9 @@ from tests.task_grid import MOCK_TASK_TEST_GRID_MONOLINGUAL
 logging.basicConfig(level=logging.INFO)
 
 
-@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID_MONOLINGUAL)
+@pytest.mark.parametrize(
+    "task", MOCK_TASK_TEST_GRID_MONOLINGUAL, ids=lambda t: t.metadata.name
+)
 @pytest.mark.parametrize(
     "model",
     [
