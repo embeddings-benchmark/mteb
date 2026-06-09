@@ -9,6 +9,7 @@ from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
+from mteb.timing import TimingStack
 
 if sys.version_info >= (3, 13):
     from warnings import deprecated
@@ -35,16 +36,24 @@ class AbsTaskReranking(AbsTaskRetrieval):
         For dataformat and other information, see [AbsTaskRetrieval][mteb.abstasks.retrieval.AbsTaskRetrieval].
     """
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+    def load_data(
+        self,
+        num_proc: int | None = None,
+        *,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
+    ) -> None:
         """Load the dataset."""
         if self.data_loaded:
             return
+
+        timer = timer or TimingStack()
 
         if self.metadata.name in OLD_FORMAT_RERANKING_TASKS:
             self.transform_old_dataset_format()
         else:
             # use AbsTaskRetrieval default to load the data
-            return super().load_data(num_proc=num_proc)
+            return super().load_data(num_proc=num_proc, timer=timer)
 
     def _process_example(  # noqa: PLR6301
         self,

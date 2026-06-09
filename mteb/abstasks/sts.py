@@ -25,6 +25,7 @@ if TYPE_CHECKING:
 
     from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
     from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, Modalities, PromptType
     from mteb.types.statistics import (
         AudioStatistics,
@@ -151,6 +152,7 @@ class AbsTaskSTS(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> STSMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -166,6 +168,7 @@ class AbsTaskSTS(AbsTask):
             hf_subset=hf_subset,
             input1_prompt_type=self.input1_prompt_type,
             input2_prompt_type=self.input2_prompt_type,
+            timer=timer,
             **kwargs,
         )
         scores = evaluator(

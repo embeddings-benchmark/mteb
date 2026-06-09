@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import tempfile
+import time
 import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
@@ -26,6 +27,7 @@ from mteb.models import (
     EncoderProtocol,
     SearchProtocol,
 )
+from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -38,6 +40,7 @@ if TYPE_CHECKING:
     )
     from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict
     from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
+
 
 logger = logging.getLogger(__name__)
 
@@ -147,6 +150,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluates an MTEB compatible model on the task.
@@ -158,6 +162,7 @@ class AbsTask(ABC):  # noqa: PLR0904
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             prediction_folder: Folder to save model predictions
             num_proc: Number of processes to use for loading the dataset or processing.
+            timer: A context manager that tracks the timing of evaluation phases.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
 
         Returns:
@@ -167,6 +172,7 @@ class AbsTask(ABC):  # noqa: PLR0904
             TypeError: If the model is a CrossEncoder and the task does not support CrossEncoders.
             TypeError: If the model is a SearchProtocol and the task does not support Search.
         """
+        timer = timer or TimingStack()
         if isinstance(model, CrossEncoderProtocol) and not self._support_cross_encoder:
             raise TypeError(
                 f"Model {model} is a CrossEncoder, but this task {self.metadata.name} does not support CrossEncoders. "
@@ -185,7 +191,15 @@ class AbsTask(ABC):  # noqa: PLR0904
             )
 
         if not self.data_loaded:
-            self.load_data()
+            num_phases_before = len(timer.phases)
+            start_load = time.monotonic()
+            self.load_data(num_proc=num_proc, timer=timer)
+            # If load_data did not record its own timing phases, add a fallback "Data loading" phase
+            # using the outer timing measured around the load_data call.
+            if len(timer.phases) == num_phases_before:
+                timer.add_phase(
+                    "Data loading", start_load, time.monotonic(), split="", subset=""
+                )
 
         self.dataset = cast("dict[HFSubset, DatasetDict]", self.dataset)
 
@@ -214,6 +228,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 num_proc=num_proc,
+                timer=timer,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
@@ -230,6 +245,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(
@@ -334,7 +350,13 @@ class AbsTask(ABC):  # noqa: PLR0904
             )  # only take the specified test split.
         return dataset_dict
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+    def load_data(
+        self,
+        num_proc: int | None = None,
+        *,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
+    ) -> None:
         """Loads dataset from HuggingFace hub
 
         This is the main loading function for Task. Do not overwrite this, instead we recommend using `dataset_transform`, which is called after the
@@ -342,25 +364,33 @@ class AbsTask(ABC):  # noqa: PLR0904
 
         Args:
             num_proc: Number of processes to use for loading the dataset.
+            timer: A context manager that tracks the timing of evaluation phases.
             kwargs: Additional keyword arguments passed to the load_dataset function. Keep for forward compatibility.
         """
         if self.data_loaded:
             return
-        if self.metadata.is_multilingual:
-            if self.fast_loading:
-                self.fast_load()
+
+        timer = timer or TimingStack()
+        with timer(
+            "Data loading", log_message=f"Loading dataset {self.metadata.name}..."
+        ):
+            if self.metadata.is_multilingual:
+                if self.fast_loading:
+                    self.fast_load()
+                else:
+                    self.dataset = {}
+                    for hf_subset in self.hf_subsets:
+                        self.dataset[hf_subset] = load_dataset(
+                            name=hf_subset,
+                            **self.metadata.dataset,
+                            num_proc=num_proc,
+                        )
             else:
-                self.dataset = {}
-                for hf_subset in self.hf_subsets:
-                    self.dataset[hf_subset] = load_dataset(
-                        name=hf_subset,
-                        **self.metadata.dataset,
-                        num_proc=num_proc,
-                    )
-        else:
-            # some of monolingual datasets explicitly adding the split name to the dataset name
-            self.dataset = load_dataset(**self.metadata.dataset, num_proc=num_proc)
-        self.dataset_transform(num_proc=num_proc)
+                # some of monolingual datasets explicitly adding the split name to the dataset name
+                self.dataset = load_dataset(**self.metadata.dataset, num_proc=num_proc)
+
+        with timer("Dataset transform"):
+            self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
     def fast_load(self) -> None:
