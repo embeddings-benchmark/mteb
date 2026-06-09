@@ -8,15 +8,8 @@ cardinality bounded). :func:`render_metrics` produces the exposition body.
 from __future__ import annotations
 
 import time
-from collections.abc import (  # noqa: TC003 — used at runtime by middleware signature
-    Awaitable,
-    Callable,
-)
+from typing import TYPE_CHECKING
 
-from fastapi import (  # noqa: TC002 — runtime use in middleware signature
-    Request,
-    Response,
-)
 from prometheus_client import (
     CONTENT_TYPE_LATEST,
     CollectorRegistry,
@@ -25,8 +18,10 @@ from prometheus_client import (
     Histogram,
     generate_latest,
 )
-from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.routing import Match
+
+if TYPE_CHECKING:
+    from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 # Tuned for an ETag-cached read API: warm <50 ms, cold builds into seconds.
 _LATENCY_BUCKETS = (
@@ -103,56 +98,67 @@ _UNMATCHED = "<unmatched>"
 _ROUTE_TEMPLATE_KEY = "_mteb_route_template"
 
 
-def _resolve_route_template(request: Request) -> str:
-    route = request.scope.get("route")
+def _resolve_route_template(scope: Scope) -> str:
+    route = scope.get("route")
     if route is not None and hasattr(route, "path"):
         return str(route.path)
-    app = request.scope.get("app")
+    app = scope.get("app")
     router = getattr(app, "router", None) if app is not None else None
     if router is None:
         return _UNMATCHED
     for candidate in router.routes:
-        match, _ = candidate.matches(request.scope)
+        match, _ = candidate.matches(scope)
         if match == Match.FULL and hasattr(candidate, "path"):
             return str(candidate.path)
     return _UNMATCHED
 
 
-def _route_template(request: Request) -> str:
+def _route_template(scope: Scope) -> str:
     """Return the matched route's path template, or ``"<unmatched>"``.
 
-    Starlette only fills ``scope["route"]`` after the router runs — which for
-    BaseHTTPMiddleware happens inside ``call_next``. As a fallback we re-run
-    ``matches`` against the app's router; the result is memoised on the scope
-    so the post-handler re-resolution doesn't repeat the scan.
+    Starlette only fills ``scope["route"]`` after the router runs. As a fallback
+    we re-run ``matches`` against the app's router; the result is memoised on
+    the scope so a post-handler re-resolution doesn't repeat the scan.
     """
-    cached: str | None = request.scope.get(_ROUTE_TEMPLATE_KEY)
+    cached: str | None = scope.get(_ROUTE_TEMPLATE_KEY)
     if cached is not None and cached != _UNMATCHED:
         return cached
-    resolved = _resolve_route_template(request)
-    request.scope[_ROUTE_TEMPLATE_KEY] = resolved
+    resolved = _resolve_route_template(scope)
+    scope[_ROUTE_TEMPLATE_KEY] = resolved
     return resolved
 
 
-class PrometheusMiddleware(BaseHTTPMiddleware):
-    """Record per-request metrics around the downstream handler.
+class PrometheusMiddleware:
+    """Pure-ASGI middleware that records per-request Prometheus metrics.
 
     Unmatched (404) requests stay out of the latency histogram + in-flight gauge
     so bot scans don't pollute p95/p99, but their count still increments. The
-    ``/metrics`` route is excluded entirely to keep scrapes off the series.
+    ``/metrics`` route and non-HTTP scopes (lifespan, websocket) are short-
+    circuited so scrapes and ASGI control messages stay off the series.
+
+    Implemented as raw ASGI (``__call__(scope, receive, send)``) rather than
+    :class:`BaseHTTPMiddleware` because the latter buffers the response body
+    through an internal queue — adds ~1 ms per request and breaks streaming.
     """
 
-    async def dispatch(  # noqa: PLR6301 — must be a method on BaseHTTPMiddleware
-        self,
-        request: Request,
-        call_next: Callable[[Request], Awaitable[Response]],
-    ) -> Response:
-        """Time the downstream handler and emit method/handler/status metrics."""
-        if request.url.path == "/metrics":
-            return await call_next(request)
+    def __init__(self, app: ASGIApp) -> None:
+        self.app = app
 
-        method = request.method
-        handler = _route_template(request)
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        """Time the inner app and emit method/handler/status metrics.
+
+        Short-circuits non-HTTP scopes (lifespan / websocket) and the
+        ``/metrics`` scrape so neither pollutes the series. The ``send``
+        callable is wrapped to capture the response status from the
+        ``http.response.start`` ASGI message; status defaults to ``"500"`` so
+        that a downstream crash before any response is sent still records.
+        """
+        if scope["type"] != "http" or scope["path"] == "/metrics":
+            await self.app(scope, receive, send)
+            return
+
+        method = scope["method"]
+        handler = _route_template(scope)
         matched = handler != _UNMATCHED
         in_progress = (
             REQUESTS_IN_PROGRESS.labels(method=method, handler=handler)
@@ -161,9 +167,18 @@ class PrometheusMiddleware(BaseHTTPMiddleware):
         )
         if in_progress is not None:
             in_progress.inc()
+
+        status_code = "500"
+
+        async def send_wrapper(message: Message) -> None:
+            nonlocal status_code
+            if message["type"] == "http.response.start":
+                status_code = str(message["status"])
+            await send(message)
+
         start = time.perf_counter()
         try:
-            response = await call_next(request)
+            await self.app(scope, receive, send_wrapper)
         except BaseException as exc:
             EXCEPTIONS_TOTAL.labels(
                 method=method,
@@ -179,14 +194,13 @@ class PrometheusMiddleware(BaseHTTPMiddleware):
                 )
             if in_progress is not None:
                 in_progress.dec()
-        # Re-resolve post-handler — catches routes only stamped onto
-        # scope["route"] after call_next.
+        # Re-resolve post-handler — scope["route"] is only stamped after the
+        # router runs, so the pre-call lookup misses on first-time templates.
         REQUEST_COUNT.labels(
             method=method,
-            handler=_route_template(request),
-            status=str(response.status_code),
+            handler=_route_template(scope),
+            status=status_code,
         ).inc()
-        return response
 
 
 def render_metrics() -> tuple[bytes, str]:

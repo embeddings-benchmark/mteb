@@ -80,7 +80,7 @@ RUN hf download mteb/results --repo-type dataset || true
 FROM base AS og-builder
 
 ENV PLAYWRIGHT_BROWSERS_PATH=/home/user/.cache/playwright \
-    MTEB_API_OG_DIR=/og-cache
+    OG_DIR=/og-cache
 
 # Chromium runtime libs Playwright drives. Listing them explicitly
 # instead of running `playwright install --with-deps` keeps the layer
@@ -121,12 +121,12 @@ RUN python scripts/generate_og_images.py --out=/og-cache
 # ─── Stage: runtime ─────────────────────────────────────────────────
 FROM base AS runtime
 
-ENV MTEB_API_OG_DIR=/data/og
+ENV OG_DIR=/data/og
 
 # CORS deliberately left to its default (``*``) — every endpoint here
 # is public read-only, and the OG hero images are meant to be embedded
 # cross-origin by share-card validators and chat clients. Lock down
-# via ``MTEB_API_CORS_ORIGINS`` only if a specific deployment needs it.
+# via ``CORS_ORIGINS`` only if a specific deployment needs it.
 
 # Mount point for the rendered OG hero PNG files. /data is the conventional
 # Spaces persistent-volume mount: if Spaces mounts an empty volume over

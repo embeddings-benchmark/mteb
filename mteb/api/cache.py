@@ -107,11 +107,21 @@ def _load_default_from_hub(repo_id: str) -> pl.DataFrame | None:
     Reads parquet shards with polars rather than ``datasets.load_dataset`` so a
     stale README ``dataset_info`` block (e.g. when a new column lands in the
     parquet but the YAML wasn't refreshed) doesn't fail the cast.
+
+    Catches only the exception families either path is expected to raise on a
+    legitimate miss: ``OSError`` (network / FS / HTTP, includes
+    ``ConnectionError`` + ``FileNotFoundError``), ``ValueError`` (unknown
+    config, malformed args), ``KeyError`` (missing parquet/metadata key), and
+    polars' own ``PolarsError`` base. ``Exception`` would hide programmer bugs
+    like ``TypeError`` / ``AttributeError``.
     """
+    expected = (OSError, ValueError, KeyError, pl.exceptions.PolarsError)
     try:
         return pl.read_parquet(f"hf://datasets/{repo_id}/data/train-*.parquet")
-    except Exception as exc:
-        logger.warning("Hub load failed for %s: %s", repo_id, exc)
+    except expected as exc:
+        logger.warning(
+            "Hub load failed for %s: %s: %s", repo_id, type(exc).__name__, exc
+        )
         try:
             from datasets import load_dataset
 
@@ -119,9 +129,13 @@ def _load_default_from_hub(repo_id: str) -> pl.DataFrame | None:
                 "pl.DataFrame",
                 load_dataset(repo_id, name=_DEFAULT_CONFIG, split="train").to_polars(),
             )
-        except Exception as exc2:
+        except expected as exc2:
             logger.warning(
-                "Hub fallback also failed for %s/%s: %s", repo_id, _DEFAULT_CONFIG, exc2
+                "Hub fallback also failed for %s/%s: %s: %s",
+                repo_id,
+                _DEFAULT_CONFIG,
+                type(exc2).__name__,
+                exc2,
             )
             return None
 
@@ -379,6 +393,12 @@ def warmup_blocking() -> None:
         logger.warning("light warmup failed: %s", exc)
 
 
+# Cap how many summaries build concurrently during preload. Each in-flight
+# build holds a full pydantic schema + a worker thread for gzip; unbounded
+# gather on ~50+ benchmarks spikes memory and the thread pool.
+_PRELOAD_CONCURRENCY = 4
+
+
 def preload_summaries_in_background() -> None:
     """Pre-build every benchmark summary + per-language schema on a daemon thread."""
     if not get_settings().preload:
@@ -404,7 +424,13 @@ def preload_summaries_in_background() -> None:
                 logger.warning("warmup per-language: %s failed (%s)", name, exc)
 
         async def _build_all() -> None:
-            await asyncio.gather(*(_build_one(n) for n in all_names))
+            sem = asyncio.Semaphore(_PRELOAD_CONCURRENCY)
+
+            async def _bounded(name: str) -> None:
+                async with sem:
+                    await _build_one(name)
+
+            await asyncio.gather(*(_bounded(n) for n in all_names))
 
         asyncio.run(_build_all())
 

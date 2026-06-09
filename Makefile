@@ -83,7 +83,7 @@ run-leaderboard:
 
 serve-api:
 	@echo "--- 🚀 Serving leaderboard API on http://localhost:$(or $(PORT),8000) ---"
-	@echo "Set MTEB_API_PRELOAD=1 to warm every benchmark summary on startup."
+	@echo "Set PRELOAD=1 to warm every benchmark summary on startup."
 	uv run --no-sync --extra api uvicorn mteb.api.app:app --host $(or $(HOST),127.0.0.1) --port $(or $(PORT),8000)
 
 format-citations:

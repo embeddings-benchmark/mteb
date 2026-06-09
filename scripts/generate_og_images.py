@@ -573,13 +573,13 @@ def _parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     )
     p.add_argument(
         "--out",
-        default=os.environ.get("MTEB_API_OG_DIR", "/data/og"),
-        help="Output directory for the generated PNG files (defaults to $MTEB_API_OG_DIR or /data/og).",
+        default=os.environ.get("OG_DIR", "/data/og"),
+        help="Output directory for the generated PNG files (defaults to $OG_DIR or /data/og).",
     )
     p.add_argument(
         "--concurrency",
         type=int,
-        default=int(os.environ.get("MTEB_API_OG_CONCURRENCY", "6")),
+        default=int(os.environ.get("OG_CONCURRENCY", "6")),
         help="Worker pool size (default 6). Higher = faster but more memory / CPU.",
     )
     p.add_argument(

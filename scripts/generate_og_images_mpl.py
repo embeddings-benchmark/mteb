@@ -30,7 +30,7 @@ When to use which:
   parity with the HTML template.
 
 Both write to the same filesystem layout under
-``$MTEB_API_OG_DIR``, so swapping the generator for a future rebuild
+``$OG_DIR``, so swapping the generator for a future rebuild
 is just swapping the script invocation.
 """
 
@@ -1140,7 +1140,7 @@ def _parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     )
     p.add_argument(
         "--out",
-        default=os.environ.get("MTEB_API_OG_DIR", "/data/og"),
+        default=os.environ.get("OG_DIR", "/data/og"),
         help="Output directory for the generated PNG files.",
     )
     p.add_argument(
@@ -1152,9 +1152,7 @@ def _parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         "--workers",
         type=int,
         default=int(
-            os.environ.get(
-                "MTEB_API_OG_WORKERS", str(max(1, (os.cpu_count() or 4) // 2))
-            )
+            os.environ.get("OG_WORKERS", str(max(1, (os.cpu_count() or 4) // 2)))
         ),
         help=(
             "Process-pool size for parallel rendering. Defaults to half the CPU "

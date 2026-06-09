@@ -59,7 +59,9 @@ def create_app() -> FastAPI:
         allow_origins=settings.cors_origins,
         allow_methods=["GET"],
         allow_headers=["*"],
-        expose_headers=["ETag", "Cache-Control"],
+        # ETag has to be opted in; Cache-Control is a CORS-safelisted response
+        # header that browsers expose by default.
+        expose_headers=["ETag"],
     )
     app.add_middleware(PrometheusMiddleware)
     app.include_router(router, prefix="/v1")

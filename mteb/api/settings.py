@@ -1,11 +1,11 @@
 """Process-level settings for the leaderboard API.
 
 Environment variables (all optional):
-* ``MTEB_API_CORS_ORIGINS`` — comma-separated extra origins.
-* ``MTEB_API_PRELOAD`` — ``1`` to pre-build every summary in the background.
-* ``MTEB_API_CACHE_REPO`` — HF dataset id (default ``mteb/results``).
+* ``CORS_ORIGINS`` — comma-separated extra origins.
+* ``PRELOAD`` — ``1`` to pre-build every summary in the background.
+* ``CACHE_REPO`` — HF dataset id (default ``mteb/results``).
   Empty string disables hub load and forces a local cold rebuild.
-* ``MTEB_API_OG_DIR`` — OG hero PNG directory (default ``/data/og``).
+* ``OG_DIR`` — OG hero PNG directory (default ``/data/og``).
 * ``OTEL_EXPORTER_OTLP_ENDPOINT`` / ``OTEL_SERVICE_NAME`` — standard OTEL.
 """
 
