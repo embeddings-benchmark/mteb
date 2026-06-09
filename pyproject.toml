@@ -452,9 +452,9 @@ conflicts = [
         { extra = "muq" },
         { extra = "transformers-v4" },
         { extra = "qwen-vl" },
-#        { extra = "omnivinci" },
+       { extra = "omnivinci" },
         { extra = "embeddinggemma" },
-#        { extra = "ebind" },
+       { extra = "ebind" },
         { extra = "visrag-ret" }, # conflicting version of timm with blip2
     ],
 ]
