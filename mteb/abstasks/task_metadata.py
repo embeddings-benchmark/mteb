@@ -155,6 +155,12 @@ TaskDomain = Literal[
     "Music",
     "Bioacoustics",
     "Sport",
+    # Video content domains
+    "Activity",  # human actions / activities (action recognition, activity QA)
+    "Instructional",  # procedural / how-to / cooking content
+    "Egocentric",  # first-person / wearable-camera video
+    "Nature",  # animals, wildlife, natural environments
+    "Animation",  # cartoon / animated / synthetic content
 ]
 """
 The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though
