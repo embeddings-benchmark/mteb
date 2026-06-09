@@ -131,7 +131,7 @@ class TaskMetaSchema(_CamelModel):
     type: str
     simplified_type: str
     languages: list[str]
-    domains: list[str]
+    domains: list[str] | None
     modalities: list[str]
     description: str
     reference: str | None = None

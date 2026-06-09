@@ -20,11 +20,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from mteb.api.cache import preload_summaries_in_background, warmup_blocking
 from mteb.api.metrics import PrometheusMiddleware
 from mteb.api.otel import setup_telemetry, shutdown_telemetry
 from mteb.api.routes import infra_router, router
 from mteb.api.settings import get_settings
+from mteb.api.warmup import preload_summaries_in_background, warmup_blocking
 
 if TYPE_CHECKING:
     from starlette.responses import Response

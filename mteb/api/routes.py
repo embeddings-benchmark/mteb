@@ -32,16 +32,14 @@ from mteb.api.adapters import (
     task_to_meta_schema,
 )
 from mteb.api.aggregators import build_benchmark_leaders
-from mteb.api.cache import (  # noqa: TC001 — Serialized is a runtime type annotation
-    Serialized,
+from mteb.api.cache import (
     _cached_bytes,
-    _load_per_benchmark_frames,
     get_model_scores_bytes,
     get_per_language_bytes,
     get_summary_bytes,
     get_task_scores_bytes,
-    serialize_bytes,
 )
+from mteb.api.frames import _load_per_benchmark_frames
 from mteb.api.icons import get_icon
 from mteb.api.metrics import (
     BENCHMARK_SELECTIONS,
@@ -61,6 +59,9 @@ from mteb.api.schemas import (
     TaskScoresSchema,
     _is_url,
 )
+from mteb.api.serialization import (
+    serialize_bytes,
+)
 from mteb.benchmarks._leaderboard_menu import HOME_BENCHMARK_ENTRIES
 from mteb.filter_tasks import filter_tasks
 from mteb.get_tasks import _TASKS_REGISTRY, TASK_LIST
@@ -69,6 +70,10 @@ from mteb.models.model_implementations import MODEL_REGISTRY
 
 if TYPE_CHECKING:
     import asyncio
+
+    from mteb.api.serialization import (
+        Serialized,
+    )
 
 logger = logging.getLogger(__name__)
 # Root-level infra (health / metrics / asset proxies); not under /v1.

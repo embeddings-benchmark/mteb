@@ -1,200 +1,41 @@
-"""Process-wide caches for the leaderboard API.
+"""Per-endpoint pre-serialised bytes cache + single-flight cold build.
 
-Holds pre-serialised JSON bytes + gzipped bytes + ETag per endpoint. Routes
-read straight from the bytes cache; cold builds run the schema constructor,
-serialise on a worker thread (to keep gzip off the event loop), and store the
-result.
+Holds the warm bytes routes serve directly. Cold builds run the schema
+constructor under a per-key lock, then serialise + gzip on a worker thread.
 
-Only ``_summary_schemas`` keeps the pydantic schema around — ``build_model_scores``
-and ``build_benchmark_leaders`` scan its rows. Other endpoints discard the schema
-after serialising.
+Sits above :mod:`mteb.api.frames` and :mod:`mteb.api.serialization` and below
+:mod:`mteb.api.routes` and :mod:`mteb.api.warmup`. Importing this module must
+not pull in ``routes`` (warmup orchestration lives in :mod:`mteb.api.warmup`).
 """
 
 from __future__ import annotations
 
 import asyncio
-import functools
-import gzip
-import hashlib
 import logging
-import threading
 from collections import OrderedDict
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
-from typing import TYPE_CHECKING, TypeVar, cast
+from typing import TYPE_CHECKING, TypeVar
 
-import polars as pl
-from datasets import load_dataset
-
-import mteb
-from mteb.api.adapters import prewarm_schema_caches
 from mteb.api.aggregators import (
     build_benchmark_per_language,
     build_benchmark_summary,
     build_model_scores,
     build_task_scores,
 )
+from mteb.api.frames import get_cache
 from mteb.api.metrics import CACHE_OUTCOMES
-from mteb.api.routes import (
-    _benchmark_schemas_bytes,
-    _filtered_model_schemas_bytes,
-    _filtered_task_schemas_bytes,
-    _menu_schemas_bytes,
+from mteb.api.serialization import (  # noqa: TC001 — Serialized used as runtime dict value type
+    Serialized,
+    serialize_schema,
 )
-from mteb.api.settings import get_settings
-from mteb.benchmarks._create_table import _training_datasets_cached
-from mteb.cache.result_cache import ResultCache
-from mteb.models.model_implementations import MODEL_REGISTRY
-from mteb.results.benchmark_results import BenchmarkResults
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
-    from concurrent.futures import Future
 
     from pydantic import BaseModel
 
     from mteb.api.schemas import BenchmarkSummarySchema
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass(frozen=True, slots=True)
-class Serialized:
-    """Pre-serialised schema response — raw bytes + optional gzipped variant + ETag."""
-
-    body: bytes
-    body_gzip: bytes | None  # None when payload is too small to bother compressing
-    etag: str
-
-
-# Tiny payloads don't gain from gzip; framing alone is ~20 bytes of overhead.
-_GZIP_MIN_BYTES = 1024
-
-
-def serialize_bytes(body: bytes) -> Serialized:
-    """Wrap raw JSON bytes with a gzipped variant (when worth it) + matching ETag.
-
-    Synchronous — callers that hit this on a cold path should run it through
-    :func:`asyncio.to_thread` so the gzip pass doesn't stall the event loop on
-    multi-MB payloads.
-    """
-    body_gzip = (
-        gzip.compress(body, compresslevel=6) if len(body) >= _GZIP_MIN_BYTES else None
-    )
-    etag = '"' + hashlib.sha1(body, usedforsecurity=False).hexdigest() + '"'
-    return Serialized(body=body, body_gzip=body_gzip, etag=etag)
-
-
-def _serialize(schema: BaseModel) -> Serialized:
-    return serialize_bytes(schema.model_dump_json(by_alias=True).encode())
-
-
-@functools.cache
-def get_cache() -> ResultCache:
-    """Return the process-wide `ResultCache`."""
-    return ResultCache()
-
-
-_UNIFIED_SCHEMA = {
-    "model_name": pl.Utf8,
-    "task_name": pl.Utf8,
-    "subset": pl.Utf8,
-    "score": pl.Float64,
-}
-
-
-def _dedupe_unified(combined: pl.DataFrame) -> pl.DataFrame:
-    """Reduce the combined frame to one row per (model, task, subset) with max score."""
-    if combined.is_empty():
-        return pl.DataFrame(schema=_UNIFIED_SCHEMA)
-    return (
-        combined.lazy()
-        .drop_nulls("score")
-        .group_by(["model_name", "task_name", "subset"])
-        .agg(pl.col("score").max())
-        .collect(engine="streaming")
-    )
-
-
-_DEFAULT_CONFIG = "default"
-
-
-def _load_default_from_hub(repo_id: str) -> pl.DataFrame | None:
-    """Fetch the ``default`` HF config (all-results dump) via direct parquet read.
-
-    Reads parquet shards with polars rather than ``datasets.load_dataset`` so a
-    stale README ``dataset_info`` block (e.g. when a new column lands in the
-    parquet but the YAML wasn't refreshed) doesn't fail the cast.
-
-    Catches only the exception families either path is expected to raise on a
-    legitimate miss: ``OSError`` (network / FS / HTTP, includes
-    ``ConnectionError`` + ``FileNotFoundError``), ``ValueError`` (unknown
-    config, malformed args), ``KeyError`` (missing parquet/metadata key), and
-    polars' own ``PolarsError`` base. ``Exception`` would hide programmer bugs
-    like ``TypeError`` / ``AttributeError``.
-    """
-    expected = (OSError, ValueError, KeyError, pl.exceptions.PolarsError)
-    try:
-        return pl.read_parquet(f"hf://datasets/{repo_id}/data/train-*.parquet")
-    except expected as exc:
-        logger.warning(
-            "Hub load failed for %s: %s: %s", repo_id, type(exc).__name__, exc
-        )
-        try:
-            return cast(
-                "pl.DataFrame",
-                load_dataset(repo_id, name=_DEFAULT_CONFIG, split="train").to_polars(),
-            )
-        except expected as exc2:
-            logger.warning(
-                "Hub fallback also failed for %s/%s: %s: %s",
-                repo_id,
-                _DEFAULT_CONFIG,
-                type(exc2).__name__,
-                exc2,
-            )
-            return None
-
-
-@functools.cache
-def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]:
-    """Return ``(per_benchmark_frames, unified_frame)``, loaded once.
-
-    Callers MUST NOT mutate the returned frames — they are shared across the
-    whole process. Polars frames are practically immutable from the Python
-    API, but ``.with_columns`` etc. should be called on `.lazy()` clones.
-    """
-    cache = get_cache()
-    combined: pl.DataFrame | None = None
-
-    repo_id = get_settings().cache_repo
-    if repo_id:
-        combined = _load_default_from_hub(repo_id)
-        if combined is not None and not combined.is_empty():
-            logger.info(
-                "Loaded default config (%d rows) from hub '%s'",
-                combined.height,
-                repo_id,
-            )
-        else:
-            combined = None
-
-    if combined is None:
-        logger.info("Building combined results frame from local ResultCache")
-        all_results = cache._load_from_cache(rebuild=True)
-        combined = all_results._to_results_df()
-
-    loaded = BenchmarkResults.split_leaderboard_frame(combined)
-    for bench in mteb.get_benchmarks():
-        loaded.setdefault(bench.name, pl.DataFrame(schema=combined.schema))
-
-    unified = _dedupe_unified(combined)
-    logger.info(
-        "Built unified results frame: %d rows / %d unique tasks",
-        unified.height,
-        unified.select(pl.col("task_name").n_unique()).item() if unified.height else 0,
-    )
-    return loaded, unified
 
 
 # Only kept because aggregators (build_model_scores, build_benchmark_leaders)
@@ -257,7 +98,7 @@ async def _cached_bytes(
             return cached
         CACHE_OUTCOMES.labels(layer=layer, outcome="miss").inc()
         schema = await schema_builder()
-        cached = await asyncio.to_thread(_serialize, schema)
+        cached = await asyncio.to_thread(serialize_schema, schema)
         store[key] = cached
         return cached
 
@@ -308,7 +149,7 @@ async def get_summary_bytes(name: str, languages: tuple[str, ...] = ()) -> Seria
         CACHE_OUTCOMES.labels(layer="summary_lang", outcome="miss").inc()
         logger.info("Building summary for %s (langs=%s)", name, languages)
         schema = await build_benchmark_summary(name, get_cache(), languages=languages)
-        cached = await asyncio.to_thread(_serialize, schema)
+        cached = await asyncio.to_thread(serialize_schema, schema)
         _summary_lang_bytes[key] = cached
         if len(_summary_lang_bytes) > _SUMMARY_LANG_MAX:
             evicted, _ = _summary_lang_bytes.popitem(last=False)
@@ -351,123 +192,3 @@ async def get_model_scores_bytes(name: str) -> Serialized:
         lambda: build_model_scores(name),
         layer="model_scores",
     )
-
-
-def _prewarm_training_datasets() -> None:
-    """Populate ``_training_datasets_cached`` for every registered model.
-
-    Without this, the first summary build pays ~2.5s on ``_collect_similar_tasks``
-    per first-seen model.
-    """
-    with ThreadPoolExecutor(max_workers=16, thread_name_prefix="warm-td") as ex:
-        list(ex.map(_training_datasets_cached, MODEL_REGISTRY))
-
-
-def _prewarm_list_schemas() -> None:
-    """Pre-build the unfiltered list schemas + their serialised bytes.
-
-    The four builders are independent — run them on a small thread pool.
-    """
-    with ThreadPoolExecutor(max_workers=4, thread_name_prefix="warm-list") as ex:
-        futures = [
-            ex.submit(_menu_schemas_bytes),
-            ex.submit(_benchmark_schemas_bytes),
-            ex.submit(_filtered_task_schemas_bytes, None, None, None, None, None),
-            ex.submit(
-                _filtered_model_schemas_bytes,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                False,
-            ),
-        ]
-        for f in futures:
-            f.result()
-
-
-def warmup_blocking() -> None:
-    """Populate shared caches synchronously before accepting requests.
-
-    Phases 1-3 are independent (network I/O / CPU / pydantic-core); they run
-    on a small thread pool so wall time is max() instead of sum(). Phase 4
-    (list schemas) depends on phases 1-3 because it reads them through the
-    benchmark / task / model caches, so it runs serially afterwards.
-    """
-    try:
-        with ThreadPoolExecutor(max_workers=3, thread_name_prefix="warmup") as ex:
-            futures: list[Future[object]] = [
-                ex.submit(_load_per_benchmark_frames),
-                ex.submit(_prewarm_training_datasets),
-                ex.submit(prewarm_schema_caches),
-            ]
-            for f in futures:
-                f.result()
-        _prewarm_list_schemas()
-    except (OSError, ValueError, KeyError, pl.exceptions.PolarsError) as exc:
-        # Warmup failure isn't fatal — the routes will rebuild on first request.
-        # Narrow set lets programmer errors (TypeError, AttributeError) surface.
-        logger.warning("light warmup failed: %s: %s", type(exc).__name__, exc)
-
-
-# Cap how many summaries build concurrently during preload. Each in-flight
-# build holds a full pydantic schema + a worker thread for gzip; unbounded
-# gather on ~50+ benchmarks spikes memory and the thread pool.
-_PRELOAD_CONCURRENCY = 4
-
-
-def preload_summaries_in_background() -> None:
-    """Pre-build every benchmark summary + per-language schema on a daemon thread."""
-    if not get_settings().preload:
-        return
-
-    def _run() -> None:
-        # Preload every registered benchmark — including off-menu
-        # ones — so hidden-benchmark requests also hit the warmed cache
-        # and the model detail page (which iterates all benchmarks) is
-        # cold-path-free.
-        all_names = [b.name for b in mteb.get_benchmarks()]
-
-        expected = (
-            OSError,
-            ValueError,
-            KeyError,
-            AttributeError,
-            pl.exceptions.PolarsError,
-        )
-
-        async def _build_one(name: str) -> None:
-            try:
-                await get_summary_bytes(name)
-            except expected as exc:
-                logger.warning(
-                    "warmup summary: %s failed (%s: %s)",
-                    name,
-                    type(exc).__name__,
-                    exc,
-                )
-            try:
-                await get_per_language_bytes(name)
-            except expected as exc:
-                logger.warning(
-                    "warmup per-language: %s failed (%s: %s)",
-                    name,
-                    type(exc).__name__,
-                    exc,
-                )
-
-        async def _build_all() -> None:
-            sem = asyncio.Semaphore(_PRELOAD_CONCURRENCY)
-
-            async def _bounded(name: str) -> None:
-                async with sem:
-                    await _build_one(name)
-
-            await asyncio.gather(*(_bounded(n) for n in all_names))
-
-        asyncio.run(_build_all())
-
-    threading.Thread(target=_run, name="mteb-api-preload", daemon=True).start()
