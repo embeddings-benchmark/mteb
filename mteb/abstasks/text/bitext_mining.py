@@ -11,6 +11,7 @@ from mteb._evaluators import BitextMiningEvaluator
 from mteb.abstasks._statistics_calculation import calculate_text_statistics
 from mteb.abstasks.abstask import AbsTask
 from mteb.models import EncoderProtocol
+from mteb.timing import TimingStack
 from mteb.types.statistics import SplitDescriptiveStatistics
 
 if TYPE_CHECKING:
@@ -83,6 +84,7 @@ class AbsTaskBitextMining(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Added load for "parallel" datasets"""
@@ -98,6 +100,8 @@ class AbsTaskBitextMining(AbsTask):
         if subsets_to_run is not None:
             hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
+        timer = timer or TimingStack()
+
         if self.dataset is None:
             raise ValueError("Dataset is not loaded.")
 
@@ -112,6 +116,7 @@ class AbsTaskBitextMining(AbsTask):
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 num_proc=num_proc,
+                timer=timer,
                 **kwargs,
             )
         else:
@@ -132,6 +137,7 @@ class AbsTaskBitextMining(AbsTask):
                     encode_kwargs=encode_kwargs,
                     prediction_folder=prediction_folder,
                     num_proc=num_proc,
+                    timer=timer,
                     **kwargs,
                 )
 
@@ -154,6 +160,7 @@ class AbsTaskBitextMining(AbsTask):
         prediction_folder: Path | None = None,
         parallel: bool = False,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> BitextMiningMetrics | dict[str, BitextMiningMetrics]:
         pairs = self._get_pairs(parallel)
@@ -164,6 +171,7 @@ class AbsTaskBitextMining(AbsTask):
             pair_columns=pairs,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         # NOTE: used only by BUCC

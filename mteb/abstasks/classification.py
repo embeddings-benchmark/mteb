@@ -19,6 +19,7 @@ from sklearn.model_selection import KFold
 from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator
 from mteb.models import EncoderProtocol
+from mteb.timing import TimingStack
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
@@ -162,6 +163,7 @@ class AbsTaskClassification(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate a model on the classification task.
@@ -188,6 +190,8 @@ class AbsTaskClassification(AbsTask):
         hf_subsets = self.hf_subsets
         if subsets_to_run is not None:
             hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
+
+        timer = timer or TimingStack()
 
         for hf_subset in hf_subsets:
             logger.info(
@@ -233,6 +237,7 @@ class AbsTaskClassification(AbsTask):
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 num_proc=num_proc,
+                timer=timer,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
@@ -249,6 +254,7 @@ class AbsTaskClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -272,17 +278,22 @@ class AbsTaskClassification(AbsTask):
             num_proc=num_proc,
             **encode_kwargs,
         )
-        logger.info(
-            f"Encoding {len(union_idxs)} unique training samples "
-            f"(union across {self.n_experiments} experiments)..."
-        )
-        union_cache = model.encode(
-            dataloader_train,
-            task_metadata=self.metadata,
-            hf_split=self.train_split,
-            hf_subset=hf_subset,
-            **encode_kwargs,
-        )
+        with timer(
+            "Encoding training samples",
+            split=hf_split,
+            subset=hf_subset,
+            log_message=(
+                f"Encoding {len(union_idxs)} unique training samples "
+                f"(union across {self.n_experiments} experiments)..."
+            ),
+        ):
+            union_cache = model.encode(
+                dataloader_train,
+                task_metadata=self.metadata,
+                hf_split=self.train_split,
+                hf_subset=hf_subset,
+                **encode_kwargs,
+            )
         idx_to_pos = {orig: pos for pos, orig in enumerate(union_idxs)}
 
         dataloader_test = create_dataloader(
@@ -292,31 +303,45 @@ class AbsTaskClassification(AbsTask):
             num_proc=num_proc,
             **encode_kwargs,
         )
-        test_embeddings = model.encode(
-            dataloader_test,
-            task_metadata=self.metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            **encode_kwargs,
-        )
+        with timer(
+            "Encoding test samples",
+            split=hf_split,
+            subset=hf_subset,
+        ):
+            test_embeddings = model.encode(
+                dataloader_test,
+                task_metadata=self.metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                **encode_kwargs,
+            )
 
         scores = []
         all_predictions = []
-        for i in range(self.n_experiments):
-            logger.info(f"Running experiment ({i}/{self.n_experiments})")
-            train_embeddings = union_cache[
-                [idx_to_pos[j] for j in all_selected_idxs[i]]
-            ]
-            scores_exp, predictions = self._run_experiment(
-                train_split.select(all_selected_idxs[i]),
-                eval_split,
-                train_embeddings,
-                test_embeddings,
-            )
+        with timer(
+            "Scoring",
+            split=hf_split,
+            subset=hf_subset,
+            log_message=f"Running {self.metadata.name} - Evaluating classifiers...",
+        ):
+            for i in range(self.n_experiments):
+                logger.info(f"Running experiment ({i}/{self.n_experiments})")
+                train_embeddings = union_cache[
+                    [idx_to_pos[j] for j in all_selected_idxs[i]]
+                ]
+                msg = f"Running experiment ({i}/{self.n_experiments})"
+                with timer(msg, split=hf_split, subset=hf_subset, log_message=msg):
+                    scores_exp, predictions = self._run_experiment(
+                        train_split.select(all_selected_idxs[i]),
+                        eval_split,
+                        train_embeddings,
+                        test_embeddings,
+                        timer=timer,
+                    )
 
-            if prediction_folder:
-                all_predictions.append(predictions)
-            scores.append(scores_exp)
+                if prediction_folder:
+                    all_predictions.append(predictions)
+                scores.append(scores_exp)
 
         if prediction_folder:
             self._save_task_predictions(
@@ -339,6 +364,7 @@ class AbsTaskClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if self.train_split != hf_split:
@@ -365,34 +391,47 @@ class AbsTaskClassification(AbsTask):
             num_proc=num_proc,
             **encode_kwargs,
         )
-        logger.info("Running cross-validation - Encoding samples...")
         # precompute all embeddings for cross-validation to not recomupute them in different k-folds
-        dataset_embeddings = model.encode(
-            dataloader_train,
-            task_metadata=self.metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            **encode_kwargs,
-        )
-        for i, (train_idx, val_idx) in enumerate(
-            cross_validation_splitter.split(range(num_samples))
+        with timer(
+            "Encoding training samples",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running cross-validation - Encoding samples...",
         ):
-            train_split = ds.select(train_idx)
-            eval_split = ds.select(val_idx)
-            train_dataset, idxs, selected_idx = self._undersample_data(
-                train_split, i, idxs
+            dataset_embeddings = model.encode(
+                dataloader_train,
+                task_metadata=self.metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                **encode_kwargs,
             )
-            logger.info(f"Running experiment ({i}/{self.n_experiments})")
-            scores_exp, predictions = self._run_experiment(
-                train_dataset,
-                eval_split,
-                dataset_embeddings[train_idx][selected_idx],
-                dataset_embeddings[val_idx],
-            )
+        with timer(
+            "Scoring",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running cross-validation - Evaluating classifiers...",
+        ):
+            for i, (train_idx, val_idx) in enumerate(
+                cross_validation_splitter.split(range(num_samples))
+            ):
+                train_split = ds.select(train_idx)
+                eval_split = ds.select(val_idx)
+                train_dataset, idxs, selected_idx = self._undersample_data(
+                    train_split, i, idxs
+                )
+                msg = f"Running experiment ({i}/{self.n_experiments})"
+                with timer(msg, split=hf_split, subset=hf_subset, log_message=msg):
+                    scores_exp, predictions = self._run_experiment(
+                        train_dataset,
+                        eval_split,
+                        dataset_embeddings[train_idx][selected_idx],
+                        dataset_embeddings[val_idx],
+                        timer=timer,
+                    )
 
-            if prediction_folder:
-                all_predictions.append(predictions)
-            scores.append(scores_exp)
+                if prediction_folder:
+                    all_predictions.append(predictions)
+                scores.append(scores_exp)
 
         if prediction_folder:
             self._save_task_predictions(
@@ -410,12 +449,14 @@ class AbsTaskClassification(AbsTask):
         eval_split: Dataset,
         train_embeddings: Array,
         test_embeddings: Array,
+        timer: TimingStack,
     ) -> tuple[ClassificationMetrics, list[float]]:
         evaluator = self.evaluator(
             train_split,
             eval_split,
             label_column_name=self.label_column_name,
             evaluator_model=self.evaluator_model,
+            timer=timer,
         )
         y_pred = evaluator(train_embeddings, test_embeddings)
         y_test = eval_split[self.label_column_name]
