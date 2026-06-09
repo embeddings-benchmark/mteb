@@ -447,6 +447,10 @@ class TaskScoreRowSchema(_CamelModel):
     score: float | None
     subset_scores: dict[str, float]
     benchmarks: list[str]
+    # Three-state: True = task is in `model.training_datasets`, False = it
+    # isn't, None = the model didn't declare `training_datasets` at all
+    # (frontend renders the same NA marker it uses for `zero_shot_pct=-1`).
+    trained_on: bool | None = None
 
 
 class TaskScoresSchema(_CamelModel):

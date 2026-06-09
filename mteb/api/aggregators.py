@@ -408,6 +408,14 @@ def build_task_scores(name: str, cache: ResultCache) -> TaskScoresSchema:
             score = sum(subset_scores.values()) / len(subset_scores)
         else:
             score = None
+        # `None` when the model didn't declare its training datasets — the
+        # parquet's `trained_on` column flattens "undeclared" and
+        # "declared-but-clean" both to False, so go to the source.
+        trained_on: bool | None
+        if meta.training_datasets:
+            trained_on = name in meta.training_datasets
+        else:
+            trained_on = None
         rows.append(
             TaskScoreRowSchema.model_construct(
                 rank=0,
@@ -415,6 +423,7 @@ def build_task_scores(name: str, cache: ResultCache) -> TaskScoresSchema:
                 score=score,
                 subset_scores=subset_scores,
                 benchmarks=list(hosting_benchmarks),
+                trained_on=trained_on,
             )
         )
     # Scored rows by score desc, null-score rows alphabetically at the bottom.
