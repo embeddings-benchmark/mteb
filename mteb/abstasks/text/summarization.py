@@ -23,6 +23,7 @@ if TYPE_CHECKING:
 
     from mteb._evaluators.text.summarization_evaluator import SummarizationMetrics
     from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs
     from mteb.types.statistics import (
         ScoreStatistics,
@@ -95,6 +96,7 @@ class AbsTaskSummarization(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> SummarizationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -114,6 +116,7 @@ class AbsTaskSummarization(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs, num_proc=num_proc)

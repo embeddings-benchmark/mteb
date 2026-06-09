@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerMultimodalEncoderWrapper,
+    SentenceTransformerEncoderWrapper,
 )
 
 MEGAPAIRS_CITATION = """@article{zhou2024megapairs,
@@ -15,7 +15,7 @@ MEGAPAIRS_CITATION = """@article{zhou2024megapairs,
 BGE_VL_TRAINING_DATASETS = {"MegaPairs"}
 
 bge_vl_base = ModelMeta(
-    loader=SentenceTransformerMultimodalEncoderWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},
     name="BAAI/BGE-VL-base",
     model_type=["dense"],
@@ -41,7 +41,7 @@ bge_vl_base = ModelMeta(
 )
 
 bge_vl_large = ModelMeta(
-    loader=SentenceTransformerMultimodalEncoderWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},
     name="BAAI/BGE-VL-large",
     model_type=["dense"],
@@ -67,7 +67,7 @@ bge_vl_large = ModelMeta(
 )
 
 bge_vl_mllm_s1 = ModelMeta(
-    loader=SentenceTransformerMultimodalEncoderWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},
     name="BAAI/BGE-VL-MLLM-S1",
     model_type=["dense"],
@@ -93,7 +93,7 @@ bge_vl_mllm_s1 = ModelMeta(
 )
 
 bge_vl_mllm_s2 = ModelMeta(
-    loader=SentenceTransformerMultimodalEncoderWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},
     name="BAAI/BGE-VL-MLLM-S2",
     model_type=["dense"],
@@ -119,7 +119,7 @@ bge_vl_mllm_s2 = ModelMeta(
 )
 
 bge_vl_v1_5_zs = ModelMeta(
-    loader=SentenceTransformerMultimodalEncoderWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},
     name="BAAI/BGE-VL-v1.5-zs",
     model_type=["dense"],
@@ -145,7 +145,7 @@ bge_vl_v1_5_zs = ModelMeta(
 )
 
 bge_vl_v1_5_mmeb = ModelMeta(
-    loader=SentenceTransformerMultimodalEncoderWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},
     name="BAAI/BGE-VL-v1.5-mmeb",
     model_type=["dense"],

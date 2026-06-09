@@ -9,7 +9,7 @@ import torch
 from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
-    from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
+    from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
 
     from mteb.types import BatchedInput
 
@@ -211,11 +211,17 @@ class FramesCollator:
                 return list(range(n_source))
             if num_frames is not None:
                 target = num_frames
-            else:
+            elif fps is not None:
                 duration = video.metadata.end_stream_seconds
+                if duration is None:
+                    raise RuntimeError(
+                        "video has no duration metadata; cannot use FPS-based sampling"
+                    )
                 target = max(1, int(duration * fps))
                 if max_frames is not None:
                     target = min(target, max_frames)
+            else:
+                raise RuntimeError("`fps` is not set; cannot use FPS-based sampling")
             if num_frames is not None and n_source < target:
                 return (list(range(n_source)) * ((target // n_source) + 1))[:target]
             step = max(1, n_source // target)
@@ -224,6 +230,8 @@ class FramesCollator:
         # Retry on the actual call: decrement source count when trailing
         # frames fail to decode.
         n = video.metadata.num_frames
+        if n is None:
+            raise RuntimeError("video has no frame count metadata")
         original_n = n
         while n > 0:
             try:

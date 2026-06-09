@@ -4,7 +4,7 @@ import datetime
 import logging
 import warnings
 from pathlib import Path
-from time import time
+from time import monotonic
 from typing import TYPE_CHECKING, cast
 
 from datasets.exceptions import DatasetNotFoundError
@@ -23,6 +23,7 @@ from mteb.models.sentence_transformer_wrapper import (
 )
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
+from mteb.timing import TimingStack
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
@@ -35,6 +36,7 @@ if TYPE_CHECKING:
     )
     from mteb.types import EncodeKwargs, HFSubset, ScoresDict, SplitName
     from mteb.types._metadata import ModelName, Revision
+
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +85,7 @@ def _sanitize_model(
     return wrapped_model, meta, model_name, model_revision
 
 
-def _evaluate_task(  # noqa: PLR0913
+def _evaluate_task(  # noqa: PLR0913, PLR0914
     model: MTEBModels,
     task: AbsTask,
     *,
@@ -94,6 +96,7 @@ def _evaluate_task(  # noqa: PLR0913
     public_only: bool | None,
     cache: ResultCache | None = None,
     num_proc: int | None = None,
+    timer: TimingStack | None = None,
     existing_results: TaskResult | None = None,
 ) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
@@ -156,11 +159,22 @@ def _evaluate_task(  # noqa: PLR0913
             evaluation_time = existing_results.evaluation_time
 
     task.check_if_dataset_is_superseded()
+    timer = timer or TimingStack()
 
     data_preloaded = task.data_loaded
     if not data_preloaded:
         try:
-            task.load_data(num_proc=num_proc)
+            num_phases_before = len(timer.phases)
+            start_load = monotonic()
+            task.load_data(num_proc=num_proc, timer=timer)
+            end_load = monotonic()
+            evaluation_time += end_load - start_load
+            # If load_data did not record its own timing phases, add a fallback "Data loading" phase
+            # using the outer timing measured around the load_data call.
+            if len(timer.phases) == num_phases_before:
+                timer.add_phase(
+                    "Data loading", start_load, end_load, split="", subset=""
+                )
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
                 msg = (
@@ -177,7 +191,7 @@ def _evaluate_task(  # noqa: PLR0913
                 raise e
 
     for split, hf_subsets in splits.items():
-        tick = time()
+        tick = monotonic()
         # BitextMining tasks evaluate all subsets together (e.g. for parallel subsets), so they
         # are not run subset-by-subset. Other tasks are run subset-by-subset for intermediate caching.
         if isinstance(task, AbsTaskBitextMining):
@@ -187,33 +201,53 @@ def _evaluate_task(  # noqa: PLR0913
 
         if split not in task_results:
             task_results[split] = {}
-        for batch in subsets_batches:
-            res = task.evaluate(
-                model,
-                split,
-                subsets_to_run=batch,
-                encode_kwargs=encode_kwargs,
-                prediction_folder=prediction_folder,
-                num_proc=num_proc,
-            )
-            tock_ss = time()
-            task_results[split].update(res)
-            # Save intermediate cache
-            if cache:
-                new_result = TaskResult.from_task_results(
-                    task,
-                    task_results,
-                    evaluation_time=evaluation_time + (tock_ss - tick),
-                    kg_co2_emissions=existing_co2,
-                    date=datetime.datetime.now(tz=datetime.timezone.utc),
+
+        num_phases_before = len(timer.phases)
+        general_timer = TimingStack()
+        if timer._start_time is not None:
+            general_timer._start_time = timer._start_time
+
+        with general_timer(
+            "Evaluation",
+            split=split,
+        ):
+            for batch in subsets_batches:
+                res = task.evaluate(
+                    model,
+                    split,
+                    subsets_to_run=batch,
+                    encode_kwargs=encode_kwargs,
+                    prediction_folder=prediction_folder,
+                    num_proc=num_proc,
+                    timer=timer,
                 )
-                cache.save_to_cache(new_result, model_meta)
-        tock = time()
+                tock_ss = monotonic()
+                task_results[split].update(res)
+                # Save intermediate cache
+                if cache:
+                    new_result = TaskResult.from_task_results(
+                        task,
+                        task_results,
+                        evaluation_time=evaluation_time + (tock_ss - tick),
+                        kg_co2_emissions=existing_co2,
+                        date=datetime.datetime.now(tz=datetime.timezone.utc),
+                        evaluation_phases=timer.phases if timer.phases else None,
+                    )
+                    cache.save_to_cache(new_result, model_meta)
+
+        duration = general_timer.phases[0]["end"] - general_timer.phases[0]["start"]
+
+        # If the task evaluation did not record internal phases, append the overall evaluation phase
+        if len(timer.phases) == num_phases_before:
+            if timer._start_time is None:
+                timer._start_time = general_timer._start_time
+            timer.phases.append(general_timer.phases[0])
 
         logger.debug(
-            f"Evaluation for {task.metadata.name} on {split} took {tock - tick:.2f} seconds"
+            f"Evaluation for {task.metadata.name} on {split} took {duration:.2f} seconds"
         )
-        evaluation_time += tock - tick
+
+        evaluation_time += duration
 
     result = TaskResult.from_task_results(
         task,
@@ -221,6 +255,7 @@ def _evaluate_task(  # noqa: PLR0913
         evaluation_time=evaluation_time,
         kg_co2_emissions=existing_co2,
         date=datetime.datetime.now(tz=datetime.timezone.utc),
+        evaluation_phases=timer.phases if timer.phases else None,
     )
 
     if not data_preloaded:  # only unload if we loaded the data
@@ -313,6 +348,82 @@ def _requires_merge(task: AbsTask, existing_results: TaskResult) -> bool:
     return False
 
 
+def _check_cache(
+    task: AbsTask,
+    meta: ModelMeta,
+    cache: ResultCache | None,
+    overwrite_strategy: OverwriteStrategy,
+) -> tuple[TaskResult | None, dict[str, list[str]]]:
+    """Load cached results, handle early skipping if up-to-date, or validate compatibility.
+
+    Args:
+        task: The task to evaluate.
+        meta: Metadata of the model being evaluated.
+        cache: The cache database or file system layer.
+        overwrite_strategy: The strategy to handle existing cache results.
+
+    Returns:
+        A tuple containing:
+            - The cached TaskResult if it is compatible and we want to resume/skip.
+              Returns None if we need to re-run from scratch.
+            - A dictionary mapping evaluation split names to a list of missing subset names.
+              Returns an empty dict if no splits or subsets are missing.
+    """
+    # Load results from the cache if the overwrite strategy allows it
+    existing_results: TaskResult | None = None
+    if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
+        existing_results = cache.load_task_result(task.metadata.name, meta)
+
+    dont_overwrite = overwrite_strategy in {
+        OverwriteStrategy.NEVER,
+        OverwriteStrategy.ONLY_CACHE,
+    }
+
+    # Check if the cached results are compatible/mergeable with the current task definition
+    is_mergeable = existing_results is not None and (
+        not _requires_merge(task, existing_results)
+        or existing_results.is_mergeable(task)
+    )
+
+    # Determine missing splits and subsets
+    if existing_results and (dont_overwrite or is_mergeable):
+        # Cache exists and is compatible, compute missing evaluations to potentially resume
+        missing_eval = existing_results.get_missing_evaluations(task)
+    else:
+        # Cache is missing, incompatible, or we are forcing an overwrite: re-run all splits/subsets
+        missing_eval = dict.fromkeys(task.eval_splits, task.hf_subsets)
+        existing_results = None
+
+    # Enforce dont_overwrite constraints (NEVER and ONLY_CACHE strategies)
+    if missing_eval and dont_overwrite:
+        if existing_results is None:
+            # Cache is completely missing (or incompatible)
+            # - For normal tasks, ONLY_CACHE strategy must raise ValueError since it cannot evaluate.
+            # - For AbsTaskAggregate, we don't raise here; it will fall back to evaluating subtasks recursively.
+            if (
+                not isinstance(task, AbsTaskAggregate)
+                and overwrite_strategy == OverwriteStrategy.ONLY_CACHE
+            ):
+                raise ValueError(
+                    f"overwrite_strategy is set to '{overwrite_strategy.value}' but no results found in cache for task {task.metadata.name}."
+                )
+        # Cache results file exists but some splits/subsets are missing
+        # - For normal tasks, raising ValueError prevents silent overwrite under NEVER or ONLY_CACHE.
+        # - For AbsTaskAggregate, NEVER must raise to prevent overwriting the existing incomplete result file,
+        #   but ONLY_CACHE skips raising here to allow merging cached subtask results.
+        elif (
+            not isinstance(task, AbsTaskAggregate)
+            or overwrite_strategy == OverwriteStrategy.NEVER
+        ):
+            raise ValueError(
+                f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists for task {task.metadata.name}. "
+                + f"However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
+            )
+        existing_results = None
+
+    return existing_results, missing_eval
+
+
 def evaluate(  # noqa: PLR0913, PLR0914
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
     tasks: AbsTask | Iterable[AbsTask],
@@ -326,6 +437,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
     show_progress_bar: bool = True,
     public_only: bool | None = None,
     num_proc: int | None = None,
+    timer: TimingStack | None = None,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -351,6 +463,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
         public_only: Run only public tasks. If None, it will attempt to run the private task.
         num_proc: Number of processes to use during data loading and transformation. Defaults to 1.
+        timer: A context manager that tracks the timing of evaluation phases.
 
     Returns:
         The results of the evaluation.
@@ -388,9 +501,28 @@ def evaluate(  # noqa: PLR0913, PLR0914
 
     model, meta, model_name, model_revision = _sanitize_model(model)
     _check_model_modalities(meta, tasks)
+    overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
+        existing_results, missing_eval = _check_cache(
+            tasks, meta, cache, overwrite_strategy
+        )
+
+        if (
+            existing_results
+            and not missing_eval
+            and overwrite_strategy != OverwriteStrategy.ALWAYS
+        ):
+            logger.info(
+                f"Results for {tasks.metadata.name} already exist in cache. Skipping evaluation and loading results."
+            )
+            return ModelResult(
+                model_name=model_name,
+                model_revision=model_revision,
+                task_results=[existing_results],
+            )
+
         results = evaluate(
             model,
             tasks.metadata.tasks,
@@ -403,8 +535,13 @@ def evaluate(  # noqa: PLR0913, PLR0914
             show_progress_bar=show_progress_bar,
             public_only=public_only,
             num_proc=num_proc,
+            timer=timer,
         )
         combined_results = tasks.combine_task_results(results.task_results)
+
+        if existing_results:
+            combined_results = existing_results.merge(combined_results)
+
         if cache:
             cache.save_to_cache(
                 combined_results,
@@ -416,6 +553,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             model_name=results.model_name,
             model_revision=results.model_revision,
             task_results=[combined_results],
+            exceptions=results.exceptions,
         )
 
     if isinstance(tasks, AbsTask):
@@ -442,6 +580,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 show_progress_bar=False,
                 public_only=public_only,
                 num_proc=num_proc,
+                timer=timer,
             )
             evaluate_results.extend(_res.task_results)
             if _res.exceptions:
@@ -453,28 +592,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             exceptions=exceptions,
         )
 
-    overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
-
-    existing_results: TaskResult | None = None
-    if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
-        cache_results = cache.load_task_result(task.metadata.name, meta)
-        if cache_results:
-            existing_results = cache_results
-
-    if (
-        existing_results
-        and overwrite_strategy
-        not in (OverwriteStrategy.ALWAYS, OverwriteStrategy.NEVER)  # noqa: PLR6201
-        and (
-            not _requires_merge(task, existing_results)
-            or existing_results.is_mergeable(task)
-        )
-    ):
-        missing_eval = existing_results.get_missing_evaluations(task)
-    else:
-        missing_eval = dict.fromkeys(task.eval_splits, task.hf_subsets)
-        # Will be fully recomputed so we set it to None to avoid merging:
-        existing_results = None
+    existing_results, missing_eval = _check_cache(task, meta, cache, overwrite_strategy)
 
     if (
         existing_results
@@ -490,19 +608,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
             model_revision=model_revision,
             task_results=[existing_results],
         )
-    if missing_eval and overwrite_strategy in [  # noqa: PLR6201
-        OverwriteStrategy.NEVER,
-        OverwriteStrategy.ONLY_CACHE,
-    ]:
-        if existing_results is None:
-            raise ValueError(
-                f"overwrite_strategy is set to '{overwrite_strategy.value}' but no results found in cache for task {task.metadata.name}."
-            )
-        raise ValueError(
-            f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists for task {task.metadata.name}. "
-            + f"However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
-        )
-
     if existing_results:
         logger.info(
             f"Found existing results for {task.metadata.name}, only running missing splits (subsets): {missing_eval}"
