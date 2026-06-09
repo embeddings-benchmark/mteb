@@ -3,11 +3,14 @@
 # Multi-stage Dockerfile for the mteb FastAPI service.
 #
 # Three stages share the heavy "clone + pip install + HF dataset
-# warmup" work via a common base image:
+# warmup + per-benchmark frame split" work via a common base image:
 #
 #   base        — python:3.12-bookworm + git + a non-root user + mteb
 #                 cloned and installed with the [api] extra + the
-#                 mteb/results parquet cache pre-warmed.
+#                 mteb/results parquet cache pre-warmed + the
+#                 per-benchmark split persisted to
+#                 ``~/.cache/mteb/leaderboard/`` so the runtime first
+#                 request skips ~30s of cold work.
 #   og-builder  — extends `base` with Chromium runtime libs + the
 #                 [og] extra (Playwright). Renders one OG hero PNG per
 #                 benchmark / task / model into /og-cache, then exits.
@@ -74,6 +77,21 @@ RUN pip install --user --extra-index-url https://download.pytorch.org/whl/cpu ".
 # when the dataset is still being populated upstream — the API falls
 # back to the GitHub clone on first request when the snapshot is empty.
 RUN hf download mteb/results --repo-type dataset || true
+
+# Pre-bake the per-benchmark leaderboard frames into the image so the
+# runtime skips the ~30s cold (HF download + 72-way split) on first
+# request. ``_load_per_benchmark_frames`` reads from the local HF cache
+# warmed by the previous RUN, does the split, and persists the result
+# to ``$XDG_CACHE_HOME/mteb/leaderboard/`` (~370 MB across 71 parquets
+# + a manifest). The runtime stage reads straight from those files —
+# warm start drops from ~40s to ~5s.
+#
+# Invalidation: the manifest records the HF dataset commit SHA at bake
+# time. When the dataset is updated upstream, the first runtime startup
+# notices the SHA mismatch and rebuilds the cache (and reseeds the
+# bytes caches on top). ``|| true`` keeps the build alive when the
+# dataset is empty or temporarily unreachable at bake time.
+RUN python -c "from mteb.api.frames import _load_per_benchmark_frames; _load_per_benchmark_frames()" || true
 
 
 # ─── Stage: og-builder ──────────────────────────────────────────────

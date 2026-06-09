@@ -11,6 +11,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import threading
+import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING
 
@@ -35,11 +36,6 @@ from mteb.models.model_implementations import MODEL_REGISTRY
 
 logger = logging.getLogger(__name__)
 
-# Cap how many summaries build concurrently during preload. Each in-flight
-# build holds a full pydantic schema + a worker thread for gzip; unbounded
-# gather on ~50+ benchmarks spikes memory and the thread pool.
-_PRELOAD_CONCURRENCY = 4
-
 
 def _prewarm_training_datasets() -> None:
     """Populate ``_training_datasets_cached`` for every registered model.
@@ -47,8 +43,11 @@ def _prewarm_training_datasets() -> None:
     Without this, the first summary build pays ~2.5s on ``_collect_similar_tasks``
     per first-seen model.
     """
+    t0 = time.monotonic()
+    logger.info("warmup: training-datasets started (%d models)", len(MODEL_REGISTRY))
     with ThreadPoolExecutor(max_workers=16, thread_name_prefix="warm-td") as ex:
         list(ex.map(_training_datasets_cached, MODEL_REGISTRY))
+    logger.info("warmup: training-datasets done in %.2fs", time.monotonic() - t0)
 
 
 def _prewarm_list_schemas() -> None:
@@ -56,6 +55,8 @@ def _prewarm_list_schemas() -> None:
 
     The four builders are independent — run them on a small thread pool.
     """
+    t0 = time.monotonic()
+    logger.info("warmup: list schemas started")
     with ThreadPoolExecutor(max_workers=4, thread_name_prefix="warm-list") as ex:
         futures = [
             ex.submit(_menu_schemas_bytes),
@@ -75,6 +76,23 @@ def _prewarm_list_schemas() -> None:
         ]
         for f in futures:
             f.result()
+    logger.info("warmup: list schemas done in %.2fs", time.monotonic() - t0)
+
+
+def _load_per_benchmark_frames_logged() -> None:
+    """``_load_per_benchmark_frames`` with timing logs around the heavy call."""
+    t0 = time.monotonic()
+    logger.info("warmup: per-benchmark frames started")
+    _load_per_benchmark_frames()
+    logger.info("warmup: per-benchmark frames done in %.2fs", time.monotonic() - t0)
+
+
+def _prewarm_schema_caches_logged() -> None:
+    """``prewarm_schema_caches`` with timing logs around the heavy call."""
+    t0 = time.monotonic()
+    logger.info("warmup: schema caches started")
+    prewarm_schema_caches()
+    logger.info("warmup: schema caches done in %.2fs", time.monotonic() - t0)
 
 
 def warmup_blocking() -> None:
@@ -85,12 +103,14 @@ def warmup_blocking() -> None:
     (list schemas) depends on phases 1-3 because it reads them through the
     benchmark / task / model caches, so it runs serially afterwards.
     """
+    t0 = time.monotonic()
+    logger.info("warmup: blocking phase started")
     try:
         with ThreadPoolExecutor(max_workers=3, thread_name_prefix="warmup") as ex:
             futures: list[Future[object]] = [
-                ex.submit(_load_per_benchmark_frames),
+                ex.submit(_load_per_benchmark_frames_logged),
                 ex.submit(_prewarm_training_datasets),
-                ex.submit(prewarm_schema_caches),
+                ex.submit(_prewarm_schema_caches_logged),
             ]
             for f in futures:
                 f.result()
@@ -98,19 +118,35 @@ def warmup_blocking() -> None:
     except (OSError, ValueError, KeyError, pl.exceptions.PolarsError) as exc:
         # Warmup failure isn't fatal — the routes will rebuild on first request.
         # Narrow set lets programmer errors (TypeError, AttributeError) surface.
-        logger.warning("light warmup failed: %s: %s", type(exc).__name__, exc)
+        logger.warning(
+            "warmup: blocking phase failed after %.2fs (%s: %s)",
+            time.monotonic() - t0,
+            type(exc).__name__,
+            exc,
+        )
+        return
+    logger.info("warmup: blocking phase done in %.2fs", time.monotonic() - t0)
 
 
 def preload_summaries_in_background() -> None:
     """Pre-build every benchmark summary + per-language schema on a daemon thread."""
     if not get_settings().preload:
+        logger.info("warmup: background preload disabled (PRELOAD=0)")
         return
+
+    concurrency = get_settings().preload_concurrency
 
     def _run() -> None:
         # Preload every registered benchmark — including off-menu ones — so
         # hidden-benchmark requests also hit the warmed cache and the model
         # detail page (which iterates all benchmarks) is cold-path-free.
         all_names = [b.name for b in mteb.get_benchmarks()]
+        t0 = time.monotonic()
+        logger.info(
+            "warmup: background preload started (%d benchmarks, concurrency=%d)",
+            len(all_names),
+            concurrency,
+        )
 
         expected = (
             OSError,
@@ -141,7 +177,7 @@ def preload_summaries_in_background() -> None:
                 )
 
         async def _build_all() -> None:
-            sem = asyncio.Semaphore(_PRELOAD_CONCURRENCY)
+            sem = asyncio.Semaphore(concurrency)
 
             async def _bounded(name: str) -> None:
                 async with sem:
@@ -150,5 +186,10 @@ def preload_summaries_in_background() -> None:
             await asyncio.gather(*(_bounded(n) for n in all_names))
 
         asyncio.run(_build_all())
+        logger.info(
+            "warmup: background preload done in %.2fs (%d benchmarks)",
+            time.monotonic() - t0,
+            len(all_names),
+        )
 
     threading.Thread(target=_run, name="mteb-api-preload", daemon=True).start()

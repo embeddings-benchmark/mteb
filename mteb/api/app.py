@@ -8,9 +8,6 @@ from __future__ import annotations
 import asyncio
 import logging
 import pathlib
-from collections.abc import (  # noqa: TC003 — used at runtime by lifespan signature
-    AsyncIterator,
-)
 from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING
 
@@ -27,6 +24,8 @@ from mteb.api.settings import get_settings
 from mteb.api.warmup import preload_summaries_in_background, warmup_blocking
 
 if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
     from starlette.responses import Response
     from starlette.types import Scope
 
@@ -42,17 +41,27 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     shutdown_telemetry()
 
 
+def _configure_logging(level: str) -> None:
+    """Install a root handler so our INFO logs surface alongside uvicorn output.
+
+    Uvicorn configures its own ``uvicorn.error`` / ``uvicorn.access`` loggers
+    but doesn't touch root, so unconfigured loggers like ``mteb.api.warmup``
+    have nowhere to emit. ``basicConfig`` is a no-op when handlers already
+    exist (e.g. uvicorn ``--log-config``) so this doesn't fight existing
+    setups.
+    """
+    logging.basicConfig(
+        level=level.upper(),
+        format="%(asctime)s %(levelname)-7s %(name)s: %(message)s",
+    )
+
+
 def create_app() -> FastAPI:
     """Build and return the FastAPI app instance for the leaderboard API."""
-    app = FastAPI(title="MTEB Leaderboard API", lifespan=lifespan)
     settings = get_settings()
-    # OTEL instrumentation must attach before middleware finalises so the
-    # FastAPI instrumentor can inject its ASGI middleware.
+    _configure_logging(settings.log_level)
+    app = FastAPI(title="MTEB Leaderboard API", lifespan=lifespan)
     setup_telemetry(app, settings)
-    # GZip compresses 200 responses that aren't already encoded (cached routes
-    # set Content-Encoding: gzip themselves and skip recompression). CORS adds
-    # headers next; Prometheus is the outermost middleware so it sees the full
-    # stack timing.
     app.add_middleware(GZipMiddleware, minimum_size=1024)
     app.add_middleware(
         CORSMiddleware,

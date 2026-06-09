@@ -33,6 +33,34 @@ def _format_scores(score: float) -> float:
     return round(score * 100, 2)
 
 
+def _short_name(org_name: str) -> str:
+    """Return the last ``/``-separated segment of an ``org/name`` identifier."""
+    return org_name.rsplit("/", 1)[-1] if org_name else ""
+
+
+def _wrap_model_column(
+    df: pd.DataFrame, meta_lookup: dict[str, dict[str, object]]
+) -> pd.DataFrame:
+    """Replace the canonical ``Model`` column with ``[short_name](url)`` markdown.
+
+    Looks up the URL via :func:`_static_model_meta`. Models without a URL fall
+    back to the bare short name; models without a registry entry pass through
+    untouched (display still shows the org/name).
+    """
+    if "Model" not in df.columns:
+        return df
+
+    def _wrap(full_name: str) -> str:
+        short = _short_name(full_name)
+        meta = meta_lookup.get(full_name)
+        url = meta.get("_model_link") if meta else None
+        return f"[{short}]({url})" if url else short
+
+    df = df.copy()
+    df["Model"] = df["Model"].map(_wrap)
+    return df
+
+
 def _get_column_widths(df: pd.DataFrame) -> list[str]:
     # Keep this helper around: Gradio's column-width behavior changes between releases.
     widths = []
@@ -69,18 +97,18 @@ def apply_summary_styling_from_benchmark(
         Tuple of (styled gr.DataFrame for display, raw pd.DataFrame with metadata for plots)
     """
     t0 = time.time()
-    summary_pl = benchmark_instance._create_summary_table(pl_df)
+    summary = benchmark_instance._create_summary_table(pl_df)
     t1 = time.time()
 
-    if "No results" in summary_pl.columns:
+    if summary.is_empty:
         logger.info(
             "apply_summary_styling [%s]: create_table=%.3fs (no results)",
             benchmark_instance.name,
             t1 - t0,
         )
-        return gr.DataFrame(summary_pl), summary_pl.to_pandas()
+        return gr.DataFrame(summary.df), summary.df.to_pandas()
 
-    summary_df = summary_pl.to_pandas()
+    summary_df = summary.df.to_pandas()
     display_df = summary_df.drop(columns=["Release Date"], errors="ignore")
     result = _apply_summary_table_styling(display_df), summary_df
     t2 = time.time()
@@ -181,9 +209,19 @@ def _style_number_of_parameters(num_params: float) -> str:
 def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
     """Apply pandas-Styler formatting to a raw summary DataFrame.
 
+    Wraps the canonical ``Model`` column (``org/name``) in a markdown link
+    using the cached model-metadata URL, and humanises the per-task-type
+    column headers (``BitextMining`` → ``Bitext Mining``). Both transforms
+    are display-only — the data layer keeps canonical names so the API can
+    use them directly.
+
     Returns:
         Styled gr.DataFrame ready for display in the leaderboard
     """
+    from mteb.benchmarks._create_table import _split_on_capital, _static_model_meta
+
+    joint_table = _wrap_model_column(joint_table, _static_model_meta())
+
     excluded_columns = [
         "Rank (Borda)",
         "Rank (Mean Task)",
@@ -194,6 +232,16 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         "Embedding Dimensions",
         "Max Tokens",
     ]
+    # Humanise per-task-type column headers for display while leaving meta /
+    # Mean (...) columns untouched.
+    type_col_renames = {
+        c: _split_on_capital(c)
+        for c in joint_table.columns
+        if c not in excluded_columns
+        and c not in {"Zero-shot", "Release Date"}
+        and not c.startswith("Mean")
+    }
+    joint_table = joint_table.rename(columns=type_col_renames)
 
     score_columns = [
         col
@@ -255,6 +303,8 @@ def _apply_per_task_table_styling(per_task: pd.DataFrame) -> gr.DataFrame:
     Returns:
         Styled gr.DataFrame ready for display in the leaderboard
     """
+    if "Model" in per_task.columns:
+        per_task = per_task.assign(Model=per_task["Model"].map(_short_name))
     task_score_columns = per_task.select_dtypes("number").columns
     per_task[task_score_columns] *= 100
 
@@ -283,6 +333,8 @@ def _apply_per_language_table_styling(per_language: pd.DataFrame) -> gr.DataFram
     Returns:
         gr.DataFrame ready for display in the leaderboard
     """
+    if "Model" in per_language.columns:
+        per_language = per_language.assign(Model=per_language["Model"].map(_short_name))
     language_score_columns = per_language.select_dtypes("number").columns
     per_language[language_score_columns] = (
         per_language[language_score_columns] * 100

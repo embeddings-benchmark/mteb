@@ -23,10 +23,7 @@ _MAX_BYTES = 2 * 1024 * 1024  # 2MB
 
 _DEFAULT_CONTENT_TYPE = "image/svg+xml"
 
-# Negative cache TTL: how long to remember a failed upstream fetch before
-# retrying. Short enough that a transient GitHub outage doesn't kill icons
-# for a deploy cycle, long enough to stop the API from amplifying upstream
-# unavailability into a per-request reverse-DDoS.
+# Negative cache TTL: how long to remember a failed upstream fetch before retrying.
 _FAILURE_TTL_S = 60.0
 
 
@@ -39,9 +36,7 @@ class CachedIcon:
 
 
 _cache: dict[str, CachedIcon] = {}
-# name -> monotonic expiry timestamp. Pruned lazily on read.
 _failure_cache: dict[str, float] = {}
-# Per-name async lock so concurrent cold requests share one upstream call.
 _fetch_locks: dict[str, asyncio.Lock] = {}
 
 
@@ -104,11 +99,6 @@ async def get_icon(name: str, url: str) -> CachedIcon | None:
         _cache[name] = fetched
         _failure_cache.pop(name, None)
         return fetched
-
-
-def has_cached(name: str) -> bool:
-    """Used by tests to assert cache-hit behavior without forcing a fetch."""
-    return name in _cache
 
 
 def cache_clear() -> None:

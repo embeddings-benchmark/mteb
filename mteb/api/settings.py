@@ -8,6 +8,16 @@ Environment variables (all optional):
 * ``OG_DIR`` — OG hero PNG directory (default ``/data/og``).
 * ``PREWARM_MAX_WORKERS`` — thread-pool size for the schema-cache prewarm
   (default 16). Tune down on small-memory hosts; tune up on large ones.
+* ``PRELOAD_CONCURRENCY`` — semaphore cap on concurrent summary builds
+  during the background preload pass (default 4). Each in-flight build
+  holds a full pydantic schema + a worker thread for gzip; raising this
+  speeds up preload at the cost of peak memory.
+* ``LOG_LEVEL`` — root logging level (default ``INFO``). Applied via
+  ``basicConfig`` from ``create_app`` so warmup/cache logs surface
+  alongside uvicorn's output.
+* ``DISK_CACHE`` — ``1`` (default) to persist per-benchmark frames to
+  ``~/.cache/mteb/leaderboard/`` and reuse on next startup. Invalidated
+  by HF dataset commit SHA. Set ``0`` to always rebuild.
 * ``OTEL_EXPORTER_OTLP_ENDPOINT`` / ``OTEL_SERVICE_NAME`` — standard OTEL.
 """
 
@@ -48,6 +58,17 @@ class Settings(BaseSettings):
     # Thread-pool size for prewarm_schema_caches; pydantic-core construction
     # releases the GIL so this scales with cores.
     prewarm_max_workers: int = Field(default=16, ge=1)
+    # Semaphore cap on concurrent benchmark builds during the background
+    # preload (each holds a full schema + a gzip worker thread).
+    preload_concurrency: int = Field(default=4, ge=1)
+    # Root logger level applied by ``create_app`` via ``basicConfig`` so the
+    # warmup/cache INFO logs surface alongside uvicorn's own output.
+    log_level: str = Field(default="INFO")
+    # Persist the (split + unified) result of _load_per_benchmark_frames to
+    # ``~/.cache/mteb/leaderboard/`` so subsequent process restarts skip the
+    # ~20s HF download + ~10s split. Invalidated via the HF dataset commit
+    # SHA; set to ``False`` to force a fresh build every boot.
+    disk_cache: bool = True
 
     otel_endpoint: str | None = Field(
         default=None,

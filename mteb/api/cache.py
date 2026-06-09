@@ -172,7 +172,7 @@ async def get_task_scores_bytes(name: str) -> Serialized:
     """JSON bytes + gzip + ETag for the task-scores endpoint."""
 
     async def _build() -> BaseModel:
-        return await asyncio.to_thread(build_task_scores, name, get_cache())
+        return await asyncio.to_thread(build_task_scores, name)
 
     return await _cached_bytes(
         _task_score_bytes,

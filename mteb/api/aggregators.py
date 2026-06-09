@@ -43,8 +43,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-# Non-score metadata columns from `_create_summary_table` — stripped when
-# building `scores_by_task_type`.
 _SUMMARY_META_COLS = frozenset(
     {
         "Rank (Borda)",
@@ -80,6 +78,58 @@ def _empty_summary(
         rows=[],
         aggregations=bench_schema.aggregations,
     )
+
+
+def _extract_trained_on_map(long_df: pl.DataFrame) -> dict[str, list[str]]:
+    """Build a ``model_name -> [task_name, ...]`` map.
+
+    Reads the long frame's pre-baked ``trained_on`` column (set by
+    ``_build_pre_agg_df``).
+    """
+    if "trained_on" not in long_df.columns:
+        return {}
+    trained_pl = (
+        long_df.lazy()
+        .filter(pl.col("trained_on"))
+        .select(["model_name", "task_name"])
+        .unique()
+        .collect()
+    )
+    out: dict[str, list[str]] = {}
+    for mn, tn in trained_pl.iter_rows():
+        out.setdefault(mn, []).append(tn)
+    for lst in out.values():
+        lst.sort()
+    return out
+
+
+def _recompute_lenient_means(
+    scores_by_task: dict[str, float],
+    task_to_type: dict[str, str],
+) -> tuple[dict[str, float], float | None, float | None]:
+    """Recompute per-type means, mean(task), and mean(task_type) leniently.
+
+    Means are taken over only the tasks a model actually ran. Used in the
+    language-filtered path so partial-coverage models don't all collapse to
+    null. Per-task-type bucketing avoids letting a single dense type
+    dominate (e.g. Classification with 20 tasks shouldn't outweigh
+    Retrieval with 3).
+    """
+    type_buckets: dict[str, list[float]] = {}
+    for tname, score in scores_by_task.items():
+        ttype = task_to_type.get(tname)
+        if ttype is None:
+            continue
+        type_buckets.setdefault(ttype, []).append(float(score))
+
+    scores_by_task_type = {
+        ttype: sum(vals) / len(vals) for ttype, vals in type_buckets.items() if vals
+    }
+    task_vals = list(scores_by_task.values())
+    mean_task = sum(task_vals) / len(task_vals) if task_vals else None
+    type_vals = list(scores_by_task_type.values())
+    mean_type = sum(type_vals) / len(type_vals) if type_vals else None
+    return scores_by_task_type, mean_task, mean_type
 
 
 async def build_benchmark_summary(  # noqa: PLR0914
@@ -136,93 +186,47 @@ async def build_benchmark_summary(  # noqa: PLR0914
             pl.col("language").list.eval(pl.element().is_in(code_match)).list.any()
         )
 
-    # Both builders are independent and release the GIL inside polars — run
-    # them concurrently so wall time is max() instead of sum().
-    summary_pl, per_task_pl = await asyncio.gather(
-        asyncio.to_thread(bench._create_summary_table, long_df),
-        asyncio.to_thread(bench._create_per_task_table, long_df),
+    # Compute the (model × task) wide pivot once on a worker thread and pass
+    # it to both builders — they would otherwise each recompute it on their
+    # own thread, doubling polars CPU on the heaviest single op. Subclass
+    # builders that need an is_public-aware pivot ignore the kwarg and pay
+    # the cost themselves; per-task table always benefits.
+    pivot = await asyncio.to_thread(bench._build_per_task_pivot, long_df)
+    summary, per_task_pl = await asyncio.gather(
+        asyncio.to_thread(bench._create_summary_table, long_df, pivot=pivot),
+        asyncio.to_thread(bench._create_per_task_table, long_df, pivot=pivot),
     )
-    if "No results" in summary_pl.columns:
+    if summary.is_empty:
         return _empty_summary(bench.name, bench_schema, tasks_meta)
+    summary_pl = summary.df
 
-    # Summary frame replaces ``model_name`` with markdown-linked ``Model``;
-    # rebuild a short→full map to look up MODEL_REGISTRY.
-    short_to_full: dict[str, str] = {}
-    for full_name in long_df.get_column("model_name").unique().to_list():
-        short_to_full.setdefault(full_name.split("/")[-1], full_name)
-
-    def _parse_model_cell(cell: str) -> str:
-        if cell.startswith("[") and "](" in cell:
-            return cell[1 : cell.index("](")]
-        return cell
-
+    # ``Model`` now holds the canonical org/name — no parsing needed.
     per_task_rows: dict[str, dict[str, float]] = {}
     if "No results" not in per_task_pl.columns and "Model" in per_task_pl.columns:
         task_cols_pt = [c for c in per_task_pl.columns if c != "Model"]
         for prow in per_task_pl.iter_rows(named=True):
-            short = _parse_model_cell(prow["Model"])
-            full = short_to_full.get(short, short)
-            per_task_rows[full] = {
+            per_task_rows[prow["Model"]] = {
                 col: float(v) for col in task_cols_pt if (v := prow[col]) is not None
             }
 
-    # `trained_on` is pre-baked into the parquet by `_build_pre_agg_df`.
-    trained_on_by_model: dict[str, list[str]] = {}
-    if "trained_on" in long_df.columns:
-        trained_pl = (
-            long_df.lazy()
-            .filter(pl.col("trained_on"))
-            .select(["model_name", "task_name"])
-            .unique()
-            .collect()
-        )
-        for mn, tn in trained_pl.iter_rows():
-            trained_on_by_model.setdefault(mn, []).append(tn)
-        for lst in trained_on_by_model.values():
-            lst.sort()
+    trained_on_by_model = _extract_trained_on_map(long_df)
 
-    # Prefer "Rank" when present — MIEB/ViDoRe emit both "Rank" and
-    # "Rank (Borda)" but Borda-first would shuffle MIEB rows.
-    summary_cols = summary_pl.columns
-    rank_col = next(
-        (c for c in ("Rank", "Rank (Mean Task)", "Rank (Borda)") if c in summary_cols),
-        None,
-    )
-
-    type_cols = [c for c in summary_cols if c not in _SUMMARY_META_COLS]
-    # _create_summary_table humanises CamelCase ("BitextMining" → "Bitext
-    # Mining"); strip the inserted spaces so the canonical keys match the
-    # raw type names tasksMeta carries.
-    type_cols_canonical = [c.replace(" ", "") for c in type_cols]
-    canonical_to_display = dict(zip(type_cols_canonical, type_cols))
-    mean_task_col = next(
-        (
-            c
-            for c in ("Mean (Task)", "Mean (Subset)", "Mean (Public)")
-            if c in summary_cols
-        ),
-        None,
-    )
-    mean_type_col = "Mean (TaskType)" if "Mean (TaskType)" in summary_cols else None
-    has_public = "Mean (Public)" in summary_cols and mean_task_col != "Mean (Public)"
-    has_private = "Mean (Private)" in summary_cols
+    # The SummaryTable wrapper tells us exactly which columns hold what — no
+    # introspection needed. Type columns are still detected by exclusion since
+    # those vary per benchmark (raw CamelCase like "Retrieval", "STS").
+    type_cols = [c for c in summary_pl.columns if c not in _SUMMARY_META_COLS]
 
     # Language-filtered: switch to lenient means so partial-coverage models
     # don't all collapse to null. Unfiltered stays strict so partial-coverage
     # peers can't outrank full-coverage ones.
     lenient_means = bool(languages)
-    task_to_type: dict[str, str] = {}
-    if lenient_means:
-        from mteb.benchmarks._create_table import _split_on_capital
-
-        task_to_type = {
-            tm.name: _split_on_capital(tm.type).replace(" ", "") for tm in tasks_meta
-        }
+    task_to_type: dict[str, str] = (
+        {tm.name: tm.type for tm in tasks_meta} if lenient_means else {}
+    )
 
     rows: list[SummaryRowSchema] = []
     for idx, row in enumerate(summary_pl.iter_rows(named=True)):
-        short = _parse_model_cell(row["Model"])
-        full = short_to_full.get(short, short)
+        full = row["Model"]
         meta = MODEL_REGISTRY.get(full)
         if meta is None:
             logger.debug("Skipping %s — no MODEL_REGISTRY entry", full)
@@ -232,43 +236,26 @@ async def build_benchmark_summary(  # noqa: PLR0914
         zs = int(zs_raw) if zs_raw is not None else None
         model_schema = model_meta_to_schema(meta, zero_shot_pct=zs)
 
-        rank_value = row[rank_col] if rank_col else (idx + 1)
-        mean_task = row[mean_task_col] if mean_task_col else None
-        mean_type = row[mean_type_col] if mean_type_col else mean_task
-        mean_public = row["Mean (Public)"] if has_public else None
-        mean_private = row["Mean (Private)"] if has_private else None
+        rank_value = row.get(summary.rank_col, idx + 1)
+        mean_task = row.get(summary.primary_metric_col)
+        mean_type = (
+            row[summary.task_type_mean_col] if summary.task_type_mean_col else mean_task
+        )
+        mean_public = row[summary.mean_public_col] if summary.mean_public_col else None
+        mean_private = (
+            row[summary.mean_private_col] if summary.mean_private_col else None
+        )
 
         scores_by_task_type: dict[str, float] = {
-            canonical: float(v)
-            for canonical, display in canonical_to_display.items()
-            if (v := row[display]) is not None
+            col: float(v) for col in type_cols if (v := row[col]) is not None
         }
         scores_by_task = per_task_rows.get(full, {})
 
         if lenient_means and scores_by_task:
-            # Lenient: mean over tasks the model actually ran; per-type bucket
-            # then re-mean so dense-Classification doesn't dominate.
-            type_buckets: dict[str, list[float]] = {}
-            for tname, score in scores_by_task.items():
-                ttype = task_to_type.get(tname)
-                if ttype is None:
-                    continue
-                type_buckets.setdefault(ttype, []).append(float(score))
-            scores_by_task_type = {
-                ttype: sum(vals) / len(vals)
-                for ttype, vals in type_buckets.items()
-                if vals
-            }
-            if scores_by_task:
-                vals = list(scores_by_task.values())
-                mean_task = sum(vals) / len(vals)
-            if scores_by_task_type:
-                vals = list(scores_by_task_type.values())
-                mean_type = sum(vals) / len(vals)
+            scores_by_task_type, mean_task, mean_type = _recompute_lenient_means(
+                scores_by_task, task_to_type
+            )
 
-        # ``model_construct`` skips pydantic validation — fields are produced
-        # internally with already-correct types so the per-row validation cost
-        # (run ~500× per benchmark) is wasted work.
         rows.append(
             SummaryRowSchema.model_construct(
                 rank=int(rank_value) if rank_value is not None else (idx + 1),
@@ -294,7 +281,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
 
     return BenchmarkSummarySchema(
         benchmark_name=bench.name,
-        task_types=type_cols_canonical,
+        task_types=type_cols,
         tasks=task_cols_out,
         tasks_meta=tasks_meta,
         rows=rows,
@@ -355,7 +342,7 @@ def _task_to_hosting_benchmarks() -> dict[str, list[str]]:
     return out
 
 
-def build_task_scores(name: str, cache: ResultCache) -> TaskScoresSchema:
+def build_task_scores(name: str) -> TaskScoresSchema:
     """Per-model scores for a single task across every benchmark hosting it.
 
     ``score`` is the mean of the model's per-subset scores when it has covered
@@ -462,7 +449,9 @@ async def build_model_scores(name: str) -> ModelScoresSchema:
     for bench, summary in zip(all_benchmarks, results):
         if isinstance(summary, BaseException):
             continue
-        row = next((r for r in summary.rows if r.model.name == name), None)
+        row: SummaryRowSchema = next(
+            (r for r in summary.rows if r.model.name == name), None
+        )
         if row is None:
             continue
         if model_meta is None:
