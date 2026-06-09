@@ -13,7 +13,6 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
-    SentenceTransformerMultimodalEncoderWrapper,
 )
 from mteb.types import PromptType
 
@@ -799,7 +798,7 @@ _OMNI_MODEL_PROMPTS = {
 }
 
 
-class JinaV5OmniWrapper(SentenceTransformerMultimodalEncoderWrapper):
+class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
     def encode(
         self,
         inputs: DataLoader[BatchedInput],

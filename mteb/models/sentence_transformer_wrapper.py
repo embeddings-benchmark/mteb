@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-import sys
 import warnings
 from typing import TYPE_CHECKING, Any, cast
 
@@ -9,17 +8,13 @@ import numpy as np
 import torch
 from packaging.version import Version
 from tqdm.auto import tqdm
+from typing_extensions import deprecated
 
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
 from mteb.types import OutputDType, PromptType
 
 from .abs_encoder import AbsEncoder
-
-if sys.version_info >= (3, 13):
-    from warnings import deprecated
-else:
-    from typing_extensions import deprecated
 
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder, SentenceTransformer
@@ -76,7 +71,7 @@ def _setup_modality_collator(
     Returns True when any modality feature (image/audio/video) is present on
     the dataset so the caller can take the multimodal path.
     """
-    features = inputs.dataset.features
+    features = inputs.dataset.features  # type: ignore[attr-defined]
     has_video = "video" in features
     has_audio = "audio" in features
     if has_video:
@@ -324,9 +319,6 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 **kwargs,
             ),
         )
-        if isinstance(embeddings, torch.Tensor):
-            # ensure everything is on CPU and is float
-            embeddings = embeddings.cpu().detach().float()
         return embeddings
 
 
@@ -336,6 +328,16 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
     The base wrapper now auto-detects multimodal inputs, so this subclass is
     kept only to avoid breaking existing ``loader=...`` references.
     """
+
+    @deprecated(
+        "This wrapper is deprecated. Use `SentenceTransformerMultimodalEncoderWrapper` for using processing multimodal inputs.",
+    )
+    def __init__(
+        self,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(*args, **kwargs)
 
 
 class CrossEncoderWrapper:
