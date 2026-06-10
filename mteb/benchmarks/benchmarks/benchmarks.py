@@ -991,6 +991,7 @@ MTEB_multilingual_v1 = Benchmark(
     reference="https://arxiv.org/abs/2502.13595",
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
+    new_version=["MTEB(Multilingual, v2)"],
 )
 
 MTEB_multilingual_v2 = Benchmark(
