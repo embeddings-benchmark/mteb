@@ -30,6 +30,7 @@ if TYPE_CHECKING:
         PairClassificationDistances,
     )
     from mteb.models.models_protocols import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, Modalities, PromptType
     from mteb.types.statistics import (
         AudioStatistics,
@@ -109,6 +110,7 @@ class AbsTaskPairClassification(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> dict[str, float]:
         if not isinstance(model, EncoderProtocol):
@@ -128,6 +130,7 @@ class AbsTaskPairClassification(AbsTask):
             hf_subset=hf_subset,
             input1_prompt_type=self.input1_prompt_type,
             input2_prompt_type=self.input2_prompt_type,
+            timer=timer,
             **kwargs,
         )
         similarity_scores = evaluator(

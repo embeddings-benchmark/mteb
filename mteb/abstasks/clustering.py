@@ -29,6 +29,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import Array, EncodeKwargs, Modalities, ScoresDict
     from mteb.types.statistics import (
         AudioStatistics,
@@ -189,6 +190,7 @@ class AbsTaskClustering(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ScoresDict:
         if not isinstance(model, EncoderProtocol):
@@ -241,38 +243,48 @@ class AbsTaskClustering(AbsTask):
 
         downsampled_dataset = downsampled_dataset.select_columns(list(columns_to_keep))
 
-        logger.info("Running clustering - Encoding samples...")
-        embeddings = model.encode(
-            create_dataloader(
-                downsampled_dataset,
+        with timer(
+            "Encoding",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running clustering - Encoding samples...",
+        ):
+            embeddings = model.encode(
+                create_dataloader(
+                    downsampled_dataset,
+                    task_metadata=self.metadata,
+                    input_column=self.input_column_name,
+                    num_proc=num_proc,
+                    **encode_kwargs,
+                ),
                 task_metadata=self.metadata,
-                input_column=self.input_column_name,
-                num_proc=num_proc,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
                 **encode_kwargs,
-            ),
-            task_metadata=self.metadata,
-            hf_subset=hf_subset,
-            hf_split=hf_split,
-            **encode_kwargs,
-        )
+            )
 
-        logger.info("Running clustering - Evaluating clustering...")
         labels = []
         for label in downsampled_dataset[self.label_column_name]:
             if not isinstance(label, list):
                 label = [label]  # noqa: PLW2901
             labels.append(label)
 
-        all_scores, all_assignments = _evaluate_clustering_bootstrapped(
-            embeddings,
-            labels,
-            n_clusters=self.n_clusters,
-            cluster_size=self.max_documents_per_cluster,
-            kmean_batch_size=self.k_mean_batch_size,
-            max_depth=self.max_depth,
-            rng_state=self.rng_state,
-            seed=self.seed,
-        )
+        with timer(
+            "Scoring",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running clustering - Evaluating clustering...",
+        ):
+            all_scores, all_assignments = _evaluate_clustering_bootstrapped(
+                embeddings,
+                labels,
+                n_clusters=self.n_clusters,
+                cluster_size=self.max_documents_per_cluster,
+                kmean_batch_size=self.k_mean_batch_size,
+                max_depth=self.max_depth,
+                rng_state=self.rng_state,
+                seed=self.seed,
+            )
 
         if prediction_folder:
             self._save_task_predictions(

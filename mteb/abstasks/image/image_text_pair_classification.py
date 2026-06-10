@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from datasets import Dataset
 
     from mteb.models.models_protocols import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs
     from mteb.types.statistics import (
         ImageStatistics,
@@ -140,6 +141,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ImageTextPairClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -171,6 +173,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
             num_images_per_sample=num_images_per_sample,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         scores: list[torch.Tensor] = evaluator(

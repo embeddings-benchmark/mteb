@@ -2,6 +2,7 @@ import pytest
 
 import mteb
 from mteb._evaluators import PairClassificationEvaluator
+from mteb.timing import TimingStack
 from tests.mock_tasks import (
     MockPairClassificationTask,
 )
@@ -13,6 +14,7 @@ class TestPairClassificationEvaluator:
     def test_accuracy(self):  # noqa: PLR6301
         task = MockPairClassificationTask()
         task.load_data()
+
         evaluator = PairClassificationEvaluator(
             task.dataset["test"],
             input1_column_name="sentence1",
@@ -22,6 +24,7 @@ class TestPairClassificationEvaluator:
             hf_subset="test",
             input1_prompt_type=None,
             input2_prompt_type=None,
+            timer=TimingStack(),
         )
         distances = evaluator(
             mteb.get_model("mteb/baseline-random-encoder"),

@@ -8,11 +8,11 @@ from mteb.models.model_meta import (
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerMultimodalEncoderWrapper,
+    SentenceTransformerEncoderWrapper,
 )
 
 
-class TevatronOmniEmbedWrapper(SentenceTransformerMultimodalEncoderWrapper):
+class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
     """Thin wrapper that configures video processing kwargs after loading."""
 
     def __init__(

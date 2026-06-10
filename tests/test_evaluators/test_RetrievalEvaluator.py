@@ -2,6 +2,7 @@ import pytest
 
 from mteb._evaluators import RetrievalEvaluator
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.timing import TimingStack
 from tests.mock_tasks import general_args
 
 TOL = 0.0001
@@ -20,6 +21,7 @@ class TestRetrievalEvaluator:
 
         setup_method is invoked for every test method of a class.
         """
+
         self.evaluator = RetrievalEvaluator(
             corpus=None,
             queries=None,
@@ -30,6 +32,7 @@ class TestRetrievalEvaluator:
             top_ranked=None,
             qid=None,
             top_k=5,
+            timer=TimingStack(),
         )
 
     @pytest.mark.parametrize(
