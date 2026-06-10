@@ -301,7 +301,7 @@ def plan_tasks(entries: Iterable[TaskMetaSchema], out_dir: Path) -> list[RenderJ
             [
                 f"Type|{group or '—'}",
                 f"Languages|{_fmt_num(len(t.languages))}",
-                f"Domains|{_fmt_num(len(t.domains))}",
+                f"Domains|{_fmt_num(len(t.domains) if t.domains else None)}",
             ]
         )
         params: CardParams = {
