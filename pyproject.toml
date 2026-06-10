@@ -150,7 +150,9 @@ wave = [
     "peft>=0.11.0",
     "accelerate>=1.7.0",
     "setuptools",               # triton needs it at import
-    "flash-attn>=2.6.3",        # install the prebuilt wheel matching torch/cuda/py/abi
+    # flash-attn is intentionally NOT listed: cold installs would attempt a source build
+    # (needs torch + nvcc at build time). Install the matching prebuilt wheel afterwards —
+    # scripts/setup_wave_env.sh does this automatically.
 ]
 # ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
 

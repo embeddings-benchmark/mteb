@@ -78,29 +78,40 @@ own code, not stock transformers.
    `beats_path` loader kwarg or `WAVE_BEATS_PATH` env var. The wrapper raises a clear error if
    it is missing.
 
-## How to run a pilot (HLTCOE grid — verified recipe)
+## Setting up on any (internet-connected) cluster or login node
 
-WAVE pins `torch==2.6.0` / `transformers==4.51.3`, incompatible with the main MTEB env, so use an
-**isolated venv** with the `wave` extra. WAVE uses bf16 → request **A100/H100/L40S** (not V100).
+One script reconstructs everything — venv, the matching flash-attn wheel, the BEATs checkpoint,
+and optional prefetches (proven by a clean-room run on a fresh workspace: same Clotho score):
 
 ```bash
-# --- on a login node: build the isolated env on flash scratch ---
-WORK=/expscratch/$USER/wave-mteb; mkdir -p $WORK/beats $WORK/logs
-export HF_HOME=$WORK/.cache/huggingface UV_CACHE_DIR=$WORK/.cache/uv
-git submodule update --init --recursive external/WAVE
-uv venv "$WORK/.venv" --python 3.10 && source "$WORK/.venv/bin/activate"
-uv pip install -e ".[wave,audio,video]"        # wave extra pins the torch 2.6 stack + ST<5
-# flash-attn: install the prebuilt wheel matching cp310 / torch2.6 / cu12 / abiFALSE
-uv pip install --no-build-isolation \
-  https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiFALSE-cp310-cp310-linux_x86_64.whl
-# BEATs backbone checkpoint (WAVE's "BEATs_iter3_plus")
-curl -fL -o $WORK/beats/BEATs_iter3_plus_AS2M.pt \
-  https://huggingface.co/datasets/Bencr/beats-checkpoints/resolve/main/BEATs_iter3_plus_AS2M.pt
-export WAVE_BEATS_PATH=$WORK/beats/BEATs_iter3_plus_AS2M.pt
+git clone -b wave-7b-integration https://github.com/debashishc/mteb.git && cd mteb
+bash scripts/setup_wave_env.sh /path/to/fast/scratch/wave-mteb \
+    [--prefetch-model] [--prefetch-data ClothoT2ARetrieval,MSVDT2VRetrieval]
 ```
 
-Pilot script (`pilot_wave.py`) and `sbatch` (`--gres=gpu:a100:1 --cpus-per-task=8 --mem=64G`,
-`module load cuda/... ffmpeg/6.0.1`, export `HF_HOME`/`WAVE_BEATS_PATH`):
+It prints the exports for job scripts (`source .venv/bin/activate`, `HF_HOME`,
+`WAVE_BEATS_PATH`). WAVE uses bf16 → request **A100/L40S/H100** (not V100); video tasks need
+FFmpeg 4–7 libs at runtime (HLTCOE: `module load ffmpeg/6.0.1`).
+
+### Artifact manifest (what lives where)
+
+| Artifact | Size | Source | Obtained by |
+| :-- | :-- | :-- | :-- |
+| repo branch `wave-7b-integration` + submodule `external/WAVE` | ~0.1 GB | GitHub | `git clone` + script |
+| venv (py3.10, torch 2.7.1 cu126 stack) | ~9.5 GB | PyPI | script (never copy venvs across arch/python) |
+| WAVE-7B weights @ `6d42651d` | 18 GB | HF Hub `tsinghua-ee/WAVE-7B` | auto on first `get_model`, or `--prefetch-model` |
+| BEATs `BEATs_iter3_plus_AS2M.pt` | 345 MB | HF dataset `Bencr/beats-checkpoints` | **script (NOT auto)** — `WAVE_BEATS_PATH` |
+| flash-attn prebuilt wheel | 179 MB | Dao-AILab GitHub releases | script (auto-detects py/torch/cuda/ABI) |
+| datasets (Clotho 2.1 GB, MSVD 0.6 GB, others as pulled; ~30 GB budget for the faithfulness set) | ~30 GB | HF Hub | auto on first run, or `--prefetch-data` |
+| result JSONs | <1 MB | `~/.cache/mteb/results/` | produced by runs; rsync to continue elsewhere |
+
+Disk budget on target scratch: **~60–80 GB**. Two shortcuts:
+- **New login node, same grid**: nothing to do — `/expscratch` + `/home` are shared; just
+  `source $WORK/.venv/bin/activate`.
+- **Skip re-downloads on a new cluster**: rsync `$WORK/.cache/huggingface/hub/models--tsinghua-ee--WAVE-7B`
+  (18 GB) and `datasets--mteb--*` dirs into the new `HF_HOME` (snapshots are content-addressed).
+
+### Running an evaluation
 
 ```python
 import mteb
@@ -110,22 +121,47 @@ results = mteb.evaluate(model, tasks=tasks, encode_kwargs={"batch_size": 1})
 ```
 
 Progression: `ClothoT2ARetrieval` (audio) → `MSVDT2VRetrieval` (video) →
-`AudioCapsAVT2VRetrieval` (audio-visual).
+`AudioCapsAVVA2TRetrieval` (audio-visual). sbatch templates: `run_pilot.sbatch` in the
+workspace (`--gres=gpu:a100:1 --cpus-per-task=8 --mem=64G`, modules cuda + ffmpeg). Note:
+multi-task lists must be exported via the environment (`export WAVE_PILOT_TASKS=A,B,C` before
+`sbatch`), not `--export=ALL,VAR=A,B,C` — sbatch splits `--export` on commas.
 
 ## Verified — pilot runs on the grid ✅
 
-All runs on **A100-PCIE-40GB** (`flash_attn 2.7.4.post1`), `exceptions=[]`:
+All runs on **A100-PCIE-40GB** (`flash_attn 2.7.4.post1`), `exceptions=[]`. Every modality path
+of the wrapper has now been exercised end-to-end:
 
-| task | modality | metric | score | eval time |
+| task | path exercised | metric | score | eval time |
 | :-- | :-- | :-- | :-- | :-- |
-| `ClothoT2ARetrieval` | text→audio (1045 docs) | hit_rate@5 | **0.42** | ~450 s |
-| `MSVDT2VRetrieval` | text→video (660 videos) | ndcg@10 | **0.80** (R@1 0.63, R@5 0.90) | ~413 s |
+| `ClothoT2ARetrieval` | audio media-branch + text label-path | hit_rate@5 | **0.42** (R@1 0.19) | ~450 s |
+| `MSVDT2VRetrieval` | video decode → permute → visual tower | ndcg@10 | **0.80** (R@1 0.63) | ~414 s |
+| `MSRVTTT2V` | video (1k-candidate pool) | ndcg@10 | **0.68** (R@1 0.51) | ~456 s |
+| `DiDeMoT2VRetrieval` | long videos (fps-fix path) | ndcg@10 | **0.71** (R@1 0.55) | ~2989 s |
+| `AudioCapsAVVA2TRetrieval` | **synchronized AV** (`use_audio_in_video=True` interleave + BEATs doubling) | ndcg@10 | **0.54** (R@1 0.31) | ~656 s |
 
 - Load log shows `Init BEATs Model` + `Classify Type: all_layer` — BEATs dual encoder and
-  all-layer fusion active. Cold model load ≈ 219 s (≈ 9 s warm).
-- The MSVD score is in the SOTA band for that dataset, validating the video decode → frame
-  permute → visual tower path end-to-end (a wrong frame layout would score near-random).
-- Clotho 0.42 is identical on torch 2.6.0/datasets 3.6 and torch 2.7.1/datasets 4.0 stacks.
+  all-layer fusion active. Cold model load ≈ 219 s (≈ 9–70 s warm).
+- Clotho 0.42 is identical on torch 2.6.0/datasets 3.6 and torch 2.7.1/datasets 4.0 stacks, and
+  reproduces exactly from a clean-room environment built by `scripts/setup_wave_env.sh`.
+- Regressions after the fps/audio fidelity fixes: Clotho 0.42 and MSVD 0.80 unchanged
+  (the fixes are no-ops for short clips, as expected).
+
+### Comparison with the WAVE paper (arXiv:2509.21990, R@1)
+
+| dataset (t2v / t2a) | MTEB (ours) | paper (MMEB-v2 harness) | Δ |
+| :-- | :-- | :-- | :-- |
+| MSVD | **63.5** | 56.3 | +7.2 |
+| MSR-VTT | **50.9** | 54.7 | −3.8 |
+| DiDeMo | **54.8** | 69.3 | −14.5 |
+| Clotho | **19.4** | 25.6 | −6.2 |
+
+Read this as *faithful-in-kind, protocol-divergent*: the embedding recipe matches WAVE exactly
+(verified at source level; deltas go in both directions), but MTEB task protocols differ from
+the MMEB-v2 harness — candidate-set construction (e.g. MTEB MSVD's 660-pair pool), query
+construction (MMEB DiDeMo uses paragraph-style queries vs MTEB's per-caption), and per-task
+prompts. The same divergence applies to any model evaluated on both harnesses, so relative
+comparisons within MTEB remain valid. (Paper also reports AudioCaps 44.2, VGGSound-AV 25.0 R@1
+— `AudioCapsA2T/T2A` and `VGGSoundAV*` tasks exist in MTEB for follow-up.)
 
 ### Faithfulness audit findings (fixed)
 
@@ -136,11 +172,18 @@ All runs on **A100-PCIE-40GB** (`flash_attn 2.7.4.post1`), `exceptions=[]`:
    branch; fixing this raised Clotho hit_rate@5 **0.32 → 0.42**.
 2. **Synchronized audio-visual wiring**: `use_audio_in_video` + `seconds_per_chunk` now mirror
    `data_qwen._get_item` exactly (audio tokens interleaved inside the `<video>` expansion), and
-   the flag is forwarded to the model call. Not yet exercised on an AV task.
-3. **Checkpoint-load warnings are benign**: `beats.encoder.pos_conv` parametrization names
+   the flag is forwarded to the model call. Validated on `AudioCapsAVVA2TRetrieval` (0.54).
+3. **Video fps timing**: WAVE derives `video_second_per_grid` from the *actual* sampled rate
+   (`fps = sampled_frames / duration`), which differs from nominal when the 128-frame cap binds
+   or short videos keep all frames. The wrapper now records each video's duration in the
+   collator (`_DurationVideoCollator`) and replicates this; falls back to nominal fps when
+   duration metadata is missing.
+4. **Audio >300 s**: WAVE never truncates — `process_audio` chunks long audio into 300 s
+   segments. Truncation is now opt-in (`max_audio_length_seconds`, default off).
+5. **Checkpoint-load warnings are benign**: `beats.encoder.pos_conv` parametrization names
    mismatch on `from_pretrained`, then the separate BEATs `load_state_dict` (strict) repairs
    them — identical to WAVE's own eval flow. `beats.predictor.*` unused is expected.
-4. **Metadata corrections**: `n_parameters=9_410_651_007` (from the checkpoint index; the 7B
+6. **Metadata corrections**: `n_parameters=9_410_651_007` (from the checkpoint index; the 7B
    name undercounts — BEATs + head included), `memory_usage_mb=17949`, citation fixed to the
    real author list (Changli Tang et al.).
 
@@ -161,8 +204,6 @@ All runs on **A100-PCIE-40GB** (`flash_attn 2.7.4.post1`), `exceptions=[]`:
 
 ## Remaining work (honest list)
 
-- **AV-joint validation**: run an audio-visual task (e.g. `AudioCapsAVVA2TRetrieval`) to exercise
-  `use_audio_in_video=True` end-to-end.
 - **Benchmarks**: `MVEB(beta)` (23 AV tasks) and `MAEB(beta)` exist in-repo — running WAVE on them
   is compute only, no code. Leaderboard listing would additionally need a results-repo submission.
 - **Paper-parity datasets (optional)**: WAVE's moment-retrieval evals (Charades-STA, QVHighlights,

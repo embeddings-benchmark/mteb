@@ -62,6 +62,21 @@ _DEFAULT_MEDIA_PROMPTS = {
 _SAMPLING_RATE = 16000
 
 
+class _DurationVideoCollator(VideoCollator):
+    """``VideoCollator`` that records each video's duration before frame extraction.
+
+    The duration is needed to replicate WAVE's ``fps = sampled_frames / video_length`` for
+    ``video_second_per_grid`` (see ``Wave7BWrapper._process_video``).
+    """
+
+    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
+        for row in inputs:
+            video = row.get("video")
+            metadata = getattr(video, "metadata", None)
+            row["video_duration"] = getattr(metadata, "end_stream_seconds", None)
+        return super().__call__(inputs)
+
+
 class Wave7BWrapper(AbsEncoder):
     """Faithful MTEB wrapper around WAVE-7B's ``--pred_embeds`` embedding path.
 
@@ -80,7 +95,7 @@ class Wave7BWrapper(AbsEncoder):
         beats_path: str | None = None,
         wave_repo_path: str | None = None,
         sim_temperature: float = 0.01,
-        max_audio_length_seconds: int = 300,
+        max_audio_length_seconds: int | None = None,
         fps: float = 2.0,
         max_frames: int = 128,
         attn_implementation: str = "flash_attention_2",
@@ -95,7 +110,13 @@ class Wave7BWrapper(AbsEncoder):
         )
         self.fps = fps
         self.max_frames = max_frames
-        self.max_samples = int(max_audio_length_seconds * _SAMPLING_RATE)
+        # WAVE never truncates audio: process_audio (and the BEATs loop) chunk long audio into
+        # 300 s segments natively. `max_audio_length_seconds` is an opt-in cap for OOM safety.
+        self.max_samples = (
+            int(max_audio_length_seconds * _SAMPLING_RATE)
+            if max_audio_length_seconds is not None
+            else None
+        )
 
         beats_path = beats_path or os.environ.get("WAVE_BEATS_PATH")
         if beats_path is None:
@@ -225,19 +246,28 @@ class Wave7BWrapper(AbsEncoder):
         return image_tensor, grid_thw
 
     def _process_video(
-        self, frames: torch.Tensor
+        self, frames: torch.Tensor, duration: float | None = None
     ) -> tuple[torch.Tensor, torch.Tensor, list[float]]:
         """Preprocess pre-sampled video frames, mirroring WAVE's ``video_decord`` tail.
 
         MTEB's ``VideoCollator`` already samples frames at ``self.fps``. WAVE's decord path yields
         ``(F, H, W, C)`` uint8; torchcodec yields ``(F, C, H, W)``, so permute when needed.
+
+        WAVE computes ``fps = sampled_frames / video_length`` (which differs from the nominal
+        rate when the frame cap binds or short videos keep all frames) and derives
+        ``video_second_per_grid = temporal_patch_size / fps``. Replicate that when the video's
+        duration is known; otherwise fall back to the nominal fps.
         """
         if frames.ndim == 4 and frames.shape[1] == 3 and frames.shape[-1] != 3:
             frames = frames.permute(0, 2, 3, 1)
         frames = frames.contiguous()
         image_processor = self.processor.image_processor
         video_proc = image_processor(images=None, videos=frames, return_tensors="pt")
-        video_second_per_grid = [image_processor.temporal_patch_size / self.fps]
+        if duration is not None and duration > 0:
+            fps = frames.shape[0] / duration
+        else:
+            fps = self.fps
+        video_second_per_grid = [image_processor.temporal_patch_size / fps]
         return (
             video_proc["pixel_values_videos"],
             video_proc["video_grid_thw"],
@@ -252,6 +282,7 @@ class Wave7BWrapper(AbsEncoder):
         audio: Any,
         video: Any,
         instruction: str | None,
+        video_duration: float | None = None,
     ) -> dict[str, Any]:
         """Build WAVE's per-sample model inputs, mirroring ``LazySupervisedDataset._get_item``."""
         image_tensor = grid_thw = None
@@ -263,7 +294,7 @@ class Wave7BWrapper(AbsEncoder):
             grid_thw = [grid_thw.unsqueeze(0)]
         if video is not None:
             video_tensor, video_grid_thw, second_per_grid_ts = self._process_video(
-                video
+                video, duration=video_duration
             )
             video_grid_thw = [video_grid_thw]
         if audio is not None:
@@ -399,7 +430,7 @@ class Wave7BWrapper(AbsEncoder):
         has_video = "video" in features
         has_audio = "audio" in features
         if has_video:
-            inputs.collate_fn = VideoCollator(
+            inputs.collate_fn = _DurationVideoCollator(
                 target_sampling_rate=_SAMPLING_RATE,
                 fps=self.fps,
                 max_frames=self.max_frames,
@@ -426,6 +457,7 @@ class Wave7BWrapper(AbsEncoder):
             images = batch.get("image", [])
             audios = batch.get("audio", [])
             videos = batch.get("video", [])
+            durations = batch.get("video_duration", [])
             batch_size = max(len(texts), len(images), len(audios), len(videos))
             for i in range(batch_size):
                 text_i = texts[i] if i < len(texts) else None
@@ -442,6 +474,7 @@ class Wave7BWrapper(AbsEncoder):
                         audio=audio_i,
                         video=video_i,
                         instruction=instruction,
+                        video_duration=durations[i] if i < len(durations) else None,
                     )
                     model_kwargs = self._to_model_kwargs(data_dict)
                     raw = self.model(**model_kwargs).mllm_embeds
