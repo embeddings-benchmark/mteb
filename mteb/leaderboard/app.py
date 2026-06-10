@@ -17,8 +17,12 @@ import polars as pl
 
 import mteb
 from mteb.benchmarks._create_table import _is_zero_shot_cached
-from mteb.benchmarks._leaderboard_menu import GP_BENCHMARK_ENTRIES, R_BENCHMARK_ENTRIES
-from mteb.benchmarks.benchmark import RtebBenchmark
+from mteb.benchmarks._leaderboard_menu import (
+    GP_BENCHMARK_ENTRIES,
+    R_BENCHMARK_ENTRIES,
+    MenuEntry,
+)
+from mteb.benchmarks.benchmark import Benchmark, RtebBenchmark
 from mteb.cache import ResultCache
 from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.leaderboard.benchmark_selector import (
@@ -454,9 +458,22 @@ def get_leaderboard_app(  # noqa: PLR0914
 
     logger.info("Step 1/6: Fetching benchmarks...")
     bench_start = time.time()
-    benchmarks = sorted(
-        mteb.get_benchmarks(display_on_leaderboard=True), key=lambda x: x.name
-    )
+
+    seen: set[str] = set()
+    benchmarks: list[Benchmark] = []
+    pending: list[Benchmark | MenuEntry] = [
+        *GP_BENCHMARK_ENTRIES,
+        *R_BENCHMARK_ENTRIES,
+    ]
+    while pending:
+        entry = pending.pop()
+        if isinstance(entry, Benchmark):
+            if entry.name not in seen:
+                seen.add(entry.name)
+                benchmarks.append(entry)
+        else:
+            pending.extend(entry.benchmarks)
+    benchmarks.sort(key=lambda x: x.name)
     bench_time = time.time() - bench_start
     logger.info(
         f"Step 1/6 complete: Fetched {len(benchmarks)} benchmarks in {bench_time:.2f}s"
