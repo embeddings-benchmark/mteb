@@ -6,6 +6,7 @@ Run with ``uvicorn mteb.api.app:app --reload --port 8000``.
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import logging
 import pathlib
 from contextlib import asynccontextmanager
@@ -36,9 +37,15 @@ logger = logging.getLogger(__name__)
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     """ASGI lifespan: prepare caches before HTTP listener accepts traffic."""
     await asyncio.to_thread(warmup_blocking)
-    preload_summaries_in_background()
-    yield
-    shutdown_telemetry()
+    preload_task = preload_summaries_in_background()
+    try:
+        yield
+    finally:
+        if preload_task is not None and not preload_task.done():
+            preload_task.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await preload_task
+        shutdown_telemetry()
 
 
 def _configure_logging(level: str) -> None:

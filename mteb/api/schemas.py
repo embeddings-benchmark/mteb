@@ -101,7 +101,7 @@ class BenchmarkSchema(_CamelModel):
         if benchmark.language_view == "all":
             language_view = "all"
         elif benchmark.language_view:
-            language_view = sorted([language_label(c) for c in benchmark.language_view])
+            language_view = sorted({language_label(c) for c in benchmark.language_view})
         else:
             language_view = None
         return cls(

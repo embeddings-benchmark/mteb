@@ -16,19 +16,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def _borda_count(scores: pd.Series) -> pd.Series:
-    n = len(scores)
-    ranks = scores.rank(method="average", ascending=False)
-    counts = n - ranks
-    return counts
-
-
-def _get_borda_rank(score_table: pd.DataFrame) -> pd.Series:
-    borda_counts = score_table.apply(_borda_count, axis="index")
-    mean_borda = borda_counts.sum(axis=1)
-    return mean_borda.rank(method="min", ascending=False).astype(int)
-
-
 def _format_scores(score: float) -> float:
     return round(score * 100, 2)
 

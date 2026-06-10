@@ -39,6 +39,7 @@ if TYPE_CHECKING:
         ModelMetaSchema,
         TaskMetaSchema,
     )
+    from mteb.benchmarks._create_table import SummaryTable
     from mteb.cache.result_cache import ResultCache
 
 logger = logging.getLogger(__name__)
@@ -80,27 +81,103 @@ def _empty_summary(
     )
 
 
+def _per_task_rows_and_cols(
+    per_task_pl: pl.DataFrame,
+) -> tuple[dict[str, dict[str, float]], list[str]]:
+    """Index the per-task table by ``Model`` and surface its task columns.
+
+    Returns ``({model -> {task: score}}, task_cols)``. Both empty when
+    ``per_task_pl`` is the ``_no_results_frame`` sentinel or has no ``Model``
+    column — collapses the duplicated empty-frame guard the summary builder
+    used to apply at two separate call sites.
+    """
+    if "No results" in per_task_pl.columns or "Model" not in per_task_pl.columns:
+        return {}, []
+    task_cols = [c for c in per_task_pl.columns if c != "Model"]
+    rows = {
+        prow["Model"]: {
+            col: float(v) for col in task_cols if (v := prow[col]) is not None
+        }
+        for prow in per_task_pl.iter_rows(named=True)
+    }
+    return rows, task_cols
+
+
 def _extract_trained_on_map(long_df: pl.DataFrame) -> dict[str, list[str]]:
-    """Build a ``model_name -> [task_name, ...]`` map.
+    """Build a ``model_name -> [task_name, ...]`` map (lists already sorted).
 
     Reads the long frame's pre-baked ``trained_on`` column (set by
-    ``_build_pre_agg_df``).
+    ``_build_pre_agg_df``). Aggregating + sorting in polars means the result
+    is one column-aligned read — no per-row Python ``setdefault`` loop.
     """
     if "trained_on" not in long_df.columns:
         return {}
-    trained_pl = (
+    grouped = (
         long_df.lazy()
         .filter(pl.col("trained_on"))
-        .select(["model_name", "task_name"])
-        .unique()
+        .group_by("model_name")
+        .agg(pl.col("task_name").unique().sort())
         .collect()
     )
-    out: dict[str, list[str]] = {}
-    for mn, tn in trained_pl.iter_rows():
-        out.setdefault(mn, []).append(tn)
-    for lst in out.values():
-        lst.sort()
-    return out
+    return dict(zip(grouped["model_name"].to_list(), grouped["task_name"].to_list()))
+
+
+def _filter_long_df_by_languages(
+    long_df: pl.DataFrame, languages: tuple[str, ...]
+) -> pl.DataFrame | None:
+    """Filter ``long_df`` to rows whose ``language`` list intersects ``languages``.
+
+    Returns the filtered frame, or ``None`` if no language code in the data
+    matched any pick. The frontend filter holds labels (``"English"``) but
+    the frame holds codes (``"eng-Latn"``); a code matches if it OR
+    ``language_label(code)`` is in the pick set.
+
+    Returns the input unchanged when ``languages`` is empty or the frame has
+    no ``language`` column.
+    """
+    if not languages or "language" not in long_df.columns:
+        return long_df
+    picked_set = set(languages)
+    all_codes_series = (
+        long_df.lazy()
+        .select(pl.col("language").explode().unique())
+        .collect(engine="streaming")["language"]
+    )
+    code_match = [
+        c
+        for c in all_codes_series.to_list()
+        if c is not None and (c in picked_set or language_label(c) in picked_set)
+    ]
+    if not code_match:
+        return None
+    return long_df.filter(
+        pl.col("language").list.eval(pl.element().is_in(code_match)).list.any()
+    )
+
+
+def _read_row_metrics(
+    row: dict[str, object],
+    summary: SummaryTable,
+    type_cols: list[str],
+) -> tuple[float | None, float | None, float | None, float | None, dict[str, float]]:
+    """Pull the four mean fields + ``scores_by_task_type`` from a summary row.
+
+    Each ``summary.*_col`` pointer is either a column name in ``row`` or
+    ``None``; nulls fall through to ``None``. ``scores_by_task_type`` keeps
+    only non-null entries.
+    """
+    mean_task = row.get(summary.primary_metric_col)
+    mean_type = (
+        row.get(summary.task_type_mean_col) if summary.task_type_mean_col else mean_task
+    )
+    mean_public = row.get(summary.mean_public_col) if summary.mean_public_col else None
+    mean_private = (
+        row.get(summary.mean_private_col) if summary.mean_private_col else None
+    )
+    scores_by_task_type = {
+        col: float(v) for col in type_cols if (v := row[col]) is not None
+    }
+    return mean_task, mean_type, mean_public, mean_private, scores_by_task_type
 
 
 def _recompute_lenient_means(
@@ -132,7 +209,7 @@ def _recompute_lenient_means(
     return scores_by_task_type, mean_task, mean_type
 
 
-async def build_benchmark_summary(  # noqa: PLR0914
+async def build_benchmark_summary(  # noqa: PLR0914 — narrow loop locals are clearer inline
     name: str,
     cache: ResultCache,
     languages: tuple[str, ...] = (),
@@ -166,25 +243,10 @@ async def build_benchmark_summary(  # noqa: PLR0914
     if long_df.is_empty() or "model_name" not in long_df.columns:
         return _empty_summary(bench.name, bench_schema, tasks_meta)
 
-    if languages and "language" in long_df.columns:
-        # The frontend filter holds labels ("English"); the frame holds codes
-        # ("eng-Latn"). Map both ways and keep codes whose code or label is picked.
-        picked_set = set(languages)
-        all_codes_series = (
-            long_df.lazy()
-            .select(pl.col("language").explode().unique())
-            .collect(engine="streaming")["language"]
-        )
-        code_match = [
-            c
-            for c in all_codes_series.to_list()
-            if c is not None and (c in picked_set or language_label(c) in picked_set)
-        ]
-        if not code_match:
-            return _empty_summary(bench.name, bench_schema, tasks_meta)
-        long_df = long_df.filter(
-            pl.col("language").list.eval(pl.element().is_in(code_match)).list.any()
-        )
+    filtered = _filter_long_df_by_languages(long_df, languages)
+    if filtered is None:
+        return _empty_summary(bench.name, bench_schema, tasks_meta)
+    long_df = filtered
 
     # Compute the (model × task) wide pivot once on a worker thread and pass
     # it to both builders — they would otherwise each recompute it on their
@@ -201,13 +263,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
     summary_pl = summary.df
 
     # ``Model`` now holds the canonical org/name — no parsing needed.
-    per_task_rows: dict[str, dict[str, float]] = {}
-    if "No results" not in per_task_pl.columns and "Model" in per_task_pl.columns:
-        task_cols_pt = [c for c in per_task_pl.columns if c != "Model"]
-        for prow in per_task_pl.iter_rows(named=True):
-            per_task_rows[prow["Model"]] = {
-                col: float(v) for col in task_cols_pt if (v := prow[col]) is not None
-            }
+    per_task_rows, task_cols_out = _per_task_rows_and_cols(per_task_pl)
 
     trained_on_by_model = _extract_trained_on_map(long_df)
 
@@ -237,18 +293,9 @@ async def build_benchmark_summary(  # noqa: PLR0914
         model_schema = model_meta_to_schema(meta, zero_shot_pct=zs)
 
         rank_value = row.get(summary.rank_col, idx + 1)
-        mean_task = row.get(summary.primary_metric_col)
-        mean_type = (
-            row[summary.task_type_mean_col] if summary.task_type_mean_col else mean_task
+        mean_task, mean_type, mean_public, mean_private, scores_by_task_type = (
+            _read_row_metrics(row, summary, type_cols)
         )
-        mean_public = row[summary.mean_public_col] if summary.mean_public_col else None
-        mean_private = (
-            row[summary.mean_private_col] if summary.mean_private_col else None
-        )
-
-        scores_by_task_type: dict[str, float] = {
-            col: float(v) for col in type_cols if (v := row[col]) is not None
-        }
         scores_by_task = per_task_rows.get(full, {})
 
         if lenient_means and scores_by_task:
@@ -275,10 +322,6 @@ async def build_benchmark_summary(  # noqa: PLR0914
             )
         )
 
-    task_cols_out: list[str] = []
-    if "No results" not in per_task_pl.columns:
-        task_cols_out = [c for c in per_task_pl.columns if c != "Model"]
-
     return BenchmarkSummarySchema(
         benchmark_name=bench.name,
         task_types=type_cols,
@@ -304,8 +347,8 @@ async def build_benchmark_per_language(name: str) -> BenchmarkPerLanguageSchema:
     ):
         return BenchmarkPerLanguageSchema(benchmark_name=bench.name, rows=[])
 
-    grouped = (
-        long_df.lazy()
+    grouped = await asyncio.to_thread(
+        lambda: long_df.lazy()
         .explode("language")
         .group_by(["model_name", "language"])
         .agg(pl.col("score").mean().alias("score"))
@@ -362,6 +405,7 @@ def build_task_scores(name: str) -> TaskScoresSchema:
     task_frame = all_df.filter(pl.col("task_name") == name)
 
     seen: dict[str, dict[str, float]] = {}
+    all_subsets: set[str] = set()
     if not task_frame.is_empty():
         per_subset = (
             task_frame.drop_nulls("score")
@@ -369,13 +413,9 @@ def build_task_scores(name: str) -> TaskScoresSchema:
             .agg(pl.col("score").max())
         )
         for pr in per_subset.iter_rows(named=True):
-            seen.setdefault(pr["model_name"], {})[str(pr["subset"])] = float(
-                pr["score"]
-            )
-
-    all_subsets: set[str] = set()
-    for subset_scores in seen.values():
-        all_subsets.update(subset_scores.keys())
+            subset = str(pr["subset"])
+            seen.setdefault(pr["model_name"], {})[subset] = float(pr["score"])
+            all_subsets.add(subset)
 
     rows: list[TaskScoreRowSchema] = []
     for model_name, subset_scores in seen.items():
@@ -428,8 +468,10 @@ async def build_model_scores(name: str) -> ModelScoresSchema:
     """Per-benchmark scores for a single model.
 
     Fans out the cold summary builds with ``asyncio.gather`` so wall time is
-    max() instead of sum(). A linear scan per benchmark is cheap (~500 rows ×
-    50 benchmarks ≈ microseconds) so we don't memoise the per-summary index.
+    max() instead of sum(). The per-summary linear scan costs ~2 ms in total
+    (50 benchmarks × 500 rows × pydantic attribute access), but
+    :func:`get_model_scores_bytes` fronts this call with a per-name bytes
+    cache so the scan only runs on the cold first request for each model.
 
     Iterates every registered benchmark — including off-menu ones
     (``display_on_leaderboard=False``) — so submissions to hidden benchmarks
@@ -496,12 +538,7 @@ def _pick_leader(
     best: SummaryRowSchema | None = None
     best_rank: int | None = None
     for r in rows:
-        if (
-            r.total_params_b is None
-            or r.total_params_b is None
-            or r.total_params_b <= 0
-            or r.total_params_b < lo_b
-        ):
+        if r.total_params_b is None or r.total_params_b <= 0 or r.total_params_b < lo_b:
             continue
         if hi_b is not None and r.total_params_b >= hi_b:
             continue

@@ -136,11 +136,11 @@ def _get_borda_rank(score_cols: list[str]) -> pl.Expr:
     ranked again with ``method="min"``. The row count ``n`` comes from the
     evaluation context via ``pl.len()``.
 
-    Preferred for callers that already have a wide per-task frame and use the
-    expression inline (e.g. as a sort key). Summary builders that have the
-    long frame available should call :func:`_borda_rank_from_long` instead —
-    it replaces the 100-element horizontal-rank expression tree with a single
-    window function over the partition column.
+    Used by :meth:`Benchmark.to_dataframe`, which starts from a wide pandas
+    frame and benefits from the inline-expression form. All internal summary
+    builders use :func:`_borda_rank_from_long` instead, which replaces the
+    N-element horizontal-rank expression tree with a single window function
+    over the partition column.
     """
     n = pl.len()
     return (
@@ -352,6 +352,42 @@ def _meta_df_with_zs(task_names_key: tuple[str, ...]) -> pl.DataFrame:
     )
 
 
+_STANDARD_META_COLS: tuple[str, ...] = (
+    "Zero-shot",
+    "Active Parameters (B)",
+    "Total Parameters (B)",
+    "Embedding Dimensions",
+    "Max Tokens",
+)
+
+
+def _order_summary_cols(
+    joint_table: pl.DataFrame,
+    *,
+    rank_col: str,
+    mean_cols: Sequence[str],
+    type_cols: Sequence[str],
+    extra_trailing: Sequence[str] = (),
+) -> pl.DataFrame:
+    """Reorder ``joint_table`` into the canonical summary column layout.
+
+    Layout: ``rank_col | Model | meta cols | mean_cols | type_cols |
+    extra_trailing | Release Date``. Columns not present in ``joint_table``
+    are silently dropped — keeps the four ``_create_summary_table_*``
+    builders from each re-spelling the ordering.
+    """
+    ordering = [
+        rank_col,
+        "Model",
+        *_STANDARD_META_COLS,
+        *mean_cols,
+        *type_cols,
+        *extra_trailing,
+        "Release Date",
+    ]
+    return joint_table.select([c for c in ordering if c in joint_table.columns])
+
+
 def _attach_model_metadata(
     joint_table: pl.DataFrame,
     task_names_key: tuple[str, ...] | None = None,
@@ -377,6 +413,40 @@ def _attach_model_metadata(
         .drop("_model_link")
         .rename({"model_name": "Model"})
     )
+
+
+def _build_joint_with_type_means_and_borda(
+    per_task: pl.DataFrame,
+    task_cols: list[str],
+    pl_df: pl.DataFrame,
+    *,
+    task_type_mean_alias: str = "Mean (TaskType)",
+    extra_select_exprs: Sequence[pl.Expr] = (),
+) -> tuple[pl.DataFrame, list[str]]:
+    """Compute per-type means + the task-type mean + Borda rank into one frame.
+
+    Returns ``(joint_table, type_cols)`` where ``joint_table`` has
+    ``model_name`` + per-type mean columns + ``extra_select_exprs`` +
+    ``task_type_mean_alias`` (the mean of the per-type means) +
+    ``Rank (Borda)``.
+
+    Lazy chain so polars fuses select + with_columns into one query plan (no
+    intermediate materialisation between the per-type means and the task-type
+    mean that reads them). The Borda is computed long-form so
+    ``n_models = per_task.height`` matches the wide-form's ``pl.len()`` —
+    ``pl_df`` may contain all-null models that were filtered out of
+    ``per_task``.
+    """
+    type_exprs, type_cols = _get_means_per_types(task_cols)
+    borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
+    joint_table = (
+        per_task.lazy()
+        .select("model_name", *type_exprs, *extra_select_exprs)
+        .with_columns(_skipna_false_mean(type_cols).alias(task_type_mean_alias))
+        .collect()
+        .join(borda_df, on="model_name", how="left")
+    )
+    return joint_table, type_cols
 
 
 def _create_summary_table_from_benchmark_results(
@@ -406,27 +476,11 @@ def _create_summary_table_from_benchmark_results(
         return _no_results_summary()
     per_task, task_cols = pivot
 
-    type_exprs, type_cols = _get_means_per_types(task_cols)
-
-    # Long-form Borda: single window-rank over task_name partition instead of
-    # a 100-element horizontal expression tree on the wide per_task frame.
-    # ``n_models = per_task.height`` matches the wide-form's ``pl.len()`` —
-    # pl_df may contain all-null models that were filtered out of per_task.
-    borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
-
-    # Lazy chain so polars fuses select + with_columns into one query plan
-    # (no intermediate materialisation between the per-type means and the
-    # Mean (TaskType) that reads them).
-    joint_table = (
-        per_task.lazy()
-        .select(
-            "model_name",
-            *type_exprs,
-            _skipna_false_mean(task_cols).alias("Mean (Task)"),
-        )
-        .with_columns(_skipna_false_mean(type_cols).alias("Mean (TaskType)"))
-        .collect()
-        .join(borda_df, on="model_name", how="left")
+    joint_table, type_cols = _build_joint_with_type_means_and_borda(
+        per_task,
+        task_cols,
+        pl_df,
+        extra_select_exprs=(_skipna_false_mean(task_cols).alias("Mean (Task)"),),
     )
 
     # Attach metadata BEFORE sorting: the attach step inner-joins on the model
@@ -435,21 +489,13 @@ def _create_summary_table_from_benchmark_results(
         joint_table, task_names_key=tuple(sorted(task_cols))
     ).sort("Rank (Borda)")
 
-    final_cols = [
-        "Rank (Borda)",
-        "Model",
-        "Zero-shot",
-        "Active Parameters (B)",
-        "Total Parameters (B)",
-        "Embedding Dimensions",
-        "Max Tokens",
-        "Mean (Task)",
-        "Mean (TaskType)",
-        *type_cols,
-        "Release Date",
-    ]
     return SummaryTable(
-        df=joint_table.select([c for c in final_cols if c in joint_table.columns]),
+        df=_order_summary_cols(
+            joint_table,
+            rank_col="Rank (Borda)",
+            mean_cols=("Mean (Task)", "Mean (TaskType)"),
+            type_cols=type_cols,
+        ),
         rank_col="Rank (Borda)",
         primary_metric_col="Mean (Task)",
         task_type_mean_col="Mean (TaskType)",
@@ -481,8 +527,10 @@ def _create_per_task_table_from_benchmark_results(
         return _no_results_frame()
     per_task, task_cols = pivot
 
+    borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
     return (
-        per_task.sort(_get_borda_rank(task_cols))
+        per_task.join(borda_df, on="model_name", how="left")
+        .sort("Rank (Borda)")
         .rename({"model_name": "Model"})
         .select(["Model", *task_cols])
     )
@@ -568,23 +616,40 @@ def _create_per_language_table_from_benchmark_results(
     return per_language.rename({"model_name": "Model"}).select(["Model", *lang_cols])
 
 
-def _create_summary_table_mean_public_private(  # noqa: PLR0914 — multi-stage build; locals make each polars sub-expression named/readable
-    pl_df: pl.DataFrame,
-    exclude_private_from_borda: bool = False,
-) -> SummaryTable:
-    """Create summary table that separates public and private task means.
+@dataclass(frozen=True, slots=True)
+class _PublicPrivateBuild:
+    """Shared intermediate build for public/private-aware summary tables.
 
-    Args:
-        pl_df: Long polars frame with at least ``model_name``, ``task_name``, ``score``,
-            and ``is_public`` columns.
-        exclude_private_from_borda: If True, calculate Borda rank using only public tasks.
+    Captures everything the two consumers
+    (:func:`_create_summary_table_mean_public_private` and
+    :class:`~mteb.benchmarks.benchmark.VidoreBenchmark._create_summary_table`)
+    need: the joint table with per-type + public/private mean columns, the
+    filtered wide pivot (for ``n_models`` on Borda), the long aggregate (for
+    Borda ranking), the per-type mean column names, the sorted task-name key
+    for metadata attachment, and the public/private task names actually
+    present in the pivot (used by both the per-mean expressions above and any
+    consumer that needs to filter Borda by visibility).
+    """
 
-    Returns:
-        SummaryTable wrapping a frame with ``Mean (Public)`` (primary metric)
-        and ``Mean (Private)`` plus the standard meta + type cols.
+    joint_table: pl.DataFrame
+    per_task: pl.DataFrame
+    task_cols: list[str]
+    type_cols: list[str]
+    per_task_long: pl.DataFrame
+    public_present: list[str]
+    private_present: list[str]
+
+
+def _build_public_private_joint(pl_df: pl.DataFrame) -> _PublicPrivateBuild | None:
+    """Build the public/private joint frame, or ``None`` for empty input.
+
+    Steps shared by both public-private builders: group long results by
+    (model, task) keeping ``is_public``; partition tasks into public/private;
+    pivot to wide; drop all-null rows; compute per-type means + public/private
+    means into one frame.
     """
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
-        return _no_results_summary()
+        return None
 
     per_task_long = pl_df.group_by(["model_name", "task_name"]).agg(
         pl.col("score").mean(),
@@ -601,12 +666,12 @@ def _create_summary_table_mean_public_private(  # noqa: PLR0914 — multi-stage 
     per_task = per_task_long.pivot(on="task_name", index="model_name", values="score")
     task_cols = [c for c in per_task.columns if c != "model_name"]
     if not task_cols:
-        return _no_results_summary()
+        return None
     per_task = per_task.filter(
         pl.any_horizontal([pl.col(c).is_not_null() for c in task_cols])
     )
     if per_task.is_empty():
-        return _no_results_summary()
+        return None
 
     type_exprs, type_cols = _get_means_per_types(task_cols)
 
@@ -624,45 +689,69 @@ def _create_summary_table_mean_public_private(  # noqa: PLR0914 — multi-stage 
         else pl.lit(None).cast(pl.Float64).alias("Mean (Private)")
     )
 
+    joint_table = per_task.select(
+        "model_name",
+        *type_exprs,
+        public_mean_expr,
+        private_mean_expr,
+    )
+
+    return _PublicPrivateBuild(
+        joint_table=joint_table,
+        per_task=per_task,
+        task_cols=task_cols,
+        type_cols=type_cols,
+        per_task_long=per_task_long,
+        public_present=public_present,
+        private_present=private_present,
+    )
+
+
+def _create_summary_table_mean_public_private(
+    pl_df: pl.DataFrame,
+    exclude_private_from_borda: bool = False,
+) -> SummaryTable:
+    """Create summary table that separates public and private task means.
+
+    Args:
+        pl_df: Long polars frame with at least ``model_name``, ``task_name``, ``score``,
+            and ``is_public`` columns.
+        exclude_private_from_borda: If True, calculate Borda rank using only public tasks.
+
+    Returns:
+        SummaryTable wrapping a frame with ``Mean (Public)`` (primary metric)
+        and ``Mean (Private)`` plus the standard meta + type cols.
+    """
+    built = _build_public_private_joint(pl_df)
+    if built is None:
+        return _no_results_summary()
+
     # Long-form Borda from the per_task_long aggregate. When
     # ``exclude_private_from_borda`` is set and we have public tasks, filter
     # before ranking — matches the wide-form behaviour of using only
     # ``public_present`` as borda_cols. ``n_models`` matches wide-form's
     # ``pl.len()`` on per_task.
     borda_source = (
-        per_task_long.filter(pl.col("is_public"))
-        if exclude_private_from_borda and public_present
-        else per_task_long
+        built.per_task_long.filter(pl.col("is_public"))
+        if exclude_private_from_borda and built.public_present
+        else built.per_task_long
     )
-    borda_df = _borda_rank_from_long(borda_source, n_models=per_task.height)
+    borda_df = _borda_rank_from_long(borda_source, n_models=built.per_task.height)
 
-    joint_table = per_task.select(
-        "model_name",
-        *type_exprs,
-        public_mean_expr,
-        private_mean_expr,
-    ).join(borda_df, on="model_name", how="left")
+    joint_table = built.joint_table.join(borda_df, on="model_name", how="left")
 
     # Sort after attach: ~5-10% of rows get filtered as unknown models.
     joint_table = _attach_model_metadata(
-        joint_table, task_names_key=tuple(sorted(task_cols))
+        joint_table, task_names_key=tuple(sorted(built.task_cols))
     ).sort("Rank (Borda)")
 
-    final_cols = [
-        "Rank (Borda)",
-        "Model",
-        "Zero-shot",
-        "Active Parameters (B)",
-        "Total Parameters (B)",
-        "Embedding Dimensions",
-        "Max Tokens",
-        "Mean (Public)",
-        "Mean (Private)",
-        *type_cols,
-        "Release Date",
-    ]
     return SummaryTable(
-        df=joint_table.select([c for c in final_cols if c in joint_table.columns]),
+        df=_order_summary_cols(
+            joint_table,
+            rank_col="Rank (Borda)",
+            mean_cols=("Mean (Public)", "Mean (Private)"),
+            type_cols=built.type_cols,
+        ),
         rank_col="Rank (Borda)",
         # Primary IS the public mean — matches the prior API behaviour of
         # falling back to ``Mean (Public)`` when no ``Mean (Task)`` exists.
@@ -719,28 +808,25 @@ def _create_summary_table_mean_subset(
     type_exprs, type_cols = _get_means_per_types(task_cols)
 
     # Mean over all subset rows per model (each task-language subset weighted
-    # equally) and borda over the wide per-(task, subset) frame. The pivot
-    # creates "task::subset" column names — exact names don't matter, we only
-    # need the score columns for ranking.
+    # equally) and borda over the per-(task, subset) long frame, partitioning
+    # by the synthetic ``task::subset`` key so the rank-by-partition matches
+    # the prior wide-form behaviour.
     overall_subset_mean = per_subset_long.group_by("model_name").agg(
         pl.col("score").mean().alias("Mean (Subset)")
     )
-    per_subset_wide = per_subset_long.with_columns(
+    per_subset_long_keyed = per_subset_long.with_columns(
         (pl.col("task_name") + "::" + pl.col("subset")).alias("_ts")
-    ).pivot(on="_ts", index="model_name", values="score")
-    subset_cols = [c for c in per_subset_wide.columns if c != "model_name"]
+    )
+    borda_df = _borda_rank_from_long(
+        per_subset_long_keyed,
+        partition_col="_ts",
+        n_models=per_task.height,
+    )
 
     joint_table = (
         per_task.select("model_name", *type_exprs)
         .join(overall_subset_mean, on="model_name", how="left")
-        .join(
-            per_subset_wide.select(
-                "model_name",
-                _get_borda_rank(subset_cols).alias("Rank (Borda)"),
-            ),
-            on="model_name",
-            how="left",
-        )
+        .join(borda_df, on="model_name", how="left")
     )
 
     # Sort after attach: ~5-10% of rows get filtered as unknown models.
@@ -748,20 +834,13 @@ def _create_summary_table_mean_subset(
         joint_table, task_names_key=tuple(sorted(task_cols))
     ).sort("Mean (Subset)", descending=True, nulls_last=True)
 
-    final_cols = [
-        "Rank (Borda)",
-        "Model",
-        "Zero-shot",
-        "Active Parameters (B)",
-        "Total Parameters (B)",
-        "Embedding Dimensions",
-        "Max Tokens",
-        "Mean (Subset)",
-        *type_cols,
-        "Release Date",
-    ]
     return SummaryTable(
-        df=joint_table.select([c for c in final_cols if c in joint_table.columns]),
+        df=_order_summary_cols(
+            joint_table,
+            rank_col="Rank (Borda)",
+            mean_cols=("Mean (Subset)",),
+            type_cols=type_cols,
+        ),
         rank_col="Rank (Borda)",
         primary_metric_col="Mean (Subset)",
         task_type_mean_col=None,
@@ -800,46 +879,32 @@ def _create_summary_table_mean_task_type(
         return _no_results_summary()
     per_task, task_cols = pivot
 
-    type_exprs, type_cols = _get_means_per_types(task_cols)
-
-    # Long-form Borda (single window rank instead of horizontal expression tree).
-    borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
-
-    # Lazy chain so polars fuses select + with_columns into one query plan.
-    sort_col = sort_by or mean_column_name
-    joint_table = (
-        per_task.lazy()
-        .select("model_name", *type_exprs)
-        .with_columns(_skipna_false_mean(type_cols).alias(mean_column_name))
-        .collect()
-        .join(borda_df, on="model_name", how="left")
+    joint_table, type_cols = _build_joint_with_type_means_and_borda(
+        per_task,
+        task_cols,
+        pl_df,
+        task_type_mean_alias=mean_column_name,
     )
 
     # Attach metadata before sort+rank: the 1-indexed ``Rank`` reflects only
     # known models (matches the previous behaviour after the inner-join
     # filter dropped unknowns post-sort) and we don't waste sort work on rows
     # that get filtered.
+    sort_col = sort_by or mean_column_name
     joint_table = (
         _attach_model_metadata(joint_table, task_names_key=tuple(sorted(task_cols)))
         .sort(sort_col, descending=True, nulls_last=True)
         .with_columns((pl.int_range(0, pl.len()) + 1).cast(pl.Int64).alias("Rank"))
     )
 
-    final_cols = [
-        "Rank",
-        "Model",
-        "Zero-shot",
-        "Active Parameters (B)",
-        "Total Parameters (B)",
-        "Embedding Dimensions",
-        "Max Tokens",
-        mean_column_name,
-        *type_cols,
-        "Rank (Borda)",
-        "Release Date",
-    ]
     return SummaryTable(
-        df=joint_table.select([c for c in final_cols if c in joint_table.columns]),
+        df=_order_summary_cols(
+            joint_table,
+            rank_col="Rank",
+            mean_cols=(mean_column_name,),
+            type_cols=type_cols,
+            extra_trailing=("Rank (Borda)",),
+        ),
         rank_col="Rank",
         primary_metric_col=mean_column_name,
         task_type_mean_col=mean_column_name,

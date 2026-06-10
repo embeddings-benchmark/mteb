@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import asyncio
 import logging
-import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING
@@ -128,68 +127,71 @@ def warmup_blocking() -> None:
     logger.info("warmup: blocking phase done in %.2fs", time.monotonic() - t0)
 
 
-def preload_summaries_in_background() -> None:
-    """Pre-build every benchmark summary + per-language schema on a daemon thread."""
+def preload_summaries_in_background() -> asyncio.Task[None] | None:
+    """Pre-build every benchmark summary + per-language schema on the serving loop.
+
+    Returns the spawned :class:`asyncio.Task` (or ``None`` if preload is
+    disabled) so the lifespan can cancel it on shutdown. Runs on the serving
+    event loop — not a separate daemon thread — so the per-key
+    ``asyncio.Lock`` instances cached in :mod:`mteb.api.cache` are bound to the
+    same loop that request handlers run on.
+    """
     if not get_settings().preload:
         logger.info("warmup: background preload disabled (PRELOAD=0)")
-        return
+        return None
 
     concurrency = get_settings().preload_concurrency
+    # Preload every registered benchmark — including off-menu ones — so
+    # hidden-benchmark requests also hit the warmed cache and the model
+    # detail page (which iterates all benchmarks) is cold-path-free.
+    all_names = [b.name for b in mteb.get_benchmarks()]
 
-    def _run() -> None:
-        # Preload every registered benchmark — including off-menu ones — so
-        # hidden-benchmark requests also hit the warmed cache and the model
-        # detail page (which iterates all benchmarks) is cold-path-free.
-        all_names = [b.name for b in mteb.get_benchmarks()]
+    expected = (
+        OSError,
+        ValueError,
+        KeyError,
+        AttributeError,
+        pl.exceptions.PolarsError,
+    )
+
+    async def _build_one(name: str) -> None:
+        try:
+            await get_summary_bytes(name)
+        except expected as exc:
+            logger.warning(
+                "warmup summary: %s failed (%s: %s)",
+                name,
+                type(exc).__name__,
+                exc,
+            )
+        try:
+            await get_per_language_bytes(name)
+        except expected as exc:
+            logger.warning(
+                "warmup per-language: %s failed (%s: %s)",
+                name,
+                type(exc).__name__,
+                exc,
+            )
+
+    async def _run() -> None:
         t0 = time.monotonic()
         logger.info(
             "warmup: background preload started (%d benchmarks, concurrency=%d)",
             len(all_names),
             concurrency,
         )
+        sem = asyncio.Semaphore(concurrency)
 
-        expected = (
-            OSError,
-            ValueError,
-            KeyError,
-            AttributeError,
-            pl.exceptions.PolarsError,
-        )
+        async def _bounded(name: str) -> None:
+            async with sem:
+                await _build_one(name)
 
-        async def _build_one(name: str) -> None:
-            try:
-                await get_summary_bytes(name)
-            except expected as exc:
-                logger.warning(
-                    "warmup summary: %s failed (%s: %s)",
-                    name,
-                    type(exc).__name__,
-                    exc,
-                )
-            try:
-                await get_per_language_bytes(name)
-            except expected as exc:
-                logger.warning(
-                    "warmup per-language: %s failed (%s: %s)",
-                    name,
-                    type(exc).__name__,
-                    exc,
-                )
-
-        async def _build_all() -> None:
-            sem = asyncio.Semaphore(concurrency)
-
-            async def _bounded(name: str) -> None:
-                async with sem:
-                    await _build_one(name)
-
-            await asyncio.gather(*(_bounded(n) for n in all_names))
-
-        asyncio.run(_build_all())
+        await asyncio.gather(*(_bounded(n) for n in all_names))
         logger.info(
             "warmup: background preload done in %.2fs (%d benchmarks)",
             time.monotonic() - t0,
             len(all_names),
         )
 
-    threading.Thread(target=_run, name="mteb-api-preload", daemon=True).start()
+    return asyncio.create_task(_run(), name="mteb-api-preload")

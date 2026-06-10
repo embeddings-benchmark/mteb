@@ -41,10 +41,7 @@ _fetch_locks: dict[str, asyncio.Lock] = {}
 
 
 def _lock_for(name: str) -> asyncio.Lock:
-    lock = _fetch_locks.get(name)
-    if lock is None:
-        lock = _fetch_locks.setdefault(name, asyncio.Lock())
-    return lock
+    return _fetch_locks.setdefault(name, asyncio.Lock())
 
 
 def _fetch_sync(url: str) -> CachedIcon | None:
@@ -102,7 +99,11 @@ async def get_icon(name: str, url: str) -> CachedIcon | None:
 
 
 def cache_clear() -> None:
-    """Used by tests to start from an empty cache."""
+    """Used by tests to start from an empty cache.
+
+    Leaves ``_fetch_locks`` intact — clearing it while a coroutine still
+    holds an entry would let the next caller create a fresh Lock for the same
+    name and bypass the single-flight guard.
+    """
     _cache.clear()
     _failure_cache.clear()
-    _fetch_locks.clear()

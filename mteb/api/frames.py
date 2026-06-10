@@ -197,30 +197,39 @@ def _write_disk_cache(
 ) -> None:
     """Persist the split + unified frames so the next process restart skips the cold work.
 
-    Saves the ~20s HF download and ~10s split. Writes the manifest LAST so a
-    crashed write leaves the cache invalid (next read sees no manifest,
-    rebuilds cleanly).
+    Saves the ~20s HF download and ~10s split. Writes each shard via a
+    ``.tmp`` sidecar + ``os.replace`` so concurrent readers and abrupt exits
+    never see a torn state: a reader gating on the manifest always sees a
+    self-consistent ``(manifest, shards)`` pair — either the old one or this
+    new one.
     """
     cache_dir = _disk_cache_dir()
     try:
         cache_dir.mkdir(parents=True, exist_ok=True)
-        # Remove stale shards before writing new ones (cheap; covers benchmark
-        # renames and reduces clutter when the registry shrinks).
-        for p in cache_dir.glob("*.parquet"):
-            p.unlink(missing_ok=True)
-        manifest_path = cache_dir / _MANIFEST_FILE
-        manifest_path.unlink(missing_ok=True)
 
-        unified.write_parquet(cache_dir / _UNIFIED_FILE)
+        # Skip placeholder empty frames (cheap to recreate on read).
+        new_shards: list[tuple[Path, pl.DataFrame]] = [
+            (cache_dir / _UNIFIED_FILE, unified)
+        ]
         for bench_name, df in loaded.items():
-            # Skip the placeholder empty frames added by the setdefault loop —
-            # they're cheap to recreate on read and waste disk.
             if df.height == 0:
                 continue
             safe_name = quote(bench_name, safe="")
-            df.write_parquet(cache_dir / f"{safe_name}.parquet")
-        # Manifest is the last write — anything before is "tentative".
-        manifest_path.write_text(
+            new_shards.append((cache_dir / f"{safe_name}.parquet", df))
+
+        # Atomic write per shard: write *.parquet.tmp then os.replace into
+        # place. The read-side glob filters on *.parquet so half-written
+        # ``.tmp`` files are ignored if we crash mid-write.
+        for final_path, df in new_shards:
+            tmp_path = final_path.with_name(final_path.name + ".tmp")
+            df.write_parquet(tmp_path)
+            tmp_path.replace(final_path)
+
+        # Manifest is the last write and is itself atomic — readers gate on
+        # it, so they observe the swap as a single inode replacement.
+        manifest_path = cache_dir / _MANIFEST_FILE
+        manifest_tmp = manifest_path.with_name(manifest_path.name + ".tmp")
+        manifest_tmp.write_text(
             json.dumps(
                 {
                     "version": _DISK_CACHE_VERSION,
@@ -229,6 +238,15 @@ def _write_disk_cache(
                 }
             )
         )
+        manifest_tmp.replace(manifest_path)
+
+        # Sweep stale shards (benchmarks renamed/removed) AFTER the manifest
+        # swap so an interrupted run before this point still leaves a valid
+        # cache.
+        keep = {p.name for p, _ in new_shards}
+        for p in cache_dir.glob("*.parquet"):
+            if p.name not in keep:
+                p.unlink(missing_ok=True)
     except OSError as exc:
         # Failing to write is non-fatal — the in-memory result is still valid.
         logger.warning("disk cache write failed: %s", exc)
@@ -302,7 +320,7 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
 
     if combined is None:
         logger.info("Building combined results frame from local ResultCache")
-        all_results = cache._rebuild_from_full_repository()
+        all_results = cache._load_from_cache(rebuild=True)
         combined = all_results._to_results_df()
 
     loaded = BenchmarkResults.split_leaderboard_frame(combined)

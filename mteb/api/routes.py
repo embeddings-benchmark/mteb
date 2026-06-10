@@ -11,8 +11,9 @@ from __future__ import annotations
 import functools
 import json
 import logging
+from collections import OrderedDict
 from importlib.resources import files
-from typing import TYPE_CHECKING, Annotated
+from typing import TYPE_CHECKING, Annotated, Any
 
 import polars as pl
 from fastapi import (  # noqa: TC002 — Request needed at runtime for FastAPI DI
@@ -130,6 +131,16 @@ def _require_benchmark(name: str) -> None:
         raise HTTPException(status_code=404, detail=f"Unknown benchmark: {name}")
 
 
+def _require_task(name: str) -> None:
+    if name not in _TASKS_REGISTRY:
+        raise HTTPException(status_code=404, detail=f"Unknown task: {name}")
+
+
+def _require_model(name: str) -> None:
+    if name not in MODEL_REGISTRY:
+        raise HTTPException(status_code=404, detail=f"Unknown model: {name}")
+
+
 # Narrow exception set: a parquet-load failure should fall back to empty maps,
 # but programmer bugs (TypeError, AttributeError) must surface.
 _FRAME_LOAD_ERRORS: tuple[type[BaseException], ...] = (
@@ -140,14 +151,29 @@ _FRAME_LOAD_ERRORS: tuple[type[BaseException], ...] = (
 )
 
 
+def _safe_load_frames(
+    label: str,
+) -> tuple[dict[str, pl.DataFrame], pl.DataFrame] | None:
+    """Return the per-benchmark + unified frames, or ``None`` on a load failure.
+
+    Warns with ``label`` so each caller's log line distinguishes which map
+    couldn't be built. Programmer bugs (TypeError, AttributeError) propagate
+    so they aren't silently absorbed.
+    """
+    try:
+        return _load_per_benchmark_frames()
+    except _FRAME_LOAD_ERRORS as exc:
+        logger.warning("%s unavailable: %s: %s", label, type(exc).__name__, exc)
+        return None
+
+
 @functools.cache
 def _num_models_map() -> dict[str, int]:
     """{benchmark_name -> distinct model count}, cached for the process lifetime."""
-    try:
-        frames, _ = _load_per_benchmark_frames()
-    except _FRAME_LOAD_ERRORS as exc:
-        logger.warning("num_models map unavailable: %s: %s", type(exc).__name__, exc)
+    loaded = _safe_load_frames("num_models map")
+    if loaded is None:
         return {}
+    frames, _ = loaded
     return {
         name: int(frame["model_name"].n_unique())
         for name, frame in frames.items()
@@ -158,13 +184,10 @@ def _num_models_map() -> dict[str, int]:
 @functools.cache
 def _task_num_models_map() -> dict[str, int]:
     """{task_name -> distinct model count}, cached for the process lifetime."""
-    try:
-        _, unified = _load_per_benchmark_frames()
-    except _FRAME_LOAD_ERRORS as exc:
-        logger.warning(
-            "task num_models map unavailable: %s: %s", type(exc).__name__, exc
-        )
+    loaded = _safe_load_frames("task num_models map")
+    if loaded is None:
         return {}
+    _, unified = loaded
     if unified.is_empty() or "task_name" not in unified.columns:
         return {}
     grouped = (
@@ -240,17 +263,20 @@ _TASK_LIST_ADAPTER = TypeAdapter(list[TaskMetaSchema])
 _MODEL_LIST_ADAPTER = TypeAdapter(list[ModelMetaSchema])
 
 
+def _serialize_schemas(schemas: list[Any], adapter: TypeAdapter[Any]) -> Serialized:
+    """Dump a schema list to bytes (+gzip+ETag) via the given TypeAdapter."""
+    return serialize_bytes(adapter.dump_json(schemas, by_alias=True))
+
+
 @functools.cache
 def _menu_schemas_bytes() -> Serialized:
-    return serialize_bytes(_MENU_LIST_ADAPTER.dump_json(_menu_schemas(), by_alias=True))
+    return _serialize_schemas(_menu_schemas(), _MENU_LIST_ADAPTER)
 
 
 @functools.lru_cache(maxsize=2)
 def _benchmark_schemas_bytes(include_hidden: bool = False) -> Serialized:
-    return serialize_bytes(
-        _BENCHMARK_LIST_ADAPTER.dump_json(
-            _benchmark_schemas(include_hidden), by_alias=True
-        )
+    return _serialize_schemas(
+        _benchmark_schemas(include_hidden), _BENCHMARK_LIST_ADAPTER
     )
 
 
@@ -262,8 +288,10 @@ def _filtered_task_schemas_bytes(
     modalities: tuple[str, ...] | None,
     categories: tuple[str, ...] | None,
 ) -> Serialized:
-    schemas = _filtered_task_schemas(languages, types, domains, modalities, categories)
-    return serialize_bytes(_TASK_LIST_ADAPTER.dump_json(schemas, by_alias=True))
+    return _serialize_schemas(
+        _filtered_task_schemas(languages, types, domains, modalities, categories),
+        _TASK_LIST_ADAPTER,
+    )
 
 
 @functools.lru_cache(maxsize=128)
@@ -277,17 +305,19 @@ def _filtered_model_schemas_bytes(
     modalities: tuple[str, ...] | None,
     exclusive_modality: bool,
 ) -> Serialized:
-    schemas = _filtered_model_schemas(
-        model_types,
-        frameworks,
-        open_weights,
-        instruction_tuned,
-        min_params_b,
-        max_params_b,
-        modalities,
-        exclusive_modality,
+    return _serialize_schemas(
+        _filtered_model_schemas(
+            model_types,
+            frameworks,
+            open_weights,
+            instruction_tuned,
+            min_params_b,
+            max_params_b,
+            modalities,
+            exclusive_modality,
+        ),
+        _MODEL_LIST_ADAPTER,
     )
-    return serialize_bytes(_MODEL_LIST_ADAPTER.dump_json(schemas, by_alias=True))
 
 
 @infra_router.get("/health")
@@ -305,7 +335,7 @@ async def metrics() -> Response:
 
 @infra_router.get("/robots.txt", include_in_schema=False)
 async def robots_txt() -> Response:
-    """Cached ``Disallow: /`` body so crawler probes stop 404-ing."""
+    """Cached ``Allow: /`` body so crawler probes stop 404-ing."""
     return Response(
         content="User-agent: *\nAllow: /\n",
         media_type="text/plain",
@@ -398,16 +428,6 @@ async def benchmark_scores(
 
 
 @router.get(
-    "/benchmarks/{name:path}/summary",
-    include_in_schema=False,
-    response_model=BenchmarkSummarySchema,
-)
-async def benchmark_summary(request: Request, name: str) -> Response:
-    """Deprecated alias for ``/benchmarks/{name}/scores`` — kept during frontend rollout."""
-    return await benchmark_scores(request, name)
-
-
-@router.get(
     "/benchmarks/{name:path}/per-language",
     response_model=BenchmarkPerLanguageSchema,
 )
@@ -477,7 +497,12 @@ def _parse_buckets_json(raw: str) -> list[tuple[float, float | None]]:
     return out
 
 
-_leader_bytes: dict[tuple[str, tuple[tuple[float, float | None], ...]], Serialized] = {}
+# LRU-bounded: ?buckets= can take arbitrary tuples, so callers that vary the
+# query would otherwise grow the bytes + locks dicts without limit.
+_LEADER_BYTES_MAX = 256
+_leader_bytes: OrderedDict[
+    tuple[str, tuple[tuple[float, float | None], ...]], Serialized
+] = OrderedDict()
 _leader_bytes_locks: dict[
     tuple[str, tuple[tuple[float, float | None], ...]], asyncio.Lock
 ] = {}
@@ -509,7 +534,12 @@ async def benchmark_leaders(
         return await build_benchmark_leaders(name, parsed)
 
     payload = await _cached_bytes(
-        _leader_bytes, _leader_bytes_locks, key, _build, layer="leaders"
+        _leader_bytes,
+        _leader_bytes_locks,
+        key,
+        _build,
+        layer="leaders",
+        max_size=_LEADER_BYTES_MAX,
     )
     return _cached_json(request, payload)
 
@@ -598,17 +628,20 @@ def _filtered_task_schemas_bytes_named(
     ],
     name_lower: str,
 ) -> Serialized:
-    schemas = [
-        s for s in _filtered_task_schemas(*filter_key) if name_lower in s.name.lower()
-    ]
-    return serialize_bytes(_TASK_LIST_ADAPTER.dump_json(schemas, by_alias=True))
+    return _serialize_schemas(
+        [
+            s
+            for s in _filtered_task_schemas(*filter_key)
+            if name_lower in s.name.lower()
+        ],
+        _TASK_LIST_ADAPTER,
+    )
 
 
 @router.get("/tasks/{name:path}/scores", response_model=TaskScoresSchema)
 async def task_scores(request: Request, name: str) -> Response:
     """Per-model scores on task ``name`` across every benchmark that hosts it."""
-    if name not in _TASKS_REGISTRY:
-        raise HTTPException(status_code=404, detail=f"Unknown task: {name}")
+    _require_task(name)
     TASK_SELECTIONS.labels(name=name, endpoint="scores").inc()
     return _cached_json(request, await get_task_scores_bytes(name))
 
@@ -616,8 +649,7 @@ async def task_scores(request: Request, name: str) -> Response:
 @router.get("/tasks/{name:path}", response_model=TaskMetaSchema)
 async def task_detail(name: str) -> TaskMetaSchema:
     """Static metadata for task ``name``."""
-    if name not in _TASKS_REGISTRY:
-        raise HTTPException(status_code=404, detail=f"Unknown task: {name}")
+    _require_task(name)
     TASK_SELECTIONS.labels(name=name, endpoint="detail").inc()
     return _with_task_num_models(task_to_meta_schema(_TASKS_REGISTRY[name]))
 
@@ -693,29 +725,27 @@ def _filtered_model_schemas_bytes_named(
     ],
     name_lower: str,
 ) -> Serialized:
-    schemas = [
-        s for s in _filtered_model_schemas(*filter_key) if name_lower in s.name.lower()
-    ]
-    return serialize_bytes(_MODEL_LIST_ADAPTER.dump_json(schemas, by_alias=True))
+    return _serialize_schemas(
+        [
+            s
+            for s in _filtered_model_schemas(*filter_key)
+            if name_lower in s.name.lower()
+        ],
+        _MODEL_LIST_ADAPTER,
+    )
 
 
 @router.get("/models/{name:path}/scores", response_model=ModelScoresSchema)
 async def model_scores(request: Request, name: str) -> Response:
     """Per-benchmark scores for model ``name``."""
-    if name not in MODEL_REGISTRY:
-        raise HTTPException(status_code=404, detail=f"Unknown model: {name}")
-    try:
-        payload = await get_model_scores_bytes(name)
-    except KeyError as exc:
-        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    _require_model(name)
     MODEL_SELECTIONS.labels(name=name, endpoint="scores").inc()
-    return _cached_json(request, payload)
+    return _cached_json(request, await get_model_scores_bytes(name))
 
 
 @router.get("/models/{name:path}", response_model=ModelMetaSchema)
 async def model_detail(name: str) -> ModelMetaSchema:
     """Static metadata for model ``name``."""
-    if name not in MODEL_REGISTRY:
-        raise HTTPException(status_code=404, detail=f"Unknown model: {name}")
+    _require_model(name)
     MODEL_SELECTIONS.labels(name=name, endpoint="detail").inc()
     return model_meta_to_schema(get_model_meta(name))

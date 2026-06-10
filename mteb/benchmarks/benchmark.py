@@ -480,14 +480,12 @@ class RtebBenchmark(Benchmark):
         if summary.is_empty:
             return summary
         # issue 3902: temporarily drop the Private split from RTEB. All tasks
-        # are Retrieval, so the Retrieval type column == the public task mean;
-        # rename it to "Mean (Task)" and drop the now-redundant "Mean (Public)".
-        joint_table = summary.df.drop("Mean (Private)", strict=False)
-        if "Retrieval" in joint_table.columns:
-            joint_table = joint_table.rename({"Retrieval": "Mean (Task)"})
-        joint_table = joint_table.drop("Mean (Task)", strict=False).rename(
-            {"Mean (Public)": "Mean (Task)"}
-        )
+        # are Retrieval, so "Mean (Public)" carries the public task mean; drop
+        # the redundant "Retrieval" type column and rename "Mean (Public)" →
+        # "Mean (Task)".
+        joint_table = summary.df.drop(
+            "Mean (Private)", "Retrieval", strict=False
+        ).rename({"Mean (Public)": "Mean (Task)"})
         return SummaryTable(
             df=joint_table,
             rank_col="Rank (Borda)",
@@ -505,6 +503,11 @@ class HUMEBenchmark(Benchmark):
         *,
         pivot: tuple[pl.DataFrame, list[str]] | None = None,
     ) -> SummaryTable:
+        # ``pivot`` is intentionally ignored: ``_build_per_task_pivot`` uses a
+        # sample-weighted mean across (split, subset) rows, but mean-subset
+        # weights each subset equally via a two-step (model, task, subset) →
+        # (model, task) groupby. The two disagree whenever a task has multiple
+        # splits per subset, so the precomputed pivot can't be reused.
         from mteb.benchmarks._create_table import _create_summary_table_mean_subset
 
         return _create_summary_table_mean_subset(pl_df)
@@ -544,89 +547,32 @@ class VidoreBenchmark(Benchmark):
         BenchmarkAggregation.PUBLIC_PRIVATE,
     )
 
-    def _create_vidore_summary_table(  # noqa: PLR6301
-        self, pl_df: pl.DataFrame
-    ) -> pl.DataFrame:
-        """Create the Vidore summary frame fully in polars.
-
-        Args:
-            pl_df: Long polars frame with ``model_name``, ``task_name``, ``score``,
-                and ``is_public`` columns.
-
-        Returns:
-            Polars frame with one row per model, ready for further renames.
-            ``_create_summary_table`` wraps this with the appropriate
-            :class:`SummaryTable` metadata.
-        """
+    def _create_summary_table(  # noqa: PLR6301
+        self,
+        pl_df: pl.DataFrame,
+        *,
+        pivot: tuple[pl.DataFrame, list[str]] | None = None,
+    ) -> SummaryTable:
         from mteb.benchmarks._create_table import (
+            SummaryTable,
             _attach_model_metadata,
-            _get_means_per_types,
-            _no_results_frame,
-            _skipna_false_mean,
+            _build_public_private_joint,
+            _no_results_summary,
+            _order_summary_cols,
         )
         from mteb.get_tasks import get_task
 
-        if pl_df.is_empty() or "model_name" not in pl_df.columns:
-            return _no_results_frame()
+        built = _build_public_private_joint(pl_df)
+        if built is None:
+            return _no_results_summary()
 
-        per_task_long = pl_df.group_by(["model_name", "task_name"]).agg(
-            pl.col("score").mean(),
-            pl.col("is_public").first(),
-        )
-        public_tasks = (
-            per_task_long.filter(pl.col("is_public"))
-            .get_column("task_name")
-            .unique()
-            .to_list()
-        )
-        private_tasks = (
-            per_task_long.filter(~pl.col("is_public"))
-            .get_column("task_name")
-            .unique()
-            .to_list()
-        )
-        per_task = per_task_long.pivot(
-            on="task_name", index="model_name", values="score"
-        )
-        task_cols = [c for c in per_task.columns if c != "model_name"]
-        if not task_cols:
-            return _no_results_frame()
-        per_task = per_task.filter(
-            pl.any_horizontal([pl.col(c).is_not_null() for c in task_cols])
-        )
-        if per_task.is_empty():
-            return _no_results_frame()
-
-        type_exprs, type_cols = _get_means_per_types(task_cols)
-        # Vidore tasks share a single task type — sort primarily by it, then by means.
-        primary_type_col = get_task(task_cols[0]).metadata.type
-
-        public_present = [c for c in public_tasks if c in task_cols]
-        private_present = [c for c in private_tasks if c in task_cols]
-
-        public_mean_expr = (
-            _skipna_false_mean(public_present).alias("Mean (Public)")
-            if public_present
-            else pl.lit(None).cast(pl.Float64).alias("Mean (Public)")
-        )
-        private_mean_expr = (
-            _skipna_false_mean(private_present).alias("Mean (Private)")
-            if private_present
-            else pl.lit(None).cast(pl.Float64).alias("Mean (Private)")
-        )
-
-        joint_table = per_task.select(
-            "model_name",
-            *type_exprs,
-            public_mean_expr,
-            private_mean_expr,
-        )
-
-        # Attach metadata before sort+rank: the 1-indexed ``Rank (Mean Task)``
-        # reflects only known models and we don't waste sort work on rows the
-        # inner join drops.
+        # Vidore tasks share a single task type — sort primarily by it, then
+        # by means. Rank is the post-sort 1-indexed position (no Borda).
+        primary_type_col = get_task(built.task_cols[0]).metadata.type
         joint_table = (
-            _attach_model_metadata(joint_table, task_names_key=tuple(sorted(task_cols)))
+            _attach_model_metadata(
+                built.joint_table, task_names_key=tuple(sorted(built.task_cols))
+            )
             .sort(
                 [primary_type_col, "Mean (Public)", "Mean (Private)"],
                 descending=True,
@@ -637,38 +583,18 @@ class VidoreBenchmark(Benchmark):
             )
         )
 
-        final_cols = [
-            "Rank (Mean Task)",
-            "Model",
-            "Zero-shot",
-            "Active Parameters (B)",
-            "Total Parameters (B)",
-            "Embedding Dimensions",
-            "Max Tokens",
-            "Mean (Public)",
-            "Mean (Private)",
-            *type_cols,
-            "Release Date",
-        ]
-        return joint_table.select([c for c in final_cols if c in joint_table.columns])
-
-    def _create_summary_table(
-        self,
-        pl_df: pl.DataFrame,
-        *,
-        pivot: tuple[pl.DataFrame, list[str]] | None = None,
-    ) -> SummaryTable:
-        from mteb.benchmarks._create_table import SummaryTable
-
-        joint_table = self._create_vidore_summary_table(pl_df)
-        if "No results" in joint_table.columns:
-            return SummaryTable(df=joint_table, is_empty=True)
         # For ViDoRe (V1, V2, V3): all tasks are DocumentUnderstanding type, so
         # the type column == Mean (Task).
         if "DocumentUnderstanding" in joint_table.columns:
             joint_table = joint_table.rename({"DocumentUnderstanding": "Mean (Task)"})
+
         return SummaryTable(
-            df=joint_table,
+            df=_order_summary_cols(
+                joint_table,
+                rank_col="Rank (Mean Task)",
+                mean_cols=("Mean (Public)", "Mean (Private)"),
+                type_cols=built.type_cols,
+            ),
             rank_col="Rank (Mean Task)",
             primary_metric_col="Mean (Task)",
             task_type_mean_col=None,

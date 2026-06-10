@@ -63,6 +63,7 @@ _model_score_bytes_locks: dict[str, asyncio.Lock] = {}
 _per_language_bytes_locks: dict[str, asyncio.Lock] = {}
 
 _K = TypeVar("_K")
+_V = TypeVar("_V")
 
 
 def _lock_for(locks: dict[_K, asyncio.Lock], key: _K) -> asyncio.Lock:
@@ -72,35 +73,67 @@ def _lock_for(locks: dict[_K, asyncio.Lock], key: _K) -> asyncio.Lock:
     return lock
 
 
-async def _cached_bytes(
-    store: dict[_K, Serialized],
+async def _cache_or_build(
+    store: dict[_K, _V] | OrderedDict[_K, _V],
     locks: dict[_K, asyncio.Lock],
     key: _K,
-    schema_builder: Callable[[], Awaitable[BaseModel]],
+    build: Callable[[], Awaitable[_V]],
     *,
-    layer: str = "bytes",
-) -> Serialized:
-    """Generic single-flight cache-or-build for serialised bytes.
+    layer: str,
+    max_size: int | None = None,
+) -> _V:
+    """Generic single-flight cache-or-build.
 
-    Builds the schema under the per-key lock so concurrent cold requests share
-    one schema build; serialises on a worker thread because ``gzip.compress``
-    on a multi-MB body would otherwise pin the event loop. ``layer`` labels
-    the hit/miss counter so ops can split warm/cold by endpoint family.
+    Reads ``store[key]`` on the warm path; on miss, acquires the per-key lock,
+    re-checks, then awaits ``build()`` and stores the result. ``layer`` labels
+    the hit/miss counter so ops can split warm/cold by endpoint family. When
+    ``max_size`` is set, ``store`` must be an ``OrderedDict`` — hits bump LRU
+    order and inserts evict the oldest entry (and its lock) at the cap.
     """
     cached = store.get(key)
     if cached is not None:
+        if max_size is not None:
+            store.move_to_end(key)  # type: ignore[union-attr]
         CACHE_OUTCOMES.labels(layer=layer, outcome="hit").inc()
         return cached
     async with _lock_for(locks, key):
         cached = store.get(key)
         if cached is not None:
+            if max_size is not None:
+                store.move_to_end(key)  # type: ignore[union-attr]
             CACHE_OUTCOMES.labels(layer=layer, outcome="hit").inc()
             return cached
         CACHE_OUTCOMES.labels(layer=layer, outcome="miss").inc()
+        value = await build()
+        store[key] = value
+        if max_size is not None and len(store) > max_size:
+            evicted, _ = store.popitem(last=False)  # type: ignore[union-attr]
+            locks.pop(evicted, None)
+        return value
+
+
+async def _cached_bytes(
+    store: dict[_K, Serialized] | OrderedDict[_K, Serialized],
+    locks: dict[_K, asyncio.Lock],
+    key: _K,
+    schema_builder: Callable[[], Awaitable[BaseModel]],
+    *,
+    layer: str = "bytes",
+    max_size: int | None = None,
+) -> Serialized:
+    """Single-flight cache for serialised bytes.
+
+    Wraps :func:`_cache_or_build` with the serialise-on-thread step:
+    ``gzip.compress`` on a multi-MB body would otherwise pin the event loop.
+    """
+
+    async def _build_and_serialize() -> Serialized:
         schema = await schema_builder()
-        cached = await asyncio.to_thread(serialize_schema, schema)
-        store[key] = cached
-        return cached
+        return await asyncio.to_thread(serialize_schema, schema)
+
+    return await _cache_or_build(
+        store, locks, key, _build_and_serialize, layer=layer, max_size=max_size
+    )
 
 
 async def get_summary(name: str) -> BenchmarkSummarySchema:
@@ -110,17 +143,14 @@ async def get_summary(name: str) -> BenchmarkSummarySchema:
     :func:`get_summary_bytes` builds them, and it discards the schema after
     serialisation.
     """
-    cached = _summary_schemas.get(name)
-    if cached is not None:
-        return cached
-    async with _lock_for(_summary_locks, name):
-        cached = _summary_schemas.get(name)
-        if cached is not None:
-            return cached
+
+    async def _build() -> BenchmarkSummarySchema:
         logger.info("Building summary for %s", name)
-        schema = await build_benchmark_summary(name, get_cache())
-        _summary_schemas[name] = schema
-        return schema
+        return await build_benchmark_summary(name, get_cache())
+
+    return await _cache_or_build(
+        _summary_schemas, _summary_locks, name, _build, layer="summary_schema"
+    )
 
 
 async def get_summary_bytes(name: str, languages: tuple[str, ...] = ()) -> Serialized:
@@ -134,27 +164,18 @@ async def get_summary_bytes(name: str, languages: tuple[str, ...] = ()) -> Seria
             layer="summary",
         )
 
-    key = (name, languages)
-    cached = _summary_lang_bytes.get(key)
-    if cached is not None:
-        _summary_lang_bytes.move_to_end(key)
-        CACHE_OUTCOMES.labels(layer="summary_lang", outcome="hit").inc()
-        return cached
-    async with _lock_for(_summary_lang_bytes_locks, key):
-        cached = _summary_lang_bytes.get(key)
-        if cached is not None:
-            _summary_lang_bytes.move_to_end(key)
-            CACHE_OUTCOMES.labels(layer="summary_lang", outcome="hit").inc()
-            return cached
-        CACHE_OUTCOMES.labels(layer="summary_lang", outcome="miss").inc()
+    async def _build() -> BaseModel:
         logger.info("Building summary for %s (langs=%s)", name, languages)
-        schema = await build_benchmark_summary(name, get_cache(), languages=languages)
-        cached = await asyncio.to_thread(serialize_schema, schema)
-        _summary_lang_bytes[key] = cached
-        if len(_summary_lang_bytes) > _SUMMARY_LANG_MAX:
-            evicted, _ = _summary_lang_bytes.popitem(last=False)
-            _summary_lang_bytes_locks.pop(evicted, None)
-        return cached
+        return await build_benchmark_summary(name, get_cache(), languages=languages)
+
+    return await _cached_bytes(
+        _summary_lang_bytes,
+        _summary_lang_bytes_locks,
+        (name, languages),
+        _build,
+        layer="summary_lang",
+        max_size=_SUMMARY_LANG_MAX,
+    )
 
 
 async def get_per_language_bytes(name: str) -> Serialized:
