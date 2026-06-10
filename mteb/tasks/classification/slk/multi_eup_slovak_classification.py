@@ -187,7 +187,7 @@ class MultiEupSlovakGenderClassification(_MultiEupSlovakMixin, AbsTaskClassifica
         eval_langs=["slk-Latn"],
         main_score="accuracy",
         domains=["Government", "Spoken"],
-        task_subtypes=["Topic classification"],
+        task_subtypes=[],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
