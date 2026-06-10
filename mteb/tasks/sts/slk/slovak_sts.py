@@ -27,7 +27,6 @@ class SlovakSTS(AbsTaskSTS):
         sample_creation="machine-translated and verified",
         bibtex_citation=r"""
 @inproceedings{suppa-etal-2025-sklep,
-  abstract = {In this work, we introduce skLEP, the first comprehensive benchmark specifically designed for evaluating Slovak natural language understanding (NLU) models. We have compiled skLEP to encompass nine diverse tasks that span token-level, sentence-pair, and document-level challenges, thereby offering a thorough assessment of model capabilities. To create this benchmark, we curated new, original datasets tailored for Slovak and meticulously translated established English NLU resources. Within this paper, we also present the first systematic and extensive evaluation of a wide array of Slovak-specific, multilingual, and English pre-trained language models using the skLEP tasks. Finally, we also release the complete benchmark data, an open-source toolkit facilitating both fine-tuning and evaluation of models, and a public leaderboard at \url{https://github.com/slovak-nlp/sklep} in the hopes of fostering reproducibility and drive future research in Slovak NLU.},
   address = {Vienna, Austria},
   author = {Suppa, Marek  and
 Ridzik, Andrej  and

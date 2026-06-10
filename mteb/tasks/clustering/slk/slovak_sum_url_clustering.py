@@ -29,13 +29,13 @@ class SlovakSumURLClustering(AbsTaskClustering):
         bibtex_citation=r"""
 @inproceedings{ondrejova-suppa-2024-slovaksum,
   address = {Torino, Italia},
-  author = {Ondrejova, Viktoria and Suppa, Marek},
+  author = {Ondrejová, Viktória and Šuppa, Marek},
   booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024)},
   editor = {Calzolari, Nicoletta and Kan, Min-Yen and Hoste, Veronique and Lenci, Alessandro and Sakti, Sakriani and Xue, Nianwen},
   month = may,
   pages = {14916--14922},
   publisher = {ELRA and ICCL},
-  title = {{S}lovak{S}um: A Large Scale {S}lovak Summarization Dataset},
+  title = {SlovakSum: A Large Scale Slovak Summarization Dataset},
   url = {https://aclanthology.org/2024.lrec-main.1298/},
   year = {2024},
 }

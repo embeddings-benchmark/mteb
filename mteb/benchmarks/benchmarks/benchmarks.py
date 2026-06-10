@@ -855,9 +855,9 @@ MTEB_SLK = Benchmark(
     reference="TBD",
     citation=r"""
 @inproceedings{suppa2025skmteb,
-  title = {SkMTEB: Slovak Massive Text Embedding Benchmark and Model Adaptation},
   author = {Šuppa, Marek and Ridzik, Andrej and Hládek, Daniel and Kňažeková, Natália and Ondrejová, Viktória},
   booktitle = {Proceedings of ACL},
+  title = {SkMTEB: Slovak Massive Text Embedding Benchmark and Model Adaptation},
   year = {2026},
 }
 """,

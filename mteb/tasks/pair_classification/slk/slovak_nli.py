@@ -35,7 +35,7 @@ class SlovakNLI(AbsTaskPairClassification):
 
         for split in self.metadata.eval_splits:
             hf_dataset = self.dataset[split].filter(
-                lambda x: x["Label"] in ["Entailment", "Contradiction"]
+                lambda x: x["Label"] in {"Entailment", "Contradiction"}
             )
             hf_dataset = hf_dataset.map(
                 lambda example: {"Label": 1 if example["Label"] == "Entailment" else 0}

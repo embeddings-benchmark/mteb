@@ -47,7 +47,7 @@ class DemagogSKNLI(AbsTaskPairClassification):
             # and ensure both evidence and claim are present
             hf_dataset = hf_dataset.filter(
                 lambda x: (
-                    x.get("verdict") in ["Pravda", "Nepravda"]
+                    x.get("verdict") in {"Pravda", "Nepravda"}
                     and x.get("analysis_text")
                     and x.get("statement")
                     and len(str(x.get("analysis_text", "")).strip()) > 0
