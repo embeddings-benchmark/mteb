@@ -582,9 +582,7 @@ def get_leaderboard_app(  # noqa: PLR0914
 
     logger.info("Step 5/6: Creating Gradio components...")
     component_start = time.time()
-    default_languages = sorted(
-        default_pl_df["language"].explode().drop_nulls().unique().to_list()
-    )
+    default_languages = sorted(_benchmark_full_languages(default_benchmark.name))
     default_task_types = sorted(
         {
             _TASKS_REGISTRY[t].metadata.type
