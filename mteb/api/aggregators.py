@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import functools
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import polars as pl
 
@@ -78,6 +78,7 @@ def _empty_summary(
         tasks_meta=tasks_meta,
         rows=[],
         aggregations=bench_schema.aggregations,
+        show_zero_shot=bench_schema.show_zero_shot,
     )
 
 
@@ -156,7 +157,7 @@ def _filter_long_df_by_languages(
 
 
 def _read_row_metrics(
-    row: dict[str, object],
+    row: dict[str, Any],
     summary: SummaryTable,
     type_cols: list[str],
 ) -> tuple[float | None, float | None, float | None, float | None, dict[str, float]]:
@@ -329,6 +330,7 @@ async def build_benchmark_summary(  # noqa: PLR0914 — narrow loop locals are c
         tasks_meta=tasks_meta,
         rows=rows,
         aggregations=bench_schema.aggregations,
+        show_zero_shot=bench_schema.show_zero_shot,
     )
 
 
@@ -491,7 +493,7 @@ async def build_model_scores(name: str) -> ModelScoresSchema:
     for bench, summary in zip(all_benchmarks, results):
         if isinstance(summary, BaseException):
             continue
-        row: SummaryRowSchema = next(
+        row: SummaryRowSchema | None = next(
             (r for r in summary.rows if r.model.name == name), None
         )
         if row is None:

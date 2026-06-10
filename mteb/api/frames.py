@@ -13,7 +13,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Any, cast
 from urllib.parse import quote, unquote
 
 import polars as pl
@@ -254,7 +254,7 @@ def _write_disk_cache(
 
 def _fill_empty_placeholders(
     loaded: dict[str, pl.DataFrame],
-    benches: Iterable,
+    benches: Iterable[Any],
     schema: dict[str, pl.DataType],
 ) -> None:
     """Add empty-frame placeholders for benchmarks with no rows.
@@ -282,15 +282,17 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
     """
     settings = get_settings()
     repo_id = settings.cache_repo
-    disk_cache_enabled = bool(settings.disk_cache and repo_id)
+    # ``disk_cache_repo`` is the non-None narrowed view of ``repo_id`` used by
+    # the disk-cache + hub-load paths. ``None`` short-circuits both.
+    disk_cache_repo: str | None = repo_id if settings.disk_cache and repo_id else None
 
     # Fetch sha once: used both to validate any existing cache and to record
     # in the new manifest if we end up rebuilding. ``None`` means offline —
     # ``_read_disk_cache`` treats that as "trust the on-disk copy".
-    current_sha = _hf_dataset_sha(repo_id) if disk_cache_enabled else None
+    current_sha = _hf_dataset_sha(disk_cache_repo) if disk_cache_repo else None
 
-    if disk_cache_enabled:
-        cached = _read_disk_cache(repo_id, current_sha)
+    if disk_cache_repo:
+        cached = _read_disk_cache(disk_cache_repo, current_sha)
         if cached is not None:
             loaded, unified = cached
             _fill_empty_placeholders(
@@ -333,7 +335,7 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
         unified.select(pl.col("task_name").n_unique()).item() if unified.height else 0,
     )
 
-    if disk_cache_enabled:
-        _write_disk_cache(repo_id, current_sha, loaded, unified)
+    if disk_cache_repo:
+        _write_disk_cache(disk_cache_repo, current_sha, loaded, unified)
 
     return loaded, unified

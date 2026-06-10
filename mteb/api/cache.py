@@ -107,7 +107,7 @@ async def _cache_or_build(
         value = await build()
         store[key] = value
         if max_size is not None and len(store) > max_size:
-            evicted, _ = store.popitem(last=False)  # type: ignore[union-attr]
+            evicted, _ = store.popitem(last=False)  # type: ignore[call-arg]
             locks.pop(evicted, None)
         return value
 

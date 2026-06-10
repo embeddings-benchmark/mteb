@@ -66,6 +66,10 @@ class BenchmarkSchema(_CamelModel):
     # Mirrors ``Benchmark.aggregations`` so the frontend hides columns the
     # benchmark doesn't produce.
     aggregations: list[str]
+    # Mirrors ``Benchmark.show_zero_shot`` — frontend hides the Zero-shot
+    # column when False (benchmarks whose tasks aren't tracked in model
+    # training-data annotations, e.g. ViDoRe).
+    show_zero_shot: bool = True
     # Distinct models with at least one score on this benchmark.
     num_models: int = 0
     # ``"all"`` = every language in the data; ``None`` = no per-language view.
@@ -120,6 +124,7 @@ class BenchmarkSchema(_CamelModel):
             display_on_leaderboard=bool(benchmark.display_on_leaderboard),
             new_version=list(benchmark.new_version) if benchmark.new_version else None,
             aggregations=[a.value for a in benchmark.aggregations],
+            show_zero_shot=bool(benchmark.show_zero_shot),
             language_view=language_view,
         )
 
@@ -301,6 +306,9 @@ class BenchmarkSummarySchema(_CamelModel):
     tasks_meta: list[TaskMetaSchema]
     rows: list[SummaryRowSchema]
     aggregations: list[str] = Field(default_factory=list)
+    # Mirrors ``BenchmarkSchema.show_zero_shot`` — frontend hides the
+    # Zero-shot column when False.
+    show_zero_shot: bool = True
 
 
 class BenchmarkPerLanguageRowSchema(_CamelModel):

@@ -120,6 +120,12 @@ class Benchmark:
         BenchmarkAggregation.MEAN_TASK_TYPE,
         BenchmarkAggregation.TASK_TYPES,
     )
+    # Whether the leaderboard summary table surfaces the Zero-shot column.
+    # Off for benchmarks where model training-data annotations don't cover
+    # the task set (e.g. ViDoRe), so every row would otherwise render as a
+    # misleading 100%. The API echoes this on ``BenchmarkSummarySchema`` and
+    # the frontend hides the column when False.
+    show_zero_shot: bool = True
     summary_sort_column: ClassVar[str | None] = None
 
     @property
@@ -458,10 +464,15 @@ class Benchmark:
         return scores
 
 
+@dataclass
 class RtebBenchmark(Benchmark):
     """Wrapper for RTEB benchmark."""
 
     aggregations: Sequence[BenchmarkAggregation] = (BenchmarkAggregation.MEAN_TASK,)
+    # RTEB task names aren't tracked in model ``training_datasets`` lists,
+    # so the computed zero-shot percentage is 100 % for every row. Hide the
+    # column rather than render a misleading uniform value.
+    show_zero_shot: bool = False
 
     def _create_summary_table(  # noqa: PLR6301
         self,
@@ -513,6 +524,7 @@ class HUMEBenchmark(Benchmark):
         return _create_summary_table_mean_subset(pl_df)
 
 
+@dataclass
 class MIEBBenchmark(Benchmark):
     """Wrapper for MIEB benchmark."""
 
@@ -539,6 +551,7 @@ class MIEBBenchmark(Benchmark):
         )
 
 
+@dataclass
 class VidoreBenchmark(Benchmark):
     """Wrapper for Vidore3 benchmark."""
 
@@ -546,6 +559,10 @@ class VidoreBenchmark(Benchmark):
         BenchmarkAggregation.MEAN_TASK,
         BenchmarkAggregation.PUBLIC_PRIVATE,
     )
+    # ViDoRe task names aren't tracked in model ``training_datasets`` lists,
+    # so the computed zero-shot percentage is 100 % for every row. Hide the
+    # column rather than render a misleading uniform value.
+    show_zero_shot: bool = False
 
     def _create_summary_table(  # noqa: PLR6301
         self,
@@ -583,18 +600,21 @@ class VidoreBenchmark(Benchmark):
             )
         )
 
-        # For ViDoRe (V1, V2, V3): all tasks are DocumentUnderstanding type, so
-        # the type column == Mean (Task).
-        if "DocumentUnderstanding" in joint_table.columns:
-            joint_table = joint_table.rename({"DocumentUnderstanding": "Mean (Task)"})
+        # Order by the type-col name first, THEN rename: ``_order_summary_cols``
+        # filters by ``built.type_cols`` (= ``["DocumentUnderstanding"]``), so
+        # renaming earlier would drop the column on the final ``select``.
+        ordered = _order_summary_cols(
+            joint_table,
+            rank_col="Rank (Mean Task)",
+            mean_cols=("Mean (Public)", "Mean (Private)"),
+            type_cols=built.type_cols,
+        )
+
+        if "DocumentUnderstanding" in ordered.columns:
+            ordered = ordered.rename({"DocumentUnderstanding": "Mean (Task)"})
 
         return SummaryTable(
-            df=_order_summary_cols(
-                joint_table,
-                rank_col="Rank (Mean Task)",
-                mean_cols=("Mean (Public)", "Mean (Private)"),
-                type_cols=built.type_cols,
-            ),
+            df=ordered,
             rank_col="Rank (Mean Task)",
             primary_metric_col="Mean (Task)",
             task_type_mean_col=None,
