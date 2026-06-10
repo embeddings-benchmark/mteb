@@ -24,7 +24,7 @@ dense = mteb.get_model("intfloat/multilingual-e5-small")
 # Wrap them using Reciprocal Rank Fusion (RRF)
 hybrid_model = HybridSearch(
     models=[bm25, dense],
-    fusion_strategy="rrf",  # Options: "rrf", "dbsf", "relative-score-fusion", or a custom Callable
+    fusion_strategy="rrf", 
     weights=[0.5, 0.5],
 )
 
