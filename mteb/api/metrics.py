@@ -38,21 +38,42 @@ _LATENCY_BUCKETS = (
     10.0,
 )
 
+# Span 304 (tiny) through cold full summaries (a few MB pre-gzip).
+_RESPONSE_SIZE_BUCKETS = (
+    256,
+    1_024,
+    4_096,
+    16_384,
+    65_536,
+    262_144,
+    1_048_576,
+    4_194_304,
+    16_777_216,
+)
+
 # Dedicated registry avoids double-registration in tests and leaks from other libs.
 REGISTRY = CollectorRegistry()
 
 REQUEST_COUNT = Counter(
     "http_requests_total",
-    "Total HTTP requests processed, labelled by method, route template, and status code.",
-    labelnames=("method", "handler", "status"),
+    "Total HTTP requests processed, labelled by method, route template, params, and status code.",
+    labelnames=("method", "handler", "path_params", "has_query", "status"),
     registry=REGISTRY,
 )
 
 REQUEST_LATENCY = Histogram(
     "http_request_duration_seconds",
     "HTTP request latency in seconds, measured from middleware entry to response start.",
-    labelnames=("method", "handler"),
+    labelnames=("method", "handler", "path_params", "has_query"),
     buckets=_LATENCY_BUCKETS,
+    registry=REGISTRY,
+)
+
+RESPONSE_SIZE = Histogram(
+    "http_response_size_bytes",
+    "HTTP response body size in bytes (post-gzip when the client got gzip).",
+    labelnames=("method", "handler", "path_params", "has_query", "status"),
+    buckets=_RESPONSE_SIZE_BUCKETS,
     registry=REGISTRY,
 )
 
@@ -104,6 +125,27 @@ CACHE_OUTCOMES = Counter(
 
 _UNMATCHED = "<unmatched>"
 _ROUTE_TEMPLATE_KEY = "_mteb_route_template"
+# Truncate path-param payloads so a pathological benchmark name doesn't OOM
+# Prometheus; well-formed names are well under this cap.
+_PARAM_LABEL_MAX = 256
+
+
+def _serialize_path_params(scope: Scope) -> str:
+    """Serialize ``scope['path_params']`` deterministically as ``k1=v1,k2=v2``."""
+    params = scope.get("path_params") or {}
+    if not params:
+        return ""
+    rendered = ",".join(f"{k}={params[k]}" for k in sorted(params))
+    return rendered[:_PARAM_LABEL_MAX]
+
+
+def _has_query(scope: Scope) -> str:
+    """Return ``"true"`` if the request carried a query string, else ``"false"``.
+
+    Bounded-cardinality flag — captures whether the caller used filter/search
+    params without exploding label space the way distinct values would.
+    """
+    return "true" if scope.get("query_string") else "false"
 
 
 def _resolve_route_template(scope: Scope) -> str:
@@ -160,12 +202,21 @@ class PrometheusMiddleware:
             in_progress.inc()
 
         status_code = "500"
+        response_bytes = 0
 
         async def send_wrapper(message: Message) -> None:
-            nonlocal status_code
+            nonlocal status_code, response_bytes
             if message["type"] == "http.response.start":
                 status_code = str(message["status"])
+            elif message["type"] == "http.response.body":
+                body = message.get("body")
+                if body:
+                    response_bytes += len(body)
             await send(message)
+
+        # Query-string flag is known at request entry; path params are filled
+        # by the router so we read them post-handler.
+        has_query = _has_query(scope)
 
         start = time.perf_counter()
         try:
@@ -176,22 +227,43 @@ class PrometheusMiddleware:
                 handler=handler,
                 exception=type(exc).__name__,
             ).inc()
-            REQUEST_COUNT.labels(method=method, handler=handler, status="500").inc()
+            REQUEST_COUNT.labels(
+                method=method,
+                handler=handler,
+                path_params=_serialize_path_params(scope),
+                has_query=has_query,
+                status="500",
+            ).inc()
             raise
         finally:
             if matched:
-                REQUEST_LATENCY.labels(method=method, handler=handler).observe(
-                    time.perf_counter() - start
-                )
+                REQUEST_LATENCY.labels(
+                    method=method,
+                    handler=handler,
+                    path_params=_serialize_path_params(scope),
+                    has_query=has_query,
+                ).observe(time.perf_counter() - start)
             if in_progress is not None:
                 in_progress.dec()
         # Re-resolve post-handler — scope["route"] is only stamped after the
         # router runs, so the pre-call lookup misses on first-time templates.
+        final_handler = _route_template(scope)
+        path_params = _serialize_path_params(scope)
         REQUEST_COUNT.labels(
             method=method,
-            handler=_route_template(scope),
+            handler=final_handler,
+            path_params=path_params,
+            has_query=has_query,
             status=status_code,
         ).inc()
+        if final_handler != _UNMATCHED:
+            RESPONSE_SIZE.labels(
+                method=method,
+                handler=final_handler,
+                path_params=path_params,
+                has_query=has_query,
+                status=status_code,
+            ).observe(response_bytes)
 
 
 def render_metrics() -> tuple[bytes, str]:

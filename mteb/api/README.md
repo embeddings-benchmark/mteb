@@ -23,13 +23,13 @@ warm the cache on startup in a background thread.
 Data routes are mounted under `/v1/`; infra routes (`/health`, `/metrics`,
 `/robots.txt`, `/favicon.ico`, `/og/*`) stay at the root.
 
-| Method | Path | Returns |
-|---|---|---|
-| GET | `/health` | `{"ok": true}` |
-| GET | `/v1/benchmarks/menu` | Nested menu tree (matches frontend `MenuEntry[]`). |
-| GET | `/v1/benchmarks` | Flat list of leaderboard benchmarks. |
-| GET | `/v1/benchmarks/{name}` | Single benchmark metadata. |
-| GET | `/v1/benchmarks/{name}/scores` | Full summary with rows, per-task scores, per-task-type means. (Legacy alias: `/summary`.) |
+| Method | Path                           | Returns                                                                                   |
+|--------|--------------------------------|-------------------------------------------------------------------------------------------|
+| GET    | `/health`                      | `{"ok": true}`                                                                            |
+| GET    | `/v1/benchmarks/menu`          | Nested menu tree (matches frontend `MenuEntry[]`).                                        |
+| GET    | `/v1/benchmarks`               | Flat list of leaderboard benchmarks.                                                      |
+| GET    | `/v1/benchmarks/{name}`        | Single benchmark metadata.                                                                |
+| GET    | `/v1/benchmarks/{name}/scores` | Full summary with rows, per-task scores, per-task-type means. (Legacy alias: `/summary`.) |
 
 JSON keys are emitted in `camelCase` to match the frontend types in
 `leaderboardv2/src/lib/types.ts`.
@@ -52,9 +52,9 @@ handles metrics; stdlib logging is left alone). The pipeline is a no-op
 unless `OTEL_EXPORTER_OTLP_ENDPOINT` is set, so local dev and the test
 suite don't try to push to a collector that isn't there.
 
-| Env var | Purpose |
-|---|---|
+| Env var                       | Purpose                                                                            |
+|-------------------------------|------------------------------------------------------------------------------------|
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | Collector base URL, e.g. `http://localhost:4318`. Setting this turns telemetry on. |
-| `OTEL_SERVICE_NAME` | Service name tagged on every signal. Defaults to `mteb-api`. |
-| `OTEL_RESOURCE_ATTRIBUTES` | Extra `key=value,key=value` pairs merged into the resource. |
-| `OTEL_EXPORTER_OTLP_HEADERS` | Auth headers for hosted collectors (Honeycomb, Grafana Cloud, etc.). |
+| `OTEL_SERVICE_NAME`           | Service name tagged on every signal. Defaults to `mteb-api`.                       |
+| `OTEL_RESOURCE_ATTRIBUTES`    | Extra `key=value,key=value` pairs merged into the resource.                        |
+| `OTEL_EXPORTER_OTLP_HEADERS`  | Auth headers for hosted collectors (Honeycomb, Grafana Cloud, etc.).               |

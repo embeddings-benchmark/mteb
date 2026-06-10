@@ -169,7 +169,7 @@ def _read_row_metrics(
     """
     mean_task = row.get(summary.primary_metric_col)
     mean_type = (
-        row.get(summary.task_type_mean_col) if summary.task_type_mean_col else mean_task
+        row.get(summary.task_type_mean_col) if summary.task_type_mean_col else None
     )
     mean_public = row.get(summary.mean_public_col) if summary.mean_public_col else None
     mean_private = (
@@ -210,7 +210,7 @@ def _recompute_lenient_means(
     return scores_by_task_type, mean_task, mean_type
 
 
-async def build_benchmark_summary(  # noqa: PLR0914 — narrow loop locals are clearer inline
+async def build_benchmark_summary(  # noqa: PLR0914
     name: str,
     cache: ResultCache,
     languages: tuple[str, ...] = (),
@@ -303,6 +303,8 @@ async def build_benchmark_summary(  # noqa: PLR0914 — narrow loop locals are c
             scores_by_task_type, mean_task, mean_type = _recompute_lenient_means(
                 scores_by_task, task_to_type
             )
+        if not summary.task_type_mean_col:
+            mean_type = None
 
         rows.append(
             SummaryRowSchema.model_construct(
