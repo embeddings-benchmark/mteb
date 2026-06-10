@@ -112,39 +112,67 @@ results = mteb.evaluate(model, tasks=tasks, encode_kwargs={"batch_size": 1})
 Progression: `ClothoT2ARetrieval` (audio) → `MSVDT2VRetrieval` (video) →
 `AudioCapsAVT2VRetrieval` (audio-visual).
 
-## Verified — pilot run on the grid ✅
+## Verified — pilot runs on the grid ✅
 
-Ran on **A100-PCIE-40GB** (`torch 2.6.0+cu124`, `flash_attn 2.7.4.post1`), job COMPLETED in 13:30:
+All runs on **A100-PCIE-40GB** (`flash_attn 2.7.4.post1`), `exceptions=[]`:
 
-- Model loaded in **219 s**; log shows `Init BEATs Model` + `Classify Type: all_layer` — the BEATs
-  dual encoder and all-layer fusion (the faithful path) are active.
-- `ClothoT2ARetrieval` (text→audio, 1045-doc corpus) finished in **548 s**, `exceptions=[]`:
+| task | modality | metric | score | eval time |
+| :-- | :-- | :-- | :-- | :-- |
+| `ClothoT2ARetrieval` | text→audio (1045 docs) | hit_rate@5 | **0.42** | ~450 s |
+| `MSVDT2VRetrieval` | text→video (660 videos) | ndcg@10 | **0.80** (R@1 0.63, R@5 0.90) | ~413 s |
 
-  | metric | value |
-  | :-- | :-- |
-  | **hit_rate@5 (main_score)** | **0.317** |
-  | ndcg@10 | 0.260 |
-  | recall@5 / @100 / @1000 | 0.317 / 0.727 / 0.994 |
-  | map@10 | 0.213 |
+- Load log shows `Init BEATs Model` + `Classify Type: all_layer` — BEATs dual encoder and
+  all-layer fusion active. Cold model load ≈ 219 s (≈ 9 s warm).
+- The MSVD score is in the SOTA band for that dataset, validating the video decode → frame
+  permute → visual tower path end-to-end (a wrong frame layout would score near-random).
+- Clotho 0.42 is identical on torch 2.6.0/datasets 3.6 and torch 2.7.1/datasets 4.0 stacks.
 
-  Non-trivial scores over ~1k candidates confirm the wrapper produces meaningful cross-modal
-  embeddings (not random) via WAVE's real `--pred_embeds` path.
+### Faithfulness audit findings (fixed)
 
-Also verified: `wave_models` imports without WAVE deps; `mteb.get_model_meta(...)` resolves;
-`ruff`/`pyproject` clean.
+1. **Text inputs must use WAVE's label path.** In WAVE's forward, only *media* goes through
+   all-layer fusion + `classify_linear`; *text* (labels/candidates) is embedded as bare
+   ``text + <|im_end|>`` → last token of the FINAL layer, **no** chat template, **no** head
+   (`label_ids` and `all_ids` branches). The wrapper originally sent text through the media
+   branch; fixing this raised Clotho hit_rate@5 **0.32 → 0.42**.
+2. **Synchronized audio-visual wiring**: `use_audio_in_video` + `seconds_per_chunk` now mirror
+   `data_qwen._get_item` exactly (audio tokens interleaved inside the `<video>` expansion), and
+   the flag is forwarded to the model call. Not yet exercised on an AV task.
+3. **Checkpoint-load warnings are benign**: `beats.encoder.pos_conv` parametrization names
+   mismatch on `from_pretrained`, then the separate BEATs `load_state_dict` (strict) repairs
+   them — identical to WAVE's own eval flow. `beats.predictor.*` unused is expected.
+4. **Metadata corrections**: `n_parameters=9_410_651_007` (from the checkpoint index; the 7B
+   name undercounts — BEATs + head included), `memory_usage_mb=17949`, citation fixed to the
+   real author list (Changli Tang et al.).
 
 ### Env gotchas hit (already encoded in the `wave` extra)
 
-- `torchaudio`/`torchcodec` must match torch 2.6 (`2.6.0` / `0.3.0`); the loose `audio`/`video`
-  extras otherwise pull torch-2.11-built wheels (`libcudart.so.13` / `undefined symbol`).
-- `sentence-transformers>=5` hard-imports `torchcodec` (built for a newer torch ABI) → pin `<5`.
-- `triton` needs `setuptools` present. `module load ffmpeg/6.0.1` for the decode backends.
-- BEATs ships as `BEATs_iter3_plus_AS2M.pt` (WAVE's "iter3_plus"); config is read from its `cfg` key.
+- **torch 2.7.1 stack required for video**: `datasets>=4` (Video → torchcodec `VideoDecoder`,
+  what MTEB's `VideoCollator` expects) needs `torchcodec>=0.4` ⇒ torch 2.7.1. datasets 3.x
+  decodes video via torchvision+PyAV instead and breaks MTEB's collator; datasets 4.8+ needs
+  torch≥2.8; datasets 5 changed config discovery. Upstream WAVE pins torch 2.6.0 (training);
+  inference on 2.7.1 reproduces identical scores (verified on Clotho).
+- `sentence-transformers>=5` hard-imports `torchcodec` at module top → pin `<5`.
+- `triton` needs `setuptools`. `module load ffmpeg/6.0.1` for torchcodec's libavutil.
+- flash-attn: use the prebuilt wheel matching py/torch/cuda/ABI (torch 2.7 wheels are
+  `cxx11abiTRUE`; torch 2.6 wheels were `abiFALSE`).
+- BEATs ships as `BEATs_iter3_plus_AS2M.pt` (WAVE's "iter3_plus"); config read from its `cfg` key.
+- After editing the `wave` extra, re-run `uv pip install -e . --no-deps` — `ModelMeta`'s
+  requirement check reads the *installed* metadata, not the live pyproject.
 
-## Open assumptions (still worth confirming for video/AV)
+## Remaining work (honest list)
 
-- **Video frame layout** — MTEB's collator yields torchcodec frames `(F, C, H, W)`; WAVE's decord
-  path expects `(F, H, W, C)`. The wrapper permutes accordingly; the audio pilot didn't exercise
-  this, so confirm on a video task (`MSVDT2VRetrieval`) against WAVE's own numbers.
-- **Prompts** — defaults to WAVE's per-modality "Please describe the {modality}." prompts; an
-  explicit task `prompt` overrides. Prompt-awareness means prompt choice affects scores.
+- **AV-joint validation**: run an audio-visual task (e.g. `AudioCapsAVVA2TRetrieval`) to exercise
+  `use_audio_in_video=True` end-to-end.
+- **Benchmarks**: `MVEB(beta)` (23 AV tasks) and `MAEB(beta)` exist in-repo — running WAVE on them
+  is compute only, no code. Leaderboard listing would additionally need a results-repo submission.
+- **Paper-parity datasets (optional)**: WAVE's moment-retrieval evals (Charades-STA, QVHighlights,
+  MomentSeeker) are not in MTEB and correspond to WAVE's unported `seg_video` branch (left
+  half-finished upstream — it contains a literal `breakpoint()`). Porting would mean a new task
+  subtype; only needed to reproduce that slice of the paper. The MMEB-v2-video-style retrieval
+  members (MSRVTT, MSVD, DiDeMo, VATEX, YouCook2, VALOR32K) are already present.
+- **Prompt parity for paper numbers**: WAVE's task-specific eval prompts (their `ret_*.json`)
+  should be matched per-task when comparing to published scores; the wrapper currently uses an
+  item's own text, else the task prompt, else WAVE's "Please describe the {modality}." default.
+- **Upstreaming**: the `external/WAVE` submodule + `sys.path` import is fine for this fork; an
+  upstream `embeddings-benchmark/mteb` PR would likely want the qwenvl code installable (e.g.
+  `wave @ git+...`) instead of a submodule, and CI can't run the model (needs GPU + BEATs ckpt).

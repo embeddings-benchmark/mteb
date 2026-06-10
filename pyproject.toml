@@ -133,12 +133,16 @@ embeddinggemma = ["transformers>=4.56.0"]
 # (https://github.com/TCL606/WAVE), vendored as a submodule at external/WAVE. Also requires the
 # `audio` and `video` extras, plus the external BEATs_iter3_plus.pt checkpoint at load time.
 wave = [
-    "torch==2.6.0",
-    "torchvision==0.21.0",
-    "torchaudio==2.6.0",
-    "torchcodec==0.3.0",        # must match torch 2.6
+    # Upstream WAVE pins torch==2.6.0 (training repro); inference works on 2.7.1, which is
+    # required for MTEB's video stack: datasets>=4 (Video -> torchcodec VideoDecoder) needs a
+    # torchcodec whose torch pairing is >=2.7 (datasets 4.8+ even needs torch>=2.8).
+    "torch==2.7.1",
+    "torchvision==0.22.1",
+    "torchaudio==2.7.1",
+    "torchcodec==0.4.*",        # torch 2.7.1 pairing
+    "datasets[audio]>=4,<4.8",
     "transformers==4.51.3",
-    "sentence-transformers<5",  # ST>=5 hard-imports torchcodec built for a newer torch ABI
+    "sentence-transformers<5",  # ST>=5 hard-imports torchcodec at module top
     "liger_kernel==0.5.10",
     "decord>=0.6.0",
     "soundfile>=0.13.1",

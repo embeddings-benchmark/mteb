@@ -134,6 +134,7 @@ class Wave7BWrapper(AbsEncoder):
             model_name, revision=revision
         )
         tokenizer = self.processor.tokenizer
+        tokenizer.model_max_length = 131072
 
         config = Qwen2_5OmniThinkerConfig.from_pretrained(model_name, revision=revision)
         config.train_classify = True
@@ -273,7 +274,9 @@ class Wave7BWrapper(AbsEncoder):
                 sil = np.zeros(_SAMPLING_RATE - len(raw_wav[0]), dtype=raw_wav[0].dtype)
                 raw_wav[0] = np.concatenate((raw_wav[0], sil), axis=0)
 
-        # Pick the media tag (priority video > audio > image, matching WAVE's data handling).
+        # Pick the media tag (priority video > audio > image, matching WAVE's data handling;
+        # for synchronized audio-visual input the audio tokens are interleaved inside the
+        # <video> expansion via use_audio_in_video).
         if video is not None:
             media = "video"
         elif audio is not None:
@@ -281,15 +284,13 @@ class Wave7BWrapper(AbsEncoder):
         elif image is not None:
             media = "image"
         else:
-            media = None
+            raise ValueError(
+                "_build_inputs requires at least one media input; "
+                "text-only items are embedded via the label path (_encode_text)."
+            )
 
-        if media is not None:
-            prompt = instruction or _DEFAULT_MEDIA_PROMPTS[media]
-            value = f"<{media}>\n{prompt}"
-        else:
-            value = text if text is not None else ""
-            if instruction:
-                value = f"{instruction}\n{value}"
+        content = text or instruction or _DEFAULT_MEDIA_PROMPTS[media]
+        value = f"<{media}>\n{content}"
 
         conversations = [
             {"from": "human", "value": value},
@@ -304,9 +305,11 @@ class Wave7BWrapper(AbsEncoder):
             video_second_per_grid=iter(second_per_grid_ts)
             if second_per_grid_ts is not None
             else iter([]),
-            use_audio_in_video=False,
+            use_audio_in_video=audio_inputs is not None,
             position_id_per_seconds=25,
-            seconds_per_chunk=None,
+            seconds_per_chunk=2.0 * second_per_grid_ts[0]
+            if second_per_grid_ts is not None
+            else None,
         )
         # BEATs interleaves a second audio token per frame; double the audio placeholders.
         if audio_inputs is not None:
@@ -334,8 +337,33 @@ class Wave7BWrapper(AbsEncoder):
             "input_raw_wav": torch.from_numpy(raw_wav[0])
             if raw_wav is not None
             else None,
+            "use_audio_in_video": video_grid_thw is not None
+            and audio_inputs is not None,
             "type": "retrieval",
         }
+
+    @torch.no_grad()
+    def _encode_text(self, text: str) -> torch.Tensor:
+        """Embed text via WAVE's label path.
+
+        WAVE embeds text candidates/queries differently from media: bare ``text + <|im_end|>``
+        (no chat template, no instruction), last token of the FINAL layer only, without the
+        ``classify_linear`` all-layer head (modeling_qwen2_5_omni.py, label_ids branch).
+        """
+        if not text.endswith("<|im_end|>"):
+            text += "<|im_end|>"
+        tok = self.processor.tokenizer(
+            [text], padding=True, padding_side="left", return_tensors="pt"
+        )
+        inputs_embeds = self.model.get_input_embeddings()(
+            tok["input_ids"].to(self.device)
+        )
+        outputs = self.model.model(
+            inputs_embeds=inputs_embeds,
+            attention_mask=tok["attention_mask"].to(self.device),
+            return_dict=True,
+        )
+        return outputs[0][:, -1, :]
 
     def _to_model_kwargs(self, data_dict: dict[str, Any]) -> dict[str, Any]:
         """Move a per-sample dict to device, mirroring WAVE's eval loop in train_qwen.py."""
@@ -357,7 +385,7 @@ class Wave7BWrapper(AbsEncoder):
         return kwargs
 
     @torch.no_grad()
-    def encode(
+    def encode(  # noqa: PLR0914
         self,
         inputs: DataLoader[BatchedInput],
         *,
@@ -400,29 +428,34 @@ class Wave7BWrapper(AbsEncoder):
             videos = batch.get("video", [])
             batch_size = max(len(texts), len(images), len(audios), len(videos))
             for i in range(batch_size):
-                data_dict = self._build_inputs(
-                    text=texts[i] if i < len(texts) else None,
-                    image=images[i] if i < len(images) else None,
-                    audio=audios[i] if i < len(audios) else None,
-                    video=videos[i] if i < len(videos) else None,
-                    instruction=instruction,
-                )
-                model_kwargs = self._to_model_kwargs(data_dict)
-                outputs = self.model(**model_kwargs)
-                emb = torch.nn.functional.normalize(
-                    outputs.mllm_embeds.float(), p=2, dim=-1
-                )
+                text_i = texts[i] if i < len(texts) else None
+                image_i = images[i] if i < len(images) else None
+                audio_i = audios[i] if i < len(audios) else None
+                video_i = videos[i] if i < len(videos) else None
+                if image_i is None and audio_i is None and video_i is None:
+                    # Text-only: WAVE's label path (no chat template / instruction / head).
+                    raw = self._encode_text(text_i or "")
+                else:
+                    data_dict = self._build_inputs(
+                        text=text_i,
+                        image=image_i,
+                        audio=audio_i,
+                        video=video_i,
+                        instruction=instruction,
+                    )
+                    model_kwargs = self._to_model_kwargs(data_dict)
+                    raw = self.model(**model_kwargs).mllm_embeds
+                emb = torch.nn.functional.normalize(raw.float(), p=2, dim=-1)
                 all_embeddings.append(emb.cpu())
         return torch.cat(all_embeddings, dim=0)
 
 
-WAVE_CITATION = """@article{cheng2025wave,
+WAVE_CITATION = """@misc{tang2025wave,
     title={WAVE: Learning Unified & Versatile Audio-Visual Embeddings with Multimodal LLM},
-    author={Cheng, Changli and others},
+    author={Changli Tang and Qinfan Xiao and Ke Mei and Tianyi Wang and Fengyun Rao and Chao Zhang},
     year={2025},
     eprint={2509.21990},
     archivePrefix={arXiv},
-    primaryClass={cs.MM},
     url={https://arxiv.org/abs/2509.21990},
 }"""
 
@@ -432,8 +465,10 @@ wave_7b = ModelMeta(
     revision="6d42651d34bf1a7d83d5779397d6ce0316a4cf4f",
     release_date="2026-01-28",
     languages=["eng-Latn"],
-    n_parameters=7_000_000_000,
-    memory_usage_mb=None,
+    # From pytorch_model.bin.index.json total_size (bf16): includes the BEATs tower and the
+    # classify_linear head, which ship inside the WAVE-7B checkpoint.
+    n_parameters=9_410_651_007,
+    memory_usage_mb=17949,
     max_tokens=32768,
     embed_dim=3584,
     license="apache-2.0",
