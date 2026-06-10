@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict, cast
 
 import torch
 from datasets import Dataset
@@ -81,7 +81,9 @@ class AbsTaskZeroShotClassification(AbsTask):
     Attributes:
         dataset: Huggingface dataset containing the data for the task. Dataset must contain columns specified by self.input_column_name and self.label_column_name.
         input_column_name: Name of the column containing the inputs (image or text).
-        label_column_name: Name of the column containing the labels (str).
+        label_column_name: Name of the column containing the labels. Labels must be
+            integer indices of the candidate labels or strings matching an entry of
+            `get_candidate_labels`.
     """
 
     input_column_name: str | Sequence[Modalities] = "image"
@@ -186,14 +188,52 @@ class AbsTaskZeroShotClassification(AbsTask):
             )
 
         return self._calculate_scores(
-            data_split[self.label_column_name],
+            self._normalize_labels(
+                data_split[self.label_column_name], candidate_labels
+            ),
             torch.tensor(probs).argmax(dim=1).tolist(),
         )
+
+    @staticmethod
+    def _normalize_labels(
+        labels: list[int] | list[str], candidate_labels: list[str]
+    ) -> list[int]:
+        """Convert dataset labels to integer indices of the candidate labels.
+
+        Predictions are always integer indices into ``candidate_labels``, while
+        datasets store labels either as integer class indices (e.g. a
+        ``ClassLabel`` column) or as strings. scikit-learn >= 1.9 raises an
+        error when ``y_true`` contains strings and ``y_pred`` is numeric, so
+        string labels are mapped to their index in ``candidate_labels``.
+
+        Args:
+            labels: Labels as stored in the dataset.
+            candidate_labels: Candidate labels returned by `get_candidate_labels`.
+
+        Returns:
+            Labels as integer indices into ``candidate_labels``.
+
+        Raises:
+            ValueError: If a string label does not match any candidate label.
+        """
+        if not labels or not isinstance(labels[0], str):
+            return cast("list[int]", labels)
+
+        label_to_index = {label: idx for idx, label in enumerate(candidate_labels)}
+        unknown_labels = sorted(set(labels) - label_to_index.keys())
+        if unknown_labels:
+            raise ValueError(
+                "String labels must match an entry of `get_candidate_labels` to "
+                f"be mapped to a candidate index, but {unknown_labels} do not. "
+                "Alternatively, store labels as integer indices of the candidate "
+                "labels."
+            )
+        return [label_to_index[label] for label in labels]
 
     def _calculate_scores(  # noqa: PLR6301
         self,
         labels: list[int],
-        predictions: list[float],
+        predictions: list[int],
     ) -> ZeroShotClassificationMetrics:
         return ZeroShotClassificationMetrics(
             accuracy=metrics.accuracy_score(labels, predictions),
