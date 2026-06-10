@@ -2,11 +2,11 @@
 #
 # Multi-stage Dockerfile for the mteb FastAPI service.
 #
-# Three stages share the heavy "clone + pip install + HF dataset
-# warmup + per-benchmark frame split" work via a common base image:
+# Three stages share the heavy "pip install + HF dataset warmup +
+# per-benchmark frame split" work via a common base image:
 #
-#   base        — python:3.12-bookworm + git + a non-root user + mteb
-#                 cloned and installed with the [api] extra + the
+#   base        — python:3.12-bookworm + a non-root user + the local
+#                 checkout installed with the [api] extra + the
 #                 mteb/results parquet cache pre-warmed + the
 #                 per-benchmark split persisted to
 #                 ``~/.cache/mteb/leaderboard/`` so the runtime first
@@ -20,24 +20,20 @@
 #                 no Node. FastAPI serves the cached PNG files at /og.
 #
 # Result: the deployed image is the lean base + ~50 MB of pre-rendered
-# PNG files, not the ~700 MB hit of baking Chromium into runtime. The repo
-# is cloned once, [api] is installed once, the HF dataset cache is
-# downloaded once — both downstream stages reuse the same layers.
-
-ARG MTEB_BRANCH=api
-ARG MTEB_REPO=https://github.com/embeddings-benchmark/mteb.git
+# PNG files, not the ~700 MB hit of baking Chromium into runtime. The
+# source is copied in once, [api] is installed once, the HF dataset
+# cache is downloaded once — both downstream stages reuse the same
+# layers. The build context is filtered via ``.dockerignore`` so
+# caches / results / build artefacts never enter the daemon.
 
 
 # ─── Stage: base ────────────────────────────────────────────────────
 FROM python:3.12-bookworm AS base
 
-ARG MTEB_BRANCH
-ARG MTEB_REPO
-
-# Just enough to clone + build pip wheels. Chromium libs are added in
-# the og-builder stage so the runtime layer doesn't carry them.
+# Just enough to build pip wheels. Chromium libs are added in the
+# og-builder stage so the runtime layer doesn't carry them.
 RUN apt-get update \
- && apt-get install -y --no-install-recommends git curl build-essential ca-certificates \
+ && apt-get install -y --no-install-recommends curl build-essential ca-certificates \
  && rm -rf /var/lib/apt/lists/* \
  && useradd -m -u 1000 user
 
@@ -51,25 +47,19 @@ ENV PATH="/home/user/.local/bin:$PATH" \
     XDG_CACHE_HOME=/home/user/.cache
 
 USER user
-WORKDIR /home/user
-
-# Bust the clone cache whenever the API branch advances upstream. The
-# ADD response (latest commit SHA) changes per push, so Docker can no
-# longer reuse a stale checkout when you rebuild.
-ADD --chown=user:user https://api.github.com/repos/embeddings-benchmark/mteb/commits/${MTEB_BRANCH} /tmp/.git-sha
-RUN git clone --depth=1 --branch ${MTEB_BRANCH} ${MTEB_REPO} app
 WORKDIR /home/user/app
 
-# Branches that define an [api] extra get fastapi + uvicorn from it; on
-# older branches the explicit pins are the fallback. The PyTorch CPU
-# wheel index is added alongside default PyPI so the torch / torchvision
-# / torchaudio transitive deps resolve to ``2.x.x+cpu`` (~200 MB total)
-# instead of the default CUDA wheels (~2 GB across torch +
-# nvidia-cu* deps). PEP 440 ranks the ``+cpu`` local version above the
-# plain release, so pip picks it without an explicit version pin.
-RUN pip install --user --extra-index-url https://download.pytorch.org/whl/cpu ".[api]" \
- || pip install --user --extra-index-url https://download.pytorch.org/whl/cpu . \
-        "fastapi>=0.110" "uvicorn[standard]>=0.27"
+# Copy the local checkout in. ``.dockerignore`` keeps the build context
+# small by filtering caches, build artefacts, and large output dirs.
+COPY --chown=user:user . /home/user/app
+
+# The PyTorch CPU wheel index is added alongside default PyPI so the
+# torch / torchvision / torchaudio transitive deps resolve to
+# ``2.x.x+cpu`` (~200 MB total) instead of the default CUDA wheels
+# (~2 GB across torch + nvidia-cu* deps). PEP 440 ranks the ``+cpu``
+# local version above the plain release, so pip picks it without an
+# explicit version pin.
+RUN pip install --user --extra-index-url https://download.pytorch.org/whl/cpu ".[api]"
 
 # Pre-warm the HF dataset cache from mteb/results so the OG builder
 # (which calls warmup_blocking()) and the runtime first request both

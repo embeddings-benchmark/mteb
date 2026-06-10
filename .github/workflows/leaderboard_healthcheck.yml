@@ -17,10 +17,7 @@ jobs:
         id: health
         run: |
           if curl -sS --fail --max-time 30 --connect-timeout 10 \
-            -X POST "https://mteb-leaderboard.hf.space/gradio_api/call/on_page_load" \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ secrets.HF_TOKEN }}" \
-            -d '{"data":[]}' \
+            "https://mteb-leaderboard-backend.hf.space/health" \
             -o /dev/null; then
             echo "alive=true" >> "$GITHUB_OUTPUT"
           else
@@ -44,7 +41,7 @@ jobs:
             --body "$(cat <<EOF
           Automated leaderboard healthcheck failed.
 
-          - Endpoint: https://mteb-leaderboard.hf.space/gradio_api/call/on_page_load
+          - Endpoint: https://mteb-leaderboard-backend.hf.space/health
           - Workflow run: ${run_url}
 
           @Samoed @KennethEnevoldsen
