@@ -129,44 +129,8 @@ def test_hybrid_search_e2e_retrieval():
 
 
 def test_hybrid_search_with_cross_encoder():
-    """Verify that hybrid search can fuse a CrossEncoder and a retriever model even when top_ranked is None."""
+    """Verify that hybrid search can fuse a CrossEncoder and a retriever model when top_ranked is provided."""
     retriever = mteb.get_model("mteb/baseline-random-encoder", embed_dim=32)
-    cross_encoder = mteb.get_model("mteb/baseline-random-cross-encoder")
-
-    hybrid = HybridSearch([retriever, cross_encoder], fusion_strategy="dbsf")
-    task = MockRetrievalTask()
-    results = mteb.evaluate(hybrid, task, cache=None)
-    assert len(results) == 1
-    assert results[0].get_score() == pytest.approx(0.81546)
-
-
-def test_hybrid_search_cross_encoder_requires_candidates():
-    """Verify that a hybrid search with only CrossEncoders raises ValueError when top_ranked is None."""
-    cross_encoder = mteb.get_model("mteb/baseline-random-cross-encoder")
-    task = MockRetrievalTask()
-
-    with pytest.raises(
-        ValueError,
-        match="CrossEncoder sub-models require top_ranked documents for reranking",
-    ):
-        hybrid_only_ce = HybridSearch(
-            [cross_encoder, cross_encoder], fusion_strategy="dbsf"
-        )
-        hybrid_only_ce.search(
-            queries=[{"id": "q1", "text": "query"}],
-            task_metadata=task.metadata,
-            hf_split="test",
-            hf_subset="default",
-            top_k=5,
-            encode_kwargs={},
-            top_ranked=None,
-        )
-
-
-def test_candidate_trimming():
-    """Verify that candidates generated from multiple retrievers are trimmed to sub_top_k."""
-    m1 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=32)
-    m2 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=10)
     cross_encoder = mteb.get_model("mteb/baseline-random-cross-encoder")
 
     # Patch predict to act as a mock returning constant scores
@@ -174,23 +138,15 @@ def test_candidate_trimming():
         len(inputs2.dataset)
     )
 
-    hybrid = HybridSearch(
-        [m1, m2, cross_encoder],
-        sub_model_top_k=3,
-        fusion_strategy="dbsf",
-    )
+    hybrid = HybridSearch([retriever, cross_encoder], fusion_strategy="dbsf")
+    task = MockRetrievalTask()
 
     corpus = Dataset.from_list(
         [
             {"id": "doc1", "text": "document one"},
             {"id": "doc2", "text": "document two"},
-            {"id": "doc3", "text": "document three"},
-            {"id": "doc4", "text": "document four"},
-            {"id": "doc5", "text": "document five"},
         ]
     )
-
-    task = MockRetrievalTask()
     hybrid.index(
         corpus=corpus,
         task_metadata=task.metadata,
@@ -206,12 +162,10 @@ def test_candidate_trimming():
         hf_subset="default",
         top_k=2,
         encode_kwargs={},
-        top_ranked=None,
+        top_ranked={"q1": ["doc1", "doc2"]},
     )
     assert list(res.keys()) == ["q1"]
     assert len(res["q1"]) == 2
-    assert res["q1"]["doc4"] == pytest.approx(0.5748068685695726)
-    assert res["q1"]["doc3"] == pytest.approx(0.4209643094972072)
 
 
 def test_registered_hybrid_model_retrieval():

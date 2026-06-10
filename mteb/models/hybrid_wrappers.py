@@ -78,9 +78,6 @@ class HybridSearch:
         self.rrf_k = rrf_k
 
         self.wrapped_models: list[SearchProtocol] = []
-        self.cross_encoder_models: list[SearchCrossEncoderWrapper] = []
-        self.retriever_models: list[SearchProtocol] = []
-        self.model_is_cross_encoder: list[bool] = []
         names = []
 
         for model in models:
@@ -99,13 +96,6 @@ class HybridSearch:
                 )
 
             self.wrapped_models.append(wrapped)
-
-            if isinstance(wrapped, SearchCrossEncoderWrapper):
-                self.cross_encoder_models.append(wrapped)
-                self.model_is_cross_encoder.append(True)
-            else:
-                self.retriever_models.append(wrapped)
-                self.model_is_cross_encoder.append(False)
 
             meta = wrapped.mteb_model_meta
             if meta and meta.name:
@@ -169,7 +159,7 @@ class HybridSearch:
                 num_proc=num_proc,
             )
 
-    def search(  # noqa: PLR0914
+    def search(
         self,
         queries: QueryDatasetType,
         *,
@@ -187,93 +177,21 @@ class HybridSearch:
         else:
             sub_top_k = max(top_k, self.sub_model_top_k)
 
-        cross_encoder_models = self.cross_encoder_models
-        retriever_models = self.retriever_models
-        model_is_cross_encoder = self.model_is_cross_encoder
+        logger.info("Running all sub-models...")
 
-        effective_top_ranked = top_ranked
-
-        if cross_encoder_models and effective_top_ranked is None:
-            if not retriever_models:
-                raise ValueError(
-                    "CrossEncoder sub-models require top_ranked documents for reranking, "
-                    "or at least one retriever sub-model in the hybrid wrapper to generate candidates."
-                )
-
-            logger.info("Running retriever sub-models...")
-            retriever_results = []
-            for model in tqdm(retriever_models, desc="Retriever sub-models"):
-                res = model.search(
-                    queries=queries,
-                    top_k=sub_top_k,
-                    task_metadata=task_metadata,
-                    hf_split=hf_split,
-                    hf_subset=hf_subset,
-                    encode_kwargs=encode_kwargs,
-                    top_ranked=None,
-                    num_proc=num_proc,
-                )
-                retriever_results.append(res)
-
-            generated_top_ranked: dict[str, list[str]] = {}
-            for row in queries:
-                qid = row["id"]
-                candidate_rrf: dict[str, float] = {}
-                for res in retriever_results:
-                    if qid in res:
-                        scores = res[qid]
-                        sorted_docs = sorted(
-                            scores.keys(), key=lambda d: scores[d], reverse=True
-                        )
-                        for rank_idx, doc_id in enumerate(sorted_docs):
-                            rank = rank_idx + 1
-                            candidate_rrf[doc_id] = candidate_rrf.get(
-                                doc_id, 0.0
-                            ) + 1.0 / (self.rrf_k + rank)
-                sorted_candidates = sorted(
-                    candidate_rrf.keys(), key=lambda d: candidate_rrf[d], reverse=True
-                )
-                generated_top_ranked[qid] = sorted_candidates[:sub_top_k]
-
-            effective_top_ranked = generated_top_ranked
-
-            logger.info("Running cross-encoder sub-models...")
-            cross_encoder_results = []
-            for model in tqdm(cross_encoder_models, desc="Cross-encoder sub-models"):
-                res = model.search(
-                    queries=queries,
-                    top_k=sub_top_k,
-                    task_metadata=task_metadata,
-                    hf_split=hf_split,
-                    hf_subset=hf_subset,
-                    encode_kwargs=encode_kwargs,
-                    top_ranked=effective_top_ranked,
-                    num_proc=num_proc,
-                )
-                cross_encoder_results.append(res)
-
-            ret_iter = iter(retriever_results)
-            ce_iter = iter(cross_encoder_results)
-            all_results = [
-                next(ce_iter) if is_ce else next(ret_iter)
-                for is_ce in model_is_cross_encoder
-            ]
-        else:
-            logger.info("Running all sub-models...")
-
-            all_results = []
-            for model in tqdm(self.wrapped_models, desc="Sub-models"):
-                res = model.search(
-                    queries=queries,
-                    top_k=sub_top_k,
-                    task_metadata=task_metadata,
-                    hf_split=hf_split,
-                    hf_subset=hf_subset,
-                    encode_kwargs=encode_kwargs,
-                    top_ranked=effective_top_ranked,
-                    num_proc=num_proc,
-                )
-                all_results.append(res)
+        all_results = []
+        for model in tqdm(self.wrapped_models, desc="Sub-models"):
+            res = model.search(
+                queries=queries,
+                top_k=sub_top_k,
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                encode_kwargs=encode_kwargs,
+                top_ranked=top_ranked,
+                num_proc=num_proc,
+            )
+            all_results.append(res)
 
         fused_results: RetrievalOutputType = {}
         for row in queries:
