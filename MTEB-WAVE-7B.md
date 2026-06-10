@@ -78,46 +78,73 @@ own code, not stock transformers.
    `beats_path` loader kwarg or `WAVE_BEATS_PATH` env var. The wrapper raises a clear error if
    it is missing.
 
-## How to run a pilot (GPU required)
+## How to run a pilot (HLTCOE grid — verified recipe)
 
-WAVE's deps conflict with the main MTEB env (the `transformers==4.51.3` pin), so install them in
-an **isolated** venv with the `wave` extra. On the HLTCOE grid, request a GPU (≈24 GB+) via
-`sbatch`/`srun`; flash-attn install may need the `flash-attn-install` skill.
+WAVE pins `torch==2.6.0` / `transformers==4.51.3`, incompatible with the main MTEB env, so use an
+**isolated venv** with the `wave` extra. WAVE uses bf16 → request **A100/H100/L40S** (not V100).
 
 ```bash
-# isolated env with WAVE deps
-uv venv .venv-wave && source .venv-wave/bin/activate
-uv pip install -e ".[wave,audio,video]"
+# --- on a login node: build the isolated env on flash scratch ---
+WORK=/expscratch/$USER/wave-mteb; mkdir -p $WORK/beats $WORK/logs
+export HF_HOME=$WORK/.cache/huggingface UV_CACHE_DIR=$WORK/.cache/uv
 git submodule update --init --recursive external/WAVE
-export WAVE_BEATS_PATH=/path/to/BEATs_iter3_plus.pt
-export HF_HOME="$PWD/.hf-wave-pilot"
+uv venv "$WORK/.venv" --python 3.10 && source "$WORK/.venv/bin/activate"
+uv pip install -e ".[wave,audio,video]"        # wave extra pins the torch 2.6 stack + ST<5
+# flash-attn: install the prebuilt wheel matching cp310 / torch2.6 / cu12 / abiFALSE
+uv pip install --no-build-isolation \
+  https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.6cxx11abiFALSE-cp310-cp310-linux_x86_64.whl
+# BEATs backbone checkpoint (WAVE's "BEATs_iter3_plus")
+curl -fL -o $WORK/beats/BEATs_iter3_plus_AS2M.pt \
+  https://huggingface.co/datasets/Bencr/beats-checkpoints/resolve/main/BEATs_iter3_plus_AS2M.pt
+export WAVE_BEATS_PATH=$WORK/beats/BEATs_iter3_plus_AS2M.pt
 ```
+
+Pilot script (`pilot_wave.py`) and `sbatch` (`--gres=gpu:a100:1 --cpus-per-task=8 --mem=64G`,
+`module load cuda/... ffmpeg/6.0.1`, export `HF_HOME`/`WAVE_BEATS_PATH`):
 
 ```python
 import mteb
-
-model = mteb.get_model("tsinghua-ee/WAVE-7B")            # uses WAVE_BEATS_PATH
-tasks = mteb.get_tasks(tasks=["ClothoT2ARetrieval"])      # small audio↔text pilot
+model = mteb.get_model("tsinghua-ee/WAVE-7B")             # reads WAVE_BEATS_PATH
+tasks = mteb.get_tasks(tasks=["ClothoT2ARetrieval"])       # small audio↔text pilot
 results = mteb.evaluate(model, tasks=tasks, encode_kwargs={"batch_size": 1})
 ```
 
-Record GPU name/memory, batch size, wall time, the per-task `evaluation_time`, and cache growth
-(`du -sh "$HF_HOME" ~/.cache/mteb results`). Suggested progression: `ClothoT2ARetrieval` (audio) →
-`MSVDT2VRetrieval` (video) → `AudioCapsAVT2VRetrieval` (audio-visual).
+Progression: `ClothoT2ARetrieval` (audio) → `MSVDT2VRetrieval` (video) →
+`AudioCapsAVT2VRetrieval` (audio-visual).
 
-## Verified in this environment (no GPU)
+## Verified — pilot run on the grid ✅
 
-- `wave_models` imports without WAVE deps (heavy imports are deferred to `__init__`).
-- `mteb.get_model_meta("tsinghua-ee/WAVE-7B")` resolves; `embed_dim=3584`, modalities correct.
-- `ruff check` / `ruff format` clean; `pyproject.toml` parses; `wave` extra + conflict registered.
-- Candidate eval tasks resolve.
+Ran on **A100-PCIE-40GB** (`torch 2.6.0+cu124`, `flash_attn 2.7.4.post1`), job COMPLETED in 13:30:
 
-## Open risks / assumptions (validate during the GPU pilot)
+- Model loaded in **219 s**; log shows `Init BEATs Model` + `Classify Type: all_layer` — the BEATs
+  dual encoder and all-layer fusion (the faithful path) are active.
+- `ClothoT2ARetrieval` (text→audio, 1045-doc corpus) finished in **548 s**, `exceptions=[]`:
 
-- **Not run end-to-end here** — no GPU on the node and WAVE deps are intentionally isolated from
-  the main env. The embedding recipe is reproduced from WAVE's source but unverified at runtime.
+  | metric | value |
+  | :-- | :-- |
+  | **hit_rate@5 (main_score)** | **0.317** |
+  | ndcg@10 | 0.260 |
+  | recall@5 / @100 / @1000 | 0.317 / 0.727 / 0.994 |
+  | map@10 | 0.213 |
+
+  Non-trivial scores over ~1k candidates confirm the wrapper produces meaningful cross-modal
+  embeddings (not random) via WAVE's real `--pred_embeds` path.
+
+Also verified: `wave_models` imports without WAVE deps; `mteb.get_model_meta(...)` resolves;
+`ruff`/`pyproject` clean.
+
+### Env gotchas hit (already encoded in the `wave` extra)
+
+- `torchaudio`/`torchcodec` must match torch 2.6 (`2.6.0` / `0.3.0`); the loose `audio`/`video`
+  extras otherwise pull torch-2.11-built wheels (`libcudart.so.13` / `undefined symbol`).
+- `sentence-transformers>=5` hard-imports `torchcodec` (built for a newer torch ABI) → pin `<5`.
+- `triton` needs `setuptools` present. `module load ffmpeg/6.0.1` for the decode backends.
+- BEATs ships as `BEATs_iter3_plus_AS2M.pt` (WAVE's "iter3_plus"); config is read from its `cfg` key.
+
+## Open assumptions (still worth confirming for video/AV)
+
 - **Video frame layout** — MTEB's collator yields torchcodec frames `(F, C, H, W)`; WAVE's decord
-  path expects `(F, H, W, C)`. The wrapper permutes accordingly; confirm against WAVE's own output.
+  path expects `(F, H, W, C)`. The wrapper permutes accordingly; the audio pilot didn't exercise
+  this, so confirm on a video task (`MSVDT2VRetrieval`) against WAVE's own numbers.
 - **Prompts** — defaults to WAVE's per-modality "Please describe the {modality}." prompts; an
   explicit task `prompt` overrides. Prompt-awareness means prompt choice affects scores.
-- **BEATs checkpoint** — must match the one WAVE trained with (`BEATs_iter3_plus.pt`).

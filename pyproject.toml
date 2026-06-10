@@ -133,14 +133,20 @@ embeddinggemma = ["transformers>=4.56.0"]
 # (https://github.com/TCL606/WAVE), vendored as a submodule at external/WAVE. Also requires the
 # `audio` and `video` extras, plus the external BEATs_iter3_plus.pt checkpoint at load time.
 wave = [
-    "transformers==4.51.3",
-    "liger_kernel==0.5.10",
+    "torch==2.6.0",
     "torchvision==0.21.0",
+    "torchaudio==2.6.0",
+    "torchcodec==0.3.0",        # must match torch 2.6
+    "transformers==4.51.3",
+    "sentence-transformers<5",  # ST>=5 hard-imports torchcodec built for a newer torch ABI
+    "liger_kernel==0.5.10",
     "decord>=0.6.0",
     "soundfile>=0.13.1",
+    "ffmpeg-python>=0.2.0",
     "peft>=0.11.0",
     "accelerate>=1.7.0",
-    "flash-attn>=2.6.3",
+    "setuptools",               # triton needs it at import
+    "flash-attn>=2.6.3",        # install the prebuilt wheel matching torch/cuda/py/abi
 ]
 # ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
 
