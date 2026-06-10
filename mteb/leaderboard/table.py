@@ -38,9 +38,11 @@ def _wrap_model_column(
         return df
 
     def _wrap(full_name: str) -> str:
-        short = _short_name(full_name)
         meta = meta_lookup.get(full_name)
-        url = meta.get("_model_link") if meta else None
+        if meta is None:
+            return full_name
+        short = _short_name(full_name)
+        url = meta.get("_model_link")
         return f"[{short}]({url})" if url else short
 
     df = df.copy()
