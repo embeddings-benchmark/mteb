@@ -4092,7 +4092,7 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
                 "average_label_per_text": 1.0,
                 "max_labels_per_text": 1,
                 "unique_labels": 2,
-                "labels": {"label1": {"count": 1}, "label2": {"count": 1}},
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
             },
             "candidates_labels_text_statistics": {
                 "total_text_length": 52,
@@ -4115,7 +4115,7 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
-        labels = ["label1", "label2"]
+        labels = [0, 1]
 
         self.dataset = DatasetDict(
             {
@@ -4152,7 +4152,10 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
                 "average_label_per_text": 1.0,
                 "max_labels_per_text": 1,
                 "unique_labels": 2,
-                "labels": {"label1": {"count": 1}, "label2": {"count": 1}},
+                "labels": {
+                    "This is a test sentence": {"count": 1},
+                    "This is another test sentence": {"count": 1},
+                },
             },
             "candidates_labels_text_statistics": {
                 "total_text_length": 52,
@@ -4176,7 +4179,9 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         texts = ["This is a test sentence", "This is another test sentence"]
-        labels = ["label1", "label2"]
+        # String labels matching `get_candidate_labels` cover the string-label
+        # code path; they are mapped to candidate indices during evaluation.
+        labels = ["This is a test sentence", "This is another test sentence"]
 
         self.dataset = DatasetDict(
             {

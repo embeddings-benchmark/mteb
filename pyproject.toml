@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.15.1"
+version = "2.15.3"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -34,7 +34,7 @@ dependencies = [
     "datasets>=2.19.0",
     "numpy>=1.23.0,<3.0.0",
     "requests>=2.26.0",
-    "scikit-learn>=1.4.0, <1.9.0",  # ref https://github.com/embeddings-benchmark/mteb/issues/4784
+    "scikit-learn>=1.4.0",
     "scipy>=1.14.0",
     "sentence_transformers>=3.0.0",
     "transformers>=4.40.0,<6.0.0",
