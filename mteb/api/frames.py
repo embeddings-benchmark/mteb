@@ -11,13 +11,12 @@ from __future__ import annotations
 import functools
 import json
 import logging
-import os
-from pathlib import Path
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, cast
 from urllib.parse import quote, unquote
 
 import polars as pl
 from datasets import load_dataset
+from huggingface_hub import HfApi
 
 import mteb
 from mteb.api.settings import get_settings
@@ -25,7 +24,7 @@ from mteb.cache.result_cache import ResultCache
 from mteb.results.benchmark_results import BenchmarkResults
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -97,22 +96,21 @@ def _load_default_from_hub(repo_id: str) -> pl.DataFrame | None:
         return None
 
 
-# Disk-cache schema version. Bump when the on-disk layout changes so old
-# caches are invalidated automatically (e.g. if we add columns to the split
-# parquets or change the manifest shape).
-_DISK_CACHE_VERSION = 1
 _UNIFIED_FILE = "_unified.parquet"
 _MANIFEST_FILE = "manifest.json"
 
 
 def _disk_cache_dir() -> Path:
-    """Resolve the disk-cache directory; honours XDG_CACHE_HOME, else ``~/.cache``.
+    """Resolve the disk-cache directory under the shared :class:`ResultCache` root.
+
+    Inherits MTEB_CACHE / ``~/.cache/mteb`` resolution from :func:`get_cache`,
+    so the leaderboard parquet shards always sit next to the rest of the MTEB
+    cache instead of diverging on ``MTEB_CACHE`` overrides.
 
     Files: ``manifest.json`` + ``_unified.parquet`` + one ``<urlsafe>.parquet``
     per benchmark with rows.
     """
-    base = os.environ.get("XDG_CACHE_HOME") or str(Path.home() / ".cache")
-    return Path(base) / "mteb" / "leaderboard"
+    return get_cache().cache_path / "leaderboard"
 
 
 def _hf_dataset_sha(repo_id: str) -> str | None:
@@ -123,8 +121,6 @@ def _hf_dataset_sha(repo_id: str) -> str | None:
     if present" rather than rebuilding offline.
     """
     try:
-        from huggingface_hub import HfApi
-
         info = HfApi().dataset_info(repo_id, timeout=5)
         return cast("str", info.sha)
     except Exception as exc:
@@ -136,7 +132,7 @@ def _hf_dataset_sha(repo_id: str) -> str | None:
         return None
 
 
-def _read_disk_cache(  # noqa: PLR0911 — multiple validation branches each surface a distinct rebuild reason
+def _read_disk_cache(  # noqa: PLR0911
     repo_id: str, current_sha: str | None
 ) -> tuple[dict[str, pl.DataFrame], pl.DataFrame] | None:
     """Return ``(per_benchmark_frames, unified)`` from disk cache, or ``None``.
@@ -159,9 +155,6 @@ def _read_disk_cache(  # noqa: PLR0911 — multiple validation branches each sur
         manifest = json.loads(manifest_path.read_text())
     except (OSError, json.JSONDecodeError) as exc:
         logger.warning("disk cache manifest unreadable (%s); rebuilding", exc)
-        return None
-    if manifest.get("version") != _DISK_CACHE_VERSION:
-        logger.info("disk cache version mismatch; rebuilding")
         return None
     if manifest.get("repo_id") != repo_id:
         logger.info("disk cache repo_id mismatch; rebuilding")
@@ -225,14 +218,11 @@ def _write_disk_cache(
             df.write_parquet(tmp_path)
             tmp_path.replace(final_path)
 
-        # Manifest is the last write and is itself atomic — readers gate on
-        # it, so they observe the swap as a single inode replacement.
         manifest_path = cache_dir / _MANIFEST_FILE
         manifest_tmp = manifest_path.with_name(manifest_path.name + ".tmp")
         manifest_tmp.write_text(
             json.dumps(
                 {
-                    "version": _DISK_CACHE_VERSION,
                     "repo_id": repo_id,
                     "sha": sha,
                 }
@@ -240,9 +230,6 @@ def _write_disk_cache(
         )
         manifest_tmp.replace(manifest_path)
 
-        # Sweep stale shards (benchmarks renamed/removed) AFTER the manifest
-        # swap so an interrupted run before this point still leaves a valid
-        # cache.
         keep = {p.name for p, _ in new_shards}
         for p in cache_dir.glob("*.parquet"):
             if p.name not in keep:
@@ -252,28 +239,9 @@ def _write_disk_cache(
         logger.warning("disk cache write failed: %s", exc)
 
 
-def _fill_empty_placeholders(
-    loaded: dict[str, pl.DataFrame],
-    benches: Iterable[Any],
-    schema: dict[str, pl.DataType],
-) -> None:
-    """Add empty-frame placeholders for benchmarks with no rows.
-
-    Re-applied after both fresh build and disk-cache load so newly-added
-    benchmarks (registry adds since cache was written) get the same
-    placeholder treatment downstream consumers expect.
-    """
-    for bench in benches:
-        loaded.setdefault(bench.name, pl.DataFrame(schema=schema))
-
-
 @functools.cache
 def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]:
     """Return ``(per_benchmark_frames, unified_frame)``, loaded once.
-
-    Callers MUST NOT mutate the returned frames — they are shared across the
-    whole process. Polars frames are practically immutable from the Python
-    API, but ``.with_columns`` etc. should be called on `.lazy()` clones.
 
     Disk-cache layer: when ``DISK_CACHE`` is enabled (default), persists the
     split + unified frames to ``~/.cache/mteb/per_benchmark_frames/`` and
@@ -295,9 +263,9 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
         cached = _read_disk_cache(disk_cache_repo, current_sha)
         if cached is not None:
             loaded, unified = cached
-            _fill_empty_placeholders(
-                loaded, mteb.get_benchmarks(), dict(unified.schema)
-            )
+            empty = pl.DataFrame(schema=dict(unified.schema))
+            for bench in mteb.get_benchmarks():
+                loaded.setdefault(bench.name, empty)
             logger.info(
                 "Loaded per-benchmark frames from disk cache "
                 "(%d benchmarks, unified=%d rows)",
@@ -326,7 +294,9 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
         combined = all_results._to_results_df()
 
     loaded = BenchmarkResults.split_leaderboard_frame(combined)
-    _fill_empty_placeholders(loaded, mteb.get_benchmarks(), dict(combined.schema))
+    empty = pl.DataFrame(schema=dict(combined.schema))
+    for bench in mteb.get_benchmarks():
+        loaded.setdefault(bench.name, empty)
 
     unified = _dedupe_unified(combined)
     logger.info(

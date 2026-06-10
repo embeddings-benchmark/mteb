@@ -16,9 +16,6 @@ from typing import TYPE_CHECKING
 
 import polars as pl
 
-if TYPE_CHECKING:
-    from concurrent.futures import Future
-
 import mteb
 from mteb.api.adapters import prewarm_schema_caches
 from mteb.api.cache import get_per_language_bytes, get_summary_bytes
@@ -32,6 +29,9 @@ from mteb.api.routes import (
 from mteb.api.settings import get_settings
 from mteb.benchmarks._create_table import _training_datasets_cached
 from mteb.models.model_implementations import MODEL_REGISTRY
+
+if TYPE_CHECKING:
+    from concurrent.futures import Future
 
 logger = logging.getLogger(__name__)
 

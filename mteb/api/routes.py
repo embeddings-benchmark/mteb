@@ -34,6 +34,7 @@ from mteb.api.adapters import (
 )
 from mteb.api.aggregators import build_benchmark_leaders
 from mteb.api.cache import (
+    CacheLayer,
     _cached_bytes,
     get_model_scores_bytes,
     get_per_language_bytes,
@@ -63,6 +64,7 @@ from mteb.api.schemas import (
 from mteb.api.serialization import (
     serialize_bytes,
 )
+from mteb.api.settings import get_settings
 from mteb.benchmarks._leaderboard_menu import HOME_BENCHMARK_ENTRIES
 from mteb.filter_tasks import filter_tasks
 from mteb.get_tasks import _TASKS_REGISTRY, TASK_LIST
@@ -70,8 +72,6 @@ from mteb.models.get_model_meta import get_model_meta, get_model_metas
 from mteb.models.model_implementations import MODEL_REGISTRY
 
 if TYPE_CHECKING:
-    import asyncio
-
     from mteb.api.serialization import (
         Serialized,
     )
@@ -82,25 +82,18 @@ infra_router = APIRouter()
 router = APIRouter()
 
 
-# Data changes only when the process reloads the parquet (server restart); a
-# 4-hour browser cache lets repeat hits skip the network entirely. ETag still
-# drives 304 revalidation after max-age expires, so a deploy that ships fresh
-# data isn't blocked by a stale cache for long.
-_DEFAULT_MAX_AGE = 4 * 60 * 60
-
-
-def _cached_json(
-    request: Request, payload: Serialized, *, max_age: int | None = _DEFAULT_MAX_AGE
-) -> Response:
+def _cached_json(request: Request, payload: Serialized) -> Response:
     """Return a JSON response from a cached `Serialized` payload.
 
     Short-circuits to ``304 Not Modified`` when the client revalidates with a
     matching ``If-None-Match``. Picks the pre-gzipped body when the client
     advertises ``Accept-Encoding: gzip`` so GZipMiddleware can skip
-    compressing. ``max_age`` defaults to 4 hours — pass ``None`` for
-    ``Cache-Control: no-cache``.
+    compressing. ``Cache-Control: max-age`` is sourced from
+    :attr:`Settings.http_max_age`; ``0`` falls back to ``no-cache`` so dev
+    hard refreshes always see fresh data.
     """
-    cache_control = f"public, max-age={max_age}" if max_age is not None else "no-cache"
+    max_age = get_settings().http_max_age
+    cache_control = f"public, max-age={max_age}" if max_age > 0 else "no-cache"
     headers = {
         "etag": payload.etag,
         "vary": "accept-encoding",
@@ -497,15 +490,9 @@ def _parse_buckets_json(raw: str) -> list[tuple[float, float | None]]:
     return out
 
 
-# LRU-bounded: ?buckets= can take arbitrary tuples, so callers that vary the
-# query would otherwise grow the bytes + locks dicts without limit.
-_LEADER_BYTES_MAX = 256
-_leader_bytes: OrderedDict[
+_leader_bytes: CacheLayer[
     tuple[str, tuple[tuple[float, float | None], ...]], Serialized
-] = OrderedDict()
-_leader_bytes_locks: dict[
-    tuple[str, tuple[tuple[float, float | None], ...]], asyncio.Lock
-] = {}
+] = CacheLayer(name="leaders", store=OrderedDict(), max_size=256)
 
 
 @router.get("/benchmarks/{name:path}/leaders", response_model=BenchmarkLeadersSchema)
@@ -533,14 +520,7 @@ async def benchmark_leaders(
     async def _build() -> BenchmarkLeadersSchema:
         return await build_benchmark_leaders(name, parsed)
 
-    payload = await _cached_bytes(
-        _leader_bytes,
-        _leader_bytes_locks,
-        key,
-        _build,
-        layer="leaders",
-        max_size=_LEADER_BYTES_MAX,
-    )
+    payload = await _cached_bytes(_leader_bytes, key, _build)
     return _cached_json(request, payload)
 
 
@@ -563,8 +543,6 @@ def _filtered_task_schemas(
     modalities: tuple[str, ...] | None,
     categories: tuple[str, ...] | None,
 ) -> list[TaskMetaSchema]:
-    # Filter class refs directly — get_tasks() instantiates and runs
-    # filter_languages per task (~2.5s) for metadata we don't need here.
     task_classes = filter_tasks(  # type: ignore[misc]
         TASK_LIST,  # type: ignore[arg-type]
         languages=list(languages) if languages else None,
@@ -681,7 +659,7 @@ def _filtered_model_schemas(
 
 
 @router.get("/models", response_model=list[ModelMetaSchema])
-async def list_models(  # noqa: PLR0913, PLR0917 — FastAPI Query params can't be grouped
+async def list_models(  # noqa: PLR0913, PLR0917
     request: Request,
     model_types: Annotated[list[str] | None, Query()] = None,
     frameworks: Annotated[list[str] | None, Query()] = None,

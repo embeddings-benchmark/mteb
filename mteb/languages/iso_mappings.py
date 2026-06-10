@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import json
 import logging
-from functools import cache
+from functools import cache, lru_cache
 from pathlib import Path
 from typing import cast
 
@@ -63,6 +63,7 @@ _SCRIPT_DISPLAY_ALIASES = {
 }
 
 
+@lru_cache(maxsize=2048)
 def language_label(code: str) -> str:
     """Convert an ``ISOLanguageScript`` (e.g. ``"eng-Latn"``) to a display name.
 

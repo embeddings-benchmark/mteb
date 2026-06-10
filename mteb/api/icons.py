@@ -29,7 +29,7 @@ _FAILURE_TTL_S = 60.0
 
 @dataclass(frozen=True, slots=True)
 class CachedIcon:
-    """An icon's raw bytes + media type. ETag is handled by ETagMiddleware."""
+    """An icon's raw bytes + media type"""
 
     body: bytes
     content_type: str
@@ -47,7 +47,7 @@ def _lock_for(name: str) -> asyncio.Lock:
 def _fetch_sync(url: str) -> CachedIcon | None:
     """Pull an icon; ``None`` on any failure so the caller renders a placeholder."""
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "mteb-api/icon-proxy"})  # noqa: S310 — URL is from a trusted registry
+        req = urllib.request.Request(url)  # noqa: S310 — URL is from a trusted registry
         with urllib.request.urlopen(req, timeout=_FETCH_TIMEOUT_S) as resp:  # noqa: S310 — URL is from a trusted registry
             body = resp.read(_MAX_BYTES + 1)
             if len(body) > _MAX_BYTES:

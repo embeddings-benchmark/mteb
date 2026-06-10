@@ -18,6 +18,9 @@ Environment variables (all optional):
 * ``DISK_CACHE`` — ``1`` (default) to persist per-benchmark frames to
   ``~/.cache/mteb/leaderboard/`` and reuse on next startup. Invalidated
   by HF dataset commit SHA. Set ``0`` to always rebuild.
+* ``HTTP_MAX_AGE`` — ``Cache-Control: max-age`` (seconds) for JSON
+  endpoints; default 4 hours. Set ``0`` in dev so a browser refresh
+  always sees freshly-deployed data (ETag still drives revalidation).
 * ``OTEL_EXPORTER_OTLP_ENDPOINT`` / ``OTEL_SERVICE_NAME`` — standard OTEL.
 """
 
@@ -69,6 +72,12 @@ class Settings(BaseSettings):
     # ~20s HF download + ~10s split. Invalidated via the HF dataset commit
     # SHA; set to ``False`` to force a fresh build every boot.
     disk_cache: bool = True
+    # ``Cache-Control: max-age`` (seconds) for JSON endpoints. Data only
+    # changes when the process reloads its parquet (server restart), so a
+    # 4-hour browser cache lets repeat hits skip the network entirely. ETag
+    # still drives 304 revalidation after this expires. Set ``0`` in dev so a
+    # browser refresh always sees freshly-deployed data.
+    http_max_age: int = Field(default=4 * 60 * 60, ge=0)
 
     otel_endpoint: str | None = Field(
         default=None,
