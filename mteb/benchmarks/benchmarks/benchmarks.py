@@ -850,7 +850,7 @@ MTEB_SLK = Benchmark(
         + (get_task("WebFAQBitextMiningQuestions", hf_subsets=["eng-slk", "ces-slk"]),)
         + (get_task("WebFAQBitextMiningQAs", hf_subsets=["eng-slk", "ces-slk"]),)
     ),
-    description="""Slovak Massive Text Embedding Benchmark (SkMTEB), the first comprehensive MTEB-style benchmark for text embeddings in Slovak, a low-resource West Slavic language. SkMTEB consists of 31 diverse NLP tasks across 7 task types, with tasks adapted from existing Slovak NLP datasets and newly created resources.""",
+    description="""Slovak Massive Text Embedding Benchmark (SkMTEB), the first comprehensive benchmark for text embeddings in Slovak, a low-resource West Slavic language. SkMTEB consists of 31 tasks across 7 task types, with tasks adapted from both existing and novel resources.""",
     # TODO: to be updated
     reference="TBD",
     citation=r"""
