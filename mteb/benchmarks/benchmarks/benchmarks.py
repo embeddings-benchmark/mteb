@@ -1719,22 +1719,16 @@ C_MTEB = Benchmark(
                 "Waimai",
                 "OnlineShopping",
                 "JDReview",
+                "MultilingualSentiment",
             ],
         )
         + get_tasks(
             tasks=[
-                "MultilingualSentiment",
                 "ATEC",
                 "BQ",
                 "STSB",
             ],
             eval_splits=["test"],
-        )
-        + get_tasks(
-            tasks=[
-                "MultilingualSentiment",
-            ],
-            eval_splits=["validation"],
         )
     ),
     description="Chinese text embedding quality across retrieval, reranking, pair classification, clustering, classification, and semantic similarity.",

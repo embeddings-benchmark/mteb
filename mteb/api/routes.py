@@ -372,8 +372,6 @@ async def benchmark_icon(name: str) -> Response:
     cached = await get_icon(name, bench.icon)
     if cached is None:
         raise HTTPException(status_code=502, detail="Upstream icon fetch failed")
-
-    BENCHMARK_SELECTIONS.labels(name=name, endpoint="icon").inc()
     return Response(
         content=cached.body,
         media_type=cached.content_type,
@@ -414,7 +412,6 @@ async def benchmark_scores(
     subsets covering those languages before the summary builders run.
     """
     _require_benchmark(name)
-    BENCHMARK_SELECTIONS.labels(name=name, endpoint="scores").inc()
     # Sort+dedupe so the cache key is order-independent.
     picked = tuple(sorted(set(_as_tuple(languages) or ())))
     return _cached_json(request, await get_summary_bytes(name, picked))
@@ -427,7 +424,6 @@ async def benchmark_scores(
 async def benchmark_per_language(request: Request, name: str) -> Response:
     """Per-(model, language) mean main_score, lazy-loaded by the Per-language tab."""
     _require_benchmark(name)
-    BENCHMARK_SELECTIONS.labels(name=name, endpoint="per-language").inc()
     return _cached_json(request, await get_per_language_bytes(name))
 
 
@@ -512,7 +508,6 @@ async def benchmark_leaders(
 ) -> Response:
     """Highest-mean-task model in each size bucket — slim payload for home tiles."""
     _require_benchmark(name)
-    BENCHMARK_SELECTIONS.labels(name=name, endpoint="leaders").inc()
 
     parsed = _parse_buckets_json(buckets)
     key = (name, tuple(parsed))
@@ -531,7 +526,7 @@ async def benchmark_detail(name: str) -> BenchmarkSchema:
         bench = mteb.get_benchmark(name)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
-    BENCHMARK_SELECTIONS.labels(name=name, endpoint="detail").inc()
+    BENCHMARK_SELECTIONS.labels(name=name).inc()
     return _with_num_models(benchmark_to_schema(bench))
 
 
@@ -620,7 +615,6 @@ def _filtered_task_schemas_bytes_named(
 async def task_scores(request: Request, name: str) -> Response:
     """Per-model scores on task ``name`` across every benchmark that hosts it."""
     _require_task(name)
-    TASK_SELECTIONS.labels(name=name, endpoint="scores").inc()
     return _cached_json(request, await get_task_scores_bytes(name))
 
 
@@ -628,7 +622,7 @@ async def task_scores(request: Request, name: str) -> Response:
 async def task_detail(name: str) -> TaskMetaSchema:
     """Static metadata for task ``name``."""
     _require_task(name)
-    TASK_SELECTIONS.labels(name=name, endpoint="detail").inc()
+    TASK_SELECTIONS.labels(name=name).inc()
     return _with_task_num_models(task_to_meta_schema(_TASKS_REGISTRY[name]))
 
 
@@ -717,7 +711,6 @@ def _filtered_model_schemas_bytes_named(
 async def model_scores(request: Request, name: str) -> Response:
     """Per-benchmark scores for model ``name``."""
     _require_model(name)
-    MODEL_SELECTIONS.labels(name=name, endpoint="scores").inc()
     return _cached_json(request, await get_model_scores_bytes(name))
 
 
@@ -725,5 +718,5 @@ async def model_scores(request: Request, name: str) -> Response:
 async def model_detail(name: str) -> ModelMetaSchema:
     """Static metadata for model ``name``."""
     _require_model(name)
-    MODEL_SELECTIONS.labels(name=name, endpoint="detail").inc()
+    MODEL_SELECTIONS.labels(name=name).inc()
     return model_meta_to_schema(get_model_meta(name))
