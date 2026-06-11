@@ -680,7 +680,7 @@ colturk_vdr_4b = ModelMeta(
     release_date="2026-06-11",
     modalities=["image", "text"],
     n_parameters=4_505_515_136,
-    n_embedding_parameters=None,
+    n_embedding_parameters=388_956_160,
     memory_usage_mb=8593,
     max_tokens=262144,
     embed_dim=128,
@@ -695,4 +695,5 @@ colturk_vdr_4b = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLTURK_CITATION,
     extra_requirements_groups=["colpali_engine"],
+    adapted_from="Qwen/Qwen3-VL-4B-Instruct",
 )
