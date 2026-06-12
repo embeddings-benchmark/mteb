@@ -774,6 +774,80 @@ MTEB_POL = Benchmark(
     contacts=["rafalposwiata"],
 )
 
+MTEB_SLK = Benchmark(
+    name="MTEB(slk, v1)",
+    aliases=["MTEB(slk)"],
+    display_name="Slovak",
+    icon="https://github.com/lipis/flag-icons/raw/59d15a43b2e643fc94e519904d148c616dec20e7/flags/4x3/sk.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["slk"],
+            tasks=[
+                # Retrieval
+                "BelebeleRetrieval",
+                "SlovakSumRetrieval",
+                "SMESumRetrieval",
+                "SKQuadRetrieval",
+                "WebFAQRetrieval",
+                # STS
+                "SlovakSTS",
+                "SlovakSumSTS",
+                # Pair Classification
+                "SlovakNLI",
+                "SlovakRTE",
+                "DemagogSKNLI",
+                # Classification
+                "SlovakHateSpeechClassification.v2",
+                "SlovakMovieReviewSentimentClassification.v2",
+                "SIB200Classification",
+                "MultilingualSentimentClassification",
+                "SlovakParlaSentClassification",
+                "MultiEupSlovakPartyClassification",
+                "MultiEupSlovakGenderClassification",
+                # Reranking
+                "SkQuadReranking",
+                "SlovakPharmacyDrMaxReranking",
+                "SlovakPharmacyMojaLekarenReranking",
+                # Clustering
+                "SIB200ClusteringS2S",
+                "PravdaSKTagClustering",
+                "PravdaSKURLClustering",
+                "SlovakSumURLClustering",
+                "SMESumCategoryClustering",
+                # BitextMining
+                "OpusSlovakEnglishBitextMining",
+                "Tatoeba",
+            ],
+        )
+        + (
+            get_task(
+                "FloresBitextMining",
+                hf_subsets=["eng_Latn-slk_Latn", "ces_Latn-slk_Latn"],
+            ),
+        )
+        + (
+            get_task(
+                "NTREXBitextMining",
+                hf_subsets=["eng_Latn-slk_Latn", "ces_Latn-slk_Latn"],
+            ),
+        )
+        + (get_task("WebFAQBitextMiningQuestions", hf_subsets=["eng-slk", "ces-slk"]),)
+        + (get_task("WebFAQBitextMiningQAs", hf_subsets=["eng-slk", "ces-slk"]),)
+    ),
+    description="""Slovak Massive Text Embedding Benchmark (SkMTEB), the first comprehensive benchmark for text embeddings in Slovak, a low-resource West Slavic language. SkMTEB consists of 31 tasks across 7 task types, with tasks adapted from both existing and novel resources.""",
+    # TODO: to be updated
+    reference="TBD",
+    citation=r"""
+@inproceedings{suppa2025skmteb,
+  author = {Šuppa, Marek and Ridzik, Andrej and Hládek, Daniel and Kňažeková, Natália and Ondrejová, Viktória},
+  booktitle = {Proceedings of ACL},
+  title = {SkMTEB: Slovak Massive Text Embedding Benchmark and Model Adaptation},
+  year = {2026},
+}
+""",
+    contacts=["andrejridzik", "hladek", "mrshu"],
+)
+
 MTEB_SPA = Benchmark(
     name="MTEB(spa, v1)",
     aliases=["MTEB(spa)"],
