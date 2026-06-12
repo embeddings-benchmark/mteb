@@ -13,8 +13,19 @@ jobs:
   healthcheck:
     runs-on: ubuntu-latest
     steps:
-      - name: Check leaderboard endpoint
-        id: health
+      - name: Check frontend
+        id: frontend
+        run: |
+          if curl -sS --fail --max-time 30 --connect-timeout 10 \
+            "https://mteb-leaderboard.hf.space/" \
+            -o /dev/null; then
+            echo "alive=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "alive=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check backend health
+        id: backend
         run: |
           if curl -sS --fail --max-time 30 --connect-timeout 10 \
             "https://mteb-leaderboard-backend.hf.space/health" \
@@ -24,15 +35,25 @@ jobs:
             echo "alive=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Create or update outage issue
-        if: steps.health.outputs.alive != 'true'
+      - name: Create outage issue
+        if: steps.frontend.outputs.alive != 'true' || steps.backend.outputs.alive != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          FRONTEND_ALIVE: ${{ steps.frontend.outputs.alive }}
+          BACKEND_ALIVE: ${{ steps.backend.outputs.alive }}
         run: |
           set -euo pipefail
 
-          title="Leaderboard healthcheck failing"
+          if [[ "$FRONTEND_ALIVE" != "true" && "$BACKEND_ALIVE" != "true" ]]; then
+            target="frontend + backend"
+          elif [[ "$FRONTEND_ALIVE" != "true" ]]; then
+            target="frontend"
+          else
+            target="backend"
+          fi
+
+          title="Leaderboard healthcheck failing ($target)"
           run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
           gh issue create \
@@ -41,7 +62,8 @@ jobs:
             --body "$(cat <<EOF
           Automated leaderboard healthcheck failed.
 
-          - Endpoint: https://mteb-leaderboard-backend.hf.space/health
+          - Frontend: https://mteb-leaderboard.hf.space/ — alive=${FRONTEND_ALIVE}
+          - Backend:  https://mteb-leaderboard-backend.hf.space/health — alive=${BACKEND_ALIVE}
           - Workflow run: ${run_url}
 
           @Samoed @KennethEnevoldsen
