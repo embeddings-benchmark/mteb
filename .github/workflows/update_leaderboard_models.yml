@@ -14,9 +14,18 @@ concurrency:
   group: update-leaderboard-models
   cancel-in-progress: true
 
+# Authenticates to the HF Hub via a trusted publisher configured on
+# https://huggingface.co/spaces/mteb/leaderboard/settings (Trusted Publishers):
+#   provider:   GitHub Actions
+#   repository: embeddings-benchmark/mteb
+#   workflow:   update_leaderboard_models.yml
+# No HF_TOKEN secret required.
 jobs:
   update-models:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout mteb
         uses: actions/checkout@v6
@@ -31,23 +40,31 @@ jobs:
       - name: Install mteb
         run: uv sync --frozen
 
-      - name: Generate model list
-        run: uv run python scripts/generate_leaderboard_models.py > leaderboard_models.py
-
-      - name: Clone leaderboard space and update
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      - name: Install hf CLI
         run: |
-          git clone https://huggingface.co/spaces/mteb/leaderboard hf-leaderboard
-          cp leaderboard_models.py hf-leaderboard/models.py
-          cd hf-leaderboard
-          if git diff --quiet models.py; then
+          curl -LsSf https://hf.co/cli/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Generate model list
+        run: uv run python scripts/generate_leaderboard_models.py > models.py
+
+      - name: Check if models.py changed in HF Space
+        id: diff
+        run: |
+          mkdir hf-snapshot
+          hf download mteb/leaderboard models.py --repo-type space --local-dir hf-snapshot
+          if diff -q models.py hf-snapshot/models.py > /dev/null; then
             echo "No changes to models.py"
-            exit 0
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin "https://mteb:${HF_TOKEN}@huggingface.co/spaces/mteb/leaderboard"
-          git add models.py
-          git commit -m "Update model list"
-          git push
+
+      - name: Upload updated models.py to leaderboard Space
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          HF_OIDC_RESOURCE: spaces/mteb/leaderboard
+        run: |
+          hf upload mteb/leaderboard models.py models.py \
+            --repo-type space \
+            --commit-message "Update model list"
