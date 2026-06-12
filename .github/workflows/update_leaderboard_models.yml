@@ -14,12 +14,6 @@ concurrency:
   group: update-leaderboard-models
   cancel-in-progress: true
 
-# Authenticates to the HF Hub via a trusted publisher configured on
-# https://huggingface.co/spaces/mteb/leaderboard/settings (Trusted Publishers):
-#   provider:   GitHub Actions
-#   repository: embeddings-benchmark/mteb
-#   workflow:   update_leaderboard_models.yml
-# No HF_TOKEN secret required.
 jobs:
   update-models:
     runs-on: ubuntu-latest
