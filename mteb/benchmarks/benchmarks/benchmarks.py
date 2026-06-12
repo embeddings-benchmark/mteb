@@ -801,10 +801,10 @@ MTEB_PT = Benchmark(
             ],
         )
         # Classification (2)
-        + (get_task("MultiHateClassification", eval_splits=["test"], hf_subsets=["por"]),),
-        + (get_task("TweetSentimentClassification", eval_splits=["test"], hf_subsets=["portuguese"]),),
+        + (get_task("MultiHateClassification", eval_splits=["test"], hf_subsets=["por"]),)
+        + (get_task("TweetSentimentClassification", eval_splits=["test"], hf_subsets=["portuguese"]),)
         # Retrieval (1)
-        + (get_task("WebFAQRetrieval", eval_splits=["test"], hf_subsets=["por"]),),
+        + (get_task("WebFAQRetrieval", eval_splits=["test"], hf_subsets=["por"]),)
     ),
     description="Portuguese text embedding quality benchmark across semantic text similarity, classification, reranking and retrieval.",
     reference=None,
