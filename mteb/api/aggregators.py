@@ -280,14 +280,12 @@ async def build_benchmark_summary(  # noqa: PLR0914
         return _empty_summary(bench.name, bench_schema, tasks_meta)
     long_df = filtered
 
-    # Compute the (model × task) wide pivot once on a worker thread and pass
-    # it to both builders — they would otherwise each recompute it on their
-    # own thread, doubling polars CPU on the heaviest single op. Subclass
-    # builders that need an is_public-aware pivot ignore the kwarg and pay
-    # the cost themselves; per-task table always benefits.
+    # The summary builder recomputes its own per-task pivot (it needs the
+    # ``is_public`` column the basic pivot doesn't carry); pre-compute the
+    # pivot only for the per-task table.
     pivot = await asyncio.to_thread(bench._build_per_task_pivot, long_df)
     summary, per_task_pl = await asyncio.gather(
-        asyncio.to_thread(bench._create_summary_table, long_df, pivot=pivot),
+        asyncio.to_thread(bench._create_summary_table, long_df),
         asyncio.to_thread(bench._create_per_task_table, long_df, pivot=pivot),
     )
     if summary.is_empty:
