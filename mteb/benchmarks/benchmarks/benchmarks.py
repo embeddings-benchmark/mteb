@@ -3272,7 +3272,7 @@ MVEB = Benchmark(
     name="MVEB(beta)",
     aliases=["MVEB"],
     display_name="MVEB",
-    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-video.svg",
     tasks=get_tasks(
         tasks=[
             # Any2AnyRetrieval (10)
@@ -3316,8 +3316,8 @@ MVEB = Benchmark(
 MVEB_TEXT_VIDEO = Benchmark(
     name="MVEB(text, video, beta)",
     aliases=["MVEB(text, video)"],
-    display_name="Text+Video",
-    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    display_name="MVEB Video-Text",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-video.svg",
     tasks=get_tasks(
         tasks=[
             # Any2AnyRetrieval (8)
@@ -3357,8 +3357,8 @@ MVEB_TEXT_VIDEO = Benchmark(
 MVEB_VIDEO = Benchmark(
     name="MVEB(video, beta)",
     aliases=["MVEB(video)"],
-    display_name="Video",
-    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    display_name="MVEB Video-Only",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-video.svg",
     tasks=get_tasks(
         tasks=[
             # VideoClassification (6)
