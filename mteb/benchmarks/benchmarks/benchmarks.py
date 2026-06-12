@@ -774,6 +774,44 @@ MTEB_POL = Benchmark(
     contacts=["rafalposwiata"],
 )
 
+MTEB_PT = Benchmark(
+    name="MTEB(pt, v1)",
+    aliases=["MTEB(pt)"],
+    display_name="Portuguese",
+    icon="https://raw.githubusercontent.com/lipis/flag-icons/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/br.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["pt"],
+            tasks=[
+                # STS (3)
+                "Assin2STS",
+                "SICK-BR-STS",
+                "STSBenchmarkMultilingualSTS",
+                # Classification (3)
+                "MassiveIntentClassification",
+                "BrazilianToxicTweetsClassification",
+                "HateSpeechPortugueseClassification",
+                # Reranking (3)
+                "MultiLongDocReranking",
+                "WikipediaRerankingMultilingual",
+                "XGlueWPRReranking",
+                # Retrieval (1)
+                "MultiLongDocRetrieval",
+                "WikipediaRetrievalMultilingual"
+            ],
+        )
+        # Classification (2)
+        + (get_task("MultiHateClassification", eval_splits=["test"], hf_subsets=["por"]),),
+        + (get_task("TweetSentimentClassification", eval_splits=["test"], hf_subsets=["portuguese"]),),
+        # Retrieval (1)
+        + (get_task("WebFAQRetrieval", eval_splits=["test"], hf_subsets=["por"]),),
+    ),
+    description="Portuguese text embedding quality benchmark across semantic text similarity, classification, reranking and retrieval.",
+    reference=None,
+    citation=None,
+    contacts=["Lucas-Okamura"],
+)
+
 MTEB_SPA = Benchmark(
     name="MTEB(spa, v1)",
     aliases=["MTEB(spa)"],
