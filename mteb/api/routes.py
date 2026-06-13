@@ -664,19 +664,43 @@ DescriptiveStatsValue = (
 )
 
 
+# Legacy on-disk key → current TypedDict field. Older descriptive-stats files
+# in ``mteb/descriptive_stats/`` were generated before the
+# ``ClassificationDescriptiveStatistics`` / ``RegressionDescriptiveStatistics``
+# fields were renamed; the API response is canonicalised against the current
+# field names so clients only see one shape.
+_LEGACY_KEY_RENAMES: dict[str, str] = {
+    "number_texts_intersect_with_train": "samples_in_train",
+}
+
+
+def _canonicalise_stats(node: Any) -> Any:
+    """Recursively rename legacy keys to their current TypedDict names."""
+    if isinstance(node, dict):
+        return {
+            _LEGACY_KEY_RENAMES.get(k, k): _canonicalise_stats(v)
+            for k, v in node.items()
+        }
+    if isinstance(node, list):
+        return [_canonicalise_stats(item) for item in node]
+    return node
+
+
 @functools.cache
 def _descriptive_stats_bytes(name: str) -> Serialized | None:
     """Read the per-split descriptive-stats JSON from disk for task ``name``.
 
-    Returns ``None`` when the task has no stats file checked in. The file
-    bytes are served verbatim — typing is documented via the route's
-    ``response_model`` (a ``dict[str, DescriptiveStatsValue]`` union over the
-    per-task-type TypedDicts declared in ``mteb.abstasks``).
+    Returns ``None`` when the task has no stats file checked in. Legacy field
+    names are renamed to match the current ``*DescriptiveStatistics`` TypedDicts
+    before serving, so the response shape matches the OpenAPI schema regardless
+    of when the on-disk file was generated.
     """
     stat_path = _TASKS_REGISTRY[name].metadata.descriptive_stat_path
     if not stat_path.exists():
         return None
-    return serialize_bytes(stat_path.read_bytes())
+    raw = json.loads(stat_path.read_bytes())
+    canonicalised = _canonicalise_stats(raw)
+    return serialize_bytes(json.dumps(canonicalised).encode())
 
 
 @router.get(
