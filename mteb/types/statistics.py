@@ -1,23 +1,42 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import Generic, TypeVar
 
-from typing_extensions import TypedDict
+from typing_extensions import NotRequired, TypedDict
 
-if TYPE_CHECKING:
-    from typing_extensions import NotRequired
-
-    from mteb.types import HFSubset
+from mteb.types._result import HFSubset
 
 
 class SplitDescriptiveStatistics(TypedDict):
-    """Base class for descriptive statistics for the subset."""
+    """Base class for descriptive statistics for the subset.
+
+    Every per-task descriptive-stats TypedDict (Classification, Retrieval,
+    STS, …) inherits from this. The per-task fields are added by each
+    subclass; the multilingual subset wrapper is provided separately by
+    :class:`DescriptiveStatistics`.
+    """
 
     pass
 
 
-class DescriptiveStatistics(TypedDict, SplitDescriptiveStatistics):
-    """Class for descriptive statistics for the full task.
+# Self-bound type parameter for ``DescriptiveStatistics``: the API parameterises
+# the generic wrapper with the per-task TypedDict so that ``hf_subset_descriptive_stats``
+# is precisely typed as a mapping to the same per-task shape. The default keeps
+# backward compatibility with existing callers that use ``DescriptiveStatistics``
+# without parameters.
+_DescStatsT = TypeVar(
+    "_DescStatsT",
+    bound="SplitDescriptiveStatistics",
+    default="SplitDescriptiveStatistics",
+)
+
+
+class DescriptiveStatistics(SplitDescriptiveStatistics, Generic[_DescStatsT]):
+    """Generic descriptive statistics for the full task (split + multilingual wrapper).
+
+    Parameterised on the per-task ``SplitDescriptiveStatistics`` subclass so
+    ``hf_subset_descriptive_stats`` carries the right per-task shape (e.g.
+    ``DescriptiveStatistics[ClassificationDescriptiveStatistics]``).
 
     Attributes:
         num_samples: Total number of samples
@@ -25,7 +44,7 @@ class DescriptiveStatistics(TypedDict, SplitDescriptiveStatistics):
     """
 
     num_samples: int
-    hf_subset_descriptive_stats: NotRequired[dict[HFSubset, SplitDescriptiveStatistics]]
+    hf_subset_descriptive_stats: NotRequired[dict[HFSubset, _DescStatsT]]
 
 
 class TextStatistics(TypedDict):
@@ -267,3 +286,308 @@ class PairModalityStatistics(TypedDict):
     video1_statistics: VideoStatistics | None
     video2_statistics: VideoStatistics | None
     unique_pairs: int
+
+
+# --- Per-task descriptive statistics -----------------------------------------
+# Each concrete ``AbsTask._calculate_descriptive_statistics_from_split`` returns
+# one of these per-split TypedDicts. They inherit directly from
+# ``SplitDescriptiveStatistics`` — no ``hf_subset_descriptive_stats`` field —
+# so ``**modality_stats`` spread in the constructor doesn't trip mypy's
+# NotRequired-key check.
+#
+# Multilingual layering is expressed via ``DescriptiveStatistics[XxxDescriptiveStatistics]``
+# at the API layer: the generic wrapper carries ``num_samples`` + a
+# ``hf_subset_descriptive_stats`` whose values are precisely typed.
+
+
+class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
+    """Descriptive statistics for STS.
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
+        unique_pairs: Number of unique pairs
+
+        text1_statistics: Statistics for sentence1
+        text2_statistics: Statistics for sentence2
+
+        image1_statistics: Statistics for image1
+        image2_statistics: Statistics for image2
+
+        audio1_statistics: Statistics for audio1
+        audio2_statistics: Statistics for audio2
+
+        video1_statistics: Statistics for video1
+        video2_statistics: Statistics for video2
+
+        label_statistics: Statistics for labels
+    """
+
+    num_samples: int
+    number_of_characters: int | None
+    unique_pairs: int | None
+
+    text1_statistics: TextStatistics | None
+    text2_statistics: TextStatistics | None
+
+    image1_statistics: ImageStatistics | None
+    image2_statistics: ImageStatistics | None
+
+    audio1_statistics: AudioStatistics | None
+    audio2_statistics: AudioStatistics | None
+
+    video1_statistics: VideoStatistics | None
+    video2_statistics: VideoStatistics | None
+
+    label_statistics: ScoreStatistics
+
+
+class BitextDescriptiveStatistics(SplitDescriptiveStatistics):
+    """Descriptive statistics for Bitext.
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
+        unique_pairs: Number of duplicate pairs
+
+        sentence1_statistics: Statistics for sentence1
+        sentence2_statistics: Statistics for sentence2
+    """
+
+    num_samples: int
+    number_of_characters: int
+    unique_pairs: int
+
+    sentence1_statistics: TextStatistics
+    sentence2_statistics: TextStatistics
+
+
+class ClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
+    """Descriptive statistics for Classification.
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+        samples_in_train: Number of unique test samples (across all input modalities)
+            that also appear in the train split. None when evaluated on the train split itself.
+
+        text_statistics: Statistics for text
+        image_statistics: Statistics for images
+        audio_statistics: Statistics for audio
+        video_statistics: Statistics for video
+        label_statistics: Statistics for labels
+    """
+
+    num_samples: int
+    samples_in_train: int | None
+
+    text_statistics: TextStatistics | None
+    image_statistics: ImageStatistics | None
+    audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
+    label_statistics: LabelStatistics
+
+
+class RegressionDescriptiveStatistics(SplitDescriptiveStatistics):
+    """Descriptive statistics for Regression.
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+        samples_in_train: Number of texts in the train split
+
+        text_statistics: Statistics of texts
+        image_statistics: Statistics of images
+        audio_statistics: Statistics of audio
+        video_statistics: Statistics of video
+
+        values_statistics: Statistics of values
+    """
+
+    num_samples: int
+    samples_in_train: int | None
+
+    text_statistics: TextStatistics | None
+    image_statistics: ImageStatistics | None
+    audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
+    values_statistics: ScoreStatistics
+
+
+class ClusteringDescriptiveStatistics(SplitDescriptiveStatistics):
+    """Descriptive statistics for Clustering (legacy AbsTaskClusteringLegacy).
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+
+        text_statistics: Statistics for text
+        image_statistics: Statistics for images
+        audio_statistics: Statistics for audio
+        video_statistics: Statistics for video
+        label_statistics: Statistics for labels
+    """
+
+    num_samples: int
+
+    text_statistics: TextStatistics | None
+    image_statistics: ImageStatistics | None
+    audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
+    label_statistics: LabelStatistics
+
+
+class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
+    """Descriptive statistics for ClusteringFast.
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+
+        text_statistics: Statistics for text
+        image_statistics: Statistics for images
+        audio_statistics: Statistics for audio
+        video_statistics: Statistics for video
+        labels_statistics: Statistics for labels
+    """
+
+    num_samples: int
+
+    text_statistics: TextStatistics | None
+    image_statistics: ImageStatistics | None
+    audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
+    labels_statistics: LabelStatistics
+
+
+class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
+    """Descriptive statistics for PairClassification.
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
+        unique_pairs: Number of unique pairs
+
+        text1_statistics: Statistics for sentence1
+        image1_statistics: Statistics for image1
+        audio1_statistics: Statistics for audio1
+
+        text2_statistics: Statistics for sentence2
+        image2_statistics: Statistics for image2
+        audio2_statistics: Statistics for audio2
+
+        labels_statistics: Statistics for labels
+    """
+
+    num_samples: int
+    number_of_characters: int | None
+    unique_pairs: int | None
+
+    text1_statistics: TextStatistics | None
+    image1_statistics: ImageStatistics | None
+    audio1_statistics: AudioStatistics | None
+    video1_statistics: VideoStatistics | None
+    text2_statistics: TextStatistics | None
+    image2_statistics: ImageStatistics | None
+    audio2_statistics: AudioStatistics | None
+    video2_statistics: VideoStatistics | None
+    labels_statistics: LabelStatistics
+
+
+class ZeroShotClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
+    """Descriptive statistics for ZeroShotClassification.
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+
+        text_statistics: Statistics for texts
+        image_statistics: Statistics for images
+        audio_statistics: Statistics for audio
+        video_statistics: Statistics for video
+        label_statistics: Statistics for dataset labels
+
+        candidates_labels_text_statistics: Statistics for candidate labels text
+    """
+
+    num_samples: int
+
+    text_statistics: TextStatistics | None
+    image_statistics: ImageStatistics | None
+    audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
+    label_statistics: LabelStatistics
+    candidates_labels_text_statistics: TextStatistics
+
+
+class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
+    """Descriptive statistics for Retrieval.
+
+    Attributes:
+        num_samples: Total number of queries and documents
+        num_queries: Number of queries
+        num_documents: Number of documents
+        number_of_characters: Total number of characters in queries and documents
+
+        documents_text_statistics: Statistics for documents
+        documents_image_statistics: Statistics for documents
+        documents_audio_statistics: Statistics for documents
+        documents_video_statistics: Statistics for documents
+        queries_text_statistics: Statistics for queries
+        queries_image_statistics: Statistics for queries
+        queries_audio_statistics: Statistics for queries
+        queries_video_statistics: Statistics for queries
+        relevant_docs_statistics: Statistics for relevant documents
+        top_ranked_statistics: Statistics for top ranked documents (if available)
+    """
+
+    num_samples: int
+    num_queries: int
+    num_documents: int
+    number_of_characters: int
+
+    documents_text_statistics: TextStatistics | None
+    documents_image_statistics: ImageStatistics | None
+    documents_audio_statistics: AudioStatistics | None
+    documents_video_statistics: VideoStatistics | None
+
+    queries_text_statistics: TextStatistics | None
+    queries_image_statistics: ImageStatistics | None
+    queries_audio_statistics: AudioStatistics | None
+    queries_video_statistics: VideoStatistics | None
+
+    relevant_docs_statistics: RelevantDocsStatistics
+
+    # this is for datasets that do reranking
+    top_ranked_statistics: TopRankedStatistics | None
+
+
+class SummarizationDescriptiveStatistics(SplitDescriptiveStatistics):
+    """Descriptive statistics for Summarization.
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
+
+        text_statistics: Statistics for the text
+        human_summaries_statistics: Statistics for human summaries
+        machine_summaries_statistics: Statistics for machine summaries
+        score_statistics: Statistics for the relevance scores
+    """
+
+    num_samples: int
+    number_of_characters: int
+
+    text_statistics: TextStatistics
+    human_summaries_statistics: TextStatistics
+    machine_summaries_statistics: TextStatistics
+    score_statistics: ScoreStatistics
+
+
+class ImageTextPairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
+    """Descriptive statistics for ImageTextPairClassification.
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+        text_statistics: Statistics for text
+        image_statistics: Statistics for images
+    """
+
+    num_samples: int
+    text_statistics: TextStatistics
+    image_statistics: ImageStatistics

@@ -70,6 +70,20 @@ from mteb.filter_tasks import filter_tasks
 from mteb.get_tasks import _TASKS_REGISTRY, TASK_LIST
 from mteb.models.get_model_meta import get_model_meta, get_model_metas
 from mteb.models.model_implementations import MODEL_REGISTRY
+from mteb.types.statistics import (
+    AnySTSDescriptiveStatistics,
+    BitextDescriptiveStatistics,
+    ClassificationDescriptiveStatistics,
+    ClusteringDescriptiveStatistics,
+    ClusteringFastDescriptiveStatistics,
+    DescriptiveStatistics,
+    ImageTextPairClassificationDescriptiveStatistics,
+    PairClassificationDescriptiveStatistics,
+    RegressionDescriptiveStatistics,
+    RetrievalDescriptiveStatistics,
+    SummarizationDescriptiveStatistics,
+    ZeroShotClassificationDescriptiveStatistics,
+)
 
 if TYPE_CHECKING:
     from mteb.api.serialization import (
@@ -618,13 +632,46 @@ async def task_scores(request: Request, name: str) -> Response:
     return _cached_json(request, await get_task_scores_bytes(name))
 
 
+# Union over every per-task-type descriptive-stats wrapper. Each variant pairs
+# the per-task split TypedDict (per-task fields + num_samples) with the generic
+# ``DescriptiveStatistics[T]`` wrapper that contributes
+# ``hf_subset_descriptive_stats: NotRequired[dict[HFSubset, T]]``. Drives the
+# OpenAPI schema for ``/tasks/{name}/descriptive-stats``; clients pick the
+# concrete variant using ``task.type`` from ``/tasks/{name}``.
+DescriptiveStatsValue = (
+    AnySTSDescriptiveStatistics
+    | DescriptiveStatistics[AnySTSDescriptiveStatistics]
+    | BitextDescriptiveStatistics
+    | DescriptiveStatistics[BitextDescriptiveStatistics]
+    | ClassificationDescriptiveStatistics
+    | DescriptiveStatistics[ClassificationDescriptiveStatistics]
+    | ClusteringDescriptiveStatistics
+    | DescriptiveStatistics[ClusteringDescriptiveStatistics]
+    | ClusteringFastDescriptiveStatistics
+    | DescriptiveStatistics[ClusteringFastDescriptiveStatistics]
+    | ImageTextPairClassificationDescriptiveStatistics
+    | DescriptiveStatistics[ImageTextPairClassificationDescriptiveStatistics]
+    | PairClassificationDescriptiveStatistics
+    | DescriptiveStatistics[PairClassificationDescriptiveStatistics]
+    | RegressionDescriptiveStatistics
+    | DescriptiveStatistics[RegressionDescriptiveStatistics]
+    | RetrievalDescriptiveStatistics
+    | DescriptiveStatistics[RetrievalDescriptiveStatistics]
+    | SummarizationDescriptiveStatistics
+    | DescriptiveStatistics[SummarizationDescriptiveStatistics]
+    | ZeroShotClassificationDescriptiveStatistics
+    | DescriptiveStatistics[ZeroShotClassificationDescriptiveStatistics]
+)
+
+
 @functools.cache
 def _descriptive_stats_bytes(name: str) -> Serialized | None:
     """Read the per-split descriptive-stats JSON from disk for task ``name``.
 
     Returns ``None`` when the task has no stats file checked in. The file
-    contents vary by task type (text/image/audio/pair/…), so the payload is
-    returned verbatim rather than reshaped into a pydantic schema.
+    bytes are served verbatim — typing is documented via the route's
+    ``response_model`` (a ``dict[str, DescriptiveStatsValue]`` union over the
+    per-task-type TypedDicts declared in ``mteb.abstasks``).
     """
     stat_path = _TASKS_REGISTRY[name].metadata.descriptive_stat_path
     if not stat_path.exists():
@@ -632,9 +679,18 @@ def _descriptive_stats_bytes(name: str) -> Serialized | None:
     return serialize_bytes(stat_path.read_bytes())
 
 
-@router.get("/tasks/{name:path}/descriptive-stats")
+@router.get(
+    "/tasks/{name:path}/descriptive-stats",
+    response_model=dict[str, DescriptiveStatsValue],
+)
 async def task_descriptive_stats(request: Request, name: str) -> Response:
-    """Per-split descriptive statistics for task ``name`` (raw JSON file)."""
+    """Per-split descriptive statistics for task ``name``.
+
+    The value shape is one of the ``*DescriptiveStatistics`` TypedDicts defined
+    next to each AbsTask subclass (Classification, Retrieval, STS, …). The
+    specific shape is determined by the task's AbsTask superclass — clients
+    can switch on ``task.type`` from ``/tasks/{name}`` to discriminate.
+    """
     _require_task(name)
     payload = _descriptive_stats_bytes(name)
     if payload is None:

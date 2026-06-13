@@ -9,9 +9,7 @@ from sklearn import metrics
 
 from mteb._evaluators import ZeroShotClassificationEvaluator
 from mteb.models import EncoderProtocol
-from mteb.types.statistics import (
-    SplitDescriptiveStatistics,
-)
+from mteb.types.statistics import ZeroShotClassificationDescriptiveStatistics
 
 from ._statistics_calculation import (
     calculate_label_statistics,
@@ -27,40 +25,8 @@ if TYPE_CHECKING:
     from mteb.models import MTEBModels
     from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, Modalities
-    from mteb.types.statistics import (
-        AudioStatistics,
-        ImageStatistics,
-        LabelStatistics,
-        TextStatistics,
-        VideoStatistics,
-    )
 
 logger = logging.getLogger(__name__)
-
-
-class ZeroShotClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for ZeroShotClassification
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-
-        text_statistics: Statistics for texts
-        image_statistics: Statistics for images
-        audio_statistics: Statistics for audio
-        video_statistics: Statistics for video
-        label_statistics: Statistics for dataset labels
-
-        candidates_labels_text_statistics: Statistics for candidate labels text
-    """
-
-    num_samples: int
-
-    text_statistics: TextStatistics | None
-    image_statistics: ImageStatistics | None
-    audio_statistics: AudioStatistics | None
-    video_statistics: VideoStatistics | None
-    label_statistics: LabelStatistics
-    candidates_labels_text_statistics: TextStatistics
 
 
 class ZeroShotClassificationMetrics(TypedDict):

@@ -349,6 +349,13 @@ preview = true
     "TC002",
     "TC001",
 ]
+"mteb/types/statistics.py" = [
+    # pydantic / FastAPI resolve TypedDict annotations at runtime when building
+    # the OpenAPI schema for /v1/tasks/{name}/descriptive-stats; ``NotRequired``
+    # and ``HFSubset`` must be importable outside TYPE_CHECKING.
+    "TC001",
+    "TC002",
+]
 
 
 [tool.ruff.lint.flake8-implicit-str-concat]
