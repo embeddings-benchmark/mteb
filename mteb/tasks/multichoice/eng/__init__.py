@@ -18,7 +18,16 @@ from .perception_test import (
     PerceptionTestVideoAudioCentricQA,
     PerceptionTestVideoCentricQA,
 )
-from .star_bench import STARBenchVideoAudioCentricQA, STARBenchVideoCentricQA
+from .star_bench import (
+    STARBenchFeasibilityVideoAudioCentricQA,
+    STARBenchFeasibilityVideoCentricQA,
+    STARBenchInteractionVideoAudioCentricQA,
+    STARBenchInteractionVideoCentricQA,
+    STARBenchPredictionVideoAudioCentricQA,
+    STARBenchPredictionVideoCentricQA,
+    STARBenchSequenceVideoAudioCentricQA,
+    STARBenchSequenceVideoCentricQA,
+)
 from .video_mme import VideoMMEShortVideoAudioCentricQA, VideoMMEShortVideoCentricQA
 from .worldqa import WorldQAVideoAudioCentricQA, WorldQAVideoCentricQA
 from .worldsense import WorldSense1MinVideoAudioCentricQA, WorldSense1MinVideoCentricQA
@@ -44,8 +53,14 @@ __all__ = [
     "OmniVideoBenchVideoCentricQA",
     "PerceptionTestVideoAudioCentricQA",
     "PerceptionTestVideoCentricQA",
-    "STARBenchVideoAudioCentricQA",
-    "STARBenchVideoCentricQA",
+    "STARBenchFeasibilityVideoAudioCentricQA",
+    "STARBenchFeasibilityVideoCentricQA",
+    "STARBenchInteractionVideoAudioCentricQA",
+    "STARBenchInteractionVideoCentricQA",
+    "STARBenchPredictionVideoAudioCentricQA",
+    "STARBenchPredictionVideoCentricQA",
+    "STARBenchSequenceVideoAudioCentricQA",
+    "STARBenchSequenceVideoCentricQA",
     "VideoMMEShortVideoAudioCentricQA",
     "VideoMMEShortVideoCentricQA",
     "WorldQAVideoAudioCentricQA",
