@@ -23,13 +23,14 @@ warm the cache on startup in a background thread.
 Data routes are mounted under `/v1/`; infra routes (`/health`, `/metrics`,
 `/robots.txt`, `/favicon.ico`, `/og/*`) stay at the root.
 
-| Method | Path                           | Returns                                                                                   |
-|--------|--------------------------------|-------------------------------------------------------------------------------------------|
-| GET    | `/health`                      | `{"ok": true}`                                                                            |
-| GET    | `/v1/benchmarks/menu`          | Nested menu tree (matches frontend `MenuEntry[]`).                                        |
-| GET    | `/v1/benchmarks`               | Flat list of leaderboard benchmarks.                                                      |
-| GET    | `/v1/benchmarks/{name}`        | Single benchmark metadata.                                                                |
-| GET    | `/v1/benchmarks/{name}/scores` | Full summary with rows, per-task scores, per-task-type means. (Legacy alias: `/summary`.) |
+| Method | Path                                 | Returns                                                                                   |
+|--------|--------------------------------------|-------------------------------------------------------------------------------------------|
+| GET    | `/health`                            | `{"ok": true}`                                                                            |
+| GET    | `/v1/benchmarks/menu`                | Nested menu tree (matches frontend `MenuEntry[]`).                                        |
+| GET    | `/v1/benchmarks`                     | Flat list of leaderboard benchmarks.                                                      |
+| GET    | `/v1/benchmarks/{name}`              | Single benchmark metadata.                                                                |
+| GET    | `/v1/benchmarks/{name}/scores`       | Full summary with rows, per-task scores, per-task-type means. (Legacy alias: `/summary`.) |
+| GET    | `/v1/tasks/{name}/descriptive-stats` | Per-split descriptive statistics for the task (raw JSON, structure varies by task type).  |
 
 JSON keys are emitted in `camelCase` to match the frontend types in
 `leaderboardv2/src/lib/types.ts`.

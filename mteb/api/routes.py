@@ -618,6 +618,32 @@ async def task_scores(request: Request, name: str) -> Response:
     return _cached_json(request, await get_task_scores_bytes(name))
 
 
+@functools.cache
+def _descriptive_stats_bytes(name: str) -> Serialized | None:
+    """Read the per-split descriptive-stats JSON from disk for task ``name``.
+
+    Returns ``None`` when the task has no stats file checked in. The file
+    contents vary by task type (text/image/audio/pair/…), so the payload is
+    returned verbatim rather than reshaped into a pydantic schema.
+    """
+    stat_path = _TASKS_REGISTRY[name].metadata.descriptive_stat_path
+    if not stat_path.exists():
+        return None
+    return serialize_bytes(stat_path.read_bytes())
+
+
+@router.get("/tasks/{name:path}/descriptive-stats")
+async def task_descriptive_stats(request: Request, name: str) -> Response:
+    """Per-split descriptive statistics for task ``name`` (raw JSON file)."""
+    _require_task(name)
+    payload = _descriptive_stats_bytes(name)
+    if payload is None:
+        raise HTTPException(
+            status_code=404, detail=f"No descriptive stats for task: {name}"
+        )
+    return _cached_json(request, payload)
+
+
 @router.get("/tasks/{name:path}", response_model=TaskMetaSchema)
 async def task_detail(name: str) -> TaskMetaSchema:
     """Static metadata for task ``name``."""
