@@ -35,22 +35,34 @@ def get_cache() -> ResultCache:
     return ResultCache()
 
 
+# Bump when the on-disk parquet schema changes so old caches are rebuilt.
+# v2 added the ``split`` column so per-task scores can be surfaced per
+# (split, subset) instead of collapsed to the per-subset max.
+_CACHE_SCHEMA_VERSION = 2
+
 _UNIFIED_SCHEMA = {
     "model_name": pl.Utf8,
     "task_name": pl.Utf8,
+    "split": pl.Utf8,
     "subset": pl.Utf8,
     "score": pl.Float64,
 }
 
 
 def _dedupe_unified(combined: pl.DataFrame) -> pl.DataFrame:
-    """Reduce the combined frame to one row per (model, task, subset) with max score."""
+    """Reduce the combined frame to one row per (model, task, split, subset) with max score.
+
+    The max is over duplicate rows (same model/task/split/subset reported
+    twice across revisions); it does **not** collapse across splits.
+    Aggregating across splits is left to downstream consumers
+    (:func:`mteb.api.aggregators.build_task_scores` and friends).
+    """
     if combined.is_empty():
         return pl.DataFrame(schema=_UNIFIED_SCHEMA)
     return (
         combined.lazy()
         .drop_nulls("score")
-        .group_by(["model_name", "task_name", "subset"])
+        .group_by(["model_name", "task_name", "split", "subset"])
         .agg(pl.col("score").max())
         .collect(engine="streaming")
     )
@@ -159,6 +171,9 @@ def _read_disk_cache(  # noqa: PLR0911
     if manifest.get("repo_id") != repo_id:
         logger.info("disk cache repo_id mismatch; rebuilding")
         return None
+    if manifest.get("schema_version") != _CACHE_SCHEMA_VERSION:
+        logger.info("disk cache schema version mismatch; rebuilding")
+        return None
     if current_sha is not None and manifest.get("sha") != current_sha:
         logger.info("disk cache SHA mismatch (HF dataset updated); rebuilding")
         return None
@@ -225,6 +240,7 @@ def _write_disk_cache(
                 {
                     "repo_id": repo_id,
                     "sha": sha,
+                    "schema_version": _CACHE_SCHEMA_VERSION,
                 }
             )
         )

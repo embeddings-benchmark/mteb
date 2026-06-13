@@ -434,9 +434,14 @@ def _task_to_hosting_benchmarks() -> dict[str, list[str]]:
 def build_task_scores(name: str) -> TaskScoresSchema:
     """Per-model scores for a single task across every benchmark hosting it.
 
-    ``score`` is the mean of the model's per-subset scores when it has covered
-    every subset; ``null`` otherwise so partial-coverage models can't outrank
-    fully-evaluated peers.
+    ``subset_scores`` is a nested ``{subset: {split: score}}`` map so the
+    leaderboard UI can render either a split picker (rows × subsets) or a
+    subset picker (rows × splits) off one payload.
+
+    The rolled-up ``score`` collapses the inner split axis with ``max`` (one
+    representative value per subset) and means across subsets, but only when
+    the model covers every subset the task offers; ``null`` otherwise, so a
+    partial-coverage model can't outrank a fully-evaluated peer.
     """
     from mteb.api.frames import _load_per_benchmark_frames
 
@@ -450,18 +455,22 @@ def build_task_scores(name: str) -> TaskScoresSchema:
     _, all_df = _load_per_benchmark_frames()
     task_frame = all_df.filter(pl.col("task_name") == name)
 
-    seen: dict[str, dict[str, float]] = {}
+    # model_name -> subset -> split -> score
+    seen: dict[str, dict[str, dict[str, float]]] = {}
     all_subsets: set[str] = set()
+    all_splits: set[str] = set()
     if not task_frame.is_empty():
-        per_subset = (
-            task_frame.drop_nulls("score")
-            .group_by(["model_name", "subset"])
-            .agg(pl.col("score").max())
-        )
-        for pr in per_subset.iter_rows(named=True):
+        # The unified frame is already deduped to one row per
+        # (model, task, split, subset), so we can iterate directly without a
+        # second group_by.
+        for pr in task_frame.drop_nulls("score").iter_rows(named=True):
             subset = str(pr["subset"])
-            seen.setdefault(pr["model_name"], {})[subset] = float(pr["score"])
+            split = str(pr["split"])
+            (
+                seen.setdefault(pr["model_name"], {}).setdefault(subset, {})[split]
+            ) = float(pr["score"])
             all_subsets.add(subset)
+            all_splits.add(split)
 
     rows: list[TaskScoreRowSchema] = []
     for model_name, subset_scores in seen.items():
@@ -470,7 +479,11 @@ def build_task_scores(name: str) -> TaskScoresSchema:
             continue
         score: float | None
         if all_subsets <= subset_scores.keys():
-            score = sum(subset_scores.values()) / len(subset_scores)
+            # Per-subset value = best score across the splits this model ran,
+            # matching the pre-split behaviour so existing ranks stay stable.
+            score = sum(
+                max(splits.values()) for splits in subset_scores.values()
+            ) / len(subset_scores)
         else:
             score = None
 
@@ -504,6 +517,7 @@ def build_task_scores(name: str) -> TaskScoresSchema:
         task=task_meta,
         benchmarks=hosting_benchmarks,
         subsets=sorted(all_subsets),
+        splits=sorted(all_splits),
         rows=rows,
     )
 

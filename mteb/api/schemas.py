@@ -375,13 +375,21 @@ class TaskScoreRowSchema(_CamelModel):
     """One row of `/tasks/{name}/scores`.
 
     ``score`` is the mean across every subset the task offers, or ``null`` when
-    the model is missing any subset (partial means aren't comparable).
+    the model is missing any subset (partial means aren't comparable). Each
+    subset's contribution is the max across splits the model evaluated on, so
+    the rollup stays comparable between models that ran only ``test`` and
+    models that ran both ``validation`` and ``test``.
+
+    ``subset_scores`` is keyed first by subset (e.g. ``"en"``) then by split
+    (e.g. ``"test"``), so the frontend can pivot either way without a second
+    request. Missing inner keys mean the model wasn't evaluated on that
+    (subset, split) cell.
     """
 
     rank: int
     model: ModelMetaSchema
     score: float | None
-    subset_scores: dict[str, float]
+    subset_scores: dict[str, dict[str, float]]
     benchmarks: list[str]
     trained_on: bool | None = None
 
@@ -392,6 +400,10 @@ class TaskScoresSchema(_CamelModel):
     task: TaskMetaSchema
     benchmarks: list[str]
     subsets: list[str]
+    # Distinct splits observed across every model's scores on this task. For
+    # most tasks this is just ``["test"]``; multi-split tasks like
+    # ``MassiveIntentClassification`` will surface ``["test", "validation"]``.
+    splits: list[str]
     rows: list[TaskScoreRowSchema]
 
 
