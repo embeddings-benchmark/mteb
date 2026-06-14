@@ -32,18 +32,16 @@ _DescStatsT = TypeVar(
 
 
 class DescriptiveStatistics(SplitDescriptiveStatistics, Generic[_DescStatsT]):
-    """Generic descriptive statistics for the full task (split + multilingual wrapper).
+    """Generic multilingual wrapper for per-task descriptive statistics.
 
     Parameterised on the per-task ``SplitDescriptiveStatistics`` subclass so
     ``hf_subset_descriptive_stats`` carries the right per-task shape (e.g.
     ``DescriptiveStatistics[ClassificationDescriptiveStatistics]``).
 
     Attributes:
-        num_samples: Total number of samples
         hf_subset_descriptive_stats: HFSubset descriptive statistics (only for multilingual datasets)
     """
 
-    num_samples: int
     hf_subset_descriptive_stats: NotRequired[dict[HFSubset, _DescStatsT]]
 
 
@@ -581,16 +579,93 @@ class ImageTextPairClassificationDescriptiveStatistics(SplitDescriptiveStatistic
     image_statistics: ImageStatistics
 
 
+class AnySTSStatistics(
+    DescriptiveStatistics[AnySTSDescriptiveStatistics],
+    AnySTSDescriptiveStatistics,
+):
+    """STS descriptive statistics, optionally with multilingual subsets."""
+
+
+class BitextStatistics(
+    DescriptiveStatistics[BitextDescriptiveStatistics],
+    BitextDescriptiveStatistics,
+):
+    """Bitext mining descriptive statistics, optionally with multilingual subsets."""
+
+
+class ClassificationStatistics(
+    DescriptiveStatistics[ClassificationDescriptiveStatistics],
+    ClassificationDescriptiveStatistics,
+):
+    """Classification descriptive statistics, optionally with multilingual subsets."""
+
+
+class ClusteringStatistics(
+    DescriptiveStatistics[ClusteringDescriptiveStatistics],
+    ClusteringDescriptiveStatistics,
+):
+    """Clustering descriptive statistics, optionally with multilingual subsets."""
+
+
+class ClusteringFastStatistics(
+    DescriptiveStatistics[ClusteringFastDescriptiveStatistics],
+    ClusteringFastDescriptiveStatistics,
+):
+    """Clustering-fast descriptive statistics, optionally with multilingual subsets."""
+
+
+class ImageTextPairClassificationStatistics(
+    DescriptiveStatistics[ImageTextPairClassificationDescriptiveStatistics],
+    ImageTextPairClassificationDescriptiveStatistics,
+):
+    """Image/text pair classification stats, optionally with multilingual subsets."""
+
+
+class PairClassificationStatistics(
+    DescriptiveStatistics[PairClassificationDescriptiveStatistics],
+    PairClassificationDescriptiveStatistics,
+):
+    """Pair classification descriptive statistics, optionally with multilingual subsets."""
+
+
+class RegressionStatistics(
+    DescriptiveStatistics[RegressionDescriptiveStatistics],
+    RegressionDescriptiveStatistics,
+):
+    """Regression descriptive statistics, optionally with multilingual subsets."""
+
+
+class RetrievalStatistics(
+    DescriptiveStatistics[RetrievalDescriptiveStatistics],
+    RetrievalDescriptiveStatistics,
+):
+    """Retrieval descriptive statistics, optionally with multilingual subsets."""
+
+
+class SummarizationStatistics(
+    DescriptiveStatistics[SummarizationDescriptiveStatistics],
+    SummarizationDescriptiveStatistics,
+):
+    """Summarization descriptive statistics, optionally with multilingual subsets."""
+
+
+class ZeroShotClassificationStatistics(
+    DescriptiveStatistics[ZeroShotClassificationDescriptiveStatistics],
+    ZeroShotClassificationDescriptiveStatistics,
+):
+    """Zero-shot classification stats, optionally with multilingual subsets."""
+
+
 DescriptiveStatsValue: TypeAlias = (
-    DescriptiveStatistics[AnySTSDescriptiveStatistics]
-    | DescriptiveStatistics[BitextDescriptiveStatistics]
-    | DescriptiveStatistics[ClassificationDescriptiveStatistics]
-    | DescriptiveStatistics[ClusteringDescriptiveStatistics]
-    | DescriptiveStatistics[ClusteringFastDescriptiveStatistics]
-    | DescriptiveStatistics[ImageTextPairClassificationDescriptiveStatistics]
-    | DescriptiveStatistics[PairClassificationDescriptiveStatistics]
-    | DescriptiveStatistics[RegressionDescriptiveStatistics]
-    | DescriptiveStatistics[RetrievalDescriptiveStatistics]
-    | DescriptiveStatistics[SummarizationDescriptiveStatistics]
-    | DescriptiveStatistics[ZeroShotClassificationDescriptiveStatistics]
+    AnySTSStatistics
+    | BitextStatistics
+    | ClassificationStatistics
+    | ClusteringStatistics
+    | ClusteringFastStatistics
+    | ImageTextPairClassificationStatistics
+    | PairClassificationStatistics
+    | RegressionStatistics
+    | RetrievalStatistics
+    | SummarizationStatistics
+    | ZeroShotClassificationStatistics
 )

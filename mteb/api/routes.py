@@ -20,6 +20,7 @@ from fastapi import (
     APIRouter,
     HTTPException,
     Query,
+    Request,  # noqa: TC002
     Response,
 )
 from pydantic import TypeAdapter
@@ -72,8 +73,6 @@ from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.types.statistics import DescriptiveStatsValue
 
 if TYPE_CHECKING:
-    from fastapi import Request
-
     from mteb.api.serialization import (
         Serialized,
     )

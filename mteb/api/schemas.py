@@ -374,11 +374,12 @@ class BenchmarkLeadersSchema(_CamelModel):
 class TaskScoreRowSchema(_CamelModel):
     """One row of `/tasks/{name}/scores`.
 
-    ``score`` is the mean across every subset the task offers, or ``null`` when
-    the model is missing any subset (partial means aren't comparable). Each
-    subset's contribution is the max across splits the model evaluated on, so
-    the rollup stays comparable between models that ran only ``test`` and
-    models that ran both ``validation`` and ``test``.
+    ``score`` is the rolled-up "all" view: the mean across subsets, where each
+    subset contributes the max across splits the model evaluated on. ``null``
+    when the model didn't cover every (subset, split) the task offers, so
+    partial-coverage models can't outrank fully-evaluated peers. Per-split
+    scores and per-split ranks are computed on the frontend from
+    ``subset_scores`` — no separate payload needed.
 
     ``subset_scores`` is keyed first by subset (e.g. ``"en"``) then by split
     (e.g. ``"test"``), so the frontend can pivot either way without a second

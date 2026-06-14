@@ -431,7 +431,7 @@ def _task_to_hosting_benchmarks() -> dict[str, list[str]]:
     return out
 
 
-def build_task_scores(name: str) -> TaskScoresSchema:
+def build_task_scores(name: str) -> TaskScoresSchema:  # noqa: PLR0914
     """Per-model scores for a single task across every benchmark hosting it.
 
     ``subset_scores`` is a nested ``{subset: {split: score}}`` map so the
@@ -478,9 +478,11 @@ def build_task_scores(name: str) -> TaskScoresSchema:
         if meta is None:
             continue
         score: float | None
-        if all_subsets <= subset_scores.keys():
-            # Per-subset value = best score across the splits this model ran,
-            # matching the pre-split behaviour so existing ranks stay stable.
+
+        fully_covered = all_subsets.issubset(subset_scores.keys()) and all(
+            all_splits.issubset(subset_scores[subset].keys()) for subset in all_subsets
+        )
+        if fully_covered:
             score = sum(
                 max(splits.values()) for splits in subset_scores.values()
             ) / len(subset_scores)
