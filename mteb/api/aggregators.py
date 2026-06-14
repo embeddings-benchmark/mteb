@@ -318,10 +318,17 @@ async def build_benchmark_summary(  # noqa: PLR0914
             exp = vr["experiments"]
             if not exp:
                 continue
-            vid = _serialize_experiment_kwargs_to_name(exp) or ""
+            # Polars unions every variant's keys into one Struct schema and
+            # pads absent keys with null. Strip the nulls so each variant's
+            # surfaced kwargs are exactly what produced that run — and the
+            # variant id matches ``_ensure_variant_id``'s cleaned form.
+            clean = {k: v for k, v in dict(exp).items() if v is not None}
+            if not clean:
+                continue
+            vid = _serialize_experiment_kwargs_to_name(clean) or ""
             if not vid:
                 continue
-            variants_by_model[(vr["model_name"], vid)] = dict(exp)
+            variants_by_model[(vr["model_name"], vid)] = clean
 
     # The SummaryTable wrapper tells us exactly which columns hold what — no
     # introspection needed. Type columns are still detected by exclusion since

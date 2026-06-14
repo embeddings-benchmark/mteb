@@ -791,6 +791,11 @@ class ResultCache:
             only_main_score=True,
             require_model_meta=False,
             include_remote=True,
+            # MATCH_NAME so the rebuilt cache also carries experiment-variant
+            # rows for each model. The default MATCH_KWARGS only pulls variants
+            # when the caller supplies experiment_kwargs, which silently dropped
+            # every ablation result from the parquet that feeds the leaderboard.
+            load_experiments=LoadExperimentEnum.MATCH_NAME,
         )
 
         # Save to disk for future use

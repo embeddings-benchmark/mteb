@@ -135,6 +135,14 @@ def _ensure_variant_id(pl_df: pl.DataFrame) -> pl.DataFrame:
     def _ser(exp: Any) -> str:
         if not exp:
             return ""
+        # Polars unions all variant keys into one Struct schema and pads
+        # absent keys with null. Drop the nulls so the serialized id reflects
+        # only the kwargs that actually drove this run — matches the cleaned
+        # dict the API aggregator surfaces on the wire.
+        if isinstance(exp, dict):
+            exp = {k: v for k, v in exp.items() if v is not None}
+            if not exp:
+                return ""
         return _serialize_experiment_kwargs_to_name(exp) or ""
 
     return pl_df.with_columns(
