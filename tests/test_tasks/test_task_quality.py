@@ -327,15 +327,15 @@ def _split_quality(
             )
 
     # train-test leakage
-    number_texts_intersect_with_train = split_stats.get(
-        "number_texts_intersect_with_train", None
+    samples_in_train = split_stats.get(
+        "samples_in_train", None
     )
     if not (
-        number_texts_intersect_with_train is None
-        or number_texts_intersect_with_train == 0
+        samples_in_train is None
+        or samples_in_train == 0
     ):
         errors.append(
-            f"{name} ({split}) has an overlap between train and test ({number_texts_intersect_with_train=})"
+            f"{name} ({split}) has an overlap between train and test ({samples_in_train=})"
         )
     return errors
 
