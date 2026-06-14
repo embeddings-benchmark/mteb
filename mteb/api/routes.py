@@ -16,11 +16,10 @@ from importlib.resources import files
 from typing import TYPE_CHECKING, Annotated, Any
 
 import polars as pl
-from fastapi import (  # noqa: TC002 — Request needed at runtime for FastAPI DI
+from fastapi import (
     APIRouter,
     HTTPException,
     Query,
-    Request,
     Response,
 )
 from pydantic import TypeAdapter
@@ -70,26 +69,14 @@ from mteb.filter_tasks import filter_tasks
 from mteb.get_tasks import _TASKS_REGISTRY, TASK_LIST
 from mteb.models.get_model_meta import get_model_meta, get_model_metas
 from mteb.models.model_implementations import MODEL_REGISTRY
-from mteb.types.statistics import (
-    AnySTSDescriptiveStatistics,
-    BitextDescriptiveStatistics,
-    ClassificationDescriptiveStatistics,
-    ClusteringDescriptiveStatistics,
-    ClusteringFastDescriptiveStatistics,
-    DescriptiveStatistics,
-    ImageTextPairClassificationDescriptiveStatistics,
-    PairClassificationDescriptiveStatistics,
-    RegressionDescriptiveStatistics,
-    RetrievalDescriptiveStatistics,
-    SummarizationDescriptiveStatistics,
-    ZeroShotClassificationDescriptiveStatistics,
-)
+from mteb.types.statistics import DescriptiveStatsValue
 
 if TYPE_CHECKING:
+    from fastapi import Request
+
     from mteb.api.serialization import (
         Serialized,
     )
-
 logger = logging.getLogger(__name__)
 # Root-level infra (health / metrics / asset proxies); not under /v1.
 infra_router = APIRouter()
@@ -632,38 +619,6 @@ async def task_scores(request: Request, name: str) -> Response:
     return _cached_json(request, await get_task_scores_bytes(name))
 
 
-# Union over every per-task-type descriptive-stats wrapper. Each variant pairs
-# the per-task split TypedDict (per-task fields + num_samples) with the generic
-# ``DescriptiveStatistics[T]`` wrapper that contributes
-# ``hf_subset_descriptive_stats: NotRequired[dict[HFSubset, T]]``. Drives the
-# OpenAPI schema for ``/tasks/{name}/descriptive-stats``; clients pick the
-# concrete variant using ``task.type`` from ``/tasks/{name}``.
-DescriptiveStatsValue = (
-    AnySTSDescriptiveStatistics
-    | DescriptiveStatistics[AnySTSDescriptiveStatistics]
-    | BitextDescriptiveStatistics
-    | DescriptiveStatistics[BitextDescriptiveStatistics]
-    | ClassificationDescriptiveStatistics
-    | DescriptiveStatistics[ClassificationDescriptiveStatistics]
-    | ClusteringDescriptiveStatistics
-    | DescriptiveStatistics[ClusteringDescriptiveStatistics]
-    | ClusteringFastDescriptiveStatistics
-    | DescriptiveStatistics[ClusteringFastDescriptiveStatistics]
-    | ImageTextPairClassificationDescriptiveStatistics
-    | DescriptiveStatistics[ImageTextPairClassificationDescriptiveStatistics]
-    | PairClassificationDescriptiveStatistics
-    | DescriptiveStatistics[PairClassificationDescriptiveStatistics]
-    | RegressionDescriptiveStatistics
-    | DescriptiveStatistics[RegressionDescriptiveStatistics]
-    | RetrievalDescriptiveStatistics
-    | DescriptiveStatistics[RetrievalDescriptiveStatistics]
-    | SummarizationDescriptiveStatistics
-    | DescriptiveStatistics[SummarizationDescriptiveStatistics]
-    | ZeroShotClassificationDescriptiveStatistics
-    | DescriptiveStatistics[ZeroShotClassificationDescriptiveStatistics]
-)
-
-
 # Legacy on-disk key → current TypedDict field. Older descriptive-stats files
 # in ``mteb/descriptive_stats/`` were generated before the
 # ``ClassificationDescriptiveStatistics`` / ``RegressionDescriptiveStatistics``
@@ -704,7 +659,7 @@ def _descriptive_stats_bytes(name: str) -> Serialized | None:
 
 
 @router.get(
-    "/tasks/{name:path}/descriptive-stats",
+    "/tasks/{name:path}/descriptive_statistics",
     response_model=dict[str, DescriptiveStatsValue],
 )
 async def task_descriptive_stats(request: Request, name: str) -> Response:

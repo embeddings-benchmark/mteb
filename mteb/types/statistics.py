@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from typing import Generic, TypeVar
+from typing import Generic, TypeAlias
 
-from typing_extensions import NotRequired, TypedDict
+from typing_extensions import NotRequired, TypedDict, TypeVar
 
 from mteb.types._result import HFSubset
 
@@ -286,18 +286,6 @@ class PairModalityStatistics(TypedDict):
     video1_statistics: VideoStatistics | None
     video2_statistics: VideoStatistics | None
     unique_pairs: int
-
-
-# --- Per-task descriptive statistics -----------------------------------------
-# Each concrete ``AbsTask._calculate_descriptive_statistics_from_split`` returns
-# one of these per-split TypedDicts. They inherit directly from
-# ``SplitDescriptiveStatistics`` — no ``hf_subset_descriptive_stats`` field —
-# so ``**modality_stats`` spread in the constructor doesn't trip mypy's
-# NotRequired-key check.
-#
-# Multilingual layering is expressed via ``DescriptiveStatistics[XxxDescriptiveStatistics]``
-# at the API layer: the generic wrapper carries ``num_samples`` + a
-# ``hf_subset_descriptive_stats`` whose values are precisely typed.
 
 
 class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
@@ -591,3 +579,18 @@ class ImageTextPairClassificationDescriptiveStatistics(SplitDescriptiveStatistic
     num_samples: int
     text_statistics: TextStatistics
     image_statistics: ImageStatistics
+
+
+DescriptiveStatsValue: TypeAlias = (
+    DescriptiveStatistics[AnySTSDescriptiveStatistics]
+    | DescriptiveStatistics[BitextDescriptiveStatistics]
+    | DescriptiveStatistics[ClassificationDescriptiveStatistics]
+    | DescriptiveStatistics[ClusteringDescriptiveStatistics]
+    | DescriptiveStatistics[ClusteringFastDescriptiveStatistics]
+    | DescriptiveStatistics[ImageTextPairClassificationDescriptiveStatistics]
+    | DescriptiveStatistics[PairClassificationDescriptiveStatistics]
+    | DescriptiveStatistics[RegressionDescriptiveStatistics]
+    | DescriptiveStatistics[RetrievalDescriptiveStatistics]
+    | DescriptiveStatistics[SummarizationDescriptiveStatistics]
+    | DescriptiveStatistics[ZeroShotClassificationDescriptiveStatistics]
+)
