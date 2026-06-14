@@ -1,7 +1,7 @@
 {
     "validation": {
         "num_samples": 500,
-        "number_texts_intersect_with_train": 0,
+        "samples_in_train": 0,
         "text_statistics": {
             "total_text_length": 54082,
             "min_text_length": 28,
@@ -27,7 +27,7 @@
     },
     "test": {
         "num_samples": 2000,
-        "number_texts_intersect_with_train": 0,
+        "samples_in_train": 0,
         "text_statistics": {
             "total_text_length": 216612,
             "min_text_length": 25,
@@ -53,7 +53,7 @@
     },
     "train": {
         "num_samples": 7443,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": {
             "total_text_length": 816035,
             "min_text_length": 24,
