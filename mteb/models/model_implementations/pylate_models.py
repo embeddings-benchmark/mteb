@@ -512,6 +512,35 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
     extra_requirements_groups=["pylate"],
 )
 
+perplexity__pplx_embed_v1_late_0_6b = ModelMeta(
+    loader=MultiVectorModel,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+    ),
+    name="perplexity-ai/pplx-embed-v1-late-0.6b",
+    model_type=["late-interaction"],
+    languages=None,
+    open_weights=True,
+    revision="35e14f7c0f85720323342965e72f119dc1a937c0",
+    public_training_code=None,
+    public_training_data=None,
+    release_date="2026-03-13",
+    n_parameters=595778560,
+    n_embedding_parameters=None,
+    memory_usage_mb=2272,
+    max_tokens=512,
+    embed_dim=128,
+    license="mit",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    framework=["PyLate", "ColBERT", "Sentence Transformers", "safetensors"],
+    reference="https://huggingface.co/perplexity-ai/pplx-embed-v1-late-0.6b",
+    use_instructions=False,
+    adapted_from="perplexity-ai/pplx-embed-v1-0.6b",
+    superseded_by=None,
+    training_datasets=None,
+    extra_requirements_groups=["pylate"],
+)
+
 late_on_code_citation = """@misc{LateOn-Code,
   title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
   author = {Chaffin, Antoine},
