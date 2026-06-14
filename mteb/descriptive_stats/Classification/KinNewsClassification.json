@@ -1,7 +1,7 @@
 {
     "test": {
         "num_samples": 5177,
-        "number_texts_intersect_with_train": 1294,
+        "samples_in_train": 1294,
         "text_statistics": {
             "total_text_length": 9500557,
             "min_text_length": 137,
@@ -64,7 +64,7 @@
         "hf_subset_descriptive_stats": {
             "kinnews_cleaned": {
                 "num_samples": 4254,
-                "number_texts_intersect_with_train": 678,
+                "samples_in_train": 678,
                 "text_statistics": {
                     "total_text_length": 7979747,
                     "min_text_length": 137,
@@ -127,7 +127,7 @@
             },
             "kirnews_cleaned": {
                 "num_samples": 923,
-                "number_texts_intersect_with_train": 616,
+                "samples_in_train": 616,
                 "text_statistics": {
                     "total_text_length": 1520810,
                     "min_text_length": 153,
@@ -186,7 +186,7 @@
     },
     "train": {
         "num_samples": 20703,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": {
             "total_text_length": 38259142,
             "min_text_length": 33,
@@ -249,7 +249,7 @@
         "hf_subset_descriptive_stats": {
             "kinnews_cleaned": {
                 "num_samples": 17014,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 31840528,
                     "min_text_length": 33,
@@ -312,7 +312,7 @@
             },
             "kirnews_cleaned": {
                 "num_samples": 3689,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 6418614,
                     "min_text_length": 117,
