@@ -1,0 +1,91 @@
+name: Backend API Docker
+
+on:
+  push:
+    branches: [main, api]
+    paths:
+      - 'Dockerfile'
+      - '.github/workflows/api_docker.yml'
+      - 'pyproject.toml'
+      - 'uv.lock'
+      - 'mteb/api/**'
+  pull_request:
+    branches: [main, api]
+    paths:
+      - 'Dockerfile'
+      - '.github/workflows/api_docker.yml'
+      - 'pyproject.toml'
+      - 'uv.lock'
+      - 'mteb/api/**'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-test-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to GHCR
+        if: github.ref == 'refs/heads/main'
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Build once into the local daemon so we can boot it for the health
+      # check. `cache-to: gha` shares the heavy pip-install + HF-warmup
+      # layers with the publish step below — that second build is a
+      # metadata copy, not a real rebuild.
+      - name: Build image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./Dockerfile
+          load: true
+          push: false
+          tags: mteb-api:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Boot container and poll /health
+        timeout-minutes: 10
+        run: |
+          docker run -d --name mteb-api -p 7860:7860 mteb-api:test
+          for i in $(seq 1 120); do
+            if curl -sS --fail --max-time 5 http://localhost:7860/health > /dev/null; then
+              echo "/health responded after ${i}s"
+              docker rm -f mteb-api
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "/health never responded"
+          docker logs --tail 80 mteb-api
+          docker rm -f mteb-api
+          exit 1
+
+      - name: Publish image to GHCR (main only)
+        if: github.ref == 'refs/heads/main'
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/api:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/api:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

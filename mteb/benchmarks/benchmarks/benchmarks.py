@@ -1,5 +1,6 @@
 from mteb.benchmarks.benchmark import (
     Benchmark,
+    BenchmarkAggregation,
     HUMEBenchmark,
     MIEBBenchmark,
     VidoreBenchmark,
@@ -174,6 +175,7 @@ MTEB_ENG_CLASSIC = Benchmark(
 }
 """,
     contacts=["Muennighoff"],
+    new_version=["MTEB(eng, v2)"],
 )
 
 MTEB_MAIN_RU = Benchmark(
@@ -235,6 +237,7 @@ MTEB_MAIN_RU = Benchmark(
 }
 """,
     contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
+    new_version=["MTEB(rus, v1.1)"],
 )
 
 MTEB_MAIN_RU_v1_1 = Benchmark(
@@ -988,6 +991,7 @@ MTEB_multilingual_v1 = Benchmark(
     reference="https://arxiv.org/abs/2502.13595",
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
+    new_version=["MTEB(Multilingual, v2)"],
 )
 
 MTEB_multilingual_v2 = Benchmark(
@@ -1527,6 +1531,7 @@ BRIGHT = Benchmark(
   year = {2024},
 }
 """,
+    new_version=["BRIGHT(v1.1)"],
 )
 
 BRIGHT_LONG = Benchmark(
@@ -1549,6 +1554,7 @@ BRIGHT_LONG = Benchmark(
   year = {2024},
 }
 """,
+    new_version=["BRIGHT(v1.1)"],
 )
 
 BRIGHT_V1_1 = Benchmark(
@@ -1713,22 +1719,16 @@ C_MTEB = Benchmark(
                 "Waimai",
                 "OnlineShopping",
                 "JDReview",
+                "MultilingualSentiment",
             ],
         )
         + get_tasks(
             tasks=[
-                "MultilingualSentiment",
                 "ATEC",
                 "BQ",
                 "STSB",
             ],
             eval_splits=["test"],
-        )
-        + get_tasks(
-            tasks=[
-                "MultilingualSentiment",
-            ],
-            eval_splits=["validation"],
         )
     ),
     description="Chinese text embedding quality across retrieval, reranking, pair classification, clustering, classification, and semantic similarity.",
@@ -2746,6 +2746,7 @@ VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
   year = {2025},
 }
 """,
+    aggregations=(BenchmarkAggregation.MEAN_TASK,),
 )
 
 R2MED = Benchmark(

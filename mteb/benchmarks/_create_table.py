@@ -4,13 +4,56 @@ import functools
 import re
 from collections import defaultdict
 from collections.abc import Sequence
+from dataclasses import dataclass
 from typing import Any, Literal
 
 import numpy as np
 import polars as pl
 
+from mteb.benchmarks.benchmark import _PRIMARY_METRIC_PRIORITY, BenchmarkAggregation
 from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.models.model_implementations import MODEL_REGISTRY
+
+
+@dataclass(frozen=True, slots=True)
+class SummaryTable:
+    """Output of every ``_create_summary_table_*`` builder.
+
+    Carries the polars frame *plus* pointers to which columns hold the rank
+    and the means. Consumers (API, leaderboard) read via these pointers
+    instead of guessing from column names. Empty-result builds set
+    ``is_empty=True`` and consumers short-circuit.
+
+    The column-name strings here are the actual names present in ``df`` —
+    no renames happen at consumption time. Defaults match the most common
+    builder shape (the default per-task pivot branch of ``_create_summary_table``).
+
+    Attributes:
+        df: The summary polars frame.
+        rank_col: Column in ``df`` holding the integer rank (1 = best).
+        primary_metric_col: Column in ``df`` holding the primary scalar metric
+            the rank is based on — varies per builder ("Mean (Task)",
+            "Mean (Subset)", "Mean (TaskType)", or "Mean (Public)").
+        task_type_mean_col: Column holding the mean-over-per-type-means, or
+            ``None`` when the builder doesn't compute one.
+        mean_public_col: Public split column, or ``None`` when the primary
+            metric IS the public mean (no separate breakdown).
+        mean_private_col: Private split column, or ``None``.
+        is_empty: True for the ``No results`` sentinel — consumers short-circuit.
+    """
+
+    df: pl.DataFrame
+    rank_col: str = "Rank (Borda)"
+    primary_metric_col: str = "Mean (Task)"
+    task_type_mean_col: str | None = "Mean (TaskType)"
+    mean_public_col: str | None = None
+    mean_private_col: str | None = None
+    is_empty: bool = False
+
+
+def _no_results_summary() -> SummaryTable:
+    """Empty-result sentinel returned by every builder when the input is empty."""
+    return SummaryTable(df=_no_results_frame(), is_empty=True)
 
 
 @functools.lru_cache(maxsize=4096)
@@ -64,28 +107,55 @@ def _is_zero_shot_cached(
     return not bool(training_datasets & task_name_set)
 
 
+@functools.cache
 def _no_results_frame() -> pl.DataFrame:
-    """The placeholder frame returned when an empty selection would have no rows."""
+    """The placeholder frame returned when an empty selection would have no rows.
+
+    Cached because the frame is shape/content-immutable and consumers only
+    inspect it; allocating a fresh frame per empty-input call wastes work
+    during warmup of newly-added (still-empty) benchmarks.
+    """
     return pl.DataFrame({"No results": ["You can try relaxing your criteria"]})
 
 
 def _skipna_false_mean(cols: list[str]) -> pl.Expr:
-    """Row-wise mean that returns null if any of ``cols`` is null.
+    """Row-wise mean that returns null if any of `cols` is null.
 
-    Matches ``pd.DataFrame.mean(axis=1, skipna=False)`` semantics.
+    Matches `pd.DataFrame.mean(axis=1, skipna=False)` semantics. Uses polars'
+    native single-pass `mean_horizontal(ignore_nulls=False)` instead of the
+    older two-pass `any_horizontal(is_null) + when/otherwise + mean_horizontal`
+    pattern — same result, half the horizontal scans.
     """
-    any_null = pl.any_horizontal([pl.col(c).is_null() for c in cols])
-    return pl.when(any_null).then(None).otherwise(pl.mean_horizontal(cols))
+    return pl.mean_horizontal(cols, ignore_nulls=False)
+
+
+def _mean_or_null(cols: list[str], alias: str) -> pl.Expr:
+    """Skipna-false mean, with a Float64-null fallback for an empty column list.
+
+    `_skipna_false_mean([])` (and `pl.mean_horizontal([], ...)`) raises a
+    `ComputeError` because polars can't infer the output row count from no
+    inputs. This helper substitutes a typed all-null column of the right
+    dtype so the surrounding `select` can stay branch-free when a partition
+    (e.g. public/private) happens to be empty for this benchmark.
+    """
+    if cols:
+        return _skipna_false_mean(cols).alias(alias)
+    return pl.lit(None).cast(pl.Float64).alias(alias)
 
 
 def _get_borda_rank(score_cols: list[str]) -> pl.Expr:
     """Borda rank for each row across ``score_cols``, as a polars expression.
 
-    Per-column rank (higher score → lower rank number) is converted to a borda count
-    (``n - rank``), summed row-wise, and ranked again with ``method="min"``. The row
-    count ``n`` is taken from the evaluation context via ``pl.len()`` so the expression
-    can be plugged into any ``with_columns`` / ``select`` without an intermediate
-    materialisation.
+    Wide-form implementation: per-column rank (higher score → lower rank
+    number) converted to a borda count (``n - rank``), summed row-wise, and
+    ranked again with ``method="min"``. The row count ``n`` comes from the
+    evaluation context via ``pl.len()``.
+
+    Used by :meth:`Benchmark.to_dataframe`, which starts from a wide pandas
+    frame and benefits from the inline-expression form. All internal summary
+    builders use :func:`_borda_rank_from_long` instead, which replaces the
+    N-element horizontal-rank expression tree with a single window function
+    over the partition column.
     """
     n = pl.len()
     return (
@@ -94,6 +164,59 @@ def _get_borda_rank(score_cols: list[str]) -> pl.Expr:
         )
         .rank(method="min", descending=True)
         .cast(pl.Int64)
+    )
+
+
+def _borda_rank_from_long(
+    pl_df: pl.DataFrame,
+    *,
+    partition_col: str = "task_name",
+    model_col: str = "model_name",
+    score_col: str = "score",
+    n_models: int | None = None,
+) -> pl.DataFrame:
+    """Long-form Borda rank — returns ``(model_name, "Rank (Borda)")``.
+
+    Replaces the wide-form ``_get_borda_rank`` for callers with the long
+    results frame. For a 100-task benchmark, the wide form builds a 100-node
+    horizontal expression tree; this version uses a single ``rank().over()``
+    window partitioned by ``task_name`` instead.
+
+    Matches the wide-form semantics: each model earns
+    ``n_models - rank_in_task`` points per task it ran (more wins = more
+    points). Missing tasks contribute 0 (the model just has no row in that
+    partition).
+
+    ``n_models`` should equal the wide-form's ``pl.len()`` over the post-
+    filter per_task / per_language frame — i.e. the count of models that
+    survived the all-null-rows filter. Pass it explicitly when the long
+    frame includes models that got filtered out of the wide pivot (e.g.
+    per-language path where a model's entire language list explodes to
+    null scores). When ``None``, defaults to ``pl_df``'s distinct model
+    count, which matches when no models are all-null.
+    """
+    if n_models is None:
+        n_models = pl_df.get_column(model_col).n_unique()
+    return (
+        pl_df.lazy()
+        .group_by([model_col, partition_col])
+        .agg(pl.col(score_col).mean())
+        .with_columns(
+            pl.col(score_col)
+            .rank(method="average", descending=True)
+            .over(partition_col)
+            .alias("_r")
+        )
+        .group_by(model_col)
+        .agg((n_models - pl.col("_r")).sum().alias("_b"))
+        .with_columns(
+            pl.col("_b")
+            .rank(method="min", descending=True)
+            .cast(pl.Int64)
+            .alias("Rank (Borda)")
+        )
+        .select(model_col, "Rank (Borda)")
+        .collect()
     )
 
 
@@ -113,10 +236,10 @@ def _format_n_parameters(n_parameters: float | int | None) -> float | None:
     return round(float(n_parameters) / 1e9, 3)
 
 
-def _format_max_tokens(max_tokens: float | None) -> float | None:
+def _format_max_tokens(max_tokens: float | None) -> int | None:
     if max_tokens is None or max_tokens == np.inf:
         return None
-    return float(max_tokens)
+    return int(max_tokens)
 
 
 def _get_embedding_size(embed_dim: int | Sequence[int] | None) -> int | None:
@@ -129,17 +252,49 @@ def _get_embedding_size(embed_dim: int | Sequence[int] | None) -> int | None:
     return None
 
 
+def _build_per_task_pivot(
+    pl_df: pl.DataFrame,
+) -> tuple[pl.DataFrame, list[str]] | None:
+    """Pivot the long results frame to one row per model × one col per task.
+
+    Returns ``(per_task, task_cols)`` or ``None`` for the three empty-input
+    cases (empty frame, no ``model_name``, no tasks, or all-null rows). Every
+    summary/per-task builder opens with this pattern — extracted so the four
+    builders + per-task table builder don't duplicate the boilerplate.
+    """
+    if pl_df.is_empty() or "model_name" not in pl_df.columns:
+        return None
+    per_task = (
+        pl_df.group_by(["model_name", "task_name"])
+        .agg(pl.col("score").mean())
+        .pivot(on="task_name", index="model_name", values="score")
+    )
+    task_cols = [c for c in per_task.columns if c != "model_name"]
+    if not task_cols:
+        return None
+    per_task = per_task.filter(
+        pl.any_horizontal([pl.col(c).is_not_null() for c in task_cols])
+    )
+    if per_task.is_empty():
+        return None
+    return per_task, task_cols
+
+
 def _get_means_per_types(
     task_cols: list[str],
 ) -> tuple[list[pl.Expr], list[str]]:
     """Per-task-type mean expressions for a given task-column set.
 
     Returns ``(type_exprs, type_cols)``: a list of polars expressions (one per task
-    type, each already aliased via ``_split_on_capital``) and the matching column-name
-    list. The expressions can be splatted into a ``select`` / ``with_columns`` on the
-    wide task frame so we don't materialise an intermediate ``mean_per_type`` frame
-    and don't need a join to bring the type means back into the summary pipeline.
-    Means use ``skipna=False`` semantics (matches the prior pandas implementation).
+    type, each aliased with the raw CamelCase type name) and the matching
+    column-name list. The expressions can be splatted into a ``select`` /
+    ``with_columns`` on the wide task frame so we don't materialise an
+    intermediate ``mean_per_type`` frame and don't need a join to bring the type
+    means back into the summary pipeline. Means use ``skipna=False`` semantics
+    (matches the prior pandas implementation). Humanising the column name for
+    display (``BitextMining`` → ``Bitext Mining``) is the leaderboard styler's
+    job — keeping the canonical name here means the API can use it as a key
+    directly without round-tripping through ``_split_on_capital``.
     """
     task_names_per_type: dict[str, list[str]] = defaultdict(list)
     for task_name in task_cols:
@@ -150,22 +305,9 @@ def _get_means_per_types(
     type_cols: list[str] = []
     type_exprs: list[pl.Expr] = []
     for task_type, tasks in task_names_per_type.items():
-        col_name = _split_on_capital(task_type)
-        type_cols.append(col_name)
-        type_exprs.append(_skipna_false_mean(tasks).alias(col_name))
+        type_cols.append(task_type)
+        type_exprs.append(_skipna_false_mean(tasks).alias(task_type))
     return type_exprs, type_cols
-
-
-_META_STRUCT_FIELDS = {
-    "Max Tokens": pl.Float64,
-    "Embedding Dimensions": pl.Int64,
-    "Total Parameters (B)": pl.Float64,
-    "Active Parameters (B)": pl.Float64,
-    "Release Date": pl.Utf8,
-    "_model_link": pl.Utf8,
-}
-_META_STRUCT_DTYPE = pl.Struct(_META_STRUCT_FIELDS)
-_META_STRUCT_DTYPE_WITH_ZS = pl.Struct({**_META_STRUCT_FIELDS, "Zero-shot": pl.Int64})
 
 
 @functools.lru_cache(maxsize=1)
@@ -191,6 +333,76 @@ def _static_model_meta() -> dict[str, dict[str, Any]]:
     }
 
 
+@functools.cache
+def _meta_df_no_zs() -> pl.DataFrame:
+    """Polars frame view of :func:`_static_model_meta` — one row per registered model.
+
+    Cached for the process lifetime; ``MODEL_REGISTRY`` is static after import.
+    Used by :func:`_attach_model_metadata` for an inner join against the long
+    results frame's model column — replaces the prior ``map_batches`` + Python
+    per-row resolver loop.
+    """
+    return pl.DataFrame(
+        [{"model_name": name, **meta} for name, meta in _static_model_meta().items()]
+    )
+
+
+@functools.lru_cache(maxsize=128)
+def _meta_df_with_zs(task_names_key: tuple[str, ...]) -> pl.DataFrame:
+    """Per-task-set meta frame with ``Zero-shot`` pre-computed.
+
+    Cache size 128 ≈ benchmark count; each frame ~300 rows × 8 cols ≈ 10 KB.
+    """
+    return _meta_df_no_zs().with_columns(
+        pl.col("model_name")
+        .map_elements(
+            lambda n: (
+                -1
+                if (z := _zero_shot_pct_cached(n, task_names_key)) is None
+                else int(z)
+            ),
+            return_dtype=pl.Int64,
+        )
+        .alias("Zero-shot"),
+    )
+
+
+_STANDARD_META_COLS: tuple[str, ...] = (
+    "Zero-shot",
+    "Active Parameters (B)",
+    "Total Parameters (B)",
+    "Embedding Dimensions",
+    "Max Tokens",
+)
+
+
+def _order_summary_cols(
+    joint_table: pl.DataFrame,
+    *,
+    rank_col: str,
+    mean_cols: Sequence[str],
+    type_cols: Sequence[str],
+    extra_trailing: Sequence[str] = (),
+) -> pl.DataFrame:
+    """Reorder ``joint_table`` into the canonical summary column layout.
+
+    Layout: ``rank_col | Model | meta cols | mean_cols | type_cols |
+    extra_trailing | Release Date``. Columns not present in ``joint_table``
+    are silently dropped — keeps the four ``_create_summary_table_*``
+    builders from each re-spelling the ordering.
+    """
+    ordering = [
+        rank_col,
+        "Model",
+        *_STANDARD_META_COLS,
+        *mean_cols,
+        *type_cols,
+        *extra_trailing,
+        "Release Date",
+    ]
+    return joint_table.select([c for c in ordering if c in joint_table.columns])
+
+
 def _attach_model_metadata(
     joint_table: pl.DataFrame,
     task_names_key: tuple[str, ...] | None = None,
@@ -199,119 +411,336 @@ def _attach_model_metadata(
 
     Inner-joins meta columns (``Max Tokens``, ``Embedding Dimensions``, ``Total/Active
     Parameters (B)``, ``Release Date``) onto ``joint_table`` (which must have a
-    ``model_name`` column), replaces ``model_name`` with a markdown-linked ``Model``
-    column, and optionally adds a ``Zero-shot`` column when ``task_names_key`` is
-    provided (None → -1 to mirror the previous ``.fillna(-1)``).
+    ``model_name`` column), renames it to ``Model`` keeping the canonical
+    ``org/name`` identifier, and optionally adds a ``Zero-shot`` column when
+    ``task_names_key`` is provided. Presentation concerns (markdown links,
+    short-name shortening) are handled by the leaderboard styler.
+
+    Implemented as a native polars inner join against a pre-built metadata
+    frame — replaces the prior ``map_batches`` + per-row Python resolver,
+    saving ~300 Python calls and ~300 dict allocations per build.
     """
-    meta_lookup = _static_model_meta()
-    meta_dtype = (
-        _META_STRUCT_DTYPE_WITH_ZS if task_names_key is not None else _META_STRUCT_DTYPE
+    meta_df = (
+        _meta_df_no_zs() if task_names_key is None else _meta_df_with_zs(task_names_key)
     )
-
-    if task_names_key is None:
-        _resolve = meta_lookup.get
-    else:
-
-        def _resolve(name: str) -> dict[str, Any] | None:  # type: ignore[misc]
-            base = meta_lookup.get(name)
-            if base is None:
-                return None
-            z = _zero_shot_pct_cached(name, task_names_key)
-            return {**base, "Zero-shot": -1 if z is None else z}
-
-    def _fetch(names: pl.Series) -> pl.Series:
-        return pl.Series("_meta", [_resolve(n) for n in names], dtype=meta_dtype)
-
     return (
-        joint_table.with_columns(
-            _meta=pl.col("model_name").map_batches(_fetch, return_dtype=meta_dtype),
-        )
-        .filter(pl.col("_meta").is_not_null())
-        .unnest("_meta")
-        .with_columns(
-            pl.col("model_name").str.split("/").list.last().alias("_short_name"),
-        )
-        .with_columns(
-            pl.when(pl.col("_model_link").is_not_null())
-            .then("[" + pl.col("_short_name") + "](" + pl.col("_model_link") + ")")
-            .otherwise(pl.col("_short_name"))
-            .alias("Model"),
-        )
-        .drop(["_model_link", "_short_name", "model_name"])
+        joint_table.join(meta_df, on="model_name", how="inner")
+        .drop("_model_link")
+        .rename({"model_name": "Model"})
     )
 
 
-def _create_summary_table_from_benchmark_results(
-    pl_df: pl.DataFrame,
-) -> pl.DataFrame:
-    """Create summary table from a long polars pre-aggregation frame.
+@dataclass(frozen=True, slots=True)
+class _SummaryMetadata:
+    """Column pointers and default sort decision for a SummaryTable.
 
-    Stays in polars throughout (aggregation, pivot, type-means, borda, model metadata,
-    markdown link, sort, rename); converts to pandas only at the return boundary so the
-    leaderboard's pandas Styler can consume it.
+    Built once by
+    [_summary_metadata][mteb.benchmarks._create_table._summary_metadata] from
+    the benchmark's `aggregations`; consumed by
+    [_finalize_summary][mteb.benchmarks._create_table._finalize_summary] to
+    populate the canonical column order and the
+    [SummaryTable][mteb.benchmarks._create_table.SummaryTable] pointers
+    without re-deriving the same decisions inline.
 
-    Returns a DataFrame with one row per model containing summary statistics
-    and task type averages.
+    Attributes:
+        mean_cols: Mean column names to surface, in display order.
+        primary_metric_col: Column the rank is built on top of.
+        task_type_mean_col: `"Mean (TaskType)"` when surfaced, else `None`.
+        mean_public_col: `"Mean (Public)"` when surfaced as the public split
+            of `Mean (Task)` (Vidore case), else `None` — when the public
+            mean IS the primary metric (RTEB before the issue-3902 collapse)
+            the split breakdown vanishes.
+        mean_private_col: `"Mean (Private)"` when surfaced, else `None`.
+        default_sort: Column to sort by when the caller's `sort_by` is
+            `None` — `"Mean (Subset)"` for subset-weighted benchmarks (HUME)
+            and `"Rank (Borda)"` otherwise.
+    """
+
+    mean_cols: tuple[str, ...]
+    primary_metric_col: str
+    task_type_mean_col: str | None
+    mean_public_col: str | None
+    mean_private_col: str | None
+    default_sort: str
+
+
+def _summary_metadata(
+    aggregations: Sequence[BenchmarkAggregation],
+) -> _SummaryMetadata:
+    """Decide which mean columns to surface for the given aggregations.
+
+    Single source for what's a derivative of `aggregations` alone:
+    display-order `mean_cols`, `primary_metric_col` (via
+    [_PRIMARY_METRIC_PRIORITY][mteb.benchmarks.benchmark._PRIMARY_METRIC_PRIORITY]),
+    the three pointer columns (`task_type_mean_col` / `mean_public_col` /
+    `mean_private_col`), and the `default_sort` column. Pulling these out of
+    [_create_summary_table][mteb.benchmarks._create_table._create_summary_table]
+    makes the table-build path linear and keeps the "what columns mean what"
+    logic next to the enum spec.
+    """
+    has = set(aggregations)
+    public_private = BenchmarkAggregation.PUBLIC_PRIVATE in has
+    mean_task = BenchmarkAggregation.MEAN_TASK in has
+
+    # Names from the enum spec — single source of truth for column literals.
+    (mean_task_type_col,) = BenchmarkAggregation.MEAN_TASK_TYPE.summary_columns
+    public_col, private_col = BenchmarkAggregation.PUBLIC_PRIVATE.summary_columns
+    (mean_subset_col,) = BenchmarkAggregation.MEAN_SUBSET.summary_columns
+
+    return _SummaryMetadata(
+        mean_cols=tuple(
+            col
+            for agg in BenchmarkAggregation
+            if agg in has
+            for col in agg.summary_columns
+        ),
+        primary_metric_col=next(
+            (
+                agg.summary_columns[0]
+                for agg in _PRIMARY_METRIC_PRIORITY
+                if agg in has and agg.summary_columns
+            ),
+            "Rank (Borda)",
+        ),
+        task_type_mean_col=(
+            mean_task_type_col if BenchmarkAggregation.MEAN_TASK_TYPE in has else None
+        ),
+        # `Mean (Public)` is surfaced as a split breakdown only when
+        # `Mean (Task)` is the primary — otherwise the public mean IS the
+        # primary and the breakdown collapses.
+        mean_public_col=public_col if (public_private and mean_task) else None,
+        mean_private_col=private_col if public_private else None,
+        default_sort=(
+            mean_subset_col
+            if BenchmarkAggregation.MEAN_SUBSET in has
+            else "Rank (Borda)"
+        ),
+    )
+
+
+def _finalize_summary(
+    joint_table: pl.DataFrame,
+    *,
+    task_cols: list[str],
+    type_cols: list[str],
+    metadata: _SummaryMetadata,
+    sort_by: str | Sequence[str] | None,
+    rank_column_name: str | None,
+) -> SummaryTable:
+    """Attach model metadata, sort, rank, order columns, wrap in SummaryTable.
 
     Args:
-        pl_df: Long polars frame with at least ``model_name``, ``task_name``,
-            and ``score`` columns.
+        joint_table: Polars frame holding the per-model joint columns
+            (model_name + mean / per-type cols + ``Rank (Borda)``).
+        task_cols: Raw task column names — passed to the model-metadata join
+            so the cached ``Zero-shot`` column is keyed against the right set.
+        type_cols: Per-task-type mean column names to surface after the
+            means. Empty list hides them entirely.
+        metadata: Column pointers + default sort (see
+            [_SummaryMetadata][mteb.benchmarks._create_table._SummaryMetadata]).
+        sort_by: Sort column(s). ``None`` sorts by ``metadata.default_sort``
+            (``"Rank (Borda)"`` ascending, anything else descending). A
+            string or sequence sorts by those columns descending and adds a
+            1-indexed rank column named ``rank_column_name`` (default
+            ``"Rank"``); ``Rank (Borda)`` stays as a trailing column.
+        rank_column_name: Name for the 1-indexed rank column added when
+            ``sort_by`` is set. Falls back to ``"Rank"`` when ``None``.
 
     Returns:
-        DataFrame with model summaries, ready for styling in the leaderboard.
+        SummaryTable: Ready-to-style summary with metadata attached and
+            columns laid out in the canonical order.
     """
-    if pl_df.is_empty() or "model_name" not in pl_df.columns:
-        return _no_results_frame()
-
-    per_task = (
-        pl_df.group_by(["model_name", "task_name"])
-        .agg(pl.col("score").mean())
-        .pivot(on="task_name", index="model_name", values="score")
+    joint_table = _attach_model_metadata(
+        joint_table, task_names_key=tuple(sorted(task_cols))
     )
+    if sort_by is not None:
+        sort_cols = [sort_by] if isinstance(sort_by, str) else list(sort_by)
+        rank_col = rank_column_name or "Rank"
+        joint_table = joint_table.sort(
+            sort_cols, descending=True, nulls_last=True
+        ).with_columns((pl.int_range(0, pl.len()) + 1).cast(pl.Int64).alias(rank_col))
+        extra_trailing: tuple[str, ...] = ("Rank (Borda)",)
+    else:
+        default_sort = metadata.default_sort
+        joint_table = joint_table.sort(
+            default_sort,
+            descending=default_sort != "Rank (Borda)",
+            nulls_last=True,
+        )
+        rank_col = "Rank (Borda)"
+        extra_trailing = ()
+
+    return SummaryTable(
+        df=_order_summary_cols(
+            joint_table,
+            rank_col=rank_col,
+            mean_cols=metadata.mean_cols,
+            type_cols=type_cols,
+            extra_trailing=extra_trailing,
+        ),
+        rank_col=rank_col,
+        primary_metric_col=metadata.primary_metric_col,
+        task_type_mean_col=metadata.task_type_mean_col,
+        mean_public_col=metadata.mean_public_col,
+        mean_private_col=metadata.mean_private_col,
+    )
+
+
+def _create_summary_table(  # noqa: PLR0914
+    pl_df: pl.DataFrame,
+    *,
+    aggregations: Sequence[BenchmarkAggregation] | None = None,
+    sort_by: str | Sequence[str] | None = None,
+    rank_column_name: str | None = None,
+) -> SummaryTable:
+    """Build the leaderboard summary table for a benchmark.
+
+    Computes every candidate mean column up-front, then drops the ones not
+    requested by ``aggregations``. Stays in polars throughout (aggregation,
+    pivot, type-means, Borda, metadata join, sort) — the leaderboard converts
+    to pandas only at the styling boundary.
+
+    Candidate columns produced (kept or dropped based on `aggregations`):
+
+    - `Mean (Task)` — sample-weighted mean across tasks
+        ([MEAN_TASK][mteb.benchmarks.benchmark.BenchmarkAggregation.MEAN_TASK]).
+    - `Mean (TaskType)` — mean of per-task-type means
+        ([MEAN_TASK_TYPE][mteb.benchmarks.benchmark.BenchmarkAggregation.MEAN_TASK_TYPE]).
+    - One column per task type (e.g. `Retrieval`, `Classification`)
+        ([TASK_TYPES][mteb.benchmarks.benchmark.BenchmarkAggregation.TASK_TYPES]).
+    - `Mean (Public)` / `Mean (Private)` — public/private split, computed
+        when the long frame carries `is_public` and kept when
+        [PUBLIC_PRIVATE][mteb.benchmarks.benchmark.BenchmarkAggregation.PUBLIC_PRIVATE]
+        is requested.
+    - `Mean (Subset)` — subset-weighted mean across `(task, subset)` pairs,
+        only computed when
+        [MEAN_SUBSET][mteb.benchmarks.benchmark.BenchmarkAggregation.MEAN_SUBSET]
+        is in `aggregations` (needs the `subset` column).
+
+    Args:
+        pl_df: Long polars frame with at least `model_name`, `task_name`,
+            and `score` columns. `is_public` (optional) enables the
+            public/private split; `subset` (required for `MEAN_SUBSET`)
+            enables subset-weighted aggregation.
+        aggregations: Sequence of
+            [BenchmarkAggregation][mteb.benchmarks.benchmark.BenchmarkAggregation]
+            members (forwarded from
+            [Benchmark.aggregations][mteb.benchmarks.benchmark.Benchmark.aggregations]).
+            Defaults to `(MEAN_TASK, MEAN_TASK_TYPE, TASK_TYPES)`.
+        sort_by: Column(s) to sort rows by. `None` sorts by the default
+            (`Mean (Subset)` when `MEAN_SUBSET` is requested, else
+            `Rank (Borda)`). A string or sequence of strings sorts by those
+            columns descending and adds a 1-indexed rank column named
+            `rank_column_name` — `Rank (Borda)` stays as a trailing column.
+        rank_column_name: Name for the 1-indexed rank column added when
+            `sort_by` is set. Falls back to `"Rank"` when `None`.
+
+    Returns:
+        SummaryTable: One row per model — meta cols, the mean columns
+            requested by `aggregations`, and a rank column.
+            `primary_metric_col` points at the column the rank is built on
+            top of so consumers don't have to guess.
+    """
+    if aggregations is None:
+        aggregations = (
+            BenchmarkAggregation.MEAN_TASK,
+            BenchmarkAggregation.MEAN_TASK_TYPE,
+            BenchmarkAggregation.TASK_TYPES,
+        )
+    if pl_df.is_empty() or "model_name" not in pl_df.columns:
+        return _no_results_summary()
+
+    want_task_types = BenchmarkAggregation.TASK_TYPES in aggregations
+    want_subset = BenchmarkAggregation.MEAN_SUBSET in aggregations
+
+    # --- per-task wide frame (always carries is_public when present) ---
+    has_is_public = "is_public" in pl_df.columns
+    per_task_aggs = [pl.col("score").mean()]
+    if has_is_public:
+        per_task_aggs.append(pl.col("is_public").first())
+    per_task_long = pl_df.group_by(["model_name", "task_name"]).agg(*per_task_aggs)
+    per_task = per_task_long.pivot(on="task_name", index="model_name", values="score")
     task_cols = [c for c in per_task.columns if c != "model_name"]
     if not task_cols:
-        return _no_results_frame()
+        return _no_results_summary()
     per_task = per_task.filter(
         pl.any_horizontal([pl.col(c).is_not_null() for c in task_cols])
     )
     if per_task.is_empty():
-        return _no_results_frame()
+        return _no_results_summary()
+
+    # --- public/private task partitions (treat all-public when missing) ---
+    is_public_by_task: dict[str, bool] = (
+        dict(per_task_long.select("task_name", "is_public").unique().iter_rows())
+        if has_is_public
+        else {}
+    )
+    public_present = [c for c in task_cols if is_public_by_task.get(c, True)]
+    private_present = [c for c in task_cols if not is_public_by_task.get(c, True)]
+
+    # --- compute every candidate column up-front ---
+    # Column names come from the enum spec so adding/renaming an aggregation
+    # only has to touch ``_AGGREGATION_SUMMARY_COLUMNS``.
+    (mean_task_col,) = BenchmarkAggregation.MEAN_TASK.summary_columns
+    (mean_task_type_col,) = BenchmarkAggregation.MEAN_TASK_TYPE.summary_columns
+    public_col, private_col = BenchmarkAggregation.PUBLIC_PRIVATE.summary_columns
 
     type_exprs, type_cols = _get_means_per_types(task_cols)
+    joint_table = per_task.select(
+        "model_name",
+        *type_exprs,
+        _skipna_false_mean(task_cols).alias(mean_task_col),
+        _mean_or_null(public_present, public_col),
+        _mean_or_null(private_present, private_col),
+    ).with_columns(_skipna_false_mean(type_cols).alias(mean_task_type_col))
 
-    joint_table = (
-        per_task.select(
-            "model_name",
-            *type_exprs,
-            _skipna_false_mean(task_cols).alias("Mean (Task)"),
-            _get_borda_rank(task_cols).alias("Rank (Borda)"),
+    # Mean (Subset) + subset-partition Borda only when the benchmark actually
+    # wants subset weighting — costs an extra group_by we'd otherwise skip.
+    if want_subset:
+        (mean_subset_col,) = BenchmarkAggregation.MEAN_SUBSET.summary_columns
+        per_subset_long = pl_df.group_by(["model_name", "task_name", "subset"]).agg(
+            pl.col("score").mean()
         )
-        .with_columns(_skipna_false_mean(type_cols).alias("Mean (TaskType)"))
-        .sort("Rank (Borda)")
-    )
+        subset_mean = per_subset_long.group_by("model_name").agg(
+            pl.col("score").mean().alias(mean_subset_col)
+        )
+        joint_table = joint_table.join(subset_mean, on="model_name", how="left")
+        keyed = per_subset_long.with_columns(
+            (pl.col("task_name") + "::" + pl.col("subset")).alias("_ts")
+        )
+        borda_df = _borda_rank_from_long(
+            keyed, partition_col="_ts", n_models=per_task.height
+        )
+    else:
+        borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
 
-    joint_table = _attach_model_metadata(
-        joint_table, task_names_key=tuple(sorted(task_cols))
-    )
+    joint_table = joint_table.join(borda_df, on="model_name", how="left")
 
-    final_cols = [
-        "Rank (Borda)",
-        "Model",
-        "Zero-shot",
-        "Active Parameters (B)",
-        "Total Parameters (B)",
-        "Embedding Dimensions",
-        "Max Tokens",
-        "Mean (Task)",
-        "Mean (TaskType)",
-        *type_cols,
-        "Release Date",
-    ]
-    return joint_table.select([c for c in final_cols if c in joint_table.columns])
+    drop_cols: list[str] = []
+    for agg in BenchmarkAggregation:
+        if agg in aggregations:
+            continue
+        if agg is BenchmarkAggregation.TASK_TYPES:
+            drop_cols.extend(type_cols)
+        else:
+            drop_cols.extend(agg.summary_columns)
+    if drop_cols:
+        joint_table = joint_table.drop(drop_cols, strict=False)
+
+    return _finalize_summary(
+        joint_table,
+        task_cols=task_cols,
+        type_cols=type_cols if want_task_types else [],
+        metadata=_summary_metadata(aggregations),
+        sort_by=sort_by,
+        rank_column_name=rank_column_name,
+    )
 
 
 def _create_per_task_table_from_benchmark_results(
     pl_df: pl.DataFrame,
+    *,
+    pivot: tuple[pl.DataFrame, list[str]] | None = None,
 ) -> pl.DataFrame:
     """Create per-task table from a long polars pre-aggregation frame.
 
@@ -321,36 +750,25 @@ def _create_per_task_table_from_benchmark_results(
     Args:
         pl_df: Long polars frame with at least ``model_name``, ``task_name``,
             and ``score`` columns.
+        pivot: Pre-computed (per_task, task_cols) shared with
+            [_create_summary_table][mteb.benchmarks._create_table._create_summary_table].
 
     Returns:
         DataFrame with per-task scores, ready for styling in the leaderboard.
     """
-    if pl_df.is_empty() or "model_name" not in pl_df.columns:
+    if pivot is None:
+        pivot = _build_per_task_pivot(pl_df)
+    if pivot is None:
         return _no_results_frame()
+    per_task, task_cols = pivot
 
-    per_task = (
-        pl_df.group_by(["model_name", "task_name"])
-        .agg(pl.col("score").mean())
-        .pivot(on="task_name", index="model_name", values="score")
-    )
-    task_cols = [c for c in per_task.columns if c != "model_name"]
-    if not task_cols:
-        return _no_results_frame()
-
-    # Drop models whose task scores are all null.
-    per_task = per_task.filter(
-        pl.any_horizontal([pl.col(c).is_not_null() for c in task_cols])
-    )
-    if per_task.is_empty():
-        return _no_results_frame()
-
-    per_task = (
-        per_task.sort(_get_borda_rank(task_cols))
-        .with_columns(pl.col("model_name").str.split("/").list.last().alias("Model"))
-        .drop("model_name")
+    borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
+    return (
+        per_task.join(borda_df, on="model_name", how="left")
+        .sort("Rank (Borda)")
+        .rename({"model_name": "Model"})
         .select(["Model", *task_cols])
     )
-    return per_task
 
 
 def _create_per_language_table_from_benchmark_results(
@@ -412,251 +830,22 @@ def _create_per_language_table_from_benchmark_results(
     if len(lang_cols) == 1:
         per_language = per_language.sort(lang_cols[0], descending=True, nulls_last=True)
     else:
-        per_language = per_language.sort(_get_borda_rank(lang_cols))
-
-    return (
-        per_language.with_columns(
-            pl.col("model_name").str.split("/").list.last().alias("Model")
+        # Long-form Borda over the (model, language) aggregate: single
+        # window-rank instead of an N-column horizontal expression tree
+        # (matters for multilingual benchmarks with ~80 language columns).
+        # ``n_models = per_language.height`` matches the wide-form's
+        # ``pl.len()`` — lang_df may contain models whose aggregated scores
+        # are all null and got dropped from per_language.
+        borda_df = _borda_rank_from_long(
+            lang_df,
+            partition_col="language",
+            score_col="score",
+            n_models=per_language.height,
         )
-        .drop("model_name")
-        .select(["Model", *lang_cols])
-    )
-
-
-def _create_summary_table_mean_public_private(
-    pl_df: pl.DataFrame,
-    exclude_private_from_borda: bool = False,
-) -> pl.DataFrame:
-    """Create summary table that separates public and private task means.
-
-    Args:
-        pl_df: Long polars frame with at least ``model_name``, ``task_name``, ``score``,
-            and ``is_public`` columns.
-        exclude_private_from_borda: If True, calculate Borda rank using only public tasks.
-
-    Returns:
-        DataFrame with model summaries, ready for styling in the leaderboard.
-    """
-    if pl_df.is_empty() or "model_name" not in pl_df.columns:
-        return _no_results_frame()
-
-    per_task_long = pl_df.group_by(["model_name", "task_name"]).agg(
-        pl.col("score").mean(),
-        pl.col("is_public").first(),
-    )
-    public_tasks = (
-        per_task_long.filter(pl.col("is_public"))
-        .get_column("task_name")
-        .unique()
-        .to_list()
-    )
-    private_tasks = (
-        per_task_long.filter(~pl.col("is_public"))
-        .get_column("task_name")
-        .unique()
-        .to_list()
-    )
-    per_task = per_task_long.pivot(on="task_name", index="model_name", values="score")
-    task_cols = [c for c in per_task.columns if c != "model_name"]
-    if not task_cols:
-        return _no_results_frame()
-    per_task = per_task.filter(
-        pl.any_horizontal([pl.col(c).is_not_null() for c in task_cols])
-    )
-    if per_task.is_empty():
-        return _no_results_frame()
-
-    type_exprs, type_cols = _get_means_per_types(task_cols)
-
-    public_present = [c for c in public_tasks if c in task_cols]
-    private_present = [c for c in private_tasks if c in task_cols]
-    borda_cols = (
-        public_present if exclude_private_from_borda and public_present else task_cols
-    )
-
-    public_mean_expr = (
-        _skipna_false_mean(public_present).alias("Mean (Public)")
-        if public_present
-        else pl.lit(None).cast(pl.Float64).alias("Mean (Public)")
-    )
-    private_mean_expr = (
-        _skipna_false_mean(private_present).alias("Mean (Private)")
-        if private_present
-        else pl.lit(None).cast(pl.Float64).alias("Mean (Private)")
-    )
-
-    joint_table = per_task.select(
-        "model_name",
-        *type_exprs,
-        public_mean_expr,
-        private_mean_expr,
-        _get_borda_rank(borda_cols).alias("Rank (Borda)"),
-    ).sort("Rank (Borda)")
-
-    joint_table = _attach_model_metadata(joint_table)
-
-    final_cols = [
-        "Rank (Borda)",
-        "Model",
-        "Active Parameters (B)",
-        "Total Parameters (B)",
-        "Embedding Dimensions",
-        "Max Tokens",
-        "Mean (Public)",
-        "Mean (Private)",
-        *type_cols,
-        "Release Date",
-    ]
-    return joint_table.select([c for c in final_cols if c in joint_table.columns])
-
-
-def _create_summary_table_mean_subset(
-    pl_df: pl.DataFrame,
-) -> pl.DataFrame:
-    """Create summary table where each task-language subset is weighted equally.
-
-    Args:
-        pl_df: Long polars frame with at least ``model_name``, ``task_name``,
-            ``subset``, and ``score`` columns.
-
-    Returns:
-        DataFrame with model summaries, ready for styling in the leaderboard.
-    """
-    if pl_df.is_empty() or "model_name" not in pl_df.columns:
-        return _no_results_frame()
-
-    # Per-task mean (for per-type aggregation) and per-(task,subset) mean (for borda).
-    per_subset_long = pl_df.group_by(["model_name", "task_name", "subset"]).agg(
-        pl.col("score").mean()
-    )
-    per_task = (
-        per_subset_long.group_by(["model_name", "task_name"])
-        .agg(pl.col("score").mean())
-        .pivot(on="task_name", index="model_name", values="score")
-    )
-    task_cols = [c for c in per_task.columns if c != "model_name"]
-    if not task_cols:
-        return _no_results_frame()
-    per_task = per_task.filter(
-        pl.any_horizontal([pl.col(c).is_not_null() for c in task_cols])
-    )
-    if per_task.is_empty():
-        return _no_results_frame()
-
-    type_exprs, type_cols = _get_means_per_types(task_cols)
-
-    # Mean over all subset rows per model (each task-language subset weighted equally).
-    overall_subset_mean = per_subset_long.group_by("model_name").agg(
-        pl.col("score").mean().alias("Mean (Subset)")
-    )
-    # Borda over per-(task, subset) columns. Pivot creates "task__subset"-shaped names,
-    # but the exact names don't matter — we only need the score columns for ranking.
-    per_subset_wide = per_subset_long.with_columns(
-        (pl.col("task_name") + "::" + pl.col("subset")).alias("_ts")
-    ).pivot(on="_ts", index="model_name", values="score")
-    subset_cols = [c for c in per_subset_wide.columns if c != "model_name"]
-
-    joint_table = (
-        per_task.select("model_name", *type_exprs)
-        .join(overall_subset_mean, on="model_name", how="left")
-        .join(
-            per_subset_wide.select(
-                "model_name",
-                _get_borda_rank(subset_cols).alias("Rank (Borda)"),
-            ),
-            on="model_name",
-            how="left",
+        per_language = (
+            per_language.join(borda_df, on="model_name", how="left")
+            .sort("Rank (Borda)")
+            .drop("Rank (Borda)")
         )
-        .sort("Mean (Subset)", descending=True, nulls_last=True)
-    )
 
-    joint_table = _attach_model_metadata(
-        joint_table, task_names_key=tuple(sorted(task_cols))
-    )
-
-    final_cols = [
-        "Rank (Borda)",
-        "Model",
-        "Zero-shot",
-        "Active Parameters (B)",
-        "Total Parameters (B)",
-        "Embedding Dimensions",
-        "Max Tokens",
-        "Mean (Subset)",
-        *type_cols,
-        "Release Date",
-    ]
-    return joint_table.select([c for c in final_cols if c in joint_table.columns])
-
-
-def _create_summary_table_mean_task_type(
-    pl_df: pl.DataFrame, mean_column_name: str = "Mean (TaskType)"
-) -> pl.DataFrame:
-    """Create summary table where the overall mean is the mean of per-task-type means.
-
-    Args:
-        pl_df: Long polars frame with at least ``model_name``, ``task_name``,
-            and ``score`` columns.
-        mean_column_name: Name for the mean-by-task-type column. Defaults to "Mean (TaskType)".
-
-    Returns:
-        DataFrame with model summaries, ready for styling in the leaderboard.
-    """
-    if pl_df.is_empty() or "model_name" not in pl_df.columns:
-        return _no_results_frame()
-
-    per_task = (
-        pl_df.group_by(["model_name", "task_name"])
-        .agg(pl.col("score").mean())
-        .pivot(on="task_name", index="model_name", values="score")
-    )
-    task_cols = [c for c in per_task.columns if c != "model_name"]
-    if not task_cols:
-        return _no_results_frame()
-    per_task = per_task.filter(
-        pl.any_horizontal([pl.col(c).is_not_null() for c in task_cols])
-    )
-    if per_task.is_empty():
-        return _no_results_frame()
-
-    type_exprs, type_cols = _get_means_per_types(task_cols)
-
-    joint_table = (
-        per_task.select(
-            "model_name",
-            *type_exprs,
-            _get_borda_rank(task_cols).alias("Rank (Borda)"),
-        )
-        .with_columns(_skipna_false_mean(type_cols).alias(mean_column_name))
-        .sort(mean_column_name, descending=True, nulls_last=True)
-        .with_columns((pl.int_range(0, pl.len()) + 1).cast(pl.Int64).alias("Rank"))
-    )
-
-    joint_table = _attach_model_metadata(
-        joint_table, task_names_key=tuple(sorted(task_cols))
-    )
-
-    # Renames specific to mean-task-type variants (Vidore/MIEB).
-    renames: dict[str, str] = {}
-    if "Any Any Multilingual Retrieval" in joint_table.columns:
-        renames["Any Any Multilingual Retrieval"] = "Multilingual Retrieval"
-    if "Any Any Retrieval" in joint_table.columns:
-        renames["Any Any Retrieval"] = "Retrieval"
-    if renames:
-        joint_table = joint_table.rename(renames)
-        type_cols = [renames.get(c, c) for c in type_cols]
-
-    final_cols = [
-        "Rank",
-        "Model",
-        "Zero-shot",
-        "Active Parameters (B)",
-        "Total Parameters (B)",
-        "Embedding Dimensions",
-        "Max Tokens",
-        mean_column_name,
-        *type_cols,
-        "Rank (Borda)",
-        "Release Date",
-    ]
-    return joint_table.select([c for c in final_cols if c in joint_table.columns])
+    return per_language.rename({"model_name": "Model"}).select(["Model", *lang_cols])
