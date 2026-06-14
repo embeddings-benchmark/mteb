@@ -198,6 +198,10 @@ def _style_number_of_parameters(num_params: float) -> str:
 def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
     """Apply pandas-Styler formatting to a raw summary DataFrame.
 
+    Drops the ``_variant_id`` passthrough column if present — it's a
+    bookkeeping column for the API's variant aggregation and not meant for
+    the Gradio leaderboard's score grid.
+
     Wraps the canonical ``Model`` column (``org/name``) in a markdown link
     using the cached model-metadata URL, and humanises the per-task-type
     column headers (``BitextMining`` → ``Bitext Mining``). Both transforms
@@ -209,6 +213,8 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
     """
     from mteb.benchmarks._create_table import _split_on_capital, _static_model_meta
 
+    if "_variant_id" in joint_table.columns:
+        joint_table = joint_table.drop(columns="_variant_id")
     joint_table = _wrap_model_column(joint_table, _static_model_meta())
 
     excluded_columns = [
@@ -292,6 +298,8 @@ def _apply_per_task_table_styling(per_task: pd.DataFrame) -> gr.DataFrame:
     Returns:
         Styled gr.DataFrame ready for display in the leaderboard
     """
+    if "_variant_id" in per_task.columns:
+        per_task = per_task.drop(columns="_variant_id")
     if "Model" in per_task.columns:
         per_task = per_task.assign(Model=per_task["Model"].map(_short_name))
     task_score_columns = per_task.select_dtypes("number").columns

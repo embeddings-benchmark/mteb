@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import functools
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import polars as pl
 
@@ -49,6 +49,7 @@ _SUMMARY_META_COLS = frozenset(
         "Rank (Mean Task)",
         "Rank",
         "Model",
+        "_variant_id",
         "Zero-shot",
         "Active Parameters (B)",
         "Total Parameters (B)",
@@ -83,23 +84,23 @@ def _empty_summary(
 
 def _per_task_rows_and_cols(
     per_task_pl: pl.DataFrame,
-) -> tuple[dict[str, dict[str, float]], list[str]]:
-    """Index the per-task table by ``Model`` and surface its task columns.
+) -> tuple[dict[tuple[str, str], dict[str, float]], list[str]]:
+    """Index the per-task table by ``(Model, variant_id)`` and surface task columns.
 
-    Returns ``({model -> {task: score}}, task_cols)``. Both empty when
-    ``per_task_pl`` is the ``_no_results_frame`` sentinel or has no ``Model``
-    column — collapses the duplicated empty-frame guard the summary builder
-    used to apply at two separate call sites.
+    Returns ``({(model, variant_id) -> {task: score}}, task_cols)``. ``variant_id``
+    is the empty string for base rows; experiment variants get a stable id from
+    the long frame's ``experiments`` dict so they stay separated from the base.
+    Both outputs are empty when ``per_task_pl`` is the ``_no_results_frame``
+    sentinel or has no ``Model`` column.
     """
     if "No results" in per_task_pl.columns or "Model" not in per_task_pl.columns:
         return {}, []
-    task_cols = [c for c in per_task_pl.columns if c != "Model"]
-    rows = {
-        prow["Model"]: {
-            col: float(v) for col in task_cols if (v := prow[col]) is not None
-        }
-        for prow in per_task_pl.iter_rows(named=True)
-    }
+    meta_cols = {"Model", "_variant_id"}
+    task_cols = [c for c in per_task_pl.columns if c not in meta_cols]
+    rows: dict[tuple[str, str], dict[str, float]] = {}
+    for prow in per_task_pl.iter_rows(named=True):
+        key = (prow["Model"], prow.get("_variant_id") or "")
+        rows[key] = {col: float(v) for col in task_cols if (v := prow[col]) is not None}
     return rows, task_cols
 
 
@@ -297,6 +298,31 @@ async def build_benchmark_summary(  # noqa: PLR0914
 
     trained_on_by_model = _trained_on_map_cached(bench.name)
 
+    # Per-(model, variant_id) experiments kwargs — drives
+    # SummaryRowSchema.experiments. Built from the long frame's
+    # ``experiments`` column so variant rows can surface the exact ablation
+    # dict that produced them. Empty when the parquet pre-dates the
+    # experiments work.
+    variants_by_model: dict[tuple[str, str], dict[str, Any]] = {}
+    if "experiments" in long_df.columns:
+        from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
+
+        variant_pl = (
+            long_df.lazy()
+            .filter(pl.col("experiments").is_not_null())
+            .select(["model_name", "experiments"])
+            .unique(subset=["model_name", "experiments"])
+            .collect()
+        )
+        for vr in variant_pl.iter_rows(named=True):
+            exp = vr["experiments"]
+            if not exp:
+                continue
+            vid = _serialize_experiment_kwargs_to_name(exp) or ""
+            if not vid:
+                continue
+            variants_by_model[(vr["model_name"], vid)] = dict(exp)
+
     # The SummaryTable wrapper tells us exactly which columns hold what — no
     # introspection needed. Type columns are still detected by exclusion since
     # those vary per benchmark (raw CamelCase like "Retrieval", "STS").
@@ -313,6 +339,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
     rows: list[SummaryRowSchema] = []
     for idx, row in enumerate(summary_pl.iter_rows(named=True)):
         full = row["Model"]
+        variant_id = row.get("_variant_id") or ""
         meta = MODEL_REGISTRY.get(full)
         if meta is None:
             logger.debug("Skipping %s — no MODEL_REGISTRY entry", full)
@@ -331,12 +358,14 @@ async def build_benchmark_summary(  # noqa: PLR0914
         scores_by_task_type = {
             col: v for col in type_cols if (v := row[col]) is not None
         }
-        scores_by_task = per_task_rows.get(full, {})
+        scores_by_task = per_task_rows.get((full, variant_id), {})
 
         if language_filtered and scores_by_task:
             scores_by_task_type, mean_task, mean_type = _recompute_lenient_means(
                 scores_by_task, task_to_type
             )
+
+        experiments_kwargs = variants_by_model.get((full, variant_id))
 
         rows.append(
             SummaryRowSchema.model_construct(
@@ -362,6 +391,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
                 scores_by_task_type=scores_by_task_type,
                 scores_by_task=scores_by_task,
                 trained_on_tasks=list(trained_on_by_model.get(full, ())),
+                experiments=experiments_kwargs,
             )
         )
 
