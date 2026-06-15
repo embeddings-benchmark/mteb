@@ -129,7 +129,7 @@ class HybridSearch:
                 "fusion_strategy must be one of 'rrf', 'dbsf', 'relative-score-fusion', or a callable"
             )
 
-        combined_name = f"hybrid-{self.fusion_name}/{'-'.join(names)}"
+        combined_name = f"mteb/hybrid-{self.fusion_name}-{'-'.join(names)}"
         self.mteb_model_meta = ModelMeta.create_empty(
             overwrites={
                 "name": combined_name,

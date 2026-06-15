@@ -14,9 +14,9 @@ def hybrid_bm25s_e5_loader(model_name: str, **kwargs) -> HybridSearch:
     )
 
 
-hybrid_bm25s_e5 = ModelMeta(
+hybrid_bm25s_e5_rrf = ModelMeta(
     loader=hybrid_bm25s_e5_loader,
-    name="mteb/hybrid-bm25s-e5-small",
+    name="mteb/hybrid-rrf-baseline-bm25s-multilingual-e5-small",
     model_type=["hybrid"],
     languages=["eng-Latn"],
     open_weights=True,
@@ -50,7 +50,7 @@ def hybrid_bm25s_e5_dbsf_loader(model_name: str, **kwargs) -> HybridSearch:
 
 hybrid_bm25s_e5_dbsf = ModelMeta(
     loader=hybrid_bm25s_e5_dbsf_loader,
-    name="mteb/hybrid-bm25s-e5-small-dbsf",
+    name="mteb/hybrid-dbsf-baseline-bm25s-multilingual-e5-small",
     model_type=["hybrid"],
     languages=["eng-Latn"],
     open_weights=True,
@@ -86,7 +86,7 @@ def hybrid_bm25s_e5_relative_score_fusion_loader(
 
 hybrid_bm25s_e5_relative_score_fusion = ModelMeta(
     loader=hybrid_bm25s_e5_relative_score_fusion_loader,
-    name="mteb/hybrid-bm25s-e5-small-relative-score-fusion",
+    name="mteb/hybrid-relative-score-fusion-baseline-bm25s-multilingual-e5-small",
     model_type=["hybrid"],
     languages=["eng-Latn"],
     open_weights=True,
@@ -118,9 +118,9 @@ def hybrid_baseline_encoder_e5_loader(model_name: str, **kwargs) -> HybridSearch
     )
 
 
-hybrid_baseline_encoder_e5 = ModelMeta(
+hybrid_baseline_encoder_e5_rrf = ModelMeta(
     loader=hybrid_baseline_encoder_e5_loader,
-    name="mteb/hybrid-baseline-encoder-e5-small",
+    name="mteb/hybrid-rrf-baseline-random-encoder-multilingual-e5-small",
     model_type=["hybrid"],
     languages=["eng-Latn"],
     open_weights=True,
