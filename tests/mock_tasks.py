@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import io
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import datasets
 import numpy as np
@@ -7122,21 +7122,3 @@ class MockSymCustomVideoAudiSTSTask(AbsTaskSTS):
         self.dataset = self.dataset.cast_column("video", Video())
         self.dataset = self.dataset.cast_column("audio", Audio())
         self.data_loaded = True
-
-
-class MockTask(AbsTaskAggregate):
-    metadata = AggregateTaskMetadata(
-        name="MockTask",
-        description="Mock task containing all mock/test tasks for model validation.",
-        type="Classification",
-        eval_splits=["test"],
-        main_score="accuracy",
-        tasks=[],
-    )
-
-    def __init__(self, **kwargs: Any):
-        from tests.task_grid import ALL_TASK_TEST_GRID
-
-        self.metadata.tasks = ALL_TASK_TEST_GRID
-        self.metadata._compute_unfilled_cases()
-        super().__init__(**kwargs)
