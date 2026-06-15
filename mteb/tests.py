@@ -2,23 +2,19 @@ from __future__ import annotations
 
 try:
     from tests.task_grid import (
-        ALL_TASK_TEST_GRID as all_test_tasks,
+        ALL_TASK_TEST_GRID,
+        MOCK_MAEB_TASK_GRID,
+        MOCK_MIEB_TASK_GRID,
+        MOCK_MVEB_TASK_GRID,
+        MOCK_TASK_TEST_GRID,
     )
-    from tests.task_grid import (
-        MOCK_MAEB_TASK_GRID as test_tasks_audio,
-    )
-    from tests.task_grid import (
-        MOCK_MIEB_TASK_GRID as test_tasks_image,
-    )
-    from tests.task_grid import (
-        MOCK_MVEB_TASK_GRID as test_tasks_video,
-    )
-    from tests.task_grid import (
-        MOCK_TASK_TEST_GRID as test_tasks,
-    )
-    from tests.task_grid import (
-        MOCK_TASK_TEST_GRID as test_tasks_text,
-    )
+
+    all_test_tasks = ALL_TASK_TEST_GRID
+    test_tasks_audio = MOCK_MAEB_TASK_GRID
+    test_tasks_image = MOCK_MIEB_TASK_GRID
+    test_tasks_video = MOCK_MVEB_TASK_GRID
+    test_tasks = MOCK_TASK_TEST_GRID
+    test_tasks_text = MOCK_TASK_TEST_GRID
 except ImportError as e:
     raise ImportError(
         "mteb.tests is only available for local development and requires the tests folder from the repository."
