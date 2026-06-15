@@ -1,5 +1,6 @@
 import mteb
-from tests import MockSentenceTransformer, MockTask, test_tasks
+from tests import MockTask, test_tasks
+from tests.mock_models import MockSentenceTransformer
 
 
 def test_mteb_tests_import():
