@@ -27,7 +27,7 @@ class TUNABenchV2TRetrieval(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2025-01-01", "2025-12-31"),
-        domains=["Web", "Spoken"],
+        domains=["Web"],
         task_subtypes=["Caption Pairing"],
         license="cc-by-4.0",
         annotations_creators="human-annotated",
