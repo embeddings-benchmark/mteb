@@ -1,13 +1,17 @@
 from __future__ import annotations
 
 import time
+from unittest.mock import patch
 
 import pytest
 
 from mteb.timing import TimingStack
 
 
-def test_timing_stack():
+@patch("mteb.timing.time.monotonic")
+def test_timing_stack(mock_monotonic):
+    mock_monotonic.side_effect = [10.0, 10.0, 10.01, 10.01, 10.02]
+
     timer1 = TimingStack()
     assert timer1.phases == []
     assert timer1._start_time is None
