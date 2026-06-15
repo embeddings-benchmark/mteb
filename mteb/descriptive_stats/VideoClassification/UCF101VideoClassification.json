@@ -1,0 +1,404 @@
+{
+    "test": {
+        "num_samples": 1944,
+        "samples_in_train": 0,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": {
+            "total_duration_seconds": 13304.320000000025,
+            "total_frames": 332608,
+            "min_width": 320,
+            "average_width": 320.0,
+            "max_width": 320,
+            "min_height": 240,
+            "average_height": 240.0,
+            "max_height": 240,
+            "min_duration_seconds": 1.2,
+            "average_duration_seconds": 6.843786008230466,
+            "max_duration_seconds": 31.72,
+            "unique_videos": 1942,
+            "average_fps": 25.0,
+            "fps": {
+                "25": 1944
+            },
+            "min_resolution": [
+                320,
+                240
+            ],
+            "average_resolution": [
+                320.0,
+                240.0
+            ],
+            "max_resolution": [
+                320,
+                240
+            ],
+            "resolutions": {
+                "320x240": 1944
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 51,
+            "labels": {
+                "0": {
+                    "count": 44
+                },
+                "1": {
+                    "count": 32
+                },
+                "2": {
+                    "count": 41
+                },
+                "3": {
+                    "count": 35
+                },
+                "4": {
+                    "count": 31
+                },
+                "5": {
+                    "count": 43
+                },
+                "6": {
+                    "count": 37
+                },
+                "7": {
+                    "count": 38
+                },
+                "8": {
+                    "count": 33
+                },
+                "9": {
+                    "count": 30
+                },
+                "10": {
+                    "count": 43
+                },
+                "11": {
+                    "count": 49
+                },
+                "12": {
+                    "count": 37
+                },
+                "13": {
+                    "count": 36
+                },
+                "14": {
+                    "count": 39
+                },
+                "15": {
+                    "count": 36
+                },
+                "16": {
+                    "count": 49
+                },
+                "17": {
+                    "count": 33
+                },
+                "18": {
+                    "count": 40
+                },
+                "19": {
+                    "count": 36
+                },
+                "20": {
+                    "count": 37
+                },
+                "21": {
+                    "count": 37
+                },
+                "22": {
+                    "count": 33
+                },
+                "24": {
+                    "count": 33
+                },
+                "23": {
+                    "count": 45
+                },
+                "25": {
+                    "count": 28
+                },
+                "26": {
+                    "count": 34
+                },
+                "27": {
+                    "count": 41
+                },
+                "28": {
+                    "count": 46
+                },
+                "29": {
+                    "count": 34
+                },
+                "30": {
+                    "count": 39
+                },
+                "31": {
+                    "count": 34
+                },
+                "32": {
+                    "count": 37
+                },
+                "33": {
+                    "count": 44
+                },
+                "34": {
+                    "count": 41
+                },
+                "35": {
+                    "count": 49
+                },
+                "36": {
+                    "count": 48
+                },
+                "37": {
+                    "count": 44
+                },
+                "38": {
+                    "count": 28
+                },
+                "39": {
+                    "count": 43
+                },
+                "40": {
+                    "count": 46
+                },
+                "41": {
+                    "count": 31
+                },
+                "42": {
+                    "count": 41
+                },
+                "43": {
+                    "count": 32
+                },
+                "44": {
+                    "count": 34
+                },
+                "45": {
+                    "count": 33
+                },
+                "46": {
+                    "count": 39
+                },
+                "47": {
+                    "count": 43
+                },
+                "48": {
+                    "count": 28
+                },
+                "49": {
+                    "count": 35
+                },
+                "50": {
+                    "count": 45
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 4893,
+        "samples_in_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": {
+            "total_duration_seconds": 34559.52000000005,
+            "total_frames": 863988,
+            "min_width": 320,
+            "average_width": 320.0,
+            "max_width": 320,
+            "min_height": 240,
+            "average_height": 240.0,
+            "max_height": 240,
+            "min_duration_seconds": 1.6,
+            "average_duration_seconds": 7.063053341508287,
+            "max_duration_seconds": 71.04,
+            "unique_videos": 4889,
+            "average_fps": 25.0,
+            "fps": {
+                "25": 4893
+            },
+            "min_resolution": [
+                320,
+                240
+            ],
+            "average_resolution": [
+                320.0,
+                240.0
+            ],
+            "max_resolution": [
+                320,
+                240
+            ],
+            "resolutions": {
+                "320x240": 4893
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 51,
+            "labels": {
+                "0": {
+                    "count": 101
+                },
+                "1": {
+                    "count": 82
+                },
+                "2": {
+                    "count": 104
+                },
+                "3": {
+                    "count": 97
+                },
+                "4": {
+                    "count": 77
+                },
+                "5": {
+                    "count": 112
+                },
+                "6": {
+                    "count": 90
+                },
+                "7": {
+                    "count": 93
+                },
+                "8": {
+                    "count": 76
+                },
+                "9": {
+                    "count": 82
+                },
+                "10": {
+                    "count": 112
+                },
+                "11": {
+                    "count": 114
+                },
+                "12": {
+                    "count": 97
+                },
+                "13": {
+                    "count": 95
+                },
+                "14": {
+                    "count": 99
+                },
+                "15": {
+                    "count": 103
+                },
+                "16": {
+                    "count": 118
+                },
+                "17": {
+                    "count": 77
+                },
+                "18": {
+                    "count": 86
+                },
+                "19": {
+                    "count": 89
+                },
+                "20": {
+                    "count": 89
+                },
+                "21": {
+                    "count": 100
+                },
+                "22": {
+                    "count": 97
+                },
+                "24": {
+                    "count": 107
+                },
+                "23": {
+                    "count": 105
+                },
+                "25": {
+                    "count": 96
+                },
+                "26": {
+                    "count": 77
+                },
+                "27": {
+                    "count": 106
+                },
+                "28": {
+                    "count": 112
+                },
+                "29": {
+                    "count": 89
+                },
+                "30": {
+                    "count": 92
+                },
+                "31": {
+                    "count": 76
+                },
+                "32": {
+                    "count": 77
+                },
+                "33": {
+                    "count": 120
+                },
+                "34": {
+                    "count": 110
+                },
+                "35": {
+                    "count": 115
+                },
+                "36": {
+                    "count": 107
+                },
+                "37": {
+                    "count": 113
+                },
+                "38": {
+                    "count": 83
+                },
+                "39": {
+                    "count": 118
+                },
+                "40": {
+                    "count": 98
+                },
+                "41": {
+                    "count": 79
+                },
+                "42": {
+                    "count": 96
+                },
+                "43": {
+                    "count": 80
+                },
+                "44": {
+                    "count": 82
+                },
+                "45": {
+                    "count": 93
+                },
+                "46": {
+                    "count": 101
+                },
+                "47": {
+                    "count": 93
+                },
+                "48": {
+                    "count": 76
+                },
+                "49": {
+                    "count": 95
+                },
+                "50": {
+                    "count": 107
+                }
+            }
+        }
+    }
+}

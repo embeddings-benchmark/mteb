@@ -1,3 +1,4 @@
+from .afri_xnli import AfriXNLI
 from .indic_xnli_pair_classification import IndicXnliPairClassification
 from .opusparcus_pc import OpusparcusPC
 from .paws_x_pair_classification import PawsXPairClassification
@@ -10,6 +11,7 @@ __all__ = [
     "RTE3",
     "XNLI",
     "XNLIV2",
+    "AfriXNLI",
     "IndicXnliPairClassification",
     "OpusparcusPC",
     "PawsXPairClassification",

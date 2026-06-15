@@ -40,7 +40,7 @@ class VoxCelebClustering(AbsTaskClustering):
     max_fraction_of_documents_to_embed = None
     input_column_name: str = "audio"
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         ds = self.dataset
         # Remove 'Disagreement' samples and '<mixed>' samples
         ds = ds.filter(lambda x: x["label"] not in ["Disagreement", "<mixed>"])  # noqa: PLR6201

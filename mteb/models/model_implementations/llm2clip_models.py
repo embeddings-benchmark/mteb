@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -34,12 +33,9 @@ MODEL2PROCESSOR = {
 
 
 def llm2clip_loader(model_name, **kwargs):
-    from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcessor
-
-    requires_package(
-        llm2clip_loader, "llm2vec", model_name, "pip install 'mteb[llm2vec]'"
-    )
     from llm2vec import LLM2Vec
+    from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcessor
+    from transformers.modeling_outputs import BaseModelOutputWithPooling
 
     class LLM2CLIPAbsEncoder(AbsEncoder):
         def __init__(
@@ -48,8 +44,6 @@ def llm2clip_loader(model_name, **kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
-            requires_image_dependencies()
-
             if model_name not in MODEL2PROCESSOR:
                 raise Exception(
                     f"This model {model_name} is not in the supported mode list: {list(MODEL2PROCESSOR.keys())}."
@@ -115,6 +109,8 @@ def llm2clip_loader(model_name, **kwargs):
                         batch["text"], convert_to_tensor=True
                     ).to(self.device)
                     text_features = self.model.get_text_features(text_features)
+                    if isinstance(text_features, BaseModelOutputWithPooling):
+                        text_features = text_features.pooler_output
                     text_features /= text_features.norm(dim=-1, keepdim=True)
                     all_text_embeddings.append(text_features.cpu().to(torch.float32))
 
@@ -139,6 +135,8 @@ def llm2clip_loader(model_name, **kwargs):
                         return_tensors="pt",
                     ).pixel_values.to(self.device)
                     image_features = self.model.get_image_features(input_pixels)
+                    if isinstance(image_features, BaseModelOutputWithPooling):
+                        image_features = image_features.pooler_output
                     image_features /= image_features.norm(dim=-1, keepdim=True)
                     all_image_embeddings.append(image_features.cpu().to(torch.float32))
 
@@ -208,6 +206,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
+    extra_requirements_groups=["llm2vec"],
 )
 
 # NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
@@ -234,6 +233,7 @@ llm2clip_openai_l_14_224 = ModelMeta(
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
+    extra_requirements_groups=["llm2vec"],
 )
 
 llm2clip_openai_b_16 = ModelMeta(
@@ -259,4 +259,5 @@ llm2clip_openai_b_16 = ModelMeta(
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
+    extra_requirements_groups=["llm2vec"],
 )

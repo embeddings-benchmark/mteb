@@ -10,10 +10,10 @@ import pytest
 import yaml
 
 from mteb.cli.build_cli import (
-    _available_benchmarks,  # noqa: PLC2701
-    _available_tasks,  # noqa: PLC2701
-    _create_meta,  # noqa: PLC2701
-    _leaderboard,  # noqa: PLC2701
+    _available_benchmarks,
+    _available_tasks,
+    _create_meta,
+    _leaderboard,
     run,
 )
 

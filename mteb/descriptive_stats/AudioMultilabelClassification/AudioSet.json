@@ -1,0 +1,3218 @@
+{
+    "test": {
+        "num_samples": 17141,
+        "samples_in_train": 9,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 169636.8799387755,
+            "min_duration_seconds": 0.7935,
+            "average_duration_seconds": 9.89655679008083,
+            "max_duration_seconds": 10.000793650793652,
+            "unique_audios": 17119,
+            "average_sampling_rate": 47664.62866810571,
+            "sampling_rates": {
+                "48000": 15667,
+                "44100": 1474
+            }
+        },
+        "video_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 2.5531765941310307,
+            "max_labels_per_text": 11,
+            "unique_labels": 527,
+            "labels": {
+                "Smash, crash": {
+                    "count": 50
+                },
+                "Sink (filling or washing)": {
+                    "count": 52
+                },
+                "Water tap, faucet": {
+                    "count": 66
+                },
+                "Speech": {
+                    "count": 4419
+                },
+                "Hands": {
+                    "count": 49
+                },
+                "Inside, small room": {
+                    "count": 479
+                },
+                "Heart murmur": {
+                    "count": 49
+                },
+                "Music": {
+                    "count": 4654
+                },
+                "Radio": {
+                    "count": 52
+                },
+                "Beep, bleep": {
+                    "count": 49
+                },
+                "Female speech, woman speaking": {
+                    "count": 59
+                },
+                "Rattle": {
+                    "count": 52
+                },
+                "Sniff": {
+                    "count": 52
+                },
+                "Engine knocking": {
+                    "count": 56
+                },
+                "Engine": {
+                    "count": 173
+                },
+                "Idling": {
+                    "count": 80
+                },
+                "Explosion": {
+                    "count": 46
+                },
+                "Sawing": {
+                    "count": 55
+                },
+                "Wood": {
+                    "count": 151
+                },
+                "Reversing beeps": {
+                    "count": 51
+                },
+                "Truck": {
+                    "count": 89
+                },
+                "Vehicle": {
+                    "count": 698
+                },
+                "Oink": {
+                    "count": 48
+                },
+                "Laughter": {
+                    "count": 96
+                },
+                "Television": {
+                    "count": 49
+                },
+                "Funny music": {
+                    "count": 45
+                },
+                "Horse": {
+                    "count": 73
+                },
+                "Neigh, whinny": {
+                    "count": 44
+                },
+                "Animal": {
+                    "count": 586
+                },
+                "Finger snapping": {
+                    "count": 47
+                },
+                "Bathtub (filling or washing)": {
+                    "count": 42
+                },
+                "Domestic animals, pets": {
+                    "count": 295
+                },
+                "Fill (with liquid)": {
+                    "count": 53
+                },
+                "Pump (liquid)": {
+                    "count": 53
+                },
+                "Water": {
+                    "count": 239
+                },
+                "Gush": {
+                    "count": 50
+                },
+                "Bird": {
+                    "count": 187
+                },
+                "White noise": {
+                    "count": 54
+                },
+                "Outside, urban or manmade": {
+                    "count": 177
+                },
+                "Firecracker": {
+                    "count": 42
+                },
+                "Crackle": {
+                    "count": 50
+                },
+                "Maraca": {
+                    "count": 48
+                },
+                "Sanding": {
+                    "count": 55
+                },
+                "Rub": {
+                    "count": 127
+                },
+                "Plop": {
+                    "count": 45
+                },
+                "Filing (rasp)": {
+                    "count": 56
+                },
+                "Electric piano": {
+                    "count": 55
+                },
+                "Harpsichord": {
+                    "count": 56
+                },
+                "Keyboard (musical)": {
+                    "count": 134
+                },
+                "Chopping (food)": {
+                    "count": 47
+                },
+                "Babbling": {
+                    "count": 50
+                },
+                "Splinter": {
+                    "count": 54
+                },
+                "Bird flight, flapping wings": {
+                    "count": 46
+                },
+                "Boat, Water vehicle": {
+                    "count": 223
+                },
+                "Ship": {
+                    "count": 56
+                },
+                "Sailboat, sailing ship": {
+                    "count": 57
+                },
+                "Scissors": {
+                    "count": 52
+                },
+                "Chink, clink": {
+                    "count": 48
+                },
+                "Angry music": {
+                    "count": 53
+                },
+                "Smoke detector, smoke alarm": {
+                    "count": 48
+                },
+                "Chant": {
+                    "count": 48
+                },
+                "Ambulance (siren)": {
+                    "count": 54
+                },
+                "Emergency vehicle": {
+                    "count": 121
+                },
+                "Siren": {
+                    "count": 181
+                },
+                "Hammer": {
+                    "count": 58
+                },
+                "Tools": {
+                    "count": 93
+                },
+                "Hair dryer": {
+                    "count": 50
+                },
+                "Piano": {
+                    "count": 83
+                },
+                "Clip-clop": {
+                    "count": 55
+                },
+                "Subway, metro, underground": {
+                    "count": 58
+                },
+                "Railroad car, train wagon": {
+                    "count": 155
+                },
+                "Train horn": {
+                    "count": 54
+                },
+                "Rail transport": {
+                    "count": 161
+                },
+                "Train": {
+                    "count": 160
+                },
+                "Drum": {
+                    "count": 171
+                },
+                "Drum kit": {
+                    "count": 73
+                },
+                "Drum roll": {
+                    "count": 56
+                },
+                "Rimshot": {
+                    "count": 69
+                },
+                "Snare drum": {
+                    "count": 72
+                },
+                "Bass drum": {
+                    "count": 81
+                },
+                "Percussion": {
+                    "count": 215
+                },
+                "Didgeridoo": {
+                    "count": 54
+                },
+                "Foghorn": {
+                    "count": 54
+                },
+                "Run": {
+                    "count": 50
+                },
+                "Breaking": {
+                    "count": 47
+                },
+                "Rodents, rats, mice": {
+                    "count": 51
+                },
+                "Hiccup": {
+                    "count": 53
+                },
+                "Inside, large room or hall": {
+                    "count": 133
+                },
+                "Tap": {
+                    "count": 55
+                },
+                "Howl": {
+                    "count": 51
+                },
+                "Yip": {
+                    "count": 54
+                },
+                "Dog": {
+                    "count": 193
+                },
+                "Whimper (dog)": {
+                    "count": 48
+                },
+                "Squish": {
+                    "count": 53
+                },
+                "Electric toothbrush": {
+                    "count": 49
+                },
+                "A capella": {
+                    "count": 54
+                },
+                "Wail, moan": {
+                    "count": 41
+                },
+                "Typewriter": {
+                    "count": 53
+                },
+                "Swing music": {
+                    "count": 50
+                },
+                "Soul music": {
+                    "count": 56
+                },
+                "Cat": {
+                    "count": 96
+                },
+                "Meow": {
+                    "count": 56
+                },
+                "Snicker": {
+                    "count": 54
+                },
+                "Rain": {
+                    "count": 86
+                },
+                "Rustle": {
+                    "count": 51
+                },
+                "Raindrop": {
+                    "count": 54
+                },
+                "Typing": {
+                    "count": 52
+                },
+                "Power windows, electric windows": {
+                    "count": 54
+                },
+                "Car": {
+                    "count": 250
+                },
+                "Purr": {
+                    "count": 56
+                },
+                "Boom": {
+                    "count": 53
+                },
+                "Scratching (performance technique)": {
+                    "count": 56
+                },
+                "Scratch": {
+                    "count": 53
+                },
+                "Drum machine": {
+                    "count": 60
+                },
+                "Harmonica": {
+                    "count": 50
+                },
+                "Wind instrument, woodwind instrument": {
+                    "count": 224
+                },
+                "Brass instrument": {
+                    "count": 179
+                },
+                "French horn": {
+                    "count": 51
+                },
+                "Jingle, tinkle": {
+                    "count": 48
+                },
+                "Patter": {
+                    "count": 56
+                },
+                "Lawn mower": {
+                    "count": 56
+                },
+                "Aircraft engine": {
+                    "count": 51
+                },
+                "Fixed-wing aircraft, airplane": {
+                    "count": 59
+                },
+                "Aircraft": {
+                    "count": 99
+                },
+                "Toilet flush": {
+                    "count": 46
+                },
+                "Cough": {
+                    "count": 42
+                },
+                "Breathing": {
+                    "count": 49
+                },
+                "Child singing": {
+                    "count": 50
+                },
+                "Whale vocalization": {
+                    "count": 48
+                },
+                "Insect": {
+                    "count": 141
+                },
+                "Mosquito": {
+                    "count": 47
+                },
+                "Fly, housefly": {
+                    "count": 94
+                },
+                "Clarinet": {
+                    "count": 55
+                },
+                "Civil defense siren": {
+                    "count": 52
+                },
+                "Telephone dialing, DTMF": {
+                    "count": 47
+                },
+                "Buzzer": {
+                    "count": 55
+                },
+                "Fire alarm": {
+                    "count": 50
+                },
+                "Fart": {
+                    "count": 48
+                },
+                "Sizzle": {
+                    "count": 64
+                },
+                "Stir": {
+                    "count": 57
+                },
+                "Frying (food)": {
+                    "count": 58
+                },
+                "Keys jangling": {
+                    "count": 52
+                },
+                "Choir": {
+                    "count": 84
+                },
+                "Male singing": {
+                    "count": 55
+                },
+                "Electronic tuner": {
+                    "count": 53
+                },
+                "Snoring": {
+                    "count": 51
+                },
+                "Rowboat, canoe, kayak": {
+                    "count": 58
+                },
+                "Crowd": {
+                    "count": 126
+                },
+                "Battle cry": {
+                    "count": 54
+                },
+                "Electric guitar": {
+                    "count": 115
+                },
+                "Guitar": {
+                    "count": 274
+                },
+                "Musical instrument": {
+                    "count": 369
+                },
+                "Bang": {
+                    "count": 51
+                },
+                "Plucked string instrument": {
+                    "count": 232
+                },
+                "Folk music": {
+                    "count": 47
+                },
+                "Middle Eastern music": {
+                    "count": 43
+                },
+                "Lullaby": {
+                    "count": 50
+                },
+                "Motorboat, speedboat": {
+                    "count": 56
+                },
+                "Ocean": {
+                    "count": 59
+                },
+                "Jazz": {
+                    "count": 53
+                },
+                "Hubbub, speech noise, speech babble": {
+                    "count": 50
+                },
+                "Hip hop music": {
+                    "count": 51
+                },
+                "Sliding door": {
+                    "count": 54
+                },
+                "Fowl": {
+                    "count": 179
+                },
+                "Cluck": {
+                    "count": 42
+                },
+                "Chicken, rooster": {
+                    "count": 62
+                },
+                "Toot": {
+                    "count": 53
+                },
+                "Traffic noise, roadway noise": {
+                    "count": 61
+                },
+                "Scary music": {
+                    "count": 48
+                },
+                "Wind chime": {
+                    "count": 47
+                },
+                "Chime": {
+                    "count": 49
+                },
+                "Techno": {
+                    "count": 78
+                },
+                "Zing": {
+                    "count": 43
+                },
+                "Saxophone": {
+                    "count": 53
+                },
+                "Throat clearing": {
+                    "count": 50
+                },
+                "Cymbal": {
+                    "count": 60
+                },
+                "Hi-hat": {
+                    "count": 53
+                },
+                "Burst, pop": {
+                    "count": 52
+                },
+                "Dubstep": {
+                    "count": 83
+                },
+                "Hoot": {
+                    "count": 53
+                },
+                "Owl": {
+                    "count": 54
+                },
+                "Sound effect": {
+                    "count": 40
+                },
+                "Mouse": {
+                    "count": 51
+                },
+                "Slap, smack": {
+                    "count": 50
+                },
+                "Sidetone": {
+                    "count": 53
+                },
+                "Child speech, kid speaking": {
+                    "count": 159
+                },
+                "Singing": {
+                    "count": 292
+                },
+                "Rock music": {
+                    "count": 81
+                },
+                "Shout": {
+                    "count": 52
+                },
+                "Rock and roll": {
+                    "count": 75
+                },
+                "Clickety-clack": {
+                    "count": 57
+                },
+                "Mains hum": {
+                    "count": 56
+                },
+                "Hum": {
+                    "count": 71
+                },
+                "Air brake": {
+                    "count": 56
+                },
+                "Rapping": {
+                    "count": 55
+                },
+                "Theremin": {
+                    "count": 51
+                },
+                "Squeak": {
+                    "count": 51
+                },
+                "Medium engine (mid frequency)": {
+                    "count": 53
+                },
+                "Engine starting": {
+                    "count": 56
+                },
+                "Sonar": {
+                    "count": 48
+                },
+                "Eruption": {
+                    "count": 52
+                },
+                "Goat": {
+                    "count": 48
+                },
+                "Music for children": {
+                    "count": 50
+                },
+                "Stomach rumble": {
+                    "count": 41
+                },
+                "Gunshot, gunfire": {
+                    "count": 138
+                },
+                "Cap gun": {
+                    "count": 45
+                },
+                "Canidae, dogs, wolves": {
+                    "count": 52
+                },
+                "Bark": {
+                    "count": 51
+                },
+                "Growling": {
+                    "count": 56
+                },
+                "Field recording": {
+                    "count": 55
+                },
+                "Cattle, bovinae": {
+                    "count": 53
+                },
+                "Moo": {
+                    "count": 51
+                },
+                "Livestock, farm animals, working animals": {
+                    "count": 99
+                },
+                "Camera": {
+                    "count": 51
+                },
+                "Organ": {
+                    "count": 115
+                },
+                "Hammond organ": {
+                    "count": 57
+                },
+                "Pour": {
+                    "count": 49
+                },
+                "Trickle, dribble": {
+                    "count": 50
+                },
+                "Machine gun": {
+                    "count": 49
+                },
+                "Tubular bells": {
+                    "count": 53
+                },
+                "Tick": {
+                    "count": 55
+                },
+                "Boing": {
+                    "count": 40
+                },
+                "Creak": {
+                    "count": 50
+                },
+                "Flute": {
+                    "count": 46
+                },
+                "Acoustic guitar": {
+                    "count": 84
+                },
+                "Steel guitar, slide guitar": {
+                    "count": 56
+                },
+                "Strum": {
+                    "count": 56
+                },
+                "Motor vehicle (road)": {
+                    "count": 77
+                },
+                "Accelerating, revving, vroom": {
+                    "count": 131
+                },
+                "Trombone": {
+                    "count": 53
+                },
+                "Ratchet, pawl": {
+                    "count": 48
+                },
+                "Pulleys": {
+                    "count": 51
+                },
+                "Mechanisms": {
+                    "count": 91
+                },
+                "Cutlery, silverware": {
+                    "count": 51
+                },
+                "Dishes, pots, and pans": {
+                    "count": 51
+                },
+                "Thunk": {
+                    "count": 47
+                },
+                "Video game music": {
+                    "count": 47
+                },
+                "Background music": {
+                    "count": 54
+                },
+                "Soundtrack music": {
+                    "count": 48
+                },
+                "Whistle": {
+                    "count": 49
+                },
+                "Train whistle": {
+                    "count": 56
+                },
+                "Steam whistle": {
+                    "count": 66
+                },
+                "Steam": {
+                    "count": 55
+                },
+                "Hiss": {
+                    "count": 78
+                },
+                "Whimper": {
+                    "count": 45
+                },
+                "Silence": {
+                    "count": 47
+                },
+                "Clapping": {
+                    "count": 52
+                },
+                "Mechanical fan": {
+                    "count": 55
+                },
+                "Jet engine": {
+                    "count": 58
+                },
+                "Harmonic": {
+                    "count": 50
+                },
+                "Throbbing": {
+                    "count": 52
+                },
+                "Blender": {
+                    "count": 51
+                },
+                "Train wheels squealing": {
+                    "count": 56
+                },
+                "Blues": {
+                    "count": 55
+                },
+                "Alarm": {
+                    "count": 53
+                },
+                "Wind": {
+                    "count": 170
+                },
+                "Wind noise (microphone)": {
+                    "count": 139
+                },
+                "Bee, wasp, etc.": {
+                    "count": 50
+                },
+                "Bird vocalization, bird call, bird song": {
+                    "count": 151
+                },
+                "Chirp, tweet": {
+                    "count": 62
+                },
+                "Conversation": {
+                    "count": 50
+                },
+                "Male speech, man speaking": {
+                    "count": 58
+                },
+                "Chuckle, chortle": {
+                    "count": 54
+                },
+                "Crushing": {
+                    "count": 54
+                },
+                "Drill": {
+                    "count": 55
+                },
+                "Power tool": {
+                    "count": 72
+                },
+                "Whip": {
+                    "count": 50
+                },
+                "Echo": {
+                    "count": 53
+                },
+                "Effects unit": {
+                    "count": 102
+                },
+                "Distortion": {
+                    "count": 107
+                },
+                "Scrape": {
+                    "count": 47
+                },
+                "Chainsaw": {
+                    "count": 52
+                },
+                "Environmental noise": {
+                    "count": 48
+                },
+                "String section": {
+                    "count": 54
+                },
+                "Reverberation": {
+                    "count": 55
+                },
+                "Microwave oven": {
+                    "count": 52
+                },
+                "Ding": {
+                    "count": 54
+                },
+                "Clang": {
+                    "count": 50
+                },
+                "Knock": {
+                    "count": 45
+                },
+                "Humming": {
+                    "count": 42
+                },
+                "Rustling leaves": {
+                    "count": 54
+                },
+                "Air conditioning": {
+                    "count": 55
+                },
+                "Applause": {
+                    "count": 51
+                },
+                "Static": {
+                    "count": 50
+                },
+                "Tender music": {
+                    "count": 55
+                },
+                "Waterfall": {
+                    "count": 53
+                },
+                "Zither": {
+                    "count": 49
+                },
+                "Pizzicato": {
+                    "count": 115
+                },
+                "Funk": {
+                    "count": 49
+                },
+                "Bow-wow": {
+                    "count": 62
+                },
+                "Motorcycle": {
+                    "count": 50
+                },
+                "Biting": {
+                    "count": 54
+                },
+                "Tuning fork": {
+                    "count": 53
+                },
+                "Sad music": {
+                    "count": 47
+                },
+                "Church bell": {
+                    "count": 54
+                },
+                "Afrobeat": {
+                    "count": 51
+                },
+                "Fusillade": {
+                    "count": 44
+                },
+                "Whack, thwack": {
+                    "count": 46
+                },
+                "Sigh": {
+                    "count": 46
+                },
+                "New-age music": {
+                    "count": 52
+                },
+                "Cheering": {
+                    "count": 52
+                },
+                "Children shouting": {
+                    "count": 53
+                },
+                "Gasp": {
+                    "count": 47
+                },
+                "Toothbrush": {
+                    "count": 50
+                },
+                "Pig": {
+                    "count": 45
+                },
+                "Snort": {
+                    "count": 50
+                },
+                "Shuffle": {
+                    "count": 56
+                },
+                "Harp": {
+                    "count": 50
+                },
+                "Belly laugh": {
+                    "count": 52
+                },
+                "Disco": {
+                    "count": 51
+                },
+                "Gears": {
+                    "count": 47
+                },
+                "Heavy engine (low frequency)": {
+                    "count": 56
+                },
+                "Heart sounds, heartbeat": {
+                    "count": 57
+                },
+                "Music of Africa": {
+                    "count": 63
+                },
+                "Reggae": {
+                    "count": 45
+                },
+                "Exciting music": {
+                    "count": 47
+                },
+                "Rattle (instrument)": {
+                    "count": 49
+                },
+                "Grunt": {
+                    "count": 43
+                },
+                "Outside, rural or natural": {
+                    "count": 157
+                },
+                "Pant": {
+                    "count": 47
+                },
+                "Drawer open or close": {
+                    "count": 54
+                },
+                "Door": {
+                    "count": 57
+                },
+                "Jingle (music)": {
+                    "count": 50
+                },
+                "Salsa music": {
+                    "count": 53
+                },
+                "Rhythm and blues": {
+                    "count": 52
+                },
+                "Sheep": {
+                    "count": 52
+                },
+                "Bleat": {
+                    "count": 49
+                },
+                "Busy signal": {
+                    "count": 46
+                },
+                "Cash register": {
+                    "count": 53
+                },
+                "Arrow": {
+                    "count": 55
+                },
+                "Ska": {
+                    "count": 54
+                },
+                "Music of Latin America": {
+                    "count": 49
+                },
+                "Bicycle": {
+                    "count": 56
+                },
+                "Bicycle bell": {
+                    "count": 50
+                },
+                "Cowbell": {
+                    "count": 57
+                },
+                "Zipper (clothing)": {
+                    "count": 52
+                },
+                "Waves, surf": {
+                    "count": 54
+                },
+                "Ding-dong": {
+                    "count": 42
+                },
+                "Gargling": {
+                    "count": 41
+                },
+                "House music": {
+                    "count": 50
+                },
+                "Electronic dance music": {
+                    "count": 72
+                },
+                "Dance music": {
+                    "count": 71
+                },
+                "Electronica": {
+                    "count": 70
+                },
+                "Punk rock": {
+                    "count": 58
+                },
+                "Psychedelic rock": {
+                    "count": 51
+                },
+                "Vibraphone": {
+                    "count": 54
+                },
+                "Thunderstorm": {
+                    "count": 53
+                },
+                "Thunder": {
+                    "count": 52
+                },
+                "Rain on surface": {
+                    "count": 52
+                },
+                "Theme music": {
+                    "count": 53
+                },
+                "Timpani": {
+                    "count": 51
+                },
+                "Bellow": {
+                    "count": 52
+                },
+                "Crowing, cock-a-doodle-doo": {
+                    "count": 45
+                },
+                "Screaming": {
+                    "count": 38
+                },
+                "Children playing": {
+                    "count": 48
+                },
+                "Fireworks": {
+                    "count": 48
+                },
+                "Doorbell": {
+                    "count": 49
+                },
+                "Dental drill, dentist's drill": {
+                    "count": 52
+                },
+                "Drip": {
+                    "count": 52
+                },
+                "Croak": {
+                    "count": 49
+                },
+                "Frog": {
+                    "count": 50
+                },
+                "Cello": {
+                    "count": 59
+                },
+                "Double bass": {
+                    "count": 52
+                },
+                "Violin, fiddle": {
+                    "count": 53
+                },
+                "Bowed string instrument": {
+                    "count": 101
+                },
+                "Heavy metal": {
+                    "count": 60
+                },
+                "Progressive rock": {
+                    "count": 64
+                },
+                "Grunge": {
+                    "count": 51
+                },
+                "Basketball bounce": {
+                    "count": 52
+                },
+                "Bouncing": {
+                    "count": 52
+                },
+                "Printer": {
+                    "count": 50
+                },
+                "Slam": {
+                    "count": 51
+                },
+                "Orchestra": {
+                    "count": 53
+                },
+                "Trumpet": {
+                    "count": 50
+                },
+                "Classical music": {
+                    "count": 51
+                },
+                "Slosh": {
+                    "count": 48
+                },
+                "Giggle": {
+                    "count": 54
+                },
+                "Narration, monologue": {
+                    "count": 55
+                },
+                "Fire": {
+                    "count": 54
+                },
+                "Baby laughter": {
+                    "count": 56
+                },
+                "Yell": {
+                    "count": 45
+                },
+                "Glass": {
+                    "count": 54
+                },
+                "Jingle bell": {
+                    "count": 50
+                },
+                "Burping, eructation": {
+                    "count": 48
+                },
+                "Yodeling": {
+                    "count": 53
+                },
+                "Ice cream truck, ice cream van": {
+                    "count": 52
+                },
+                "Caterwaul": {
+                    "count": 56
+                },
+                "Vocal music": {
+                    "count": 66
+                },
+                "Traditional music": {
+                    "count": 54
+                },
+                "Liquid": {
+                    "count": 53
+                },
+                "Turkey": {
+                    "count": 56
+                },
+                "Gobble": {
+                    "count": 56
+                },
+                "Bus": {
+                    "count": 54
+                },
+                "Gurgling": {
+                    "count": 52
+                },
+                "Wood block": {
+                    "count": 52
+                },
+                "Clicking": {
+                    "count": 48
+                },
+                "Rumble": {
+                    "count": 50
+                },
+                "Synthesizer": {
+                    "count": 49
+                },
+                "Whoosh, swoosh, swish": {
+                    "count": 51
+                },
+                "Sewing machine": {
+                    "count": 56
+                },
+                "Sitar": {
+                    "count": 49
+                },
+                "Crying, sobbing": {
+                    "count": 40
+                },
+                "Skidding": {
+                    "count": 49
+                },
+                "Tire squeal": {
+                    "count": 50
+                },
+                "Race car, auto racing": {
+                    "count": 64
+                },
+                "Whistling": {
+                    "count": 46
+                },
+                "Squeal": {
+                    "count": 51
+                },
+                "Whispering": {
+                    "count": 51
+                },
+                "Skateboard": {
+                    "count": 55
+                },
+                "Electric shaver, electric razor": {
+                    "count": 49
+                },
+                "Pink noise": {
+                    "count": 50
+                },
+                "Splash, splatter": {
+                    "count": 42
+                },
+                "Fire engine, fire truck (siren)": {
+                    "count": 51
+                },
+                "Single-lens reflex camera": {
+                    "count": 51
+                },
+                "Coo": {
+                    "count": 50
+                },
+                "Pigeon, dove": {
+                    "count": 50
+                },
+                "Ping": {
+                    "count": 51
+                },
+                "Roll": {
+                    "count": 50
+                },
+                "Stream": {
+                    "count": 52
+                },
+                "Drum and bass": {
+                    "count": 66
+                },
+                "Trance music": {
+                    "count": 52
+                },
+                "Buzz": {
+                    "count": 52
+                },
+                "Independent music": {
+                    "count": 56
+                },
+                "Tambourine": {
+                    "count": 54
+                },
+                "Walk, footsteps": {
+                    "count": 49
+                },
+                "Car alarm": {
+                    "count": 50
+                },
+                "Flamenco": {
+                    "count": 54
+                },
+                "Crow": {
+                    "count": 59
+                },
+                "Caw": {
+                    "count": 57
+                },
+                "Ambient music": {
+                    "count": 49
+                },
+                "Police car (siren)": {
+                    "count": 52
+                },
+                "Song": {
+                    "count": 135
+                },
+                "Chatter": {
+                    "count": 46
+                },
+                "Bass guitar": {
+                    "count": 52
+                },
+                "Tapping (guitar technique)": {
+                    "count": 54
+                },
+                "Whoop": {
+                    "count": 54
+                },
+                "Chorus effect": {
+                    "count": 52
+                },
+                "Bagpipes": {
+                    "count": 58
+                },
+                "Pulse": {
+                    "count": 48
+                },
+                "Beatboxing": {
+                    "count": 46
+                },
+                "Honk": {
+                    "count": 53
+                },
+                "Goose": {
+                    "count": 61
+                },
+                "Electronic organ": {
+                    "count": 59
+                },
+                "Artillery fire": {
+                    "count": 48
+                },
+                "Snake": {
+                    "count": 37
+                },
+                "Mantra": {
+                    "count": 54
+                },
+                "Clock": {
+                    "count": 54
+                },
+                "Coin (dropping)": {
+                    "count": 55
+                },
+                "Vibration": {
+                    "count": 56
+                },
+                "Ukulele": {
+                    "count": 53
+                },
+                "Marimba, xylophone": {
+                    "count": 57
+                },
+                "Glockenspiel": {
+                    "count": 48
+                },
+                "Mallet percussion": {
+                    "count": 46
+                },
+                "Quack": {
+                    "count": 55
+                },
+                "Noise": {
+                    "count": 56
+                },
+                "Air horn, truck horn": {
+                    "count": 51
+                },
+                "Bell": {
+                    "count": 52
+                },
+                "Computer keyboard": {
+                    "count": 51
+                },
+                "Writing": {
+                    "count": 51
+                },
+                "Shuffling cards": {
+                    "count": 57
+                },
+                "Cacophony": {
+                    "count": 53
+                },
+                "Wild animals": {
+                    "count": 42
+                },
+                "Roar": {
+                    "count": 50
+                },
+                "Roaring cats (lions, tigers)": {
+                    "count": 44
+                },
+                "Accordion": {
+                    "count": 55
+                },
+                "Change ringing (campanology)": {
+                    "count": 58
+                },
+                "Baby cry, infant cry": {
+                    "count": 36
+                },
+                "Wheeze": {
+                    "count": 51
+                },
+                "Ringtone": {
+                    "count": 46
+                },
+                "Sneeze": {
+                    "count": 37
+                },
+                "Squawk": {
+                    "count": 50
+                },
+                "Telephone": {
+                    "count": 45
+                },
+                "Christmas music": {
+                    "count": 44
+                },
+                "Chirp tone": {
+                    "count": 52
+                },
+                "Propeller, airscrew": {
+                    "count": 55
+                },
+                "Steelpan": {
+                    "count": 53
+                },
+                "Country": {
+                    "count": 56
+                },
+                "Bluegrass": {
+                    "count": 60
+                },
+                "Happy music": {
+                    "count": 53
+                },
+                "Tick-tock": {
+                    "count": 56
+                },
+                "Whir": {
+                    "count": 54
+                },
+                "Vehicle horn, car horn, honking": {
+                    "count": 54
+                },
+                "Thump, thud": {
+                    "count": 46
+                },
+                "Pop music": {
+                    "count": 70
+                },
+                "Inside, public space": {
+                    "count": 45
+                },
+                "Spray": {
+                    "count": 54
+                },
+                "Chewing, mastication": {
+                    "count": 42
+                },
+                "Cricket": {
+                    "count": 55
+                },
+                "Telephone bell ringing": {
+                    "count": 47
+                },
+                "Female singing": {
+                    "count": 47
+                },
+                "Crack": {
+                    "count": 46
+                },
+                "Singing bowl": {
+                    "count": 51
+                },
+                "Boiling": {
+                    "count": 55
+                },
+                "Tabla": {
+                    "count": 54
+                },
+                "Carnatic music": {
+                    "count": 56
+                },
+                "Music of Bollywood": {
+                    "count": 36
+                },
+                "Jackhammer": {
+                    "count": 55
+                },
+                "Gospel music": {
+                    "count": 46
+                },
+                "Opera": {
+                    "count": 54
+                },
+                "Music of Asia": {
+                    "count": 50
+                },
+                "Groan": {
+                    "count": 43
+                },
+                "Sampler": {
+                    "count": 54
+                },
+                "Shatter": {
+                    "count": 47
+                },
+                "Banjo": {
+                    "count": 57
+                },
+                "Cupboard open or close": {
+                    "count": 48
+                },
+                "Sine wave": {
+                    "count": 53
+                },
+                "Electronic music": {
+                    "count": 52
+                },
+                "Mandolin": {
+                    "count": 55
+                },
+                "Duck": {
+                    "count": 50
+                },
+                "Gong": {
+                    "count": 51
+                },
+                "Dial tone": {
+                    "count": 50
+                },
+                "Vacuum cleaner": {
+                    "count": 47
+                },
+                "Alarm clock": {
+                    "count": 54
+                },
+                "Crunch": {
+                    "count": 46
+                },
+                "Light engine (high frequency)": {
+                    "count": 53
+                },
+                "Wedding music": {
+                    "count": 53
+                },
+                "Speech synthesizer": {
+                    "count": 54
+                },
+                "Synthetic singing": {
+                    "count": 45
+                },
+                "Helicopter": {
+                    "count": 52
+                },
+                "Flap": {
+                    "count": 51
+                },
+                "Christian music": {
+                    "count": 36
+                },
+                "Car passing by": {
+                    "count": 53
+                },
+                "Chop": {
+                    "count": 49
+                },
+                "Tearing": {
+                    "count": 49
+                },
+                "Crumpling, crinkling": {
+                    "count": 51
+                },
+                "Clatter": {
+                    "count": 58
+                },
+                "Shofar": {
+                    "count": 52
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 18683,
+        "samples_in_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 185066.06181292518,
+            "min_duration_seconds": 0.5135,
+            "average_duration_seconds": 9.905585923723448,
+            "max_duration_seconds": 10.000793650793652,
+            "unique_audios": 18670,
+            "average_sampling_rate": 47626.971043194346,
+            "sampling_rates": {
+                "48000": 16896,
+                "44100": 1787
+            }
+        },
+        "video_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 2.4003104426483968,
+            "max_labels_per_text": 12,
+            "unique_labels": 527,
+            "labels": {
+                "Speech": {
+                    "count": 4752
+                },
+                "Gush": {
+                    "count": 53
+                },
+                "Goat": {
+                    "count": 51
+                },
+                "Music": {
+                    "count": 5179
+                },
+                "Smoke detector, smoke alarm": {
+                    "count": 54
+                },
+                "Gunshot, gunfire": {
+                    "count": 152
+                },
+                "Cap gun": {
+                    "count": 54
+                },
+                "Ping": {
+                    "count": 51
+                },
+                "Singing": {
+                    "count": 444
+                },
+                "Bang": {
+                    "count": 49
+                },
+                "Sink (filling or washing)": {
+                    "count": 50
+                },
+                "Water tap, faucet": {
+                    "count": 67
+                },
+                "Water": {
+                    "count": 218
+                },
+                "Blues": {
+                    "count": 51
+                },
+                "Country": {
+                    "count": 53
+                },
+                "Guitar": {
+                    "count": 325
+                },
+                "Acoustic guitar": {
+                    "count": 57
+                },
+                "Musical instrument": {
+                    "count": 497
+                },
+                "Strum": {
+                    "count": 55
+                },
+                "Plucked string instrument": {
+                    "count": 279
+                },
+                "Bluegrass": {
+                    "count": 57
+                },
+                "Traditional music": {
+                    "count": 48
+                },
+                "Knock": {
+                    "count": 52
+                },
+                "Inside, small room": {
+                    "count": 634
+                },
+                "Train whistle": {
+                    "count": 52
+                },
+                "Rattle": {
+                    "count": 57
+                },
+                "Engine": {
+                    "count": 174
+                },
+                "Idling": {
+                    "count": 58
+                },
+                "Medium engine (mid frequency)": {
+                    "count": 58
+                },
+                "Squeak": {
+                    "count": 49
+                },
+                "Walk, footsteps": {
+                    "count": 54
+                },
+                "Liquid": {
+                    "count": 48
+                },
+                "Boiling": {
+                    "count": 53
+                },
+                "Vehicle": {
+                    "count": 773
+                },
+                "Air brake": {
+                    "count": 56
+                },
+                "Radio": {
+                    "count": 54
+                },
+                "Organ": {
+                    "count": 104
+                },
+                "Electronic organ": {
+                    "count": 54
+                },
+                "Boat, Water vehicle": {
+                    "count": 221
+                },
+                "Ship": {
+                    "count": 53
+                },
+                "Ska": {
+                    "count": 53
+                },
+                "Clarinet": {
+                    "count": 52
+                },
+                "Horse": {
+                    "count": 64
+                },
+                "Neigh, whinny": {
+                    "count": 47
+                },
+                "Animal": {
+                    "count": 637
+                },
+                "Tender music": {
+                    "count": 48
+                },
+                "Splinter": {
+                    "count": 54
+                },
+                "Wood": {
+                    "count": 148
+                },
+                "Carnatic music": {
+                    "count": 52
+                },
+                "Ambulance (siren)": {
+                    "count": 62
+                },
+                "Car alarm": {
+                    "count": 57
+                },
+                "Emergency vehicle": {
+                    "count": 123
+                },
+                "Siren": {
+                    "count": 172
+                },
+                "Female speech, woman speaking": {
+                    "count": 51
+                },
+                "Run": {
+                    "count": 47
+                },
+                "Timpani": {
+                    "count": 51
+                },
+                "Buzzer": {
+                    "count": 49
+                },
+                "Crackle": {
+                    "count": 54
+                },
+                "Flap": {
+                    "count": 54
+                },
+                "Clatter": {
+                    "count": 53
+                },
+                "Folk music": {
+                    "count": 49
+                },
+                "Reversing beeps": {
+                    "count": 51
+                },
+                "Truck": {
+                    "count": 67
+                },
+                "Tabla": {
+                    "count": 49
+                },
+                "Drum": {
+                    "count": 166
+                },
+                "Percussion": {
+                    "count": 233
+                },
+                "Bass guitar": {
+                    "count": 54
+                },
+                "Roaring cats (lions, tigers)": {
+                    "count": 43
+                },
+                "Camera": {
+                    "count": 49
+                },
+                "Yodeling": {
+                    "count": 55
+                },
+                "Middle Eastern music": {
+                    "count": 45
+                },
+                "Soundtrack music": {
+                    "count": 41
+                },
+                "Sliding door": {
+                    "count": 56
+                },
+                "Exciting music": {
+                    "count": 50
+                },
+                "Chopping (food)": {
+                    "count": 53
+                },
+                "Cat": {
+                    "count": 104
+                },
+                "Domestic animals, pets": {
+                    "count": 368
+                },
+                "Meow": {
+                    "count": 47
+                },
+                "Mandolin": {
+                    "count": 58
+                },
+                "Engine starting": {
+                    "count": 54
+                },
+                "Heart murmur": {
+                    "count": 44
+                },
+                "Engine knocking": {
+                    "count": 56
+                },
+                "Lawn mower": {
+                    "count": 57
+                },
+                "Whale vocalization": {
+                    "count": 50
+                },
+                "Gong": {
+                    "count": 52
+                },
+                "Theme music": {
+                    "count": 48
+                },
+                "Drawer open or close": {
+                    "count": 58
+                },
+                "Electric toothbrush": {
+                    "count": 56
+                },
+                "Chink, clink": {
+                    "count": 54
+                },
+                "Pump (liquid)": {
+                    "count": 57
+                },
+                "Techno": {
+                    "count": 48
+                },
+                "Ukulele": {
+                    "count": 56
+                },
+                "Inside, large room or hall": {
+                    "count": 142
+                },
+                "Motorboat, speedboat": {
+                    "count": 57
+                },
+                "Wind": {
+                    "count": 153
+                },
+                "Wind noise (microphone)": {
+                    "count": 131
+                },
+                "Zipper (clothing)": {
+                    "count": 52
+                },
+                "Humming": {
+                    "count": 48
+                },
+                "Dental drill, dentist's drill": {
+                    "count": 55
+                },
+                "Helicopter": {
+                    "count": 52
+                },
+                "Television": {
+                    "count": 40
+                },
+                "Doorbell": {
+                    "count": 43
+                },
+                "Pink noise": {
+                    "count": 44
+                },
+                "Snoring": {
+                    "count": 54
+                },
+                "Car passing by": {
+                    "count": 55
+                },
+                "Sheep": {
+                    "count": 49
+                },
+                "Bleat": {
+                    "count": 48
+                },
+                "Computer keyboard": {
+                    "count": 51
+                },
+                "Jingle, tinkle": {
+                    "count": 44
+                },
+                "Shuffle": {
+                    "count": 52
+                },
+                "Caterwaul": {
+                    "count": 52
+                },
+                "Cutlery, silverware": {
+                    "count": 53
+                },
+                "Dishes, pots, and pans": {
+                    "count": 52
+                },
+                "Cymbal": {
+                    "count": 58
+                },
+                "Drum kit": {
+                    "count": 87
+                },
+                "Hi-hat": {
+                    "count": 55
+                },
+                "Rimshot": {
+                    "count": 80
+                },
+                "Bass drum": {
+                    "count": 80
+                },
+                "Finger snapping": {
+                    "count": 45
+                },
+                "Filing (rasp)": {
+                    "count": 52
+                },
+                "Rub": {
+                    "count": 130
+                },
+                "Female singing": {
+                    "count": 52
+                },
+                "Oink": {
+                    "count": 45
+                },
+                "Belly laugh": {
+                    "count": 43
+                },
+                "Steelpan": {
+                    "count": 54
+                },
+                "Opera": {
+                    "count": 53
+                },
+                "Creak": {
+                    "count": 53
+                },
+                "Bagpipes": {
+                    "count": 55
+                },
+                "Wind instrument, woodwind instrument": {
+                    "count": 229
+                },
+                "Scratching (performance technique)": {
+                    "count": 50
+                },
+                "Drum and bass": {
+                    "count": 51
+                },
+                "Scratch": {
+                    "count": 49
+                },
+                "Choir": {
+                    "count": 54
+                },
+                "Male singing": {
+                    "count": 53
+                },
+                "Applause": {
+                    "count": 50
+                },
+                "Male speech, man speaking": {
+                    "count": 49
+                },
+                "Yell": {
+                    "count": 54
+                },
+                "Bicycle bell": {
+                    "count": 45
+                },
+                "Synthetic singing": {
+                    "count": 52
+                },
+                "Fart": {
+                    "count": 48
+                },
+                "Video game music": {
+                    "count": 40
+                },
+                "Outside, rural or natural": {
+                    "count": 212
+                },
+                "Squish": {
+                    "count": 50
+                },
+                "White noise": {
+                    "count": 53
+                },
+                "Drum roll": {
+                    "count": 61
+                },
+                "Snare drum": {
+                    "count": 86
+                },
+                "Church bell": {
+                    "count": 58
+                },
+                "Bell": {
+                    "count": 52
+                },
+                "Scary music": {
+                    "count": 50
+                },
+                "Coin (dropping)": {
+                    "count": 46
+                },
+                "Whimper (dog)": {
+                    "count": 50
+                },
+                "Bee, wasp, etc.": {
+                    "count": 52
+                },
+                "Insect": {
+                    "count": 144
+                },
+                "Fly, housefly": {
+                    "count": 96
+                },
+                "Fusillade": {
+                    "count": 56
+                },
+                "Motorcycle": {
+                    "count": 57
+                },
+                "Mains hum": {
+                    "count": 62
+                },
+                "Hum": {
+                    "count": 95
+                },
+                "Mouse": {
+                    "count": 50
+                },
+                "Tap": {
+                    "count": 46
+                },
+                "Music of Bollywood": {
+                    "count": 43
+                },
+                "Thump, thud": {
+                    "count": 54
+                },
+                "Electronica": {
+                    "count": 49
+                },
+                "Background music": {
+                    "count": 52
+                },
+                "Hammer": {
+                    "count": 52
+                },
+                "Rain": {
+                    "count": 96
+                },
+                "Raindrop": {
+                    "count": 55
+                },
+                "Thunderstorm": {
+                    "count": 53
+                },
+                "Thunder": {
+                    "count": 57
+                },
+                "Rain on surface": {
+                    "count": 49
+                },
+                "Singing bowl": {
+                    "count": 52
+                },
+                "Chainsaw": {
+                    "count": 57
+                },
+                "Power tool": {
+                    "count": 69
+                },
+                "Mantra": {
+                    "count": 52
+                },
+                "Crowd": {
+                    "count": 123
+                },
+                "Battle cry": {
+                    "count": 49
+                },
+                "Motor vehicle (road)": {
+                    "count": 54
+                },
+                "Noise": {
+                    "count": 51
+                },
+                "Car": {
+                    "count": 265
+                },
+                "Toothbrush": {
+                    "count": 46
+                },
+                "Drip": {
+                    "count": 48
+                },
+                "Clicking": {
+                    "count": 55
+                },
+                "Steam whistle": {
+                    "count": 65
+                },
+                "Thunk": {
+                    "count": 53
+                },
+                "Mechanical fan": {
+                    "count": 54
+                },
+                "Slosh": {
+                    "count": 46
+                },
+                "Outside, urban or manmade": {
+                    "count": 217
+                },
+                "Grunt": {
+                    "count": 43
+                },
+                "Sad music": {
+                    "count": 44
+                },
+                "Echo": {
+                    "count": 51
+                },
+                "Keys jangling": {
+                    "count": 54
+                },
+                "Scrape": {
+                    "count": 56
+                },
+                "Funny music": {
+                    "count": 42
+                },
+                "Scissors": {
+                    "count": 49
+                },
+                "Croak": {
+                    "count": 51
+                },
+                "Frog": {
+                    "count": 52
+                },
+                "Beatboxing": {
+                    "count": 51
+                },
+                "Vocal music": {
+                    "count": 50
+                },
+                "Trickle, dribble": {
+                    "count": 48
+                },
+                "Growling": {
+                    "count": 51
+                },
+                "Whack, thwack": {
+                    "count": 52
+                },
+                "Christmas music": {
+                    "count": 53
+                },
+                "Dance music": {
+                    "count": 45
+                },
+                "Toilet flush": {
+                    "count": 38
+                },
+                "Chop": {
+                    "count": 54
+                },
+                "Zing": {
+                    "count": 47
+                },
+                "Screaming": {
+                    "count": 45
+                },
+                "Cupboard open or close": {
+                    "count": 53
+                },
+                "Dog": {
+                    "count": 252
+                },
+                "Boing": {
+                    "count": 36
+                },
+                "Rumble": {
+                    "count": 50
+                },
+                "Cowbell": {
+                    "count": 53
+                },
+                "Single-lens reflex camera": {
+                    "count": 46
+                },
+                "Child speech, kid speaking": {
+                    "count": 111
+                },
+                "Children playing": {
+                    "count": 51
+                },
+                "Chewing, mastication": {
+                    "count": 46
+                },
+                "Crack": {
+                    "count": 52
+                },
+                "Reverberation": {
+                    "count": 59
+                },
+                "Bird flight, flapping wings": {
+                    "count": 44
+                },
+                "Biting": {
+                    "count": 42
+                },
+                "Crunch": {
+                    "count": 46
+                },
+                "Bow-wow": {
+                    "count": 55
+                },
+                "Funk": {
+                    "count": 48
+                },
+                "Gurgling": {
+                    "count": 50
+                },
+                "Inside, public space": {
+                    "count": 48
+                },
+                "Drill": {
+                    "count": 57
+                },
+                "Tools": {
+                    "count": 92
+                },
+                "Rapping": {
+                    "count": 47
+                },
+                "Bouncing": {
+                    "count": 53
+                },
+                "Bathtub (filling or washing)": {
+                    "count": 32
+                },
+                "Fill (with liquid)": {
+                    "count": 50
+                },
+                "Sewing machine": {
+                    "count": 59
+                },
+                "Zither": {
+                    "count": 52
+                },
+                "Pizzicato": {
+                    "count": 115
+                },
+                "Keyboard (musical)": {
+                    "count": 130
+                },
+                "Piano": {
+                    "count": 78
+                },
+                "Harmonic": {
+                    "count": 56
+                },
+                "Ding": {
+                    "count": 47
+                },
+                "Music of Africa": {
+                    "count": 44
+                },
+                "Burping, eructation": {
+                    "count": 49
+                },
+                "Baby cry, infant cry": {
+                    "count": 45
+                },
+                "Pant": {
+                    "count": 47
+                },
+                "Splash, splatter": {
+                    "count": 47
+                },
+                "Waterfall": {
+                    "count": 53
+                },
+                "Hair dryer": {
+                    "count": 44
+                },
+                "Pour": {
+                    "count": 54
+                },
+                "Tick-tock": {
+                    "count": 58
+                },
+                "Sizzle": {
+                    "count": 55
+                },
+                "Hands": {
+                    "count": 53
+                },
+                "Rock music": {
+                    "count": 64
+                },
+                "Shout": {
+                    "count": 49
+                },
+                "Rock and roll": {
+                    "count": 53
+                },
+                "Independent music": {
+                    "count": 50
+                },
+                "Gasp": {
+                    "count": 48
+                },
+                "Electronic music": {
+                    "count": 95
+                },
+                "House music": {
+                    "count": 47
+                },
+                "Pulse": {
+                    "count": 52
+                },
+                "Music of Asia": {
+                    "count": 44
+                },
+                "Arrow": {
+                    "count": 52
+                },
+                "Crow": {
+                    "count": 57
+                },
+                "Caw": {
+                    "count": 55
+                },
+                "Tambourine": {
+                    "count": 51
+                },
+                "Maraca": {
+                    "count": 52
+                },
+                "Baby laughter": {
+                    "count": 47
+                },
+                "Psychedelic rock": {
+                    "count": 52
+                },
+                "Railroad car, train wagon": {
+                    "count": 165
+                },
+                "Train horn": {
+                    "count": 56
+                },
+                "Rail transport": {
+                    "count": 171
+                },
+                "Train": {
+                    "count": 169
+                },
+                "Brass instrument": {
+                    "count": 200
+                },
+                "Orchestra": {
+                    "count": 53
+                },
+                "Classical music": {
+                    "count": 54
+                },
+                "Trance music": {
+                    "count": 53
+                },
+                "Cacophony": {
+                    "count": 51
+                },
+                "Propeller, airscrew": {
+                    "count": 54
+                },
+                "Jet engine": {
+                    "count": 58
+                },
+                "Clock": {
+                    "count": 48
+                },
+                "Electric guitar": {
+                    "count": 60
+                },
+                "Electronic tuner": {
+                    "count": 58
+                },
+                "Accordion": {
+                    "count": 54
+                },
+                "Tearing": {
+                    "count": 51
+                },
+                "Electronic dance music": {
+                    "count": 54
+                },
+                "Wail, moan": {
+                    "count": 40
+                },
+                "Machine gun": {
+                    "count": 47
+                },
+                "Sound effect": {
+                    "count": 42
+                },
+                "Patter": {
+                    "count": 54
+                },
+                "Air conditioning": {
+                    "count": 54
+                },
+                "Whip": {
+                    "count": 58
+                },
+                "Wind chime": {
+                    "count": 48
+                },
+                "Chime": {
+                    "count": 54
+                },
+                "String section": {
+                    "count": 55
+                },
+                "Fire alarm": {
+                    "count": 55
+                },
+                "Bicycle": {
+                    "count": 51
+                },
+                "Laughter": {
+                    "count": 83
+                },
+                "Giggle": {
+                    "count": 46
+                },
+                "Vibration": {
+                    "count": 58
+                },
+                "Aircraft": {
+                    "count": 103
+                },
+                "Sneeze": {
+                    "count": 39
+                },
+                "Police car (siren)": {
+                    "count": 53
+                },
+                "Telephone bell ringing": {
+                    "count": 46
+                },
+                "A capella": {
+                    "count": 53
+                },
+                "Theremin": {
+                    "count": 53
+                },
+                "Stir": {
+                    "count": 54
+                },
+                "Frying (food)": {
+                    "count": 54
+                },
+                "Fireworks": {
+                    "count": 50
+                },
+                "Sampler": {
+                    "count": 55
+                },
+                "Blender": {
+                    "count": 49
+                },
+                "Vibraphone": {
+                    "count": 52
+                },
+                "Breaking": {
+                    "count": 51
+                },
+                "Spray": {
+                    "count": 47
+                },
+                "Rustling leaves": {
+                    "count": 53
+                },
+                "Foghorn": {
+                    "count": 52
+                },
+                "Grunge": {
+                    "count": 51
+                },
+                "Afrobeat": {
+                    "count": 47
+                },
+                "Marimba, xylophone": {
+                    "count": 68
+                },
+                "Glockenspiel": {
+                    "count": 54
+                },
+                "Mallet percussion": {
+                    "count": 52
+                },
+                "Whispering": {
+                    "count": 46
+                },
+                "Harmonica": {
+                    "count": 56
+                },
+                "Canidae, dogs, wolves": {
+                    "count": 54
+                },
+                "Angry music": {
+                    "count": 53
+                },
+                "Environmental noise": {
+                    "count": 56
+                },
+                "Skidding": {
+                    "count": 55
+                },
+                "Tire squeal": {
+                    "count": 57
+                },
+                "Firecracker": {
+                    "count": 41
+                },
+                "Snake": {
+                    "count": 42
+                },
+                "Hiss": {
+                    "count": 78
+                },
+                "Rustle": {
+                    "count": 51
+                },
+                "Ratchet, pawl": {
+                    "count": 55
+                },
+                "Pulleys": {
+                    "count": 53
+                },
+                "Mechanisms": {
+                    "count": 106
+                },
+                "Narration, monologue": {
+                    "count": 50
+                },
+                "Whistle": {
+                    "count": 49
+                },
+                "Shofar": {
+                    "count": 52
+                },
+                "Hammond organ": {
+                    "count": 60
+                },
+                "Electric shaver, electric razor": {
+                    "count": 53
+                },
+                "Ocean": {
+                    "count": 64
+                },
+                "Typewriter": {
+                    "count": 52
+                },
+                "Saxophone": {
+                    "count": 53
+                },
+                "Howl": {
+                    "count": 56
+                },
+                "Sonar": {
+                    "count": 51
+                },
+                "Babbling": {
+                    "count": 48
+                },
+                "Chatter": {
+                    "count": 47
+                },
+                "Heavy metal": {
+                    "count": 49
+                },
+                "Printer": {
+                    "count": 53
+                },
+                "Telephone dialing, DTMF": {
+                    "count": 44
+                },
+                "Race car, auto racing": {
+                    "count": 52
+                },
+                "Flute": {
+                    "count": 50
+                },
+                "Eruption": {
+                    "count": 52
+                },
+                "Tubular bells": {
+                    "count": 54
+                },
+                "Clang": {
+                    "count": 44
+                },
+                "Dial tone": {
+                    "count": 49
+                },
+                "Hip hop music": {
+                    "count": 48
+                },
+                "Chorus effect": {
+                    "count": 54
+                },
+                "Alarm clock": {
+                    "count": 50
+                },
+                "Accelerating, revving, vroom": {
+                    "count": 54
+                },
+                "Heavy engine (low frequency)": {
+                    "count": 54
+                },
+                "Trumpet": {
+                    "count": 53
+                },
+                "Wood block": {
+                    "count": 52
+                },
+                "Sailboat, sailing ship": {
+                    "count": 57
+                },
+                "Ice cream truck, ice cream van": {
+                    "count": 50
+                },
+                "Disco": {
+                    "count": 47
+                },
+                "Sine wave": {
+                    "count": 55
+                },
+                "Chirp tone": {
+                    "count": 54
+                },
+                "Jazz": {
+                    "count": 50
+                },
+                "Pop music": {
+                    "count": 49
+                },
+                "Ringtone": {
+                    "count": 51
+                },
+                "Beep, bleep": {
+                    "count": 50
+                },
+                "Sanding": {
+                    "count": 54
+                },
+                "Artillery fire": {
+                    "count": 53
+                },
+                "Harp": {
+                    "count": 56
+                },
+                "Violin, fiddle": {
+                    "count": 58
+                },
+                "Bowed string instrument": {
+                    "count": 105
+                },
+                "Power windows, electric windows": {
+                    "count": 52
+                },
+                "Chuckle, chortle": {
+                    "count": 47
+                },
+                "Glass": {
+                    "count": 57
+                },
+                "Lullaby": {
+                    "count": 51
+                },
+                "Child singing": {
+                    "count": 49
+                },
+                "Clip-clop": {
+                    "count": 50
+                },
+                "Subway, metro, underground": {
+                    "count": 57
+                },
+                "Pig": {
+                    "count": 45
+                },
+                "Hubbub, speech noise, speech babble": {
+                    "count": 50
+                },
+                "Rowboat, canoe, kayak": {
+                    "count": 53
+                },
+                "Livestock, farm animals, working animals": {
+                    "count": 107
+                },
+                "Light engine (high frequency)": {
+                    "count": 56
+                },
+                "Cheering": {
+                    "count": 55
+                },
+                "Children shouting": {
+                    "count": 48
+                },
+                "Throat clearing": {
+                    "count": 41
+                },
+                "Crumpling, crinkling": {
+                    "count": 51
+                },
+                "Stomach rumble": {
+                    "count": 43
+                },
+                "Tuning fork": {
+                    "count": 52
+                },
+                "French horn": {
+                    "count": 59
+                },
+                "Chant": {
+                    "count": 46
+                },
+                "Flamenco": {
+                    "count": 50
+                },
+                "Cough": {
+                    "count": 44
+                },
+                "Trombone": {
+                    "count": 56
+                },
+                "Mosquito": {
+                    "count": 47
+                },
+                "Ding-dong": {
+                    "count": 50
+                },
+                "Gospel music": {
+                    "count": 50
+                },
+                "Crushing": {
+                    "count": 50
+                },
+                "Field recording": {
+                    "count": 57
+                },
+                "Roll": {
+                    "count": 55
+                },
+                "Bird": {
+                    "count": 154
+                },
+                "Bird vocalization, bird call, bird song": {
+                    "count": 111
+                },
+                "Chirp, tweet": {
+                    "count": 53
+                },
+                "Cricket": {
+                    "count": 56
+                },
+                "Plop": {
+                    "count": 52
+                },
+                "Purr": {
+                    "count": 53
+                },
+                "Slam": {
+                    "count": 44
+                },
+                "Song": {
+                    "count": 66
+                },
+                "Fire": {
+                    "count": 58
+                },
+                "Bellow": {
+                    "count": 49
+                },
+                "Groan": {
+                    "count": 47
+                },
+                "Rattle (instrument)": {
+                    "count": 47
+                },
+                "Sniff": {
+                    "count": 53
+                },
+                "Toot": {
+                    "count": 53
+                },
+                "Drum machine": {
+                    "count": 52
+                },
+                "Stream": {
+                    "count": 58
+                },
+                "Buzz": {
+                    "count": 42
+                },
+                "Wild animals": {
+                    "count": 45
+                },
+                "Roar": {
+                    "count": 42
+                },
+                "Didgeridoo": {
+                    "count": 55
+                },
+                "Rhythm and blues": {
+                    "count": 47
+                },
+                "Whir": {
+                    "count": 53
+                },
+                "Static": {
+                    "count": 57
+                },
+                "Harpsichord": {
+                    "count": 55
+                },
+                "Hiccup": {
+                    "count": 48
+                },
+                "Train wheels squealing": {
+                    "count": 59
+                },
+                "Snicker": {
+                    "count": 45
+                },
+                "Typing": {
+                    "count": 60
+                },
+                "Jingle (music)": {
+                    "count": 40
+                },
+                "Music for children": {
+                    "count": 45
+                },
+                "Fowl": {
+                    "count": 160
+                },
+                "Crowing, cock-a-doodle-doo": {
+                    "count": 33
+                },
+                "Cluck": {
+                    "count": 37
+                },
+                "Chicken, rooster": {
+                    "count": 51
+                },
+                "Music of Latin America": {
+                    "count": 51
+                },
+                "Whoosh, swoosh, swish": {
+                    "count": 54
+                },
+                "Steam": {
+                    "count": 58
+                },
+                "Hoot": {
+                    "count": 57
+                },
+                "Owl": {
+                    "count": 57
+                },
+                "Wedding music": {
+                    "count": 53
+                },
+                "Shuffling cards": {
+                    "count": 44
+                },
+                "Whimper": {
+                    "count": 41
+                },
+                "Vacuum cleaner": {
+                    "count": 50
+                },
+                "Civil defense siren": {
+                    "count": 45
+                },
+                "Busy signal": {
+                    "count": 49
+                },
+                "Speech synthesizer": {
+                    "count": 48
+                },
+                "Gargling": {
+                    "count": 42
+                },
+                "Clapping": {
+                    "count": 49
+                },
+                "Sitar": {
+                    "count": 44
+                },
+                "Coo": {
+                    "count": 55
+                },
+                "Pigeon, dove": {
+                    "count": 54
+                },
+                "Heart sounds, heartbeat": {
+                    "count": 57
+                },
+                "Throbbing": {
+                    "count": 52
+                },
+                "Quack": {
+                    "count": 59
+                },
+                "Duck": {
+                    "count": 53
+                },
+                "Bark": {
+                    "count": 52
+                },
+                "Boom": {
+                    "count": 51
+                },
+                "Jingle bell": {
+                    "count": 52
+                },
+                "Synthesizer": {
+                    "count": 56
+                },
+                "Cattle, bovinae": {
+                    "count": 52
+                },
+                "Moo": {
+                    "count": 50
+                },
+                "Traffic noise, roadway noise": {
+                    "count": 54
+                },
+                "Rodents, rats, mice": {
+                    "count": 55
+                },
+                "Ambient music": {
+                    "count": 50
+                },
+                "Effects unit": {
+                    "count": 100
+                },
+                "New-age music": {
+                    "count": 50
+                },
+                "Explosion": {
+                    "count": 55
+                },
+                "Burst, pop": {
+                    "count": 49
+                },
+                "Tick": {
+                    "count": 56
+                },
+                "Squawk": {
+                    "count": 49
+                },
+                "Telephone": {
+                    "count": 49
+                },
+                "Bus": {
+                    "count": 50
+                },
+                "Cello": {
+                    "count": 63
+                },
+                "Double bass": {
+                    "count": 57
+                },
+                "Air horn, truck horn": {
+                    "count": 54
+                },
+                "Clickety-clack": {
+                    "count": 68
+                },
+                "Sawing": {
+                    "count": 57
+                },
+                "Writing": {
+                    "count": 52
+                },
+                "Steel guitar, slide guitar": {
+                    "count": 50
+                },
+                "Fixed-wing aircraft, airplane": {
+                    "count": 54
+                },
+                "Wheeze": {
+                    "count": 41
+                },
+                "Change ringing (campanology)": {
+                    "count": 55
+                },
+                "Whistling": {
+                    "count": 51
+                },
+                "Christian music": {
+                    "count": 58
+                },
+                "Punk rock": {
+                    "count": 54
+                },
+                "Door": {
+                    "count": 55
+                },
+                "Smash, crash": {
+                    "count": 52
+                },
+                "Microwave oven": {
+                    "count": 49
+                },
+                "Aircraft engine": {
+                    "count": 55
+                },
+                "Salsa music": {
+                    "count": 49
+                },
+                "Progressive rock": {
+                    "count": 50
+                },
+                "Basketball bounce": {
+                    "count": 52
+                },
+                "Waves, surf": {
+                    "count": 60
+                },
+                "Tapping (guitar technique)": {
+                    "count": 56
+                },
+                "Sigh": {
+                    "count": 48
+                },
+                "Yip": {
+                    "count": 52
+                },
+                "Slap, smack": {
+                    "count": 39
+                },
+                "Sidetone": {
+                    "count": 50
+                },
+                "Jackhammer": {
+                    "count": 56
+                },
+                "Skateboard": {
+                    "count": 51
+                },
+                "Squeal": {
+                    "count": 46
+                },
+                "Snort": {
+                    "count": 49
+                },
+                "Swing music": {
+                    "count": 49
+                },
+                "Honk": {
+                    "count": 52
+                },
+                "Goose": {
+                    "count": 63
+                },
+                "Turkey": {
+                    "count": 58
+                },
+                "Gobble": {
+                    "count": 57
+                },
+                "Reggae": {
+                    "count": 49
+                },
+                "Gears": {
+                    "count": 53
+                },
+                "Distortion": {
+                    "count": 54
+                },
+                "Soul music": {
+                    "count": 49
+                },
+                "Alarm": {
+                    "count": 52
+                },
+                "Crying, sobbing": {
+                    "count": 42
+                },
+                "Electric piano": {
+                    "count": 56
+                },
+                "Banjo": {
+                    "count": 54
+                },
+                "Conversation": {
+                    "count": 42
+                },
+                "Cash register": {
+                    "count": 49
+                },
+                "Breathing": {
+                    "count": 47
+                },
+                "Happy music": {
+                    "count": 51
+                },
+                "Whoop": {
+                    "count": 51
+                },
+                "Silence": {
+                    "count": 53
+                },
+                "Shatter": {
+                    "count": 48
+                },
+                "Fire engine, fire truck (siren)": {
+                    "count": 50
+                },
+                "Vehicle horn, car horn, honking": {
+                    "count": 51
+                },
+                "Dubstep": {
+                    "count": 49
+                }
+            }
+        }
+    }
+}

@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Any, ClassVar
 import numpy as np
 import torch
 
-from mteb._requires_package import requires_package
 from mteb.languages import PROGRAMMING_LANGS
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -336,12 +335,7 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
             raise RuntimeError(
                 f"sentence_transformers version {st_version} is lower than the required version 3.1.0"
             )
-        requires_package(self, "einops", model, "pip install 'mteb[jina]'")
         import einops  # noqa: F401
-
-        requires_package(
-            self, "flash_attn", model, "pip install 'mteb[flash_attention]'"
-        )
         import flash_attn  # noqa: F401
 
         super().__init__(
@@ -402,14 +396,6 @@ class JinaV4Wrapper(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        requires_package(
-            self,
-            "flash_attn",
-            model,
-            "pip install 'mteb[flash_attention]'",
-        )
-        requires_package(self, "peft", model, "pip install 'mteb[jina-v4]'")
-        requires_package(self, "torchvision", model, "pip install 'mteb[jina-v4]'")
         import flash_attn  # noqa: F401
         import peft  # noqa: F401
         import transformers  # noqa: F401
@@ -774,6 +760,132 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
         return embeddings
 
 
+# Default routing from mteb's simplified_task_type to the Jina v5 omni LoRA
+# adapter. Concrete MTEB types whose harness routing diverges from this default
+# go in the ModelMeta's `model_prompts` dict (which takes precedence).
+_SIMPLIFIED_TO_JINA_TASK = {
+    "retrieval": "retrieval",
+    "clustering": "clustering",
+    "classification": "classification",
+    "semantic-similarity": "text-matching",
+    "pair-classification": "text-matching",
+}
+
+
+# Per-MTEB-type adapter routing for omni-{small,nano}. Tasks not listed fall
+# back to task_metadata.simplified_task_type via _SIMPLIFIED_TO_JINA_TASK.
+_OMNI_MODEL_PROMPTS = {
+    "Retrieval": "retrieval",
+    "Clustering": "clustering",
+    "Classification": "classification",
+    "STS": "text-matching",
+    "PairClassification": "text-matching",
+    "BitextMining": "text-matching",
+    "MultilabelClassification": "classification",
+    "Reranking": "retrieval",
+    "Summarization": "text-matching",
+    "InstructionReranking": "retrieval",
+    "ImageClassification": "retrieval",
+    "ZeroShotClassification": "retrieval",
+    "AudioClassification": "retrieval",
+    "AudioZeroshotClassification": "retrieval",
+    "AudioMultilabelClassification": "retrieval",
+    "VideoClassification": "retrieval",
+    "VideoZeroshotClassification": "retrieval",
+    "Compositionality": "clustering",
+    "AudioPairClassification": "retrieval",
+    "ImageClustering": "text-matching",
+}
+
+
+class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        has_video = "video" in inputs.dataset.features
+        has_audio = "audio" in inputs.dataset.features
+        if has_video:
+            from mteb.models.modality_collators import VideoCollator
+
+            inputs.collate_fn = VideoCollator(
+                target_sampling_rate=self.target_sampling_rate or 16000,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+                max_samples=self.max_samples,
+            )
+        elif has_audio:
+            from mteb.models.modality_collators import AudioCollator
+
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.target_sampling_rate or 16000,
+                max_samples=self.max_samples,
+            )
+
+        # Resolve adapter: per-type model_prompts override, else simplified fallback.
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+        jina_task_name = (
+            self.model_prompts.get(prompt_name, None)
+            if self.model_prompts and prompt_name
+            else None
+        )
+        if jina_task_name is None:
+            jina_task_name = _SIMPLIFIED_TO_JINA_TASK.get(
+                task_metadata.simplified_task_type
+            )
+        task = jina_task_name or "retrieval"
+        # Non-retrieval adapters were trained without the Query/Document prefix.
+        if task == "retrieval":
+            prompt = (
+                "Query: "
+                if prompt_type and prompt_type == PromptType.query
+                else "Document: "
+            )
+        else:
+            prompt = ""
+
+        logger.info(
+            f"Using prompt=`{prompt}` and task={task} for task={task_metadata.name} prompt_type={prompt_type}"
+        )
+
+        all_embeddings = []
+        modality_keys = ("text", "image", "audio", "video")
+        for batch in inputs:
+            if "audio" in batch:
+                batch["audio"] = [
+                    a["array"] if isinstance(a, dict) and "array" in a else a
+                    for a in batch["audio"]
+                ]
+
+            batch_column = next(iter(batch.keys()))
+            batch_inputs = []
+            for i in range(len(batch[batch_column])):
+                parts = [
+                    batch[key][i]
+                    for key in modality_keys
+                    if key in batch and batch[key][i] is not None
+                ]
+                batch_inputs.append(parts[0] if len(parts) == 1 else tuple(parts))
+
+            embeddings = self.model.encode(
+                batch_inputs,
+                task=task,
+                prompt=prompt,
+                **kwargs,
+            )
+            if isinstance(embeddings, torch.Tensor):
+                embeddings = embeddings.cpu().detach().float()
+            all_embeddings.append(embeddings)
+        return np.concatenate(all_embeddings, axis=0)
+
+
 jina_embeddings_v5_text_small = ModelMeta(
     loader=JinaV5TextWrapper,
     loader_kwargs=dict(
@@ -796,7 +908,7 @@ jina_embeddings_v5_text_small = ModelMeta(
     modalities=["text"],
     languages=multilingual_langs,
     open_weights=True,
-    revision="46ed7da5b47e4bca710b756313fafaf4110c6bd1",
+    revision="dd76d535f5447ca3897a9c893fb1e612ead98192",
     release_date="2026-02-17",  # official release date
     n_parameters=596049920,
     n_embedding_parameters=155582464,
@@ -826,6 +938,7 @@ jina_embeddings_v5_text_small = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2602.15547},
 }""",
+    extra_requirements_groups=["peft"],
 )
 
 
@@ -881,6 +994,105 @@ jina_embeddings_v5_text_nano = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2602.15547},
 }""",
+    extra_requirements_groups=["peft"],
+)
+
+
+jina_embeddings_v5_omni_small = ModelMeta(
+    loader=JinaV5OmniWrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        fps=2.0,
+        max_frames=64,
+        target_sampling_rate=16000,
+        max_samples=30 * 16000,
+        model_prompts=_OMNI_MODEL_PROMPTS,
+    ),
+    name="jinaai/jina-embeddings-v5-omni-small",
+    model_type=["dense"],
+    modalities=["text", "image", "audio", "video"],
+    languages=multilingual_langs,
+    open_weights=True,
+    revision="dfdcc361ec47c69a5afcd81e4bd148abb9d0568e",
+    release_date="2026-04-01",
+    n_parameters=1626268672,
+    n_embedding_parameters=155312128,
+    memory_usage_mb=3102,
+    max_tokens=32768,
+    embed_dim=[32, 64, 128, 256, 512, 768, 1024],
+    license="cc-by-nc-4.0",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "safetensors",
+    ],
+    use_instructions=True,
+    reference="https://huggingface.co/jinaai/jina-embeddings-v5-omni-small",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    adapted_from="jinaai/jina-embeddings-v5-text-small",
+    citation="""@misc{akram2026jinaembeddingsv5texttasktargetedembeddingdistillation,
+      title={jina-embeddings-v5-text: Task-Targeted Embedding Distillation},
+      author={Mohammad Kalim Akram and Saba Sturua and Nastia Havriushenko and Quentin Herreros and Michael Günther and Maximilian Werk and Han Xiao},
+      year={2026},
+      eprint={2602.15547},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2602.15547},
+}""",
+    extra_requirements_groups=["peft"],
+)
+
+
+jina_embeddings_v5_omni_nano = ModelMeta(
+    loader=JinaV5OmniWrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        fps=2.0,
+        max_frames=64,
+        target_sampling_rate=16000,
+        max_samples=30 * 16000,
+        model_prompts=_OMNI_MODEL_PROMPTS,
+    ),
+    name="jinaai/jina-embeddings-v5-omni-nano",
+    model_type=["dense"],
+    modalities=["text", "image", "audio", "video"],
+    languages=multilingual_langs,
+    open_weights=True,
+    revision="2b230c93c996e091a45b95af4e3315dd07605ee3",
+    release_date="2026-04-01",
+    n_parameters=985984512,
+    n_embedding_parameters=98503680,
+    memory_usage_mb=1881,
+    max_tokens=8192,
+    embed_dim=[32, 64, 128, 256, 512, 768],
+    license="cc-by-nc-4.0",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "safetensors",
+    ],
+    use_instructions=True,
+    reference="https://huggingface.co/jinaai/jina-embeddings-v5-omni-nano",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    adapted_from="jinaai/jina-embeddings-v5-text-nano",
+    citation="""@misc{akram2026jinaembeddingsv5texttasktargetedembeddingdistillation,
+      title={jina-embeddings-v5-text: Task-Targeted Embedding Distillation},
+      author={Mohammad Kalim Akram and Saba Sturua and Nastia Havriushenko and Quentin Herreros and Michael Günther and Maximilian Werk and Han Xiao},
+      year={2026},
+      eprint={2602.15547},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2602.15547},
+}""",
+    extra_requirements_groups=["peft"],
 )
 
 jina_reranker_v3 = ModelMeta(
@@ -962,6 +1174,7 @@ jina_embeddings_v4 = ModelMeta(
       primaryClass={cs.AI},
       url={https://arxiv.org/abs/2506.18902},
 }""",
+    extra_requirements_groups=["jina-v4", "flash_attention"],
 )
 
 
@@ -1036,6 +1249,7 @@ jina_embeddings_v3 = ModelMeta(
       url={https://arxiv.org/abs/2409.10173},
     }
     """,
+    extra_requirements_groups=["jina", "flash_attention"],
 )
 
 jina_embeddings_v2_base_en = ModelMeta(

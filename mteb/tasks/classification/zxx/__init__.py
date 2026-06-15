@@ -1,9 +1,11 @@
 from .ambient_acoustic_context import AmbientAcousticContextClassification
 from .beijing_opera import BeijingOpera
 from .bird_clef import BirdCLEFClassification
+from .diving48_classification import Diving48ClassificationV1, Diving48ClassificationV2
 from .esc50 import ESC50Classification
 from .gtzan_genre import GTZANGenre
 from .gunshot_triangulation import GunshotTriangulation
+from .inat_sounds import INatSoundsClassification
 from .mridingham_stroke import MridinghamStroke
 from .mridingham_tonic import MridinghamTonic
 from .n_synth import NSynth
@@ -15,9 +17,12 @@ __all__ = [
     "AmbientAcousticContextClassification",
     "BeijingOpera",
     "BirdCLEFClassification",
+    "Diving48ClassificationV1",
+    "Diving48ClassificationV2",
     "ESC50Classification",
     "GTZANGenre",
     "GunshotTriangulation",
+    "INatSoundsClassification",
     "MridinghamStroke",
     "MridinghamTonic",
     "NSynth",

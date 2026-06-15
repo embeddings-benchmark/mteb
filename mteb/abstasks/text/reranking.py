@@ -2,12 +2,14 @@ import logging
 import sys
 from collections import defaultdict
 from copy import copy
+from typing import Any
 
 import datasets
 from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
+from mteb.timing import TimingStack
 
 if sys.version_info >= (3, 13):
     from warnings import deprecated
@@ -34,18 +36,31 @@ class AbsTaskReranking(AbsTaskRetrieval):
         For dataformat and other information, see [AbsTaskRetrieval][mteb.abstasks.retrieval.AbsTaskRetrieval].
     """
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(
+        self,
+        num_proc: int | None = None,
+        *,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
+    ) -> None:
         """Load the dataset."""
         if self.data_loaded:
             return
+
+        timer = timer or TimingStack()
 
         if self.metadata.name in OLD_FORMAT_RERANKING_TASKS:
             self.transform_old_dataset_format()
         else:
             # use AbsTaskRetrieval default to load the data
-            return super().load_data(num_proc=num_proc)
+            return super().load_data(num_proc=num_proc, timer=timer)
 
-    def _process_example(self, example: dict, split: str, query_idx: int) -> dict:  # noqa: PLR6301
+    def _process_example(  # noqa: PLR6301
+        self,
+        example: dict[str, Any],
+        split: str,
+        query_idx: int,
+    ) -> dict[str, Any]:
         """Process a single example from the dataset.
 
         Args:
@@ -91,7 +106,9 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
         return example_data
 
-    def transform_old_dataset_format(self, given_dataset: Dataset | None = None):
+    def transform_old_dataset_format(
+        self, given_dataset: Dataset | None = None
+    ) -> None:
         """Transform the old format to the new format using HF datasets mapping. This is a one-time transformation for datasets which are in the old format.
 
         Args:

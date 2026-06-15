@@ -4,7 +4,6 @@ import json
 import logging
 from collections import defaultdict
 from pathlib import Path
-from time import time
 from typing import TYPE_CHECKING, Any, Literal
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
@@ -23,21 +22,22 @@ from mteb.models import (
     SearchEncoderWrapper,
     SearchProtocol,
 )
+from mteb.timing import TimingStack
+from mteb.types import (
+    PromptType,
+)
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
 
 from ._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
     calculate_relevant_docs_statistics,
-    calculate_text_statistics,
+    calculate_single_input_modality_statistics,
     calculate_top_ranked_statistics,
 )
 from .abstask import AbsTask
 from .retrieval_dataset_loaders import (
     RetrievalDatasetLoader,
-    RetrievalSplitData,
     _combine_queries_with_instructions_datasets,
 )
 
@@ -52,6 +52,7 @@ if TYPE_CHECKING:
     from mteb.types import (
         EncodeKwargs,
         HFSubset,
+        Modalities,
         QueryDatasetType,
         RelevantDocumentsType,
         RetrievalOutputType,
@@ -63,8 +64,12 @@ if TYPE_CHECKING:
         RelevantDocsStatistics,
         TextStatistics,
         TopRankedStatistics,
+        VideoStatistics,
     )
 
+    from .retrieval_dataset_loaders import (
+        RetrievalSplitData,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -73,29 +78,37 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for Retrieval
 
     Attributes:
-        num_samples: Number of queries and documents
+        num_samples: Total number of queries and documents
+        num_queries: Number of queries
+        num_documents: Number of documents
         number_of_characters: Total number of characters in queries and documents
 
         documents_text_statistics: Statistics for documents
         documents_image_statistics: Statistics for documents
         documents_audio_statistics: Statistics for documents
+        documents_video_statistics: Statistics for documents
         queries_text_statistics: Statistics for queries
         queries_image_statistics: Statistics for queries
         queries_audio_statistics: Statistics for queries
+        queries_video_statistics: Statistics for queries
         relevant_docs_statistics: Statistics for relevant documents
         top_ranked_statistics: Statistics for top ranked documents (if available)
     """
 
     num_samples: int
+    num_queries: int
+    num_documents: int
     number_of_characters: int
 
     documents_text_statistics: TextStatistics | None
     documents_image_statistics: ImageStatistics | None
     documents_audio_statistics: AudioStatistics | None
+    documents_video_statistics: VideoStatistics | None
 
     queries_text_statistics: TextStatistics | None
     queries_image_statistics: ImageStatistics | None
     queries_audio_statistics: AudioStatistics | None
+    queries_video_statistics: VideoStatistics | None
 
     relevant_docs_statistics: RelevantDocsStatistics
 
@@ -112,9 +125,9 @@ def _filter_queries_without_positives(
             continue
         _relevant_docs[idx] = relevant_docs[idx]
 
-    queries = queries.filter(
-        lambda x: x["id"] in _relevant_docs.keys(), desc="Filtering queries by qrels"
-    )
+    ids_to_keep = set(_relevant_docs.keys())
+    indices = [i for i, id_ in enumerate(queries["id"]) if id_ in ids_to_keep]
+    queries = queries.select(indices)
 
     return _relevant_docs, queries
 
@@ -146,43 +159,23 @@ class AbsTaskRetrieval(AbsTask):
     _previous_results_model_meta: dict[str, Any] | None = None
     skip_first_result: bool = False
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        empty_dataset = Dataset.from_dict({})
-        self.dataset = defaultdict(
-            lambda: defaultdict(
-                lambda: RetrievalSplitData(
-                    corpus=empty_dataset,
-                    queries=empty_dataset,
-                    relevant_docs={},
-                    top_ranked=None,
-                )
-            )
-        )
-
     def convert_v1_dataset_format_to_v2(
         self,
         num_proc: int | None,
     ) -> None:
         """Convert dataset from v1 (from `self.queries`, `self.document`) format to v2 format (`self.dotaset`)."""
         # check if dataset is `v1` version
-        if not hasattr(self, "queries"):
+        if (
+            not hasattr(self, "queries")
+            or not hasattr(self, "corpus")
+            or not hasattr(self, "relevant_docs")
+        ):
             return
-        empty_dataset = Dataset.from_dict({})
 
-        self.dataset = defaultdict(
-            lambda: defaultdict(
-                lambda: RetrievalSplitData(
-                    corpus=empty_dataset,
-                    queries=empty_dataset,
-                    relevant_docs={},
-                    top_ranked=None,
-                )
-            )
-        )
+        self.dataset = {}
 
         def _process_split(
-            ds_queries: dict | Dataset, ds_corpus: dict | Dataset
+            ds_queries: dict[str, Any] | Dataset, ds_corpus: dict[str, Any] | Dataset
         ) -> tuple[Dataset, Dataset]:
             if isinstance(ds_queries, dict):
                 queries = Dataset.from_list(
@@ -211,17 +204,21 @@ class AbsTaskRetrieval(AbsTask):
             return queries, corpus
 
         if self.metadata.is_multilingual:
-            for subset in self.queries:  # type: ignore[attr-defined]
-                for split in self.queries[subset]:  # type: ignore[attr-defined]
-                    queries = self.queries[subset][split]  # type: ignore[attr-defined]
-                    corpus = self.corpus[subset][split]  # type: ignore[attr-defined]
+            for subset in self.queries:
+                if subset not in self.dataset:
+                    self.dataset[subset] = {}
+                for split in self.queries[subset]:
+                    if split not in self.dataset[subset]:
+                        self.dataset[subset][split] = {}  # type: ignore[typeddict-item]
+                    queries = self.queries[subset][split]
+                    corpus = self.corpus[subset][split]
 
                     (
                         self.dataset[subset][split]["queries"],
                         self.dataset[subset][split]["corpus"],
                     ) = _process_split(queries, corpus)
 
-                    self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[  # type: ignore[attr-defined]
+                    self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
                         subset
                     ][split]
                     if hasattr(self, "instructions"):
@@ -237,17 +234,23 @@ class AbsTaskRetrieval(AbsTask):
                         self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                             subset
                         ][split]
+                    else:
+                        self.dataset[subset][split]["top_ranked"] = None
         else:
             subset = "default"
-            for split in self.queries:  # type: ignore[attr-defined]
-                queries = self.queries[split]  # type: ignore[attr-defined]
-                corpus = self.corpus[split]  # type: ignore[attr-defined]
+            if subset not in self.dataset:
+                self.dataset[subset] = {}
+            for split in self.queries:
+                if split not in self.dataset[subset]:
+                    self.dataset[subset][split] = {}  # type: ignore[typeddict-item]
+                queries = self.queries[split]
+                corpus = self.corpus[split]
                 (
                     self.dataset[subset][split]["queries"],
                     self.dataset[subset][split]["corpus"],
                 ) = _process_split(queries, corpus)
 
-                self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[  # type: ignore[attr-defined]
+                self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
                     split
                 ].copy()
                 if hasattr(self, "instructions"):
@@ -263,30 +266,41 @@ class AbsTaskRetrieval(AbsTask):
                     self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                         split
                     ].copy()
+                else:
+                    self.dataset[subset][split]["top_ranked"] = None
 
-        del self.queries  # type: ignore[attr-defined]
-        del self.corpus  # type: ignore[attr-defined]
-        del self.relevant_docs  # type: ignore[attr-defined]
+        del self.queries
+        del self.corpus
+        del self.relevant_docs
         if hasattr(self, "instructions"):
             del self.instructions
         if hasattr(self, "top_ranked"):
             del self.top_ranked
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(
+        self,
+        num_proc: int | None = None,
+        *,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
+    ) -> None:
         """Load the dataset for the retrieval task."""
         if self.data_loaded:
             return
 
+        self.dataset = {}
         dataset_path = self.metadata.dataset["path"]
         eval_splits = self.eval_splits
         trust_remote_code = self.metadata.dataset.get("trust_remote_code", False)
         revision = self.metadata.dataset["revision"]
 
-        def _process_data(split: str, hf_subset: str = "default"):
+        def _process_data(split: str, hf_subset: str = "default") -> None:
             """Helper function to load and process data for a given split and language"""
             logger.debug(
                 f"Loading {split} split for {hf_subset} subset of {self.metadata.name}"
             )
+            if hf_subset not in self.dataset:
+                self.dataset[hf_subset] = {}
 
             self.dataset[hf_subset][split] = RetrievalDatasetLoader(
                 hf_repo=dataset_path,
@@ -298,14 +312,20 @@ class AbsTaskRetrieval(AbsTask):
                 num_proc=num_proc,
             )
 
-        if self.metadata.is_multilingual:
-            for lang in self.hf_subsets:
+        timer = timer or TimingStack()
+        with timer(
+            "Data loading", log_message=f"Loading dataset {self.metadata.name}..."
+        ):
+            if self.metadata.is_multilingual:
+                for lang in self.hf_subsets:
+                    for split in eval_splits:
+                        _process_data(split, lang)
+            else:
                 for split in eval_splits:
-                    _process_data(split, lang)
-        else:
-            for split in eval_splits:
-                _process_data(split)
-        self.dataset_transform(num_proc=num_proc)
+                    _process_data(split)
+
+        with timer("Dataset transform"):
+            self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
     def evaluate(
@@ -317,6 +337,7 @@ class AbsTaskRetrieval(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.
@@ -329,13 +350,15 @@ class AbsTaskRetrieval(AbsTask):
             encode_kwargs: Keyword arguments passed to the encoder
             prediction_folder: Folder to save model predictions
             num_proc: Number of processes to use
+            timer: A context manager that tracks the timing of evaluation phases.
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
             Dictionary mapping subsets to their evaluation scores
         """
+        timer = timer or TimingStack()
         if not self.data_loaded:
-            self.load_data(num_proc=num_proc)
+            self.load_data(num_proc=num_proc, timer=timer)
         # TODO: convert all tasks directly https://github.com/embeddings-benchmark/mteb/issues/2030
         self.convert_v1_dataset_format_to_v2(num_proc=num_proc)
 
@@ -346,6 +369,7 @@ class AbsTaskRetrieval(AbsTask):
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             num_proc=num_proc,
+            timer=timer,
             **kwargs,
         )
 
@@ -359,7 +383,8 @@ class AbsTaskRetrieval(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        **kwargs,
+        timer: TimingStack,
+        **kwargs: Any,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
 
@@ -371,6 +396,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset: Subset to evaluate on
             prediction_folder: Folder with results prediction
             num_proc: Number of processes to use
+            timer: A context manager that tracks the timing of evaluation phases.
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
@@ -390,6 +416,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset=hf_subset,
             top_ranked=data_split["top_ranked"],
             top_k=self._top_k,
+            timer=timer,
             **kwargs,
         )
 
@@ -406,15 +433,10 @@ class AbsTaskRetrieval(AbsTask):
                 f"RetrievalEvaluator expects a SearchInterface, Encoder, or CrossEncoder, got {type(model)}"
             )
 
-        start_time = time()
         results = retriever(
             search_model,
             encode_kwargs=encode_kwargs,
             num_proc=num_proc,
-        )
-        end_time = time()
-        logger.debug(
-            f"Running retrieval task - Time taken to retrieve: {end_time - start_time:.2f} seconds"
         )
 
         if prediction_folder:
@@ -426,24 +448,30 @@ class AbsTaskRetrieval(AbsTask):
                 hf_split=hf_split,
             )
 
-        logger.info("Running retrieval task - Evaluating retrieval scores...")
-        (
-            all_scores,
-            ndcg,
-            _map,
-            recall,
-            precision,
-            naucs,
-            mrr,
-            naucs_mrr,
-            hit_rate,
-        ) = retriever.evaluate(
-            data_split["relevant_docs"],
-            results,
-            self.k_values,
-            ignore_identical_ids=self.ignore_identical_ids,
-            skip_first_result=self.skip_first_result,
-        )
+        with timer(
+            "Scoring",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running retrieval task - Evaluating retrieval scores...",
+        ):
+            (
+                all_scores,
+                ndcg,
+                _map,
+                recall,
+                precision,
+                naucs,
+                mrr,
+                naucs_mrr,
+                hit_rate,
+            ) = retriever.evaluate(
+                data_split["relevant_docs"],
+                results,
+                self.k_values,
+                ignore_identical_ids=self.ignore_identical_ids,
+                skip_first_result=self.skip_first_result,
+            )
+
         task_specific_scores = self.task_specific_scores(
             all_scores,
             data_split["relevant_docs"],
@@ -487,6 +515,7 @@ class AbsTaskRetrieval(AbsTask):
     def _calculate_descriptive_statistics_from_split(  # noqa: PLR0914
         self,
         split: str,
+        *,
         hf_subset: str | None = None,
         compute_overall: bool = False,
         num_proc: int | None = None,
@@ -542,66 +571,79 @@ class AbsTaskRetrieval(AbsTask):
         num_queries = len(queries)
 
         if self.metadata.category is None:
-            queries_modalities = "t"
-            corpus_modalities = "t"
+            queries_modalities: Sequence[str] = ["text"]
+            corpus_modalities: Sequence[str] = ["text"]
         else:
-            queries_modalities, corpus_modalities = self.metadata.category.split("2")
+            queries_modalities = self.metadata.get_modalities(
+                prompt_type=PromptType.query
+            )
+            corpus_modalities = self.metadata.get_modalities(
+                prompt_type=PromptType.document
+            )
 
-        number_of_characters = 0
+        # Build corpus col_inputs — text needs special mapping from the corpus dict format.
+        corpus_col_inputs: dict[Modalities, list[Any]] = {}
+        if "text" in corpus_modalities:
+            corpus_col_inputs["text"] = corpus.map(_corpus_to_dict)["text"]
+        if "image" in corpus_modalities:
+            corpus_col_inputs["image"] = corpus["image"]
+        if "audio" in corpus_modalities:
+            corpus_col_inputs["audio"] = corpus["audio"]
+        if "video" in corpus_modalities:
+            corpus_col_inputs["video"] = corpus["video"]
 
-        documents_text_statistics = None
-        documents_image_statistics = None
-        documents_audio_statistics = None
-        queries_text_statistics = None
-        queries_image_statistics = None
-        queries_audio_statistics = None
-
-        if "t" in corpus_modalities:
-            corpus_texts = corpus.map(_corpus_to_dict)["text"]
-            documents_text_statistics = calculate_text_statistics(corpus_texts)
-            number_of_characters += documents_text_statistics["total_text_length"]
-
-        if "i" in corpus_modalities:
-            documents_image_statistics = calculate_image_statistics(corpus["image"])
-
-        if "a" in corpus_modalities:
-            documents_audio_statistics = calculate_audio_statistics(corpus["audio"])
-
-        if "t" in queries_modalities:
+        # Build queries col_inputs — text may need instruction/conversation transformations.
+        queries_col_inputs: dict[Modalities, list[Any]] = {}
+        if "text" in queries_modalities:
             queries_ = queries
             if "instruction" in queries_[0]:
-                queries_ = queries_.map(_combine_queries_with_instruction_text)
-
+                queries_ = _combine_queries_with_instruction_text(queries_)
             if isinstance(queries_["text"][0], dict | list):
                 queries_ = queries_.map(_convert_conv_history_to_query)
-            queries_text_statistics = calculate_text_statistics(queries_["text"])
+            queries_col_inputs["text"] = queries_["text"]
+        if "image" in queries_modalities:
+            queries_col_inputs["image"] = queries["image"]
+        if "audio" in queries_modalities:
+            queries_col_inputs["audio"] = queries["audio"]
+        if "video" in queries_modalities:
+            queries_col_inputs["video"] = queries["video"]
 
-            number_of_characters += queries_text_statistics["total_text_length"]
+        corpus_stats = calculate_single_input_modality_statistics(
+            corpus_col_inputs, max_workers=num_proc
+        )
+        queries_stats = calculate_single_input_modality_statistics(
+            queries_col_inputs, max_workers=num_proc
+        )
 
-        if "i" in queries_modalities:
-            queries_image_statistics = calculate_image_statistics(queries["image"])
-
-        if "a" in queries_modalities:
-            queries_audio_statistics = calculate_audio_statistics(queries["audio"])
+        number_of_characters = sum(
+            stat["total_text_length"]
+            for stat in [
+                corpus_stats["text_statistics"],
+                queries_stats["text_statistics"],
+            ]
+            if stat is not None
+        )
 
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
-
-        if top_ranked is not None and num_queries and len(top_ranked) > 0:
-            top_ranked_statistics = calculate_top_ranked_statistics(
-                top_ranked, num_queries
-            )
-        else:
-            top_ranked_statistics = None
+        top_ranked_statistics = (
+            calculate_top_ranked_statistics(top_ranked, num_queries)
+            if top_ranked is not None and num_queries and len(top_ranked) > 0
+            else None
+        )
 
         return RetrievalDescriptiveStatistics(
             num_samples=num_documents + num_queries,
+            num_queries=num_queries,
+            num_documents=num_documents,
             number_of_characters=number_of_characters,
-            documents_text_statistics=documents_text_statistics,
-            documents_image_statistics=documents_image_statistics,
-            documents_audio_statistics=documents_audio_statistics,
-            queries_text_statistics=queries_text_statistics,
-            queries_image_statistics=queries_image_statistics,
-            queries_audio_statistics=queries_audio_statistics,
+            documents_text_statistics=corpus_stats["text_statistics"],
+            documents_image_statistics=corpus_stats["image_statistics"],
+            documents_audio_statistics=corpus_stats["audio_statistics"],
+            documents_video_statistics=corpus_stats["video_statistics"],
+            queries_text_statistics=queries_stats["text_statistics"],
+            queries_image_statistics=queries_stats["image_statistics"],
+            queries_audio_statistics=queries_stats["audio_statistics"],
+            queries_video_statistics=queries_stats["video_statistics"],
             relevant_docs_statistics=relevant_docs_statistics,
             top_ranked_statistics=top_ranked_statistics,
         )
@@ -610,6 +652,7 @@ class AbsTaskRetrieval(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         self.convert_v1_dataset_format_to_v2(num_proc)
 
@@ -652,6 +695,7 @@ class AbsTaskRetrieval(AbsTask):
                     hf_subset_name,
                     commit_message=f"Add {hf_subset_name}-{subset_item}",
                     num_proc=num_proc,
+                    **kwargs,
                 )
 
         for subset in self.dataset:

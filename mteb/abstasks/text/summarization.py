@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
@@ -23,6 +23,7 @@ if TYPE_CHECKING:
 
     from mteb._evaluators.text.summarization_evaluator import SummarizationMetrics
     from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs
     from mteb.types.statistics import (
         ScoreStatistics,
@@ -95,7 +96,8 @@ class AbsTaskSummarization(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        **kwargs,
+        timer: TimingStack,
+        **kwargs: Any,
     ) -> SummarizationMetrics:
         if not isinstance(model, EncoderProtocol):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
@@ -114,6 +116,7 @@ class AbsTaskSummarization(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs, num_proc=num_proc)
@@ -128,7 +131,12 @@ class AbsTaskSummarization(AbsTask):
         return evaluator._calculate_metrics(scores)
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> SummarizationDescriptiveStatistics:
         if hf_subset:
             text = self.dataset[hf_subset][split][self.text_column_name]

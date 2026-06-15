@@ -12,22 +12,23 @@ from mteb._create_dataloaders import (
     _transform_image_to_rgb,
 )
 from mteb._evaluators.evaluator import Evaluator
-from mteb._requires_package import requires_image_dependencies
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    from datasets import Dataset
     from PIL.Image import Image
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import EncoderProtocol
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs
 
 
 logger = logging.getLogger(__name__)
 
 
-class CustomImageDataset(torch.utils.data.Dataset):
+class CustomImageDataset(torch.utils.data.Dataset[dict[str, Any]]):
     def __init__(
         self,
         images: list[Image],
@@ -64,7 +65,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
 
     def __init__(
         self,
-        dataset,
+        dataset: Dataset,
         *,
         images_column_names: str | Sequence[str],
         texts_column_names: str | Sequence[str],
@@ -73,10 +74,10 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        **kwargs,
-    ):
+        timer: TimingStack,
+        **kwargs: Any,
+    ) -> None:
         super().__init__(**kwargs)
-        requires_image_dependencies()
 
         self.dataset = dataset
         self.images_column_names = images_column_names
@@ -86,8 +87,9 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
+        self.timer = timer
 
-    def __call__(  # type: ignore[override]
+    def __call__(
         self,
         model: EncoderProtocol,
         *,
@@ -112,17 +114,18 @@ class ImageTextPairClassificationEvaluator(Evaluator):
                 for col in self.texts_column_names:
                     texts.append(row[col])
 
-        text_embeddings = model.encode(
-            _create_dataloader_from_texts(
-                texts,
-                num_proc=num_proc,
+        with self.timer("Encoding texts", split=self.hf_split, subset=self.hf_subset):
+            text_embeddings = model.encode(
+                _create_dataloader_from_texts(
+                    texts,
+                    num_proc=num_proc,
+                    **encode_kwargs,
+                ),
+                task_metadata=self.task_metadata,
+                hf_subset=self.hf_subset,
+                hf_split=self.hf_split,
                 **encode_kwargs,
-            ),
-            task_metadata=self.task_metadata,
-            hf_subset=self.hf_subset,
-            hf_split=self.hf_split,
-            **encode_kwargs,
-        )
+            )
 
         if not isinstance(text_embeddings, torch.Tensor):
             text_embeddings = torch.tensor(text_embeddings)
@@ -132,21 +135,24 @@ class ImageTextPairClassificationEvaluator(Evaluator):
             dim=-1,
         ).view(len(self.dataset), self.num_texts_per_sample, -1)
 
-        def _image_collate_fn(batch):
+        def _image_collate_fn(batch: list[dict[str, Any]]) -> dict[str, list[Any]]:
             """Collate function for image batches."""
             return {"image": [item["image"] for item in batch]}
 
-        image_embeddings = model.encode(
-            DataLoader(
-                CustomImageDataset(images),
-                collate_fn=_image_collate_fn,
-                num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-            ),
-            task_metadata=self.task_metadata,
-            hf_subset=self.hf_subset,
-            hf_split=self.hf_split,
-            **encode_kwargs,
+        _image_dl = DataLoader(
+            CustomImageDataset(images),
+            collate_fn=_image_collate_fn,
+            num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
         )
+
+        with self.timer("Encoding images", split=self.hf_split, subset=self.hf_subset):
+            image_embeddings = model.encode(
+                _image_dl,  # type: ignore[arg-type]
+                task_metadata=self.task_metadata,
+                hf_subset=self.hf_subset,
+                hf_split=self.hf_split,
+                **encode_kwargs,
+            )
         if not isinstance(image_embeddings, torch.Tensor):
             image_embeddings = torch.tensor(image_embeddings)
 
@@ -157,9 +163,10 @@ class ImageTextPairClassificationEvaluator(Evaluator):
 
         all_scores = []
 
-        for img_emb, txt_emb in zip(norm_image_embeddings, norm_text_embeddings):
-            scores = (
-                img_emb @ txt_emb.t()
-            )  # shape = (num_images_per_sample x num_texts_per_sample)
-            all_scores.append(scores)
+        with self.timer("Scoring", split=self.hf_split, subset=self.hf_subset):
+            for img_emb, txt_emb in zip(norm_image_embeddings, norm_text_embeddings):
+                scores = (
+                    img_emb @ txt_emb.t()
+                )  # shape = (num_images_per_sample x num_texts_per_sample)
+                all_scores.append(scores)
         return all_scores

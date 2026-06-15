@@ -11,6 +11,7 @@ from mteb._evaluators import BitextMiningEvaluator
 from mteb.abstasks._statistics_calculation import calculate_text_statistics
 from mteb.abstasks.abstask import AbsTask
 from mteb.models import EncoderProtocol
+from mteb.timing import TimingStack
 from mteb.types.statistics import SplitDescriptiveStatistics
 
 if TYPE_CHECKING:
@@ -83,6 +84,7 @@ class AbsTaskBitextMining(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Added load for "parallel" datasets"""
@@ -98,7 +100,7 @@ class AbsTaskBitextMining(AbsTask):
         if subsets_to_run is not None:
             hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
-        encoder_model = cast("EncoderProtocol", model)
+        timer = timer or TimingStack()
 
         if self.dataset is None:
             raise ValueError("Dataset is not loaded.")
@@ -106,7 +108,7 @@ class AbsTaskBitextMining(AbsTask):
         scores: dict[str, BitextMiningMetrics] = {}
         if self.parallel_subsets:
             scores = self._evaluate_subset(  # type: ignore[assignment]
-                encoder_model,
+                model,
                 self.dataset[split],
                 parallel=True,
                 hf_split=split,
@@ -114,6 +116,7 @@ class AbsTaskBitextMining(AbsTask):
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 num_proc=num_proc,
+                timer=timer,
                 **kwargs,
             )
         else:
@@ -127,13 +130,14 @@ class AbsTaskBitextMining(AbsTask):
                 else:
                     data_split = self.dataset[hf_subset][split]
                 scores[hf_subset] = self._evaluate_subset(  # type: ignore[assignment]
-                    encoder_model,
+                    model,
                     data_split,
                     hf_split=split,
                     hf_subset=hf_subset,
                     encode_kwargs=encode_kwargs,
                     prediction_folder=prediction_folder,
                     num_proc=num_proc,
+                    timer=timer,
                     **kwargs,
                 )
 
@@ -156,7 +160,8 @@ class AbsTaskBitextMining(AbsTask):
         prediction_folder: Path | None = None,
         parallel: bool = False,
         num_proc: int | None = None,
-        **kwargs,
+        timer: TimingStack,
+        **kwargs: Any,
     ) -> BitextMiningMetrics | dict[str, BitextMiningMetrics]:
         pairs = self._get_pairs(parallel)
 
@@ -166,6 +171,7 @@ class AbsTaskBitextMining(AbsTask):
             pair_columns=pairs,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         # NOTE: used only by BUCC
@@ -224,7 +230,12 @@ class AbsTaskBitextMining(AbsTask):
         )
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> BitextDescriptiveStatistics:
         pairs_cols = self._get_pairs(self.parallel_subsets)
         if hf_subset:
@@ -272,6 +283,7 @@ class AbsTaskBitextMining(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         if self.dataset is None:
             raise ValueError("Dataset is not loaded.")
@@ -307,4 +319,4 @@ class AbsTaskBitextMining(AbsTask):
                     }
                 )
             sentences = DatasetDict(sentences)
-            sentences.push_to_hub(repo_name, num_proc=num_proc)
+            sentences.push_to_hub(repo_name, num_proc=num_proc, **kwargs)

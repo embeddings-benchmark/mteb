@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any, Literal
 import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -71,8 +70,6 @@ def vista_loader(model_name, **kwargs):
             image_tokens_num: int | None = None,
             **kwargs: Any,
         ):
-            requires_image_dependencies()
-
             super().__init__(
                 model_name_bge=model_name_bge,
                 model_weight=model_weight,

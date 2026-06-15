@@ -34,3 +34,39 @@ type(models_results) # mteb.results.TaskResult
 :::mteb.results.ModelResult
 
 :::mteb.results.BenchmarkResults
+
+## Timing and Phase Plotting
+
+To analyze where evaluation time is spent, you can inspect the evaluation phases. The timing data is stored inside `TaskResult.evaluation_phases` as a list of `PhaseTiming` objects, and can be plotted directly using the [`TaskResult.plot_evaluation_phases()`][mteb.results.TaskResult.plot_evaluation_phases] method.
+
+<details>
+<summary><b>Example: Inspecting and Plotting Runtime Timings</b> (click to expand)</summary>
+
+```python
+import mteb
+
+model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
+task = mteb.get_task("SciFact")
+
+# Evaluate returns a ModelResult container holding TaskResult instances
+results = mteb.evaluate(model, task)
+task_result = results.task_results[0]
+
+# Print the overall evaluation time
+print(f"Evaluation took: {task_result.evaluation_time:.2f}s")
+
+# Plot the timings from the cached results
+task_result.plot_evaluation_phases()
+```
+
+This will print a text-based Gantt chart of the recorded evaluation phases:
+
+```text
+Data loading                                   |███████████████████████████                       | 14.2s
+Dataset transform                              |                           █                      | 0.0s
+
+Encoding queries and documents (test, default) |                           ██████████████████████ | 11.7s
+Scoring (test, default)                        |                                                 █| 0.2s
+                                                26.1s (untracked: 0.0s)
+```
+</details>

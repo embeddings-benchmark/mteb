@@ -19,31 +19,34 @@ from sklearn.model_selection import KFold
 from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator
 from mteb.models import EncoderProtocol
+from mteb.timing import TimingStack
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
 
 from ._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
+    _compute_modality_hashes,
+    _count_samples_in_train,
     calculate_label_statistics,
-    calculate_text_statistics,
+    calculate_single_input_modality_statistics,
 )
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from pathlib import Path
 
     from numpy.typing import NDArray
 
     from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
     from mteb.models import MTEBModels
-    from mteb.types import Array, EncodeKwargs, HFSubset, ScoresDict
+    from mteb.types import Array, EncodeKwargs, HFSubset, Modalities, ScoresDict
     from mteb.types.statistics import (
         AudioStatistics,
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -54,20 +57,23 @@ class ClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        number_texts_intersect_with_train: Number of texts in the train split
+        samples_in_train: Number of unique test samples (across all input modalities)
+            that also appear in the train split. None when evaluated on the train split itself.
 
         text_statistics: Statistics for text
         image_statistics: Statistics for images
         audio_statistics: Statistics for audio
+        video_statistics: Statistics for video
         label_statistics: Statistics for labels
     """
 
     num_samples: int
-    number_texts_intersect_with_train: int | None
+    samples_in_train: int | None
 
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
     label_statistics: LabelStatistics
 
 
@@ -125,7 +131,10 @@ class AbsTaskClassification(AbsTask):
         n_experiments: Number of experiments to run. Default is 10.
         train_split: Name of the split to use for training the evaluator model. Default is "train".
         label_column_name: Name of the column containing the labels. Default is "label".
-        input_column_name: Name of the column containing the input data. Default is "text".
+        input_column_name: Name of the column(s) containing the input data. Default is "text".
+            Can be a string for single-column tasks or a list of strings for multimodal tasks (e.g. ["video", "audio"]).
+            When specified as a list, values must be the default column names as defined in the encoder I/O types
+            (see https://embeddings-benchmark.github.io/mteb/api/types/#mteb.types._encoder_io).
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
         is_cross_validation: Is task cross validation
         n_splits: Number of splits for cross-validation
@@ -140,7 +149,7 @@ class AbsTaskClassification(AbsTask):
     n_experiments: int = 10
     train_split: str = "train"
     label_column_name: str = "label"
-    input_column_name: str = "text"
+    input_column_name: str | Sequence[Modalities] = "text"
     abstask_prompt = "Classify user passages."
     is_cross_validation: bool = False
     n_splits = 5
@@ -154,6 +163,7 @@ class AbsTaskClassification(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate a model on the classification task.
@@ -181,6 +191,8 @@ class AbsTaskClassification(AbsTask):
         if subsets_to_run is not None:
             hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
+        timer = timer or TimingStack()
+
         for hf_subset in hf_subsets:
             logger.info(
                 f"Task: {self.metadata.name}, split: {split}, subset: {hf_subset}. Running..."
@@ -192,7 +204,26 @@ class AbsTaskClassification(AbsTask):
                 ds = self.dataset[hf_subset]
 
             if isinstance(ds, Dataset | DatasetDict):
-                ds = ds.select_columns([self.label_column_name, self.input_column_name])
+                # Keep label and input columns
+                input_cols = (
+                    [self.input_column_name]
+                    if isinstance(self.input_column_name, str)
+                    else list(self.input_column_name)
+                )
+                columns_to_keep = set(input_cols) | {self.label_column_name}
+
+                if isinstance(ds, DatasetDict):
+                    available = set(next(iter(ds.values())).column_names)
+                else:
+                    available = set(ds.column_names)
+
+                missing_columns = columns_to_keep - available
+                if missing_columns:
+                    raise ValueError(
+                        f"Missing required columns in dataset: {missing_columns}. "
+                        f"Available columns: {available}"
+                    )
+                ds = ds.select_columns(list(columns_to_keep))
             eval_function = (
                 self._evaluate_subset
                 if not self.is_cross_validation
@@ -206,13 +237,14 @@ class AbsTaskClassification(AbsTask):
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 num_proc=num_proc,
+                timer=timer,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
 
         return scores  # type: ignore[return-value]
 
-    def _evaluate_subset(
+    def _evaluate_subset(  # noqa: PLR0914
         self,
         model: MTEBModels,
         data_split: DatasetDict,
@@ -222,6 +254,7 @@ class AbsTaskClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -230,29 +263,85 @@ class AbsTaskClassification(AbsTask):
         train_split = data_split[self.train_split]
         eval_split = data_split[hf_split]
 
-        scores = []
-        # we store idxs to make the shuffling reproducible
-        test_cache, idxs = None, None
-
-        all_predictions = []
+        # Simulate all undersamplings to collect exactly which training indices each experiment needs.
+        sim_idxs = None
+        all_selected_idxs: list[list[int]] = []
         for i in range(self.n_experiments):
-            logger.info(f"Running experiment ({i}/{self.n_experiments})")
-            scores_exp, predictions, idxs, test_cache = self._run_experiment(
-                model,
-                train_split,
-                eval_split,
-                experiment_num=i,
-                idxs=idxs,
-                test_cache=test_cache,
-                encode_kwargs=encode_kwargs,
+            _, sim_idxs, selected_idx = self._undersample_data(train_split, i, sim_idxs)
+            all_selected_idxs.append(selected_idx)
+
+        union_idxs = sorted(set().union(*all_selected_idxs))
+        dataloader_train = create_dataloader(
+            train_split.select(union_idxs),
+            task_metadata=self.metadata,
+            input_column=self.input_column_name,
+            num_proc=num_proc,
+            **encode_kwargs,
+        )
+        with timer(
+            "Encoding training samples",
+            split=hf_split,
+            subset=hf_subset,
+            log_message=(
+                f"Encoding {len(union_idxs)} unique training samples "
+                f"(union across {self.n_experiments} experiments)..."
+            ),
+        ):
+            union_cache = model.encode(
+                dataloader_train,
+                task_metadata=self.metadata,
+                hf_split=self.train_split,
+                hf_subset=hf_subset,
+                **encode_kwargs,
+            )
+        idx_to_pos = {orig: pos for pos, orig in enumerate(union_idxs)}
+
+        dataloader_test = create_dataloader(
+            eval_split,
+            task_metadata=self.metadata,
+            input_column=self.input_column_name,
+            num_proc=num_proc,
+            **encode_kwargs,
+        )
+        with timer(
+            "Encoding test samples",
+            split=hf_split,
+            subset=hf_subset,
+        ):
+            test_embeddings = model.encode(
+                dataloader_test,
+                task_metadata=self.metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
-                num_proc=num_proc,
+                **encode_kwargs,
             )
 
-            if prediction_folder:
-                all_predictions.append(predictions)
-            scores.append(scores_exp)
+        scores = []
+        all_predictions = []
+        with timer(
+            "Scoring",
+            split=hf_split,
+            subset=hf_subset,
+            log_message=f"Running {self.metadata.name} - Evaluating classifiers...",
+        ):
+            for i in range(self.n_experiments):
+                logger.info(f"Running experiment ({i}/{self.n_experiments})")
+                train_embeddings = union_cache[
+                    [idx_to_pos[j] for j in all_selected_idxs[i]]
+                ]
+                msg = f"Running experiment ({i}/{self.n_experiments})"
+                with timer(msg, split=hf_split, subset=hf_subset, log_message=msg):
+                    scores_exp, predictions = self._run_experiment(
+                        train_split.select(all_selected_idxs[i]),
+                        eval_split,
+                        train_embeddings,
+                        test_embeddings,
+                        timer=timer,
+                    )
+
+                if prediction_folder:
+                    all_predictions.append(predictions)
+                scores.append(scores_exp)
 
         if prediction_folder:
             self._save_task_predictions(
@@ -275,6 +364,7 @@ class AbsTaskClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if self.train_split != hf_split:
@@ -301,40 +391,47 @@ class AbsTaskClassification(AbsTask):
             num_proc=num_proc,
             **encode_kwargs,
         )
-        logger.info("Running cross-validation - Encoding samples...")
         # precompute all embeddings for cross-validation to not recomupute them in different k-folds
-        dataset_embeddings = model.encode(
-            dataloader_train,
-            task_metadata=self.metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            **encode_kwargs,
-        )
-        for i, (train_idx, val_idx) in enumerate(
-            cross_validation_splitter.split(range(num_samples))
+        with timer(
+            "Encoding training samples",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running cross-validation - Encoding samples...",
         ):
-            train_split = ds.select(train_idx)
-            eval_split = ds.select(val_idx)
-            train_cache = dataset_embeddings[train_idx]
-            test_cache = dataset_embeddings[val_idx]
-            logger.info(f"Running experiment ({i}/{self.n_experiments})")
-            scores_exp, predictions, idxs, _ = self._run_experiment(
-                model,
-                train_split,
-                eval_split,
-                experiment_num=i,
-                idxs=idxs,
-                encode_kwargs=encode_kwargs,
+            dataset_embeddings = model.encode(
+                dataloader_train,
+                task_metadata=self.metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
-                test_cache=test_cache,
-                train_cache=train_cache,
-                num_proc=num_proc,
+                **encode_kwargs,
             )
+        with timer(
+            "Scoring",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running cross-validation - Evaluating classifiers...",
+        ):
+            for i, (train_idx, val_idx) in enumerate(
+                cross_validation_splitter.split(range(num_samples))
+            ):
+                train_split = ds.select(train_idx)
+                eval_split = ds.select(val_idx)
+                train_dataset, idxs, selected_idx = self._undersample_data(
+                    train_split, i, idxs
+                )
+                msg = f"Running experiment ({i}/{self.n_experiments})"
+                with timer(msg, split=hf_split, subset=hf_subset, log_message=msg):
+                    scores_exp, predictions = self._run_experiment(
+                        train_dataset,
+                        eval_split,
+                        dataset_embeddings[train_idx][selected_idx],
+                        dataset_embeddings[val_idx],
+                        timer=timer,
+                    )
 
-            if prediction_folder:
-                all_predictions.append(predictions)
-            scores.append(scores_exp)
+                if prediction_folder:
+                    all_predictions.append(predictions)
+                scores.append(scores_exp)
 
         if prediction_folder:
             self._save_task_predictions(
@@ -346,49 +443,24 @@ class AbsTaskClassification(AbsTask):
             )
         return self._calculate_avg_scores(scores)
 
-    def _run_experiment(  # noqa: PLR0913
+    def _run_experiment(
         self,
-        model: EncoderProtocol,
         train_split: Dataset,
         eval_split: Dataset,
-        *,
-        experiment_num: int,
-        idxs: list[int] | None,
-        test_cache: Array | None,
-        encode_kwargs: EncodeKwargs,
-        hf_split: str,
-        hf_subset: str,
-        train_cache: Array | None = None,
-        num_proc: int | None = None,
-    ) -> tuple[ClassificationMetrics, list[float], list[int], Array]:
-        train_dataset, idxs, selected_idx = self._undersample_data(
-            train_split,
-            experiment_num,
-            idxs,
-        )
-        sub_train_cache = None
-        if train_cache is not None:
-            sub_train_cache = train_cache[selected_idx]
-
+        train_embeddings: Array,
+        test_embeddings: Array,
+        timer: TimingStack,
+    ) -> tuple[ClassificationMetrics, list[float]]:
         evaluator = self.evaluator(
-            train_dataset,
+            train_split,
             eval_split,
-            values_column_name=self.input_column_name,
             label_column_name=self.label_column_name,
-            task_metadata=self.metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
             evaluator_model=self.evaluator_model,
+            timer=timer,
         )
-        y_pred, test_cache = evaluator(
-            model,
-            encode_kwargs=encode_kwargs,
-            test_cache=test_cache,
-            train_cache=sub_train_cache,
-            num_proc=num_proc,
-        )
+        y_pred = evaluator(train_embeddings, test_embeddings)
         y_test = eval_split[self.label_column_name]
-        return self._calculate_scores(y_test, y_pred), y_pred.tolist(), idxs, test_cache
+        return self._calculate_scores(y_test, y_pred), y_pred.tolist()
 
     def _calculate_avg_scores(
         self, scores: list[ClassificationMetrics]
@@ -403,7 +475,7 @@ class AbsTaskClassification(AbsTask):
             for k in scores[0].keys()
         }
         logger.info(f"Running {self.metadata.name} - Finished.")
-        return FullClassificationMetrics(
+        return FullClassificationMetrics(  # type: ignore[no-any-return]
             scores_per_experiment=scores,
             **avg_scores,  # type: ignore[typeddict-item]
         )
@@ -467,73 +539,106 @@ class AbsTaskClassification(AbsTask):
 
         return dataset.select(sampled_idxs), idxs, sampled_idxs
 
-    def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
-    ) -> ClassificationDescriptiveStatistics:
-        train_text = []
-        if hf_subset:
-            inputs = self.dataset[hf_subset][split][self.input_column_name]
-            label = self.dataset[hf_subset][split][self.label_column_name]
-            if split != self.train_split:
-                train_text = self.dataset[hf_subset][self.train_split][
-                    self.input_column_name
-                ]
-        elif compute_overall:
-            inputs = []
-            label = []
-            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
-                inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
-                label.extend(self.dataset[hf_subset][split][self.label_column_name])
-                if split != self.train_split:
-                    train_text.extend(
-                        self.dataset[hf_subset][self.train_split][
-                            self.input_column_name
-                        ]
-                    )
+    def _load_statistics_col_inputs_and_hashes(
+        self, split: str, hf_subset: str | None, compute_overall: bool
+    ) -> tuple[
+        dict[Modalities, list[Any]],
+        list[Any],
+        dict[str, list[str]],
+        dict[str, list[str]] | None,
+    ]:
+        """Load input columns, label data, and pre-computed hashes for a split."""
+        if isinstance(self.input_column_name, str):
+            col_map = {self.metadata.modalities[0]: self.input_column_name}
         else:
-            inputs = self.dataset[split][self.input_column_name]
-            label = self.dataset[split][self.label_column_name]
-            if split != self.train_split:
-                train_text = self.dataset[self.train_split][self.input_column_name]
+            col_map = {col: col for col in self.input_column_name}
 
-        image_statistics = None
-        text_statistics = None
-        audio_statistics = None
-        num_texts_in_train = None
-
-        if "image" in self.metadata.modalities:
-            image_statistics = calculate_image_statistics(inputs)
-        if "text" in self.metadata.modalities:
-            text_statistics = calculate_text_statistics(inputs)
-            num_texts_in_train = (
-                len(set(inputs) & set(train_text))
+        if hf_subset:
+            ds = self.dataset[hf_subset][split]
+            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
+            label = ds[self.label_column_name]
+            train_inputs = (
+                {
+                    mod: self.dataset[hf_subset][self.train_split][col]
+                    for mod, col in col_map.items()
+                }
                 if split != self.train_split
                 else None
             )
-        if "audio" in self.metadata.modalities:
-            audio_statistics = calculate_audio_statistics(inputs)
+        elif compute_overall:
+            col_inputs = {mod: [] for mod in col_map}
+            label = []
+            train_inputs = (
+                {mod: [] for mod in col_map} if split != self.train_split else None
+            )
+            for subset in self.metadata.eval_langs:
+                ds = self.dataset[subset][split]
+                for mod, col in col_map.items():
+                    col_inputs[mod].extend(ds[col])
+                label.extend(ds[self.label_column_name])
+                if train_inputs is not None:
+                    for mod, col in col_map.items():
+                        train_inputs[mod].extend(
+                            self.dataset[subset][self.train_split][col]
+                        )
+        else:
+            ds = self.dataset[split]
+            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
+            label = ds[self.label_column_name]
+            train_inputs = (
+                {
+                    mod: self.dataset[self.train_split][col]
+                    for mod, col in col_map.items()
+                }
+                if split != self.train_split
+                else None
+            )
 
-        label_statistics = calculate_label_statistics(label)
+        # Compute hashes once; reuse for both statistics (uniqueness counts) and
+        # train/test intersection — avoids decoding expensive media (e.g. video frames) twice.
+        test_hashes = _compute_modality_hashes(col_inputs)
+        train_hashes = (
+            _compute_modality_hashes(train_inputs) if train_inputs is not None else None
+        )
+        return col_inputs, label, test_hashes, train_hashes
 
+    def _calculate_descriptive_statistics_from_split(
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
+    ) -> ClassificationDescriptiveStatistics:
+        col_inputs, label, test_hashes, train_hashes = (
+            self._load_statistics_col_inputs_and_hashes(
+                split, hf_subset, compute_overall
+            )
+        )
+        modality_stats = calculate_single_input_modality_statistics(
+            col_inputs, test_hashes, max_workers=num_proc
+        )
         return ClassificationDescriptiveStatistics(
-            num_samples=len(inputs),
-            number_texts_intersect_with_train=num_texts_in_train,
-            text_statistics=text_statistics,
-            image_statistics=image_statistics,
-            audio_statistics=audio_statistics,
-            label_statistics=label_statistics,
+            num_samples=len(label),
+            samples_in_train=_count_samples_in_train(test_hashes, train_hashes),
+            **modality_stats,
+            label_statistics=calculate_label_statistics(label),
         )
 
     def _push_dataset_to_hub(
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
+        input_cols = (
+            [self.input_column_name]
+            if isinstance(self.input_column_name, str)
+            else list(self.input_column_name)
+        )
         self._upload_dataset_to_hub(
             repo_name,
-            [
-                self.input_column_name,
-                self.label_column_name,
-            ],
+            input_cols + [self.label_column_name],
             num_proc=num_proc,
+            **kwargs,
         )

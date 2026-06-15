@@ -12,15 +12,14 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator
 from mteb.abstasks._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
     calculate_score_statistics,
-    calculate_text_statistics,
+    calculate_single_input_modality_statistics,
 )
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
 
+from ._statistics_calculation import _count_samples_in_train
 from .classification import AbsTaskClassification
 
 if TYPE_CHECKING:
@@ -33,6 +32,7 @@ if TYPE_CHECKING:
         ImageStatistics,
         ScoreStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -43,21 +43,23 @@ class RegressionDescriptiveStatistics(SplitDescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        num_texts_in_train: Number of texts in the train split
+        samples_in_train: Number of texts in the train split
 
         text_statistics: Statistics of texts
         image_statistics: Statistics of images
         audio_statistics: Statistics of audio
+        video_statistics: Statistics of video
 
         values_statistics: Statistics of values
     """
 
     num_samples: int
-    num_texts_in_train: int | None
+    samples_in_train: int | None
 
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
     values_statistics: ScoreStatistics
 
 
@@ -114,16 +116,18 @@ class AbsTaskRegression(AbsTaskClassification):
         self, dataset: Dataset, experiment_num: int, idxs: list[int] | None = None
     ) -> tuple[Dataset, list[int], list[int]]:
         if self.n_samples >= len(dataset):
-            train_split_sampled = dataset
-        else:
-            train_split_sampled = self.stratified_subsampling(
-                datasets.DatasetDict({"train": dataset}),
-                seed=self.seed + experiment_num,
-                splits=["train"],
-                label=self.label_column_name,
-                n_samples=self.n_samples,
-            )["train"]
-        return train_split_sampled, [], []
+            return dataset, [], list(range(len(dataset)))
+        # Tag rows with their original position so we can recover indices after subsampling.
+        indexed = dataset.add_column("__idx__", list(range(len(dataset))))
+        subsampled = self.stratified_subsampling(
+            datasets.DatasetDict({"train": indexed}),
+            seed=self.seed + experiment_num,
+            splits=["train"],
+            label=self.label_column_name,
+            n_samples=self.n_samples,
+        )["train"]
+        selected_idx = subsampled["__idx__"]
+        return subsampled.remove_columns(["__idx__"]), [], selected_idx
 
     def _calculate_scores(  # type: ignore[override]  # noqa: PLR6301
         self,
@@ -197,55 +201,24 @@ class AbsTaskRegression(AbsTaskClassification):
         return dataset_dict
 
     def _calculate_descriptive_statistics_from_split(  # type: ignore[override]
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> RegressionDescriptiveStatistics:
-        train_text = []
-        if hf_subset:
-            inputs = self.dataset[hf_subset][split][self.input_column_name]
-            values = self.dataset[hf_subset][split][self.label_column_name]
-            if split != self.train_split:
-                train_text = self.dataset[hf_subset][self.train_split][
-                    self.input_column_name
-                ]
-        elif compute_overall:
-            inputs = []
-            values = []
-            for lang_subset in self.metadata.eval_langs:
-                inputs.extend(self.dataset[lang_subset][split][self.input_column_name])
-                values.extend(self.dataset[lang_subset][split][self.label_column_name])
-                if split != "train":
-                    train_text.extend(
-                        self.dataset[lang_subset][self.train_split][
-                            self.input_column_name
-                        ]
-                    )
-        else:
-            inputs = self.dataset[split][self.input_column_name]
-            values = self.dataset[split][self.label_column_name]
-            if split != "train":
-                train_text = self.dataset[self.train_split][self.input_column_name]
-
-        text_statistics = None
-        image_statistics = None
-        audio_statistics = None
-        num_texts_in_train = None
-        if self.metadata.modalities == ["text"]:
-            text_statistics = calculate_text_statistics(inputs)
-            num_texts_in_train = (
-                len(set(inputs) & set(train_text))
-                if split != self.train_split
-                else None
+        col_inputs, values, test_hashes, train_hashes = (
+            self._load_statistics_col_inputs_and_hashes(
+                split, hf_subset, compute_overall
             )
-        elif self.metadata.modalities == ["image"]:
-            image_statistics = calculate_image_statistics(inputs)
-        elif self.metadata.modalities == ["audio"]:
-            audio_statistics = calculate_audio_statistics(inputs)
-
+        )
+        modality_stats = calculate_single_input_modality_statistics(
+            col_inputs, test_hashes, max_workers=num_proc
+        )
         return RegressionDescriptiveStatistics(
-            num_samples=len(inputs),
-            num_texts_in_train=num_texts_in_train,
-            text_statistics=text_statistics,
-            image_statistics=image_statistics,
-            audio_statistics=audio_statistics,
+            num_samples=len(values),
+            samples_in_train=_count_samples_in_train(test_hashes, train_hashes),
+            **modality_stats,
             values_statistics=calculate_score_statistics(values),
         )

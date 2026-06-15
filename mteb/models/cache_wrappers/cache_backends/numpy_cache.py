@@ -4,7 +4,7 @@ import json
 import logging
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 
@@ -26,7 +26,7 @@ class NumpyCache:
         self.index_file = self.directory / "index.json"
         self.dimension_file = self.directory / "dimension"
         self.hash_to_index: dict[str, int] = {}
-        self.vectors: np.memmap | None = None
+        self.vectors: np.memmap[tuple[int, ...], np.dtype[np.floating]] | None = None
         self.vector_dim: int | None = None
         self.initial_vectors = initial_vectors
         logger.info(f"Initialized VectorCacheMap in directory: {self.directory}")
@@ -194,7 +194,8 @@ class NumpyCache:
                 logger.debug(f"Item hash not found in index: {item_hash}")
                 return None
             index = self.hash_to_index[item_hash]
-            return self.vectors[index]
+            vector = cast("np.typing.NDArray[np.floating]", self.vectors[index])
+            return vector
         except Exception as e:
             logger.error(f"Error retrieving vector for item: {str(e)}")
             raise
@@ -202,7 +203,7 @@ class NumpyCache:
     def __contains__(self, item: dict[str, Any]) -> bool:
         return _hash_item(item) in self.hash_to_index
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.close()
 
     def close(self) -> None:

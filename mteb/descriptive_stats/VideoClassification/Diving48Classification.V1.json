@@ -1,0 +1,389 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "samples_in_train": 0,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": {
+            "total_duration_seconds": 8807.706669,
+            "total_frames": 223539,
+            "min_width": 640,
+            "average_width": 640.0,
+            "max_width": 640,
+            "min_height": 480,
+            "average_height": 480.0,
+            "max_height": 480,
+            "min_duration_seconds": 1.0,
+            "average_duration_seconds": 4.300638021972656,
+            "max_duration_seconds": 13.28,
+            "unique_videos": 2048,
+            "average_fps": 25.42724609375,
+            "fps": {
+                "25": 1873,
+                "30": 175
+            },
+            "min_resolution": [
+                640,
+                480
+            ],
+            "average_resolution": [
+                640.0,
+                480.0
+            ],
+            "max_resolution": [
+                640,
+                480
+            ],
+            "resolutions": {
+                "640x480": 2048
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 48,
+            "labels": {
+                "17": {
+                    "count": 78
+                },
+                "20": {
+                    "count": 37
+                },
+                "8": {
+                    "count": 39
+                },
+                "1": {
+                    "count": 46
+                },
+                "42": {
+                    "count": 34
+                },
+                "11": {
+                    "count": 113
+                },
+                "41": {
+                    "count": 153
+                },
+                "46": {
+                    "count": 59
+                },
+                "28": {
+                    "count": 100
+                },
+                "7": {
+                    "count": 145
+                },
+                "33": {
+                    "count": 5
+                },
+                "44": {
+                    "count": 22
+                },
+                "40": {
+                    "count": 58
+                },
+                "19": {
+                    "count": 78
+                },
+                "5": {
+                    "count": 15
+                },
+                "27": {
+                    "count": 42
+                },
+                "4": {
+                    "count": 29
+                },
+                "9": {
+                    "count": 25
+                },
+                "10": {
+                    "count": 13
+                },
+                "43": {
+                    "count": 38
+                },
+                "29": {
+                    "count": 101
+                },
+                "13": {
+                    "count": 16
+                },
+                "0": {
+                    "count": 79
+                },
+                "39": {
+                    "count": 64
+                },
+                "45": {
+                    "count": 59
+                },
+                "24": {
+                    "count": 10
+                },
+                "23": {
+                    "count": 36
+                },
+                "14": {
+                    "count": 47
+                },
+                "15": {
+                    "count": 56
+                },
+                "25": {
+                    "count": 96
+                },
+                "21": {
+                    "count": 58
+                },
+                "26": {
+                    "count": 49
+                },
+                "34": {
+                    "count": 28
+                },
+                "18": {
+                    "count": 18
+                },
+                "6": {
+                    "count": 3
+                },
+                "30": {
+                    "count": 80
+                },
+                "22": {
+                    "count": 38
+                },
+                "32": {
+                    "count": 2
+                },
+                "3": {
+                    "count": 16
+                },
+                "2": {
+                    "count": 15
+                },
+                "37": {
+                    "count": 5
+                },
+                "16": {
+                    "count": 14
+                },
+                "47": {
+                    "count": 2
+                },
+                "31": {
+                    "count": 4
+                },
+                "36": {
+                    "count": 9
+                },
+                "38": {
+                    "count": 9
+                },
+                "35": {
+                    "count": 2
+                },
+                "12": {
+                    "count": 3
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 15943,
+        "samples_in_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": {
+            "total_duration_seconds": 69908.890501,
+            "total_frames": 2599794,
+            "min_width": 640,
+            "average_width": 640.0,
+            "max_width": 640,
+            "min_height": 480,
+            "average_height": 480.0,
+            "max_height": 480,
+            "min_duration_seconds": 1.0,
+            "average_duration_seconds": 4.384926958602522,
+            "max_duration_seconds": 17.4,
+            "unique_videos": 15943,
+            "average_fps": 39.6136235338393,
+            "fps": {
+                "60": 6362,
+                "25": 7518,
+                "30": 2063
+            },
+            "min_resolution": [
+                640,
+                480
+            ],
+            "average_resolution": [
+                640.0,
+                480.0
+            ],
+            "max_resolution": [
+                640,
+                480
+            ],
+            "resolutions": {
+                "640x480": 15943
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 48,
+            "labels": {
+                "11": {
+                    "count": 611
+                },
+                "7": {
+                    "count": 668
+                },
+                "26": {
+                    "count": 64
+                },
+                "22": {
+                    "count": 321
+                },
+                "25": {
+                    "count": 755
+                },
+                "41": {
+                    "count": 792
+                },
+                "9": {
+                    "count": 335
+                },
+                "30": {
+                    "count": 304
+                },
+                "0": {
+                    "count": 220
+                },
+                "31": {
+                    "count": 75
+                },
+                "32": {
+                    "count": 84
+                },
+                "46": {
+                    "count": 410
+                },
+                "28": {
+                    "count": 595
+                },
+                "20": {
+                    "count": 256
+                },
+                "19": {
+                    "count": 1159
+                },
+                "14": {
+                    "count": 688
+                },
+                "17": {
+                    "count": 525
+                },
+                "27": {
+                    "count": 622
+                },
+                "33": {
+                    "count": 60
+                },
+                "45": {
+                    "count": 960
+                },
+                "39": {
+                    "count": 552
+                },
+                "29": {
+                    "count": 1066
+                },
+                "38": {
+                    "count": 451
+                },
+                "43": {
+                    "count": 509
+                },
+                "15": {
+                    "count": 403
+                },
+                "24": {
+                    "count": 40
+                },
+                "1": {
+                    "count": 122
+                },
+                "12": {
+                    "count": 59
+                },
+                "13": {
+                    "count": 115
+                },
+                "47": {
+                    "count": 206
+                },
+                "4": {
+                    "count": 453
+                },
+                "23": {
+                    "count": 251
+                },
+                "6": {
+                    "count": 115
+                },
+                "40": {
+                    "count": 591
+                },
+                "3": {
+                    "count": 153
+                },
+                "21": {
+                    "count": 361
+                },
+                "5": {
+                    "count": 42
+                },
+                "2": {
+                    "count": 74
+                },
+                "44": {
+                    "count": 184
+                },
+                "8": {
+                    "count": 58
+                },
+                "42": {
+                    "count": 57
+                },
+                "18": {
+                    "count": 48
+                },
+                "34": {
+                    "count": 40
+                },
+                "10": {
+                    "count": 69
+                },
+                "16": {
+                    "count": 68
+                },
+                "36": {
+                    "count": 153
+                },
+                "37": {
+                    "count": 145
+                },
+                "35": {
+                    "count": 54
+                }
+            }
+        }
+    }
+}

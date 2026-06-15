@@ -1,4 +1,5 @@
 from .ara import *
+from .code import *
 from .eng import *
 from .fra import *
 from .jpn import *

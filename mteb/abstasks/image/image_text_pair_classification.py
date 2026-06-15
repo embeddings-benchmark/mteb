@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from datasets import Dataset
 
     from mteb.models.models_protocols import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs
     from mteb.types.statistics import (
         ImageStatistics,
@@ -81,7 +82,12 @@ class AbsTaskImageTextPairClassification(AbsTask):
     texts_column_names: str | Sequence[str] = "caption"
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> ImageTextPairClassificationDescriptiveStatistics:
         if compute_overall:
             dataset = concatenate_datasets(
@@ -122,7 +128,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         return ImageTextPairClassificationDescriptiveStatistics(
             num_samples=num_samples,
             text_statistics=calculate_text_statistics(texts),
-            image_statistics=calculate_image_statistics(images),
+            image_statistics=calculate_image_statistics(images, max_workers=num_proc),
         )
 
     def _evaluate_subset(
@@ -135,6 +141,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ImageTextPairClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -166,11 +173,12 @@ class AbsTaskImageTextPairClassification(AbsTask):
             num_images_per_sample=num_images_per_sample,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         scores: list[torch.Tensor] = evaluator(
             model, encode_kwargs=encode_kwargs, num_proc=num_proc
-        )  # type: ignore[assignment]
+        )
         if prediction_folder:
             self._save_task_predictions(
                 [score.tolist() for score in scores],
@@ -222,6 +230,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         text_columns = (
             [self.texts_column_names]
@@ -238,4 +247,5 @@ class AbsTaskImageTextPairClassification(AbsTask):
             repo_name,
             [*text_columns, *image_columns],
             num_proc=num_proc,
+            **kwargs,
         )

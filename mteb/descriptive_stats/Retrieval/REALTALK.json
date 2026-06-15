@@ -1,0 +1,144 @@
+{
+    "test": {
+        "num_samples": 27511,
+        "number_of_characters": 4651664,
+        "documents_text_statistics": {
+            "total_text_length": 4618326,
+            "min_text_length": 66,
+            "average_text_length": 172.12008050089446,
+            "max_text_length": 2084,
+            "unique_texts": 8943
+        },
+        "documents_image_statistics": null,
+        "documents_audio_statistics": null,
+        "queries_text_statistics": {
+            "total_text_length": 33338,
+            "min_text_length": 15,
+            "average_text_length": 49.09867452135494,
+            "max_text_length": 160,
+            "unique_texts": 675
+        },
+        "queries_image_statistics": null,
+        "queries_audio_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 1553,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 2.287187039764359,
+            "max_relevant_docs_per_query": 22,
+            "unique_relevant_docs": 1338
+        },
+        "top_ranked_statistics": {
+            "num_top_ranked": 592716,
+            "min_top_ranked_per_query": 410,
+            "average_top_ranked_per_query": 872.9248895434463,
+            "max_top_ranked_per_query": 1548
+        },
+        "hf_subset_descriptive_stats": {
+            "commonsense": {
+                "num_samples": 9047,
+                "number_of_characters": 1545264,
+                "documents_text_statistics": {
+                    "total_text_length": 1539442,
+                    "min_text_length": 66,
+                    "average_text_length": 172.12008050089446,
+                    "max_text_length": 2084,
+                    "unique_texts": 8943
+                },
+                "documents_image_statistics": null,
+                "documents_audio_statistics": null,
+                "queries_text_statistics": {
+                    "total_text_length": 5822,
+                    "min_text_length": 15,
+                    "average_text_length": 56.52427184466019,
+                    "max_text_length": 160,
+                    "unique_texts": 103
+                },
+                "queries_image_statistics": null,
+                "queries_audio_statistics": null,
+                "relevant_docs_statistics": {
+                    "num_relevant_docs": 287,
+                    "min_relevant_docs_per_query": 1,
+                    "average_relevant_docs_per_query": 2.7864077669902914,
+                    "max_relevant_docs_per_query": 22,
+                    "unique_relevant_docs": 270
+                },
+                "top_ranked_statistics": {
+                    "num_top_ranked": 90866,
+                    "min_top_ranked_per_query": 410,
+                    "average_top_ranked_per_query": 882.1941747572815,
+                    "max_top_ranked_per_query": 1548
+                }
+            },
+            "multi_hop": {
+                "num_samples": 9209,
+                "number_of_characters": 1550818,
+                "documents_text_statistics": {
+                    "total_text_length": 1539442,
+                    "min_text_length": 66,
+                    "average_text_length": 172.12008050089446,
+                    "max_text_length": 2084,
+                    "unique_texts": 8943
+                },
+                "documents_image_statistics": null,
+                "documents_audio_statistics": null,
+                "queries_text_statistics": {
+                    "total_text_length": 11376,
+                    "min_text_length": 15,
+                    "average_text_length": 42.928301886792454,
+                    "max_text_length": 104,
+                    "unique_texts": 263
+                },
+                "queries_image_statistics": null,
+                "queries_audio_statistics": null,
+                "relevant_docs_statistics": {
+                    "num_relevant_docs": 914,
+                    "min_relevant_docs_per_query": 1,
+                    "average_relevant_docs_per_query": 3.449056603773585,
+                    "max_relevant_docs_per_query": 20,
+                    "unique_relevant_docs": 735
+                },
+                "top_ranked_statistics": {
+                    "num_top_ranked": 229296,
+                    "min_top_ranked_per_query": 410,
+                    "average_top_ranked_per_query": 865.2679245283019,
+                    "max_top_ranked_per_query": 1548
+                }
+            },
+            "temporal_reasoning": {
+                "num_samples": 9255,
+                "number_of_characters": 1555582,
+                "documents_text_statistics": {
+                    "total_text_length": 1539442,
+                    "min_text_length": 66,
+                    "average_text_length": 172.12008050089446,
+                    "max_text_length": 2084,
+                    "unique_texts": 8943
+                },
+                "documents_image_statistics": null,
+                "documents_audio_statistics": null,
+                "queries_text_statistics": {
+                    "total_text_length": 16140,
+                    "min_text_length": 22,
+                    "average_text_length": 51.89710610932476,
+                    "max_text_length": 128,
+                    "unique_texts": 309
+                },
+                "queries_image_statistics": null,
+                "queries_audio_statistics": null,
+                "relevant_docs_statistics": {
+                    "num_relevant_docs": 352,
+                    "min_relevant_docs_per_query": 1,
+                    "average_relevant_docs_per_query": 1.1318327974276527,
+                    "max_relevant_docs_per_query": 5,
+                    "unique_relevant_docs": 333
+                },
+                "top_ranked_statistics": {
+                    "num_top_ranked": 272554,
+                    "min_top_ranked_per_query": 410,
+                    "average_top_ranked_per_query": 876.379421221865,
+                    "max_top_ranked_per_query": 1548
+                }
+            }
+        }
+    }
+}

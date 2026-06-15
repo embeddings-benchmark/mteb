@@ -8,10 +8,9 @@ from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb import TaskMetadata
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator
 from mteb.types import Array, BatchedInput, PromptType
 from mteb.types._encoder_io import AudioInput
 
@@ -96,18 +95,6 @@ class MCTCTWrapper(AbsEncoder):
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
-        import transformers
-        from packaging import version
-
-        transformers_version = version.parse(transformers.__version__)
-        if transformers_version >= version.parse("5.0.0"):
-            raise RuntimeError(
-                f"transformers version {transformers.__version__} is not supported. "
-                "MCTCT requires transformers < 5.0.0. "
-                'You can run `pip install "mteb[mctct]"` to install the correct version.'
-            )
-
         from transformers import MCTCTFeatureExtractor, MCTCTModel
 
         self.model_name = model_name
@@ -129,7 +116,7 @@ class MCTCTWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []
 
@@ -243,4 +230,5 @@ mctct_large = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2111.00161},
 }""",
+    extra_requirements_groups=["transformers-v4"],
 )

@@ -2,9 +2,6 @@ import logging
 
 import torch
 
-from mteb._requires_package import (
-    requires_package,
-)
 from mteb.models.model_meta import ModelMeta
 
 from .colpali_models import (
@@ -27,9 +24,6 @@ class ColSmolWrapper(ColPaliEngineWrapper):
         attn_implementation: str | None = None,
         **kwargs,
     ):
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
         from colpali_engine.models import ColIdefics3, ColIdefics3Processor
         from transformers.utils.import_utils import is_flash_attn_2_available
 
@@ -74,6 +68,7 @@ colsmol_256m = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
+    extra_requirements_groups=["colpali_engine"],
 )
 
 colsmol_500m = ModelMeta(
@@ -102,4 +97,5 @@ colsmol_500m = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
+    extra_requirements_groups=["colpali_engine"],
 )

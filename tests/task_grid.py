@@ -9,6 +9,8 @@ from .mock_tasks import (
     MockAny2AnyRetrievalI2TTask,
     MockAny2AnyRetrievalT2ATask,
     MockAny2AnyRetrievalT2ITask,
+    MockAsymVideoAudioPairClassificationTask,
+    MockAsymVideoAudioPairClassificationTaskV2,
     MockAudioClassification,
     MockAudioClassificationCrossVal,
     MockAudioClusteringTask,
@@ -54,7 +56,25 @@ from .mock_tasks import (
     MockRetrievalTask,
     MockSTSTask,
     MockSummarizationTask,
+    MockSymCustomVideoAudioPairClassificationTaskV2,
+    MockSymCustomVideoAudiSTSTask,
     MockTextZeroShotClassificationTask,
+    MockVideoAudioClassification,
+    MockVideoAudioClusteringTask,
+    MockVideoAudioMultilabelClassificationTask,
+    MockVideoAudioPairClassificationTask,
+    MockVideoAudioRetrievalT2VA,
+    MockVideoAudioRetrievalVA2T,
+    MockVideoAudioSTSTask,
+    MockVideoAudioTextRetrievalVAT2T,
+    MockVideoAudioZeroshotClassificationTask,
+    MockVideoClassification,
+    MockVideoClusteringTask,
+    MockVideoMultilabelClassificationTask,
+    MockVideoPairClassificationTask,
+    MockVideoRetrievalT2V,
+    MockVideoRetrievalV2T,
+    MockVideoZeroshotClassificationTask,
     MockVisualSTSTask,
     MockZeroShotClassificationTask,
 )
@@ -166,7 +186,38 @@ MOCK_MIEB_TASK_REGISTRY = {
     task.metadata.name: type(task) for task in MOCK_MIEB_TASK_GRID
 }
 
-ALL_TASK_TEST_GRID = MOCK_TASK_TEST_GRID + MOCK_MIEB_TASK_GRID + MOCK_MAEB_TASK_GRID
+MOCK_MVEB_TASK_GRID = [
+    MockVideoClassification(),
+    MockVideoClusteringTask(),
+    MockVideoMultilabelClassificationTask(),
+    MockVideoZeroshotClassificationTask(),
+    MockVideoPairClassificationTask(),
+    MockVideoRetrievalV2T(),
+    MockVideoRetrievalT2V(),
+]
+
+MOCK_MULTIMODAL_TASKS = (
+    MockVideoAudioClassification(),
+    MockVideoAudioClusteringTask(),
+    MockVideoAudioMultilabelClassificationTask(),
+    MockVideoAudioPairClassificationTask(),
+    MockVideoAudioSTSTask(),
+    MockVideoAudioRetrievalVA2T(),
+    MockVideoAudioRetrievalT2VA(),
+    MockVideoAudioTextRetrievalVAT2T(),
+    MockVideoAudioZeroshotClassificationTask(),
+    MockAsymVideoAudioPairClassificationTask(),
+    MockAsymVideoAudioPairClassificationTaskV2(),
+    MockSymCustomVideoAudioPairClassificationTaskV2(),
+    MockSymCustomVideoAudiSTSTask(),
+)
+
+ALL_TASK_TEST_GRID = (
+    MOCK_TASK_TEST_GRID
+    + MOCK_MIEB_TASK_GRID
+    + MOCK_MAEB_TASK_GRID
+    + MOCK_MVEB_TASK_GRID
+)
 
 ALL_TASK_TEST_GRID_AS_STRING = [
     t.metadata.name if isinstance(t, AbsTask) else t for t in ALL_TASK_TEST_GRID

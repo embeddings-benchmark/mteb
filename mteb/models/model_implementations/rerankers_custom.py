@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 
-from mteb._requires_package import requires_package
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 
@@ -63,12 +62,6 @@ class BGEReranker(RerankerWrapper):
         if self.fp_options:
             model_args["torch_dtype"] = self.fp_options
 
-        requires_package(
-            self,
-            "FlagEmbedding",
-            model_name_or_path,
-            "pip install 'mteb[flagembedding]'",
-        )
         from FlagEmbedding import FlagReranker
 
         self.model = FlagReranker(model_name_or_path, use_fp16=True)
@@ -267,6 +260,7 @@ bge_reranker_v2_m3 = ModelMeta(
       year = {2024},
     }
     """,
+    extra_requirements_groups=["flagembedding"],
 )
 
 # SBERT MS MARCO CrossEncoders (Version 2 models). Same training/data/citation for all.

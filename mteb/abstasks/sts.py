@@ -12,26 +12,27 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
+    calculate_pair_modality_statistics,
     calculate_score_statistics,
-    calculate_text_statistics,
 )
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
     from pathlib import Path
 
     from datasets import Dataset
 
     from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
     from mteb.models import MTEBModels
-    from mteb.types import EncodeKwargs, PromptType
+    from mteb.timing import TimingStack
+    from mteb.types import EncodeKwargs, Modalities, PromptType
     from mteb.types.statistics import (
         AudioStatistics,
         ImageStatistics,
         ScoreStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -54,6 +55,9 @@ class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
         audio1_statistics: Statistics for audio1
         audio2_statistics: Statistics for audio2
 
+        video1_statistics: Statistics for video1
+        video2_statistics: Statistics for video2
+
         label_statistics: Statistics for labels
     """
 
@@ -69,6 +73,9 @@ class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
 
     audio1_statistics: AudioStatistics | None
     audio2_statistics: AudioStatistics | None
+
+    video1_statistics: VideoStatistics | None
+    video2_statistics: VideoStatistics | None
 
     label_statistics: ScoreStatistics
 
@@ -120,7 +127,16 @@ class AbsTaskSTS(AbsTask):
     """
 
     abstask_prompt = "Retrieve semantically similar text."
-    column_names: tuple[str, str] = ("sentence1", "sentence2")
+    column_names: (
+        tuple[str, str]
+        | tuple[
+            Mapping[str, Modalities],
+            Mapping[str, Modalities],
+        ]
+    ) = (
+        "sentence1",
+        "sentence2",
+    )
     min_score: int = 0
     max_score: int = 5
     input1_prompt_type: PromptType | None = None
@@ -136,13 +152,13 @@ class AbsTaskSTS(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> STSMetrics:
         if not isinstance(model, EncoderProtocol):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
 
         normalized_scores = list(map(self._normalize, data_split["score"]))
-        data_split = data_split.select_columns(list(self.column_names))
 
         evaluator = AnySTSEvaluator(
             data_split,
@@ -152,6 +168,7 @@ class AbsTaskSTS(AbsTask):
             hf_subset=hf_subset,
             input1_prompt_type=self.input1_prompt_type,
             input2_prompt_type=self.input2_prompt_type,
+            timer=timer,
             **kwargs,
         )
         scores = evaluator(
@@ -210,69 +227,85 @@ class AbsTaskSTS(AbsTask):
         )
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> AnySTSDescriptiveStatistics:
-        first_column, second_column = self.column_names
         self.dataset = cast("dict[str, dict[str, Dataset]]", self.dataset)
 
+        # Pick a representative split dataset to inspect available column names.
+        _ref_split: Dataset = (
+            self.dataset[hf_subset][split]
+            if hf_subset
+            else (
+                self.dataset[next(iter(self.metadata.eval_langs))][split]
+                if compute_overall
+                else self.dataset[split]
+            )
+        )
         if hf_subset:
-            sentence1 = self.dataset[hf_subset][split][first_column]
-            sentence2 = self.dataset[hf_subset][split][second_column]
             score = self.dataset[hf_subset][split]["score"]
+            n = len(score)
+
+            def _load_col(col: str) -> list[Any]:
+                return list(self.dataset[hf_subset][split][col])
+
         elif compute_overall:
-            sentence1 = []
-            sentence2 = []
             score = []
-            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
-                sentence1.extend(self.dataset[hf_subset][split][first_column])
-                sentence2.extend(self.dataset[hf_subset][split][second_column])
-                score.extend(self.dataset[hf_subset][split]["score"])
+            for _subset in self.metadata.eval_langs:
+                score.extend(self.dataset[_subset][split]["score"])
+            n = len(score)
+
+            def _load_col(col: str) -> list[Any]:
+                result: list[Any] = []
+                for subset in self.metadata.eval_langs:
+                    result.extend(self.dataset[subset][split][col])
+                return result
+
         else:
-            sentence1 = self.dataset[split][first_column]
-            sentence2 = self.dataset[split][second_column]
             score = self.dataset[split]["score"]
+            n = len(score)
 
-        if "text" in self.metadata.modalities:
-            text1_statistics = calculate_text_statistics(sentence1)
-            text2_statistics = calculate_text_statistics(sentence2)
+            def _load_col(col: str) -> list[Any]:
+                return list(self.dataset[split][col])
 
-            unique_pairs = len(set(zip(sentence1, sentence2)))
+        if isinstance(self.column_names[0], str) and len(self.metadata.modalities) == 1:
+            modality = self.metadata.modalities[0]
+            col_modalities1 = {str(self.column_names[0]): modality}
+            col_modalities2 = {str(self.column_names[1]): modality}
         else:
-            text1_statistics = None
-            text2_statistics = None
-            unique_pairs = None
+            col_modalities1 = self.column_names[0]  # type: ignore[assignment]
+            col_modalities2 = self.column_names[1]  # type: ignore[assignment]
 
-        if "image" in self.metadata.modalities:
-            image1_statistics = calculate_image_statistics(sentence1)
-            image2_statistics = calculate_image_statistics(sentence2)
-        else:
-            image1_statistics = None
-            image2_statistics = None
-
-        if "audio" in self.metadata.modalities:
-            audio1_statistics = calculate_audio_statistics(sentence1)
-            audio2_statistics = calculate_audio_statistics(sentence2)
-        else:
-            audio1_statistics = None
-            audio2_statistics = None
-
+        pair_stats = calculate_pair_modality_statistics(
+            col_modalities1,
+            col_modalities2,
+            _load_col,
+            n,
+            max_workers=num_proc,
+        )
         labels_statistics = calculate_score_statistics(score)
 
         return AnySTSDescriptiveStatistics(
-            num_samples=len(sentence1),
+            num_samples=n,
             number_of_characters=(
-                text1_statistics["total_text_length"]
-                + text2_statistics["total_text_length"]
-                if text1_statistics
+                pair_stats["text1_statistics"]["total_text_length"]
+                + pair_stats["text2_statistics"]["total_text_length"]
+                if pair_stats["text1_statistics"]
                 else None
             ),
-            unique_pairs=unique_pairs,
-            text1_statistics=text1_statistics,
-            text2_statistics=text2_statistics,
-            image1_statistics=image1_statistics,
-            image2_statistics=image2_statistics,
-            audio1_statistics=audio1_statistics,
-            audio2_statistics=audio2_statistics,
+            unique_pairs=pair_stats["unique_pairs"],
+            text1_statistics=pair_stats["text1_statistics"],
+            text2_statistics=pair_stats["text2_statistics"],
+            image1_statistics=pair_stats["image1_statistics"],
+            image2_statistics=pair_stats["image2_statistics"],
+            audio1_statistics=pair_stats["audio1_statistics"],
+            audio2_statistics=pair_stats["audio2_statistics"],
+            video1_statistics=pair_stats["video1_statistics"],
+            video2_statistics=pair_stats["video2_statistics"],
             label_statistics=labels_statistics,
         )
 
@@ -280,11 +313,14 @@ class AbsTaskSTS(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
+        if isinstance(self.column_names[0], str):
+            cols = [self.column_names[0], self.column_names[1]]
+        else:
+            cols = list(self.column_names[0]) + list(self.column_names[1])
         self._upload_dataset_to_hub(
-            repo_name,
-            [self.column_names[0], self.column_names[1], "score"],
-            num_proc=num_proc,
+            repo_name, [*cols, "score"], num_proc=num_proc, **kwargs
         )
 
     def _normalize(self, x: float) -> float:

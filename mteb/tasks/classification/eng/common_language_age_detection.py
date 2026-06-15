@@ -44,7 +44,7 @@ Mirco Ravanelli},
     input_column_name: str = "audio"
     label_column_name: str = "age"
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         # remove rows where age is "not_defined" or "eighties" <- only 1 label so messes up stratified subsampling
         for split in self.dataset.keys():
             self.dataset[split] = self.dataset[split].filter(

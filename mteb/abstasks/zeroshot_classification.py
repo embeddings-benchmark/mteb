@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict, cast
 
 import torch
 from datasets import Dataset
@@ -14,23 +14,25 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
     calculate_label_statistics,
+    calculate_single_input_modality_statistics,
     calculate_text_statistics,
 )
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from pathlib import Path
 
     from mteb.models import MTEBModels
-    from mteb.types import EncodeKwargs
+    from mteb.timing import TimingStack
+    from mteb.types import EncodeKwargs, Modalities
     from mteb.types.statistics import (
         AudioStatistics,
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -41,22 +43,22 @@ class ZeroShotClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        number_of_characters: None (no text inputs)
 
-        text_statistics: None (no text inputs)
+        text_statistics: Statistics for texts
         image_statistics: Statistics for images
-        audio_statistics: None (no audio inputs)
+        audio_statistics: Statistics for audio
+        video_statistics: Statistics for video
         label_statistics: Statistics for dataset labels
 
         candidates_labels_text_statistics: Statistics for candidate labels text
     """
 
     num_samples: int
-    number_of_characters: int | None
 
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
     label_statistics: LabelStatistics
     candidates_labels_text_statistics: TextStatistics
 
@@ -79,10 +81,12 @@ class AbsTaskZeroShotClassification(AbsTask):
     Attributes:
         dataset: Huggingface dataset containing the data for the task. Dataset must contain columns specified by self.input_column_name and self.label_column_name.
         input_column_name: Name of the column containing the inputs (image or text).
-        label_column_name: Name of the column containing the labels (str).
+        label_column_name: Name of the column containing the labels. Labels must be
+            integer indices of the candidate labels or strings matching an entry of
+            `get_candidate_labels`.
     """
 
-    input_column_name: str = "image"
+    input_column_name: str | Sequence[Modalities] = "image"
     label_column_name: str = "label"
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
@@ -95,45 +99,45 @@ class AbsTaskZeroShotClassification(AbsTask):
                 del self.dataset[split]
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> ZeroShotClassificationDescriptiveStatistics:
-        if hf_subset:
-            inputs = self.dataset[hf_subset][split][self.input_column_name]
-            labels = self.dataset[hf_subset][split][self.label_column_name]
-        elif compute_overall:
-            inputs, labels = [], []
-            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
-                inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
-                labels.extend(self.dataset[hf_subset][split][self.label_column_name])
+        if isinstance(self.input_column_name, str):
+            col_map = {self.metadata.modalities[0]: self.input_column_name}
         else:
-            inputs = self.dataset[split][self.input_column_name]
-            labels = self.dataset[split][self.label_column_name]
+            col_map = {col: col for col in self.input_column_name}
 
-        num_samples = len(inputs)
+        if hf_subset:
+            ds = self.dataset[hf_subset][split]
+            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
+            labels = ds[self.label_column_name]
+        elif compute_overall:
+            col_inputs = {mod: [] for mod in col_map}
+            labels = []
+            for subset in self.metadata.eval_langs:
+                ds = self.dataset[subset][split]
+                for mod, col in col_map.items():
+                    col_inputs[mod].extend(ds[col])
+                labels.extend(ds[self.label_column_name])
+        else:
+            ds = self.dataset[split]
+            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
+            labels = ds[self.label_column_name]
 
-        image_statistics = None
-        text_statistics = None
-        audio_statistics = None
-
-        if "image" in self.metadata.modalities:
-            image_statistics = calculate_image_statistics(inputs)
-        if self.metadata.modalities == ["text"]:
-            text_statistics = calculate_text_statistics(inputs)
-
-        if "audio" in self.metadata.modalities:
-            audio_statistics = calculate_audio_statistics(inputs)
-
-        label_statistics = calculate_label_statistics(labels)
-        candidate_lens = calculate_text_statistics(self.get_candidate_labels())
-
+        modality_stats = calculate_single_input_modality_statistics(
+            col_inputs, max_workers=num_proc
+        )
         return ZeroShotClassificationDescriptiveStatistics(
-            num_samples=num_samples,
-            number_of_characters=None,
-            text_statistics=text_statistics,
-            image_statistics=image_statistics,
-            audio_statistics=audio_statistics,
-            label_statistics=label_statistics,
-            candidates_labels_text_statistics=candidate_lens,
+            num_samples=len(ds[self.label_column_name]),
+            **modality_stats,
+            label_statistics=calculate_label_statistics(labels),
+            candidates_labels_text_statistics=calculate_text_statistics(
+                self.get_candidate_labels()
+            ),
         )
 
     def _evaluate_subset(
@@ -146,7 +150,8 @@ class AbsTaskZeroShotClassification(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        **kwargs,
+        timer: TimingStack,
+        **kwargs: Any,
     ) -> ZeroShotClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
@@ -154,6 +159,8 @@ class AbsTaskZeroShotClassification(AbsTask):
         candidate_labels = self.get_candidate_labels()
         data_split = data_split.select_columns(
             [self.input_column_name, self.label_column_name]
+            if isinstance(self.input_column_name, str)
+            else [*self.input_column_name, self.label_column_name]
         )
         evaluator = ZeroShotClassificationEvaluator(
             data_split,
@@ -162,6 +169,7 @@ class AbsTaskZeroShotClassification(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         probs = evaluator(
@@ -180,14 +188,52 @@ class AbsTaskZeroShotClassification(AbsTask):
             )
 
         return self._calculate_scores(
-            data_split[self.label_column_name],
+            self._normalize_labels(
+                data_split[self.label_column_name], candidate_labels
+            ),
             torch.tensor(probs).argmax(dim=1).tolist(),
         )
+
+    @staticmethod
+    def _normalize_labels(
+        labels: list[int] | list[str], candidate_labels: list[str]
+    ) -> list[int]:
+        """Convert dataset labels to integer indices of the candidate labels.
+
+        Predictions are always integer indices into ``candidate_labels``, while
+        datasets store labels either as integer class indices (e.g. a
+        ``ClassLabel`` column) or as strings. scikit-learn >= 1.9 raises an
+        error when ``y_true`` contains strings and ``y_pred`` is numeric, so
+        string labels are mapped to their index in ``candidate_labels``.
+
+        Args:
+            labels: Labels as stored in the dataset.
+            candidate_labels: Candidate labels returned by `get_candidate_labels`.
+
+        Returns:
+            Labels as integer indices into ``candidate_labels``.
+
+        Raises:
+            ValueError: If a string label does not match any candidate label.
+        """
+        if not labels or not isinstance(labels[0], str):
+            return cast("list[int]", labels)
+
+        label_to_index = {label: idx for idx, label in enumerate(candidate_labels)}
+        unknown_labels = sorted(set(labels) - label_to_index.keys())
+        if unknown_labels:
+            raise ValueError(
+                "String labels must match an entry of `get_candidate_labels` to "
+                f"be mapped to a candidate index, but {unknown_labels} do not. "
+                "Alternatively, store labels as integer indices of the candidate "
+                "labels."
+            )
+        return [label_to_index[label] for label in labels]
 
     def _calculate_scores(  # noqa: PLR6301
         self,
         labels: list[int],
-        predictions: list[float],
+        predictions: list[int],
     ) -> ZeroShotClassificationMetrics:
         return ZeroShotClassificationMetrics(
             accuracy=metrics.accuracy_score(labels, predictions),
@@ -197,17 +243,23 @@ class AbsTaskZeroShotClassification(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         self._upload_dataset_to_hub(
             repo_name,
             [
                 self.input_column_name,
                 self.label_column_name,
+            ]
+            if isinstance(self.input_column_name, str)
+            else [
+                *self.input_column_name,
+                self.label_column_name,
             ],
             num_proc=num_proc,
         )
         labels_dataset = Dataset.from_dict({"labels": self.get_candidate_labels()})
-        labels_dataset.push_to_hub(repo_name, config_name="labels")
+        labels_dataset.push_to_hub(repo_name, config_name="labels", **kwargs)
 
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""

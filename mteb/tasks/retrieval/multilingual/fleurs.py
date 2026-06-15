@@ -121,7 +121,7 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
         reference="https://github.com/google-research-datasets/fleurs",
         dataset={
             "path": "mteb/fleurs",
-            "revision": "720cfffb024c8a4691f26a2b79d471b1f99a49a0",
+            "revision": "cadac46d4cd7d721f5cf8844a5b9f0f20e6fcde8",
         },
         type="Any2AnyRetrieval",
         category="a2t",
@@ -168,6 +168,9 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
 
             for split in self.metadata.eval_splits:
                 split_dataset = lang_dataset[split]
+                split_dataset = split_dataset.cast_column(
+                    "id", datasets.Value("string")
+                )
 
                 queries_ds = split_dataset.select_columns(["id", "audio"])
                 corpus_ds = split_dataset.select_columns(
@@ -190,7 +193,7 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
         reference="https://github.com/google-research-datasets/fleurs",
         dataset={
             "path": "mteb/fleurs",
-            "revision": "720cfffb024c8a4691f26a2b79d471b1f99a49a0",
+            "revision": "cadac46d4cd7d721f5cf8844a5b9f0f20e6fcde8",
         },
         type="Any2AnyRetrieval",
         category="t2a",
@@ -237,6 +240,9 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
 
             for split in self.metadata.eval_splits:
                 split_dataset = lang_dataset[split]
+                split_dataset = split_dataset.cast_column(
+                    "id", datasets.Value("string")
+                )
 
                 # Create datasets directly without intermediate lists
                 queries_ds = split_dataset.select_columns(

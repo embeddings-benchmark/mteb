@@ -89,7 +89,7 @@ def create_aggregate_table(task: AbsTaskAggregate) -> str:
     df = tasks.to_dataframe(["name", "type", "modalities", "languages"])
     df["name"] = df.apply(
         lambda row: (
-            f"[{row['name']}](./{row['type'].lower()}.md#{slugify_anchor(row['name'])})"
+            f"[{row['name']}](./{_TASKTYPE2SIMPLIFIEDTASKTYPE.get(row['type'], row['type'].lower())}.md#{slugify_anchor(row['name'])})"
         ),
         axis=1,
     )
@@ -102,7 +102,11 @@ def format_task_entry(task: mteb.AbsTask) -> str:  # noqa: PLR0914
     description = task.metadata.description
     if task.metadata.contributed_by:
         description += f" Contributed by {task.metadata.contributed_by}."
-    license = task.metadata.license or "not specified"
+    raw_license = task.metadata.license or "not specified"
+    if raw_license.startswith("http://") or raw_license.startswith("https://"):
+        license = f"[custom]({raw_license})"
+    else:
+        license = raw_license
     reference = task.metadata.reference
     dataset_name = task.metadata.dataset["path"]
     if not reference and not isinstance(task, AbsTaskAggregate):
@@ -161,7 +165,7 @@ def format_task_entry(task: mteb.AbsTask) -> str:  # noqa: PLR0914
     return entry
 
 
-def insert_content(doc_path: Path, content: str, tag: str) -> None:
+def insert_content(input_path: Path, output_path: Path, content: str, tag: str) -> None:
     """Insert content into a markdown file between tags.
 
     If the file does not exist, it will be created with the content between the tags.
@@ -170,8 +174,8 @@ def insert_content(doc_path: Path, content: str, tag: str) -> None:
     start_tag = f"<!-- START-{tag} -->"
     end_tag = f"<!-- END-{tag} -->"
 
-    if doc_path.exists():
-        doc_content = doc_path.read_text()  # noqa: PLW1514
+    if input_path.exists():
+        doc_content = input_path.read_text()  # noqa: PLW1514
         if start_tag in doc_content and end_tag in doc_content:
             before = doc_content.split(start_tag)[0]
             after = doc_content.split(end_tag)[1]
@@ -185,16 +189,17 @@ def insert_content(doc_path: Path, content: str, tag: str) -> None:
         # Create new file with content between tags
         new_content = start_tag + "\n" + content + "\n" + end_tag
 
-    doc_path.write_text(new_content)  # noqa: PLW1514
+    output_path.write_text(new_content)  # noqa: PLW1514
 
 
-def main(folder: Path) -> None:
-    folder.mkdir(exist_ok=True)
+def main(input_path: Path, output_path: Path) -> None:
+    output_path.mkdir(exist_ok=True)
 
     tasks = mteb.get_tasks(
         exclude_superseded=False,
         exclude_aggregate=False,
         exclude_private=False,
+        exclude_beta=False,
     )
 
     task_types = sorted({task.metadata.type for task in tasks})
@@ -202,7 +207,7 @@ def main(folder: Path) -> None:
     for task in tasks:
         task_types2tasks[task.metadata.type].append(task)
 
-    assert set(task_types2tasks.keys()) == set(_TASKTYPE2SIMPLIFIEDTASKTYPE.keys()), (
+    assert set(task_types2tasks.keys()) <= set(_TASKTYPE2SIMPLIFIEDTASKTYPE.keys()), (
         f"Task types in tasks do not match expected task types. Found: {set(task_types2tasks.keys())}, expected: {set(_TASKTYPE2SIMPLIFIEDTASKTYPE.keys())}, difference: {set(task_types2tasks.keys()).symmetric_difference(set(_TASKTYPE2SIMPLIFIEDTASKTYPE.keys()))}"
     )
 
@@ -215,9 +220,9 @@ def main(folder: Path) -> None:
         mds = []
 
         for tt in sorted(tt):  # noqa: PLW2901
-            tt_tasks = task_types2tasks[tt]
+            tt_tasks = task_types2tasks.get(tt, [])
             if not tt_tasks:
-                raise ValueError(f"No tasks found for task type {tt}")
+                continue
             _task_entries = ""
             for task in sorted(tt_tasks, key=lambda t: t.metadata.name):
                 _task_entries += format_task_entry(task) + "\n"
@@ -230,12 +235,13 @@ def main(folder: Path) -> None:
 
             mds.append(md)
 
-        doc_path = tasks_path / f"{stt}.md"
+        doc_path = f"{stt}.md"
         doc_content = "\n\n".join(mds)
-        insert_content(doc_path, doc_content, tag="TASKS")
+        insert_content(
+            input_path / doc_path, output_path / doc_path, doc_content, tag="TASKS"
+        )
 
 
 if __name__ == "__main__":
     root = Path(__file__).parent
-    tasks_path = root / "available_tasks"
-    main(tasks_path)
+    main(root / "task_templates", root / "available_tasks")

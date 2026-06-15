@@ -15,10 +15,8 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
     calculate_label_statistics,
-    calculate_text_statistics,
+    calculate_single_input_modality_statistics,
 )
 from .abstask import AbsTask
 
@@ -26,12 +24,14 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, ScoresDict
     from mteb.types.statistics import (
         AudioStatistics,
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
+        VideoStatistics,
     )
 
 logger = logging.getLogger(__name__)
@@ -46,6 +46,7 @@ class ClusteringDescriptiveStatistics(SplitDescriptiveStatistics):
         text_statistics: Statistics for text
         image_statistics: Statistics for images
         audio_statistics: Statistics for audio
+        video_statistics: Statistics for video
         label_statistics: Statistics for labels
     """
 
@@ -54,6 +55,7 @@ class ClusteringDescriptiveStatistics(SplitDescriptiveStatistics):
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     audio_statistics: AudioStatistics | None
+    video_statistics: VideoStatistics | None
     label_statistics: LabelStatistics
 
 
@@ -100,6 +102,7 @@ class AbsTaskClusteringLegacy(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ScoresDict:
         if not isinstance(model, EncoderProtocol):
@@ -134,6 +137,7 @@ class AbsTaskClusteringLegacy(AbsTask):
                     task_metadata=self.metadata,
                     hf_split=hf_split,
                     hf_subset=hf_subset,
+                    timer=timer,
                     **kwargs,
                 )
                 clusters_assignment = evaluator(model, encode_kwargs=encode_kwargs)
@@ -170,6 +174,7 @@ class AbsTaskClusteringLegacy(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         evaluate_clusters = evaluator(
@@ -219,50 +224,52 @@ class AbsTaskClusteringLegacy(AbsTask):
         )
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> ClusteringDescriptiveStatistics:
+        modality = self.metadata.modalities[0]
         if hf_subset:
-            inputs = self.dataset[hf_subset][split][self.input_column_name]
-            labels = self.dataset[hf_subset][split][self.label_column_name]
+            ds = self.dataset[hf_subset][split]
+            col_inputs = {modality: ds[self.input_column_name]}
+            labels = ds[self.label_column_name]
         elif compute_overall:
-            inputs = []
+            col_inputs = {modality: []}
             labels = []
-            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
-                inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
-                labels.extend(self.dataset[hf_subset][split][self.label_column_name])
+            for subset in self.metadata.eval_langs:
+                ds = self.dataset[subset][split]
+                col_inputs[modality].extend(ds[self.input_column_name])
+                labels.extend(ds[self.label_column_name])
         else:
-            inputs = self.dataset[split][self.input_column_name]
-            labels = self.dataset[split][self.label_column_name]
+            ds = self.dataset[split]
+            col_inputs = {modality: ds[self.input_column_name]}
+            labels = ds[self.label_column_name]
 
-        if isinstance(inputs[0], list):
-            inputs = [item for sublist in inputs for item in sublist]
-        if isinstance(labels[0], list):
+        # Flatten nested lists (e.g. grouped sentence clusters)
+        if col_inputs[modality] and isinstance(col_inputs[modality][0], list):
+            col_inputs[modality] = [
+                item for sublist in col_inputs[modality] for item in sublist
+            ]
+        if labels and isinstance(labels[0], list):
             labels = [item for sublist in labels for item in sublist]
 
-        text_statistics, image_statistics, audio_statistics = None, None, None
-        if "image" in self.metadata.modalities:
-            image_statistics = calculate_image_statistics(inputs)
-
-        if "text" in self.metadata.modalities:
-            text_statistics = calculate_text_statistics(inputs)
-
-        if "audio" in self.metadata.modalities:
-            audio_statistics = calculate_audio_statistics(inputs)
-
-        label_statistics = calculate_label_statistics(labels)
-
+        modality_stats = calculate_single_input_modality_statistics(
+            col_inputs, max_workers=num_proc
+        )
         return ClusteringDescriptiveStatistics(
-            num_samples=len(inputs),
-            text_statistics=text_statistics,
-            image_statistics=image_statistics,
-            audio_statistics=audio_statistics,
-            label_statistics=label_statistics,
+            num_samples=len(col_inputs[modality]),
+            **modality_stats,
+            label_statistics=calculate_label_statistics(labels),
         )
 
     def _push_dataset_to_hub(
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         self._upload_dataset_to_hub(
             repo_name,
@@ -271,4 +278,5 @@ class AbsTaskClusteringLegacy(AbsTask):
                 self.label_column_name,
             ],
             num_proc=num_proc,
+            **kwargs,
         )

@@ -55,7 +55,7 @@ To see more check out the [installation guide](installation.md).
     1. If the model is not implemented in MTEB, it will be loaded with `SentenceTransformer(model_name)` or `CrossEncoder(model_name)` if applicable.
 
 
-    To see more check out the [usage documentation](./usage/get_started.md)
+    To see more check out the [usage documentation](./get_started/usage/get_started.md)
 
 === "Using the CLI"
 
@@ -67,7 +67,7 @@ To see more check out the [installation guide](installation.md).
         --output-folder results
     ```
 
-    To read more about what you can do with the command line interface check out its [documentation](./usage/cli.md)
+    To read more about what you can do with the command line interface check out its [documentation](./get_started/usage/cli.md)
 
 ---
 

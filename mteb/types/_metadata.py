@@ -59,7 +59,6 @@ ModelName = str
 Revision = str
 """The revision of a model, typically a git commit hash. For APIs this can be a version string e.g. `1`."""
 
-
 # MODALITY TYPES
 Modalities = Literal[
     "text",

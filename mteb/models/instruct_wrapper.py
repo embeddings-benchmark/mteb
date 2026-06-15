@@ -1,14 +1,16 @@
 from __future__ import annotations
 
 import logging
-import sys
 import warnings
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
+import numpy as np
 import torch
+from tqdm.auto import tqdm
+from typing_extensions import deprecated
 
-from mteb._requires_package import requires_package
-from mteb.types import PromptType
+from mteb._requires_package import _is_package_available
+from mteb.types import OutputDType, PromptType
 
 from .abs_encoder import AbsEncoder
 
@@ -16,14 +18,10 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
-
-if sys.version_info >= (3, 13):
-    from warnings import deprecated
-else:
-    from typing_extensions import deprecated
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 
 logger = logging.getLogger(__name__)
@@ -38,8 +36,8 @@ def instruct_wrapper(
     mode: str,
     instruction_template: str | Callable[[str, PromptType | None], str] | None = None,
     device: str | None = None,
-    **kwargs,
-):
+    **kwargs: Any,
+) -> Any:
     """Instruct wrapper for models. Uses GritLM to pass instructions to the model.
 
     It's recommended to use `InstructSentenceTransformerModel` instead of this wrapper for models.
@@ -57,16 +55,17 @@ def instruct_wrapper(
         DeprecationWarning,
         stacklevel=2,
     )
-    requires_package(
-        instruct_wrapper, "gritlm", model_name_or_path, "pip install 'mteb[gritlm]'"
-    )
-    from gritlm import GritLM  # type: ignore[import]
+    if not _is_package_available("gritlm"):
+        raise ImportError(
+            f"gritlm is required for {model_name_or_path}. Please install with `pip install mteb[gritlm]`."
+        )
+    from gritlm import GritLM  # type: ignore[import-not-found]
 
     @deprecated(
         "`instruct_wrapper` is deprecated and will be removed in future versions. "
         "Please use `InstructSentenceTransformerModel` instead."
     )
-    class InstructGritLMModel(GritLM, AbsEncoder):
+    class InstructGritLMModel(GritLM, AbsEncoder):  # type: ignore[misc]
         def __init__(
             self,
             model_name_or_path: str,
@@ -75,8 +74,8 @@ def instruct_wrapper(
             instruction_template: str
             | Callable[[str, PromptType | None], str]
             | None = None,
-            **kwargs,
-        ):
+            **kwargs: Any,
+        ) -> None:
             if (
                 isinstance(instruction_template, str)
                 and "{instruction}" not in instruction_template
@@ -105,7 +104,7 @@ def instruct_wrapper(
         def encode(
             self,
             inputs: DataLoader[BatchedInput],
-            *args,
+            *args: Any,
             task_metadata: TaskMetadata,
             hf_split: str,
             hf_subset: str,
@@ -138,7 +137,12 @@ def instruct_wrapper(
 
 
 class InstructSentenceTransformerModel(AbsEncoder):
-    """Instruction wrapper for Sentence Transformer models."""
+    """Instruction wrapper for Sentence Transformer models.
+
+    Supports both text-only and multimodal (text + image + audio + video) inputs.
+    When the input dataset exposes image/audio/video features, the encode method
+    builds per-sample modality dicts and applies the appropriate collator.
+    """
 
     def __init__(  # noqa: PLR0913
         self,
@@ -156,11 +160,16 @@ class InstructSentenceTransformerModel(AbsEncoder):
         prompts_dict: dict[str, str] | None = None,
         include_prompt: bool = True,
         embed_dim: int | None = None,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        target_sampling_rate: int | None = None,
+        max_samples: int | None = None,
         **kwargs: Any,
     ):
         """Instruct Sentence Transformer Wrapper. Wrapper that passes instructions to the Sentence Transformer model.
 
-        Applied for models like e5-instruct, jasper, etc.
+        Applied for models like e5-instruct, jasper, qwen3-vl-embedding, etc.
 
         Arguments:
             model_name: Model name of the sentence transformers model.
@@ -175,6 +184,11 @@ class InstructSentenceTransformerModel(AbsEncoder):
                 AbsTask.abstask_prompt will be used.
             include_prompt: Whether to include the prompt tokens in the pooling.
             embed_dim: The embedding dimension of the model to use.
+            fps: Target frames per second for video sampling (multimodal inputs only).
+            max_frames: Maximum number of video frames to sample (multimodal inputs only).
+            num_frames: Fixed number of video frames to sample (multimodal inputs only).
+            target_sampling_rate: Audio target sampling rate (multimodal inputs only). Defaults to 16000 when an audio/video collator is applied.
+            max_samples: Audio maximum number of samples (multimodal inputs only).
             **kwargs: Kwargs for Sentence Transformer model.
         """
         from sentence_transformers import SentenceTransformer
@@ -218,6 +232,11 @@ class InstructSentenceTransformerModel(AbsEncoder):
             self.model.set_pooling_include_prompt(include_prompt=False)
         self.apply_instruction_to_passages = apply_instruction_to_passages
         self.prompts_dict = prompts_dict
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
 
     def encode(
         self,
@@ -227,7 +246,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Encodes the given sentences using the encoder.
 
@@ -251,9 +270,24 @@ class InstructSentenceTransformerModel(AbsEncoder):
         Returns:
             The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
         """
-        sentences = [text for batch in inputs for text in batch["text"]]
-        instruction: str | None
-        instruction = self.get_task_instruction(task_metadata, prompt_type)
+        instruction: str | None = self.get_task_instruction(task_metadata, prompt_type)
+
+        if "precision" in kwargs and self.mteb_model_meta is not None:
+            existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
+            output_dtype = OutputDType.from_str(kwargs["precision"])
+            if existing_experiment_kwargs is not None:
+                existing_experiment_kwargs["output_dtypes"] = output_dtype  # type: ignore[index]
+            else:
+                existing_experiment_kwargs = {"output_dtypes": output_dtype.value}
+            logger.warning(
+                f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {output_dtype.value}."
+            )
+            self.mteb_model_meta = self.mteb_model_meta.model_copy(
+                update={
+                    "experiment_kwargs": existing_experiment_kwargs,
+                },
+                deep=True,
+            )
 
         # to passage prompts won't be applied to passages
         if (
@@ -270,13 +304,53 @@ class InstructSentenceTransformerModel(AbsEncoder):
                 f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
             )
 
-        embeddings = self.model.encode(
-            sentences,
-            prompt=instruction,
-            **kwargs,
-        )
+        features = inputs.dataset.features  # type: ignore[attr-defined]
+        has_video = "video" in features
+        has_audio = "audio" in features
+        is_multimodal = has_video or has_audio or "image" in features
 
-        if isinstance(embeddings, torch.Tensor):
-            # sometimes in kwargs can be return_tensors=True
-            embeddings = embeddings.cpu().detach().float().numpy()
+        if has_video:
+            from mteb.models.modality_collators import VideoCollator
+
+            inputs.collate_fn = VideoCollator(
+                target_sampling_rate=self.target_sampling_rate or 16000,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+                max_samples=self.max_samples,
+            )
+        elif has_audio:
+            from mteb.models.modality_collators import AudioCollator
+
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.target_sampling_rate or 16000,
+                max_samples=self.max_samples,
+            )
+
+        if is_multimodal:
+            _modality_keys = {"text", "image", "audio", "video"}
+            all_embeddings = []
+            for batch in tqdm(inputs, desc="Building multimodal embeddings"):
+                modality_batch = {k: v for k, v in batch.items() if k in _modality_keys}
+                batched_input = [
+                    dict(zip(modality_batch, sample))
+                    for sample in zip(*modality_batch.values())
+                ]
+
+                embeddings = self.model.encode(
+                    batched_input, prompt=instruction, **kwargs
+                )
+                all_embeddings.append(embeddings)
+
+            return cast("Array", np.concatenate(all_embeddings, axis=0))
+
+        sentences = [text for batch in inputs for text in batch["text"]]
+        embeddings = cast(
+            "Array",
+            self.model.encode(
+                sentences,
+                prompt=instruction,
+                **kwargs,
+            ),
+        )
         return embeddings

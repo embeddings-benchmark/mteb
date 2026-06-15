@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import argparse
 import logging
 import os
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import torch
 from rich.logging import RichHandler
@@ -160,7 +162,7 @@ def _add_task_selection_args(parser: argparse.ArgumentParser) -> None:
     )
 
 
-def _add_available_tasks_parser(subparsers: argparse._SubParsersAction) -> None:
+def _add_available_tasks_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
     parser = subparsers.add_parser(
         "available-tasks", help="List the available tasks within MTEB"
     )
@@ -169,7 +171,9 @@ def _add_available_tasks_parser(subparsers: argparse._SubParsersAction) -> None:
     parser.set_defaults(func=_available_tasks)
 
 
-def _add_available_benchmarks_parser(subparsers: argparse._SubParsersAction) -> None:
+def _add_available_benchmarks_parser(
+    subparsers: argparse._SubParsersAction[Any],
+) -> None:
     parser = subparsers.add_parser(
         "available-benchmarks", help="List the available benchmarks within MTEB"
     )
@@ -178,7 +182,7 @@ def _add_available_benchmarks_parser(subparsers: argparse._SubParsersAction) -> 
     parser.set_defaults(func=_available_benchmarks)
 
 
-def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
+def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
     parser = subparsers.add_parser("run", help="Run a model on a set of tasks")
 
     parser.add_argument(
@@ -277,7 +281,6 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
 def _create_meta(args: argparse.Namespace) -> None:
     model_name = args.model_name
     tasks_names = args.tasks
-    benchmarks = args.benchmarks
     results_folder = Path(args.results_folder) if args.results_folder else None
     output_path = Path(args.output_path)
     overwrite = args.overwrite
@@ -298,7 +301,7 @@ def _create_meta(args: argparse.Namespace) -> None:
     tasks: list[AbsTask] = []
     if tasks_names is not None:
         tasks = list(mteb.get_tasks(tasks_names))
-    if benchmarks is not None:
+    if args.benchmarks is not None:
         benchmarks = mteb.get_benchmarks(benchmarks)
 
     generate_model_card(
@@ -311,7 +314,7 @@ def _create_meta(args: argparse.Namespace) -> None:
     )
 
 
-def _add_create_meta_parser(subparsers) -> None:
+def _add_create_meta_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
     parser = subparsers.add_parser("create-model-results", help="Create model results")
 
     parser.add_argument(
@@ -365,7 +368,7 @@ def _add_create_meta_parser(subparsers) -> None:
     parser.set_defaults(func=_create_meta)
 
 
-def _add_leaderboard_parser(subparsers) -> None:
+def _add_leaderboard_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
     parser = subparsers.add_parser("leaderboard", help="Launch the MTEB leaderboard")
 
     parser.add_argument(

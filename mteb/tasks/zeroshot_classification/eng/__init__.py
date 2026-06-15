@@ -1,4 +1,13 @@
+from .ave_dataset import (
+    AVEDatasetVideoZeroShotClassification,
+    AVEDatasetZeroShotClassification,
+)
+from .avmeme_exam_classification import (
+    AVMemeAudioVideoZeroShotClassification,
+    AVMemeVideoZeroShotClassification,
+)
 from .birdsnap import BirdsnapZeroShotClassification
+from .breakfast_classification import BreakfastZeroShotClassification
 from .caltech101 import Caltech101ZeroShotClassification
 from .cifar import CIFAR10ZeroShotClassification, CIFAR100ZeroShotClassification
 from .clevr import CLEVR, CLEVRCount
@@ -9,11 +18,40 @@ from .fer2013 import FER2013ZeroShotClassification
 from .fgvc_aircraft import FGVCAircraftZeroShotClassification
 from .food101 import Food101ZeroShotClassification
 from .gtsrb import GTSRBZeroShotClassification
+from .hmdb51 import HMDB51ZeroShotClassification
+from .human_animal_cartoon import (
+    HumanAnimalCartoonVAZeroShotClassification,
+    HumanAnimalCartoonZeroShotClassification,
+)
 from .imagenet1k import Imagenet1kZeroShotClassification
+from .kinetics400 import (
+    Kinetics400VAZeroShotClassification,
+    Kinetics400ZeroShotClassification,
+)
+from .kinetics600 import (
+    Kinetics600VAZeroShotClassification,
+    Kinetics600VZeroShotClassification,
+)
+from .kinetics700 import (
+    Kinetics700VAZeroShotClassification,
+    Kinetics700VZeroShotClassification,
+)
+from .meld_classification import (
+    MELDAudioVideoZeroShotClassification,
+    MELDVideoZeroShotClassification,
+)
 from .mnist import MNISTZeroShotClassification
+from .music_avqa import (
+    MusicAVQACLSAudioVideoZeroShotClassification,
+    MusicAVQACLSVideoZeroShotClassification,
+)
 from .oxford_pets import OxfordPetsZeroShotClassification
 from .patch_camelyon import PatchCamelyonZeroShotClassification
 from .ravdess import RavdessZeroshotClassification
+from .ravdess_av import (
+    RAVDESSAVZeroShotClassification,
+    RAVDESSVZeroShotClassification,
+)
 from .rendered_sst2 import RenderedSST2
 from .resisc45 import RESISC45ZeroShotClassification
 from .sci_mmir import SciMMIR
@@ -24,11 +62,28 @@ from .speech_commands import (
 from .stanford_cars import StanfordCarsZeroShotClassification
 from .stl10 import STL10ZeroShotClassification
 from .sun397 import SUN397ZeroShotClassification
-from .ucf101 import UCF101ZeroShotClassification
+from .ucf101 import (
+    UCF101VideoAudioZeroShotClassification,
+    UCF101VideoZeroShotClassification,
+    UCF101ZeroShotClassification,
+)
+from .vggsound_zeroshot import (
+    VGGSoundVideoAudioZeroshotClassification,
+    VGGSoundVideoZeroshotClassification,
+)
+from .worldsense_classification import (
+    WorldSenseAudioVideoZeroShotClassification,
+    WorldSenseVideoZeroShotClassification,
+)
 
 __all__ = [
     "CLEVR",
+    "AVEDatasetVideoZeroShotClassification",
+    "AVEDatasetZeroShotClassification",
+    "AVMemeAudioVideoZeroShotClassification",
+    "AVMemeVideoZeroShotClassification",
     "BirdsnapZeroShotClassification",
+    "BreakfastZeroShotClassification",
     "CIFAR10ZeroShotClassification",
     "CIFAR100ZeroShotClassification",
     "CLEVRCount",
@@ -40,10 +95,25 @@ __all__ = [
     "FGVCAircraftZeroShotClassification",
     "Food101ZeroShotClassification",
     "GTSRBZeroShotClassification",
+    "HMDB51ZeroShotClassification",
+    "HumanAnimalCartoonVAZeroShotClassification",
+    "HumanAnimalCartoonZeroShotClassification",
     "Imagenet1kZeroShotClassification",
+    "Kinetics400VAZeroShotClassification",
+    "Kinetics400ZeroShotClassification",
+    "Kinetics600VAZeroShotClassification",
+    "Kinetics600VZeroShotClassification",
+    "Kinetics700VAZeroShotClassification",
+    "Kinetics700VZeroShotClassification",
+    "MELDAudioVideoZeroShotClassification",
+    "MELDVideoZeroShotClassification",
     "MNISTZeroShotClassification",
+    "MusicAVQACLSAudioVideoZeroShotClassification",
+    "MusicAVQACLSVideoZeroShotClassification",
     "OxfordPetsZeroShotClassification",
     "PatchCamelyonZeroShotClassification",
+    "RAVDESSAVZeroShotClassification",
+    "RAVDESSVZeroShotClassification",
     "RESISC45ZeroShotClassification",
     "RavdessZeroshotClassification",
     "RenderedSST2",
@@ -53,5 +123,11 @@ __all__ = [
     "SpeechCommandsZeroshotClassificationV01",
     "SpeechCommandsZeroshotClassificationv02",
     "StanfordCarsZeroShotClassification",
+    "UCF101VideoAudioZeroShotClassification",
+    "UCF101VideoZeroShotClassification",
     "UCF101ZeroShotClassification",
+    "VGGSoundVideoAudioZeroshotClassification",
+    "VGGSoundVideoZeroshotClassification",
+    "WorldSenseAudioVideoZeroShotClassification",
+    "WorldSenseVideoZeroShotClassification",
 ]

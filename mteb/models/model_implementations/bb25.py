@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 from mteb._create_dataloaders import _combine_queries_with_instruction_text
-from mteb._requires_package import requires_package
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
@@ -54,7 +53,6 @@ def _composite_prior(
 
 
 def bb25_loader(model_name, **kwargs) -> SearchProtocol:
-    requires_package(bb25_loader, "bm25s", model_name, "pip install 'mteb[bm25s]'")
     import bm25s
     import Stemmer
 
@@ -166,10 +164,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
             logger.info("Encoding Queries...")
             query_ids = list(queries["id"])
             results: RetrievalOutputType = {qid: {} for qid in query_ids}
-            processed = queries.map(
-                _combine_queries_with_instruction_text,
-                desc="Processing queries for dataloading",
-            )
+            processed = _combine_queries_with_instruction_text(queries)
             queries_texts = processed["text"]
             query_tokenized = self._encode(queries_texts)
 
@@ -283,8 +278,8 @@ bb25_model = ModelMeta(
     open_weights=True,
     revision="0_1_1",
     release_date="2026-02-06",
-    n_parameters=None,
-    n_embedding_parameters=None,
+    n_parameters=0,
+    n_embedding_parameters=0,
     memory_usage_mb=None,
     embed_dim=None,
     license=None,
@@ -310,4 +305,5 @@ bb25_model = ModelMeta(
   doi={10.5281/zenodo.18512411},
   url={https://doi.org/10.5281/zenodo.18512411},
 }""",
+    extra_requirements_groups=["bm25s"],
 )

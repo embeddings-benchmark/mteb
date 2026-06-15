@@ -42,5 +42,5 @@ class SpokenQAForIC(AbsTaskClassification):
 
     is_cross_validation: bool = True
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         self.dataset["train"] = self.dataset.pop("test")

@@ -5,7 +5,7 @@ install:
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	uv sync --extra bm25s --extra image --extra audio --extra leaderboard --extra faiss-cpu --group dev
+	uv sync --extra bm25s --extra image --extra audio --extra leaderboard --extra faiss-cpu --extra github --group dev --frozen
 
 lint:
 	@echo "--- 🧹 Running linters ---"
@@ -21,7 +21,7 @@ lint-check:
 
 test:
 	@echo "--- 🧪 Running tests ---"
-	uv run --no-sync --group test pytest -n auto -m "not (test_datasets or leaderboard_stability)"
+	uv run --no-sync --group test pytest -n auto -m "not (test_datasets or leaderboard_stability or test_reference_models)"
 
 
 test-with-coverage:
@@ -35,7 +35,7 @@ pr:
 
 build-docs: build-docs-overview
 	@echo "--- 📚 Building documentation ---"
-	uv run --no-sync --group docs zensical build --clean
+	uv run --no-sync --group docs zensical build --clean --strict
 
 
 build-docs-overview:
@@ -65,6 +65,10 @@ dataset-load-test-pr:
 	@echo "--- 🚀 Running dataset load test for PR ---"
 	eval "$$(uv run --no-sync python -m scripts.extract_datasets $(BASE_BRANCH))" && uv run --no-sync --group test pytest -m test_datasets
 
+reference-model-test:
+	@echo "--- Running reference model coverage test ---"
+	uv run --no-sync --group test pytest -m test_reference_models -v
+
 leaderboard-build-test:
 	@echo "--- 🚀 Running leaderboard build test ---"
 	uv run --group test --extra leaderboard pytest -n auto -m leaderboard_stability
@@ -75,7 +79,7 @@ leaderboard-test-all:
 
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
-	uv run --extra leaderboard python -m mteb leaderboard
+	uv run --no-sync --extra leaderboard python -m mteb leaderboard
 
 format-citations:
 	@echo "--- 🧹 Formatting citations ---"

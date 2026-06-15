@@ -29,7 +29,7 @@ class GTSRBZeroShotClassification(AbsTaskZeroShotClassification):
         license="not specified",
         annotations_creators="derived",
         dialect=[],
-        modalities=["image"],
+        modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation=r"""
 @inproceedings{6033395,

@@ -281,6 +281,62 @@ Once we have decided on task, we can implement them as follows:
     # 0.021194685839832323
     ```
 
+=== "Multimodal Pair Classification"
+
+    For multimodal PairClassification task, you need to specify columns types in `input1_column_name` & `input2_column_name` as a mapping `{column_name: modality}`, e.g.
+    ```python
+    input1_column_name = {"video_column_name": "video"}
+    input2_column_name = {"audio_column_name": "audio"}
+    ```
+    Full example:
+    ```python
+    from mteb.abstasks import AbsTaskPairClassification
+    from mteb.abstasks.task_metadata import TaskMetadata
+
+
+    class VideoConPairClassification(AbsTaskPairClassification):
+        metadata = TaskMetadata(
+            name="VideoConPairClassification",
+            description=(
+                "Pair classification on the VideoCon dataset: "
+                "determining whether a text caption correctly describes "
+                "a video or is a semantically-plausible contrast caption "
+                "(e.g. entity/action/attribute swaps, event order flips). "
+                "Tests video-language alignment robustness."
+            ),
+            reference="https://arxiv.org/abs/2311.10111",
+            dataset={
+                "path": "zachz/VideoCon-PC",
+                "revision": "b0cb7112a3edfccf8ae697602442a828712b056b",
+            },
+            type="VideoPairClassification",
+            category="v2t",
+            eval_splits=["test"],
+            eval_langs=["eng-Latn"],
+            main_score="max_ap",
+            date=("2023-11-01", "2023-11-30"),
+            domains=["Scene"],
+            task_subtypes=["Caption Pairing"],
+            license="mit",
+            annotations_creators="LM-generated and reviewed",
+            dialect=[],
+            modalities=["video", "text"],
+            sample_creation="LM-generated and verified",
+            is_beta=True,
+            bibtex_citation=r"""
+    @article{bansal2023videocon,
+      author = {Bansal, Hritik and Bitton, Yonatan and Szpektor, Idan and Chang, Kai-Wei and Grover, Aditya},
+      journal = {arXiv preprint arXiv:2311.10111},
+      title = {VideoCon: Robust Video-Language Alignment via Contrast Captions},
+      year = {2023},
+    }
+    """,
+        )
+
+        input1_column_name = {"video": "video"}
+        input2_column_name = {"text": "text"}
+        label_column_name: str = "label"
+    ```
 
 
 ??? example "Overwriting `load_data`"
@@ -385,12 +441,16 @@ Once we have decided on task, we can implement them as follows:
                     "query2": ["doc2", "doc1", "doc3"],
                 }
 
-                self.dataset["default"]["test"] = RetrievalSplitData(
-                    corpus=corpus,
-                    queries=queries,
-                    relevant_docs=qrels,
-                    top_ranked=top_ranked,  # only for reranking
-                )
+                self.dataset = {
+                    "default": {
+                        "test": RetrievalSplitData(
+                            corpus=corpus,
+                            queries=queries,
+                            relevant_docs=qrels,
+                            top_ranked=top_ranked,  # only for reranking
+                        )
+                    }
+                }
         ```
         which can then be run as follows:
         ```py
@@ -476,7 +536,8 @@ Once you have your task you can create a pull request (PR) to the main repositor
 
 Before creating a pull request, it is important to calculate some descriptive statistics about the dataset. This is to ensure that the dataset is not too small, does not contain duplicates and that the documents are not too short. This is important to ensure that the dataset is of high quality and that it can be used to evaluate models in a meaningful way.
 
-To calculate the descriptive statistics, you can simply run [`task.calculate_descriptive_statistics()`][mteb.AbsTask.calculate_descriptive_statistics].
+To calculate the descriptive statistics, you can run [`task.calculate_descriptive_statistics()`][mteb.AbsTask.calculate_descriptive_statistics].
+By default, this method caches the results and loads them from cache on subsequent calls. To recalculate the statistics (overwriting the cached results), use the `overwrite_results=True`.
 
 ### Submit a Pull Request
 
@@ -486,10 +547,11 @@ Once added, here is a checklist to ensure that everything works before you submi
 - [ ] I have outlined why this dataset is filling an existing gap in `mteb`
 - [ ] I have tested that the dataset runs with the `mteb` package.
 - [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.
-  - [ ] `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
-  - [ ] `intfloat/multilingual-e5-small`
-- [ ] I have checked that the performance is neither trivial (both models gain close to perfect scores) nor random (both models gain close to random scores).
-- [ ] I have considered the size of the dataset and reduced it if it is too big (2048 examples is typically large enough for most tasks)
+  - [ ] `mteb/baseline-random encoder`
+  - [ ] `intfloat/multilingual-e5-small` or another small model
+- [ ] I have checked that the performance is neither trivial (close to perfect scores) nor random.
+- [ ] I have considered the size of the dataset and reduced it if it is too big (e.g. 2048 examples for binary classification)
+- [ ] I reproduced scores from the original paper (if applicable) and added them to the PR description for reference.
 ```
 
 An easy way to test it is using:
@@ -498,14 +560,14 @@ An easy way to test it is using:
     ```python
     import mteb
     # sample model:
-    model = mteb.get_model("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+    model = mteb.get_model("mteb/baseline-random encoder")
     task = mteb.get_task("{name of your task}")
 
     results = mteb.evaluate(model, task)
     ```
 === "CLI"
     ```bash
-    mteb run -m sentence-transformers/paraphrase-multilingual-MiniLM -t {name of your task}
+    mteb run -m mteb/baseline-random encoder -t {name of your task}
     ```
 
 

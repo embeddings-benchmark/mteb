@@ -6,11 +6,12 @@ import pytest
 import mteb
 from mteb import ResultCache
 from mteb._hf_integration.eval_result_model import (
-    HFEvalResultDataset,  # noqa: PLC2701
+    HFEvalResultDataset,
 )
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.results import TaskResult
+from mteb.timing import PhaseTiming
 
 tests_folder = Path(__file__).parent.parent
 
@@ -48,7 +49,11 @@ class DummyTask(AbsTask):
         pass
 
     def _calculate_descriptive_statistics_from_split(  # noqa: PLR6301
-        self, split: str, hf_subset: str | None = None, compute_overall=False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
     ) -> dict[str, float]:
         return {}
 
@@ -83,11 +88,13 @@ def test_task_results_get_score(task_result: TaskResult):
 
 
 def test_task_results_to_dict(task_result: TaskResult):
+    mteb_ver = version("mteb")
     dict_repr = {
         "dataset_revision": "1.0",
         "task_name": "dummy_task",
-        "mteb_version": version("mteb"),
-        "evaluation_time": 100,
+        "mteb_version": mteb_ver,
+        "evaluation_time": 100.0,
+        "evaluation_phases": None,
         "date": None,
         "kg_co2_emissions": None,
         "scores": {
@@ -96,11 +103,13 @@ def test_task_results_to_dict(task_result: TaskResult):
                     "main_score": 0.5,
                     "hf_subset": "en-de",
                     "languages": ["eng-Latn", "deu-Latn"],
+                    "mteb_version": mteb_ver,
                 },
                 {
                     "main_score": 0.6,
                     "hf_subset": "en-fr",
                     "languages": ["eng-Latn", "fra-Latn"],
+                    "mteb_version": mteb_ver,
                 },
             ]
         },
@@ -151,6 +160,119 @@ def test_task_results_validate_and_filter():
     res3 = res.validate_and_filter_scores(task=task)
     assert res3.scores.keys() == {"train", "test"}
     assert res3.get_score() == (0.5 + 0.3) / 2  # only en-de scores
+
+
+def test_per_subset_mteb_version(task_result: TaskResult):
+    """Test that each subset score dict includes mteb_version."""
+    mteb_ver = version("mteb")
+    for split_scores in task_result.scores.values():
+        for subset_scores in split_scores:
+            assert "mteb_version" in subset_scores
+            assert subset_scores["mteb_version"] == mteb_ver
+
+
+def test_merge_across_mteb_versions():
+    """Test that results from different MTEB versions can be merged."""
+    existing = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="2.12.4",
+        scores={
+            "train": [
+                {
+                    "main_score": 0.5,
+                    "hf_subset": "en-de",
+                    "languages": ["eng-Latn", "deu-Latn"],
+                    "mteb_version": "2.12.4",
+                },
+            ]
+        },
+        evaluation_time=50,
+        kg_co2_emissions=0.05,
+    )
+
+    new = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="2.20.1",
+        scores={
+            "train": [
+                {
+                    "main_score": 0.6,
+                    "hf_subset": "en-fr",
+                    "languages": ["eng-Latn", "fra-Latn"],
+                    "mteb_version": "2.20.1",
+                },
+            ]
+        },
+        evaluation_time=60,
+        kg_co2_emissions=0.02,
+    )
+
+    assert existing.is_mergeable(new)
+    merged = existing.merge(new)
+
+    # Both subsets should be present
+    assert len(merged.scores["train"]) == 2
+    subsets = {s["hf_subset"]: s for s in merged.scores["train"]}
+    assert subsets["en-de"]["mteb_version"] == "2.12.4"
+    assert subsets["en-fr"]["mteb_version"] == "2.20.1"
+
+    # Top-level version should be a range when subsets differ
+    assert merged.mteb_version == "2.12.4-2.20.1"
+
+    # Verify that CO2 emissions are summed when both are present
+    assert merged.kg_co2_emissions == pytest.approx(0.07)
+
+
+def test_merge_without_per_subset_version():
+    """Test merging old results that lack per-subset mteb_version."""
+    existing = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="2.12.4",
+        scores={
+            "train": [
+                {
+                    "main_score": 0.5,
+                    "hf_subset": "en-de",
+                    "languages": ["eng-Latn", "deu-Latn"],
+                },
+            ]
+        },
+        evaluation_time=50,
+        kg_co2_emissions=0.05,
+    )
+
+    new = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="2.20.1",
+        scores={
+            "train": [
+                {
+                    "main_score": 0.6,
+                    "hf_subset": "en-fr",
+                    "languages": ["eng-Latn", "fra-Latn"],
+                    "mteb_version": "2.20.1",
+                },
+            ]
+        },
+        evaluation_time=60,
+        kg_co2_emissions=None,
+    )
+
+    merged = existing.merge(new)
+    # Old subset has no per-subset version — backfilled from top-level
+    subsets = {s["hf_subset"]: s for s in merged.scores["train"]}
+    assert subsets["en-de"]["mteb_version"] == "2.12.4"
+    assert subsets["en-fr"]["mteb_version"] == "2.20.1"
+
+    # Top-level should be a range across all subset versions
+    assert merged.mteb_version == "2.12.4-2.20.1"
+
+    # Verify that CO2 emissions are merged when one of them is present
+    assert merged.kg_co2_emissions == pytest.approx(0.05)
 
 
 @pytest.mark.parametrize(
@@ -212,3 +334,152 @@ def test_to_hf_result(mock_mteb_cache: ResultCache):
     user: test_user
 """
     )
+
+
+def test_task_result_timings():
+    """Test that TaskResult.plot_evaluation_phases correctly loads evaluation_phases and supports plotting."""
+
+    phases: list[PhaseTiming] = [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 1.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {"name": "encode", "start": 1.5, "end": 4.5, "split": "test", "subset": "en"},
+    ]
+
+    task_result = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="1.0.0",
+        scores={},
+        evaluation_time=4.5,
+        evaluation_phases=phases,
+    )
+
+    plot_output = task_result.plot_evaluation_phases()
+    assert "load data" in plot_output
+    assert "encode" in plot_output
+    assert "3.0s" in plot_output  # duration of encode phase is 4.5 - 1.5 = 3.0s
+
+
+def test_merge_evaluation_phases() -> None:
+    """Test that TaskResult.merge() correctly concatenates evaluation_phases with proper offset and sums evaluation_time."""
+    phases1: list[PhaseTiming] = [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 1.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {"name": "encode", "start": 1.5, "end": 4.5, "split": "test", "subset": "en"},
+    ]
+    phases2: list[PhaseTiming] = [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 2.0,
+            "split": "test",
+            "subset": "fr",
+        },
+        {"name": "encode", "start": 2.0, "end": 6.0, "split": "test", "subset": "fr"},
+    ]
+
+    task_result1 = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="1.0.0",
+        scores={},
+        evaluation_time=5.0,
+        evaluation_phases=phases1,
+    )
+
+    task_result2 = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="1.0.0",
+        scores={},
+        evaluation_time=8.0,
+        evaluation_phases=phases2,
+    )
+
+    merged = task_result1.merge(task_result2)
+
+    assert merged.evaluation_time == 13.0
+    assert merged.evaluation_phases is not None
+    # The second set of phases should be offset by task_result1.evaluation_time (5.0s)
+    assert merged.evaluation_phases == [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 1.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {
+            "name": "encode",
+            "start": 1.5,
+            "end": 4.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {
+            "name": "load data",
+            "start": 5.0,
+            "end": 7.0,
+            "split": "test",
+            "subset": "fr",
+        },
+        {
+            "name": "encode",
+            "start": 7.0,
+            "end": 11.0,
+            "split": "test",
+            "subset": "fr",
+        },
+    ]
+
+    # Also test merging where evaluation_time is None on the first result
+    task_result_no_time = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="1.0.0",
+        scores={},
+        evaluation_time=None,
+        evaluation_phases=phases1,
+    )
+    merged_fallback = task_result_no_time.merge(task_result2)
+    assert merged_fallback.evaluation_time == 8.0
+    assert merged_fallback.evaluation_phases == [
+        {
+            "name": "load data",
+            "start": 0.0,
+            "end": 1.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {
+            "name": "encode",
+            "start": 1.5,
+            "end": 4.5,
+            "split": "test",
+            "subset": "en",
+        },
+        {
+            "name": "load data",
+            "start": 4.5,
+            "end": 6.5,
+            "split": "test",
+            "subset": "fr",
+        },
+        {
+            "name": "encode",
+            "start": 6.5,
+            "end": 10.5,
+            "split": "test",
+            "subset": "fr",
+        },
+    ]

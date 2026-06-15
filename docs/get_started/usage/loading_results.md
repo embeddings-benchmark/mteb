@@ -6,7 +6,7 @@ icon: lucide/table
 # Loading and working with results
 
 To make the results more easily accessible, we have designed functionality for retrieving results from both online and the local cache.
-Generally you access this functionality using the `ResultCache` object.
+Generally you access this functionality using the `ResultCache` object. You can also submit results using this object for more on that see the [contributing section](../../contributing/submitting_results.md).
 
 For instance, if you are selecting the best model for semantic text similarity (STS) you could fetch the relevant tasks and create a dataframe of the results using the following code:
 
@@ -16,9 +16,11 @@ import mteb
 tasks = mteb.get_tasks(tasks=["STS12"])
 model_names = ["intfloat/multilingual-e5-large"]
 
-cache = mteb.ResultCache("~/.cache/mteb")
+cache = mteb.ResultCache("~/.cache/mteb")  # (1)!
 results = cache.load_results(models=model_names, tasks=tasks)
 ```
+
+1. The cache path can also be set via the `MTEB_CACHE` environment variable.
 
 From this you will get a `BenchmarkResults` object:
 ```python

@@ -138,7 +138,7 @@ class SearchEncoderWrapper:
             prompt_type=PromptType.query,
             **encode_kwargs,
         )
-        query_idx_to_id = {i: row["id"] for i, row in enumerate(queries)}
+        query_idx_to_id = dict(enumerate(queries["id"]))
 
         if top_ranked is not None:
             logger.info("Reranking pre-ranked documents...")
@@ -347,7 +347,7 @@ class SearchEncoderWrapper:
         result_heaps: dict[str, list[tuple[float, str]]] = {
             qid: [] for qid in query_idx_to_id.values()
         }
-        doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
+        doc_id_to_idx = {doc: idx for idx, doc in enumerate(self.task_corpus["id"])}
 
         all_doc_embeddings = self.model.encode(
             create_dataloader(
@@ -537,8 +537,8 @@ class SearchCrossEncoderWrapper:
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
 
-        query_id_to_idx = {row["id"]: i for i, row in enumerate(queries)}
-        doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
+        query_id_to_idx = {row: i for i, row in enumerate(queries["id"])}
+        doc_id_to_idx = {doc: idx for idx, doc in enumerate(self.task_corpus["id"])}
 
         total_queries = []
         total_docs = []

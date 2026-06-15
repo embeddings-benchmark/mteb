@@ -5,6 +5,8 @@
     "release_date": null,
     "languages": null,
     "n_parameters": 0,
+    "n_active_parameters_override": null,
+    "n_embedding_parameters": null,
     "memory_usage_mb": 0.0,
     "max_tokens": Infinity,
     "embed_dim": 32,
@@ -21,13 +23,17 @@
     "superseded_by": null,
     "modalities": [
         "text",
-        "image"
+        "image",
+        "audio",
+        "video"
     ],
     "model_type": [
         "dense"
     ],
     "citation": null,
     "contacts": null,
+    "experiment_kwargs": null,
+    "output_dtypes": null,
     "loader": "RandomEncoderBaseline",
     "is_cross_encoder": false
 }

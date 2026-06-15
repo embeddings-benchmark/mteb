@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any, ClassVar
 import numpy as np
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -40,21 +39,8 @@ class OpenAIModel(AbsEncoder):
 
         To handle documents larger than 8191 tokens, we truncate the document to the specified sequence length. If the document is empty we return a zero vector.
         """
-        requires_package(
-            self,
-            "openai",
-            model_name,
-            install_instruction="pip install 'mteb[openai]'",
-        )
-        from openai import OpenAI
-
-        requires_package(
-            self,
-            "tiktoken",
-            model_name,
-            install_instruction="pip install 'mteb[openai]'",
-        )
         import tiktoken
+        from openai import OpenAI
 
         self._client = OpenAI() if client is None else client
         self.model_name = model_name.split("/")[-1].split(" ")[0]  # noqa: PLC0207
@@ -93,8 +79,6 @@ class OpenAIModel(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        requires_package(self, "openai", "Openai text embedding")
-
         from openai import NotGiven
 
         sentences = [text for batch in inputs for text in batch["text"]]
@@ -196,6 +180,7 @@ text_embedding_3_small = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    extra_requirements_groups=["openai"],
 )
 text_embedding_3_large = ModelMeta(
     name="openai/text-embedding-3-large",
@@ -222,6 +207,7 @@ text_embedding_3_large = ModelMeta(
     training_datasets=None,
     license=None,
     similarity_fn_name=None,
+    extra_requirements_groups=["openai"],
 )
 text_embedding_ada_002 = ModelMeta(
     name="openai/text-embedding-ada-002",
@@ -248,6 +234,7 @@ text_embedding_ada_002 = ModelMeta(
     training_datasets=None,
     license=None,
     similarity_fn_name=None,
+    extra_requirements_groups=["openai"],
 )
 
 text_embedding_3_small_512 = ModelMeta(
@@ -276,6 +263,7 @@ text_embedding_3_small_512 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    extra_requirements_groups=["openai"],
 )
 
 text_embedding_3_large_512 = ModelMeta(
@@ -304,4 +292,5 @@ text_embedding_3_large_512 = ModelMeta(
     training_datasets=None,
     license=None,
     similarity_fn_name=None,
+    extra_requirements_groups=["openai"],
 )
