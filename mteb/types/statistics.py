@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from typing import Generic, TypeAlias
+from typing import TypeAlias
 
-from typing_extensions import NotRequired, TypedDict, TypeVar
+from typing_extensions import NotRequired, TypedDict
 
 from mteb.types._result import HFSubset
 
@@ -19,30 +19,20 @@ class SplitDescriptiveStatistics(TypedDict):
     pass
 
 
-# Self-bound type parameter for ``DescriptiveStatistics``: the API parameterises
-# the generic wrapper with the per-task TypedDict so that ``hf_subset_descriptive_stats``
-# is precisely typed as a mapping to the same per-task shape. The default keeps
-# backward compatibility with existing callers that use ``DescriptiveStatistics``
-# without parameters.
-_DescStatsT = TypeVar(
-    "_DescStatsT",
-    bound="SplitDescriptiveStatistics",
-    default="SplitDescriptiveStatistics",
-)
+class DescriptiveStatistics(SplitDescriptiveStatistics):
+    """Multilingual wrapper for per-task descriptive statistics.
 
-
-class DescriptiveStatistics(SplitDescriptiveStatistics, Generic[_DescStatsT]):
-    """Generic multilingual wrapper for per-task descriptive statistics.
-
-    Parameterised on the per-task ``SplitDescriptiveStatistics`` subclass so
-    ``hf_subset_descriptive_stats`` carries the right per-task shape (e.g.
-    ``DescriptiveStatistics[ClassificationDescriptiveStatistics]``).
+    The concrete per-task ``*Statistics`` classes below mirror this shape with
+    a tighter ``hf_subset_descriptive_stats`` value type (e.g.
+    ``dict[HFSubset, ClassificationDescriptiveStatistics]``). They don't
+    inherit from this class — TypedDict forbids redeclaring fields across
+    extension — but they're structurally assignable to it.
 
     Attributes:
         hf_subset_descriptive_stats: HFSubset descriptive statistics (only for multilingual datasets)
     """
 
-    hf_subset_descriptive_stats: NotRequired[dict[HFSubset, _DescStatsT]]
+    hf_subset_descriptive_stats: NotRequired[dict[HFSubset, SplitDescriptiveStatistics]]
 
 
 class TextStatistics(TypedDict):
@@ -579,81 +569,94 @@ class ImageTextPairClassificationDescriptiveStatistics(SplitDescriptiveStatistic
     image_statistics: ImageStatistics
 
 
-class AnySTSStatistics(
-    DescriptiveStatistics[AnySTSDescriptiveStatistics],
-    AnySTSDescriptiveStatistics,
-):
+class AnySTSStatistics(AnySTSDescriptiveStatistics):
     """STS descriptive statistics, optionally with multilingual subsets."""
 
+    hf_subset_descriptive_stats: NotRequired[
+        dict[HFSubset, AnySTSDescriptiveStatistics]
+    ]
 
-class BitextStatistics(
-    DescriptiveStatistics[BitextDescriptiveStatistics],
-    BitextDescriptiveStatistics,
-):
+
+class BitextStatistics(BitextDescriptiveStatistics):
     """Bitext mining descriptive statistics, optionally with multilingual subsets."""
 
+    hf_subset_descriptive_stats: NotRequired[
+        dict[HFSubset, BitextDescriptiveStatistics]
+    ]
 
-class ClassificationStatistics(
-    DescriptiveStatistics[ClassificationDescriptiveStatistics],
-    ClassificationDescriptiveStatistics,
-):
+
+class ClassificationStatistics(ClassificationDescriptiveStatistics):
     """Classification descriptive statistics, optionally with multilingual subsets."""
 
+    hf_subset_descriptive_stats: NotRequired[
+        dict[HFSubset, ClassificationDescriptiveStatistics]
+    ]
 
-class ClusteringStatistics(
-    DescriptiveStatistics[ClusteringDescriptiveStatistics],
-    ClusteringDescriptiveStatistics,
-):
+
+class ClusteringStatistics(ClusteringDescriptiveStatistics):
     """Clustering descriptive statistics, optionally with multilingual subsets."""
 
+    hf_subset_descriptive_stats: NotRequired[
+        dict[HFSubset, ClusteringDescriptiveStatistics]
+    ]
 
-class ClusteringFastStatistics(
-    DescriptiveStatistics[ClusteringFastDescriptiveStatistics],
-    ClusteringFastDescriptiveStatistics,
-):
+
+class ClusteringFastStatistics(ClusteringFastDescriptiveStatistics):
     """Clustering-fast descriptive statistics, optionally with multilingual subsets."""
+
+    hf_subset_descriptive_stats: NotRequired[
+        dict[HFSubset, ClusteringFastDescriptiveStatistics]
+    ]
 
 
 class ImageTextPairClassificationStatistics(
-    DescriptiveStatistics[ImageTextPairClassificationDescriptiveStatistics],
-    ImageTextPairClassificationDescriptiveStatistics,
+    ImageTextPairClassificationDescriptiveStatistics
 ):
     """Image/text pair classification stats, optionally with multilingual subsets."""
 
+    hf_subset_descriptive_stats: NotRequired[
+        dict[HFSubset, ImageTextPairClassificationDescriptiveStatistics]
+    ]
 
-class PairClassificationStatistics(
-    DescriptiveStatistics[PairClassificationDescriptiveStatistics],
-    PairClassificationDescriptiveStatistics,
-):
+
+class PairClassificationStatistics(PairClassificationDescriptiveStatistics):
     """Pair classification descriptive statistics, optionally with multilingual subsets."""
 
+    hf_subset_descriptive_stats: NotRequired[
+        dict[HFSubset, PairClassificationDescriptiveStatistics]
+    ]
 
-class RegressionStatistics(
-    DescriptiveStatistics[RegressionDescriptiveStatistics],
-    RegressionDescriptiveStatistics,
-):
+
+class RegressionStatistics(RegressionDescriptiveStatistics):
     """Regression descriptive statistics, optionally with multilingual subsets."""
 
+    hf_subset_descriptive_stats: NotRequired[
+        dict[HFSubset, RegressionDescriptiveStatistics]
+    ]
 
-class RetrievalStatistics(
-    DescriptiveStatistics[RetrievalDescriptiveStatistics],
-    RetrievalDescriptiveStatistics,
-):
+
+class RetrievalStatistics(RetrievalDescriptiveStatistics):
     """Retrieval descriptive statistics, optionally with multilingual subsets."""
 
+    hf_subset_descriptive_stats: NotRequired[
+        dict[HFSubset, RetrievalDescriptiveStatistics]
+    ]
 
-class SummarizationStatistics(
-    DescriptiveStatistics[SummarizationDescriptiveStatistics],
-    SummarizationDescriptiveStatistics,
-):
+
+class SummarizationStatistics(SummarizationDescriptiveStatistics):
     """Summarization descriptive statistics, optionally with multilingual subsets."""
 
+    hf_subset_descriptive_stats: NotRequired[
+        dict[HFSubset, SummarizationDescriptiveStatistics]
+    ]
 
-class ZeroShotClassificationStatistics(
-    DescriptiveStatistics[ZeroShotClassificationDescriptiveStatistics],
-    ZeroShotClassificationDescriptiveStatistics,
-):
+
+class ZeroShotClassificationStatistics(ZeroShotClassificationDescriptiveStatistics):
     """Zero-shot classification stats, optionally with multilingual subsets."""
+
+    hf_subset_descriptive_stats: NotRequired[
+        dict[HFSubset, ZeroShotClassificationDescriptiveStatistics]
+    ]
 
 
 DescriptiveStatsValue: TypeAlias = (
