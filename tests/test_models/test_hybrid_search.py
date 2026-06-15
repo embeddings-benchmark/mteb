@@ -23,7 +23,9 @@ def test_hybrid_search_init_and_meta():
     assert hybrid_weighted.weights == [0.7, 0.3]
 
     meta = hybrid.mteb_model_meta
-    assert "hybrid-dbsf-baseline-random-encoder-baseline-random-encoder" in meta.name
+    assert (
+        meta.name == "mteb/hybrid-dbsf-baseline-random-encoder-baseline-random-encoder"
+    )
     assert meta.model_type == ["hybrid"]
 
     with pytest.raises(
