@@ -25,6 +25,11 @@ from .benchmarks.get_benchmark import get_benchmark, get_benchmarks
 
 __version__ = version("mteb")  # fetch version from install metadata
 
+try:
+    from mteb import tests
+except ImportError:
+    tests = None
+
 __all__ = [
     "MTEB",
     "AbsTask",
@@ -49,5 +54,6 @@ __all__ = [
     "get_task",
     "get_tasks",
     "load_results",
+    "tests",
     "types",
 ]

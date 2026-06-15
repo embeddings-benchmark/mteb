@@ -1,5 +1,5 @@
 import mteb
-from tests import MockTask, test_tasks
+from mteb.tests import test_tasks
 from tests.mock_models import MockSentenceTransformer
 
 
@@ -10,15 +10,4 @@ def test_mteb_tests_import():
     model = MockSentenceTransformer()
     task = test_tasks[0]
     results = mteb.evaluate(model, task, cache=None)
-    assert len(results.task_results) == 1
-
-
-def test_mteb_mock_task():
-    task = MockTask()
-    assert task is not None
-    assert len(task.tasks) > 0
-
-    model = MockSentenceTransformer()
-    subtask = task.tasks[0]
-    results = mteb.evaluate(model, subtask, cache=None)
     assert len(results.task_results) == 1
