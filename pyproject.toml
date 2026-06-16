@@ -483,6 +483,7 @@ module = [
     "mteb.models.model_implementations.*",
     "mteb.tasks.*",
     "mteb.leaderboard.*",
+    "mteb.tests_mock.*",
 ]
 ignore_errors = true
 
