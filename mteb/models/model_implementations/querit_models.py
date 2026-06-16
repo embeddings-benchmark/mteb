@@ -237,6 +237,7 @@ Querit_Reranker_A0_6B = ModelMeta(
     reference="https://huggingface.co/Querit/Querit",
     similarity_fn_name=None,
     training_datasets=querit_reranker_training_data,
+    adapted_from="Qwen/Qwen3-Embedding-4B",
     license="apache-2.0",
     framework=["PyTorch"],
     use_instructions=None,
