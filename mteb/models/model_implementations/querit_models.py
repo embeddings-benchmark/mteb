@@ -217,7 +217,7 @@ querit_reranker_training_data = {
     "T2Reranking",  # https://huggingface.co/datasets/THUIR/T2Ranking & The corpus and queries that overlap with mteb/T2Reranking have been removed.
 }
 
-Querit_Reranker_A0_6B = ModelMeta(
+Querit_Reranker_A0_4B = ModelMeta(
     loader=QueritWrapper,
     loader_kwargs={
         "fp_options": "bfloat16",
@@ -264,6 +264,7 @@ Querit_Reranker_4B = ModelMeta(
     reference="https://huggingface.co/Querit/Querit-4B",
     similarity_fn_name=None,
     training_datasets=querit_reranker_training_data,
+    adapted_from="Qwen/Qwen3-Embedding-4B",
     license="apache-2.0",
     framework=["PyTorch"],
     use_instructions=None,
