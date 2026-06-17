@@ -90,13 +90,12 @@ class VirtueWrapper(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
+        show_progress_bar: bool = True,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         features = inputs.dataset.features
         has_text = "text" in features
         has_image = "image" in features
-
-        show_progress_bar = kwargs.get("show_progress_bar", True)
 
         all_embeddings: list[torch.Tensor] = []
 
