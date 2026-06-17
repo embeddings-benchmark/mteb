@@ -21,10 +21,13 @@ prism_reranker_citation = """
 
 _PRISM_COMMON = dict(
     loader=CrossEncoderWrapper,
+    loader_kwargs={"trust_remote_code": True},
     model_type=["cross-encoder"],
     languages=["eng-Latn", "zho-Hans"],
     open_weights=True,
     release_date="2026-04-26",
+    # The model card caps usable context at 10K tokens ("Inputs longer than 10K
+    # tokens may degrade") despite the larger Qwen3.5 position-embedding window.
     max_tokens=10000,
     license="mit",
     similarity_fn_name=None,
