@@ -3,10 +3,6 @@ from __future__ import annotations
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 
-# Prism rerankers are LLM-based cross-encoders. The system prompt and instruction
-# are baked into the model's chat template and are not user-configurable, so they
-# can be used directly through sentence-transformers' CrossEncoder. The default
-# activation is sigmoid, yielding relevance scores in (0, 1).
 prism_reranker_citation = """
 @misc{zhang2026prismreranker,
   title={Prism-Reranker: Beyond Relevance Scoring -- Jointly Producing Contributions and Evidence for Agentic Retrieval},
