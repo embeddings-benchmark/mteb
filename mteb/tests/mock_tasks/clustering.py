@@ -1,15 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from datasets import Audio, Dataset, DatasetDict
 
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    pass
 
 from .utils import (
     create_mock_audio,
