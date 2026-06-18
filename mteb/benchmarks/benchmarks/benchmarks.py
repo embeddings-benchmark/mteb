@@ -175,7 +175,7 @@ MTEB_ENG_CLASSIC = Benchmark(
 }
 """,
     contacts=["Muennighoff"],
-    new_version=["MTEB(eng, v2)"],
+    superseded_by=["MTEB(eng, v2)"],
 )
 
 MTEB_MAIN_RU = Benchmark(
@@ -237,7 +237,7 @@ MTEB_MAIN_RU = Benchmark(
 }
 """,
     contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
-    new_version=["MTEB(rus, v1.1)"],
+    superseded_by=["MTEB(rus, v1.1)"],
 )
 
 MTEB_MAIN_RU_v1_1 = Benchmark(
@@ -991,7 +991,7 @@ MTEB_multilingual_v1 = Benchmark(
     reference="https://arxiv.org/abs/2502.13595",
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
-    new_version=["MTEB(Multilingual, v2)"],
+    superseded_by=["MTEB(Multilingual, v2)"],
 )
 
 MTEB_multilingual_v2 = Benchmark(
@@ -1531,7 +1531,7 @@ BRIGHT = Benchmark(
   year = {2024},
 }
 """,
-    new_version=["BRIGHT(v1.1)"],
+    superseded_by=["BRIGHT(v1.1)"],
 )
 
 BRIGHT_LONG = Benchmark(
@@ -1554,7 +1554,7 @@ BRIGHT_LONG = Benchmark(
   year = {2024},
 }
 """,
-    new_version=["BRIGHT(v1.1)"],
+    superseded_by=["BRIGHT(v1.1)"],
 )
 
 BRIGHT_V1_1 = Benchmark(

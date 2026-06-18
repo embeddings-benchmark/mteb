@@ -191,7 +191,7 @@ class Benchmark:
         reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
         citation: A bibtex citation
         contacts: The people to contact in case of a problem in the benchmark, preferably a GitHub handle.
-        new_version: Benchmark name with newer version of benchmark
+        superseded_by: Benchmark name with newer version of benchmark
         aggregations: Which aggregations to use in on leaderboard
         summary_sort_column: The column to sort benchmarks by on leaderboard
 
@@ -217,7 +217,7 @@ class Benchmark:
     display_name: str | None = None
     language_view: list[str] | Literal["all"] = field(default_factory=list)
     benchmark_hf_repo: str | None = None
-    new_version: Sequence[str] | None = None
+    superseded_by: Sequence[str] | None = None
     # Api aggregation functions
     aggregations: Sequence[BenchmarkAggregation] = (
         BenchmarkAggregation.MEAN_TASK,

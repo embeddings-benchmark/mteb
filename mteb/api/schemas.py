@@ -122,7 +122,9 @@ class BenchmarkSchema(_CamelModel):
             domains=sorted(domains),
             modalities=sorted(modalities),
             display_on_leaderboard=bool(benchmark.display_on_leaderboard),
-            new_version=list(benchmark.new_version) if benchmark.new_version else None,
+            new_version=list(benchmark.superseded_by)
+            if benchmark.superseded_by
+            else None,
             aggregations=[a.value for a in benchmark.aggregations],
             show_zero_shot=bool(benchmark.show_zero_shot),
             language_view=language_view,
