@@ -197,7 +197,7 @@ from mteb.tests import test_tasks
 model = mteb.get_model("your_model_name")
 
 # Evaluate on the mock test tasks
-mteb.evaluate(model, test_tasks, cache=mteb.ResultCache(cache_path="results"))
+mteb.evaluate(model, test_tasks, cache=None) # don't use cache
 ```
 
 This will run mock tasks for your model and save the output JSON files under the `results/` folder. Please commit the resulting JSON file(s) with your PR.

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.tests_mock.task_grid import (
+from mteb.tests.task_grid import (
     ALL_TASK_TEST_GRID,
     MOCK_MAEB_TASK_GRID,
     MOCK_MIEB_TASK_GRID,

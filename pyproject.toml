@@ -321,7 +321,7 @@ preview = true
     "S603",  # allow subprocess calls in tests
     "PLC2701",  # Private name import
 ]
-"mteb/tests_mock/*" = [
+"mteb/tests/*" = [
     "RUF012",
     "D",
     "DOC",
@@ -483,7 +483,7 @@ module = [
     "mteb.models.model_implementations.*",
     "mteb.tasks.*",
     "mteb.leaderboard.*",
-    "mteb.tests_mock.*",
+    "mteb.tests.*",
 ]
 ignore_errors = true
 
