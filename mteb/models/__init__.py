@@ -8,13 +8,16 @@ from .models_protocols import (
     MTEBModels,
     SearchProtocol,
 )
-from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
+from .search_encoder_index.search_backend_protocol import (
+    IndexEncoderSearchProtocol,
+)
 from .search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
 from .sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
     sentence_transformers_loader,
 )
+from .vllm_endpoint_wrapper import VllmEndpointWrapper
 
 __all__ = [
     "CacheBackendProtocol",
@@ -32,4 +35,5 @@ __all__ = [
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
     "sentence_transformers_loader",
+    "VllmEndpointWrapper",
 ]
