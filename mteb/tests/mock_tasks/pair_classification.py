@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from datasets import Audio, Dataset, DatasetDict
 
 from mteb.abstasks.image.image_text_pair_classification import (
@@ -10,9 +8,6 @@ from mteb.abstasks.image.image_text_pair_classification import (
 from mteb.abstasks.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types import PromptType
-
-if TYPE_CHECKING:
-    pass
 
 from .utils import (
     create_mock_audio,

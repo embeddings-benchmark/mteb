@@ -1,14 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.summarization import AbsTaskSummarization
-
-if TYPE_CHECKING:
-    pass
 
 from .utils import (
     general_args,

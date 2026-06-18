@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import numpy as np
 from datasets import Audio, Dataset, DatasetDict
 
@@ -9,9 +7,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.zeroshot_classification import (
     AbsTaskZeroShotClassification,
 )
-
-if TYPE_CHECKING:
-    pass
 
 from .utils import (
     create_mock_audio,

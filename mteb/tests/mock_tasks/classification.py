@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from datasets import Audio, Dataset, DatasetDict
 from sklearn.linear_model import LogisticRegression
 
@@ -10,9 +8,6 @@ from mteb.abstasks.multilabel_classification import (
     AbsTaskMultilabelClassification,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    pass
 
 from .utils import (
     create_mock_audio,
