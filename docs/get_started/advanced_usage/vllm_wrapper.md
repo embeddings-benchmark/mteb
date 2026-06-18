@@ -9,6 +9,11 @@ icon: lucide/zap
 !!! note
     vLLM currently supports only a limited number of models, and many implementations have subtle differences compared to the default implementations in mteb. For the full list of supported models, refer to the [vllm documentation](https://docs.vllm.ai/en/stable/models/supported_models/#pooling-models).
 
+MTEB provides two vLLM wrappers:
+
+- **VllmEncoderWrapper / VllmCrossEncoderWrapper**: Local in-process vLLM instantiation for maximum performance
+- **VllmEndpointWrapper**: HTTP-based access to remote vLLM servers for production deployments
+
 
 ## Installation
 
@@ -24,6 +29,10 @@ If you're using cuda you can run
 
 For other architectures, please refer to the [vllm installation guide](https://docs.vllm.ai/en/latest/getting_started/installation/).
 ## Usage
+
+### Local vLLM (VllmEncoderWrapper)
+
+For local in-process vLLM instantiation with maximum performance, use the standard wrappers.
 
 To use vLLM with MTEB you have to wrap the model with its respective wrapper.
 
@@ -80,6 +89,58 @@ To use vLLM with MTEB you have to wrap the model with its respective wrapper.
         results = run_vllm_crossencoder()
         print(results)
     ```
+
+### Remote vLLM Endpoint (VllmEndpointWrapper)
+
+For connecting to existing vLLM servers via HTTP API, use `VllmEndpointWrapper`. This is useful for:
+
+- Testing remote vLLM deployments (CPU or GPU)
+- Benchmarking production vLLM servers
+- Reusing running vLLM instances across multiple benchmark runs
+- Avoiding repeated model loading overhead
+
+!!! note
+    The endpoint wrapper requires a running vLLM server with the OpenAI-compatible API enabled.
+    Start a vLLM server with: `vllm serve <model-name> --host 0.0.0.0 --port 8000`
+
+```python
+import mteb
+from mteb.models import VllmEndpointWrapper
+
+# Connect to a running vLLM server
+encoder = VllmEndpointWrapper(
+    endpoint_url="http://localhost:8000",
+    model_name="intfloat/e5-small",
+)
+
+# Evaluate on MTEB tasks
+results = mteb.evaluate(
+    encoder,
+    mteb.get_task("STS12"),
+)
+print(results)
+```
+
+**Additional Options:**
+
+```python
+# With authentication
+encoder = VllmEndpointWrapper(
+    endpoint_url="https://my-vllm-server.com",
+    model_name="intfloat/e5-small",
+    api_key="your-api-key",
+    verify_ssl=True,  # Set to False for self-signed certs
+)
+
+# With custom settings
+encoder = VllmEndpointWrapper(
+    endpoint_url="http://localhost:8000",
+    model_name="intfloat/e5-small",
+    timeout=600,  # Request timeout in seconds
+    batch_size=64,  # Batch size for embeddings
+    max_retries=5,  # Retry failed requests
+)
+```
 
 ## Why is vLLM fast?
 
@@ -158,6 +219,7 @@ vLLM’s optimizations are primarily designed for and most effective with causal
 
 ## API Reference
 
+### Local vLLM Wrappers
 
 :::mteb.models.vllm_wrapper.VllmWrapperBase
 
@@ -167,3 +229,7 @@ vLLM’s optimizations are primarily designed for and most effective with causal
 :::mteb.models.vllm_wrapper.VllmEncoderWrapper
 
 :::mteb.models.vllm_wrapper.VllmCrossEncoderWrapper
+
+### Remote Endpoint Wrapper
+
+:::mteb.models.vllm_endpoint_wrapper.VllmEndpointWrapper
