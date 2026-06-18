@@ -25,8 +25,6 @@ from .benchmarks.get_benchmark import get_benchmark, get_benchmarks
 
 __version__ = version("mteb")  # fetch version from install metadata
 
-# NOTE: `mteb.tests` is a developer-only helper module; import it explicitly when needed (e.g., `from mteb.tests import test_tasks`).
-
 __all__ = [
     "MTEB",
     "AbsTask",

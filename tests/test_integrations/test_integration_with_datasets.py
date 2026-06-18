@@ -7,7 +7,7 @@ import pytest
 
 import mteb
 from mteb.abstasks import AbsTask
-from tests.task_grid import TASK_TEST_GRID
+from mteb.tests.task_grid import TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 

@@ -185,19 +185,19 @@ As it is an optional dependency, you can't use top-level dependencies, but will 
 
 ### Local Model Verification using mock tasks
 
-Before submitting your model implementation in a Pull Request, you must verify that the model integrates correctly with the benchmarking pipeline using the `test_tasks` suite from `mteb.tests`. Mock tasks run locally, execute very quickly, and do not download large datasets.
+Before submitting your model implementation in a Pull Request, you must verify that the model integrates correctly with the benchmarking pipeline using the `MOCK_TASK_TEST_GRID` suite from `mteb.tests.task_grid`. Mock tasks run locally, execute very quickly, and do not download large datasets.
 
 To run the local verification:
 
 ```python
 import mteb
-from mteb.tests import test_tasks
+from mteb.tests.task_grid import MOCK_TASK_TEST_GRID
 
 # Load your new model
 model = mteb.get_model("your_model_name")
 
 # Evaluate on the mock test tasks
-mteb.evaluate(model, test_tasks, cache=None) # don't use cache
+mteb.evaluate(model, MOCK_TASK_TEST_GRID, cache=None) # don't use cache
 ```
 
 This will run mock tasks for your model and save the output JSON files under the `results/` folder. Please commit the resulting JSON file(s) with your PR.
@@ -212,7 +212,7 @@ When submitting you models as a PR, please copy and paste the following checklis
   - [ ] `mteb.get_model(model_name, revision)` and
   - [ ] `mteb.get_model_meta(model_name, revision)`
 - [ ] I have tested the implementation works on a representative set of tasks.
-- [ ] I have evaluated the model locally against `mteb.tests.test_tasks` and committed the resulting JSON file(s) from `results/`
+- [ ] I have evaluated the model locally against `mteb.tests.task_grid.MOCK_TASK_TEST_GRID` and committed the resulting JSON file(s) from `results/`
 
 - [ ] The model is public, i.e., is available either as an API or the weights are publicly available to download
 - [ ] I reproduced results from the original paper (if applicable) on at least one benchmark, and I am including the results in the PR description.

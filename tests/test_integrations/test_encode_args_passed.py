@@ -15,8 +15,8 @@ from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.tests.task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
 from mteb.types import PromptType
-from tests.task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
 
 if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput

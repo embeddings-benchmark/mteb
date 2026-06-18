@@ -10,6 +10,7 @@ from torch.utils.data import DataLoader
 import mteb
 from mteb.abstasks import AbsTask
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.tests.task_grid import MOCK_TASK_TEST_GRID
 from tests.mock_models import (
     MockSentenceTransformer,
     MockSentenceTransformerWrapper,
@@ -22,7 +23,6 @@ from tests.mock_tasks import (
     MockRerankingTask,
     MockRetrievalTask,
 )
-from tests.task_grid import MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 
