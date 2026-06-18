@@ -70,7 +70,7 @@ class BenchmarkSchema(_CamelModel):
     # column when False (benchmarks whose tasks aren't tracked in model
     # training-data annotations, e.g. ViDoRe).
     show_zero_shot: bool = True
-    # Distinct models with at least one score on this benchmark.
+    # Distinct models evaluated on every task in this benchmark.
     num_models: int = 0
     # ``"all"`` = every language in the data; ``None`` = no per-language view.
     language_view: list[str] | Literal["all"] | None = None
@@ -151,6 +151,10 @@ class TaskMetaSchema(_CamelModel):
     dialect: list[str] | None = None
     sample_creation: str | None = None
     main_score: str | None = None
+    # Distinct models evaluated on **every** (subset, split) cell the task
+    # declares — i.e. ``len(metadata.eval_splits) * len(metadata.hf_subsets)``
+    # cells of scores. Partial-coverage models are excluded so the count
+    # doesn't overstate how complete the task is (issue #4826).
     num_models: int = 0
 
     @classmethod

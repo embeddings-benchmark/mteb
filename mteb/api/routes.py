@@ -162,29 +162,61 @@ def _safe_load_frames(
 
 @functools.cache
 def _num_models_map() -> dict[str, int]:
-    """{benchmark_name -> distinct model count}, cached for the process lifetime."""
+    """{benchmark_name -> count of fully-evaluated models}, cached for the process lifetime."""
     loaded = _safe_load_frames("num_models map")
     if loaded is None:
         return {}
     frames, _ = loaded
-    return {
-        name: int(frame["model_name"].n_unique())
-        for name, frame in frames.items()
-        if "model_name" in frame.columns
-    }
+    expected_tasks = {b.name: len(b.tasks) for b in mteb.get_benchmarks()}
+    out: dict[str, int] = {}
+    for name, frame in frames.items():
+        total = expected_tasks.get(name, 0)
+        if total <= 0 or "model_name" not in frame.columns:
+            continue
+        if "task_name" not in frame.columns:
+            continue
+        fully_evaluated = (
+            frame.lazy()
+            .group_by("model_name")
+            .agg(pl.col("task_name").n_unique().alias("n_tasks"))
+            .filter(pl.col("n_tasks") >= total)
+            .select(pl.len())
+            .collect()
+            .item()
+        )
+        out[name] = int(fully_evaluated)
+    return out
 
 
 @functools.cache
 def _task_num_models_map() -> dict[str, int]:
-    """{task_name -> distinct model count}, cached for the process lifetime."""
+    """{task_name -> count of fully-evaluated models}, cached for the process lifetime."""
     loaded = _safe_load_frames("task num_models map")
     if loaded is None:
         return {}
     _, unified = loaded
     if unified.is_empty() or "task_name" not in unified.columns:
         return {}
+    expected_cells: dict[str, int] = {}
+    for name, cls in _TASKS_REGISTRY.items():
+        n_splits = max(len(cls.metadata.eval_splits), 1)
+        n_subsets = max(len(cls.metadata.hf_subsets), 1)
+        expected_cells[name] = n_splits * n_subsets
+    if not expected_cells:
+        return {}
+    expected_df = pl.DataFrame(
+        {
+            "task_name": list(expected_cells.keys()),
+            "expected_cells": list(expected_cells.values()),
+        },
+        schema={"task_name": pl.Utf8, "expected_cells": pl.Int64},
+    )
     grouped = (
         unified.lazy()
+        .group_by(["task_name", "model_name"])
+        .agg(pl.len().alias("n_cells"))
+        .join(expected_df.lazy(), on="task_name", how="inner")
+        .filter(pl.col("n_cells") >= pl.col("expected_cells"))
         .group_by("task_name")
         .agg(pl.col("model_name").n_unique().alias("n"))
         .collect()
