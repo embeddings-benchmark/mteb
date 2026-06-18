@@ -8,10 +8,6 @@ on:
 jobs:
   rebuild:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-      packages: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -50,22 +46,6 @@ jobs:
 
       - name: Trigger Factory Rebuild
         run: |
-          # Mint a short-lived OIDC ID token from GitHub Actions.
-          ID_TOKEN=$(curl -sSf \
-            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=https://huggingface.co" \
-            | jq -r '.value')
-
-          # Exchange the ID token for a short-lived HF token (RFC 8693).
-          HF_TOKEN=$(curl -sSf -X POST https://huggingface.co/oauth/token \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"grant_type\": \"urn:ietf:params:oauth:grant-type:token-exchange\",
-              \"subject_token_type\": \"urn:ietf:params:oauth:token-type:id_token\",
-              \"subject_token\": \"$ID_TOKEN\",
-              \"resource\": \"spaces/mteb/leaderboard\"
-            }" | jq -r '.access_token')
-
-          curl -sSf -X POST \
+          curl -X POST \
             "https://huggingface.co/api/spaces/mteb/leaderboard/restart?factory=true" \
-            -H "Authorization: Bearer $HF_TOKEN"
+            -H "Authorization: Bearer ${{ secrets.HF_TOKEN }}"
