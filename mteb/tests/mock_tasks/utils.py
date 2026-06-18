@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from PIL.Image import Image
 
 general_args = {
-    "description": "a mock task for testing",
+    "description": "A lightweight mock task designed for testing, debugging, and local model verification within the MTEB framework.",
     "reference": "https://github.com/embeddings-benchmark/mteb",
     "dataset": {
         "path": "NA",

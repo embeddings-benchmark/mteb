@@ -21,10 +21,8 @@ from .mock_tasks import (
     MockBitextMiningTask,
     MockClassificationTask,
     MockClusteringFastTask,
-    MockClusteringTask,
     MockImageClassificationTask,
     MockImageClusteringFastTask,
-    MockImageClusteringTask,
     MockImageMultilabelClassificationTask,
     MockImageRegressionTask,
     MockImageTextPairClassificationTask,
@@ -35,7 +33,6 @@ from .mock_tasks import (
     MockMultilingualBitextMiningTask,
     MockMultilingualClassificationTask,
     MockMultilingualClusteringFastTask,
-    MockMultilingualClusteringTask,
     MockMultilingualImageClassificationTask,
     MockMultilingualImageTextPairClassificationTask,
     MockMultilingualInstructionReranking,
@@ -77,6 +74,11 @@ from .mock_tasks import (
     MockVideoZeroshotClassificationTask,
     MockVisualSTSTask,
     MockZeroShotClassificationTask,
+)
+from .mock_tasks.clustering import (
+    MockClusteringTask,
+    MockImageClusteringTask,
+    MockMultilingualClusteringTask,
 )
 
 TASK_TEST_GRID = mteb.get_tasks(
