@@ -177,6 +177,7 @@ def _num_models_map() -> dict[str, int]:
             continue
         fully_evaluated = (
             frame.lazy()
+            .drop_nulls("score")
             .group_by("model_name")
             .agg(pl.col("task_name").n_unique().alias("n_tasks"))
             .filter(pl.col("n_tasks") >= total)
@@ -197,25 +198,30 @@ def _task_num_models_map() -> dict[str, int]:
     _, unified = loaded
     if unified.is_empty() or "task_name" not in unified.columns:
         return {}
-    expected_cells: dict[str, int] = {}
+    triples: list[tuple[str, str, str]] = []
     for name, cls in _TASKS_REGISTRY.items():
-        n_splits = max(len(cls.metadata.eval_splits), 1)
-        n_subsets = max(len(cls.metadata.hf_subsets), 1)
-        expected_cells[name] = n_splits * n_subsets
-    if not expected_cells:
+        splits = list(cls.metadata.eval_splits) or ["default"]
+        subsets = list(cls.metadata.hf_subsets) or ["default"]
+        for sp in splits:
+            for ss in subsets:
+                triples.append((name, sp, ss))
+    if not triples:
         return {}
     expected_df = pl.DataFrame(
-        {
-            "task_name": list(expected_cells.keys()),
-            "expected_cells": list(expected_cells.values()),
-        },
-        schema={"task_name": pl.Utf8, "expected_cells": pl.Int64},
+        triples,
+        schema={"task_name": pl.Utf8, "split": pl.Utf8, "subset": pl.Utf8},
+        orient="row",
+    )
+    expected_per_task = (
+        expected_df.lazy().group_by("task_name").agg(pl.len().alias("expected_cells"))
     )
     grouped = (
         unified.lazy()
+        .drop_nulls("score")
+        .join(expected_df.lazy(), on=["task_name", "split", "subset"], how="inner")
         .group_by(["task_name", "model_name"])
         .agg(pl.len().alias("n_cells"))
-        .join(expected_df.lazy(), on="task_name", how="inner")
+        .join(expected_per_task, on="task_name", how="inner")
         .filter(pl.col("n_cells") >= pl.col("expected_cells"))
         .group_by("task_name")
         .agg(pl.col("model_name").n_unique().alias("n"))
