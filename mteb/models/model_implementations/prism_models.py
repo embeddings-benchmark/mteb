@@ -52,6 +52,7 @@ prism_qwen35_reranker_0_8b = ModelMeta(
     embed_dim=1024,
     memory_usage_mb=1435,
     reference="https://huggingface.co/infgrad/Prism-Qwen3.5-Reranker-0.8B",
+    adapted_from="Qwen3.5-Reranker-0.8B",
 )
 
 prism_qwen35_reranker_2b = ModelMeta(
