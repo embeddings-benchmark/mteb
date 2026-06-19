@@ -297,14 +297,23 @@ class MultilingualNanoHotpotQARetrieval(AbsTaskNanoBEIRMultilingual):
         bibtex_citation=r"""
 @inproceedings{yang-etal-2018-hotpotqa,
   address = {Brussels, Belgium},
-  author = {Yang, Zhilin  and Qi, Peng  and Zhang, Saizheng  and Bengio, Yoshua  and Cohen, William  and Salakhutdinov, Ruslan  and Manning, Christopher D.},
+  author = {Yang, Zhilin  and
+Qi, Peng  and
+Zhang, Saizheng  and
+Bengio, Yoshua  and
+Cohen, William  and
+Salakhutdinov, Ruslan  and
+Manning, Christopher D.},
   booktitle = {Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing},
   doi = {10.18653/v1/D18-1259},
-  editor = {Riloff, Ellen  and Chiang, David  and Hockenmaier, Julia  and Tsujii, Jun'ichi},
-  month = oct,
+  editor = {Riloff, Ellen  and
+Chiang, David  and
+Hockenmaier, Julia  and
+Tsujii, Jun{'}ichi},
+  month = oct # {-} # nov,
   pages = {2369--2380},
   publisher = {Association for Computational Linguistics},
-  title = {{HotpotQA}: A Dataset for Diverse, Explainable Multi-hop Question Answering},
+  title = {{H}otpot{QA}: A Dataset for Diverse, Explainable Multi-hop Question Answering},
   url = {https://aclanthology.org/D18-1259},
   year = {2018},
 }
@@ -588,11 +597,19 @@ class MultilingualNanoTouche2020Retrieval(AbsTaskNanoBEIRMultilingual):
         sample_creation="found",
         bibtex_citation=r"""
 @dataset{potthast_2022_6862281,
-  author = {Potthast, Martin and Gienapp, Lukas and Wachsmuth, Henning and Hagen, Matthias and Fröbe, Maik and Bondarenko, Alexander and Ajjour, Yamen and Stein, Benno},
+  author = {Potthast, Martin and
+Gienapp, Lukas and
+Wachsmuth, Henning and
+Hagen, Matthias and
+Fröbe, Maik and
+Bondarenko, Alexander and
+Ajjour, Yamen and
+Stein, Benno},
   doi = {10.5281/zenodo.6862281},
   month = jul,
   publisher = {Zenodo},
-  title = {{Touché20-Argument-Retrieval-for-Controversial-Questions}},
+  title = {{Touché20-Argument-Retrieval-for-Controversial-
+Questions}},
   url = {https://doi.org/10.5281/zenodo.6862281},
   year = {2022},
 }
