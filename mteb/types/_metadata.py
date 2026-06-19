@@ -49,6 +49,7 @@ Licenses = (
         "multiple",
         "gemma",
         "eupl-1.2",
+        "lfm1.0",
     ]
 )
 """The different licenses that a dataset or model can have. This list can be extended as needed."""
