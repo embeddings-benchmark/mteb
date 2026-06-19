@@ -102,13 +102,23 @@ class TestVllmEndpointWrapper:
 
     def test_ssl_verification(self, vllm_model):
         """Test SSL verification can be disabled."""
+        from unittest.mock import patch
+
+        import requests
+
+        # Mock successful response when SSL verification is disabled
+        mock_response = requests.Response()
+        mock_response.status_code = 200
+        mock_response._content = b'{"data": []}'
+
         # Should not raise even with invalid SSL if verify_ssl=False
-        wrapper = VllmEndpointWrapper(
-            endpoint_url="https://self-signed-cert:8000",
-            model_name=vllm_model,
-            verify_ssl=False,
-        )
-        assert wrapper.verify_ssl is False
+        with patch("requests.get", return_value=mock_response):
+            wrapper = VllmEndpointWrapper(
+                endpoint_url="https://self-signed-cert:8000",
+                model_name=vllm_model,
+                verify_ssl=False,
+            )
+            assert wrapper.verify_ssl is False
 
     def test_api_key_header(self, vllm_endpoint, vllm_model):
         """Test that API key is included in headers."""

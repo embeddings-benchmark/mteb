@@ -341,6 +341,7 @@ preview = true
     "S602",  # allow shell=True in tests
     "S603",  # allow subprocess calls in tests
     "PLC2701",  # Private name import
+    "PLR6301",  # Method could be a function - pytest test methods are instance methods
 ]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = [
