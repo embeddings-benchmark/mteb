@@ -2,7 +2,7 @@ from pathlib import Path
 
 import mteb
 from mteb.cache import ResultCache
-from tests.mock_tasks import MockRetrievalTask
+from mteb.mocks.mock_tasks import MockRetrievalTask
 
 
 def test_two_stage_reranking(tmp_path: Path):

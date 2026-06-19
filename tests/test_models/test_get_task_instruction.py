@@ -3,9 +3,9 @@ from collections.abc import Callable
 import pytest
 
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.mocks.mock_tasks import MockRetrievalTask
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import PromptType
-from tests.mock_tasks import MockRetrievalTask
 
 
 def _meta(prompt: dict[str, str] | str | None) -> TaskMetadata:

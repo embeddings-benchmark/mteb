@@ -6,8 +6,8 @@ import numpy as np
 
 import mteb
 from mteb.abstasks.clustering import _evaluate_clustering_bootstrapped
+from mteb.mocks.mock_tasks import MockClusteringFastTask
 from tests.mock_models import MockSentenceTransformer
-from tests.mock_tasks import MockClusteringFastTask
 
 
 def _well_separated_dataset(

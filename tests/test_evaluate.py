@@ -12,6 +12,13 @@ import mteb
 from mteb import SentenceTransformerEncoderWrapper
 from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
+from mteb.mocks.mock_tasks import (
+    MockAggregatedTask,
+    MockClassificationTask,
+    MockMultilingualClassificationTask,
+    MockMultilingualRetrievalTask,
+    MockRetrievalTask,
+)
 from mteb.mocks.task_grid import (
     MOCK_MAEB_TASK_GRID,
     MOCK_MULTIMODAL_TASKS,
@@ -23,13 +30,6 @@ from mteb.results.task_result import TaskResult
 from mteb.timing import TimingStack
 from mteb.types import OutputDType
 from tests.mock_models import MockSentenceTransformer
-from tests.mock_tasks import (
-    MockAggregatedTask,
-    MockClassificationTask,
-    MockMultilingualClassificationTask,
-    MockMultilingualRetrievalTask,
-    MockRetrievalTask,
-)
 
 mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 1)
 mock_retrieval = (
