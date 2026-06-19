@@ -9,7 +9,7 @@ import numpy as np
 import pytest
 import requests
 
-from mteb.models.openai_api_wrapper import OpenAIAPIWrapper
+from mteb.models.openai_wrappers import OpenAIAPIWrapper
 
 
 class TestOpenAIAPIWrapper:
@@ -147,7 +147,7 @@ class TestOpenAIAPIWrapper:
         assert wrapper.verify_ssl is False
 
         # Verify that requests.get was called with verify=False
-        mock_get.assert_called_once()
+        assert mock_get.call_count >= 1  # Called in _verify_server and _detect_max_length
         call_kwargs = mock_get.call_args[1]
         assert call_kwargs["verify"] is False
 
@@ -183,7 +183,10 @@ class TestOpenAIAPIWrapper:
         def create_embeddings(count):
             return {
                 "data": [
-                    {"index": j, "embedding": np.random.default_rng().random(768).tolist()}
+                    {
+                        "index": j,
+                        "embedding": np.random.default_rng().random(768).tolist(),
+                    }
                     for j in range(count)
                 ]
             }
