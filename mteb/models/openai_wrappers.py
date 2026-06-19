@@ -115,7 +115,8 @@ class OpenAIBaseWrapper:
                     verify=self.verify_ssl,
                 )
                 response.raise_for_status()
-                return response.json()
+                json_response: dict[str, Any] = response.json()
+                return json_response
 
             except requests.exceptions.Timeout:
                 if attempt < self.max_retries - 1:

@@ -9,10 +9,10 @@ icon: lucide/zap
 !!! note
     vLLM currently supports only a limited number of models, and many implementations have subtle differences compared to the default implementations in mteb. For the full list of supported models, refer to the [vllm documentation](https://docs.vllm.ai/en/stable/models/supported_models/#pooling-models).
 
-MTEB provides two vLLM wrappers:
+MTEB provides wrappers for both local and remote vLLM usage:
 
 - **VllmEncoderWrapper / VllmCrossEncoderWrapper**: Local in-process vLLM instantiation for maximum performance
-- **VllmEndpointWrapper**: HTTP-based access to remote vLLM servers for production deployments
+- **OpenAIAPIWrapper / OpenAIRerankWrapper**: HTTP-based access to OpenAI-compatible API servers (including vLLM, OpenAI, and others)
 
 
 ## Installation
@@ -90,55 +90,93 @@ To use vLLM with MTEB you have to wrap the model with its respective wrapper.
         print(results)
     ```
 
-### Remote vLLM Endpoint (VllmEndpointWrapper)
+### OpenAI-Compatible API Wrappers
 
-For connecting to existing vLLM servers via HTTP API, use `VllmEndpointWrapper`. This is useful for:
+For connecting to OpenAI-compatible API servers (vLLM, OpenAI, or other compatible servers) via HTTP, use the OpenAI wrappers. These are useful for:
 
 - Testing remote vLLM deployments (CPU or GPU)
-- Benchmarking production vLLM servers
-- Reusing running vLLM instances across multiple benchmark runs
+- Benchmarking production API servers
+- Using OpenAI's embedding and reranking APIs
+- Reusing running server instances across multiple benchmark runs
 - Avoiding repeated model loading overhead
 
 !!! note
-    The endpoint wrapper requires a running vLLM server with the OpenAI-compatible API enabled.
-    Start a vLLM server with: `vllm serve <model-name> --host 0.0.0.0 --port 8000`
+    These wrappers work with any OpenAI-compatible API server. For vLLM, start a server with:
+    
+    - **Embedding**: `vllm serve <model-name> --host 0.0.0.0 --port 8000`
+    - **Reranking**: `vllm serve <reranker-model> --host 0.0.0.0 --port 8001`
 
-```python
-import mteb
-from mteb.models import VllmEndpointWrapper
+=== "Embedding models (OpenAIAPIWrapper)"
+    ```python
+    import mteb
+    from mteb.models import OpenAIAPIWrapper
 
-# Connect to a running vLLM server
-encoder = VllmEndpointWrapper(
-    endpoint_url="http://localhost:8000",
-    model_name="intfloat/e5-small",
-)
+    # Connect to a vLLM server
+    encoder = OpenAIAPIWrapper(
+        endpoint_url="http://localhost:8000",
+        model_name="BAAI/bge-small-en-v1.5",
+    )
 
-# Evaluate on MTEB tasks
-results = mteb.evaluate(
-    encoder,
-    mteb.get_task("STS12"),
-)
-print(results)
-```
+    # Or use OpenAI's API
+    encoder = OpenAIAPIWrapper(
+        endpoint_url="https://api.openai.com/v1",
+        model_name="text-embedding-3-small",
+        api_key="sk-...",
+    )
+
+    # Evaluate on MTEB tasks
+    results = mteb.evaluate(
+        encoder,
+        mteb.get_task("STS12"),
+    )
+    print(results)
+    ```
+
+=== "Reranking models (OpenAIRerankWrapper)"
+    ```python
+    import mteb
+    from mteb.models import OpenAIRerankWrapper
+
+    # Connect to a vLLM reranking server
+    reranker = OpenAIRerankWrapper(
+        endpoint_url="http://localhost:8001",
+        model_name="BAAI/bge-reranker-v2-m3",
+    )
+
+    # Evaluate on MTEB reranking tasks
+    results = mteb.evaluate(
+        reranker,
+        mteb.get_task("AskUbuntuDupQuestions"),
+    )
+    print(results)
+    ```
 
 **Additional Options:**
 
 ```python
-# With authentication
-encoder = VllmEndpointWrapper(
-    endpoint_url="https://my-vllm-server.com",
-    model_name="intfloat/e5-small",
+# With authentication and SSL
+encoder = OpenAIAPIWrapper(
+    endpoint_url="https://my-server.com",
+    model_name="model-name",
     api_key="your-api-key",
     verify_ssl=True,  # Set to False for self-signed certs
 )
 
 # With custom settings
-encoder = VllmEndpointWrapper(
+encoder = OpenAIAPIWrapper(
     endpoint_url="http://localhost:8000",
-    model_name="intfloat/e5-small",
+    model_name="model-name",
     timeout=600,  # Request timeout in seconds
     batch_size=64,  # Batch size for embeddings
     max_retries=5,  # Retry failed requests
+)
+
+# With instruction templates
+encoder = OpenAIAPIWrapper(
+    endpoint_url="http://localhost:8000",
+    model_name="instruct-model",
+    use_instructions=True,
+    instruction_template="Represent this {instruction} for retrieval: ",
 )
 ```
 
@@ -230,6 +268,8 @@ vLLM’s optimizations are primarily designed for and most effective with causal
 
 :::mteb.models.vllm_wrapper.VllmCrossEncoderWrapper
 
-### Remote Endpoint Wrapper
+### OpenAI-Compatible API Wrappers
 
-:::mteb.models.vllm_endpoint_wrapper.VllmEndpointWrapper
+:::mteb.models.openai_wrappers.OpenAIAPIWrapper
+
+:::mteb.models.openai_wrappers.OpenAIRerankWrapper
