@@ -187,6 +187,44 @@ comparisons within MTEB remain valid. (Paper also reports AudioCaps 44.2, VGGSou
    name undercounts — BEATs + head included), `memory_usage_mb=17949`, citation fixed to the
    real author list (Changli Tang et al.).
 
+### Numerical parity (single-input) — measured ✅
+
+Findings #1–#3 were originally verified by source inspection; they are now also verified
+**numerically** by `scripts/validate_wave_faithfulness.py` (run via
+`scripts/validate_wave_faithfulness.sbatch`; ~2 min on one H200/A100). The harness loads
+WAVE-7B once via `Wave7BWrapper` and, per modality, compares the wrapper's embedding to an
+upstream-WAVE reference built from `qwenvl`'s own `_get_item` + `DataCollatorForOmniDataset`
+(WAVE's *training* collator — it sets `use_audio_in_video` for synchronized AV, which WAVE's
+lightweight eval `collate_fn` does not, so the eval collator would be an unfair AV reference).
+Both sides reuse the same `wrapper.model`/`processor`, isolating *preprocessing*, not weight
+loading. Media are synthesized deterministically (ffmpeg + soundfile), so the check is a
+committable, network-free regression guard.
+
+Two levels per media modality:
+- **L1 (construction parity)** — wrapper fed the SAME frames WAVE selects (`np.linspace`),
+  isolating input construction from frame selection. **Hard gate.**
+- **L2 (pipeline parity)** — wrapper fed frames from the REAL MTEB collator
+  (`_DurationVideoCollator` → stride sampling), exactly as `encode` runs in production.
+  **Diagnostic only** — MTEB deliberately keeps its default (stride) frame sampler.
+
+Measured (H200, bf16, elapsed 1:55):
+
+| modality | level | cosine | max_abs | note |
+| :-- | :-- | --: | --: | :-- |
+| text (×2) | L1==L2 | **1.00000** | 0 | WAVE label path == `_encode_text` |
+| audio | L1==L2 | **1.00000** | 0 | |
+| video-short | L1 / L2 | **1.00000** / 1.00000 | 0 | samplers converge (N=T=6) |
+| video-mid | L1 / L2 | **1.00000** / 0.99726 | 4.8e-3 | stride last frame 195 vs linspace 199 |
+| video-cap | L1 / L2 | **1.00000** / 0.99735 | 4.8e-3 | 128-frame cap; stride last 635 vs 699 |
+| av (sync) | L1 / L2 | **1.00000** / 0.99790 | 4.7e-3 | `use_audio_in_video` interleave + BEATs doubling |
+
+**Every L1 gate is bit-identical** (cosine 1.00000, max-abs exactly 0) across text, audio,
+video, and synchronized AV: the wrapper reproduces WAVE's forward / all-layer head / label
+path / L2-normalization exactly. The only deltas are the L2 video/AV diagnostics (~0.997),
+which are **by design** — MTEB's default stride sampler selects different frames than WAVE's
+`linspace` on longer clips (drops the tail; off-by-one target count). We keep MTEB's default
+sampler; this gap is documented, not patched.
+
 ### Env gotchas hit (already encoded in the `wave` extra)
 
 - **torch 2.7.1 stack required for video**: `datasets>=4` (Video → torchcodec `VideoDecoder`,
