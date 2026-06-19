@@ -635,3 +635,113 @@ colqwen3_5_v3 = ModelMeta(
     training_datasets=COLQWEN35_V3_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
 )
+
+
+class ColQwen3EngineWrapper(ColPaliEngineWrapper):
+    """Wrapper for colpali_engine ColQwen3 models (merged full checkpoints)."""
+
+    def __init__(
+        self,
+        model_name: str = "Verm1ion/ColTurk-VDR-Qwen3VL-4B-v1.0",
+        revision: str | None = None,
+        device: str | None = None,
+        **kwargs,
+    ):
+        from colpali_engine.models import ColQwen3, ColQwen3Processor
+
+        super().__init__(
+            model_name=model_name,
+            model_class=ColQwen3,
+            processor_class=ColQwen3Processor,
+            revision=revision,
+            device=device,
+            **kwargs,
+        )
+
+
+COLTURK_CITATION = """
+@misc{karatay2026colturkvdr,
+  title={ColTurk-VDR: A Late-Interaction Visual Document Retriever on Qwen3-VL-4B},
+  author={Karatay, Mert},
+  year={2026},
+  url={https://github.com/Verm1lion/ColTurk-VDR}
+}
+"""
+
+colturk_vdr_4b = ModelMeta(
+    loader=ColQwen3EngineWrapper,
+    loader_kwargs=dict(
+        torch_dtype=torch.bfloat16,
+    ),
+    name="Verm1ion/ColTurk-VDR-Qwen3VL-4B-v1.0",
+    model_type=["late-interaction"],
+    languages=["eng-Latn", "fra-Latn"],
+    revision="d56c7bbc278ba2fe4ac1c255fb0e55dd46b40bad",
+    release_date="2026-06-11",
+    modalities=["image", "text"],
+    n_parameters=4_505_515_136,
+    n_embedding_parameters=388_956_160,
+    memory_usage_mb=8593,
+    max_tokens=262144,
+    embed_dim=128,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/Verm1lion/ColTurk-VDR",
+    public_training_data="https://huggingface.co/datasets/manu/colpali-queries",
+    framework=["ColPali", "safetensors"],
+    reference="https://huggingface.co/Verm1ion/ColTurk-VDR-Qwen3VL-4B-v1.0",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=True,
+    training_datasets=COLPALI_TRAINING_DATA,
+    citation=COLTURK_CITATION,
+    extra_requirements_groups=["colpali_engine"],
+    adapted_from="Qwen/Qwen3-VL-4B-Instruct",
+)
+
+VULTRON_PRIME_8B_TRAINING_DATA = {
+    # from https://huggingface.co/datasets/vidore/colpali_train_set
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreArxivQARetrieval",
+    # from https://huggingface.co/datasets/Metric-AI/tabfquad_train_set
+    "VidoreTabfquadRetrieval",
+    # from https://huggingface.co/datasets/llamaindex/vdr-multilingual-train
+    "VDRMultilingualRetrieval",
+    # from https://huggingface.co/datasets/openbmb/VisRAG-Ret-Train-Synthetic-data
+    "VisRAG-Ret-Train-Synthetic-data",
+    # from https://huggingface.co/datasets/openbmb/VisRAG-Ret-Train-In-domain-data
+    "VisRAG-Ret-Train-In-domain-data",
+    # from https://huggingface.co/datasets/HuggingFaceM4/Docmatix (IR adaptation)
+    "docmatix-ir",
+    # wiki-ss + Natural Questions document-screenshot retrieval
+    "wiki-ss-nq",
+}
+
+vultron_prime_qwen35_8b = ModelMeta(
+    loader=ColQwen3_5Wrapper,
+    loader_kwargs=dict(
+        torch_dtype=torch.bfloat16,
+    ),
+    name="vultr/VultronRetrieverPrime-Qwen3.5-8B",
+    model_type=["late-interaction"],
+    languages=["eng-Latn", "fra-Latn", "deu-Latn", "spa-Latn", "ita-Latn", "por-Latn"],
+    revision="e8f3104b743a04b0d5f715b67117d687ae99ce51",
+    release_date="2026-06-18",
+    modalities=["image", "text"],
+    n_parameters=8_394_006_064,
+    n_embedding_parameters=1_017_118_720,  # vocab 248320 x hidden 4096 (token embedding matrix)
+    memory_usage_mb=16788,
+    max_tokens=262144,
+    embed_dim=320,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "ColPali", "safetensors"],
+    reference="https://huggingface.co/vultr/VultronRetrieverPrime-Qwen3.5-8B",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=False,
+    training_datasets=VULTRON_PRIME_8B_TRAINING_DATA,
+    extra_requirements_groups=["colpali_engine"],
+)

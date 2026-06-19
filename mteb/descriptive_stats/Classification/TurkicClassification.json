@@ -1,7 +1,7 @@
 {
     "train": {
         "num_samples": 6144,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": {
             "total_text_length": 8711803,
             "min_text_length": 49,
@@ -261,7 +261,7 @@
         "hf_subset_descriptive_stats": {
             "ky": {
                 "num_samples": 2048,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 1967702,
                     "min_text_length": 157,
@@ -335,7 +335,7 @@
             },
             "kk": {
                 "num_samples": 2048,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 2629102,
                     "min_text_length": 195,
@@ -385,7 +385,7 @@
             },
             "ba": {
                 "num_samples": 2048,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 4114999,
                     "min_text_length": 49,

@@ -2,7 +2,7 @@
     "test": {
         "num_samples": 2048,
         "number_of_characters": 162858,
-        "number_texts_intersect_with_train": 80,
+        "samples_in_train": 80,
         "min_text_length": 6,
         "average_text_length": 79.5205078125,
         "max_text_length": 283,
@@ -50,7 +50,7 @@
     "train": {
         "num_samples": 97128,
         "number_of_characters": 8081377,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "min_text_length": 1,
         "average_text_length": 83.20337080965324,
         "max_text_length": 771,

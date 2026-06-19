@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.15.3"
+version = "2.15.4"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -155,6 +155,7 @@ wave = [
     # scripts/setup_wave_env.sh does this automatically.
 ]
 # ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
+
 
 
 
