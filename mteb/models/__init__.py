@@ -8,6 +8,7 @@ from .models_protocols import (
     MTEBModels,
     SearchProtocol,
 )
+from .openai_api_wrapper import OpenAIAPIWrapper
 from .search_encoder_index.search_backend_protocol import (
     IndexEncoderSearchProtocol,
 )
@@ -17,7 +18,6 @@ from .sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
     sentence_transformers_loader,
 )
-from .vllm_endpoint_wrapper import VllmEndpointWrapper
 
 __all__ = [
     "CacheBackendProtocol",
@@ -30,10 +30,10 @@ __all__ = [
     "IndexEncoderSearchProtocol",
     "MTEBModels",
     "ModelMeta",
+    "OpenAIAPIWrapper",
     "SearchCrossEncoderWrapper",
     "SearchEncoderWrapper",
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
     "sentence_transformers_loader",
-    "VllmEndpointWrapper",
 ]

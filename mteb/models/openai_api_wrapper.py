@@ -1,27 +1,35 @@
-"""vLLM Endpoint Wrapper for MTEB.
+"""OpenAI API Wrapper for MTEB.
 
-This wrapper provides HTTP-based access to vLLM servers for MTEB benchmarks,
-complementing the existing VllmEncoderWrapper which requires local instantiation.
+This wrapper provides HTTP-based access to embedding models served via the
+OpenAI-compatible API (such as vLLM servers) for MTEB benchmarks.
 
 Use Cases:
 - Testing remote vLLM servers (CPU or GPU)
-- Benchmarking production vLLM deployments
-- Reusing running vLLM instances across multiple benchmark runs
+- Benchmarking production deployments with OpenAI-compatible APIs
+- Reusing running instances across multiple benchmark runs
 - Avoiding repeated model loading overhead
 
 Example:
     ```python
-    from mteb.models import VllmEndpointWrapper
+    from mteb.models import OpenAIAPIWrapper
 
-    wrapper = VllmEndpointWrapper(
+    # With vLLM server
+    wrapper = OpenAIAPIWrapper(
         endpoint_url="http://localhost:8000",
         model_name="BAAI/bge-small-en-v1.5"
+    )
+
+    # With OpenAI API
+    wrapper = OpenAIAPIWrapper(
+        endpoint_url="https://api.openai.com/v1",
+        model_name="text-embedding-3-small",
+        api_key="sk-..."
     )
     ```
 
 Comparison with VllmEncoderWrapper:
 - VllmEncoderWrapper: Local in-process instantiation via `vllm.LLM()`
-- VllmEndpointWrapper: Remote HTTP API access via `/v1/embeddings`
+- OpenAIAPIWrapper: Remote HTTP API access via `/v1/embeddings`
 """
 
 from __future__ import annotations
@@ -31,32 +39,35 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import requests
+from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_meta import ModelMeta
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
     from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
 
-class VllmEndpointWrapper(AbsEncoder):
-    """vLLM endpoint wrapper for MTEB embedding benchmarks.
+class OpenAIAPIWrapper(AbsEncoder):
+    """OpenAI-compatible API wrapper for MTEB embedding benchmarks.
 
-    This wrapper communicates with vLLM servers via the OpenAI-compatible
-    HTTP API instead of local instantiation.
+    This wrapper communicates with embedding models served via OpenAI-compatible
+    HTTP APIs (such as vLLM, OpenAI, or other compatible servers).
 
     Args:
-        endpoint_url: URL of the vLLM server (e.g., "http://localhost:8000")
-        model_name: Name of the model loaded in vLLM
+        endpoint_url: URL of the OpenAI-compatible server
+            (e.g., "http://localhost:8000" for vLLM, "https://api.openai.com/v1" for OpenAI)
+        model_name: Name of the model to use
         api_key: Optional API key for authentication
-        revision: The revision of the model to use
         prompt_dict: A dictionary mapping task names to prompt strings
         use_instructions: Whether to use instructions from the prompt_dict
         instruction_template: A template or callable to format instructions
@@ -64,20 +75,18 @@ class VllmEndpointWrapper(AbsEncoder):
             documents (passages). Default True.
         timeout: Request timeout in seconds (default: 300)
         max_retries: Maximum number of retries for failed requests (default: 3)
-        batch_size: Batch size for processing embeddings (default: 32)
+        batch_size: Default batch size for processing embeddings (default: 32).
+            Can be overridden per encode() call.
         verify_ssl: Whether to verify SSL certificates (default: True)
         max_length: Maximum sequence length for truncation. If None,
             auto-detected from model metadata.
     """
-
-    mteb_model_meta = None
 
     def __init__(  # noqa: PLR0913
         self,
         endpoint_url: str,
         model_name: str,
         api_key: str | None = None,
-        revision: str | None = None,
         *,
         prompt_dict: dict[str, str] | None = None,
         use_instructions: bool = False,
@@ -91,8 +100,9 @@ class VllmEndpointWrapper(AbsEncoder):
         verify_ssl: bool = True,
         max_length: int | None = None,
     ):
-        """Initialize the vLLM endpoint wrapper."""
+        """Initialize the OpenAI API wrapper."""
         self.endpoint_url = endpoint_url.rstrip("/")
+        self.model_name = model_name
         self.api_key = api_key
         self.prompts_dict = prompt_dict
         self.use_instructions = use_instructions
@@ -104,9 +114,8 @@ class VllmEndpointWrapper(AbsEncoder):
         self.verify_ssl = verify_ssl
         self.max_length = max_length
 
-        # MTEB looks for these attributes for result organization
-        self.model_name = model_name
-        self.revision = revision if revision else "main"
+        # Create model metadata for MTEB compatibility
+        self.mteb_model_meta = ModelMeta.create_empty(overwrites={"name": model_name})
 
         if use_instructions and instruction_template is None:
             raise ValueError(
@@ -126,7 +135,7 @@ class VllmEndpointWrapper(AbsEncoder):
         self._verify_server()
 
     def _verify_server(self) -> None:
-        """Verify that the vLLM server is reachable and get model info."""
+        """Verify that the server is reachable and get model info."""
         try:
             response = requests.get(
                 f"{self.endpoint_url}/v1/models",
@@ -146,14 +155,12 @@ class VllmEndpointWrapper(AbsEncoder):
                 # Still allow initialization - model name might be alias
                 return
 
-            logger.info(
-                f"Successfully connected to vLLM server. Model: {self.model_name}"
-            )
+            logger.info(f"Successfully connected to server. Model: {self.model_name}")
             self._detect_max_length_from_models(models)
 
         except Exception as e:
             raise ConnectionError(
-                f"Failed to connect to vLLM server at {self.endpoint_url}: {e}"
+                f"Failed to connect to server at {self.endpoint_url}: {e}"
             ) from e
 
     def _detect_max_length_from_models(self, models: dict[str, Any]) -> None:
@@ -174,7 +181,7 @@ class VllmEndpointWrapper(AbsEncoder):
             break
 
     def _get_embeddings(self, texts: list[str]) -> Array:
-        """Get embeddings from the vLLM server via HTTP API.
+        """Get embeddings from the server via OpenAI-compatible API.
 
         Args:
             texts: List of texts to embed
@@ -193,7 +200,7 @@ class VllmEndpointWrapper(AbsEncoder):
         }
 
         # Add truncation parameter if max_length is set
-        # This tells vLLM to truncate inputs to model's max length
+        # Note: vLLM supports truncate_prompt_tokens, OpenAI uses different params
         if self.max_length:
             payload["truncate_prompt_tokens"] = self.max_length
 
@@ -245,9 +252,7 @@ class VllmEndpointWrapper(AbsEncoder):
                         f"Retrying..."
                     )
                     continue
-                raise RuntimeError(
-                    f"Failed to get embeddings from vLLM server: {e}"
-                ) from e
+                raise RuntimeError(f"Failed to get embeddings from server: {e}") from e
 
         # This should never be reached due to the raise above, but mypy needs it
         raise RuntimeError("Failed to get embeddings after all retries")
@@ -260,9 +265,9 @@ class VllmEndpointWrapper(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
-        """Encode the given sentences using the vLLM server.
+        """Encode the given sentences using the OpenAI-compatible API.
 
         Args:
             inputs: The sentences to encode
@@ -270,11 +275,15 @@ class VllmEndpointWrapper(AbsEncoder):
             hf_split: Split of current task
             hf_subset: Subset of current task
             prompt_type: The type of prompt (query or passage)
-            **kwargs: Additional arguments
+            **kwargs: Additional arguments (batch_size, show_progress_bar, precision)
 
         Returns:
             The encoded sentences as embeddings
         """
+        # Get encode kwargs with defaults
+        batch_size = kwargs.get("batch_size", self.batch_size)
+        show_progress_bar = kwargs.get("show_progress_bar", True)
+
         # Determine prompt to use
         prompt = ""
         if self.use_instructions and self.prompts_dict is not None:
@@ -305,12 +314,12 @@ class VllmEndpointWrapper(AbsEncoder):
         # Process in batches to avoid overwhelming the server
         all_embeddings = []
 
-        for i in range(0, len(texts), self.batch_size):
-            batch_texts = texts[i : i + self.batch_size]
-            logger.debug(
-                f"Processing batch {i // self.batch_size + 1} "
-                f"({len(batch_texts)} texts)"
-            )
+        for i in tqdm(
+            range(0, len(texts), batch_size),
+            desc="Encoding batches",
+            disable=not show_progress_bar,
+        ):
+            batch_texts = texts[i : i + batch_size]
             batch_embeddings = self._get_embeddings(batch_texts)
             all_embeddings.append(batch_embeddings)
 
