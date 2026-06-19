@@ -72,7 +72,7 @@ class VllmEndpointWrapper(AbsEncoder):
 
     mteb_model_meta = None
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         endpoint_url: str,
         model_name: str,
@@ -144,30 +144,34 @@ class VllmEndpointWrapper(AbsEncoder):
                     f"Available models: {available_models}"
                 )
                 # Still allow initialization - model name might be alias
-            else:
-                logger.info(
-                    f"Successfully connected to vLLM server. "
-                    f"Model: {self.model_name}"
-                )
+                return
 
-                # Auto-detect max_length from model info if not provided
-                if self.max_length is None:
-                    for model in models.get("data", []):
-                        if model["id"] == self.model_name:
-                            # vLLM returns max_model_len in model metadata
-                            max_model_len = model.get("max_model_len")
-                            if max_model_len:
-                                self.max_length = max_model_len
-                                logger.info(
-                                    f"Auto-detected max_length="
-                                    f"{self.max_length} from model metadata"
-                                )
-                            break
+            logger.info(
+                f"Successfully connected to vLLM server. Model: {self.model_name}"
+            )
+            self._detect_max_length_from_models(models)
 
         except Exception as e:
             raise ConnectionError(
                 f"Failed to connect to vLLM server at {self.endpoint_url}: {e}"
             ) from e
+
+    def _detect_max_length_from_models(self, models: dict[str, Any]) -> None:
+        """Auto-detect max_length from model metadata if not provided."""
+        if self.max_length is not None:
+            return
+
+        for model in models.get("data", []):
+            if model["id"] != self.model_name:
+                continue
+            # vLLM returns max_model_len in model metadata
+            max_model_len = model.get("max_model_len")
+            if max_model_len:
+                self.max_length = max_model_len
+                logger.info(
+                    f"Auto-detected max_length={self.max_length} from model metadata"
+                )
+            break
 
     def _get_embeddings(self, texts: list[str]) -> Array:
         """Get embeddings from the vLLM server via HTTP API.
@@ -182,7 +186,7 @@ class VllmEndpointWrapper(AbsEncoder):
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
 
-        payload = {
+        payload: dict[str, Any] = {
             "model": self.model_name,
             "input": texts,
             "encoding_format": "float",
@@ -212,9 +216,7 @@ class VllmEndpointWrapper(AbsEncoder):
                     embeddings[item["index"]] = item["embedding"]
 
                 # Validate all embeddings were returned
-                missing_indices = [
-                    i for i, emb in enumerate(embeddings) if emb is None
-                ]
+                missing_indices = [i for i, emb in enumerate(embeddings) if emb is None]
                 if missing_indices:
                     raise RuntimeError(
                         f"Incomplete embeddings from vLLM server: "
@@ -246,6 +248,9 @@ class VllmEndpointWrapper(AbsEncoder):
                 raise RuntimeError(
                     f"Failed to get embeddings from vLLM server: {e}"
                 ) from e
+
+        # This should never be reached due to the raise above, but mypy needs it
+        raise RuntimeError("Failed to get embeddings after all retries")
 
     def encode(
         self,
@@ -285,17 +290,14 @@ class VllmEndpointWrapper(AbsEncoder):
             and self.apply_instruction_to_passages is False
             and prompt_type == PromptType.document
         ):
-            logger.info(
-                f"No instruction used, because prompt type = {prompt_type}"
-            )
+            logger.info(f"No instruction used, because prompt type = {prompt_type}")
             prompt = ""
-        else:
-            if prompt:
-                logger.info(
-                    f"Using instruction: '{prompt}' for "
-                    f"task: '{task_metadata.name}' "
-                    f"prompt type: '{prompt_type}'"
-                )
+        elif prompt:
+            logger.info(
+                f"Using instruction: '{prompt}' for "
+                f"task: '{task_metadata.name}' "
+                f"prompt type: '{prompt_type}'"
+            )
 
         # Collect all texts from batches
         texts = [prompt + text for batch in inputs for text in batch["text"]]
