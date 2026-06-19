@@ -147,7 +147,9 @@ class TestOpenAIAPIWrapper:
         assert wrapper.verify_ssl is False
 
         # Verify that requests.get was called with verify=False
-        assert mock_get.call_count >= 1  # Called in _verify_server and _detect_max_length
+        assert (
+            mock_get.call_count >= 1
+        )  # Called in _verify_server and _detect_max_length
         call_kwargs = mock_get.call_args[1]
         assert call_kwargs["verify"] is False
 
