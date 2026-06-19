@@ -7,7 +7,7 @@ from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.tests.mock_tasks import MockRerankingTask
+from mteb.mocks.mock_tasks import MockRerankingTask
 
 from .utils import (
     _VIDEO_TEXTS,

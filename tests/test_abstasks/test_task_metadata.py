@@ -5,7 +5,7 @@ from pydantic import ValidationError
 
 import mteb
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.tests.task_grid import (
+from mteb.mocks.task_grid import (
     MOCK_MAEB_TASK_GRID,
     MOCK_MIEB_TASK_GRID,
     MOCK_MULTIMODAL_TASKS,

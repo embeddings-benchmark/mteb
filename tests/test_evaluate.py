@@ -12,14 +12,14 @@ import mteb
 from mteb import SentenceTransformerEncoderWrapper
 from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
-from mteb.models import ModelMeta
-from mteb.models.models_protocols import EncoderProtocol
-from mteb.results.task_result import TaskResult
-from mteb.tests.task_grid import (
+from mteb.mocks.task_grid import (
     MOCK_MAEB_TASK_GRID,
     MOCK_MULTIMODAL_TASKS,
     MOCK_MVEB_TASK_GRID,
 )
+from mteb.models import ModelMeta
+from mteb.models.models_protocols import EncoderProtocol
+from mteb.results.task_result import TaskResult
 from mteb.timing import TimingStack
 from mteb.types import OutputDType
 from tests.mock_models import MockSentenceTransformer

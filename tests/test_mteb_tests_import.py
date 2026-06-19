@@ -1,5 +1,5 @@
 import mteb
-from mteb.tests.task_grid import MOCK_TASK_TEST_GRID
+from mteb.mocks.task_grid import MOCK_TASK_TEST_GRID
 from tests.mock_models import MockSentenceTransformer
 
 

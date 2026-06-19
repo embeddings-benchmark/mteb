@@ -8,7 +8,7 @@ from packaging.version import Version
 
 import mteb
 from mteb.abstasks import AbsTask
-from mteb.tests.task_grid import MOCK_TASK_TEST_GRID_MONOLINGUAL
+from mteb.mocks.task_grid import MOCK_TASK_TEST_GRID_MONOLINGUAL
 from tests.mock_models import MockSentenceTransformersbf16Encoder
 
 logging.basicConfig(level=logging.INFO)

@@ -9,8 +9,8 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
 from mteb.abstasks import AbsTask
+from mteb.mocks.task_grid import MOCK_TASK_TEST_GRID
 from mteb.models import ModelMeta
-from mteb.tests.task_grid import MOCK_TASK_TEST_GRID
 from tests.mock_tasks import (
     MockInstructionReranking,
     MockRerankingTask,
