@@ -512,39 +512,48 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         )
         return f"{self.name} ({experiment_str})" if experiment_str else self.name
 
+    @staticmethod
+    def _detect_modalities_from_sbert_config(
+        sbert_config: dict[str, Any] | None,
+    ) -> list[Modalities]:
+        """Detect supported modalities from sentence_bert_config.json modality_config."""
+        if not sbert_config:
+            return ["text"]
+        modality_config = sbert_config.get("modality_config", {})
+        if not modality_config:
+            return ["text"]
+        _supported: set[Modalities] = {"text", "image", "audio", "video"}
+        detected = _supported & set(modality_config)
+        return sorted(detected) if detected else ["text"]
+
     @classmethod
-    def _detect_cross_encoder_or_dense(
+    def _detect_model_type(
         cls,
         model_name: str,
         revision: str | None,
         config: dict[str, Any] | None,
-        encoder_loader: Callable[..., MTEBModels],
-        cross_encoder_loader: Callable[..., MTEBModels],
-    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
+    ) -> MODEL_TYPES:
         """Detect if model is CrossEncoder or default to dense."""
         if not config:
             logger.warning(
                 f"Could not load config.json for {model_name}. "
                 "Defaulting to SentenceTransformer loader."
             )
-            return encoder_loader, "dense"
+            return "dense"
 
         architectures = config.get("architectures", [])
 
-        is_cross_encoder = any(
-            arch.endswith("ForSequenceClassification") for arch in architectures
-        )
-        if is_cross_encoder:
-            return cross_encoder_loader, "cross-encoder"
+        if any(arch.endswith("ForSequenceClassification") for arch in architectures):
+            return "cross-encoder"
 
         if cls._is_causal_lm_reranker(architectures, config, model_name):
-            return cross_encoder_loader, "cross-encoder"
+            return "cross-encoder"
 
         logger.info(
             f"Model {model_name} does not have modules.json or recognized architecture. "
             "Defaulting to SentenceTransformer loader."
         )
-        return encoder_loader, "dense"
+        return "dense"
 
     @staticmethod
     def _is_causal_lm_reranker(
@@ -566,67 +575,71 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         )
 
     @classmethod
-    def _detect_model_type_and_loader(
+    def _resolve_loader(
         cls,
         model_name: str,
+        config_sbert: dict[str, Any] | None,
+        sbert_config: dict[str, Any] | None,
+        modules_config: dict[str, Any] | None,
+        config: dict[str, Any] | None,
         revision: str | None = None,
-        config: dict[str, Any] | None = None,
-    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
-        """Detect the model type and appropriate loader based on HuggingFace Hub configuration files.
+    ) -> tuple[Callable[..., MTEBModels], MODEL_TYPES, list[Modalities]]:
+        """Resolve loader, model_type and modalities from pre-fetched config dicts.
 
-        This follows the Sentence Transformers architecture detection logic:
-        1. Check for modules.json - If present, model is a SentenceTransformer (dense encoder)
-        2. If no modules.json, check config.json for architecture:
-            - ForSequenceClassification → CrossEncoder
-            - CausalLM with reranking indicators → CrossEncoder
-        3. Default to dense (SentenceTransformer) if no clear indicators are found
-
-        Detection for CausalLM-style rerankers:
-        - Model has ForCausalLM architecture AND
-        - Has num_labels > 0 in config, OR
-        - Model name contains "rerank" or "cross-encoder"
-
-        Args:
-            model_name: The HuggingFace model name
-            revision: The model revision
-            config: The loaded config.json from the HuggingFace model repository. If not provided, it will be fetched from the hub.
-
-
-        Returns:
-            A tuple of (loader_function, model_type) where:
-            - loader_function: A callable that returns MTEBModels, or None if model doesn't exist
-            - model_type: One of "dense", "cross-encoder", or "late-interaction"
+        - SentenceTransformer  → SentenceTransformerEncoderWrapper
+        - CrossEncoder         → CrossEncoderWrapper
         """
         from mteb.models import (
             CrossEncoderWrapper,
             SentenceTransformerEncoderWrapper,
         )
 
-        try:
-            modules_config = _get_json_from_hub(
-                model_name, "modules.json", "model", revision=revision
-            )
-
-            if (
-                modules_config
-            ):  # SentenceTransformer/SparseEncoder (Not support for now)
-                return SentenceTransformerEncoderWrapper, "dense"
+        st_model_type = config_sbert.get("model_type") if config_sbert else None
+        if st_model_type not in {"SentenceTransformer", "CrossEncoder"}:
+            if modules_config:
+                st_model_type = "SentenceTransformer"
             else:
-                return cls._detect_cross_encoder_or_dense(
-                    model_name,
-                    revision,
-                    config,
-                    SentenceTransformerEncoderWrapper,
-                    cross_encoder_loader=CrossEncoderWrapper,
+                fallback = cls._detect_model_type(model_name, revision, config)
+                st_model_type = (
+                    "CrossEncoder"
+                    if fallback == "cross-encoder"
+                    else "SentenceTransformer"
                 )
 
-        except Exception as e:
-            logger.warning(
-                f"Error detecting model type for {model_name}: {e}. "
-                "Defaulting to SentenceTransformer loader."
-            )
+        modalities = cls._detect_modalities_from_sbert_config(sbert_config)
+        is_cross_encoder = st_model_type == "CrossEncoder"
 
-        return SentenceTransformerEncoderWrapper, "dense"
+        if is_cross_encoder:
+            return CrossEncoderWrapper, "cross-encoder", modalities
+        elif st_model_type == "SentenceTransformer":
+            return SentenceTransformerEncoderWrapper, "dense", modalities
+        else:
+            raise ValueError("Unsupported model type")
+
+    @classmethod
+    def _detect_model_type_and_loader(
+        cls,
+        model_name: str,
+        revision: str | None = None,
+        config: dict[str, Any] | None = None,
+    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES, list[Modalities]]:
+        """Detect the model type, loader, and supported modalities from HuggingFace Hub config files."""
+        hf_repo_type = "model"
+        config_sbert = _get_json_from_hub(
+            model_name,
+            "config_sentence_transformers.json",
+            hf_repo_type,
+            revision=revision,
+        )
+        sbert_config = _get_json_from_hub(
+            model_name, "sentence_bert_config.json", hf_repo_type, revision=revision
+        )
+        modules_config = _get_json_from_hub(
+            model_name, "modules.json", hf_repo_type, revision=revision
+        )
+        return cls._resolve_loader(
+            model_name, config_sbert, sbert_config, modules_config, config, revision
+        )
 
     @classmethod
     def create_empty(cls, overwrites: dict[str, Any] | None = None) -> Self:
@@ -829,7 +842,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         config = _get_json_from_hub(
             model_name, "config.json", "model", revision=revision
         )
-        loader, model_type = cls._detect_model_type_and_loader(
+        loader, model_type, modalities = cls._detect_model_type_and_loader(
             model_name, revision, config=config
         )
         card = ModelCard.load(model_name)
@@ -898,6 +911,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 embed_dim=embedding_dim,
                 similarity_fn_name=similarity_fn_name,
                 adapted_from=_get_source_model(card_data),
+                modalities=modalities,
             )
         )
 
