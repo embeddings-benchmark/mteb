@@ -79,6 +79,21 @@ from .mlqa_retrieval import MLQARetrieval
 from .mr_tidy_retrieval import MrTidyRetrieval
 from .multi_long_doc_retrieval import MultiLongDocRetrieval
 from .mupler_retrieval import MuPLeRRetrieval
+from .nanobeir_multilingual import (
+    MultilingualArguAnaRetrieval,
+    MultilingualClimateFeverRetrieval,
+    MultilingualDBPediaRetrieval,
+    MultilingualFEVERRetrieval,
+    MultilingualFiQA2018Retrieval,
+    MultilingualHotpotQARetrieval,
+    MultilingualMSMARCORetrieval,
+    MultilingualNFCorpusRetrieval,
+    MultilingualNQRetrieval,
+    MultilingualQuoraRetrieval,
+    MultilingualSCIDOCSRetrieval,
+    MultilingualSciFactRetrieval,
+    MultilingualTouche2020Retrieval,
+)
 from .neu_clir2022_retrieval import (
     NeuCLIR2022Retrieval,
     NeuCLIR2022RetrievalHardNegatives,
@@ -203,6 +218,19 @@ __all__ = [
     "MrTidyRetrieval",
     "MuPLeRRetrieval",
     "MultiLongDocRetrieval",
+    "MultilingualArguAnaRetrieval",
+    "MultilingualClimateFeverRetrieval",
+    "MultilingualDBPediaRetrieval",
+    "MultilingualFEVERRetrieval",
+    "MultilingualFiQA2018Retrieval",
+    "MultilingualHotpotQARetrieval",
+    "MultilingualMSMARCORetrieval",
+    "MultilingualNFCorpusRetrieval",
+    "MultilingualNQRetrieval",
+    "MultilingualQuoraRetrieval",
+    "MultilingualSCIDOCSRetrieval",
+    "MultilingualSciFactRetrieval",
+    "MultilingualTouche2020Retrieval",
     "NeuCLIR2022Retrieval",
     "NeuCLIR2022RetrievalHardNegatives",
     "NeuCLIR2023Retrieval",

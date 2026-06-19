@@ -1678,6 +1678,32 @@ NANOBEIR = Benchmark(
     citation=None,
 )
 
+NANOBEIR_EXTENDED = Benchmark(
+    name="NanoBEIR-extended",
+    display_name="NanoBEIR Extended",
+    tasks=get_tasks(
+        tasks=[
+            "MultilingualArguAnaRetrieval",
+            "MultilingualClimateFeverRetrieval",
+            "MultilingualDBPediaRetrieval",
+            "MultilingualFEVERRetrieval",
+            "MultilingualFiQA2018Retrieval",
+            "MultilingualHotpotQARetrieval",
+            "MultilingualMSMARCORetrieval",
+            "MultilingualNFCorpusRetrieval",
+            "MultilingualNQRetrieval",
+            "MultilingualQuoraRetrieval",
+            "MultilingualSCIDOCSRetrieval",
+            "MultilingualSciFactRetrieval",
+            "MultilingualTouche2020Retrieval",
+        ],
+    ),
+    description="Extended version of the NanoBEIR benchmark to evaluate models across 11 diverse languages using subsets of BEIR.",
+    reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+    citation=None,
+)
+
+
 C_MTEB = Benchmark(
     name="MTEB(cmn, v1)",
     aliases=["MTEB(Chinese)", "CMTEB"],
