@@ -2,23 +2,101 @@ from __future__ import annotations
 
 from datasets import Audio, Dataset, DatasetDict
 
-from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
-from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.mocks.mock_tasks import MockRerankingTask
 
-from .utils import (
-    _VIDEO_TEXTS,
-    base_retrieval_datasplit,
+from .create_mock_samples import (
     create_mock_audio,
     create_mock_images,
     create_mock_video_bytes,
-    general_args,
-    instruction_retrieval_datasplit,
     multilingual_eval_langs,
 )
+
+general_args = {
+    "description": "A lightweight mock retrieval task designed for testing, debugging, and local model verification within the MTEB framework.",
+    "reference": "https://github.com/embeddings-benchmark/mteb",
+    "dataset": {
+        "path": "NA",
+        "revision": "NA",
+    },
+    "category": "t2t",
+    "eval_splits": ["test"],
+    "eval_langs": ["eng-Latn"],
+    "date": ("2022-12-22", "2022-12-22"),
+    "dialect": ["Written"],
+    "domains": [],
+    "task_subtypes": [],
+    "license": "cc-by-4.0",
+    "annotations_creators": "derived",
+    "modalities": ["text"],
+    "sample_creation": "found",
+    "bibtex_citation": "",
+}
+
+
+def base_retrieval_datasplit() -> RetrievalSplitData:
+    return RetrievalSplitData(
+        queries=Dataset.from_list(
+            [
+                {
+                    "id": "q1",
+                    "text": "This is a test sentence",
+                },
+                {
+                    "id": "q2",
+                    "text": "This is another test sentence",
+                },
+            ]
+        ),
+        corpus=Dataset.from_list(
+            [
+                {
+                    "id": "d2",
+                    "text": "This is a positive sentence",
+                    "title": "Title of d1",
+                },
+                {
+                    "id": "d1",
+                    "text": "This is another positive sentence",
+                    "title": "Title of d2",
+                },
+            ]
+        ),
+        relevant_docs={
+            "q1": {"d1": 1, "d2": 0},
+            "q2": {"d1": 0, "d2": 1},
+        },
+        top_ranked={
+            "q1": ["d1", "d2"],
+            "q2": ["d2", "d1"],
+        },
+    )
+
+
+def instruction_retrieval_datasplit() -> RetrievalSplitData:
+    base_ds = base_retrieval_datasplit()
+    base_ds["queries"] = Dataset.from_list(
+        [
+            {
+                "id": "q1",
+                "text": "This is a test sentence",
+                "instruction": "This is a test instruction",
+            },
+            {
+                "id": "q2",
+                "text": "This is another test sentence",
+                "instruction": "This is another test instruction",
+            },
+        ]
+    )
+    return base_ds
+
+
+_VIDEO_TEXTS = [
+    "This is a video of an action",
+    "This is another video of a scene",
+]
 
 
 class MockRetrievalTask(AbsTaskRetrieval):
@@ -623,19 +701,6 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
             "fra": {"test": base_datasplit},
         }
         self.data_loaded = True
-
-
-class MockAggregatedTask(AbsTaskAggregate):
-    metadata = AggregateTaskMetadata(
-        type="InstructionReranking",
-        name="MockMultilingualInstructionReranking",
-        main_score="ndcg_at_10",
-        tasks=[
-            MockRetrievalTask(),
-            MockRerankingTask(),
-        ],
-        **general_args,
-    )
 
 
 class MockMultiChoiceTask(AbsTaskRetrieval):

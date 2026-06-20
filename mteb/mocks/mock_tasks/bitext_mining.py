@@ -5,10 +5,30 @@ from datasets import Dataset, DatasetDict
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
 
-from .utils import (
-    general_args,
+from .create_mock_samples import (
     multilingual_eval_langs,
 )
+
+general_args = {
+    "description": "A lightweight mock bitext mining task designed for testing, debugging, and local model verification within the MTEB framework.",
+    "reference": "https://github.com/embeddings-benchmark/mteb",
+    "dataset": {
+        "path": "NA",
+        "revision": "NA",
+    },
+    "category": "t2t",
+    "eval_splits": ["test"],
+    "eval_langs": ["eng-Latn"],
+    "date": ("2022-12-22", "2022-12-22"),
+    "dialect": ["Written"],
+    "domains": [],
+    "task_subtypes": [],
+    "license": "cc-by-4.0",
+    "annotations_creators": "derived",
+    "modalities": ["text"],
+    "sample_creation": "found",
+    "bibtex_citation": "",
+}
 
 
 class MockBitextMiningTask(AbsTaskBitextMining):

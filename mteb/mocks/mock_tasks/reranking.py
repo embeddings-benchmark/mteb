@@ -2,17 +2,42 @@ from __future__ import annotations
 
 from datasets import Audio, Dataset
 
+from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
-from .utils import (
-    base_retrieval_datasplit,
+from .create_mock_samples import (
     create_mock_audio,
-    general_args,
-    instruction_retrieval_datasplit,
     multilingual_eval_langs,
 )
+from .retrieval import (
+    MockRetrievalTask,
+    base_retrieval_datasplit,
+    instruction_retrieval_datasplit,
+)
+
+general_args = {
+    "description": "A lightweight mock reranking task designed for testing, debugging, and local model verification within the MTEB framework.",
+    "reference": "https://github.com/embeddings-benchmark/mteb",
+    "dataset": {
+        "path": "NA",
+        "revision": "NA",
+    },
+    "category": "t2t",
+    "eval_splits": ["test"],
+    "eval_langs": ["eng-Latn"],
+    "date": ("2022-12-22", "2022-12-22"),
+    "dialect": ["Written"],
+    "domains": [],
+    "task_subtypes": [],
+    "license": "cc-by-4.0",
+    "annotations_creators": "derived",
+    "modalities": ["text"],
+    "sample_creation": "found",
+    "bibtex_citation": "",
+}
 
 
 class MockRerankingTask(AbsTaskRetrieval):
@@ -501,3 +526,16 @@ class MockAudioReranking(AbsTaskRetrieval):
         }
 
         self.data_loaded = True
+
+
+class MockAggregatedTask(AbsTaskAggregate):
+    metadata = AggregateTaskMetadata(
+        type="InstructionReranking",
+        name="MockMultilingualInstructionReranking",
+        main_score="ndcg_at_10",
+        tasks=[
+            MockRetrievalTask(),
+            MockRerankingTask(),
+        ],
+        **general_args,
+    )

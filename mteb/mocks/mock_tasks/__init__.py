@@ -44,6 +44,7 @@ from .pair_classification import (
 )
 from .regression import MockImageRegressionTask, MockRegressionTask
 from .reranking import (
+    MockAggregatedTask,
     MockAudioReranking,
     MockInstructionReranking,
     MockMultilingualInstructionReranking,
@@ -51,7 +52,6 @@ from .reranking import (
     MockRerankingTask,
 )
 from .retrieval import (
-    MockAggregatedTask,
     MockAny2AnyRetrievalA2ATask,
     MockAny2AnyRetrievalA2TTask,
     MockAny2AnyRetrievalI2TTask,
