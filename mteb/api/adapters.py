@@ -1,8 +1,6 @@
 """Caching wrappers around the schema ``from_*`` constructors.
 
-Each ``Schema.from_<thing>`` does the actual conversion; this module memoises
-the result so endpoints pay the pydantic construction cost once per object.
-Safe because mteb's registries are static after import.
+Memoised because mteb's registries are static after import.
 """
 
 from __future__ import annotations
@@ -49,12 +47,7 @@ def task_to_meta_schema(task: AbsTask | type[AbsTask]) -> TaskMetaSchema:
 
 
 def scoped_task_meta_schema(task: AbsTask) -> TaskMetaSchema:
-    """Like `task_to_meta_schema`, but respects ``task.languages``.
-
-    When a benchmark registers a task with a language restriction the instance's
-    ``task.languages`` reflects the restriction; the unscoped base schema uses
-    the full metadata union.
-    """
+    """Like `task_to_meta_schema`, but respects benchmark-pinned ``task.languages``."""
     base = task_to_meta_schema(task)
     labels = sorted({language_label(c) for c in task.languages if c})
     return base.model_copy(update={"languages": labels})
@@ -75,11 +68,7 @@ def model_meta_to_schema(
     *,
     zero_shot_pct: int | None = None,
 ) -> ModelMetaSchema:
-    """Return a `ModelMetaSchema` for ``meta`` with ``zero_shot_pct`` applied.
-
-    Caches the ``zs=-1`` base instance and ``model_copy``s it when a caller
-    supplies a real percentage — pydantic-core skips revalidation on copies.
-    """
+    """Cached `ModelMetaSchema` for ``meta``; ``zero_shot_pct`` applied via ``model_copy``."""
     name = meta.name or ""
     cached = _model_schema_base_cache.get(name)
     if cached is None:
@@ -96,11 +85,7 @@ def menus_to_schemas(entries: Sequence[MenuEntry]) -> list[MenuEntrySchema]:
 
 
 def prewarm_schema_caches() -> None:
-    """Fill every task / benchmark / model schema cache.
-
-    Pydantic v2 construction releases the GIL inside pydantic-core, so threading
-    the per-object builds is a real speedup over the sequential loop.
-    """
+    """Fill every task/benchmark/model schema cache; threaded since pydantic-core releases the GIL."""
     tasks = list(_TASKS_REGISTRY.values())
     benches = list(mteb.get_benchmarks(display_on_leaderboard=True))
     models = list(MODEL_REGISTRY.values())

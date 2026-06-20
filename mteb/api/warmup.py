@@ -1,10 +1,4 @@
-"""Startup-time cache warmup orchestration.
-
-Lives above ``cache`` and ``routes`` in the import graph so it can wire them
-together without forcing either to depend on the other for its prewarm needs.
-``app.py`` calls these from the ASGI lifespan; nothing else should import from
-here at module scope.
-"""
+"""Startup-time cache warmup orchestration; called from the ASGI lifespan."""
 
 from __future__ import annotations
 
@@ -14,9 +8,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING
 
-import polars as pl
-
 import mteb
+from mteb.api._errors import FRAME_LOAD_ERRORS, PRELOAD_ERRORS
 from mteb.api.adapters import prewarm_schema_caches
 from mteb.api.cache import get_per_language_bytes, get_summary_bytes
 from mteb.api.frames import _load_per_benchmark_frames
@@ -37,10 +30,9 @@ logger = logging.getLogger(__name__)
 
 
 def _prewarm_training_datasets() -> None:
-    """Populate ``_training_datasets_cached`` for every registered model.
+    """Populate ``_training_datasets_cached`` for every model.
 
-    Without this, the first summary build pays ~2.5s on ``_collect_similar_tasks``
-    per first-seen model.
+    Why: first summary build otherwise pays ~2.5s per first-seen model.
     """
     t0 = time.monotonic()
     logger.info("warmup: training-datasets started (%d models)", len(MODEL_REGISTRY))
@@ -50,10 +42,7 @@ def _prewarm_training_datasets() -> None:
 
 
 def _prewarm_list_schemas() -> None:
-    """Pre-build the unfiltered list schemas + their serialised bytes.
-
-    The four builders are independent — run them on a small thread pool.
-    """
+    """Pre-build the unfiltered list schemas + serialised bytes (threaded)."""
     t0 = time.monotonic()
     logger.info("warmup: list schemas started")
     with ThreadPoolExecutor(max_workers=4, thread_name_prefix="warm-list") as ex:
@@ -79,7 +68,7 @@ def _prewarm_list_schemas() -> None:
 
 
 def _load_per_benchmark_frames_logged() -> None:
-    """``_load_per_benchmark_frames`` with timing logs around the heavy call."""
+    """``_load_per_benchmark_frames`` with timing logs."""
     t0 = time.monotonic()
     logger.info("warmup: per-benchmark frames started")
     _load_per_benchmark_frames()
@@ -87,7 +76,7 @@ def _load_per_benchmark_frames_logged() -> None:
 
 
 def _prewarm_schema_caches_logged() -> None:
-    """``prewarm_schema_caches`` with timing logs around the heavy call."""
+    """``prewarm_schema_caches`` with timing logs."""
     t0 = time.monotonic()
     logger.info("warmup: schema caches started")
     prewarm_schema_caches()
@@ -95,12 +84,10 @@ def _prewarm_schema_caches_logged() -> None:
 
 
 def warmup_blocking() -> None:
-    """Populate shared caches synchronously before accepting requests.
+    """Populate shared caches before accepting requests.
 
-    Phases 1-3 are independent (network I/O / CPU / pydantic-core); they run
-    on a small thread pool so wall time is max() instead of sum(). Phase 4
-    (list schemas) depends on phases 1-3 because it reads them through the
-    benchmark / task / model caches, so it runs serially afterwards.
+    Phases 1-3 (frames / training-datasets / schema caches) run in parallel;
+    phase 4 (list schemas) depends on them and runs serially after.
     """
     t0 = time.monotonic()
     logger.info("warmup: blocking phase started")
@@ -114,9 +101,9 @@ def warmup_blocking() -> None:
             for f in futures:
                 f.result()
         _prewarm_list_schemas()
-    except (OSError, ValueError, KeyError, pl.exceptions.PolarsError) as exc:
-        # Warmup failure isn't fatal — the routes will rebuild on first request.
-        # Narrow set lets programmer errors (TypeError, AttributeError) surface.
+    except FRAME_LOAD_ERRORS as exc:
+        # Non-fatal — routes will rebuild on first request. Narrow set lets
+        # programmer errors (TypeError, AttributeError) surface.
         logger.warning(
             "warmup: blocking phase failed after %.2fs (%s: %s)",
             time.monotonic() - t0,
@@ -128,36 +115,24 @@ def warmup_blocking() -> None:
 
 
 def preload_summaries_in_background() -> asyncio.Task[None] | None:
-    """Pre-build every benchmark summary + per-language schema on the serving loop.
+    """Pre-build every summary + per-language schema on the serving loop.
 
-    Returns the spawned :class:`asyncio.Task` (or ``None`` if preload is
-    disabled) so the lifespan can cancel it on shutdown. Runs on the serving
-    event loop — not a separate daemon thread — so the per-key
-    ``asyncio.Lock`` instances cached in :mod:`mteb.api.cache` are bound to the
-    same loop that request handlers run on.
+    Must run on the serving event loop so the per-key ``asyncio.Lock``
+    instances are bound to the same loop request handlers use.
     """
     if not get_settings().preload:
         logger.info("warmup: background preload disabled (PRELOAD=0)")
         return None
 
     concurrency = get_settings().preload_concurrency
-    # Preload every registered benchmark — including off-menu ones — so
-    # hidden-benchmark requests also hit the warmed cache and the model
-    # detail page (which iterates all benchmarks) is cold-path-free.
+    # Include off-menu benchmarks so hidden requests + the model detail page
+    # (which iterates all benchmarks) stay cold-path-free.
     all_names = [b.name for b in mteb.get_benchmarks()]
-
-    expected = (
-        OSError,
-        ValueError,
-        KeyError,
-        AttributeError,
-        pl.exceptions.PolarsError,
-    )
 
     async def _build_one(name: str) -> None:
         try:
             await get_summary_bytes(name)
-        except expected as exc:
+        except PRELOAD_ERRORS as exc:
             logger.warning(
                 "warmup summary: %s failed (%s: %s)",
                 name,
@@ -166,7 +141,7 @@ def preload_summaries_in_background() -> asyncio.Task[None] | None:
             )
         try:
             await get_per_language_bytes(name)
-        except expected as exc:
+        except PRELOAD_ERRORS as exc:
             logger.warning(
                 "warmup per-language: %s failed (%s: %s)",
                 name,

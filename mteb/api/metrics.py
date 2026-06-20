@@ -1,11 +1,8 @@
 """Prometheus instrumentation.
 
-The ASGI middleware records request count / in-flight / latency per matched
-route, labelled by *resource group* (``/v1/benchmarks``, ``/v1/tasks``,
-``/v1/models``, …) rather than the full route template — that keeps the
-series count proportional to the number of endpoint families instead of the
-number of registered benchmarks/tasks/models. :func:`render_metrics`
-produces the exposition body.
+The middleware labels metrics by *resource group* (``/v1/benchmarks``,
+``/v1/tasks``, …) rather than full route template, to keep cardinality bounded
+by the number of endpoint families.
 """
 
 from __future__ import annotations
@@ -26,7 +23,7 @@ from starlette.routing import Match
 if TYPE_CHECKING:
     from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
-# Tuned for an ETag-cached read API: warm <50 ms, cold builds into seconds.
+# Tuned for ETag-cached read API: warm <50 ms, cold builds into seconds.
 _LATENCY_BUCKETS = (
     0.005,
     0.01,
@@ -41,7 +38,7 @@ _LATENCY_BUCKETS = (
     10.0,
 )
 
-# Span 304 (tiny) through cold full summaries (a few MB pre-gzip).
+# 304 (tiny) through cold full summaries (a few MB pre-gzip).
 _RESPONSE_SIZE_BUCKETS = (
     256,
     1_024,
@@ -54,7 +51,7 @@ _RESPONSE_SIZE_BUCKETS = (
     16_777_216,
 )
 
-# Dedicated registry avoids double-registration in tests and leaks from other libs.
+# Dedicated registry avoids double-registration in tests.
 REGISTRY = CollectorRegistry()
 
 REQUEST_COUNT = Counter(
@@ -94,8 +91,7 @@ EXCEPTIONS_TOTAL = Counter(
     registry=REGISTRY,
 )
 
-# Per-entity counters; cardinality bounded by the registries. Only incremented
-# after the handler confirms the name exists.
+# Per-entity counters; only incremented after the handler confirms the name exists.
 BENCHMARK_SELECTIONS = Counter(
     "mteb_benchmark_selections_total",
     "Times a benchmark was requested, by name (summed across endpoints).",
@@ -117,7 +113,7 @@ MODEL_SELECTIONS = Counter(
     registry=REGISTRY,
 )
 
-# Hit/miss per cache layer; lets ops verify warmup landed and tune preload.
+# Hit/miss per cache layer.
 CACHE_OUTCOMES = Counter(
     "mteb_cache_total",
     "Cache hits and misses for the serialised-bytes layer.",
@@ -131,14 +127,7 @@ _ROUTE_GROUP_KEY = "_mteb_route_group"
 
 
 def _group(template: str) -> str:
-    """Collapse a route template to its literal skeleton.
-
-    Drops ``{...}`` path-parameter segments and rejoins the literals, so
-    ``/v1/benchmarks/{name:path}/scores`` becomes ``/v1/benchmarks/scores``
-    and ``/v1/benchmarks/{name:path}`` becomes ``/v1/benchmarks``. Infra
-    routes (``/health``, ``/openapi.json``) carry no params and pass through
-    unchanged.
-    """
+    """Collapse a route template to its literal skeleton by dropping ``{...}`` segments."""
     parts = [
         p for p in template.split("/") if not (p.startswith("{") and p.endswith("}"))
     ]
@@ -162,12 +151,10 @@ def _resolve_route_template(scope: Scope) -> str:
 
 
 def _route_group(scope: Scope) -> str:
-    """Return the matched route's resource group, or ``"<unmatched>"``.
+    """Resolve the route's resource group, memoised on ``scope``.
 
-    Starlette only fills ``scope["route"]`` after the router runs. As a fallback
-    we re-run ``matches`` against the app's router; the resolved group is
-    memoised on the scope so a post-handler re-resolution doesn't repeat the
-    scan.
+    Why: starlette fills ``scope["route"]`` only after the router runs, so we
+    re-run ``matches`` as a pre-handler fallback.
     """
     cached: str | None = scope.get(_ROUTE_GROUP_KEY)
     if cached is not None and cached != _UNMATCHED:
@@ -179,13 +166,13 @@ def _route_group(scope: Scope) -> str:
 
 
 class PrometheusMiddleware:
-    """Middleware that records per-request Prometheus metrics"""
+    """Records per-request Prometheus metrics."""
 
     def __init__(self, app: ASGIApp) -> None:
         self.app = app
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
-        """Time the inner app and emit method/handler/status metrics"""
+        """Time the inner app and emit method/handler/status metrics."""
         if scope["type"] != "http" or scope["path"] == "/metrics":
             await self.app(scope, receive, send)
             return
@@ -237,8 +224,7 @@ class PrometheusMiddleware:
                 ).observe(time.perf_counter() - start)
             if in_progress is not None:
                 in_progress.dec()
-        # Re-resolve post-handler — scope["route"] is only stamped after the
-        # router runs, so the pre-call lookup misses on first-time templates.
+        # Re-resolve post-handler: pre-call lookup misses on first-time templates.
         final_handler = _route_group(scope)
         REQUEST_COUNT.labels(
             method=method,

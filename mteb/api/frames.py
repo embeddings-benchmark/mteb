@@ -1,10 +1,4 @@
-"""Long-results polars frames — process-wide, loaded once.
-
-Pulled out of :mod:`mteb.api.cache` so :mod:`mteb.api.aggregators` (which only
-needs the long frames, not the bytes caches) can depend on this module without
-pulling in the whole cache layer. Sits below ``cache`` and ``routes`` in the
-import graph.
-"""
+"""Long-results polars frames — process-wide, loaded once."""
 
 from __future__ import annotations
 
@@ -19,6 +13,7 @@ from datasets import load_dataset
 from huggingface_hub import HfApi
 
 import mteb
+from mteb.api._errors import FRAME_LOAD_ERRORS
 from mteb.api.settings import get_settings
 from mteb.cache.result_cache import ResultCache
 from mteb.results.benchmark_results import BenchmarkResults
@@ -36,8 +31,6 @@ def get_cache() -> ResultCache:
 
 
 # Bump when the on-disk parquet schema changes so old caches are rebuilt.
-# v2 added the ``split`` column so per-task scores can be surfaced per
-# (split, subset) instead of collapsed to the per-subset max.
 _CACHE_SCHEMA_VERSION = 2
 
 _UNIFIED_SCHEMA = {
@@ -50,13 +43,7 @@ _UNIFIED_SCHEMA = {
 
 
 def _dedupe_unified(combined: pl.DataFrame) -> pl.DataFrame:
-    """Reduce the combined frame to one row per (model, task, split, subset) with max score.
-
-    The max is over duplicate rows (same model/task/split/subset reported
-    twice across revisions); it does **not** collapse across splits.
-    Aggregating across splits is left to downstream consumers
-    (:func:`mteb.api.aggregators.build_task_scores` and friends).
-    """
+    """One row per (model, task, split, subset) with max score across duplicate revisions."""
     if combined.is_empty():
         return pl.DataFrame(schema=_UNIFIED_SCHEMA)
     return (
@@ -74,30 +61,25 @@ _DEFAULT_CONFIG = "default"
 def _load_default_from_hub(repo_id: str) -> pl.DataFrame | None:
     """Fetch the ``default`` HF config (all-results dump) via direct parquet read.
 
-    Reads parquet shards with polars rather than ``datasets.load_dataset`` so a
-    stale README ``dataset_info`` block (e.g. when a new column lands in the
-    parquet but the YAML wasn't refreshed) doesn't fail the cast.
-
-    Catches only the exception families either path is expected to raise on a
-    legitimate miss: ``OSError`` (network / FS / HTTP, includes
-    ``ConnectionError`` + ``FileNotFoundError``), ``ValueError`` (unknown
-    config, malformed args), ``KeyError`` (missing parquet/metadata key), and
-    polars' own ``PolarsError`` base. ``Exception`` would hide programmer bugs
-    like ``TypeError`` / ``AttributeError``.
+    Reads with polars rather than ``datasets.load_dataset`` so a stale README
+    ``dataset_info`` block doesn't fail the cast. Falls back to load_dataset.
     """
-    expected = (OSError, ValueError, KeyError, pl.exceptions.PolarsError)
     try:
         return pl.read_parquet(f"hf://datasets/{repo_id}/data/train-*.parquet")
-    except expected as exc:
+    except FRAME_LOAD_ERRORS as exc:
         logger.warning(
             "Hub load failed for %s: %s: %s", repo_id, type(exc).__name__, exc
         )
+    # Fallback is slower; logged so we notice if direct-parquet keeps missing.
+    logger.info(
+        "Falling back to datasets.load_dataset for %s/%s", repo_id, _DEFAULT_CONFIG
+    )
     try:
         return cast(
             "pl.DataFrame",
             load_dataset(repo_id, name=_DEFAULT_CONFIG, split="train").to_polars(),
         )
-    except expected as exc:
+    except FRAME_LOAD_ERRORS as exc:
         logger.warning(
             "Hub fallback also failed for %s/%s: %s: %s",
             repo_id,
@@ -113,11 +95,7 @@ _MANIFEST_FILE = "manifest.json"
 
 
 def _disk_cache_dir() -> Path:
-    """Resolve the disk-cache directory under the shared :class:`ResultCache` root.
-
-    Inherits MTEB_CACHE / ``~/.cache/mteb`` resolution from :func:`get_cache`,
-    so the leaderboard parquet shards always sit next to the rest of the MTEB
-    cache instead of diverging on ``MTEB_CACHE`` overrides.
+    """Disk-cache dir under the shared :class:`ResultCache` root.
 
     Files: ``manifest.json`` + ``_unified.parquet`` + one ``<urlsafe>.parquet``
     per benchmark with rows.
@@ -126,12 +104,7 @@ def _disk_cache_dir() -> Path:
 
 
 def _hf_dataset_sha(repo_id: str) -> str | None:
-    """Cheap (~100ms) commit-SHA lookup for the HF dataset.
-
-    Used as the disk-cache invalidation key. Returns ``None`` on any failure
-    (offline, auth, timeout) — callers treat this as "trust the on-disk cache
-    if present" rather than rebuilding offline.
-    """
+    """Commit-SHA lookup for the HF dataset; ``None`` on failure (offline/auth)."""
     try:
         info = HfApi().dataset_info(repo_id, timeout=5)
         return cast("str", info.sha)
@@ -147,17 +120,9 @@ def _hf_dataset_sha(repo_id: str) -> str | None:
 def _read_disk_cache(  # noqa: PLR0911
     repo_id: str, current_sha: str | None
 ) -> tuple[dict[str, pl.DataFrame], pl.DataFrame] | None:
-    """Return ``(per_benchmark_frames, unified)`` from disk cache, or ``None``.
+    """Return ``(per_benchmark_frames, unified)`` from disk cache, or ``None`` on miss.
 
-    Returns ``None`` when:
-    * the manifest is missing or malformed,
-    * the cache version doesn't match,
-    * the cached repo_id differs,
-    * an HF sha was fetched and doesn't match the manifest,
-    * the unified parquet is missing.
-
-    Trusts the cache when the HF sha probe failed (``current_sha is None``)
-    so an offline restart still boots fast.
+    Trusts the cache when ``current_sha is None`` so offline restarts boot fast.
     """
     cache_dir = _disk_cache_dir()
     manifest_path = cache_dir / _MANIFEST_FILE
@@ -203,13 +168,10 @@ def _write_disk_cache(
     loaded: dict[str, pl.DataFrame],
     unified: pl.DataFrame,
 ) -> None:
-    """Persist the split + unified frames so the next process restart skips the cold work.
+    """Persist split + unified frames so the next restart skips the cold work.
 
-    Saves the ~20s HF download and ~10s split. Writes each shard via a
-    ``.tmp`` sidecar + ``os.replace`` so concurrent readers and abrupt exits
-    never see a torn state: a reader gating on the manifest always sees a
-    self-consistent ``(manifest, shards)`` pair — either the old one or this
-    new one.
+    Each shard is written via ``.tmp`` + ``os.replace`` so readers and abrupt
+    exits never see a torn state.
     """
     cache_dir = _disk_cache_dir()
     try:
@@ -225,9 +187,6 @@ def _write_disk_cache(
             safe_name = quote(bench_name, safe="")
             new_shards.append((cache_dir / f"{safe_name}.parquet", df))
 
-        # Atomic write per shard: write *.parquet.tmp then os.replace into
-        # place. The read-side glob filters on *.parquet so half-written
-        # ``.tmp`` files are ignored if we crash mid-write.
         for final_path, df in new_shards:
             tmp_path = final_path.with_name(final_path.name + ".tmp")
             df.write_parquet(tmp_path)
@@ -259,20 +218,14 @@ def _write_disk_cache(
 def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]:
     """Return ``(per_benchmark_frames, unified_frame)``, loaded once.
 
-    Disk-cache layer: when ``DISK_CACHE`` is enabled (default), persists the
-    split + unified frames to ``~/.cache/mteb/per_benchmark_frames/`` and
-    skips the ~20s HF download + ~10s split on subsequent process restarts.
-    Invalidated via the HF dataset commit SHA.
+    When ``DISK_CACHE`` is enabled, persists frames under ``ResultCache`` root
+    and skips the HF download + split on subsequent restarts. Invalidated via
+    the HF dataset commit SHA.
     """
     settings = get_settings()
     repo_id = settings.cache_repo
-    # ``disk_cache_repo`` is the non-None narrowed view of ``repo_id`` used by
-    # the disk-cache + hub-load paths. ``None`` short-circuits both.
     disk_cache_repo: str | None = repo_id if settings.disk_cache and repo_id else None
 
-    # Fetch sha once: used both to validate any existing cache and to record
-    # in the new manifest if we end up rebuilding. ``None`` means offline —
-    # ``_read_disk_cache`` treats that as "trust the on-disk copy".
     current_sha = _hf_dataset_sha(disk_cache_repo) if disk_cache_repo else None
 
     if disk_cache_repo:

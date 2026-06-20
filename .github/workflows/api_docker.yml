@@ -1,4 +1,4 @@
-name: Test Buuld API Docker
+name: Test Build API Docker
 
 on:
   push:

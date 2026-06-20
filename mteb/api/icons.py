@@ -1,7 +1,6 @@
 """Benchmark-icon proxy with long-lived in-process cache.
 
-Upstream icons live on github.com (redirects to raw, ``max-age=300``).
-Proxying lets us hand the browser ``max-age=31536000, immutable``.
+Upstream icons have ``max-age=300``; proxying lets us serve ``immutable``.
 """
 
 from __future__ import annotations
@@ -15,15 +14,11 @@ from urllib.error import URLError
 
 logger = logging.getLogger(__name__)
 
-# SVGs are tiny — if a fetch exceeds this, 404 fast instead of blocking handlers.
+# SVGs are tiny — fail fast instead of blocking handlers.
 _FETCH_TIMEOUT_S = 5.0
-
-# Defensive cap on cached body size to bound process memory.
-_MAX_BYTES = 2 * 1024 * 1024  # 2MB
-
+_MAX_BYTES = 2 * 1024 * 1024
 _DEFAULT_CONTENT_TYPE = "image/svg+xml"
-
-# Negative cache TTL: how long to remember a failed upstream fetch before retrying.
+# Negative cache TTL — keeps us off a flapping upstream.
 _FAILURE_TTL_S = 60.0
 
 
@@ -65,13 +60,7 @@ def _fetch_sync(url: str) -> CachedIcon | None:
 
 
 async def get_icon(name: str, url: str) -> CachedIcon | None:
-    """Cached icon for ``name``, fetched from ``url`` on miss.
-
-    Keyed by name so a URL change picks up at server restart and multiple
-    benchmarks sharing a URL dedupe. A per-name lock makes concurrent cold
-    requests share one upstream call; failures are negatively cached for
-    :data:`_FAILURE_TTL_S` seconds to keep us off a flapping upstream.
-    """
+    """Cached icon for ``name``; per-name lock single-flights concurrent cold requests."""
     cached = _cache.get(name)
     if cached is not None:
         return cached
@@ -96,14 +85,3 @@ async def get_icon(name: str, url: str) -> CachedIcon | None:
         _cache[name] = fetched
         _failure_cache.pop(name, None)
         return fetched
-
-
-def cache_clear() -> None:
-    """Used by tests to start from an empty cache.
-
-    Leaves ``_fetch_locks`` intact — clearing it while a coroutine still
-    holds an entry would let the next caller create a fresh Lock for the same
-    name and bypass the single-flight guard.
-    """
-    _cache.clear()
-    _failure_cache.clear()

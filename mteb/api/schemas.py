@@ -1,9 +1,7 @@
 """Pydantic response models for the leaderboard API.
 
-Field names mirror ``src/lib/types.ts`` in the SvelteKit frontend; Python keeps
-``snake_case`` internally while the JSON serialises as ``camelCase`` via
-``alias_generator=to_camel``. Add ``populate_by_name=True`` so the schemas can
-still be constructed with Python-style keyword args from adapters.
+Field names mirror ``src/lib/types.ts`` in the SvelteKit frontend; JSON
+serialises as ``camelCase`` via ``alias_generator=to_camel``.
 """
 
 from __future__ import annotations
@@ -31,7 +29,7 @@ _ModelType = Literal["dense", "cross-encoder", "late-interaction", "sparse", "ro
 
 
 def _is_url(value: str) -> bool:
-    """True iff ``value`` is an http(s) or data URL (vs. emoji/text icon)."""
+    """True iff ``value`` is an http(s) or data URL."""
     head = value[:7].lower()
     return head.startswith(("http://", "https:/", "data:"))
 
@@ -45,7 +43,7 @@ class _CamelModel(BaseModel):
 
 
 class BenchmarkSchema(_CamelModel):
-    """Top-level benchmark metadata returned by ``/benchmarks`` and ``/benchmarks/{name}``."""
+    """Top-level benchmark metadata."""
 
     name: str
     display_name: str
@@ -55,20 +53,15 @@ class BenchmarkSchema(_CamelModel):
     citation: str | None = None
     languages: list[str]
     task_types: list[str]
-    # Borda-compatible buckets (retrieval, classification, …). Drives the
-    # /benchmarks "Task group" filter facet.
+    # Drives the /benchmarks "Task group" filter facet.
     simplified_task_types: list[str] = Field(default_factory=list)
     tasks: list[str]
     domains: list[str]
     modalities: list[str]
     display_on_leaderboard: bool = True
     new_version: list[str] | None = None
-    # Mirrors ``Benchmark.aggregations`` so the frontend hides columns the
-    # benchmark doesn't produce.
     aggregations: list[str]
-    # Mirrors ``Benchmark.show_zero_shot`` — frontend hides the Zero-shot
-    # column when False (benchmarks whose tasks aren't tracked in model
-    # training-data annotations, e.g. ViDoRe).
+    # False on benchmarks whose tasks aren't tracked in training-data annotations (e.g. ViDoRe).
     show_zero_shot: bool = True
     # Distinct models evaluated on every task in this benchmark.
     num_models: int = 0
@@ -94,8 +87,7 @@ class BenchmarkSchema(_CamelModel):
                 domains.add(str(dom))
             for mod in task.metadata.modalities:
                 modalities.add(str(mod))
-        # icon is polymorphic — URLs go through the /icon proxy; emoji/text
-        # are passed verbatim.
+        # URLs go through the /icon proxy; emoji/text pass through verbatim.
         icon_value: str | None
         if benchmark.icon and _is_url(benchmark.icon):
             icon_value = f"/v1/icon/{quote(benchmark.name, safe='')}"
@@ -132,7 +124,7 @@ class BenchmarkSchema(_CamelModel):
 
 
 class TaskMetaSchema(_CamelModel):
-    """Static task metadata (returned by ``/tasks`` and embedded in summary payloads)."""
+    """Static task metadata."""
 
     name: str
     type: str
@@ -153,10 +145,8 @@ class TaskMetaSchema(_CamelModel):
     dialect: list[str] | None = None
     sample_creation: str | None = None
     main_score: str | None = None
-    # Distinct models evaluated on **every** (subset, split) cell the task
-    # declares — i.e. ``len(metadata.eval_splits) * len(metadata.hf_subsets)``
-    # cells of scores. Partial-coverage models are excluded so the count
-    # doesn't overstate how complete the task is (issue #4826).
+    # Distinct models evaluated on every (subset, split) cell the task declares.
+    # Partial-coverage models excluded so the count doesn't overstate completeness.
     num_models: int = 0
 
     @classmethod
@@ -194,10 +184,7 @@ class TaskMetaSchema(_CamelModel):
 
 
 class ModelMetaSchema(_CamelModel):
-    """Static model metadata + per-benchmark zero-shot label.
-
-    ``name`` is the canonical ``org/name`` HuggingFace identifier.
-    """
+    """Static model metadata; ``name`` is the canonical ``org/name`` HF identifier."""
 
     name: str
     url: str | None = None
@@ -285,7 +272,7 @@ class ModelMetaSchema(_CamelModel):
 
 
 class SummaryRowSchema(_CamelModel):
-    """One row of a benchmark summary table — a model with its aggregate scores."""
+    """One row of a benchmark summary — a model with its aggregate scores."""
 
     rank: int
     model: ModelMetaSchema
@@ -312,8 +299,6 @@ class BenchmarkSummarySchema(_CamelModel):
     tasks_meta: list[TaskMetaSchema]
     rows: list[SummaryRowSchema]
     aggregations: list[str] = Field(default_factory=list)
-    # Mirrors ``BenchmarkSchema.show_zero_shot`` — frontend hides the
-    # Zero-shot column when False.
     show_zero_shot: bool = True
 
 
@@ -325,29 +310,14 @@ class BenchmarkPerLanguageRowSchema(_CamelModel):
 
 
 class BenchmarkPerLanguageSchema(_CamelModel):
-    """Response from ``/v1/benchmarks/{name}/per-language``.
-
-    Replaces the synthetic placeholder PerLanguageTab used to render.
-    Lazily fetched by the tab on mount so the per-language aggregate
-    (long-frame explode + group_by) only runs when a user opens it.
-    """
+    """Response from ``/v1/benchmarks/{name}/per-language``; lazy-loaded by the tab."""
 
     benchmark_name: str
     rows: list[BenchmarkPerLanguageRowSchema]
 
 
 class LeaderModelSchema(_CamelModel):
-    """Slim model identity for the leaders endpoint.
-
-    Returned per-bucket from ``/benchmarks/{name}/leaders`` — just the
-    fields the home page needs to render a one-line leaderboard entry
-    with the right model-type tint and an internal link to
-    ``/models/[name]``. Strip everything else (release date, max tokens,
-    embedding dim, …) so the payload is tiny vs. ``/scores``'s full
-    ``ModelMetaSchema``. ``name`` is the canonical ``org/name``
-    HuggingFace identifier; the frontend splits on ``/`` when it needs
-    a display-only name.
-    """
+    """Slim model identity for the leaders endpoint — just name + type for home-tile rendering."""
 
     name: str
     model_type: _ModelType
@@ -380,17 +350,9 @@ class BenchmarkLeadersSchema(_CamelModel):
 class TaskScoreRowSchema(_CamelModel):
     """One row of `/tasks/{name}/scores`.
 
-    ``score`` is the rolled-up "all" view: the mean across subsets, where each
-    subset contributes the max across splits the model evaluated on. ``null``
-    when the model didn't cover every (subset, split) the task offers, so
-    partial-coverage models can't outrank fully-evaluated peers. Per-split
-    scores and per-split ranks are computed on the frontend from
-    ``subset_scores`` — no separate payload needed.
-
-    ``subset_scores`` is keyed first by subset (e.g. ``"en"``) then by split
-    (e.g. ``"test"``), so the frontend can pivot either way without a second
-    request. Missing inner keys mean the model wasn't evaluated on that
-    (subset, split) cell.
+    ``score`` is mean across subsets (each subset = max across splits the model
+    ran), or ``null`` for partial coverage. ``subset_scores[subset][split]``
+    lets the frontend pivot either way without a second request.
     """
 
     rank: int
@@ -407,15 +369,13 @@ class TaskScoresSchema(_CamelModel):
     task: TaskMetaSchema
     benchmarks: list[str]
     subsets: list[str]
-    # Distinct splits observed across every model's scores on this task. For
-    # most tasks this is just ``["test"]``; multi-split tasks like
-    # ``MassiveIntentClassification`` will surface ``["test", "validation"]``.
+    # Distinct splits across all models' scores; usually ``["test"]``.
     splits: list[str]
     rows: list[TaskScoreRowSchema]
 
 
 class ModelScoreRowSchema(_CamelModel):
-    """One row of `/models/{name}/scores` — per-benchmark score for a single model."""
+    """Per-benchmark score for one model."""
 
     benchmark_name: str
     benchmark_display_name: str
@@ -445,7 +405,7 @@ class MenuEntrySchema(_CamelModel):
 
     @classmethod
     def from_menu_entry(cls, entry: MenuEntry) -> MenuEntrySchema:
-        """Recursively translate an mteb menu entry tree."""
+        """Translate an mteb menu entry tree."""
         children: list[BenchmarkSchema | MenuEntrySchema] = []
         for child in entry.benchmarks:
             if isinstance(child, Benchmark):

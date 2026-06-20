@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
-    """ASGI lifespan: prepare caches before HTTP listener accepts traffic."""
+    """ASGI lifespan: warm caches before accepting traffic."""
     await asyncio.to_thread(warmup_blocking)
     preload_task = preload_summaries_in_background()
     try:
@@ -49,13 +49,10 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
 
 
 def _configure_logging(level: str) -> None:
-    """Install a root handler so our INFO logs surface alongside uvicorn output.
+    """Install a root handler so mteb logs surface alongside uvicorn output.
 
-    Uvicorn configures its own ``uvicorn.error`` / ``uvicorn.access`` loggers
-    but doesn't touch root, so unconfigured loggers like ``mteb.api.warmup``
-    have nowhere to emit. ``basicConfig`` is a no-op when handlers already
-    exist (e.g. uvicorn ``--log-config``) so this doesn't fight existing
-    setups.
+    Why: uvicorn doesn't touch root, so loggers like ``mteb.api.warmup``
+    have nowhere to emit. ``basicConfig`` is a no-op when handlers already exist.
     """
     logging.basicConfig(
         level=level.upper(),
@@ -64,7 +61,7 @@ def _configure_logging(level: str) -> None:
 
 
 def create_app() -> FastAPI:
-    """Build and return the FastAPI app instance for the leaderboard API."""
+    """Build the FastAPI app instance for the leaderboard API."""
     settings = get_settings()
     _configure_logging(settings.log_level)
     app = FastAPI(title="MTEB Leaderboard API", lifespan=lifespan)
@@ -75,8 +72,7 @@ def create_app() -> FastAPI:
         allow_origins=settings.cors_origins,
         allow_methods=["GET"],
         allow_headers=["*"],
-        # ETag has to be opted in; Cache-Control is a CORS-safelisted response
-        # header that browsers expose by default.
+        # ETag isn't CORS-safelisted; opt in so browsers expose it.
         expose_headers=["ETag"],
     )
     app.add_middleware(PrometheusMiddleware)
@@ -87,11 +83,7 @@ def create_app() -> FastAPI:
 
 
 def _mount_og_assets(app: FastAPI) -> None:
-    """Mount the pre-rendered Open Graph hero PNG directory at ``/og``.
-
-    Skipped silently when the directory is missing so local dev doesn't error
-    before the operator has run the generator.
-    """
+    """Mount the pre-rendered OG hero PNG directory at ``/og``; warn if missing."""
     cache_dir = get_settings().og_dir
     if pathlib.Path(cache_dir).is_dir():
         app.mount(
@@ -107,11 +99,7 @@ def _mount_og_assets(app: FastAPI) -> None:
 
 
 class _CachedStatic(StaticFiles):
-    """``StaticFiles`` with a one-day ``Cache-Control`` on every 200 response.
-
-    Filenames are content-hashed against rendering inputs, but the URL never
-    rolls over — the short max-age caps how long crawlers serve stale images.
-    """
+    """``StaticFiles`` with a one-day ``Cache-Control`` on every 200 response."""
 
     async def get_response(self, path: str, scope: Scope) -> Response:
         response = await super().get_response(path, scope)

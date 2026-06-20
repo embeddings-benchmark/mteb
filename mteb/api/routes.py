@@ -1,16 +1,16 @@
 """FastAPI routes for the leaderboard.
 
 Cached endpoints serve pre-built JSON bytes via :func:`_cached_json`, which
-also handles 304 revalidation, gzip negotiation, and ``Cache-Control``.
-Non-cached endpoints return pydantic schemas directly — FastAPI serialises
-them via pydantic-core.
+handles 304 revalidation, gzip negotiation, and ``Cache-Control``.
 """
 
 from __future__ import annotations
 
+import email.utils
 import functools
 import json
 import logging
+import time
 from collections import OrderedDict
 from importlib.resources import files
 from typing import TYPE_CHECKING, Annotated, Any
@@ -26,6 +26,7 @@ from fastapi import (
 from pydantic import TypeAdapter
 
 import mteb
+from mteb.api._errors import FRAME_LOAD_ERRORS
 from mteb.api.adapters import (
     benchmark_to_schema,
     menus_to_schemas,
@@ -81,25 +82,24 @@ logger = logging.getLogger(__name__)
 infra_router = APIRouter()
 router = APIRouter()
 
+# All cached payloads derive from data loaded at process start. Pre-formatted
+# so ``If-Modified-Since`` comparison is byte-equal, not parse-and-compare.
+_PROCESS_START_HTTP_DATE: str = email.utils.formatdate(time.time(), usegmt=True)
+
 
 def _cached_json(request: Request, payload: Serialized) -> Response:
-    """Return a JSON response from a cached `Serialized` payload.
-
-    Short-circuits to ``304 Not Modified`` when the client revalidates with a
-    matching ``If-None-Match``. Picks the pre-gzipped body when the client
-    advertises ``Accept-Encoding: gzip`` so GZipMiddleware can skip
-    compressing. ``Cache-Control: max-age`` is sourced from
-    :attr:`Settings.http_max_age`; ``0`` falls back to ``no-cache`` so dev
-    hard refreshes always see fresh data.
-    """
+    """JSON response from a cached `Serialized` payload (handles 304 + gzip + Cache-Control)."""
     max_age = get_settings().http_max_age
     cache_control = f"public, max-age={max_age}" if max_age > 0 else "no-cache"
     headers = {
         "etag": payload.etag,
+        "last-modified": _PROCESS_START_HTTP_DATE,
         "vary": "accept-encoding",
         "cache-control": cache_control,
     }
-    if request.headers.get("if-none-match") == payload.etag:
+    if request.headers.get("if-none-match") == payload.etag or (
+        request.headers.get("if-modified-since") == _PROCESS_START_HTTP_DATE
+    ):
         return Response(status_code=304, headers=headers)
     use_gzip = (
         payload.body_gzip is not None
@@ -115,7 +115,6 @@ def _cached_json(request: Request, payload: Serialized) -> Response:
 
 @functools.cache
 def _benchmark_name_set() -> frozenset[str]:
-    """All registered benchmark names — for fast 404 validation."""
     return frozenset(b.name for b in mteb.get_benchmarks())
 
 
@@ -134,35 +133,20 @@ def _require_model(name: str) -> None:
         raise HTTPException(status_code=404, detail=f"Unknown model: {name}")
 
 
-# Narrow exception set: a parquet-load failure should fall back to empty maps,
-# but programmer bugs (TypeError, AttributeError) must surface.
-_FRAME_LOAD_ERRORS: tuple[type[BaseException], ...] = (
-    OSError,
-    ValueError,
-    KeyError,
-    pl.exceptions.PolarsError,
-)
-
-
 def _safe_load_frames(
     label: str,
 ) -> tuple[dict[str, pl.DataFrame], pl.DataFrame] | None:
-    """Return the per-benchmark + unified frames, or ``None`` on a load failure.
-
-    Warns with ``label`` so each caller's log line distinguishes which map
-    couldn't be built. Programmer bugs (TypeError, AttributeError) propagate
-    so they aren't silently absorbed.
-    """
+    """Per-benchmark + unified frames, or ``None`` on load failure (logged with ``label``)."""
     try:
         return _load_per_benchmark_frames()
-    except _FRAME_LOAD_ERRORS as exc:
+    except FRAME_LOAD_ERRORS as exc:
         logger.warning("%s unavailable: %s: %s", label, type(exc).__name__, exc)
         return None
 
 
 @functools.cache
 def _num_models_map() -> dict[str, int]:
-    """{benchmark_name -> count of fully-evaluated models}, cached for the process lifetime."""
+    """{benchmark_name -> count of fully-evaluated models}."""
     loaded = _safe_load_frames("num_models map")
     if loaded is None:
         return {}
@@ -191,7 +175,7 @@ def _num_models_map() -> dict[str, int]:
 
 @functools.cache
 def _task_num_models_map() -> dict[str, int]:
-    """{task_name -> count of fully-evaluated models}, cached for the process lifetime."""
+    """{task_name -> count of fully-evaluated models}."""
     loaded = _safe_load_frames("task num_models map")
     if loaded is None:
         return {}
@@ -245,11 +229,7 @@ def _with_task_num_models(schema: TaskMetaSchema) -> TaskMetaSchema:
 
 
 def _patch_menu_counts(entries: list[MenuEntrySchema]) -> list[MenuEntrySchema]:
-    """Overlay ``num_models`` onto every benchmark child in the menu tree.
-
-    Reuses the input entry when no descendant changed — avoids needless
-    pydantic ``model_copy`` allocations during prewarm.
-    """
+    """Overlay ``num_models`` onto benchmark children; reuse entries when unchanged."""
     patched: list[MenuEntrySchema] = []
     for entry in entries:
         new_children: list[BenchmarkSchema | MenuEntrySchema] = []
@@ -286,8 +266,8 @@ def _benchmark_schemas(include_hidden: bool = False) -> list[BenchmarkSchema]:
     return [_with_num_models(benchmark_to_schema(b)) for b in benches]
 
 
-# TypeAdapters dump a list of pydantic models to JSON bytes in pydantic-core
-# (Rust) without the Python-level iteration FastAPI's response encoder does.
+# TypeAdapters dump model lists to JSON in pydantic-core (Rust) — faster than
+# FastAPI's per-item response encoder.
 _MENU_LIST_ADAPTER = TypeAdapter(list[MenuEntrySchema])
 _BENCHMARK_LIST_ADAPTER = TypeAdapter(list[BenchmarkSchema])
 _TASK_LIST_ADAPTER = TypeAdapter(list[TaskMetaSchema])
@@ -374,15 +354,17 @@ async def robots_txt() -> Response:
     )
 
 
-# Shipped as package data via pyproject's ``[tool.setuptools.package-data]``.
-_FAVICON_BYTES = (files("mteb.api") / "static" / "favicon.png").read_bytes()
+@functools.cache
+def _favicon_bytes() -> bytes:
+    """Lazy-load favicon so a missing PNG fails at the route, not startup."""
+    return (files("mteb.api") / "static" / "favicon.png").read_bytes()
 
 
 @infra_router.get("/favicon.ico", include_in_schema=False)
 async def favicon() -> Response:
     """Serve the MTEB logo (PNG payload under the .ico URL)."""
     return Response(
-        content=_FAVICON_BYTES,
+        content=_favicon_bytes(),
         media_type="image/png",
         headers={"Cache-Control": "public, max-age=31536000, immutable"},
     )
@@ -390,12 +372,7 @@ async def favicon() -> Response:
 
 @router.get("/icon/{name:path}", include_in_schema=False)
 async def benchmark_icon(name: str) -> Response:
-    """Proxy and long-cache the benchmark's icon.
-
-    Upstream icons live on github.com which redirects to raw.githubusercontent
-    (uncached, ``max-age=300``). Proxying lets us hand the browser one year of
-    ``immutable`` caching.
-    """
+    """Proxy upstream icon with one-year ``immutable`` Cache-Control."""
     try:
         bench = mteb.get_benchmark(name)
     except KeyError as exc:
@@ -444,11 +421,7 @@ async def benchmark_scores(
         ),
     ] = None,
 ) -> Response:
-    """Full summary payload (one row per model) for benchmark ``name``.
-
-    When ``languages=`` is set, the long results frame is pre-filtered to
-    subsets covering those languages before the summary builders run.
-    """
+    """Full summary payload for benchmark ``name``; ``languages=`` pre-filters subsets."""
     _require_benchmark(name)
     # Sort+dedupe so the cache key is order-independent.
     picked = tuple(sorted(set(_as_tuple(languages) or ())))
@@ -466,14 +439,10 @@ async def benchmark_per_language(request: Request, name: str) -> Response:
 
 
 def _parse_buckets_json(raw: str) -> list[tuple[float, float | None]]:
-    """Parse the ``buckets`` query param.
+    """Parse the ``buckets`` query param: JSON ``[[min, max], ...]`` in millions of params.
 
-    Wire format: JSON array of ``[min, max]`` pairs in millions of parameters.
-    ``null`` (or a 1-element entry) means open-ended top bucket. Example:
-    ``[[0,500],[500,1000],[1000,5000],[5000,null]]``.
-
-    Returned tuples stay in MILLIONS — callers convert when comparing against
-    ``ModelMeta.total_params_b`` (billions).
+    ``null`` (or a 1-element entry) means open-ended top bucket.
+    Returned tuples stay in MILLIONS — callers convert to billions.
     """
     try:
         decoded = json.loads(raw)
@@ -621,11 +590,8 @@ async def list_tasks(
     )
     if not name:
         return _cached_json(request, _filtered_task_schemas_bytes(*filter_key))
-    # Name filter is high-cardinality but typeahead repeats heavily —
-    # cache by (filter_key, name_lower) so each keystroke is a hit not a rebuild.
-    return _cached_json(
-        request, _filtered_task_schemas_bytes_named(filter_key, name.lower())
-    )
+    # Typeahead repeats heavily — cache by (filter_key, name).
+    return _cached_json(request, _filtered_task_schemas_bytes_named(filter_key, name))
 
 
 @functools.lru_cache(maxsize=256)
@@ -637,14 +603,10 @@ def _filtered_task_schemas_bytes_named(
         tuple[str, ...] | None,
         tuple[str, ...] | None,
     ],
-    name_lower: str,
+    name: str,
 ) -> Serialized:
     return _serialize_schemas(
-        [
-            s
-            for s in _filtered_task_schemas(*filter_key)
-            if name_lower in s.name.lower()
-        ],
+        [s for s in _filtered_task_schemas(*filter_key) if name in s.name],
         _TASK_LIST_ADAPTER,
     )
 
@@ -656,43 +618,13 @@ async def task_scores(request: Request, name: str) -> Response:
     return _cached_json(request, await get_task_scores_bytes(name))
 
 
-# Legacy on-disk key → current TypedDict field. Older descriptive-stats files
-# in ``mteb/descriptive_stats/`` were generated before the
-# ``ClassificationDescriptiveStatistics`` / ``RegressionDescriptiveStatistics``
-# fields were renamed; the API response is canonicalised against the current
-# field names so clients only see one shape.
-_LEGACY_KEY_RENAMES: dict[str, str] = {
-    "number_texts_intersect_with_train": "samples_in_train",
-}
-
-
-def _canonicalise_stats(node: Any) -> Any:
-    """Recursively rename legacy keys to their current TypedDict names."""
-    if isinstance(node, dict):
-        return {
-            _LEGACY_KEY_RENAMES.get(k, k): _canonicalise_stats(v)
-            for k, v in node.items()
-        }
-    if isinstance(node, list):
-        return [_canonicalise_stats(item) for item in node]
-    return node
-
-
 @functools.cache
 def _descriptive_stats_bytes(name: str) -> Serialized | None:
-    """Read the per-split descriptive-stats JSON from disk for task ``name``.
-
-    Returns ``None`` when the task has no stats file checked in. Legacy field
-    names are renamed to match the current ``*DescriptiveStatistics`` TypedDicts
-    before serving, so the response shape matches the OpenAPI schema regardless
-    of when the on-disk file was generated.
-    """
+    """Per-split descriptive-stats JSON for task ``name``; ``None`` if no file on disk."""
     stat_path = _TASKS_REGISTRY[name].metadata.descriptive_stat_path
     if not stat_path.exists():
         return None
-    raw = json.loads(stat_path.read_bytes())
-    canonicalised = _canonicalise_stats(raw)
-    return serialize_bytes(json.dumps(canonicalised).encode())
+    return serialize_bytes(stat_path.read_bytes())
 
 
 @router.get(
@@ -700,13 +632,7 @@ def _descriptive_stats_bytes(name: str) -> Serialized | None:
     response_model=dict[str, DescriptiveStatsValue],
 )
 async def task_descriptive_stats(request: Request, name: str) -> Response:
-    """Per-split descriptive statistics for task ``name``.
-
-    The value shape is one of the ``*DescriptiveStatistics`` TypedDicts defined
-    next to each AbsTask subclass (Classification, Retrieval, STS, …). The
-    specific shape is determined by the task's AbsTask superclass — clients
-    can switch on ``task.type`` from ``/tasks/{name}`` to discriminate.
-    """
+    """Per-split descriptive statistics; shape varies by ``task.type`` (one of ``*DescriptiveStatistics``)."""
     _require_task(name)
     payload = _descriptive_stats_bytes(name)
     if payload is None:
@@ -776,9 +702,7 @@ async def list_models(  # noqa: PLR0913, PLR0917
     )
     if not name:
         return _cached_json(request, _filtered_model_schemas_bytes(*filter_key))
-    return _cached_json(
-        request, _filtered_model_schemas_bytes_named(filter_key, name.lower())
-    )
+    return _cached_json(request, _filtered_model_schemas_bytes_named(filter_key, name))
 
 
 @functools.lru_cache(maxsize=256)
@@ -793,14 +717,10 @@ def _filtered_model_schemas_bytes_named(
         tuple[str, ...] | None,
         bool,
     ],
-    name_lower: str,
+    name: str,
 ) -> Serialized:
     return _serialize_schemas(
-        [
-            s
-            for s in _filtered_model_schemas(*filter_key)
-            if name_lower in s.name.lower()
-        ],
+        [s for s in _filtered_model_schemas(*filter_key) if name in s.name],
         _MODEL_LIST_ADAPTER,
     )
 

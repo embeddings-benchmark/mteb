@@ -1,11 +1,7 @@
 """Per-endpoint pre-serialised bytes cache + single-flight cold build.
 
-Holds the warm bytes routes serve directly. Cold builds run the schema
-constructor under a per-key lock, then serialise + gzip on a worker thread.
-
-Sits above :mod:`mteb.api.frames` and :mod:`mteb.api.serialization` and below
-:mod:`mteb.api.routes` and :mod:`mteb.api.warmup`. Importing this module must
-not pull in ``routes`` (warmup orchestration lives in :mod:`mteb.api.warmup`).
+Cold builds run the schema constructor under a per-key lock, then serialise +
+gzip on a worker thread.
 """
 
 from __future__ import annotations
@@ -45,13 +41,7 @@ _V = TypeVar("_V")
 
 @dataclass
 class CacheLayer(Generic[_K, _V]):
-    """One single-flight cache: a value store + per-key locks + label + cap.
-
-    Bundling these means ``store``/``locks`` can't drift out of sync at a call
-    site, the metric ``name`` lives next to the data it labels, and a per-layer
-    ``max_size`` opts into LRU eviction (unbounded otherwise — bounded
-    naturally by the benchmark/model registries).
-    """
+    """Single-flight cache: store + per-key locks + metric label + optional LRU cap."""
 
     name: str
     store: OrderedDict[_K, _V]
@@ -59,16 +49,11 @@ class CacheLayer(Generic[_K, _V]):
     max_size: int | None = None
 
 
-# Schema cache — only kept because aggregators (build_model_scores,
-# build_benchmark_leaders) scan ``summary.rows`` for individual models. Every
-# other endpoint serialises once and throws the schema away.
+# Kept as schemas (not bytes) because aggregators scan ``summary.rows`` per model.
 _summary_schemas: CacheLayer[str, BenchmarkSummarySchema] = CacheLayer(
     name="summary_schema", store=OrderedDict()
 )
 
-# Serialised-bytes caches — one per endpoint, keyed by name (plus languages tuple
-# for the lang-scoped summary variant). Bounded by registry size except for the
-# language variant, which has an LRU cap.
 _summary_bytes: CacheLayer[str, Serialized] = CacheLayer(
     name="summary", store=OrderedDict()
 )
@@ -87,6 +72,7 @@ _per_language_bytes: CacheLayer[str, Serialized] = CacheLayer(
 
 
 def _lock_for(locks: dict[_K, asyncio.Lock], key: _K) -> asyncio.Lock:
+    # ``get`` first so the hit path skips a throwaway Lock alloc.
     lock = locks.get(key)
     if lock is None:
         lock = locks.setdefault(key, asyncio.Lock())
@@ -98,15 +84,7 @@ async def _cache_or_build(
     key: _K,
     build: Callable[[], Awaitable[_V]],
 ) -> _V:
-    """Generic single-flight cache-or-build.
-
-    Reads ``layer.store[key]`` on the warm path; on miss, acquires the per-key
-    lock, re-checks, then awaits ``build()`` and stores the result.
-    ``layer.name`` labels the hit/miss counter so ops can split warm/cold by
-    endpoint family. When ``layer.max_size`` is set, the oldest entry (and its
-    lock) is evicted at the cap; unbounded stores still pay the
-    ``move_to_end`` cost on hit but it's negligible at registry-bounded sizes.
-    """
+    """Single-flight cache-or-build with optional LRU eviction at ``layer.max_size``."""
     store = layer.store
     locks = layer.locks
 
@@ -136,11 +114,7 @@ async def _cached_bytes(
     key: _K,
     schema_builder: Callable[[], Awaitable[BaseModel]],
 ) -> Serialized:
-    """Single-flight cache for serialised bytes.
-
-    Wraps :func:`_cache_or_build` with the serialise-on-thread step:
-    ``gzip.compress`` on a multi-MB body would otherwise pin the event loop.
-    """
+    """Single-flight cache for serialised bytes; gzip runs on a worker thread."""
 
     async def _build_and_serialize() -> Serialized:
         schema = await schema_builder()
@@ -150,12 +124,7 @@ async def _cached_bytes(
 
 
 async def get_summary(name: str) -> BenchmarkSummarySchema:
-    """Cached unfiltered summary schema for ``name``.
-
-    Lang-scoped summaries are not exposed as schemas — only
-    :func:`get_summary_bytes` builds them, and it discards the schema after
-    serialisation.
-    """
+    """Cached unfiltered summary schema for ``name`` (lang-scoped only via bytes)."""
 
     async def _build() -> BenchmarkSummarySchema:
         logger.info("Building summary for %s", name)

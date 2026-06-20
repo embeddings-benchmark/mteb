@@ -1,9 +1,4 @@
-"""OpenTelemetry tracing.
-
-Configures one `TracerProvider` + OTLP HTTP exporter and instruments
-FastAPI for per-request spans. No-op when ``OTEL_EXPORTER_OTLP_ENDPOINT`` is
-unset. Metrics live at ``/metrics`` (Prometheus); logs stay on stdlib.
-"""
+"""OpenTelemetry tracing; no-op when ``OTEL_EXPORTER_OTLP_ENDPOINT`` is unset."""
 
 from __future__ import annotations
 

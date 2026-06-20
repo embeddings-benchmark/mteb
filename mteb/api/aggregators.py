@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import functools
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import polars as pl
 
@@ -69,7 +69,7 @@ def _empty_summary(
     bench_schema: BenchmarkSchema,
     tasks_meta: list[TaskMetaSchema],
 ) -> BenchmarkSummarySchema:
-    """Empty-row summary used by every early-return path in build_benchmark_summary."""
+    """Empty-row summary for early-return paths."""
     return BenchmarkSummarySchema(
         benchmark_name=bench_name,
         task_types=bench_schema.task_types,
@@ -84,55 +84,26 @@ def _empty_summary(
 def _per_task_rows_and_cols(
     per_task_pl: pl.DataFrame,
 ) -> tuple[dict[str, dict[str, float]], list[str]]:
-    """Index the per-task table by ``Model`` and surface its task columns.
-
-    Returns ``({model -> {task: score}}, task_cols)``. Both empty when
-    ``per_task_pl`` is the ``_no_results_frame`` sentinel or has no ``Model``
-    column — collapses the duplicated empty-frame guard the summary builder
-    used to apply at two separate call sites.
-    """
+    """Return ``({model -> {task: score}}, task_cols)``; both empty on sentinel frame."""
     if "No results" in per_task_pl.columns or "Model" not in per_task_pl.columns:
         return {}, []
     task_cols = [c for c in per_task_pl.columns if c != "Model"]
+    # Bulk column reads beat ``iter_rows(named=True)`` on wide per-task tables.
+    model_col = per_task_pl["Model"].to_list()
+    task_data = {c: per_task_pl[c].to_list() for c in task_cols}
     rows = {
-        prow["Model"]: {
-            col: float(v) for col in task_cols if (v := prow[col]) is not None
-        }
-        for prow in per_task_pl.iter_rows(named=True)
+        m: {c: float(v) for c, vals in task_data.items() if (v := vals[i]) is not None}
+        for i, m in enumerate(model_col)
     }
     return rows, task_cols
 
 
-def _extract_trained_on_map(long_df: pl.DataFrame) -> dict[str, list[str]]:
-    """Build a ``model_name -> [task_name, ...]`` map (lists already sorted).
-
-    Reads the long frame's pre-baked ``trained_on`` column (set by
-    ``_build_pre_agg_df``). Aggregating + sorting in polars means the result
-    is one column-aligned read — no per-row Python ``setdefault`` loop.
-    """
-    if "trained_on" not in long_df.columns:
-        return {}
-    grouped = (
-        long_df.lazy()
-        .filter(pl.col("trained_on"))
-        .group_by("model_name")
-        .agg(pl.col("task_name").unique().sort())
-        .collect()
-    )
-    return dict(zip(grouped["model_name"].to_list(), grouped["task_name"].to_list()))
-
-
 @functools.lru_cache(maxsize=128)
 def _trained_on_map_cached(bench_name: str) -> dict[str, tuple[str, ...]]:
-    """``model_name -> (task_name, ...)`` from the **unfiltered** per-benchmark frame.
+    """``model_name -> (task_name, ...)`` from the unfiltered per-benchmark frame.
 
-    ``trained_on`` is a model/task property — invariant under the language
-    filter. Caching by benchmark name lets language-filtered cold builds
-    skip the polars groupby (~10–40 ms on big multilingual frames). Extra
-    models in the map are harmless: the per-row caller only does
-    ``map.get(model_in_summary_pl, [])``.
-
-    Tuples (not lists) so the cached value is treated as immutable.
+    Why: ``trained_on`` is invariant under the language filter, so caching skips
+    the polars groupby on filtered rebuilds.
     """
     from mteb.api.frames import _load_per_benchmark_frames
 
@@ -157,14 +128,7 @@ def _trained_on_map_cached(bench_name: str) -> dict[str, tuple[str, ...]]:
 
 @functools.lru_cache(maxsize=128)
 def _benchmark_language_codes(bench_name: str) -> tuple[str, ...]:
-    """Unique non-null language codes for ``bench_name``'s long frame.
-
-    Cached for the process lifetime — the underlying per-benchmark frame is
-    also ``functools.cache``-d in :func:`_load_per_benchmark_frames`, so the
-    code set is immutable across calls. Lifts the explode + unique scan out
-    of the language-filter hot path (~30 ms per call on the 8M-row
-    multilingual frame).
-    """
+    """Unique non-null language codes for ``bench_name``'s long frame."""
     from mteb.api.frames import _load_per_benchmark_frames
 
     frames, _ = _load_per_benchmark_frames()
@@ -186,16 +150,9 @@ def _filter_long_df_by_languages(
 ) -> pl.DataFrame | None:
     """Filter ``long_df`` to rows whose ``language`` list intersects ``languages``.
 
-    Returns the filtered frame, or ``None`` if no language code in the data
-    matched any pick. The frontend filter holds labels (``"English"``) but
-    the frame holds codes (``"eng-Latn"``); a code matches if it OR
-    ``language_label(code)`` is in the pick set.
-
-    Returns the input unchanged when ``languages`` is empty or the frame has
-    no ``language`` column. The polars filter still uses ``list.eval`` — on
-    the 8M-row multilingual frame it beats ``set_intersection`` (~30 %
-    faster) and ``any_horizontal(contains)`` (which blows up at large pick
-    sets); see ``scripts/bench_lang_filter.py``.
+    Returns ``None`` if no code in the data matched any pick. The frontend
+    sends labels (``"English"``) but the frame holds codes (``"eng-Latn"``);
+    a code matches if it OR ``language_label(code)`` is in the pick set.
     """
     if not languages or "language" not in long_df.columns:
         return long_df
@@ -216,13 +173,11 @@ def _recompute_lenient_means(
     scores_by_task: dict[str, float],
     task_to_type: dict[str, str],
 ) -> tuple[dict[str, float], float | None, float | None]:
-    """Recompute per-type means, mean(task), and mean(task_type) leniently.
+    """Recompute means over only the tasks a model actually ran.
 
-    Means are taken over only the tasks a model actually ran. Used in the
-    language-filtered path so partial-coverage models don't all collapse to
-    null. Per-task-type bucketing avoids letting a single dense type
-    dominate (e.g. Classification with 20 tasks shouldn't outweigh
-    Retrieval with 3).
+    Why: used in the language-filtered path so partial-coverage models don't
+    collapse to null. Per-task-type bucketing prevents a single dense type
+    (e.g. Classification with 20 tasks) from outweighing sparser ones.
     """
     type_buckets: dict[str, list[float]] = {}
     for tname, score in scores_by_task.items():
@@ -248,27 +203,21 @@ async def build_benchmark_summary(  # noqa: PLR0914
 ) -> BenchmarkSummarySchema:
     """Build the summary payload for one benchmark.
 
-    Delegates to the benchmark's own ``_create_summary_table`` and the per-task
-    table builder, then matches each row back onto ``MODEL_REGISTRY`` for
-    structured ``ModelMetaSchema`` + per-task / per-type score maps.
-
     When ``languages`` is non-empty the long frame is pre-filtered to subsets
-    whose ``language`` list intersects the picks (matched by raw code OR by
-    ``language_label``) before the summary builders run.
+    whose ``language`` list intersects the picks before the summary builders run.
     """
     from mteb.api.frames import _load_per_benchmark_frames
 
     bench = mteb.get_benchmark(name)
     bench_schema = benchmark_to_schema(bench)
-    # Scoped variant: when a benchmark pins a shared task to specific languages
-    # (e.g. MIRACL → ['eng']), the per-task `languages` reflects that pin.
+    # Scoped: when a benchmark pins a shared task to specific languages
+    # (e.g. MIRACL → ['eng']), per-task ``languages`` reflects that pin.
     tasks_meta: list[TaskMetaSchema] = [scoped_task_meta_schema(t) for t in bench.tasks]
 
     frames, _ = _load_per_benchmark_frames()
     long_df = frames.get(bench.name)
     if long_df is None:
-        # Benchmark missing from the parquet cache (newly added). Costly first
-        # call; the parquet rebuild normally covers everything.
+        # Benchmark missing from the parquet cache (newly added).
         results = cache.load_results(tasks=bench, require_model_meta=True)
         long_df = results._to_results_df(bench.tasks)
 
@@ -280,9 +229,8 @@ async def build_benchmark_summary(  # noqa: PLR0914
         return _empty_summary(bench.name, bench_schema, tasks_meta)
     long_df = filtered
 
-    # The summary builder recomputes its own per-task pivot (it needs the
-    # ``is_public`` column the basic pivot doesn't carry); pre-compute the
-    # pivot only for the per-task table.
+    # The summary builder recomputes its own pivot (needs ``is_public`` column);
+    # pre-compute the basic pivot only for the per-task table.
     pivot = await asyncio.to_thread(bench._build_per_task_pivot, long_df)
     summary, per_task_pl = await asyncio.gather(
         asyncio.to_thread(bench._create_summary_table, long_df),
@@ -292,24 +240,52 @@ async def build_benchmark_summary(  # noqa: PLR0914
         return _empty_summary(bench.name, bench_schema, tasks_meta)
     summary_pl = summary.df
 
-    # ``Model`` now holds the canonical org/name — no parsing needed.
     per_task_rows, task_cols_out = _per_task_rows_and_cols(per_task_pl)
 
     trained_on_by_model = _trained_on_map_cached(bench.name)
 
-    # The SummaryTable wrapper tells us exactly which columns hold what — no
-    # introspection needed. Type columns are still detected by exclusion since
-    # those vary per benchmark (raw CamelCase like "Retrieval", "STS").
     type_cols = [c for c in summary_pl.columns if c not in _SUMMARY_META_COLS]
 
-    # Language-filtered: switch to lenient means so partial-coverage models
-    # don't all collapse to null. Unfiltered stays strict so partial-coverage
-    # peers can't outrank full-coverage ones.
+    # Lenient means under language filter so partial-coverage models don't
+    # collapse to null; strict otherwise so they can't outrank full-coverage peers.
     language_filtered = bool(languages)
     task_to_type: dict[str, str] = (
         {tm.name: tm.type for tm in tasks_meta} if language_filtered else {}
     )
 
+    # Off-thread: ``model_construct`` releases the GIL in pydantic-core.
+    rows = await asyncio.to_thread(
+        _build_summary_rows,
+        summary_pl,
+        summary,
+        type_cols,
+        per_task_rows,
+        trained_on_by_model,
+        task_to_type,
+        language_filtered,
+    )
+
+    return BenchmarkSummarySchema(
+        benchmark_name=bench.name,
+        task_types=type_cols,
+        tasks=task_cols_out,
+        tasks_meta=tasks_meta,
+        rows=rows,
+        aggregations=bench_schema.aggregations,
+        show_zero_shot=bench_schema.show_zero_shot,
+    )
+
+
+def _build_summary_rows(
+    summary_pl: pl.DataFrame,
+    summary: Any,
+    type_cols: list[str],
+    per_task_rows: dict[str, dict[str, float]],
+    trained_on_by_model: dict[str, tuple[str, ...]],
+    task_to_type: dict[str, str],
+    language_filtered: bool,
+) -> list[SummaryRowSchema]:
+    """Sync row-construction loop; off-loaded via ``asyncio.to_thread``."""
     rows: list[SummaryRowSchema] = []
     for idx, row in enumerate(summary_pl.iter_rows(named=True)):
         full = row["Model"]
@@ -364,16 +340,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
                 trained_on_tasks=list(trained_on_by_model.get(full, ())),
             )
         )
-
-    return BenchmarkSummarySchema(
-        benchmark_name=bench.name,
-        task_types=type_cols,
-        tasks=task_cols_out,
-        tasks_meta=tasks_meta,
-        rows=rows,
-        aggregations=bench_schema.aggregations,
-        show_zero_shot=bench_schema.show_zero_shot,
-    )
+    return rows
 
 
 async def build_benchmark_per_language(name: str) -> BenchmarkPerLanguageSchema:
@@ -391,34 +358,37 @@ async def build_benchmark_per_language(name: str) -> BenchmarkPerLanguageSchema:
     ):
         return BenchmarkPerLanguageSchema(benchmark_name=bench.name, rows=[])
 
-    # asyncio.to_thread(lambda: ...) — collect() is CPU-bound (group_by over an exploded multilingual frame). The wrapper keeps the event loop responsive
-    # so concurrent API requests aren't blocked.
-    grouped = await asyncio.to_thread(
-        lambda: long_df.lazy()
+    # One to_thread span covers both the polars collect and the N×M Python accum.
+    rows = await asyncio.to_thread(_build_per_language_rows, long_df)
+
+    return BenchmarkPerLanguageSchema(benchmark_name=bench.name, rows=rows)
+
+
+def _build_per_language_rows(
+    long_df: pl.DataFrame,
+) -> list[BenchmarkPerLanguageRowSchema]:
+    """Sync groupby + row accumulation; off-loaded via ``asyncio.to_thread``."""
+    grouped = (
+        long_df.lazy()
         .explode("language")
         .group_by(["model_name", "language"])
         .agg(pl.col("score").mean().alias("score"))
         .collect(engine="streaming")
     )
-
+    model_names = grouped["model_name"].to_list()
+    codes = grouped["language"].to_list()
+    scores = grouped["score"].to_list()
     rows: dict[str, dict[str, float]] = {}
-    for row in grouped.iter_rows(named=True):
-        mn = row["model_name"]
-        code = row.get("language")
-        score = row.get("score")
+    for mn, code, score in zip(model_names, codes, scores):
         if not mn or code is None or score is None:
             continue
         rows.setdefault(mn, {})[language_label(code)] = score
-
-    return BenchmarkPerLanguageSchema(
-        benchmark_name=bench.name,
-        rows=[
-            BenchmarkPerLanguageRowSchema.model_construct(
-                model_name=mn, scores_by_language=s
-            )
-            for mn, s in rows.items()
-        ],
-    )
+    return [
+        BenchmarkPerLanguageRowSchema.model_construct(
+            model_name=mn, scores_by_language=s
+        )
+        for mn, s in rows.items()
+    ]
 
 
 @functools.cache
@@ -434,14 +404,10 @@ def _task_to_hosting_benchmarks() -> dict[str, list[str]]:
 def build_task_scores(name: str) -> TaskScoresSchema:  # noqa: PLR0914
     """Per-model scores for a single task across every benchmark hosting it.
 
-    ``subset_scores`` is a nested ``{subset: {split: score}}`` map so the
-    leaderboard UI can render either a split picker (rows × subsets) or a
-    subset picker (rows × splits) off one payload.
-
-    The rolled-up ``score`` collapses the inner split axis with ``max`` (one
-    representative value per subset) and means across subsets, but only when
-    the model covers every subset the task offers; ``null`` otherwise, so a
-    partial-coverage model can't outrank a fully-evaluated peer.
+    ``subset_scores`` is nested ``{subset: {split: score}}`` so the UI can pivot
+    either way. The rolled-up ``score`` means across subsets (using max across
+    splits per subset), but only when the model covers every (subset, split);
+    ``null`` otherwise so partial-coverage models can't outrank full-coverage peers.
     """
     from mteb.api.frames import _load_per_benchmark_frames
 
@@ -450,8 +416,8 @@ def build_task_scores(name: str) -> TaskScoresSchema:  # noqa: PLR0914
 
     hosting_benchmarks = list(_task_to_hosting_benchmarks().get(name, ()))
 
-    # Pull from the all-results frame so multilingual tasks aren't trimmed to
-    # one benchmark's locale selection.
+    # Use the all-results frame so multilingual tasks aren't trimmed to one
+    # benchmark's locale selection.
     _, all_df = _load_per_benchmark_frames()
     task_frame = all_df.filter(pl.col("task_name") == name)
 
@@ -460,17 +426,18 @@ def build_task_scores(name: str) -> TaskScoresSchema:  # noqa: PLR0914
     all_subsets: set[str] = set()
     all_splits: set[str] = set()
     if not task_frame.is_empty():
-        # The unified frame is already deduped to one row per
-        # (model, task, split, subset), so we can iterate directly without a
-        # second group_by.
-        for pr in task_frame.drop_nulls("score").iter_rows(named=True):
-            subset = str(pr["subset"])
-            split = str(pr["split"])
-            (
-                seen.setdefault(pr["model_name"], {}).setdefault(subset, {})[split]
-            ) = float(pr["score"])
-            all_subsets.add(subset)
-            all_splits.add(split)
+        # Unified frame is already deduped per (model, task, split, subset).
+        deduped = task_frame.drop_nulls("score")
+        all_subsets = set(deduped["subset"].unique().to_list())
+        all_splits = set(deduped["split"].unique().to_list())
+        model_names = deduped["model_name"].to_list()
+        subset_col = deduped["subset"].to_list()
+        split_col = deduped["split"].to_list()
+        score_col = deduped["score"].to_list()
+        for mn, subset, split, score in zip(
+            model_names, subset_col, split_col, score_col
+        ):
+            seen.setdefault(mn, {}).setdefault(subset, {})[split] = score
 
     rows: list[TaskScoreRowSchema] = []
     for model_name, subset_scores in seen.items():
@@ -524,20 +491,14 @@ def build_task_scores(name: str) -> TaskScoresSchema:  # noqa: PLR0914
     )
 
 
-# Per-benchmark ``{model_name -> row}`` index
+# Tracks ``_summary_schemas``; must evict in lockstep if that ever gains a cap.
 _summary_row_indices: dict[str, dict[str, SummaryRowSchema]] = {}
 
 
 def _summary_row_index(
     bench_name: str, summary: BenchmarkSummarySchema
 ) -> dict[str, SummaryRowSchema]:
-    """Cached ``{model_name -> row}`` for ``summary``.
-
-    Replaces the per-call ``next(r for r in summary.rows if r.model.name ==
-    name)`` linear scan — once the index is built, every subsequent
-    ``build_model_scores`` call (for any model) does an O(1) lookup instead
-    of N pydantic-attribute accesses.
-    """
+    """Cached ``{model_name -> row}`` for O(1) lookups in ``build_model_scores``."""
     cached = _summary_row_indices.get(bench_name)
     if cached is None:
         cached = {r.model.name: r for r in summary.rows}
@@ -548,15 +509,8 @@ def _summary_row_index(
 async def build_model_scores(name: str) -> ModelScoresSchema:
     """Per-benchmark scores for a single model.
 
-    Fans out the cold summary builds with ``asyncio.gather`` so wall time is
-    max() instead of sum(). Per-summary row lookup goes through
-    :func:`_summary_row_index` — the first ``build_model_scores`` call after
-    a process restart pays an O(N) index build per benchmark; every call
-    after (for any model name) is O(1).
-
-    Iterates every registered benchmark — including off-menu ones
-    (``display_on_leaderboard=False``) — so submissions to hidden benchmarks
-    still surface on the model detail page.
+    Iterates every registered benchmark — including off-menu ones — so
+    submissions to hidden benchmarks still surface on the model detail page.
     """
     from mteb.api.cache import get_summary
 
@@ -570,7 +524,6 @@ async def build_model_scores(name: str) -> ModelScoresSchema:
     rows: list[ModelScoreRowSchema] = []
 
     for bench, summary in zip(all_benchmarks, results):
-        # gather(return_exceptions=True) substitutes failed tasks with their exception instance.
         if isinstance(summary, BaseException):
             continue
         row = _summary_row_index(bench.name, summary).get(name)
@@ -608,11 +561,7 @@ Bucket = tuple[float, float | None]
 def _pick_leader(
     rows: list[SummaryRowSchema], lo_b: float, hi_b: float | None
 ) -> SummaryRowSchema | None:
-    """Best-ranked row inside ``[lo_b, hi_b)`` (billions).
-
-    Best = lowest ``row.rank`` (Borda). Excludes rows with ``total_params_b
-    <= 0``. Upper bound exclusive so buckets stitch without double-counting.
-    """
+    """Lowest-rank row inside ``[lo_b, hi_b)`` (billions); ``hi`` exclusive so buckets stitch."""
     best: SummaryRowSchema | None = None
     best_rank: int | None = None
     for r in rows:
@@ -629,7 +578,7 @@ def _pick_leader(
 async def build_benchmark_leaders(
     name: str, buckets: list[Bucket]
 ) -> BenchmarkLeadersSchema:
-    """Per-size-bucket leaders payload — reuses the cached summary."""
+    """Per-size-bucket leaders, reusing the cached summary."""
     from mteb.api.cache import get_summary
 
     summary = await get_summary(name)
