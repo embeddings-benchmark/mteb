@@ -2712,7 +2712,7 @@ VIDORE_V3_1 = VidoreBenchmark(
 """,
 )
 
-VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
+VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
     name="ViDoRe(v1&v2)",
     aliases=["VisualDocumentRetrieval"],
     display_name="ViDoRe (V1&V2)",
@@ -2747,6 +2747,7 @@ VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
 }
 """,
     aggregations=(BenchmarkAggregation.MEAN_TASK,),
+    show_zero_shot=False,
 )
 
 R2MED = Benchmark(
