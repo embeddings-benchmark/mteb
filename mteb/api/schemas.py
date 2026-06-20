@@ -8,7 +8,7 @@ still be constructed with Python-style keyword args from adapters.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal
 from urllib.parse import quote
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -301,6 +301,11 @@ class SummaryRowSchema(_CamelModel):
     scores_by_task_type: dict[str, float]
     scores_by_task: dict[str, float]
     trained_on_tasks: list[str] = Field(default_factory=list)
+    # Experiment kwargs that produced this row — present only for variant
+    # rows (e.g. ``{"colbert": True, "use_image_modality": False}``). ``None``
+    # for the canonical base-model row. Frontend uses it to badge or filter
+    # ablation variants without changing the rest of the schema.
+    experiments: dict[str, Any] | None = None
 
 
 class BenchmarkSummarySchema(_CamelModel):

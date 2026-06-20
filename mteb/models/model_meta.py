@@ -6,7 +6,6 @@ import json
 import logging
 import warnings
 from collections.abc import Callable, Mapping, Sequence
-from dataclasses import field
 from enum import Enum
 from functools import partial
 from importlib.metadata import PackageNotFoundError, distribution, requires
@@ -29,7 +28,7 @@ from huggingface_hub.errors import (
 )
 from packaging.requirements import Requirement
 from packaging.version import InvalidVersion, Version
-from pydantic import BaseModel, ConfigDict, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 from sentence_transformers import (
     CrossEncoder,
     SentenceTransformer,
@@ -159,9 +158,13 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
     model_config = ConfigDict(extra="forbid")
 
-    # loaders
-    loader: Callable[..., MTEBModels] | None
-    loader_kwargs: dict[str, Any] = field(default_factory=dict)
+    # loaders — excluded from model_dump()/JSON so ModelMeta is round-trippable
+    # over wire formats (parquet, hub datasets). Constructor surface unchanged:
+    # every existing `loader=…` call site keeps working. The default lets a
+    # JSON-loaded ModelMeta (which won't carry the callable) instantiate
+    # without manual fill-in.
+    loader: Callable[..., MTEBModels] | None = Field(default=None, exclude=True)
+    loader_kwargs: dict[str, Any] = Field(default_factory=dict, exclude=True)
     name: str | None
     revision: str | None
     release_date: StrDate | None
@@ -277,18 +280,34 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     def to_dict(self) -> dict[str, Any]:
         """Returns a dictionary representation of the model metadata."""
         meta = self.model_copy(deep=True)
+        # `loader` and `loader_kwargs` are `Field(exclude=True)` so model_dump
+        # drops them — re-add the stringified loader name for human-readable
+        # output (the callable itself stays off the dict).
         dict_repr = meta.model_dump()
         if isinstance(meta.embed_dim, Sequence):
             dict_repr["embed_dim"] = max(meta.embed_dim)
-        loader = dict_repr.pop("loader", None)
         dict_repr["training_datasets"] = (
             list(dict_repr["training_datasets"])
             if isinstance(dict_repr["training_datasets"], set)
             else dict_repr["training_datasets"]
         )
-        dict_repr["loader"] = _get_loader_name(loader)
+        dict_repr["loader"] = _get_loader_name(meta.loader)
         dict_repr["is_cross_encoder"] = self.is_cross_encoder
         return dict_repr
+
+    @field_validator("loader", mode="before")
+    @classmethod
+    def _coerce_loader(cls, value: Any) -> Callable[..., MTEBModels] | None:
+        # On-disk ``model_meta.json`` written by ``to_dict()`` stores ``loader``
+        # as a string (the class name) for human-readable output. Accept that
+        # shape on deserialization so legacy / cached metas round-trip — the
+        # callable simply isn't recoverable without re-importing, which the
+        # caller can do via ``mteb.get_model_meta(...)`` when actually needed.
+        if value is None or callable(value):
+            return value
+        if isinstance(value, str):
+            return None
+        return value
 
     @field_validator("languages")
     @classmethod

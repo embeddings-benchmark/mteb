@@ -107,6 +107,52 @@ def _is_zero_shot_cached(
     return not bool(training_datasets & task_name_set)
 
 
+# Synthetic per-row variant identifier — empty string for base rows,
+# serialized experiment_kwargs for ablation/variant rows (matches the
+# on-disk experiment folder name). Threaded through the summary / per-task
+# pivots as a secondary group key so each variant becomes its own row
+# instead of being silently averaged into the base model. Stored as a
+# separate column (not folded into ``model_name``) so MODEL_REGISTRY
+# lookups in :func:`_attach_model_metadata` stay keyed by the canonical
+# model name.
+_VARIANT_ID_COL = "_variant_id"
+
+
+def _ensure_variant_id(pl_df: pl.DataFrame) -> pl.DataFrame:
+    """Add a stable ``_variant_id`` Utf8 column derived from ``experiments``.
+
+    No-op when the column is already present. When the long frame has no
+    ``experiments`` column (legacy parquet pre-experiments work) the col is
+    added as empty strings so downstream group_by keys behave uniformly.
+    """
+    from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
+
+    if _VARIANT_ID_COL in pl_df.columns:
+        return pl_df
+    if "experiments" not in pl_df.columns:
+        return pl_df.with_columns(pl.lit("").alias(_VARIANT_ID_COL))
+
+    def _ser(exp: Any) -> str:
+        if not exp:
+            return ""
+        # Polars unions all variant keys into one Struct schema and pads
+        # absent keys with null. Drop the nulls so the serialized id reflects
+        # only the kwargs that actually drove this run — matches the cleaned
+        # dict the API aggregator surfaces on the wire.
+        if isinstance(exp, dict):
+            exp = {k: v for k, v in exp.items() if v is not None}
+            if not exp:
+                return ""
+        return _serialize_experiment_kwargs_to_name(exp) or ""
+
+    return pl_df.with_columns(
+        pl.col("experiments")
+        .map_elements(_ser, return_dtype=pl.Utf8)
+        .fill_null("")
+        .alias(_VARIANT_ID_COL)
+    )
+
+
 @functools.cache
 def _no_results_frame() -> pl.DataFrame:
     """The placeholder frame returned when an empty selection would have no rows.
@@ -255,21 +301,26 @@ def _get_embedding_size(embed_dim: int | Sequence[int] | None) -> int | None:
 def _build_per_task_pivot(
     pl_df: pl.DataFrame,
 ) -> tuple[pl.DataFrame, list[str]] | None:
-    """Pivot the long results frame to one row per model × one col per task.
+    """Pivot the long results frame to one row per (model, variant) × one col per task.
 
     Returns ``(per_task, task_cols)`` or ``None`` for the three empty-input
     cases (empty frame, no ``model_name``, no tasks, or all-null rows). Every
     summary/per-task builder opens with this pattern — extracted so the four
-    builders + per-task table builder don't duplicate the boilerplate.
+    builders + per-task table builder don't duplicate the boilerplate. The
+    pivot index is ``(model_name, _variant_id)`` so experiment variants stay
+    as distinct rows (see :func:`_ensure_variant_id`).
     """
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return None
+    pl_df = _ensure_variant_id(pl_df)
     per_task = (
-        pl_df.group_by(["model_name", "task_name"])
+        pl_df.group_by(["model_name", _VARIANT_ID_COL, "task_name"])
         .agg(pl.col("score").mean())
-        .pivot(on="task_name", index="model_name", values="score")
+        .pivot(on="task_name", index=["model_name", _VARIANT_ID_COL], values="score")
     )
-    task_cols = [c for c in per_task.columns if c != "model_name"]
+    task_cols = [
+        c for c in per_task.columns if c not in {"model_name", _VARIANT_ID_COL}
+    ]
     if not task_cols:
         return None
     per_task = per_task.filter(
@@ -386,14 +437,17 @@ def _order_summary_cols(
 ) -> pl.DataFrame:
     """Reorder ``joint_table`` into the canonical summary column layout.
 
-    Layout: ``rank_col | Model | meta cols | mean_cols | type_cols |
-    extra_trailing | Release Date``. Columns not present in ``joint_table``
-    are silently dropped — keeps the four ``_create_summary_table_*``
-    builders from each re-spelling the ordering.
+    Layout: ``rank_col | Model | _variant_id? | meta cols | mean_cols |
+    type_cols | extra_trailing | Release Date``. Columns not present in
+    ``joint_table`` are silently dropped — keeps the four
+    ``_create_summary_table_*`` builders from each re-spelling the ordering.
+    ``_variant_id`` slots in right after ``Model`` so downstream consumers
+    (API, leaderboard) can read it positionally; it's omitted when absent.
     """
     ordering = [
         rank_col,
         "Model",
+        _VARIANT_ID_COL,
         *_STANDARD_META_COLS,
         *mean_cols,
         *type_cols,
@@ -650,6 +704,8 @@ def _create_summary_table(  # noqa: PLR0914
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return _no_results_summary()
 
+    pl_df = _ensure_variant_id(pl_df)
+
     want_task_types = BenchmarkAggregation.TASK_TYPES in aggregations
     want_subset = BenchmarkAggregation.MEAN_SUBSET in aggregations
 
@@ -658,9 +714,15 @@ def _create_summary_table(  # noqa: PLR0914
     per_task_aggs = [pl.col("score").mean()]
     if has_is_public:
         per_task_aggs.append(pl.col("is_public").first())
-    per_task_long = pl_df.group_by(["model_name", "task_name"]).agg(*per_task_aggs)
-    per_task = per_task_long.pivot(on="task_name", index="model_name", values="score")
-    task_cols = [c for c in per_task.columns if c != "model_name"]
+    per_task_long = pl_df.group_by(["model_name", _VARIANT_ID_COL, "task_name"]).agg(
+        *per_task_aggs
+    )
+    per_task = per_task_long.pivot(
+        on="task_name", index=["model_name", _VARIANT_ID_COL], values="score"
+    )
+    task_cols = [
+        c for c in per_task.columns if c not in {"model_name", _VARIANT_ID_COL}
+    ]
     if not task_cols:
         return _no_results_summary()
     per_task = per_task.filter(
@@ -688,6 +750,7 @@ def _create_summary_table(  # noqa: PLR0914
     type_exprs, type_cols = _get_means_per_types(task_cols)
     joint_table = per_task.select(
         "model_name",
+        _VARIANT_ID_COL,
         *type_exprs,
         _skipna_false_mean(task_cols).alias(mean_task_col),
         _mean_or_null(public_present, public_col),
@@ -698,13 +761,15 @@ def _create_summary_table(  # noqa: PLR0914
     # wants subset weighting — costs an extra group_by we'd otherwise skip.
     if want_subset:
         (mean_subset_col,) = BenchmarkAggregation.MEAN_SUBSET.summary_columns
-        per_subset_long = pl_df.group_by(["model_name", "task_name", "subset"]).agg(
-            pl.col("score").mean()
-        )
-        subset_mean = per_subset_long.group_by("model_name").agg(
+        per_subset_long = pl_df.group_by(
+            ["model_name", _VARIANT_ID_COL, "task_name", "subset"]
+        ).agg(pl.col("score").mean())
+        subset_mean = per_subset_long.group_by(["model_name", _VARIANT_ID_COL]).agg(
             pl.col("score").mean().alias(mean_subset_col)
         )
-        joint_table = joint_table.join(subset_mean, on="model_name", how="left")
+        joint_table = joint_table.join(
+            subset_mean, on=["model_name", _VARIANT_ID_COL], how="left"
+        )
         keyed = per_subset_long.with_columns(
             (pl.col("task_name") + "::" + pl.col("subset")).alias("_ts")
         )
@@ -714,6 +779,9 @@ def _create_summary_table(  # noqa: PLR0914
     else:
         borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
 
+    # Borda ranks by model_name (one rank per model) — variants of the same
+    # model currently share the rank. Acceptable for the minimal variant-row
+    # surface; a richer port can ``rank()`` over (model_name, _variant_id).
     joint_table = joint_table.join(borda_df, on="model_name", how="left")
 
     drop_cols: list[str] = []
@@ -763,11 +831,14 @@ def _create_per_task_table_from_benchmark_results(
     per_task, task_cols = pivot
 
     borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
+    select_cols = ["Model"]
+    if _VARIANT_ID_COL in per_task.columns:
+        select_cols.append(_VARIANT_ID_COL)
     return (
         per_task.join(borda_df, on="model_name", how="left")
         .sort("Rank (Borda)")
         .rename({"model_name": "Model"})
-        .select(["Model", *task_cols])
+        .select([*select_cols, *task_cols])
     )
 
 

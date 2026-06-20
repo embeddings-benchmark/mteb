@@ -19,6 +19,7 @@ from mteb._hf_integration.eval_result_model import (
     HFEvalResultSource,
 )
 from mteb.benchmarks import Benchmark
+from mteb.models.model_meta import ModelMeta
 
 from .task_result import TaskError, TaskResult
 
@@ -105,6 +106,14 @@ class ModelResult(BaseModel):
     )
     exceptions: list[TaskError] | None = None
     experiment_name: str | None = None
+    # Per-result snapshot of the ModelMeta as it appeared in the cache when
+    # this result was produced — for experiments, this is the per-experiment
+    # `model_meta.json` (under `<rev>/experiments/<exp>/`), so variant
+    # attributes (e.g. `model_type` flipping to `late-interaction`,
+    # `experiment_kwargs`) flow through to consumers unchanged. ``None`` only
+    # when the JSON wasn't present (legacy results loaded with
+    # `require_model_meta=False`).
+    model_meta: ModelMeta | None = None
 
     def __repr__(self) -> str:
         n_entries = len(self.task_results)
