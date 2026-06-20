@@ -13,7 +13,7 @@ from torch.utils.data import DataLoader
 import mteb
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.mocks.task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
+from mteb.mocks import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import PromptType

@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 
 import mteb
 from mteb.abstasks import AbsTask
+from mteb.mocks import MOCK_TASK_TEST_GRID
 from mteb.mocks.mock_tasks import (
     MockInstructionRetrieval,
     MockMultilingualInstructionRetrieval,
@@ -17,7 +18,6 @@ from mteb.mocks.mock_tasks import (
     MockRerankingTask,
     MockRetrievalTask,
 )
-from mteb.mocks.task_grid import MOCK_TASK_TEST_GRID
 from mteb.models.abs_encoder import AbsEncoder
 from tests.mock_models import (
     MockSentenceTransformer,

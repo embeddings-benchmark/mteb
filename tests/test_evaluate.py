@@ -12,17 +12,17 @@ import mteb
 from mteb import SentenceTransformerEncoderWrapper
 from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
+from mteb.mocks import (
+    MOCK_MAEB_TASK_GRID,
+    MOCK_MULTIMODAL_TASKS,
+    MOCK_MVEB_TASK_GRID,
+)
 from mteb.mocks.mock_tasks import (
     MockAggregatedTask,
     MockClassificationTask,
     MockMultilingualClassificationTask,
     MockMultilingualRetrievalTask,
     MockRetrievalTask,
-)
-from mteb.mocks.task_grid import (
-    MOCK_MAEB_TASK_GRID,
-    MOCK_MULTIMODAL_TASKS,
-    MOCK_MVEB_TASK_GRID,
 )
 from mteb.models import ModelMeta
 from mteb.models.models_protocols import EncoderProtocol
