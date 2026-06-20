@@ -434,10 +434,8 @@ def build_task_scores(name: str) -> TaskScoresSchema:  # noqa: PLR0914
         subset_col = deduped["subset"].to_list()
         split_col = deduped["split"].to_list()
         score_col = deduped["score"].to_list()
-        for mn, subset, split, score in zip(
-            model_names, subset_col, split_col, score_col
-        ):
-            seen.setdefault(mn, {}).setdefault(subset, {})[split] = score
+        for mn, subset, split, s in zip(model_names, subset_col, split_col, score_col):
+            seen.setdefault(mn, {}).setdefault(subset, {})[split] = s
 
     rows: list[TaskScoreRowSchema] = []
     for model_name, subset_scores in seen.items():

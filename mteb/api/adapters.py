@@ -6,7 +6,7 @@ Memoised because mteb's registries are static after import.
 from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, TypeVar
 
 import mteb
 from mteb.api.schemas import (
@@ -21,7 +21,7 @@ from mteb.languages import language_label
 from mteb.models.model_implementations import MODEL_REGISTRY
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Callable, Sequence
     from concurrent.futures import Future
 
     from mteb.abstasks.abstask import AbsTask
@@ -30,20 +30,27 @@ if TYPE_CHECKING:
     from mteb.models.model_meta import ModelMeta
 
 
+_T = TypeVar("_T")
+
 _task_schema_cache: dict[str, TaskMetaSchema] = {}
 _benchmark_schema_cache: dict[str, BenchmarkSchema] = {}
 _model_schema_base_cache: dict[str, ModelMetaSchema] = {}
 
 
+def _cached(cache: dict[str, _T], key: str, builder: Callable[[], _T]) -> _T:
+    cached = cache.get(key)
+    if cached is None:
+        cached = builder()
+        cache[key] = cached
+    return cached
+
+
 def task_to_meta_schema(task: AbsTask | type[AbsTask]) -> TaskMetaSchema:
     """Return the cached `TaskMetaSchema` for ``task`` (class or instance)."""
     md = task.metadata
-    cached = _task_schema_cache.get(md.name)
-    if cached is not None:
-        return cached
-    schema = TaskMetaSchema.from_task_metadata(md)
-    _task_schema_cache[md.name] = schema
-    return schema
+    return _cached(
+        _task_schema_cache, md.name, lambda: TaskMetaSchema.from_task_metadata(md)
+    )
 
 
 def scoped_task_meta_schema(task: AbsTask) -> TaskMetaSchema:
@@ -55,12 +62,9 @@ def scoped_task_meta_schema(task: AbsTask) -> TaskMetaSchema:
 
 def benchmark_to_schema(b: Benchmark) -> BenchmarkSchema:
     """Return the cached `BenchmarkSchema` for ``b``."""
-    cached = _benchmark_schema_cache.get(b.name)
-    if cached is not None:
-        return cached
-    schema = BenchmarkSchema.from_benchmark(b)
-    _benchmark_schema_cache[b.name] = schema
-    return schema
+    return _cached(
+        _benchmark_schema_cache, b.name, lambda: BenchmarkSchema.from_benchmark(b)
+    )
 
 
 def model_meta_to_schema(
@@ -70,10 +74,11 @@ def model_meta_to_schema(
 ) -> ModelMetaSchema:
     """Cached `ModelMetaSchema` for ``meta``; ``zero_shot_pct`` applied via ``model_copy``."""
     name = meta.name or ""
-    cached = _model_schema_base_cache.get(name)
-    if cached is None:
-        cached = ModelMetaSchema.from_model_meta(meta, zero_shot_pct=None)
-        _model_schema_base_cache[name] = cached
+    cached = _cached(
+        _model_schema_base_cache,
+        name,
+        lambda: ModelMetaSchema.from_model_meta(meta, zero_shot_pct=None),
+    )
     if zero_shot_pct is None:
         return cached
     return cached.model_copy(update={"zero_shot_pct": int(zero_shot_pct)})

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -24,9 +25,23 @@ from mteb.benchmarks._create_table import _training_datasets_cached
 from mteb.models.model_implementations import MODEL_REGISTRY
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
     from concurrent.futures import Future
 
 logger = logging.getLogger(__name__)
+
+
+@contextlib.contextmanager
+def _timed(label: str) -> Iterator[None]:
+    """Log ``label`` start; on clean exit, log elapsed wall-time.
+
+    Skips the "done" log on exception so callers can attach their own failure
+    message (e.g. ``warmup_blocking`` logs a different summary on failure).
+    """
+    t0 = time.monotonic()
+    logger.info("warmup: %s started", label)
+    yield
+    logger.info("warmup: %s done in %.2fs", label, time.monotonic() - t0)
 
 
 def _prewarm_training_datasets() -> None:
@@ -34,53 +49,45 @@ def _prewarm_training_datasets() -> None:
 
     Why: first summary build otherwise pays ~2.5s per first-seen model.
     """
-    t0 = time.monotonic()
-    logger.info("warmup: training-datasets started (%d models)", len(MODEL_REGISTRY))
-    with ThreadPoolExecutor(max_workers=16, thread_name_prefix="warm-td") as ex:
-        list(ex.map(_training_datasets_cached, MODEL_REGISTRY))
-    logger.info("warmup: training-datasets done in %.2fs", time.monotonic() - t0)
+    with _timed(f"training-datasets ({len(MODEL_REGISTRY)} models)"):
+        with ThreadPoolExecutor(max_workers=16, thread_name_prefix="warm-td") as ex:
+            list(ex.map(_training_datasets_cached, MODEL_REGISTRY))
 
 
 def _prewarm_list_schemas() -> None:
     """Pre-build the unfiltered list schemas + serialised bytes (threaded)."""
-    t0 = time.monotonic()
-    logger.info("warmup: list schemas started")
-    with ThreadPoolExecutor(max_workers=4, thread_name_prefix="warm-list") as ex:
-        futures = [
-            ex.submit(_menu_schemas_bytes),
-            ex.submit(_benchmark_schemas_bytes),
-            ex.submit(_filtered_task_schemas_bytes, None, None, None, None, None),
-            ex.submit(
-                _filtered_model_schemas_bytes,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                False,
-            ),
-        ]
-        for f in futures:
-            f.result()
-    logger.info("warmup: list schemas done in %.2fs", time.monotonic() - t0)
+    with _timed("list schemas"):
+        with ThreadPoolExecutor(max_workers=4, thread_name_prefix="warm-list") as ex:
+            futures = [
+                ex.submit(_menu_schemas_bytes),
+                ex.submit(_benchmark_schemas_bytes),
+                ex.submit(_filtered_task_schemas_bytes, None, None, None, None, None),
+                ex.submit(
+                    _filtered_model_schemas_bytes,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    False,
+                ),
+            ]
+            for f in futures:
+                f.result()
 
 
 def _load_per_benchmark_frames_logged() -> None:
     """``_load_per_benchmark_frames`` with timing logs."""
-    t0 = time.monotonic()
-    logger.info("warmup: per-benchmark frames started")
-    _load_per_benchmark_frames()
-    logger.info("warmup: per-benchmark frames done in %.2fs", time.monotonic() - t0)
+    with _timed("per-benchmark frames"):
+        _load_per_benchmark_frames()
 
 
 def _prewarm_schema_caches_logged() -> None:
     """``prewarm_schema_caches`` with timing logs."""
-    t0 = time.monotonic()
-    logger.info("warmup: schema caches started")
-    prewarm_schema_caches()
-    logger.info("warmup: schema caches done in %.2fs", time.monotonic() - t0)
+    with _timed("schema caches"):
+        prewarm_schema_caches()
 
 
 def warmup_blocking() -> None:
@@ -90,17 +97,17 @@ def warmup_blocking() -> None:
     phase 4 (list schemas) depends on them and runs serially after.
     """
     t0 = time.monotonic()
-    logger.info("warmup: blocking phase started")
     try:
-        with ThreadPoolExecutor(max_workers=3, thread_name_prefix="warmup") as ex:
-            futures: list[Future[object]] = [
-                ex.submit(_load_per_benchmark_frames_logged),
-                ex.submit(_prewarm_training_datasets),
-                ex.submit(_prewarm_schema_caches_logged),
-            ]
-            for f in futures:
-                f.result()
-        _prewarm_list_schemas()
+        with _timed("blocking phase"):
+            with ThreadPoolExecutor(max_workers=3, thread_name_prefix="warmup") as ex:
+                futures: list[Future[object]] = [
+                    ex.submit(_load_per_benchmark_frames_logged),
+                    ex.submit(_prewarm_training_datasets),
+                    ex.submit(_prewarm_schema_caches_logged),
+                ]
+                for f in futures:
+                    f.result()
+            _prewarm_list_schemas()
     except FRAME_LOAD_ERRORS as exc:
         # Non-fatal — routes will rebuild on first request. Narrow set lets
         # programmer errors (TypeError, AttributeError) surface.
@@ -110,8 +117,6 @@ def warmup_blocking() -> None:
             type(exc).__name__,
             exc,
         )
-        return
-    logger.info("warmup: blocking phase done in %.2fs", time.monotonic() - t0)
 
 
 def preload_summaries_in_background() -> asyncio.Task[None] | None:

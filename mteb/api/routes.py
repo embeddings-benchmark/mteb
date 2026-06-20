@@ -13,7 +13,7 @@ import logging
 import time
 from collections import OrderedDict
 from importlib.resources import files
-from typing import TYPE_CHECKING, Annotated, Any
+from typing import TYPE_CHECKING, Annotated, Any, TypeVar
 
 import polars as pl
 from fastapi import (
@@ -74,6 +74,8 @@ from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.types.statistics import DescriptiveStatsValue
 
 if TYPE_CHECKING:
+    from collections.abc import Callable, Container
+
     from mteb.api.serialization import (
         Serialized,
     )
@@ -118,19 +120,19 @@ def _benchmark_name_set() -> frozenset[str]:
     return frozenset(b.name for b in mteb.get_benchmarks())
 
 
-def _require_benchmark(name: str) -> None:
-    if name not in _benchmark_name_set():
-        raise HTTPException(status_code=404, detail=f"Unknown benchmark: {name}")
+def _make_require(
+    get_registry: Callable[[], Container[str]], kind: str
+) -> Callable[[str], None]:
+    def _require(name: str) -> None:
+        if name not in get_registry():
+            raise HTTPException(status_code=404, detail=f"Unknown {kind}: {name}")
+
+    return _require
 
 
-def _require_task(name: str) -> None:
-    if name not in _TASKS_REGISTRY:
-        raise HTTPException(status_code=404, detail=f"Unknown task: {name}")
-
-
-def _require_model(name: str) -> None:
-    if name not in MODEL_REGISTRY:
-        raise HTTPException(status_code=404, detail=f"Unknown model: {name}")
+_require_benchmark = _make_require(_benchmark_name_set, "benchmark")
+_require_task = _make_require(lambda: _TASKS_REGISTRY, "task")
+_require_model = _make_require(lambda: MODEL_REGISTRY, "model")
 
 
 def _safe_load_frames(
@@ -214,18 +216,23 @@ def _task_num_models_map() -> dict[str, int]:
     return dict(zip(grouped["task_name"].to_list(), (int(n) for n in grouped["n"])))
 
 
-def _with_num_models(schema: BenchmarkSchema) -> BenchmarkSchema:
-    n = _num_models_map().get(schema.name, 0)
-    if n == schema.num_models:
-        return schema
-    return schema.model_copy(update={"num_models": n})
+_S = TypeVar("_S", BenchmarkSchema, TaskMetaSchema)
 
 
-def _with_task_num_models(schema: TaskMetaSchema) -> TaskMetaSchema:
-    n = _task_num_models_map().get(schema.name, 0)
-    if n == schema.num_models:
-        return schema
-    return schema.model_copy(update={"num_models": n})
+def _make_num_models_overlay(
+    map_fn: Callable[[], dict[str, int]],
+) -> Callable[[_S], _S]:
+    def _overlay(schema: _S) -> _S:
+        n = map_fn().get(schema.name, 0)
+        if n == schema.num_models:
+            return schema
+        return schema.model_copy(update={"num_models": n})
+
+    return _overlay
+
+
+_with_num_models = _make_num_models_overlay(_num_models_map)
+_with_task_num_models = _make_num_models_overlay(_task_num_models_map)
 
 
 def _patch_menu_counts(entries: list[MenuEntrySchema]) -> list[MenuEntrySchema]:
@@ -291,44 +298,31 @@ def _benchmark_schemas_bytes(include_hidden: bool = False) -> Serialized:
     )
 
 
-@functools.lru_cache(maxsize=128)
-def _filtered_task_schemas_bytes(
-    languages: tuple[str, ...] | None,
-    types: tuple[str, ...] | None,
-    domains: tuple[str, ...] | None,
-    modalities: tuple[str, ...] | None,
-    categories: tuple[str, ...] | None,
-) -> Serialized:
-    return _serialize_schemas(
-        _filtered_task_schemas(languages, types, domains, modalities, categories),
-        _TASK_LIST_ADAPTER,
-    )
+def _make_filtered_bytes(
+    schemas_fn: Callable[..., list[Any]],
+    adapter: TypeAdapter[Any],
+    maxsize: int = 128,
+) -> Callable[..., Serialized]:
+    @functools.lru_cache(maxsize=maxsize)
+    def _bytes(*args: Any) -> Serialized:
+        return _serialize_schemas(schemas_fn(*args), adapter)
+
+    return _bytes
 
 
-@functools.lru_cache(maxsize=128)
-def _filtered_model_schemas_bytes(
-    model_types: tuple[str, ...] | None,
-    frameworks: tuple[str, ...] | None,
-    open_weights: bool | None,
-    instruction_tuned: bool | None,
-    min_params_b: float | None,
-    max_params_b: float | None,
-    modalities: tuple[str, ...] | None,
-    exclusive_modality: bool,
-) -> Serialized:
-    return _serialize_schemas(
-        _filtered_model_schemas(
-            model_types,
-            frameworks,
-            open_weights,
-            instruction_tuned,
-            min_params_b,
-            max_params_b,
-            modalities,
-            exclusive_modality,
-        ),
-        _MODEL_LIST_ADAPTER,
-    )
+def _make_filtered_bytes_named(
+    schemas_fn: Callable[..., list[Any]],
+    adapter: TypeAdapter[Any],
+    maxsize: int = 256,
+) -> Callable[[tuple[Any, ...], str], Serialized]:
+    @functools.lru_cache(maxsize=maxsize)
+    def _named(filter_key: tuple[Any, ...], name: str) -> Serialized:
+        return _serialize_schemas(
+            [s for s in schemas_fn(*filter_key) if name in s.name],
+            adapter,
+        )
+
+    return _named
 
 
 @infra_router.get("/health")
@@ -557,6 +551,14 @@ def _filtered_task_schemas(
     return [_with_task_num_models(task_to_meta_schema(c)) for c in task_classes]
 
 
+_filtered_task_schemas_bytes = _make_filtered_bytes(
+    _filtered_task_schemas, _TASK_LIST_ADAPTER
+)
+_filtered_task_schemas_bytes_named = _make_filtered_bytes_named(
+    _filtered_task_schemas, _TASK_LIST_ADAPTER
+)
+
+
 def _as_tuple(values: list[str] | None) -> tuple[str, ...] | None:
     """Flatten + comma-split + strip a list query param into a hashable tuple."""
     if not values:
@@ -592,23 +594,6 @@ async def list_tasks(
         return _cached_json(request, _filtered_task_schemas_bytes(*filter_key))
     # Typeahead repeats heavily — cache by (filter_key, name).
     return _cached_json(request, _filtered_task_schemas_bytes_named(filter_key, name))
-
-
-@functools.lru_cache(maxsize=256)
-def _filtered_task_schemas_bytes_named(
-    filter_key: tuple[
-        tuple[str, ...] | None,
-        tuple[str, ...] | None,
-        tuple[str, ...] | None,
-        tuple[str, ...] | None,
-        tuple[str, ...] | None,
-    ],
-    name: str,
-) -> Serialized:
-    return _serialize_schemas(
-        [s for s in _filtered_task_schemas(*filter_key) if name in s.name],
-        _TASK_LIST_ADAPTER,
-    )
 
 
 @router.get("/tasks/{name:path}/scores", response_model=TaskScoresSchema)
@@ -676,6 +661,14 @@ def _filtered_model_schemas(
     return [model_meta_to_schema(m) for m in metas]
 
 
+_filtered_model_schemas_bytes = _make_filtered_bytes(
+    _filtered_model_schemas, _MODEL_LIST_ADAPTER
+)
+_filtered_model_schemas_bytes_named = _make_filtered_bytes_named(
+    _filtered_model_schemas, _MODEL_LIST_ADAPTER
+)
+
+
 @router.get("/models", response_model=list[ModelMetaSchema])
 async def list_models(  # noqa: PLR0913, PLR0917
     request: Request,
@@ -703,26 +696,6 @@ async def list_models(  # noqa: PLR0913, PLR0917
     if not name:
         return _cached_json(request, _filtered_model_schemas_bytes(*filter_key))
     return _cached_json(request, _filtered_model_schemas_bytes_named(filter_key, name))
-
-
-@functools.lru_cache(maxsize=256)
-def _filtered_model_schemas_bytes_named(
-    filter_key: tuple[
-        tuple[str, ...] | None,
-        tuple[str, ...] | None,
-        bool | None,
-        bool | None,
-        float | None,
-        float | None,
-        tuple[str, ...] | None,
-        bool,
-    ],
-    name: str,
-) -> Serialized:
-    return _serialize_schemas(
-        [s for s in _filtered_model_schemas(*filter_key) if name in s.name],
-        _MODEL_LIST_ADAPTER,
-    )
 
 
 @router.get("/models/{name:path}/scores", response_model=ModelScoresSchema)
