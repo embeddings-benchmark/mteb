@@ -1,27 +1,23 @@
 from __future__ import annotations
 
 import time
-from unittest.mock import patch
 
 import pytest
 
 from mteb.timing import TimingStack
 
 
-@patch("mteb.timing.time.monotonic")
-def test_timing_stack(mock_monotonic):
-    mock_monotonic.side_effect = [10.0, 10.0, 10.01, 10.01, 10.02]
-
+def test_timing_stack():
     timer1 = TimingStack()
     assert timer1.phases == []
     assert timer1._start_time is None
     assert timer1.plot() == "No timing phases recorded."
 
     with timer1("Load Data", split="test", subset="en"):
-        time.sleep(0.01)
+        time.sleep(0.1)
 
     with timer1("Encode", split="test", subset="en"):
-        time.sleep(0.01)
+        time.sleep(0.1)
 
     assert timer1._start_time is not None
     assert len(timer1.phases) == 2
