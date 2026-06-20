@@ -225,6 +225,22 @@ which are **by design** — MTEB's default stride sampler selects different fram
 `linspace` on longer clips (drops the tail; off-by-one target count). We keep MTEB's default
 sampler; this gap is documented, not patched.
 
+### Known failing benchmark tasks (2026-06-20)
+
+Running WAVE-7B on `MVEB(beta)` + `MAEB(beta)` (resumable, `only-missing`) completed
+**MVEB(beta) 21/23** and **MAEB(beta) 29/30**. Three tasks fail deterministically. These are
+task/data-level errors, **not** wrapper-faithfulness issues (single-input parity is
+bit-identical), and are not yet triaged:
+
+| Task | Suite | Error |
+| :-- | :-- | :-- |
+| `VATEXVA2TRetrieval` | MVEB | `RuntimeError: max(): Expected reduction dim … input.numel() == 0` (empty tensor; the reverse `VATEXV2ARetrieval` succeeds at 0.575) |
+| `MELDEmotionAudioVideoClustering` | MVEB | `RuntimeError: Did you add a stream before you called for a scan?` (torchcodec video decode) |
+| `FleursT2ARetrieval` | MAEB | `DatasetGenerationError` after ~240 s (HF dataset generation; possibly a corrupt cache) |
+
+Likely a mix of upstream task bugs and/or a stale dataset cache. All other per-task scores are
+under `~/.cache/mteb/results/tsinghua-ee__WAVE-7B/`.
+
 ### Env gotchas hit (already encoded in the `wave` extra)
 
 - **torch 2.7.1 stack required for video**: `datasets>=4` (Video → torchcodec `VideoDecoder`,
