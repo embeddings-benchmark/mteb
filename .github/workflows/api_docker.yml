@@ -1,4 +1,4 @@
-name: Backend API Docker
+name: Test Buuld API Docker
 
 on:
   push:
@@ -76,16 +76,3 @@ jobs:
           docker logs --tail 80 mteb-api
           docker rm -f mteb-api
           exit 1
-
-      - name: Publish image to GHCR (main only)
-        if: github.ref == 'refs/heads/main'
-        uses: docker/build-push-action@v7
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository }}/api:${{ github.sha }}
-            ghcr.io/${{ github.repository }}/api:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
