@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import sys
-from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -21,39 +19,6 @@ if TYPE_CHECKING:
     from mteb.types._encoder_io import AudioInput, ImageInput, TextInput, VideoInput
 
 
-_LANGUAGEBIND_HF_REPO = "myang333/languagebind-source"
-_LANGUAGEBIND_HF_REVISION = "a226c49bc5d7c68ce396d4c606c32222803c487a"
-
-
-def _ensure_languagebind_source() -> Path:
-    """Download LanguageBind source from HF mirror at pinned revision.
-
-    Applies the compatibility shims first, so they only run when a
-    LanguageBind model is actually loaded rather than at module import.
-
-    Returns the local snapshot path (already added to sys.path).
-    """
-    try:
-        from huggingface_hub import snapshot_download
-
-        path = Path(
-            snapshot_download(
-                repo_id=_LANGUAGEBIND_HF_REPO,
-                revision=_LANGUAGEBIND_HF_REVISION,
-            )
-        )
-    except Exception as e:
-        raise RuntimeError(
-            f"Failed to download LanguageBind source from HF "
-            f"({_LANGUAGEBIND_HF_REPO} at revision {_LANGUAGEBIND_HF_REVISION}). "
-            f"Original error: {e}"
-        ) from e
-
-    if str(path) not in sys.path:
-        sys.path.insert(0, str(path))
-    return path
-
-
 # LanguageBind expects audio sampled at 16 kHz (its audio mel-spectrogram pipeline).
 _LANGUAGE_BIND_AUDIO_SR = 16000
 
@@ -70,10 +35,6 @@ class _LanguageBindBase(AbsEncoder):
     Setup::
 
         pip install mteb[languagebind]
-
-    The LanguageBind source code is automatically downloaded from HuggingFace
-    (myang333/languagebind-source) at a pinned revision on first use, cached in
-    HuggingFace Hub's standard cache location.
 
     Note: a working FFmpeg installation is also required for video tasks.
     """
@@ -144,7 +105,6 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         max_samples: int | None = None,
         **kwargs: Any,
     ):
-        _ensure_languagebind_source()
         from languagebind import (
             LanguageBindVideo,
             LanguageBindVideoProcessor,
@@ -260,7 +220,6 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
         revision: str | None = None,
         **kwargs: Any,
     ):
-        _ensure_languagebind_source()
         from languagebind import (
             LanguageBindAudio,
             LanguageBindAudioProcessor,
@@ -358,7 +317,6 @@ class LanguageBindImageWrapper(_LanguageBindBase):
         revision: str | None = None,
         **kwargs: Any,
     ):
-        _ensure_languagebind_source()
         from languagebind import (
             LanguageBindImage,
             LanguageBindImageProcessor,

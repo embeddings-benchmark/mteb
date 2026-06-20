@@ -131,14 +131,7 @@ qwen_omni_utils = ["qwen_omni_utils"]
 embeddinggemma = ["transformers>=4.56.0"]
 # ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
 languagebind = [
-    "einops>=0.8.2",
-    "decord>=0.6.0",
-    "opencv-python-headless>=4.5.0",
-    "pytorchvideo>=0.1.5",
-    "peft>=0.11.0",
-    "torchvision>0.2.1",
-    "torchaudio",
-    "transformers>=4.40.0,<5.0.0",
+    "languagebind[video,audio]==0.1.0",
 ]
 
 [dependency-groups]
