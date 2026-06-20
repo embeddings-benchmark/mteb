@@ -41,7 +41,7 @@ class HybridSearch:
         models: Sequence[MTEBModels],
         weights: Sequence[float] | None = None,
         sub_model_top_k: int | None = None,
-        fusion_strategy: Literal["rrf", "dbsf", "relative-score-fusion"]
+        fusion_strategy: Literal["rrf", "dbsf", "rsf", "relative-score-fusion"]
         | Callable[
             [Sequence[Mapping[str, float]], Sequence[float]], Mapping[str, float]
         ] = "rrf",
@@ -55,7 +55,7 @@ class HybridSearch:
             sub_model_top_k: Optional top-k documents to retrieve from individual retriever sub-models.
             fusion_strategy: Fusion strategy to combine sub-model scores.
                 Options: "rrf" (Reciprocal Rank Fusion), "dbsf" (Distribution-Based Score Fusion),
-                "relative-score-fusion", or a custom Callable.
+                "rsf" (Relative Score Fusion), or a custom Callable.
             rrf_k: The rank constant used for Reciprocal Rank Fusion (default: 60).
         """
         if len(models) < 2:
@@ -99,9 +99,17 @@ class HybridSearch:
 
             meta = wrapped.mteb_model_meta
             if meta and meta.name:
-                names.append(meta.name.rsplit("/", 1)[-1])
+                sub_name = meta.name.rsplit("/", 1)[-1]
+                if sub_name == "multilingual-e5-small":
+                    sub_name = "me5-small"
+                elif sub_name == "baseline-bm25s":
+                    sub_name = "bm25"
+                names.append(sub_name)
             else:
                 names.append("unknown")
+
+        if "me5-small" in names:
+            names = ["me5-small"] + [n for n in names if n != "me5-small"]
 
         self.fusion_name: str
         self._fuse_fn: Callable[
@@ -116,8 +124,12 @@ class HybridSearch:
                 )
             elif fusion_strategy == "dbsf":
                 self._fuse_fn = fuse_dbsf
-            elif fusion_strategy in {"relative-score-fusion", "relative_score_fusion"}:
-                self.fusion_name = "relative-score-fusion"
+            elif fusion_strategy in {
+                "relative-score-fusion",
+                "relative_score_fusion",
+                "rsf",
+            }:
+                self.fusion_name = "rsf"
                 self._fuse_fn = fuse_relative_score_fusion
             else:
                 raise ValueError(f"Unknown fusion strategy: {fusion_strategy}")
@@ -126,10 +138,10 @@ class HybridSearch:
             self._fuse_fn = fusion_strategy
         else:
             raise TypeError(
-                "fusion_strategy must be one of 'rrf', 'dbsf', 'relative-score-fusion', or a callable"
+                "fusion_strategy must be one of 'rrf', 'dbsf', 'rsf', or a callable"
             )
 
-        combined_name = f"mteb/hybrid-{self.fusion_name}-{'-'.join(names)}"
+        combined_name = f"mteb/baseline-hybrid-{self.fusion_name} ({'+'.join(names)})"
         self.mteb_model_meta = ModelMeta.create_empty(
             overwrites={
                 "name": combined_name,

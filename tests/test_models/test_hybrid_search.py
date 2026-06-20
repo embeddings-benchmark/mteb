@@ -24,7 +24,8 @@ def test_hybrid_search_init_and_meta():
 
     meta = hybrid.mteb_model_meta
     assert (
-        meta.name == "mteb/hybrid-dbsf-baseline-random-encoder-baseline-random-encoder"
+        meta.name
+        == "mteb/baseline-hybrid-dbsf (baseline-random-encoder+baseline-random-encoder)"
     )
     assert meta.model_type == ["hybrid"]
 
@@ -95,9 +96,7 @@ def test_relative_score_fusion_logic():
     """Verify that Relative Score Fusion normalizes and fuses scores using min-max scaling."""
     m1 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=32)
     m2 = mteb.get_model("mteb/baseline-random-encoder", embed_dim=10)
-    hybrid = HybridSearch(
-        [m1, m2], weights=[0.7, 0.3], fusion_strategy="relative-score-fusion"
-    )
+    hybrid = HybridSearch([m1, m2], weights=[0.7, 0.3], fusion_strategy="rsf")
 
     scores1 = {
         "doc1": 1.0,
@@ -121,7 +120,7 @@ def test_hybrid_search_e2e_retrieval():
     for strategy in [
         "dbsf",
         "rrf",
-        "relative-score-fusion",
+        "rsf",
     ]:
         hybrid = HybridSearch([m1, m2], fusion_strategy=strategy)
         task = MockRetrievalTask()
@@ -171,16 +170,12 @@ def test_hybrid_search_with_cross_encoder():
 
 
 def test_registered_hybrid_model_retrieval():
-    """Verify that the registered hybrid-baseline_encoder-e5-small model can be loaded and its metadata is correct."""
-    meta = mteb.get_model_meta(
-        "mteb/hybrid-rrf-baseline-random-encoder-multilingual-e5-small"
-    )
+    """Verify that a registered hybrid model can be loaded and its metadata is correct."""
+    meta = mteb.get_model_meta("mteb/baseline-hybrid-rrf (me5-small+bm25)")
     assert meta is not None
-    assert meta.name == "mteb/hybrid-rrf-baseline-random-encoder-multilingual-e5-small"
+    assert meta.name == "mteb/baseline-hybrid-rrf (me5-small+bm25)"
     assert meta.model_type == ["hybrid"]
 
-    model = mteb.get_model(
-        "mteb/hybrid-rrf-baseline-random-encoder-multilingual-e5-small"
-    )
+    model = mteb.get_model("mteb/baseline-hybrid-rrf (me5-small+bm25)")
     assert isinstance(model, HybridSearch)
     assert len(model.wrapped_models) == 2
