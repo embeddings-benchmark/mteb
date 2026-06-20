@@ -24,8 +24,7 @@ def test_hybrid_search_init_and_meta():
 
     meta = hybrid.mteb_model_meta
     assert (
-        meta.name
-        == "mteb/baseline-hybrid-dbsf (baseline-random-encoder+baseline-random-encoder)"
+        meta.name == "mteb/hybrid-dbsf-baseline-random-encoder-baseline-random-encoder"
     )
     assert meta.model_type == ["hybrid"]
 
@@ -171,11 +170,11 @@ def test_hybrid_search_with_cross_encoder():
 
 def test_registered_hybrid_model_retrieval():
     """Verify that a registered hybrid model can be loaded and its metadata is correct."""
-    meta = mteb.get_model_meta("mteb/baseline-hybrid-rrf (me5-small+bm25)")
+    meta = mteb.get_model_meta("mteb/hybrid-rrf-baseline-bm25s-multilingual-e5-small")
     assert meta is not None
-    assert meta.name == "mteb/baseline-hybrid-rrf (me5-small+bm25)"
+    assert meta.name == "mteb/hybrid-rrf-baseline-bm25s-multilingual-e5-small"
     assert meta.model_type == ["hybrid"]
 
-    model = mteb.get_model("mteb/baseline-hybrid-rrf (me5-small+bm25)")
+    model = mteb.get_model("mteb/hybrid-rrf-baseline-bm25s-multilingual-e5-small")
     assert isinstance(model, HybridSearch)
     assert len(model.wrapped_models) == 2

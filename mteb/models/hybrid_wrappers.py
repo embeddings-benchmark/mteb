@@ -99,17 +99,9 @@ class HybridSearch:
 
             meta = wrapped.mteb_model_meta
             if meta and meta.name:
-                sub_name = meta.name.rsplit("/", 1)[-1]
-                if sub_name == "multilingual-e5-small":
-                    sub_name = "me5-small"
-                elif sub_name == "baseline-bm25s":
-                    sub_name = "bm25"
-                names.append(sub_name)
+                names.append(meta.name.rsplit("/", 1)[-1])
             else:
                 names.append("unknown")
-
-        if "me5-small" in names:
-            names = ["me5-small"] + [n for n in names if n != "me5-small"]
 
         self.fusion_name: str
         self._fuse_fn: Callable[
@@ -141,7 +133,7 @@ class HybridSearch:
                 "fusion_strategy must be one of 'rrf', 'dbsf', 'rsf', or a callable"
             )
 
-        combined_name = f"mteb/baseline-hybrid-{self.fusion_name} ({'+'.join(names)})"
+        combined_name = f"mteb/hybrid-{self.fusion_name}-{'-'.join(names)}"
         self.mteb_model_meta = ModelMeta.create_empty(
             overwrites={
                 "name": combined_name,

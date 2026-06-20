@@ -16,7 +16,7 @@ dense = mteb.get_model("intfloat/multilingual-e5-small")
 hybrid_model = HybridSearch(
     models=[bm25, dense],
     fusion_strategy="rrf",
-    weights=[0.5, 0.5],     # Optional: weight assigned to each model
+    weights=[0.5, 0.5],
 )
 
 # Evaluate the hybrid model on your selected tasks
@@ -28,7 +28,7 @@ results = mteb.evaluate(hybrid_model, tasks=tasks)
 
 To demonstrate the effectiveness of combining different retrieval paradigms, the table below compares the performance (NDCG@10) of individual sub-models against their hybrid combinations using Reciprocal Rank Fusion (RRF), Distribution-Based Score Fusion (DBSF), and Relative Score Fusion (RSF):
 
-| Task | mteb/baseline-bm25s | intfloat/multilingual-e5-small | mteb/baseline-hybrid-rrf (me5-small+bm25) | mteb/baseline-hybrid-dbsf (me5-small+bm25) | mteb/baseline-hybrid-rsf (me5-small+bm25) |
+| Task | mteb/baseline-bm25s | intfloat/multilingual-e5-small | mteb/hybrid-rrf-baseline-bm25s-multilingual-e5-small | mteb/hybrid-dbsf-baseline-bm25s-multilingual-e5-small | mteb/hybrid-rsf-baseline-bm25s-multilingual-e5-small |
 |---|---|---|---|---|---|
 | NanoSciFactRetrieval | 0.70991 | 0.72458 | 0.75391 | 0.53757 | 0.76656 |
 | NanoNFCorpusRetrieval | 0.32504 | 0.28820 | 0.32870 | 0.33824 | 0.35915 |
