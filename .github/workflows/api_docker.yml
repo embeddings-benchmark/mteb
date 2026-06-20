@@ -2,7 +2,7 @@ name: Test Buuld API Docker
 
 on:
   push:
-    branches: [main, api]
+    branches: [main]
     paths:
       - 'Dockerfile'
       - '.github/workflows/api_docker.yml'
@@ -10,7 +10,7 @@ on:
       - 'uv.lock'
       - 'mteb/api/**'
   pull_request:
-    branches: [main, api]
+    branches: [main]
     paths:
       - 'Dockerfile'
       - '.github/workflows/api_docker.yml'
