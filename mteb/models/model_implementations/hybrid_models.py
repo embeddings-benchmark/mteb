@@ -23,7 +23,7 @@ def hybrid_bm25s_e5_loader(model_name: str, **kwargs) -> HybridSearch:
 
 hybrid_bm25s_e5_rrf = ModelMeta(
     loader=hybrid_bm25s_e5_loader,
-    name="mteb/hybrid-rrf-baseline-bm25s-multilingual-e5-small",
+    name="mteb/baseline-hybrid-rrf-baseline-bm25s-multilingual-e5-small",
     model_type=["hybrid"],
     languages=XLMR_LANGUAGES,
     open_weights=True,
@@ -58,7 +58,7 @@ def hybrid_bm25s_e5_dbsf_loader(model_name: str, **kwargs) -> HybridSearch:
 
 hybrid_bm25s_e5_dbsf = ModelMeta(
     loader=hybrid_bm25s_e5_dbsf_loader,
-    name="mteb/hybrid-dbsf-baseline-bm25s-multilingual-e5-small",
+    name="mteb/baseline-hybrid-dbsf-baseline-bm25s-multilingual-e5-small",
     model_type=["hybrid"],
     languages=XLMR_LANGUAGES,
     open_weights=True,
@@ -93,7 +93,7 @@ def hybrid_bm25s_e5_rsf_loader(model_name: str, **kwargs) -> HybridSearch:
 
 hybrid_bm25s_e5_rsf = ModelMeta(
     loader=hybrid_bm25s_e5_rsf_loader,
-    name="mteb/hybrid-rsf-baseline-bm25s-multilingual-e5-small",
+    name="mteb/baseline-hybrid-rsf-baseline-bm25s-multilingual-e5-small",
     model_type=["hybrid"],
     languages=XLMR_LANGUAGES,
     open_weights=True,

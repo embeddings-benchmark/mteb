@@ -41,7 +41,7 @@ class HybridSearch:
         models: Sequence[MTEBModels],
         weights: Sequence[float] | None = None,
         sub_model_top_k: int | None = None,
-        fusion_strategy: Literal["rrf", "dbsf", "rsf", "relative-score-fusion"]
+        fusion_strategy: Literal["rrf", "dbsf", "rsf"]
         | Callable[
             [Sequence[Mapping[str, float]], Sequence[float]], Mapping[str, float]
         ] = "rrf",
@@ -116,12 +116,7 @@ class HybridSearch:
                 )
             elif fusion_strategy == "dbsf":
                 self._fuse_fn = fuse_dbsf
-            elif fusion_strategy in {
-                "relative-score-fusion",
-                "relative_score_fusion",
-                "rsf",
-            }:
-                self.fusion_name = "rsf"
+            elif fusion_strategy == "rsf":
                 self._fuse_fn = fuse_relative_score_fusion
             else:
                 raise ValueError(f"Unknown fusion strategy: {fusion_strategy}")
@@ -133,7 +128,7 @@ class HybridSearch:
                 "fusion_strategy must be one of 'rrf', 'dbsf', 'rsf', or a callable"
             )
 
-        combined_name = f"mteb/hybrid-{self.fusion_name}-{'-'.join(names)}"
+        combined_name = f"mteb/baseline-hybrid-{self.fusion_name}-{'-'.join(names)}"
         self.mteb_model_meta = ModelMeta.create_empty(
             overwrites={
                 "name": combined_name,
