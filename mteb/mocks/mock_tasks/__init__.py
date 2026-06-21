@@ -22,8 +22,8 @@ from .classification import (
     MockVideoMultilabelClassificationTask,
 )
 from .clustering import (
+    LegacyMockClusteringFastTask,
     MockAudioClusteringTask,
-    MockClusteringFastTask,
     MockImageClusteringFastTask,
     MockMultilingualClusteringFastTask,
     MockVideoAudioClusteringTask,
@@ -87,6 +87,7 @@ from .zeroshot_classification import (
 )
 
 __all__ = [
+    "LegacyMockClusteringFastTask",
     "MockAggregatedTask",
     "MockAny2AnyRetrievalA2ATask",
     "MockAny2AnyRetrievalA2TTask",
@@ -104,7 +105,6 @@ __all__ = [
     "MockAudioZeroshotClassificationTask",
     "MockBitextMiningTask",
     "MockClassificationTask",
-    "MockClusteringFastTask",
     "MockImageClassificationTask",
     "MockImageClusteringFastTask",
     "MockImageMultilabelClassificationTask",

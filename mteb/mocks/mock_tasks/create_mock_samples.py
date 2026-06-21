@@ -10,11 +10,6 @@ import numpy as np
 if TYPE_CHECKING:
     from PIL.Image import Image
 
-multilingual_eval_langs = {
-    "eng": ["eng-Latn"],
-    "fra": ["fra-Latn"],
-}
-
 
 def create_mock_images(np_rng: np.random.Generator, n: int = 2) -> list[Image]:
     from PIL import Image

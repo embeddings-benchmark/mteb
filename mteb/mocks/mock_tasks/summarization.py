@@ -5,9 +5,10 @@ from datasets import Dataset, DatasetDict
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.summarization import AbsTaskSummarization
 
-from .create_mock_samples import (
-    multilingual_eval_langs,
-)
+multilingual_eval_langs = {
+    "eng": ["eng-Latn"],
+    "fra": ["fra-Latn"],
+}
 
 general_args = {
     "description": "A lightweight mock summarization task designed for testing, debugging, and local model verification within the MTEB framework.",

@@ -6,6 +6,7 @@ import mteb
 from mteb.abstasks import AbsTask
 
 from .mock_tasks import (
+    LegacyMockClusteringFastTask,
     MockAny2AnyRetrievalA2ATask,
     MockAny2AnyRetrievalA2TTask,
     MockAny2AnyRetrievalI2TTask,
@@ -22,7 +23,6 @@ from .mock_tasks import (
     MockAudioZeroshotClassificationTask,
     MockBitextMiningTask,
     MockClassificationTask,
-    MockClusteringFastTask,
     MockImageClassificationTask,
     MockImageClusteringFastTask,
     MockImageMultilabelClassificationTask,
@@ -128,7 +128,7 @@ MOCK_TASK_TEST_GRID_MONOLINGUAL = [
     MockClassificationTask(),
     MockRegressionTask(),
     MockClusteringTask(),
-    MockClusteringFastTask(),
+    LegacyMockClusteringFastTask(),
     MockPairClassificationTask(),
     MockRerankingTask(),
     MockRetrievalTask(),

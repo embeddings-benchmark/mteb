@@ -6,7 +6,7 @@ import numpy as np
 
 import mteb
 from mteb.abstasks.clustering import _evaluate_clustering_bootstrapped
-from mteb.mocks.mock_tasks import MockClusteringFastTask
+from mteb.mocks.mock_tasks import LegacyMockClusteringFastTask
 from tests.mock_models import MockSentenceTransformer
 
 
@@ -48,7 +48,7 @@ def test_random_labels_ami_near_zero():
 def test_end_to_end_result_dict_contains_both_metrics():
     results = mteb.evaluate(
         MockSentenceTransformer(),
-        MockClusteringFastTask(),
+        LegacyMockClusteringFastTask(),
         cache=None,
         co2_tracker=False,
     )

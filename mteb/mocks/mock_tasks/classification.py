@@ -13,8 +13,12 @@ from .create_mock_samples import (
     create_mock_audio,
     create_mock_images,
     create_mock_video_bytes,
-    multilingual_eval_langs,
 )
+
+multilingual_eval_langs = {
+    "eng": ["eng-Latn"],
+    "fra": ["fra-Latn"],
+}
 
 general_args = {
     "description": "A lightweight mock classification task designed for testing, debugging, and local model verification within the MTEB framework.",

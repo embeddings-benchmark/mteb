@@ -10,8 +10,12 @@ from .create_mock_samples import (
     create_mock_audio,
     create_mock_images,
     create_mock_video_bytes,
-    multilingual_eval_langs,
 )
+
+multilingual_eval_langs = {
+    "eng": ["eng-Latn"],
+    "fra": ["fra-Latn"],
+}
 
 general_args = {
     "description": "A lightweight mock clustering task designed for testing, debugging, and local model verification within the MTEB framework.",
@@ -198,7 +202,7 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
         self.data_loaded = True
 
 
-class MockClusteringFastTask(AbsTaskClustering):
+class LegacyMockClusteringFastTask(AbsTaskClustering):
     max_document_to_embed = 20
     max_fraction_of_documents_to_embed = None
     n_clusters = 3
@@ -228,7 +232,7 @@ class MockClusteringFastTask(AbsTaskClustering):
 
     metadata = TaskMetadata(
         type="Clustering",
-        name="MockClusteringFastTask",
+        name="LegacyMockClusteringFastTask",
         main_score="v_measure",
         **general_args,
     )

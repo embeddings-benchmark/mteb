@@ -10,13 +10,17 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 from .create_mock_samples import (
     create_mock_audio,
-    multilingual_eval_langs,
 )
 from .retrieval import (
     MockRetrievalTask,
     base_retrieval_datasplit,
     instruction_retrieval_datasplit,
 )
+
+multilingual_eval_langs = {
+    "eng": ["eng-Latn"],
+    "fra": ["fra-Latn"],
+}
 
 general_args = {
     "description": "A lightweight mock reranking task designed for testing, debugging, and local model verification within the MTEB framework.",
