@@ -775,8 +775,8 @@ MTEB_POL = Benchmark(
 )
 
 MTEB_PT = Benchmark(
-    name="MTEB(pt, v1)",
-    aliases=["MTEB(pt)"],
+    name="MTEB(por, v1)",
+    aliases=["MTEB(por)"],
     display_name="Portuguese",
     icon="https://raw.githubusercontent.com/lipis/flag-icons/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/br.svg",
     tasks=MTEBTasks(
