@@ -19,13 +19,13 @@ from mteb.benchmarks._create_table import (
 )
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.languages import language_label
+from mteb.models.model_meta import MODEL_TYPES
+from mteb.types import Modalities
 
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.benchmarks._leaderboard_menu import MenuEntry
     from mteb.models.model_meta import ModelMeta
-
-_ModelType = Literal["dense", "cross-encoder", "late-interaction", "sparse", "router"]
 
 
 def _is_url(value: str) -> bool:
@@ -57,7 +57,7 @@ class BenchmarkSchema(_CamelModel):
     simplified_task_types: list[str] = Field(default_factory=list)
     tasks: list[str]
     domains: list[str]
-    modalities: list[str]
+    modalities: list[Modalities]
     display_on_leaderboard: bool = True
     new_version: list[str] | None = None
     aggregations: list[str]
@@ -131,7 +131,7 @@ class TaskMetaSchema(_CamelModel):
     simplified_type: str
     languages: list[str]
     domains: list[str] | None
-    modalities: list[str]
+    modalities: list[Modalities]
     description: str
     reference: str | None = None
     citation: str | None = None
@@ -194,7 +194,7 @@ class ModelMetaSchema(_CamelModel):
     embedding_dim: int | None
     max_tokens: float | None
     release_date: str | None = None
-    model_type: _ModelType
+    model_type: MODEL_TYPES
     instruction_tuned: bool
     open_weights: bool
     sentence_transformers_compatible: bool
@@ -291,7 +291,7 @@ class SummaryRowSchema(_CamelModel):
 
 
 class BenchmarkSummarySchema(_CamelModel):
-    """Response from ``/benchmarks/{name}/scores``."""
+    """Response from /benchmarks/{name}/scores"""
 
     benchmark_name: str
     task_types: list[str]
@@ -320,7 +320,7 @@ class LeaderModelSchema(_CamelModel):
     """Slim model identity for the leaders endpoint — just name + type for home-tile rendering."""
 
     name: str
-    model_type: _ModelType
+    model_type: MODEL_TYPES
 
 
 class LeaderRowSchema(_CamelModel):
@@ -369,7 +369,6 @@ class TaskScoresSchema(_CamelModel):
     task: TaskMetaSchema
     benchmarks: list[str]
     subsets: list[str]
-    # Distinct splits across all models' scores; usually ``["test"]``.
     splits: list[str]
     rows: list[TaskScoreRowSchema]
 
