@@ -171,6 +171,9 @@ def test_hybrid_search_with_cross_encoder():
 
 def test_registered_hybrid_model_retrieval():
     """Verify that a registered hybrid model can be loaded and its metadata is correct."""
+    pytest.importorskip("bm25s", reason="bm25s not installed")
+    pytest.importorskip("Stemmer", reason="PyStemmer not installed")
+
     meta = mteb.get_model_meta(
         "mteb/baseline-hybrid-rrf-baseline-bm25s-multilingual-e5-small"
     )
