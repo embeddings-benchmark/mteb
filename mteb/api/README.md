@@ -1,6 +1,6 @@
 # mteb.api
 
-FastAPI surface that powers the leaderboardv2 SvelteKit frontend.
+FastAPI surface that powers the leaderboard frontend.
 
 ## Install
 
