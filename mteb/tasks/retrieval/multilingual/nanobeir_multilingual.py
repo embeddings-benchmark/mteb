@@ -90,7 +90,7 @@ class MultilingualNanoArguAnaRetrieval(AbsTaskNanoBEIRMultilingual):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @inproceedings{wachsmuth2018retrieval,
   author = {Wachsmuth, Henning and Syed, Shahbaz and Stein, Benno},
@@ -127,7 +127,7 @@ class MultilingualNanoClimateFeverRetrieval(AbsTaskNanoBEIRMultilingual):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @misc{diggelmann2021climatefever,
   archiveprefix = {arXiv},
@@ -168,7 +168,7 @@ class MultilingualNanoDBPediaRetrieval(AbsTaskNanoBEIRMultilingual):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @article{lehmann2015dbpedia,
   author = {Lehmann, Jens and et al.},
@@ -207,7 +207,7 @@ class MultilingualNanoFEVERRetrieval(AbsTaskNanoBEIRMultilingual):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @inproceedings{thorne-etal-2018-fever,
   address = {New Orleans, Louisiana},
@@ -253,7 +253,7 @@ class MultilingualNanoFiQA2018Retrieval(AbsTaskNanoBEIRMultilingual):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @inproceedings{thakur2021beir,
   author = {Nandan Thakur and Nils Reimers and Andreas R{"u}ckl'e and Abhishek Srivastava and Iryna Gurevych},
@@ -293,7 +293,7 @@ class MultilingualNanoHotpotQARetrieval(AbsTaskNanoBEIRMultilingual):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @inproceedings{yang-etal-2018-hotpotqa,
   address = {Brussels, Belgium},
@@ -348,7 +348,7 @@ class MultilingualNanoMSMARCORetrieval(AbsTaskNanoBEIRMultilingual):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @article{DBLP:journals/corr/NguyenRSGTMD16,
   archiveprefix = {arXiv},
@@ -394,7 +394,7 @@ class MultilingualNanoNFCorpusRetrieval(AbsTaskNanoBEIRMultilingual):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @inproceedings{boteva2016,
   author = {Boteva, Vera and Gholipour, Demian and Sokolov, Artem and Riezler, Stefan},
@@ -437,7 +437,7 @@ class MultilingualNanoNQRetrieval(AbsTaskNanoBEIRMultilingual):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @article{47761,
   author = {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le and Slav Petrov},
@@ -476,7 +476,7 @@ class MultilingualNanoQuoraRetrieval(AbsTaskNanoBEIRMultilingual):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @misc{quora-question-pairs,
   author = {DataCanary, hilfialkaff, Lili Jiang, Meg Risdal, Nikhil Dandekar, tomtung},
@@ -516,7 +516,7 @@ class MultilingualNanoSCIDOCSRetrieval(AbsTaskNanoBEIRMultilingual):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @inproceedings{specter2020cohan,
   author = {Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
@@ -555,7 +555,7 @@ class MultilingualNanoSciFactRetrieval(AbsTaskNanoBEIRMultilingual):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @inproceedings{specter2020cohan,
   author = {Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
@@ -594,7 +594,7 @@ class MultilingualNanoTouche2020Retrieval(AbsTaskNanoBEIRMultilingual):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @dataset{potthast_2022_6862281,
   author = {Potthast, Martin and

@@ -1698,7 +1698,7 @@ NANOBEIR_EXTENDED = Benchmark(
             "MultilingualNanoTouche2020Retrieval",
         ],
     ),
-    description="Extended version of the NanoBEIR benchmark to evaluate models across 11 diverse languages using subsets of BEIR.",
+    description="A translated benchmark targeting zero-shot retrieval quality using translated subsets of the BEIR datasets, designed for faster evaluation during training with reduced computational cost.",
     reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
     citation=None,
 )
