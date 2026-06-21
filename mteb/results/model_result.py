@@ -481,7 +481,9 @@ class ModelResult(BaseModel):
             benchmarks = [benchmark] if isinstance(benchmark, Benchmark) else benchmark
             for cur_benchmark in benchmarks:
                 try:
-                    benchmark_score = cur_benchmark._get_model_score(self)["Mean(Task)"]
+                    benchmark_score = cur_benchmark._get_model_score(self).get(
+                        "Mean(Task)"
+                    )
                 except ValueError:
                     if raise_error:
                         raise

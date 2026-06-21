@@ -5,7 +5,7 @@ install:
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	uv sync --extra bm25s --extra image --extra audio --extra leaderboard --extra faiss-cpu --extra github --group dev --frozen
+	uv sync --extra bm25s --extra image --extra audio --extra leaderboard --extra faiss-cpu --extra github --extra api --group dev --frozen
 
 lint:
 	@echo "--- 🧹 Running linters ---"
@@ -80,6 +80,11 @@ leaderboard-test-all:
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
 	uv run --no-sync --extra leaderboard python -m mteb leaderboard
+
+serve-api:
+	@echo "--- 🚀 Serving leaderboard API on http://localhost:$(or $(PORT),8000) ---"
+	@echo "Set PRELOAD=1 to warm every benchmark summary on startup."
+	uv run --no-sync --extra api uvicorn mteb.api.app:app --host $(or $(HOST),127.0.0.1) --port $(or $(PORT),8000)
 
 format-citations:
 	@echo "--- 🧹 Formatting citations ---"

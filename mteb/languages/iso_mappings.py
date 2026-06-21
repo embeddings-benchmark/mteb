@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import json
 import logging
-from functools import cache
+from functools import cache, lru_cache
 from pathlib import Path
 from typing import cast
 
@@ -48,6 +48,45 @@ def _get_iso3_to_default_script() -> dict[str, str]:
     """Lazy-load ISO 639-3 to default script mapping."""
     with _PATH_DEFAULT_SCRIPTS.open("r") as f:
         return cast("dict[str, str]", json.load(f))
+
+
+# Short, reader-friendly overrides for ISO 15924 names whose canonical labels
+# would read awkwardly when appended in parentheses (e.g. the official name
+# for "Hant" is "Han (Traditional variant)").
+_SCRIPT_DISPLAY_ALIASES = {
+    "Hans": "Simplified",
+    "Hant": "Traditional",
+    "Jpan": "Japanese",
+    "Kore": "Korean",
+    "Hang": "Hangul",
+    "Hani": "Han",
+}
+
+
+@lru_cache(maxsize=2048)
+def language_label(code: str) -> str:
+    """Convert an ``ISOLanguageScript`` (e.g. ``"eng-Latn"``) to a display name.
+
+    Default-script suffixes are dropped so the common case reads naturally
+    (``"eng-Latn"`` => ``"English"``), and non-default scripts are appended in
+    parentheses so multi-script languages stay distinguishable
+    (``"zho-Hant"`` => ``"Chinese (Traditional)"``). Bare ISO 639-3 codes
+    (``"eng"``) are also accepted. Unknown codes pass through verbatim so the
+    caller never sees an empty string.
+    """
+    if not code:
+        return code
+    if "-" in code:
+        lang, script = code.split("-", 1)
+    else:
+        lang, script = code, ""
+    name = str(ISO_TO_LANGUAGE.get(lang, code))
+    if script and _get_iso3_to_default_script().get(lang) != script:
+        script_name = _SCRIPT_DISPLAY_ALIASES.get(
+            script, ISO_TO_SCRIPT.get(script, script)
+        )
+        return f"{name} ({script_name})"
+    return name
 
 
 # Special HF language values that are not ISO codes
