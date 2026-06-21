@@ -291,7 +291,7 @@ class SummaryRowSchema(_CamelModel):
 
 
 class BenchmarkSummarySchema(_CamelModel):
-    """Response from ``/benchmarks/{name}/scores``."""
+    """Response from /benchmarks/{name}/scores"""
 
     benchmark_name: str
     task_types: list[str]
