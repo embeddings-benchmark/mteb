@@ -198,7 +198,7 @@ class ModelMetaSchema(_CamelModel):
     instruction_tuned: bool
     open_weights: bool
     sentence_transformers_compatible: bool
-    modalities: list[Modalities] = Field(default_factory=lambda: ["text"])
+    modalities: list[str] = Field(default_factory=lambda: ["text"])
     languages: list[str] = Field(default_factory=list)
     citation: str | None = None
     memory_usage_mb: float | None = None
