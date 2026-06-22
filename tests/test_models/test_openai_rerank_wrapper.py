@@ -92,58 +92,6 @@ class TestOpenAIRerankWrapper:
 
     @patch("requests.post")
     @patch("requests.get")
-    def test_predict_one_query_many_docs(self, mock_get, mock_post):
-        """Test predict with one query and multiple documents."""
-        from mteb.abstasks.task_metadata import TaskMetadata
-        from mteb.types import PromptType
-
-        # Mock server initialization
-        mock_get.return_value = MagicMock(
-            status_code=200, json=MagicMock(return_value={"data": [{"id": "test"}]})
-        )
-
-        # Mock reranking response
-        mock_post.return_value = MagicMock(
-            status_code=200,
-            json=MagicMock(
-                return_value={
-                    "results": [
-                        {"index": 0, "relevance_score": 0.9},
-                        {"index": 1, "relevance_score": 0.1},
-                    ]
-                }
-            ),
-        )
-
-        wrapper = OpenAIRerankWrapper(
-            endpoint_url="http://localhost:8001",
-            model_name="test",
-        )
-
-        # One query, two documents
-        query_dataloader = [{"text": ["What is AI?"]}]
-        doc_dataloader = [{"text": ["AI is artificial intelligence", "I like pizza"]}]
-
-        mock_metadata = MagicMock(spec=TaskMetadata)
-        mock_metadata.name = "test"
-
-        scores = wrapper.predict(
-            query_dataloader,
-            doc_dataloader,
-            task_metadata=mock_metadata,
-            hf_split="test",
-            hf_subset="default",
-            prompt_type=PromptType.query,
-            show_progress_bar=False,
-        )
-
-        assert isinstance(scores, np.ndarray)
-        assert scores.shape == (2,)
-        assert scores[0] == 0.9
-        assert scores[1] == 0.1
-
-    @patch("requests.post")
-    @patch("requests.get")
     def test_predict_pairwise(self, mock_get, mock_post):
         """Test predict with pairwise query-document scoring."""
         from mteb.abstasks.task_metadata import TaskMetadata
@@ -197,20 +145,51 @@ class TestOpenAIRerankWrapper:
         assert scores[0] == 0.8
         assert scores[1] == 0.3
 
+    @patch("requests.post")
     @patch("requests.get")
-    def test_top_k_parameter(self, mock_get):
-        """Test that top_k parameter is stored correctly."""
+    def test_top_k_parameter(self, mock_get, mock_post):
+        """Test that top_k parameter can be passed to predict()."""
         mock_response = MagicMock()
         mock_response.status_code = 200
         mock_response.json.return_value = {"data": [{"id": "test-model"}]}
         mock_get.return_value = mock_response
 
+        # Mock reranking response
+        mock_post.return_value = MagicMock(
+            status_code=200,
+            json=MagicMock(
+                return_value={"results": [{"index": 0, "relevance_score": 0.8}]}
+            ),
+        )
+
+        from mteb.abstasks.task_metadata import TaskMetadata
+        from mteb.types import PromptType
+
         wrapper = OpenAIRerankWrapper(
             endpoint_url="http://localhost:8001",
             model_name="test-model",
+        )
+
+        # Test that top_k can be passed to predict()
+        query_dataloader = [{"text": ["query1"]}]
+        doc_dataloader = [{"text": ["doc1"]}]
+
+        mock_metadata = MagicMock(spec=TaskMetadata)
+        mock_metadata.name = "test"
+
+        scores = wrapper.predict(
+            query_dataloader,
+            doc_dataloader,
+            task_metadata=mock_metadata,
+            hf_split="test",
+            hf_subset="default",
+            prompt_type=PromptType.query,
+            show_progress_bar=False,
             top_k=10,
         )
-        assert wrapper.top_k == 10
+
+        assert isinstance(scores, np.ndarray)
+        assert scores.shape == (1,)
 
     @patch("requests.post")
     @patch("requests.get")
@@ -228,14 +207,14 @@ class TestOpenAIRerankWrapper:
             model_name="test",
         )
 
-        # 2 queries, 3 documents - invalid
+        # 2 queries, 3 documents - invalid (lengths don't match)
         query_dataloader = [{"text": ["query1", "query2"]}]
         doc_dataloader = [{"text": ["doc1", "doc2", "doc3"]}]
 
         mock_metadata = MagicMock(spec=TaskMetadata)
         mock_metadata.name = "test"
 
-        with pytest.raises(ValueError, match="Invalid input sizes"):
+        with pytest.raises(ValueError, match="Expected equal number"):
             wrapper.predict(
                 query_dataloader,
                 doc_dataloader,

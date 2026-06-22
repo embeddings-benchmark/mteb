@@ -88,6 +88,9 @@ class OpenAIBaseWrapper:
         self.max_retries = max_retries
         self.verify_ssl = verify_ssl
 
+        # Create model metadata for MTEB compatibility
+        self.mteb_model_meta = ModelMeta.create_empty(overwrites={"name": model_name})
+
     def _make_request(self, endpoint: str, payload: dict[str, Any]) -> dict[str, Any]:
         """Make an HTTP POST request with retry logic.
 
@@ -184,8 +187,6 @@ class OpenAIAPIWrapper(OpenAIBaseWrapper, AbsEncoder):
             documents (passages). Default True.
         timeout: Request timeout in seconds (default: 300)
         max_retries: Maximum number of retries for failed requests (default: 3)
-        batch_size: Default batch size for processing embeddings (default: 32).
-            Can be overridden per encode() call.
         verify_ssl: Whether to verify SSL certificates (default: True)
         max_length: Maximum sequence length for truncation. If None,
             auto-detected from model metadata.
@@ -205,7 +206,6 @@ class OpenAIAPIWrapper(OpenAIBaseWrapper, AbsEncoder):
         apply_instruction_to_documents: bool = True,
         timeout: int = 300,
         max_retries: int = 3,
-        batch_size: int = 32,
         verify_ssl: bool = True,
         max_length: int | None = None,
     ):
@@ -225,11 +225,7 @@ class OpenAIAPIWrapper(OpenAIBaseWrapper, AbsEncoder):
         self.use_instructions = use_instructions
         self.instruction_template = instruction_template
         self.apply_instruction_to_passages = apply_instruction_to_documents
-        self.batch_size = batch_size
         self.max_length = max_length
-
-        # Create model metadata for MTEB compatibility
-        self.mteb_model_meta = ModelMeta.create_empty(overwrites={"name": model_name})
 
         if use_instructions and instruction_template is None:
             raise ValueError(
@@ -326,7 +322,9 @@ class OpenAIAPIWrapper(OpenAIBaseWrapper, AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Unpack[EncodeKwargs],
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        **kwargs: Any,
     ) -> Array:
         """Encode the given sentences using the OpenAI-compatible API.
 
@@ -336,15 +334,13 @@ class OpenAIAPIWrapper(OpenAIBaseWrapper, AbsEncoder):
             hf_split: Split of current task
             hf_subset: Subset of current task
             prompt_type: The type of prompt (query or passage)
-            **kwargs: Additional arguments (batch_size, show_progress_bar, precision)
+            batch_size: Batch size for processing (default: 32)
+            show_progress_bar: Whether to show progress bar (default: True)
+            **kwargs: Additional arguments (precision, etc.)
 
         Returns:
             The encoded sentences as embeddings
         """
-        # Get encode kwargs with defaults
-        batch_size = kwargs.get("batch_size", self.batch_size)
-        show_progress_bar = kwargs.get("show_progress_bar", True)
-
         # Determine prompt to use
         prompt = ""
         if self.use_instructions and self.prompts_dict is not None:
@@ -400,10 +396,7 @@ class OpenAIRerankWrapper(OpenAIBaseWrapper):
         api_key: Optional API key for authentication
         timeout: Request timeout in seconds (default: 300)
         max_retries: Maximum number of retries for failed requests (default: 3)
-        batch_size: Default batch size for processing (default: 32).
-            Can be overridden per predict() call.
         verify_ssl: Whether to verify SSL certificates (default: True)
-        top_k: Optional number of top results to return per query
     """
 
     def __init__(
@@ -414,9 +407,7 @@ class OpenAIRerankWrapper(OpenAIBaseWrapper):
         *,
         timeout: int = 300,
         max_retries: int = 3,
-        batch_size: int = 32,
         verify_ssl: bool = True,
-        top_k: int | None = None,
     ):
         """Initialize the OpenAI Rerank wrapper."""
         # Initialize base class
@@ -428,13 +419,6 @@ class OpenAIRerankWrapper(OpenAIBaseWrapper):
             max_retries=max_retries,
             verify_ssl=verify_ssl,
         )
-
-        # Reranking-specific attributes
-        self.batch_size = batch_size
-        self.top_k = top_k
-
-        # Create model metadata for MTEB compatibility
-        self.mteb_model_meta = ModelMeta.create_empty(overwrites={"name": model_name})
 
         # Verify server is reachable
         self._verify_server()
@@ -481,7 +465,10 @@ class OpenAIRerankWrapper(OpenAIBaseWrapper):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Unpack[EncodeKwargs],
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        top_k: int | None = None,
+        **kwargs: Any,
     ) -> Array:
         """Predict relevance scores for query-document pairs.
 
@@ -492,49 +479,42 @@ class OpenAIRerankWrapper(OpenAIBaseWrapper):
             hf_split: Split of current task
             hf_subset: Subset of current task
             prompt_type: The type of prompt
-            **kwargs: Additional arguments (batch_size, show_progress_bar)
+            batch_size: Batch size for processing (default: 32)
+            show_progress_bar: Whether to show progress bar (default: True)
+            top_k: Optional number of top results to return per query
+            **kwargs: Additional arguments
 
         Returns:
             Relevance scores for each query-document pair
         """
-        # Get kwargs with defaults
-        batch_size = kwargs.get("batch_size", self.batch_size)
-        show_progress_bar = kwargs.get("show_progress_bar", True)
-
         # Collect all queries and documents
         queries = [text for batch in inputs1 for text in batch["text"]]
         documents = [text for batch in inputs2 for text in batch["text"]]
 
-        # For reranking, we typically have one query with multiple documents
-        # or equal numbers of queries and documents (pairwise)
-        if len(queries) == 1 and len(documents) > 1:
-            # One query, many documents - rank all documents for the query
-            scores = self._rerank(queries[0], documents, self.top_k)
-        elif len(queries) == len(documents):
-            # Pairwise scoring - one query per document
-            all_scores = []
-            for i in tqdm(
-                range(0, len(queries), batch_size),
-                desc="Reranking batches",
-                disable=not show_progress_bar,
-            ):
-                batch_queries = queries[i : i + batch_size]
-                batch_docs = documents[i : i + batch_size]
-
-                # Score each pair individually
-                batch_scores = []
-                for query, doc in zip(batch_queries, batch_docs):
-                    score = self._rerank(query, [doc])[0]
-                    batch_scores.append(score)
-
-                all_scores.extend(batch_scores)
-
-            scores = np.array(all_scores, dtype=np.float32)
-        else:
+        # Expect equal-length queries and documents
+        if len(queries) != len(documents):
             raise ValueError(
-                f"Invalid input sizes: {len(queries)} queries and "
-                f"{len(documents)} documents. Expected either 1 query with N "
-                f"documents, or N queries with N documents (pairwise)."
+                f"Expected equal number of queries and documents, got "
+                f"{len(queries)} queries and {len(documents)} documents"
             )
 
+        # Pairwise scoring - one query per document
+        all_scores = []
+        for i in tqdm(
+            range(0, len(queries), batch_size),
+            desc="Reranking batches",
+            disable=not show_progress_bar,
+        ):
+            batch_queries = queries[i : i + batch_size]
+            batch_docs = documents[i : i + batch_size]
+
+            # Score each pair individually
+            batch_scores = []
+            for query, doc in zip(batch_queries, batch_docs):
+                score = self._rerank(query, [doc], top_k)[0]
+                batch_scores.append(score)
+
+            all_scores.extend(batch_scores)
+
+        scores = np.array(all_scores, dtype=np.float32)
         return scores
