@@ -874,7 +874,10 @@ MTEB_SLK = Benchmark(
             get_task(
                 "FloresBitextMining",
                 hf_subsets=["eng_Latn-slk_Latn", "ces_Latn-slk_Latn"],
-
+            ),
+        )
+        + (
+            get_task(
                 "NTREXBitextMining",
                 hf_subsets=["eng_Latn-slk_Latn", "ces_Latn-slk_Latn"],
             ),
@@ -883,8 +886,7 @@ MTEB_SLK = Benchmark(
         + (get_task("WebFAQBitextMiningQAs", hf_subsets=["eng-slk", "ces-slk"]),)
     ),
     description="""Slovak Massive Text Embedding Benchmark (SkMTEB), the first comprehensive benchmark for text embeddings in Slovak, a low-resource West Slavic language. SkMTEB consists of 31 tasks across 7 task types, with tasks adapted from both existing and novel resources.""",
-    # TODO: to be updated
-    reference="TBD",
+    reference="https://arxiv.org/abs/2606.13647",
     citation=r"""
 @misc{suppa2026skmteb,
   archiveprefix = {arXiv},
