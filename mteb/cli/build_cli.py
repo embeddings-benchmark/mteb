@@ -551,7 +551,7 @@ def mock_run(args: argparse.Namespace) -> None:
     md_lines.append(f"# MTEB Mock-Run Results for `{args.model}`")
     md_lines.append("")
     md_lines.append("| Task | Metric | Score | Modality |")
-    md_lines.append("| :--- | :--- | :--- | :--- |")
+    md_lines.append("| --- | --- | --- | --- |")
 
     task_lookup = {t.metadata.name: t for t in compatible_tasks}
 
