@@ -5,30 +5,27 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_SPLIT = "test"
 
-
-class SyntheticText2SQLRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
-        name="SyntheticText2SQL",
-        description="The dataset is a collection of natural language queries and their corresponding sql snippets. The task is to retrieve the most relevant code snippet for a given query.",
-        reference="https://huggingface.co/datasets/gretelai/synthetic_text_to_sql",
-        dataset={
-            "path": "CoIR-Retrieval/synthetic-text2sql",
-            "revision": "686b87296c3a0191b5d9415a00526c62db9fce09",
-        },
-        type="Retrieval",
-        category="t2t",
-        modalities=["text"],
-        eval_splits=[_EVAL_SPLIT],
-        eval_langs=["eng-Latn", "sql-Code"],
-        main_score="ndcg_at_10",
-        date=("2019-01-01", "2019-12-31"),
-        domains=["Programming", "Written"],
-        task_subtypes=["Code retrieval"],
-        license="mit",
-        annotations_creators="derived",
-        dialect=[],
-        sample_creation="found",
-        bibtex_citation=r"""
+_METADATA = dict(
+    description="The dataset is a collection of natural language queries and their corresponding sql snippets. The task is to retrieve the most relevant code snippet for a given query.",
+    reference="https://huggingface.co/datasets/gretelai/synthetic_text_to_sql",
+    dataset={
+        "path": "CoIR-Retrieval/synthetic-text2sql",
+        "revision": "686b87296c3a0191b5d9415a00526c62db9fce09",
+    },
+    type="Retrieval",
+    category="t2t",
+    modalities=["text"],
+    eval_splits=[_EVAL_SPLIT],
+    eval_langs=["eng-Latn", "sql-Code"],
+    main_score="ndcg_at_10",
+    date=("2019-01-01", "2019-12-31"),
+    domains=["Programming", "Written"],
+    task_subtypes=["Code retrieval"],
+    license="mit",
+    annotations_creators="derived",
+    dialect=[],
+    sample_creation="found",
+    bibtex_citation=r"""
 @software{gretel-synthetic-text-to-sql-2024,
   author = {Meyer, Yev and Emadi, Marjan and Nathawani, Dhruv and Ramaswamy, Lipika and Boyd, Kendrick and Van Segbroeck, Maarten and Grossman, Matthew and Mlocek, Piotr and Newberry, Drew},
   month = {April},
@@ -37,6 +34,21 @@ class SyntheticText2SQLRetrieval(AbsTaskRetrieval):
   year = {2024},
 }
 """,
+)
+
+
+class SyntheticText2SQLRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="SyntheticText2SQL",
+        superseded_by="SyntheticText2SQL.v2",
+        **_METADATA,
+    )
+
+
+class SyntheticText2SQLRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="SyntheticText2SQL.v2",
+        **_METADATA,
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
