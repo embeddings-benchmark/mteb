@@ -469,23 +469,6 @@ def _leaderboard(args: argparse.Namespace) -> None:
     )
 
 
-def _format_task_row(task_result: Any, task_lookup: dict[str, Any]) -> str | None:
-    task_name = task_result.task_name
-    main_score_val = task_result.main_score
-    score_str = (
-        f"{main_score_val:.4f}"
-        if isinstance(main_score_val, float)
-        else str(main_score_val)
-    )
-    task_obj = task_lookup.get(task_name)
-    if task_obj is None:
-        try:
-            task_obj = task_result.task
-        except KeyError:
-            return None
-    return f"| {task_name} | {task_obj.metadata.main_score} | {score_str} | {', '.join(task_obj.metadata.modalities)} |"
-
-
 def mock_run(args: argparse.Namespace) -> None:
     """Run a model on the compatible mock tasks for verification."""
     # set logging based on verbosity level
@@ -545,20 +528,22 @@ def mock_run(args: argparse.Namespace) -> None:
         model,
         compatible_tasks,
         cache=None,
+        raise_error=False,
     )
 
     md_lines = []
     md_lines.append(f"# MTEB Mock-Run Results for `{args.model}`")
     md_lines.append("")
-    md_lines.append("| Task | Metric | Score | Modality |")
-    md_lines.append("| --- | --- | --- | --- |")
+    md_lines.append("| Task | Modality | Pass |")
+    md_lines.append("| --- | --- | --- |")
 
-    task_lookup = {t.metadata.name: t for t in compatible_tasks}
+    passed_tasks = {res.task_name for res in results.task_results}
 
-    for task_result in results.task_results:
-        row = _format_task_row(task_result, task_lookup)
-        if row is not None:
-            md_lines.append(row)
+    for task in compatible_tasks:
+        task_name = task.metadata.name
+        modalities_str = ", ".join(task.metadata.modalities)
+        status = "✓" if task_name in passed_tasks else "✗"
+        md_lines.append(f"| {task_name} | {modalities_str} | {status} |")
 
     output_path = Path("mteb_mock_run_results.md")
     output_path.write_text("\n".join(md_lines), encoding="utf-8")
