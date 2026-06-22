@@ -22,7 +22,7 @@ class NExTQAVideoCentricQA(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2021-05-18", "2021-05-18"),
-        domains=["Web"],
+        domains=["Activity", "Web"],
         task_subtypes=["Question answering"],
         license="cc-by-4.0",
         annotations_creators="human-annotated",

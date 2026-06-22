@@ -217,7 +217,17 @@ querit_reranker_training_data = {
     "T2Reranking",  # https://huggingface.co/datasets/THUIR/T2Ranking & The corpus and queries that overlap with mteb/T2Reranking have been removed.
 }
 
-model_meta = ModelMeta(
+QUERIT_CITATION = """@misc{zhong2026queritrerankertrainingcompactmultilingual,
+      title={Querit-Reranker: Training Compact Multilingual Rerankers via Efficient Label-Free Distribution Adaptation}, 
+      author={Yunfei Zhong and Jun Yang and Wei Huang and Yinqiong Cai and Haosheng Qian and Yixing Fan and Ruqing Zhang and Lixin Su and Daiting Shi and Jiafeng Guo},
+      year={2026},
+      eprint={2606.19037},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2606.19037}, 
+}"""
+
+Querit_Reranker_A0_4B = ModelMeta(
     loader=QueritWrapper,
     loader_kwargs={
         "fp_options": "bfloat16",
@@ -230,6 +240,7 @@ model_meta = ModelMeta(
     release_date="2026-05-14",
     n_parameters=4919636992,
     n_embedding_parameters=131907584,
+    n_active_parameters_override=433_833_858,
     embed_dim=1024,
     memory_usage_mb=9383.0,
     max_tokens=4096,
@@ -241,5 +252,33 @@ model_meta = ModelMeta(
     use_instructions=None,
     public_training_code=None,
     public_training_data=None,
-    citation=None,
+    citation=QUERIT_CITATION,
+)
+
+Querit_Reranker_4B = ModelMeta(
+    loader=QueritWrapper,
+    loader_kwargs={
+        "fp_options": "bfloat16",
+    },
+    name="Querit/Querit-4B",
+    model_type=["cross-encoder"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="86b4aeea8f69ad15d9a619e0c6a04f2d01b08222",
+    release_date="2026-06-14",
+    n_parameters=4021782018,
+    n_embedding_parameters=388264960,
+    embed_dim=2560,
+    memory_usage_mb=7671,
+    max_tokens=40960,
+    reference="https://huggingface.co/Querit/Querit-4B",
+    similarity_fn_name=None,
+    training_datasets=querit_reranker_training_data,
+    adapted_from="Qwen/Qwen3-Embedding-4B",
+    license="apache-2.0",
+    framework=["PyTorch"],
+    use_instructions=None,
+    public_training_code=None,
+    public_training_data=None,
+    citation=QUERIT_CITATION,
 )

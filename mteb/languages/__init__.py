@@ -4,6 +4,7 @@ from .iso_mappings import (
     ISO_TO_FAM_LEVEL0,
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
+    language_label,
 )
 from .language_scripts import LanguageScripts
 from .programming_languages import PROGRAMMING_LANGS
@@ -16,4 +17,5 @@ __all__ = [
     "PROGRAMMING_LANGS",
     "LanguageScripts",
     "check_language_code",
+    "language_label",
 ]

@@ -15,9 +15,7 @@ from mteb.abstasks._statistics_calculation import (
     calculate_score_statistics,
     calculate_single_input_modality_statistics,
 )
-from mteb.types.statistics import (
-    SplitDescriptiveStatistics,
-)
+from mteb.types.statistics import RegressionDescriptiveStatistics
 
 from ._statistics_calculation import _count_samples_in_train
 from .classification import AbsTaskClassification
@@ -27,40 +25,8 @@ if TYPE_CHECKING:
     from numpy.typing import NDArray
 
     from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
-    from mteb.types.statistics import (
-        AudioStatistics,
-        ImageStatistics,
-        ScoreStatistics,
-        TextStatistics,
-        VideoStatistics,
-    )
 
 logger = logging.getLogger(__name__)
-
-
-class RegressionDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for Regression
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-        samples_in_train: Number of texts in the train split
-
-        text_statistics: Statistics of texts
-        image_statistics: Statistics of images
-        audio_statistics: Statistics of audio
-        video_statistics: Statistics of video
-
-        values_statistics: Statistics of values
-    """
-
-    num_samples: int
-    samples_in_train: int | None
-
-    text_statistics: TextStatistics | None
-    image_statistics: ImageStatistics | None
-    audio_statistics: AudioStatistics | None
-    video_statistics: VideoStatistics | None
-    values_statistics: ScoreStatistics
 
 
 class RegressionMetrics(TypedDict):

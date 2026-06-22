@@ -25,7 +25,7 @@ class VideoConPairClassification(AbsTaskPairClassification):
         eval_langs=["eng-Latn"],
         main_score="max_ap",
         date=("2023-11-01", "2023-11-30"),
-        domains=["Scene"],
+        domains=["Activity", "Web"],
         task_subtypes=["Caption Pairing"],
         license="mit",
         annotations_creators="LM-generated and reviewed",

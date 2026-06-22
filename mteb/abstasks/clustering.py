@@ -14,9 +14,7 @@ from sklearn.metrics.cluster import adjusted_mutual_info_score, v_measure_score
 from mteb._create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
 from mteb.types import Array, HFSubset
-from mteb.types.statistics import (
-    SplitDescriptiveStatistics,
-)
+from mteb.types.statistics import ClusteringFastDescriptiveStatistics
 
 from ._statistics_calculation import (
     calculate_label_statistics,
@@ -29,14 +27,8 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import Array, EncodeKwargs, Modalities, ScoresDict
-    from mteb.types.statistics import (
-        AudioStatistics,
-        ImageStatistics,
-        LabelStatistics,
-        TextStatistics,
-        VideoStatistics,
-    )
 
 logger = logging.getLogger(__name__)
 
@@ -117,28 +109,6 @@ def _evaluate_clustering_bootstrapped(
     return scores, cluster_assignments
 
 
-class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for ClusteringFast
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-
-        text_statistics: Statistics for text
-        image_statistics: Statistics for images
-        audio_statistics: Statistics for audio
-        video_statistics: Statistics for video
-        labels_statistics: Statistics for labels
-    """
-
-    num_samples: int
-
-    text_statistics: TextStatistics | None
-    image_statistics: ImageStatistics | None
-    audio_statistics: AudioStatistics | None
-    video_statistics: VideoStatistics | None
-    labels_statistics: LabelStatistics
-
-
 class AbsTaskClustering(AbsTask):
     """The abstract class for clustering tasks.
 
@@ -189,6 +159,7 @@ class AbsTaskClustering(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ScoresDict:
         if not isinstance(model, EncoderProtocol):
@@ -241,38 +212,48 @@ class AbsTaskClustering(AbsTask):
 
         downsampled_dataset = downsampled_dataset.select_columns(list(columns_to_keep))
 
-        logger.info("Running clustering - Encoding samples...")
-        embeddings = model.encode(
-            create_dataloader(
-                downsampled_dataset,
+        with timer(
+            "Encoding",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running clustering - Encoding samples...",
+        ):
+            embeddings = model.encode(
+                create_dataloader(
+                    downsampled_dataset,
+                    task_metadata=self.metadata,
+                    input_column=self.input_column_name,
+                    num_proc=num_proc,
+                    **encode_kwargs,
+                ),
                 task_metadata=self.metadata,
-                input_column=self.input_column_name,
-                num_proc=num_proc,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
                 **encode_kwargs,
-            ),
-            task_metadata=self.metadata,
-            hf_subset=hf_subset,
-            hf_split=hf_split,
-            **encode_kwargs,
-        )
+            )
 
-        logger.info("Running clustering - Evaluating clustering...")
         labels = []
         for label in downsampled_dataset[self.label_column_name]:
             if not isinstance(label, list):
                 label = [label]  # noqa: PLW2901
             labels.append(label)
 
-        all_scores, all_assignments = _evaluate_clustering_bootstrapped(
-            embeddings,
-            labels,
-            n_clusters=self.n_clusters,
-            cluster_size=self.max_documents_per_cluster,
-            kmean_batch_size=self.k_mean_batch_size,
-            max_depth=self.max_depth,
-            rng_state=self.rng_state,
-            seed=self.seed,
-        )
+        with timer(
+            "Scoring",
+            split=hf_split,
+            subset=hf_subset,
+            log_message="Running clustering - Evaluating clustering...",
+        ):
+            all_scores, all_assignments = _evaluate_clustering_bootstrapped(
+                embeddings,
+                labels,
+                n_clusters=self.n_clusters,
+                cluster_size=self.max_documents_per_cluster,
+                kmean_batch_size=self.k_mean_batch_size,
+                max_depth=self.max_depth,
+                rng_state=self.rng_state,
+                seed=self.seed,
+            )
 
         if prediction_folder:
             self._save_task_predictions(

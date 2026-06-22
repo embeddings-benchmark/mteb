@@ -16,9 +16,7 @@ from mteb.abstasks._statistics_calculation import (
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ScoringFunction
 from mteb.models.models_protocols import EncoderProtocol
-from mteb.types.statistics import (
-    SplitDescriptiveStatistics,
-)
+from mteb.types.statistics import PairClassificationDescriptiveStatistics
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -30,50 +28,10 @@ if TYPE_CHECKING:
         PairClassificationDistances,
     )
     from mteb.models.models_protocols import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, Modalities, PromptType
-    from mteb.types.statistics import (
-        AudioStatistics,
-        ImageStatistics,
-        LabelStatistics,
-        TextStatistics,
-        VideoStatistics,
-    )
 
 logger = logging.getLogger(__name__)
-
-
-class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for PairClassification
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-        number_of_characters: Total number of symbols in the dataset.
-        unique_pairs: Number of unique pairs
-
-        text1_statistics: Statistics for sentence1
-        image1_statistics: Statistics for image1
-        audio1_statistics: Statistics for audio1
-
-        text2_statistics: Statistics for sentence2
-        image2_statistics: Statistics for image2
-        audio2_statistics: Statistics for audio2
-
-        labels_statistics: Statistics for labels
-    """
-
-    num_samples: int
-    number_of_characters: int | None
-    unique_pairs: int | None
-
-    text1_statistics: TextStatistics | None
-    image1_statistics: ImageStatistics | None
-    audio1_statistics: AudioStatistics | None
-    video1_statistics: VideoStatistics | None
-    text2_statistics: TextStatistics | None
-    image2_statistics: ImageStatistics | None
-    audio2_statistics: AudioStatistics | None
-    video2_statistics: VideoStatistics | None
-    labels_statistics: LabelStatistics
 
 
 class AbsTaskPairClassification(AbsTask):
@@ -109,6 +67,7 @@ class AbsTaskPairClassification(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> dict[str, float]:
         if not isinstance(model, EncoderProtocol):
@@ -128,6 +87,7 @@ class AbsTaskPairClassification(AbsTask):
             hf_subset=hf_subset,
             input1_prompt_type=self.input1_prompt_type,
             input2_prompt_type=self.input2_prompt_type,
+            timer=timer,
             **kwargs,
         )
         similarity_scores = evaluator(

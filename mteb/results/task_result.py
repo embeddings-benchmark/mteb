@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 from huggingface_hub import EvalResult
-from packaging.version import Version
+from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, field_validator, model_validator
 from typing_extensions import deprecated
 
@@ -28,6 +28,7 @@ from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
+from mteb.timing import PhaseTiming, TimingStack
 from mteb.types import (
     ScoresDict,
     SplitName,
@@ -173,6 +174,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     evaluation_time: float | None
     kg_co2_emissions: float | None = None
     date: datetime.datetime | None = None
+    evaluation_phases: list[PhaseTiming] | None = None
 
     @classmethod
     def from_task_results(
@@ -182,6 +184,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
         date: datetime.datetime | None = None,
+        evaluation_phases: list[PhaseTiming] | None = None,
     ) -> TaskResult:
         """Create a TaskResult from the task and scores.
 
@@ -193,6 +196,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_time: The time taken to evaluate the model.
             kg_co2_emissions: The kg of CO2 emissions produced by the model during evaluation.
             date: The date the model was trained on.
+            evaluation_phases: A list of dicts describing the start, end, and name of each phase.
         """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
@@ -228,6 +232,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_time=evaluation_time,
             kg_co2_emissions=kg_co2_emissions,
             date=date,
+            evaluation_phases=evaluation_phases,
         )
 
     @field_validator("scores")
@@ -321,6 +326,13 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         """Get the eval splits present in the scores."""
         return list(self.scores.keys())
 
+    def plot_evaluation_phases(self) -> str:
+        """Plots a text-based bar chart of the recorded evaluation phases."""
+        ts = TimingStack()
+        if self.evaluation_phases:
+            ts.phases = self.evaluation_phases
+        return ts.plot()
+
     def to_dict(self) -> dict[str, Any]:
         """Convert the TaskResult to a dictionary.
 
@@ -391,12 +403,9 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     f"Error loading TaskResult from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
                 )
         data = json.loads(json_str)
+        min_version = cls._parse_mteb_version_min(data.get("mteb_version"))
         pre_1_11_load = (
-            (
-                "mteb_version" in data
-                and data["mteb_version"] is not None
-                and Version(data["mteb_version"]) < Version("1.11.0")
-            )
+            (min_version is not None and min_version < Version("1.11.0"))
             or "mteb_version" not in data
         )  # assume it is before 1.11.0 if the version is not present
 
@@ -410,11 +419,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             )
             obj = cls._convert_from_before_v1_11_0(data)
 
-        pre_v_12_48 = (
-            "mteb_version" in data
-            and data["mteb_version"] is not None
-            and Version(data["mteb_version"]) < Version("1.12.48")
-        )
+        pre_v_12_48 = min_version is not None and min_version < Version("1.12.48")
 
         if pre_v_12_48:
             cls._fix_pair_classification_scores(obj)
@@ -531,6 +536,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             scores,
             evaluation_time,
             kg_co2_emissions=None,
+            evaluation_phases=data.get("evaluation_phases"),
         )
         result.dataset_revision = dataset_revision
         result.mteb_version = mteb_version
@@ -855,7 +861,29 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             merged_evaluation_time = (self.evaluation_time or 0.0) + (
                 new_results.evaluation_time or 0.0
             )
+
+        merged_evaluation_phases: list[PhaseTiming] | None = None
+        if (
+            self.evaluation_phases is not None
+            or new_results.evaluation_phases is not None
+        ):
+            merged_evaluation_phases = []
+            if self.evaluation_phases is not None:
+                merged_evaluation_phases.extend(self.evaluation_phases)
+            if new_results.evaluation_phases is not None:
+                offset = self.evaluation_time or (
+                    max(p["end"] for p in self.evaluation_phases)
+                    if self.evaluation_phases
+                    else 0.0
+                )
+                for phase in new_results.evaluation_phases:
+                    merged_phase = phase.copy()
+                    merged_phase["start"] += offset
+                    merged_phase["end"] += offset
+                    merged_evaluation_phases.append(merged_phase)
+
         date = self.date
+
         if new_results.date is not None and (date is None or new_results.date > date):
             date = new_results.date
         mteb_ver = self._compute_top_level_mteb_version(merged_scores)
@@ -868,9 +896,30 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_time=merged_evaluation_time,
             kg_co2_emissions=merged_kg_co2_emissions,
             date=date,
+            evaluation_phases=merged_evaluation_phases,
         )
 
         return merged_results
+
+    @staticmethod
+    def _parse_mteb_version_min(version_str: str | None) -> Version | None:
+        """Parse a stored mteb_version, which may be a range like "2.12.16-2.15.4".
+
+        Returns the minimum version of the range, or the parsed version for a
+        single version string. Returns None if the input is None or unparsable.
+        """
+        if version_str is None:
+            return None
+        try:
+            return Version(version_str)
+        except InvalidVersion:
+            pass
+        if "-" in version_str:
+            try:
+                return Version(version_str.split("-", 1)[0])
+            except InvalidVersion:
+                return None
+        return None
 
     @staticmethod
     def _compute_top_level_mteb_version(

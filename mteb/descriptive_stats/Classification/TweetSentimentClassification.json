@@ -1,7 +1,7 @@
 {
     "test": {
         "num_samples": 2048,
-        "number_texts_intersect_with_train": 0,
+        "samples_in_train": 0,
         "text_statistics": {
             "total_text_length": 169117,
             "min_text_length": 4,
@@ -30,7 +30,7 @@
         "hf_subset_descriptive_stats": {
             "arabic": {
                 "num_samples": 256,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 21637,
                     "min_text_length": 14,
@@ -59,7 +59,7 @@
             },
             "english": {
                 "num_samples": 256,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 23508,
                     "min_text_length": 17,
@@ -88,7 +88,7 @@
             },
             "german": {
                 "num_samples": 256,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 19069,
                     "min_text_length": 9,
@@ -117,7 +117,7 @@
             },
             "french": {
                 "num_samples": 256,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 24130,
                     "min_text_length": 23,
@@ -146,7 +146,7 @@
             },
             "italian": {
                 "num_samples": 256,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 23564,
                     "min_text_length": 14,
@@ -175,7 +175,7 @@
             },
             "portuguese": {
                 "num_samples": 256,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 18522,
                     "min_text_length": 24,
@@ -204,7 +204,7 @@
             },
             "spanish": {
                 "num_samples": 256,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 21014,
                     "min_text_length": 22,
@@ -233,7 +233,7 @@
             },
             "hindi": {
                 "num_samples": 256,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 17673,
                     "min_text_length": 4,
@@ -264,7 +264,7 @@
     },
     "train": {
         "num_samples": 14712,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": {
             "total_text_length": 1277720,
             "min_text_length": 2,
@@ -293,7 +293,7 @@
         "hf_subset_descriptive_stats": {
             "arabic": {
                 "num_samples": 1839,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 164305,
                     "min_text_length": 11,
@@ -322,7 +322,7 @@
             },
             "english": {
                 "num_samples": 1839,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 201493,
                     "min_text_length": 29,
@@ -351,7 +351,7 @@
             },
             "german": {
                 "num_samples": 1839,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 137071,
                     "min_text_length": 7,
@@ -380,7 +380,7 @@
             },
             "french": {
                 "num_samples": 1839,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 178091,
                     "min_text_length": 16,
@@ -409,7 +409,7 @@
             },
             "italian": {
                 "num_samples": 1839,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 165828,
                     "min_text_length": 6,
@@ -438,7 +438,7 @@
             },
             "portuguese": {
                 "num_samples": 1839,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 135761,
                     "min_text_length": 18,
@@ -467,7 +467,7 @@
             },
             "spanish": {
                 "num_samples": 1839,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 153354,
                     "min_text_length": 19,
@@ -496,7 +496,7 @@
             },
             "hindi": {
                 "num_samples": 1839,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 141817,
                     "min_text_length": 2,
