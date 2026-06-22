@@ -1,5 +1,6 @@
 """tests for the MTEB CLI"""
 
+import os
 import subprocess
 import sys
 from argparse import Namespace
@@ -14,6 +15,7 @@ from mteb.cli.build_cli import (
     _available_tasks,
     _create_meta,
     _leaderboard,
+    mock_run,
     run,
 )
 
@@ -309,3 +311,24 @@ def test_leaderboard_cli_integration():
 
     assert result.returncode == 0
     assert "leaderboard" in result.stdout, "Leaderboard command not found in main help"
+
+
+def test_mock_run_cli(tmp_path):
+    """Test the mock-run subcommand."""
+
+    args = Namespace(
+        model="sentence-transformers/all-MiniLM-L6-v2",
+        model_revision="8b3219a92973c328a8e22fadcfa821b5dc75636a",
+        device=None,
+        verbosity=2,
+    )
+
+    orig_cwd = Path.cwd()
+    try:
+        os.chdir(tmp_path)
+        mock_run(args)
+        assert (tmp_path / "mteb_mock_run_results.md").exists(), (
+            "mteb_mock_run_results.md not created in output folder"
+        )
+    finally:
+        os.chdir(orig_cwd)

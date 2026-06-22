@@ -15,6 +15,12 @@ from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
+from mteb.mocks import ALL_TASK_TEST_GRID
+from mteb.models.models_protocols import (
+    CrossEncoderProtocol,
+    EncoderProtocol,
+    SearchProtocol,
+)
 
 if TYPE_CHECKING:
     from mteb.abstasks.abstask import AbsTask
@@ -463,6 +469,131 @@ def _leaderboard(args: argparse.Namespace) -> None:
     )
 
 
+def _format_task_row(task_result: Any, task_lookup: dict[str, Any]) -> str | None:
+    task_name = task_result.task_name
+    main_score_val = task_result.main_score
+    score_str = (
+        f"{main_score_val:.4f}"
+        if isinstance(main_score_val, float)
+        else str(main_score_val)
+    )
+    task_obj = task_lookup.get(task_name)
+    if task_obj is None:
+        try:
+            task_obj = task_result.task
+        except KeyError:
+            return None
+    return f"| {task_name} | {task_obj.metadata.main_score} | {score_str} | {', '.join(task_obj.metadata.modalities)} |"
+
+
+def mock_run(args: argparse.Namespace) -> None:
+    """Run a model on the compatible mock tasks for verification."""
+    # set logging based on verbosity level
+    if args.verbosity == 0:
+        logging.getLogger("mteb").setLevel(logging.CRITICAL)
+    elif args.verbosity == 1:
+        logging.getLogger("mteb").setLevel(logging.WARNING)
+    elif args.verbosity == 2:
+        logging.getLogger("mteb").setLevel(logging.INFO)
+    elif args.verbosity == 3:
+        logging.getLogger("mteb").setLevel(logging.DEBUG)
+
+    logger.debug("Setting environment variable TOKENIZERS_PARALLELISM to false")
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+    logger.info("Running mock-run with parameters: %s", args)
+
+    logger.info("Loading model %s...", args.model)
+    model = mteb.get_model(
+        args.model,
+        args.model_revision,
+        device=args.device or ("cuda" if torch.cuda.is_available() else "cpu"),
+    )
+
+    model_modalities = model.mteb_model_meta.modalities
+
+    logger.info("Model modalities: %s", model_modalities)
+
+    # Filter tasks based on model modalities and protocols
+    compatible_tasks = []
+    for task in ALL_TASK_TEST_GRID:
+        if not all(mod in model_modalities for mod in task.metadata.modalities):
+            continue
+
+        # SearchProtocol / Retrieval-only models (like BM25)
+        if isinstance(model, SearchProtocol) and not isinstance(model, EncoderProtocol):
+            if not task._support_search:
+                continue
+
+        # CrossEncoder models
+        if isinstance(model, CrossEncoderProtocol):
+            if not task._support_cross_encoder:
+                continue
+
+        compatible_tasks.append(task)
+
+    if not compatible_tasks:
+        logger.warning(
+            "No compatible mock tasks found for model modalities and protocols."
+        )
+        return
+
+    logger.info(
+        "Evaluating model on %d compatible mock tasks...", len(compatible_tasks)
+    )
+    results = mteb.evaluate(
+        model,
+        compatible_tasks,
+        cache=None,
+    )
+
+    md_lines = []
+    md_lines.append(f"# MTEB Mock-Run Results for `{args.model}`")
+    md_lines.append("")
+    md_lines.append("| Task | Metric | Score | Modality |")
+    md_lines.append("| :--- | :--- | :--- | :--- |")
+
+    task_lookup = {t.metadata.name: t for t in compatible_tasks}
+
+    for task_result in results.task_results:
+        row = _format_task_row(task_result, task_lookup)
+        if row is not None:
+            md_lines.append(row)
+
+    output_path = Path("mteb_mock_run_results.md")
+    output_path.write_text("\n".join(md_lines), encoding="utf-8")
+    logger.info("Saved results to %s", output_path.resolve())
+
+
+def _add_mock_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
+    parser = subparsers.add_parser(
+        "mock-run",
+        help="Sanity check a model implementation using mock tasks",
+    )
+
+    parser.add_argument(
+        "-m",
+        "--model",
+        type=str,
+        required=True,
+        help="Model to use. Will prioritize model implementation in MTEB's model registry, but default to loading the model using sentence-transformers.",
+    )
+    parser.add_argument(
+        "--model-revision",
+        "--model_revision",
+        type=str,
+        default=None,
+        help="Revision of the model to be loaded.",
+    )
+    parser.add_argument(
+        "--device", type=str, default=None, help="Device to use for computation."
+    )
+    parser.add_argument(
+        "-v", "--verbosity", type=int, default=2, help="Verbosity level"
+    )
+    parser.set_defaults(func=mock_run)
+
+
 def build_cli() -> argparse.ArgumentParser:
     """Builds the argument parser for the MTEB CLI.
 
@@ -483,6 +614,7 @@ def build_cli() -> argparse.ArgumentParser:
     _add_available_benchmarks_parser(subparsers)
     _add_create_meta_parser(subparsers)
     _add_leaderboard_parser(subparsers)
+    _add_mock_run_parser(subparsers)
 
     return parser
 
