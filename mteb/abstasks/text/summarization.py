@@ -12,9 +12,7 @@ from mteb.abstasks._statistics_calculation import (
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models import EncoderProtocol
-from mteb.types.statistics import (
-    SplitDescriptiveStatistics,
-)
+from mteb.types.statistics import SummarizationDescriptiveStatistics
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -25,34 +23,8 @@ if TYPE_CHECKING:
     from mteb.models import MTEBModels
     from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs
-    from mteb.types.statistics import (
-        ScoreStatistics,
-        TextStatistics,
-    )
 
 logger = logging.getLogger(__name__)
-
-
-class SummarizationDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for Summarization
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-        number_of_characters: Total number of symbols in the dataset.
-
-        text_statistics: Statistics for the text
-        human_summaries_statistics: Statistics for human summaries
-        machine_summaries_statistics: Statistics for machine summaries
-        score_statistics: Statistics for the relevance scoresk
-    """
-
-    num_samples: int
-    number_of_characters: int
-
-    text_statistics: TextStatistics
-    human_summaries_statistics: TextStatistics
-    machine_summaries_statistics: TextStatistics
-    score_statistics: ScoreStatistics
 
 
 class AbsTaskSummarization(AbsTask):

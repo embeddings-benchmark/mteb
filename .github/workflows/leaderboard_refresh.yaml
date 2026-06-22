@@ -39,8 +39,8 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/leaderboard:${{ github.sha }}
-            ghcr.io/${{ github.repository }}/leaderboard:latest
+            ghcr.io/${{ github.repository }}/leaderboard-backend:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/leaderboard-backend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

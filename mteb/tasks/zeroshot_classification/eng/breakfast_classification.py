@@ -22,7 +22,7 @@ class BreakfastZeroShotClassification(AbsTaskZeroShotClassification):
             "2014-06-23",
             "2014-06-28",
         ),
-        domains=["Scene"],
+        domains=["Activity", "Instructional"],
         task_subtypes=["Activity recognition"],
         license="not specified",
         annotations_creators="human-annotated",

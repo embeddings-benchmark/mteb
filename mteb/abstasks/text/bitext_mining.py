@@ -12,36 +12,15 @@ from mteb.abstasks._statistics_calculation import calculate_text_statistics
 from mteb.abstasks.abstask import AbsTask
 from mteb.models import EncoderProtocol
 from mteb.timing import TimingStack
-from mteb.types.statistics import SplitDescriptiveStatistics
+from mteb.types.statistics import BitextDescriptiveStatistics
 
 if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
     from mteb.types import EncodeKwargs, HFSubset, ScoresDict
-    from mteb.types.statistics import TextStatistics
 
 logger = logging.getLogger(__name__)
-
-
-class BitextDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for Bitext
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-        number_of_characters: Total number of symbols in the dataset.
-        unique_pairs: Number of duplicate pairs
-
-        sentence1_statistics: Statistics for sentence1
-        sentence2_statistics: Statistics for sentence2
-    """
-
-    num_samples: int
-    number_of_characters: int
-    unique_pairs: int
-
-    sentence1_statistics: TextStatistics
-    sentence2_statistics: TextStatistics
 
 
 class BitextMiningMetrics(TypedDict):
