@@ -1,9 +1,4 @@
-from collections import defaultdict
-
-from datasets import Value, load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
-from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_LANGS = {
@@ -21,62 +16,14 @@ _EVAL_LANGS = {
 }
 
 
-class AbsTaskNanoBEIRMultilingual(AbsTaskRetrieval):
-    task_base_name: str
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        if self.data_loaded:
-            return
-
-        self.dataset = {}
-        for lang in self.hf_subsets:
-            ds = load_dataset(
-                self.metadata.dataset["path"],
-                f"{self.task_base_name}_{lang}",
-                revision=self.metadata.dataset["revision"],
-            )
-            corpus = ds["corpus"]
-            queries = ds["queries"]
-
-            corpus = corpus.cast_column("_id", Value("string")).rename_column(
-                "_id", "id"
-            )
-            queries = queries.cast_column("_id", Value("string")).rename_column(
-                "_id", "id"
-            )
-
-            qrels_ds = load_dataset(
-                self.metadata.dataset["path"],
-                f"{self.task_base_name}_{lang}_qrels",
-                revision=self.metadata.dataset["revision"],
-            )["qrels"]
-
-            relevant_docs = defaultdict(dict)
-            for row in qrels_ds:
-                relevant_docs[str(row["query-id"])][str(row["corpus-id"])] = 1
-
-            self.dataset[lang] = {
-                "test": RetrievalSplitData(
-                    corpus=corpus,
-                    queries=queries,
-                    relevant_docs=relevant_docs,
-                    top_ranked=None,
-                )
-            }
-
-        self.data_loaded = True
-
-
-class MultilingualNanoArguAnaRetrieval(AbsTaskNanoBEIRMultilingual):
-    task_base_name = "NanoArguAna"
-
+class MultilingualNanoArguAnaRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultilingualNanoArguAnaRetrieval",
         description="NanoArguAna is a smaller subset of ArguAna, a dataset for argument retrieval in debate contexts.",
-        reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+        reference="https://huggingface.co/datasets/mteb/MultilingualNanoArguAnaRetrieval",
         dataset={
-            "path": "LiquidAI/nanobeir-multilingual-extended",
-            "revision": "8a4be55eb80b3ed4d2e9a423a5212228c217d426",
+            "path": "mteb/MultilingualNanoArguAnaRetrieval",
+            "revision": "c0b2a891577e87141baf768b28e7acb997ac5680",
         },
         type="Retrieval",
         category="t2t",
@@ -104,16 +51,14 @@ class MultilingualNanoArguAnaRetrieval(AbsTaskNanoBEIRMultilingual):
     )
 
 
-class MultilingualNanoClimateFeverRetrieval(AbsTaskNanoBEIRMultilingual):
-    task_base_name = "NanoClimateFEVER"
-
+class MultilingualNanoClimateFeverRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultilingualNanoClimateFeverRetrieval",
         description="NanoClimateFever is a small version of the BEIR dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change.",
-        reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+        reference="https://huggingface.co/datasets/mteb/MultilingualNanoClimateFeverRetrieval",
         dataset={
-            "path": "LiquidAI/nanobeir-multilingual-extended",
-            "revision": "8a4be55eb80b3ed4d2e9a423a5212228c217d426",
+            "path": "mteb/MultilingualNanoClimateFeverRetrieval",
+            "revision": "2fe8eb61630d248dc0bd1a13e4b7f6406b4a3e2a",
         },
         type="Retrieval",
         category="t2t",
@@ -145,16 +90,14 @@ class MultilingualNanoClimateFeverRetrieval(AbsTaskNanoBEIRMultilingual):
     )
 
 
-class MultilingualNanoDBPediaRetrieval(AbsTaskNanoBEIRMultilingual):
-    task_base_name = "NanoDBPedia"
-
+class MultilingualNanoDBPediaRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultilingualNanoDBPediaRetrieval",
         description="NanoDBPediaRetrieval is a small version of the standard test collection for entity search over the DBpedia knowledge base.",
-        reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+        reference="https://huggingface.co/datasets/mteb/MultilingualNanoDBPediaRetrieval",
         dataset={
-            "path": "LiquidAI/nanobeir-multilingual-extended",
-            "revision": "8a4be55eb80b3ed4d2e9a423a5212228c217d426",
+            "path": "mteb/MultilingualNanoDBPediaRetrieval",
+            "revision": "d190b64f4888205f70b5bfdd4fdf806100139dd0",
         },
         type="Retrieval",
         category="t2t",
@@ -184,16 +127,14 @@ class MultilingualNanoDBPediaRetrieval(AbsTaskNanoBEIRMultilingual):
     )
 
 
-class MultilingualNanoFEVERRetrieval(AbsTaskNanoBEIRMultilingual):
-    task_base_name = "NanoFEVER"
-
+class MultilingualNanoFEVERRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultilingualNanoFEVERRetrieval",
         description="NanoFEVER is a smaller version of FEVER (Fact Extraction and VERification), which consists of 185,445 claims generated by altering sentences extracted from Wikipedia and subsequently verified without knowledge of the sentence they were derived from.",
-        reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+        reference="https://huggingface.co/datasets/mteb/MultilingualNanoFEVERRetrieval",
         dataset={
-            "path": "LiquidAI/nanobeir-multilingual-extended",
-            "revision": "8a4be55eb80b3ed4d2e9a423a5212228c217d426",
+            "path": "mteb/MultilingualNanoFEVERRetrieval",
+            "revision": "58c0c39b5718de4c64ba115e30ae830f25fc6c62",
         },
         type="Retrieval",
         category="t2t",
@@ -230,16 +171,14 @@ class MultilingualNanoFEVERRetrieval(AbsTaskNanoBEIRMultilingual):
     )
 
 
-class MultilingualNanoFiQA2018Retrieval(AbsTaskNanoBEIRMultilingual):
-    task_base_name = "NanoFiQA2018"
-
+class MultilingualNanoFiQA2018Retrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultilingualNanoFiQA2018Retrieval",
         description="NanoFiQA2018 is a smaller subset of the Financial Opinion Mining and Question Answering dataset.",
-        reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+        reference="https://huggingface.co/datasets/mteb/MultilingualNanoFiQA2018Retrieval",
         dataset={
-            "path": "LiquidAI/nanobeir-multilingual-extended",
-            "revision": "8a4be55eb80b3ed4d2e9a423a5212228c217d426",
+            "path": "mteb/MultilingualNanoFiQA2018Retrieval",
+            "revision": "6af7d1d165dab5c41840440ee33373d3a459483a",
         },
         type="Retrieval",
         category="t2t",
@@ -270,16 +209,14 @@ class MultilingualNanoFiQA2018Retrieval(AbsTaskNanoBEIRMultilingual):
     )
 
 
-class MultilingualNanoHotpotQARetrieval(AbsTaskNanoBEIRMultilingual):
-    task_base_name = "NanoHotpotQA"
-
+class MultilingualNanoHotpotQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultilingualNanoHotpotQARetrieval",
         description="NanoHotpotQARetrieval is a smaller subset of the HotpotQA dataset, which is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems.",
-        reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+        reference="https://huggingface.co/datasets/mteb/MultilingualNanoHotpotQARetrieval",
         dataset={
-            "path": "LiquidAI/nanobeir-multilingual-extended",
-            "revision": "8a4be55eb80b3ed4d2e9a423a5212228c217d426",
+            "path": "mteb/MultilingualNanoHotpotQARetrieval",
+            "revision": "d226781cb805c360229d14c2efa8672d11226075",
         },
         type="Retrieval",
         category="t2t",
@@ -325,16 +262,14 @@ Tsujii, Jun{'}ichi},
     )
 
 
-class MultilingualNanoMSMARCORetrieval(AbsTaskNanoBEIRMultilingual):
-    task_base_name = "NanoMSMARCO"
-
+class MultilingualNanoMSMARCORetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultilingualNanoMSMARCORetrieval",
         description="NanoMSMARCORetrieval is a smaller subset of MS MARCO, a collection of datasets focused on deep learning in search.",
-        reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+        reference="https://huggingface.co/datasets/mteb/MultilingualNanoMSMARCORetrieval",
         dataset={
-            "path": "LiquidAI/nanobeir-multilingual-extended",
-            "revision": "8a4be55eb80b3ed4d2e9a423a5212228c217d426",
+            "path": "mteb/MultilingualNanoMSMARCORetrieval",
+            "revision": "f579311c703483afcec3062f58fe69e9f0813843",
         },
         type="Retrieval",
         category="t2t",
@@ -371,16 +306,14 @@ class MultilingualNanoMSMARCORetrieval(AbsTaskNanoBEIRMultilingual):
     )
 
 
-class MultilingualNanoNFCorpusRetrieval(AbsTaskNanoBEIRMultilingual):
-    task_base_name = "NanoNFCorpus"
-
+class MultilingualNanoNFCorpusRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultilingualNanoNFCorpusRetrieval",
         description="NanoNFCorpus is a smaller subset of NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval.",
-        reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+        reference="https://huggingface.co/datasets/mteb/MultilingualNanoNFCorpusRetrieval",
         dataset={
-            "path": "LiquidAI/nanobeir-multilingual-extended",
-            "revision": "8a4be55eb80b3ed4d2e9a423a5212228c217d426",
+            "path": "mteb/MultilingualNanoNFCorpusRetrieval",
+            "revision": "4484b487f178125827f7dda052f1b2f5673548d6",
         },
         type="Retrieval",
         category="t2t",
@@ -414,16 +347,14 @@ class MultilingualNanoNFCorpusRetrieval(AbsTaskNanoBEIRMultilingual):
     )
 
 
-class MultilingualNanoNQRetrieval(AbsTaskNanoBEIRMultilingual):
-    task_base_name = "NanoNQ"
-
+class MultilingualNanoNQRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultilingualNanoNQRetrieval",
         description="NanoNQ is a smaller subset of a dataset which contains questions from real users, and it requires QA systems to read and comprehend an entire Wikipedia article that may or may not contain the answer to the question.",
-        reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+        reference="https://huggingface.co/datasets/mteb/MultilingualNanoNQRetrieval",
         dataset={
-            "path": "LiquidAI/nanobeir-multilingual-extended",
-            "revision": "8a4be55eb80b3ed4d2e9a423a5212228c217d426",
+            "path": "mteb/MultilingualNanoNQRetrieval",
+            "revision": "4104e3376fe243f0bd4845e204b01c0fc3f7d1d7",
         },
         type="Retrieval",
         category="t2t",
@@ -453,16 +384,14 @@ class MultilingualNanoNQRetrieval(AbsTaskNanoBEIRMultilingual):
     )
 
 
-class MultilingualNanoQuoraRetrieval(AbsTaskNanoBEIRMultilingual):
-    task_base_name = "NanoQuoraRetrieval"
-
+class MultilingualNanoQuoraRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultilingualNanoQuoraRetrieval",
         description="NanoQuoraRetrieval is a smaller subset of the QuoraRetrieval dataset, which is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions.",
-        reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+        reference="https://huggingface.co/datasets/mteb/MultilingualNanoQuoraRetrieval",
         dataset={
-            "path": "LiquidAI/nanobeir-multilingual-extended",
-            "revision": "8a4be55eb80b3ed4d2e9a423a5212228c217d426",
+            "path": "mteb/MultilingualNanoQuoraRetrieval",
+            "revision": "eb9418faade7449e869be388846f287aa3535b64",
         },
         type="Retrieval",
         category="t2t",
@@ -493,16 +422,14 @@ class MultilingualNanoQuoraRetrieval(AbsTaskNanoBEIRMultilingual):
     )
 
 
-class MultilingualNanoSCIDOCSRetrieval(AbsTaskNanoBEIRMultilingual):
-    task_base_name = "NanoSCIDOCS"
-
+class MultilingualNanoSCIDOCSRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultilingualNanoSCIDOCSRetrieval",
         description="NanoFiQA2018 is a smaller subset of SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation.",
-        reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+        reference="https://huggingface.co/datasets/mteb/MultilingualNanoSCIDOCSRetrieval",
         dataset={
-            "path": "LiquidAI/nanobeir-multilingual-extended",
-            "revision": "8a4be55eb80b3ed4d2e9a423a5212228c217d426",
+            "path": "mteb/MultilingualNanoSCIDOCSRetrieval",
+            "revision": "06cff48c8ebea5f46e3effa29573fc22a5b9d8fc",
         },
         type="Retrieval",
         category="t2t",
@@ -532,16 +459,14 @@ class MultilingualNanoSCIDOCSRetrieval(AbsTaskNanoBEIRMultilingual):
     )
 
 
-class MultilingualNanoSciFactRetrieval(AbsTaskNanoBEIRMultilingual):
-    task_base_name = "NanoSciFact"
-
+class MultilingualNanoSciFactRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultilingualNanoSciFactRetrieval",
         description="NanoSciFact is a smaller subset of SciFact, which verifies scientific claims using evidence from the research literature containing scientific paper abstracts.",
-        reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+        reference="https://huggingface.co/datasets/mteb/MultilingualNanoSciFactRetrieval",
         dataset={
-            "path": "LiquidAI/nanobeir-multilingual-extended",
-            "revision": "8a4be55eb80b3ed4d2e9a423a5212228c217d426",
+            "path": "mteb/MultilingualNanoSciFactRetrieval",
+            "revision": "3e75543b8006c013ec14d36a17dd3010eb139f72",
         },
         type="Retrieval",
         category="t2t",
@@ -571,16 +496,14 @@ class MultilingualNanoSciFactRetrieval(AbsTaskNanoBEIRMultilingual):
     )
 
 
-class MultilingualNanoTouche2020Retrieval(AbsTaskNanoBEIRMultilingual):
-    task_base_name = "NanoTouche2020"
-
+class MultilingualNanoTouche2020Retrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultilingualNanoTouche2020Retrieval",
         description="NanoTouche2020 is a smaller subset of Touché Task 1: Argument Retrieval for Controversial Questions.",
-        reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+        reference="https://huggingface.co/datasets/mteb/MultilingualNanoTouche2020Retrieval",
         dataset={
-            "path": "LiquidAI/nanobeir-multilingual-extended",
-            "revision": "8a4be55eb80b3ed4d2e9a423a5212228c217d426",
+            "path": "mteb/MultilingualNanoTouche2020Retrieval",
+            "revision": "cc244b553d65a88fb66d913907146fe4c33aef29",
         },
         type="Retrieval",
         category="t2t",
