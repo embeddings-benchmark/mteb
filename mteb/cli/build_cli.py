@@ -494,7 +494,6 @@ def mock_run(args: argparse.Namespace) -> None:
     )
 
     model_modalities = model.mteb_model_meta.modalities
-
     logger.info("Model modalities: %s", model_modalities)
 
     # Filter tasks based on model modalities and protocols
@@ -534,16 +533,19 @@ def mock_run(args: argparse.Namespace) -> None:
     md_lines = []
     md_lines.append(f"# MTEB Mock-Run Results for `{args.model}`")
     md_lines.append("")
-    md_lines.append("| Task | Modality | Pass |")
-    md_lines.append("| --- | --- | --- |")
+    md_lines.append("| Task | Modality | Pass | Reason |")
+    md_lines.append("| --- | --- | --- | --- |")
 
     passed_tasks = {res.task_name for res in results.task_results}
+    failed_reasons = {exc.task_name: exc.exception for exc in results.exceptions}
 
     for task in compatible_tasks:
         task_name = task.metadata.name
         modalities_str = ", ".join(task.metadata.modalities)
         status = "✓" if task_name in passed_tasks else "✗"
-        md_lines.append(f"| {task_name} | {modalities_str} | {status} |")
+        reason = failed_reasons.get(task_name, "-")
+        reason = reason.replace("\n", " ")
+        md_lines.append(f"| {task_name} | {modalities_str} | {status} | {reason} |")
 
     output_path = Path("mteb_mock_run_results.md")
     output_path.write_text("\n".join(md_lines), encoding="utf-8")
