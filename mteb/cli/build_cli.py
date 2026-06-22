@@ -537,7 +537,9 @@ def mock_run(args: argparse.Namespace) -> None:
     md_lines.append("| --- | --- | --- | --- |")
 
     passed_tasks = {res.task_name for res in results.task_results}
-    failed_reasons = {exc.task_name: exc.exception for exc in results.exceptions}
+    failed_reasons = {
+        exc.task_name: exc.exception for exc in (results.exceptions or [])
+    }
 
     for task in compatible_tasks:
         task_name = task.metadata.name
