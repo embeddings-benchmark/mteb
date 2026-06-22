@@ -48,10 +48,9 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     from torch.utils.data import DataLoader
-    from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, EncodeKwargs
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -367,6 +366,10 @@ class OpenAIAPIWrapper(OpenAIBaseWrapper, AbsEncoder):
         # Collect all texts from batches
         texts = [prompt + text for batch in inputs for text in batch["text"]]
 
+        # Handle empty input
+        if not texts:
+            return np.array([], dtype=np.float32).reshape(0, 0)
+
         # Process in batches to avoid overwhelming the server
         all_embeddings = []
 
@@ -490,6 +493,10 @@ class OpenAIRerankWrapper(OpenAIBaseWrapper):
         # Collect all queries and documents
         queries = [text for batch in inputs1 for text in batch["text"]]
         documents = [text for batch in inputs2 for text in batch["text"]]
+
+        # Handle empty input
+        if not queries and not documents:
+            return np.array([], dtype=np.float32)
 
         # Expect equal-length queries and documents
         if len(queries) != len(documents):
