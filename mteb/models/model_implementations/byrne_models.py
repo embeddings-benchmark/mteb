@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -17,10 +16,9 @@ if TYPE_CHECKING:
 
 
 class ByrneEmbedModel(AbsEncoder):
-    """Byrne-Embed: an 85M SpikeWhale decoder + a 640->768 projection head producing
-    unit-norm sentence embeddings. The model repo bundles its own modeling code
-    (`byrne_embedder.py`, `model_v2.py`, `spike_tokenizer.py`); we download the snapshot
-    and use its self-contained `ByrneEmbedder` loader.
+    """Byrne-Embed: an 85M SpikeWhale decoder + a fused 640->768 projection head that
+    produces unit-norm sentence embeddings. The model is a custom-code `transformers`
+    model loaded with `trust_remote_code=True` (modeling code lives in the model repo).
     """
 
     def __init__(
@@ -28,18 +26,22 @@ class ByrneEmbedModel(AbsEncoder):
         model: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_length: int = 128,
         **kwargs: Any,
     ):
-        from huggingface_hub import snapshot_download
+        from transformers import AutoModel, AutoTokenizer
 
         self.model_name = model
         self.device = device
-        local = snapshot_download(repo_id=model, revision=revision)
-        if local not in sys.path:
-            sys.path.insert(0, local)
-        from byrne_embedder import ByrneEmbedder
-
-        self.encoder = ByrneEmbedder(local, device=device)
+        self.max_length = max_length
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model, revision=revision, trust_remote_code=True
+        )
+        self.model = (
+            AutoModel.from_pretrained(model, revision=revision, trust_remote_code=True)
+            .to(device)
+            .eval()
+        )
 
     def encode(
         self,
@@ -52,11 +54,17 @@ class ByrneEmbedModel(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         embeddings = []
-        for batch in inputs:
-            vecs = self.encoder.encode(
-                list(batch["text"]), batch_size=64, max_length=128, normalize=True
-            )
-            embeddings.append(vecs.to(torch.float32).cpu().numpy())
+        with torch.no_grad():
+            for batch in inputs:
+                enc = self.tokenizer(
+                    list(batch["text"]),
+                    return_tensors="pt",
+                    padding=True,
+                    truncation=True,
+                    max_length=self.max_length,
+                ).to(self.device)
+                emb = self.model(**enc).last_hidden_state  # (B, 768), L2-normalized
+                embeddings.append(emb.to(torch.float32).cpu().numpy())
         return np.concatenate(embeddings, axis=0).astype(np.float32)
 
 
@@ -65,7 +73,7 @@ byrne_embed = ModelMeta(
     name="Quazim0t0/Byrne-Embed",
     model_type=["dense"],
     languages=["eng-Latn"],
-    revision="b1dd73482beb385c295d8237a8c9c845680f8f75",
+    revision="af905dd5dfa2b42a07f8d953dd25171709257e8d",
     release_date="2026-06-20",
     modalities=["text"],
     n_parameters=85_700_000,
@@ -76,7 +84,7 @@ byrne_embed = ModelMeta(
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
     reference="https://huggingface.co/Quazim0t0/Byrne-Embed",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
