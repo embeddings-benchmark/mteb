@@ -29,6 +29,7 @@ def _load_data(path: str, splits: str, revision: str | None = None):
         remove_columns=[
             "split",
             "label",
+            "image",
         ],
     )
 
@@ -43,6 +44,7 @@ def _load_data(path: str, splits: str, revision: str | None = None):
             remove_columns=[
                 "split",
                 "label",
+                "text",
             ],
         )
         relevant_docs[split] = {}

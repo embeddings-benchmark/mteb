@@ -29,6 +29,7 @@ def _load_data(path: str, splits: str, revision: str | None = None):
                 "super_class",
                 "sub_class",
                 "split",
+                "image",
             ],
         )
 
@@ -44,6 +45,7 @@ def _load_data(path: str, splits: str, revision: str | None = None):
                 "super_class",
                 "sub_class",
                 "split",
+                "text",
             ],
         )
         relevant_docs[split] = {}

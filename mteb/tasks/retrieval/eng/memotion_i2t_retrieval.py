@@ -42,6 +42,7 @@ def _load_data(path: str, splits: str, revision: str | None = None):
                     "offensive",
                     "motivational",
                     "sentiment",
+                    "image",
                 ],
             )
             for split in dataset_splits

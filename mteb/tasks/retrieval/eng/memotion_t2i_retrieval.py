@@ -66,6 +66,7 @@ def _load_data(path: str, splits: str, revision: str | None = None):
                 "motivational",
                 "sentiment",
                 "text_corrected",
+                "image",
             ],
         )
 
