@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -36,3 +38,43 @@ class SyntheticText2SQLRetrieval(AbsTaskRetrieval):
 }
 """,
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+        """Drop corpus documents that are exact duplicates of a relevant document.
+
+        The published corpus pools the train and test partitions, and >94% of the
+        evaluated documents have an identical-text twin in the train partition under
+        a different ID. Because the qrels only reference the test ID, retrieving the
+        identical train document is wrongly scored as a false positive, which tanks
+        the metrics (see issue #4626). Removing these duplicate twins restores correct
+        scoring without altering any document that is actually referenced by the qrels.
+        """
+        for subset in self.dataset:
+            for split in self.dataset[subset]:
+                data = self.dataset[subset][split]
+                corpus = data["corpus"]
+
+                relevant_ids = {
+                    doc_id for docs in data["relevant_docs"].values() for doc_id in docs
+                }
+                content_cols = [c for c in corpus.column_names if c != "id"]
+                signatures = list(
+                    zip(*(corpus[c] for c in content_cols))
+                    if content_cols
+                    else ([()] * len(corpus))
+                )
+                relevant_signatures = {
+                    sig
+                    for doc_id, sig in zip(corpus["id"], signatures)
+                    if doc_id in relevant_ids
+                }
+                drop_ids = {
+                    doc_id
+                    for doc_id, sig in zip(corpus["id"], signatures)
+                    if doc_id not in relevant_ids and sig in relevant_signatures
+                }
+                if drop_ids:
+                    data["corpus"] = corpus.filter(
+                        lambda row: row["id"] not in drop_ids,
+                        num_proc=num_proc,
+                    )
