@@ -279,7 +279,6 @@ class TestOpenAIAPIWrapper:
         wrapper = OpenAIAPIWrapper(
             endpoint_url="http://localhost:8000",
             model_name="test",
-            batch_size=32,  # Default batch size
         )
 
         texts = ["text1", "text2", "text3", "text4"]
@@ -288,7 +287,7 @@ class TestOpenAIAPIWrapper:
         mock_metadata = MagicMock(spec=TaskMetadata)
         mock_metadata.name = "test"
 
-        # Override batch_size to 2
+        # Pass batch_size=2 to encode()
         wrapper.encode(
             dataloader,
             task_metadata=mock_metadata,
