@@ -69,6 +69,9 @@ class OpenAIBaseWrapper:
         verify_ssl: Whether to verify SSL certificates (default: True)
     """
 
+    # Declare as class attribute to match AbsEncoder protocol
+    mteb_model_meta: ModelMeta | None
+
     def __init__(
         self,
         endpoint_url: str,

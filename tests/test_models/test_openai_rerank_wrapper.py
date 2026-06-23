@@ -86,9 +86,9 @@ class TestOpenAIRerankWrapper:
         assert scores.shape == (3,)
         assert scores.dtype == np.float32
         # Check scores are in original document order
-        assert scores[0] == 0.95
-        assert scores[1] == 0.05
-        assert scores[2] == 0.75
+        assert scores[0] == pytest.approx(0.95)
+        assert scores[1] == pytest.approx(0.05)
+        assert scores[2] == pytest.approx(0.75)
 
     @patch("requests.post")
     @patch("requests.get")
@@ -142,8 +142,8 @@ class TestOpenAIRerankWrapper:
 
         assert isinstance(scores, np.ndarray)
         assert scores.shape == (2,)
-        assert scores[0] == 0.8
-        assert scores[1] == 0.3
+        assert scores[0] == pytest.approx(0.8)
+        assert scores[1] == pytest.approx(0.3)
 
     @patch("requests.post")
     @patch("requests.get")
