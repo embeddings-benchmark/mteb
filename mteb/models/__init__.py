@@ -8,7 +8,7 @@ from .models_protocols import (
     MTEBModels,
     SearchProtocol,
 )
-from .openai_wrappers import OpenAIAPIWrapper, OpenAIRerankWrapper
+from .openai_wrappers import OpenAIAPIEncodeWrapper, OpenAIAPIRerankWrapper
 from .search_encoder_index.search_backend_protocol import (
     IndexEncoderSearchProtocol,
 )
@@ -30,8 +30,8 @@ __all__ = [
     "IndexEncoderSearchProtocol",
     "MTEBModels",
     "ModelMeta",
-    "OpenAIAPIWrapper",
-    "OpenAIRerankWrapper",
+    "OpenAIAPIEncodeWrapper",
+    "OpenAIAPIRerankWrapper",
     "SearchCrossEncoderWrapper",
     "SearchEncoderWrapper",
     "SearchProtocol",

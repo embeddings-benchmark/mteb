@@ -11,8 +11,8 @@ icon: lucide/zap
 
 MTEB provides wrappers for both local and remote vLLM usage:
 
-- **VllmEncoderWrapper / VllmCrossEncoderWrapper**: Local in-process vLLM instantiation for maximum performance
-- **OpenAIAPIWrapper / OpenAIRerankWrapper**: HTTP-based access to OpenAI-compatible API servers (including vLLM, OpenAI, and others)
+- **[VllmEncoderWrapper][mteb.models.vllm_wrapper.VllmEncoderWrapper] / [VllmCrossEncoderWrapper][mteb.models.vllm_wrapper.VllmCrossEncoderWrapper]**: Local in-process vLLM instantiation for maximum performance
+- **[OpenAIAPIEncodeWrapper][mteb.models.openai_wrappers.OpenAIAPIEncodeWrapper] / [OpenAIAPIRerankWrapper][mteb.models.openai_wrappers.OpenAIAPIRerankWrapper]**: HTTP-based access to OpenAI-compatible API servers (including vLLM, OpenAI, and others)
 
 
 ## Installation
@@ -106,19 +106,19 @@ For connecting to OpenAI-compatible API servers (vLLM, OpenAI, or other compatib
     - **Embedding**: `vllm serve <model-name> --host 0.0.0.0 --port 8000`
     - **Reranking**: `vllm serve <reranker-model> --host 0.0.0.0 --port 8001`
 
-=== "Embedding models (OpenAIAPIWrapper)"
+=== "Embedding models (OpenAIAPIEncodeWrapper)"
     ```python
     import mteb
-    from mteb.models import OpenAIAPIWrapper
+    from mteb.models import OpenAIAPIEncodeWrapper
 
     # Connect to a vLLM server
-    encoder = OpenAIAPIWrapper(
+    encoder = OpenAIAPIEncodeWrapper(
         endpoint_url="http://localhost:8000",
         model_name="BAAI/bge-small-en-v1.5",
     )
 
     # Or use OpenAI's API
-    encoder = OpenAIAPIWrapper(
+    encoder = OpenAIAPIEncodeWrapper(
         endpoint_url="https://api.openai.com/v1",
         model_name="text-embedding-3-small",
         api_key="sk-...",
@@ -132,13 +132,13 @@ For connecting to OpenAI-compatible API servers (vLLM, OpenAI, or other compatib
     print(results)
     ```
 
-=== "Reranking models (OpenAIRerankWrapper)"
+=== "Reranking models (OpenAIAPIRerankWrapper)"
     ```python
     import mteb
-    from mteb.models import OpenAIRerankWrapper
+    from mteb.models import OpenAIAPIRerankWrapper
 
     # Connect to a vLLM reranking server
-    reranker = OpenAIRerankWrapper(
+    reranker = OpenAIAPIRerankWrapper(
         endpoint_url="http://localhost:8001",
         model_name="BAAI/bge-reranker-v2-m3",
     )
@@ -155,7 +155,7 @@ For connecting to OpenAI-compatible API servers (vLLM, OpenAI, or other compatib
 
 ```python
 # With authentication and SSL
-encoder = OpenAIAPIWrapper(
+encoder = OpenAIAPIEncodeWrapper(
     endpoint_url="https://my-server.com",
     model_name="model-name",
     api_key="your-api-key",
@@ -163,7 +163,7 @@ encoder = OpenAIAPIWrapper(
 )
 
 # With custom settings
-encoder = OpenAIAPIWrapper(
+encoder = OpenAIAPIEncodeWrapper(
     endpoint_url="http://localhost:8000",
     model_name="model-name",
     timeout=600,  # Request timeout in seconds
@@ -172,7 +172,7 @@ encoder = OpenAIAPIWrapper(
 )
 
 # With instruction templates
-encoder = OpenAIAPIWrapper(
+encoder = OpenAIAPIEncodeWrapper(
     endpoint_url="http://localhost:8000",
     model_name="instruct-model",
     use_instructions=True,
@@ -270,6 +270,6 @@ vLLM’s optimizations are primarily designed for and most effective with causal
 
 ### OpenAI-Compatible API Wrappers
 
-:::mteb.models.openai_wrappers.OpenAIAPIWrapper
+:::mteb.models.openai_wrappers.OpenAIAPIEncodeWrapper
 
-:::mteb.models.openai_wrappers.OpenAIRerankWrapper
+:::mteb.models.openai_wrappers.OpenAIAPIRerankWrapper
