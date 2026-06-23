@@ -1,4 +1,4 @@
-"""Tests for OpenAIAPIWrapper.
+"""Tests for OpenAIAPIEncodeWrapper.
 
 All tests are fully mocked and do not require a running vLLM server.
 """
@@ -9,11 +9,11 @@ import numpy as np
 import pytest
 import requests
 
-from mteb.models.openai_wrappers import OpenAIAPIWrapper
+from mteb.models.openai_wrappers import OpenAIAPIEncodeWrapper
 
 
-class TestOpenAIAPIWrapper:
-    """Test OpenAIAPIWrapper functionality."""
+class TestOpenAIAPIEncodeWrapper:
+    """Test OpenAIAPIEncodeWrapper functionality."""
 
     @patch("requests.get")
     def test_initialization(self, mock_get):
@@ -31,7 +31,7 @@ class TestOpenAIAPIWrapper:
         }
         mock_get.return_value = mock_response
 
-        wrapper = OpenAIAPIWrapper(
+        wrapper = OpenAIAPIEncodeWrapper(
             endpoint_url="http://localhost:8000",
             model_name="test-model",
         )
@@ -46,7 +46,7 @@ class TestOpenAIAPIWrapper:
                 "Connection failed"
             )
             with pytest.raises(ConnectionError):
-                OpenAIAPIWrapper(
+                OpenAIAPIEncodeWrapper(
                     endpoint_url="http://invalid-endpoint:9999",
                     model_name="test-model",
                 )
@@ -62,7 +62,7 @@ class TestOpenAIAPIWrapper:
 
         # Missing instruction template when use_instructions=True
         with pytest.raises(ValueError, match="instruction_template must be"):
-            OpenAIAPIWrapper(
+            OpenAIAPIEncodeWrapper(
                 endpoint_url="http://localhost:8000",
                 model_name="test-model",
                 use_instructions=True,
@@ -70,7 +70,7 @@ class TestOpenAIAPIWrapper:
 
         # Template missing {instruction} placeholder
         with pytest.raises(ValueError, match="must contain.*instruction"):
-            OpenAIAPIWrapper(
+            OpenAIAPIEncodeWrapper(
                 endpoint_url="http://localhost:8000",
                 model_name="test-model",
                 use_instructions=True,
@@ -101,7 +101,7 @@ class TestOpenAIAPIWrapper:
         }
         mock_post.return_value = mock_post_response
 
-        wrapper = OpenAIAPIWrapper(
+        wrapper = OpenAIAPIEncodeWrapper(
             endpoint_url="http://localhost:8000",
             model_name="test-model",
         )
@@ -139,7 +139,7 @@ class TestOpenAIAPIWrapper:
 
         mock_get.return_value = mock_response
 
-        wrapper = OpenAIAPIWrapper(
+        wrapper = OpenAIAPIEncodeWrapper(
             endpoint_url="https://self-signed-cert:8000",
             model_name="test-model",
             verify_ssl=False,
@@ -161,7 +161,7 @@ class TestOpenAIAPIWrapper:
         mock_response.json.return_value = {"data": [{"id": "test-model"}]}
         mock_get.return_value = mock_response
 
-        wrapper = OpenAIAPIWrapper(
+        wrapper = OpenAIAPIEncodeWrapper(
             endpoint_url="http://localhost:8000",
             model_name="test-model",
             api_key="test-key-123",
@@ -206,7 +206,7 @@ class TestOpenAIAPIWrapper:
 
         mock_post.side_effect = mock_post_side_effect
 
-        wrapper = OpenAIAPIWrapper(
+        wrapper = OpenAIAPIEncodeWrapper(
             endpoint_url="http://localhost:8000",
             model_name="test-model",
         )
@@ -276,7 +276,7 @@ class TestOpenAIAPIWrapper:
             ),
         )
 
-        wrapper = OpenAIAPIWrapper(
+        wrapper = OpenAIAPIEncodeWrapper(
             endpoint_url="http://localhost:8000",
             model_name="test",
         )

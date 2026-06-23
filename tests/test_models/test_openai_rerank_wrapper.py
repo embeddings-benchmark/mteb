@@ -1,4 +1,4 @@
-"""Tests for OpenAIRerankWrapper.
+"""Tests for OpenAIAPIRerankWrapper.
 
 All tests are fully mocked and do not require a running server.
 """
@@ -9,11 +9,11 @@ import numpy as np
 import pytest
 import requests
 
-from mteb.models.openai_wrappers import OpenAIRerankWrapper
+from mteb.models.openai_wrappers import OpenAIAPIRerankWrapper
 
 
-class TestOpenAIRerankWrapper:
-    """Test OpenAIRerankWrapper functionality."""
+class TestOpenAIAPIRerankWrapper:
+    """Test OpenAIAPIRerankWrapper functionality."""
 
     @patch("requests.get")
     def test_initialization(self, mock_get):
@@ -30,7 +30,7 @@ class TestOpenAIRerankWrapper:
         }
         mock_get.return_value = mock_response
 
-        wrapper = OpenAIRerankWrapper(
+        wrapper = OpenAIAPIRerankWrapper(
             endpoint_url="http://localhost:8001",
             model_name="test-reranker",
         )
@@ -44,7 +44,7 @@ class TestOpenAIRerankWrapper:
                 "Connection failed"
             )
             with pytest.raises(ConnectionError):
-                OpenAIRerankWrapper(
+                OpenAIAPIRerankWrapper(
                     endpoint_url="http://invalid-endpoint:9999",
                     model_name="test-model",
                 )
@@ -71,7 +71,7 @@ class TestOpenAIRerankWrapper:
         }
         mock_post.return_value = mock_post_response
 
-        wrapper = OpenAIRerankWrapper(
+        wrapper = OpenAIAPIRerankWrapper(
             endpoint_url="http://localhost:8001",
             model_name="test-reranker",
         )
@@ -118,7 +118,7 @@ class TestOpenAIRerankWrapper:
             ),
         ]
 
-        wrapper = OpenAIRerankWrapper(
+        wrapper = OpenAIAPIRerankWrapper(
             endpoint_url="http://localhost:8001",
             model_name="test",
         )
@@ -165,7 +165,7 @@ class TestOpenAIRerankWrapper:
         from mteb.abstasks.task_metadata import TaskMetadata
         from mteb.types import PromptType
 
-        wrapper = OpenAIRerankWrapper(
+        wrapper = OpenAIAPIRerankWrapper(
             endpoint_url="http://localhost:8001",
             model_name="test-model",
         )
@@ -202,7 +202,7 @@ class TestOpenAIRerankWrapper:
             status_code=200, json=MagicMock(return_value={"data": [{"id": "test"}]})
         )
 
-        wrapper = OpenAIRerankWrapper(
+        wrapper = OpenAIAPIRerankWrapper(
             endpoint_url="http://localhost:8001",
             model_name="test",
         )

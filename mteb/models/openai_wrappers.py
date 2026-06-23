@@ -5,26 +5,26 @@ OpenAI-compatible APIs (such as vLLM servers, OpenAI, or other compatible server
 
 Classes:
     OpenAIBaseWrapper: Base class with shared HTTP connection logic
-    OpenAIAPIWrapper: Wrapper for embedding models using /v1/embeddings endpoint
-    OpenAIRerankWrapper: Wrapper for reranking models using /v1/rerank endpoint
+    OpenAIAPIEncodeWrapper: Wrapper for embedding models using /v1/embeddings endpoint
+    OpenAIAPIRerankWrapper: Wrapper for reranking models using /v1/rerank endpoint
 
 Examples:
     Embeddings with vLLM:
-        >>> from mteb.models import OpenAIAPIWrapper
-        >>> wrapper = OpenAIAPIWrapper(
+        >>> from mteb.models import OpenAIAPIEncodeWrapper
+        >>> wrapper = OpenAIAPIEncodeWrapper(
         ...     endpoint_url="http://localhost:8000",
         ...     model_name="BAAI/bge-small-en-v1.5"
         ... )
 
     Reranking with vLLM:
-        >>> from mteb.models import OpenAIRerankWrapper
-        >>> wrapper = OpenAIRerankWrapper(
+        >>> from mteb.models import OpenAIAPIRerankWrapper
+        >>> wrapper = OpenAIAPIRerankWrapper(
         ...     endpoint_url="http://localhost:8001",
         ...     model_name="BAAI/bge-reranker-v2-m3"
         ... )
 
     With OpenAI API:
-        >>> wrapper = OpenAIAPIWrapper(
+        >>> wrapper = OpenAIAPIEncodeWrapper(
         ...     endpoint_url="https://api.openai.com/v1",
         ...     model_name="text-embedding-3-small",
         ...     api_key="sk-..."
@@ -172,7 +172,7 @@ class OpenAIBaseWrapper:
             ) from e
 
 
-class OpenAIAPIWrapper(OpenAIBaseWrapper, AbsEncoder):
+class OpenAIAPIEncodeWrapper(OpenAIBaseWrapper, AbsEncoder):
     """OpenAI-compatible API wrapper for MTEB embedding benchmarks.
 
     This wrapper communicates with embedding models served via OpenAI-compatible
@@ -390,7 +390,7 @@ class OpenAIAPIWrapper(OpenAIBaseWrapper, AbsEncoder):
         return embeddings
 
 
-class OpenAIRerankWrapper(OpenAIBaseWrapper):
+class OpenAIAPIRerankWrapper(OpenAIBaseWrapper):
     """OpenAI-compatible API wrapper for MTEB reranking benchmarks.
 
     This wrapper communicates with reranking models served via OpenAI-compatible
