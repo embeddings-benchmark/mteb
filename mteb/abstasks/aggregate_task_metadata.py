@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 from pydantic import ConfigDict, Field, model_validator
 
+from mteb.benchmarks.get_benchmark import get_benchmark
 from mteb.types import (
     Languages,
 )
@@ -196,3 +197,20 @@ class AggregateTaskMetadata(TaskMetadata):
         if len(categories) == 1:
             return categories.pop()
         return None
+
+    def is_filled(self) -> bool:
+        """Check if all the metadata fields are filled, dynamically resolving tasks if they are empty."""
+        if not self.tasks:
+            self.tasks = list(get_benchmark(self.name).tasks)
+
+        core_fields = [
+            "name",
+            "description",
+            "dataset",
+            "tasks",
+            "main_score",
+            "type",
+            "eval_splits",
+            "eval_langs",
+        ]
+        return all(getattr(self, field_name) is not None for field_name in core_fields)

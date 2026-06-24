@@ -47,8 +47,30 @@ class AbsTaskAggregate(AbsTask):
                 self._tasks_resolved = self.metadata.tasks
             else:
                 self._tasks_resolved = list(get_benchmark(self.metadata.name).tasks)
-                self.metadata = self.metadata.model_copy(
-                    update={"tasks": self._tasks_resolved}
+                computed_fields = {
+                    "eval_langs",
+                    "date",
+                    "domains",
+                    "task_subtypes",
+                    "license",
+                    "annotations_creators",
+                    "dialect",
+                    "sample_creation",
+                    "modalities",
+                    "category",
+                }
+                dump = self.metadata.model_dump()
+                init_args = {}
+                for k, v in dump.items():
+                    if k == "tasks":
+                        continue
+                    if k in computed_fields and (v is None or v == []):
+                        continue
+                    init_args[k] = v
+
+                self.metadata = self.metadata.__class__(
+                    **init_args,
+                    tasks=self._tasks_resolved,
                 )
         return self._tasks_resolved
 
