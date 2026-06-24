@@ -14,6 +14,32 @@ TIMEOUT = 300
 pytest.importorskip("gradio", reason="Gradio not installed")
 
 
+def test_update_task_info_returns_empty_dataframe_for_empty_task_selection():
+    from mteb.leaderboard.app import _update_task_info
+
+    df = _update_task_info([])
+
+    assert df.empty
+    assert list(df.columns) == [
+        "Task Name",
+        "Task Type",
+        "Languages",
+        "Domains",
+        "Metric",
+        "Modality",
+        "Public",
+    ]
+
+
+def test_update_task_info_returns_selected_task():
+    from mteb.leaderboard.app import _update_task_info
+
+    df = _update_task_info(["STS12"])
+
+    assert len(df.index) == 1
+    assert "STS12" in df.loc[0, "Task Name"]
+
+
 def run_leaderboard_app():
     """Function to launch the leaderboard app."""
     # Set up logging for subprocess
