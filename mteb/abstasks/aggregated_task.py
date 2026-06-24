@@ -46,7 +46,7 @@ class AbsTaskAggregate(AbsTask):
             if self.metadata.tasks:
                 self._tasks_resolved = self.metadata.tasks
             else:
-                self._tasks_resolved = get_benchmark(self.metadata.name).tasks
+                self._tasks_resolved = list(get_benchmark(self.metadata.name).tasks)
                 self.metadata = self.metadata.model_copy(
                     update={"tasks": self._tasks_resolved}
                 )

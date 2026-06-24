@@ -50,6 +50,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from mteb._reversible_workflow.reversible_workflow import ReversibleAction
+    from mteb.abstasks.aggregated_task import AbsTaskAggregate
     from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
@@ -1381,9 +1382,11 @@ class ResultCache:
                 else:
                     requested_task_names.add(cast("str", task))
 
-        all_agg_tasks = [t for t in get_tasks() if t.is_aggregate]
+        all_agg_tasks = [
+            cast("AbsTaskAggregate", t) for t in get_tasks() if t.is_aggregate
+        ]
 
-        agg_tasks_to_compute = []
+        agg_tasks_to_compute: list[AbsTaskAggregate] = []
         if tasks is not None:
             for agg_task in all_agg_tasks:
                 if agg_task.metadata.name in requested_task_names:
@@ -1391,9 +1394,9 @@ class ResultCache:
         else:
             agg_tasks_to_compute = all_agg_tasks
 
-        tasks_for_cache = None
+        tasks_for_cache: list[str | AbsTask] | None = None
         if tasks is not None:
-            tasks_for_cache = list(tasks)
+            tasks_for_cache = list(cast("Iterable[str | AbsTask]", tasks))
             tasks_for_cache_names = set(requested_task_names)
             for agg_task in agg_tasks_to_compute:
                 for subtask in agg_task.tasks:
@@ -1417,7 +1420,7 @@ class ResultCache:
                 if isinstance(task, AbsTask):
                     task_names[task.metadata.name] = task
                 else:
-                    task_names[cast("str", task)] = None
+                    task_names[task] = None
 
         experiment_names = set()
         if isinstance(experiment_kwargs, Mapping):
@@ -1505,7 +1508,7 @@ class ResultCache:
     @staticmethod
     def _dynamic_aggregate_results(
         models_results: dict[tuple[str, str, str | None], list[TaskResult]],
-        agg_tasks_to_compute: list[AbsTask],
+        agg_tasks_to_compute: list[AbsTaskAggregate],
         requested_task_names: set[str],
         only_main_score: bool,
         filter_subtasks: bool,
