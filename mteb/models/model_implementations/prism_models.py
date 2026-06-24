@@ -60,6 +60,7 @@ prism_qwen35_reranker_2b = ModelMeta(
     embed_dim=2048,
     memory_usage_mb=3589,
     reference="https://huggingface.co/infgrad/Prism-Qwen3.5-Reranker-2B",
+    adapted_from="Qwen/Qwen3.5",
 )
 
 prism_qwen35_reranker_4b = ModelMeta(
@@ -71,6 +72,7 @@ prism_qwen35_reranker_4b = ModelMeta(
     embed_dim=2560,
     memory_usage_mb=8022,
     reference="https://huggingface.co/infgrad/Prism-Qwen3.5-Reranker-4B",
+    adapted_from="Qwen/Qwen3.5",
 )
 
 prism_qwen35_reranker_9b = ModelMeta(
@@ -82,4 +84,5 @@ prism_qwen35_reranker_9b = ModelMeta(
     embed_dim=4096,
     memory_usage_mb=17078,
     reference="https://huggingface.co/infgrad/Prism-Qwen3.5-Reranker-9B",
+    adapted_from="Qwen/Qwen3.5",
 )
