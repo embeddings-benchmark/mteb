@@ -70,9 +70,42 @@ def _produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
     return md
 
 
-def _set_benchmark_on_load(request: gr.Request):
+@functools.cache
+def _leaderboard_benchmark_names() -> frozenset[str]:
+    names: set[str] = set()
+    pending: list[Benchmark | MenuEntry] = [
+        *GP_BENCHMARK_ENTRIES,
+        *R_BENCHMARK_ENTRIES,
+    ]
+
+    while pending:
+        entry = pending.pop()
+        if isinstance(entry, Benchmark):
+            names.add(entry.name)
+        else:
+            pending.extend(entry.benchmarks)
+
+    return frozenset(names)
+
+
+def _resolve_benchmark_name_from_query(benchmark_name: str | None) -> str:
+    if benchmark_name is None:
+        return DEFAULT_BENCHMARK_NAME
+
+    try:
+        resolved_name = mteb.get_benchmark(benchmark_name).name
+    except KeyError:
+        return DEFAULT_BENCHMARK_NAME
+
+    if resolved_name not in _leaderboard_benchmark_names():
+        return DEFAULT_BENCHMARK_NAME
+
+    return resolved_name
+
+
+def _set_benchmark_on_load(request: gr.Request) -> str:
     query_params = request.query_params
-    return query_params.get("benchmark_name", DEFAULT_BENCHMARK_NAME)
+    return _resolve_benchmark_name_from_query(query_params.get("benchmark_name"))
 
 
 def _download_table(table: pd.DataFrame) -> str:
