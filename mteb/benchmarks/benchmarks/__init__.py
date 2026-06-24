@@ -62,6 +62,7 @@ from mteb.benchmarks.benchmarks.benchmarks import (
     MTEB_MAIN_RU_v1_1,
     MTEB_multilingual_v1,
     MTEB_multilingual_v2,
+    Overview,
     RAR_b,
 )
 from mteb.benchmarks.benchmarks.rteb_benchmarks import (
@@ -150,5 +151,6 @@ __all__ = [
     "MTEB_code",
     "MTEB_multilingual_v1",
     "MTEB_multilingual_v2",
+    "Overview",
     "RAR_b",
 ]
