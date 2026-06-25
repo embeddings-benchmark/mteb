@@ -144,6 +144,31 @@ qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
 # omnivinci = ["transformers==4.46.0", "torch==2.8.*", "einops>=0.8.0", "openai-whisper>=20240930", "soundfile>=0.13.1", "opencv-python-headless>=4.0.0", "kaldiio>=2.18.0", "decord>=0.6.0", "librosa>=0.10.0", "beartype>=0.18.0", "accelerate>=1.0.0", "s2wrapper @ git+https://github.com/bfshi/scaling_on_scales", "deepspeed>=0.9.0", "torchvision>=0.15.0", "torchaudio>=2.0.0", "torchcodec==0.7.0", "av>=10.0.0", "numpy>=1.23.0,<2.0.0", "flash-attn>=2.6.3"]
 qwen_omni_utils = ["qwen_omni_utils"]
 embeddinggemma = ["transformers>=4.56.0"]
+# WAVE-7B (tsinghua-ee/WAVE-7B). Versions mirror the upstream repo's requirements.txt
+# (https://github.com/TCL606/WAVE), vendored as a submodule at external/WAVE. Also requires the
+# `audio` and `video` extras, plus the external BEATs_iter3_plus.pt checkpoint at load time.
+wave = [
+    # Upstream WAVE pins torch==2.6.0 (training repro); inference works on 2.7.1, which is
+    # required for MTEB's video stack: datasets>=4 (Video -> torchcodec VideoDecoder) needs a
+    # torchcodec whose torch pairing is >=2.7 (datasets 4.8+ even needs torch>=2.8).
+    "torch==2.7.1",
+    "torchvision==0.22.1",
+    "torchaudio==2.7.1",
+    "torchcodec==0.4.*",        # torch 2.7.1 pairing
+    "datasets[audio]>=4,<4.8",
+    "transformers==4.51.3",
+    "sentence-transformers<5",  # ST>=5 hard-imports torchcodec at module top
+    "liger_kernel==0.5.10",
+    "decord>=0.6.0",
+    "soundfile>=0.13.1",
+    "ffmpeg-python>=0.2.0",
+    "peft>=0.11.0",
+    "accelerate>=1.7.0",
+    "setuptools",               # triton needs it at import
+    # flash-attn is intentionally NOT listed: cold installs would attempt a source build
+    # (needs torch + nvcc at build time). Install the matching prebuilt wheel afterwards —
+    # scripts/setup_wave_env.sh does this automatically.
+]
 # ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
 
 
@@ -457,6 +482,7 @@ conflicts = [
         { extra = "muq" },
         { extra = "transformers-v4" },
         { extra = "qwen-vl" },
+        { extra = "wave" }, # pins transformers==4.51.3
         # { extra = "omnivinci" },
         { extra = "embeddinggemma" },
         # { extra = "ebind" },

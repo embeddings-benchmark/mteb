@@ -1,0 +1,3 @@
+[submodule "external/WAVE"]
+	path = external/WAVE
+	url = https://github.com/TCL606/WAVE.git
