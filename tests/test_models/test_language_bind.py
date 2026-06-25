@@ -5,7 +5,12 @@ from __future__ import annotations
 import pytest
 
 import mteb
+from mteb.models.model_implementations.language_bind_models import (
+    _apply_languagebind_compat,
+)
 from tests.mock_tasks import MockAudioClassification, MockImageClassificationTask
+
+_apply_languagebind_compat()
 
 languagebind = pytest.importorskip(
     "languagebind",
@@ -14,11 +19,7 @@ languagebind = pytest.importorskip(
 
 
 def test_languagebind_image_on_mock_task():
-    from mteb.models.model_implementations.language_bind_models import (
-        LanguageBindImageWrapper,
-    )
-
-    model = LanguageBindImageWrapper("LanguageBind/LanguageBind_Image")
+    model = mteb.get_model("LanguageBind/LanguageBind_Image")
     results = mteb.evaluate(
         model, MockImageClassificationTask(), cache=None, co2_tracker=False
     )
@@ -29,11 +30,7 @@ def test_languagebind_image_on_mock_task():
 
 
 def test_languagebind_audio_on_mock_task():
-    from mteb.models.model_implementations.language_bind_models import (
-        LanguageBindAudioWrapper,
-    )
-
-    model = LanguageBindAudioWrapper("LanguageBind/LanguageBind_Audio_FT")
+    model = mteb.get_model("LanguageBind/LanguageBind_Audio_FT")
     results = mteb.evaluate(
         model, MockAudioClassification(), cache=None, co2_tracker=False
     )

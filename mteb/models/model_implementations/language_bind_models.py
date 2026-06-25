@@ -22,6 +22,28 @@ if TYPE_CHECKING:
 # LanguageBind expects audio sampled at 16 kHz (its audio mel-spectrogram pipeline).
 _LANGUAGE_BIND_AUDIO_SR = 16000
 
+_LANGUAGEBIND_SHIM_APPLIED: list[bool] = []
+
+
+def _apply_languagebind_compat() -> None:
+    """Install the one compatibility shim LanguageBind's deps still need.
+
+    pytorchvideo 0.1.5 imports ``torchvision.transforms.functional_tensor``,
+    which was removed in torchvision 0.17. Alias it to the current functional
+    module so ``import languagebind`` succeeds on modern torchvision.
+    """
+    if _LANGUAGEBIND_SHIM_APPLIED:
+        return
+    import sys
+
+    try:
+        import torchvision.transforms.functional_tensor  # noqa: F401
+    except ImportError:
+        import torchvision.transforms.functional as _tv_functional
+
+        sys.modules["torchvision.transforms.functional_tensor"] = _tv_functional
+    _LANGUAGEBIND_SHIM_APPLIED.append(True)
+
 
 class _LanguageBindBase(AbsEncoder):
     """Shared text-encoding logic for the LanguageBind modality wrappers.
@@ -105,6 +127,7 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         max_samples: int | None = None,
         **kwargs: Any,
     ):
+        _apply_languagebind_compat()
         from languagebind import (
             LanguageBindVideo,
             LanguageBindVideoProcessor,
@@ -220,6 +243,7 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
         revision: str | None = None,
         **kwargs: Any,
     ):
+        _apply_languagebind_compat()
         from languagebind import (
             LanguageBindAudio,
             LanguageBindAudioProcessor,
@@ -317,6 +341,7 @@ class LanguageBindImageWrapper(_LanguageBindBase):
         revision: str | None = None,
         **kwargs: Any,
     ):
+        _apply_languagebind_compat()
         from languagebind import (
             LanguageBindImage,
             LanguageBindImageProcessor,
