@@ -54,6 +54,34 @@ MULTILINGUAL_EVALUATED_LANGUAGES = [
 # Prompt mapping for Gemini Embedding 2.
 # Task-type defaults are derived from MTEB metadata; per-task overrides
 # are from Google's recommended mapping in issue #4260.
+GEMINI_EMBEDDING_2_TEXT_PREFIXES = {
+    "RETRIEVAL_QUERY": "task: search result | query: {text}",
+    "QUESTION_ANSWERING": "task: question answering | query: {text}",
+    "FACT_VERIFICATION": "task: fact checking | query: {text}",
+    "CODE_RETRIEVAL_QUERY": "task: code retrieval | query: {text}",
+    "CLASSIFICATION": "task: classification | query: {text}",
+    "CLUSTERING": "task: clustering | query: {text}",
+    "SEMANTIC_SIMILARITY": "task: sentence similarity | query: {text}",
+}
+
+
+def _format_gemini_embedding_2_document(text: str, title: str | None = None) -> str:
+    return f"title: {title or 'none'} | text: {text}"
+
+
+def _format_gemini_embedding_2_text(
+    text: str,
+    google_task_type: str | None,
+    prompt_type: PromptType | None,
+    title: str | None = None,
+) -> str:
+    if prompt_type == PromptType.document:
+        return _format_gemini_embedding_2_document(text, title)
+    if google_task_type in GEMINI_EMBEDDING_2_TEXT_PREFIXES:
+        return GEMINI_EMBEDDING_2_TEXT_PREFIXES[google_task_type].format(text=text)
+    return text
+
+
 GEMINI_EMBEDDING_2_PROMPTS = {
     # Task-type defaults (derived from metadata)
     "Classification": "CLASSIFICATION",
@@ -169,16 +197,12 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
     def _embed(
         self,
         contents: list,
-        google_task_type: str | None = None,
         show_progress_bar: bool = False,
         batch_size: int = 32,
     ) -> np.ndarray:
         from google.genai.types import EmbedContentConfig
 
-        config = EmbedContentConfig(
-            taskType=google_task_type,
-            outputDimensionality=self.embed_dim,
-        )
+        config = EmbedContentConfig(outputDimensionality=self.embed_dim)
 
         async def run() -> list:
             semaphore = asyncio.Semaphore(batch_size)
@@ -266,16 +290,16 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
                         [text, Part.from_bytes(data=wav_bytes, mime_type="audio/wav")]
                     )
         elif has_text:
-            if has_title:
-                contents = []
-                for batch in inputs:
-                    for title, text in zip(batch["title"], batch["text"]):
-                        if title:
-                            contents.append(f"title: {title} | text: {text}")
-                        else:
-                            contents.append(text)
-            else:
-                contents = [text for batch in inputs for text in batch["text"]]
+            contents = []
+            for batch in inputs:
+                texts = batch["text"]
+                titles = batch["title"] if has_title else [None] * len(texts)
+                for text, title in zip(texts, titles):
+                    contents.append(
+                        _format_gemini_embedding_2_text(
+                            text, google_task_type, prompt_type, title
+                        )
+                    )
         elif has_image:
             contents = [img for batch in inputs for img in batch["image"]]
         elif has_audio:
@@ -291,7 +315,6 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
 
         return self._embed(
             contents,
-            google_task_type=google_task_type,
             show_progress_bar=show_progress_bar,
             batch_size=batch_size,
         )

@@ -635,7 +635,7 @@ class TaskMetadata(BaseModel):
         for subset, subset_value in stats.items():
             if subset == "hf_subset_descriptive_stats":
                 continue
-            n_samples[subset] = subset_value["num_samples"]
+            n_samples[subset] = subset_value["num_samples"]  # type: ignore[typeddict-item]
         return n_samples
 
     @property

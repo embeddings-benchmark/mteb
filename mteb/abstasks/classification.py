@@ -20,9 +20,7 @@ from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator
 from mteb.models import EncoderProtocol
 from mteb.timing import TimingStack
-from mteb.types.statistics import (
-    SplitDescriptiveStatistics,
-)
+from mteb.types.statistics import ClassificationDescriptiveStatistics
 
 from ._statistics_calculation import (
     _compute_modality_hashes,
@@ -41,40 +39,8 @@ if TYPE_CHECKING:
     from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
     from mteb.models import MTEBModels
     from mteb.types import Array, EncodeKwargs, HFSubset, Modalities, ScoresDict
-    from mteb.types.statistics import (
-        AudioStatistics,
-        ImageStatistics,
-        LabelStatistics,
-        TextStatistics,
-        VideoStatistics,
-    )
 
 logger = logging.getLogger(__name__)
-
-
-class ClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for Classification
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-        samples_in_train: Number of unique test samples (across all input modalities)
-            that also appear in the train split. None when evaluated on the train split itself.
-
-        text_statistics: Statistics for text
-        image_statistics: Statistics for images
-        audio_statistics: Statistics for audio
-        video_statistics: Statistics for video
-        label_statistics: Statistics for labels
-    """
-
-    num_samples: int
-    samples_in_train: int | None
-
-    text_statistics: TextStatistics | None
-    image_statistics: ImageStatistics | None
-    audio_statistics: AudioStatistics | None
-    video_statistics: VideoStatistics | None
-    label_statistics: LabelStatistics
 
 
 class ClassificationMetrics(TypedDict):
