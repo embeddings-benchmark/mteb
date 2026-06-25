@@ -406,7 +406,7 @@ mxbai_rerank_base_v2 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["cross-encoder"],
-    extra_requirements_groups=("mxbai-rerank-v2",),
+    extra_requirements_groups=["multimodal-sbert"],
     citation=MXBAI_RERANK_V2_CITATION,
     contacts=None,
 )
@@ -436,7 +436,7 @@ mxbai_rerank_large_v2 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["cross-encoder"],
-    extra_requirements_groups=("mxbai-rerank-v2",),
+    extra_requirements_groups=["multimodal-sbert"],
     citation=MXBAI_RERANK_V2_CITATION,
     contacts=None,
 )
