@@ -14,9 +14,7 @@ from sklearn.metrics.cluster import adjusted_mutual_info_score, v_measure_score
 from mteb._create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
 from mteb.types import Array, HFSubset
-from mteb.types.statistics import (
-    SplitDescriptiveStatistics,
-)
+from mteb.types.statistics import ClusteringFastDescriptiveStatistics
 
 from ._statistics_calculation import (
     calculate_label_statistics,
@@ -31,13 +29,6 @@ if TYPE_CHECKING:
     from mteb.models import MTEBModels
     from mteb.timing import TimingStack
     from mteb.types import Array, EncodeKwargs, Modalities, ScoresDict
-    from mteb.types.statistics import (
-        AudioStatistics,
-        ImageStatistics,
-        LabelStatistics,
-        TextStatistics,
-        VideoStatistics,
-    )
 
 logger = logging.getLogger(__name__)
 
@@ -116,28 +107,6 @@ def _evaluate_clustering_bootstrapped(
             cluster_assignments[f"Level {i_level}"].append(cluster_assignment.tolist())
 
     return scores, cluster_assignments
-
-
-class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for ClusteringFast
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-
-        text_statistics: Statistics for text
-        image_statistics: Statistics for images
-        audio_statistics: Statistics for audio
-        video_statistics: Statistics for video
-        labels_statistics: Statistics for labels
-    """
-
-    num_samples: int
-
-    text_statistics: TextStatistics | None
-    image_statistics: ImageStatistics | None
-    audio_statistics: AudioStatistics | None
-    video_statistics: VideoStatistics | None
-    labels_statistics: LabelStatistics
 
 
 class AbsTaskClustering(AbsTask):

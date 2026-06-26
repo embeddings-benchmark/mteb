@@ -155,6 +155,12 @@ TaskDomain = Literal[
     "Music",
     "Bioacoustics",
     "Sport",
+    # Video content domains
+    "Activity",  # human actions / activities (action recognition, activity QA)
+    "Instructional",  # procedural / how-to / cooking content
+    "Egocentric",  # first-person / wearable-camera video
+    "Nature",  # animals, wildlife, natural environments
+    "Animation",  # cartoon / animated / synthetic content
 ]
 """
 The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though
@@ -629,7 +635,7 @@ class TaskMetadata(BaseModel):
         for subset, subset_value in stats.items():
             if subset == "hf_subset_descriptive_stats":
                 continue
-            n_samples[subset] = subset_value["num_samples"]
+            n_samples[subset] = subset_value["num_samples"]  # type: ignore[typeddict-item]
         return n_samples
 
     @property

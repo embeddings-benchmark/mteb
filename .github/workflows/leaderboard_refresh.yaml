@@ -39,13 +39,13 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/leaderboard:${{ github.sha }}
-            ghcr.io/${{ github.repository }}/leaderboard:latest
+            ghcr.io/${{ github.repository }}/leaderboard-backend:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/leaderboard-backend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Trigger Factory Rebuild
         run: |
           curl -X POST \
-            "https://huggingface.co/api/spaces/mteb/leaderboard/restart?factory=true" \
+            "https://huggingface.co/api/spaces/mteb/leaderboard-backend/restart?factory=true" \
             -H "Authorization: Bearer ${{ secrets.HF_TOKEN }}"

@@ -541,6 +541,43 @@ perplexity__pplx_embed_v1_late_0_6b = ModelMeta(
     extra_requirements_groups=["pylate"],
 )
 
+
+topk_io__iso_moderncolbert = ModelMeta(
+    loader=MultiVectorModel,
+    name="topk-io/Iso-ModernColBERT",
+    model_type=["late-interaction"],
+    languages=[
+        "eng-Latn",
+    ],
+    open_weights=True,
+    revision="a43b93e62b11ff205b7f935c1ce2207bfed2d283",
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/lightonai/ms-marco-en-bge-gemma",
+    release_date="2026-05-27",
+    n_parameters=149015808,
+    n_embedding_parameters=38684160,
+    memory_usage_mb=568,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/topk-io/Iso-ModernColBERT",
+    use_instructions=False,
+    adapted_from="lightonai/GTE-ModernColBERT-v1",
+    superseded_by=None,
+    training_datasets={
+        "MSMARCO",
+    },
+    citation="""@misc{Iso-ModernColBERT,
+    title={Iso-ModernColBERT},
+    author={TopK},
+    url={https://huggingface.co/topk-io/Iso-ModernColBERT},
+    year={2026}
+}""",
+    extra_requirements_groups=["pylate"],
+)
+
 late_on_code_citation = """@misc{LateOn-Code,
   title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
   author = {Chaffin, Antoine},
