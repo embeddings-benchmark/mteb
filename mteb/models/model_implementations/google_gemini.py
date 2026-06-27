@@ -347,6 +347,35 @@ google_gemini_embedding_001 = ModelMeta(
     extra_requirements_groups=["vertexai"],
 )
 
+google_gemini_embedding_2 = ModelMeta(
+    loader=GoogleGeminiEmbeddingModel,  # type: ignore[call-arg]
+    loader_kwargs=dict(
+        model_prompts=GEMINI_EMBEDDING_2_PROMPTS,
+        embed_dim=3072,
+    ),
+    name="google/gemini-embedding-2",
+    model_type=["dense"],
+    languages=MULTILINGUAL_EVALUATED_LANGUAGES,
+    modalities=["audio", "image", "text"],
+    open_weights=False,
+    revision="1",
+    release_date="2026-04-22",
+    n_parameters=None,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=8192,
+    embed_dim=[768, 1536, 3072],
+    license=None,
+    reference="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/embedding-2",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=GECKO_TRAINING_DATA,
+    extra_requirements_groups=["google_genai"],
+)
+
 google_gemini_embedding_2_preview = ModelMeta(
     loader=GoogleGeminiEmbeddingModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
