@@ -12,6 +12,12 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 2. [Evaluate](../get_started/usage/get_started.md#evaluating-a-model) the desired model using `mteb` on the [benchmarks](../get_started/usage/selecting_tasks.md#selecting-a-benchmark)
 3. Push the results to the [results repository](https://github.com/embeddings-benchmark/results) via a PR. Once merged they will appear on the leaderboard after a day.
 
+!!! tip "Requesting an evaluation"
+
+    If you want a model to be evaluated but are not submitting the results yourself, open an [Evaluation Request](https://github.com/embeddings-benchmark/mteb/issues/new?template=eval_request.yaml) issue instead. Include the model link, the tasks or benchmarks you care about, whether the model already exists in MTEB, and whether you can help run the evaluation.
+
+    Maintainers generally prioritize evaluation requests for private subsets or cases where community contributors cannot run the benchmark directly. For public benchmarks, the fastest path is still to run the evaluation locally and submit the results PR.
+
 !!! info Submitting Evaluation Results
 
     This section contains info on how to submit a model implementation. If you wish to submit a model results see [submit results](./submitting_results.md).
