@@ -31,6 +31,7 @@ from mteb.types.statistics import RetrievalDescriptiveStatistics
 from ._statistics_calculation import (
     calculate_relevant_docs_statistics,
     calculate_single_input_modality_statistics,
+    calculate_text_relevance_overlap_statistics,
     calculate_top_ranked_statistics,
 )
 from .abstask import AbsTask
@@ -573,13 +574,22 @@ class AbsTaskRetrieval(AbsTask):
         )
 
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
+        text_relevance_overlap_statistics = (
+            calculate_text_relevance_overlap_statistics(
+                relevant_docs,
+                dict(zip(queries["id"], queries_col_inputs["text"], strict=True)),
+                dict(zip(corpus["id"], corpus_col_inputs["text"], strict=True)),
+            )
+            if "text" in queries_col_inputs and "text" in corpus_col_inputs
+            else None
+        )
         top_ranked_statistics = (
             calculate_top_ranked_statistics(top_ranked, num_queries)
             if top_ranked is not None and num_queries and len(top_ranked) > 0
             else None
         )
 
-        return RetrievalDescriptiveStatistics(
+        stats = RetrievalDescriptiveStatistics(
             num_samples=num_documents + num_queries,
             num_queries=num_queries,
             num_documents=num_documents,
@@ -595,6 +605,11 @@ class AbsTaskRetrieval(AbsTask):
             relevant_docs_statistics=relevant_docs_statistics,
             top_ranked_statistics=top_ranked_statistics,
         )
+        if text_relevance_overlap_statistics is not None:
+            stats["text_relevance_overlap_statistics"] = (
+                text_relevance_overlap_statistics
+            )
+        return stats
 
     def _push_dataset_to_hub(
         self,

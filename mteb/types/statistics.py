@@ -228,6 +228,25 @@ class RelevantDocsStatistics(TypedDict):
     unique_relevant_docs: int
 
 
+class TextRelevanceOverlapStatistics(TypedDict):
+    """Token-overlap statistics for query and relevant document text pairs.
+
+    Attributes:
+        num_pairs: Number of positive query-document relevance pairs considered.
+        min_query_token_recall: Minimum fraction of unique query tokens found in
+            the relevant document text.
+        average_query_token_recall: Average fraction of unique query tokens found
+            in the relevant document text.
+        max_query_token_recall: Maximum fraction of unique query tokens found in
+            the relevant document text.
+    """
+
+    num_pairs: int
+    min_query_token_recall: float
+    average_query_token_recall: float
+    max_query_token_recall: float
+
+
 class SingleInputModalityStatistics(TypedDict):
     """Per-modality statistics for a single-input dataset (Classification, Regression, …).
 
@@ -509,6 +528,8 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
         queries_audio_statistics: Statistics for queries
         queries_video_statistics: Statistics for queries
         relevant_docs_statistics: Statistics for relevant documents
+        text_relevance_overlap_statistics: Token-overlap statistics for positive
+            text query-document pairs
         top_ranked_statistics: Statistics for top ranked documents (if available)
     """
 
@@ -528,6 +549,7 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     queries_video_statistics: VideoStatistics | None
 
     relevant_docs_statistics: RelevantDocsStatistics
+    text_relevance_overlap_statistics: NotRequired[TextRelevanceOverlapStatistics]
 
     # this is for datasets that do reranking
     top_ranked_statistics: TopRankedStatistics | None
