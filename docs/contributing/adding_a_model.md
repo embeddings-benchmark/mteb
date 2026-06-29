@@ -14,9 +14,9 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 
 !!! tip "Requesting an evaluation"
 
-    If you want a model to be evaluated but are not submitting the results yourself, open an [Evaluation Request](https://github.com/embeddings-benchmark/mteb/issues/new?template=eval_request.yaml) issue instead. Include the model link, the tasks or benchmarks you care about, whether the model already exists in MTEB, and whether you can help run the evaluation.
+    If you want a model to be evaluated but are not submitting the results yourself, open an [Evaluation Request](https://github.com/embeddings-benchmark/mteb/issues/new?template=eval_request.yaml) issue instead and fill out the required information.
 
-    Maintainers generally prioritize evaluation requests for private subsets or cases where community contributors cannot run the benchmark directly. For public benchmarks, the fastest path is still to run the evaluation locally and submit the results PR.
+    Maintainers prioritize evaluation requests for private subsets or cases where community contributors cannot run the benchmark directly. We aim to run a private evaluation within 7 working days of the request. For public benchmarks, the fastest path is still to run the evaluation locally and submit the results PR.
 
 !!! info Submitting Evaluation Results
 
