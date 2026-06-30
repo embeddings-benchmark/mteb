@@ -35,6 +35,7 @@ from mteb._reversible_workflow.reversible_workflow import (
 from mteb.abstasks import AbsTask
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.benchmarks.get_benchmark import get_benchmark
+from mteb.get_tasks import get_task, get_tasks
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
@@ -49,6 +50,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from mteb._reversible_workflow.reversible_workflow import ReversibleAction
+    from mteb.abstasks.aggregated_task import AbsTaskAggregate
     from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
@@ -1297,7 +1299,7 @@ class ResultCache:
             pr_body=pr_body,
         )
 
-    def load_results(
+    def load_results(  # noqa: PLR0914
         self,
         models: Sequence[str] | Iterable[ModelMeta] | None = None,
         tasks: Sequence[str]
@@ -1371,9 +1373,41 @@ class ResultCache:
             next(iter(models)), ModelMeta
         )
 
+        # Identify requested task names and aggregate tasks to compute
+        requested_task_names = set()
+        if tasks is not None:
+            for task in tasks:
+                if isinstance(task, AbsTask):
+                    requested_task_names.add(task.metadata.name)
+                else:
+                    requested_task_names.add(cast("str", task))
+
+        all_agg_tasks = [
+            cast("AbsTaskAggregate", t) for t in get_tasks() if t.is_aggregate
+        ]
+
+        agg_tasks_to_compute: list[AbsTaskAggregate] = []
+        if tasks is not None:
+            for agg_task in all_agg_tasks:
+                if agg_task.metadata.name in requested_task_names:
+                    agg_tasks_to_compute.append(agg_task)
+        else:
+            agg_tasks_to_compute = all_agg_tasks
+
+        tasks_for_cache: list[str | AbsTask] | None = None
+        if tasks is not None:
+            tasks_for_cache = list(cast("Iterable[str | AbsTask]", tasks))
+            tasks_for_cache_names = set(requested_task_names)
+            for agg_task in agg_tasks_to_compute:
+                for subtask in agg_task.tasks:
+                    subtask_name = subtask.metadata.name
+                    if subtask_name not in tasks_for_cache_names:
+                        tasks_for_cache.append(subtask_name)
+                        tasks_for_cache_names.add(subtask_name)
+
         paths = self.get_cache_paths(
             models=models,
-            tasks=tasks,  # type: ignore[arg-type]
+            tasks=tasks_for_cache,  # type: ignore[arg-type]
             require_model_meta=require_model_meta,
             include_remote=include_remote,
             load_experiments=load_experiments,
@@ -1381,12 +1415,12 @@ class ResultCache:
         models_results = defaultdict(list)
 
         task_names: dict[str, AbsTask | None] = {}
-        if tasks is not None:
-            for task in tasks:
+        if tasks_for_cache is not None:
+            for task in tasks_for_cache:
                 if isinstance(task, AbsTask):
                     task_names[task.metadata.name] = task
                 else:
-                    task_names[cast("str", task)] = None
+                    task_names[task] = None
 
         experiment_names = set()
         if isinstance(experiment_kwargs, Mapping):
@@ -1406,16 +1440,25 @@ class ResultCache:
             )
 
             if validate_and_filter:
-                task_instance = task_names[task_result.task_name]
-                try:
-                    task_result = task_result.validate_and_filter_scores(
-                        task=task_instance
-                    )
-                except ValidationError as e:
-                    logger.info(
-                        f"Validation failed for {task_result.task_name} in {model_name} {revision}: {e}"
-                    )
-                    continue
+                task_instance = task_names.get(task_result.task_name)
+                if task_instance is None:
+                    try:
+                        task_instance = get_task(task_result.task_name)
+                    except Exception as e:
+                        logger.warning(
+                            f"Task {task_result.task_name} not found in registry. Skipping validation. Error: {e}"
+                        )
+
+                if task_instance is not None:
+                    try:
+                        task_result = task_result.validate_and_filter_scores(
+                            task=task_instance
+                        )
+                    except ValidationError as e:
+                        logger.info(
+                            f"Validation failed for {task_result.task_name} in {model_name} {revision}: {e}"
+                        )
+                        continue
 
             if len(experiment_names) > 0 and experiment_name not in experiment_names:
                 logger.debug(
@@ -1432,6 +1475,15 @@ class ResultCache:
                 continue
 
             models_results[(model_name, revision, experiment_name)].append(task_result)
+
+        # Dynamically compute aggregate tasks from the loaded subtask results
+        self._dynamic_aggregate_results(
+            models_results=models_results,
+            agg_tasks_to_compute=agg_tasks_to_compute,
+            requested_task_names=requested_task_names,
+            only_main_score=only_main_score,
+            filter_subtasks=tasks is not None,
+        )
 
         # create BenchmarkResults object
         models_results_object = [
@@ -1452,6 +1504,49 @@ class ResultCache:
             model_results=models_results_object,
             benchmark=benchmarks,
         )
+
+    @staticmethod
+    def _dynamic_aggregate_results(
+        models_results: dict[tuple[str, str, str | None], list[TaskResult]],
+        agg_tasks_to_compute: list[AbsTaskAggregate],
+        requested_task_names: set[str],
+        only_main_score: bool,
+        filter_subtasks: bool,
+    ) -> None:
+        """Dynamically compute aggregate tasks from the loaded subtask results and optionally filter subtasks."""
+        for key, loaded_results in models_results.items():
+            loaded_map = {res.task_name: res for res in loaded_results}
+            new_results = []
+
+            for agg_task in agg_tasks_to_compute:
+                if agg_task.metadata.name in loaded_map:
+                    continue
+                subtask_names = [sub.metadata.name for sub in agg_task.tasks]
+                if not subtask_names:
+                    continue
+                if all(name in loaded_map for name in subtask_names):
+                    try:
+                        subtask_results = [loaded_map[name] for name in subtask_names]
+                        combined = agg_task.combine_task_results(subtask_results)
+                        if only_main_score:
+                            combined = combined.only_main_score()
+                        new_results.append(combined)
+                        loaded_map[combined.task_name] = combined
+                    except Exception as e:
+                        logger.warning(
+                            f"Failed to dynamically combine results for {agg_task.metadata.name}: {e}"
+                        )
+
+            loaded_results.extend(new_results)
+
+        # Filter out subtasks that were only loaded for aggregation but not requested by the user
+        if filter_subtasks:
+            for key in list(models_results.keys()):
+                models_results[key] = [
+                    res
+                    for res in models_results[key]
+                    if res.task_name in requested_task_names
+                ]
 
 
 def _prepare_pr_body(

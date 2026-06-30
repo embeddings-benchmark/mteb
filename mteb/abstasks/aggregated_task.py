@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
+from mteb.benchmarks.get_benchmark import get_benchmark
 from mteb.results.task_result import TaskResult
 
 from .abstask import AbsTask
@@ -37,8 +38,46 @@ class AbsTaskAggregate(AbsTask):
 
     def __init__(self, **kwargs: Any):
         super().__init__(**kwargs)
-        self.tasks = self.metadata.tasks
-        self.taskname_to_task = {task.metadata.name: task for task in self.tasks}
+
+    @property
+    def tasks(self) -> list[AbsTask]:
+        """Get the list of subtasks for this aggregate task, dynamically resolving them if necessary."""
+        if not hasattr(self, "_tasks_resolved"):
+            if self.metadata.tasks:
+                self._tasks_resolved = self.metadata.tasks
+            else:
+                self._tasks_resolved = list(get_benchmark(self.metadata.name).tasks)
+                computed_fields = {
+                    "eval_langs",
+                    "date",
+                    "domains",
+                    "task_subtypes",
+                    "license",
+                    "annotations_creators",
+                    "dialect",
+                    "sample_creation",
+                    "modalities",
+                    "category",
+                }
+                dump = self.metadata.model_dump()
+                init_args = {}
+                for k, v in dump.items():
+                    if k == "tasks":
+                        continue
+                    if k in computed_fields and (v is None or v == []):
+                        continue
+                    init_args[k] = v
+
+                self.metadata = self.metadata.__class__(
+                    **init_args,
+                    tasks=self._tasks_resolved,
+                )
+        return self._tasks_resolved
+
+    @property
+    def taskname_to_task(self) -> dict[str, AbsTask]:
+        """Map task names to their corresponding AbsTask instances."""
+        return {task.metadata.name: task for task in self.tasks}
 
     def task_results_to_scores(
         self, task_results: list[TaskResult]

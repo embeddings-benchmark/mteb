@@ -3458,3 +3458,25 @@ CoREB = Benchmark(
 """,
     contacts=["Geralt-Targaryen"],
 )
+
+Overview = Benchmark(
+    name="Overview",
+    display_name="Overview",
+    tasks=get_tasks(
+        tasks=[
+            "MTEB(eng, v2)",
+            "MTEB(Multilingual, v2)",
+            "MTEB(Europe, v1)",
+            "MTEB(Indic, v1)",
+            "MTEB(Code, v1)",
+            "MTEB(Law, v1)",
+            "MTEB(Medical, v1)",
+            "FollowIR",
+            "LongEmbed",
+            "MIEB(eng)",
+        ]
+    ),
+    description="An overview benchmark of MTEB, aggregating results across its major subsets, including English (v2), Multilingual (v2), Europe (v1), Indic (v1), Code (v1), Law (v1), Medical (v1), FollowIR, LongEmbed, and MIEB(eng).",
+    citation=None,
+    contacts=["KennethEnevoldsen"],
+)
