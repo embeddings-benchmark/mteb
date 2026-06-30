@@ -27,7 +27,10 @@ from .japanese_code1_retrieval import JapaneseCode1Retrieval
 from .mbpp_retrieval import MBPPRetrieval
 from .stack_overflow_qa_retrieval import StackOverflowQARetrieval
 from .swebench_code_retrieval import SWEbenchCodeRetrieval
-from .synthetic_text2_sql_retrieval import SyntheticText2SQLRetrieval
+from .synthetic_text2_sql_retrieval import (
+    SyntheticText2SQLRetrieval,
+    SyntheticText2SQLRetrievalV2,
+)
 from .wiki_sql_retrieval import WikiSQLRetrieval
 
 __all__ = [
@@ -57,5 +60,6 @@ __all__ = [
     "SWEbenchCodeRetrieval",
     "StackOverflowQARetrieval",
     "SyntheticText2SQLRetrieval",
+    "SyntheticText2SQLRetrievalV2",
     "WikiSQLRetrieval",
 ]
