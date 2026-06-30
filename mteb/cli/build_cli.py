@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import torch
+from rich.console import Console
 from rich.logging import RichHandler
 
 import mteb
@@ -23,6 +24,8 @@ from mteb.models.models_protocols import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from mteb.abstasks.abstask import AbsTask
     from mteb.types import EncodeKwargs
 
@@ -530,28 +533,141 @@ def mock_run(args: argparse.Namespace) -> None:
         raise_error=False,
     )
 
-    md_lines = []
-    md_lines.append(f"# MTEB Mock-Run Results for `{args.model}`")
-    md_lines.append("")
-    md_lines.append("| Task | Modality | Pass | Reason |")
-    md_lines.append("| --- | --- | --- | --- |")
-
     passed_tasks = {res.task_name for res in results.task_results}
     failed_reasons = {
         exc.task_name: exc.exception for exc in (results.exceptions or [])
     }
 
-    for task in compatible_tasks:
-        task_name = task.metadata.name
-        modalities_str = ", ".join(task.metadata.modalities)
-        status = "✓" if task_name in passed_tasks else "✗"
-        reason = failed_reasons.get(task_name, "-")
-        reason = reason.replace("\n", " ")
-        md_lines.append(f"| {task_name} | {modalities_str} | {status} | {reason} |")
+    md_rows = _get_modality_summary(compatible_tasks, passed_tasks, model_modalities)
 
     output_path = Path("mteb_mock_run_results.md")
+    _write_full_results_to_file(
+        output_path, args.model, compatible_tasks, passed_tasks, failed_reasons, md_rows
+    )
+
+    all_passed = len(results.exceptions or []) == 0
+    _print_terminal_summary(args.model, all_passed, md_rows, output_path)
+
+
+def _write_full_results_to_file(
+    output_path: Path,
+    model_name: str,
+    compatible_tasks: list[AbsTask],
+    passed_tasks: set[str],
+    failed_reasons: dict[str, str],
+    md_rows: list[tuple[str, str, str]],
+) -> None:
+    md_lines = [
+        f"# MTEB Mock-Run Results for `{model_name}`",
+        "",
+        "| Task | Modality | Pass | Reason |",
+        "| --- | --- | --- | --- |",
+    ]
+    for task in compatible_tasks:
+        name = task.metadata.name
+        mods = ", ".join(task.metadata.modalities)
+        status = "✓" if name in passed_tasks else "✗"
+        reason = failed_reasons.get(name, "-").replace("\n", " ")
+        md_lines.append(f"| {name} | {mods} | {status} | {reason} |")
+
+    max_status_len = max([len(row[0]) for row in md_rows] + [len("Pass")])
+    max_mod_len = max([len(row[1]) for row in md_rows] + [len("Modality")])
+
+    md_lines.append("")
+    md_lines.append("## Summary by Modality")
+    md_lines.append("")
+    md_lines.append(
+        f"| {'Pass':<{max_status_len}} | {'Modality':<{max_mod_len}} | Failures |"
+    )
+    md_lines.append(f"| {'-' * max_status_len} | {'-' * max_mod_len} | {'-' * 8} |")
+    for status, modality, failures in md_rows:
+        md_lines.append(
+            f"| {status:<{max_status_len}} | {modality:<{max_mod_len}} | {failures} |"
+        )
+
     output_path.write_text("\n".join(md_lines), encoding="utf-8")
-    logger.info("Saved results to %s", output_path.resolve())
+
+
+def _get_modality_summary(
+    compatible_tasks: list[AbsTask],
+    passed_tasks: set[str],
+    model_modalities: Sequence[str] | None,
+) -> list[tuple[str, str, str]]:
+    md_rows = []
+    for modality in ["text", "image", "audio", "video"]:
+        is_supported = (
+            modality in model_modalities
+            if model_modalities is not None
+            else any(modality in t.metadata.modalities for t in compatible_tasks)
+        )
+        if not is_supported:
+            md_rows.append(("skipped", modality, ""))
+            continue
+
+        mod_tasks = [t for t in compatible_tasks if modality in t.metadata.modalities]
+        if not mod_tasks:
+            md_rows.append(("skipped", modality, ""))
+            continue
+
+        passed_count = sum(1 for t in mod_tasks if t.metadata.name in passed_tasks)
+        total_count = len(mod_tasks)
+
+        if passed_count == total_count:
+            status = f"✓ ({passed_count}/{total_count})"
+            failures = ""
+        else:
+            status = f"✗ ({passed_count}/{total_count})"
+            failures = ", ".join(
+                t.metadata.name
+                for t in mod_tasks
+                if t.metadata.name not in passed_tasks
+            )
+        md_rows.append((status, modality, failures))
+    return md_rows
+
+
+def _print_terminal_summary(
+    model_name: str,
+    all_passed: bool,
+    md_rows: list[tuple[str, str, str]],
+    output_path: Path,
+) -> None:
+    console = Console()
+
+    if all_passed:
+        console.print(f"\n[bold green]✓ `{model_name}` passed all expected checks[/]")
+    else:
+        console.print(
+            f"\n[bold red]✗ `{model_name}` did not pass all expected checks[/]"
+        )
+
+    console.print("")
+
+    max_status_len = max([len(row[0]) for row in md_rows] + [len("Pass")])
+    max_mod_len = max([len(row[1]) for row in md_rows] + [len("Modality")])
+
+    console.print(
+        f"| {'Pass':<{max_status_len}} | {'Modality':<{max_mod_len}} | Failures |"
+    )
+    console.print(f"| {'-' * max_status_len} | {'-' * max_mod_len} | {'-' * 8} |")
+
+    for status, modality, failures in md_rows:
+        status_padded = f"{status:<{max_status_len}}"
+        mod_padded = f"{modality:<{max_mod_len}}"
+
+        if "✓" in status_padded:
+            status_colored = status_padded.replace("✓", "[green]✓[/]")
+        elif "✗" in status_padded:
+            status_colored = status_padded.replace("✗", "[red]✗[/]")
+        elif "skipped" in status_padded:
+            status_colored = status_padded.replace("skipped", "[yellow]skipped[/]")
+        else:
+            status_colored = status_padded
+
+        console.print(f"| {status_colored} | {mod_padded} | {failures} |")
+
+    console.print("")
+    console.print(f"For more information see `{output_path.resolve()}`")
 
 
 def _add_mock_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
