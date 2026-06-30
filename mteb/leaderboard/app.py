@@ -35,6 +35,10 @@ from mteb.leaderboard.figures import (
     _performance_size_plot,
     _radar_chart,
 )
+from mteb.leaderboard.lazy_plots import (
+    BenchmarkSelectOutputValues,
+    build_benchmark_select_outputs,
+)
 from mteb.leaderboard.table import (
     apply_per_language_styling_from_benchmark,
     apply_per_task_styling_from_benchmark,
@@ -931,38 +935,32 @@ def get_leaderboard_app(  # noqa: PLR0914
                 languages,
             )
             t3 = time.time()
-            size_plot = _performance_size_plot(summary_raw)
-            t4 = time.time()
-            time_plot = _performance_over_time_plot(summary_raw)
-            t5 = time.time()
-            radar = _radar_chart(summary_raw)
-            t6 = time.time()
             task_info_value = _update_task_info(benchmark_tasks)
-            t7 = time.time()
+            t4 = time.time()
             description_value = _update_description(
                 benchmark_name, languages, types, domains
             )
-            t8 = time.time()
-            outputs = (
-                gr.update(choices=languages, value=languages),
-                gr.update(choices=domains, value=domains),
-                gr.update(choices=types, value=types),
-                gr.update(choices=modalities, value=modalities),
-                gr.update(choices=benchmark_tasks, value=benchmark_tasks),
-                scores,
-                gr.update(visible=show_zero_shot),
-                initial_models,
-                gr.update(visible=display_radar),
-                gr.update(value=summary_raw),
-                size_plot,
-                time_plot,
-                radar,
-                summary_table_value,
-                per_task_table_value,
-                per_language_table_value,
-                language_tab_update,
-                task_info_value,
-                description_value,
+            t5 = time.time()
+            outputs = build_benchmark_select_outputs(
+                BenchmarkSelectOutputValues(
+                    languages=languages,
+                    domains=domains,
+                    task_types=types,
+                    modalities=modalities,
+                    benchmark_tasks=benchmark_tasks,
+                    scores=scores,
+                    show_zero_shot=show_zero_shot,
+                    initial_models=initial_models,
+                    display_radar=display_radar,
+                    summary_raw=gr.update(value=summary_raw),
+                    summary_table_value=summary_table_value,
+                    per_task_table_value=per_task_table_value,
+                    per_language_table_value=per_language_table_value,
+                    language_tab_update=language_tab_update,
+                    task_info_value=task_info_value,
+                    description_value=description_value,
+                ),
+                update=gr.update,
             )
             output_names = (
                 "lang",
@@ -975,9 +973,6 @@ def get_leaderboard_app(  # noqa: PLR0914
                 "models",
                 "radar_tab",
                 "summary_data",
-                "size_plot",
-                "time_plot",
-                "radar",
                 "summary_tbl",
                 "per_task_tbl",
                 "per_lang_tbl",
@@ -991,17 +986,14 @@ def get_leaderboard_app(  # noqa: PLR0914
             total_size = sum(s for s in sizes.values() if s > 0)
             t9 = time.time()
             logger.info(
-                "on_benchmark_select [%s]: cache=%.3fs task_types=%.3fs tables=%.3fs size_plot=%.3fs time_plot=%.3fs radar=%.3fs task_info=%.3fs desc=%.3fs size_est=%.3fs total=%.3fs payload=%dKB sizes=%s",
+                "on_benchmark_select [%s]: cache=%.3fs task_types=%.3fs tables=%.3fs task_info=%.3fs desc=%.3fs size_est=%.3fs total=%.3fs payload=%dKB sizes=%s",
                 benchmark_name,
                 t1 - t0,
                 t2 - t1,
                 t3 - t2,
                 t4 - t3,
                 t5 - t4,
-                t6 - t5,
-                t7 - t6,
-                t8 - t7,
-                t9 - t8,
+                t9 - t5,
                 t9 - t0,
                 total_size // 1024,
                 {
@@ -1025,9 +1017,6 @@ def get_leaderboard_app(  # noqa: PLR0914
                 models,
                 radar_plot_tab,
                 summary_data,
-                plot,
-                timeline_plot,
-                radar_plot,
                 summary_table,
                 per_task_table,
                 per_language_table,
