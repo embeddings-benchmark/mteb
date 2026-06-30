@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import torch
+from rich.console import Console
 from rich.logging import RichHandler
 
 import mteb
@@ -15,8 +16,16 @@ from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
+from mteb.mocks import ALL_TASK_TEST_GRID
+from mteb.models.models_protocols import (
+    CrossEncoderProtocol,
+    EncoderProtocol,
+    SearchProtocol,
+)
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from mteb.abstasks.abstask import AbsTask
     from mteb.types import EncodeKwargs
 
@@ -463,6 +472,233 @@ def _leaderboard(args: argparse.Namespace) -> None:
     )
 
 
+def mock_run(args: argparse.Namespace) -> None:
+    """Run a model on the compatible mock tasks for verification."""
+    # set logging based on verbosity level
+    if args.verbosity == 0:
+        logging.getLogger("mteb").setLevel(logging.CRITICAL)
+    elif args.verbosity == 1:
+        logging.getLogger("mteb").setLevel(logging.WARNING)
+    elif args.verbosity == 2:
+        logging.getLogger("mteb").setLevel(logging.INFO)
+    elif args.verbosity == 3:
+        logging.getLogger("mteb").setLevel(logging.DEBUG)
+
+    logger.debug("Setting environment variable TOKENIZERS_PARALLELISM to false")
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+    logger.info("Running mock-run with parameters: %s", args)
+
+    logger.info("Loading model %s...", args.model)
+    model = mteb.get_model(
+        args.model,
+        args.model_revision,
+        device=args.device or ("cuda" if torch.cuda.is_available() else "cpu"),
+    )
+
+    model_modalities = model.mteb_model_meta.modalities
+    logger.info("Model modalities: %s", model_modalities)
+
+    # Filter tasks based on model modalities and protocols
+    compatible_tasks = []
+    for task in ALL_TASK_TEST_GRID:
+        if not all(mod in model_modalities for mod in task.metadata.modalities):
+            continue
+
+        # SearchProtocol / Retrieval-only models (like BM25)
+        if isinstance(model, SearchProtocol) and not isinstance(model, EncoderProtocol):
+            if not task._support_search:
+                continue
+
+        # CrossEncoder models
+        if isinstance(model, CrossEncoderProtocol):
+            if not task._support_cross_encoder:
+                continue
+
+        compatible_tasks.append(task)
+
+    if not compatible_tasks:
+        logger.warning(
+            "No compatible mock tasks found for model modalities and protocols."
+        )
+        return
+
+    logger.info(
+        "Evaluating model on %d compatible mock tasks...", len(compatible_tasks)
+    )
+    results = mteb.evaluate(
+        model,
+        compatible_tasks,
+        cache=None,
+        raise_error=False,
+    )
+
+    passed_tasks = {res.task_name for res in results.task_results}
+    failed_reasons = {
+        exc.task_name: exc.exception for exc in (results.exceptions or [])
+    }
+
+    md_rows = _get_modality_summary(compatible_tasks, passed_tasks, model_modalities)
+
+    output_path = Path("mteb_mock_run_results.md")
+    _write_full_results_to_file(
+        output_path, args.model, compatible_tasks, passed_tasks, failed_reasons, md_rows
+    )
+
+    all_passed = len(results.exceptions or []) == 0
+    _print_terminal_summary(args.model, all_passed, md_rows, output_path)
+
+
+def _write_full_results_to_file(
+    output_path: Path,
+    model_name: str,
+    compatible_tasks: list[AbsTask],
+    passed_tasks: set[str],
+    failed_reasons: dict[str, str],
+    md_rows: list[tuple[str, str, str]],
+) -> None:
+    md_lines = [
+        f"# MTEB Mock-Run Results for `{model_name}`",
+        "",
+        "| Task | Modality | Pass | Reason |",
+        "| --- | --- | --- | --- |",
+    ]
+    for task in compatible_tasks:
+        name = task.metadata.name
+        mods = ", ".join(task.metadata.modalities)
+        status = "✓" if name in passed_tasks else "✗"
+        reason = failed_reasons.get(name, "-").replace("\n", " ")
+        md_lines.append(f"| {name} | {mods} | {status} | {reason} |")
+
+    max_status_len = max([len(row[0]) for row in md_rows] + [len("Pass")])
+    max_mod_len = max([len(row[1]) for row in md_rows] + [len("Modality")])
+
+    md_lines.append("")
+    md_lines.append("## Summary by Modality")
+    md_lines.append("")
+    md_lines.append(
+        f"| {'Pass':<{max_status_len}} | {'Modality':<{max_mod_len}} | Failures |"
+    )
+    md_lines.append(f"| {'-' * max_status_len} | {'-' * max_mod_len} | {'-' * 8} |")
+    for status, modality, failures in md_rows:
+        md_lines.append(
+            f"| {status:<{max_status_len}} | {modality:<{max_mod_len}} | {failures} |"
+        )
+
+    output_path.write_text("\n".join(md_lines), encoding="utf-8")
+
+
+def _get_modality_summary(
+    compatible_tasks: list[AbsTask],
+    passed_tasks: set[str],
+    model_modalities: Sequence[str] | None,
+) -> list[tuple[str, str, str]]:
+    md_rows = []
+    for modality in ["text", "image", "audio", "video"]:
+        is_supported = (
+            modality in model_modalities
+            if model_modalities is not None
+            else any(modality in t.metadata.modalities for t in compatible_tasks)
+        )
+        if not is_supported:
+            md_rows.append(("skipped", modality, ""))
+            continue
+
+        mod_tasks = [t for t in compatible_tasks if modality in t.metadata.modalities]
+        if not mod_tasks:
+            md_rows.append(("skipped", modality, ""))
+            continue
+
+        passed_count = sum(1 for t in mod_tasks if t.metadata.name in passed_tasks)
+        total_count = len(mod_tasks)
+
+        if passed_count == total_count:
+            status = f"✓ ({passed_count}/{total_count})"
+            failures = ""
+        else:
+            status = f"✗ ({passed_count}/{total_count})"
+            failures = ", ".join(
+                t.metadata.name
+                for t in mod_tasks
+                if t.metadata.name not in passed_tasks
+            )
+        md_rows.append((status, modality, failures))
+    return md_rows
+
+
+def _print_terminal_summary(
+    model_name: str,
+    all_passed: bool,
+    md_rows: list[tuple[str, str, str]],
+    output_path: Path,
+) -> None:
+    console = Console()
+
+    if all_passed:
+        console.print(f"\n[bold green]✓ `{model_name}` passed all expected checks[/]")
+    else:
+        console.print(
+            f"\n[bold red]✗ `{model_name}` did not pass all expected checks[/]"
+        )
+
+    console.print("")
+
+    max_status_len = max([len(row[0]) for row in md_rows] + [len("Pass")])
+    max_mod_len = max([len(row[1]) for row in md_rows] + [len("Modality")])
+
+    console.print(
+        f"| {'Pass':<{max_status_len}} | {'Modality':<{max_mod_len}} | Failures |"
+    )
+    console.print(f"| {'-' * max_status_len} | {'-' * max_mod_len} | {'-' * 8} |")
+
+    for status, modality, failures in md_rows:
+        status_padded = f"{status:<{max_status_len}}"
+        mod_padded = f"{modality:<{max_mod_len}}"
+
+        if "✓" in status_padded:
+            status_colored = status_padded.replace("✓", "[green]✓[/]")
+        elif "✗" in status_padded:
+            status_colored = status_padded.replace("✗", "[red]✗[/]")
+        elif "skipped" in status_padded:
+            status_colored = status_padded.replace("skipped", "[yellow]skipped[/]")
+        else:
+            status_colored = status_padded
+
+        console.print(f"| {status_colored} | {mod_padded} | {failures} |")
+
+    console.print("")
+    console.print(f"For more information see `{output_path.resolve()}`")
+
+
+def _add_mock_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
+    parser = subparsers.add_parser(
+        "mock-run",
+        help="Sanity check a model implementation using mock tasks",
+    )
+
+    parser.add_argument(
+        "-m",
+        "--model",
+        type=str,
+        required=True,
+        help="Model to use. Will prioritize model implementation in MTEB's model registry, but default to loading the model using sentence-transformers.",
+    )
+    parser.add_argument(
+        "--model-revision",
+        "--model_revision",
+        type=str,
+        default=None,
+        help="Revision of the model to be loaded.",
+    )
+    parser.add_argument(
+        "--device", type=str, default=None, help="Device to use for computation."
+    )
+    parser.add_argument(
+        "-v", "--verbosity", type=int, default=2, help="Verbosity level"
+    )
+    parser.set_defaults(func=mock_run)
+
+
 def build_cli() -> argparse.ArgumentParser:
     """Builds the argument parser for the MTEB CLI.
 
@@ -483,6 +719,7 @@ def build_cli() -> argparse.ArgumentParser:
     _add_available_benchmarks_parser(subparsers)
     _add_create_meta_parser(subparsers)
     _add_leaderboard_parser(subparsers)
+    _add_mock_run_parser(subparsers)
 
     return parser
 

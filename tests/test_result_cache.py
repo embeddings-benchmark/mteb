@@ -12,9 +12,10 @@ import requests
 
 import mteb
 from mteb.cache import LoadExperimentEnum, ResultCache
+from mteb.mocks.mock_tasks import MockRetrievalTask
+from mteb.mocks.mock_tasks.clustering import MockMultilingualClusteringTask
 from mteb.models import ModelMeta
 from mteb.results import TaskResult
-from tests.mock_tasks import MockMultilingualClusteringTask, MockRetrievalTask
 
 test_cache_path = Path(__file__).parent / "mock_mteb_cache"
 

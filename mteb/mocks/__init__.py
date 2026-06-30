@@ -1,9 +1,12 @@
-"""Task grid for testing purposes. This is a list of tasks that can be used to test the benchmarking pipeline."""
+"""Mocks package entrypoint. This defines and exposes various task grids and mock task components."""
+
+from __future__ import annotations
 
 import mteb
 from mteb.abstasks import AbsTask
 
 from .mock_tasks import (
+    LegacyMockClusteringFastTask,
     MockAny2AnyRetrievalA2ATask,
     MockAny2AnyRetrievalA2TTask,
     MockAny2AnyRetrievalI2TTask,
@@ -20,11 +23,8 @@ from .mock_tasks import (
     MockAudioZeroshotClassificationTask,
     MockBitextMiningTask,
     MockClassificationTask,
-    MockClusteringFastTask,
-    MockClusteringTask,
     MockImageClassificationTask,
     MockImageClusteringFastTask,
-    MockImageClusteringTask,
     MockImageMultilabelClassificationTask,
     MockImageRegressionTask,
     MockImageTextPairClassificationTask,
@@ -35,7 +35,6 @@ from .mock_tasks import (
     MockMultilingualBitextMiningTask,
     MockMultilingualClassificationTask,
     MockMultilingualClusteringFastTask,
-    MockMultilingualClusteringTask,
     MockMultilingualImageClassificationTask,
     MockMultilingualImageTextPairClassificationTask,
     MockMultilingualInstructionReranking,
@@ -77,6 +76,11 @@ from .mock_tasks import (
     MockVideoZeroshotClassificationTask,
     MockVisualSTSTask,
     MockZeroShotClassificationTask,
+)
+from .mock_tasks.clustering import (
+    MockClusteringTask,
+    MockImageClusteringTask,
+    MockMultilingualClusteringTask,
 )
 
 TASK_TEST_GRID = mteb.get_tasks(
@@ -124,7 +128,7 @@ MOCK_TASK_TEST_GRID_MONOLINGUAL = [
     MockClassificationTask(),
     MockRegressionTask(),
     MockClusteringTask(),
-    MockClusteringFastTask(),
+    LegacyMockClusteringFastTask(),
     MockPairClassificationTask(),
     MockRerankingTask(),
     MockRetrievalTask(),
@@ -224,3 +228,23 @@ ALL_TASK_TEST_GRID_AS_STRING = [
 ]
 
 ALL_MOCK_TASK_REGISTRY = {task.metadata.name: type(task) for task in ALL_TASK_TEST_GRID}
+
+task_grid = TASK_TEST_GRID
+
+__all__ = [
+    "ALL_MOCK_TASK_REGISTRY",
+    "ALL_TASK_TEST_GRID",
+    "ALL_TASK_TEST_GRID_AS_STRING",
+    "MOCK_MAEB_TASK_GRID",
+    "MOCK_MIEB_TASK_GRID",
+    "MOCK_MIEB_TASK_GRID_AS_STRING",
+    "MOCK_MIEB_TASK_REGISTRY",
+    "MOCK_MULTIMODAL_TASKS",
+    "MOCK_MVEB_TASK_GRID",
+    "MOCK_TASK_REGISTRY",
+    "MOCK_TASK_TEST_GRID",
+    "MOCK_TASK_TEST_GRID_AS_STRING",
+    "TASK_TEST_GRID",
+    "TASK_TEST_GRID_AS_STRING",
+    "task_grid",
+]
