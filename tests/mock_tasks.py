@@ -4129,7 +4129,7 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
         )
         self.data_loaded = True
 
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
+    def get_candidate_labels(self) -> list[str]:
         return ["This is a test sentence", "This is another test sentence"]
 
 
@@ -4195,7 +4195,7 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
         )
         self.data_loaded = True
 
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
+    def get_candidate_labels(self) -> list[str]:
         return ["This is a test sentence", "This is another test sentence"]
 
 
@@ -4532,7 +4532,7 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
         self.dataset = self.dataset.cast_column("audio", Audio())
         self.data_loaded = True
 
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
+    def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
         return ["This is sound type 0", "This is sound type 1"]
 
@@ -5795,7 +5795,7 @@ class MockVideoZeroshotClassificationTask(AbsTaskZeroShotClassification):
         self.dataset = self.dataset.cast_column("video", Video())
         self.data_loaded = True
 
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
+    def get_candidate_labels(self) -> list[str]:
         return ["This is video type 0", "This is video type 1"]
 
 
@@ -5886,7 +5886,7 @@ class MockVideoAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
         self.dataset = self.dataset.cast_column("audio", Audio())
         self.data_loaded = True
 
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
+    def get_candidate_labels(self) -> list[str]:
         return ["This is video audio type 0", "This is video audio type 1"]
 
 

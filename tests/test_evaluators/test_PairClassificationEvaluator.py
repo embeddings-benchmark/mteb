@@ -11,7 +11,7 @@ TOL = 0.0001
 
 
 class TestPairClassificationEvaluator:
-    def test_accuracy(self):  # noqa: PLR6301
+    def test_accuracy(self):
         task = MockPairClassificationTask()
         task.load_data()
 
