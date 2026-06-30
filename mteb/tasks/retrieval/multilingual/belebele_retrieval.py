@@ -224,7 +224,7 @@ class BelebeleRetrieval(AbsTaskRetrieval):
             for lang_pair in self.hf_subsets
             for language in self.metadata.eval_langs[lang_pair]
         }
-        self.dataset = {
+        dataset = {
             language: load_dataset(name=language, **self.metadata.dataset)[_EVAL_SPLIT]
             for language in languages_to_load
         }
@@ -235,8 +235,8 @@ class BelebeleRetrieval(AbsTaskRetrieval):
                 languages[0].replace("-", "_"),
                 languages[1].replace("-", "_"),
             )
-            ds_corpus = self.dataset[lang_corpus]
-            ds_question = self.dataset[lang_question]
+            ds_corpus = dataset[lang_corpus]
+            ds_question = dataset[lang_question]
 
             question_ids = {}
             for row in ds_question:
