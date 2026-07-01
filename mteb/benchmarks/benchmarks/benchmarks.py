@@ -713,7 +713,6 @@ MTEB_KOR = Benchmark(
     tasks=get_tasks(
         languages=["kor"],
         tasks=[
-            # @KennethEnevoldsen: We could probably expand this to a more solid benchmark, but for now I have left it as is.
             # Classification
             "KLUE-TC",
             # Reranking
@@ -721,6 +720,13 @@ MTEB_KOR = Benchmark(
             # Retrieval
             "MIRACLRetrieval",
             "Ko-StrategyQA",
+            "LawIRKo",
+            "SQuADKorV1Retrieval",
+            "AutoRAGRetrieval",
+            "PublicHealthQA",
+            "BelebeleRetrieval",
+            "MultiLongDocRetrieval",
+            "MrTidyRetrieval",
             # STS
             "KLUE-STS",
             "KorSTS",
