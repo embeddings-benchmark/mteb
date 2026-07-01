@@ -574,11 +574,51 @@ class AbsTaskRetrieval(AbsTask):
         )
 
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
+        if compute_overall and "text" in queries_col_inputs and "text" in corpus_col_inputs:
+            query_text_by_id: dict[str, str] = {}
+            corpus_text_by_id: dict[str, str] = {}
+            for subset_name in self.metadata.eval_langs:
+                split_data = self.dataset[subset_name][split]
+
+                subset_queries = split_data["queries"]
+                if "instruction" in subset_queries[0]:
+                    subset_queries = _combine_queries_with_instruction_text(
+                        subset_queries
+                    )
+                if isinstance(subset_queries["text"][0], dict | list):
+                    subset_queries = subset_queries.map(_convert_conv_history_to_query)
+                query_text_by_id.update(
+                    {
+                        f"{split}_{subset_name}_{query_id}": text
+                        for query_id, text in zip(
+                            subset_queries["id"], subset_queries["text"], strict=True
+                        )
+                    }
+                )
+
+                subset_corpus = split_data["corpus"]
+                corpus_text_by_id.update(
+                    {
+                        f"{split}_{subset_name}_{doc_id}": text
+                        for doc_id, text in zip(
+                            subset_corpus["id"],
+                            subset_corpus.map(_corpus_to_dict)["text"],
+                            strict=True,
+                        )
+                    }
+                )
+        else:
+            query_text_by_id = dict(
+                zip(queries["id"], queries_col_inputs.get("text", []), strict=True)
+            )
+            corpus_text_by_id = dict(
+                zip(corpus["id"], corpus_col_inputs.get("text", []), strict=True)
+            )
         text_relevance_overlap_statistics = (
             calculate_text_relevance_overlap_statistics(
                 relevant_docs,
-                dict(zip(queries["id"], queries_col_inputs["text"], strict=True)),
-                dict(zip(corpus["id"], corpus_col_inputs["text"], strict=True)),
+                query_text_by_id,
+                corpus_text_by_id,
             )
             if "text" in queries_col_inputs and "text" in corpus_col_inputs
             else None
