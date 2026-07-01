@@ -574,7 +574,11 @@ class AbsTaskRetrieval(AbsTask):
         )
 
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
-        if compute_overall and "text" in queries_col_inputs and "text" in corpus_col_inputs:
+        if (
+            compute_overall
+            and "text" in queries_col_inputs
+            and "text" in corpus_col_inputs
+        ):
             query_text_by_id: dict[str, str] = {}
             corpus_text_by_id: dict[str, str] = {}
             for subset_name in self.metadata.eval_langs:
