@@ -50,6 +50,15 @@ event_logger = EventLogger()
 
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 MODEL_TYPE_CHOICES = list(get_args(MODEL_TYPES))
+_TASK_INFO_COLUMNS = [
+    "Task Name",
+    "Task Type",
+    "Languages",
+    "Domains",
+    "Metric",
+    "Modality",
+    "Public",
+]
 
 
 def _produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
@@ -120,8 +129,11 @@ def _format_list(props: list[str]):
     return ", ".join(props)
 
 
-def _update_task_info(task_names: str) -> pd.DataFrame:
+def _update_task_info(task_names: list[str]) -> pd.DataFrame:
     t0 = time.time()
+    if not task_names:
+        return pd.DataFrame(columns=_TASK_INFO_COLUMNS)
+
     tasks = mteb.get_tasks(tasks=task_names)
     t1 = time.time()
     df = tasks.to_dataframe(
