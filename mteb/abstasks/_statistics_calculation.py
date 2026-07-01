@@ -422,36 +422,26 @@ def calculate_text_relevance_overlap_statistics(
     queries: Mapping[str, str],
     corpus: Mapping[str, str],
 ) -> TextRelevanceOverlapStatistics | None:
-    """Calculate query-token recall against positive relevant documents."""
-
-    def _resolve_text(text_by_id: Mapping[str, str], item_id: str) -> str:
-        if item_id in text_by_id:
-            return text_by_id[item_id]
-        # Multilingual aggregate retrieval stats prefix ids as
-        # ``{split}_{hf_subset}_{id}`` to keep qrels unique across subsets.
-        _, _, unprefixed_id = item_id.partition("_")
-        _, _, unprefixed_id = unprefixed_id.partition("_")
-        return text_by_id[unprefixed_id]
-
-    recalls: list[float] = []
+    """Calculate query-token overlap against positive relevant documents."""
+    overlaps: list[float] = []
     for query_id, docs in relevant_docs.items():
-        query_tokens = set(_resolve_text(queries, query_id).lower().split())
+        query_tokens = set(queries[query_id].lower().split())
         if not query_tokens:
             continue
         for doc_id, score in docs.items():
             if score == 0:
                 continue
-            doc_tokens = set(_resolve_text(corpus, doc_id).lower().split())
-            recalls.append(len(query_tokens & doc_tokens) / len(query_tokens))
+            doc_tokens = set(corpus[doc_id].lower().split())
+            overlaps.append(len(query_tokens & doc_tokens) / len(query_tokens))
 
-    if not recalls:
+    if not overlaps:
         return None
 
     return TextRelevanceOverlapStatistics(
-        num_pairs=len(recalls),
-        min_query_token_recall=min(recalls),
-        average_query_token_recall=sum(recalls) / len(recalls),
-        max_query_token_recall=max(recalls),
+        num_pairs=len(overlaps),
+        min_query_token_overlap=min(overlaps),
+        average_query_token_overlap=sum(overlaps) / len(overlaps),
+        max_query_token_overlap=max(overlaps),
     )
 
 

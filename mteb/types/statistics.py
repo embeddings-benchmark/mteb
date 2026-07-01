@@ -233,18 +233,18 @@ class TextRelevanceOverlapStatistics(TypedDict):
 
     Attributes:
         num_pairs: Number of positive query-document relevance pairs considered.
-        min_query_token_recall: Minimum fraction of unique query tokens found in
+        min_query_token_overlap: Minimum fraction of unique query tokens found in
             the relevant document text.
-        average_query_token_recall: Average fraction of unique query tokens found
+        average_query_token_overlap: Average fraction of unique query tokens found
             in the relevant document text.
-        max_query_token_recall: Maximum fraction of unique query tokens found in
+        max_query_token_overlap: Maximum fraction of unique query tokens found in
             the relevant document text.
     """
 
     num_pairs: int
-    min_query_token_recall: float
-    average_query_token_recall: float
-    max_query_token_recall: float
+    min_query_token_overlap: float
+    average_query_token_overlap: float
+    max_query_token_overlap: float
 
 
 class SingleInputModalityStatistics(TypedDict):

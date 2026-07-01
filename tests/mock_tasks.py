@@ -1714,9 +1714,9 @@ class MockRerankingTask(AbsTaskRetrieval):
             },
             "text_relevance_overlap_statistics": {
                 "num_pairs": 2,
-                "min_query_token_recall": 0.6,
-                "average_query_token_recall": 0.6,
-                "max_query_token_recall": 0.6,
+                "min_query_token_overlap": 0.6,
+                "average_query_token_overlap": 0.6,
+                "max_query_token_overlap": 0.6,
             },
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
@@ -1777,9 +1777,9 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
             },
             "text_relevance_overlap_statistics": {
                 "num_pairs": 4,
-                "min_query_token_recall": 0.6,
-                "average_query_token_recall": 0.6,
-                "max_query_token_recall": 0.6,
+                "min_query_token_overlap": 0.6,
+                "average_query_token_overlap": 0.6,
+                "max_query_token_overlap": 0.6,
             },
             "top_ranked_statistics": {
                 "num_top_ranked": 8,
@@ -1822,9 +1822,9 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                     },
                     "text_relevance_overlap_statistics": {
                         "num_pairs": 2,
-                        "min_query_token_recall": 0.6,
-                        "average_query_token_recall": 0.6,
-                        "max_query_token_recall": 0.6,
+                        "min_query_token_overlap": 0.6,
+                        "average_query_token_overlap": 0.6,
+                        "max_query_token_overlap": 0.6,
                     },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
@@ -1867,9 +1867,9 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                     },
                     "text_relevance_overlap_statistics": {
                         "num_pairs": 2,
-                        "min_query_token_recall": 0.6,
-                        "average_query_token_recall": 0.6,
-                        "max_query_token_recall": 0.6,
+                        "min_query_token_overlap": 0.6,
+                        "average_query_token_overlap": 0.6,
+                        "max_query_token_overlap": 0.6,
                     },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
@@ -1936,9 +1936,9 @@ class MockRetrievalTask(AbsTaskRetrieval):
             },
             "text_relevance_overlap_statistics": {
                 "num_pairs": 2,
-                "min_query_token_recall": 0.6,
-                "average_query_token_recall": 0.6,
-                "max_query_token_recall": 0.6,
+                "min_query_token_overlap": 0.6,
+                "average_query_token_overlap": 0.6,
+                "max_query_token_overlap": 0.6,
             },
             "top_ranked_statistics": None,
         },
@@ -1976,9 +1976,9 @@ class MockRetrievalTask(AbsTaskRetrieval):
             },
             "text_relevance_overlap_statistics": {
                 "num_pairs": 2,
-                "min_query_token_recall": 0.6,
-                "average_query_token_recall": 0.6,
-                "max_query_token_recall": 0.6,
+                "min_query_token_overlap": 0.6,
+                "average_query_token_overlap": 0.6,
+                "max_query_token_overlap": 0.6,
             },
             "top_ranked_statistics": None,
         },
@@ -2036,9 +2036,9 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             },
             "text_relevance_overlap_statistics": {
                 "num_pairs": 2,
-                "min_query_token_recall": 0.14285714285714285,
-                "average_query_token_recall": 0.17142857142857143,
-                "max_query_token_recall": 0.2,
+                "min_query_token_overlap": 0.14285714285714285,
+                "average_query_token_overlap": 0.17142857142857143,
+                "max_query_token_overlap": 0.2,
             },
             "top_ranked_statistics": None,
         },
@@ -2076,9 +2076,9 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             },
             "text_relevance_overlap_statistics": {
                 "num_pairs": 2,
-                "min_query_token_recall": 0.14285714285714285,
-                "average_query_token_recall": 0.17142857142857143,
-                "max_query_token_recall": 0.2,
+                "min_query_token_overlap": 0.14285714285714285,
+                "average_query_token_overlap": 0.17142857142857143,
+                "max_query_token_overlap": 0.2,
             },
             "top_ranked_statistics": None,
         },
@@ -2153,9 +2153,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             },
             "text_relevance_overlap_statistics": {
                 "num_pairs": 4,
-                "min_query_token_recall": 0.6,
-                "average_query_token_recall": 0.6,
-                "max_query_token_recall": 0.6,
+                "min_query_token_overlap": 0.6,
+                "average_query_token_overlap": 0.6,
+                "max_query_token_overlap": 0.6,
             },
             "top_ranked_statistics": None,
             "hf_subset_descriptive_stats": {
@@ -2193,9 +2193,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "text_relevance_overlap_statistics": {
                         "num_pairs": 2,
-                        "min_query_token_recall": 0.6,
-                        "average_query_token_recall": 0.6,
-                        "max_query_token_recall": 0.6,
+                        "min_query_token_overlap": 0.6,
+                        "average_query_token_overlap": 0.6,
+                        "max_query_token_overlap": 0.6,
                     },
                     "top_ranked_statistics": None,
                 },
@@ -2233,9 +2233,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "text_relevance_overlap_statistics": {
                         "num_pairs": 2,
-                        "min_query_token_recall": 0.6,
-                        "average_query_token_recall": 0.6,
-                        "max_query_token_recall": 0.6,
+                        "min_query_token_overlap": 0.6,
+                        "average_query_token_overlap": 0.6,
+                        "max_query_token_overlap": 0.6,
                     },
                     "top_ranked_statistics": None,
                 },
@@ -2275,9 +2275,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             },
             "text_relevance_overlap_statistics": {
                 "num_pairs": 4,
-                "min_query_token_recall": 0.6,
-                "average_query_token_recall": 0.6,
-                "max_query_token_recall": 0.6,
+                "min_query_token_overlap": 0.6,
+                "average_query_token_overlap": 0.6,
+                "max_query_token_overlap": 0.6,
             },
             "top_ranked_statistics": None,
             "hf_subset_descriptive_stats": {
@@ -2315,9 +2315,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "text_relevance_overlap_statistics": {
                         "num_pairs": 2,
-                        "min_query_token_recall": 0.6,
-                        "average_query_token_recall": 0.6,
-                        "max_query_token_recall": 0.6,
+                        "min_query_token_overlap": 0.6,
+                        "average_query_token_overlap": 0.6,
+                        "max_query_token_overlap": 0.6,
                     },
                     "top_ranked_statistics": None,
                 },
@@ -2355,9 +2355,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                     },
                     "text_relevance_overlap_statistics": {
                         "num_pairs": 2,
-                        "min_query_token_recall": 0.6,
-                        "average_query_token_recall": 0.6,
-                        "max_query_token_recall": 0.6,
+                        "min_query_token_overlap": 0.6,
+                        "average_query_token_overlap": 0.6,
+                        "max_query_token_overlap": 0.6,
                     },
                     "top_ranked_statistics": None,
                 },
@@ -2668,9 +2668,9 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
             },
             "text_relevance_overlap_statistics": {
                 "num_pairs": 2,
-                "min_query_token_recall": 0.5,
-                "average_query_token_recall": 0.5,
-                "max_query_token_recall": 0.5,
+                "min_query_token_overlap": 0.5,
+                "average_query_token_overlap": 0.5,
+                "max_query_token_overlap": 0.5,
             },
             "top_ranked_statistics": None,
         }
@@ -2727,9 +2727,9 @@ class MockInstructionReranking(AbsTaskRetrieval):
             },
             "text_relevance_overlap_statistics": {
                 "num_pairs": 2,
-                "min_query_token_recall": 0.5,
-                "average_query_token_recall": 0.5,
-                "max_query_token_recall": 0.5,
+                "min_query_token_overlap": 0.5,
+                "average_query_token_overlap": 0.5,
+                "max_query_token_overlap": 0.5,
             },
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
@@ -2789,9 +2789,9 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
             },
             "text_relevance_overlap_statistics": {
                 "num_pairs": 4,
-                "min_query_token_recall": 0.5,
-                "average_query_token_recall": 0.5,
-                "max_query_token_recall": 0.5,
+                "min_query_token_overlap": 0.5,
+                "average_query_token_overlap": 0.5,
+                "max_query_token_overlap": 0.5,
             },
             "top_ranked_statistics": None,
             "hf_subset_descriptive_stats": {
@@ -2829,9 +2829,9 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                     },
                     "text_relevance_overlap_statistics": {
                         "num_pairs": 2,
-                        "min_query_token_recall": 0.5,
-                        "average_query_token_recall": 0.5,
-                        "max_query_token_recall": 0.5,
+                        "min_query_token_overlap": 0.5,
+                        "average_query_token_overlap": 0.5,
+                        "max_query_token_overlap": 0.5,
                     },
                     "top_ranked_statistics": None,
                 },
@@ -2869,9 +2869,9 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                     },
                     "text_relevance_overlap_statistics": {
                         "num_pairs": 2,
-                        "min_query_token_recall": 0.5,
-                        "average_query_token_recall": 0.5,
-                        "max_query_token_recall": 0.5,
+                        "min_query_token_overlap": 0.5,
+                        "average_query_token_overlap": 0.5,
+                        "max_query_token_overlap": 0.5,
                     },
                     "top_ranked_statistics": None,
                 },
@@ -2933,9 +2933,9 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
             },
             "text_relevance_overlap_statistics": {
                 "num_pairs": 4,
-                "min_query_token_recall": 0.5,
-                "average_query_token_recall": 0.5,
-                "max_query_token_recall": 0.5,
+                "min_query_token_overlap": 0.5,
+                "average_query_token_overlap": 0.5,
+                "max_query_token_overlap": 0.5,
             },
             "top_ranked_statistics": {
                 "num_top_ranked": 8,
@@ -2978,9 +2978,9 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                     },
                     "text_relevance_overlap_statistics": {
                         "num_pairs": 2,
-                        "min_query_token_recall": 0.5,
-                        "average_query_token_recall": 0.5,
-                        "max_query_token_recall": 0.5,
+                        "min_query_token_overlap": 0.5,
+                        "average_query_token_overlap": 0.5,
+                        "max_query_token_overlap": 0.5,
                     },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
@@ -3023,9 +3023,9 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                     },
                     "text_relevance_overlap_statistics": {
                         "num_pairs": 2,
-                        "min_query_token_recall": 0.5,
-                        "average_query_token_recall": 0.5,
-                        "max_query_token_recall": 0.5,
+                        "min_query_token_overlap": 0.5,
+                        "average_query_token_overlap": 0.5,
+                        "max_query_token_overlap": 0.5,
                     },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
@@ -6852,9 +6852,9 @@ class MockVideoAudioTextRetrievalVAT2T(AbsTaskRetrieval):
             },
             "text_relevance_overlap_statistics": {
                 "num_pairs": 2,
-                "min_query_token_recall": 1.0,
-                "average_query_token_recall": 1.0,
-                "max_query_token_recall": 1.0,
+                "min_query_token_overlap": 1.0,
+                "average_query_token_overlap": 1.0,
+                "max_query_token_overlap": 1.0,
             },
             "top_ranked_statistics": None,
         }
