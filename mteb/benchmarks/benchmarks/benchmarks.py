@@ -715,6 +715,13 @@ MTEB_KOR = Benchmark(
         tasks=[
             # Classification
             "KLUE-TC",
+            # Clustering
+            "SIB200ClusteringS2S",
+            "KlueMrcDomainClustering",
+            "KlueYnatMrcCategoryClustering",
+            # Pair Classification (NLI)
+            "KLUE-NLI",
+            "PawsXPairClassification",
             # Reranking
             "MIRACLReranking",
             # Retrieval
@@ -730,9 +737,10 @@ MTEB_KOR = Benchmark(
             # STS
             "KLUE-STS",
             "KorSTS",
+            "STS17",
         ],
     ),
-    description="Korean text embedding quality across classification, reranking, retrieval, and semantic similarity.",
+    description="Korean text embedding quality across classification, clustering, pair classification (NLI), reranking, retrieval, and semantic similarity.",
     reference=None,
     citation=None,
 )
