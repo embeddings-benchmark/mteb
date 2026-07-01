@@ -46,8 +46,10 @@ class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
                     * 28,  # model card recommendation to save memory
                     "do_sample_frames": False,
                 },
+                "text": {"truncation": True, "max_length": 512},
             }
         )
+        self.model.max_seq_length = 512
 
 
 _OMNI_EMBED_CITATION = r"""
