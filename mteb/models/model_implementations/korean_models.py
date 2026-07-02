@@ -1,4 +1,4 @@
-"""Korean(-focused) fine-tuned embedding models, registered for MTEB(kor, v1).
+"""Korean(-focused) embedding models, registered for MTEB(kor, v2).
 
 These community models had Korean retrieval/STS/clustering results but no ModelMeta
 in the registry, so they were invisible on the leaderboard. Metadata (revision,
