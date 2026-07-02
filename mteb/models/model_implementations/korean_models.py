@@ -48,9 +48,10 @@ dragonkue_bge_m3_ko = ModelMeta(
     adapted_from="BAAI/bge-m3",
     public_training_code=None,
     public_training_data=None,
-    # Model card only says "additionally trained on the Korean dataset" without
-    # naming it, so the fine-tuning data is unknown.
-    training_datasets=None,
+    # Confirmed by the model author: the Korean fine-tuning data contains no
+    # mteb datasets; empty set so the bge-m3 base data is still inherited via
+    # adapted_from.
+    training_datasets=set(),
 )
 
 kure_v1 = ModelMeta(
