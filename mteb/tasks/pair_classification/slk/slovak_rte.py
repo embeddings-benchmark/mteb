@@ -9,7 +9,7 @@ class SlovakRTE(AbsTaskPairClassification):
         name="SlovakRTE",
         dataset={
             "path": "slovak-nlp/sklep",
-            "revision": "2e428d17ae4178dae14f6643785647fc9f30edaa",
+            "revision": "10549a8c63542e6a0db4fcf5fcdc29b3e1b8c4e9",
             "name": "rte",
         },
         description="Slovak Recognizing Textual Entailment dataset. Professional translation and human verification of English RTE datasets (combining multiple sources) for Slovak language. The task is binary classification (entailment vs. not entailment).",
@@ -51,11 +51,16 @@ class SlovakRTE(AbsTaskPairClassification):
         for split in self.dataset:
             hf_dataset = self.dataset[split]
 
+            entailment_idx = hf_dataset.features["label"].names.index("entailment")
+            labels = [
+                1 if label == entailment_idx else 0 for label in hf_dataset["label"]
+            ]
+
             _dataset[split] = [
                 {
                     "sentence1": hf_dataset["text1"],
                     "sentence2": hf_dataset["text2"],
-                    "labels": hf_dataset["label"],
+                    "labels": labels,
                 }
             ]
 
