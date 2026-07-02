@@ -48,6 +48,8 @@ dragonkue_bge_m3_ko = ModelMeta(
     adapted_from="BAAI/bge-m3",
     public_training_code=None,
     public_training_data=None,
+    # Model card only says "additionally trained on the Korean dataset" without
+    # naming it, so the fine-tuning data is unknown.
     training_datasets=None,
 )
 
@@ -72,6 +74,8 @@ kure_v1 = ModelMeta(
     adapted_from="BAAI/bge-m3",
     public_training_code=None,
     public_training_data=None,
+    # Trained on ~2M Korean query-document-hard-negative pairs; the model card and
+    # the KURE GitHub repo do not name the source datasets, so unknown.
     training_datasets=None,
 )
 
@@ -96,7 +100,9 @@ upskyy_bge_m3_korean = ModelMeta(
     adapted_from="BAAI/bge-m3",
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    # Model card: "korsts and kornli finetuning model from BAAI/bge-m3".
+    # KorNLI has no mteb task; base bge-m3 data is inherited via adapted_from.
+    training_datasets={"KorSTS"},
 )
 
 # --------------------------------------------------------------------------- #
@@ -124,7 +130,10 @@ dragonkue_e5_small_ko = ModelMeta(
     adapted_from="intfloat/multilingual-e5-small",
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    # Fine-tuned on the same data as dragonkue/snowflake-arctic-embed-l-v2.0-ko
+    # (AI Hub Korean MRC corpora — none are mteb datasets); empty set so the
+    # multilingual-e5 base data is still inherited via adapted_from.
+    training_datasets=set(),
 )
 
 dragonkue_koen_e5_tiny = ModelMeta(
@@ -149,7 +158,10 @@ dragonkue_koen_e5_tiny = ModelMeta(
     adapted_from="intfloat/multilingual-e5-small",
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    # Model card: fine-tuned on the same data as
+    # dragonkue/snowflake-arctic-embed-l-v2.0-ko (AI Hub Korean MRC corpora —
+    # none are mteb datasets).
+    training_datasets=set(),
 )
 
 koe5 = ModelMeta(
@@ -173,7 +185,10 @@ koe5 = ModelMeta(
     use_instructions=True,
     adapted_from="intfloat/multilingual-e5-large",
     public_training_code=None,
-    public_training_data=None,
+    public_training_data="https://huggingface.co/datasets/nlpai-lab/ko-triplet-v1.0",
+    # Trained on nlpai-lab/ko-triplet-v1.0 (~700k Korean triplets, open data);
+    # its dataset card does not document which source datasets it aggregates,
+    # so possible mteb-task overlap is unknown.
     training_datasets=None,
 )
 
@@ -202,7 +217,10 @@ dragonkue_arctic_l_v2_0_ko = ModelMeta(
     adapted_from="Snowflake/snowflake-arctic-embed-l-v2.0",
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    # Model card: fine-tuned on AI Hub Korean MRC corpora (admin-document /
+    # news / book / numeric / finance-law MRC) — none are mteb datasets; empty
+    # set so the arctic-embed base data is still inherited via adapted_from.
+    training_datasets=set(),
 )
 
 pixie_rune_v1_5 = ModelMeta(
@@ -227,6 +245,8 @@ pixie_rune_v1_5 = ModelMeta(
     adapted_from="Snowflake/snowflake-arctic-embed-l-v2.0",
     public_training_code=None,
     public_training_data=None,
+    # Model card only says "trained on Korean and English information
+    # retrieval dataset" without naming it, so the fine-tuning data is unknown.
     training_datasets=None,
 )
 
@@ -254,5 +274,7 @@ ko_sroberta_multitask = ModelMeta(
     adapted_from="klue/roberta-base",
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    # Model card: multi-task trained on the KorSTS and KorNLI training sets
+    # (KorNLI has no mteb task).
+    training_datasets={"KorSTS"},
 )
