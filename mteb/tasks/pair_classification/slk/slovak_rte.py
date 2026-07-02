@@ -45,7 +45,7 @@ class SlovakRTE(AbsTaskPairClassification):
         prompt="Given a premise, retrieve a hypothesis that is entailed by the premise",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         _dataset = {}
 
         for split in self.dataset:

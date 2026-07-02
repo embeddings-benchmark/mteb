@@ -30,7 +30,7 @@ class SlovakNLI(AbsTaskPairClassification):
         bibtex_citation="",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         _dataset = {}
 
         for split in self.metadata.eval_splits:

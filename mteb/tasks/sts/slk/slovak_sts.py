@@ -55,7 +55,7 @@ Pilehvar, Mohammad Taher},
     min_score = 0
     max_score = 5
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         _dataset = self.dataset.rename_columns({"similarity_score": "score"})
 
         # ensure numeric value

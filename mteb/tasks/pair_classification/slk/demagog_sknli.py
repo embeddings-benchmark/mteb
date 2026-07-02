@@ -36,7 +36,7 @@ class DemagogSKNLI(AbsTaskPairClassification):
         prompt="Given a fact-checker's analysis (evidence), determine if it supports or refutes the political claim",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         """Transform DemagogSK into evidence-claim NLI pairs."""
         _dataset = {}
 
