@@ -194,7 +194,7 @@ koe5 = ModelMeta(
 )
 
 # --------------------------------------------------------------------------- #
-# Snowflake arctic-embed-l-v2.0 Korean fine-tune + telepix PIXIE-Rune v1.5
+# Snowflake arctic-embed-l-v2.0 Korean fine-tune
 # --------------------------------------------------------------------------- #
 dragonkue_arctic_l_v2_0_ko = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
@@ -222,33 +222,6 @@ dragonkue_arctic_l_v2_0_ko = ModelMeta(
     # news / book / numeric / finance-law MRC) — none are mteb datasets; empty
     # set so the arctic-embed base data is still inherited via adapted_from.
     training_datasets=set(),
-)
-
-pixie_rune_v1_5 = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
-    loader_kwargs=dict(model_prompts=ARCTIC_QUERY_PROMPTS),
-    name="telepix/PIXIE-Rune-v1.5",
-    model_type=["dense"],
-    languages=KOR_EN,
-    open_weights=True,
-    revision="29dd334196af53e6cfc16674379e743334f5fa66",
-    release_date="2026-04-22",
-    n_parameters=567_754_752,
-    embed_dim=1024,
-    license="apache-2.0",
-    max_tokens=8192,
-    memory_usage_mb=2166,
-    n_embedding_parameters=256_002_048,
-    reference="https://huggingface.co/telepix/PIXIE-Rune-v1.5",
-    similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=True,
-    adapted_from="Snowflake/snowflake-arctic-embed-l-v2.0",
-    public_training_code=None,
-    public_training_data=None,
-    # Model card only says "trained on Korean and English information
-    # retrieval dataset" without naming it, so the fine-tuning data is unknown.
-    training_datasets=None,
 )
 
 # --------------------------------------------------------------------------- #
