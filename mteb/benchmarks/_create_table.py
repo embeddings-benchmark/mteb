@@ -242,6 +242,13 @@ def _format_max_tokens(max_tokens: float | None) -> int | None:
     return int(max_tokens)
 
 
+def _format_co2_per_mtoken(co2_g_per_mtoken: float | None) -> float | None:
+    """Round an estimated gCO₂/Mtoken figure for display (None -> None)."""
+    if co2_g_per_mtoken is None:
+        return None
+    return round(float(co2_g_per_mtoken), 1)
+
+
 def _get_embedding_size(embed_dim: int | Sequence[int] | None) -> int | None:
     if embed_dim is None:
         return None
@@ -326,6 +333,7 @@ def _static_model_meta() -> dict[str, dict[str, Any]]:
             "Embedding Dimensions": _get_embedding_size(m.embed_dim),
             "Total Parameters (B)": _format_n_parameters(m.n_parameters),
             "Active Parameters (B)": _format_n_parameters(m.n_active_parameters),
+            "CO₂ (g/Mtoken)": _format_co2_per_mtoken(m.co2_cost_per_million_tokens),
             "Release Date": str(m.release_date) if m.release_date else None,
             "_model_link": m.reference,
         }
@@ -371,6 +379,7 @@ _STANDARD_META_COLS: tuple[str, ...] = (
     "Zero-shot",
     "Active Parameters (B)",
     "Total Parameters (B)",
+    "CO₂ (g/Mtoken)",
     "Embedding Dimensions",
     "Max Tokens",
 )

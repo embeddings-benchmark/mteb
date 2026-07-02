@@ -251,6 +251,20 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             return self.n_parameters - self.n_embedding_parameters
         return None
 
+    @property
+    def co2_cost_per_million_tokens(self) -> float | None:
+        """Estimated inference carbon cost in gCO₂ per million tokens.
+
+        A rough, order-of-magnitude estimate derived from `n_active_parameters`
+        using the EcoLogits linear energy model under benchmark conditions (see
+        `mteb.models._carbon`). Returns None if active parameters are unknown.
+        Always present it prefixed with "~"; it reflects benchmark conditions,
+        not real-world deployment.
+        """
+        from mteb.models._carbon import estimate_co2_per_million_tokens
+
+        return estimate_co2_per_million_tokens(self.n_active_parameters)
+
     @field_validator("similarity_fn_name", mode="before")
     @classmethod
     def _validate_similarity_fn_name(cls, value: str) -> ScoringFunction | None:
