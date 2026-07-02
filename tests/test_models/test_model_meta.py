@@ -173,6 +173,46 @@ def test_similar_tasks_superseded_by():
     assert "Banking77Classification.v2" in model_meta.get_training_datasets()
 
 
+def _openness_meta(**overwrites) -> ModelMeta:
+    return ModelMeta.create_empty(
+        overwrites={"name": "test/openness", "revision": "test", **overwrites}
+    )
+
+
+def test_openness_score_all_dimensions():
+    meta = _openness_meta(
+        open_weights=True,
+        license="apache-2.0",
+        public_training_code="https://github.com/example/train",
+        public_training_data="https://huggingface.co/datasets/example",
+        citation="@article{example}",
+    )
+    assert meta.open_license is True
+    assert meta.openness_score == 5
+    assert all(meta.openness.values())
+
+
+def test_openness_score_none():
+    meta = _openness_meta(
+        open_weights=False,
+        license=None,
+        public_training_code=None,
+        public_training_data=None,
+        citation=None,
+    )
+    assert meta.open_license is False
+    assert meta.openness_score == 0
+    assert not any(meta.openness.values())
+
+
+def test_openness_non_open_license_not_counted():
+    meta = _openness_meta(open_weights=True, license="cc-by-nc-4.0")
+    assert meta.open_license is False
+    assert meta.openness["open_weights"] is True
+    assert meta.openness["open_license"] is False
+    assert meta.openness_score == 1
+
+
 def test_model_name_without_prefix():
     with pytest.raises(ValueError):
         ModelMeta(
