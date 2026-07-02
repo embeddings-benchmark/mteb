@@ -22,6 +22,12 @@ model_entry = """
 |:-:|:-:|:-:|:-:|:-:|:-:|
 | {n_parameters} | {embed_dim} | {max_tokens} | {required_memory} | {release_date} | {languages} |
 
+ **Openness:** {openness_score}
+
+| :lucide-weight: Open Weights | :lucide-scale: Open License | :lucide-code: Open Code | :lucide-database: Open Data | :lucide-file-text: Paper |
+|:-:|:-:|:-:|:-:|:-:|
+| {open_weights} | {open_license} | {open_code} | {open_data} | {paper} |
+
 """
 
 h1_header = """
@@ -116,6 +122,10 @@ def modality_to_filename(modality: tuple[str, ...]) -> str:
     return f"{modality_to_string(modality).lower().replace('-', '_')}.md"
 
 
+def bool_to_mark(value: bool) -> str:
+    return ":white_check_mark:" if value else ":x:"
+
+
 def required_memory_string(mem_in_mb: int | None) -> str:
     if mem_in_mb is None:
         return "not specified"
@@ -152,6 +162,7 @@ def format_model_entry(meta: ModelMeta) -> str:
         pretty_long_list(sorted(meta.languages)) if meta.languages else "not specified"
     )
     required_mem = required_memory_string(meta.memory_usage_mb)
+    openness = meta.openness
 
     entry = model_entry.format(
         icon=modality_to_icon.get(meta.modalities[0], "lucide/layers"),
@@ -165,6 +176,12 @@ def format_model_entry(meta: ModelMeta) -> str:
         release_date=release_date,
         languages=languages,
         required_memory=required_mem,
+        openness_score=f"{meta.openness_score}/{len(openness)}",
+        open_weights=bool_to_mark(openness["open_weights"]),
+        open_license=bool_to_mark(openness["open_license"]),
+        open_code=bool_to_mark(openness["open_training_code"]),
+        open_data=bool_to_mark(openness["open_training_data"]),
+        paper=bool_to_mark(openness["paper"]),
     )
 
     if meta.citation:
