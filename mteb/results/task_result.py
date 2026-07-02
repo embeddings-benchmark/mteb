@@ -127,6 +127,39 @@ renamed_tasks = {
 }
 
 
+def _reconstruct_legacy_main_score(main_score: str, scores: ScoresDict) -> Score | None:
+    """Reconstruct a task's ``main_score`` from legacy metric names.
+
+    Result files from before the reranking and pair-classification evaluators were
+    migrated to the retrieval-based metrics stored their scores under different
+    names, so the current ``main_score`` is absent (see issue #4333):
+
+    - Reranking stored ``map``/``mrr`` instead of ``map_at_1000``/``mrr_at_10``.
+    - Pair classification stored per-similarity metrics (e.g. ``cosine_ap``) but not
+      the ``max_*`` aggregate.
+
+    Returns the reconstructed score, or ``None`` if it cannot be derived.
+    """
+    # Pair classification: `max_*` is the max over the per-similarity metrics.
+    if main_score.startswith("max_"):
+        metric = main_score[len("max_") :]
+        candidates = [
+            v
+            for name, v in scores.items()
+            if name.endswith(f"_{metric}") and isinstance(v, (int, float))
+        ]
+        if candidates:
+            return max(candidates)
+    # Reranking: the legacy `map`/`mrr` correspond to the `*_at_k` main scores.
+    for legacy in ("map", "mrr"):
+        legacy_score = scores.get(legacy)
+        if legacy_score is not None and (
+            main_score == legacy or f"{legacy}_at_" in main_score
+        ):
+            return legacy_score
+    return None
+
+
 class TaskResult(BaseModel):  # noqa: PLR0904
     """A class to represent the MTEB result.
 
@@ -513,8 +546,16 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     if main_score in hf_subset_scores:
                         hf_subset_scores["main_score"] = hf_subset_scores[main_score]
                     else:
-                        log_once.warning(f"Main score {main_score} not found in scores")
-                        hf_subset_scores["main_score"] = None
+                        legacy_score = _reconstruct_legacy_main_score(
+                            main_score, hf_subset_scores
+                        )
+                        if legacy_score is not None:
+                            hf_subset_scores["main_score"] = legacy_score
+                        else:
+                            log_once.warning(
+                                f"Main score {main_score} not found in scores"
+                            )
+                            hf_subset_scores["main_score"] = None
 
         # specific fixes:
         if task_name == "MLSUMClusteringP2P" and mteb_version in [  # noqa: PLR6201

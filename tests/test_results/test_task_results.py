@@ -281,6 +281,12 @@ def test_merge_without_per_subset_version():
 def test_mteb_results_from_historic(path: Path):
     mteb_result = TaskResult.from_disk(path, load_historic_data=True)
     assert isinstance(mteb_result, TaskResult)
+    # Legacy result files stored reranking/pair-classification scores under names that
+    # no longer match the task's `main_score`; these should be reconstructed rather
+    # than left as None (https://github.com/embeddings-benchmark/mteb/issues/4333).
+    for split_scores in mteb_result.scores.values():
+        for subset_scores in split_scores:
+            assert subset_scores["main_score"] is not None
 
 
 def test_from_disk_with_multiversion_range(tmp_path: Path):
