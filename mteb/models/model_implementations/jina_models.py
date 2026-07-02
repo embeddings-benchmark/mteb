@@ -841,15 +841,16 @@ class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
                 task_metadata.simplified_task_type
             )
         task = jina_task_name or "retrieval"
-        # Non-retrieval adapters were trained without the Query/Document prefix.
-        if task == "retrieval":
+        # All text and image adapters use Query/Document prefix.
+        # Audio/video non-retrieval adapters do not use the prefix.
+        if (has_video or has_audio) and task != "retrieval":
+            prompt = ""
+        else:
             prompt = (
                 "Query: "
                 if prompt_type and prompt_type == PromptType.query
                 else "Document: "
             )
-        else:
-            prompt = ""
 
         logger.info(
             f"Using prompt=`{prompt}` and task={task} for task={task_metadata.name} prompt_type={prompt_type}"

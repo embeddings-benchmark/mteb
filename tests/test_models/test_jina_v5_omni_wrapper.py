@@ -72,10 +72,11 @@ def _omni_prompts() -> dict:
     [
         (PromptType.query, "Retrieval", "retrieval", "Query: "),
         (PromptType.document, "Retrieval", "retrieval", "Document: "),
-        (PromptType.document, "Clustering", "clustering", ""),
-        (PromptType.query, "STS", "text-matching", ""),
-        (PromptType.document, "Classification", "classification", ""),
-        (PromptType.query, "PairClassification", "text-matching", ""),
+        # Text tasks: all adapters now use prefix (trained with prefix)
+        (PromptType.document, "Clustering", "clustering", "Document: "),
+        (PromptType.query, "STS", "text-matching", "Query: "),
+        (PromptType.document, "Classification", "classification", "Document: "),
+        (PromptType.query, "PairClassification", "text-matching", "Query: "),
     ],
 )
 def test_prefix_by_task_type(prompt_type, task_type, expected_task, expected_prompt):
@@ -89,9 +90,10 @@ def test_prefix_by_task_type(prompt_type, task_type, expected_task, expected_pro
     "prompt_type,task_type,expected_task,expected_prompt",
     [
         (PromptType.query, "Any2AnyRetrieval", "retrieval", "Query: "),
-        (PromptType.document, "ImageClustering", "clustering", ""),
-        (PromptType.query, "VisualSTS(eng)", "text-matching", ""),
-        (PromptType.query, "AudioPairClassification", "text-matching", ""),
+        # Text-input paths always get prefix regardless of task type label
+        (PromptType.document, "ImageClustering", "clustering", "Document: "),
+        (PromptType.query, "VisualSTS(eng)", "text-matching", "Query: "),
+        (PromptType.query, "AudioPairClassification", "text-matching", "Query: "),
     ],
 )
 def test_simplified_fallback(prompt_type, task_type, expected_task, expected_prompt):
@@ -108,9 +110,10 @@ def test_simplified_fallback(prompt_type, task_type, expected_task, expected_pro
         (PromptType.query, "ImageClassification", "retrieval", "Query: "),
         (PromptType.query, "AudioClassification", "retrieval", "Query: "),
         (PromptType.query, "ZeroShotClassification", "retrieval", "Query: "),
-        (PromptType.document, "Compositionality", "clustering", ""),
+        # Text-input paths always get prefix
+        (PromptType.document, "Compositionality", "clustering", "Document: "),
         (PromptType.query, "AudioPairClassification", "retrieval", "Query: "),
-        (PromptType.document, "ImageClustering", "text-matching", ""),
+        (PromptType.document, "ImageClustering", "text-matching", "Document: "),
     ],
 )
 def test_omni_overrides(prompt_type, task_type, expected_task, expected_prompt):
