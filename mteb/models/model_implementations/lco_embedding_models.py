@@ -69,8 +69,9 @@ class LCOEmbedding(AbsEncoder):
                 return f"\nSummarize the above {modality} in one word:"
         return "\nSummarize the above text in one word:"
 
-    @staticmethod
-    def _build_messages(batch: BatchedInput, suffix: str) -> list[list[dict[str, Any]]]:
+    def _build_messages(
+        self, batch: BatchedInput, suffix: str
+    ) -> list[list[dict[str, Any]]]:
         """Build chat messages for each item in the batch."""
         texts = batch.get("text", [])
         images = batch.get("image", [])
@@ -88,7 +89,12 @@ class LCOEmbedding(AbsEncoder):
             if i < len(images) and images[i] is not None:
                 content.append({"type": "image", "image": "placeholder"})
             if i < len(texts) and texts[i] is not None:
-                content.append({"type": "text", "text": texts[i]})
+                text = texts[i]
+                # match author eval: cap text at 300 tokens
+                ids = self.processor.tokenizer(text).input_ids
+                if len(ids) > 300:
+                    text = self.processor.tokenizer.decode(ids[:300])
+                content.append({"type": "text", "text": text})
             content.append({"type": "text", "text": suffix})
             messages.append([{"role": "user", "content": content}])
         return messages
