@@ -218,6 +218,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         "Model",
         "Total Parameters (B)",
         "Active Parameters (B)",
+        "CO₂ (g/Mtoken)",
         "Embedding Dimensions",
         "Max Tokens",
     ]
@@ -257,6 +258,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
             "Max Tokens": "{:.0f}",
             "Total Parameters (B)": lambda x: _style_number_of_parameters(x),  # noqa: PLW0108
             "Active Parameters (B)": lambda x: _style_number_of_parameters(x),  # noqa: PLW0108
+            "CO₂ (g/Mtoken)": lambda x: f"~{x:.0f}",
         },
         na_rep="",
     )

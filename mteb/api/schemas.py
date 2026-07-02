@@ -13,6 +13,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from pydantic.alias_generators import to_camel
 
 from mteb.benchmarks._create_table import (
+    _format_co2_per_mtoken,
     _format_max_tokens,
     _format_n_parameters,
     _get_embedding_size,
@@ -191,6 +192,7 @@ class ModelMetaSchema(_CamelModel):
     zero_shot_pct: int
     active_params_b: float | None
     total_params_b: float | None
+    co2_g_per_mtoken: float | None = None
     embedding_dim: int | None
     max_tokens: float | None
     release_date: str | None = None
@@ -232,6 +234,7 @@ class ModelMetaSchema(_CamelModel):
             zero_shot_pct=-1 if zero_shot_pct is None else int(zero_shot_pct),
             active_params_b=_format_n_parameters(n_active),
             total_params_b=_format_n_parameters(meta.n_parameters),
+            co2_g_per_mtoken=_format_co2_per_mtoken(meta.co2_cost_per_million_tokens),
             embedding_dim=_get_embedding_size(meta.embed_dim),
             max_tokens=_format_max_tokens(meta.max_tokens),
             release_date=str(meta.release_date) if meta.release_date else None,
