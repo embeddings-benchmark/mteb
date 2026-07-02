@@ -707,6 +707,32 @@ MTEB_DEU = Benchmark(
 
 MTEB_KOR = Benchmark(
     name="MTEB(kor, v1)",
+    aliases=["MTEB(kor, classic)"],
+    display_name="Korean Legacy",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
+    tasks=get_tasks(
+        languages=["kor"],
+        tasks=[
+            # @KennethEnevoldsen: We could probably expand this to a more solid benchmark, but for now I have left it as is.
+            # Classification
+            "KLUE-TC",
+            # Reranking
+            "MIRACLReranking",
+            # Retrieval
+            "MIRACLRetrieval",
+            "Ko-StrategyQA",
+            # STS
+            "KLUE-STS",
+            "KorSTS",
+        ],
+    ),
+    description="Korean text embedding quality across classification, reranking, retrieval, and semantic similarity.",
+    reference=None,
+    citation=None,
+)
+
+MTEB_KOR_V2 = Benchmark(
+    name="MTEB(kor, v2)",
     aliases=["MTEB(kor)"],
     display_name="Korean",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
