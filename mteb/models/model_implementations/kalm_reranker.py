@@ -23,11 +23,12 @@ DEFAULT_SYSTEM_INSTRUCTION = (
     'the Instruct provided. Note that the answer can only be "yes" or "no".'
 )
 
+
 class KaLMRerankerWrapper:
     """Wrapper for KaLM-Reranker-V1 models.
 
     Reference implementation https://huggingface.co/KaLM-Embedding/KaLM-Reranker-V1-Nano/blob/main/kalm_reranker.py
-    
+
     Score query-document relevance with a KaLM encoder-decoder reranker.
     The returned score is ``P(yes)`` after applying a two-class softmax to the
     model's ``yes`` and ``no`` logits.
@@ -70,9 +71,11 @@ class KaLMRerankerWrapper:
         self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
         if self.tokenizer.pad_token_id is None:
             if self.tokenizer.eos_token_id is None:
-                raise ValueError("The tokenizer must define a pad token or an EOS token.")
+                raise ValueError(
+                    "The tokenizer must define a pad token or an EOS token."
+                )
             self.tokenizer.pad_token = self.tokenizer.eos_token
-        
+
         self.tokenizer.padding_side = "right"
 
         self.model = AutoModelForSeq2SeqLM.from_pretrained(
@@ -80,7 +83,7 @@ class KaLMRerankerWrapper:
             dtype=self.dtype,
             **model_kwargs,
         )
-        
+
         for parameter in self.model.parameters():
             if parameter.is_floating_point() and parameter.dtype != self.dtype:
                 parameter.data = parameter.data.to(dtype=self.dtype)
@@ -108,7 +111,9 @@ class KaLMRerankerWrapper:
         if isinstance(dtype, torch.dtype):
             return dtype
         if not isinstance(dtype, str):
-            raise TypeError("dtype must be a torch.dtype or a string such as 'bfloat16'.")
+            raise TypeError(
+                "dtype must be a torch.dtype or a string such as 'bfloat16'."
+            )
         normalized = dtype.lower().removeprefix("torch.")
         supported = {
             "bfloat16": torch.bfloat16,
@@ -294,7 +299,6 @@ class KaLMRerankerWrapper:
         if not isinstance(effective_batch_size, int) or effective_batch_size <= 0:
             raise ValueError("batch_size must be a positive integer.")
 
-        
         length_sorted_indices = np.argsort(
             [-(len(query) + len(document)) for query, document in validated_pairs]
         )
@@ -331,6 +335,7 @@ class KaLMRerankerWrapper:
             ) from error
         inverse_indices = np.argsort(length_sorted_indices)
         return np.array([sorted_scores[index] for index in inverse_indices])
+
 
 kalm_reranker_v1_training_data = {
     "AdvertiseGen",
