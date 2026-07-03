@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any, ClassVar, Unpack
+from typing import TYPE_CHECKING, Any, ClassVar
 
 import numpy as np
 import torch
@@ -19,6 +19,7 @@ from mteb.types import PromptType
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder
     from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs
