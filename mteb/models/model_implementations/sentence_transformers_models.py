@@ -856,3 +856,38 @@ multi_qa_mpnet_base_dot_v1 = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
 )
+
+qwen_indic_v1 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="LingoIITGN/qwen-indic-v1",
+    model_type=["dense"],
+    # These are the standard language codes evaluated in the Indic MTEB subset. 
+    # Add or remove languages if your specific fine-tuning targeted a different subset.
+    languages=[
+        "hin-Deva", "guj-Gujr", "tam-Taml", "ben-Beng", 
+        "mar-Deva", "urd-Arab", "tel-Telu", "kan-Knda", 
+        "mal-Mlym", "pan-Guru", "ori-Orya", "asm-Beng"
+    ], 
+    open_weights=True,
+    revision="df0f8b2c7565e6a630f50ae4e50a480f2fe9004d", 
+    release_date="2026-07-03", 
+    n_parameters=8_000_000_000, 
+    memory_usage_mb=16000, # Approximate bf16/fp16 VRAM footprint for an 8B parameter model
+    embed_dim=4096, # Matches Qwen3-8B hidden size
+    license="apache-2.0",
+    max_tokens=8192,
+    reference="https://huggingface.co/LingoIITGN/qwen-indic-v1",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    superseded_by=None,
+    adapted_from="Qwen/Qwen3-Embedding-8B",
+    training_datasets={
+        "Samanantar",
+        "IndicXNLI",
+        "MASSIVE",
+        "IndicGLUE"
+    },
+    public_training_code=None,
+    public_training_data=None,
+)
