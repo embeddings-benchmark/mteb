@@ -1,8 +1,7 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
-import logging
-from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
-from mteb.models.model_meta import ModelMeta
+
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
@@ -10,6 +9,7 @@ import torch.nn.functional as F
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 from transformers.modeling_outputs import BaseModelOutput
 
+from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -38,12 +38,12 @@ class KaLMRerankerWrapper:
         self,
         model_name_or_path: str,
         *,
-        device: Optional[Union[str, torch.device]] = None,
-        dtype: Optional[Union[str, torch.dtype]] = None,
+        device: str | torch.device | None = None,
+        dtype: str | torch.dtype | None = None,
         batch_size: int = 32,
         query_max_length: int = 512,
         max_length: int = 1024,
-        chunk_size: Optional[int] = 4,
+        chunk_size: int | None = 4,
         instruction: str = DEFAULT_INSTRUCTION,
         system_instruction: str = DEFAULT_SYSTEM_INSTRUCTION,
         **model_kwargs: Any,
@@ -94,7 +94,7 @@ class KaLMRerankerWrapper:
         self.no_token_id = self._answer_token_id("no")
 
     @staticmethod
-    def _resolve_device(device: Optional[Union[str, torch.device]]) -> torch.device:
+    def _resolve_device(device: str | torch.device | None) -> torch.device:
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
         resolved = torch.device(device)
@@ -104,7 +104,7 @@ class KaLMRerankerWrapper:
 
     @staticmethod
     def _resolve_dtype(
-        dtype: Optional[Union[str, torch.dtype]], device: torch.device
+        dtype: str | torch.dtype | None, device: torch.device
     ) -> torch.dtype:
         if dtype is None:
             return torch.bfloat16 if device.type == "cuda" else torch.float32
@@ -145,7 +145,7 @@ class KaLMRerankerWrapper:
         hidden_states: torch.Tensor,
         attention_mask: torch.Tensor,
         chunk_size: int,
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+    ) -> tuple[torch.Tensor, torch.Tensor]:
         batch_size, sequence_length, hidden_size = hidden_states.shape
         num_chunks = (sequence_length + chunk_size - 1) // chunk_size
         padded_length = num_chunks * chunk_size
@@ -161,7 +161,7 @@ class KaLMRerankerWrapper:
         chunk_mask = attention_mask.view(batch_size, num_chunks, chunk_size)
         expanded_mask = chunk_mask.unsqueeze(-1).to(hidden_states.dtype)
         pooled_hidden = (hidden_states * expanded_mask).sum(dim=2)
-        pooled_hidden = pooled_hidden / chunk_mask.sum(dim=2).clamp(min=1).unsqueeze(-1)
+        pooled_hidden /= chunk_mask.sum(dim=2).clamp(min=1).unsqueeze(-1)
         pooled_mask = (chunk_mask.sum(dim=2) > 0).to(attention_mask.dtype)
         return pooled_hidden, pooled_mask
 
@@ -187,11 +187,11 @@ class KaLMRerankerWrapper:
 
     @staticmethod
     def _validate_pairs(
-        pairs: Sequence[Tuple[str, str]],
-    ) -> List[Tuple[str, str]]:
+        pairs: Sequence[tuple[str, str]],
+    ) -> list[tuple[str, str]]:
         if isinstance(pairs, (str, bytes)) or not isinstance(pairs, Sequence):
             raise TypeError("pairs must be a sequence of (query, document) pairs.")
-        validated: List[Tuple[str, str]] = []
+        validated: list[tuple[str, str]] = []
         for index, pair in enumerate(pairs):
             if (
                 isinstance(pair, (str, bytes))
@@ -207,8 +207,8 @@ class KaLMRerankerWrapper:
 
     @torch.inference_mode()
     def _predict_batch(
-        self, pairs: Sequence[Tuple[str, str]], instruction: str
-    ) -> List[float]:
+        self, pairs: Sequence[tuple[str, str]], instruction: str
+    ) -> list[float]:
         encoder_texts = [f"<Document>: {document}" for _, document in pairs]
         decoder_texts = [self._decoder_text(query, instruction) for query, _ in pairs]
 
@@ -282,8 +282,8 @@ class KaLMRerankerWrapper:
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        instruction: Optional[str] = None,
-        batch_size: Optional[int] = None,
+        instruction: str | None = None,
+        batch_size: int | None = None,
     ) -> Array:
         """Return ``P(yes)`` scores in the same order as ``pairs``."""
         queries = [text for batch in inputs1 for text in batch["text"]]
@@ -317,7 +317,7 @@ class KaLMRerankerWrapper:
                     torch.cuda.empty_cache()
                 tested_batch_size = max(1, tested_batch_size * 3 // 4)
 
-        sorted_scores: List[float] = []
+        sorted_scores: list[float] = []
         try:
             for start in range(0, len(sorted_pairs), tested_batch_size):
                 sorted_scores.extend(
