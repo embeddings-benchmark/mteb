@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import typing
 
+import numpy as np
 import pytest
+import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader
 
@@ -10,6 +12,7 @@ from mteb.abstasks.task_metadata import SimplifiedTaskType, TaskMetadata
 from mteb.models.model_implementations.jina_models import (
     _SIMPLIFIED_TO_JINA_TASK,
     JinaV5OmniWrapper,
+    _video_frames_to_channels_last,
     jina_embeddings_v5_omni_small,
 )
 from mteb.types import PromptType
@@ -122,6 +125,23 @@ def test_omni_overrides(prompt_type, task_type, expected_task, expected_prompt):
     _encode(wrapper, prompt_type, task_type)
     assert wrapper.model.captured[-1]["task"] == expected_task
     assert wrapper.model.captured[-1]["prompt"] == expected_prompt
+
+
+def test_video_channels_first_tensor_converted_to_channels_last():
+    """torchcodec yields (T, C, H, W) uint8 frames; the HF remote code only
+    detects channels-last video and would otherwise embed str(tensor) as text."""
+    chw = torch.randint(0, 255, (8, 3, 64, 96), dtype=torch.uint8)
+    out = _video_frames_to_channels_last(chw)
+    assert isinstance(out, np.ndarray)
+    assert out.shape == (8, 64, 96, 3)
+    assert np.array_equal(out, chw.permute(0, 2, 3, 1).numpy())
+
+
+def test_video_channels_last_input_passes_through_unchanged():
+    hwc = np.random.default_rng(0).integers(0, 255, (8, 64, 96, 3), dtype=np.uint8)
+    assert _video_frames_to_channels_last(hwc) is hwc
+    path = "/data/video.mp4"
+    assert _video_frames_to_channels_last(path) is path
 
 
 def test_simplified_to_jina_task_covers_all_simplified_types():

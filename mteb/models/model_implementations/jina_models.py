@@ -798,6 +798,20 @@ _OMNI_MODEL_PROMPTS = {
 }
 
 
+def _video_frames_to_channels_last(video: Any) -> Any:
+    """torchcodec frame batches are (T, C, H, W) uint8; the model's remote code
+    detects video only for channels-last (T, H, W, 3|4) arrays and would
+    otherwise stringify the tensor and embed it as text."""
+    if (
+        isinstance(video, torch.Tensor)
+        and video.ndim == 4
+        and video.shape[1] in (3, 4)
+        and video.shape[-1] not in (3, 4)
+    ):
+        return video.permute(0, 2, 3, 1).contiguous().cpu().numpy()
+    return video
+
+
 class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
     def encode(
         self,
@@ -863,6 +877,10 @@ class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
                 batch["audio"] = [
                     a["array"] if isinstance(a, dict) and "array" in a else a
                     for a in batch["audio"]
+                ]
+            if "video" in batch:
+                batch["video"] = [
+                    _video_frames_to_channels_last(v) for v in batch["video"]
                 ]
 
             batch_column = next(iter(batch.keys()))
