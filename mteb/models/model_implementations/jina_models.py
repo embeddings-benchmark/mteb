@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar, Unpack
 
 import numpy as np
 import torch
@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -805,8 +805,8 @@ def _video_frames_to_channels_last(video: Any) -> Any:
     if (
         isinstance(video, torch.Tensor)
         and video.ndim == 4
-        and video.shape[1] in (3, 4)
-        and video.shape[-1] not in (3, 4)
+        and video.shape[1] in {3, 4}
+        and video.shape[-1] not in {3, 4}
     ):
         return video.permute(0, 2, 3, 1).contiguous().cpu().numpy()
     return video
@@ -821,7 +821,7 @@ class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         has_video = "video" in inputs.dataset.features
         has_audio = "audio" in inputs.dataset.features
