@@ -885,7 +885,7 @@ qwen_indic_v1 = ModelMeta(
     training_datasets={
         "Samanantar",
         "IndicXNLI",
-        "MASSIVE",
+        "MassiveIntentClassification",
         "IndicGLUE"
     },
     public_training_code=None,
