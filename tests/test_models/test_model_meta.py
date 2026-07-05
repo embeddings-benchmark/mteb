@@ -188,7 +188,7 @@ def test_openness_score_all_dimensions():
         citation="@article{example}",
     )
     assert meta.open_license is True
-    assert meta.openness_score == 5
+    assert meta.openness_score == 6
     assert all(meta.openness.values())
 
 
@@ -201,16 +201,18 @@ def test_openness_score_none():
         citation=None,
     )
     assert meta.open_license is False
-    assert meta.openness_score == 0
-    assert not any(meta.openness.values())
+    # "model card" is always True, so a fully closed model still scores 1
+    assert meta.openness_score == 1
+    assert meta.openness["model card"] is True
+    assert not any(v for k, v in meta.openness.items() if k != "model card")
 
 
 def test_openness_non_open_license_not_counted():
     meta = _openness_meta(open_weights=True, license="cc-by-nc-4.0")
     assert meta.open_license is False
-    assert meta.openness["open_weights"] is True
-    assert meta.openness["open_license"] is False
-    assert meta.openness_score == 1
+    assert meta.openness["open weights"] is True
+    assert meta.openness["open license"] is False
+    assert meta.openness_score == 2
 
 
 def test_model_name_without_prefix():
