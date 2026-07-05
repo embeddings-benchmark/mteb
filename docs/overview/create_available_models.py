@@ -24,9 +24,9 @@ model_entry = """
 
  **Openness:** {openness_score}
 
-| :lucide-weight: Open Weights | :lucide-scale: Open License | :lucide-code: Open Code | :lucide-database: Open Data | :lucide-file-text: Paper |
-|:-:|:-:|:-:|:-:|:-:|
-| {open_weights} | {open_license} | {open_code} | {open_data} | {paper} |
+| :lucide-weight: Open Weights | :lucide-scale: Open License | :lucide-code: Open Code | :lucide-database: Open Data | :lucide-file-text: Paper | :lucide-id-card: Model Card |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| {open_weights} | {open_license} | {open_code} | {open_data} | {paper} | {model_card} |
 
 """
 
@@ -177,11 +177,12 @@ def format_model_entry(meta: ModelMeta) -> str:
         languages=languages,
         required_memory=required_mem,
         openness_score=f"{meta.openness_score}/{len(openness)}",
-        open_weights=bool_to_mark(openness["open_weights"]),
-        open_license=bool_to_mark(openness["open_license"]),
-        open_code=bool_to_mark(openness["open_training_code"]),
-        open_data=bool_to_mark(openness["open_training_data"]),
+        open_weights=bool_to_mark(openness["open weights"]),
+        open_license=bool_to_mark(openness["open license"]),
+        open_code=bool_to_mark(openness["open training code"]),
+        open_data=bool_to_mark(openness["open training data"]),
         paper=bool_to_mark(openness["paper"]),
+        model_card=bool_to_mark(openness["model card"]),
     )
 
     if meta.citation:
