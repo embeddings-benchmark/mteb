@@ -784,7 +784,7 @@ MTEB_PT = Benchmark(
     icon="https://raw.githubusercontent.com/lipis/flag-icons/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/br.svg",
     tasks=MTEBTasks(
         get_tasks(
-            languages=["pt"],
+            languages=["por"],
             tasks=[
                 # STS (3)
                 "Assin2STS",

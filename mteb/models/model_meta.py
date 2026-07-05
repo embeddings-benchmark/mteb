@@ -4,6 +4,10 @@ import hashlib
 import importlib
 import json
 import logging
+import os
+import shutil
+import subprocess
+import sys
 import warnings
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import field
@@ -70,6 +74,42 @@ if TYPE_CHECKING:
 
 
 logger = logging.getLogger(__name__)
+
+
+def _auto_install_extras_enabled() -> bool:
+    """Whether mteb should try to install missing optional dependencies automatically.
+
+    Controlled by the ``MTEB_AUTO_INSTALL_EXTRAS`` environment variable.
+    """
+    return os.environ.get("MTEB_AUTO_INSTALL_EXTRAS", "0").lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+
+
+def _install_extras(model_name: str | None, groups: Sequence[str]) -> None:
+    """Install the given mteb extras groups using ``uv`` if available, else ``pip``.
+
+    Uses ``uv pip install`` when ``uv`` is on the PATH (faster), otherwise falls back
+    to ``python -m pip install``.
+    """
+    target = f"mteb[{','.join(groups)}]"
+    if shutil.which("uv") is not None:
+        command = ["uv", "pip", "install", target]
+    else:
+        command = [sys.executable, "-m", "pip", "install", target]
+
+    logger.info(
+        "Auto-installing missing dependencies for model %s: %s",
+        model_name,
+        " ".join(command),
+    )
+    subprocess.run(command, check=True)
+    # Ensure freshly installed distributions are visible to importlib.
+    importlib.invalidate_caches()
+
 
 FRAMEWORKS = Literal[
     "Sentence Transformers",
@@ -181,7 +221,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
         experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
         output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
-        extra_requirements_groups: Name of group of extra requirements.
+        extra_requirements_groups: Name of group of extra requirements (mteb extras) needed to run the model, e.g. `["flagembedding"]`.
+            When a required group is missing, loading the model raises with install instructions. Set the environment variable
+            `MTEB_AUTO_INSTALL_EXTRAS=1` to let mteb install the missing extras automatically (using `uv` if available, otherwise `pip`).
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -471,6 +513,28 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         return model
 
     def _check_requirements(self) -> None:
+        groups = self._resolve_extras_groups()
+        if not groups:
+            return
+
+        self._validate_extras_groups(groups)
+
+        missing_dependencies = self._missing_dependencies(groups)
+        if missing_dependencies and _auto_install_extras_enabled():
+            _install_extras(self.name, groups)
+            missing_dependencies = self._missing_dependencies(groups)
+
+        if missing_dependencies:
+            raise ImportError(
+                f"Model {self.name} is missing required dependencies: "
+                + ", ".join(missing_dependencies)
+                + f".\nYou can install it with `pip install mteb[{','.join(groups)}]`."
+                + "\nAlternatively, set the environment variable "
+                "`MTEB_AUTO_INSTALL_EXTRAS=1` to let mteb install them automatically."
+            )
+
+    def _resolve_extras_groups(self) -> list[str]:
+        """Collect the extras groups this model requires, including modality defaults."""
         groups: list[str] = list(self.extra_requirements_groups or [])
 
         # handle modality specific dependencies inside baseline functions
@@ -480,9 +544,11 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             if "audio" in self.modalities and "audio" not in groups:
                 groups.append("audio")
 
-        if not groups:
-            return
+        return groups
 
+    @staticmethod
+    def _validate_extras_groups(groups: Sequence[str]) -> None:
+        """Raise if any group is not a valid mteb extra."""
         available_extras = set(
             distribution("mteb").metadata.get_all("Provides-Extra") or []
         )
@@ -498,6 +564,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 f"Available: {sorted(available_extras)}"
             )
 
+    @staticmethod
+    def _missing_dependencies(groups: Sequence[str]) -> list[str]:
+        """Return the requirement strings of the given groups that are not satisfied."""
         missing_dependencies = []
 
         mteb_requires = requires("mteb")
@@ -526,12 +595,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             except InvalidVersion:
                 missing_dependencies.append(f"{req_str} (installed: {installed})")
 
-        if missing_dependencies:
-            raise ImportError(
-                f"Model {self.name} is missing required dependencies: "
-                + ", ".join(missing_dependencies)
-                + f".\nYou can install it with `pip install mteb[{','.join(groups)}]`."
-            )
+        return missing_dependencies
 
     def model_name_as_path(self) -> str:
         """Returns the model name in a format that can be used as a file path.

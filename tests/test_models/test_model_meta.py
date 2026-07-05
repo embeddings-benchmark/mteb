@@ -525,3 +525,48 @@ def test_model_meta_dependencies_not_installed_group():
         ),
     ):
         model_meta._check_requirements()
+
+
+def test_model_meta_auto_install_extras(monkeypatch):
+    """When MTEB_AUTO_INSTALL_EXTRAS is set, missing deps trigger an install attempt."""
+    model_meta = mteb.get_model_meta("google/vggish").model_copy(
+        update={
+            "extra_requirements_groups": ["torch-vggish-yamnet"],
+        }
+    )
+    monkeypatch.setenv("MTEB_AUTO_INSTALL_EXTRAS", "1")
+
+    install_calls: list[tuple[str | None, list[str]]] = []
+
+    def fake_install(name, groups):
+        install_calls.append((name, list(groups)))
+
+    monkeypatch.setattr("mteb.models.model_meta._install_extras", fake_install)
+
+    # Install is a no-op in the test, so the deps remain missing and we still raise;
+    # the important assertion is that auto-install was attempted with the right groups.
+    with pytest.raises(ImportError):
+        model_meta._check_requirements()
+
+    assert len(install_calls) == 1
+    name, groups = install_calls[0]
+    assert name == "google/vggish"
+    assert "torch-vggish-yamnet" in groups
+
+
+def test_model_meta_no_auto_install_by_default(monkeypatch):
+    """Without the env var, no install is attempted and the error is raised directly."""
+    model_meta = mteb.get_model_meta("google/vggish").model_copy(
+        update={
+            "extra_requirements_groups": ["torch-vggish-yamnet"],
+        }
+    )
+    monkeypatch.delenv("MTEB_AUTO_INSTALL_EXTRAS", raising=False)
+
+    def fail_install(name, groups):
+        raise AssertionError("install should not be attempted")
+
+    monkeypatch.setattr("mteb.models.model_meta._install_extras", fail_install)
+
+    with pytest.raises(ImportError):
+        model_meta._check_requirements()
