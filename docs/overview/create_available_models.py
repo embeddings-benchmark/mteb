@@ -16,17 +16,11 @@ if TYPE_CHECKING:
 model_entry = """
 ####  `{model_name}` {{ .model-copy }}
 
- **License:** {license} {learn_more}
+ **License:** {license} • **Openness:** {openness} {learn_more}
 
 | :lucide-cpu: Parameters | :lucide-layers: Emb. Dim | :lucide-ruler: Max Tokens | :lucide-database: Memory | :lucide-calendar: Released | :lucide-languages: Languages |
 |:-:|:-:|:-:|:-:|:-:|:-:|
 | {n_parameters} | {embed_dim} | {max_tokens} | {required_memory} | {release_date} | {languages} |
-
- **Openness:** {openness_score}
-
-| :lucide-weight: Open Weights | :lucide-scale: Open License | :lucide-code: Open Code | :lucide-database: Open Data | :lucide-file-text: Paper | :lucide-id-card: Model Card |
-|:-:|:-:|:-:|:-:|:-:|:-:|
-| {open_weights} | {open_license} | {open_code} | {open_data} | {paper} | {model_card} |
 
 """
 
@@ -122,8 +116,13 @@ def modality_to_filename(modality: tuple[str, ...]) -> str:
     return f"{modality_to_string(modality).lower().replace('-', '_')}.md"
 
 
-def bool_to_mark(value: bool) -> str:
-    return ":white_check_mark:" if value else ":x:"
+def openness_badge(openness: dict[str, bool], score: int) -> str:
+    """Renders the openness score as `n/total`, with a hover tooltip listing each dimension."""
+    tooltip = "&#10;".join(
+        f"{'✅' if value else '❌'} {dimension.title()}"
+        for dimension, value in openness.items()
+    )
+    return f'<abbr title="{tooltip}">{score}/{len(openness)}</abbr>'
 
 
 def required_memory_string(mem_in_mb: int | None) -> str:
@@ -162,7 +161,7 @@ def format_model_entry(meta: ModelMeta) -> str:
         pretty_long_list(sorted(meta.languages)) if meta.languages else "not specified"
     )
     required_mem = required_memory_string(meta.memory_usage_mb)
-    openness = meta.openness
+    openness = openness_badge(meta.openness, meta.openness_score)
 
     entry = model_entry.format(
         icon=modality_to_icon.get(meta.modalities[0], "lucide/layers"),
@@ -176,13 +175,7 @@ def format_model_entry(meta: ModelMeta) -> str:
         release_date=release_date,
         languages=languages,
         required_memory=required_mem,
-        openness_score=f"{meta.openness_score}/{len(openness)}",
-        open_weights=bool_to_mark(openness["open weights"]),
-        open_license=bool_to_mark(openness["open license"]),
-        open_code=bool_to_mark(openness["open training code"]),
-        open_data=bool_to_mark(openness["open training data"]),
-        paper=bool_to_mark(openness["paper"]),
-        model_card=bool_to_mark(openness["model card"]),
+        openness=openness,
     )
 
     if meta.citation:
