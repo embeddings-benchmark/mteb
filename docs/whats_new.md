@@ -25,6 +25,10 @@ print(meta.openness_score)
 
 The [available models overview](overview/available_models/text.md) now shows this as an `n/6` openness score next to each model's license, with a hover tooltip listing which dimensions are satisfied.
 
+Looking at the openness of embedding models over time, the picture is fairly static: aside from open weights, which the vast majority of models release, openness has barely changed over the last couple of years. In particular, open training code and open training data remain the exception rather than the norm.
+
+![Openness of MTEB models over time](images/visualizations/openness_over_time.png)
+
 ## New in v2.16
 
 ### Support for Hybrid Search Models
