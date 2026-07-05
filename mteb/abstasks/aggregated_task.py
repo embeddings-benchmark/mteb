@@ -69,7 +69,7 @@ class AbsTaskAggregate(AbsTask):
                     main_scores.append(
                         task_res._get_score_fast(
                             languages=[lang.split("-")[0] for lang in langs],
-                            splits=self.metadata.eval_splits,
+                            splits=[split],
                             subsets=subsets,
                         )
                     )
