@@ -135,6 +135,31 @@ MODEL_TYPES = Literal[
     "dense", "cross-encoder", "late-interaction", "sparse", "router", "hybrid"
 ]
 
+# Licenses considered "open" (OSI-approved or otherwise free/libre) when computing the
+# open-license dimension of the openness score. Non-commercial (``*-nc-*``), no-derivatives
+# (``*-nd-*``) and other restricted licenses are intentionally excluded.
+OPEN_LICENSES: frozenset[str] = frozenset(
+    {
+        "mit",
+        "apache-2.0",
+        "bsd-3-clause",
+        "gpl-3.0",
+        "lgpl",
+        "lgpl-3.0",
+        "mpl-2.0",
+        "afl-3.0",
+        "eupl-1.2",
+        "cc0-1.0",
+        "cc-by-2.0",
+        "cc-by-3.0",
+        "cc-by-4.0",
+        "cc-by-sa-3.0",
+        "cc-by-sa-4.0",
+        "odc-by",
+        "cdla-sharing-1.0",
+    }
+)
+
 
 class ScoringFunction(HelpfulStrEnum):
     """The scoring function used by the models."""
@@ -292,6 +317,38 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         if self.n_parameters is not None and self.n_embedding_parameters is not None:
             return self.n_parameters - self.n_embedding_parameters
         return None
+
+    @property
+    def open_license(self) -> bool:
+        """Whether the model is released under a recognized open license (see `OPEN_LICENSES`)."""
+        if self.license is None:
+            return False
+        return self.license.lower() in OPEN_LICENSES
+
+    @property
+    def openness(self) -> dict[str, bool]:
+        """A breakdown of how open the model is across several dimensions.
+
+        Inspired by the [OSAI index](https://osai-index.eu/), each dimension is a boolean
+        indicating whether the corresponding artifact is openly available. The number of
+        satisfied dimensions is summarized by `openness_score`.
+
+        `model card` is always `True` as documenting one is required as part of the
+        model addition review process.
+        """
+        return {
+            "open weights": self.open_weights is True,
+            "open license": self.open_license,
+            "open training code": bool(self.public_training_code),
+            "open training data": bool(self.public_training_data),
+            "paper": bool(self.citation),
+            "model card": True,
+        }
+
+    @property
+    def openness_score(self) -> int:
+        """The number of openness dimensions the model satisfies (0-6). See `openness`."""
+        return sum(self.openness.values())
 
     @field_validator("similarity_fn_name", mode="before")
     @classmethod
