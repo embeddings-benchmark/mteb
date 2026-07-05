@@ -38,9 +38,8 @@ class KaLMRerankerWrapper:
         self,
         model_name_or_path: str,
         *,
+        revision: str | None = None,
         device: str | torch.device | None = None,
-        dtype: str | torch.dtype | None = None,
-        batch_size: int = 32,
         query_max_length: int = 512,
         max_length: int = 1024,
         chunk_size: int | None = 4,
@@ -50,8 +49,6 @@ class KaLMRerankerWrapper:
     ) -> None:
         if not isinstance(model_name_or_path, str) or not model_name_or_path:
             raise ValueError("model_name_or_path must be a non-empty string.")
-        if batch_size <= 0:
-            raise ValueError("batch_size must be positive.")
         if query_max_length <= 0 or max_length <= 0:
             raise ValueError("query_max_length and max_length must be positive.")
         if chunk_size is not None and chunk_size <= 0:
@@ -60,8 +57,8 @@ class KaLMRerankerWrapper:
             raise TypeError("instruction and system_instruction must be strings.")
 
         self.device = self._resolve_device(device)
+        dtype = model_kwargs.pop("dtype", None)
         self.dtype = self._resolve_dtype(dtype, self.device)
-        self.batch_size = batch_size
         self.query_max_length = query_max_length
         self.max_length = max_length
         self.chunk_size = chunk_size
@@ -76,17 +73,13 @@ class KaLMRerankerWrapper:
                 )
             self.tokenizer.pad_token = self.tokenizer.eos_token
 
-        self.tokenizer.padding_side = "right"
-
         self.model = AutoModelForSeq2SeqLM.from_pretrained(
             model_name_or_path,
             dtype=self.dtype,
+            revision=revision,
             **model_kwargs,
         )
 
-        for parameter in self.model.parameters():
-            if parameter.is_floating_point() and parameter.dtype != self.dtype:
-                parameter.data = parameter.data.to(dtype=self.dtype)
         self.model.to(device=self.device)
         self.model.eval()
 
@@ -207,10 +200,15 @@ class KaLMRerankerWrapper:
 
     @torch.inference_mode()
     def _predict_batch(
-        self, pairs: Sequence[tuple[str, str]], instruction: str
+        self, pairs: Sequence[tuple[str, str]], instructions: Sequence[str]
     ) -> list[float]:
+        if len(pairs) != len(instructions):
+            raise ValueError("pairs and instructions must have the same length.")
         encoder_texts = [f"<Document>: {document}" for _, document in pairs]
-        decoder_texts = [self._decoder_text(query, instruction) for query, _ in pairs]
+        decoder_texts = [
+            self._decoder_text(query, inst)
+            for query, inst in zip([pair[0] for pair in pairs], instructions)
+        ]
 
         encoder_batch = self.tokenizer(
             encoder_texts,
@@ -282,8 +280,7 @@ class KaLMRerankerWrapper:
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        instruction: str | None = None,
-        batch_size: int | None = None,
+        batch_size: int = 32,
     ) -> Array:
         """Return ``P(yes)`` scores in the same order as ``pairs``."""
         queries = [text for batch in inputs1 for text in batch["text"]]
@@ -292,38 +289,26 @@ class KaLMRerankerWrapper:
         validated_pairs = self._validate_pairs(pairs)
         if not validated_pairs:
             return []
-        effective_instruction = self.instruction if instruction is None else instruction
-        if not isinstance(effective_instruction, str):
-            raise TypeError("instruction must be a string or None.")
-        effective_batch_size = self.batch_size if batch_size is None else batch_size
-        if not isinstance(effective_batch_size, int) or effective_batch_size <= 0:
+        if "instruction" in inputs1.dataset.features:
+            instructions = [text for batch in inputs1 for text in batch["instruction"]]
+        else:
+            instructions = [self.instruction] * len(queries)
+        if not isinstance(batch_size, int) or batch_size <= 0:
             raise ValueError("batch_size must be a positive integer.")
 
         length_sorted_indices = np.argsort(
             [-(len(query) + len(document)) for query, document in validated_pairs]
         )
         sorted_pairs = [validated_pairs[index] for index in length_sorted_indices]
-
-        tested_batch_size = effective_batch_size
-        while tested_batch_size > 1:
-            try:
-                self._predict_batch(
-                    sorted_pairs[: min(len(sorted_pairs), tested_batch_size)],
-                    effective_instruction,
-                )
-                break
-            except torch.cuda.OutOfMemoryError:
-                if torch.cuda.is_available():
-                    torch.cuda.empty_cache()
-                tested_batch_size = max(1, tested_batch_size * 3 // 4)
+        sorted_instructions = [instructions[index] for index in length_sorted_indices]
 
         sorted_scores: list[float] = []
         try:
-            for start in range(0, len(sorted_pairs), tested_batch_size):
+            for start in range(0, len(sorted_pairs), batch_size):
                 sorted_scores.extend(
                     self._predict_batch(
-                        sorted_pairs[start : start + tested_batch_size],
-                        effective_instruction,
+                        sorted_pairs[start : start + batch_size],
+                        sorted_instructions[start : start + batch_size],
                     )
                 )
         except torch.cuda.OutOfMemoryError as error:
