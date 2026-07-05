@@ -32,3 +32,33 @@ comsat_embed_ja_8b_preview = ModelMeta(
     # is not documented, so possible mteb-task overlap is unknown.
     training_datasets=None,
 )
+
+comsat_embed_ja_03b_preview = ModelMeta(
+    # Plain sentence-transformers load: the Japanese query/document prefixes
+    # ("検索クエリ: " / "検索文書: ") ship in the model's
+    # config_sentence_transformers.json and are picked up automatically.
+    loader=SentenceTransformerEncoderWrapper,
+    name="sionic-ai/comsat-embed-ja-0.3b-preview",
+    model_type=["dense"],
+    revision="6466ce998f3a4a74f52b51c625e9ac1d7fb00fd7",
+    release_date="2026-07-02",
+    languages=["jpn-Jpan"],
+    open_weights=True,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    n_parameters=314_611_968,
+    n_embedding_parameters=78_643_200,
+    memory_usage_mb=1200,
+    max_tokens=8192,
+    embed_dim=768,
+    license="cc-by-nc-4.0",
+    reference="https://huggingface.co/sionic-ai/comsat-embed-ja-0.3b-preview",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    adapted_from="cl-nagoya/ruri-v3-310m",
+    superseded_by=None,
+    public_training_code=None,
+    public_training_data=None,
+    # Fine-tuning data composition is not documented, so possible mteb-task
+    # overlap is unknown.
+    training_datasets=None,
+)
