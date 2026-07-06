@@ -472,46 +472,52 @@ def _leaderboard(args: argparse.Namespace) -> None:
     )
 
 
-def mock_run(args: argparse.Namespace) -> None:
-    """Run a model on the compatible mock tasks for verification."""
-    # set logging based on verbosity level
-    if args.verbosity == 0:
-        logging.getLogger("mteb").setLevel(logging.CRITICAL)
-    elif args.verbosity == 1:
-        logging.getLogger("mteb").setLevel(logging.WARNING)
-    elif args.verbosity == 2:
-        logging.getLogger("mteb").setLevel(logging.INFO)
-    elif args.verbosity == 3:
-        logging.getLogger("mteb").setLevel(logging.DEBUG)
-
+def check_model_implementation(
+    model: str | EncoderProtocol | CrossEncoderProtocol | SearchProtocol,
+    *,
+    model_revision: str | None = None,
+    device: str | None = None,
+) -> None:
+    """Check a model implementation using mock tasks."""
     logger.debug("Setting environment variable TOKENIZERS_PARALLELISM to false")
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-    logger.info("Running mock-run with parameters: %s", args)
+    if isinstance(model, str):
+        logger.info("Loading model %s...", model)
+        model_name = model
+        model_obj = mteb.get_model(
+            model,
+            model_revision,
+            device=device or ("cuda" if torch.cuda.is_available() else "cpu"),
+        )
+    else:
+        model_obj = model
+        model_name = model.mteb_model_meta.name or model.__class__.__name__
 
-    logger.info("Loading model %s...", args.model)
-    model = mteb.get_model(
-        args.model,
-        args.model_revision,
-        device=args.device or ("cuda" if torch.cuda.is_available() else "cpu"),
+    model_modalities = (
+        model_obj.mteb_model_meta.modalities
+        if model_obj.mteb_model_meta is not None
+        else ["text"]
     )
-
-    model_modalities = model.mteb_model_meta.modalities
     logger.info("Model modalities: %s", model_modalities)
 
     # Filter tasks based on model modalities and protocols
     compatible_tasks = []
     for task in ALL_TASK_TEST_GRID:
-        if not all(mod in model_modalities for mod in task.metadata.modalities):
+        if model_modalities is not None and not all(
+            mod in model_modalities for mod in task.metadata.modalities
+        ):
             continue
 
         # SearchProtocol / Retrieval-only models (like BM25)
-        if isinstance(model, SearchProtocol) and not isinstance(model, EncoderProtocol):
+        if isinstance(model_obj, SearchProtocol) and not isinstance(
+            model_obj, EncoderProtocol
+        ):
             if not task._support_search:
                 continue
 
         # CrossEncoder models
-        if isinstance(model, CrossEncoderProtocol):
+        if isinstance(model_obj, CrossEncoderProtocol):
             if not task._support_cross_encoder:
                 continue
 
@@ -527,10 +533,11 @@ def mock_run(args: argparse.Namespace) -> None:
         "Evaluating model on %d compatible mock tasks...", len(compatible_tasks)
     )
     results = mteb.evaluate(
-        model,
+        model_obj,
         compatible_tasks,
         cache=None,
         raise_error=False,
+        show_progress_bar=False,
     )
 
     passed_tasks = {res.task_name for res in results.task_results}
@@ -538,15 +545,65 @@ def mock_run(args: argparse.Namespace) -> None:
         exc.task_name: exc.exception for exc in (results.exceptions or [])
     }
 
-    md_rows = _get_modality_summary(compatible_tasks, passed_tasks, model_modalities)
+    dependency_skipped_tasks = set()
+    for exc in results.exceptions or []:
+        exception_str = exc.exception
+        is_dependency_error = any(
+            pat in exception_str.lower()
+            for pat in [
+                "importerror",
+                "modulenotfounderror",
+                "without having installed the required dependencies",
+                "dependencies",
+                "please install",
+                "install '",
+            ]
+        )
+        if is_dependency_error:
+            dependency_skipped_tasks.add(exc.task_name)
+
+    md_rows = _get_modality_summary(
+        compatible_tasks, passed_tasks, dependency_skipped_tasks, model_modalities
+    )
 
     output_path = Path("mteb_mock_run_results.md")
     _write_full_results_to_file(
-        output_path, args.model, compatible_tasks, passed_tasks, failed_reasons, md_rows
+        output_path,
+        model_name,
+        compatible_tasks,
+        passed_tasks,
+        dependency_skipped_tasks,
+        failed_reasons,
+        md_rows,
     )
 
-    all_passed = len(results.exceptions or []) == 0
-    _print_terminal_summary(args.model, all_passed, md_rows, output_path)
+    all_passed = all(
+        exc.task_name in dependency_skipped_tasks for exc in (results.exceptions or [])
+    )
+    _print_terminal_summary(model_name, all_passed, md_rows, output_path)
+
+
+def mock_run(args: argparse.Namespace) -> None:
+    """Run a model on the compatible mock tasks for verification."""
+    # set logging based on verbosity level
+    if args.verbosity == 0:
+        logging.getLogger("mteb").setLevel(logging.CRITICAL)
+    elif args.verbosity == 1:
+        logging.getLogger("mteb").setLevel(logging.ERROR)
+    elif args.verbosity == 2:
+        logging.getLogger("mteb").setLevel(logging.WARNING)
+    elif args.verbosity == 3:
+        logging.getLogger("mteb").setLevel(logging.INFO)
+    elif args.verbosity >= 4:
+        logging.getLogger("mteb").setLevel(logging.DEBUG)
+
+    logger.info("Running mock-run with parameters: %s", args)
+
+    check_model_implementation(
+        model=args.model,
+        model_revision=args.model_revision,
+        device=args.device,
+    )
 
 
 def _write_full_results_to_file(
@@ -554,6 +611,7 @@ def _write_full_results_to_file(
     model_name: str,
     compatible_tasks: list[AbsTask],
     passed_tasks: set[str],
+    dependency_skipped_tasks: set[str],
     failed_reasons: dict[str, str],
     md_rows: list[tuple[str, str, str]],
 ) -> None:
@@ -566,8 +624,15 @@ def _write_full_results_to_file(
     for task in compatible_tasks:
         name = task.metadata.name
         mods = ", ".join(task.metadata.modalities)
-        status = "✓" if name in passed_tasks else "✗"
-        reason = failed_reasons.get(name, "-").replace("\n", " ")
+        if name in passed_tasks:
+            status = "✓"
+            reason = "-"
+        elif name in dependency_skipped_tasks:
+            status = "skipped"
+            reason = failed_reasons.get(name, "Missing dependency").replace("\n", " ")
+        else:
+            status = "✗"
+            reason = failed_reasons.get(name, "-").replace("\n", " ")
         md_lines.append(f"| {name} | {mods} | {status} | {reason} |")
 
     max_status_len = max([len(row[0]) for row in md_rows] + [len("Pass")])
@@ -591,6 +656,7 @@ def _write_full_results_to_file(
 def _get_modality_summary(
     compatible_tasks: list[AbsTask],
     passed_tasks: set[str],
+    dependency_skipped_tasks: set[str],
     model_modalities: Sequence[str] | None,
 ) -> list[tuple[str, str, str]]:
     md_rows = []
@@ -604,13 +670,19 @@ def _get_modality_summary(
             md_rows.append(("skipped", modality, ""))
             continue
 
-        mod_tasks = [t for t in compatible_tasks if modality in t.metadata.modalities]
-        if not mod_tasks:
+        run_tasks = [
+            t
+            for t in compatible_tasks
+            if modality in t.metadata.modalities
+            and t.metadata.name not in dependency_skipped_tasks
+        ]
+
+        if not run_tasks:
             md_rows.append(("skipped", modality, ""))
             continue
 
-        passed_count = sum(1 for t in mod_tasks if t.metadata.name in passed_tasks)
-        total_count = len(mod_tasks)
+        passed_count = sum(1 for t in run_tasks if t.metadata.name in passed_tasks)
+        total_count = len(run_tasks)
 
         if passed_count == total_count:
             status = f"✓ ({passed_count}/{total_count})"
@@ -619,7 +691,7 @@ def _get_modality_summary(
             status = f"✗ ({passed_count}/{total_count})"
             failures = ", ".join(
                 t.metadata.name
-                for t in mod_tasks
+                for t in run_tasks
                 if t.metadata.name not in passed_tasks
             )
         md_rows.append((status, modality, failures))
