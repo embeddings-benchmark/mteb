@@ -169,8 +169,6 @@ def test_task_results_to_scores_ignores_extra_tasks():
 
 
 def test_task_results_to_scores_raises_on_missing_tasks():
-    import pytest
-
     from mteb.results.task_result import TaskResult
     from tests.mock_tasks import MockAggregatedTask
 
@@ -197,6 +195,7 @@ def test_task_results_to_scores_raises_on_missing_tasks():
         evaluation_time=1.0,
     )
 
-    # It should raise a ValueError indicating missing tasks
-    with pytest.raises(ValueError, match="Missing task results for required tasks"):
-        agg_task.task_results_to_scores([mock_task_result_1])
+    # It should return a dictionary with main_score: None indicating missing tasks
+    scores = agg_task.task_results_to_scores([mock_task_result_1])
+    assert scores["test"]["default"]["main_score"] is None
+    assert scores["test"]["default"][agg_task.metadata.main_score] is None
