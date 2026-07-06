@@ -91,3 +91,110 @@ def test_task_results_to_scores_isolates_splits():
 
     assert math.isclose(scores["test"]["default"]["main_score"], 0.7)  # (0.8 + 0.6) / 2
     assert math.isclose(scores["dev"]["default"]["main_score"], 0.4)  # (0.5 + 0.3) / 2
+
+
+def test_task_results_to_scores_ignores_extra_tasks():
+    from mteb.results.task_result import TaskResult
+    from tests.mock_tasks import MockAggregatedTask
+    import math
+
+    agg_task = MockAggregatedTask()
+
+    # Provide the two expected tasks
+    task1_name = agg_task.tasks[0].metadata.name
+    task2_name = agg_task.tasks[1].metadata.name
+
+    mock_task_result_1 = TaskResult(
+        dataset_revision="1.0",
+        task_name=task1_name,
+        mteb_version="1.0",
+        scores={
+            "test": [
+                {
+                    "hf_subset": "default",
+                    "languages": ["eng-Latn"],
+                    "main_score": 0.8,
+                    agg_task.metadata.main_score: 0.8,
+                    "mteb_version": "1.0",
+                }
+            ]
+        },
+        evaluation_time=1.0,
+    )
+
+    mock_task_result_2 = TaskResult(
+        dataset_revision="1.0",
+        task_name=task2_name,
+        mteb_version="1.0",
+        scores={
+            "test": [
+                {
+                    "hf_subset": "default",
+                    "languages": ["eng-Latn"],
+                    "main_score": 0.6,
+                    agg_task.metadata.main_score: 0.6,
+                    "mteb_version": "1.0",
+                }
+            ]
+        },
+        evaluation_time=1.0,
+    )
+
+    # Provide an extra rogue task that should be completely ignored
+    mock_task_result_extra = TaskResult(
+        dataset_revision="1.0",
+        task_name="RogueTask",
+        mteb_version="1.0",
+        scores={
+            "test": [
+                {
+                    "hf_subset": "default",
+                    "languages": ["eng-Latn"],
+                    "main_score": 100.0,
+                    agg_task.metadata.main_score: 100.0,
+                    "mteb_version": "1.0",
+                }
+            ]
+        },
+        evaluation_time=1.0,
+    )
+
+    scores = agg_task.task_results_to_scores(
+        [mock_task_result_1, mock_task_result_extra, mock_task_result_2]
+    )
+
+    # The 100.0 should be ignored, so the average is still (0.8 + 0.6) / 2 = 0.7
+    assert math.isclose(scores["test"]["default"]["main_score"], 0.7)
+
+
+def test_task_results_to_scores_raises_on_missing_tasks():
+    import pytest
+    from mteb.results.task_result import TaskResult
+    from tests.mock_tasks import MockAggregatedTask
+
+    agg_task = MockAggregatedTask()
+
+    # Provide ONLY one of the two expected tasks
+    task1_name = agg_task.tasks[0].metadata.name
+
+    mock_task_result_1 = TaskResult(
+        dataset_revision="1.0",
+        task_name=task1_name,
+        mteb_version="1.0",
+        scores={
+            "test": [
+                {
+                    "hf_subset": "default",
+                    "languages": ["eng-Latn"],
+                    "main_score": 0.8,
+                    agg_task.metadata.main_score: 0.8,
+                    "mteb_version": "1.0",
+                }
+            ]
+        },
+        evaluation_time=1.0,
+    )
+
+    # It should raise a ValueError indicating missing tasks
+    with pytest.raises(ValueError, match="Missing task results for required tasks"):
+        agg_task.task_results_to_scores([mock_task_result_1])
