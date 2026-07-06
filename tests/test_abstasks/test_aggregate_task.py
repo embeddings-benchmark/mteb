@@ -173,6 +173,9 @@ def test_task_results_to_scores_raises_on_missing_tasks():
     from tests.mock_tasks import MockAggregatedTask
 
     agg_task = MockAggregatedTask()
+    agg_task.metadata = agg_task.metadata.model_copy(
+        update={"eval_splits": ("test", "dev")}
+    )
 
     # Provide ONLY one of the two expected tasks
     task1_name = agg_task.tasks[0].metadata.name
@@ -199,3 +202,5 @@ def test_task_results_to_scores_raises_on_missing_tasks():
     scores = agg_task.task_results_to_scores([mock_task_result_1])
     assert scores["test"]["default"]["main_score"] is None
     assert scores["test"]["default"][agg_task.metadata.main_score] is None
+    assert scores["dev"]["default"]["main_score"] is None
+    assert scores["dev"]["default"][agg_task.metadata.main_score] is None
