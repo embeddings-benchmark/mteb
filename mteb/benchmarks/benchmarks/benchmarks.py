@@ -1679,8 +1679,8 @@ NANOBEIR = Benchmark(
 )
 
 NANOBEIR_EXTENDED = Benchmark(
-    name="NanoBEIR-extended",
-    display_name="NanoBEIR Extended",
+    name="NanoBEIR-multilingual",
+    display_name="Multilingual NanoBEIR",
     tasks=get_tasks(
         tasks=[
             "MultilingualNanoArguAnaRetrieval",
