@@ -94,9 +94,10 @@ def test_task_results_to_scores_isolates_splits():
 
 
 def test_task_results_to_scores_ignores_extra_tasks():
+    import math
+
     from mteb.results.task_result import TaskResult
     from tests.mock_tasks import MockAggregatedTask
-    import math
 
     agg_task = MockAggregatedTask()
 
@@ -169,6 +170,7 @@ def test_task_results_to_scores_ignores_extra_tasks():
 
 def test_task_results_to_scores_raises_on_missing_tasks():
     import pytest
+
     from mteb.results.task_result import TaskResult
     from tests.mock_tasks import MockAggregatedTask
 
