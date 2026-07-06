@@ -10,7 +10,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 #
 # Paper: "One Embedder, Any Task: Instruction-Finetuned Text Embeddings"
 # (Su et al., Findings of ACL 2023).
-INSTRUCTOR_INSTRUCTION = "{instruction} "
+INSTRUCTOR_INSTRUCTION = "{instruction}: "
 
 INSTRUCTOR_CITATION = """@inproceedings{su-etal-2023-one,
     title = "One Embedder, Any Task: Instruction-Finetuned Text Embeddings",
