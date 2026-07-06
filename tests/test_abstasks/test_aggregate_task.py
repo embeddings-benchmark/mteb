@@ -23,7 +23,9 @@ def test_task_results_to_scores_isolates_splits():
     # To test split isolation, the task MUST have at least two splits.
     # MockAggregatedTask only has 'test' by default, so we inject 'dev' for this test
     # using model_copy() so we don't pollute the global mock class metadata for other tests.
-    agg_task.metadata = agg_task.metadata.model_copy(update={"eval_splits": ("test", "dev")})
+    agg_task.metadata = agg_task.metadata.model_copy(
+        update={"eval_splits": ("test", "dev")}
+    )
 
     # The aggregate expects results for its inner tasks. We only need one to prove the math.
     inner_task_name = agg_task.tasks[0].metadata.name
