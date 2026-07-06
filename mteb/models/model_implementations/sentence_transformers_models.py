@@ -890,4 +890,6 @@ qwen_indic_v1 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
+    public_training_code=None,
+    public_training_data=None,
 )
