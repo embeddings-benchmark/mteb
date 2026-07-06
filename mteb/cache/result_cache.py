@@ -940,20 +940,20 @@ class ResultCache:
     @staticmethod
     def _get_model_name_and_revision_from_path(
         revision_path: Path,
-    ) -> tuple[ModelName, Revision, str | None]:
-        """Get model name, revision and experiment name from the given path.
+    ) -> tuple[ModelName, Revision, str | None, ModelMeta | None]:
+        """Get model name, revision, experiment name, and ModelMeta from the given path.
 
         Args:
             revision_path: The path to the revision folder, which should contain a model_meta.json file. If the file is not found, it will attempt to extract the model name and revision from the path.
 
         Returns:
-            A tuple containing the model name, revision and experiment name (if available).
+            A tuple of ``(model_name, revision, experiment_name, model_meta)``. ``model_meta`` is the parsed ModelMeta when ``model_meta.json`` was found in ``revision_path``, or ``None`` when the file is missing.
 
         """
-        model_meta = revision_path / "model_meta.json"
+        model_meta_path = revision_path / "model_meta.json"
         model_path = revision_path.parent
 
-        if not model_meta.exists():
+        if not model_meta_path.exists():
             logger.debug(
                 f"model_meta.json not found in {revision_path}, extracting model_name and revision from the path"
             )
@@ -964,17 +964,23 @@ class ResultCache:
                 experiment_name = revision_path.name
                 revision = revision_path.parent.parent.name
                 model_name = revision_path.parent.parent.parent.name.replace("__", "/")
-                return model_name, revision, experiment_name
+                return model_name, revision, experiment_name, None
             model_name = model_path.name.replace("__", "/")
             revision = revision_path.name
-            return model_name, revision, None
-        with model_meta.open("r") as f:
-            model_meta_json = json.load(f)
+            return model_name, revision, None, None
+        with model_meta_path.open("r") as f:
+            raw = f.read()
+        model_meta_json = json.loads(raw)
         model_name = model_meta_json["name"]
         revision = model_meta_json["revision"]
         experiment_kwargs = model_meta_json.get("experiment_kwargs", None)
         experiment_name_ = _serialize_experiment_kwargs_to_name(experiment_kwargs)
-        return model_name, revision, experiment_name_
+        try:
+            meta = ModelMeta.model_validate_json(raw)
+        except Exception as e:
+            logger.warning(f"Failed to parse ModelMeta from {model_meta_path}: {e!r}")
+            meta = None
+        return model_name, revision, experiment_name_, meta
 
     @staticmethod
     def _filter_paths_by_model_and_revision(
@@ -1297,7 +1303,7 @@ class ResultCache:
             pr_body=pr_body,
         )
 
-    def load_results(
+    def load_results(  # noqa: PLR0914
         self,
         models: Sequence[str] | Iterable[ModelMeta] | None = None,
         tasks: Sequence[str]
@@ -1396,12 +1402,13 @@ class ResultCache:
                 _serialize_experiment_kwargs_to_name(params)
                 for params in experiment_kwargs
             }
+        model_metas: dict[tuple[ModelName, Revision, str | None], ModelMeta | None] = {}
         for path in paths:
             task_result = TaskResult.from_disk(path)
 
             if only_main_score:
                 task_result = task_result.only_main_score()
-            model_name, revision, experiment_name = (
+            model_name, revision, experiment_name, model_meta = (
                 self._get_model_name_and_revision_from_path(path.parent)
             )
 
@@ -1431,7 +1438,9 @@ class ResultCache:
             ):
                 continue
 
-            models_results[(model_name, revision, experiment_name)].append(task_result)
+            key = (model_name, revision, experiment_name)
+            models_results[key].append(task_result)
+            model_metas.setdefault(key, model_meta)
 
         # create BenchmarkResults object
         models_results_object = [
@@ -1440,6 +1449,7 @@ class ResultCache:
                 model_revision=revision,
                 task_results=task_results,
                 experiment_name=experiment_name,
+                model_meta=model_metas.get((model_name, revision, experiment_name)),
             )
             for (
                 model_name,
