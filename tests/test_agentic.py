@@ -8,6 +8,7 @@ from mteb.agentic import (
     ClosedBookSystem,
     ExactMatchJudge,
     InMemoryCorpus,
+    LLMJudge,
     OracleContextSystem,
     from_mteb_retrieval,
 )
@@ -81,3 +82,12 @@ def test_latency_is_captured():
     _, evaluator = _evaluator()
     result = evaluator(ClosedBookSystem(_FakeChat("Paris")))
     assert result.per_question[0]["latency_s"] is not None
+
+
+def test_llm_judge_robust_to_reasoning():
+    yes = LLMJudge(
+        _FakeChat("<think>it matches</think> The prediction is correct. YES")
+    )
+    no = LLMJudge(_FakeChat("Let me think... this does not match. NO"))
+    assert yes.score("q", "QX-4417", "QX-4417") == 1.0
+    assert no.score("q", "ZZ-9", "QX-4417") == 0.0

@@ -38,25 +38,35 @@ class ExactMatchJudge:
 
 
 _JUDGE_PROMPT = (
-    "You grade a predicted answer against a reference answer. "
-    "Reply with only YES if the prediction is correct, otherwise NO.\n\n"
+    "Decide if the predicted answer is correct given the reference answer. "
+    "End your reply with a single word: YES or NO.\n\n"
     "Question: {question}\nReference: {reference}\nPrediction: {predicted}"
 )
 
+_THINK_RE = re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE)
+
+
+def _verdict(text: str) -> float:
+    # Drop reasoning blocks, then take the last yes/no word as the verdict.
+    words = re.findall(r"[a-z]+", _THINK_RE.sub(" ", text).lower())
+    for word in reversed(words):
+        if word in {"yes", "no"}:
+            return 1.0 if word == "yes" else 0.0
+    return 0.0
+
 
 class LLMJudge:
-    """Grades open ended answers with a ChatModel."""
+    """Grades open ended answers with a ChatModel, robust to reasoning output."""
 
     def __init__(self, model: ChatModel) -> None:
         self.model = model
 
     def score(self, question: str, predicted: str, reference: str) -> float:
-        """Return 1.0 if the judge model answers YES, else 0.0."""
+        """Return 1.0 if the judge deems the prediction correct."""
         prompt = _JUDGE_PROMPT.format(
             question=question, reference=reference, predicted=predicted
         )
-        out = self.model.generate([{"role": "user", "content": prompt}])
-        return 1.0 if out.text.strip().lower().startswith("yes") else 0.0
+        return _verdict(self.model.generate([{"role": "user", "content": prompt}]).text)
 
 
 @dataclass
