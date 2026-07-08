@@ -111,13 +111,14 @@ Wang, Lu},
                 ds = self.dataset[lang][split]
 
                 # Map label strings to integers
-                label_map = {"Normal": 0, "Abuse": 1, "Hate": 2}
+                # label_map = {"Normal": 0, "Abuse": 1, "Hate": 2}
 
                 def transform_labels(example):
                     return {
-                        "text": example["tweet"],
-                        "label": label_map[example["label"]],
-                    }
+                        "text": example.get("tweet", example.get("text")),
+                        # "label": label_map[example["label"]],
+                        "label": example["label"],
+		    }
 
                 ds = ds.map(
                     transform_labels,
