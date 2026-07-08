@@ -65,7 +65,4 @@ mmbert_embed_32k_2d_matryoshka = ModelMeta(
   year={2025},
   url={https://huggingface.co/llm-semantic-router/mmbert-embed-32k-2d-matryoshka}
 }""",
-    contacts=None,
-    output_dtypes=None,
-    extra_requirements_groups=None,
 )
