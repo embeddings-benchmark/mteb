@@ -5,6 +5,14 @@ from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderW
 
 # TODO
 PT_MATRYOSHKA_EMBEDDING_CITATION = """
+@misc{okamura2026multilingualaveragesmtebptbenchmark,
+      title={Beyond Multilingual Averages: MTEB-PT, a Benchmark for Portuguese Sentence Encoders}, 
+      author={Lucas Hideki Takeuchi Okamura and Alexandre Alcoforado and Anna Helena Reali Costa},
+      year={2026},
+      eprint={2607.04071},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2607.04071},
 """
 
 PT_MATRYOSHKA_EMBEDDING_TRAINING_DATA = {
