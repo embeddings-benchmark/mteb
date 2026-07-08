@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-# TODO
 PT_MATRYOSHKA_EMBEDDING_CITATION = """
 @misc{okamura2026multilingualaveragesmtebptbenchmark,
       title={Beyond Multilingual Averages: MTEB-PT, a Benchmark for Portuguese Sentence Encoders}, 
