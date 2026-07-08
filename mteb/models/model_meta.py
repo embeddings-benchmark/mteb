@@ -70,6 +70,7 @@ if TYPE_CHECKING:
     from mteb.abstasks import AbsTask
     from mteb.benchmarks.benchmark import Benchmark
     from mteb.cache import ResultCache
+    from mteb.models.models_protocols import EncoderProtocol
 
 
 logger = logging.getLogger(__name__)
@@ -172,12 +173,10 @@ class ScoringFunction(HelpfulStrEnum):
 
 
 def _get_loader_name(
-    loader: Callable[..., Any] | str | None,
+    loader: Callable[..., EncoderProtocol] | None,
 ) -> str | None:
     if loader is None:
         return None
-    if isinstance(loader, str):
-        return loader
     if hasattr(loader, "func"):  # partial class wrapper
         return str(loader.func.__name__)
     return str(loader.__name__)
@@ -230,7 +229,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     model_config = ConfigDict(extra="forbid")
 
     # loaders
-    loader: Callable[..., MTEBModels] | str | None
+    loader: Callable[..., MTEBModels] | None
     loader_kwargs: dict[str, Any] = field(default_factory=dict)
     name: str | None
     revision: str | None
@@ -415,23 +414,6 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             )
         return v
 
-    @field_validator("loader", mode="before")
-    @classmethod
-    def _validate_loader(
-        cls, loader: Callable[..., MTEBModels] | str | None
-    ) -> Callable[..., MTEBModels] | str | None:
-        if isinstance(loader, str):
-            try:
-                from mteb.models.model_implementations import MODEL_REGISTRY
-
-                for model_meta in MODEL_REGISTRY.values():
-                    if model_meta.loader is not None:
-                        if _get_loader_name(model_meta.loader) == loader:
-                            return model_meta.loader
-            except Exception as e:
-                logger.debug("Failed to resolve loader %s: %s", loader, e)
-        return loader
-
     def __hash__(self) -> int:
         """Make ModelMeta hashable based on name, revision, experiment_kwargs and embed_dim.
 
@@ -485,24 +467,10 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         if _self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
 
-        loader = self._validate_loader(_self.loader)
-
-        if loader is None:
-            raise NotImplementedError(
-                "No model implementation is available for this model."
-            )
-
-        if isinstance(loader, str):
-            raise ValueError(
-                f"Loader '{loader}' for model '{_self.name}' could not be resolved to a callable. "
-                "Ensure the model is registered and its loader is available in the current environment."
-            )
-
+        loader = _self.loader
         name = _self.name
         revision = _self.revision
         updates: dict[str, Any] = {}
-        if loader != _self.loader:
-            updates["loader"] = loader
         base_exp_kwargs = (
             dict(_self.experiment_kwargs) if _self.experiment_kwargs else {}
         )

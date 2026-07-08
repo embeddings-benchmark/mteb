@@ -37,7 +37,11 @@ from mteb.benchmarks.benchmark import Benchmark
 from mteb.benchmarks.get_benchmark import get_benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
-from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
+from mteb.models.model_implementations import MODEL_REGISTRY
+from mteb.models.model_meta import (
+    _get_loader_name,
+    _serialize_experiment_kwargs_to_name,
+)
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
 from mteb.results.task_result import (
     _read_run_settings_from_file,
@@ -1080,8 +1084,21 @@ class ResultCache:
 
         try:
             with meta_file.open("r") as f:
-                meta_dict = f.read()
-            return ModelMeta.model_validate_json(meta_dict)
+                meta_dict = json.load(f)
+
+            # Resolve the string loader name back to the Callable registry object
+            loader_name = meta_dict.get("loader")
+            resolved_loader = None
+            if isinstance(loader_name, str):
+                for model_meta in MODEL_REGISTRY.values():
+                    if model_meta.loader is not None:
+                        name = _get_loader_name(model_meta.loader)  # type: ignore[arg-type]
+                        if name == loader_name:
+                            resolved_loader = model_meta.loader
+                            break
+
+            meta_dict["loader"] = resolved_loader
+            return ModelMeta.model_validate(meta_dict)
         except Exception as e:
             logger.warning(f"Failed to load ModelMeta from {meta_file}: {e}")
             return None
