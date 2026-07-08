@@ -70,7 +70,6 @@ if TYPE_CHECKING:
     from mteb.abstasks import AbsTask
     from mteb.benchmarks.benchmark import Benchmark
     from mteb.cache import ResultCache
-    from mteb.models.models_protocols import EncoderProtocol
 
 
 logger = logging.getLogger(__name__)
@@ -173,10 +172,12 @@ class ScoringFunction(HelpfulStrEnum):
 
 
 def _get_loader_name(
-    loader: Callable[..., EncoderProtocol] | None,
+    loader: Callable[..., Any] | str | None,
 ) -> str | None:
     if loader is None:
         return None
+    if isinstance(loader, str):
+        return loader
     if hasattr(loader, "func"):  # partial class wrapper
         return str(loader.func.__name__)
     return str(loader.__name__)
@@ -484,10 +485,24 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         if _self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
 
-        loader = _self.loader
+        loader = self._validate_loader(_self.loader)
+
+        if loader is None:
+            raise NotImplementedError(
+                "No model implementation is available for this model."
+            )
+
+        if isinstance(loader, str):
+            raise ValueError(
+                f"Loader '{loader}' for model '{_self.name}' could not be resolved to a callable. "
+                "Ensure the model is registered and its loader is available in the current environment."
+            )
+
         name = _self.name
         revision = _self.revision
         updates: dict[str, Any] = {}
+        if loader != _self.loader:
+            updates["loader"] = loader
         base_exp_kwargs = (
             dict(_self.experiment_kwargs) if _self.experiment_kwargs else {}
         )
