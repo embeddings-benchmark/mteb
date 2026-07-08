@@ -42,7 +42,6 @@ mmbert_embed_32k_2d_matryoshka = ModelMeta(
     release_date="2026-01-26",
     languages=bgem3_languages,
     n_parameters=306_939_648,
-    n_active_parameters_override=None,
     n_embedding_parameters=196_608_000,
     memory_usage_mb=585,
     max_tokens=32768,
@@ -66,7 +65,4 @@ mmbert_embed_32k_2d_matryoshka = ModelMeta(
   year={2025},
   url={https://huggingface.co/llm-semantic-router/mmbert-embed-32k-2d-matryoshka}
 }""",
-    contacts=None,
-    output_dtypes=None,
-    extra_requirements_groups=None,
 )

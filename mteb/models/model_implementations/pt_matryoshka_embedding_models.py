@@ -27,7 +27,6 @@ PT_MATRYOSHKA_EMBEDDING_TRAINING_DATA = {
 
 e5_large_matryoshka_sts_pt = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
-    loader_kwargs={},
     name="iara-project/e5-large-matryoshka-sts-pt",
     revision="85f530106aca75bcb1b8e7b483817b4c942d7810",
     release_date="2026-03-23",
