@@ -229,7 +229,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     model_config = ConfigDict(extra="forbid")
 
     # loaders
-    loader: Callable[..., MTEBModels] | None
+    loader: Callable[..., MTEBModels] | str | None
     loader_kwargs: dict[str, Any] = field(default_factory=dict)
     name: str | None
     revision: str | None
@@ -413,6 +413,23 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 "Model name must be in the format 'organization/model_name'"
             )
         return v
+
+    @field_validator("loader", mode="before")
+    @classmethod
+    def _validate_loader(
+        cls, loader: Callable[..., MTEBModels] | str | None
+    ) -> Callable[..., MTEBModels] | str | None:
+        if isinstance(loader, str):
+            try:
+                from mteb.models.model_implementations import MODEL_REGISTRY
+
+                for model_meta in MODEL_REGISTRY.values():
+                    if model_meta.loader is not None:
+                        if _get_loader_name(model_meta.loader) == loader:
+                            return model_meta.loader
+            except Exception as e:
+                logger.debug("Failed to resolve loader %s: %s", loader, e)
+        return loader
 
     def __hash__(self) -> int:
         """Make ModelMeta hashable based on name, revision, experiment_kwargs and embed_dim.
