@@ -4,6 +4,10 @@ import hashlib
 import importlib
 import json
 import logging
+import os
+import shutil
+import subprocess
+import sys
 import warnings
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import field
@@ -71,6 +75,42 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+
+def _auto_install_extras_enabled() -> bool:
+    """Whether mteb should try to install missing optional dependencies automatically.
+
+    Controlled by the ``MTEB_AUTO_INSTALL_EXTRAS`` environment variable.
+    """
+    return os.environ.get("MTEB_AUTO_INSTALL_EXTRAS", "0").lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+
+
+def _install_extras(model_name: str | None, groups: Sequence[str]) -> None:
+    """Install the given mteb extras groups using ``uv`` if available, else ``pip``.
+
+    Uses ``uv pip install`` when ``uv`` is on the PATH (faster), otherwise falls back
+    to ``python -m pip install``.
+    """
+    target = f"mteb[{','.join(groups)}]"
+    if shutil.which("uv") is not None:
+        command = ["uv", "pip", "install", target]
+    else:
+        command = [sys.executable, "-m", "pip", "install", target]
+
+    logger.info(
+        "Auto-installing missing dependencies for model %s: %s",
+        model_name,
+        " ".join(command),
+    )
+    subprocess.run(command, check=True)
+    # Ensure freshly installed distributions are visible to importlib.
+    importlib.invalidate_caches()
+
+
 FRAMEWORKS = Literal[
     "Sentence Transformers",
     "PyTorch",
@@ -91,7 +131,34 @@ FRAMEWORKS = Literal[
     "Transformers",
 ]
 
-MODEL_TYPES = Literal["dense", "cross-encoder", "late-interaction", "sparse", "router"]
+MODEL_TYPES = Literal[
+    "dense", "cross-encoder", "late-interaction", "sparse", "router", "hybrid"
+]
+
+# Licenses considered "open" (OSI-approved or otherwise free/libre) when computing the
+# open-license dimension of the openness score. Non-commercial (``*-nc-*``), no-derivatives
+# (``*-nd-*``) and other restricted licenses are intentionally excluded.
+OPEN_LICENSES: frozenset[str] = frozenset(
+    {
+        "mit",
+        "apache-2.0",
+        "bsd-3-clause",
+        "gpl-3.0",
+        "lgpl",
+        "lgpl-3.0",
+        "mpl-2.0",
+        "afl-3.0",
+        "eupl-1.2",
+        "cc0-1.0",
+        "cc-by-2.0",
+        "cc-by-3.0",
+        "cc-by-4.0",
+        "cc-by-sa-3.0",
+        "cc-by-sa-4.0",
+        "odc-by",
+        "cdla-sharing-1.0",
+    }
+)
 
 
 class ScoringFunction(HelpfulStrEnum):
@@ -154,7 +221,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
         experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
         output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
-        extra_requirements_groups: Name of group of extra requirements.
+        extra_requirements_groups: Name of group of extra requirements (mteb extras) needed to run the model, e.g. `["flagembedding"]`.
+            When a required group is missing, loading the model raises with install instructions. Set the environment variable
+            `MTEB_AUTO_INSTALL_EXTRAS=1` to let mteb install the missing extras automatically (using `uv` if available, otherwise `pip`).
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -248,6 +317,38 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         if self.n_parameters is not None and self.n_embedding_parameters is not None:
             return self.n_parameters - self.n_embedding_parameters
         return None
+
+    @property
+    def open_license(self) -> bool:
+        """Whether the model is released under a recognized open license (see `OPEN_LICENSES`)."""
+        if self.license is None:
+            return False
+        return self.license.lower() in OPEN_LICENSES
+
+    @property
+    def openness(self) -> dict[str, bool]:
+        """A breakdown of how open the model is across several dimensions.
+
+        Inspired by the [OSAI index](https://osai-index.eu/), each dimension is a boolean
+        indicating whether the corresponding artifact is openly available. The number of
+        satisfied dimensions is summarized by `openness_score`.
+
+        `model card` is always `True` as documenting one is required as part of the
+        model addition review process.
+        """
+        return {
+            "open weights": self.open_weights is True,
+            "open license": self.open_license,
+            "open training code": bool(self.public_training_code),
+            "open training data": bool(self.public_training_data),
+            "paper": bool(self.citation),
+            "model card": True,
+        }
+
+    @property
+    def openness_score(self) -> int:
+        """The number of openness dimensions the model satisfies (0-6). See `openness`."""
+        return sum(self.openness.values())
 
     @field_validator("similarity_fn_name", mode="before")
     @classmethod
@@ -412,6 +513,28 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         return model
 
     def _check_requirements(self) -> None:
+        groups = self._resolve_extras_groups()
+        if not groups:
+            return
+
+        self._validate_extras_groups(groups)
+
+        missing_dependencies = self._missing_dependencies(groups)
+        if missing_dependencies and _auto_install_extras_enabled():
+            _install_extras(self.name, groups)
+            missing_dependencies = self._missing_dependencies(groups)
+
+        if missing_dependencies:
+            raise ImportError(
+                f"Model {self.name} is missing required dependencies: "
+                + ", ".join(missing_dependencies)
+                + f".\nYou can install it with `pip install mteb[{','.join(groups)}]`."
+                + "\nAlternatively, set the environment variable "
+                "`MTEB_AUTO_INSTALL_EXTRAS=1` to let mteb install them automatically."
+            )
+
+    def _resolve_extras_groups(self) -> list[str]:
+        """Collect the extras groups this model requires, including modality defaults."""
         groups: list[str] = list(self.extra_requirements_groups or [])
 
         # handle modality specific dependencies inside baseline functions
@@ -421,9 +544,11 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             if "audio" in self.modalities and "audio" not in groups:
                 groups.append("audio")
 
-        if not groups:
-            return
+        return groups
 
+    @staticmethod
+    def _validate_extras_groups(groups: Sequence[str]) -> None:
+        """Raise if any group is not a valid mteb extra."""
         available_extras = set(
             distribution("mteb").metadata.get_all("Provides-Extra") or []
         )
@@ -439,6 +564,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 f"Available: {sorted(available_extras)}"
             )
 
+    @staticmethod
+    def _missing_dependencies(groups: Sequence[str]) -> list[str]:
+        """Return the requirement strings of the given groups that are not satisfied."""
         missing_dependencies = []
 
         mteb_requires = requires("mteb")
@@ -467,12 +595,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             except InvalidVersion:
                 missing_dependencies.append(f"{req_str} (installed: {installed})")
 
-        if missing_dependencies:
-            raise ImportError(
-                f"Model {self.name} is missing required dependencies: "
-                + ", ".join(missing_dependencies)
-                + f".\nYou can install it with `pip install mteb[{','.join(groups)}]`."
-            )
+        return missing_dependencies
 
     def model_name_as_path(self) -> str:
         """Returns the model name in a format that can be used as a file path.
@@ -512,39 +635,48 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         )
         return f"{self.name} ({experiment_str})" if experiment_str else self.name
 
+    @staticmethod
+    def _detect_modalities_from_sbert_config(
+        sbert_config: dict[str, Any] | None,
+    ) -> list[Modalities]:
+        """Detect supported modalities from sentence_bert_config.json modality_config."""
+        if not sbert_config:
+            return ["text"]
+        modality_config = sbert_config.get("modality_config", {})
+        if not modality_config:
+            return ["text"]
+        _supported: set[Modalities] = {"text", "image", "audio", "video"}
+        detected = _supported & set(modality_config)
+        return sorted(detected) if detected else ["text"]
+
     @classmethod
-    def _detect_cross_encoder_or_dense(
+    def _detect_model_type(
         cls,
         model_name: str,
         revision: str | None,
         config: dict[str, Any] | None,
-        encoder_loader: Callable[..., MTEBModels],
-        cross_encoder_loader: Callable[..., MTEBModels],
-    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
+    ) -> MODEL_TYPES:
         """Detect if model is CrossEncoder or default to dense."""
         if not config:
             logger.warning(
                 f"Could not load config.json for {model_name}. "
                 "Defaulting to SentenceTransformer loader."
             )
-            return encoder_loader, "dense"
+            return "dense"
 
         architectures = config.get("architectures", [])
 
-        is_cross_encoder = any(
-            arch.endswith("ForSequenceClassification") for arch in architectures
-        )
-        if is_cross_encoder:
-            return cross_encoder_loader, "cross-encoder"
+        if any(arch.endswith("ForSequenceClassification") for arch in architectures):
+            return "cross-encoder"
 
         if cls._is_causal_lm_reranker(architectures, config, model_name):
-            return cross_encoder_loader, "cross-encoder"
+            return "cross-encoder"
 
         logger.info(
             f"Model {model_name} does not have modules.json or recognized architecture. "
             "Defaulting to SentenceTransformer loader."
         )
-        return encoder_loader, "dense"
+        return "dense"
 
     @staticmethod
     def _is_causal_lm_reranker(
@@ -566,67 +698,71 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         )
 
     @classmethod
-    def _detect_model_type_and_loader(
+    def _resolve_loader(
         cls,
         model_name: str,
+        config_sbert: dict[str, Any] | None,
+        sbert_config: dict[str, Any] | None,
+        modules_config: dict[str, Any] | None,
+        config: dict[str, Any] | None,
         revision: str | None = None,
-        config: dict[str, Any] | None = None,
-    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
-        """Detect the model type and appropriate loader based on HuggingFace Hub configuration files.
+    ) -> tuple[Callable[..., MTEBModels], MODEL_TYPES, list[Modalities]]:
+        """Resolve loader, model_type and modalities from pre-fetched config dicts.
 
-        This follows the Sentence Transformers architecture detection logic:
-        1. Check for modules.json - If present, model is a SentenceTransformer (dense encoder)
-        2. If no modules.json, check config.json for architecture:
-            - ForSequenceClassification → CrossEncoder
-            - CausalLM with reranking indicators → CrossEncoder
-        3. Default to dense (SentenceTransformer) if no clear indicators are found
-
-        Detection for CausalLM-style rerankers:
-        - Model has ForCausalLM architecture AND
-        - Has num_labels > 0 in config, OR
-        - Model name contains "rerank" or "cross-encoder"
-
-        Args:
-            model_name: The HuggingFace model name
-            revision: The model revision
-            config: The loaded config.json from the HuggingFace model repository. If not provided, it will be fetched from the hub.
-
-
-        Returns:
-            A tuple of (loader_function, model_type) where:
-            - loader_function: A callable that returns MTEBModels, or None if model doesn't exist
-            - model_type: One of "dense", "cross-encoder", or "late-interaction"
+        - SentenceTransformer  → SentenceTransformerEncoderWrapper
+        - CrossEncoder         → CrossEncoderWrapper
         """
         from mteb.models import (
             CrossEncoderWrapper,
             SentenceTransformerEncoderWrapper,
         )
 
-        try:
-            modules_config = _get_json_from_hub(
-                model_name, "modules.json", "model", revision=revision
-            )
-
-            if (
-                modules_config
-            ):  # SentenceTransformer/SparseEncoder (Not support for now)
-                return SentenceTransformerEncoderWrapper, "dense"
+        st_model_type = config_sbert.get("model_type") if config_sbert else None
+        if st_model_type not in {"SentenceTransformer", "CrossEncoder"}:
+            if modules_config:
+                st_model_type = "SentenceTransformer"
             else:
-                return cls._detect_cross_encoder_or_dense(
-                    model_name,
-                    revision,
-                    config,
-                    SentenceTransformerEncoderWrapper,
-                    cross_encoder_loader=CrossEncoderWrapper,
+                fallback = cls._detect_model_type(model_name, revision, config)
+                st_model_type = (
+                    "CrossEncoder"
+                    if fallback == "cross-encoder"
+                    else "SentenceTransformer"
                 )
 
-        except Exception as e:
-            logger.warning(
-                f"Error detecting model type for {model_name}: {e}. "
-                "Defaulting to SentenceTransformer loader."
-            )
+        modalities = cls._detect_modalities_from_sbert_config(sbert_config)
+        is_cross_encoder = st_model_type == "CrossEncoder"
 
-        return SentenceTransformerEncoderWrapper, "dense"
+        if is_cross_encoder:
+            return CrossEncoderWrapper, "cross-encoder", modalities
+        elif st_model_type == "SentenceTransformer":
+            return SentenceTransformerEncoderWrapper, "dense", modalities
+        else:
+            raise ValueError("Unsupported model type")
+
+    @classmethod
+    def _detect_model_type_and_loader(
+        cls,
+        model_name: str,
+        revision: str | None = None,
+        config: dict[str, Any] | None = None,
+    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES, list[Modalities]]:
+        """Detect the model type, loader, and supported modalities from HuggingFace Hub config files."""
+        hf_repo_type = "model"
+        config_sbert = _get_json_from_hub(
+            model_name,
+            "config_sentence_transformers.json",
+            hf_repo_type,
+            revision=revision,
+        )
+        sbert_config = _get_json_from_hub(
+            model_name, "sentence_bert_config.json", hf_repo_type, revision=revision
+        )
+        modules_config = _get_json_from_hub(
+            model_name, "modules.json", hf_repo_type, revision=revision
+        )
+        return cls._resolve_loader(
+            model_name, config_sbert, sbert_config, modules_config, config, revision
+        )
 
     @classmethod
     def create_empty(cls, overwrites: dict[str, Any] | None = None) -> Self:
@@ -829,7 +965,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         config = _get_json_from_hub(
             model_name, "config.json", "model", revision=revision
         )
-        loader, model_type = cls._detect_model_type_and_loader(
+        loader, model_type, modalities = cls._detect_model_type_and_loader(
             model_name, revision, config=config
         )
         card = ModelCard.load(model_name)
@@ -898,6 +1034,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 embed_dim=embedding_dim,
                 similarity_fn_name=similarity_fn_name,
                 adapted_from=_get_source_model(card_data),
+                modalities=modalities,
             )
         )
 

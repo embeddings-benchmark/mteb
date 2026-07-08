@@ -10,9 +10,7 @@ from sklearn import metrics
 
 from mteb._evaluators import ClusteringEvaluator
 from mteb.models import EncoderProtocol
-from mteb.types.statistics import (
-    SplitDescriptiveStatistics,
-)
+from mteb.types.statistics import ClusteringDescriptiveStatistics
 
 from ._statistics_calculation import (
     calculate_label_statistics,
@@ -26,37 +24,8 @@ if TYPE_CHECKING:
     from mteb.models import MTEBModels
     from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, ScoresDict
-    from mteb.types.statistics import (
-        AudioStatistics,
-        ImageStatistics,
-        LabelStatistics,
-        TextStatistics,
-        VideoStatistics,
-    )
 
 logger = logging.getLogger(__name__)
-
-
-class ClusteringDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for Clustering
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-
-        text_statistics: Statistics for text
-        image_statistics: Statistics for images
-        audio_statistics: Statistics for audio
-        video_statistics: Statistics for video
-        label_statistics: Statistics for labels
-    """
-
-    num_samples: int
-
-    text_statistics: TextStatistics | None
-    image_statistics: ImageStatistics | None
-    audio_statistics: AudioStatistics | None
-    video_statistics: VideoStatistics | None
-    label_statistics: LabelStatistics
 
 
 class ClusteringMetrics(TypedDict, total=False):

@@ -581,7 +581,7 @@ class TaskMetadata(BaseModel):
         """
         return all(
             getattr(self, field_name) is not None
-            for field_name in self.model_fields
+            for field_name in self.__class__.model_fields
             if field_name
             not in ["prompt", "adapted_from", "contributed_by", "superseded_by"]  # noqa: PLR6201
         )
@@ -635,7 +635,7 @@ class TaskMetadata(BaseModel):
         for subset, subset_value in stats.items():
             if subset == "hf_subset_descriptive_stats":
                 continue
-            n_samples[subset] = subset_value["num_samples"]
+            n_samples[subset] = subset_value["num_samples"]  # type: ignore[typeddict-item]
         return n_samples
 
     @property

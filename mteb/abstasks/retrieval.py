@@ -26,9 +26,7 @@ from mteb.timing import TimingStack
 from mteb.types import (
     PromptType,
 )
-from mteb.types.statistics import (
-    SplitDescriptiveStatistics,
-)
+from mteb.types.statistics import RetrievalDescriptiveStatistics
 
 from ._statistics_calculation import (
     calculate_relevant_docs_statistics,
@@ -58,62 +56,12 @@ if TYPE_CHECKING:
         RetrievalOutputType,
         ScoresDict,
     )
-    from mteb.types.statistics import (
-        AudioStatistics,
-        ImageStatistics,
-        RelevantDocsStatistics,
-        TextStatistics,
-        TopRankedStatistics,
-        VideoStatistics,
-    )
 
     from .retrieval_dataset_loaders import (
         RetrievalSplitData,
     )
 
 logger = logging.getLogger(__name__)
-
-
-class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for Retrieval
-
-    Attributes:
-        num_samples: Total number of queries and documents
-        num_queries: Number of queries
-        num_documents: Number of documents
-        number_of_characters: Total number of characters in queries and documents
-
-        documents_text_statistics: Statistics for documents
-        documents_image_statistics: Statistics for documents
-        documents_audio_statistics: Statistics for documents
-        documents_video_statistics: Statistics for documents
-        queries_text_statistics: Statistics for queries
-        queries_image_statistics: Statistics for queries
-        queries_audio_statistics: Statistics for queries
-        queries_video_statistics: Statistics for queries
-        relevant_docs_statistics: Statistics for relevant documents
-        top_ranked_statistics: Statistics for top ranked documents (if available)
-    """
-
-    num_samples: int
-    num_queries: int
-    num_documents: int
-    number_of_characters: int
-
-    documents_text_statistics: TextStatistics | None
-    documents_image_statistics: ImageStatistics | None
-    documents_audio_statistics: AudioStatistics | None
-    documents_video_statistics: VideoStatistics | None
-
-    queries_text_statistics: TextStatistics | None
-    queries_image_statistics: ImageStatistics | None
-    queries_audio_statistics: AudioStatistics | None
-    queries_video_statistics: VideoStatistics | None
-
-    relevant_docs_statistics: RelevantDocsStatistics
-
-    # this is for datasets that do reranking
-    top_ranked_statistics: TopRankedStatistics | None
 
 
 def _filter_queries_without_positives(

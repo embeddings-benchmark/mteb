@@ -283,6 +283,40 @@ def test_mteb_results_from_historic(path: Path):
     assert isinstance(mteb_result, TaskResult)
 
 
+def test_from_disk_with_multiversion_range(tmp_path: Path):
+    """Loading a TaskResult whose top-level mteb_version is a range (e.g. "2.12.16-2.15.4") should succeed.
+
+    Regression test for https://github.com/embeddings-benchmark/mteb/issues/4830.
+    """
+    result = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="2.12.16-2.15.4",
+        scores={
+            "train": [
+                {
+                    "main_score": 0.5,
+                    "hf_subset": "en-de",
+                    "languages": ["eng-Latn", "deu-Latn"],
+                    "mteb_version": "2.12.16",
+                },
+                {
+                    "main_score": 0.6,
+                    "hf_subset": "en-fr",
+                    "languages": ["eng-Latn", "fra-Latn"],
+                    "mteb_version": "2.15.4",
+                },
+            ]
+        },
+        evaluation_time=50,
+    )
+    path = tmp_path / "result.json"
+    result.to_disk(path)
+
+    loaded = TaskResult.from_disk(path)
+    assert loaded.mteb_version == "2.12.16-2.15.4"
+
+
 def test_to_hf_result(mock_mteb_cache: ResultCache):
     task_name = "Banking77Classification"
     task_metadata = mteb.get_task(task_name).metadata

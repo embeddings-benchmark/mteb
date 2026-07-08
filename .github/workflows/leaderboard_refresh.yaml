@@ -22,30 +22,31 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check if image with current SHA exists
-        id: image
-        run: |
-          if docker manifest inspect ghcr.io/${{ github.repository }}/leaderboard:${{ github.sha }} > /dev/null 2>&1; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-          fi
+      - name: Compute data refresh stamp
+        id: stamp
+        run: echo "date=$(date -u +%F)" >> "$GITHUB_OUTPUT"
 
-      - name: Build and push Docker image (if missing)
-        if: steps.image.outputs.exists != 'true'
+      # DATA_REFRESH busts the layer cache of the data stage in the
+      # Dockerfile, so every daily run re-downloads mteb/results,
+      # re-splits the frames and re-renders the OG images even when
+      # the code is unchanged. Code-only layers (pip install,
+      # Playwright/Chromium) still come from the GHA cache.
+      - name: Build and push Docker image
         uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile
           push: true
+          build-args: |
+            DATA_REFRESH=${{ steps.stamp.outputs.date }}
           tags: |
-            ghcr.io/${{ github.repository }}/leaderboard:${{ github.sha }}
-            ghcr.io/${{ github.repository }}/leaderboard:latest
+            ghcr.io/${{ github.repository }}/leaderboard-backend:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/leaderboard-backend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Trigger Factory Rebuild
         run: |
           curl -X POST \
-            "https://huggingface.co/api/spaces/mteb/leaderboard/restart?factory=true" \
+            "https://huggingface.co/api/spaces/mteb/leaderboard-backend/restart?factory=true" \
             -H "Authorization: Bearer ${{ secrets.HF_TOKEN }}"
