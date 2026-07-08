@@ -25,11 +25,12 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
         dataset={
             "path": "mteb/EmotionAnalysis",
             "revision": "554dbe305cad4f86705c8b6389c76f7f33fc6fd8",
+            "split": "test",
         },
         type="MultilabelClassification",
         category="t2c",
         modalities=["text"],
-        eval_splits=["validation", "test"],
+        eval_splits=[ "test"],
         eval_langs={
             # (ISO-639-3 code : BCP-47 tag)
             "afr": ["afr-Latn"],
@@ -91,47 +92,62 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
         "category",
         "label_cat",
     )
-
     # ---------------------------------------------------------------- transform
     def dataset_transform(self, **kwargs) -> None:
         """
         Bring every split to the MTEB expected format:
-
         * column **text** : sentence/utterance (str)
         * column **label**: list[int] (multi-label IDs 0–5)
+
+        Note on the mteb/EmotionAnalysis mirror (rev 554dbe3): it ships
+        data already in canonical {text, label} form, and its 'validation'
+        split is declared but empty (0 rows). We therefore load test-only
+        (split="test" in the dataset metadata), re-wrap the resulting bare
+        Dataset into a DatasetDict, and pass canonical splits through
+        untouched. The raw per-emotion-column path below is kept as a
+        fallback for any config/revision still in raw format.
         """
+        from datasets import Dataset, DatasetDict
+
+        # -- 0️⃣  split="test" makes load_dataset return a bare Dataset per
+        #        lang; re-wrap into the split-keyed dict this method expects.
+        for lang in self.dataset:
+            if isinstance(self.dataset[lang], Dataset):
+                self.dataset[lang] = DatasetDict({"test": self.dataset[lang]})
+
         for lang in self.dataset:
             for split in self.dataset[lang]:
                 ds = self.dataset[lang][split]
-
-                # ── 1️⃣  locate the text column ───────────────────────────────
                 cols = ds.column_names
-                text_col = next(c for c in self._LOOKUP_TEXT if c in cols)
 
-                # ── 2️⃣  locate all emotion columns that are present ──────────
+                # -- 0.5️⃣  already canonical {text, label}: pass through.
+                if "text" in cols and "label" in cols:
+                    continue
+
+                # ── 1️⃣  locate the text column ──────────────────────────────
+                text_col = next(c for c in self._LOOKUP_TEXT if c in cols)
+                # ── 2️⃣  locate all emotion columns that are present ─────────
                 emo_cols = [e for e in self._EMOTION2ID if e in cols]
                 if not emo_cols:
                     raise ValueError(
                         f"{lang}/{split}: none of the expected emotion columns "
                         f"{list(self._EMOTION2ID)} were found."
                     )
-
-                # ── 3️⃣  map each row to {text, label} ────────────────────────
+                # ── 3️⃣  map each row to {text, label} ───────────────────────
                 def to_labels(example):
                     labels = [
-                        self._EMOTION2ID[emo]  # integer ID
-                        for emo in emo_cols  # only the columns that exist
-                        if int(example[emo]) == 1  # treat non-zero as “present”
+                        self._EMOTION2ID[emo]
+                        for emo in emo_cols
+                        if int(example[emo]) == 1
                     ]
                     return {"text": example[text_col], "label": labels}
 
                 ds = ds.map(
                     to_labels,
-                    remove_columns=cols,  # drop original columns
+                    remove_columns=cols,
                     desc=f"{lang}/{split}",
                 )
-
-                # ── 4️⃣  save the cleaned split back ──────────────────────────
+                # ── 4️⃣  save the cleaned split back ─────────────────────────
                 self.dataset[lang][split] = ds
 
         # ── 5️⃣  make sure every language has a 'train' split ────────────────
