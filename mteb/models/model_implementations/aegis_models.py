@@ -42,7 +42,6 @@ mmbert_embed_32k_2d_matryoshka = ModelMeta(
     release_date="2026-01-26",
     languages=bgem3_languages,
     n_parameters=306_939_648,
-    n_active_parameters_override=None,
     n_embedding_parameters=196_608_000,
     memory_usage_mb=585,
     max_tokens=32768,
