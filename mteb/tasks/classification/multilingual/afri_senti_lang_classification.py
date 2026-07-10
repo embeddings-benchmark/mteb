@@ -7,8 +7,8 @@ class AfriSentiLangClassification(AbsTaskClassification):
         name="AfriSentiLangClassification",
         description="AfriSentiLID is the largest LID classification dataset for African Languages.",
         dataset={
-            "path": "HausaNLP/afrisenti-lid-data",
-            "revision": "f17cb5f3ec522ac604601fd09db9fd644ac66ca5",
+            "path": "mteb/afri_senti_lang",
+            "revision": "a9402c6af7984421fc30900ea96533efb2df8f5e",
         },
         reference="https://huggingface.co/datasets/HausaNLP/afrisenti-lid-data/",
         type="Classification",
@@ -47,7 +47,7 @@ class AfriSentiLangClassification(AbsTaskClassification):
         self,
         num_proc: int | None = None,
     ):
-        self.dataset = self.dataset.rename_column("tweet", "text")
+    
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )
