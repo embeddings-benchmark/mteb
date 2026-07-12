@@ -136,7 +136,7 @@ fusion_embedding_1_2b_preview = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
-    public_training_code="https://github.com/Eximius-Labs/fusion-embedding-1",
+    public_training_code="https://github.com/Eximius-Labs/fusion-embedding",
     public_training_data=None,
     training_datasets={
         # AudioCaps (train split)
@@ -167,7 +167,7 @@ fusion_embedding_1_2b_preview = ModelMeta(
             Image, Video, and Audio},
   author = {Tonmoy, Abdul Basit},
   year   = {2026},
-  url    = {https://github.com/Eximius-Labs/fusion-embedding-1}
+  url    = {https://github.com/Eximius-Labs/fusion-embedding}
 }
 """,
     extra_requirements_groups=["audio", "fusion-embedding"],
