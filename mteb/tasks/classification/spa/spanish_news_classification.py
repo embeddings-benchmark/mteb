@@ -24,7 +24,7 @@ class SpanishNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="",
         superseded_by="SpanishNewsClassification.v2",
     )
 
