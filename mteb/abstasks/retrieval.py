@@ -241,6 +241,10 @@ class AbsTaskRetrieval(AbsTask):
         eval_splits = self.eval_splits
         trust_remote_code = self.metadata.dataset.get("trust_remote_code", False)
         revision = self.metadata.dataset["revision"]
+        # A single repo can host several retrieval directions/tasks via named
+        # configs (e.g. ``<name>-queries`` / ``<name>-corpus`` / ``<name>-qrels``).
+        # Multilingual tasks derive the config from the language subset instead.
+        dataset_name = self.metadata.dataset.get("name")
 
         def _process_data(split: str, hf_subset: str = "default") -> None:
             """Helper function to load and process data for a given split and language"""
@@ -255,7 +259,7 @@ class AbsTaskRetrieval(AbsTask):
                 revision=revision,
                 trust_remote_code=trust_remote_code,
                 split=split,
-                config=hf_subset,
+                config=hf_subset if self.metadata.is_multilingual else dataset_name,
             ).load(
                 num_proc=num_proc,
             )
