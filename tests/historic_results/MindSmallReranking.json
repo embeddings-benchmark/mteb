@@ -1,0 +1,19 @@
+{
+    "dataset_revision": "3bdac13927fdc888b903db93b2ffdbd90b295a69",
+    "task_name": "MindSmallReranking",
+    "evaluation_time": null,
+    "mteb_version": "1.14.17",
+    "scores": {
+        "test": [
+            {
+                "hf_subset": "default",
+                "languages": [
+                    "eng-Latn"
+                ],
+                "map": 0.339769104898534,
+                "mrr": 0.3532831430710564,
+                "main_score": null
+            }
+        ]
+    }
+}

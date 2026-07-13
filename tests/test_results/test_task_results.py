@@ -281,6 +281,37 @@ def test_merge_without_per_subset_version():
 def test_mteb_results_from_historic(path: Path):
     mteb_result = TaskResult.from_disk(path, load_historic_data=True)
     assert isinstance(mteb_result, TaskResult)
+    # Legacy result files stored reranking/pair-classification scores under names that
+    # no longer match the task's `main_score`; these should be reconstructed rather
+    # than left as None (https://github.com/embeddings-benchmark/mteb/issues/4333).
+    for split_scores in mteb_result.scores.values():
+        for subset_scores in split_scores:
+            assert subset_scores["main_score"] is not None
+
+
+@pytest.mark.parametrize(
+    ("filename", "expected_main_score"),
+    [
+        # Reranking, pre-v1.11.0 layout: legacy `map` -> `map_at_1000`.
+        ("SciDocsRR.json", 0.8458048271261831),
+        # Pair classification, pre-v1.11.0 layout: `cos_sim.ap` -> `max_ap`.
+        ("SprintDuplicateQuestions.json", 0.9457614298),
+        # Reranking, modern layout with a null `main_score` (the format still stored
+        # `map`/`mrr` between ~v1.12 and v2). `max_over_subqueries_map_at_1000` is
+        # reconstructed from the legacy `map`. Regression guard for the v1.12-v2 gap.
+        ("MindSmallReranking.json", 0.339769104898534),
+    ],
+)
+def test_historic_main_score_reconstruction(filename: str, expected_main_score: float):
+    """Legacy metric names should be reconstructed to the correct `main_score` value.
+
+    Regression test for https://github.com/embeddings-benchmark/mteb/issues/4333.
+    """
+    path = tests_folder / "historic_results" / filename
+    mteb_result = TaskResult.from_disk(path, load_historic_data=True)
+    assert mteb_result.scores["test"][0]["main_score"] == pytest.approx(
+        expected_main_score
+    )
 
 
 def test_from_disk_with_multiversion_range(tmp_path: Path):
