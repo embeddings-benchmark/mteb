@@ -747,6 +747,7 @@ MTEB_KOR_V2 = Benchmark(
             "KlueYnatMrcCategoryClustering",
             # Pair Classification (NLI)
             "KLUE-NLI",
+            "KorNLI",
             "PawsXPairClassification",
             # Reranking
             "MIRACLReranking",
