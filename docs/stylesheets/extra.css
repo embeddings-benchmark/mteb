@@ -18,3 +18,7 @@
 .copy-model-btn.copied {
   color: var(--md-typeset-a-color);
 }
+
+.md-tooltip2__inner {
+  white-space: pre-line;
+}

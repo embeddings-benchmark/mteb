@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.16.0"
+version = "2.18.1"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -145,6 +145,12 @@ qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
 qwen_omni_utils = ["qwen_omni_utils"]
 embeddinggemma = ["transformers>=4.56.0"]
 # ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
+
+
+
+
+
+
 
 
 [dependency-groups]

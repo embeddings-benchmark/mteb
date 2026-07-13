@@ -72,7 +72,7 @@ class ColPaliEngineWrapper(AbsEncoder):
                 raise ValueError(
                     "The number of texts and images must have the same length"
                 )
-            fused_embeddings = text_embeddings + image_embeddings
+            fused_embeddings = torch.cat([text_embeddings, image_embeddings], dim=1)
             return fused_embeddings
         elif text_embeddings is not None:
             return text_embeddings

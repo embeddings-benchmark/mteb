@@ -581,7 +581,7 @@ class TaskMetadata(BaseModel):
         """
         return all(
             getattr(self, field_name) is not None
-            for field_name in self.model_fields
+            for field_name in self.__class__.model_fields
             if field_name
             not in ["prompt", "adapted_from", "contributed_by", "superseded_by"]  # noqa: PLR6201
         )

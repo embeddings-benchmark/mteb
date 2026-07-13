@@ -9,6 +9,8 @@ icon: lucide/upload
 
 The [`ResultCache`][mteb.cache.result_cache.ResultCache] class manages evaluation results locally and submits them to the [official results repository](https://github.com/embeddings-benchmark/results). Use it to cache results, avoid re-computation, and contribute results back to the community.
 
+If you want to request that a model be evaluated, rather than submitting results that you ran yourself, open an [Evaluation Request](https://github.com/embeddings-benchmark/mteb/issues/new?template=eval_request.yaml) issue.
+
 ## Loading Results
 
 For a full guide on loading and working with results — including filtering, dataframe conversion, and benchmark scoring — see [Loading Results](../get_started/usage/loading_results.md).

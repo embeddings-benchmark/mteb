@@ -6,10 +6,10 @@ class SpanishNewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SpanishNewsClassification",
         description="A Spanish dataset for news classification. The dataset includes articles from reputable Spanish news sources spanning 12 different categories.",
-        reference="https://huggingface.co/datasets/MarcOrfilaCarreras/spanish-news",
+        reference="https://huggingface.co/datasets/mteb/SpanishNewsClassification",
         dataset={
-            "path": "MarcOrfilaCarreras/spanish-news",
-            "revision": "0086c197b914690a9dace258a19398890a05299a",
+            "path": "mteb/SpanishNewsClassification",
+            "revision": "9f568e396857395bd803c63452b83316124d31c9",
         },
         type="Classification",
         category="t2c",
@@ -24,19 +24,9 @@ class SpanishNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        """,
+        bibtex_citation="",
         superseded_by="SpanishNewsClassification.v2",
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_columns({"category": "label"})
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )
 
 
 class SpanishNewsClassificationV2(AbsTaskClassification):

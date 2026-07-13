@@ -84,7 +84,7 @@ For more on how to use the CLI check out the [related documentation](https://emb
 | 📈 [Leaderboard]               | The interactive leaderboard of the benchmark                                         |
 | **Get Started**.               |                                                                                      |
 | 🏃 [Get Started]               | Overview of how to use mteb                                                          |
-| 🤖 [Defining Models]           | How to use existing model and define custom ones                                     |
+| 🤖 [Defining Models]           | How to use existing models and define custom ones                                     |
 | 📋 [Selecting tasks]           | How to select tasks, benchmarks, splits etc.                                         |
 | 🏭 [Running Evaluation]        | How to run the evaluations, including cache management, speeding up evaluations etc. |
 | 📊 [Loading Results]           | How to load and work with existing model results                                     |
