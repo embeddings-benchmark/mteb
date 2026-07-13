@@ -161,6 +161,30 @@ OPEN_LICENSES: frozenset[str] = frozenset(
 )
 
 
+# --- CO2 inference-cost estimation ---------------------------------------------------
+# We estimate the inference carbon cost of a model as grams of CO2-equivalent per one
+# million tokens (gCO2eq / Mtoken). The estimate follows the linear energy model used by
+# EcoLogits (https://ecologits.ai/0.2/methodology/llm_inference/) and Luccioni et al.
+# (2024, https://arxiv.org/abs/2311.16863), so that figures are on roughly the same scale
+# as EcoLogits estimates for closed generative models:
+#
+#     energy_per_token (Wh) = CO2_ENERGY_ALPHA * active_params_billions + CO2_ENERGY_BETA
+#
+# The GPU energy is scaled by the datacenter PUE and multiplied by the grid carbon
+# intensity. All figures are approximate (prefixed with "~" when displayed) and reflect
+# *benchmark* conditions (a single reference GPU on an average grid), not any particular
+# real-world deployment. The coefficients are kept as module constants so they can be
+# refit on embedding-specific benchmark data in the future.
+CO2_ENERGY_ALPHA_WH_PER_TOKEN_PER_B_PARAM = 8.91e-5
+CO2_ENERGY_BETA_WH_PER_TOKEN = 1.43e-3
+# ADEME world-average grid carbon intensity, gCO2eq per kWh.
+CO2_CARBON_INTENSITY_G_PER_KWH = 400.0
+# Datacenter Power Usage Effectiveness.
+CO2_PUE = 1.2
+# Reference hardware the estimate is anchored to.
+CO2_BENCHMARK_HARDWARE = "A100 80GB"
+
+
 class ScoringFunction(HelpfulStrEnum):
     """The scoring function used by the models."""
 
@@ -317,6 +341,51 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         if self.n_parameters is not None and self.n_embedding_parameters is not None:
             return self.n_parameters - self.n_embedding_parameters
         return None
+
+    @property
+    def co2_cost_per_million_tokens(self) -> float | None:
+        """Estimated inference carbon cost in grams of CO2-equivalent per million tokens.
+
+        The estimate is derived from `n_active_parameters` using the linear energy model
+        described alongside the `CO2_ENERGY_ALPHA_WH_PER_TOKEN_PER_B_PARAM` constant, and
+        assumes the reference benchmark hardware (`CO2_BENCHMARK_HARDWARE`), an average grid
+        carbon intensity (`CO2_CARBON_INTENSITY_G_PER_KWH`) and datacenter overhead
+        (`CO2_PUE`). It is an approximation and reflects benchmark conditions rather than any
+        specific real-world deployment; treat it as a relative signal for model selection.
+
+        Returns:
+            The estimated gCO2eq / Mtoken, or None if the number of active parameters is unknown.
+        """
+        active = self.n_active_parameters
+        if active is None:
+            return None
+        active_billions = active / 1e9
+        energy_wh_per_token = (
+            CO2_ENERGY_ALPHA_WH_PER_TOKEN_PER_B_PARAM * active_billions
+            + CO2_ENERGY_BETA_WH_PER_TOKEN
+        )
+        # Wh/token -> kWh/Mtoken: multiply by 1e6 tokens then divide by 1000 Wh per kWh.
+        energy_kwh_per_million_tokens = energy_wh_per_token * 1e3
+        return energy_kwh_per_million_tokens * CO2_PUE * CO2_CARBON_INTENSITY_G_PER_KWH
+
+    @property
+    def co2_cost_estimate(self) -> dict[str, Any] | None:
+        """The CO2 inference-cost estimate together with the assumptions behind it.
+
+        Intended to back a compact badge (e.g. `~42 gCO₂ / Mtoken`) with a popover listing
+        the assumptions. Returns None when the estimate cannot be computed (unknown active
+        parameters). See `co2_cost_per_million_tokens` for the methodology.
+        """
+        value = self.co2_cost_per_million_tokens
+        if value is None:
+            return None
+        return {
+            "g_co2_per_million_tokens": value,
+            "active_parameters": self.n_active_parameters,
+            "benchmark_hardware": CO2_BENCHMARK_HARDWARE,
+            "carbon_intensity_g_per_kwh": CO2_CARBON_INTENSITY_G_PER_KWH,
+            "pue": CO2_PUE,
+        }
 
     @property
     def open_license(self) -> bool:

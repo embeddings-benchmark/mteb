@@ -183,6 +183,19 @@ class TaskMetaSchema(_CamelModel):
         )
 
 
+class Co2EstimateSchema(_CamelModel):
+    """Estimated inference carbon cost with the assumptions behind it (for a badge + popover).
+
+    All figures are approximate and reflect benchmark conditions, not real-world deployment.
+    """
+
+    g_co2_per_million_tokens: float
+    active_parameters: int | None
+    benchmark_hardware: str
+    carbon_intensity_g_per_kwh: float
+    pue: float
+
+
 class ModelMetaSchema(_CamelModel):
     """Static model metadata; ``name`` is the canonical ``org/name`` HF identifier."""
 
@@ -204,6 +217,7 @@ class ModelMetaSchema(_CamelModel):
     languages: list[str] = Field(default_factory=list)
     citation: str | None = None
     memory_usage_mb: float | None = None
+    co2_estimate: Co2EstimateSchema | None = None
     license: str | None = None
     public_training_code: str | None = None
     public_training_data: str | None = None
@@ -253,6 +267,11 @@ class ModelMetaSchema(_CamelModel):
             memory_usage_mb=float(meta.memory_usage_mb)
             if meta.memory_usage_mb is not None
             else None,
+            co2_estimate=(
+                Co2EstimateSchema(**meta.co2_cost_estimate)
+                if meta.co2_cost_estimate is not None
+                else None
+            ),
             license=str(meta.license) if meta.license else None,
             public_training_code=str(meta.public_training_code)
             if meta.public_training_code
