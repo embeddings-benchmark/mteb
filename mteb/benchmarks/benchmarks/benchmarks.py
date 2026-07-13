@@ -1531,38 +1531,8 @@ LONG_EMBED = Benchmark(
 """,
 )
 
-LMEB = Benchmark(
-    name="LMEB",
-    display_name="Long-Horizon Memory",
-    tasks=get_tasks(
-        tasks=[
-            "EPBench",
-            "KnowMeBench",
-            "LoCoMo",
-            "LongMemEval",
-            "REALTALK",
-            "TMD",
-            "MemBench",
-            "ConvoMem",
-            "QASPER",
-            "NovelQA",
-            "PeerQA",
-            "CovidQA",
-            "ESGReports",
-            "LMEBMLDR",
-            "LooGLE",
-            "LMEB_SciFact",
-            "Gorilla",
-            "ToolBench",
-            "ReMe",
-            "ProceduralMemBench",
-            "MemGovern",
-            "DeepPlanning",
-        ]
-    ),
-    description="Long-horizon memory retrieval quality across episodic, dialogue, semantic, and procedural retrieval tasks, measuring how well embedding models retrieve evidence in long-term memory scenarios.",
-    reference="https://arxiv.org/abs/2603.12572",
-    citation=r"""
+_LMEB_REFERENCE = "https://arxiv.org/abs/2603.12572"
+_LMEB_CITATION = r"""
 @misc{zhao2026lmeb,
   archiveprefix = {arXiv},
   author = {Zhao, Xinping and Hu, Xinshuo and Xu, Jiaxin and Tang, Danyu and Zhang, Xin and Zhou, Mengjia and Zhong, Yan and Zhou, Yao and Shan, Zifei and Zhang, Meishan and Hu, Baotian and Zhang, Min},
@@ -1572,7 +1542,88 @@ LMEB = Benchmark(
   url = {https://arxiv.org/abs/2603.12572},
   year = {2026},
 }
-""",
+"""
+_LMEB_EPISODIC_TASKS = [
+    "EPBench",
+    "KnowMeBench",
+]
+_LMEB_DIALOGUE_TASKS = [
+    "LoCoMo",
+    "LongMemEval",
+    "REALTALK",
+    "TMD",
+    "MemBench",
+    "ConvoMem",
+]
+_LMEB_SEMANTIC_TASKS = [
+    "QASPER",
+    "NovelQA",
+    "PeerQA",
+    "CovidQA",
+    "ESGReports",
+    "LMEBMLDR",
+    "LooGLE",
+    "LMEB_SciFact",
+]
+_LMEB_PROCEDURAL_TASKS = [
+    "Gorilla",
+    "ToolBench",
+    "ReMe",
+    "ProceduralMemBench",
+    "MemGovern",
+    "DeepPlanning",
+]
+
+LMEB = Benchmark(
+    name="LMEB",
+    display_name="Long-Horizon Memory",
+    tasks=get_tasks(
+        tasks=[
+            *_LMEB_EPISODIC_TASKS,
+            *_LMEB_DIALOGUE_TASKS,
+            *_LMEB_SEMANTIC_TASKS,
+            *_LMEB_PROCEDURAL_TASKS,
+        ]
+    ),
+    description="Long-horizon memory retrieval quality across episodic, dialogue, semantic, and procedural retrieval tasks, measuring how well embedding models retrieve evidence in long-term memory scenarios.",
+    reference=_LMEB_REFERENCE,
+    citation=_LMEB_CITATION,
+)
+
+LMEB_EPISODIC = Benchmark(
+    name="LMEB-Episodic",
+    display_name="LMEB Episodic Memory",
+    tasks=get_tasks(tasks=_LMEB_EPISODIC_TASKS),
+    description="Episodic memory retrieval aims to recall past events grounded in temporal cues, entities, contents, and spatial context.",
+    reference=_LMEB_REFERENCE,
+    citation=_LMEB_CITATION,
+)
+
+LMEB_DIALOGUE = Benchmark(
+    name="LMEB-Dialogue",
+    display_name="LMEB Dialogue Memory",
+    tasks=get_tasks(tasks=_LMEB_DIALOGUE_TASKS),
+    description="Dialogue memory retrieval aims to maintain context across multi-turn interactions by recalling relevant dialogue history and user preference.",
+    reference=_LMEB_REFERENCE,
+    citation=_LMEB_CITATION,
+)
+
+LMEB_SEMANTIC = Benchmark(
+    name="LMEB-Semantic",
+    display_name="LMEB Semantic Memory",
+    tasks=get_tasks(tasks=_LMEB_SEMANTIC_TASKS),
+    description="Semantic memory retrieval focuses on recalling general knowledge and concepts that are largely independent of time or specific context.",
+    reference=_LMEB_REFERENCE,
+    citation=_LMEB_CITATION,
+)
+
+LMEB_PROCEDURAL = Benchmark(
+    name="LMEB-Procedural",
+    display_name="LMEB Procedural Memory",
+    tasks=get_tasks(tasks=_LMEB_PROCEDURAL_TASKS),
+    description="Procedural memory retrieval focuses on recalling learned skills, action patterns, and structured procedures that guide task execution and multi-step reasoning.",
+    reference=_LMEB_REFERENCE,
+    citation=_LMEB_CITATION,
 )
 
 BRIGHT = Benchmark(
