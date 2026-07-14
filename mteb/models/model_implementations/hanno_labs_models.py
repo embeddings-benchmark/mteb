@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 # dinghy-law-0.6b-v1: a legal-domain contrastive fine-tune of Qwen/Qwen3-Embedding-0.6B, keeping the base interface
 # (last-token pooling, cosine, query-side "Instruct: {instruction}\nQuery:" prefix, unprefixed documents). Training
@@ -22,8 +22,8 @@ training_data = {
     "BillSumUS",
 }
 
-# Per-task query instruction (the dominant eval lever). Expressed as sentence-transformers model_prompts keyed
-# "{task}-query" (byte-exact to Qwen3-Embedding's "Instruct: {instruction}\nQuery:" template) with unprefixed docs.
+# Per-task query instruction (the dominant eval lever); wrapped at load time by the shared instruction_template below,
+# and applied query-side only (apply_instruction_to_passages=False).
 _instructions = {
     "AILACasedocs": "Retrieve the case document that most closely matches or is most relevant to the scenario described in the provided query.",
     "AILAStatutes": "Identify the most relevant statutes for the given situation.",
@@ -34,15 +34,13 @@ _instructions = {
     "LegalQuAD": "Retrieve relevant legal case documents.",
     "LeCaRDv2": "Retrieve the case document that most closely matches or is most relevant to the scenario described in the provided query.",
 }
-dinghy_law_prompts = {
-    **{f"{t}-query": f"Instruct: {i}\nQuery:" for t, i in _instructions.items()},
-    **{f"{t}-document": "" for t in _instructions},
-}
 
 dinghy_law_0_6b = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
-        model_prompts=dinghy_law_prompts,
+        instruction_template="Instruct: {instruction}\nQuery:",
+        apply_instruction_to_passages=False,
+        prompts_dict=_instructions,
         model_kwargs={"torch_dtype": "bfloat16"},
     ),
     name="Hanno-Labs/dinghy-law-0.6b-v1",
