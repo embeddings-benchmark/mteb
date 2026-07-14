@@ -28,8 +28,8 @@ class FusionEmbeddingWrapper(AbsEncoder):
     truncation. Text: the base model's chat template -> last-token pooling ->
     diagonal whitening -> Matryoshka truncation. Image and video: the frozen base
     model's own encode paths (nothing trained touches them; the base's published
-    behavior is inherited unchanged). Video preprocessing follows the base's
-    reference scripts (qwen-vl-utils, up to 64 uniformly sampled frames). Inputs
+    behavior is inherited unchanged). Video preprocessing natively follows the base's
+    reference pipeline (decoded frame tensors, up to 64 uniformly sampled frames). Inputs
     combining several modalities are embedded per modality and summed elementwise.
     The base model is byte-identical to its original release; only the connector
     was trained (audio-text contrastive).
@@ -91,23 +91,15 @@ class FusionEmbeddingWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         # The video path is the frozen base model's own encode path, exposed by
-        # the remote code as a single-video method over pre-extracted frames;
-        # VideoCollator supplies [T, C, H, W] uint8 frame tensors.
-        from PIL import Image
-
+        # the remote code. VideoCollator supplies decoded [T, C, H, W] uint8
+        # frame tensors (torchcodec), which embed_video consumes directly.
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Video Encoding"):
             with torch.no_grad():
                 batch_embeddings = torch.stack(
                     [
-                        self.model.embed_video(
-                            [
-                                Image.fromarray(frame.permute(1, 2, 0).cpu().numpy())
-                                for frame in video
-                            ],
-                            max_frames=self.video_num_frames,
-                        )
+                        self.model.embed_video(video, max_frames=self.video_num_frames)
                         for video in batch["video"]
                     ]
                 )
@@ -215,14 +207,14 @@ fusion_embedding_1_2b_preview = ModelMeta(
     name="EximiusLabs/fusion-embedding-1-2b-preview",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="e63b6c0b6a9b58c68e1b17fb55698fe5342b8028",
+    revision="b551ea8033bee3cd51468cbde2bb25397292e0b3",
     release_date="2026-07-06",
     modalities=["audio", "image", "text", "video"],
     n_parameters=2_800_000_000,
-    n_embedding_parameters=311_164_928,  # base token-embedding layer: 151,936 x 2,048
-    memory_usage_mb=10681,  # Calculated using model.calculate_memory_usage_mb()
+    n_embedding_parameters=311_164_928,
+    memory_usage_mb=10681,
     max_tokens=254,
-    embed_dim=[2048, 1536, 1024, 512, 256, 128, 64],  # Matryoshka ladder
+    embed_dim=[2048, 1536, 1024, 512, 256, 128, 64],
     license="cc-by-nc-4.0",
     reference="https://huggingface.co/EximiusLabs/fusion-embedding-1-2b-preview",
     similarity_fn_name="cosine",
@@ -262,5 +254,5 @@ fusion_embedding_1_2b_preview = ModelMeta(
   url    = {https://github.com/Eximius-Labs/fusion-embedding}
 }
 """,
-    extra_requirements_groups=["audio", "fusion-embedding"],
+    extra_requirements_groups=["fusion-embedding"],
 )
