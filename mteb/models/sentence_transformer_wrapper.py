@@ -96,7 +96,7 @@ def _batch_to_modality_dicts(
     supported_modalities: list[Modalities],
 ) -> list[dict[str, Any]]:
     modality_batch = {k: v for k, v in batch.items() if k in supported_modalities}
-    LogOnce(logger).info(f"Model will encode modalities {modality_batch}")
+    LogOnce(logger).info(f"Model will encode modalities {list(modality_batch.keys())}")
     return [
         dict(zip(modality_batch, sample)) for sample in zip(*modality_batch.values())
     ]
