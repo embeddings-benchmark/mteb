@@ -9,7 +9,7 @@ from transformers import AutoModel
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, VideoCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -22,12 +22,17 @@ if TYPE_CHECKING:
 class FusionEmbeddingWrapper(AbsEncoder):
     """fusion-embedding-1: a unified text/image/video/audio embedding model.
 
-    This wrapper exposes the audio, text, and image encoding paths. Audio: frozen Qwen2.5-Omni audio tower -> trained 16.4M-parameter
-    perceiver-resampler -> tokens spliced into the frozen Qwen3-VL-Embedding-2B input
-    stream -> last-token pooling -> Matryoshka truncation. Text: the base model's chat
-    template -> last-token pooling -> diagonal whitening -> Matryoshka truncation. The
-    base model is byte-identical to its original release; only the connector was
-    trained (audio-text contrastive).
+    This wrapper exposes all four encoding paths. Audio: frozen Qwen2.5-Omni audio
+    tower -> trained 16.4M-parameter perceiver-resampler -> tokens spliced into the
+    frozen Qwen3-VL-Embedding-2B input stream -> last-token pooling -> Matryoshka
+    truncation. Text: the base model's chat template -> last-token pooling ->
+    diagonal whitening -> Matryoshka truncation. Image and video: the frozen base
+    model's own encode paths (nothing trained touches them; the base's published
+    behavior is inherited unchanged). Video preprocessing follows the base's
+    reference scripts (qwen-vl-utils, up to 64 uniformly sampled frames). Inputs
+    combining several modalities are embedded per modality and summed elementwise.
+    The base model is byte-identical to its original release; only the connector
+    was trained (audio-text contrastive).
 
     The model loads through ``AutoModel`` with ``trust_remote_code``; the remote code
     downloads the frozen base and audio tower from their original repositories and only
@@ -36,6 +41,7 @@ class FusionEmbeddingWrapper(AbsEncoder):
 
     sampling_rate = 16_000
     max_text_tokens = 254
+    video_num_frames = 64  # the base's reference max_frames; sampled uniformly
 
     def __init__(
         self,
@@ -72,6 +78,38 @@ class FusionEmbeddingWrapper(AbsEncoder):
             with torch.no_grad():
                 batch_embeddings = self.model.embed_audio_batch(
                     waveforms, sr=self.sampling_rate
+                )
+
+            embeddings.append(batch_embeddings.float().cpu().numpy())
+
+        return np.vstack(embeddings)
+
+    def get_video_embeddings(
+        self,
+        inputs: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> Array:
+        # The video path is the frozen base model's own encode path, exposed by
+        # the remote code as a single-video method over pre-extracted frames;
+        # VideoCollator supplies [T, C, H, W] uint8 frame tensors.
+        from PIL import Image
+
+        embeddings = []
+
+        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Video Encoding"):
+            with torch.no_grad():
+                batch_embeddings = torch.stack(
+                    [
+                        self.model.embed_video(
+                            [
+                                Image.fromarray(frame.permute(1, 2, 0).cpu().numpy())
+                                for frame in video
+                            ],
+                            max_frames=self.video_num_frames,
+                        )
+                        for video in batch["video"]
+                    ]
                 )
 
             embeddings.append(batch_embeddings.float().cpu().numpy())
@@ -128,21 +166,48 @@ class FusionEmbeddingWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         features = inputs.dataset.features
-        if "audio" in features:
-            inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
-            return self.get_audio_embeddings(inputs, **kwargs)
-        if "image" in features and "text" in features:
-            raise NotImplementedError(
-                "fused image+text inputs are not supported by this wrapper"
+        present = [m for m in ("audio", "video", "image", "text") if m in features]
+        if not present:
+            raise ValueError(
+                "fusion-embedding supports audio, video, image, and text inputs, "
+                f"got: {list(features)}"
             )
-        if "image" in features:
-            return self.get_image_embeddings(inputs, **kwargs)
-        if "text" in features:
-            return self.get_text_embeddings(inputs, **kwargs)
-        raise ValueError(
-            "fusion-embedding supports audio, image, and text inputs, got: "
-            f"{list(features)}"
-        )
+
+        original_collate_fn = inputs.collate_fn
+        embeddings = None
+        for modality in present:
+            if modality in {"audio", "video"} and "video" in present:
+                inputs.collate_fn = VideoCollator(
+                    target_sampling_rate=self.sampling_rate,
+                    num_frames=self.video_num_frames,
+                )
+            elif modality == "audio":
+                inputs.collate_fn = AudioCollator(
+                    target_sampling_rate=self.sampling_rate
+                )
+            else:
+                inputs.collate_fn = original_collate_fn
+
+            if modality == "audio":
+                modality_embeddings = self.get_audio_embeddings(inputs, **kwargs)
+            elif modality == "video":
+                modality_embeddings = self.get_video_embeddings(inputs, **kwargs)
+            elif modality == "image":
+                modality_embeddings = self.get_image_embeddings(inputs, **kwargs)
+            else:
+                modality_embeddings = self.get_text_embeddings(inputs, **kwargs)
+
+            if embeddings is None:
+                embeddings = modality_embeddings
+            else:
+                # Fused inputs: elementwise sum across modalities, as in the
+                # CLIP wrapper's text+image handling.
+                if len(modality_embeddings) != len(embeddings):
+                    raise ValueError(
+                        "all modalities must have the same length for fused embeddings"
+                    )
+                embeddings += modality_embeddings
+        return embeddings
 
 
 fusion_embedding_1_2b_preview = ModelMeta(
@@ -150,11 +215,11 @@ fusion_embedding_1_2b_preview = ModelMeta(
     name="EximiusLabs/fusion-embedding-1-2b-preview",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="e6d91bc06920e74553b5ea52244ebdf7d1a82402",
+    revision="e63b6c0b6a9b58c68e1b17fb55698fe5342b8028",
     release_date="2026-07-06",
-    modalities=["audio", "image", "text"],
+    modalities=["audio", "image", "text", "video"],
     n_parameters=2_800_000_000,
-    n_embedding_parameters=None,
+    n_embedding_parameters=311_164_928,  # base token-embedding layer: 151,936 x 2,048
     memory_usage_mb=10681,  # Calculated using model.calculate_memory_usage_mb()
     max_tokens=254,
     embed_dim=[2048, 1536, 1024, 512, 256, 128, 64],  # Matryoshka ladder
