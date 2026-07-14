@@ -10,11 +10,11 @@ from tqdm.auto import tqdm
 from transformers import AutoModel, AutoTokenizer
 from transformers import __version__ as transformers_version
 
-from mteb.models import CrossEncoderWrapper
+from mteb.models import CrossEncoderWrapper, SentenceTransformerEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -633,6 +633,136 @@ llama_embed_nemotron_8b = ModelMeta(
     contacts=["ybabakhin"],
     citation=LlamaEmbedNemotron_CITATION,
     extra_requirements_groups=["flash_attention"],
+)
+
+
+nemotron_3_embed_supported_languages = [
+    "eng-Latn",
+    "ara-Arab",
+    "asm-Beng",
+    "ben-Beng",
+    "bul-Cyrl",
+    "zho-Hans",
+    "dan-Latn",
+    "nld-Latn",
+    "fin-Latn",
+    "fra-Latn",
+    "deu-Latn",
+    "hin-Deva",
+    "hin-Latn",
+    "ind-Latn",
+    "ita-Latn",
+    "jpn-Jpan",
+    "kor-Hang",
+    "msa-Latn",
+    "mar-Deva",
+    "nep-Deva",
+    "nor-Latn",
+    "fas-Arab",
+    "por-Latn",
+    "ron-Latn",
+    "rus-Cyrl",
+    "spa-Latn",
+    "swa-Latn",
+    "swe-Latn",
+    "tam-Taml",
+    "tel-Telu",
+    "tha-Thai",
+    "ukr-Cyrl",
+    "urd-Arab",
+    "vie-Latn",
+]
+
+nemotron_3_embed_training_datasets = {
+    "AppsRetrieval",
+    "BioASQ",
+    "CodeTransOceanContest",
+    "CodeTransOceanDL",
+    "CosQA",
+    "FEVER",
+    "FinePDFs",
+    "FinQARetrieval",
+    "HotpotQA",
+    "HoVer",
+    "MIRACLRetrieval",
+    "MLQARetrieval",
+    "Nemotron-CC-v2",
+    "NQ",
+    "PAQ",
+    "RedditClustering",
+    "SpartQA",
+    "SQuAD",
+    "StackOverflowQA",
+    "SyntheticText2SQL",
+    "TempReasonL1",
+    "TriviaQA",
+    "WikiSQLRetrieval",
+    "WinoGrande",
+}
+
+
+nemotron_3_embed_1b_bf16 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(processor_kwargs={"model_max_length": 4096}),
+    name="nvidia/Nemotron-3-Embed-1B-BF16",
+    revision="f880174635613cff04033875fc6a69296cb72006",
+    release_date="2026-07-16",
+    languages=nemotron_3_embed_supported_languages,
+    n_parameters=1_140_918_272,
+    n_active_parameters_override=None,
+    n_embedding_parameters=268_435_456,
+    memory_usage_mb=2176,
+    max_tokens=32768,
+    embed_dim=2048,
+    license="https://huggingface.co/nvidia/Nemotron-3-Embed-1B-BF16/blob/main/LICENSE",
+    open_weights=True,
+    public_training_code="https://github.com/NVIDIA-NeMo/Automodel",
+    public_training_data=None,
+    framework=["Sentence Transformers", "PyTorch", "Transformers"],
+    reference="https://huggingface.co/nvidia/Nemotron-3-Embed-1B-BF16",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets=nemotron_3_embed_training_datasets,
+    adapted_from="mistralai/Ministral-3-3B-Instruct-2512",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["dense"],
+    citation=None,
+    contacts=["ybabakhin"],
+    output_dtypes=OutputDType.BF16,
+    extra_requirements_groups=["nemotron-3-embed"],
+)
+
+nemotron_3_embed_8b_bf16 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(processor_kwargs={"model_max_length": 4096}),
+    name="nvidia/Nemotron-3-Embed-8B-BF16",
+    revision="dd9d06b1852ef836d3dc2fbd2b71a34356912759",
+    release_date="2026-07-16",
+    languages=nemotron_3_embed_supported_languages,
+    n_parameters=7_952_683_008,
+    n_active_parameters_override=None,
+    n_embedding_parameters=536_870_912,
+    memory_usage_mb=15169,
+    max_tokens=32768,
+    embed_dim=4096,
+    license="https://huggingface.co/nvidia/Nemotron-3-Embed-8B-BF16/blob/main/LICENSE",
+    open_weights=True,
+    public_training_code="https://github.com/NVIDIA-NeMo/Automodel",
+    public_training_data=None,
+    framework=["Sentence Transformers", "PyTorch", "Transformers"],
+    reference="https://huggingface.co/nvidia/Nemotron-3-Embed-8B-BF16",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets=nemotron_3_embed_training_datasets,
+    adapted_from="mistralai/Ministral-3-8B-Instruct-2512",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["dense"],
+    citation=None,
+    contacts=["ybabakhin"],
+    output_dtypes=OutputDType.BF16,
+    extra_requirements_groups=["nemotron-3-embed"],
 )
 
 
