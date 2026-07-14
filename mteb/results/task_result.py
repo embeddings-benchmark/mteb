@@ -502,7 +502,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     main_score, subset_scores
                 )
                 if reconstructed is not None:
-                    subset_scores["main_score"] = reconstructed
+                    subset_scores["main_score"] = reconstructed  # type: ignore[index]
                 else:
                     log_once.warning(f"Main score {main_score} not found in scores")
 
