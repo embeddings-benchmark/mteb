@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, EncodeKwargs
+    from mteb.types import Array, BatchedInput, EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -52,9 +52,6 @@ def sentence_transformers_loader(
     return SentenceTransformerEncoderWrapper(
         model=model_name, revision=revision, device=device, **kwargs
     )
-
-
-_MODALITY_KEYS = frozenset({"text", "image", "audio", "video"})
 
 
 def _setup_modality_collator(
@@ -94,8 +91,10 @@ def _setup_modality_collator(
     return has_video or has_audio or "image" in features
 
 
-def _batch_to_modality_dicts(batch: dict[str, Any]) -> list[dict[str, Any]]:
-    modality_batch = {k: v for k, v in batch.items() if k in _MODALITY_KEYS}
+def _batch_to_modality_dicts(
+    batch: dict[str, Any], supported_modalities: list[Modalities]
+) -> list[dict[str, Any]]:
+    modality_batch = {k: v for k, v in batch.items() if k in supported_modalities}
     return [
         dict(zip(modality_batch, sample)) for sample in zip(*modality_batch.values())
     ]
@@ -298,7 +297,9 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         if is_multimodal:
             all_embeddings = []
             for batch in tqdm(inputs, desc="Building multimodal embeddings"):
-                batched_input = _batch_to_modality_dicts(batch)
+                batched_input = _batch_to_modality_dicts(
+                    batch, self.mteb_model_meta.modalities
+                )
                 embeddings = encode_function(
                     batched_input,
                     prompt=prompt,
