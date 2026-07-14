@@ -22,8 +22,7 @@ if TYPE_CHECKING:
 class FusionEmbeddingWrapper(AbsEncoder):
     """fusion-embedding-1: a unified text/image/video/audio embedding model.
 
-    This wrapper exposes the audio and text encoding paths (the modalities MAEB
-    exercises). Audio: frozen Qwen2.5-Omni audio tower -> trained 16.4M-parameter
+    This wrapper exposes the audio, text, and image encoding paths. Audio: frozen Qwen2.5-Omni audio tower -> trained 16.4M-parameter
     perceiver-resampler -> tokens spliced into the frozen Qwen3-VL-Embedding-2B input
     stream -> last-token pooling -> Matryoshka truncation. Text: the base model's chat
     template -> last-token pooling -> diagonal whitening -> Matryoshka truncation. The
@@ -79,6 +78,27 @@ class FusionEmbeddingWrapper(AbsEncoder):
 
         return np.vstack(embeddings)
 
+    def get_image_embeddings(
+        self,
+        inputs: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> Array:
+        # The image path is the frozen base model's own encode path (audio-side
+        # components never touch it), exposed by the remote code as a single-image
+        # method; images are embedded one at a time (as in other merged wrappers).
+        embeddings = []
+
+        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Image Encoding"):
+            with torch.no_grad():
+                batch_embeddings = torch.stack(
+                    [self.model.embed_image(image) for image in batch["image"]]
+                )
+
+            embeddings.append(batch_embeddings.float().cpu().numpy())
+
+        return np.vstack(embeddings)
+
     def get_text_embeddings(
         self,
         inputs: DataLoader[TextInput],
@@ -107,14 +127,21 @@ class FusionEmbeddingWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        if "audio" in inputs.dataset.features:
+        features = inputs.dataset.features
+        if "audio" in features:
             inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
             return self.get_audio_embeddings(inputs, **kwargs)
-        if "text" in inputs.dataset.features:
+        if "image" in features and "text" in features:
+            raise NotImplementedError(
+                "fused image+text inputs are not supported by this wrapper"
+            )
+        if "image" in features:
+            return self.get_image_embeddings(inputs, **kwargs)
+        if "text" in features:
             return self.get_text_embeddings(inputs, **kwargs)
         raise ValueError(
-            "fusion-embedding supports audio and text inputs, got: "
-            f"{list(inputs.dataset.features)}"
+            "fusion-embedding supports audio, image, and text inputs, got: "
+            f"{list(features)}"
         )
 
 
@@ -125,7 +152,7 @@ fusion_embedding_1_2b_preview = ModelMeta(
     open_weights=True,
     revision="e6d91bc06920e74553b5ea52244ebdf7d1a82402",
     release_date="2026-07-06",
-    modalities=["audio", "text"],
+    modalities=["audio", "image", "text"],
     n_parameters=2_800_000_000,
     n_embedding_parameters=None,
     memory_usage_mb=10681,  # Calculated using model.calculate_memory_usage_mb()
