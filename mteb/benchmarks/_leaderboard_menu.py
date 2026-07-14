@@ -164,10 +164,10 @@ R_BENCHMARK_ENTRIES = [
                         mteb.get_benchmarks(
                             [
                                 "LMEB",
-                                "LMEB(Episodic)",
-                                "LMEB(Dialogue)",
-                                "LMEB(Semantic)",
-                                "LMEB(Procedural)",
+                                "LMEB-Episodic",
+                                "LMEB-Dialogue",
+                                "LMEB-Semantic",
+                                "LMEB-Procedural",
                             ]
                         ),
                     ),
@@ -281,10 +281,10 @@ HOME_BENCHMARK_ENTRIES = [
                 "FollowIR",
                 "LongEmbed",
                 "LMEB",
-                "LMEB(Episodic)",
-                "LMEB(Dialogue)",
-                "LMEB(Semantic)",
-                "LMEB(Procedural)",
+                "LMEB-Episodic",
+                "LMEB-Dialogue",
+                "LMEB-Semantic",
+                "LMEB-Procedural",
                 "BRIGHT",
             ]
         ),
