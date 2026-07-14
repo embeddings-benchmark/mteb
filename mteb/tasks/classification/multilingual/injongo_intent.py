@@ -43,7 +43,7 @@ class InjongoIntent(AbsTaskClassification):
             "xho": ["xho-Latn"],
             "yor": ["yor-Latn"],
             "zul": ["zul-Latn"],
-           # "eng": ["eng-Latn"],
+            # "eng": ["eng-Latn"],
         },
         main_score="accuracy",
         date=("2024-02-13", "2025-02-13"),
