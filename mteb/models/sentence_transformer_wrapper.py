@@ -92,7 +92,8 @@ def _setup_modality_collator(
 
 
 def _batch_to_modality_dicts(
-    batch: dict[str, Any], supported_modalities: list[Modalities]
+    batch: dict[str, Any],
+    supported_modalities: list[Modalities],
 ) -> list[dict[str, Any]]:
     modality_batch = {k: v for k, v in batch.items() if k in supported_modalities}
     LogOnce(logger).info(f"Model will encode modalities {modality_batch}")
@@ -299,7 +300,8 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             all_embeddings = []
             for batch in tqdm(inputs, desc="Building multimodal embeddings"):
                 batched_input = _batch_to_modality_dicts(
-                    batch, self.mteb_model_meta.modalities
+                    batch,
+                    self.mteb_model_meta.modalities,
                 )
                 embeddings = encode_function(
                     batched_input,
@@ -414,7 +416,10 @@ class CrossEncoderWrapper:
 
         items: list[dict[str, Any]] = []
         for batch in tqdm(loader, desc="Collecting multimodal inputs"):
-            for sample in _batch_to_modality_dicts(batch):
+            for sample in _batch_to_modality_dicts(
+                batch,
+                self.mteb_model_meta.modalities,
+            ):
                 if prefix and "text" in sample:
                     sample["text"] = prefix + sample["text"]
                 items.append(sample)
