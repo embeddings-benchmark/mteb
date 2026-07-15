@@ -28,9 +28,10 @@ comsat_embed_ja_8b_preview = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    # Trained on ~1.5M Japanese examples (model card); the source composition
-    # is not documented, so possible mteb-task overlap is unknown.
-    training_datasets=None,
+    # The fine-tuning data contains no mteb datasets; empty set lets the base
+    # model's (Qwen/Qwen3-Embedding-8B) training data be inherited via
+    # adapted_from.
+    training_datasets=set(),
 )
 
 comsat_embed_ja_03b_preview = ModelMeta(
@@ -58,7 +59,8 @@ comsat_embed_ja_03b_preview = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    # Fine-tuning data composition is not documented, so possible mteb-task
-    # overlap is unknown.
-    training_datasets=None,
+    # The fine-tuning data contains no mteb datasets; empty set lets the base
+    # model's (cl-nagoya/ruri-v3-310m) training data be inherited via
+    # adapted_from.
+    training_datasets=set(),
 )
