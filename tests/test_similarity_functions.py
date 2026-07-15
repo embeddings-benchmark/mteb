@@ -1,10 +1,8 @@
 """Tests for the similarity primitives in ``mteb.similarity_functions``.
 
-These focus on High-Precision Scoring (HPS): relevance scores must be computed
-in float32 even when the encoder returns low-precision (float16/bfloat16)
-embeddings, so that reduced-mantissa bucketization does not collapse distinct
-scores into spurious ties. See "Reliable Evaluation Protocol for Low-Precision
-Retrieval" (Yang et al., 2026), https://aclanthology.org/2026.acl-short.33.
+Relevance scores must be computed in float32 even when the encoder returns
+low-precision (float16/bfloat16) embeddings, so that reduced precision does not
+collapse distinct scores into spurious ties.
 """
 
 from __future__ import annotations

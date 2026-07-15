@@ -24,15 +24,8 @@ def _use_torch_compile() -> bool:
 def _convert_to_tensor(a: Array, dtype: torch.dtype = torch.float32) -> torch.Tensor:
     if not isinstance(a, torch.Tensor):
         return torch.tensor(a, dtype=dtype)
-    # High-Precision Scoring (HPS): upcast low-precision float embeddings to
-    # float32 before computing relevance scores. Reduced-mantissa formats such
-    # as float16/bfloat16 coarsely bucket values in a narrow range, collapsing
-    # distinct scores into spurious ties that make ranking (and thus retrieval
-    # metrics) depend on arbitrary tie-breaking. Upcasting is value-preserving
-    # (every float16/bfloat16 value is exactly representable in float32) and a
-    # no-op for embeddings that are already float32. See "Reliable Evaluation
-    # Protocol for Low-Precision Retrieval" (Yang et al., 2026),
-    # https://aclanthology.org/2026.acl-short.33.
+    # upcast low-precision (float16/bfloat16) embeddings to float32 before
+    # scoring, so reduced precision does not collapse distinct scores into ties
     if a.dtype in {torch.float16, torch.bfloat16}:
         return a.to(torch.float32)
     return a
