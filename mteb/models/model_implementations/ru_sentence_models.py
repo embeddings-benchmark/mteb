@@ -1128,7 +1128,7 @@ starse = ModelMeta(
     adapted_from=None,
     training_datasets=starse_training_datasets,
     public_training_data=None,
-    public_training_code=None,
+    public_training_code="https://github.com/BlessedTatonka/StaRSE",
     framework=["Sentence Transformers", "PyTorch", "safetensors"],
     citation=None,
 )
