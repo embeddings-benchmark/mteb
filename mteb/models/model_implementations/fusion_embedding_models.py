@@ -20,7 +20,12 @@ if TYPE_CHECKING:
 
 
 class FusionEmbeddingWrapper(AbsEncoder):
-    """fusion-embedding-1: a unified text/image/video/audio embedding model.
+    """fusion-embedding: unified text/image/video/audio embedding models.
+
+    Serves both released generations: fusion-embedding-1 (16.4M-parameter
+    connector) and fusion-embedding-2 (adds modality-gated deep adapters,
+    60.6M trained parameters; the repo's remote code attaches and gates the
+    adapters internally, so the wrapper is identical).
 
     This wrapper exposes all four encoding paths. Audio: frozen Qwen2.5-Omni audio
     tower -> trained 16.4M-parameter perceiver-resampler -> tokens spliced into the
@@ -252,6 +257,64 @@ fusion_embedding_1_2b_preview = ModelMeta(
   author = {Tonmoy, Abdul Basit},
   year   = {2026},
   url    = {https://github.com/Eximius-Labs/fusion-embedding}
+}
+""",
+    extra_requirements_groups=["fusion-embedding"],
+)
+
+fusion_embedding_2_2b_preview = ModelMeta(
+    loader=FusionEmbeddingWrapper,
+    name="EximiusLabs/fusion-embedding-2-2b-preview",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="2d30494e4ef581ccad66e9d90b55dc4a84b96bc4",
+    release_date="2026-07-12",
+    modalities=["audio", "image", "text", "video"],
+    n_parameters=2_800_000_000,
+    n_embedding_parameters=311_164_928,
+    # calculate_memory_usage_mb() basis: FP32 x n_parameters; the +44.2M
+    # generation-2 adapters sit inside the 2.8B rounding
+    memory_usage_mb=10681,
+    max_tokens=254,
+    embed_dim=[2048, 1536, 1024, 512, 256, 128, 64],
+    license="cc-by-nc-4.0",
+    reference="https://huggingface.co/EximiusLabs/fusion-embedding-2-2b-preview",
+    similarity_fn_name="cosine",
+    framework=["PyTorch", "Transformers", "safetensors"],
+    use_instructions=True,
+    public_training_code="https://github.com/Eximius-Labs/fusion-embedding",
+    public_training_data=None,
+    # identical training corpus to generation 1 (same 518K-pair sources)
+    training_datasets={
+        # AudioCaps (train split)
+        "AudioCapsA2TRetrieval",
+        "AudioCapsT2ARetrieval",
+        "AudioCapsAVA2VRetrieval",
+        "AudioCapsAVAT2VRetrieval",
+        "AudioCapsAVT2VRetrieval",
+        "AudioCapsAVT2VARetrieval",
+        "AudioCapsAVV2ARetrieval",
+        "AudioCapsAVV2TRetrieval",
+        "AudioCapsAVVA2TRetrieval",
+        "AudioCapsAVVT2ARetrieval",
+        # FSD50K (dev split); 13.6% of FSDKaggle2019 test clips appear in FSD50K dev
+        "FSD50K",
+        "FSD2019Kaggle",
+        # AudioSet-SL / WavCaps captions over strongly-labelled AudioSet clips
+        "AudioSet",
+        "AudioSetMini",
+        # LAION-FreeSound (not in MTEB)
+        # Clotho / ESC-50 / UrbanSound8K / VGGSound eval clips excluded from training
+        # by id blacklist at ingestion (see the model card)
+    },
+    model_type=["dense"],
+    citation="""
+@software{fusion_embedding_2026,
+  title  = {Fusion Embedding 2: A Unified Embedding Space for Text,
+            Image, Video, and Audio},
+  author = {Tonmoy, Abdul Basit},
+  year   = {2026},
+  url    = {https://huggingface.co/EximiusLabs/fusion-embedding-2-2b-preview}
 }
 """,
     extra_requirements_groups=["fusion-embedding"],
