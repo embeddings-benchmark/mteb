@@ -23,11 +23,9 @@ def _use_torch_compile() -> bool:
 
 def _convert_to_tensor(a: Array, dtype: torch.dtype = torch.float32) -> torch.Tensor:
     if not isinstance(a, torch.Tensor):
-        return torch.tensor(a, dtype=dtype)
-    # upcast low-precision (float16/bfloat16) embeddings to float32 before
-    # scoring, so reduced precision does not collapse distinct scores into ties
-    if a.dtype in {torch.float16, torch.bfloat16}:
-        return a.to(torch.float32)
+        a = torch.tensor(a, dtype=dtype)
+    if torch.is_floating_point(a) and torch.finfo(a.dtype).bits < 32:
+        a = a.to(torch.float32) # upcast if low-precision
     return a
 
 
