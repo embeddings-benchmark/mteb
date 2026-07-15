@@ -1096,3 +1096,39 @@ user2_base = ModelMeta(
     year={2025},
 }""",
 )
+
+
+starse_training_datasets = {
+    "MSMARCO",  # https://huggingface.co/datasets/unicamp-dl/mmarco
+    # deepvk/cultura_ru_edu
+    # deepvk/ru-HNP
+    # cointegrated/ru-paraphrase-NMT-Leipzig
+}
+
+starse = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+    ),
+    name="BorisTM/starse",
+    model_type=["dense"],
+    languages=["rus-Cyrl"],
+    open_weights=True,
+    revision="8ae7fd7f139bb1ae7c52af8e9a3df419abe66777",
+    release_date="2026-06-25",
+    use_instructions=False,
+    reference="https://huggingface.co/BorisTM/starse",
+    n_parameters=61_510_656,
+    n_embedding_parameters=61_510_656,
+    memory_usage_mb=8,
+    max_tokens=float("inf"),
+    embed_dim=512,
+    license="apache-2.0",
+    similarity_fn_name=ScoringFunction.COSINE,
+    adapted_from=None,
+    training_datasets=starse_training_datasets,
+    public_training_data=None,
+    public_training_code=None,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    citation=None,
+)
