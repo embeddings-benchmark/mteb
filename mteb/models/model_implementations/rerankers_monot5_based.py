@@ -152,13 +152,7 @@ class MonoT5Reranker(RerankerWrapper):
         )
         batch_scores = output.scores[0]
         batch_scores = batch_scores[:, [self.token_false_id, self.token_true_id]]
-        # High-Precision Scoring (HPS): upcast the logits to float32 before the
-        # softmax. Rerankers are commonly run in float16/bfloat16, whose reduced
-        # mantissa coarsely buckets the (0, 1) probability range and collapses
-        # distinct relevance scores into spurious ties. The upcast is
-        # value-preserving and adds negligible cost. See "Reliable Evaluation
-        # Protocol for Low-Precision Retrieval" (Yang et al., 2026),
-        # https://aclanthology.org/2026.acl-short.33.
+        # upcast the logits to float32 before the softmax
         batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
         return batch_scores[:, 1].exp().tolist()
 
@@ -272,13 +266,12 @@ Relevant: """
             true_vector = batch_scores[:, self.token_true_id]
             false_vector = batch_scores[:, self.token_false_id]
             batch_scores = torch.stack([false_vector, true_vector], dim=1)
-            # HPS: upcast to float32 before the softmax to avoid low-precision
-            # tie collisions (see the note in MonoT5Reranker.predict above).
+            # upcast the logits to float32 before the softmax
             batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
             scores = batch_scores[:, 1].exp().tolist()
         else:
             batch_scores = self.model(**tokens).logits
-            # HPS: upcast to float32 before the softmax (see note above).
+            # upcast the logits to float32 before the softmax
             batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
             scores = batch_scores[:, 1].exp().tolist()
 
