@@ -24,8 +24,10 @@ def _use_torch_compile() -> bool:
 def _convert_to_tensor(a: Array, dtype: torch.dtype = torch.float32) -> torch.Tensor:
     if not isinstance(a, torch.Tensor):
         a = torch.tensor(a, dtype=dtype)
+    elif torch.is_floating_point(a) and torch.finfo(a.dtype).bits < 32:
+        a = a.to(torch.float32)  # upcast sub-float32 floats (fp8/float16/bfloat16) to break ties        
     return a
-
+    
 
 def compute_pairwise_similarity(
     model: EncoderProtocol, embedding1: Array, embedding2: Array
