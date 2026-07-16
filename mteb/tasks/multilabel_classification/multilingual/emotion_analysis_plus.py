@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import ClassVar
-
 from mteb.abstasks.multilabel_classification import (
     AbsTaskMultilabelClassification,
 )
@@ -25,11 +23,12 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
         dataset={
             "path": "mteb/EmotionAnalysis",
             "revision": "554dbe305cad4f86705c8b6389c76f7f33fc6fd8",
+            "split": "test",
         },
         type="MultilabelClassification",
         category="t2c",
         modalities=["text"],
-        eval_splits=["validation", "test"],
+        eval_splits=["test"],
         eval_langs={
             # (ISO-639-3 code : BCP-47 tag)
             "afr": ["afr-Latn"],
@@ -74,69 +73,22 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
         bibtex_citation="",
     )
 
-    # ---------------------------------------------------------------- constants
-    _EMOTION2ID: ClassVar[dict[str, int]] = {
-        "anger": 0,
-        "disgust": 1,
-        "fear": 2,
-        "joy": 3,
-        "sadness": 4,
-        "surprise": 5,
-    }
-    _LOOKUP_TEXT: ClassVar[tuple[str, ...]] = ("text", "sentence", "utterance")
-    _LOOKUP_EMO: ClassVar[tuple[str, ...]] = (
-        "label",
-        "emotions",
-        "emotion",
-        "category",
-        "label_cat",
-    )
-
-    # ---------------------------------------------------------------- transform
     def dataset_transform(self, **kwargs) -> None:
-        """
-        Bring every split to the MTEB expected format:
+        from datasets import Dataset, DatasetDict, load_dataset
 
-        * column **text** : sentence/utterance (str)
-        * column **label**: list[int] (multi-label IDs 0–5)
-        """
+        path = self.metadata.dataset["path"]
+        rev = self.metadata.dataset["revision"]
+
         for lang in self.dataset:
+            if isinstance(self.dataset[lang], Dataset):
+                train = load_dataset(path, lang, revision=rev, split="train")
+                self.dataset[lang] = DatasetDict(
+                    {"train": train, "test": self.dataset[lang]}
+                )
             for split in self.dataset[lang]:
-                ds = self.dataset[lang][split]
-
-                # ── 1️⃣  locate the text column ───────────────────────────────
-                cols = ds.column_names
-                text_col = next(c for c in self._LOOKUP_TEXT if c in cols)
-
-                # ── 2️⃣  locate all emotion columns that are present ──────────
-                emo_cols = [e for e in self._EMOTION2ID if e in cols]
-                if not emo_cols:
+                cols = self.dataset[lang][split].column_names
+                if "text" not in cols or "label" not in cols:
                     raise ValueError(
-                        f"{lang}/{split}: none of the expected emotion columns "
-                        f"{list(self._EMOTION2ID)} were found."
+                        f"{lang}/{split}: expected canonical columns "
+                        f"{{text, label}}, got {cols}."
                     )
-
-                # ── 3️⃣  map each row to {text, label} ────────────────────────
-                def to_labels(example):
-                    labels = [
-                        self._EMOTION2ID[emo]  # integer ID
-                        for emo in emo_cols  # only the columns that exist
-                        if int(example[emo]) == 1  # treat non-zero as “present”
-                    ]
-                    return {"text": example[text_col], "label": labels}
-
-                ds = ds.map(
-                    to_labels,
-                    remove_columns=cols,  # drop original columns
-                    desc=f"{lang}/{split}",
-                )
-
-                # ── 4️⃣  save the cleaned split back ──────────────────────────
-                self.dataset[lang][split] = ds
-
-        # ── 5️⃣  make sure every language has a 'train' split ────────────────
-        for lang, splits in self.dataset.items():
-            if "train" not in splits:
-                self.dataset[lang]["train"] = (
-                    splits.get("validation") or splits.get("dev") or splits["test"]
-                )
