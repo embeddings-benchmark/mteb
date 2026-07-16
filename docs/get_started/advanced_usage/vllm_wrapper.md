@@ -9,10 +9,11 @@ icon: lucide/zap
 !!! note
     vLLM currently supports only a limited number of models, and many implementations have subtle differences compared to the default implementations in mteb. For the full list of supported models, refer to the [vllm documentation](https://docs.vllm.ai/en/stable/models/supported_models/#pooling-models).
 
-MTEB provides wrappers for both local and remote vLLM usage:
+MTEB provides wrappers for local vLLM usage:
 
 - **[VllmEncoderWrapper][mteb.models.vllm_wrapper.VllmEncoderWrapper] / [VllmCrossEncoderWrapper][mteb.models.vllm_wrapper.VllmCrossEncoderWrapper]**: Local in-process vLLM instantiation for maximum performance
-- **[OpenAIAPIEncodeWrapper][mteb.models.openai_wrappers.OpenAIAPIEncodeWrapper] / [OpenAIAPIRerankWrapper][mteb.models.openai_wrappers.OpenAIAPIRerankWrapper]**: HTTP-based access to OpenAI-compatible API servers (including vLLM, OpenAI, and others)
+
+For HTTP-based access to OpenAI-compatible API servers (including vLLM, OpenAI, and others), see [OpenAI-Compatible APIs](openai_api_wrappers.md).
 
 
 ## Installation
@@ -31,8 +32,6 @@ For other architectures, please refer to the [vllm installation guide](https://d
 ## Usage
 
 ### Local vLLM (VllmEncoderWrapper)
-
-For local in-process vLLM instantiation with maximum performance, use the standard wrappers.
 
 To use vLLM with MTEB you have to wrap the model with its respective wrapper.
 
@@ -89,96 +88,6 @@ To use vLLM with MTEB you have to wrap the model with its respective wrapper.
         results = run_vllm_crossencoder()
         print(results)
     ```
-
-### OpenAI-Compatible API Wrappers
-
-For connecting to OpenAI-compatible API servers (vLLM, OpenAI, or other compatible servers) via HTTP, use the OpenAI wrappers. These are useful for:
-
-- Testing remote vLLM deployments (CPU or GPU)
-- Benchmarking production API servers
-- Using OpenAI's embedding and reranking APIs
-- Reusing running server instances across multiple benchmark runs
-- Avoiding repeated model loading overhead
-
-!!! note
-    These wrappers work with any OpenAI-compatible API server. For vLLM, start a server with:
-    
-    - **Embedding**: `vllm serve <model-name> --host 0.0.0.0 --port 8000`
-    - **Reranking**: `vllm serve <reranker-model> --host 0.0.0.0 --port 8001`
-
-=== "Embedding models (OpenAIAPIEncodeWrapper)"
-    ```python
-    import mteb
-    from mteb.models import OpenAIAPIEncodeWrapper
-
-    # Connect to a vLLM server
-    encoder = OpenAIAPIEncodeWrapper(
-        endpoint_url="http://localhost:8000",
-        model_name="BAAI/bge-small-en-v1.5",
-    )
-
-    # Or use OpenAI's API
-    encoder = OpenAIAPIEncodeWrapper(
-        endpoint_url="https://api.openai.com/v1",
-        model_name="text-embedding-3-small",
-        api_key="sk-...",
-    )
-
-    # Evaluate on MTEB tasks
-    results = mteb.evaluate(
-        encoder,
-        mteb.get_task("STS12"),
-    )
-    print(results)
-    ```
-
-=== "Reranking models (OpenAIAPIRerankWrapper)"
-    ```python
-    import mteb
-    from mteb.models import OpenAIAPIRerankWrapper
-
-    # Connect to a vLLM reranking server
-    reranker = OpenAIAPIRerankWrapper(
-        endpoint_url="http://localhost:8001",
-        model_name="BAAI/bge-reranker-v2-m3",
-    )
-
-    # Evaluate on MTEB reranking tasks
-    results = mteb.evaluate(
-        reranker,
-        mteb.get_task("AskUbuntuDupQuestions"),
-    )
-    print(results)
-    ```
-
-**Additional Options:**
-
-```python
-# With authentication and SSL
-encoder = OpenAIAPIEncodeWrapper(
-    endpoint_url="https://my-server.com",
-    model_name="model-name",
-    api_key="your-api-key",
-    verify_ssl=True,  # Set to False for self-signed certs
-)
-
-# With custom settings
-encoder = OpenAIAPIEncodeWrapper(
-    endpoint_url="http://localhost:8000",
-    model_name="model-name",
-    timeout=600,  # Request timeout in seconds
-    batch_size=64,  # Batch size for embeddings
-    max_retries=5,  # Retry failed requests
-)
-
-# With instruction templates
-encoder = OpenAIAPIEncodeWrapper(
-    endpoint_url="http://localhost:8000",
-    model_name="instruct-model",
-    use_instructions=True,
-    instruction_template="Represent this {instruction} for retrieval: ",
-)
-```
 
 ## Why is vLLM fast?
 
@@ -268,8 +177,3 @@ vLLM’s optimizations are primarily designed for and most effective with causal
 
 :::mteb.models.vllm_wrapper.VllmCrossEncoderWrapper
 
-### OpenAI-Compatible API Wrappers
-
-:::mteb.models.openai_wrappers.OpenAIAPIEncodeWrapper
-
-:::mteb.models.openai_wrappers.OpenAIAPIRerankWrapper
