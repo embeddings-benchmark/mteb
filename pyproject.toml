@@ -78,6 +78,14 @@ leaderboard = [
 video = ["torchcodec"]
 github = ["PyGithub>=1.60"]
 
+# agentic answer-mode benchmark (mteb.agentic):
+# "agentic" covers the in-process paradigms (no Docker); "agentic-agents" adds
+# Harbor for the containerized agents (Docker or a Harbor cloud backend);
+# "agentic-rlm" adds the Recursive Language Model paradigm (local by default).
+agentic = ["openai>=1.41.0", "tiktoken>=0.8.0", "bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
+agentic-agents = ["mteb[agentic]", "harbor>=0.3.0"]
+agentic-rlm = ["mteb[agentic]", "rlms>=0.1.3"]
+
 # model specific optional dependencies:
 peft = ["peft>=0.11.0"]
 flagembedding = ["FlagEmbedding==1.3.4"]

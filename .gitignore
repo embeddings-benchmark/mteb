@@ -172,3 +172,6 @@ CLAUDE.md
 
 # test files
 tests/mock_mteb_cache/leaderboard/__cached_results.json
+
+# RLM docker-sandbox scratch (mteb.agentic rlm system)
+.rlm_workspace/
