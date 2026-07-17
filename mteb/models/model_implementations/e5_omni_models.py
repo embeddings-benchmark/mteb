@@ -46,7 +46,6 @@ class E5OmniWrapper(SentenceTransformerEncoderWrapper):
                 "text": {"truncation": True, "max_length": 512},
             }
         )
-        self.model.max_seq_length = 512
 
 
 _E5_OMNI_CITATION = r"""
