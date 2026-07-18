@@ -209,6 +209,7 @@ from .met_i2i_retrieval import METI2IRetrieval
 from .ml_questions import MLQuestionsRetrieval
 from .mmdocir_t2i_retrieval import MMDocIRT2IRetrieval
 from .mmdocir_t2it_retrieval import MMDocIRT2ITRetrieval
+from .moment_seeker import MomentSeekerTI2VRetrieval, MomentSeekerTV2VRetrieval
 from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval
 from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
 from .msmarc_ov2_retrieval import MSMARCOv2
@@ -616,6 +617,8 @@ __all__ = [
     "MemGovern",
     "MemotionI2TRetrieval",
     "MemotionT2IRetrieval",
+    "MomentSeekerTI2VRetrieval",
+    "MomentSeekerTV2VRetrieval",
     "NFCorpus",
     "NIGHTSI2IRetrieval",
     "NQHardNegatives",
