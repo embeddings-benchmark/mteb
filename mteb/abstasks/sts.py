@@ -29,6 +29,19 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def _canonical_text_pair_keys(
+    text1: list[Any], text2: list[Any]
+) -> set[tuple[str, str]]:
+    """Return exact text-pair keys with sentence order removed."""
+    if len(text1) != len(text2):
+        raise ValueError("STS pair columns must contain the same number of rows")
+
+    return {
+        (left, right) if left <= right else (right, left)
+        for left, right in zip(text1, text2)
+    }
+
+
 class STSMetrics(TypedDict):
     """Metrics for STS tasks
 
@@ -195,12 +208,23 @@ class AbsTaskSTS(AbsTask):
                 else self.dataset[split]
             )
         )
+
+        def _load_split_col(target_split: str, col: str) -> list[Any]:
+            if hf_subset:
+                return list(self.dataset[hf_subset][target_split][col])
+            if compute_overall:
+                result: list[Any] = []
+                for subset in self.metadata.eval_langs:
+                    result.extend(self.dataset[subset][target_split][col])
+                return result
+            return list(self.dataset[target_split][col])
+
         if hf_subset:
             score = self.dataset[hf_subset][split]["score"]
             n = len(score)
 
             def _load_col(col: str) -> list[Any]:
-                return list(self.dataset[hf_subset][split][col])
+                return _load_split_col(split, col)
 
         elif compute_overall:
             score = []
@@ -209,17 +233,14 @@ class AbsTaskSTS(AbsTask):
             n = len(score)
 
             def _load_col(col: str) -> list[Any]:
-                result: list[Any] = []
-                for subset in self.metadata.eval_langs:
-                    result.extend(self.dataset[subset][split][col])
-                return result
+                return _load_split_col(split, col)
 
         else:
             score = self.dataset[split]["score"]
             n = len(score)
 
             def _load_col(col: str) -> list[Any]:
-                return list(self.dataset[split][col])
+                return _load_split_col(split, col)
 
         if isinstance(self.column_names[0], str) and len(self.metadata.modalities) == 1:
             modality = self.metadata.modalities[0]
@@ -238,7 +259,33 @@ class AbsTaskSTS(AbsTask):
         )
         labels_statistics = calculate_score_statistics(score)
 
-        return AnySTSDescriptiveStatistics(
+        pair_overlap: dict[str, int] | None = None
+        column1, column2 = self.column_names
+        if (
+            isinstance(column1, str)
+            and isinstance(column2, str)
+            and len(self.metadata.modalities) == 1
+            and self.metadata.modalities[0] == "text"
+            and not compute_overall
+        ):
+            current_pair_keys = _canonical_text_pair_keys(
+                _load_col(column1),
+                _load_col(column2),
+            )
+            pair_stats["unique_pairs"] = len(current_pair_keys)
+
+            split_dataset = self.dataset[hf_subset] if hf_subset else self.dataset
+            pair_overlap = {}
+            for other_split in split_dataset:
+                if other_split == split:
+                    continue
+                other_pair_keys = _canonical_text_pair_keys(
+                    _load_split_col(other_split, column1),
+                    _load_split_col(other_split, column2),
+                )
+                pair_overlap[other_split] = len(current_pair_keys & other_pair_keys)
+
+        statistics = AnySTSDescriptiveStatistics(
             num_samples=n,
             number_of_characters=(
                 pair_stats["text1_statistics"]["total_text_length"]
@@ -257,6 +304,9 @@ class AbsTaskSTS(AbsTask):
             video2_statistics=pair_stats["video2_statistics"],
             label_statistics=labels_statistics,
         )
+        if pair_overlap is not None:
+            statistics["pair_overlap"] = pair_overlap
+        return statistics
 
     def _push_dataset_to_hub(
         self,

@@ -283,6 +283,9 @@ class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
         num_samples: number of samples in the dataset.
         number_of_characters: Total number of symbols in the dataset.
         unique_pairs: Number of unique pairs
+        pair_overlap: Number of unique order-insensitive pairs shared with each
+            other split. This field marks statistics generated with the symmetric
+            STS pair-quality checks; it is absent from historical statistics.
 
         text1_statistics: Statistics for sentence1
         text2_statistics: Statistics for sentence2
@@ -302,6 +305,7 @@ class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
     num_samples: int
     number_of_characters: int | None
     unique_pairs: int | None
+    pair_overlap: NotRequired[dict[str, int]]
 
     text1_statistics: TextStatistics | None
     text2_statistics: TextStatistics | None
