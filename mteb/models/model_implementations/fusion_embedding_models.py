@@ -252,7 +252,7 @@ fusion_embedding_1_2b_preview = ModelMeta(
     model_type=["dense"],
     citation="""
 @software{fusion_embedding_2026,
-  title  = {Fusion Embedding 1: A Unified Embedding Space for Text,
+  title  = {Fusion Embedding: A Unified Embedding Space for Text,
             Image, Video, and Audio},
   author = {Tonmoy, Abdul Basit},
   year   = {2026},
@@ -310,11 +310,11 @@ fusion_embedding_2_2b_preview = ModelMeta(
     model_type=["dense"],
     citation="""
 @software{fusion_embedding_2026,
-  title  = {Fusion Embedding 2: A Unified Embedding Space for Text,
+  title  = {Fusion Embedding: A Unified Embedding Space for Text,
             Image, Video, and Audio},
   author = {Tonmoy, Abdul Basit},
   year   = {2026},
-  url    = {https://huggingface.co/EximiusLabs/fusion-embedding-2-2b-preview}
+  url    = {https://github.com/Eximius-Labs/fusion-embedding}
 }
 """,
     extra_requirements_groups=["fusion-embedding"],
