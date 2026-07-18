@@ -201,6 +201,7 @@ from .lmeb_retrieval import (
     ToolBench,
 )
 from .lotte_retrieval import LoTTERetrieval
+from .lovr_c2v import LoVRC2VRetrieval
 from .macs import MACSA2TRetrieval, MACST2ARetrieval
 from .medical_qa_retrieval import MedicalQARetrieval
 from .memotion_i2t_retrieval import MemotionI2TRetrieval
@@ -597,6 +598,7 @@ __all__ = [
     "LitSearchRetrieval",
     "LoCoMo",
     "LoTTERetrieval",
+    "LoVRC2VRetrieval",
     "LongMemEval",
     "LooGLE",
     "MACSA2TRetrieval",
