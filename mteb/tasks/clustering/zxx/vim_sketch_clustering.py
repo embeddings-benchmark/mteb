@@ -1,35 +1,34 @@
-from __future__ import annotations
-
-from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class VimSketchA2ARetrieval(AbsTaskRetrieval):
+class VimSketchImitationClustering(AbsTaskClustering):
+    label_column_name: str = "label"
+    input_column_name: str = "audio"
+    max_fraction_of_documents_to_embed = None
     metadata = TaskMetadata(
-        name="VimSketchA2ARetrieval",
+        name="VimSketchImitationClustering",
         description=(
-            "Query-by-vocal-imitation retrieval on the VimSketch dataset. Queries are "
-            "human vocal imitations of a sound and the corpus contains the 542 "
-            "reference sounds (environmental sounds, instruments and sound effects) "
-            "they imitate; the goal is to retrieve the imitated reference sound. VimSketch merges the Vocal Imitation Set and "
-            "VocalSketch and provides one reference recording per sound class. "
-            "Queries are downsampled to at most 4 imitations per reference "
-            "(2,168 queries)."
+            "Clustering of vocal imitations from the VimSketch dataset by the "
+            "sound they imitate: 1,230 human vocal imitations covering 50 "
+            "reference-sound classes sampled with a fixed seed (at most 40 "
+            "imitations per class). Labels are the imitated reference classes."
         ),
         reference="https://zenodo.org/record/2596911",
         dataset={
             "path": "dukesun99/VimSketch",
+            "name": "clustering",
             "revision": "466e0ea0ed8f50bad9c240f3bfc8426c08430aa2",
         },
-        type="Any2AnyRetrieval",
+        type="AudioClustering",
         category="a2a",
         modalities=["audio"],
         eval_splits=["test"],
         eval_langs=["zxx-Zxxx"],
-        main_score="ndcg_at_10",
+        main_score="v_measure",
         date=("2015-01-01", "2019-03-18"),
         domains=["AudioScene", "Spoken"],
-        task_subtypes=["Environment Sound Retrieval"],
+        task_subtypes=["Environment Sound Clustering"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
@@ -51,7 +50,4 @@ class VimSketchA2ARetrieval(AbsTaskRetrieval):
   year = {2018},
 }
 """,
-        prompt={
-            "query": "Retrieve the original sound that this vocal imitation mimics."
-        },
     )
