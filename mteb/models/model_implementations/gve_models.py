@@ -87,9 +87,17 @@ class GVEWrapper(AbsEncoder):
         video_processor = getattr(self.processor, "video_processor", None)
         if video_processor is not None:
             # matches the model card's video settings; frame sampling is
-            # already done by FramesCollator
+            # already done by FramesCollator. Newer processors read the
+            # pixel budget from size["longest_edge"], older ones from
+            # max_pixels; set both so frames stay within max_length.
+            max_video_pixels = 200 * 28 * 28
+            if isinstance(getattr(video_processor, "size", None), dict):
+                video_processor.size = {
+                    **video_processor.size,
+                    "longest_edge": max_video_pixels,
+                }
             if hasattr(video_processor, "max_pixels"):
-                video_processor.max_pixels = 200 * 28 * 28
+                video_processor.max_pixels = max_video_pixels
             if hasattr(video_processor, "do_sample_frames"):
                 video_processor.do_sample_frames = False
 
