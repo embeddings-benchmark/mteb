@@ -1,3 +1,8 @@
+---
+title: "Hybrid model"
+icon: lucide/merge
+---
+
 ## Using a Hybrid Model
 
 MTEB provides a unified [`mteb.HybridSearch`][mteb.HybridSearch] wrapper that allows you to combine multiple retrievers and cross-encoders using different fusion strategies (e.g. Reciprocal Rank Fusion, Distribution-Based Score Fusion, or custom fusion functions).
