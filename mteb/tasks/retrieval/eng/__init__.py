@@ -63,6 +63,7 @@ from .bright_v1_1_retrieval import (
 )
 from .browse_comp_plus_retrieval import BrowseCompPlusRetrieval
 from .built_bench_retrieval import BuiltBenchRetrieval
+from .castella_amr import CASTELLAAMRRetrieval
 from .chat_doctor_retrieval import ChatDoctorRetrieval
 from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
 from .chem_nq_retrieval import ChemNQRetrieval
@@ -472,6 +473,7 @@ __all__ = [
     "BrightTheoremQATheoremsRetrieval",
     "BrowseCompPlusRetrieval",
     "BuiltBenchRetrieval",
+    "CASTELLAAMRRetrieval",
     "CIRRIT2IRetrieval",
     "CMUArcticA2TRetrieval",
     "CMUArcticT2ARetrieval",
