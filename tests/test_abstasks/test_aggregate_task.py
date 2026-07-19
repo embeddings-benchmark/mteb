@@ -1,9 +1,12 @@
 """Tests for AbsTaskAggregate"""
 
 import logging
+import math
 
 import mteb
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
+from mteb.results.task_result import TaskResult
+from tests.mock_tasks import MockAggregatedTask
 
 logging.basicConfig(level=logging.INFO)
 
@@ -16,9 +19,6 @@ def test_is_aggregate_property_correct():
 
 
 def test_task_results_to_scores_isolates_splits():
-    from mteb.results.task_result import TaskResult
-    from tests.mock_tasks import MockAggregatedTask
-
     agg_task = MockAggregatedTask()
     # To test split isolation, the task MUST have at least two splits.
     # MockAggregatedTask only has 'test' by default, so we inject 'dev' for this test
@@ -94,11 +94,6 @@ def test_task_results_to_scores_isolates_splits():
 
 
 def test_task_results_to_scores_ignores_extra_tasks():
-    import math
-
-    from mteb.results.task_result import TaskResult
-    from tests.mock_tasks import MockAggregatedTask
-
     agg_task = MockAggregatedTask()
 
     # Provide the two expected tasks
@@ -169,9 +164,6 @@ def test_task_results_to_scores_ignores_extra_tasks():
 
 
 def test_task_results_to_scores_raises_on_missing_tasks():
-    from mteb.results.task_result import TaskResult
-    from tests.mock_tasks import MockAggregatedTask
-
     agg_task = MockAggregatedTask()
     agg_task.metadata = agg_task.metadata.model_copy(
         update={"eval_splits": ("test", "dev")}
