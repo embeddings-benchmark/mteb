@@ -230,9 +230,7 @@ class MRMRKnowledgeRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=_BIBTEX,
-        prompt={
-            "query": "Retrieve relevant documents that help answer the question."
-        },
+        prompt={"query": "Retrieve relevant documents that help answer the question."},
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
