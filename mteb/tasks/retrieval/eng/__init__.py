@@ -307,6 +307,7 @@ from .shot2story_retrieval import (
 from .siqa_retrieval import SIQA
 from .sketchy_i2i_retrieval import SketchyI2IRetrieval
 from .sop_i2i_retrieval import SOPI2IRetrieval
+from .sounding_earth import SoundingEarthA2IRetrieval, SoundingEarthI2ARetrieval
 from .spart_qa_retrieval import SpartQA
 from .spoken_s_qu_ad import SpokenSQuADT2ARetrieval
 from .stanford_cars_i2i_retrieval import StanfordCarsI2I
@@ -687,6 +688,8 @@ __all__ = [
     "Shot2Story20KVA2TRetrieval",
     "Shot2Story20KVT2ARetrieval",
     "SketchyI2IRetrieval",
+    "SoundingEarthA2IRetrieval",
+    "SoundingEarthI2ARetrieval",
     "SpartQA",
     "SpokenSQuADT2ARetrieval",
     "StanfordCarsI2I",

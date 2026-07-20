@@ -1081,7 +1081,7 @@ class ResultCache:
         try:
             with meta_file.open("r") as f:
                 meta_dict = f.read()
-            return ModelMeta.model_validate_json(meta_dict)
+            return ModelMeta.model_validate_json_resolved(meta_dict)
         except Exception as e:
             logger.warning(f"Failed to load ModelMeta from {meta_file}: {e}")
             return None
