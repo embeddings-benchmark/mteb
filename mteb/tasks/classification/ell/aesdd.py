@@ -1,5 +1,10 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
+
+# Corrupt/truncated WAV in the HF snapshot (no RIFF data chunk).
+_CORRUPTED_AUDIO_FILENAME = "s05 (3).wav"
 
 
 class AESDD(AbsTaskClassification):
@@ -42,3 +47,21 @@ class AESDD(AbsTaskClassification):
     label_column_name: str = "label"
 
     is_cross_validation: bool = True
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        """Drop the one corrupt WAV that cannot be decoded."""
+        from datasets import Audio
+
+        for split in self.dataset:
+            split_ds = self.dataset[split].cast_column(
+                self.input_column_name, Audio(decode=False)
+            )
+            split_ds = split_ds.filter(
+                lambda example, bad=_CORRUPTED_AUDIO_FILENAME: not example[
+                    self.input_column_name
+                ]["path"].endswith(bad),
+                num_proc=num_proc,
+            )
+            self.dataset[split] = split_ds.cast_column(
+                self.input_column_name, Audio(decode=True)
+            )
