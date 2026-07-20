@@ -7,7 +7,12 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class SlovakNLI(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="SlovakNLI",
-        description="Slovak Handwritten Annotated NLI dataset",
+        description=(
+            "A Slovak Natural Language Inference (NLI) dataset with human annotations. "
+            "NLI is the task of determining whether a hypothesis sentence is entailed by, "
+            "contradicts, or is neutral with respect to a given premise sentence. "
+            "The dataset covers news and web domains and was manually annotated by human annotators."
+        ),
         reference="https://huggingface.co/datasets/natalia-nk/NLI-SK-annotated",
         dataset={
             "path": "natalia-nk/NLI-SK-annotated",

@@ -12,7 +12,12 @@ class SlovakRTE(AbsTaskPairClassification):
             "revision": "10549a8c63542e6a0db4fcf5fcdc29b3e1b8c4e9",
             "name": "rte",
         },
-        description="Slovak Recognizing Textual Entailment dataset. Professional translation and human verification of English RTE datasets (combining multiple sources) for Slovak language. The task is binary classification (entailment vs. not entailment).",
+        description=(
+            "Slovak Textual Entailment dataset. The task is binary classification of document pairs "
+            "(entailment vs. not entailment), determining whether a hypothesis sentence logically "
+            "follows from a given premise. The dataset is a professional translation of English RTE "
+            "datasets, combining multiple sources."
+        ),
         reference="https://aclanthology.org/2025.findings-acl.1371",
         type="PairClassification",
         category="t2t",

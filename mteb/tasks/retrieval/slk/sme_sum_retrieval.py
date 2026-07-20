@@ -7,15 +7,11 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class SMESumRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SMESumRetrieval",
-        description="""
-            SMESum, a Slovak news summarization dataset consisting of 80,000
-            news articles with titles and introductions obtained from the SME news portal.
-
-            Originally intended as a summarization task, but since no human annotations were provided
-            here reformulated to a retrieval task. The task uses article introductions as queries
-            to retrieve full documents, representing a realistic use case of finding articles
-            from their abstracts.
-        """,
+        description=(
+            "SMESum is a Slovak news summarization dataset consisting of 80,000 news articles "
+            "with titles and introductions obtained from the SME news portal. "
+            "The task uses article introductions as queries to retrieve full documents."
+        ),
         reference="https://huggingface.co/datasets/NaiveNeuron/SMESum",
         dataset={
             "path": "NaiveNeuron/SMESum",

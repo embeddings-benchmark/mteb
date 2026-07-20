@@ -5,7 +5,13 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class SkQuadReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SkQuadReranking",
-        description=""" From Retrieval Sk QUAD """,
+        description=(
+            "A Slovak reranking task derived from the SK-QuAD question answering dataset. "
+            "The queries are factual questions in Slovak, and the corpus consists of "
+            "Wikipedia-based encyclopaedic passages. "
+            "The goal is to rerank candidate passages by their relevance to a given question, "
+            "placing the passage that correctly answers the question highest."
+        ),
         reference="https://huggingface.co/datasets/TUKE-KEMT/reranking-skquad",
         dataset={
             "path": "TUKE-KEMT/reranking-skquad",

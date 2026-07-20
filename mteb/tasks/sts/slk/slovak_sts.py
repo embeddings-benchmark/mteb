@@ -10,7 +10,14 @@ class SlovakSTS(AbsTaskSTS):
             "revision": "2e428d17ae4178dae14f6643785647fc9f30edaa",
             "name": "sts",
         },
-        description="Professional Slovak translation of the original GLUE STSb dataset.",
+        description=(
+            "A professional Slovak translation of the STS Benchmark (STSb), "
+            "originally part of the GLUE benchmark. "
+            "The task is Semantic Textual Similarity (STS): given a pair of sentences, "
+            "the goal is to predict their semantic similarity on a continuous scale "
+            "from 0 (completely unrelated) to 5 (semantically equivalent). "
+            "Sentence pairs are drawn from news headlines, image captions, and forum posts."
+        ),
         reference="https://aclanthology.org/2025.findings-acl.1371",
         type="STS",
         category="t2t",
