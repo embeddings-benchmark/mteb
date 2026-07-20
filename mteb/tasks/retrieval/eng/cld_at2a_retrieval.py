@@ -42,16 +42,6 @@ class CLDAT2ARetrieval(AbsTaskRetrieval):
   url = {https://arxiv.org/abs/2502.04476},
   year = {2025},
 }
-
-@misc{drossos2019clothoaudiocaptioningdataset,
-  archiveprefix = {arXiv},
-  author = {Konstantinos Drossos and Samuel Lipping and Tuomas Virtanen},
-  eprint = {1910.09387},
-  primaryclass = {cs.SD},
-  title = {Clotho: An Audio Captioning Dataset},
-  url = {https://arxiv.org/abs/1910.09387},
-  year = {2019},
-}
 """,
         prompt={
             "query": "Given the source audio and a description of how the target differs from it, retrieve the target audio."
