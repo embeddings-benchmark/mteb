@@ -1,7 +1,12 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, ClassVar
+
 from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 
 class VELOCITIPairClassification(AbsTaskPairClassification):
@@ -44,6 +49,6 @@ class VELOCITIPairClassification(AbsTaskPairClassification):
 """,
     )
 
-    input1_column_name = {"video": "video"}
-    input2_column_name = {"text": "text"}
+    input1_column_name: ClassVar[Mapping[str, str]] = {"video": "video"}
+    input2_column_name: ClassVar[Mapping[str, str]] = {"text": "text"}
     label_column_name: str = "label"
