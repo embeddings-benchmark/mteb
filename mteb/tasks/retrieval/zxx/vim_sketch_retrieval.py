@@ -35,20 +35,18 @@ class VimSketchA2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{cartwright2015vocalsketch,
-  author = {Cartwright, Mark and Pardo, Bryan},
-  booktitle = {Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems},
-  pages = {43--46},
-  title = {VocalSketch: Vocally Imitating Audio Concepts},
-  year = {2015},
-}
-
-@inproceedings{kim2018vocal,
-  author = {Kim, Bongjun and Ghei, Madhav and Pardo, Bryan and Duan, Zhiyao},
-  booktitle = {Proceedings of the Detection and Classification of Acoustic Scenes and Events 2018 Workshop (DCASE2018)},
-  pages = {148--152},
-  title = {Vocal Imitation Set: a dataset of vocally imitated sound events using the AudioSet ontology},
-  year = {2018},
+@dataset{bongjun_kim_2019_2596911,
+  author       = {Bongjun Kim and
+                  Mark Cartwright and
+                  Fatemeh Pishdadian and
+                  Bryan Pardo},
+  title        = {VimSketch Dataset},
+  month        = mar,
+  year         = 2019,
+  publisher    = {Zenodo},
+  version      = {1.0},
+  doi          = {10.5281/zenodo.2596911},
+  url          = {https://doi.org/10.5281/zenodo.2596911},
 }
 """,
         prompt={
