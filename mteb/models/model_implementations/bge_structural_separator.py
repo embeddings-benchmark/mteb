@@ -1,11 +1,7 @@
 from __future__ import annotations
 
-import hashlib
-import json
-import os
 import re
 import tempfile
-import urllib.request
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -19,80 +15,17 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
 MODEL_NAME = "thu-nmrc/bge-small-structural-separator"
-MODEL_REVISION = "e8b0a9325409d791981b7410679ae8c152fd6e00"
+MODEL_REVISION = "9a0a8aa92400202dd1ef6950ed9cd4a116dfb03d"
 BASE_MODEL_NAME = "BAAI/bge-small-en-v1.5"
 BASE_MODEL_REVISION = "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
-ARTIFACT_SHA256 = "3c8e7babb89cdf530c311935d143841513bceb7922b51534bcc9c5b5c6d80083"
-MANIFEST_SHA256 = "7c052cf792fa468fd2e9cf42a289dd906c8fa2f2619371428425c69d961da63b"
-REPOSITORY_URL = "https://github.com/thu-nmrc/bge-small-structural-separator"
-RAW_ROOT = f"https://raw.githubusercontent.com/thu-nmrc/bge-small-structural-separator/{MODEL_REVISION}"
-
-
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for block in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(block)
-    return digest.hexdigest()
-
-
-def _download_verified(url: str, destination: Path, expected_sha256: str) -> Path:
-    if destination.exists() and _sha256(destination) == expected_sha256:
-        return destination
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    if not url.startswith("https://raw.githubusercontent.com/"):
-        raise ValueError(f"Artifact URL must use the pinned GitHub HTTPS origin: {url}")
-    request = urllib.request.Request(  # noqa: S310 - origin is allowlisted above
-        url, headers={"User-Agent": "mteb-structural-separator"}
-    )
-    with urllib.request.urlopen(request) as response:  # noqa: S310 - request origin is allowlisted above
-        payload = response.read()
-    if hashlib.sha256(payload).hexdigest() != expected_sha256:
-        raise RuntimeError(f"Downloaded artifact failed SHA256 verification: {url}")
-    handle, temporary_name = tempfile.mkstemp(
-        prefix=f".{destination.name}.", dir=destination.parent
-    )
-    try:
-        with os.fdopen(handle, "wb") as stream:
-            stream.write(payload)
-        Path(temporary_name).replace(destination)
-    except BaseException:
-        try:
-            Path(temporary_name).unlink()
-        except FileNotFoundError:
-            pass
-        raise
-    return destination
-
-
-def _resolve_artifacts(artifact_dir: str | Path | None) -> tuple[Path, Path]:
-    directory = (
-        Path(artifact_dir).expanduser()
-        if artifact_dir is not None
-        else Path.home()
-        / ".cache"
-        / "mteb"
-        / MODEL_NAME.replace("/", "--")
-        / MODEL_REVISION
-    )
-    artifact = directory / "separator_row.pt"
-    manifest = directory / "training_manifest.json"
-    if artifact_dir is None:
-        _download_verified(
-            f"{RAW_ROOT}/artifacts/separator_row.pt", artifact, ARTIFACT_SHA256
-        )
-        _download_verified(
-            f"{RAW_ROOT}/artifacts/training_manifest.json", manifest, MANIFEST_SHA256
-        )
-    if not artifact.exists() or not manifest.exists():
-        raise FileNotFoundError(
-            f"Expected separator_row.pt and training_manifest.json in {directory}"
-        )
-    if _sha256(artifact) != ARTIFACT_SHA256 or _sha256(manifest) != MANIFEST_SHA256:
-        raise RuntimeError(
-            "Local structural-separator artifacts failed immutable SHA256 verification"
-        )
-    return artifact, manifest
+REPOSITORY_URL = "https://huggingface.co/thu-nmrc/bge-small-structural-separator"
+TRAINING_REPOSITORY_URL = (
+    "https://github.com/thu-nmrc/bge-small-structural-separator"
+)
+TRAINING_REPOSITORY_REVISION = "e8b0a9325409d791981b7410679ae8c152fd6e00"
+SEPARATOR_SYMBOL = "[unused2]"
+SEPARATOR_TOKEN_ID = 3
+MAX_LENGTH = 512
 
 
 def _row_id(row: dict[str, Any]) -> str:
@@ -150,8 +83,7 @@ class StructuralSeparatorSearch:
         revision: str | None,
         *,
         device: str | None = None,
-        artifact_dir: str | Path | None = None,
-        base_model_source: str | Path | None = None,
+        model_source: str | Path | None = None,
         batch_size: int = 64,
         index_encoding_chunk_size: int = 4_096,
         query_search_batch_size: int = 64,
@@ -160,21 +92,11 @@ class StructuralSeparatorSearch:
     ) -> None:
         if model_name != MODEL_NAME or revision not in {None, MODEL_REVISION}:
             raise ValueError(f"Unsupported model identity: {model_name}@{revision}")
-        artifact_path, manifest_path = _resolve_artifacts(artifact_dir)
-        self.training_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        if self.training_manifest["artifact_sha256"] != ARTIFACT_SHA256:
-            raise RuntimeError(
-                "Training manifest does not identify the pinned separator artifact"
-            )
-        if self.training_manifest["encoder_revision"] != BASE_MODEL_REVISION:
-            raise RuntimeError(
-                "Training manifest does not identify the pinned base-model revision"
-            )
 
         from transformers import AutoModel, AutoTokenizer
 
-        source = str(base_model_source or BASE_MODEL_NAME)
-        source_revision = None if base_model_source is not None else BASE_MODEL_REVISION
+        source = str(model_source or MODEL_NAME)
+        source_revision = None if model_source is not None else MODEL_REVISION
         self.device = torch.device(
             device or ("mps" if torch.backends.mps.is_available() else "cpu")
         )
@@ -184,21 +106,11 @@ class StructuralSeparatorSearch:
             .to(self.device)
             .eval()
         )
-        saved = torch.load(artifact_path, map_location="cpu", weights_only=True)
-        self.separator_token_id = int(saved["separator_token_id"])
-        if (
-            self.tokenizer.convert_ids_to_tokens(self.separator_token_id)
-            != saved["separator_token"]
-        ):
-            raise RuntimeError(
-                "Separator token does not match the pinned base tokenizer"
-            )
-        with torch.no_grad():
-            self.backbone.get_input_embeddings().weight[self.separator_token_id].copy_(
-                saved["separator_row"]
-            )
+        self.separator_token_id = SEPARATOR_TOKEN_ID
+        if self.tokenizer.convert_ids_to_tokens(SEPARATOR_TOKEN_ID) != SEPARATOR_SYMBOL:
+            raise RuntimeError("Separator token does not match the pinned tokenizer")
 
-        self.max_length = int(self.training_manifest["max_length"])
+        self.max_length = MAX_LENGTH
         self.batch_size = int(batch_size)
         self.index_encoding_chunk_size = int(index_encoding_chunk_size)
         self.query_search_batch_size = int(query_search_batch_size)
@@ -414,7 +326,9 @@ bge_small_structural_separator = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch", "Transformers"],
     use_instructions=False,
-    public_training_code=f"{REPOSITORY_URL}/tree/{MODEL_REVISION}/training",
+    public_training_code=(
+        f"{TRAINING_REPOSITORY_URL}/tree/{TRAINING_REPOSITORY_REVISION}/training"
+    ),
     public_training_data="https://allenai.org/data/s2orc",
     training_datasets=set(),
     adapted_from=BASE_MODEL_NAME,
