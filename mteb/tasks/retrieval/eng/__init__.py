@@ -308,6 +308,7 @@ from .sketchy_i2i_retrieval import SketchyI2IRetrieval
 from .sop_i2i_retrieval import SOPI2IRetrieval
 from .sounding_earth import SoundingEarthA2IRetrieval, SoundingEarthI2ARetrieval
 from .spart_qa_retrieval import SpartQA
+from .speech_coco import SpeechCocoA2IRetrieval, SpeechCocoI2ARetrieval
 from .spoken_s_qu_ad import SpokenSQuADT2ARetrieval
 from .stanford_cars_i2i_retrieval import StanfordCarsI2I
 from .temp_reason_l1_retrieval import TempReasonL1
@@ -688,6 +689,8 @@ __all__ = [
     "SoundingEarthA2IRetrieval",
     "SoundingEarthI2ARetrieval",
     "SpartQA",
+    "SpeechCocoA2IRetrieval",
+    "SpeechCocoI2ARetrieval",
     "SpokenSQuADT2ARetrieval",
     "StanfordCarsI2I",
     "TUBerlinT2IRetrieval",
