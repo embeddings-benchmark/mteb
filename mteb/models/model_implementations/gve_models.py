@@ -45,8 +45,8 @@ class GVEWrapper(AbsEncoder):
 
     Frame sampling defaults to fps=2 capped at 32 frames, denser than the
     model card's 8-frame demo: with the 200*28*28 per-frame pixel budget,
-    32 frames come to ~800 video tokens, staying within max_length while
-    matching the sampling density of other mteb video wrappers.
+    max_length is 4096 (vs the demo's 1200) so dense video batches never
+    truncate vision tokens; text-only batches still pad to longest-in-batch.
     """
 
     def __init__(
@@ -55,7 +55,7 @@ class GVEWrapper(AbsEncoder):
         revision: str,
         *,
         device: str | None = None,
-        max_length: int = 1200,
+        max_length: int = 4096,
         fps: float | None = 2.0,
         max_frames: int | None = 32,
         num_frames: int | None = None,
