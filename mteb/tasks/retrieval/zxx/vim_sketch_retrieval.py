@@ -36,17 +36,17 @@ class VimSketchA2ARetrieval(AbsTaskRetrieval):
         sample_creation="created",
         bibtex_citation=r"""
 @dataset{bongjun_kim_2019_2596911,
-  author       = {Bongjun Kim and
-                  Mark Cartwright and
-                  Fatemeh Pishdadian and
-                  Bryan Pardo},
-  title        = {VimSketch Dataset},
-  month        = mar,
-  year         = 2019,
-  publisher    = {Zenodo},
-  version      = {1.0},
-  doi          = {10.5281/zenodo.2596911},
-  url          = {https://doi.org/10.5281/zenodo.2596911},
+  author = {Bongjun Kim and
+Mark Cartwright and
+Fatemeh Pishdadian and
+Bryan Pardo},
+  doi = {10.5281/zenodo.2596911},
+  month = mar,
+  publisher = {Zenodo},
+  title = {VimSketch Dataset},
+  url = {https://doi.org/10.5281/zenodo.2596911},
+  version = {1.0},
+  year = {2019},
 }
 """,
         prompt={
