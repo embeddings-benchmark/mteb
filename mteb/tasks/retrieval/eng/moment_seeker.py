@@ -37,7 +37,9 @@ def _load_momentseeker(task: AbsTaskRetrieval, direction: str) -> None:
     path = task.metadata.dataset["path"]
     revision = task.metadata.dataset["revision"]
     corpus = load_dataset(path, "corpus", split="test", revision=revision)
-    queries = load_dataset(path, f"{direction}-queries", split="test", revision=revision)
+    queries = load_dataset(
+        path, f"{direction}-queries", split="test", revision=revision
+    )
     qrels_ds = load_dataset(path, f"{direction}-qrels", split="test", revision=revision)
     qrels: dict[str, dict[str, int]] = {}
     for row in qrels_ds:
