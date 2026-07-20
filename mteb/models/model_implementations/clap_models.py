@@ -11,6 +11,7 @@ from transformers.modeling_outputs import BaseModelOutputWithPooling
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -311,4 +312,30 @@ larger_clap_music_and_speech = ModelMeta(
       url={https://arxiv.org/abs/2211.06687},
 }
 """,
+)
+
+clap_large_v2 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs={"trust_remote_code": True},
+    name="laion/voiceclap-large-v2",
+    languages=["eng-Latn", "deu-Latn", "fra-Latn", "spa-Latn", "zho-Hans"],
+    revision="68ee637005607c8736e70bb5133270b60c1f8228",
+    release_date="2026-06-11",
+    modalities=["text", "audio"],
+    n_parameters=8_931_813_888,
+    n_embedding_parameters=544_997_376,
+    memory_usage_mb=17043,
+    max_tokens=32768,
+    embed_dim=3584,
+    license="cc-by-4.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["Sentence Transformers", "PyTorch"],
+    reference="https://huggingface.co/laion/voiceclap-large-v2",
+    similarity_fn_name="cosine",
+    use_instructions=False,
+    training_datasets=None,
+    adapted_from="LCO-Embedding/LCO-Embedding-Omni-7B",
+    extra_requirements_groups=["multimodal-sbert"],
 )
