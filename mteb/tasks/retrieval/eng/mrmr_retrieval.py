@@ -129,7 +129,7 @@ class MRMRNegationRetrieval(AbsTaskRetrieval):
         sample_creation="created",
         bibtex_citation=_BIBTEX,
         prompt={
-            "query": "Retrieve the document that satisfies the query, paying attention to negated constraints."
+            "query": "Given an image, retrieve descriptions that have contradictory information with the image."
         },
     )
 
@@ -163,7 +163,7 @@ class MRMRDesignRetrieval(AbsTaskRetrieval):
         sample_creation="created",
         bibtex_citation=_BIBTEX,
         prompt={
-            "query": "Retrieve the design document that matches the requirements expressed in the query."
+            "query": "Given a vehicle design, retrieve the design requirements that it violates."
         },
     )
 
@@ -197,7 +197,7 @@ class MRMRTrafficRetrieval(AbsTaskRetrieval):
         sample_creation="created",
         bibtex_citation=_BIBTEX,
         prompt={
-            "query": "Retrieve the document about the traffic scenario that answers the query."
+            "query": "Given a traffic case, retrieve the driving rule documents that it violates."
         },
     )
 
@@ -231,7 +231,7 @@ class MRMRKnowledgeRetrieval(AbsTaskRetrieval):
         sample_creation="created",
         bibtex_citation=_BIBTEX,
         prompt={
-            "query": "Retrieve the document containing the knowledge needed to answer the query."
+            "query": "Retrieve relevant documents that help answer the question."
         },
     )
 
@@ -265,7 +265,7 @@ class MRMRTheoremRetrieval(AbsTaskRetrieval):
         sample_creation="created",
         bibtex_citation=_BIBTEX,
         prompt={
-            "query": "Retrieve the document stating the theorem or result relevant to the query."
+            "query": "Retrieve relevant theorems that are involved in solving the problem."
         },
     )
 
