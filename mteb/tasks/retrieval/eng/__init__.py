@@ -68,7 +68,7 @@ from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
 from .chem_nq_retrieval import ChemNQRetrieval
 from .chemrxiv import ChemRxivRetrieval
 from .cirr_it2i_retrieval import CIRRIT2IRetrieval
-from .cld_at2a_retrieval import CLDAT2ARetrieval
+from .cld_at2a_retrieval import CLDA2TRetrieval, CLDAT2ARetrieval
 from .climate_fever_retrieval import (
     ClimateFEVER,
     ClimateFEVERHardNegatives,
@@ -475,6 +475,7 @@ __all__ = [
     "BuiltBenchRetrieval",
     "CIRRIT2IRetrieval",
     "CLDAT2ARetrieval",
+    "CLDA2TRetrieval",
     "CMUArcticA2TRetrieval",
     "CMUArcticT2ARetrieval",
     "CQADupstackAndroidRetrieval",

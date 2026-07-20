@@ -47,3 +47,47 @@ class CLDAT2ARetrieval(AbsTaskRetrieval):
             "query": "Given the source audio and a description of how the target differs from it, retrieve the target audio."
         },
     )
+
+
+class CLDA2TRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="CLDA2TRetrieval",
+        description=(
+            "Audio-to-text difference retrieval built from the CLD (Clotho-Difference) "
+            "subset of ADIFF. Each query is a Clotho v2.1 audio clip, and the goal is to "
+            "retrieve, from a corpus of 2,000 natural-language difference descriptions, "
+            "the description(s) that characterise this clip against a paired clip. It is "
+            "the audio-to-text inversion of CLDAT2ARetrieval over the same 2,000 "
+            "language-model-generated difference captions from the ADIFF authors."
+        ),
+        reference="https://arxiv.org/abs/2502.04476",
+        dataset={
+            "path": "dukesun99/CLD-A2T",
+            "revision": "cb33bcc92952eeba8c9458be77e97fbe2423677c",
+        },
+        type="Any2AnyRetrieval",
+        category="a2t",
+        modalities=["audio", "text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=("2019-01-01", "2025-02-01"),
+        domains=["AudioScene"],
+        task_subtypes=["Environment Sound Retrieval"],
+        license="mit",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="created",
+        bibtex_citation=r"""
+@inproceedings{deshmukh2025adiff,
+  author = {Deshmukh, Soham and Han, Shuo and Singh, Rita and Raj, Bhiksha},
+  booktitle = {The Thirteenth International Conference on Learning Representations (ICLR)},
+  title = {ADIFF: Explaining audio difference using natural language},
+  url = {https://arxiv.org/abs/2502.04476},
+  year = {2025},
+}
+""",
+        prompt={
+            "query": "Given an audio clip, retrieve the description of how it differs from another audio clip."
+        },
+    )
