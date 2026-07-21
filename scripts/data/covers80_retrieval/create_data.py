@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Package LabROSA Covers80 into MTEB a2a retrieval format.
 
 Expects the official coversongs layout from
