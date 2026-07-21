@@ -61,7 +61,7 @@ def main() -> None:
         required=True,
         help="Path to LabROSA covers32k/ (song folders with mp3s)",
     )
-    parser.add_argument("--repo-id", default="wissam-sib/Covers80-A2A")
+    parser.add_argument("--repo-id", required=True, help="Hugging Face repo ID")
     parser.add_argument("--push", action="store_true")
     args = parser.parse_args()
 
@@ -115,7 +115,7 @@ def main() -> None:
     qrels_ds = Dataset.from_dict(qrels)
 
     if args.push:
-        token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
+        token = os.environ.get("HF_TOKEN")
         if not token:
             raise SystemExit("Set HF_TOKEN to push")
         create_repo(args.repo_id, repo_type="dataset", token=token, exist_ok=True)
