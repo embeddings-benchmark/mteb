@@ -11,7 +11,11 @@ def _fill_none_text(texts: list[str | None]) -> dict:
     return {"text": [t if t is not None else "" for t in texts]}
 
 
-def _load_mrmr(task: AbsTaskRetrieval, num_proc: int | None = None) -> None:
+def _load_mrmr(
+    task: AbsTaskRetrieval,
+    num_proc: int | None = None,
+    build_top_ranked: bool = False,
+) -> None:
     """Shared loader for the MRMR subsets.
 
     The corpus mixes text-only and interleaved image-text documents, so the raw
@@ -70,13 +74,25 @@ def _load_mrmr(task: AbsTaskRetrieval, num_proc: int | None = None) -> None:
         num_proc=num_proc,
     )
 
+    top_ranked = None
+    if build_top_ranked:
+        # Each negation query q has exactly four candidate documents whose corpus
+        # ids are the query id plus a candidate suffix (q_1..q_4), and the paper
+        # scores this subset as Hit@1 over those four candidates. Expose the
+        # candidate sets as a top_ranked split so the task reranks each query's
+        # four candidates rather than the full corpus.
+        groups: dict[str, list[str]] = {}
+        for cid in corpus["id"]:
+            groups.setdefault(cid.rsplit("_", 1)[0], []).append(cid)
+        top_ranked = {q: sorted(groups[q]) for q in queries["id"] if q in groups}
+
     task.dataset = {
         "default": {
             "test": RetrievalSplitData(
                 corpus=corpus,
                 queries=queries,
                 relevant_docs=qrels,
-                top_ranked=None,
+                top_ranked=top_ranked,
             )
         }
     }
@@ -108,7 +124,9 @@ class MRMRNegationRetrieval(AbsTaskRetrieval):
         description=_DESCRIPTION
         + "The negation subset requires retrieving the image that satisfies a caption "
         "with negated constraints (contradiction retrieval), e.g. an image containing "
-        "certain objects but not others.",
+        "certain objects but not others. Each query has exactly four candidate "
+        "documents (exposed as a top_ranked split), so the task reranks the four "
+        "candidates and is scored by Hit@1, matching the paper's protocol.",
         reference=_REFERENCE,
         dataset={
             "path": "MRMRbenchmark/negation",
@@ -119,7 +137,7 @@ class MRMRNegationRetrieval(AbsTaskRetrieval):
         modalities=["image", "text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
+        main_score="recall_at_1",
         date=("2025-01-01", "2025-10-01"),
         domains=["Scene"],
         task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
@@ -134,7 +152,7 @@ class MRMRNegationRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_mrmr(self, num_proc=num_proc)
+        _load_mrmr(self, num_proc=num_proc, build_top_ranked=True)
 
 
 class MRMRDesignRetrieval(AbsTaskRetrieval):
