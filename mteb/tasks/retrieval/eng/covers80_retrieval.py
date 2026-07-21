@@ -11,13 +11,12 @@ class Covers80A2ARetrieval(AbsTaskRetrieval):
             "Audio-to-audio cover-song retrieval on the classic Covers80 dataset: "
             "80 songs with 2 recordings each (160 tracks). A query recording should "
             "retrieve the other recording of the same work (cover / alternate "
-            "performance). Packaged from the LabROSA covers32k/ tree via "
-            "scripts/data/covers80_retrieval/create_data.py."
+            "performance). Packaged from the LabROSA covers dataset."
         ),
         reference="https://labrosa.ee.columbia.edu/projects/coversongs/covers80/",
         dataset={
-            "path": "wissam-sib/Covers80-A2A",
-            "revision": "main",
+            "path": "Wissam42/Covers80-A2A",
+            "revision": "37145bdba45d5593c8a171998dd797a360c6cf96",
         },
         type="Any2AnyRetrieval",
         category="a2a",
