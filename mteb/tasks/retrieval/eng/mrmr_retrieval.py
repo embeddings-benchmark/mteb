@@ -137,7 +137,7 @@ class MRMRNegationRetrieval(AbsTaskRetrieval):
         modalities=["image", "text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="recall_at_1",
+        main_score="hit_rate_at_1",
         date=("2025-01-01", "2025-10-01"),
         domains=["Scene"],
         task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
