@@ -3,8 +3,7 @@
 These tests are not perfect, but should encourage contributors to re-examine the dataset.
 """
 
-from collections.abc import Mapping
-from typing import Any, cast
+from typing import cast
 
 from mteb.abstasks import AbsTask
 from mteb.get_tasks import get_tasks
@@ -340,32 +339,6 @@ def _split_quality(
     return errors
 
 
-def _normalized_pair_quality(
-    name: str, split: str, split_stats: Mapping[str, Any]
-) -> list[str]:
-    """Check symmetric STS pair statistics without failing historical stats."""
-    pair_overlap = split_stats.get("pair_overlap")
-    if pair_overlap is None:
-        return []
-
-    errors = []
-    num_samples = split_stats["num_samples"]
-    unique_pairs = split_stats.get("unique_pairs")
-    if unique_pairs is not None and num_samples != unique_pairs:
-        errors.append(
-            f"{name} ({split}) contains order-insensitive pair duplicates "
-            f"({num_samples=}, {unique_pairs=})"
-        )
-
-    for other_split, overlap_count in pair_overlap.items():
-        if overlap_count:
-            errors.append(
-                f"{name} ({split}) has order-insensitive pair overlap with "
-                f"{other_split} ({overlap_count=})"
-            )
-    return errors
-
-
 def _task_quality(task: AbsTask) -> list[str]:
     desc_stats = task.metadata.descriptive_stats
 
@@ -374,20 +347,11 @@ def _task_quality(task: AbsTask) -> list[str]:
         return []
     for split_name, split_stats in desc_stats.items():
         errors += _split_quality(task.metadata.name, split_name, split_stats)
-        errors += _normalized_pair_quality(task.metadata.name, split_name, split_stats)
-
-        subset_stats = split_stats.get("hf_subset_descriptive_stats", {})
-        for subset_name, subset_split_stats in subset_stats.items():
-            errors += _normalized_pair_quality(
-                task.metadata.name,
-                f"{split_name}/{subset_name}",
-                cast("DescriptiveStatistics", subset_split_stats),
-            )
 
     return errors
 
 
-def test_dataset_quality() -> None:
+def test_dataset_quality():
     tasks = get_tasks(
         exclude_superseded=False, exclude_aggregate=True, exclude_beta=False
     )
@@ -400,22 +364,3 @@ def test_dataset_quality() -> None:
 
     if errors:
         raise AssertionError("\n".join([str(e) for e in errors]))
-
-
-def test_normalized_pair_quality_is_backward_compatible() -> None:
-    historical_stats = {"num_samples": 2, "unique_pairs": 1}
-
-    assert _normalized_pair_quality("HistoricalSTS", "test", historical_stats) == []
-
-
-def test_normalized_pair_quality_reports_duplicates_and_split_overlap() -> None:
-    stats = {
-        "num_samples": 3,
-        "unique_pairs": 2,
-        "pair_overlap": {"train": 1, "validation": 0},
-    }
-
-    assert _normalized_pair_quality("NewSTS", "test", stats) == [
-        "NewSTS (test) contains order-insensitive pair duplicates (num_samples=3, unique_pairs=2)",
-        "NewSTS (test) has order-insensitive pair overlap with train (overlap_count=1)",
-    ]

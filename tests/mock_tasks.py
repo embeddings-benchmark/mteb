@@ -1295,7 +1295,6 @@ class MockSTSTask(AbsTaskSTS):
             "num_samples": 2,
             "number_of_characters": 113,
             "unique_pairs": 2,
-            "pair_overlap": {},
             "text1_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -1384,7 +1383,6 @@ class MockMultilingualSTSTask(AbsTaskSTS):
                     "num_samples": 2,
                     "number_of_characters": 113,
                     "unique_pairs": 2,
-                    "pair_overlap": {},
                     "text1_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -1415,7 +1413,6 @@ class MockMultilingualSTSTask(AbsTaskSTS):
                     "num_samples": 2,
                     "number_of_characters": 113,
                     "unique_pairs": 2,
-                    "pair_overlap": {},
                     "text1_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
