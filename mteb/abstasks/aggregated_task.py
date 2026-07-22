@@ -62,18 +62,34 @@ class AbsTaskAggregate(AbsTask):
             if isinstance(self.metadata.eval_langs, dict)
             else [self.metadata.eval_langs]
         )
+
+        valid_task_results = [
+            tr for tr in task_results if tr.task_name in self.taskname_to_task
+        ]
+
+        provided_task_names = {tr.task_name for tr in valid_task_results}
+        missing_tasks = set(self.taskname_to_task.keys()) - provided_task_names
+        is_missing = len(missing_tasks) > 0
+        if is_missing:
+            logger.info(
+                f"Missing task results for required tasks: {missing_tasks}. Setting evaluation to None."
+            )
+
         for split in self.metadata.eval_splits:
             main_scores = []
-            for task_res in task_results:
-                for langs in eval_langs:
-                    main_scores.append(
-                        task_res._get_score_fast(
-                            languages=[lang.split("-")[0] for lang in langs],
-                            splits=self.metadata.eval_splits,
-                            subsets=subsets,
+            if not is_missing:
+                for task_res in valid_task_results:
+                    for langs in eval_langs:
+                        main_scores.append(
+                            task_res._get_score_fast(
+                                languages=[lang.split("-")[0] for lang in langs],
+                                splits=[split],
+                                subsets=subsets,
+                            )
                         )
-                    )
-            main_score = np.mean(main_scores)
+                main_score = np.mean(main_scores)
+            else:
+                main_score = None
             scores[split] = {
                 "default": {
                     self.metadata.main_score: main_score,
