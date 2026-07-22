@@ -26,7 +26,7 @@ class FLAREUnifiedT2VARetrieval(AbsTaskRetrieval):
         name="FLAREUnifiedT2VARetrieval",
         description=_DESCRIPTION
         + " This task uses unified user-simulated text queries to retrieve the "
-        "matching audiovisual clip (text → video+audio). It is based on a 1k " 
+        "matching audiovisual clip (text → video+audio). It is based on a 1k "
         "subset of the original FLARE dataset.",
         reference=_REFERENCE,
         dataset={
