@@ -46,7 +46,5 @@ class CASTELLAAMRRetrieval(AbsTaskRetrieval):
   year = {2025},
 }
 """,
-        prompt={
-            "query": "Retrieve the recording that contains the described moment."
-        },
+        prompt={"query": "Retrieve the recording that contains the described moment."},
     )
