@@ -327,6 +327,7 @@ from .trecdl_retrieval import TRECDL2019, TRECDL2020
 from .tu_berlin_t2i_retrieval import TUBerlinT2IRetrieval
 from .tuna_bench_t2v_retrieval import TUNABenchT2VRetrieval
 from .tuna_bench_v2t_retrieval import TUNABenchV2TRetrieval
+from .uco3d_retrieval import UCO3DI2VRetrieval, UCO3DT2VRetrieval, UCO3DV2VRetrieval
 from .valor_32k_retrieval import (
     VALOR32KA2VRetrieval,
     VALOR32KAT2VRetrieval,
@@ -714,6 +715,9 @@ __all__ = [
     "TopiOCQARetrievalHardNegatives",
     "Touche2020",
     "Touche2020v3Retrieval",
+    "UCO3DI2VRetrieval",
+    "UCO3DT2VRetrieval",
+    "UCO3DV2VRetrieval",
     "VALOR32KA2VRetrieval",
     "VALOR32KAT2VRetrieval",
     "VALOR32KT2VARetrieval",
