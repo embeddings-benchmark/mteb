@@ -66,12 +66,6 @@ dinghy_law_0_6b = ModelMeta(
     adapted_from="Qwen/Qwen3-Embedding-0.6B",
 )
 
-# dinghy-law-4b-v1: the 4B sibling of dinghy-law-0.6b, a legal-domain contrastive fine-tune of
-# Qwen/Qwen3-Embedding-4B, keeping the same interface (last-token pooling, cosine, query-side
-# "Instruct: {instruction}\nQuery:" prefix, unprefixed documents). Adds German case-law and Chinese
-# case-to-case coverage over the 0.6b mix. Training data, licensing, and leakage accounting are on the model
-# card. training_data (GerDaLIR / GerDaLIRSmall / BillSumUS) is the shared MTEB-overlap declaration.
-
 DINGHY_LAW_4B_CITATION = """@misc{dinghy-law-4b,
   title  = {dinghy-law-4b: a 4B legal text-embedding model},
   author = {Solka, Stephen},
