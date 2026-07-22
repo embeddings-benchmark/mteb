@@ -12,13 +12,11 @@ _BIBTEX = r"""
   year = {2026},
 }
 """
-_DESCRIPTION = (
-    "FLARE is a long-video audiovisual retrieval benchmark built from Video-MME "
-    "source videos (399 videos, ~88k fine-grained clips). Clips have vision-only, "
-    "audio-only, and unified audiovisual captions, plus user-simulated queries. "
-    "The unified (cross-modal) query split applies a hard bimodal constraint so "
-    "that only joint vision+audio evidence uniquely identifies the target.",
-)
+_DESCRIPTION = """FLARE is a long-video audiovisual retrieval benchmark built 
+from Video-MME source videos (399 videos, ~88k fine-grained clips). Clips have
+vision-only, audio-only, and unified audiovisual captions, plus user-simulated 
+queries. The unified (cross-modal) query split applies a hard bimodal constraint 
+so that only joint vision+audio evidence uniquely identifies the target."""
 
 
 class FLAREUnifiedT2VARetrieval(AbsTaskRetrieval):
