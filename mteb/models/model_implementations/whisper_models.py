@@ -423,3 +423,38 @@ whisper_large_v3 = ModelMeta(
       url={https://arxiv.org/abs/2212.04356},
 }""",
 )
+
+whisper_large_v3_turbo = ModelMeta(
+    loader=WhisperAudioWrapper,
+    name="openai/whisper-large-v3-turbo",
+    languages=whisper_langs,
+    open_weights=True,
+    revision="main",
+    release_date="2022-09-27",
+    max_tokens=float("inf"),
+    n_parameters=809_000_000,
+    n_embedding_parameters=0,
+    memory_usage_mb=3065,
+    embed_dim=1280,
+    license="mit",
+    reference="https://huggingface.co/openai/whisper-large-v3-turbo",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=set(
+        # same large-v3 data; decoder distilled/fine-tuned (proprietary, not in MTEB)
+    ),
+    modalities=["audio"],
+    citation="""
+@misc{radford2022robustspeechrecognitionlargescale,
+      title={Robust Speech Recognition via Large-Scale Weak Supervision},
+      author={Alec Radford and Jong Wook Kim and Tao Xu and Greg Brockman and Christine McLeavey and Ilya Sutskever},
+      year={2022},
+      eprint={2212.04356},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2212.04356},
+}""",
+)
