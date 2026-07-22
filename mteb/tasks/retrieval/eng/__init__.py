@@ -139,6 +139,11 @@ from .fever_retrieval import FEVER, FEVERHardNegatives, FEVERHardNegativesV2
 from .fi_qa2018_retrieval import FiQA2018
 from .fin_qa_retrieval import FinQARetrieval
 from .finance_bench_retrieval import FinanceBenchRetrieval
+from .flare_retrieval import (
+    FLAREAudioT2VARetrieval,
+    FLAREUnifiedT2VARetrieval,
+    FLAREVisionT2VRetrieval,
+)
 from .flickr30k_i2t_retrieval import Flickr30kI2TRetrieval
 from .flickr30k_t2i_retrieval import Flickr30kT2IRetrieval
 from .forb_i2i_retrieval import FORBI2I
@@ -557,6 +562,9 @@ __all__ = [
     "FiQA2018",
     "FinQARetrieval",
     "FinanceBenchRetrieval",
+    "FLAREAudioT2VARetrieval",
+    "FLAREUnifiedT2VARetrieval",
+    "FLAREVisionT2VRetrieval",
     "Flickr30kI2TRetrieval",
     "Flickr30kT2IRetrieval",
     "GLDv2I2IRetrieval",
