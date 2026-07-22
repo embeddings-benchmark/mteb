@@ -16,7 +16,7 @@ _BIBTEX = r"""
 _DESCRIPTION = (
     "The Song Describer Dataset (SDD) is a corpus of human-written natural-language "
     "captions of music tracks, released for music-and-language evaluation. It "
-    "provides 746 captions over 547 music recordings drawn from MTG-Jamendo "
+    "provides 1,106 captions over 706 music recordings drawn from MTG-Jamendo "
     "(Creative Commons). "
 )
 
@@ -26,11 +26,11 @@ class SongDescriberT2ARetrieval(AbsTaskRetrieval):
         name="SongDescriberT2ARetrieval",
         description=_DESCRIPTION
         + "Text-to-music retrieval: the query is a caption and the goal is to "
-        "retrieve the music track it describes from the corpus of 547 recordings.",
+        "retrieve the music track it describes from the corpus of 706 recordings.",
         reference=_REFERENCE,
         dataset={
             "path": "dukesun99/SongDescriber-T2A",
-            "revision": "f673048958",
+            "revision": "c58ad9b08343e56ce412d4da41accd15bffdbd6d",
         },
         type="Any2AnyRetrieval",
         category="t2a",
@@ -55,11 +55,11 @@ class SongDescriberA2TRetrieval(AbsTaskRetrieval):
         name="SongDescriberA2TRetrieval",
         description=_DESCRIPTION
         + "Music-to-text retrieval: the query is a music recording and the goal is "
-        "to retrieve its caption(s) from the corpus of 746 captions.",
+        "to retrieve its caption(s) from the corpus of 1,106 captions.",
         reference=_REFERENCE,
         dataset={
             "path": "dukesun99/SongDescriber-A2T",
-            "revision": "27e379ddf6",
+            "revision": "205f679a640b5fecf9ca9ee74bb715b339d228a5",
         },
         type="Any2AnyRetrieval",
         category="a2t",
