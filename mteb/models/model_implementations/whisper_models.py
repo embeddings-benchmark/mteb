@@ -64,6 +64,11 @@ class WhisperAudioWrapper(AbsEncoder):
                 max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 return_attention_mask=True,
             ).to(self.device)
+            # Some Whisper checkpoints load as fp16;
+            # the processor always returns float32 mel features.
+            feature_inputs["input_features"] = feature_inputs["input_features"].to(
+                dtype=self.model.dtype
+            )
 
             with torch.no_grad():
                 outputs = self.model.encoder(
