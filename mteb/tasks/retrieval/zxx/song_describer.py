@@ -37,7 +37,7 @@ class SongDescriberT2ARetrieval(AbsTaskRetrieval):
         modalities=["audio", "text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="hit_rate_at_5",
+        main_score="recall_at_5",
         date=("2023-01-01", "2023-11-01"),
         domains=["Music"],
         task_subtypes=["Music Caption Retrieval"],
