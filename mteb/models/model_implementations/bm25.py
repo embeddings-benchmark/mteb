@@ -57,6 +57,7 @@ _ISO3_TO_LANG: dict[str, tuple[str | None, str | None, str | None]] = {
     "lao": (None, None, "char"),  # Lao
     # PyStemmer only (no bm25s stopword list — pass None to skip stopword removal)
     "ara": (None, "arabic", None),
+    "arb": (None, "arabic", None),
     "hye": (None, "armenian", None),
     "eus": (None, "basque", None),
     "cat": (None, "catalan", None),
@@ -142,10 +143,13 @@ class BM25Tokenizer:
     ):
         # Resolve language defaults, then apply explicit overrides.
         # language=None means "no language assumptions" — no stopwords, stemmer, or tokenizer.
-        if language is None:
-            detected_sw, detected_stemmer, detected_tok = None, None, None
-        else:
-            detected_sw, detected_stemmer, detected_tok = _ISO3_TO_LANG[language]
+        # A language with no entry in _ISO3_TO_LANG gets the same treatment: many
+        # languages have no stopword list or Snowball stemmer available at all.
+
+        detected_sw, detected_stemmer, detected_tok = _ISO3_TO_LANG.get(
+            language, (None, None, None)
+        )
+
         self.stopwords_key = stopwords_key if stopwords_key is not None else detected_sw
         stemmer_lang = (
             stemmer_language if stemmer_language is not None else detected_stemmer
