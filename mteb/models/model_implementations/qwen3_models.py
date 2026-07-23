@@ -209,3 +209,21 @@ Qwen3_Embedding_8B = ModelMeta(
     training_datasets=training_data,
     citation=QWEN3_CITATION,
 )
+
+
+nano_em1_0_6b_v2 = ModelMeta(
+    name="KiteFishAI/Nano-Em1-0.6B-v2",
+    loader=SentenceTransformerEncoderWrapper,
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="<hash from Step 3>",
+    release_date="2026-07-19",
+    n_parameters=596_000_000,
+    embed_dim=1024,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/KiteFishAI/Nano-Em1-0.6B-v2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+)
