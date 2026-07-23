@@ -278,6 +278,7 @@ TaskCategory = Literal[
     "va2va",
     "v2a",
     "a2v",
+    "i2v",
     "vt2a",
     "at2v",
     "a2i",
