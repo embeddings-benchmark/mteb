@@ -433,7 +433,7 @@ siglip2_base_patch32_256 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-base-patch32-256",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="94dffa8cb1179de3e03f091dbc3917e5d5a9ae84",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -452,17 +452,13 @@ siglip2_base_patch32_256 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
 
 siglip2_base_patch16_224 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-base-patch16-224",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="75de2d55ec2d0b4efc50b3e9ad70dba96a7b2fa2",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -481,17 +477,13 @@ siglip2_base_patch16_224 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
 
 siglip2_base_patch16_256 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-base-patch16-256",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="3f9f96cb90da5dbc758b01813f2f6f1aee24c1ab",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -510,17 +502,13 @@ siglip2_base_patch16_256 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
 
 siglip2_base_patch16_384 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-base-patch16-384",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="f775b65a79762255128c981547af89addcfe0f88",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -539,17 +527,13 @@ siglip2_base_patch16_384 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
 
 siglip2_base_patch16_512 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-base-patch16-512",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="a89f5c5093f902bf39d3cd4d81d2c09867f0724b",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -568,17 +552,13 @@ siglip2_base_patch16_512 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
 
 siglip2_large_patch16_256 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-large-patch16-256",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="787800c8990e6f058423089178e718139608408c",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -597,17 +577,13 @@ siglip2_large_patch16_256 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
 
 siglip2_large_patch16_384 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-large-patch16-384",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="1b426889ea62b5a72bf9839009a1b184bfc9c178",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -626,17 +602,13 @@ siglip2_large_patch16_384 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
 
 siglip2_large_patch16_512 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-large-patch16-512",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="49488218e80259885f3be61d7a9455faf833b7a8",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -655,17 +627,13 @@ siglip2_large_patch16_512 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
 
 siglip2_so400m_patch14_224 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-so400m-patch14-224",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="78e403963a4f6a3640d07803284752326fdf4edf",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -684,17 +652,13 @@ siglip2_so400m_patch14_224 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
 
 siglip2_so400m_patch14_384 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-so400m-patch14-384",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="e8e487298228002f3d8a82e0cd5c8ea9c567f57f",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -713,17 +677,13 @@ siglip2_so400m_patch14_384 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
 
 siglip2_so400m_patch16_256 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-so400m-patch16-256",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="e8708ab72d125807e45b36fb7d4e0aacbb59f379",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -742,17 +702,13 @@ siglip2_so400m_patch16_256 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
 
 siglip2_so400m_patch16_384 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-so400m-patch16-384",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="dd658faac399427308559e2c3ac1e99cbe43845d",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -771,17 +727,13 @@ siglip2_so400m_patch16_384 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
 
 siglip2_so400m_patch16_512 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-so400m-patch16-512",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="ceea1cba8130d8271436da4828633198c176a775",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -800,17 +752,13 @@ siglip2_so400m_patch16_512 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
 
 siglip2_giant_opt_patch16_256 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-giant-opt-patch16-256",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="46d7129e1aa1527cc5a44d86fb35250df3abf0aa",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -829,17 +777,13 @@ siglip2_giant_opt_patch16_256 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
 
 siglip2_giant_opt_patch16_384 = ModelMeta(
     loader=SiglipModelWrapper,
     name="google/siglip2-giant-opt-patch16-384",
     model_type=["dense"],
-    languages=None,  # multilingual WebLI, no official language list
+    languages=["eng-Latn"],
     revision="a713301b217d38485fb2204c808367d10bc3cc40",
     release_date="2025-02-17",
     modalities=["image", "text"],
@@ -858,8 +802,4 @@ siglip2_giant_opt_patch16_384 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
     citation=SIGLIP2_CITATION,
-    extra_requirements_groups=[
-        "siglip",
-        "image",
-    ],
 )
