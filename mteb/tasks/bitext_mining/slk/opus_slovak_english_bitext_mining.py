@@ -45,7 +45,7 @@ Sennrich, Rico},
         prompt="Retrieve parallel sentences.",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs) -> None:
         # Convert from OPUS-100 format to standard bitext format
         # OPUS-100 has structure: {"translation": {"en": "...", "sk": "..."}}
         # We need: {"sentence1": "...", "sentence2": "..."}

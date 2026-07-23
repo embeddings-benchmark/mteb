@@ -42,7 +42,7 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, **kwargs) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}

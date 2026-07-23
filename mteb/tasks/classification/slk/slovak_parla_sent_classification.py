@@ -36,7 +36,7 @@ class SlovakParlaSentClassification(AbsTaskClassification):
         prompt="Classify the sentiment expressed in the given text as negative, neutral or positive",
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, **kwargs) -> None:
         """Transform the ParlaSent dataset for classification.
 
         Note: MTEB classification requires both train and test splits.

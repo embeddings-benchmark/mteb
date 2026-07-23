@@ -49,7 +49,7 @@ class SMESumRetrieval(AbsTaskRetrieval):
         prompt={"query": "Retrieve the text that belongs to the given summary"},
     )
 
-    def load_data(self):
+    def load_data(self, **kwargs) -> None:
         if self.data_loaded:
             return
 

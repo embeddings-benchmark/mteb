@@ -35,7 +35,7 @@ class PravdaSKTagClustering(AbsTaskClustering):
         prompt="Identify the topic or theme of the given text.",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs) -> None:
         """Transform the dataset to create sentences (title + summary) and labels (assigned_label)."""
         ds = {}
         for split in self.metadata.eval_splits:
@@ -84,7 +84,7 @@ class PravdaSKURLClustering(AbsTaskClustering):
         prompt="Identify the topic or theme of the given text.",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs) -> None:
         """Transform the dataset to create sentences (title + summary) and labels (url_category)."""
         ds = {}
         for split in self.metadata.eval_splits:

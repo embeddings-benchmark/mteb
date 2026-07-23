@@ -45,7 +45,7 @@ class SMESumCategoryClustering(AbsTaskClustering):
         prompt="Identify the topic or theme of the given text.",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs) -> None:
         """Transform the dataset to create sentences (title + introduction) and labels (category).
 
         Filters out articles with 'none' category as they don't represent meaningful clusters.
