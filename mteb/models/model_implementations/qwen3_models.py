@@ -211,19 +211,27 @@ Qwen3_Embedding_8B = ModelMeta(
 )
 
 
+from mteb.models import ModelMeta, SentenceTransformerEncoderWrapper
+
 nano_em1_0_6b_v2 = ModelMeta(
-    name="KiteFishAI/Nano-Em1-0.6B-v2",
     loader=SentenceTransformerEncoderWrapper,
-    languages=["eng-Latn"],
-    open_weights=True,
+    name="KiteFishAI/Nano-Em1-0.6B-v2",
     revision="910d7de4086239ce5bc1c55e4a2e56395b3f04b9",
-    release_date="2026-07-19",
-    n_parameters=596_000_000,
+    release_date="2026-07-20",
+    languages=["eng-Latn"],
+    n_parameters=596049920,
+    n_embedding_parameters=155582464,
+    memory_usage_mb=1137,
+    max_tokens=40960,
     embed_dim=1024,
     license="apache-2.0",
-    max_tokens=512,
+    open_weights=True,
+    framework=["Sentence Transformers", "safetensors"],
     reference="https://huggingface.co/KiteFishAI/Nano-Em1-0.6B-v2",
-    similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
+    training_datasets={ ... },   # your call — see note above
+    adapted_from="Qwen/Qwen3-0.6B",
+    modalities=["text"],
+    model_type=["dense"],
 )
