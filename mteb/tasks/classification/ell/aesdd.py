@@ -1,10 +1,5 @@
-from typing import Any
-
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
-
-# Corrupt/truncated WAV in the HF snapshot (no RIFF data chunk).
-_CORRUPTED_AUDIO_FILENAME = "s05 (3).wav"
 
 
 class AESDD(AbsTaskClassification):
@@ -13,8 +8,8 @@ class AESDD(AbsTaskClassification):
         description="Acted Emotional Speech Dynamic Database (AESDD): emotion classification of acted Greek speech into one of 5 classes: anger, disgust, fear, happiness, and sadness.",
         reference="https://m3c.web.auth.gr/research/aesdd-speech-emotion-recognition/",
         dataset={
-            "path": "mteb/AESDD",
-            "revision": "2ab5cc0f7126088d11d1752747cdd1d7f74625c6",
+            "path": "mteb/AESDD-fixed",
+            "revision": "2bfe310368859dadb0dbbcc8874135f817f469df",
         },
         type="AudioClassification",
         category="a2c",
@@ -47,21 +42,3 @@ class AESDD(AbsTaskClassification):
     label_column_name: str = "label"
 
     is_cross_validation: bool = True
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """Drop the one corrupt WAV that cannot be decoded."""
-        from datasets import Audio
-
-        for split in self.dataset:
-            split_ds = self.dataset[split].cast_column(
-                self.input_column_name, Audio(decode=False)
-            )
-            split_ds = split_ds.filter(
-                lambda example, bad=_CORRUPTED_AUDIO_FILENAME: not example[
-                    self.input_column_name
-                ]["path"].endswith(bad),
-                num_proc=num_proc,
-            )
-            self.dataset[split] = split_ds.cast_column(
-                self.input_column_name, Audio(decode=True)
-            )
