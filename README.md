@@ -56,7 +56,9 @@ from sentence_transformers import SentenceTransformer
 
 # Select model
 model_name = "sentence-transformers/all-MiniLM-L6-v2"
-model = mteb.get_model(model_name) # if the model is not implemented in MTEB it will be eq. to SentenceTransformer(model_name)
+model = mteb.get_model(
+    model_name
+)  # if the model is not implemented in MTEB it will be eq. to SentenceTransformer(model_name)
 
 # Select tasks
 tasks = mteb.get_tasks(tasks=["Banking77Classification.v2"])
@@ -148,7 +150,7 @@ If you use any of the specific benchmarks, we also recommend that you cite the a
 
 ```py
 benchmark = mteb.get_benchmark("MTEB(eng, v2)")
-benchmark.citation # get citation for a specific benchmark
+benchmark.citation  # get citation for a specific benchmark
 
 # you can also create a table of the task for the appendix using:
 benchmark.tasks.to_latex()

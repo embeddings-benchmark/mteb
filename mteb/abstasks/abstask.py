@@ -516,7 +516,7 @@ class AbsTask(ABC):  # noqa: PLR0904
 
     @property
     def languages(self) -> list[str]:
-        """Returns the languages of the task."""
+        """The languages of the task."""
         if self.hf_subsets:
             eval_langs = self.metadata.hf_subsets_to_langscripts
             languages = []
@@ -769,14 +769,14 @@ class AbsTask(ABC):  # noqa: PLR0904
 
     @property
     def eval_splits(self) -> Sequence[str]:
-        """Returns the evaluation splits of the task."""
+        """The evaluation splits of the task."""
         if self._eval_splits:
             return self._eval_splits
         return self.metadata.eval_splits
 
     @property
     def modalities(self) -> list[Modalities]:
-        """Returns the modalities of the task."""
+        """The modalities of the task."""
         return self.metadata.modalities
 
     def __repr__(self) -> str:

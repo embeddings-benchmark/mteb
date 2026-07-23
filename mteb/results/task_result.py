@@ -6,7 +6,6 @@ import logging
 from collections import defaultdict
 from functools import cached_property
 from importlib.metadata import version
-from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
@@ -275,7 +274,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
     @property
     def languages(self) -> list[str]:
-        """Get the languages present in the scores."""
+        """The languages present in the scores."""
         langs = []
         for split, split_res in self.scores.items():
             for entry in split_res:
@@ -284,14 +283,14 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
     @cached_property
     def task(self) -> AbsTask:
-        """Get the task associated with the result."""
+        """The task associated with the result."""
         from mteb.get_tasks import get_task
 
         return get_task(self.task_name)
 
     @property
     def domains(self) -> list[TaskDomain]:
-        """Get the domains of the task."""
+        """The domains of the task."""
         doms = self.task.metadata.domains
         if doms is None:
             doms = []
@@ -299,7 +298,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
     @property
     def task_type(self) -> str:
-        """Get the type of the task."""
+        """The type of the task."""
         return cast("str", self.task.metadata.type)
 
     @property
@@ -309,12 +308,12 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
     @property
     def main_score(self) -> float:
-        """Get the main score of the result."""
+        """The main score of the result."""
         return self.get_score()
 
     @property
     def hf_subsets(self) -> list[str]:
-        """Get the hf_subsets present in the scores."""
+        """The hf_subsets present in the scores."""
         hf_subsets = set()
         for split, split_res in self.scores.items():
             for entry in split_res:
@@ -323,7 +322,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
     @property
     def eval_splits(self) -> list[str]:
-        """Get the eval splits present in the scores."""
+        """The eval splits present in the scores."""
         return list(self.scores.keys())
 
     def plot_evaluation_phases(self) -> str:

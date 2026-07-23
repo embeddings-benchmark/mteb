@@ -4,15 +4,11 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb import TaskMetadata
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -20,7 +16,6 @@ if TYPE_CHECKING:
     from mteb import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
     from mteb.types._encoder_io import AudioInput
-
 
 logger = logging.getLogger(__name__)
 

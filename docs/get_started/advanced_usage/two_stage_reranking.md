@@ -15,7 +15,7 @@ task = mteb.get_task("NanoArguAnaRetrieval")
 # stage 1 model:
 encoder = mteb.get_model("sentence-transformers/static-similarity-mrl-multilingual-v1")
 # stage 2 model:
-cross_encoder = mteb.get_model("cross-encoder/ms-marco-TinyBERT-L2-v2") # (1)!
+cross_encoder = mteb.get_model("cross-encoder/ms-marco-TinyBERT-L2-v2")  # (1)!
 ```
 
 1.  You can also directly use `CrossEncoder` from [sentence transformers](https://www.sbert.net/).
@@ -38,7 +38,7 @@ task = task.convert_to_reranking(prediction_folder, top_k=100)
 # stage 2: reranking
 cross_enc_results = mteb.evaluate(cross_encoder, task)
 
-print(task.metadata.main_score) # NDCG@10
+print(task.metadata.main_score)  # NDCG@10
 res[0].get_score()  # 0.286
-cross_enc_results[0].get_score() # 0.338
+cross_enc_results[0].get_score()  # 0.338
 ```

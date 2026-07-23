@@ -27,6 +27,7 @@ from datasets import load_dataset
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.classification import AbsTaskClassification
 
+
 class MyNewTask(AbsTaskClassification):
     # metadata contains information such as title, description, metrics etc.
     metadata = TaskMetadata(...)
@@ -40,7 +41,7 @@ class MyNewTask(AbsTaskClassification):
         self.dataset = load_dataset(
             **self.metadata.dataset,
         )
-        self.dataset_transform() # optional processing
+        self.dataset_transform()  # optional processing
         self.data_loaded = True
 
     # dataset transform, which allow you to process the dataset
@@ -94,7 +95,7 @@ Once we have decided on task, we can implement them as follows:
                 "path": "mteb/poem_sentiment",
                 "revision": "9fdc57b89ccc09a8d9256f376112d626878e51a7",
             },
-            prompt="Classify poem verses as positive or negative"
+            prompt="Classify poem verses as positive or negative",
         )
 
         label_column_name = "label"
@@ -114,7 +115,7 @@ Once we have decided on task, we can implement them as follows:
     task = MyClassificationtask()
     task.load_data()
 
-    print(task.dataset["test"][0]) # check one of the samples:
+    print(task.dataset["test"][0])  # check one of the samples:
     # {'id': 1, 'text': 'shall yet be glad for him, and he shall bless', 'label': 1}
 
     # ensure that we can evaluate the model on the task
@@ -137,6 +138,7 @@ Once we have decided on task, we can implement them as follows:
     ```python
     import mteb
     from mteb.abstasks import AbsTaskClustering
+
 
     class MyClusteringTask(AbsTaskClustering):
         metadata = mteb.TaskMetadata(  # minimal metadata
@@ -388,6 +390,7 @@ Once we have decided on task, we can implement them as follows:
         from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
         from datasets import Dataset
 
+
         class MyRetrievalTask(AbsTaskRetrieval):
             metadata = mteb.TaskMetadata(  # minimal metadata
                 name="MyRetrievalTask",
@@ -481,19 +484,27 @@ TaskMetadata(
         "revision": "9fdc57b89ccc09a8d9256f376112d626878e51a7",
     },
     type="Classification",
-    category="t2c", # text-2-class
+    category="t2c",  # text-2-class
     modalities=["text"],
     eval_splits=["validation", "test"],
     eval_langs=["eng-Latn"],
     main_score="accuracy",
-    date=("1700-01-01", "1900-01-01"), # a very rough guess of the date range of the poems, we do not have exact dates for all poems
+    date=(
+        "1700-01-01",
+        "1900-01-01",
+    ),  # a very rough guess of the date range of the poems, we do not have exact dates for all poems
     domains=["Written", "Fiction", "Poetry"],
-    task_subtypes=["Sentiment/Hate speech"], # if no subtypes match then just use []
+    task_subtypes=["Sentiment/Hate speech"],  # if no subtypes match then just use []
     license="cc-by-4.0",
     annotations_creators="human-annotated",
-    dialect=["eng-Latn-US", "en-Latn-GB"], # dialects is often unknown if so just use []
-    sample_creation="found", # the text was not created for the purpose of the dataset, but rather found and annotated
-    adapted_from=["PoemSentimentClassification"], # Previous version of the dataset, can be None
+    dialect=[
+        "eng-Latn-US",
+        "en-Latn-GB",
+    ],  # dialects is often unknown if so just use []
+    sample_creation="found",  # the text was not created for the purpose of the dataset, but rather found and annotated
+    adapted_from=[
+        "PoemSentimentClassification"
+    ],  # Previous version of the dataset, can be None
     bibtex_citation=r"""
 @misc{sheng2020investigating,
   archiveprefix = {arXiv},
@@ -517,8 +528,9 @@ You can then update class to utilize the new dataset on the hub and remove the `
 ```python
 import mteb
 
-class MyTask(...):
-    ...
+
+class MyTask(...): ...
+
 
 task = MyTask()
 repo_name = f"myorg/{task.metadata.name}"
@@ -559,6 +571,7 @@ An easy way to test it is using:
 === "Python"
     ```python
     import mteb
+
     # sample model:
     model = mteb.get_model("mteb/baseline-random encoder")
     task = mteb.get_task("{name of your task}")

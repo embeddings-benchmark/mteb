@@ -14,6 +14,7 @@ For instance to select the English benchmark that forms the English leaderboard:
 
 ```python
 import mteb
+
 benchmark = mteb.get_benchmark("MTEB(eng, v2)")
 model = ...
 results = mteb.evaluate(model, tasks=benchmark)
@@ -60,8 +61,7 @@ You can filter benchmarks to evaluate your model on specific subsets of tasks. U
     ```python
     # Get retrieval and reranking tasks from a benchmark
     filtered_tasks = [
-        task for task in benchmark.tasks
-        if task.metadata.type in ["Retrieval", "Reranking"]
+        task for task in benchmark.tasks if task.metadata.type in ["Retrieval", "Reranking"]
     ]
     ```
 
@@ -73,15 +73,10 @@ You can filter benchmarks to evaluate your model on specific subsets of tasks. U
     import mteb
 
     # Get all English retrieval tasks
-    eng_retrieval_tasks = mteb.get_tasks(
-        task_types=["Retrieval"],
-        languages=["eng"]
-    )
+    eng_retrieval_tasks = mteb.get_tasks(task_types=["Retrieval"], languages=["eng"])
 
     # Get tasks in multiple languages
-    multilingual_tasks = mteb.get_tasks(
-        languages=["eng", "fra", "deu", "spa"]
-    )
+    multilingual_tasks = mteb.get_tasks(languages=["eng", "fra", "deu", "spa"])
 
     # Get retrieval tasks from the English benchmark
     eng_benchmark = mteb.get_benchmark("MTEB(eng, v2)")
@@ -89,7 +84,7 @@ You can filter benchmarks to evaluate your model on specific subsets of tasks. U
 
     retrieval_from_benchmark = mteb.get_tasks(
         task_types=["Retrieval"],
-        tasks=benchmark_task_names  # Only tasks from the benchmark
+        tasks=benchmark_task_names,  # Only tasks from the benchmark
     )
 
     print(f"Found {len(retrieval_from_benchmark)} retrieval tasks in MTEB(eng, v2)")
@@ -101,17 +96,15 @@ You can filter benchmarks to evaluate your model on specific subsets of tasks. U
     # Specify which languages to load
     tasks = [
         mteb.get_task("AmazonReviewsClassification", languages=["eng", "fra"]),
-        mteb.get_task("BUCCBitextMining", languages=["deu"]), # all subsets containing "deu"
+        mteb.get_task(
+            "BUCCBitextMining", languages=["deu"]
+        ),  # all subsets containing "deu"
     ]
 
     # Filter tasks supporting multiple languages
-    multilingual_retrieval = mteb.get_tasks(
-        task_types=["Retrieval"],
-        modalities=["text"]
-    )
+    multilingual_retrieval = mteb.get_tasks(task_types=["Retrieval"], modalities=["text"])
     multilingual_retrieval = [
-        task for task in multilingual_retrieval
-        if len(task.metadata.languages) > 1
+        task for task in multilingual_retrieval if len(task.metadata.languages) > 1
     ]
     ```
 
@@ -129,14 +122,13 @@ You can filter benchmarks to evaluate your model on specific subsets of tasks. U
     specialized_tasks = mteb.get_tasks(
         task_types=["Retrieval", "InstructionRetrieval"],
         languages=["eng"],
-        domains=["Scientific", "Medical", "Legal"]
+        domains=["Scientific", "Medical", "Legal"],
     )
 
     # Filter benchmark tasks by domain
     benchmark = mteb.get_benchmark("MTEB(eng, v2)")
     scientific_tasks = [
-        task for task in benchmark.tasks
-        if "Scientific" in task.metadata.domains
+        task for task in benchmark.tasks if "Scientific" in task.metadata.domains
     ]
     ```
 
@@ -152,7 +144,7 @@ You can filter benchmarks to evaluate your model on specific subsets of tasks. U
         task_types=["Classification"],
         languages=["eng"],
         domains=["Legal"],
-        modalities=["text"]
+        modalities=["text"],
     )
 
     # Filter by custom logic
@@ -160,17 +152,18 @@ You can filter benchmarks to evaluate your model on specific subsets of tasks. U
 
     # Get short retrieval tasks (< 10k documents)
     short_retrieval = [
-        task for task in benchmark.tasks
+        task
+        for task in benchmark.tasks
         if task.metadata.type == "Retrieval"
-        and hasattr(task, 'metadata_dict')
-        and task.metadata_dict.get('n_documents', float('inf')) < 10000
+        and hasattr(task, "metadata_dict")
+        and task.metadata_dict.get("n_documents", float("inf")) < 10000
     ]
 
     # Filter by task name patterns
     news_tasks = [
-        task for task in benchmark.tasks
-        if "news" in task.metadata.name.lower()
-        or "News" in task.metadata.domains
+        task
+        for task in benchmark.tasks
+        if "news" in task.metadata.name.lower() or "News" in task.metadata.domains
     ]
 
     # Combine filters with set operations
@@ -189,6 +182,7 @@ To get an overview of all available benchmarks, simply run:
 
 ```python
 import mteb
+
 benchmarks = mteb.get_benchmarks()
 ```
 
@@ -211,13 +205,13 @@ This can be done in multiple ways, e.g.:
 # by name
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 # by type
-tasks = mteb.get_tasks(task_types=["Clustering", "Retrieval"]) # (1)!
+tasks = mteb.get_tasks(task_types=["Clustering", "Retrieval"])  # (1)!
 # by language
-tasks = mteb.get_tasks(languages=["eng", "deu"]) # (2)!
+tasks = mteb.get_tasks(languages=["eng", "deu"])  # (2)!
 # by domain
 tasks = get_tasks(domains=["Legal"])
 # by modality
-tasks = mteb.get_tasks(modalities=["text", "image"]) # (3)!
+tasks = mteb.get_tasks(modalities=["text", "image"])  # (3)!
 # or using multiple
 tasks = get_tasks(languages=["eng", "deu"], script=["Latn"], domains=["Legal"])
 ```
@@ -258,6 +252,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class MyCustomTask(AbsTaskRetrieval):
     metadata = TaskMetadata(...)
+
 
 model = mteb.get_model(...)
 results = mteb.evaluate(model, tasks=[MyCustomTask()])
