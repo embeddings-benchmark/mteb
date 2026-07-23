@@ -12,20 +12,26 @@ from torch.nn import functional as F
 from mteb.models import ModelMeta
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import (
+        CorpusDatasetType,
+        EncodeKwargs,
+        QueryDatasetType,
+        RetrievalOutputType,
+        TopRankedDocumentsType,
+    )
 
 MODEL_NAME = "thu-nmrc/bge-small-structural-separator"
 MODEL_REVISION = "9a0a8aa92400202dd1ef6950ed9cd4a116dfb03d"
 BASE_MODEL_NAME = "BAAI/bge-small-en-v1.5"
 BASE_MODEL_REVISION = "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
 REPOSITORY_URL = "https://huggingface.co/thu-nmrc/bge-small-structural-separator"
-TRAINING_REPOSITORY_URL = (
-    "https://github.com/thu-nmrc/bge-small-structural-separator"
-)
+TRAINING_REPOSITORY_URL = "https://github.com/thu-nmrc/bge-small-structural-separator"
 TRAINING_REPOSITORY_REVISION = "e8b0a9325409d791981b7410679ae8c152fd6e00"
 SEPARATOR_SYMBOL = "[unused2]"
 SEPARATOR_TOKEN_ID = 3
 MAX_LENGTH = 512
+DEFAULT_BATCH_SIZE = 64
 
 
 def _row_id(row: dict[str, Any]) -> str:
@@ -54,12 +60,22 @@ def _document_ids(
     if title:
         ids.append(separator_token_id)
         ids.extend(tokenizer.encode(title, add_special_tokens=False))
-    for sentence in _split_sentences(str(raw.get("text", "") or "")):
+    body = raw.get("body")
+    if body is None:
+        body = raw.get("text", "")
+    for sentence in _split_sentences(str(body or "")):
         ids.append(separator_token_id)
         ids.extend(tokenizer.encode(sentence, add_special_tokens=False))
     if len(ids) == 1:
         ids.append(separator_token_id)
     return ids[: max_length - 1] + [int(tokenizer.sep_token_id)]
+
+
+def _batch_size(encode_kwargs: EncodeKwargs) -> int:
+    batch_size = int(encode_kwargs.get("batch_size", DEFAULT_BATCH_SIZE))
+    if batch_size <= 0:
+        raise ValueError("batch_size must be positive")
+    return batch_size
 
 
 def _pad(
@@ -83,8 +99,6 @@ class StructuralSeparatorSearch:
         revision: str | None,
         *,
         device: str | None = None,
-        model_source: str | Path | None = None,
-        batch_size: int = 64,
         index_encoding_chunk_size: int = 4_096,
         query_search_batch_size: int = 64,
         document_search_block_size: int = 65_536,
@@ -95,14 +109,19 @@ class StructuralSeparatorSearch:
 
         from transformers import AutoModel, AutoTokenizer
 
-        source = str(model_source or MODEL_NAME)
-        source_revision = None if model_source is not None else MODEL_REVISION
-        self.device = torch.device(
-            device or ("mps" if torch.backends.mps.is_available() else "cpu")
+        if device is None:
+            if torch.cuda.is_available():
+                device = "cuda"
+            elif torch.backends.mps.is_available():
+                device = "mps"
+            else:
+                device = "cpu"
+        self.device = torch.device(device)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            MODEL_NAME, revision=MODEL_REVISION
         )
-        self.tokenizer = AutoTokenizer.from_pretrained(source, revision=source_revision)
         self.backbone = (
-            AutoModel.from_pretrained(source, revision=source_revision)
+            AutoModel.from_pretrained(MODEL_NAME, revision=MODEL_REVISION)
             .to(self.device)
             .eval()
         )
@@ -111,11 +130,11 @@ class StructuralSeparatorSearch:
             raise RuntimeError("Separator token does not match the pinned tokenizer")
 
         self.max_length = MAX_LENGTH
-        self.batch_size = int(batch_size)
         self.index_encoding_chunk_size = int(index_encoding_chunk_size)
         self.query_search_batch_size = int(query_search_batch_size)
         self.document_search_block_size = int(document_search_block_size)
         self.docids: list[str] = []
+        self._docid_to_index: dict[str, int] = {}
         self.document_vectors = np.empty((0, 384), dtype=np.float32)
         self._index_path: Path | None = None
         self._model_meta: ModelMeta | None = None
@@ -141,7 +160,9 @@ class StructuralSeparatorSearch:
                 F.normalize(output, dim=1).cpu().numpy().astype(np.float32, copy=False)
             )
 
-    def _encode_documents(self, documents: list[dict[str, str]]) -> np.ndarray:
+    def _encode_documents(
+        self, documents: list[dict[str, str]], *, batch_size: int
+    ) -> np.ndarray:
         sequences = [
             _document_ids(
                 self.tokenizer,
@@ -152,19 +173,19 @@ class StructuralSeparatorSearch:
             for document in documents
         ]
         vectors = []
-        for start in range(0, len(sequences), self.batch_size):
+        for start in range(0, len(sequences), batch_size):
             input_ids, attention_mask = _pad(
-                sequences[start : start + self.batch_size],
+                sequences[start : start + batch_size],
                 int(self.tokenizer.pad_token_id),
             )
             vectors.append(self._encode(input_ids, attention_mask))
         return np.concatenate(vectors, axis=0)
 
-    def _encode_queries(self, queries: list[str]) -> np.ndarray:
+    def _encode_queries(self, queries: list[str], *, batch_size: int) -> np.ndarray:
         vectors = []
-        for start in range(0, len(queries), self.batch_size):
+        for start in range(0, len(queries), batch_size):
             tokens = self.tokenizer(
-                queries[start : start + self.batch_size],
+                queries[start : start + batch_size],
                 padding=True,
                 truncation=True,
                 max_length=self.max_length,
@@ -174,9 +195,9 @@ class StructuralSeparatorSearch:
         return np.concatenate(vectors, axis=0)
 
     def close(self) -> None:
-        numpy = globals().get("np")
-        if numpy is not None:
-            self.document_vectors = numpy.empty((0, 384), dtype=numpy.float32)
+        empty = getattr(np, "empty", None)
+        if empty is not None:
+            self.document_vectors = empty((0, 384), dtype=np.float32)
         index_path = getattr(self, "_index_path", None)
         if index_path is not None:
             try:
@@ -190,22 +211,19 @@ class StructuralSeparatorSearch:
 
     def index(
         self,
-        corpus: Iterable[dict[str, Any]],
+        corpus: CorpusDatasetType,
         *,
-        task_metadata: Any,
+        task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         num_proc: int | None,
     ) -> None:
-        del task_metadata, hf_split, hf_subset, encode_kwargs, num_proc
+        del task_metadata, hf_split, hf_subset, num_proc
+        batch_size = _batch_size(encode_kwargs)
         self.close()
         self.docids = []
-        handle = tempfile.NamedTemporaryFile(
-            prefix="structural-separator-index-", suffix=".f32", delete=False
-        )
-        handle.close()
-        self._index_path = Path(handle.name)
+        self._docid_to_index = {}
         dimension = 0
         document_ids: list[str] = []
         documents: list[dict[str, str]] = []
@@ -214,28 +232,42 @@ class StructuralSeparatorSearch:
             nonlocal dimension
             if not documents:
                 return
-            vectors = self._encode_documents(documents)
+            vectors = self._encode_documents(documents, batch_size=batch_size)
             dimension = int(vectors.shape[1])
             stream.write(vectors.tobytes(order="C"))
             self.docids.extend(document_ids)
             document_ids.clear()
             documents.clear()
 
-        with self._index_path.open("wb") as stream:
-            for row in corpus:
-                document_ids.append(_row_id(row))
-                documents.append(
-                    {
-                        "title": str(row.get("title", "") or ""),
-                        "text": str(row.get("text", "") or ""),
-                    }
-                )
-                if len(documents) == self.index_encoding_chunk_size:
-                    flush(stream)
-            flush(stream)
+        try:
+            with tempfile.NamedTemporaryFile(
+                prefix="structural-separator-index-", suffix=".f32", delete=False
+            ) as stream:
+                self._index_path = Path(stream.name)
+                for row in corpus:
+                    document_ids.append(_row_id(row))
+                    documents.append(
+                        {
+                            "title": str(row.get("title", "") or ""),
+                            "body": str(
+                                row.get("body")
+                                if row.get("body") is not None
+                                else row.get("text", "")
+                            ),
+                        }
+                    )
+                    if len(documents) == self.index_encoding_chunk_size:
+                        flush(stream)
+                flush(stream)
+        except Exception:
+            self.close()
+            raise
         if not self.docids:
             self.close()
             raise ValueError("Corpus must be nonempty")
+        self._docid_to_index = {
+            document_id: index for index, document_id in enumerate(self.docids)
+        }
         self.document_vectors = np.memmap(
             self._index_path,
             mode="r",
@@ -245,29 +277,33 @@ class StructuralSeparatorSearch:
 
     def search(
         self,
-        queries: Iterable[dict[str, Any]],
+        queries: QueryDatasetType,
         *,
-        task_metadata: Any,
+        task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
-        top_ranked: dict[str, list[str]] | None = None,
+        encode_kwargs: EncodeKwargs,
+        top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None,
-    ) -> dict[str, dict[str, float]]:
-        del task_metadata, hf_split, hf_subset, encode_kwargs, num_proc
-        if top_ranked is not None:
-            raise ValueError(
-                "This is a first-stage retriever; reranking inputs are not accepted"
-            )
+    ) -> RetrievalOutputType:
+        del task_metadata, hf_split, hf_subset, num_proc
+        batch_size = _batch_size(encode_kwargs)
         if top_k <= 0:
             raise ValueError("top_k must be positive")
         query_map = {_row_id(row): str(row.get("text", "") or "") for row in queries}
         if not query_map:
             return {}
         query_ids = list(query_map)
-        query_vectors = self._encode_queries(list(query_map.values()))
-        output: dict[str, dict[str, float]] = {}
+        query_vectors = self._encode_queries(
+            list(query_map.values()), batch_size=batch_size
+        )
+        if top_ranked is not None:
+            return self._rerank_candidates(
+                query_ids, query_vectors, top_ranked=top_ranked, top_k=top_k
+            )
+
+        output: RetrievalOutputType = {}
         for query_start in range(0, len(query_ids), self.query_search_batch_size):
             query_stop = min(query_start + self.query_search_batch_size, len(query_ids))
             retained_by_query: list[list[tuple[float, str]]] = [
@@ -305,6 +341,42 @@ class StructuralSeparatorSearch:
                 output[query_id] = {
                     document_id: score for score, document_id in retained
                 }
+        return output
+
+    def _rerank_candidates(
+        self,
+        query_ids: list[str],
+        query_vectors: np.ndarray,
+        *,
+        top_ranked: TopRankedDocumentsType,
+        top_k: int,
+    ) -> RetrievalOutputType:
+        output: RetrievalOutputType = {}
+        for query_id, query_vector in zip(query_ids, query_vectors):
+            candidate_ids = list(top_ranked.get(query_id, []))
+            missing = [
+                document_id
+                for document_id in candidate_ids
+                if document_id not in self._docid_to_index
+            ]
+            if missing:
+                raise KeyError(
+                    f"Candidate documents are missing from the index: {missing[:3]}"
+                )
+            if not candidate_ids:
+                output[query_id] = {}
+                continue
+            candidate_indices = [
+                self._docid_to_index[document_id] for document_id in candidate_ids
+            ]
+            scores = query_vector @ self.document_vectors[candidate_indices].T
+            ranked = sorted(
+                zip(scores.tolist(), candidate_ids),
+                key=lambda item: (-item[0], item[1]),
+            )[:top_k]
+            output[query_id] = {
+                document_id: float(score) for score, document_id in ranked
+            }
         return output
 
 
