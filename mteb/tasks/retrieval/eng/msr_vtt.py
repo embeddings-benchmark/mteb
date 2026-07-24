@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from datasets import load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
-from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _DATASET_PATH = "mteb/MSR-VTT"
+# The standard-format configs (``<direction>-queries`` / ``<direction>-corpus``
+# / ``<direction>-qrels``) are produced by
+# ``scripts/upload_msr_vtt_retrieval.py``. Update this revision after
+# reuploading the dataset so every direction loads through the standard
+# ``RetrievalDatasetLoader`` (see issue #4375).
 _DATASET_REVISION = "4661603cee25c1fd370e5478a2953203cf37155b"
 _BIBTEX = r"""
 @inproceedings{xu2016msrvtt,
@@ -18,44 +20,15 @@ _BIBTEX = r"""
 """
 
 
-def _load_msr_vtt(
-    task: AbsTaskRetrieval,
-    query_columns: list[str],
-    corpus_columns: list[str],
-) -> None:
-    """Shared loader for all MSR-VTT retrieval directions.
-
-    TODO: Reupload dataset in standard format and remove this custom load_data.
-    """
-    if task.data_loaded:
-        return
-    task.dataset = {"default": {}}
-    dataset = load_dataset(
-        task.metadata.dataset["path"],
-        revision=task.metadata.dataset["revision"],
-        split=task.metadata.eval_splits[0],
-    )
-    dataset = dataset.add_column("id", [str(i) for i in range(len(dataset))])
-
-    query = dataset.select_columns(["id"] + query_columns)
-    corpus = dataset.select_columns(["id"] + corpus_columns)
-    if "caption" in query_columns:
-        query = query.rename_column("caption", "text")
-    if "caption" in corpus_columns:
-        corpus = corpus.rename_column("caption", "text")
-
-    qrels = {str(i): {str(i): 1} for i in range(len(dataset))}
-    task.dataset["default"]["test"] = RetrievalSplitData(
-        queries=query, corpus=corpus, relevant_docs=qrels, top_ranked=None
-    )
-    task.data_loaded = True
-
-
 class MSRVTTV2T(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSRVTTV2T",
         description="A large video description dataset for bridging video and language. Used the msrvtt_ret_test1k retrieval split (879 examples).",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        dataset={
+            "path": _DATASET_PATH,
+            "revision": _DATASET_REVISION,
+            "name": "MSRVTTV2T",
+        },
         type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],
         eval_splits=["test"],
@@ -75,15 +48,16 @@ class MSRVTTV2T(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_msr_vtt(self, query_columns=["video"], corpus_columns=["caption"])
-
 
 class MSRVTTT2V(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSRVTTT2V",
         description="A large video description dataset for bridging video and language. Used the msrvtt_ret_test1k retrieval split (879 examples).",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        dataset={
+            "path": _DATASET_PATH,
+            "revision": _DATASET_REVISION,
+            "name": "MSRVTTT2V",
+        },
         type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],
         eval_splits=["test"],
@@ -103,15 +77,16 @@ class MSRVTTT2V(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_msr_vtt(self, query_columns=["caption"], corpus_columns=["video"])
-
 
 class MSRVTTVA2T(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSRVTTVA2T",
         description="A large video description dataset for bridging video and language. Used the msrvtt_ret_test1k retrieval split (879 examples).",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        dataset={
+            "path": _DATASET_PATH,
+            "revision": _DATASET_REVISION,
+            "name": "MSRVTTVA2T",
+        },
         type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],
         eval_splits=["test"],
@@ -131,17 +106,16 @@ class MSRVTTVA2T(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_msr_vtt(
-            self, query_columns=["video", "audio"], corpus_columns=["caption"]
-        )
-
 
 class MSRVTTT2VA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSRVTTT2VA",
         description="A large video description dataset for bridging video and language. Used the msrvtt_ret_test1k retrieval split (879 examples).",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        dataset={
+            "path": _DATASET_PATH,
+            "revision": _DATASET_REVISION,
+            "name": "MSRVTTT2VA",
+        },
         type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],
         eval_splits=["test"],
@@ -161,11 +135,6 @@ class MSRVTTT2VA(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_msr_vtt(
-            self, query_columns=["caption"], corpus_columns=["video", "audio"]
-        )
-
 
 class MSRVTTV2A(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -175,7 +144,11 @@ class MSRVTTV2A(AbsTaskRetrieval):
             "Tests cross-modal alignment between video frames and audio."
             " Used the msrvtt_ret_test1k retrieval split (879 examples)."
         ),
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        dataset={
+            "path": _DATASET_PATH,
+            "revision": _DATASET_REVISION,
+            "name": "MSRVTTV2A",
+        },
         type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],
         eval_splits=["test"],
@@ -195,9 +168,6 @@ class MSRVTTV2A(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_msr_vtt(self, query_columns=["video"], corpus_columns=["audio"])
-
 
 class MSRVTTA2V(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -207,7 +177,11 @@ class MSRVTTA2V(AbsTaskRetrieval):
             "Tests cross-modal alignment between audio and video frames."
             " Used the msrvtt_ret_test1k retrieval split (879 examples)."
         ),
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        dataset={
+            "path": _DATASET_PATH,
+            "revision": _DATASET_REVISION,
+            "name": "MSRVTTA2V",
+        },
         type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],
         eval_splits=["test"],
@@ -227,15 +201,16 @@ class MSRVTTA2V(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_msr_vtt(self, query_columns=["audio"], corpus_columns=["video"])
-
 
 class MSRVTTVT2A(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSRVTTVT2A",
         description="A large video description dataset for bridging video and language. Used the msrvtt_ret_test1k retrieval split (879 examples).",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        dataset={
+            "path": _DATASET_PATH,
+            "revision": _DATASET_REVISION,
+            "name": "MSRVTTVT2A",
+        },
         type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],
         eval_splits=["test"],
@@ -257,17 +232,16 @@ class MSRVTTVT2A(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_msr_vtt(
-            self, query_columns=["video", "caption"], corpus_columns=["audio"]
-        )
-
 
 class MSRVTTAT2V(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSRVTTAT2V",
         description="A large video description dataset for bridging video and language. Used the msrvtt_ret_test1k retrieval split (879 examples).",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        dataset={
+            "path": _DATASET_PATH,
+            "revision": _DATASET_REVISION,
+            "name": "MSRVTTAT2V",
+        },
         type="Any2AnyRetrieval",
         eval_langs=["eng-Latn"],
         eval_splits=["test"],
@@ -288,8 +262,3 @@ class MSRVTTAT2V(AbsTaskRetrieval):
         },
         is_beta=True,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_msr_vtt(
-            self, query_columns=["audio", "caption"], corpus_columns=["video"]
-        )
