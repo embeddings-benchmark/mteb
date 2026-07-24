@@ -160,6 +160,18 @@ R_BENCHMARK_ENTRIES = [
                     mteb.get_benchmark("RTEB(Health, beta)"),
                     mteb.get_benchmark("FollowIR"),
                     mteb.get_benchmark("LongEmbed"),
+                    MenuEntry(
+                        "Long-Horizon Memory",
+                        mteb.get_benchmarks(
+                            [
+                                "LMEB",
+                                "LMEB-Episodic",
+                                "LMEB-Dialogue",
+                                "LMEB-Semantic",
+                                "LMEB-Procedural",
+                            ]
+                        ),
+                    ),
                     mteb.get_benchmark("BRIGHT"),
                 ],
             ),
@@ -269,6 +281,11 @@ HOME_BENCHMARK_ENTRIES = [
                 "RTEB(Health, beta)",
                 "FollowIR",
                 "LongEmbed",
+                "LMEB",
+                "LMEB-Episodic",
+                "LMEB-Dialogue",
+                "LMEB-Semantic",
+                "LMEB-Procedural",
                 "BRIGHT",
             ]
         ),
