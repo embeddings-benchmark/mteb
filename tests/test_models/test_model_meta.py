@@ -217,6 +217,76 @@ def test_openness_non_open_license_not_counted():
     assert meta.openness_score == 2
 
 
+def _co2_meta(**overwrites) -> ModelMeta:
+    return ModelMeta.create_empty(
+        overwrites={"name": "test/co2", "revision": "test", **overwrites}
+    )
+
+
+def test_co2_cost_none_when_active_params_unknown():
+    meta = _co2_meta(n_parameters=None, n_embedding_parameters=None)
+    assert meta.n_active_parameters is None
+    assert meta.co2_cost_per_million_tokens is None
+    assert meta.co2_cost_estimate is None
+
+
+def test_co2_cost_matches_linear_model():
+    from mteb.models.model_meta import (
+        CO2_CARBON_INTENSITY_G_PER_KWH,
+        CO2_ENERGY_ALPHA_WH_PER_TOKEN_PER_B_PARAM,
+        CO2_ENERGY_BETA_WH_PER_TOKEN,
+        CO2_PUE,
+    )
+
+    # 1B active parameters (110M total minus 10M embedding would be too small; use explicit override)
+    meta = _co2_meta(n_active_parameters_override=1_000_000_000)
+    assert meta.n_active_parameters == 1_000_000_000
+
+    energy_wh_per_token = (
+        CO2_ENERGY_ALPHA_WH_PER_TOKEN_PER_B_PARAM * 1.0 + CO2_ENERGY_BETA_WH_PER_TOKEN
+    )
+    expected = energy_wh_per_token * 1e3 * CO2_PUE * CO2_CARBON_INTENSITY_G_PER_KWH
+    assert meta.co2_cost_per_million_tokens == pytest.approx(expected)
+
+
+def test_co2_cost_increases_with_active_parameters():
+    small = _co2_meta(n_active_parameters_override=100_000_000)
+    large = _co2_meta(n_active_parameters_override=7_000_000_000)
+    assert small.co2_cost_per_million_tokens < large.co2_cost_per_million_tokens
+
+
+def test_co2_cost_uses_active_not_total_parameters():
+    from mteb.models.model_meta import CO2_ENERGY_BETA_WH_PER_TOKEN
+
+    # n_active_parameters = n_parameters - n_embedding_parameters
+    meta = _co2_meta(n_parameters=110_000_000, n_embedding_parameters=10_000_000)
+    assert meta.n_active_parameters == 100_000_000
+
+    active_only = _co2_meta(n_active_parameters_override=100_000_000)
+    assert meta.co2_cost_per_million_tokens == pytest.approx(
+        active_only.co2_cost_per_million_tokens
+    )
+    # sanity: strictly positive and dominated by the fixed beta term for a small model
+    assert meta.co2_cost_per_million_tokens > CO2_ENERGY_BETA_WH_PER_TOKEN
+
+
+def test_co2_cost_estimate_reports_assumptions():
+    from mteb.models.model_meta import (
+        CO2_BENCHMARK_HARDWARE,
+        CO2_CARBON_INTENSITY_G_PER_KWH,
+        CO2_PUE,
+    )
+
+    meta = _co2_meta(n_active_parameters_override=1_000_000_000)
+    estimate = meta.co2_cost_estimate
+    assert estimate is not None
+    assert estimate["g_co2_per_million_tokens"] == meta.co2_cost_per_million_tokens
+    assert estimate["active_parameters"] == 1_000_000_000
+    assert estimate["benchmark_hardware"] == CO2_BENCHMARK_HARDWARE
+    assert estimate["carbon_intensity_g_per_kwh"] == CO2_CARBON_INTENSITY_G_PER_KWH
+    assert estimate["pue"] == CO2_PUE
+
+
 def test_model_name_without_prefix():
     with pytest.raises(ValueError):
         ModelMeta(
