@@ -211,9 +211,10 @@ class ColVec11Wrapper(ColVec1Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        # ViDoRe v3.1 corpora expose both the page image and OCR markdown.
-        # ColVec1.1 encodes documents from images, so images must take
-        # precedence and corpus OCR text must not be encoded as a query.
+        # ViDoRe v3.1 corpus rows include page images and auxiliary OCR
+        # Markdown. ColVec1.1 was trained with text queries and page-image
+        # documents; it has no trained OCR/document-text fusion path.
+        # Therefore, prefer the image whenever both features are present.
         if "image" in inputs.dataset.features:
             return self.get_image_embeddings(inputs, **kwargs)
         if "text" in inputs.dataset.features:
@@ -371,7 +372,6 @@ colvec1_1_4b = ModelMeta(
     modalities=["image", "text"],
     n_parameters=4540904576,
     n_embedding_parameters=1639040,
-    n_active_parameters_override=None,
     memory_usage_mb=8661,
     max_tokens=262144,
     embed_dim=640,
@@ -419,7 +419,6 @@ colvec1_1_8b = ModelMeta(
     modalities=["image", "text"],
     n_parameters=8395317104,
     n_embedding_parameters=2622080,
-    n_active_parameters_override=None,
     memory_usage_mb=16013,
     max_tokens=262144,
     embed_dim=640,
