@@ -31,6 +31,7 @@ from mteb.types.statistics import RetrievalDescriptiveStatistics
 from ._statistics_calculation import (
     calculate_relevant_docs_statistics,
     calculate_single_input_modality_statistics,
+    calculate_text_relevance_overlap_statistics,
     calculate_top_ranked_statistics,
 )
 from .abstask import AbsTask
@@ -573,13 +574,67 @@ class AbsTaskRetrieval(AbsTask):
         )
 
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
+        text_relevance_overlap_statistics = None
+        if "text" in queries_col_inputs and "text" in corpus_col_inputs:
+            if compute_overall:
+                query_text_by_id: dict[str, str] = {}
+                corpus_text_by_id: dict[str, str] = {}
+                for subset_name in self.metadata.eval_langs:
+                    split_data = self.dataset[subset_name][split]
+
+                    subset_queries = split_data["queries"]
+                    if "instruction" in subset_queries[0]:
+                        subset_queries = _combine_queries_with_instruction_text(
+                            subset_queries
+                        )
+                    if isinstance(subset_queries["text"][0], dict | list):
+                        subset_queries = subset_queries.map(
+                            _convert_conv_history_to_query
+                        )
+                    query_text_by_id.update(
+                        {
+                            f"{split}_{subset_name}_{query_id}": text
+                            for query_id, text in zip(
+                                subset_queries["id"],
+                                subset_queries["text"],
+                                strict=True,
+                            )
+                        }
+                    )
+
+                    subset_corpus = split_data["corpus"]
+                    corpus_text_by_id.update(
+                        {
+                            f"{split}_{subset_name}_{doc_id}": text
+                            for doc_id, text in zip(
+                                subset_corpus["id"],
+                                subset_corpus.map(_corpus_to_dict)["text"],
+                                strict=True,
+                            )
+                        }
+                    )
+            else:
+                query_text_by_id = dict(
+                    zip(queries["id"], queries_col_inputs["text"], strict=True)
+                )
+                corpus_text_by_id = dict(
+                    zip(corpus["id"], corpus_col_inputs["text"], strict=True)
+                )
+
+            text_relevance_overlap_statistics = (
+                calculate_text_relevance_overlap_statistics(
+                    relevant_docs,
+                    query_text_by_id,
+                    corpus_text_by_id,
+                )
+            )
         top_ranked_statistics = (
             calculate_top_ranked_statistics(top_ranked, num_queries)
             if top_ranked is not None and num_queries and len(top_ranked) > 0
             else None
         )
 
-        return RetrievalDescriptiveStatistics(
+        stats = RetrievalDescriptiveStatistics(
             num_samples=num_documents + num_queries,
             num_queries=num_queries,
             num_documents=num_documents,
@@ -595,6 +650,11 @@ class AbsTaskRetrieval(AbsTask):
             relevant_docs_statistics=relevant_docs_statistics,
             top_ranked_statistics=top_ranked_statistics,
         )
+        if text_relevance_overlap_statistics is not None:
+            stats["text_relevance_overlap_statistics"] = (
+                text_relevance_overlap_statistics
+            )
+        return stats
 
     def _push_dataset_to_hub(
         self,

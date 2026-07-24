@@ -15,6 +15,7 @@ from mteb.types.statistics import (
     RelevantDocsStatistics,
     ScoreStatistics,
     SingleInputModalityStatistics,
+    TextRelevanceOverlapStatistics,
     TextStatistics,
     TopRankedStatistics,
     VideoStatistics,
@@ -413,6 +414,34 @@ def calculate_relevant_docs_statistics(
         average_relevant_docs_per_query=qrels_per_doc,
         max_relevant_docs_per_query=max(qrels_lengths),
         unique_relevant_docs=unique_qrels,
+    )
+
+
+def calculate_text_relevance_overlap_statistics(
+    relevant_docs: Mapping[str, Mapping[str, int]],
+    queries: Mapping[str, str],
+    corpus: Mapping[str, str],
+) -> TextRelevanceOverlapStatistics | None:
+    """Calculate query-token overlap against positive relevant documents."""
+    overlaps: list[float] = []
+    for query_id, docs in relevant_docs.items():
+        query_tokens = set(queries[query_id].lower().split())
+        if not query_tokens:
+            continue
+        for doc_id, score in docs.items():
+            if score == 0:
+                continue
+            doc_tokens = set(corpus[doc_id].lower().split())
+            overlaps.append(len(query_tokens & doc_tokens) / len(query_tokens))
+
+    if not overlaps:
+        return None
+
+    return TextRelevanceOverlapStatistics(
+        num_pairs=len(overlaps),
+        min_query_token_overlap=min(overlaps),
+        average_query_token_overlap=sum(overlaps) / len(overlaps),
+        max_query_token_overlap=max(overlaps),
     )
 
 
