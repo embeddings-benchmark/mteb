@@ -16,8 +16,7 @@ _DESCRIPTION = (
     "MIAO (Multimodal Image-Audio Onomatopoeia) pairs CC0 FSD50K sound-event clips "
     "with human-drawn onomatopoeic illustrations (50 classes; 12 audio clips and 18 "
     "images per class). Relevance is class-level: an audio clip of class C is "
-    "relevant to every image of class C, and vice versa. Media packaged via "
-    "scripts/data/miao_retrieval/create_data.py from KeisukeImoto/MIAO."
+    "relevant to every image of class C, and vice versa."
 )
 
 
