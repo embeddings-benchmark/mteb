@@ -64,8 +64,8 @@ class ImageBindWrapper(AbsEncoder):
 
     def _load_images(self, images: list) -> torch.Tensor:
         """Transform PIL images using ImageBind's vision pipeline."""
-        from torchvision import transforms
         from PIL import Image as PILImage
+        from torchvision import transforms
 
         transform = transforms.Compose(
             [
