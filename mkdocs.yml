@@ -88,6 +88,7 @@ nav:
         - Retrieval backend: get_started/advanced_usage/retrieval_backend.md
         - Two stage reranking: get_started/advanced_usage/two_stage_reranking.md
         - vLLM: get_started/advanced_usage/vllm_wrapper.md
+        - OpenAI-Compatible APIs: get_started/advanced_usage/openai_api_wrappers.md
 
   - Contributing:
       - Adding a Model: contributing/adding_a_model.md

@@ -9,6 +9,12 @@ icon: lucide/zap
 !!! note
     vLLM currently supports only a limited number of models, and many implementations have subtle differences compared to the default implementations in mteb. For the full list of supported models, refer to the [vllm documentation](https://docs.vllm.ai/en/stable/models/supported_models/#pooling-models).
 
+MTEB provides wrappers for local vLLM usage:
+
+- **[VllmEncoderWrapper][mteb.models.vllm_wrapper.VllmEncoderWrapper] / [VllmCrossEncoderWrapper][mteb.models.vllm_wrapper.VllmCrossEncoderWrapper]**: Local in-process vLLM instantiation for maximum performance
+
+For HTTP-based access to OpenAI-compatible API servers (including vLLM, OpenAI, and others), see [OpenAI-Compatible APIs](openai_api_wrappers.md).
+
 
 ## Installation
 
@@ -24,6 +30,8 @@ If you're using cuda you can run
 
 For other architectures, please refer to the [vllm installation guide](https://docs.vllm.ai/en/latest/getting_started/installation/).
 ## Usage
+
+### Local vLLM (VllmEncoderWrapper)
 
 To use vLLM with MTEB you have to wrap the model with its respective wrapper.
 
@@ -163,6 +171,7 @@ vLLM’s optimizations are primarily designed for and most effective with causal
 
 ## API Reference
 
+### Local vLLM Wrappers
 
 :::mteb.models.vllm_wrapper.VllmWrapperBase
 
@@ -172,3 +181,4 @@ vLLM’s optimizations are primarily designed for and most effective with causal
 :::mteb.models.vllm_wrapper.VllmEncoderWrapper
 
 :::mteb.models.vllm_wrapper.VllmCrossEncoderWrapper
+
