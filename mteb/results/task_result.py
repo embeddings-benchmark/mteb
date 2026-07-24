@@ -126,6 +126,43 @@ renamed_tasks = {
 }
 
 
+def _reconstruct_legacy_main_score(main_score: str, scores: ScoresDict) -> Score | None:
+    """Reconstruct a task's ``main_score`` from legacy metric names.
+
+    Result files from before the reranking and pair-classification evaluators were
+    migrated to the retrieval-based metrics stored their scores under different
+    names, so the current ``main_score`` is absent (see issue #4333):
+
+    - Reranking stored ``map``/``mrr`` instead of ``map_at_1000``/``mrr_at_10``.
+    - Pair classification stored per-similarity metrics (e.g. ``cosine_ap``) but not
+      the ``max_*`` aggregate.
+
+    Returns the reconstructed score, or ``None`` if it cannot be derived.
+    """
+    # Reranking: the legacy `map`/`mrr` correspond to today's `*map_at_k` / `*mrr_at_k`
+    # main scores (e.g. `map_at_1000`, `max_over_subqueries_map_at_1000`), which are
+    # computed the same way. Checked before the pair-classification branch below so
+    # that a `max_over_subqueries_*` main score is not mistaken for a `max_*` aggregate.
+    for legacy in ("map", "mrr"):
+        legacy_score = scores.get(legacy)
+        if legacy_score is not None and (
+            main_score == legacy or f"{legacy}_at_" in main_score
+        ):
+            return legacy_score
+    # Pair classification: `max_<metric>` is the max over the per-similarity
+    # `*_<metric>` scores (e.g. `cosine_ap`, `dot_ap`, ... for `max_ap`).
+    if main_score.startswith("max_"):
+        metric = main_score[len("max_") :]
+        candidates = [
+            v
+            for name, v in scores.items()
+            if name.endswith(f"_{metric}") and isinstance(v, (int, float))
+        ]
+        if candidates:
+            return max(candidates)
+    return None
+
+
 class TaskResult(BaseModel):  # noqa: PLR0904
     """A class to represent the MTEB result.
 
@@ -423,7 +460,50 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         if pre_v_12_48:
             cls._fix_pair_classification_scores(obj)
 
+        cls._reconstruct_missing_main_scores(obj)
+
         return obj
+
+    @classmethod
+    def _reconstruct_missing_main_scores(cls, obj: TaskResult) -> None:
+        """Reconstruct ``main_score`` values that loaded as ``None``.
+
+        Historic result files predate the reranking and pair-classification metric
+        migrations, so their stored scores no longer include the task's current
+        ``main_score`` (see issue #4333). This runs after all other historic fixups
+        (so metric names are already normalized) and applies to every load path, not
+        just the pre-v1.11.0 one, since the reranking format also changed later.
+        """
+        if not any(
+            subset_scores.get("main_score") is None
+            for split_scores in obj.scores.values()
+            for subset_scores in split_scores
+        ):
+            return
+
+        from mteb import get_task
+
+        task_name = obj.task_name
+        if task_name in outdated_tasks:
+            task: AbsTask | type[AbsTask] = outdated_tasks[task_name]
+        else:
+            try:
+                task = get_task(task_name)
+            except Exception:
+                return
+        main_score = task.metadata.main_score
+
+        for split_scores in obj.scores.values():
+            for subset_scores in split_scores:
+                if subset_scores.get("main_score") is not None:
+                    continue
+                reconstructed = _reconstruct_legacy_main_score(
+                    main_score, subset_scores
+                )
+                if reconstructed is not None:
+                    subset_scores["main_score"] = reconstructed  # type: ignore[index]
+                else:
+                    log_once.warning(f"Main score {main_score} not found in scores")
 
     @classmethod
     def _fix_pair_classification_scores(cls, obj: TaskResult) -> None:
@@ -512,7 +592,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     if main_score in hf_subset_scores:
                         hf_subset_scores["main_score"] = hf_subset_scores[main_score]
                     else:
-                        log_once.warning(f"Main score {main_score} not found in scores")
+                        # Left as None here; reconstructed later (once metric names
+                        # are normalized) by `_reconstruct_missing_main_scores`.
                         hf_subset_scores["main_score"] = None
 
         # specific fixes:
