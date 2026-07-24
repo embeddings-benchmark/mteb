@@ -458,10 +458,19 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         col_language: list[Any] = []
         col_subset: list[Any] = []
         col_score: list[Any] = []
+        col_experiments: list[Any] = []
+        col_model_meta: list[Any] = []
 
         for model_result in bench_results:
             mn = model_result.model_name
             mr = model_result.model_revision
+            mm = model_result.model_meta
+            exp_kwargs = (
+                dict(mm.experiment_kwargs)
+                if mm is not None and mm.experiment_kwargs
+                else None
+            )
+            meta_dict = mm.to_dict() if mm is not None and exp_kwargs else None
             for task_result in model_result.task_results:
                 tn = task_result.task_name
                 for split, scores_list in task_result.scores.items():
@@ -473,6 +482,8 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                         col_language.append(score_item.get("languages", ["Unknown"]))
                         col_subset.append(score_item.get("hf_subset", "default"))
                         col_score.append(score_item.get("main_score", None))
+                        col_experiments.append(exp_kwargs)
+                        col_model_meta.append(meta_dict)
 
         if not col_model_name:
             return None
@@ -486,6 +497,8 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 "language": col_language,
                 "subset": col_subset,
                 "score": col_score,
+                "experiments": col_experiments,
+                "model_meta": col_model_meta,
             }
         )
         if include_model_revision is False:

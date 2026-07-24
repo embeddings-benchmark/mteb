@@ -6,7 +6,7 @@ serialises as ``camelCase`` via ``alias_generator=to_camel``.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal
 from urllib.parse import quote
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -292,6 +292,7 @@ class SummaryRowSchema(_CamelModel):
     scores_by_task_type: dict[str, float]
     scores_by_task: dict[str, float]
     trained_on_tasks: list[str] = Field(default_factory=list)
+    experiments: dict[str, Any] | None = None
 
 
 class BenchmarkSummarySchema(_CamelModel):
