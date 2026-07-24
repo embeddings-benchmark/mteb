@@ -68,7 +68,10 @@ class ViCLIPWrapper(AbsEncoder):
 
         if frames.shape[-2] != _VICLIP_SIZE or frames.shape[-1] != _VICLIP_SIZE:
             frames = F.interpolate(
-                frames, size=(_VICLIP_SIZE, _VICLIP_SIZE), mode="bilinear", align_corners=False
+                frames,
+                size=(_VICLIP_SIZE, _VICLIP_SIZE),
+                mode="bilinear",
+                align_corners=False,
             )
 
         mean = torch.tensor(_VICLIP_MEAN, device=frames.device).view(1, 3, 1, 1)
@@ -160,9 +163,7 @@ class ViCLIPWrapper(AbsEncoder):
 
         if text_embeddings is not None and video_embeddings is not None:
             if len(text_embeddings) != len(video_embeddings):
-                raise ValueError(
-                    "Number of texts and videos must match"
-                )
+                raise ValueError("Number of texts and videos must match")
             return text_embeddings + video_embeddings
         elif text_embeddings is not None:
             return text_embeddings
