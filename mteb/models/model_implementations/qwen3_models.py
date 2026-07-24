@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
-from mteb.models.model_meta import ModelMeta
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
@@ -208,4 +208,66 @@ Qwen3_Embedding_8B = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=QWEN3_CITATION,
+)
+
+
+from mteb.models import ModelMeta, SentenceTransformerEncoderWrapper
+
+nano_em1_0_6b_v2 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="KiteFishAI/Nano-Em1-0.6B-v2",
+    revision="910d7de4086239ce5bc1c55e4a2e56395b3f04b9",
+    release_date="2026-07-20",
+    languages=["eng-Latn"],
+    n_parameters=596049920,
+    n_embedding_parameters=155582464,
+    memory_usage_mb=1137,
+    max_tokens=40960,
+    embed_dim=1024,
+    license="apache-2.0",
+    open_weights=True,
+    framework=["Sentence Transformers", "safetensors"],
+    reference="https://huggingface.co/KiteFishAI/Nano-Em1-0.6B-v2",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    adapted_from="Qwen/Qwen3-0.6B",
+    modalities=["text"],
+    model_type=["dense"],
+    training_datasets={
+    "MSMARCO",
+    "HotpotQA",
+    "FEVER",
+    "NQ",
+    "DBPedia",
+    "NFCorpus",
+    "SciFact",
+    "TRECCOVID",
+    "QuoraRetrieval",
+    "FiQA2018",
+    "CQADupstackRetrieval",
+    "Banking77Classification",
+    "ImdbClassification",
+    "AmazonPolarityClassification",
+    "AmazonReviewsClassification",
+    "AmazonCounterfactualClassification",
+    "MassiveIntentClassification",
+    "MassiveScenarioClassification",
+    "MTOPDomainClassification",
+    "MTOPIntentClassification",
+    "ToxicConversationsClassification",
+    "TweetSentimentExtractionClassification",
+    "EmotionClassification",
+    "RedditClustering",
+    "RedditClusteringP2P",
+    "StackExchangeClustering",
+    "StackExchangeClusteringP2P",
+    "TwentyNewsgroupsClustering",
+    "ArxivClusteringP2P",
+    "ArxivClusteringS2S",
+    "BiorxivClusteringP2P",
+    "BiorxivClusteringS2S",
+    "MedrxivClusteringP2P",
+    "MedrxivClusteringS2S",
+    "SprintDuplicateQuestions",
+}
 )
