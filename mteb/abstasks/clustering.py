@@ -13,7 +13,7 @@ from sklearn.metrics.cluster import adjusted_mutual_info_score, v_measure_score
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
-from mteb.types import Array, HFSubset
+from mteb.types import HFSubset
 from mteb.types.statistics import ClusteringFastDescriptiveStatistics
 
 from ._statistics_calculation import (

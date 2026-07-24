@@ -82,7 +82,7 @@ class CompressionWrapper:
 
     @property
     def mteb_model_meta(self) -> ModelMeta | None:
-        """Return wrapped model meta data."""
+        """The wrapped model meta data."""
         return self.model.mteb_model_meta
 
     def encode(

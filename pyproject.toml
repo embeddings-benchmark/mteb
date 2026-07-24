@@ -148,18 +148,9 @@ qwen_omni_utils = ["qwen_omni_utils"]
 embeddinggemma = ["transformers>=4.56.0"]
 # ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
 
-
-
-
-
-
-
-
-
-
 [dependency-groups]
 lint = [
-    "ruff==0.14.0", # locked so we don't get PRs which fail only due to a lint update
+    "ruff==0.16.0", # locked so we don't get PRs which fail only due to a lint update
     "pre-commit>=4.1.0",
     "typos>1",
     "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
@@ -253,6 +244,9 @@ namespaces = false
 
 [tool.ruff]
 target-version = "py310"
+exclude = [
+    "tests/create_meta/*",  # don't format test md model cards
+]
 
 
 [tool.ruff.lint]
@@ -319,6 +313,7 @@ ignore = [
     "PLC0415",   # import outside of top-level
     "PLR0912",  # too many branches
     "PLR0915",  # too many statements
+    "PLW0717",  # too-many-statements-in-try-clause
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]

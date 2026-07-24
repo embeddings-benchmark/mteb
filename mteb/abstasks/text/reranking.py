@@ -162,8 +162,9 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
                 # first, filter out the ones that have no positive or no negatives
                 enumerated_dataset = enumerated_dataset.filter(
-                    lambda example: len(example["positive"]) > 0
-                    and len(example["negative"]) > 0
+                    lambda example: (
+                        len(example["positive"]) > 0 and len(example["negative"]) > 0
+                    )
                 )
 
                 logger.info(
