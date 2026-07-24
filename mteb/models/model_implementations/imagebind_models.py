@@ -64,15 +64,17 @@ class ImageBindWrapper(AbsEncoder):
 
     def _load_images(self, images: list) -> torch.Tensor:
         """Transform PIL images using ImageBind's vision pipeline."""
-        import torchvision.transforms as T
+        import torchvision.transforms as transforms
         from PIL import Image as PILImage
 
-        transform = T.Compose(
+        transform = transforms.Compose(
             [
-                T.Resize(224, interpolation=T.InterpolationMode.BICUBIC),
-                T.CenterCrop(224),
-                T.ToTensor(),
-                T.Normalize(
+                transforms.Resize(
+                    224, interpolation=transforms.InterpolationMode.BICUBIC
+                ),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                transforms.Normalize(
                     mean=(0.48145466, 0.4578275, 0.40821073),
                     std=(0.26862954, 0.26130258, 0.27577711),
                 ),
@@ -81,7 +83,7 @@ class ImageBindWrapper(AbsEncoder):
         tensors = []
         for img in images:
             if not isinstance(img, PILImage.Image):
-                img = PILImage.fromarray(img)
+                img = PILImage.fromarray(img)  # noqa: PLW2901
             tensors.append(transform(img.convert("RGB")))
         return torch.stack(tensors).to(self.device)
 
@@ -110,11 +112,11 @@ class ImageBindWrapper(AbsEncoder):
             tensors = data.load_and_transform_audio_data(paths, self.device)
             return tensors[ModalityType.AUDIO]
         finally:
-            import os
+            from pathlib import Path
 
             for p in tmp_files:
                 try:
-                    os.unlink(p)
+                    Path(p).unlink()
                 except OSError:
                     pass
 
