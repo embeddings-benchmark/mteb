@@ -230,7 +230,6 @@ nano_em1_0_6b_v2 = ModelMeta(
     reference="https://huggingface.co/KiteFishAI/Nano-Em1-0.6B-v2",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
-    training_datasets={ ... },   # your call — see note above
     adapted_from="Qwen/Qwen3-0.6B",
     modalities=["text"],
     model_type=["dense"],
