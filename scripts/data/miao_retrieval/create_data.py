@@ -2,8 +2,8 @@
 """Package KeisukeImoto/MIAO into MTEB audio↔image retrieval format.
 
 MIAO pairs FSD50K sound-event clips with human-drawn onomatopoeic images
-(50 classes × 12 audio / 18 images). Ground truth is class-level: every audio
-of class C is relevant to every image of class C (and vice versa).
+Ground truth is class-level: every audio of class C is relevant to every 
+image of class C (and vice versa).
 
 Builds two Hub datasets (corpus / queries / qrels configs, test split):
   - {repo-prefix}-A2I  (audio query → image corpus)
@@ -14,7 +14,7 @@ Images are resized (max side 1024, RGB) so the Hub dump stays manageable.
 Usage:
   export HF_TOKEN=...
   uv run python scripts/data/miao_retrieval/create_data.py \\
-      --repo-prefix Wissam42/MIAO \\
+      --repo-prefix {base_repo}/MIAO \\
       --work-dir /tmp/miao_mteb \\
       --push
 """
@@ -214,7 +214,7 @@ def main() -> None:
 
     token = None
     if args.push:
-        token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
+        token = os.environ.get("HF_TOKEN")
         if not token:
             raise SystemExit("Set HF_TOKEN to push")
 
