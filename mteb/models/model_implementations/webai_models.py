@@ -376,8 +376,7 @@ colvec1_1_4b = ModelMeta(
     max_tokens=262144,
     embed_dim=640,
     license=(
-        "https://huggingface.co/webAI-Official/"
-        "webAI-ColVec1.1-4b/blob/main/LICENSE.md"
+        "https://huggingface.co/webAI-Official/webAI-ColVec1.1-4b/blob/main/LICENSE.md"
     ),
     open_weights=True,
     public_training_code=None,
@@ -392,7 +391,7 @@ colvec1_1_4b = ModelMeta(
     citation=COLVEC1_1_CITATION,
     contacts=["zhanlunchang-webai"],
     output_dtypes=None,
-    extra_requirements_groups=["flash_attention"],
+    extra_requirements_groups=["flash_attention", "colvec1_1"],
 )
 
 
@@ -425,8 +424,7 @@ colvec1_1_8b = ModelMeta(
     max_tokens=262144,
     embed_dim=640,
     license=(
-        "https://huggingface.co/webAI-Official/"
-        "webAI-ColVec1.1-8b/blob/main/LICENSE.md"
+        "https://huggingface.co/webAI-Official/webAI-ColVec1.1-8b/blob/main/LICENSE.md"
     ),
     open_weights=True,
     public_training_code=None,
@@ -441,5 +439,5 @@ colvec1_1_8b = ModelMeta(
     citation=COLVEC1_1_CITATION,
     contacts=["zhanlunchang-webai"],
     output_dtypes=None,
-    extra_requirements_groups=["flash_attention"],
+    extra_requirements_groups=["flash_attention", "colvec1_1"],
 )
