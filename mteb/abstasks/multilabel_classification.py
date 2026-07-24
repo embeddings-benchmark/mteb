@@ -276,7 +276,8 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         """
         sample_indices = []
         if idxs is None:
-            idxs = list(np.arange(len(y)))
+            # plain ints: datasets>=4 lazy Columns reject numpy integer keys
+            idxs = list(range(len(y)))
         self.np_rng.shuffle(idxs)
         label_counter: dict[int, int] = defaultdict(int)
         for i in idxs:
