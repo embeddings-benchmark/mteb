@@ -3,12 +3,12 @@ from __future__ import annotations
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_REFERENCE = "https://huggingface.co/datasets/YqjMartin/FLARE"
+_REFERENCE = "https://arxiv.org/abs/2605.10228"
 _BIBTEX = r"""
 @misc{flare2026,
   author = {YqjMartin},
   title = {FLARE: Full-Modality Long-Video Audiovisual Retrieval Benchmark with User-Simulated Queries},
-  url = {https://huggingface.co/datasets/YqjMartin/FLARE},
+  url = {https://arxiv.org/abs/2605.10228},
   year = {2026},
 }
 """
