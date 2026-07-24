@@ -6,9 +6,9 @@ from torch.utils.data import DataLoader
 
 import mteb
 from mteb import AbsTask, EncoderProtocol, TaskMetadata
+from mteb.mocks import MOCK_TASK_TEST_GRID_MONOLINGUAL
 from mteb.models import CompressionWrapper
 from mteb.types import OutputDType
-from tests.task_grid import MOCK_TASK_TEST_GRID_MONOLINGUAL
 
 task_metadata = TaskMetadata(
     name="DummyTask",

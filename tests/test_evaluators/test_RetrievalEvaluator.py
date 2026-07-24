@@ -2,8 +2,8 @@ import pytest
 
 from mteb._evaluators import RetrievalEvaluator
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.mocks.mock_tasks.retrieval import general_args
 from mteb.timing import TimingStack
-from tests.mock_tasks import general_args
 
 TOL = 0.0001
 

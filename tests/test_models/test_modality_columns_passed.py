@@ -7,14 +7,7 @@ from torch.utils.data import DataLoader
 
 import mteb
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import ModelMeta
-from mteb.models.model_implementations.random_baseline import (
-    RandomEncoderBaseline,
-)
-from mteb.models.model_meta import ScoringFunction
-from mteb.types import PromptType
-from mteb.types._encoder_io import Array, BatchedInput
-from tests.mock_tasks import (
+from mteb.mocks.mock_tasks import (
     MockAudioClassification,
     MockClassificationTask,
     MockImageClassificationTask,
@@ -26,6 +19,13 @@ from tests.mock_tasks import (
     MockVideoAudioTextRetrievalVAT2T,
     MockVideoClassification,
 )
+from mteb.models import ModelMeta
+from mteb.models.model_implementations.random_baseline import (
+    RandomEncoderBaseline,
+)
+from mteb.models.model_meta import ScoringFunction
+from mteb.types import PromptType
+from mteb.types._encoder_io import Array, BatchedInput
 
 _MODALITY_COLUMNS = frozenset({"text", "image", "audio", "video"})
 

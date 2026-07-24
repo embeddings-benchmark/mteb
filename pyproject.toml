@@ -337,6 +337,10 @@ preview = true
     "S603",  # allow subprocess calls in tests
     "PLC2701",  # Private name import
 ]
+"mteb/mocks/*" = [
+    "RUF012",
+    "D",
+]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = [
     "D",
@@ -497,6 +501,7 @@ module = [
     "mteb.models.model_implementations.*",
     "mteb.tasks.*",
     "mteb.leaderboard.*",
+    "mteb.mocks.*",
 ]
 ignore_errors = true
 

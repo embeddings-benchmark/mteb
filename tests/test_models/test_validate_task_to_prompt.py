@@ -3,8 +3,8 @@ import logging
 import pytest
 
 from mteb.abstasks import AbsTask
+from mteb.mocks import TASK_TEST_GRID
 from mteb.models.abs_encoder import AbsEncoder
-from tests.task_grid import TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 
