@@ -1,0 +1,443 @@
+{
+    "test": {
+        "num_samples": 846,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": {
+            "total_duration_seconds": 250977.76669647376,
+            "total_frames": 7085360,
+            "min_width": 202,
+            "average_width": 595.4420803782506,
+            "max_width": 640,
+            "min_height": 226,
+            "average_height": 380.31205673758865,
+            "max_height": 640,
+            "min_duration_seconds": 19.185833333333335,
+            "average_duration_seconds": 296.66402682798315,
+            "max_duration_seconds": 656.0887666666666,
+            "unique_videos": 845,
+            "average_fps": 28.166666666666668,
+            "fps": {
+                "24": 129,
+                "30": 569,
+                "25": 134,
+                "26": 2,
+                "29": 5,
+                "15": 3,
+                "7": 1,
+                "10": 1,
+                "27": 2
+            },
+            "min_resolution": [
+                202,
+                360
+            ],
+            "average_resolution": [
+                595.4420803782506,
+                380.31205673758865
+            ],
+            "max_resolution": [
+                640,
+                360
+            ],
+            "resolutions": {
+                "640x360": 691,
+                "626x360": 1,
+                "270x480": 12,
+                "480x360": 22,
+                "480x272": 2,
+                "202x360": 13,
+                "360x640": 58,
+                "416x236": 1,
+                "526x360": 1,
+                "204x360": 2,
+                "296x640": 2,
+                "576x360": 4,
+                "474x360": 1,
+                "360x360": 4,
+                "490x360": 1,
+                "580x360": 1,
+                "320x240": 2,
+                "492x360": 1,
+                "640x272": 3,
+                "540x360": 3,
+                "360x480": 1,
+                "360x370": 1,
+                "400x226": 1,
+                "484x360": 1,
+                "476x360": 1,
+                "576x324": 1,
+                "514x360": 1,
+                "638x360": 1,
+                "640x338": 1,
+                "636x360": 2,
+                "508x360": 1,
+                "478x360": 1,
+                "600x360": 1,
+                "640x358": 1,
+                "480x270": 2,
+                "408x360": 1,
+                "640x352": 1,
+                "270x360": 1,
+                "486x360": 1
+            }
+        },
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 116,
+            "labels": {
+                "Engineering Projects": {
+                    "count": 8
+                },
+                "Game Reviews": {
+                    "count": 7
+                },
+                "Career Highlights": {
+                    "count": 8
+                },
+                "Recipe Videos": {
+                    "count": 8
+                },
+                "Fashion Hauls": {
+                    "count": 7
+                },
+                "Remixes": {
+                    "count": 8
+                },
+                "Skincare Routines": {
+                    "count": 8
+                },
+                "Music Videos": {
+                    "count": 8
+                },
+                "Documentaries": {
+                    "count": 8
+                },
+                "Home Improvement": {
+                    "count": 8
+                },
+                "Cultural Explainers": {
+                    "count": 8
+                },
+                "Film Trailers": {
+                    "count": 8
+                },
+                "Space Missions": {
+                    "count": 8
+                },
+                "Toy Collections": {
+                    "count": 8
+                },
+                "Camping": {
+                    "count": 8
+                },
+                "Software Tutorials": {
+                    "count": 8
+                },
+                "Chemistry": {
+                    "count": 8
+                },
+                "Poetry Readings": {
+                    "count": 8
+                },
+                "Memorabilia": {
+                    "count": 8
+                },
+                "Short Films": {
+                    "count": 8
+                },
+                "Let's Plays": {
+                    "count": 8
+                },
+                "Political Commentary": {
+                    "count": 8
+                },
+                "Marketing Strategies": {
+                    "count": 8
+                },
+                "Astronomy": {
+                    "count": 8
+                },
+                "Car Modifications": {
+                    "count": 8
+                },
+                "Conservation Efforts": {
+                    "count": 8
+                },
+                "Entrepreneurship": {
+                    "count": 8
+                },
+                "World News": {
+                    "count": 8
+                },
+                "Climate Change": {
+                    "count": 8
+                },
+                "Unboxing Videos": {
+                    "count": 8
+                },
+                "Book Reviews": {
+                    "count": 8
+                },
+                "Stand-up": {
+                    "count": 8
+                },
+                "Pranks": {
+                    "count": 6
+                },
+                "Buyer\u2019s Guides": {
+                    "count": 8
+                },
+                "Motivational Talks": {
+                    "count": 8
+                },
+                "Sports Talk Shows": {
+                    "count": 8
+                },
+                "Parodies": {
+                    "count": 8
+                },
+                "ASMR": {
+                    "count": 8
+                },
+                "Sketches": {
+                    "count": 8
+                },
+                "Political Interviews": {
+                    "count": 8
+                },
+                "Editorials": {
+                    "count": 8
+                },
+                "Analysis Shows": {
+                    "count": 8
+                },
+                "Hiking": {
+                    "count": 8
+                },
+                "Writing Tips": {
+                    "count": 8
+                },
+                "Knitting": {
+                    "count": 8
+                },
+                "Storytime": {
+                    "count": 8
+                },
+                "Training Techniques": {
+                    "count": 8
+                },
+                "Mental Health Tips": {
+                    "count": 8
+                },
+                "AI Concepts": {
+                    "count": 8
+                },
+                "Nutrition Guides": {
+                    "count": 8
+                },
+                "Off-Roading": {
+                    "count": 5
+                },
+                "Investment Guides": {
+                    "count": 8
+                },
+                "Celebrity Interviews": {
+                    "count": 8
+                },
+                "Destination Guides": {
+                    "count": 8
+                },
+                "Documentary Profiles": {
+                    "count": 8
+                },
+                "Food Reviews": {
+                    "count": 8
+                },
+                "Biology": {
+                    "count": 8
+                },
+                "Social Commentary": {
+                    "count": 8
+                },
+                "Travel Vlogs": {
+                    "count": 8
+                },
+                "Top 10 Videos": {
+                    "count": 8
+                },
+                "Ranked Lists": {
+                    "count": 8
+                },
+                "Travel Tips": {
+                    "count": 8
+                },
+                "Makeup Tutorials": {
+                    "count": 8
+                },
+                "Movie Reviews": {
+                    "count": 8
+                },
+                "Parenting Tips": {
+                    "count": 8
+                },
+                "Gadget Reviews": {
+                    "count": 8
+                },
+                "Expert Interviews": {
+                    "count": 8
+                },
+                "Pronunciation Guides": {
+                    "count": 8
+                },
+                "Match Replays": {
+                    "count": 8
+                },
+                "Game Commentary": {
+                    "count": 8
+                },
+                "Drawing Tutorials": {
+                    "count": 8
+                },
+                "Athlete Workouts": {
+                    "count": 8
+                },
+                "Daily Vlogs": {
+                    "count": 6
+                },
+                "Political News": {
+                    "count": 8
+                },
+                "Gardening Tips": {
+                    "count": 8
+                },
+                "TED Talks": {
+                    "count": 8
+                },
+                "Tech Reviews": {
+                    "count": 8
+                },
+                "Family Vlogs": {
+                    "count": 8
+                },
+                "Car Reviews": {
+                    "count": 8
+                },
+                "Event Livestreams": {
+                    "count": 8
+                },
+                "Physics": {
+                    "count": 8
+                },
+                "Lyric Videos": {
+                    "count": 8
+                },
+                "Historical Analysis": {
+                    "count": 8
+                },
+                "Walkthroughs": {
+                    "count": 8
+                },
+                "Software Reviews": {
+                    "count": 8
+                },
+                "Gameplay Tutorials": {
+                    "count": 8
+                },
+                "Fishing": {
+                    "count": 7
+                },
+                "Motorsport Commentary": {
+                    "count": 5
+                },
+                "Mechanical Engineering": {
+                    "count": 8
+                },
+                "Academic Lectures": {
+                    "count": 8
+                },
+                "Cooking Tutorials": {
+                    "count": 6
+                },
+                "DIY & Crafts": {
+                    "count": 8
+                },
+                "Q&A Sessions": {
+                    "count": 8
+                },
+                "Art Exhibitions": {
+                    "count": 8
+                },
+                "Cinematography": {
+                    "count": 6
+                },
+                "Language Lessons": {
+                    "count": 8
+                },
+                "Reaction Videos": {
+                    "count": 8
+                },
+                "Breaking News": {
+                    "count": 8
+                },
+                "Racing Highlights": {
+                    "count": 6
+                },
+                "Painting Tutorials": {
+                    "count": 8
+                },
+                "Political Debates": {
+                    "count": 1
+                },
+                "Science Explainers": {
+                    "count": 6
+                },
+                "Gaming Livestreams": {
+                    "count": 8
+                },
+                "Machine Learning Tutorials": {
+                    "count": 6
+                },
+                "Photography Tips": {
+                    "count": 6
+                },
+                "Interior Design": {
+                    "count": 2
+                },
+                "Covers": {
+                    "count": 8
+                },
+                "Workout Routines": {
+                    "count": 8
+                },
+                "Driving Tutorials": {
+                    "count": 5
+                },
+                "Game Highlights": {
+                    "count": 8
+                },
+                "Best of [Category]": {
+                    "count": 1
+                },
+                "Social Issue Debates": {
+                    "count": 1
+                },
+                "Childcare Advice": {
+                    "count": 1
+                },
+                "Social Experiments": {
+                    "count": 2
+                },
+                "DIY Projects": {
+                    "count": 1
+                },
+                "Electrical Engineering": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}
