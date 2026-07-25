@@ -1,5 +1,5 @@
-from mteb import SentenceTransformerEncoderWrapper
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 nano_em1_0_6b_v2 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
@@ -21,6 +21,8 @@ nano_em1_0_6b_v2 = ModelMeta(
     adapted_from="Qwen/Qwen3-0.6B",
     modalities=["text"],
     model_type=["dense"],
+    public_training_code=None,
+    public_training_data=None,
     training_datasets={
         "MSMARCO",
         "HotpotQA",
