@@ -224,7 +224,7 @@ class ResultCache:
 
     @property
     def remote_repo_path(self) -> Path:
-        """Get the path to the remote repository clone.
+        """The path to the remote repository clone.
 
         Returns:
             The path to the remote repository clone.
@@ -253,7 +253,7 @@ class ResultCache:
 
     @property
     def remote_results_path(self) -> Path:
-        """Get the path to the remote results directory.
+        """The path to the remote results directory.
 
         Returns:
             The path to the remote results directory.
@@ -431,7 +431,7 @@ class ResultCache:
 
     @property
     def default_cache_path(self) -> Path:
-        """Get the local cache directory for MTEB results.
+        """The local cache directory for MTEB results.
 
         Returns:
             The path to the local cache directory.
