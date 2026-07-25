@@ -16,7 +16,8 @@ model = mteb.get_model("sentence-transformers/static-similarity-mrl-multilingual
 
 # wrap the model with the cache wrapper
 from mteb.models.cache_wrappers import CachedEmbeddingWrapper
-model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path='path_to_cache_dir')
+
+model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path="path_to_cache_dir")
 # run as normal
 results = mteb.evaluate(model_with_cached_emb, tasks=[task])
 ```
