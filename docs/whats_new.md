@@ -46,7 +46,7 @@ dense = mteb.get_model("intfloat/multilingual-e5-small")
 # Wrap them using Reciprocal Rank Fusion (RRF)
 hybrid_model = HybridSearch(
     models=[bm25, dense],
-    fusion_strategy="rrf", 
+    fusion_strategy="rrf",
     weights=[0.5, 0.5],
 )
 
@@ -241,25 +241,35 @@ print(results.model_results)
 # [ModelResult(model_name=mteb/baseline-random-encoder, model_revision=1, task_results=[...](#1))]
 
 # getting results with specific experiment
-model_meta = mteb.get_model_meta("mteb/baseline-random-encoder", experiment_kwargs={"a": "test"})
+model_meta = mteb.get_model_meta(
+    "mteb/baseline-random-encoder", experiment_kwargs={"a": "test"}
+)
 result_with_experiment = cache.load_results(models=[model_meta])
 # equal to
-result_with_experiment = cache.load_results(models=["mteb/baseline-random-encoder"], experiment_kwargs={"a": "test"})
+result_with_experiment = cache.load_results(
+    models=["mteb/baseline-random-encoder"], experiment_kwargs={"a": "test"}
+)
 print(result_with_experiment.model_results)
 # [ModelResult(model_name=mteb/baseline-random-encoder, model_revision=1, experiment_name=a_test, task_results=[...](#1))]
 
 # don't load experiment results
-results_without_experiment = cache.load_results(models=["mteb/baseline-random-encoder"], load_experiments="no_experiments")
+results_without_experiment = cache.load_results(
+    models=["mteb/baseline-random-encoder"], load_experiments="no_experiments"
+)
 print(results_without_experiment.model_results)
 # [ModelResult(model_name=mteb/baseline-random-encoder, model_revision=1, task_results=[...](#1))]
 
 # load all results for specific model
-results_without_experiment = cache.load_results(models=["mteb/baseline-random-encoder"], load_experiments="match_name")
+results_without_experiment = cache.load_results(
+    models=["mteb/baseline-random-encoder"], load_experiments="match_name"
+)
 print(results_without_experiment.model_results)
 # [ModelResult(model_name=mteb/baseline-random-encoder, model_revision=1, task_results=[...](#1)), ModelResult(model_name=mteb/baseline-random-encoder, model_revision=1, experiment_name=a_test, task_results=[...](#1))]
 
 # only one result will be loaded as experiment name doesn't match, so it will load the default one
-results_without_experiment = cache.load_results(models=["mteb/baseline-random-encoder"], load_experiments="match_kwargs")
+results_without_experiment = cache.load_results(
+    models=["mteb/baseline-random-encoder"], load_experiments="match_kwargs"
+)
 print(results_without_experiment.model_results)
 # [ModelResult(model_name=mteb/baseline-random-encoder, model_revision=1, task_results=[...](#1))]
 
@@ -281,6 +291,7 @@ To convert your task into a HuggingFace benchmark, you can simply run:
 
 ```python
 import mteb
+
 task = mteb.get_task("MyTask")
 task.push_eval_to_hub("myorg/mytask")
 ```
@@ -312,21 +323,21 @@ Added audio support to MTEB 🎉. This includes support for loading and processi
 ```python
 import mteb
 
-tasks= mteb.get_tasks()
+tasks = mteb.get_tasks()
 
 audio_task = mteb.get_tasks(modalities=["audio"])
-len(audio_task) # 108 tasks
+len(audio_task)  # 108 tasks
 
 models = mteb.get_model_metas()
 audio_models = [model for model in models if "audio" in model.modalities]
-len(audio_models) # 56 models
+len(audio_models)  # 56 models
 
 # and as easy as always to evaluate on these tasks:
 audio_task = audio_task[0]
-print(audio_task) # CREMAD(name='CREMA_D', languages=['eng'])
+print(audio_task)  # CREMAD(name='CREMA_D', languages=['eng'])
 
 audio_model = audio_models[0]
-print(audio_model.name) # google/vggish
+print(audio_model.name)  # google/vggish
 
 mteb.evaluate(audio_model, audio_task)
 ```
@@ -428,10 +439,7 @@ from mteb.models.search_encoder_index import FaissSearchIndex
 
 model = mteb.get_model(...)
 index_backend = FaissSearchIndex(model)
-model = SearchEncoderWrapper(
-    model,
-    index_backend=index_backend
-)
+model = SearchEncoderWrapper(model, index_backend=index_backend)
 ...
 ```
 
@@ -508,7 +516,7 @@ It allow you to access the online cache so you don't have to rerun existing mode
 
 ```py
 # no need to rerun already public results
-cache.download_from_remote() # download the latest results from the remote repository
+cache.download_from_remote()  # download the latest results from the remote repository
 results = mteb.evaluate(model, tasks, cache=cache)
 ```
 
@@ -528,7 +536,7 @@ Not only does this allow more efficient loading using the torch dataloader, but 
 batch_input: BatchedInput = {
     "text": list[str],
     "images": list[PIL.Image],
-    "audio": list[list[audio]], # upcoming
+    "audio": list[list[audio]],  # upcoming
     # + optional fields such as document title
 }
 ```
@@ -593,8 +601,7 @@ class SearchProtocol(Protocol):
         hf_split: str,
         hf_subset: str,
         encode_kwargs: dict[str, Any],
-    ) -> None:
-        ...
+    ) -> None: ...
 
     def search(
         self,
@@ -606,8 +613,7 @@ class SearchProtocol(Protocol):
         top_k: int,
         encode_kwargs: dict[str, Any],
         top_ranked: TopRankedDocumentsType | None = None,
-    ) -> RetrievalOutputType:
-        ...
+    ) -> RetrievalOutputType: ...
 ```
 
 We're automatically wrapping `Encoder` and `CrossEncoder` models support `SearchProtocol`. However, if your model needs a custom index you can implement this protocol directly, like was done for colbert-like models.
@@ -627,11 +633,13 @@ The new `ResultCache` also makes it easier to load, inspect and compare both loc
 ```py
 import mteb
 
-cache = mteb.ResultCache(cache_path="~/.cache/mteb") # default
-cache.download_from_remote() # download the latest results from the remote repository
+cache = mteb.ResultCache(cache_path="~/.cache/mteb")  # default
+cache.download_from_remote()  # download the latest results from the remote repository
 
 # load both local and online results
-results = cache.load_results(models=["sentence-transformers/all-MiniLM-L6-v2", ...], tasks=["STS12"])
+results = cache.load_results(
+    models=["sentence-transformers/all-MiniLM-L6-v2", ...], tasks=["STS12"]
+)
 df = results.to_dataframe()
 ```
 
@@ -641,6 +649,7 @@ Descriptive statistics isn't a new thing in MTEB, however, now it is there for e
 
 ```py
 import mteb
+
 task = mteb.get_task("MIRACLRetrievalHardNegatives")
 
 task.metadata.descriptive_stats

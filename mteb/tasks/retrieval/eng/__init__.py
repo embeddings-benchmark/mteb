@@ -63,6 +63,7 @@ from .bright_v1_1_retrieval import (
 )
 from .browse_comp_plus_retrieval import BrowseCompPlusRetrieval
 from .built_bench_retrieval import BuiltBenchRetrieval
+from .castella_amr import CASTELLAAMRRetrieval
 from .chat_doctor_retrieval import ChatDoctorRetrieval
 from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
 from .chem_nq_retrieval import ChemNQRetrieval
@@ -77,6 +78,7 @@ from .climate_fever_retrieval import (
 )
 from .clotho import ClothoA2TRetrieval, ClothoT2ARetrieval
 from .cmu_arctic import CMUArcticA2TRetrieval, CMUArcticT2ARetrieval
+from .covers80_retrieval import Covers80A2ARetrieval
 from .cqa_dupstack_android_retrieval import CQADupstackAndroidRetrieval
 from .cqa_dupstack_english_retrieval import CQADupstackEnglishRetrieval
 from .cqa_dupstack_gaming_retrieval import CQADupstackGamingRetrieval
@@ -481,6 +483,7 @@ __all__ = [
     "BrightTheoremQATheoremsRetrieval",
     "BrowseCompPlusRetrieval",
     "BuiltBenchRetrieval",
+    "CASTELLAAMRRetrieval",
     "CIRRIT2IRetrieval",
     "CLDA2TRetrieval",
     "CLDAT2ARetrieval",
@@ -509,6 +512,7 @@ __all__ = [
     "ClothoA2TRetrieval",
     "ClothoT2ARetrieval",
     "ConvoMem",
+    "Covers80A2ARetrieval",
     "CovidQA",
     "DAPFAMAllTitlAbsClmToFullTextRetrieval",
     "DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval",
