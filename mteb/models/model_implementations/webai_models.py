@@ -352,7 +352,7 @@ colvec1_1_4b = ModelMeta(
     loader=ColVec11Wrapper,
     loader_kwargs={
         "torch_dtype": torch.bfloat16,
-        "attn_implementation": "flash_attention_2",
+        "attn_implementation": "sdpa",
         "processor_kwargs": {
             "max_num_visual_tokens": 1792,
         },
@@ -391,7 +391,7 @@ colvec1_1_4b = ModelMeta(
     citation=COLVEC1_1_CITATION,
     contacts=["zhanlunchang-webai"],
     output_dtypes=None,
-    extra_requirements_groups=["flash_attention", "colvec1_1"],
+    extra_requirements_groups=["colvec1_1"],
 )
 
 
@@ -399,7 +399,7 @@ colvec1_1_8b = ModelMeta(
     loader=ColVec11Wrapper,
     loader_kwargs={
         "torch_dtype": torch.bfloat16,
-        "attn_implementation": "flash_attention_2",
+        "attn_implementation": "sdpa",
         "processor_kwargs": {
             "max_num_visual_tokens": 1792,
         },
@@ -438,5 +438,5 @@ colvec1_1_8b = ModelMeta(
     citation=COLVEC1_1_CITATION,
     contacts=["zhanlunchang-webai"],
     output_dtypes=None,
-    extra_requirements_groups=["flash_attention", "colvec1_1"],
+    extra_requirements_groups=["colvec1_1"],
 )
