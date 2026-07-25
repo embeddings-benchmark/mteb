@@ -1,0 +1,74 @@
+from __future__ import annotations
+
+from mteb.abstasks.classification import AbsTaskClassification
+from mteb.abstasks.task_metadata import TaskMetadata
+
+
+class SciRepEvalDRSMClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="SciRepEvalDRSMClassification",
+        description=(
+            "Disease Research State Model (DRSM) classification task from the "
+            "SciRepEval benchmark. Given the title and abstract of a biomedical "
+            "paper, classify it into one of five research-state categories: "
+            "'clinical characteristics or disease pathology', 'disease mechanism', "
+            "'therapeutics in the clinic', 'patient-based therapeutics', or 'other'."
+        ),
+        reference="https://aclanthology.org/2023.emnlp-main.338/",
+        dataset={
+            "path": "allenai/scirepeval",
+            "name": "drsm",
+            "revision": "781d35d1bf87253b3dcd0fadcb82bfbee9c244f1",
+        },
+        type="Classification",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-01-01", "2023-12-06"),
+        domains=["Academic", "Medical", "Written"],
+        task_subtypes=["Topic classification"],
+        license="not specified",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{singh-etal-2023-scirepeval,
+  address = {Singapore},
+  author = {Singh, Amanpreet  and
+D{'}Arcy, Mike  and
+Cohan, Arman  and
+Downey, Doug  and
+Feldman, Sergey},
+  booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/v1/2023.emnlp-main.338},
+  month = dec,
+  pages = {5548--5566},
+  publisher = {Association for Computational Linguistics},
+  title = {{SciRepEval: A Multi-Format Benchmark for Scientific Document Representations}},
+  url = {https://aclanthology.org/2023.emnlp-main.338/},
+  year = {2023},
+}
+""",
+    )
+
+    def dataset_transform(self, num_proc: int | None = None) -> None:
+        # SciRepEval exposes only a single "evaluation" split for `drsm`, so we
+        # build a stratified train/test split for the classification evaluator.
+        ds = self.dataset["evaluation"]
+        ds = ds.map(
+            lambda x: {"text": f"{x['title'] or ''}\n\n{x['abstract'] or ''}".strip()},
+            num_proc=num_proc,
+        )
+        keep = {"text", "class"}
+        ds = ds.remove_columns([c for c in ds.column_names if c not in keep])
+        ds = ds.rename_column("class", "label")
+        ds = ds.class_encode_column("label")
+        ds = ds.train_test_split(
+            test_size=0.3, seed=self.seed, stratify_by_column="label"
+        )
+        ds = self.stratified_subsampling(
+            dataset_dict=ds, seed=self.seed, splits=["test"]
+        )
+        self.dataset = ds

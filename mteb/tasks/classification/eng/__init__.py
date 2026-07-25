@@ -231,6 +231,7 @@ from .ravdess_av_classification import (
     RAVDESSVClassification,
 )
 from .resisc45_classification import RESISC45Classification
+from .scirepeval_drsm_classification import SciRepEvalDRSMClassification
 from .sds_eye_protection_classification import (
     SDSEyeProtectionClassification,
     SDSEyeProtectionClassificationV2,
@@ -526,6 +527,7 @@ __all__ = [
     "SDSGlovesClassificationV2",
     "STL10Classification",
     "SUN397Classification",
+    "SciRepEvalDRSMClassification",
     "SomethingSomethingV2Classification",
     "SpeechCommandsClassification",
     "SpokeNEnglishClassification",
