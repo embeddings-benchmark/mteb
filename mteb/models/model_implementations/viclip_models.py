@@ -55,7 +55,8 @@ class ViCLIPWrapper(AbsEncoder):
         self.model.eval()
         self.tokenizer = self.model.tokenizer
 
-    def _preprocess_frames(self, frames: torch.Tensor) -> torch.Tensor:
+    @staticmethod
+    def _preprocess_frames(frames: torch.Tensor) -> torch.Tensor:
         """Normalize (T, C, H, W) frame tensor to ViCLIP input format."""
         import torch.nn.functional as F
 
@@ -118,12 +119,10 @@ class ViCLIPWrapper(AbsEncoder):
         all_embeddings = []
 
         for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):
-            processed = []
-            for v in batch["video"]:
-                if isinstance(v, torch.Tensor):
-                    v = self._preprocess_frames(v)
-                processed.append(v)
-
+            processed = [
+                self._preprocess_frames(v) if isinstance(v, torch.Tensor) else v
+                for v in batch["video"]
+            ]
             # Stack to (B, T, C, H, W) and move to device
             video_tensor = torch.stack(processed, dim=0).to(self.device)
             features = self.model.get_vid_features(video_tensor)
