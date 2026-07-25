@@ -84,7 +84,11 @@ class STARBenchFeasibilityVideoCentricQA(AbsTaskRetrieval):
         self.dataset = {"default": {}}
         for split in self.metadata.eval_splits:
             self.dataset["default"][split] = _load_split(
-                _DATASET["path"], _DATASET["revision"], "feasibility", split, ["video", "text"]
+                _DATASET["path"],
+                _DATASET["revision"],
+                "feasibility",
+                split,
+                ["video", "text"],
             )
         self.data_loaded = True
 
@@ -118,7 +122,11 @@ class STARBenchFeasibilityVideoAudioCentricQA(AbsTaskRetrieval):
         self.dataset = {"default": {}}
         for split in self.metadata.eval_splits:
             self.dataset["default"][split] = _load_split(
-                _DATASET["path"], _DATASET["revision"], "feasibility", split, ["video", "audio", "text"]
+                _DATASET["path"],
+                _DATASET["revision"],
+                "feasibility",
+                split,
+                ["video", "audio", "text"],
             )
         self.data_loaded = True
 
@@ -152,7 +160,11 @@ class STARBenchInteractionVideoCentricQA(AbsTaskRetrieval):
         self.dataset = {"default": {}}
         for split in self.metadata.eval_splits:
             self.dataset["default"][split] = _load_split(
-                _DATASET["path"], _DATASET["revision"], "interaction", split, ["video", "text"]
+                _DATASET["path"],
+                _DATASET["revision"],
+                "interaction",
+                split,
+                ["video", "text"],
             )
         self.data_loaded = True
 
@@ -186,7 +198,11 @@ class STARBenchInteractionVideoAudioCentricQA(AbsTaskRetrieval):
         self.dataset = {"default": {}}
         for split in self.metadata.eval_splits:
             self.dataset["default"][split] = _load_split(
-                _DATASET["path"], _DATASET["revision"], "interaction", split, ["video", "audio", "text"]
+                _DATASET["path"],
+                _DATASET["revision"],
+                "interaction",
+                split,
+                ["video", "audio", "text"],
             )
         self.data_loaded = True
 
@@ -220,7 +236,11 @@ class STARBenchPredictionVideoCentricQA(AbsTaskRetrieval):
         self.dataset = {"default": {}}
         for split in self.metadata.eval_splits:
             self.dataset["default"][split] = _load_split(
-                _DATASET["path"], _DATASET["revision"], "prediction", split, ["video", "text"]
+                _DATASET["path"],
+                _DATASET["revision"],
+                "prediction",
+                split,
+                ["video", "text"],
             )
         self.data_loaded = True
 
@@ -254,7 +274,11 @@ class STARBenchPredictionVideoAudioCentricQA(AbsTaskRetrieval):
         self.dataset = {"default": {}}
         for split in self.metadata.eval_splits:
             self.dataset["default"][split] = _load_split(
-                _DATASET["path"], _DATASET["revision"], "prediction", split, ["video", "audio", "text"]
+                _DATASET["path"],
+                _DATASET["revision"],
+                "prediction",
+                split,
+                ["video", "audio", "text"],
             )
         self.data_loaded = True
 
@@ -288,7 +312,11 @@ class STARBenchSequenceVideoCentricQA(AbsTaskRetrieval):
         self.dataset = {"default": {}}
         for split in self.metadata.eval_splits:
             self.dataset["default"][split] = _load_split(
-                _DATASET["path"], _DATASET["revision"], "sequence", split, ["video", "text"]
+                _DATASET["path"],
+                _DATASET["revision"],
+                "sequence",
+                split,
+                ["video", "text"],
             )
         self.data_loaded = True
 
@@ -322,6 +350,10 @@ class STARBenchSequenceVideoAudioCentricQA(AbsTaskRetrieval):
         self.dataset = {"default": {}}
         for split in self.metadata.eval_splits:
             self.dataset["default"][split] = _load_split(
-                _DATASET["path"], _DATASET["revision"], "sequence", split, ["video", "audio", "text"]
+                _DATASET["path"],
+                _DATASET["revision"],
+                "sequence",
+                split,
+                ["video", "audio", "text"],
             )
         self.data_loaded = True
