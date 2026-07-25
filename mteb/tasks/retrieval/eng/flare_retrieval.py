@@ -5,17 +5,20 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _REFERENCE = "https://arxiv.org/abs/2605.10228"
 _BIBTEX = r"""
-@misc{flare2026,
-  author = {YqjMartin},
-  title = {FLARE: Full-Modality Long-Video Audiovisual Retrieval Benchmark with User-Simulated Queries},
-  url = {https://arxiv.org/abs/2605.10228},
-  year = {2026},
+@misc{you2026flarefullmodalitylongvideoaudiovisual,
+  title={FLARE: Full-Modality Long-Video Audiovisual Retrieval Benchmark with User-Simulated Queries},
+  author={Qijie You and Hao Liang and Mingrui Chen and Bohan Zeng and Meiyi Qiang and Zhenhao Wong and Wentao Zhang},
+  year={2026},
+  eprint={2605.10228},
+  archivePrefix={arXiv},
+  primaryClass={cs.MM},
+  url={https://arxiv.org/abs/2605.10228},
 }
 """
-_DESCRIPTION = """FLARE is a long-video audiovisual retrieval benchmark built 
+_DESCRIPTION = """FLARE is a long-video audiovisual retrieval benchmark built
 from Video-MME source videos (399 videos, ~88k fine-grained clips). Clips have
-vision-only, audio-only, and unified audiovisual captions, plus user-simulated 
-queries. The unified (cross-modal) query split applies a hard bimodal constraint 
+vision-only, audio-only, and unified audiovisual captions, plus user-simulated
+queries. The unified (cross-modal) query split applies a hard bimodal constraint
 so that only joint vision+audio evidence uniquely identifies the target."""
 
 
