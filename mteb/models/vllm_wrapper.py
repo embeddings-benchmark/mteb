@@ -30,7 +30,7 @@ Dtype = Literal["half", "float16", "float", "float32", "bfloat16", "auto"]
 
 
 class VllmWrapperBase:
-    """Wrapper for vllm serving engine."""
+    """Base wrapper for vLLM serving engine."""
 
     convert = "auto"
     mteb_model_meta: ModelMeta | None = None
@@ -46,6 +46,7 @@ class VllmWrapperBase:
         max_model_len: int | None = None,
         max_num_batched_tokens: int | None = None,
         max_num_seqs: int = 128,
+        renderer_num_workers: int = 1,
         tensor_parallel_size: int = 1,
         enable_prefix_caching: bool | None = None,
         gpu_memory_utilization: float = 0.9,
@@ -54,26 +55,25 @@ class VllmWrapperBase:
         enforce_eager: bool = False,
         **kwargs: Any,
     ):
-        """Wrapper for vllm serving engine.
+        """Wrapper for vLLM serving engine.
 
         Args:
-            model: model name string.
+            model: Model name or ModelMeta instance.
             revision: The revision of the model to use.
             trust_remote_code: Whether to trust remote code execution when loading the model.
                 Should be True for models with custom code.
             dtype: Data type for model weights. "auto" will automatically select appropriate
-                dtype based on hardware and model capabilities. vllm uses flash attention by
-                default, which does not support fp32. Therefore, it defaults to using fp16 for
-                inference on fp32 models. Testing has shown a relatively small drop in accuracy.
-                You can manually opt for fp32, but inference speed will be very slow.
-            head_dtype: "head" refers to the last Linear layer(s) of an LLMs, such as the score
-                or classifier in a classification model. Uses fp32 for the head by default to
-                gain extra precision.
+                dtype based on hardware and model capabilities. vLLM uses flash attention by
+                default, which requires fp16/bf16; using fp32 may cause fallback or slow speed.
+            head_dtype: If provided, overrides the data type of the head layers. If None
+                (default), the model's original head dtype is kept.
             max_model_len: Maximum sequence length (context window) supported by the model.
                 If None, uses the model's default maximum length.
             max_num_batched_tokens: Maximum number of tokens to process in a single batch.
                 If None, automatically determined.
             max_num_seqs: Maximum number of sequences to process concurrently.
+            renderer_num_workers: Number of threads for multithreading to accelerate
+                preprocessing.
             tensor_parallel_size: Number of GPUs for tensor parallelism.
             enable_prefix_caching: Whether to enable KV cache sharing for common prompt prefixes.
                 If None, uses the model's default setting.
@@ -81,7 +81,7 @@ class VllmWrapperBase:
             hf_overrides: Dictionary mapping Hugging Face configuration keys to override values.
             pooler_config: Controls the behavior of output pooling in pooling models.
             enforce_eager: Whether to disable CUDA graph optimization and use eager execution.
-            **kwargs: Additional arguments to pass to the vllm serving engine model.
+            **kwargs: Additional arguments to pass to the vLLM serving engine model.
         """
         if not _is_package_available("vllm"):
             raise ImportError(
@@ -113,6 +113,7 @@ class VllmWrapperBase:
             max_model_len=max_model_len,
             max_num_batched_tokens=max_num_batched_tokens,
             max_num_seqs=max_num_seqs,
+            renderer_num_workers=renderer_num_workers,
             tensor_parallel_size=tensor_parallel_size,
             enable_prefix_caching=enable_prefix_caching,
             gpu_memory_utilization=gpu_memory_utilization,
@@ -167,7 +168,7 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
             Can be a string with '{instruction}' placeholder or a callable that takes
             the instruction and prompt type and returns a formatted string.
         apply_instruction_to_documents: Whether to apply instructions to documents prompts.
-        **kwargs: Additional arguments to pass to the vllm serving engine model.
+        **kwargs: Additional arguments to pass to the vLLM serving engine model.
     """
 
     convert = "embed"
