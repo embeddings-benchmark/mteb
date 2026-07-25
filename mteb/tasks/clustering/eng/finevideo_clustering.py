@@ -6,7 +6,7 @@ import time
 from collections import defaultdict
 from pathlib import Path
 
-from datasets import Dataset, Features, Value, Video, load_dataset
+from datasets import Dataset, load_dataset
 
 from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -17,7 +17,6 @@ _VIDEOS_PER_CATEGORY = 8
 _CACHE_DIR = Path(tempfile.gettempdir()) / "mteb_finevideo_clustering_cache"
 _MAX_STREAM_ATTEMPTS = 5
 _MAX_LOAD_SECONDS = 900
-_FEATURES = Features({"video": Video(), "label": Value("string")})
 
 
 class FineVideoClustering(AbsTaskClustering):
@@ -73,6 +72,13 @@ class FineVideoClustering(AbsTaskClustering):
     def load_data(self, **kwargs) -> None:
         if self.data_loaded:
             return
+        # Imported lazily: datasets.Video is only available when the
+        # optional `torchcodec` codec backend is installed, and importing
+        # it at module level would break importing this task (and thus the
+        # whole `mteb.tasks` package) in environments without it.
+        from datasets import Features, Value, Video
+
+        features = Features({"video": Video(), "label": Value("string")})
         _CACHE_DIR.mkdir(exist_ok=True, parents=True)
 
         counts: dict[str, int] = defaultdict(int)
@@ -111,7 +117,7 @@ class FineVideoClustering(AbsTaskClustering):
                     # single flaky shard can otherwise stall for a long time.
                     if rows_scanned % 50 == 0 and _time_budget_exceeded():
                         self.dataset = {
-                            "test": Dataset.from_list(records, features=_FEATURES)
+                            "test": Dataset.from_list(records, features=features)
                         }
                         self.data_loaded = True
                         return
@@ -124,7 +130,7 @@ class FineVideoClustering(AbsTaskClustering):
                         # just to skip most of them.
                         if rows_since_last_add >= 1500 and rows_scanned >= 4000:
                             self.dataset = {
-                                "test": Dataset.from_list(records, features=_FEATURES)
+                                "test": Dataset.from_list(records, features=features)
                             }
                             self.data_loaded = True
                             return
@@ -156,5 +162,5 @@ class FineVideoClustering(AbsTaskClustering):
                     raise
                 time.sleep(5)
 
-        self.dataset = {"test": Dataset.from_list(records, features=_FEATURES)}
+        self.dataset = {"test": Dataset.from_list(records, features=features)}
         self.data_loaded = True
