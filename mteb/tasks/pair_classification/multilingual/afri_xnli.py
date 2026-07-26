@@ -52,9 +52,3 @@ class AfriXNLI(AbsTaskPairClassification):
         sample_creation="created",
         bibtex_citation="",
     )
-
-    def dataset_transform(self, **kwargs):
-        # The current HF dataset already has the correct schema:
-        # sentence1, sentence2, labels with binary 0/1 labels.
-        # Do not filter or remap labels.
-        return
