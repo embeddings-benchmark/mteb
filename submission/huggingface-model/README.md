@@ -39,10 +39,10 @@ policy, not as evidence of zero-shot model selection.
 
 The output dimension depends on the route:
 
-| MTEB task type | Model | Dimension |
-|---|---|---:|
-| Retrieval | F2LLM-v2-330M | 896 |
-| Reranking | C2LLM-7B | 3,584 |
+| MTEB task type | Model | Dimension | Configured max tokens |
+|---|---|---:|---:|
+| Retrieval | F2LLM-v2-330M | 896 | 8,192 |
+| Reranking | C2LLM-7B | 3,584 | 2,048 |
 
 Each individual evaluation task has a fixed output dimension. Current MTEB
 `ModelMeta` has no representation for task-dependent dimensions, so the model

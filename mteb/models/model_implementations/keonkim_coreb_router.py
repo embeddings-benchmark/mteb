@@ -161,15 +161,19 @@ coreb_task_type_router = ModelMeta(
     n_embedding_parameters=sum(
         meta.n_embedding_parameters or 0 for meta in _CHILD_METAS
     ),
-    memory_usage_mb=sum(meta.memory_usage_mb or 0 for meta in _CHILD_METAS),
-    max_tokens=8192,
+    # Children are loaded one at a time, so peak weight memory is the larger
+    # child's footprint rather than the sum.
+    memory_usage_mb=max(meta.memory_usage_mb or 0 for meta in _CHILD_METAS),
+    # The public wrappers currently configure 8,192 tokens for Retrieval and
+    # 2,048 for Reranking; this is the guaranteed common maximum.
+    max_tokens=2048,
     # This task router emits 896d Retrieval and 3584d Reranking embeddings.
     # ModelMeta currently has no task-dependent dimension representation.
     embed_dim=None,
     license="apache-2.0",
     open_weights=True,
     public_training_code=None,
-    public_training_data=F2LLM_v2_330M.public_training_data,
+    public_training_data=None,
     framework=_FRAMEWORKS,
     reference="https://huggingface.co/keonkim/coreb-task-type-router-f2llmv2-330m-c2llm-7b",
     similarity_fn_name=ScoringFunction.COSINE,
