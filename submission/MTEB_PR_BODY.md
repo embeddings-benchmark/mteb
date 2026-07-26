@@ -10,8 +10,10 @@ only the coarse MTEB task type.
 - MTEB: `2.18.6`
 - Device: NVIDIA L4
 - Child settings: each pinned model's official MTEB loader configuration
+- Precision: bfloat16
+- Batch size: 4 for Retrieval; 2 for Reranking
 - Routing: Retrieval -> F2LLM-v2-330M; Reranking -> C2LLM-7B
-- Measured CoREB(v1) macro mean: `0.6019367`
+- Measured CoREB(v1) macro mean: `0.6017383`
 
 ## Disclosure
 

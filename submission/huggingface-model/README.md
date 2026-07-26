@@ -52,18 +52,18 @@ implementation leaves `embed_dim` unset.
 
 | Task | Main score |
 |---|---:|
-| CorebC2CReranking | 0.42383 |
+| CorebC2CReranking | 0.42461 |
 | CorebC2CRetrieval | 0.54383 |
-| CorebC2TReranking | 0.95685 |
+| CorebC2TReranking | 0.95751 |
 | CorebC2TRetrieval | 0.96794 |
-| CorebT2CReranking | 0.28824 |
+| CorebT2CReranking | 0.28561 |
 | CorebT2CRetrieval | 0.43093 |
-| **Macro mean** | **0.6019367** |
+| **Macro mean** | **0.6017383** |
 
-Retrieval was evaluated through the router with MTEB 2.18.6 on an NVIDIA L4.
-The reranking scores are the existing official C2LLM-7B results at the exact
-pinned revision, copied without modification because the router delegates
-those tasks and forwards their encode context unchanged.
+All six results were newly evaluated through the router with MTEB 2.18.6 on
+an NVIDIA L4. Retrieval used bfloat16, batch size 4, and F2LLM's configured
+FlashAttention 2 implementation. Reranking used bfloat16, batch size 2, and
+C2LLM's official attention configuration.
 
 ## Reproduction
 

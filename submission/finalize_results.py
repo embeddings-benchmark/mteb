@@ -34,6 +34,7 @@ RETRIEVAL_TASKS = {task for task in TASKS if task.endswith("Retrieval")}
 RERANKING_TASKS = TASKS - RETRIEVAL_TASKS
 C2LLM_NAME = "codefuse-ai/C2LLM-7B"
 C2LLM_REVISION = "c1dc16d6d64eb962c783bfb36a6d9c2f24a86dca"
+ROUTER_NAME = "keonkim/coreb-task-type-router-f2llmv2-330m-c2llm-7b"
 SOURCE_MODEL_PATHS = (
     "omlabs__coreb-type-router-f2llmv2-330m-c2llm-7b",
     "keonkim__coreb-task-type-router-f2llmv2-330m-c2llm-7b",
@@ -49,7 +50,10 @@ def _parse_args() -> argparse.Namespace:
         "--reranking-source",
         type=Path,
         required=True,
-        help="Official C2LLM-7B result directory from embeddings-benchmark/results.",
+        help=(
+            "New router reranking result directory, or the exact official "
+            "C2LLM-7B directory as a compatibility fallback."
+        ),
     )
     parser.add_argument(
         "--prepare-submission",
@@ -62,33 +66,56 @@ def _parse_args() -> argparse.Namespace:
 def _validate_reranking_source(source: Path) -> list[Path]:
     meta_path = source / "model_meta.json"
     meta = json.loads(meta_path.read_text())
-    if (meta.get("name"), meta.get("revision")) != (C2LLM_NAME, C2LLM_REVISION):
+    identity = (meta.get("name"), meta.get("revision"))
+    allowed_identities = {
+        (C2LLM_NAME, C2LLM_REVISION),
+        (ROUTER_NAME, SOURCE_REVISION),
+    }
+    if identity not in allowed_identities:
         raise ValueError(
-            f"unexpected C2 source metadata in {meta_path}: "
+            f"unexpected reranking source metadata in {meta_path}: "
             f"{meta.get('name')} at {meta.get('revision')}"
         )
     result_paths = [source / f"{task}.json" for task in RERANKING_TASKS]
     tasks = {TaskResult.from_disk(path).task_name for path in result_paths}
     if tasks != RERANKING_TASKS:
-        raise ValueError("official C2 source does not contain all reranking tasks")
+        raise ValueError("source does not contain all reranking tasks")
     return result_paths
 
 
-def _retain_retrieval_run_settings(result_directory: Path) -> None:
-    path = result_directory / "run_settings.jsonl"
+def _read_run_settings(path: Path, tasks: set[str]) -> list[dict]:
     if not path.exists():
-        return
+        return []
 
-    retrieval_settings = []
-    for line in path.read_text().splitlines():
+    settings = []
+    for line in path.read_text(encoding="utf-8").splitlines():
         if not line.strip():
             continue
         entry = json.loads(line)
-        if entry.get("task") in RETRIEVAL_TASKS:
-            retrieval_settings.append(entry)
-    path.write_text(
-        "".join(json.dumps(entry, default=str) + "\n" for entry in retrieval_settings)
-    )
+        if entry.get("task") in tasks:
+            settings.append(entry)
+    return settings
+
+
+def _merge_run_settings(result_directory: Path, reranking_source: Path) -> None:
+    path = result_directory / "run_settings.jsonl"
+    retrieval_settings = _read_run_settings(path, RETRIEVAL_TASKS)
+    if {entry["task"] for entry in retrieval_settings} != RETRIEVAL_TASKS:
+        raise ValueError("source does not contain all Retrieval run settings")
+
+    reranking_path = reranking_source / "run_settings.jsonl"
+    reranking_settings = _read_run_settings(reranking_path, RERANKING_TASKS)
+    if (
+        reranking_path.exists()
+        and {entry["task"] for entry in reranking_settings} != RERANKING_TASKS
+    ):
+        raise ValueError("source does not contain all Reranking run settings")
+
+    settings = retrieval_settings + reranking_settings
+    if settings:
+        path.write_text(
+            "".join(json.dumps(entry, default=str) + "\n" for entry in settings)
+        )
 
 
 def main() -> None:
@@ -143,7 +170,7 @@ def main() -> None:
     for result_path in c2_result_paths:
         shutil.copy2(result_path, destination / result_path.name)
 
-    _retain_retrieval_run_settings(destination)
+    _merge_run_settings(destination, args.reranking_source)
     prepared_tasks = {
         TaskResult.from_disk(path).task_name for path in destination.glob("Coreb*.json")
     }
