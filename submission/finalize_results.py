@@ -30,7 +30,10 @@ TASKS = {
     "CorebT2CReranking",
     "CorebT2CRetrieval",
 }
-SOURCE_MODEL_PATH = "omlabs__coreb-type-router-f2llmv2-330m-c2llm-7b"
+SOURCE_MODEL_PATHS = (
+    "omlabs__coreb-type-router-f2llmv2-330m-c2llm-7b",
+    "keonkim__coreb-task-type-router-f2llmv2-330m-c2llm-7b",
+)
 SOURCE_REVISION = "router-v1"
 
 
@@ -57,19 +60,32 @@ def main() -> None:
             "Update the MTEB ModelMeta revision to the same commit SHA first"
         )
 
-    source = args.cache_path / "results" / SOURCE_MODEL_PATH / SOURCE_REVISION
+    source_roots = [
+        args.cache_path / "results" / model_path / SOURCE_REVISION
+        for model_path in SOURCE_MODEL_PATHS
+    ]
+    result_paths = sorted(
+        path
+        for source_root in source_roots
+        for path in source_root.rglob("Coreb*.json")
+    )
+    source_directories = {path.parent for path in result_paths}
+    if len(source_directories) != 1:
+        raise FileNotFoundError(
+            "expected one source result directory below "
+            f"{', '.join(str(path) for path in source_roots)}; "
+            f"found {len(source_directories)}"
+        )
+    source = source_directories.pop()
     destination = (
         args.cache_path
         / "results"
         / coreb_task_type_router.model_name_as_path()
         / args.revision
     )
-    if not source.is_dir():
-        raise FileNotFoundError(f"source result directory not found: {source}")
     if destination.exists():
         raise FileExistsError(f"destination already exists: {destination}")
 
-    result_paths = sorted(source.glob("Coreb*.json"))
     found_tasks = {TaskResult.from_disk(path).task_name for path in result_paths}
     if found_tasks != TASKS:
         raise ValueError(
