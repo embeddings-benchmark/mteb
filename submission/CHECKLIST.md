@@ -1,6 +1,6 @@
 # Submission checklist
 
-1. Create the public Hugging Face model-card/config repository from
+1. [x] Create the public Hugging Face model-card/config repository from
    `submission/huggingface-model`.
 
    ```bash
@@ -14,14 +14,15 @@
      .
    ```
 
-2. Record its immutable commit SHA.
-3. Replace `TODO_AFTER_HF_UPLOAD` in the MTEB `ModelMeta`.
+2. [x] Record its immutable commit SHA:
+   `a3f180e8d5a1c85aa16f3d37027498d1af780074`.
+3. [x] Set the MTEB `ModelMeta` to that immutable revision.
 4. Run the two model loading checks from `submission/MTEB_PR_BODY.md`.
 5. Re-key the completed MTEB cache and prepare the manual results branch:
 
    ```bash
    PYTHONPATH=. python submission/finalize_results.py \
-     /path/to/mteb-cache HUGGING_FACE_COMMIT_SHA \
+     /path/to/mteb-cache a3f180e8d5a1c85aa16f3d37027498d1af780074 \
      --reranking-source \
      /path/to/gce-20260726-102117/artifacts/mteb-cache/results/keonkim__coreb-task-type-router-f2llmv2-330m-c2llm-7b/router-v1 \
      --prepare-submission

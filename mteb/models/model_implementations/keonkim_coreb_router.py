@@ -153,8 +153,7 @@ coreb_task_type_router = ModelMeta(
     loader=CoREBTaskTypeRouter,
     loader_kwargs={"release_between_types": True},
     name="keonkim/coreb-task-type-router-f2llmv2-330m-c2llm-7b",
-    # Replace with the Hugging Face model-card commit before submitting.
-    revision="TODO_AFTER_HF_UPLOAD",
+    revision="a3f180e8d5a1c85aa16f3d37027498d1af780074",
     release_date="2026-07-26",
     languages=_LANGUAGES,
     n_parameters=sum(meta.n_parameters or 0 for meta in _CHILD_METAS),

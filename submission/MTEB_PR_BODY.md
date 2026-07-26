@@ -29,12 +29,11 @@ on task name, examples, labels, or scores.
   - [x] `mteb.get_model_meta(model_name, revision)`
 - [x] I have tested the implementation works on representative Retrieval and
   Reranking task metadata
-- [ ] The model card/config repository is public
+- [x] The model card/config repository is public
 - [x] There is no original-paper result to reproduce; both child revisions and
   the complete CoREB reproduction environment are documented
 
-## Before opening
+## Before merging
 
-- Replace `TODO_AFTER_HF_UPLOAD` with the public Hugging Face commit SHA.
 - Link the results PR.
 - Confirm maintainers accept task-dependent embedding dimensions for a router.
