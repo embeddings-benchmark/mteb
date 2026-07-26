@@ -32,59 +32,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class LightOnPointwiseRerankerWrapper(CrossEncoderWrapper):
-    """CrossEncoderWrapper that feeds the LightOn ST integration raw payloads.
-
-    The LightOn CrossEncoder integration accepts a text string or a PIL image as
-    the document side of each pair, so multimodal samples collected by
-    ``CrossEncoderWrapper._collect_inputs`` (dicts keyed by modality) are unwrapped
-    into the raw payload: the image if present, the text otherwise.
-
-    ``predict_batch_size`` bounds the sentence-transformers prediction batch size
-    (the search wrapper does not forward ``encode_kwargs`` to ``predict``).
-    """
-
-    def __init__(
-        self,
-        model: Any,
-        revision: str | None = None,
-        device: str | None = None,
-        predict_batch_size: int = 32,
-        **kwargs: Any,
-    ) -> None:
-        self.predict_batch_size = predict_batch_size
-        super().__init__(model, revision=revision, device=device, **kwargs)
-
-    @staticmethod
-    def _unwrap(items: list[Any]) -> list[Any]:
-        unwrapped = []
-        for item in items:
-            if isinstance(item, dict):
-                if item.get("image") is not None:
-                    unwrapped.append(item["image"])
-                else:
-                    unwrapped.append(item.get("text", ""))
-            else:
-                unwrapped.append(item)
-        return unwrapped
-
-    def predict(
-        self,
-        inputs1: DataLoader[BatchedInput],
-        inputs2: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        queries = self._unwrap(self._collect_inputs(inputs1, self.query_prefix))
-        documents = self._unwrap(self._collect_inputs(inputs2, self.passage_prefix))
-        kwargs.setdefault("batch_size", self.predict_batch_size)
-        return self.model.predict(list(zip(queries, documents)), **kwargs)
-
-
 class LightOnListwiseRerankerWrapper:
     """Generative listwise reranker with sliding-window inference.
 
@@ -103,8 +50,12 @@ class LightOnListwiseRerankerWrapper:
     # The 4B backbone enables thinking by default; an empty think block keeps the
     # generation budget for the ranking permutation. The 0.8B/2B prompts omit it.
     think_block = "<think>\n\n</think>\n\n"
+    # Windows per generate() call; halved on OOM at runtime. Values match the
+    # reference evaluation (an image window holds 4 full-page images).
+    text_window_batch_size = 16
+    image_window_batch_size = 8
 
-    def __init__(  # noqa: PLR0913
+    def __init__(
         self,
         model_name: str,
         revision: str | None = None,
@@ -115,13 +66,10 @@ class LightOnListwiseRerankerWrapper:
         stride: int = 2,
         max_new_tokens: int = 30,
         max_length: int = 2048,
-        text_window_batch_size: int = 16,
-        image_window_batch_size: int = 8,
         **kwargs: Any,
     ):
         from transformers import AutoModelForImageTextToText, AutoProcessor
 
-        self.model_name = model_name
         self.device = device or (
             "cuda"
             if torch.cuda.is_available()
@@ -137,16 +85,15 @@ class LightOnListwiseRerankerWrapper:
             .to(self.device)
             .eval()
         )
+        # Batched generation needs left padding (completions are sliced at the
+        # prompt length); the pinned revisions set padding_side in tokenizer_config.
         self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
-        self.processor.tokenizer.padding_side = "left"
 
         self.use_think_block = use_think_block
         self.window_size = window_size
         self.stride = stride
         self.max_new_tokens = max_new_tokens
         self.max_length = max_length
-        self.text_window_batch_size = text_window_batch_size
-        self.image_window_batch_size = image_window_batch_size
         # A malformed generation silently falls back to the input order, which drags
         # scores toward the first-stage ranking with no error raised. Track fallbacks
         # so silent regressions stay visible.
@@ -328,16 +275,28 @@ class LightOnListwiseRerankerWrapper:
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        queries: list[str] = [text for batch in inputs1 for text in batch["text"]]
+        queries: list[str] = []
+        for batch in inputs1:
+            if batch.get("image") is not None:
+                raise ValueError(
+                    "LightOn-rerank models support text queries only; "
+                    "got queries with an image modality."
+                )
+            queries.extend(batch["text"])
         documents: list[str | Image.Image] = []
         for batch in inputs2:
             images = batch.get("image")
-            if images is not None:
-                documents.extend(images)
-            else:
-                documents.extend(batch["text"])
+            texts = batch.get("text")
+            if images is not None and texts is not None:
+                raise ValueError(
+                    "LightOn-rerank models score each candidate as either a text "
+                    "passage or a page image, not both; this task provides documents "
+                    "with both modalities. Use an image-only or text-only variant."
+                )
+            documents.extend(images if images is not None else texts)
         group_queries: list[str] = []
         group_docs: list[list[str | Image.Image]] = []
         for query, document in zip(queries, documents):
@@ -346,7 +305,6 @@ class LightOnListwiseRerankerWrapper:
                 group_docs.append([])
             group_docs[-1].append(document)
 
-        show_progress_bar = kwargs.get("show_progress_bar", True)
         orders = self._sliding_window_rank(
             group_queries, group_docs, show_progress_bar=show_progress_bar
         )
@@ -408,7 +366,7 @@ _LIGHTON_COMMON = dict(
 )
 
 _PW_COMMON = dict(
-    loader=LightOnPointwiseRerankerWrapper,
+    loader=CrossEncoderWrapper,
     loader_kwargs=dict(
         model_kwargs=dict(dtype=torch.bfloat16),
     ),
@@ -424,7 +382,7 @@ _LW_COMMON = dict(
 
 lighton_rerank_pw_0_8b = ModelMeta(
     name="lightonai/LightOn-rerank-PW-0.8B",
-    revision="faec9ed8fb3354b2a0e5acae8dc57030cba9ff62",
+    revision="e2459c2554b95969a68cba3aa6f0bd696723934f",
     n_parameters=852_985_920,
     n_embedding_parameters=254_279_680,
     memory_usage_mb=1627,
@@ -435,7 +393,7 @@ lighton_rerank_pw_0_8b = ModelMeta(
 
 lighton_rerank_pw_2b = ModelMeta(
     name="lightonai/LightOn-rerank-PW-2B",
-    revision="1eb28fb2af08808b848811af59e0320186ed1b6a",
+    revision="c5333533d5ebea2142490d5eacd42f0c8363c808",
     n_parameters=2_213_241_664,
     n_embedding_parameters=508_559_360,
     memory_usage_mb=4221,
@@ -446,7 +404,7 @@ lighton_rerank_pw_2b = ModelMeta(
 
 lighton_rerank_pw_4b = ModelMeta(
     name="lightonai/LightOn-rerank-PW-4B",
-    revision="d2f5f218dd9022315a6fc4a882168d355a43a672",
+    revision="8f0e0c2d506734bf61ff67ab3c4553efebddba39",
     n_parameters=4_539_265_536,
     n_embedding_parameters=635_699_200,
     memory_usage_mb=8658,
@@ -457,7 +415,7 @@ lighton_rerank_pw_4b = ModelMeta(
 
 lighton_rerank_lw_0_8b = ModelMeta(
     name="lightonai/LightOn-rerank-LW-0.8B",
-    revision="a8c8b237bf6ff8f9d4fe56913521394f354a30cd",
+    revision="b6b897c646a9ea980692fb3278ffa04867919b8c",
     n_parameters=852_985_920,
     n_embedding_parameters=254_279_680,
     memory_usage_mb=1627,
@@ -468,7 +426,7 @@ lighton_rerank_lw_0_8b = ModelMeta(
 
 lighton_rerank_lw_2b = ModelMeta(
     name="lightonai/LightOn-rerank-LW-2B",
-    revision="5597c854e85eb32b55ef25585ce9e8e963af3fa0",
+    revision="4629d733e8381a7d2c8cfba17378ce3ceaf0edd4",
     n_parameters=2_213_241_664,
     n_embedding_parameters=508_559_360,
     memory_usage_mb=4221,
@@ -479,7 +437,7 @@ lighton_rerank_lw_2b = ModelMeta(
 
 lighton_rerank_lw_4b = ModelMeta(
     name="lightonai/LightOn-rerank-LW-4B",
-    revision="24afd9113197454de5295d935cc79d74c82a8611",
+    revision="92b0661fa69e4820ac3647548a7f8e940b83cd41",
     n_parameters=4_539_265_536,
     n_embedding_parameters=635_699_200,
     memory_usage_mb=8658,
