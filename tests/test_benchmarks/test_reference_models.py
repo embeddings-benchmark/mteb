@@ -54,7 +54,7 @@ def result_cache() -> BenchmarkResults:
     return results_cache
 
 
-TARGET_BENCHMARKS = mteb.get_benchmarks(display_on_leaderboard=True)
+TARGET_BENCHMARKS = mteb.get_benchmarks()
 
 
 @pytest.mark.test_reference_models
