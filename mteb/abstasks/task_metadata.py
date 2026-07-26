@@ -280,6 +280,9 @@ TaskCategory = Literal[
     "a2v",
     "vt2a",
     "at2v",
+    "a2i",
+    "i2a",
+    "it2v",
 ]
 """The category of the task.
 
@@ -319,6 +322,9 @@ TaskCategory = Literal[
 34. va2va: video+audio to video+audio
 35. v2a: video to audio
 36. a2v: audio to video
+37. a2i: audio to image
+38. i2a: image to audio
+39. it2v: image+text to video
 """
 
 _MODALITY_CODES: dict[str, str] = {
@@ -540,7 +546,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def bcp47_codes(self) -> list[ISOLanguageScript]:
-        """Return the languages and script codes of the dataset formatting in accordance with the BCP-47 standard."""
+        """The languages and script codes of the dataset formatted in accordance with the BCP-47 standard."""
         if isinstance(self.eval_langs, dict):
             return sorted(
                 {lang for langs in self.eval_langs.values() for lang in langs}
@@ -549,7 +555,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def languages(self) -> list[str]:
-        """Return the languages of the dataset as iso639-3 codes."""
+        """The languages of the dataset as iso639-3 codes."""
 
         def get_lang(lang: str) -> str:
             return lang.split("-", maxsplit=1)[0]
@@ -562,7 +568,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def scripts(self) -> set[str]:
-        """Return the scripts of the dataset as iso15924 codes."""
+        """The scripts of the dataset as iso15924 codes."""
 
         def get_script(lang: str) -> str:
             return lang.split("-")[1]
@@ -588,7 +594,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISOLanguageScript]]:
-        """Return a dictionary mapping huggingface subsets to languages."""
+        """A dictionary mapping huggingface subsets to languages."""
         if isinstance(self.eval_langs, dict):
             return self.eval_langs
         return {"default": cast("list[str]", self.eval_langs)}
@@ -608,7 +614,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def descriptive_stats(self) -> dict[str, DescriptiveStatistics] | None:
-        """Return the descriptive statistics for the dataset."""
+        """The descriptive statistics for the dataset."""
         if self.descriptive_stat_path.exists():
             with self.descriptive_stat_path.open("r") as f:
                 js = cast("dict[str, DescriptiveStatistics]", json.load(f))
@@ -617,7 +623,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def descriptive_stat_path(self) -> Path:
-        """Return the path to the descriptive statistics file."""
+        """The path to the descriptive statistics file."""
         descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
         if self.type in MIEB_TASK_TYPE:
             descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"  # noqa: PLR6104
@@ -626,7 +632,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def n_samples(self) -> dict[str, int] | None:
-        """Returns the number of samples in the dataset"""
+        """The number of samples in the dataset."""
         stats = self.descriptive_stats
         if not stats:
             return None
@@ -640,7 +646,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def hf_subsets(self) -> list[str]:
-        """Return the huggingface subsets."""
+        """The huggingface subsets."""
         return list(self.hf_subsets_to_langscripts.keys())
 
     @property
@@ -653,7 +659,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def revision(self) -> str:
-        """Return the dataset revision."""
+        """The dataset revision."""
         return self.dataset["revision"]
 
     def get_modalities(self, prompt_type: PromptType | None = None) -> list[Modalities]:

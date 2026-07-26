@@ -302,7 +302,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
     @property
     def is_cross_encoder(self) -> bool:
-        """Returns True if the model is a cross-encoder.
+        """Whether the model is a cross-encoder.
 
         Derived from model_type field. A model is considered a cross-encoder if "cross-encoder" is in its model_type list.
         """
