@@ -16,17 +16,16 @@ from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
-from mteb.mocks import ALL_TASK_TEST_GRID
-from mteb.models.models_protocols import (
-    CrossEncoderProtocol,
-    EncoderProtocol,
-    SearchProtocol,
+from mteb.mocks.mock_run import (
+    all_checks_passed,
+    check_model_implementation,
+    get_modality_summary,
+    results_to_markdown,
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
-
     from mteb.abstasks.abstask import AbsTask
+    from mteb.mocks.mock_run import CheckResults
     from mteb.types import EncodeKwargs
 
 logger = logging.getLogger(__name__)
@@ -472,117 +471,6 @@ def _leaderboard(args: argparse.Namespace) -> None:
     )
 
 
-def check_model_implementation(
-    model: str | EncoderProtocol | CrossEncoderProtocol | SearchProtocol,
-    *,
-    model_revision: str | None = None,
-    device: str | None = None,
-) -> None:
-    """Check a model implementation using mock tasks."""
-    logger.debug("Setting environment variable TOKENIZERS_PARALLELISM to false")
-    os.environ["TOKENIZERS_PARALLELISM"] = "false"
-
-    if isinstance(model, str):
-        logger.info("Loading model %s...", model)
-        model_name = model
-        model_obj = mteb.get_model(
-            model,
-            model_revision,
-            device=device or ("cuda" if torch.cuda.is_available() else "cpu"),
-        )
-    else:
-        model_obj = model
-        model_name = model.mteb_model_meta.name or model.__class__.__name__
-
-    model_modalities = (
-        model_obj.mteb_model_meta.modalities
-        if model_obj.mteb_model_meta is not None
-        else ["text"]
-    )
-    logger.info("Model modalities: %s", model_modalities)
-
-    # Filter tasks based on model modalities and protocols
-    compatible_tasks = []
-    for task in ALL_TASK_TEST_GRID:
-        if model_modalities is not None and not all(
-            mod in model_modalities for mod in task.metadata.modalities
-        ):
-            continue
-
-        # SearchProtocol / Retrieval-only models (like BM25)
-        if isinstance(model_obj, SearchProtocol) and not isinstance(
-            model_obj, EncoderProtocol
-        ):
-            if not task._support_search:
-                continue
-
-        # CrossEncoder models
-        if isinstance(model_obj, CrossEncoderProtocol):
-            if not task._support_cross_encoder:
-                continue
-
-        compatible_tasks.append(task)
-
-    if not compatible_tasks:
-        logger.warning(
-            "No compatible mock tasks found for model modalities and protocols."
-        )
-        return
-
-    logger.info(
-        "Evaluating model on %d compatible mock tasks...", len(compatible_tasks)
-    )
-    results = mteb.evaluate(
-        model_obj,
-        compatible_tasks,
-        cache=None,
-        raise_error=False,
-        show_progress_bar=False,
-    )
-
-    passed_tasks = {res.task_name for res in results.task_results}
-    failed_reasons = {
-        exc.task_name: exc.exception for exc in (results.exceptions or [])
-    }
-
-    dependency_skipped_tasks = set()
-    for exc in results.exceptions or []:
-        exception_str = exc.exception
-        is_dependency_error = any(
-            pat in exception_str.lower()
-            for pat in [
-                "importerror",
-                "modulenotfounderror",
-                "without having installed the required dependencies",
-                "dependencies",
-                "please install",
-                "install '",
-            ]
-        )
-        if is_dependency_error:
-            dependency_skipped_tasks.add(exc.task_name)
-
-    md_rows = _get_modality_summary(
-        compatible_tasks, passed_tasks, dependency_skipped_tasks, model_modalities
-    )
-
-    output_path = Path("mteb_mock_run_results.md")
-    _write_full_results_to_file(
-        output_path,
-        model_name,
-        compatible_tasks,
-        passed_tasks,
-        dependency_skipped_tasks,
-        failed_reasons,
-        md_rows,
-    )
-
-    all_passed = all(
-        exc.task_name in dependency_skipped_tasks for exc in (results.exceptions or [])
-    )
-    _print_terminal_summary(model_name, all_passed, md_rows, output_path)
-
-
 def mock_run(args: argparse.Namespace) -> None:
     """Run a model on the compatible mock tasks for verification."""
     # set logging based on verbosity level
@@ -599,114 +487,39 @@ def mock_run(args: argparse.Namespace) -> None:
 
     logger.info("Running mock-run with parameters: %s", args)
 
-    check_model_implementation(
-        model=args.model,
-        model_revision=args.model_revision,
-        device=args.device,
-    )
+    logger.debug("Setting environment variable TOKENIZERS_PARALLELISM to false")
+    old_tokenizer_parallelism = os.environ.get("TOKENIZERS_PARALLELISM")
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-
-def _write_full_results_to_file(
-    output_path: Path,
-    model_name: str,
-    compatible_tasks: list[AbsTask],
-    passed_tasks: set[str],
-    dependency_skipped_tasks: set[str],
-    failed_reasons: dict[str, str],
-    md_rows: list[tuple[str, str, str]],
-) -> None:
-    md_lines = [
-        f"# MTEB Mock-Run Results for `{model_name}`",
-        "",
-        "| Task | Modality | Pass | Reason |",
-        "| --- | --- | --- | --- |",
-    ]
-    for task in compatible_tasks:
-        name = task.metadata.name
-        mods = ", ".join(task.metadata.modalities)
-        if name in passed_tasks:
-            status = "✓"
-            reason = "-"
-        elif name in dependency_skipped_tasks:
-            status = "skipped"
-            reason = failed_reasons.get(name, "Missing dependency").replace("\n", " ")
-        else:
-            status = "✗"
-            reason = failed_reasons.get(name, "-").replace("\n", " ")
-        md_lines.append(f"| {name} | {mods} | {status} | {reason} |")
-
-    max_status_len = max([len(row[0]) for row in md_rows] + [len("Pass")])
-    max_mod_len = max([len(row[1]) for row in md_rows] + [len("Modality")])
-
-    md_lines.append("")
-    md_lines.append("## Summary by Modality")
-    md_lines.append("")
-    md_lines.append(
-        f"| {'Pass':<{max_status_len}} | {'Modality':<{max_mod_len}} | Failures |"
-    )
-    md_lines.append(f"| {'-' * max_status_len} | {'-' * max_mod_len} | {'-' * 8} |")
-    for status, modality, failures in md_rows:
-        md_lines.append(
-            f"| {status:<{max_status_len}} | {modality:<{max_mod_len}} | {failures} |"
+    try:
+        model = mteb.get_model(
+            args.model,
+            args.model_revision,
+            device=args.device or ("cuda" if torch.cuda.is_available() else "cpu"),
         )
-
-    output_path.write_text("\n".join(md_lines), encoding="utf-8")
-
-
-def _get_modality_summary(
-    compatible_tasks: list[AbsTask],
-    passed_tasks: set[str],
-    dependency_skipped_tasks: set[str],
-    model_modalities: Sequence[str] | None,
-) -> list[tuple[str, str, str]]:
-    md_rows = []
-    for modality in ["text", "image", "audio", "video"]:
-        is_supported = (
-            modality in model_modalities
-            if model_modalities is not None
-            else any(modality in t.metadata.modalities for t in compatible_tasks)
-        )
-        if not is_supported:
-            md_rows.append(("skipped", modality, ""))
-            continue
-
-        run_tasks = [
-            t
-            for t in compatible_tasks
-            if modality in t.metadata.modalities
-            and t.metadata.name not in dependency_skipped_tasks
-        ]
-
-        if not run_tasks:
-            md_rows.append(("skipped", modality, ""))
-            continue
-
-        passed_count = sum(1 for t in run_tasks if t.metadata.name in passed_tasks)
-        total_count = len(run_tasks)
-
-        if passed_count == total_count:
-            status = f"✓ ({passed_count}/{total_count})"
-            failures = ""
+        results = check_model_implementation(model)
+    finally:
+        if old_tokenizer_parallelism is not None:
+            os.environ["TOKENIZERS_PARALLELISM"] = old_tokenizer_parallelism
         else:
-            status = f"✗ ({passed_count}/{total_count})"
-            failures = ", ".join(
-                t.metadata.name
-                for t in run_tasks
-                if t.metadata.name not in passed_tasks
-            )
-        md_rows.append((status, modality, failures))
-    return md_rows
+            os.environ.pop("TOKENIZERS_PARALLELISM", None)
+
+    output_path = Path("mteb_mock_run_results.md")
+    output_path.write_text(results_to_markdown(args.model, results), encoding="utf-8")
+
+    _print_terminal_summary(args.model, results, output_path)
 
 
 def _print_terminal_summary(
     model_name: str,
-    all_passed: bool,
-    md_rows: list[tuple[str, str, str]],
+    results: CheckResults,
     output_path: Path,
 ) -> None:
     console = Console()
 
-    if all_passed:
+    md_rows = get_modality_summary(results)
+
+    if all_checks_passed(results):
         console.print(f"\n[bold green]✓ `{model_name}` passed all expected checks[/]")
     else:
         console.print(

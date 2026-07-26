@@ -24,7 +24,7 @@ from mteb.results import BenchmarkResults, TaskResult
 from .benchmarks.benchmark import Benchmark
 from .benchmarks.get_benchmark import get_benchmark, get_benchmarks
 
-from mteb.cli.build_cli import check_model_implementation  # isort: skip
+from mteb.mocks.mock_run import check_model_implementation  # isort: skip
 
 __version__ = version("mteb")  # fetch version from install metadata
 

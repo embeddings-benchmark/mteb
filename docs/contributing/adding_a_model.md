@@ -185,22 +185,35 @@ As it is an optional dependency, you can't use top-level dependencies, but will 
 
 ### Local Model Verification using mock tasks
 
-Before submitting your model implementation in a Pull Request, you must verify that the model integrates correctly with the benchmarking pipeline using the `MOCK_TASK_TEST_GRID` suite from `mteb.mocks`. Mock tasks run locally, execute very quickly, and do not download large datasets.
+Before submitting your model implementation in a Pull Request, you must verify that the model integrates correctly with the benchmarking pipeline using the local verification helper `check_model_implementation`. Mock tasks run locally, execute very quickly, and do not download large datasets.
 
 To run the local verification:
 
 ```python
 import mteb
-from mteb.mocks import MOCK_TASK_TEST_GRID
 
 # Load your new model
 model = mteb.get_model("your_model_name")
 
-# Evaluate on the mock test tasks
-mteb.evaluate(model, MOCK_TASK_TEST_GRID, cache=None) # don't use cache
+# This will run the mock test tasks compatible with your model's modalities and protocols to verify your new model implementation
+results = mteb.check_model_implementation(model)
 ```
 
-This will run mock tasks for your model and save the output JSON files under the `results/` folder. Please commit the resulting JSON file(s) with your PR.
+`results` maps each mock task name to its status:
+
+| Value | Meaning |
+| --- | --- |
+| `TaskResult` | the task ran successfully |
+| `TaskError` | the task failed, the `exception` attribute contains the reason (tasks failing due to a missing optional dependency are reported as skipped) |
+| `None` | the task is not compatible with the model's modalities or protocols |
+
+Alternatively, run the same checks from the command line:
+
+```bash
+mteb mock-run -m your_model_name
+```
+
+This prints a results summary table to the terminal and saves the markdown file `mteb_mock_run_results.md` in the directory you ran the command from. Please commit the resulting file with your PR.
 
 ### Submitting your model as a PR
 
@@ -212,8 +225,6 @@ When submitting you models as a PR, please copy and paste the following checklis
   - [ ] `mteb.get_model(model_name, revision)` and
   - [ ] `mteb.get_model_meta(model_name, revision)`
 - [ ] I have tested the implementation works on a representative set of tasks.
-- [ ] I have evaluated the model locally against `mteb.mocks.MOCK_TASK_TEST_GRID`
-
 - [ ] The model is public, i.e., is available either as an API or the weights are publicly available to download
 - [ ] I reproduced results from the original paper (if applicable) on at least one benchmark, and I am including the results in the PR description.
 ```

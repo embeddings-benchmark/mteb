@@ -93,9 +93,9 @@ Available options:
 
 For more details on running the leaderboard, see the [leaderboard documentation](leaderboard.md).
 
-## Sanity Checking Model Implementations
+## Checking Model Implementations
 
-To sanity check a model implementation using mock tasks, use the `mteb mock-run` command. This command evaluates the model on a mock task test grid corresponding to its modalities and protocols. It does not require downloading large datasets, making it extremely fast and suitable for local testing.
+To sanity check a model implementation using a set of example test tasks, use the `mteb mock-run` command. This command evaluates the model on a set of tasks covering various modalities and task types, while not require any external datasets, making it fast way to test that the implementation works as intended before running larger benchmarks or when implementing a model.
 
 For example:
 
@@ -109,4 +109,6 @@ Available options:
 - `-m, --model MODEL`: The model to use. Prioritizes the model implementation from MTEB's model registry, or defaults to loading via `sentence-transformers`.
 - `--model-revision REVISION`: Revision of the model to load.
 - `--device DEVICE`: Device to use for computation (e.g. `cpu`, `cuda`).
-- `-v, --verbosity VERBOSITY`: Verbosity level (0 to 3, default: 2).
+- `-v, --verbosity VERBOSITY`: Verbosity level (0 to 4, default: 2).
+
+The same checks are available from Python using [`mteb.check_model_implementation`](../../contributing/adding_a_model.md#local-model-verification-using-mock-tasks), which returns the per-task status instead of writing a file.
