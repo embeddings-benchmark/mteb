@@ -1,3 +1,4 @@
+import json
 import re
 
 import pytest
@@ -571,3 +572,23 @@ def test_model_meta_no_auto_install_by_default(monkeypatch):
 
     with pytest.raises(ImportError):
         model_meta._check_requirements()
+
+
+def test_model_validate_json_resolved():
+    """Test that model_validate_json_resolved correctly parses JSON and resolves string loader to callable."""
+    original_meta = mteb.get_model_meta("google/siglip-base-patch16-224")
+    original_loader = original_meta.loader
+    assert original_loader is not None
+
+    meta_dict = original_meta.to_dict()
+    assert isinstance(meta_dict["loader"], str)
+    assert meta_dict["loader"] == "SiglipModelWrapper"
+
+    json_data = json.dumps(meta_dict)
+    parsed_meta = ModelMeta.model_validate_json_resolved(json_data)
+    assert parsed_meta.loader == original_loader
+
+    meta_dict["loader"] = "NonExistentModelWrapper"
+    json_data_unknown = json.dumps(meta_dict)
+    parsed_unknown = ModelMeta.model_validate_json_resolved(json_data_unknown)
+    assert parsed_unknown.loader is None

@@ -33,7 +33,7 @@ For instance if we want to run [`"sentence-transformers/all-MiniLM-L6-v2"`](http
 model_name = "sentence-transformers/all-MiniLM-L6-v2"
 
 # load the model using MTEB
-model = mteb.get_model(model_name) # (1)!
+model = mteb.get_model(model_name)  # (1)!
 
 # select the desired tasks and evaluate
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
@@ -58,7 +58,7 @@ MTEB is not only text evaluating, but also allow you to evaluate image and image
 To evaluate image embeddings you can follow the same approach for any other task in `mteb`. Simply ensuring that the task contains the modality "image":
 
 ```python
-tasks = mteb.get_tasks(modalities=["image"]) # Only select tasks with image modalities
+tasks = mteb.get_tasks(modalities=["image"])  # Only select tasks with image modalities
 task = task[0]
 
 print(task.metadata.modalites)
@@ -69,8 +69,9 @@ However, we recommend starting with one of the predefined benchmarks:
 
 ```python
 import mteb
+
 benchmark = mteb.get_benchmark("MIEB(eng)")
-model = mteb.get_model("openai/clip-vit-base-patch16") # example model
+model = mteb.get_model("openai/clip-vit-base-patch16")  # example model
 
 results = mteb.evaluate(model, tasks=benchmark)
 ```
