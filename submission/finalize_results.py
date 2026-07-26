@@ -30,6 +30,10 @@ TASKS = {
     "CorebT2CReranking",
     "CorebT2CRetrieval",
 }
+RETRIEVAL_TASKS = {task for task in TASKS if task.endswith("Retrieval")}
+RERANKING_TASKS = TASKS - RETRIEVAL_TASKS
+C2LLM_NAME = "codefuse-ai/C2LLM-7B"
+C2LLM_REVISION = "c1dc16d6d64eb962c783bfb36a6d9c2f24a86dca"
 SOURCE_MODEL_PATHS = (
     "omlabs__coreb-type-router-f2llmv2-330m-c2llm-7b",
     "keonkim__coreb-task-type-router-f2llmv2-330m-c2llm-7b",
@@ -42,11 +46,49 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("cache_path", type=Path)
     parser.add_argument("revision", help="40-character Hugging Face commit SHA")
     parser.add_argument(
+        "--reranking-source",
+        type=Path,
+        required=True,
+        help="Official C2LLM-7B result directory from embeddings-benchmark/results.",
+    )
+    parser.add_argument(
         "--prepare-submission",
         action="store_true",
         help="Run ResultCache.submit_results(create_pr=False) after validation.",
     )
     return parser.parse_args()
+
+
+def _validate_reranking_source(source: Path) -> list[Path]:
+    meta_path = source / "model_meta.json"
+    meta = json.loads(meta_path.read_text())
+    if (meta.get("name"), meta.get("revision")) != (C2LLM_NAME, C2LLM_REVISION):
+        raise ValueError(
+            f"unexpected C2 source metadata in {meta_path}: "
+            f"{meta.get('name')} at {meta.get('revision')}"
+        )
+    result_paths = [source / f"{task}.json" for task in RERANKING_TASKS]
+    tasks = {TaskResult.from_disk(path).task_name for path in result_paths}
+    if tasks != RERANKING_TASKS:
+        raise ValueError("official C2 source does not contain all reranking tasks")
+    return result_paths
+
+
+def _retain_retrieval_run_settings(result_directory: Path) -> None:
+    path = result_directory / "run_settings.jsonl"
+    if not path.exists():
+        return
+
+    retrieval_settings = []
+    for line in path.read_text().splitlines():
+        if not line.strip():
+            continue
+        entry = json.loads(line)
+        if entry.get("task") in RETRIEVAL_TASKS:
+            retrieval_settings.append(entry)
+    path.write_text(
+        "".join(json.dumps(entry, default=str) + "\n" for entry in retrieval_settings)
+    )
 
 
 def main() -> None:
@@ -93,7 +135,14 @@ def main() -> None:
             f"unexpected={found_tasks - TASKS}"
         )
 
+    c2_result_paths = _validate_reranking_source(args.reranking_source)
+
     shutil.copytree(source, destination)
+    for result_path in c2_result_paths:
+        shutil.copy2(result_path, destination / result_path.name)
+
+    _retain_retrieval_run_settings(destination)
+
     model_meta_path = destination / "model_meta.json"
     model_meta_path.write_text(
         json.dumps(coreb_task_type_router.to_dict(), indent=4, default=str) + "\n"

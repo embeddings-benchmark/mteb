@@ -15,6 +15,15 @@ Adds all six CoREB(v1) task results for
 
 The route is determined only from the public coarse MTEB task type.
 
+## Result provenance
+
+- Retrieval: newly evaluated through the router using the pinned
+  F2LLM-v2-330M revision.
+- Reranking: copied verbatim from the existing official C2LLM-7B result files
+  at the same pinned revision. Because the router delegates the entire task and
+  forwards all MTEB encode context unchanged, these are the router's exact
+  Reranking outputs.
+
 ## Disclosure
 
 This composition was selected after inspecting public CoREB results. CoREB has
