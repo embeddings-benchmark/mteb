@@ -175,16 +175,25 @@ class LightOnListwiseRerankerWrapper:
         ]
 
     def _rank_windows_batched(
-        self, windows: list[tuple[str, list[str | Image.Image]]]
+        self,
+        windows: list[tuple[str, list[str | Image.Image]]],
+        batch_size: int | None = None,
     ) -> list[list[int]]:
-        """Rank a batch of (query, window_docs) windows, halving the batch on OOM."""
+        """Rank a batch of (query, window_docs) windows, halving the batch on OOM.
+
+        One batch unit is one window (window_size documents per generate() call);
+        when batch_size is None the per-modality default is used.
+        """
         results: list[list[int] | None] = [None] * len(windows)
         has_images = any(
             not isinstance(doc, str) for _, docs in windows for doc in docs
         )
-        batch_size = (
-            self.image_window_batch_size if has_images else self.text_window_batch_size
-        )
+        if batch_size is None:
+            batch_size = (
+                self.image_window_batch_size
+                if has_images
+                else self.text_window_batch_size
+            )
         i = 0
         while i < len(windows):
             sub = windows[i : i + batch_size]
@@ -219,6 +228,7 @@ class LightOnListwiseRerankerWrapper:
         queries: list[str],
         doc_lists: list[list[str | Image.Image]],
         show_progress_bar: bool = True,
+        batch_size: int | None = None,
     ) -> list[list[int]]:
         """Rerank each query's documents; returns per-query ordering of original indices.
 
@@ -259,7 +269,7 @@ class LightOnListwiseRerankerWrapper:
                 meta.append((query_idx, p, end))
             if not windows:
                 continue
-            permutations = self._rank_windows_batched(windows)
+            permutations = self._rank_windows_batched(windows, batch_size=batch_size)
             for (query_idx, p, end), perm in zip(meta, permutations):
                 order = orders[query_idx]
                 order[p:end] = [order[p + j] for j in perm]
@@ -276,6 +286,7 @@ class LightOnListwiseRerankerWrapper:
         hf_subset: str,
         prompt_type: PromptType | None = None,
         show_progress_bar: bool = True,
+        batch_size: int | None = None,
         **kwargs: Any,
     ) -> Array:
         queries: list[str] = []
@@ -306,7 +317,10 @@ class LightOnListwiseRerankerWrapper:
             group_docs[-1].append(document)
 
         orders = self._sliding_window_rank(
-            group_queries, group_docs, show_progress_bar=show_progress_bar
+            group_queries,
+            group_docs,
+            show_progress_bar=show_progress_bar,
+            batch_size=batch_size,
         )
 
         scores: list[float] = []
