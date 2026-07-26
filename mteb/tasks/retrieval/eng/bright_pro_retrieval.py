@@ -26,12 +26,12 @@ class BrightProBiologyRetrieval(AbsTaskRetrieval):
         },
         reference=_REFERENCE,
         description=(
-            "Part of the BRIGHT-Pro benchmark for reasoning-intensive retrieval "
-            "in agentic search settings. Biology StackExchange queries are paired "
-            "with multi-aspect gold evidence: each query has a long-form reference "
-            "answer whose cited passages collectively cover several reasoning "
-            "aspects. This task evaluates standard top-k retrieval over the union "
-            "of those gold passages."
+            "Reasoning-intensive retrieval over Biology StackExchange posts. Each query is "
+            "paired with multi-aspect gold evidence: a long-form reference answer "
+            "whose cited passages collectively cover several reasoning aspects, so "
+            "retrievers are scored on surfacing that aspect-diverse evidence set "
+            "rather than a single passage. Was developed as part of the BRIGHT-Pro "
+            "benchmark for agentic search settings."
         ),
         type="Retrieval",
         prompt={
@@ -62,10 +62,12 @@ class BrightProEarthScienceRetrieval(AbsTaskRetrieval):
         },
         reference=_REFERENCE,
         description=(
-            "Part of the BRIGHT-Pro benchmark for reasoning-intensive retrieval "
-            "in agentic search settings. Earth Science StackExchange queries are "
-            "paired with multi-aspect gold evidence drawn from a long-form "
-            "reference answer covering several reasoning aspects."
+            "Reasoning-intensive retrieval over Earth Science StackExchange posts. Each query is "
+            "paired with multi-aspect gold evidence: a long-form reference answer "
+            "whose cited passages collectively cover several reasoning aspects, so "
+            "retrievers are scored on surfacing that aspect-diverse evidence set "
+            "rather than a single passage. Was developed as part of the BRIGHT-Pro "
+            "benchmark for agentic search settings."
         ),
         type="Retrieval",
         prompt={
@@ -96,10 +98,12 @@ class BrightProEconomicsRetrieval(AbsTaskRetrieval):
         },
         reference=_REFERENCE,
         description=(
-            "Part of the BRIGHT-Pro benchmark for reasoning-intensive retrieval "
-            "in agentic search settings. Economics StackExchange queries are "
-            "paired with multi-aspect gold evidence drawn from a long-form "
-            "reference answer covering several reasoning aspects."
+            "Reasoning-intensive retrieval over Economics StackExchange posts. Each query is "
+            "paired with multi-aspect gold evidence: a long-form reference answer "
+            "whose cited passages collectively cover several reasoning aspects, so "
+            "retrievers are scored on surfacing that aspect-diverse evidence set "
+            "rather than a single passage. Was developed as part of the BRIGHT-Pro "
+            "benchmark for agentic search settings."
         ),
         type="Retrieval",
         prompt={
@@ -130,10 +134,12 @@ class BrightProPsychologyRetrieval(AbsTaskRetrieval):
         },
         reference=_REFERENCE,
         description=(
-            "Part of the BRIGHT-Pro benchmark for reasoning-intensive retrieval "
-            "in agentic search settings. Psychology StackExchange queries are "
-            "paired with multi-aspect gold evidence drawn from a long-form "
-            "reference answer covering several reasoning aspects."
+            "Reasoning-intensive retrieval over Psychology StackExchange posts. Each query is "
+            "paired with multi-aspect gold evidence: a long-form reference answer "
+            "whose cited passages collectively cover several reasoning aspects, so "
+            "retrievers are scored on surfacing that aspect-diverse evidence set "
+            "rather than a single passage. Was developed as part of the BRIGHT-Pro "
+            "benchmark for agentic search settings."
         ),
         type="Retrieval",
         prompt={
@@ -164,10 +170,12 @@ class BrightProRoboticsRetrieval(AbsTaskRetrieval):
         },
         reference=_REFERENCE,
         description=(
-            "Part of the BRIGHT-Pro benchmark for reasoning-intensive retrieval "
-            "in agentic search settings. Robotics StackExchange queries are "
-            "paired with multi-aspect gold evidence drawn from a long-form "
-            "reference answer covering several reasoning aspects."
+            "Reasoning-intensive retrieval over Robotics StackExchange posts. Each query is "
+            "paired with multi-aspect gold evidence: a long-form reference answer "
+            "whose cited passages collectively cover several reasoning aspects, so "
+            "retrievers are scored on surfacing that aspect-diverse evidence set "
+            "rather than a single passage. Was developed as part of the BRIGHT-Pro "
+            "benchmark for agentic search settings."
         ),
         type="Retrieval",
         prompt={
@@ -198,10 +206,12 @@ class BrightProStackoverflowRetrieval(AbsTaskRetrieval):
         },
         reference=_REFERENCE,
         description=(
-            "Part of the BRIGHT-Pro benchmark for reasoning-intensive retrieval "
-            "in agentic search settings. Stack Overflow queries are paired with "
-            "multi-aspect gold evidence drawn from a long-form reference answer "
-            "covering several reasoning aspects."
+            "Reasoning-intensive retrieval over Stack Overflow posts. Each query is "
+            "paired with multi-aspect gold evidence: a long-form reference answer "
+            "whose cited passages collectively cover several reasoning aspects, so "
+            "retrievers are scored on surfacing that aspect-diverse evidence set "
+            "rather than a single passage. Was developed as part of the BRIGHT-Pro "
+            "benchmark for agentic search settings."
         ),
         type="Retrieval",
         prompt={
@@ -232,10 +242,12 @@ class BrightProSustainableLivingRetrieval(AbsTaskRetrieval):
         },
         reference=_REFERENCE,
         description=(
-            "Part of the BRIGHT-Pro benchmark for reasoning-intensive retrieval "
-            "in agentic search settings. Sustainable Living StackExchange queries "
-            "are paired with multi-aspect gold evidence drawn from a long-form "
-            "reference answer covering several reasoning aspects."
+            "Reasoning-intensive retrieval over Sustainable Living StackExchange posts. Each query is "
+            "paired with multi-aspect gold evidence: a long-form reference answer "
+            "whose cited passages collectively cover several reasoning aspects, so "
+            "retrievers are scored on surfacing that aspect-diverse evidence set "
+            "rather than a single passage. Was developed as part of the BRIGHT-Pro "
+            "benchmark for agentic search settings."
         ),
         type="Retrieval",
         prompt={

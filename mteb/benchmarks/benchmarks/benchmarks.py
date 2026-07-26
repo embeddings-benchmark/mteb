@@ -1658,7 +1658,7 @@ BRIGHT_V1_1 = Benchmark(
 
 BRIGHT_PRO = Benchmark(
     name="BRIGHT-Pro",
-    display_name="Reasoning Retrieval (Pro)",
+    display_name="BRIGHT-Pro",
     tasks=get_tasks(
         tasks=[
             "BrightProBiologyRetrieval",
@@ -1670,7 +1670,7 @@ BRIGHT_PRO = Benchmark(
             "BrightProSustainableLivingRetrieval",
         ],
     ),
-    description="""BRIGHT-Pro extends BRIGHT with multi-aspect gold evidence for reasoning-intensive retrieval in agentic search settings. Each StackExchange query is paired with a long-form reference answer whose cited passages collectively cover several reasoning aspects; the benchmark evaluates retrievers on their ability to surface this aspect-diverse evidence set.""",
+    description="""Reasoning-intensive retrieval quality on real-world StackExchange questions, scored against multi-aspect gold evidence. Each query is paired with a long-form reference answer whose cited passages collectively cover several reasoning aspects, so retrievers are measured on surfacing an aspect-diverse evidence set rather than a single relevant passage. Extends BRIGHT with these aspect annotations for agentic search settings.""",
     reference="https://huggingface.co/datasets/yale-nlp/Bright-Pro",
     citation=r"""
 @article{Zhao2026RethinkingRR,
