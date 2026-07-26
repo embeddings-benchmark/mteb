@@ -50,7 +50,10 @@ implementation leaves `embed_dim` unset.
 
 ## Reproduction
 
-The MTEB model implementation pins both child model revisions. Evaluate the six
-CoREB v1 tasks with MTEB 2.18.6, CUDA, bfloat16, and FlashAttention 2. The
-submission includes per-task MTEB JSON results, an environment record, and the
-complete run log.
+The MTEB model implementation pins both child model revisions and delegates to
+each child's official MTEB loader configuration. In particular, the F2LLM
+Retrieval route uses its configured bfloat16/FlashAttention 2 implementation,
+while the C2LLM Reranking route keeps C2LLM's official adapter defaults.
+Evaluate all six CoREB v1 tasks with MTEB 2.18.6 and CUDA. The submission
+includes per-task MTEB JSON results, an environment record, and the complete
+run log.

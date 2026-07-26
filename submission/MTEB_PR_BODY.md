@@ -9,8 +9,7 @@ only the coarse MTEB task type.
 - Benchmark: `CoREB(v1)` (all six tasks)
 - MTEB: `2.18.6`
 - Device: NVIDIA L4
-- Precision: bfloat16
-- Attention: FlashAttention 2
+- Child settings: each pinned model's official MTEB loader configuration
 - Routing: Retrieval -> F2LLM-v2-330M; Reranking -> C2LLM-7B
 
 ## Disclosure

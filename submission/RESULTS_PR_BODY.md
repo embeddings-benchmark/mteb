@@ -7,8 +7,7 @@ Adds all six CoREB(v1) task results for
 
 - MTEB: `2.18.6`
 - Device: NVIDIA L4
-- Precision: bfloat16
-- Attention: FlashAttention 2
+- Child settings: each pinned model's official MTEB loader configuration
 - Retrieval child: `codefuse-ai/F2LLM-v2-330M` at
   `e8ef9a8eb907a9dffdd9442424a967ba73e70d31`
 - Reranking child: `codefuse-ai/C2LLM-7B` at

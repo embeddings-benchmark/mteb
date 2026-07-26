@@ -67,10 +67,7 @@ class CoREBTaskTypeRouter(AbsEncoder):
     ) -> None:
         del model_name, revision
         self.device = device
-        self.model_kwargs = model_kwargs or {
-            "attn_implementation": "flash_attention_2",
-            "torch_dtype": torch.bfloat16,
-        }
+        self.model_kwargs = model_kwargs
         self.release_between_types = release_between_types
         self._injected_loader = model_loader
         self._models: dict[str, Any] = {}
@@ -93,11 +90,14 @@ class CoREBTaskTypeRouter(AbsEncoder):
         if self._injected_loader is not None:
             model = self._injected_loader(route)
         else:
+            load_kwargs: dict[str, Any] = {}
+            if self.model_kwargs is not None:
+                load_kwargs["model_kwargs"] = self.model_kwargs
             model = mteb.get_model(
                 route.model_name,
                 revision=route.revision,
                 device=self.device,
-                model_kwargs=self.model_kwargs,
+                **load_kwargs,
             )
 
         self._models[task_type] = model
