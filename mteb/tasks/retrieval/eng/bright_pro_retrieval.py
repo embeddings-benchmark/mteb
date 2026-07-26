@@ -1,66 +1,7 @@
 from __future__ import annotations
 
-from collections import defaultdict
-
-import datasets
-
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-
-def load_bright_pro_data(
-    path: str,
-    domain: str,
-    eval_splits: list,
-    cache_dir: str | None = None,
-    revision: str | None = None,
-):
-    """Load Bright-Pro retrieval data for a given StackExchange domain.
-
-    The HuggingFace dataset uses three configs (`documents`, `examples`,
-    `aspects`), each split by domain. We only need `documents` (corpus) and
-    `examples` (queries + binary gold labels) for standard retrieval. The
-    `aspects` config carries fine-grained reasoning-aspect annotations
-    (weighted supporting docs); these are not consumed by standard nDCG@10
-    but remain available on the Hub for users who want aspect-aware metrics.
-    """
-    eval_split = eval_splits[0]
-
-    corpus = dict.fromkeys(eval_splits)
-    queries = dict.fromkeys(eval_splits)
-    relevant_docs = dict.fromkeys(eval_splits)
-
-    domain_corpus = datasets.load_dataset(
-        path,
-        "documents",
-        split=domain,
-        cache_dir=cache_dir,
-        revision=revision,
-    )
-    examples = datasets.load_dataset(
-        path,
-        "examples",
-        split=domain,
-        cache_dir=cache_dir,
-        revision=revision,
-    )
-
-    corpus[eval_split] = {e["id"]: {"text": e["content"]} for e in domain_corpus}
-    # examples["id"] is int64 in the HF schema; coerce to str for consistency
-    # with corpus doc-ids (which are strings) and with MTEB's qid conventions.
-    queries[eval_split] = {str(e["id"]): e["query"] for e in examples}
-    relevant_docs[eval_split] = defaultdict(dict)
-
-    for e in examples:
-        qid = str(e["id"])
-        for gid in e["gold_ids"]:
-            relevant_docs[eval_split][qid][gid] = 1
-
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-    return corpus, queries, relevant_docs
-
 
 _BIBTEX_CITATION = r"""
 @article{Zhao2026RethinkingRR,
@@ -72,8 +13,6 @@ _BIBTEX_CITATION = r"""
 """
 
 
-_DATASET_PATH = "yale-nlp/Bright-Pro"
-_DATASET_REVISION = "dbdc22babbef310210e267b99249e7cec86d5edf"
 _REFERENCE = "https://huggingface.co/datasets/yale-nlp/Bright-Pro"
 _DATE = ("2025-09-01", "2026-04-30")
 
@@ -82,8 +21,8 @@ class BrightProBiologyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightProBiologyRetrieval",
         dataset={
-            "path": _DATASET_PATH,
-            "revision": _DATASET_REVISION,
+            "path": "mteb/BrightProBiologyRetrieval",
+            "revision": "8d356ed8a3b65123b5ec78793fbb7e80010345db",
         },
         reference=_REFERENCE,
         description=(
@@ -113,26 +52,13 @@ class BrightProBiologyRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_bright_pro_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            domain="biology",
-            cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
-
 
 class BrightProEarthScienceRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightProEarthScienceRetrieval",
         dataset={
-            "path": _DATASET_PATH,
-            "revision": _DATASET_REVISION,
+            "path": "mteb/BrightProEarthScienceRetrieval",
+            "revision": "66a901dddee938a175f87d3dededeae506c13af8",
         },
         reference=_REFERENCE,
         description=(
@@ -160,26 +86,13 @@ class BrightProEarthScienceRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_bright_pro_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            domain="earth_science",
-            cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
-
 
 class BrightProEconomicsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightProEconomicsRetrieval",
         dataset={
-            "path": _DATASET_PATH,
-            "revision": _DATASET_REVISION,
+            "path": "mteb/BrightProEconomicsRetrieval",
+            "revision": "e7ce2bbbfc5fab8c0048dadc83abf2b5dd98bc05",
         },
         reference=_REFERENCE,
         description=(
@@ -207,26 +120,13 @@ class BrightProEconomicsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_bright_pro_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            domain="economics",
-            cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
-
 
 class BrightProPsychologyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightProPsychologyRetrieval",
         dataset={
-            "path": _DATASET_PATH,
-            "revision": _DATASET_REVISION,
+            "path": "mteb/BrightProPsychologyRetrieval",
+            "revision": "18b7681648b7064e0a0f46843f3ab677d7e6a2c4",
         },
         reference=_REFERENCE,
         description=(
@@ -254,26 +154,13 @@ class BrightProPsychologyRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_bright_pro_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            domain="psychology",
-            cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
-
 
 class BrightProRoboticsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightProRoboticsRetrieval",
         dataset={
-            "path": _DATASET_PATH,
-            "revision": _DATASET_REVISION,
+            "path": "mteb/BrightProRoboticsRetrieval",
+            "revision": "25648862e812eef5fbeb51de859ce3127dbc055e",
         },
         reference=_REFERENCE,
         description=(
@@ -301,26 +188,13 @@ class BrightProRoboticsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_bright_pro_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            domain="robotics",
-            cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
-
 
 class BrightProStackoverflowRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightProStackoverflowRetrieval",
         dataset={
-            "path": _DATASET_PATH,
-            "revision": _DATASET_REVISION,
+            "path": "mteb/BrightProStackoverflowRetrieval",
+            "revision": "cfadbcdc4d1ee17e91751218ae0ebfa001c8feea",
         },
         reference=_REFERENCE,
         description=(
@@ -348,26 +222,13 @@ class BrightProStackoverflowRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_bright_pro_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            domain="stackoverflow",
-            cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
-
 
 class BrightProSustainableLivingRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightProSustainableLivingRetrieval",
         dataset={
-            "path": _DATASET_PATH,
-            "revision": _DATASET_REVISION,
+            "path": "mteb/BrightProSustainableLivingRetrieval",
+            "revision": "3f10f4998714e03b9fda8064360a768b0a3fbb4f",
         },
         reference=_REFERENCE,
         description=(
@@ -394,16 +255,3 @@ class BrightProSustainableLivingRetrieval(AbsTaskRetrieval):
         modalities=["text"],
         bibtex_citation=_BIBTEX_CITATION,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_bright_pro_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            domain="sustainable_living",
-            cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
