@@ -1,16 +1,17 @@
 {
     "test": {
-        "num_samples": 241325,
+        "num_samples": 251125,
         "samples_in_train": 9,
         "text_statistics": {
-            "total_text_length": 32177814,
+            "total_text_length": 33234698,
             "min_text_length": 10,
-            "average_text_length": 133.33808764114784,
+            "average_text_length": 132.34324738675957,
             "max_text_length": 597,
-            "unique_texts": 241084
+            "unique_texts": 250033
         },
         "image_statistics": null,
         "audio_statistics": null,
+        "video_statistics": null,
         "label_statistics": {
             "min_labels_per_text": 1,
             "average_label_per_text": 1.0,
@@ -18,50 +19,114 @@
             "unique_labels": 14,
             "labels": {
                 "0": {
-                    "count": 34278
+                    "count": 35670
                 },
                 "1": {
-                    "count": 25019
+                    "count": 26035
                 },
                 "2": {
-                    "count": 23640
+                    "count": 24600
                 },
                 "3": {
-                    "count": 20685
+                    "count": 21525
                 },
                 "4": {
-                    "count": 19306
+                    "count": 20090
                 },
                 "5": {
-                    "count": 18518
+                    "count": 19270
                 },
                 "6": {
-                    "count": 18124
+                    "count": 18860
                 },
                 "7": {
-                    "count": 15563
+                    "count": 16195
                 },
                 "8": {
-                    "count": 13790
+                    "count": 14350
                 },
                 "9": {
-                    "count": 13199
+                    "count": 13735
                 },
                 "10": {
-                    "count": 12017
+                    "count": 12505
                 },
                 "11": {
-                    "count": 11820
+                    "count": 12300
                 },
                 "12": {
-                    "count": 8274
+                    "count": 8610
                 },
                 "13": {
-                    "count": 7092
+                    "count": 7380
                 }
             }
         },
         "hf_subset_descriptive_stats": {
+            "ace_Arab": {
+                "num_samples": 1225,
+                "samples_in_train": 0,
+                "text_statistics": {
+                    "total_text_length": 132310,
+                    "min_text_length": 31,
+                    "average_text_length": 108.00816326530612,
+                    "max_text_length": 295,
+                    "unique_texts": 1225
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "0": {
+                            "count": 174
+                        },
+                        "1": {
+                            "count": 127
+                        },
+                        "2": {
+                            "count": 120
+                        },
+                        "3": {
+                            "count": 105
+                        },
+                        "4": {
+                            "count": 98
+                        },
+                        "5": {
+                            "count": 94
+                        },
+                        "6": {
+                            "count": 92
+                        },
+                        "7": {
+                            "count": 79
+                        },
+                        "8": {
+                            "count": 70
+                        },
+                        "9": {
+                            "count": 67
+                        },
+                        "10": {
+                            "count": 61
+                        },
+                        "11": {
+                            "count": 60
+                        },
+                        "12": {
+                            "count": 42
+                        },
+                        "13": {
+                            "count": 36
+                        }
+                    }
+                }
+            },
             "ace_Latn": {
                 "num_samples": 1225,
                 "samples_in_train": 0,
@@ -74,6 +139,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -137,6 +203,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -200,6 +267,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -263,6 +331,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -326,6 +395,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -389,6 +459,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -452,6 +523,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -515,6 +587,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -578,6 +651,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -641,6 +715,71 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "0": {
+                            "count": 174
+                        },
+                        "1": {
+                            "count": 127
+                        },
+                        "2": {
+                            "count": 120
+                        },
+                        "3": {
+                            "count": 105
+                        },
+                        "4": {
+                            "count": 98
+                        },
+                        "5": {
+                            "count": 94
+                        },
+                        "6": {
+                            "count": 92
+                        },
+                        "7": {
+                            "count": 79
+                        },
+                        "8": {
+                            "count": 70
+                        },
+                        "9": {
+                            "count": 67
+                        },
+                        "10": {
+                            "count": 61
+                        },
+                        "11": {
+                            "count": 60
+                        },
+                        "12": {
+                            "count": 42
+                        },
+                        "13": {
+                            "count": 36
+                        }
+                    }
+                }
+            },
+            "arb_Arab": {
+                "num_samples": 1225,
+                "samples_in_train": 0,
+                "text_statistics": {
+                    "total_text_length": 139538,
+                    "min_text_length": 31,
+                    "average_text_length": 113.90857142857143,
+                    "max_text_length": 316,
+                    "unique_texts": 1225
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -704,6 +843,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -767,6 +907,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -830,6 +971,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -893,6 +1035,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -956,6 +1099,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1019,6 +1163,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1082,6 +1227,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1145,6 +1291,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1208,6 +1355,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1271,6 +1419,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1334,6 +1483,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1397,6 +1547,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1460,6 +1611,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1523,6 +1675,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1586,6 +1739,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1649,6 +1803,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1712,6 +1867,71 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "0": {
+                            "count": 174
+                        },
+                        "1": {
+                            "count": 127
+                        },
+                        "2": {
+                            "count": 120
+                        },
+                        "3": {
+                            "count": 105
+                        },
+                        "4": {
+                            "count": 98
+                        },
+                        "5": {
+                            "count": 94
+                        },
+                        "6": {
+                            "count": 92
+                        },
+                        "7": {
+                            "count": 79
+                        },
+                        "8": {
+                            "count": 70
+                        },
+                        "9": {
+                            "count": 67
+                        },
+                        "10": {
+                            "count": 61
+                        },
+                        "11": {
+                            "count": 60
+                        },
+                        "12": {
+                            "count": 42
+                        },
+                        "13": {
+                            "count": 36
+                        }
+                    }
+                }
+            },
+            "bjn_Arab": {
+                "num_samples": 1225,
+                "samples_in_train": 0,
+                "text_statistics": {
+                    "total_text_length": 144666,
+                    "min_text_length": 28,
+                    "average_text_length": 118.09469387755102,
+                    "max_text_length": 319,
+                    "unique_texts": 1225
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1775,6 +1995,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1838,6 +2059,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1901,6 +2123,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -1964,6 +2187,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2027,6 +2251,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2090,6 +2315,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2153,6 +2379,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2216,6 +2443,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2279,6 +2507,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2342,6 +2571,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2405,6 +2635,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2468,6 +2699,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2531,6 +2763,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2594,6 +2827,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2657,6 +2891,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2720,6 +2955,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2783,6 +3019,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2846,6 +3083,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2909,6 +3147,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -2972,6 +3211,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3035,6 +3275,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3098,6 +3339,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3161,6 +3403,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3224,6 +3467,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3287,6 +3531,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3350,6 +3595,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3413,6 +3659,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3476,6 +3723,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3539,6 +3787,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3602,6 +3851,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3665,6 +3915,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3728,6 +3979,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3791,6 +4043,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3854,6 +4107,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3917,6 +4171,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -3980,6 +4235,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4043,6 +4299,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4106,6 +4363,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4169,6 +4427,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4232,6 +4491,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4295,6 +4555,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4358,6 +4619,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4421,6 +4683,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4484,6 +4747,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4547,6 +4811,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4610,6 +4875,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4673,6 +4939,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4736,6 +5003,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4799,6 +5067,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4862,6 +5131,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4925,6 +5195,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -4988,6 +5259,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5051,6 +5323,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5114,6 +5387,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5177,6 +5451,71 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "0": {
+                            "count": 174
+                        },
+                        "1": {
+                            "count": 127
+                        },
+                        "2": {
+                            "count": 120
+                        },
+                        "3": {
+                            "count": 105
+                        },
+                        "4": {
+                            "count": 98
+                        },
+                        "5": {
+                            "count": 94
+                        },
+                        "6": {
+                            "count": 92
+                        },
+                        "7": {
+                            "count": 79
+                        },
+                        "8": {
+                            "count": 70
+                        },
+                        "9": {
+                            "count": 67
+                        },
+                        "10": {
+                            "count": 61
+                        },
+                        "11": {
+                            "count": 60
+                        },
+                        "12": {
+                            "count": 42
+                        },
+                        "13": {
+                            "count": 36
+                        }
+                    }
+                }
+            },
+            "kas_Arab": {
+                "num_samples": 1225,
+                "samples_in_train": 0,
+                "text_statistics": {
+                    "total_text_length": 150701,
+                    "min_text_length": 28,
+                    "average_text_length": 123.02122448979591,
+                    "max_text_length": 315,
+                    "unique_texts": 1225
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5240,6 +5579,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5303,6 +5643,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5366,6 +5707,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5429,6 +5771,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5492,6 +5835,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5555,6 +5899,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5618,6 +5963,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5681,6 +6027,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5744,6 +6091,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5807,6 +6155,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5870,6 +6219,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5933,6 +6283,71 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "0": {
+                            "count": 174
+                        },
+                        "1": {
+                            "count": 127
+                        },
+                        "2": {
+                            "count": 120
+                        },
+                        "3": {
+                            "count": 105
+                        },
+                        "4": {
+                            "count": 98
+                        },
+                        "5": {
+                            "count": 94
+                        },
+                        "6": {
+                            "count": 92
+                        },
+                        "7": {
+                            "count": 79
+                        },
+                        "8": {
+                            "count": 70
+                        },
+                        "9": {
+                            "count": 67
+                        },
+                        "10": {
+                            "count": 61
+                        },
+                        "11": {
+                            "count": 60
+                        },
+                        "12": {
+                            "count": 42
+                        },
+                        "13": {
+                            "count": 36
+                        }
+                    }
+                }
+            },
+            "knc_Arab": {
+                "num_samples": 1225,
+                "samples_in_train": 0,
+                "text_statistics": {
+                    "total_text_length": 139694,
+                    "min_text_length": 28,
+                    "average_text_length": 114.03591836734694,
+                    "max_text_length": 405,
+                    "unique_texts": 1225
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -5996,6 +6411,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6059,6 +6475,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6122,6 +6539,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6185,6 +6603,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6248,6 +6667,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6311,6 +6731,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6374,6 +6795,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6437,6 +6859,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6500,6 +6923,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6563,6 +6987,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6626,6 +7051,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6689,6 +7115,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6752,6 +7179,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6815,6 +7243,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6878,6 +7307,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -6941,6 +7371,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7004,6 +7435,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7067,6 +7499,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7130,6 +7563,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7193,6 +7627,71 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "0": {
+                            "count": 174
+                        },
+                        "1": {
+                            "count": 127
+                        },
+                        "2": {
+                            "count": 120
+                        },
+                        "3": {
+                            "count": 105
+                        },
+                        "4": {
+                            "count": 98
+                        },
+                        "5": {
+                            "count": 94
+                        },
+                        "6": {
+                            "count": 92
+                        },
+                        "7": {
+                            "count": 79
+                        },
+                        "8": {
+                            "count": 70
+                        },
+                        "9": {
+                            "count": 67
+                        },
+                        "10": {
+                            "count": 61
+                        },
+                        "11": {
+                            "count": 60
+                        },
+                        "12": {
+                            "count": 42
+                        },
+                        "13": {
+                            "count": 36
+                        }
+                    }
+                }
+            },
+            "min_Arab": {
+                "num_samples": 1225,
+                "samples_in_train": 0,
+                "text_statistics": {
+                    "total_text_length": 149581,
+                    "min_text_length": 31,
+                    "average_text_length": 122.1069387755102,
+                    "max_text_length": 363,
+                    "unique_texts": 1225
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7256,6 +7755,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7319,6 +7819,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7382,6 +7883,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7445,6 +7947,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7508,6 +8011,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7571,6 +8075,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7634,6 +8139,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7697,6 +8203,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7760,6 +8267,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7823,6 +8331,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7886,6 +8395,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -7949,6 +8459,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8012,6 +8523,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8075,6 +8587,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8138,6 +8651,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8201,6 +8715,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8264,6 +8779,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8327,6 +8843,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8390,6 +8907,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8453,6 +8971,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8516,6 +9035,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8579,6 +9099,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8642,6 +9163,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8705,6 +9227,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8768,6 +9291,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8831,6 +9355,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8894,6 +9419,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -8957,6 +9483,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9020,6 +9547,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9083,6 +9611,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9146,6 +9675,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9209,6 +9739,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9272,6 +9803,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9335,6 +9867,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9398,6 +9931,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9461,6 +9995,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9524,6 +10059,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9587,6 +10123,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9650,6 +10187,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9713,6 +10251,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9776,6 +10315,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9839,6 +10379,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9902,6 +10443,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -9965,6 +10507,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10028,6 +10571,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10091,6 +10635,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10154,6 +10699,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10217,6 +10763,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10280,6 +10827,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10343,6 +10891,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10406,6 +10955,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10469,6 +11019,71 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "0": {
+                            "count": 174
+                        },
+                        "1": {
+                            "count": 127
+                        },
+                        "2": {
+                            "count": 120
+                        },
+                        "3": {
+                            "count": 105
+                        },
+                        "4": {
+                            "count": 98
+                        },
+                        "5": {
+                            "count": 94
+                        },
+                        "6": {
+                            "count": 92
+                        },
+                        "7": {
+                            "count": 79
+                        },
+                        "8": {
+                            "count": 70
+                        },
+                        "9": {
+                            "count": 67
+                        },
+                        "10": {
+                            "count": 61
+                        },
+                        "11": {
+                            "count": 60
+                        },
+                        "12": {
+                            "count": 42
+                        },
+                        "13": {
+                            "count": 36
+                        }
+                    }
+                }
+            },
+            "taq_Latn": {
+                "num_samples": 1225,
+                "samples_in_train": 0,
+                "text_statistics": {
+                    "total_text_length": 148211,
+                    "min_text_length": 22,
+                    "average_text_length": 120.98857142857143,
+                    "max_text_length": 312,
+                    "unique_texts": 1225
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10532,6 +11147,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10595,6 +11211,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10658,6 +11275,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10721,6 +11339,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10784,6 +11403,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10847,6 +11467,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10910,6 +11531,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -10973,6 +11595,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11036,6 +11659,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11099,6 +11723,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11162,6 +11787,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11225,6 +11851,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11288,6 +11915,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11351,6 +11979,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11414,6 +12043,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11477,6 +12107,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11540,6 +12171,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11603,6 +12235,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11666,6 +12299,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11729,6 +12363,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11792,6 +12427,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11855,6 +12491,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11918,6 +12555,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -11981,6 +12619,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12044,6 +12683,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12107,6 +12747,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12170,6 +12811,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12233,6 +12875,71 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "0": {
+                            "count": 174
+                        },
+                        "1": {
+                            "count": 127
+                        },
+                        "2": {
+                            "count": 120
+                        },
+                        "3": {
+                            "count": 105
+                        },
+                        "4": {
+                            "count": 98
+                        },
+                        "5": {
+                            "count": 94
+                        },
+                        "6": {
+                            "count": 92
+                        },
+                        "7": {
+                            "count": 79
+                        },
+                        "8": {
+                            "count": 70
+                        },
+                        "9": {
+                            "count": 67
+                        },
+                        "10": {
+                            "count": 61
+                        },
+                        "11": {
+                            "count": 60
+                        },
+                        "12": {
+                            "count": 42
+                        },
+                        "13": {
+                            "count": 36
+                        }
+                    }
+                }
+            },
+            "zho_Hans": {
+                "num_samples": 1225,
+                "samples_in_train": 0,
+                "text_statistics": {
+                    "total_text_length": 52183,
+                    "min_text_length": 10,
+                    "average_text_length": 42.59836734693877,
+                    "max_text_length": 139,
+                    "unique_texts": 1225
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12296,6 +13003,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12359,6 +13067,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12422,6 +13131,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12476,17 +13186,18 @@
         }
     },
     "train": {
-        "num_samples": 13790,
+        "num_samples": 14350,
         "samples_in_train": null,
         "text_statistics": {
-            "total_text_length": 1848123,
+            "total_text_length": 1909601,
             "min_text_length": 16,
-            "average_text_length": 134.019071791153,
+            "average_text_length": 133.07324041811847,
             "max_text_length": 412,
-            "unique_texts": 13777
+            "unique_texts": 14287
         },
         "image_statistics": null,
         "audio_statistics": null,
+        "video_statistics": null,
         "label_statistics": {
             "min_labels_per_text": 1,
             "average_label_per_text": 1.0,
@@ -12494,50 +13205,114 @@
             "unique_labels": 14,
             "labels": {
                 "4": {
-                    "count": 985
+                    "count": 1025
                 },
                 "0": {
-                    "count": 985
+                    "count": 1025
                 },
                 "9": {
-                    "count": 985
+                    "count": 1025
                 },
                 "10": {
-                    "count": 985
+                    "count": 1025
                 },
                 "3": {
-                    "count": 985
+                    "count": 1025
                 },
                 "2": {
-                    "count": 985
+                    "count": 1025
                 },
                 "6": {
-                    "count": 985
+                    "count": 1025
                 },
                 "1": {
-                    "count": 985
+                    "count": 1025
                 },
                 "13": {
-                    "count": 985
+                    "count": 1025
                 },
                 "12": {
-                    "count": 985
+                    "count": 1025
                 },
                 "11": {
-                    "count": 985
+                    "count": 1025
                 },
                 "7": {
-                    "count": 985
+                    "count": 1025
                 },
                 "8": {
-                    "count": 985
+                    "count": 1025
                 },
                 "5": {
-                    "count": 985
+                    "count": 1025
                 }
             }
         },
         "hf_subset_descriptive_stats": {
+            "ace_Arab": {
+                "num_samples": 70,
+                "samples_in_train": null,
+                "text_statistics": {
+                    "total_text_length": 7625,
+                    "min_text_length": 48,
+                    "average_text_length": 108.92857142857143,
+                    "max_text_length": 186,
+                    "unique_texts": 70
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "4": {
+                            "count": 5
+                        },
+                        "0": {
+                            "count": 5
+                        },
+                        "9": {
+                            "count": 5
+                        },
+                        "10": {
+                            "count": 5
+                        },
+                        "3": {
+                            "count": 5
+                        },
+                        "2": {
+                            "count": 5
+                        },
+                        "6": {
+                            "count": 5
+                        },
+                        "1": {
+                            "count": 5
+                        },
+                        "13": {
+                            "count": 5
+                        },
+                        "12": {
+                            "count": 5
+                        },
+                        "11": {
+                            "count": 5
+                        },
+                        "7": {
+                            "count": 5
+                        },
+                        "8": {
+                            "count": 5
+                        },
+                        "5": {
+                            "count": 5
+                        }
+                    }
+                }
+            },
             "ace_Latn": {
                 "num_samples": 70,
                 "samples_in_train": null,
@@ -12550,6 +13325,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12613,6 +13389,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12676,6 +13453,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12739,6 +13517,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12802,6 +13581,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12865,6 +13645,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12928,6 +13709,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -12991,6 +13773,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13054,6 +13837,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13117,6 +13901,71 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "4": {
+                            "count": 5
+                        },
+                        "0": {
+                            "count": 5
+                        },
+                        "9": {
+                            "count": 5
+                        },
+                        "10": {
+                            "count": 5
+                        },
+                        "3": {
+                            "count": 5
+                        },
+                        "2": {
+                            "count": 5
+                        },
+                        "6": {
+                            "count": 5
+                        },
+                        "1": {
+                            "count": 5
+                        },
+                        "13": {
+                            "count": 5
+                        },
+                        "12": {
+                            "count": 5
+                        },
+                        "11": {
+                            "count": 5
+                        },
+                        "7": {
+                            "count": 5
+                        },
+                        "8": {
+                            "count": 5
+                        },
+                        "5": {
+                            "count": 5
+                        }
+                    }
+                }
+            },
+            "arb_Arab": {
+                "num_samples": 70,
+                "samples_in_train": null,
+                "text_statistics": {
+                    "total_text_length": 8223,
+                    "min_text_length": 45,
+                    "average_text_length": 117.47142857142858,
+                    "max_text_length": 227,
+                    "unique_texts": 70
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13180,6 +14029,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13243,6 +14093,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13306,6 +14157,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13369,6 +14221,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13432,6 +14285,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13495,6 +14349,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13558,6 +14413,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13621,6 +14477,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13684,6 +14541,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13747,6 +14605,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13810,6 +14669,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13873,6 +14733,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13936,6 +14797,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -13999,6 +14861,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14062,6 +14925,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14125,6 +14989,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14188,6 +15053,71 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "4": {
+                            "count": 5
+                        },
+                        "0": {
+                            "count": 5
+                        },
+                        "9": {
+                            "count": 5
+                        },
+                        "10": {
+                            "count": 5
+                        },
+                        "3": {
+                            "count": 5
+                        },
+                        "2": {
+                            "count": 5
+                        },
+                        "6": {
+                            "count": 5
+                        },
+                        "1": {
+                            "count": 5
+                        },
+                        "13": {
+                            "count": 5
+                        },
+                        "12": {
+                            "count": 5
+                        },
+                        "11": {
+                            "count": 5
+                        },
+                        "7": {
+                            "count": 5
+                        },
+                        "8": {
+                            "count": 5
+                        },
+                        "5": {
+                            "count": 5
+                        }
+                    }
+                }
+            },
+            "bjn_Arab": {
+                "num_samples": 70,
+                "samples_in_train": null,
+                "text_statistics": {
+                    "total_text_length": 8364,
+                    "min_text_length": 45,
+                    "average_text_length": 119.48571428571428,
+                    "max_text_length": 219,
+                    "unique_texts": 70
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14251,6 +15181,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14314,6 +15245,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14377,6 +15309,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14440,6 +15373,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14503,6 +15437,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14566,6 +15501,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14629,6 +15565,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14692,6 +15629,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14755,6 +15693,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14818,6 +15757,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14881,6 +15821,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -14944,6 +15885,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15007,6 +15949,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15070,6 +16013,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15133,6 +16077,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15196,6 +16141,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15259,6 +16205,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15322,6 +16269,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15385,6 +16333,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15448,6 +16397,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15511,6 +16461,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15574,6 +16525,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15637,6 +16589,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15700,6 +16653,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15763,6 +16717,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15826,6 +16781,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15889,6 +16845,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -15952,6 +16909,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16015,6 +16973,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16078,6 +17037,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16141,6 +17101,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16204,6 +17165,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16267,6 +17229,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16330,6 +17293,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16393,6 +17357,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16456,6 +17421,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16519,6 +17485,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16582,6 +17549,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16645,6 +17613,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16708,6 +17677,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16771,6 +17741,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16834,6 +17805,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16897,6 +17869,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -16960,6 +17933,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17023,6 +17997,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17086,6 +18061,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17149,6 +18125,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17212,6 +18189,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17275,6 +18253,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17338,6 +18317,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17401,6 +18381,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17464,6 +18445,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17527,6 +18509,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17590,6 +18573,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17653,6 +18637,71 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "4": {
+                            "count": 5
+                        },
+                        "0": {
+                            "count": 5
+                        },
+                        "9": {
+                            "count": 5
+                        },
+                        "10": {
+                            "count": 5
+                        },
+                        "3": {
+                            "count": 5
+                        },
+                        "2": {
+                            "count": 5
+                        },
+                        "6": {
+                            "count": 5
+                        },
+                        "1": {
+                            "count": 5
+                        },
+                        "13": {
+                            "count": 5
+                        },
+                        "12": {
+                            "count": 5
+                        },
+                        "11": {
+                            "count": 5
+                        },
+                        "7": {
+                            "count": 5
+                        },
+                        "8": {
+                            "count": 5
+                        },
+                        "5": {
+                            "count": 5
+                        }
+                    }
+                }
+            },
+            "kas_Arab": {
+                "num_samples": 70,
+                "samples_in_train": null,
+                "text_statistics": {
+                    "total_text_length": 8654,
+                    "min_text_length": 44,
+                    "average_text_length": 123.62857142857143,
+                    "max_text_length": 224,
+                    "unique_texts": 70
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17716,6 +18765,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17779,6 +18829,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17842,6 +18893,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17905,6 +18957,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -17968,6 +19021,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18031,6 +19085,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18094,6 +19149,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18157,6 +19213,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18220,6 +19277,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18283,6 +19341,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18346,6 +19405,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18409,6 +19469,71 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "4": {
+                            "count": 5
+                        },
+                        "0": {
+                            "count": 5
+                        },
+                        "9": {
+                            "count": 5
+                        },
+                        "10": {
+                            "count": 5
+                        },
+                        "3": {
+                            "count": 5
+                        },
+                        "2": {
+                            "count": 5
+                        },
+                        "6": {
+                            "count": 5
+                        },
+                        "1": {
+                            "count": 5
+                        },
+                        "13": {
+                            "count": 5
+                        },
+                        "12": {
+                            "count": 5
+                        },
+                        "11": {
+                            "count": 5
+                        },
+                        "7": {
+                            "count": 5
+                        },
+                        "8": {
+                            "count": 5
+                        },
+                        "5": {
+                            "count": 5
+                        }
+                    }
+                }
+            },
+            "knc_Arab": {
+                "num_samples": 70,
+                "samples_in_train": null,
+                "text_statistics": {
+                    "total_text_length": 8323,
+                    "min_text_length": 51,
+                    "average_text_length": 118.9,
+                    "max_text_length": 299,
+                    "unique_texts": 70
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18472,6 +19597,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18535,6 +19661,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18598,6 +19725,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18661,6 +19789,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18724,6 +19853,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18787,6 +19917,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18850,6 +19981,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18913,6 +20045,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -18976,6 +20109,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19039,6 +20173,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19102,6 +20237,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19165,6 +20301,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19228,6 +20365,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19291,6 +20429,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19354,6 +20493,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19417,6 +20557,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19480,6 +20621,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19543,6 +20685,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19606,6 +20749,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19669,6 +20813,71 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "4": {
+                            "count": 5
+                        },
+                        "0": {
+                            "count": 5
+                        },
+                        "9": {
+                            "count": 5
+                        },
+                        "10": {
+                            "count": 5
+                        },
+                        "3": {
+                            "count": 5
+                        },
+                        "2": {
+                            "count": 5
+                        },
+                        "6": {
+                            "count": 5
+                        },
+                        "1": {
+                            "count": 5
+                        },
+                        "13": {
+                            "count": 5
+                        },
+                        "12": {
+                            "count": 5
+                        },
+                        "11": {
+                            "count": 5
+                        },
+                        "7": {
+                            "count": 5
+                        },
+                        "8": {
+                            "count": 5
+                        },
+                        "5": {
+                            "count": 5
+                        }
+                    }
+                }
+            },
+            "min_Arab": {
+                "num_samples": 70,
+                "samples_in_train": null,
+                "text_statistics": {
+                    "total_text_length": 8439,
+                    "min_text_length": 47,
+                    "average_text_length": 120.55714285714286,
+                    "max_text_length": 223,
+                    "unique_texts": 70
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19732,6 +20941,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19795,6 +21005,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19858,6 +21069,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19921,6 +21133,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -19984,6 +21197,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20047,6 +21261,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20110,6 +21325,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20173,6 +21389,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20236,6 +21453,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20299,6 +21517,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20362,6 +21581,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20425,6 +21645,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20488,6 +21709,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20551,6 +21773,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20614,6 +21837,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20677,6 +21901,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20740,6 +21965,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20803,6 +22029,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20866,6 +22093,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20929,6 +22157,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -20992,6 +22221,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21055,6 +22285,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21118,6 +22349,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21181,6 +22413,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21244,6 +22477,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21307,6 +22541,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21370,6 +22605,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21433,6 +22669,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21496,6 +22733,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21559,6 +22797,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21622,6 +22861,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21685,6 +22925,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21748,6 +22989,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21811,6 +23053,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21874,6 +23117,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -21937,6 +23181,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22000,6 +23245,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22063,6 +23309,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22126,6 +23373,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22189,6 +23437,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22252,6 +23501,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22315,6 +23565,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22378,6 +23629,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22441,6 +23693,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22504,6 +23757,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22567,6 +23821,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22630,6 +23885,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22693,6 +23949,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22756,6 +24013,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22819,6 +24077,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22882,6 +24141,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -22945,6 +24205,71 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "4": {
+                            "count": 5
+                        },
+                        "0": {
+                            "count": 5
+                        },
+                        "9": {
+                            "count": 5
+                        },
+                        "10": {
+                            "count": 5
+                        },
+                        "3": {
+                            "count": 5
+                        },
+                        "2": {
+                            "count": 5
+                        },
+                        "6": {
+                            "count": 5
+                        },
+                        "1": {
+                            "count": 5
+                        },
+                        "13": {
+                            "count": 5
+                        },
+                        "12": {
+                            "count": 5
+                        },
+                        "11": {
+                            "count": 5
+                        },
+                        "7": {
+                            "count": 5
+                        },
+                        "8": {
+                            "count": 5
+                        },
+                        "5": {
+                            "count": 5
+                        }
+                    }
+                }
+            },
+            "taq_Latn": {
+                "num_samples": 70,
+                "samples_in_train": null,
+                "text_statistics": {
+                    "total_text_length": 8705,
+                    "min_text_length": 49,
+                    "average_text_length": 124.35714285714286,
+                    "max_text_length": 207,
+                    "unique_texts": 70
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23008,6 +24333,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23071,6 +24397,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23134,6 +24461,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23197,6 +24525,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23260,6 +24589,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23323,6 +24653,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23386,6 +24717,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23449,6 +24781,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23512,6 +24845,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23575,6 +24909,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23638,6 +24973,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23701,6 +25037,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23764,6 +25101,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23827,6 +25165,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23890,6 +25229,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -23953,6 +25293,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24016,6 +25357,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24079,6 +25421,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24142,6 +25485,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24205,6 +25549,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24268,6 +25613,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24331,6 +25677,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24394,6 +25741,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24457,6 +25805,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24520,6 +25869,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24583,6 +25933,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24646,6 +25997,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24709,6 +26061,71 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 14,
+                    "labels": {
+                        "4": {
+                            "count": 5
+                        },
+                        "0": {
+                            "count": 5
+                        },
+                        "9": {
+                            "count": 5
+                        },
+                        "10": {
+                            "count": 5
+                        },
+                        "3": {
+                            "count": 5
+                        },
+                        "2": {
+                            "count": 5
+                        },
+                        "6": {
+                            "count": 5
+                        },
+                        "1": {
+                            "count": 5
+                        },
+                        "13": {
+                            "count": 5
+                        },
+                        "12": {
+                            "count": 5
+                        },
+                        "11": {
+                            "count": 5
+                        },
+                        "7": {
+                            "count": 5
+                        },
+                        "8": {
+                            "count": 5
+                        },
+                        "5": {
+                            "count": 5
+                        }
+                    }
+                }
+            },
+            "zho_Hans": {
+                "num_samples": 70,
+                "samples_in_train": null,
+                "text_statistics": {
+                    "total_text_length": 3145,
+                    "min_text_length": 18,
+                    "average_text_length": 44.92857142857143,
+                    "max_text_length": 99,
+                    "unique_texts": 70
+                },
+                "image_statistics": null,
+                "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24772,6 +26189,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24835,6 +26253,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -24898,6 +26317,7 @@
                 },
                 "image_statistics": null,
                 "audio_statistics": null,
+                "video_statistics": null,
                 "label_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
