@@ -64,6 +64,17 @@ Feldman, Sergey},
         keep = {"text", "class"}
         ds = ds.remove_columns([c for c in ds.column_names if c not in keep])
         ds = ds.rename_column("class", "label")
+        # A couple of papers share an identical title+abstract; drop duplicate
+        # texts so the same document cannot leak across the train/test split.
+        seen: set = set()
+
+        def _first_per_text(example: dict) -> bool:
+            if example["text"] in seen:
+                return False
+            seen.add(example["text"])
+            return True
+
+        ds = ds.filter(_first_per_text)
         ds = ds.class_encode_column("label")
         ds = ds.train_test_split(
             test_size=0.3, seed=self.seed, stratify_by_column="label"

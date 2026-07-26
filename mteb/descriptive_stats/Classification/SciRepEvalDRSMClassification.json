@@ -3,9 +3,9 @@
         "num_samples": 2048,
         "samples_in_train": 0,
         "text_statistics": {
-            "total_text_length": 2798020,
+            "total_text_length": 2805677,
             "min_text_length": 33,
-            "average_text_length": 1366.220703125,
+            "average_text_length": 1369.95947265625,
             "max_text_length": 4099,
             "unique_texts": 2048
         },
@@ -37,12 +37,12 @@
         }
     },
     "train": {
-        "num_samples": 6169,
+        "num_samples": 6168,
         "samples_in_train": null,
         "text_statistics": {
-            "total_text_length": 8454623,
+            "total_text_length": 8453021,
             "min_text_length": 107,
-            "average_text_length": 1370.5013778570271,
+            "average_text_length": 1370.4638456549935,
             "max_text_length": 7240,
             "unique_texts": 6168
         },
@@ -59,16 +59,16 @@
                     "count": 1961
                 },
                 "0": {
-                    "count": 2916
+                    "count": 2915
                 },
                 "3": {
                     "count": 816
                 },
-                "4": {
-                    "count": 239
-                },
                 "1": {
                     "count": 237
+                },
+                "4": {
+                    "count": 239
                 }
             }
         }
