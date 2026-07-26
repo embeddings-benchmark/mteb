@@ -115,7 +115,7 @@ def _audio_to_data_url(audio: AudioInputItem) -> str:
     and video share one encoding library.
     """
     try:
-        from torchcodec.encoders import AudioEncoder
+        from torchcodec.encoders import AudioEncoder  # type: ignore[attr-defined]
     except ImportError as e:
         raise ImportError(
             "Sending audio content to a multimodal endpoint requires "
@@ -156,7 +156,7 @@ def _video_to_data_url(video: torch.Tensor, *, fps: float | None) -> str:
     fps = fps or 2.0
 
     try:
-        from torchcodec.encoders import VideoEncoder
+        from torchcodec.encoders import VideoEncoder  # type: ignore[attr-defined]
     except ImportError as e:
         raise ImportError(
             "Sending video content to a multimodal endpoint requires "
@@ -293,7 +293,6 @@ class OpenAIBaseWrapper:
             None, no truncation is applied.
     """
 
-    # Declare as class attribute to match AbsEncoder protocol
     mteb_model_meta: ModelMeta | None
 
     def __init__(  # noqa: PLR0913
@@ -312,7 +311,6 @@ class OpenAIBaseWrapper:
         target_sampling_rate: int | None = None,
         max_samples: int | None = None,
     ):
-        """Initialize the base wrapper."""
         self.endpoint_url = endpoint_url.rstrip("/")
         self.model_name = model_name
         self.api_key = api_key
@@ -605,13 +603,14 @@ class OpenAIAPIEncodeWrapper(OpenAIBaseWrapper, AbsEncoder):
 
         result = self._make_request("/v1/embeddings", payload)
 
-        # Extract embeddings in correct order
-        embeddings = [None] * len(texts)
-        for item in result["data"]:
-            embeddings[item["index"]] = item["embedding"]
+        # Extract embeddings, keyed by index since the server may return
+        # them out of order.
+        embeddings_by_index = {
+            item["index"]: item["embedding"] for item in result["data"]
+        }
 
         # Validate all embeddings were returned
-        missing_indices = [i for i, emb in enumerate(embeddings) if emb is None]
+        missing_indices = [i for i in range(len(texts)) if i not in embeddings_by_index]
         if missing_indices:
             raise RuntimeError(
                 f"Incomplete embeddings from server: expected {len(texts)} "
@@ -619,7 +618,8 @@ class OpenAIAPIEncodeWrapper(OpenAIBaseWrapper, AbsEncoder):
                 f"Missing indices: {missing_indices[:10]}"
             )
 
-        # Convert to numpy array
+        # Convert to numpy array, restoring the original order
+        embeddings = [embeddings_by_index[i] for i in range(len(texts))]
         return np.array(embeddings, dtype=np.float32)
 
     def _get_multimodal_embeddings(
@@ -660,11 +660,11 @@ class OpenAIAPIEncodeWrapper(OpenAIBaseWrapper, AbsEncoder):
 
         result = self._make_request("/v1/embeddings", payload)
 
-        embeddings = [None] * len(items)
-        for item in result["data"]:
-            embeddings[item["index"]] = item["embedding"]
+        embeddings_by_index = {
+            item["index"]: item["embedding"] for item in result["data"]
+        }
 
-        missing_indices = [i for i, emb in enumerate(embeddings) if emb is None]
+        missing_indices = [i for i in range(len(items)) if i not in embeddings_by_index]
         if missing_indices:
             raise RuntimeError(
                 f"Incomplete embeddings from server: expected {len(items)} "
@@ -672,6 +672,7 @@ class OpenAIAPIEncodeWrapper(OpenAIBaseWrapper, AbsEncoder):
                 f"Missing indices: {missing_indices[:10]}"
             )
 
+        embeddings = [embeddings_by_index[i] for i in range(len(items))]
         return np.array(embeddings, dtype=np.float32)
 
     def _encode_multimodal(
@@ -1104,7 +1105,7 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
             target_sampling_rate=target_sampling_rate,
             max_samples=max_samples,
         )
-        self.mteb_model_meta = self.mteb_model_meta.model_copy(
+        self.mteb_model_meta = self.mteb_model_meta.model_copy(  # type: ignore[union-attr]
             update={"similarity_fn_name": ScoringFunction.MAX_SIM}
         )
 
@@ -1122,35 +1123,33 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
         """
         result = self._make_request("/pooling", payload)
 
-        embeddings: list[NDArray[np.floating] | None] = [None] * len(result["data"])
-        for item in result["data"]:
-            embeddings[item["index"]] = np.array(item["data"], dtype=np.float32)
+        embeddings_by_index = {
+            item["index"]: np.array(item["data"], dtype=np.float32)
+            for item in result["data"]
+        }
 
-        missing_indices = [i for i, emb in enumerate(embeddings) if emb is None]
+        expected = len(result["data"])
+        missing_indices = [i for i in range(expected) if i not in embeddings_by_index]
         if missing_indices:
             raise RuntimeError(
                 f"Incomplete pooling output from server: expected "
-                f"{len(embeddings)} items, missing indices: {missing_indices[:10]}"
+                f"{expected} items, missing indices: {missing_indices[:10]}"
             )
 
-        return embeddings
+        return [embeddings_by_index[i] for i in range(expected)]
 
-    def _encode_texts(self, texts: list[str]) -> list[NDArray[np.floating]]:
-        """Get multi-vector embeddings for a batch of texts via /pooling."""
-        payload: dict[str, Any] = {"model": self.model_name, "input": texts}
-        return self._pooling_request(payload)
-
-    def _encode_multimodal_item(
+    def _encode_item(
         self,
         text: str | None,
         image: Image.Image | None,
         audio: AudioInputItem | None,
         video: torch.Tensor | None,
     ) -> NDArray[np.floating]:
-        """Get a multi-vector embedding for a single non-text-only item.
+        """Get a multi-vector embedding for a single item via the Chat Pooling API.
 
-        Uses the Chat Pooling API; vLLM's `/pooling` endpoint only accepts a
-        single conversation per request, so these items cannot be batched.
+        vLLM's `/pooling` endpoint only accepts a single conversation per
+        request, so items are always sent one at a time regardless of
+        modality.
         """
         content = _build_content_parts(text, image, audio, video, fps=self.fps)
 
@@ -1180,9 +1179,10 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
             hf_split: Split of current task
             hf_subset: Subset of current task
             prompt_type: The type of prompt (query or document)
-            batch_size: Batch size used for batching pure-text requests
-                (default: 32). Image/audio/video items are always sent one
-                request at a time.
+            batch_size: Unused; kept for interface compatibility. vLLM's
+                `/pooling` endpoint only accepts a single conversation per
+                request, so items are always sent one at a time regardless
+                of modality.
             show_progress_bar: Whether to show progress bar (default: True)
             **kwargs: Additional arguments (unused)
 
@@ -1199,39 +1199,15 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
 
         self._configure_collate_fn(inputs)
         items = _collect_multimodal_items(inputs)
-        if not items:
-            return []
 
-        embeddings: list[NDArray[np.floating] | None] = [None] * len(items)
-        text_indices = [
-            i
-            for i, (_, image, audio, video) in enumerate(items)
-            if image is None and audio is None and video is None
-        ]
-        other_indices = [i for i in range(len(items)) if i not in set(text_indices)]
-
-        for start in tqdm(
-            range(0, len(text_indices), batch_size),
-            desc="Pooling text batches",
-            disable=not show_progress_bar,
+        embeddings = []
+        for text, image, audio, video in tqdm(
+            items, desc="Pooling items", disable=not show_progress_bar
         ):
-            batch_idx = text_indices[start : start + batch_size]
-            batch_texts = [prompt + (items[i][0] or "") for i in batch_idx]
-            batch_embeddings = self._encode_texts(batch_texts)
-            for idx, embedding in zip(batch_idx, batch_embeddings):
-                embeddings[idx] = embedding
-
-        for i in tqdm(
-            other_indices,
-            desc="Pooling multimodal items",
-            disable=not show_progress_bar,
-        ):
-            text, image, audio, video = items[i]
             combined_text = (prompt + text) if text else prompt
-            embeddings[i] = self._encode_multimodal_item(
-                combined_text or None, image, audio, video
+            embeddings.append(
+                self._encode_item(combined_text or None, image, audio, video)
             )
-
         return embeddings
 
     def index(
