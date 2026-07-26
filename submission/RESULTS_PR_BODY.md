@@ -5,7 +5,6 @@ Adds all six CoREB(v1) task results for
 
 ## Evaluation
 
-- MTEB: `2.18.6`
 - Device: NVIDIA L4
 - Child settings: each pinned model's official MTEB loader configuration
 - Retrieval child: `codefuse-ai/F2LLM-v2-330M` at
@@ -15,14 +14,26 @@ Adds all six CoREB(v1) task results for
 
 The route is determined only from the public coarse MTEB task type.
 
+| Task | Main score |
+|---|---:|
+| CorebC2CReranking | 0.42383 |
+| CorebC2CRetrieval | 0.54383 |
+| CorebC2TReranking | 0.95685 |
+| CorebC2TRetrieval | 0.96794 |
+| CorebT2CReranking | 0.28824 |
+| CorebT2CRetrieval | 0.43093 |
+| **Macro mean** | **0.6019367** |
+
+At preparation time, the live CoREB leader was C2LLM-7B at `0.6009717`.
+
 ## Result provenance
 
 - Retrieval: newly evaluated through the router using the pinned
-  F2LLM-v2-330M revision.
+  F2LLM-v2-330M revision with MTEB `2.18.6`.
 - Reranking: copied verbatim from the existing official C2LLM-7B result files
-  at the same pinned revision. Because the router delegates the entire task and
-  forwards all MTEB encode context unchanged, these are the router's exact
-  Reranking outputs.
+  at the same pinned revision and MTEB `2.12.30`. Because the router delegates
+  the entire task and forwards all MTEB encode context unchanged, these are the
+  router's exact Reranking outputs.
 
 ## Disclosure
 
@@ -31,6 +42,5 @@ only a test split, so the policy is leaderboard-adapted.
 
 ## Before opening
 
-- Insert the final per-task table and macro mean.
 - Ensure the result model revision equals the public Hugging Face commit SHA.
 - Link the MTEB model implementation PR.

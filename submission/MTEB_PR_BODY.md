@@ -11,6 +11,7 @@ only the coarse MTEB task type.
 - Device: NVIDIA L4
 - Child settings: each pinned model's official MTEB loader configuration
 - Routing: Retrieval -> F2LLM-v2-330M; Reranking -> C2LLM-7B
+- Measured CoREB(v1) macro mean: `0.6019367`
 
 ## Disclosure
 
@@ -21,9 +22,9 @@ on task name, examples, labels, or scores.
 ## Checklist
 
 - [x] I have filled out the ModelMeta object to the extent possible
-- [ ] I have ensured that my model can be loaded using
-  - [ ] `mteb.get_model(model_name, revision)` and
-  - [ ] `mteb.get_model_meta(model_name, revision)`
+- [x] I have ensured that my model can be loaded using
+  - [x] `mteb.get_model(model_name, revision)` and
+  - [x] `mteb.get_model_meta(model_name, revision)`
 - [x] I have tested the implementation works on representative Retrieval and
   Reranking task metadata
 - [ ] The model card/config repository is public
@@ -33,5 +34,5 @@ on task name, examples, labels, or scores.
 ## Before opening
 
 - Replace `TODO_AFTER_HF_UPLOAD` with the public Hugging Face commit SHA.
-- Fill the final six-task score and link the results PR.
+- Link the results PR.
 - Confirm maintainers accept task-dependent embedding dimensions for a router.

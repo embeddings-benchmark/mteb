@@ -48,6 +48,23 @@ Each individual evaluation task has a fixed output dimension. Current MTEB
 `ModelMeta` has no representation for task-dependent dimensions, so the model
 implementation leaves `embed_dim` unset.
 
+## CoREB v1 results
+
+| Task | Main score |
+|---|---:|
+| CorebC2CReranking | 0.42383 |
+| CorebC2CRetrieval | 0.54383 |
+| CorebC2TReranking | 0.95685 |
+| CorebC2TRetrieval | 0.96794 |
+| CorebT2CReranking | 0.28824 |
+| CorebT2CRetrieval | 0.43093 |
+| **Macro mean** | **0.6019367** |
+
+Retrieval was evaluated through the router with MTEB 2.18.6 on an NVIDIA L4.
+The reranking scores are the existing official C2LLM-7B results at the exact
+pinned revision, copied without modification because the router delegates
+those tasks and forwards their encode context unchanged.
+
 ## Reproduction
 
 The MTEB model implementation pins both child model revisions and delegates to

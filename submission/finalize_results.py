@@ -129,10 +129,12 @@ def main() -> None:
         raise FileExistsError(f"destination already exists: {destination}")
 
     found_tasks = {TaskResult.from_disk(path).task_name for path in result_paths}
-    if found_tasks != TASKS:
+    missing_tasks = RETRIEVAL_TASKS - found_tasks
+    unexpected_tasks = found_tasks - TASKS
+    if missing_tasks or unexpected_tasks:
         raise ValueError(
-            f"expected six CoREB tasks; missing={TASKS - found_tasks}, "
-            f"unexpected={found_tasks - TASKS}"
+            "source must contain all CoREB Retrieval tasks; "
+            f"missing={missing_tasks}, unexpected={unexpected_tasks}"
         )
 
     c2_result_paths = _validate_reranking_source(args.reranking_source)
@@ -142,6 +144,14 @@ def main() -> None:
         shutil.copy2(result_path, destination / result_path.name)
 
     _retain_retrieval_run_settings(destination)
+    prepared_tasks = {
+        TaskResult.from_disk(path).task_name for path in destination.glob("Coreb*.json")
+    }
+    if prepared_tasks != TASKS:
+        raise ValueError(
+            f"expected six prepared CoREB tasks; missing={TASKS - prepared_tasks}, "
+            f"unexpected={prepared_tasks - TASKS}"
+        )
 
     model_meta_path = destination / "model_meta.json"
     model_meta_path.write_text(
