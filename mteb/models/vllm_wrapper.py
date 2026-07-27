@@ -1,3 +1,4 @@
+
 from __future__ import annotations
 
 import atexit
@@ -8,6 +9,7 @@ from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import torch
+from packaging import version
 
 from mteb._requires_package import _is_package_available
 from mteb.models import ModelMeta
@@ -73,7 +75,7 @@ class VllmWrapperBase:
                 If None, automatically determined.
             max_num_seqs: Maximum number of sequences to process concurrently.
             renderer_num_workers: Number of threads for multithreading to accelerate
-                preprocessing.
+                preprocessing. Defaults to 1. Only effective for vLLM versions >= 0.26.0.
             tensor_parallel_size: Number of GPUs for tensor parallelism.
             enable_prefix_caching: Whether to enable KV cache sharing for common prompt prefixes.
                 If None, uses the model's default setting.
@@ -91,6 +93,15 @@ class VllmWrapperBase:
         os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
 
         from vllm import LLM, EngineArgs
+        from vllm import __version__ as vllm_version
+
+        if version.parse(vllm_version) >= version.parse("0.26.0"):
+            kwargs["renderer_num_workers"] = renderer_num_workers
+        elif renderer_num_workers > 1:
+            logger.warning(
+                f"renderer_num_workers is set to {renderer_num_workers} but requires vLLM >= 0.26.0; "
+                f"current vLLM version is {vllm_version}. It will be ignored."
+            )
 
         hf_overrides = {} if hf_overrides is None else hf_overrides
 
@@ -113,7 +124,6 @@ class VllmWrapperBase:
             max_model_len=max_model_len,
             max_num_batched_tokens=max_num_batched_tokens,
             max_num_seqs=max_num_seqs,
-            renderer_num_workers=renderer_num_workers,
             tensor_parallel_size=tensor_parallel_size,
             enable_prefix_caching=enable_prefix_caching,
             gpu_memory_utilization=gpu_memory_utilization,
