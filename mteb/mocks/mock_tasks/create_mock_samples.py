@@ -77,8 +77,8 @@ def create_mock_audio(
     n: int = 2,
     duration_s: float = 1.0,
     sampling_rate: int = 16_000,
-) -> list[np.ndarray]:
-    audio_samples = []
+) -> list[dict[str, np.ndarray | int]]:
+    audio_samples: list[dict[str, np.ndarray | int]] = []
     num_samples = int(duration_s * sampling_rate)
     for _ in range(n):
         audio = np_rng.uniform(-1.0, 1.0, num_samples).astype(np.float32)
