@@ -18,14 +18,14 @@ from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
 from mteb.mocks.mock_run import (
     all_checks_passed,
-    check_model_implementation,
     get_modality_summary,
+    mock_run,
     results_to_markdown,
 )
 
 if TYPE_CHECKING:
     from mteb.abstasks.abstask import AbsTask
-    from mteb.mocks.mock_run import CheckResults
+    from mteb.mocks.mock_run import MockRunResults
     from mteb.types import EncodeKwargs
 
 logger = logging.getLogger(__name__)
@@ -471,7 +471,7 @@ def _leaderboard(args: argparse.Namespace) -> None:
     )
 
 
-def mock_run(args: argparse.Namespace) -> None:
+def _mock_run(args: argparse.Namespace) -> None:
     """Run a model on the compatible mock tasks for verification."""
     # set logging based on verbosity level
     if args.verbosity == 0:
@@ -497,7 +497,7 @@ def mock_run(args: argparse.Namespace) -> None:
             args.model_revision,
             device=args.device or ("cuda" if torch.cuda.is_available() else "cpu"),
         )
-        results = check_model_implementation(model)
+        results = mock_run(model)
     finally:
         if old_tokenizer_parallelism is not None:
             os.environ["TOKENIZERS_PARALLELISM"] = old_tokenizer_parallelism
@@ -512,7 +512,7 @@ def mock_run(args: argparse.Namespace) -> None:
 
 def _print_terminal_summary(
     model_name: str,
-    results: CheckResults,
+    results: MockRunResults,
     output_path: Path,
 ) -> None:
     console = Console()
@@ -581,7 +581,7 @@ def _add_mock_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
     parser.add_argument(
         "-v", "--verbosity", type=int, default=2, help="Verbosity level"
     )
-    parser.set_defaults(func=mock_run)
+    parser.set_defaults(func=_mock_run)
 
 
 def build_cli() -> argparse.ArgumentParser:

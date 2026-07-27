@@ -1,4 +1,4 @@
-"""Tests for the mock task based model implementation checks (`mteb.check_model_implementation`)."""
+"""Tests for the mock task based model implementation checks (`mteb.mock_run`)."""
 
 from __future__ import annotations
 

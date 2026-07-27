@@ -24,7 +24,7 @@ from mteb.results import BenchmarkResults, TaskResult
 from .benchmarks.benchmark import Benchmark
 from .benchmarks.get_benchmark import get_benchmark, get_benchmarks
 
-from mteb.mocks.mock_run import check_model_implementation  # isort: skip
+from mteb.mocks.mock_run import mock_run  # isort: skip
 
 __version__ = version("mteb")  # fetch version from install metadata
 
@@ -43,7 +43,6 @@ __all__ = [
     "SentenceTransformerEncoderWrapper",
     "TaskMetadata",
     "TaskResult",
-    "check_model_implementation",
     "evaluate",
     "filter_tasks",
     "get_benchmark",
@@ -54,5 +53,6 @@ __all__ = [
     "get_task",
     "get_tasks",
     "load_results",
+    "mock_run",
     "types",
 ]

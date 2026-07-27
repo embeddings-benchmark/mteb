@@ -7,7 +7,7 @@ such that it can be used directly from Python:
 import mteb
 
 model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
-results = mteb.check_model_implementation(model)
+results = mteb.mock_run(model)
 ```
 
 The `mteb mock-run` CLI command is a thin wrapper around the functions defined here.
@@ -16,35 +16,34 @@ The `mteb mock-run` CLI command is a thin wrapper around the functions defined h
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, get_args
 
 from mteb.evaluate import evaluate
-from mteb.mocks import ALL_TASK_TEST_GRID
+from mteb.mocks import ALL_MOCK_TASK_TEST_GRID
 from mteb.models.models_protocols import (
     CrossEncoderProtocol,
     EncoderProtocol,
     SearchProtocol,
 )
 from mteb.results.task_result import TaskError, TaskResult
+from mteb.types import Modalities
 
 if TYPE_CHECKING:
     from mteb.abstasks.abstask import AbsTask
 
 logger = logging.getLogger(__name__)
 
-MODALITIES = ("text", "image", "audio", "video")
+MODALITIES: tuple[Modalities, ...] = get_args(Modalities)
 
 # a task failing due to a missing optional dependency is reported as skipped and not as a failure
 _DEPENDENCY_ERROR_PATTERNS = (
     "importerror",
     "modulenotfounderror",
-    "without having installed the required dependencies",
     "dependencies",
-    "please install",
     "install '",
 )
 
-CheckResults = dict[str, TaskResult | TaskError | None]
+MockRunResults = dict[str, TaskResult | TaskError | None]
 
 
 def get_compatible_mock_tasks(
@@ -58,16 +57,11 @@ def get_compatible_mock_tasks(
     Returns:
         The subset of the mock task grid that the model can be evaluated on.
     """
-    model_modalities = (
-        model.mteb_model_meta.modalities
-        if model.mteb_model_meta is not None
-        else ["text"]
-    )
 
     compatible_tasks = []
-    for task in ALL_TASK_TEST_GRID:
-        if model_modalities is not None and not all(
-            mod in model_modalities for mod in task.metadata.modalities
+    for task in ALL_MOCK_TASK_TEST_GRID:
+        if not all(
+            mod in model.mteb_model_meta.modalities for mod in task.metadata.modalities
         ):
             continue
 
@@ -77,17 +71,16 @@ def get_compatible_mock_tasks(
                 continue
 
         # CrossEncoder models
-        if isinstance(model, CrossEncoderProtocol):
-            if not task._support_cross_encoder:
-                continue
+        if isinstance(model, CrossEncoderProtocol) and not task._support_cross_encoder:
+            continue
 
         compatible_tasks.append(task)
     return compatible_tasks
 
 
-def check_model_implementation(
+def mock_run(
     model: EncoderProtocol | CrossEncoderProtocol | SearchProtocol,
-) -> CheckResults:
+) -> MockRunResults:
     """Check a model implementation using mock tasks.
 
     The mock tasks run locally and do not download any datasets, making this a fast way of
@@ -102,8 +95,8 @@ def check_model_implementation(
         with the model).
     """
     compatible_tasks = get_compatible_mock_tasks(model)
-    task_status: CheckResults = {
-        task.metadata.name: None for task in ALL_TASK_TEST_GRID
+    task_status: MockRunResults = {
+        task.metadata.name: None for task in ALL_MOCK_TASK_TEST_GRID
     }
 
     if not compatible_tasks:
@@ -138,7 +131,7 @@ def is_dependency_error(error: TaskError) -> bool:
     return any(pat in error.exception.lower() for pat in _DEPENDENCY_ERROR_PATTERNS)
 
 
-def all_checks_passed(results: CheckResults) -> bool:
+def all_checks_passed(results: MockRunResults) -> bool:
     """Check whether all compatible mock tasks either passed or were skipped due to missing dependencies."""
     return all(
         not isinstance(status, TaskError) or is_dependency_error(status)
@@ -146,17 +139,17 @@ def all_checks_passed(results: CheckResults) -> bool:
     )
 
 
-def get_modality_summary(results: CheckResults) -> list[tuple[str, str, str]]:
+def get_modality_summary(results: MockRunResults) -> list[tuple[str, str, str]]:
     """Summarize the check results per modality.
 
     Args:
-        results: The results as returned by [`check_model_implementation`][mteb.check_model_implementation].
+        results: The results as returned by [`mteb.mock_run`][mteb.mock_run].
 
     Returns:
         A list of (status, modality, failures) rows, one per modality.
     """
     task_modalities = {
-        task.metadata.name: task.metadata.modalities for task in ALL_TASK_TEST_GRID
+        task.metadata.name: task.metadata.modalities for task in ALL_MOCK_TASK_TEST_GRID
     }
 
     md_rows = []
@@ -189,18 +182,18 @@ def get_modality_summary(results: CheckResults) -> list[tuple[str, str, str]]:
     return md_rows
 
 
-def results_to_markdown(model_name: str, results: CheckResults) -> str:
+def results_to_markdown(model_name: str, results: MockRunResults) -> str:
     """Convert the check results into a markdown report.
 
     Args:
         model_name: The name of the checked model.
-        results: The results as returned by [`check_model_implementation`][mteb.check_model_implementation].
+        results: The results as returned by [`mteb.mock_run`][mteb.mock_run].
 
     Returns:
         The markdown report as a string.
     """
     task_modalities = {
-        task.metadata.name: task.metadata.modalities for task in ALL_TASK_TEST_GRID
+        task.metadata.name: task.metadata.modalities for task in ALL_MOCK_TASK_TEST_GRID
     }
 
     md_lines = [

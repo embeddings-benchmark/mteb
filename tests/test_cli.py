@@ -15,7 +15,7 @@ from mteb.cli.build_cli import (
     _available_tasks,
     _create_meta,
     _leaderboard,
-    mock_run,
+    _mock_run,
     run,
 )
 
@@ -326,7 +326,7 @@ def test_mock_run_cli(tmp_path):
     orig_cwd = Path.cwd()
     try:
         os.chdir(tmp_path)
-        mock_run(args)
+        _mock_run(args)
         assert (tmp_path / "mteb_mock_run_results.md").exists(), (
             "mteb_mock_run_results.md not created in output folder"
         )

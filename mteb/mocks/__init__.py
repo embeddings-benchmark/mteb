@@ -216,25 +216,25 @@ MOCK_MULTIMODAL_TASKS = (
     MockSymCustomVideoAudiSTSTask(),
 )
 
-ALL_TASK_TEST_GRID = (
+ALL_MOCK_TASK_TEST_GRID = (
     MOCK_TASK_TEST_GRID
     + MOCK_MIEB_TASK_GRID
     + MOCK_MAEB_TASK_GRID
     + MOCK_MVEB_TASK_GRID
 )
 
-ALL_TASK_TEST_GRID_AS_STRING = [
-    t.metadata.name if isinstance(t, AbsTask) else t for t in ALL_TASK_TEST_GRID
+ALL_MOCK_TASK_TEST_GRID_AS_STRING = [
+    t.metadata.name if isinstance(t, AbsTask) else t for t in ALL_MOCK_TASK_TEST_GRID
 ]
 
-ALL_MOCK_TASK_REGISTRY = {task.metadata.name: type(task) for task in ALL_TASK_TEST_GRID}
-
-task_grid = TASK_TEST_GRID
+ALL_MOCK_TASK_REGISTRY = {
+    task.metadata.name: type(task) for task in ALL_MOCK_TASK_TEST_GRID
+}
 
 __all__ = [
     "ALL_MOCK_TASK_REGISTRY",
-    "ALL_TASK_TEST_GRID",
-    "ALL_TASK_TEST_GRID_AS_STRING",
+    "ALL_MOCK_TASK_TEST_GRID",
+    "ALL_MOCK_TASK_TEST_GRID_AS_STRING",
     "MOCK_MAEB_TASK_GRID",
     "MOCK_MIEB_TASK_GRID",
     "MOCK_MIEB_TASK_GRID_AS_STRING",
@@ -246,5 +246,4 @@ __all__ = [
     "MOCK_TASK_TEST_GRID_AS_STRING",
     "TASK_TEST_GRID",
     "TASK_TEST_GRID_AS_STRING",
-    "task_grid",
 ]
