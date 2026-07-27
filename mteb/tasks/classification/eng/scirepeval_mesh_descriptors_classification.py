@@ -8,11 +8,10 @@ class SciRepEvalMeSHDescriptorsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SciRepEvalMeSHDescriptorsClassification",
         description=(
-            "MeSH descriptor classification task from the SciRepEval benchmark. "
-            "Given the title and abstract of a biomedical paper, predict its "
-            "primary Medical Subject Headings (MeSH) descriptor from a set of 30 "
-            "common disease-related descriptors (e.g. 'Hypertension', "
-            "'Myocardial Infarction', 'Anti-Bacterial Agents')."
+            "MeSH descriptor classification. Given the title and abstract of a "
+            "biomedical paper, predict its Medical Subject Headings (MeSH) "
+            "descriptor from a set of 30 common disease-related descriptors "
+            "(multi-class classification). Published as a part of SciRepEval."
         ),
         reference="https://aclanthology.org/2023.emnlp-main.338/",
         dataset={
@@ -30,7 +29,7 @@ class SciRepEvalMeSHDescriptorsClassification(AbsTaskClassification):
         date=("2022-01-01", "2023-12-06"),
         domains=["Academic", "Medical", "Written"],
         task_subtypes=["Topic classification"],
-        license="not specified",
+        license="odc-by",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

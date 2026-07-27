@@ -8,10 +8,10 @@ class SciRepEvalBiomimicryClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SciRepEvalBiomimicryClassification",
         description=(
-            "Biomimicry relevance classification task from the SciRepEval "
-            "benchmark. Given the title and abstract of a scientific paper, "
-            "predict whether the paper is relevant to biomimicry research "
-            "(binary classification)."
+            "Biomimicry relevance classification. Given the title and abstract "
+            "of a scientific paper, predict whether the paper is relevant to "
+            "biomimicry research (binary classification). Published as a part of "
+            "SciRepEval."
         ),
         reference="https://aclanthology.org/2023.emnlp-main.338/",
         dataset={
@@ -28,8 +28,8 @@ class SciRepEvalBiomimicryClassification(AbsTaskClassification):
         date=("2022-01-01", "2023-12-06"),
         domains=["Academic", "Engineering", "Written"],
         task_subtypes=["Topic classification"],
-        license="not specified",
-        annotations_creators="derived",
+        license="odc-by",
+        annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""

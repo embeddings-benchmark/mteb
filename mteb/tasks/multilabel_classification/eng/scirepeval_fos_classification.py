@@ -8,11 +8,9 @@ class SciRepEvalFoSClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="SciRepEvalFoSClassification",
         description=(
-            "Fields of Study (FoS) multi-label classification task from the "
-            "SciRepEval benchmark. Given the title and abstract of a scientific "
-            "paper, predict its Microsoft Academic Graph fields of study (e.g. "
-            "'Chemistry', 'Materials science', 'Environmental science'). A paper "
-            "may belong to multiple fields."
+            "Fields of Study (FoS) classification. Given the title and abstract "
+            "of a scientific paper, predict one or more of its fields of study "
+            "(multi-label classification). Published as a part of SciRepEval."
         ),
         reference="https://aclanthology.org/2023.emnlp-main.338/",
         dataset={
@@ -30,7 +28,7 @@ class SciRepEvalFoSClassification(AbsTaskMultilabelClassification):
         date=("2022-01-01", "2023-12-06"),
         domains=["Academic", "Written"],
         task_subtypes=["Topic classification"],
-        license="not specified",
+        license="odc-by",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

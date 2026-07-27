@@ -8,11 +8,12 @@ class SciRepEvalDRSMClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SciRepEvalDRSMClassification",
         description=(
-            "Disease Research State Model (DRSM) classification task from the "
-            "SciRepEval benchmark. Given the title and abstract of a biomedical "
-            "paper, classify it into one of five research-state categories: "
-            "'clinical characteristics or disease pathology', 'disease mechanism', "
-            "'therapeutics in the clinic', 'patient-based therapeutics', or 'other'."
+            "Disease Research State Model (DRSM) classification. Given the title "
+            "and abstract of a biomedical paper, classify it into one of five "
+            "research-state categories (clinical characteristics or disease "
+            "pathology, disease mechanism, therapeutics in the clinic, "
+            "patient-based therapeutics, or other). Published as a part of "
+            "SciRepEval."
         ),
         reference="https://aclanthology.org/2023.emnlp-main.338/",
         dataset={
@@ -29,7 +30,7 @@ class SciRepEvalDRSMClassification(AbsTaskClassification):
         date=("2022-01-01", "2023-12-06"),
         domains=["Academic", "Medical", "Written"],
         task_subtypes=["Topic classification"],
-        license="not specified",
+        license="odc-by",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
