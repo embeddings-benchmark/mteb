@@ -209,8 +209,8 @@ To run the local verification:
     # This will run the mock test tasks compatible with your model's modalities and protocols to verify your new model implementation
     results = mteb.mock_run(model)
 
-    print(results.all_passed)        # whether the model passed every check
-    print(results.to_markdown())     # the same report the CLI writes to disk
+    print(results.all_passed)  # whether the model passed every check
+    print(results.to_markdown())  # the same report the CLI writes to disk
     ```
 
     `results` maps each mock task name to its status:
@@ -223,7 +223,7 @@ To run the local verification:
 
     ```python
     results["MockRetrievalTask"]  # the status of a single mock task
-    results.task_results          # the full {task name: status} mapping
+    results.task_results  # the full {task name: status} mapping
     ```
 
 === "CLI"
