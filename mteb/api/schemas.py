@@ -197,6 +197,8 @@ class ModelMetaSchema(_CamelModel):
     model_type: MODEL_TYPES
     instruction_tuned: bool
     open_weights: bool
+    openness: dict[str, bool] = Field(default_factory=dict)
+    openness_score: int = 0
     sentence_transformers_compatible: bool
     modalities: list[str] = Field(default_factory=lambda: ["text"])
     languages: list[str] = Field(default_factory=list)
@@ -242,6 +244,8 @@ class ModelMetaSchema(_CamelModel):
             open_weights=bool(meta.open_weights)
             if meta.open_weights is not None
             else False,
+            openness=meta.openness,
+            openness_score=meta.openness_score,
             sentence_transformers_compatible="Sentence Transformers" in framework,
             modalities=[str(m) for m in (meta.modalities or ["text"])],
             languages=lang_labels,

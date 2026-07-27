@@ -13,7 +13,7 @@ from .sts15_sts import STS15STS
 from .sts15_visual_sts import STS15VisualSTS
 from .sts16_sts import STS16STS
 from .sts16_visual_sts import STS16VisualSTS
-from .sts_benchmark_sts import STSBenchmarkSTS
+from .sts_benchmark_sts import STSBenchmarkSTS, STSBenchmarkSTSV2
 
 __all__ = [
     "HUMESICKR",
@@ -31,5 +31,6 @@ __all__ = [
     "STS15VisualSTS",
     "STS16VisualSTS",
     "STSBenchmarkSTS",
+    "STSBenchmarkSTSV2",
     "SickrSTS",
 ]

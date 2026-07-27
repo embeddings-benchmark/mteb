@@ -19,9 +19,10 @@ from mteb.types import PromptType
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder
     from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -483,13 +484,25 @@ class JinaV4Wrapper(AbsEncoder):
                 raise ValueError(
                     "The number of texts and images must have the same length"
                 )
-            fused_embeddings = text_embeddings + image_embeddings
-            return fused_embeddings
+            embeddings = text_embeddings + image_embeddings
         elif text_embeddings is not None:
-            return text_embeddings
+            embeddings = text_embeddings
         elif image_embeddings is not None:
-            return image_embeddings
-        raise ValueError
+            embeddings = image_embeddings
+        else:
+            raise ValueError
+
+        if isinstance(embeddings, torch.Tensor):
+            embeddings = embeddings.cpu().detach().float().numpy()
+        elif (
+            isinstance(embeddings, (list, tuple))
+            and embeddings
+            and isinstance(embeddings[0], torch.Tensor)
+        ):
+            embeddings = np.stack(
+                [e.cpu().detach().float().numpy() for e in embeddings]
+            )
+        return embeddings
 
     def get_text_embeddings(
         self,
@@ -518,7 +531,7 @@ class JinaV4Wrapper(AbsEncoder):
             task_metadata, prompt_type
         )
 
-        if task_type.startswith("DocumentUnderstanding"):
+        if task_type and task_type.startswith("DocumentUnderstanding"):
             self.vector_type = "multi_vector"
         else:
             self.vector_type = "single_vector"
@@ -548,7 +561,7 @@ class JinaV4Wrapper(AbsEncoder):
             task_metadata, prompt_type
         )
 
-        if task_type.startswith("DocumentUnderstanding"):
+        if task_type and task_type.startswith("DocumentUnderstanding"):
             self.vector_type = "multi_vector"
         else:
             self.vector_type = "single_vector"
@@ -798,6 +811,20 @@ _OMNI_MODEL_PROMPTS = {
 }
 
 
+def _video_frames_to_channels_last(video: Any) -> Any:
+    """torchcodec frame batches are (T, C, H, W) uint8; the model's remote code
+    detects video only for channels-last (T, H, W, 3|4) arrays and would
+    otherwise stringify the tensor and embed it as text."""
+    if (
+        isinstance(video, torch.Tensor)
+        and video.ndim == 4
+        and video.shape[1] in {3, 4}
+        and video.shape[-1] not in {3, 4}
+    ):
+        return video.permute(0, 2, 3, 1).contiguous().cpu().numpy()
+    return video
+
+
 class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
     def encode(
         self,
@@ -807,7 +834,7 @@ class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         has_video = "video" in inputs.dataset.features
         has_audio = "audio" in inputs.dataset.features
@@ -841,15 +868,16 @@ class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
                 task_metadata.simplified_task_type
             )
         task = jina_task_name or "retrieval"
-        # Non-retrieval adapters were trained without the Query/Document prefix.
-        if task == "retrieval":
+        # All text and image adapters use Query/Document prefix.
+        # Audio/video non-retrieval adapters do not use the prefix.
+        if (has_video or has_audio) and task != "retrieval":
+            prompt = ""
+        else:
             prompt = (
                 "Query: "
                 if prompt_type and prompt_type == PromptType.query
                 else "Document: "
             )
-        else:
-            prompt = ""
 
         logger.info(
             f"Using prompt=`{prompt}` and task={task} for task={task_metadata.name} prompt_type={prompt_type}"
@@ -862,6 +890,10 @@ class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
                 batch["audio"] = [
                     a["array"] if isinstance(a, dict) and "array" in a else a
                     for a in batch["audio"]
+                ]
+            if "video" in batch:
+                batch["video"] = [
+                    _video_frames_to_channels_last(v) for v in batch["video"]
                 ]
 
             batch_column = next(iter(batch.keys()))
@@ -1141,6 +1173,7 @@ jina_embeddings_v4 = ModelMeta(
             "Retrieval-query": "retrieval.query",
             "Retrieval-document": "retrieval.passage",
             "STS": "text-matching",
+            "PairClassification": "text-matching",
             "DocumentUnderstanding": "retrieval.query",
         },
     ),

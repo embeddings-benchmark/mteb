@@ -12,6 +12,12 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 2. [Evaluate](../get_started/usage/get_started.md#evaluating-a-model) the desired model using `mteb` on the [benchmarks](../get_started/usage/selecting_tasks.md#selecting-a-benchmark)
 3. Push the results to the [results repository](https://github.com/embeddings-benchmark/results) via a PR. Once merged they will appear on the leaderboard after a day.
 
+!!! tip "Requesting an evaluation"
+
+    If you want a model to be evaluated but are not submitting the results yourself, open an [Evaluation Request](https://github.com/embeddings-benchmark/mteb/issues/new?template=eval_request.yaml) issue instead and fill out the required information.
+
+    Maintainers prioritize evaluation requests for private subsets or cases where community contributors cannot run the benchmark directly. We aim to run a private evaluation within 7 working days of the request. For public benchmarks, the fastest path is still to run the evaluation locally and submit the results PR.
+
 !!! info Submitting Evaluation Results
 
     This section contains info on how to submit a model implementation. If you wish to submit a model results see [submit results](./submitting_results.md).
@@ -28,7 +34,7 @@ Typically, it only requires that you fill in metadata about the model and add it
     my_model = ModelMeta(
         name="model_name",
         loader=SentenceTransformerEncoderWrapper,
-        languages=["eng-Latn"], # follows ISO 639-3 and BCP-47
+        languages=["eng-Latn"],  # follows ISO 639-3 and BCP-47
         open_weights=True,
         revision="5617a9f61b028005a4858fdac845db406aefb181",
         release_date="2025-01-01",
@@ -43,8 +49,11 @@ Typically, it only requires that you fill in metadata about the model and add it
         use_instructions=False,
         public_training_code="https://github.com/user-or-org/my-training-code",
         public_training_data="https://huggingface.co/datasets/user-or-org/full-dataset",
-        training_datasets={"MSMARCO"}, # if you trained on the MSMARCO training set
-        output_dtypes=[OutputDType.INT8, OutputDType.BINARY], # Alternative output types supported by the model
+        training_datasets={"MSMARCO"},  # if you trained on the MSMARCO training set
+        output_dtypes=[
+            OutputDType.INT8,
+            OutputDType.BINARY,
+        ],  # Alternative output types supported by the model
     )
     ```
 
@@ -119,9 +128,10 @@ If you need to use a custom implementation, you can specify the `loader` paramet
     from mteb.types import PromptType, Array
     import numpy as np
 
+
     class CustomModel:
         def __init__(self, model_name: str, revision: str, **kwargs):
-            pass # your initialization of model here
+            pass  # your initialization of model here
 
         def encode(
             self,

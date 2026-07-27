@@ -37,7 +37,7 @@ To use vLLM with MTEB you have to wrap the model with its respective wrapper.
     ```
     try this instead:
     ```python
-    if __name__ == '__main__':
+    if __name__ == "__main__":
         import vllm
 
         llm = vllm.LLM(...)
@@ -50,6 +50,7 @@ To use vLLM with MTEB you have to wrap the model with its respective wrapper.
     import mteb
     from mteb.models.vllm_wrapper import VllmEncoderWrapper
 
+
     def run_vllm_encoder():
         """Evaluate a model on specified MTEB tasks using vLLM for inference."""
         encoder = VllmEncoderWrapper(model="intfloat/e5-small")
@@ -57,6 +58,7 @@ To use vLLM with MTEB you have to wrap the model with its respective wrapper.
             encoder,
             mteb.get_task("STS12"),
         )
+
 
     if __name__ == "__main__":
         results = run_vllm_encoder()
@@ -67,9 +69,12 @@ To use vLLM with MTEB you have to wrap the model with its respective wrapper.
     import mteb
     from mteb.models.vllm_wrapper import VllmCrossEncoderWrapper
 
+
     def run_vllm_crossencoder():
         """Evaluate a model on specified MTEB tasks using vLLM for inference."""
-        cross_encoder = VllmCrossEncoderWrapper(model="cross-encoder/ms-marco-MiniLM-L-6-v2")
+        cross_encoder = VllmCrossEncoderWrapper(
+            model="cross-encoder/ms-marco-MiniLM-L-6-v2"
+        )
         return mteb.evaluate(
             cross_encoder,
             mteb.get_task("AskUbuntuDupQuestions"),

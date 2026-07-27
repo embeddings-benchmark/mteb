@@ -98,7 +98,7 @@ class MTEBTasks(tuple[AbsTask]):
 
     @property
     def languages(self) -> set[str]:
-        """Return all languages from tasks"""
+        """All languages from tasks."""
         langs: set[str] = set()
         for task in self:
             for lg in task.languages:

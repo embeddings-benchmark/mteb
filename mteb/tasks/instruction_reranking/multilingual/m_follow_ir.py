@@ -168,9 +168,9 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):  # noqa: N801
         bibtex_citation=r"""
 @article{weller2024mfollowir,
   author = {Weller, Orion and Chang, Benjamin and Yang, Eugene and Yarmohammadi, Mahsa and Barham, Sam and MacAvaney, Sean and Cohan, Arman and Soldaini, Luca and Van Durme, Benjamin and Lawrie, Dawn},
-  journal = {arXiv preprint TODO},
+  journal = {arXiv preprint arXiv:2501.19264},
   title = {{mFollowIR: a Multilingual Benchmark for Instruction Following in Retrieval}},
-  year = {2024},
+  year = {2025},
 }
 """,
     )
@@ -236,9 +236,9 @@ class mFollowIR(AbsTaskRetrieval):  # noqa: N801
         bibtex_citation=r"""
 @article{weller2024mfollowir,
   author = {Weller, Orion and Chang, Benjamin and Yang, Eugene and Yarmohammadi, Mahsa and Barham, Sam and MacAvaney, Sean and Cohan, Arman and Soldaini, Luca and Van Durme, Benjamin and Lawrie, Dawn},
-  journal = {arXiv preprint TODO},
+  journal = {arXiv preprint arXiv:2501.19264},
   title = {{mFollowIR: a Multilingual Benchmark for Instruction Following in Retrieval}},
-  year = {2024},
+  year = {2025},
 }
 """,
     )
