@@ -404,11 +404,10 @@ class MockVideoAudioSTSTask(AbsTaskSTS):
 
 
 class MockSymCustomVideoAudiSTSTask(AbsTaskSTS):
-    """Asymmetric pair classification: side-1 is video only, side-2 is audio only. Differs from v1 by `input_column_name` is str instead of list"""
-
+    """Asymmetric STS: side-1 is video only, side-2 is audio only. Tests custom `column_names` mapping."""
     metadata = TaskMetadata(
-        type="VideoPairClassification",
-        name="STS",
+        type="STS",
+        name="MockSymCustomVideoAudioSTSTask",
         main_score="cosine_spearman",
         **general_args,  # type: ignore[arg-type]
     )

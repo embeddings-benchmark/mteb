@@ -365,13 +365,13 @@ class MockVideoAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
     }
 
     metadata = TaskMetadata(
-        type="VideoZeroshotClassification",
-        name="MockVideoZeroshotClassification",
+        type="VideoAudioZeroshotClassification",
+        name="MockVideoAudioZeroshotClassification",
         main_score="accuracy",
         **general_args,
     )
-    metadata.modalities = ["video"]
-    metadata.category = "v2c"
+    metadata.modalities = ["video", "audio"]
+    metadata.category = "va2c"
 
     def load_data(self, **kwargs):
         from datasets import Video
