@@ -21,18 +21,6 @@ if TYPE_CHECKING:
         TopRankedDocumentsType,
     )
 
-MODEL_NAME = "thu-nmrc/bge-small-structural-separator"
-MODEL_REVISION = "9a0a8aa92400202dd1ef6950ed9cd4a116dfb03d"
-BASE_MODEL_NAME = "BAAI/bge-small-en-v1.5"
-BASE_MODEL_REVISION = "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
-REPOSITORY_URL = "https://huggingface.co/thu-nmrc/bge-small-structural-separator"
-TRAINING_REPOSITORY_URL = "https://github.com/thu-nmrc/bge-small-structural-separator"
-TRAINING_REPOSITORY_REVISION = "e8b0a9325409d791981b7410679ae8c152fd6e00"
-SEPARATOR_SYMBOL = "[unused2]"
-SEPARATOR_TOKEN_ID = 3
-MAX_LENGTH = 512
-DEFAULT_BATCH_SIZE = 64
-
 
 def _row_id(row: dict[str, Any]) -> str:
     for key in ("id", "_id", "query-id", "query_id", "corpus-id", "corpus_id"):
@@ -46,7 +34,7 @@ def _split_sentences(text: str) -> list[str]:
     return [chunk.strip() for chunk in chunks if chunk.strip()]
 
 
-def _document_ids(
+def _get_document_tokens(
     tokenizer: Any,
     raw: dict[str, str],
     *,
@@ -71,13 +59,6 @@ def _document_ids(
     return ids[: max_length - 1] + [int(tokenizer.sep_token_id)]
 
 
-def _batch_size(encode_kwargs: EncodeKwargs) -> int:
-    batch_size = int(encode_kwargs.get("batch_size", DEFAULT_BATCH_SIZE))
-    if batch_size <= 0:
-        raise ValueError("batch_size must be positive")
-    return batch_size
-
-
 def _pad(
     sequences: list[list[int]], pad_token_id: int
 ) -> tuple[torch.Tensor, torch.Tensor]:
@@ -91,7 +72,25 @@ def _pad(
 
 
 class StructuralSeparatorSearch:
-    """One-vector exact retrieval with a learned shared structural separator."""
+    """Exact single-vector retrieval with a learned structural separator.
+
+    Documents insert the learned ``[unused2]`` token before a non-empty title
+    and each punctuation-delimited sentence, then use the normalized CLS
+    representation. Queries use the unchanged no-instruction BGE encoding, and
+    matching is exact cosine search over the corpus or a supplied reranking
+    candidate set.
+
+    The motivation, algorithm, training procedure, BGE control results,
+    falsification result, and limitations are documented at
+    https://github.com/thu-nmrc/bge-small-structural-separator/blob/main/METHOD_CARD.md.
+    """
+
+    mteb_model_meta: ModelMeta | None = None
+    max_length = 512
+    separator_symbol = "[unused2]"
+    separator_token_id = 3
+    default_batch_size = 64
+    embedding_dimension = 384
 
     def __init__(
         self,
@@ -102,11 +101,8 @@ class StructuralSeparatorSearch:
         index_encoding_chunk_size: int = 4_096,
         query_search_batch_size: int = 64,
         document_search_block_size: int = 65_536,
-        **_: Any,
+        **kwargs: Any,
     ) -> None:
-        if model_name != MODEL_NAME or revision not in {None, MODEL_REVISION}:
-            raise ValueError(f"Unsupported model identity: {model_name}@{revision}")
-
         from transformers import AutoModel, AutoTokenizer
 
         if device is None:
@@ -117,35 +113,27 @@ class StructuralSeparatorSearch:
             else:
                 device = "cpu"
         self.device = torch.device(device)
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            MODEL_NAME, revision=MODEL_REVISION
-        )
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, revision=revision)
         self.backbone = (
-            AutoModel.from_pretrained(MODEL_NAME, revision=MODEL_REVISION)
+            AutoModel.from_pretrained(model_name, revision=revision)
             .to(self.device)
             .eval()
         )
-        self.separator_token_id = SEPARATOR_TOKEN_ID
-        if self.tokenizer.convert_ids_to_tokens(SEPARATOR_TOKEN_ID) != SEPARATOR_SYMBOL:
+        if (
+            self.tokenizer.convert_ids_to_tokens(self.separator_token_id)
+            != self.separator_symbol
+        ):
             raise RuntimeError("Separator token does not match the pinned tokenizer")
 
-        self.max_length = MAX_LENGTH
         self.index_encoding_chunk_size = int(index_encoding_chunk_size)
         self.query_search_batch_size = int(query_search_batch_size)
         self.document_search_block_size = int(document_search_block_size)
         self.docids: list[str] = []
         self._docid_to_index: dict[str, int] = {}
-        self.document_vectors = np.empty((0, 384), dtype=np.float32)
+        self.document_vectors = np.empty(
+            (0, self.embedding_dimension), dtype=np.float32
+        )
         self._index_path: Path | None = None
-        self._model_meta: ModelMeta | None = None
-
-    @property
-    def mteb_model_meta(self) -> ModelMeta:
-        return self._model_meta or bge_small_structural_separator
-
-    @mteb_model_meta.setter
-    def mteb_model_meta(self, value: ModelMeta) -> None:
-        self._model_meta = value
 
     def _encode(
         self, input_ids: torch.Tensor, attention_mask: torch.Tensor
@@ -156,15 +144,13 @@ class StructuralSeparatorSearch:
                 attention_mask=attention_mask.to(self.device),
                 return_dict=True,
             ).last_hidden_state[:, 0]
-            return (
-                F.normalize(output, dim=1).cpu().numpy().astype(np.float32, copy=False)
-            )
+            return F.normalize(output, dim=1).cpu().numpy()
 
     def _encode_documents(
         self, documents: list[dict[str, str]], *, batch_size: int
     ) -> np.ndarray:
         sequences = [
-            _document_ids(
+            _get_document_tokens(
                 self.tokenizer,
                 document,
                 separator_token_id=self.separator_token_id,
@@ -197,7 +183,9 @@ class StructuralSeparatorSearch:
     def close(self) -> None:
         empty = getattr(np, "empty", None)
         if empty is not None:
-            self.document_vectors = empty((0, 384), dtype=np.float32)
+            self.document_vectors = empty(
+                (0, self.embedding_dimension), dtype=np.float32
+            )
         index_path = getattr(self, "_index_path", None)
         if index_path is not None:
             try:
@@ -209,6 +197,12 @@ class StructuralSeparatorSearch:
     def __del__(self) -> None:
         self.close()
 
+    def _get_batch_size(self, encode_kwargs: EncodeKwargs) -> int:
+        batch_size = int(encode_kwargs.get("batch_size", self.default_batch_size))
+        if batch_size <= 0:
+            raise ValueError("batch_size must be positive")
+        return batch_size
+
     def index(
         self,
         corpus: CorpusDatasetType,
@@ -219,8 +213,7 @@ class StructuralSeparatorSearch:
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
     ) -> None:
-        del task_metadata, hf_split, hf_subset, num_proc
-        batch_size = _batch_size(encode_kwargs)
+        batch_size = self._get_batch_size(encode_kwargs)
         self.close()
         self.docids = []
         self._docid_to_index = {}
@@ -287,8 +280,7 @@ class StructuralSeparatorSearch:
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None,
     ) -> RetrievalOutputType:
-        del task_metadata, hf_split, hf_subset, num_proc
-        batch_size = _batch_size(encode_kwargs)
+        batch_size = self._get_batch_size(encode_kwargs)
         if top_k <= 0:
             raise ValueError("top_k must be positive")
         query_map = {_row_id(row): str(row.get("text", "") or "") for row in queries}
@@ -382,11 +374,11 @@ class StructuralSeparatorSearch:
 
 bge_small_structural_separator = ModelMeta(
     loader=StructuralSeparatorSearch,
-    name=MODEL_NAME,
+    name="thu-nmrc/bge-small-structural-separator",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision=MODEL_REVISION,
+    revision="9a0a8aa92400202dd1ef6950ed9cd4a116dfb03d",
     release_date="2026-07-14",
     n_parameters=33_360_000,
     n_embedding_parameters=11_720_448,
@@ -394,16 +386,14 @@ bge_small_structural_separator = ModelMeta(
     embed_dim=384,
     license="mit",
     max_tokens=512,
-    reference=REPOSITORY_URL,
+    reference="https://github.com/thu-nmrc/bge-small-structural-separator/blob/main/METHOD_CARD.md",
     similarity_fn_name="cosine",
     framework=["PyTorch", "Transformers"],
     use_instructions=False,
-    public_training_code=(
-        f"{TRAINING_REPOSITORY_URL}/tree/{TRAINING_REPOSITORY_REVISION}/training"
-    ),
+    public_training_code="https://github.com/thu-nmrc/bge-small-structural-separator/tree/e8b0a9325409d791981b7410679ae8c152fd6e00/training",
     public_training_data="https://allenai.org/data/s2orc",
     training_datasets=set(),
-    adapted_from=BASE_MODEL_NAME,
+    adapted_from="BAAI/bge-small-en-v1.5",
     citation=None,
     contacts=["thu-nmrc"],
 )
