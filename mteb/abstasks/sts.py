@@ -29,19 +29,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def _canonical_text_pair_keys(
-    text1: list[Any], text2: list[Any]
-) -> set[tuple[str, str]]:
-    """Return exact text-pair keys with sentence order removed."""
-    if len(text1) != len(text2):
-        raise ValueError("STS pair columns must contain the same number of rows")
-
-    return {
-        (left, right) if left <= right else (right, left)
-        for left, right in zip(text1, text2)
-    }
-
-
 class STSMetrics(TypedDict):
     """Metrics for STS tasks
 
@@ -249,22 +236,9 @@ class AbsTaskSTS(AbsTask):
             _load_col,
             n,
             max_workers=num_proc,
+            symmetric=True,
         )
         labels_statistics = calculate_score_statistics(score)
-
-        column1, column2 = self.column_names
-        if (
-            isinstance(column1, str)
-            and isinstance(column2, str)
-            and len(self.metadata.modalities) == 1
-            and self.metadata.modalities[0] == "text"
-        ):
-            pair_stats["unique_pairs"] = len(
-                _canonical_text_pair_keys(
-                    _load_col(column1),
-                    _load_col(column2),
-                )
-            )
 
         return AnySTSDescriptiveStatistics(
             num_samples=n,

@@ -1,6 +1,23 @@
 from datasets import Dataset, DatasetDict
 
+from mteb.abstasks._statistics_calculation import calculate_pair_modality_statistics
 from tests.mock_tasks import MockMultilingualSTSTask, MockSTSTask
+
+
+def test_pair_statistics_remain_order_sensitive_by_default() -> None:
+    columns = {
+        "left": ["alpha", "beta"],
+        "right": ["beta", "alpha"],
+    }
+
+    stats = calculate_pair_modality_statistics(
+        {"left": "text"},
+        {"right": "text"},
+        columns.__getitem__,
+        n=2,
+    )
+
+    assert stats["unique_pairs"] == 2
 
 
 def test_sts_statistics_count_order_insensitive_pairs() -> None:
