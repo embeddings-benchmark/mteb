@@ -18,6 +18,8 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, get_args
 
+from pydantic import BaseModel, ConfigDict
+
 from mteb.evaluate import evaluate
 from mteb.mocks import ALL_MOCK_TASK_TEST_GRID
 from mteb.models.models_protocols import (
@@ -29,6 +31,8 @@ from mteb.results.task_result import TaskError, TaskResult
 from mteb.types import Modalities
 
 if TYPE_CHECKING:
+    from collections.abc import ItemsView
+
     from mteb.abstasks.abstask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -43,7 +47,130 @@ _DEPENDENCY_ERROR_PATTERNS = (
     "install '",
 )
 
-MockRunResults = dict[str, TaskResult | TaskError | None]
+
+class MockRunResults(BaseModel):
+    """The results of running a model on the mock tasks, as returned by [`mteb.mock_run`][mteb.mock_run].
+
+    Attributes:
+        model_name: The name of the checked model.
+        task_results: A mapping of every mock task name to its status; a `TaskResult` (the task
+            ran successfully), a `TaskError` (the task failed) or `None` (the task is not
+            compatible with the model).
+    """
+
+    model_config = ConfigDict(
+        protected_namespaces=(),  # to free up the name model_name which is otherwise protected
+    )
+
+    model_name: str
+    task_results: dict[str, TaskResult | TaskError | None]
+
+    def __getitem__(self, task_name: str) -> TaskResult | TaskError | None:
+        return self.task_results[task_name]
+
+    def __contains__(self, task_name: str) -> bool:
+        return task_name in self.task_results
+
+    def items(self) -> ItemsView[str, TaskResult | TaskError | None]:
+        """The (task name, status) pairs of every mock task."""
+        return self.task_results.items()
+
+    @property
+    def all_passed(self) -> bool:
+        """Whether all compatible mock tasks either passed or were skipped due to missing dependencies."""
+        return all(
+            not isinstance(status, TaskError) or is_dependency_error(status)
+            for status in self.task_results.values()
+        )
+
+    def modality_summary(self) -> list[tuple[str, str, str]]:
+        """Summarize the results per modality.
+
+        Returns:
+            A list of (status, modality, failures) rows, one per modality.
+        """
+        task_modalities = {
+            task.metadata.name: task.metadata.modalities
+            for task in ALL_MOCK_TASK_TEST_GRID
+        }
+
+        md_rows = []
+        for modality in MODALITIES:
+            # tasks which were both compatible with the model and actually ran
+            run_tasks = [
+                name
+                for name, status in self.items()
+                if status is not None
+                and modality in task_modalities.get(name, [])
+                and not (isinstance(status, TaskError) and is_dependency_error(status))
+            ]
+
+            if not run_tasks:
+                md_rows.append(("skipped", modality, ""))
+                continue
+
+            failed = [
+                name for name in run_tasks if not isinstance(self[name], TaskResult)
+            ]
+            passed_count = len(run_tasks) - len(failed)
+            total_count = len(run_tasks)
+
+            if not failed:
+                md_rows.append((f"✓ ({passed_count}/{total_count})", modality, ""))
+            else:
+                md_rows.append(
+                    (f"✗ ({passed_count}/{total_count})", modality, ", ".join(failed))
+                )
+        return md_rows
+
+    def to_markdown(self) -> str:
+        """Convert the results into a markdown report.
+
+        Returns:
+            The markdown report as a string.
+        """
+        task_modalities = {
+            task.metadata.name: task.metadata.modalities
+            for task in ALL_MOCK_TASK_TEST_GRID
+        }
+
+        md_lines = [
+            f"# MTEB Mock-Run Results for `{self.model_name}`",
+            "",
+            "| Task | Modality | Pass | Reason |",
+            "| --- | --- | --- | --- |",
+        ]
+        for name, status in self.items():
+            if status is None:  # not compatible with the model
+                continue
+            mods = ", ".join(task_modalities.get(name, []))
+            if isinstance(status, TaskResult):
+                status_str, reason = "✓", "-"
+            elif is_dependency_error(status):
+                status_str = "skipped"
+                reason = status.exception.replace("\n", " ")
+            else:
+                status_str = "✗"
+                reason = status.exception.replace("\n", " ")
+            md_lines.append(f"| {name} | {mods} | {status_str} | {reason} |")
+
+        md_rows = self.modality_summary()
+        max_status_len = max([len(row[0]) for row in md_rows] + [len("Pass")])
+        max_mod_len = max([len(row[1]) for row in md_rows] + [len("Modality")])
+
+        md_lines += [
+            "",
+            "## Summary by Modality",
+            "",
+            f"| {'Pass':<{max_status_len}} | {'Modality':<{max_mod_len}} | Failures |",
+            f"| {'-' * max_status_len} | {'-' * max_mod_len} | {'-' * 8} |",
+        ]
+        for status_str, modality, failures in md_rows:
+            md_lines.append(
+                f"| {status_str:<{max_status_len}} | {modality:<{max_mod_len}} | {failures} |"
+            )
+
+        return "\n".join(md_lines)
 
 
 def get_compatible_mock_tasks(
@@ -90,12 +217,13 @@ def mock_run(
         model: The model object to check.
 
     Returns:
-        A dictionary mapping every mock task name to its status; a `TaskResult` (the task ran
-        successfully), a `TaskError` (the task failed) or `None` (the task is not compatible
-        with the model).
+        The [`MockRunResults`][mteb.mocks.mock_run.MockRunResults] of the run, mapping every mock
+        task name to its status; a `TaskResult` (the task ran successfully), a `TaskError` (the
+        task failed) or `None` (the task is not compatible with the model).
     """
+    model_name = model.mteb_model_meta.name or "unknown model"
     compatible_tasks = get_compatible_mock_tasks(model)
-    task_status: MockRunResults = {
+    task_status: dict[str, TaskResult | TaskError | None] = {
         task.metadata.name: None for task in ALL_MOCK_TASK_TEST_GRID
     }
 
@@ -103,7 +231,7 @@ def mock_run(
         logger.warning(
             "No compatible mock tasks found for model modalities and protocols."
         )
-        return task_status
+        return MockRunResults(model_name=model_name, task_results=task_status)
 
     results = evaluate(
         model,
@@ -123,113 +251,9 @@ def mock_run(
         elif name in failed_tasks:
             task_status[name] = failed_tasks[name]
 
-    return task_status
+    return MockRunResults(model_name=model_name, task_results=task_status)
 
 
 def is_dependency_error(error: TaskError) -> bool:
     """Check whether a task failed because an optional dependency was not installed."""
     return any(pat in error.exception.lower() for pat in _DEPENDENCY_ERROR_PATTERNS)
-
-
-def all_checks_passed(results: MockRunResults) -> bool:
-    """Check whether all compatible mock tasks either passed or were skipped due to missing dependencies."""
-    return all(
-        not isinstance(status, TaskError) or is_dependency_error(status)
-        for status in results.values()
-    )
-
-
-def get_modality_summary(results: MockRunResults) -> list[tuple[str, str, str]]:
-    """Summarize the check results per modality.
-
-    Args:
-        results: The results as returned by [`mteb.mock_run`][mteb.mock_run].
-
-    Returns:
-        A list of (status, modality, failures) rows, one per modality.
-    """
-    task_modalities = {
-        task.metadata.name: task.metadata.modalities for task in ALL_MOCK_TASK_TEST_GRID
-    }
-
-    md_rows = []
-    for modality in MODALITIES:
-        # tasks which were both compatible with the model and actually ran
-        run_tasks = [
-            name
-            for name, status in results.items()
-            if status is not None
-            and modality in task_modalities.get(name, [])
-            and not (isinstance(status, TaskError) and is_dependency_error(status))
-        ]
-
-        if not run_tasks:
-            md_rows.append(("skipped", modality, ""))
-            continue
-
-        failed = [
-            name for name in run_tasks if not isinstance(results[name], TaskResult)
-        ]
-        passed_count = len(run_tasks) - len(failed)
-        total_count = len(run_tasks)
-
-        if not failed:
-            md_rows.append((f"✓ ({passed_count}/{total_count})", modality, ""))
-        else:
-            md_rows.append(
-                (f"✗ ({passed_count}/{total_count})", modality, ", ".join(failed))
-            )
-    return md_rows
-
-
-def results_to_markdown(model_name: str, results: MockRunResults) -> str:
-    """Convert the check results into a markdown report.
-
-    Args:
-        model_name: The name of the checked model.
-        results: The results as returned by [`mteb.mock_run`][mteb.mock_run].
-
-    Returns:
-        The markdown report as a string.
-    """
-    task_modalities = {
-        task.metadata.name: task.metadata.modalities for task in ALL_MOCK_TASK_TEST_GRID
-    }
-
-    md_lines = [
-        f"# MTEB Mock-Run Results for `{model_name}`",
-        "",
-        "| Task | Modality | Pass | Reason |",
-        "| --- | --- | --- | --- |",
-    ]
-    for name, status in results.items():
-        if status is None:  # not compatible with the model
-            continue
-        mods = ", ".join(task_modalities.get(name, []))
-        if isinstance(status, TaskResult):
-            status_str, reason = "✓", "-"
-        elif is_dependency_error(status):
-            status_str = "skipped"
-            reason = status.exception.replace("\n", " ")
-        else:
-            status_str = "✗"
-            reason = status.exception.replace("\n", " ")
-        md_lines.append(f"| {name} | {mods} | {status_str} | {reason} |")
-
-    md_rows = get_modality_summary(results)
-    max_status_len = max([len(row[0]) for row in md_rows] + [len("Pass")])
-    max_mod_len = max([len(row[1]) for row in md_rows] + [len("Modality")])
-
-    md_lines += [
-        "",
-        "## Summary by Modality",
-        "",
-        f"| {'Pass':<{max_status_len}} | {'Modality':<{max_mod_len}} | Failures |",
-        f"| {'-' * max_status_len} | {'-' * max_mod_len} | {'-' * 8} |",
-    ]
-    for status_str, modality, failures in md_rows:
-        md_lines.append(
-            f"| {status_str:<{max_status_len}} | {modality:<{max_mod_len}} | {failures} |"
-        )
-
-    return "\n".join(md_lines)

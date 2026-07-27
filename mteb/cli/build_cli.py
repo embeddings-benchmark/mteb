@@ -16,12 +16,7 @@ from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
-from mteb.mocks.mock_run import (
-    all_checks_passed,
-    get_modality_summary,
-    mock_run,
-    results_to_markdown,
-)
+from mteb.mocks.mock_run import mock_run
 
 if TYPE_CHECKING:
     from mteb.abstasks.abstask import AbsTask
@@ -505,21 +500,18 @@ def _mock_run(args: argparse.Namespace) -> None:
             os.environ.pop("TOKENIZERS_PARALLELISM", None)
 
     output_path = Path("mteb_mock_run_results.md")
-    output_path.write_text(results_to_markdown(args.model, results), encoding="utf-8")
+    output_path.write_text(results.to_markdown(), encoding="utf-8")
 
-    _print_terminal_summary(args.model, results, output_path)
+    _print_terminal_summary(results, output_path)
 
 
-def _print_terminal_summary(
-    model_name: str,
-    results: MockRunResults,
-    output_path: Path,
-) -> None:
+def _print_terminal_summary(results: MockRunResults, output_path: Path) -> None:
     console = Console()
 
-    md_rows = get_modality_summary(results)
+    md_rows = results.modality_summary()
+    model_name = results.model_name
 
-    if all_checks_passed(results):
+    if results.all_passed:
         console.print(f"\n[bold green]✓ `{model_name}` passed all expected checks[/]")
     else:
         console.print(
