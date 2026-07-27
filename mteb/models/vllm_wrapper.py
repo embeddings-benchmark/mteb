@@ -151,6 +151,7 @@ class VllmWrapperBase:
             cleanup_dist_env_and_memory,
         )
 
+        atexit.unregister(self.cleanup)
         self.llm = None
         gc.collect()
         cleanup_dist_env_and_memory()

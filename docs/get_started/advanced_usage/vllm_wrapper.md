@@ -93,7 +93,9 @@ To use vLLM with MTEB, you need to wrap the model with its corresponding wrapper
 
 ### Half-Precision Inference
 
-By default, vLLM uses Flash Attention, which only supports `float16` and `bfloat16`, not `float32`. vLLM does not optimize inference performance for `float32`.
+By default, vLLM uses Flash Attention, which only supports `float16` and `bfloat16`, not `float32`.
+
+We provide a standalone benchmark script `scripts/bench_vllm/dtype.py` to quantify inference performance across different precisions.
 
 <figure markdown="span">
     ![](../images/visualizations/half_precision_inference.png)
@@ -123,6 +125,8 @@ By default, vLLM uses Flash Attention, which only supports `float16` and `bfloat
 
 By default, Sentence Transformers (ST) pad all inputs in a batch to the length of the longest one, which is highly inefficient. vLLM avoids padding entirely during inference.
 
+We provide a standalone benchmark script `scripts/bench_vllm/unpadding.py` to quantify inference performance using unpadding.
+
 <figure markdown="span">
     ![](../images/visualizations/unpadding.png)
     <figcaption>X-axis: Throughput (requests/s);<br>
@@ -141,6 +145,16 @@ For these small models, preprocessing bottlenecks are often encountered.
 
 - Use multithreading to accelerate preprocessing. You can specify the number of threads using renderer_num_workers. The total time scales down almost linearly as the number of renderer workers increases, if you encounter preprocessing bottlenecks.
 - Tiling to overlap preprocessing and computation for pooling models offline inference. When preprocessing takes less time than computation, the preprocessing overhead can be almost entirely overlapped.
+
+We provide a standalone benchmark script `scripts/bench_vllm/renderer_num_workers.py` to quantify inference performance using renderer_num_workers.
+
+<figure markdown="span">
+    ![](../images/visualizations/renderer_workers.png)
+    <figcaption>X‑axis: Prompt length (words, log₂ scale).<br>
+    Y‑axis: Time for 100 embeddings (seconds, log₁₀ scale).<br>
+    Each curve corresponds to a different number of renderer workers (1, 2, 4, 8).<br>
+    Lower curves is better.</figcaption>
+</figure>
 
 ### Other Optimizations
 
