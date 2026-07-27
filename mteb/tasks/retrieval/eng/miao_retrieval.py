@@ -29,7 +29,7 @@ class MIAOA2IRetrieval(AbsTaskRetrieval):
         reference=_REFERENCE,
         dataset={
             "path": "Wissam42/MIAO-A2I",
-            "revision": "main",
+            "revision": "b21943d3d5e7ec80fb3754ce2d7bfc5d89c8d284",
         },
         type="Any2AnyRetrieval",
         category="a2i",
@@ -61,7 +61,7 @@ class MIAOI2ARetrieval(AbsTaskRetrieval):
         reference=_REFERENCE,
         dataset={
             "path": "Wissam42/MIAO-I2A",
-            "revision": "main",
+            "revision": "3e8abdc3ecbdd0eccfd738335ddeb00a208b2abd",
         },
         type="Any2AnyRetrieval",
         category="i2a",
