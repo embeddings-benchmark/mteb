@@ -85,6 +85,7 @@ def _build_t2i_split(pairs: list[dict]) -> RetrievalSplitData:
         queries=Dataset.from_list(query_rows),
         corpus=Dataset.from_list(corpus_rows).cast_column("image", Image()),
         relevant_docs=relevant_docs,
+        top_ranked=None,
     )
 
 
@@ -100,6 +101,7 @@ def _build_i2t_split(pairs: list[dict]) -> RetrievalSplitData:
         queries=Dataset.from_list(query_rows).cast_column("image", Image()),
         corpus=Dataset.from_list(corpus_rows),
         relevant_docs=relevant_docs,
+        top_ranked=None,
     )
 
 
