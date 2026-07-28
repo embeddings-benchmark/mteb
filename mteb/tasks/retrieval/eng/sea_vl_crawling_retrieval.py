@@ -1,16 +1,7 @@
 from __future__ import annotations
 
-from datasets import Dataset, Image, load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
-from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-
-_SOURCE = "SEACrowd/sea-vl_crawling"
-_SOURCE_REVISION = "4723b4f00b68dc2fe649624628f3e8d50afa1e74"
-_N_SAMPLES = 2048
-_SHUFFLE_BUFFER = 10_000
-_SEED = 42
 
 _REFERENCE = "https://arxiv.org/abs/2503.07920"
 _BIBTEX = r"""
@@ -23,86 +14,11 @@ _BIBTEX = r"""
 }
 """
 _DESCRIPTION = (
-    "SEA-VL crawling is a large-scale Southeast Asia–focused image–caption collection "
-    "(~1.27M web-crawled culturally relevant pairs). For MTEB evaluation we deterministically "
-    f"downsample to {_N_SAMPLES} image–caption pairs via a seeded streaming shuffle "
-    f"(buffer={_SHUFFLE_BUFFER}), using the first non-empty caption per image."
+    "SEA-VL crawling is a large-scale, Southeast Asia–focused image–caption dataset, "
+    "containing culturally relevant image–text pairs from the web. The subset used in MTEB "
+    "features 2048 unique images and their corresponding captions, offering an evaluation "
+    "benchmark for image–text and text–image retrieval in Southeast Asian cultural contexts."
 )
-
-
-def _first_caption(captions: list[str] | None) -> str | None:
-    if not captions:
-        return None
-    for cap in captions:
-        if isinstance(cap, str) and cap.strip():
-            return cap.strip()
-    return None
-
-
-def _sample_pairs(*, n_samples: int = _N_SAMPLES) -> list[dict]:
-    """Stream-sample image–caption pairs without downloading the full 1.27M set."""
-    stream = load_dataset(
-        _SOURCE,
-        revision=_SOURCE_REVISION,
-        split="train",
-        streaming=True,
-    )
-    stream = stream.shuffle(seed=_SEED, buffer_size=_SHUFFLE_BUFFER)
-
-    pairs: list[dict] = []
-    for row in stream:
-        text = _first_caption(row.get("caption"))
-        image = row.get("image")
-        if text is None or image is None:
-            continue
-        pairs.append(
-            {
-                "id": str(row["id"]),
-                "image": image,
-                "text": text,
-                "category": row.get("category"),
-            }
-        )
-        if len(pairs) >= n_samples:
-            break
-    if len(pairs) < n_samples:
-        raise RuntimeError(
-            f"Only collected {len(pairs)} valid pairs from {_SOURCE}; "
-            f"expected {n_samples}."
-        )
-    return pairs
-
-
-def _build_t2i_split(pairs: list[dict]) -> RetrievalSplitData:
-    query_rows = [
-        {"id": f"q-{p['id']}", "text": p["text"], "modality": "text"} for p in pairs
-    ]
-    corpus_rows = [
-        {"id": f"d-{p['id']}", "image": p["image"], "modality": "image"} for p in pairs
-    ]
-    relevant_docs = {f"q-{p['id']}": {f"d-{p['id']}": 1} for p in pairs}
-    return RetrievalSplitData(
-        queries=Dataset.from_list(query_rows),
-        corpus=Dataset.from_list(corpus_rows).cast_column("image", Image()),
-        relevant_docs=relevant_docs,
-        top_ranked=None,
-    )
-
-
-def _build_i2t_split(pairs: list[dict]) -> RetrievalSplitData:
-    query_rows = [
-        {"id": f"q-{p['id']}", "image": p["image"], "modality": "image"} for p in pairs
-    ]
-    corpus_rows = [
-        {"id": f"d-{p['id']}", "text": p["text"], "modality": "text"} for p in pairs
-    ]
-    relevant_docs = {f"q-{p['id']}": {f"d-{p['id']}": 1} for p in pairs}
-    return RetrievalSplitData(
-        queries=Dataset.from_list(query_rows).cast_column("image", Image()),
-        corpus=Dataset.from_list(corpus_rows),
-        relevant_docs=relevant_docs,
-        top_ranked=None,
-    )
 
 
 class SeaVLCrawlingT2IRetrieval(AbsTaskRetrieval):
@@ -112,8 +28,8 @@ class SeaVLCrawlingT2IRetrieval(AbsTaskRetrieval):
         + " Queries are captions; the corpus contains images (text→image retrieval).",
         reference=_REFERENCE,
         dataset={
-            "path": _SOURCE,
-            "revision": _SOURCE_REVISION,
+            "path": "Wissam42/SEA-VL-Crawling-T2I",
+            "revision": "b0f22ad420a61d217efb654d1fa3cc88b77ba40b",
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -133,13 +49,6 @@ class SeaVLCrawlingT2IRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, **kwargs) -> None:
-        if self.data_loaded:
-            return
-        pairs = _sample_pairs()
-        self.dataset = {"default": {"test": _build_t2i_split(pairs)}}
-        self.data_loaded = True
-
 
 class SeaVLCrawlingI2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -148,8 +57,8 @@ class SeaVLCrawlingI2TRetrieval(AbsTaskRetrieval):
         + " Queries are images; the corpus contains captions (image→text retrieval).",
         reference=_REFERENCE,
         dataset={
-            "path": _SOURCE,
-            "revision": _SOURCE_REVISION,
+            "path": "Wissam42/SEA-VL-Crawling-I2T",
+            "revision": "112d27a26b4fcc5516940360771766c5feb785e8",
         },
         type="Any2AnyRetrieval",
         category="i2t",
@@ -168,10 +77,3 @@ class SeaVLCrawlingI2TRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a caption that matches the given image."},
         is_beta=True,
     )
-
-    def load_data(self, **kwargs) -> None:
-        if self.data_loaded:
-            return
-        pairs = _sample_pairs()
-        self.dataset = {"default": {"test": _build_i2t_split(pairs)}}
-        self.data_loaded = True
