@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
-from datasets import Dataset, Video, load_dataset
+from datasets import Dataset, load_dataset
 from huggingface_hub import snapshot_download
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -35,18 +35,19 @@ class MMVUVideoCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@misc{zhao2025mmvu,
-  author = {Zhao, Yilun and Xie, Lujing and Zhang, Haowei and Gan, Guo and Long, Yitao and Hu, Zhiyuan and Hu, Tongyan and Chen, Weiyuan and Li, Chuhan and Song, Junyang and Xu, Zhijian and Wang, Chengye and Pan, Weifeng and Shangguan, Ziyao and Tang, Xiangru and Liang, Zhenwen and Liu, Yixin and Zhao, Chen and Cohan, Arman},
-  eprint = {2501.12380},
-  primaryClass = {cs.CV},
-  title = {MMVU: Measuring Expert-Level Multi-Discipline Video Understanding},
-  url = {https://arxiv.org/abs/2501.12380},
-  year = {2025},
+@inproceedings{zhao2025mmvu,
+  title={MMVU: Measuring expert-level multi-discipline video understanding},
+  author={Zhao, Yilun and Zhang, Haowei and Xie, Lujing and Hu, Tongyan and Gan, Guo and Long, Yitao and Hu, Zhiyuan and Chen, Weiyuan and Li, Chuhan and Xu, Zhijian and others},
+  booktitle={Proceedings of the Computer Vision and Pattern Recognition Conference},
+  pages={8475--8489},
+  year={2025}
 }
 """,
     )
 
     def load_data(self, **kwargs) -> None:
+        from datasets import Video
+
         def _video_relpath(url: str) -> str:
             path = unquote(urlparse(url).path)
             marker = "/videos/"
