@@ -297,6 +297,10 @@ from .sci_fact_retrieval import SciFact
 from .sci_mmir_i2t_retrieval import SciMMIRI2TRetrieval
 from .sci_mmir_t2i_retrieval import SciMMIRT2IRetrieval
 from .scidocs_retrieval import SCIDOCS
+from .sea_vl_crawling_retrieval import (
+    SeaVLCrawlingI2TRetrieval,
+    SeaVLCrawlingT2IRetrieval,
+)
 from .shot2story_retrieval import (
     Shot2Story20KA2VRetrieval,
     Shot2Story20KAT2VRetrieval,
@@ -307,6 +311,7 @@ from .shot2story_retrieval import (
     Shot2Story20KVA2TRetrieval,
     Shot2Story20KVT2ARetrieval,
 )
+from .shs100k_retrieval import SHS100KA2ARetrieval
 from .siqa_retrieval import SIQA
 from .sketchy_i2i_retrieval import SketchyI2IRetrieval
 from .sop_i2i_retrieval import SOPI2IRetrieval
@@ -683,10 +688,13 @@ __all__ = [
     "RParisMediumI2IRetrieval",
     "ReMe",
     "ReMuQIT2TRetrieval",
+    "SHS100KA2ARetrieval",
     "SOPI2IRetrieval",
     "SciFact",
     "SciMMIRI2TRetrieval",
     "SciMMIRT2IRetrieval",
+    "SeaVLCrawlingI2TRetrieval",
+    "SeaVLCrawlingT2IRetrieval",
     "Shot2Story20KA2VRetrieval",
     "Shot2Story20KAT2VRetrieval",
     "Shot2Story20KT2VARetrieval",
