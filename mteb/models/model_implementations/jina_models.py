@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 import logging
 from collections import defaultdict
 from typing import TYPE_CHECKING, Any, ClassVar
@@ -301,13 +302,18 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
         for idx, (query, doc) in enumerate(zip(all_queries, all_corpus)):
             query_groups[query].append((idx, doc))
 
+        rerank_parameters = inspect.signature(self.model.rerank).parameters
+        rerank_kwargs = {}
+        if "max_query_length" in rerank_parameters:
+            rerank_kwargs["max_query_length"] = 3072
+        if "max_doc_length" in rerank_parameters:
+            rerank_kwargs["max_doc_length"] = 2048
+
         results = np.zeros(sentences_count, dtype=np.float32)
         for query, doc_infos in query_groups.items():
             original_indices, docs = zip(*doc_infos)
 
-            scores = self.model.rerank(
-                query, list(docs), max_query_length=3072, max_doc_length=2048
-            )
+            scores = self.model.rerank(query, list(docs), **rerank_kwargs)
             for scr in scores:
                 original_idx = original_indices[scr["index"]]
                 results[original_idx] = float(scr["relevance_score"])
