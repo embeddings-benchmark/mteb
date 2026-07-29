@@ -33,12 +33,12 @@ class BirdCLEFSpeciesClustering(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{birdclef2025,
-  author = {Christopher},
-  publisher = {Hugging Face},
-  title = {BirdCLEF+ 2025},
-  url = {https://huggingface.co/datasets/christopher/birdclef-2025},
+@inproceedings{canas2025birdclef,
+  author = {Cañas, Juan and Kahl, Stefan and Denton, Tom and Toro-Gómez, Maria and Rodriguez-Buritica, Susana and Benavides-Lopez, Jose and Ulloa, Juan and Caycedo-Rosales, Paula and Klinck, Holger and Goëau, Hervé and Vellinga, Willem-Pier and Planqué, Robert and Joly, Alexis},
   year = {2025},
+  month = {10},
+  pages = {},
+  title = {Overview of BirdCLEF+ 2025: Multi-Taxonomic Sound Identification in the Middle Magdalena, Colombia}
 }
 """,
     )
