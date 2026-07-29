@@ -9,6 +9,7 @@ from mteb.evaluate import evaluate
 from mteb.filter_tasks import filter_tasks
 from mteb.get_tasks import get_task, get_tasks
 from mteb.load_results import load_results
+from mteb.mocks.mock_run import MockRunResults, mock_run
 from mteb.models import (
     CacheBackendProtocol,
     CrossEncoderProtocol,
@@ -23,8 +24,6 @@ from mteb.results import BenchmarkResults, TaskResult
 
 from .benchmarks.benchmark import Benchmark
 from .benchmarks.get_benchmark import get_benchmark, get_benchmarks
-
-from mteb.mocks.mock_run import MockRunResults, mock_run
 
 __version__ = version("mteb")  # fetch version from install metadata
 
