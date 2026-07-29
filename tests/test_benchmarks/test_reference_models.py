@@ -31,6 +31,9 @@ def _get_expected_task_names(benchmark, model_name):
     task_names = []
     benchmark_tasks = []
     for task in benchmark.tasks:
+        if task.metadata.name == "CodeRAGStackoverflowPosts":
+            # CodeRAGStackoverflowPosts is too big
+            continue
         if task.is_aggregate:
             benchmark_tasks.extend(task.metadata.tasks)
         else:
