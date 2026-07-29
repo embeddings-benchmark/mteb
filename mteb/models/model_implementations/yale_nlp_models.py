@@ -1,7 +1,27 @@
 from __future__ import annotations
 
-from mteb.models.model_implementations.qwen3_models import q3e_instruct_loader
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
+from mteb.types import PromptType
+
+
+def instruction_template(
+    instruction: str, prompt_type: PromptType | None = None
+) -> str:
+    """Prefix queries with "Instruct: ...\nQuery:" and leave documents bare.
+
+    Matches the template in the checkpoint's config_sentence_transformers.json.
+    """
+    if not instruction or prompt_type == PromptType.document:
+        return ""
+    if isinstance(instruction, dict):
+        instruction = (
+            instruction[prompt_type]
+            if prompt_type is not None
+            else next(iter(instruction.values()))
+        )
+    return f"Instruct: {instruction}\nQuery:"
+
 
 RTRIEVER_CITATION = """@inproceedings{zhao-etal-2026-rethinking,
     title = "Rethinking Reasoning-Intensive Retrieval: Evaluating and Advancing Retrievers in Agentic Search Systems",
@@ -30,7 +50,11 @@ RTRIEVER_4B = ModelMeta(
     # RTriever-4B keeps the Qwen3-Embedding interface it was fine-tuned from:
     # last-token pooling, cosine similarity, and an "Instruct: ...\nQuery:"
     # prefix on queries only.
-    loader=q3e_instruct_loader,
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template=instruction_template,
+        apply_instruction_to_passages=False,
+    ),
     name="yale-nlp/RTriever-4B",
     model_type=["dense"],
     languages=["eng-Latn"],

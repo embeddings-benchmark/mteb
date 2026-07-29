@@ -1,7 +1,27 @@
 from __future__ import annotations
 
-from mteb.models.model_implementations.qwen3_models import q3e_instruct_loader
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
+from mteb.types import PromptType
+
+
+def instruction_template(
+    instruction: str, prompt_type: PromptType | None = None
+) -> str:
+    """Prefix queries with "Instruct: ...\nQuery:" and leave documents bare.
+
+    Matches the template in the checkpoint's config_sentence_transformers.json.
+    """
+    if not instruction or prompt_type == PromptType.document:
+        return ""
+    if isinstance(instruction, dict):
+        instruction = (
+            instruction[prompt_type]
+            if prompt_type is not None
+            else next(iter(instruction.values()))
+        )
+    return f"Instruct: {instruction}\nQuery:"
+
 
 # Fetched verbatim from https://arxiv.org/bibtex/2508.07995 (v5); the copy in
 # the model card predates the revision and lists an older author set.
@@ -39,7 +59,11 @@ DIVER_RETRIEVER_4B_1020 = ModelMeta(
     # A Qwen3-Embedding-4B fine-tune, so it keeps that interface: last-token
     # pooling, cosine similarity, and an "Instruct: ...\nQuery:" prefix on
     # queries only (verified against its config_sentence_transformers.json).
-    loader=q3e_instruct_loader,
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template=instruction_template,
+        apply_instruction_to_passages=False,
+    ),
     name="AQ-MedAI/Diver-Retriever-4B-1020",
     model_type=["dense"],
     languages=["eng-Latn", "zho-Hans"],
@@ -64,7 +88,11 @@ DIVER_RETRIEVER_4B_1020 = ModelMeta(
 )
 
 DIVER_RETRIEVER_4B = ModelMeta(
-    loader=q3e_instruct_loader,
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template=instruction_template,
+        apply_instruction_to_passages=False,
+    ),
     name="AQ-MedAI/Diver-Retriever-4B",
     model_type=["dense"],
     languages=["eng-Latn", "zho-Hans"],
@@ -94,7 +122,11 @@ DIVER_RETRIEVER_1B7 = ModelMeta(
     # base LM rather than a Qwen3-Embedding checkpoint, but it exposes the same
     # interface. Note its 1_Pooling/config.json carries the 4B model's
     # word_embedding_dimension (2560); the checkpoint's hidden size is 2048.
-    loader=q3e_instruct_loader,
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template=instruction_template,
+        apply_instruction_to_passages=False,
+    ),
     name="AQ-MedAI/Diver-Retriever-1.7B",
     model_type=["dense"],
     languages=["eng-Latn", "zho-Hans"],
@@ -119,7 +151,11 @@ DIVER_RETRIEVER_1B7 = ModelMeta(
 )
 
 DIVER_RETRIEVER_0B6 = ModelMeta(
-    loader=q3e_instruct_loader,
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template=instruction_template,
+        apply_instruction_to_passages=False,
+    ),
     name="AQ-MedAI/Diver-Retriever-0.6B",
     model_type=["dense"],
     languages=["eng-Latn", "zho-Hans"],
