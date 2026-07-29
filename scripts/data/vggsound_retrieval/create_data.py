@@ -38,9 +38,7 @@ _VIDEO_ID_RE = re.compile(r"^video/(.+)/video\.mp4$")
 
 
 def _hf_token() -> str | None:
-    return (
-        os.environ.get("HF_TOKEN")
-    )
+    return os.environ.get("HF_TOKEN")
 
 
 def _video_id_from_file_name(file_name: str) -> str | None:
