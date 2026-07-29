@@ -30,6 +30,8 @@ BEKKO_COMMON_KWARGS = {
             "dtype": "bfloat16",
         }
     },
+    # The model cards specify 100+ languages but do not publish a closed
+    # ISO 639-3 + script inventory.
     "languages": None,
     "n_embedding_parameters": 98_304_000,
     "max_tokens": 8192,
