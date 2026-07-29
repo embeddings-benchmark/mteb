@@ -297,6 +297,10 @@ from .sci_fact_retrieval import SciFact
 from .sci_mmir_i2t_retrieval import SciMMIRI2TRetrieval
 from .sci_mmir_t2i_retrieval import SciMMIRT2IRetrieval
 from .scidocs_retrieval import SCIDOCS
+from .sea_vl_crawling_retrieval import (
+    SeaVLCrawlingI2TRetrieval,
+    SeaVLCrawlingT2IRetrieval,
+)
 from .shot2story_retrieval import (
     Shot2Story20KA2VRetrieval,
     Shot2Story20KAT2VRetrieval,
@@ -687,6 +691,8 @@ __all__ = [
     "SciFact",
     "SciMMIRI2TRetrieval",
     "SciMMIRT2IRetrieval",
+    "SeaVLCrawlingI2TRetrieval",
+    "SeaVLCrawlingT2IRetrieval",
     "Shot2Story20KA2VRetrieval",
     "Shot2Story20KAT2VRetrieval",
     "Shot2Story20KT2VARetrieval",
