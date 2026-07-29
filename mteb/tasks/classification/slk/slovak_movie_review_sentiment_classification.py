@@ -73,7 +73,7 @@ class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
         adapted_from=["SlovakMovieReviewSentimentClassification"],
     )
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, **kwargs) -> None:
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )
