@@ -54,7 +54,15 @@ BEKKO_COMMON_KWARGS = {
     "adapted_from": "jhu-clsp/mmBERT-small",
     "modalities": ["text"],
     "model_type": ["dense"],
-    "citation": None,
+    "citation": """@misc{tateno2026bekko,
+  title={Bekko Embedding: Parameter-Efficient Multilingual Retrieval with Ultra-Compact Encoders},
+  author={Yuichi Tateno},
+  year={2026},
+  eprint={2607.25180},
+  archivePrefix={arXiv},
+  primaryClass={cs.IR},
+  url={https://arxiv.org/abs/2607.25180},
+}""",
     "contacts": ["hotchpotch"],
 }
 
