@@ -72,7 +72,7 @@ bekko_embedding_v1_a8m = ModelMeta(
     revision="a8cedb6b46fad5df6f10e1c94750ff62e298fbd2",
     n_parameters=105_975_168,
     memory_usage_mb=202,
-    release_date="2026-07-07",
+    release_date="2026-07-28",
     reference="https://huggingface.co/hotchpotch/bekko-embedding-v1-a8m",
     **BEKKO_COMMON_KWARGS,
 )
@@ -83,7 +83,7 @@ bekko_embedding_v1_a25m = ModelMeta(
     revision="aede922b27c1751d091b1e26c86dc82446a46cb4",
     n_parameters=123_234_432,
     memory_usage_mb=470,
-    release_date="2026-07-19",
+    release_date="2026-07-28",
     reference="https://huggingface.co/hotchpotch/bekko-embedding-v1-a25m",
     **BEKKO_COMMON_KWARGS,
 )
