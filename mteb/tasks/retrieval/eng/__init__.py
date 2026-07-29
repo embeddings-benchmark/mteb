@@ -307,7 +307,6 @@ from .shot2story_retrieval import (
     Shot2Story20KVA2TRetrieval,
     Shot2Story20KVT2ARetrieval,
 )
-from .shs100k_retrieval import SHS100KA2ARetrieval
 from .siqa_retrieval import SIQA
 from .sketchy_i2i_retrieval import SketchyI2IRetrieval
 from .sop_i2i_retrieval import SOPI2IRetrieval
@@ -685,7 +684,6 @@ __all__ = [
     "RParisMediumI2IRetrieval",
     "ReMe",
     "ReMuQIT2TRetrieval",
-    "SHS100KA2ARetrieval",
     "SOPI2IRetrieval",
     "SciFact",
     "SciMMIRI2TRetrieval",
