@@ -365,7 +365,7 @@ class MockVideoAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
     }
 
     metadata = TaskMetadata(
-        type="VideoAudioZeroshotClassification",
+        type="VideoZeroshotClassification",
         name="MockVideoAudioZeroshotClassification",
         main_score="accuracy",
         **general_args,

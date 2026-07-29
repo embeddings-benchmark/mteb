@@ -405,6 +405,7 @@ class MockVideoAudioSTSTask(AbsTaskSTS):
 
 class MockSymCustomVideoAudiSTSTask(AbsTaskSTS):
     """Asymmetric STS: side-1 is video only, side-2 is audio only. Tests custom `column_names` mapping."""
+
     metadata = TaskMetadata(
         type="STS",
         name="MockSymCustomVideoAudioSTSTask",
