@@ -6,7 +6,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class MMVUVideoCentricQA(AbsTaskRetrieval):
     k_values = (1, 3, 5)  # 5 possible answers only
-    _top_k = 5
 
     metadata = TaskMetadata(
         name="MMVUVideoCentricQA",
