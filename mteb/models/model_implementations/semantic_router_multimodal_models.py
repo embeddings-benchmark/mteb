@@ -32,6 +32,32 @@ _CITATION = """@misc{multi-modal-embed-2026,
 }"""
 
 
+def _disable_broken_flash_attn() -> None:
+    try:
+        from flash_attn.flash_attn_interface import (  # noqa: F401
+            flash_attn_varlen_qkvpacked_func,
+        )
+        return
+    except Exception:
+        pass
+
+    try:
+        import transformers.utils as utils
+        import transformers.utils.import_utils as import_utils
+    except Exception:
+        return
+
+    def _unavailable(*_args: Any, **_kwargs: Any) -> bool:
+        return False
+
+    for module in (import_utils, utils):
+        fn = getattr(module, "is_flash_attn_2_available", None)
+        if fn is not None and hasattr(fn, "cache_clear"):
+            fn.cache_clear()
+        if hasattr(module, "is_flash_attn_2_available"):
+            module.is_flash_attn_2_available = _unavailable  # type: ignore[misc]
+
+
 class _MultiModalEmbedSmall(nn.Module):
     """Standalone tri-encoder matching the HF model-card loading recipe."""
 
@@ -298,6 +324,7 @@ class SemanticRouterMultiModalEmbedLargeWrapper(AbsEncoder):
         if src_dir not in sys.path:
             sys.path.insert(0, src_dir)
 
+        _disable_broken_flash_attn()
         from hf_st_mm.model import MultiModalSentenceEmbedder
 
         with (local_dir / "config.json").open(encoding="utf-8") as handle:
@@ -490,5 +517,6 @@ multi_modal_embed_large = ModelMeta(
     training_datasets=set(),
     adapted_from="llm-semantic-router/mmbert-embed-32k-2d-matryoshka",
     framework=["PyTorch", "Sentence Transformers", "Transformers"],
+    extra_requirements_groups=["multi-modal-embed"],
     **{k: v for k, v in _COMMON.items() if k != "framework"},
 )
