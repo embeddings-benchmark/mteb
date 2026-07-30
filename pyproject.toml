@@ -527,6 +527,8 @@ extend-ignore-words-re = [
     "Parth",
     # languages/bibtext artifacts
     "SHW",
+    "SHS",  # SecondHandSongs / SHS100K dataset
+    "shs",
     "ba",
     "creen",
     "Accademia",
@@ -619,4 +621,6 @@ NIFE = "NIFE"
 thw = "thw"
 ist = "ist" # spelling error in prompt for harrier-oss-v1
 shw = "SHW"
+SHS = "SHS"  # SecondHandSongs / SHS100K dataset
+shs = "shs"
 nd = "nd"
