@@ -508,9 +508,9 @@ class JinaV4Wrapper(AbsEncoder):
             and embeddings
             and isinstance(embeddings[0], torch.Tensor)
         ):
-            embeddings = np.stack(
-                [e.cpu().detach().float().numpy() for e in embeddings]
-            )
+            # Multi-vector embeddings have one vector per token or image patch.
+            # Their sequence lengths vary by input, so they must remain ragged.
+            embeddings = [e.cpu().detach().float() for e in embeddings]
         return embeddings
 
     def get_text_embeddings(

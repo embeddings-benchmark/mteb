@@ -5,6 +5,9 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Covers80A2ARetrieval(AbsTaskRetrieval):
+    # Query audio is also in the corpus under a different id; drop that self-hit.
+    skip_first_result = True
+
     metadata = TaskMetadata(
         name="Covers80A2ARetrieval",
         description=(
