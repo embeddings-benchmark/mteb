@@ -821,7 +821,17 @@ MTEB_PT = Benchmark(
     ),
     description="Portuguese text embedding quality benchmark across semantic text similarity, classification, reranking and retrieval.",
     reference=None,
-    citation=None,
+    citation=r"""
+@misc{okamura2026multilingualaveragesmtebptbenchmark,
+  archiveprefix = {arXiv},
+  author = {Lucas Hideki Takeuchi Okamura and Alexandre Alcoforado and Anna Helena Reali Costa},
+  eprint = {2607.04071},
+  primaryclass = {cs.CL},
+  title = {Beyond Multilingual Averages: MTEB-PT, a Benchmark for Portuguese Sentence Encoders},
+  url = {https://arxiv.org/abs/2607.04071},
+  year = {2026},
+}
+""",
     contacts=["Lucas-Okamura"],
 )
 
