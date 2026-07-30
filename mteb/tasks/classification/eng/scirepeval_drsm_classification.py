@@ -24,7 +24,7 @@ class SciRepEvalDRSMClassification(AbsTaskClassification):
         type="Classification",
         category="t2c",
         modalities=["text"],
-        eval_splits=["test"],
+        eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-01-01", "2023-12-06"),
@@ -54,9 +54,14 @@ Feldman, Sergey},
 """,
     )
 
+    is_cross_validation: bool = True
+
     def dataset_transform(self, num_proc: int | None = None) -> None:
-        # SciRepEval exposes only a single "evaluation" split for `drsm`, so we
-        # build a stratified train/test split for the classification evaluator.
+        # SciRepEval exposes only a single "evaluation" split for `drsm`. We keep
+        # it as one split named "train" and let MTEB's cross-validation path
+        # (is_cross_validation) run KFold over the whole split.
+        from datasets import DatasetDict
+
         ds = self.dataset["evaluation"]
         ds = ds.map(
             lambda x: {"text": f"{x['title'] or ''}\n\n{x['abstract'] or ''}".strip()},
@@ -66,7 +71,7 @@ Feldman, Sergey},
         ds = ds.remove_columns([c for c in ds.column_names if c not in keep])
         ds = ds.rename_column("class", "label")
         # A couple of papers share an identical title+abstract; drop duplicate
-        # texts so the same document cannot leak across the train/test split.
+        # texts so the same document cannot appear in multiple cross-validation folds.
         seen: set = set()
 
         def _first_per_text(example: dict) -> bool:
@@ -77,10 +82,4 @@ Feldman, Sergey},
 
         ds = ds.filter(_first_per_text)
         ds = ds.class_encode_column("label")
-        ds = ds.train_test_split(
-            test_size=0.3, seed=self.seed, stratify_by_column="label"
-        )
-        ds = self.stratified_subsampling(
-            dataset_dict=ds, seed=self.seed, splits=["test"]
-        )
-        self.dataset = ds
+        self.dataset = DatasetDict({"train": ds})
