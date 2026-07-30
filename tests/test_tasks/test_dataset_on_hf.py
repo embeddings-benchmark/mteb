@@ -23,9 +23,7 @@ tasks = [
 ]
 
 
-datasets_not_available = [
-    "AfriSentiLangClassification",
-]
+datasets_not_available = []
 
 
 _original_dataset_revisions = list(
