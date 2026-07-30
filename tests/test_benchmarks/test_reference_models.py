@@ -30,8 +30,11 @@ def _get_expected_task_names(benchmark, model_name):
     is_retrieval_only = model_name in RETRIEVAL_ONLY_MODELS
     task_names = []
     benchmark_tasks = []
-    for task in benchmark.tasks:
-        if task.metadata.name == "CodeRAGStackoverflowPosts":
+    for task in benchmark:
+        if (
+            task.metadata.name == "CodeRAGStackoverflowPosts"
+            and benchmark.name == "CodeRAG"
+        ):
             # CodeRAGStackoverflowPosts is too big
             continue
         if task.is_aggregate:
