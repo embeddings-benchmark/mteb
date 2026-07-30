@@ -100,6 +100,7 @@ GP_BENCHMARK_ENTRIES = [
                         "MTEB(fas, v2)",
                         "VN-MTEB (vie, v1)",
                         "MTEB(spa, v1)",
+                        "MTEB(por, v1)",
                     ]
                 )
                 + [
@@ -211,6 +212,7 @@ HOME_BENCHMARK_ENTRIES = [
                 "MTEB(fas, v2)",
                 "VN-MTEB (vie, v1)",
                 "MTEB(spa, v1)",
+                "MTEB(por, v1)",
             ]
         ),
     ),
