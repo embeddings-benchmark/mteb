@@ -4,7 +4,7 @@ import pytest
 
 import mteb
 from mteb.abstasks import AbsTaskZeroShotClassification
-from tests.mock_tasks import MockTextZeroShotClassificationTask
+from mteb.mocks.mock_tasks import MockTextZeroShotClassificationTask
 
 
 def test_normalize_labels_keeps_integer_labels():
