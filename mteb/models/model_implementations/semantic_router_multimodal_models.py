@@ -78,6 +78,32 @@ def _patch_sentence_transformer_sdpa(hf_st_mm_model: Any) -> None:
     hf_st_mm_model.SentenceTransformer = _factory
 
 
+def _remap_text_encoder_state_dict(
+    state_dict: dict[str, Any], model: nn.Module
+) -> dict[str, Any]:
+    """Map ST Transformer keys between ``.model.`` and ``.auto_model.``."""
+    model_keys = model.state_dict().keys()
+    wants_auto = any(k.startswith("text_model.0.auto_model.") for k in model_keys)
+    wants_model = any(k.startswith("text_model.0.model.") for k in model_keys)
+    has_auto = any(k.startswith("text_model.0.auto_model.") for k in state_dict)
+    has_model = any(k.startswith("text_model.0.model.") for k in state_dict)
+
+    if wants_auto and has_model and not has_auto:
+        old, new = "text_model.0.model.", "text_model.0.auto_model."
+    elif wants_model and has_auto and not has_model:
+        old, new = "text_model.0.auto_model.", "text_model.0.model."
+    else:
+        return state_dict
+
+    remapped: dict[str, Any] = {}
+    for key, value in state_dict.items():
+        if key.startswith(old):
+            remapped[new + key[len(old) :]] = value
+        else:
+            remapped[key] = value
+    return remapped
+
+
 class _MultiModalEmbedSmall(nn.Module):
     """Standalone tri-encoder matching the HF model-card loading recipe."""
 
@@ -367,6 +393,7 @@ class SemanticRouterMultiModalEmbedLargeWrapper(AbsEncoder):
         )
         if isinstance(state_dict, dict) and "state_dict" in state_dict:
             state_dict = state_dict["state_dict"]
+        state_dict = _remap_text_encoder_state_dict(state_dict, self.model)
         self.model.load_state_dict(state_dict)
         self.model.to(self.device)
         self.model.eval()
