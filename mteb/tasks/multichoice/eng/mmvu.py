@@ -31,11 +31,11 @@ class MMVUVideoCentricQA(AbsTaskRetrieval):
         is_beta=True,
         bibtex_citation=r"""
 @inproceedings{zhao2025mmvu,
-  title={MMVU: Measuring expert-level multi-discipline video understanding},
-  author={Zhao, Yilun and Zhang, Haowei and Xie, Lujing and Hu, Tongyan and Gan, Guo and Long, Yitao and Hu, Zhiyuan and Chen, Weiyuan and Li, Chuhan and Xu, Zhijian and others},
-  booktitle={Proceedings of the Computer Vision and Pattern Recognition Conference},
-  pages={8475--8489},
-  year={2025}
+  author = {Zhao, Yilun and Zhang, Haowei and Xie, Lujing and Hu, Tongyan and Gan, Guo and Long, Yitao and Hu, Zhiyuan and Chen, Weiyuan and Li, Chuhan and Xu, Zhijian and others},
+  booktitle = {Proceedings of the Computer Vision and Pattern Recognition Conference},
+  pages = {8475--8489},
+  title = {MMVU: Measuring expert-level multi-discipline video understanding},
+  year = {2025},
 }
 """,
     )

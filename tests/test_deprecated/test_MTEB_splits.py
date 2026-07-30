@@ -3,13 +3,13 @@ from pathlib import Path
 import pytest
 
 from mteb import MTEB
-from tests.mock_models import (
-    MockSentenceTransformer,
-)
-from tests.mock_tasks import (
+from mteb.mocks.mock_tasks import (
     MockMultilingualRetrievalTask,
     MockMultilingualSTSTask,
     MockRetrievalTask,
+)
+from tests.mock_models import (
+    MockSentenceTransformer,
 )
 
 

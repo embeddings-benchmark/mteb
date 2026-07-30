@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import torch
+from rich.console import Console
 from rich.logging import RichHandler
 
 import mteb
@@ -15,9 +16,11 @@ from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
+from mteb.mocks.mock_run import mock_run
 
 if TYPE_CHECKING:
     from mteb.abstasks.abstask import AbsTask
+    from mteb.mocks.mock_run import MockRunResults
     from mteb.types import EncodeKwargs
 
 logger = logging.getLogger(__name__)
@@ -463,6 +466,116 @@ def _leaderboard(args: argparse.Namespace) -> None:
     )
 
 
+def _mock_run(args: argparse.Namespace) -> None:
+    """Run a model on the compatible mock tasks for verification."""
+    # set logging based on verbosity level
+    if args.verbosity == 0:
+        logging.getLogger("mteb").setLevel(logging.CRITICAL)
+    elif args.verbosity == 1:
+        logging.getLogger("mteb").setLevel(logging.ERROR)
+    elif args.verbosity == 2:
+        logging.getLogger("mteb").setLevel(logging.WARNING)
+    elif args.verbosity == 3:
+        logging.getLogger("mteb").setLevel(logging.INFO)
+    elif args.verbosity >= 4:
+        logging.getLogger("mteb").setLevel(logging.DEBUG)
+
+    logger.info("Running mock-run with parameters: %s", args)
+
+    logger.debug("Setting environment variable TOKENIZERS_PARALLELISM to false")
+    old_tokenizer_parallelism = os.environ.get("TOKENIZERS_PARALLELISM")
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+    try:
+        model = mteb.get_model(
+            args.model,
+            args.model_revision,
+            device=args.device or ("cuda" if torch.cuda.is_available() else "cpu"),
+        )
+        results = mock_run(model)
+    finally:
+        if old_tokenizer_parallelism is not None:
+            os.environ["TOKENIZERS_PARALLELISM"] = old_tokenizer_parallelism
+        else:
+            os.environ.pop("TOKENIZERS_PARALLELISM", None)
+
+    output_path = Path("mteb_mock_run_results.md")
+    output_path.write_text(results.to_markdown(), encoding="utf-8")
+
+    _print_terminal_summary(results, output_path)
+
+
+def _print_terminal_summary(results: MockRunResults, output_path: Path) -> None:
+    console = Console()
+
+    md_rows = results.modality_summary()
+    model_name = results.model_name
+
+    if results.all_passed:
+        console.print(f"\n[bold green]✓ `{model_name}` passed all expected checks[/]")
+    else:
+        console.print(
+            f"\n[bold red]✗ `{model_name}` did not pass all expected checks[/]"
+        )
+
+    console.print("")
+
+    max_status_len = max([len(row[0]) for row in md_rows] + [len("Pass")])
+    max_mod_len = max([len(row[1]) for row in md_rows] + [len("Modality")])
+
+    console.print(
+        f"| {'Pass':<{max_status_len}} | {'Modality':<{max_mod_len}} | Failures |"
+    )
+    console.print(f"| {'-' * max_status_len} | {'-' * max_mod_len} | {'-' * 8} |")
+
+    for status, modality, failures in md_rows:
+        status_padded = f"{status:<{max_status_len}}"
+        mod_padded = f"{modality:<{max_mod_len}}"
+
+        if "✓" in status_padded:
+            status_colored = status_padded.replace("✓", "[green]✓[/]")
+        elif "✗" in status_padded:
+            status_colored = status_padded.replace("✗", "[red]✗[/]")
+        elif "skipped" in status_padded:
+            status_colored = status_padded.replace("skipped", "[yellow]skipped[/]")
+        else:
+            status_colored = status_padded
+
+        console.print(f"| {status_colored} | {mod_padded} | {failures} |")
+
+    console.print("")
+    console.print(f"For more information see `{output_path.resolve()}`")
+
+
+def _add_mock_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
+    parser = subparsers.add_parser(
+        "mock-run",
+        help="Sanity check a model implementation using mock tasks",
+    )
+
+    parser.add_argument(
+        "-m",
+        "--model",
+        type=str,
+        required=True,
+        help="Model to use. Will prioritize model implementation in MTEB's model registry, but default to loading the model using sentence-transformers.",
+    )
+    parser.add_argument(
+        "--model-revision",
+        "--model_revision",
+        type=str,
+        default=None,
+        help="Revision of the model to be loaded.",
+    )
+    parser.add_argument(
+        "--device", type=str, default=None, help="Device to use for computation."
+    )
+    parser.add_argument(
+        "-v", "--verbosity", type=int, default=2, help="Verbosity level"
+    )
+    parser.set_defaults(func=_mock_run)
+
+
 def build_cli() -> argparse.ArgumentParser:
     """Builds the argument parser for the MTEB CLI.
 
@@ -483,6 +596,7 @@ def build_cli() -> argparse.ArgumentParser:
     _add_available_benchmarks_parser(subparsers)
     _add_create_meta_parser(subparsers)
     _add_leaderboard_parser(subparsers)
+    _add_mock_run_parser(subparsers)
 
     return parser
 
