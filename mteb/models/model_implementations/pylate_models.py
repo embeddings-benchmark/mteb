@@ -548,6 +548,21 @@ topk_io__iso_moderncolbert = ModelMeta(
     extra_requirements_groups=["pylate"],
 )
 
+# Code fine-tuning data from LateOn-Code (training splits)
+late_on_code_fine_tuning_data = {
+    "AppsRetrieval",
+    "SyntheticText2SQL",
+    "CosQA",
+    "CodeFeedbackMT",
+    "CodeFeedbackST",
+    "StackOverflowQA",
+    "CodeTransOceanContest",
+    "CodeTransOceanDL",
+    "CodeSearchNetRetrieval",
+    "CodeSearchNetCCRetrieval",
+    "COIRCodeSearchNetRetrieval",
+}
+
 late_on_code_citation = """@misc{LateOn-Code,
   title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
   author = {Chaffin, Antoine},
@@ -641,29 +656,8 @@ lightonai__late_on_code = ModelMeta(
         "MSMARCO",
         "mMARCO-NL",
         "CornStack",
-        "AppsRetrieval",
-        "SyntheticText2SQL",
-        "CosQA",
-        "CodeFeedbackMT",
-        "CodeFeedbackST",
-        "StackOverflowQA",
-        "CodeTransOceanContest",
-        "CodeTransOceanDL",
-        "CodeSearchNetRetrieval",
-        "CodeSearchNetCCRetrieval",
-        "COIRCodeSearchNetRetrieval",
-        "AppsRetrieval",
-        "SyntheticText2SQL",
-        "CosQA",
-        "CodeFeedbackMT",
-        "CodeFeedbackST",
-        "StackOverflowQA",
-        "CodeTransOceanContest",
-        "CodeTransOceanDL",
-        "CodeSearchNetRetrieval",
-        "CodeSearchNetCCRetrieval",
-        "COIRCodeSearchNetRetrieval",
-    },
+    }
+    | late_on_code_fine_tuning_data,
     citation=late_on_code_citation,
     extra_requirements_groups=["pylate"],
 )
@@ -750,18 +744,8 @@ lightonai__late_on_code_edge = ModelMeta(
         "LoTTE",
         "MultiLongDocRetrieval",
         "CornStack",
-        "AppsRetrieval",
-        "SyntheticText2SQL",
-        "CosQA",
-        "CodeFeedbackMT",
-        "CodeFeedbackST",
-        "StackOverflowQA",
-        "CodeTransOceanContest",
-        "CodeTransOceanDL",
-        "CodeSearchNetRetrieval",
-        "CodeSearchNetCCRetrieval",
-        "COIRCodeSearchNetRetrieval",
-    },
+    }
+    | late_on_code_fine_tuning_data,
     citation=late_on_code_citation,
     extra_requirements_groups=["pylate"],
 )
@@ -955,11 +939,14 @@ denseon_lateon_supervised_data = {
     "ClimateFEVER",
 }
 
-denseon_lateon_citation = r"""@misc{sourty2026denseonlateon,
-  title={DenseOn with LateOn: Open State-of-the-Art Single and Multi-Vector Models},
-  author={Sourty, Raphael and Chaffin, Antoine and Weller, Orion and Moura Junior, Paulo Roberto and Chatelain, Amelie},
-  year={2026},
-  howpublished={\url{https://huggingface.co/blog/lightonai/denseon-lateon}},
+denseon_lateon_citation = r"""@misc{sourty2026denseonlateonfullyopen,
+  title         = {DenseOn with the LateOn: Fully Open Dense and Late-Interaction Models for Multilingual, Long-Context, and Code Search},
+  author        = {Raphaël Sourty and Antoine Chaffin and Paulo Roberto Moura Junior and Amélie Chatelain},
+  year          = {2026},
+  eprint        = {2607.27178},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url           = {https://arxiv.org/abs/2607.27178},
 }"""
 
 lightonai__lateon_unsupervised = ModelMeta(
@@ -971,7 +958,7 @@ lightonai__lateon_unsupervised = ModelMeta(
     ],
     open_weights=True,
     revision="db4d2f0b4295e2169fee5c9b1415b6cc334b0585",
-    public_training_code="",  # We need to add the boilerplates
+    public_training_code="https://github.com/lightonai/mdenseon-mlateon/blob/main/scripts/pretrain/english_late_interaction.py",
     public_training_data="https://huggingface.co/datasets/lightonai/embeddings-pre-training-curated",  # As detailed in the BP, the actual training data is proprietary Apache 2 compatible reproduction of this
     release_date="2026-04-21",
     n_parameters=149015808,
@@ -1001,7 +988,7 @@ lightonai__lateon = ModelMeta(
     ],
     open_weights=True,
     revision="6bb4488a7a1f1769f7a69fa1ff0c74c6a7b98cbd",
-    public_training_code="",  # We need to add the boilerplates
+    public_training_code="https://github.com/lightonai/mdenseon-mlateon/blob/main/scripts/finetune/english_late_interaction.py",
     public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",  # As detailed in the BP, the actual training data is proprietary Apache 2 compatible reproduction of this
     release_date="2026-04-21",
     n_parameters=149015808,
@@ -1018,5 +1005,106 @@ lightonai__lateon = ModelMeta(
     superseded_by=None,
     training_datasets=denseon_lateon_unsupervised_data | denseon_lateon_supervised_data,
     citation=denseon_lateon_citation,
+    extra_requirements_groups=["pylate"],
+)
+
+# The multilingual pre-training and fine-tuning corpora are translate-train
+# extensions of the English DenseOn/LateOn data, so the same overlaps apply and
+# the denseon_lateon_* sets are reused below
+mdenseon_mlateon_organic_data = {
+    # Organic multilingual and long-context data (training splits)
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MIRACLReranking",
+    "MultiLongDocRetrieval",
+}
+
+mdenseon_mlateon_code_data = late_on_code_fine_tuning_data | {
+    # Built from CommitPackFT and decontaminated against the evaluation set
+    "CodeEditSearchRetrieval",
+}
+
+# English plus the eight translate-train target languages
+mdenseon_mlateon_languages = [
+    "ara-Arab",
+    "deu-Latn",
+    "eng-Latn",
+    "fra-Latn",
+    "ita-Latn",
+    "nob-Latn",
+    "por-Latn",
+    "spa-Latn",
+    "swe-Latn",
+]
+
+# Code languages covered by the LateOn-Code fine-tuning data
+mdenseon_mlateon_code_languages = [
+    "python-Code",
+    "go-Code",
+    "java-Code",
+    "javascript-Code",
+    "ruby-Code",
+    "php-Code",
+]
+
+# The English and multilingual releases share the same paper
+mdenseon_mlateon_citation = denseon_lateon_citation
+
+
+lightonai__mlateon_unsupervised = ModelMeta(
+    loader=MultiVectorModel,
+    name="lightonai/mLateOn-unsupervised",
+    model_type=["late-interaction"],
+    languages=mdenseon_mlateon_languages,
+    open_weights=True,
+    revision="5fcf9b20cdff594f0849a3ef928f3d79dcb0990c",
+    public_training_code="https://github.com/lightonai/mdenseon-mlateon/blob/main/scripts/pretrain/multilingual_late_interaction.py",
+    public_training_data="https://huggingface.co/datasets/lightonai/multilingual-embeddings-pre-training-curated",  # As detailed in the BP, the actual training data is a proprietary Apache 2 compatible reproduction of this
+    release_date="2026-07-30",
+    n_parameters=306941184,
+    n_embedding_parameters=196609536,
+    memory_usage_mb=585,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name="MaxSim",
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/lightonai/mLateOn-unsupervised",
+    use_instructions=False,
+    adapted_from="jhu-clsp/mmBERT-base",
+    superseded_by=None,
+    training_datasets=denseon_lateon_unsupervised_data,
+    citation=mdenseon_mlateon_citation,
+    extra_requirements_groups=["pylate"],
+)
+
+
+lightonai__mlateon = ModelMeta(
+    loader=MultiVectorModel,
+    name="lightonai/mLateOn",
+    model_type=["late-interaction"],
+    languages=mdenseon_mlateon_languages + mdenseon_mlateon_code_languages,
+    open_weights=True,
+    revision="1a3f1d70415f80515ee4611ce3ba96ea7f5816ca",
+    public_training_code="https://github.com/lightonai/mdenseon-mlateon/blob/main/scripts/finetune/multilingual_late_interaction.py",
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning-multilingual-unfiltered",  # Filtered per-language versions are linked in the collection: https://huggingface.co/collections/lightonai/mdenseon-and-mlateon
+    release_date="2026-07-30",
+    n_parameters=306941184,
+    n_embedding_parameters=196609536,
+    memory_usage_mb=1171,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name="MaxSim",
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/lightonai/mLateOn",
+    use_instructions=False,
+    adapted_from="lightonai/mLateOn-unsupervised",
+    superseded_by=None,
+    training_datasets=denseon_lateon_unsupervised_data
+    | denseon_lateon_supervised_data
+    | mdenseon_mlateon_organic_data
+    | mdenseon_mlateon_code_data,
+    citation=mdenseon_mlateon_citation,
     extra_requirements_groups=["pylate"],
 )
