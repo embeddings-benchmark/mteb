@@ -42,12 +42,3 @@ class AfriSentiLangClassification(AbsTaskClassification):
     )
 
     samples_per_label = 32
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-    
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
-        )
