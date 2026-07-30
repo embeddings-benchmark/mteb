@@ -37,18 +37,22 @@ def _disable_broken_flash_attn() -> None:
         from flash_attn.flash_attn_interface import (  # noqa: F401
             flash_attn_varlen_qkvpacked_func,
         )
-        return
     except Exception:
-        pass
+        flash_attn_ok = False
+    else:
+        flash_attn_ok = True
 
-    try:
-        import transformers.utils as utils
-        import transformers.utils.import_utils as import_utils
-    except Exception:
+    if flash_attn_ok:
         return
 
     def _unavailable(*_args: Any, **_kwargs: Any) -> bool:
         return False
+
+    try:
+        from transformers import utils
+        from transformers.utils import import_utils
+    except Exception:
+        return
 
     for module in (import_utils, utils):
         fn = getattr(module, "is_flash_attn_2_available", None)
@@ -56,6 +60,22 @@ def _disable_broken_flash_attn() -> None:
             fn.cache_clear()
         if hasattr(module, "is_flash_attn_2_available"):
             module.is_flash_attn_2_available = _unavailable  # type: ignore[misc]
+
+    for name in list(sys.modules):
+        if name.endswith("modeling_modernbert"):
+            del sys.modules[name]
+
+
+def _patch_sentence_transformer_sdpa(hf_st_mm_model: Any) -> None:
+    original = hf_st_mm_model.SentenceTransformer
+
+    def _factory(*args: Any, **kwargs: Any):
+        model_kwargs = dict(kwargs.get("model_kwargs") or {})
+        model_kwargs.setdefault("attn_implementation", "sdpa")
+        kwargs["model_kwargs"] = model_kwargs
+        return original(*args, **kwargs)
+
+    hf_st_mm_model.SentenceTransformer = _factory
 
 
 class _MultiModalEmbedSmall(nn.Module):
@@ -325,13 +345,15 @@ class SemanticRouterMultiModalEmbedLargeWrapper(AbsEncoder):
             sys.path.insert(0, src_dir)
 
         _disable_broken_flash_attn()
-        from hf_st_mm.model import MultiModalSentenceEmbedder
+        import hf_st_mm.model as hf_st_mm_model
+
+        _patch_sentence_transformer_sdpa(hf_st_mm_model)
 
         with (local_dir / "config.json").open(encoding="utf-8") as handle:
             cfg = json.load(handle)
 
         model_cfg = cfg.get("model", cfg)
-        self.model = MultiModalSentenceEmbedder(
+        self.model = hf_st_mm_model.MultiModalSentenceEmbedder(
             text_encoder_name=model_cfg["text_encoder_name"],
             image_encoder_name=model_cfg["image_encoder_name"],
             audio_encoder_name=model_cfg["audio_encoder_name"],
