@@ -141,6 +141,11 @@ from .fever_retrieval import FEVER, FEVERHardNegatives, FEVERHardNegativesV2
 from .fi_qa2018_retrieval import FiQA2018
 from .fin_qa_retrieval import FinQARetrieval
 from .finance_bench_retrieval import FinanceBenchRetrieval
+from .flare_retrieval import (
+    FLAREAudioT2VARetrieval,
+    FLAREUnifiedT2VARetrieval,
+    FLAREVisionT2VRetrieval,
+)
 from .flickr30k_i2t_retrieval import Flickr30kI2TRetrieval
 from .flickr30k_t2i_retrieval import Flickr30kT2IRetrieval
 from .forb_i2i_retrieval import FORBI2I
@@ -209,6 +214,7 @@ from .medical_qa_retrieval import MedicalQARetrieval
 from .memotion_i2t_retrieval import MemotionI2TRetrieval
 from .memotion_t2i_retrieval import MemotionT2IRetrieval
 from .met_i2i_retrieval import METI2IRetrieval
+from .miao_retrieval import MIAOA2IRetrieval, MIAOI2ARetrieval
 from .ml_questions import MLQuestionsRetrieval
 from .mmdocir_t2i_retrieval import MMDocIRT2IRetrieval
 from .mmdocir_t2it_retrieval import MMDocIRT2ITRetrieval
@@ -297,6 +303,10 @@ from .sci_fact_retrieval import SciFact
 from .sci_mmir_i2t_retrieval import SciMMIRI2TRetrieval
 from .sci_mmir_t2i_retrieval import SciMMIRT2IRetrieval
 from .scidocs_retrieval import SCIDOCS
+from .sea_vl_crawling_retrieval import (
+    SeaVLCrawlingI2TRetrieval,
+    SeaVLCrawlingT2IRetrieval,
+)
 from .shot2story_retrieval import (
     Shot2Story20KA2VRetrieval,
     Shot2Story20KAT2VRetrieval,
@@ -553,6 +563,9 @@ __all__ = [
     "EnglishHealthcare1Retrieval",
     "FEVERHardNegatives",
     "FEVERHardNegativesV2",
+    "FLAREAudioT2VARetrieval",
+    "FLAREUnifiedT2VARetrieval",
+    "FLAREVisionT2VRetrieval",
     "FaithDialRetrieval",
     "Fashion200kI2TRetrieval",
     "Fashion200kT2IRetrieval",
@@ -612,6 +625,8 @@ __all__ = [
     "MACSA2TRetrieval",
     "MACST2ARetrieval",
     "METI2IRetrieval",
+    "MIAOA2IRetrieval",
+    "MIAOI2ARetrieval",
     "MLQuestionsRetrieval",
     "MMDocIRT2IRetrieval",
     "MMDocIRT2ITRetrieval",
@@ -687,6 +702,8 @@ __all__ = [
     "SciFact",
     "SciMMIRI2TRetrieval",
     "SciMMIRT2IRetrieval",
+    "SeaVLCrawlingI2TRetrieval",
+    "SeaVLCrawlingT2IRetrieval",
     "Shot2Story20KA2VRetrieval",
     "Shot2Story20KAT2VRetrieval",
     "Shot2Story20KT2VARetrieval",

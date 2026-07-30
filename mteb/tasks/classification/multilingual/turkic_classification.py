@@ -41,8 +41,9 @@ class TurkicClassification(AbsTaskClassification):
         dataset_lang = DatasetDict()
         label_count = Counter(dataset["train"]["label"])
         dataset_lang["train"] = dataset["train"].filter(
-            lambda example: example["lang"] == lang
-            and label_count[example["label"]] >= 20
+            lambda example: (
+                example["lang"] == lang and label_count[example["label"]] >= 20
+            )
         )
         dataset_lang = self.stratified_subsampling(
             dataset_lang, seed=self.seed, splits=["train"]
