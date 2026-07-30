@@ -38,12 +38,12 @@ class SHS100KA2ARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{xu2018key,
-  title={Key-invariant convolutional neural network toward efficient cover song identification},
-  author={Xu, Xiaoshuo and Chen, Xiaoou and Yang, Deshun},
-  booktitle={2018 IEEE International Conference on Multimedia and Expo (ICME)},
-  pages={1--6},
-  year={2018},
-  organization={IEEE}
+  author = {Xu, Xiaoshuo and Chen, Xiaoou and Yang, Deshun},
+  booktitle = {2018 IEEE International Conference on Multimedia and Expo (ICME)},
+  organization = {IEEE},
+  pages = {1--6},
+  title = {Key-invariant convolutional neural network toward efficient cover song identification},
+  year = {2018},
 }
 """,
         prompt={
