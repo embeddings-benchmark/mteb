@@ -75,8 +75,7 @@ me5_instruct_afri_large_instruct = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        torch_dtype=torch.float16,
-        normalized=True,
+        model_kwargs={"dtype": torch.float16},
     ),
     name="McGill-NLP/AfriE5-Large-instruct",
     languages=XLMR_LANGUAGES,
