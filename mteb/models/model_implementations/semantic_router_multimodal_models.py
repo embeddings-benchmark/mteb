@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import sys
 from abc import abstractmethod
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -31,52 +30,6 @@ _CITATION = """@misc{multi-modal-embed-2026,
   year={2026},
   url={https://huggingface.co/llm-semantic-router/multi-modal-embed-small}
 }"""
-
-
-def _disable_broken_flash_attn() -> None:
-    try:
-        from flash_attn.flash_attn_interface import (  # noqa: F401
-            flash_attn_varlen_qkvpacked_func,
-        )
-    except Exception:
-        flash_attn_ok = False
-    else:
-        flash_attn_ok = True
-
-    if flash_attn_ok:
-        return
-
-    def _unavailable(*_args: Any, **_kwargs: Any) -> bool:
-        return False
-
-    try:
-        from transformers import utils
-        from transformers.utils import import_utils
-    except Exception:
-        return
-
-    for module in (import_utils, utils):
-        fn = getattr(module, "is_flash_attn_2_available", None)
-        if fn is not None and hasattr(fn, "cache_clear"):
-            fn.cache_clear()
-        if hasattr(module, "is_flash_attn_2_available"):
-            module.is_flash_attn_2_available = _unavailable  # type: ignore[misc]
-
-    for name in list(sys.modules):
-        if name.endswith("modeling_modernbert"):
-            del sys.modules[name]
-
-
-def _patch_sentence_transformer_sdpa(hf_st_mm_model: Any) -> None:
-    original = hf_st_mm_model.SentenceTransformer
-
-    def _factory(*args: Any, **kwargs: Any):
-        model_kwargs = dict(kwargs.get("model_kwargs") or {})
-        model_kwargs.setdefault("attn_implementation", "sdpa")
-        kwargs["model_kwargs"] = model_kwargs
-        return original(*args, **kwargs)
-
-    hf_st_mm_model.SentenceTransformer = _factory
 
 
 def _remap_text_encoder_state_dict(
@@ -209,6 +162,130 @@ class _MultiModalEmbedSmall(nn.Module):
                 if k.startswith("audio_encoder.encoder.")
             }
         )
+
+
+class _MultiModalEmbedLarge(nn.Module):
+    """Standalone large tri-encoder (mmBERT + SigLIP2 + Whisper-medium)."""
+
+    def __init__(
+        self,
+        text_encoder_name: str,
+        image_encoder_name: str,
+        audio_encoder_name: str,
+        embedding_dim: int,
+        max_text_length: int,
+    ) -> None:
+        from sentence_transformers import SentenceTransformer
+        from transformers import (
+            AutoModel,
+            AutoProcessor,
+            WhisperFeatureExtractor,
+            WhisperModel,
+        )
+
+        super().__init__()
+        # Force SDPA so ModernBERT never imports a broken system flash_attn.
+        self.text_model = SentenceTransformer(
+            text_encoder_name,
+            model_kwargs={"attn_implementation": "sdpa"},
+        )
+        self.text_model.max_seq_length = max_text_length
+
+        self.image_model = AutoModel.from_pretrained(
+            image_encoder_name, trust_remote_code=True
+        )
+        self.image_processor = AutoProcessor.from_pretrained(
+            image_encoder_name, trust_remote_code=True
+        )
+
+        whisper = WhisperModel.from_pretrained(audio_encoder_name)
+        self.audio_model = whisper.encoder
+        self.audio_processor = WhisperFeatureExtractor.from_pretrained(
+            audio_encoder_name
+        )
+
+        text_dim = (
+            self.text_model.get_embedding_dimension()
+            if hasattr(self.text_model, "get_embedding_dimension")
+            else self.text_model.get_sentence_embedding_dimension()
+        )
+        image_dim = self._get_vision_dim(self.image_model)
+        audio_dim = whisper.config.d_model
+
+        self.text_proj = (
+            nn.Linear(text_dim, embedding_dim)
+            if text_dim != embedding_dim
+            else nn.Identity()
+        )
+        self.image_proj = (
+            nn.Linear(image_dim, embedding_dim)
+            if image_dim != embedding_dim
+            else nn.Identity()
+        )
+        self.audio_proj = (
+            nn.Linear(audio_dim, embedding_dim)
+            if audio_dim != embedding_dim
+            else nn.Identity()
+        )
+
+    @staticmethod
+    def _get_vision_dim(model: nn.Module) -> int:
+        if hasattr(model, "vision_model") and hasattr(model.config, "vision_config"):
+            return int(model.config.vision_config.hidden_size)
+        if hasattr(model.config, "hidden_size"):
+            return int(model.config.hidden_size)
+        raise ValueError("Could not infer image hidden size")
+
+    def encode_text(self, texts: list[str]) -> torch.Tensor:
+        device = next(self.parameters()).device
+        if hasattr(self.text_model, "preprocess"):
+            features = self.text_model.preprocess(texts)
+        else:
+            features = self.text_model.tokenize(texts)
+        features = {
+            k: (v.to(device) if hasattr(v, "to") else v) for k, v in features.items()
+        }
+        out = self.text_model(features)
+        return F.normalize(self.text_proj(out["sentence_embedding"]), p=2, dim=-1)
+
+    def encode_image(self, images: list[Any]) -> torch.Tensor:
+        proc = self.image_processor(images=images, return_tensors="pt")
+        device = next(self.parameters()).device
+        pixel_values = proc["pixel_values"].to(device)
+        if hasattr(self.image_model, "vision_model"):
+            out = self.image_model.vision_model(
+                pixel_values=pixel_values, output_hidden_states=False
+            )
+        else:
+            out = self.image_model(
+                pixel_values=pixel_values, output_hidden_states=False
+            )
+        hidden = out.last_hidden_state
+        pooled = (
+            hidden[:, 1:].mean(dim=1) if hidden.shape[1] > 1 else hidden.mean(dim=1)
+        )
+        return F.normalize(self.image_proj(pooled), p=2, dim=-1)
+
+    def encode_audio(self, waveforms: list[np.ndarray]) -> torch.Tensor:
+        proc = self.audio_processor(
+            waveforms, sampling_rate=16_000, return_tensors="pt"
+        )
+        device = next(self.parameters()).device
+        input_features = proc["input_features"].to(
+            device=device, dtype=self.audio_model.conv1.weight.dtype
+        )
+        out = self.audio_model(
+            input_features=input_features, output_hidden_states=False
+        )
+        pooled = out.last_hidden_state.mean(dim=1)
+        return F.normalize(self.audio_proj(pooled), p=2, dim=-1)
+
+    def load_checkpoint(self, checkpoint_path: str | Path) -> None:
+        state_dict = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+        if isinstance(state_dict, dict) and "state_dict" in state_dict:
+            state_dict = state_dict["state_dict"]
+        state_dict = _remap_text_encoder_state_dict(state_dict, self)
+        self.load_state_dict(state_dict)
 
 
 class SemanticRouterMultiModalEmbedWrapper(AbsEncoder):
@@ -365,7 +442,7 @@ class SemanticRouterMultiModalEmbedSmallWrapper(SemanticRouterMultiModalEmbedWra
 
 
 class SemanticRouterMultiModalEmbedLargeWrapper(SemanticRouterMultiModalEmbedWrapper):
-    """Wrapper for llm-semantic-router/multi-modal-embed-large (packaged hf_st_mm)."""
+    """Wrapper for llm-semantic-router/multi-modal-embed-large (text/image/audio)."""
 
     model_label = "multi-modal-embed-large"
 
@@ -376,56 +453,40 @@ class SemanticRouterMultiModalEmbedLargeWrapper(SemanticRouterMultiModalEmbedWra
         device: str | None = None,
         **kwargs: Any,
     ) -> None:
-        from huggingface_hub import snapshot_download
+        from huggingface_hub import hf_hub_download
 
         super().__init__(device=device)
         self.model_name = model_name
 
-        local_dir = Path(snapshot_download(repo_id=model_name, revision=revision))
-        src_dir = str(local_dir / "src")
-        if src_dir not in sys.path:
-            sys.path.insert(0, src_dir)
-
-        _disable_broken_flash_attn()
-        import hf_st_mm.model as hf_st_mm_model
-
-        _patch_sentence_transformer_sdpa(hf_st_mm_model)
-
-        with (local_dir / "config.json").open(encoding="utf-8") as handle:
+        config_path = hf_hub_download(
+            repo_id=model_name, filename="config.json", revision=revision
+        )
+        checkpoint_path = hf_hub_download(
+            repo_id=model_name, filename="model.pt", revision=revision
+        )
+        with Path(config_path).open(encoding="utf-8") as handle:
             cfg = json.load(handle)
-
         model_cfg = cfg.get("model", cfg)
-        self.model = hf_st_mm_model.MultiModalSentenceEmbedder(
+
+        self.model = _MultiModalEmbedLarge(
             text_encoder_name=model_cfg["text_encoder_name"],
             image_encoder_name=model_cfg["image_encoder_name"],
             audio_encoder_name=model_cfg["audio_encoder_name"],
             embedding_dim=int(model_cfg["embedding_dim"]),
             max_text_length=int(model_cfg["max_text_length"]),
         )
-        state_dict = torch.load(
-            local_dir / "model.pt",
-            map_location="cpu",
-            weights_only=False,
-        )
-        if isinstance(state_dict, dict) and "state_dict" in state_dict:
-            state_dict = state_dict["state_dict"]
-        state_dict = _remap_text_encoder_state_dict(state_dict, self.model)
-        self.model.load_state_dict(state_dict)
+        self.model.load_checkpoint(checkpoint_path)
         self.model.to(self.device)
         self.model.eval()
 
     def _encode_text_batch(self, texts: list[str]) -> torch.Tensor:
-        return self.model._encode_text(texts)
+        return self.model.encode_text(texts)
 
     def _encode_image_batch(self, images: list[Any]) -> torch.Tensor:
-        proc = self.model.image_processor(images=images, return_tensors="pt")
-        return self.model._encode_image_pixel_values(proc["pixel_values"])
+        return self.model.encode_image(images)
 
     def _encode_audio_batch(self, waveforms: list[np.ndarray]) -> torch.Tensor:
-        proc = self.model.audio_processor(
-            waveforms, sampling_rate=self.sampling_rate, return_tensors="pt"
-        )
-        return self.model._encode_audio_features(proc["input_features"])
+        return self.model.encode_audio(waveforms)
 
 
 multi_modal_embed_small = ModelMeta(
@@ -480,5 +541,4 @@ multi_modal_embed_large = ModelMeta(
     modalities=["text", "image", "audio"],
     model_type=["dense"],
     citation=_CITATION,
-    extra_requirements_groups=["multi-modal-embed"],
 )
