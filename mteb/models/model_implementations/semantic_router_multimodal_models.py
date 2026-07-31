@@ -184,7 +184,6 @@ class _MultiModalEmbedLarge(nn.Module):
         )
 
         super().__init__()
-        # Force SDPA so ModernBERT never imports a broken system flash_attn.
         self.text_model = SentenceTransformer(
             text_encoder_name,
             model_kwargs={"attn_implementation": "sdpa"},
@@ -293,7 +292,6 @@ class SemanticRouterMultiModalEmbedWrapper(AbsEncoder):
 
     sampling_rate = 16_000
     max_audio_seconds = 30.0
-    model_label = "multi-modal-embed"
 
     def __init__(self, device: str | None = None) -> None:
         self.device = device or (
@@ -375,7 +373,7 @@ class SemanticRouterMultiModalEmbedWrapper(AbsEncoder):
         has_audio = "audio" in features
         if not (has_text or has_image or has_audio):
             raise ValueError(
-                f"{self.model_label} supports text, image, and/or audio inputs"
+                f"{self.model_name} supports text, image, and/or audio inputs"
             )
 
         if has_audio:
@@ -406,8 +404,6 @@ class SemanticRouterMultiModalEmbedWrapper(AbsEncoder):
 
 class SemanticRouterMultiModalEmbedSmallWrapper(SemanticRouterMultiModalEmbedWrapper):
     """Wrapper for llm-semantic-router/multi-modal-embed-small (text/image/audio)."""
-
-    model_label = "multi-modal-embed-small"
 
     def __init__(
         self,
@@ -443,8 +439,6 @@ class SemanticRouterMultiModalEmbedSmallWrapper(SemanticRouterMultiModalEmbedWra
 
 class SemanticRouterMultiModalEmbedLargeWrapper(SemanticRouterMultiModalEmbedWrapper):
     """Wrapper for llm-semantic-router/multi-modal-embed-large (text/image/audio)."""
-
-    model_label = "multi-modal-embed-large"
 
     def __init__(
         self,
