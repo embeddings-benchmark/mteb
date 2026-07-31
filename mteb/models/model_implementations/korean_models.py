@@ -129,6 +129,7 @@ dragonkue_e5_small_ko = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from="intfloat/multilingual-e5-small",
+    superseded_by="dragonkue/multilingual-e5-small-ko-v2",
     public_training_code=None,
     public_training_data=None,
     # Fine-tuned on the same data as dragonkue/snowflake-arctic-embed-l-v2.0-ko

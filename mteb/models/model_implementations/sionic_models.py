@@ -66,9 +66,6 @@ comsat_embed_ja_03b_preview = ModelMeta(
 )
 
 comsat_embed_ko_8b_preview = ModelMeta(
-    # Plain sentence-transformers load: the instruct query prompt
-    # ("Instruct: {task}\nQuery:") ships in the model's
-    # config_sentence_transformers.json and is picked up automatically.
     loader=SentenceTransformerEncoderWrapper,
     name="sionic-ai/comsat-embed-ko-8b-preview",
     model_type=["dense"],
