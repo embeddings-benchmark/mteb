@@ -20,8 +20,8 @@ class SHS100KA2ARetrieval(AbsTaskRetrieval):
         ),
         reference="https://github.com/NovaFrost/SHS100K",
         dataset={
-            "path": "Wissam42/SHS100K-A2A-1k",
-            "revision": "8467482c2579d1062bc789878ea44d56891d0a61",
+            "path": "mteb/SHS100K-A2A-1k",
+            "revision": "dec904a50796f536dce6395a571a973bdb7fd2c3",
         },
         type="Any2AnyRetrieval",
         category="a2a",

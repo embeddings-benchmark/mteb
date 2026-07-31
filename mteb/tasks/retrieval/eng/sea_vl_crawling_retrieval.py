@@ -28,8 +28,8 @@ class SeaVLCrawlingT2IRetrieval(AbsTaskRetrieval):
         + " Queries are captions; the corpus contains images (text→image retrieval).",
         reference=_REFERENCE,
         dataset={
-            "path": "Wissam42/SEA-VL-Crawling-T2I",
-            "revision": "b0f22ad420a61d217efb654d1fa3cc88b77ba40b",
+            "path": "mteb/SEA-VL-Crawling-T2I",
+            "revision": "761fb5ed934f053c8b94d321b7885cd5a3ad115f",
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -57,8 +57,8 @@ class SeaVLCrawlingI2TRetrieval(AbsTaskRetrieval):
         + " Queries are images; the corpus contains captions (image→text retrieval).",
         reference=_REFERENCE,
         dataset={
-            "path": "Wissam42/SEA-VL-Crawling-I2T",
-            "revision": "112d27a26b4fcc5516940360771766c5feb785e8",
+            "path": "mteb/SEA-VL-Crawling-I2T",
+            "revision": "2239cc6bc852b299bd5ecb3898d81d2ef29a17c0",
         },
         type="Any2AnyRetrieval",
         category="i2t",

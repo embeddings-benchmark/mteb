@@ -12,8 +12,8 @@ class MMVUVideoCentricQA(AbsTaskRetrieval):
         description="MMVU is an expert-level, multi-discipline video understanding benchmark with questions spanning 27 subjects across Science, Healthcare, Humanities & Social Sciences, and Engineering. Each multiple-choice example pairs a specialized-domain video with a question and 5 candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate. Used the public validation multiple-choice subset (~625 examples).",
         reference="https://arxiv.org/abs/2501.12380",
         dataset={
-            "path": "Wissam42/MMVU-VQA",
-            "revision": "7a2990975222d1f09948299999221463ce1961bf",
+            "path": "mteb/MMVU-VQA",
+            "revision": "4c2b59cb04639eacbae2f6a2379e538d5696ab7a",
         },
         type="VideoCentricQA",
         category="vt2t",
