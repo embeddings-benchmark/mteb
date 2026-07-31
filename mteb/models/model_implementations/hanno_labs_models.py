@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import (
+    SentenceTransformerEncoderWrapper,
+)
 
 # dinghy-law-0.6b-v1: a legal-domain contrastive fine-tune of Qwen/Qwen3-Embedding-0.6B, keeping the base interface
 # (last-token pooling, cosine, query-side "Instruct: {instruction}\nQuery:" prefix, unprefixed documents). Training
@@ -115,4 +118,38 @@ dinghy_law_4b = ModelMeta(
     training_datasets=training_data,
     citation=DINGHY_LAW_4B_CITATION,
     adapted_from="Qwen/Qwen3-Embedding-4B",
+)
+
+DINGHY_LAW_8B_CITATION = """@misc{dinghy-law-8b,
+  title  = {dinghy-law-8b: an 8B multilingual legal text-embedding model},
+  author = {Solka, Stephen},
+  year   = {2026},
+  note   = {Hanno Labs / Clause Logic Inc.},
+  howpublished = {\\url{https://huggingface.co/Hanno-Labs/dinghy-law-8b-v1}}
+}"""
+
+dinghy_law_8b = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="Hanno-Labs/dinghy-law-8b-v1",
+    model_type=["dense"],
+    languages=["eng-Latn", "deu-Latn", "zho-Hans"],
+    open_weights=True,
+    revision="3970de8a260295e5bce224639bc96fc3a142788b",
+    release_date="2026-07-31",
+    n_parameters=7_969_464_320,
+    n_embedding_parameters=536_870_912,
+    memory_usage_mb=15201,
+    embed_dim=4096,
+    max_tokens=8192,
+    license="https://huggingface.co/Hanno-Labs/dinghy-law-8b-v1/blob/main/LICENSE",
+    reference="https://huggingface.co/Hanno-Labs/dinghy-law-8b-v1",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch", "Transformers"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/Hanno-Labs/legal-retrieval-pairs-v2",
+    training_datasets=training_data,
+    citation=DINGHY_LAW_8B_CITATION,
+    adapted_from="nvidia/Nemotron-3-Embed-8B-BF16",
+    extra_requirements_groups=["nemotron-3-embed"],
 )
