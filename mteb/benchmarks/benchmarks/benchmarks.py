@@ -707,7 +707,7 @@ MTEB_DEU = Benchmark(
 
 MTEB_KOR = Benchmark(
     name="MTEB(kor, v1)",
-    aliases=["MTEB(kor)"],
+    aliases=[],
     display_name="Korean",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
     tasks=get_tasks(
@@ -727,6 +727,56 @@ MTEB_KOR = Benchmark(
         ],
     ),
     description="Korean text embedding quality across classification, reranking, retrieval, and semantic similarity.",
+    reference=None,
+    citation=None,
+    superseded_by=["MTEB(kor, v2)"],
+)
+
+MTEB_KOR_V2 = Benchmark(
+    name="MTEB(kor, v2)",
+    aliases=["MTEB(kor)"],
+    display_name="Korean",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
+    tasks=get_tasks(
+        languages=["kor"],
+        tasks=[
+            # Classification
+            "KLUE-TC",
+            # Clustering
+            "SIB200ClusteringS2S",
+            "KlueMrcDomainClustering",
+            "KlueYnatMrcCategoryClustering",
+            # Pair Classification (NLI)
+            "KLUE-NLI",
+            "KorNLI",
+            "PawsXPairClassification",
+            # Reranking
+            "MIRACLReranking",
+            # Retrieval
+            "MIRACLRetrieval",
+            "Ko-StrategyQA",
+            "LawIRKo",
+            "SQuADKorV1Retrieval",
+            "AutoRAGRetrieval",
+            "PublicHealthQA",
+            "BelebeleRetrieval",
+            "MultiLongDocRetrieval",
+            "MrTidyRetrieval",
+            # STS
+            "KLUE-STS",
+            "KorSTS",
+            "STS17",
+        ],
+    ),
+    description=(
+        "Korean text embedding quality across classification, clustering, pair "
+        "classification (NLI), reranking, retrieval, and semantic similarity. "
+        "Expanded successor to MTEB(kor, v1): grows the suite from 6 to 20 tasks, "
+        "adding clustering (SIB200, KLUE-MRC domain/category), pair classification/NLI "
+        "(KLUE-NLI, KorNLI, PawsX), additional retrieval (LawIRKo, SQuAD-Ko, AutoRAG, "
+        "PublicHealthQA, Belebele, MultiLongDoc, MrTidy) and STS17, for broader and more "
+        "robust coverage of Korean embedding capabilities."
+    ),
     reference=None,
     citation=None,
 )
