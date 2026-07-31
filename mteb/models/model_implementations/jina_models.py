@@ -404,12 +404,18 @@ class JinaV4Wrapper(AbsEncoder):
         attn_implementation="flash_attention_2",
         trust_remote_code: bool = True,
         model_prompts: dict[str, str] | None = None,
+        vector_type: str = "single_vector",
         **kwargs,
     ) -> None:
         import flash_attn  # noqa: F401
         import peft  # noqa: F401
         import transformers  # noqa: F401
         from transformers import AutoModel
+
+        if vector_type not in self.SUPPORTED_VECTOR_TYPES:
+            raise ValueError(
+                f"vector_type must be one of {self.SUPPORTED_VECTOR_TYPES}, got {vector_type!r}"
+            )
 
         self.model = AutoModel.from_pretrained(
             model,
@@ -420,7 +426,7 @@ class JinaV4Wrapper(AbsEncoder):
             revision=revision,
         ).eval()
         self.model_prompts = model_prompts or {}
-        self.vector_type = "single_vector"  # default vector type
+        self.vector_type = vector_type
 
     def _resolve_task_parameters(
         self, task_metadata: TaskMetadata, prompt_type: PromptType | None = None
@@ -471,6 +477,17 @@ class JinaV4Wrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        if self.mteb_model_meta is not None:
+            model_type = (
+                ["late-interaction"]
+                if self.vector_type == "multi_vector"
+                else ["dense"]
+            )
+            if self.mteb_model_meta.model_type != model_type:
+                self.mteb_model_meta = self.mteb_model_meta.model_copy(
+                    update={"model_type": model_type}
+                )
+
         text_embeddings = None
         image_embeddings = None
         if "text" in inputs.dataset.features:
@@ -493,7 +510,15 @@ class JinaV4Wrapper(AbsEncoder):
                 raise ValueError(
                     "The number of texts and images must have the same length"
                 )
-            embeddings = text_embeddings + image_embeddings
+            if self.vector_type == "multi_vector":
+                # Fuse per-example by concatenating the text and image token
+                # vectors, rather than concatenating the two lists end-to-end.
+                embeddings = [
+                    torch.cat([text_emb, image_emb], dim=0)
+                    for text_emb, image_emb in zip(text_embeddings, image_embeddings)
+                ]
+            else:
+                embeddings = text_embeddings + image_embeddings
         elif text_embeddings is not None:
             embeddings = text_embeddings
         elif image_embeddings is not None:
@@ -536,14 +561,9 @@ class JinaV4Wrapper(AbsEncoder):
         )
 
         # Resolve task parameters
-        base_task, prompt_name_param, task_type = self._resolve_task_parameters(
+        base_task, prompt_name_param, _ = self._resolve_task_parameters(
             task_metadata, prompt_type
         )
-
-        if task_type and task_type.startswith("DocumentUnderstanding"):
-            self.vector_type = "multi_vector"
-        else:
-            self.vector_type = "single_vector"
 
         with torch.no_grad():
             return self.model.encode_text(
@@ -566,14 +586,7 @@ class JinaV4Wrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         # Resolve task parameters
-        base_task, _, task_type = self._resolve_task_parameters(
-            task_metadata, prompt_type
-        )
-
-        if task_type and task_type.startswith("DocumentUnderstanding"):
-            self.vector_type = "multi_vector"
-        else:
-            self.vector_type = "single_vector"
+        base_task, _, _ = self._resolve_task_parameters(task_metadata, prompt_type)
 
         all_images = [text for batch in inputs for text in batch["image"]]
 
