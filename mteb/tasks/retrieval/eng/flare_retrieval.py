@@ -31,8 +31,8 @@ class FLAREUnifiedT2VARetrieval(AbsTaskRetrieval):
         "subset of the original FLARE dataset.",
         reference=_REFERENCE,
         dataset={
-            "path": "Wissam42/FLARE-1k-Unified-T2VA",
-            "revision": "d9711a42e34a4ca1a3bf698252675e8941a5658f",
+            "path": "mteb/FLARE-1k-Unified-T2VA",
+            "revision": "43882045fca29c38ec1f4daca2638fd8a110f663",
         },
         type="Any2AnyRetrieval",
         category="t2va",
@@ -67,8 +67,8 @@ class FLAREVisionT2VRetrieval(AbsTaskRetrieval):
         "original FLARE dataset.",
         reference=_REFERENCE,
         dataset={
-            "path": "Wissam42/FLARE-1k-Vision-T2V",
-            "revision": "acc178728cf51918d1674aed7da657f05fc068a7",
+            "path": "mteb/FLARE-1k-Vision-T2V",
+            "revision": "761b0a37017b1b20c9ab8375d16ec5a4a3115863",
         },
         type="Any2AnyRetrieval",
         category="t2v",
@@ -100,8 +100,8 @@ class FLAREAudioT2VARetrieval(AbsTaskRetrieval):
         "subset of the original FLARE dataset.",
         reference=_REFERENCE,
         dataset={
-            "path": "Wissam42/FLARE-1k-Audio-T2VA",
-            "revision": "7cd512b99482265a07d58902a9e831f6962415a9",
+            "path": "mteb/FLARE-1k-Audio-T2VA",
+            "revision": "aafad12102620f8fe30af431b7fca27c5b062eb4",
         },
         type="Any2AnyRetrieval",
         category="t2va",

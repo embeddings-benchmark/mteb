@@ -28,8 +28,8 @@ class MIAOA2IRetrieval(AbsTaskRetrieval):
         "images; the goal is to retrieve images depicting the same sound event.",
         reference=_REFERENCE,
         dataset={
-            "path": "Wissam42/MIAO-A2I",
-            "revision": "b21943d3d5e7ec80fb3754ce2d7bfc5d89c8d284",
+            "path": "mteb/MIAO-A2I",
+            "revision": "884909d8de094e1dc75195649c448cd8763e6360",
         },
         type="Any2AnyRetrieval",
         category="a2i",
@@ -60,8 +60,8 @@ class MIAOI2ARetrieval(AbsTaskRetrieval):
         "clips; the goal is to retrieve audio of the depicted sound event.",
         reference=_REFERENCE,
         dataset={
-            "path": "Wissam42/MIAO-I2A",
-            "revision": "3e8abdc3ecbdd0eccfd738335ddeb00a208b2abd",
+            "path": "mteb/MIAO-I2A",
+            "revision": "4d5269569c632822012aa0bde938aa97e1ff1109",
         },
         type="Any2AnyRetrieval",
         category="i2a",
