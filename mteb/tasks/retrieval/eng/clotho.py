@@ -58,6 +58,9 @@ class ClothoA2TRetrieval(AbsTaskRetrieval):
             index = row["index"]
 
             for i, text in enumerate(row["text"].split(".")):
+                text = text.strip()
+                if not text:
+                    continue
                 doc_id = f"d-{index}-{i}"
                 corpus_data["id"].append(doc_id)
                 corpus_data["text"].append(text)
@@ -120,6 +123,9 @@ class ClothoT2ARetrieval(AbsTaskRetrieval):
             index = row["index"]
 
             for i, text in enumerate(row["text"].split(".")):
+                text = text.strip()
+                if not text:
+                    continue
                 query_id = f"q-{index}-{i}"
                 queries_data["id"].append(query_id)
                 queries_data["text"].append(text)
