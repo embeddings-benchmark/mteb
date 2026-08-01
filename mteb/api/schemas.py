@@ -219,11 +219,7 @@ class ModelMetaSchema(_CamelModel):
         """Build the API schema view of a `ModelMeta`."""
         framework = list(meta.framework or [])
         model_type = (meta.model_type or ["dense"])[0]
-        n_active = (
-            meta.n_active_parameters_override
-            if meta.n_active_parameters_override is not None
-            else meta.n_parameters
-        )
+        n_active = meta.n_active_parameters
 
         lang_labels = sorted(
             {language_label(code) for code in (meta.languages or []) if code}
