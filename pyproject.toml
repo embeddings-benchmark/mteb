@@ -118,6 +118,7 @@ google_genai = ["google-genai>=1.7.0"]
 octen = ["octen>=0.4.0"]
 llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
 timm = ["timm>=1.0.15,<1.1.0"]
+radio = ["timm>=1.0.15,<1.1.0", "einops>=0.8.0", "transformers>=4.57.0,<5.0.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
 nomic = ["einops>=0.8.1"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
@@ -447,6 +448,7 @@ override-dependencies = [
 conflicts = [
     [
         { extra = "timm" },
+        { extra = "radio" }, # pins timm, same conflict as the timm extra
         { extra = "blip2" },
         { extra = "llm2vec" },
         { extra = "model2vec" },
