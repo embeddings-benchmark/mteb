@@ -22,6 +22,13 @@ RADIO_CITATION = """@InProceedings{Ranzinger_2024_CVPR,
     month     = {June},
     year      = {2024},
     pages     = {12490-12500}
+}
+
+@InProceedings{Heinrich_2025_CVPR,
+    author    = {Heinrich, Greg and Ranzinger, Mike and Yin, Hongxu and Lu, Yao and Kautz, Jan and Tao, Andrew and Catanzaro, Bryan and Molchanov, Pavlo},
+    title     = {RADIOv2.5: Improved Baselines for Agglomerative Vision Foundation Models},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    year      = {2025}
 }"""
 
 # AM-RADIO distils CLIP, DINOv2 and SAM into a single backbone. The exact
