@@ -1,3 +1,5 @@
+import sys
+
 from mteb.benchmarks.benchmark import (
     Benchmark,
     BenchmarkAggregation,
@@ -890,7 +892,36 @@ MTEB_code = Benchmark(
     description="Code retrieval quality across a wide range of popular programming languages, covering code search, text-to-SQL, and code feedback tasks.",
     reference=None,
     citation=MMTEB_CITATION,
+    superseded_by=["MTEB(Code, v1.1)"],
 )
+
+MTEB_code_v1_1 = Benchmark(
+    name="MTEB(Code, v1.1)",
+    display_name="Code",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Retrieval
+            "AppsRetrieval",
+            "CodeEditSearchRetrieval",
+            "CodeFeedbackMT",
+            "CodeFeedbackST",
+            "CodeSearchNetCCRetrieval",
+            "CodeSearchNetRetrieval",
+            "CodeTransOceanContest",
+            "CodeTransOceanDL.v2",
+            "CosQA.v2",
+            "COIRCodeSearchNetRetrieval",
+            "StackOverflowQA",
+            "SyntheticText2SQL",
+        ],
+    ),
+    description="Code retrieval quality across a wide range of popular programming languages, covering code search, text-to-SQL, and code feedback tasks. This version replaces CodeTransOceanDL and CosQA with corrected task versions.",
+    reference=None,
+    citation=MMTEB_CITATION,
+)
+if __package__ in sys.modules:
+    sys.modules[__package__].MTEB_code_v1_1 = MTEB_code_v1_1
 
 mteb_multilingual_tasks = get_tasks(
     tasks=[
