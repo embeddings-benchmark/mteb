@@ -61,9 +61,7 @@ class RADIOModel(AbsEncoder):
     ) -> None:
         from transformers import AutoModel
 
-        self.model_name = model_name
         self.device = device
-        # RADIO ships its own modelling code, so trust_remote_code is required.
         self.model = (
             AutoModel.from_pretrained(
                 model_name, revision=revision, trust_remote_code=True
@@ -71,11 +69,6 @@ class RADIOModel(AbsEncoder):
             .eval()
             .to(self.device)
         )
-        # RADIO normalises internally (OpenAI CLIP mean/std), so images are
-        # passed as floats in [0, 1]. Both dimensions must be a multiple of
-        # `min_resolution_step`, and the shipped processor config resizes by
-        # shortest edge with no crop, which yields non-stackable batches for
-        # non-square inputs -- so resize explicitly instead.
         if image_resolution is None:
             height, width = self.model.preferred_resolution
         elif isinstance(image_resolution, int):
@@ -87,13 +80,6 @@ class RADIOModel(AbsEncoder):
         )
         self.resolution = (int(resolution.height), int(resolution.width))
 
-    @staticmethod
-    def get_text_embeddings(
-        texts: DataLoader[BatchedInput],
-        show_progress_bar: bool = True,
-        **kwargs: Any,
-    ):
-        raise ValueError("RADIO models only support image encoding.")
 
     def get_image_embeddings(
         self,
