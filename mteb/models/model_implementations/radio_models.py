@@ -80,7 +80,6 @@ class RADIOModel(AbsEncoder):
         )
         self.resolution = (int(resolution.height), int(resolution.width))
 
-
     def get_image_embeddings(
         self,
         images: DataLoader[BatchedInput],
