@@ -6,8 +6,8 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_DATASET_PATH = "dukesun99/MomentSeeker-CVR"
-_DATASET_REVISION = "e87fc71839cd14dfd09aa83b378cd51074318b3c"
+_DATASET_PATH = "dukesun99/MomentSeeker-Full"
+_DATASET_REVISION = "f2342d821be973ab88a7f43f88676eaaef9d41af"
 _REFERENCE = "https://arxiv.org/abs/2502.12558"
 _BIBTEX = r"""
 @misc{yuan2025momentseeker,
@@ -21,17 +21,16 @@ _BIBTEX = r"""
 }
 """
 _DESCRIPTION = (
-    "Composed video retrieval adapted from MomentSeeker, a long-video moment "
+    "Full-video moment retrieval adapted from MomentSeeker, a long-video moment "
     "retrieval benchmark with videos averaging over 500 seconds (movies, "
-    "cartoons, egocentric and open-domain footage). Source videos are split into "
-    "30-second non-overlapping 360p chunks forming the corpus; a chunk is "
-    "relevant to a query iff it overlaps an annotated answer interval by at "
-    "least half of the shorter of chunk and interval. "
+    "cartoons, egocentric and open-domain footage). The corpus is the 116 "
+    "complete source videos (re-encoded to 360p, audio kept); a video is "
+    "relevant to a query iff it contains the annotated answer moment. "
 )
 
 
 def _load_momentseeker(task: AbsTaskRetrieval, direction: str) -> None:
-    """Load the shared chunk corpus plus the direction's queries and qrels."""
+    """Load the shared full-video corpus plus the direction's queries and qrels."""
     if task.data_loaded:
         return
     path = task.metadata.dataset["path"]
@@ -58,8 +57,8 @@ class MomentSeekerTI2VRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MomentSeekerTI2VRetrieval",
         description=_DESCRIPTION
-        + "Queries combine a text question with a reference image, e.g. asking "
-        "what happened around the pictured moment.",
+        + "Queries combine a text question with a reference image; retrieve the "
+        "full video that contains the answer moment.",
         reference=_REFERENCE,
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
@@ -77,7 +76,7 @@ class MomentSeekerTI2VRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={
-            "query": "Given the question and the reference image, retrieve the video segment that answers it."
+            "query": "Given the question and the reference image, retrieve the video that answers it."
         },
         is_beta=True,
     )
@@ -90,8 +89,8 @@ class MomentSeekerTV2VRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MomentSeekerTV2VRetrieval",
         description=_DESCRIPTION
-        + "Queries combine a text question with a reference video clip, e.g. "
-        "asking what happened after the shown event.",
+        + "Queries combine a text question with a reference video clip; retrieve "
+        "the full video that contains the answer moment.",
         reference=_REFERENCE,
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
@@ -109,7 +108,7 @@ class MomentSeekerTV2VRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={
-            "query": "Given the question and the reference clip, retrieve the video segment that answers it."
+            "query": "Given the question and the reference clip, retrieve the video that answers it."
         },
         is_beta=True,
     )
