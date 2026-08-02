@@ -11,8 +11,7 @@ class MMarcoRetrievalMultilingual(AbsTaskRetrieval):
         reference="https://github.com/unicamp-dl/mMARCO",
         dataset={
             "path": "lopozz/MMarcoRetrieval",
-            # Pin this to the final Hugging Face commit before opening a PR.
-            "revision": None,
+            "revision": "63ca2e67935385df799f512d84bd9c880fd579de",
         },
         type="Retrieval",
         category="t2t",
@@ -30,16 +29,19 @@ class MMarcoRetrievalMultilingual(AbsTaskRetrieval):
         license="apache-2.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="machine-translated and verified",
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @article{DBLP:journals/corr/abs-2108-13897,
   author = {Luiz Bonifacio and
 Israel Campiotti and
 Roberto de Alencar Lotufo and
 Rodrigo Frassetto Nogueira},
+  bibsource = {dblp computer science bibliography, https://dblp.org},
+  biburl = {https://dblp.org/rec/journals/corr/abs-2108-13897.bib},
   eprint = {2108.13897},
   eprinttype = {arXiv},
   journal = {CoRR},
+  timestamp = {Mon, 20 Mar 2023 15:35:34 +0100},
   title = {mMARCO: {A} Multilingual Version of {MS} {MARCO} Passage Ranking Dataset},
   url = {https://arxiv.org/abs/2108.13897},
   volume = {abs/2108.13897},
