@@ -377,7 +377,7 @@ internvideo2_clip_1b_224p_f8 = ModelMeta(
     loader=InternVideo2CLIPModel,
     loader_kwargs=dict(num_frames=8),
     name="OpenGVLab/InternVideo2-CLIP-1B-224p-f8",
-    revision="TODO-fill-in-the-hf-commit-sha",
+    revision="b8f9edd6cacdbede471fd2fa58439e0b97a6dc1b",
     release_date="2024-03-22",
     languages=["eng-Latn"],
     modalities=["video", "text"],
