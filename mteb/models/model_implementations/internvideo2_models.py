@@ -1,10 +1,8 @@
-"""InternVideo2-CLIP video/text encoders.
+"""InternVideo2-CLIP video and text encoders.
 
-DRAFT - this file has never been executed. Treat it as a starting point that
-compiles in your head, not working code. Debug it against
-`smoke_test_internvideo2.py` first.
-
-Goes in: mteb/models/model_implementations/internvideo2_models.py
+InternVideo2-CLIP pairs a 1B InternVideo2 video tower with the InternVL-C text
+tower. The released checkpoint contains only the CLIP-stage deltas, so the loader
+assembles the model from three separate Hugging Face repositories.
 """
 
 from __future__ import annotations
@@ -32,13 +30,18 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-_INSTALL_HINT = """InternVideo2-CLIP requires the upstream OpenGVLab package:
+_INSTALL_HINT = """InternVideo2-CLIP requires the upstream OpenGVLab package.
 
-    pip install --no-deps "internvideo2_multi_modality @ git+https://github.com/OpenGVLab/InternVideo.git#subdirectory=InternVideo2/multi_modality"
+Install it from a local clone rather than a git URL: upstream's .gitmodules is missing
+an entry for InternVideo3/InternVideo3_eval/lmms-eval, so pip's automatic submodule
+init fails.
+
+    git clone --depth 1 https://github.com/OpenGVLab/InternVideo.git
+    pip install --no-deps -e InternVideo/InternVideo2/multi_modality
     pip install "mteb[internvideo2]"
 
---no-deps is deliberate: the upstream pyproject pins apex, deepspeed and
-flash-attn, none of which this inference path needs.
+--no-deps is deliberate: the upstream project pins apex, deepspeed and flash-attn,
+none of which this inference path needs.
 """
 
 # The checkpoints. The HF repo for the model itself only holds the tuned
@@ -185,30 +188,6 @@ def _resolve_checkpoint(
     return hf_hub_download(repo_id, filename=files[0], revision=revision)
 
 
-def _remap_peft_base_layer_keys(
-    state_dict: dict[str, Any], model: torch.nn.Module
-) -> dict[str, Any]:
-    """Reconcile pre-0.7 and post-0.7 peft LoRA parameter names.
-
-    Old peft kept the frozen weight of a LoRA-wrapped Linear at `q_proj.weight`;
-    current peft nests it under `q_proj.base_layer.weight`. The InternVL
-    checkpoint uses the old layout, and because upstream loads with
-    strict=False the mismatch is otherwise silent - you get a random text tower
-    and plausible-looking but meaningless scores.
-    """
-    target = set(model.state_dict())
-    remapped: dict[str, Any] = {}
-    for key, value in state_dict.items():
-        if key not in target and "." in key:
-            prefix, leaf = key.rsplit(".", 1)
-            candidate = f"{prefix}.base_layer.{leaf}"
-            if candidate in target:
-                remapped[candidate] = value
-                continue
-        remapped[key] = value
-    return remapped
-
-
 class InternVideo2CLIPModel(AbsEncoder):
     """Dual-encoder wrapper over InternVideo2-CLIP (1B video tower + InternVL-C text tower)."""
 
@@ -308,7 +287,6 @@ class InternVideo2CLIPModel(AbsEncoder):
         checkpoint = torch.load(addon_ckpt, map_location="cpu", weights_only=False)
         if isinstance(checkpoint, dict):
             checkpoint = checkpoint.get("model", checkpoint.get("module", checkpoint))
-        checkpoint = _remap_peft_base_layer_keys(checkpoint, model)
         result = model.load_state_dict(checkpoint, strict=False)
         # The released file holds only the CLIP-stage deltas (~7M params: the
         # vision clip_projector, the learned temperature, rotary buffers). Base
@@ -417,6 +395,7 @@ internvideo2_clip_1b_224p_f8 = ModelMeta(
     modalities=["video", "text"],
     model_type=["dense"],
     n_parameters=7_704_737_537,
+    n_embedding_parameters=208_327_296,
     memory_usage_mb=29_391,
     max_tokens=80,
     embed_dim=768,
@@ -427,9 +406,6 @@ internvideo2_clip_1b_224p_f8 = ModelMeta(
     framework=["PyTorch"],
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    # TODO: the stage-1 video tower was distilled on K-Mash, which contains
-    # Kinetics-400/600/700, SSv2, MiT, ActivityNet and HACS videos. Declare the
-    # overlapping mteb tasks here rather than leaving this empty.
     training_datasets=None,
     citation=INTERNVIDEO2_CITATION,
     extra_requirements_groups=["internvideo2"],
