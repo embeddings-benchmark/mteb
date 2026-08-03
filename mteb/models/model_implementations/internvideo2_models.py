@@ -125,6 +125,31 @@ def _stub_missing_flash_attn() -> None:
         sys.modules[name] = module
 
 
+def _shim_moved_transformers_symbols() -> None:
+    """Restore symbols that moved out of `transformers.modeling_utils`.
+
+    InternVideo2's vendored BERT (`xbert.py`) targets transformers ~4.28 and
+    imports `apply_chunking_to_forward`, `find_pruneable_heads_and_indices` and
+    `prune_linear_layer` from `transformers.modeling_utils`. They now live in
+    `transformers.pytorch_utils`, and the backwards-compatible re-export was
+    removed in 4.5x. We re-attach them rather than pinning transformers, since
+    the functions themselves are unchanged. `xbert` is only reached because the
+    upstream `models/__init__.py` eagerly imports the stage-2 models; the CLIP
+    path never uses it.
+    """
+    import transformers.modeling_utils as _mu
+    import transformers.pytorch_utils as _pu
+
+    for name in (
+        "apply_chunking_to_forward",
+        "find_pruneable_heads_and_indices",
+        "prune_linear_layer",
+        "Conv1D",
+    ):
+        if not hasattr(_mu, name) and hasattr(_pu, name):
+            setattr(_mu, name, getattr(_pu, name))
+
+
 def _ensure_llama_assets(cache_dir: Path) -> Path:
     """Materialise the config + sentencepiece tokenizer the text tower needs."""
     import json
@@ -198,6 +223,7 @@ class InternVideo2CLIPModel(AbsEncoder):
         **kwargs: Any,
     ) -> None:
         _stub_missing_flash_attn()
+        _shim_moved_transformers_symbols()
         try:
             from internvideo2_multi_modality.models.internvideo2_clip import (
                 InternVideo2_CLIP,
@@ -284,15 +310,23 @@ class InternVideo2CLIPModel(AbsEncoder):
             checkpoint = checkpoint.get("model", checkpoint.get("module", checkpoint))
         checkpoint = _remap_peft_base_layer_keys(checkpoint, model)
         result = model.load_state_dict(checkpoint, strict=False)
-        stale = [
-            k
-            for k in result.missing_keys
-            if k.startswith(("vision_encoder.", "text_encoder."))
-        ]
-        if stale:
+        # The released file holds only the CLIP-stage deltas (~7M params: the
+        # vision clip_projector, the learned temperature, rotary buffers). Base
+        # weights come from the two checkpoints loaded in __init__, so a large
+        # missing_keys list here is expected. A real problem would be an add-on
+        # key that fails to match the model.
+        unexpected = [k for k in result.unexpected_keys if "rotary_emb" not in k]
+        if unexpected:
             logger.warning(
-                "%d encoder weights were not populated, e.g. %s", len(stale), stale[:3]
+                "%d add-on weights did not match the model, e.g. %s",
+                len(unexpected),
+                unexpected[:5],
             )
+        logger.debug(
+            "add-on load: %d missing, %d unexpected",
+            len(result.missing_keys),
+            len(result.unexpected_keys),
+        )
 
         self.model = model.to(device).to(torch_dtype).eval()
 
@@ -382,8 +416,8 @@ internvideo2_clip_1b_224p_f8 = ModelMeta(
     languages=["eng-Latn"],
     modalities=["video", "text"],
     model_type=["dense"],
-    n_parameters=None,  # TODO: sum(p.numel() for p in model.parameters())
-    memory_usage_mb=None,  # TODO: model_meta.calculate_memory_usage_mb()
+    n_parameters=7_704_737_537,
+    memory_usage_mb=29_391,
     max_tokens=80,
     embed_dim=768,
     license="apache-2.0",
