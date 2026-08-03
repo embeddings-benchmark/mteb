@@ -76,12 +76,7 @@ from .climate_fever_retrieval import (
     ClimateFEVERHardNegativesV2,
     ClimateFEVERRetrievalv2,
 )
-from .clotho import (
-    ClothoA2TRetrieval,
-    ClothoA2TRetrievalV2,
-    ClothoT2ARetrieval,
-    ClothoT2ARetrievalV2,
-)
+from .clotho import ClothoA2TRetrieval, ClothoT2ARetrieval
 from .cmu_arctic import CMUArcticA2TRetrieval, CMUArcticT2ARetrieval
 from .covers80_retrieval import Covers80A2ARetrieval
 from .cqa_dupstack_android_retrieval import CQADupstackAndroidRetrieval
@@ -521,9 +516,7 @@ __all__ = [
     "ClimateFEVERHardNegativesV2",
     "ClimateFEVERRetrievalv2",
     "ClothoA2TRetrieval",
-    "ClothoA2TRetrievalV2",
     "ClothoT2ARetrieval",
-    "ClothoT2ARetrievalV2",
     "ConvoMem",
     "Covers80A2ARetrieval",
     "CovidQA",
