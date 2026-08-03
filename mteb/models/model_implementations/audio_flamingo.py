@@ -125,7 +125,7 @@ class AudioFlamingoWrapper(AbsEncoder):
                 batch_indices = torch.arange(hidden.size(0), device=hidden.device)
                 embeddings = hidden[batch_indices, last_idx]
 
-                all_embeddings.append(embeddings.cpu().detach())
+                all_embeddings.append(embeddings.float().cpu().detach())
 
         return torch.cat(all_embeddings, dim=0).numpy()
 
