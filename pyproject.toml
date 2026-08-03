@@ -469,6 +469,7 @@ conflicts = [
         { extra = "msclap" },
         { extra = "muq" },
         { extra = "transformers-v4" },
+        { extra = "internvideo2" }, # conflicting versions of transformers
         { extra = "qwen-vl" },
         # { extra = "omnivinci" },
         { extra = "embeddinggemma" },
