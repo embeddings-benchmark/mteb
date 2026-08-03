@@ -44,8 +44,9 @@ init fails.
 none of which this inference path needs.
 """
 
-# The checkpoints. The HF repo for the model itself only holds the tuned
-# add-on weights (LoRA + projectors); the two base towers live elsewhere.
+# The HF repo for this model holds only the CLIP-stage deltas (47 tensors, ~7M
+# params: the vision clip_projector, the learned temperature, rotary buffers).
+# Both towers come from separate checkpoints resolved below.
 _STAGE2_REPO = "OpenGVLab/InternVideo2-Stage2_1B-224p-f4"
 _INTERNVL_REPO = "OpenGVLab/InternVL"
 _INTERNVL_TEXT_CKPT = "internvl_c_13b_224px.pth"
