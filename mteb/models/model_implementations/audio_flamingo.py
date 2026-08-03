@@ -6,14 +6,14 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
-    from mteb import TaskMetadata
+    from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
@@ -24,24 +24,36 @@ class AudioFlamingoWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str | None = None,
-        device: str = "cuda" if torch.cuda.is_available() else ("mps" if torch.backends.mps.is_available() else "cpu"),
+        device: str | None = None,
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
-        from transformers import AutoProcessor, AudioFlamingo3ForConditionalGeneration
+        from transformers import AudioFlamingo3ForConditionalGeneration, AutoProcessor
 
         self.model_name = model_name
-        self.device = device
+        self.device = device or (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
         self.max_audio_length_seconds = max_audio_length_seconds
 
         self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
-        
+
         # Audio Flamingo uses torch.bfloat16 commonly
         torch_dtype = kwargs.pop("torch_dtype", torch.bfloat16)
-        device_map = kwargs.pop("device_map", self.device)
+        device_map = kwargs.pop("device_map", "auto" if self.device == "cuda" else None)
         self.model = AudioFlamingo3ForConditionalGeneration.from_pretrained(
-            model_name, revision=revision, device_map=device_map, torch_dtype=torch_dtype, **kwargs
+            model_name,
+            revision=revision,
+            device_map=device_map,
+            torch_dtype=torch_dtype,
+            **kwargs,
         )
+        if device_map is None:
+            self.model = self.model.to(self.device)
         self.model.eval()
 
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
@@ -90,15 +102,14 @@ class AudioFlamingoWrapper(AbsEncoder):
                 audio=audio_arrays if len(audio_arrays) > 0 else None,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
-                truncation=True, # note: processor might not support truncation directly for audio flamingo, but text can
-                # max_length=..., # max_length usually for text
+                truncation=True
             )
 
-            # limit audio if necessary. Actually AudioFlamingo handles up to 30s per chunk by default 
-            # and WhisperFeatureExtractor can handle longer, maybe we need to be careful with max_audio_len
-
             processor_inputs = {
-                k: v.to(self.device) for k, v in processor_inputs.items()
+                k: v.to(self.device, dtype=self.model.dtype)
+                if torch.is_floating_point(v)
+                else v.to(self.device)
+                for k, v in processor_inputs.items()
             }
             with torch.no_grad():
                 outputs = self.model(
@@ -133,10 +144,10 @@ audio_flamingo_meta = ModelMeta(
     max_tokens=32768,
     n_parameters=8_267_215_360,
     memory_usage_mb=None,
-    embed_dim=3584, # Qwen2.5-7B has 3584 hidden size
-    license=None, # NVIDIA OneWay Noncommercial License
+    embed_dim=3584,  # Qwen2.5-7B has 3584 hidden size
+    license=None,  # NVIDIA OneWay Noncommercial License
     reference="https://huggingface.co/nvidia/audio-flamingo-3-hf",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
     use_instructions=True,
     public_training_code=None,
