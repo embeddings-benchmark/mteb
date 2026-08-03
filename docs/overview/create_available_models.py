@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 model_entry = """
 ####  `{model_name}` {{ .model-copy }}
 
- **License:** {license} {learn_more}
+ **License:** {license} • **Openness:** {openness} {learn_more}
 
 | :lucide-cpu: Parameters | :lucide-layers: Emb. Dim | :lucide-ruler: Max Tokens | :lucide-database: Memory | :lucide-calendar: Released | :lucide-languages: Languages |
 |:-:|:-:|:-:|:-:|:-:|:-:|
@@ -116,6 +116,15 @@ def modality_to_filename(modality: tuple[str, ...]) -> str:
     return f"{modality_to_string(modality).lower().replace('-', '_')}.md"
 
 
+def openness_badge(openness: dict[str, bool], score: int) -> str:
+    """Renders the openness score as `n/total`, with a hover tooltip listing each dimension."""
+    tooltip = "&#10;".join(
+        f"{'✅' if value else '❌'} {dimension.title()}"
+        for dimension, value in openness.items()
+    )
+    return f'<abbr title="{tooltip}">{score}/{len(openness)}</abbr>'
+
+
 def required_memory_string(mem_in_mb: int | None) -> str:
     if mem_in_mb is None:
         return "not specified"
@@ -152,6 +161,7 @@ def format_model_entry(meta: ModelMeta) -> str:
         pretty_long_list(sorted(meta.languages)) if meta.languages else "not specified"
     )
     required_mem = required_memory_string(meta.memory_usage_mb)
+    openness = openness_badge(meta.openness, meta.openness_score)
 
     entry = model_entry.format(
         icon=modality_to_icon.get(meta.modalities[0], "lucide/layers"),
@@ -165,6 +175,7 @@ def format_model_entry(meta: ModelMeta) -> str:
         release_date=release_date,
         languages=languages,
         required_memory=required_mem,
+        openness=openness,
     )
 
     if meta.citation:

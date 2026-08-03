@@ -1,3 +1,4 @@
+import json
 import re
 
 import pytest
@@ -154,6 +155,7 @@ def test_model_similar_tasks(training_datasets):
     )
     expected = sorted(
         [
+            "MultilingualNanoTouche2020Retrieval",
             "NanoTouche2020Retrieval",
             "Touche2020",
             "Touche2020-Fa",
@@ -171,6 +173,48 @@ def test_similar_tasks_superseded_by():
     """Banking77Classification in model training data, but Banking77Classification.v2 version not"""
     model_meta = mteb.get_model_meta("BAAI/bge-multilingual-gemma2")
     assert "Banking77Classification.v2" in model_meta.get_training_datasets()
+
+
+def _openness_meta(**overwrites) -> ModelMeta:
+    return ModelMeta.create_empty(
+        overwrites={"name": "test/openness", "revision": "test", **overwrites}
+    )
+
+
+def test_openness_score_all_dimensions():
+    meta = _openness_meta(
+        open_weights=True,
+        license="apache-2.0",
+        public_training_code="https://github.com/example/train",
+        public_training_data="https://huggingface.co/datasets/example",
+        citation="@article{example}",
+    )
+    assert meta.open_license is True
+    assert meta.openness_score == 6
+    assert all(meta.openness.values())
+
+
+def test_openness_score_none():
+    meta = _openness_meta(
+        open_weights=False,
+        license=None,
+        public_training_code=None,
+        public_training_data=None,
+        citation=None,
+    )
+    assert meta.open_license is False
+    # "model card" is always True, so a fully closed model still scores 1
+    assert meta.openness_score == 1
+    assert meta.openness["model card"] is True
+    assert not any(v for k, v in meta.openness.items() if k != "model card")
+
+
+def test_openness_non_open_license_not_counted():
+    meta = _openness_meta(open_weights=True, license="cc-by-nc-4.0")
+    assert meta.open_license is False
+    assert meta.openness["open weights"] is True
+    assert meta.openness["open license"] is False
+    assert meta.openness_score == 2
 
 
 def test_model_name_without_prefix():
@@ -483,3 +527,68 @@ def test_model_meta_dependencies_not_installed_group():
         ),
     ):
         model_meta._check_requirements()
+
+
+def test_model_meta_auto_install_extras(monkeypatch):
+    """When MTEB_AUTO_INSTALL_EXTRAS is set, missing deps trigger an install attempt."""
+    model_meta = mteb.get_model_meta("google/vggish").model_copy(
+        update={
+            "extra_requirements_groups": ["torch-vggish-yamnet"],
+        }
+    )
+    monkeypatch.setenv("MTEB_AUTO_INSTALL_EXTRAS", "1")
+
+    install_calls: list[tuple[str | None, list[str]]] = []
+
+    def fake_install(name, groups):
+        install_calls.append((name, list(groups)))
+
+    monkeypatch.setattr("mteb.models.model_meta._install_extras", fake_install)
+
+    # Install is a no-op in the test, so the deps remain missing and we still raise;
+    # the important assertion is that auto-install was attempted with the right groups.
+    with pytest.raises(ImportError):
+        model_meta._check_requirements()
+
+    assert len(install_calls) == 1
+    name, groups = install_calls[0]
+    assert name == "google/vggish"
+    assert "torch-vggish-yamnet" in groups
+
+
+def test_model_meta_no_auto_install_by_default(monkeypatch):
+    """Without the env var, no install is attempted and the error is raised directly."""
+    model_meta = mteb.get_model_meta("google/vggish").model_copy(
+        update={
+            "extra_requirements_groups": ["torch-vggish-yamnet"],
+        }
+    )
+    monkeypatch.delenv("MTEB_AUTO_INSTALL_EXTRAS", raising=False)
+
+    def fail_install(name, groups):
+        raise AssertionError("install should not be attempted")
+
+    monkeypatch.setattr("mteb.models.model_meta._install_extras", fail_install)
+
+    with pytest.raises(ImportError):
+        model_meta._check_requirements()
+
+
+def test_model_validate_json_resolved():
+    """Test that model_validate_json_resolved correctly parses JSON and resolves string loader to callable."""
+    original_meta = mteb.get_model_meta("google/siglip-base-patch16-224")
+    original_loader = original_meta.loader
+    assert original_loader is not None
+
+    meta_dict = original_meta.to_dict()
+    assert isinstance(meta_dict["loader"], str)
+    assert meta_dict["loader"] == "SiglipModelWrapper"
+
+    json_data = json.dumps(meta_dict)
+    parsed_meta = ModelMeta.model_validate_json_resolved(json_data)
+    assert parsed_meta.loader == original_loader
+
+    meta_dict["loader"] = "NonExistentModelWrapper"
+    json_data_unknown = json.dumps(meta_dict)
+    parsed_unknown = ModelMeta.model_validate_json_resolved(json_data_unknown)
+    assert parsed_unknown.loader is None

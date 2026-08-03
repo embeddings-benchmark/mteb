@@ -2,20 +2,26 @@
 #
 # Multi-stage Dockerfile for the mteb FastAPI service.
 #
-# Three stages share the heavy "pip install + HF dataset warmup +
-# per-benchmark frame split" work via a common base image:
+# Stages split so that layer caching keeps the stable work (pip
+# install, Chromium) cached while the data-dependent work (HF dataset
+# warmup, per-benchmark frame split, OG rendering) is re-run on every
+# daily refresh via the DATA_REFRESH build arg:
 #
 #   base        — python:3.12-bookworm + a non-root user + the local
-#                 checkout installed with the [api] extra + the
-#                 mteb/results parquet cache pre-warmed + the
-#                 per-benchmark split persisted to
+#                 checkout installed with the [api] extra.
+#   og-deps     — extends `base` with Chromium runtime libs +
+#                 Playwright. Depends only on code, so it stays cached
+#                 across daily data refreshes.
+#   data        — extends `base`; pre-warms the mteb/results parquet
+#                 cache and persists the per-benchmark split to
 #                 ``~/.cache/mteb/leaderboard/`` so the runtime first
-#                 request skips ~30s of cold work.
-#   og-builder  — extends `base` with Chromium runtime libs + the
-#                 [og] extra (Playwright). Renders one OG hero PNG per
-#                 benchmark / task / model into /og-cache, then exits.
-#                 Nothing downstream of this stage ships.
-#   runtime     — extends `base`, copies the rendered PNG files out of
+#                 request skips ~30s of cold work. DATA_REFRESH busts
+#                 the cache of these layers daily.
+#   og-builder  — extends `og-deps`, copies the warmed caches from
+#                 `data`, renders one OG hero PNG per benchmark / task
+#                 / model into /og-cache, then exits. Nothing
+#                 downstream of this stage ships.
+#   runtime     — extends `data`, copies the rendered PNG files out of
 #                 og-builder. Stays small: no Playwright, no Chromium,
 #                 no Node. FastAPI serves the cached PNG files at /og.
 
@@ -44,22 +50,9 @@ COPY --chown=user:user . /home/user/app
 
 RUN pip install --user --extra-index-url https://download.pytorch.org/whl/cpu ".[api]"
 
-# Pre-warm the HF dataset cache from mteb/results so the OG builder
-# (which calls warmup_blocking()) and the runtime first request both
-# skip the multi-minute cold clone.
-RUN hf download mteb/results --repo-type dataset || true
 
-# Pre-bake the per-benchmark leaderboard frames into the image so the
-# runtime skips the ~30s cold (HF download + 72-way split) on first
-# request. ``_load_per_benchmark_frames`` reads from the local HF cache
-# warmed by the previous RUN, does the split, and persists the result
-# to ``$XDG_CACHE_HOME/mteb/leaderboard/`` (~370 MB across 71 parquets
-# + a manifest). The runtime stage reads straight from those files —
-# warm start drops from ~40s to ~5s.
-RUN python -c "from mteb.api.frames import _load_per_benchmark_frames; _load_per_benchmark_frames()" || true
-
-
-FROM base AS og-builder
+# ─── Stage: og-deps ─────────────────────────────────────────────────
+FROM base AS og-deps
 
 ENV PLAYWRIGHT_BROWSERS_PATH=/home/user/.cache/playwright \
     OG_DIR=/og-cache
@@ -78,11 +71,44 @@ USER user
 RUN pip install --user "playwright>=1.49.0"
 RUN python -m playwright install chromium
 
+
+# ─── Stage: data ────────────────────────────────────────────────────
+FROM base AS data
+
+# Set by CI to the date of the run. Changing it invalidates the layer
+# cache from here on, so the daily rebuild re-downloads mteb/results
+# and re-splits the frames even when the code (and therefore every
+# earlier layer) is unchanged.
+ARG DATA_REFRESH=0
+
+# Pre-warm the HF dataset cache from mteb/results so the OG builder
+# (which calls warmup_blocking()) and the runtime first request both
+# skip the multi-minute cold clone.
+RUN echo "data refresh: ${DATA_REFRESH}" \
+ && hf download mteb/results --repo-type dataset || true
+
+# Pre-bake the per-benchmark leaderboard frames into the image so the
+# runtime skips the ~30s cold (HF download + 72-way split) on first
+# request. ``_load_per_benchmark_frames`` reads from the local HF cache
+# warmed by the previous RUN, does the split, and persists the result
+# to ``$XDG_CACHE_HOME/mteb/leaderboard/`` (~370 MB across 71 parquets
+# + a manifest). The runtime stage reads straight from those files —
+# warm start drops from ~40s to ~5s.
+RUN python -c "from mteb.api.frames import _load_per_benchmark_frames; _load_per_benchmark_frames()" || true
+
+
+# ─── Stage: og-builder ──────────────────────────────────────────────
+FROM og-deps AS og-builder
+
+# Merge the warmed HF + leaderboard caches from the data stage next to
+# the Playwright browser cache already present in og-deps.
+COPY --from=data --chown=user:user /home/user/.cache /home/user/.cache
+
 RUN python scripts/generate_og_images.py --out=/og-cache
 
 
 # ─── Stage: runtime ─────────────────────────────────────────────────
-FROM base AS runtime
+FROM data AS runtime
 
 ENV OG_DIR=/data/og
 

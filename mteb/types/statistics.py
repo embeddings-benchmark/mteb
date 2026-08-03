@@ -229,22 +229,25 @@ class RelevantDocsStatistics(TypedDict):
 
 
 class TextRelevanceOverlapStatistics(TypedDict):
-    """Token-overlap statistics for query and relevant document text pairs.
+    """Character n-gram overlap for query and relevant document text pairs.
 
     Attributes:
         num_pairs: Number of positive query-document relevance pairs considered.
-        min_query_token_overlap: Minimum fraction of unique query tokens found in
-            the relevant document text.
-        average_query_token_overlap: Average fraction of unique query tokens found
-            in the relevant document text.
-        max_query_token_overlap: Maximum fraction of unique query tokens found in
-            the relevant document text.
+        min_query_character_ngram_overlap: Minimum fraction of unique normalized
+            query character n-grams found in the relevant document text.
+        average_query_character_ngram_overlap: Average fraction of unique normalized
+            query character n-grams found in the relevant document text.
+        max_query_character_ngram_overlap: Maximum fraction of unique normalized
+            query character n-grams found in the relevant document text.
+
+    Text is Unicode NFKC-normalized and case-folded, then punctuation, symbols,
+    and whitespace are removed before extracting character n-grams of lengths 3-5.
     """
 
     num_pairs: int
-    min_query_token_overlap: float
-    average_query_token_overlap: float
-    max_query_token_overlap: float
+    min_query_character_ngram_overlap: float
+    average_query_character_ngram_overlap: float
+    max_query_character_ngram_overlap: float
 
 
 class SingleInputModalityStatistics(TypedDict):
@@ -528,8 +531,8 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
         queries_audio_statistics: Statistics for queries
         queries_video_statistics: Statistics for queries
         relevant_docs_statistics: Statistics for relevant documents
-        text_relevance_overlap_statistics: Token-overlap statistics for positive
-            text query-document pairs
+        text_relevance_overlap_statistics: Character n-gram overlap statistics for
+            positive text query-document pairs
         top_ranked_statistics: Statistics for top ranked documents (if available)
     """
 

@@ -707,7 +707,7 @@ MTEB_DEU = Benchmark(
 
 MTEB_KOR = Benchmark(
     name="MTEB(kor, v1)",
-    aliases=["MTEB(kor)"],
+    aliases=[],
     display_name="Korean",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
     tasks=get_tasks(
@@ -727,6 +727,56 @@ MTEB_KOR = Benchmark(
         ],
     ),
     description="Korean text embedding quality across classification, reranking, retrieval, and semantic similarity.",
+    reference=None,
+    citation=None,
+    superseded_by=["MTEB(kor, v2)"],
+)
+
+MTEB_KOR_V2 = Benchmark(
+    name="MTEB(kor, v2)",
+    aliases=["MTEB(kor)"],
+    display_name="Korean",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
+    tasks=get_tasks(
+        languages=["kor"],
+        tasks=[
+            # Classification
+            "KLUE-TC",
+            # Clustering
+            "SIB200ClusteringS2S",
+            "KlueMrcDomainClustering",
+            "KlueYnatMrcCategoryClustering",
+            # Pair Classification (NLI)
+            "KLUE-NLI",
+            "KorNLI",
+            "PawsXPairClassification",
+            # Reranking
+            "MIRACLReranking",
+            # Retrieval
+            "MIRACLRetrieval",
+            "Ko-StrategyQA",
+            "LawIRKo",
+            "SQuADKorV1Retrieval",
+            "AutoRAGRetrieval",
+            "PublicHealthQA",
+            "BelebeleRetrieval",
+            "MultiLongDocRetrieval",
+            "MrTidyRetrieval",
+            # STS
+            "KLUE-STS",
+            "KorSTS",
+            "STS17",
+        ],
+    ),
+    description=(
+        "Korean text embedding quality across classification, clustering, pair "
+        "classification (NLI), reranking, retrieval, and semantic similarity. "
+        "Expanded successor to MTEB(kor, v1): grows the suite from 6 to 20 tasks, "
+        "adding clustering (SIB200, KLUE-MRC domain/category), pair classification/NLI "
+        "(KLUE-NLI, KorNLI, PawsX), additional retrieval (LawIRKo, SQuAD-Ko, AutoRAG, "
+        "PublicHealthQA, Belebele, MultiLongDoc, MrTidy) and STS17, for broader and more "
+        "robust coverage of Korean embedding capabilities."
+    ),
     reference=None,
     citation=None,
 )
@@ -784,7 +834,7 @@ MTEB_PT = Benchmark(
     icon="https://raw.githubusercontent.com/lipis/flag-icons/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/br.svg",
     tasks=MTEBTasks(
         get_tasks(
-            languages=["pt"],
+            languages=["por"],
             tasks=[
                 # STS (3)
                 "Assin2STS",
@@ -821,7 +871,17 @@ MTEB_PT = Benchmark(
     ),
     description="Portuguese text embedding quality benchmark across semantic text similarity, classification, reranking and retrieval.",
     reference=None,
-    citation=None,
+    citation=r"""
+@misc{okamura2026multilingualaveragesmtebptbenchmark,
+  archiveprefix = {arXiv},
+  author = {Lucas Hideki Takeuchi Okamura and Alexandre Alcoforado and Anna Helena Reali Costa},
+  eprint = {2607.04071},
+  primaryclass = {cs.CL},
+  title = {Beyond Multilingual Averages: MTEB-PT, a Benchmark for Portuguese Sentence Encoders},
+  url = {https://arxiv.org/abs/2607.04071},
+  year = {2026},
+}
+""",
     contacts=["Lucas-Okamura"],
 )
 
@@ -1731,6 +1791,32 @@ NANOBEIR = Benchmark(
     reference="https://huggingface.co/collections/zeta-alpha-ai/nanobeir-66e1a0af21dfd93e620cd9f6",
     citation=None,
 )
+
+NANOBEIR_EXTENDED = Benchmark(
+    name="NanoBEIR-multilingual",
+    display_name="Multilingual NanoBEIR",
+    tasks=get_tasks(
+        tasks=[
+            "MultilingualNanoArguAnaRetrieval",
+            "MultilingualNanoClimateFeverRetrieval",
+            "MultilingualNanoDBPediaRetrieval",
+            "MultilingualNanoFEVERRetrieval",
+            "MultilingualNanoFiQA2018Retrieval",
+            "MultilingualNanoHotpotQARetrieval",
+            "MultilingualNanoMSMARCORetrieval",
+            "MultilingualNanoNFCorpusRetrieval",
+            "MultilingualNanoNQRetrieval",
+            "MultilingualNanoQuoraRetrieval",
+            "MultilingualNanoSCIDOCSRetrieval",
+            "MultilingualNanoSciFactRetrieval",
+            "MultilingualNanoTouche2020Retrieval",
+        ],
+    ),
+    description="A translated benchmark targeting zero-shot retrieval quality using translated subsets of the BEIR datasets, designed for faster evaluation during training with reduced computational cost.",
+    reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+    citation=None,
+)
+
 
 C_MTEB = Benchmark(
     name="MTEB(cmn, v1)",

@@ -208,7 +208,9 @@ class VoyageModel(AbsEncoder):
         if api_model_name:
             self._model_name = api_model_name
         else:
-            self._model_name = model_name.rsplit("/", maxsplit=1)[-1].split()[0]
+            self._model_name = model_name.rsplit("/", maxsplit=1)[-1].split(maxsplit=1)[
+                0
+            ]
         self._evolved_prompts = evolved_prompts
         self._max_tpm = max_tpm
         self._max_tokens = max_tokens
