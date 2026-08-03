@@ -260,7 +260,7 @@ class InternVideo2CLIPModel(AbsEncoder):
                         "use_flash_attn": False,
                         "transformer_width": 4096,
                         "llama_path": str(llama_dir),
-                        "use_lora": True,
+                        "use_lora": False,  # InternVL-C ships its text tower without LoRA; wrapping in peft renames q_proj/v_proj to *.base_layer.* and silently breaks weight loading
                     },
                     "temp": 1 / 100.0,
                     "temp_min": 1 / 100.0,
