@@ -57,7 +57,6 @@ class AudioFlamingoWrapper(AbsEncoder):
         self.model.eval()
 
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
-        self.audio_token = getattr(self.processor, "audio_token", "<sound>")
 
     def encode(  # noqa: PLR0914
         self,
@@ -72,45 +71,39 @@ class AudioFlamingoWrapper(AbsEncoder):
     ) -> Array:
         all_embeddings = []
 
-        for batch in tqdm(inputs, disable=not show_progress_bar):
-            audio_arrays = []
-            texts = []
-            audio_list = batch.get("audio", [])
-            text_list = batch.get("text", [])
+        for batch_data in tqdm(inputs, disable=not show_progress_bar):
+            audio_list = batch_data.get("audio", [])
+            text_list = batch_data.get("text", [])
             batch_size = max(len(audio_list), len(text_list))
 
+            conversations = []
             for i in range(batch_size):
-                cur_text = ""
+                content = []
+
+                text_row = text_list[i] if i < len(text_list) else None
+                if text_row:
+                    content.append({"type": "text", "text": text_row})
+
                 audio_row = audio_list[i] if i < len(audio_list) else None
                 if audio_row is not None:
                     array = AudioCollator.resample_audio(
                         {"audio": audio_row},
                         target_sampling_rate=self.sampling_rate,
                     )
-                    cur_text += self.audio_token
-                    audio_arrays.append(array)
+                    content.append({"type": "audio", "audio": array})
 
-                text_row = text_list[i] if i < len(text_list) else None
-                if text_row is not None:
-                    cur_text += text_row
-                texts.append(cur_text)
+                conversations.append([{"role": "user", "content": content}])
 
-            # We can use apply_chat_template if we want, but passing text with <sound> token and audio is simpler
-            # like in our test script.
-            processor_inputs = self.processor(
-                text=texts,
-                audio=audio_arrays if len(audio_arrays) > 0 else None,
-                sampling_rate=self.sampling_rate,
-                return_tensors="pt",
-                truncation=True
-            )
+            # Use apply_chat_template rather than calling the processor directly:
+            # it's the only input path NVIDIA tests/supports, and it handles
+            # audio feature prep + dtype casting internally.
+            processor_inputs = self.processor.apply_chat_template(
+                conversations,
+                tokenize=True,
+                add_generation_prompt=True,
+                return_dict=True,
+            ).to(self.model.device)
 
-            processor_inputs = {
-                k: v.to(self.device, dtype=self.model.dtype)
-                if torch.is_floating_point(v)
-                else v.to(self.device)
-                for k, v in processor_inputs.items()
-            }
             with torch.no_grad():
                 outputs = self.model(
                     **processor_inputs,
@@ -126,7 +119,7 @@ class AudioFlamingoWrapper(AbsEncoder):
                 last_idx = mask.size(1) - 1 - first_one_reversed
 
                 # gather last-token embeddings
-                batch_indices = torch.arange(hidden.size(0), device=self.device)
+                batch_indices = torch.arange(hidden.size(0), device=hidden.device)
                 embeddings = hidden[batch_indices, last_idx]
 
                 all_embeddings.append(embeddings.cpu().detach())
