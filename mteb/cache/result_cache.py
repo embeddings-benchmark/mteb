@@ -791,6 +791,7 @@ class ResultCache:
             only_main_score=True,
             require_model_meta=False,
             include_remote=True,
+            load_experiments=LoadExperimentEnum.MATCH_NAME,
         )
 
         # Save to disk for future use
@@ -976,7 +977,11 @@ class ResultCache:
         experiment_kwargs = model_meta_json.get("experiment_kwargs", None)
         experiment_name_ = _serialize_experiment_kwargs_to_name(experiment_kwargs)
         try:
-            meta = ModelMeta.model_validate_json(raw)
+            # `loader` is serialized to disk as its registered name (a plain
+            # string), not a callable — `model_validate_json` chokes on that
+            # for every model. `model_validate_json_resolved` looks the name
+            # back up in `MODEL_REGISTRY` before validating.
+            meta = ModelMeta.model_validate_json_resolved(raw)
         except Exception as e:
             logger.warning(f"Failed to parse ModelMeta from {model_meta_path}: {e!r}")
             meta = None
