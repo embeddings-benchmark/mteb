@@ -256,6 +256,7 @@ moca_qwen25vl_3b = ModelMeta(
     release_date="2025-06-29",
     modalities=["image", "text"],
     n_parameters=3_756_720_128,
+    n_embedding_parameters=311_164_928,
     memory_usage_mb=7165,
     embed_dim=2048,
     license="mit",
