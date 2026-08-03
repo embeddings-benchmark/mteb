@@ -302,7 +302,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
     @property
     def is_cross_encoder(self) -> bool:
-        """Returns True if the model is a cross-encoder.
+        """Whether the model is a cross-encoder.
 
         Derived from model_type field. A model is considered a cross-encoder if "cross-encoder" is in its model_type list.
         """
@@ -413,6 +413,24 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 "Model name must be in the format 'organization/model_name'"
             )
         return v
+
+    @classmethod
+    def model_validate_json_resolved(cls, json_data: str | bytes) -> ModelMeta:
+        """Validate JSON and resolve string loader if present."""
+        data = json.loads(json_data)
+        loader_name = data.get("loader")
+        resolved_loader = None
+        if isinstance(loader_name, str):
+            from mteb.models.model_implementations import MODEL_REGISTRY
+
+            for model_meta in MODEL_REGISTRY.values():
+                if model_meta.loader is not None:
+                    name = _get_loader_name(model_meta.loader)  # type: ignore[arg-type]
+                    if name == loader_name:
+                        resolved_loader = model_meta.loader
+                        break
+        data["loader"] = resolved_loader
+        return cls.model_validate(data)
 
     def __hash__(self) -> int:
         """Make ModelMeta hashable based on name, revision, experiment_kwargs and embed_dim.

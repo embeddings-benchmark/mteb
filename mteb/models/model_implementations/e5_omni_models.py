@@ -43,6 +43,7 @@ class E5OmniWrapper(SentenceTransformerEncoderWrapper):
                     "max_pixels": 64 * 28 * 28,
                     "do_sample_frames": False,
                 },
+                "text": {"truncation": True, "max_length": 512},
             }
         )
 

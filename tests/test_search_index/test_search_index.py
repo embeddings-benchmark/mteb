@@ -6,13 +6,13 @@ import pytest
 
 import mteb
 from mteb.abstasks import AbsTaskRetrieval
-from mteb.models import SearchEncoderWrapper
-from mteb.models.model_meta import ScoringFunction
-from mteb.models.search_encoder_index import FaissSearchIndex
-from tests.mock_tasks import (
+from mteb.mocks.mock_tasks import (
     MockRerankingTask,
     MockRetrievalTask,
 )
+from mteb.models import SearchEncoderWrapper
+from mteb.models.model_meta import ScoringFunction
+from mteb.models.search_encoder_index import FaissSearchIndex
 
 
 @pytest.mark.parametrize(

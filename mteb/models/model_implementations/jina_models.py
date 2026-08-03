@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 import logging
 from collections import defaultdict
 from typing import TYPE_CHECKING, Any, ClassVar
@@ -271,7 +272,10 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
         from transformers import AutoModel
 
         self.model = AutoModel.from_pretrained(
-            model, trust_remote_code=trust_remote_code, dtype="auto"
+            model,
+            revision=revision,
+            trust_remote_code=trust_remote_code,
+            dtype="auto",
         )
 
         device = device or get_device_name()
@@ -298,13 +302,18 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
         for idx, (query, doc) in enumerate(zip(all_queries, all_corpus)):
             query_groups[query].append((idx, doc))
 
+        rerank_parameters = inspect.signature(self.model.rerank).parameters
+        rerank_kwargs = {}
+        if "max_query_length" in rerank_parameters:
+            rerank_kwargs["max_query_length"] = 3072
+        if "max_doc_length" in rerank_parameters:
+            rerank_kwargs["max_doc_length"] = 2048
+
         results = np.zeros(sentences_count, dtype=np.float32)
         for query, doc_infos in query_groups.items():
             original_indices, docs = zip(*doc_infos)
 
-            scores = self.model.rerank(
-                query, list(docs), max_query_length=3072, max_doc_length=2048
-            )
+            scores = self.model.rerank(query, list(docs), **rerank_kwargs)
             for scr in scores:
                 original_idx = original_indices[scr["index"]]
                 results[original_idx] = float(scr["relevance_score"])
@@ -484,13 +493,25 @@ class JinaV4Wrapper(AbsEncoder):
                 raise ValueError(
                     "The number of texts and images must have the same length"
                 )
-            fused_embeddings = text_embeddings + image_embeddings
-            return fused_embeddings
+            embeddings = text_embeddings + image_embeddings
         elif text_embeddings is not None:
-            return text_embeddings
+            embeddings = text_embeddings
         elif image_embeddings is not None:
-            return image_embeddings
-        raise ValueError
+            embeddings = image_embeddings
+        else:
+            raise ValueError
+
+        if isinstance(embeddings, torch.Tensor):
+            embeddings = embeddings.cpu().detach().float().numpy()
+        elif (
+            isinstance(embeddings, (list, tuple))
+            and embeddings
+            and isinstance(embeddings[0], torch.Tensor)
+        ):
+            # Multi-vector embeddings have one vector per token or image patch.
+            # Their sequence lengths vary by input, so they must remain ragged.
+            embeddings = [e.cpu().detach().float() for e in embeddings]
+        return embeddings
 
     def get_text_embeddings(
         self,
@@ -519,7 +540,7 @@ class JinaV4Wrapper(AbsEncoder):
             task_metadata, prompt_type
         )
 
-        if task_type.startswith("DocumentUnderstanding"):
+        if task_type and task_type.startswith("DocumentUnderstanding"):
             self.vector_type = "multi_vector"
         else:
             self.vector_type = "single_vector"
@@ -549,7 +570,7 @@ class JinaV4Wrapper(AbsEncoder):
             task_metadata, prompt_type
         )
 
-        if task_type.startswith("DocumentUnderstanding"):
+        if task_type and task_type.startswith("DocumentUnderstanding"):
             self.vector_type = "multi_vector"
         else:
             self.vector_type = "single_vector"
@@ -1150,6 +1171,45 @@ jina_reranker_v3 = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2509.25085},}
 """,
+    superseded_by="jinaai/jina-reranker-v3.5",
+)
+
+
+jina_reranker_v3_5 = ModelMeta(
+    loader=JinaRerankerV3Wrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+    ),
+    name="jinaai/jina-reranker-v3.5",
+    model_type=["cross-encoder"],
+    languages=multilingual_langs,
+    open_weights=True,
+    revision="cbe7fd34449cc1a036c2959fa3c9b1deca6730ed",
+    release_date="2026-07-20",
+    modalities=["text"],
+    n_parameters=596836352,
+    n_embedding_parameters=155582464,
+    memory_usage_mb=1138,
+    max_tokens=131072,
+    embed_dim=None,
+    license="cc-by-nc-4.0",
+    similarity_fn_name=None,
+    framework=["PyTorch", "Transformers", "safetensors"],
+    use_instructions=None,
+    reference="https://huggingface.co/jinaai/jina-reranker-v3.5",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    adapted_from="jinaai/jina-reranker-v3",
+    citation="""@misc{nasika2026jinarerankerv35,
+      title={jina-reranker-v3.5: An Efficient Listwise Reranker with Hybrid Attention and Self-Distillation},
+      author={Christina Nasika and Feng Wang and Antonis Krasakis and Han Xiao},
+      year={2026},
+      eprint={2607.18152},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2607.18152},
+}""",
 )
 
 
@@ -1161,6 +1221,7 @@ jina_embeddings_v4 = ModelMeta(
             "Retrieval-query": "retrieval.query",
             "Retrieval-document": "retrieval.passage",
             "STS": "text-matching",
+            "PairClassification": "text-matching",
             "DocumentUnderstanding": "retrieval.query",
         },
     ),
@@ -1224,7 +1285,7 @@ jina_embeddings_v3 = ModelMeta(
     n_parameters=572310396,
     n_embedding_parameters=256002048,
     memory_usage_mb=1092,
-    max_tokens=8194,
+    max_tokens=8192,
     embed_dim=1024,
     license="cc-by-nc-4.0",
     similarity_fn_name=ScoringFunction.COSINE,

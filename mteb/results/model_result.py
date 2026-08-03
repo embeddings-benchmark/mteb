@@ -382,7 +382,7 @@ class ModelResult(BaseModel):
 
     @property
     def languages(self) -> list[str]:
-        """Get all languages in the model results.
+        """All languages in the model results.
 
         Returns:
             A list of languages in the model results.
@@ -394,7 +394,7 @@ class ModelResult(BaseModel):
 
     @property
     def domains(self) -> list[str]:
-        """Get all domains in the model results.
+        """All domains in the model results.
 
         Returns:
             A list of domains in the model results.
@@ -407,7 +407,7 @@ class ModelResult(BaseModel):
 
     @property
     def task_types(self) -> list[str]:
-        """Get all task types in the model results.
+        """All task types in the model results.
 
         Returns:
             A list of task types in the model results.
@@ -416,7 +416,7 @@ class ModelResult(BaseModel):
 
     @property
     def task_names(self) -> list[str]:
-        """Get all task names in the model results.
+        """All task names in the model results.
 
         Returns:
             A list of task names in the model results.
@@ -425,7 +425,7 @@ class ModelResult(BaseModel):
 
     @property
     def modalities(self) -> list[Modalities]:
-        """Get all modalities in the task results.
+        """All modalities in the task results.
 
         Returns:
             A list of modalities in the task results.

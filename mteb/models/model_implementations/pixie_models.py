@@ -55,3 +55,33 @@ pixie_rune_v1_0 = ModelMeta(
     training_datasets=pixie_rune_v1_training_datasets,
     citation=PIXIE_RUNE_V1_CITATION + "\n\n" + ARCTIC_V2_CITATION,
 )
+
+pixie_rune_v1_5 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs={
+        "model_prompts": PIXIE_RUNE_V1_PROMPTS,
+    },
+    name="telepix/PIXIE-Rune-v1.5",
+    model_type=["dense"],
+    revision="29dd334196af53e6cfc16674379e743334f5fa66",
+    release_date="2026-04-22",
+    languages=["kor-Hang", "eng-Latn"],
+    open_weights=True,
+    framework=["Sentence Transformers", "PyTorch"],
+    n_parameters=567754752,
+    n_embedding_parameters=256002048,
+    memory_usage_mb=2166,
+    max_tokens=8192,
+    embed_dim=1024,
+    license="apache-2.0",
+    reference="https://huggingface.co/telepix/PIXIE-Rune-v1.5",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    adapted_from="Snowflake/snowflake-arctic-embed-l-v2.0",
+    superseded_by=None,
+    public_training_code=None,
+    public_training_data=None,
+    # Model card only says "trained on Korean and English information
+    # retrieval dataset" without naming it, so the fine-tuning data is unknown.
+    training_datasets=None,
+)

@@ -434,6 +434,36 @@ potion_multilingual_128m = ModelMeta(
     citation=MODEL2VEC_CITATION,
 )
 
+potion_code_16m_v2 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="minishlab/potion-code-16M-v2",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="d3daf3e31f36d78f75913030b8bdf4a505d5b833",
+    release_date="2026-07-08",
+    n_parameters=16244992,
+    n_embedding_parameters=16244992,
+    memory_usage_mb=62,
+    max_tokens=np.inf,
+    embed_dim=256,
+    license="mit",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["NumPy", "Sentence Transformers", "safetensors"],
+    reference="https://huggingface.co/minishlab/potion-code-16M-v2",
+    use_instructions=False,
+    adapted_from="nomic-ai/CodeRankEmbed",
+    superseded_by=None,
+    training_datasets={"CoRNStack"},
+    public_training_code="https://github.com/MinishLab/model2vec",
+    public_training_data=(
+        "https://huggingface.co/collections/nomic-ai/cornstack; "
+        "https://huggingface.co/datasets/minishlab/tokenlearn-cornstack-docs-coderankembed-v2; "
+        "https://huggingface.co/datasets/minishlab/tokenlearn-cornstack-queries-coderankembed-v2"
+    ),
+    citation=MODEL2VEC_CITATION,
+)
+
 pubmed_bert_100k = ModelMeta(
     loader=Model2VecModel,
     name="NeuML/pubmedbert-base-embeddings-100K",

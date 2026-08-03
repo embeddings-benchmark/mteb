@@ -846,7 +846,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @property
     def languages(self) -> list[str]:
-        """Get all languages in the benchmark results.
+        """All languages in the benchmark results.
 
         Returns:
             A list of languages in ISO 639-1 format.
@@ -858,7 +858,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @property
     def domains(self) -> list[str]:
-        """Get all domains in the benchmark results.
+        """All domains in the benchmark results.
 
         Returns:
             A list of domains in ISO 639-1 format.
@@ -870,7 +870,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @property
     def task_types(self) -> list[str]:
-        """Get all task types in the benchmark results.
+        """All task types in the benchmark results.
 
         Returns:
             A list of task types.
@@ -882,7 +882,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @property
     def task_names(self) -> list[str]:
-        """Get all task names in the benchmark results.
+        """All task names in the benchmark results.
 
         Returns:
             A list of task names.
@@ -894,7 +894,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @property
     def modalities(self) -> list[str]:
-        """Get all modalities in the benchmark results.
+        """All modalities in the benchmark results.
 
         Returns:
             A list of modalities.
@@ -906,7 +906,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @property
     def model_names(self) -> list[str]:
-        """Get all model names in the benchmark results.
+        """All model names in the benchmark results.
 
         Returns:
             A list of model names.
@@ -915,7 +915,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @property
     def model_revisions(self) -> list[dict[str, str | None]]:
-        """Get all model revisions in the benchmark results.
+        """All model revisions in the benchmark results.
 
         Returns:
             A list of dictionaries with model names and revisions.
