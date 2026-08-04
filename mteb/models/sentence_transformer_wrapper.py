@@ -12,12 +12,14 @@ from typing_extensions import deprecated
 
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
+from mteb.similarity_functions import batched_sparse_similarity
 from mteb.types import OutputDType, PromptType
 
 from .abs_encoder import AbsEncoder
 
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder, SentenceTransformer
+    from sentence_transformers.sparse_encoder import SparseEncoder
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -460,4 +462,150 @@ class CrossEncoderWrapper:
                 list(zip(queries, corpus)),
                 **kwargs,
             ),
+        )
+
+
+class SparseEncoderWrapper(AbsEncoder):
+    """Wrapper for sentence-transformers `SparseEncoder` models.
+
+    Args:
+        model: The SparseEncoder model to use. Can be a string (model name) or a SparseEncoder model.
+        revision: The revision of the model to use.
+        device: The device used to load the model.
+        model_prompts: A dictionary mapping task names to prompt names. See
+            `SentenceTransformerEncoderWrapper` for the order of priority used to select a prompt.
+        torch_dtype: The torch dtype to cast the model to after loading.
+        similarity_batch_size: Number of query embeddings to compare against the corpus at a time
+            when computing similarity. Sparse query embeddings are batched to avoid densifying the
+            whole query matrix at once.
+        **kwargs: Additional arguments to pass to the SparseEncoder model.
+    """
+
+    mteb_model_meta: ModelMeta
+
+    def __init__(
+        self,
+        model: str | SparseEncoder,
+        revision: str | None = None,
+        device: str | None = None,
+        model_prompts: dict[str, str] | None = None,
+        *,
+        torch_dtype: torch.dtype = torch.float16,
+        similarity_batch_size: int = 1000,
+        **kwargs: Any,
+    ) -> None:
+        import sentence_transformers
+
+        if (
+            Version(sentence_transformers.__version__).release
+            < Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
+        ):
+            raise ImportError(
+                f"sentence-transformers version must be >= {SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION} to load a SparseEncoder model."
+            )
+        from sentence_transformers.sparse_encoder import SparseEncoder
+
+        if isinstance(model, str):
+            self.model = SparseEncoder(
+                model, revision=revision, device=device, **kwargs
+            )
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    name=model,
+                    revision=revision,
+                    loader=type(self),
+                    model_type=["sparse"],
+                )
+            )
+        else:
+            self.model = model
+            self.mteb_model_meta = ModelMeta.from_sparse_encoder_model(self.model)
+        self.model.to(torch_dtype)
+
+        built_in_prompts = getattr(self.model, "prompts", None)
+        if built_in_prompts and not model_prompts:
+            model_prompts = built_in_prompts
+        elif model_prompts and built_in_prompts:
+            msg = f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
+            logger.warning(msg)
+            warnings.warn(msg)
+            self.model.prompts = model_prompts
+
+        self.model_prompts, invalid_prompts = self.validate_task_to_prompt_name(
+            model_prompts, raise_for_invalid_keys=False
+        )
+        if invalid_prompts:
+            invalid_prompts = "\n".join(invalid_prompts)
+            msg = f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
+            logger.warning(msg)
+            warnings.warn(msg)
+
+        self.similarity_batch_size = similarity_batch_size
+
+    def similarity(
+        self, query_embeddings: torch.Tensor, corpus_embeddings: torch.Tensor
+    ) -> torch.Tensor:
+        """Compute similarity between sparse query_embeddings and corpus_embeddings in batches.
+
+        Args:
+            query_embeddings: Sparse COO tensor of shape (num_queries, dim).
+            corpus_embeddings: Tensor of shape (num_corpus, dim).
+
+        Returns:
+            Similarity matrix of shape (num_queries, num_corpus).
+        """
+        return batched_sparse_similarity(
+            query_embeddings,
+            corpus_embeddings,
+            sparse_sentence_transformer_model=self.model,
+            batch_size=self.similarity_batch_size,
+        )
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Unpack[EncodeKwargs],
+    ) -> Array:
+        """Encodes the given sentences using the sparse encoder.
+
+        Args:
+            inputs: The sentences to encode.
+            task_metadata: The metadata of the task. Used to determine which prompt to use
+                from `model_prompts`.
+            hf_split: Split of current task.
+            hf_subset: Subset of current task.
+            prompt_type: The name type of prompt (query or document).
+            **kwargs: Additional arguments to pass to the encoder.
+
+        Returns:
+            The encoded sentences as sparse tensors.
+        """
+        prompt = None
+        prompt_name = None
+        if self.model_prompts is not None:
+            prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+            prompt = self.model_prompts.get(prompt_name, None)  # type: ignore[arg-type]
+        if prompt_name:
+            prompt_log = f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
+        else:
+            prompt_log = (
+                f"No model prompts found for task={task_metadata.name} {prompt_type=}"
+            )
+        LogOnce(logger).info(prompt_log)
+
+        sentences = [text for batch in inputs for text in batch["text"]]
+
+        if prompt_type == PromptType.query:
+            return cast(
+                "Array",
+                self.model.encode_query(sentences, prompt=prompt, **kwargs),
+            )
+        return cast(
+            "Array",
+            self.model.encode_document(sentences, prompt=prompt, **kwargs),
         )

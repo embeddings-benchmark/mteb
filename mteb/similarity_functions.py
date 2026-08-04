@@ -7,6 +7,8 @@ import torch
 from mteb.models.model_meta import ScoringFunction
 
 if TYPE_CHECKING:
+    from sentence_transformers.sparse_encoder import SparseEncoder
+
     from mteb.models import EncoderProtocol
     from mteb.types import Array
 
@@ -282,6 +284,76 @@ def pairwise_dot_score(a: Array, b: Array) -> Array:
     a = _convert_to_tensor(a)
     b = _convert_to_tensor(b)
     return (a * b).sum(dim=-1)
+
+
+def batched_sparse_similarity(
+    query_embeddings: Array,
+    corpus_embeddings: Array,
+    sparse_sentence_transformer_model: SparseEncoder,
+    batch_size: int = 1000,
+) -> torch.Tensor:
+    """Compute similarity between sparse query embeddings and corpus embeddings in batches.
+
+    Sparse query embeddings (e.g. from lexical/SPLADE-style encoders with vocab-sized embeddings)
+    are sliced and rebuilt per batch so the full query matrix is never densified at once, which
+    would otherwise blow up memory. Each batch is scored with the sentence-transformers
+    `SparseEncoder`'s own native `similarity` method, rather than reimplementing it here.
+
+    Args:
+        query_embeddings: Sparse COO tensor of shape (num_queries, dim). Falls back to a single
+            unbatched call to `sparse_sentence_transformer_model.similarity` if this isn't a sparse tensor.
+        corpus_embeddings: Tensor of shape (num_corpus, dim).
+        sparse_sentence_transformer_model: The `SparseEncoder` model whose `similarity` method is
+            used to score each query batch against the full corpus.
+        batch_size: Number of query embeddings to compare against the corpus at a time.
+
+    Returns:
+        Similarity matrix of shape (num_queries, num_corpus).
+    """
+    query_embeddings = _convert_to_tensor(query_embeddings)
+    corpus_embeddings = _convert_to_tensor(corpus_embeddings)
+
+    if not query_embeddings.is_sparse:
+        return cast(
+            "torch.Tensor",
+            sparse_sentence_transformer_model.similarity(
+                query_embeddings, corpus_embeddings
+            ),
+        )
+
+    sims = []
+    num_queries = query_embeddings.size(0)
+
+    q = query_embeddings.coalesce()
+    indices = q.indices()  # 2 x nnz: [row, col]
+    values = q.values()  # nnz
+    n_cols = q.size(1)
+
+    for start in range(0, num_queries, batch_size):
+        end = min(start + batch_size, num_queries)
+        mask = (indices[0] >= start) & (indices[0] < end)
+        sel_idx = indices[:, mask].clone()
+        sel_idx[0] -= start  # shift row indices to batch-local
+        sel_vals = values[mask].clone()
+
+        batch_q = torch.sparse_coo_tensor(
+            sel_idx,
+            sel_vals,
+            size=(end - start, n_cols),
+            device=q.device,
+            dtype=q.dtype,
+        ).coalesce()
+
+        sims.append(
+            cast(
+                "torch.Tensor",
+                sparse_sentence_transformer_model.similarity(
+                    batch_q, corpus_embeddings
+                ),
+            )
+        )
+
+    return torch.cat(sims, dim=0)
 
 
 # https://github.com/UKPLab/sentence-transformers/blob/3fd59c3d122f2148e22b6338447b45d850fb6ea4/sentence_transformers/util.py#L196C1-L227C56
