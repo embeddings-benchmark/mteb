@@ -2,7 +2,7 @@ name: Check PR description length
 
 on:
   pull_request_target:
-    types: [opened, edited, reopened]
+    types: [opened, reopened]
 
 permissions:
   pull-requests: write
