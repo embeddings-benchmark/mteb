@@ -400,12 +400,12 @@ class Jinav4ModelMeta(ModelMeta):
         device: str | None = None,
         *,
         embed_dim: int | None = None,
-        vector_type: Literal[SUPPORTED_VECTOR_TYPES] = "single_vector",
         **kwargs: Any,
     ) -> MTEBModels:
-        model = super().load_model(
-            device=device, embed_dim=embed_dim, vector_type=vector_type, **kwargs
-        )
+        model = super().load_model(device=device, embed_dim=embed_dim, **kwargs)
+        vector_type = kwargs.pop(
+            "vector_type", "single_vector"
+        )  # didn't add to args to not trigger experiments
         if vector_type == "multi_vector":
             model.mteb_model_meta = model.mteb_model_meta.model_copy(
                 update={
