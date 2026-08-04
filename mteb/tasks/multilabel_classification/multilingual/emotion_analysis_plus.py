@@ -23,7 +23,6 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
         dataset={
             "path": "mteb/EmotionAnalysis",
             "revision": "554dbe305cad4f86705c8b6389c76f7f33fc6fd8",
-            "split": "test",
         },
         type="MultilabelClassification",
         category="t2c",
@@ -72,23 +71,3 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
         sample_creation="created",
         bibtex_citation="",
     )
-
-    def dataset_transform(self, **kwargs) -> None:
-        from datasets import Dataset, DatasetDict, load_dataset
-
-        path = self.metadata.dataset["path"]
-        rev = self.metadata.dataset["revision"]
-
-        for lang in self.dataset:
-            if isinstance(self.dataset[lang], Dataset):
-                train = load_dataset(path, lang, revision=rev, split="train")
-                self.dataset[lang] = DatasetDict(
-                    {"train": train, "test": self.dataset[lang]}
-                )
-            for split in self.dataset[lang]:
-                cols = self.dataset[lang][split].column_names
-                if "text" not in cols or "label" not in cols:
-                    raise ValueError(
-                        f"{lang}/{split}: expected canonical columns "
-                        f"{{text, label}}, got {cols}."
-                    )
