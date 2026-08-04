@@ -12,14 +12,17 @@ from .code_rag import (
 from .code_search_net_cc_retrieval import CodeSearchNetCCRetrieval
 from .code_search_net_retrieval import CodeSearchNetRetrieval
 from .code_trans_ocean_contest_retrieval import CodeTransOceanContestRetrieval
-from .code_trans_ocean_dl_retrieval import CodeTransOceanDLRetrieval
+from .code_trans_ocean_dl_retrieval import (
+    CodeTransOceanDLRetrieval,
+    CodeTransOceanDLRetrievalv2,
+)
 from .coir_code_search_net_retrieval import COIRCodeSearchNetRetrieval
 from .coreb_retrieval import (
     CorebC2CRetrieval,
     CorebC2TRetrieval,
     CorebT2CRetrieval,
 )
-from .cos_qa_retrieval import CosQARetrieval
+from .cos_qa_retrieval import CosQARetrieval, CosQARetrievalv2
 from .ds1000_retrieval import DS1000Retrieval
 from .fresh_stack_retrieval import FreshStackRetrieval
 from .human_eval_retrieval import HumanEvalRetrieval
@@ -45,10 +48,12 @@ __all__ = [
     "CodeSearchNetRetrieval",
     "CodeTransOceanContestRetrieval",
     "CodeTransOceanDLRetrieval",
+    "CodeTransOceanDLRetrievalv2",
     "CorebC2CRetrieval",
     "CorebC2TRetrieval",
     "CorebT2CRetrieval",
     "CosQARetrieval",
+    "CosQARetrievalv2",
     "DS1000Retrieval",
     "FreshStackRetrieval",
     "HumanEvalRetrieval",
