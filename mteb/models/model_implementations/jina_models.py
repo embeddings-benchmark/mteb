@@ -422,7 +422,8 @@ class JinaV4Wrapper(AbsEncoder):
         self,
         model: str,
         revision: str | None = None,
-        device: str = "cuda",
+        device: str | None = None,
+        device_map: str | None = None,
         torch_dtype=torch.bfloat16,
         attn_implementation="sdpa",
         trust_remote_code: bool = True,
@@ -430,6 +431,16 @@ class JinaV4Wrapper(AbsEncoder):
         vector_type: Literal[SUPPORTED_VECTOR_TYPES] = "single_vector",
         **kwargs,
     ) -> None:
+        device = device_map or device
+
+        self.device = device or (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
+
         from transformers import AutoModel
 
         if vector_type not in SUPPORTED_VECTOR_TYPES:
@@ -439,7 +450,7 @@ class JinaV4Wrapper(AbsEncoder):
 
         self.model = AutoModel.from_pretrained(
             model,
-            device_map=device,
+            device_map=self.device,
             trust_remote_code=trust_remote_code,
             torch_dtype=torch_dtype,
             attn_implementation=attn_implementation,
