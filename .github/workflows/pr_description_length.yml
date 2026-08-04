@@ -35,5 +35,3 @@ jobs:
           See our [contributing guidelines](https://github.com/embeddings-benchmark/mteb/blob/main/docs/CONTRIBUTING.md#pull-requests) for details on what a good PR description should contain.
           EOF
           )"
-
-          gh pr close "$PR_NUMBER" --repo "$REPO"
