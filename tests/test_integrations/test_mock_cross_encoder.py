@@ -2,7 +2,7 @@ import pytest
 
 import mteb
 from mteb.abstasks import AbsTask
-from tests.mock_tasks import (
+from mteb.mocks.mock_tasks import (
     MockInstructionReranking,
     MockMultilingualInstructionReranking,
     MockMultilingualRerankingTask,
