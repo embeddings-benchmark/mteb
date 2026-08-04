@@ -1,7 +1,7 @@
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks._statistics_calculation import calculate_pair_modality_statistics
-from tests.mock_tasks import MockMultilingualSTSTask, MockSTSTask
+from mteb.mocks import MockMultilingualSTSTask, MockSTSTask
 
 
 def test_pair_statistics_remain_order_sensitive_by_default() -> None:
