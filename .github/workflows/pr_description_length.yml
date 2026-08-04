@@ -1,0 +1,39 @@
+name: Check PR description length
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  check-description-length:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      MAX_LENGTH: 2000
+    steps:
+      - name: Check description length and close if too long
+        run: |
+          length=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json body --jq '.body | length')
+          echo "Description length: $length"
+
+          if [ "$length" -le "$MAX_LENGTH" ]; then
+            echo "Description within limit, nothing to do."
+            exit 0
+          fi
+
+          gh pr comment "$PR_NUMBER" --repo "$REPO" --body "$(cat <<EOF
+          This pull request description is $length characters long, which exceeds the $MAX_LENGTH character limit.
+
+          This is usually a sign that the description was auto-generated or copy-pasted rather than written for reviewers. Please open a new PR with a concise, human-written description.
+
+          See our [contributing guidelines](https://github.com/embeddings-benchmark/mteb/blob/main/docs/CONTRIBUTING.md#pull-requests) for details on what a good PR description should contain.
+          EOF
+          )"
+
+          gh pr close "$PR_NUMBER" --repo "$REPO"

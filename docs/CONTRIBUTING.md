@@ -58,6 +58,10 @@ make typecheck
 This command is equivalent to the one run during CI. It will use mypy to check for issues with type declarations.
 
 
+## Pull Requests
+
+When opening a pull request, please keep the description concise and focused on what reviewers need to know: what changed, why, and any relevant context (e.g. linked issues, benchmark numbers, breaking changes). PR descriptions are limited to 2,000 characters — long, auto-generated, or copy-pasted descriptions are usually a sign that the PR should be split up or the summary trimmed down. PRs that exceed this limit will be automatically closed; please open a new PR with a shorter description instead.
+
 ## Semantic Versioning and Releases
 MTEB follows [semantic versioning](https://semver.org/). This means that the version number of the package is composed of three numbers: `MAJOR.MINOR.PATCH`. This allows us to use existing tools to manage the versioning of the package automatically. For maintainers (and contributors), this means that commits with the following prefixes will automatically trigger a version bump:
 
