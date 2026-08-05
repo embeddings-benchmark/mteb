@@ -160,3 +160,44 @@ class TestRetrievalEvaluator:
         aucs = ["nAUC_NDCG@3_max", "nAUC_NDCG@3_std", "nAUC_NDCG@3_diff1"]
         for auc in aucs:
             assert naucs[auc] == pytest.approx(expected_naucs[auc], TOL)
+
+    def test_mrr_is_independent_of_result_insertion_order(self):
+        """MRR must not depend on the order documents were inserted into `results`.
+
+        Regression test for a constant scorer reaching mrr_at_10 = 1.0 on
+        WebLINXCandidatesReranking, which lists the relevant candidate first.
+        """
+        relevant_docs = {"0": {"d_pos": 1}}
+        tied = {"d_pos": 0.5, "d_x": 0.5, "d_y": 0.5}
+        reversed_tied = dict(reversed(list(tied.items())))
+
+        mrr_pos_first = self.evaluator.evaluate(relevant_docs, {"0": tied}, [1, 10]).mrr
+        mrr_pos_last = self.evaluator.evaluate(
+            relevant_docs, {"0": reversed_tied}, [1, 10]
+        ).mrr
+
+        assert mrr_pos_first == mrr_pos_last
+
+    @pytest.mark.parametrize(
+        "results",
+        [
+            {"0": {"d_pos": 0.5, "d_x": 0.5, "d_y": 0.5}},
+            {"0": {"d_y": 0.5, "d_x": 0.5, "d_pos": 0.5}},
+            {"0": {"a_pos": 1.0, "b_x": 1.0, "c_y": 0.2}},
+            {"0": {"z_pos": 1.0, "b_x": 1.0, "c_y": 0.2}},
+        ],
+    )
+    def test_mrr_at_1_matches_hit_rate_at_1_under_ties(self, results):
+        """MRR@1 and HitRate@1 measure the same event, so they must agree.
+
+        HitRate comes from pytrec_eval while MRR is computed separately, so any
+        divergence means the two disagree on how tied scores are ranked.
+        """
+        doc_ids = next(iter(results.values())).keys()
+        relevant_docs = {
+            "0": {doc_id: int(doc_id.split("_")[-1] == "pos") for doc_id in doc_ids}
+        }
+
+        result = self.evaluator.evaluate(relevant_docs, results, [1, 10])
+
+        assert result.mrr["MRR@1"] == result.hit_rate["HitRate@1"]

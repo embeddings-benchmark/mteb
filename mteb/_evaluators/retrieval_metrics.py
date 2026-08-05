@@ -22,6 +22,18 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def rank_documents(doc_scores: Mapping[str, float]) -> list[tuple[str, float]]:
+    """Rank documents by descending score, breaking ties by descending document id.
+
+    The tie-breaking policy matches `pytrec_eval` (i.e. `trec_eval`), which every other
+    retrieval metric is computed with. A plain score sort would instead be resolved by
+    Python's stable `sorted`, making the metric depend on the order documents happen to
+    be inserted into `results` - e.g. a model emitting a constant score would score
+    perfectly on a task that lists the relevant candidate first.
+    """
+    return sorted(doc_scores.items(), key=lambda item: (item[1], item[0]), reverse=True)
+
+
 def mrr(
     qrels: RelevantDocumentsType,
     results: Mapping[str, Mapping[str, float]],
@@ -32,9 +44,7 @@ def mrr(
     k_max, top_hits = max(k_values), {}
 
     for query_id, doc_scores in results.items():
-        top_hits[query_id] = sorted(
-            doc_scores.items(), key=lambda item: item[1], reverse=True
-        )[0:k_max]
+        top_hits[query_id] = rank_documents(doc_scores)[0:k_max]
 
     for query_id in top_hits:
         query_relevant_docs = {
@@ -60,9 +70,7 @@ def recall_cap(
     k_max = max(k_values)
 
     for query_id, doc_scores in results.items():
-        top_hits = sorted(doc_scores.items(), key=lambda item: item[1], reverse=True)[
-            0:k_max
-        ]
+        top_hits = rank_documents(doc_scores)[0:k_max]
         query_relevant_docs = [
             doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0
         ]
@@ -92,9 +100,7 @@ def hole(
     k_max = max(k_values)
 
     for _, scores in results.items():
-        top_hits = sorted(scores.items(), key=lambda item: item[1], reverse=True)[
-            0:k_max
-        ]
+        top_hits = rank_documents(scores)[0:k_max]
         for k in k_values:
             hole_docs = [
                 row[0] for row in top_hits[0:k] if row[0] not in annotated_corpus
@@ -113,12 +119,7 @@ def top_k_accuracy(
     k_max, top_hits = max(k_values), {}
 
     for query_id, doc_scores in results.items():
-        top_hits[query_id] = [
-            item[0]
-            for item in sorted(
-                doc_scores.items(), key=lambda item: item[1], reverse=True
-            )[0:k_max]
-        ]
+        top_hits[query_id] = [item[0] for item in rank_documents(doc_scores)[0:k_max]]
 
     for query_id in top_hits:
         query_relevant_docs = {
@@ -135,8 +136,7 @@ def top_k_accuracy(
 def get_rank_from_dict(
     dict_of_results: dict[str, float], doc_id: str
 ) -> tuple[int, float]:
-    tuple_of_id_score = dict_of_results.items()
-    sorted_by_score = sorted(tuple_of_id_score, key=lambda x: x[1], reverse=True)
+    sorted_by_score = rank_documents(dict_of_results)
     for i, (id, score) in enumerate(sorted_by_score):
         if id == doc_id:
             return i + 1, score
@@ -575,7 +575,7 @@ def calculate_retrieval_scores(  # noqa: PLR0914
 ) -> RetrievalEvaluationResult:
     if skip_first_result:
         results = {
-            qid: dict(sorted(doc_scores.items(), key=lambda x: x[1], reverse=True)[1:])
+            qid: dict(rank_documents(doc_scores)[1:])
             for qid, doc_scores in results.items()
         }
 
