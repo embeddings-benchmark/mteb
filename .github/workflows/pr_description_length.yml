@@ -35,3 +35,11 @@ jobs:
           See our [contributing guidelines](https://github.com/embeddings-benchmark/mteb/blob/main/docs/CONTRIBUTING.md#pull-requests) for details on what a good PR description should contain.
           EOF
           )"
+
+          has_label=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json labels --jq '.labels[].name | select(. == "long PR desc")')
+          if [ -z "$has_label" ]; then
+            gh pr edit "$PR_NUMBER" --repo "$REPO" --add-label "long PR desc"
+            echo 'Added label: long PR desc'
+          else
+            echo 'Label already present: long PR desc'
+          fi
