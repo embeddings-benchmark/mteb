@@ -21,7 +21,13 @@ nemotron_3_embed_8b_legal = ModelMeta(
     reference="https://huggingface.co/minetta/nemotron-3-embed-8b-legal",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
+    # Fine-tuning sources: ECtHR case law, GDPR enforcement decisions, CaseHOLD (US case
+    # holdings), SEC EDGAR agreements, public terms-of-service text, Australian tax
+    # guidance and UK legislation. None of these is an MTEB dataset, so this set is
+    # empty; the base model's declared training data is inherited via adapted_from.
+    # Per-document containment audit of every training input against the evaluated
+    # corpora: https://huggingface.co/minetta/nemotron-3-embed-8b-legal/blob/main/CONTAMINATION.md
+    training_datasets=set(),
     adapted_from="nvidia/Nemotron-3-Embed-8B-BF16",
     superseded_by=None,
     modalities=["text"],
