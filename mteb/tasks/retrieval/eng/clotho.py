@@ -211,9 +211,7 @@ class ClothoT2ARetrievalV2(AbsTaskRetrieval):
         description=(
             "An audio captioning datasetst containing audio clips from the "
             "Freesound platform and their corresponding captions. Version 2 "
-            "strips whitespace and filters out empty caption segments "
-            "produced by splitting captions on '.', which previously "
-            "created empty-string queries with their own qrel entries."
+            "removes empty-string queries. For more information see [#5062](https://github.com/embeddings-benchmark/mteb/pull/5062)"
         ),
         reference="https://github.com/audio-captioning/clotho-dataset",
         dataset={
