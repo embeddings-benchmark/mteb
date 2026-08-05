@@ -21,7 +21,6 @@ from mteb.types.statistics import (
     VideoStatistics,
 )
 
-# DO NOT ADD TO THIS DICT WITHOUT VERIFYING THE TASK ACTUALLY FAILS THAT CHECK.
 KNOWN_ISSUES: dict[str, list[str]] = {
     "short_text": [
         "ARCChallenge",
