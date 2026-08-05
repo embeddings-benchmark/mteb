@@ -918,13 +918,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
 
 
 def _task_known_issues() -> dict[str, set[str]]:
-    """Reverse index (task name -> set of exempted check *kinds*). A task can
-    legitimately need more than one exemption (e.g. both "short_text" and
-    "duplicate_text"), so this doesn't collapse to a single kind per task --
-    only a check whose kind is recorded here for that task is suppressed
-    (kind-level, not per-field/per-hf_subset); any other check kind failing
-    on the same task still surfaces as a real error.
-    """
     task_known_issues: dict[str, set[str]] = {}
     for kind, names in KNOWN_ISSUES.items():
         for name in names:
@@ -950,10 +943,6 @@ _DIMENSION_OUTLIER_RATIO = 20
 # Outlier checks are reported as warnings, not failures
 _WARNING_CHECK_KINDS = {"long_text", "long_audio", "long_video", "large_video_frame"}
 
-# Outlier checks above are reported as pytest warnings, not failures, and so
-# should never appear as a KNOWN_ISSUES key -- there's nothing to exempt
-# since they can't fail the test. Checked once here rather than relying on it
-# staying true by convention.
 assert not (set(KNOWN_ISSUES) & _WARNING_CHECK_KINDS), (
     "A warning-kind check must not appear in KNOWN_ISSUES (it can never fail "
     "the test, so listing it would make the stale-entry check permanently fire)."
@@ -981,15 +970,6 @@ def _is_duplicate_check_exempt(field: str) -> bool:
 
 
 def _is_impossible_count_exempt(field: str) -> bool:
-    """Unlike `_is_duplicate_check_exempt`, the *1_statistics/*2_statistics
-    suffix does NOT exempt a field here: a paired column still has exactly
-    `expected_count` rows, so `unique_texts` exceeding that is impossible
-    regardless of pairing -- it signals a genuine denominator/stats bug, not
-    "duplicates are normal here". Only fields with a *known-wrong* expected
-    count (`_DUPLICATE_CHECK_EXEMPT_FIELDS`) are exempt from this direction
-    too, since for those `expected_count` was never the right denominator to
-    begin with.
-    """
     return field in _DUPLICATE_CHECK_EXEMPT_FIELDS
 
 
@@ -1272,13 +1252,6 @@ def _field_quality(
                 f"{name} ({split}) contains {modality} duplicates in {field} ({expected_count=}, unique_{modality}s={unique_count})",
             )
         )
-    # A field can have at most `expected_count` unique values -- it has
-    # exactly that many rows. Exceeding it isn't extra duplication (the
-    # opposite, really); it means `expected_count`'s denominator doesn't
-    # actually match the field (e.g. a stats-generation bug, or a field that
-    # packs more than one item per row and needs a different denominator
-    # than the one available). See `_is_impossible_count_exempt` for why its
-    # exemption differs from `_is_duplicate_check_exempt`.
     elif (
         unique_count is not None
         and expected_count is not None
@@ -1434,18 +1407,6 @@ def _task_quality(task: AbsTask) -> list[tuple[str, str]]:
 
 
 def test_dataset_quality() -> None:
-    """Bad tasks are still run, not skipped: exemption is scoped to the check
-    *kind* (the `check_id` prefix before `:field`) listed for that task in
-    `KNOWN_ISSUES`, checked below rather than just excluding the whole task,
-    so that:
-      - a dataset fix that makes a specific check kind stop firing is caught
-        (a stale exemption that should be removed from `KNOWN_ISSUES`), and
-      - a *different*, unrelated check kind newly failing on an
-        already-exempted task is NOT masked -- only the specific kind it was
-        added for is. (Note this is kind-level, not per-field: an exemption
-        for e.g. "short_text" covers that check on every field and hf_subset
-        of the task, not just the one instance that motivated adding it.)
-    """
     tasks = get_tasks(
         exclude_superseded=False, exclude_aggregate=True, exclude_beta=False
     )
@@ -1461,11 +1422,6 @@ def test_dataset_quality() -> None:
 
         for check_id, message in _task_quality(task):
             kind = check_id.split(":", 1)[0]
-            # `seen_check_ids` must be updated before the warning branch:
-            # otherwise a (currently nonexistent, but not enforced) warning
-            # kind listed in KNOWN_ISSUES would always be reported stale even
-            # while it's actively firing, since it would never reach the line
-            # below that records it as "seen".
             seen_check_ids.add(kind)
             if kind in _WARNING_CHECK_KINDS:
                 findings.append(message)
