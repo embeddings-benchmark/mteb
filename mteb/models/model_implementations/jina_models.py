@@ -537,7 +537,15 @@ class JinaV4Wrapper(AbsEncoder):
                     for text_emb, image_emb in zip(text_embeddings, image_embeddings)
                 ]
             else:
-                embeddings = text_embeddings + image_embeddings
+                # `encode_text`/`encode_image` return a list with one vector per
+                # input, so the two lists must be fused per example rather than
+                # concatenated - otherwise one input yields two embeddings.
+                embeddings = torch.nn.functional.normalize(
+                    torch.stack(list(text_embeddings))
+                    + torch.stack(list(image_embeddings)),
+                    p=2,
+                    dim=-1,
+                )
         elif text_embeddings is not None:
             embeddings = text_embeddings
         elif image_embeddings is not None:
