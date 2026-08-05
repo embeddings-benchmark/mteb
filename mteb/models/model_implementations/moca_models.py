@@ -33,7 +33,7 @@ MOCA_CITATION = """@article{chen2025moca,
 _IMAGE_TOKEN = "<|vision_start|><|image_pad|><|vision_end|>"  # noqa: S105
 
 # Default prompts taken from the MoCa model card and evaluation code.
-_IMAGE_PROMPT = "Represent the given image."
+_IMAGE_PROMPT = "Represent the given document image."
 _IMAGE_TEXT_PROMPT = "Represent the given image with the following question: {text}"
 
 # Image resolution bounds used in MoCa's ViDoRe evaluation
@@ -238,12 +238,26 @@ class MoCaWrapper(AbsEncoder):
         return torch.cat(all_embeddings, dim=0)
 
 
-moca_training_datasets = set(
-    # CPT: DCLM, PixelProse, MAmmoTH-VL-Instruct, DocMatix, VisRAG, ColPali train, MMEB train
-    # CL: VisRAG, ColPali train, MMEB train, mmE5, E5
-    # Not expressible as mteb task names, but note MMEB-train overlaps several MIEB
-    # tasks, so MIEB numbers for this model should be read as in-domain.
-)
+# MMEB-train appears in both the CPT and CL mixtures and overlaps the mteb tasks below,
+# so scores on those should be read as in-domain. The other training corpora (DCLM,
+# PixelProse, MAmmoTH-VL-Instruct, DocMatix, VisRAG, the ColPali training set, mmE5, E5)
+# have no mteb equivalent.
+moca_training_datasets = {
+    "HatefulMemesI2TRetrieval",
+    "HatefulMemesT2IRetrieval",
+    "SUN397",
+    "SUN397ZeroShot",
+    "VOC2007",
+    "OKVQAIT2TRetrieval",
+    "CIRRIT2IRetrieval",
+    "NIGHTSI2IRetrieval",
+    "WebQAT2ITRetrieval",
+    "WebQAT2TRetrieval",
+    "VisualNewsI2TRetrieval",
+    "VisualNewsT2IRetrieval",
+    "MSCOCOI2TRetrieval",
+    "MSCOCOT2IRetrieval",
+}
 
 moca_qwen25vl_3b = ModelMeta(
     loader=MoCaWrapper,
@@ -270,5 +284,5 @@ moca_qwen25vl_3b = ModelMeta(
     training_datasets=moca_training_datasets,
     adapted_from="Qwen/Qwen2.5-VL-3B-Instruct",
     citation=MOCA_CITATION,
-    extra_requirements_groups=["transformers-v4"],
+    extra_requirements_groups=["moca"],
 )
