@@ -74,11 +74,10 @@ class ClothoA2TRetrievalV2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ClothoA2TRetrieval.v2",
         description=(
-            "An audio captioning datasetst containing audio clips and their "
-            "corresponding captions. Version 2 strips whitespace and filters "
-            "out empty caption segments produced by splitting captions on "
-            "'.', which previously created empty-string documents with their "
-            "own qrel entries."
+            "An audio captioning dataset containing audio clips and their "
+            "corresponding captions. Version 2 removes empty-string "
+            "documents. For more information see "
+            "[#5062](https://github.com/embeddings-benchmark/mteb/pull/5062)."
         ),
         reference="https://github.com/audio-captioning/clotho-dataset",
         dataset={
@@ -209,7 +208,7 @@ class ClothoT2ARetrievalV2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ClothoT2ARetrieval.v2",
         description=(
-            "An audio captioning datasetst containing audio clips from the "
+            "An audio captioning dataset containing audio clips from the "
             "Freesound platform and their corresponding captions. Version 2 "
             "removes empty-string queries. For more information see [#5062](https://github.com/embeddings-benchmark/mteb/pull/5062)"
         ),
