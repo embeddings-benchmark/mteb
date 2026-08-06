@@ -108,20 +108,7 @@ def _batch_to_modality_dicts(
 def _resolve_model_prompts(
     model: Any, model_prompts: dict[str, str] | None
 ) -> dict[str, str] | None:
-    """Merge `model_prompts` with a sentence-transformers-style `model`'s built-in prompts.
-
-    If only one of the two is given, that one is used as-is. If both are given, `model_prompts`
-    takes priority and is written back onto `model.prompts` (with a warning). The merged result is
-    then validated, dropping (with a warning) any keys that aren't a valid task name/type or prompt
-    type.
-
-    Args:
-        model: The sentence-transformers-style model whose built-in `.prompts` (if any) to merge with.
-        model_prompts: A dictionary mapping task names to prompt names, as passed to the wrapper.
-
-    Returns:
-        The validated, merged prompts dictionary (or None if there are no prompts at all).
-    """
+    """Merge `model_prompts` with `model`'s built-in prompts (explicit `model_prompts` wins) and validate the result."""
     built_in_prompts = getattr(model, "prompts", None)
     if built_in_prompts and not model_prompts:
         model_prompts = built_in_prompts
@@ -147,16 +134,7 @@ def _resolve_prompt(
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None,
 ) -> str | None:
-    """Look up the prompt text for `task_metadata`/`prompt_type` in `model_prompts`, logging the outcome.
-
-    Args:
-        model_prompts: A dictionary mapping task names to prompt names (see `_resolve_model_prompts`).
-        task_metadata: The metadata of the task being encoded.
-        prompt_type: The name type of prompt (query or document).
-
-    Returns:
-        The prompt text to use, or None if no matching prompt was found.
-    """
+    """Look up the prompt text for `task_metadata`/`prompt_type` in `model_prompts`, logging the outcome."""
     prompt = None
     prompt_name = None
     if model_prompts is not None:
@@ -178,17 +156,7 @@ def _select_encode_function(
     *,
     has_query_encode: bool = True,
 ) -> Callable[..., Any]:
-    """Pick `model.encode_query`/`model.encode_document`/`model.encode` based on `prompt_type`.
-
-    Args:
-        model: The sentence-transformers-style model to pick the encode method from.
-        prompt_type: The name type of prompt (query or document).
-        has_query_encode: Whether `model` supports `encode_query`/`encode_document` (added in
-            sentence-transformers 5.0). Falls back to `model.encode` when False.
-
-    Returns:
-        The bound encode method to use.
-    """
+    """Pick `model.encode_query`/`model.encode_document`/`model.encode` based on `prompt_type`."""
     if prompt_type and has_query_encode:
         if prompt_type == PromptType.query:
             return model.encode_query  # type: ignore[no-any-return]
@@ -211,24 +179,10 @@ def _concatenate_sparse_batches(batches: list[Any]) -> Any:
 
 
 def _is_sparse_compatible_task(task_metadata: TaskMetadata) -> bool:
-    """Whether `task_metadata`'s evaluator only calls `model.similarity(...)` on the raw embeddings.
+    """Whether this task's evaluator can work with sparse tensors, rather than needing dense ones.
 
-    Such evaluators never index into the embeddings or hand them to sklearn/numpy directly, so they
-    can consume the sparse tensors a SparseEncoder produces natively. Every other task needs dense
-    embeddings: torch sparse COO tensors support neither generic indexing (e.g. Classification's
-    `embeddings[idxs]`) nor `numpy.asarray()` conversion (e.g. Clustering handing embeddings to
-    sklearn's `KMeans`).
-
-    Gated on `simplified_task_type` rather than the raw, modality-specific `type` so that e.g. a
-    multimodal sparse encoder's `Any2AnyRetrieval`/`VisionCentricQA` tasks are covered the same way
-    as plain text `Retrieval`, without having to enumerate every modality-specific retrieval type.
-
-    Reranking-family task types ("Reranking", "InstructionReranking", "AudioReranking") share the
-    "retrieval" `simplified_task_type` with plain Retrieval, but their search path indexes into a
-    cached embeddings tensor by position (see search_wrappers.py's `_rerank_documents`, called for
-    a `top_ranked` candidate list) rather than only ever computing a single query-vs-corpus
-    similarity matrix. Sparse COO tensors don't support that indexing either (confirmed on both CPU
-    and MPS backends), so these are excluded despite sharing the "retrieval" grouping.
+    True for retrieval tasks (just a similarity matrix), excluding reranking (indexes into a
+    corpus embeddings tensor, which sparse tensors don't support).
     """
     return (
         task_metadata.simplified_task_type == "retrieval"
@@ -237,12 +191,7 @@ def _is_sparse_compatible_task(task_metadata: TaskMetadata) -> bool:
 
 
 def _postprocess_sparse_embeddings(embeddings: Any) -> Any:
-    """Densify a batch's embeddings if it's a sparse torch tensor, then move to CPU float32.
-
-    `.to_dense()` keeps the tensor on its original device, but most non-retrieval evaluators
-    (sklearn, numpy) can only consume CPU tensors/arrays, so this also applies the same CPU/float32
-    normalization as `_postprocess_dense_embeddings`.
-    """
+    """Densify a batch's embeddings if it's a sparse torch tensor, then move to CPU float32."""
     if isinstance(embeddings, torch.Tensor) and embeddings.is_sparse:
         embeddings = embeddings.to_dense()
     return _postprocess_dense_embeddings(embeddings)
@@ -261,24 +210,9 @@ def _encode_batches(
 ) -> Array:
     """Encode `inputs` with `encode_function`, handling the multimodal vs text-only cases.
 
-    For multimodal inputs (as detected by `_setup_modality_collator`), each batch is converted to
-    per-sample modality dicts and encoded separately; the per-batch outputs are combined with
-    `concatenate_batches` (default: `np.concatenate`), after each one is first passed through
-    `postprocess_batch` (default: identity). For text-only inputs, all sentences are collected up
-    front and encoded in a single call.
-
-    Args:
-        inputs: The inputs to encode.
-        is_multimodal: Whether `inputs` exposes image/audio/video features (see `_setup_modality_collator`).
-        encode_function: The (bound) encode method to call, e.g. `model.encode_query`.
-        prompt: The prompt text to pass to `encode_function`, if any.
-        modalities: The modalities the model supports, used to build per-sample dicts for multimodal inputs.
-        postprocess_batch: Optional hook applied to each batch's raw output.
-        concatenate_batches: Optional hook used to combine per-batch outputs for multimodal inputs.
-        **kwargs: Additional arguments to pass to `encode_function`.
-
-    Returns:
-        The encoded inputs.
+    Multimodal inputs are encoded batch by batch as per-sample modality dicts and combined via
+    `concatenate_batches` (default `np.concatenate`); text-only inputs are collected up front and
+    encoded in one call. `postprocess_batch` (default identity) is applied to each batch's output.
     """
     postprocess = postprocess_batch or (lambda embeddings: embeddings)
     concatenate = concatenate_batches or (
@@ -717,9 +651,8 @@ class SparseEncoderWrapper(AbsEncoder):
             **kwargs: Additional arguments to pass to the encoder.
 
         Returns:
-            The encoded inputs. Kept as sparse tensors for task types whose evaluators only need
-            `similarity()` (see `_is_sparse_compatible_task`); densified for every other task type,
-            since most evaluators need to index into or numpy-convert the embeddings.
+            The encoded inputs, as sparse tensors where the task supports it (see
+            `_is_sparse_compatible_task`), densified otherwise.
         """
         prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
 
