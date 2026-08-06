@@ -18,6 +18,43 @@ if TYPE_CHECKING:
 DEFAULT_INSTRUCTION = "Retrieve images or text relevant to the user's query."
 
 
+QWEN3_VL_LANGUAGES = [
+    "eng-Latn",
+    "cmn-Hans",
+    "spa-Latn",
+    "fra-Latn",
+    "ara-Arab",
+    "por-Latn",
+    "rus-Cyrl",
+    "urd-Arab",
+    "ind-Latn",
+    "deu-Latn",
+    "jpn-Jpan",
+    "vie-Latn",
+    "tur-Latn",
+    "kor-Hang",
+    "fas-Arab",
+    "ita-Latn",
+    "tha-Thai",
+    "pol-Latn",
+    "ukr-Cyrl",
+    "uzb-Latn",
+    "ron-Latn",
+    "nld-Latn",
+    "kaz-Cyrl",
+    "ell-Grek",
+    "ces-Latn",
+    "swe-Latn",
+    "srp-Cyrl",
+    "heb-Hebr",
+    "dan-Latn",
+    "fin-Latn",
+    "nor-Latn",
+    "slv-Latn",
+    "gle-Latn",
+]
+
+
 class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
     """Wrapper for the Qwen3-VL-Reranker series.
 
@@ -121,7 +158,7 @@ qwen3_vl_reranker_2b = ModelMeta(
     loader=Qwen3VLRerankerWrapper,
     name="Qwen/Qwen3-VL-Reranker-2B",
     model_type=["cross-encoder"],
-    languages=None,  # supports 30+ languages
+    languages=QWEN3_VL_LANGUAGES,
     open_weights=True,
     revision="4bd860ac4f15ad1897a214615cccc700f8f71818",
     release_date="2026-01-07",
@@ -147,7 +184,7 @@ qwen3_vl_reranker_8b = ModelMeta(
     loader=Qwen3VLRerankerWrapper,
     name="Qwen/Qwen3-VL-Reranker-8B",
     model_type=["cross-encoder"],
-    languages=None,  # supports 30+ languages
+    languages=QWEN3_VL_LANGUAGES,
     open_weights=True,
     revision="b212dc8c91a8164aef1ea2de9c1a867611e75c04",
     release_date="2026-01-07",
