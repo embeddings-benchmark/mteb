@@ -195,6 +195,7 @@ class AbsTaskSTS(AbsTask):
                 else self.dataset[split]
             )
         )
+
         if hf_subset:
             score = self.dataset[hf_subset][split]["score"]
             n = len(score)
@@ -235,6 +236,7 @@ class AbsTaskSTS(AbsTask):
             _load_col,
             n,
             max_workers=num_proc,
+            symmetric=True,
         )
         labels_statistics = calculate_score_statistics(score)
 

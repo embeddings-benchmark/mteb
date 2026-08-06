@@ -245,6 +245,13 @@ fusion_embedding_1_2b_preview = ModelMeta(
         # AudioSet-SL / WavCaps captions over strongly-labelled AudioSet clips
         "AudioSet",
         "AudioSetMini",
+        # Common Voice: corpus samples the `validated` pool the test split is drawn
+        # from; measured overlap 22% of eval clips / 47% of eval sentences (see the
+        # model card's evaluation-integrity section and mteb#5096)
+        "CommonVoiceMini21T2ARetrieval",
+        # CommonLanguage derives from Common Voice; overlap unaudited, declared
+        # conservatively
+        "CommonLanguageAgeDetection",
         # LAION-FreeSound (not in MTEB)
         # Clotho / ESC-50 / UrbanSound8K / VGGSound eval clips excluded from training
         # by id blacklist at ingestion (see the model card)
@@ -302,6 +309,13 @@ fusion_embedding_2_2b_preview = ModelMeta(
         # AudioSet-SL / WavCaps captions over strongly-labelled AudioSet clips
         "AudioSet",
         "AudioSetMini",
+        # Common Voice: corpus samples the `validated` pool the test split is drawn
+        # from; measured overlap 22% of eval clips / 47% of eval sentences (see the
+        # model card's evaluation-integrity section and mteb#5096)
+        "CommonVoiceMini21T2ARetrieval",
+        # CommonLanguage derives from Common Voice; overlap unaudited, declared
+        # conservatively
+        "CommonLanguageAgeDetection",
         # LAION-FreeSound (not in MTEB)
         # Clotho / ESC-50 / UrbanSound8K / VGGSound eval clips excluded from training
         # by id blacklist at ingestion (see the model card)
