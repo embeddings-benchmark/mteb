@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 import torch
 
@@ -207,7 +207,7 @@ def max_sim(a: Array, b: Array, batch_size: int = 128) -> torch.Tensor:
             col_chunks.append(scores.max(axis=-1).values.sum(axis=-1))  # type: ignore[call-overload]
         row_chunks.append(torch.cat(col_chunks, dim=1))
 
-    return cast("torch.Tensor", torch.cat(row_chunks, dim=0))
+    return torch.cat(row_chunks, dim=0)
 
 
 # https://github.com/lightonai/pylate/blob/2d094a724866d6e15701781528368438081c0157/pylate/scores/scores.py#L67C1-L122C38
