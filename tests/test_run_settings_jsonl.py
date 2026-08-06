@@ -39,8 +39,48 @@ def test_save_to_cache_replaces_existing_run_settings_entry(tmp_path):
     assert len(entries) == 1
     assert entries[0]["task"] == "STS12"
     assert entries[0]["split"] == "test"
-    assert entries[0]["subset"] == "en"
+    assert entries[0]["subsets"] == ["en"]
     assert entries[0]["encode_kwargs"]["batch_size"] == 32
+
+
+def test_save_to_cache_combines_subsets_with_same_settings(tmp_path):
+    cache = ResultCache(cache_path=tmp_path)
+    for subset in ["en", "de"]:
+        cache.save_to_cache(
+            TaskResult.from_task_results(
+                task=mteb.get_task("MassiveIntentClassification"),
+                scores={"test": {subset: {"main_score": 0.5}}},
+                evaluation_time=100,
+            ),
+            "model",
+            model_revision="rev1",
+            encode_kwargs={"batch_size": 16},
+        )
+
+    run_settings_path = tmp_path / "results" / "model" / "rev1" / "run_settings.jsonl"
+    entries = _read_jsonl(run_settings_path)
+
+    assert len(entries) == 1
+    assert entries[0]["subsets"] == ["de", "en"]
+
+    # rerunning a single subset with other settings splits it out again
+    cache.save_to_cache(
+        TaskResult.from_task_results(
+            task=mteb.get_task("MassiveIntentClassification"),
+            scores={"test": {"en": {"main_score": 0.5}}},
+            evaluation_time=100,
+        ),
+        "model",
+        model_revision="rev1",
+        encode_kwargs={"batch_size": 32},
+    )
+    entries = _read_jsonl(run_settings_path)
+
+    assert len(entries) == 2
+    assert entries[0]["subsets"] == ["de"]
+    assert entries[0]["encode_kwargs"]["batch_size"] == 16
+    assert entries[1]["subsets"] == ["en"]
+    assert entries[1]["encode_kwargs"]["batch_size"] == 32
 
 
 def test_save_to_cache_serializes_non_json_serializable_encode_kwargs(tmp_path):

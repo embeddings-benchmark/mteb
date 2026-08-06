@@ -1099,22 +1099,53 @@ def _read_run_settings_from_file(path: Path) -> list[dict[str, Any]]:
     return run_settings
 
 
-def _write_and_merge_keyed_json(
-    path: Path,
-    entries: list[dict[str, Any]],
-    *,
-    key_fields: tuple[str, str, str] = ("task", "split", "subset"),
-) -> None:
-    """Write entries to `.jsonl`, if it already exist it will merge it, replacing any existing entries with the same key."""
-    existing_entries = _read_run_settings_from_file(path)
-    new_keys = {tuple(entry.get(field) for field in key_fields) for entry in entries}
-    filtered_existing = [
-        entry
-        for entry in existing_entries
-        if tuple(entry.get(field) for field in key_fields) not in new_keys
-    ]
-    all_entries = filtered_existing + entries
+def _split_run_settings_entry(
+    entry: dict[str, Any],
+) -> tuple[dict[str, Any], list[str]]:
+    """Split an entry into its settings (everything but the subsets) and its subsets."""
+    settings = dict(entry)
+    subsets = settings.pop("subsets", None)
+    if subsets is None:
+        # entries written before subsets were combined stored a single "subset"
+        subset = settings.pop("subset", None)
+        subsets = [subset] if subset is not None else []
+    return settings, list(subsets)
+
+
+def _write_and_merge_keyed_json(path: Path, entries: list[dict[str, Any]]) -> None:
+    """Write entries to `.jsonl`, if it already exist it will merge it.
+
+    Entries sharing the same settings (task, split, version, encode_kwargs) are combined into a single row listing all
+    their subsets. Subsets of the new entries are removed from existing entries with the same task and split but
+    different settings.
+    """
+    merged: dict[str, tuple[dict[str, Any], list[str]]] = {}
+
+    def add(entry: dict[str, Any], *, replace: bool) -> None:
+        settings, subsets = _split_run_settings_entry(entry)
+        key = json.dumps(settings, sort_keys=True, default=str)
+        if replace:
+            for other_key, (other_settings, other_subsets) in merged.items():
+                if other_key != key and (
+                    other_settings.get("task"),
+                    other_settings.get("split"),
+                ) == (settings.get("task"), settings.get("split")):
+                    merged[other_key] = (
+                        other_settings,
+                        [s for s in other_subsets if s not in subsets],
+                    )
+        current = merged.setdefault(key, (settings, []))[1]
+        current.extend(s for s in subsets if s not in current)
+
+    for entry in _read_run_settings_from_file(path):
+        add(entry, replace=False)
+    for entry in entries:
+        add(entry, replace=True)
 
     with path.open("w", encoding="utf-8") as f:
-        for entry in all_entries:
-            f.write(json.dumps(entry, default=str) + "\n")
+        for settings, subsets in merged.values():
+            if not subsets:
+                continue
+            f.write(
+                json.dumps({**settings, "subsets": sorted(subsets)}, default=str) + "\n"
+            )
