@@ -102,6 +102,37 @@ _VIDEO_TEXTS = [
     "This is another video of a scene",
 ]
 
+_BASE_TEXT_RELEVANCE_OVERLAP_STATISTICS = {
+    "num_pairs": 2,
+    "min_query_character_ngram_overlap": 0.4090909090909091,
+    "average_query_character_ngram_overlap": 0.4857954545454546,
+    "max_query_character_ngram_overlap": 0.5625,
+}
+_MULTILINGUAL_TEXT_RELEVANCE_OVERLAP_STATISTICS = (
+    _BASE_TEXT_RELEVANCE_OVERLAP_STATISTICS | {"num_pairs": 4}
+)
+_DIALOG_TEXT_RELEVANCE_OVERLAP_STATISTICS = {
+    "num_pairs": 2,
+    "min_query_character_ngram_overlap": 0.015267175572519083,
+    "average_query_character_ngram_overlap": 0.02711410726677902,
+    "max_query_character_ngram_overlap": 0.03896103896103896,
+}
+_INSTRUCTION_TEXT_RELEVANCE_OVERLAP_STATISTICS = {
+    "num_pairs": 2,
+    "min_query_character_ngram_overlap": 0.25,
+    "average_query_character_ngram_overlap": 0.275,
+    "max_query_character_ngram_overlap": 0.3,
+}
+_MULTILINGUAL_INSTRUCTION_TEXT_RELEVANCE_OVERLAP_STATISTICS = (
+    _INSTRUCTION_TEXT_RELEVANCE_OVERLAP_STATISTICS | {"num_pairs": 4}
+)
+_IDENTICAL_TEXT_RELEVANCE_OVERLAP_STATISTICS = {
+    "num_pairs": 2,
+    "min_query_character_ngram_overlap": 1.0,
+    "average_query_character_ngram_overlap": 1.0,
+    "max_query_character_ngram_overlap": 1.0,
+}
+
 
 class MockRetrievalTask(AbsTaskRetrieval):
     _top_k = 2
@@ -138,6 +169,9 @@ class MockRetrievalTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
+            "text_relevance_overlap_statistics": (
+                _BASE_TEXT_RELEVANCE_OVERLAP_STATISTICS
+            ),
             "top_ranked_statistics": None,
         },
         "test": {
@@ -172,6 +206,9 @@ class MockRetrievalTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
+            "text_relevance_overlap_statistics": (
+                _BASE_TEXT_RELEVANCE_OVERLAP_STATISTICS
+            ),
             "top_ranked_statistics": None,
         },
     }
@@ -226,6 +263,9 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
+            "text_relevance_overlap_statistics": (
+                _DIALOG_TEXT_RELEVANCE_OVERLAP_STATISTICS
+            ),
             "top_ranked_statistics": None,
         },
         "test": {
@@ -260,6 +300,9 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
+            "text_relevance_overlap_statistics": (
+                _DIALOG_TEXT_RELEVANCE_OVERLAP_STATISTICS
+            ),
             "top_ranked_statistics": None,
         },
     }
@@ -331,6 +374,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
             },
+            "text_relevance_overlap_statistics": (
+                _MULTILINGUAL_TEXT_RELEVANCE_OVERLAP_STATISTICS
+            ),
             "top_ranked_statistics": None,
             "hf_subset_descriptive_stats": {
                 "eng": {
@@ -365,6 +411,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
+                    "text_relevance_overlap_statistics": (
+                        _BASE_TEXT_RELEVANCE_OVERLAP_STATISTICS
+                    ),
                     "top_ranked_statistics": None,
                 },
                 "fra": {
@@ -399,6 +448,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
+                    "text_relevance_overlap_statistics": (
+                        _BASE_TEXT_RELEVANCE_OVERLAP_STATISTICS
+                    ),
                     "top_ranked_statistics": None,
                 },
             },
@@ -435,6 +487,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
             },
+            "text_relevance_overlap_statistics": (
+                _MULTILINGUAL_TEXT_RELEVANCE_OVERLAP_STATISTICS
+            ),
             "top_ranked_statistics": None,
             "hf_subset_descriptive_stats": {
                 "eng": {
@@ -469,6 +524,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
+                    "text_relevance_overlap_statistics": (
+                        _BASE_TEXT_RELEVANCE_OVERLAP_STATISTICS
+                    ),
                     "top_ranked_statistics": None,
                 },
                 "fra": {
@@ -503,6 +561,9 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
+                    "text_relevance_overlap_statistics": (
+                        _BASE_TEXT_RELEVANCE_OVERLAP_STATISTICS
+                    ),
                     "top_ranked_statistics": None,
                 },
             },
@@ -562,6 +623,9 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
+            "text_relevance_overlap_statistics": (
+                _INSTRUCTION_TEXT_RELEVANCE_OVERLAP_STATISTICS
+            ),
             "top_ranked_statistics": None,
         }
     }
@@ -615,6 +679,9 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
             },
+            "text_relevance_overlap_statistics": (
+                _MULTILINGUAL_INSTRUCTION_TEXT_RELEVANCE_OVERLAP_STATISTICS
+            ),
             "top_ranked_statistics": None,
             "hf_subset_descriptive_stats": {
                 "eng": {
@@ -649,6 +716,9 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
+                    "text_relevance_overlap_statistics": (
+                        _INSTRUCTION_TEXT_RELEVANCE_OVERLAP_STATISTICS
+                    ),
                     "top_ranked_statistics": None,
                 },
                 "fra": {
@@ -683,6 +753,9 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
+                    "text_relevance_overlap_statistics": (
+                        _INSTRUCTION_TEXT_RELEVANCE_OVERLAP_STATISTICS
+                    ),
                     "top_ranked_statistics": None,
                 },
             },
@@ -1920,6 +1993,9 @@ class MockVideoAudioTextRetrievalVAT2T(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
+            "text_relevance_overlap_statistics": (
+                _IDENTICAL_TEXT_RELEVANCE_OVERLAP_STATISTICS
+            ),
             "top_ranked_statistics": None,
         }
     }

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import unicodedata
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any, cast
@@ -15,6 +16,7 @@ from mteb.types.statistics import (
     RelevantDocsStatistics,
     ScoreStatistics,
     SingleInputModalityStatistics,
+    TextRelevanceOverlapStatistics,
     TextStatistics,
     TopRankedStatistics,
     VideoStatistics,
@@ -414,6 +416,49 @@ def calculate_relevant_docs_statistics(
         max_relevant_docs_per_query=max(qrels_lengths),
         unique_relevant_docs=unique_qrels,
     )
+
+
+def calculate_text_relevance_overlap_statistics(
+    relevant_docs: Mapping[str, Mapping[str, int]],
+    queries: Mapping[str, str],
+    corpus: Mapping[str, str],
+) -> TextRelevanceOverlapStatistics | None:
+    """Calculate query character n-gram overlap against relevant documents."""
+    overlaps: list[float] = []
+    for query_id, docs in relevant_docs.items():
+        query_ngrams = _character_ngrams(queries[query_id])
+        if not query_ngrams:
+            continue
+        for doc_id, score in docs.items():
+            if score == 0:
+                continue
+            doc_ngrams = _character_ngrams(corpus[doc_id])
+            overlaps.append(len(query_ngrams & doc_ngrams) / len(query_ngrams))
+
+    if not overlaps:
+        return None
+
+    return TextRelevanceOverlapStatistics(
+        num_pairs=len(overlaps),
+        min_query_character_ngram_overlap=min(overlaps),
+        average_query_character_ngram_overlap=sum(overlaps) / len(overlaps),
+        max_query_character_ngram_overlap=max(overlaps),
+    )
+
+
+def _character_ngrams(text: str, min_n: int = 3, max_n: int = 5) -> set[str]:
+    """Return normalized character n-grams without punctuation or whitespace."""
+    normalized_text = unicodedata.normalize("NFKC", text).casefold()
+    normalized_text = "".join(
+        char
+        for char in normalized_text
+        if unicodedata.category(char)[0] in {"L", "M", "N"}
+    )
+    return {
+        normalized_text[start : start + n]
+        for n in range(min_n, max_n + 1)
+        for start in range(len(normalized_text) - n + 1)
+    }
 
 
 def calculate_single_input_modality_statistics(

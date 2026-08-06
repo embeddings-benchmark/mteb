@@ -12,6 +12,10 @@ from .create_mock_samples import (
     create_mock_audio,
 )
 from .retrieval import (
+    _BASE_TEXT_RELEVANCE_OVERLAP_STATISTICS,
+    _INSTRUCTION_TEXT_RELEVANCE_OVERLAP_STATISTICS,
+    _MULTILINGUAL_INSTRUCTION_TEXT_RELEVANCE_OVERLAP_STATISTICS,
+    _MULTILINGUAL_TEXT_RELEVANCE_OVERLAP_STATISTICS,
     MockRetrievalTask,
     base_retrieval_datasplit,
     instruction_retrieval_datasplit,
@@ -78,6 +82,9 @@ class MockRerankingTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
+            "text_relevance_overlap_statistics": (
+                _BASE_TEXT_RELEVANCE_OVERLAP_STATISTICS
+            ),
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
                 "min_top_ranked_per_query": 2,
@@ -135,6 +142,9 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
             },
+            "text_relevance_overlap_statistics": (
+                _MULTILINGUAL_TEXT_RELEVANCE_OVERLAP_STATISTICS
+            ),
             "top_ranked_statistics": {
                 "num_top_ranked": 8,
                 "min_top_ranked_per_query": 2,
@@ -174,6 +184,9 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
+                    "text_relevance_overlap_statistics": (
+                        _BASE_TEXT_RELEVANCE_OVERLAP_STATISTICS
+                    ),
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
                         "min_top_ranked_per_query": 2,
@@ -213,6 +226,9 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
+                    "text_relevance_overlap_statistics": (
+                        _BASE_TEXT_RELEVANCE_OVERLAP_STATISTICS
+                    ),
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
                         "min_top_ranked_per_query": 2,
@@ -275,6 +291,9 @@ class MockInstructionReranking(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
+            "text_relevance_overlap_statistics": (
+                _INSTRUCTION_TEXT_RELEVANCE_OVERLAP_STATISTICS
+            ),
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
                 "min_top_ranked_per_query": 2,
@@ -331,6 +350,9 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
             },
+            "text_relevance_overlap_statistics": (
+                _MULTILINGUAL_INSTRUCTION_TEXT_RELEVANCE_OVERLAP_STATISTICS
+            ),
             "top_ranked_statistics": {
                 "num_top_ranked": 8,
                 "min_top_ranked_per_query": 2,
@@ -370,6 +392,9 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
+                    "text_relevance_overlap_statistics": (
+                        _INSTRUCTION_TEXT_RELEVANCE_OVERLAP_STATISTICS
+                    ),
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
                         "min_top_ranked_per_query": 2,
@@ -409,6 +434,9 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
+                    "text_relevance_overlap_statistics": (
+                        _INSTRUCTION_TEXT_RELEVANCE_OVERLAP_STATISTICS
+                    ),
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
                         "min_top_ranked_per_query": 2,
