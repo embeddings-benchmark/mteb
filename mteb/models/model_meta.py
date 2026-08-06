@@ -1007,7 +1007,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 else None,
                 framework=["Sentence Transformers", "PyTorch"],
                 model_type=["sparse"],
-                adapted_from=_get_source_model(model.model_card_data)
+                adapted_from=_get_source_model(model.model_card_data)  # type: ignore[arg-type]
                 if hasattr(model, "model_card_data")
                 else None,
             )
