@@ -7,6 +7,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
+from mteb._create_dataloaders import create_dataloader
 from mteb._requires_package import (
     requires_audio_dependencies,
     requires_image_dependencies,
@@ -15,10 +16,10 @@ from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta
 from mteb.similarity_functions import (
     max_sim,
-    pairwise_max_sim,
     select_pairwise_similarity,
     select_similarity,
 )
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
@@ -30,7 +31,11 @@ if TYPE_CHECKING:
         Array,
         AudioInputItem,
         BatchedInput,
-        PromptType,
+        CorpusDatasetType,
+        EncodeKwargs,
+        QueryDatasetType,
+        RetrievalOutputType,
+        TopRankedDocumentsType,
     )
 
 
@@ -192,7 +197,6 @@ _common_mock_metadata = dict(
     license="mit",
     max_tokens=np.inf,
     reference=None,
-    similarity_fn_name="cosine",
     framework=[],
     use_instructions=False,
     public_training_code=None,  # No training code, as this is a random baseline
@@ -271,33 +275,38 @@ def _batch_to_embeddings(
     return np.vstack(embeddings)
 
 
-def _sparsify_vector(vector: NDArray[np.floating], top_k: int) -> NDArray[np.floating]:
-    """Zero out all but the top_k largest entries of a vector.
+def _sparsify_vector(
+    vector: NDArray[np.floating], n_nonzero: int
+) -> NDArray[np.floating]:
+    """Zero out all but the `n_nonzero` largest-magnitude entries of a vector, keeping its shape.
 
-    Mimics the output of a lexical/sparse encoder (e.g. SPLADE), which only assigns
-    non-zero importance weights to a small subset of the vocabulary.
+    Mimics the output of a lexical/sparse encoder (e.g. SPLADE), which only assigns non-zero
+    importance weights to a small subset of the vocabulary. Unlike Matryoshka-style dense embedding
+    truncation (which shrinks a vector to its first `k` dimensions), this keeps the full
+    dimensionality and zeroes out everything except the `n_nonzero` largest values, wherever they
+    are.
 
     Args:
         vector: Dense input vector.
-        top_k: Number of entries to keep non-zero.
+        n_nonzero: Number of entries to keep non-zero.
 
     Returns:
-        A copy of `vector` with all but the `top_k` largest entries set to 0.
+        A copy of `vector`, same shape, with all but the `n_nonzero` largest entries set to 0.
     """
-    if top_k >= vector.size:
+    if n_nonzero >= vector.size:
         return vector
     vector = vector.copy()
-    zero_idx = np.argpartition(vector, -top_k)[:-top_k]
+    zero_idx = np.argpartition(vector, -n_nonzero)[:-n_nonzero]
     vector[zero_idx] = 0.0
     return vector
 
 
 _SPARSE_EMBEDDING_DIM = 128
-_SPARSE_TOP_K = 16
+_SPARSE_N_NONZERO = 16
 
 
 def _batch_to_sparse_embeddings(
-    inputs: DataLoader[BatchedInput], embedding_dim: int, top_k: int
+    inputs: DataLoader[BatchedInput], embedding_dim: int, n_nonzero: int
 ) -> NDArray[np.floating]:
     """Convert batched text/image/audio/video inputs into sparse (mostly-zero) embeddings.
 
@@ -305,13 +314,13 @@ def _batch_to_sparse_embeddings(
         inputs: A DataLoader yielding batches of inputs, where each batch is a dictionary
                 that may contain 'text', 'image', 'audio', and/or 'video' keys.
         embedding_dim: The dimensionality of the output embeddings.
-        top_k: Number of non-zero entries to keep per embedding.
+        n_nonzero: Number of non-zero entries to keep per embedding.
 
     Returns:
         A 2D numpy array of shape (num_samples, embedding_dim).
     """
     embeddings = _batch_to_embeddings(inputs, embedding_dim)
-    return np.stack([_sparsify_vector(row, top_k) for row in embeddings])
+    return np.stack([_sparsify_vector(row, n_nonzero) for row in embeddings])
 
 
 _LATE_INTERACTION_EMBEDDING_DIM = 16
@@ -480,6 +489,7 @@ random_encoder_baseline = ModelMeta(
     name="mteb/baseline-random-encoder",
     model_type=["dense"],
     embed_dim=[_EMBEDDING_DIM, 10],
+    similarity_fn_name="cosine",
     **_common_mock_metadata,
 )
 
@@ -535,6 +545,7 @@ random_cross_encoder_baseline = ModelMeta(
     name="mteb/baseline-random-cross-encoder",
     model_type=["cross-encoder"],
     embed_dim=None,
+    similarity_fn_name="cosine",
     **_common_mock_metadata,
 )
 
@@ -554,7 +565,7 @@ class RandomSparseEncoderBaseline:
         model_name: str,
         revision: str | None,
         embed_dim: int | None = None,
-        top_k: int | None = None,
+        n_nonzero: int | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = 10,
@@ -562,7 +573,7 @@ class RandomSparseEncoderBaseline:
     ) -> None:
         self.rng_state = np.random.default_rng(42)
         self.embedding_dim = embed_dim or _SPARSE_EMBEDDING_DIM
-        self.top_k = top_k or _SPARSE_TOP_K
+        self.n_nonzero = n_nonzero or _SPARSE_N_NONZERO
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
@@ -580,7 +591,7 @@ class RandomSparseEncoderBaseline:
         _attach_modality_collator(
             inputs, fps=self.fps, max_frames=self.max_frames, num_frames=self.num_frames
         )
-        return _batch_to_sparse_embeddings(inputs, self.embedding_dim, self.top_k)
+        return _batch_to_sparse_embeddings(inputs, self.embedding_dim, self.n_nonzero)
 
     def similarity(
         self,
@@ -624,20 +635,26 @@ random_sparse_encoder_baseline = ModelMeta(
     name="mteb/baseline-random-sparse-encoder",
     model_type=["sparse"],
     embed_dim=_SPARSE_EMBEDDING_DIM,
-    **{**_common_mock_metadata, "similarity_fn_name": "dot"},
+    similarity_fn_name="dot",
+    **_common_mock_metadata,
 )
 
 
 class RandomColBERTBaseline:
     """A random baseline that generates random per-token (late-interaction / ColBERT-style) embeddings.
-    Useful to establish a lower bound for late-interaction retrieval performance.
-    The embeddings are conditioned on the input, so that the same input always gets the same embedding.
-    Supports text, image, audio, and video inputs.
+    Useful to establish a lower bound for retrieval/reranking performance with late-interaction
+    (multi-vector) models. The embeddings are conditioned on the input, so that the same input
+    always gets the same embedding. Supports text, image, audio, and video inputs.
 
-    This implements the Encoder interface.
+    This implements the SearchProtocol interface rather than the plain Encoder interface: real
+    late-interaction models produce a variable number of per-token embeddings per document, which
+    only supports retrieval-style search/reranking (via MaxSim over an indexed corpus), not the
+    fixed-size-vector operations (indexing into a corpus-wide array, sklearn fit/predict, ...) that
+    Classification/Clustering/etc. rely on.
     """
 
     mteb_model_meta: ModelMeta | None = None
+    task_corpus: CorpusDatasetType | None = None
 
     def __init__(
         self,
@@ -656,17 +673,9 @@ class RandomColBERTBaseline:
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
+        self.task_corpus = None
 
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
+    def _encode(self, inputs: DataLoader[BatchedInput]) -> Array:
         _attach_modality_collator(
             inputs, fps=self.fps, max_frames=self.max_frames, num_frames=self.num_frames
         )
@@ -674,37 +683,99 @@ class RandomColBERTBaseline:
             inputs, self.num_tokens, self.embedding_dim
         )
 
-    def similarity(  # noqa: PLR6301
+    def index(
         self,
-        embeddings1: Array,
-        embeddings2: Array,
-    ) -> Array:
-        """MaxSim similarity between two sets of multi-vector embeddings
+        corpus: CorpusDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None = None,
+    ) -> None:
+        """Index the corpus for retrieval.
 
         Args:
-            embeddings1: First set of multi-vector embeddings
-            embeddings2: Second set of multi-vector embeddings
-
-        Returns:
-            MaxSim similarity matrix between the two sets of embeddings
+            corpus: Corpus dataset to index.
+            task_metadata: Metadata of the task, used to determine how to index the corpus.
+            hf_split: Split of current task, allows to know some additional information about current split.
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
+            encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for dataloading.
         """
-        return max_sim(embeddings1, embeddings2)
+        self.task_corpus = corpus
 
-    def similarity_pairwise(  # noqa: PLR6301
+    def search(
         self,
-        embeddings1: Array,
-        embeddings2: Array,
-    ) -> Array:
-        """MaxSim similarity for pairs of multi-vector embeddings
+        queries: QueryDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        top_k: int,
+        encode_kwargs: EncodeKwargs,
+        top_ranked: TopRankedDocumentsType | None = None,
+        num_proc: int | None = None,
+    ) -> RetrievalOutputType:
+        """Search the indexed corpus using MaxSim similarity between multi-vector embeddings.
 
         Args:
-            embeddings1: First set of multi-vector embeddings
-            embeddings2: Second set of multi-vector embeddings
+            queries: Queries to find
+            task_metadata: Task metadata
+            hf_split: split of the dataset
+            hf_subset: subset of the dataset
+            top_ranked: Top-ranked documents for each query, mapping query IDs to a list of document IDs.
+                Passed only from Reranking tasks.
+            top_k: Number of top documents to return for each query.
+            encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for dataloading.
 
         Returns:
-            MaxSim similarity for each pair of embeddings
+            Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
         """
-        return pairwise_max_sim(embeddings1, embeddings2)
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be indexed before searching.")
+
+        query_embeddings = self._encode(
+            create_dataloader(
+                queries,
+                task_metadata=task_metadata,
+                prompt_type=PromptType.query,
+                num_proc=num_proc,
+                **encode_kwargs,
+            )
+        )
+        corpus_embeddings = self._encode(
+            create_dataloader(
+                self.task_corpus,
+                task_metadata=task_metadata,
+                prompt_type=PromptType.document,
+                num_proc=num_proc,
+                **encode_kwargs,
+            )
+        )
+        query_ids = list(queries["id"])
+        corpus_ids = list(self.task_corpus["id"])
+        corpus_id_to_idx = {cid: idx for idx, cid in enumerate(corpus_ids)}
+
+        scores = max_sim(
+            query_embeddings, corpus_embeddings
+        )  # (num_queries, num_corpus)
+
+        results: RetrievalOutputType = {qid: {} for qid in query_ids}
+        for i, qid in enumerate(query_ids):
+            candidate_ids = top_ranked[qid] if top_ranked is not None else corpus_ids
+            candidate_idxs = torch.tensor(
+                [corpus_id_to_idx[cid] for cid in candidate_ids]
+            )
+            candidate_scores = scores[i, candidate_idxs]
+            top_n = min(top_k, len(candidate_ids))
+            top_vals, top_idx = torch.topk(candidate_scores, top_n)
+            for val, idx in zip(top_vals.tolist(), top_idx.tolist()):
+                results[qid][candidate_ids[idx]] = val
+
+        self.task_corpus = None
+        return results
 
 
 random_colbert_baseline = ModelMeta(
@@ -712,5 +783,6 @@ random_colbert_baseline = ModelMeta(
     name="mteb/baseline-random-colbert",
     model_type=["late-interaction"],
     embed_dim=_LATE_INTERACTION_EMBEDDING_DIM,
-    **{**_common_mock_metadata, "similarity_fn_name": "MaxSim"},
+    similarity_fn_name="MaxSim",
+    **_common_mock_metadata,
 )

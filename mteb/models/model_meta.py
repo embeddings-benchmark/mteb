@@ -133,7 +133,12 @@ FRAMEWORKS = Literal[
 ]
 
 MODEL_TYPES = Literal[
-    "dense", "cross-encoder", "late-interaction", "sparse", "router", "hybrid"
+    "dense",
+    "cross-encoder",
+    "late-interaction",
+    "sparse",
+    "router",
+    "hybrid",
 ]
 
 # Licenses considered "open" (OSI-approved or otherwise free/libre) when computing the

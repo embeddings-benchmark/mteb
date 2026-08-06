@@ -12,12 +12,13 @@ from typing_extensions import deprecated
 
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
-from mteb.similarity_functions import batched_sparse_similarity
 from mteb.types import OutputDType, PromptType
 
-from .abs_encoder import AbsEncoder
+from .abs_encoder import AbsEncoder, get_prompt_name
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from sentence_transformers import CrossEncoder, SentenceTransformer
     from sentence_transformers.sparse_encoder import SparseEncoder
     from torch.utils.data import DataLoader
@@ -104,6 +105,199 @@ def _batch_to_modality_dicts(
     ]
 
 
+def _resolve_model_prompts(
+    model: Any, model_prompts: dict[str, str] | None
+) -> dict[str, str] | None:
+    """Merge `model_prompts` with a sentence-transformers-style `model`'s built-in prompts.
+
+    If only one of the two is given, that one is used as-is. If both are given, `model_prompts`
+    takes priority and is written back onto `model.prompts` (with a warning). The merged result is
+    then validated, dropping (with a warning) any keys that aren't a valid task name/type or prompt
+    type.
+
+    Args:
+        model: The sentence-transformers-style model whose built-in `.prompts` (if any) to merge with.
+        model_prompts: A dictionary mapping task names to prompt names, as passed to the wrapper.
+
+    Returns:
+        The validated, merged prompts dictionary (or None if there are no prompts at all).
+    """
+    built_in_prompts = getattr(model, "prompts", None)
+    if built_in_prompts and not model_prompts:
+        model_prompts = built_in_prompts
+    elif model_prompts and built_in_prompts:
+        msg = f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
+        logger.warning(msg)
+        warnings.warn(msg)
+        model.prompts = model_prompts
+
+    resolved_prompts, invalid_prompts = AbsEncoder.validate_task_to_prompt_name(
+        model_prompts, raise_for_invalid_keys=False
+    )
+    if invalid_prompts:
+        invalid_prompts_str = "\n".join(invalid_prompts)
+        msg = f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts_str}"
+        logger.warning(msg)
+        warnings.warn(msg)
+    return resolved_prompts
+
+
+def _resolve_prompt(
+    model_prompts: dict[str, str] | None,
+    task_metadata: TaskMetadata,
+    prompt_type: PromptType | None,
+) -> str | None:
+    """Look up the prompt text for `task_metadata`/`prompt_type` in `model_prompts`, logging the outcome.
+
+    Args:
+        model_prompts: A dictionary mapping task names to prompt names (see `_resolve_model_prompts`).
+        task_metadata: The metadata of the task being encoded.
+        prompt_type: The name type of prompt (query or document).
+
+    Returns:
+        The prompt text to use, or None if no matching prompt was found.
+    """
+    prompt = None
+    prompt_name = None
+    if model_prompts is not None:
+        prompt_name = get_prompt_name(model_prompts, task_metadata, prompt_type)
+        prompt = model_prompts.get(prompt_name, None)  # type: ignore[arg-type]
+    if prompt_name:
+        prompt_log = f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
+    else:
+        prompt_log = (
+            f"No model prompts found for task={task_metadata.name} {prompt_type=}"
+        )
+    LogOnce(logger).info(prompt_log)
+    return prompt
+
+
+def _select_encode_function(
+    model: Any,
+    prompt_type: PromptType | None,
+    *,
+    has_query_encode: bool = True,
+) -> Callable[..., Any]:
+    """Pick `model.encode_query`/`model.encode_document`/`model.encode` based on `prompt_type`.
+
+    Args:
+        model: The sentence-transformers-style model to pick the encode method from.
+        prompt_type: The name type of prompt (query or document).
+        has_query_encode: Whether `model` supports `encode_query`/`encode_document` (added in
+            sentence-transformers 5.0). Falls back to `model.encode` when False.
+
+    Returns:
+        The bound encode method to use.
+    """
+    if prompt_type and has_query_encode:
+        if prompt_type == PromptType.query:
+            return model.encode_query
+        elif prompt_type == PromptType.document:
+            return model.encode_document
+        raise ValueError(f"Unknown prompt type: {prompt_type}")
+    return model.encode
+
+
+def _postprocess_dense_embeddings(embeddings: Any) -> Any:
+    """Move a batch's embeddings to CPU float32 if it's a torch tensor; otherwise pass through unchanged."""
+    if isinstance(embeddings, torch.Tensor):
+        embeddings = embeddings.cpu().detach().float()
+    return embeddings
+
+
+def _concatenate_sparse_batches(batches: list[Any]) -> Any:
+    """Concatenate per-batch sparse tensors along dim 0 (sparse tensors don't support `np.concatenate`)."""
+    return torch.cat(batches, dim=0)
+
+
+def _is_sparse_compatible_task(task_metadata: TaskMetadata) -> bool:
+    """Whether `task_metadata`'s evaluator only calls `model.similarity(...)` on the raw embeddings.
+
+    Such evaluators never index into the embeddings or hand them to sklearn/numpy directly, so they
+    can consume the sparse tensors a SparseEncoder produces natively. Every other task needs dense
+    embeddings: torch sparse COO tensors support neither generic indexing (e.g. Classification's
+    `embeddings[idxs]`) nor `numpy.asarray()` conversion (e.g. Clustering handing embeddings to
+    sklearn's `KMeans`).
+
+    Gated on `simplified_task_type` rather than the raw, modality-specific `type` so that e.g. a
+    multimodal sparse encoder's `Any2AnyRetrieval`/`VisionCentricQA` tasks are covered the same way
+    as plain text `Retrieval`, without having to enumerate every modality-specific retrieval type.
+
+    Reranking-family task types ("Reranking", "InstructionReranking", "AudioReranking") share the
+    "retrieval" `simplified_task_type` with plain Retrieval, but their search path indexes into a
+    cached embeddings tensor by position (see search_wrappers.py's `_rerank_documents`, called for
+    a `top_ranked` candidate list) rather than only ever computing a single query-vs-corpus
+    similarity matrix. Sparse COO tensors don't support that indexing either (confirmed on both CPU
+    and MPS backends), so these are excluded despite sharing the "retrieval" grouping.
+    """
+    return (
+        task_metadata.simplified_task_type == "retrieval"
+        and "Reranking" not in task_metadata.type
+    )
+
+
+def _postprocess_sparse_embeddings(embeddings: Any) -> Any:
+    """Densify a batch's embeddings if it's a sparse torch tensor, then move to CPU float32.
+
+    `.to_dense()` keeps the tensor on its original device, but most non-retrieval evaluators
+    (sklearn, numpy) can only consume CPU tensors/arrays, so this also applies the same CPU/float32
+    normalization as `_postprocess_dense_embeddings`.
+    """
+    if isinstance(embeddings, torch.Tensor) and embeddings.is_sparse:
+        embeddings = embeddings.to_dense()
+    return _postprocess_dense_embeddings(embeddings)
+
+
+def _encode_batches(
+    inputs: DataLoader[BatchedInput],
+    *,
+    is_multimodal: bool,
+    encode_function: Callable[..., Any],
+    prompt: str | None,
+    modalities: list[Modalities],
+    postprocess_batch: Callable[[Any], Any] | None = None,
+    concatenate_batches: Callable[[list[Any]], Any] | None = None,
+    **kwargs: Any,
+) -> Array:
+    """Encode `inputs` with `encode_function`, handling the multimodal vs text-only cases.
+
+    For multimodal inputs (as detected by `_setup_modality_collator`), each batch is converted to
+    per-sample modality dicts and encoded separately; the per-batch outputs are combined with
+    `concatenate_batches` (default: `np.concatenate`), after each one is first passed through
+    `postprocess_batch` (default: identity). For text-only inputs, all sentences are collected up
+    front and encoded in a single call.
+
+    Args:
+        inputs: The inputs to encode.
+        is_multimodal: Whether `inputs` exposes image/audio/video features (see `_setup_modality_collator`).
+        encode_function: The (bound) encode method to call, e.g. `model.encode_query`.
+        prompt: The prompt text to pass to `encode_function`, if any.
+        modalities: The modalities the model supports, used to build per-sample dicts for multimodal inputs.
+        postprocess_batch: Optional hook applied to each batch's raw output.
+        concatenate_batches: Optional hook used to combine per-batch outputs for multimodal inputs.
+        **kwargs: Additional arguments to pass to `encode_function`.
+
+    Returns:
+        The encoded inputs.
+    """
+    postprocess = postprocess_batch or (lambda embeddings: embeddings)
+    concatenate = concatenate_batches or (
+        lambda batches: np.concatenate(batches, axis=0)
+    )
+
+    if is_multimodal:
+        all_embeddings = []
+        for batch in tqdm(inputs, desc="Building multimodal embeddings"):
+            batched_input = _batch_to_modality_dicts(batch, modalities)
+            embeddings = encode_function(batched_input, prompt=prompt, **kwargs)
+            all_embeddings.append(postprocess(embeddings))
+        return cast("Array", concatenate(all_embeddings))
+
+    sentences = [text for batch in inputs for text in batch["text"]]
+    embeddings = encode_function(sentences, prompt=prompt, **kwargs)
+    return cast("Array", postprocess(embeddings))
+
+
 class SentenceTransformerEncoderWrapper(AbsEncoder):
     """Wrapper for SentenceTransformer models.
 
@@ -170,24 +364,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             self.model = model
             self.mteb_model_meta = ModelMeta.from_sentence_transformer_model(self.model)
 
-        built_in_prompts = getattr(self.model, "prompts", None)
-        if built_in_prompts and not model_prompts:
-            model_prompts = built_in_prompts
-        elif model_prompts and built_in_prompts:
-            msg = f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
-            logger.warning(msg)
-            warnings.warn(msg)
-            self.model.prompts = model_prompts
-
-        self.model_prompts, invalid_prompts = self.validate_task_to_prompt_name(
-            model_prompts, raise_for_invalid_keys=False
-        )
-
-        if invalid_prompts:
-            invalid_prompts = "\n".join(invalid_prompts)
-            msg = f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
-            logger.warning(msg)
-            warnings.warn(msg)
+        self.model_prompts = _resolve_model_prompts(self.model, model_prompts)
 
         if (
             self.model_prompts
@@ -261,18 +438,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 deep=True,
             )
 
-        prompt = None
-        prompt_name = None
-        if self.model_prompts is not None:
-            prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-            prompt = self.model_prompts.get(prompt_name, None)  # type: ignore[arg-type]
-        if prompt_name:
-            prompt_log = f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
-        else:
-            prompt_log = (
-                f"No model prompts found for task={task_metadata.name} {prompt_type=}"
-            )
-        LogOnce(logger).info(prompt_log)
+        prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
 
         is_multimodal = _setup_modality_collator(
             inputs,
@@ -288,44 +454,19 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             Version(st_version).release
             >= Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
         )
-        if prompt_type and has_query_encode:
-            if prompt_type == PromptType.query:
-                encode_function = self.model.encode_query
-            elif prompt_type == PromptType.document:
-                encode_function = self.model.encode_document
-            else:
-                raise ValueError(f"Unknown prompt type: {prompt_type}")
-        else:
-            encode_function = self.model.encode
+        encode_function = _select_encode_function(
+            self.model, prompt_type, has_query_encode=has_query_encode
+        )
 
-        if is_multimodal:
-            all_embeddings = []
-            for batch in tqdm(inputs, desc="Building multimodal embeddings"):
-                batched_input = _batch_to_modality_dicts(
-                    batch,
-                    self.mteb_model_meta.modalities,
-                )
-                embeddings = encode_function(
-                    batched_input,
-                    prompt=prompt,
-                    **kwargs,
-                )
-                if isinstance(embeddings, torch.Tensor):
-                    embeddings = embeddings.cpu().detach().float()
-                all_embeddings.append(embeddings)
-            return cast("Array", np.concatenate(all_embeddings, axis=0))
-
-        _inputs = [text for batch in inputs for text in batch["text"]]
-        logger.debug(f"Encoding {len(_inputs)} sentences.")
-        embeddings = encode_function(
-            _inputs,
+        return _encode_batches(
+            inputs,
+            is_multimodal=is_multimodal,
+            encode_function=encode_function,
             prompt=prompt,
+            modalities=self.mteb_model_meta.modalities,
+            postprocess_batch=_postprocess_dense_embeddings,
             **kwargs,
         )
-        if isinstance(embeddings, torch.Tensor):
-            # ensure everything is on CPU and is float
-            embeddings = embeddings.cpu().detach().float()
-        return cast("Array", embeddings)
 
 
 class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrapper):
@@ -468,16 +609,22 @@ class CrossEncoderWrapper:
 class SparseEncoderWrapper(AbsEncoder):
     """Wrapper for sentence-transformers `SparseEncoder` models.
 
+    Supports both text-only and multimodal (text + image + audio + video) inputs, following the
+    same auto-detection pattern as `SentenceTransformerEncoderWrapper`: when the input dataset
+    exposes image/audio/video features, the encode method attaches the matching collator and feeds
+    the model per-sample modality dicts; otherwise it uses the text-only fast path.
+
     Args:
         model: The SparseEncoder model to use. Can be a string (model name) or a SparseEncoder model.
         revision: The revision of the model to use.
         device: The device used to load the model.
         model_prompts: A dictionary mapping task names to prompt names. See
             `SentenceTransformerEncoderWrapper` for the order of priority used to select a prompt.
-        torch_dtype: The torch dtype to cast the model to after loading.
-        similarity_batch_size: Number of query embeddings to compare against the corpus at a time
-            when computing similarity. Sparse query embeddings are batched to avoid densifying the
-            whole query matrix at once.
+        fps: Target frames per second for video sampling (multimodal inputs only).
+        max_frames: Safety cap on frames per video for FPS mode (multimodal inputs only).
+        num_frames: If set, use fixed-sample mode instead of FPS-based (multimodal inputs only).
+        target_sampling_rate: Sampling rate to resample audio to (multimodal inputs only). Defaults to 16000 when an audio/video collator is applied.
+        max_samples: Maximum number of audio samples to keep (multimodal inputs only).
         **kwargs: Additional arguments to pass to the SparseEncoder model.
     """
 
@@ -487,11 +634,14 @@ class SparseEncoderWrapper(AbsEncoder):
         self,
         model: str | SparseEncoder,
         revision: str | None = None,
+        *,
         device: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        *,
-        torch_dtype: torch.dtype = torch.float16,
-        similarity_batch_size: int = 1000,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        target_sampling_rate: int | None = None,
+        max_samples: int | None = None,
         **kwargs: Any,
     ) -> None:
         import sentence_transformers
@@ -520,46 +670,30 @@ class SparseEncoderWrapper(AbsEncoder):
         else:
             self.model = model
             self.mteb_model_meta = ModelMeta.from_sparse_encoder_model(self.model)
-        self.model.to(torch_dtype)
 
-        built_in_prompts = getattr(self.model, "prompts", None)
-        if built_in_prompts and not model_prompts:
-            model_prompts = built_in_prompts
-        elif model_prompts and built_in_prompts:
-            msg = f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
-            logger.warning(msg)
-            warnings.warn(msg)
-            self.model.prompts = model_prompts
+        self.model_prompts = _resolve_model_prompts(self.model, model_prompts)
 
-        self.model_prompts, invalid_prompts = self.validate_task_to_prompt_name(
-            model_prompts, raise_for_invalid_keys=False
-        )
-        if invalid_prompts:
-            invalid_prompts = "\n".join(invalid_prompts)
-            msg = f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
-            logger.warning(msg)
-            warnings.warn(msg)
-
-        self.similarity_batch_size = similarity_batch_size
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
 
     def similarity(
-        self, query_embeddings: torch.Tensor, corpus_embeddings: torch.Tensor
-    ) -> torch.Tensor:
-        """Compute similarity between sparse query_embeddings and corpus_embeddings in batches.
+        self,
+        embeddings1: Array,
+        embeddings2: Array,
+    ) -> Array:
+        """Compute similarity between sparse query_embeddings and corpus_embeddings.
 
         Args:
-            query_embeddings: Sparse COO tensor of shape (num_queries, dim).
-            corpus_embeddings: Tensor of shape (num_corpus, dim).
+            embeddings1: Sparse COO tensor of shape (num_queries, dim).
+            embeddings2: Tensor of shape (num_corpus, dim).
 
         Returns:
             Similarity matrix of shape (num_queries, num_corpus).
         """
-        return batched_sparse_similarity(
-            query_embeddings,
-            corpus_embeddings,
-            sparse_sentence_transformer_model=self.model,
-            batch_size=self.similarity_batch_size,
-        )
+        return cast("Array", self.model.similarity(embeddings1, embeddings2))
 
     def encode(
         self,
@@ -574,7 +708,7 @@ class SparseEncoderWrapper(AbsEncoder):
         """Encodes the given sentences using the sparse encoder.
 
         Args:
-            inputs: The sentences to encode.
+            inputs: The sentences (or, for multimodal models, image/audio/video samples) to encode.
             task_metadata: The metadata of the task. Used to determine which prompt to use
                 from `model_prompts`.
             hf_split: Split of current task.
@@ -583,29 +717,35 @@ class SparseEncoderWrapper(AbsEncoder):
             **kwargs: Additional arguments to pass to the encoder.
 
         Returns:
-            The encoded sentences as sparse tensors.
+            The encoded inputs. Kept as sparse tensors for task types whose evaluators only need
+            `similarity()` (see `_is_sparse_compatible_task`); densified for every other task type,
+            since most evaluators need to index into or numpy-convert the embeddings.
         """
-        prompt = None
-        prompt_name = None
-        if self.model_prompts is not None:
-            prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-            prompt = self.model_prompts.get(prompt_name, None)  # type: ignore[arg-type]
-        if prompt_name:
-            prompt_log = f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
-        else:
-            prompt_log = (
-                f"No model prompts found for task={task_metadata.name} {prompt_type=}"
-            )
-        LogOnce(logger).info(prompt_log)
+        prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
 
-        sentences = [text for batch in inputs for text in batch["text"]]
+        is_multimodal = _setup_modality_collator(
+            inputs,
+            fps=self.fps,
+            max_frames=self.max_frames,
+            num_frames=self.num_frames,
+            target_sampling_rate=self.target_sampling_rate,
+            max_samples=self.max_samples,
+        )
+        encode_function = _select_encode_function(self.model, prompt_type)
 
-        if prompt_type == PromptType.query:
-            return cast(
-                "Array",
-                self.model.encode_query(sentences, prompt=prompt, **kwargs),
-            )
-        return cast(
-            "Array",
-            self.model.encode_document(sentences, prompt=prompt, **kwargs),
+        postprocess_batch = (
+            None
+            if _is_sparse_compatible_task(task_metadata)
+            else _postprocess_sparse_embeddings
+        )
+
+        return _encode_batches(
+            inputs,
+            is_multimodal=is_multimodal,
+            encode_function=encode_function,
+            prompt=prompt,
+            modalities=self.mteb_model_meta.modalities,
+            postprocess_batch=postprocess_batch,
+            concatenate_batches=_concatenate_sparse_batches,
+            **kwargs,
         )
