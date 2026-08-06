@@ -75,6 +75,7 @@ def test_save_to_cache_combines_subsets_with_same_settings(tmp_path):
         encode_kwargs={"batch_size": 32},
     )
     entries = _read_jsonl(run_settings_path)
+    entries = sorted(entries, key=lambda e: e["encode_kwargs"]["batch_size"])
 
     assert len(entries) == 2
     assert entries[0]["subsets"] == ["de"]
