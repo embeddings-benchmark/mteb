@@ -409,7 +409,7 @@ class Jinav4ModelMeta(ModelMeta):
         if vector_type == "multi_vector":
             model.mteb_model_meta = model.mteb_model_meta.model_copy(
                 update={
-                    "model_type": "late-interaction",
+                    "model_type": ["late-interaction"],
                 }
             )
         return model
