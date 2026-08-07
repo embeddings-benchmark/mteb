@@ -252,6 +252,74 @@ def _get_embedding_size(embed_dim: int | Sequence[int] | None) -> int | None:
     return None
 
 
+def _incomplete_task_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
+    """``(model_name, task_name)`` pairs that skipped a (subset, split) combo.
+
+    "Observed" means the union of subsets × union of splits reported by *any*
+    model for the task within this (already benchmark-scoped) frame — mirrors
+    ``build_task_scores``'s ``fully_covered`` check in ``mteb/api/aggregators.py``
+    so the summary / per-task table agree with the per-task detail page instead
+    of drifting apart.
+
+    Without this, a model that only ran e.g. 2 of a task's 6 splits gets its
+    partial-split mean folded in as if it were a full score, silently
+    outranking fully-evaluated peers (see issue #5101 — WebLINXCandidatesReranking
+    scored on `validation` + `test_iid` only, still shown as a normal number
+    in the benchmark summary).
+    """
+    required = (
+        pl_df.select("task_name", "subset", "split")
+        .unique()
+        .group_by("task_name")
+        .agg(
+            pl.col("subset").n_unique().alias("_n_subsets"),
+            pl.col("split").n_unique().alias("_n_splits"),
+        )
+        .select(
+            "task_name",
+            (pl.col("_n_subsets") * pl.col("_n_splits")).alias("_required"),
+        )
+    )
+    have = (
+        pl_df.select("model_name", "task_name", "subset", "split")
+        .unique()
+        .group_by(["model_name", "task_name"])
+        .agg(pl.len().alias("_have"))
+    )
+    return (
+        have.join(required, on="task_name", how="left")
+        .filter(pl.col("_have") < pl.col("_required"))
+        .select("model_name", "task_name")
+    )
+
+
+def _null_incomplete_scores(
+    per_task_long: pl.DataFrame, incomplete: pl.DataFrame
+) -> pl.DataFrame:
+    """Null the ``score`` column for every ``(model_name, task_name)`` row ``incomplete`` flags.
+
+    ``incomplete`` is the output of :func:`_incomplete_task_pairs`. No-op
+    (returns ``per_task_long`` unchanged) when nothing is incomplete — the
+    common case for single-split tasks, which never appear in ``incomplete``.
+    """
+    if incomplete.is_empty():
+        return per_task_long
+    return (
+        per_task_long.join(
+            incomplete.with_columns(pl.lit(True).alias("_incomplete")),
+            on=["model_name", "task_name"],
+            how="left",
+        )
+        .with_columns(
+            pl.when(pl.col("_incomplete").fill_null(False))
+            .then(None)
+            .otherwise(pl.col("score"))
+            .alias("score")
+        )
+        .drop("_incomplete")
+    )
+
+
 def _build_per_task_pivot(
     pl_df: pl.DataFrame,
 ) -> tuple[pl.DataFrame, list[str]] | None:
@@ -261,14 +329,21 @@ def _build_per_task_pivot(
     cases (empty frame, no ``model_name``, no tasks, or all-null rows). Every
     summary/per-task builder opens with this pattern — extracted so the four
     builders + per-task table builder don't duplicate the boilerplate.
+
+    A model's per-task score is nulled (rather than averaged over whatever
+    subset/split rows it happens to have) when it didn't cover every
+    (subset, split) combination observed for that task — see
+    :func:`_incomplete_task_pairs`.
     """
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return None
-    per_task = (
-        pl_df.group_by(["model_name", "task_name"])
-        .agg(pl.col("score").mean())
-        .pivot(on="task_name", index="model_name", values="score")
+    per_task_long = pl_df.group_by(["model_name", "task_name"]).agg(
+        pl.col("score").mean()
     )
+    per_task_long = _null_incomplete_scores(
+        per_task_long, _incomplete_task_pairs(pl_df)
+    )
+    per_task = per_task_long.pivot(on="task_name", index="model_name", values="score")
     task_cols = [c for c in per_task.columns if c != "model_name"]
     if not task_cols:
         return None
@@ -659,6 +734,9 @@ def _create_summary_table(  # noqa: PLR0914
     if has_is_public:
         per_task_aggs.append(pl.col("is_public").first())
     per_task_long = pl_df.group_by(["model_name", "task_name"]).agg(*per_task_aggs)
+    per_task_long = _null_incomplete_scores(
+        per_task_long, _incomplete_task_pairs(pl_df)
+    )
     per_task = per_task_long.pivot(on="task_name", index="model_name", values="score")
     task_cols = [c for c in per_task.columns if c != "model_name"]
     if not task_cols:
