@@ -602,6 +602,8 @@ extend-ignore-re = [
 
 [tool.typos.type.py.extend-identifiers]
 BulgarianStoreReviewSentimentClassfication = "BulgarianStoreReviewSentimentClassfication"
+SciRepEvalFoSClassification = "SciRepEvalFoSClassification"
+FoS = "FoS"
 LaBSE = "LaBSE"
 
 [tool.typos.type.py.extend-words]
