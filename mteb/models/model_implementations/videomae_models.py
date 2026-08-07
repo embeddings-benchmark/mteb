@@ -73,7 +73,7 @@ class VideoMAEWrapper(AbsEncoder):
             num_frames if num_frames is not None else self.model.config.num_frames
         )
         if self.num_frames != self.model.config.num_frames:
-            raise ValueError(
+            logger.warning(
                 f"{model_name} was trained with {self.model.config.num_frames} frames "
                 f"per clip, but num_frames={self.num_frames} was requested."
             )
