@@ -412,18 +412,21 @@ class ResultCache:
 
         run_settings_list: list[dict[str, Any]] = []
         for split, split_scores in task_result.scores.items():
-            for score_entry in split_scores:
-                hf_subset = score_entry.get("hf_subset", "default")
-                run_settings = {
-                    "task": task_result.task_name,
-                    "split": split,
-                    "subset": hf_subset,
-                    "version": version_dict,
-                    "encode_kwargs": json.loads(json.dumps(encode_kwargs, default=str))
-                    if encode_kwargs is not None
-                    else {},
-                }
-                run_settings_list.append(run_settings)
+            run_settings = {
+                "task": task_result.task_name,
+                "splits": [split],
+                "version": version_dict,
+                "encode_kwargs": json.loads(json.dumps(encode_kwargs, default=str))
+                if encode_kwargs is not None
+                else {},
+                "subsets": sorted(
+                    {
+                        score_entry.get("hf_subset", "default")
+                        for score_entry in split_scores
+                    }
+                ),
+            }
+            run_settings_list.append(run_settings)
 
         if run_settings_list:
             run_settings_path = result_path.parent / "run_settings.jsonl"
