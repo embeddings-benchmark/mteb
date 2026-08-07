@@ -74,9 +74,9 @@ from .miracl_retrieval import (
     MIRACLRetrievalHardNegativesV2,
 )
 from .miracl_vision_retrieval import MIRACLVisionRetrieval
-from .mmarco_retrieval import MMarcoRetrievalMultilingual
 from .mkqa_retrieval import MKQARetrieval
 from .mlqa_retrieval import MLQARetrieval
+from .mmarco_retrieval import MMarcoRetrievalMultilingual
 from .mr_tidy_retrieval import MrTidyRetrieval
 from .multi_long_doc_retrieval import MultiLongDocRetrieval
 from .mupler_retrieval import MuPLeRRetrieval
@@ -213,9 +213,9 @@ __all__ = [
     "MIRACLRetrievalHardNegatives",
     "MIRACLRetrievalHardNegativesV2",
     "MIRACLVisionRetrieval",
-    "MMarcoRetrievalMultilingual",
     "MKQARetrieval",
     "MLQARetrieval",
+    "MMarcoRetrievalMultilingual",
     "MintakaRetrieval",
     "MrTidyRetrieval",
     "MuPLeRRetrieval",
