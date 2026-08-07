@@ -38,6 +38,7 @@ def _task_frame(mock_mteb_cache: ResultCache, task_names: list[str]) -> pl.DataF
     return mock_results.select_tasks(tasks)._to_results_df(tasks)
 
 
+@_skip_if_datasets_too_old
 def test_incomplete_task_pairs_flags_partial_split_coverage(
     mock_mteb_cache: ResultCache,
 ):
