@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.18.13"
+version = "2.18.16"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -141,6 +141,7 @@ wav2clip = ["wav2clip==0.1.0"]
 fusion-embedding = ["librosa>=0.10.0", "soundfile>=0.13.1", "torchvision>=0.22.1", "pillow>=10.0.1", "accelerate>=0.26.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
+moca = ["transformers>=4.49.0,<4.53"]
 transformers-v4 = ["transformers<5"]
 siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
 tipsv2 = ["sentencepiece>=0.2.0", "protobuf>=3.0.0"]
@@ -467,6 +468,7 @@ conflicts = [
         { extra = "jina-clip" },
         { extra = "msclap" },
         { extra = "muq" },
+        { extra = "moca" }, # needs transformers with _update_causal_mask
         { extra = "transformers-v4" },
         { extra = "qwen-vl" },
         # { extra = "omnivinci" },
