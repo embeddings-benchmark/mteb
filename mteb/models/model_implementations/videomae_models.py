@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -18,30 +17,6 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
 
-logger = logging.getLogger(__name__)
-
-
-def _load_checkpoint_tensors(
-    model_name: str, revision: str | None
-) -> dict[str, torch.Tensor]:
-    """Read the raw checkpoint tensors for a Hub model.
-
-    Called after ``from_pretrained``, so the file is already in the local
-    HuggingFace cache and this does not hit the network again.
-    """
-    from huggingface_hub import hf_hub_download
-    from huggingface_hub.errors import EntryNotFoundError
-
-    try:
-        path = hf_hub_download(model_name, "model.safetensors", revision=revision)
-    except EntryNotFoundError:
-        path = hf_hub_download(model_name, "pytorch_model.bin", revision=revision)
-        return torch.load(path, map_location="cpu", weights_only=True)
-
-    from safetensors.torch import load_file
-
-    return load_file(path)
-
 
 class VideoMAEWrapper(AbsEncoder):
     """VideoMAE encoder.
@@ -50,15 +25,15 @@ class VideoMAEWrapper(AbsEncoder):
     ``VideoMAEForVideoClassification`` averages ``last_hidden_state`` over the
     token axis before its head. We pool the same way.
 
-    Two weight fixups run after loading, both of which change the output. See
-    ``_restore_qkv_bias`` and ``_load_fc_norm``.
+    Pinned to the existing ``transformers-v4`` requirement group. v4 implements
+    VideoMAE attention BEiT-style, with ``q_bias``/``v_bias`` as separate
+    parameters, which is how every published checkpoint is saved. v5 refactored
+    to standard Linears and ships no mapping for the old key names, so those
+    biases load as zeros with no error raised.
 
-    Note on the processor: ``AutoImageProcessor`` rather than
-    ``AutoVideoProcessor``. ``VideoMAEVideoProcessor`` only exists from
-    transformers v5 onwards while ``mteb`` supports ``transformers>=4.40``.
-    Every published checkpoint ships a ``preprocessor_config.json`` declaring
-    ``VideoMAEImageProcessor``, which resolves on both and carries the
-    checkpoint's own resize/crop/normalisation values.
+    ``AutoImageProcessor`` rather than ``AutoVideoProcessor``: every checkpoint
+    ships a ``preprocessor_config.json`` declaring ``VideoMAEImageProcessor``,
+    which carries the checkpoint's own resize/crop/normalisation values.
     """
 
     def __init__(
@@ -89,12 +64,7 @@ class VideoMAEWrapper(AbsEncoder):
         self.model = AutoModel.from_pretrained(model_name, revision=revision)
         self.model.eval()
 
-        state_dict = _load_checkpoint_tensors(model_name, revision)
-        self._load_fc_norm(state_dict)
-
         self.model.to(self.device)
-        if self.fc_norm is not None:
-            self.fc_norm.to(self.device)
 
         # VideoMAE bakes the clip length into its temporal position embeddings
         # and transformers does not interpolate it, so the config is the source
@@ -107,37 +77,6 @@ class VideoMAEWrapper(AbsEncoder):
                 f"{model_name} was trained with {self.model.config.num_frames} frames "
                 f"per clip, but num_frames={self.num_frames} was requested."
             )
-
-    def _load_fc_norm(self, state_dict: dict[str, torch.Tensor]) -> None:
-        """Load the final LayerNorm when it lives on the classification head.
-
-        ``VideoMAEModel.layernorm`` exists only when ``use_mean_pooling`` is
-        False, which is the case for the self-supervised checkpoints. The
-        finetuned ones set it True, moving that LayerNorm to ``fc_norm`` on the
-        classification head, which ``AutoModel`` discards. Without this the two
-        groups would produce embeddings through different pipelines.
-        """
-        self.fc_norm: torch.nn.LayerNorm | None = None
-        if not getattr(self.model.config, "use_mean_pooling", False):
-            return  # base model keeps its own layernorm
-
-        if "fc_norm.weight" not in state_dict:
-            logger.warning(
-                "%s sets use_mean_pooling=True but has no fc_norm in the "
-                "checkpoint; embeddings will be un-normalised.",
-                self.model_name,
-            )
-            return
-
-        fc_norm = torch.nn.LayerNorm(self.model.config.hidden_size)
-        fc_norm.load_state_dict(
-            {
-                "weight": state_dict["fc_norm.weight"],
-                "bias": state_dict["fc_norm.bias"],
-            }
-        )
-        fc_norm.eval()
-        self.fc_norm = fc_norm
 
     @torch.inference_mode()
     def encode(
@@ -169,8 +108,6 @@ class VideoMAEWrapper(AbsEncoder):
 
             outputs = self.model(**processed)
             pooled = outputs.last_hidden_state.mean(dim=1)
-            if self.fc_norm is not None:
-                pooled = self.fc_norm(pooled)
             embeddings.append(pooled.cpu())
         return torch.cat(embeddings, dim=0).numpy()
 
