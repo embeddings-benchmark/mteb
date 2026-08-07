@@ -94,7 +94,11 @@ class TimesformerWrapper(AbsEncoder):
         embeddings = []
         for batch in tqdm(inputs, desc="Encoding", disable=not show_progress_bar):
             videos = batch["video"]
-            processed = self.processor(videos, return_tensors="pt").to(self.device)
+            # Explicit list-of-videos-of-frames in HWC. A list of 4D tensors trips
+            # `make_batched` on the v4 slow processor, which treats the whole batch
+            # as a single video and then fails inside PIL.
+            frames = [[f.permute(1, 2, 0).numpy() for f in v] for v in videos]
+            processed = self.processor(frames, return_tensors="pt").to(self.device)
 
             outputs = self.model(**processed)
             embeddings.append(outputs.last_hidden_state[:, 0].cpu())
