@@ -397,7 +397,7 @@ class TestDownloadCachedResultsFromBranch:
     """Test the _download_cached_results_from_branch method."""
 
     @patch("requests.get")
-    def test_successful_download(  # noqa: PLR6301
+    def test_successful_download(
         self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
     ):
         """Test successful download and decompression, including parent directory creation."""
@@ -430,7 +430,7 @@ class TestDownloadCachedResultsFromBranch:
         assert nested_result_path.read_text(encoding="utf-8") == mock_benchmark_json
 
     @patch("requests.get")
-    def test_file_too_large(self, mock_get, tmp_path):  # noqa: PLR6301
+    def test_file_too_large(self, mock_get, tmp_path):
         """Test that oversized files raise ValueError."""
         cache = ResultCache(cache_path=tmp_path)
 
@@ -456,7 +456,7 @@ class TestDownloadCachedResultsFromBranch:
         ],
     )
     @patch("requests.get")
-    def test_error_handling_consolidated(  # noqa: PLR6301
+    def test_error_handling_consolidated(
         self, mock_get, tmp_path, error_type, exception_class
     ):
         """Test various error conditions in a consolidated manner."""
@@ -486,7 +486,7 @@ class TestDownloadCachedResultsFromBranch:
             cache._download_cached_results_from_branch(timeout=30)
 
     @patch("requests.get")
-    def test_default_output_path(  # noqa: PLR6301
+    def test_default_output_path(
         self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
     ):
         """Test that default output path is {cache_path}/leaderboard/__cached_results.json when none provided."""
@@ -514,7 +514,7 @@ class TestDownloadCachedResultsFromBranch:
         ],
     )
     @patch("requests.get")
-    def test_content_type_handling(  # noqa: PLR6301
+    def test_content_type_handling(
         self,
         mock_get,
         tmp_path,
@@ -553,7 +553,7 @@ class TestDownloadCachedResultsFromBranch:
         ],
     )
     @patch("requests.get")
-    def test_file_size_validation(  # noqa: PLR6301
+    def test_file_size_validation(
         self,
         mock_get,
         tmp_path,

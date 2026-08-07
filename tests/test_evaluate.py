@@ -513,7 +513,7 @@ def test_mock_mmeb_tasks(task: AbsTask):
 
 
 class MockCrashTask(MockMultilingualClassificationTask):
-    def _evaluate_subset(self, model, data_split, hf_split, hf_subset, **kwargs):  # noqa: PLR6301
+    def _evaluate_subset(self, model, data_split, hf_split, hf_subset, **kwargs):
         if hf_subset == "fra":
             raise RuntimeError("Crash on fra")
         return {"accuracy": 0.8}
