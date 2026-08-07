@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
+import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
-from mteb.agentic.interface import AnswerResult, Usage
+from mteb.agentic.interface import AnswerResult
 from mteb.agentic.metrics import (
     aggregate,
     calibration_error,
@@ -16,10 +17,12 @@ from mteb.agentic.metrics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Mapping
+    from collections.abc import Callable, Mapping, Sequence
 
     from mteb.agentic.interface import AnswerSystem, CorpusHandle
     from mteb.agentic.metrics import AggregateScores, Judge
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -30,7 +33,7 @@ class AnswerEvaluationResult:
     per_question: list[dict[str, Any]]
 
 
-def question_record(
+def _question_record(
     qid: str,
     result: AnswerResult,
     score: float | None,
@@ -50,13 +53,42 @@ def question_record(
         "confidence": extract_confidence(result.answer),
         "latency_s": result.usage.latency_s,
         "cost_usd": result.usage.cost_usd,
+        "prompt_tokens": result.usage.prompt_tokens,
+        "completion_tokens": result.usage.completion_tokens,
         "num_llm_calls": result.usage.num_llm_calls,
+        "num_tool_calls": result.usage.num_tool_calls,
         "trace": result.trace,
     }
 
 
+def _finalize(
+    results: Sequence[AnswerResult],
+    correctness: Sequence[float | None],
+    per_question: Sequence[dict[str, Any]],
+) -> AggregateScores:
+    """Aggregate results and fold in the record-level recall and calibration axes."""
+    scores = aggregate(results, correctness)
+    recalls = [r["recall"] for r in per_question if r["recall"] is not None]
+    scores.mean_recall = sum(recalls) / len(recalls) if recalls else None
+    scores.calibration_error = calibration_error(
+        [r["confidence"] for r in per_question],
+        [r["correct"] for r in per_question],
+    )
+    return scores
+
+
 class AnswerEvaluator:
-    """Evaluate an answer-mode system over a fixed corpus and question set."""
+    """Evaluate an answer-mode system over a fixed corpus and question set.
+
+    Args:
+        questions: Question text keyed by query id.
+        references: Reference answer keyed by query id.
+        corpus: A shared CorpusHandle, or a qid -> CorpusHandle builder for
+            per-question corpora.
+        judge: Correctness judge applied to every answer.
+        gold: Gold doc ids per qid, for retrieval recall.
+        max_workers: Questions evaluated concurrently.
+    """
 
     def __init__(
         self,
@@ -68,12 +100,11 @@ class AnswerEvaluator:
         gold: Mapping[str, list[str]] | None = None,
         max_workers: int = 1,
     ) -> None:
-        # questions and references are keyed by query id.
         self.questions = questions
         self.references = references
         self.corpus = corpus
         self.judge = judge
-        self.gold = gold  # gold doc ids per qid, for retrieval recall
+        self.gold = gold
         self.max_workers = max_workers
 
     def _run_one(
@@ -93,14 +124,15 @@ class AnswerEvaluator:
                 else None
             )
         except Exception as exc:
-            result = AnswerResult(answer="", usage=Usage())
+            logger.error("question %s failed: %r", qid, exc)
+            result = AnswerResult(answer="")
             score = 0.0
             error = repr(exc)
         elapsed = time.perf_counter() - start
         if result.usage.latency_s is None:
             result.usage.latency_s = elapsed
         gold = self.gold.get(qid) if self.gold else None
-        record = question_record(qid, result, score, error=error, gold=gold)
+        record = _question_record(qid, result, score, error=error, gold=gold)
         return result, score, record
 
     def __call__(self, system: AnswerSystem) -> AnswerEvaluationResult:
@@ -116,11 +148,5 @@ class AnswerEvaluator:
         results = [row[0] for row in out]
         correctness = [row[1] for row in out]
         per_question = [row[2] for row in out]
-        scores = aggregate(results, correctness)
-        recalls = [r["recall"] for r in per_question if r["recall"] is not None]
-        scores.mean_recall = sum(recalls) / len(recalls) if recalls else None
-        scores.calibration_error = calibration_error(
-            [r["confidence"] for r in per_question],
-            [r["correct"] for r in per_question],
-        )
+        scores = _finalize(results, correctness, per_question)
         return AnswerEvaluationResult(scores=scores, per_question=per_question)

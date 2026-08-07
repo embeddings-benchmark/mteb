@@ -8,16 +8,25 @@ Judge.
 
 from __future__ import annotations
 
+import inspect
+import shutil
 import tempfile
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast, overload
 
-from mteb.agentic.corpus import FileSystemCorpus, InMemoryCorpus, RetrievalCorpus
+from mteb.agentic.corpus import InMemoryCorpus, RetrievalCorpus, RetrieverGuard
 from mteb.agentic.data import AnswerTaskData
 from mteb.agentic.evaluator import (
     AnswerEvaluationResult,
     AnswerEvaluator,
-    question_record,
+    _finalize,
+    _question_record,
+)
+from mteb.agentic.harbor import (
+    read_harbor_answers,
+    read_harbor_metrics,
+    run_harbor,
+    to_harbor_dataset,
 )
 from mteb.agentic.interface import AnswerResult, Usage
 from mteb.agentic.metrics import (
@@ -26,8 +35,6 @@ from mteb.agentic.metrics import (
     MultipleChoiceJudge,
     NumericToleranceJudge,
     QAF1Judge,
-    aggregate,
-    calibration_error,
 )
 from mteb.agentic.models import OpenAIChatModel
 from mteb.agentic.systems import get_system_meta
@@ -36,10 +43,16 @@ from mteb.agentic.tasks import get_task_meta
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping, Sequence
 
+    from mteb.agentic.data import TaskMeta
     from mteb.agentic.interface import AnswerSystem, ChatModel, CorpusHandle
     from mteb.agentic.metrics import Judge
     from mteb.agentic.systems import SystemMeta
     from mteb.models.models_protocols import EncoderProtocol, SearchProtocol
+
+# Batch-level kwargs consumed by the Harbor path rather than a system __init__.
+_HARBOR_KWARGS = frozenset(
+    {"agent_timeout_s", "agent_retriever", "n_concurrent", "agent_env"}
+)
 
 
 @overload
@@ -89,16 +102,28 @@ def evaluate(
 ) -> AnswerEvaluationResult | dict[str, AnswerEvaluationResult]:
     """Evaluate one or several answer-mode systems on one task.
 
-    Pass exactly one of ``system=`` or ``systems=``. The single-system form returns
-    an AnswerEvaluationResult and remains the simplest front door. The batch form
-    returns results keyed by system name and reuses the loaded task and compatible
-    corpus representations, including a retrieval index, across systems.
+    Pass exactly one of ``system=`` or ``systems=``. The batch form reuses the
+    loaded task and compatible corpus representations, including a retrieval
+    index, across systems.
 
-    Systems and task may be registry names or objects. model is a ChatModel or a
-    model name (a name is built into an OpenAIChatModel using OPENAI_BASE_URL /
-    OPENAI_API_KEY from the environment). retriever selects the first-stage
-    corpus for retrieval systems: "bm25", an MTEB model name, or a SearchProtocol.
-    Extra kwargs pass through to each system (top_k, sandbox_image, agent_env, ...).
+    Args:
+        system: One system, by registry name or as an AnswerSystem object.
+        task: Task registry name or an AnswerTaskData.
+        systems: Several systems, keyed by name in the returned dict.
+        model: A ChatModel, or a model name built into an OpenAIChatModel using
+            OPENAI_BASE_URL / OPENAI_API_KEY from the environment.
+        retriever: First-stage corpus for retrieval systems: "bm25", an MTEB
+            model name, or a SearchProtocol.
+        judge: Correctness judge; defaults to the task's canonical judge.
+        limit: Evaluate only the first N questions.
+        max_workers: Questions evaluated concurrently (in-process systems).
+        work_dir: Where Harbor datasets and job outputs are written.
+        **system_kwargs: Extra system arguments (top_k, agent_env, ...), passed
+            to each system that accepts them; unknown names raise.
+
+    Returns:
+        An AnswerEvaluationResult, or a dict of them keyed by system name when
+        systems= is used.
     """
     if task is None:
         raise TypeError("Pass task= a task name or AnswerTaskData.")
@@ -116,8 +141,9 @@ def evaluate(
         data = task_meta.load()
     questions, references = _select_questions(data, limit)
     judge = judge or _default_judge(task_meta, model)
-    corpora = _CorpusPool(data, retriever, work_dir)
+    corpora = _CorpusPool(data, retriever)
     resolved_model: ChatModel | None = None
+    consumed_kwargs: set[str] = set()
     output: dict[str, AnswerEvaluationResult] = {}
 
     for requested_system in requested:
@@ -127,11 +153,7 @@ def evaluate(
         if isinstance(requested_system, str):
             meta = get_system_meta(requested_system)
             if meta.kind == "harbor":
-                harbor_work_dir = (
-                    Path(work_dir) / key
-                    if systems is not None and work_dir is not None
-                    else work_dir
-                )
+                consumed_kwargs |= _HARBOR_KWARGS & set(system_kwargs)
                 output[key] = _run_harbor_batch(
                     meta,
                     data,
@@ -139,44 +161,55 @@ def evaluate(
                     references,
                     model=model,
                     judge=judge,
-                    work_dir=harbor_work_dir,
-                    **system_kwargs,
+                    work_dir=Path(work_dir) / key
+                    if systems is not None and work_dir is not None
+                    else work_dir,
+                    **{k: v for k, v in system_kwargs.items() if k in _HARBOR_KWARGS},
                 )
                 continue
             if resolved_model is None:
                 resolved_model = _resolve_model(model)
             corpus_kind = meta.corpus_kind
-            answer_system = _build_system(meta, resolved_model, data, system_kwargs)
+            answer_system = _build_system(
+                meta, resolved_model, data, system_kwargs, consumed_kwargs
+            )
         else:
             # A prebuilt system chooses its own corpus access via retriever=.
             corpus_kind = "retrieval" if retriever is not None else "memory"
             answer_system = requested_system
+            consumed_kwargs |= set(system_kwargs)
 
-        corpus = corpora.get(corpus_kind)
         output[key] = AnswerEvaluator(
             questions,
             references,
-            corpus,
+            corpora.get(corpus_kind),
             judge,
             gold=data.gold_by_qid,
             max_workers=max_workers,
         )(answer_system)
 
+    _reject_unknown_kwargs(system_kwargs, consumed_kwargs)
     return output if systems is not None else next(iter(output.values()))
+
+
+def _reject_unknown_kwargs(
+    system_kwargs: Mapping[str, Any], consumed: set[str]
+) -> None:
+    unknown = set(system_kwargs) - consumed
+    if unknown:
+        raise TypeError(f"Unknown system kwargs for this evaluation: {sorted(unknown)}")
 
 
 class _CorpusPool:
     """Lazily build and reuse corpus views during one batch evaluation."""
 
     def __init__(
-        self,
-        data: AnswerTaskData,
-        retriever: SearchProtocol | str | None,
-        work_dir: str | Path | None,
+        self, data: AnswerTaskData, retriever: SearchProtocol | str | None
     ) -> None:
         self.data = data
         self.retriever = retriever
-        self.work_dir = work_dir
+        # One guard per pool: every corpus sharing this retriever serializes on it.
+        self.guard = RetrieverGuard()
         self._shared: dict[str, CorpusHandle | Callable[[str], CorpusHandle]] = {}
 
     def get(self, corpus_kind: str) -> CorpusHandle | Callable[[str], CorpusHandle]:
@@ -185,21 +218,16 @@ class _CorpusPool:
 
         corpus: CorpusHandle | Callable[[str], CorpusHandle]
         if self.data.documents_by_qid is None:
-            corpus = _build_corpus(
-                corpus_kind, self.data.documents, self.retriever, self.work_dir
-            )
+            corpus = self._build(corpus_kind, self.data.documents)
         else:
             per_question: dict[str, CorpusHandle] = {}
 
             def resolve(qid: str) -> CorpusHandle:
-                # A SearchProtocol usually owns one mutable index. Do not retain
+                # A SearchProtocol owns one mutable index. Do not retain
                 # per-question retrieval handles that may share and overwrite it.
                 if corpus_kind != "retrieval" and qid in per_question:
                     return per_question[qid]
-                sub = str(Path(self.work_dir) / qid) if self.work_dir else None
-                built = _build_corpus(
-                    corpus_kind, self.data.corpus_for(qid), self.retriever, sub
-                )
+                built = self._build(corpus_kind, self.data.corpus_for(qid))
                 if corpus_kind != "retrieval":
                     per_question[qid] = built
                 return built
@@ -208,6 +236,20 @@ class _CorpusPool:
 
         self._shared[corpus_kind] = corpus
         return corpus
+
+    def _build(
+        self, corpus_kind: str, documents: Mapping[str, dict[str, str]]
+    ) -> CorpusHandle:
+        if corpus_kind == "retrieval":
+            if self.retriever is None:
+                raise ValueError(
+                    "This system uses a first-stage retriever; pass retriever= "
+                    "('bm25', an mteb model name, or a SearchProtocol)."
+                )
+            return RetrievalCorpus(
+                dict(documents), _resolve_retriever(self.retriever), guard=self.guard
+            )
+        return InMemoryCorpus(dict(documents))
 
 
 def _system_name(system: str | AnswerSystem) -> str:
@@ -226,7 +268,10 @@ def _select_questions(
     if limit is not None:
         items = items[:limit]
     questions = dict(items)
-    references = {qid: data.references.get(qid, "") for qid in questions}
+    missing = [qid for qid in questions if qid not in data.references]
+    if missing:
+        raise ValueError(f"Questions with no reference answer: {missing[:5]}")
+    references = {qid: data.references[qid] for qid in questions}
     return questions, references
 
 
@@ -243,7 +288,7 @@ def _resolve_model(model: ChatModel | str | None) -> ChatModel:
 
 # The judge behind each TaskMeta.default_judge name (the "llm" metric is
 # handled separately because it needs a ChatModel).
-_METRIC_JUDGES = {
+_METRIC_JUDGES: dict[str, Callable[[], Judge]] = {
     "qa_f1": QAF1Judge,
     "mcq": MultipleChoiceJudge,
     "oolong": NumericToleranceJudge,
@@ -251,19 +296,24 @@ _METRIC_JUDGES = {
 }
 
 
-def _default_judge(task_meta: object, model: ChatModel | str | None) -> Judge:
+def _default_judge(task_meta: TaskMeta | None, model: ChatModel | str | None) -> Judge:
     """The task's canonical judge when the caller passes none.
 
-    Non-LLM metrics need no model; the LLM judge falls back to exact match when
-    no usable ChatModel is available (e.g. a Harbor run passing a model name).
+    Ad-hoc AnswerTaskData defaults to exact match. A task graded by an LLM
+    judge requires a usable ChatModel rather than silently downgrading.
     """
-    metric = getattr(task_meta, "default_judge", None)
+    if task_meta is None:
+        return ExactMatchJudge()
+    metric = task_meta.default_judge
     judge_cls = _METRIC_JUDGES.get(metric)
     if judge_cls is not None:
         return judge_cls()
-    if metric == "llm" and not isinstance(model, str) and model is not None:
-        return LLMJudge(model)
-    return ExactMatchJudge()
+    if isinstance(model, str) or model is None:
+        raise ValueError(
+            f"Task {task_meta.name!r} grades with an LLM judge; pass judge= "
+            "(e.g. LLMJudge(chat_model)) or model= a ChatModel."
+        )
+    return LLMJudge(model)
 
 
 def _resolve_retriever(retriever: SearchProtocol | str) -> SearchProtocol:
@@ -282,38 +332,31 @@ def _resolve_retriever(retriever: SearchProtocol | str) -> SearchProtocol:
     )  # wrap a plain encoder for dense retrieval
 
 
-def _build_corpus(
-    corpus_kind: str,
-    documents: Mapping[str, dict[str, str]],
-    retriever: SearchProtocol | str | None,
-    work_dir: str | Path | None,
-) -> CorpusHandle:
-    if corpus_kind == "retrieval":
-        if retriever is None:
-            raise ValueError(
-                "This system uses a first-stage retriever; pass retriever= "
-                "('bm25', an mteb model name, or a SearchProtocol)."
-            )
-        return RetrievalCorpus(documents, _resolve_retriever(retriever))
-    if corpus_kind == "files":
-        base = (
-            Path(work_dir)
-            if work_dir
-            else Path(tempfile.mkdtemp(prefix="mteb-agentic-"))
-        )
-        return FileSystemCorpus(documents, str(base / "corpus"))
-    return InMemoryCorpus(documents)
-
-
 def _build_system(
     meta: SystemMeta,
     model: ChatModel,
     data: AnswerTaskData,
     system_kwargs: dict[str, Any],
+    consumed: set[str],
 ) -> AnswerSystem:
-    kwargs = dict(system_kwargs)
-    if meta.name == "oracle":
-        kwargs.setdefault("gold", data.gold_by_question)
+    """Instantiate a system with the kwargs its constructor accepts."""
+    if meta.loader is None:
+        raise ValueError(f"System {meta.name!r} has no in-process loader.")
+    params = inspect.signature(meta.loader).parameters
+    accepts_any = any(p.kind is inspect.Parameter.VAR_KEYWORD for p in params.values())
+    used = {k for k in system_kwargs if accepts_any or k in params} - _HARBOR_KWARGS
+    consumed |= used
+    kwargs = {k: system_kwargs[k] for k in used}
+    if meta.needs_gold:
+        # Gold docs keyed by question text, since answer() receives only the question.
+        kwargs.setdefault(
+            "gold",
+            {
+                data.questions[qid]: ids
+                for qid, ids in data.gold_by_qid.items()
+                if qid in data.questions
+            },
+        )
     return meta.load(model, **kwargs)
 
 
@@ -330,21 +373,10 @@ def _run_harbor_batch(
 ) -> AnswerEvaluationResult:
     # One batch Harbor job over all questions (Harbor's canonical adapter pattern),
     # then score the collected answers with the same Judge as every other system.
-    # kwargs tune the run: n_concurrent (default 8), agent_env, agent_timeout_s.
-    import shutil
-    import tempfile
-
-    from mteb.agentic.harbor import (
-        read_harbor_answers,
-        read_harbor_metrics,
-        run_harbor,
-        to_harbor_dataset,
-    )
-
     if shutil.which("harbor") is None:
-        raise RuntimeError(
+        raise ImportError(
             "Harbor is required for containerized agents. Install it with "
-            'pip install "mteb[agentic-agents]".'
+            'pip install "mteb[agentic-agents]" and a running Docker daemon.'
         )
     if meta.harbor_agent is None:
         raise ValueError(f"Harbor system {meta.name!r} has no Harbor agent id.")
@@ -389,12 +421,13 @@ def _run_harbor_batch(
         results.append(result)
         correctness.append(score)
         per_question.append(
-            question_record(
-                qid, result, score, error=None if answer else "no answer produced"
+            _question_record(
+                qid,
+                result,
+                score,
+                error=None if answer else "no answer produced",
+                gold=data.gold_by_qid.get(qid),
             )
         )
-    scores = aggregate(results, correctness)
-    scores.calibration_error = calibration_error(
-        [r["confidence"] for r in per_question], correctness
-    )
+    scores = _finalize(results, correctness, per_question)
     return AnswerEvaluationResult(scores=scores, per_question=per_question)

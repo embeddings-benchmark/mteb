@@ -5,15 +5,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from mteb.agentic.interface import AnswerResult, Usage
-from mteb.agentic.systems._common import add_usage, join_context
+from mteb.agentic.systems._common import CONTEXT_PROMPT, add_usage, join_context
 
 if TYPE_CHECKING:
     from mteb.agentic.interface import ChatModel, CorpusHandle
-
-_RAG_PROMPT = (
-    "Answer the question concisely using only the context below.\n\n"
-    "Context:\n{context}\n\nQuestion: {question}"
-)
 
 
 class RetrieveThenAnswer:
@@ -37,7 +32,9 @@ class RetrieveThenAnswer:
             [
                 {
                     "role": "user",
-                    "content": _RAG_PROMPT.format(context=context, question=question),
+                    "content": CONTEXT_PROMPT.format(
+                        context=context, question=question
+                    ),
                 }
             ]
         )

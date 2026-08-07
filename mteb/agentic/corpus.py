@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+import threading
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -14,7 +14,6 @@ class InMemoryCorpus:
     """Read-only corpus backed by a dict of documents, with no search index."""
 
     def __init__(self, documents: dict[str, dict[str, str]]) -> None:
-        # documents maps doc_id to a mapping with at least a text key.
         self._docs = documents
 
     @property
@@ -31,17 +30,30 @@ class InMemoryCorpus:
         raise NotImplementedError("InMemoryCorpus has no index. Use RetrievalCorpus.")
 
 
-def _retrieval_task_metadata(name: str = "AgenticRetrieval") -> TaskMetadata:
+def _retrieval_task_metadata() -> TaskMetadata:
     from mteb.abstasks.task_metadata import TaskMetadata
 
     return TaskMetadata(
         dataset={"path": "mteb/agentic", "revision": "main"},
-        name=name,
+        name="AgenticRetrieval",
         description="Answer-mode retrieval over a fixed corpus.",
         type="Retrieval",
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
     )
+
+
+class RetrieverGuard:
+    """Serializes access to one SearchProtocol and tracks which corpus indexed it.
+
+    A SearchProtocol owns a single mutable index. When several RetrievalCorpus
+    objects share one retriever (per-question corpora, concurrent workers), the
+    guard makes each search run against the index of the corpus that issued it.
+    """
+
+    def __init__(self) -> None:
+        self.lock = threading.Lock()
+        self.owner: int | None = None
 
 
 class RetrievalCorpus(InMemoryCorpus):
@@ -50,6 +62,7 @@ class RetrievalCorpus(InMemoryCorpus):
     Pass mteb.get_model("mteb/baseline-bb25") for BM25, or a
     SearchEncoderWrapper around an encoder for dense. The corpus is indexed
     once at construction; search runs one query through the model per call.
+    Pass a shared RetrieverGuard when several corpora share one retriever.
     """
 
     def __init__(
@@ -57,22 +70,22 @@ class RetrievalCorpus(InMemoryCorpus):
         documents: dict[str, dict[str, str]],
         search_model: SearchProtocol,
         *,
-        task_metadata: TaskMetadata | None = None,
-        encode_kwargs: dict | None = None,
+        guard: RetrieverGuard | None = None,
     ) -> None:
         super().__init__(documents)
         from datasets import Dataset
 
         self._model = search_model
-        self._meta = task_metadata or _retrieval_task_metadata()
-        self._encode_kwargs = dict(encode_kwargs or {})
+        self._meta = _retrieval_task_metadata()
+        self._guard = guard or RetrieverGuard()
         self._corpus = Dataset.from_list(
             [
                 {"id": d, "title": doc.get("title", ""), "text": doc.get("text", "")}
                 for d, doc in documents.items()
             ]
         )
-        self._index()
+        with self._guard.lock:
+            self._index()
 
     def _index(self) -> None:
         self._model.index(
@@ -80,46 +93,38 @@ class RetrievalCorpus(InMemoryCorpus):
             task_metadata=self._meta,
             hf_split="test",
             hf_subset="default",
-            encode_kwargs=self._encode_kwargs,
+            encode_kwargs={},
             num_proc=None,
         )
+        self._guard.owner = id(self)
 
     def search(self, query: str, *, top_k: int = 10) -> list[tuple[str, float]]:
         """Retrieve top-k documents for one query via the wrapped model."""
         from datasets import Dataset
 
         queries = Dataset.from_list([{"id": "q", "text": query}])
-        try:
-            out = self._run_search(queries, top_k)
-        except ValueError as exc:
-            # Dense/late-interaction wrappers free their index after a search;
-            # re-index and retry so per-query search works for every retriever.
-            if "indexed" not in str(exc).lower():
-                raise
-            self._index()
-            out = self._run_search(queries, top_k)
+        with self._guard.lock:
+            if self._guard.owner != id(self):
+                self._index()  # another corpus re-indexed the shared retriever
+            try:
+                out = self._run_search(queries, top_k)
+            except ValueError as exc:
+                # Dense/late-interaction wrappers free their index after a search;
+                # re-index and retry so per-query search works for every retriever.
+                if "indexed" not in str(exc).lower():
+                    raise
+                self._index()
+                out = self._run_search(queries, top_k)
         ranking = out.get("q", {})
         return sorted(ranking.items(), key=lambda kv: -kv[1])[:top_k]
 
-    def _run_search(self, queries: object, top_k: int) -> dict:
+    def _run_search(self, queries: object, top_k: int) -> dict[str, dict[str, float]]:
         return self._model.search(
             queries=queries,
             task_metadata=self._meta,
             hf_split="test",
             hf_subset="default",
             top_k=top_k,
-            encode_kwargs=self._encode_kwargs,
+            encode_kwargs={},
             num_proc=None,
         )
-
-
-class FileSystemCorpus(InMemoryCorpus):
-    """Corpus materialized to files so file-based agents can read it. Exposes root."""
-
-    def __init__(self, documents: dict[str, dict[str, str]], root: str) -> None:
-        super().__init__(documents)
-        self.root = Path(root)
-        self.root.mkdir(parents=True, exist_ok=True)
-        for doc_id, doc in documents.items():
-            safe = "".join(c if c.isalnum() or c in "-_." else "_" for c in doc_id)
-            (self.root / f"{safe}.txt").write_text(doc.get("text", ""))

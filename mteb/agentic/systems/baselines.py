@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from mteb.agentic.interface import AnswerResult, Usage
-from mteb.agentic.systems._common import join_context
+from mteb.agentic.systems._common import CONTEXT_PROMPT, add_usage, join_context
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -13,10 +13,6 @@ if TYPE_CHECKING:
     from mteb.agentic.interface import ChatModel, CorpusHandle
 
 _ANSWER_PROMPT = "Answer the question concisely.\n\nQuestion: {question}"
-_CONTEXT_PROMPT = (
-    "Answer the question concisely using only the context below.\n\n"
-    "Context:\n{context}\n\nQuestion: {question}"
-)
 
 
 class ClosedBookSystem:
@@ -31,15 +27,9 @@ class ClosedBookSystem:
         out = self.model.generate(
             [{"role": "user", "content": _ANSWER_PROMPT.format(question=question)}]
         )
-        return AnswerResult(
-            answer=out.text,
-            usage=Usage(
-                prompt_tokens=out.prompt_tokens,
-                completion_tokens=out.completion_tokens,
-                num_llm_calls=1,
-                cost_usd=out.cost_usd,
-            ),
-        )
+        usage = Usage()
+        add_usage(usage, out)
+        return AnswerResult(answer=out.text, usage=usage)
 
 
 class OracleContextSystem:
@@ -69,19 +59,12 @@ class OracleContextSystem:
             [
                 {
                     "role": "user",
-                    "content": _CONTEXT_PROMPT.format(
+                    "content": CONTEXT_PROMPT.format(
                         context=context, question=question
                     ),
                 }
             ]
         )
-        return AnswerResult(
-            answer=out.text,
-            cited_doc_ids=list(doc_ids),
-            usage=Usage(
-                prompt_tokens=out.prompt_tokens,
-                completion_tokens=out.completion_tokens,
-                num_llm_calls=1,
-                cost_usd=out.cost_usd,
-            ),
-        )
+        usage = Usage()
+        add_usage(usage, out)
+        return AnswerResult(answer=out.text, cited_doc_ids=list(doc_ids), usage=usage)

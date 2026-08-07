@@ -10,9 +10,10 @@ Docker); pass environment="docker" (with a sandbox image) or a cloud backend
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from mteb.agentic.interface import AnswerResult, Usage
+from mteb.agentic.systems._common import join_all
 
 if TYPE_CHECKING:
     from mteb.agentic.interface import ChatModel, CorpusHandle
@@ -48,7 +49,7 @@ class RLMSystem:
         sandbox_image: str = "rlm-sandbox",
         timeout_s: float = 90.0,
     ) -> None:
-        self.model = model.name
+        self.model_name = model.name
         self.base_url = model.base_url
         self.api_key = model.api_key or "EMPTY"
         self.max_context_chars = max_context_chars
@@ -59,9 +60,9 @@ class RLMSystem:
         self.timeout_s = timeout_s
         self.name = f"rlm/{model.name}"
 
-    def _build_rlm(self):
+    def _build_rlm(self) -> Any:
         try:
-            from rlm import RLM
+            from rlm import RLM  # type: ignore[import-untyped]
         except ImportError as exc:
             raise ImportError(
                 "RLMSystem needs the rlm library (imported as rlm, PyPI package "
@@ -74,7 +75,7 @@ class RLMSystem:
         return RLM(
             backend="openai",
             backend_kwargs={
-                "model_name": self.model,
+                "model_name": self.model_name,
                 "base_url": self.base_url,
                 "api_key": self.api_key,
                 "timeout": self.timeout_s,
@@ -87,9 +88,7 @@ class RLMSystem:
 
     def answer(self, question: str, corpus: CorpusHandle) -> AnswerResult:
         """Load the whole corpus as context, then let RLM search it for the answer."""
-        context = "\n\n".join(
-            f"[{d}] {doc.get('text', '')}" for d, doc in corpus.documents.items()
-        )
+        context = join_all(corpus)
         out = self._build_rlm().completion(
             context[: self.max_context_chars],
             root_prompt=_ROOT_PROMPT.format(question=question),

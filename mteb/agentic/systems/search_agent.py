@@ -44,24 +44,24 @@ class SearchAgent:
         self,
         model: ChatModel,
         *,
-        k: int = 5,
+        top_k: int = 5,
         snippet_chars: int = 2000,
         max_iterations: int = 30,
     ) -> None:
         self.model = model
-        self.k = k
+        self.top_k = top_k
         self.snippet_chars = snippet_chars  # matches the BCP 512-token snippet cap
         self.max_iterations = max_iterations
         self.name = f"search-agent/{model.name}"
 
-    def _tools(self) -> list[dict]:
+    def _tools(self) -> list[dict[str, Any]]:
         return [
             {
                 "type": "function",
                 "function": {
                     "name": "search",
                     "description": (
-                        f"Search the corpus. Returns top-{self.k} hits with docid, "
+                        f"Search the corpus. Returns top-{self.top_k} hits with docid, "
                         "score, and a snippet of the document."
                     ),
                     "parameters": {
@@ -86,10 +86,10 @@ class SearchAgent:
         ]
 
     def _run_tool(
-        self, name: str, args: dict, corpus: CorpusHandle, seen: set[str]
+        self, name: str, args: dict[str, Any], corpus: CorpusHandle, seen: set[str]
     ) -> object:
         if name == "search":
-            hits = corpus.search(args.get("query", ""), top_k=self.k)
+            hits = corpus.search(args.get("query", ""), top_k=self.top_k)
             results = []
             for doc_id, score in hits:
                 seen.add(doc_id)
@@ -108,7 +108,7 @@ class SearchAgent:
         seen: set[str] = set()
         trace: list[dict[str, Any]] = []
         tools = self._tools()
-        messages: list[dict] = [
+        messages: list[dict[str, Any]] = [
             {"role": "user", "content": _QUERY_TEMPLATE.format(question=question)}
         ]
         text = ""

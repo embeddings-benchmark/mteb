@@ -44,7 +44,12 @@ def _load(
     """Load HotpotQA. max_questions scopes both the questions and the corpus."""
     from datasets import load_dataset
 
-    dataset = load_dataset("hotpot_qa", "distractor", split=split)
+    dataset = load_dataset(
+        "hotpotqa/hotpot_qa",
+        "distractor",
+        split=split,
+        revision="1908d6afbbead072334abe2965f91bd2709910ab",
+    )
     if max_questions is not None:
         dataset = dataset.select(range(min(max_questions, len(dataset))))
     return _to_answer_data(dataset)

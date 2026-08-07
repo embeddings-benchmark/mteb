@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Iterable, Sequence
 
     from mteb.agentic.interface import AnswerResult, ChatModel
 
@@ -56,11 +56,12 @@ class QAF1Judge:
 
 def _extract_choice(text: str) -> str | None:
     # The letter of a multiple-choice answer (A-D), from common answer phrasings.
-    for pattern in (r"answer is[^A-Da-d]*\(?([A-Da-d])\)?", r"\(([A-Da-d])\)"):
-        match = re.search(pattern, text)
+    patterns = (r"answer is\s*:?\s*\**\(?([A-D])\)?\b", r"\(([A-D])\)")
+    for pattern in patterns:
+        match = re.search(pattern, text, re.IGNORECASE)
         if match:
             return match.group(1).upper()
-    lead = re.match(r"\s*([A-Da-d])\b", text)
+    lead = re.match(r"\s*([A-D])\b", text, re.IGNORECASE)
     return lead.group(1).upper() if lead else None
 
 
@@ -134,21 +135,34 @@ class LLMJudge:
         return _verdict(self.model.generate([{"role": "user", "content": prompt}]).text)
 
 
-def recall_at(cited: object, gold: object) -> float | None:
-    """Fraction of gold documents present in the retrieved/cited set, or None."""
+def recall_at(cited: Iterable[str] | None, gold: Iterable[str] | None) -> float | None:
+    """Fraction of gold documents present in the cited set.
+
+    None when the question has no gold set or the system cited nothing:
+    recall only applies to systems that surface documents (closed-book,
+    full-context, and containerized agents report no citations).
+    """
     gold_set = set(gold or [])
-    if not gold_set:
+    cited_set = set(cited or [])
+    if not gold_set or not cited_set:
         return None
-    return len(gold_set & set(cited or [])) / len(gold_set)
+    return len(gold_set & cited_set) / len(gold_set)
 
 
 _CONFIDENCE_RE = re.compile(r"confidence:\s*(\d+(?:\.\d+)?)", re.IGNORECASE)
 
 
 def extract_confidence(text: str) -> float | None:
-    """A stated confidence in [0,1] parsed from a BrowseComp-style answer, or None."""
+    """A stated confidence in [0,1] parsed from a BrowseComp-style answer, or None.
+
+    Values above 1 are read as percentages ("confidence: 90"), values at or
+    below 1 as fractions ("confidence: 0.9").
+    """
     match = _CONFIDENCE_RE.search(text or "")
-    return min(1.0, float(match.group(1)) / 100.0) if match else None
+    if not match:
+        return None
+    value = float(match.group(1))
+    return min(1.0, value / 100.0 if value > 1 else value)
 
 
 def calibration_error(
@@ -200,16 +214,24 @@ def aggregate(
     """Reduce per-question results into the reported axes, excluding N/A questions."""
     n = len(results)
     if n == 0:
-        return AggregateScores(0.0, None, None, None, 0.0, 0, coverage=0.0)
+        return AggregateScores(
+            accuracy=0.0,
+            mean_cost_usd=None,
+            total_cost_usd=None,
+            mean_latency_s=None,
+            mean_llm_calls=0.0,
+            n=0,
+            coverage=0.0,
+        )
     applicable = [r for r in results if r.applicable]
     n_app = len(applicable)
     scores = [c for c in correctness if c is not None]
     costs = [r.usage.cost_usd for r in applicable if r.usage.cost_usd is not None]
     latencies = [r.usage.latency_s for r in applicable if r.usage.latency_s is not None]
-    total_cost = sum(costs) if costs else None
+    total_cost: float | None = sum(costs) if costs else None
     return AggregateScores(
         accuracy=(sum(scores) / n_app) if n_app else 0.0,
-        mean_cost_usd=(total_cost / len(costs)) if costs else None,
+        mean_cost_usd=(total_cost / len(costs)) if total_cost is not None else None,
         total_cost_usd=total_cost,
         mean_latency_s=(sum(latencies) / len(latencies)) if latencies else None,
         mean_llm_calls=(sum(r.usage.num_llm_calls for r in applicable) / n_app)

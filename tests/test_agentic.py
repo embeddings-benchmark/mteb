@@ -48,10 +48,8 @@ class FakeChatModel:
 
     def __init__(self, scripted: list[ChatResponse] | None = None) -> None:
         self._scripted = list(scripted or [])
-        self.calls = 0
 
     def generate(self, messages, **kwargs) -> ChatResponse:
-        self.calls += 1
         if self._scripted:
             return self._scripted.pop(0)
         return ChatResponse(text="Paris")
@@ -156,11 +154,27 @@ def test_rag_with_llm_retriever_end_to_end():
 
 
 def test_registry_lists_and_loads():
-    names = list_systems()
-    assert {"closed-book", "rag", "search-agent", "oracle", "rlm"} <= set(names)
+    # Exact registry contents, so a silently dropped system fails the suite.
+    assert list_systems() == sorted(
+        [
+            "closed-book",
+            "full-context",
+            "windowed-full-context",
+            "rag",
+            "iterative-rag",
+            "search-agent",
+            "oracle",
+            "rlm",
+            "claude-code",
+            "codex",
+            "mini-swe-agent",
+            "openhands",
+            "hermes",
+        ]
+    )
     assert isinstance(get_system("closed-book", FakeChatModel()), ClosedBookSystem)
-    with pytest.raises(KeyError):
-        get_system("does-not-exist", FakeChatModel())
+    with pytest.raises(KeyError, match="Did you mean 'rag'"):
+        get_system("ragg", FakeChatModel())
 
 
 def test_search_agent_tool_loop():
@@ -177,7 +191,7 @@ def test_search_agent_tool_loop():
             text="Explanation: from the docs [d1].\nExact Answer: Paris\nConfidence: 90%"
         ),
     ]
-    agent = SearchAgent(FakeChatModel(scripted), k=2)
+    agent = SearchAgent(FakeChatModel(scripted), top_k=2)
     result = agent.answer("What is the capital of France?", corpus())
     assert result.answer == "Paris"
     assert result.usage.num_tool_calls == 1
@@ -216,6 +230,9 @@ def test_evaluator_concurrent_matches_sequential():
         RetrieveThenAnswer(FakeChatModel(), top_k=1)
     )
     assert seq.scores.accuracy == conc.scores.accuracy == 1.0
+    # Records must line up question-for-question regardless of worker count.
+    strip = lambda r: {k: v for k, v in r.items() if k != "latency_s"}  # noqa: E731
+    assert [strip(r) for r in seq.per_question] == [strip(r) for r in conc.per_question]
 
 
 def test_evaluate_door_in_process():
@@ -328,7 +345,7 @@ def test_evaluate_batch_loads_task_and_model_once(monkeypatch):
         assert name == "Tiny"
         from mteb.agentic import TaskMeta
 
-        return TaskMeta("Tiny", "tiny", load_task)
+        return TaskMeta("Tiny", "tiny", load_task, default_judge="exact_match")
 
     def fake_model(name):
         assert name == "fake-model"
@@ -402,33 +419,37 @@ def test_official_metric_judges():
 
 
 def test_task_default_judge_and_resolution():
-    from mteb.agentic import ExactMatchJudge, QAF1Judge, get_task_meta
+    from mteb.agentic import ExactMatchJudge, QAF1Judge, TaskMeta, get_task_meta
     from mteb.agentic.evaluate import _default_judge
 
     assert get_task_meta("LongBenchV2").default_judge == "mcq"
     assert get_task_meta("HotpotQA").default_judge == "qa_f1"
     assert get_task_meta("BrowseCompPlus").default_judge == "llm"
 
-    class QAMeta:
-        default_judge = "qa_f1"
+    qa_meta = TaskMeta("T", "t", lambda: None, default_judge="qa_f1")
+    assert isinstance(_default_judge(qa_meta, FakeChatModel()), QAF1Judge)
 
-    assert isinstance(_default_judge(QAMeta(), FakeChatModel()), QAF1Judge)
+    # Ad-hoc AnswerTaskData (no TaskMeta) defaults to exact match.
+    assert isinstance(_default_judge(None, FakeChatModel()), ExactMatchJudge)
 
-    class LLMMeta:
-        default_judge = "llm"
-
-    # llm default with a str model (Harbor) safely falls back to exact match
-    assert isinstance(_default_judge(LLMMeta(), "model-name"), ExactMatchJudge)
-    assert type(_default_judge(LLMMeta(), FakeChatModel())).__name__ == "LLMJudge"
+    llm_meta = TaskMeta("T", "t", lambda: None)  # default_judge="llm"
+    assert type(_default_judge(llm_meta, FakeChatModel())).__name__ == "LLMJudge"
+    # An LLM-judged task must not silently downgrade when no ChatModel is usable.
+    with pytest.raises(ValueError, match="LLM judge"):
+        _default_judge(llm_meta, "model-name")
+    with pytest.raises(ValueError, match="LLM judge"):
+        _default_judge(llm_meta, None)
 
 
 def test_recall_and_calibration_metrics():
     from mteb.agentic.metrics import calibration_error, extract_confidence, recall_at
 
     assert recall_at(["d1", "d2"], ["d1", "d3"]) == 0.5  # 1 of 2 gold retrieved
-    assert recall_at([], ["d1"]) == 0.0
+    assert recall_at([], ["d1"]) is None  # nothing cited -> N/A, not 0
     assert recall_at(["d1"], []) is None  # no gold -> N/A
+    assert recall_at(["d2"], ["d1"]) == 0.0  # cited but missed all gold
     assert extract_confidence("Exact Answer: Paris. Confidence: 90%") == 0.9
+    assert extract_confidence("Confidence: 0.9") == 0.9  # fraction form
     assert extract_confidence("no confidence here") is None
     assert calibration_error([1.0, 0.0], [1.0, 0.0]) == 0.0  # perfectly calibrated
     assert calibration_error([1.0], [0.0]) == 1.0  # confident but wrong
@@ -472,7 +493,6 @@ def test_evaluate_resolves_model_name(monkeypatch):
 def test_harbor_batch_dispatch(tmp_path, monkeypatch):
     # Harbor agents run as one batch job: evaluate exports a dataset, runs harbor
     # (mocked here), reads answer artifacts, and scores them like any system.
-    import mteb.agentic.harbor as hb
 
     data = from_per_question(
         corpora={"q1": {"a": {"text": "Paris is the capital of France."}}},
@@ -490,7 +510,10 @@ def test_harbor_batch_dispatch(tmp_path, monkeypatch):
         art.mkdir(parents=True)
         (art / "answer.txt").write_text("Paris")
 
-    monkeypatch.setattr(hb, "run_harbor", fake_run)
+    import importlib
+
+    ev_mod = importlib.import_module("mteb.agentic.evaluate")
+    monkeypatch.setattr(ev_mod, "run_harbor", fake_run)
     monkeypatch.setattr("shutil.which", lambda _: "/usr/bin/harbor")
     res = evaluate(
         "mini-swe-agent", data, model="qwen", judge=ExactMatchJudge(), work_dir=tmp_path
@@ -521,7 +544,6 @@ def test_hotpotqa_transform():
         data.corpus_for("q1")["France"]["text"] == "Paris is the capital. It is large."
     )
     assert data.gold_by_qid["q1"] == ["France"]
-    assert data.gold_by_question["Which city is the French capital?"] == ["France"]
 
 
 def test_musique_transform():
@@ -735,3 +757,87 @@ def test_harbor_reads_metrics(tmp_path):
     m = read_harbor_metrics(tmp_path)["q0"]
     assert m["prompt_tokens"] == 100 and m["completion_tokens"] == 20
     assert m["cost_usd"] == 0.5 and m["latency_s"] == 30.0
+
+
+def test_browsecomp_plus_transform():
+    # Round-trip the official XOR/base64 scheme so the decrypt path is covered.
+    import base64
+
+    from mteb.agentic.tasks.browsecomp_plus import _CANARY, _derive_key, _to_answer_data
+
+    def encrypt(plain: str) -> str:
+        data = plain.encode("utf-8")
+        key = _derive_key(_CANARY, len(data))
+        return base64.b64encode(bytes(a ^ b for a, b in zip(data, key))).decode()
+
+    corpus_rows = [{"docid": "d1", "text": "Paris is the capital."}]
+    query_rows = [
+        {
+            "query_id": "q1",
+            "query": encrypt("capital of France?"),
+            "answer": encrypt("Paris"),
+            "gold_docs": [{"docid": encrypt("d1")}],
+            "evidence_docs": [{"docid": encrypt("d-missing")}],  # not in corpus
+        }
+    ]
+    data = _to_answer_data(corpus_rows, query_rows)
+    assert data.questions["q1"] == "capital of France?"
+    assert data.references["q1"] == "Paris"
+    assert data.gold_by_qid["q1"] == ["d1"]  # missing evidence doc filtered out
+
+
+def test_to_scores_dict_bridges_aggregate():
+    from mteb.agentic import to_scores_dict
+
+    data = from_mteb_retrieval(
+        CORPUS, {"q1": "capital of France?"}, {"q1": {"d1": 1}}, {"q1": "Paris"}
+    )
+    res = evaluate(
+        "rag",
+        data,
+        model=FakeChatModel(),
+        judge=ExactMatchJudge(),
+        retriever=FakeSearchModel(),
+        top_k=1,
+    )
+    scores = to_scores_dict(res.scores)
+    assert scores["accuracy"] == 1.0
+    assert scores["mean_recall"] == 1.0
+    assert scores["n"] == 1.0 and scores["coverage"] == 1.0
+
+
+def test_search_agent_forces_final_answer_at_iteration_cap():
+    # Every scripted turn calls a tool; at the cap the agent must still answer.
+    tool_turn = ChatResponse(
+        text="",
+        tool_calls=[ToolCall(id="c", name="search", arguments='{"query": "x"}')],
+    )
+    scripted = [tool_turn, tool_turn, ChatResponse(text="Exact Answer: Paris")]
+    agent = SearchAgent(FakeChatModel(scripted), top_k=1, max_iterations=2)
+    result = agent.answer("capital?", corpus())
+    assert result.answer == "Paris"  # from the forced final call
+    assert result.usage.num_llm_calls == 3
+
+
+def test_evaluate_rejects_unknown_kwargs_but_broadcasts_known():
+    data = from_mteb_retrieval(
+        CORPUS, {"q1": "capital of France?"}, {"q1": {"d1": 1}}, {"q1": "Paris"}
+    )
+    # top_k applies to rag and is skipped for closed-book, without error.
+    results = evaluate(
+        task=data,
+        systems=["closed-book", "rag"],
+        model=FakeChatModel(),
+        judge=ExactMatchJudge(),
+        retriever=FakeSearchModel(),
+        top_k=1,
+    )
+    assert set(results) == {"closed-book", "rag"}
+    with pytest.raises(TypeError, match="Unknown system kwargs"):
+        evaluate(
+            "closed-book",
+            data,
+            model=FakeChatModel(),
+            judge=ExactMatchJudge(),
+            not_a_kwarg=1,
+        )

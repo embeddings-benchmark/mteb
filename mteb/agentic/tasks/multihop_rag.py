@@ -40,8 +40,13 @@ def _load(*, max_questions: int | None = None) -> AnswerTaskData:
     """Load MultiHop-RAG. The corpus is shared; max_questions scopes the questions."""
     from datasets import load_dataset
 
-    corpus = load_dataset("yixuantt/MultiHopRAG", "corpus", split="train")
-    queries = load_dataset("yixuantt/MultiHopRAG", "MultiHopRAG", split="train")
+    revision = "71ac0d0bd1f951d2d6b70311f7d2ae404e1ffa82"
+    corpus = load_dataset(
+        "yixuantt/MultiHopRAG", "corpus", split="train", revision=revision
+    )
+    queries = load_dataset(
+        "yixuantt/MultiHopRAG", "MultiHopRAG", split="train", revision=revision
+    )
     if max_questions is not None:
         queries = queries.select(range(min(max_questions, len(queries))))
     return _to_answer_data(corpus, queries)

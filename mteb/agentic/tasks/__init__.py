@@ -39,7 +39,11 @@ def list_tasks() -> list[str]:
 def get_task_meta(name: str) -> TaskMeta:
     """Fetch a task's metadata by name."""
     if name not in TASK_REGISTRY:
-        raise KeyError(f"Unknown task {name!r}. Available: {list_tasks()}")
+        from difflib import get_close_matches
+
+        suggestion = get_close_matches(name, TASK_REGISTRY, n=1)
+        hint = f" Did you mean {suggestion[0]!r}?" if suggestion else ""
+        raise KeyError(f"Unknown task {name!r}.{hint} Available: {list_tasks()}")
     return TASK_REGISTRY[name]
 
 

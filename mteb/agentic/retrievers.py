@@ -9,12 +9,15 @@ into rag via retriever= and are scorable on ranking metrics like any retriever.
 from __future__ import annotations
 
 import json
+import logging
 import re
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from mteb.agentic.interface import ChatModel
     from mteb.models.models_protocols import SearchProtocol
+
+logger = logging.getLogger(__name__)
 
 _REWRITE = (
     "Rewrite the question into a concise keyword search query. "
@@ -56,7 +59,7 @@ class _QueryTransformRetriever:
         """Index the base retriever."""
         self.base.index(**kwargs)
 
-    def search(self, *, queries: Any, **kwargs: Any) -> dict:
+    def search(self, *, queries: Any, **kwargs: Any) -> dict[str, dict[str, float]]:
         """Transform each query with the LLM, then search the base retriever."""
         return self.base.search(
             queries=_transform_queries(queries, self.model, self._template), **kwargs
@@ -95,19 +98,22 @@ class RerankRetriever:
         self.base = base
         self.model = model
         self.pool_size = pool_size
+        self._text: dict[str, str] = {}
 
     def index(self, *, corpus: Any, **kwargs: Any) -> None:
         """Index the base retriever and cache document text for reranking."""
         self._text = {row["id"]: row.get("text", "") for row in corpus}
         self.base.index(corpus=corpus, **kwargs)
 
-    def search(self, *, queries: Any, top_k: int, **kwargs: Any) -> dict:
+    def search(
+        self, *, queries: Any, top_k: int, **kwargs: Any
+    ) -> dict[str, dict[str, float]]:
         """Retrieve a candidate pool, then LLM listwise rerank it to top_k."""
         query_text = {row["id"]: row["text"] for row in queries}
         pool = self.base.search(queries=queries, top_k=self.pool_size, **kwargs)
         results: dict[str, dict[str, float]] = {}
         for qid, ranking in pool.items():
-            candidates = list(ranking)
+            candidates = sorted(ranking, key=lambda d: -ranking[d])
             docs = "\n".join(f"[{d}] {self._text.get(d, '')[:500]}" for d in candidates)
             out = self.model.generate(
                 [
@@ -118,6 +124,11 @@ class RerankRetriever:
                 ]
             )
             ranked = [d for d in (_parse_ids(out.text) or []) if d in ranking]
+            if not ranked:
+                # Fall back to the base ranking rather than failing the query.
+                logger.warning(
+                    "rerank parse failed for query %s; keeping base order", qid
+                )
             ranked = (ranked or candidates)[:top_k]
             # Descending scores preserve the reranked order for downstream top-k.
             results[qid] = {d: float(len(ranked) - i) for i, d in enumerate(ranked)}

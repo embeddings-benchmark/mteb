@@ -55,11 +55,13 @@ def _load(
     """Load OOLONG. subset is "synth" or "real"; real needs config ("dnd")."""
     from datasets import load_dataset
 
-    repo = (
-        "oolongbench/oolong-synth" if subset == "synth" else "oolongbench/oolong-real"
+    repo, revision = (
+        ("oolongbench/oolong-synth", "f0d59eaf0febf130664cfceb710436c8e3216b2b")
+        if subset == "synth"
+        else ("oolongbench/oolong-real", "6bc9ef04866fcf005c9749b70649be69dd37fffb")
     )
     kwargs = {"name": config} if config else {}
-    dataset = load_dataset(repo, split=split, **kwargs)
+    dataset = load_dataset(repo, split=split, revision=revision, **kwargs)
     if max_questions is not None:
         dataset = dataset.select(range(min(max_questions, len(dataset))))
     return _to_answer_data(dataset)

@@ -2,16 +2,11 @@
 
 from __future__ import annotations
 
-from mteb.agentic.corpus import (
-    FileSystemCorpus,
-    InMemoryCorpus,
-    RetrievalCorpus,
-)
+from mteb.agentic.corpus import InMemoryCorpus, RetrievalCorpus
 from mteb.agentic.data import (
     AnswerTaskData,
     TaskMeta,
     from_mteb_retrieval,
-    from_mteb_task,
     from_per_question,
 )
 from mteb.agentic.evaluate import evaluate
@@ -35,6 +30,9 @@ from mteb.agentic.metrics import (
     NumericToleranceJudge,
     QAF1Judge,
     aggregate,
+    calibration_error,
+    extract_confidence,
+    recall_at,
     to_scores_dict,
 )
 from mteb.agentic.models import OpenAIChatModel
@@ -71,7 +69,6 @@ __all__ = [
     "ClosedBookSystem",
     "CorpusHandle",
     "ExactMatchJudge",
-    "FileSystemCorpus",
     "FullContextSystem",
     "HyDERetriever",
     "InMemoryCorpus",
@@ -96,9 +93,10 @@ __all__ = [
     "Usage",
     "WindowedFullContextSystem",
     "aggregate",
+    "calibration_error",
     "evaluate",
+    "extract_confidence",
     "from_mteb_retrieval",
-    "from_mteb_task",
     "from_per_question",
     "get_system",
     "get_system_meta",
@@ -106,5 +104,6 @@ __all__ = [
     "get_task_meta",
     "list_systems",
     "list_tasks",
+    "recall_at",
     "to_scores_dict",
 ]

@@ -9,6 +9,19 @@ if TYPE_CHECKING:
 
     from mteb.agentic.interface import ChatResponse, CorpusHandle, Usage
 
+# The one answer-from-context prompt shared by every context-reading system.
+CONTEXT_PROMPT = (
+    "Answer the question concisely using only the context below.\n\n"
+    "Context:\n{context}\n\nQuestion: {question}"
+)
+
+
+def join_all(corpus: CorpusHandle) -> str:
+    """Join every document, prefixed by its id, into one context block."""
+    return "\n\n".join(
+        f"[{doc_id}] {doc.get('text', '')}" for doc_id, doc in corpus.documents.items()
+    )
+
 
 def join_context(
     corpus: CorpusHandle,

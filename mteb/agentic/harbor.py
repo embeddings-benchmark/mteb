@@ -2,20 +2,23 @@
 
 Follows Harbor's canonical adapter pattern (harbor-framework/harbor/adapters):
 convert the task into a directory of per-question task folders, run one
-`harbor run -d <dataset> -a <agent> -n K` job (isolated trials, K concurrent),
+`harbor run -p <dataset> -a <agent> -n K` job (isolated trials, K concurrent),
 and read each trial's answer artifact back so our Judge scores it host-side.
 """
 
 from __future__ import annotations
 
 import json
+import logging
 import os
 import subprocess
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping
+
+logger = logging.getLogger(__name__)
 
 # Host auth env vars forwarded into the agent container (subscription or API key).
 _FORWARDED_AUTH_ENV = (
@@ -177,7 +180,9 @@ def _materialize(documents: Mapping[str, Mapping[str, str]], corpus_dir: Path) -
     # One text file per document, named by docid, under one corpus directory.
     corpus_dir.mkdir(parents=True, exist_ok=True)
     for doc_id, doc in documents.items():
-        (corpus_dir / f"{_safe(doc_id)}.txt").write_text(doc.get("text", ""))
+        (corpus_dir / f"{_safe(doc_id)}.txt").write_text(
+            doc.get("text", ""), encoding="utf-8"
+        )
 
 
 def _write_task(
@@ -194,22 +199,25 @@ def _write_task(
         path.mkdir(parents=True, exist_ok=True)
     # Harbor requires an org/name task name; the slug also names the trial dir.
     (task_dir / "task.toml").write_text(
-        _TASK_TOML.format(name=f"mteb-agentic/{name}", agent_timeout=agent_timeout_s)
+        _TASK_TOML.format(name=f"mteb-agentic/{name}", agent_timeout=agent_timeout_s),
+        encoding="utf-8",
     )
     instruction = _RETRIEVER_INSTRUCTION if retriever_tool else _INSTRUCTION
-    (task_dir / "instruction.md").write_text(instruction.format(question=question))
+    (task_dir / "instruction.md").write_text(
+        instruction.format(question=question), encoding="utf-8"
+    )
     if retriever_tool:
-        (env_dir / "search.py").write_text(_SEARCH_SCRIPT)
+        (env_dir / "search.py").write_text(_SEARCH_SCRIPT, encoding="utf-8")
     if documents is None:  # shared corpus, bind-mounted at /corpus
         dockerfile = (
             _DOCKERFILE_MOUNT_RETRIEVER if retriever_tool else _DOCKERFILE_MOUNT
         )
-        (env_dir / "Dockerfile").write_text(dockerfile)
+        (env_dir / "Dockerfile").write_text(dockerfile, encoding="utf-8")
     else:  # per-question corpus, baked into the image
         dockerfile = _DOCKERFILE_COPY_RETRIEVER if retriever_tool else _DOCKERFILE_COPY
-        (env_dir / "Dockerfile").write_text(dockerfile)
+        (env_dir / "Dockerfile").write_text(dockerfile, encoding="utf-8")
         _materialize(documents, env_dir / "corpus")
-    (tests_dir / "test.sh").write_text(_TEST_SH)
+    (tests_dir / "test.sh").write_text(_TEST_SH, encoding="utf-8")
 
 
 def to_harbor_dataset(
@@ -231,7 +239,8 @@ def to_harbor_dataset(
     out = Path(out_dir)
     mount_dir: Path | None = None
     if shared_documents is not None:
-        mount_dir = (out / "_corpus").resolve()
+        # A sibling of the dataset dir, so Harbor's task scan never sees it.
+        mount_dir = (out.parent / "corpus").resolve()
         _materialize(shared_documents, mount_dir)
     for index, (qid, question) in enumerate(questions.items()):
         slug = f"q{index}"
@@ -289,18 +298,27 @@ def run_harbor(
         for var in _FORWARDED_AUTH_ENV
         if var in os.environ and var not in explicit_keys
     ]
+    n_secrets = 0
     for kv in (*forwarded, *(agent_env or [])):
         cmd += ["--ae", kv]
-    subprocess.run(cmd, check=True)
+        n_secrets += 1
+    try:
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError as exc:
+        # Re-raise without argv so forwarded auth values stay out of tracebacks.
+        raise RuntimeError(
+            f"harbor run failed with exit code {exc.returncode} "
+            f"(command redacted, {n_secrets} env values forwarded)."
+        ) from None
 
 
 def read_harbor_answers(jobs_dir: str | Path) -> dict[str, str]:
-    """Read each trial's answer artifact, keyed by query id."""
+    """Read each trial's answer artifact, keyed by the q0..qN task slug."""
     answers: dict[str, str] = {}
     for artifact in Path(jobs_dir).rglob("artifacts/answer.txt"):
-        # trial dir is <qid>__<shortid>; qid recovers as the prefix.
-        qid = artifact.parent.parent.name.rsplit("__", 1)[0]
-        answers[qid] = artifact.read_text().strip()
+        # trial dir is <slug>__<shortid>; the slug recovers as the prefix.
+        slug = artifact.parent.parent.name.rsplit("__", 1)[0]
+        answers[slug] = artifact.read_text(encoding="utf-8").strip()
     return answers
 
 
@@ -321,19 +339,20 @@ def _span_seconds(span: object) -> float | None:
         return None
 
 
-def read_harbor_metrics(jobs_dir: str | Path) -> dict[str, dict]:
-    """Read each trial's token, cost, and latency metrics, keyed by query id."""
-    metrics: dict[str, dict] = {}
+def read_harbor_metrics(jobs_dir: str | Path) -> dict[str, dict[str, Any]]:
+    """Read each trial's token, cost, and latency metrics, keyed by the task slug."""
+    metrics: dict[str, dict[str, Any]] = {}
     for result in Path(jobs_dir).rglob("result.json"):
-        qid = result.parent.name.rsplit("__", 1)[0]  # trial dir is q<N>__<shortid>
-        if not (qid.startswith("q") and qid[1:].isdigit()):
+        slug = result.parent.name.rsplit("__", 1)[0]  # trial dir is q<N>__<shortid>
+        if not (slug.startswith("q") and slug[1:].isdigit()):
             continue  # skip the job-level result.json (timestamp dir)
         try:
-            data = json.loads(result.read_text())
+            data = json.loads(result.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
+            logger.warning("unreadable Harbor result %s; metrics skipped", result)
             continue
         agent = data.get("agent_result") or {}
-        metrics[qid] = {
+        metrics[slug] = {
             "prompt_tokens": agent.get("n_input_tokens") or 0,
             "completion_tokens": agent.get("n_output_tokens") or 0,
             "cost_usd": agent.get("cost_usd"),

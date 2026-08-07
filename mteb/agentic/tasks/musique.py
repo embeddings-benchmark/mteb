@@ -54,7 +54,11 @@ def _load(
 
     # The authors released MuSiQue-Answerable on GitHub, not the Hub; this is the
     # standard Hub mirror of that release (same fields: paragraphs, is_supporting).
-    dataset = load_dataset("dgslibisey/MuSiQue", split=split)
+    dataset = load_dataset(
+        "dgslibisey/MuSiQue",
+        split=split,
+        revision="c8f4f8c9465fb69d31a8eae894c3fd509c4ca321",
+    )
     if max_questions is not None:
         dataset = dataset.select(range(min(max_questions, len(dataset))))
     return _to_answer_data(dataset)

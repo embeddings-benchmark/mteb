@@ -5,7 +5,7 @@ in SYSTEM_REGISTRY. In-process systems declare a loader; Harbor agents declare
 kind="harbor" and an agent id, and run as a batch job (see evaluate).
 
 corpus_kind is the corpus access an in-process system needs: "memory" (raw
-documents), "retrieval" (a first-stage retriever), or "files".
+documents) or "retrieval" (a first-stage retriever).
 """
 
 from __future__ import annotations
@@ -36,9 +36,10 @@ class SystemMeta:
     name: str
     description: str
     loader: Callable[..., AnswerSystem] | None = None  # in-process systems
-    corpus_kind: str = "memory"  # memory, retrieval, or files
+    corpus_kind: str = "memory"  # memory or retrieval
     kind: str = "in-process"  # in-process or harbor
     harbor_agent: str | None = None  # `harbor run -a` id, for kind="harbor"
+    needs_gold: bool = False  # evaluate() wires the task's gold docs in
 
     def load(self, *args: Any, **kwargs: Any) -> AnswerSystem:
         """Instantiate the in-process system; first arg is the ChatModel."""
@@ -103,6 +104,7 @@ SYSTEM_REGISTRY: dict[str, SystemMeta] = {
             "oracle",
             "Ceiling: answer from gold documents (gold wired from the task).",
             OracleContextSystem,
+            needs_gold=True,
         ),
         SystemMeta(
             "rlm",
@@ -128,7 +130,11 @@ def list_systems() -> list[str]:
 def get_system_meta(name: str) -> SystemMeta:
     """Fetch a system's metadata by name."""
     if name not in SYSTEM_REGISTRY:
-        raise KeyError(f"Unknown system {name!r}. Available: {list_systems()}")
+        from difflib import get_close_matches
+
+        suggestion = get_close_matches(name, SYSTEM_REGISTRY, n=1)
+        hint = f" Did you mean {suggestion[0]!r}?" if suggestion else ""
+        raise KeyError(f"Unknown system {name!r}.{hint} Available: {list_systems()}")
     return SYSTEM_REGISTRY[name]
 
 

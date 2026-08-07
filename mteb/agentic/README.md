@@ -2,8 +2,9 @@
 
 MTEB's retrieval tasks score a retriever's *ranking* quality (ndcg, recall).
 This package scores the end-to-end *system*: given a question and a fixed
-corpus, produce an answer, graded on correctness, cost, and latency. The same
-dataset supports both modes, so retrievers and full systems stay comparable.
+corpus, produce an answer, graded on correctness, cost, latency, gold-doc
+recall, and calibration. The same dataset supports both modes, so retrievers
+and full systems stay comparable.
 
 ## Quickstart
 
@@ -12,12 +13,16 @@ pip install "mteb[agentic]"        # in-process paradigms; add [agentic-agents] 
 ```
 
 ```python
-from mteb.agentic import evaluate, OpenAIChatModel, LLMJudge
+from mteb.agentic import evaluate, OpenAIChatModel
 
 model = OpenAIChatModel("Qwen/Qwen3-32B", base_url="http://localhost:8010/v1", api_key="EMPTY")
-result = evaluate("rag", "BrowseCompPlus", model=model, retriever="bm25", judge=LLMJudge(model))
+result = evaluate("rag", "BrowseCompPlus", model=model, retriever="bm25")
 print(result.scores.accuracy, result.scores.mean_latency_s)
 ```
+
+Each task carries its official metric as the default judge (BrowseComp-Plus:
+LLM grading; HotpotQA/MuSiQue: token F1; LongBench-v2: option accuracy;
+OOLONG: numeric tolerance). Pass `judge=` to override.
 
 `evaluate(system, task, *, model=, retriever=, judge=, ...)` is the single
 front door. `system` and `task` are registry names (`list_systems()`,
@@ -61,8 +66,9 @@ Systems fall in two tiers with different requirements, installed via extras:
   `docker build -t rlm-sandbox -f Dockerfile.sandbox .`) or a cloud backend
   (e2b, daytona, modal).
 
-`evaluate()` raises a clear error if a container backend is missing, so
-in-process runs never require any of this.
+`evaluate()` raises a clear error if the `harbor` CLI is missing; a stopped
+Docker daemon surfaces as a failed `harbor run`. In-process runs never require
+any of this.
 
 ## Auth
 
@@ -96,6 +102,7 @@ corpus. All run through the same evaluator and judge.
 | --- | --- | --- |
 | `closed-book` | none | Floor: parametric memory only. |
 | `full-context` | whole corpus in prompt | Long-context rival to RAG. N/A when the corpus exceeds the window (reported as coverage, not as wrong). |
+| `windowed-full-context` | sliding windows | Per-window answers aggregated; always applies (bounded by `max_windows`). |
 | `rag` | retriever | Retrieve top-k once, answer. |
 | `iterative-rag` | retriever | Decompose-retrieve-reason loop (Self-Ask/IRCoT), then answer. |
 | `search-agent` | retriever tools | Reason-act loop over search + get_document (BrowseComp-Plus setup). |
@@ -138,10 +145,12 @@ reranks a candidate pool) each wrap a base retriever.
 
 ## Scoring
 
-Correctness comes from a `Judge` (`ExactMatchJudge` for verifiable answers,
-`LLMJudge` for open-ended). Cost and latency come from `Usage` accounting on
-each answer. `aggregate` reduces a run to `AggregateScores` (accuracy, cost,
-latency, coverage); `to_scores_dict` bridges to MTEB's scores dict with
+Correctness comes from a `Judge`; each task declares its official metric as
+the default (see Quickstart). Cost and latency come from `Usage` accounting on
+each answer. Two BrowseComp-Plus secondary metrics ride along: `mean_recall`
+(gold docs among the cited ones; N/A for systems that cite nothing) and
+`calibration_error` (ECE over stated confidences). `aggregate` reduces a run
+to `AggregateScores`; `to_scores_dict` bridges to MTEB's scores dict with
 accuracy as the main score.
 
 Feasibility-gated systems (`full-context`) mark questions they cannot attempt
@@ -158,8 +167,9 @@ and scored by the same `Judge` as every other system. See **Setup** and
 ## Extending
 
 - **Task**: add a module under `tasks/` that builds an `AnswerTaskData` (via
-  `from_mteb_retrieval` or `from_mteb_task`) and declares a `TaskMeta`; list it
-  in `tasks.TASK_REGISTRY`.
+  `from_mteb_retrieval` for a shared corpus or `from_per_question` for one
+  corpus per question) and declares a `TaskMeta`; list it in
+  `tasks.TASK_REGISTRY`.
 - **System**: add a module under `systems/` implementing
   `AnswerSystem.answer(question, corpus) -> AnswerResult` and list a
   `SystemMeta` in `systems.SYSTEM_REGISTRY`.
@@ -169,13 +179,15 @@ and scored by the same `Judge` as every other system. See **Setup** and
 ## Layout
 
 - `interface.py` contract: `AnswerSystem`, `CorpusHandle`, `ChatModel`, results.
-- `corpus.py` `InMemoryCorpus`, `RetrievalCorpus` (wraps MTEB retrievers), `FileSystemCorpus`.
+- `corpus.py` `InMemoryCorpus`, `RetrievalCorpus` (wraps MTEB retrievers).
 - `data.py` `AnswerTaskData`, `TaskMeta`, adapters from MTEB retrieval data.
 - `evaluate.py` the single- and multi-system `evaluate()` front door, with
   corpus reuse within batch evaluations.
 - `evaluator.py` per-question run loop (resilient, optionally concurrent).
-- `metrics.py` judges and aggregation.
+- `metrics.py` judges, recall, calibration, and aggregation.
 - `models.py` `OpenAIChatModel`.
+- `retrievers.py` LLM retriever wrappers (query rewrite, HyDE, rerank).
+- `harbor.py` Harbor dataset export, batch run, and result readers.
 - `tasks/` one module per task, plus the task registry (`get_task`).
 - `systems/` one module per paradigm, plus the system registry (`get_system`).
 

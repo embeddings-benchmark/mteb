@@ -40,7 +40,11 @@ def _load(*, split: str = "train", max_questions: int | None = None) -> AnswerTa
     """Load LongBench-v2 (all 503 questions ship in the single train split)."""
     from datasets import load_dataset
 
-    dataset = load_dataset("THUDM/LongBench-v2", split=split)
+    dataset = load_dataset(
+        "THUDM/LongBench-v2",
+        split=split,
+        revision="2b48e494f2c7a2f0af81aae178e05c7e1dde0fe9",
+    )
     if max_questions is not None:
         dataset = dataset.select(range(min(max_questions, len(dataset))))
     return _to_answer_data(dataset)

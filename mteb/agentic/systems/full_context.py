@@ -5,15 +5,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from mteb.agentic.interface import AnswerResult, Usage
-from mteb.agentic.systems._common import add_usage
+from mteb.agentic.systems._common import CONTEXT_PROMPT, add_usage, join_all
 
 if TYPE_CHECKING:
     from mteb.agentic.interface import ChatModel, CorpusHandle
 
-_PROMPT = (
-    "Answer the question concisely using only the context below.\n\n"
-    "Context:\n{context}\n\nQuestion: {question}"
-)
 _WINDOW_PROMPT = (
     "This is one part of a longer context. Using only what is below, answer the "
     'question if the answer is present, otherwise reply exactly "NOT FOUND".\n\n'
@@ -45,27 +41,21 @@ class FullContextSystem:
         total = sum(len(doc.get("text", "")) for doc in corpus.documents.values())
         if total > self.max_context_chars:
             return AnswerResult(answer="", applicable=False)
-        context = "\n\n".join(
-            f"[{d}] {doc.get('text', '')}" for d, doc in corpus.documents.items()
-        )
+        context = join_all(corpus)
         out = self.model.generate(
             [
                 {
                     "role": "user",
-                    "content": _PROMPT.format(context=context, question=question),
+                    "content": CONTEXT_PROMPT.format(
+                        context=context, question=question
+                    ),
                 }
             ]
         )
+        usage = Usage()
+        add_usage(usage, out)
         # No cited docs: nothing was selected, the whole corpus was read.
-        return AnswerResult(
-            answer=out.text,
-            usage=Usage(
-                prompt_tokens=out.prompt_tokens,
-                completion_tokens=out.completion_tokens,
-                num_llm_calls=1,
-                cost_usd=out.cost_usd,
-            ),
-        )
+        return AnswerResult(answer=out.text, usage=usage)
 
 
 class WindowedFullContextSystem:
@@ -100,10 +90,12 @@ class WindowedFullContextSystem:
         total = 0
         for doc_id, doc in corpus.documents.items():
             piece = f"[{doc_id}] {doc.get('text', '')}"
+            remaining = cap - total
+            if len(piece) >= remaining:
+                parts.append(piece[:remaining])
+                break
             parts.append(piece)
             total += len(piece) + 2
-            if total >= cap:
-                break
         return "\n\n".join(parts)
 
     def _windows(self, corpus: CorpusHandle) -> tuple[list[str], bool]:

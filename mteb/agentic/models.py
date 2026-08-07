@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 from mteb.agentic.interface import ChatResponse, ToolCall
 
@@ -25,7 +25,13 @@ class OpenAIChatModel:
         max_retries: int = 2,
         **kwargs: Any,
     ) -> None:
-        from openai import OpenAI
+        try:
+            from openai import OpenAI
+        except ImportError as exc:
+            raise ImportError(
+                "OpenAIChatModel needs the openai package. Install it with "
+                'pip install "mteb[agentic]".'
+            ) from exc
 
         self.name = model
         # Exposed so external agents (RLM, Harbor) can point at the same endpoint.
@@ -44,7 +50,7 @@ class OpenAIChatModel:
         """Call the chat completions endpoint. Pass tools to enable tool calling."""
         resp = self._client.chat.completions.create(
             model=self.name,
-            messages=list(messages),
+            messages=cast("Any", list(messages)),
             **{**self._kwargs, **kwargs},
         )
         message = resp.choices[0].message
@@ -52,6 +58,7 @@ class OpenAIChatModel:
         tool_calls = [
             ToolCall(id=tc.id, name=tc.function.name, arguments=tc.function.arguments)
             for tc in (message.tool_calls or [])
+            if tc.type == "function"
         ]
         return ChatResponse(
             text=message.content or "",
