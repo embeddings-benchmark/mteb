@@ -564,8 +564,6 @@ def test_submit_results_with_fake_remote(tmp_path):
 
 
 def test_submit_results(tmp_path):
-    from unittest.mock import patch
-
     cache_path, remote_path = _setup_fake_remote(tmp_path)
     test_model, result_files_copied = _setup_test_model_results(cache_path)
 
@@ -620,8 +618,6 @@ def test_submit_results(tmp_path):
 
 def test_pr_creation_failure_cleans_up_branch(tmp_path):
     """Verify that failed PR creation cleans up temporary branch and restores original branch."""
-    from unittest.mock import patch
-
     cache_path, remote_path = _setup_fake_remote(tmp_path)
     test_model, _ = _setup_test_model_results(cache_path)
 
