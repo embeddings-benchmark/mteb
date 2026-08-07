@@ -393,6 +393,7 @@ def _assert_score_parity(
         )
 
 
+@_skip_if_datasets_too_old
 def test_get_score_matches_summary_table_on_partial_split_coverage(
     mock_mteb_cache: ResultCache,
 ):
