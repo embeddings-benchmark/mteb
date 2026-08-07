@@ -62,6 +62,4 @@ Rodrigo Frassetto Nogueira},
             "query": "Given a web search query, retrieve relevant passages that answer the query"
         },
         adapted_from=["MMarcoRetrieval"],
-        contributed_by=None,
-        is_beta=True,
     )
