@@ -11,6 +11,7 @@ import mteb
 from mteb.api.adapters import (
     benchmark_to_schema,
     model_meta_to_schema,
+    run_model_meta_to_schema,
     scoped_task_meta_schema,
     task_to_meta_schema,
 )
@@ -248,14 +249,25 @@ async def build_benchmark_summary(  # noqa: PLR0914
     # ``experiments`` column so variant rows can surface the exact ablation
     # dict that produced them. Empty when the parquet pre-dates the
     # experiments work.
+    #
+    # Also carries each variant's own `model_meta.json` dict (the
+    # ``model_meta`` column) so its row can build a `ModelMetaSchema` from
+    # that run's *actual* metadata instead of the static MODEL_REGISTRY
+    # entry — an ablation can change more than the kwarg it's named after
+    # (e.g. jinaai/jina-embeddings-v4's `vector_type=multi_vector`
+    # experiment runs `late-interaction`, not the base model's `dense`).
     variants_by_model: dict[tuple[str, str], dict[str, Any]] = {}
+    variant_model_meta: dict[tuple[str, str], dict[str, Any]] = {}
     if "experiments" in long_df.columns:
         from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 
+        variant_cols = ["model_name", "experiments"]
+        if "model_meta" in long_df.columns:
+            variant_cols.append("model_meta")
         variant_pl = (
             long_df.lazy()
             .filter(pl.col("experiments").is_not_null())
-            .select(["model_name", "experiments"])
+            .select(variant_cols)
             .unique(subset=["model_name", "experiments"])
             .collect()
         )
@@ -269,7 +281,11 @@ async def build_benchmark_summary(  # noqa: PLR0914
             vid = _serialize_experiment_kwargs_to_name(clean) or ""
             if not vid:
                 continue
-            variants_by_model[(vr["model_name"], vid)] = clean
+            key = (vr["model_name"], vid)
+            variants_by_model[key] = clean
+            run_meta = vr.get("model_meta")
+            if run_meta:
+                variant_model_meta[key] = dict(run_meta)
 
     type_cols = [c for c in summary_pl.columns if c not in _SUMMARY_META_COLS]
 
@@ -291,6 +307,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
         task_to_type,
         language_filtered,
         variants_by_model,
+        variant_model_meta,
     )
 
     return BenchmarkSummarySchema(
@@ -313,6 +330,7 @@ def _build_summary_rows(
     task_to_type: dict[str, str],
     language_filtered: bool,
     variants_by_model: dict[tuple[str, str], dict[str, Any]] | None = None,
+    variant_model_meta: dict[tuple[str, str], dict[str, Any]] | None = None,
 ) -> list[SummaryRowSchema]:
     """Sync row-construction loop; off-loaded via ``asyncio.to_thread``."""
     rows: list[SummaryRowSchema] = []
@@ -326,7 +344,16 @@ def _build_summary_rows(
 
         zs_raw = row.get("Zero-shot")
         zs = int(zs_raw) if zs_raw is not None else None
-        model_schema = model_meta_to_schema(meta, zero_shot_pct=zs)
+        run_meta = (
+            variant_model_meta.get((full, variant_id))
+            if variant_id and variant_model_meta
+            else None
+        )
+        model_schema = (
+            run_model_meta_to_schema(run_meta, zero_shot_pct=zs) if run_meta else None
+        )
+        if model_schema is None:
+            model_schema = model_meta_to_schema(meta, zero_shot_pct=zs)
 
         rank_raw = row.get(summary.rank_col)
         rank = int(rank_raw) if rank_raw is not None else idx + 1
