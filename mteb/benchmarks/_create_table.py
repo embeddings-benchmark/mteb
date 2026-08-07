@@ -268,20 +268,7 @@ def _required_splits_per_task(pl_df: pl.DataFrame) -> pl.DataFrame:
 
 
 def _incomplete_task_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
-    """``(model_name, task_name)`` pairs that skipped a (subset, split) combo.
-
-    "Observed" means the union of subsets × union of splits reported by *any*
-    model for the task within this (already benchmark-scoped) frame — mirrors
-    ``build_task_scores``'s ``fully_covered`` check in ``mteb/api/aggregators.py``
-    so the summary / per-task table agree with the per-task detail page instead
-    of drifting apart.
-
-    Without this, a model that only ran e.g. 2 of a task's 6 splits gets its
-    partial-split mean folded in as if it were a full score, silently
-    outranking fully-evaluated peers (see issue #5101 — WebLINXCandidatesReranking
-    scored on `validation` + `test_iid` only, still shown as a normal number
-    in the benchmark summary).
-    """
+    """``(model_name, task_name)`` pairs that skipped a (subset, split) combo."""
     scored = _scored(pl_df)
     n_subsets = (
         scored.select("task_name", "subset")
@@ -309,8 +296,7 @@ def _incomplete_task_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
 
 
 def _incomplete_subset_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
-    """``(model_name, task_name, subset)`` triples missing an observed split.
-    """
+    """``(model_name, task_name, subset)`` triples missing an observed split."""
     scored = _scored(pl_df)
     have = (
         scored.select("model_name", "task_name", "subset", "split")

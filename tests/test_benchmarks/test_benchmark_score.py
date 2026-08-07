@@ -205,21 +205,6 @@ def test_benchmark_get_score_nulls_partial_split_and_subset_coverage(
 ):
     """`Benchmark.get_score()` nulls Mean(Task)/Mean(TaskType)/Mean(Subset) etc.
     for a model that skipped a split, or a subset within a split (issue #5101).
-
-    `ModelResult.select_tasks` (which every real `Benchmark.get_score()` call
-    goes through, via `Benchmark._get_model_score`) calls
-    `TaskResult.validate_and_filter_scores`, which NaN-fills missing
-    `(subset, split)` cells against the *benchmark's own* task instance
-    (respecting any language/split scoping, e.g. MIRACL pinned to `["eng"]`)
-    *before* the aggregators ever see the data.
-    `TaskResult.get_score()`'s `np.mean` then already propagates that NaN,
-    and `_compute_mean_task` / `_compute_task_types` / `_compute_mean_subset`
-    already null on `np.isnan(...)`. This is an end-to-end regression test
-    for that existing mechanism using real partial-coverage fixtures — not a
-    hand-built `TaskResult` bypassing `validate_and_filter_scores` (which
-    doesn't reflect how these aggregators are actually invoked, and checking
-    a task's *global* `eval_splits`/`hf_subsets` there would incorrectly flag
-    a benchmark-scoped-down task as incomplete).
     """
     full = "mteb/baseline-random-encoder"
     partial = "sentence-transformers/all-MiniLM-L6-v2"
@@ -411,20 +396,7 @@ def _assert_score_parity(
 def test_get_score_matches_summary_table_on_partial_split_coverage(
     mock_mteb_cache: ResultCache,
 ):
-    """get_score() and the polars summary table null the *same* keys on partial coverage.
-
-    `test_get_score_matches_summary_table_means` above only exercises fully-
-    covered fixtures, where a mismatch would show up as one path returning a
-    number and the other `None` — it never exercises the actual issue #5101
-    scenario (a model missing a split, or a subset within a split), so a
-    regression that nulls one path but not the other could slip through with
-    both paths still "agreeing" on every fully-covered task. This drives both
-    paths on the same partial-coverage fixtures used elsewhere in this file
-    (`PoemSentimentClassification.v2` missing its `test` split,
-    `CataloniaTweetClassification` missing the `catalan` subset within
-    `test`) and asserts every aggregation key is null on *both* sides for the
-    partial model, and a real, equal number on both sides for the full one.
-    """
+    """get_score() and the polars summary table null the same keys on partial coverage."""
     full = "mteb/baseline-random-encoder"
     partial = "sentence-transformers/all-MiniLM-L6-v2"
     tasks = mteb.get_tasks(

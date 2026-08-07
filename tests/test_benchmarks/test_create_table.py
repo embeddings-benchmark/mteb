@@ -119,11 +119,4 @@ def test_create_summary_table_nulls_mean_subset_on_partial_split_coverage(
         (full_spanish + full_catalan + 0.012532) / 3
     )
 
-    # "partial": "catalan" is missing its "test" split (deleted from the
-    # fixture to simulate a real partial submission), so its subset cell is
-    # nulled — and (skipna=False) that nulls Mean (Subset) entirely, even
-    # though "spanish" (0.457122, 0.464931) and Banking77 are both fully
-    # covered. Without this fix it would silently average only the complete
-    # entries in, or fold in catalan's lone 0.432786 as if it were a real
-    # subset mean.
     assert rows[PARTIAL_MODEL]["Mean (Subset)"] is None
