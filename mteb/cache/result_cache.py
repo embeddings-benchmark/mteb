@@ -414,7 +414,7 @@ class ResultCache:
         for split, split_scores in task_result.scores.items():
             run_settings = {
                 "task": task_result.task_name,
-                "split": split,
+                "splits": [split],
                 "version": version_dict,
                 "encode_kwargs": json.loads(json.dumps(encode_kwargs, default=str))
                 if encode_kwargs is not None
