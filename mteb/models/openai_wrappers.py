@@ -392,6 +392,18 @@ class OpenAIBaseWrapper:
                     timeout=self.timeout,
                     verify=self.verify_ssl,
                 )
+
+                # 4xx means the request itself was rejected (e.g. a
+                # malformed payload, or `messages` sent to a model with no
+                # chat template) - retrying an identical request won't
+                # help, so fail immediately with the server's error body,
+                # which usually explains why.
+                if 400 <= response.status_code < 500:
+                    raise RuntimeError(
+                        f"Server rejected request to {endpoint} "
+                        f"({response.status_code}): {response.text[:2000]}"
+                    )
+
                 response.raise_for_status()
                 json_response: dict[str, Any] = response.json()
                 return json_response
@@ -459,6 +471,19 @@ class OpenAIAPIEncodeWrapper(OpenAIBaseWrapper, AbsEncoder):
     sent as WAV, video as MP4 (re-encoded from decoded frames via
     `torchcodec`).
 
+    `messages` is rendered through the model's chat template, so — like
+    `OpenAIAPITokenEmbedWrapper` — it only works with chat-template-capable
+    (typically VLM-based) models; non-chat text encoders reject it with a 400
+    ("...default chat template is no longer allowed..."). By default
+    (`use_chat_template=True`), all batches, including pure text, are sent
+    through `messages`. Note that `messages` is a vLLM-only extension — the
+    real OpenAI API and other OpenAI-compatible servers don't support it for
+    embeddings at all — and non-chat text-encoder vLLM models (e.g.
+    `BAAI/bge-small-en-v1.5` without a chat template) will reject it; set
+    `use_chat_template=False` for those, which sends pure-text batches via
+    the plain `input` field instead (image/audio/video content still
+    requires `messages` and a chat-capable model regardless of this flag).
+
     Args:
         endpoint_url: URL of the OpenAI-compatible server
         model_name: Name of the model to use
@@ -476,6 +501,11 @@ class OpenAIAPIEncodeWrapper(OpenAIBaseWrapper, AbsEncoder):
         modalities: Modalities supported by the served model. Defaults to
             `["text", "image", "audio", "video"]`; pass a subset (e.g.
             `["text"]`) if the served model is text-only.
+        use_chat_template: Whether to send text-only batches through the
+            Chat Embeddings API (`messages`) like image/audio/video batches.
+            Default True (see class docstring); set False for the real
+            OpenAI API, other non-vLLM OpenAI-compatible servers, or vLLM
+            models with no chat template.
         fps: Target frames per second for video downsampling (see
             `VideoCollator`).
         max_frames: Safety cap on the number of frames sampled per video.
@@ -503,6 +533,7 @@ class OpenAIAPIEncodeWrapper(OpenAIBaseWrapper, AbsEncoder):
         verify_ssl: bool = True,
         max_length: int | None = None,
         modalities: list[Modalities] | None = None,
+        use_chat_template: bool = True,
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = None,
@@ -532,6 +563,7 @@ class OpenAIAPIEncodeWrapper(OpenAIBaseWrapper, AbsEncoder):
         self.instruction_template = instruction_template
         self.apply_instruction_to_passages = apply_instruction_to_documents
         self.max_length = max_length
+        self.use_chat_template = use_chat_template
 
         if use_instructions and instruction_template is None:
             raise ValueError(
@@ -754,10 +786,7 @@ class OpenAIAPIEncodeWrapper(OpenAIBaseWrapper, AbsEncoder):
         self._configure_collate_fn(inputs)
         items = _collect_multimodal_items(inputs)
 
-        # Route batches containing image/audio/video through the multimodal
-        # Chat Embeddings API; keep pure-text batches on the plain `input`
-        # field for compatibility with non-vLLM OpenAI-compatible servers.
-        if any(
+        if self.use_chat_template or any(
             image is not None or audio is not None or video is not None
             for _, image, audio, video in items
         ):
@@ -1048,9 +1077,17 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
     Pooling API (a `messages` field on `/pooling`), following
     `colqwen3_token_embed_online.py`; unlike `/v1/embeddings`, vLLM's
     `/pooling` endpoint does not support batching multiple chat conversations
-    into a single request. Pure-text inputs are still batched via the plain
-    `input` field. Audio is sent as WAV, video as MP4 (re-encoded from
-    decoded frames; requires the `av` package).
+    into a single request. `messages` is rendered through the model's chat
+    template, so it only works with chat-template-capable (typically
+    VLM-based) pooling models — non-chat text encoders like `BAAI/bge-m3`
+    reject it with a 400 ("...default chat template is no longer
+    allowed..."). By default (`use_chat_template=True`) all items, including
+    pure text, are sent through `messages`; set `use_chat_template=False` for
+    text-only models without a chat template, which instead batches text via
+    the plain `input` field (image/audio/video items still require
+    `messages` and a chat-capable model regardless of this flag). Audio is
+    sent as WAV, video as MP4 (re-encoded from decoded frames; requires the
+    `av` package).
 
     Args:
         endpoint_url: URL of the OpenAI-compatible server
@@ -1063,6 +1100,11 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
         modalities: Modalities supported by the served model. Defaults to
             `["text", "image", "audio", "video"]`; pass a subset (e.g.
             `["text"]`) if the served model is text-only.
+        use_chat_template: Whether to send text-only items through the Chat
+            Pooling API (`messages`) like image/audio/video items. Default
+            True. Set False for text-only pooling models that don't define a
+            chat template (e.g. `BAAI/bge-m3`), so text is instead batched
+            via the plain `input` field.
         fps: Target frames per second for video downsampling (see
             `VideoCollator`).
         max_frames: Safety cap on the number of frames sampled per video.
@@ -1084,6 +1126,7 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
         max_retries: int = 3,
         verify_ssl: bool = True,
         modalities: list[Modalities] | None = None,
+        use_chat_template: bool = True,
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = None,
@@ -1110,6 +1153,7 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
         )
 
         self.prompt_dict = prompt_dict
+        self.use_chat_template = use_chat_template
         self._corpus_ids: list[str] | None = None
         self._corpus_embeddings: list[NDArray[np.floating]] | None = None
 
@@ -1138,6 +1182,19 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
 
         return [embeddings_by_index[i] for i in range(expected)]
 
+    def _encode_texts(self, texts: list[str]) -> list[NDArray[np.floating]]:
+        """Get multi-vector embeddings for a batch of texts via /pooling.
+
+        Uses the plain `input` field (`PoolingCompletionRequest`), which
+        works for any pooling model. Pure-text items must go through this
+        path rather than `_encode_item`'s Chat Pooling API: `messages` is
+        rendered through the model's chat template, and most text-only
+        pooling models (e.g. BAAI/bge-m3) don't define one, so vLLM rejects
+        it with a 400 ("...default chat template is no longer allowed...").
+        """
+        payload: dict[str, Any] = {"model": self.model_name, "input": texts}
+        return self._pooling_request(payload)
+
     def _encode_item(
         self,
         text: str | None,
@@ -1145,11 +1202,12 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
         audio: AudioInputItem | None,
         video: torch.Tensor | None,
     ) -> NDArray[np.floating]:
-        """Get a multi-vector embedding for a single item via the Chat Pooling API.
+        """Get a multi-vector embedding for a single image/audio/video item.
 
-        vLLM's `/pooling` endpoint only accepts a single conversation per
-        request, so items are always sent one at a time regardless of
-        modality.
+        Uses the Chat Pooling API (`messages`), required for non-text
+        content and only supported by chat-template-capable (typically
+        VLM-based) pooling models. vLLM's `/pooling` endpoint only accepts a
+        single conversation per request, so these items cannot be batched.
         """
         content = _build_content_parts(text, image, audio, video, fps=self.fps)
 
@@ -1179,10 +1237,10 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
             hf_split: Split of current task
             hf_subset: Subset of current task
             prompt_type: The type of prompt (query or document)
-            batch_size: Unused; kept for interface compatibility. vLLM's
-                `/pooling` endpoint only accepts a single conversation per
-                request, so items are always sent one at a time regardless
-                of modality.
+            batch_size: Batch size used for batching pure-text requests when
+                `use_chat_template=False` (default: 32). Image/audio/video
+                items, and all items when `use_chat_template=True`, are
+                always sent one request at a time (see class docstring).
             show_progress_bar: Whether to show progress bar (default: True)
             **kwargs: Additional arguments (unused)
 
@@ -1200,15 +1258,51 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
         self._configure_collate_fn(inputs)
         items = _collect_multimodal_items(inputs)
 
-        embeddings = []
-        for text, image, audio, video in tqdm(
-            items, desc="Pooling items", disable=not show_progress_bar
+        if self.use_chat_template:
+            embeddings = []
+            for text, image, audio, video in tqdm(
+                items, desc="Pooling items", disable=not show_progress_bar
+            ):
+                combined_text = (prompt + text) if text else prompt
+                embeddings.append(
+                    self._encode_item(combined_text or None, image, audio, video)
+                )
+            return embeddings
+
+        # use_chat_template=False: batch pure-text items via the plain
+        # `input` field; image/audio/video items still need `messages`.
+        text_indices = [
+            i
+            for i, (_, image, audio, video) in enumerate(items)
+            if image is None and audio is None and video is None
+        ]
+        other_indices = [i for i in range(len(items)) if i not in set(text_indices)]
+
+        embeddings_by_index: dict[int, NDArray[np.floating]] = {}
+
+        for start in tqdm(
+            range(0, len(text_indices), batch_size),
+            desc="Pooling text batches",
+            disable=not show_progress_bar,
         ):
+            batch_idx = text_indices[start : start + batch_size]
+            batch_texts = [prompt + (items[i][0] or "") for i in batch_idx]
+            batch_embeddings = self._encode_texts(batch_texts)
+            for idx, embedding in zip(batch_idx, batch_embeddings):
+                embeddings_by_index[idx] = embedding
+
+        for i in tqdm(
+            other_indices,
+            desc="Pooling multimodal items",
+            disable=not show_progress_bar,
+        ):
+            text, image, audio, video = items[i]
             combined_text = (prompt + text) if text else prompt
-            embeddings.append(
-                self._encode_item(combined_text or None, image, audio, video)
+            embeddings_by_index[i] = self._encode_item(
+                combined_text or None, image, audio, video
             )
-        return embeddings
+
+        return [embeddings_by_index[i] for i in range(len(items))]
 
     def index(
         self,

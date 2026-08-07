@@ -209,6 +209,8 @@ class TestOpenAIAPIEncodeWrapper:
         wrapper = OpenAIAPIEncodeWrapper(
             endpoint_url="http://localhost:8000",
             model_name="test-model",
+            # This test asserts on the plain `input`-based payload.
+            use_chat_template=False,
         )
 
         # Create a simple mock task metadata
