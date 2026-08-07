@@ -206,7 +206,7 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
         main_score="accuracy",
         **general_args,
     )
-    metadata.modalities = ["audio"]
+    metadata.modalities = ["audio", "text"]
 
     def load_data(self, **kwargs):
         mock_audio = create_mock_audio(self.np_rng)
@@ -283,7 +283,7 @@ class MockVideoZeroshotClassificationTask(AbsTaskZeroShotClassification):
         main_score="accuracy",
         **general_args,
     )
-    metadata.modalities = ["video"]
+    metadata.modalities = ["video", "text"]
     metadata.category = "v2c"
 
     def load_data(self, **kwargs):
@@ -370,7 +370,7 @@ class MockVideoAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
         main_score="accuracy",
         **general_args,
     )
-    metadata.modalities = ["video", "audio"]
+    metadata.modalities = ["video", "audio", "text"]
     metadata.category = "va2c"
 
     def load_data(self, **kwargs):
