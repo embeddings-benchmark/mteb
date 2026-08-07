@@ -1148,11 +1148,11 @@ def _write_and_merge_keyed_json(path: Path, entries: list[dict[str, Any]]) -> No
             rows: dict[tuple[str, ...], list[str]] = defaultdict(list)
             for split, subsets in splits.items():
                 rows[tuple(sorted(set(subsets)))].append(split)
-            for subsets, split_names in rows.items():
+            for row_subsets, split_names in rows.items():
                 entry = {
                     "task": task,
                     "splits": sorted(split_names),
                     **settings_by_key[key],
-                    "subsets": list(subsets),
+                    "subsets": list(row_subsets),
                 }
                 f.write(json.dumps(entry, default=str) + "\n")
