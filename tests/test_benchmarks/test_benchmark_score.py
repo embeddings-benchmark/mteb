@@ -13,7 +13,6 @@ from mteb.benchmarks._benchmark_metrics import (
     _compute_task_types,
 )
 from mteb.benchmarks.benchmark import Benchmark, BenchmarkAggregation
-from mteb.results.task_result import TaskResult
 
 
 def _datasets_supports_dictionary_type() -> bool:
@@ -201,31 +200,59 @@ def test_compute_mean_subset(mock_mteb_cache: ResultCache):
     assert checked > 0, "test never matched a model; fixture or registry change?"
 
 
-def test_compute_mean_subset_returns_none_on_partial_split_coverage():
-    """A model missing one of a task's eval_splits shouldn't get a normal Mean(Subset).
+def test_benchmark_get_score_nulls_partial_split_and_subset_coverage(
+    mock_mteb_cache: ResultCache,
+):
+    """`Benchmark.get_score()` nulls Mean(Task)/Mean(TaskType)/Mean(Subset) etc.
+    for a model that skipped a split, or a subset within a split (issue #5101).
 
-    Same class of bug as issue #5101 (partial-split task scores counted as
-    complete), one level down: `_compute_mean_subset` used to average
-    whatever splits a model happened to submit per (task, subset), with no
-    check that every `eval_splits` entry was actually present.
+    `ModelResult.select_tasks` (which every real `Benchmark.get_score()` call
+    goes through, via `Benchmark._get_model_score`) calls
+    `TaskResult.validate_and_filter_scores`, which NaN-fills missing
+    `(subset, split)` cells against the *benchmark's own* task instance
+    (respecting any language/split scoping, e.g. MIRACL pinned to `["eng"]`)
+    *before* the aggregators ever see the data.
+    `TaskResult.get_score()`'s `np.mean` then already propagates that NaN,
+    and `_compute_mean_task` / `_compute_task_types` / `_compute_mean_subset`
+    already null on `np.isnan(...)`. This is an end-to-end regression test
+    for that existing mechanism using real partial-coverage fixtures — not a
+    hand-built `TaskResult` bypassing `validate_and_filter_scores` (which
+    doesn't reflect how these aggregators are actually invoked, and checking
+    a task's *global* `eval_splits`/`hf_subsets` there would incorrectly flag
+    a benchmark-scoped-down task as incomplete).
     """
-    task = mteb.get_tasks(["CataloniaTweetClassification"])[0]
-    assert task.metadata.eval_splits == ["validation", "test"]
-
-    # Both subsets score high on "validation", but "test" is missing
-    # entirely — the model only ran half of the task's required splits.
-    tr = TaskResult.from_task_results(
-        task=task,
-        scores={
-            "validation": {
-                "spanish": {"main_score": 0.9},
-                "catalan": {"main_score": 0.9},
-            },
-        },
-        evaluation_time=1.0,
+    full = "mteb/baseline-random-encoder"
+    partial = "sentence-transformers/all-MiniLM-L6-v2"
+    tasks = mteb.get_tasks(
+        [
+            "PoemSentimentClassification.v2",  # partial model missing the "test" split
+            "CataloniaTweetClassification",  # partial model missing "catalan"/"test"
+            "Banking77Classification",  # fully covered by both models
+        ]
     )
+    bench = Benchmark(
+        name="mock_partial_coverage",
+        tasks=tasks,
+        aggregations=(
+            BenchmarkAggregation.MEAN_TASK,
+            BenchmarkAggregation.MEAN_TASK_TYPE,
+            BenchmarkAggregation.TASK_TYPES,
+            BenchmarkAggregation.MEAN_SUBSET,
+        ),
+    )
+    scores = bench.get_score(mock_mteb_cache.load_results())
 
-    assert _compute_mean_subset([tr]) == {"Mean(Subset)": None}
+    full_scores = scores[full]
+    assert full_scores["Mean(Task)"] is not None
+    assert full_scores["Mean(TaskType)"] is not None
+    assert full_scores["Classification"] is not None
+    assert full_scores["Mean(Subset)"] is not None
+
+    partial_scores = scores[partial]
+    assert partial_scores["Mean(Task)"] is None
+    assert partial_scores["Mean(TaskType)"] is None
+    assert partial_scores["Classification"] is None
+    assert partial_scores["Mean(Subset)"] is None
 
 
 def test_compute_mean_public_private(mock_mteb_cache: ResultCache):
@@ -346,6 +373,107 @@ def test_get_score_matches_summary_table_means(mock_mteb_cache: ResultCache):
             checked += 1
     assert checked > 0, (
         "Parity test never matched a model — fixture or registry change?"
+    )
+
+
+def _assert_score_parity(
+    model_name: str,
+    get_score_row: dict[str, float | None],
+    summary_row: dict,
+    parity_pairs: list[tuple[str, str]],
+    *,
+    expect_none: bool,
+) -> None:
+    """Assert `get_score_row` and `summary_row` agree on every (key, column) pair.
+
+    ``expect_none=True`` requires both sides to be `None`; `False` requires
+    both to be equal, non-null numbers. Either way, a mismatch (one side
+    null, the other not) fails loudly instead of silently passing.
+    """
+    for gs_key, summary_col in parity_pairs:
+        gs, sm = get_score_row.get(gs_key), summary_row.get(summary_col)
+        if expect_none:
+            assert gs is None, (
+                f"{model_name} get_score[{gs_key}] should be None, got {gs!r}"
+            )
+            assert sm is None, (
+                f"{model_name} summary[{summary_col}] should be None, got {sm!r}"
+            )
+            continue
+        assert gs is not None and sm is not None, (
+            f"{model_name} {gs_key}/{summary_col}: get_score={gs!r} vs summary={sm!r}"
+        )
+        assert np.isclose(gs, sm), (
+            f"{model_name} {gs_key}/{summary_col}: get_score={gs:.6f} vs summary={sm:.6f}"
+        )
+
+
+def test_get_score_matches_summary_table_on_partial_split_coverage(
+    mock_mteb_cache: ResultCache,
+):
+    """get_score() and the polars summary table null the *same* keys on partial coverage.
+
+    `test_get_score_matches_summary_table_means` above only exercises fully-
+    covered fixtures, where a mismatch would show up as one path returning a
+    number and the other `None` — it never exercises the actual issue #5101
+    scenario (a model missing a split, or a subset within a split), so a
+    regression that nulls one path but not the other could slip through with
+    both paths still "agreeing" on every fully-covered task. This drives both
+    paths on the same partial-coverage fixtures used elsewhere in this file
+    (`PoemSentimentClassification.v2` missing its `test` split,
+    `CataloniaTweetClassification` missing the `catalan` subset within
+    `test`) and asserts every aggregation key is null on *both* sides for the
+    partial model, and a real, equal number on both sides for the full one.
+    """
+    full = "mteb/baseline-random-encoder"
+    partial = "sentence-transformers/all-MiniLM-L6-v2"
+    tasks = mteb.get_tasks(
+        [
+            "PoemSentimentClassification.v2",
+            "CataloniaTweetClassification",
+            "Banking77Classification",
+        ]
+    )
+    bench = Benchmark(
+        name="mock_partial_parity",
+        tasks=tasks,
+        aggregations=(
+            BenchmarkAggregation.MEAN_TASK,
+            BenchmarkAggregation.MEAN_TASK_TYPE,
+            BenchmarkAggregation.TASK_TYPES,
+            BenchmarkAggregation.MEAN_SUBSET,
+        ),
+    )
+    mock_results = mock_mteb_cache.load_results()
+
+    get_score_out = bench.get_score(mock_results)
+    pl_df = mock_results.select_tasks(bench.tasks)._to_results_df(bench.tasks)
+    summary_by_model = {
+        row["Model"]: row
+        for row in bench._create_summary_table(pl_df).df.iter_rows(named=True)
+    }
+    assert full in get_score_out and full in summary_by_model
+    assert partial in get_score_out and partial in summary_by_model
+
+    # All three tasks are Classification, so there's exactly one dynamic
+    # TASK_TYPES column/key to pair up alongside the fixed aggregation keys.
+    parity_pairs: list[tuple[str, str]] = [("Classification", "Classification")]
+    for agg in bench.aggregations:
+        parity_pairs.extend(zip(agg.get_score_keys, agg.summary_columns))
+
+    _assert_score_parity(
+        full,
+        get_score_out[full],
+        summary_by_model[full],
+        parity_pairs,
+        expect_none=False,
+    )
+    _assert_score_parity(
+        partial,
+        get_score_out[partial],
+        summary_by_model[partial],
+        parity_pairs,
+        expect_none=True,
     )
 
 

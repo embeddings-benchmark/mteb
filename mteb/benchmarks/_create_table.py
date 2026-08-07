@@ -253,31 +253,12 @@ def _get_embedding_size(embed_dim: int | Sequence[int] | None) -> int | None:
 
 
 def _scored(pl_df: pl.DataFrame) -> pl.DataFrame:
-    """Rows with an actual score, dropping null- and NaN-scored placeholders.
-
-    ``TaskResult`` loading (e.g. ``validate_and_filter_scores``, exercised by
-    ``ResultCache.load_results``) fills a model's missing (subset, split)
-    cells with a NaN-scored placeholder row rather than leaving them absent,
-    so the cell still shows up as a distinct ``(subset, split)`` pair. Every
-    completeness tally in this module must run on this filtered frame —
-    otherwise a placeholder reads as "present", defeating the whole point of
-    :func:`_incomplete_task_pairs` / :func:`_incomplete_subset_pairs`.
-    Mirrors ``build_task_scores``'s ``deduped = task_frame.drop_nulls("score")``
-    in ``mteb/api/aggregators.py``.
-    """
+    """Rows with an actual score, dropping null- and NaN-scored placeholders."""
     return pl_df.filter(pl.col("score").is_not_null() & pl.col("score").is_not_nan())
 
 
 def _required_splits_per_task(pl_df: pl.DataFrame) -> pl.DataFrame:
-    """``(task_name, _required_splits)`` — count of distinct splits observed for each task.
-
-    "Observed" means the union of splits reported by *any* model for the task
-    within this (already benchmark-scoped) frame — the shared basis for both
-    :func:`_incomplete_task_pairs` (subset × split completeness) and
-    :func:`_incomplete_subset_pairs` (split completeness within one subset,
-    used by the ``Mean (Subset)`` / HUME aggregation path). ``pl_df`` must
-    already be filtered through :func:`_scored`.
-    """
+    """``(task_name, _required_splits)`` — count of distinct splits observed for each task."""
     return (
         pl_df.select("task_name", "split")
         .unique()
@@ -329,14 +310,6 @@ def _incomplete_task_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
 
 def _incomplete_subset_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
     """``(model_name, task_name, subset)`` triples missing an observed split.
-
-    Subset-level analogue of :func:`_incomplete_task_pairs` — required by any
-    ``Mean (Subset)`` consumer (HUME's ``want_subset`` branch of
-    :func:`_create_summary_table`) since that path averages within a single
-    (task, subset) rather than across the whole task. Same rationale as
-    :func:`_incomplete_task_pairs`: a model that only ran 2 of a task's 6
-    splits shouldn't have that partial-split subset mean folded into
-    ``Mean (Subset)`` as if it were complete.
     """
     scored = _scored(pl_df)
     have = (
@@ -387,15 +360,9 @@ def _build_per_task_pivot(
 ) -> tuple[pl.DataFrame, list[str]] | None:
     """Pivot the long results frame to one row per model × one col per task.
 
-    Returns ``(per_task, task_cols)`` or ``None`` for the three empty-input
-    cases (empty frame, no ``model_name``, no tasks, or all-null rows). Every
-    summary/per-task builder opens with this pattern — extracted so the four
-    builders + per-task table builder don't duplicate the boilerplate.
-
-    A model's per-task score is nulled (rather than averaged over whatever
-    subset/split rows it happens to have) when it didn't cover every
-    (subset, split) combination observed for that task — see
-    :func:`_incomplete_task_pairs`.
+    Returns:
+        ``(per_task, task_cols)`` or ``None`` for the three empty-input
+        cases (empty frame, no ``model_name``, no tasks, or all-null rows).
     """
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return None
@@ -845,11 +812,6 @@ def _create_summary_table(  # noqa: PLR0914
         per_subset_long = pl_df.group_by(["model_name", "task_name", "subset"]).agg(
             pl.col("score").mean()
         )
-        # Null a (task, subset) cell when the model skipped one of the task's
-        # observed splits — same rationale as `_incomplete_task_pairs` (issue
-        # #5101), one granularity down. `Mean (Subset)` then goes null too
-        # (skipna=False, matching `_compute_mean_subset`'s contract) rather
-        # than silently averaging over the subsets that happen to be complete.
         per_subset_long = _null_incomplete_scores(
             per_subset_long,
             _incomplete_subset_pairs(pl_df),

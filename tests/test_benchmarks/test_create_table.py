@@ -4,23 +4,7 @@ Covers issue #5101: a model that only ran a subset of a task's splits must
 not have those partial results averaged into its task score as if it were
 fully evaluated — the score should come back `None` instead, matching
 `build_task_scores`'s existing `fully_covered` check in
-`mteb/api/aggregators.py`. Also covers the same class of bug one granularity
-down, in the `Mean (Subset)` (HUME) path.
-
-Fixtures are real `TaskResult`s under `tests/mock_mteb_cache`, produced by
-actually running `mteb.evaluate()` (see git history for the generating
-commands) rather than hand-built DataFrames:
-
-- `PoemSentimentClassification.v2` (2 eval_splits, 1 subset) /
-  `CataloniaTweetClassification` (2 eval_splits, 2 subsets): evaluated in
-  full with `mteb/baseline-random-encoder`, and with
-  `sentence-transformers/all-MiniLM-L6-v2` with one split (Poem) / one
-  (subset, split) cell (Catalonia's `catalan`/`test`) then deleted from the
-  saved JSON to simulate a real partial submission.
-- `Banking77Classification` (1 eval_split, 1 subset): pre-existing fixture,
-  used as an always-fully-covered companion task so the partial model still
-  has a non-null row to survive `_create_summary_table`'s "drop models with
-  an all-null per-task pivot" filter.
+`mteb/api/aggregators.py`.
 """
 
 from __future__ import annotations
@@ -104,9 +88,6 @@ def test_create_summary_table_nulls_mean_task_on_partial_split_coverage(
     assert rows[PARTIAL_MODEL]["Classification"] is None
     assert rows[PARTIAL_MODEL]["Mean (Task)"] is None
     assert rows[PARTIAL_MODEL]["Mean (TaskType)"] is None
-
-
-# --- Mean (Subset) / HUME — subset-level analogue of the above ------------
 
 
 def test_incomplete_subset_pairs_flags_partial_split_coverage_per_subset(
