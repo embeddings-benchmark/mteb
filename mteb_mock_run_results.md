@@ -1,4 +1,4 @@
-# MTEB Mock-Run Results for `nvidia/RADIO-H`
+# MTEB Mock-Run Results for `nvidia/RADIO-B`
 
 | Task | Modality | Pass | Reason |
 | --- | --- | --- | --- |
