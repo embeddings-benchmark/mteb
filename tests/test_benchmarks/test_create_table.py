@@ -21,6 +21,7 @@ from mteb.benchmarks._create_table import (
     _incomplete_task_pairs,
 )
 from mteb.benchmarks.benchmark import BenchmarkAggregation
+from tests.conftest import _skip_if_datasets_too_old
 
 FULL_MODEL = "mteb/baseline-random-encoder"
 PARTIAL_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
@@ -45,6 +46,7 @@ def test_incomplete_task_pairs_flags_partial_split_coverage(
     assert pairs.to_dicts() == [{"model_name": PARTIAL_MODEL, "task_name": POEM}]
 
 
+@_skip_if_datasets_too_old
 def test_build_per_task_pivot_nulls_partial_split_coverage(
     mock_mteb_cache: ResultCache,
 ):
@@ -64,6 +66,7 @@ def test_build_per_task_pivot_nulls_partial_split_coverage(
     assert by_model[PARTIAL_MODEL][BANKING77] == pytest.approx(0.800422)
 
 
+@_skip_if_datasets_too_old
 def test_create_summary_table_nulls_mean_task_on_partial_split_coverage(
     mock_mteb_cache: ResultCache,
 ):
@@ -90,6 +93,7 @@ def test_create_summary_table_nulls_mean_task_on_partial_split_coverage(
     assert rows[PARTIAL_MODEL]["Mean (TaskType)"] is None
 
 
+@_skip_if_datasets_too_old
 def test_incomplete_subset_pairs_flags_partial_split_coverage_per_subset(
     mock_mteb_cache: ResultCache,
 ):
@@ -100,6 +104,7 @@ def test_incomplete_subset_pairs_flags_partial_split_coverage_per_subset(
     ]
 
 
+@_skip_if_datasets_too_old
 def test_create_summary_table_nulls_mean_on_partial_split_coverage(
     mock_mteb_cache: ResultCache,
 ):
