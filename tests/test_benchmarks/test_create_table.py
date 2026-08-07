@@ -100,12 +100,18 @@ def test_incomplete_subset_pairs_flags_partial_split_coverage_per_subset(
     ]
 
 
-def test_create_summary_table_nulls_mean_subset_on_partial_split_coverage(
+def test_create_summary_table_nulls_mean_on_partial_split_coverage(
     mock_mteb_cache: ResultCache,
 ):
     pl_df = _task_frame(mock_mteb_cache, [CATALONIA, BANKING77])
     summary = _create_summary_table(
-        pl_df, aggregations=(BenchmarkAggregation.MEAN_SUBSET,)
+        pl_df,
+        aggregations=(
+            BenchmarkAggregation.MEAN_TASK,
+            BenchmarkAggregation.MEAN_TASK_TYPE,
+            BenchmarkAggregation.TASK_TYPES,
+            BenchmarkAggregation.MEAN_SUBSET,
+        ),
     )
     assert not summary.is_empty
     rows = {r["Model"]: r for r in summary.df.to_dicts()}
@@ -119,4 +125,13 @@ def test_create_summary_table_nulls_mean_subset_on_partial_split_coverage(
         (full_spanish + full_catalan + 0.012532) / 3
     )
 
+    catalonia_task_mean = (0.333102 + 0.337946 + 0.338905 + 0.339453) / 4
+    full_task_mean = (catalonia_task_mean + 0.012532) / 2
+    assert rows[FULL_MODEL]["Classification"] == pytest.approx(full_task_mean)
+    assert rows[FULL_MODEL]["Mean (Task)"] == pytest.approx(full_task_mean)
+    assert rows[FULL_MODEL]["Mean (TaskType)"] == pytest.approx(full_task_mean)
+
     assert rows[PARTIAL_MODEL]["Mean (Subset)"] is None
+    assert rows[PARTIAL_MODEL]["Classification"] is None
+    assert rows[PARTIAL_MODEL]["Mean (Task)"] is None
+    assert rows[PARTIAL_MODEL]["Mean (TaskType)"] is None
