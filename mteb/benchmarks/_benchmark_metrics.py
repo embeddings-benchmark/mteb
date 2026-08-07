@@ -95,11 +95,22 @@ def _compute_mean_subset(
 
     Returns:
         dict: `{"Mean(Subset)": value}` where `value` is `None` if any
-            subset score is missing/NaN, `0.0` for an empty input list, and
-            the subset-weighted mean otherwise.
+            subset score is missing/NaN or a task is missing one of its
+            required splits, `0.0` for an empty input list, and the
+            subset-weighted mean otherwise.
     """
+    from mteb.get_tasks import _TASKS_REGISTRY
+
     by_subset: dict[tuple[str, str], list[float]] = defaultdict(list)
     for tr in task_results:
+        # A model that skipped one of the task's required splits would
+        # otherwise have its partial-split subset means folded in as if
+        # complete — same class of bug as issue #5101, one level down from
+        # the per-task score. Read from the registered class (no instantiation)
+        # so this stays cheap on the leaderboard's hot path.
+        required_splits = set(_TASKS_REGISTRY[tr.task_name].metadata.eval_splits)
+        if not required_splits.issubset(tr.scores.keys()):
+            return {"Mean(Subset)": None}
         for split_scores in tr.scores.values():
             for subset_score in split_scores:
                 main = subset_score.get("main_score")

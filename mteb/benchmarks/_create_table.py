@@ -252,6 +252,40 @@ def _get_embedding_size(embed_dim: int | Sequence[int] | None) -> int | None:
     return None
 
 
+def _scored(pl_df: pl.DataFrame) -> pl.DataFrame:
+    """Rows with an actual score, dropping null- and NaN-scored placeholders.
+
+    ``TaskResult`` loading (e.g. ``validate_and_filter_scores``, exercised by
+    ``ResultCache.load_results``) fills a model's missing (subset, split)
+    cells with a NaN-scored placeholder row rather than leaving them absent,
+    so the cell still shows up as a distinct ``(subset, split)`` pair. Every
+    completeness tally in this module must run on this filtered frame —
+    otherwise a placeholder reads as "present", defeating the whole point of
+    :func:`_incomplete_task_pairs` / :func:`_incomplete_subset_pairs`.
+    Mirrors ``build_task_scores``'s ``deduped = task_frame.drop_nulls("score")``
+    in ``mteb/api/aggregators.py``.
+    """
+    return pl_df.filter(pl.col("score").is_not_null() & pl.col("score").is_not_nan())
+
+
+def _required_splits_per_task(pl_df: pl.DataFrame) -> pl.DataFrame:
+    """``(task_name, _required_splits)`` — count of distinct splits observed for each task.
+
+    "Observed" means the union of splits reported by *any* model for the task
+    within this (already benchmark-scoped) frame — the shared basis for both
+    :func:`_incomplete_task_pairs` (subset × split completeness) and
+    :func:`_incomplete_subset_pairs` (split completeness within one subset,
+    used by the ``Mean (Subset)`` / HUME aggregation path). ``pl_df`` must
+    already be filtered through :func:`_scored`.
+    """
+    return (
+        pl_df.select("task_name", "split")
+        .unique()
+        .group_by("task_name")
+        .agg(pl.len().alias("_required_splits"))
+    )
+
+
 def _incomplete_task_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
     """``(model_name, task_name)`` pairs that skipped a (subset, split) combo.
 
@@ -267,21 +301,21 @@ def _incomplete_task_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
     scored on `validation` + `test_iid` only, still shown as a normal number
     in the benchmark summary).
     """
-    required = (
-        pl_df.select("task_name", "subset", "split")
+    scored = _scored(pl_df)
+    n_subsets = (
+        scored.select("task_name", "subset")
         .unique()
         .group_by("task_name")
-        .agg(
-            pl.col("subset").n_unique().alias("_n_subsets"),
-            pl.col("split").n_unique().alias("_n_splits"),
-        )
-        .select(
-            "task_name",
-            (pl.col("_n_subsets") * pl.col("_n_splits")).alias("_required"),
-        )
+        .agg(pl.len().alias("_n_subsets"))
+    )
+    required = n_subsets.join(
+        _required_splits_per_task(scored), on="task_name", how="left"
+    ).select(
+        "task_name",
+        (pl.col("_n_subsets") * pl.col("_required_splits")).alias("_required"),
     )
     have = (
-        pl_df.select("model_name", "task_name", "subset", "split")
+        scored.select("model_name", "task_name", "subset", "split")
         .unique()
         .group_by(["model_name", "task_name"])
         .agg(pl.len().alias("_have"))
@@ -293,21 +327,49 @@ def _incomplete_task_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def _null_incomplete_scores(
-    per_task_long: pl.DataFrame, incomplete: pl.DataFrame
-) -> pl.DataFrame:
-    """Null the ``score`` column for every ``(model_name, task_name)`` row ``incomplete`` flags.
+def _incomplete_subset_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
+    """``(model_name, task_name, subset)`` triples missing an observed split.
 
-    ``incomplete`` is the output of :func:`_incomplete_task_pairs`. No-op
-    (returns ``per_task_long`` unchanged) when nothing is incomplete — the
-    common case for single-split tasks, which never appear in ``incomplete``.
+    Subset-level analogue of :func:`_incomplete_task_pairs` — required by any
+    ``Mean (Subset)`` consumer (HUME's ``want_subset`` branch of
+    :func:`_create_summary_table`) since that path averages within a single
+    (task, subset) rather than across the whole task. Same rationale as
+    :func:`_incomplete_task_pairs`: a model that only ran 2 of a task's 6
+    splits shouldn't have that partial-split subset mean folded into
+    ``Mean (Subset)`` as if it were complete.
+    """
+    scored = _scored(pl_df)
+    have = (
+        scored.select("model_name", "task_name", "subset", "split")
+        .unique()
+        .group_by(["model_name", "task_name", "subset"])
+        .agg(pl.len().alias("_have"))
+    )
+    return (
+        have.join(_required_splits_per_task(scored), on="task_name", how="left")
+        .filter(pl.col("_have") < pl.col("_required_splits"))
+        .select("model_name", "task_name", "subset")
+    )
+
+
+def _null_incomplete_scores(
+    long_df: pl.DataFrame, incomplete: pl.DataFrame, *, keys: Sequence[str]
+) -> pl.DataFrame:
+    """Null the ``score`` column for every row ``incomplete`` flags, joined on ``keys``.
+
+    ``incomplete`` is the output of :func:`_incomplete_task_pairs`
+    (``keys=("model_name", "task_name")``) or :func:`_incomplete_subset_pairs`
+    (``keys=("model_name", "task_name", "subset")``). No-op (returns
+    ``long_df`` unchanged) when nothing is incomplete — the common case for
+    single-split tasks, which never appear in ``incomplete``.
     """
     if incomplete.is_empty():
-        return per_task_long
+        return long_df
+    keys = list(keys)
     return (
-        per_task_long.join(
+        long_df.join(
             incomplete.with_columns(pl.lit(True).alias("_incomplete")),
-            on=["model_name", "task_name"],
+            on=keys,
             how="left",
         )
         .with_columns(
@@ -341,7 +403,9 @@ def _build_per_task_pivot(
         pl.col("score").mean()
     )
     per_task_long = _null_incomplete_scores(
-        per_task_long, _incomplete_task_pairs(pl_df)
+        per_task_long,
+        _incomplete_task_pairs(pl_df),
+        keys=("model_name", "task_name"),
     )
     per_task = per_task_long.pivot(on="task_name", index="model_name", values="score")
     task_cols = [c for c in per_task.columns if c != "model_name"]
@@ -735,7 +799,9 @@ def _create_summary_table(  # noqa: PLR0914
         per_task_aggs.append(pl.col("is_public").first())
     per_task_long = pl_df.group_by(["model_name", "task_name"]).agg(*per_task_aggs)
     per_task_long = _null_incomplete_scores(
-        per_task_long, _incomplete_task_pairs(pl_df)
+        per_task_long,
+        _incomplete_task_pairs(pl_df),
+        keys=("model_name", "task_name"),
     )
     per_task = per_task_long.pivot(on="task_name", index="model_name", values="score")
     task_cols = [c for c in per_task.columns if c != "model_name"]
@@ -779,8 +845,21 @@ def _create_summary_table(  # noqa: PLR0914
         per_subset_long = pl_df.group_by(["model_name", "task_name", "subset"]).agg(
             pl.col("score").mean()
         )
+        # Null a (task, subset) cell when the model skipped one of the task's
+        # observed splits — same rationale as `_incomplete_task_pairs` (issue
+        # #5101), one granularity down. `Mean (Subset)` then goes null too
+        # (skipna=False, matching `_compute_mean_subset`'s contract) rather
+        # than silently averaging over the subsets that happen to be complete.
+        per_subset_long = _null_incomplete_scores(
+            per_subset_long,
+            _incomplete_subset_pairs(pl_df),
+            keys=("model_name", "task_name", "subset"),
+        )
         subset_mean = per_subset_long.group_by("model_name").agg(
-            pl.col("score").mean().alias(mean_subset_col)
+            pl.when(pl.col("score").is_null().any())
+            .then(None)
+            .otherwise(pl.col("score").mean())
+            .alias(mean_subset_col)
         )
         joint_table = joint_table.join(subset_mean, on="model_name", how="left")
         keyed = per_subset_long.with_columns(

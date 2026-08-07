@@ -13,6 +13,7 @@ from mteb.benchmarks._benchmark_metrics import (
     _compute_task_types,
 )
 from mteb.benchmarks.benchmark import Benchmark, BenchmarkAggregation
+from mteb.results.task_result import TaskResult
 
 
 def _datasets_supports_dictionary_type() -> bool:
@@ -198,6 +199,33 @@ def test_compute_mean_subset(mock_mteb_cache: ResultCache):
         checked += 1
 
     assert checked > 0, "test never matched a model; fixture or registry change?"
+
+
+def test_compute_mean_subset_returns_none_on_partial_split_coverage():
+    """A model missing one of a task's eval_splits shouldn't get a normal Mean(Subset).
+
+    Same class of bug as issue #5101 (partial-split task scores counted as
+    complete), one level down: `_compute_mean_subset` used to average
+    whatever splits a model happened to submit per (task, subset), with no
+    check that every `eval_splits` entry was actually present.
+    """
+    task = mteb.get_tasks(["CataloniaTweetClassification"])[0]
+    assert task.metadata.eval_splits == ["validation", "test"]
+
+    # Both subsets score high on "validation", but "test" is missing
+    # entirely — the model only ran half of the task's required splits.
+    tr = TaskResult.from_task_results(
+        task=task,
+        scores={
+            "validation": {
+                "spanish": {"main_score": 0.9},
+                "catalan": {"main_score": 0.9},
+            },
+        },
+        evaluation_time=1.0,
+    )
+
+    assert _compute_mean_subset([tr]) == {"Mean(Subset)": None}
 
 
 def test_compute_mean_public_private(mock_mteb_cache: ResultCache):
