@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -16,6 +17,8 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
+
+logger = logging.getLogger(__name__)
 
 
 class VideoMAEWrapper(AbsEncoder):
