@@ -104,7 +104,11 @@ class VideoMAEWrapper(AbsEncoder):
                 else v[: self.num_frames]
                 for v in videos
             ]
-            processed = self.processor(padded, return_tensors="pt").to(self.device)
+            # Explicit list-of-videos-of-frames in HWC. A list of 4D tensors trips
+            # `make_batched` on the v4 slow processor, which treats the whole batch
+            # as a single video and then fails inside PIL.
+            frames = [[f.permute(1, 2, 0).numpy() for f in v] for v in padded]
+            processed = self.processor(frames, return_tensors="pt").to(self.device)
 
             outputs = self.model(**processed)
             pooled = outputs.last_hidden_state.mean(dim=1)
