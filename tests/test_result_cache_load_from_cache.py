@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from mteb.cache import ResultCache
+from mteb.cache import LoadExperimentEnum, ResultCache
 from mteb.results import BenchmarkResults
 
 
@@ -119,6 +119,7 @@ class TestRebuildFromFullRepository:
                 only_main_score=True,
                 require_model_meta=False,
                 include_remote=True,
+                load_experiments=LoadExperimentEnum.MATCH_NAME,
             )
             mock_results.to_disk.assert_called_once_with(quick_cache_path)
             assert result == mock_results

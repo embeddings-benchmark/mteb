@@ -240,7 +240,7 @@ class MoCaWrapper(AbsEncoder):
 
 # MMEB-train appears in both the CPT and CL mixtures and overlaps the mteb tasks below,
 # so scores on those should be read as in-domain. The other training corpora (DCLM,
-# PixelProse, MAmmoTH-VL-Instruct, DocMatix, VisRAG, the ColPali training set, mmE5, E5)
+# PixelProse, MAmmoTH-VL-Instruct, docmatix, VisRAG, the ColPali training set, mmE5, E5)
 # have no mteb equivalent.
 moca_training_datasets = {
     "HatefulMemesI2TRetrieval",
