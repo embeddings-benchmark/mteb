@@ -496,6 +496,7 @@ def calculate_pair_modality_statistics(
     load_col: Callable[[str], list[Any]],
     n: int,
     max_workers: int | None = None,
+    symmetric: bool = False,
 ) -> PairModalityStatistics:
     """Compute per-modality statistics for a paired dataset.
 
@@ -507,6 +508,7 @@ def calculate_pair_modality_statistics(
         load_col: Callable that loads a column by name from the dataset split.
         n: Number of samples.
         max_workers: Maximum number of worker threads for hash computation.
+        symmetric: Whether swapping the two sides represents the same pair.
     """
     s1, all_h1 = _compute_side_statistics(
         col_modalities1, load_col, n, max_workers=max_workers
@@ -514,7 +516,13 @@ def calculate_pair_modality_statistics(
     s2, all_h2 = _compute_side_statistics(
         col_modalities2, load_col, n, max_workers=max_workers
     )
-    unique_pairs = len({(tuple(r1), tuple(r2)) for r1, r2 in zip(all_h1, all_h2)})
+    pairs = ((tuple(r1), tuple(r2)) for r1, r2 in zip(all_h1, all_h2))
+    if symmetric:
+        unique_pairs = len(
+            {(left, right) if left <= right else (right, left) for left, right in pairs}
+        )
+    else:
+        unique_pairs = len(set(pairs))
 
     return PairModalityStatistics(
         text1_statistics=s1["text_statistics"],
