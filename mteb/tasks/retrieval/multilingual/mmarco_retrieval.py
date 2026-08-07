@@ -7,7 +7,7 @@ class MMarcoRetrievalMultilingual(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="MMarcoRetrievalMultilingual",
-        description="A 13-language machine-translated version of the MS MARCO passage retrieval dataset.",
+        description="A retrieval task derived from mMARCO v2. 100,000 candidates were sampled from the entire corpus to reduce evaluation inference cost.",
         reference="https://github.com/unicamp-dl/mMARCO",
         dataset={
             "path": "lopozz/MMarcoRetrievalMultilingual",
