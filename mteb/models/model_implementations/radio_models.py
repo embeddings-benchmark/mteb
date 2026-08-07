@@ -136,10 +136,6 @@ class RADIOModel(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        if "text" in inputs.dataset.features:
-            raise ValueError("RADIO models only support image encoding.")
-        if "image" not in inputs.dataset.features:
-            raise ValueError("No image data found.")
         return self.get_image_embeddings(inputs, **kwargs)
 
 
