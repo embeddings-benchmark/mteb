@@ -90,7 +90,6 @@ class VideoMAEWrapper(AbsEncoder):
         self.model.eval()
 
         state_dict = _load_checkpoint_tensors(model_name, revision)
-        self._restore_qkv_bias(state_dict)
         self._load_fc_norm(state_dict)
 
         self.model.to(self.device)
@@ -108,54 +107,6 @@ class VideoMAEWrapper(AbsEncoder):
                 f"{model_name} was trained with {self.model.config.num_frames} frames "
                 f"per clip, but num_frames={self.num_frames} was requested."
             )
-
-    def _restore_qkv_bias(self, state_dict: dict[str, torch.Tensor]) -> None:
-        """Restore attention biases dropped by transformers v5.
-
-        transformers 4.x implemented VideoMAE attention BEiT-style: query/key/value
-        Linears with ``bias=False``, plus separate ``q_bias`` and ``v_bias``
-        parameters and an implicit zero ``k_bias``. Every published checkpoint is
-        saved that way. 5.x refactored to standard Linears with
-        ``bias=config.qkv_bias`` and shipped no key mapping, so the stored biases
-        land in UNEXPECTED, the new ones land in MISSING, and the model loads
-        zeroed biases without raising.
-
-        Skipped on v4, where the module still has a ``q_bias`` attribute, and on
-        any future version that loads the biases correctly.
-        """
-        first = self.model.encoder.layer[0].attention.attention
-        if hasattr(first, "q_bias"):
-            return  # transformers v4 layout, loaded natively
-        if first.query.bias is None:
-            return  # config.qkv_bias is False, nothing to restore
-        if not bool((first.query.bias == 0).all()):
-            return  # already populated
-
-        restored = 0
-        with torch.no_grad():
-            for i, layer in enumerate(self.model.encoder.layer):
-                attn = layer.attention.attention
-                q_key = f"videomae.encoder.layer.{i}.attention.attention.q_bias"
-                v_key = f"videomae.encoder.layer.{i}.attention.attention.v_bias"
-                if q_key not in state_dict:
-                    q_key = q_key.removeprefix("videomae.")
-                    v_key = v_key.removeprefix("videomae.")
-                if q_key not in state_dict or v_key not in state_dict:
-                    continue
-                attn.query.bias.copy_(state_dict[q_key])
-                attn.value.bias.copy_(state_dict[v_key])
-                attn.key.bias.zero_()  # k_bias was always an implicit zero
-                restored += 1
-
-        expected = len(self.model.encoder.layer)
-        if restored != expected:
-            raise RuntimeError(
-                f"{self.model_name}: this transformers version dropped VideoMAE's "
-                f"q_bias/v_bias during load, but only {restored}/{expected} layers "
-                "could be restored from the checkpoint. Refusing to return silently "
-                "degraded embeddings."
-            )
-        logger.info("Restored q_bias/v_bias for %d VideoMAE layers", restored)
 
     def _load_fc_norm(self, state_dict: dict[str, torch.Tensor]) -> None:
         """Load the final LayerNorm when it lives on the classification head.
@@ -268,7 +219,7 @@ videomae_base = ModelMeta(
     citation=_VIDEOMAE_CITATION,
     contacts=None,
     output_dtypes=None,
-    extra_requirements_groups=None,
+    extra_requirements_groups=["transformers-v4"],
 )
 
 videomae_large = ModelMeta(
@@ -298,7 +249,7 @@ videomae_large = ModelMeta(
     citation=_VIDEOMAE_CITATION,
     contacts=None,
     output_dtypes=None,
-    extra_requirements_groups=None,
+    extra_requirements_groups=["transformers-v4"],
 )
 
 videomae_base_finetuned_kinetics = ModelMeta(
@@ -328,5 +279,5 @@ videomae_base_finetuned_kinetics = ModelMeta(
     citation=_VIDEOMAE_CITATION,
     contacts=None,
     output_dtypes=None,
-    extra_requirements_groups=None,
+    extra_requirements_groups=["transformers-v4"],
 )
