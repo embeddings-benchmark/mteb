@@ -94,16 +94,7 @@ class TimesformerWrapper(AbsEncoder):
         embeddings = []
         for batch in tqdm(inputs, desc="Encoding", disable=not show_progress_bar):
             videos = batch["video"]
-            padded = [
-                torch.cat(
-                    [v, v[-1:].expand(self.num_frames - v.shape[0], *v.shape[1:])],
-                    dim=0,
-                )
-                if v.shape[0] < self.num_frames
-                else v[: self.num_frames]
-                for v in videos
-            ]
-            processed = self.processor(padded, return_tensors="pt").to(self.device)
+            processed = self.processor(videos, return_tensors="pt").to(self.device)
 
             outputs = self.model(**processed)
             embeddings.append(outputs.last_hidden_state[:, 0].cpu())
