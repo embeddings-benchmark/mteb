@@ -50,6 +50,7 @@ _ISO3_TO_LANG: dict[str, tuple[str | None, str | None, str | None]] = {
     "cmn": ("zh", None, "char"),
     # No-space scripts without a dedicated tokenizer: character-level split
     "jpn": (None, None, "char"),  # Japanese (could add MeCab later)
+    "kor": (None, None, "char"),  # Korean (could add a morphological analyzer later)
     "tha": (None, None, "char"),  # Thai (could add pythainlp later)
     "khm": (None, None, "char"),  # Khmer
     "mya": (None, None, "char"),  # Myanmar

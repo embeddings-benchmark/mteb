@@ -193,6 +193,46 @@ As it is an optional dependency, you can't use top-level dependencies, but will 
     )
     ```
 
+### Local Model Verification using mock tasks
+
+Before submitting your model implementation in a Pull Request, you must verify that the model integrates correctly with the benchmarking pipeline using the local verification helper `mock_run`. Mock tasks run locally, execute very quickly, and do not download large datasets.
+
+To run the local verification:
+
+=== "Python"
+    ```python
+    import mteb
+
+    # Load your new model
+    model = mteb.get_model("your_model_name")
+
+    # This will run the mock test tasks compatible with your model's modalities and protocols to verify your new model implementation
+    results = mteb.mock_run(model)
+
+    print(results.all_passed)  # whether the model passed every check
+    print(results.to_markdown())  # the same report the CLI writes to disk
+    ```
+
+    `results` maps each mock task name to its status:
+
+    | Value | Meaning |
+    | --- | --- |
+    | `TaskResult` | the task ran successfully |
+    | `TaskError` | the task failed, the `exception` attribute contains the reason (tasks failing due to a missing optional dependency are reported as skipped) |
+    | `None` | the task is not compatible with the model's modalities or protocols |
+
+    ```python
+    results["MockRetrievalTask"]  # the status of a single mock task
+    results.task_results  # the full {task name: status} mapping
+    ```
+
+=== "CLI"
+    ```bash
+    mteb mock-run -m your_model_name
+    ```
+
+    This prints a results summary table to the terminal and saves the markdown file `mteb_mock_run_results.md` in the directory you ran the command from. Please commit the resulting file with your PR.
+
 ### Submitting your model as a PR
 
 When submitting you models as a PR, please copy and paste the following checklist into the pull request message:
@@ -206,6 +246,7 @@ When submitting you models as a PR, please copy and paste the following checklis
 - [ ] The model is public, i.e., is available either as an API or the weights are publicly available to download
 - [ ] I reproduced results from the original paper (if applicable) on at least one benchmark, and I am including the results in the PR description.
 ```
+
 
 ### Matryoshka embeddings
 

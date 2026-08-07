@@ -14,6 +14,7 @@ This described the is the command line interface for `mteb`.
 - [`mteb available_benchmarks`](#listing-available-benchmarks): Lists the available benchmarks
 - [`mteb create_meta`](#creating-model-metadata): Creates the metadata for a model card from a folder of results
 - [`mteb leaderboard`](#running-the-leaderboard): Runs the MTEB leaderboard locally
+- [`mteb mock-run`](#checking-model-implementations): Sanity checks a model implementation using mock tasks
 
 In the following we outline some sample use cases, but if you want to learn more about the arguments for each command you can run:
 
@@ -91,3 +92,23 @@ Available options:
 - `--rebuild`: Force rebuild from full results repository, bypassing cached JSON
 
 For more details on running the leaderboard, see the [leaderboard documentation](leaderboard.md).
+
+## Checking Model Implementations
+
+To sanity check a model implementation using a set of example test tasks, use the `mteb mock-run` command. This command evaluates the model on a set of tasks covering various modalities and task types, while not requiring any external datasets, making it a fast way to test that the implementation works as intended before running larger benchmarks or when implementing a model.
+
+For example:
+
+```bash
+mteb mock-run -m sentence-transformers/average_word_embeddings_komninos
+```
+
+This will run the model on all compatible mock tasks, print a Markdown summary table to stdout, and save the markdown results to `mteb_mock_run_results.md`.
+
+Available options:
+- `-m, --model MODEL`: The model to use. Prioritizes the model implementation from MTEB's model registry, or defaults to loading via `sentence-transformers`.
+- `--model-revision REVISION`: Revision of the model to load.
+- `--device DEVICE`: Device to use for computation (e.g. `cpu`, `cuda`).
+- `-v, --verbosity VERBOSITY`: Verbosity level (0 to 4, default: 2).
+
+The same checks are available from Python using [`mteb.mock_run`](../../contributing/adding_a_model.md#local-model-verification-using-mock-tasks), which returns the per-task status instead of writing a file.

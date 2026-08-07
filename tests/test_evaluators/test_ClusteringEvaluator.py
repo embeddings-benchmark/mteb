@@ -8,8 +8,8 @@ from sklearn.metrics import v_measure_score
 from torch.utils.data import DataLoader
 
 from mteb._evaluators import ClusteringEvaluator
+from mteb.mocks.mock_tasks.clustering import MockClusteringTask
 from mteb.timing import TimingStack
-from tests.mock_tasks import MockClusteringTask
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray

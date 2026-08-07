@@ -9,6 +9,7 @@ from datasets import Dataset
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import SimplifiedTaskType, TaskMetadata
+from mteb.mocks.mock_tasks import MockRetrievalTask
 from mteb.models.model_implementations.jina_models import (
     _SIMPLIFIED_TO_JINA_TASK,
     JinaV5OmniWrapper,
@@ -17,7 +18,6 @@ from mteb.models.model_implementations.jina_models import (
 )
 from mteb.types import PromptType
 from tests.mock_models import MockSentenceTransformer
-from tests.mock_tasks import MockRetrievalTask
 
 _VARIANT_MAP = {
     "Retrieval": "retrieval",
