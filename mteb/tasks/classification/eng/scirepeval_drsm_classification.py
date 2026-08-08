@@ -24,7 +24,7 @@ class SciRepEvalDRSMClassification(AbsTaskClassification):
         type="Classification",
         category="t2c",
         modalities=["text"],
-        eval_splits=["train"],
+        eval_splits=["evaluation"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-01-01", "2023-12-06"),
@@ -55,10 +55,11 @@ Feldman, Sergey},
     )
 
     is_cross_validation: bool = True
+    train_split: str = "evaluation"
 
     def dataset_transform(self, num_proc: int | None = None) -> None:
         # SciRepEval exposes only a single "evaluation" split for `drsm`. We keep
-        # it as one split named "train" and let MTEB's cross-validation path
+        # it named "evaluation" and let MTEB's cross-validation path
         # (is_cross_validation) run KFold over the whole split.
         from datasets import DatasetDict
 
@@ -82,4 +83,4 @@ Feldman, Sergey},
 
         ds = ds.filter(_first_per_text)
         ds = ds.class_encode_column("label")
-        self.dataset = DatasetDict({"train": ds})
+        self.dataset = DatasetDict({"evaluation": ds})

@@ -22,7 +22,7 @@ class SciRepEvalBiomimicryClassification(AbsTaskClassification):
         type="Classification",
         category="t2c",
         modalities=["text"],
-        eval_splits=["train"],
+        eval_splits=["evaluation"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-01-01", "2023-12-06"),
@@ -53,10 +53,11 @@ Feldman, Sergey},
     )
 
     is_cross_validation: bool = True
+    train_split: str = "evaluation"
 
     def dataset_transform(self, num_proc: int | None = None) -> None:
         # SciRepEval exposes only a single "evaluation" split for `biomimicry`.
-        # We keep it as one split named "train" and let MTEB's cross-validation
+        # We keep it named "evaluation" and let MTEB's cross-validation
         # path (is_cross_validation) run KFold over the whole split.
         from datasets import DatasetDict
 
@@ -68,4 +69,4 @@ Feldman, Sergey},
         keep = {"text", "label"}
         ds = ds.remove_columns([c for c in ds.column_names if c not in keep])
         ds = ds.class_encode_column("label")
-        self.dataset = DatasetDict({"train": ds})
+        self.dataset = DatasetDict({"evaluation": ds})

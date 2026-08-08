@@ -23,7 +23,7 @@ class SciRepEvalMeSHDescriptorsClassification(AbsTaskClassification):
         type="Classification",
         category="t2c",
         modalities=["text"],
-        eval_splits=["train"],
+        eval_splits=["evaluation"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-01-01", "2023-12-06"),
@@ -54,12 +54,13 @@ Feldman, Sergey},
     )
 
     is_cross_validation: bool = True
+    train_split: str = "evaluation"
 
     def dataset_transform(self, num_proc: int | None = None) -> None:
         # Only the "evaluation" split is loaded (see `split` in metadata.dataset).
         # Each row is a (paper, descriptor) pair; deduplicate by paper so a single
         # abstract cannot appear in multiple cross-validation folds with different
-        # labels. The deduplicated split is kept as one split named "train" and
+        # labels. The deduplicated split is kept named "evaluation" and
         # MTEB's cross-validation path (is_cross_validation) runs KFold over it.
         from datasets import DatasetDict
 
@@ -85,4 +86,4 @@ Feldman, Sergey},
         ds = ds.remove_columns([c for c in ds.column_names if c not in keep])
         ds = ds.class_encode_column("label")
         ds = ds.shuffle(seed=self.seed).select(range(min(len(ds), 8192)))
-        self.dataset = DatasetDict({"train": ds})
+        self.dataset = DatasetDict({"evaluation": ds})

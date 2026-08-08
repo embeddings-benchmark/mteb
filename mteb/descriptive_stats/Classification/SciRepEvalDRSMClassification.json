@@ -1,5 +1,5 @@
 {
-    "train": {
+    "evaluation": {
         "num_samples": 8812,
         "samples_in_train": null,
         "text_statistics": {
