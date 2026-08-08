@@ -58,6 +58,10 @@ class AbsTaskSummarization(AbsTask):
     machine_summaries_column_name: str = "machine_summaries"
     relevancy_column_name: str = "relevance"
 
+    def _get_text_columns(self) -> list[str]:
+        # only the source text: the summary columns hold a list per row and are aligned with the relevance scores
+        return [self.text_column_name]
+
     def _evaluate_subset(
         self,
         model: MTEBModels,

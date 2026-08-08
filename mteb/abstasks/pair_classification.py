@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 from datasets import Dataset
@@ -56,6 +56,14 @@ class AbsTaskPairClassification(AbsTask):
     label_column_name: str = "labels"
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
+
+    def _get_text_columns(self) -> list[str]:
+        columns = (self.input1_column_name, self.input2_column_name)
+        if self.modalities == ["text"] and all(
+            isinstance(column, str) for column in columns
+        ):
+            return list(cast("tuple[str, str]", columns))
+        return []
 
     def _evaluate_subset(
         self,

@@ -55,6 +55,11 @@ class AbsTaskZeroShotClassification(AbsTask):
     input_column_name: str | Sequence[Modalities] = "image"
     label_column_name: str = "label"
 
+    def _get_text_columns(self) -> list[str]:
+        if self.modalities == ["text"] and isinstance(self.input_column_name, str):
+            return [self.input_column_name]
+        return []
+
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Keep only eval splits. Zero-shot tasks don't need train splits."""
         if self.dataset is None:

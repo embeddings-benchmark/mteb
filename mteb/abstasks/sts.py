@@ -91,6 +91,13 @@ class AbsTaskSTS(AbsTask):
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
 
+    def _get_text_columns(self) -> list[str]:
+        if self.modalities == ["text"] and all(
+            isinstance(column, str) for column in self.column_names
+        ):
+            return list(cast("tuple[str, str]", self.column_names))
+        return []
+
     def _evaluate_subset(
         self,
         model: MTEBModels,

@@ -149,6 +149,11 @@ class AbsTaskClustering(AbsTask):
     input_column_name: str | Sequence[Modalities] = "sentences"
     label_column_name: str = "labels"
 
+    def _get_text_columns(self) -> list[str]:
+        if self.modalities == ["text"] and isinstance(self.input_column_name, str):
+            return [self.input_column_name]
+        return []
+
     def _evaluate_subset(
         self,
         model: MTEBModels,

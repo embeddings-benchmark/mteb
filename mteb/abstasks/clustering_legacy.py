@@ -61,6 +61,11 @@ class AbsTaskClusteringLegacy(AbsTask):
     input_column_name: str = "sentences"
     label_column_name: str = "labels"
 
+    def _get_text_columns(self) -> list[str]:
+        if self.modalities == ["text"]:
+            return [self.input_column_name]
+        return []
+
     def _evaluate_subset(
         self,
         model: MTEBModels,

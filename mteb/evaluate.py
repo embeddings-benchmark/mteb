@@ -369,9 +369,14 @@ def _check_cache(
             - A dictionary mapping evaluation split names to a list of missing subset names.
               Returns an empty dict if no splits or subsets are missing.
     """
-    # Load results from the cache if the overwrite strategy allows it
+    # Load results from the cache if the overwrite strategy allows it. Cached results describe the published
+    # dataset, so they say nothing about a task whose data was modified locally.
     existing_results: TaskResult | None = None
-    if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
+    if (
+        cache
+        and overwrite_strategy != OverwriteStrategy.ALWAYS
+        and not task.data_modified
+    ):
         existing_results = cache.load_task_result(task.metadata.name, meta)
 
     dont_overwrite = overwrite_strategy in {
