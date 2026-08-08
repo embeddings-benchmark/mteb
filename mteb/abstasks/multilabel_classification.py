@@ -86,6 +86,10 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
     input_column_name: str = "text"
     label_column_name: str = "label"
 
+    def _warn_about_label_distribution(self) -> None:
+        """Each row carries a list of labels here, so the single-label checks do not apply."""
+        pass
+
     @override
     def _evaluate_subset(  # type: ignore[override]  # noqa: PLR0914
         self,

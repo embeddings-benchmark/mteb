@@ -122,6 +122,13 @@ class AbsTaskBitextMining(AbsTask):
 
         return cast("dict[HFSubset, ScoresDict]", scores)
 
+    def _get_text_columns(self) -> list[str]:
+        # for parallel subsets the columns are the languages of each pair, otherwise sentence1/sentence2
+        columns: list[str] = []
+        for pair in self._get_pairs(self.parallel_subsets):
+            columns.extend(column for column in pair if column not in columns)
+        return columns
+
     def _get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
         pairs = self._DEFAULT_PAIR
         if parallel:

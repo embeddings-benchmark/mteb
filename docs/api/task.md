@@ -51,6 +51,50 @@ All tasks in `mteb` inherits from the following abstract class.
 
 :::mteb.AbsTask
 
+## Cleaning Task Data
+
+Datasets often contain duplicated or near-empty documents. A task can remove those before it is evaluated:
+
+```python
+import mteb
+
+task = mteb.get_task("MassiveIntentClassification")
+task.remove_duplicates()
+task.filter_short_documents(min_length=5)  # or min_length=3, unit="words"
+```
+
+Both methods load the data if needed, modify the dataset in place and return the task, so they can be chained.
+They cover every split and subset by default; `splits=`, `subsets=` and `columns=` narrow that down. For retrieval
+tasks the relevance judgements are kept valid: a judgement pointing at a removed duplicate moves to the copy that
+was kept, and a query left without a positive is dropped.
+
+Duplicates are texts that match once surrounding whitespace is stripped. `normalize=` loosens the comparison:
+
+| `normalize` | additionally ignores | `"Wake me up!"` also matches |
+|---|---|---|
+| `"strip"` (default) | – | `"  Wake me up! "` |
+| `"casefold"` | case | `"wake me up!"` |
+| `"alphanumeric"` | punctuation, repeated whitespace | `"wake  me  up"` |
+
+```python
+task.remove_duplicates(normalize="alphanumeric")
+```
+
+Under `"alphanumeric"`, `"e-mail"` and `"email"` are duplicates too, but `"e mail"` is not. The looser settings
+catch more duplicates while risking merges a reader would tell apart — punctuation matters in source code, and case
+folding is not meaningful in every script.
+
+A filter that removed something sets `task.data_modified`. While that is set, `mteb` does not read cached results
+for the task and warns when a `TaskResult` is built. The filters also warn about data they leave unusable, such as
+an emptied split.
+
+!!! warning
+    A cleaned task no longer matches the published dataset, so its scores are not comparable to the
+    [leaderboard](https://huggingface.co/spaces/mteb/leaderboard) and its descriptive statistics still describe the
+    published data. If a dataset needs cleaning for everyone, please
+    [open an issue](https://github.com/embeddings-benchmark/mteb/issues) so a new version of the task can be created
+    instead.
+
 ## Multimodal Tasks
 
 Tasks that support any modality (text, image, etc.) inherit from the following abstract class. Retrieval tasks support multimodal input (e.g. image + text queries and image corpus or vice versa).

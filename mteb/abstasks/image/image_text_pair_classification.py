@@ -61,6 +61,12 @@ class AbsTaskImageTextPairClassification(AbsTask):
     images_column_names: str | Sequence[str] = "image"
     texts_column_names: str | Sequence[str] = "caption"
 
+    def _get_text_columns(self) -> list[str]:
+        # filtering on a caption drops the image it is paired with, keeping the pair intact
+        if isinstance(self.texts_column_names, str):
+            return [self.texts_column_names]
+        return list(self.texts_column_names)
+
     def _calculate_descriptive_statistics_from_split(
         self,
         split: str,
