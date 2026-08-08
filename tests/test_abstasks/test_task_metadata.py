@@ -1,10 +1,16 @@
 """Tests the TaskMetadata class"""
 
+from typing import get_args
+
 import pytest
 from pydantic import ValidationError
 
 import mteb
-from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.task_metadata import (
+    _TASKTYPE2SIMPLIFIEDTASKTYPE,
+    TaskMetadata,
+    TaskType,
+)
 from mteb.mocks import (
     MOCK_MAEB_TASK_GRID,
     MOCK_MIEB_TASK_GRID,
@@ -56,6 +62,25 @@ def test_descriptive_statistics_mock_mmeb_tasks(task):
         "torchcodec", reason="Video dependencies torchcodec are not installed"
     )
     check_descriptive_stats(task)
+
+
+def test_all_task_types_have_a_simplified_task_type():
+    """Every `TaskType` must have an entry in `_TASKTYPE2SIMPLIFIEDTASKTYPE`, otherwise
+    `TaskMetadata.simplified_task_type` raises a `KeyError` for tasks of that type.
+    """
+
+    all_task_types = set(get_args(TaskType))
+    mapped_task_types = set(_TASKTYPE2SIMPLIFIEDTASKTYPE.keys())
+
+    missing = all_task_types - mapped_task_types
+    assert not missing, (
+        f"The following TaskType(s) are missing from _TASKTYPE2SIMPLIFIEDTASKTYPE: {sorted(missing)}"
+    )
+
+    extra = mapped_task_types - all_task_types
+    assert not extra, (
+        f"_TASKTYPE2SIMPLIFIEDTASKTYPE contains keys that aren't valid TaskType values: {sorted(extra)}"
+    )
 
 
 def test_given_dataset_config_then_it_is_valid():
