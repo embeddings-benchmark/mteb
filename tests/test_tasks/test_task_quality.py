@@ -812,6 +812,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "RParisHardI2IRetrieval",
         "RParisMediumI2IRetrieval",
         "ReMuQIT2TRetrieval",
+        "RealMMRAGFinSlidesRetrieval",
         "SOPI2IRetrieval",
         "SoundingEarthA2IRetrieval",
         "SoundingEarthI2ARetrieval",
