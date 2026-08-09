@@ -1,12 +1,28 @@
 from __future__ import annotations
 
+import hashlib
 from collections import defaultdict
 
-from datasets import load_dataset
+from datasets import Audio, Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
+
+
+def _audio_payload_hashes(ds: Dataset) -> list[str]:
+    """MD5 of the stored audio payload of every row.
+
+    Duplicate audio is defined in mteb as two clips whose decoded sample arrays
+    are byte-identical. Hashing the encoded payload instead avoids decoding the
+    whole split; for this pinned revision the two agree exactly (both leave 2970
+    distinct clips out of the 3002 test rows).
+    """
+    undecoded = ds.select_columns(["audio"]).cast_column("audio", Audio(decode=False))
+    return [
+        hashlib.md5(row["audio"]["bytes"], usedforsecurity=False).hexdigest()
+        for row in undecoded
+    ]
 
 
 class NSynthInstrumentFamilyA2ARetrieval(AbsTaskRetrieval):
@@ -67,9 +83,24 @@ class NSynthInstrumentFamilyA2ARetrieval(AbsTaskRetrieval):
         for split in self.metadata.eval_splits:
             ds = load_dataset(**self.metadata.dataset, split=split)
 
+            # NSynth-mini stores a few physical recordings under several
+            # metadata rows: 32 `brass_acoustic_046` rows spanning 19 pitches
+            # and 5 velocities all carry one waveform, and 2
+            # `mallet_acoustic_047` rows carry another. Deduplicating before the
+            # query/corpus split keeps every distinct recording exactly once on
+            # exactly one side. The row kept per waveform is the one with the
+            # smallest note_str, so the choice does not depend on row order.
+            note_ids = ds["note_str"]
+            kept_per_hash: dict[str, int] = {}
+            for idx, audio_hash in enumerate(_audio_payload_hashes(ds)):
+                kept = kept_per_hash.get(audio_hash)
+                if kept is None or note_ids[idx] < note_ids[kept]:
+                    kept_per_hash[audio_hash] = idx
+            ds = ds.select(sorted(kept_per_hash.values()))
+
             # Group the row indices by instrument family, then by the individual
-            # instrument. Only the label columns are touched, the audio column is
-            # never materialised here.
+            # instrument. Only the label columns are touched, the audio is never
+            # decoded anywhere in this loader.
             grouped: dict[str, dict[str, list[int]]] = defaultdict(
                 lambda: defaultdict(list)
             )
