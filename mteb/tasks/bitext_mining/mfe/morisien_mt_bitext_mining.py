@@ -14,7 +14,7 @@ class MorisienMTBitextMining(AbsTaskBitextMining):
         name="MorisienMTBitextMining",
         dataset={
             "path": "Singaraj/MorisienMTBitextMining",
-            "revision": "5f44836aedd5385d14ba0268ba0c14e0d5718ad5",
+            "revision": "27bde8eb920789d539536613b1eaa34d877e2070",
         },
         description=(
             "Machine translation test set aligning Mauritian Creole (Kreol Morisien) with English and French, "
@@ -33,7 +33,7 @@ class MorisienMTBitextMining(AbsTaskBitextMining):
         ),  # estimated: aggregated from earlier published translations
         domains=["Written", "Religious", "Government", "Fiction"],
         task_subtypes=[],
-        license="not specified",
+        license="mit",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
