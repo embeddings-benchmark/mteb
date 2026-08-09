@@ -129,6 +129,7 @@ dasheng_base = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    extra_requirements_groups=["dasheng"],
 )
 
 dasheng_0_6b = ModelMeta(
@@ -152,6 +153,7 @@ dasheng_0_6b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    extra_requirements_groups=["dasheng"],
 )
 
 dasheng_1_2b = ModelMeta(
@@ -175,4 +177,5 @@ dasheng_1_2b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    extra_requirements_groups=["dasheng"],
 )
