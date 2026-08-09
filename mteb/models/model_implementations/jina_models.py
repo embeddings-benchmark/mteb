@@ -3,7 +3,7 @@ from __future__ import annotations
 import inspect
 import logging
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar, Literal
 
 import numpy as np
 import torch
@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import MTEBModels
     from mteb.types import Array, BatchedInput, EncodeKwargs
 
 logger = logging.getLogger(__name__)
@@ -390,37 +391,73 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
         return embeddings
 
 
+SUPPORTED_VECTOR_TYPES = ("single_vector", "multi_vector")
+
+
+class Jinav4ModelMeta(ModelMeta):
+    def load_model(
+        self,
+        device: str | None = None,
+        *,
+        embed_dim: int | None = None,
+        vector_type: Literal[SUPPORTED_VECTOR_TYPES] = "single_vector",
+        **kwargs: Any,
+    ) -> MTEBModels:
+        model = super().load_model(
+            device=device, embed_dim=embed_dim, vector_type=vector_type, **kwargs
+        )
+        if vector_type == "multi_vector":
+            model.mteb_model_meta = model.mteb_model_meta.model_copy(
+                update={
+                    "model_type": "late-interaction",
+                }
+            )
+        return model
+
+
 class JinaV4Wrapper(AbsEncoder):
     """following the hf model card documentation."""
-
-    SUPPORTED_VECTOR_TYPES: ClassVar[set[str]] = {"single_vector", "multi_vector"}
 
     def __init__(
         self,
         model: str,
         revision: str | None = None,
-        device_map="cuda",
+        device: str | None = None,
+        device_map: str | None = None,
         torch_dtype=torch.bfloat16,
-        attn_implementation="flash_attention_2",
+        attn_implementation="sdpa",
         trust_remote_code: bool = True,
         model_prompts: dict[str, str] | None = None,
+        vector_type: Literal[SUPPORTED_VECTOR_TYPES] = "single_vector",
         **kwargs,
     ) -> None:
-        import flash_attn  # noqa: F401
-        import peft  # noqa: F401
-        import transformers  # noqa: F401
+        device = device_map or device
+
+        self.device = device or (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
+
         from transformers import AutoModel
+
+        if vector_type not in SUPPORTED_VECTOR_TYPES:
+            raise ValueError(
+                f"vector_type must be one of {SUPPORTED_VECTOR_TYPES}, got {vector_type!r}"
+            )
 
         self.model = AutoModel.from_pretrained(
             model,
-            device_map=device_map,
+            device_map=self.device,
             trust_remote_code=trust_remote_code,
             torch_dtype=torch_dtype,
             attn_implementation=attn_implementation,
             revision=revision,
         ).eval()
         self.model_prompts = model_prompts or {}
-        self.vector_type = "single_vector"  # default vector type
+        self.vector_type = vector_type
 
     def _resolve_task_parameters(
         self, task_metadata: TaskMetadata, prompt_type: PromptType | None = None
@@ -471,6 +508,7 @@ class JinaV4Wrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+
         text_embeddings = None
         image_embeddings = None
         if "text" in inputs.dataset.features:
@@ -493,7 +531,13 @@ class JinaV4Wrapper(AbsEncoder):
                 raise ValueError(
                     "The number of texts and images must have the same length"
                 )
-            embeddings = text_embeddings + image_embeddings
+            if self.vector_type == "multi_vector":
+                embeddings = [
+                    torch.cat([text_emb, image_emb], dim=0)
+                    for text_emb, image_emb in zip(text_embeddings, image_embeddings)
+                ]
+            else:
+                embeddings = text_embeddings + image_embeddings
         elif text_embeddings is not None:
             embeddings = text_embeddings
         elif image_embeddings is not None:
@@ -536,14 +580,9 @@ class JinaV4Wrapper(AbsEncoder):
         )
 
         # Resolve task parameters
-        base_task, prompt_name_param, task_type = self._resolve_task_parameters(
+        base_task, prompt_name_param, _ = self._resolve_task_parameters(
             task_metadata, prompt_type
         )
-
-        if task_type and task_type.startswith("DocumentUnderstanding"):
-            self.vector_type = "multi_vector"
-        else:
-            self.vector_type = "single_vector"
 
         with torch.no_grad():
             return self.model.encode_text(
@@ -566,14 +605,7 @@ class JinaV4Wrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         # Resolve task parameters
-        base_task, _, task_type = self._resolve_task_parameters(
-            task_metadata, prompt_type
-        )
-
-        if task_type and task_type.startswith("DocumentUnderstanding"):
-            self.vector_type = "multi_vector"
-        else:
-            self.vector_type = "single_vector"
+        base_task, _, _ = self._resolve_task_parameters(task_metadata, prompt_type)
 
         all_images = [text for batch in inputs for text in batch["image"]]
 
@@ -585,15 +617,6 @@ class JinaV4Wrapper(AbsEncoder):
             return_multivector=self.vector_type == "multi_vector",
             task=base_task,
             return_numpy=return_numpy,
-        )
-
-    def get_fused_embeddings(
-        self,
-        *args,
-        **kwargs,
-    ):
-        raise NotImplementedError(
-            "Fused embeddings are not supported yet. Please use get_text_embeddings or get_image_embeddings."
         )
 
     @staticmethod
@@ -1212,8 +1235,7 @@ jina_reranker_v3_5 = ModelMeta(
 }""",
 )
 
-
-jina_embeddings_v4 = ModelMeta(
+jina_embeddings_v4 = Jinav4ModelMeta(
     loader=JinaV4Wrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
@@ -1255,9 +1277,8 @@ jina_embeddings_v4 = ModelMeta(
       primaryClass={cs.AI},
       url={https://arxiv.org/abs/2506.18902},
 }""",
-    extra_requirements_groups=["jina-v4", "flash_attention"],
+    extra_requirements_groups=["jina-v4"],
 )
-
 
 jina_embeddings_v3 = ModelMeta(
     loader=JinaWrapper,
