@@ -6,8 +6,8 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_DATASET_PATH = "mteb/CaReBench"
-_DATASET_REVISION = "TODO-PIN-AFTER-UPLOAD"
+_DATASET_PATH = "myang333/CaReBench"
+_DATASET_REVISION = "2871160f7089bc22d1f9c16f1af43e11a80efb91"
 _BIBTEX = r"""
 @article{xu2025carebench,
   author = {Xu, Yifan and Li, Xinhao and Yang, Yichun and Meng, Desen and Huang, Rui and Wang, Limin},
