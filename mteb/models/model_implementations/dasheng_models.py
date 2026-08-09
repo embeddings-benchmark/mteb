@@ -106,3 +106,73 @@ class DashengAudioWrapper(AbsEncoder):
                 all_embeddings.append(torch.stack(ordered))
 
         return torch.cat(all_embeddings, dim=0)
+
+
+dasheng_base = ModelMeta(
+    loader=DashengAudioWrapper,
+    name="mispeech/dasheng-base",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="d29a721c75b996ffa49e2a1f985349d191a4ae5e",
+    release_date="2024-06-06",
+    max_tokens=float("inf"),
+    n_parameters=85447937,
+    n_embedding_parameters=0,
+    memory_usage_mb=326,
+    embed_dim=768,
+    license="apache-2.0",
+    reference="https://huggingface.co/mispeech/dasheng-base",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=False,
+    public_training_code="https://github.com/RicherMans/Dasheng",
+    public_training_data=None,
+    training_datasets=None,
+    modalities=["audio"],
+)
+
+dasheng_0_6b = ModelMeta(
+    loader=DashengAudioWrapper,
+    name="mispeech/dasheng-0.6B",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="9ea8bcc013ef3d220855368b2be7e0e3e74641d8",
+    release_date="2024-06-06",
+    max_tokens=float("inf"),
+    n_parameters=630333697,
+    n_embedding_parameters=0,
+    memory_usage_mb=2405,
+    embed_dim=1280,
+    license="apache-2.0",
+    reference="https://huggingface.co/mispeech/dasheng-0.6B",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=False,
+    public_training_code="https://github.com/RicherMans/Dasheng",
+    public_training_data=None,
+    training_datasets=None,
+    modalities=["audio"],
+)
+
+dasheng_1_2b = ModelMeta(
+    loader=DashengAudioWrapper,
+    name="mispeech/dasheng-1.2B",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="e830b3b0014affc8447a9c15d18bb196a747137f",
+    release_date="2024-06-06",
+    max_tokens=float("inf"),
+    n_parameters=1134047489,
+    n_embedding_parameters=0,
+    memory_usage_mb=4326,
+    embed_dim=1536,
+    license="apache-2.0",
+    reference="https://huggingface.co/mispeech/dasheng-1.2B",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=False,
+    public_training_code="https://github.com/RicherMans/Dasheng",
+    public_training_data=None,
+    training_datasets=None,
+    modalities=["audio"],
+)
