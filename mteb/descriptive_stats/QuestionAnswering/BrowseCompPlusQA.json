@@ -1,5 +1,6 @@
 {
     "test": {
+        "num_samples": 830,
         "num_queries": 830,
         "num_documents": 100195
     }
