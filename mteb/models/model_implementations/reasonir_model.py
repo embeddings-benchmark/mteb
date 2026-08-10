@@ -96,25 +96,25 @@ _prompts_dict = {
         "query": "Given a Pony question, retrieve relevant documents that help answer the question"
     },
     "BrightProBiologyRetrieval": {
-        "query": "Given a biology post, retrieve relevant passages that help answer the post"
+        "query": "Given a Biology post, retrieve relevant passages that help answer the post"
     },
     "BrightProEarthScienceRetrieval": {
-        "query": "Given a earth_science post, retrieve relevant passages that help answer the post"
+        "query": "Given an Earth Science post, retrieve relevant passages that help answer the post"
     },
     "BrightProEconomicsRetrieval": {
-        "query": "Given a economics post, retrieve relevant passages that help answer the post"
+        "query": "Given an Economics post, retrieve relevant passages that help answer the post"
     },
     "BrightProPsychologyRetrieval": {
-        "query": "Given a psychology post, retrieve relevant passages that help answer the post"
+        "query": "Given a Psychology post, retrieve relevant passages that help answer the post"
     },
     "BrightProRoboticsRetrieval": {
-        "query": "Given a robotics post, retrieve relevant passages that help answer the post"
+        "query": "Given a Robotics post, retrieve relevant passages that help answer the post"
     },
     "BrightProStackoverflowRetrieval": {
-        "query": "Given a stackoverflow post, retrieve relevant passages that help answer the post"
+        "query": "Given a Stack Overflow post, retrieve relevant passages that help answer the post"
     },
     "BrightProSustainableLivingRetrieval": {
-        "query": "Given a sustainable_living post, retrieve relevant passages that help answer the post"
+        "query": "Given a Sustainable Living post, retrieve relevant passages that help answer the post"
     },
 }
 
