@@ -378,6 +378,7 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
     "AudioReranking": "retrieval",
     "Reranking": "retrieval",
     "Retrieval": "retrieval",
+    "QuestionAnswering": "retrieval",
     "InstructionRetrieval": "retrieval",
     "InstructionReranking": "retrieval",
     "Clustering": "clustering",
