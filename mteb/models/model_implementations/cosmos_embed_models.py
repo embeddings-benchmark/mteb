@@ -143,19 +143,11 @@ class CosmosEmbed1Model(AbsEncoder):
         )
 
 
-COSMOS_EMBED1_CITATION = """
-@misc{nvidia2025cosmosembed1,
-  title={Cosmos-Embed1: A Joint Video-Text Embedding Model for Physical AI},
-  author={NVIDIA},
-  year={2025},
-  url={https://research.nvidia.com/labs/cosmos-lab/cosmos-embed1/}
-}"""
-
 _COSMOS_COMMON = dict(
     loader=CosmosEmbed1Model,
     model_type=["dense"],
     languages=["eng-Latn"],
-    release_date="2025-06-11",
+    release_date="2025-05-26",
     modalities=["video", "text"],
     license="https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
     open_weights=True,
@@ -170,8 +162,16 @@ _COSMOS_COMMON = dict(
         "Kinetics400VA",
         "Kinetics400ZeroShot",
         "Kinetics400VAZeroShot",
+        "Kinetics600V",
+        "Kinetics600VA",
+        "Kinetics600VZeroShot",
+        "Kinetics600VAZeroShot",
+        "Kinetics700V",
+        "Kinetics700VA",
+        "Kinetics700VZeroShot",
+        "Kinetics700VAZeroShot",
     },
-    citation=COSMOS_EMBED1_CITATION,
+    citation=None,
     loader_kwargs=dict(num_frames=8),
     extra_requirements_groups=["cosmos-embed1"],
 )
