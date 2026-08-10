@@ -6,13 +6,27 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 from mteb.abstasks.abstask import AbsTask
-from mteb.models.answer_systems import ExactMatchJudge
+from mteb.models.answer_systems import AnswerProtocol, ExactMatchJudge
+from mteb.types.statistics import SplitDescriptiveStatistics
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
+    from datasets import Dataset
+
     from mteb.models.answer_systems import JudgeProtocol
-    from mteb.types import ScoresDict
+    from mteb.models.models_protocols import MTEBModels
+    from mteb.timing import TimingStack
+    from mteb.types import EncodeKwargs, ScoresDict
 
 logger = logging.getLogger(__name__)
+
+
+class QADescriptiveStatistics(SplitDescriptiveStatistics):
+    """Descriptive statistics for QuestionAnswering tasks."""
+
+    num_queries: int
+    num_documents: int
 
 
 class AbsTaskQuestionAnswering(AbsTask):
@@ -34,24 +48,36 @@ class AbsTaskQuestionAnswering(AbsTask):
         self.judge = judge or ExactMatchJudge()
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, num_proc: int | None = None
-    ) -> dict[str, Any]:
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
+    ) -> QADescriptiveStatistics:
         data = self.dataset[hf_subset or "default"][split]
-        return {
-            "num_queries": len(data["queries"]),
-            "num_documents": len(data["corpus"]),
-        }
+        return QADescriptiveStatistics(
+            num_queries=len(data["queries"]), num_documents=len(data["corpus"])
+        )
 
     def _evaluate_subset(
         self,
-        model: Any,
-        data_split: dict[str, Any],
+        model: MTEBModels,
+        data_split: Dataset,
         *,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
+        prediction_folder: Path | None = None,
+        num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
+        if not isinstance(model, AnswerProtocol):
+            raise TypeError(
+                f"{type(model).__name__} does not implement AnswerProtocol "
+                "(index and answer methods)."
+            )
         corpus = data_split["corpus"]
         queries = data_split["queries"]
         answers = data_split["answers"]
@@ -61,7 +87,7 @@ class AbsTaskQuestionAnswering(AbsTask):
             hf_split=hf_split,
             hf_subset=hf_subset,
             encode_kwargs=encode_kwargs,
-            num_proc=kwargs.get("num_proc"),
+            num_proc=num_proc,
         )
         scores: list[float] = []
         costs: list[float] = []

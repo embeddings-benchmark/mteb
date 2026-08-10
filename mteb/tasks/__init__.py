@@ -1,7 +1,6 @@
 from .aggregated_tasks import *
 from .bitext_mining import *
 from .classification import *
-from .QuestionAnswering import *
 from .clustering import *
 from .image_text_pair_classification import *
 from .instruction_reranking import *
@@ -9,6 +8,7 @@ from .instruction_retrieval import *
 from .multichoice import *
 from .multilabel_classification import *
 from .pair_classification import *
+from .QuestionAnswering import *
 from .regression import *
 from .reranking import *
 from .retrieval import *
