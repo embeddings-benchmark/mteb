@@ -35,7 +35,7 @@ class AnswerResult:
 
 @runtime_checkable
 class AnswerProtocol(Protocol):
-    """Interface for answer systems evaluated by AbsTaskAnswer."""
+    """Interface for answer systems evaluated by AbsTaskQuestionAnswering."""
 
     def index(
         self,

@@ -231,7 +231,7 @@ _TASK_TYPE = (
         "Summarization",
         "InstructionRetrieval",
         "InstructionReranking",
-        "Answer",
+        "QuestionAnswering",
     )
     + MIEB_TASK_TYPE
     + MAEB_TASK_TYPE

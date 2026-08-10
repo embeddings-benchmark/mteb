@@ -1,11 +1,11 @@
-"""End-to-end tests for AbsTaskAnswer through mteb.evaluate."""
+"""End-to-end tests for AbsTaskQuestionAnswering through mteb.evaluate."""
 
 from __future__ import annotations
 
 from datasets import Dataset
 
 import mteb
-from mteb.abstasks.answer import AbsTaskAnswer
+from mteb.abstasks.question_answering import AbsTaskQuestionAnswering
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.answer_systems import (
     AnswerProtocol,
@@ -52,12 +52,12 @@ class FakeSearchModel:
         return out
 
 
-class TinyAnswerTask(AbsTaskAnswer):
+class TinyAnswerTask(AbsTaskQuestionAnswering):
     metadata = TaskMetadata(
         dataset={"path": "mteb/test", "revision": "main"},
         name="TinyAnswerTask",
         description="Fixture task for answer-mode tests.",
-        type="Answer",
+        type="QuestionAnswering",
         eval_langs=["eng-Latn"],
         main_score="accuracy",
     )

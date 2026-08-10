@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class AbsTaskAnswer(AbsTask):
+class AbsTaskQuestionAnswering(AbsTask):
     """Task where the model answers each query from a fixed corpus.
 
     The data split holds a corpus, queries, and reference answers. The model
