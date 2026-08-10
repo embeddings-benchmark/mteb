@@ -19,12 +19,7 @@ if TYPE_CHECKING:
 
 
 class SONARWrapper(AbsEncoder):
-    """MTEB wrapper for Meta's SONAR text + speech embedding model.
-
-    Loads the text pipeline eagerly and the speech pipeline lazily (only if
-    a task actually passes audio), since the speech encoder is a separate
-    checkpoint download that text-only tasks don't need.
-    """
+    """MTEB wrapper for Meta's SONAR text + speech embedding model."""
 
     def __init__(
         self,
@@ -35,6 +30,7 @@ class SONARWrapper(AbsEncoder):
         speech_encoder: str = "sonar_speech_encoder_eng",
         **kwargs: Any,
     ) -> None:
+        from sonar.inference_pipelines.speech import SpeechToEmbeddingModelPipeline
         from sonar.inference_pipelines.text import TextToEmbeddingModelPipeline
 
         self.device = device or (
@@ -44,45 +40,42 @@ class SONARWrapper(AbsEncoder):
             if torch.backends.mps.is_available()
             else "cpu"
         )
-        self.speech_encoder = speech_encoder
-        self._speech_model = None
 
         self.text_model = TextToEmbeddingModelPipeline(
             encoder=text_encoder,
             tokenizer=text_encoder,
             device=torch.device(self.device),
         )
-
-    @property
-    def speech_model(self):
-        if self._speech_model is None:
-            from sonar.inference_pipelines.speech import (
-                SpeechToEmbeddingModelPipeline,
-            )
-
-            self._speech_model = SpeechToEmbeddingModelPipeline(
-                encoder=self.speech_encoder,
-                device=torch.device(self.device),
-            )
-        return self._speech_model
+        self.speech_model = SpeechToEmbeddingModelPipeline(
+            encoder=speech_encoder,
+            device=torch.device(self.device),
+        )
 
     @staticmethod
-    def _to_sonar_lang(hf_subset: str | None, prompt_type: PromptType | None) -> str:
+    def _to_sonar_lang(
+        task_metadata: TaskMetadata,
+        hf_subset: str | None,
+        prompt_type: PromptType | None,
+    ) -> str:
         """Resolve the SONAR-format language code ('eng_Latn') for this batch.
 
-        Bitext-mining hf_subset names are 'srcLang_Script-tgtLang_Script'
-        (e.g. 'eng_Latn-fra_Latn'); queries use the source side, documents
-        use the target side. Monolingual tasks/subsets fall back to the
-        single code present, or English if nothing is resolvable.
+        Uses the task's own eval_langs rather than parsing hf_subset, since
+        subset names have no guaranteed format. For bitext subsets this list
+        has two entries (source, target); queries use the source side,
+        documents use the target side. eval_langs uses BCP47 ('eng-Latn'),
+        SONAR wants underscore-joined FLORES-200-style codes ('eng_Latn').
+
+        Tasks with `parallel_subsets=True` (e.g. FLORES) instead pass a
+        single already-resolved language code as hf_subset -- one per
+        dataset column, not a key into eval_langs -- so it's used as-is.
         """
-        if not hf_subset or hf_subset == "default":
-            return "eng_Latn"
-        parts = hf_subset.split("-")
-        # Each side is itself 'lang_Script', i.e. two underscore-joined
-        # tokens; a full bitext subset is four tokens total.
-        if len(parts) == 2 and all(p.count("_") == 1 for p in parts):
-            return parts[1] if prompt_type == PromptType.document else parts[0]
-        return parts[0]
+        langscripts = task_metadata.hf_subsets_to_langscripts
+        if hf_subset in langscripts:
+            langs = langscripts[hf_subset]
+            lang = langs[-1] if prompt_type == PromptType.document else langs[0]
+        else:
+            lang = hf_subset or "eng_Latn"
+        return lang.replace("-", "_")
 
     def _encode_audio_batch(self, audio_items: list) -> torch.Tensor:
         import soundfile as sf
@@ -110,7 +103,7 @@ class SONARWrapper(AbsEncoder):
     ) -> Array:
         has_text = "text" in inputs.dataset.features
         has_audio = "audio" in inputs.dataset.features
-        source_lang = self._to_sonar_lang(hf_subset, prompt_type)
+        source_lang = self._to_sonar_lang(task_metadata, hf_subset, prompt_type)
 
         all_embeddings: list[torch.Tensor] = []
         for batch in tqdm(inputs, desc="Encoding"):
