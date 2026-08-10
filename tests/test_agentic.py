@@ -335,7 +335,7 @@ def test_evaluate_batch_loads_task_and_model_once(monkeypatch):
     data = from_mteb_retrieval(
         CORPUS, {"q1": "capital of France?"}, {"q1": {"d1": 1}}, {"q1": "Paris"}
     )
-    calls = {"task": 0, "model": 0}
+    calls = {"task": 0}
 
     def load_task():
         calls["task"] += 1
@@ -347,21 +347,15 @@ def test_evaluate_batch_loads_task_and_model_once(monkeypatch):
 
         return TaskMeta("Tiny", "tiny", load_task, default_judge="exact_match")
 
-    def fake_model(name):
-        assert name == "fake-model"
-        calls["model"] += 1
-        return FakeChatModel()
-
     monkeypatch.setattr(ev, "get_task_meta", fake_task_meta)
-    monkeypatch.setattr(ev, "OpenAIChatModel", fake_model)
     results = evaluate(
         task="Tiny",
         systems=["closed-book", "oracle"],
-        model="fake-model",
+        model=FakeChatModel(),
     )
 
     assert set(results) == {"closed-book", "oracle"}
-    assert calls == {"task": 1, "model": 1}
+    assert calls == {"task": 1}
 
 
 def test_evaluate_requires_exactly_one_system_form():
@@ -471,23 +465,25 @@ def test_evaluator_reports_gold_recall():
     assert res.scores.mean_recall == 1.0
 
 
-def test_evaluate_resolves_model_name(monkeypatch):
-    # A model name (not a ChatModel) is built into an OpenAIChatModel from env.
-    import importlib
-
-    ev = importlib.import_module("mteb.agentic.evaluate")
-    built = {}
-
-    def fake_openai(name, **kwargs):
-        built["name"] = name
-        return FakeChatModel()
-
-    monkeypatch.setattr(ev, "OpenAIChatModel", fake_openai)
+def test_evaluate_requires_chat_model_object():
+    # Model name strings apply only to containerized agents; in-process raises.
     data = from_mteb_retrieval(
         CORPUS, {"q1": "capital of France?"}, {"q1": {"d1": 1}}, {"q1": "Paris"}
     )
-    res = evaluate("closed-book", data, model="my-model")
-    assert built["name"] == "my-model" and res.scores.accuracy == 1.0
+    with pytest.raises(TypeError, match="ChatModel object"):
+        evaluate("closed-book", data, model="my-model")
+
+
+def test_litellm_chat_model_offline():
+    # LiteLLM's mock_response skips the network; cost comes from its local table.
+    pytest.importorskip("litellm")
+    from mteb.agentic import ChatModel, LiteLLMChatModel
+
+    m = LiteLLMChatModel("gpt-4o")
+    assert isinstance(m, ChatModel)
+    out = m.generate([{"role": "user", "content": "capital?"}], mock_response="Paris")
+    assert out.text == "Paris"
+    assert out.cost_usd is not None and out.cost_usd > 0  # priced from local table
 
 
 def test_harbor_batch_dispatch(tmp_path, monkeypatch):

@@ -35,7 +35,7 @@ from mteb.agentic.metrics import (
     recall_at,
     to_scores_dict,
 )
-from mteb.agentic.models import OpenAIChatModel
+from mteb.agentic.models import LiteLLMChatModel, OpenAIChatModel
 from mteb.agentic.retrievers import (
     HyDERetriever,
     QueryRewriteRetriever,
@@ -75,6 +75,7 @@ __all__ = [
     "IterativeRAG",
     "Judge",
     "LLMJudge",
+    "LiteLLMChatModel",
     "Message",
     "MultipleChoiceJudge",
     "NumericToleranceJudge",

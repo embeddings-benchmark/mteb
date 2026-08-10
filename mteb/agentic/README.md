@@ -13,10 +13,12 @@ pip install "mteb[agentic]"        # in-process paradigms; add [agentic-agents] 
 ```
 
 ```python
+import mteb
 from mteb.agentic import evaluate, OpenAIChatModel
 
 model = OpenAIChatModel("Qwen/Qwen3-32B", base_url="http://localhost:8010/v1", api_key="EMPTY")
-result = evaluate("rag", "BrowseCompPlus", model=model, retriever="bm25")
+bm25 = mteb.get_model("mteb/baseline-bb25")
+result = evaluate("rag", "BrowseCompPlus", model=model, retriever=bm25)
 print(result.scores.accuracy, result.scores.mean_latency_s)
 ```
 
@@ -26,9 +28,10 @@ OOLONG: numeric tolerance). Pass `judge=` to override.
 
 `evaluate(system, task, *, model=, retriever=, judge=, ...)` is the single
 front door. `system` and `task` are registry names (`list_systems()`,
-`list_tasks()`) or objects. `model` is a `ChatModel` or a model name (a name
-uses `OPENAI_BASE_URL` / `OPENAI_API_KEY` from the environment). Every call
-returns an `AnswerEvaluationResult`: aggregate scores plus per-question records.
+`list_tasks()`) or objects. `model` is a `ChatModel` object: `OpenAIChatModel`
+(any OpenAI-compatible endpoint) or `LiteLLMChatModel` (any LiteLLM provider,
+with built-in per-model cost accounting). Every call returns an
+`AnswerEvaluationResult`: aggregate scores plus per-question records.
 
 To compare several systems, use the batch form. It loads the task once and
 reuses compatible corpus representations, including the built retrieval index:
@@ -38,7 +41,7 @@ results = evaluate(
     task="BrowseCompPlus",
     systems=["rag", "iterative-rag", "search-agent"],
     model=model,
-    retriever="bm25",
+    retriever=bm25,
     limit=25,
 )
 print(results["rag"].scores.accuracy)  # dict keyed by system name
@@ -73,9 +76,8 @@ any of this.
 ## Auth
 
 **Answerer / judge** (in-process systems): build the `ChatModel` with its
-endpoint and key, e.g. `OpenAIChatModel(name, base_url=..., api_key=...)`, or
-pass a model name and set `OPENAI_BASE_URL` / `OPENAI_API_KEY` in the
-environment.
+endpoint and key, e.g. `OpenAIChatModel(name, base_url=..., api_key=...)` or
+`LiteLLMChatModel(name)`.
 
 **Containerized agents**: set your provider's standard variable and `evaluate()`
 forwards it into the container automatically (no `agent_env` wiring):
@@ -115,18 +117,19 @@ Every paradigm runs through the same `evaluate(system, task, ...)` call:
 ```python
 evaluate("closed-book", task, model=m, judge=j)                          # no corpus
 evaluate("full-context", task, model=m, judge=j)                         # or windowed-full-context
-evaluate("rag", task, model=m, judge=j, retriever="bm25")                # or iterative-rag, search-agent
+evaluate("rag", task, model=m, judge=j, retriever=bm25)                  # or iterative-rag, search-agent
 evaluate("oracle", task, model=m, judge=j)                               # ceiling
 evaluate("rlm", task, model=m, judge=j)                                  # needs mteb[agentic-rlm]
 evaluate("claude-code", task, model="claude-sonnet-5", judge=j)          # agent: mteb[agentic-agents] + Docker
 evaluate("mini-swe-agent", task, model=m, judge=j, agent_retriever=True)  # agent + BM25 tool
 ```
 
-The retriever axis is orthogonal and reuses MTEB models: `retriever="bm25"`
-(`mteb/baseline-bb25`), any dense encoder name (wrapped in `SearchEncoderWrapper`),
-or a late-interaction model such as `colbert-ir/colbertv2.0`. Only retriever-based
-systems read it. The corpus is indexed once and, in the batch form, reused across
-all retriever systems.
+The retriever axis is orthogonal and reuses MTEB models: any `SearchProtocol`
+from `mteb.get_model` (BM25 via `mteb/baseline-bb25`, dense encoders, or a
+late-interaction model such as `colbert-ir/colbertv2.0`); a plain encoder is
+wrapped in `SearchEncoderWrapper` automatically. Only retriever-based systems
+read it. The corpus is indexed once and, in the batch form, reused across all
+retriever systems.
 
 Retrieval *strategies* that transform the query or reorder candidates are
 retrievers, not answer paradigms, so `rag` composes with any of them and they

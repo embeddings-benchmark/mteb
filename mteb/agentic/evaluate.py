@@ -36,7 +36,6 @@ from mteb.agentic.metrics import (
     NumericToleranceJudge,
     QAF1Judge,
 )
-from mteb.agentic.models import OpenAIChatModel
 from mteb.agentic.systems import get_system_meta
 from mteb.agentic.tasks import get_task_meta
 
@@ -62,7 +61,7 @@ def evaluate(
     *,
     systems: None = None,
     model: ChatModel | str | None = None,
-    retriever: SearchProtocol | str | None = None,
+    retriever: SearchProtocol | EncoderProtocol | None = None,
     judge: Judge | None = None,
     limit: int | None = None,
     max_workers: int = 1,
@@ -78,7 +77,7 @@ def evaluate(
     *,
     systems: Sequence[str | AnswerSystem],
     model: ChatModel | str | None = None,
-    retriever: SearchProtocol | str | None = None,
+    retriever: SearchProtocol | EncoderProtocol | None = None,
     judge: Judge | None = None,
     limit: int | None = None,
     max_workers: int = 1,
@@ -93,7 +92,7 @@ def evaluate(
     *,
     systems: Sequence[str | AnswerSystem] | None = None,
     model: ChatModel | str | None = None,
-    retriever: SearchProtocol | str | None = None,
+    retriever: SearchProtocol | EncoderProtocol | None = None,
     judge: Judge | None = None,
     limit: int | None = None,
     max_workers: int = 1,
@@ -110,10 +109,12 @@ def evaluate(
         system: One system, by registry name or as an AnswerSystem object.
         task: Task registry name or an AnswerTaskData.
         systems: Several systems, keyed by name in the returned dict.
-        model: A ChatModel, or a model name built into an OpenAIChatModel using
-            OPENAI_BASE_URL / OPENAI_API_KEY from the environment.
-        retriever: First-stage corpus for retrieval systems: "bm25", an MTEB
-            model name, or a SearchProtocol.
+        model: A ChatModel object (e.g. OpenAIChatModel, LiteLLMChatModel).
+            Containerized agents alone also accept a provider model name string,
+            since it configures the agent CLI rather than an LLM client.
+        retriever: First-stage retriever for retrieval systems: any MTEB
+            SearchProtocol (e.g. mteb.get_model("mteb/baseline-bb25")), or a
+            plain encoder, which is wrapped for dense retrieval.
         judge: Correctness judge; defaults to the task's canonical judge.
         limit: Evaluate only the first N questions.
         max_workers: Questions evaluated concurrently (in-process systems).
@@ -204,7 +205,7 @@ class _CorpusPool:
     """Lazily build and reuse corpus views during one batch evaluation."""
 
     def __init__(
-        self, data: AnswerTaskData, retriever: SearchProtocol | str | None
+        self, data: AnswerTaskData, retriever: SearchProtocol | EncoderProtocol | None
     ) -> None:
         self.data = data
         self.retriever = retriever
@@ -276,13 +277,12 @@ def _select_questions(
 
 
 def _resolve_model(model: ChatModel | str | None) -> ChatModel:
-    if model is None:
-        raise ValueError(
-            "Pass model= a ChatModel or a model name (e.g. OpenAIChatModel(...) "
-            "or 'Qwen/Qwen3-...' with OPENAI_BASE_URL/OPENAI_API_KEY set)."
+    if isinstance(model, str) or model is None:
+        raise TypeError(
+            "In-process systems take model= a ChatModel object, e.g. "
+            "OpenAIChatModel(name, base_url=...) or LiteLLMChatModel(name). "
+            "A model name string applies only to containerized agents."
         )
-    if isinstance(model, str):
-        return OpenAIChatModel(model)  # endpoint and key come from the environment
     return model
 
 
@@ -316,20 +316,14 @@ def _default_judge(task_meta: TaskMeta | None, model: ChatModel | str | None) ->
     return LLMJudge(model)
 
 
-def _resolve_retriever(retriever: SearchProtocol | str) -> SearchProtocol:
-    model: object = retriever
-    if isinstance(retriever, str):
-        import mteb
-
-        name = "mteb/baseline-bb25" if retriever == "bm25" else retriever
-        model = mteb.get_model(name)
-    if hasattr(model, "index") and hasattr(model, "search"):
-        return cast("SearchProtocol", model)  # already a SearchProtocol (e.g. BM25)
+def _resolve_retriever(retriever: SearchProtocol | EncoderProtocol) -> SearchProtocol:
+    if hasattr(retriever, "index") and hasattr(retriever, "search"):
+        # Already a SearchProtocol, e.g. mteb.get_model("mteb/baseline-bb25").
+        return cast("SearchProtocol", retriever)
     from mteb.models.search_wrappers import SearchEncoderWrapper
 
-    return SearchEncoderWrapper(
-        cast("EncoderProtocol", model)
-    )  # wrap a plain encoder for dense retrieval
+    # A plain encoder is wrapped for dense retrieval.
+    return SearchEncoderWrapper(retriever)
 
 
 def _build_system(
