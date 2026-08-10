@@ -2,8 +2,7 @@
 
 Each wraps a base retriever (BM25, dense, late-interaction) and implements
 SearchProtocol itself, so the wrappers compose with each other and run on
-ordinary retrieval tasks. The multi-hop agent and tournament reranker follow
-the OBLIQ-Bench setups (arXiv 2605.06235, section 5 and appendix C).
+ordinary retrieval tasks.
 """
 
 from __future__ import annotations
@@ -277,14 +276,13 @@ class RerankRetriever(_TextCachingRetriever):
 
 
 class TournamentRerankRetriever(_TextCachingRetriever):
-    """Tournament listwise rerank over a large pool (OBLIQ-Bench appendix C).
+    """Tournament listwise rerank over a large candidate pool.
 
     The pool is shuffled (deterministically per query id) and partitioned into
     batches of batch_size; one listwise call ranks each batch, the top
     promote_k advance, and the rest form that depth's tail. Rounds repeat
     until one batch remains, which is ranked directly. The final ranking is
     the survivors followed by the tails in reverse order of elimination.
-    OBLIQ-Bench uses batch_size=20, promote_k=4.
     """
 
     def __init__(
@@ -358,14 +356,13 @@ def _note_after_ids(text: str) -> str:
 
 
 class MultiHopRetriever(_TextCachingRetriever):
-    """Iterative search agent producing a ranking (OBLIQ-Bench multi-hop setup).
+    """Iterative multi-hop search agent producing a ranking.
 
     Each hop the LLM writes a search query from the question and accumulated
     notes, the base retrieves per_hop candidates, and the LLM reads the batch,
     selecting relevant ids and noting an observation for the next hop.
     Selected documents are promoted to the top in selection order; the
-    retrieved-but-unselected ones fill the tail by base score. OBLIQ-Bench
-    uses hops=4, per_hop=25.
+    retrieved-but-unselected ones fill the tail by base score.
     """
 
     def __init__(
