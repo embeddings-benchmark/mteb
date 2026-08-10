@@ -347,6 +347,9 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
             **kwargs,
         )
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
+        # VideoCollator has already selected the frames. The processor's own
+        # sampling would run on top of that, so switch it off once here.
+        self.processor.video_processor.do_sample_frames = False
 
     def encode(
         self,
@@ -416,21 +419,8 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
         return self._encode_batches(audios, "audio", _process, "Encoding audio")
 
     def get_video_embeddings(self, videos, batch_size: int = 32, **kwargs):
-        video_processor = self.processor.video_processor
-
         def _process(clip):
-            # mteb's VideoCollator has already selected the frames. Leaving the
-            # processor in fps mode would resample on top of that and silently
-            # drop most of them, so pin num_frames to what we were handed.
-            prev_fps = video_processor.fps
-            prev_num_frames = video_processor.num_frames
-            video_processor.fps = None
-            video_processor.num_frames = len(clip)
-            try:
-                return self.processor.process_videos([clip])
-            finally:
-                video_processor.fps = prev_fps
-                video_processor.num_frames = prev_num_frames
+            return self.processor.process_videos([clip])
 
         return self._encode_batches(videos, "video", _process, "Encoding video")
 
