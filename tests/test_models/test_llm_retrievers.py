@@ -50,15 +50,13 @@ _KWARGS = {
 
 
 class FakeChatModel:
-    """Deterministic ChatModel: replies from a scripted queue or echoes."""
+    """Deterministic ChatModel replying from a scripted queue."""
 
-    def __init__(self, scripted: list[str] | None = None) -> None:
-        self._scripted = list(scripted or [])
+    def __init__(self, scripted: list[str]) -> None:
+        self._scripted = list(scripted)
 
     def generate(self, messages, **kwargs) -> ChatResponse:
-        if self._scripted:
-            return ChatResponse(text=self._scripted.pop(0))
-        return ChatResponse(text=messages[-1]["content"])
+        return ChatResponse(text=self._scripted.pop(0))
 
 
 class FakeSearchModel:
@@ -90,14 +88,13 @@ def _top_ids(retriever, query: str, top_k: int = 2) -> list[str]:
 
 
 def test_wrappers_implement_search_protocol():
-    model = FakeChatModel()
+    model = FakeChatModel([])
     for retriever in (
         QueryRewriteRetriever(FakeSearchModel(), model),
         HyDERetriever(FakeSearchModel(), model),
         RerankRetriever(FakeSearchModel(), model),
     ):
         assert isinstance(retriever, SearchProtocol)
-    assert isinstance(model, ChatModelProtocol)
 
 
 def test_query_rewrite_searches_on_rewritten_text():
@@ -125,13 +122,11 @@ def test_rerank_falls_back_to_base_score_order():
     retriever = RerankRetriever(
         FakeSearchModel(), FakeChatModel(["not json at all"]), pool_size=3
     )
-    # d1 outscores the rest on word overlap; the unparseable reply keeps it first.
     ids = _top_ids(retriever, "capital of France paris", top_k=3)
-    assert ids[0] == "d1" and len(ids) == 3
+    assert ids[0] == "d1" and len(ids) == 3  # base score order kept
 
 
 def test_wrappers_compose():
-    # Rerank over a query-rewriting base: wrappers are SearchProtocol, so they stack.
     retriever = RerankRetriever(
         QueryRewriteRetriever(FakeSearchModel(), FakeChatModel(["capital France"])),
         FakeChatModel(['["d1"]']),
@@ -150,14 +145,14 @@ def test_query_rewrite_over_real_bm25():
 
 
 def test_litellm_chat_model_offline():
-    # LiteLLM's mock_response skips the network; cost comes from its local table.
     pytest.importorskip("litellm")
     from mteb.models import LiteLLMChatModel
 
     model = LiteLLMChatModel("gpt-4o")
     assert isinstance(model, ChatModelProtocol)
+    # mock_response skips the network; cost still comes from the local pricing table.
     out = model.generate(
         [{"role": "user", "content": "capital?"}], mock_response="Paris"
     )
     assert out.text == "Paris"
-    assert out.cost_usd is not None and out.cost_usd > 0  # priced from local table
+    assert out.cost_usd is not None and out.cost_usd > 0

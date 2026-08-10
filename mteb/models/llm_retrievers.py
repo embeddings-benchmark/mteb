@@ -57,7 +57,6 @@ def _wrapper_meta(kind: str, base: SearchProtocol) -> ModelMeta:
 def _transform_queries(
     queries: QueryDatasetType, model: ChatModelProtocol, template: str
 ) -> QueryDatasetType:
-    # Rewrite each query's text with the LLM, keeping its id.
     from datasets import Dataset
 
     rows = []
@@ -230,7 +229,6 @@ class RerankRetriever:
             )
             ranked = [d for d in (_parse_ids(out.text) or []) if d in ranking]
             if not ranked:
-                # Fall back to the base ranking rather than failing the query.
                 logger.warning(
                     "rerank parse failed for query %s; keeping base order", qid
                 )

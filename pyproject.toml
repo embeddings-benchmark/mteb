@@ -497,6 +497,7 @@ module = [
     "faiss",
     "vllm",
     "torchaudio",
+    "litellm",
 ]
 ignore_missing_imports = true
 

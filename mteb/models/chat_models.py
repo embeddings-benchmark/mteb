@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
 if TYPE_CHECKING:
@@ -10,23 +10,11 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class ToolCall:
-    """One tool call requested by the model."""
-
-    id: str
-    name: str
-    arguments: str
-
-
-@dataclass
 class ChatResponse:
-    """One chat completion with usage accounting."""
+    """One chat completion with cost accounting."""
 
     text: str
-    prompt_tokens: int = 0
-    completion_tokens: int = 0
     cost_usd: float | None = None
-    tool_calls: list[ToolCall] = field(default_factory=list)
 
 
 @runtime_checkable
@@ -40,10 +28,10 @@ class ChatModelProtocol(Protocol):
 
         Args:
             messages: Chat messages, each a {"role", "content"} mapping.
-            **kwargs: Provider arguments, e.g. tools= for tool calling.
+            **kwargs: Extra provider arguments.
 
         Returns:
-            The completion with token and cost accounting.
+            The completion with cost accounting.
         """
         ...
 
@@ -82,7 +70,7 @@ class LiteLLMChatModel:
     def generate(
         self, messages: Sequence[dict[str, Any]], **kwargs: Any
     ) -> ChatResponse:
-        """Run one chat completion. Pass tools= to enable tool calling."""
+        """Run one chat completion."""
         import litellm
 
         resp = litellm.completion(
@@ -92,20 +80,8 @@ class LiteLLMChatModel:
             api_key=self.api_key,
             **{**self._kwargs, **kwargs},
         )
-        message = resp.choices[0].message
-        usage = getattr(resp, "usage", None)
-        tool_calls = [
-            ToolCall(id=tc.id, name=tc.function.name, arguments=tc.function.arguments)
-            for tc in (message.tool_calls or [])
-        ]
         try:
             cost = litellm.completion_cost(completion_response=resp)
         except Exception:
             cost = None  # model absent from the pricing table (local endpoints)
-        return ChatResponse(
-            text=message.content or "",
-            prompt_tokens=getattr(usage, "prompt_tokens", 0) or 0,
-            completion_tokens=getattr(usage, "completion_tokens", 0) or 0,
-            cost_usd=cost,
-            tool_calls=tool_calls,
-        )
+        return ChatResponse(text=resp.choices[0].message.content or "", cost_usd=cost)

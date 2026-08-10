@@ -1,10 +1,5 @@
 from .cache_wrappers import CacheBackendProtocol, CachedEmbeddingWrapper
-from .chat_models import (
-    ChatModelProtocol,
-    ChatResponse,
-    LiteLLMChatModel,
-    ToolCall,
-)
+from .chat_models import ChatModelProtocol, ChatResponse, LiteLLMChatModel
 from .compression_wrappers import CompressionWrapper
 from .hybrid_wrappers import HybridSearch
 from .llm_retrievers import HyDERetriever, QueryRewriteRetriever, RerankRetriever
@@ -44,6 +39,5 @@ __all__ = [
     "SearchEncoderWrapper",
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
-    "ToolCall",
     "sentence_transformers_loader",
 ]
