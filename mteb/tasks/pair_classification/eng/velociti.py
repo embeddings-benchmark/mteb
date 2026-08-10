@@ -26,7 +26,7 @@ class VELOCITIPairClassification(AbsTaskPairClassification):
         reference="https://arxiv.org/abs/2406.10889",
         dataset={
             "path": "yaswanth169/VELOCITI-PC",
-            "revision": "820ccb697f5312dbeb4057e3c6626d77577011c2",
+            "revision": "dfbe014eacf4507cb0fad6a66497f43d30ce8044",
         },
         type="VideoPairClassification",
         category="v2t",
