@@ -63,7 +63,12 @@ class VELOCITIPairClassification(AbsTaskPairClassification):
         revision = self.metadata.dataset["revision"]
 
         # (video_id, text, label), 17,584 rows -- one per pos/neg caption.
-        raw = load_dataset(path, revision=revision, split="test")
+        # force_redownload: this small table is occasionally re-pushed under the
+        # same file path with different content (e.g. dedup fixes), and datasets'
+        # local cache can otherwise silently keep serving an older snapshot.
+        raw = load_dataset(
+            path, revision=revision, split="test", download_mode="force_redownload"
+        )
         # (video_id, video), 864 unique rows -- no per-row video duplication.
         videos_ds = load_dataset(path, "videos", revision=revision, split="test")
 
