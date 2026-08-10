@@ -1,20 +1,14 @@
 from __future__ import annotations
 
-import tempfile
-import zipfile
-from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar
 
-from datasets import Dataset, load_dataset
-from huggingface_hub import hf_hub_download
+from datasets import concatenate_datasets, load_dataset
 
 from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
-
-_CACHE_DIR = Path(tempfile.gettempdir()) / "mteb_velociti_pairclassification_cache"
 
 
 class VELOCITIPairClassification(AbsTaskPairClassification):
@@ -32,7 +26,7 @@ class VELOCITIPairClassification(AbsTaskPairClassification):
         reference="https://arxiv.org/abs/2406.10889",
         dataset={
             "path": "yaswanth169/VELOCITI-PC",
-            "revision": "cab7ae8f379937ee687375fb23aac3ffe1039802",
+            "revision": "820ccb697f5312dbeb4057e3c6626d77577011c2",
         },
         type="VideoPairClassification",
         category="v2t",
@@ -65,38 +59,17 @@ class VELOCITIPairClassification(AbsTaskPairClassification):
     def load_data(self, **kwargs) -> None:
         if self.data_loaded:
             return
-        # Imported lazily: datasets.Video requires the optional torchcodec
-        # backend, and importing it at module level would break importing
-        # this task (and thus the whole mteb.tasks package) without it.
-        from datasets import Features, Value, Video
+        path = self.metadata.dataset["path"]
+        revision = self.metadata.dataset["revision"]
 
-        raw = load_dataset(
-            self.metadata.dataset["path"],
-            revision=self.metadata.dataset["revision"],
-            split="test",
-        )
+        # (video_id, text, label), 17,584 rows -- one per pos/neg caption.
+        raw = load_dataset(path, revision=revision, split="test")
+        # (video_id, video), 864 unique rows -- no per-row video duplication.
+        videos_ds = load_dataset(path, "videos", revision=revision, split="test")
 
-        zip_path = hf_hub_download(
-            repo_id=self.metadata.dataset["path"],
-            filename="videos.zip",
-            repo_type="dataset",
-            revision=self.metadata.dataset["revision"],
-        )
-        if not _CACHE_DIR.exists():
-            _CACHE_DIR.mkdir(parents=True, exist_ok=True)
-            with zipfile.ZipFile(zip_path) as zf:
-                zf.extractall(_CACHE_DIR)
+        video_id_to_idx = {vid: i for i, vid in enumerate(videos_ds["video_id"])}
+        aligned_indices = [video_id_to_idx[vid] for vid in raw["video_id"]]
+        aligned_videos = videos_ds.select(aligned_indices).select_columns(["video"])
 
-        features = Features(
-            {"video": Video(), "text": Value("string"), "label": Value("int64")}
-        )
-        records = [
-            {
-                "video": {"path": str(_CACHE_DIR / row["video_id"]), "bytes": None},
-                "text": row["text"],
-                "label": row["label"],
-            }
-            for row in raw
-        ]
-        self.dataset = {"test": Dataset.from_list(records, features=features)}
+        self.dataset = {"test": concatenate_datasets([raw, aligned_videos], axis=1)}
         self.data_loaded = True
