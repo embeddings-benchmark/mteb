@@ -2,7 +2,13 @@ from .cache_wrappers import CacheBackendProtocol, CachedEmbeddingWrapper
 from .chat_models import ChatModelProtocol, ChatResponse, LiteLLMChatModel
 from .compression_wrappers import CompressionWrapper
 from .hybrid_wrappers import HybridSearch
-from .llm_retrievers import HyDERetriever, QueryRewriteRetriever, RerankRetriever
+from .llm_retrievers import (
+    HyDERetriever,
+    MultiHopRetriever,
+    QueryRewriteRetriever,
+    RerankRetriever,
+    TournamentRerankRetriever,
+)
 from .model_meta import ModelMeta
 from .models_protocols import (
     CrossEncoderProtocol,
@@ -33,11 +39,13 @@ __all__ = [
     "LiteLLMChatModel",
     "MTEBModels",
     "ModelMeta",
+    "MultiHopRetriever",
     "QueryRewriteRetriever",
     "RerankRetriever",
     "SearchCrossEncoderWrapper",
     "SearchEncoderWrapper",
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
+    "TournamentRerankRetriever",
     "sentence_transformers_loader",
 ]

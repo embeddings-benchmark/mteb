@@ -13,9 +13,11 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import (
     ChatModelProtocol,
     HyDERetriever,
+    MultiHopRetriever,
     QueryRewriteRetriever,
     RerankRetriever,
     SearchProtocol,
+    TournamentRerankRetriever,
 )
 from mteb.models.chat_models import ChatResponse
 
@@ -93,6 +95,8 @@ def test_wrappers_implement_search_protocol():
         QueryRewriteRetriever(FakeSearchModel(), model),
         HyDERetriever(FakeSearchModel(), model),
         RerankRetriever(FakeSearchModel(), model),
+        MultiHopRetriever(FakeSearchModel(), model),
+        TournamentRerankRetriever(FakeSearchModel(), model),
     ):
         assert isinstance(retriever, SearchProtocol)
 
@@ -158,3 +162,37 @@ def test_litellm_chat_model_offline():
     )
     assert out.text == "Paris"
     assert out.cost_usd is not None and out.cost_usd > 0
+
+
+def test_multi_hop_promotes_selected_docs():
+    scripted = [
+        "capital France",  # hop 1 query
+        '["d1"]\nnote: check the Seine',  # hop 1 read
+        "seine river",  # hop 2 query
+        '["d3"]',  # hop 2 read
+    ]
+    retriever = MultiHopRetriever(
+        FakeSearchModel(), FakeChatModel(scripted), hops=2, per_hop=2
+    )
+    ids = _top_ids(retriever, "a vague question", top_k=3)
+    assert ids[:2] == ["d1", "d3"]  # selection order, pooled tail after
+
+
+def test_tournament_rerank_final_round_leads():
+    import json
+    import random
+
+    # Base score order for this query, then the per-query deterministic shuffle.
+    shuffled = ["d1", "d2", "d3"]
+    random.Random("q").shuffle(shuffled)
+    survivors = [shuffled[:2][0], shuffled[2:][0]]  # round 1 falls back to batch order
+    scripted = ["not json", "not json", json.dumps(survivors[::-1])]
+    retriever = TournamentRerankRetriever(
+        FakeSearchModel(),
+        FakeChatModel(scripted),
+        pool_size=3,
+        batch_size=2,
+        promote_k=1,
+    )
+    ids = _top_ids(retriever, "capital of France paris", top_k=3)
+    assert ids[:2] == survivors[::-1]  # final listwise round decides the head
