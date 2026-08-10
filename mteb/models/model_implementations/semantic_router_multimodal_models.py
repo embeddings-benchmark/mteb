@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-from abc import abstractmethod
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -31,7 +30,6 @@ _CITATION = """@misc{multi-modal-embed-2026,
   url={https://huggingface.co/llm-semantic-router/multi-modal-embed-small}
 }"""
 
-
 def _remap_text_encoder_state_dict(
     state_dict: dict[str, Any], model: nn.Module
 ) -> dict[str, Any]:
@@ -58,16 +56,6 @@ def _remap_text_encoder_state_dict(
     return remapped
 
 
-def _waveforms_from_batch(batch: BatchedInput) -> list[np.ndarray]:
-    waveforms: list[np.ndarray] = []
-    for audio in batch["audio"]:
-        array = np.asarray(audio["array"], dtype=np.float32)
-        if array.ndim > 1:
-            array = array.mean(axis=-1)
-        waveforms.append(array)
-    return waveforms
-
-
 class _MultiModalEmbedSmall(nn.Module):
     """Standalone tri-encoder matching the HF model-card loading recipe."""
 
@@ -87,19 +75,27 @@ class _MultiModalEmbedSmall(nn.Module):
         )
 
         super().__init__()
-        self.text_tokenizer = AutoTokenizer.from_pretrained(self.TEXT_ENCODER)
-        self.text_encoder = AutoModel.from_pretrained(self.TEXT_ENCODER)
+        self.text_tokenizer = AutoTokenizer.from_pretrained(
+            self.TEXT_ENCODER, revision="8b3219a92973c328a8e22fadcfa821b5dc75636a"
+        )
+        self.text_encoder = AutoModel.from_pretrained(
+            self.TEXT_ENCODER, revision="8b3219a92973c328a8e22fadcfa821b5dc75636a"
+        )
 
-        self.image_processor = SiglipImageProcessor.from_pretrained(self.IMAGE_ENCODER)
+        self.image_processor = SiglipImageProcessor.from_pretrained(
+            self.IMAGE_ENCODER, revision="753a949581523b60257d93e18391e8c27f72eb22"
+        )
         self.image_encoder = SiglipModel.from_pretrained(
-            self.IMAGE_ENCODER
+            self.IMAGE_ENCODER, revision="753a949581523b60257d93e18391e8c27f72eb22"
         ).vision_model
         self.image_proj = nn.Linear(768, self.EMBED_DIM)
 
         self.audio_processor = WhisperFeatureExtractor.from_pretrained(
-            self.AUDIO_ENCODER
+            self.AUDIO_ENCODER, revision="169d4a4341b33bc18d8881c4b69c2e104e1cc0af"
         )
-        self.audio_encoder = WhisperModel.from_pretrained(self.AUDIO_ENCODER).encoder
+        self.audio_encoder = WhisperModel.from_pretrained(
+            self.AUDIO_ENCODER, revision="169d4a4341b33bc18d8881c4b69c2e104e1cc0af"
+        ).encoder
 
     def encode_text(self, texts: list[str]) -> torch.Tensor:
         inputs = self.text_tokenizer(
@@ -186,21 +182,30 @@ class _MultiModalEmbedLarge(nn.Module):
         super().__init__()
         self.text_model = SentenceTransformer(
             text_encoder_name,
+            revision="c544097d7603b10c546560e8be5d7fe0965a7909",
             model_kwargs={"attn_implementation": "sdpa"},
         )
         self.text_model.max_seq_length = max_text_length
 
         self.image_model = AutoModel.from_pretrained(
-            image_encoder_name, trust_remote_code=True
+            image_encoder_name,
+            revision="e8e487298228002f3d8a82e0cd5c8ea9c567f57f",
+            trust_remote_code=True,
         )
         self.image_processor = AutoProcessor.from_pretrained(
-            image_encoder_name, trust_remote_code=True
+            image_encoder_name,
+            revision="e8e487298228002f3d8a82e0cd5c8ea9c567f57f",
+            trust_remote_code=True,
         )
 
-        whisper = WhisperModel.from_pretrained(audio_encoder_name)
+        whisper = WhisperModel.from_pretrained(
+            audio_encoder_name,
+            revision="abdf7c39ab9d0397620ccaea8974cc764cd0953e",
+        )
         self.audio_model = whisper.encoder
         self.audio_processor = WhisperFeatureExtractor.from_pretrained(
-            audio_encoder_name
+            audio_encoder_name,
+            revision="abdf7c39ab9d0397620ccaea8974cc764cd0953e",
         )
 
         text_dim = (
@@ -303,15 +308,6 @@ class SemanticRouterMultiModalEmbedWrapper(AbsEncoder):
         )
         self.max_audio_samples = int(self.max_audio_seconds * self.sampling_rate)
 
-    @abstractmethod
-    def _encode_text_batch(self, texts: list[str]) -> torch.Tensor: ...
-
-    @abstractmethod
-    def _encode_image_batch(self, images: list[Any]) -> torch.Tensor: ...
-
-    @abstractmethod
-    def _encode_audio_batch(self, waveforms: list[np.ndarray]) -> torch.Tensor: ...
-
     def _maybe_set_audio_collator(self, inputs: DataLoader[BatchedInput]) -> None:
         inputs.collate_fn = AudioCollator(
             target_sampling_rate=self.sampling_rate,
@@ -353,7 +349,8 @@ class SemanticRouterMultiModalEmbedWrapper(AbsEncoder):
         self._maybe_set_audio_collator(inputs)
         embeddings: list[torch.Tensor] = []
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding audio"):
-            embeddings.append(self._encode_audio_batch(_waveforms_from_batch(batch)))
+            audio_arrays = [audio["array"] for audio in batch["audio"]]
+            embeddings.append(self._encode_audio_batch(audio_arrays))
         return torch.cat(embeddings, dim=0).float().cpu()
 
     @torch.inference_mode()
@@ -389,7 +386,8 @@ class SemanticRouterMultiModalEmbedWrapper(AbsEncoder):
                 images = [img.convert("RGB") for img in batch["image"]]
                 parts.append(self._encode_image_batch(images))
             if has_audio and batch.get("audio"):
-                parts.append(self._encode_audio_batch(_waveforms_from_batch(batch)))
+                audio_arrays = [audio["array"] for audio in batch["audio"]]
+                parts.append(self._encode_audio_batch(audio_arrays))
             if not parts:
                 raise ValueError(
                     f"No supported modality found in batch: {batch.keys()}"
