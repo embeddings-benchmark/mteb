@@ -1705,6 +1705,7 @@ BRIGHT_V1_1 = Benchmark(
     benchmark_hf_repo="mteb/BRIGHT",
 )
 
+
 CODE_RAG = Benchmark(
     name="CodeRAG",
     tasks=get_tasks(
