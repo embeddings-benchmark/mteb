@@ -26,8 +26,6 @@ GVE_CITATION = """@misc{guo2025gve,
   url={https://arxiv.org/abs/2510.27571}
 }"""
 
-_IMAGE_PLACEHOLDER = "<|vision_start|><|image_pad|><|vision_end|>"
-_VIDEO_PLACEHOLDER = "<|vision_start|><|video_pad|><|vision_end|>"
 _DEFAULT_INSTRUCTION = "You are a helpful assistant."
 
 
@@ -79,41 +77,20 @@ class GVEWrapper(AbsEncoder):
             model_name,
             revision=revision,
             dtype=torch.bfloat16,
-            low_cpu_mem_usage=True,
             **kwargs,
         )
         self.model.eval()
         self.model.to(self.device)
 
-        self.processor = AutoProcessor.from_pretrained(
-            model_name, revision=revision, use_fast=True
-        )
+        self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
         self.processor.tokenizer.padding_side = "left"
-        video_processor = getattr(self.processor, "video_processor", None)
-        if video_processor is not None:
-            # matches the model card's video settings; frame sampling is
-            # already done by FramesCollator. Newer processors read the
-            # pixel budget from size["longest_edge"], older ones from
-            # max_pixels; set both so frames stay within max_length.
-            max_video_pixels = 200 * 28 * 28
-            if isinstance(getattr(video_processor, "size", None), dict):
-                video_processor.size = {
-                    **video_processor.size,
-                    "longest_edge": max_video_pixels,
-                }
-            if hasattr(video_processor, "max_pixels"):
-                video_processor.max_pixels = max_video_pixels
-            if hasattr(video_processor, "do_sample_frames"):
-                video_processor.do_sample_frames = False
-
-    @staticmethod
-    def _build_prompt(content: str, instruction: str | None) -> str:
-        system = instruction or _DEFAULT_INSTRUCTION
-        return (
-            f"<|im_start|>system\n{system}<|im_end|>\n"
-            f"<|im_start|>user\n{content}<|im_end|>\n"
-            "<|im_start|>assistant\n"
-        )
+        # per-frame pixel budget from the model card (size is the
+        # call-time equivalent of max_pixels); frame sampling is already
+        # done by FramesCollator
+        self.videos_kwargs = {
+            "size": {"shortest_edge": 4 * 28 * 28, "longest_edge": 200 * 28 * 28},
+            "do_sample_frames": False,
+        }
 
     @torch.inference_mode()
     def encode(
@@ -145,16 +122,27 @@ class GVEWrapper(AbsEncoder):
             images = batch.get("image", [None] * batch_size)
             videos = batch.get("video", [None] * batch_size)
 
-            prompts = []
+            conversations = []
             for text, image, video in zip(texts, images, videos):
-                content = ""
+                content = []
                 if video is not None:
-                    content += _VIDEO_PLACEHOLDER
+                    content.append({"type": "video"})
                 if image is not None:
-                    content += _IMAGE_PLACEHOLDER
+                    content.append({"type": "image"})
                 if text is not None:
-                    content += text
-                prompts.append(self._build_prompt(content, instruction))
+                    content.append({"type": "text", "text": text})
+                conversations.append(
+                    [
+                        {
+                            "role": "system",
+                            "content": instruction or _DEFAULT_INSTRUCTION,
+                        },
+                        {"role": "user", "content": content},
+                    ]
+                )
+            prompts = self.processor.apply_chat_template(
+                conversations, tokenize=False, add_generation_prompt=True
+            )
 
             image_inputs = [img.convert("RGB") for img in images if img is not None]
             video_inputs = [vid for vid in videos if vid is not None]
@@ -162,6 +150,7 @@ class GVEWrapper(AbsEncoder):
                 text=prompts,
                 images=image_inputs or None,
                 videos=video_inputs or None,
+                videos_kwargs=self.videos_kwargs,
                 padding=True,
                 truncation=True,
                 max_length=self.max_length,
