@@ -152,7 +152,8 @@ class MonoT5Reranker(RerankerWrapper):
         )
         batch_scores = output.scores[0]
         batch_scores = batch_scores[:, [self.token_false_id, self.token_true_id]]
-        batch_scores = torch.nn.functional.log_softmax(batch_scores, dim=1)
+        # upcast the logits to float32 before the softmax
+        batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
         return batch_scores[:, 1].exp().tolist()
 
 
@@ -265,11 +266,13 @@ Relevant: """
             true_vector = batch_scores[:, self.token_true_id]
             false_vector = batch_scores[:, self.token_false_id]
             batch_scores = torch.stack([false_vector, true_vector], dim=1)
-            batch_scores = torch.nn.functional.log_softmax(batch_scores, dim=1)
+            # upcast the logits to float32 before the softmax
+            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
             scores = batch_scores[:, 1].exp().tolist()
         else:
             batch_scores = self.model(**tokens).logits
-            batch_scores = torch.nn.functional.log_softmax(batch_scores, dim=1)
+            # upcast the logits to float32 before the softmax
+            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
             scores = batch_scores[:, 1].exp().tolist()
 
         return scores

@@ -228,6 +228,73 @@ Once we have decided on task, we can implement them as follows:
     ```
 
 
+=== "Multiple Choice Retrieval"
+
+    A multiple choice retrieval task is a retrieval task where each query is only compared against a fixed set of
+    candidate documents (the "choices") instead of the full corpus, and the goal is to pick the single correct one.
+    This is expressed by populating the `top_ranked` split, which maps each query to the list of candidate document
+    ids that should be ranked for it. Because there is exactly one correct choice per query, the main score is usually
+    `accuracy` rather than `ndcg_at_10`.
+
+    In practice the candidates are often already encoded in `relevant_docs` (with the correct choice(s) marked as
+    relevant and the distractors as non-relevant), so we can build the `top_ranked` split from it in
+    `dataset_transform`. Below we use the [BLINK](https://huggingface.co/datasets/mteb/blink-it2t-multi) dataset, where
+    the model must retrieve the correct text answer given an image and a question:
+
+    ```python
+    from collections import defaultdict
+
+    import mteb
+    from mteb.abstasks import AbsTaskRetrieval
+
+
+    class MyMultipleChoiceRetrievalTask(AbsTaskRetrieval):
+        metadata = mteb.TaskMetadata(  # minimal metadata
+            name="MyMultipleChoiceRetrievalTask",
+            description="Retrieve the correct text answer based on images and specific retrieval instructions.",
+            main_score="accuracy",  # accuracy since there is a single correct choice per query
+            eval_langs=["eng-Latn"],
+            eval_splits=["test"],
+            type="VisionCentricQA",  # a retrieval-style type; use "Retrieval" for a text-only task
+            category="it2t",
+            modalities=["text", "image"],
+            dataset={
+                "path": "mteb/blink-it2t-multi",
+                "revision": "772e1c8461c0dff10b32f52326d55a67f0d3ca94",
+            },
+        )
+
+        def dataset_transform(self, **kwargs) -> None:
+            # build the `top_ranked` (candidate) split from the relevant documents:
+            # every scored document for a query - both the correct choice and the
+            # distractors - becomes a candidate that gets ranked for that query.
+            for subset, split_data in self.dataset.items():
+                for split, dataset in split_data.items():
+                    top_ranked = defaultdict(list)
+                    for query_id, relevant in dataset["relevant_docs"].items():
+                        for corpus_id, score in relevant.items():
+                            top_ranked[query_id].append(corpus_id)
+                    dataset["top_ranked"] = top_ranked
+    ```
+
+    Once we have the task we can then test to make sure that everything works as intended:
+
+    ```python
+    # ensure that the dataset can be loaded and transformed properly
+    task = MyMultipleChoiceRetrievalTask()
+    task.load_data()
+
+    test_set = task.dataset["default"]["test"]  # default unless there are multiple subsets
+    query_id = next(iter(test_set["relevant_docs"]))
+    print(test_set["top_ranked"][query_id])  # the candidate documents ranked for this query
+    # ['<candidate_id_1>', '<candidate_id_2>', ...]
+
+    # ensure that we can evaluate a model on the task
+    mdl = mteb.get_model("mteb/baseline-random-encoder")
+    results = mteb.evaluate(mdl, task)
+    print(results[0].get_score())  # print the accuracy score of the random baseline
+    ```
+
 === "Multilingual Semantic Similarity"
 
     We kick up the notch here an do a multilingual example using a [Indic Cross-lingual semantic similarity corpus](https://huggingface.co/datasets/mteb/IndicCrosslingualSTS). We will use just three of the languages as an example, but we can easily add more. The subsets on huggingface we will
