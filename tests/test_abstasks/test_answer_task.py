@@ -57,7 +57,7 @@ class TinyAnswerTask(AbsTaskAnswer):
         dataset={"path": "mteb/test", "revision": "main"},
         name="TinyAnswerTask",
         description="Fixture task for answer-mode tests.",
-        type="Retrieval",
+        type="Answer",
         eval_langs=["eng-Latn"],
         main_score="accuracy",
     )
