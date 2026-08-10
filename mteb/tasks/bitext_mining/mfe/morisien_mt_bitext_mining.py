@@ -13,8 +13,8 @@ class MorisienMTBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="MorisienMTBitextMining",
         dataset={
-            "path": "Singaraj/MorisienMTBitextMining",
-            "revision": "27bde8eb920789d539536613b1eaa34d877e2070",
+            "path": "mteb/MorisienMTBitextMining",
+            "revision": "45f511e86cc511a422a130f2d23a2697e279efa2",
         },
         description=(
             "Machine translation test set aligning Mauritian Creole (Kreol Morisien) with English and French, "
