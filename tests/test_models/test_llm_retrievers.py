@@ -14,6 +14,7 @@ from mteb.models import (
     ChatModelProtocol,
     HyDERetriever,
     MultiHopRetriever,
+    MultiQueryRetriever,
     QueryRewriteRetriever,
     RerankRetriever,
     SearchProtocol,
@@ -96,6 +97,7 @@ def test_wrappers_implement_search_protocol():
         HyDERetriever(FakeSearchModel(), model),
         RerankRetriever(FakeSearchModel(), model),
         MultiHopRetriever(FakeSearchModel(), model),
+        MultiQueryRetriever(FakeSearchModel(), model),
         TournamentRerankRetriever(FakeSearchModel(), model),
     ):
         assert isinstance(retriever, SearchProtocol)
@@ -196,3 +198,11 @@ def test_tournament_rerank_final_round_leads():
     )
     ids = _top_ids(retriever, "capital of France paris", top_k=3)
     assert ids[:2] == survivors[::-1]  # final listwise round decides the head
+
+
+def test_multi_query_fuses_variant_rankings():
+    retriever = MultiQueryRetriever(
+        FakeSearchModel(), FakeChatModel(["capital France\nSeine Paris"]), num_queries=2
+    )
+    ids = _top_ids(retriever, "a vague question", top_k=3)
+    assert set(ids[:2]) == {"d1", "d3"}  # each variant surfaces one gold doc

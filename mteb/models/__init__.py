@@ -5,6 +5,7 @@ from .hybrid_wrappers import HybridSearch
 from .llm_retrievers import (
     HyDERetriever,
     MultiHopRetriever,
+    MultiQueryRetriever,
     QueryRewriteRetriever,
     RerankRetriever,
     TournamentRerankRetriever,
@@ -40,6 +41,7 @@ __all__ = [
     "MTEBModels",
     "ModelMeta",
     "MultiHopRetriever",
+    "MultiQueryRetriever",
     "QueryRewriteRetriever",
     "RerankRetriever",
     "SearchCrossEncoderWrapper",

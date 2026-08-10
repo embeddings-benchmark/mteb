@@ -41,6 +41,10 @@ _RERANK = (
     "Rank the documents by relevance to the question. Reply with a JSON array "
     "of document ids, best first.\n\nQuestion: {q}\n\nDocuments:\n{docs}"
 )
+_MULTI_QUERY = (
+    "Write {n} diverse search queries for the question, one per line. "
+    "Reply with only the queries.\n\nQuestion: {q}"
+)
 _HOP_QUERY = (
     "You are searching a corpus for documents relevant to a question. Given "
     "the question and notes from previous searches, reply with only the "
@@ -97,16 +101,15 @@ def _transform_queries(
     return Dataset.from_list(rows)
 
 
-class _QueryTransformRetriever:
-    """Base for retrievers that LLM-transform the query text before searching."""
+class _WrapperBase:
+    """Shared identity and index delegation for the LLM retriever wrappers."""
 
-    _template: str
-    _kind: str
-
-    def __init__(self, base: SearchProtocol, model: ChatModelProtocol) -> None:
+    def __init__(
+        self, base: SearchProtocol, model: ChatModelProtocol, kind: str
+    ) -> None:
         self.base = base
         self.model = model
-        self.mteb_model_meta = _wrapper_meta(self._kind, base)
+        self.mteb_model_meta = _wrapper_meta(kind, base)
 
     def index(
         self,
@@ -127,6 +130,16 @@ class _QueryTransformRetriever:
             encode_kwargs=encode_kwargs,
             num_proc=num_proc,
         )
+
+
+class _QueryTransformRetriever(_WrapperBase):
+    """Base for retrievers that LLM-transform the query text before searching."""
+
+    _template: str
+    _kind: str
+
+    def __init__(self, base: SearchProtocol, model: ChatModelProtocol) -> None:
+        super().__init__(base, model, self._kind)
 
     def search(
         self,
@@ -167,7 +180,7 @@ class HyDERetriever(_QueryTransformRetriever):
     _kind = "hyde"
 
 
-class _TextCachingRetriever:
+class _TextCachingRetriever(_WrapperBase):
     """Base for retrievers whose LLM reads document text at search time."""
 
     def __init__(
@@ -177,10 +190,8 @@ class _TextCachingRetriever:
         kind: str,
         snippet_chars: int,
     ) -> None:
-        self.base = base
-        self.model = model
+        super().__init__(base, model, kind)
         self.snippet_chars = snippet_chars
-        self.mteb_model_meta = _wrapper_meta(kind, base)
         self._text: dict[str, str] = {}
 
     def index(
@@ -195,7 +206,7 @@ class _TextCachingRetriever:
     ) -> None:
         """Index the base retriever and cache document text."""
         self._text = {row["id"]: row.get("text", "") for row in corpus}
-        self.base.index(
+        super().index(
             corpus,
             task_metadata=task_metadata,
             hf_split=hf_split,
@@ -450,4 +461,73 @@ class MultiHopRetriever(_TextCachingRetriever):
                 d for d in sorted(pool, key=lambda d: -pool[d]) if d not in selected
             ]
             results[qid] = _to_scores(selected + tail, top_k)
+        return results
+
+
+class MultiQueryRetriever(_WrapperBase):
+    """LLM writes query variants; base rankings fuse via reciprocal rank fusion.
+
+    The original query and num_queries LLM variants are searched together,
+    and the per-variant rankings merge with the same reciprocal rank fusion
+    used by HybridSearch.
+    """
+
+    def __init__(
+        self,
+        base: SearchProtocol,
+        model: ChatModelProtocol,
+        *,
+        num_queries: int = 3,
+        rrf_k: int = 60,
+    ) -> None:
+        super().__init__(base, model, "multi-query")
+        self.num_queries = num_queries
+        self.rrf_k = rrf_k
+
+    def search(
+        self,
+        queries: QueryDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        top_k: int,
+        encode_kwargs: EncodeKwargs,
+        top_ranked: TopRankedDocumentsType | None = None,
+        num_proc: int | None,
+    ) -> RetrievalOutputType:
+        """Search the original query plus LLM variants, then fuse the rankings."""
+        from datasets import Dataset
+
+        from mteb.models.hybrid_wrappers import fuse_rrf
+
+        results: dict[str, dict[str, float]] = {}
+        for row in queries:
+            qid, question = row["id"], row["text"]
+            out = self.model.generate(
+                [
+                    {
+                        "role": "user",
+                        "content": _MULTI_QUERY.format(n=self.num_queries, q=question),
+                    }
+                ]
+            )
+            variants = [v.strip() for v in out.text.splitlines() if v.strip()]
+            texts = [question, *variants[: self.num_queries]]
+            rankings = self.base.search(
+                Dataset.from_list(
+                    [{"id": f"v{i}", "text": t} for i, t in enumerate(texts)]
+                ),
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                top_k=top_k,
+                encode_kwargs=encode_kwargs,
+                top_ranked=top_ranked,
+                num_proc=num_proc,
+            )
+            per_variant = [rankings[f"v{i}"] for i in range(len(texts))]
+            fused = fuse_rrf(per_variant, [1.0] * len(per_variant), rrf_k=self.rrf_k)
+            ordered = sorted(fused, key=lambda d: -fused[d])
+            results[qid] = _to_scores(ordered, top_k)
         return results
