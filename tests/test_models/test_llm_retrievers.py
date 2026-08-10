@@ -136,6 +136,8 @@ def test_wrappers_compose():
 
 
 def test_query_rewrite_over_real_bm25():
+    pytest.importorskip("bm25s", reason="bm25s not installed")
+    pytest.importorskip("Stemmer", reason="PyStemmer not installed")
     import mteb
 
     retriever = QueryRewriteRetriever(
