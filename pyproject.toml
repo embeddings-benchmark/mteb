@@ -91,7 +91,7 @@ api = [
 og = [
     "playwright>=1.49.0",
 ]
-video = ["torchcodec"]
+video = ["pytubefix>=10.11.0", "torchcodec", "yt-dlp>=2026.7.4"]
 github = ["PyGithub>=1.60"]
 
 # model specific optional dependencies:
