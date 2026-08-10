@@ -1,6 +1,7 @@
 from .aggregated_tasks import *
 from .bitext_mining import *
 from .classification import *
+from .QuestionAnswering import *
 from .clustering import *
 from .image_text_pair_classification import *
 from .instruction_reranking import *
