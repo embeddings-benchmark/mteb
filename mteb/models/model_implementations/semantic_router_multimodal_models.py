@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-import numpy as np
 import torch
 import torch.nn.functional as F
 from torch import nn
@@ -17,6 +16,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from .bge_models import bgem3_languages
 
 if TYPE_CHECKING:
+    import numpy as np
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -29,6 +29,7 @@ _CITATION = """@misc{multi-modal-embed-2026,
   year={2026},
   url={https://huggingface.co/llm-semantic-router/multi-modal-embed-small}
 }"""
+
 
 def _remap_text_encoder_state_dict(
     state_dict: dict[str, Any], model: nn.Module
