@@ -151,10 +151,10 @@ class GmeQwen2VL(AbsEncoder):
         max_length=1800,
         **kwargs,
     ) -> None:
-        from transformers import AutoModelForVision2Seq, AutoProcessor
+        from transformers import AutoModelForImageTextToText, AutoProcessor
 
         model_name = model_path or model_name
-        base = AutoModelForVision2Seq.from_pretrained(
+        base = AutoModelForImageTextToText.from_pretrained(
             model_name, revision=revision, torch_dtype=torch.float16, **kwargs
         )
         min_pixels = min_image_tokens * 28 * 28
