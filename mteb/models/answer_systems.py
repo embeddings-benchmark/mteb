@@ -69,7 +69,16 @@ class ClosedBookAnswerer:
         self.model = model
         self.mteb_model_meta = _answer_meta("closed-book", model)
 
-    def index(self, corpus: CorpusDatasetType, **kwargs: object) -> None:
+    def index(
+        self,
+        corpus: CorpusDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None,
+    ) -> None:
         """No corpus access."""
 
     def answer(self, query_id: str, question: str) -> AnswerResult:
@@ -162,7 +171,16 @@ class OracleAnswerer(_ContextAnswerer):
         super().__init__(model, "oracle", snippet_chars)
         self.relevant_docs = relevant_docs
 
-    def index(self, corpus: CorpusDatasetType, **kwargs: object) -> None:
+    def index(
+        self,
+        corpus: CorpusDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None,
+    ) -> None:
         """Cache document text for gold-context answering."""
         self._text = {row["id"]: row.get("text", "") for row in corpus}
 
