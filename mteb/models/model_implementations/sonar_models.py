@@ -1,4 +1,138 @@
+from __future__ import annotations
+
+import tempfile
+from typing import TYPE_CHECKING, Any
+
+import numpy as np
+import torch
+from tqdm.auto import tqdm
+
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput
+
+
+class SONARWrapper(AbsEncoder):
+    """MTEB wrapper for Meta's SONAR text + speech embedding model.
+
+    Loads the text pipeline eagerly and the speech pipeline lazily (only if
+    a task actually passes audio), since the speech encoder is a separate
+    checkpoint download that text-only tasks don't need.
+    """
+
+    def __init__(
+        self,
+        model_name: str,
+        revision: str | None = None,
+        device: str | None = None,
+        text_encoder: str = "text_sonar_basic_encoder",
+        speech_encoder: str = "sonar_speech_encoder_eng",
+        **kwargs: Any,
+    ) -> None:
+        from sonar.inference_pipelines.text import TextToEmbeddingModelPipeline
+
+        self.device = device or (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
+        self.speech_encoder = speech_encoder
+        self._speech_model = None
+
+        self.text_model = TextToEmbeddingModelPipeline(
+            encoder=text_encoder,
+            tokenizer=text_encoder,
+            device=torch.device(self.device),
+        )
+
+    @property
+    def speech_model(self):
+        if self._speech_model is None:
+            from sonar.inference_pipelines.speech import (
+                SpeechToEmbeddingModelPipeline,
+            )
+
+            self._speech_model = SpeechToEmbeddingModelPipeline(
+                encoder=self.speech_encoder,
+                device=torch.device(self.device),
+            )
+        return self._speech_model
+
+    @staticmethod
+    def _to_sonar_lang(hf_subset: str | None, prompt_type: PromptType | None) -> str:
+        """Resolve the SONAR-format language code ('eng_Latn') for this batch.
+
+        Bitext-mining hf_subset names are 'srcLang_Script-tgtLang_Script'
+        (e.g. 'eng_Latn-fra_Latn'); queries use the source side, documents
+        use the target side. Monolingual tasks/subsets fall back to the
+        single code present, or English if nothing is resolvable.
+        """
+        if not hf_subset or hf_subset == "default":
+            return "eng_Latn"
+        parts = hf_subset.split("-")
+        # Each side is itself 'lang_Script', i.e. two underscore-joined
+        # tokens; a full bitext subset is four tokens total.
+        if len(parts) == 2 and all(p.count("_") == 1 for p in parts):
+            return parts[1] if prompt_type == PromptType.document else parts[0]
+        return parts[0]
+
+    def _encode_audio_batch(self, audio_items: list) -> torch.Tensor:
+        import soundfile as sf
+
+        embeddings = []
+        for item in audio_items:
+            array = np.asarray(item["array"])
+            sr = item["sampling_rate"]
+            with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as tmp:
+                sf.write(tmp.name, array, sr)
+                emb = self.speech_model.predict([tmp.name])
+            embeddings.append(emb[0])
+        return torch.stack(embeddings)
+
+    @torch.inference_mode()
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        has_text = "text" in inputs.dataset.features
+        has_audio = "audio" in inputs.dataset.features
+        source_lang = self._to_sonar_lang(hf_subset, prompt_type)
+
+        all_embeddings: list[torch.Tensor] = []
+        for batch in tqdm(inputs, desc="Encoding"):
+            embs: list[torch.Tensor] = []
+            if has_text and batch.get("text"):
+                text_emb = self.text_model.predict(
+                    batch["text"], source_lang=source_lang
+                )
+                embs.append(text_emb)
+            if has_audio and batch.get("audio"):
+                audio_emb = self._encode_audio_batch(batch["audio"])
+                embs.append(audio_emb)
+
+            if not embs:
+                raise ValueError(
+                    f"No supported modality found in batch: {list(batch.keys())}"
+                )
+            batch_emb = embs[0] if len(embs) == 1 else sum(embs[1:], embs[0])
+            all_embeddings.append(batch_emb.cpu())
+
+        return torch.cat(all_embeddings, dim=0).float().numpy()
+
 
 SONAR_CITATION = """@misc{Duquenne:2023:sonar_arxiv,
   author = {Paul-Ambroise Duquenne and Holger Schwenk and Benoit Sagot},
@@ -216,7 +350,7 @@ sonar_langs = [
 ]
 
 sonar = ModelMeta(
-    loader=None,
+    loader=SONARWrapper,
     name="facebook/SONAR",
     model_type=["dense"],
     languages=sonar_langs,
@@ -228,10 +362,11 @@ sonar = ModelMeta(
     n_embedding_parameters=None,  # it is really multiple models so not sure how to calculate this
     max_tokens=512,  # https://github.com/facebookresearch/SONAR/blob/549d287466443bd8720f938047882630c1c5c3f7/sonar/models/sonar_text/builder.py#L139
     embed_dim=1024,
-    license="mit",
+    license="cc-by-nc-4.0",
     memory_usage_mb=None,
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
+    modalities=["text", "audio"],
     reference="https://ai.meta.com/research/publications/sonar-sentence-level-multimodal-and-language-agnostic-representations/",
     training_datasets=set(
         # "FloresBitextMining", # I believe it only used for evaluation
@@ -240,4 +375,5 @@ sonar = ModelMeta(
     public_training_code="https://github.com/facebookresearch/SONAR",
     public_training_data=None,  # couldn't find this
     citation=SONAR_CITATION,
+    extra_requirements_groups=["sonar"],
 )
