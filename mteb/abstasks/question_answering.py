@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 class QADescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for QuestionAnswering tasks."""
 
+    num_samples: int
     num_queries: int
     num_documents: int
 
@@ -57,7 +58,9 @@ class AbsTaskQuestionAnswering(AbsTask):
     ) -> QADescriptiveStatistics:
         data = self.dataset[hf_subset or "default"][split]
         return QADescriptiveStatistics(
-            num_queries=len(data["queries"]), num_documents=len(data["corpus"])
+            num_samples=len(data["queries"]),
+            num_queries=len(data["queries"]),
+            num_documents=len(data["corpus"]),
         )
 
     def _evaluate_subset(
