@@ -517,14 +517,14 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     num_samples: int
     num_queries: int
     num_documents: int
-    num_documents_with_text: int
-    num_documents_with_image: int
-    num_documents_with_audio: int
-    num_documents_with_video: int
-    num_queries_with_text: int
-    num_queries_with_image: int
-    num_queries_with_audio: int
-    num_queries_with_video: int
+    num_documents_with_text: NotRequired[int]
+    num_documents_with_image: NotRequired[int]
+    num_documents_with_audio: NotRequired[int]
+    num_documents_with_video: NotRequired[int]
+    num_queries_with_text: NotRequired[int]
+    num_queries_with_image: NotRequired[int]
+    num_queries_with_audio: NotRequired[int]
+    num_queries_with_video: NotRequired[int]
     number_of_characters: int
 
     documents_text_statistics: TextStatistics | None
