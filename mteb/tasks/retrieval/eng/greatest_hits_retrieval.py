@@ -30,7 +30,7 @@ class GreatestHitsA2VRetrieval(AbsTaskRetrieval):
         reference=_REFERENCE,
         dataset={
             "path": "dukesun99/GreatestHits-A2V",
-            "revision": "a9d0f5b7faf64c300d0c5e0a3f146ee48fae52da",
+            "revision": "bfb8cbecc345ea78cd92d669a09e8f410f56c8c9",
         },
         type="Any2AnyRetrieval",
         category="a2v",
@@ -58,7 +58,7 @@ class GreatestHitsV2ARetrieval(AbsTaskRetrieval):
         reference=_REFERENCE,
         dataset={
             "path": "dukesun99/GreatestHits-V2A",
-            "revision": "2c4fc4aab06afdd89d87747dc42b40884229e0b6",
+            "revision": "2b1cd359f987fc1db90c745269d10426c86205c7",
         },
         type="Any2AnyRetrieval",
         category="v2a",
