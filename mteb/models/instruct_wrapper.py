@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, EncodeKwargs, Modalities
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 
 logger = logging.getLogger(__name__)
@@ -330,16 +330,11 @@ class InstructSentenceTransformerModel(AbsEncoder):
         if is_multimodal:
             from .sentence_transformer_wrapper import _batch_to_modality_dicts
 
-            supported_modalities: list[Modalities] = (
-                self.mteb_model_meta.modalities
-                if self.mteb_model_meta is not None
-                else ["text", "image", "audio", "video"]
-            )
             all_embeddings = []
             for batch in tqdm(inputs, desc="Building multimodal embeddings"):
                 batched_input = _batch_to_modality_dicts(
                     batch,
-                    supported_modalities,
+                    ["text", "image", "audio", "video"],
                 )
 
                 embeddings = self.model.encode(

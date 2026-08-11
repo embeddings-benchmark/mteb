@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 import numpy as np
 import pytest
 from datasets import Dataset, Features, Value
 from datasets import Image as HFImage
 from PIL import Image
 
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_implementations.random_baseline import (
     _batch_to_embeddings,
     _image_to_vector,
@@ -13,6 +16,7 @@ from mteb.models.model_implementations.random_baseline import (
 )
 from mteb.models.sentence_transformer_wrapper import _batch_to_modality_dicts
 from mteb.tasks.retrieval.eng.mixbench_retrieval import MixBenchMSCOCO
+from mteb.types import PromptType
 
 
 def _image(color: str) -> Image.Image:
@@ -52,6 +56,42 @@ def test_per_sample_modalities_omit_missing_values():
 def test_per_sample_modalities_reject_empty_input():
     with pytest.raises(ValueError, match="without any populated modality"):
         _batch_to_modality_dicts({"text": [""], "image": [None]}, ["text", "image"])
+
+
+def test_instruct_wrapper_preserves_present_modalities_with_incomplete_metadata():
+    image = _image("red")
+
+    class Inputs:
+        dataset = SimpleNamespace(features={"text": object(), "image": object()})
+
+        def __iter__(self):
+            yield {"text": ["dense input"], "image": [image]}
+
+    class RecordingModel:
+        encoded_inputs = None
+
+        def encode(self, inputs, **kwargs):
+            self.encoded_inputs = inputs
+            return np.zeros((len(inputs), 2), dtype=np.float32)
+
+    wrapper = object.__new__(InstructSentenceTransformerModel)
+    wrapper.apply_instruction_to_passages = True
+    wrapper.mteb_model_meta = SimpleNamespace(modalities=["text"])
+    wrapper.get_task_instruction = lambda *_: None
+    wrapper.model = RecordingModel()
+
+    embeddings = wrapper.encode(
+        Inputs(),
+        task_metadata=SimpleNamespace(name="dense-regression"),
+        hf_split="test",
+        hf_subset="default",
+        prompt_type=PromptType.query,
+    )
+
+    assert embeddings.shape == (1, 2)
+    assert wrapper.model.encoded_inputs is not None
+    assert wrapper.model.encoded_inputs[0]["text"] == "dense input"
+    assert wrapper.model.encoded_inputs[0]["image"] is image
 
 
 def test_random_baseline_combines_only_present_modalities():
