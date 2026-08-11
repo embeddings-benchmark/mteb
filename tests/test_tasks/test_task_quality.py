@@ -879,6 +879,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     "duplicate_video": [
         "MMVUVideoCentricQA",
         "MomentSeekerTV2VRetrieval",
+        "StanfordI2VRetrieval",  # official 3,401-ID manifest contains 3,325 unique video contents
         "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseAudioVideoZeroShot",
         "WorldSenseVideoClassification",  # multiple QA rows share the same underlying video/audio
