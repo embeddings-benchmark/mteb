@@ -102,7 +102,7 @@ class AudioFlamingoWrapper(AbsEncoder):
             ).to(self.model.device)
 
             with torch.no_grad(), torch.autocast(
-                device_type="cuda" if self.model.device.type == "cuda" else "cpu",
+                device_type=self.device,
                 dtype=torch.bfloat16,
             ):
                 outputs = self.model(
@@ -137,8 +137,8 @@ audio_flamingo_meta = ModelMeta(
     max_tokens=32768,
     n_parameters=8_267_215_360,
     memory_usage_mb=None,
-    embed_dim=3584,  # Qwen2.5-7B has 3584 hidden size
-    license=None,  # NVIDIA OneWay Noncommercial License
+    embed_dim=3584,
+    license=None,
     reference="https://huggingface.co/nvidia/audio-flamingo-3-hf",
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
@@ -152,7 +152,7 @@ audio_flamingo_meta = ModelMeta(
       title={Audio Flamingo: A Novel Audio Language Model with Few-Shot Learning and Dialogue Abilities},
       author={NVIDIA},
       year={2024},
-      url={https://huggingface.co/nvidia/audio-flamingo-3-hf},
+      url={https://arxiv.org/abs/2507.08128},
 }
 """,
 )
