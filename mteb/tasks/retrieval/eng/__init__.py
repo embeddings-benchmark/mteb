@@ -307,6 +307,7 @@ from .r_paris_i2i_retrieval import (
 )
 from .ra_rb_code_retrieval import RARbCode
 from .ra_rb_math_retrieval import RARbMath
+from .ravenea import RAVENEAI2TRetrieval
 from .re_mu_q_it2t_retrieval import ReMuQIT2TRetrieval
 from .rp2k_i2i_retrieval import RP2kI2IRetrieval
 from .sci_fact_retrieval import SciFact
@@ -709,6 +710,7 @@ __all__ = [
     "R2MEDPMCTreatmentRetrieval",
     "RARbCode",
     "RARbMath",
+    "RAVENEAI2TRetrieval",
     "ROxfordEasyI2IRetrieval",
     "ROxfordHardI2IRetrieval",
     "ROxfordMediumI2IRetrieval",
