@@ -402,6 +402,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProRoboticsRetrieval",
         "BrightProStackoverflowRetrieval",
         "BrightProSustainableLivingRetrieval",
+        "MixBenchGoogleWIT",  # source includes a legitimate 3-character WIT title query
     ],
     "duplicate_text": [
         "AfriHateClassification",
@@ -663,6 +664,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProRoboticsRetrieval",
         "BrightProStackoverflowRetrieval",
         "BrightProSustainableLivingRetrieval",
+        "MixBenchOVEN",  # OVEN repeats entity text across distinct query/document rows
     ],
     "train_test_leakage": [
         "AVEDatasetClassification",
@@ -834,6 +836,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WebQAT2ITRetrieval",
         "XFlickr30kCoT2IRetrieval",
         "XM3600T2IRetrieval",
+        "MixBenchOVEN",  # OVEN repeats source images across distinct query/document rows
     ],
     "duplicate_pairs": [
         "BibleNLPBitextMining",
@@ -991,6 +994,7 @@ def _expected_unique_count(
     num_samples: int | None,
     num_queries: int | None,
     num_documents: int | None,
+    split_stats: SplitDescriptiveStatistics,
 ) -> int | None:
     """The row count a field's `unique_*` should be compared against.
 
@@ -998,6 +1002,19 @@ def _expected_unique_count(
     not "one row per unique value" for either `documents_*` or `queries_*`
     fields individually -- those need their own, correct denominator.
     """
+    populated_count_fields = {
+        "documents_text_statistics": "num_documents_with_text",
+        "documents_image_statistics": "num_documents_with_image",
+        "documents_audio_statistics": "num_documents_with_audio",
+        "documents_video_statistics": "num_documents_with_video",
+        "queries_text_statistics": "num_queries_with_text",
+        "queries_image_statistics": "num_queries_with_image",
+        "queries_audio_statistics": "num_queries_with_audio",
+        "queries_video_statistics": "num_queries_with_video",
+    }
+    populated_count = split_stats.get(populated_count_fields.get(field, ""))
+    if isinstance(populated_count, int):
+        return populated_count
     if field.startswith("documents_"):
         return num_documents
     if field.startswith("queries_"):
@@ -1364,7 +1381,7 @@ def _split_quality(
     num_documents = cast("int | None", split_stats.get("num_documents"))
     for field, stats in _iter_stat_fields(split_stats):
         expected_count = _expected_unique_count(
-            field, num_samples, num_queries, num_documents
+            field, num_samples, num_queries, num_documents, split_stats
         )
         errors += _field_quality(name, split, field, stats, expected_count)
 

@@ -532,9 +532,15 @@ class AbsTaskRetrieval(AbsTask):
         # Build corpus col_inputs — text needs special mapping from the corpus dict format.
         corpus_col_inputs: dict[Modalities, list[Any]] = {}
         if "text" in corpus_modalities:
-            corpus_col_inputs["text"] = corpus.map(_corpus_to_dict)["text"]
+            corpus_col_inputs["text"] = [
+                text
+                for text in corpus.map(_corpus_to_dict)["text"]
+                if text is not None and text.strip()
+            ]
         if "image" in corpus_modalities:
-            corpus_col_inputs["image"] = corpus["image"]
+            corpus_col_inputs["image"] = [
+                image for image in corpus["image"] if image is not None
+            ]
         if "audio" in corpus_modalities:
             corpus_col_inputs["audio"] = corpus["audio"]
         if "video" in corpus_modalities:
@@ -548,9 +554,13 @@ class AbsTaskRetrieval(AbsTask):
                 queries_ = _combine_queries_with_instruction_text(queries_)
             if isinstance(queries_["text"][0], dict | list):
                 queries_ = queries_.map(_convert_conv_history_to_query)
-            queries_col_inputs["text"] = queries_["text"]
+            queries_col_inputs["text"] = [
+                text for text in queries_["text"] if text is not None and text.strip()
+            ]
         if "image" in queries_modalities:
-            queries_col_inputs["image"] = queries["image"]
+            queries_col_inputs["image"] = [
+                image for image in queries["image"] if image is not None
+            ]
         if "audio" in queries_modalities:
             queries_col_inputs["audio"] = queries["audio"]
         if "video" in queries_modalities:
@@ -583,6 +593,14 @@ class AbsTaskRetrieval(AbsTask):
             num_samples=num_documents + num_queries,
             num_queries=num_queries,
             num_documents=num_documents,
+            num_documents_with_text=len(corpus_col_inputs.get("text", [])),
+            num_documents_with_image=len(corpus_col_inputs.get("image", [])),
+            num_documents_with_audio=len(corpus_col_inputs.get("audio", [])),
+            num_documents_with_video=len(corpus_col_inputs.get("video", [])),
+            num_queries_with_text=len(queries_col_inputs.get("text", [])),
+            num_queries_with_image=len(queries_col_inputs.get("image", [])),
+            num_queries_with_audio=len(queries_col_inputs.get("audio", [])),
+            num_queries_with_video=len(queries_col_inputs.get("video", [])),
             number_of_characters=number_of_characters,
             documents_text_statistics=corpus_stats["text_statistics"],
             documents_image_statistics=corpus_stats["image_statistics"],

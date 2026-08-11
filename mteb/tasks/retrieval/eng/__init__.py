@@ -225,6 +225,12 @@ from .memotion_i2t_retrieval import MemotionI2TRetrieval
 from .memotion_t2i_retrieval import MemotionT2IRetrieval
 from .met_i2i_retrieval import METI2IRetrieval
 from .miao_retrieval import MIAOA2IRetrieval, MIAOI2ARetrieval
+from .mixbench_retrieval import (
+    MixBenchGoogleWIT,
+    MixBenchMSCOCO,
+    MixBenchOVEN,
+    MixBenchVisualNews,
+)
 from .ml_questions import MLQuestionsRetrieval
 from .mmdocir_t2i_retrieval import MMDocIRT2IRetrieval
 from .mmdocir_t2it_retrieval import MMDocIRT2ITRetrieval
@@ -661,6 +667,10 @@ __all__ = [
     "MemGovern",
     "MemotionI2TRetrieval",
     "MemotionT2IRetrieval",
+    "MixBenchGoogleWIT",
+    "MixBenchMSCOCO",
+    "MixBenchOVEN",
+    "MixBenchVisualNews",
     "MomentSeekerTI2VRetrieval",
     "MomentSeekerTV2VRetrieval",
     "NFCorpus",
