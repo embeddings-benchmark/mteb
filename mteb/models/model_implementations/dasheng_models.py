@@ -16,6 +16,15 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
 
 
+DASHENG_CITATION = """@inproceedings{dinkel2023scaling,
+    title={Scaling up masked audio encoder learning for general audio classification},
+    author={Dinkel, Heinrich and Yan, Zhiyong and Wang, Yongqing and Zhang, Junbo and Wang, Yujun and Wang, Bin},
+    booktitle={Interspeech 2024},
+    year={2024},
+    url={https://arxiv.org/abs/2406.06992}
+}"""
+
+
 class DashengAudioWrapper(AbsEncoder):
     """Wrapper for Dasheng masked-autoencoder audio encoders.
 
@@ -126,9 +135,17 @@ dasheng_base = ModelMeta(
     framework=["PyTorch"],
     use_instructions=False,
     public_training_code="https://github.com/RicherMans/Dasheng",
-    public_training_data=None,
-    training_datasets=None,
+    public_training_data="https://github.com/RicherMans/Dasheng#models",
+    training_datasets={
+        "AudioSet",
+        "AudioSetMini",
+        "AudioSetStrongA2TRetrieval",
+        "AudioSetStrongT2ARetrieval",
+        "VGGSoundV",
+        "VGGSoundVA",
+    },
     modalities=["audio"],
+    citation=DASHENG_CITATION,
     extra_requirements_groups=["dasheng"],
 )
 
@@ -150,9 +167,17 @@ dasheng_0_6b = ModelMeta(
     framework=["PyTorch"],
     use_instructions=False,
     public_training_code="https://github.com/RicherMans/Dasheng",
-    public_training_data=None,
-    training_datasets=None,
+    public_training_data="https://github.com/RicherMans/Dasheng#models",
+    training_datasets={
+        "AudioSet",
+        "AudioSetMini",
+        "AudioSetStrongA2TRetrieval",
+        "AudioSetStrongT2ARetrieval",
+        "VGGSoundV",
+        "VGGSoundVA",
+    },
     modalities=["audio"],
+    citation=DASHENG_CITATION,
     extra_requirements_groups=["dasheng"],
 )
 
@@ -174,8 +199,16 @@ dasheng_1_2b = ModelMeta(
     framework=["PyTorch"],
     use_instructions=False,
     public_training_code="https://github.com/RicherMans/Dasheng",
-    public_training_data=None,
-    training_datasets=None,
+    public_training_data="https://github.com/RicherMans/Dasheng#models",
+    training_datasets={
+        "AudioSet",
+        "AudioSetMini",
+        "AudioSetStrongA2TRetrieval",
+        "AudioSetStrongT2ARetrieval",
+        "VGGSoundV",
+        "VGGSoundVA",
+    },
     modalities=["audio"],
+    citation=DASHENG_CITATION,
     extra_requirements_groups=["dasheng"],
 )
