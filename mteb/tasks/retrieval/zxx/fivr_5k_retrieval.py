@@ -240,8 +240,8 @@ def _materialize_videos(
         raise RuntimeError(
             f"Failed to materialize {len(failures)} frozen FIVR videos: {failed_ids}. "
             "The benchmark corpus is frozen and will not remove them dynamically. "
-            "Install mteb[video], or set MTEB_FIVR_VIDEO_DIR to a complete local "
-            "mirror, and retry."
+            "Install mteb[video,fivr], or set MTEB_FIVR_VIDEO_DIR to a complete "
+            "local mirror, and retry."
         )
     return paths
 
