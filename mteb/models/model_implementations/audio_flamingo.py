@@ -26,6 +26,8 @@ class AudioFlamingoWrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         max_audio_length_seconds: float = 30.0,
+        torch_dtype: torch.dtype = torch.bfloat16,
+        device_map: str | dict | None = None,
         **kwargs: Any,
     ):
         from transformers import AudioFlamingo3ForConditionalGeneration, AutoProcessor
@@ -43,8 +45,9 @@ class AudioFlamingoWrapper(AbsEncoder):
         self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
 
         # Audio Flamingo uses torch.bfloat16 commonly
-        torch_dtype = kwargs.pop("torch_dtype", torch.bfloat16)
-        device_map = kwargs.pop("device_map", "auto" if self.device == "cuda" else None)
+        if device_map is None and self.device == "cuda":
+            device_map = "auto"
+
         self.model = AudioFlamingo3ForConditionalGeneration.from_pretrained(
             model_name,
             revision=revision,
