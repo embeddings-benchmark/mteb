@@ -32,8 +32,10 @@ def mrr(
     k_max, top_hits = max(k_values), {}
 
     for query_id, doc_scores in results.items():
+        # tie-break by doc id descending to match pytrec_eval; a score-only sort is
+        # stable, so tied docs kept dict insertion order and leaked into the rank (#5092)
         top_hits[query_id] = sorted(
-            doc_scores.items(), key=lambda item: item[1], reverse=True
+            doc_scores.items(), key=lambda item: (item[1], item[0]), reverse=True
         )[0:k_max]
 
     for query_id in top_hits:
@@ -60,9 +62,9 @@ def recall_cap(
     k_max = max(k_values)
 
     for query_id, doc_scores in results.items():
-        top_hits = sorted(doc_scores.items(), key=lambda item: item[1], reverse=True)[
-            0:k_max
-        ]
+        top_hits = sorted(
+            doc_scores.items(), key=lambda item: (item[1], item[0]), reverse=True
+        )[0:k_max]
         query_relevant_docs = [
             doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0
         ]
@@ -92,9 +94,9 @@ def hole(
     k_max = max(k_values)
 
     for _, scores in results.items():
-        top_hits = sorted(scores.items(), key=lambda item: item[1], reverse=True)[
-            0:k_max
-        ]
+        top_hits = sorted(
+            scores.items(), key=lambda item: (item[1], item[0]), reverse=True
+        )[0:k_max]
         for k in k_values:
             hole_docs = [
                 row[0] for row in top_hits[0:k] if row[0] not in annotated_corpus
@@ -116,7 +118,7 @@ def top_k_accuracy(
         top_hits[query_id] = [
             item[0]
             for item in sorted(
-                doc_scores.items(), key=lambda item: item[1], reverse=True
+                doc_scores.items(), key=lambda item: (item[1], item[0]), reverse=True
             )[0:k_max]
         ]
 
