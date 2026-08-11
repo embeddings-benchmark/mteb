@@ -33,16 +33,20 @@ class CosmosEmbed1Model(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | int | torch.device | None = None,
         num_frames: int = 8,
         **kwargs: Any,
     ) -> None:
         from transformers import AutoModel, AutoProcessor
 
         self.model_name = model_name
-        self.device = device
         self.num_frames = num_frames
-        dtype = torch.bfloat16 if device.startswith("cuda") else torch.float32
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+        # mteb's CLI passes an int device index, torch.device normalises it
+        self.device = torch.device(device)
+        dtype = torch.bfloat16 if self.device.type == "cuda" else torch.float32
+        self.dtype = dtype
         self.model = AutoModel.from_pretrained(
             model_name,
             revision=revision,
@@ -57,10 +61,21 @@ class CosmosEmbed1Model(AbsEncoder):
         )
 
     def _move(self, batch: Any) -> dict[str, Any]:
-        return {
-            key: (value.to(self.device) if hasattr(value, "to") else value)
-            for key, value in dict(batch).items()
-        }
+        moved: dict[str, Any] = {}
+        for key, value in dict(batch).items():
+            if isinstance(value, torch.Tensor):
+                # The processor returns float32 pixel values while the weights
+                # may be bfloat16. Integer tensors such as input_ids and
+                # attention masks must keep their dtype.
+                if value.is_floating_point():
+                    moved[key] = value.to(self.device, dtype=self.dtype)
+                else:
+                    moved[key] = value.to(self.device)
+            elif hasattr(value, "to"):
+                moved[key] = value.to(self.device)
+            else:
+                moved[key] = value
+        return moved
 
     @torch.no_grad()
     def get_text_embeddings(
@@ -86,18 +101,25 @@ class CosmosEmbed1Model(AbsEncoder):
     ) -> torch.Tensor:
         all_embeddings = []
         for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):
-            # The collator already hands us [T, C, H, W] uint8 frames, which
-            # is the BTCHW layout the processor wants once stacked. It requires
-            # exactly num_frames frames per clip.
-            frames = torch.stack(
-                [
+            # Source clips vary in resolution, so they cannot be stacked
+            # before preprocessing. The processor resizes each clip to the
+            # model's input size, after which they concatenate cleanly.
+            processed: list[dict[str, torch.Tensor]] = []
+            for video in batch["video"]:
+                clip = (
                     video.to(torch.uint8)
                     if isinstance(video, torch.Tensor)
                     else torch.as_tensor(video, dtype=torch.uint8)
-                    for video in batch["video"]
-                ]
+                )
+                processed.append(
+                    dict(self.processor(videos=clip.unsqueeze(0), return_tensors="pt"))
+                )
+            inputs = self._move(
+                {
+                    key: torch.cat([item[key] for item in processed], dim=0)
+                    for key in processed[0]
+                }
             )
-            inputs = self._move(self.processor(videos=frames, return_tensors="pt"))
             output = self.model.get_video_embeddings(**inputs)
             embeddings = _proj(output, "visual_proj")
             all_embeddings.append(embeddings.float().cpu())
