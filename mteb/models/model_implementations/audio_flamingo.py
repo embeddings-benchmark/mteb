@@ -94,9 +94,6 @@ class AudioFlamingoWrapper(AbsEncoder):
 
                 conversations.append([{"role": "user", "content": content}])
 
-            # Use apply_chat_template rather than calling the processor directly:
-            # it's the only input path NVIDIA tests/supports, and it handles
-            # audio feature prep + dtype casting internally.
             processor_inputs = self.processor.apply_chat_template(
                 conversations,
                 tokenize=True,
