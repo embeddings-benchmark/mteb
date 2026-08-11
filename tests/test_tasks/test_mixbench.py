@@ -86,10 +86,13 @@ def test_mixbench_loader_normalizes_ids_and_missing_text(monkeypatch):
         "mixed_corpus": Dataset.from_dict({"id": [1], "text": [None], "image": [None]}),
     }
 
-    def fake_load_dataset(**kwargs):
-        return datasets[kwargs["split"]]
+    loaded_splits = []
 
-    monkeypatch.setattr(mixbench, "load_dataset", fake_load_dataset)
+    def fake_load_split(config, split):
+        loaded_splits.append((config, split))
+        return datasets[split]
+
+    monkeypatch.setattr(mixbench, "_load_split", fake_load_split)
     monkeypatch.setattr(mixbench, "_load_qrels", lambda config: {"1": {"1": 1}})
     task = MixBenchMSCOCO()
 
@@ -100,6 +103,7 @@ def test_mixbench_loader_normalizes_ids_and_missing_text(monkeypatch):
     assert split["corpus"]["id"] == ["1"]
     assert split["corpus"]["text"] == [""]
     assert split["relevant_docs"] == {"1": {"1": 1}}
+    assert loaded_splits == [("MSCOCO", "queries"), ("MSCOCO", "mixed_corpus")]
 
 
 def test_retrieval_statistics_ignore_absent_modalities():

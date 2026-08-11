@@ -52,6 +52,17 @@ def _normalize_rows(dataset: Dataset, num_proc: int | None) -> Dataset:
     )
 
 
+def _load_split(config: str, split: str) -> Dataset:
+    """Load only the pinned Parquet file needed by the retrieval task."""
+    parquet_path = hf_hub_download(
+        repo_id=_DATASET_REPO,
+        filename=f"{config}/{split}.parquet",
+        repo_type="dataset",
+        revision=_DATASET_REVISION,
+    )
+    return load_dataset("parquet", data_files=parquet_path, split="train")
+
+
 def _load_qrels(config: str) -> dict[str, dict[str, int]]:
     qrels_path = Path(
         hf_hub_download(
@@ -74,17 +85,8 @@ class _MixBenchBase(AbsTaskRetrieval):
             return
 
         config = self.metadata.dataset["name"]
-        dataset_kwargs = {
-            "path": self.metadata.dataset["path"],
-            "name": config,
-            "revision": self.metadata.dataset["revision"],
-        }
-        queries = _normalize_rows(
-            load_dataset(**dataset_kwargs, split="queries"), num_proc
-        )
-        corpus = _normalize_rows(
-            load_dataset(**dataset_kwargs, split="mixed_corpus"), num_proc
-        )
+        queries = _normalize_rows(_load_split(config, "queries"), num_proc)
+        corpus = _normalize_rows(_load_split(config, "mixed_corpus"), num_proc)
 
         self.dataset = {
             "default": {
