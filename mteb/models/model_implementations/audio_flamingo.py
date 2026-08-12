@@ -139,6 +139,7 @@ audio_flamingo_meta = ModelMeta(
     release_date="2025-07-10",
     max_tokens=32768,
     n_parameters=8_267_215_360,
+    n_embedding_parameters=543592448,
     memory_usage_mb=None,
     embed_dim=3584,
     license=None,
