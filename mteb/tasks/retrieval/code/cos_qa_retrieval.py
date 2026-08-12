@@ -37,4 +37,42 @@ class CosQARetrieval(AbsTaskRetrieval):
   year = {2021},
 }
 """,
+        superseded_by="CosQA.v2",
+    )
+
+
+class CosQARetrievalv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="CosQA.v2",
+        description="The dataset is a collection of natural language queries and their corresponding code snippets. The task is to retrieve the most relevant code snippet for a given query. This version fixes incorrect query/document relevance pairs.",
+        reference="https://arxiv.org/abs/2105.13239",
+        dataset={
+            "path": "mteb/cosqa",
+            "revision": "86b74bd4f59526a4e3269890bd1f58a2ea476097",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=[_EVAL_SPLIT],
+        eval_langs=["eng-Latn", "python-Code"],
+        main_score="ndcg_at_10",
+        date=("2021-05-07", "2021-05-07"),
+        domains=["Programming", "Written"],
+        task_subtypes=["Code retrieval"],
+        license="mit",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@misc{huang2021cosqa20000webqueries,
+  archiveprefix = {arXiv},
+  author = {Junjie Huang and Duyu Tang and Linjun Shou and Ming Gong and Ke Xu and Daxin Jiang and Ming Zhou and Nan Duan},
+  eprint = {2105.13239},
+  primaryclass = {cs.CL},
+  title = {CoSQA: 20,000+ Web Queries for Code Search and Question Answering},
+  url = {https://arxiv.org/abs/2105.13239},
+  year = {2021},
+}
+""",
+        adapted_from=["CosQA"],
     )

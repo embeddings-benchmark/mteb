@@ -45,3 +45,16 @@ def test_benchmark_on_leaderboard():
     names = {b.name for b in benchmark}
     assert on_leaderboard not in names
     assert not_on_leaderboard in names
+
+
+def test_mteb_code_v1_1_replaces_superseded_code_tasks():
+    legacy_benchmark = mteb.get_benchmark(benchmark_name="MTEB(Code, v1)")
+    benchmark = mteb.get_benchmark(benchmark_name="MTEB(Code, v1.1)")
+
+    assert legacy_benchmark.superseded_by == ["MTEB(Code, v1.1)"]
+
+    task_names = {task.metadata.name for task in benchmark.tasks}
+    assert "CodeTransOceanDL.v2" in task_names
+    assert "CosQA.v2" in task_names
+    assert "CodeTransOceanDL" not in task_names
+    assert "CosQA" not in task_names
