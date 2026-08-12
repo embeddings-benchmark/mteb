@@ -43,7 +43,6 @@ def _load_data(
             .rename_column("query-id", "id")
             .rename_column("rephrase_level_3", "text")
             .select_columns(["id", "text"])
-            .add_column("modality", ["text"] * len(queries))
         )
 
         corpus = load_dataset(
