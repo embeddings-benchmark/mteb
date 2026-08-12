@@ -24,12 +24,11 @@ audit report. Both MTEB directions are derived from the same frozen pair table.
   --push
 ```
 
-If direct downloads fail, `--archive-recovery` also attempts scheme variants
-and exact-URL Wayback snapshots, including captures stored with an incorrect
-MIME type. It may retry the exact source URL without TLS verification after a
-certificate failure; this is labeled in `recovery_method`. Recovered rows
-retain the original URL and recovery method. The script stops on missing or
-exact duplicate media by default; `--allow-missing` and
+If direct downloads fail, `--archive-recovery` also upgrades HTTP URLs to HTTPS
+and attempts exact-URL Wayback snapshots, including captures stored with an
+incorrect MIME type. HTTPS certificate verification is always enabled.
+Recovered rows retain the original URL and recovery method. The script stops
+on missing or exact duplicate media by default; `--allow-missing` and
 `--allow-duplicate-images` require an explicit, documented decision.
 
 Manual review of every image pair with dHash distance at most two found two

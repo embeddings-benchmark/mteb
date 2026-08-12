@@ -16,7 +16,6 @@ import re
 import shutil
 import statistics
 import threading
-import warnings
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
@@ -33,7 +32,6 @@ from PIL import ImageOps
 from requests.adapters import HTTPAdapter
 from tqdm import tqdm
 from urllib3.util.retry import Retry
-from urllib3.exceptions import InsecureRequestWarning
 
 SOURCE = "SUSTech/Mars-VL-Pairs"
 SOURCE_REVISION = "1cac8885e481256d3752ad0d3a0f8f9681c5f206"
@@ -158,20 +156,16 @@ def _fetch_bytes(
     connect_timeout: float,
     read_timeout: float,
     max_bytes: int,
-    verify_tls: bool = True,
 ) -> tuple[bytes, requests.Response]:
     parsed = urlparse(url)
-    with warnings.catch_warnings():
-        if not verify_tls:
-            warnings.simplefilter("ignore", InsecureRequestWarning)
-        response = _session(retries).get(
-            url,
-            allow_redirects=True,
-            headers={"Referer": f"{parsed.scheme}://{parsed.netloc}/"},
-            stream=True,
-            timeout=(connect_timeout, read_timeout),
-            verify=verify_tls,
-        )
+    response = _session(retries).get(
+        url,
+        allow_redirects=True,
+        headers={"Referer": f"{parsed.scheme}://{parsed.netloc}/"},
+        stream=True,
+        timeout=(connect_timeout, read_timeout),
+        verify=True,
+    )
     response.raise_for_status()
     chunks: list[bytes] = []
     size = 0
@@ -240,40 +234,36 @@ def _wikimedia_original(url: str) -> str | None:
     ).geturl()
 
 
-def _recovery_candidates(source_url: str, retries: int) -> list[tuple[str, str, bool]]:
+def _recovery_candidates(source_url: str, retries: int) -> list[tuple[str, str]]:
     direct_variants = [source_url]
     unescaped = html.unescape(source_url)
     if unescaped != source_url:
         direct_variants.append(unescaped)
 
-    candidates: list[tuple[str, str, bool]] = []
+    candidates: list[tuple[str, str]] = []
     for variant in direct_variants:
         candidates.append(
             (
                 variant,
                 "direct" if variant == source_url else "html-unescape",
-                True,
             )
         )
         parsed = urlparse(variant)
-        alternate_scheme = "https" if parsed.scheme == "http" else "http"
-        candidates.append(
-            (
-                parsed._replace(scheme=alternate_scheme).geturl(),
-                f"scheme-{alternate_scheme}",
-                True,
+        if parsed.scheme == "http":
+            candidates.append(
+                (
+                    parsed._replace(scheme="https").geturl(),
+                    "scheme-https",
+                )
             )
-        )
-        if parsed.scheme == "https":
-            candidates.append((variant, "direct-tls-unverified", False))
     for variant in direct_variants:
         candidates.extend(
-            (candidate, "wayback-exact-url", True)
+            (candidate, "wayback-exact-url")
             for candidate in _wayback_candidates(variant, retries)
         )
     wikimedia_original = _wikimedia_original(unescaped)
     if wikimedia_original:
-        candidates.append((wikimedia_original, "wikimedia-original-file", True))
+        candidates.append((wikimedia_original, "wikimedia-original-file"))
     return candidates
 
 
@@ -299,18 +289,16 @@ def _download_row(
     candidates = (
         _recovery_candidates(source_url, retries)
         if archive_recovery
-        else [(source_url, "direct", True)]
+        else [(source_url, "direct")]
     )
 
     errors: list[str] = []
-    attempted_candidates: set[tuple[str, bool]] = set()
-    for candidate, recovery_method, verify_tls in candidates:
-        candidate_key = (candidate, verify_tls)
-        if candidate_key in attempted_candidates:
+    attempted_candidates: set[str] = set()
+    for candidate, recovery_method in candidates:
+        if candidate in attempted_candidates:
             continue
-        attempted_candidates.add(candidate_key)
-        attempt_label = candidate if verify_tls else f"{candidate} [TLS unverified]"
-        result.attempts.append(attempt_label)
+        attempted_candidates.add(candidate)
+        result.attempts.append(candidate)
         try:
             content, response = _fetch_bytes(
                 candidate,
@@ -318,7 +306,6 @@ def _download_row(
                 connect_timeout=connect_timeout,
                 read_timeout=read_timeout,
                 max_bytes=max_bytes,
-                verify_tls=verify_tls,
             )
             image_info = _validate_image(content)
             extension = image_info.pop("extension")
@@ -343,7 +330,7 @@ def _download_row(
             result.dhash = image_info["dhash"]
             return result
         except Exception as exc:  # errors are preserved in the audit manifest
-            errors.append(f"{attempt_label}: {type(exc).__name__}: {exc}")
+            errors.append(f"{candidate}: {type(exc).__name__}: {exc}")
     result.error = " | ".join(errors)
     return result
 
