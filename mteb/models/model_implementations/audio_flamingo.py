@@ -7,8 +7,8 @@ import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.modality_collators import AudioCollator
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
