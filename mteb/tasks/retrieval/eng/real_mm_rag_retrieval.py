@@ -56,7 +56,6 @@ def _load_data(
             corpus.cast_column("corpus-id", Value("string"))
             .rename_column("corpus-id", "id")
             .select_columns(["id", "image"])
-            .add_column("modality", ["image"] * len(corpus))
         )
 
         qrels = load_dataset(
