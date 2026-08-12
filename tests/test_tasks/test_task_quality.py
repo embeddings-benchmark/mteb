@@ -877,6 +877,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WorldSenseAudioVideoZeroShot",
     ],
     "duplicate_video": [
+        "InsAVE80KVT2VRetrieval",  # reverse couples re-release the same clip under two names
         "MMVUVideoCentricQA",
         "MomentSeekerTV2VRetrieval",
         "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
