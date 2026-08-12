@@ -337,6 +337,7 @@ from .sop_i2i_retrieval import SOPI2IRetrieval
 from .sounding_earth import SoundingEarthA2IRetrieval, SoundingEarthI2ARetrieval
 from .spart_qa_retrieval import SpartQA
 from .speech_coco import SpeechCocoA2IRetrieval, SpeechCocoI2ARetrieval
+from .spoken_coco_retrieval import SpokenCOCOA2IRetrieval, SpokenCOCOI2ARetrieval
 from .spoken_s_qu_ad import SpokenSQuADT2ARetrieval
 from .stanford_cars_i2i_retrieval import StanfordCarsI2I
 from .temp_reason_l1_retrieval import TempReasonL1
@@ -747,6 +748,8 @@ __all__ = [
     "SpartQA",
     "SpeechCocoA2IRetrieval",
     "SpeechCocoI2ARetrieval",
+    "SpokenCOCOA2IRetrieval",
+    "SpokenCOCOI2ARetrieval",
     "SpokenSQuADT2ARetrieval",
     "StanfordCarsI2I",
     "TUBerlinT2IRetrieval",
