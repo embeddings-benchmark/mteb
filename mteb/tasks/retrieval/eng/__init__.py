@@ -32,6 +32,14 @@ from .avmeme_exam_retrieval import (
 from .bar_exam_qa_retrieval import BarExamQARetrieval
 from .bill_sum_ca_retrieval import BillSumCARetrieval
 from .bill_sum_us_retrieval import BillSumUSRetrieval
+from .biovita import (
+    BioVITAA2IRetrieval,
+    BioVITAA2TRetrieval,
+    BioVITAI2ARetrieval,
+    BioVITAI2TRetrieval,
+    BioVITAT2ARetrieval,
+    BioVITAT2IRetrieval,
+)
 from .birco_argu_ana_reranking import BIRCOArguAnaReranking
 from .birco_clinical_trial_reranking import BIRCOClinicalTrialReranking
 from .birco_doris_mae_reranking import BIRCODorisMaeReranking
@@ -478,6 +486,12 @@ __all__ = [
     "BarExamQARetrieval",
     "BillSumCARetrieval",
     "BillSumUSRetrieval",
+    "BioVITAA2IRetrieval",
+    "BioVITAA2TRetrieval",
+    "BioVITAI2ARetrieval",
+    "BioVITAI2TRetrieval",
+    "BioVITAT2ARetrieval",
+    "BioVITAT2IRetrieval",
     "BrightAopsRetrieval",
     "BrightBiologyLongRetrieval",
     "BrightBiologyRetrieval",
