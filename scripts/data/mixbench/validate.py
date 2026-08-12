@@ -99,7 +99,7 @@ def _download_sources() -> tuple[Path, Path]:
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
-    with path.open() as f:
+    with path.open(encoding="utf-8") as f:
         return [json.loads(line) for line in f]
 
 

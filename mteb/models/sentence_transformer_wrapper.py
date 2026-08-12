@@ -96,6 +96,11 @@ def _batch_to_modality_dicts(
     supported_modalities: list[Modalities],
 ) -> list[dict[str, Any]]:
     modality_batch = {k: v for k, v in batch.items() if k in supported_modalities}
+    if not modality_batch:
+        raise ValueError(
+            "Batch contains none of the model's supported modalities: "
+            f"{supported_modalities}"
+        )
     LogOnce(logger).info(f"Model will encode modalities {list(modality_batch.keys())}")
     samples: list[dict[str, Any]] = []
     for values in zip(*modality_batch.values()):

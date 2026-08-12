@@ -63,6 +63,11 @@ def test_per_sample_modalities_reject_empty_input():
         _batch_to_modality_dicts({"text": [None], "image": [None]}, ["text", "image"])
 
 
+def test_per_sample_modalities_reject_unsupported_batch():
+    with pytest.raises(ValueError, match="none of the model's supported modalities"):
+        _batch_to_modality_dicts({"image": [_image("red")]}, ["text"])
+
+
 def test_mixed_corpus_dataloader_preserves_missing_modalities():
     inputs = create_dataloader(
         _mixed_dataset(),
