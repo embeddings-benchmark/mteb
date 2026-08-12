@@ -62,7 +62,8 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
     be text, an image, a video, or a mixture of these. It is exposed as a
     standard `sentence_transformers.CrossEncoder`, so the multimodal input
     collection in `CrossEncoderWrapper` is reused as-is; this subclass only
-    supplies the task-level instruction.
+    supplies the task-level instruction. Pass `use_instructions=False` to
+    score pairs without one.
 
     Reference implementation: https://github.com/QwenLM/Qwen3-VL-Embedding
     """
@@ -77,6 +78,7 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
+        use_instructions: bool = True,
         **kwargs: Any,
     ) -> None:
         # Default to the checkpoint's own preprocessor_config.json. Forcing a
@@ -100,6 +102,7 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
             num_frames=num_frames,
             **kwargs,
         )
+        self.use_instructions = use_instructions
 
     @staticmethod
     def _normalize_instruction(instruction: str) -> str:
@@ -140,9 +143,10 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        kwargs.setdefault(
-            "prompt", self.get_task_instruction(task_metadata, prompt_type)
-        )
+        if self.use_instructions:
+            kwargs.setdefault(
+                "prompt", self.get_task_instruction(task_metadata, prompt_type)
+            )
         return super().predict(
             inputs1,
             inputs2,
