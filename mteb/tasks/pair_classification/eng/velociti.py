@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar
 
-from datasets import concatenate_datasets, load_dataset
+import pandas as pd
+from datasets import Dataset, concatenate_datasets, load_dataset
+from huggingface_hub import hf_hub_download
 
 from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -63,12 +65,20 @@ class VELOCITIPairClassification(AbsTaskPairClassification):
         revision = self.metadata.dataset["revision"]
 
         # (video_id, text, label), 17,584 rows -- one per pos/neg caption.
-        # force_redownload: this small table is occasionally re-pushed under the
-        # same file path with different content (e.g. dedup fixes), and datasets'
-        # local cache can otherwise silently keep serving an older snapshot.
-        raw = load_dataset(
-            path, revision=revision, split="test", download_mode="force_redownload"
+        # Downloaded directly rather than via load_dataset: this small table
+        # is occasionally re-pushed under the same file path with different
+        # content (e.g. dedup fixes), and datasets' Arrow-cache build for it
+        # isn't safe under CI's parallel test workers (pytest-xdist) sharing
+        # one HF cache dir -- a concurrent load from another worker can race
+        # the rebuild. hf_hub_download is a single atomic, revision-pinned
+        # file fetch with no cache-build step to race.
+        parquet_path = hf_hub_download(
+            repo_id=path,
+            filename="data/test-00000-of-00001.parquet",
+            repo_type="dataset",
+            revision=revision,
         )
+        raw = Dataset.from_pandas(pd.read_parquet(parquet_path), preserve_index=False)
         # (video_id, video), 864 unique rows -- no per-row video duplication.
         videos_ds = load_dataset(path, "videos", revision=revision, split="test")
 
