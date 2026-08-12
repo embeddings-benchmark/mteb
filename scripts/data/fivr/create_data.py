@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib
 import json
 import os
 import pickle
@@ -546,7 +547,7 @@ def _download_one(
     errors: list[str] = []
     if backend in {"auto", "yt-dlp"}:
         try:
-            import yt_dlp  # type: ignore[import-untyped]
+            yt_dlp = importlib.import_module("yt_dlp")
 
             options: dict[str, Any] = {
                 "continuedl": True,
@@ -584,11 +585,17 @@ def _download_one(
             failed_path = _find_video(video_dir, video_id)
             if failed_path is not None and not _video_decodes(failed_path):
                 failed_path.unlink()
+            if backend == "yt-dlp":
+                return {
+                    "id": video_id,
+                    "ok": False,
+                    "error": errors[-1][-1000:],
+                }
 
     try:
-        from pytubefix import YouTube  # type: ignore[import-untyped]
+        pytubefix = importlib.import_module("pytubefix")
 
-        video = YouTube(
+        video = pytubefix.YouTube(
             f"https://www.youtube.com/watch?v={video_id}",
             use_oauth=False,
             allow_oauth_cache=False,

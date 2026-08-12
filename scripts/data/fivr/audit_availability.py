@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib
 import importlib.metadata
 import json
 import os
@@ -25,8 +26,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
-
-import yt_dlp  # type: ignore[import-untyped]
 
 
 class _QuietLogger:
@@ -70,12 +69,23 @@ def _classify_error(message: str) -> str:
     return "error"
 
 
+def _load_ytdlp() -> Any:
+    try:
+        return importlib.import_module("yt_dlp")
+    except ImportError as error:
+        raise RuntimeError(
+            "The yt-dlp backend requires the optional 'yt-dlp' package. "
+            "Install it or run with --backend pytubefix."
+        ) from error
+
+
 def _probe_ytdlp(
     video_id: str,
     socket_timeout: int,
     request_delay: float,
     force_ipv4: bool,
 ) -> dict[str, Any]:
+    yt_dlp = _load_ytdlp()
     if request_delay:
         time.sleep(request_delay)
     options = {
@@ -125,9 +135,9 @@ def _probe_pytubefix(video_id: str, request_delay: float) -> dict[str, Any]:
     if request_delay:
         time.sleep(request_delay)
     try:
-        from pytubefix import YouTube  # type: ignore[import-untyped]
+        pytubefix = importlib.import_module("pytubefix")
 
-        video = YouTube(
+        video = pytubefix.YouTube(
             f"https://www.youtube.com/watch?v={video_id}",
             use_oauth=False,
             allow_oauth_cache=False,
@@ -306,6 +316,9 @@ def main() -> None:
         help="When resuming, probe this prior status again (repeatable).",
     )
     args = parser.parse_args()
+
+    if args.backend == "yt-dlp":
+        _load_ytdlp()
 
     manifest_ids = [
         line.strip()
