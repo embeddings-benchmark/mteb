@@ -197,7 +197,6 @@ def main() -> None:
         task.load_data(
             fivr_metadata_dir=args.metadata_dir,
             fivr_video_dir=args.video_dir,
-            fivr_download_workers=1,
         )
     first_split = tasks[0].dataset["default"]["test"]
     corpus_ids = list(first_split["corpus"]["id"])

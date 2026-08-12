@@ -103,9 +103,11 @@ instructs users to download original media separately because of potential
 copyright issues.
 
 Consequently, this repository publishes only IDs, original-source URLs,
-availability decisions, and qrels. MTEB downloads retained videos from their
-original URLs into a local cache on first use. A later source disappearance is
-reported as an error; the benchmark never silently changes its frozen corpus.
+availability decisions, and qrels. The MTEB task does not download media.
+Prepare a complete local video directory separately with the reproducible
+construction script, then set `MTEB_FIVR_VIDEO_DIR` or pass `fivr_video_dir` to
+the task. Missing files are reported as an error; the benchmark never silently
+changes its frozen corpus.
 
 Users are responsible for complying with the original platforms' terms and
 applicable law. Individual media rights remain with their respective owners.

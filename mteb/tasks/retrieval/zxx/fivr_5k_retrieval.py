@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-import logging
 import os
-import shutil
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal
 
@@ -16,8 +13,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-
-logger = logging.getLogger(__name__)
 
 _DATASET_PATH = "Cerru02/FIVR-5K-MTEB"
 _DATASET_REVISION = "27278cba0b40e0dc764c652efb2e9eed9b997c83"
@@ -119,129 +114,39 @@ def _find_video(video_dir: Path, video_id: str) -> Path | None:
     return None
 
 
-def _download_with_pytubefix(video_id: str, video_dir: Path) -> Path:
-    from pytubefix import YouTube  # type: ignore[import-untyped]
-
-    video = YouTube(
-        f"https://www.youtube.com/watch?v={video_id}",
-        use_oauth=False,
-        allow_oauth_cache=False,
-    )
-    stream_groups = (
-        list(video.streams.filter(progressive=True, file_extension="mp4")),
-        list(video.streams.filter(only_video=True, file_extension="mp4")),
-        list(video.streams.filter(progressive=True)),
-        list(video.streams.filter(only_video=True)),
-    )
-    streams = next((group for group in stream_groups if group), [])
-    eligible = [
-        stream
-        for stream in streams
-        if stream.resolution is not None
-        and int(stream.resolution.removesuffix("p")) <= 480
-    ]
-    stream = max(
-        eligible or streams,
-        key=lambda item: int((item.resolution or "0p").removesuffix("p")),
-        default=None,
-    )
-    if stream is None:
-        raise RuntimeError("no downloadable video stream")
-    suffix = f".{stream.subtype or 'mp4'}"
-    partial = Path(
-        stream.download(output_path=video_dir, filename=f"{video_id}.partial{suffix}")
-    )
-    target = video_dir / f"{video_id}{suffix}"
-    partial.replace(target)
-    return target
-
-
-def _download_with_ytdlp(video_id: str, video_dir: Path) -> Path:
-    import yt_dlp  # type: ignore[import-untyped]
-
-    options: dict[str, Any] = {
-        "continuedl": True,
-        "format": "bestvideo[height<=480]/best[height<=480]/bestvideo/best",
-        "noplaylist": True,
-        "no_warnings": True,
-        "outtmpl": str(video_dir / f"{video_id}.partial.%(ext)s"),
-        "quiet": True,
-        "retries": 3,
-        "source_address": "0.0.0.0",
-    }
-    node = shutil.which("node")
-    if node is not None:
-        options["js_runtimes"] = {"node": {"path": node}}
-        options["remote_components"] = {"ejs:github"}
-    with yt_dlp.YoutubeDL(options) as downloader:
-        downloader.download([f"https://www.youtube.com/watch?v={video_id}"])
-    candidates = sorted(video_dir.glob(f"{video_id}.partial.*"))
-    if len(candidates) != 1:
-        raise RuntimeError("download did not produce exactly one media file")
-    partial = candidates[0]
-    target = video_dir / f"{video_id}{partial.suffix}"
-    partial.replace(target)
-    return target
-
-
-def _download_video(video_id: str, video_dir: Path) -> tuple[str, Path]:
-    existing = _find_video(video_dir, video_id)
-    if existing is not None:
-        return video_id, existing
-
-    errors: list[str] = []
-    for downloader in (_download_with_pytubefix, _download_with_ytdlp):
-        try:
-            path = downloader(video_id, video_dir)
-            if not path.is_file() or path.stat().st_size == 0:
-                raise RuntimeError("downloaded file is empty")
-            return video_id, path
-        except Exception as error:
-            errors.append(f"{downloader.__name__}: {error}")
-            for partial in video_dir.glob(f"{video_id}.partial.*"):
-                partial.unlink(missing_ok=True)
-    raise RuntimeError("; ".join(errors))
-
-
 def _video_directory(override: str | Path | None = None) -> Path:
-    if override is not None:
-        return Path(override).expanduser()
-    configured = os.environ.get("MTEB_FIVR_VIDEO_DIR")
-    if configured:
-        return Path(configured).expanduser()
-    cache = Path(os.environ.get("MTEB_CACHE", Path.home() / ".cache" / "mteb"))
-    return cache / "datasets" / "fivr-5k" / _DATASET_REVISION
+    configured = override or os.environ.get("MTEB_FIVR_VIDEO_DIR")
+    if configured is None:
+        raise ValueError(
+            "FIVR media is not distributed with the metadata dataset. Prepare a "
+            "local video directory with scripts/data/fivr/create_data.py, then set "
+            "MTEB_FIVR_VIDEO_DIR or pass fivr_video_dir to load_data()."
+        )
+    video_dir = Path(configured).expanduser()
+    if not video_dir.is_dir():
+        raise FileNotFoundError(f"FIVR video directory does not exist: {video_dir}")
+    return video_dir
 
 
-def _materialize_videos(
-    rows: Sequence[dict[str, Any]],
-    video_dir: Path,
-    workers: int,
+def _resolve_local_videos(
+    rows: Sequence[dict[str, Any]], video_dir: Path
 ) -> dict[str, Path]:
-    video_dir.mkdir(parents=True, exist_ok=True)
     paths: dict[str, Path] = {}
-    failures: dict[str, str] = {}
-    with ThreadPoolExecutor(max_workers=workers) as executor:
-        futures = {
-            executor.submit(_download_video, row["id"], video_dir): row["id"]
-            for row in rows
-        }
-        for completed, future in enumerate(as_completed(futures), start=1):
-            video_id = futures[future]
-            try:
-                returned_id, path = future.result()
-                paths[returned_id] = path
-            except Exception as error:
-                failures[video_id] = str(error)
-            if completed % 100 == 0:
-                logger.info("Prepared %d/%d FIVR videos", completed, len(rows))
-    if failures:
-        failed_ids = ", ".join(sorted(failures)[:10])
-        raise RuntimeError(
-            f"Failed to materialize {len(failures)} frozen FIVR videos: {failed_ids}. "
-            "The benchmark corpus is frozen and will not remove them dynamically. "
-            "Install mteb[video,fivr], or set MTEB_FIVR_VIDEO_DIR to a complete "
-            "local mirror, and retry."
+    missing: list[str] = []
+    for row in rows:
+        video_id = row["id"]
+        path = _find_video(video_dir, video_id)
+        if path is None:
+            missing.append(video_id)
+        else:
+            paths[video_id] = path
+    if missing:
+        missing_ids = ", ".join(sorted(missing)[:10])
+        raise FileNotFoundError(
+            f"FIVR video directory is missing {len(missing)} frozen videos: "
+            f"{missing_ids}. The task never downloads media or changes its frozen "
+            "corpus; prepare the complete directory with "
+            "scripts/data/fivr/create_data.py and retry."
         )
     return paths
 
@@ -264,7 +169,6 @@ def _load_fivr(
     num_proc: int | None,
     metadata_dir: str | Path | None,
     video_dir: str | Path | None,
-    download_workers: int,
 ) -> None:
     if task.data_loaded:
         return
@@ -287,11 +191,7 @@ def _load_fivr(
         raise ValueError("FIVR metadata counts differ from the frozen task definition")
 
     all_rows = list(corpus_metadata) + list(query_metadata)
-    paths = _materialize_videos(
-        all_rows,
-        video_dir=_video_directory(video_dir),
-        workers=download_workers,
-    )
+    paths = _resolve_local_videos(all_rows, _video_directory(video_dir))
     relevant_docs: dict[str, dict[str, int]] = {}
     for row in qrels:
         relevant_docs.setdefault(row["query-id"], {})[row["corpus-id"]] = row["score"]
@@ -326,10 +226,6 @@ class _FIVR5KTaskMixin:
                 or os.environ.get("MTEB_FIVR_METADATA_DIR")
             ),
             video_dir=kwargs.get("fivr_video_dir"),
-            download_workers=int(
-                kwargs.get("fivr_download_workers")
-                or os.environ.get("MTEB_FIVR_DOWNLOAD_WORKERS", "8")
-            ),
         )
 
 
