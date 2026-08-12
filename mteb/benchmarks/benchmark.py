@@ -29,6 +29,95 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+@dataclass(frozen=True, slots=True)
+class CustomGroup:
+    """One labeled bucket within a [CustomGrouping][mteb.benchmarks.benchmark.CustomGrouping] dimension.
+
+    Args:
+        label: The group's display label (e.g. ``"Episodic"``). Must be
+            unique within its owning `CustomGrouping` and must not contain
+            ``"::"`` (reserved as the internal column/key delimiter).
+        tasks: Names of the tasks assigned to this group. A task may appear
+            in at most one group per dimension.
+        description: Optional prose explaining what this group measures —
+            surfaced as the column tooltip on the leaderboard.
+    """
+
+    label: str
+    tasks: Sequence[str]
+    description: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class CustomGrouping:
+    """A named custom dimension bucketing a benchmark's tasks into display groups.
+
+    Generalises [TASK_TYPES][mteb.benchmarks.benchmark.BenchmarkAggregation.TASK_TYPES]:
+    instead of grouping by the global `TaskMetadata.type` registry, groups by
+    a benchmark-supplied set of [CustomGroup][mteb.benchmarks.benchmark.CustomGroup]s.
+    Goes directly into [Benchmark.aggregations][mteb.benchmarks.benchmark.Benchmark.aggregations]
+    alongside the plain `BenchmarkAggregation` flags — there is no separate
+    field to declare it in and no matching `BenchmarkAggregation` member; a
+    `CustomGrouping` instance's presence in `aggregations` is itself the
+    on-switch for that dimension's columns. A benchmark may include several
+    instances for several independent dimensions at once.
+
+    Args:
+        name: The dimension's display name (e.g. ``"Memory Type"``). Must not
+            contain ``"::"`` (reserved as the internal column/key delimiter).
+            Used to namespace every score key / summary column this
+            dimension produces (``f"{name}::{label}"``) so two dimensions
+            that happen to share a group label (e.g. both have an "Other"
+            bucket) never collide, and to look the declaration back up when
+            only computed columns are available (see `mteb.api.aggregators`).
+        groups: The dimension's groups. Every group's label must be unique
+            within this dimension, and a task may not appear in more than one
+            group of the same dimension.
+
+    Examples:
+        >>> CustomGrouping(
+        ...     name="Memory Type",
+        ...     groups=(
+        ...         CustomGroup(label="Episodic", tasks=["EPBench", "KnowMeBench"]),
+        ...         CustomGroup(label="Dialogue", tasks=["LoCoMo", "LongMemEval"]),
+        ...     ),
+        ... )
+    """
+
+    name: str
+    groups: Sequence[CustomGroup]
+    # Derived in __post_init__, not passed by callers. frozen=True +
+    # slots=True rules out functools.cached_property (no __dict__ to cache
+    # into, and frozen blocks a plain attribute set after __init__), so this
+    # is computed once up front and written via object.__setattr__ instead.
+    task_to_label: dict[str, str] = field(init=False, repr=False, compare=False)
+
+    def __post_init__(self) -> None:
+        if "::" in self.name:
+            raise ValueError(
+                f"CustomGrouping.name must not contain '::': {self.name!r}"
+            )
+        seen_labels: set[str] = set()
+        seen_tasks: set[str] = set()
+        for g in self.groups:
+            if "::" in g.label:
+                raise ValueError(f"group label must not contain '::': {g.label!r}")
+            if g.label in seen_labels:
+                raise ValueError(f"duplicate group label {g.label!r} in {self.name!r}")
+            seen_labels.add(g.label)
+            for task in g.tasks:
+                if task in seen_tasks:
+                    raise ValueError(
+                        f"task {task!r} assigned to multiple groups in {self.name!r}"
+                    )
+                seen_tasks.add(task)
+        object.__setattr__(
+            self,
+            "task_to_label",
+            {task: g.label for g in self.groups for task in g.tasks},
+        )
+
+
 class BenchmarkAggregation(HelpfulStrEnum):
     """Aggregation columns a benchmark can surface in its leaderboard summary.
 
@@ -192,7 +281,11 @@ class Benchmark:
         citation: A bibtex citation
         contacts: The people to contact in case of a problem in the benchmark, preferably a GitHub handle.
         superseded_by: Benchmark name with newer version of benchmark
-        aggregations: Which aggregations to use in on leaderboard
+        aggregations: Which aggregations to use on the leaderboard. Sequence of
+            `BenchmarkAggregation` flags mixed freely with
+            [CustomGrouping][mteb.benchmarks.benchmark.CustomGrouping]
+            instances — a `CustomGrouping`'s mere presence in this sequence
+            turns on its dynamic per-group columns, no separate field needed.
         summary_sort_column: The column to sort benchmarks by on leaderboard
 
     Examples:
@@ -218,8 +311,9 @@ class Benchmark:
     language_view: list[str] | Literal["all"] = field(default_factory=list)
     benchmark_hf_repo: str | None = None
     superseded_by: Sequence[str] | None = None
-    # Api aggregation functions
-    aggregations: Sequence[BenchmarkAggregation] = (
+    # Api aggregation functions — plain BenchmarkAggregation flags mixed
+    # freely with CustomGrouping instances (see CustomGrouping's docstring).
+    aggregations: Sequence[BenchmarkAggregation | CustomGrouping] = (
         BenchmarkAggregation.MEAN_TASK,
         BenchmarkAggregation.MEAN_TASK_TYPE,
         BenchmarkAggregation.TASK_TYPES,
@@ -524,7 +618,14 @@ class Benchmark:
 
         scores: dict[str, float | None] = {}
         for aggregation in self.aggregations:
-            scores.update(aggregation.aggregate(filtered))
+            if isinstance(aggregation, CustomGrouping):
+                from mteb.benchmarks._benchmark_metrics import (
+                    _compute_custom_group_means,
+                )
+
+                scores.update(_compute_custom_group_means(filtered, aggregation))
+            else:
+                scores.update(aggregation.aggregate(filtered))
         return scores
 
     def get_score(
@@ -629,7 +730,9 @@ class RtebBenchmark(Benchmark):
     only.
     """
 
-    aggregations: Sequence[BenchmarkAggregation] = (BenchmarkAggregation.MEAN_TASK,)
+    aggregations: Sequence[BenchmarkAggregation | CustomGrouping] = (
+        BenchmarkAggregation.MEAN_TASK,
+    )
     # RTEB task names aren't tracked in model ``training_datasets`` lists,
     # so the computed zero-shot percentage is 100 % for every row. Hide the
     # column rather than render a misleading uniform value.
@@ -652,7 +755,7 @@ class HUMEBenchmark(Benchmark):
     routes to the subset-weighted builder.
     """
 
-    aggregations: Sequence[BenchmarkAggregation] = (
+    aggregations: Sequence[BenchmarkAggregation | CustomGrouping] = (
         BenchmarkAggregation.MEAN_SUBSET,
         BenchmarkAggregation.TASK_TYPES,
     )
@@ -662,7 +765,7 @@ class HUMEBenchmark(Benchmark):
 class MIEBBenchmark(Benchmark):
     """Wrapper for MIEB benchmark."""
 
-    aggregations: Sequence[BenchmarkAggregation] = (
+    aggregations: Sequence[BenchmarkAggregation | CustomGrouping] = (
         BenchmarkAggregation.MEAN_TASK_TYPE,
         BenchmarkAggregation.TASK_TYPES,
     )
@@ -685,7 +788,7 @@ class VidoreBenchmark(Benchmark):
     [summary_rank_column][mteb.benchmarks.benchmark.Benchmark.summary_rank_column].
     """
 
-    aggregations: Sequence[BenchmarkAggregation] = (
+    aggregations: Sequence[BenchmarkAggregation | CustomGrouping] = (
         BenchmarkAggregation.MEAN_TASK,
         BenchmarkAggregation.PUBLIC_PRIVATE,
     )

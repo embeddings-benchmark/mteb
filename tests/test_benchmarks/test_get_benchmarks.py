@@ -3,6 +3,7 @@ import logging
 import pytest
 
 import mteb
+from mteb.benchmarks.benchmark import CustomGrouping
 
 logging.basicConfig(level=logging.INFO)
 
@@ -45,3 +46,23 @@ def test_benchmark_on_leaderboard():
     names = {b.name for b in benchmark}
     assert on_leaderboard not in names
     assert not_on_leaderboard in names
+
+
+def test_lmeb_memory_grouping_covers_all_tasks():
+    """LMEB's "Memory Type" CustomGrouping (issue #4898) should partition
+    every one of its tasks into exactly one of the four memory-type groups,
+    with no task left ungrouped and no group left without a description."""
+    benchmark = mteb.get_benchmark("LMEB")
+    task_names = {t.metadata.name for t in benchmark.tasks}
+
+    grouping = next(a for a in benchmark.aggregations if isinstance(a, CustomGrouping))
+    assert grouping.name == "Memory Type"
+    assert set(grouping.task_to_label) == task_names
+    assert set(grouping.task_to_label.values()) == {
+        "Episodic",
+        "Dialogue",
+        "Semantic",
+        "Procedural",
+    }
+    for group in grouping.groups:
+        assert group.description

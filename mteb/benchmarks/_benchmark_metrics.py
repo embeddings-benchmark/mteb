@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
+    from mteb.benchmarks.benchmark import CustomGrouping
     from mteb.results.task_result import TaskResult
 
 
@@ -111,6 +112,44 @@ def _compute_mean_subset(
         return {"Mean(Subset)": 0.0}
     means_per_subset = [sum(s) / len(s) for s in by_subset.values()]
     return {"Mean(Subset)": sum(means_per_subset) / len(means_per_subset)}
+
+
+def _compute_custom_group_means(
+    task_results: list[TaskResult], grouping: CustomGrouping
+) -> dict[str, float | None]:
+    """Per-custom-group mean scores, namespaced ``"{dimension}::{label}"``.
+
+    Mirrors [_task_types_or_nulls][mteb.benchmarks._benchmark_metrics._task_types_or_nulls]'s
+    all-or-nothing semantics, scoped to the tasks this dimension actually
+    covers: if any task assigned to a group in `grouping` is missing a
+    score, every group in this dimension comes back `None`. Tasks not
+    assigned to any group in `grouping` (a dimension may cover only a
+    subset of the benchmark's tasks) are ignored entirely. A group with no
+    scored tasks (e.g. its declared tasks aren't part of this benchmark)
+    gets `0.0`, matching [_compute_mean_subset][mteb.benchmarks._benchmark_metrics._compute_mean_subset]'s
+    empty-input fallback.
+    """
+    buckets: dict[str, list[float]] = defaultdict(list)
+    has_null = False
+    for tr in task_results:
+        label = grouping.task_to_label.get(tr.task.metadata.name)
+        if label is None:
+            continue
+        score = tr.get_score()
+        if score is None or np.isnan(score):
+            has_null = True
+            continue
+        buckets[label].append(score)
+
+    result: dict[str, float | None] = {}
+    for group in grouping.groups:
+        key = f"{grouping.name}::{group.label}"
+        if has_null:
+            result[key] = None
+            continue
+        scores = buckets.get(group.label, [])
+        result[key] = sum(scores) / len(scores) if scores else 0.0
+    return result
 
 
 def _task_types_or_nulls(

@@ -6,13 +6,19 @@ from datasets import Dataset
 import mteb
 from mteb import ResultCache
 from mteb.benchmarks._benchmark_metrics import (
+    _compute_custom_group_means,
     _compute_mean_public_private,
     _compute_mean_subset,
     _compute_mean_task,
     _compute_mean_task_type,
     _compute_task_types,
 )
-from mteb.benchmarks.benchmark import Benchmark, BenchmarkAggregation
+from mteb.benchmarks.benchmark import (
+    Benchmark,
+    BenchmarkAggregation,
+    CustomGroup,
+    CustomGrouping,
+)
 
 
 def _datasets_supports_dictionary_type() -> bool:
@@ -48,6 +54,28 @@ MODELS_SCORES = {
         "sentence-transformers/all-MiniLM-L6-v2": 0.645581,
     },
 }
+
+
+def _make_custom_groupings() -> tuple[CustomGrouping, CustomGrouping]:
+    """Two CustomGrouping dimensions over the mock task set, deliberately
+    sharing a group label ("Other") to exercise dimension namespacing."""
+    dim_a = CustomGrouping(
+        name="DimA",
+        groups=(
+            CustomGroup(
+                label="G1", tasks=["NanoSCIDOCSRetrieval", "Banking77Classification"]
+            ),
+            CustomGroup(label="Other", tasks=["NanoArguAnaRetrieval"]),
+        ),
+    )
+    dim_b = CustomGrouping(
+        name="DimB",
+        groups=(
+            CustomGroup(label="G2", tasks=["NanoArguAnaRetrieval"]),
+            CustomGroup(label="Other", tasks=["Banking77Classification"]),
+        ),
+    )
+    return dim_a, dim_b
 
 
 def _make_benchmark(extra_tasks: list[str] | None = None):
@@ -353,3 +381,139 @@ def test_benchmark_get_score_aggregations_drive_keys(mock_mteb_cache: ResultCach
 
     pp_keys = set(public_private.get_score(mock_results)[model_name])
     assert pp_keys == {"Mean(Public)", "Mean(Private)", "Rank"}
+
+
+def test_compute_custom_group_means(mock_mteb_cache: ResultCache):
+    """_compute_custom_group_means returns namespaced 'dimension::label' keys,
+    and two dimensions sharing a group label ("Other") don't collide."""
+    mock_model_name = "mteb/baseline-random-encoder"
+    dim_a, dim_b = _make_custom_groupings()
+    mock_benchmark = _make_benchmark()
+
+    model_result = mock_mteb_cache.load_results(models=[mock_model_name]).model_results[
+        0
+    ]
+    task_results = model_result.select_tasks(mock_benchmark.tasks).task_results
+
+    out_a = _compute_custom_group_means(task_results, dim_a)
+    out_b = _compute_custom_group_means(task_results, dim_b)
+
+    assert set(out_a) == {"DimA::G1", "DimA::Other"}
+    assert set(out_b) == {"DimB::G2", "DimB::Other"}
+    assert all(v is not None for v in {**out_a, **out_b}.values())
+    # Different task sets behind each "Other" -> different values, and
+    # namespacing keeps both present at once without overwriting each other.
+    assert out_a["DimA::Other"] != out_b["DimB::Other"]
+
+
+def test_benchmark_get_score_custom_groups(mock_mteb_cache: ResultCache):
+    """get_score surfaces CustomGrouping keys alongside the built-in aggregations."""
+    dim_a, dim_b = _make_custom_groupings()
+    mock_benchmark = _make_benchmark()
+    mock_benchmark = Benchmark(
+        name=mock_benchmark.name,
+        tasks=mock_benchmark.tasks,
+        aggregations=(BenchmarkAggregation.MEAN_TASK, dim_a, dim_b),
+    )
+    mock_results = mock_mteb_cache.load_results()
+    model_name = next(iter(MODELS_SCORES["Mean(Task)"]))
+
+    scores = mock_benchmark.get_score(mock_results)[model_name]
+
+    assert set(scores) == {
+        "Mean(Task)",
+        "DimA::G1",
+        "DimA::Other",
+        "DimB::G2",
+        "DimB::Other",
+        "Rank",
+    }
+    assert np.allclose(scores["Mean(Task)"], MODELS_SCORES["Mean(Task)"][model_name])
+
+
+@_skip_if_datasets_too_old
+def test_summary_table_custom_groups_columns(mock_mteb_cache: ResultCache):
+    """_create_summary_table namespaces CustomGrouping columns per dimension
+    and exposes them via SummaryTable.custom_group_cols, without polluting
+    the TASK_TYPES columns the aggregators.py type_cols catch-all reads."""
+    dim_a, dim_b = _make_custom_groupings()
+    mock_benchmark = _make_benchmark()
+    bench = Benchmark(
+        name="mock_custom_groups",
+        tasks=mock_benchmark.tasks,
+        aggregations=(
+            BenchmarkAggregation.MEAN_TASK,
+            BenchmarkAggregation.TASK_TYPES,
+            dim_a,
+            dim_b,
+        ),
+    )
+    mock_results = mock_mteb_cache.load_results()
+
+    pl_df = mock_results.select_tasks(bench.tasks)._to_results_df(bench.tasks)
+    summary = bench._create_summary_table(pl_df)
+
+    # Column order within a dimension follows first-occurrence order in the
+    # pivoted task frame (same precedent as TASK_TYPES / _get_means_per_types
+    # — not the declaration order of `grouping.groups`), so compare as sets.
+    assert {dim: set(cols) for dim, cols in summary.custom_group_cols.items()} == {
+        "DimA": {"__cg__DimA::G1", "__cg__DimA::Other"},
+        "DimB": {"__cg__DimB::G2", "__cg__DimB::Other"},
+    }
+    cols = set(summary.df.columns)
+    assert {
+        "__cg__DimA::G1",
+        "__cg__DimA::Other",
+        "__cg__DimB::G2",
+        "__cg__DimB::Other",
+    } <= cols
+    # TASK_TYPES columns are unaffected by the custom-group columns sharing
+    # the frame — no collision, no cross-contamination.
+    assert {"Retrieval", "Classification"} <= cols
+
+
+@_skip_if_datasets_too_old
+def test_get_score_matches_summary_table_custom_groups(mock_mteb_cache: ResultCache):
+    """get_score() and the polars summary table agree on CustomGrouping values,
+    mirroring test_get_score_matches_summary_table_means for the built-ins."""
+    dim_a, dim_b = _make_custom_groupings()
+    mock_benchmark = _make_benchmark()
+    bench = Benchmark(
+        name="mock_custom_groups_parity",
+        tasks=mock_benchmark.tasks,
+        aggregations=(BenchmarkAggregation.MEAN_TASK, dim_a, dim_b),
+    )
+    mock_results = mock_mteb_cache.load_results()
+
+    get_score_out = bench.get_score(mock_results)
+    pl_df = mock_results.select_tasks(bench.tasks)._to_results_df(bench.tasks)
+    summary_pl = bench._create_summary_table(pl_df).df
+    summary_by_model = {row["Model"]: row for row in summary_pl.iter_rows(named=True)}
+
+    parity_pairs = [
+        ("DimA::G1", "__cg__DimA::G1"),
+        ("DimA::Other", "__cg__DimA::Other"),
+        ("DimB::G2", "__cg__DimB::G2"),
+        ("DimB::Other", "__cg__DimB::Other"),
+    ]
+
+    checked = 0
+    for model_name, scores in get_score_out.items():
+        if model_name not in summary_by_model:
+            continue
+        srow = summary_by_model[model_name]
+        for gs_key, summary_col in parity_pairs:
+            gs = scores.get(gs_key)
+            sm = srow.get(summary_col)
+            if gs is None and sm is None:
+                continue
+            assert gs is not None and sm is not None, (
+                f"{model_name}: get_score[{gs_key}]={gs!r} vs summary[{summary_col}]={sm!r}"
+            )
+            assert np.isclose(gs, sm), (
+                f"{model_name}: get_score[{gs_key}]={gs:.6f} vs summary[{summary_col}]={sm:.6f}"
+            )
+            checked += 1
+    assert checked > 0, (
+        "Parity test never matched a model — fixture or registry change?"
+    )

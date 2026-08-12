@@ -1,6 +1,8 @@
 from mteb.benchmarks.benchmark import (
     Benchmark,
     BenchmarkAggregation,
+    CustomGroup,
+    CustomGrouping,
     HUMEBenchmark,
     MIEBBenchmark,
     VidoreBenchmark,
@@ -1581,35 +1583,95 @@ LONG_EMBED = Benchmark(
 """,
 )
 
+_LMEB_TASKS = [
+    "EPBench",
+    "KnowMeBench",
+    "LoCoMo",
+    "LongMemEval",
+    "REALTALK",
+    "TMD",
+    "MemBench",
+    "ConvoMem",
+    "QASPER",
+    "NovelQA",
+    "PeerQA",
+    "CovidQA",
+    "ESGReports",
+    "LMEBMLDR",
+    "LooGLE",
+    "LMEB_SciFact",
+    "Gorilla",
+    "ToolBench",
+    "ReMe",
+    "ProceduralMemBench",
+    "MemGovern",
+    "DeepPlanning",
+]
+
+# Groups LMEB's 22 tasks by memory type for a "Memory Type" breakdown on the
+# leaderboard (issue #4898) — a CustomGrouping dropped straight into LMEB's
+# `aggregations`, instead of registering four separate LMEB-* Benchmark
+# objects that each duplicate a disjoint subset of these same tasks.
+LMEB_MEMORY_TYPE = CustomGrouping(
+    name="Memory Type",
+    groups=(
+        CustomGroup(
+            label="Episodic",
+            tasks=["EPBench", "KnowMeBench"],
+            description="Episodic memory retrieval aims to recall past events "
+            "grounded in temporal cues, entities, contents, and spatial context.",
+        ),
+        CustomGroup(
+            label="Dialogue",
+            tasks=[
+                "LoCoMo",
+                "LongMemEval",
+                "REALTALK",
+                "TMD",
+                "MemBench",
+                "ConvoMem",
+            ],
+            description="Dialogue memory retrieval aims to maintain context "
+            "across multi-turn interactions by recalling relevant dialogue "
+            "history and user preference.",
+        ),
+        CustomGroup(
+            label="Semantic",
+            tasks=[
+                "QASPER",
+                "NovelQA",
+                "PeerQA",
+                "CovidQA",
+                "ESGReports",
+                "LMEBMLDR",
+                "LooGLE",
+                "LMEB_SciFact",
+            ],
+            description="Semantic memory retrieval focuses on recalling general "
+            "knowledge and concepts that are largely independent of time or "
+            "specific context.",
+        ),
+        CustomGroup(
+            label="Procedural",
+            tasks=[
+                "Gorilla",
+                "ToolBench",
+                "ReMe",
+                "ProceduralMemBench",
+                "MemGovern",
+                "DeepPlanning",
+            ],
+            description="Procedural memory retrieval focuses on recalling "
+            "learned skills, action patterns, and structured procedures that "
+            "guide task execution and multi-step reasoning.",
+        ),
+    ),
+)
+
 LMEB = Benchmark(
     name="LMEB",
     display_name="Long-Horizon Memory",
-    tasks=get_tasks(
-        tasks=[
-            "EPBench",
-            "KnowMeBench",
-            "LoCoMo",
-            "LongMemEval",
-            "REALTALK",
-            "TMD",
-            "MemBench",
-            "ConvoMem",
-            "QASPER",
-            "NovelQA",
-            "PeerQA",
-            "CovidQA",
-            "ESGReports",
-            "LMEBMLDR",
-            "LooGLE",
-            "LMEB_SciFact",
-            "Gorilla",
-            "ToolBench",
-            "ReMe",
-            "ProceduralMemBench",
-            "MemGovern",
-            "DeepPlanning",
-        ]
-    ),
+    tasks=get_tasks(tasks=_LMEB_TASKS),
     description="Long-horizon memory retrieval quality across episodic, dialogue, semantic, and procedural retrieval tasks, measuring how well embedding models retrieve evidence in long-term memory scenarios.",
     reference="https://arxiv.org/abs/2603.12572",
     citation=r"""
@@ -1623,6 +1685,12 @@ LMEB = Benchmark(
   year = {2026},
 }
 """,
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.MEAN_TASK_TYPE,
+        BenchmarkAggregation.TASK_TYPES,
+        LMEB_MEMORY_TYPE,
+    ),
 )
 
 BRIGHT = Benchmark(

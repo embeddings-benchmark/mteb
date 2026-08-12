@@ -4,13 +4,17 @@ import functools
 import re
 from collections import defaultdict
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Literal
 
 import numpy as np
 import polars as pl
 
-from mteb.benchmarks.benchmark import _PRIMARY_METRIC_PRIORITY, BenchmarkAggregation
+from mteb.benchmarks.benchmark import (
+    _PRIMARY_METRIC_PRIORITY,
+    BenchmarkAggregation,
+    CustomGrouping,
+)
 from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.models.model_implementations import MODEL_REGISTRY
 
@@ -39,6 +43,12 @@ class SummaryTable:
         mean_public_col: Public split column, or ``None`` when the primary
             metric IS the public mean (no separate breakdown).
         mean_private_col: Private split column, or ``None``.
+        custom_group_cols: dimension name -> ordered polars column names
+            (``__cg__{dimension}::{label}``) that dimension produced, or
+            ``{}`` when no `CustomGrouping` was requested. Read explicitly
+            by `mteb.api.aggregators` instead of being inferred by scanning
+            `df.columns`, so custom-group columns never get conflated with
+            the `TASK_TYPES` columns there.
         is_empty: True for the ``No results`` sentinel — consumers short-circuit.
     """
 
@@ -48,6 +58,7 @@ class SummaryTable:
     task_type_mean_col: str | None = "Mean (TaskType)"
     mean_public_col: str | None = None
     mean_private_col: str | None = None
+    custom_group_cols: dict[str, tuple[str, ...]] = field(default_factory=dict)
     is_empty: bool = False
 
 
@@ -310,6 +321,43 @@ def _get_means_per_types(
     return type_exprs, type_cols
 
 
+# Prefix for CustomGrouping-derived summary columns. Guarantees no collision
+# against `_SUMMARY_META_COLS` (all human-readable, space-containing, no
+# leading underscores) or bare TASK_TYPES columns (raw CamelCase type names,
+# no leading underscores). The `{dimension}::{label}` suffix (matching
+# CustomGrouping/`_compute_custom_group_means`'s key format) additionally
+# guarantees no collision *between* simultaneous dimensions that happen to
+# share a group label (e.g. both have an "Other" bucket).
+_CUSTOM_GROUP_COL_PREFIX = "__cg__"
+
+
+def _get_means_per_custom_group(
+    task_cols: list[str], grouping: CustomGrouping
+) -> tuple[list[pl.Expr], list[str]]:
+    """Per-custom-group mean expressions for one `CustomGrouping` dimension.
+
+    Directly modeled on
+    [_get_means_per_types][mteb.benchmarks._create_table._get_means_per_types]
+    — same `skipna=False` mean policy — but buckets task columns by
+    `grouping.task_to_label` (benchmark-supplied) instead of the global
+    task-type registry. Column names are prefixed with
+    [_CUSTOM_GROUP_COL_PREFIX][mteb.benchmarks._create_table._CUSTOM_GROUP_COL_PREFIX].
+    """
+    tasks_per_label: dict[str, list[str]] = defaultdict(list)
+    for task_name in task_cols:
+        label = grouping.task_to_label.get(task_name)
+        if label is not None:
+            tasks_per_label[label].append(task_name)
+
+    cols: list[str] = []
+    exprs: list[pl.Expr] = []
+    for label, tasks in tasks_per_label.items():
+        col = f"{_CUSTOM_GROUP_COL_PREFIX}{grouping.name}::{label}"
+        cols.append(col)
+        exprs.append(_skipna_false_mean(tasks).alias(col))
+    return exprs, cols
+
+
 @functools.lru_cache(maxsize=1)
 def _static_model_meta() -> dict[str, dict[str, Any]]:
     """Cached per-model metadata dict keyed by ``model_name``.
@@ -382,14 +430,15 @@ def _order_summary_cols(
     rank_col: str,
     mean_cols: Sequence[str],
     type_cols: Sequence[str],
+    custom_group_cols: Sequence[str] = (),
     extra_trailing: Sequence[str] = (),
 ) -> pl.DataFrame:
     """Reorder ``joint_table`` into the canonical summary column layout.
 
     Layout: ``rank_col | Model | meta cols | mean_cols | type_cols |
-    extra_trailing | Release Date``. Columns not present in ``joint_table``
-    are silently dropped — keeps the four ``_create_summary_table_*``
-    builders from each re-spelling the ordering.
+    custom_group_cols | extra_trailing | Release Date``. Columns not present
+    in ``joint_table`` are silently dropped — keeps the four
+    ``_create_summary_table_*`` builders from each re-spelling the ordering.
     """
     ordering = [
         rank_col,
@@ -397,6 +446,7 @@ def _order_summary_cols(
         *_STANDARD_META_COLS,
         *mean_cols,
         *type_cols,
+        *custom_group_cols,
         *extra_trailing,
         "Release Date",
     ]
@@ -526,6 +576,7 @@ def _finalize_summary(
     metadata: _SummaryMetadata,
     sort_by: str | Sequence[str] | None,
     rank_column_name: str | None,
+    custom_group_cols_by_dim: dict[str, list[str]] | None = None,
 ) -> SummaryTable:
     """Attach model metadata, sort, rank, order columns, wrap in SummaryTable.
 
@@ -545,6 +596,9 @@ def _finalize_summary(
             ``"Rank"``); ``Rank (Borda)`` stays as a trailing column.
         rank_column_name: Name for the 1-indexed rank column added when
             ``sort_by`` is set. Falls back to ``"Rank"`` when ``None``.
+        custom_group_cols_by_dim: dimension name -> ordered custom-group
+            column names, surfaced after ``type_cols``. Empty/``None`` hides
+            them entirely (mirrors ``type_cols``).
 
     Returns:
         SummaryTable: Ready-to-style summary with metadata attached and
@@ -570,12 +624,18 @@ def _finalize_summary(
         rank_col = "Rank (Borda)"
         extra_trailing = ()
 
+    custom_group_cols_by_dim = custom_group_cols_by_dim or {}
+    flat_custom_group_cols = [
+        c for cols in custom_group_cols_by_dim.values() for c in cols
+    ]
+
     return SummaryTable(
         df=_order_summary_cols(
             joint_table,
             rank_col=rank_col,
             mean_cols=metadata.mean_cols,
             type_cols=type_cols,
+            custom_group_cols=flat_custom_group_cols,
             extra_trailing=extra_trailing,
         ),
         rank_col=rank_col,
@@ -583,13 +643,16 @@ def _finalize_summary(
         task_type_mean_col=metadata.task_type_mean_col,
         mean_public_col=metadata.mean_public_col,
         mean_private_col=metadata.mean_private_col,
+        custom_group_cols={
+            dim: tuple(cols) for dim, cols in custom_group_cols_by_dim.items()
+        },
     )
 
 
 def _create_summary_table(  # noqa: PLR0914
     pl_df: pl.DataFrame,
     *,
-    aggregations: Sequence[BenchmarkAggregation] | None = None,
+    aggregations: Sequence[BenchmarkAggregation | CustomGrouping] | None = None,
     sort_by: str | Sequence[str] | None = None,
     rank_column_name: str | None = None,
 ) -> SummaryTable:
@@ -624,9 +687,14 @@ def _create_summary_table(  # noqa: PLR0914
             enables subset-weighted aggregation.
         aggregations: Sequence of
             [BenchmarkAggregation][mteb.benchmarks.benchmark.BenchmarkAggregation]
-            members (forwarded from
+            members mixed freely with
+            [CustomGrouping][mteb.benchmarks.benchmark.CustomGrouping] instances
+            (forwarded from
             [Benchmark.aggregations][mteb.benchmarks.benchmark.Benchmark.aggregations]).
-            Defaults to `(MEAN_TASK, MEAN_TASK_TYPE, TASK_TYPES)`.
+            Defaults to `(MEAN_TASK, MEAN_TASK_TYPE, TASK_TYPES)`. Each
+            `CustomGrouping` present adds one mean column per group, namespaced
+            `__cg__{dimension}::{label}` (see
+            [_get_means_per_custom_group][mteb.benchmarks._create_table._get_means_per_custom_group]).
         sort_by: Column(s) to sort rows by. `None` sorts by the default
             (`Mean (Subset)` when `MEAN_SUBSET` is requested, else
             `Rank (Borda)`). A string or sequence of strings sorts by those
@@ -649,6 +717,13 @@ def _create_summary_table(  # noqa: PLR0914
         )
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return _no_results_summary()
+
+    # Split the mixed sequence once. `_summary_metadata` below needs the
+    # enum-only view — CustomGrouping isn't safely hashable (its `groups` /
+    # `CustomGroup.tasks` are typically plain lists), so it can never be fed
+    # through `set(aggregations)`.
+    enum_aggregations = [a for a in aggregations if isinstance(a, BenchmarkAggregation)]
+    custom_groupings = [a for a in aggregations if isinstance(a, CustomGrouping)]
 
     want_task_types = BenchmarkAggregation.TASK_TYPES in aggregations
     want_subset = BenchmarkAggregation.MEAN_SUBSET in aggregations
@@ -686,9 +761,22 @@ def _create_summary_table(  # noqa: PLR0914
     public_col, private_col = BenchmarkAggregation.PUBLIC_PRIVATE.summary_columns
 
     type_exprs, type_cols = _get_means_per_types(task_cols)
+
+    # Custom-group columns, one CustomGrouping dimension at a time. Unlike
+    # TASK_TYPES (always computed, dropped below if unwanted), this only
+    # runs for dimensions actually declared — there's nothing to compute
+    # when a benchmark has none.
+    custom_group_exprs: list[pl.Expr] = []
+    custom_group_cols_by_dim: dict[str, list[str]] = {}
+    for grouping in custom_groupings:
+        exprs, cols = _get_means_per_custom_group(task_cols, grouping)
+        custom_group_exprs.extend(exprs)
+        custom_group_cols_by_dim[grouping.name] = cols
+
     joint_table = per_task.select(
         "model_name",
         *type_exprs,
+        *custom_group_exprs,
         _skipna_false_mean(task_cols).alias(mean_task_col),
         _mean_or_null(public_present, public_col),
         _mean_or_null(private_present, private_col),
@@ -716,9 +804,12 @@ def _create_summary_table(  # noqa: PLR0914
 
     joint_table = joint_table.join(borda_df, on="model_name", how="left")
 
+    # Only BenchmarkAggregation columns are ever dropped here — a
+    # CustomGrouping's columns are computed only when the dimension is
+    # present in `aggregations` (above), so there's nothing to drop for it.
     drop_cols: list[str] = []
     for agg in BenchmarkAggregation:
-        if agg in aggregations:
+        if agg in enum_aggregations:
             continue
         if agg is BenchmarkAggregation.TASK_TYPES:
             drop_cols.extend(type_cols)
@@ -731,9 +822,10 @@ def _create_summary_table(  # noqa: PLR0914
         joint_table,
         task_cols=task_cols,
         type_cols=type_cols if want_task_types else [],
-        metadata=_summary_metadata(aggregations),
+        metadata=_summary_metadata(enum_aggregations),
         sort_by=sort_by,
         rank_column_name=rank_column_name,
+        custom_group_cols_by_dim=custom_group_cols_by_dim,
     )
 
 

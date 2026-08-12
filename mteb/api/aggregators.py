@@ -20,6 +20,8 @@ from mteb.api.schemas import (
     BenchmarkPerLanguageSchema,
     BenchmarkSummarySchema,
     BucketLeaderSchema,
+    CustomGroupingSchema,
+    CustomGroupSchema,
     LeaderModelSchema,
     LeaderRowSchema,
     ModelScoreRowSchema,
@@ -28,7 +30,8 @@ from mteb.api.schemas import (
     TaskScoreRowSchema,
     TaskScoresSchema,
 )
-from mteb.benchmarks._create_table import _format_max_tokens
+from mteb.benchmarks._create_table import _CUSTOM_GROUP_COL_PREFIX, _format_max_tokens
+from mteb.benchmarks.benchmark import CustomGrouping
 from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.languages import language_label
 from mteb.models.model_implementations import MODEL_REGISTRY
@@ -244,7 +247,18 @@ async def build_benchmark_summary(  # noqa: PLR0914
 
     trained_on_by_model = _trained_on_map_cached(bench.name)
 
-    type_cols = [c for c in summary_pl.columns if c not in _SUMMARY_META_COLS]
+    # summary.custom_group_cols is the explicit pointer to every
+    # __cg__-prefixed column — read it BEFORE the type_cols catch-all below
+    # so those columns are excluded rather than misclassified as task types.
+    custom_group_cols_by_dim: dict[str, tuple[str, ...]] = summary.custom_group_cols
+    all_custom_group_cols = {
+        c for cols in custom_group_cols_by_dim.values() for c in cols
+    }
+    type_cols = [
+        c
+        for c in summary_pl.columns
+        if c not in _SUMMARY_META_COLS and c not in all_custom_group_cols
+    ]
 
     # Lenient means under language filter so partial-coverage models don't
     # collapse to null; strict otherwise so they can't outrank full-coverage peers.
@@ -263,7 +277,33 @@ async def build_benchmark_summary(  # noqa: PLR0914
         trained_on_by_model,
         task_to_type,
         language_filtered,
+        custom_group_cols_by_dim,
     )
+
+    # The polars frame only carries labels (column names), not descriptions —
+    # join each label's description back in from the benchmark's static
+    # CustomGrouping declaration, matched by (dimension, label).
+    declared_by_dim: dict[str, CustomGrouping] = {
+        a.name: a for a in bench.aggregations if isinstance(a, CustomGrouping)
+    }
+    custom_groupings_out: list[CustomGroupingSchema] = []
+    for dim, cols in custom_group_cols_by_dim.items():
+        declared = declared_by_dim.get(dim)
+        desc_by_label = (
+            {g.label: g.description for g in declared.groups} if declared else {}
+        )
+        labels = sorted(
+            c.removeprefix(f"{_CUSTOM_GROUP_COL_PREFIX}{dim}::") for c in cols
+        )
+        custom_groupings_out.append(
+            CustomGroupingSchema(
+                name=dim,
+                groups=[
+                    CustomGroupSchema(label=label, description=desc_by_label.get(label))
+                    for label in labels
+                ],
+            )
+        )
 
     return BenchmarkSummarySchema(
         benchmark_name=bench.name,
@@ -272,6 +312,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
         tasks_meta=tasks_meta,
         rows=rows,
         aggregations=bench_schema.aggregations,
+        custom_groupings=custom_groupings_out,
         show_zero_shot=bench_schema.show_zero_shot,
     )
 
@@ -284,8 +325,10 @@ def _build_summary_rows(
     trained_on_by_model: dict[str, tuple[str, ...]],
     task_to_type: dict[str, str],
     language_filtered: bool,
+    custom_group_cols_by_dim: dict[str, tuple[str, ...]] | None = None,
 ) -> list[SummaryRowSchema]:
     """Sync row-construction loop; off-loaded via ``asyncio.to_thread``."""
+    custom_group_cols_by_dim = custom_group_cols_by_dim or {}
     rows: list[SummaryRowSchema] = []
     for idx, row in enumerate(summary_pl.iter_rows(named=True)):
         full = row["Model"]
@@ -313,6 +356,26 @@ def _build_summary_rows(
             scores_by_task_type, mean_task, mean_type = _recompute_lenient_means(
                 scores_by_task, task_to_type
             )
+            # NOTE: scores_by_custom_group is intentionally NOT recomputed
+            # here (unlike scores_by_task_type/mean_task/mean_task_type just
+            # above) — it stays frozen at the unfiltered values below. No
+            # custom-grouped benchmark currently declares a `language_view`,
+            # so this is inert today; extending it would mirror
+            # `_recompute_lenient_means` per dimension if ever needed.
+
+        # __cg__-prefixed columns are read via this explicit
+        # custom_group_cols_by_dim pointer, never via the type_cols
+        # catch-all above — keeps custom-group columns from ever being
+        # misclassified as task-type columns (see build_benchmark_summary).
+        scores_by_custom_group = {
+            dim: {
+                label: v
+                for col in cols
+                if (label := col.removeprefix(f"{_CUSTOM_GROUP_COL_PREFIX}{dim}::"))
+                and (v := row[col]) is not None
+            }
+            for dim, cols in custom_group_cols_by_dim.items()
+        }
 
         rows.append(
             SummaryRowSchema.model_construct(
@@ -337,6 +400,7 @@ def _build_summary_rows(
                 ),
                 scores_by_task_type=scores_by_task_type,
                 scores_by_task=scores_by_task,
+                scores_by_custom_group=scores_by_custom_group,
                 trained_on_tasks=list(trained_on_by_model.get(full, ())),
             )
         )
