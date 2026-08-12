@@ -227,6 +227,7 @@ from .memotion_t2i_retrieval import MemotionT2IRetrieval
 from .met_i2i_retrieval import METI2IRetrieval
 from .miao_retrieval import MIAOA2IRetrieval, MIAOI2ARetrieval
 from .ml_questions import MLQuestionsRetrieval
+from .mm_long_bench_doc_retrieval import MMLongBenchDocRetrieval
 from .mmdocir_t2i_retrieval import MMDocIRT2IRetrieval
 from .mmdocir_t2it_retrieval import MMDocIRT2ITRetrieval
 from .moment_seeker import MomentSeekerTI2VRetrieval, MomentSeekerTV2VRetrieval
@@ -653,6 +654,7 @@ __all__ = [
     "MLQuestionsRetrieval",
     "MMDocIRT2IRetrieval",
     "MMDocIRT2ITRetrieval",
+    "MMLongBenchDocRetrieval",
     "MSCOCOI2TRetrieval",
     "MSCOCOT2IRetrieval",
     "MSMARCOHardNegatives",
