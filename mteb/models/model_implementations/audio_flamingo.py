@@ -104,9 +104,12 @@ class AudioFlamingoWrapper(AbsEncoder):
                 return_dict=True,
             ).to(self.model.device)
 
-            with torch.no_grad(), torch.autocast(
-                device_type=self.device,
-                dtype=torch.bfloat16,
+            with (
+                torch.no_grad(),
+                torch.autocast(
+                    device_type=self.device,
+                    dtype=torch.bfloat16,
+                ),
             ):
                 outputs = self.model(
                     **processor_inputs,
