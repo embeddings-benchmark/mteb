@@ -3,6 +3,7 @@ import math
 import pytest
 
 from mteb.tasks.retrieval.eng.ravenea import (
+    RAVENEAI2TRetrieval,
     _source_gain_to_grade,
     _source_grade_to_gain,
     _source_metrics,
@@ -12,6 +13,14 @@ from mteb.tasks.retrieval.eng.ravenea import (
 @pytest.mark.parametrize("grade", range(-3, 4))
 def test_ravenea_gain_round_trip(grade: int) -> None:
     assert _source_gain_to_grade(_source_grade_to_gain(grade)) == grade
+
+
+def test_ravenea_metadata() -> None:
+    metadata = RAVENEAI2TRetrieval.metadata
+
+    assert metadata.type == "Reranking"
+    assert metadata.main_score == "ravenea_ndcg_at_5"
+    assert metadata.descriptive_stat_path.is_file()
 
 
 def test_ravenea_source_metrics() -> None:
