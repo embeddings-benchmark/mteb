@@ -1,12 +1,18 @@
 from __future__ import annotations
 
-from typing import Literal
+from statistics import fmean
+from typing import TYPE_CHECKING, Literal
 
 from datasets import load_dataset
+from typing_extensions import override
 
+from mteb._evaluators.retrieval_metrics import mrr
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from mteb.types import RelevantDocumentsType
 
 _DATASET_PATH = "Cerru02/Mars-VL-Pairs-MTEB"
 _DATASET_REVISION = "f0084ab0ba2f584b15dc72a82502b38ee490f58d"
@@ -47,25 +53,21 @@ def _load_mars_vl_pairs(
     if len(pairs) != _FROZEN_PAIRS:
         raise ValueError(f"Expected {_FROZEN_PAIRS} frozen pairs, found {len(pairs)}")
 
-    keys = pairs["key"]
-    query_ids = [f"query-{key}" for key in keys]
-    corpus_ids = [f"corpus-{key}" for key in keys]
+    ids = [str(key) for key in pairs["key"]]
 
     text = (
         pairs.select_columns(["refined_caption"])
         .rename_column("refined_caption", "text")
-        .add_column("id", query_ids if direction == "t2i" else corpus_ids)
+        .add_column("id", ids)
         .select_columns(["id", "text"])
     )
     images = (
         pairs.select_columns(["image"])
-        .add_column("id", corpus_ids if direction == "t2i" else query_ids)
+        .add_column("id", ids)
         .select_columns(["id", "image"])
     )
     queries, corpus = (text, images) if direction == "t2i" else (images, text)
-    qrels = {
-        query_id: {corpus_id: 1} for query_id, corpus_id in zip(query_ids, corpus_ids)
-    }
+    qrels = {pair_id: {pair_id: 1} for pair_id in ids}
 
     task.dataset = {
         "default": {
@@ -80,7 +82,23 @@ def _load_mars_vl_pairs(
     task.data_loaded = True
 
 
-class MarsVLPairsT2IRetrieval(AbsTaskRetrieval):
+class _MarsVLPairsRetrieval(AbsTaskRetrieval):
+    _top_k = _FROZEN_PAIRS
+
+    @override
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        full_gallery_mrr = mrr(qrels, results, (_FROZEN_PAIRS,))[f"MRR@{_FROZEN_PAIRS}"]
+        return {f"mrr_at_{_FROZEN_PAIRS}": fmean(full_gallery_mrr)}
+
+
+class MarsVLPairsT2IRetrieval(_MarsVLPairsRetrieval):
     metadata = TaskMetadata(
         name="MarsVLPairsT2IRetrieval",
         description=_DESCRIPTION
@@ -107,14 +125,12 @@ class MarsVLPairsT2IRetrieval(AbsTaskRetrieval):
         },
         is_beta=True,
     )
-    k_values = (1, 3, 5, 10, 20, 100, 1000, _FROZEN_PAIRS)
-    _top_k = _FROZEN_PAIRS
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         _load_mars_vl_pairs(self, "t2i", num_proc)
 
 
-class MarsVLPairsI2TRetrieval(AbsTaskRetrieval):
+class MarsVLPairsI2TRetrieval(_MarsVLPairsRetrieval):
     metadata = TaskMetadata(
         name="MarsVLPairsI2TRetrieval",
         description=_DESCRIPTION
@@ -141,8 +157,6 @@ class MarsVLPairsI2TRetrieval(AbsTaskRetrieval):
         },
         is_beta=True,
     )
-    k_values = (1, 3, 5, 10, 20, 100, 1000, _FROZEN_PAIRS)
-    _top_k = _FROZEN_PAIRS
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         _load_mars_vl_pairs(self, "i2t", num_proc)
