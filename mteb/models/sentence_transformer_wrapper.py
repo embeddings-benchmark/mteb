@@ -103,9 +103,6 @@ def _batch_to_modality_dicts(
             modality: value
             for modality, value in zip(modality_batch, values)
             if value is not None
-            and not (
-                modality == "text" and isinstance(value, str) and not value.strip()
-            )
         }
         if not sample:
             raise ValueError("Found an input without any populated modality")

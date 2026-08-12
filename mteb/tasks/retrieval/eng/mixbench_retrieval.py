@@ -42,14 +42,20 @@ _COMMON_DESCRIPTION = (
 )
 
 
-def _normalize_rows(dataset: Dataset, num_proc: int | None) -> Dataset:
-    """Normalize IDs and represent an absent text modality as an empty string."""
+def _normalize_rows(
+    dataset: Dataset, *, drop_empty_modalities: bool = False
+) -> Dataset:
+    """Normalize IDs and drop modalities absent from the entire split."""
     dataset = dataset.cast_column("id", Value("string"))
-    return dataset.map(
-        lambda row: {"text": row["text"] or ""},
-        num_proc=num_proc,
-        desc="Normalizing missing MixBench text values",
-    )
+    if not drop_empty_modalities:
+        return dataset
+    empty_columns = [
+        modality
+        for modality in ("text", "image", "audio", "video")
+        if modality in dataset.column_names
+        and all(value is None for value in dataset[modality])
+    ]
+    return dataset.remove_columns(empty_columns)
 
 
 def _load_split(config: str, split: str) -> Dataset:
@@ -85,8 +91,10 @@ class _MixBenchBase(AbsTaskRetrieval):
             return
 
         config = self.metadata.dataset["name"]
-        queries = _normalize_rows(_load_split(config, "queries"), num_proc)
-        corpus = _normalize_rows(_load_split(config, "mixed_corpus"), num_proc)
+        queries = _normalize_rows(
+            _load_split(config, "queries"), drop_empty_modalities=True
+        )
+        corpus = _normalize_rows(_load_split(config, "mixed_corpus"))
 
         self.dataset = {
             "default": {

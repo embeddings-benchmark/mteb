@@ -3593,6 +3593,6 @@ MIXBENCH = Benchmark(
   year = {2025},
 }
 """,
-    contacts=["tommasocerruti"],
+    contacts=["yuhui-zh15"],
     aggregations=(BenchmarkAggregation.MEAN_TASK,),
 )

@@ -54,21 +54,23 @@ def _create_dataloader_from_texts(
 
 
 def _corpus_to_dict(
-    row: dict[str, str],
-) -> dict[str, str]:
-    text = (
-        (row["title"] + " " + row["text"]).strip()
-        if "title" in row and len(row["title"]) > 0
-        else row["text"].strip()
-    )
+    row: dict[str, Any],
+) -> dict[str, Any]:
+    body = row["text"]
+    title = row.get("title")
+    if title:
+        text = f"{title} {body or ''}".strip()
+    elif body is not None:
+        text = body.strip()
+    else:
+        text = None
     new_row = {
         "id": row["id"],
         "text": text,
-        "body": row["text"],
+        "body": body or "",
     }
-    # dataloaders can't handle None
-    if "title" in row and row["title"] is not None and len(row["title"]) > 0:
-        new_row["title"] = row["title"]
+    if title:
+        new_row["title"] = title
     return new_row
 
 
@@ -212,7 +214,7 @@ def _prepare_image_dataset(
 def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     """Custom collate function for DataLoader.
 
-    - For the "image", "conversation" key, leave the images as a list (to avoid stacking errors).
+    - For modality and conversation keys, leave values as a list.
     - For other keys, use the default collate.
 
     Args:
@@ -224,6 +226,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     collated = {}
     for key in batch[0]:
         if key in (  # noqa: PLR6201
+            "text",  # mixed-modality rows can have no text
             "image",  # images can be with different sizes
             "conversation",  # conversations are lists of varying lengths
             "audio",  # audio can have different lengths

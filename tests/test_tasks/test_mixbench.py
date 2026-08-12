@@ -8,6 +8,7 @@ from datasets import Dataset, Features, Value
 from datasets import Image as HFImage
 from PIL import Image
 
+from mteb._create_dataloaders import create_dataloader
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_implementations.random_baseline import (
     _batch_to_embeddings,
@@ -27,7 +28,7 @@ def _mixed_dataset() -> Dataset:
     return Dataset.from_dict(
         {
             "id": ["text", "image", "both"],
-            "text": ["text only", "", "both"],
+            "text": ["text only", None, "both"],
             "image": [None, _image("red"), _image("blue")],
         },
         features=Features(
@@ -40,7 +41,7 @@ def test_per_sample_modalities_omit_missing_values():
     red = _image("red")
     blue = _image("blue")
     batch = {
-        "text": ["text only", "", "both"],
+        "text": ["text only", None, "both"],
         "image": [None, red, blue],
     }
 
@@ -53,9 +54,28 @@ def test_per_sample_modalities_omit_missing_values():
     ]
 
 
+def test_per_sample_modalities_preserve_blank_text():
+    assert _batch_to_modality_dicts({"text": [""]}, ["text"]) == [{"text": ""}]
+
+
 def test_per_sample_modalities_reject_empty_input():
     with pytest.raises(ValueError, match="without any populated modality"):
-        _batch_to_modality_dicts({"text": [""], "image": [None]}, ["text", "image"])
+        _batch_to_modality_dicts({"text": [None], "image": [None]}, ["text", "image"])
+
+
+def test_mixed_corpus_dataloader_preserves_missing_modalities():
+    inputs = create_dataloader(
+        _mixed_dataset(),
+        task_metadata=MixBenchMSCOCO.metadata,
+        prompt_type=PromptType.document,
+        batch_size=3,
+    )
+
+    batch = next(iter(inputs))
+
+    assert batch["text"] == ["text only", None, "both"]
+    assert batch["image"][0] is None
+    assert batch["image"][1] is not None
 
 
 def test_instruct_wrapper_preserves_present_modalities_with_incomplete_metadata():
@@ -100,7 +120,7 @@ def test_random_baseline_combines_only_present_modalities():
     embeddings = _batch_to_embeddings(
         [
             {
-                "text": ["text only", "", "both"],
+                "text": ["text only", None, "both"],
                 "image": [None, red, blue],
             }
         ],
@@ -118,12 +138,39 @@ def test_random_baseline_combines_only_present_modalities():
     )
 
 
-def test_mixbench_loader_normalizes_ids_and_missing_text(monkeypatch):
+def test_random_baseline_preserves_dense_input_embeddings():
+    red = _image("red")
+    blue = _image("blue")
+    text = ["", "dense"]
+    images = [red, blue]
+
+    embeddings = _batch_to_embeddings(
+        [{"text": text, "image": images}], embedding_dim=8
+    )
+    expected = []
+    for text_value, image in zip(text, images):
+        combined = np.zeros(8, dtype=np.float32)
+        combined += _string_to_vector(text_value, 8)
+        combined += _image_to_vector(image, 8)
+        combined /= 2
+        expected.append(combined)
+
+    np.testing.assert_array_equal(embeddings, np.vstack(expected))
+
+
+def test_mixbench_loader_normalizes_ids_and_drops_empty_columns(monkeypatch):
     import mteb.tasks.retrieval.eng.mixbench_retrieval as mixbench
 
+    red = _image("red")
     datasets = {
         "queries": Dataset.from_dict({"id": [1], "text": ["query"], "image": [None]}),
-        "mixed_corpus": Dataset.from_dict({"id": [1], "text": [None], "image": [None]}),
+        "mixed_corpus": Dataset.from_dict(
+            {
+                "id": [1, 2],
+                "text": [None, "document"],
+                "image": [red, None],
+            }
+        ),
     }
 
     loaded_splits = []
@@ -140,8 +187,11 @@ def test_mixbench_loader_normalizes_ids_and_missing_text(monkeypatch):
 
     split = task.dataset["default"]["test"]
     assert split["queries"]["id"] == ["1"]
-    assert split["corpus"]["id"] == ["1"]
-    assert split["corpus"]["text"] == [""]
+    assert "image" not in split["queries"].column_names
+    assert split["corpus"]["id"] == ["1", "2"]
+    assert split["corpus"]["text"] == [None, "document"]
+    assert split["corpus"]["image"][0].tobytes() == red.tobytes()
+    assert split["corpus"]["image"][1] is None
     assert split["relevant_docs"] == {"1": {"1": 1}}
     assert loaded_splits == [("MSCOCO", "queries"), ("MSCOCO", "mixed_corpus")]
 

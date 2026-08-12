@@ -533,9 +533,7 @@ class AbsTaskRetrieval(AbsTask):
         corpus_col_inputs: dict[Modalities, list[Any]] = {}
         if "text" in corpus_modalities:
             corpus_col_inputs["text"] = [
-                text
-                for text in corpus.map(_corpus_to_dict)["text"]
-                if text is not None and text.strip()
+                text for text in corpus.map(_corpus_to_dict)["text"] if text is not None
             ]
         if "image" in corpus_modalities:
             corpus_col_inputs["image"] = [
@@ -559,7 +557,7 @@ class AbsTaskRetrieval(AbsTask):
             if isinstance(queries_["text"][0], dict | list):
                 queries_ = queries_.map(_convert_conv_history_to_query)
             queries_col_inputs["text"] = [
-                text for text in queries_["text"] if text is not None and text.strip()
+                text for text in queries_["text"] if text is not None
             ]
         if "image" in queries_modalities:
             queries_col_inputs["image"] = [

@@ -141,29 +141,56 @@ def _batch_to_embeddings(
     """
     embeddings = []
     for batch in tqdm(inputs, desc="Encoding batches", unit="batch"):
-        modality_values = {
-            modality: batch[modality]
-            for modality in ("text", "image", "audio", "video")
-            if modality in batch
-        }
-        batch_size = max(len(values) for values in modality_values.values())
-        for i in range(batch_size):
-            sample_embeddings = []
-            text = modality_values.get("text")
-            if text is not None and text[i] is not None and str(text[i]).strip():
-                sample_embeddings.append(_string_to_vector(text[i], embedding_dim))
-            image = modality_values.get("image")
-            if image is not None and image[i] is not None:
-                sample_embeddings.append(_image_to_vector(image[i], embedding_dim))
-            audio = modality_values.get("audio")
-            if audio is not None and audio[i] is not None:
-                sample_embeddings.append(_audio_to_vector(audio[i], embedding_dim))
-            video = modality_values.get("video")
-            if video is not None and video[i] is not None:
-                sample_embeddings.append(_video_to_vector(video[i], embedding_dim))
-            if not sample_embeddings:
-                raise ValueError("Found an input without any populated modality")
-            embeddings.append(np.mean(sample_embeddings, axis=0, dtype=np.float32))
+        text_embeddings = []
+        image_embeddings = []
+        audio_embeddings = []
+        video_embeddings = []
+
+        if "text" in batch:
+            text_embeddings = [
+                _string_to_vector(text, embedding_dim) if text is not None else None
+                for text in batch["text"]
+            ]
+        if "image" in batch:
+            image_embeddings = [
+                _image_to_vector(image, embedding_dim) if image is not None else None
+                for image in batch["image"]
+            ]
+        if "audio" in batch:
+            audio_embeddings = [
+                _audio_to_vector(audio, embedding_dim) if audio is not None else None
+                for audio in batch["audio"]
+            ]
+        if "video" in batch:
+            video_embeddings = [
+                _video_to_vector(video, embedding_dim) if video is not None else None
+                for video in batch["video"]
+            ]
+
+        # Combine embeddings, ignoring modalities that are absent for a sample.
+        max_len = max(
+            [
+                len(text_embeddings),
+                len(image_embeddings),
+                len(audio_embeddings),
+                len(video_embeddings),
+            ]
+        )
+        for i in range(max_len):
+            combined_embedding = np.zeros(embedding_dim, dtype=np.float32)
+            count = 0
+            for embeddings_list in [
+                text_embeddings,
+                image_embeddings,
+                audio_embeddings,
+                video_embeddings,
+            ]:
+                if i < len(embeddings_list) and embeddings_list[i] is not None:
+                    combined_embedding += embeddings_list[i]
+                    count += 1
+            if count > 0:
+                combined_embedding /= count
+            embeddings.append(combined_embedding)
 
     return np.vstack(embeddings)
 
