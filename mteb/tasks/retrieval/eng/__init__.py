@@ -3,6 +3,7 @@ from .activitynet_captions_retrieval import (
     ActivityNetCaptionsV2TRetrieval,
 )
 from .advance import ADVANCEA2IRetrieval, ADVANCEI2ARetrieval
+from .ssw60 import SSW60A2IRetrieval, SSW60I2ARetrieval
 from .aila_casedocs_retrieval import AILACasedocs
 from .aila_statutes_retrieval import AILAStatutes
 from .alpha_nli_retrieval import AlphaNLI
@@ -739,6 +740,8 @@ __all__ = [
     "SpartQA",
     "SpeechCocoA2IRetrieval",
     "SpeechCocoI2ARetrieval",
+    "SSW60A2IRetrieval",
+    "SSW60I2ARetrieval",
     "SpokenSQuADT2ARetrieval",
     "StanfordCarsI2I",
     "TUBerlinT2IRetrieval",
