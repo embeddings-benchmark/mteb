@@ -54,3 +54,22 @@ def test_text_relevance_overlap_ignores_queries_without_3_grams() -> None:
     )
 
     assert statistics is None
+
+
+@pytest.mark.parametrize(
+    ("queries", "corpus"),
+    [
+        ({}, {"d1": "document"}),
+        ({"q1": "query"}, {}),
+    ],
+)
+def test_text_relevance_overlap_ignores_missing_qrels_ids(
+    queries: dict[str, str], corpus: dict[str, str]
+) -> None:
+    statistics = calculate_text_relevance_overlap_statistics(
+        relevant_docs={"q1": {"d1": 1}},
+        queries=queries,
+        corpus=corpus,
+    )
+
+    assert statistics is None

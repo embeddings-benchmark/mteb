@@ -426,13 +426,19 @@ def calculate_text_relevance_overlap_statistics(
     """Calculate query character n-gram overlap against relevant documents."""
     overlaps: list[float] = []
     for query_id, docs in relevant_docs.items():
-        query_ngrams = _character_ngrams(queries[query_id])
+        query_text = queries.get(query_id)
+        if query_text is None:
+            continue
+        query_ngrams = _character_ngrams(query_text)
         if not query_ngrams:
             continue
         for doc_id, score in docs.items():
             if score == 0:
                 continue
-            doc_ngrams = _character_ngrams(corpus[doc_id])
+            doc_text = corpus.get(doc_id)
+            if doc_text is None:
+                continue
+            doc_ngrams = _character_ngrams(doc_text)
             overlaps.append(len(query_ngrams & doc_ngrams) / len(query_ngrams))
 
     if not overlaps:
