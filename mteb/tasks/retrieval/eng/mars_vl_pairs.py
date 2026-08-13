@@ -76,12 +76,9 @@ def _load_mars_vl_pairs(
     task.data_loaded = True
 
 
-class _MarsVLPairsRetrieval(AbsTaskRetrieval):
+class MarsVLPairsT2IRetrieval(AbsTaskRetrieval):
     k_values = (1, 3, 5, 10, 20, 100, 1000, _FROZEN_PAIRS)
-    _top_k = _FROZEN_PAIRS
 
-
-class MarsVLPairsT2IRetrieval(_MarsVLPairsRetrieval):
     metadata = TaskMetadata(
         name="MarsVLPairsT2IRetrieval",
         description=_DESCRIPTION
@@ -113,7 +110,9 @@ class MarsVLPairsT2IRetrieval(_MarsVLPairsRetrieval):
         _load_mars_vl_pairs(self, "t2i", num_proc)
 
 
-class MarsVLPairsI2TRetrieval(_MarsVLPairsRetrieval):
+class MarsVLPairsI2TRetrieval(AbsTaskRetrieval):
+    k_values = (1, 3, 5, 10, 20, 100, 1000, _FROZEN_PAIRS)
+
     metadata = TaskMetadata(
         name="MarsVLPairsI2TRetrieval",
         description=_DESCRIPTION
