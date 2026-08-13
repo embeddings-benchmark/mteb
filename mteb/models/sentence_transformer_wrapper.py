@@ -223,13 +223,15 @@ def _encode_batches(
         all_embeddings = []
         for batch in tqdm(inputs, desc="Building multimodal embeddings"):
             batched_input = _batch_to_modality_dicts(batch, modalities)
-            embeddings = encode_function(batched_input, prompt=prompt, **kwargs)
-            all_embeddings.append(postprocess(embeddings))
-        return cast("Array", concatenate(all_embeddings))
-
-    sentences = [text for batch in inputs for text in batch["text"]]
-    embeddings = encode_function(sentences, prompt=prompt, **kwargs)
-    return cast("Array", postprocess(embeddings))
+            _embeddings = encode_function(batched_input, prompt=prompt, **kwargs)
+            all_embeddings.append(postprocess(_embeddings))
+        embeddings = concatenate(all_embeddings)
+    else:
+      sentences = [text for batch in inputs for text in batch["text"]]
+      embeddings = encode_function(sentences, prompt=prompt, **kwargs)
+      embeddings = postprocess(embeddings)
+    
+    return cast("Array", embeddings)
 
 
 class SentenceTransformerEncoderWrapper(AbsEncoder):
