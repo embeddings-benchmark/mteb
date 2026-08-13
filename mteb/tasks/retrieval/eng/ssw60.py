@@ -139,12 +139,9 @@ class SSW60I2ARetrieval(AbsTaskRetrieval):
         for split in self.metadata.eval_splits:
             # Load static bird images as queries (from iNaturalist and NABirds)
             inat_ds = load_dataset(self.metadata.dataset["path"], name="images_inat", split=split)
-            try:
-                nabirds_ds = load_dataset(self.metadata.dataset["path"], name="images_nabirds", split=split)
-                queries_ds = concatenate_datasets([inat_ds, nabirds_ds])
-            except Exception:
-                queries_ds = inat_ds
-
+            nabirds_ds = load_dataset(self.metadata.dataset["path"], name="images_nabirds", split=split)
+            queries_ds = concatenate_datasets([inat_ds, nabirds_ds])
+            
             # Load standalone audio recordings as corpus
             corpus_ds = load_dataset(self.metadata.dataset["path"], name="audio", split=split)
 
