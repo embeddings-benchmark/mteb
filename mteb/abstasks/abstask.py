@@ -29,22 +29,11 @@ from mteb.models import (
 )
 from mteb.timing import TimingStack
 
-from ._data_filter.dataset_filters import (
-    apply_row_filter,
-    keep_first_occurrence,
-    keep_long_enough,
-)
-
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
     from typing_extensions import Self
 
-    from mteb.abstasks._data_filter.dataset_filters import (
-        KeepIndicesFn,
-        TextLengthUnit,
-        TextNormalization,
-    )
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import (
         MTEBModels,
@@ -89,14 +78,25 @@ def _multilabel_subsampling(
     return dataset_dict
 
 
-def _no_split_matched_message(
-    task_name: str, datasets_by_subset: Mapping[str, Mapping[str, Any]]
-) -> str:
-    """The error raised when the `splits`/`subsets` given to a data cleaning filter select nothing."""
-    available = ", ".join(
-        f"{subset}: {sorted(splits)}" for subset, splits in datasets_by_subset.items()
-    )
-    return f"The given splits and subsets do not select any data of '{task_name}'. The task has {available}."
+def _pair_content_columns(
+    columns: tuple[str | Mapping[str, Modalities], str | Mapping[str, Modalities]],
+    modalities: list[Modalities],
+) -> dict[str, Modalities]:
+    """The content columns of a task comparing two inputs, mapped to the modality of each.
+
+    An input is either a single column, whose modality is then the task's only one, or already a mapping from
+    column to modality. A plain column name on a task with several modalities is ambiguous, so nothing is returned
+    in that case and the caller reports the task as not declaring its columns.
+    """
+    resolved: dict[str, Modalities] = {}
+    for column in columns:
+        if isinstance(column, str):
+            if len(modalities) != 1:
+                return {}
+            resolved[column] = modalities[0]
+        else:
+            resolved.update(column)
+    return resolved
 
 
 class AbsTask(ABC):  # noqa: PLR0904
@@ -617,212 +617,15 @@ class AbsTask(ABC):  # noqa: PLR0904
         self.hf_subsets = subsets_to_keep
         return self
 
-    def _get_text_columns(self) -> list[str]:  # noqa: PLR6301
-        """The dataset columns that the data cleaning filters look at.
+    def _get_content_columns(self) -> dict[str, Modalities]:  # noqa: PLR6301
+        """The dataset columns holding the task's content, mapped to the modality of that content.
 
-        Subclasses point this at their own column names (e.g. `"text"` for classification). It is empty for tasks
-        that have no text to filter on, such as image-only tasks, which makes the cleaning methods raise instead of
-        silently doing nothing.
+        This is what the filters in `mteb.quality` compare samples on. Subclasses point it at their own column
+        names, e.g. `{"text": "text"}` for a text classification task or `{"image": "image"}` for an image one. It
+        is empty when a task does not declare its columns, which makes those filters raise rather than silently do
+        nothing.
         """
-        return []
-
-    def _mark_data_modified(self) -> None:
-        """Record that the task's data no longer matches the published dataset, warning the first time."""
-        if self.data_modified:
-            return
-        self.data_modified = True
-
-        msg = (
-            f"The data of '{self.metadata.name}' was modified locally, so it no longer matches revision "
-            f"{self.metadata.revision} of the published dataset. Scores computed from it are not comparable to "
-            "other results and must not be submitted to the leaderboard."
-        )
-        if self.metadata.descriptive_stats is not None:
-            msg += " Its descriptive statistics still describe the published dataset."
-        logger.warning(msg)
-        warnings.warn(msg, stacklevel=2)
-
-    def _warn_about_unusable_data(self) -> None:
-        """Warn about data that a filter left in a state the evaluators cannot handle."""
-        for subset, dataset_dict in self._datasets_by_subset().items():
-            empty = sorted(split for split, ds in dataset_dict.items() if len(ds) == 0)
-            if empty:
-                msg = (
-                    f"Filtering left the splits {empty} of '{self.metadata.name}' (subset '{subset}') empty. "
-                    "Evaluating them will fail."
-                )
-                logger.warning(msg)
-                warnings.warn(msg, stacklevel=2)
-
-    def _datasets_by_subset(self) -> dict[HFSubset, DatasetDict]:
-        """`self.dataset` normalized to a `{subset: {split: Dataset}}` mapping.
-
-        Monolingual tasks store their data as a plain `{split: Dataset}` mapping; that mapping is returned under the
-        `"default"` subset. The returned `DatasetDict`s are the task's own, so assigning to them updates the task.
-        """
-        if self.dataset is None:
-            raise ValueError(f"Dataset of task '{self.metadata.name}' is not loaded.")
-
-        first_value = next(iter(self.dataset.values()), None)
-        if isinstance(first_value, Dataset):
-            return {"default": cast("DatasetDict", self.dataset)}
-        return self.dataset
-
-    def _filter_dataset_rows(
-        self,
-        keep_fn: KeepIndicesFn,
-        *,
-        filter_name: str,
-        columns: Sequence[str] | None,
-        splits: Sequence[str] | None,
-        subsets: Sequence[HFSubset] | None,
-        num_proc: int | None,
-    ) -> Self:
-        """Apply `keep_fn` to the text columns of every selected split, in place."""
-        if not self.data_loaded:
-            self.load_data(num_proc=num_proc)
-
-        text_columns = (
-            list(columns) if columns is not None else self._get_text_columns()
-        )
-        if not text_columns:
-            raise NotImplementedError(
-                f"`{filter_name}` does not know which columns of '{self.metadata.name}' hold text. This is "
-                "expected for tasks without a text modality; pass `columns=[...]` to filter on specific columns."
-            )
-
-        n_removed = 0
-        n_filtered_splits = 0
-        datasets_by_subset = self._datasets_by_subset()
-        for subset, dataset_dict in datasets_by_subset.items():
-            if subsets is not None and subset not in subsets:
-                continue
-            for split in list(dataset_dict.keys()):
-                if splits is not None and split not in splits:
-                    continue
-                dataset_dict[split], removed = apply_row_filter(
-                    dataset_dict[split], text_columns, keep_fn, num_proc=num_proc
-                )
-                n_removed += removed
-                n_filtered_splits += 1
-
-        if n_filtered_splits == 0:
-            raise ValueError(
-                _no_split_matched_message(self.metadata.name, datasets_by_subset)
-            )
-
-        if n_removed:
-            self._mark_data_modified()
-            self._warn_about_unusable_data()
-
-        logger.info(
-            f"`{filter_name}` removed {n_removed} texts from '{self.metadata.name}' "
-            f"(columns={text_columns})."
-        )
-        return self
-
-    def remove_duplicates(
-        self,
-        *,
-        normalize: TextNormalization = "strip",
-        columns: Sequence[str] | None = None,
-        splits: Sequence[str] | None = None,
-        subsets: Sequence[HFSubset] | None = None,
-        num_proc: int | None = None,
-    ) -> Self:
-        """Remove duplicated documents from the task, keeping the first occurrence of each.
-
-        Two documents are duplicates when all of their text columns compare equal, which by default means they are
-        identical once surrounding whitespace is stripped. Use `normalize` to also ignore case or punctuation.
-        Duplicates are removed within each split, so a document appearing in both the train and the test split is
-        kept in both.
-
-        The data is loaded if it has not been loaded yet, and the task's dataset is modified in place. Because the
-        dataset then no longer matches the published one, scores computed after cleaning are not comparable to the
-        results on the leaderboard.
-
-        Args:
-            normalize: How much of a difference between two documents to ignore when comparing them: `"strip"`
-                (the default) only ignores surrounding whitespace, `"casefold"` also ignores case, and
-                `"alphanumeric"` also ignores punctuation and repeated whitespace. The looser settings catch more
-                duplicates but can merge documents that a reader would tell apart, and case folding is not
-                meaningful in every script.
-            columns: The text columns to compare. Defaults to the text columns of the task, e.g. `["text"]` for
-                classification or `["sentence1", "sentence2"]` for pair classification.
-            splits: The splits to filter. Defaults to every split of the dataset.
-            subsets: The Huggingface subsets to filter. Defaults to every loaded subset.
-            num_proc: Number of processes to use for loading and filtering the dataset.
-
-        Returns:
-            The task itself, so that calls can be chained.
-
-        Raises:
-            NotImplementedError: If the task has no text columns and `columns` was not given.
-            ValueError: If `splits` or `subsets` select none of the task's data.
-
-        Examples:
-            >>> import mteb
-            >>> task = mteb.get_task("MassiveIntentClassification")
-            >>> task.remove_duplicates().filter_short_documents(min_length=5)
-            >>> task.remove_duplicates(normalize="alphanumeric")
-        """
-        return self._filter_dataset_rows(
-            keep_first_occurrence(normalize),
-            filter_name="remove_duplicates",
-            columns=columns,
-            splits=splits,
-            subsets=subsets,
-            num_proc=num_proc,
-        )
-
-    def filter_short_documents(
-        self,
-        min_length: int = 5,
-        *,
-        unit: TextLengthUnit = "characters",
-        columns: Sequence[str] | None = None,
-        splits: Sequence[str] | None = None,
-        subsets: Sequence[HFSubset] | None = None,
-        num_proc: int | None = None,
-    ) -> Self:
-        """Remove documents shorter than `min_length` from the task.
-
-        A document is removed when any of its text columns is shorter than `min_length`, measured after stripping
-        surrounding whitespace. Passing `min_length=1` therefore removes empty documents.
-
-        The data is loaded if it has not been loaded yet, and the task's dataset is modified in place. Because the
-        dataset then no longer matches the published one, scores computed after cleaning are not comparable to the
-        results on the leaderboard.
-
-        Args:
-            min_length: The minimum length a document must have to be kept.
-            unit: Whether `min_length` counts `"characters"` or whitespace-separated `"words"`. Word counts are a
-                poor fit for languages that are not whitespace-delimited, such as Chinese or Japanese.
-            columns: The text columns to measure. Defaults to the text columns of the task.
-            splits: The splits to filter. Defaults to every split of the dataset.
-            subsets: The Huggingface subsets to filter. Defaults to every loaded subset.
-            num_proc: Number of processes to use for loading and filtering the dataset.
-
-        Returns:
-            The task itself, so that calls can be chained.
-
-        Raises:
-            NotImplementedError: If the task has no text columns and `columns` was not given.
-            ValueError: If `splits` or `subsets` select none of the task's data.
-
-        Examples:
-            >>> import mteb
-            >>> task = mteb.get_task("MassiveIntentClassification")
-            >>> task.filter_short_documents(min_length=3, unit="words")
-        """
-        return self._filter_dataset_rows(
-            keep_long_enough(min_length, unit),
-            filter_name="filter_short_documents",
-            columns=columns,
-            splits=splits,
-            subsets=subsets,
-            num_proc=num_proc,
-        )
+        return {}
 
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]

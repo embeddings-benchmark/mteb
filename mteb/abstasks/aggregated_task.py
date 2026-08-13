@@ -16,7 +16,6 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from datasets import Dataset, DatasetDict
-    from typing_extensions import Self
 
     from mteb.models.models_protocols import MTEBModels
     from mteb.timing import TimingStack
@@ -40,24 +39,6 @@ class AbsTaskAggregate(AbsTask):
         super().__init__(**kwargs)
         self.tasks = self.metadata.tasks
         self.taskname_to_task = {task.metadata.name: task for task in self.tasks}
-
-    def remove_duplicates(self, **kwargs: Any) -> Self:
-        """An aggregate task holds no data of its own, so this is forwarded to each of the aggregated tasks.
-
-        See [`AbsTask.remove_duplicates`][mteb.AbsTask.remove_duplicates] for the arguments.
-        """
-        for task in self.tasks:
-            task.remove_duplicates(**kwargs)
-        return self
-
-    def filter_short_documents(self, min_length: int = 5, **kwargs: Any) -> Self:
-        """An aggregate task holds no data of its own, so this is forwarded to each of the aggregated tasks.
-
-        See [`AbsTask.filter_short_documents`][mteb.AbsTask.filter_short_documents] for the arguments.
-        """
-        for task in self.tasks:
-            task.filter_short_documents(min_length, **kwargs)
-        return self
 
     def task_results_to_scores(
         self, task_results: list[TaskResult]

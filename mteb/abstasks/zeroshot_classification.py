@@ -55,10 +55,11 @@ class AbsTaskZeroShotClassification(AbsTask):
     input_column_name: str | Sequence[Modalities] = "image"
     label_column_name: str = "label"
 
-    def _get_text_columns(self) -> list[str]:
-        if self.modalities == ["text"] and isinstance(self.input_column_name, str):
-            return [self.input_column_name]
-        return []
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        # a multimodal task names each of its input columns after the modality it holds
+        if isinstance(self.input_column_name, str):
+            return {self.input_column_name: self.modalities[0]}
+        return {column: column for column in self.input_column_name}
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Keep only eval splits. Zero-shot tasks don't need train splits."""

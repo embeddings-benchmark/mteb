@@ -53,22 +53,23 @@ All tasks in `mteb` inherits from the following abstract class.
 
 ## Cleaning Task Data
 
-Datasets often contain duplicated or near-empty documents. A task can remove those before it is evaluated:
+Datasets often contain duplicated samples. `mteb.quality` removes them before the task is evaluated:
 
 ```python
 import mteb
+from mteb.quality import remove_duplicates
 
 task = mteb.get_task("MassiveIntentClassification")
-task.remove_duplicates()
-task.filter_short_documents(min_length=5)  # or min_length=3, unit="words"
+task = remove_duplicates(task)
 ```
 
-Both methods load the data if needed, modify the dataset in place and return the task, so they can be chained.
-They cover every split and subset by default; `splits=`, `subsets=` and `columns=` narrow that down. For retrieval
-tasks the relevance judgements are kept valid: a judgement pointing at a removed duplicate moves to the copy that
-was kept, and a query left without a positive is dropped.
+The filter loads the data if needed, modifies the dataset in place and returns the task. It covers every split and
+subset by default; `splits=`, `subsets=` and `columns=` narrow that down. Text is compared as text, while images,
+audio and video are compared by a hash of their content. For retrieval tasks the relevance judgements are kept
+valid: a judgement pointing at a removed duplicate moves to the copy that was kept, and a query left without a
+positive is dropped.
 
-Duplicates are texts that match once surrounding whitespace is stripped. `normalize=` loosens the comparison:
+Duplicate texts are those that match once surrounding whitespace is stripped. `normalize=` loosens the comparison:
 
 | `normalize` | additionally ignores | `"Wake me up!"` also matches |
 |---|---|---|
@@ -77,7 +78,7 @@ Duplicates are texts that match once surrounding whitespace is stripped. `normal
 | `"alphanumeric"` | punctuation, repeated whitespace | `"wake  me  up"` |
 
 ```python
-task.remove_duplicates(normalize="alphanumeric")
+task = remove_duplicates(task, normalize="alphanumeric")
 ```
 
 Under `"alphanumeric"`, `"e-mail"` and `"email"` are duplicates too, but `"e mail"` is not. The looser settings
@@ -85,8 +86,10 @@ catch more duplicates while risking merges a reader would tell apart — punctua
 folding is not meaningful in every script.
 
 A filter that removed something sets `task.data_modified`. While that is set, `mteb` does not read cached results
-for the task and warns when a `TaskResult` is built. The filters also warn about data they leave unusable, such as
-an emptied split.
+for the task and warns when a `TaskResult` is built. Filters also warn about data they leave unusable, such as a
+classification label that no longer occurs in the train split.
+
+:::mteb.quality.remove_duplicates
 
 !!! warning
     A cleaned task no longer matches the published dataset, so its scores are not comparable to the

@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import logging
-import warnings
-from collections import Counter, defaultdict
+from collections import defaultdict
 from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
@@ -121,55 +120,11 @@ class AbsTaskClassification(AbsTask):
     is_cross_validation: bool = False
     n_splits = 5
 
-    def _get_text_columns(self) -> list[str]:
-        if self.modalities == ["text"] and isinstance(self.input_column_name, str):
-            return [self.input_column_name]
-        return []
-
-    def _warn_about_unusable_data(self) -> None:
-        """Also warn about label distributions that the classifier cannot be trained or scored on."""
-        super()._warn_about_unusable_data()
-        self._warn_about_label_distribution()
-
-    def _warn_about_label_distribution(self) -> None:
-        """Warn about labels that filtering left too rare to train on, or absent from the train split.
-
-        Subclasses whose labels are not single hashable classes -- multilabel and regression tasks -- turn this off.
-        """
-        for subset, dataset_dict in self._datasets_by_subset().items():
-            if self.train_split not in dataset_dict:
-                continue
-            train_labels = Counter(
-                dataset_dict[self.train_split][self.label_column_name]
-            )
-
-            # stratified subsampling and the train/test split both need at least two examples per label
-            too_rare = sorted(
-                str(label) for label, count in train_labels.items() if count < 2
-            )
-            if too_rare:
-                msg = (
-                    f"The '{self.train_split}' split of '{self.metadata.name}' (subset '{subset}') has fewer than "
-                    f"two examples for the labels {too_rare}, which stratified sampling cannot handle."
-                )
-                logger.warning(msg)
-                warnings.warn(msg, stacklevel=2)
-
-            for split, dataset in dataset_dict.items():
-                if split == self.train_split:
-                    continue
-                unseen = sorted(
-                    str(label)
-                    for label in set(dataset[self.label_column_name])
-                    - set(train_labels)
-                )
-                if unseen:
-                    msg = (
-                        f"The '{split}' split of '{self.metadata.name}' (subset '{subset}') contains the labels "
-                        f"{unseen}, which no longer occur in '{self.train_split}' and can never be predicted."
-                    )
-                    logger.warning(msg)
-                    warnings.warn(msg, stacklevel=2)
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        # a multimodal task names each of its input columns after the modality it holds
+        if isinstance(self.input_column_name, str):
+            return {self.input_column_name: self.modalities[0]}
+        return {column: column for column in self.input_column_name}
 
     def evaluate(
         self,

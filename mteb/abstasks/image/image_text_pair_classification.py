@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 
     from mteb.models.models_protocols import MTEBModels
     from mteb.timing import TimingStack
-    from mteb.types import EncodeKwargs
+    from mteb.types import EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -61,11 +61,14 @@ class AbsTaskImageTextPairClassification(AbsTask):
     images_column_names: str | Sequence[str] = "image"
     texts_column_names: str | Sequence[str] = "caption"
 
-    def _get_text_columns(self) -> list[str]:
-        # filtering on a caption drops the image it is paired with, keeping the pair intact
-        if isinstance(self.texts_column_names, str):
-            return [self.texts_column_names]
-        return list(self.texts_column_names)
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        def _named(columns: str | Sequence[str]) -> list[str]:
+            return [columns] if isinstance(columns, str) else list(columns)
+
+        return {
+            **dict.fromkeys(_named(self.images_column_names), "image"),
+            **dict.fromkeys(_named(self.texts_column_names), "text"),
+        }
 
     def _calculate_descriptive_statistics_from_split(
         self,

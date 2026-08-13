@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import logging
-import warnings
 from collections import defaultdict
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal
@@ -29,18 +28,12 @@ from mteb.types import (
 )
 from mteb.types.statistics import RetrievalDescriptiveStatistics
 
-from ._data_filter.dataset_filters import (
-    iter_texts,
-    keep_first_occurrence,
-    keep_long_enough,
-    text_key,
-)
 from ._statistics_calculation import (
     calculate_relevant_docs_statistics,
     calculate_single_input_modality_statistics,
     calculate_top_ranked_statistics,
 )
-from .abstask import AbsTask, _no_split_matched_message
+from .abstask import AbsTask
 from .retrieval_dataset_loaders import (
     RetrievalDatasetLoader,
     _combine_queries_with_instructions_datasets,
@@ -64,11 +57,6 @@ if TYPE_CHECKING:
         ScoresDict,
     )
 
-    from ._data_filter.dataset_filters import (
-        KeepIndicesFn,
-        TextLengthUnit,
-        TextNormalization,
-    )
     from .retrieval_dataset_loaders import (
         RetrievalSplitData,
     )
@@ -90,125 +78,6 @@ def _filter_queries_without_positives(
     queries = queries.select(indices)
 
     return _relevant_docs, queries
-
-
-def _select_kept_entries(
-    dataset: Dataset,
-    keep_fn: KeepIndicesFn,
-    columns: Sequence[str],
-    *,
-    remap_duplicates: TextNormalization | None,
-) -> tuple[Dataset, set[str], dict[str, str]]:
-    """Apply `keep_fn` to a corpus or query dataset.
-
-    Remapping assumes that `keep_fn` keeps the *first* entry of each group of equal texts, which lets the
-    replacements be collected in a single pass: a removed entry always follows the entry it is remapped onto. It
-    also has to compare texts the same way `keep_fn` does, which is why it takes the normalization rather than a
-    flag.
-
-    Returns:
-        The filtered dataset, the ids it kept, and a mapping from the id of a removed entry to the id of the first
-        kept entry with the same text. That mapping is empty unless `remap_duplicates` was given.
-    """
-    keep = keep_fn(iter_texts(dataset, columns))
-    ids = dataset["id"]
-    kept_ids = {ids[i] for i in keep}
-
-    replacements: dict[str, str] = {}
-    if remap_duplicates is not None:
-        keep_set = set(keep)
-        canonical: dict[bytes, str] = {}
-        for i, row in enumerate(iter_texts(dataset, columns)):
-            key = text_key(row, remap_duplicates)
-            if i in keep_set:
-                canonical.setdefault(key, ids[i])
-            elif (target := canonical.get(key)) is not None:
-                replacements[ids[i]] = target
-
-    return dataset.select(keep), kept_ids, replacements
-
-
-def _filter_retrieval_split(  # noqa: PLR0914
-    split_data: RetrievalSplitData,
-    keep_fn: KeepIndicesFn,
-    columns: Sequence[str],
-    *,
-    remap_duplicates: TextNormalization | None,
-) -> tuple[RetrievalSplitData, int]:
-    """Apply `keep_fn` to the corpus and the queries of a single split, keeping the relevance judgements valid.
-
-    Args:
-        split_data: The corpus, queries, relevance judgements and top-ranked documents of one split.
-        keep_fn: Decides which documents and queries to keep.
-        columns: The text columns of the corpus and the queries to hand to `keep_fn`.
-        remap_duplicates: The text normalization to use when handing the relevance judgements of a removed
-            document or query over to the first kept entry with the same text. This is what makes deduplication
-            lossless; for a filter that removes entries on their own merit, such as a length filter, it must be
-            None.
-
-    Returns:
-        The filtered split and the number of documents and queries that were removed.
-
-    Raises:
-        ValueError: If one of `columns` is missing from the corpus or from the queries.
-    """
-    old_corpus, old_queries = split_data["corpus"], split_data["queries"]
-    missing = [
-        column
-        for column in columns
-        if column not in old_corpus.column_names
-        or column not in old_queries.column_names
-    ]
-    if missing:
-        raise ValueError(
-            f"Cannot filter on {missing}: the corpus has the columns {old_corpus.column_names} and the queries "
-            f"have the columns {old_queries.column_names}."
-        )
-
-    corpus, kept_doc_ids, doc_replacements = _select_kept_entries(
-        old_corpus, keep_fn, columns, remap_duplicates=remap_duplicates
-    )
-    queries, kept_query_ids, query_replacements = _select_kept_entries(
-        old_queries, keep_fn, columns, remap_duplicates=remap_duplicates
-    )
-
-    relevant_docs: dict[str, dict[str, int]] = {}
-    for query_id, docs in split_data["relevant_docs"].items():
-        query_id = query_replacements.get(query_id, query_id)  # noqa: PLW2901
-        if query_id not in kept_query_ids:
-            continue
-        scores = relevant_docs.setdefault(query_id, {})
-        for doc_id, score in docs.items():
-            doc_id = doc_replacements.get(doc_id, doc_id)  # noqa: PLW2901
-            if doc_id in kept_doc_ids:
-                scores[doc_id] = max(scores.get(doc_id, score), score)
-
-    relevant_docs, queries = _filter_queries_without_positives(  # type: ignore[assignment]
-        relevant_docs, queries
-    )
-
-    top_ranked = split_data["top_ranked"]
-    if top_ranked is not None:
-        remaining_query_ids = set(queries["id"])
-        new_top_ranked: dict[str, list[str]] = {}
-        for query_id, doc_ids in top_ranked.items():
-            query_id = query_replacements.get(query_id, query_id)  # noqa: PLW2901
-            if query_id not in remaining_query_ids:
-                continue
-            ranked = new_top_ranked.setdefault(query_id, [])
-            for doc_id in doc_ids:
-                doc_id = doc_replacements.get(doc_id, doc_id)  # noqa: PLW2901
-                if doc_id in kept_doc_ids and doc_id not in ranked:
-                    ranked.append(doc_id)
-        top_ranked = new_top_ranked
-
-    n_removed = len(old_corpus) + len(old_queries) - len(corpus) - len(queries)
-    return {
-        "corpus": corpus,
-        "queries": queries,
-        "relevant_docs": relevant_docs,
-        "top_ranked": top_ranked,
-    }, n_removed
 
 
 class AbsTaskRetrieval(AbsTask):
@@ -407,181 +276,16 @@ class AbsTaskRetrieval(AbsTask):
             self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
-    def _get_text_columns(self) -> list[str]:  # noqa: PLR6301
-        return ["text"]
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        """The corpus and query columns holding the documents, mapped to their modality.
 
-    def _warn_about_unusable_data(self) -> None:
-        """Warn about splits that a filter left without documents or without queries."""
-        for subset, splits_data in self.dataset.items():
-            for split, split_data in splits_data.items():
-                empty = sorted(
-                    name
-                    for name in ("corpus", "queries")
-                    if len(split_data[name]) == 0  # type: ignore[literal-required]
-                )
-                if empty:
-                    msg = (
-                        f"Filtering left the {' and the '.join(empty)} of the '{split}' split of "
-                        f"'{self.metadata.name}' (subset '{subset}') empty. Evaluating it will fail."
-                    )
-                    logger.warning(msg)
-                    warnings.warn(msg, stacklevel=2)
-
-    def _filter_retrieval(
-        self,
-        keep_fn: KeepIndicesFn,
-        *,
-        filter_name: str,
-        remap_duplicates: TextNormalization | None,
-        columns: Sequence[str] | None,
-        splits: Sequence[str] | None,
-        subsets: Sequence[HFSubset] | None,
-        num_proc: int | None,
-    ) -> Self:
-        if not self.data_loaded:
-            self.load_data(num_proc=num_proc)
-        if self.dataset is None:
-            raise ValueError(f"Dataset of task '{self.metadata.name}' is not loaded.")
-
-        text_columns = (
-            list(columns) if columns is not None else self._get_text_columns()
-        )
-        if not text_columns:
-            raise NotImplementedError(
-                f"`{filter_name}` does not know which columns of '{self.metadata.name}' hold text. This is "
-                "expected for tasks without a text modality; pass `columns=[...]` to filter on specific columns."
-            )
-
-        n_removed = 0
-        n_filtered_splits = 0
-        for subset, splits_data in self.dataset.items():
-            if subsets is not None and subset not in subsets:
-                continue
-            for split in list(splits_data.keys()):
-                if splits is not None and split not in splits:
-                    continue
-                splits_data[split], removed = _filter_retrieval_split(
-                    splits_data[split],
-                    keep_fn,
-                    text_columns,
-                    remap_duplicates=remap_duplicates,
-                )
-                n_removed += removed
-                n_filtered_splits += 1
-
-        if n_filtered_splits == 0:
-            raise ValueError(
-                _no_split_matched_message(self.metadata.name, self.dataset)
-            )
-
-        if n_removed:
-            self._mark_data_modified()
-            self._warn_about_unusable_data()
-
-        logger.info(
-            f"`{filter_name}` removed {n_removed} documents and queries from '{self.metadata.name}' "
-            f"(columns={text_columns})."
-        )
-        return self
-
-    def remove_duplicates(
-        self,
-        *,
-        normalize: TextNormalization = "strip",
-        columns: Sequence[str] | None = None,
-        splits: Sequence[str] | None = None,
-        subsets: Sequence[HFSubset] | None = None,
-        num_proc: int | None = None,
-    ) -> Self:
-        """Remove duplicated documents and queries from the task, keeping the first occurrence of each.
-
-        Relevance judgements that point at a removed duplicate are moved to the copy that was kept, so no query
-        loses a positive document, and duplicated queries inherit the union of their relevance judgements. Any
-        query left without a positive document afterwards is dropped, as it cannot be scored.
-
-        The data is loaded if it has not been loaded yet, and the task's dataset is modified in place. Because the
-        dataset then no longer matches the published one, scores computed after cleaning are not comparable to the
-        results on the leaderboard.
-
-        Args:
-            normalize: How much of a difference between two texts to ignore when comparing them: `"strip"` (the
-                default) only ignores surrounding whitespace, `"casefold"` also ignores case, and `"alphanumeric"`
-                also ignores punctuation and repeated whitespace. The looser settings catch more duplicates but can
-                merge documents that a reader would tell apart, and case folding is not meaningful in every script.
-            columns: The columns of the corpus and the queries to compare. Defaults to `["text"]`.
-            splits: The splits to filter. Defaults to every loaded split.
-            subsets: The Huggingface subsets to filter. Defaults to every loaded subset.
-            num_proc: Number of processes to use for loading the dataset.
-
-        Returns:
-            The task itself, so that calls can be chained.
-
-        Raises:
-            ValueError: If `splits` or `subsets` select none of the task's data.
-
-        Examples:
-            >>> import mteb
-            >>> task = mteb.get_task("SciFact")
-            >>> task.remove_duplicates()
+        Retrieval stores each modality in its own column, named after the modality itself, except for text which
+        also carries an optional `title`. Only columns present in both the corpus and the queries are compared.
         """
-        return self._filter_retrieval(
-            keep_first_occurrence(normalize),
-            filter_name="remove_duplicates",
-            remap_duplicates=normalize,
-            columns=columns,
-            splits=splits,
-            subsets=subsets,
-            num_proc=num_proc,
-        )
-
-    def filter_short_documents(
-        self,
-        min_length: int = 5,
-        *,
-        unit: TextLengthUnit = "characters",
-        columns: Sequence[str] | None = None,
-        splits: Sequence[str] | None = None,
-        subsets: Sequence[HFSubset] | None = None,
-        num_proc: int | None = None,
-    ) -> Self:
-        """Remove documents and queries shorter than `min_length` from the task.
-
-        Relevance judgements referring to a removed document or query are dropped along with it, and any query
-        left without a positive document afterwards is dropped as well, as it cannot be scored.
-
-        The data is loaded if it has not been loaded yet, and the task's dataset is modified in place. Because the
-        dataset then no longer matches the published one, scores computed after cleaning are not comparable to the
-        results on the leaderboard.
-
-        Args:
-            min_length: The minimum length a document or query must have to be kept.
-            unit: Whether `min_length` counts `"characters"` or whitespace-separated `"words"`. Word counts are a
-                poor fit for languages that are not whitespace-delimited, such as Chinese or Japanese.
-            columns: The columns of the corpus and the queries to measure. Defaults to `["text"]`.
-            splits: The splits to filter. Defaults to every loaded split.
-            subsets: The Huggingface subsets to filter. Defaults to every loaded subset.
-            num_proc: Number of processes to use for loading the dataset.
-
-        Returns:
-            The task itself, so that calls can be chained.
-
-        Raises:
-            ValueError: If `splits` or `subsets` select none of the task's data.
-
-        Examples:
-            >>> import mteb
-            >>> task = mteb.get_task("SciFact")
-            >>> task.filter_short_documents(min_length=5)
-        """
-        return self._filter_retrieval(
-            keep_long_enough(min_length, unit),
-            filter_name="filter_short_documents",
-            remap_duplicates=None,
-            columns=columns,
-            splits=splits,
-            subsets=subsets,
-            num_proc=num_proc,
-        )
+        return {
+            "text" if modality == "text" else modality: modality
+            for modality in self.metadata.modalities
+        }
 
     def evaluate(
         self,

@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from mteb._evaluators.text.summarization_evaluator import SummarizationMetrics
     from mteb.models import MTEBModels
     from mteb.timing import TimingStack
-    from mteb.types import EncodeKwargs
+    from mteb.types import EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -58,9 +58,9 @@ class AbsTaskSummarization(AbsTask):
     machine_summaries_column_name: str = "machine_summaries"
     relevancy_column_name: str = "relevance"
 
-    def _get_text_columns(self) -> list[str]:
+    def _get_content_columns(self) -> dict[str, Modalities]:
         # only the source text: the summary columns hold a list per row and are aligned with the relevance scores
-        return [self.text_column_name]
+        return {self.text_column_name: "text"}
 
     def _evaluate_subset(
         self,

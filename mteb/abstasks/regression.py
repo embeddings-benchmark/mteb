@@ -78,10 +78,6 @@ class AbsTaskRegression(AbsTaskClassification):
     n_experiments: int = 10
     n_samples: int = 2048
 
-    def _warn_about_label_distribution(self) -> None:
-        """The labels are continuous values here, so counting how often each one occurs is meaningless."""
-        pass
-
     def _undersample_data(
         self, dataset: Dataset, experiment_num: int, idxs: list[int] | None = None
     ) -> tuple[Dataset, list[int], list[int]]:
