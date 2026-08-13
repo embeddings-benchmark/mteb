@@ -1,18 +1,12 @@
 from __future__ import annotations
 
-from statistics import fmean
-from typing import TYPE_CHECKING, Literal
+from typing import Literal
 
 from datasets import load_dataset
-from typing_extensions import override
 
-from mteb._evaluators.retrieval_metrics import mrr
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from mteb.types import RelevantDocumentsType
 
 _DATASET_PATH = "Cerru02/Mars-VL-Pairs-MTEB"
 _DATASET_REVISION = "f0084ab0ba2f584b15dc72a82502b38ee490f58d"
@@ -83,19 +77,8 @@ def _load_mars_vl_pairs(
 
 
 class _MarsVLPairsRetrieval(AbsTaskRetrieval):
+    k_values = (1, 3, 5, 10, 20, 100, 1000, _FROZEN_PAIRS)
     _top_k = _FROZEN_PAIRS
-
-    @override
-    def task_specific_scores(
-        self,
-        scores: dict[str, dict[str, float]],
-        qrels: RelevantDocumentsType,
-        results: dict[str, dict[str, float]],
-        hf_split: str,
-        hf_subset: str,
-    ) -> dict[str, float]:
-        full_gallery_mrr = mrr(qrels, results, (_FROZEN_PAIRS,))[f"MRR@{_FROZEN_PAIRS}"]
-        return {f"mrr_at_{_FROZEN_PAIRS}": fmean(full_gallery_mrr)}
 
 
 class MarsVLPairsT2IRetrieval(_MarsVLPairsRetrieval):

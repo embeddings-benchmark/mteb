@@ -39,16 +39,8 @@ def test_mars_vl_pairs_uses_shared_pair_ids(task_cls):
 
 
 @pytest.mark.parametrize("task_cls", [MarsVLPairsT2IRetrieval, MarsVLPairsI2TRetrieval])
-def test_mars_vl_pairs_computes_full_gallery_mrr_separately(task_cls):
+def test_mars_vl_pairs_uses_full_gallery_metric_cutoff(task_cls):
     task = task_cls()
-    qrels = {"first": {"first": 1}, "second": {"second": 1}}
-    results = {
-        "first": {"first": 0.9, "second": 0.1},
-        "second": {"first": 0.9, "second": 0.8},
-    }
 
-    scores = task.task_specific_scores({}, qrels, results, "test", "default")
-
-    assert task.k_values == (1, 3, 5, 10, 20, 100, 1000)
+    assert task.k_values == (1, 3, 5, 10, 20, 100, 1000, 2_247)
     assert task._top_k == 2_247
-    assert scores == {"mrr_at_2247": pytest.approx(0.75)}
