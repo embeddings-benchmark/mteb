@@ -144,6 +144,7 @@ torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
 moca = ["transformers>=4.49.0,<4.53"]
 transformers-v4 = ["transformers<5"]
+cosmos-embed1 = ["transformers<5", "einops>=0.8.0", "torchvision>=0.16.0"]
 siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
 tipsv2 = ["sentencepiece>=0.2.0", "protobuf>=3.0.0"]
 qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
@@ -472,6 +473,7 @@ conflicts = [
         { extra = "muq" },
         { extra = "moca" }, # needs transformers with _update_causal_mask
         { extra = "transformers-v4" },
+        { extra = "cosmos-embed1" }, # remote code needs transformers<5
         { extra = "qwen-vl" },
         # { extra = "omnivinci" },
         { extra = "embeddinggemma" },
