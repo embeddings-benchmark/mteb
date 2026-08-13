@@ -2,10 +2,20 @@
 
 Ensure the PR description includes the evidence and context reviewers need to evaluate correctness and quality.
 
+## Gap in MTEB
+
+- The PR description must explain why this dataset fills an existing gap in MTEB (e.g. new language, domain, task type, or modality not yet covered).
+- A generic statement that the dataset is "useful" is not sufficient — the gap must be stated concretely. A tagged issue is acceptable.
+
 ## Descriptive Statistics
 
 - The PR description must include descriptive statistics for the dataset directly (e.g. number of samples per split, average text length, label distribution, language breakdown).
 - A reference to the dataset card is not sufficient — the stats must appear in the PR itself.
+
+## Dataset Size
+
+- Flag the PR if the dataset appears oversized for its task type without justification (e.g. more than ~2048 examples for binary classification).
+- The author should note whether the size was deliberately reduced.
 
 ## Results Table Format
 
@@ -22,14 +32,14 @@ Example of correct format:
 | model-a | 42.1 | 42.3 |
 | model-b | 38.7 | 39.0 |
 
-## Random Encoder Baseline
+## Model Results
 
-- The PR must report scores for a random encoder alongside the main results. Run it with:
-  ```
-  mteb run -m mteb/baseline-random-encoder -t {task_name}
-  ```
-- This confirms performance is neither trivially high (suggesting the task is too easy or data is leaked) nor at chance level (suggesting the task or metric is misconfigured).
-- Flag the PR if no random baseline is present.
+- The PR must report scores for at least two models:
+  - `mteb/baseline-random-encoder` (random baseline)
+  - A small real model, e.g. `intfloat/multilingual-e5-small`
+  - These can be run with: `mteb run -m {model_name} -t {task_name}`
+- The random baseline confirms performance is neither trivially high (suggesting the task is too easy or data is leaked) nor at chance level (suggesting the task or metric is misconfigured).
+- Flag the PR if either model result is missing.
 
 ## AI-Generated Boilerplate
 
