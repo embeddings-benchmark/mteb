@@ -18,6 +18,6 @@ jobs:
     steps:
       - name: Post Copilot review request
         run: |
-          gh pr comment "$PR_NUMBER" --repo "$REPO" --body "@github-copilot review
+          gh pr comment "$PR_NUMBER" --repo "$REPO" --body "@copilot review
 
           Please review this PR against the guidelines in \`.github/instructions/model-pr.instructions.md\`. Only report actionable issues. Include file/line references and a concrete suggested fix where possible."
