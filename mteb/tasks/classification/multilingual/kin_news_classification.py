@@ -65,8 +65,8 @@ class KinNewsClassification(AbsTaskClassification):
 
                 def transform_example(example):
                     # Concatenate title and content for the text field
-                    text = f"{example['title']} {example['content']}"
-
+                    # text = f"{example['title']} {example['content']}"
+                    text = example["text"]
                     return {"text": text, "label": example["label"]}
 
                 ds = ds.map(
