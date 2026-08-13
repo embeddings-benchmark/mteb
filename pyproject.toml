@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.18.16"
+version = "2.18.17"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -91,7 +91,7 @@ api = [
 og = [
     "playwright>=1.49.0",
 ]
-video = ["torchcodec"]
+video = ["datasets>=4.0.0", "torchcodec"]
 github = ["PyGithub>=1.60"]
 
 # model specific optional dependencies:
@@ -261,6 +261,7 @@ select = [
     "F",  # pyflakes rules,
     "I",  # sorting for imports
     "E",  # formatting for docs
+    "W",  # pycodestyle warnings
     "D",  # formatting for docs
     "UP", # upgrade to latest syntax if possible
     "FA", # Future annotations
@@ -300,6 +301,16 @@ select = [
     "PL",      # pylint
     "S",       # flake8-bandit
     "FAST",       # fastapi
+    "ICN",     # import conventions, e.g. `import numpy as np`
+    "PIE",     # misc. lints, e.g. unnecessary `pass`
+    "PD",      # pandas-vet
+    "DTZ",     # require timezone-aware datetimes
+    "SLOT",    # __slots__ on str/tuple/namedtuple subclasses
+    "RSE",     # no unnecessary parens on raised exceptions
+    "YTT",     # correct sys.version checks
+    "EXE",     # shebang/executable-bit consistency
+    "INT",     # gettext f-string misuse
+    "ASYNC",   # blocking calls in async functions
 ]
 
 ignore = [
@@ -561,6 +572,8 @@ extend-ignore-words-re = [
     "thi",
     # ISO 15924 script codes
     "Beng",  # Bengali script
+    # dataset names
+    "Matix",  # Docmatix (HF dataset)
 
 ]
 extend-ignore-re = [

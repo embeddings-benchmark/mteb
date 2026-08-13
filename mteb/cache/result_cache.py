@@ -10,7 +10,7 @@ import subprocess
 import warnings
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
-from datetime import datetime
+from datetime import datetime, timezone
 from importlib.metadata import version
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
@@ -1231,7 +1231,7 @@ class ResultCache:
             >>> print(f"PR created: {submission['pr_url']}")
         """
         # Always create a new branch to keep the original branch clean
-        branch_name = f"mteb-results-{int(datetime.now().timestamp())}"
+        branch_name = f"mteb-results-{int(datetime.now(timezone.utc).timestamp())}"
         normalized_models = self._normalize_models(models)
 
         try:
