@@ -23,7 +23,7 @@ class FlickrAudioToImageRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/pdf/1511.03690",
         dataset={
             "path": "deep9539/flickr-audio-image",
-            "revision": "cd1902b7aa5ff256aa656a20131a42078b38494c",
+            "revision": "eccef427e2398ade609d40c1dcc9b5c30dce8641",
         },
         type="Retrieval",
         category="a2i",
@@ -47,9 +47,10 @@ class FlickrAudioToImageRetrieval(AbsTaskRetrieval):
             return
         
         # Load the custom dataset
-        audio_ds = datasets.load_dataset(self.metadata.dataset["path"], "audio", split="train")
-        images_ds = datasets.load_dataset(self.metadata.dataset["path"], "images", split="train")
-        qrels_ds = datasets.load_dataset(self.metadata.dataset["path"], "qrels", split="train")
+        revision = self.metadata.dataset.get("revision")
+        audio_ds = datasets.load_dataset(self.metadata.dataset["path"], "audio", split="train", revision=revision)
+        images_ds = datasets.load_dataset(self.metadata.dataset["path"], "images", split="train", revision=revision)
+        qrels_ds = datasets.load_dataset(self.metadata.dataset["path"], "qrels", split="train", revision=revision)
         
         # qrels_ds has 'image_id' and 'audio_id'
         # For A2I: query is audio, corpus is image
@@ -81,7 +82,7 @@ class FlickrImageToAudioRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/pdf/1511.03690",
         dataset={
             "path": "deep9539/flickr-audio-image",
-            "revision": "cd1902b7aa5ff256aa656a20131a42078b38494c",
+            "revision": "eccef427e2398ade609d40c1dcc9b5c30dce8641",
         },
         type="Retrieval",
         category="i2a",
@@ -105,9 +106,10 @@ class FlickrImageToAudioRetrieval(AbsTaskRetrieval):
             return
         
         # Load the custom dataset
-        audio_ds = datasets.load_dataset(self.metadata.dataset["path"], "audio", split="train")
-        images_ds = datasets.load_dataset(self.metadata.dataset["path"], "images", split="train")
-        qrels_ds = datasets.load_dataset(self.metadata.dataset["path"], "qrels", split="train")
+        revision = self.metadata.dataset.get("revision")
+        audio_ds = datasets.load_dataset(self.metadata.dataset["path"], "audio", split="train", revision=revision)
+        images_ds = datasets.load_dataset(self.metadata.dataset["path"], "images", split="train", revision=revision)
+        qrels_ds = datasets.load_dataset(self.metadata.dataset["path"], "qrels", split="train", revision=revision)
         
         # For I2A: query is image, corpus is audio
         qrels = {}
