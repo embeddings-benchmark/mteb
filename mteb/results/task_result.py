@@ -34,7 +34,7 @@ from mteb.types import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Mapping
+    from collections.abc import Callable, Iterable, Iterator, Mapping
     from pathlib import Path
 
     from typing_extensions import Self
@@ -1099,22 +1099,60 @@ def _read_run_settings_from_file(path: Path) -> list[dict[str, Any]]:
     return run_settings
 
 
-def _write_and_merge_keyed_json(
-    path: Path,
-    entries: list[dict[str, Any]],
-    *,
-    key_fields: tuple[str, str, str] = ("task", "split", "subset"),
-) -> None:
-    """Write entries to `.jsonl`, if it already exist it will merge it, replacing any existing entries with the same key."""
-    existing_entries = _read_run_settings_from_file(path)
-    new_keys = {tuple(entry.get(field) for field in key_fields) for entry in entries}
-    filtered_existing = [
-        entry
-        for entry in existing_entries
-        if tuple(entry.get(field) for field in key_fields) not in new_keys
-    ]
-    all_entries = filtered_existing + entries
+def _expand_run_settings_entry(
+    entry: dict[str, Any],
+) -> Iterator[tuple[tuple[str, str, str], str, dict[str, Any]]]:
+    """Expand an entry into one (task, split, subset), settings tuple per evaluated subset."""
+    settings = dict(entry)
+    task = settings.pop("task", None)
+    # entries written before splits and subsets were combined stored a single "split" and "subset"
+    splits = settings.pop("splits", None)
+    if splits is None:
+        splits = [settings.pop("split", None)]
+    subsets = settings.pop("subsets", None)
+    if subsets is None:
+        subsets = [settings.pop("subset", None)]
+
+    key = json.dumps(settings, sort_keys=True, default=str)
+    for split in splits:
+        for subset in subsets:
+            if split is not None and subset is not None:
+                yield (task, split, subset), key, settings
+
+
+def _write_and_merge_keyed_json(path: Path, entries: list[dict[str, Any]]) -> None:
+    """Write entries to `.jsonl`, if it already exist it will merge it.
+
+    Every (task, split, subset) is stored once, with the settings of the last entry that evaluated it. Rows are then
+    combined as far as possible: splits of a task sharing both their settings and their subsets are written as a single
+    row listing all of its splits and subsets.
+    """
+    settings_by_key: dict[str, dict[str, Any]] = {}
+    # (task, split, subset) -> settings key, later entries overwrite the settings of earlier ones
+    run_settings: dict[tuple[str, str, str], str] = {}
+    for entry in [*_read_run_settings_from_file(path), *entries]:
+        for scope, key, settings in _expand_run_settings_entry(entry):
+            settings_by_key[key] = settings
+            run_settings[scope] = key
+
+    # (task, settings key) -> split -> subsets
+    grouped: dict[tuple[str, str], dict[str, list[str]]] = defaultdict(
+        lambda: defaultdict(list)
+    )
+    for (task, split, subset), key in run_settings.items():
+        grouped[(task, key)][split].append(subset)
 
     with path.open("w", encoding="utf-8") as f:
-        for entry in all_entries:
-            f.write(json.dumps(entry, default=str) + "\n")
+        for (task, key), splits in grouped.items():
+            # splits evaluated on the exact same subsets share a row
+            rows: dict[tuple[str, ...], list[str]] = defaultdict(list)
+            for split, subsets in splits.items():
+                rows[tuple(sorted(set(subsets)))].append(split)
+            for row_subsets, split_names in rows.items():
+                entry = {
+                    "task": task,
+                    "splits": sorted(split_names),
+                    **settings_by_key[key],
+                    "subsets": list(row_subsets),
+                }
+                f.write(json.dumps(entry, default=str) + "\n")
