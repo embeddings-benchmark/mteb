@@ -108,7 +108,7 @@ class AbsTaskRetrieval(AbsTask):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self._top_k = max(self.k_values)
+        self._top_k: int = max(self.k_values)
 
     def convert_v1_dataset_format_to_v2(
         self,
