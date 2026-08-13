@@ -282,6 +282,8 @@ TaskCategory = Literal[
     "at2v",
     "a2i",
     "i2a",
+    "i2v",
+    "i2va",
     "it2v",
 ]
 """The category of the task.
@@ -324,7 +326,9 @@ TaskCategory = Literal[
 36. a2v: audio to video
 37. a2i: audio to image
 38. i2a: image to audio
-39. it2v: image+text to video
+39. i2v: image to video
+40. i2va: image to video+audio
+41. it2v: image+text to video
 """
 
 _MODALITY_CODES: dict[str, str] = {
@@ -1013,6 +1017,8 @@ class TaskMetadata(BaseModel):
             dataset_type.append("audio-to-audio")
         if self.category in ["a2t", "t2a", "at2t", "t2at", "at2at", "a2at"]:  # noqa: PLR6201
             dataset_type.extend(["text-to-audio"])
+        if self.category in {"i2v", "i2va"}:
+            dataset_type.append("image-to-video")
         return dataset_type
 
     def _hf_languages(self) -> list[str]:
