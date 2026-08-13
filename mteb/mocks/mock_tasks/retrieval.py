@@ -104,7 +104,7 @@ _VIDEO_TEXTS = [
 
 
 class MockRetrievalTask(AbsTaskRetrieval):
-    _top_k = 2
+    k_values = (1, 2)
     expected_stats = {
         "val": {
             "num_samples": 4,
