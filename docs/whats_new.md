@@ -101,7 +101,7 @@ For more details, see the [Results API documentation](./api/results.md#timing-an
 To improve reproducibility and auditing of evaluations, MTEB now automatically tracks the settings used for each run by generating and maintaining a `run_settings.jsonl` file under each model revision's directory.
 
 For every evaluation run, this file tracks:
-- **Task metadata**: The specific task, split, and Hugging Face subset that was evaluated.
+- **Task metadata**: The specific task, splits, and Hugging Face subsets that were evaluated. Splits and subsets evaluated with the same settings are combined into a single row.
 - **Library versions**: The exact versions of the packages in your python environment (including `mteb`, `torch`, `sentence-transformers`, `transformers`, and `flash-attn`).
 - **Encode settings**: The keyword arguments passed to the model's `encode` method (`encode_kwargs`).
 
