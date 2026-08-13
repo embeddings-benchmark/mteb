@@ -1,0 +1,23 @@
+name: Copilot model PR review
+
+on:
+  pull_request_target:
+    types: [labeled]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  request-review:
+    if: github.event.label.name == 'new model'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+    steps:
+      - name: Post Copilot review request
+        run: |
+          gh pr comment "$PR_NUMBER" --repo "$REPO" --body "@github-copilot review
+
+          Please review this PR against the guidelines in \`.github/instructions/model-pr.instructions.md\`. Only report actionable issues. Include file/line references and a concrete suggested fix where possible."
