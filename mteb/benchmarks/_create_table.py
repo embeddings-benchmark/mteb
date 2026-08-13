@@ -321,6 +321,9 @@ def _get_means_per_types(
     return type_exprs, type_cols
 
 
+_CUSTOM_GROUP_COL_PREFIX = "__cg__"
+
+
 def _get_means_per_custom_group(
     task_cols: list[str], grouping: CustomGrouping
 ) -> tuple[list[pl.Expr], list[str]]:
@@ -334,7 +337,7 @@ def _get_means_per_custom_group(
     cols: list[str] = []
     exprs: list[pl.Expr] = []
     for label, tasks in tasks_per_label.items():
-        col = f"__cg__{grouping.name}::{label}"
+        col = f"{_CUSTOM_GROUP_COL_PREFIX}{grouping.name}::{label}"
         cols.append(col)
         exprs.append(_skipna_false_mean(tasks).alias(col))
     return exprs, cols
