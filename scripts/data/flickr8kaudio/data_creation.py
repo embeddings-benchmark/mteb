@@ -36,7 +36,9 @@ from pathlib import Path
 import pandas as pd
 
 
-def ffmpeg_reencode(src: Path, dst: Path, sample_rate: int = 16000) -> tuple[Path, str | None]:
+def ffmpeg_reencode(
+    src: Path, dst: Path, sample_rate: int = 16000
+) -> tuple[Path, str | None]:
     """
     Re-encode one wav through ffmpeg to force clean, accurate headers/metadata
     (mono, fixed sample rate, PCM16). This is what fixes torchcodec's
@@ -45,11 +47,18 @@ def ffmpeg_reencode(src: Path, dst: Path, sample_rate: int = 16000) -> tuple[Pat
     """
     dst.parent.mkdir(parents=True, exist_ok=True)
     cmd = [
-        "ffmpeg", "-y", "-v", "error",
-        "-i", str(src),
-        "-ar", str(sample_rate),
-        "-ac", "1",
-        "-c:a", "pcm_s16le",
+        "ffmpeg",
+        "-y",
+        "-v",
+        "error",
+        "-i",
+        str(src),
+        "-ar",
+        str(sample_rate),
+        "-ac",
+        "1",
+        "-c:a",
+        "pcm_s16le",
         str(dst),
     ]
     try:
@@ -61,7 +70,12 @@ def ffmpeg_reencode(src: Path, dst: Path, sample_rate: int = 16000) -> tuple[Pat
         return dst, str(e)
 
 
-def reencode_all(wav_paths: list[Path], out_dir: Path, sample_rate: int = 16000, max_workers: int = 16) -> dict:
+def reencode_all(
+    wav_paths: list[Path],
+    out_dir: Path,
+    sample_rate: int = 16000,
+    max_workers: int = 16,
+) -> dict:
     """
     Re-encode a list of wav files in parallel via ffmpeg into out_dir.
     Returns a dict mapping original stem -> new fixed path, and prints/collects failures.
@@ -92,7 +106,9 @@ def reencode_all(wav_paths: list[Path], out_dir: Path, sample_rate: int = 16000,
                 stem_to_fixed_path[src.stem] = dst
             done += 1
             if done % 2000 == 0 or done == len(wav_paths):
-                print(f"  {done}/{len(wav_paths)} processed ({len(failures)} failures so far)")
+                print(
+                    f"  {done}/{len(wav_paths)} processed ({len(failures)} failures so far)"
+                )
 
     if failures:
         print(f"\n{len(failures)} files failed to re-encode:")
@@ -111,8 +127,12 @@ def download_sources() -> tuple[Path, Path]:
     print("Downloading adityajn105/flickr8k (images + captions.txt) ...")
     images_root = Path(kagglehub.dataset_download("adityajn105/flickr8k"))
 
-    print("Downloading warcoder/flickr-8k-audio-caption-corpus (wavs + wav2capt.txt) ...")
-    audio_root = Path(kagglehub.dataset_download("warcoder/flickr-8k-audio-caption-corpus"))
+    print(
+        "Downloading warcoder/flickr-8k-audio-caption-corpus (wavs + wav2capt.txt) ..."
+    )
+    audio_root = Path(
+        kagglehub.dataset_download("warcoder/flickr-8k-audio-caption-corpus")
+    )
 
     return images_root, audio_root
 
@@ -138,7 +158,9 @@ def load_captions(images_root: Path) -> pd.DataFrame:
     df = pd.read_csv(captions_path)
     df.columns = [c.strip().lower() for c in df.columns]
     # expect columns: image, caption
-    assert "image" in df.columns and "caption" in df.columns, f"unexpected columns: {df.columns}"
+    assert "image" in df.columns and "caption" in df.columns, (
+        f"unexpected columns: {df.columns}"
+    )
     return df
 
 
@@ -162,7 +184,9 @@ def load_wav2capt(audio_root: Path) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def build_tables(images_root: Path, audio_root: Path, fixed_wav_dir: Path, sample_rate: int = 16000):
+def build_tables(
+    images_root: Path, audio_root: Path, fixed_wav_dir: Path, sample_rate: int = 16000
+):
     captions_df = load_captions(images_root)
     wav2capt_df = load_wav2capt(audio_root)
 
@@ -178,7 +202,9 @@ def build_tables(images_root: Path, audio_root: Path, fixed_wav_dir: Path, sampl
     )
     first_caps["id"] = first_caps["image"].apply(lambda x: Path(x).stem)
     first_caps["image_path"] = first_caps["image"].apply(lambda x: str(images_dir / x))
-    images_table = first_caps[["id", "image_path", "text"]].rename(columns={"image_path": "image"})
+    images_table = first_caps[["id", "image_path", "text"]].rename(
+        columns={"image_path": "image"}
+    )
 
     # --- audio config: one row per wav file, re-encoded through ffmpeg first ---
     wav2capt_df["id"] = wav2capt_df["wav"].apply(lambda x: Path(x).stem)
@@ -188,13 +214,17 @@ def build_tables(images_root: Path, audio_root: Path, fixed_wav_dir: Path, sampl
 
     # drop any rows whose file failed to re-encode, rather than silently pushing bad data
     before = len(wav2capt_df)
-    wav2capt_df = wav2capt_df[wav2capt_df["id"].isin(stem_to_fixed.keys())].reset_index(drop=True)
+    wav2capt_df = wav2capt_df[wav2capt_df["id"].isin(stem_to_fixed.keys())].reset_index(
+        drop=True
+    )
     dropped = before - len(wav2capt_df)
     if dropped:
         print(f"Dropping {dropped} rows whose audio failed ffmpeg re-encoding.")
 
     wav2capt_df["audio_path"] = wav2capt_df["id"].apply(lambda s: str(stem_to_fixed[s]))
-    audio_table = wav2capt_df[["id", "audio_path"]].rename(columns={"audio_path": "audio"})
+    audio_table = wav2capt_df[["id", "audio_path"]].rename(
+        columns={"audio_path": "audio"}
+    )
 
     # --- qrels: audio_id -> image_id it was spoken for ---
     wav2capt_df["image_id"] = wav2capt_df["image"].apply(lambda x: Path(x).stem)
@@ -203,7 +233,9 @@ def build_tables(images_root: Path, audio_root: Path, fixed_wav_dir: Path, sampl
     return audio_table, images_table, qrels_table
 
 
-def to_hf_datasets(audio_table: pd.DataFrame, images_table: pd.DataFrame, qrels_table: pd.DataFrame):
+def to_hf_datasets(
+    audio_table: pd.DataFrame, images_table: pd.DataFrame, qrels_table: pd.DataFrame
+):
     from datasets import Dataset, Audio, Image
 
     audio_ds = Dataset.from_pandas(audio_table, preserve_index=False)
@@ -230,39 +262,58 @@ def main():
     ap.add_argument("--sample_rate", type=int, default=16000)
     args = ap.parse_args()
 
-    fixed_wav_dir = Path(args.fixed_wav_dir) if args.fixed_wav_dir else Path.home() / "flickr_fixed_wavs"
+    fixed_wav_dir = (
+        Path(args.fixed_wav_dir)
+        if args.fixed_wav_dir
+        else Path.home() / "flickr_fixed_wavs"
+    )
 
     images_root, audio_root = download_sources()
 
     print("Building tables (re-encoding audio through ffmpeg for clean headers) ...")
     audio_table, images_table, qrels_table = build_tables(
-        images_root, audio_root, fixed_wav_dir=fixed_wav_dir, sample_rate=args.sample_rate
+        images_root,
+        audio_root,
+        fixed_wav_dir=fixed_wav_dir,
+        sample_rate=args.sample_rate,
     )
     print(f"  audio:  {len(audio_table)} rows")
     print(f"  images: {len(images_table)} rows")
     print(f"  qrels:  {len(qrels_table)} rows")
 
     print("Converting to HF Datasets (this decodes/validates audio & image files) ...")
-    audio_ds, images_ds, qrels_ds = to_hf_datasets(audio_table, images_table, qrels_table)
+    audio_ds, images_ds, qrels_ds = to_hf_datasets(
+        audio_table, images_table, qrels_table
+    )
 
     # Sanity check a few rows before pushing anything
     print("Sanity-checking a few rows ...")
     for i in (0, len(audio_ds) - 1):
         a = audio_ds[i]["audio"]
-        print(f"  audio[{i}] id={audio_ds[i]['id']} sr={a['sampling_rate']} n_samples={len(a['array'])}")
+        print(
+            f"  audio[{i}] id={audio_ds[i]['id']} sr={a['sampling_rate']} n_samples={len(a['array'])}"
+        )
     for i in (0, len(images_ds) - 1):
         img = images_ds[i]["image"]
         print(f"  images[{i}] id={images_ds[i]['id']} size={img.size} mode={img.mode}")
 
     if not args.push:
-        print("\nDry run only (pass --push to actually upload). Local objects built successfully.")
+        print(
+            "\nDry run only (pass --push to actually upload). Local objects built successfully."
+        )
         return
 
     print(f"\nPushing to {args.repo_id} ...")
     # Smaller shards reduce the chance of binary-offset corruption on large audio pushes
-    audio_ds.push_to_hub(args.repo_id, config_name="audio", private=args.private, max_shard_size="200MB")
-    images_ds.push_to_hub(args.repo_id, config_name="images", private=args.private, max_shard_size="200MB")
-    qrels_ds.push_to_hub(args.repo_id, config_name="qrels", private=args.private, max_shard_size="200MB")
+    audio_ds.push_to_hub(
+        args.repo_id, config_name="audio", private=args.private, max_shard_size="200MB"
+    )
+    images_ds.push_to_hub(
+        args.repo_id, config_name="images", private=args.private, max_shard_size="200MB"
+    )
+    qrels_ds.push_to_hub(
+        args.repo_id, config_name="qrels", private=args.private, max_shard_size="200MB"
+    )
     print("Push complete. Running post-push verification (re-downloads from hub) ...")
 
     verify_push(args.repo_id)
@@ -272,7 +323,9 @@ def verify_push(repo_id: str):
     """Re-download the pushed audio config and confirm every row decodes cleanly."""
     from datasets import load_dataset
 
-    verify_ds = load_dataset(repo_id, "audio", split="train", download_mode="force_redownload")
+    verify_ds = load_dataset(
+        repo_id, "audio", split="train", download_mode="force_redownload"
+    )
     ids_only = verify_ds.select_columns(["id"])
 
     bad_rows = []
@@ -283,7 +336,9 @@ def verify_push(repo_id: str):
             bad_rows.append((i, ids_only[i]["id"], repr(e)))
 
     total = len(verify_ds)
-    print(f"\nVerification: {len(bad_rows)} / {total} rows failed to decode after push.")
+    print(
+        f"\nVerification: {len(bad_rows)} / {total} rows failed to decode after push."
+    )
     if bad_rows:
         print("First 20 failures:")
         for row in bad_rows[:20]:
