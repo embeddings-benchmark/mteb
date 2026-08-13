@@ -173,7 +173,7 @@ def _postprocess_dense_embeddings(embeddings: Any) -> Any:
     return embeddings
 
 
-def _concatenate_sparse_batches(batches: list[Any]) -> Any:
+def _concatenate_sparse_batches(batches: list[torch.Tensor]) -> torch.Tensor:
     """Concatenate per-batch sparse tensors along dim 0 (sparse tensors don't support `np.concatenate`)."""
     return torch.cat(batches, dim=0)
 
