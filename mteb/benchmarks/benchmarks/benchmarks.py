@@ -1733,33 +1733,56 @@ BRIGHT_LONG = Benchmark(
     superseded_by=["BRIGHT(v1.1)"],
 )
 
+_BRIGHT_SHORT_TASKS = [
+    "BrightBiologyRetrieval",
+    "BrightEarthScienceRetrieval",
+    "BrightEconomicsRetrieval",
+    "BrightPsychologyRetrieval",
+    "BrightRoboticsRetrieval",
+    "BrightStackoverflowRetrieval",
+    "BrightSustainableLivingRetrieval",
+    "BrightPonyRetrieval",
+    "BrightLeetcodeRetrieval",
+    "BrightAopsRetrieval",
+    "BrightTheoremQATheoremsRetrieval",
+    "BrightTheoremQAQuestionsRetrieval",
+]
+_BRIGHT_LONG_TASKS = [
+    "BrightBiologyLongRetrieval",
+    "BrightEarthScienceLongRetrieval",
+    "BrightEconomicsLongRetrieval",
+    "BrightPsychologyLongRetrieval",
+    "BrightRoboticsLongRetrieval",
+    "BrightStackoverflowLongRetrieval",
+    "BrightSustainableLivingLongRetrieval",
+    "BrightPonyLongRetrieval",
+]
+
+# Groups BRIGHT(v1.1)'s 20 tasks by document length for a "Document Length"
+# breakdown on the leaderboard — the 8 domains with a "Long" variant get
+# both groups' tasks; the 4 code/math domains without one (Leetcode, Aops,
+# TheoremQA*) only ever appear in "Short".
+BRIGHT_DOCUMENT_LENGTH = CustomGrouping(
+    name="Document Length",
+    groups=(
+        CustomGroup(
+            label="Short",
+            tasks=_BRIGHT_SHORT_TASKS,
+            description="Standard-length BRIGHT documents.",
+        ),
+        CustomGroup(
+            label="Long",
+            tasks=_BRIGHT_LONG_TASKS,
+            description="Documents filtered to longer context lengths, "
+            "stress-testing retrieval over extended documents.",
+        ),
+    ),
+)
+
 BRIGHT_V1_1 = Benchmark(
     name="BRIGHT(v1.1)",
     display_name="Reasoning Retrieval",
-    tasks=get_tasks(
-        tasks=[
-            "BrightBiologyRetrieval",
-            "BrightEarthScienceRetrieval",
-            "BrightEconomicsRetrieval",
-            "BrightPsychologyRetrieval",
-            "BrightRoboticsRetrieval",
-            "BrightStackoverflowRetrieval",
-            "BrightSustainableLivingRetrieval",
-            "BrightPonyRetrieval",
-            "BrightLeetcodeRetrieval",
-            "BrightAopsRetrieval",
-            "BrightTheoremQATheoremsRetrieval",
-            "BrightTheoremQAQuestionsRetrieval",
-            "BrightBiologyLongRetrieval",
-            "BrightEarthScienceLongRetrieval",
-            "BrightEconomicsLongRetrieval",
-            "BrightPsychologyLongRetrieval",
-            "BrightRoboticsLongRetrieval",
-            "BrightStackoverflowLongRetrieval",
-            "BrightSustainableLivingLongRetrieval",
-            "BrightPonyLongRetrieval",
-        ],
-    ),
+    tasks=get_tasks(tasks=[*_BRIGHT_SHORT_TASKS, *_BRIGHT_LONG_TASKS]),
     description="Reasoning-intensive retrieval quality across real-world queries spanning diverse domains including economics, psychology, mathematics, and coding. v1.1 restructures tasks into separate datasets and adds per-task prompts.",
     reference="https://brightbenchmark.github.io/",
     citation=r"""
@@ -1771,6 +1794,12 @@ BRIGHT_V1_1 = Benchmark(
 }
 """,
     benchmark_hf_repo="mteb/BRIGHT",
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.MEAN_TASK_TYPE,
+        BenchmarkAggregation.TASK_TYPES,
+        BRIGHT_DOCUMENT_LENGTH,
+    ),
 )
 
 

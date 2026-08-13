@@ -66,3 +66,21 @@ def test_lmeb_memory_grouping_covers_all_tasks():
     }
     for group in grouping.groups:
         assert group.description
+
+
+def test_bright_document_length_grouping_covers_all_tasks():
+    """BRIGHT(v1.1)'s "Document Length" CustomGrouping should partition every
+    task into Short or Long by whether its name carries the "Long" variant
+    suffix, with no task left ungrouped."""
+    benchmark = mteb.get_benchmark("BRIGHT(v1.1)")
+    task_names = {t.metadata.name for t in benchmark.tasks}
+
+    grouping = next(a for a in benchmark.aggregations if isinstance(a, CustomGrouping))
+    assert grouping.name == "Document Length"
+    assert set(grouping.task_to_label) == task_names
+    assert set(grouping.task_to_label.values()) == {"Short", "Long"}
+    for group in grouping.groups:
+        assert group.description
+        is_long_group = group.label == "Long"
+        for task_name in group.tasks:
+            assert ("Long" in task_name) == is_long_group
