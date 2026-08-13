@@ -1,14 +1,6 @@
----
-applyTo: "**"
----
-
 # New Dataset PR Guidelines
 
-## Purpose
-
-These instructions apply only when the PR title starts with `task:` or `dataset:`, or when the PR adds or modifies files under `mteb/tasks/`. If neither condition is met, ignore all instructions in this file.
-
-For matching PRs, ensure the PR description includes the evidence and context reviewers need to evaluate correctness and quality.
+Ensure the PR description includes the evidence and context reviewers need to evaluate correctness and quality.
 
 ## Descriptive Statistics
 
