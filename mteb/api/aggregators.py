@@ -30,6 +30,10 @@ from mteb.api.schemas import (
     TaskScoreRowSchema,
     TaskScoresSchema,
 )
+from mteb.benchmarks._benchmark_metrics import (
+    _recompute_lenient_custom_groups,
+    _recompute_lenient_means,
+)
 from mteb.benchmarks._create_table import _CUSTOM_GROUP_COL_PREFIX, _format_max_tokens
 from mteb.benchmarks.benchmark import CustomGrouping
 from mteb.get_tasks import _TASKS_REGISTRY
@@ -170,67 +174,6 @@ def _filter_long_df_by_languages(
     return long_df.filter(
         pl.col("language").list.eval(pl.element().is_in(code_match)).list.any()
     )
-
-
-def _bucket_means(
-    scores_by_task: dict[str, float], task_to_key: dict[str, str]
-) -> dict[str, float]:
-    """Average `scores_by_task` grouped by `task_to_key`.
-
-    Keeps only tasks present in `scores_by_task` — a task missing a score
-    (filtered out / not run) is absent from its bucket rather than treated
-    as a zero, and a task with no key (`task_to_key.get` misses) is skipped
-    entirely.
-    """
-    buckets: dict[str, list[float]] = {}
-    for tname, score in scores_by_task.items():
-        key = task_to_key.get(tname)
-        if key is None:
-            continue
-        buckets.setdefault(key, []).append(float(score))
-    return {key: sum(vals) / len(vals) for key, vals in buckets.items() if vals}
-
-
-def _recompute_lenient_means(
-    scores_by_task: dict[str, float],
-    task_to_type: dict[str, str],
-) -> tuple[dict[str, float], float | None, float | None]:
-    """Recompute means over only the tasks a model actually ran.
-
-    Why: used in the language-filtered path so partial-coverage models don't
-    collapse to null. Per-task-type bucketing (via _bucket_means) prevents a
-    single dense type (e.g. Classification with 20 tasks) from outweighing
-    sparser ones.
-    """
-    scores_by_task_type = _bucket_means(scores_by_task, task_to_type)
-    task_vals = list(scores_by_task.values())
-    mean_task = sum(task_vals) / len(task_vals) if task_vals else None
-    type_vals = list(scores_by_task_type.values())
-    mean_type = sum(type_vals) / len(type_vals) if type_vals else None
-    return scores_by_task_type, mean_task, mean_type
-
-
-def _recompute_lenient_custom_groups(
-    scores_by_task: dict[str, float],
-    custom_group_task_to_label: dict[str, dict[str, str]],
-) -> dict[str, dict[str, float]]:
-    """Recompute scores_by_custom_group over only the tasks a model actually ran.
-
-    The CustomGrouping analog of _recompute_lenient_means — one
-    _bucket_means call per dimension instead of a single task-type bucketing.
-
-    Args:
-        scores_by_task: {task_name: score} for tasks the model has a value
-            for after the language filter (same input _recompute_lenient_means
-            takes).
-        custom_group_task_to_label: {dimension_name: {task_name: label}} —
-            one CustomGrouping.task_to_label per dimension the benchmark
-            declares.
-    """
-    return {
-        dim: _bucket_means(scores_by_task, task_to_label)
-        for dim, task_to_label in custom_group_task_to_label.items()
-    }
 
 
 async def build_benchmark_summary(  # noqa: PLR0914
