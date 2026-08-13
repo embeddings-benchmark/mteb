@@ -424,7 +424,10 @@ def calculate_text_relevance_overlap_statistics(
     corpus: Mapping[str, str],
 ) -> TextRelevanceOverlapStatistics | None:
     """Calculate query character n-gram overlap against relevant documents."""
-    overlaps: list[float] = []
+    num_pairs = 0
+    total_overlap = 0.0
+    min_overlap = 1.0
+    max_overlap = 0.0
     for query_id, docs in relevant_docs.items():
         query_text = queries.get(query_id)
         if query_text is None:
@@ -439,16 +442,20 @@ def calculate_text_relevance_overlap_statistics(
             if doc_text is None:
                 continue
             doc_ngrams = _character_ngrams(doc_text)
-            overlaps.append(len(query_ngrams & doc_ngrams) / len(query_ngrams))
+            overlap = len(query_ngrams & doc_ngrams) / len(query_ngrams)
+            num_pairs += 1
+            total_overlap += overlap
+            min_overlap = min(min_overlap, overlap)
+            max_overlap = max(max_overlap, overlap)
 
-    if not overlaps:
+    if num_pairs == 0:
         return None
 
     return TextRelevanceOverlapStatistics(
-        num_pairs=len(overlaps),
-        min_query_character_ngram_overlap=min(overlaps),
-        average_query_character_ngram_overlap=sum(overlaps) / len(overlaps),
-        max_query_character_ngram_overlap=max(overlaps),
+        num_pairs=num_pairs,
+        min_query_character_ngram_overlap=min_overlap,
+        average_query_character_ngram_overlap=total_overlap / num_pairs,
+        max_query_character_ngram_overlap=max_overlap,
     )
 
 
