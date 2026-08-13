@@ -16,16 +16,6 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
 
 
-def _proj(output, attr: str) -> torch.Tensor:
-    """Pull the projected embedding off a Cosmos-Embed1 output object."""
-    value = getattr(output, attr, None)
-    if not isinstance(value, torch.Tensor):
-        raise ValueError(
-            f"Expected a tensor at {type(output).__name__}.{attr}, got {type(value).__name__}"
-        )
-    return value
-
-
 class CosmosEmbed1Model(AbsEncoder):
     """Wrapper for NVIDIA Cosmos-Embed1 joint video-text embedders."""
 
@@ -88,7 +78,7 @@ class CosmosEmbed1Model(AbsEncoder):
         for batch in tqdm(texts, disable=not show_progress_bar, desc="Text Encoding"):
             inputs = self._move(self.processor(text=batch["text"], return_tensors="pt"))
             output = self.model.get_text_embeddings(**inputs)
-            embeddings = _proj(output, "text_proj")
+            embeddings = output.text_proj
             all_embeddings.append(embeddings.float().cpu())
         return torch.cat(all_embeddings, dim=0)
 
@@ -121,7 +111,7 @@ class CosmosEmbed1Model(AbsEncoder):
                 }
             )
             output = self.model.get_video_embeddings(**inputs)
-            embeddings = _proj(output, "visual_proj")
+            embeddings = output.visual_proj
             all_embeddings.append(embeddings.float().cpu())
         return torch.cat(all_embeddings, dim=0)
 
