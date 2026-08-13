@@ -294,18 +294,11 @@ class Benchmark:
     language_view: list[str] | Literal["all"] = field(default_factory=list)
     benchmark_hf_repo: str | None = None
     superseded_by: Sequence[str] | None = None
-    # Api aggregation functions — plain BenchmarkAggregation flags mixed
-    # freely with CustomGrouping instances (see CustomGrouping's docstring).
     aggregations: Sequence[BenchmarkAggregation | CustomGrouping] = (
         BenchmarkAggregation.MEAN_TASK,
         BenchmarkAggregation.MEAN_TASK_TYPE,
         BenchmarkAggregation.TASK_TYPES,
     )
-    # Whether the leaderboard summary table surfaces the Zero-shot column.
-    # Off for benchmarks where model training-data annotations don't cover
-    # the task set (e.g. ViDoRe), so every row would otherwise render as a
-    # misleading 100%. The API echoes this on ``BenchmarkSummarySchema`` and
-    # the frontend hides the column when False.
     show_zero_shot: bool = True
     # Sort column(s) for the leaderboard summary. ``None`` keeps the default
     # ``Rank (Borda)`` sort; a string or tuple of strings sorts by those
