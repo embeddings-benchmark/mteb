@@ -8,7 +8,7 @@ from .instruction_retrieval import *
 from .multichoice import *
 from .multilabel_classification import *
 from .pair_classification import *
-from .QuestionAnswering import *
+from .question_answering import *
 from .regression import *
 from .reranking import *
 from .retrieval import *
