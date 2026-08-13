@@ -247,6 +247,17 @@ When submitting you models as a PR, please copy and paste the following checklis
 - [ ] I reproduced results from the original paper (if applicable) on at least one benchmark, and I am including the results in the PR description.
 ```
 
+The PR description must also include:
+
+- **Reproduction results table**: If the model has an associated paper or published benchmark results, include a table comparing your scores against the paper. If there is no paper or no equivalent benchmark, include a note explaining this.
+
+  | Benchmark | PR | Paper |
+  |---|---|---|
+  | MTEB English | 64.2 | 64.5 |
+  | BEIR | 51.3 | 51.0 |
+
+- **Mock run results**: Confirm that `mteb mock-run -m your_model_name` passes and commit the resulting `mteb_mock_run_results.md` file with the PR.
+
 
 ### Matryoshka embeddings
 
