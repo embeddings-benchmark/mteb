@@ -146,6 +146,7 @@ MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.o
 </details>
 
 
+
 If you use any of the specific benchmarks, we also recommend that you cite the authors of both the benchmark and its tasks:
 
 ```py
