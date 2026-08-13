@@ -1627,8 +1627,6 @@ LMEB = Benchmark(
 """,
     aggregations=(
         BenchmarkAggregation.MEAN_TASK,
-        BenchmarkAggregation.MEAN_TASK_TYPE,
-        BenchmarkAggregation.TASK_TYPES,
         CustomGrouping(
             name="Memory Type",
             groups=(
@@ -1769,8 +1767,6 @@ BRIGHT_V1_1 = Benchmark(
     benchmark_hf_repo="mteb/BRIGHT",
     aggregations=(
         BenchmarkAggregation.MEAN_TASK,
-        BenchmarkAggregation.MEAN_TASK_TYPE,
-        BenchmarkAggregation.TASK_TYPES,
         CustomGrouping(
             name="Document Length",
             groups=(
