@@ -633,6 +633,18 @@ Once added, here is a checklist to ensure that everything works before you submi
 - [ ] I reproduced scores from the original paper (if applicable) and added them to the PR description for reference.
 ```
 
+The PR description must also include:
+
+- **Descriptive statistics**: Number of samples per split, average text length, label distribution, language breakdown — directly in the PR, not just a link to the dataset card.
+- **Model results table**: Scores for at least `mteb/baseline-random-encoder` and a small real model (e.g. `intfloat/multilingual-e5-small`). If reproduction results from a paper are included, present them as a table:
+
+  | Model | PR | Paper |
+  |---|---|---|
+  | model-a | 42.1 | 42.3 |
+  | model-b | 38.7 | 39.0 |
+
+  If there is no associated paper or no equivalent model in MTEB, include a note explaining this.
+
 An easy way to test it is using:
 
 === "Python"
