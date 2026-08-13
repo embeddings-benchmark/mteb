@@ -84,6 +84,8 @@ _DEFAULT_PROPRIETIES = (
 class MTEBTasks(tuple[AbsTask]):
     """A tuple of tasks with additional methods to get an overview of the tasks."""
 
+    __slots__ = ()
+
     def __repr__(self) -> str:
         return "MTEBTasks" + super().__repr__()
 

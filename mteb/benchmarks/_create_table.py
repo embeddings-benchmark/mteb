@@ -252,23 +252,115 @@ def _get_embedding_size(embed_dim: int | Sequence[int] | None) -> int | None:
     return None
 
 
+def _scored(pl_df: pl.DataFrame) -> pl.DataFrame:
+    """Rows with an actual score, dropping null- and NaN-scored placeholders."""
+    return pl_df.filter(pl.col("score").is_not_null() & pl.col("score").is_not_nan())
+
+
+def _required_splits_per_task(pl_df: pl.DataFrame) -> pl.DataFrame:
+    """``(task_name, _required_splits)`` — count of distinct splits observed for each task."""
+    return (
+        pl_df.select("task_name", "split")
+        .unique()
+        .group_by("task_name")
+        .agg(pl.len().alias("_required_splits"))
+    )
+
+
+def _incomplete_task_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
+    """``(model_name, task_name)`` pairs that skipped a (subset, split) combo."""
+    scored = _scored(pl_df)
+    n_subsets = (
+        scored.select("task_name", "subset")
+        .unique()
+        .group_by("task_name")
+        .agg(pl.len().alias("_n_subsets"))
+    )
+    required = n_subsets.join(
+        _required_splits_per_task(scored), on="task_name", how="left"
+    ).select(
+        "task_name",
+        (pl.col("_n_subsets") * pl.col("_required_splits")).alias("_required"),
+    )
+    have = (
+        scored.select("model_name", "task_name", "subset", "split")
+        .unique()
+        .group_by(["model_name", "task_name"])
+        .agg(pl.len().alias("_have"))
+    )
+    return (
+        have.join(required, on="task_name", how="left")
+        .filter(pl.col("_have") < pl.col("_required"))
+        .select("model_name", "task_name")
+    )
+
+
+def _incomplete_subset_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
+    """``(model_name, task_name, subset)`` triples missing an observed split."""
+    scored = _scored(pl_df)
+    have = (
+        scored.select("model_name", "task_name", "subset", "split")
+        .unique()
+        .group_by(["model_name", "task_name", "subset"])
+        .agg(pl.len().alias("_have"))
+    )
+    return (
+        have.join(_required_splits_per_task(scored), on="task_name", how="left")
+        .filter(pl.col("_have") < pl.col("_required_splits"))
+        .select("model_name", "task_name", "subset")
+    )
+
+
+def _null_incomplete_scores(
+    long_df: pl.DataFrame, incomplete: pl.DataFrame, *, keys: Sequence[str]
+) -> pl.DataFrame:
+    """Null the ``score`` column for every row ``incomplete`` flags, joined on ``keys``.
+
+    ``incomplete`` is the output of :func:`_incomplete_task_pairs`
+    (``keys=("model_name", "task_name")``) or :func:`_incomplete_subset_pairs`
+    (``keys=("model_name", "task_name", "subset")``). No-op (returns
+    ``long_df`` unchanged) when nothing is incomplete — the common case for
+    single-split tasks, which never appear in ``incomplete``.
+    """
+    if incomplete.is_empty():
+        return long_df
+    keys = list(keys)
+    return (
+        long_df.join(
+            incomplete.with_columns(pl.lit(True).alias("_incomplete")),
+            on=keys,
+            how="left",
+        )
+        .with_columns(
+            pl.when(pl.col("_incomplete").fill_null(False))
+            .then(None)
+            .otherwise(pl.col("score"))
+            .alias("score")
+        )
+        .drop("_incomplete")
+    )
+
+
 def _build_per_task_pivot(
     pl_df: pl.DataFrame,
 ) -> tuple[pl.DataFrame, list[str]] | None:
     """Pivot the long results frame to one row per model × one col per task.
 
-    Returns ``(per_task, task_cols)`` or ``None`` for the three empty-input
-    cases (empty frame, no ``model_name``, no tasks, or all-null rows). Every
-    summary/per-task builder opens with this pattern — extracted so the four
-    builders + per-task table builder don't duplicate the boilerplate.
+    Returns:
+        ``(per_task, task_cols)`` or ``None`` for the three empty-input
+        cases (empty frame, no ``model_name``, no tasks, or all-null rows).
     """
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return None
-    per_task = (
-        pl_df.group_by(["model_name", "task_name"])
-        .agg(pl.col("score").mean())
-        .pivot(on="task_name", index="model_name", values="score")
+    per_task_long = pl_df.group_by(["model_name", "task_name"]).agg(
+        pl.col("score").mean()
     )
+    per_task_long = _null_incomplete_scores(
+        per_task_long,
+        _incomplete_task_pairs(pl_df),
+        keys=("model_name", "task_name"),
+    )
+    per_task = per_task_long.pivot(on="task_name", index="model_name", values="score")
     task_cols = [c for c in per_task.columns if c != "model_name"]
     if not task_cols:
         return None
@@ -659,6 +751,11 @@ def _create_summary_table(  # noqa: PLR0914
     if has_is_public:
         per_task_aggs.append(pl.col("is_public").first())
     per_task_long = pl_df.group_by(["model_name", "task_name"]).agg(*per_task_aggs)
+    per_task_long = _null_incomplete_scores(
+        per_task_long,
+        _incomplete_task_pairs(pl_df),
+        keys=("model_name", "task_name"),
+    )
     per_task = per_task_long.pivot(on="task_name", index="model_name", values="score")
     task_cols = [c for c in per_task.columns if c != "model_name"]
     if not task_cols:
@@ -701,8 +798,16 @@ def _create_summary_table(  # noqa: PLR0914
         per_subset_long = pl_df.group_by(["model_name", "task_name", "subset"]).agg(
             pl.col("score").mean()
         )
+        per_subset_long = _null_incomplete_scores(
+            per_subset_long,
+            _incomplete_subset_pairs(pl_df),
+            keys=("model_name", "task_name", "subset"),
+        )
         subset_mean = per_subset_long.group_by("model_name").agg(
-            pl.col("score").mean().alias(mean_subset_col)
+            pl.when(pl.col("score").is_null().any())
+            .then(None)
+            .otherwise(pl.col("score").mean())
+            .alias(mean_subset_col)
         )
         joint_table = joint_table.join(subset_mean, on="model_name", how="left")
         keyed = per_subset_long.with_columns(

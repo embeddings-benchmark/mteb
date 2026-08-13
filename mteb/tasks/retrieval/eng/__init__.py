@@ -73,6 +73,7 @@ from .bright_v1_1_retrieval import (
 )
 from .browse_comp_plus_retrieval import BrowseCompPlusRetrieval
 from .built_bench_retrieval import BuiltBenchRetrieval
+from .carebench_retrieval import CaReBenchT2VRetrieval, CaReBenchV2TRetrieval
 from .castella_amr import CASTELLAAMRRetrieval
 from .chat_doctor_retrieval import ChatDoctorRetrieval
 from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
@@ -89,6 +90,7 @@ from .climate_fever_retrieval import (
 from .clotho import ClothoA2TRetrieval, ClothoT2ARetrieval
 from .cmu_arctic import CMUArcticA2TRetrieval, CMUArcticT2ARetrieval
 from .covers80_retrieval import Covers80A2ARetrieval
+from .covr_r_retrieval import CoVRRVT2VRetrieval
 from .cqa_dupstack_android_retrieval import CQADupstackAndroidRetrieval
 from .cqa_dupstack_english_retrieval import CQADupstackEnglishRetrieval
 from .cqa_dupstack_gaming_retrieval import CQADupstackGamingRetrieval
@@ -158,11 +160,16 @@ from .flare_retrieval import (
 )
 from .flickr30k_i2t_retrieval import Flickr30kI2TRetrieval
 from .flickr30k_t2i_retrieval import Flickr30kT2IRetrieval
+from .flickr_audio_image_retrieval import (
+    FlickrAudioToImageRetrieval,
+    FlickrImageToAudioRetrieval,
+)
 from .forb_i2i_retrieval import FORBI2I
 from .giga_speech import GigaSpeechA2TRetrieval, GigaSpeechT2ARetrieval
 from .gl_dv2_i2i_retrieval import GLDv2I2IRetrieval
 from .gl_dv2_i2t_retrieval import GLDv2I2TRetrieval
 from .gov_report_retrieval import GovReportRetrieval
+from .greatest_hits_retrieval import GreatestHitsA2VRetrieval, GreatestHitsV2ARetrieval
 from .hagrid_retrieval import HagridRetrieval
 from .hateful_memes_i2t_retrieval import HatefulMemesI2TRetrieval
 from .hateful_memes_t2i_retrieval import HatefulMemesT2IRetrieval
@@ -227,6 +234,7 @@ from .memotion_t2i_retrieval import MemotionT2IRetrieval
 from .met_i2i_retrieval import METI2IRetrieval
 from .miao_retrieval import MIAOA2IRetrieval, MIAOI2ARetrieval
 from .ml_questions import MLQuestionsRetrieval
+from .mm_long_bench_doc_retrieval import MMLongBenchDocRetrieval
 from .mmdocir_t2i_retrieval import MMDocIRT2IRetrieval
 from .mmdocir_t2it_retrieval import MMDocIRT2ITRetrieval
 from .moment_seeker import MomentSeekerTI2VRetrieval, MomentSeekerTV2VRetrieval
@@ -308,7 +316,14 @@ from .r_paris_i2i_retrieval import (
 )
 from .ra_rb_code_retrieval import RARbCode
 from .ra_rb_math_retrieval import RARbMath
+from .ravenea import RAVENEAI2TRetrieval
 from .re_mu_q_it2t_retrieval import ReMuQIT2TRetrieval
+from .real_mm_rag_retrieval import (
+    RealMMRAGFinReportRetrieval,
+    RealMMRAGFinSlidesRetrieval,
+    RealMMRAGTechReportRetrieval,
+    RealMMRAGTechSlidesRetrieval,
+)
 from .rp2k_i2i_retrieval import RP2kI2IRetrieval
 from .sci_fact_retrieval import SciFact
 from .sci_mmir_i2t_retrieval import SciMMIRI2TRetrieval
@@ -335,6 +350,7 @@ from .sop_i2i_retrieval import SOPI2IRetrieval
 from .sounding_earth import SoundingEarthA2IRetrieval, SoundingEarthI2ARetrieval
 from .spart_qa_retrieval import SpartQA
 from .speech_coco import SpeechCocoA2IRetrieval, SpeechCocoI2ARetrieval
+from .spoken_coco_retrieval import SpokenCOCOA2IRetrieval, SpokenCOCOI2ARetrieval
 from .spoken_s_qu_ad import SpokenSQuADT2ARetrieval
 from .stanford_cars_i2i_retrieval import StanfordCarsI2I
 from .temp_reason_l1_retrieval import TempReasonL1
@@ -527,6 +543,8 @@ __all__ = [
     "CQADupstackUnixRetrieval",
     "CQADupstackWebmastersRetrieval",
     "CQADupstackWordpressRetrieval",
+    "CaReBenchT2VRetrieval",
+    "CaReBenchV2TRetrieval",
     "ChatDoctorRetrieval",
     "ChemHotpotQARetrieval",
     "ChemNQRetrieval",
@@ -537,6 +555,7 @@ __all__ = [
     "ClimateFEVERRetrievalv2",
     "ClothoA2TRetrieval",
     "ClothoT2ARetrieval",
+    "CoVRRVT2VRetrieval",
     "ConvoMem",
     "Covers80A2ARetrieval",
     "CovidQA",
@@ -597,12 +616,16 @@ __all__ = [
     "FinanceBenchRetrieval",
     "Flickr30kI2TRetrieval",
     "Flickr30kT2IRetrieval",
+    "FlickrAudioToImageRetrieval",
+    "FlickrImageToAudioRetrieval",
     "GLDv2I2IRetrieval",
     "GLDv2I2TRetrieval",
     "GigaSpeechA2TRetrieval",
     "GigaSpeechT2ARetrieval",
     "Gorilla",
     "GovReportRetrieval",
+    "GreatestHitsA2VRetrieval",
+    "GreatestHitsV2ARetrieval",
     "HC3FinanceRetrieval",
     "HagridRetrieval",
     "HatefulMemesI2TRetrieval",
@@ -651,6 +674,7 @@ __all__ = [
     "MLQuestionsRetrieval",
     "MMDocIRT2IRetrieval",
     "MMDocIRT2ITRetrieval",
+    "MMLongBenchDocRetrieval",
     "MSCOCOI2TRetrieval",
     "MSCOCOT2IRetrieval",
     "MSMARCOHardNegatives",
@@ -712,6 +736,7 @@ __all__ = [
     "R2MEDPMCTreatmentRetrieval",
     "RARbCode",
     "RARbMath",
+    "RAVENEAI2TRetrieval",
     "ROxfordEasyI2IRetrieval",
     "ROxfordHardI2IRetrieval",
     "ROxfordMediumI2IRetrieval",
@@ -721,6 +746,10 @@ __all__ = [
     "RParisMediumI2IRetrieval",
     "ReMe",
     "ReMuQIT2TRetrieval",
+    "RealMMRAGFinReportRetrieval",
+    "RealMMRAGFinSlidesRetrieval",
+    "RealMMRAGTechReportRetrieval",
+    "RealMMRAGTechSlidesRetrieval",
     "SHS100KA2ARetrieval",
     "SOPI2IRetrieval",
     "SciFact",
@@ -742,6 +771,8 @@ __all__ = [
     "SpartQA",
     "SpeechCocoA2IRetrieval",
     "SpeechCocoI2ARetrieval",
+    "SpokenCOCOA2IRetrieval",
+    "SpokenCOCOI2ARetrieval",
     "SpokenSQuADT2ARetrieval",
     "StanfordCarsI2I",
     "TUBerlinT2IRetrieval",
