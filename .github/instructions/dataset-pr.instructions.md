@@ -9,10 +9,11 @@ Ensure the PR description includes the evidence and context reviewers need to ev
 
 ## Results Table Format
 
-- Reproduction results from the paper must be presented as a table, not as prose.
+- If reproduction results from a paper are included, they must be presented as a table, not as prose.
 - Columns: score source (e.g. "PR" and "Paper").
 - Rows: one row per model.
 - Flag the PR if results are described only in paragraph form, or if the table is transposed (models as columns).
+- If the dataset has no associated paper, or no equivalent model exists in MTEB to compare against, the PR must include a note explaining this.
 
 Example of correct format:
 
@@ -23,8 +24,11 @@ Example of correct format:
 
 ## Random Encoder Baseline
 
-- The PR must report scores for a random encoder (random embeddings or equivalent baseline) alongside the main results.
-- This confirms performance is neither trivially high (suggesting task is too easy or data is leaked) nor at chance level (suggesting the task or metric is misconfigured).
+- The PR must report scores for a random encoder alongside the main results. Run it with:
+  ```
+  mteb run -m mteb/baseline-random-encoder -t {task_name}
+  ```
+- This confirms performance is neither trivially high (suggesting the task is too easy or data is leaked) nor at chance level (suggesting the task or metric is misconfigured).
 - Flag the PR if no random baseline is present.
 
 ## AI-Generated Boilerplate
