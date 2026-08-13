@@ -281,9 +281,9 @@ async def build_benchmark_summary(  # noqa: PLR0914
         desc_by_label = (
             {g.label: g.description for g in declared.groups} if declared else {}
         )
-        labels = sorted(
+        labels = [
             c.removeprefix(f"{_CUSTOM_GROUP_COL_PREFIX}{dim}::") for c in cols
-        )
+        ]
         custom_groupings_out.append(
             CustomGroupingSchema(
                 name=dim,

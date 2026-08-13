@@ -748,6 +748,11 @@ def _create_summary_table(  # noqa: PLR0914
     for grouping in custom_groupings:
         exprs, cols = _get_means_per_custom_group(task_cols, grouping)
         custom_group_exprs.extend(exprs)
+        if grouping.name in custom_group_cols_by_dim:
+            raise ValueError(
+                f"Duplicate CustomGrouping.name detected: {grouping.name!r}. "
+                "Custom grouping names must be unique within a benchmark."
+            )
         custom_group_cols_by_dim[grouping.name] = cols
 
     joint_table = per_task.select(
