@@ -6,7 +6,18 @@
         "number_of_characters": 0,
         "documents_text_statistics": null,
         "documents_image_statistics": null,
-        "documents_audio_statistics": null,
+        "documents_audio_statistics": {
+            "total_duration_seconds": 579891.0033560079,
+            "min_duration_seconds": 1.7647165532879818,
+            "average_duration_seconds": 170.50602862570062,
+            "max_duration_seconds": 2306.304,
+            "unique_audios": 3321,
+            "average_sampling_rate": 45723.75771831814,
+            "sampling_rates": {
+                "44100": 1985,
+                "48000": 1416
+            }
+        },
         "documents_video_statistics": {
             "total_duration_seconds": 579850.3488583342,
             "total_frames": 17250363,

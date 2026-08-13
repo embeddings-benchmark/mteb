@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build Stanford I2V 600K as an MTEB image-to-video retrieval dataset.
+"""Build Stanford I2V 600K as an MTEB image-to-video+audio retrieval dataset.
 
 The official Stanford release stores the videos in split gzip-compressed tar
 archives. Reconstructing the 600K release normally requires roughly 500 GB of
@@ -46,13 +46,20 @@ from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from typing import Any, BinaryIO
 
-from datasets import Dataset, DatasetDict, Image, Video
+from datasets import Audio, Dataset, DatasetDict, Image, Video
 from huggingface_hub import HfApi, create_repo, get_token
 
 _RECORD_URL = "https://purl.stanford.edu/zx935qw7203.json"
 _FILE_BASE_URL = "https://stacks.stanford.edu/file/druid:zx935qw7203"
 _SOURCE_RECORD_VERSION = 15
 _ARCHIVE_GROUPS = ("201210", "201211", "201212", "201301", "rest_videos_600k_4M")
+# This source clip has corrupt AAC packets until second 69. Its only relevance
+# annotation is at 2:25-2:27, within the recoverable portion. Preserve the
+# timeline by replacing the corrupt prefix with silence and re-encoding the
+# decodable suffix.
+_AUDIO_REPAIRS = {
+    "20130923/Early_Start_20130923_0200_cc_segment/07.700k.mp4": 69.0,
+}
 _SMALL_FILES = (
     "README.txt",
     "queries.tar.gz",
@@ -480,14 +487,185 @@ def _video_is_decodable(path: Path) -> bool:
     return bool(data.get("streams")) and duration > 0
 
 
+def _audio_is_decodable(path: Path) -> bool:
+    ffmpeg = shutil.which("ffmpeg")
+    if ffmpeg is None:
+        raise RuntimeError("ffmpeg is required to validate Stanford I2V audio")
+    decode = subprocess.run(
+        [
+            ffmpeg,
+            "-v",
+            "error",
+            "-xerror",
+            "-nostdin",
+            "-i",
+            str(path),
+            "-map",
+            "0:a:0",
+            "-f",
+            "null",
+            "-",
+        ],
+        capture_output=True,
+        text=True,
+    )
+    return decode.returncode == 0
+
+
+def _audio_path(audio_dir: Path, video_id: str) -> Path:
+    audio_id = str(PurePosixPath(video_id).with_suffix(".m4a"))
+    return _safe_output_path(audio_dir, audio_id)
+
+
+def _extract_audio_track(
+    video_path: Path,
+    audio_path: Path,
+    *,
+    repair_start_seconds: float | None = None,
+) -> tuple[bool, bool]:
+    ffmpeg = shutil.which("ffmpeg")
+    if ffmpeg is None:
+        raise RuntimeError("ffmpeg is required to extract Stanford I2V audio")
+    audio_path.parent.mkdir(parents=True, exist_ok=True)
+    partial = audio_path.with_name(f".{audio_path.stem}.partial{audio_path.suffix}")
+    partial.unlink(missing_ok=True)
+    if repair_start_seconds is None:
+        lossless_command = [
+            "-i",
+            str(video_path),
+            "-map",
+            "0:a:0",
+            "-vn",
+            "-c:a",
+            "copy",
+        ]
+        remux = subprocess.run(
+            [
+                ffmpeg,
+                "-v",
+                "error",
+                "-nostdin",
+                "-y",
+                *lossless_command,
+                "-movflags",
+                "+faststart",
+                str(partial),
+            ],
+            capture_output=True,
+            text=True,
+        )
+        if remux.returncode == 0 and _audio_is_decodable(partial):
+            partial.replace(audio_path)
+            return True, False
+        partial.unlink(missing_ok=True)
+
+        command = [
+            "-fflags",
+            "+discardcorrupt",
+            "-i",
+            str(video_path),
+            "-map",
+            "0:a:0",
+            "-vn",
+            "-af",
+            "aresample=async=1:first_pts=0",
+            "-c:a",
+            "aac",
+            "-b:a",
+            "128k",
+        ]
+    else:
+        command = [
+            "-f",
+            "lavfi",
+            "-t",
+            str(repair_start_seconds),
+            "-i",
+            "anullsrc=sample_rate=48000:channel_layout=stereo",
+            "-ss",
+            str(repair_start_seconds),
+            "-i",
+            str(video_path),
+            "-filter_complex",
+            "[0:a:0][1:a:0]concat=n=2:v=0:a=1[out]",
+            "-map",
+            "[out]",
+            "-c:a",
+            "aac",
+            "-b:a",
+            "128k",
+        ]
+    remux = subprocess.run(
+        [
+            ffmpeg,
+            "-v",
+            "error",
+            "-nostdin",
+            "-y",
+            *command,
+            "-movflags",
+            "+faststart",
+            str(partial),
+        ],
+        capture_output=True,
+        text=True,
+    )
+    if remux.returncode != 0 or not _audio_is_decodable(partial):
+        partial.unlink(missing_ok=True)
+        return False, True
+    partial.replace(audio_path)
+    return True, True
+
+
+def _extract_audio_tracks(
+    corpus_ids: list[str],
+    videos_dir: Path,
+    audio_dir: Path,
+    *,
+    workers: int,
+) -> tuple[set[str], set[str]]:
+    available = [
+        video_id for video_id in corpus_ids if (videos_dir / video_id).is_file()
+    ]
+
+    def extract(video_id: str) -> tuple[bool, bool]:
+        return _extract_audio_track(
+            videos_dir / video_id,
+            _audio_path(audio_dir, video_id),
+            repair_start_seconds=_AUDIO_REPAIRS.get(video_id),
+        )
+
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
+        results = list(pool.map(extract, available))
+        failed = {
+            video_id
+            for video_id, (valid, _) in zip(available, results, strict=True)
+            if not valid
+        }
+        reencoded = {
+            video_id
+            for video_id, (valid, source_is_malformed) in zip(
+                available, results, strict=True
+            )
+            if valid and source_is_malformed
+        }
+    print(
+        f"Audio extraction: available_videos={len(available)} "
+        f"reencoded={len(reencoded)} failed={len(failed)}",
+        flush=True,
+    )
+    return failed, reencoded
+
+
 def _validate_media(
     queries: dict[str, str],
     corpus_ids: list[str],
     queries_dir: Path,
     videos_dir: Path,
+    audio_dir: Path,
     *,
     workers: int,
-) -> tuple[set[str], set[str], set[str], set[str]]:
+) -> tuple[set[str], set[str], set[str], set[str], set[str], set[str]]:
     missing_queries = {
         query_id
         for query_id, path in queries.items()
@@ -512,7 +690,30 @@ def _validate_media(
             for video_id, valid in zip(candidates, checks, strict=True)
             if not valid
         }
-    return missing_queries, bad_queries, missing_videos, bad_videos
+    audio_candidates = [
+        video_id
+        for video_id in corpus_ids
+        if video_id not in missing_videos and _audio_path(audio_dir, video_id).is_file()
+    ]
+    missing_audio = set(candidates) - set(audio_candidates)
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
+        checks = pool.map(
+            lambda video_id: _audio_is_decodable(_audio_path(audio_dir, video_id)),
+            audio_candidates,
+        )
+        bad_audio = {
+            video_id
+            for video_id, valid in zip(audio_candidates, checks, strict=True)
+            if not valid
+        }
+    return (
+        missing_queries,
+        bad_queries,
+        missing_videos,
+        bad_videos,
+        missing_audio,
+        bad_audio,
+    )
 
 
 def _relevance_distribution(counts: Counter[str]) -> dict[str, float | int]:
@@ -531,9 +732,13 @@ def _build_datasets(
     qrels: list[tuple[str, str, int]],
     queries_dir: Path,
     videos_dir: Path,
+    audio_dir: Path,
     *,
     unavailable_queries: set[str],
     unavailable_videos: set[str],
+    missing_or_corrupt_videos: set[str],
+    missing_or_corrupt_audio: set[str],
+    reencoded_audio: set[str],
     temporal_annotations: int,
 ) -> tuple[Dataset, Dataset, Dataset, dict[str, Any]]:
     available_corpus = [
@@ -562,8 +767,12 @@ def _build_datasets(
         {
             "id": available_corpus,
             "video": [str(videos_dir / video_id) for video_id in available_corpus],
+            "audio": [
+                str(_audio_path(audio_dir, video_id)) for video_id in available_corpus
+            ],
         }
     ).cast_column("video", Video())
+    corpus = corpus.cast_column("audio", Audio())
     query_dataset = Dataset.from_dict(
         {
             "id": available_queries,
@@ -603,7 +812,14 @@ def _build_datasets(
             surviving_qrels_per_query
         ),
         "missing_or_corrupt_queries": sorted(unavailable_queries),
-        "missing_or_corrupt_videos": sorted(unavailable_videos),
+        "missing_or_corrupt_videos": sorted(missing_or_corrupt_videos),
+        "missing_or_corrupt_audio": sorted(missing_or_corrupt_audio),
+        "reencoded_audio": sorted(reencoded_audio & available_corpus_set),
+        "repaired_audio": {
+            video_id: {"silent_prefix_seconds": start_seconds}
+            for video_id, start_seconds in _AUDIO_REPAIRS.items()
+            if video_id in available_corpus_set
+        },
         "queries_dropped_without_positive": sorted(
             set(queries) - unavailable_queries - queries_with_positive
         ),
@@ -621,13 +837,13 @@ task_categories:
 tags:
 - mteb
 - moeb
-- image-to-video-retrieval
+- image-to-video-audio-retrieval
 ---
 
 # Stanford I2V 600K
 
 Frozen MTEB/MOEB representation of the official Stanford I2V 600K evaluation
-release for image-to-video retrieval.
+release for image-to-video+audio retrieval.
 
 ## Construction
 
@@ -643,19 +859,27 @@ protocol.
 The construction script is maintained in the MTEB repository at
 `scripts/data/stanford_i2v_retrieval/create_data.py`. Every source archive part is checked
 against the size and MD5 digest in the Stanford record before extraction. Images
-are decoded, and videos are probed for a valid video stream and positive duration,
-before publication.
+are decoded, videos are probed for a valid video stream, and their AAC soundtracks
+are placed in a separate audio column and fully decoded with strict error handling.
+Soundtracks with valid AAC streams are losslessly remuxed. The
+{len(summary["reencoded_audio"])} tracks containing malformed source packets are
+decoded and re-encoded while preserving timestamp gaps. One of those tracks has
+an unrecoverable first 69 seconds, which are replaced with silence; its only
+relevance annotation (2:25-2:27) lies in the recoverable suffix.
 
 ## Frozen evaluation contents
 
 - Queries: {summary["surviving_queries"]} (official: {summary["original_queries"]})
-- Corpus videos: {summary["surviving_corpus"]} (official: {summary["original_corpus"]})
+- Corpus video+audio clips: {summary["surviving_corpus"]} (official: {summary["original_corpus"]})
 - Binary query/video qrels: {summary["surviving_qrels"]} (official: {summary["original_qrels"]})
 - Source temporal annotations: {summary["original_temporal_annotations"]}
 - Distinct positive corpus videos: {summary["surviving_positive_videos"]} (official: {summary["original_positive_videos"]})
 - Distractor corpus videos: {summary["surviving_distractor_videos"]} (official: {summary["original_distractor_videos"]})
 - Missing or corrupt queries: {len(summary["missing_or_corrupt_queries"])}
 - Missing or corrupt videos: {len(summary["missing_or_corrupt_videos"])}
+- Missing or corrupt audio tracks: {len(summary["missing_or_corrupt_audio"])}
+- Re-encoded source-malformed audio tracks: {len(summary["reencoded_audio"])}
+- Tracks with an unrecoverable prefix replaced by silence: {len(summary["repaired_audio"])}
 - Queries removed because no positive survived: {len(summary["queries_dropped_without_positive"])}
 
 Configs follow MTEB's standard retrieval representation: `queries`, `corpus`,
@@ -734,7 +958,7 @@ def _publish(
         "corpus",
         token=token,
         max_shard_size="500MB",
-        commit_message="Add Stanford I2V video corpus",
+        commit_message="Add Stanford I2V video+audio corpus",
     )
     DatasetDict({"test": queries}).push_to_hub(
         repo_id,
@@ -770,6 +994,12 @@ def main() -> None:
         help="Maximum official archive parts prefetched concurrently (default: 4).",
     )
     parser.add_argument("--verify-workers", type=int, default=8)
+    parser.add_argument(
+        "--audio-workers",
+        type=int,
+        default=4,
+        help="Maximum audio tracks remuxed concurrently (default: 4).",
+    )
     args = parser.parse_args()
 
     work_dir = args.work_dir.resolve()
@@ -778,7 +1008,8 @@ def main() -> None:
     scratch_dir = source_dir / "scratch"
     queries_dir = source_dir / "queries"
     videos_dir = source_dir / "videos"
-    for directory in (metadata_dir, scratch_dir, queries_dir, videos_dir):
+    audio_dir = source_dir / "audio"
+    for directory in (metadata_dir, scratch_dir, queries_dir, videos_dir, audio_dir):
         directory.mkdir(parents=True, exist_ok=True)
 
     record, files = _load_source_record(work_dir)
@@ -877,21 +1108,38 @@ def main() -> None:
                 download_workers=args.download_workers,
             )
 
-    missing_queries, bad_queries, missing_videos, bad_videos = _validate_media(
+    _, reencoded_audio = _extract_audio_tracks(
+        corpus_ids,
+        videos_dir,
+        audio_dir,
+        workers=args.audio_workers,
+    )
+    (
+        missing_queries,
+        bad_queries,
+        missing_videos,
+        bad_videos,
+        missing_audio,
+        bad_audio,
+    ) = _validate_media(
         queries,
         corpus_ids,
         queries_dir,
         videos_dir,
+        audio_dir,
         workers=args.verify_workers,
     )
     unavailable_queries = missing_queries | bad_queries
-    unavailable_videos = missing_videos | bad_videos
+    video_failures = missing_videos | bad_videos
+    audio_failures = missing_audio | bad_audio
+    unavailable_videos = video_failures | audio_failures
     if (unavailable_queries or unavailable_videos) and not args.allow_missing:
         raise RuntimeError(
             "Media validation failed. Re-run with --download-media to fetch missing files, "
             "or --allow-missing to freeze a deterministic surviving benchmark. "
             f"missing_queries={len(missing_queries)} bad_queries={len(bad_queries)} "
-            f"missing_videos={len(missing_videos)} bad_videos={len(bad_videos)}"
+            f"missing_videos={len(missing_videos)} bad_videos={len(bad_videos)} "
+            f"missing_audio={len(missing_audio)} bad_audio={len(bad_audio)}"
         )
 
     corpus, query_dataset, qrel_dataset, summary = _build_datasets(
@@ -900,8 +1148,12 @@ def main() -> None:
         qrels,
         queries_dir,
         videos_dir,
+        audio_dir,
         unavailable_queries=unavailable_queries,
         unavailable_videos=unavailable_videos,
+        missing_or_corrupt_videos=video_failures,
+        missing_or_corrupt_audio=audio_failures,
+        reencoded_audio=reencoded_audio,
         temporal_annotations=temporal_annotations,
     )
     summary_path = work_dir / "construction_summary.json"

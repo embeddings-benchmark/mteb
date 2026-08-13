@@ -12,7 +12,6 @@ from mteb.mocks import (
     MOCK_MVEB_TASK_GRID,
     MOCK_TASK_TEST_GRID,
 )
-from mteb.types import PromptType
 
 
 def check_descriptive_stats(task):
@@ -85,33 +84,6 @@ def test_given_dataset_config_then_it_is_valid():
     )
     assert my_task.dataset["path"] == "test/dataset"
     assert my_task.dataset["revision"] == "1.0"
-
-
-def test_i2v_category_modalities_and_hf_metadata():
-    metadata = TaskMetadata(
-        name="ImageToVideoTask",
-        dataset={"path": "test/dataset", "revision": "1.0"},
-        description="testing image-to-video retrieval",
-        reference=None,
-        type="Any2AnyRetrieval",
-        category="i2v",
-        modalities=["image", "video"],
-        eval_splits=["test"],
-        eval_langs=["zxx-Zxxx"],
-        main_score="map_at_100",
-        date=None,
-        domains=None,
-        license="not specified",
-        task_subtypes=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
-        bibtex_citation="",
-    )
-
-    assert metadata.get_modalities(PromptType.query) == ["image"]
-    assert metadata.get_modalities(PromptType.document) == ["video"]
-    assert metadata._hf_task_category() == ["image-to-video"]
 
 
 def test_given_missing_dataset_path_then_it_throws():

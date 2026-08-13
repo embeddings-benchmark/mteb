@@ -8,7 +8,7 @@ class StanfordI2VRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="StanfordI2VRetrieval",
         description=(
-            "Image-to-video scene retrieval on the official Stanford I2V 600K "
+            "Image-to-video+audio scene retrieval on the official Stanford I2V 600K "
             "release. It contains 229 image queries and 3,401 newscast video "
             "clips, preserving the full release's query and relevance manifests "
             "while using the recommended smaller distractor corpus. The source's "
@@ -18,11 +18,11 @@ class StanfordI2VRetrieval(AbsTaskRetrieval):
         reference="https://doi.org/10.1145/2713168.2713197",
         dataset={
             "path": "Cerru02/Stanford-I2V-600K",
-            "revision": "3bc95ea84ae525e5df0501139d3c7f37c0866e24",
+            "revision": "cd233c9821c4f49242b53682ed0182e3d64a1b8d",
         },
         type="Any2AnyRetrieval",
-        category="i2v",
-        modalities=["image", "video"],
+        category="i2va",
+        modalities=["image", "video", "audio"],
         eval_splits=["test"],
         eval_langs=["zxx-Zxxx"],
         main_score="map_at_100",
@@ -51,8 +51,8 @@ class StanfordI2VRetrieval(AbsTaskRetrieval):
 """,
         prompt={
             "query": (
-                "Retrieve news videos containing the visual event or scene shown "
-                "in the image."
+                "Retrieve news video+audio clips containing the visual event or "
+                "scene shown in the image."
             )
         },
     )
