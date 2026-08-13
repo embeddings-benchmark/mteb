@@ -73,10 +73,6 @@ class CustomGrouping:
 
     name: str
     groups: Sequence[CustomGroup]
-    # Derived in __post_init__, not passed by callers. frozen=True +
-    # slots=True rules out functools.cached_property (no __dict__ to cache
-    # into, and frozen blocks a plain attribute set after __init__), so this
-    # is computed once up front and written via object.__setattr__ instead.
     task_to_label: dict[str, str] = field(init=False, repr=False, compare=False)
 
     def __post_init__(self) -> None:

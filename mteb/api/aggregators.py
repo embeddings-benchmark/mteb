@@ -400,10 +400,6 @@ def _build_summary_rows(
         }
         scores_by_task = per_task_rows.get(full, {})
 
-        # __cg__-prefixed columns are read via this explicit
-        # custom_group_cols_by_dim pointer, never via the type_cols
-        # catch-all above — keeps custom-group columns from ever being
-        # misclassified as task-type columns (see build_benchmark_summary).
         scores_by_custom_group = {
             dim: {
                 label: v
