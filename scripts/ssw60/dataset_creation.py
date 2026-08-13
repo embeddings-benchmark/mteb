@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script to prepare and upload the SSW60 (Sapsucker Woods 60) standalone audio and image 
+Script to prepare and upload the SSW60 (Sapsucker Woods 60) standalone audio and image
 subsets to the Hugging Face Hub under separate configurations.
 
 The script:
@@ -38,7 +38,9 @@ def build_config_dataset(
     Builds a DatasetDict for a given configuration (audio, images_inat, or images_nabirds).
     """
     if not metadata_path.exists() or not media_dir.exists():
-        print(f"Warning: Missing metadata or media folder for config '{config_name}'. Skipping.")
+        print(
+            f"Warning: Missing metadata or media folder for config '{config_name}'. Skipping."
+        )
         return None
 
     print(f"\nProcessing config '{config_name}' from {metadata_path}...")
@@ -46,7 +48,9 @@ def build_config_dataset(
     print(f"Loaded {len(df)} total rows from {metadata_path.name}")
 
     if debug:
-        print(f"Debug mode: Processing up to 5 samples per split for config '{config_name}'.")
+        print(
+            f"Debug mode: Processing up to 5 samples per split for config '{config_name}'."
+        )
         debug_dfs = []
         for split in df["split"].unique():
             debug_dfs.append(df[df["split"] == split].head(5))
@@ -54,7 +58,7 @@ def build_config_dataset(
 
     # Determine asset_id type
     # For NABirds, asset_id is a hex string. For Others, it is integer.
-    is_nabirds = (config_name == "images_nabirds")
+    is_nabirds = config_name == "images_nabirds"
 
     records = []
     for _, row in tqdm(df.iterrows(), total=len(df), desc=f"Scanning {config_name}"):
@@ -73,13 +77,16 @@ def build_config_dataset(
             continue
 
         # Get taxonomic info
-        species_info = taxa_map.get(label, {
-            "species_code": "unknown",
-            "common_name": "unknown",
-            "scientific_name": "unknown",
-            "family": "unknown",
-            "order": "unknown",
-        })
+        species_info = taxa_map.get(
+            label,
+            {
+                "species_code": "unknown",
+                "common_name": "unknown",
+                "scientific_name": "unknown",
+                "family": "unknown",
+                "order": "unknown",
+            },
+        )
 
         record = {
             "asset_id": str(asset_id),
@@ -95,20 +102,40 @@ def build_config_dataset(
         # Add modality-specific fields
         if config_name == "audio":
             record["audio"] = str(file_path)
-            record["samplerate"] = int(row["samplerate"]) if not pd.isna(row["samplerate"]) else 0
-            record["channels"] = int(row["channels"]) if not pd.isna(row["channels"]) else 0
-            record["samples"] = int(row["samples"]) if not pd.isna(row["samples"]) else 0
-            record["duration_seconds"] = float(row["duration_seconds"]) if not pd.isna(row["duration_seconds"]) else 0.0
+            record["samplerate"] = (
+                int(row["samplerate"]) if not pd.isna(row["samplerate"]) else 0
+            )
+            record["channels"] = (
+                int(row["channels"]) if not pd.isna(row["channels"]) else 0
+            )
+            record["samples"] = (
+                int(row["samples"]) if not pd.isna(row["samples"]) else 0
+            )
+            record["duration_seconds"] = (
+                float(row["duration_seconds"])
+                if not pd.isna(row["duration_seconds"])
+                else 0.0
+            )
         else:
             record["image"] = str(file_path)
             record["height"] = int(row["height"]) if not pd.isna(row["height"]) else 0
             record["width"] = int(row["width"]) if not pd.isna(row["width"]) else 0
-            record["channels"] = int(row["channels"]) if not pd.isna(row["channels"]) else 0
+            record["channels"] = (
+                int(row["channels"]) if not pd.isna(row["channels"]) else 0
+            )
             if config_name == "images_inat":
-                record["rights_holder"] = str(row["rights_holder"]) if not pd.isna(row["rights_holder"]) else ""
-                record["license_id"] = int(row["license_id"]) if not pd.isna(row["license_id"]) else -1
+                record["rights_holder"] = (
+                    str(row["rights_holder"])
+                    if not pd.isna(row["rights_holder"])
+                    else ""
+                )
+                record["license_id"] = (
+                    int(row["license_id"]) if not pd.isna(row["license_id"]) else -1
+                )
             elif config_name == "images_nabirds":
-                record["photographer"] = str(row["photographer"]) if not pd.isna(row["photographer"]) else ""
+                record["photographer"] = (
+                    str(row["photographer"]) if not pd.isna(row["photographer"]) else ""
+                )
 
         records.append(record)
 
@@ -131,33 +158,39 @@ def build_config_dataset(
     }
 
     if config_name == "audio":
-        schema_features = Features({
-            "audio": Audio(sampling_rate=16000), # standard 16kHz sampling rate
-            "samplerate": Value("int64"),
-            "channels": Value("int64"),
-            "samples": Value("int64"),
-            "duration_seconds": Value("float64"),
-            **base_features,
-        })
+        schema_features = Features(
+            {
+                "audio": Audio(sampling_rate=16000),  # standard 16kHz sampling rate
+                "samplerate": Value("int64"),
+                "channels": Value("int64"),
+                "samples": Value("int64"),
+                "duration_seconds": Value("float64"),
+                **base_features,
+            }
+        )
     elif config_name == "images_inat":
-        schema_features = Features({
-            "image": Image(),
-            "height": Value("int64"),
-            "width": Value("int64"),
-            "channels": Value("int64"),
-            "rights_holder": Value("string"),
-            "license_id": Value("int64"),
-            **base_features,
-        })
+        schema_features = Features(
+            {
+                "image": Image(),
+                "height": Value("int64"),
+                "width": Value("int64"),
+                "channels": Value("int64"),
+                "rights_holder": Value("string"),
+                "license_id": Value("int64"),
+                **base_features,
+            }
+        )
     elif config_name == "images_nabirds":
-        schema_features = Features({
-            "image": Image(),
-            "height": Value("int64"),
-            "width": Value("int64"),
-            "channels": Value("int64"),
-            "photographer": Value("string"),
-            **base_features,
-        })
+        schema_features = Features(
+            {
+                "image": Image(),
+                "height": Value("int64"),
+                "width": Value("int64"),
+                "channels": Value("int64"),
+                "photographer": Value("string"),
+                **base_features,
+            }
+        )
 
     splits_dict = {}
     for split_name in df_records["split"].unique():
@@ -165,7 +198,9 @@ def build_config_dataset(
         split_dict = {col: split_df[col].tolist() for col in df_records.columns}
         dataset = Dataset.from_dict(split_dict, features=schema_features)
         splits_dict[split_name] = dataset
-        print(f"Created subset '{config_name}' split '{split_name}' with {len(dataset)} samples.")
+        print(
+            f"Created subset '{config_name}' split '{split_name}' with {len(dataset)} samples."
+        )
 
     return DatasetDict(splits_dict)
 
@@ -203,7 +238,9 @@ def main():
     # Resolve HF Token
     token = args.token or os.environ.get("HF_TOKEN")
     if not token:
-        print("Warning: Hugging Face token not provided. You can log in via huggingface-cli or provide HF_TOKEN environment variable.")
+        print(
+            "Warning: Hugging Face token not provided. You can log in via huggingface-cli or provide HF_TOKEN environment variable."
+        )
 
     # Expand user paths (like ~/)
     data_dir = Path(os.path.expanduser(args.data_dir))
@@ -270,10 +307,14 @@ def main():
                 token=token,
                 private=False,
             )
-            print(f"✓ Successfully uploaded subset '{cfg['name']}' to https://huggingface.co/datasets/{args.repo_id}")
+            print(
+                f"✓ Successfully uploaded subset '{cfg['name']}' to https://huggingface.co/datasets/{args.repo_id}"
+            )
         except Exception as e:
             print(f"✗ Error uploading subset '{cfg['name']}': {e}", file=sys.stderr)
-            print("You can try pushing the dataset manually or log in via 'huggingface-cli login'.")
+            print(
+                "You can try pushing the dataset manually or log in via 'huggingface-cli login'."
+            )
 
 
 if __name__ == "__main__":

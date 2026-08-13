@@ -65,13 +65,19 @@ class SSW60A2IRetrieval(AbsTaskRetrieval):
         self.dataset = {"default": {}}
         for split in self.metadata.eval_splits:
             # Load standalone audio queries
-            queries_ds = load_dataset(self.metadata.dataset["path"], name="audio", split=split)
-            
+            queries_ds = load_dataset(
+                self.metadata.dataset["path"], name="audio", split=split
+            )
+
             # Load static image corpus from both iNaturalist and NABirds
-            inat_ds = load_dataset(self.metadata.dataset["path"], name="images_inat", split=split)
-            nabirds_ds = load_dataset(self.metadata.dataset["path"], name="images_nabirds", split=split)
+            inat_ds = load_dataset(
+                self.metadata.dataset["path"], name="images_inat", split=split
+            )
+            nabirds_ds = load_dataset(
+                self.metadata.dataset["path"], name="images_nabirds", split=split
+            )
             corpus_ds = concatenate_datasets([inat_ds, nabirds_ds])
-            
+
             queries = queries_ds.rename_column("asset_id", "id")
             corpus = corpus_ds.rename_column("asset_id", "id")
 
@@ -135,12 +141,18 @@ class SSW60I2ARetrieval(AbsTaskRetrieval):
         self.dataset = {"default": {}}
         for split in self.metadata.eval_splits:
             # Load static bird images as queries (from iNaturalist and NABirds)
-            inat_ds = load_dataset(self.metadata.dataset["path"], name="images_inat", split=split)
-            nabirds_ds = load_dataset(self.metadata.dataset["path"], name="images_nabirds", split=split)
+            inat_ds = load_dataset(
+                self.metadata.dataset["path"], name="images_inat", split=split
+            )
+            nabirds_ds = load_dataset(
+                self.metadata.dataset["path"], name="images_nabirds", split=split
+            )
             queries_ds = concatenate_datasets([inat_ds, nabirds_ds])
-            
+
             # Load standalone audio recordings as corpus
-            corpus_ds = load_dataset(self.metadata.dataset["path"], name="audio", split=split)
+            corpus_ds = load_dataset(
+                self.metadata.dataset["path"], name="audio", split=split
+            )
 
             queries = queries_ds.rename_column("asset_id", "id")
             corpus = corpus_ds.rename_column("asset_id", "id")
