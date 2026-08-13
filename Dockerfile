@@ -17,10 +17,11 @@
 #                 ``~/.cache/mteb/leaderboard/`` so the runtime first
 #                 request skips ~30s of cold work. DATA_REFRESH busts
 #                 the cache of these layers daily.
-#   og-builder  — extends `og-deps`, copies the warmed caches from
-#                 `data`, renders one OG hero PNG per benchmark / task
-#                 / model into /og-cache, then exits. Nothing
-#                 downstream of this stage ships.
+#   og-builder  — extends `og-deps`, renders one OG hero PNG per
+#                 benchmark / task / model into /og-cache, then exits.
+#                 Registry metadata only, so it does not depend on
+#                 `data` and builds alongside it. Nothing downstream
+#                 of this stage ships.
 #   runtime     — extends `data`, copies the rendered PNG files out of
 #                 og-builder. Stays small: no Playwright, no Chromium,
 #                 no Node. FastAPI serves the cached PNG files at /og.
@@ -81,9 +82,10 @@ FROM base AS data
 # earlier layer) is unchanged.
 ARG DATA_REFRESH=0
 
-# Pre-warm the HF dataset cache from mteb/results so the OG builder
-# (which calls warmup_blocking()) and the runtime first request both
-# skip the multi-minute cold clone.
+# Pre-warm the HF dataset cache from mteb/results so the runtime first
+# request skips the multi-minute cold clone. The OG builder does not
+# read this cache: `_load_catalogue` walks the static registries and
+# never calls warmup_blocking().
 RUN echo "data refresh: ${DATA_REFRESH}" \
  && hf download mteb/results --repo-type dataset || true
 
@@ -99,10 +101,6 @@ RUN python -c "from mteb.api.frames import _load_per_benchmark_frames; _load_per
 
 # ─── Stage: og-builder ──────────────────────────────────────────────
 FROM og-deps AS og-builder
-
-# Merge the warmed HF + leaderboard caches from the data stage next to
-# the Playwright browser cache already present in og-deps.
-COPY --from=data --chown=user:user /home/user/.cache /home/user/.cache
 
 RUN python scripts/generate_og_images.py --out=/og-cache
 
