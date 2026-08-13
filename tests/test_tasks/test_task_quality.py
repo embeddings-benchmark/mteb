@@ -165,6 +165,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "IndicCrosslingualSTS",
         "IndicLangClassification",
         "IndicNLPNewsClassification",
+        "InfoSeekIT2TRetrieval.v2",  # documents_text_statistics inherits OVEN's short min_text_length after the corpus union fix (#5021)
         "JDReview",
         "JDReview.v2",
         "JaGovFaqsRetrieval",
@@ -254,6 +255,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "NorQuadRetrieval",
         "NovelQA",
         "OVENIT2TRetrieval",
+        "OVENIT2TRetrieval.v2",  # same OVEN corpus text as v1; corpus completeness fix (#5021) doesn't touch text quality
         "Ocnli",
         "OdiaNewsClassification",
         "OmniVideoBenchVideoAudioCentricQA",
@@ -490,6 +492,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "IndonesianMongabayConservationClassification",
         "InfoSeekIT2ITRetrieval",
         "InfoSeekIT2TRetrieval",
+        "InfoSeekIT2TRetrieval.v2",  # queries unchanged from v1 (templated questions across images); corpus union also carries OVEN's document-level duplicates (#5021)
         "JDReview",
         "JQaRAReranking",
         "JaCWIRReranking",
@@ -565,6 +568,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "OKVQAIT2TRetrieval",
         "OVENIT2ITRetrieval",
         "OVENIT2TRetrieval",
+        "OVENIT2TRetrieval.v2",  # queries unchanged from v1 (templated questions across images); corpus union also carries INFOSEEK's document-level duplicates (#5021)
         "OnlineStoreReviewSentimentClassification",
         "OpenTenderRetrieval",
         "PIQA",
@@ -817,6 +821,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "ImageCoDeT2IRetrieval",
         "InfoSeekIT2ITRetrieval",
         "InfoSeekIT2TRetrieval",
+        "InfoSeekIT2TRetrieval.v2",  # queries unchanged from v1 (multiple questions per image) (#5021)
         "LLaVAIT2TRetrieval",
         "MMLongBenchDocRetrieval",  # official corpus contains repeated rendered pages; preserve IDs to match qrels
         "MomentSeekerTI2VRetrieval",
