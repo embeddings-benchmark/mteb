@@ -1,15 +1,5 @@
-from pathlib import Path
-
-from datasets import Video, load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
-from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-
-
-def _video_id(value) -> str:
-    """Return the flat filename stem used by the dataset's videos directory."""
-    return str(value).rsplit("/", maxsplit=1)[-1]
 
 
 class CoVRRVT2VRetrieval(AbsTaskRetrieval):
@@ -23,8 +13,8 @@ class CoVRRVT2VRetrieval(AbsTaskRetrieval):
         ),
         reference="https://arxiv.org/abs/2603.20190",
         dataset={
-            "path": "omkarthawakar/CoVR-R",
-            "revision": "5e4543c680b19238bbb773e6757563c28d5666d8",
+            "path": "whybe-choi/CoVRRVT2VRetrieval",
+            "revision": "c4c64ba85adf72c1577fcb693dee0b1aa1ac8080",
         },
         type="Any2AnyRetrieval",
         category="vt2v",
@@ -48,77 +38,3 @@ class CoVRRVT2VRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        """Load the release annotations and pair them with the flat video files."""
-        if self.data_loaded:
-            return
-
-        grouped_annotations = load_dataset(
-            self.metadata.dataset["path"],
-            data_files="merged_webvid_ss2.json",
-            revision=self.metadata.dataset["revision"],
-            split="train",
-            num_proc=num_proc,
-        )
-
-        annotations = []
-        for group in grouped_annotations:
-            for source_name, rows in group.items():
-                if rows is not None:
-                    annotations.extend((source_name, row) for row in rows)
-
-        videos = load_dataset(
-            self.metadata.dataset["path"],
-            revision=self.metadata.dataset["revision"],
-            split="train",
-            num_proc=num_proc,
-        )
-        video_paths = videos.cast_column("video", Video(decode=False))["video"]
-        video_ids = [Path(video["path"]).stem for video in video_paths]
-        video_index = {video_id: index for index, video_id in enumerate(video_ids)}
-
-        missing_video_ids = {
-            video_id
-            for _, row in annotations
-            for video_id in (
-                _video_id(row["video_source"]),
-                _video_id(row["video_target"]),
-            )
-            if video_id not in video_index
-        }
-        if missing_video_ids:
-            missing = ", ".join(sorted(missing_video_ids)[:5])
-            raise ValueError(f"CoVR-R is missing referenced videos: {missing}")
-
-        query_ids = [f"{source_name}-{row['id']}" for source_name, row in annotations]
-        source_ids = [_video_id(row["video_source"]) for _, row in annotations]
-        target_ids = [_video_id(row["video_target"]) for _, row in annotations]
-
-        queries = videos.select(
-            [video_index[source_id] for source_id in source_ids]
-        ).add_column("id", query_ids)
-        queries = queries.add_column(
-            "text", [row["modification_text"] for _, row in annotations]
-        )
-        corpus = videos.add_column("id", video_ids)
-        qrels = {
-            query_id: {target_id: 1}
-            for query_id, target_id in zip(query_ids, target_ids, strict=True)
-        }
-        top_ranked = {
-            query_id: [video_id for video_id in video_ids if video_id != source_id]
-            for query_id, source_id in zip(query_ids, source_ids, strict=True)
-        }
-
-        self.dataset = {
-            "default": {
-                "test": RetrievalSplitData(
-                    queries=queries,
-                    corpus=corpus,
-                    relevant_docs=qrels,
-                    top_ranked=top_ranked,
-                )
-            }
-        }
-        self.data_loaded = True
