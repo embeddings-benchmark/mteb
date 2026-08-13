@@ -256,16 +256,21 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         Returns:
             A new BenchmarkResults object with the revisions joined.
         """
+        _experiment_sentinel = ""
+
         records = []
         for model_result in self:
+            experiment_name = model_result.experiment_name or _experiment_sentinel
             for task_result in model_result.task_results:
                 records.append(
                     dict(
                         model=model_result.model_name,
                         revision=model_result.model_revision,
+                        experiment_name=experiment_name,
                         task_name=task_result.task_name,
                         mteb_version=task_result.mteb_version,
                         task_result=task_result,
+                        model_meta=model_result.model_meta,
                         has_scores=bool(task_result.scores),
                     )
                 )
@@ -308,23 +313,33 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
         # Sort by priority (desc), mteb_version (desc), and take first per group
         task_df = task_df.sort_values(
-            ["model", "task_name", "priority", "mteb_version"],
-            ascending=[True, True, False, False],
+            ["model", "experiment_name", "task_name", "priority", "mteb_version"],
+            ascending=[True, True, True, False, False],
             na_position="last",
         )
 
-        task_df = task_df.groupby(["model", "task_name"], as_index=False).first()
+        # `experiment_name` is part of the group key so an experiment variant
+        # never collapses into (or overwrites) the base model's row for a
+        # task they both happen to share.
+        task_df = task_df.groupby(
+            ["model", "experiment_name", "task_name"], as_index=False
+        ).first()
 
         # Reconstruct model results
         model_results = []
-        # Group by original revision to maintain deterministic behavior
-        # After the first() selection above, each (model, task_name) is unique,
-        # so grouping by original revision ensures consistent ModelResult creation
-        for (model, model_revision), group in task_df.groupby(["model", "revision"]):
+        # Group by original revision (+ experiment_name) to maintain
+        # deterministic behavior. After the first() selection above, each
+        # (model, experiment_name, task_name) is unique, so grouping by
+        # original revision ensures consistent ModelResult creation.
+        for (model, model_revision, experiment_name), group in task_df.groupby(
+            ["model", "revision", "experiment_name"]
+        ):
             model_result = ModelResult.model_construct(
                 model_name=model,  # type: ignore[arg-type]
                 model_revision=model_revision,  # type: ignore[arg-type]
                 task_results=list(group["task_result"]),
+                experiment_name=experiment_name or None,
+                model_meta=group["model_meta"].iloc[0],
             )
             model_results.append(model_result)
         return BenchmarkResults.model_construct(model_results=model_results)
@@ -458,10 +473,19 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         col_language: list[Any] = []
         col_subset: list[Any] = []
         col_score: list[Any] = []
+        col_experiments: list[Any] = []
+        col_model_meta: list[Any] = []
 
         for model_result in bench_results:
             mn = model_result.model_name
             mr = model_result.model_revision
+            mm = model_result.model_meta
+            exp_kwargs = (
+                dict(mm.experiment_kwargs)
+                if mm is not None and mm.experiment_kwargs
+                else None
+            )
+            meta_dict = mm.to_dict() if mm is not None and exp_kwargs else None
             for task_result in model_result.task_results:
                 tn = task_result.task_name
                 for split, scores_list in task_result.scores.items():
@@ -473,6 +497,8 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                         col_language.append(score_item.get("languages", ["Unknown"]))
                         col_subset.append(score_item.get("hf_subset", "default"))
                         col_score.append(score_item.get("main_score", None))
+                        col_experiments.append(exp_kwargs)
+                        col_model_meta.append(meta_dict)
 
         if not col_model_name:
             return None
@@ -486,6 +512,8 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 "language": col_language,
                 "subset": col_subset,
                 "score": col_score,
+                "experiments": col_experiments,
+                "model_meta": col_model_meta,
             }
         )
         if include_model_revision is False:

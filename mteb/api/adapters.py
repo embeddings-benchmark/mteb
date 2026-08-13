@@ -5,6 +5,8 @@ Memoised because mteb's registries are static after import.
 
 from __future__ import annotations
 
+import json
+import logging
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any, TypeVar
 
@@ -19,6 +21,9 @@ from mteb.api.settings import get_settings
 from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.languages import language_label
 from mteb.models.model_implementations import MODEL_REGISTRY
+from mteb.models.model_meta import ModelMeta
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
@@ -27,7 +32,6 @@ if TYPE_CHECKING:
     from mteb.abstasks.abstask import AbsTask
     from mteb.benchmarks._leaderboard_menu import MenuEntry
     from mteb.benchmarks.benchmark import Benchmark
-    from mteb.models.model_meta import ModelMeta
 
 
 _T = TypeVar("_T")
@@ -82,6 +86,39 @@ def model_meta_to_schema(
     if zero_shot_pct is None:
         return cached
     return cached.model_copy(update={"zero_shot_pct": int(zero_shot_pct)})
+
+
+def run_model_meta_to_schema(
+    run_meta: dict[str, Any],
+    *,
+    zero_shot_pct: int | None = None,
+) -> ModelMetaSchema | None:
+    """`ModelMetaSchema` built straight from one *run's own* `model_meta.json`.
+
+    Unlike `model_meta_to_schema`, this isn't cached by model name — it's
+    meant for experiment/ablation rows, whose metadata can genuinely differ
+    from the base model's static MODEL_REGISTRY entry in more than one field
+    (e.g. jinaai/jina-embeddings-v4's `vector_type=multi_vector` experiment
+    runs `late-interaction`, not the base model's `dense`; other ablations
+    could just as easily change `embed_dim`, `languages`, etc.). Rebuilding
+    the whole schema from the run's dict — the same way a base row's schema
+    gets built from its `ModelMeta` — picks up any such difference generically
+    instead of special-casing one field.
+
+    `run_meta` is the dict produced by `ModelMeta.to_dict()` (see
+    `benchmark_results.py::_build_pre_agg_df`'s `model_meta` column), where
+    `loader` is serialized as its registered name rather than the callable
+    itself — round-trip through `model_validate_json_resolved` to resolve it
+    back before handing off to the normal schema constructor. Returns `None`
+    (caller should fall back to the cached base-model schema) if the dict
+    doesn't validate — e.g. a submission predating some now-required field.
+    """
+    try:
+        meta = ModelMeta.model_validate_json_resolved(json.dumps(run_meta))
+    except Exception:
+        logger.debug("Failed to parse run-level ModelMeta for %s", run_meta.get("name"))
+        return None
+    return ModelMetaSchema.from_model_meta(meta, zero_shot_pct=zero_shot_pct)
 
 
 def menus_to_schemas(entries: Sequence[MenuEntry]) -> list[MenuEntrySchema]:
