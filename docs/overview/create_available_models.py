@@ -138,7 +138,7 @@ def required_memory_string(mem_in_mb: int | None) -> str:
 def format_model_entry(meta: ModelMeta) -> str:
     revision = meta.revision or "not specified"
     raw_license = meta.license or "not specified"
-    if raw_license.startswith("http://") or raw_license.startswith("https://"):
+    if raw_license.startswith(("http://", "https://")):
         license = f"[custom]({raw_license})"
     else:
         license = raw_license

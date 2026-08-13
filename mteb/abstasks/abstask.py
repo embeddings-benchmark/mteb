@@ -139,7 +139,6 @@ class AbsTask(ABC):  # noqa: PLR0904
             num_proc: Number of processes to use for the transformation.
             kwargs: Additional keyword arguments passed to the load_dataset function. Keep for forward compatibility.
         """
-        pass
 
     def evaluate(
         self,

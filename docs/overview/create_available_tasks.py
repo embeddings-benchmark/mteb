@@ -103,7 +103,7 @@ def format_task_entry(task: mteb.AbsTask) -> str:  # noqa: PLR0914
     if task.metadata.contributed_by:
         description += f" Contributed by {task.metadata.contributed_by}."
     raw_license = task.metadata.license or "not specified"
-    if raw_license.startswith("http://") or raw_license.startswith("https://"):
+    if raw_license.startswith(("http://", "https://")):
         license = f"[custom]({raw_license})"
     else:
         license = raw_license
