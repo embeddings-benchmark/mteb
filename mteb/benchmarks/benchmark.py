@@ -18,6 +18,7 @@ from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.eval_model import HFEvalMeta, HFEvalTaskConfig
 from mteb._hf_integration.hf_hub_utils import _get_file_on_hub
 from mteb.abstasks.abstask import AbsTask
+from mteb.benchmarks._benchmark_metrics import _compute_custom_group_means
 from mteb.types import StrURL
 
 if TYPE_CHECKING:
@@ -595,10 +596,6 @@ class Benchmark:
         scores: dict[str, float | None] = {}
         for aggregation in self.aggregations:
             if isinstance(aggregation, CustomGrouping):
-                from mteb.benchmarks._benchmark_metrics import (
-                    _compute_custom_group_means,
-                )
-
                 scores.update(_compute_custom_group_means(filtered, aggregation))
             else:
                 scores.update(aggregation.aggregate(filtered))
