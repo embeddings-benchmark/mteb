@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any, TypedDict, cast
 
+import numpy as np
 import torch
 from datasets import Dataset
 from sklearn import metrics
@@ -22,6 +23,8 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
     from pathlib import Path
 
+    from numpy.typing import NDArray
+
     from mteb.models import MTEBModels
     from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, Modalities
@@ -34,9 +37,25 @@ class ZeroShotClassificationMetrics(TypedDict):
 
     Attributes:
         accuracy: Accuracy of the model.
+        f1: F1 score (macro).
+        f1_weighted: Weighted F1 score.
+        precision: Precision score (macro).
+        precision_weighted: Weighted precision score.
+        recall: Recall score (macro).
+        recall_weighted: Weighted recall score.
+        ap: Average precision score (macro) for binary classification.
+        ap_weighted: Weighted average precision score for binary classification.
     """
 
     accuracy: float
+    f1: float
+    f1_weighted: float
+    precision: float
+    precision_weighted: float
+    recall: float
+    recall_weighted: float
+    ap: float | None
+    ap_weighted: float | None
 
 
 class AbsTaskZeroShotClassification(AbsTask):
@@ -153,11 +172,14 @@ class AbsTaskZeroShotClassification(AbsTask):
                 hf_split=hf_split,
             )
 
+        probs_array = (
+            probs.cpu().numpy() if torch.is_tensor(probs) else np.asarray(probs)
+        )
         return self._calculate_scores(
             self._normalize_labels(
                 data_split[self.label_column_name], candidate_labels
             ),
-            torch.tensor(probs).argmax(dim=1).tolist(),
+            probs_array,
         )
 
     @staticmethod
@@ -199,11 +221,35 @@ class AbsTaskZeroShotClassification(AbsTask):
     def _calculate_scores(  # noqa: PLR6301
         self,
         labels: list[int],
-        predictions: list[int],
+        probs: NDArray[np.floating],
     ) -> ZeroShotClassificationMetrics:
-        return ZeroShotClassificationMetrics(
+        predictions = probs.argmax(axis=1)
+        scores = ZeroShotClassificationMetrics(
             accuracy=metrics.accuracy_score(labels, predictions),
+            f1=metrics.f1_score(labels, predictions, average="macro"),
+            f1_weighted=metrics.f1_score(labels, predictions, average="weighted"),
+            precision=metrics.precision_score(labels, predictions, average="macro"),
+            precision_weighted=metrics.precision_score(
+                labels, predictions, average="weighted"
+            ),
+            recall=metrics.recall_score(labels, predictions, average="macro"),
+            recall_weighted=metrics.recall_score(
+                labels, predictions, average="weighted"
+            ),
+            ap=None,
+            ap_weighted=None,
         )
+
+        # if binary classification, also report average precision using the
+        if len(np.unique(labels)) == 2:
+            positive_scores = probs[:, 1]
+            scores["ap"] = metrics.average_precision_score(
+                labels, positive_scores, average="macro"
+            )
+            scores["ap_weighted"] = metrics.average_precision_score(
+                labels, positive_scores, average="weighted"
+            )
+        return scores
 
     def _push_dataset_to_hub(
         self,
