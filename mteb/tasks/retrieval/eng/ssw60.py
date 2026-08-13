@@ -69,12 +69,9 @@ class SSW60A2IRetrieval(AbsTaskRetrieval):
             
             # Load static image corpus from both iNaturalist and NABirds
             inat_ds = load_dataset(self.metadata.dataset["path"], name="images_inat", split=split)
-            try:
-                nabirds_ds = load_dataset(self.metadata.dataset["path"], name="images_nabirds", split=split)
-                corpus_ds = concatenate_datasets([inat_ds, nabirds_ds])
-            except Exception:
-                corpus_ds = inat_ds
-
+            nabirds_ds = load_dataset(self.metadata.dataset["path"], name="images_nabirds", split=split)
+            corpus_ds = concatenate_datasets([inat_ds, nabirds_ds])
+            
             queries = queries_ds.rename_column("asset_id", "id")
             corpus = corpus_ds.rename_column("asset_id", "id")
 
