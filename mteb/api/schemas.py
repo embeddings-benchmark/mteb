@@ -335,9 +335,9 @@ class SummaryRowSchema(_CamelModel):
     mean_private: float | None = None
     scores_by_task_type: dict[str, float]
     scores_by_task: dict[str, float]
-    # dimension name -> {group label: score}. Not recomputed under a language
-    # filter (unlike scores_by_task_type/mean_task/mean_task_type) — stays
-    # frozen at the unfiltered values; see `build_benchmark_summary`.
+    # dimension name -> {group label: score}. Recomputed under a language
+    # filter the same way scores_by_task_type is — see
+    # `_recompute_lenient_custom_groups` in `aggregators.py`.
     scores_by_custom_group: dict[str, dict[str, float]] = Field(default_factory=dict)
     trained_on_tasks: list[str] = Field(default_factory=list)
 
