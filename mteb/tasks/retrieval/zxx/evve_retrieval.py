@@ -70,6 +70,7 @@ def evve_scores(
 
 class EVVERetrieval(AbsTaskRetrieval):
     k_values = (1, 3, 5, 10, 20, 100, 1000, 1644)
+    # EVVE's AP is defined over the complete corpus; the base class retrieves 1,000.
     _top_k = 1644
 
     metadata = TaskMetadata(
@@ -85,7 +86,7 @@ class EVVERetrieval(AbsTaskRetrieval):
         reference="https://openaccess.thecvf.com/content_cvpr_2013/html/Revaud_Event_Retrieval_in_2013_CVPR_paper.html",
         dataset={
             "path": "Cerru02/EVVE",
-            "revision": "90e3c4073106df21b32ac435275091c4f5686b00",
+            "revision": "19cc04cdf0bb74ea755b01172ff902405a8fd82e",
         },
         type="Any2AnyRetrieval",
         category="v2v",

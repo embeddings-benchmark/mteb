@@ -991,7 +991,7 @@ configs:
   data_files:
   - split: test
     path: qrels/test-*
-license: other
+license: unknown
 pretty_name: EVVE Video-to-Video Event Retrieval
 ---
 
@@ -1270,7 +1270,9 @@ def main() -> None:
     protocol = build_protocol(annotations, load_protocol_ids())
     summary = protocol_summary(protocol, before_filter)
     summary_path = args.work_dir / "protocol-summary.json"
-    summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+    summary_path.write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     print(json.dumps(summary["evaluation_protocol"], indent=2, sort_keys=True))
     print(f"Wrote {summary_path}")
 
