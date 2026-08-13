@@ -34,7 +34,6 @@ class MockSentenceTransformer(SentenceTransformer):
 
     def __init__(self):
         self._modules = {}
-        pass
 
     def encode(  # noqa: PLR0913, PLR0917, PLR6301
         self,

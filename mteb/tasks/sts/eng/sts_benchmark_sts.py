@@ -38,9 +38,6 @@ class STSBenchmarkSTS(AbsTaskSTS):
         superseded_by="STSBenchmark.v2",
     )
 
-    min_score = 0
-    max_score = 5
-
 
 class STSBenchmarkSTSV2(AbsTaskSTS):
     min_score = 0

@@ -218,13 +218,13 @@ querit_reranker_training_data = {
 }
 
 QUERIT_CITATION = """@misc{zhong2026queritrerankertrainingcompactmultilingual,
-      title={Querit-Reranker: Training Compact Multilingual Rerankers via Efficient Label-Free Distribution Adaptation}, 
+      title={Querit-Reranker: Training Compact Multilingual Rerankers via Efficient Label-Free Distribution Adaptation},
       author={Yunfei Zhong and Jun Yang and Wei Huang and Yinqiong Cai and Haosheng Qian and Yixing Fan and Ruqing Zhang and Lixin Su and Daiting Shi and Jiafeng Guo},
       year={2026},
       eprint={2606.19037},
       archivePrefix={arXiv},
       primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2606.19037}, 
+      url={https://arxiv.org/abs/2606.19037},
 }"""
 
 Querit_Reranker_A0_4B = ModelMeta(
