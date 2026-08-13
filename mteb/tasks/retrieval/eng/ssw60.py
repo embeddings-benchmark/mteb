@@ -36,7 +36,7 @@ class SSW60A2IRetrieval(AbsTaskRetrieval):
         reference=_REFERENCE,
         dataset={
             "path": "nik1995/ssw60_audio_image",
-            "revision": "main",
+            "revision": "453efd1eb3d933565e23e657ab70502360acd632",
         },
         type="Any2AnyRetrieval",
         category="a2i",
@@ -112,7 +112,7 @@ class SSW60I2ARetrieval(AbsTaskRetrieval):
         reference=_REFERENCE,
         dataset={
             "path": "nik1995/ssw60_audio_image",
-            "revision": "main",
+            "revision": "453efd1eb3d933565e23e657ab70502360acd632",
         },
         type="Any2AnyRetrieval",
         category="i2a",
