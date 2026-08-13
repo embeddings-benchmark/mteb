@@ -174,7 +174,7 @@ class AbsTaskZeroShotClassification(AbsTask):
 
         probs_array = (
             probs.cpu().numpy() if torch.is_tensor(probs) else np.asarray(probs)
-        )
+        ).astype(np.float64)
         return self._calculate_scores(
             self._normalize_labels(
                 data_split[self.label_column_name], candidate_labels
