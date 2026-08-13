@@ -321,28 +321,10 @@ def _get_means_per_types(
     return type_exprs, type_cols
 
 
-# Prefix for CustomGrouping-derived summary columns. Guarantees no collision
-# against `_SUMMARY_META_COLS` (all human-readable, space-containing, no
-# leading underscores) or bare TASK_TYPES columns (raw CamelCase type names,
-# no leading underscores). The `{dimension}::{label}` suffix (matching
-# CustomGrouping/`_compute_custom_group_means`'s key format) additionally
-# guarantees no collision *between* simultaneous dimensions that happen to
-# share a group label (e.g. both have an "Other" bucket).
-_CUSTOM_GROUP_COL_PREFIX = "__cg__"
-
-
 def _get_means_per_custom_group(
     task_cols: list[str], grouping: CustomGrouping
 ) -> tuple[list[pl.Expr], list[str]]:
-    """Per-custom-group mean expressions for one `CustomGrouping` dimension.
-
-    Directly modeled on
-    [_get_means_per_types][mteb.benchmarks._create_table._get_means_per_types]
-    — same `skipna=False` mean policy — but buckets task columns by
-    `grouping.task_to_label` (benchmark-supplied) instead of the global
-    task-type registry. Column names are prefixed with
-    [_CUSTOM_GROUP_COL_PREFIX][mteb.benchmarks._create_table._CUSTOM_GROUP_COL_PREFIX].
-    """
+    """Per-custom-group mean expressions for one `CustomGrouping` dimension."""
     tasks_per_label: dict[str, list[str]] = defaultdict(list)
     for task_name in task_cols:
         label = grouping.task_to_label.get(task_name)
@@ -352,7 +334,7 @@ def _get_means_per_custom_group(
     cols: list[str] = []
     exprs: list[pl.Expr] = []
     for label, tasks in tasks_per_label.items():
-        col = f"{_CUSTOM_GROUP_COL_PREFIX}{grouping.name}::{label}"
+        col = f"__cg__{grouping.name}::{label}"
         cols.append(col)
         exprs.append(_skipna_false_mean(tasks).alias(col))
     return exprs, cols
@@ -718,10 +700,6 @@ def _create_summary_table(  # noqa: PLR0914
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return _no_results_summary()
 
-    # Split the mixed sequence once. `_summary_metadata` below needs the
-    # enum-only view — CustomGrouping isn't safely hashable (its `groups` /
-    # `CustomGroup.tasks` are typically plain lists), so it can never be fed
-    # through `set(aggregations)`.
     enum_aggregations = [a for a in aggregations if isinstance(a, BenchmarkAggregation)]
     custom_groupings = [a for a in aggregations if isinstance(a, CustomGrouping)]
 
@@ -762,10 +740,6 @@ def _create_summary_table(  # noqa: PLR0914
 
     type_exprs, type_cols = _get_means_per_types(task_cols)
 
-    # Custom-group columns, one CustomGrouping dimension at a time. Unlike
-    # TASK_TYPES (always computed, dropped below if unwanted), this only
-    # runs for dimensions actually declared — there's nothing to compute
-    # when a benchmark has none.
     custom_group_exprs: list[pl.Expr] = []
     custom_group_cols_by_dim: dict[str, list[str]] = {}
     for grouping in custom_groupings:

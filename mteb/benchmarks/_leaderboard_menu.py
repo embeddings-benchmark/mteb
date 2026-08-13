@@ -161,7 +161,6 @@ R_BENCHMARK_ENTRIES = [
                     mteb.get_benchmark("RTEB(Health, beta)"),
                     mteb.get_benchmark("FollowIR"),
                     mteb.get_benchmark("LongEmbed"),
-                    mteb.get_benchmark("LMEB"),
                     mteb.get_benchmark("BRIGHT"),
                 ],
             ),
@@ -272,7 +271,6 @@ HOME_BENCHMARK_ENTRIES = [
                 "RTEB(Health, beta)",
                 "FollowIR",
                 "LongEmbed",
-                "LMEB",
                 "BRIGHT",
             ]
         ),

@@ -126,12 +126,7 @@ class BenchmarkSchema(_CamelModel):
             language_view = sorted({language_label(c) for c in benchmark.language_view})
         else:
             language_view = None
-        # benchmark.aggregations mixes BenchmarkAggregation members with
-        # CustomGrouping instances (no `.value`) — plain flags echo `.value`
-        # as before, every CustomGrouping collapses to one deduped
-        # "custom_groups" marker so the frontend's existing
-        # `aggregations.includes('custom_groups')` gate is unchanged
-        # regardless of how many dimensions are actually declared.
+
         agg_values: list[str] = []
         for a in benchmark.aggregations:
             value = "custom_groups" if isinstance(a, CustomGrouping) else a.value
@@ -335,9 +330,6 @@ class SummaryRowSchema(_CamelModel):
     mean_private: float | None = None
     scores_by_task_type: dict[str, float]
     scores_by_task: dict[str, float]
-    # dimension name -> {group label: score}. Recomputed under a language
-    # filter the same way scores_by_task_type is — see
-    # `_recompute_lenient_custom_groups` in `aggregators.py`.
     scores_by_custom_group: dict[str, dict[str, float]] = Field(default_factory=dict)
     trained_on_tasks: list[str] = Field(default_factory=list)
 
@@ -351,9 +343,6 @@ class BenchmarkSummarySchema(_CamelModel):
     tasks_meta: list[TaskMetaSchema]
     rows: list[SummaryRowSchema]
     aggregations: list[str] = Field(default_factory=list)
-    # Data-driven from what's actually in SummaryTable.custom_group_cols —
-    # same relationship task_types already has to type_cols. Descriptions
-    # are joined back in from the benchmark's static declaration.
     custom_groupings: list[CustomGroupingSchema] = Field(default_factory=list)
     show_zero_shot: bool = True
 

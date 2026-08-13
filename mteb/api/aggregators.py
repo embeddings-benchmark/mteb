@@ -181,14 +181,6 @@ def _bucket_means(
     (filtered out / not run) is absent from its bucket rather than treated
     as a zero, and a task with no key (`task_to_key.get` misses) is skipped
     entirely.
-
-    Shared bucket-and-average primitive behind both
-    [_recompute_lenient_means][mteb.api.aggregators._recompute_lenient_means]
-    (bucketed by task type) and
-    [_recompute_lenient_custom_groups][mteb.api.aggregators._recompute_lenient_custom_groups]
-    (bucketed by CustomGrouping label, once per dimension) — same
-    "only average what's present" policy either way, so partial-coverage
-    models under a language filter don't collapse to null.
     """
     buckets: dict[str, list[float]] = {}
     for tname, score in scores_by_task.items():

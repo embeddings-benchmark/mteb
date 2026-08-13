@@ -52,24 +52,11 @@ class CustomGroup:
 class CustomGrouping:
     """A named custom dimension bucketing a benchmark's tasks into display groups.
 
-    Generalises [TASK_TYPES][mteb.benchmarks.benchmark.BenchmarkAggregation.TASK_TYPES]:
-    instead of grouping by the global `TaskMetadata.type` registry, groups by
-    a benchmark-supplied set of [CustomGroup][mteb.benchmarks.benchmark.CustomGroup]s.
-    Goes directly into [Benchmark.aggregations][mteb.benchmarks.benchmark.Benchmark.aggregations]
-    alongside the plain `BenchmarkAggregation` flags — there is no separate
-    field to declare it in and no matching `BenchmarkAggregation` member; a
-    `CustomGrouping` instance's presence in `aggregations` is itself the
-    on-switch for that dimension's columns. A benchmark may include several
-    instances for several independent dimensions at once.
-
     Args:
         name: The dimension's display name (e.g. ``"Memory Type"``). Must not
             contain ``"::"`` (reserved as the internal column/key delimiter).
             Used to namespace every score key / summary column this
-            dimension produces (``f"{name}::{label}"``) so two dimensions
-            that happen to share a group label (e.g. both have an "Other"
-            bucket) never collide, and to look the declaration back up when
-            only computed columns are available (see `mteb.api.aggregators`).
+            dimension produces (``f"{name}::{label}"``).
         groups: The dimension's groups. Every group's label must be unique
             within this dimension, and a task may not appear in more than one
             group of the same dimension.
