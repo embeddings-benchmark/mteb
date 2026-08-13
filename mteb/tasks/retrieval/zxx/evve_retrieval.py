@@ -69,9 +69,8 @@ def evve_scores(
 
 
 class EVVERetrieval(AbsTaskRetrieval):
+    # The final value requests the complete frozen corpus for EVVE's source metric.
     k_values = (1, 3, 5, 10, 20, 100, 1000, 1644)
-    # EVVE's AP is defined over the complete corpus; the base class retrieves 1,000.
-    _top_k = 1644
 
     metadata = TaskMetadata(
         name="EVVERetrieval",
@@ -86,7 +85,7 @@ class EVVERetrieval(AbsTaskRetrieval):
         reference="https://openaccess.thecvf.com/content_cvpr_2013/html/Revaud_Event_Retrieval_in_2013_CVPR_paper.html",
         dataset={
             "path": "Cerru02/EVVE",
-            "revision": "19cc04cdf0bb74ea755b01172ff902405a8fd82e",
+            "revision": "88f505f0a77f0ee0a14f2d7e098aaea08507bbe5",
         },
         type="Any2AnyRetrieval",
         category="v2v",

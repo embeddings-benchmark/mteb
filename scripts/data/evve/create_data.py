@@ -517,8 +517,11 @@ def _video_is_decodable(path: Path) -> bool:
 
     try:
         from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
-    except ImportError:
-        return True
+    except ImportError as error:
+        raise RuntimeError(
+            "Media validation requires ffprobe or TorchCodec. Install FFmpeg or "
+            "MTEB's `video` extra before downloading or packaging EVVE."
+        ) from error
     try:
         duration = VideoDecoder(str(path)).metadata.duration_seconds
         return duration is not None and duration > 0
@@ -1151,7 +1154,6 @@ def push_dataset(
     for local_path, path_in_repo in (
         (card_path, "README.md"),
         (Path(__file__), "construction/create_data.py"),
-        (Path(__file__).with_name("README.md"), "construction/README.md"),
         (
             PROTOCOL_MANIFEST,
             f"construction/{PROTOCOL_MANIFEST.name}",
