@@ -311,6 +311,7 @@ select = [
     "EXE",     # shebang/executable-bit consistency
     "INT",     # gettext f-string misuse
     "ASYNC",   # blocking calls in async functions
+    "ISC",     # implicit string concatenation
 ]
 
 ignore = [
@@ -332,6 +333,7 @@ ignore = [
     "PLR0912",  # too many branches
     "PLR0915",  # too many statements
     "PLW0717",  # too-many-statements-in-try-clause
+    "ISC001",   # single-line implicit concat; conflicts with `ruff format`
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
@@ -385,9 +387,6 @@ preview = true
     "TC002",
 ]
 
-
-[tool.ruff.lint.flake8-implicit-str-concat]
-allow-multiline = false
 
 [tool.ruff.lint.pep8-naming]
 ignore-names = [

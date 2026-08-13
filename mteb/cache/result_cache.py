@@ -487,7 +487,7 @@ class ResultCache:
             if remote_url != remote:
                 msg = (
                     f"remote repository '{remote}' does not match the one in {results_directory},  which is '{remote_url}'."
-                    + " Please remove the directory and try again."
+                    " Please remove the directory and try again."
                 )
                 raise ValueError(msg)
 
