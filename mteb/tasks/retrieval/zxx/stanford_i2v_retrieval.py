@@ -18,7 +18,7 @@ class StanfordI2VRetrieval(AbsTaskRetrieval):
         reference="https://doi.org/10.1145/2713168.2713197",
         dataset={
             "path": "Cerru02/Stanford-I2V-600K",
-            "revision": "cd233c9821c4f49242b53682ed0182e3d64a1b8d",
+            "revision": "30ba417f4ed92c7035abd552cdef1ebfb3542186",
         },
         type="Any2AnyRetrieval",
         category="i2va",

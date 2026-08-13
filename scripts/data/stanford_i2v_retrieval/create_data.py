@@ -829,8 +829,7 @@ def _build_datasets(
 
 def _dataset_card(summary: dict[str, Any]) -> str:
     return f"""---
-license: other
-license_name: not-specified
+license: unknown
 pretty_name: Stanford I2V 600K
 task_categories:
 - image-to-video
