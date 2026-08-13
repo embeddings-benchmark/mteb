@@ -1583,95 +1583,35 @@ LONG_EMBED = Benchmark(
 """,
 )
 
-_LMEB_TASKS = [
-    "EPBench",
-    "KnowMeBench",
-    "LoCoMo",
-    "LongMemEval",
-    "REALTALK",
-    "TMD",
-    "MemBench",
-    "ConvoMem",
-    "QASPER",
-    "NovelQA",
-    "PeerQA",
-    "CovidQA",
-    "ESGReports",
-    "LMEBMLDR",
-    "LooGLE",
-    "LMEB_SciFact",
-    "Gorilla",
-    "ToolBench",
-    "ReMe",
-    "ProceduralMemBench",
-    "MemGovern",
-    "DeepPlanning",
-]
-
-# Groups LMEB's 22 tasks by memory type for a "Memory Type" breakdown on the
-# leaderboard (issue #4898) — a CustomGrouping dropped straight into LMEB's
-# `aggregations`, instead of registering four separate LMEB-* Benchmark
-# objects that each duplicate a disjoint subset of these same tasks.
-LMEB_MEMORY_TYPE = CustomGrouping(
-    name="Memory Type",
-    groups=(
-        CustomGroup(
-            label="Episodic",
-            tasks=["EPBench", "KnowMeBench"],
-            description="Episodic memory retrieval aims to recall past events "
-            "grounded in temporal cues, entities, contents, and spatial context.",
-        ),
-        CustomGroup(
-            label="Dialogue",
-            tasks=[
-                "LoCoMo",
-                "LongMemEval",
-                "REALTALK",
-                "TMD",
-                "MemBench",
-                "ConvoMem",
-            ],
-            description="Dialogue memory retrieval aims to maintain context "
-            "across multi-turn interactions by recalling relevant dialogue "
-            "history and user preference.",
-        ),
-        CustomGroup(
-            label="Semantic",
-            tasks=[
-                "QASPER",
-                "NovelQA",
-                "PeerQA",
-                "CovidQA",
-                "ESGReports",
-                "LMEBMLDR",
-                "LooGLE",
-                "LMEB_SciFact",
-            ],
-            description="Semantic memory retrieval focuses on recalling general "
-            "knowledge and concepts that are largely independent of time or "
-            "specific context.",
-        ),
-        CustomGroup(
-            label="Procedural",
-            tasks=[
-                "Gorilla",
-                "ToolBench",
-                "ReMe",
-                "ProceduralMemBench",
-                "MemGovern",
-                "DeepPlanning",
-            ],
-            description="Procedural memory retrieval focuses on recalling "
-            "learned skills, action patterns, and structured procedures that "
-            "guide task execution and multi-step reasoning.",
-        ),
-    ),
-)
-
 LMEB = Benchmark(
     name="LMEB",
     display_name="Long-Horizon Memory",
-    tasks=get_tasks(tasks=_LMEB_TASKS),
+    tasks=get_tasks(
+        tasks=[
+            "EPBench",
+            "KnowMeBench",
+            "LoCoMo",
+            "LongMemEval",
+            "REALTALK",
+            "TMD",
+            "MemBench",
+            "ConvoMem",
+            "QASPER",
+            "NovelQA",
+            "PeerQA",
+            "CovidQA",
+            "ESGReports",
+            "LMEBMLDR",
+            "LooGLE",
+            "LMEB_SciFact",
+            "Gorilla",
+            "ToolBench",
+            "ReMe",
+            "ProceduralMemBench",
+            "MemGovern",
+            "DeepPlanning",
+        ]
+    ),
     description="Long-horizon memory retrieval quality across episodic, dialogue, semantic, and procedural retrieval tasks, measuring how well embedding models retrieve evidence in long-term memory scenarios.",
     reference="https://arxiv.org/abs/2603.12572",
     citation=r"""
@@ -1689,7 +1629,61 @@ LMEB = Benchmark(
         BenchmarkAggregation.MEAN_TASK,
         BenchmarkAggregation.MEAN_TASK_TYPE,
         BenchmarkAggregation.TASK_TYPES,
-        LMEB_MEMORY_TYPE,
+        CustomGrouping(
+            name="Memory Type",
+            groups=(
+                CustomGroup(
+                    label="Episodic",
+                    tasks=["EPBench", "KnowMeBench"],
+                    description="Episodic memory retrieval aims to recall past events "
+                    "grounded in temporal cues, entities, contents, and spatial context.",
+                ),
+                CustomGroup(
+                    label="Dialogue",
+                    tasks=[
+                        "LoCoMo",
+                        "LongMemEval",
+                        "REALTALK",
+                        "TMD",
+                        "MemBench",
+                        "ConvoMem",
+                    ],
+                    description="Dialogue memory retrieval aims to maintain context "
+                    "across multi-turn interactions by recalling relevant dialogue "
+                    "history and user preference.",
+                ),
+                CustomGroup(
+                    label="Semantic",
+                    tasks=[
+                        "QASPER",
+                        "NovelQA",
+                        "PeerQA",
+                        "CovidQA",
+                        "ESGReports",
+                        "LMEBMLDR",
+                        "LooGLE",
+                        "LMEB_SciFact",
+                    ],
+                    description="Semantic memory retrieval focuses on recalling general "
+                    "knowledge and concepts that are largely independent of time or "
+                    "specific context.",
+                ),
+                CustomGroup(
+                    label="Procedural",
+                    tasks=[
+                        "Gorilla",
+                        "ToolBench",
+                        "ReMe",
+                        "ProceduralMemBench",
+                        "MemGovern",
+                        "DeepPlanning",
+                    ],
+                    description="Procedural memory retrieval focuses on recalling "
+                    "learned skills, action patterns, and structured procedures that "
+                    "guide task execution and multi-step reasoning.",
+                ),
+            ),
+        ),
     ),
 )
 
@@ -1758,27 +1752,6 @@ _BRIGHT_LONG_TASKS = [
     "BrightPonyLongRetrieval",
 ]
 
-# Groups BRIGHT(v1.1)'s 20 tasks by document length for a "Document Length"
-# breakdown on the leaderboard — the 8 domains with a "Long" variant get
-# both groups' tasks; the 4 code/math domains without one (Leetcode, Aops,
-# TheoremQA*) only ever appear in "Short".
-BRIGHT_DOCUMENT_LENGTH = CustomGrouping(
-    name="Document Length",
-    groups=(
-        CustomGroup(
-            label="Short",
-            tasks=_BRIGHT_SHORT_TASKS,
-            description="Standard-length BRIGHT documents.",
-        ),
-        CustomGroup(
-            label="Long",
-            tasks=_BRIGHT_LONG_TASKS,
-            description="Documents filtered to longer context lengths, "
-            "stress-testing retrieval over extended documents.",
-        ),
-    ),
-)
-
 BRIGHT_V1_1 = Benchmark(
     name="BRIGHT(v1.1)",
     display_name="Reasoning Retrieval",
@@ -1798,7 +1771,21 @@ BRIGHT_V1_1 = Benchmark(
         BenchmarkAggregation.MEAN_TASK,
         BenchmarkAggregation.MEAN_TASK_TYPE,
         BenchmarkAggregation.TASK_TYPES,
-        BRIGHT_DOCUMENT_LENGTH,
+        CustomGrouping(
+            name="Document Length",
+            groups=(
+                CustomGroup(
+                    label="Short",
+                    tasks=_BRIGHT_SHORT_TASKS,
+                    description="Standard-length BRIGHT documents.",
+                ),
+                CustomGroup(
+                    label="Long",
+                    tasks=_BRIGHT_LONG_TASKS,
+                    description="Documents filtered to longer context lengths, stress-testing retrieval over extended documents.",
+                ),
+            ),
+        ),
     ),
 )
 
