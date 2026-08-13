@@ -240,7 +240,6 @@ class AbsTaskZeroShotClassification(AbsTask):
             ap_weighted=None,
         )
 
-        # if binary classification, also report average precision using the
         if len(np.unique(labels)) == 2:
             positive_scores = probs[:, 1]
             scores["ap"] = metrics.average_precision_score(
