@@ -818,6 +818,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "InfoSeekIT2ITRetrieval",
         "InfoSeekIT2TRetrieval",
         "LLaVAIT2TRetrieval",
+        "MMLongBenchDocRetrieval",  # official corpus contains repeated rendered pages; preserve IDs to match qrels
         "MomentSeekerTI2VRetrieval",
         "OVENIT2ITRetrieval",
         "PatchCamelyon",  # adjacent, overlapping WSI patches are inherent to the source data
@@ -873,12 +874,14 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SpeechCommands",  # many repeated recordings of the same short command word
         "SpeechCommandsZeroshotv0.01",
         "SpeechCommandsZeroshotv0.02",
+        "StanfordI2VRetrieval",  # official manifest contains repeated video+audio clips
         "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseAudioVideoZeroShot",
     ],
     "duplicate_video": [
         "MMVUVideoCentricQA",
         "MomentSeekerTV2VRetrieval",
+        "StanfordI2VRetrieval",  # official 3,401-ID manifest contains 3,325 unique video contents
         "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseAudioVideoZeroShot",
         "WorldSenseVideoClassification",  # multiple QA rows share the same underlying video/audio
