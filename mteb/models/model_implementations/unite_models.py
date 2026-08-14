@@ -9,13 +9,12 @@ from tqdm.autonotebook import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +39,7 @@ def _build_unite_model(model_name: str, revision: str | None, **kwargs):
             super().__init__(config)
             self.normalize = True
 
-        def forward(
+        def forward(  # noqa: PLR0913, PLR0917 - signature mirrors upstream Qwen2VLForConditionalGeneration
             self,
             input_ids=None,
             attention_mask=None,
@@ -67,18 +66,26 @@ def _build_unite_model(model_name: str, revision: str | None, **kwargs):
                         .expand_as(inputs_embeds)
                         .to(inputs_embeds.device)
                     )
-                    image_embeds = image_embeds.to(inputs_embeds.device, inputs_embeds.dtype)
+                    image_embeds = image_embeds.to(
+                        inputs_embeds.device, inputs_embeds.dtype
+                    )
                     inputs_embeds = inputs_embeds.masked_scatter(mask, image_embeds)
                 if pixel_values_videos is not None:
-                    pixel_values_videos = pixel_values_videos.type(self.visual.get_dtype())
-                    video_embeds = self.visual(pixel_values_videos, grid_thw=video_grid_thw)
+                    pixel_values_videos = pixel_values_videos.type(
+                        self.visual.get_dtype()
+                    )
+                    video_embeds = self.visual(
+                        pixel_values_videos, grid_thw=video_grid_thw
+                    )
                     mask = (
                         (input_ids == self.config.video_token_id)
                         .unsqueeze(-1)
                         .expand_as(inputs_embeds)
                         .to(inputs_embeds.device)
                     )
-                    video_embeds = video_embeds.to(inputs_embeds.device, inputs_embeds.dtype)
+                    video_embeds = video_embeds.to(
+                        inputs_embeds.device, inputs_embeds.dtype
+                    )
                     inputs_embeds = inputs_embeds.masked_scatter(mask, video_embeds)
                 if attention_mask is not None:
                     attention_mask = attention_mask.to(inputs_embeds.device)
