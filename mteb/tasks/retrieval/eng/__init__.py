@@ -91,6 +91,7 @@ from .clotho import ClothoA2TRetrieval, ClothoT2ARetrieval
 from .cmu_arctic import CMUArcticA2TRetrieval, CMUArcticT2ARetrieval
 from .covers80_retrieval import Covers80A2ARetrieval
 from .covr_r_retrieval import CoVRRVT2VRetrieval
+from .dense_webvid_covr_retrieval import DenseWebVidCoVRVT2VRetrieval
 from .cqa_dupstack_android_retrieval import CQADupstackAndroidRetrieval
 from .cqa_dupstack_english_retrieval import CQADupstackEnglishRetrieval
 from .cqa_dupstack_gaming_retrieval import CQADupstackGamingRetrieval
@@ -559,6 +560,7 @@ __all__ = [
     "Covers80A2ARetrieval",
     "CovidQA",
     "DAPFAMAllTitlAbsClmToFullTextRetrieval",
+    "DenseWebVidCoVRVT2VRetrieval",
     "DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval",
     "DAPFAMAllTitlAbsClmToTitlAbsRetrieval",
     "DAPFAMAllTitlAbsToFullTextRetrieval",
