@@ -4,7 +4,6 @@ import logging
 from typing import TYPE_CHECKING, Any, TypedDict, cast
 
 import numpy as np
-import torch
 from datasets import Dataset
 from sklearn import metrics
 
@@ -23,11 +22,9 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
     from pathlib import Path
 
-    from numpy.typing import NDArray
-
     from mteb.models import MTEBModels
     from mteb.timing import TimingStack
-    from mteb.types import EncodeKwargs, Modalities
+    from mteb.types import Array, EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -172,14 +169,12 @@ class AbsTaskZeroShotClassification(AbsTask):
                 hf_split=hf_split,
             )
 
-        probs_array = (
-            probs.cpu().numpy() if torch.is_tensor(probs) else np.asarray(probs)
-        ).astype(np.float64)
         return self._calculate_scores(
             self._normalize_labels(
-                data_split[self.label_column_name], candidate_labels
+                data_split[self.label_column_name],
+                candidate_labels,
             ),
-            probs_array,
+            probs,
         )
 
     @staticmethod
@@ -221,9 +216,9 @@ class AbsTaskZeroShotClassification(AbsTask):
     def _calculate_scores(  # noqa: PLR6301
         self,
         labels: list[int],
-        probs: NDArray[np.floating],
+        probs: Array,
     ) -> ZeroShotClassificationMetrics:
-        predictions = probs.argmax(axis=1)
+        predictions = probs.argmax(1)
         scores = ZeroShotClassificationMetrics(
             accuracy=metrics.accuracy_score(labels, predictions),
             f1=metrics.f1_score(labels, predictions, average="macro"),
