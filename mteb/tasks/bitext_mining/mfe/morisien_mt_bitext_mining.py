@@ -38,6 +38,14 @@ class MorisienMTBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
+@misc{b2026morisienembed,
+  author = {B, Singaraj},
+  doi = {10.5281/zenodo.21877805},
+  publisher = {Zenodo},
+  title = {morisien-embed: A Dedicated Text Embedding Model and Benchmark for Mauritian Creole (Kreol Morisien)},
+  year = {2026},
+}
+
 @article{dabre2022morisienmt,
   author = {Dabre, Raj and Sukhoo, Aneerav},
   journal = {arXiv preprint arXiv:2206.02421},
