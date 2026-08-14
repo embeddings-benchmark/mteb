@@ -34,7 +34,7 @@ from mteb.types import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Iterator, Mapping
+    from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
     from pathlib import Path
 
     from typing_extensions import Self
@@ -239,7 +239,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def _validate_scores(
         cls, v: dict[SplitName, list[ScoresDict]]
     ) -> dict[SplitName, list[ScoresDict]]:
-        for split, hf_subset_scores in v.items():
+        for hf_subset_scores in v.values():
             for hf_subset_score in hf_subset_scores:
                 if not isinstance(hf_subset_score, dict):
                     raise ValueError("Scores should be a dictionary")
@@ -270,13 +270,13 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         try:
             _ = json.dumps(scores)
         except Exception as e:
-            raise ValueError(f"Scores are not json serializable: {e}")
+            raise ValueError(f"Scores are not json serializable: {e}") from e
 
     @property
     def languages(self) -> list[str]:
         """The languages present in the scores."""
         langs = []
-        for split, split_res in self.scores.items():
+        for split_res in self.scores.values():
             for entry in split_res:
                 langs.extend([lang.split("-")[0] for lang in entry["languages"]])
         return list(set(langs))
@@ -315,7 +315,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def hf_subsets(self) -> list[str]:
         """The hf_subsets present in the scores."""
         hf_subsets = set()
-        for split, split_res in self.scores.items():
+        for split_res in self.scores.values():
             for entry in split_res:
                 hf_subsets.add(entry["hf_subset"])
         return list(hf_subsets)
@@ -400,7 +400,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             except Exception as e:
                 raise ValueError(
                     f"Error loading TaskResult from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
-                )
+                ) from e
         data = json.loads(json_str)
         min_version = cls._parse_mteb_version_min(data.get("mteb_version"))
         pre_1_11_load = (
@@ -437,7 +437,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             task = get_task(obj.task_name)
 
         if task.metadata.type == "PairClassification":  # noqa: PLR1702
-            for split, split_scores in obj.scores.items():
+            for split_scores in obj.scores.values():
                 for hf_subset_scores in split_scores:
                     # concatenate score e.g. ["max"]["ap"] -> ["max_ap"]
                     for key in list(hf_subset_scores.keys()):
@@ -463,7 +463,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
         # calculate evaluation time across all splits (move to top level)
         evaluation_time = 0
-        for split, split_score in scores.items():
+        for split_score in scores.values():
             if "evaluation_time" in split_score:
                 evaluation_time += split_score.pop("evaluation_time")
 
@@ -493,8 +493,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
         # make sure that main score exists
         main_score = task.metadata.main_score
-        for split, split_score in scores.items():
-            for hf_subset, hf_subset_scores in split_score.items():
+        for split_score in scores.values():
+            for hf_subset_scores in split_score.values():
                 for name, prev_name in [
                     (ScoringFunction.COSINE.value, "cos_sim"),
                     (ScoringFunction.MANHATTAN.value, "manhattan"),
@@ -758,9 +758,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def is_mergeable(
         self,
         result: TaskResult | AbsTask,
-        criteria: list[str] | list[Criteria] = [
-            "dataset_revision",
-        ],
+        criteria: Sequence[str] | Sequence[Criteria] = ("dataset_revision",),
         raise_error: bool = False,
     ) -> bool:
         """Checks if the TaskResult object can be merged with another TaskResult or Task.
@@ -816,9 +814,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def merge(
         self,
         new_results: TaskResult,
-        criteria: list[str] | list[Criteria] = [
-            "dataset_revision",
-        ],
+        criteria: Sequence[str] | Sequence[Criteria] = ("dataset_revision",),
     ) -> TaskResult:
         """Merges two TaskResult objects.
 

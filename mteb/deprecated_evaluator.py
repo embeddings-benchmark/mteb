@@ -487,7 +487,7 @@ class MTEB:
                         except ImportError:
                             raise ImportError(
                                 "codecarbon is not installed. Please install it using `pip install 'mteb[codecarbon]'` to track CO₂ emissions."
-                            )
+                            ) from None
                         msg = "Evaluating multiple MTEB runs simultaneously will produce incorrect CO₂ results"
                         logger.warning(msg)
                         warnings.warn(msg)

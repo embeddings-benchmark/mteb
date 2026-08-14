@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.18.17"
+version = "2.19.1"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -311,6 +311,8 @@ select = [
     "EXE",     # shebang/executable-bit consistency
     "INT",     # gettext f-string misuse
     "ASYNC",   # blocking calls in async functions
+    "ISC",     # implicit string concatenation
+    "B",       # flake8-bugbear
 ]
 
 ignore = [
@@ -332,6 +334,10 @@ ignore = [
     "PLR0912",  # too many branches
     "PLR0915",  # too many statements
     "PLW0717",  # too-many-statements-in-try-clause
+    "ISC001",   # single-line implicit concat; conflicts with `ruff format`
+    # TODO: enable in a follow-up PR; each needs a per-site `strict=` / `stacklevel=` decision
+    "B905",     # zip-without-explicit-strict
+    "B028",     # no-explicit-stacklevel
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
@@ -354,6 +360,7 @@ preview = true
     "S602",  # allow shell=True in tests
     "S603",  # allow subprocess calls in tests
     "PLC2701",  # Private name import
+    "PLR6301",  # Method could be a function - pytest test methods are instance methods
 ]
 "mteb/mocks/*" = [
     "RUF012",
@@ -385,9 +392,6 @@ preview = true
     "TC002",
 ]
 
-
-[tool.ruff.lint.flake8-implicit-str-concat]
-allow-multiline = false
 
 [tool.ruff.lint.pep8-naming]
 ignore-names = [
