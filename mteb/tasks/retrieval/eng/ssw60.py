@@ -92,7 +92,7 @@ class SSW60A2IRetrieval(AbsTaskRetrieval):
                 query_id = row["id"]
                 query_label = row["label"]
                 relevant_images = label_to_image_ids.get(query_label, [])
-                qrels[query_id] = {img_id: 1 for img_id in relevant_images}
+                qrels[query_id] = dict.fromkeys(relevant_images, 1)
 
             queries = queries.select_columns(["id", "audio"])
             corpus = corpus.select_columns(["id", "image"])
@@ -168,7 +168,7 @@ class SSW60I2ARetrieval(AbsTaskRetrieval):
                 query_id = row["id"]
                 query_label = row["label"]
                 relevant_audios = label_to_audio_ids.get(query_label, [])
-                qrels[query_id] = {aud_id: 1 for aud_id in relevant_audios}
+                qrels[query_id] = dict.fromkeys(relevant_audios, 1)
 
             queries = queries.select_columns(["id", "image"])
             corpus = corpus.select_columns(["id", "audio"])
