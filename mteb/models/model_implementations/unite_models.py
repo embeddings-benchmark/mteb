@@ -136,7 +136,6 @@ class UniteWrapper(AbsEncoder):
         max_image_tokens: int = 1280,
         fps: float = 1.0,
         max_frames: int = 32,
-        num_frames: int | None = None,  # None so fps mode applies
         target_sampling_rate: int = 16000,
         video_max_pixels: int = 360 * 420,
         **kwargs: Any,
@@ -146,7 +145,6 @@ class UniteWrapper(AbsEncoder):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.fps = fps
         self.max_frames = max_frames
-        self.num_frames = num_frames
         self.target_sampling_rate = target_sampling_rate
         self.video_max_pixels = video_max_pixels
 
@@ -219,7 +217,7 @@ class UniteWrapper(AbsEncoder):
                 target_sampling_rate=self.target_sampling_rate,
                 fps=self.fps,
                 max_frames=self.max_frames,
-                num_frames=self.num_frames,
+                num_frames=None,  # fps mode; both set would let num_frames win
             )
 
         all_embeddings = []
