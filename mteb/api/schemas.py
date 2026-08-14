@@ -43,10 +43,21 @@ class _CamelModel(BaseModel):
 
 
 class CustomGroupSchema(_CamelModel):
-    """One labeled group within a custom-grouping dimension."""
+    """One labeled group within a custom-grouping dimension.
+
+    ``tasks`` is the group's task membership — needed so the frontend can
+    recompute ``scoresByCustomGroup`` under the task-type/domain/modality
+    sidebar filters (client-side, no server round-trip) the same way it
+    already recomputes ``scoresByTaskType`` from ``TaskMeta.type``. Absent
+    from ``BenchmarkSummarySchema.custom_groupings`` rows the polars frame
+    can't attribute back to a declared group (shouldn't happen in practice —
+    every computed column comes from a declared group — but keeps this
+    schema's `tasks` optional rather than assuming it's always resolvable).
+    """
 
     label: str
     description: str | None = None
+    tasks: list[str] = Field(default_factory=list)
 
 
 class CustomGroupingSchema(_CamelModel):
@@ -154,7 +165,11 @@ class BenchmarkSchema(_CamelModel):
                 CustomGroupingSchema(
                     name=g.name,
                     groups=[
-                        CustomGroupSchema(label=cg.label, description=cg.description)
+                        CustomGroupSchema(
+                            label=cg.label,
+                            description=cg.description,
+                            tasks=list(cg.tasks),
+                        )
                         for cg in g.groups
                     ],
                 )

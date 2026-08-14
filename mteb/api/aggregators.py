@@ -272,25 +272,27 @@ async def build_benchmark_summary(  # noqa: PLR0914
         custom_group_task_to_label,
     )
 
-    # The polars frame only carries labels (column names), not descriptions —
-    # join each label's description back in from the benchmark's static
-    # CustomGrouping declaration, matched by (dimension, label).
+    # The polars frame only carries labels (column names), not descriptions or
+    # task membership — join both back in from the benchmark's static
+    # CustomGrouping declaration, matched by (dimension, label). Membership
+    # (`tasks`) is what lets the frontend recompute scoresByCustomGroup under
+    # its client-side task-type/domain/modality filters.
     custom_groupings_out: list[CustomGroupingSchema] = []
     for dim, cols in custom_group_cols_by_dim.items():
         declared = declared_by_dim.get(dim)
-        desc_by_label = (
-            {g.label: g.description for g in declared.groups} if declared else {}
-        )
+        group_by_label = {g.label: g for g in declared.groups} if declared else {}
         labels = [c.removeprefix(f"{_CUSTOM_GROUP_COL_PREFIX}{dim}::") for c in cols]
-        custom_groupings_out.append(
-            CustomGroupingSchema(
-                name=dim,
-                groups=[
-                    CustomGroupSchema(label=label, description=desc_by_label.get(label))
-                    for label in labels
-                ],
+        out_groups: list[CustomGroupSchema] = []
+        for label in labels:
+            declared_group = group_by_label.get(label)
+            out_groups.append(
+                CustomGroupSchema(
+                    label=label,
+                    description=declared_group.description if declared_group else None,
+                    tasks=list(declared_group.tasks) if declared_group else [],
+                )
             )
-        )
+        custom_groupings_out.append(CustomGroupingSchema(name=dim, groups=out_groups))
 
     return BenchmarkSummarySchema(
         benchmark_name=bench.name,
