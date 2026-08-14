@@ -313,6 +313,7 @@ select = [
     "ASYNC",   # blocking calls in async functions
     "ISC",     # implicit string concatenation
     "B",       # flake8-bugbear
+    "PT",       # flake8-pytest-style
 ]
 
 ignore = [
@@ -338,6 +339,7 @@ ignore = [
     # TODO: enable in a follow-up PR; each needs a per-site `strict=` / `stacklevel=` decision
     "B905",     # zip-without-explicit-strict
     "B028",     # no-explicit-stacklevel
+    "pytest-composite-assertion",
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]

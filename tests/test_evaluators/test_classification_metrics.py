@@ -92,7 +92,7 @@ class TestHammingScore:
             hamming_score(None, [[1, 0]])
 
         # Test with incompatible nested structure
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match="Arrays must contain only binary values"):
             hamming_score([["invalid", "data"]], [[1, 0]])
 
     def test_mixed_performance_case(self):  # noqa: PLR6301

@@ -59,10 +59,8 @@ def test_model_meta_load_sentence_transformer_metadata_from_model():
     assert meta.max_tokens == 256
     assert meta.embed_dim == 384
     if Version(sentence_transformers.__version__) >= Version("4.0.0"):
-        assert (
-            meta.similarity_fn_name is not None
-            and meta.similarity_fn_name.value == "cosine"
-        )
+        assert meta.similarity_fn_name is not None
+        assert meta.similarity_fn_name.value == "cosine"
 
 
 @pytest.mark.parametrize("model_name", ["sentence-transformers/all-MiniLM-L6-v2"])

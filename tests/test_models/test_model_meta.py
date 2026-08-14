@@ -218,7 +218,9 @@ def test_openness_non_open_license_not_counted():
 
 
 def test_model_name_without_prefix():
-    with pytest.raises(ValueError):
+    with pytest.raises(
+        ValueError, match="Model name must be in the format 'organization/model_name'"
+    ):
         ModelMeta(
             name="test_model",
             revision="test",
