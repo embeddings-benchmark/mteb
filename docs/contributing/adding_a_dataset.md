@@ -618,6 +618,8 @@ Before creating a pull request, it is important to calculate some descriptive st
 To calculate the descriptive statistics, you can run [`task.calculate_descriptive_statistics()`][mteb.AbsTask.calculate_descriptive_statistics].
 By default, this method caches the results and loads them from cache on subsequent calls. To recalculate the statistics (overwriting the cached results), use the `overwrite_results=True`.
 
+If the statistics show that the dataset does contain duplicates, very short documents or any other dataset cleaning, see [Cleaning task data](../get_started/advanced_usage/cleaning_task_data.md) for how to find and remove them.
+
 ### Submit a Pull Request
 
 Once added, here is a checklist to ensure that everything works before you submit the PR:

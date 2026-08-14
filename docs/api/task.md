@@ -53,50 +53,9 @@ All tasks in `mteb` inherits from the following abstract class.
 
 ## Cleaning Task Data
 
-Datasets often contain duplicated samples. `mteb.quality` removes them before the task is evaluated:
-
-```python
-import mteb
-from mteb.quality import remove_duplicates
-
-task = mteb.get_task("MassiveIntentClassification")
-task = remove_duplicates(task)
-```
-
-The filter loads the data if needed, modifies the dataset in place and returns the task. It covers every split and
-subset by default; `splits=`, `subsets=` and `columns=` narrow that down. Text is compared as text, while images,
-audio and video are compared by a hash of their content. For retrieval tasks the relevance judgements are kept
-valid: a judgement pointing at a removed duplicate moves to the copy that was kept, and a query left without a
-positive is dropped.
-
-Duplicate texts are those that match once surrounding whitespace is stripped. `normalize=` loosens the comparison:
-
-| `normalize` | additionally ignores | `"Wake me up!"` also matches |
-|---|---|---|
-| `"strip"` (default) | – | `"  Wake me up! "` |
-| `"casefold"` | case | `"wake me up!"` |
-| `"alphanumeric"` | punctuation, repeated whitespace | `"wake  me  up"` |
-
-```python
-task = remove_duplicates(task, normalize="alphanumeric")
-```
-
-Under `"alphanumeric"`, `"e-mail"` and `"email"` are duplicates too, but `"e mail"` is not. The looser settings
-catch more duplicates while risking merges a reader would tell apart — punctuation matters in source code, and case
-folding is not meaningful in every script.
-
-A filter that removed something sets `task.data_modified`. While that is set, `mteb` does not read cached results
-for the task and warns when a `TaskResult` is built. Filters also warn about data they leave unusable, such as a
-classification label that no longer occurs in the train split.
+Filters that remove low-quality samples from a task before it is evaluated. See [Cleaning task data](../get_started/advanced_usage/cleaning_task_data.md) for more details on how to use them.
 
 :::mteb.quality.remove_duplicates
-
-!!! warning
-    A cleaned task no longer matches the published dataset, so its scores are not comparable to the
-    [leaderboard](https://huggingface.co/spaces/mteb/leaderboard) and its descriptive statistics still describe the
-    published data. If a dataset needs cleaning for everyone, please
-    [open an issue](https://github.com/embeddings-benchmark/mteb/issues) so a new version of the task can be created
-    instead.
 
 ## Multimodal Tasks
 
