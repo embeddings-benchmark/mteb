@@ -46,9 +46,13 @@ def _fit(video, max_pixels: int):
     scale = (max_pixels / (h * w)) ** 0.5
     nh = max(28, int(h * scale) // 28 * 28)
     nw = max(28, int(w * scale) // 28 * 28)
-    return torch.nn.functional.interpolate(
-        video.float(), size=(nh, nw), mode="bilinear", align_corners=False
-    ).clamp(0, 255).to(torch.uint8)
+    return (
+        torch.nn.functional.interpolate(
+            video.float(), size=(nh, nw), mode="bilinear", align_corners=False
+        )
+        .clamp(0, 255)
+        .to(torch.uint8)
+    )
 
 
 def _unwrap(out):
@@ -91,13 +95,21 @@ def _unite_embed(model, inputs) -> torch.Tensor:
 
     if inputs.get("pixel_values") is not None:
         inputs_embeds = _scatter(
-            model, inputs_embeds, input_ids, inputs["pixel_values"],
-            inputs["image_grid_thw"], model.config.image_token_id,
+            model,
+            inputs_embeds,
+            input_ids,
+            inputs["pixel_values"],
+            inputs["image_grid_thw"],
+            model.config.image_token_id,
         )
     if inputs.get("pixel_values_videos") is not None:
         inputs_embeds = _scatter(
-            model, inputs_embeds, input_ids, inputs["pixel_values_videos"],
-            inputs["video_grid_thw"], model.config.video_token_id,
+            model,
+            inputs_embeds,
+            input_ids,
+            inputs["pixel_values_videos"],
+            inputs["video_grid_thw"],
+            model.config.video_token_id,
         )
 
     out = model.model.language_model(
