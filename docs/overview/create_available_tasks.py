@@ -215,11 +215,11 @@ def main(input_path: Path, output_path: Path) -> None:
     for tt, stt in _TASKTYPE2SIMPLIFIEDTASKTYPE.items():
         stask_types[stt].append(tt)
 
-    for stt, tt in stask_types.items():
+    for stt, task_types in stask_types.items():
         # For each simplified task type, combine the markdown entries of the corresponding task types, each consisting of the tasks of that type.
         mds = []
 
-        for tt in sorted(tt):  # noqa: PLW2901
+        for tt in sorted(task_types):
             tt_tasks = task_types2tasks.get(tt, [])
             if not tt_tasks:
                 continue

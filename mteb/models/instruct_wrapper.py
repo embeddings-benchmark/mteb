@@ -122,8 +122,8 @@ def instruct_wrapper(
             )
             embeddings = super().encode(  # type: ignore[safe-super,call-arg]
                 _inputs,  # type: ignore[arg-type]
-                instruction=instruction,
                 *args,
+                instruction=instruction,
                 **kwargs,
             )
             if isinstance(embeddings, torch.Tensor):
