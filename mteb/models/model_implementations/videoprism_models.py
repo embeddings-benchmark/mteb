@@ -15,6 +15,12 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
+# Usage follows the transformers docs for VideoPrism:
+# https://huggingface.co/docs/transformers/en/model_doc/videoprism
+# The HF-format weights are not on main in any of the four repos yet, only the
+# original Flax .npz, so the revisions pinned in the ModelMeta blocks below are
+# commits from the open Hub PRs that carry the converted checkpoints.
+
 # The LVT text tower has exactly 64 learned position embeddings and adds them
 # elementwise, so a longer sequence raises a shape mismatch instead of being
 # truncated internally. Every text batch is padded and truncated to this length.
