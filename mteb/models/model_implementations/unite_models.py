@@ -269,5 +269,4 @@ unite_base_qwen2vl_2b = ModelMeta(
     training_datasets=unite_training_datasets,
     adapted_from="Qwen/Qwen2-VL-2B-Instruct",
     citation=UNITE_CITATION,
-    contacts=["hubielu"],
 )
