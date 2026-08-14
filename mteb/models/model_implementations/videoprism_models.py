@@ -41,8 +41,6 @@ def _resolve_device(device: str | int | torch.device | None) -> torch.device:
 class VideoPrismVisionWrapper(AbsEncoder):
     """VideoPrism video-only encoders (Base, Large).
 
-    These checkpoints have no text tower, so they support video clustering and
-    classification only, the same shape as the vjepa2 checkpoints.
     """
 
     def __init__(
