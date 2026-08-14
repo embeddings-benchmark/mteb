@@ -31,20 +31,24 @@ UNITE_CITATION = """@article{kong2025modality,
 # Qwen2VL refactor; each is marked inline.
 
 
-def _fit(frame, max_pixels: int):
-    """Downscale a video frame to at most max_pixels, keeping aspect ratio.
+def _fit(video, max_pixels: int):
+    """Downscale video frames to at most max_pixels each, keeping aspect ratio.
 
-    UNITE's reference inference passes video through qwen_vl_utils with
-    max_pixels=360*420, far below the image budget. Without this, video items
-    carry ~6x the visual tokens they should and encoding is ~6x slower.
+    mteb's VideoCollator yields a (T, C, H, W) uint8 tensor. CaReBench frames are
+    720x1280, while UNITE's reference inference caps video at 360*420 via
+    qwen_vl_utils. Without this the model sees ~6x the visual tokens per frame.
     """
-    w, h = frame.size
-    if w * h <= max_pixels:
-        return frame
-    scale = (max_pixels / (w * h)) ** 0.5
-    nw = max(28, int(w * scale) // 28 * 28)
+    if not hasattr(video, "shape") or video.ndim != 4:
+        return video
+    h, w = video.shape[-2], video.shape[-1]
+    if h * w <= max_pixels:
+        return video
+    scale = (max_pixels / (h * w)) ** 0.5
     nh = max(28, int(h * scale) // 28 * 28)
-    return frame.resize((nw, nh))
+    nw = max(28, int(w * scale) // 28 * 28)
+    return torch.nn.functional.interpolate(
+        video.float(), size=(nh, nw), mode="bilinear", align_corners=False
+    ).clamp(0, 255).to(torch.uint8)
 
 
 def _unwrap(out):
@@ -120,7 +124,7 @@ class UniteWrapper(AbsEncoder):
         max_image_tokens: int = 1280,
         fps: float = 1.0,
         max_frames: int = 32,
-        num_frames: int = 32,
+        num_frames: int | None = None,  # None so fps mode applies
         target_sampling_rate: int = 16000,
         video_max_pixels: int = 360 * 420,
         **kwargs: Any,
@@ -158,7 +162,7 @@ class UniteWrapper(AbsEncoder):
     def _embed_one(self, text=None, image=None, video=None) -> torch.Tensor:
         content = []
         if video is not None:
-            video = [_fit(f, self.video_max_pixels) for f in video]
+            video = _fit(video, self.video_max_pixels)
             content.append({"type": "video", "video": ""})
         elif image is not None:
             content.append({"type": "image", "image": ""})
