@@ -39,9 +39,7 @@ def _resolve_device(device: str | int | torch.device | None) -> torch.device:
 
 
 class VideoPrismVisionWrapper(AbsEncoder):
-    """VideoPrism video-only encoders (Base, Large).
-
-    """
+    """VideoPrism video-only encoders (Base, Large)."""
 
     def __init__(
         self,
