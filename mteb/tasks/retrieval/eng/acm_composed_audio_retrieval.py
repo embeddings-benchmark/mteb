@@ -72,31 +72,14 @@ class ACMComposedAudioRetrieval(AbsTaskRetrieval):
         self.dataset = {"default": {}}
 
         # Process Corpus: select audio column and add string IDs
-        if "audio" in candidates_ds.column_names:
-            corpus = candidates_ds.select_columns(["audio"])
-        else:
-            corpus = candidates_ds.cast_column("audio_path", datasets.Audio())
-            corpus = corpus.select_columns(["audio_path"]).rename_column("audio_path", "audio")
-
+        corpus = candidates_ds.select_columns(["audio"])
         corpus = corpus.add_column("id", [str(x) for x in candidates_ds["audio_id"]])
 
         # Process Queries: select text instruction and source audio column
-        if "src_audio" in queries_ds.column_names:
-            queries = queries_ds.select_columns(["modified_text", "src_audio"])
-            queries = queries.rename_column("src_audio", "audio")
-        else:
-            queries = queries_ds.cast_column("src_audio_path", datasets.Audio())
-            queries = queries.select_columns(["modified_text", "src_audio_path"])
-            queries = queries.rename_column("src_audio_path", "audio")
-
+        queries = queries_ds.select_columns(["modified_text", "src_audio"])
+        queries = queries.rename_column("src_audio", "audio")
         queries = queries.rename_column("modified_text", "text")
         queries = queries.add_column("id", [str(x) for x in queries_ds["sample_id"]])
-
-        # Filter out invalid entries if any
-        print(len(corpus), len(queries))
-        corpus = corpus.filter(lambda x: x["audio"] is not None)
-        queries = queries.filter(lambda x: x["audio"] is not None)
-        print(len(corpus), len(queries))
 
         valid_query_ids = set(queries["id"])
         relevant_docs: dict[str, dict[str, int]] = {}
