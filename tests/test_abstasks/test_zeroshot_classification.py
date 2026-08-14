@@ -4,7 +4,9 @@ import pytest
 
 import mteb
 from mteb.abstasks import AbsTaskZeroShotClassification
-from mteb.mocks.mock_tasks import MockTextZeroShotClassificationTask
+from mteb.mocks.mock_tasks import (
+    MockTextZeroShotClassificationTask,
+)
 
 
 def test_normalize_labels_keeps_integer_labels():
@@ -38,4 +40,13 @@ def test_zeroshot_classification_scores_with_string_labels():
         model, MockTextZeroShotClassificationTask(), cache=None, co2_tracker=False
     )
 
-    assert results[0].scores["test"][0]["accuracy"] == 1.0
+    scores = results[0].scores["test"][0]
+    assert scores["accuracy"] == 1.0
+    assert scores["f1"] == 1.0
+    assert scores["f1_weighted"] == 1.0
+    assert scores["precision"] == 1.0
+    assert scores["precision_weighted"] == 1.0
+    assert scores["recall"] == 1.0
+    assert scores["recall_weighted"] == 1.0
+    assert scores["ap"] == 1.0
+    assert scores["ap_weighted"] == 1.0

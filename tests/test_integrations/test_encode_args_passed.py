@@ -93,7 +93,7 @@ def test_task_metadata_passed_encoder(task: mteb.AbsTask, tmp_path: Path):
             assert task_metadata.name == _task_name
             assert isinstance(hf_split, str)
             assert isinstance(hf_subset, str)
-            return np.zeros((len(inputs.dataset), 10))
+            return np.ones((len(inputs.dataset), 10))
 
     mteb.evaluate(
         MockEncoder(),
