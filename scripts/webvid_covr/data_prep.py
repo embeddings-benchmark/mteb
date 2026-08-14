@@ -75,6 +75,15 @@ def main():
         repo_type="dataset"
     )
     df_meta = pd.read_csv(meta_path)
+
+    # Exclude corrupted video "104/1012954007" and remove all associated entries
+    corrupted_video = "104/1012954007"
+    initial_len = len(df_meta)
+    df_meta = df_meta[(df_meta["pth1"] != corrupted_video) & (df_meta["pth2"] != corrupted_video)]
+    removed_count = initial_len - len(df_meta)
+    if removed_count > 0:
+        print(f"Removed {removed_count} metadata rows associated with corrupted video: {corrupted_video}")
+
     if args.limit:
         df_meta = df_meta.head(args.limit)
     print(f"Loaded {len(df_meta)} metadata rows.")
