@@ -31,6 +31,22 @@ UNITE_CITATION = """@article{kong2025modality,
 # Qwen2VL refactor; each is marked inline.
 
 
+def _fit(frame, max_pixels: int):
+    """Downscale a video frame to at most max_pixels, keeping aspect ratio.
+
+    UNITE's reference inference passes video through qwen_vl_utils with
+    max_pixels=360*420, far below the image budget. Without this, video items
+    carry ~6x the visual tokens they should and encoding is ~6x slower.
+    """
+    w, h = frame.size
+    if w * h <= max_pixels:
+        return frame
+    scale = (max_pixels / (w * h)) ** 0.5
+    nw = max(28, int(w * scale) // 28 * 28)
+    nh = max(28, int(h * scale) // 28 * 28)
+    return frame.resize((nw, nh))
+
+
 def _unwrap(out):
     """tf 4.52 vision tower returns a tensor; tf 5.x returns an output object."""
     return out.pooler_output if hasattr(out, "pooler_output") else out
@@ -106,6 +122,7 @@ class UniteWrapper(AbsEncoder):
         max_frames: int = 32,
         num_frames: int = 32,
         target_sampling_rate: int = 16000,
+        video_max_pixels: int = 360 * 420,
         **kwargs: Any,
     ) -> None:
         from transformers import AutoProcessor
@@ -115,6 +132,7 @@ class UniteWrapper(AbsEncoder):
         self.max_frames = max_frames
         self.num_frames = num_frames
         self.target_sampling_rate = target_sampling_rate
+        self.video_max_pixels = video_max_pixels
 
         self.model = _load_base(model_name, revision)
         self.model.eval().to(self.device)
@@ -140,6 +158,7 @@ class UniteWrapper(AbsEncoder):
     def _embed_one(self, text=None, image=None, video=None) -> torch.Tensor:
         content = []
         if video is not None:
+            video = [_fit(f, self.video_max_pixels) for f in video]
             content.append({"type": "video", "video": ""})
         elif image is not None:
             content.append({"type": "image", "image": ""})
