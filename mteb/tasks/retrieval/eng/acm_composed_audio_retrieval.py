@@ -24,7 +24,7 @@ class ACMComposedAudioRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2603.02098",
         dataset={
             "path": "deep9539/ACM-processed",
-            "revision": "main",
+            "revision": "bc16d75267123a7ac893eccec65693e1e30bec72",
         },
         type="Any2AnyRetrieval",
         category="at2a",
