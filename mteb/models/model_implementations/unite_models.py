@@ -222,6 +222,15 @@ class UniteWrapper(AbsEncoder):
         return torch.cat(all_embeddings, dim=0)
 
 
+unite_training_datasets = set(
+    # Stage 1, retrieval adaptation: friedrichor/Unite-Base-Retrieval-Train
+    # (includes Tarsier2-Recap-585K video captions)
+    # Stage 2, instruction tuning: TIGER-Lab/MMEB-train
+    # Following the VLM2Vec precedent, MMEB-train components are not enumerated
+    # here even though mteb ships tasks matching several of them.
+)
+
+
 unite_base_qwen2vl_2b = ModelMeta(
     loader=UniteWrapper,
     name="friedrichor/Unite-Base-Qwen2-VL-2B",
@@ -233,7 +242,7 @@ unite_base_qwen2vl_2b = ModelMeta(
     modalities=["image", "text", "video"],
     n_parameters=2_208_985_600,
     n_embedding_parameters=233_373_696,
-    memory_usage_mb=4214,
+    memory_usage_mb=8427,
     embed_dim=1536,
     license="apache-2.0",
     max_tokens=32768,
@@ -243,7 +252,7 @@ unite_base_qwen2vl_2b = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/friedrichor/UNITE",
     public_training_data="https://huggingface.co/datasets/friedrichor/Unite-Base-Retrieval-Train",
-    training_datasets=None,
+    training_datasets=unite_training_datasets,
     adapted_from="Qwen/Qwen2-VL-2B-Instruct",
     citation=UNITE_CITATION,
     contacts=["hubielu"],
