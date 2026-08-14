@@ -267,7 +267,33 @@ omniret = ModelMeta(
     reference="https://huggingface.co/chuonghm/OmniRet",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
-    training_datasets=None,  # TODO map the M-BEIR/UniIR + audio corpora
+    training_datasets={
+        # M-BEIR / UniIR train collection
+        "MSCOCOI2TRetrieval",
+        "MSCOCOT2IRetrieval",
+        "Fashion200kI2TRetrieval",
+        "Fashion200kT2IRetrieval",
+        "FashionIQIT2IRetrieval",
+        "VisualNewsI2TRetrieval",
+        "VisualNewsT2IRetrieval",
+        "NIGHTSI2IRetrieval",
+        "WebQAT2ITRetrieval",
+        "WebQAT2TRetrieval",
+        "EDIST2ITRetrieval",
+        "CIRRIT2IRetrieval",
+        "OVENIT2ITRetrieval",
+        "OVENIT2TRetrieval",
+        "InfoSeekIT2ITRetrieval",
+        "InfoSeekIT2TRetrieval",
+        # audio additions
+        "AudioCapsA2TRetrieval",
+        "AudioCapsT2ARetrieval",
+        "ClothoA2TRetrieval",
+        "ClothoT2ARetrieval",
+        # WavCaps, WavText5K and VGGSound have no mteb task yet. VGGSound is the
+        # one to watch: OmniRet trains on its audio-visual pairs and the ACM
+        # benchmark is curated from VGG-Sound, so add it if #5016 merges.
+    },
     adapted_from="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
     superseded_by=None,
     modalities=["text", "image", "audio", "video"],
