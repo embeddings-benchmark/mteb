@@ -31,30 +31,6 @@ UNITE_CITATION = """@article{kong2025modality,
 # Qwen2VL refactor; each is marked inline.
 
 
-def _fit(video, max_pixels: int):
-    """Downscale video frames to at most max_pixels each, keeping aspect ratio.
-
-    mteb's VideoCollator yields a (T, C, H, W) uint8 tensor. CaReBench frames are
-    720x1280, while UNITE's reference inference caps video at 360*420 via
-    qwen_vl_utils. Without this the model sees ~6x the visual tokens per frame.
-    """
-    if not hasattr(video, "shape") or video.ndim != 4:
-        return video
-    h, w = video.shape[-2], video.shape[-1]
-    if h * w <= max_pixels:
-        return video
-    scale = (max_pixels / (h * w)) ** 0.5
-    nh = max(28, int(h * scale) // 28 * 28)
-    nw = max(28, int(w * scale) // 28 * 28)
-    return (
-        torch.nn.functional.interpolate(
-            video.float(), size=(nh, nw), mode="bilinear", align_corners=False
-        )
-        .clamp(0, 255)
-        .to(torch.uint8)
-    )
-
-
 def _unwrap(out):
     """tf 4.52 vision tower returns a tensor; tf 5.x returns an output object."""
     return out.pooler_output if hasattr(out, "pooler_output") else out
@@ -157,6 +133,15 @@ class UniteWrapper(AbsEncoder):
             max_pixels=max_image_tokens * 28 * 28,
         )
 
+        # UNITE's reference inference caps video at 360*420 via qwen_vl_utils, well
+        # below the image budget. tf>=5 exposes this as video_processor.size; on
+        # older versions the video branch shares the image processor settings.
+        vp = getattr(self.processor, "video_processor", None)
+        if vp is not None:
+            size = dict(getattr(vp, "size", None) or {})
+            size["longest_edge"] = video_max_pixels
+            vp.size = size
+
     @staticmethod
     def _suffix(has_text: bool, has_image: bool, has_video: bool) -> str:
         if has_video and has_text:
@@ -169,37 +154,52 @@ class UniteWrapper(AbsEncoder):
             return "\nSummary above image in one word:"
         return "\nSummary above sentence in one word:"
 
-    def _embed_one(self, text=None, image=None, video=None) -> torch.Tensor:
+    def _build_prompt(self, text=None, has_image=False, has_video=False) -> str:
         content = []
-        if video is not None:
-            video = _fit(video, self.video_max_pixels)
+        if has_video:
             content.append({"type": "video", "video": ""})
-        elif image is not None:
+        elif has_image:
             content.append({"type": "image", "image": ""})
         if text:
             content.append({"type": "text", "text": text})
         content.append(
-            {
-                "type": "text",
-                "text": self._suffix(bool(text), image is not None, video is not None),
-            }
+            {"type": "text", "text": self._suffix(bool(text), has_image, has_video)}
         )
         messages = [{"role": "user", "content": content}]
-        prompt = (
+        return (
             self.processor.apply_chat_template(
                 messages, tokenize=False, add_generation_prompt=True
             )
             + "<|endoftext|>"
         )
+
+    def _embed_batch(self, texts=None, images=None, videos=None) -> torch.Tensor:
+        n = len(texts or images or videos)
+        prompts = [
+            self._build_prompt(
+                text=texts[i] if texts is not None else None,
+                has_image=images is not None,
+                has_video=videos is not None,
+            )
+            for i in range(n)
+        ]
         inputs = self.processor(
-            text=[prompt],
-            images=[image] if image is not None else None,
-            videos=[video] if video is not None else None,
+            text=prompts,
+            images=list(images) if images is not None else None,
+            videos=list(videos) if videos is not None else None,
             padding=True,
             return_tensors="pt",
         ).to(self.device)
         with torch.inference_mode():
             return _unite_embed(self.model, inputs)
+
+    def _embed_one(self, text=None, image=None, video=None) -> torch.Tensor:
+        """Single-item convenience wrapper, used by tests."""
+        return self._embed_batch(
+            texts=[text] if text is not None else None,
+            images=[image] if image is not None else None,
+            videos=[video] if video is not None else None,
+        )
 
     def encode(
         self,
@@ -225,14 +225,8 @@ class UniteWrapper(AbsEncoder):
             texts = batch.get("text")
             images = batch.get("image")
             videos = batch.get("video")
-            n = len(texts or images or videos)
-            for i in range(n):
-                emb = self._embed_one(
-                    text=texts[i] if texts is not None else None,
-                    image=images[i] if images is not None else None,
-                    video=videos[i] if videos is not None else None,
-                )
-                all_embeddings.append(emb.float().cpu())
+            emb = self._embed_batch(texts=texts, images=images, videos=videos)
+            all_embeddings.append(emb.float().cpu())
         return torch.cat(all_embeddings, dim=0)
 
 
