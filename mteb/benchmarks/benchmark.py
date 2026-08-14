@@ -18,7 +18,10 @@ from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.eval_model import HFEvalMeta, HFEvalTaskConfig
 from mteb._hf_integration.hf_hub_utils import _get_file_on_hub
 from mteb.abstasks.abstask import AbsTask
-from mteb.benchmarks._benchmark_metrics import _compute_custom_group_means
+from mteb.benchmarks._benchmark_metrics import (
+    _compute_custom_group_means,
+    _is_whole_task_ref,
+)
 from mteb.types import StrURL
 
 if TYPE_CHECKING:
@@ -35,17 +38,19 @@ class CustomGroup:
     """One labeled bucket within a [CustomGrouping][mteb.benchmarks.benchmark.CustomGrouping] dimension.
 
     Args:
-        label: The group's display label (e.g. ``"Episodic"``). Must be
-            unique within its owning `CustomGrouping` and must not contain
-            ``"::"`` (reserved as the internal column/key delimiter).
-        tasks: Names of the tasks assigned to this group. A task may appear
-            in at most one group per dimension.
-        description: Optional prose explaining what this group measures —
-            surfaced as the column tooltip on the leaderboard.
+        label: Display label (e.g. ``"Episodic"``), unique within its
+            `CustomGrouping` and must not contain ``"::"``.
+        tasks: Initialized `AbsTask` instances (via `mteb.get_task(...)`/
+            `get_tasks(...)`), not bare names. A whole instance contributes
+            its whole-task score; one filtered by ``hf_subsets``/
+            ``eval_splits`` contributes the mean of just those cells, as one
+            data point. A task can appear whole in only one group per
+            dimension, but different groups may claim different scopes of it.
+        description: Optional prose, surfaced as the column tooltip.
     """
 
     label: str
-    tasks: Sequence[str]
+    tasks: Sequence[AbsTask]
     description: str | None = None
 
 
@@ -54,20 +59,22 @@ class CustomGrouping:
     """A named custom dimension bucketing a benchmark's tasks into display groups.
 
     Args:
-        name: The dimension's display name (e.g. ``"Memory Type"``). Must not
-            contain ``"::"`` (reserved as the internal column/key delimiter).
-            Used to namespace every score key / summary column this
-            dimension produces (``f"{name}::{label}"``).
-        groups: The dimension's groups. Every group's label must be unique
-            within this dimension, and a task may not appear in more than one
-            group of the same dimension.
+        name: Display name (e.g. ``"Memory Type"``), must not contain
+            ``"::"`` — namespaces every score key/column this dimension
+            produces (``f"{name}::{label}"``).
+        groups: The dimension's groups; labels must be unique within it. A
+            task can't be a whole-task member of more than one group, and
+            two groups can't claim the same (subset, split) cell of a task —
+            but they may each claim a *different* scope of it (e.g.
+            LongEmbed's per-length groups, each an ``eval_splits=[...]``
+            slice of the same two tasks).
 
     Examples:
         >>> CustomGrouping(
         ...     name="Memory Type",
         ...     groups=(
-        ...         CustomGroup(label="Episodic", tasks=["EPBench", "KnowMeBench"]),
-        ...         CustomGroup(label="Dialogue", tasks=["LoCoMo", "LongMemEval"]),
+        ...         CustomGroup(label="Episodic", tasks=get_tasks(["EPBench", "KnowMeBench"])),
+        ...         CustomGroup(label="Dialogue", tasks=get_tasks(["LoCoMo", "LongMemEval"])),
         ...     ),
         ... )
     """
@@ -75,6 +82,7 @@ class CustomGrouping:
     name: str
     groups: Sequence[CustomGroup]
     task_to_label: dict[str, str] = field(init=False, repr=False, compare=False)
+    has_scoped_refs: bool = field(init=False, repr=False, compare=False)
 
     def __post_init__(self) -> None:
         if "::" in self.name:
@@ -82,24 +90,41 @@ class CustomGrouping:
                 f"CustomGrouping.name must not contain '::': {self.name!r}"
             )
         seen_labels: set[str] = set()
-        seen_tasks: set[str] = set()
+        seen_whole_tasks: set[str] = set()
+        seen_scope_pairs: dict[str, set[tuple[str, str]]] = {}
+        task_to_label: dict[str, str] = {}
+        has_scoped_refs = False
         for g in self.groups:
             if "::" in g.label:
                 raise ValueError(f"group label must not contain '::': {g.label!r}")
             if g.label in seen_labels:
                 raise ValueError(f"duplicate group label {g.label!r} in {self.name!r}")
             seen_labels.add(g.label)
-            for task in g.tasks:
-                if task in seen_tasks:
-                    raise ValueError(
-                        f"task {task!r} assigned to multiple groups in {self.name!r}"
-                    )
-                seen_tasks.add(task)
-        object.__setattr__(
-            self,
-            "task_to_label",
-            {task: g.label for g in self.groups for task in g.tasks},
-        )
+            for task_ref in g.tasks:
+                name = task_ref.metadata.name
+                if _is_whole_task_ref(task_ref):
+                    if name in seen_whole_tasks or name in seen_scope_pairs:
+                        raise ValueError(
+                            f"task {name!r} assigned to multiple groups in {self.name!r}"
+                        )
+                    seen_whole_tasks.add(name)
+                    task_to_label[name] = g.label
+                else:
+                    has_scoped_refs = True
+                    claimed = {
+                        (subset, split)
+                        for subset in task_ref.hf_subsets
+                        for split in task_ref.eval_splits
+                    }
+                    if name in seen_whole_tasks or claimed & seen_scope_pairs.get(
+                        name, set()
+                    ):
+                        raise ValueError(
+                            f"task {name!r} assigned to multiple groups in {self.name!r}"
+                        )
+                    seen_scope_pairs.setdefault(name, set()).update(claimed)
+        object.__setattr__(self, "task_to_label", task_to_label)
+        object.__setattr__(self, "has_scoped_refs", has_scoped_refs)
 
 
 class BenchmarkAggregation(HelpfulStrEnum):

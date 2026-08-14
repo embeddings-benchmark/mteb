@@ -31,6 +31,7 @@ from mteb.api.schemas import (
     TaskScoresSchema,
 )
 from mteb.benchmarks._benchmark_metrics import (
+    _is_whole_task_ref,
     _recompute_lenient_custom_groups,
     _recompute_lenient_means,
 )
@@ -224,9 +225,6 @@ async def build_benchmark_summary(  # noqa: PLR0914
 
     trained_on_by_model = _trained_on_map_cached(bench.name)
 
-    # summary.custom_group_cols is the explicit pointer to every
-    # __cg__-prefixed column — read it BEFORE the type_cols catch-all below
-    # so those columns are excluded rather than misclassified as task types.
     custom_group_cols_by_dim: dict[str, tuple[str, ...]] = summary.custom_group_cols
     all_custom_group_cols = {
         c for cols in custom_group_cols_by_dim.values() for c in cols
@@ -236,24 +234,22 @@ async def build_benchmark_summary(  # noqa: PLR0914
         for c in summary_pl.columns
         if c not in _SUMMARY_META_COLS and c not in all_custom_group_cols
     ]
-    # Needed both for the lenient recompute below and for the description
-    # join further down — computed once, ahead of both uses.
+
     declared_by_dim: dict[str, CustomGrouping] = {
         a.name: a for a in bench.aggregations if isinstance(a, CustomGrouping)
     }
 
-    # Lenient means under language filter so partial-coverage models don't
-    # collapse to null; strict otherwise so they can't outrank full-coverage peers.
-    # Applies to scores_by_custom_group the same as scores_by_task_type — the
-    # language filter isn't gated on `language_view` (the sidebar facet reads
-    # tasksMeta[].languages directly), so any custom-grouped benchmark with
-    # more than one task language can hit this path.
     language_filtered = bool(languages)
     task_to_type: dict[str, str] = (
         {tm.name: tm.type for tm in tasks_meta} if language_filtered else {}
     )
+
     custom_group_task_to_label: dict[str, dict[str, str]] = (
-        {dim: g.task_to_label for dim, g in declared_by_dim.items()}
+        {
+            dim: g.task_to_label
+            for dim, g in declared_by_dim.items()
+            if not g.has_scoped_refs
+        }
         if language_filtered
         else {}
     )
@@ -285,11 +281,24 @@ async def build_benchmark_summary(  # noqa: PLR0914
         out_groups: list[CustomGroupSchema] = []
         for label in labels:
             declared_group = group_by_label.get(label)
+            if declared_group is None:
+                tasks_out: list[str] = []
+                tasks_complete = True
+            else:
+                tasks_out = [
+                    t.metadata.name
+                    for t in declared_group.tasks
+                    if _is_whole_task_ref(t)
+                ]
+                tasks_complete = all(
+                    _is_whole_task_ref(t) for t in declared_group.tasks
+                )
             out_groups.append(
                 CustomGroupSchema(
                     label=label,
                     description=declared_group.description if declared_group else None,
-                    tasks=list(declared_group.tasks) if declared_group else [],
+                    tasks=tasks_out,
+                    tasks_complete=tasks_complete,
                 )
             )
         custom_groupings_out.append(CustomGroupingSchema(name=dim, groups=out_groups))
@@ -357,11 +366,13 @@ def _build_summary_rows(
             scores_by_task_type, mean_task, mean_type = _recompute_lenient_means(
                 scores_by_task, task_to_type
             )
-            # No-ops (returns {}) when custom_group_task_to_label is empty —
-            # same as leaving scores_by_custom_group at its value above.
-            scores_by_custom_group = _recompute_lenient_custom_groups(
-                scores_by_task, custom_group_task_to_label
-            )
+
+            scores_by_custom_group = {
+                **scores_by_custom_group,
+                **_recompute_lenient_custom_groups(
+                    scores_by_task, custom_group_task_to_label
+                ),
+            }
 
         rows.append(
             SummaryRowSchema.model_construct(

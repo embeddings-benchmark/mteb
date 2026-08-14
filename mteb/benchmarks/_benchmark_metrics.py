@@ -8,8 +8,23 @@ import numpy as np
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    from mteb.abstasks.abstask import AbsTask
     from mteb.benchmarks.benchmark import CustomGrouping
     from mteb.results.task_result import TaskResult
+
+
+def _is_whole_task_ref(task_ref: AbsTask) -> bool:
+    """True if `task_ref` covers every subset and every split of its task class.
+
+    `hf_subsets`/`eval_splits` default to the full metadata list when
+    unfiltered, so a narrower `get_task(hf_subsets=..., eval_splits=...)`
+    instance simply won't set-equal them — no `is None` check needed. Lives
+    here rather than in `benchmark.py` to avoid an import cycle (that module
+    already imports `_compute_custom_group_means` from here).
+    """
+    return set(task_ref.hf_subsets) == set(task_ref.metadata.hf_subsets) and set(
+        task_ref.eval_splits
+    ) == set(task_ref.metadata.eval_splits)
 
 
 def _compute_mean_task(task_results: list[TaskResult]) -> float | None:
@@ -144,24 +159,53 @@ def _compute_mean_subset(
     return {"Mean(Subset)": sum(means_per_subset) / len(means_per_subset)}
 
 
+def _score_for_task_ref(
+    by_name: dict[str, TaskResult], task_ref: AbsTask
+) -> float | None:
+    """One `CustomGroup.tasks` entry -> one scalar score, or `None` if unresolvable.
+
+    Whole-task entries use `tr.get_score()`; scoped entries use
+    `tr._get_score_fast(splits=..., subsets=...)`, which averages across
+    exactly the given cells so a multi-cell entry still counts as one data
+    point. `ValueError` (missing split/subset/score) becomes `None`.
+    """
+    tr = by_name.get(task_ref.metadata.name)
+    if tr is None:
+        return None
+    try:
+        score = (
+            tr.get_score()
+            if _is_whole_task_ref(task_ref)
+            else tr._get_score_fast(
+                splits=task_ref.eval_splits, subsets=task_ref.hf_subsets
+            )
+        )
+    except ValueError:
+        return None
+    return None if (score is None or np.isnan(score)) else score
+
+
 def _compute_custom_group_means(
     task_results: list[TaskResult], grouping: CustomGrouping
 ) -> dict[str, float | None]:
     """Per-custom-group mean scores, namespaced ``"{dimension}::{label}"``.
 
-    Mirrors [_task_types_or_nulls][mteb.benchmarks._benchmark_metrics._task_types_or_nulls]'s
-    all-or-nothing semantics, scoped to the tasks this dimension actually
-    covers: if any task assigned to a group in `grouping` is missing a
-    score, every group in this dimension comes back `None`. Tasks not
-    assigned to any group in `grouping` (a dimension may cover only a
-    subset of the benchmark's tasks) are ignored entirely. A group with no
-    scored tasks (e.g. its declared tasks aren't part of this benchmark)
-    gets `0.0`, matching [_compute_mean_subset][mteb.benchmarks._benchmark_metrics._compute_mean_subset]'s
-    empty-input fallback.
+    All-or-nothing: if any `CustomGroup.tasks` entry in `grouping` is
+    missing a score, every group in this dimension comes back `None`. A
+    group with no scored entries gets `0.0`.
     """
-    buckets, has_null = _bucket_task_result_scores(
-        task_results, lambda tr: grouping.task_to_label.get(tr.task.metadata.name)
-    )
+    by_name = {tr.task.metadata.name: tr for tr in task_results}
+    has_null = False
+    per_group_scores: dict[str, list[float]] = {}
+    for group in grouping.groups:
+        scores: list[float] = []
+        for task_ref in group.tasks:
+            score = _score_for_task_ref(by_name, task_ref)
+            if score is None:
+                has_null = True
+            else:
+                scores.append(score)
+        per_group_scores[group.label] = scores
 
     result: dict[str, float | None] = {}
     for group in grouping.groups:
@@ -169,7 +213,7 @@ def _compute_custom_group_means(
         if has_null:
             result[key] = None
             continue
-        scores = buckets.get(group.label, [])
+        scores = per_group_scores[group.label]
         result[key] = sum(scores) / len(scores) if scores else 0.0
     return result
 

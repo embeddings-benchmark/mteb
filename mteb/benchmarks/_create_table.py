@@ -10,6 +10,7 @@ from typing import Any, Literal
 import numpy as np
 import polars as pl
 
+from mteb.benchmarks._benchmark_metrics import _is_whole_task_ref
 from mteb.benchmarks.benchmark import (
     _PRIMARY_METRIC_PRIORITY,
     BenchmarkAggregation,
@@ -416,22 +417,85 @@ def _get_means_per_types(
 _CUSTOM_GROUP_COL_PREFIX = "__cg__"
 
 
-def _get_means_per_custom_group(
-    task_cols: list[str], grouping: CustomGrouping
-) -> tuple[list[pl.Expr], list[str]]:
-    """Per-custom-group mean expressions for one `CustomGrouping` dimension."""
-    tasks_per_label: dict[str, list[str]] = defaultdict(list)
-    for task_name in task_cols:
-        label = grouping.task_to_label.get(task_name)
-        if label is not None:
-            tasks_per_label[label].append(task_name)
+@dataclass(frozen=True, slots=True)
+class _ScopePivot:
+    """One row per model, one column per ``f"{task}::{subset}::{split}"`` cell.
 
+    Finer-grained than (and kept separate from) `MEAN_SUBSET`'s own
+    `(task, subset)`-mean-over-splits pivot. Built only when a
+    `CustomGrouping` has scoped (subset-/split-narrowed) task entries.
+    """
+
+    wide: pl.DataFrame
+    cols: set[str]
+
+
+def _build_per_scope_pivot(pl_df: pl.DataFrame) -> _ScopePivot | None:
+    """Build the `(task, subset, split)`-grain pivot backing scoped `CustomGroup` entries.
+
+    Deliberately skips `_null_incomplete_scores`: that policy nulls a model
+    for not running every split of a subset, which doesn't apply here since
+    a scoped entry only ever asks for the exact cells it names. A genuinely
+    missing cell is still absent from the pivot and still nulls via
+    `ignore_nulls=False` in :func:`_get_means_per_custom_group`.
+    """
+    if pl_df.is_empty() or "model_name" not in pl_df.columns:
+        return None
+    per_scope_long = pl_df.group_by(["model_name", "task_name", "subset", "split"]).agg(
+        pl.col("score").mean()
+    )
+    keyed = per_scope_long.with_columns(
+        (pl.col("task_name") + "::" + pl.col("subset") + "::" + pl.col("split")).alias(
+            "_tss"
+        )
+    )
+    wide = keyed.pivot(on="_tss", index="model_name", values="score")
+    cols = {c for c in wide.columns if c != "model_name"}
+    if not cols:
+        return None
+    return _ScopePivot(wide=wide, cols=cols)
+
+
+def _get_means_per_custom_group(
+    task_cols: list[str],
+    scope_pivot: _ScopePivot | None,
+    grouping: CustomGrouping,
+) -> tuple[list[pl.Expr], list[str]]:
+    """Per-custom-group mean expressions for one `CustomGrouping` dimension.
+
+    Each entry contributes exactly one data point to its group's mean: a
+    whole-task entry is `pl.col(name)`; a scoped entry is
+    `pl.mean_horizontal(cells, ignore_nulls=False)` over just its own
+    `(subset, split)` cells, nested into the group's outer mean so a
+    many-cell entry can't outweigh a single-task one.
+    """
     cols: list[str] = []
     exprs: list[pl.Expr] = []
-    for label, tasks in tasks_per_label.items():
-        col = f"{_CUSTOM_GROUP_COL_PREFIX}{grouping.name}::{label}"
+    task_col_set = set(task_cols)
+    scope_cols = scope_pivot.cols if scope_pivot is not None else set()
+    for group in grouping.groups:
+        component_exprs: list[pl.Expr] = []
+        for task_ref in group.tasks:
+            name = task_ref.metadata.name
+            if _is_whole_task_ref(task_ref):
+                if name in task_col_set:
+                    component_exprs.append(pl.col(name))
+                continue
+            cell_cols = [
+                f"{name}::{subset}::{split}"
+                for subset in task_ref.hf_subsets
+                for split in task_ref.eval_splits
+                if f"{name}::{subset}::{split}" in scope_cols
+            ]
+            if cell_cols:
+                component_exprs.append(
+                    pl.mean_horizontal(cell_cols, ignore_nulls=False)
+                )
+        if not component_exprs:
+            continue
+        col = f"{_CUSTOM_GROUP_COL_PREFIX}{grouping.name}::{group.label}"
         cols.append(col)
-        exprs.append(_skipna_false_mean(tasks).alias(col))
+        exprs.append(pl.mean_horizontal(component_exprs, ignore_nulls=False).alias(col))
     return exprs, cols
 
 
@@ -840,10 +904,16 @@ def _create_summary_table(  # noqa: PLR0914
 
     type_exprs, type_cols = _get_means_per_types(task_cols)
 
+    scope_pivot = (
+        _build_per_scope_pivot(pl_df)
+        if any(g.has_scoped_refs for g in custom_groupings)
+        else None
+    )
+
     custom_group_exprs: list[pl.Expr] = []
     custom_group_cols_by_dim: dict[str, list[str]] = {}
     for grouping in custom_groupings:
-        exprs, cols = _get_means_per_custom_group(task_cols, grouping)
+        exprs, cols = _get_means_per_custom_group(task_cols, scope_pivot, grouping)
         custom_group_exprs.extend(exprs)
         if grouping.name in custom_group_cols_by_dim:
             raise ValueError(
@@ -855,11 +925,24 @@ def _create_summary_table(  # noqa: PLR0914
     joint_table = per_task.select(
         "model_name",
         *type_exprs,
-        *custom_group_exprs,
         _skipna_false_mean(task_cols).alias(mean_task_col),
         _mean_or_null(public_present, public_col),
         _mean_or_null(private_present, private_col),
     ).with_columns(_skipna_false_mean(type_cols).alias(mean_task_type_col))
+
+    if custom_group_exprs:
+        # Scoped entries reference scope_pivot.wide's columns, which don't
+        # exist on per_task -- evaluate against the joined source, then
+        # join the result back in.
+        custom_group_source = (
+            per_task.join(scope_pivot.wide, on="model_name", how="left")
+            if scope_pivot is not None
+            else per_task
+        )
+        custom_group_table = custom_group_source.select(
+            "model_name", *custom_group_exprs
+        )
+        joint_table = joint_table.join(custom_group_table, on="model_name", how="left")
 
     # Mean (Subset) + subset-partition Borda only when the benchmark actually
     # wants subset weighting — costs an extra group_by we'd otherwise skip.

@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 import mteb
 from mteb import ResultCache
@@ -39,16 +40,21 @@ def _make_custom_groupings() -> tuple[CustomGrouping, CustomGrouping]:
         name="DimA",
         groups=(
             CustomGroup(
-                label="G1", tasks=["NanoSCIDOCSRetrieval", "Banking77Classification"]
+                label="G1",
+                tasks=mteb.get_tasks(
+                    ["NanoSCIDOCSRetrieval", "Banking77Classification"]
+                ),
             ),
-            CustomGroup(label="Other", tasks=["NanoArguAnaRetrieval"]),
+            CustomGroup(label="Other", tasks=mteb.get_tasks(["NanoArguAnaRetrieval"])),
         ),
     )
     dim_b = CustomGrouping(
         name="DimB",
         groups=(
-            CustomGroup(label="G2", tasks=["NanoArguAnaRetrieval"]),
-            CustomGroup(label="Other", tasks=["Banking77Classification"]),
+            CustomGroup(label="G2", tasks=mteb.get_tasks(["NanoArguAnaRetrieval"])),
+            CustomGroup(
+                label="Other", tasks=mteb.get_tasks(["Banking77Classification"])
+            ),
         ),
     )
     return dim_a, dim_b
@@ -669,3 +675,265 @@ def test_recompute_lenient_custom_groups_matches_recompute_lenient_means_semanti
     out = _recompute_lenient_custom_groups(scores_by_task, custom_group_task_to_label)
 
     assert out["DimA"]["G1"] == mean_task
+
+
+# --- Scoped (subset-/split-narrowed) CustomGroup.tasks entries -------------
+#
+# NOTE (pre-existing, not introduced here): get_score() nulls a whole
+# dimension when any entry is missing a score; the polars path only nulls
+# the affected group. So the parity test below only checks a fully-covered
+# model -- a partial-coverage model would legitimately disagree between paths.
+
+
+def _make_scoped_custom_grouping() -> CustomGrouping:
+    """A subset-scoped 'Language' dimension over the same
+    CataloniaTweetClassification/Banking77Classification mock fixture
+    `test_benchmark_get_score_nulls_partial_split_and_subset_coverage` uses."""
+    catalan = mteb.get_task("CataloniaTweetClassification", hf_subsets=["catalan"])
+    spanish = mteb.get_task("CataloniaTweetClassification", hf_subsets=["spanish"])
+    banking = mteb.get_task("Banking77Classification")
+    return CustomGrouping(
+        name="Language",
+        groups=(
+            CustomGroup(label="Catalan", tasks=[catalan]),
+            CustomGroup(label="Mixed", tasks=[spanish, banking]),
+        ),
+    )
+
+
+def test_custom_grouping_post_init_scope_detection():
+    """A whole-task ref lands in task_to_label; subset-, split-, and
+    both-scoped refs don't -- and has_scoped_refs flips accordingly."""
+    whole = mteb.get_task("Banking77Classification")
+    subset_scoped = mteb.get_task(
+        "CataloniaTweetClassification", hf_subsets=["catalan"]
+    )
+    split_scoped = mteb.get_task(
+        "PoemSentimentClassification.v2", eval_splits=["validation"]
+    )
+    both_scoped = mteb.get_task(
+        "CataloniaTweetClassification", hf_subsets=["spanish"], eval_splits=["test"]
+    )
+
+    grouping = CustomGrouping(
+        name="ScopeDetect",
+        groups=(
+            CustomGroup(label="Whole", tasks=[whole]),
+            CustomGroup(label="SubsetScoped", tasks=[subset_scoped]),
+            CustomGroup(label="SplitScoped", tasks=[split_scoped]),
+            CustomGroup(label="BothScoped", tasks=[both_scoped]),
+        ),
+    )
+
+    assert grouping.task_to_label == {"Banking77Classification": "Whole"}
+    assert grouping.has_scoped_refs
+
+
+def test_custom_grouping_rejects_whole_task_and_scope_conflict():
+    """A task claimed whole in one group can't also be claimed (even
+    partially) by another group in the same dimension."""
+    whole = mteb.get_task("CataloniaTweetClassification")
+    scoped = mteb.get_task("CataloniaTweetClassification", hf_subsets=["catalan"])
+
+    with pytest.raises(ValueError, match="assigned to multiple groups"):
+        CustomGrouping(
+            name="Conflict",
+            groups=(
+                CustomGroup(label="A", tasks=[whole]),
+                CustomGroup(label="B", tasks=[scoped]),
+            ),
+        )
+
+
+def test_custom_grouping_rejects_duplicate_scope_claim():
+    """Two groups can't both claim the same (subset, split) cell of a task."""
+    first = mteb.get_task("CataloniaTweetClassification", hf_subsets=["catalan"])
+    second = mteb.get_task(
+        "CataloniaTweetClassification", hf_subsets=["catalan"], eval_splits=["test"]
+    )
+
+    with pytest.raises(ValueError, match="assigned to multiple groups"):
+        CustomGrouping(
+            name="Conflict",
+            groups=(
+                CustomGroup(label="A", tasks=[first]),
+                CustomGroup(label="B", tasks=[second]),
+            ),
+        )
+
+
+def test_custom_grouping_allows_different_scopes_of_same_task_in_different_groups():
+    """Two groups *may* each claim a different subset/split scope of the
+    same task -- the whole point of scoped refs (e.g. LongEmbed's per-length
+    groups)."""
+    catalan = mteb.get_task("CataloniaTweetClassification", hf_subsets=["catalan"])
+    spanish = mteb.get_task("CataloniaTweetClassification", hf_subsets=["spanish"])
+
+    grouping = CustomGrouping(
+        name="Language",
+        groups=(
+            CustomGroup(label="Catalan", tasks=[catalan]),
+            CustomGroup(label="Spanish", tasks=[spanish]),
+        ),
+    )
+    assert grouping.has_scoped_refs
+    assert grouping.task_to_label == {}
+
+
+def test_compute_custom_group_means_subset_scoped(mock_mteb_cache: ResultCache):
+    """A subset-scoped entry contributes _get_score_fast(subsets=...), not
+    the whole task's score."""
+    model_name = "mteb/baseline-random-encoder"
+    grouping = _make_scoped_custom_grouping()
+    tasks = mteb.get_tasks(["CataloniaTweetClassification", "Banking77Classification"])
+    model_result = mock_mteb_cache.load_results(models=[model_name]).model_results[0]
+    task_results = model_result.select_tasks(tasks).task_results
+    by_name = {tr.task.metadata.name: tr for tr in task_results}
+
+    out = _compute_custom_group_means(task_results, grouping)
+
+    catalan_expected = by_name["CataloniaTweetClassification"]._get_score_fast(
+        subsets=["catalan"]
+    )
+    spanish_expected = by_name["CataloniaTweetClassification"]._get_score_fast(
+        subsets=["spanish"]
+    )
+    banking_expected = by_name["Banking77Classification"].get_score()
+
+    assert out["Language::Catalan"] == pytest.approx(catalan_expected)
+    assert out["Language::Mixed"] == pytest.approx(
+        (spanish_expected + banking_expected) / 2
+    )
+
+
+def test_compute_custom_group_means_split_scoped(mock_mteb_cache: ResultCache):
+    """A split-scoped entry contributes _get_score_fast(splits=...), not the
+    whole task's score -- the LongEmbed shape."""
+    model_name = "mteb/baseline-random-encoder"
+    poem_val = mteb.get_task(
+        "PoemSentimentClassification.v2", eval_splits=["validation"]
+    )
+    poem_test = mteb.get_task("PoemSentimentClassification.v2", eval_splits=["test"])
+    banking = mteb.get_task("Banking77Classification")
+    grouping = CustomGrouping(
+        name="SplitDim",
+        groups=(
+            CustomGroup(label="ValOnly", tasks=[poem_val]),
+            CustomGroup(label="Mixed", tasks=[poem_test, banking]),
+        ),
+    )
+    tasks = mteb.get_tasks(
+        ["PoemSentimentClassification.v2", "Banking77Classification"]
+    )
+    model_result = mock_mteb_cache.load_results(models=[model_name]).model_results[0]
+    task_results = model_result.select_tasks(tasks).task_results
+    by_name = {tr.task.metadata.name: tr for tr in task_results}
+
+    out = _compute_custom_group_means(task_results, grouping)
+
+    val_expected = by_name["PoemSentimentClassification.v2"]._get_score_fast(
+        splits=["validation"]
+    )
+    test_expected = by_name["PoemSentimentClassification.v2"]._get_score_fast(
+        splits=["test"]
+    )
+    banking_expected = by_name["Banking77Classification"].get_score()
+
+    assert out["SplitDim::ValOnly"] == pytest.approx(val_expected)
+    assert out["SplitDim::Mixed"] == pytest.approx(
+        (test_expected + banking_expected) / 2
+    )
+
+
+def _weight_regression_expected_values(
+    by_name: dict, banking_expected: float
+) -> tuple[float, float]:
+    """(correct evenly-weighted value, wrong per-cell-weighted value) for
+    test_compute_custom_group_means_weights_one_entry_per_ref_not_per_cell."""
+    catalonia = by_name["CataloniaTweetClassification"]
+    multi_cell_expected = catalonia._get_score_fast(
+        subsets=["catalan", "spanish"], splits=["test"]
+    )
+    catalan_test = catalonia._get_score_fast(subsets=["catalan"], splits=["test"])
+    spanish_test = catalonia._get_score_fast(subsets=["spanish"], splits=["test"])
+    correct = (multi_cell_expected + banking_expected) / 2
+    wrong = (catalan_test + spanish_test + banking_expected) / 3
+    return correct, wrong
+
+
+def test_compute_custom_group_means_weights_one_entry_per_ref_not_per_cell(
+    mock_mteb_cache: ResultCache,
+):
+    """A 2-cell scoped entry (2 subsets x 1 split) and a 1-task entry in the
+    same group must weight 50/50, not 2:1 by underlying cell count."""
+    model_name = "mteb/baseline-random-encoder"
+    multi_cell = mteb.get_task(
+        "CataloniaTweetClassification",
+        hf_subsets=["catalan", "spanish"],
+        eval_splits=["test"],
+    )
+    banking = mteb.get_task("Banking77Classification")
+    grouping = CustomGrouping(
+        name="WeightDim",
+        groups=(CustomGroup(label="G", tasks=[multi_cell, banking]),),
+    )
+    tasks = mteb.get_tasks(["CataloniaTweetClassification", "Banking77Classification"])
+    model_result = mock_mteb_cache.load_results(models=[model_name]).model_results[0]
+    task_results = model_result.select_tasks(tasks).task_results
+    by_name = {tr.task.metadata.name: tr for tr in task_results}
+
+    out = _compute_custom_group_means(task_results, grouping)
+    correct, wrong = _weight_regression_expected_values(
+        by_name, by_name["Banking77Classification"].get_score()
+    )
+
+    assert out["WeightDim::G"] == pytest.approx(correct)
+    assert out["WeightDim::G"] != pytest.approx(wrong)
+
+
+def test_compute_custom_group_means_nulls_on_missing_scope_coverage(
+    mock_mteb_cache: ResultCache,
+):
+    """A model missing the subset a scoped entry needs nulls every group in
+    the dimension (dimension-global policy, unchanged from whole-task)."""
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"  # missing catalan/test
+    grouping = _make_scoped_custom_grouping()
+    tasks = mteb.get_tasks(["CataloniaTweetClassification", "Banking77Classification"])
+    model_result = mock_mteb_cache.load_results(models=[model_name]).model_results[0]
+    task_results = model_result.select_tasks(tasks).task_results
+
+    out = _compute_custom_group_means(task_results, grouping)
+
+    assert out == {"Language::Catalan": None, "Language::Mixed": None}
+
+
+@_skip_if_datasets_too_old
+def test_get_score_matches_summary_table_custom_groups_scoped(
+    mock_mteb_cache: ResultCache,
+):
+    """get_score() and the polars summary table agree on a scoped
+    CustomGrouping's values for a fully-covered model (see the module note
+    on partial models)."""
+    grouping = _make_scoped_custom_grouping()
+    tasks = mteb.get_tasks(["CataloniaTweetClassification", "Banking77Classification"])
+    bench = Benchmark(
+        name="mock_custom_groups_scoped_parity",
+        tasks=tasks,
+        aggregations=(BenchmarkAggregation.MEAN_TASK, grouping),
+    )
+    mock_results = mock_mteb_cache.load_results()
+
+    get_score_out = bench.get_score(mock_results)
+    pl_df = mock_results.select_tasks(bench.tasks)._to_results_df(bench.tasks)
+    summary_pl = bench._create_summary_table(pl_df).df
+    summary_by_model = {row["Model"]: row for row in summary_pl.iter_rows(named=True)}
+
+    model_name = "mteb/baseline-random-encoder"  # fully covers both subsets
+    scores = get_score_out[model_name]
+    srow = summary_by_model[model_name]
+    for gs_key, summary_col in [
+        ("Language::Catalan", "__cg__Language::Catalan"),
+        ("Language::Mixed", "__cg__Language::Mixed"),
+    ]:
+        assert scores[gs_key] is not None and srow[summary_col] is not None
+        assert np.isclose(scores[gs_key], srow[summary_col])

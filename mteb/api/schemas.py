@@ -12,6 +12,7 @@ from urllib.parse import quote
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic.alias_generators import to_camel
 
+from mteb.benchmarks._benchmark_metrics import _is_whole_task_ref
 from mteb.benchmarks._create_table import (
     _format_max_tokens,
     _format_n_parameters,
@@ -45,19 +46,19 @@ class _CamelModel(BaseModel):
 class CustomGroupSchema(_CamelModel):
     """One labeled group within a custom-grouping dimension.
 
-    ``tasks`` is the group's task membership — needed so the frontend can
-    recompute ``scoresByCustomGroup`` under the task-type/domain/modality
-    sidebar filters (client-side, no server round-trip) the same way it
-    already recomputes ``scoresByTaskType`` from ``TaskMeta.type``. Absent
-    from ``BenchmarkSummarySchema.custom_groupings`` rows the polars frame
-    can't attribute back to a declared group (shouldn't happen in practice —
-    every computed column comes from a declared group — but keeps this
-    schema's `tasks` optional rather than assuming it's always resolvable).
+    ``tasks`` is the group's *whole-task* membership only — lets the
+    frontend recompute ``scoresByCustomGroup`` client-side under the
+    sidebar filters, same as ``scoresByTaskType``.
+
+    ``tasks_complete`` is `False` when the group has a subset-/split-scoped
+    entry too, which can't be named in `tasks`. The frontend must not
+    recompute or drop an incomplete group — it freezes the server's value.
     """
 
     label: str
     description: str | None = None
     tasks: list[str] = Field(default_factory=list)
+    tasks_complete: bool = True
 
 
 class CustomGroupingSchema(_CamelModel):
@@ -168,7 +169,12 @@ class BenchmarkSchema(_CamelModel):
                         CustomGroupSchema(
                             label=cg.label,
                             description=cg.description,
-                            tasks=list(cg.tasks),
+                            tasks=[
+                                t.metadata.name
+                                for t in cg.tasks
+                                if _is_whole_task_ref(t)
+                            ],
+                            tasks_complete=all(_is_whole_task_ref(t) for t in cg.tasks),
                         )
                         for cg in g.groups
                     ],

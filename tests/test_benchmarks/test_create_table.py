@@ -15,12 +15,13 @@ import pytest
 import mteb
 from mteb import ResultCache
 from mteb.benchmarks._create_table import (
+    _build_per_scope_pivot,
     _build_per_task_pivot,
     _create_summary_table,
     _incomplete_subset_pairs,
     _incomplete_task_pairs,
 )
-from mteb.benchmarks.benchmark import BenchmarkAggregation
+from mteb.benchmarks.benchmark import BenchmarkAggregation, CustomGroup, CustomGrouping
 from tests.conftest import _skip_if_datasets_too_old
 
 FULL_MODEL = "mteb/baseline-random-encoder"
@@ -141,3 +142,85 @@ def test_create_summary_table_nulls_mean_on_partial_split_coverage(
     assert rows[PARTIAL_MODEL]["Classification"] is None
     assert rows[PARTIAL_MODEL]["Mean (Task)"] is None
     assert rows[PARTIAL_MODEL]["Mean (TaskType)"] is None
+
+
+@_skip_if_datasets_too_old
+def test_build_per_scope_pivot_nulls_partial_coverage(mock_mteb_cache: ResultCache):
+    """`_build_per_scope_pivot` doesn't apply `_null_incomplete_scores`
+    (deliberately, see its docstring): a genuinely missing cell is absent
+    from the pivot / null, but a present cell for an otherwise-partial model
+    is NOT nulled the way `_build_per_task_pivot` would null it."""
+    pl_df = _task_frame(mock_mteb_cache, [CATALONIA, BANKING77])
+    pivot = _build_per_scope_pivot(pl_df)
+    assert pivot is not None
+
+    catalan_val_col = f"{CATALONIA}::catalan::validation"
+    catalan_test_col = f"{CATALONIA}::catalan::test"
+    spanish_val_col = f"{CATALONIA}::spanish::validation"
+    banking_col = f"{BANKING77}::default::test"
+    assert {catalan_val_col, catalan_test_col, spanish_val_col, banking_col}.issubset(
+        pivot.cols
+    )
+
+    by_model = {r["model_name"]: r for r in pivot.wide.to_dicts()}
+    # PARTIAL_MODEL is missing catalan/test entirely -- absent, not nulled by
+    # a "rest of the task is incomplete" policy that doesn't apply here.
+    assert by_model[PARTIAL_MODEL][catalan_test_col] is None
+    # But its catalan/validation cell, which it *did* run, keeps its real
+    # (raw, unaveraged-with-anything-else) value -- unlike
+    # `_build_per_task_pivot`'s per_task[CATALONIA], which nulls the whole
+    # task for this model (see the subset-pairs test above).
+    partial_catalan_val_raw = pl_df.filter(
+        (pl.col("model_name") == PARTIAL_MODEL)
+        & (pl.col("task_name") == CATALONIA)
+        & (pl.col("subset") == "catalan")
+        & (pl.col("split") == "validation")
+    )["score"].mean()
+    assert by_model[PARTIAL_MODEL][catalan_val_col] == pytest.approx(
+        partial_catalan_val_raw
+    )
+    assert by_model[FULL_MODEL][catalan_test_col] == pytest.approx(0.339453)
+
+
+@_skip_if_datasets_too_old
+def test_create_summary_table_custom_groups_scoped_hand_computed(
+    mock_mteb_cache: ResultCache,
+):
+    """A scoped + mixed `CustomGrouping` over the Catalonia/Banking77
+    partial-coverage fixture: hand-computed values for FULL_MODEL, per-group
+    (not dimension-global) nulling for PARTIAL_MODEL."""
+    catalan = mteb.get_task(CATALONIA, hf_subsets=["catalan"])
+    spanish = mteb.get_task(CATALONIA, hf_subsets=["spanish"])
+    banking = mteb.get_task(BANKING77)
+    grouping = CustomGrouping(
+        name="Language",
+        groups=(
+            CustomGroup(label="Catalan", tasks=[catalan]),
+            CustomGroup(label="Mixed", tasks=[spanish, banking]),
+        ),
+    )
+
+    pl_df = _task_frame(mock_mteb_cache, [CATALONIA, BANKING77])
+    summary = _create_summary_table(
+        pl_df, aggregations=(BenchmarkAggregation.MEAN_TASK, grouping)
+    )
+    assert not summary.is_empty
+    assert summary.custom_group_cols["Language"] == (
+        "__cg__Language::Catalan",
+        "__cg__Language::Mixed",
+    )
+    rows = {r["Model"]: r for r in summary.df.to_dicts()}
+
+    full_catalan = (0.338905 + 0.339453) / 2
+    full_spanish = (0.333102 + 0.337946) / 2
+    assert rows[FULL_MODEL]["__cg__Language::Catalan"] == pytest.approx(full_catalan)
+    assert rows[FULL_MODEL]["__cg__Language::Mixed"] == pytest.approx(
+        (full_spanish + 0.012532) / 2
+    )
+
+    # PARTIAL_MODEL is missing catalan/test -> Catalan's only entry is null.
+    assert rows[PARTIAL_MODEL]["__cg__Language::Catalan"] is None
+    # Mixed's entries (spanish, banking77) are both fully covered by
+    # PARTIAL_MODEL -- unaffected by Catalan's gap (per-group, not
+    # dimension-global, in the polars path).
+    assert rows[PARTIAL_MODEL]["__cg__Language::Mixed"] is not None
