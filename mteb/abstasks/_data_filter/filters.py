@@ -63,7 +63,7 @@ def filter_unclear_label(
     normalized: dict[str, set[str | tuple[str, ...]]] = {}
     logger.debug("[filter_controversial] scanning dataset for label conflicts...")
 
-    for split, ds in dataset_dict.items():
+    for ds in dataset_dict.values():
         for text, label in zip(ds[input_column], ds[label_column]):
             key = text.strip().lower()
             normalized.setdefault(key, set()).add(

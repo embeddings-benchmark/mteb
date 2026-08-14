@@ -37,7 +37,7 @@ def evaclip_loader(model_name, **kwargs):
             "`pip install ninja timm`"
             "`pip install -v -U git+https://github.com/facebookresearch/xformers.git@main#egg=xformers`"
             "`git clone https://github.com/NVIDIA/apex && cd apex && pip install -v --disable-pip-version-check --no-build-isolation --no-cache-dir ./`"
-        )
+        ) from None
 
     class EvaCLIPWrapper(AbsEncoder):
         def __init__(

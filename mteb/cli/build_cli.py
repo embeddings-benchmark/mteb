@@ -422,7 +422,7 @@ def _leaderboard(args: argparse.Namespace) -> None:
             "Seems like some dependencies are not installed. "
             "You can likely install these using: `pip install 'mteb[leaderboard]'`. "
             f"{e}"
-        )
+        ) from e
 
     cache_path = args.cache_path
 

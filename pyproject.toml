@@ -312,6 +312,7 @@ select = [
     "INT",     # gettext f-string misuse
     "ASYNC",   # blocking calls in async functions
     "ISC",     # implicit string concatenation
+    "B",       # flake8-bugbear
 ]
 
 ignore = [
@@ -334,6 +335,9 @@ ignore = [
     "PLR0915",  # too many statements
     "PLW0717",  # too-many-statements-in-try-clause
     "ISC001",   # single-line implicit concat; conflicts with `ruff format`
+    # TODO: enable in a follow-up PR; each needs a per-site `strict=` / `stacklevel=` decision
+    "B905",     # zip-without-explicit-strict
+    "B028",     # no-explicit-stacklevel
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]

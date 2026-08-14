@@ -21,6 +21,9 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# Default abstention rates for the nAUC computation: 0.0, 0.1, ..., 0.9
+_DEFAULT_ABSTENTION_RATES = np.linspace(0, 1, 11)[:-1]
+
 
 def mrr(
     qrels: RelevantDocumentsType,
@@ -88,7 +91,7 @@ def hole(
 
     annotated_corpus = set()
     for _, docs in qrels.items():
-        for doc_id, score in docs.items():
+        for doc_id in docs:
             annotated_corpus.add(doc_id)
 
     k_max = max(k_values)
@@ -158,7 +161,7 @@ def calculate_pmrr(
             continue
         original_qid_run = original_run[qid + "-og"]
         new_qid_run = new_run[qid + "-changed"]
-        for idx, changed_doc in enumerate(cur_changed_qrels):
+        for changed_doc in cur_changed_qrels:
             original_rank, original_score = get_rank_from_dict(
                 original_qid_run, changed_doc
             )
@@ -294,7 +297,7 @@ def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
 def nauc(
     conf_scores: NDArray[np.floating],
     metrics: NDArray[np.floating],
-    abstention_rates: NDArray[np.floating] = np.linspace(0, 1, 11)[:-1],
+    abstention_rates: NDArray[np.floating] = _DEFAULT_ABSTENTION_RATES,
 ) -> float:
     """Computes normalized Area Under the Curve (nAUC) on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
 
@@ -316,7 +319,7 @@ def nauc(
     def abstention_curve(
         conf_scores: NDArray[np.floating],
         metrics: NDArray[np.floating],
-        abstention_rates: NDArray[np.floating] = np.linspace(0, 1, 11)[:-1],
+        abstention_rates: NDArray[np.floating] = _DEFAULT_ABSTENTION_RATES,
     ) -> NDArray[np.floating]:
         """Computes the raw abstention curve for a given set of evaluated instances and corresponding confidence scores
 
