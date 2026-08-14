@@ -149,6 +149,7 @@ from .fashion200k_i2t_retrieval import Fashion200kI2TRetrieval
 from .fashion200k_t2i_retrieval import Fashion200kT2IRetrieval
 from .fashion_iq_it2i_retrieval import FashionIQIT2IRetrieval
 from .feedback_qa_retrieval import FeedbackQARetrieval
+from .fgmcaps_retrieval import FGMCapsA2TRetrieval, FGMCapsT2ARetrieval
 from .fever_retrieval import FEVER, FEVERHardNegatives, FEVERHardNegativesV2
 from .fi_qa2018_retrieval import FiQA2018
 from .fin_qa_retrieval import FinQARetrieval
@@ -611,6 +612,8 @@ __all__ = [
     "Fashion200kT2IRetrieval",
     "FashionIQIT2IRetrieval",
     "FeedbackQARetrieval",
+    "FGMCapsA2TRetrieval",
+    "FGMCapsT2ARetrieval",
     "FiQA2018",
     "FinQARetrieval",
     "FinanceBenchRetrieval",
