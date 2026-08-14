@@ -31,89 +31,67 @@ UNITE_CITATION = """@article{kong2025modality,
 # Qwen2VL refactor; each is marked inline.
 
 
-def _build_unite_model(model_name: str, revision: str | None, **kwargs):
+def _unwrap(out):
+    """tf 4.52 vision tower returns a tensor; tf 5.x returns an output object."""
+    return out.pooler_output if hasattr(out, "pooler_output") else out
+
+
+def _load_base(model_name: str, revision: str | None):
     from transformers import Qwen2VLForConditionalGeneration
 
-    class UniteQwen2VL(Qwen2VLForConditionalGeneration):
-        def __init__(self, config):
-            super().__init__(config)
-            self.normalize = True
+    # UNITE ships modeling_unite.py as a Qwen2VLForConditionalGeneration subclass,
+    # but subclassing breaks checkpoint key remapping on transformers 5.x: the
+    # language model silently loads with random weights. We keep the base class and
+    # reproduce UNITE's pooling in _unite_embed instead.
+    try:
+        return Qwen2VLForConditionalGeneration.from_pretrained(
+            model_name, revision=revision, dtype=torch.bfloat16
+        )
+    except TypeError:
+        return Qwen2VLForConditionalGeneration.from_pretrained(
+            model_name, revision=revision, torch_dtype=torch.bfloat16
+        )
 
-        def forward(  # noqa: PLR0913, PLR0917 - signature mirrors upstream Qwen2VLForConditionalGeneration
-            self,
-            input_ids=None,
-            attention_mask=None,
-            position_ids=None,
-            past_key_values=None,
-            inputs_embeds=None,
-            pixel_values=None,
-            pixel_values_videos=None,
-            image_grid_thw=None,
-            video_grid_thw=None,
-            pooling_mask=None,
-            **unused,
-        ) -> torch.Tensor:
-            if inputs_embeds is None:
-                # Upstream: self.model.embed_tokens(input_ids).
-                # tf>=4.52 moved embed_tokens under self.model.language_model.
-                inputs_embeds = self.get_input_embeddings()(input_ids)
-                if pixel_values is not None:
-                    pixel_values = pixel_values.type(self.visual.get_dtype())
-                    image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
-                    mask = (
-                        (input_ids == self.config.image_token_id)
-                        .unsqueeze(-1)
-                        .expand_as(inputs_embeds)
-                        .to(inputs_embeds.device)
-                    )
-                    image_embeds = image_embeds.to(
-                        inputs_embeds.device, inputs_embeds.dtype
-                    )
-                    inputs_embeds = inputs_embeds.masked_scatter(mask, image_embeds)
-                if pixel_values_videos is not None:
-                    pixel_values_videos = pixel_values_videos.type(
-                        self.visual.get_dtype()
-                    )
-                    video_embeds = self.visual(
-                        pixel_values_videos, grid_thw=video_grid_thw
-                    )
-                    mask = (
-                        (input_ids == self.config.video_token_id)
-                        .unsqueeze(-1)
-                        .expand_as(inputs_embeds)
-                        .to(inputs_embeds.device)
-                    )
-                    video_embeds = video_embeds.to(
-                        inputs_embeds.device, inputs_embeds.dtype
-                    )
-                    inputs_embeds = inputs_embeds.masked_scatter(mask, video_embeds)
-                if attention_mask is not None:
-                    attention_mask = attention_mask.to(inputs_embeds.device)
 
-            # Upstream: self.model(...), which was the text decoder in tf 4.47.
-            # In tf>=4.52 that name is the multimodal wrapper and would recompute
-            # position ids via get_rope_index; language_model is the 4.47 self.model.
-            outputs = self.model.language_model(
-                input_ids=None,
-                position_ids=position_ids,
-                attention_mask=attention_mask,
-                past_key_values=past_key_values,
-                inputs_embeds=inputs_embeds,
-            )
+def _scatter(model, inputs_embeds, input_ids, pixels, grid, token_id):
+    tower = model.model.visual
+    embeds = _unwrap(tower(pixels.type(tower.dtype), grid_thw=grid))
+    mask = (input_ids == token_id).unsqueeze(-1).expand_as(inputs_embeds)
+    return inputs_embeds.masked_scatter(
+        mask.to(inputs_embeds.device),
+        embeds.to(inputs_embeds.device, inputs_embeds.dtype),
+    )
 
-            pooling_mask = attention_mask if pooling_mask is None else pooling_mask
-            h = outputs.last_hidden_state
-            left_padding = pooling_mask[:, -1].sum() == pooling_mask.shape[0]
-            if left_padding:
-                embeddings = h[:, -1]
-            else:
-                idx = pooling_mask.sum(dim=1) - 1
-                embeddings = h[torch.arange(h.shape[0], device=h.device), idx]
-            if self.normalize:
-                embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=1)
-            return embeddings.contiguous()
 
-    return UniteQwen2VL.from_pretrained(model_name, revision=revision, **kwargs)
+def _unite_embed(model, inputs) -> torch.Tensor:
+    """UNITE's forward: embed, scatter visual features, decode, last-token pool."""
+    input_ids = inputs["input_ids"]
+    attention_mask = inputs["attention_mask"]
+    inputs_embeds = model.get_input_embeddings()(input_ids)
+
+    if inputs.get("pixel_values") is not None:
+        inputs_embeds = _scatter(
+            model, inputs_embeds, input_ids, inputs["pixel_values"],
+            inputs["image_grid_thw"], model.config.image_token_id,
+        )
+    if inputs.get("pixel_values_videos") is not None:
+        inputs_embeds = _scatter(
+            model, inputs_embeds, input_ids, inputs["pixel_values_videos"],
+            inputs["video_grid_thw"], model.config.video_token_id,
+        )
+
+    out = model.model.language_model(
+        input_ids=None,
+        attention_mask=attention_mask.to(inputs_embeds.device),
+        inputs_embeds=inputs_embeds,
+    )
+    h = out.last_hidden_state
+    if attention_mask[:, -1].sum() == attention_mask.shape[0]:
+        emb = h[:, -1]
+    else:
+        idx = attention_mask.sum(dim=1) - 1
+        emb = h[torch.arange(h.shape[0], device=h.device), idx]
+    return torch.nn.functional.normalize(emb, p=2, dim=1).contiguous()
 
 
 class UniteWrapper(AbsEncoder):
@@ -138,11 +116,7 @@ class UniteWrapper(AbsEncoder):
         self.num_frames = num_frames
         self.target_sampling_rate = target_sampling_rate
 
-        self.model = _build_unite_model(
-            model_name,
-            revision,
-            torch_dtype=torch.bfloat16,
-        )
+        self.model = _load_base(model_name, revision)
         self.model.eval().to(self.device)
         self.processor = AutoProcessor.from_pretrained(
             model_name,
@@ -192,7 +166,7 @@ class UniteWrapper(AbsEncoder):
             return_tensors="pt",
         ).to(self.device)
         with torch.inference_mode():
-            return self.model(**inputs)
+            return _unite_embed(self.model, inputs)
 
     def encode(
         self,
