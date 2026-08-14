@@ -351,6 +351,7 @@ from .spart_qa_retrieval import SpartQA
 from .speech_coco import SpeechCocoA2IRetrieval, SpeechCocoI2ARetrieval
 from .spoken_coco_retrieval import SpokenCOCOA2IRetrieval, SpokenCOCOI2ARetrieval
 from .spoken_s_qu_ad import SpokenSQuADT2ARetrieval
+from .ssw60 import SSW60A2IRetrieval, SSW60I2ARetrieval
 from .stanford_cars_i2i_retrieval import StanfordCarsI2I
 from .temp_reason_l1_retrieval import TempReasonL1
 from .temp_reason_l2_context_retrieval import TempReasonL2Context
@@ -749,6 +750,8 @@ __all__ = [
     "RealMMRAGTechSlidesRetrieval",
     "SHS100KA2ARetrieval",
     "SOPI2IRetrieval",
+    "SSW60A2IRetrieval",
+    "SSW60I2ARetrieval",
     "SciFact",
     "SciMMIRI2TRetrieval",
     "SciMMIRT2IRetrieval",
