@@ -110,9 +110,9 @@ class AbsTask(ABC):  # noqa: PLR0904
         seed: The random seed used for reproducibility.
         hf_subsets: The list of Huggingface subsets to use.
         data_loaded: Denotes if the dataset is loaded or not. This is used to avoid loading the dataset multiple times.
-        data_modified: Denotes if the dataset was modified locally, e.g. by `remove_duplicates` or
-            `filter_short_documents`. Scores computed from a modified task are not comparable to other results, so
-            they are never read from or resumed out of the results cache.
+        data_modified: Denotes if the dataset was modified locally by a filter from `mteb.quality`. Scores
+            computed from a modified task are not comparable to other results, so they are never read from or
+            resumed out of the results cache.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
         fast_loading: **Deprecated**. Denotes if the task should be loaded using the fast loading method.
             This is only possible if the dataset have a "default" config. We don't recommend to use this method, and suggest to use different subsets for loading datasets.

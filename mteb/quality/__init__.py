@@ -17,10 +17,9 @@ https://github.com/embeddings-benchmark/mteb/issues/3672 for which of them to ex
 from __future__ import annotations
 
 from ._deduplication import remove_duplicates
-from ._row_filters import TextLengthUnit, TextNormalization
+from ._row_filters import TextNormalization
 
 __all__ = [
-    "TextLengthUnit",
     "TextNormalization",
     "remove_duplicates",
 ]

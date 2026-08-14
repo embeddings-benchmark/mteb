@@ -202,7 +202,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         if task.data_modified:
             msg = (
                 f"Building a result for '{task_meta.name}' from a task whose data was modified locally, e.g. by "
-                "`remove_duplicates` or `filter_short_documents`. The result records the revision of the published "
+                "a filter from `mteb.quality`. The result records the revision of the published "
                 "dataset, so it is indistinguishable from a regular result while not being comparable to one. Do "
                 "not submit it to the leaderboard."
             )

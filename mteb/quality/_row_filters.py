@@ -23,9 +23,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-TextLengthUnit = Literal["characters", "words"]
-"""The unit used when measuring the length of a document."""
-
 TextNormalization = Literal["strip", "casefold", "alphanumeric"]
 """How much of a difference between two documents to ignore when deciding whether they are duplicates.
 
@@ -78,14 +75,6 @@ def row_key(keys: tuple[str, ...]) -> bytes:
     return digest.digest()
 
 
-def text_length(text: str, unit: TextLengthUnit) -> int:
-    """The length of `text` in `unit`, ignoring surrounding whitespace."""
-    stripped = _normalize(text)
-    if unit == "characters":
-        return len(stripped)
-    return len(stripped.split())
-
-
 def keep_first_occurrence(keys: Iterable[tuple[str, ...]]) -> list[int]:
     """Keep the rows whose comparison key has not been seen before.
 
@@ -104,27 +93,6 @@ def keep_first_occurrence(keys: Iterable[tuple[str, ...]]) -> list[int]:
         seen.add(key)
         keep.append(i)
     return keep
-
-
-def keep_long_enough(min_length: int, unit: TextLengthUnit) -> KeepIndicesFn:
-    """Build a filter keeping the rows where *every* text is at least `min_length` `unit` long.
-
-    Args:
-        min_length: The minimum length a text must have to be kept.
-        unit: Whether `min_length` counts characters or whitespace-separated words.
-
-    Returns:
-        A `KeepIndicesFn` applying the length threshold.
-    """
-
-    def _keep(keys: Iterable[tuple[str, ...]]) -> list[int]:
-        return [
-            i
-            for i, row in enumerate(keys)
-            if all(text_length(text, unit) >= min_length for text in row)
-        ]
-
-    return _keep
 
 
 def iter_row_keys(
@@ -147,11 +115,6 @@ def iter_row_keys(
         else:
             per_column.append(_HASH_FN[modality](dataset[column], max_workers=num_proc))
     return zip(*per_column)
-
-
-def iter_texts(dataset: Dataset, columns: Sequence[str]) -> Iterator[tuple[str, ...]]:
-    """Iterate the raw text of `columns` row by row, without materializing it all at once."""
-    return zip(*(dataset[column] for column in columns))
 
 
 def _is_grouped(dataset: Dataset, columns: Sequence[str]) -> bool:
