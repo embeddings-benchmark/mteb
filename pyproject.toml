@@ -503,6 +503,7 @@ conflicts = [
         { extra = "embeddinggemma" },
         # { extra = "ebind" },
         { extra = "visrag-ret" }, # conflicting version of timm with blip2
+        { extra = "omniret" }, # pins transformers>=5.13
     ],
 ]
 
