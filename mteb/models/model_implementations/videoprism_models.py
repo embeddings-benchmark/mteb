@@ -50,12 +50,16 @@ class VideoPrismVisionWrapper(AbsEncoder):
         model_name: str,
         revision: str | None,
         device: str | int | torch.device | None = None,
-        num_frames: int = 16,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = 16,
         **kwargs: Any,
     ) -> None:
         from transformers import AutoVideoProcessor, VideoPrismVisionModel
 
         self.model_name = model_name
+        self.fps = fps
+        self.max_frames = max_frames
         self.num_frames = num_frames
         self.device = _resolve_device(device)
         self.dtype = torch.bfloat16 if self.device.type == "cuda" else torch.float32
@@ -79,7 +83,11 @@ class VideoPrismVisionWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = FramesCollator(num_frames=self.num_frames)
+        inputs.collate_fn = FramesCollator(
+            fps=self.fps,
+            max_frames=self.max_frames,
+            num_frames=self.num_frames,
+        )
 
         all_embeddings = []
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Video Encoding"):
@@ -88,11 +96,7 @@ class VideoPrismVisionWrapper(AbsEncoder):
             # which they concatenate cleanly.
             processed = []
             for video in batch["video"]:
-                clip = (
-                    video.to(torch.uint8)
-                    if isinstance(video, torch.Tensor)
-                    else torch.as_tensor(video, dtype=torch.uint8)
-                )
+                clip = video.to(torch.uint8)
                 processed.append(
                     self.processor(videos=[clip.numpy()], return_tensors="pt")[
                         "pixel_values_videos"
@@ -118,12 +122,16 @@ class VideoPrismClipWrapper(AbsEncoder):
         model_name: str,
         revision: str | None,
         device: str | int | torch.device | None = None,
-        num_frames: int = 16,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = 16,
         **kwargs: Any,
     ) -> None:
         from transformers import AutoProcessor, VideoPrismClipModel
 
         self.model_name = model_name
+        self.fps = fps
+        self.max_frames = max_frames
         self.num_frames = num_frames
         self.device = _resolve_device(device)
         self.dtype = torch.bfloat16 if self.device.type == "cuda" else torch.float32
@@ -164,11 +172,7 @@ class VideoPrismClipWrapper(AbsEncoder):
         for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):
             processed = []
             for video in batch["video"]:
-                clip = (
-                    video.to(torch.uint8)
-                    if isinstance(video, torch.Tensor)
-                    else torch.as_tensor(video, dtype=torch.uint8)
-                )
+                clip = video.to(torch.uint8)
                 processed.append(
                     self.processor(videos=[clip.numpy()], return_tensors="pt")[
                         "pixel_values_videos"
@@ -200,7 +204,11 @@ class VideoPrismClipWrapper(AbsEncoder):
         has_video = "video" in inputs.dataset.features
 
         if has_video:
-            inputs.collate_fn = FramesCollator(num_frames=self.num_frames)
+            inputs.collate_fn = FramesCollator(
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+            )
 
         text_embeddings = None
         video_embeddings = None
