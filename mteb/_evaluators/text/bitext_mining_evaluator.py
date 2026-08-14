@@ -79,9 +79,7 @@ class BitextMiningEvaluator(Evaluator):
             subset=self.hf_subset,
             log_message="Finding nearest neighbors...",
         ):
-            for i, (key1, key2) in enumerate(
-                tqdm(self.pairs, desc="Matching sentences")
-            ):
+            for key1, key2 in tqdm(self.pairs, desc="Matching sentences"):
                 neighbours[f"{key1}-{key2}"] = self._similarity_search(
                     embeddings[key1], embeddings[key2], model
                 )

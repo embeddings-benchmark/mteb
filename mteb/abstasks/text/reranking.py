@@ -173,7 +173,9 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
                 # Map the transformation function over the dataset
                 processed_dataset = enumerated_dataset.map(
-                    lambda example, idx: self._process_example(example, split, idx),
+                    lambda example, idx, split=split: self._process_example(
+                        example, split, idx
+                    ),
                     with_indices=True,
                     remove_columns=enumerated_dataset.column_names,
                 )

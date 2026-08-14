@@ -428,7 +428,7 @@ class LlamaEmbedNemotron(AbsEncoder):
         if Version(transformers_version) != Version(required_transformers_version):
             raise ImportError(
                 f"{model_name} requires transformers library version {required_transformers_version}, but it was not found in your environment. "
-                + f"If you want to load {model_name} model, please run `pip install 'mteb[llama-embed-nemotron]'` to install the required package."
+                f"If you want to load {model_name} model, please run `pip install 'mteb[llama-embed-nemotron]'` to install the required package."
             )
 
         self.model_name = model_name
