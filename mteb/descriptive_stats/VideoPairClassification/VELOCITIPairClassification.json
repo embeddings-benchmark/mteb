@@ -1,34 +1,34 @@
 {
     "test": {
-        "num_samples": 17584,
-        "unique_pairs": 11670,
+        "num_samples": 11669,
+        "unique_pairs": 11669,
         "number_of_characters": null,
         "text1_statistics": null,
         "image1_statistics": null,
         "audio1_statistics": null,
         "video1_statistics": {
-            "total_duration_seconds": 176015.808,
-            "total_frames": 4220160,
+            "total_duration_seconds": 116806.67599999999,
+            "total_frames": 2800560,
             "min_width": 1070,
-            "average_width": 1278.7340764331211,
+            "average_width": 1278.650269946011,
             "max_width": 1280,
             "min_height": 720,
             "average_height": 720.0,
             "max_height": 720,
             "min_duration_seconds": 10,
-            "average_duration_seconds": 10.009998180163784,
+            "average_duration_seconds": 10.009998800239952,
             "max_duration_seconds": 10.010666666666667,
             "unique_videos": 864,
             "average_fps": 24.0,
             "fps": {
-                "24": 17584
+                "24": 11669
             },
             "min_resolution": [
                 1070,
                 720
             ],
             "average_resolution": [
-                1278.7340764331211,
+                1278.650269946011,
                 720.0
             ],
             "max_resolution": [
@@ -36,14 +36,14 @@
                 720
             ],
             "resolutions": {
-                "1280x720": 17478,
-                "1070x720": 106
+                "1280x720": 11594,
+                "1070x720": 75
             }
         },
         "text2_statistics": {
-            "total_text_length": 1620508,
+            "total_text_length": 1154947,
             "min_text_length": 29,
-            "average_text_length": 92.1580982711556,
+            "average_text_length": 98.97566201045505,
             "max_text_length": 345,
             "unique_texts": 10118
         },
@@ -57,10 +57,10 @@
             "unique_labels": 2,
             "labels": {
                 "1": {
-                    "count": 8792
+                    "count": 4206
                 },
                 "0": {
-                    "count": 8792
+                    "count": 7463
                 }
             }
         }
