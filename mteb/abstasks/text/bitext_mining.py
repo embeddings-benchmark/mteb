@@ -245,7 +245,10 @@ class AbsTaskBitextMining(AbsTask):
 
         text1_statistics = calculate_text_statistics(sentence1)
         text2_statistics = calculate_text_statistics(sentence2)
-        unique_pairs = len(set(zip(sentence1, sentence2, strict=True)))
+        # Not strict: BUCC (superseded by BUCC.v2) filters `sentence1` down to the
+        # gold pairs while keeping the full `sentence2` corpus, so the two sides are
+        # deliberately ragged and the zip truncates to the shorter one.
+        unique_pairs = len(set(zip(sentence1, sentence2, strict=False)))
 
         return BitextDescriptiveStatistics(
             num_samples=len(sentence1),
