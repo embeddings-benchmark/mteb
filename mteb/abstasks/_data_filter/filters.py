@@ -64,7 +64,7 @@ def filter_unclear_label(
     logger.debug("[filter_controversial] scanning dataset for label conflicts...")
 
     for ds in dataset_dict.values():
-        for text, label in zip(ds[input_column], ds[label_column]):
+        for text, label in zip(ds[input_column], ds[label_column], strict=True):
             key = text.strip().lower()
             normalized.setdefault(key, set()).add(
                 label if isinstance(label, (str, int, float)) else tuple(label)  # type: ignore[arg-type]

@@ -151,7 +151,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
                 **encode_kwargs,
             )
         unique_train_embeddings = dict(
-            zip(unique_train_indices, _unique_train_embeddings)
+            zip(unique_train_indices, _unique_train_embeddings, strict=True)
         )
         # Stratified subsampling of test set to 2000 examples.
         test_dataset = eval_split

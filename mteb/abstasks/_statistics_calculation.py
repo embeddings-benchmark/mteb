@@ -516,7 +516,7 @@ def calculate_pair_modality_statistics(
     s2, all_h2 = _compute_side_statistics(
         col_modalities2, load_col, n, max_workers=max_workers
     )
-    pairs = ((tuple(r1), tuple(r2)) for r1, r2 in zip(all_h1, all_h2))
+    pairs = ((tuple(r1), tuple(r2)) for r1, r2 in zip(all_h1, all_h2, strict=True))
     if symmetric:
         unique_pairs = len(
             {(left, right) if left <= right else (right, left) for left, right in pairs}

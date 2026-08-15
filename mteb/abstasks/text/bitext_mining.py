@@ -155,7 +155,7 @@ class AbsTaskBitextMining(AbsTask):
         )
         # NOTE: used only by BUCC
         gold = (
-            list(zip(range(len(data_split)), range(len(data_split))))
+            list(zip(range(len(data_split)), range(len(data_split)), strict=True))
             if "gold" not in data_split
             else data_split["gold"]
         )
@@ -245,7 +245,7 @@ class AbsTaskBitextMining(AbsTask):
 
         text1_statistics = calculate_text_statistics(sentence1)
         text2_statistics = calculate_text_statistics(sentence2)
-        unique_pairs = len(set(zip(sentence1, sentence2)))
+        unique_pairs = len(set(zip(sentence1, sentence2, strict=True)))
 
         return BitextDescriptiveStatistics(
             num_samples=len(sentence1),

@@ -305,7 +305,7 @@ def test_get_score_matches_summary_table_means(mock_mteb_cache: ResultCache):
     # Pair (get_score key, summary column) for each aggregation surfaced.
     parity_pairs: list[tuple[str, str]] = []
     for agg in bench.aggregations:
-        parity_pairs.extend(zip(agg.get_score_keys, agg.summary_columns))
+        parity_pairs.extend(zip(agg.get_score_keys, agg.summary_columns, strict=True))
     # TASK_TYPES is dynamic — match observed type names directly.
     if BenchmarkAggregation.TASK_TYPES in bench.aggregations:
         type_names = {t.metadata.type for t in bench.tasks}
@@ -406,7 +406,7 @@ def test_get_score_matches_summary_table_on_partial_split_coverage(
     # TASK_TYPES column/key to pair up alongside the fixed aggregation keys.
     parity_pairs: list[tuple[str, str]] = [("Classification", "Classification")]
     for agg in bench.aggregations:
-        parity_pairs.extend(zip(agg.get_score_keys, agg.summary_columns))
+        parity_pairs.extend(zip(agg.get_score_keys, agg.summary_columns, strict=True))
 
     _assert_score_parity(
         full,
