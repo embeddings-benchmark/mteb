@@ -264,6 +264,35 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
     return result
 
 
+def _check_data_not_modified(tasks: AbsTask | Iterable[AbsTask]) -> None:
+    """Refuse to evaluate a task whose data was modified locally.
+
+    A filter from `mteb.quality` changes the data but not the task name or dataset revision, so the resulting
+    scores would be indistinguishable from -- while not comparable to -- results on the published dataset.
+
+    Args:
+        tasks: A single task, a benchmark or an iterable of tasks to check.
+
+    Raises:
+        ValueError: If any of the tasks has `data_modified` set.
+    """
+    if isinstance(tasks, AbsTask):
+        check_tasks: Iterable[AbsTask] = [tasks]
+    elif isinstance(tasks, Benchmark):
+        check_tasks = tasks.tasks
+    else:
+        check_tasks = tasks
+
+    modified = sorted(task.metadata.name for task in check_tasks if task.data_modified)
+    if modified:
+        raise ValueError(
+            f"The data of {modified} was modified locally, e.g. by a filter from `mteb.quality`, so these tasks "
+            "cannot be evaluated: the scores would not be comparable to any other result while being "
+            "indistinguishable from one. To contribute the cleaned data, submit it as a new version of the task "
+            "instead; see https://embeddings-benchmark.github.io/mteb/contributing/adding_a_dataset/."
+        )
+
+
 def _check_model_modalities(
     model: ModelMeta,
     tasks: AbsTask | Iterable[AbsTask],
@@ -369,14 +398,9 @@ def _check_cache(
             - A dictionary mapping evaluation split names to a list of missing subset names.
               Returns an empty dict if no splits or subsets are missing.
     """
-    # Load results from the cache if the overwrite strategy allows it. Cached results describe the published
-    # dataset, so they say nothing about a task whose data was modified locally.
+    # Load results from the cache if the overwrite strategy allows it
     existing_results: TaskResult | None = None
-    if (
-        cache
-        and overwrite_strategy != OverwriteStrategy.ALWAYS
-        and not task.data_modified
-    ):
+    if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
         existing_results = cache.load_task_result(task.metadata.name, meta)
 
     dont_overwrite = overwrite_strategy in {
@@ -506,6 +530,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
 
     model, meta, model_name, model_revision = _sanitize_model(model)
     _check_model_modalities(meta, tasks)
+    _check_data_not_modified(tasks)
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results

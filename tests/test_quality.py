@@ -1,13 +1,12 @@
 """Tests for `mteb.quality`."""
 
-import warnings
-from pathlib import Path
+import logging
 
 import pytest
 from datasets import Dataset, DatasetDict
 
-from mteb.cache import ResultCache
-from mteb.evaluate import OverwriteStrategy, _check_cache
+import mteb
+from mteb.evaluate import _check_data_not_modified
 from mteb.mocks import (
     MockClassificationTask,
     MockClusteringTask,
@@ -16,11 +15,14 @@ from mteb.mocks import (
     MockPairClassificationTask,
     MockRerankingTask,
     MockRetrievalTask,
+    MockSTSTask,
 )
-from mteb.models.model_meta import ModelMeta
 from mteb.quality import remove_duplicates
-from mteb.quality._apply import warn_about_unusable_data
-from mteb.quality._row_filters import keep_first_occurrence, row_key
+from mteb.quality._filters import (
+    _keep_first_occurrence,
+    _row_key,
+    _warn_about_unusable_data,
+)
 from mteb.results import TaskResult
 
 
@@ -44,11 +46,11 @@ def _classification_task() -> MockClassificationTask:
 
 
 def test_keep_first_occurrence_returns_the_first_of_each_distinct_row() -> None:
-    assert keep_first_occurrence([("a",), ("a",), ("b",), ("a",)]) == [0, 2]
+    assert _keep_first_occurrence([("a",), ("a",), ("b",), ("a",)]) == [0, 2]
 
 
 def test_row_key_distinguishes_differently_split_rows() -> None:
-    assert row_key(("a", "b")) != row_key(("ab", ""))
+    assert _row_key(("a", "b")) != _row_key(("ab", ""))
 
 
 def test_remove_duplicates_keeps_first_occurrence_per_split() -> None:
@@ -244,17 +246,18 @@ def test_a_filter_that_removes_nothing_leaves_the_task_unmodified() -> None:
     assert not task.data_modified
 
 
-def test_filtering_marks_the_task_as_modified_and_warns_once() -> None:
+def test_filtering_marks_the_task_as_modified_and_reports_it_once(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
     task = _classification_task()
 
-    with warnings.catch_warnings(record=True) as caught:
-        warnings.simplefilter("always")
+    with caplog.at_level(logging.WARNING, logger="mteb.quality._filters"):
         remove_duplicates(task)
         remove_duplicates(task, normalize="alphanumeric")
 
     assert task.data_modified
     # the second filter finds the task already modified and stays quiet about it
-    assert sum("no longer matches revision" in str(w.message) for w in caught) == 1
+    assert sum("no longer matches revision" in m for m in caplog.messages) == 1
 
 
 def test_unloading_the_data_clears_the_modified_flag() -> None:
@@ -266,25 +269,16 @@ def test_unloading_the_data_clears_the_modified_flag() -> None:
     assert not task.data_modified
 
 
-def test_a_modified_task_never_reads_the_results_cache(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    task = _classification_task()
-    loaded: list[str] = []
+def test_a_modified_task_cannot_be_evaluated() -> None:
+    task = remove_duplicates(_classification_task())
+    model = mteb.get_model("mteb/baseline-random-encoder")
 
-    cache = ResultCache(tmp_path)
-    monkeypatch.setattr(
-        ResultCache,
-        "load_task_result",
-        lambda _self, name, _meta: loaded.append(name),  # type: ignore[misc]
-    )
+    with pytest.raises(ValueError, match="modified locally"):
+        mteb.evaluate(model, [task], cache=None, co2_tracker=False)
 
-    _check_cache(task, ModelMeta.create_empty(), cache, OverwriteStrategy.ONLY_MISSING)
-    assert loaded == [task.metadata.name]
 
-    task.data_modified = True
-    _check_cache(task, ModelMeta.create_empty(), cache, OverwriteStrategy.ONLY_MISSING)
-    assert loaded == [task.metadata.name]
+def test_an_unmodified_task_passes_the_guard() -> None:
+    _check_data_not_modified([_classification_task()])
 
 
 def test_building_a_result_from_a_modified_task_warns() -> None:
@@ -296,16 +290,20 @@ def test_building_a_result_from_a_modified_task_warns() -> None:
         TaskResult.from_task_results(task, scores, evaluation_time=1.0)
 
 
-def test_an_emptied_split_warns() -> None:
+def test_an_emptied_split_is_reported(caplog: pytest.LogCaptureFixture) -> None:
     # deduplication alone cannot empty a split, but the staged filters can
     task = _classification_task()
     task.dataset["test"] = task.dataset["test"].select([])
 
-    with pytest.warns(UserWarning, match=r"splits \['test'\].*empty"):
-        warn_about_unusable_data(task)
+    with caplog.at_level(logging.WARNING, logger="mteb.quality._filters"):
+        _warn_about_unusable_data(task)
+
+    assert any("splits ['test']" in m and "empty" in m for m in caplog.messages)
 
 
-def test_a_label_that_filtering_made_untrainable_warns() -> None:
+def test_a_label_that_filtering_made_untrainable_is_reported(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
     task = MockClassificationTask()
     task.dataset = DatasetDict(
         {
@@ -316,8 +314,10 @@ def test_a_label_that_filtering_made_untrainable_warns() -> None:
     task.data_loaded = True
 
     # deduplicating train drops the only example of label 1
-    with pytest.warns(UserWarning, match="can never be predicted"):
+    with caplog.at_level(logging.WARNING, logger="mteb.quality._classification"):
         remove_duplicates(task, splits=["train"])
+
+    assert any("can never be predicted" in m for m in caplog.messages)
 
 
 def _retrieval_split(task: MockRetrievalTask) -> tuple[str, str]:
@@ -407,3 +407,75 @@ def test_reranking_top_ranked_is_kept_consistent() -> None:
     data = task.dataset[subset][split]
     # d2 is remapped onto d1, which then already occurs in the list
     assert data["top_ranked"] == {"q1": ["d1", "d3"]}
+
+
+def test_an_unsupported_modality_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:
+    task = _classification_task()
+    monkeypatch.setattr(
+        type(task), "_get_content_columns", lambda _self: {"text": "smell"}
+    )
+
+    with pytest.raises(NotImplementedError, match="cannot compare the \\['smell'\\]"):
+        remove_duplicates(task)
+
+
+def test_swapped_pairs_are_duplicates_for_a_symmetric_task() -> None:
+    task = MockSTSTask()
+    task.dataset = DatasetDict(
+        {
+            "test": Dataset.from_dict(
+                {
+                    "sentence1": ["alpha", "beta", "gamma"],
+                    "sentence2": ["beta", "alpha", "delta"],
+                    "score": [1.0, 3.0, 2.0],
+                }
+            )
+        }
+    )
+    task.data_loaded = True
+
+    remove_duplicates(task)
+
+    # ("beta", "alpha") is the same pair as ("alpha", "beta"), so only the first is kept
+    assert task.dataset["test"]["sentence1"] == ["alpha", "gamma"]
+    assert task.dataset["test"]["score"] == [1.0, 2.0]
+
+
+def test_swapped_pairs_are_distinct_for_an_order_sensitive_task() -> None:
+    task = MockPairClassificationTask()
+    task.dataset = DatasetDict(
+        {
+            "test": Dataset.from_dict(
+                {
+                    "sentence1": ["alpha", "beta"],
+                    "sentence2": ["beta", "alpha"],
+                    "labels": [1, 0],
+                }
+            )
+        }
+    )
+    task.data_loaded = True
+
+    remove_duplicates(task)
+
+    assert len(task.dataset["test"]) == 2
+
+
+def test_narrowing_to_one_side_keeps_the_comparison_order_sensitive() -> None:
+    task = MockSTSTask()
+    task.dataset = DatasetDict(
+        {
+            "test": Dataset.from_dict(
+                {
+                    "sentence1": ["alpha", "beta"],
+                    "sentence2": ["beta", "alpha"],
+                    "score": [1.0, 3.0],
+                }
+            )
+        }
+    )
+    task.data_loaded = True
+
+    remove_duplicates(task, columns=["sentence1"])
+
+    assert len(task.dataset["test"]) == 2

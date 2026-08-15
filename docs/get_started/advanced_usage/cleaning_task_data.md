@@ -57,23 +57,25 @@ duplicate moves to the copy that was kept.
 
 ## Changes after cleaning Task Data
 
-Cleaning changes the descriptive statistics and the scores, because the model is now evaluated on different data:
+Cleaning changes the descriptive statistics, and it would change the scores too, because the model would be
+evaluated on different data. What it does *not* change is the task's name or its `dataset_revision`, so such a
+score would be indistinguishable from one computed on the published dataset while not being comparable to it.
+
+For that reason a cleaned task is marked with `data_modified` and [`mteb.evaluate`][mteb.evaluate] refuses to run
+it:
 
 ```python
-model = mteb.get_model("intfloat/multilingual-e5-small")
-results = mteb.evaluate(model, [task])
+mteb.evaluate(model, [task])
+# ValueError: The data of ['MassiveIntentClassification'] was modified locally ...
 ```
 
-***Every Below part is not finalized yet (needs discussion)***
-
-What it does *not* change is the task's name or its `dataset_revision`. A result computed from a cleaned task is
-therefore indistinguishable on disk from one computed on the published dataset, while not being comparable to it.
-`mteb` guards against the obvious mistakes -- a cleaned task sets `data_modified`, is never served from the
-results cache, and warns when a result is built from it -- but the guard rails stop at your own machine. 
-
+Reloading the task with [`task.unload_data()`][mteb.AbsTask.unload_data] restores the published data and clears the
+mark.
 
 !!! warning
-    Scores from a locally cleaned task are not accepted on the [leaderboard](https://huggingface.co/spaces/mteb/leaderboard). They are not comparable to any other result, and nothing in the result file distinguishes them.
+    Scores from a locally cleaned task are not accepted on the
+    [leaderboard](https://huggingface.co/spaces/mteb/leaderboard). They are not comparable to any other result, and
+    nothing in the result file would distinguish them.
 
 ## Contributing the fix
 

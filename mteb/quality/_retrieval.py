@@ -7,19 +7,36 @@ from typing import TYPE_CHECKING
 
 from mteb.abstasks.retrieval import _filter_queries_without_positives
 
-from ._row_filters import iter_row_keys, row_key
+from ._filters import _iter_row_keys, _row_key, _warn
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
     from datasets import Dataset
 
+    from mteb.abstasks.retrieval import AbsTaskRetrieval
     from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
     from mteb.types import Modalities
 
-    from ._row_filters import KeepIndicesFn, TextNormalization
+    from ._filters import KeepIndicesFn, TextNormalization
 
 logger = logging.getLogger(__name__)
+
+
+def _warn_about_empty_retrieval_splits(task: AbsTaskRetrieval) -> None:
+    """Report splits that a filter left without documents or without queries."""
+    for subset, splits_data in task.dataset.items():
+        for split, split_data in splits_data.items():
+            empty = sorted(
+                name
+                for name in ("corpus", "queries")
+                if len(split_data[name]) == 0  # type: ignore[literal-required]
+            )
+            if empty:
+                _warn(
+                    f"Filtering left the {' and the '.join(empty)} of the '{split}' split of "
+                    f"'{task.metadata.name}' (subset '{subset}') empty. Evaluating it will fail."
+                )
 
 
 def _select_kept_entries(
@@ -40,7 +57,7 @@ def _select_kept_entries(
         The filtered dataset, the ids it kept, and a mapping from the id of a removed entry to the id of the first
         kept entry with the same content. That mapping is empty unless `remap_duplicates` is set.
     """
-    keys = iter_row_keys(
+    keys = _iter_row_keys(
         dataset, col_modalities, normalize=normalize, num_proc=num_proc
     )
     keep = keep_fn(keys)
@@ -51,11 +68,11 @@ def _select_kept_entries(
     if remap_duplicates:
         keep_set = set(keep)
         canonical: dict[bytes, str] = {}
-        rows = iter_row_keys(
+        rows = _iter_row_keys(
             dataset, col_modalities, normalize=normalize, num_proc=num_proc
         )
         for i, row in enumerate(rows):
-            key = row_key(row)
+            key = _row_key(row)
             if i in keep_set:
                 canonical.setdefault(key, ids[i])
             elif (target := canonical.get(key)) is not None:
@@ -64,7 +81,7 @@ def _select_kept_entries(
     return dataset.select(keep), kept_ids, replacements
 
 
-def filter_retrieval_split(  # noqa: PLR0914
+def _filter_retrieval_split(  # noqa: PLR0914
     split_data: RetrievalSplitData,
     keep_fn: KeepIndicesFn,
     col_modalities: Mapping[str, Modalities],

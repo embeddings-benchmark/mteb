@@ -94,6 +94,14 @@ class AbsTaskSTS(AbsTask):
     def _get_content_columns(self) -> dict[str, Modalities]:
         return _pair_content_columns(self.column_names, self.modalities)
 
+    def _get_symmetric_sides(self) -> tuple[list[str], list[str]] | None:
+        # similarity does not depend on which sentence comes first, matching `symmetric=True` in the statistics
+        sides = [
+            [column] if isinstance(column, str) else list(column)
+            for column in self.column_names
+        ]
+        return (sides[0], sides[1])
+
     def _evaluate_subset(
         self,
         model: MTEBModels,

@@ -111,8 +111,8 @@ class AbsTask(ABC):  # noqa: PLR0904
         hf_subsets: The list of Huggingface subsets to use.
         data_loaded: Denotes if the dataset is loaded or not. This is used to avoid loading the dataset multiple times.
         data_modified: Denotes if the dataset was modified locally by a filter from `mteb.quality`. Scores
-            computed from a modified task are not comparable to other results, so they are never read from or
-            resumed out of the results cache.
+            computed from a modified task would not be comparable to other results, so `mteb.evaluate` refuses to
+            run such a task.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
         fast_loading: **Deprecated**. Denotes if the task should be loaded using the fast loading method.
             This is only possible if the dataset have a "default" config. We don't recommend to use this method, and suggest to use different subsets for loading datasets.
@@ -626,6 +626,14 @@ class AbsTask(ABC):  # noqa: PLR0904
         nothing.
         """
         return {}
+
+    def _get_symmetric_sides(self) -> tuple[list[str], list[str]] | None:  # noqa: PLR6301
+        """The two sides of a task whose inputs mean the same thing when swapped, or None if order matters.
+
+        A symmetric task treats `(a, b)` and `(b, a)` as one sample, so the filters in `mteb.quality` compare them
+        as equal. This mirrors the `symmetric` flag the descriptive statistics use when counting unique pairs.
+        """
+        return None
 
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
