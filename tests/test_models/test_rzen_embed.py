@@ -194,8 +194,8 @@ def test_rzen_embed_wrapper_video(mock_transformers):
     """Test encoding video inputs."""
     wrapper = RzenEmbedWrapper("qihoo360/RzenEmbed", device="cpu")
 
-    # Create dummy dataset with both text and video columns (list of frames)
-    dummy_frame = Image.new("RGB", (100, 100))
+    # Create dummy dataset with both text and video columns (list of frames as torch Tensors)
+    dummy_frame = torch.randint(0, 256, (3, 100, 100), dtype=torch.uint8)
     dataset = Dataset.from_dict({
         "text": ["query text 1", "query text 2"],
         "video": [[[dummy_frame, dummy_frame]], [[dummy_frame, dummy_frame]]],

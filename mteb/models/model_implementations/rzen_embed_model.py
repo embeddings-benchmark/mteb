@@ -68,8 +68,8 @@ def smart_resize(
     return int(h_bar), int(w_bar)
 
 
-def fetch_image(image: str | Image.Image | dict[str, Any], size_factor: int = IMAGE_FACTOR) -> Image.Image:
-    """Robust image parser supporting PIL Images, local paths, HTTP/HTTPS URLs, data URIs,
+def fetch_image(image: str | Image.Image | torch.Tensor | dict[str, Any], size_factor: int = IMAGE_FACTOR) -> Image.Image:
+    """Robust image parser supporting PIL Images, PyTorch Tensors, local paths, HTTP/HTTPS URLs, data URIs,
 
     and dictionary serialization structures from datasets.
     """
@@ -79,6 +79,9 @@ def fetch_image(image: str | Image.Image | dict[str, Any], size_factor: int = IM
 
     if isinstance(image, Image.Image):
         image_obj = image
+    elif isinstance(image, torch.Tensor):
+        from torchvision.transforms.functional import to_pil_image
+        image_obj = to_pil_image(image.cpu())
     elif isinstance(image, dict) and "bytes" in image:
         image_obj = Image.open(BytesIO(image["bytes"]))
     elif isinstance(image, str):
