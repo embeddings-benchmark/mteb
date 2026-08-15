@@ -13,6 +13,9 @@ import random
 import re
 from typing import TYPE_CHECKING
 
+from datasets import Dataset
+
+from mteb.models.hybrid_wrappers import fuse_rrf
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
@@ -64,7 +67,7 @@ def _wrapper_meta(kind: str, base: SearchProtocol) -> ModelMeta:
     base_name = (getattr(base_meta, "name", None) or "unknown").rsplit("/", 1)[-1]
     return ModelMeta.create_empty(
         overwrites={
-            "name": f"mteb/baseline-{kind}-{base_name}",
+            "name": f"{kind}-{base_name}",
             "model_type": ["hybrid"],
         }
     )
@@ -90,8 +93,6 @@ def _to_scores(ordered: list[str], top_k: int) -> dict[str, float]:
 def _transform_queries(
     queries: QueryDatasetType, model: ChatModelProtocol, template: str
 ) -> QueryDatasetType:
-    from datasets import Dataset
-
     rows = []
     for row in queries:
         out = model.generate(
@@ -138,8 +139,16 @@ class _QueryTransformRetriever(_WrapperBase):
     _template: str
     _kind: str
 
-    def __init__(self, base: SearchProtocol, model: ChatModelProtocol) -> None:
+    def __init__(
+        self,
+        base: SearchProtocol,
+        model: ChatModelProtocol,
+        *,
+        prompt: str | None = None,
+    ) -> None:
         super().__init__(base, model, self._kind)
+        if prompt is not None:
+            self._template = prompt
 
     def search(
         self,
@@ -167,14 +176,20 @@ class _QueryTransformRetriever(_WrapperBase):
 
 
 class QueryRewriteRetriever(_QueryTransformRetriever):
-    """LLM rewrites each query into a keyword query, then the base searches."""
+    """LLM rewrites each query into a keyword query, then the base searches.
+
+    Reference: Ma et al., Query Rewriting for Retrieval-Augmented LLMs (arXiv:2305.14283).
+    """
 
     _template = _REWRITE
     _kind = "query-rewrite"
 
 
 class HyDERetriever(_QueryTransformRetriever):
-    """LLM writes a hypothetical answer passage; the base retrieves with it."""
+    """LLM writes a hypothetical answer passage; the base retrieves with it.
+
+    Reference: Gao et al., Precise Zero-Shot Dense Retrieval without Relevance Labels (arXiv:2212.10496).
+    """
 
     _template = _HYDE
     _kind = "hyde"
@@ -182,6 +197,8 @@ class HyDERetriever(_QueryTransformRetriever):
 
 class _TextCachingRetriever(_WrapperBase):
     """Base for retrievers whose LLM reads document text at search time."""
+
+    _rerank_prompt = _RERANK
 
     def __init__(
         self,
@@ -226,7 +243,7 @@ class _TextCachingRetriever(_WrapperBase):
             [
                 {
                     "role": "user",
-                    "content": _RERANK.format(
+                    "content": self._rerank_prompt.format(
                         q=query, docs=self._docs_block(candidates)
                     ),
                 }
@@ -241,7 +258,10 @@ class _TextCachingRetriever(_WrapperBase):
 
 
 class RerankRetriever(_TextCachingRetriever):
-    """Base retrieves a candidate pool; the LLM listwise reranks it to top_k."""
+    """Base retrieves a candidate pool; the LLM listwise reranks it to top_k.
+
+    Reference: Sun et al., Is ChatGPT Good at Search? (RankGPT, arXiv:2304.09542).
+    """
 
     def __init__(
         self,
@@ -250,9 +270,12 @@ class RerankRetriever(_TextCachingRetriever):
         *,
         pool_size: int = 20,
         snippet_chars: int = 500,
+        prompt: str | None = None,
     ) -> None:
         super().__init__(base, model, "llm-rerank", snippet_chars)
         self.pool_size = pool_size
+        if prompt is not None:
+            self._rerank_prompt = prompt
 
     def search(
         self,
@@ -288,6 +311,8 @@ class RerankRetriever(_TextCachingRetriever):
 
 class TournamentRerankRetriever(_TextCachingRetriever):
     """Tournament listwise rerank over a large candidate pool.
+
+    Reference: OBLIQ-Bench (arXiv:2605.06235), appendix C.
 
     The pool is shuffled (deterministically per query id) and partitioned into
     batches of batch_size; one listwise call ranks each batch, the top
@@ -369,6 +394,8 @@ def _note_after_ids(text: str) -> str:
 class MultiHopRetriever(_TextCachingRetriever):
     """Iterative multi-hop search agent producing a ranking.
 
+    Reference: OBLIQ-Bench (arXiv:2605.06235), section 5.
+
     Each hop the LLM writes a search query from the question and accumulated
     notes, the base retrieves per_hop candidates, and the LLM reads the batch,
     selecting relevant ids and noting an observation for the next hop.
@@ -402,8 +429,6 @@ class MultiHopRetriever(_TextCachingRetriever):
         num_proc: int | None,
     ) -> RetrievalOutputType:
         """Run the hop loop per query and rank selected docs above the pool."""
-        from datasets import Dataset
-
         results: dict[str, dict[str, float]] = {}
         for row in queries:
             qid, question = row["id"], row["text"]
@@ -467,6 +492,9 @@ class MultiHopRetriever(_TextCachingRetriever):
 class MultiQueryRetriever(_WrapperBase):
     """LLM writes query variants; base rankings fuse via reciprocal rank fusion.
 
+    Reference: Cormack et al., Reciprocal Rank Fusion (SIGIR 2009) for the fusion;
+    multi-query expansion follows common RAG practice.
+
     The original query and num_queries LLM variants are searched together,
     and the per-variant rankings merge with the same reciprocal rank fusion
     used by HybridSearch.
@@ -497,10 +525,6 @@ class MultiQueryRetriever(_WrapperBase):
         num_proc: int | None,
     ) -> RetrievalOutputType:
         """Search the original query plus LLM variants, then fuse the rankings."""
-        from datasets import Dataset
-
-        from mteb.models.hybrid_wrappers import fuse_rrf
-
         results: dict[str, dict[str, float]] = {}
         for row in queries:
             qid, question = row["id"], row["text"]

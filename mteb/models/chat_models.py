@@ -11,10 +11,12 @@ if TYPE_CHECKING:
 
 @dataclass
 class ChatResponse:
-    """One chat completion with cost accounting."""
+    """One chat completion with token and cost accounting."""
 
     text: str
-    cost_usd: float | None = None
+    prompt_tokens: int = 0
+    completion_tokens: int = 0
+    cost_usd: float | None = None  # None when the model has no pricing entry
 
 
 @runtime_checkable
@@ -84,4 +86,10 @@ class LiteLLMChatModel:
             cost = litellm.completion_cost(completion_response=resp)
         except Exception:
             cost = None  # model absent from the pricing table (local endpoints)
-        return ChatResponse(text=resp.choices[0].message.content or "", cost_usd=cost)
+        usage = getattr(resp, "usage", None)
+        return ChatResponse(
+            text=resp.choices[0].message.content or "",
+            prompt_tokens=getattr(usage, "prompt_tokens", 0) or 0,
+            completion_tokens=getattr(usage, "completion_tokens", 0) or 0,
+            cost_usd=cost,
+        )
