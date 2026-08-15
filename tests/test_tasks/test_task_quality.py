@@ -16,7 +16,7 @@ from mteb.types.statistics import (
     RelevantDocsStatistics,
     ScoreStatistics,
     SplitDescriptiveStatistics,
-    TextRelevanceOverlapStatistics,
+    TextCorpusOverlapStatistics,
     TextStatistics,
     TopRankedStatistics,
     VideoStatistics,
@@ -1288,14 +1288,14 @@ def _relevant_docs_bound_quality(
     return []
 
 
-def _text_relevance_overlap_quality(
+def _text_corpus_overlap_quality(
     name: str, split: str, split_stats: SplitDescriptiveStatistics
 ) -> list[tuple[str, str]]:
-    stats = split_stats.get("text_relevance_overlap_statistics")
+    stats = split_stats.get("text_corpus_overlap_statistics")
     if not isinstance(stats, dict):
         return []
 
-    overlap_stats = cast("TextRelevanceOverlapStatistics", stats)
+    overlap_stats = cast("TextCorpusOverlapStatistics", stats)
     min_overlap = overlap_stats["min_query_character_ngram_overlap"]
     average_overlap = overlap_stats["average_query_character_ngram_overlap"]
     max_overlap = overlap_stats["max_query_character_ngram_overlap"]
@@ -1308,27 +1308,22 @@ def _text_relevance_overlap_quality(
     if not valid_overlaps:
         errors.append(
             (
-                "invalid_text_relevance_overlap",
-                f"{name} ({split}) has invalid text relevance overlap statistics "
+                "invalid_text_corpus_overlap",
+                f"{name} ({split}) has invalid text corpus overlap statistics "
                 f"({min_overlap=}, {average_overlap=}, {max_overlap=})",
             )
         )
 
-    num_pairs = overlap_stats["num_pairs"]
-    relevant_docs_stats = split_stats.get("relevant_docs_statistics")
-    num_relevant_docs = (
-        relevant_docs_stats.get("num_relevant_docs")
-        if isinstance(relevant_docs_stats, dict)
-        else None
-    )
-    if num_pairs <= 0 or (
-        isinstance(num_relevant_docs, int) and num_pairs > num_relevant_docs
+    overlap_queries = overlap_stats["num_queries"]
+    num_queries = split_stats.get("num_queries")
+    if overlap_queries <= 0 or (
+        isinstance(num_queries, int) and overlap_queries > num_queries
     ):
         errors.append(
             (
-                "invalid_text_relevance_overlap_pairs",
-                f"{name} ({split}) has an invalid number of text relevance pairs "
-                f"({num_pairs=}, {num_relevant_docs=})",
+                "invalid_text_corpus_overlap_queries",
+                f"{name} ({split}) has an invalid number of text corpus queries "
+                f"({overlap_queries=}, {num_queries=})",
             )
         )
 
@@ -1403,7 +1398,7 @@ def _split_quality(
         errors += _field_quality(name, split, field, stats, expected_count)
 
     errors += _relevant_docs_bound_quality(name, split, split_stats)
-    errors += _text_relevance_overlap_quality(name, split, split_stats)
+    errors += _text_corpus_overlap_quality(name, split, split_stats)
     errors += _audio_video_pair_quality(name, split, split_stats)
 
     # train-test leakage
@@ -1454,37 +1449,37 @@ def _task_quality(task: AbsTask) -> list[tuple[str, str]]:
     return findings
 
 
-def test_text_relevance_overlap_quality() -> None:
+def test_text_corpus_overlap_quality() -> None:
     valid_stats = cast(
         "SplitDescriptiveStatistics",
         {
-            "relevant_docs_statistics": {"num_relevant_docs": 2},
-            "text_relevance_overlap_statistics": {
-                "num_pairs": 2,
+            "num_queries": 2,
+            "text_corpus_overlap_statistics": {
+                "num_queries": 2,
                 "min_query_character_ngram_overlap": 0.1,
                 "average_query_character_ngram_overlap": 0.4,
                 "max_query_character_ngram_overlap": 0.7,
             },
         },
     )
-    assert _text_relevance_overlap_quality("Example", "test", valid_stats) == []
+    assert _text_corpus_overlap_quality("Example", "test", valid_stats) == []
 
     invalid_stats = cast(
         "SplitDescriptiveStatistics",
         {
-            "relevant_docs_statistics": {"num_relevant_docs": 2},
-            "text_relevance_overlap_statistics": {
-                "num_pairs": 3,
+            "num_queries": 2,
+            "text_corpus_overlap_statistics": {
+                "num_queries": 3,
                 "min_query_character_ngram_overlap": 0.4,
                 "average_query_character_ngram_overlap": 0.3,
                 "max_query_character_ngram_overlap": 1.1,
             },
         },
     )
-    invalid_findings = _text_relevance_overlap_quality("Example", "test", invalid_stats)
+    invalid_findings = _text_corpus_overlap_quality("Example", "test", invalid_stats)
     assert [check_id for check_id, _ in invalid_findings] == [
-        "invalid_text_relevance_overlap",
-        "invalid_text_relevance_overlap_pairs",
+        "invalid_text_corpus_overlap",
+        "invalid_text_corpus_overlap_queries",
     ]
 
 

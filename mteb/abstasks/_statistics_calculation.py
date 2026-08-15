@@ -16,7 +16,7 @@ from mteb.types.statistics import (
     RelevantDocsStatistics,
     ScoreStatistics,
     SingleInputModalityStatistics,
-    TextRelevanceOverlapStatistics,
+    TextCorpusOverlapStatistics,
     TextStatistics,
     TopRankedStatistics,
     VideoStatistics,
@@ -418,43 +418,51 @@ def calculate_relevant_docs_statistics(
     )
 
 
-def calculate_text_relevance_overlap_statistics(
-    relevant_docs: Mapping[str, Mapping[str, int]],
+def calculate_text_corpus_overlap_statistics(
     queries: Mapping[str, str],
     corpus: Mapping[str, str],
-) -> TextRelevanceOverlapStatistics | None:
-    """Calculate query character n-gram overlap against relevant documents."""
-    num_pairs = 0
+) -> TextCorpusOverlapStatistics | None:
+    """Calculate query character n-gram coverage across the full corpus."""
+    all_query_ngrams: set[str] = set()
+    for query_text in queries.values():
+        all_query_ngrams.update(_character_ngrams(query_text))
+
+    if not all_query_ngrams:
+        return None
+
+    covered_query_ngrams: set[str] = set()
+    has_corpus_ngrams = False
+    for document_text in corpus.values():
+        document_ngrams = _character_ngrams(document_text)
+        has_corpus_ngrams = has_corpus_ngrams or bool(document_ngrams)
+        covered_query_ngrams.update(document_ngrams & all_query_ngrams)
+
+    if not has_corpus_ngrams:
+        return None
+
+    num_queries = 0
     total_overlap = 0.0
     min_overlap = 1.0
     max_overlap = 0.0
-    for query_id, docs in relevant_docs.items():
-        query_text = queries.get(query_id)
-        if query_text is None:
+    for query_text in queries.values():
+        current_query_ngrams = _character_ngrams(query_text)
+        if not current_query_ngrams:
             continue
-        query_ngrams = _character_ngrams(query_text)
-        if not query_ngrams:
-            continue
-        for doc_id, score in docs.items():
-            if score == 0:
-                continue
-            doc_text = corpus.get(doc_id)
-            if doc_text is None:
-                continue
-            doc_ngrams = _character_ngrams(doc_text)
-            overlap = len(query_ngrams & doc_ngrams) / len(query_ngrams)
-            num_pairs += 1
-            total_overlap += overlap
-            min_overlap = min(min_overlap, overlap)
-            max_overlap = max(max_overlap, overlap)
+        overlap = len(current_query_ngrams & covered_query_ngrams) / len(
+            current_query_ngrams
+        )
+        num_queries += 1
+        total_overlap += overlap
+        min_overlap = min(min_overlap, overlap)
+        max_overlap = max(max_overlap, overlap)
 
-    if num_pairs == 0:
+    if num_queries == 0:
         return None
 
-    return TextRelevanceOverlapStatistics(
-        num_pairs=num_pairs,
+    return TextCorpusOverlapStatistics(
+        num_queries=num_queries,
         min_query_character_ngram_overlap=min_overlap,
-        average_query_character_ngram_overlap=total_overlap / num_pairs,
+        average_query_character_ngram_overlap=total_overlap / num_queries,
         max_query_character_ngram_overlap=max_overlap,
     )
 

@@ -228,23 +228,23 @@ class RelevantDocsStatistics(TypedDict):
     unique_relevant_docs: int
 
 
-class TextRelevanceOverlapStatistics(TypedDict):
-    """Character n-gram overlap for query and relevant document text pairs.
+class TextCorpusOverlapStatistics(TypedDict):
+    """Character n-gram overlap between queries and the full text corpus.
 
     Attributes:
-        num_pairs: Number of positive query-document relevance pairs considered.
+        num_queries: Number of non-empty queries considered.
         min_query_character_ngram_overlap: Minimum fraction of unique normalized
-            query character n-grams found in the relevant document text.
+            query character n-grams found anywhere in the corpus.
         average_query_character_ngram_overlap: Average fraction of unique normalized
-            query character n-grams found in the relevant document text.
+            query character n-grams found anywhere in the corpus.
         max_query_character_ngram_overlap: Maximum fraction of unique normalized
-            query character n-grams found in the relevant document text.
+            query character n-grams found anywhere in the corpus.
 
     Text is Unicode NFKC-normalized and case-folded, then punctuation, symbols,
     and whitespace are removed before extracting character n-grams of lengths 3-5.
     """
 
-    num_pairs: int
+    num_queries: int
     min_query_character_ngram_overlap: float
     average_query_character_ngram_overlap: float
     max_query_character_ngram_overlap: float
@@ -531,8 +531,8 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
         queries_audio_statistics: Statistics for queries
         queries_video_statistics: Statistics for queries
         relevant_docs_statistics: Statistics for relevant documents
-        text_relevance_overlap_statistics: Character n-gram overlap statistics for
-            positive text query-document pairs
+        text_corpus_overlap_statistics: Character n-gram overlap statistics between
+            text queries and the full text corpus
         top_ranked_statistics: Statistics for top ranked documents (if available)
     """
 
@@ -552,7 +552,7 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     queries_video_statistics: VideoStatistics | None
 
     relevant_docs_statistics: RelevantDocsStatistics
-    text_relevance_overlap_statistics: NotRequired[TextRelevanceOverlapStatistics]
+    text_corpus_overlap_statistics: NotRequired[TextCorpusOverlapStatistics]
 
     # this is for datasets that do reranking
     top_ranked_statistics: TopRankedStatistics | None
