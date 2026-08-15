@@ -1309,8 +1309,10 @@ def _text_corpus_overlap_quality(
         errors.append(
             (
                 "invalid_text_corpus_overlap",
-                f"{name} ({split}) has invalid text corpus overlap statistics "
-                f"({min_overlap=}, {average_overlap=}, {max_overlap=})",
+                (
+                    f"{name} ({split}) has invalid text corpus overlap statistics "
+                    f"({min_overlap=}, {average_overlap=}, {max_overlap=})"
+                ),
             )
         )
 
@@ -1322,8 +1324,10 @@ def _text_corpus_overlap_quality(
         errors.append(
             (
                 "invalid_text_corpus_overlap_queries",
-                f"{name} ({split}) has an invalid number of text corpus queries "
-                f"({overlap_queries=}, {num_queries=})",
+                (
+                    f"{name} ({split}) has an invalid number of text corpus queries "
+                    f"({overlap_queries=}, {num_queries=})"
+                ),
             )
         )
 
