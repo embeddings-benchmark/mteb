@@ -212,6 +212,22 @@ class RzenEmbedWrapper(AbsEncoder):
         )
         return prompt, processed_images
 
+    def get_task_instruction(
+        self,
+        task_metadata: TaskMetadata,
+        prompt_type: PromptType | None,
+    ) -> str:
+        """Safe retrieval of task instructions to guard against core/task-side AttributeError exceptions."""
+        try:
+            return super().get_task_instruction(task_metadata, prompt_type)
+        except AttributeError:
+            if task_metadata.prompt:
+                if isinstance(task_metadata.prompt, str):
+                    return task_metadata.prompt
+                if isinstance(task_metadata.prompt, dict) and prompt_type:
+                    return task_metadata.prompt.get(prompt_type.value, "")
+            return ""
+
     @torch.no_grad()
     def encode(
         self,
