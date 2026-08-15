@@ -301,12 +301,12 @@ class RzenEmbedWrapper(AbsEncoder):
             # Relocate tensors to active hardware
             inputs_tokenized = {k: v.to(self.device) for k, v in inputs_tokenized.items()}
 
-            inputs_embeds = self.model.model.embed_tokens(inputs_tokenized["input_ids"])
+            inputs_embeds = self.model.model.language_model.embed_tokens(inputs_tokenized["input_ids"])
             pixel_values = inputs_tokenized.get("pixel_values", None)
 
             if pixel_values is not None:
-                pixel_values = pixel_values.type(self.model.visual.get_dtype())
-                image_embeds = self.model.visual(
+                pixel_values = pixel_values.type(self.model.model.visual.get_dtype())
+                image_embeds = self.model.model.visual(
                     pixel_values, grid_thw=inputs_tokenized["image_grid_thw"]
                 ).to(inputs_embeds.device)
 

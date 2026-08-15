@@ -10,37 +10,6 @@ from mteb.models.model_implementations.rzen_embed_model import RzenEmbedWrapper
 logging.basicConfig(level=logging.INFO)
 
 
-class MockBaseModel(MagicMock):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.config = MagicMock()
-        self.config.image_token_id = 151655
-
-        self.model = MagicMock()
-        self.visual = MagicMock()
-
-        def mock_embed_tokens(input_ids):
-            batch_size, seq_len = input_ids.shape
-            return torch.zeros((batch_size, seq_len, 128), dtype=torch.float32)
-
-        self.model.embed_tokens = mock_embed_tokens
-        self.visual.get_dtype.return_value = torch.float32
-
-        def mock_visual(pixel_values, grid_thw):
-            num_tokens = pixel_values.shape[0] if len(pixel_values.shape) > 0 else 1
-            return torch.zeros((num_tokens, 128), dtype=torch.float32)
-
-        self.visual.side_effect = mock_visual
-
-        def mock_forward(input_ids=None, attention_mask=None, inputs_embeds=None, **kwargs):
-            batch_size, seq_len, embed_dim = inputs_embeds.shape
-            output = MagicMock()
-            output.last_hidden_state = torch.ones((batch_size, seq_len, embed_dim), dtype=torch.float32)
-            return output
-
-        self.model.side_effect = mock_forward
-
-
 # We patch transformers before initializing and running the evaluation
 with patch("transformers.AutoConfig.from_pretrained") as mock_config, \
      patch("transformers.AutoProcessor.from_pretrained") as mock_processor, \
@@ -84,7 +53,28 @@ with patch("transformers.AutoConfig.from_pretrained") as mock_config, \
 
     mock_processor.side_effect = select_processor
 
-    model_instance = MockBaseModel()
+    # Setup mock model directly using standard MagicMock assignments
+    model_instance = MagicMock()
+    model_instance.to.return_value = model_instance
+    model_instance.config.image_token_id = 151655
+    
+    mock_language_model = MagicMock()
+    mock_language_model.embed_tokens.return_value = torch.zeros((2, 5, 128), dtype=torch.float32)
+    
+    mock_visual = MagicMock()
+    mock_visual.get_dtype.return_value = torch.float32
+    mock_visual.return_value = torch.zeros((2, 128), dtype=torch.float32)
+    
+    mock_model_inner = MagicMock()
+    mock_model_inner.language_model = mock_language_model
+    mock_model_inner.visual = mock_visual
+    
+    # mock outputs forward pass
+    mock_outputs = MagicMock()
+    mock_outputs.last_hidden_state = torch.ones((2, 5, 128), dtype=torch.float32)
+    mock_model_inner.return_value = mock_outputs
+    
+    model_instance.model = mock_model_inner
     mock_model.return_value = model_instance
 
     from mteb.models.model_implementations.rzen_embed_model import rzen_embed
