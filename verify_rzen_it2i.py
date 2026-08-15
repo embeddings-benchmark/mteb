@@ -16,21 +16,21 @@ class MockBaseModel(MagicMock):
         self.config = MagicMock()
         self.config.image_token_id = 151655
 
-        self.base = MagicMock()
-        self.base.config = self.config
+        self.model = MagicMock()
+        self.visual = MagicMock()
 
         def mock_embed_tokens(input_ids):
             batch_size, seq_len = input_ids.shape
             return torch.zeros((batch_size, seq_len, 128), dtype=torch.float32)
 
-        self.base.model.embed_tokens = mock_embed_tokens
-        self.base.visual.get_dtype.return_value = torch.float32
+        self.model.embed_tokens = mock_embed_tokens
+        self.visual.get_dtype.return_value = torch.float32
 
         def mock_visual(pixel_values, grid_thw):
             num_tokens = pixel_values.shape[0] if len(pixel_values.shape) > 0 else 1
             return torch.zeros((num_tokens, 128), dtype=torch.float32)
 
-        self.base.visual.side_effect = mock_visual
+        self.visual.side_effect = mock_visual
 
         def mock_forward(input_ids=None, attention_mask=None, inputs_embeds=None, **kwargs):
             batch_size, seq_len, embed_dim = inputs_embeds.shape
@@ -38,7 +38,7 @@ class MockBaseModel(MagicMock):
             output.last_hidden_state = torch.ones((batch_size, seq_len, embed_dim), dtype=torch.float32)
             return output
 
-        self.base.model.side_effect = mock_forward
+        self.model.side_effect = mock_forward
 
 
 # We patch transformers before initializing and running the evaluation

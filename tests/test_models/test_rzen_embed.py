@@ -24,19 +24,19 @@ class MockBaseModel(MagicMock):
         self.config = MagicMock()
         self.config.image_token_id = 151655
 
-        # Setup base.model.embed_tokens
-        self.base = MagicMock()
-        self.base.config = self.config
+        # Setup model and visual
+        self.model = MagicMock()
+        self.visual = MagicMock()
 
         # embed_tokens should return a float32 tensor
         def mock_embed_tokens(input_ids):
             batch_size, seq_len = input_ids.shape
             return torch.zeros((batch_size, seq_len, 128), dtype=torch.float32)
 
-        self.base.model.embed_tokens = mock_embed_tokens
+        self.model.embed_tokens = mock_embed_tokens
 
         # visual.get_dtype()
-        self.base.visual.get_dtype.return_value = torch.float32
+        self.visual.get_dtype.return_value = torch.float32
 
         # visual(pixel_values, grid_thw) should return a tensor
         def mock_visual(pixel_values, grid_thw):
@@ -44,16 +44,16 @@ class MockBaseModel(MagicMock):
             num_tokens = pixel_values.shape[0] if len(pixel_values.shape) > 0 else 1
             return torch.zeros((num_tokens, 128), dtype=torch.float32)
 
-        self.base.visual.side_effect = mock_visual
+        self.visual.side_effect = mock_visual
 
-        # base.model(...) forward call should return an object with last_hidden_state
+        # model(...) forward call should return an object with last_hidden_state
         def mock_forward(input_ids=None, attention_mask=None, inputs_embeds=None, **kwargs):
             batch_size, seq_len, embed_dim = inputs_embeds.shape
             output = MagicMock()
             output.last_hidden_state = torch.ones((batch_size, seq_len, embed_dim), dtype=torch.float32)
             return output
 
-        self.base.model.side_effect = mock_forward
+        self.model.side_effect = mock_forward
 
 
 @pytest.fixture
