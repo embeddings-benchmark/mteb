@@ -15,7 +15,7 @@ class InfoSeekIT2ITRetrieval(AbsTaskRetrieval):
         category="it2it",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
+        main_score="hit_rate_at_5",
         date=("2023-01-01", "2023-12-31"),
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
