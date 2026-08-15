@@ -64,6 +64,7 @@ with patch("transformers.AutoConfig.from_pretrained") as mock_config, \
     mock_visual = MagicMock()
     mock_visual.get_dtype.return_value = torch.float32
     mock_visual.return_value = torch.zeros((2, 128), dtype=torch.float32)
+    mock_visual.merger.side_effect = lambda x: x
     
     mock_model_inner = MagicMock()
     mock_model_inner.language_model = mock_language_model

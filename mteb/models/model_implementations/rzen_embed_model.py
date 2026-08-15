@@ -324,6 +324,8 @@ class RzenEmbedWrapper(AbsEncoder):
                     else:
                         image_embeds = image_embeds[0]
 
+                # Project visual embeddings using the visual merger to map to language model dimensions
+                image_embeds = self.model.model.visual.merger(image_embeds)
                 image_embeds = image_embeds.to(inputs_embeds.device)
 
                 image_mask = (

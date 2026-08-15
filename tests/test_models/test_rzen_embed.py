@@ -85,6 +85,7 @@ def mock_transformers():
             num_tokens = pixel_values.shape[0] if len(pixel_values.shape) > 0 else 1
             return torch.zeros((num_tokens, 128), dtype=torch.float32)
         mock_visual.side_effect = mock_visual_fn
+        mock_visual.merger.side_effect = lambda x: x
         
         mock_model_inner = MagicMock()
         mock_model_inner.language_model = mock_language_model
