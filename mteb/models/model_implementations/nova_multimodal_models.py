@@ -68,14 +68,16 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
             config=Config(retries={"max_attempts": 10, "mode": "adaptive"}),
         )
 
-    def _purpose(
-        self, task_metadata: TaskMetadata, prompt_type: PromptType | None
-    ) -> str:
+    @staticmethod
+    def _purpose(task_metadata: TaskMetadata, prompt_type: PromptType | None) -> str:
         if task_metadata.type in _CLASSIFICATION_TASKS:
             return PURPOSE_CLASSIFICATION
         if task_metadata.type == "Clustering":
             return PURPOSE_CLUSTERING
-        if prompt_type is not None and getattr(prompt_type, "value", prompt_type) == "query":
+        if (
+            prompt_type is not None
+            and getattr(prompt_type, "value", prompt_type) == "query"
+        ):
             return PURPOSE_QUERY
         return PURPOSE_DOCUMENT
 
