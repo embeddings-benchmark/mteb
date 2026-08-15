@@ -179,6 +179,8 @@ class RzenEmbedWrapper(AbsEncoder):
         """
         if isinstance(images, (list, tuple)):
             return [fetch_image(img) for img in images]
+        if isinstance(images, torch.Tensor) and images.ndim == 4:
+            return [fetch_image(frame) for frame in images]
         return [fetch_image(images)]
 
     def _prepare_sample(

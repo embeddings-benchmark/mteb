@@ -194,8 +194,8 @@ def test_rzen_embed_wrapper_video(mock_transformers):
     """Test encoding video inputs."""
     wrapper = RzenEmbedWrapper("qihoo360/RzenEmbed", device="cpu")
 
-    # Create dummy dataset with both text and video columns (list of frames as torch Tensors)
-    dummy_frame = torch.randint(0, 256, (3, 100, 100), dtype=torch.uint8)
+    # Create dummy dataset with both text and video columns (list of frames)
+    dummy_frame = Image.new("RGB", (100, 100))
     dataset = Dataset.from_dict({
         "text": ["query text 1", "query text 2"],
         "video": [[[dummy_frame, dummy_frame]], [[dummy_frame, dummy_frame]]],
@@ -229,3 +229,23 @@ def test_rzen_embed_wrapper_video(mock_transformers):
     # Check L2 normalization
     norms = np.linalg.norm(embeddings, axis=1)
     assert np.allclose(norms, 1.0, atol=1e-5)
+
+
+def test_fetch_image_tensor(mock_transformers):
+    """Test that fetch_image successfully parses and converts PyTorch Tensors (standard on decord/torchcodec clusters)."""
+    from mteb.models.model_implementations.rzen_embed_model import fetch_image, RzenEmbedWrapper
+
+    # 1. Test 3D Tensor Frame [C, H, W]
+    tensor_frame = torch.randint(0, 256, (3, 200, 300), dtype=torch.uint8)
+    parsed_image = fetch_image(tensor_frame)
+    assert isinstance(parsed_image, Image.Image)
+    assert parsed_image.mode == "RGB"
+
+    # 2. Test 4D Tensor Video Sequence [T, C, H, W]
+    wrapper = RzenEmbedWrapper("qihoo360/RzenEmbed", device="cpu")
+    tensor_video = torch.randint(0, 256, (2, 3, 200, 300), dtype=torch.uint8)
+    processed_images = wrapper._process_images(tensor_video)
+    assert isinstance(processed_images, list)
+    assert len(processed_images) == 2
+    assert isinstance(processed_images[0], Image.Image)
+    assert processed_images[0].mode == "RGB"
