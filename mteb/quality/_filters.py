@@ -20,7 +20,7 @@ from typing import TYPE_CHECKING, Any, Literal, TypeVar, cast
 
 from datasets import Dataset
 
-from mteb.abstasks._statistics_calculation import _HASH_FN
+from mteb._content_hashes import MODALITY_HASH_FNS
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -51,13 +51,14 @@ It only applies to text. Images, audio and video are always compared by the hash
 """
 
 KeepIndicesFn = Callable[[Iterable[tuple[str, ...]]], list[int]]
-"""Given the comparison key of each row, return the (ascending) indices of the rows to keep.
+"""Given the comparable content of each row, return the (ascending) indices of the rows to keep.
 
-The keys are passed as a lazy iterable and may only be consumed once, so that filtering a large corpus does not
-require holding all of its content in memory at the same time.
+A row arrives as one tuple holding the content of each compared column. The rows are passed as a lazy iterable and
+may only be consumed once, so that filtering a large corpus does not require holding all of its content in memory
+at the same time.
 """
 
-SUPPORTED_MODALITIES: frozenset[str] = frozenset(_HASH_FN)
+SUPPORTED_MODALITIES: frozenset[str] = frozenset(MODALITY_HASH_FNS)
 """The modalities a filter can compare, i.e. those the descriptive statistics know how to hash."""
 
 _PUNCTUATION = re.compile(r"[^\w\s]", flags=re.UNICODE)
@@ -79,33 +80,34 @@ def _normalize(value: Any, normalize: TextNormalization = "strip") -> str:
     return " ".join(_PUNCTUATION.sub("", text).split())
 
 
-def _row_key(keys: tuple[str, ...]) -> bytes:
-    """A compact key identifying a row by the comparison keys of its columns.
+def _row_key(row: tuple[str, ...]) -> bytes:
+    """A compact key identifying a row by the comparable content of its columns.
 
-    Hashing rather than keeping the keys themselves makes the memory used while deduplicating proportional to the
-    number of rows instead of to the size of the corpus, which matters for the larger retrieval datasets. Each key
-    is length-prefixed so that a row cannot collide with a differently split one, e.g. `("a", "b")` and `("ab", "")`.
+    Hashing rather than keeping the content itself makes the memory used while deduplicating proportional to the
+    number of rows instead of to the size of the corpus, which matters for the larger retrieval datasets. Each
+    value is length-prefixed so that a row cannot collide with a differently split one, e.g. `("a", "b")` and
+    `("ab", "")`.
     """
     digest = hashlib.blake2b(digest_size=16)
-    for key in keys:
-        encoded = key.encode()
+    for value in row:
+        encoded = value.encode()
         digest.update(len(encoded).to_bytes(8, "little"))
         digest.update(encoded)
     return digest.digest()
 
 
-def _keep_first_occurrence(keys: Iterable[tuple[str, ...]]) -> list[int]:
-    """Keep the rows whose comparison key has not been seen before.
+def _keep_first_occurrence(rows: Iterable[tuple[str, ...]]) -> list[int]:
+    """Keep the rows whose content has not been seen before.
 
     Args:
-        keys: The comparison key of each row, one tuple per row with one entry per compared column.
+        rows: The comparable content of each row, one tuple per row with one entry per compared column.
 
     Returns:
         The indices of the first occurrence of each distinct row.
     """
     seen: set[bytes] = set()
     keep = []
-    for i, row in enumerate(keys):
+    for i, row in enumerate(rows):
         key = _row_key(row)
         if key in seen:
             continue
@@ -114,7 +116,7 @@ def _keep_first_occurrence(keys: Iterable[tuple[str, ...]]) -> list[int]:
     return keep
 
 
-def _iter_row_keys(
+def _iter_row_content(
     dataset: Dataset,
     col_modalities: Mapping[str, Modalities],
     *,
@@ -122,14 +124,14 @@ def _iter_row_keys(
     num_proc: int | None = None,
     symmetric_sides: tuple[list[str], list[str]] | None = None,
 ) -> Iterator[tuple[str, ...]]:
-    """Iterate the comparison key of each row, one entry per column of `col_modalities`.
+    """Iterate the comparable content of each row, one entry per column of `col_modalities`.
 
     Text is compared by its normalized value; every other modality is compared by a hash of its content, using the
     same hash functions as the descriptive statistics. Text columns stay lazy so that the memory needed to compare
     a large text corpus does not grow with its size; the other modalities have to be decoded to be hashed.
 
     When `symmetric_sides` names the two sides of a symmetric task, they are ordered within each row, so that a
-    pair and its swap produce the same key.
+    pair and its swap compare equal.
     """
     columns = list(col_modalities)
     per_column: list[Iterable[str]] = []
@@ -137,7 +139,9 @@ def _iter_row_keys(
         if modality == "text":
             per_column.append(_normalize(value, normalize) for value in dataset[column])
         else:
-            per_column.append(_HASH_FN[modality](dataset[column], max_workers=num_proc))
+            per_column.append(
+                MODALITY_HASH_FNS[modality](dataset[column], max_workers=num_proc)
+            )
     rows = zip(*per_column)
 
     if symmetric_sides is None:
@@ -145,11 +149,11 @@ def _iter_row_keys(
     left, right = ([columns.index(c) for c in side] for side in symmetric_sides)
     return (
         tuple(
-            key
+            value
             for side in sorted(
                 (tuple(row[i] for i in left), tuple(row[i] for i in right))
             )
-            for key in side
+            for value in side
         )
         for row in rows
     )
@@ -269,14 +273,14 @@ def _apply_row_filter(
             num_proc=num_proc,
         )
     else:
-        keys = _iter_row_keys(
+        rows = _iter_row_content(
             dataset,
             col_modalities,
             normalize=normalize,
             num_proc=num_proc,
             symmetric_sides=symmetric_sides,
         )
-        filtered = dataset.select(keep_fn(keys))
+        filtered = dataset.select(keep_fn(rows))
 
     return filtered, before - _count_values(filtered, columns[0], grouped)
 
@@ -331,13 +335,13 @@ def _no_split_matched_message(
     return f"The given splits and subsets do not select any data of '{task_name}'. The task has {listed}."
 
 
-def _warn_about_unusable_data(task: AbsTask) -> None:
+def _check_unusable_data(task: AbsTask) -> None:
     """Report data that a filter left in a state the evaluators cannot handle."""
-    from ._classification import _warn_about_label_distribution
-    from ._retrieval import _warn_about_empty_retrieval_splits
+    from ._classification import _check_label_distribution
+    from ._retrieval import _check_empty_retrieval_splits
 
     if isinstance(task, AbsTaskRetrieval):
-        _warn_about_empty_retrieval_splits(task)
+        _check_empty_retrieval_splits(task)
         return
 
     for subset, dataset_dict in _datasets_by_subset(task).items():
@@ -349,7 +353,7 @@ def _warn_about_unusable_data(task: AbsTask) -> None:
             )
 
     if isinstance(task, AbsTaskClassification):
-        _warn_about_label_distribution(
+        _check_label_distribution(
             task, min_examples_per_label=_MIN_TRAIN_EXAMPLES_PER_LABEL
         )
 
@@ -478,7 +482,7 @@ def _filter_task_rows(
 
     if n_removed:
         _mark_data_modified(task)
-        _warn_about_unusable_data(task)
+        _check_unusable_data(task)
 
     logger.info(
         f"`{filter_name}` removed {n_removed} samples from '{task.metadata.name}' "

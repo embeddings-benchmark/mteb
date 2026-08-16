@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def _warn_about_label_distribution(
+def _check_label_distribution(
     task: AbsTaskClassification, *, min_examples_per_label: int
 ) -> None:
     """Report labels that filtering left too rare to train on, or absent from the train split.

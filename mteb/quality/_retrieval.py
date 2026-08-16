@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 
 from mteb.abstasks.retrieval import _filter_queries_without_positives
 
-from ._filters import _iter_row_keys, _row_key, _warn
+from ._filters import _iter_row_content, _row_key, _warn
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def _warn_about_empty_retrieval_splits(task: AbsTaskRetrieval) -> None:
+def _check_empty_retrieval_splits(task: AbsTaskRetrieval) -> None:
     """Report splits that a filter left without documents or without queries."""
     for subset, splits_data in task.dataset.items():
         for split, split_data in splits_data.items():
@@ -37,6 +37,30 @@ def _warn_about_empty_retrieval_splits(task: AbsTaskRetrieval) -> None:
                     f"Filtering left the {' and the '.join(empty)} of the '{split}' split of "
                     f"'{task.metadata.name}' (subset '{subset}') empty. Evaluating it will fail."
                 )
+
+
+def _columns_present_in(
+    dataset: Dataset, col_modalities: Mapping[str, Modalities], side: str
+) -> dict[str, Modalities]:
+    """The compared columns that `dataset` actually has.
+
+    The corpus and the queries do not hold the same columns -- only a corpus entry has a `title` -- so each side is
+    compared on the columns it has rather than on their intersection.
+
+    Raises:
+        ValueError: If the dataset has none of the compared columns.
+    """
+    present = {
+        column: modality
+        for column, modality in col_modalities.items()
+        if column in dataset.column_names
+    }
+    if not present:
+        raise ValueError(
+            f"Cannot filter the {side} on {sorted(col_modalities)}: it only has the columns "
+            f"{dataset.column_names}."
+        )
+    return present
 
 
 def _select_kept_entries(
@@ -57,10 +81,10 @@ def _select_kept_entries(
         The filtered dataset, the ids it kept, and a mapping from the id of a removed entry to the id of the first
         kept entry with the same content. That mapping is empty unless `remap_duplicates` is set.
     """
-    keys = _iter_row_keys(
+    rows = _iter_row_content(
         dataset, col_modalities, normalize=normalize, num_proc=num_proc
     )
-    keep = keep_fn(keys)
+    keep = keep_fn(rows)
     ids = dataset["id"]
     kept_ids = {ids[i] for i in keep}
 
@@ -68,10 +92,10 @@ def _select_kept_entries(
     if remap_duplicates:
         keep_set = set(keep)
         canonical: dict[bytes, str] = {}
-        rows = _iter_row_keys(
+        all_rows = _iter_row_content(
             dataset, col_modalities, normalize=normalize, num_proc=num_proc
         )
-        for i, row in enumerate(rows):
+        for i, row in enumerate(all_rows):
             key = _row_key(row)
             if i in keep_set:
                 canonical.setdefault(key, ids[i])
@@ -106,25 +130,16 @@ def _filter_retrieval_split(  # noqa: PLR0914
         The filtered split and the number of documents and queries that were removed.
 
     Raises:
-        ValueError: If a compared column is missing from the corpus or from the queries.
+        ValueError: If the corpus or the queries have none of the compared columns.
     """
     old_corpus, old_queries = split_data["corpus"], split_data["queries"]
-    missing = [
-        column
-        for column in col_modalities
-        if column not in old_corpus.column_names
-        or column not in old_queries.column_names
-    ]
-    if missing:
-        raise ValueError(
-            f"Cannot filter on {missing}: the corpus has the columns {old_corpus.column_names} and the queries "
-            f"have the columns {old_queries.column_names}."
-        )
+    corpus_columns = _columns_present_in(old_corpus, col_modalities, "corpus")
+    query_columns = _columns_present_in(old_queries, col_modalities, "queries")
 
     corpus, kept_doc_ids, doc_replacements = _select_kept_entries(
         old_corpus,
         keep_fn,
-        col_modalities,
+        corpus_columns,
         normalize=normalize,
         remap_duplicates=remap_duplicates,
         num_proc=num_proc,
@@ -132,7 +147,7 @@ def _filter_retrieval_split(  # noqa: PLR0914
     queries, kept_query_ids, query_replacements = _select_kept_entries(
         old_queries,
         keep_fn,
-        col_modalities,
+        query_columns,
         normalize=normalize,
         remap_duplicates=remap_duplicates,
         num_proc=num_proc,

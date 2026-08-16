@@ -29,6 +29,14 @@ Fewer unique texts than samples means the split contains duplicates -- four of t
 For a task you are developing, compute the statistics yourself with
 [`task.calculate_descriptive_statistics()`][mteb.AbsTask.calculate_descriptive_statistics].
 
+## Available filters
+
+Each filter takes a task, modifies its dataset in place and returns it, so they can be chained. They cover every split and subset by default; see the linked reference for the arguments.
+
+| filter | removes |
+|---|---|
+| [`remove_duplicates`][mteb.quality.remove_duplicates] | [repeated samples](#removing-duplicates) |
+
 ## Removing duplicates
 
 [`remove_duplicates`][mteb.quality.remove_duplicates] drops repeated samples, keeping the first of each:
@@ -57,7 +65,7 @@ duplicate moves to the copy that was kept.
 
 ## Changes after cleaning Task Data
 
-Cleaning changes the descriptive statistics, and it would change the scores too, because the model would be
+Cleaning changes the data, and it would change the scores too, because the model would be
 evaluated on different data. What it does *not* change is the task's name or its `dataset_revision`, so such a
 score would be indistinguishable from one computed on the published dataset while not being comparable to it.
 
@@ -65,12 +73,10 @@ For that reason a cleaned task is marked with `data_modified` and [`mteb.evaluat
 it:
 
 ```python
-mteb.evaluate(model, [task])
+mteb.evaluate(model, task)
 # ValueError: The data of ['MassiveIntentClassification'] was modified locally ...
 ```
 
-Reloading the task with [`task.unload_data()`][mteb.AbsTask.unload_data] restores the published data and clears the
-mark.
 
 !!! warning
     Scores from a locally cleaned task are not accepted on the

@@ -19,9 +19,9 @@ from mteb.mocks import (
 )
 from mteb.quality import remove_duplicates
 from mteb.quality._filters import (
+    _check_unusable_data,
     _keep_first_occurrence,
     _row_key,
-    _warn_about_unusable_data,
 )
 from mteb.results import TaskResult
 
@@ -296,7 +296,7 @@ def test_an_emptied_split_is_reported(caplog: pytest.LogCaptureFixture) -> None:
     task.dataset["test"] = task.dataset["test"].select([])
 
     with caplog.at_level(logging.WARNING, logger="mteb.quality._filters"):
-        _warn_about_unusable_data(task)
+        _check_unusable_data(task)
 
     assert any("splits ['test']" in m and "empty" in m for m in caplog.messages)
 
@@ -479,3 +479,49 @@ def test_narrowing_to_one_side_keeps_the_comparison_order_sensitive() -> None:
     remove_duplicates(task, columns=["sentence1"])
 
     assert len(task.dataset["test"]) == 2
+
+
+def test_retrieval_compares_the_title_as_part_of_the_document() -> None:
+    task = MockRetrievalTask()
+    task.load_data()
+    subset, split = _retrieval_split(task)
+    task.dataset[subset][split] = {
+        "corpus": Dataset.from_dict(
+            {
+                "id": ["d1", "d2", "d3"],
+                "title": ["Alpha", "Beta", "Alpha"],
+                "text": ["same body", "same body", "same body"],
+            }
+        ),
+        "queries": Dataset.from_dict({"id": ["q1"], "text": ["a query"]}),
+        "relevant_docs": {"q1": {"d1": 1, "d2": 1, "d3": 1}},
+        "top_ranked": None,
+    }
+
+    remove_duplicates(task)
+
+    data = task.dataset[subset][split]
+    # a document is encoded as "title text", so d2 differs from d1 while d3 does not
+    assert data["corpus"]["id"] == ["d1", "d2"]
+    assert data["relevant_docs"] == {"q1": {"d1": 1, "d2": 1}}
+
+
+def test_retrieval_compares_queries_on_the_columns_they_have() -> None:
+    task = MockRetrievalTask()
+    task.load_data()
+    subset, split = _retrieval_split(task)
+    task.dataset[subset][split] = {
+        "corpus": Dataset.from_dict(
+            {"id": ["d1"], "title": ["Alpha"], "text": ["a body"]}
+        ),
+        # queries carry no title, so they are compared on `text` alone
+        "queries": Dataset.from_dict(
+            {"id": ["q1", "q2"], "text": ["same query", "same query"]}
+        ),
+        "relevant_docs": {"q1": {"d1": 1}, "q2": {"d1": 1}},
+        "top_ranked": None,
+    }
+
+    remove_duplicates(task)
+
+    assert task.dataset[subset][split]["queries"]["id"] == ["q1"]

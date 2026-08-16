@@ -289,7 +289,7 @@ def _check_data_not_modified(tasks: AbsTask | Iterable[AbsTask]) -> None:
             f"The data of {modified} was modified locally, e.g. by a filter from `mteb.quality`, so these tasks "
             "cannot be evaluated: the scores would not be comparable to any other result while being "
             "indistinguishable from one. To contribute the cleaned data, submit it as a new version of the task "
-            "instead; see https://embeddings-benchmark.github.io/mteb/contributing/adding_a_dataset/."
+            "instead; see https://docs.mteb.org/contributing/adding_a_dataset/."
         )
 
 
