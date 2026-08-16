@@ -32,9 +32,10 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# Rewriter prompt from Ma et al. (arXiv:2305.14283), table 1.
 _REWRITE = (
-    "Rewrite the question into a concise keyword search query. "
-    "Reply with only the query.\n\nQuestion: {q}"
+    "Provide a better search query for a web search engine to answer the "
+    "given question. Reply with only the query.\n\nQuestion: {q}"
 )
 _HYDE = (
     "Write a short passage that plausibly answers the question. "
@@ -194,24 +195,68 @@ class HyDERetriever(_QueryTransformRetriever):
         super().__init__(base, model, "hyde", prompt)
 
 
-class _TextCachingRetriever:
-    """Base for retrievers whose LLM reads document text at search time."""
+def _docs_block(
+    corpus: CorpusDatasetType | None,
+    doc_id_to_idx: dict[str, int],
+    doc_ids: list[str],
+    snippet_chars: int,
+) -> tuple[str, list[str]]:
+    """Render the given documents as an id-prefixed block, with the ids kept."""
+    if corpus is None:
+        raise ValueError("Corpus must be indexed before searching.")
+    known = [d for d in doc_ids if d in doc_id_to_idx]
+    # select() is an indices view over the existing dataset, not a copy.
+    rows = corpus.select([doc_id_to_idx[d] for d in known])
+    block = "\n".join(
+        f"[{d}] {row.get('text', '')[:snippet_chars]}" for d, row in zip(known, rows)
+    )
+    return block, known
+
+
+def _listwise_rank(
+    model: ChatModelProtocol,
+    prompt: str,
+    qid: str,
+    query: str,
+    candidates: list[str],
+    docs: str,
+) -> list[str]:
+    """LLM listwise ordering of candidates; unranked ids keep their order."""
+    out = model.generate(
+        [{"role": "user", "content": prompt.format(q=query, docs=docs)}]
+    )
+    ranked = [d for d in (_parse_ids(out.text) or []) if d in set(candidates)]
+    if not ranked:
+        logger.warning(
+            "listwise rerank parse failed for query %s; keeping base order", qid
+        )
+    return ranked + [d for d in candidates if d not in set(ranked)]
+
+
+class RerankRetriever:
+    """Base retrieves a candidate pool; the LLM listwise reranks it to top_k.
+
+    Reference: Sun et al., Is ChatGPT Good at Search? (RankGPT, arXiv:2304.09542).
+    """
 
     def __init__(
         self,
         base: SearchProtocol,
         model: ChatModelProtocol,
-        kind: str,
-        snippet_chars: int,
-        prompt: str,
+        *,
+        pool_size: int = 20,
+        snippet_chars: int = 500,
+        prompt: str = _RERANK,
     ) -> None:
         self.base = base
         self.model = model
         self.prompt = prompt
-        self.mteb_model_meta = _wrapper_meta(kind, base)
         self.snippet_chars = snippet_chars
+        self.mteb_model_meta = _wrapper_meta("llm-rerank", base)
         self.task_corpus: CorpusDatasetType | None = None
         self._doc_id_to_idx: dict[str, int] = {}
+
+        self.pool_size = pool_size
 
     def index(
         self,
@@ -234,55 +279,6 @@ class _TextCachingRetriever:
             encode_kwargs=encode_kwargs,
             num_proc=num_proc,
         )
-
-    def _docs_block(self, doc_ids: list[str]) -> str:
-        if self.task_corpus is None:
-            raise ValueError("Corpus must be indexed before searching.")
-        known = [d for d in doc_ids if d in self._doc_id_to_idx]
-        # select() is an indices view over the existing dataset, not a copy.
-        rows = self.task_corpus.select([self._doc_id_to_idx[d] for d in known])
-        return "\n".join(
-            f"[{d}] {row.get('text', '')[: self.snippet_chars]}"
-            for d, row in zip(known, rows)
-        )
-
-    def _listwise(self, qid: str, query: str, candidates: list[str]) -> list[str]:
-        """LLM listwise ordering of candidates; unranked ids keep their order."""
-        out = self.model.generate(
-            [
-                {
-                    "role": "user",
-                    "content": self.prompt.format(
-                        q=query, docs=self._docs_block(candidates)
-                    ),
-                }
-            ]
-        )
-        ranked = [d for d in (_parse_ids(out.text) or []) if d in set(candidates)]
-        if not ranked:
-            logger.warning(
-                "listwise rerank parse failed for query %s; keeping base order", qid
-            )
-        return ranked + [d for d in candidates if d not in set(ranked)]
-
-
-class RerankRetriever(_TextCachingRetriever):
-    """Base retrieves a candidate pool; the LLM listwise reranks it to top_k.
-
-    Reference: Sun et al., Is ChatGPT Good at Search? (RankGPT, arXiv:2304.09542).
-    """
-
-    def __init__(
-        self,
-        base: SearchProtocol,
-        model: ChatModelProtocol,
-        *,
-        pool_size: int = 20,
-        snippet_chars: int = 500,
-        prompt: str = _RERANK,
-    ) -> None:
-        super().__init__(base, model, "llm-rerank", snippet_chars, prompt)
-        self.pool_size = pool_size
 
     def search(
         self,
@@ -311,12 +307,17 @@ class RerankRetriever(_TextCachingRetriever):
         results: dict[str, dict[str, float]] = {}
         for qid, ranking in pool.items():
             candidates = sorted(ranking, key=lambda d: -ranking[d])
-            ordered = self._listwise(qid, query_text[qid], candidates)
+            docs, _ = _docs_block(
+                self.task_corpus, self._doc_id_to_idx, candidates, self.snippet_chars
+            )
+            ordered = _listwise_rank(
+                self.model, self.prompt, qid, query_text[qid], candidates, docs
+            )
             results[qid] = _to_scores(ordered, top_k)
         return results
 
 
-class TournamentRerankRetriever(_TextCachingRetriever):
+class TournamentRerankRetriever:
     """Tournament listwise rerank over a large candidate pool.
 
     Reference: OBLIQ-Bench (arXiv:2605.06235), appendix C.
@@ -341,10 +342,39 @@ class TournamentRerankRetriever(_TextCachingRetriever):
     ) -> None:
         if promote_k >= batch_size:
             raise ValueError("promote_k must be smaller than batch_size.")
-        super().__init__(base, model, "tournament-rerank", snippet_chars, prompt)
+        self.base = base
+        self.model = model
+        self.prompt = prompt
+        self.snippet_chars = snippet_chars
+        self.mteb_model_meta = _wrapper_meta("tournament-rerank", base)
+        self.task_corpus: CorpusDatasetType | None = None
+        self._doc_id_to_idx: dict[str, int] = {}
+
         self.pool_size = pool_size
         self.batch_size = batch_size
         self.promote_k = promote_k
+
+    def index(
+        self,
+        corpus: CorpusDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None,
+    ) -> None:
+        """Index the base retriever and keep the corpus for document lookups."""
+        self.task_corpus = corpus
+        self._doc_id_to_idx = {doc: idx for idx, doc in enumerate(corpus["id"])}
+        self.base.index(
+            corpus,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
 
     def search(
         self,
@@ -379,14 +409,23 @@ class TournamentRerankRetriever(_TextCachingRetriever):
                 survivors: list[str] = []
                 tail: list[str] = []
                 for i in range(0, len(candidates), self.batch_size):
-                    ranked = self._listwise(
-                        qid, query_text[qid], candidates[i : i + self.batch_size]
+                    batch = candidates[i : i + self.batch_size]
+                    docs, _ = _docs_block(
+                        self.task_corpus, self._doc_id_to_idx, batch, self.snippet_chars
+                    )
+                    ranked = _listwise_rank(
+                        self.model, self.prompt, qid, query_text[qid], batch, docs
                     )
                     survivors += ranked[: self.promote_k]
                     tail += ranked[self.promote_k :]
                 tails.append(tail)
                 candidates = survivors
-            ordered = self._listwise(qid, query_text[qid], candidates)
+            docs, _ = _docs_block(
+                self.task_corpus, self._doc_id_to_idx, candidates, self.snippet_chars
+            )
+            ordered = _listwise_rank(
+                self.model, self.prompt, qid, query_text[qid], candidates, docs
+            )
             for tail in reversed(tails):
                 ordered += tail
             results[qid] = _to_scores(ordered, top_k)
@@ -399,7 +438,7 @@ def _note_after_ids(text: str) -> str:
     return note[:300]
 
 
-class MultiHopRetriever(_TextCachingRetriever):
+class MultiHopRetriever:
     """Iterative multi-hop search agent producing a ranking.
 
     Reference: OBLIQ-Bench (arXiv:2605.06235), section 5.
@@ -420,9 +459,38 @@ class MultiHopRetriever(_TextCachingRetriever):
         per_hop: int = 25,
         snippet_chars: int = 500,
     ) -> None:
-        super().__init__(base, model, "multi-hop", snippet_chars, _RERANK)
+        self.base = base
+        self.model = model
+        self.prompt = _RERANK
+        self.snippet_chars = snippet_chars
+        self.mteb_model_meta = _wrapper_meta("multi-hop", base)
+        self.task_corpus: CorpusDatasetType | None = None
+        self._doc_id_to_idx: dict[str, int] = {}
+
         self.hops = hops
         self.per_hop = per_hop
+
+    def index(
+        self,
+        corpus: CorpusDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None,
+    ) -> None:
+        """Index the base retriever and keep the corpus for document lookups."""
+        self.task_corpus = corpus
+        self._doc_id_to_idx = {doc: idx for idx, doc in enumerate(corpus["id"])}
+        self.base.index(
+            corpus,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
 
     def search(
         self,
@@ -472,13 +540,14 @@ class MultiHopRetriever(_TextCachingRetriever):
                     for d in sorted(ranking, key=lambda d: -ranking[d])
                     if d not in selected
                 ]
+                hop_docs, _ = _docs_block(
+                    self.task_corpus, self._doc_id_to_idx, batch, self.snippet_chars
+                )
                 read = self.model.generate(
                     [
                         {
                             "role": "user",
-                            "content": _HOP_READ.format(
-                                q=question, docs=self._docs_block(batch)
-                            ),
+                            "content": _HOP_READ.format(q=question, docs=hop_docs),
                         }
                     ]
                 )
