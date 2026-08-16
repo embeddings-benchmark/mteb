@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import tempfile
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -33,8 +32,8 @@ class ImageBindWrapper(AbsEncoder):
     (plus depth, thermal, IMU — not used here). Output embeddings are 1024-dim
     and L2-normalized. Requires the imagebind pip package from facebookresearch.
 
-    Audio inputs are written to temporary WAV files since ImageBind's data
-    loaders expect file paths (same pattern as ebind_models.py).
+    Audio inputs are processed in-memory via ImageBind's mel spectrogram
+    pipeline without writing to disk.
     """
 
     def __init__(
@@ -67,6 +66,7 @@ class ImageBindWrapper(AbsEncoder):
         from PIL import Image as PILImage
         from torchvision import transforms
 
+        # https://github.com/facebookresearch/ImageBind/blob/53680b02d7e37b19b124fa37bae4b6c98c38f5be/imagebind/data.py#L88-L98
         transform = transforms.Compose(
             [
                 transforms.Resize(
@@ -88,37 +88,40 @@ class ImageBindWrapper(AbsEncoder):
         return torch.stack(tensors).to(self.device)
 
     def _load_audio(self, audio_items: list) -> torch.Tensor:
-        """Write audio arrays to temp WAV files for ImageBind's torchaudio pipeline."""
+        """Process audio arrays in-memory using ImageBind's mel spectrogram pipeline."""
         import numpy as np
-        import soundfile as sf
-        from imagebind import data
-        from imagebind.models.imagebind_model import ModalityType
+        import torchaudio
+        from imagebind.data import get_clip_timepoints, waveform2melspec
+        from pytorchvideo.data.clip_sampling import ConstantClipsPerVideoSampler
+        from torchvision import transforms
 
-        paths = []
-        tmp_files = []
+        sample_rate = 16_000
+        clip_sampler = ConstantClipsPerVideoSampler(clip_duration=2, clips_per_video=3)
+        normalize = transforms.Normalize(mean=-4.268, std=9.138)
+
+        audio_outputs = []
         for item in audio_items:
-            array = np.asarray(item["array"])
+            array = np.asarray(item["array"], dtype=np.float32)
             sr = item["sampling_rate"]
-            min_samples = max(int(sr * 0.5), 400)
-            if array.shape[0] < min_samples:
-                array = np.pad(array, (0, min_samples - array.shape[0]))
-            tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
-            sf.write(tmp.name, array, sr)
-            tmp.close()
-            paths.append(tmp.name)
-            tmp_files.append(tmp.name)
+            waveform = torch.from_numpy(array).unsqueeze(0)
+            if sr != sample_rate:
+                waveform = torchaudio.functional.resample(
+                    waveform, orig_freq=sr, new_freq=sample_rate
+                )
+            min_len = 2 * sample_rate
+            if waveform.shape[1] < min_len:
+                waveform = torch.nn.functional.pad(
+                    waveform, (0, min_len - waveform.shape[1])
+                )
+            timepoints = get_clip_timepoints(clip_sampler, waveform.size(1) / sample_rate)
+            clips = []
+            for start, end in timepoints:
+                clip = waveform[:, int(start * sample_rate) : int(end * sample_rate)]
+                melspec = waveform2melspec(clip, sample_rate, 128, 204)
+                clips.append(normalize(melspec).to(self.device))
+            audio_outputs.append(torch.stack(clips, dim=0))
 
-        try:
-            tensors = data.load_and_transform_audio_data(paths, self.device)
-            return tensors[ModalityType.AUDIO]
-        finally:
-            from pathlib import Path
-
-            for p in tmp_files:
-                try:
-                    Path(p).unlink()
-                except OSError:
-                    pass
+        return torch.stack(audio_outputs, dim=0)
 
     @torch.inference_mode()
     def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
