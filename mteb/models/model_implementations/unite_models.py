@@ -117,15 +117,16 @@ def _build_unite_model(model_name: str, revision: str | None, **kwargs):
 
 
 class UniteWrapper(AbsEncoder):
-    def __init__(
+    def __init__(  # noqa: PLR0913, PLR0917 - video sampling options are configurable
         self,
         model_name: str,
         revision: str,
         device: str | None = None,
         min_image_tokens: int = 256,
         max_image_tokens: int = 1280,
-        fps: float = 1.0,
-        max_frames: int = 32,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = 32,
         target_sampling_rate: int = 16000,
         video_max_pixels: int = 360 * 420,
         **kwargs: Any,
@@ -135,6 +136,7 @@ class UniteWrapper(AbsEncoder):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.fps = fps
         self.max_frames = max_frames
+        self.num_frames = num_frames
         self.target_sampling_rate = target_sampling_rate
         self.video_max_pixels = video_max_pixels
 
@@ -235,7 +237,7 @@ class UniteWrapper(AbsEncoder):
                 target_sampling_rate=self.target_sampling_rate,
                 fps=self.fps,
                 max_frames=self.max_frames,
-                num_frames=None,  # fps mode; both set would let num_frames win
+                num_frames=self.num_frames,
             )
 
         all_embeddings = []
