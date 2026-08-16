@@ -27,8 +27,10 @@ UNITE_CITATION = """@article{kong2025modality,
 
 # Vendored from https://github.com/friedrichor/UNITE/blob/main/inference/modeling_unite.py
 # The HF repos ship no auto_map, so trust_remote_code is not available.
-# Two lines differ from upstream, both required by the transformers >=4.52
-# Qwen2VL refactor; each is marked inline.
+# UNITE ships modeling_unite.py as a Qwen2VLForConditionalGeneration subclass.
+# On transformers 5.x that subclass misses the checkpoint key remapping and the
+# language model loads randomly initialized without erroring, so we use the base
+# class and reproduce UNITE's pooling in _unite_embed.
 
 
 def _unwrap(out):
