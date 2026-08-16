@@ -3,7 +3,6 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-
 INTERNVIDEO2_CITATION = """
 @article{wang2024internvideo2,
   title={InternVideo2: Scaling Video Foundation Models for Multimodal Video Understanding},
