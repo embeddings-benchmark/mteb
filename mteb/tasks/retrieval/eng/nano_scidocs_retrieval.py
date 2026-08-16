@@ -10,8 +10,8 @@ class NanoSCIDOCSRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoSCIDOCSRetrieval",
         description="NanoFiQA2018 is a smaller subset of "
-        + "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"
-        + " prediction, to document classification and recommendation.",
+        "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"
+        " prediction, to document classification and recommendation.",
         reference="https://allenai.org/data/scidocs",
         dataset={
             "path": "zeta-alpha-ai/NanoSCIDOCS",

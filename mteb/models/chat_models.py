@@ -62,7 +62,7 @@ class LiteLLMChatModel:
         except ImportError as exc:
             raise ImportError(
                 "LiteLLMChatModel requires the litellm package. Install it "
-                "with pip install litellm."
+                'with pip install "mteb[litellm]".'
             ) from exc
         self.name = model
         self.base_url = base_url
