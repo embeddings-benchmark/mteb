@@ -18,6 +18,7 @@ from .built_bench_clustering_s2s import BuiltBenchClusteringS2S
 from .cifar import CIFAR10Clustering, CIFAR100Clustering
 from .clus_trec_covid import ClusTrecCovid
 from .crema_d_clustering import CREMADClustering
+from .epic_kitchens100_clustering import EPICKitchens100Clustering
 from .hmdb51_clustering import HMDB51Clustering
 from .human_concepts_clustering import HumanConceptsClustering
 from .hume_arxiv_clustering_p2p import HUMEArxivClusteringP2P
@@ -88,6 +89,7 @@ __all__ = [
     "CIFAR100Clustering",
     "CREMADClustering",
     "ClusTrecCovid",
+    "EPICKitchens100Clustering",
     "HMDB51Clustering",
     "HUMEArxivClusteringP2P",
     "HUMERedditClusteringP2P",
