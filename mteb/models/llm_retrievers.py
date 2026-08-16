@@ -210,7 +210,8 @@ class _TextCachingRetriever:
         self.prompt = prompt
         self.mteb_model_meta = _wrapper_meta(kind, base)
         self.snippet_chars = snippet_chars
-        self._text: dict[str, str] = {}
+        self.task_corpus: CorpusDatasetType | None = None
+        self._doc_id_to_idx: dict[str, int] = {}
 
     def index(
         self,
@@ -222,8 +223,9 @@ class _TextCachingRetriever:
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
     ) -> None:
-        """Index the base retriever and cache document text."""
-        self._text = {row["id"]: row.get("text", "") for row in corpus}
+        """Index the base retriever and keep the corpus for document lookups."""
+        self.task_corpus = corpus
+        self._doc_id_to_idx = {doc: idx for idx, doc in enumerate(corpus["id"])}
         self.base.index(
             corpus,
             task_metadata=task_metadata,
@@ -234,8 +236,14 @@ class _TextCachingRetriever:
         )
 
     def _docs_block(self, doc_ids: list[str]) -> str:
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be indexed before searching.")
+        known = [d for d in doc_ids if d in self._doc_id_to_idx]
+        # select() is an indices view over the existing dataset, not a copy.
+        rows = self.task_corpus.select([self._doc_id_to_idx[d] for d in known])
         return "\n".join(
-            f"[{d}] {self._text.get(d, '')[: self.snippet_chars]}" for d in doc_ids
+            f"[{d}] {row.get('text', '')[: self.snippet_chars]}"
+            for d, row in zip(known, rows)
         )
 
     def _listwise(self, qid: str, query: str, candidates: list[str]) -> list[str]:
