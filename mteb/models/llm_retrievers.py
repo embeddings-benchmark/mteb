@@ -63,7 +63,6 @@ _HOP_READ = (
 
 
 def _wrapper_meta(kind: str, base: SearchProtocol) -> ModelMeta:
-    # Composed-retriever identity, mirroring HybridSearch naming.
     base_meta = getattr(base, "mteb_model_meta", None)
     base_name = (getattr(base_meta, "name", None) or "unknown").rsplit("/", 1)[-1]
     return ModelMeta.create_empty(
@@ -240,7 +239,6 @@ def _docs_block(
     if corpus is None:
         raise ValueError("Corpus must be indexed before searching.")
     known = [d for d in doc_ids if d in doc_id_to_idx]
-    # select() is an indices view over the existing dataset, not a copy.
     rows = corpus.select([doc_id_to_idx[d] for d in known])
     block = "\n".join(
         f"[{d}] {row.get('text', '')[:snippet_chars]}" for d, row in zip(known, rows)
