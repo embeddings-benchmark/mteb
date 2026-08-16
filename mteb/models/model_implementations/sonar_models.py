@@ -1,15 +1,16 @@
 from __future__ import annotations
 
-import tempfile
 from typing import TYPE_CHECKING, Any
 
-import numpy as np
 import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
+
+_SONAR_SPEECH_SAMPLING_RATE = 16_000
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -72,23 +73,30 @@ class SONARWrapper(AbsEncoder):
         langscripts = task_metadata.hf_subsets_to_langscripts
         if hf_subset in langscripts:
             langs = langscripts[hf_subset]
+            # Position-based, not name-based: bitext eval_langs lists are
+            # always [source, target] by convention, so index 0/-1 holds
+            # regardless of how the subset itself happens to be named.
             lang = langs[-1] if prompt_type == PromptType.document else langs[0]
         else:
             lang = hf_subset or "eng_Latn"
         return lang.replace("-", "_")
 
     def _encode_audio_batch(self, audio_items: list) -> torch.Tensor:
-        import soundfile as sf
+        """Encode a batch of audio in a single SONAR call.
 
-        embeddings = []
-        for item in audio_items:
-            array = np.asarray(item["array"])
-            sr = item["sampling_rate"]
-            with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as tmp:
-                sf.write(tmp.name, array, sr)
-                emb = self.speech_model.predict([tmp.name])
-            embeddings.append(emb[0])
-        return torch.stack(embeddings)
+        SONAR's speech pipeline accepts raw waveform tensors directly (in
+        addition to file paths) and batches them internally, so there's no
+        need to round-trip through temp WAV files one item at a time. Its
+        tensor path assumes a fixed 16kHz input and a (channels, samples)
+        shape (github.com/facebookresearch/SONAR speech.py's _decode_audio),
+        so items are resampled to 16kHz via AudioCollator upstream and
+        reshaped to add the channel dimension here.
+        """
+        waveforms = [
+            torch.as_tensor(item["array"], dtype=torch.float32).unsqueeze(0)
+            for item in audio_items
+        ]
+        return self.speech_model.predict(waveforms, batch_size=len(waveforms))
 
     @torch.inference_mode()
     def encode(
@@ -104,6 +112,10 @@ class SONARWrapper(AbsEncoder):
         has_text = "text" in inputs.dataset.features
         has_audio = "audio" in inputs.dataset.features
         source_lang = self._to_sonar_lang(task_metadata, hf_subset, prompt_type)
+        if has_audio:
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=_SONAR_SPEECH_SAMPLING_RATE
+            )
 
         all_embeddings: list[torch.Tensor] = []
         for batch in tqdm(inputs, desc="Encoding"):
