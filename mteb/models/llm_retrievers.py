@@ -74,15 +74,50 @@ def _wrapper_meta(kind: str, base: SearchProtocol) -> ModelMeta:
     )
 
 
-def _parse_ids(text: str) -> list[str] | None:
-    match = re.search(r"\[.*\]", text, re.DOTALL)
+def _schema(
+    name: str, properties: dict[str, object], required: list[str]
+) -> dict[str, object]:
+    """A response_format asking the provider for structured JSON."""
+    return {
+        "type": "json_schema",
+        "json_schema": {
+            "name": name,
+            "schema": {
+                "type": "object",
+                "properties": properties,
+                "required": required,
+                "additionalProperties": False,
+            },
+        },
+    }
+
+
+_IDS = {"type": "array", "items": {"type": "string"}}
+_RANKING_SCHEMA = _schema("ranking", {"doc_ids": _IDS}, ["doc_ids"])
+_HOP_SCHEMA = _schema(
+    "hop_read", {"doc_ids": _IDS, "note": {"type": "string"}}, ["doc_ids", "note"]
+)
+
+
+def _parse_reply(text: str) -> dict[str, object] | None:
+    """Parse a JSON reply, accepting a bare id array from unconstrained models."""
+    match = re.search(r"[\[{].*[\]}]", text, re.DOTALL)
     if not match:
         return None
     try:
         value = json.loads(match.group(0))
     except json.JSONDecodeError:
         return None
-    return [str(x) for x in value] if isinstance(value, list) else None
+    if isinstance(value, list):
+        return {"doc_ids": value}
+    return value if isinstance(value, dict) else None
+
+
+def _parse_ids(text: str) -> list[str] | None:
+    """Document ids from a structured reply or a bare JSON array."""
+    reply = _parse_reply(text)
+    ids = reply.get("doc_ids") if reply else None
+    return [str(x) for x in ids] if isinstance(ids, list) else None
 
 
 def _to_scores(ordered: list[str], top_k: int) -> dict[str, float]:
@@ -223,7 +258,8 @@ def _listwise_rank(
 ) -> list[str]:
     """LLM listwise ordering of candidates; unranked ids keep their order."""
     out = model.generate(
-        [{"role": "user", "content": prompt.format(q=query, docs=docs)}]
+        [{"role": "user", "content": prompt.format(q=query, docs=docs)}],
+        response_format=_RANKING_SCHEMA,
     )
     ranked = [d for d in (_parse_ids(out.text) or []) if d in set(candidates)]
     if not ranked:
@@ -432,10 +468,14 @@ class TournamentRerankRetriever:
         return results
 
 
-def _note_after_ids(text: str) -> str:
-    match = re.search(r"\[.*?\]", text, re.DOTALL)
-    note = text[match.end() :].strip() if match else text.strip()
-    return note[:300]
+def _parse_note(text: str) -> str:
+    """The observation from a hop reply, or the text after the id array."""
+    reply = _parse_reply(text)
+    note = reply.get("note") if reply else None
+    if not isinstance(note, str):
+        match = re.search(r"\[.*?\]", text, re.DOTALL)
+        note = text[match.end() :] if match else text
+    return note.strip()[:300]
 
 
 class MultiHopRetriever:
@@ -549,14 +589,15 @@ class MultiHopRetriever:
                             "role": "user",
                             "content": _HOP_READ.format(q=question, docs=hop_docs),
                         }
-                    ]
+                    ],
+                    response_format=_HOP_SCHEMA,
                 )
                 selected += [
                     d
                     for d in (_parse_ids(read.text) or [])
                     if d in ranking and d not in selected
                 ]
-                note = _note_after_ids(read.text)
+                note = _parse_note(read.text)
                 if note:
                     notes.append(note)
             tail = [

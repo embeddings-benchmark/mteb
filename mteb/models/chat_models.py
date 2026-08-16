@@ -69,18 +69,33 @@ class LiteLLMChatModel:
         self.api_key = api_key
         self._kwargs = {"timeout": timeout, "num_retries": max_retries, **kwargs}
 
+    def _supports_schema(self) -> bool:
+        import litellm
+
+        try:
+            return bool(litellm.supports_response_schema(model=self.name))
+        except Exception:
+            return False
+
     def generate(
         self, messages: Sequence[dict[str, Any]], **kwargs: Any
     ) -> ChatResponse:
-        """Run one chat completion."""
+        """Run one chat completion.
+
+        A response_format is dropped for providers that cannot honour it, so
+        callers can always ask for structured output.
+        """
         import litellm
 
+        call_kwargs = {**self._kwargs, **kwargs}
+        if "response_format" in call_kwargs and not self._supports_schema():
+            del call_kwargs["response_format"]
         resp = litellm.completion(
             model=self.name,
             messages=list(messages),
             api_base=self.base_url,
             api_key=self.api_key,
-            **{**self._kwargs, **kwargs},
+            **call_kwargs,
         )
         try:
             cost = litellm.completion_cost(completion_response=resp)

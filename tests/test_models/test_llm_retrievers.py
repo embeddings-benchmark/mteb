@@ -206,3 +206,11 @@ def test_multi_query_fuses_variant_rankings():
     )
     ids = _top_ids(retriever, "a vague question", top_k=3)
     assert set(ids[:2]) == {"d1", "d3"}  # each variant surfaces one gold doc
+
+
+def test_rerank_accepts_structured_reply():
+    # Providers honouring the json schema return an object, not a bare array.
+    retriever = RerankRetriever(
+        FakeSearchModel(), FakeChatModel(['{"doc_ids": ["d3", "d1"]}']), pool_size=3
+    )
+    assert _top_ids(retriever, "capital of France") == ["d3", "d1"]
