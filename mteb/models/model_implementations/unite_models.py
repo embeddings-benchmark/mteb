@@ -39,18 +39,9 @@ def _unwrap(out):
 def _load_base(model_name: str, revision: str | None):
     from transformers import Qwen2VLForConditionalGeneration
 
-    # UNITE ships modeling_unite.py as a Qwen2VLForConditionalGeneration subclass,
-    # but subclassing breaks checkpoint key remapping on transformers 5.x: the
-    # language model silently loads with random weights. We keep the base class and
-    # reproduce UNITE's pooling in _unite_embed instead.
-    try:
-        return Qwen2VLForConditionalGeneration.from_pretrained(
-            model_name, revision=revision, dtype=torch.bfloat16
-        )
-    except TypeError:
-        return Qwen2VLForConditionalGeneration.from_pretrained(
-            model_name, revision=revision, torch_dtype=torch.bfloat16
-        )
+    return Qwen2VLForConditionalGeneration.from_pretrained(
+        model_name, revision=revision, torch_dtype=torch.bfloat16
+    )
 
 
 def _scatter(model, inputs_embeds, input_ids, pixels, grid, token_id):
