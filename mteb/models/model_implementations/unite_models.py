@@ -213,13 +213,6 @@ class UniteWrapper(AbsEncoder):
         with torch.inference_mode():
             return self.model(**inputs)
 
-    def _embed_one(self, text=None, image=None, video=None) -> torch.Tensor:
-        """Single-item convenience wrapper, used by tests."""
-        return self._embed_batch(
-            texts=[text] if text is not None else None,
-            images=[image] if image is not None else None,
-            videos=[video] if video is not None else None,
-        )
 
     def encode(
         self,
