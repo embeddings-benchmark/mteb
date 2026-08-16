@@ -213,7 +213,6 @@ class UniteWrapper(AbsEncoder):
         with torch.inference_mode():
             return self.model(**inputs)
 
-
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
