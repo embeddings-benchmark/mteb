@@ -105,21 +105,17 @@ def _transform_queries(
 class _QueryTransformRetriever:
     """Base for retrievers that LLM-transform the query text before searching."""
 
-    _template: str
-    _kind: str
-
     def __init__(
         self,
         base: SearchProtocol,
         model: ChatModelProtocol,
-        *,
-        prompt: str | None = None,
+        kind: str,
+        prompt: str,
     ) -> None:
         self.base = base
         self.model = model
-        self.mteb_model_meta = _wrapper_meta(self._kind, base)
-        if prompt is not None:
-            self._template = prompt
+        self.prompt = prompt
+        self.mteb_model_meta = _wrapper_meta(kind, base)
 
     def index(
         self,
@@ -155,7 +151,7 @@ class _QueryTransformRetriever:
     ) -> RetrievalOutputType:
         """Transform each query with the LLM, then search the base retriever."""
         return self.base.search(
-            _transform_queries(queries, self.model, self._template),
+            _transform_queries(queries, self.model, self.prompt),
             task_metadata=task_metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
@@ -172,8 +168,14 @@ class QueryRewriteRetriever(_QueryTransformRetriever):
     Reference: Ma et al., Query Rewriting for Retrieval-Augmented LLMs (arXiv:2305.14283).
     """
 
-    _template = _REWRITE
-    _kind = "query-rewrite"
+    def __init__(
+        self,
+        base: SearchProtocol,
+        model: ChatModelProtocol,
+        *,
+        prompt: str = _REWRITE,
+    ) -> None:
+        super().__init__(base, model, "query-rewrite", prompt)
 
 
 class HyDERetriever(_QueryTransformRetriever):
@@ -182,14 +184,18 @@ class HyDERetriever(_QueryTransformRetriever):
     Reference: Gao et al., Precise Zero-Shot Dense Retrieval without Relevance Labels (arXiv:2212.10496).
     """
 
-    _template = _HYDE
-    _kind = "hyde"
+    def __init__(
+        self,
+        base: SearchProtocol,
+        model: ChatModelProtocol,
+        *,
+        prompt: str = _HYDE,
+    ) -> None:
+        super().__init__(base, model, "hyde", prompt)
 
 
 class _TextCachingRetriever:
     """Base for retrievers whose LLM reads document text at search time."""
-
-    _rerank_prompt = _RERANK
 
     def __init__(
         self,
@@ -197,9 +203,11 @@ class _TextCachingRetriever:
         model: ChatModelProtocol,
         kind: str,
         snippet_chars: int,
+        prompt: str,
     ) -> None:
         self.base = base
         self.model = model
+        self.prompt = prompt
         self.mteb_model_meta = _wrapper_meta(kind, base)
         self.snippet_chars = snippet_chars
         self._text: dict[str, str] = {}
@@ -236,7 +244,7 @@ class _TextCachingRetriever:
             [
                 {
                     "role": "user",
-                    "content": self._rerank_prompt.format(
+                    "content": self.prompt.format(
                         q=query, docs=self._docs_block(candidates)
                     ),
                 }
@@ -263,12 +271,10 @@ class RerankRetriever(_TextCachingRetriever):
         *,
         pool_size: int = 20,
         snippet_chars: int = 500,
-        prompt: str | None = None,
+        prompt: str = _RERANK,
     ) -> None:
-        super().__init__(base, model, "llm-rerank", snippet_chars)
+        super().__init__(base, model, "llm-rerank", snippet_chars, prompt)
         self.pool_size = pool_size
-        if prompt is not None:
-            self._rerank_prompt = prompt
 
     def search(
         self,
@@ -323,10 +329,11 @@ class TournamentRerankRetriever(_TextCachingRetriever):
         batch_size: int = 20,
         promote_k: int = 4,
         snippet_chars: int = 500,
+        prompt: str = _RERANK,
     ) -> None:
         if promote_k >= batch_size:
             raise ValueError("promote_k must be smaller than batch_size.")
-        super().__init__(base, model, "tournament-rerank", snippet_chars)
+        super().__init__(base, model, "tournament-rerank", snippet_chars, prompt)
         self.pool_size = pool_size
         self.batch_size = batch_size
         self.promote_k = promote_k
@@ -405,7 +412,7 @@ class MultiHopRetriever(_TextCachingRetriever):
         per_hop: int = 25,
         snippet_chars: int = 500,
     ) -> None:
-        super().__init__(base, model, "multi-hop", snippet_chars)
+        super().__init__(base, model, "multi-hop", snippet_chars, _RERANK)
         self.hops = hops
         self.per_hop = per_hop
 
