@@ -102,15 +102,24 @@ def _transform_queries(
     return Dataset.from_list(rows)
 
 
-class _WrapperBase:
-    """Shared identity and index delegation for the LLM retriever wrappers."""
+class _QueryTransformRetriever:
+    """Base for retrievers that LLM-transform the query text before searching."""
+
+    _template: str
+    _kind: str
 
     def __init__(
-        self, base: SearchProtocol, model: ChatModelProtocol, kind: str
+        self,
+        base: SearchProtocol,
+        model: ChatModelProtocol,
+        *,
+        prompt: str | None = None,
     ) -> None:
         self.base = base
         self.model = model
-        self.mteb_model_meta = _wrapper_meta(kind, base)
+        self.mteb_model_meta = _wrapper_meta(self._kind, base)
+        if prompt is not None:
+            self._template = prompt
 
     def index(
         self,
@@ -131,24 +140,6 @@ class _WrapperBase:
             encode_kwargs=encode_kwargs,
             num_proc=num_proc,
         )
-
-
-class _QueryTransformRetriever(_WrapperBase):
-    """Base for retrievers that LLM-transform the query text before searching."""
-
-    _template: str
-    _kind: str
-
-    def __init__(
-        self,
-        base: SearchProtocol,
-        model: ChatModelProtocol,
-        *,
-        prompt: str | None = None,
-    ) -> None:
-        super().__init__(base, model, self._kind)
-        if prompt is not None:
-            self._template = prompt
 
     def search(
         self,
@@ -195,7 +186,7 @@ class HyDERetriever(_QueryTransformRetriever):
     _kind = "hyde"
 
 
-class _TextCachingRetriever(_WrapperBase):
+class _TextCachingRetriever:
     """Base for retrievers whose LLM reads document text at search time."""
 
     _rerank_prompt = _RERANK
@@ -207,7 +198,9 @@ class _TextCachingRetriever(_WrapperBase):
         kind: str,
         snippet_chars: int,
     ) -> None:
-        super().__init__(base, model, kind)
+        self.base = base
+        self.model = model
+        self.mteb_model_meta = _wrapper_meta(kind, base)
         self.snippet_chars = snippet_chars
         self._text: dict[str, str] = {}
 
@@ -223,7 +216,7 @@ class _TextCachingRetriever(_WrapperBase):
     ) -> None:
         """Index the base retriever and cache document text."""
         self._text = {row["id"]: row.get("text", "") for row in corpus}
-        super().index(
+        self.base.index(
             corpus,
             task_metadata=task_metadata,
             hf_split=hf_split,
@@ -489,7 +482,7 @@ class MultiHopRetriever(_TextCachingRetriever):
         return results
 
 
-class MultiQueryRetriever(_WrapperBase):
+class MultiQueryRetriever:
     """LLM writes query variants; base rankings fuse via reciprocal rank fusion.
 
     Reference: Cormack et al., Reciprocal Rank Fusion (SIGIR 2009) for the fusion;
@@ -508,9 +501,31 @@ class MultiQueryRetriever(_WrapperBase):
         num_queries: int = 3,
         rrf_k: int = 60,
     ) -> None:
-        super().__init__(base, model, "multi-query")
+        self.base = base
+        self.model = model
+        self.mteb_model_meta = _wrapper_meta("multi-query", base)
         self.num_queries = num_queries
         self.rrf_k = rrf_k
+
+    def index(
+        self,
+        corpus: CorpusDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None,
+    ) -> None:
+        """Index the base retriever."""
+        self.base.index(
+            corpus,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
 
     def search(
         self,
