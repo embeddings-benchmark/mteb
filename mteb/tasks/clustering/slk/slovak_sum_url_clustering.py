@@ -1,5 +1,3 @@
-from datasets import Dataset, DatasetDict
-
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -10,8 +8,8 @@ class SlovakSumURLClustering(AbsTaskClustering):
         description="Clustering of Slovak news articles from SlovakSum dataset based on the URL structure. Articles are organized into 12 editorial categories including sports, culture, economy, health, travel, politics, and technology sections.",
         reference="https://aclanthology.org/2024.lrec-main.1298/",
         dataset={
-            "path": "kiviki/slovaksum-url-clustering",
-            "revision": "6ac67c0a18a641c611c49224a82012cd749000e2",
+            "path": "mteb/SlovakSumURLClustering",
+            "revision": "3410778ab05bf1f002fa26eab148410191427dab",
         },
         type="Clustering",
         category="t2c",
@@ -42,22 +40,3 @@ class SlovakSumURLClustering(AbsTaskClustering):
 """,
         prompt="Identify the topic or theme of the given text.",
     )
-
-    def dataset_transform(self, **kwargs) -> None:
-        """Transform the dataset to create sentences (title + summary) and labels (url_category)."""
-        ds = {}
-        for split in self.metadata.eval_splits:
-            # Combine title and summary to create sentences
-            titles = self.dataset[split]["title"]
-            summaries = self.dataset[split]["sum"]
-
-            sentences = [
-                f"{title} {summary}".strip()
-                for title, summary in zip(titles, summaries)
-            ]
-
-            labels = self.dataset[split]["theme"]
-
-            ds[split] = Dataset.from_dict({"sentences": sentences, "labels": labels})
-
-        self.dataset = DatasetDict(ds)

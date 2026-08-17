@@ -1,5 +1,3 @@
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -14,8 +12,8 @@ class SMESumRetrieval(AbsTaskRetrieval):
         ),
         reference="https://huggingface.co/datasets/NaiveNeuron/SMESum",
         dataset={
-            "path": "NaiveNeuron/SMESum",
-            "revision": "c5a6521a4ddce3450fb04ba218623681a9189c6d",
+            "path": "mteb/SMESumRetrieval",
+            "revision": "06a0b78f807ea6ab4c82cb729509416ac9b16469",
         },
         type="Retrieval",
         category="t2t",
@@ -48,29 +46,3 @@ class SMESumRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve the text that belongs to the given summary"},
     )
-
-    def load_data(self, **kwargs) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        n_sample = 600
-
-        for split in self.metadata.eval_splits:
-            split_ds = datasets.load_dataset(
-                path=self.metadata.dataset["path"],
-                split=f"{split}[:{n_sample}]",
-            )
-            # Use introduction only as query to avoid title overlap with corpus
-            queries = {f"q{e + 1}": x["introduction"] for e, x in enumerate(split_ds)}
-            corpus = {
-                f"d{e + 1}": {"title": x["title"], "text": x["document"]}
-                for e, x in enumerate(split_ds)
-            }
-            qrels = {f"q{i + 1}": {f"d{i + 1}": 1} for i in range(split_ds.shape[0])}
-            self.corpus[split], self.queries[split], self.relevant_docs[split] = (
-                corpus,
-                queries,
-                qrels,
-            )
-        self.data_loaded = True

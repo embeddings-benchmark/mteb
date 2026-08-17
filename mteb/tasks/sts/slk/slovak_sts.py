@@ -6,9 +6,8 @@ class SlovakSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="SlovakSTS",
         dataset={
-            "path": "slovak-nlp/sklep",
-            "revision": "2e428d17ae4178dae14f6643785647fc9f30edaa",
-            "name": "sts",
+            "path": "mteb/SlovakSTS",
+            "revision": "620c09a567e524c727d4dd20e4339fb4d3ed442f",
         },
         description=(
             "A professional Slovak translation of the STS Benchmark (STSb), "
@@ -61,11 +60,3 @@ Pilehvar, Mohammad Taher},
 
     min_score = 0
     max_score = 5
-
-    def dataset_transform(self, **kwargs):
-        _dataset = self.dataset.rename_columns({"similarity_score": "score"})
-
-        # ensure numeric value
-        _dataset = _dataset.map(lambda example: {"score": float(example["score"])})
-
-        self.dataset = _dataset
