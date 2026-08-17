@@ -21,6 +21,24 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def _load_checkpoint_tensors(
+    model_name: str, revision: str | None
+) -> dict[str, torch.Tensor]:
+    """Read raw checkpoint tensors. The file is already in the local HF cache."""
+    from huggingface_hub import hf_hub_download
+    from huggingface_hub.errors import EntryNotFoundError
+
+    try:
+        path = hf_hub_download(model_name, "model.safetensors", revision=revision)
+    except EntryNotFoundError:
+        path = hf_hub_download(model_name, "pytorch_model.bin", revision=revision)
+        return torch.load(path, map_location="cpu", weights_only=True)
+
+    from safetensors.torch import load_file
+
+    return load_file(path)
+
+
 class VideoMAEWrapper(AbsEncoder):
     """VideoMAE encoder.
 
@@ -28,15 +46,11 @@ class VideoMAEWrapper(AbsEncoder):
     ``VideoMAEForVideoClassification`` averages ``last_hidden_state`` over the
     token axis before its head. We pool the same way.
 
-    Pinned to the existing ``transformers-v4`` requirement group. v4 implements
-    VideoMAE attention BEiT-style, with ``q_bias``/``v_bias`` as separate
-    parameters, which is how every published checkpoint is saved. v5 refactored
-    to standard Linears and ships no mapping for the old key names, so those
-    biases load as zeros with no error raised.
-
-    ``AutoImageProcessor`` rather than ``AutoVideoProcessor``: every checkpoint
-    ships a ``preprocessor_config.json`` declaring ``VideoMAEImageProcessor``,
-    which carries the checkpoint's own resize/crop/normalisation values.
+    Uses ``AutoVideoProcessor``, which requires transformers v5. v5 refactored
+    VideoMAE attention to standard Linear layers and ships no mapping for the
+    old ``q_bias``/``v_bias`` key names, so those weights load as zeros with no
+    error; ``_restore_qkv_bias`` copies them back from the checkpoint. On v4,
+    where the attention module still owns ``q_bias``, it is a no-op.
     """
 
     def __init__(
@@ -48,7 +62,7 @@ class VideoMAEWrapper(AbsEncoder):
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
-        from transformers import AutoImageProcessor, AutoModel
+        from transformers import AutoModel, AutoVideoProcessor
 
         self.model_name = model_name
         self.revision = revision
@@ -61,11 +75,12 @@ class VideoMAEWrapper(AbsEncoder):
             else "cpu"
         )
 
-        self.processor = AutoImageProcessor.from_pretrained(
+        self.processor = AutoVideoProcessor.from_pretrained(
             model_name, revision=revision
         )
         self.model = AutoModel.from_pretrained(model_name, revision=revision)
         self.model.eval()
+        self._restore_qkv_bias()
 
         self.model.to(self.device)
 
@@ -80,6 +95,46 @@ class VideoMAEWrapper(AbsEncoder):
                 f"{model_name} was trained with {self.model.config.num_frames} frames "
                 f"per clip, but num_frames={self.num_frames} was requested."
             )
+
+    def _restore_qkv_bias(self) -> None:
+        """Copy back q_bias/v_bias, which transformers v5 drops silently.
+
+        v4 kept these as separate parameters with query/key/value at
+        ``bias=False``, and that is how every published checkpoint is saved. v5
+        uses standard Linears with their own biases and no key mapping, so they
+        arrive zeroed. Skipped on v4, and on any version that loads them.
+        """
+        first = self.model.encoder.layer[0].attention.attention
+        if hasattr(first, "q_bias") or first.query.bias is None:
+            return
+        if not bool((first.query.bias == 0).all()):
+            return
+
+        state_dict = _load_checkpoint_tensors(self.model_name, self.revision)
+        restored = 0
+        with torch.no_grad():
+            for i, layer in enumerate(self.model.encoder.layer):
+                attn = layer.attention.attention
+                q_key = f"videomae.encoder.layer.{i}.attention.attention.q_bias"
+                v_key = f"videomae.encoder.layer.{i}.attention.attention.v_bias"
+                if q_key not in state_dict:
+                    q_key = q_key.removeprefix("videomae.")
+                    v_key = v_key.removeprefix("videomae.")
+                if q_key not in state_dict or v_key not in state_dict:
+                    continue
+                attn.query.bias.copy_(state_dict[q_key])
+                attn.value.bias.copy_(state_dict[v_key])
+                attn.key.bias.zero_()  # k_bias was always an implicit zero
+                restored += 1
+
+        expected = len(self.model.encoder.layer)
+        if restored != expected:
+            raise RuntimeError(
+                f"{self.model_name}: q_bias/v_bias were dropped on load but only "
+                f"{restored}/{expected} layers could be restored. Refusing to "
+                "return silently degraded embeddings."
+            )
+        logger.info("Restored q_bias/v_bias for %d VideoMAE layers", restored)
 
     @torch.inference_mode()
     def encode(
@@ -110,8 +165,7 @@ class VideoMAEWrapper(AbsEncoder):
             # Explicit list-of-videos-of-frames in HWC. A list of 4D tensors trips
             # `make_batched` on the v4 slow processor, which treats the whole batch
             # as a single video and then fails inside PIL.
-            frames = [[f.permute(1, 2, 0).numpy() for f in v] for v in padded]
-            processed = self.processor(frames, return_tensors="pt").to(self.device)
+            processed = self.processor(padded, return_tensors="pt").to(self.device)
 
             outputs = self.model(**processed)
             pooled = outputs.last_hidden_state.mean(dim=1)
@@ -163,7 +217,7 @@ videomae_base = ModelMeta(
     citation=_VIDEOMAE_CITATION,
     contacts=None,
     output_dtypes=None,
-    extra_requirements_groups=["transformers-v4"],
+    extra_requirements_groups=None,
 )
 
 videomae_large = ModelMeta(
@@ -193,7 +247,7 @@ videomae_large = ModelMeta(
     citation=_VIDEOMAE_CITATION,
     contacts=None,
     output_dtypes=None,
-    extra_requirements_groups=["transformers-v4"],
+    extra_requirements_groups=None,
 )
 
 videomae_base_finetuned_kinetics = ModelMeta(
@@ -223,5 +277,5 @@ videomae_base_finetuned_kinetics = ModelMeta(
     citation=_VIDEOMAE_CITATION,
     contacts=None,
     output_dtypes=None,
-    extra_requirements_groups=["transformers-v4"],
+    extra_requirements_groups=None,
 )
