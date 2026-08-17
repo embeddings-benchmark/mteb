@@ -6,7 +6,6 @@ import torch
 from tqdm.auto import tqdm
 from transformers import AutoModel, AutoProcessor
 
-from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
@@ -35,7 +34,6 @@ class ColVec1Wrapper(AbsEncoder):
         torch_dtype: torch.dtype | None = torch.bfloat16,
         **kwargs,
     ):
-        requires_image_dependencies()
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
 
         self.model = AutoModel.from_pretrained(
@@ -157,7 +155,6 @@ class ColVec11Wrapper(ColVec1Wrapper):
         processor_kwargs: dict[str, Any] | None = None,
         **model_kwargs,
     ):
-        requires_image_dependencies()
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         processor_kwargs = dict(processor_kwargs or {})
 

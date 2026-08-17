@@ -28,8 +28,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-MIN_SENTENCE_TRANSFORMERS_VERSION = (3, 1, 0)
-
 multilingual_langs = [
     "afr-Latn",
     "ara-Arab",
@@ -338,17 +336,6 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        from sentence_transformers import __version__ as st_version
-
-        current_sentence_transformers_version = tuple(map(int, st_version.split(".")))
-
-        if current_sentence_transformers_version < MIN_SENTENCE_TRANSFORMERS_VERSION:
-            raise RuntimeError(
-                f"sentence_transformers version {st_version} is lower than the required version 3.1.0"
-            )
-        import einops  # noqa: F401
-        import flash_attn  # noqa: F401
-
         super().__init__(
             model, revision, device=device, model_prompts=model_prompts, **kwargs
         )
