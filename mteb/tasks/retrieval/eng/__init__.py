@@ -87,7 +87,12 @@ from .climate_fever_retrieval import (
     ClimateFEVERHardNegativesV2,
     ClimateFEVERRetrievalv2,
 )
-from .clotho import ClothoA2TRetrieval, ClothoT2ARetrieval
+from .clotho import (
+    ClothoA2TRetrieval,
+    ClothoA2TRetrievalV2,
+    ClothoT2ARetrieval,
+    ClothoT2ARetrievalV2,
+)
 from .cmu_arctic import CMUArcticA2TRetrieval, CMUArcticT2ARetrieval
 from .covers80_retrieval import Covers80A2ARetrieval
 from .covr_r_retrieval import CoVRRVT2VRetrieval
@@ -559,7 +564,9 @@ __all__ = [
     "ClimateFEVERHardNegativesV2",
     "ClimateFEVERRetrievalv2",
     "ClothoA2TRetrieval",
+    "ClothoA2TRetrievalV2",
     "ClothoT2ARetrieval",
+    "ClothoT2ARetrievalV2",
     "CoVRRVT2VRetrieval",
     "ConvoMem",
     "Covers80A2ARetrieval",
