@@ -408,10 +408,25 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         )
         batch_size = kwargs.pop("batch_size", 32)
 
-        has_video = "video" in inputs.dataset.features
-        has_title = "title" in inputs.dataset.features
+        features = inputs.dataset.features
+        # Apply prompts only to text-only tasks: https://ai.google.dev/gemini-api/docs/embeddings#task-types-embeddings-2
         use_text_formatting = set(task_metadata.modalities) == {"text"}
+        if (
+            use_text_formatting
+            and prompt_type == PromptType.query
+            and "query" in features
+        ):
+            text_key = "query"
+        elif (
+            use_text_formatting
+            and prompt_type == PromptType.document
+            and "body" in features
+        ):
+            text_key = "body"
+        else:
+            text_key = "text"
 
+        has_video = "video" in features
         if has_video:
             # Sample at 1 FPS and cap at 32 frames to match Gemini's video limits.
             inputs.collate_fn = FramesCollator(
@@ -419,7 +434,7 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
                 max_frames=GEMINI_MAX_VIDEO_FRAMES,
             )
 
-        modality_keys = ("text", "title", "image", "audio", "video")
+        modality_keys = (text_key, "title", "image", "audio", "video")
         contents = []
         for batch in inputs:
             num_samples = len(next(iter(batch.values())))
@@ -427,8 +442,8 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
                 row = {key: batch[key][index] for key in modality_keys if key in batch}
                 contents.append(
                     _build_gemini_content(
-                        text=row.get("text"),
-                        title=row.get("title") if has_title else None,
+                        text=row.get(text_key),
+                        title=row.get("title"),
                         image=row.get("image"),
                         audio=row.get("audio"),
                         video=row.get("video"),
