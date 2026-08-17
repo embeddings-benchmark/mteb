@@ -218,7 +218,7 @@ def test_openness_non_open_license_not_counted():
 
 
 def test_model_name_without_prefix():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Model name must be in the format"):
         ModelMeta(
             name="test_model",
             revision="test",
@@ -252,7 +252,7 @@ def test_model_training_dataset_adapted():
 
 
 @pytest.mark.parametrize(
-    ("model_name", "expected_memory"),
+    "model_name, expected_memory",
     [
         ("intfloat/e5-mistral-7b-instruct", 13563),  # multiple safetensors
         ("NovaSearch/jasper_en_vision_language_v1", 3802),  # bf16

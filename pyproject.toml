@@ -315,6 +315,7 @@ select = [
     "ASYNC",   # blocking calls in async functions
     "ISC",     # implicit string concatenation
     "B",       # flake8-bugbear
+    "PT",      # flake8-pytest-style
 ]
 
 ignore = [
@@ -391,6 +392,11 @@ preview = true
     "TC002",
 ]
 
+
+[tool.ruff.lint.flake8-pytest-style]
+# The suite already writes `parametrize("a, b", ...)` at every multi-name call
+# site, so enforce that rather than rewriting them all to tuples.
+parametrize-names-type = "csv"
 
 [tool.ruff.lint.pep8-naming]
 ignore-names = [

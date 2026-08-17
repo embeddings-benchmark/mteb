@@ -83,7 +83,8 @@ def test_evaluate_with_cache(
         results.model_revision,
     )
     model_meta_path = path.parent / "model_meta.json"
-    assert path.exists() and path.is_file(), "cache file should exist"
+    assert path.exists(), "cache file should exist"
+    assert path.is_file(), "cache path should be a file"
     assert path.suffix == ".json", "cache file should be a json file"
     assert model_meta_path.exists(), "no model meta path is saved"
 
@@ -260,12 +261,16 @@ def test_evaluate_overwrites(
 
     task._eval_splits = task.metadata.eval_splits  # reset splits to default
 
-    with pytest.raises(ValueError):
+    with pytest.raises(
+        ValueError, match="'only-cache' and the results file exists for task"
+    ):
         results = mteb.evaluate(
             model, task, cache=cache, overwrite_strategy="only-cache"
         )
 
-    with pytest.raises(ValueError):
+    with pytest.raises(
+        ValueError, match="'never' and the results file exists for task"
+    ):
         results = mteb.evaluate(model, task, cache=cache, overwrite_strategy="never")
 
     # should just overwrite
@@ -467,14 +472,18 @@ def test_evaluate_mrl(tmp_path, embed_dim):
 def test_mrl_unsupported_dim():
     """Test that passing unsupported mrl dim raises an error."""
     # try to load model with mrl, but wrong dim
-    with pytest.raises(ValueError):
+    with pytest.raises(
+        ValueError, match="is not in the model's supported embedding dimensions"
+    ):
         mteb.get_model(
             "mteb/baseline-random-encoder",
             embed_dim=100,
         )
 
     # try to load model that don't support mrl
-    with pytest.raises(ValueError):
+    with pytest.raises(
+        ValueError, match="does not match the model's embedding dimension"
+    ):
         mteb.get_model(
             "intfloat/multilingual-e5-small",
             embed_dim=100,

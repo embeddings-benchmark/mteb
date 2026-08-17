@@ -44,7 +44,7 @@ def test_validate_task_to_prompt_name(task_name: str | AbsTask):
     AbsEncoder.validate_task_to_prompt_name(model_prompts)
 
 
-@pytest.mark.parametrize("raise_for_invalid_keys", (True, False))
+@pytest.mark.parametrize("raise_for_invalid_keys", [True, False])
 def test_validate_task_to_prompt_name_for_none(raise_for_invalid_keys: bool):
     result = AbsEncoder.validate_task_to_prompt_name(
         None, raise_for_invalid_keys=raise_for_invalid_keys

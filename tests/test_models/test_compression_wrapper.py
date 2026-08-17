@@ -80,9 +80,8 @@ def test_int_compression(level: OutputDType, bits: int):
         hf_split="test",
         hf_subset="test",
     )
-    assert (
-        torch.max(embeddings) <= 2**bits / 2 and torch.min(embeddings) >= -(2**bits) / 2
-    )
+    assert torch.max(embeddings) <= 2**bits / 2
+    assert torch.min(embeddings) >= -(2**bits) / 2
 
 
 @pytest.mark.parametrize(
@@ -97,7 +96,8 @@ def test_uint_compression(level: OutputDType, bits: int):
         hf_split="test",
         hf_subset="test",
     )
-    assert torch.max(embeddings) <= 2**bits and torch.min(embeddings) >= 0
+    assert torch.max(embeddings) <= 2**bits
+    assert torch.min(embeddings) >= 0
 
 
 def test_binary_compression():
@@ -109,13 +109,14 @@ def test_binary_compression():
         hf_split="test",
         hf_subset="test",
     )
-    assert torch.max(embeddings) <= 1 and torch.min(embeddings) >= 0
+    assert torch.max(embeddings) <= 1
+    assert torch.min(embeddings) >= 0
 
 
 @pytest.mark.parametrize("margins", [(-0.1, 0.7), (0.1, 1.3), (0.2, 0.1)])
 def test_invalid_clipping_margin(margins: tuple[float, float]):
     model = mteb.get_model("mteb/baseline-random-encoder")
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Clipping margin must be between 0 and 1"):
         CompressionWrapper(model, OutputDType.INT8, margins)
 
 

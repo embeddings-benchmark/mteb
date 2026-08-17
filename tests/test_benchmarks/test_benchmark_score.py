@@ -164,7 +164,8 @@ def test_compute_mean_subset(mock_mteb_cache: ResultCache):
 
         polars_value = summary_by_model[model_result.model_name].get("Mean (Subset)")
         python_value = helper_out["Mean(Subset)"]
-        assert polars_value is not None and python_value is not None
+        assert polars_value is not None
+        assert python_value is not None
         assert np.isclose(polars_value, python_value), (
             f"{model_result.model_name}: polars={polars_value:.6f} "
             f"vs python={python_value:.6f}"
@@ -323,7 +324,10 @@ def test_get_score_matches_summary_table_means(mock_mteb_cache: ResultCache):
             sm = srow.get(summary_col)
             if gs is None and sm is None:
                 continue
-            assert gs is not None and sm is not None, (
+            assert gs is not None, (
+                f"{model_name}: get_score[{gs_key}]={gs!r} vs summary[{summary_col}]={sm!r}"
+            )
+            assert sm is not None, (
                 f"{model_name}: get_score[{gs_key}]={gs!r} vs summary[{summary_col}]={sm!r}"
             )
             assert np.isclose(gs, sm), (
@@ -359,7 +363,10 @@ def _assert_score_parity(
                 f"{model_name} summary[{summary_col}] should be None, got {sm!r}"
             )
             continue
-        assert gs is not None and sm is not None, (
+        assert gs is not None, (
+            f"{model_name} {gs_key}/{summary_col}: get_score={gs!r} vs summary={sm!r}"
+        )
+        assert sm is not None, (
             f"{model_name} {gs_key}/{summary_col}: get_score={gs!r} vs summary={sm!r}"
         )
         assert np.isclose(gs, sm), (
@@ -399,8 +406,10 @@ def test_get_score_matches_summary_table_on_partial_split_coverage(
         row["Model"]: row
         for row in bench._create_summary_table(pl_df).df.iter_rows(named=True)
     }
-    assert full in get_score_out and full in summary_by_model
-    assert partial in get_score_out and partial in summary_by_model
+    assert full in get_score_out
+    assert full in summary_by_model
+    assert partial in get_score_out
+    assert partial in summary_by_model
 
     # All three tasks are Classification, so there's exactly one dynamic
     # TASK_TYPES column/key to pair up alongside the fixed aggregation keys.

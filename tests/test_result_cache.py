@@ -73,7 +73,10 @@ def test_get_models_and_tasks() -> None:
 
     models = cache.get_models()
     assert isinstance(models, list), "Models should be a list"
-    assert isinstance(models[0], tuple) and len(models[0]) == 2, (
+    assert isinstance(models[0], tuple), (
+        "Models should be a list of tuples (model_name, model_revision)"
+    )
+    assert len(models[0]) == 2, (
         "Models should be a list of tuples (model_name, model_revision)"
     )
 
