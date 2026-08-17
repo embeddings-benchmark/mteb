@@ -15,7 +15,7 @@ class WebVidCoVRIT2VRetrieval(AbsTaskRetrieval):
             "where the query consists of a reference image (middle frame of reference video) "
             "and an editing instruction. The corpus consists of candidate videos."
         ),
-        reference="https://arxiv.org/pdf/2308.14746",
+        reference="https://arxiv.org/abs/2308.14746",
         dataset={
             "path": "deep9539/WebVid-CoVR",
             "revision": "22f6c8c41e0e3a2b969be0e58df5217d7059ec1c",
@@ -25,7 +25,7 @@ class WebVidCoVRIT2VRetrieval(AbsTaskRetrieval):
         modalities=["image", "text", "video"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
+        main_score="recall_at_10",
         date=("2023-01-01", "2023-12-31"),
         domains=["Web"],
         task_subtypes=["Cross-Modal Retrieval"],
