@@ -211,7 +211,7 @@ amazon_titan_embed_text_v1 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=False,
-    extra_requirements_groups=["boto3"],
+    extra_requirements_groups=["boto3", "video"],
 )
 
 amazon_titan_embed_text_v2 = ModelMeta(
@@ -312,6 +312,10 @@ NOVA_PURPOSE_QUERY = "GENERIC_RETRIEVAL"
 NOVA_PURPOSE_CLASSIFICATION = "CLASSIFICATION"
 NOVA_PURPOSE_CLUSTERING = "CLUSTERING"
 
+# Nova accepts video segments up to 30 seconds.
+NOVA_MAX_VIDEO_SECONDS = 30
+NOVA_VIDEO_MODE = "AUDIO_VIDEO_COMBINED"
+
 _NOVA_CLASSIFICATION_TASKS = {
     "Classification",
     "MultilabelClassification",
@@ -322,10 +326,12 @@ _NOVA_CLASSIFICATION_TASKS = {
 class NovaMultimodalEmbeddingsModel(AbsEncoder):
     """Amazon Nova Multimodal Embeddings via the Bedrock synchronous InvokeModel API.
 
-    Text, image and audio. Video is not yet supported: mteb decodes video to a
-    frame tensor before it reaches the encoder, with no frame rate and no audio
-    track, so re-encoding it to a container would mean choosing an arbitrary fps
-    and dropping the audio stream.
+    Supports text, image, audio and video.
+
+    Video arrives as a torchcodec ``VideoDecoder``, so frames are re-encoded to
+    mp4 at the source frame rate before upload; Nova validates the container
+    against the declared format and does not accept every source container.
+    Segments are capped at ``NOVA_MAX_VIDEO_SECONDS``.
     """
 
     def __init__(
@@ -406,6 +412,48 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
         }
         return {"taskType": "SINGLE_EMBEDDING", "singleEmbeddingParams": params}
 
+    def _video_payload(self, video: Any, purpose: str) -> dict[str, Any]:
+        from torchcodec.encoders import VideoEncoder
+
+        metadata = video.metadata
+        frame_rate = metadata.average_fps
+        if not frame_rate:
+            raise ValueError("Video has no frame rate metadata; cannot re-encode.")
+
+        max_frames = int(frame_rate * NOVA_MAX_VIDEO_SECONDS)
+        num_frames = metadata.num_frames or max_frames
+        keep = min(num_frames, max_frames)
+
+        # num_frames from the container header can overshoot what actually
+        # decodes, so drop trailing frames until the read succeeds.
+        frames = None
+        while keep > 0:
+            try:
+                frames = video.get_frames_at(list(range(keep))).data
+                break
+            except RuntimeError as error:
+                if "no more frames" not in str(error):
+                    raise
+                keep -= 1
+        if frames is None or keep == 0:
+            raise ValueError("Video has no decodable frames.")
+
+        # h264 requires even dimensions.
+        height, width = frames.shape[-2:]
+        if height % 2 or width % 2:
+            frames = frames[..., : height - (height % 2), : width - (width % 2)]
+
+        encoded = VideoEncoder(frames, frame_rate=frame_rate).to_tensor(format="mp4")
+        raw = encoded.numpy().tobytes()
+
+        params = self._params(purpose)
+        params["video"] = {
+            "embeddingMode": NOVA_VIDEO_MODE,
+            "format": "mp4",
+            "source": {"bytes": base64.b64encode(raw).decode()},
+        }
+        return {"taskType": "SINGLE_EMBEDDING", "singleEmbeddingParams": params}
+
     def _invoke(self, payload: dict[str, Any]) -> list[float]:
         response = self._client.invoke_model(
             modelId=self._model_id, body=json.dumps(payload)
@@ -432,9 +480,12 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
             for batch in inputs:
                 images = batch.get("image")
                 audios = batch.get("audio")
+                videos = batch.get("video")
                 texts = batch.get("text")
 
-                present = [k for k in ("image", "audio", "text") if batch.get(k)]
+                present = [
+                    k for k in ("image", "audio", "video", "text") if batch.get(k)
+                ]
                 if len(present) > 1:
                     raise NotImplementedError(
                         "Interleaved multi-modality input is not yet supported "
@@ -444,11 +495,13 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
                     payloads = [self._image_payload(im, purpose) for im in images]
                 elif audios:
                     payloads = [self._audio_payload(a, purpose) for a in audios]
+                elif videos:
+                    payloads = [self._video_payload(v, purpose) for v in videos]
                 elif texts:
                     payloads = [self._text_payload(t, purpose) for t in texts]
                 else:
                     raise ValueError(
-                        "Batch has no 'text', 'image' or 'audio' key. "
+                        "Batch has no 'text', 'image', 'audio' or 'video' key. "
                         f"Got: {list(batch.keys())}"
                     )
 
@@ -485,6 +538,6 @@ amazon_nova_2_multimodal_embeddings = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=False,
-    modalities=["text", "image", "audio"],
+    modalities=["text", "image", "audio", "video"],
     extra_requirements_groups=["boto3"],
 )
