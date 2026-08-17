@@ -5,6 +5,7 @@ import io
 import json
 import logging
 import re
+import wave
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any
 
@@ -321,10 +322,10 @@ _NOVA_CLASSIFICATION_TASKS = {
 class NovaMultimodalEmbeddingsModel(AbsEncoder):
     """Amazon Nova Multimodal Embeddings via the Bedrock synchronous InvokeModel API.
 
-    Text and image only. Nova also supports audio and video, but mteb decodes
-    both before they reach the encoder (audio as a float array, video as a
-    torchcodec frame tensor), so sending them would require re-encoding decoded
-    media back into a container.
+    Text, image and audio. Video is not yet supported: mteb decodes video to a
+    frame tensor before it reaches the encoder, with no frame rate and no audio
+    track, so re-encoding it to a container would mean choosing an arbitrary fps
+    and dropping the audio stream.
     """
 
     def __init__(
@@ -384,6 +385,27 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
         }
         return {"taskType": "SINGLE_EMBEDDING", "singleEmbeddingParams": params}
 
+    def _audio_payload(self, audio: dict[str, Any], purpose: str) -> dict[str, Any]:
+        array = np.asarray(audio["array"], dtype=np.float32)
+        sampling_rate = int(audio["sampling_rate"])
+        if array.ndim > 1:
+            array = array.mean(axis=0)
+        pcm = (np.clip(array, -1.0, 1.0) * 32767).astype("<i2")
+
+        buffer = io.BytesIO()
+        with wave.open(buffer, "wb") as wav:
+            wav.setnchannels(1)
+            wav.setsampwidth(2)
+            wav.setframerate(sampling_rate)
+            wav.writeframes(pcm.tobytes())
+
+        params = self._params(purpose)
+        params["audio"] = {
+            "format": "wav",
+            "source": {"bytes": base64.b64encode(buffer.getvalue()).decode()},
+        }
+        return {"taskType": "SINGLE_EMBEDDING", "singleEmbeddingParams": params}
+
     def _invoke(self, payload: dict[str, Any]) -> list[float]:
         response = self._client.invoke_model(
             modelId=self._model_id, body=json.dumps(payload)
@@ -398,10 +420,10 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
+        show_progress_bar: bool = False,
         **kwargs: Any,
     ) -> Array:
         purpose = self._purpose(task_metadata, prompt_type)
-        show_progress_bar = kwargs.pop("show_progress_bar", False)
 
         embeddings: list[list[float]] = []
         pbar = tqdm(disable=not show_progress_bar, leave=False, desc="Nova MME")
@@ -409,20 +431,25 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
         with ThreadPoolExecutor(max_workers=self._max_workers) as pool:
             for batch in inputs:
                 images = batch.get("image")
+                audios = batch.get("audio")
                 texts = batch.get("text")
 
-                if images and texts:
+                present = [k for k in ("image", "audio", "text") if batch.get(k)]
+                if len(present) > 1:
                     raise NotImplementedError(
-                        "Interleaved text+image input is not yet supported for "
-                        "Nova Multimodal Embeddings."
+                        "Interleaved multi-modality input is not yet supported "
+                        f"for Nova Multimodal Embeddings. Got: {present}"
                     )
                 if images:
                     payloads = [self._image_payload(im, purpose) for im in images]
+                elif audios:
+                    payloads = [self._audio_payload(a, purpose) for a in audios]
                 elif texts:
                     payloads = [self._text_payload(t, purpose) for t in texts]
                 else:
                     raise ValueError(
-                        f"Batch has no 'text' or 'image' key. Got: {list(batch.keys())}"
+                        "Batch has no 'text', 'image' or 'audio' key. "
+                        f"Got: {list(batch.keys())}"
                     )
 
                 embeddings.extend(pool.map(self._invoke, payloads))
@@ -458,6 +485,6 @@ amazon_nova_2_multimodal_embeddings = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=False,
-    modalities=["text", "image"],
+    modalities=["text", "image", "audio"],
     extra_requirements_groups=["boto3"],
 )
