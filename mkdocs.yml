@@ -85,6 +85,7 @@ nav:
         - get_started/advanced_usage/bm25.md
         - Cache embeddings: get_started/advanced_usage/cache_embeddings.md
         - Hybrid Model: get_started/advanced_usage/hybrid_model.md
+        - Rank stability: get_started/advanced_usage/rank_stability.md
         - Retrieval backend: get_started/advanced_usage/retrieval_backend.md
         - Two stage reranking: get_started/advanced_usage/two_stage_reranking.md
         - vLLM: get_started/advanced_usage/vllm_wrapper.md
