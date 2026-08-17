@@ -310,6 +310,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SentimentDKSF",
         "SinhalaNewsClassification",
         "SlovakMovieReviewSentimentClassification",
+        "SlovakPharmacyDrMaxReranking",  # real e-commerce search-query log; 2/4676 queries are 1-char noise
         "SpanishNewsClusteringP2P",
         "SpeechCommandsZeroshotv0.01",
         "SpeechCommandsZeroshotv0.02",
@@ -844,6 +845,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "ESC50PairClassification",  # pairs constructed combinatorially from a small pool of audio clips
         "FalseFriendsGermanEnglish",
         "LinceMTBitextMining",
+        "OpusSlovakEnglishBitextMining",  # OPUS-100's subtitle/legal-document mix naturally repeats short common phrases
         "ParsinluEntail",
         "Query2Query",
         "RUParaPhraserSTS",
