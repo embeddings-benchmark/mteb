@@ -217,7 +217,7 @@ videomae_base = ModelMeta(
     citation=_VIDEOMAE_CITATION,
     contacts=None,
     output_dtypes=None,
-    extra_requirements_groups=None,
+    extra_requirements_groups=["transformers-v5"],
 )
 
 videomae_large = ModelMeta(
@@ -247,7 +247,7 @@ videomae_large = ModelMeta(
     citation=_VIDEOMAE_CITATION,
     contacts=None,
     output_dtypes=None,
-    extra_requirements_groups=None,
+    extra_requirements_groups=["transformers-v5"],
 )
 
 videomae_base_finetuned_kinetics = ModelMeta(
@@ -277,5 +277,5 @@ videomae_base_finetuned_kinetics = ModelMeta(
     citation=_VIDEOMAE_CITATION,
     contacts=None,
     output_dtypes=None,
-    extra_requirements_groups=None,
+    extra_requirements_groups=["transformers-v5"],
 )
