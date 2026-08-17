@@ -29,6 +29,22 @@ def test_mrr_tiebreak_matches_pytrec_eval():
     assert got == expected == 1 / 3
 
 
+def test_p_mrr_tiebreak_independent_of_insertion_order():
+    # regression for the same #5092 tie-break bug in get_rank_from_dict: p-MRR ranks a
+    # doc with a score-only stable sort, so on tied scores its rank followed dict
+    # insertion order. Here both runs carry identical scores, so p-MRR must be 0 — but
+    # the reversed insertion order moves the changed doc from rank 1 to rank 3 without
+    # the fix, producing a spurious non-zero change.
+    changed_qrels = {"a": ["0"]}
+    tied = {"0": 0.5, "1": 0.5, "2": 0.5}
+
+    original_run = {"a-og": tied}
+    new_run = {"a-changed": dict(reversed(tied.items()))}
+
+    score = calculate_pmrr(original_run, new_run, changed_qrels)
+    assert score == 0.0
+
+
 def test_p_mrr():
     changed_qrels = {
         "a": ["0"],
