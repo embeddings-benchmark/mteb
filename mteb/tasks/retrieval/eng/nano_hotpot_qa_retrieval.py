@@ -10,8 +10,8 @@ class NanoHotpotQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoHotpotQARetrieval",
         description="NanoHotpotQARetrieval is a smaller subset of the "
-        + "HotpotQA dataset, which is a question answering dataset featuring natural, multi-hop questions, with strong"
-        + " supervision for supporting facts to enable more explainable question answering systems.",
+        "HotpotQA dataset, which is a question answering dataset featuring natural, multi-hop questions, with strong"
+        " supervision for supporting facts to enable more explainable question answering systems.",
         reference="https://hotpotqa.github.io/",
         dataset={
             "path": "zeta-alpha-ai/NanoHotpotQA",

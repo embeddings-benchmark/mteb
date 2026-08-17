@@ -48,7 +48,7 @@ class DummyTask(AbsTask):
     def _evaluate_subset(self, **kwargs):
         pass
 
-    def _calculate_descriptive_statistics_from_split(  # noqa: PLR6301
+    def _calculate_descriptive_statistics_from_split(
         self,
         split: str,
         *,

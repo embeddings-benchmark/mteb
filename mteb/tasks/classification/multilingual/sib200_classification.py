@@ -321,7 +321,7 @@ class SIB200ClassificationV2(AbsTaskClassification):
                 )
                 lab_col = next(c for c in ("label", "labels", "category") if c in cols)
 
-                def to_mteb(example):
+                def to_mteb(example, lab_col=lab_col, text_col=text_col):
                     raw_label = example[lab_col]
                     if isinstance(raw_label, str):
                         label = _TOPIC2ID[raw_label]

@@ -10,8 +10,8 @@ class NanoQuoraRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoQuoraRetrieval",
         description="NanoQuoraRetrieval is a smaller subset of the "
-        + "QuoraRetrieval dataset, which is based on questions that are marked as duplicates on the Quora platform. Given a"
-        + " question, find other (duplicate) questions.",
+        "QuoraRetrieval dataset, which is based on questions that are marked as duplicates on the Quora platform. Given a"
+        " question, find other (duplicate) questions.",
         reference="https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs",
         dataset={
             "path": "zeta-alpha-ai/NanoQuoraRetrieval",

@@ -114,7 +114,8 @@ class FaissSearchIndex:
                 query_idx_to_id=query_idx_to_id,
             )
         else:
-            sim_array, id_array = self.index.search(embeddings_f32, top_k)
+            capped_top_k = min(top_k, self.index.ntotal)
+            sim_array, id_array = self.index.search(embeddings_f32, capped_top_k)
             similarities = sim_array.tolist()
             ids = id_array.tolist()
 
