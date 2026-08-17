@@ -193,10 +193,17 @@ def _audio_to_wav_bytes(audio_item: dict) -> bytes:
 
     array = audio_item["array"]
     sampling_rate = audio_item["sampling_rate"]
-    # Preserve the original sampling rate and reject audio beyond Gemini's limit.
+
+    # Preserve the original sampling rate and truncate to Gemini's duration limit.
     num_samples = array.shape[-1]
-    if num_samples > sampling_rate * GEMINI_MAX_AUDIO_SECONDS:
-        raise ValueError("Gemini Embedding 2 supports audio inputs up to 180 seconds")
+    max_samples = sampling_rate * GEMINI_MAX_AUDIO_SECONDS
+    if num_samples > max_samples:
+        logger.warning(
+            "Truncating Gemini Embedding 2 audio input from %.2f to %d seconds.",
+            num_samples / sampling_rate,
+            GEMINI_MAX_AUDIO_SECONDS,
+        )
+        array = array[..., :max_samples]
 
     # Convert float audio to 16-bit PCM
     pcm = (array * 32767).astype(np.int16)

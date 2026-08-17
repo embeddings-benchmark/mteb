@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import io
 import sys
+import wave
 from types import ModuleType
 
 import numpy as np
@@ -34,14 +36,20 @@ def test_gemini_audio_accepts_exactly_180_seconds() -> None:
     assert _audio_to_wav_bytes(audio)
 
 
-def test_gemini_audio_rejects_more_than_180_seconds() -> None:
+def test_gemini_audio_truncates_more_than_180_seconds(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
     audio = {
         "array": np.zeros(181, dtype=np.float32),
         "sampling_rate": 1,
     }
 
-    with pytest.raises(ValueError, match="up to 180 seconds"):
-        _audio_to_wav_bytes(audio)
+    wav_bytes = _audio_to_wav_bytes(audio)
+
+    with wave.open(io.BytesIO(wav_bytes), "rb") as wav_file:
+        assert wav_file.getframerate() == 1
+        assert wav_file.getnframes() == 180
+    assert "Truncating Gemini Embedding 2 audio input" in caplog.text
 
 
 @pytest.fixture
