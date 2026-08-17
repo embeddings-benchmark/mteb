@@ -1,15 +1,15 @@
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
-_DATASET_PATH = "artist/IntPhys2VideoZeroShot"
-_DATASET_REVISION = "9ceb62a8a1fdf1b9f0c276430f72e3eb30426bbe"
-_LABEL_NAMES = [
-    "object behavior is inconsistent with Earth's physical laws",
-    "object behavior is consistent with Earth's physical laws",
-]
-
 
 class IntPhys2VideoZeroShot(AbsTaskZeroShotClassification):
+    _DATASET_PATH = "artist/IntPhys2VideoZeroShot"
+    _DATASET_REVISION = "9ceb62a8a1fdf1b9f0c276430f72e3eb30426bbe"
+    _LABEL_NAMES = (
+        "object behavior is inconsistent with Earth's physical laws",
+        "object behavior is consistent with Earth's physical laws",
+    )
+
     metadata = TaskMetadata(
         name="IntPhys2VideoZeroShot",
         description=(
@@ -49,5 +49,5 @@ class IntPhys2VideoZeroShot(AbsTaskZeroShotClassification):
     input_column_name = "video"
     label_column_name = "label"
 
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
-        return [f"a video where {label}" for label in _LABEL_NAMES]
+    def get_candidate_labels(self) -> list[str]:
+        return [f"a video where {label}" for label in self._LABEL_NAMES]
