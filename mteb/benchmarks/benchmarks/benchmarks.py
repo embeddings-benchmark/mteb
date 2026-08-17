@@ -3571,3 +3571,28 @@ BRIGHT_PRO = Benchmark(
 }
 """,
 )
+
+MIXBENCH = Benchmark(
+    name="MixBench",
+    tasks=get_tasks(
+        tasks=[
+            "MixBenchMSCOCO",
+            "MixBenchGoogleWIT",
+            "MixBenchVisualNews",
+            "MixBenchOVEN",
+        ],
+    ),
+    description="Mixed-modality retrieval over heterogeneous corpora containing text-only, image-only, and image-and-text documents.",
+    reference="https://arxiv.org/abs/2507.19054",
+    citation=r"""
+@article{li2025closing,
+  author = {Li, Binxu and Zhang, Yuhui and Wang, Xiaohan and Liang, Weixin and Schmidt, Ludwig and Yeung-Levy, Serena},
+  journal = {arXiv preprint arXiv:2507.19054},
+  title = {Closing the Modality Gap for Mixed Modality Search},
+  url = {https://arxiv.org/abs/2507.19054},
+  year = {2025},
+}
+""",
+    contacts=["yuhui-zh15"],
+    aggregations=(BenchmarkAggregation.MEAN_TASK,),
+)

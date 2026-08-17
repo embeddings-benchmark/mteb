@@ -148,26 +148,26 @@ def _batch_to_embeddings(
 
         if "text" in batch:
             text_embeddings = [
-                _string_to_vector(txt, embedding_dim) for txt in batch["text"]
+                _string_to_vector(text, embedding_dim) if text is not None else None
+                for text in batch["text"]
             ]
         if "image" in batch:
             image_embeddings = [
-                _image_to_vector(img, embedding_dim) for img in batch["image"]
+                _image_to_vector(image, embedding_dim) if image is not None else None
+                for image in batch["image"]
             ]
         if "audio" in batch:
             audio_embeddings = [
-                _audio_to_vector(audio, embedding_dim) for audio in batch["audio"]
+                _audio_to_vector(audio, embedding_dim) if audio is not None else None
+                for audio in batch["audio"]
             ]
         if "video" in batch:
             video_embeddings = [
-                _video_to_vector(
-                    video,
-                    embedding_dim,
-                )
+                _video_to_vector(video, embedding_dim) if video is not None else None
                 for video in batch["video"]
             ]
 
-        # Combine embeddings
+        # Combine embeddings, ignoring modalities that are absent for a sample.
         max_len = max(
             [
                 len(text_embeddings),
@@ -185,7 +185,7 @@ def _batch_to_embeddings(
                 audio_embeddings,
                 video_embeddings,
             ]:
-                if i < len(embeddings_list):
+                if i < len(embeddings_list) and embeddings_list[i] is not None:
                     combined_embedding += embeddings_list[i]
                     count += 1
             if count > 0:

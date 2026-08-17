@@ -96,10 +96,23 @@ def _batch_to_modality_dicts(
     supported_modalities: list[Modalities],
 ) -> list[dict[str, Any]]:
     modality_batch = {k: v for k, v in batch.items() if k in supported_modalities}
+    if not modality_batch:
+        raise ValueError(
+            "Batch contains none of the model's supported modalities: "
+            f"{supported_modalities}"
+        )
     LogOnce(logger).info(f"Model will encode modalities {list(modality_batch.keys())}")
-    return [
-        dict(zip(modality_batch, sample)) for sample in zip(*modality_batch.values())
-    ]
+    samples: list[dict[str, Any]] = []
+    for values in zip(*modality_batch.values()):
+        sample: dict[str, Any] = {
+            modality: value
+            for modality, value in zip(modality_batch, values)
+            if value is not None
+        }
+        if not sample:
+            raise ValueError("Found an input without any populated modality")
+        samples.append(sample)
+    return samples
 
 
 class SentenceTransformerEncoderWrapper(AbsEncoder):

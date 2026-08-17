@@ -328,14 +328,14 @@ class InstructSentenceTransformerModel(AbsEncoder):
             )
 
         if is_multimodal:
-            _modality_keys = {"text", "image", "audio", "video"}
+            from .sentence_transformer_wrapper import _batch_to_modality_dicts
+
             all_embeddings = []
             for batch in tqdm(inputs, desc="Building multimodal embeddings"):
-                modality_batch = {k: v for k, v in batch.items() if k in _modality_keys}
-                batched_input = [
-                    dict(zip(modality_batch, sample))
-                    for sample in zip(*modality_batch.values())
-                ]
+                batched_input = _batch_to_modality_dicts(
+                    batch,
+                    ["text", "image", "audio", "video"],
+                )
 
                 embeddings = self.model.encode(
                     batched_input, prompt=instruction, **kwargs

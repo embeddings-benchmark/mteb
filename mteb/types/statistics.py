@@ -496,6 +496,8 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
         num_samples: Total number of queries and documents
         num_queries: Number of queries
         num_documents: Number of documents
+        num_documents_with_*: Number of documents populated for each modality
+        num_queries_with_*: Number of queries populated for each modality
         number_of_characters: Total number of characters in queries and documents
 
         documents_text_statistics: Statistics for documents
@@ -513,6 +515,14 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     num_samples: int
     num_queries: int
     num_documents: int
+    num_documents_with_text: NotRequired[int]
+    num_documents_with_image: NotRequired[int]
+    num_documents_with_audio: NotRequired[int]
+    num_documents_with_video: NotRequired[int]
+    num_queries_with_text: NotRequired[int]
+    num_queries_with_image: NotRequired[int]
+    num_queries_with_audio: NotRequired[int]
+    num_queries_with_video: NotRequired[int]
     number_of_characters: int
 
     documents_text_statistics: TextStatistics | None

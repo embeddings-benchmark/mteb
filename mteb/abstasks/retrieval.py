@@ -535,13 +535,21 @@ class AbsTaskRetrieval(AbsTask):
         # Build corpus col_inputs — text needs special mapping from the corpus dict format.
         corpus_col_inputs: dict[Modalities, list[Any]] = {}
         if "text" in corpus_modalities:
-            corpus_col_inputs["text"] = corpus.map(_corpus_to_dict)["text"]
+            corpus_col_inputs["text"] = [
+                text for text in corpus.map(_corpus_to_dict)["text"] if text is not None
+            ]
         if "image" in corpus_modalities:
-            corpus_col_inputs["image"] = corpus["image"]
+            corpus_col_inputs["image"] = [
+                image for image in corpus["image"] if image is not None
+            ]
         if "audio" in corpus_modalities:
-            corpus_col_inputs["audio"] = corpus["audio"]
+            corpus_col_inputs["audio"] = [
+                audio for audio in corpus["audio"] if audio is not None
+            ]
         if "video" in corpus_modalities:
-            corpus_col_inputs["video"] = corpus["video"]
+            corpus_col_inputs["video"] = [
+                video for video in corpus["video"] if video is not None
+            ]
 
         # Build queries col_inputs — text may need instruction/conversation transformations.
         queries_col_inputs: dict[Modalities, list[Any]] = {}
@@ -551,13 +559,21 @@ class AbsTaskRetrieval(AbsTask):
                 queries_ = _combine_queries_with_instruction_text(queries_)
             if isinstance(queries_["text"][0], dict | list):
                 queries_ = queries_.map(_convert_conv_history_to_query)
-            queries_col_inputs["text"] = queries_["text"]
+            queries_col_inputs["text"] = [
+                text for text in queries_["text"] if text is not None
+            ]
         if "image" in queries_modalities:
-            queries_col_inputs["image"] = queries["image"]
+            queries_col_inputs["image"] = [
+                image for image in queries["image"] if image is not None
+            ]
         if "audio" in queries_modalities:
-            queries_col_inputs["audio"] = queries["audio"]
+            queries_col_inputs["audio"] = [
+                audio for audio in queries["audio"] if audio is not None
+            ]
         if "video" in queries_modalities:
-            queries_col_inputs["video"] = queries["video"]
+            queries_col_inputs["video"] = [
+                video for video in queries["video"] if video is not None
+            ]
 
         corpus_stats = calculate_single_input_modality_statistics(
             corpus_col_inputs, max_workers=num_proc
@@ -582,7 +598,7 @@ class AbsTaskRetrieval(AbsTask):
             else None
         )
 
-        return RetrievalDescriptiveStatistics(
+        statistics = RetrievalDescriptiveStatistics(
             num_samples=num_documents + num_queries,
             num_queries=num_queries,
             num_documents=num_documents,
@@ -598,6 +614,35 @@ class AbsTaskRetrieval(AbsTask):
             relevant_docs_statistics=relevant_docs_statistics,
             top_ranked_statistics=top_ranked_statistics,
         )
+        has_sparse_modalities = any(
+            len(values) != num_documents for values in corpus_col_inputs.values()
+        ) or any(len(values) != num_queries for values in queries_col_inputs.values())
+        if has_sparse_modalities:
+            statistics["num_documents_with_text"] = len(
+                corpus_col_inputs.get("text", [])
+            )
+            statistics["num_documents_with_image"] = len(
+                corpus_col_inputs.get("image", [])
+            )
+            statistics["num_documents_with_audio"] = len(
+                corpus_col_inputs.get("audio", [])
+            )
+            statistics["num_documents_with_video"] = len(
+                corpus_col_inputs.get("video", [])
+            )
+            statistics["num_queries_with_text"] = len(
+                queries_col_inputs.get("text", [])
+            )
+            statistics["num_queries_with_image"] = len(
+                queries_col_inputs.get("image", [])
+            )
+            statistics["num_queries_with_audio"] = len(
+                queries_col_inputs.get("audio", [])
+            )
+            statistics["num_queries_with_video"] = len(
+                queries_col_inputs.get("video", [])
+            )
+        return statistics
 
     def _push_dataset_to_hub(
         self,
