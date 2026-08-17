@@ -5,8 +5,6 @@ Memoised because mteb's registries are static after import.
 
 from __future__ import annotations
 
-import json
-import logging
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any, TypeVar
 
@@ -21,9 +19,6 @@ from mteb.api.settings import get_settings
 from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.languages import language_label
 from mteb.models.model_implementations import MODEL_REGISTRY
-from mteb.models.model_meta import ModelMeta
-
-logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
@@ -32,6 +27,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.abstask import AbsTask
     from mteb.benchmarks._leaderboard_menu import MenuEntry
     from mteb.benchmarks.benchmark import Benchmark
+    from mteb.models.model_meta import ModelMeta
 
 
 _T = TypeVar("_T")
@@ -88,36 +84,32 @@ def model_meta_to_schema(
     return cached.model_copy(update={"zero_shot_pct": int(zero_shot_pct)})
 
 
+_RUN_OVERRIDE_FIELDS = ("model_type", "embed_dim", "output_dtypes")
+
+
 def run_model_meta_to_schema(
+    base_meta: ModelMeta,
     run_meta: dict[str, Any],
     *,
     zero_shot_pct: int | None = None,
-) -> ModelMetaSchema | None:
-    """`ModelMetaSchema` built straight from one *run's own* `model_meta.json`.
+) -> ModelMetaSchema:
+    """`ModelMetaSchema` for `base_meta`, patched with one *run's own* metadata.
 
-    Unlike `model_meta_to_schema`, this isn't cached by model name — it's
-    meant for experiment/ablation rows, whose metadata can genuinely differ
-    from the base model's static MODEL_REGISTRY entry in more than one field
-    (e.g. jinaai/jina-embeddings-v4's `vector_type=multi_vector` experiment
-    runs `late-interaction`, not the base model's `dense`; other ablations
-    could just as easily change `embed_dim`, `languages`, etc.). Rebuilding
-    the whole schema from the run's dict — the same way a base row's schema
-    gets built from its `ModelMeta` — picks up any such difference generically
-    instead of special-casing one field.
-
-    `run_meta` is the dict produced by `ModelMeta.to_dict()` (see
-    `benchmark_results.py::_build_pre_agg_df`'s `model_meta` column), where
-    `loader` is serialized as its registered name rather than the callable
-    itself — round-trip through `model_validate_json_resolved` to resolve it
-    back before handing off to the normal schema constructor. Returns `None`
-    (caller should fall back to the cached base-model schema) if the dict
-    doesn't validate — e.g. a submission predating some now-required field.
+    Meant for experiment/ablation rows: an ablation can change how the model
+    actually behaves along a few specific axes (e.g. jinaai/jina-embeddings-v4's
+    `vector_type=multi_vector` experiment runs `late-interaction`, not the
+    base model's `dense`), while everything else — name, params, languages,
+    openness, ... — stays whatever's on the static MODEL_REGISTRY entry.
+    `run_meta` (see `benchmark_results.py::_build_pre_agg_df`'s `model_meta`
+    column) only ever carries `model_type` / `embed_dim` / `output_dtypes`
+    for exactly this reason, so patching is a plain `model_copy` — no need to
+    re-validate a full `ModelMeta` (and resolve `loader` back from its
+    serialized name) just to read three fields.
     """
-    try:
-        meta = ModelMeta.model_validate_json_resolved(json.dumps(run_meta))
-    except Exception:
-        logger.debug("Failed to parse run-level ModelMeta for %s", run_meta.get("name"))
-        return None
+    overrides = {
+        k: run_meta[k] for k in _RUN_OVERRIDE_FIELDS if run_meta.get(k) is not None
+    }
+    meta = base_meta.model_copy(update=overrides) if overrides else base_meta
     return ModelMetaSchema.from_model_meta(meta, zero_shot_pct=zero_shot_pct)
 
 

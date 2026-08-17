@@ -485,7 +485,20 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 if mm is not None and mm.experiment_kwargs
                 else None
             )
-            meta_dict = mm.to_dict() if mm is not None and exp_kwargs else None
+            # Only the fields an ablation can plausibly change, not the whole
+            # `ModelMeta` — avoids `to_dict()`'s loader-name serialization
+            # (which the API side would otherwise have to resolve back) and
+            # keeps every row's dict the same fixed shape (no heterogeneous
+            # per-experiment key sets to reconcile downstream).
+            meta_dict = (
+                {
+                    "model_type": mm.model_type,
+                    "embed_dim": mm.embed_dim,
+                    "output_dtypes": mm.output_dtypes,
+                }
+                if mm is not None and exp_kwargs
+                else None
+            )
             for task_result in model_result.task_results:
                 tn = task_result.task_name
                 for split, scores_list in task_result.scores.items():

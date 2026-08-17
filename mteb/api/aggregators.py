@@ -250,12 +250,12 @@ async def build_benchmark_summary(  # noqa: PLR0914
     # dict that produced them. Empty when the parquet pre-dates the
     # experiments work.
     #
-    # Also carries each variant's own `model_meta.json` dict (the
-    # ``model_meta`` column) so its row can build a `ModelMetaSchema` from
-    # that run's *actual* metadata instead of the static MODEL_REGISTRY
-    # entry — an ablation can change more than the kwarg it's named after
-    # (e.g. jinaai/jina-embeddings-v4's `vector_type=multi_vector`
-    # experiment runs `late-interaction`, not the base model's `dense`).
+    # Also carries each variant's own `model_type`/`embed_dim`/`output_dtypes`
+    # (the ``model_meta`` column — see `_build_pre_agg_df`) so its row can
+    # patch those onto the static MODEL_REGISTRY entry: an ablation can
+    # change more than the kwarg it's named after (e.g.
+    # jinaai/jina-embeddings-v4's `vector_type=multi_vector` experiment runs
+    # `late-interaction`, not the base model's `dense`).
     variants_by_model: dict[tuple[str, str], dict[str, Any]] = {}
     variant_model_meta: dict[tuple[str, str], dict[str, Any]] = {}
     if "experiments" in long_df.columns:
@@ -350,10 +350,10 @@ def _build_summary_rows(
             else None
         )
         model_schema = (
-            run_model_meta_to_schema(run_meta, zero_shot_pct=zs) if run_meta else None
+            run_model_meta_to_schema(meta, run_meta, zero_shot_pct=zs)
+            if run_meta
+            else model_meta_to_schema(meta, zero_shot_pct=zs)
         )
-        if model_schema is None:
-            model_schema = model_meta_to_schema(meta, zero_shot_pct=zs)
 
         rank_raw = row.get(summary.rank_col)
         rank = int(rank_raw) if rank_raw is not None else idx + 1
