@@ -55,12 +55,12 @@ class FaissCache:
 
         start_id = len(self.hash_to_index)
         vectors_to_add = []
-        for i, (item, vectors) in enumerate(zip(items, vectors)):
+        for i, (item, vector) in enumerate(zip(items, vectors)):
             item_hash = _hash_item(item)
             if item_hash in self.hash_to_index:
                 continue
             self.hash_to_index[item_hash] = start_id + i
-            vectors_to_add.append(vectors)
+            vectors_to_add.append(vector)
         if len(vectors_to_add) > 0:
             vectors_array = np.vstack(vectors_to_add).astype(np.float32)
             self.index.add(vectors_array)

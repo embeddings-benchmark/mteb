@@ -159,7 +159,7 @@ def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
             by_title[norm].append((f"benchmark:{benchmark.name}", cid, title))
 
     duplicates = []
-    for norm_title, items in by_title.items():
+    for items in by_title.values():
         id_to_raw = {cid: raw for _, cid, raw in items}
         id_to_item = {cid: item for item, cid, raw in items}
         if len(id_to_raw) < 2:

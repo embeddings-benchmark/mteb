@@ -3,8 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-from datasets import Dataset
-
 from mteb._create_dataloaders import (
     _create_dataloader_from_texts,
     create_dataloader,
@@ -56,14 +54,6 @@ class ZeroShotClassificationEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> Array:
-        dataloader = create_dataloader(
-            self.dataset,
-            input_column=self.input_column_name,
-            task_metadata=self.task_metadata,
-            num_proc=num_proc,
-            **encode_kwargs,
-        )
-
         with self.timer(
             "Encoding labels",
             split=self.hf_split,

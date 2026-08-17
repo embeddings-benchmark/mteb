@@ -1,7 +1,4 @@
 import numpy as np
-import polars as pl
-import pytest
-from datasets import Dataset
 
 import mteb
 from mteb import ResultCache
@@ -13,30 +10,7 @@ from mteb.benchmarks._benchmark_metrics import (
     _compute_task_types,
 )
 from mteb.benchmarks.benchmark import Benchmark, BenchmarkAggregation
-
-
-def _datasets_supports_dictionary_type() -> bool:
-    """True if the installed ``datasets`` can convert Polars Categorical columns.
-
-    ``_to_results_df`` goes through ``Dataset.from_polars`` for categorical
-    columns (model_name, task_name, …); older ``datasets`` releases raise
-    ``NotImplementedError`` for ``pa.DictionaryType``. Probe once at import.
-    """
-    try:
-        Dataset.from_polars(pl.DataFrame({"x": ["a"]}, schema={"x": pl.Categorical}))
-    except NotImplementedError:
-        return False
-    return True
-
-
-_skip_if_datasets_too_old = pytest.mark.skipif(
-    not _datasets_supports_dictionary_type(),
-    reason=(
-        "installed `datasets` cannot convert Polars Categorical columns "
-        "(pa.DictionaryType -> Features.from_arrow_schema NotImplementedError); "
-        "skip the _to_results_df-based parity tests on lowest-pin CI"
-    ),
-)
+from tests.conftest import _skip_if_datasets_too_old
 
 MODELS_SCORES = {
     "Mean(Task)": {
@@ -200,6 +174,46 @@ def test_compute_mean_subset(mock_mteb_cache: ResultCache):
     assert checked > 0, "test never matched a model; fixture or registry change?"
 
 
+def test_benchmark_get_score_nulls_partial_split_and_subset_coverage(
+    mock_mteb_cache: ResultCache,
+):
+    """`Benchmark.get_score()` nulls Mean(Task)/Mean(TaskType)/Mean(Subset) etc.
+    for a model that skipped a split, or a subset within a split (issue #5101).
+    """
+    full = "mteb/baseline-random-encoder"
+    partial = "sentence-transformers/all-MiniLM-L6-v2"
+    tasks = mteb.get_tasks(
+        [
+            "PoemSentimentClassification.v2",  # partial model missing the "test" split
+            "CataloniaTweetClassification",  # partial model missing "catalan"/"test"
+            "Banking77Classification",  # fully covered by both models
+        ]
+    )
+    bench = Benchmark(
+        name="mock_partial_coverage",
+        tasks=tasks,
+        aggregations=(
+            BenchmarkAggregation.MEAN_TASK,
+            BenchmarkAggregation.MEAN_TASK_TYPE,
+            BenchmarkAggregation.TASK_TYPES,
+            BenchmarkAggregation.MEAN_SUBSET,
+        ),
+    )
+    scores = bench.get_score(mock_mteb_cache.load_results())
+
+    full_scores = scores[full]
+    assert full_scores["Mean(Task)"] is not None
+    assert full_scores["Mean(TaskType)"] is not None
+    assert full_scores["Classification"] is not None
+    assert full_scores["Mean(Subset)"] is not None
+
+    partial_scores = scores[partial]
+    assert partial_scores["Mean(Task)"] is None
+    assert partial_scores["Mean(TaskType)"] is None
+    assert partial_scores["Classification"] is None
+    assert partial_scores["Mean(Subset)"] is None
+
+
 def test_compute_mean_public_private(mock_mteb_cache: ResultCache):
     """_compute_mean_public_private returns Mean(Public) and Mean(Private) keys."""
     mock_model_name = "mteb/baseline-random-encoder"
@@ -318,6 +332,95 @@ def test_get_score_matches_summary_table_means(mock_mteb_cache: ResultCache):
             checked += 1
     assert checked > 0, (
         "Parity test never matched a model — fixture or registry change?"
+    )
+
+
+def _assert_score_parity(
+    model_name: str,
+    get_score_row: dict[str, float | None],
+    summary_row: dict,
+    parity_pairs: list[tuple[str, str]],
+    *,
+    expect_none: bool,
+) -> None:
+    """Assert `get_score_row` and `summary_row` agree on every (key, column) pair.
+
+    ``expect_none=True`` requires both sides to be `None`; `False` requires
+    both to be equal, non-null numbers. Either way, a mismatch (one side
+    null, the other not) fails loudly instead of silently passing.
+    """
+    for gs_key, summary_col in parity_pairs:
+        gs, sm = get_score_row.get(gs_key), summary_row.get(summary_col)
+        if expect_none:
+            assert gs is None, (
+                f"{model_name} get_score[{gs_key}] should be None, got {gs!r}"
+            )
+            assert sm is None, (
+                f"{model_name} summary[{summary_col}] should be None, got {sm!r}"
+            )
+            continue
+        assert gs is not None and sm is not None, (
+            f"{model_name} {gs_key}/{summary_col}: get_score={gs!r} vs summary={sm!r}"
+        )
+        assert np.isclose(gs, sm), (
+            f"{model_name} {gs_key}/{summary_col}: get_score={gs:.6f} vs summary={sm:.6f}"
+        )
+
+
+@_skip_if_datasets_too_old
+def test_get_score_matches_summary_table_on_partial_split_coverage(
+    mock_mteb_cache: ResultCache,
+):
+    """get_score() and the polars summary table null the same keys on partial coverage."""
+    full = "mteb/baseline-random-encoder"
+    partial = "sentence-transformers/all-MiniLM-L6-v2"
+    tasks = mteb.get_tasks(
+        [
+            "PoemSentimentClassification.v2",
+            "CataloniaTweetClassification",
+            "Banking77Classification",
+        ]
+    )
+    bench = Benchmark(
+        name="mock_partial_parity",
+        tasks=tasks,
+        aggregations=(
+            BenchmarkAggregation.MEAN_TASK,
+            BenchmarkAggregation.MEAN_TASK_TYPE,
+            BenchmarkAggregation.TASK_TYPES,
+            BenchmarkAggregation.MEAN_SUBSET,
+        ),
+    )
+    mock_results = mock_mteb_cache.load_results()
+
+    get_score_out = bench.get_score(mock_results)
+    pl_df = mock_results.select_tasks(bench.tasks)._to_results_df(bench.tasks)
+    summary_by_model = {
+        row["Model"]: row
+        for row in bench._create_summary_table(pl_df).df.iter_rows(named=True)
+    }
+    assert full in get_score_out and full in summary_by_model
+    assert partial in get_score_out and partial in summary_by_model
+
+    # All three tasks are Classification, so there's exactly one dynamic
+    # TASK_TYPES column/key to pair up alongside the fixed aggregation keys.
+    parity_pairs: list[tuple[str, str]] = [("Classification", "Classification")]
+    for agg in bench.aggregations:
+        parity_pairs.extend(zip(agg.get_score_keys, agg.summary_columns))
+
+    _assert_score_parity(
+        full,
+        get_score_out[full],
+        summary_by_model[full],
+        parity_pairs,
+        expect_none=False,
+    )
+    _assert_score_parity(
+        partial,
+        get_score_out[partial],
+        summary_by_model[partial],
+        parity_pairs,
+        expect_none=True,
     )
 
 

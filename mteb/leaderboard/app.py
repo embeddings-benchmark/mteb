@@ -45,6 +45,10 @@ from mteb.models.model_meta import MODEL_TYPES
 from mteb.results.benchmark_results import BenchmarkResults
 
 logger = logging.getLogger(__name__)
+
+# Shared default cache, constructed at import time exactly as the previous
+# `cache: ResultCache = ResultCache()` default argument was.
+_DEFAULT_CACHE = ResultCache()
 event_logger = EventLogger()
 
 
@@ -294,11 +298,7 @@ def _cache_on_benchmark_select(benchmark_name, all_benchmark_results):
 
 @cachetools.cached(
     cache={},
-    key=lambda benchmark_name,
-    type_select,
-    domain_select,
-    lang_select,
-    modality_select: (
+    key=lambda benchmark_name, type_select, domain_select, lang_select, modality_select: (
         hash(
             (
                 hash(benchmark_name),
@@ -420,7 +420,7 @@ def on_page_load(request: gr.Request):
 
 
 def get_leaderboard_app(  # noqa: PLR0914
-    cache: ResultCache = ResultCache(),
+    cache: ResultCache = _DEFAULT_CACHE,
     rebuild: bool = False,
     cache_repo_id: str = "mteb/results",
 ) -> gr.Blocks:
@@ -1095,15 +1095,7 @@ def get_leaderboard_app(  # noqa: PLR0914
 
         @cachetools.cached(
             cache={},
-            key=lambda scores,
-            tasks,
-            availability,
-            compatibility,
-            instructions,
-            max_model_size,
-            zero_shot,
-            model_type_select,
-            request=None: (
+            key=lambda scores, tasks, availability, compatibility, instructions, max_model_size, zero_shot, model_type_select, request=None: (
                 hash(
                     (
                         id(scores),

@@ -33,8 +33,13 @@ gte_qwen2_7b_instruct = ModelMeta(
     loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
-        model_kwargs={"dtype": torch.float16},
+        model_kwargs={"dtype": torch.bfloat16},
+        # The remote modeling_qwen.py calls DynamicCache.get_usable_length(),
+        # removed in transformers>=4.56; encoding never needs the KV cache,
+        # and use_cache=False skips that code path.
+        config_kwargs={"use_cache": False},
         add_eos_token=True,
+        trust_remote_code=True,
     ),
     name="Alibaba-NLP/gte-Qwen2-7B-instruct",
     model_type=["dense"],

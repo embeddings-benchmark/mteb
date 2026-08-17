@@ -6,14 +6,14 @@ from copy import deepcopy
 import pytest
 
 import mteb
-from mteb.types import PromptType
-from tests.mock_tasks import (
-    MockImageClusteringTask,
+from mteb.mocks.mock_tasks import (
     MockImageTextPairClassificationTask,
     MockMultiChoiceTask,
     MockPairClassificationTask,
     MockRetrievalTask,
 )
+from mteb.mocks.mock_tasks.clustering import MockImageClusteringTask
+from mteb.types import PromptType
 
 logging.basicConfig(level=logging.INFO)
 

@@ -139,7 +139,7 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
         texts = ds["text"]
         parsed = ds["parsed"]
         id = 0
-        for title, text, mt in zip(titles, texts, parsed):
+        for title, text, _mt in zip(titles, texts, parsed):
             # in code-rag-bench,
             # query=doc(code)
             # text=query+doc(code)

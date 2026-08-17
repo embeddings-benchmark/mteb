@@ -10,7 +10,7 @@ import subprocess
 import warnings
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
-from datetime import datetime
+from datetime import datetime, timezone
 from importlib.metadata import version
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
@@ -224,7 +224,7 @@ class ResultCache:
 
     @property
     def remote_repo_path(self) -> Path:
-        """Get the path to the remote repository clone.
+        """The path to the remote repository clone.
 
         Returns:
             The path to the remote repository clone.
@@ -253,7 +253,7 @@ class ResultCache:
 
     @property
     def remote_results_path(self) -> Path:
-        """Get the path to the remote results directory.
+        """The path to the remote results directory.
 
         Returns:
             The path to the remote results directory.
@@ -412,18 +412,21 @@ class ResultCache:
 
         run_settings_list: list[dict[str, Any]] = []
         for split, split_scores in task_result.scores.items():
-            for score_entry in split_scores:
-                hf_subset = score_entry.get("hf_subset", "default")
-                run_settings = {
-                    "task": task_result.task_name,
-                    "split": split,
-                    "subset": hf_subset,
-                    "version": version_dict,
-                    "encode_kwargs": json.loads(json.dumps(encode_kwargs, default=str))
-                    if encode_kwargs is not None
-                    else {},
-                }
-                run_settings_list.append(run_settings)
+            run_settings = {
+                "task": task_result.task_name,
+                "splits": [split],
+                "version": version_dict,
+                "encode_kwargs": json.loads(json.dumps(encode_kwargs, default=str))
+                if encode_kwargs is not None
+                else {},
+                "subsets": sorted(
+                    {
+                        score_entry.get("hf_subset", "default")
+                        for score_entry in split_scores
+                    }
+                ),
+            }
+            run_settings_list.append(run_settings)
 
         if run_settings_list:
             run_settings_path = result_path.parent / "run_settings.jsonl"
@@ -431,7 +434,7 @@ class ResultCache:
 
     @property
     def default_cache_path(self) -> Path:
-        """Get the local cache directory for MTEB results.
+        """The local cache directory for MTEB results.
 
         Returns:
             The path to the local cache directory.
@@ -484,7 +487,7 @@ class ResultCache:
             if remote_url != remote:
                 msg = (
                     f"remote repository '{remote}' does not match the one in {results_directory},  which is '{remote_url}'."
-                    + " Please remove the directory and try again."
+                    " Please remove the directory and try again."
                 )
                 raise ValueError(msg)
 
@@ -1081,7 +1084,7 @@ class ResultCache:
         try:
             with meta_file.open("r") as f:
                 meta_dict = f.read()
-            return ModelMeta.model_validate_json(meta_dict)
+            return ModelMeta.model_validate_json_resolved(meta_dict)
         except Exception as e:
             logger.warning(f"Failed to load ModelMeta from {meta_file}: {e}")
             return None
@@ -1228,7 +1231,7 @@ class ResultCache:
             >>> print(f"PR created: {submission['pr_url']}")
         """
         # Always create a new branch to keep the original branch clean
-        branch_name = f"mteb-results-{int(datetime.now().timestamp())}"
+        branch_name = f"mteb-results-{int(datetime.now(timezone.utc).timestamp())}"
         normalized_models = self._normalize_models(models)
 
         try:

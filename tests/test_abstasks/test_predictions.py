@@ -5,10 +5,9 @@ import pytest
 from sklearn.metrics import v_measure_score
 
 import mteb
-from tests.mock_tasks import (
+from mteb.mocks.mock_tasks import (
     MockBitextMiningTask,
     MockClassificationTask,
-    MockClusteringTask,
     MockImageTextPairClassificationTask,
     MockPairClassificationTask,
     MockRegressionTask,
@@ -16,6 +15,7 @@ from tests.mock_tasks import (
     MockSTSTask,
     MockTextZeroShotClassificationTask,
 )
+from mteb.mocks.mock_tasks.clustering import MockClusteringTask
 
 
 @pytest.mark.parametrize(
@@ -106,7 +106,7 @@ from tests.mock_tasks import (
         # TODO: #3441
         # Disabled due to being too flaky.
         # (
-        #     MockClusteringFastTask(seed=1),
+        #     LegacyMockClusteringFastTask(seed=1),
         #     {"Level 0": [[0, 0, 0, 0], [0, 0, 1, 0], [0, 1, 2, 1]]},
         # ),
         (

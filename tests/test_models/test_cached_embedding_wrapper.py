@@ -12,6 +12,10 @@ from torch.utils.data import DataLoader
 import mteb
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.mocks.mock_tasks import (
+    MockMultiChoiceTask,
+    MockRetrievalTask,
+)
 from mteb.models.cache_wrappers.cache_backend_protocol import CacheBackendProtocol
 from mteb.models.cache_wrappers.cache_backends.faiss_cache import FaissCache
 from mteb.models.cache_wrappers.cache_backends.numpy_cache import NumpyCache
@@ -19,7 +23,6 @@ from mteb.models.cache_wrappers.cache_wrapper import CachedEmbeddingWrapper
 from mteb.models.model_implementations.random_baseline import RandomEncoderBaseline
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import PromptType
-from tests.mock_tasks import MockMultiChoiceTask, MockRetrievalTask
 
 if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput
@@ -59,7 +62,7 @@ class DummyModel(RandomEncoderBaseline):
 
 class TestCachedEmbeddingWrapper:
     @pytest.fixture(scope="function")
-    def cache_dir(self, tmp_path):  # noqa: PLR6301
+    def cache_dir(self, tmp_path):
         cache_path = tmp_path / "test_cache"
         yield cache_path
         # Cleanup after test
@@ -73,7 +76,7 @@ class TestCachedEmbeddingWrapper:
             FaissCache,
         ],
     )
-    def test_caching_functionality(  # noqa: PLR0914, PLR6301
+    def test_caching_functionality(  # noqa: PLR0914
         self, cache_dir, cache_backend: type[CacheBackendProtocol]
     ):
         if cache_backend is FaissCache:

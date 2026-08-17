@@ -9,6 +9,8 @@ icon: lucide/upload
 
 The [`ResultCache`][mteb.cache.result_cache.ResultCache] class manages evaluation results locally and submits them to the [official results repository](https://github.com/embeddings-benchmark/results). Use it to cache results, avoid re-computation, and contribute results back to the community.
 
+If you want to request that a model be evaluated, rather than submitting results that you ran yourself, open an [Evaluation Request](https://github.com/embeddings-benchmark/mteb/issues/new?template=eval_request.yaml) issue.
+
 ## Loading Results
 
 For a full guide on loading and working with results — including filtering, dataframe conversion, and benchmark scoring — see [Loading Results](../get_started/usage/loading_results.md).
@@ -42,8 +44,7 @@ cache.submit_results(model_meta, create_pr=False)  # manual review before pushin
 
     ```python
     submission_info = cache.submit_results(
-        models=["sentence-transformers/all-MiniLM-L6-v2"],
-        create_pr=False
+        models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=False
     )
 
     # submit_results logs the manual submission instructions
@@ -66,8 +67,7 @@ cache.submit_results(model_meta, create_pr=False)  # manual review before pushin
 
     ```python
     submission_info = cache.submit_results(
-        models=["sentence-transformers/all-MiniLM-L6-v2"],
-        create_pr=True
+        models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=True
     )
 
     if submission_info.get("pr_url"):
@@ -82,7 +82,7 @@ Submit multiple models at once:
 models = [
     "sentence-transformers/all-MiniLM-L6-v2",
     "sentence-transformers/all-mpnet-base-v2",
-    "BAAI/bge-base-en-v1.5"
+    "BAAI/bge-base-en-v1.5",
 ]
 
 cache.submit_results(models=models, create_pr=False)

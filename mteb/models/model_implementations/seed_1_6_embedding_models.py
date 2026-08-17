@@ -19,6 +19,8 @@ from mteb.models.model_meta import ModelMeta
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from PIL import Image
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -156,7 +158,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         max_tokens: int,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
-        available_embed_dims: list[int | None] = [None],
+        available_embed_dims: Sequence[int | None] = (None,),
         **kwargs,
     ) -> None:
         """Wrapper for Seed embedding API."""
