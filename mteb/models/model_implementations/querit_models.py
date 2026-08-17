@@ -147,7 +147,9 @@ class QueritWrapper(RerankerWrapper):
                 )
                 pairs = [
                     self.format_instruction(instr, query, doc)
-                    for instr, query, doc in zip(batch_instructions, batch_q, batch_d)
+                    for instr, query, doc in zip(
+                        batch_instructions, batch_q, batch_d, strict=True
+                    )
                 ]
                 enc = self.process_inputs(pairs)
                 out = self.model(**enc)

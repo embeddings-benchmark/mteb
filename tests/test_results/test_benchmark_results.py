@@ -297,7 +297,7 @@ def test_generate_model_card_with_table_and_benchmarks(
 
     # Compare each data row
     for i, (output_row, golden_row) in enumerate(
-        zip(output_data_rows, golden_data_rows)
+        zip(output_data_rows, golden_data_rows, strict=True)
     ):
         assert output_row == golden_row, (
             f"Row {i} doesn't match.\nExpected: {golden_row}\nGot: {output_row}"

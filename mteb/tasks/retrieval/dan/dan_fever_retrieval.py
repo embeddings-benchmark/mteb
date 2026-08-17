@@ -78,7 +78,9 @@ Derczynski, Leon},
             labels = ds["label"]
             class_labels = ds.features["label"].names
 
-            for claim, evidence, label_id in zip(claims, evidences, labels):
+            for claim, evidence, label_id in zip(
+                claims, evidences, labels, strict=True
+            ):
                 claim_is_supported = class_labels[label_id] == "Supported"
 
                 sim = (

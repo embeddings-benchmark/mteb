@@ -986,7 +986,8 @@ def get_leaderboard_app(  # noqa: PLR0914
                 "desc",
             )
             sizes = {
-                n: _estimate_payload_size(o) for n, o in zip(output_names, outputs)
+                n: _estimate_payload_size(o)
+                for n, o in zip(output_names, outputs, strict=True)
             }
             total_size = sum(s for s in sizes.values() if s > 0)
             t9 = time.time()

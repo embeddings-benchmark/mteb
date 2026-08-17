@@ -74,7 +74,7 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
             answer = [a["text"] for a in ds["answers"]]
 
             n = 0
-            for q, cont, ans in zip(question, context, answer):
+            for q, cont, ans in zip(question, context, answer, strict=True):
                 self.queries[split][str(n)] = q
                 q_n = n
                 n += 1

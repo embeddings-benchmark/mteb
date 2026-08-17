@@ -76,7 +76,7 @@ def _load_data(
         )
         qrels = qrels.to_polars()
         relevant_docs = {
-            query_id[0]: dict(zip(group["corpus-id"], group["score"]))
+            query_id[0]: dict(zip(group["corpus-id"], group["score"], strict=True))
             for query_id, group in qrels.group_by("query-id", maintain_order=False)
         }
 
