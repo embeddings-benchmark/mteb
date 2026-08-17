@@ -16,8 +16,6 @@ class SplitDescriptiveStatistics(TypedDict):
     :class:`DescriptiveStatistics`.
     """
 
-    pass
-
 
 class DescriptiveStatistics(SplitDescriptiveStatistics):
     """Multilingual wrapper for per-task descriptive statistics.

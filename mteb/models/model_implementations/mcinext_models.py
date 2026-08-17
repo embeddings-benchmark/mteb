@@ -289,7 +289,7 @@ class HakimModelWrapper(AbsEncoder):
                     f"API request failed (attempt {attempt + 1}/{self.max_retries}): {e}"
                 )
                 if status_code and 400 <= status_code < 500 and status_code != 429:
-                    raise APIError(f"Client error: {e}", status_code)
+                    raise APIError(f"Client error: {e}", status_code) from e
                 time.sleep(self.retry_delay * (2**attempt))
 
         raise APIError(f"API request failed after {self.max_retries} attempts.")

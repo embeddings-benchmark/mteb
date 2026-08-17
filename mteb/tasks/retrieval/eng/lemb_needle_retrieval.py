@@ -60,7 +60,9 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
                 "queries"
             ]  # dict_keys(['qid', 'text'])
             query_list = query_list.filter(
-                lambda x: x["context_length"] == context_length
+                lambda x, context_length=context_length: (
+                    x["context_length"] == context_length
+                )
             )
             queries = {row["qid"]: row["text"] for row in query_list}
 
@@ -68,7 +70,9 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
                 "corpus"
             ]  # dict_keys(['doc_id', 'text'])
             corpus_list = corpus_list.filter(
-                lambda x: x["context_length"] == context_length
+                lambda x, context_length=context_length: (
+                    x["context_length"] == context_length
+                )
             )
             corpus = {row["doc_id"]: {"text": row["text"]} for row in corpus_list}
 
@@ -76,7 +80,9 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
                 "qrels"
             ]  # dict_keys(['qid', 'doc_id'])
             qrels_list = qrels_list.filter(
-                lambda x: x["context_length"] == context_length
+                lambda x, context_length=context_length: (
+                    x["context_length"] == context_length
+                )
             )
             qrels = {row["qid"]: {row["doc_id"]: 1} for row in qrels_list}
 

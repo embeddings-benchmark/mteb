@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.18.16"
+version = "2.19.3"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -91,7 +91,7 @@ api = [
 og = [
     "playwright>=1.49.0",
 ]
-video = ["torchcodec"]
+video = ["datasets>=4.0.0", "torchcodec"]
 github = ["PyGithub>=1.60"]
 
 # model specific optional dependencies:
@@ -108,6 +108,7 @@ model2vec = ["model2vec>=0.3.0"]
 pylate = ["pylate>=1.3.1"]
 msclap = ["msclap>=1.3.4", "soundfile>=0.13.1"]
 bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
+boto3 = ["boto3>=1.34.0"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
 blip2 = ["salesforce-lavis>=1.0.2"]
@@ -146,6 +147,7 @@ torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
 moca = ["transformers>=4.49.0,<4.53"]
 transformers-v4 = ["transformers<5"]
+transformers-v5 = ["transformers>=5"]
 cosmos-embed1 = ["transformers<5", "einops>=0.8.0", "torchvision>=0.16.0"]
 siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
 tipsv2 = ["sentencepiece>=0.2.0", "protobuf>=3.0.0"]
@@ -262,6 +264,7 @@ select = [
     "F",  # pyflakes rules,
     "I",  # sorting for imports
     "E",  # formatting for docs
+    "W",  # pycodestyle warnings
     "D",  # formatting for docs
     "UP", # upgrade to latest syntax if possible
     "FA", # Future annotations
@@ -301,6 +304,18 @@ select = [
     "PL",      # pylint
     "S",       # flake8-bandit
     "FAST",       # fastapi
+    "ICN",     # import conventions, e.g. `import numpy as np`
+    "PIE",     # misc. lints, e.g. unnecessary `pass`
+    "PD",      # pandas-vet
+    "DTZ",     # require timezone-aware datetimes
+    "SLOT",    # __slots__ on str/tuple/namedtuple subclasses
+    "RSE",     # no unnecessary parens on raised exceptions
+    "YTT",     # correct sys.version checks
+    "EXE",     # shebang/executable-bit consistency
+    "INT",     # gettext f-string misuse
+    "ASYNC",   # blocking calls in async functions
+    "ISC",     # implicit string concatenation
+    "B",       # flake8-bugbear
 ]
 
 ignore = [
@@ -322,6 +337,10 @@ ignore = [
     "PLR0912",  # too many branches
     "PLR0915",  # too many statements
     "PLW0717",  # too-many-statements-in-try-clause
+    "ISC001",   # single-line implicit concat; conflicts with `ruff format`
+    # TODO: enable in a follow-up PR; each needs a per-site `strict=` / `stacklevel=` decision
+    "B905",     # zip-without-explicit-strict
+    "B028",     # no-explicit-stacklevel
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
@@ -344,6 +363,7 @@ preview = true
     "S602",  # allow shell=True in tests
     "S603",  # allow subprocess calls in tests
     "PLC2701",  # Private name import
+    "PLR6301",  # Method could be a function - pytest test methods are instance methods
 ]
 "mteb/mocks/*" = [
     "RUF012",
@@ -375,9 +395,6 @@ preview = true
     "TC002",
 ]
 
-
-[tool.ruff.lint.flake8-implicit-str-concat]
-allow-multiline = false
 
 [tool.ruff.lint.pep8-naming]
 ignore-names = [
@@ -477,6 +494,7 @@ conflicts = [
         { extra = "moca" }, # needs transformers with _update_causal_mask
         { extra = "transformers-v4" },
         { extra = "internvideo2" }, # conflicting versions of transformers
+        { extra = "transformers-v5" },
         { extra = "cosmos-embed1" }, # remote code needs transformers<5
         { extra = "qwen-vl" },
         { extra = "ps3" }, # ps3-torch pins transformers<=4.49.0
@@ -563,6 +581,8 @@ extend-ignore-words-re = [
     "thi",
     # ISO 15924 script codes
     "Beng",  # Bengali script
+    # dataset names
+    "Matix",  # Docmatix (HF dataset)
 
 ]
 extend-ignore-re = [

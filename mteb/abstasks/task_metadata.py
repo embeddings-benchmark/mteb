@@ -738,7 +738,7 @@ class TaskMetadata(BaseModel):
         descriptive_stats = ""
         if self.descriptive_stats is not None:
             descriptive_stats_ = self.descriptive_stats
-            for split, split_stat in descriptive_stats_.items():
+            for split_stat in descriptive_stats_.values():
                 if len(split_stat.get("hf_subset_descriptive_stats", {})) > 10:
                     split_stat.pop("hf_subset_descriptive_stats", {})
             descriptive_stats = json.dumps(descriptive_stats_, indent=4)

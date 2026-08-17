@@ -113,7 +113,7 @@ class AbsTaskAggregate(AbsTask):
         if len(eval_times) != len(task_results):
             logger.info(
                 f"Loaded results does not include runtime. Therefore evaluation of {self.metadata.name} "
-                + "can't be computed. Setting it to None."
+                "can't be computed. Setting it to None."
             )
             eval_time = np.nan
         else:
@@ -125,7 +125,7 @@ class AbsTaskAggregate(AbsTask):
         if len(kg_co2_emissions_) != len(task_results):
             logger.info(
                 f"Loaded results does not include co2-eq emissions. Therefore evaluation of {self.metadata.name} "
-                + "can't be computed. Setting it to None."
+                "can't be computed. Setting it to None."
             )
             kg_co2_emissions = np.nan
         else:

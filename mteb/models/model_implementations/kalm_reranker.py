@@ -456,13 +456,13 @@ multilingual_langs = [
 ]
 
 KALM_RERANKER_V1_CITATION = """@misc{zhao2026kalmrerankerv1,
-      title={KaLM-Reranker-V1: Fast but Not Late Interaction for Compressed Document Reranking}, 
+      title={KaLM-Reranker-V1: Fast but Not Late Interaction for Compressed Document Reranking},
       author={Xinping Zhao and Jiaxin Xu and Ziqi Dai and Xin Zhang and Shouzheng Huang and Danyu Tang and Xinshuo Hu and Meishan Zhang and Baotian Hu and Min Zhang},
       year={2026},
       eprint={2606.22807},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2606.22807}, 
+      url={https://arxiv.org/abs/2606.22807},
 }"""
 
 

@@ -48,7 +48,7 @@ logger = logging.getLogger(__name__)
 def _multilabel_subsampling(
     dataset_dict: DatasetDict,
     seed: int,
-    splits: list[str] = ["test"],
+    splits: Sequence[str] = ("test",),
     label: str = "label",
     n_samples: int = 2048,
 ) -> DatasetDict:
@@ -129,7 +129,7 @@ class AbsTask(ABC):  # noqa: PLR0904
             logger.warning(msg)
             warnings.warn(msg)
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:  # noqa: B027 -- optional hook, deliberately not abstract
         """A transform operations applied to the dataset after loading.
 
         This method is useful when the dataset from Huggingface is not in an `mteb` compatible format.
@@ -139,7 +139,6 @@ class AbsTask(ABC):  # noqa: PLR0904
             num_proc: Number of processes to use for the transformation.
             kwargs: Additional keyword arguments passed to the load_dataset function. Keep for forward compatibility.
         """
-        pass
 
     def evaluate(
         self,
@@ -307,7 +306,7 @@ class AbsTask(ABC):  # noqa: PLR0904
     def stratified_subsampling(
         dataset_dict: DatasetDict,
         seed: int,
-        splits: list[str] = ["test"],
+        splits: Sequence[str] = ("test",),
         label: str = "label",
         n_samples: int = 2048,
     ) -> DatasetDict:
