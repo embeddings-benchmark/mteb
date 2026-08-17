@@ -262,7 +262,7 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
         choices=[val.value for val in OverwriteStrategy],
         help=(
             "Strategy for when to overwrite. Can be 'always', 'never', 'only-missing'. 'only-missing' will only rerun the missing splits of a task."
-            + " It will not rerun the splits if the dataset revision or mteb version has changed."
+            " It will not rerun the splits if the dataset revision or mteb version has changed."
         ),
     )
     parser.add_argument(
@@ -420,9 +420,9 @@ def _leaderboard(args: argparse.Namespace) -> None:
     except ImportError as e:
         raise ImportError(
             "Seems like some dependencies are not installed. "
-            + "You can likely install these using: `pip install 'mteb[leaderboard]'`. "
-            + f"{e}"
-        )
+            "You can likely install these using: `pip install 'mteb[leaderboard]'`. "
+            f"{e}"
+        ) from e
 
     cache_path = args.cache_path
 

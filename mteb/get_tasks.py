@@ -84,6 +84,8 @@ _DEFAULT_PROPRIETIES = (
 class MTEBTasks(tuple[AbsTask]):
     """A tuple of tasks with additional methods to get an overview of the tasks."""
 
+    __slots__ = ()
+
     def __repr__(self) -> str:
         return "MTEBTasks" + super().__repr__()
 
@@ -281,7 +283,7 @@ def get_tasks(  # noqa: PLR0913, PLR0917
         if domains or task_types or categories:
             logger.warning(
                 "When `tasks` is provided, other filters like domains, task_types, and categories are ignored. "
-                + "If you want to filter a list of tasks, please use `mteb.filter_tasks` instead."
+                "If you want to filter a list of tasks, please use `mteb.filter_tasks` instead."
             )
         _tasks = []
         for task in tasks:
