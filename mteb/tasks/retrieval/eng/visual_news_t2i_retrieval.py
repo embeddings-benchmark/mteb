@@ -36,4 +36,49 @@ class VisualNewsT2IRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Identify the news-related image in line with the described event."
         },
+        superseded_by="VisualNewsT2IRetrieval.v2",
+    )
+
+
+class VisualNewsT2IRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="VisualNewsT2IRetrieval.v2",
+        description=(
+            "Retrieve news images with captions. "
+            "Version 2 sets the canonical metric to hit_rate_at_5, matching the "
+            "M-BEIR/UniIR source metric (hit-style Recall@5) instead of "
+            "ndcg_at_10. Dataset, corpus, and qrels are identical to VisualNewsT2IRetrieval. See "
+            "[Issue #5214](https://github.com/embeddings-benchmark/mteb/issues/5214)."
+        ),
+        reference="https://aclanthology.org/2021.emnlp-main.542/",
+        dataset={
+            "path": "mteb/mbeir_visualnews_task0",
+            "revision": "6ba75433fbeb6a06d9fccb27031bcafdfb8b5de1",
+        },
+        type="Any2AnyRetrieval",
+        category="t2i",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="hit_rate_at_5",
+        date=("2020-01-01", "2020-12-31"),
+        domains=["Encyclopaedic"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["image", "text"],
+        sample_creation="created",
+        bibtex_citation=r"""
+@inproceedings{liu2021visual,
+  author = {Liu, Fuxiao and Wang, Yinghan and Wang, Tianlu and Ordonez, Vicente},
+  booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
+  pages = {6761--6771},
+  title = {Visual News: Benchmark and Challenges in News Image Captioning},
+  year = {2021},
+}
+""",
+        prompt={
+            "query": "Identify the news-related image in line with the described event."
+        },
+        adapted_from=["VisualNewsT2IRetrieval"],
     )

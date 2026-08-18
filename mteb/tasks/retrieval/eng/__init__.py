@@ -67,7 +67,7 @@ from .chat_doctor_retrieval import ChatDoctorRetrieval
 from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
 from .chem_nq_retrieval import ChemNQRetrieval
 from .chemrxiv import ChemRxivRetrieval
-from .cirr_it2i_retrieval import CIRRIT2IRetrieval
+from .cirr_it2i_retrieval import CIRRIT2IRetrieval, CIRRIT2IRetrievalV2
 from .climate_fever_retrieval import (
     ClimateFEVER,
     ClimateFEVERHardNegatives,
@@ -120,7 +120,7 @@ from .didemo_retrieval import (
     DiDeMoVA2TRetrieval,
     DiDeMoVT2ARetrieval,
 )
-from .edis_t2it_retrieval import EDIST2ITRetrieval
+from .edis_t2it_retrieval import EDIST2ITRetrieval, EDIST2ITRetrievalV2
 from .elastic_kb_retrieval import ElasticKBRetrieval
 from .emo_vdb import EmoVDBA2TRetrieval, EmoVDBT2ARetrieval
 from .encyclopedia_vqa_it2it_retrieval import EncyclopediaVQAIT2ITRetrieval
@@ -130,9 +130,15 @@ from .english_finance3_retrieval import EnglishFinance3Retrieval
 from .english_finance4_retrieval import EnglishFinance4Retrieval
 from .english_healthcare1_retrieval import EnglishHealthcare1Retrieval
 from .faith_dial_retrieval import FaithDialRetrieval
-from .fashion200k_i2t_retrieval import Fashion200kI2TRetrieval
-from .fashion200k_t2i_retrieval import Fashion200kT2IRetrieval
-from .fashion_iq_it2i_retrieval import FashionIQIT2IRetrieval
+from .fashion200k_i2t_retrieval import (
+    Fashion200kI2TRetrieval,
+    Fashion200kI2TRetrievalV2,
+)
+from .fashion200k_t2i_retrieval import (
+    Fashion200kT2IRetrieval,
+    Fashion200kT2IRetrievalV2,
+)
+from .fashion_iq_it2i_retrieval import FashionIQIT2IRetrieval, FashionIQIT2IRetrievalV2
 from .feedback_qa_retrieval import FeedbackQARetrieval
 from .fever_retrieval import FEVER, FEVERHardNegatives, FEVERHardNegativesV2
 from .fi_qa2018_retrieval import FiQA2018
@@ -157,7 +163,7 @@ from .hotpot_qa_retrieval import (
     HotpotQAHardNegativesV2,
 )
 from .image_co_de_t2i_retrieval import ImageCoDeT2IRetrieval
-from .info_seek_it2it_retrieval import InfoSeekIT2ITRetrieval
+from .info_seek_it2it_retrieval import InfoSeekIT2ITRetrieval, InfoSeekIT2ITRetrievalV2
 from .info_seek_it2t_retrieval import (
     InfoSeekIT2TRetrieval,
     InfoSeekIT2TRetrievalV2,
@@ -212,8 +218,8 @@ from .met_i2i_retrieval import METI2IRetrieval
 from .ml_questions import MLQuestionsRetrieval
 from .mmdocir_t2i_retrieval import MMDocIRT2IRetrieval
 from .mmdocir_t2it_retrieval import MMDocIRT2ITRetrieval
-from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval
-from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
+from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval, MSCOCOI2TRetrievalV2
+from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval, MSCOCOT2IRetrievalV2
 from .msmarc_ov2_retrieval import MSMARCOv2
 from .msmarco_retrieval import MSMARCO, MSMARCOHardNegatives
 from .msr_vtt import (
@@ -243,7 +249,7 @@ from .nano_scidocs_retrieval import NanoSCIDOCSRetrieval
 from .nano_touche2020_retrieval import NanoTouche2020Retrieval
 from .narrative_qa_retrieval import NarrativeQARetrieval
 from .nf_corpus_retrieval import NFCorpus
-from .nights_i2i_retrieval import NIGHTSI2IRetrieval
+from .nights_i2i_retrieval import NIGHTSI2IRetrieval, NIGHTSI2IRetrievalV2
 from .nq_retrieval import NQ, NQHardNegatives
 from .obliq_bench_retrieval import (
     OBLIQBenchCongressRetrieval,
@@ -253,7 +259,7 @@ from .obliq_bench_retrieval import (
     OBLIQBenchWritingRetrieval,
 )
 from .okvqa_it2t_retrieval import OKVQAIT2TRetrieval
-from .oven_it2it_retrieval import OVENIT2ITRetrieval
+from .oven_it2it_retrieval import OVENIT2ITRetrieval, OVENIT2ITRetrievalV2
 from .oven_it2t_retrieval import OVENIT2TRetrieval, OVENIT2TRetrievalV2
 from .panda70m_retrieval import (
     Panda70MT2VARetrieval,
@@ -374,12 +380,12 @@ from .visrag_ret_info_vqa_retrieval import VisRAGRetInfoVQA
 from .visrag_ret_mp_docvqa_retrieval import VisRAGRetMPDocVQA
 from .visrag_ret_plot_qa_retrieval import VisRAGRetPlotQA
 from .visrag_ret_slide_vqa_retrieval import VisRAGRetSlideVQA
-from .visual_news_i2t_retrieval import VisualNewsI2TRetrieval
-from .visual_news_t2i_retrieval import VisualNewsT2IRetrieval
+from .visual_news_i2t_retrieval import VisualNewsI2TRetrieval, VisualNewsI2TRetrievalV2
+from .visual_news_t2i_retrieval import VisualNewsT2IRetrieval, VisualNewsT2IRetrievalV2
 from .viz_wiz_it2t_retrieval import VizWizIT2TRetrieval
 from .vqa2_it2t_retrieval import VQA2IT2TRetrieval
-from .web_qa_t2it_retrieval import WebQAT2ITRetrieval
-from .web_qa_t2t_retrieval import WebQAT2TRetrieval
+from .web_qa_t2it_retrieval import WebQAT2ITRetrieval, WebQAT2ITRetrievalV2
+from .web_qa_t2t_retrieval import WebQAT2TRetrieval, WebQAT2TRetrievalV2
 from .wino_grande_retrieval import WinoGrande
 from .youcook2_retrieval import (
     YouCook2A2VRetrieval,
@@ -476,6 +482,7 @@ __all__ = [
     "BrowseCompPlusRetrieval",
     "BuiltBenchRetrieval",
     "CIRRIT2IRetrieval",
+    "CIRRIT2IRetrievalV2",
     "CMUArcticA2TRetrieval",
     "CMUArcticT2ARetrieval",
     "CQADupstackAndroidRetrieval",
@@ -533,6 +540,7 @@ __all__ = [
     "DiDeMoVA2TRetrieval",
     "DiDeMoVT2ARetrieval",
     "EDIST2ITRetrieval",
+    "EDIST2ITRetrievalV2",
     "EPBench",
     "ESGReports",
     "ElasticKBRetrieval",
@@ -548,8 +556,11 @@ __all__ = [
     "FEVERHardNegativesV2",
     "FaithDialRetrieval",
     "Fashion200kI2TRetrieval",
+    "Fashion200kI2TRetrievalV2",
     "Fashion200kT2IRetrieval",
+    "Fashion200kT2IRetrievalV2",
     "FashionIQIT2IRetrieval",
+    "FashionIQIT2IRetrievalV2",
     "FeedbackQARetrieval",
     "FiQA2018",
     "FinQARetrieval",
@@ -576,6 +587,7 @@ __all__ = [
     "IRPapersT2ITRetrieval",
     "ImageCoDeT2IRetrieval",
     "InfoSeekIT2ITRetrieval",
+    "InfoSeekIT2ITRetrievalV2",
     "InfoSeekIT2TRetrieval",
     "InfoSeekIT2TRetrievalV2",
     "JLCorpusA2TRetrieval",
@@ -610,7 +622,9 @@ __all__ = [
     "MMDocIRT2IRetrieval",
     "MMDocIRT2ITRetrieval",
     "MSCOCOI2TRetrieval",
+    "MSCOCOI2TRetrievalV2",
     "MSCOCOT2IRetrieval",
+    "MSCOCOT2IRetrievalV2",
     "MSMARCOHardNegatives",
     "MSMARCOv2",
     "MSVDT2VRetrieval",
@@ -622,6 +636,7 @@ __all__ = [
     "MemotionT2IRetrieval",
     "NFCorpus",
     "NIGHTSI2IRetrieval",
+    "NIGHTSI2IRetrievalV2",
     "NQHardNegatives",
     "NanoArguAnaRetrieval",
     "NanoClimateFeverRetrieval",
@@ -645,6 +660,7 @@ __all__ = [
     "OBLIQBenchWritingRetrieval",
     "OKVQAIT2TRetrieval",
     "OVENIT2ITRetrieval",
+    "OVENIT2ITRetrievalV2",
     "OVENIT2TRetrieval",
     "OVENIT2TRetrievalV2",
     "Panda70MT2VARetrieval",
@@ -749,10 +765,14 @@ __all__ = [
     "VisRAGRetPlotQA",
     "VisRAGRetSlideVQA",
     "VisualNewsI2TRetrieval",
+    "VisualNewsI2TRetrievalV2",
     "VisualNewsT2IRetrieval",
+    "VisualNewsT2IRetrievalV2",
     "VizWizIT2TRetrieval",
     "WebQAT2ITRetrieval",
+    "WebQAT2ITRetrievalV2",
     "WebQAT2TRetrieval",
+    "WebQAT2TRetrievalV2",
     "WinoGrande",
     "YouCook2A2VRetrieval",
     "YouCook2AT2VRetrieval",

@@ -37,6 +37,56 @@ class MSCOCOT2IRetrieval(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Identify the image showcasing the described everyday scene."},
+        superseded_by="MSCOCOT2IRetrieval.v2",
+    )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        # image contain only None
+        self.dataset["default"]["test"]["queries"] = self.dataset["default"]["test"][
+            "queries"
+        ].remove_columns("image")
+
+
+class MSCOCOT2IRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MSCOCOT2IRetrieval.v2",
+        description=(
+            "Retrieve images based on captions. "
+            "Version 2 sets the canonical metric to hit_rate_at_5, matching the "
+            "M-BEIR/UniIR source metric (hit-style Recall@5) instead of "
+            "ndcg_at_10. Dataset, corpus, and qrels are identical to MSCOCOT2IRetrieval. See "
+            "[Issue #5214](https://github.com/embeddings-benchmark/mteb/issues/5214)."
+        ),
+        reference="https://link.springer.com/chapter/10.1007/978-3-319-10602-1_48",
+        dataset={
+            "path": "mteb/mbeir_mscoco_task0",
+            "revision": "8dfc4d250094f4e241bcb93211d6c5fbc99bb0bd",
+        },
+        type="Any2AnyRetrieval",
+        category="t2i",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="hit_rate_at_5",
+        date=("2018-01-01", "2018-12-31"),
+        domains=["Encyclopaedic"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{lin2014microsoft,
+  author = {Lin, Tsung-Yi and Maire, Michael and Belongie, Serge and Hays, James and Perona, Pietro and Ramanan, Deva and Doll{\'a}r, Piotr and Zitnick, C Lawrence},
+  booktitle = {Computer Vision--ECCV 2014: 13th European Conference, Zurich, Switzerland, September 6-12, 2014, Proceedings, Part V 13},
+  organization = {Springer},
+  pages = {740--755},
+  title = {Microsoft coco: Common objects in context},
+  year = {2014},
+}
+""",
+        prompt={"query": "Identify the image showcasing the described everyday scene."},
+        adapted_from=["MSCOCOT2IRetrieval"],
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:

@@ -36,6 +36,58 @@ class VisualNewsI2TRetrieval(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Find a caption for the news in the given photo."},
+        superseded_by="VisualNewsI2TRetrieval.v2",
+    )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        # fixes https://github.com/embeddings-benchmark/mteb/issues/4436
+        self.dataset["default"]["test"]["corpus"] = self.dataset["default"]["test"][
+            "corpus"
+        ].remove_columns("image")
+        self.dataset["default"]["test"]["queries"] = self.dataset["default"]["test"][
+            "queries"
+        ].remove_columns("text")
+
+
+class VisualNewsI2TRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="VisualNewsI2TRetrieval.v2",
+        description=(
+            "Retrieval entity-rich captions for news images. "
+            "Version 2 sets the canonical metric to hit_rate_at_5, matching the "
+            "M-BEIR/UniIR source metric (hit-style Recall@5) instead of "
+            "ndcg_at_10. Dataset, corpus, and qrels are identical to VisualNewsI2TRetrieval. See "
+            "[Issue #5214](https://github.com/embeddings-benchmark/mteb/issues/5214)."
+        ),
+        reference="https://aclanthology.org/2021.emnlp-main.542/",
+        dataset={
+            "path": "mteb/mbeir_visualnews_task3",
+            "revision": "158d0c0ce9cdd4f292964393de7dd47dc3e87519",
+        },
+        type="Any2AnyRetrieval",
+        category="i2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="hit_rate_at_5",
+        date=("2020-01-01", "2020-12-31"),
+        domains=["Encyclopaedic"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["image", "text"],
+        sample_creation="created",
+        bibtex_citation=r"""
+@inproceedings{liu2021visual,
+  author = {Liu, Fuxiao and Wang, Yinghan and Wang, Tianlu and Ordonez, Vicente},
+  booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
+  pages = {6761--6771},
+  title = {Visual News: Benchmark and Challenges in News Image Captioning},
+  year = {2021},
+}
+""",
+        prompt={"query": "Find a caption for the news in the given photo."},
+        adapted_from=["VisualNewsI2TRetrieval"],
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:

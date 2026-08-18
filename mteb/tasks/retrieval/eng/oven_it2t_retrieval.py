@@ -44,7 +44,7 @@ class OVENIT2TRetrievalV2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="OVENIT2TRetrieval.v2",
         description=(
-            "Retrieve a Wikipedia passage that answers a query about an image. "
+            "Retrieval a Wiki passage to answer query about an image. "
             "Version 2 sets the canonical metric to hit_rate_at_5, matching the "
             "M-BEIR/UniIR source benchmark's hit-style Recall@5, instead of "
             "ndcg_at_10. Dataset, corpus, and qrels are identical to "

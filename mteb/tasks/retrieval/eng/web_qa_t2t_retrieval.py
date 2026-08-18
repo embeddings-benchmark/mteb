@@ -36,4 +36,49 @@ class WebQAT2TRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Retrieve passages from Wikipedia that provide answers to the following question."
         },
+        superseded_by="WebQAT2TRetrieval.v2",
+    )
+
+
+class WebQAT2TRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="WebQAT2TRetrieval.v2",
+        description=(
+            "Retrieve sources of information based on questions. "
+            "Version 2 sets the canonical metric to hit_rate_at_5, matching the "
+            "M-BEIR/UniIR source metric (hit-style Recall@5) instead of "
+            "ndcg_at_10. Dataset, corpus, and qrels are identical to WebQAT2TRetrieval. See "
+            "[Issue #5214](https://github.com/embeddings-benchmark/mteb/issues/5214)."
+        ),
+        reference="https://openaccess.thecvf.com/content/CVPR2022/html/Chang_WebQA_Multihop_and_Multimodal_QA_CVPR_2022_paper.html",
+        dataset={
+            "path": "mteb/mbeir_webqa_task1",
+            "revision": "17d2f7d42f1b3ef9293fb545b9039fcec1deab91",
+        },
+        type="Any2AnyRetrieval",
+        category="t2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="hit_rate_at_5",
+        date=("2022-01-01", "2022-12-31"),
+        domains=["Encyclopaedic"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text"],
+        sample_creation="created",
+        bibtex_citation=r"""
+@inproceedings{chang2022webqa,
+  author = {Chang, Yingshan and Narang, Mridu and Suzuki, Hisami and Cao, Guihong and Gao, Jianfeng and Bisk, Yonatan},
+  booktitle = {Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
+  pages = {16495--16504},
+  title = {Webqa: Multihop and multimodal qa},
+  year = {2022},
+}
+""",
+        prompt={
+            "query": "Retrieve passages from Wikipedia that provide answers to the following question."
+        },
+        adapted_from=["WebQAT2TRetrieval"],
     )
