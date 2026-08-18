@@ -413,12 +413,6 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         use_text_formatting = set(task_metadata.modalities) == {"text"}
         if (
             use_text_formatting
-            and prompt_type == PromptType.query
-            and "query" in features
-        ):
-            text_key = "query"
-        elif (
-            use_text_formatting
             and prompt_type == PromptType.document
             and "body" in features
         ):
