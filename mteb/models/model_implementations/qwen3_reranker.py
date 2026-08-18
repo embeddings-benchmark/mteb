@@ -141,7 +141,7 @@ class Qwen3RerankerWrapper:
             pairs = [
                 self.format_instruction(instr, query, doc)
                 for instr, query, doc in zip(
-                    batch_instructions, batch_queries, batch_passages
+                    batch_instructions, batch_queries, batch_passages, strict=True
                 )
             ]
 

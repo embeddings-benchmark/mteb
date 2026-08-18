@@ -182,7 +182,7 @@ class NanoVDRWrapper(AbsEncoder):
 
                 videos, video_metadata = None, None
                 if video_inputs is not None:
-                    videos, video_metadata = zip(*video_inputs)
+                    videos, video_metadata = zip(*video_inputs, strict=True)
                     videos, video_metadata = list(videos), list(video_metadata)
 
                 processed = self._doc_processor(

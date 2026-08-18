@@ -972,7 +972,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
         if not _repo_exists(model_name):
             warnings.warn(
-                f"Could not find model {model_name} on HuggingFace Hub repository ({reference}). Metadata will be limited."
+                f"Could not find model {model_name} on HuggingFace Hub repository ({reference}). Metadata will be limited.",
+                stacklevel=2,
             )
             return cls.create_empty(
                 overwrites=dict(

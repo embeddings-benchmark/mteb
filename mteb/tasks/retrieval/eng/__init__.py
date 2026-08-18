@@ -87,7 +87,12 @@ from .climate_fever_retrieval import (
     ClimateFEVERHardNegativesV2,
     ClimateFEVERRetrievalv2,
 )
-from .clotho import ClothoA2TRetrieval, ClothoT2ARetrieval
+from .clotho import (
+    ClothoA2TRetrieval,
+    ClothoA2TRetrievalV2,
+    ClothoT2ARetrieval,
+    ClothoT2ARetrievalV2,
+)
 from .cmu_arctic import CMUArcticA2TRetrieval, CMUArcticT2ARetrieval
 from .covers80_retrieval import Covers80A2ARetrieval
 from .covr_r_retrieval import CoVRRVT2VRetrieval
@@ -183,6 +188,10 @@ from .hotpot_qa_retrieval import (
     HotpotQAHardNegativesV2,
 )
 from .image_co_de_t2i_retrieval import ImageCoDeT2IRetrieval
+from .incompe_bench_retrieval import (
+    IncompeBenchLenientRetrieval,
+    IncompeBenchStrictRetrieval,
+)
 from .info_seek_it2it_retrieval import InfoSeekIT2ITRetrieval
 from .info_seek_it2t_retrieval import InfoSeekIT2TRetrieval
 from .irpapers_t2i_retrieval import IRPapersT2IRetrieval
@@ -555,7 +564,9 @@ __all__ = [
     "ClimateFEVERHardNegativesV2",
     "ClimateFEVERRetrievalv2",
     "ClothoA2TRetrieval",
+    "ClothoA2TRetrievalV2",
     "ClothoT2ARetrieval",
+    "ClothoT2ARetrievalV2",
     "CoVRRVT2VRetrieval",
     "ConvoMem",
     "Covers80A2ARetrieval",
@@ -642,6 +653,8 @@ __all__ = [
     "IRPapersT2IRetrieval",
     "IRPapersT2ITRetrieval",
     "ImageCoDeT2IRetrieval",
+    "IncompeBenchLenientRetrieval",
+    "IncompeBenchStrictRetrieval",
     "InfoSeekIT2ITRetrieval",
     "InfoSeekIT2TRetrieval",
     "JLCorpusA2TRetrieval",

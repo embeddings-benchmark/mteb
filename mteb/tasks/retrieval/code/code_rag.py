@@ -80,7 +80,7 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
 
         texts = ds["text"]
         meta = ds["meta"]
-        for text, mt in zip(texts, meta):
+        for text, mt in zip(texts, meta, strict=True):
             # in code-rag-bench,
             # text = query + "\n" + doc(code)
             query, doc = split_by_first_newline(text)
@@ -139,7 +139,7 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
         texts = ds["text"]
         parsed = ds["parsed"]
         id = 0
-        for title, text, _mt in zip(titles, texts, parsed):
+        for title, text, _mt in zip(titles, texts, parsed, strict=True):
             # in code-rag-bench,
             # query=doc(code)
             # text=query+doc(code)

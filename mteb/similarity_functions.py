@@ -216,7 +216,7 @@ def pairwise_max_sim(
     scores = []
 
     for query_embedding, document_embedding in zip(
-        queries_embeddings, documents_embeddings
+        queries_embeddings, documents_embeddings, strict=True
     ):
         query_embedding = _convert_to_tensor(query_embedding)  # noqa: PLW2901
         document_embedding = _convert_to_tensor(document_embedding)  # noqa: PLW2901

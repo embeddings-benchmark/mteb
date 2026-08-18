@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.19.3"
+version = "2.19.4"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -146,6 +146,7 @@ torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
 moca = ["transformers>=4.49.0,<4.53"]
 transformers-v4 = ["transformers<5"]
+transformers-v5 = ["transformers>=5"]
 cosmos-embed1 = ["transformers<5", "einops>=0.8.0", "torchvision>=0.16.0"]
 siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
 tipsv2 = ["sentencepiece>=0.2.0", "protobuf>=3.0.0"]
@@ -336,9 +337,6 @@ ignore = [
     "PLR0915",  # too many statements
     "PLW0717",  # too-many-statements-in-try-clause
     "ISC001",   # single-line implicit concat; conflicts with `ruff format`
-    # TODO: enable in a follow-up PR; each needs a per-site `strict=` / `stacklevel=` decision
-    "B905",     # zip-without-explicit-strict
-    "B028",     # no-explicit-stacklevel
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
@@ -491,6 +489,7 @@ conflicts = [
         { extra = "muq" },
         { extra = "moca" }, # needs transformers with _update_causal_mask
         { extra = "transformers-v4" },
+        { extra = "transformers-v5" },
         { extra = "cosmos-embed1" }, # remote code needs transformers<5
         { extra = "qwen-vl" },
         { extra = "ps3" }, # ps3-torch pins transformers<=4.49.0
@@ -584,6 +583,7 @@ extend-ignore-words-re = [
 extend-ignore-re = [
     "author.*",  # ignore authors in citations
     "editor.*",  # ignore authors in citations
+    "FIne-Grained Music retrievAl",  # stylised paper title (FIGMA)
 ]
 
 [tool.typos.files]
