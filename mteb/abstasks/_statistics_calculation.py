@@ -432,7 +432,7 @@ def calculate_text_corpus_overlap_statistics(
 
     covered_query_ngrams: set[str] = set()
     has_corpus_ngrams = False
-    for document_text in corpus.values():
+    for document_text in tqdm(corpus.values(), desc="Calculating text corpus overlap"):
         document_ngrams = _character_ngrams(document_text)
         has_corpus_ngrams = has_corpus_ngrams or bool(document_ngrams)
         covered_query_ngrams.update(document_ngrams & all_query_ngrams)
@@ -467,7 +467,7 @@ def calculate_text_corpus_overlap_statistics(
     )
 
 
-def _character_ngrams(text: str, min_n: int = 3, max_n: int = 5) -> set[str]:
+def _character_ngrams(text: str, n: int = 4) -> set[str]:
     """Return normalized character n-grams without punctuation or whitespace."""
     normalized_text = unicodedata.normalize("NFKC", text).casefold()
     normalized_text = "".join(
@@ -477,7 +477,6 @@ def _character_ngrams(text: str, min_n: int = 3, max_n: int = 5) -> set[str]:
     )
     return {
         normalized_text[start : start + n]
-        for n in range(min_n, max_n + 1)
         for start in range(len(normalized_text) - n + 1)
     }
 

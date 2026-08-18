@@ -30,7 +30,7 @@ def test_text_corpus_overlap_normalizes_multilingual_text(
     }
 
 
-def test_text_corpus_overlap_uses_character_ngrams_3_to_5() -> None:
+def test_text_corpus_overlap_uses_character_4_grams() -> None:
     statistics = calculate_text_corpus_overlap_statistics(
         queries={"q1": "abcd"},
         corpus={"d1": "abcx"},
@@ -38,15 +38,15 @@ def test_text_corpus_overlap_uses_character_ngrams_3_to_5() -> None:
 
     assert statistics == {
         "num_queries": 1,
-        "min_query_character_ngram_overlap": 1 / 3,
-        "average_query_character_ngram_overlap": 1 / 3,
-        "max_query_character_ngram_overlap": 1 / 3,
+        "min_query_character_ngram_overlap": 0.0,
+        "average_query_character_ngram_overlap": 0.0,
+        "max_query_character_ngram_overlap": 0.0,
     }
 
 
-def test_text_corpus_overlap_ignores_queries_without_3_grams() -> None:
+def test_text_corpus_overlap_ignores_queries_without_4_grams() -> None:
     statistics = calculate_text_corpus_overlap_statistics(
-        queries={"q1": "!?"},
+        queries={"q1": "abc"},
         corpus={"d1": "anything"},
     )
 
@@ -61,8 +61,8 @@ def test_text_corpus_overlap_uses_all_queries_and_documents() -> None:
 
     assert statistics == {
         "num_queries": 2,
-        "min_query_character_ngram_overlap": 1 / 3,
-        "average_query_character_ngram_overlap": 2 / 3,
+        "min_query_character_ngram_overlap": 0.0,
+        "average_query_character_ngram_overlap": 0.5,
         "max_query_character_ngram_overlap": 1.0,
     }
 

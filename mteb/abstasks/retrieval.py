@@ -486,14 +486,20 @@ class AbsTaskRetrieval(AbsTask):
             top_ranked = {}
             for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 split_data = self.dataset[hf_subset][split]
+                subset_queries = _prefix_dataset_ids(
+                    split_data["queries"], hf_subset, split
+                )
+                subset_corpus = _prefix_dataset_ids(
+                    split_data["corpus"], hf_subset, split
+                )
                 if queries is None:
-                    queries = split_data["queries"]
+                    queries = subset_queries
                 else:
-                    queries = concatenate_datasets([queries, split_data["queries"]])
+                    queries = concatenate_datasets([queries, subset_queries])
                 if corpus is None:
-                    corpus = split_data["corpus"]
+                    corpus = subset_corpus
                 else:
-                    corpus = concatenate_datasets([corpus, split_data["corpus"]])
+                    corpus = concatenate_datasets([corpus, subset_corpus])
 
                 relevant_docs.update(
                     _process_relevant_docs(
@@ -579,50 +585,12 @@ class AbsTaskRetrieval(AbsTask):
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
         text_corpus_overlap_statistics = None
         if "text" in queries_col_inputs and "text" in corpus_col_inputs:
-            if compute_overall:
-                query_text_by_id: dict[str, str] = {}
-                corpus_text_by_id: dict[str, str] = {}
-                for subset_name in self.metadata.eval_langs:
-                    split_data = self.dataset[subset_name][split]
-
-                    subset_queries = split_data["queries"]
-                    if "instruction" in subset_queries[0]:
-                        subset_queries = _combine_queries_with_instruction_text(
-                            subset_queries
-                        )
-                    if isinstance(subset_queries["text"][0], dict | list):
-                        subset_queries = subset_queries.map(
-                            _convert_conv_history_to_query
-                        )
-                    query_text_by_id.update(
-                        {
-                            f"{split}_{subset_name}_{query_id}": text
-                            for query_id, text in zip(
-                                subset_queries["id"],
-                                subset_queries["text"],
-                                strict=True,
-                            )
-                        }
-                    )
-
-                    subset_corpus = split_data["corpus"]
-                    corpus_text_by_id.update(
-                        {
-                            f"{split}_{subset_name}_{doc_id}": text
-                            for doc_id, text in zip(
-                                subset_corpus["id"],
-                                subset_corpus.map(_corpus_to_dict)["text"],
-                                strict=True,
-                            )
-                        }
-                    )
-            else:
-                query_text_by_id = dict(
-                    zip(queries["id"], queries_col_inputs["text"], strict=True)
-                )
-                corpus_text_by_id = dict(
-                    zip(corpus["id"], corpus_col_inputs["text"], strict=True)
-                )
+            query_text_by_id = dict(
+                zip(queries["id"], queries_col_inputs["text"], strict=True)
+            )
+            corpus_text_by_id = dict(
+                zip(corpus["id"], corpus_col_inputs["text"], strict=True)
+            )
 
             text_corpus_overlap_statistics = calculate_text_corpus_overlap_statistics(
                 query_text_by_id,
@@ -634,7 +602,7 @@ class AbsTaskRetrieval(AbsTask):
             else None
         )
 
-        stats = RetrievalDescriptiveStatistics(
+        return RetrievalDescriptiveStatistics(
             num_samples=num_documents + num_queries,
             num_queries=num_queries,
             num_documents=num_documents,
@@ -648,11 +616,9 @@ class AbsTaskRetrieval(AbsTask):
             queries_audio_statistics=queries_stats["audio_statistics"],
             queries_video_statistics=queries_stats["video_statistics"],
             relevant_docs_statistics=relevant_docs_statistics,
+            text_corpus_overlap_statistics=text_corpus_overlap_statistics,
             top_ranked_statistics=top_ranked_statistics,
         )
-        if text_corpus_overlap_statistics is not None:
-            stats["text_corpus_overlap_statistics"] = text_corpus_overlap_statistics
-        return stats
 
     def _push_dataset_to_hub(
         self,
@@ -813,3 +779,9 @@ def _process_relevant_docs(
             f"{split}_{hf_subset}_{doc_id}": value for doc_id, value in relevant.items()
         }
     return return_collection
+
+
+def _prefix_dataset_ids(collection: Dataset, hf_subset: str, split: str) -> Dataset:
+    """Prepend split and subset to dataset IDs to keep aggregate IDs unique."""
+    prefix = f"{split}_{hf_subset}_"
+    return collection.map(lambda row: {"id": f"{prefix}{row['id']}"})

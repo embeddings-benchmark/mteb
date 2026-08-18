@@ -532,6 +532,7 @@ class MockAudioReranking(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
+            "text_corpus_overlap_statistics": None,
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
                 "min_top_ranked_per_query": 2,

@@ -239,7 +239,7 @@ class TextCorpusOverlapStatistics(TypedDict):
             query character n-grams found anywhere in the corpus.
 
     Text is Unicode NFKC-normalized and case-folded, then punctuation, symbols,
-    and whitespace are removed before extracting character n-grams of lengths 3-5.
+    and whitespace are removed before extracting character 4-grams.
     """
 
     num_queries: int
@@ -550,7 +550,7 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     queries_video_statistics: VideoStatistics | None
 
     relevant_docs_statistics: RelevantDocsStatistics
-    text_corpus_overlap_statistics: NotRequired[TextCorpusOverlapStatistics]
+    text_corpus_overlap_statistics: TextCorpusOverlapStatistics | None
 
     # this is for datasets that do reranking
     top_ranked_statistics: TopRankedStatistics | None
