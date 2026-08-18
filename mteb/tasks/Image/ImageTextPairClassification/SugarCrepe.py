@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
+from mteb.abstasks.image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 from datasets import DatasetDict, load_dataset
 
-from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
+from mteb.abstasks.image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata

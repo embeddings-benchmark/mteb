@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from .aggregated_tasks import *
 from .BitextMining import *
-from .Classification import *
-from .Clustering import *
+from .classification import *
+from .clustering import *
 from .Image.Any2AnyMultiChoice import *
 from .Image.Any2AnyRetrieval import *
 from .Image.ImageClassification import *
@@ -15,9 +15,9 @@ from .Image.ZeroShotClassification import *
 from .InstructionRetrieval import *
 from .MultiLabelClassification import *
 from .PairClassification import *
-from .Regression import *
-from .Reranking import *
-from .Retrieval import *
+from .regression import *
+from .reranking import *
+from .retrieval import *
 from .SpeedTask import *
-from .STS import *
-from .Summarization import *
+from .sts import *
+from .summarization import *
