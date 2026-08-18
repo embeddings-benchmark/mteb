@@ -3,6 +3,7 @@ from .beijing_opera import BeijingOpera
 from .bird_clef import BirdCLEFClassification
 from .diving48_classification import Diving48ClassificationV1, Diving48ClassificationV2
 from .esc50 import ESC50Classification
+from .fsdkaggle2018 import FSDKaggle2018Classification
 from .gtzan_genre import GTZANGenre
 from .gunshot_triangulation import GunshotTriangulation
 from .inat_sounds import INatSoundsClassification
@@ -20,6 +21,7 @@ __all__ = [
     "Diving48ClassificationV1",
     "Diving48ClassificationV2",
     "ESC50Classification",
+    "FSDKaggle2018Classification",
     "GTZANGenre",
     "GunshotTriangulation",
     "INatSoundsClassification",
