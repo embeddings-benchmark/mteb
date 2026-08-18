@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_implementations.google_text_embedding import (
     GECKO_TRAINING_DATA,
     MODEL_PROMPTS,
@@ -23,6 +24,7 @@ from mteb.types import PromptType
 logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -49,6 +51,30 @@ MULTILINGUAL_EVALUATED_LANGUAGES = [
     "zho-Hant",
     "zho-Hans",
 ]
+
+GEMINI_VIDEO_FPS = 1.0
+GEMINI_MAX_VIDEO_FRAMES = 32
+GEMINI_MAX_AUDIO_SECONDS = 180
+
+GEMINI_EMBEDDING_CITATION = """@misc{lee2025geminiembeddinggeneralizableembeddings,
+  title={Gemini Embedding: Generalizable Embeddings from Gemini},
+  author={Jinhyuk Lee and Feiyang Chen and Sahil Dua and Daniel Cer and Madhuri Shanbhogue and Iftekhar Naim and Gustavo Hernández Ábrego and Zhe Li and Kaifeng Chen and Henrique Schechter Vera and Xiaoqi Ren and Shanfeng Zhang and Daniel Salz and Michael Boratko and Jay Han and Blair Chen and Shuo Huang and Vikram Rao and Paul Suganthan and Feng Han and Andreas Doumanoglou and Nithi Gupta and Fedor Moiseev and Cathy Yip and Aashi Jain and Simon Baumgartner and Shahrokh Shahi and Frank Palma Gomez and Sandeep Mariserla and Min Choi and Parashar Shah and Sonam Goenka and Ke Chen and Ye Xia and Koert Chen and Sai Meher Karthik Duddu and Yichang Chen and Trevor Walker and Wenlei Zhou and Rakesh Ghiya and Zach Gleicher and Karan Gill and Zhe Dong and Mojtaba Seyedhosseini and Yunhsuan Sung and Raphael Hoffmann and Tom Duerig},
+  year={2025},
+  eprint={2503.07891},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2503.07891},
+}"""
+
+GEMINI_EMBEDDING_2_CITATION = """@misc{shanbhogue2026geminiembedding2native,
+  title={Gemini Embedding 2: A Native Multimodal Embedding Model from Gemini},
+  author={Madhuri Shanbhogue and Zhe Li and Shanfeng Zhang and Gustavo Hernández Ábrego and Shih-Cheng Huang and Aashi Jain and Daniel Salz and Sonam Goenka and Chaitra Hegde and Ji Ma and Feiyang Chen and Jiaxing Wu and Tanmaya Dabral and Babak Samari and Kevin Poulet and Daniel Cer and Kaifeng Chen and Paul Suganathan and Hui Hui and Jovan Andonov and Philippe Schlattner and Jay Han and Iftekhar Naim and Wing Lowe and Vladimir Pchelin and Albert Yang and Yi-Ting Chen and Zhongli Ding and Grace Zhang and Georg Heigold and Yichang Chen and Antoine Reveillon and Brendan Mccloskey and Wenlei Zhou and Dahun Kim and Rui Meng and Emma Wang and Jack Zheng and Halley Fede and Zhen Yang and Keegan Mosley and Brian Potetz and Sahil Dua and Henrique Schechter Vera and Shen Gao and Hesen Zhang and Andreas Hess and Hengxuan Ying and Alberto Montes and Karan Gill and Min Choi and Sebastian Russo and Anja Hauth and Jinhyuk Lee and Michael Boratko and Megan Barnes and Vikram Rao and Claudiu Musat and Cyril Allauzen and Ehsan Variani and Shankar Kumar and Tom Bagby and Junyi Jiao and Yang Gu and Tengxin Li and Ayush Agrawal and Roberto Santana and Dev Nath and Stephen Karukas and Shuoxuan Han and Lucia Loher and Alice Twu and Nidhi Vyas and Siddharth Bhai and Frank Palma Gomez and Wangyuan Zhang and Chaoren Liu and Jizheng Yang and Steve Qiu and Shijie Zhang and Sujay Kulkarni and Sascha Rothe and Sean Nakamoto and Raphael Hoffmann and Zach Gleicher and Yunhsuan Sung and Qin Yin and Tom Duerig and Mojtaba Seyedhosseini},
+  year={2026},
+  eprint={2605.27295},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2605.27295},
+}"""
 
 
 # Prompt mapping for Gemini Embedding 2.
@@ -167,6 +193,18 @@ def _audio_to_wav_bytes(audio_item: dict) -> bytes:
 
     array = audio_item["array"]
     sampling_rate = audio_item["sampling_rate"]
+
+    # Preserve the original sampling rate and truncate to Gemini's duration limit.
+    num_samples = array.shape[-1]
+    max_samples = sampling_rate * GEMINI_MAX_AUDIO_SECONDS
+    if num_samples > max_samples:
+        logger.warning(
+            "Truncating Gemini Embedding 2 audio input from %.2f to %d seconds.",
+            num_samples / sampling_rate,
+            GEMINI_MAX_AUDIO_SECONDS,
+        )
+        array = array[..., :max_samples]
+
     # Convert float audio to 16-bit PCM
     pcm = (array * 32767).astype(np.int16)
     buf = io.BytesIO()
@@ -176,6 +214,107 @@ def _audio_to_wav_bytes(audio_item: dict) -> bytes:
         wf.setframerate(sampling_rate)
         wf.writeframes(pcm.tobytes())
     return buf.getvalue()
+
+
+def _video_to_mp4_bytes(frames: torch.Tensor, *, fps: float) -> bytes:
+    """Encode sampled ``[T, C, H, W]`` RGB frames as an in-memory MP4."""
+    import torch
+    from torch.nn import functional as F
+    from torchcodec.encoders import VideoEncoder
+
+    if frames.ndim != 4:
+        raise ValueError(
+            f"Expected video frames with shape [T, C, H, W], got {tuple(frames.shape)}"
+        )
+    if frames.shape[0] == 0:
+        raise ValueError("Expected at least one video frame")
+    if frames.shape[1] != 3:
+        raise ValueError(
+            f"Expected RGB video frames with 3 channels, got {frames.shape[1]}"
+        )
+    if fps <= 0:
+        raise ValueError(f"Expected a positive video FPS, got {fps}")
+
+    video_frames = frames.detach().cpu()
+    if video_frames.is_floating_point():
+        # TorchCodec currently returns uint8, but accepting normalized tensors
+        # makes this boundary safe for other frame providers too.
+        if video_frames.numel():
+            min_value = video_frames.min().item()
+            max_value = video_frames.max().item()
+
+            if min_value >= 0 and max_value <= 1:
+                video_frames = torch.mul(video_frames, 255)
+    if video_frames.dtype != torch.uint8:
+        video_frames = video_frames.clamp(0, 255).to(torch.uint8)
+
+    height, width = video_frames.shape[2:4]
+    # H.264 with yuv420p requires even dimensions.
+    if height == 0 or width == 0:
+        raise ValueError("Video frames are too small to encode as MP4")
+    pad_h = height % 2
+    pad_w = width % 2
+    if pad_h or pad_w:
+        video_frames = F.pad(
+            video_frames,
+            (0, pad_w, 0, pad_h),
+            mode="replicate",
+        )
+
+    video_frames = video_frames.contiguous()
+    encoded = VideoEncoder(video_frames, frame_rate=fps).to_tensor(
+        "mp4",
+        codec="h264",
+        pixel_format="yuv420p",
+    )
+    return encoded.numpy().tobytes()
+
+
+def _build_gemini_content(
+    *,
+    text: str | None,
+    title: str | None,
+    image: Any | None,
+    audio: dict | None,
+    video: torch.Tensor | None,
+    google_task_type: str | None,
+    prompt_type: PromptType | None,
+    use_text_formatting: bool = True,
+) -> str | list[Any] | Any:
+    """Build one Gemini input, aggregating all modalities present in a row."""
+    from google.genai.types import Part
+
+    parts: list[Any] = []
+    has_media = image is not None or audio is not None or video is not None
+    if text is not None:
+        formatted_text = (
+            text
+            if has_media or not use_text_formatting
+            else _format_gemini_embedding_2_text(
+                text, google_task_type, prompt_type, title
+            )
+        )
+        parts.append(formatted_text)
+    if image is not None:
+        parts.append(image)
+    if audio is not None:
+        parts.append(
+            Part.from_bytes(
+                data=_audio_to_wav_bytes(audio),
+                mime_type="audio/wav",
+            )
+        )
+    if video is not None:
+        parts.append(
+            Part.from_bytes(
+                data=_video_to_mp4_bytes(video, fps=GEMINI_VIDEO_FPS),
+                mime_type="video/mp4",
+            )
+        )
+
+    if not parts:
+        raise ValueError("No supported Gemini input modality found")
+    return parts[0] if len(parts) == 1 else parts
 
 
 class GoogleGeminiEmbeddingModel(AbsEncoder):
@@ -259,8 +398,6 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        from google.genai.types import Part
-
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         google_task_type = self.model_prompts.get(prompt_name)
 
@@ -271,47 +408,44 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         )
         batch_size = kwargs.pop("batch_size", 32)
 
-        has_text = "text" in inputs.dataset.features
-        has_image = "image" in inputs.dataset.features
-        has_audio = "audio" in inputs.dataset.features
-        has_title = "title" in inputs.dataset.features
-
-        if has_text and has_image:
-            contents = []
-            for batch in inputs:
-                for text, image in zip(batch["text"], batch["image"], strict=True):
-                    contents.append([text, image])
-        elif has_text and has_audio:
-            contents = []
-            for batch in inputs:
-                for text, audio_item in zip(batch["text"], batch["audio"], strict=True):
-                    wav_bytes = _audio_to_wav_bytes(audio_item)
-                    contents.append(
-                        [text, Part.from_bytes(data=wav_bytes, mime_type="audio/wav")]
-                    )
-        elif has_text:
-            contents = []
-            for batch in inputs:
-                texts = batch["text"]
-                titles = batch["title"] if has_title else [None] * len(texts)
-                for text, title in zip(texts, titles, strict=True):
-                    contents.append(
-                        _format_gemini_embedding_2_text(
-                            text, google_task_type, prompt_type, title
-                        )
-                    )
-        elif has_image:
-            contents = [img for batch in inputs for img in batch["image"]]
-        elif has_audio:
-            contents = []
-            for batch in inputs:
-                for audio_item in batch["audio"]:
-                    wav_bytes = _audio_to_wav_bytes(audio_item)
-                    contents.append(
-                        Part.from_bytes(data=wav_bytes, mime_type="audio/wav")
-                    )
+        features = inputs.dataset.features
+        # Apply prompts only to text-only tasks: https://ai.google.dev/gemini-api/docs/embeddings#task-types-embeddings-2
+        use_text_formatting = set(task_metadata.modalities) == {"text"}
+        if (
+            use_text_formatting
+            and prompt_type == PromptType.document
+            and "body" in features
+        ):
+            text_key = "body"
         else:
-            raise ValueError("No text, image, or audio features found in inputs")
+            text_key = "text"
+
+        has_video = "video" in features
+        if has_video:
+            # Sample at 1 FPS and cap at 32 frames to match Gemini's video limits.
+            inputs.collate_fn = FramesCollator(
+                fps=GEMINI_VIDEO_FPS,
+                max_frames=GEMINI_MAX_VIDEO_FRAMES,
+            )
+
+        modality_keys = (text_key, "title", "image", "audio", "video")
+        contents = []
+        for batch in inputs:
+            num_samples = len(next(iter(batch.values())))
+            for index in range(num_samples):
+                row = {key: batch[key][index] for key in modality_keys if key in batch}
+                contents.append(
+                    _build_gemini_content(
+                        text=row.get(text_key),
+                        title=row.get("title"),
+                        image=row.get("image"),
+                        audio=row.get("audio"),
+                        video=row.get("video"),
+                        google_task_type=google_task_type,
+                        prompt_type=prompt_type,
+                        use_text_formatting=use_text_formatting,
+                    )
+                )
 
         return self._embed(
             contents,
@@ -330,7 +464,7 @@ google_gemini_embedding_001 = ModelMeta(
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
     open_weights=False,
     revision="1",
-    release_date="2025-03-07",
+    release_date="2025-07-14",
     n_parameters=None,
     n_embedding_parameters=None,
     memory_usage_mb=None,
@@ -345,6 +479,7 @@ google_gemini_embedding_001 = ModelMeta(
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
     extra_requirements_groups=["vertexai"],
+    citation=GEMINI_EMBEDDING_CITATION,
 )
 
 google_gemini_embedding_2_preview = ModelMeta(
@@ -356,14 +491,14 @@ google_gemini_embedding_2_preview = ModelMeta(
     name="google/gemini-embedding-2-preview",
     model_type=["dense"],
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
-    modalities=["audio", "image", "text"],
+    modalities=["audio", "image", "text", "video"],
     open_weights=False,
     revision="1",
-    release_date="2025-03-25",
+    release_date="2026-03-10",
     n_parameters=None,
     n_embedding_parameters=None,
     memory_usage_mb=None,
-    max_tokens=2048,
+    max_tokens=8192,
     embed_dim=[768, 1536, 3072],
     license=None,
     reference="https://ai.google.dev/gemini-api/docs/embeddings",
@@ -373,5 +508,37 @@ google_gemini_embedding_2_preview = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
+    superseded_by="google/gemini-embedding-2",
     extra_requirements_groups=["google_genai"],
+    citation=GEMINI_EMBEDDING_2_CITATION,
+)
+
+google_gemini_embedding_2 = ModelMeta(
+    loader=GoogleGeminiEmbeddingModel,  # type: ignore[call-arg]
+    loader_kwargs=dict(
+        model_prompts=GEMINI_EMBEDDING_2_PROMPTS,
+        embed_dim=3072,
+    ),
+    name="google/gemini-embedding-2",
+    model_type=["dense"],
+    languages=MULTILINGUAL_EVALUATED_LANGUAGES,
+    modalities=["audio", "image", "text", "video"],
+    open_weights=False,
+    revision="1",
+    release_date="2026-04-22",
+    n_parameters=None,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=8192,
+    embed_dim=[768, 1536, 3072],
+    license=None,
+    reference="https://ai.google.dev/gemini-api/docs/models/gemini-embedding-2",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=GECKO_TRAINING_DATA,
+    extra_requirements_groups=["google_genai"],
+    citation=GEMINI_EMBEDDING_2_CITATION,
 )
