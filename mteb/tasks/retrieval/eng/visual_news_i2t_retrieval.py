@@ -17,7 +17,7 @@ class VisualNewsI2TRetrieval(AbsTaskRetrieval):
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="hit_rate_at_5",
+        main_score="ndcg_at_10",
         date=("2020-01-01", "2020-12-31"),
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
