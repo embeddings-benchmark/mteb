@@ -584,7 +584,7 @@ def test_an_aggregate_task_is_copied_with_its_subtasks() -> None:
     cleaned = remove_duplicates(task)
 
     assert cleaned is not task
-    assert all(a is not b for a, b in zip(cleaned.tasks, task.tasks))
+    assert all(a is not b for a, b in zip(cleaned.tasks, task.tasks, strict=True))
     assert not any(t.data_modified for t in task.tasks)
 
 

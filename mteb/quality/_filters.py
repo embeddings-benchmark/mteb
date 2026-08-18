@@ -166,7 +166,7 @@ def _iter_row_content(
             per_column.append(
                 MODALITY_HASH_FNS[modality](dataset[column], max_workers=num_proc)
             )
-    rows = zip(*per_column)
+    rows = zip(*per_column, strict=True)
 
     if symmetric_sides is None:
         return rows
