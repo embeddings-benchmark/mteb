@@ -113,7 +113,7 @@ class Encoder(torch.nn.Module):
         instruction = instruction or self.default_instruction
         # Inputs must be batched
         input_texts, input_images = [], []
-        for t, i in zip(texts, images):
+        for t, i in zip(texts, images, strict=True):
             input_str = ""
             if i is None:
                 input_images = None  # All examples in the same batch are consistent
@@ -266,7 +266,7 @@ def smart_resize(
     if max(h_bar, w_bar) / min(h_bar, w_bar) > MAX_RATIO:
         msg = f"Absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(h_bar, w_bar) / min(h_bar, w_bar)}"
         logger.warning(msg)
-        warnings.warn(msg)
+        warnings.warn(msg, stacklevel=2)
         if h_bar > w_bar:
             h_bar = w_bar * MAX_RATIO
         else:

@@ -300,7 +300,7 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
 
         sentences_count = len(all_corpus)
         query_groups: dict[str, list[tuple[int, str]]] = defaultdict(list)
-        for idx, (query, doc) in enumerate(zip(all_queries, all_corpus)):
+        for idx, (query, doc) in enumerate(zip(all_queries, all_corpus, strict=True)):
             query_groups[query].append((idx, doc))
 
         rerank_parameters = inspect.signature(self.model.rerank).parameters
@@ -312,7 +312,7 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
 
         results = np.zeros(sentences_count, dtype=np.float32)
         for query, doc_infos in query_groups.items():
-            original_indices, docs = zip(*doc_infos)
+            original_indices, docs = zip(*doc_infos, strict=True)
 
             scores = self.model.rerank(query, list(docs), **rerank_kwargs)
             for scr in scores:
@@ -534,7 +534,9 @@ class JinaV4Wrapper(AbsEncoder):
             if self.vector_type == "multi_vector":
                 embeddings = [
                     torch.cat([text_emb, image_emb], dim=0)
-                    for text_emb, image_emb in zip(text_embeddings, image_embeddings)
+                    for text_emb, image_emb in zip(
+                        text_embeddings, image_embeddings, strict=True
+                    )
                 ]
             else:
                 embeddings = text_embeddings + image_embeddings

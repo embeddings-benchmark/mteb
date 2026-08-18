@@ -34,9 +34,8 @@ class MockSentenceTransformer(SentenceTransformer):
 
     def __init__(self):
         self._modules = {}
-        pass
 
-    def encode(  # noqa: PLR0913, PLR0917, PLR6301
+    def encode(  # noqa: PLR0913, PLR0917
         self,
         inputs: list[SingleInput] | SingleInput,
         prompt_name: str | None = None,
@@ -64,7 +63,7 @@ class MockSentenceTransformer(SentenceTransformer):
     def get_sentence_embedding_dimension() -> int:
         return 10
 
-    def max_seq_length(self) -> int:  # noqa: PLR6301
+    def max_seq_length(self) -> int:
         return 10
 
     @property
@@ -77,7 +76,7 @@ class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
         model_name="mock/MockSentenceTransformersbf16Encoder",
     )
 
-    def encode(  # noqa: PLR0913, PLR0917, PLR6301
+    def encode(  # noqa: PLR0913, PLR0917
         self,
         inputs: list[SingleInput] | SingleInput,
         prompt_name: str | None = None,

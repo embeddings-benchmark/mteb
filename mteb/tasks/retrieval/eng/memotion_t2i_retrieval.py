@@ -51,7 +51,7 @@ def _load_data(path: str, splits: str, revision: str | None = None):
         corpus[split] = shared_corpus
         split_dataset = split_datasets[split]
         queries[split] = split_dataset.map(
-            lambda x, idx: {
+            lambda x, idx, split=split: {
                 "id": f"query-{split}-{idx}",
                 "text": x["text_corrected"],
                 "modality": "text",

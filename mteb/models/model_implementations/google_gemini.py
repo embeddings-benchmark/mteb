@@ -279,12 +279,12 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         if has_text and has_image:
             contents = []
             for batch in inputs:
-                for text, image in zip(batch["text"], batch["image"]):
+                for text, image in zip(batch["text"], batch["image"], strict=True):
                     contents.append([text, image])
         elif has_text and has_audio:
             contents = []
             for batch in inputs:
-                for text, audio_item in zip(batch["text"], batch["audio"]):
+                for text, audio_item in zip(batch["text"], batch["audio"], strict=True):
                     wav_bytes = _audio_to_wav_bytes(audio_item)
                     contents.append(
                         [text, Part.from_bytes(data=wav_bytes, mime_type="audio/wav")]
@@ -294,7 +294,7 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
             for batch in inputs:
                 texts = batch["text"]
                 titles = batch["title"] if has_title else [None] * len(texts)
-                for text, title in zip(texts, titles):
+                for text, title in zip(texts, titles, strict=True):
                     contents.append(
                         _format_gemini_embedding_2_text(
                             text, google_task_type, prompt_type, title

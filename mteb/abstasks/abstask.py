@@ -48,7 +48,7 @@ logger = logging.getLogger(__name__)
 def _multilabel_subsampling(
     dataset_dict: DatasetDict,
     seed: int,
-    splits: list[str] = ["test"],
+    splits: Sequence[str] = ("test",),
     label: str = "label",
     n_samples: int = 2048,
 ) -> DatasetDict:
@@ -145,16 +145,16 @@ class AbsTask(ABC):  # noqa: PLR0904
         if self.metadata.is_beta:
             msg = f"The task '{self.metadata.name}' is currently in beta. This means that the dataset is still being tested and may be subject to changes. This means that the scores of this dataset is liable to change and should be used with caution."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
 
     def check_if_dataset_is_superseded(self) -> None:
         """Check if the dataset is superseded by a newer version."""
         if self.superseded_by:
             msg = f"The task '{self.metadata.name}' is superseded by '{self.superseded_by}'. We recommend using the newer version of the task unless you are running a specific benchmark. See `get_task('{self.superseded_by}').metadata.description` to get a description of the task and changes."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:  # noqa: B027 -- optional hook, deliberately not abstract
         """A transform operations applied to the dataset after loading.
 
         This method is useful when the dataset from Huggingface is not in an `mteb` compatible format.
@@ -164,7 +164,6 @@ class AbsTask(ABC):  # noqa: PLR0904
             num_proc: Number of processes to use for the transformation.
             kwargs: Additional keyword arguments passed to the load_dataset function. Keep for forward compatibility.
         """
-        pass
 
     def evaluate(
         self,
@@ -332,7 +331,7 @@ class AbsTask(ABC):  # noqa: PLR0904
     def stratified_subsampling(
         dataset_dict: DatasetDict,
         seed: int,
-        splits: list[str] = ["test"],
+        splits: Sequence[str] = ("test",),
         label: str = "label",
         n_samples: int = 2048,
     ) -> DatasetDict:
