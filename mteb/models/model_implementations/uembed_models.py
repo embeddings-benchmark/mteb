@@ -19,6 +19,7 @@ import torch.nn.functional as F
 from huggingface_hub import hf_hub_download
 from tqdm.auto import tqdm
 from transformers import AutoModel, AutoProcessor
+from typing_extensions import override
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
@@ -41,8 +42,6 @@ IMAGE_BASE_FACTOR = 16
 IMAGE_FACTOR = IMAGE_BASE_FACTOR * 2
 MIN_PIXELS = 4 * IMAGE_FACTOR * IMAGE_FACTOR
 MAX_PIXELS = 1800 * IMAGE_FACTOR * IMAGE_FACTOR
-FRAME_MAX_PIXELS = 768 * IMAGE_FACTOR * IMAGE_FACTOR
-MAX_TOTAL_PIXELS = 10 * FRAME_MAX_PIXELS
 DEFAULT_FPS = 1.0
 DEFAULT_MAX_FRAMES = 64
 SPARSE_DIM = 184_016
@@ -57,37 +56,6 @@ _HUB_DOWNLOAD_KWARGS = (
 
 def _hub_download_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
     return {key: kwargs[key] for key in _HUB_DOWNLOAD_KWARGS if key in kwargs}
-
-
-def _video_tensor_to_pil_frames(video: torch.Tensor) -> list[Image.Image]:
-    """Convert MTEB's decoded ``[T, C, H, W]`` frames to UEmbed input."""
-    from PIL import Image
-
-    frames = video.detach().cpu()
-    if frames.ndim != 4:
-        raise ValueError(
-            "Expected video frames with shape [T, C, H, W] or [T, H, W, C], "
-            f"got {tuple(frames.shape)}"
-        )
-
-    if frames.shape[1] in {1, 3, 4}:
-        frames = frames.permute(0, 2, 3, 1)
-    elif frames.shape[-1] not in {1, 3, 4}:
-        raise ValueError(
-            f"Could not identify video channel axis in {tuple(frames.shape)}"
-        )
-
-    if torch.is_floating_point(frames):
-        if frames.numel() and frames.max() <= 1:
-            frames *= 255
-        frames = frames.clamp(0, 255)
-    frames = frames.to(torch.uint8).numpy()
-
-    pil_frames = []
-    for frame in frames:
-        rgb_frame = frame[..., 0] if frame.shape[-1] == 1 else frame
-        pil_frames.append(Image.fromarray(rgb_frame))
-    return pil_frames
 
 
 def _concatenate_sparse_batches(
@@ -137,13 +105,13 @@ class _UEmbedInference:
         max_length: int,
         min_pixels: int,
         max_pixels: int,
-        total_pixels: int,
         fps: float,
-        max_frames: int,
         default_instruction: str,
         processor_kwargs: dict[str, Any] | None,
         **model_kwargs: Any,
     ) -> None:
+        from transformers import AutoImageProcessor, AutoVideoProcessor
+
         if pooling not in SUPPORTED_POOLING:
             raise ValueError(
                 f"Unsupported UEmbed pooling {pooling!r}. "
@@ -153,11 +121,7 @@ class _UEmbedInference:
         self.pooling = pooling
         self.normalize = normalize
         self.max_length = max_length
-        self.min_pixels = min_pixels
-        self.max_pixels = max_pixels
-        self.total_pixels = total_pixels
         self.fps = fps
-        self.max_frames = max_frames
         self.default_instruction = default_instruction
         self.device = torch.device(
             device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -170,17 +134,35 @@ class _UEmbedInference:
         ).to(self.device)
         self.model.eval()
 
+        hub_kwargs = _hub_download_kwargs(model_kwargs)
+        image_processor = AutoImageProcessor.from_pretrained(
+            model_name_or_path,
+            revision=revision,
+            min_pixels=min_pixels,
+            max_pixels=max_pixels,
+            **hub_kwargs,
+        )
+        # VideoCollator already samples frames; skip inner sampling.
+        video_processor = AutoVideoProcessor.from_pretrained(
+            model_name_or_path,
+            revision=revision,
+            do_sample_frames=False,
+            min_pixels=min_pixels,
+            max_pixels=max_pixels,
+            **hub_kwargs,
+        )
+
         processor_load_kwargs = dict(processor_kwargs or {})
-        for key, value in _hub_download_kwargs(model_kwargs).items():
+        for key, value in hub_kwargs.items():
             processor_load_kwargs.setdefault(key, value)
         self.processor = AutoProcessor.from_pretrained(
             model_name_or_path,
             revision=revision,
-            padding_side="right",
+            image_processor=image_processor,
+            video_processor=video_processor,
             **processor_load_kwargs,
         )
         self.tokenizer = self.processor.tokenizer
-        self.tokenizer.padding_side = "right"
 
         self.num_eos_tokens = 0
         self.sparse_lm_heads: torch.nn.ParameterList | None = None
@@ -306,7 +288,9 @@ class _UEmbedInference:
             instruction += "."
         return instruction
 
-    def _format_model_input(self, item: dict[str, Any]) -> list[dict[str, Any]]:
+    def _format_model_input(
+        self, item: dict[str, Any]
+    ) -> tuple[list[dict[str, Any]], list[Image.Image], list[torch.Tensor]]:
         from PIL import Image
 
         instruction = self._format_instruction(item.get("instruction"))
@@ -335,100 +319,60 @@ class _UEmbedInference:
 
         if not texts and not images and not videos:
             content.append({"type": "text", "text": "NULL"})
-            return conversation
+            return conversation, [], []
 
+        video_frames: list[torch.Tensor] = []
         for video_item in videos:
-            if isinstance(video_item, list):
-                frames = video_item[: self.max_frames]
-                video_content = [
-                    f"file://{frame}" if isinstance(frame, str) else frame
-                    for frame in frames
-                ]
-                content.append(
-                    {
-                        "type": "video",
-                        "video": video_content,
-                        "total_pixels": self.total_pixels,
-                    }
-                )
-            elif isinstance(video_item, str):
-                video_content = (
-                    video_item
-                    if video_item.startswith(("http://", "https://"))
-                    else f"file://{video_item}"
-                )
-                content.append(
-                    {
-                        "type": "video",
-                        "video": video_content,
-                        "fps": self.fps,
-                        "max_frames": self.max_frames,
-                    }
-                )
-            else:
+            if not isinstance(video_item, torch.Tensor):
                 raise TypeError(f"Unrecognized video type: {type(video_item)}")
+            content.append({"type": "video"})
+            video_frames.append(video_item)
 
+        pil_images: list[Image.Image] = []
         for image_item in images:
-            if isinstance(image_item, Image.Image):
-                image_content = image_item
-            elif isinstance(image_item, str):
-                image_content = (
-                    image_item
-                    if image_item.startswith(("http://", "https://"))
-                    else f"file://{image_item}"
-                )
-            else:
+            if not isinstance(image_item, Image.Image):
                 raise TypeError(f"Unrecognized image type: {type(image_item)}")
-            content.append(
-                {
-                    "type": "image",
-                    "image": image_content,
-                    "min_pixels": self.min_pixels,
-                    "max_pixels": self.max_pixels,
-                }
-            )
+            content.append({"type": "image"})
+            pil_images.append(image_item)
 
         content.extend(
             {"type": "text", "text": text_item} for text_item in texts if text_item
         )
-        return conversation
+        return conversation, pil_images, video_frames
 
     def _preprocess_inputs(
-        self, conversations: list[list[dict[str, Any]]]
+        self,
+        conversations: list[list[dict[str, Any]]],
+        images: list[Image.Image],
+        videos: list[torch.Tensor],
     ) -> dict[str, torch.Tensor]:
-        from qwen_vl_utils.vision_process import process_vision_info
+        from transformers.video_utils import VideoMetadata
 
         text = self.processor.apply_chat_template(
             conversations,
             add_generation_prompt=True,
             tokenize=False,
         )
-        images, video_inputs, video_kwargs = process_vision_info(
-            conversations,
-            image_patch_size=16,
-            return_video_metadata=True,
-            return_video_kwargs=True,
-        )
-
-        if video_inputs is not None:
-            videos, video_metadata = zip(*video_inputs)
-            videos = list(videos)
-            video_metadata = list(video_metadata)
-        else:
-            videos = None
-            video_metadata = None
+        # Qwen3-VL renders frame timestamps into the prompt, so report the rate
+        # VideoCollator sampled at rather than let the processor assume 24 fps.
+        video_metadata = [
+            VideoMetadata(
+                total_num_frames=len(video),
+                fps=self.fps,
+                frames_indices=list(range(len(video))),
+            )
+            for video in videos
+        ]
 
         inputs = self.processor(
             text=text,
-            images=images,
-            videos=videos,
-            video_metadata=video_metadata,
+            images=images or None,
+            videos=videos or None,
+            video_metadata=video_metadata or None,
             truncation=True,
             max_length=self.max_length,
             padding=True,
-            do_resize=False,
             return_tensors="pt",
-            **video_kwargs,
         )
         return {
             key: value.to(self.device) if hasattr(value, "to") else value
@@ -472,8 +416,16 @@ class _UEmbedInference:
 
     @torch.no_grad()
     def process(self, items: list[dict[str, Any]]) -> torch.Tensor:
-        conversations = [self._format_model_input(item) for item in items]
-        inputs = self._preprocess_inputs(conversations)
+        conversations = []
+        images: list[Image.Image] = []
+        videos: list[torch.Tensor] = []
+        for item in items:
+            conversation, item_images, item_videos = self._format_model_input(item)
+            conversations.append(conversation)
+            images.extend(item_images)
+            videos.extend(item_videos)
+
+        inputs = self._preprocess_inputs(conversations, images, videos)
         outputs = self.model(**inputs)
         hidden_state = outputs.last_hidden_state
         attention_mask = cast("torch.Tensor", inputs["attention_mask"])
@@ -496,12 +448,14 @@ class UEmbedEncoder(AbsEncoder):
         max_length: int = MAX_LENGTH,
         min_pixels: int = MIN_PIXELS,
         max_pixels: int = MAX_PIXELS,
-        total_pixels: int = MAX_TOTAL_PIXELS,
         fps: float = DEFAULT_FPS,
         max_frames: int = DEFAULT_MAX_FRAMES,
         default_instruction: str = DEFAULT_INSTRUCTION,
         apply_instruction_to_passages: bool = False,
         processor_kwargs: dict[str, Any] | None = None,
+        # Output dimension is fixed by `pooling`, but ModelMeta.load_model forwards
+        # embed_dim into loader kwargs, so absorb it here instead of letting it reach
+        # AutoModel.from_pretrained as a config override.
         embed_dim: int | None = None,
         **model_kwargs: Any,
     ) -> None:
@@ -520,22 +474,11 @@ class UEmbedEncoder(AbsEncoder):
             max_length=max_length,
             min_pixels=min_pixels,
             max_pixels=max_pixels,
-            total_pixels=total_pixels,
             fps=fps,
-            max_frames=max_frames,
             default_instruction=default_instruction,
             processor_kwargs=processor_kwargs,
             **model_kwargs,
         )
-
-        actual_dim = (
-            self.model.dense_dim if pooling == "last.normal" else self.model.sparse_dim
-        )
-        if embed_dim is not None and embed_dim != actual_dim:
-            raise ValueError(
-                f"UEmbed pooling {pooling!r} produces dimension {actual_dim}, "
-                f"not requested dimension {embed_dim}."
-            )
 
     @property
     def mteb_model_meta(self) -> ModelMeta | None:
@@ -599,10 +542,7 @@ class UEmbedEncoder(AbsEncoder):
         for row_index in range(batch_size):
             item: dict[str, Any] = {}
             for key in modality_keys:
-                value = batch[key][row_index]  # type: ignore[index,literal-required]
-                if key == "video" and isinstance(value, torch.Tensor):
-                    value = _video_tensor_to_pil_frames(value)
-                item[key] = value
+                item[key] = batch[key][row_index]  # type: ignore[index,literal-required]
             if instruction:
                 item["instruction"] = instruction
             items.append(item)
@@ -619,17 +559,19 @@ class UEmbedEncoder(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        del hf_split, hf_subset, kwargs
-        if self.pooling == "splade.last" and (
-            task_metadata.simplified_task_type != "retrieval"
-            or "Reranking" in task_metadata.type
-        ):
-            raise ValueError(
-                "UEmbed splade.last currently supports retrieval tasks only; "
-                f"task {task_metadata.name!r} has type {task_metadata.type!r}."
-            )
-
         instruction = self._instruction(task_metadata, prompt_type)
+        output_dim = (
+            self.model.dense_dim
+            if self.pooling == "last.normal"
+            else self.model.sparse_dim
+        )
+        # Retrieval scores sparse embeddings directly through torch.sparse.mm; every
+        # other evaluator needs dense arrays, so never build COO for them.
+        keep_sparse = (
+            self.pooling == "splade.last"
+            and task_metadata.simplified_task_type == "retrieval"
+        )
+
         has_video = "video" in inputs.dataset.features  # type: ignore[attr-defined]
         original_collate_fn = inputs.collate_fn
         if has_video:
@@ -639,8 +581,7 @@ class UEmbedEncoder(AbsEncoder):
                 max_frames=self.max_frames,
             )
 
-        dense_batches: list[torch.Tensor] = []
-        sparse_batches: list[torch.Tensor] = []
+        batches: list[torch.Tensor] = []
         try:
             for batch in tqdm(
                 inputs,
@@ -649,46 +590,46 @@ class UEmbedEncoder(AbsEncoder):
             ):
                 items = self._batch_to_items(batch, instruction)
                 embeddings = self.model.process(items).detach().float().cpu()
-                if self.pooling == "last.normal":
-                    dense_batches.append(embeddings)
-                else:
-                    sparse_batches.append(embeddings.to_sparse_coo().coalesce())
+                if keep_sparse:
+                    embeddings = embeddings.to_sparse_coo().coalesce()
+                batches.append(embeddings)
         finally:
             inputs.collate_fn = original_collate_fn
 
-        if self.pooling == "last.normal":
-            if not dense_batches:
-                return torch.empty((0, self.model.dense_dim), dtype=torch.float32)
-            return torch.cat(dense_batches)
-        return _concatenate_sparse_batches(sparse_batches, self.model.sparse_dim)
+        if keep_sparse:
+            return _concatenate_sparse_batches(batches, output_dim)
+        if not batches:
+            return torch.empty((0, output_dim), dtype=torch.float32)
+        return torch.cat(batches)
 
+    @override
     def similarity(self, embeddings1: Array, embeddings2: Array) -> torch.Tensor:
-        if self.pooling == "last.normal":
-            first = torch.as_tensor(embeddings1)
-            second = torch.as_tensor(embeddings2)
-            # Callers such as the summarization evaluator pass a single embedding per
-            # side, which has no dimension to transpose.
-            if first.ndim == 1:
-                first = first.unsqueeze(0)
-            if second.ndim == 1:
-                second = second.unsqueeze(0)
-            return first @ second.transpose(-2, -1)
+        first = torch.as_tensor(embeddings1)
+        second = torch.as_tensor(embeddings2)
+        if first.is_sparse:
+            return torch.sparse.mm(
+                first.coalesce(), second.coalesce().transpose(0, 1)
+            ).to_dense()
 
-        first = cast("torch.Tensor", embeddings1).coalesce()
-        second = cast("torch.Tensor", embeddings2).coalesce()
-        return torch.sparse.mm(first, second.transpose(0, 1)).to_dense()
+        # Callers such as the summarization evaluator pass a single embedding per
+        # side, which has no dimension to transpose.
+        if first.ndim == 1:
+            first = first.unsqueeze(0)
+        if second.ndim == 1:
+            second = second.unsqueeze(0)
+        return first @ second.transpose(-2, -1)
 
+    @override
     def similarity_pairwise(
         self, embeddings1: Array, embeddings2: Array
     ) -> torch.Tensor:
-        if self.pooling == "last.normal":
-            first = torch.as_tensor(embeddings1)
-            second = torch.as_tensor(embeddings2)
-            return (first * second).sum(dim=-1)
-
-        first = cast("torch.Tensor", embeddings1).coalesce()
-        second = cast("torch.Tensor", embeddings2).coalesce()
-        return torch.sparse.sum(first * second, dim=1).to_dense()
+        first = torch.as_tensor(embeddings1)
+        second = torch.as_tensor(embeddings2)
+        if first.is_sparse:
+            return torch.sparse.sum(
+                first.coalesce() * second.coalesce(), dim=1
+            ).to_dense()
+        return (first * second).sum(dim=-1)
 
 
 UEMBED_CITATION = """@misc{uembed2026,
@@ -727,39 +668,38 @@ _COMMON_METADATA = dict(
     public_training_data=True,
     training_datasets=UEMBED_TRAINING_DATASETS,
     citation=UEMBED_CITATION,
-    experiment_kwargs={"pooling": "last.normal"},
     extra_requirements_groups=["uembed"],
 )
 
 uembed_2b = ModelMeta(
     name="Alibaba-NLP/UEmbed-2B",
-    revision="b544aa19b50b5961f0a14f22c9f8abf1eafa80bc",
+    revision="d02beb2d8b975f8140ebb035bd0e1dbf8afe98c4",
     n_parameters=2_590_290_448,
     n_embedding_parameters=508_559_360,
     memory_usage_mb=4941,
-    embed_dim=[2048, 184_016],
+    embed_dim=2048,
     reference="https://huggingface.co/Alibaba-NLP/UEmbed-2B",
     **_COMMON_METADATA,
 )
 
 uembed_4b = ModelMeta(
     name="Alibaba-NLP/UEmbed-4B",
-    revision="5ceafb64ad1049f2c6d6b179dd8a878e75444a4f",
+    revision="2982eab2f474ce762362209a1045c882c2ed43e5",
     n_parameters=5_010_530_512,
     n_embedding_parameters=635_699_200,
     memory_usage_mb=9557,
-    embed_dim=[2560, 184_016],
+    embed_dim=2560,
     reference="https://huggingface.co/Alibaba-NLP/UEmbed-4B",
     **_COMMON_METADATA,
 )
 
 uembed_9b = ModelMeta(
     name="Alibaba-NLP/UEmbed-9B",
-    revision="ea380efb495d62d324c7bbaa6c6b23a0f748692d",
+    revision="08fffab347965cd9e4bcfdb17a7c27d7d0ebfa4d",
     n_parameters=9_146_608_576,
     n_embedding_parameters=1_017_118_720,
     memory_usage_mb=17446,
-    embed_dim=[4096, 184_016],
+    embed_dim=4096,
     reference="https://huggingface.co/Alibaba-NLP/UEmbed-9B",
     **_COMMON_METADATA,
 )
