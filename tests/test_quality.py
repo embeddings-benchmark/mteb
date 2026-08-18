@@ -1,12 +1,12 @@
 """Tests for `mteb.quality`."""
 
 import logging
+from collections.abc import Callable
 
 import pytest
 from datasets import Dataset, DatasetDict
 
 import mteb
-from mteb.evaluate import _check_data_not_modified
 from mteb.mocks import (
     MockClassificationTask,
     MockClusteringTask,
@@ -17,9 +17,16 @@ from mteb.mocks import (
     MockRetrievalTask,
     MockSTSTask,
 )
-from mteb.quality import remove_duplicates
+from mteb.mocks.mock_tasks.reranking import MockAggregatedTask
+from mteb.quality import (
+    alphanumeric_text,
+    casefold_text,
+    remove_duplicates,
+    strip_whitespace,
+)
 from mteb.quality._filters import (
     _check_unusable_data,
+    _derived_task_name,
     _keep_first_occurrence,
     _row_key,
 )
@@ -56,7 +63,7 @@ def test_row_key_distinguishes_differently_split_rows() -> None:
 def test_remove_duplicates_keeps_first_occurrence_per_split() -> None:
     task = _classification_task()
 
-    remove_duplicates(task)
+    task = remove_duplicates(task)
 
     # "a shared text " is a duplicate of "a shared text" once stripped
     assert task.dataset["test"]["text"] == ["a shared text", "hi", "long text"]
@@ -67,21 +74,28 @@ def test_remove_duplicates_keeps_first_occurrence_per_split() -> None:
 def test_remove_duplicates_keeps_the_other_columns_aligned() -> None:
     task = _classification_task()
 
-    remove_duplicates(task)
+    task = remove_duplicates(task)
 
     assert task.dataset["test"]["label"] == [0, 0, 0]
 
 
-def test_remove_duplicates_returns_the_task() -> None:
+def test_remove_duplicates_returns_a_copy_and_leaves_the_original_alone() -> None:
     task = _classification_task()
+    before = list(task.dataset["test"]["text"])
 
-    assert remove_duplicates(task) is task
+    cleaned = remove_duplicates(task)
+
+    assert cleaned is not task
+    assert task.dataset["test"]["text"] == before
+    assert not task.data_modified
+    assert cleaned.data_modified
+    assert len(cleaned.dataset["test"]) < len(task.dataset["test"])
 
 
 def test_remove_duplicates_can_be_restricted_to_a_split() -> None:
     task = _classification_task()
 
-    remove_duplicates(task, splits=["train"])
+    task = remove_duplicates(task, splits=["train"])
 
     assert len(task.dataset["test"]) == 4
 
@@ -90,21 +104,24 @@ def test_remove_duplicates_loads_the_data_when_it_is_not_loaded() -> None:
     task = MockClassificationTask()
     assert not task.data_loaded
 
-    remove_duplicates(task)
+    task = remove_duplicates(task)
 
     assert task.data_loaded
 
 
 @pytest.mark.parametrize(
-    ("normalize", "expected"),
+    ("normalization", "expected"),
     [
-        ("strip", ["Wake me up!", "wake me up", "wake me up!", "wake  me  up"]),
-        ("casefold", ["Wake me up!", "wake me up", "wake  me  up"]),
-        ("alphanumeric", ["Wake me up!"]),
+        (
+            strip_whitespace,
+            ["Wake me up!", "wake me up", "wake me up!", "wake  me  up"],
+        ),
+        (casefold_text, ["Wake me up!", "wake me up", "wake  me  up"]),
+        (alphanumeric_text, ["Wake me up!"]),
     ],
 )
-def test_normalize_controls_how_close_a_duplicate_has_to_be(
-    normalize: str, expected: list[str]
+def test_normalization_controls_how_close_a_duplicate_has_to_be(
+    normalization: Callable[[str], str], expected: list[str]
 ) -> None:
     task = MockClassificationTask()
     texts = ["Wake me up!", "wake me up", "wake me up!", "wake  me  up"]
@@ -113,12 +130,12 @@ def test_normalize_controls_how_close_a_duplicate_has_to_be(
     )
     task.data_loaded = True
 
-    remove_duplicates(task, normalize=normalize)  # type: ignore[arg-type]
+    cleaned = remove_duplicates(task, normalization=normalization)
 
-    assert task.dataset["test"]["text"] == expected
+    assert cleaned.dataset["test"]["text"] == expected
 
 
-def test_alphanumeric_drops_punctuation_instead_of_splitting_on_it() -> None:
+def test_a_normalization_that_drops_punctuation_does_not_split_words() -> None:
     task = MockClassificationTask()
     texts = ["e-mail", "email", "e mail"]
     task.dataset = DatasetDict(
@@ -126,7 +143,7 @@ def test_alphanumeric_drops_punctuation_instead_of_splitting_on_it() -> None:
     )
     task.data_loaded = True
 
-    remove_duplicates(task, normalize="alphanumeric")
+    task = remove_duplicates(task, normalization=alphanumeric_text)
 
     # "e-mail" and "email" match, but whitespace is collapsed rather than removed
     assert task.dataset["test"]["text"] == ["e-mail", "e mail"]
@@ -152,7 +169,7 @@ def _multilingual_task() -> MockMultilingualClassificationTask:
 def test_remove_duplicates_applies_to_every_subset() -> None:
     task = _multilingual_task()
 
-    remove_duplicates(task)
+    task = remove_duplicates(task)
 
     for subset in task.dataset:
         assert task.dataset[subset]["test"]["text"] == ["duplicated"]
@@ -161,7 +178,7 @@ def test_remove_duplicates_applies_to_every_subset() -> None:
 def test_remove_duplicates_can_be_restricted_to_a_subset() -> None:
     task = _multilingual_task()
 
-    remove_duplicates(task, subsets=["eng"])
+    task = remove_duplicates(task, subsets=["eng"])
 
     assert task.dataset["eng"]["test"]["text"] == ["duplicated"]
     assert task.dataset["fra"]["test"]["text"] == ["duplicated", "duplicated"]
@@ -182,7 +199,7 @@ def test_remove_duplicates_uses_both_columns_of_a_pair_task() -> None:
     )
     task.data_loaded = True
 
-    remove_duplicates(task)
+    task = remove_duplicates(task)
 
     # only the third row duplicates the first, the second differs in `sentence2`
     assert task.dataset["test"]["sentence2"] == ["other", "different"]
@@ -202,7 +219,7 @@ def test_remove_duplicates_applies_within_a_row_of_a_clustering_task() -> None:
     )
     task.data_loaded = True
 
-    remove_duplicates(task)
+    task = remove_duplicates(task)
 
     row = task.dataset["test"][0]
     assert row["sentences"] == ["repeated", "distinct"]
@@ -219,7 +236,7 @@ def test_remove_duplicates_compares_images_by_content() -> None:
         {"image": [images[0], images[0], images[1]], "label": [0, 1, 2]}
     )
 
-    remove_duplicates(task)
+    task = remove_duplicates(task)
 
     assert task.dataset[split]["label"] == [0, 2]
 
@@ -228,36 +245,47 @@ def test_remove_duplicates_raises_for_unknown_columns() -> None:
     task = _classification_task()
 
     with pytest.raises(ValueError, match="does not declare the columns"):
-        remove_duplicates(task, columns=["not_a_column"])
+        task = remove_duplicates(task, columns=["not_a_column"])
 
 
 def test_remove_duplicates_raises_when_nothing_is_selected() -> None:
     task = _classification_task()
 
     with pytest.raises(ValueError, match="do not select any data"):
-        remove_duplicates(task, splits=["nope"])
+        task = remove_duplicates(task, splits=["nope"])
 
 
 def test_a_filter_that_removes_nothing_leaves_the_task_unmodified() -> None:
     task = _classification_task()
 
-    remove_duplicates(task, splits=["train"])
+    task = remove_duplicates(task, splits=["train"])
 
     assert not task.data_modified
 
 
-def test_filtering_marks_the_task_as_modified_and_reports_it_once(
-    caplog: pytest.LogCaptureFixture,
-) -> None:
+def test_filtering_renames_the_task_after_the_filter() -> None:
     task = _classification_task()
 
-    with caplog.at_level(logging.WARNING, logger="mteb.quality._filters"):
-        remove_duplicates(task)
-        remove_duplicates(task, normalize="alphanumeric")
+    cleaned = remove_duplicates(task)
 
-    assert task.data_modified
-    # the second filter finds the task already modified and stays quiet about it
-    assert sum("no longer matches revision" in m for m in caplog.messages) == 1
+    assert cleaned.metadata.name == "MockClassificationTask (remove_duplicates)"
+    assert cleaned.metadata.adapted_from == ["MockClassificationTask"]
+    assert cleaned.data_modified
+    # the published task, and every other instance of it, keeps its own name
+    assert task.metadata.name == "MockClassificationTask"
+    assert MockClassificationTask.metadata.name == "MockClassificationTask"
+
+
+def test_a_filter_that_removes_nothing_does_not_rename() -> None:
+    cleaned = remove_duplicates(_classification_task(), splits=["train"])
+
+    assert cleaned.metadata.name == "MockClassificationTask"
+
+
+def test_reapplying_the_same_filter_does_not_repeat_it_in_the_name() -> None:
+    cleaned = remove_duplicates(remove_duplicates(_classification_task()))
+
+    assert cleaned.metadata.name == "MockClassificationTask (remove_duplicates)"
 
 
 def test_unloading_the_data_clears_the_modified_flag() -> None:
@@ -269,25 +297,35 @@ def test_unloading_the_data_clears_the_modified_flag() -> None:
     assert not task.data_modified
 
 
-def test_a_modified_task_cannot_be_evaluated() -> None:
-    task = remove_duplicates(_classification_task())
+def test_a_cleaned_task_can_be_evaluated() -> None:
+    task = MockSTSTask()
+    task.dataset = DatasetDict(
+        {
+            "test": Dataset.from_dict(
+                {
+                    "sentence1": ["a", "a", "b"],
+                    "sentence2": ["x", "x", "y"],
+                    "score": [1.0, 1.0, 2.0],
+                }
+            )
+        }
+    )
+    task.data_loaded = True
+    cleaned = remove_duplicates(task)
     model = mteb.get_model("mteb/baseline-random-encoder")
 
-    with pytest.raises(ValueError, match="modified locally"):
-        mteb.evaluate(model, [task], cache=None, co2_tracker=False)
+    results = mteb.evaluate(model, [cleaned], cache=None, co2_tracker=False)
+
+    assert results[0].task_name == "MockSTSTask (remove_duplicates)"
 
 
-def test_an_unmodified_task_passes_the_guard() -> None:
-    _check_data_not_modified([_classification_task()])
-
-
-def test_building_a_result_from_a_modified_task_warns() -> None:
-    task = _classification_task()
-    task.data_modified = True
+def test_a_result_records_the_cleaned_task_name() -> None:
+    cleaned = remove_duplicates(_classification_task())
     scores = {"test": {"default": {"accuracy": 1.0, "main_score": 1.0}}}
 
-    with pytest.warns(UserWarning, match="modified locally"):
-        TaskResult.from_task_results(task, scores, evaluation_time=1.0)
+    result = TaskResult.from_task_results(cleaned, scores, evaluation_time=1.0)
+
+    assert result.task_name == "MockClassificationTask (remove_duplicates)"
 
 
 def test_an_emptied_split_is_reported(caplog: pytest.LogCaptureFixture) -> None:
@@ -315,7 +353,7 @@ def test_a_label_that_filtering_made_untrainable_is_reported(
 
     # deduplicating train drops the only example of label 1
     with caplog.at_level(logging.WARNING, logger="mteb.quality._classification"):
-        remove_duplicates(task, splits=["train"])
+        task = remove_duplicates(task, splits=["train"])
 
     assert any("can never be predicted" in m for m in caplog.messages)
 
@@ -338,7 +376,7 @@ def test_retrieval_deduplication_moves_judgements_to_the_kept_document() -> None
         "top_ranked": None,
     }
 
-    remove_duplicates(task)
+    task = remove_duplicates(task)
 
     data = task.dataset[subset][split]
     assert data["corpus"]["id"] == ["d1", "d3"]
@@ -359,7 +397,7 @@ def test_retrieval_remap_uses_the_same_normalization_as_the_filter() -> None:
         "top_ranked": None,
     }
 
-    remove_duplicates(task, normalize="alphanumeric")
+    task = remove_duplicates(task, normalization=alphanumeric_text)
 
     data = task.dataset[subset][split]
     assert data["corpus"]["id"] == ["d1"]
@@ -382,7 +420,7 @@ def test_retrieval_deduplication_merges_duplicated_queries() -> None:
         "top_ranked": None,
     }
 
-    remove_duplicates(task)
+    task = remove_duplicates(task)
 
     data = task.dataset[subset][split]
     assert data["queries"]["id"] == ["q1"]
@@ -402,7 +440,7 @@ def test_reranking_top_ranked_is_kept_consistent() -> None:
         "top_ranked": {"q1": ["d2", "d3", "d1"]},
     }
 
-    remove_duplicates(task)
+    task = remove_duplicates(task)
 
     data = task.dataset[subset][split]
     # d2 is remapped onto d1, which then already occurs in the list
@@ -416,7 +454,7 @@ def test_an_unsupported_modality_is_refused(monkeypatch: pytest.MonkeyPatch) -> 
     )
 
     with pytest.raises(NotImplementedError, match="cannot compare the \\['smell'\\]"):
-        remove_duplicates(task)
+        task = remove_duplicates(task)
 
 
 def test_swapped_pairs_are_duplicates_for_a_symmetric_task() -> None:
@@ -434,7 +472,7 @@ def test_swapped_pairs_are_duplicates_for_a_symmetric_task() -> None:
     )
     task.data_loaded = True
 
-    remove_duplicates(task)
+    task = remove_duplicates(task)
 
     # ("beta", "alpha") is the same pair as ("alpha", "beta"), so only the first is kept
     assert task.dataset["test"]["sentence1"] == ["alpha", "gamma"]
@@ -456,7 +494,7 @@ def test_swapped_pairs_are_distinct_for_an_order_sensitive_task() -> None:
     )
     task.data_loaded = True
 
-    remove_duplicates(task)
+    task = remove_duplicates(task)
 
     assert len(task.dataset["test"]) == 2
 
@@ -476,7 +514,7 @@ def test_narrowing_to_one_side_keeps_the_comparison_order_sensitive() -> None:
     )
     task.data_loaded = True
 
-    remove_duplicates(task, columns=["sentence1"])
+    task = remove_duplicates(task, columns=["sentence1"])
 
     assert len(task.dataset["test"]) == 2
 
@@ -498,7 +536,7 @@ def test_retrieval_compares_the_title_as_part_of_the_document() -> None:
         "top_ranked": None,
     }
 
-    remove_duplicates(task)
+    task = remove_duplicates(task)
 
     data = task.dataset[subset][split]
     # a document is encoded as "title text", so d2 differs from d1 while d3 does not
@@ -522,6 +560,68 @@ def test_retrieval_compares_queries_on_the_columns_they_have() -> None:
         "top_ranked": None,
     }
 
-    remove_duplicates(task)
+    task = remove_duplicates(task)
 
     assert task.dataset[subset][split]["queries"]["id"] == ["q1"]
+
+
+def test_the_original_task_is_untouched_for_every_dataset_shape() -> None:
+    for task in (_multilingual_task(), MockRetrievalTask(), MockSTSTask()):
+        task.load_data()
+        before = repr(task.dataset)
+
+        cleaned = remove_duplicates(task)
+
+        assert cleaned is not task
+        assert cleaned.dataset is not task.dataset
+        assert repr(task.dataset) == before
+        assert not task.data_modified
+
+
+def test_an_aggregate_task_is_copied_with_its_subtasks() -> None:
+    task = MockAggregatedTask()
+
+    cleaned = remove_duplicates(task)
+
+    assert cleaned is not task
+    assert all(a is not b for a, b in zip(cleaned.tasks, task.tasks))
+    assert not any(t.data_modified for t in task.tasks)
+
+
+def test_normalization_accepts_any_callable() -> None:
+    task = MockClassificationTask()
+    task.dataset = DatasetDict(
+        {
+            "test": Dataset.from_dict(
+                {
+                    "text": ["report-2024", "report-2025", "summary-2024"],
+                    "label": [0, 1, 2],
+                }
+            )
+        }
+    )
+    task.data_loaded = True
+
+    # the presets are conveniences, not the only options: compare on the prefix alone
+    cleaned = remove_duplicates(task, normalization=lambda text: text.split("-")[0])
+
+    assert cleaned.dataset["test"]["text"] == ["report-2024", "summary-2024"]
+
+
+@pytest.mark.parametrize(
+    ("name", "filter_name", "expected"),
+    [
+        ("Task", "remove_duplicates", "Task (remove_duplicates)"),
+        (
+            "Task (remove_duplicates)",
+            "filter_short",
+            "Task (remove_duplicates, filter_short)",
+        ),
+        ("Task (remove_duplicates)", "remove_duplicates", "Task (remove_duplicates)"),
+        ("Task.v2", "remove_duplicates", "Task.v2 (remove_duplicates)"),
+    ],
+)
+def test_derived_task_name_extends_rather_than_nests(
+    name: str, filter_name: str, expected: str
+) -> None:
+    assert _derived_task_name(name, filter_name) == expected

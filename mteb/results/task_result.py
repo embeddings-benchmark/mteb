@@ -3,7 +3,6 @@ from __future__ import annotations
 import datetime
 import json
 import logging
-import warnings
 from collections import defaultdict
 from functools import cached_property
 from importlib.metadata import version
@@ -199,16 +198,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_phases: A list of dicts describing the start, end, and name of each phase.
         """
         task_meta = task.metadata
-        if task.data_modified:
-            msg = (
-                f"Building a result for '{task_meta.name}' from a task whose data was modified locally, e.g. by "
-                "a filter from `mteb.quality`. The result records the revision of the published "
-                "dataset, so it is indistinguishable from a regular result while not being comparable to one. Do "
-                "not submit it to the leaderboard."
-            )
-            logger.warning(msg)
-            warnings.warn(msg, stacklevel=2)
-
         subset2langscripts = task_meta.hf_subsets_to_langscripts
         mteb_ver = version("mteb")
         flat_scores: dict[SplitName, list[ScoresDict]] = defaultdict(list)

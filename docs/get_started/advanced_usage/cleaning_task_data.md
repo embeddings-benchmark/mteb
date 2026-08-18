@@ -31,11 +31,10 @@ For a task you are developing, compute the statistics yourself with
 
 ## Available filters
 
-Each filter takes a task, modifies its dataset in place and returns it, so they can be chained. They cover every split and subset by default; see the linked reference for the arguments.
+Each filter takes a task and returns a cleaned copy, leaving the task you passed in untouched. They cover every split and subset by default; see the linked reference for the arguments that narrow that down.
 
-| filter | removes |
-|---|---|
-| [`remove_duplicates`][mteb.quality.remove_duplicates] | [repeated samples](#removing-duplicates) |
+- [`remove_duplicates`][mteb.quality.remove_duplicates] removes [repeated samples](#removing-duplicates).
+
 
 ## Removing duplicates
 
@@ -44,58 +43,51 @@ Each filter takes a task, modifies its dataset in place and returns it, so they 
 ```python
 from mteb.quality import remove_duplicates
 
-task = remove_duplicates(task)
+cleaned = remove_duplicates(task)
 
-print({split: len(data) for split, data in task.dataset["en"].items()})
+print({split: len(data) for split, data in cleaned.dataset["en"].items()})
 # {'train': 11468, 'test': 2970, 'validation': 2031}, from 11514 / 2974 / 2033
 ```
 
-Two documents count as duplicates when they are identical once surrounding whitespace is stripped. `normalize=`
-loosens that to ignore case, or case and punctuation:
+Two texts are duplicates when `normalization` rewrites both to the same string. It defaults to stripping surrounding whitespace, and you pass any function to loosen that:
 
 ```python
-task = remove_duplicates(
-    task, normalize="alphanumeric"
-)  # "Wake me up!" == "wake  me  up"
+from mteb.quality import alphanumeric_text, casefold_text
+
+# "Wake me up!" == "wake me up!"
+cleaned = remove_duplicates(task, normalization=casefold_text)
+
+# "Wake me up!" == "wake me up", and "e-mail" == "email"
+cleaned = remove_duplicates(task, normalization=alphanumeric_text)
 ```
 
-Text is compared as text, while images, audio and video are compared by a hash of their content, so the filter
-works on any task. Retrieval tasks keep their relevance judgements valid: a judgement pointing at a removed
-duplicate moves to the copy that was kept.
+Only text is normalized; images, audio and video are compared by an exact hash of their content, so the filter works on any task but does not match a re-encoded or
+rescaled copy of a sample. Retrieval tasks keep their relevance judgements valid: a judgement pointing at a removed duplicate moves to the copy that was kept.
 
-## Changes after cleaning Task Data
+## Cleaning produces a new task
 
-Cleaning changes the data, and it would change the scores too, because the model would be
-evaluated on different data. What it does *not* change is the task's name or its `dataset_revision`, so such a
-score would be indistinguishable from one computed on the published dataset while not being comparable to it.
-
-For that reason a cleaned task is marked with `data_modified` and [`mteb.evaluate`][mteb.evaluate] refuses to run
-it:
+A cleaned task is a different task, so it is given an id of its own rather than reusing the published one:
 
 ```python
-mteb.evaluate(model, task)
-# ValueError: The data of ['MassiveIntentClassification'] was modified locally ...
+cleaned = remove_duplicates(task)
+
+print(task.metadata.name)  # MassiveIntentClassification
+print(cleaned.metadata.name)  # MassiveIntentClassification (remove_duplicates)
 ```
 
+Each filter adds its name to the list, so applying a second one gives
+`MassiveIntentClassification (remove_duplicates, filter_short)`. The task you passed in keeps its own name, and
+`adapted_from` on the copy records where the data came from.
 
-!!! warning
-    Scores from a locally cleaned task are not accepted on the
-    [leaderboard](https://huggingface.co/spaces/mteb/leaderboard). They are not comparable to any other result, and
-    nothing in the result file would distinguish them.
+That id is what keeps the result honest. You evaluate a cleaned task as usual, and its scores are recorded against
+the cleaned id rather than against the published dataset:
 
-## Contributing the fix
+```python
+results = mteb.evaluate(model, [cleaned])
+print(results[0].task_name)  # MassiveIntentClassification (remove_duplicates)
+```
 
-If a dataset needs cleaning, everyone benefits from fixing it once rather than in each user's script. Submit the
-cleaned data as a **new version of the task** rather than as scores. A new version:
-
-- bumps the version suffix of the task name, so `MassiveIntentClassification` becomes
-  `MassiveIntentClassification.v2`. The suffix replaces rather than accumulates, so a task that is already at `.v2` becomes `.v3`.
-- points `adapted_from` at the task it was derived from, and sets `superseded_by` on every older version so that
-  users of those are warned towards the current one.
-
-See [Adding a Task](../../contributing/adding_a_dataset.md) for the full process, and
-[`push_dataset_to_hub`][mteb.AbsTask.push_dataset_to_hub] for uploading the cleaned data.
-`scripts/data/clean_and_update_tasks.py` automates the version bump, including finding the highest existing
-version.
-
-That way the fix keeps its own identity, and results on the old and the new version remain distinguishable.
+!!! note
+    As cleaning the dataset changes the score, we do not accept scores from modified datasets on the
+    [leaderboard](https://huggingface.co/spaces/mteb/leaderboard). We do however allow a cleaned version of a
+    dataset to be [submitted to MTEB](../../contributing/adding_a_dataset.md#contributing-the-fix).

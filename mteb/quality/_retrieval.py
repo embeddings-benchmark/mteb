@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
     from mteb.types import Modalities
 
-    from ._filters import KeepIndicesFn, TextNormalization
+    from ._filters import KeepIndicesFn, Normalization
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +68,7 @@ def _select_kept_entries(
     keep_fn: KeepIndicesFn,
     col_modalities: Mapping[str, Modalities],
     *,
-    normalize: TextNormalization,
+    normalization: Normalization,
     remap_duplicates: bool,
     num_proc: int | None,
 ) -> tuple[Dataset, set[str], dict[str, str]]:
@@ -82,7 +82,7 @@ def _select_kept_entries(
         kept entry with the same content. That mapping is empty unless `remap_duplicates` is set.
     """
     rows = _iter_row_content(
-        dataset, col_modalities, normalize=normalize, num_proc=num_proc
+        dataset, col_modalities, normalization=normalization, num_proc=num_proc
     )
     keep = keep_fn(rows)
     ids = dataset["id"]
@@ -93,7 +93,7 @@ def _select_kept_entries(
         keep_set = set(keep)
         canonical: dict[bytes, str] = {}
         all_rows = _iter_row_content(
-            dataset, col_modalities, normalize=normalize, num_proc=num_proc
+            dataset, col_modalities, normalization=normalization, num_proc=num_proc
         )
         for i, row in enumerate(all_rows):
             key = _row_key(row)
@@ -110,7 +110,7 @@ def _filter_retrieval_split(  # noqa: PLR0914
     keep_fn: KeepIndicesFn,
     col_modalities: Mapping[str, Modalities],
     *,
-    normalize: TextNormalization = "strip",
+    normalization: Normalization,
     remap_duplicates: bool = False,
     num_proc: int | None = None,
 ) -> tuple[RetrievalSplitData, int]:
@@ -120,7 +120,7 @@ def _filter_retrieval_split(  # noqa: PLR0914
         split_data: The corpus, queries, relevance judgements and top-ranked documents of one split.
         keep_fn: Decides which documents and queries to keep.
         col_modalities: The columns of the corpus and the queries to compare, mapped to their modality.
-        normalize: How to normalize text before comparing it.
+        normalization: How to rewrite text before comparing it.
         remap_duplicates: Whether a removed document or query should hand its relevance judgements over to the
             first kept entry with the same content. This is what makes deduplication lossless; for a filter that
             removes entries on their own merit, such as a length filter, it must be False.
@@ -140,7 +140,7 @@ def _filter_retrieval_split(  # noqa: PLR0914
         old_corpus,
         keep_fn,
         corpus_columns,
-        normalize=normalize,
+        normalization=normalization,
         remap_duplicates=remap_duplicates,
         num_proc=num_proc,
     )
@@ -148,7 +148,7 @@ def _filter_retrieval_split(  # noqa: PLR0914
         old_queries,
         keep_fn,
         query_columns,
-        normalize=normalize,
+        normalization=normalization,
         remap_duplicates=remap_duplicates,
         num_proc=num_proc,
     )

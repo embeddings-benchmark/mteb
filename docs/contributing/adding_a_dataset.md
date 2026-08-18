@@ -618,7 +618,28 @@ Before creating a pull request, it is important to calculate some descriptive st
 To calculate the descriptive statistics, you can run [`task.calculate_descriptive_statistics()`][mteb.AbsTask.calculate_descriptive_statistics].
 By default, this method caches the results and loads them from cache on subsequent calls. To recalculate the statistics (overwriting the cached results), use the `overwrite_results=True`.
 
-If the statistics show that the dataset does contain duplicates, very short documents or any other dataset cleaning, see [Cleaning task data](../get_started/advanced_usage/cleaning_task_data.md) for how to find and remove them.
+If the statistics show that the dataset does contain duplicates, very short documents or other quality concerns, see [Cleaning task data](../get_started/advanced_usage/cleaning_task_data.md) for how to find and remove them.
+
+
+### Contributing the fix
+
+If a dataset needs cleaning, everyone benefits from fixing it once rather than in each user's script. Submit the
+cleaned data as a **new version of the task** rather than as scores. A new version:
+
+- bumps the version suffix of the task name, so `MassiveIntentClassification` becomes `MassiveIntentClassification.v2`. The suffix replaces rather than accumulates, so a task already at `.v2` becomes `.v3`.
+- points `adapted_from` at the task it was derived from, and sets `superseded_by` on every older version so that users of those are warned towards the current one.
+- fills out its own `TaskMetadata` and descriptive statistics, following the sections above.
+
+A task cleaned locally carries a name recording what was done to it, such as
+`MassiveIntentClassification (remove_duplicates)`. That name is for your own runs; a contributed version takes a
+version id instead, so it can be evaluated and compared like any other task in `mteb`.
+
+Use [`push_dataset_to_hub`][mteb.AbsTask.push_dataset_to_hub] to upload the cleaned data.
+`scripts/data/clean_and_update_tasks.py` automates the version bump, including finding the highest existing
+version and setting `superseded_by` on the older classes.
+
+That way the fix keeps its own identity, and results on the old and the new version remain distinguishable.
+
 
 ### Submit a Pull Request
 

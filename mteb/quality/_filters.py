@@ -8,6 +8,7 @@ type. The public filters are at the bottom.
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import logging
 import re
@@ -16,9 +17,10 @@ from collections.abc import (
     Iterable,
     Mapping,  # noqa: TC003
 )
-from typing import TYPE_CHECKING, Any, Literal, TypeVar, cast
+from dataclasses import dataclass
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
-from datasets import Dataset
+from datasets import Dataset, DatasetDict
 
 from mteb._content_hashes import MODALITY_HASH_FNS
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
@@ -28,27 +30,43 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
 
-    from datasets import DatasetDict
-
     from mteb.abstasks.abstask import AbsTask
+    from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import HFSubset, Modalities
 
 logger = logging.getLogger(__name__)
 
 T = TypeVar("T", bound="AbsTask")
 
-TextNormalization = Literal["strip", "casefold", "alphanumeric"]
-"""How much of a difference between two documents to ignore when deciding whether they are duplicates.
+Normalization = Callable[[str], str]
+"""Rewrites a text into the form a filter compares it in.
 
-- `"strip"`: only ignore surrounding whitespace, so the texts must otherwise be identical.
-- `"casefold"`: also ignore case, so `"Hello"` and `"hello"` are duplicates.
-- `"alphanumeric"`: also ignore punctuation and repeated whitespace, so `"hello, world!"` and `"Hello world"` are
-    duplicates, as are `"e-mail"` and `"email"`. This is the most aggressive option and can merge documents that a
-    reader would tell apart, e.g. source code or texts where punctuation carries the meaning. Word boundaries are
-    still significant, so `"e mail"` remains distinct from `"email"`.
-
-It only applies to text. Images, audio and video are always compared by the hash of their content.
+Only text is normalized. Images, audio and video are compared by an exact hash of their content, so a re-encoded
+or rescaled copy of a sample does not currently match the original.
 """
+
+_PUNCTUATION = re.compile(r"[^\w\s]", flags=re.UNICODE)
+
+
+def strip_whitespace(text: str) -> str:
+    """Ignore surrounding whitespace, so that texts must otherwise be identical to match. The default."""
+    return text.strip()
+
+
+def casefold_text(text: str) -> str:
+    """Also ignore case, so that `"Hello"` and `"hello"` match."""
+    return text.strip().casefold()
+
+
+def alphanumeric_text(text: str) -> str:
+    """Also ignore punctuation and repeated whitespace, so that `"e-mail"` and `"email"` match.
+
+    Punctuation is dropped rather than replaced by a space, so word boundaries still tell texts apart: `"e mail"`
+    does not match `"email"`. This is the most aggressive of the three and can merge texts a reader would
+    distinguish, e.g. source code or anything where punctuation carries meaning.
+    """
+    return " ".join(_PUNCTUATION.sub("", text.casefold()).split())
+
 
 KeepIndicesFn = Callable[[Iterable[tuple[str, ...]]], list[int]]
 """Given the comparable content of each row, return the (ascending) indices of the rows to keep.
@@ -58,26 +76,30 @@ may only be consumed once, so that filtering a large corpus does not require hol
 at the same time.
 """
 
+
+@dataclass(frozen=True)
+class _Filter:
+    """What a filter removes, and what that means for the relevance judgements of a retrieval task.
+
+    Grouping these keeps them from drifting apart: `removes_duplicates` is only sound because `keep` drops a row
+    for being identical to a kept one, which is what lets a retrieval task hand the removed row's judgements over.
+    """
+
+    name: str
+    keep: KeepIndicesFn
+    removes_duplicates: bool = False
+
+
 SUPPORTED_MODALITIES: frozenset[str] = frozenset(MODALITY_HASH_FNS)
 """The modalities a filter can compare, i.e. those the descriptive statistics know how to hash."""
 
-_PUNCTUATION = re.compile(r"[^\w\s]", flags=re.UNICODE)
 _MIN_TRAIN_EXAMPLES_PER_LABEL = 2
 """Stratified subsampling and the train/test split both need at least this many examples of each label."""
 
 
-def _normalize(value: Any, normalize: TextNormalization = "strip") -> str:
-    """Bring a text into the form that `normalize` compares, treating a missing text as an empty one."""
-    if not isinstance(value, str):
-        return ""
-    text = value.strip()
-    if normalize == "strip":
-        return text
-    text = text.casefold()
-    if normalize == "casefold":
-        return text
-    # drop the punctuation instead of replacing it, so that "e-mail" and "email" compare equal
-    return " ".join(_PUNCTUATION.sub("", text).split())
+def _normalize(value: Any, normalization: Normalization) -> str:
+    """Apply `normalization`, treating a missing text as an empty one."""
+    return normalization(value) if isinstance(value, str) else ""
 
 
 def _row_key(row: tuple[str, ...]) -> bytes:
@@ -120,7 +142,7 @@ def _iter_row_content(
     dataset: Dataset,
     col_modalities: Mapping[str, Modalities],
     *,
-    normalize: TextNormalization = "strip",
+    normalization: Normalization = strip_whitespace,
     num_proc: int | None = None,
     symmetric_sides: tuple[list[str], list[str]] | None = None,
 ) -> Iterator[tuple[str, ...]]:
@@ -137,7 +159,9 @@ def _iter_row_content(
     per_column: list[Iterable[str]] = []
     for column, modality in col_modalities.items():
         if modality == "text":
-            per_column.append(_normalize(value, normalize) for value in dataset[column])
+            per_column.append(
+                _normalize(value, normalization) for value in dataset[column]
+            )
         else:
             per_column.append(
                 MODALITY_HASH_FNS[modality](dataset[column], max_workers=num_proc)
@@ -182,7 +206,7 @@ def _filter_within_row(
     example: dict[str, Any],
     columns: Sequence[str],
     keep_fn: KeepIndicesFn,
-    normalize: TextNormalization,
+    normalization: Normalization,
 ) -> dict[str, Any]:
     """Apply `keep_fn` inside a single row of a grouped dataset.
 
@@ -197,7 +221,7 @@ def _filter_within_row(
         )
     n_values = lengths.pop()
     keep = keep_fn(
-        tuple(_normalize(example[column][i], normalize) for column in columns)
+        tuple(_normalize(example[column][i], normalization) for column in columns)
         for i in range(n_values)
     )
     return {
@@ -219,7 +243,7 @@ def _apply_row_filter(
     col_modalities: Mapping[str, Modalities],
     keep_fn: KeepIndicesFn,
     *,
-    normalize: TextNormalization = "strip",
+    normalization: Normalization = strip_whitespace,
     num_proc: int | None = None,
     symmetric_sides: tuple[list[str], list[str]] | None = None,
 ) -> tuple[Dataset, int]:
@@ -233,7 +257,7 @@ def _apply_row_filter(
         dataset: The dataset to filter.
         col_modalities: The columns to compare, mapped to the modality of their content.
         keep_fn: Decides which rows to keep.
-        normalize: How to normalize text before comparing it.
+        normalization: How to rewrite text before comparing it.
         num_proc: Number of processes to use for hashing and for filtering a grouped dataset.
         symmetric_sides: The two sides to order within each row, for a task where swapping them means the same.
 
@@ -268,7 +292,7 @@ def _apply_row_filter(
             fn_kwargs={
                 "columns": columns,
                 "keep_fn": keep_fn,
-                "normalize": normalize,
+                "normalization": normalization,
             },
             num_proc=num_proc,
         )
@@ -276,7 +300,7 @@ def _apply_row_filter(
         rows = _iter_row_content(
             dataset,
             col_modalities,
-            normalize=normalize,
+            normalization=normalization,
             num_proc=num_proc,
             symmetric_sides=symmetric_sides,
         )
@@ -294,20 +318,39 @@ def _warn(msg: str) -> None:
     logger.warning(msg)
 
 
-def _mark_data_modified(task: AbsTask) -> None:
-    """Record that the task's data no longer matches the published dataset, reporting it the first time."""
-    if task.data_modified:
-        return
-    task.data_modified = True
+_APPLIED_FILTERS = re.compile(r"^(?P<base>.*?) \((?P<filters>[^()]*)\)$")
 
-    msg = (
-        f"The data of '{task.metadata.name}' was modified locally, so it no longer matches revision "
-        f"{task.metadata.revision} of the published dataset. Scores computed from it are not comparable to other "
-        "results and must not be submitted to the leaderboard."
+
+def _derived_task_name(name: str, filter_name: str) -> str:
+    """The name a task takes once `filter_name` has been applied to it.
+
+    Cleaning produces a different task, so it gets an id of its own rather than reusing the published one:
+    `MassiveIntentClassification` becomes `MassiveIntentClassification (remove_duplicates)`. A second filter
+    extends the list rather than nesting, giving `MassiveIntentClassification (remove_duplicates, filter_short)`.
+    """
+    applied_to = _APPLIED_FILTERS.match(name)
+    if applied_to is None:
+        return f"{name} ({filter_name})"
+
+    applied = [applied.strip() for applied in applied_to["filters"].split(",")]
+    if filter_name not in applied:
+        applied.append(filter_name)
+    return f"{applied_to['base']} ({', '.join(applied)})"
+
+
+def _rename_as_cleaned(task: AbsTask, original: TaskMetadata, filter_name: str) -> None:
+    """Give `task` a metadata of its own, named after the filter that produced it.
+
+    `metadata` is a class attribute shared by every instance of a task, so this assigns an instance attribute that
+    shadows it, leaving the published task and its other instances alone.
+    """
+    base = _APPLIED_FILTERS.match(original.name)
+    task.metadata = original.model_copy(
+        update={
+            "name": _derived_task_name(original.name, filter_name),
+            "adapted_from": [base["base"] if base else original.name],
+        }
     )
-    if task.metadata.descriptive_stats is not None:
-        msg += " Its descriptive statistics still describe the published dataset."
-    _warn(msg)
 
 
 def _datasets_by_subset(task: AbsTask) -> dict[HFSubset, DatasetDict]:
@@ -387,114 +430,135 @@ def _resolve_columns(
     return col_modalities
 
 
+def _split_containers(task: AbsTask) -> tuple[Mapping[str, Any], bool]:
+    """The task's `{subset: {split: data}}` mapping, and whether it was stored without the subset level."""
+    if isinstance(task, AbsTaskRetrieval):
+        return cast("Mapping[str, Any]", task.dataset), False
+    by_subset = _datasets_by_subset(task)
+    flat = isinstance(next(iter(cast("Any", task.dataset).values()), None), Dataset)
+    return by_subset, flat
+
+
 def _filter_task_rows(
     task: T,
-    keep_fn: KeepIndicesFn,
+    filter_: _Filter,
     *,
-    filter_name: str,
-    normalize: TextNormalization = "strip",
-    remap_duplicates: bool = False,
+    normalization: Normalization = strip_whitespace,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
     subsets: Sequence[HFSubset] | None = None,
     num_proc: int | None = None,
 ) -> T:
-    """Apply `keep_fn` to every selected split of `task`, in place.
+    """Apply `filter_` to every selected split of `task`, returning a cleaned copy.
+
+    The task passed in is never changed. Its data is loaded if needed, and the returned copy holds new containers
+    for the splits that were filtered, so the two share nothing that either could mutate.
 
     Args:
-        task: The task to filter. Its data is loaded first if it is not loaded yet.
-        keep_fn: Decides which rows to keep.
-        filter_name: The name of the calling filter, used in messages.
-        normalize: How to normalize text before comparing it.
-        remap_duplicates: Retrieval only; see `_filter_retrieval_split`.
+        task: The task to filter.
+        filter_: What to remove.
+        normalization: How to rewrite text before comparing it.
         columns: The columns to compare. Defaults to every content column of the task.
         splits: The splits to filter. Defaults to every split of the dataset.
         subsets: The Huggingface subsets to filter. Defaults to every loaded subset.
         num_proc: Number of processes to use for loading and filtering the dataset.
 
     Returns:
-        The task, so that filters can be chained.
+        A copy of the task holding the filtered data.
 
     Raises:
-        NotImplementedError: If the task does not declare its content columns, or holds a modality that cannot be
-            compared.
         ValueError: If `columns`, `splits` or `subsets` select none of the task's data.
     """
     from ._retrieval import _filter_retrieval_split
 
     if isinstance(task, AbsTaskAggregate):
-        # an aggregate task holds no data of its own
-        for sub_task in task.tasks:
+        # an aggregate task holds no data of its own, only the tasks it aggregates
+        sub_tasks = [
             _filter_task_rows(
                 sub_task,
-                keep_fn,
-                filter_name=filter_name,
-                normalize=normalize,
-                remap_duplicates=remap_duplicates,
+                filter_,
+                normalization=normalization,
                 columns=columns,
                 splits=splits,
                 subsets=subsets,
                 num_proc=num_proc,
             )
-        return task
+            for sub_task in task.tasks
+        ]
+        cleaned_aggregate = copy.copy(task)
+        cleaned_aggregate.tasks = sub_tasks
+        cleaned_aggregate.taskname_to_task = {t.metadata.name: t for t in sub_tasks}
+        cleaned_aggregate.data_modified = any(t.data_modified for t in sub_tasks)
+        if cleaned_aggregate.data_modified:
+            _rename_as_cleaned(cleaned_aggregate, task.metadata, filter_.name)
+        return cleaned_aggregate
 
     if not task.data_loaded:
         task.load_data(num_proc=num_proc)
 
-    col_modalities = _resolve_columns(task, filter_name, columns)
+    col_modalities = _resolve_columns(task, filter_.name, columns)
     symmetric_sides = _resolve_symmetric_sides(task, col_modalities)
     is_retrieval = isinstance(task, AbsTaskRetrieval)
-    available: Mapping[str, Any] = cast(
-        "Mapping[str, Any]", task.dataset if is_retrieval else _datasets_by_subset(task)
-    )
+    available, flat = _split_containers(task)
 
     n_removed = 0
     n_filtered_splits = 0
+    by_subset: dict[str, Any] = {}
     for subset, splits_data in available.items():
-        if subsets is not None and subset not in subsets:
-            continue
-        for split in list(splits_data.keys()):
+        new_splits = dict(splits_data)
+        for split in splits_data:
+            if subsets is not None and subset not in subsets:
+                continue
             if splits is not None and split not in splits:
                 continue
             if is_retrieval:
-                splits_data[split], removed = _filter_retrieval_split(
+                new_splits[split], removed = _filter_retrieval_split(
                     splits_data[split],
-                    keep_fn,
+                    filter_.keep,
                     col_modalities,
-                    normalize=normalize,
-                    remap_duplicates=remap_duplicates,
+                    normalization=normalization,
+                    remap_duplicates=filter_.removes_duplicates,
                     num_proc=num_proc,
                 )
             else:
-                splits_data[split], removed = _apply_row_filter(
+                new_splits[split], removed = _apply_row_filter(
                     splits_data[split],
                     col_modalities,
-                    keep_fn,
-                    normalize=normalize,
+                    filter_.keep,
+                    normalization=normalization,
                     num_proc=num_proc,
                     symmetric_sides=symmetric_sides,
                 )
             n_removed += removed
             n_filtered_splits += 1
+        by_subset[subset] = new_splits if is_retrieval else DatasetDict(new_splits)
 
     if n_filtered_splits == 0:
         raise ValueError(_no_split_matched_message(task.metadata.name, available))
 
+    cleaned = copy.copy(task)
+    cleaned.dataset = by_subset["default"] if flat else by_subset
     if n_removed:
-        _mark_data_modified(task)
-        _check_unusable_data(task)
-
-    logger.info(
-        f"`{filter_name}` removed {n_removed} samples from '{task.metadata.name}' "
-        f"(columns={sorted(col_modalities)})."
-    )
-    return task
+        cleaned.data_modified = True
+        _rename_as_cleaned(cleaned, task.metadata, filter_.name)
+        _warn(
+            f"`{filter_.name}` removed {n_removed} samples from '{task.metadata.name}' "
+            f"(columns={sorted(col_modalities)}). The cleaned task is '{cleaned.metadata.name}', and its scores "
+            f"are not comparable to results on '{task.metadata.name}'."
+        )
+        _check_unusable_data(cleaned)
+    else:
+        logger.info(
+            f"`{filter_.name}` removed nothing from '{task.metadata.name}' "
+            f"(columns={sorted(col_modalities)})."
+        )
+    return cleaned
 
 
 def remove_duplicates(
     task: T,
     *,
-    normalize: TextNormalization = "strip",
+    normalization: Normalization = strip_whitespace,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
     subsets: Sequence[HFSubset] | None = None,
@@ -502,25 +566,23 @@ def remove_duplicates(
 ) -> T:
     """Remove duplicated samples from a task, keeping the first occurrence of each.
 
-    Two samples are duplicates when all of their content columns match. Text matches when it is identical once
-    surrounding whitespace is stripped, which `normalize` can loosen; images, audio and video match when their
-    content hashes are equal. Duplicates are removed within each split, so a sample appearing in both the train and
-    the test split is kept in both.
+    Two samples are duplicates when all of their content columns match. Text matches when `normalization` rewrites
+    both to the same string; images, audio and video match when their content hashes are equal. Duplicates are
+    removed within each split, so a sample appearing in both the train and the test split is kept in both.
 
-    The data is loaded if it has not been loaded yet, and the task's dataset is modified in place. The task is also
-    returned, so filters can be chained. Because the dataset then no longer matches the published one, the task is
-    marked with `data_modified` and can no longer be evaluated with [`mteb.evaluate`][mteb.evaluate].
+    The task passed in is left untouched, and a cleaned copy is returned. The copy is marked with `data_modified`,
+    so [`mteb.evaluate`][mteb.evaluate] refuses to run it: its scores would not be comparable to results on the
+    published dataset while being indistinguishable from them.
 
     For a retrieval task the corpus and the queries are deduplicated together with their relevance judgements: a
     judgement pointing at a removed duplicate is moved to the copy that was kept, so no query loses a positive
     document, and any query left without one afterwards is dropped, as it cannot be scored.
 
     Args:
-        task: The task to deduplicate.
-        normalize: How much of a difference between two texts to ignore when comparing them: `"strip"` (the
-            default) only ignores surrounding whitespace, `"casefold"` also ignores case, and `"alphanumeric"`
-            also ignores punctuation and repeated whitespace. The looser settings catch more duplicates but can
-            merge samples that a reader would tell apart, and case folding is not meaningful in every script.
+        task: The task to deduplicate. It is not modified.
+        normalization: How to rewrite a text before comparing it. The default ignores surrounding whitespace only.
+            Looser comparisons catch more duplicates but can merge samples that a reader would tell apart, so
+            prefer the narrowest one that finds the duplicates you care about.
         columns: The content columns to compare. Defaults to every content column of the task, e.g. `["text"]` for
             classification or `["sentence1", "sentence2"]` for pair classification.
         splits: The splits to filter. Defaults to every split of the dataset.
@@ -528,27 +590,23 @@ def remove_duplicates(
         num_proc: Number of processes to use for loading the dataset and for hashing non-text content.
 
     Returns:
-        The task, so that calls can be chained.
+        A copy of the task holding the deduplicated data.
 
     Raises:
-        NotImplementedError: If the task does not declare which of its columns hold content, or holds a modality
-            that cannot be compared.
         ValueError: If `columns`, `splits` or `subsets` select none of the task's data.
 
     Examples:
         >>> import mteb
         >>> from mteb.quality import remove_duplicates
         >>> task = mteb.get_task("MassiveIntentClassification")
-        >>> task = remove_duplicates(task)
-        >>> # also treat "Wake me up!" and "wake  me  up" as duplicates
-        >>> task = remove_duplicates(task, normalize="alphanumeric")
+        >>> cleaned = remove_duplicates(task)
+        >>> # ignore case too, so that "Wake me up!" and "wake me up!" are duplicates
+        >>> cleaned = remove_duplicates(task, normalization=lambda t: t.strip().casefold())
     """
     return _filter_task_rows(
         task,
-        _keep_first_occurrence,
-        filter_name="remove_duplicates",
-        normalize=normalize,
-        remap_duplicates=True,
+        _Filter("remove_duplicates", _keep_first_occurrence, removes_duplicates=True),
+        normalization=normalization,
         columns=columns,
         splits=splits,
         subsets=subsets,

@@ -16,9 +16,16 @@ https://github.com/embeddings-benchmark/mteb/issues/3672 for which of them to ex
 
 from __future__ import annotations
 
-from ._filters import TextNormalization, remove_duplicates
+from ._filters import (
+    alphanumeric_text,
+    casefold_text,
+    remove_duplicates,
+    strip_whitespace,
+)
 
 __all__ = [
-    "TextNormalization",
+    "alphanumeric_text",
+    "casefold_text",
     "remove_duplicates",
+    "strip_whitespace",
 ]

@@ -94,4 +94,4 @@ Tasks that support any modality (text, image, etc.) inherit from the following a
 
 Filters that remove low-quality samples from a task before it is evaluated. See [Cleaning task data](../get_started/advanced_usage/cleaning_task_data.md) for more details on how to use them.
 
-:::mteb.quality.remove_duplicates
+:::mteb.quality
