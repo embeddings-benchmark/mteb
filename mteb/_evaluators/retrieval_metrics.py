@@ -21,6 +21,9 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# Default abstention rates for the nAUC computation: 0.0, 0.1, ..., 0.9
+_DEFAULT_ABSTENTION_RATES = np.linspace(0, 1, 11)[:-1]
+
 
 def mrr(
     qrels: RelevantDocumentsType,
@@ -32,8 +35,10 @@ def mrr(
     k_max, top_hits = max(k_values), {}
 
     for query_id, doc_scores in results.items():
+        # tie-break by doc id descending to match pytrec_eval; a score-only sort is
+        # stable, so tied docs kept dict insertion order and leaked into the rank (#5092)
         top_hits[query_id] = sorted(
-            doc_scores.items(), key=lambda item: item[1], reverse=True
+            doc_scores.items(), key=lambda item: (item[1], item[0]), reverse=True
         )[0:k_max]
 
     for query_id in top_hits:
@@ -60,9 +65,9 @@ def recall_cap(
     k_max = max(k_values)
 
     for query_id, doc_scores in results.items():
-        top_hits = sorted(doc_scores.items(), key=lambda item: item[1], reverse=True)[
-            0:k_max
-        ]
+        top_hits = sorted(
+            doc_scores.items(), key=lambda item: (item[1], item[0]), reverse=True
+        )[0:k_max]
         query_relevant_docs = [
             doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0
         ]
@@ -86,15 +91,15 @@ def hole(
 
     annotated_corpus = set()
     for _, docs in qrels.items():
-        for doc_id, score in docs.items():
+        for doc_id in docs:
             annotated_corpus.add(doc_id)
 
     k_max = max(k_values)
 
     for _, scores in results.items():
-        top_hits = sorted(scores.items(), key=lambda item: item[1], reverse=True)[
-            0:k_max
-        ]
+        top_hits = sorted(
+            scores.items(), key=lambda item: (item[1], item[0]), reverse=True
+        )[0:k_max]
         for k in k_values:
             hole_docs = [
                 row[0] for row in top_hits[0:k] if row[0] not in annotated_corpus
@@ -116,7 +121,7 @@ def top_k_accuracy(
         top_hits[query_id] = [
             item[0]
             for item in sorted(
-                doc_scores.items(), key=lambda item: item[1], reverse=True
+                doc_scores.items(), key=lambda item: (item[1], item[0]), reverse=True
             )[0:k_max]
         ]
 
@@ -136,7 +141,12 @@ def get_rank_from_dict(
     dict_of_results: dict[str, float], doc_id: str
 ) -> tuple[int, float]:
     tuple_of_id_score = dict_of_results.items()
-    sorted_by_score = sorted(tuple_of_id_score, key=lambda x: x[1], reverse=True)
+    # tie-break by doc id descending, matching the other rank computations in this module
+    # (#5092); a score-only sort is stable, so a tied doc's rank followed dict insertion
+    # order and leaked into p-MRR, which weights rank as 1/rank
+    sorted_by_score = sorted(
+        tuple_of_id_score, key=lambda x: (x[1], x[0]), reverse=True
+    )
     for i, (id, score) in enumerate(sorted_by_score):
         if id == doc_id:
             return i + 1, score
@@ -156,7 +166,7 @@ def calculate_pmrr(
             continue
         original_qid_run = original_run[qid + "-og"]
         new_qid_run = new_run[qid + "-changed"]
-        for idx, changed_doc in enumerate(cur_changed_qrels):
+        for changed_doc in cur_changed_qrels:
             original_rank, original_score = get_rank_from_dict(
                 original_qid_run, changed_doc
             )
@@ -292,7 +302,7 @@ def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
 def nauc(
     conf_scores: NDArray[np.floating],
     metrics: NDArray[np.floating],
-    abstention_rates: NDArray[np.floating] = np.linspace(0, 1, 11)[:-1],
+    abstention_rates: NDArray[np.floating] = _DEFAULT_ABSTENTION_RATES,
 ) -> float:
     """Computes normalized Area Under the Curve (nAUC) on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
 
@@ -314,7 +324,7 @@ def nauc(
     def abstention_curve(
         conf_scores: NDArray[np.floating],
         metrics: NDArray[np.floating],
-        abstention_rates: NDArray[np.floating] = np.linspace(0, 1, 11)[:-1],
+        abstention_rates: NDArray[np.floating] = _DEFAULT_ABSTENTION_RATES,
     ) -> NDArray[np.floating]:
         """Computes the raw abstention curve for a given set of evaluated instances and corresponding confidence scores
 

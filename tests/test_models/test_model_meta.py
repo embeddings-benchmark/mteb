@@ -506,7 +506,7 @@ def test_model_meta_dependencies_not_existing_group():
     )
     with pytest.raises(
         ValueError,
-        match="Unknown extras group\(s\) for mteb: \['test_group'\]. .*",
+        match=r"Unknown extras group\(s\) for mteb: \['test_group'\]. .*",
     ):
         model_meta._check_requirements()
 

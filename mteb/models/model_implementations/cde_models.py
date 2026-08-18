@@ -63,7 +63,7 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
     ) -> None:
         from transformers import AutoConfig
 
-        super().__init__(model, revision=revision, device=device, *args, **kwargs)
+        super().__init__(model, *args, revision=revision, device=device, **kwargs)
         model_config = AutoConfig.from_pretrained(model, trust_remote_code=True)
         self.max_sentences = model_config.transductive_corpus_size
 
