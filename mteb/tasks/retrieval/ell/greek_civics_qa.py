@@ -44,7 +44,7 @@ class GreekCivicsQA(AbsTaskRetrieval):
 
         question_ids = {
             question: str(id)
-            for id, question in zip(data_raw["id"], data_raw["question"])
+            for id, question in zip(data_raw["id"], data_raw["question"], strict=True)
         }
 
         context_ids = {

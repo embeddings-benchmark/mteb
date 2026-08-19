@@ -101,7 +101,9 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
             correct_mask = np.array([cid == correct_id for cid in candidates])
             correct_idx = candidate_indices[np.argmax(correct_mask)]
             incorrect_indices = [
-                idx for idx, mask in zip(candidate_indices, ~correct_mask) if mask
+                idx
+                for idx, mask in zip(candidate_indices, ~correct_mask, strict=True)
+                if mask
             ]
             return {
                 "text": example["text"],

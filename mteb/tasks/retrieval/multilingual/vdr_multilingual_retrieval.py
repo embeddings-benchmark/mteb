@@ -37,7 +37,7 @@ def _load_vdr_multilingual_data(
         queries_records = []
         relevant_dict = {}
 
-        for idx, record in enumerate(dataset):
+        for record in dataset:
             doc_id = f"doc-{record['id']}"
             query_id = f"query-{record['id']}"
             has_query = record.get("query") is not None

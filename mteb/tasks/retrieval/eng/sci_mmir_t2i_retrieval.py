@@ -18,7 +18,7 @@ def _load_data(path: str, splits: str, revision: str | None = None):
         split_dataset = dataset[split]
 
         corpus[split] = split_dataset.map(
-            lambda x, idx: {
+            lambda x, idx, split=split: {
                 "id": f"corpus-{split}-{idx}",
                 "modality": "image",
             },
@@ -33,7 +33,7 @@ def _load_data(path: str, splits: str, revision: str | None = None):
         )
 
         queries[split] = split_dataset.map(
-            lambda x, idx: {
+            lambda x, idx, split=split: {
                 "id": f"query-{split}-{idx}",
                 "modality": "text",
             },

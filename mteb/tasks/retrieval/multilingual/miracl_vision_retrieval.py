@@ -63,7 +63,7 @@ def _load_miracl_data(  # noqa: PLR0914
         }
 
         images_data = images_data.map(
-            lambda x: {
+            lambda x, imgid2docid=imgid2docid: {
                 "id": imgid2docid[str(x["file_name"])],
                 "modality": "image",
             },

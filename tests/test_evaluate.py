@@ -12,24 +12,24 @@ import mteb
 from mteb import SentenceTransformerEncoderWrapper
 from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
-from mteb.models import ModelMeta
-from mteb.models.models_protocols import EncoderProtocol
-from mteb.results.task_result import TaskResult
-from mteb.timing import TimingStack
-from mteb.types import OutputDType
-from tests.mock_models import MockSentenceTransformer
-from tests.mock_tasks import (
+from mteb.mocks import (
+    MOCK_MAEB_TASK_GRID,
+    MOCK_MULTIMODAL_TASKS,
+    MOCK_MVEB_TASK_GRID,
+)
+from mteb.mocks.mock_tasks import (
     MockAggregatedTask,
     MockClassificationTask,
     MockMultilingualClassificationTask,
     MockMultilingualRetrievalTask,
     MockRetrievalTask,
 )
-from tests.task_grid import (
-    MOCK_MAEB_TASK_GRID,
-    MOCK_MULTIMODAL_TASKS,
-    MOCK_MVEB_TASK_GRID,
-)
+from mteb.models import ModelMeta
+from mteb.models.models_protocols import EncoderProtocol
+from mteb.results.task_result import TaskResult
+from mteb.timing import TimingStack
+from mteb.types import OutputDType
+from tests.mock_models import MockSentenceTransformer
 
 mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 1)
 mock_retrieval = (
@@ -513,7 +513,7 @@ def test_mock_mmeb_tasks(task: AbsTask):
 
 
 class MockCrashTask(MockMultilingualClassificationTask):
-    def _evaluate_subset(self, model, data_split, hf_split, hf_subset, **kwargs):  # noqa: PLR6301
+    def _evaluate_subset(self, model, data_split, hf_split, hf_subset, **kwargs):
         if hf_subset == "fra":
             raise RuntimeError("Crash on fra")
         return {"accuracy": 0.8}
