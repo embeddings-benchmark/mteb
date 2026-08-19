@@ -51,12 +51,6 @@ class SparseEncoderWrapper(AbsEncoder):
         torch_dtype: torch.dtype = torch.float16,
         **kwargs,
     ):
-        import sentence_transformers
-
-        if sentence_transformers.__version__ < "5.0.0":
-            raise ImportError(
-                "sentence-transformers version must be >= 5.0.0 to load sparse encoder"
-            )
         from sentence_transformers.sparse_encoder import SparseEncoder
 
         self.model_name = model_name
@@ -134,6 +128,7 @@ class SparseEncoderWrapper(AbsEncoder):
 
 opensearch_neural_sparse_encoding_doc_v3_gte = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v3-gte",
+    extra_requirements_groups=["sparse-encoder"],
     model_type=["sparse"],
     languages=["eng-Latn"],
     open_weights=True,
@@ -161,6 +156,7 @@ opensearch_neural_sparse_encoding_doc_v3_gte = ModelMeta(
 
 opensearch_neural_sparse_encoding_doc_v3_distill = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v3-distill",
+    extra_requirements_groups=["sparse-encoder"],
     model_type=["sparse"],
     languages=["eng-Latn"],
     open_weights=True,
@@ -184,6 +180,7 @@ opensearch_neural_sparse_encoding_doc_v3_distill = ModelMeta(
 
 opensearch_neural_sparse_encoding_doc_v2_distill = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v2-distill",
+    extra_requirements_groups=["sparse-encoder"],
     model_type=["sparse"],
     languages=["eng-Latn"],
     open_weights=True,
@@ -208,6 +205,7 @@ opensearch_neural_sparse_encoding_doc_v2_distill = ModelMeta(
 
 opensearch_neural_sparse_encoding_doc_v2_mini = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v2-mini",
+    extra_requirements_groups=["sparse-encoder"],
     model_type=["sparse"],
     languages=["eng-Latn"],
     open_weights=True,
@@ -231,6 +229,7 @@ opensearch_neural_sparse_encoding_doc_v2_mini = ModelMeta(
 
 opensearch_neural_sparse_encoding_doc_v1 = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v1",
+    extra_requirements_groups=["sparse-encoder"],
     model_type=["sparse"],
     languages=["eng-Latn"],
     open_weights=True,
