@@ -193,7 +193,7 @@ from .incompe_bench_retrieval import (
     IncompeBenchStrictRetrieval,
 )
 from .info_seek_it2it_retrieval import InfoSeekIT2ITRetrieval
-from .info_seek_it2t_retrieval import InfoSeekIT2TRetrieval
+from .info_seek_it2t_retrieval import InfoSeekIT2TRetrieval, InfoSeekIT2TRetrievalV2
 from .irpapers_t2i_retrieval import IRPapersT2IRetrieval
 from .irpapers_t2it_retrieval import IRPapersT2ITRetrieval
 from .jl_corpus import JLCorpusA2TRetrieval, JLCorpusT2ARetrieval
@@ -289,7 +289,7 @@ from .obliq_bench_retrieval import (
 )
 from .okvqa_it2t_retrieval import OKVQAIT2TRetrieval
 from .oven_it2it_retrieval import OVENIT2ITRetrieval
-from .oven_it2t_retrieval import OVENIT2TRetrieval
+from .oven_it2t_retrieval import OVENIT2TRetrieval, OVENIT2TRetrievalV2
 from .panda70m_retrieval import (
     Panda70MT2VARetrieval,
     Panda70MT2VRetrieval,
@@ -657,6 +657,7 @@ __all__ = [
     "IncompeBenchStrictRetrieval",
     "InfoSeekIT2ITRetrieval",
     "InfoSeekIT2TRetrieval",
+    "InfoSeekIT2TRetrievalV2",
     "JLCorpusA2TRetrieval",
     "JLCorpusT2ARetrieval",
     "KnowMeBench",
@@ -730,6 +731,7 @@ __all__ = [
     "OKVQAIT2TRetrieval",
     "OVENIT2ITRetrieval",
     "OVENIT2TRetrieval",
+    "OVENIT2TRetrievalV2",
     "Panda70MT2VARetrieval",
     "Panda70MT2VRetrieval",
     "Panda70MV2TRetrieval",
