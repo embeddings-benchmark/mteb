@@ -7,7 +7,7 @@ from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _DATASET_PATH = "dukesun99/MomentSeeker-Full"
-_DATASET_REVISION = "f3de8afd34f7c1defc58d0597d4b5c77ba50e738"
+_DATASET_REVISION = "e1be36f6a27a0da618704860cb50517634c01f3a"
 _REFERENCE = "https://arxiv.org/abs/2502.12558"
 _BIBTEX = r"""
 @misc{yuan2025momentseeker,
@@ -23,7 +23,7 @@ _BIBTEX = r"""
 _DESCRIPTION = (
     "Full-video moment retrieval adapted from MomentSeeker, a long-video moment "
     "retrieval benchmark with videos averaging over 500 seconds (movies, "
-    "cartoons, egocentric and open-domain footage). The corpus is the 116 "
+    "cartoons, egocentric and open-domain footage). The corpus is the 271 "
     "complete source videos (re-encoded to 360p, audio kept); a video is "
     "relevant to a query iff it contains the annotated answer moment. "
 )
@@ -34,10 +34,12 @@ _LEVEL_TASKS = {
     "event": "Description Location, Action Recognition, Anomaly Detection",
     "object": "Object Recognition, Object Location, Attribute Recognition, OCR",
 }
-# Per direction: composed-query modality and its TaskCategory code.
+# Per direction: query modality, TaskCategory code, and the query's extra
+# reference modality (None for the plain text->video direction).
 _DIRECTIONS = {
     "ti2v": (["image", "text", "video"], "it2v", "a reference image"),
     "tv2v": (["video", "text"], "vt2v", "a reference video clip"),
+    "t2v": (["text", "video"], "t2v", None),
 }
 
 
@@ -65,12 +67,20 @@ def _load_momentseeker(task: AbsTaskRetrieval, subset: str) -> None:
 
 def _meta(name: str, direction: str, level: str) -> TaskMetadata:
     modalities, category, qref = _DIRECTIONS[direction]
+    if qref is None:  # plain text -> video
+        qdesc = "Queries are text questions; retrieve the full video that contains the answer moment. "
+        qprompt = "Given the question, retrieve the video that answers it."
+    else:
+        qdesc = (
+            f"Queries combine a text question with {qref}; retrieve the full video "
+            "that contains the answer moment. "
+        )
+        qprompt = f"Given the question and {qref}, retrieve the video that answers it."
     return TaskMetadata(
         name=name,
         description=_DESCRIPTION
-        + f"Queries combine a text question with {qref}; retrieve the full video "
-        f"that contains the answer moment. This subtask covers only "
-        f"{level}-level moments ({_LEVEL_TASKS[level]}).",
+        + qdesc
+        + f"This subtask covers only {level}-level moments ({_LEVEL_TASKS[level]}).",
         reference=_REFERENCE,
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
@@ -87,9 +97,7 @@ def _meta(name: str, direction: str, level: str) -> TaskMetadata:
         dialect=[],
         sample_creation="found",
         bibtex_citation=_BIBTEX,
-        prompt={
-            "query": f"Given the question and {qref}, retrieve the video that answers it."
-        },
+        prompt={"query": qprompt},
         is_beta=True,
     )
 
@@ -134,3 +142,24 @@ class MomentSeekerTV2VObjectLevelRetrieval(AbsTaskRetrieval):
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         _load_momentseeker(self, "tv2v-object")
+
+
+class MomentSeekerT2VGlobalLevelRetrieval(AbsTaskRetrieval):
+    metadata = _meta("MomentSeekerT2VGlobalLevelRetrieval", "t2v", "global")
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_momentseeker(self, "t2v-global")
+
+
+class MomentSeekerT2VEventLevelRetrieval(AbsTaskRetrieval):
+    metadata = _meta("MomentSeekerT2VEventLevelRetrieval", "t2v", "event")
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_momentseeker(self, "t2v-event")
+
+
+class MomentSeekerT2VObjectLevelRetrieval(AbsTaskRetrieval):
+    metadata = _meta("MomentSeekerT2VObjectLevelRetrieval", "t2v", "object")
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        _load_momentseeker(self, "t2v-object")

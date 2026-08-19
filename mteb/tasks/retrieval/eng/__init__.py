@@ -219,6 +219,9 @@ from .ml_questions import MLQuestionsRetrieval
 from .mmdocir_t2i_retrieval import MMDocIRT2IRetrieval
 from .mmdocir_t2it_retrieval import MMDocIRT2ITRetrieval
 from .moment_seeker import (
+    MomentSeekerT2VEventLevelRetrieval,
+    MomentSeekerT2VGlobalLevelRetrieval,
+    MomentSeekerT2VObjectLevelRetrieval,
     MomentSeekerTI2VEventLevelRetrieval,
     MomentSeekerTI2VGlobalLevelRetrieval,
     MomentSeekerTI2VObjectLevelRetrieval,
@@ -655,6 +658,9 @@ __all__ = [
     "MomentSeekerTV2VGlobalLevelRetrieval",
     "MomentSeekerTV2VEventLevelRetrieval",
     "MomentSeekerTV2VObjectLevelRetrieval",
+    "MomentSeekerT2VGlobalLevelRetrieval",
+    "MomentSeekerT2VEventLevelRetrieval",
+    "MomentSeekerT2VObjectLevelRetrieval",
     "NFCorpus",
     "NIGHTSI2IRetrieval",
     "NQHardNegatives",
