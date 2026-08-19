@@ -12,8 +12,8 @@ from .sts_benchmark_multilingual_visual_sts_eng import (
 
 __all__ = [
     "CQADupstackRetrieval",
-    "MomentSeekerGlobalLevelRetrieval",
     "MomentSeekerEventLevelRetrieval",
+    "MomentSeekerGlobalLevelRetrieval",
     "MomentSeekerObjectLevelRetrieval",
     "MomentSeekerRetrieval",
     "STS17MultilingualVisualSTSEng",

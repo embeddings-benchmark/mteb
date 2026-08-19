@@ -53,6 +53,8 @@ class MomentSeekerGlobalLevelRetrieval(AbsTaskAggregate):
         reference=_REFERENCE,
         tasks=_GLOBAL,
         main_score="map_at_5",
+        # leaves span it2v/vt2v/t2v; all queries are text-anchored -> video
+        category="t2v",
         type="Retrieval",
         eval_splits=["test"],
         bibtex_citation=_BIBTEX,
@@ -68,6 +70,8 @@ class MomentSeekerEventLevelRetrieval(AbsTaskAggregate):
         reference=_REFERENCE,
         tasks=_EVENT,
         main_score="map_at_5",
+        # leaves span it2v/vt2v/t2v; all queries are text-anchored -> video
+        category="t2v",
         type="Retrieval",
         eval_splits=["test"],
         bibtex_citation=_BIBTEX,
@@ -83,6 +87,8 @@ class MomentSeekerObjectLevelRetrieval(AbsTaskAggregate):
         reference=_REFERENCE,
         tasks=_OBJECT,
         main_score="map_at_5",
+        # leaves span it2v/vt2v/t2v; all queries are text-anchored -> video
+        category="t2v",
         type="Retrieval",
         eval_splits=["test"],
         bibtex_citation=_BIBTEX,
@@ -99,6 +105,8 @@ class MomentSeekerRetrieval(AbsTaskAggregate):
         reference=_REFERENCE,
         tasks=_GLOBAL + _EVENT + _OBJECT,
         main_score="map_at_5",
+        # leaves span it2v/vt2v/t2v; all queries are text-anchored -> video
+        category="t2v",
         type="Retrieval",
         eval_splits=["test"],
         bibtex_citation=_BIBTEX,
