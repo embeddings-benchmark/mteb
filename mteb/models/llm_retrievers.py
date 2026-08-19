@@ -137,20 +137,23 @@ def _transform_queries(
     return Dataset.from_list(rows)
 
 
-class _QueryTransformRetriever:
-    """Base for retrievers that LLM-transform the query text before searching."""
+class QueryRewriteRetriever:
+    """LLM rewrites each query into a search query, then the base searches.
+
+    Reference: Ma et al., Query Rewriting for Retrieval-Augmented LLMs (arXiv:2305.14283).
+    """
 
     def __init__(
         self,
         base: SearchProtocol,
         model: ChatModelProtocol,
-        kind: str,
-        prompt: str,
+        *,
+        prompt: str = _REWRITE,
     ) -> None:
         self.base = base
         self.model = model
         self.prompt = prompt
-        self.mteb_model_meta = _wrapper_meta(kind, base)
+        self.mteb_model_meta = _wrapper_meta("query-rewrite", base)
 
     def index(
         self,
@@ -184,7 +187,7 @@ class _QueryTransformRetriever:
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None,
     ) -> RetrievalOutputType:
-        """Transform each query with the LLM, then search the base retriever."""
+        """Rewrite each query with the LLM, then search the base retriever."""
         return self.base.search(
             _transform_queries(queries, self.model, self.prompt),
             task_metadata=task_metadata,
@@ -197,23 +200,7 @@ class _QueryTransformRetriever:
         )
 
 
-class QueryRewriteRetriever(_QueryTransformRetriever):
-    """LLM rewrites each query into a keyword query, then the base searches.
-
-    Reference: Ma et al., Query Rewriting for Retrieval-Augmented LLMs (arXiv:2305.14283).
-    """
-
-    def __init__(
-        self,
-        base: SearchProtocol,
-        model: ChatModelProtocol,
-        *,
-        prompt: str = _REWRITE,
-    ) -> None:
-        super().__init__(base, model, "query-rewrite", prompt)
-
-
-class HyDERetriever(_QueryTransformRetriever):
+class HyDERetriever:
     """LLM writes a hypothetical answer passage; the base retrieves with it.
 
     Reference: Gao et al., Precise Zero-Shot Dense Retrieval without Relevance Labels (arXiv:2212.10496).
@@ -226,7 +213,54 @@ class HyDERetriever(_QueryTransformRetriever):
         *,
         prompt: str = _HYDE,
     ) -> None:
-        super().__init__(base, model, "hyde", prompt)
+        self.base = base
+        self.model = model
+        self.prompt = prompt
+        self.mteb_model_meta = _wrapper_meta("hyde", base)
+
+    def index(
+        self,
+        corpus: CorpusDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None,
+    ) -> None:
+        """Index the base retriever."""
+        self.base.index(
+            corpus,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
+
+    def search(
+        self,
+        queries: QueryDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        top_k: int,
+        encode_kwargs: EncodeKwargs,
+        top_ranked: TopRankedDocumentsType | None = None,
+        num_proc: int | None,
+    ) -> RetrievalOutputType:
+        """Write a passage for each query with the LLM, then search with it."""
+        return self.base.search(
+            _transform_queries(queries, self.model, self.prompt),
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            top_k=top_k,
+            encode_kwargs=encode_kwargs,
+            top_ranked=top_ranked,
+            num_proc=num_proc,
+        )
 
 
 def _docs_block(
