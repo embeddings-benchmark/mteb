@@ -1,0 +1,95 @@
+{
+    "test": {
+        "num_samples": 3630,
+        "num_queries": 229,
+        "num_documents": 3401,
+        "number_of_characters": 0,
+        "documents_text_statistics": null,
+        "documents_image_statistics": null,
+        "documents_audio_statistics": {
+            "total_duration_seconds": 579891.0033560079,
+            "min_duration_seconds": 1.7647165532879818,
+            "average_duration_seconds": 170.50602862570062,
+            "max_duration_seconds": 2306.304,
+            "unique_audios": 3321,
+            "average_sampling_rate": 45723.75771831814,
+            "sampling_rates": {
+                "44100": 1985,
+                "48000": 1416
+            }
+        },
+        "documents_video_statistics": {
+            "total_duration_seconds": 579850.3488583342,
+            "total_frames": 17250363,
+            "min_width": 360,
+            "average_width": 842.0817406645104,
+            "max_width": 1920,
+            "min_height": 358,
+            "average_height": 506.5516024698618,
+            "max_height": 1080,
+            "min_duration_seconds": 1.6333333333333333,
+            "average_duration_seconds": 170.49407493629352,
+            "max_duration_seconds": 2306.4041,
+            "unique_videos": 3325,
+            "average_fps": 29.82064098794472,
+            "fps": {
+                "30": 3268,
+                "25": 116,
+                "24": 15,
+                "60": 2
+            },
+            "min_resolution": [
+                360,
+                480
+            ],
+            "average_resolution": [
+                842.0817406645104,
+                506.5516024698618
+            ],
+            "max_resolution": [
+                1920,
+                1080
+            ],
+            "resolutions": {
+                "528x480": 76,
+                "640x360": 648,
+                "704x470": 31,
+                "854x480": 144,
+                "638x360": 2,
+                "1280x720": 683,
+                "528x436": 12,
+                "1920x1080": 13,
+                "720x480": 797,
+                "852x480": 3,
+                "640x480": 20,
+                "720x470": 498,
+                "854x478": 460,
+                "1906x1080": 5,
+                "360x480": 2,
+                "1280x712": 3,
+                "854x470": 1,
+                "640x358": 3
+            }
+        },
+        "queries_text_statistics": null,
+        "queries_image_statistics": {
+            "min_image_width": 201,
+            "average_image_width": 631.7772925764192,
+            "max_image_width": 1484,
+            "min_image_height": 169,
+            "average_image_height": 394.92139737991266,
+            "max_image_height": 891,
+            "unique_images": 229
+        },
+        "queries_audio_statistics": null,
+        "queries_video_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 1280,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 5.5895196506550215,
+            "max_relevant_docs_per_query": 34,
+            "unique_relevant_docs": 1188
+        },
+        "top_ranked_statistics": null
+    }
+}

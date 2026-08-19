@@ -100,12 +100,15 @@ class AbsTaskRetrieval(AbsTask):
     ignore_identical_ids: bool = False
     abstask_prompt = "Retrieve text based on user query."
     k_values: Sequence[int] = (1, 3, 5, 10, 20, 100, 1000)
-    _top_k: int = max(k_values)
     dataset: dict[str, dict[str, RetrievalSplitData]]
     _support_cross_encoder: bool = True
     _support_search: bool = True
     _previous_results_model_meta: dict[str, Any] | None = None
     skip_first_result: bool = False
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self._top_k: int = max(self.k_values)
 
     def convert_v1_dataset_format_to_v2(
         self,

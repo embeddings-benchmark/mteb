@@ -9,6 +9,7 @@ from .blink_it2t_multi_choice import BLINKIT2TMultiChoice
 from .cv_bench import CVBenchCount, CVBenchDepth, CVBenchDistance, CVBenchRelation
 from .daily_omni import DailyOmniVideoAudioCentricQA, DailyOmniVideoCentricQA
 from .egoschema import EgoSchemaVideoCentricQA
+from .mmvu import MMVUVideoCentricQA
 from .nextqa import NExTQAVideoCentricQA
 from .omni_video_bench import (
     OmniVideoBenchVideoAudioCentricQA,
@@ -17,6 +18,16 @@ from .omni_video_bench import (
 from .perception_test import (
     PerceptionTestVideoAudioCentricQA,
     PerceptionTestVideoCentricQA,
+)
+from .star_bench import (
+    STARBenchFeasibilityVideoAudioCentricQA,
+    STARBenchFeasibilityVideoCentricQA,
+    STARBenchInteractionVideoAudioCentricQA,
+    STARBenchInteractionVideoCentricQA,
+    STARBenchPredictionVideoAudioCentricQA,
+    STARBenchPredictionVideoCentricQA,
+    STARBenchSequenceVideoAudioCentricQA,
+    STARBenchSequenceVideoCentricQA,
 )
 from .video_mme import VideoMMEShortVideoAudioCentricQA, VideoMMEShortVideoCentricQA
 from .worldqa import WorldQAVideoAudioCentricQA, WorldQAVideoCentricQA
@@ -38,11 +49,20 @@ __all__ = [
     "DailyOmniVideoAudioCentricQA",
     "DailyOmniVideoCentricQA",
     "EgoSchemaVideoCentricQA",
+    "MMVUVideoCentricQA",
     "NExTQAVideoCentricQA",
     "OmniVideoBenchVideoAudioCentricQA",
     "OmniVideoBenchVideoCentricQA",
     "PerceptionTestVideoAudioCentricQA",
     "PerceptionTestVideoCentricQA",
+    "STARBenchFeasibilityVideoAudioCentricQA",
+    "STARBenchFeasibilityVideoCentricQA",
+    "STARBenchInteractionVideoAudioCentricQA",
+    "STARBenchInteractionVideoCentricQA",
+    "STARBenchPredictionVideoAudioCentricQA",
+    "STARBenchPredictionVideoCentricQA",
+    "STARBenchSequenceVideoAudioCentricQA",
+    "STARBenchSequenceVideoCentricQA",
     "VideoMMEShortVideoAudioCentricQA",
     "VideoMMEShortVideoCentricQA",
     "WorldQAVideoAudioCentricQA",

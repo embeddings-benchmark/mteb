@@ -114,7 +114,8 @@ class FaissSearchIndex:
                 query_idx_to_id=query_idx_to_id,
             )
         else:
-            sim_array, id_array = self.index.search(embeddings_f32, top_k)
+            capped_top_k = min(top_k, self.index.ntotal)
+            sim_array, id_array = self.index.search(embeddings_f32, capped_top_k)
             similarities = sim_array.tolist()
             ids = id_array.tolist()
 
@@ -140,7 +141,7 @@ class FaissSearchIndex:
             if not ranked_ids:
                 msg = f"No top-ranked documents for query {query_id}"
                 logger.warning(msg)
-                warnings.warn(msg)
+                warnings.warn(msg, stacklevel=2)
                 scores_all.append([])
                 idxs_all.append([])
                 continue

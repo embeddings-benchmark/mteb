@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.18.3"
+version = "2.19.5"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -91,21 +91,24 @@ api = [
 og = [
     "playwright>=1.49.0",
 ]
-video = ["torchcodec"]
+video = ["datasets>=4.0.0", "torchcodec"]
 github = ["PyGithub>=1.60"]
 
 # model specific optional dependencies:
 peft = ["peft>=0.11.0"]
 flagembedding = ["FlagEmbedding==1.3.4"]
-jina = ["einops>=0.8.0"]
+jina = ["einops>=0.8.0", "sentence-transformers>=3.1.0"]
 jina-clip = ["peft>=0.15.2", "einops>=0.8.0", "transformers>=4.52.0,<5.0.0", "torchvision>=0.22.1", "timm>=1.0.15,<1.1.0"]
 jina-v4 = ["peft>=0.15.2", "transformers>=4.52.0,<5.0.0", "torchvision>=0.22.1"]
 flash_attention = ["flash-attn>=2.6.3"]
+omniretriever = ["peft>=0.11.0", "transformers>=4.51.0,<4.52.0"]
+colvec1_1 = ["transformers>=5.14.1,<6.0.0"]
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
 model2vec = ["model2vec>=0.3.0"]
 pylate = ["pylate>=1.3.1"]
 msclap = ["msclap>=1.3.4", "soundfile>=0.13.1"]
 bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
+boto3 = ["boto3>=1.34.0"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
 blip2 = ["salesforce-lavis>=1.0.2"]
@@ -117,10 +120,12 @@ google_genai = ["google-genai>=1.7.0"]
 octen = ["octen>=0.4.0"]
 llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
 timm = ["timm>=1.0.15,<1.1.0"]
+radio = ["timm>=1.0.15,<1.1.0", "einops>=0.8.0", "transformers>=4.57.0,<5.0.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
 nomic = ["einops>=0.8.1"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
 colpali_engine = ["colpali_engine>=0.3.12"]
+dasheng = ["einops>=0.8.0"]
 colqwen3 = ["transformers>=4.57.0", "torchvision>=0.22.1"]
 visrag-ret = ["transformers>=4.49.0,<4.53", "timm>=1.0.15,<1.1.0", "torchvision>=0.16.0", "sentencepiece>=0.1.99", "accelerate>=0.26.0"]
 sauerkrautlm-colpali = ["sauerkrautlm-colpali>=0.1.0; python_full_version < '3.14'"]
@@ -140,26 +145,29 @@ wav2clip = ["wav2clip==0.1.0"]
 fusion-embedding = ["librosa>=0.10.0", "soundfile>=0.13.1", "torchvision>=0.22.1", "pillow>=10.0.1", "accelerate>=0.26.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
+moca = ["transformers>=4.49.0,<4.53"]
 transformers-v4 = ["transformers<5"]
+transformers-v5 = ["transformers>=5"]
+e5-v = ["transformers<=4.44.2"] # https://github.com/embeddings-benchmark/mteb/issues/1647
+# NV-Embed previously needs sentence-transformers==2.7.0, which cannot be expressed here:
+# mteb itself requires sentence-transformers>=3.0.0, so the extra would be unsatisfiable.
+nvembed = ["transformers==4.42.4"]
+nemotron-rerank = ["transformers==4.47.1"]
+modernbert = ["transformers>=4.48.0"]
+sparse-encoder = ["sentence-transformers>=5.0.0"]
+cosmos-embed1 = ["transformers<5", "einops>=0.8.0", "torchvision>=0.16.0"]
 siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
+tipsv2 = ["sentencepiece>=0.2.0", "protobuf>=3.0.0"]
+ps3 = ["ps3-torch>=0.1.3", "timm==1.0.15", "torchvision>=0.22.1"] # timm 1.0.16+ changed the ViT Block signature that ps3 subclasses
 qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
 # omnivinci = ["transformers==4.46.0", "torch==2.8.*", "einops>=0.8.0", "openai-whisper>=20240930", "soundfile>=0.13.1", "opencv-python-headless>=4.0.0", "kaldiio>=2.18.0", "decord>=0.6.0", "librosa>=0.10.0", "beartype>=0.18.0", "accelerate>=1.0.0", "s2wrapper @ git+https://github.com/bfshi/scaling_on_scales", "deepspeed>=0.9.0", "torchvision>=0.15.0", "torchaudio>=2.0.0", "torchcodec==0.7.0", "av>=10.0.0", "numpy>=1.23.0,<2.0.0", "flash-attn>=2.6.3"]
 qwen_omni_utils = ["qwen_omni_utils"]
 embeddinggemma = ["transformers>=4.56.0"]
 # ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
 
-
-
-
-
-
-
-
-
-
 [dependency-groups]
 lint = [
-    "ruff==0.14.0", # locked so we don't get PRs which fail only due to a lint update
+    "ruff==0.16.0", # locked so we don't get PRs which fail only due to a lint update
     "pre-commit>=4.1.0",
     "typos>1",
     "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
@@ -253,6 +261,9 @@ namespaces = false
 
 [tool.ruff]
 target-version = "py310"
+exclude = [
+    "tests/create_meta/*",  # don't format test md model cards
+]
 
 
 [tool.ruff.lint]
@@ -260,6 +271,7 @@ select = [
     "F",  # pyflakes rules,
     "I",  # sorting for imports
     "E",  # formatting for docs
+    "W",  # pycodestyle warnings
     "D",  # formatting for docs
     "UP", # upgrade to latest syntax if possible
     "FA", # Future annotations
@@ -299,6 +311,18 @@ select = [
     "PL",      # pylint
     "S",       # flake8-bandit
     "FAST",       # fastapi
+    "ICN",     # import conventions, e.g. `import numpy as np`
+    "PIE",     # misc. lints, e.g. unnecessary `pass`
+    "PD",      # pandas-vet
+    "DTZ",     # require timezone-aware datetimes
+    "SLOT",    # __slots__ on str/tuple/namedtuple subclasses
+    "RSE",     # no unnecessary parens on raised exceptions
+    "YTT",     # correct sys.version checks
+    "EXE",     # shebang/executable-bit consistency
+    "INT",     # gettext f-string misuse
+    "ASYNC",   # blocking calls in async functions
+    "ISC",     # implicit string concatenation
+    "B",       # flake8-bugbear
 ]
 
 ignore = [
@@ -319,6 +343,8 @@ ignore = [
     "PLC0415",   # import outside of top-level
     "PLR0912",  # too many branches
     "PLR0915",  # too many statements
+    "PLW0717",  # too-many-statements-in-try-clause
+    "ISC001",   # single-line implicit concat; conflicts with `ruff format`
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
@@ -341,6 +367,11 @@ preview = true
     "S602",  # allow shell=True in tests
     "S603",  # allow subprocess calls in tests
     "PLC2701",  # Private name import
+    "PLR6301",  # Method could be a function - pytest test methods are instance methods
+]
+"mteb/mocks/*" = [
+    "RUF012",
+    "D",
 ]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = [
@@ -368,9 +399,6 @@ preview = true
     "TC002",
 ]
 
-
-[tool.ruff.lint.flake8-implicit-str-concat]
-allow-multiline = false
 
 [tool.ruff.lint.pep8-naming]
 ignore-names = [
@@ -447,6 +475,7 @@ override-dependencies = [
 conflicts = [
     [
         { extra = "timm" },
+        { extra = "radio" }, # pins timm, same conflict as the timm extra
         { extra = "blip2" },
         { extra = "llm2vec" },
         { extra = "model2vec" },
@@ -459,18 +488,30 @@ conflicts = [
         { extra = "multimodal-sbert" }, # conflicting version of sentence-transformers
         { extra = "colpali_engine" },
         { extra = "colqwen3" },
+        { extra = "colvec1-1" },
         { extra = "jina-v4" },
         { extra = "sauerkrautlm-colpali" },
         { extra = "vllm" },
         { extra = "jina-clip" },
         { extra = "msclap" },
         { extra = "muq" },
+        { extra = "moca" }, # needs transformers with _update_causal_mask
+        { extra = "omniretriever" },
         { extra = "transformers-v4" },
+        { extra = "transformers-v5" },
+        { extra = "cosmos-embed1" }, # remote code needs transformers<5
         { extra = "qwen-vl" },
+        { extra = "ps3" }, # ps3-torch pins transformers<=4.49.0
         # { extra = "omnivinci" },
         { extra = "embeddinggemma" },
         # { extra = "ebind" },
         { extra = "visrag-ret" }, # conflicting version of timm with blip2
+        { extra = "e5-v" }, # conflicting versions of transformers
+        { extra = "nvembed" }, # conflicting versions of transformers
+        { extra = "flagembedding" }, # FlagEmbedding pins transformers>=4.44.2
+        { extra = "nemotron-rerank" }, # conflicting versions of transformers
+        { extra = "modernbert" }, # conflicting versions of transformers
+        { extra = "sparse-encoder" }, # conflicting version of sentence-transformers
     ],
 ]
 
@@ -502,6 +543,7 @@ module = [
     "mteb.models.model_implementations.*",
     "mteb.tasks.*",
     "mteb.leaderboard.*",
+    "mteb.mocks.*",
 ]
 ignore_errors = true
 
@@ -530,6 +572,8 @@ extend-ignore-words-re = [
     "Parth",
     # languages/bibtext artifacts
     "SHW",
+    "SHS",  # SecondHandSongs / SHS100K dataset
+    "shs",
     "ba",
     "creen",
     "Accademia",
@@ -547,11 +591,14 @@ extend-ignore-words-re = [
     "thi",
     # ISO 15924 script codes
     "Beng",  # Bengali script
+    # dataset names
+    "Matix",  # Docmatix (HF dataset)
 
 ]
 extend-ignore-re = [
     "author.*",  # ignore authors in citations
     "editor.*",  # ignore authors in citations
+    "FIne-Grained Music retrievAl",  # stylised paper title (FIGMA)
 ]
 
 [tool.typos.files]
@@ -622,4 +669,6 @@ NIFE = "NIFE"
 thw = "thw"
 ist = "ist" # spelling error in prompt for harrier-oss-v1
 shw = "SHW"
+SHS = "SHS"  # SecondHandSongs / SHS100K dataset
+shs = "shs"
 nd = "nd"

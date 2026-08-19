@@ -75,13 +75,12 @@ me5_instruct_afri_large_instruct = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        torch_dtype=torch.float16,
-        normalized=True,
+        model_kwargs={"dtype": torch.float16},
     ),
     name="McGill-NLP/AfriE5-Large-instruct",
     languages=XLMR_LANGUAGES,
     open_weights=True,
-    revision="2bbf55df87c1ddd7b20c5626d6f97ca6178766b7",
+    revision="0d7a51373bacc776c5f41696116c6c9100dcde72",
     release_date=E5_PAPER_RELEASE_DATE,
     framework=["GritLM", "PyTorch", "Sentence Transformers"],
     similarity_fn_name="cosine",
@@ -106,9 +105,19 @@ e5_mistral = ModelMeta(
         instruction_template=E5_INSTRUCTION,
         model_kwargs={"dtype": torch.float16},
         apply_instruction_to_passages=False,
+        # This model pools the last token, so its embedding is the hidden state of
+        # the trailing </s>. Its tokenizer_config.json sets add_eos_token, but its
+        # tokenizer.json post-processor only adds <s>; transformers <5 resolved that
+        # in favour of the config, transformers >=5 in favour of tokenizer.json, so
+        # the </s> silently disappeared and pooling started reading the last word.
+        # add_eos_token alone is not enough: it rebuilds the post-processor from
+        # add_bos_token, which defaults to False here, dropping the <s> instead.
+        add_eos_token=True,
+        tokenizer_kwargs={"add_bos_token": True},
     ),
     name="intfloat/e5-mistral-7b-instruct",
     model_type=["dense"],
+    output_dtypes="float16",
     languages=MISTRAL_LANGUAGES,
     open_weights=True,
     revision="07163b72af1488142a360786df853f237b1a3ca1",

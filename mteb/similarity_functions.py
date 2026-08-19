@@ -24,6 +24,10 @@ def _use_torch_compile() -> bool:
 def _convert_to_tensor(a: Array, dtype: torch.dtype = torch.float32) -> torch.Tensor:
     if not isinstance(a, torch.Tensor):
         a = torch.tensor(a, dtype=dtype)
+    elif torch.is_floating_point(a) and torch.finfo(a.dtype).bits < 32:
+        a = a.to(
+            torch.float32
+        )  # upcast sub-float32 floats (fp8/float16/bfloat16) to break ties
     return a
 
 
@@ -212,7 +216,7 @@ def pairwise_max_sim(
     scores = []
 
     for query_embedding, document_embedding in zip(
-        queries_embeddings, documents_embeddings
+        queries_embeddings, documents_embeddings, strict=True
     ):
         query_embedding = _convert_to_tensor(query_embedding)  # noqa: PLW2901
         document_embedding = _convert_to_tensor(document_embedding)  # noqa: PLW2901

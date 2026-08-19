@@ -16,6 +16,8 @@ from .bge_models import bge_chinese_training_data
 from .nvidia_models import nvidia_training_datasets
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from mteb.types import Array
 
 logger = logging.getLogger(__name__)
@@ -42,7 +44,7 @@ class SeedTextEmbeddingModel(AbsEncoder):
         max_tokens: int,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
-        available_embed_dims: list[int | None] = [None],
+        available_embed_dims: Sequence[int | None] = (None,),
         **kwargs,
     ) -> None:
         """Wrapper for Seed embedding API."""
@@ -127,9 +129,7 @@ class SeedTextEmbeddingModel(AbsEncoder):
 
         all_embeddings = []
 
-        for i, sublist in enumerate(
-            tqdm(sublists, leave=False, disable=not show_progress_bar)
-        ):
+        for sublist in tqdm(sublists, leave=False, disable=not show_progress_bar):
             while retries > 0:
                 try:
                     embedding = self._encode(sublist, task_name, prompt_type)

@@ -162,8 +162,9 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
                 # first, filter out the ones that have no positive or no negatives
                 enumerated_dataset = enumerated_dataset.filter(
-                    lambda example: len(example["positive"]) > 0
-                    and len(example["negative"]) > 0
+                    lambda example: (
+                        len(example["positive"]) > 0 and len(example["negative"]) > 0
+                    )
                 )
 
                 logger.info(
@@ -172,7 +173,9 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
                 # Map the transformation function over the dataset
                 processed_dataset = enumerated_dataset.map(
-                    lambda example, idx: self._process_example(example, split, idx),
+                    lambda example, idx, split=split: self._process_example(
+                        example, split, idx
+                    ),
                     with_indices=True,
                     remove_columns=enumerated_dataset.column_names,
                 )
@@ -184,7 +187,10 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
                     # Add documents and relevance information
                     for doc_id, doc_text, relevance in zip(
-                        item["doc_ids"], item["doc_texts"], item["relevance_scores"]
+                        item["doc_ids"],
+                        item["doc_texts"],
+                        item["relevance_scores"],
+                        strict=True,
                     ):
                         corpus.append(
                             {
