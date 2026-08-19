@@ -13,7 +13,6 @@ from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
-
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
@@ -194,9 +193,7 @@ class OmniRetrieverWrapper(AbsEncoder):
         for audio in audios:
             waveform = np.asarray(audio["array"], dtype=np.float32)
             if waveform.shape[-1] < minimum:
-                waveform = np.pad(
-                    waveform, (0, minimum - waveform.shape[-1])
-                )
+                waveform = np.pad(waveform, (0, minimum - waveform.shape[-1]))
             waveforms.append(waveform)
         raw_wavs = [torch.from_numpy(w) for w in waveforms]
         features = self.processor.feature_extractor(
