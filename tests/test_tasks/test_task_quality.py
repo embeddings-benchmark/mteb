@@ -283,6 +283,17 @@ KNOWN_ISSUES = {
     # Add new datasets below with an explanation of why it is added
     # "name" # explanation
     "HumanConceptsClustering",  # single-word concept items (e.g. "Bat", "Cat") are intentionally short by design
+    # MomentSeeker level subtasks: the source benchmark reuses the same question
+    # text (t2v), reference image (ti2v), or reference clip (tv2v) across different
+    # target videos, so query-side duplicates are intentional. (T2VGlobal has none.)
+    "MomentSeekerT2VEventLevelRetrieval",
+    "MomentSeekerT2VObjectLevelRetrieval",
+    "MomentSeekerTI2VGlobalLevelRetrieval",
+    "MomentSeekerTI2VEventLevelRetrieval",
+    "MomentSeekerTI2VObjectLevelRetrieval",
+    "MomentSeekerTV2VGlobalLevelRetrieval",
+    "MomentSeekerTV2VEventLevelRetrieval",
+    "MomentSeekerTV2VObjectLevelRetrieval",
 }
 
 
