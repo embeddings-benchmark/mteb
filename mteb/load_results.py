@@ -46,7 +46,7 @@ def _model_name_and_revision(
 
 @deprecated(
     "`load_results` is deprecated and will be removed in future versions. "
-    + "Please use the `ResultCache`'s `.load_results` method instead."
+    "Please use the `ResultCache`'s `.load_results` method instead."
 )
 def load_results(  # noqa: PLR0914
     results_repo: str = "https://github.com/embeddings-benchmark/results",

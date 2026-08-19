@@ -309,7 +309,7 @@ class AbsTaskPairClassification(AbsTask):
         labels: NDArray[np.int64],
         high_score_more_similar: bool,
     ) -> tuple[float, float]:
-        rows = list(zip(scores, labels))
+        rows = list(zip(scores, labels, strict=True))
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
 
         max_acc = 0
@@ -335,7 +335,7 @@ class AbsTaskPairClassification(AbsTask):
     ) -> tuple[float, float, float, float]:
         scores = np.asarray(scores)
 
-        rows = list(zip(scores, labels))
+        rows = list(zip(scores, labels, strict=True))
 
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
 

@@ -122,8 +122,8 @@ def instruct_wrapper(
             )
             embeddings = super().encode(  # type: ignore[safe-super,call-arg]
                 _inputs,  # type: ignore[arg-type]
-                instruction=instruction,
                 *args,
+                instruction=instruction,
                 **kwargs,
             )
             if isinstance(embeddings, torch.Tensor):
@@ -333,8 +333,8 @@ class InstructSentenceTransformerModel(AbsEncoder):
             for batch in tqdm(inputs, desc="Building multimodal embeddings"):
                 modality_batch = {k: v for k, v in batch.items() if k in _modality_keys}
                 batched_input = [
-                    dict(zip(modality_batch, sample))
-                    for sample in zip(*modality_batch.values())
+                    dict(zip(modality_batch, sample, strict=True))
+                    for sample in zip(*modality_batch.values(), strict=True)
                 ]
 
                 embeddings = self.model.encode(

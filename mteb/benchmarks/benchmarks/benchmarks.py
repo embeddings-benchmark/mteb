@@ -1705,6 +1705,7 @@ BRIGHT_V1_1 = Benchmark(
     benchmark_hf_repo="mteb/BRIGHT",
 )
 
+
 CODE_RAG = Benchmark(
     name="CodeRAG",
     tasks=get_tasks(
@@ -3543,4 +3544,30 @@ CoREB = Benchmark(
 }
 """,
     contacts=["Geralt-Targaryen"],
+)
+
+BRIGHT_PRO = Benchmark(
+    name="BRIGHT-Pro",
+    display_name="BRIGHT-Pro",
+    tasks=get_tasks(
+        tasks=[
+            "BrightProBiologyRetrieval",
+            "BrightProEarthScienceRetrieval",
+            "BrightProEconomicsRetrieval",
+            "BrightProPsychologyRetrieval",
+            "BrightProRoboticsRetrieval",
+            "BrightProStackoverflowRetrieval",
+            "BrightProSustainableLivingRetrieval",
+        ],
+    ),
+    description="""Reasoning-intensive retrieval quality on real-world StackExchange questions, scored against multi-aspect gold evidence. Each query is paired with a long-form reference answer whose cited passages collectively cover several reasoning aspects, so retrievers are measured on surfacing an aspect-diverse evidence set rather than a single relevant passage. Extends BRIGHT with these aspect annotations for agentic search settings.""",
+    reference="https://huggingface.co/datasets/yale-nlp/Bright-Pro",
+    citation=r"""
+@article{Zhao2026RethinkingRR,
+  author = {Yilun Zhao and Jinbiao Wei and Tingyu Song and Siyue Zhang and Chen Zhao and Arman Cohan},
+  journal = {arXiv preprint arXiv:2605.04018},
+  title = {Rethinking Reasoning-Intensive Retrieval: Evaluating and Advancing Retrievers in Agentic Search Systems},
+  year = {2026},
+}
+""",
 )

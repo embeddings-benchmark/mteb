@@ -333,7 +333,7 @@ class RandomCrossEncoderBaseline:
         embeddings1 = _batch_to_embeddings(inputs1, self.embedding_dim)
         embeddings2 = _batch_to_embeddings(inputs2, self.embedding_dim)
         similarities = []
-        for emb1, emb2 in zip(embeddings1, embeddings2):
+        for emb1, emb2 in zip(embeddings1, embeddings2, strict=True):
             norm1 = np.linalg.norm(emb1)
             norm2 = np.linalg.norm(emb2)
             normalized1 = emb1 / (norm1 + 1e-10)

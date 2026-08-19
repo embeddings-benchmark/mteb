@@ -207,7 +207,9 @@ class KaLMRerankerWrapper:
         encoder_texts = [f"<Document>: {document}" for _, document in pairs]
         decoder_texts = [
             self._decoder_text(query, inst)
-            for query, inst in zip([pair[0] for pair in pairs], instructions)
+            for query, inst in zip(
+                [pair[0] for pair in pairs], instructions, strict=True
+            )
         ]
 
         encoder_batch = self.tokenizer(
@@ -285,7 +287,10 @@ class KaLMRerankerWrapper:
         """Return ``P(yes)`` scores in the same order as ``pairs``."""
         queries = [text for batch in inputs1 for text in batch["text"]]
         documents = [text for batch in inputs2 for text in batch["text"]]
-        pairs = [(query, document) for query, document in zip(queries, documents)]
+        pairs = [
+            (query, document)
+            for query, document in zip(queries, documents, strict=True)
+        ]
         validated_pairs = self._validate_pairs(pairs)
         if not validated_pairs:
             return []
@@ -456,13 +461,13 @@ multilingual_langs = [
 ]
 
 KALM_RERANKER_V1_CITATION = """@misc{zhao2026kalmrerankerv1,
-      title={KaLM-Reranker-V1: Fast but Not Late Interaction for Compressed Document Reranking}, 
+      title={KaLM-Reranker-V1: Fast but Not Late Interaction for Compressed Document Reranking},
       author={Xinping Zhao and Jiaxin Xu and Ziqi Dai and Xin Zhang and Shouzheng Huang and Danyu Tang and Xinshuo Hu and Meishan Zhang and Baotian Hu and Min Zhang},
       year={2026},
       eprint={2606.22807},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2606.22807}, 
+      url={https://arxiv.org/abs/2606.22807},
 }"""
 
 

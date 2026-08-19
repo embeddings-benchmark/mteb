@@ -90,6 +90,7 @@ def load_data(self, num_proc: int | None = None, **kwargs) -> None:
     warnings.warn(
         "This task contains wrong prompts in the metadata. "
         "Please use BRIGHT(v1.1) benchmark instead.",
+        stacklevel=2,
         category=DeprecationWarning,
     )
 

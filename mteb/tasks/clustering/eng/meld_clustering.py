@@ -67,7 +67,7 @@ class MELDEmotionAudioVideoClustering(AbsTaskClustering):
         for split in self.metadata.eval_splits:
             ds = self.dataset[split]
             neutral_id = ds.features["emotion"].str2int("neutral")
-            ds = ds.filter(lambda x: x["emotion"] != neutral_id)
+            ds = ds.filter(lambda x, neutral_id=neutral_id: x["emotion"] != neutral_id)
             self.dataset[split] = ds.select_columns(["video", "audio", "emotion"])
 
 
@@ -103,7 +103,7 @@ class MELDEmotionVideoClustering(AbsTaskClustering):
         for split in self.metadata.eval_splits:
             ds = self.dataset[split]
             neutral_id = ds.features["emotion"].str2int("neutral")
-            ds = ds.filter(lambda x: x["emotion"] != neutral_id)
+            ds = ds.filter(lambda x, neutral_id=neutral_id: x["emotion"] != neutral_id)
             self.dataset[split] = ds.select_columns(["video", "emotion"])
 
 

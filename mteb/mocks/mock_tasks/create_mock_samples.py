@@ -47,7 +47,7 @@ def create_mock_video_bytes(
         try:
             import av
         except ImportError:
-            raise ImportError("Please, install av to run mock video tasks")
+            raise ImportError("Please, install av to run mock video tasks") from None
 
     import av
 
