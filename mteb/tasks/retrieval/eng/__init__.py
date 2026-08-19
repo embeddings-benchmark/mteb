@@ -246,7 +246,17 @@ from .ml_questions import MLQuestionsRetrieval
 from .mm_long_bench_doc_retrieval import MMLongBenchDocRetrieval
 from .mmdocir_t2i_retrieval import MMDocIRT2IRetrieval
 from .mmdocir_t2it_retrieval import MMDocIRT2ITRetrieval
-from .moment_seeker import MomentSeekerTI2VRetrieval, MomentSeekerTV2VRetrieval
+from .moment_seeker import (
+    MomentSeekerT2VEventLevelRetrieval,
+    MomentSeekerT2VGlobalLevelRetrieval,
+    MomentSeekerT2VObjectLevelRetrieval,
+    MomentSeekerTI2VEventLevelRetrieval,
+    MomentSeekerTI2VGlobalLevelRetrieval,
+    MomentSeekerTI2VObjectLevelRetrieval,
+    MomentSeekerTV2VEventLevelRetrieval,
+    MomentSeekerTV2VGlobalLevelRetrieval,
+    MomentSeekerTV2VObjectLevelRetrieval,
+)
 from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval
 from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
 from .msmarc_ov2_retrieval import MSMARCOv2
@@ -702,8 +712,15 @@ __all__ = [
     "MemGovern",
     "MemotionI2TRetrieval",
     "MemotionT2IRetrieval",
-    "MomentSeekerTI2VRetrieval",
-    "MomentSeekerTV2VRetrieval",
+    "MomentSeekerT2VEventLevelRetrieval",
+    "MomentSeekerT2VGlobalLevelRetrieval",
+    "MomentSeekerT2VObjectLevelRetrieval",
+    "MomentSeekerTI2VEventLevelRetrieval",
+    "MomentSeekerTI2VGlobalLevelRetrieval",
+    "MomentSeekerTI2VObjectLevelRetrieval",
+    "MomentSeekerTV2VEventLevelRetrieval",
+    "MomentSeekerTV2VGlobalLevelRetrieval",
+    "MomentSeekerTV2VObjectLevelRetrieval",
     "NFCorpus",
     "NIGHTSI2IRetrieval",
     "NQHardNegatives",

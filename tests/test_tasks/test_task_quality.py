@@ -538,6 +538,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MedrxivClusteringS2S.v2",
         "MindSmallReranking",  # num_documents is a flattened per-query candidate pool; the same article legitimately appears across many queries
         "MintakaRetrieval",
+        "MomentSeekerT2VEventLevelRetrieval",
+        "MomentSeekerTV2VEventLevelRetrieval",
         "Moroco",
         "MrTidyRetrieval",
         "MultiSWEbenchRR",
@@ -819,7 +821,9 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "InfoSeekIT2TRetrieval",
         "LLaVAIT2TRetrieval",
         "MMLongBenchDocRetrieval",  # official corpus contains repeated rendered pages; preserve IDs to match qrels
-        "MomentSeekerTI2VRetrieval",
+        "MomentSeekerTI2VEventLevelRetrieval",
+        "MomentSeekerTI2VGlobalLevelRetrieval",
+        "MomentSeekerTI2VObjectLevelRetrieval",
         "OVENIT2ITRetrieval",
         "PatchCamelyon",  # adjacent, overlapping WSI patches are inherent to the source data
         "PatchCamelyonZeroShot",  # adjacent, overlapping WSI patches are inherent to the source data
@@ -881,7 +885,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     ],
     "duplicate_video": [
         "MMVUVideoCentricQA",
-        "MomentSeekerTV2VRetrieval",
+        "MomentSeekerTV2VEventLevelRetrieval",
+        "MomentSeekerTV2VGlobalLevelRetrieval",
         "StanfordI2VRetrieval",  # official 3,401-ID manifest contains 3,325 unique video contents
         "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseAudioVideoZeroShot",
