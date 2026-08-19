@@ -416,8 +416,6 @@ def calculate_relevant_docs_statistics(
         average_relevant_docs_per_query=qrels_per_doc,
         max_relevant_docs_per_query=max(qrels_lengths),
         unique_relevant_docs=len(qrel_corpus_ids),
-        # Dangling qrel references: IDs in qrels but absent from the loaded
-        # split, regardless of relevance score (see #5170).
         num_missing_query_ids=len(qrel_query_ids.difference(query_ids)),
         num_missing_corpus_ids=len(qrel_corpus_ids.difference(corpus_ids)),
     )
