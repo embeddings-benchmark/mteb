@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
+from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, FramesCollator
+from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
-    from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
@@ -21,54 +21,6 @@ logger = logging.getLogger(__name__)
 
 WAVE_BASE_MODEL = "tsinghua-ee/WAVE-7B"
 WAVE_BASE_REVISION = "7d51cdaecfaabb9c529a447249cd4c2a6df8ce5b"
-
-
-class OmniRetrieverCollator:
-    """Collator for OmniRetriever that preserves each video's source duration.
-
-    ``FramesCollator`` returns only the sampled frame tensor, but OmniRetriever
-    needs the original clip duration to reproduce the training-time
-    ``video_second_per_grid`` (``temporal_patch_size / (n_frames / duration)``),
-    which drives both the mrope position ids and the audio/video chunk
-    interleaving. This collator therefore records ``video_duration`` alongside
-    the frames.
-    """
-
-    def __init__(
-        self,
-        *,
-        target_sampling_rate: int,
-        num_frames: int,
-        max_samples: int,
-    ) -> None:
-        self.target_sampling_rate = target_sampling_rate
-        self.num_frames = num_frames
-        self.max_samples = max_samples
-
-    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
-        collated_inputs = []
-        for row in inputs:
-            if "video" in row:
-                video = row.pop("video")
-                duration = video.metadata.end_stream_seconds
-                row["video"] = FramesCollator.resample_video(
-                    video, num_frames=self.num_frames
-                )
-                row["video_duration"] = duration
-            if "audio" in row:
-                row["audio"] = AudioCollator.resample_audio(
-                    row,
-                    target_sampling_rate=self.target_sampling_rate,
-                    max_samples=self.max_samples,
-                )
-            collated_inputs.append(row)
-        return cast(
-            "BatchedInput",
-            {
-                key: [row[key] for row in collated_inputs]
-                for key in collated_inputs[0].keys()
-            },
-        )
 
 
 class OmniRetrieverWrapper(AbsEncoder):
@@ -98,25 +50,9 @@ class OmniRetrieverWrapper(AbsEncoder):
     """
 
     AUDIO_SAMPLING_RATE = 16_000
-    # Audio is kept at its native length. ``--fixed_audio_duration 8`` in
-    # training/train.sh is a batching convenience (``data_qwen.py`` documents it
-    # as "Fixed audio duration in seconds for consistent batching", default 0 =
-    # variable) and is *not* a property of the model. Applying it at inference
-    # truncates e.g. every Clotho clip (15-30 s) to its first 8 s, which cost
-    # 3.6 R@1 on ClothoT2ARetrieval when measured.
-    # data_qwen.py pads anything under a second: "pad audio to at least 1s".
     MIN_AUDIO_SEC = 1
-    # Both the processor and the backbone chunk audio at 300 s; this bounds
-    # memory for pathologically long inputs rather than reshaping short ones.
     MAX_AUDIO_SEC = 300
-    # training/train.sh: --video_max_frames 8 --video_min_frames 8
-    NUM_FRAMES = 8
-    # training/train.sh: --max_pixels 50176 --min_pixels 50176 (== 224 * 224)
-    PIXELS = 50_176
-    # config.json (position_id_per_seconds) / data_qwen.py
     POSITION_ID_PER_SECONDS = 25
-    # WAVE-7B text_config.hidden_size, and the output width of classify_linear
-    # (adapter tensor classify_linear.2.weight is [3584, 3584]).
     EMBED_DIM = 3584
 
     def __init__(
@@ -127,6 +63,9 @@ class OmniRetrieverWrapper(AbsEncoder):
         base_model_name_or_path: str = WAVE_BASE_MODEL,
         base_model_revision: str = WAVE_BASE_REVISION,
         device: str | None = None,
+        num_frames: int = 8,
+        pixels: int = 50_176,
+        video_batch_size: int = 1,
         **kwargs: Any,
     ) -> None:
         from peft import PeftModel
@@ -162,15 +101,20 @@ class OmniRetrieverWrapper(AbsEncoder):
         )
         self.tokenizer = self.processor.tokenizer
 
-        # train.sh pins a fixed pixel budget for both bounds.
         image_processor = self.processor.image_processor
-        image_processor.max_pixels = self.PIXELS
-        image_processor.min_pixels = self.PIXELS
+        image_processor.max_pixels = pixels
+        image_processor.min_pixels = pixels
         if getattr(image_processor, "size", None) is not None:
-            image_processor.size["longest_edge"] = self.PIXELS
-            image_processor.size["shortest_edge"] = self.PIXELS
+            image_processor.size["longest_edge"] = pixels
+            image_processor.size["shortest_edge"] = pixels
 
+        self.video_batch_size = video_batch_size
         self.max_audio_samples = self.MAX_AUDIO_SEC * self.AUDIO_SAMPLING_RATE
+        self.collator = VideoCollator(
+            target_sampling_rate=self.AUDIO_SAMPLING_RATE,
+            num_frames=num_frames,
+            max_samples=self.max_audio_samples,
+        )
 
     @staticmethod
     def _load_processor(base_model_name_or_path: str, revision: str):
@@ -206,33 +150,6 @@ class OmniRetrieverWrapper(AbsEncoder):
                 f"{base_model_name_or_path}, got {type(processor).__name__}."
             )
         return processor
-
-    # ----------------------------------------------------------------- #
-    # Preprocessing                                                     #
-    # ----------------------------------------------------------------- #
-
-    def _prepare_waveform(self, audio: Any) -> np.ndarray:
-        """Return a mono float32 waveform at its native length.
-
-        Matches ``data_qwen.py``: clips shorter than a second are padded with
-        trailing silence, and only pathologically long inputs are head-truncated
-        (at the 300 s chunk boundary the processor and backbone already use).
-        """
-        array = audio["array"] if isinstance(audio, dict) else audio
-        if isinstance(array, torch.Tensor):
-            array = array.numpy()
-        array = np.asarray(array, dtype=np.float32)
-        if array.ndim > 1:
-            array = array[0]
-
-        minimum = self.MIN_AUDIO_SEC * self.AUDIO_SAMPLING_RATE
-        if array.shape[0] < minimum:
-            return np.concatenate(
-                [array, np.zeros(minimum - array.shape[0], dtype=np.float32)]
-            )
-        if array.shape[0] > self.max_audio_samples:
-            return array[: self.max_audio_samples]
-        return array
 
     @staticmethod
     def _frames_to_thwc(frames: torch.Tensor) -> np.ndarray:
@@ -272,7 +189,15 @@ class OmniRetrieverWrapper(AbsEncoder):
         if not audios:
             return {}, [], []
 
-        waveforms = [self._prepare_waveform(a) for a in audios]
+        minimum = self.MIN_AUDIO_SEC * self.AUDIO_SAMPLING_RATE
+        waveforms = []
+        for audio in audios:
+            waveform = np.asarray(audio["array"], dtype=np.float32)
+            if waveform.shape[-1] < minimum:
+                waveform = np.pad(
+                    waveform, (0, minimum - waveform.shape[-1])
+                )
+            waveforms.append(waveform)
         raw_wavs = [torch.from_numpy(w) for w in waveforms]
         features = self.processor.feature_extractor(
             waveforms,
@@ -350,10 +275,6 @@ class OmniRetrieverWrapper(AbsEncoder):
             prompts, padding=True, padding_side="left", return_tensors="pt"
         )
 
-    # ----------------------------------------------------------------- #
-    # Encoding                                                          #
-    # ----------------------------------------------------------------- #
-
     @staticmethod
     def _unpack(batch: BatchedInput) -> tuple[list, list, list, list]:
         """Split a batch into text / video / audio / duration columns, validating it."""
@@ -409,6 +330,12 @@ class OmniRetrieverWrapper(AbsEncoder):
             for key, value in inputs.items()
         }
 
+    def _collate(self, inputs: list[dict[str, Any]]) -> BatchedInput:
+        for row in inputs:
+            if "video" in row:
+                row["video_duration"] = row["video"].metadata.end_stream_seconds
+        return self.collator(inputs)
+
     @torch.inference_mode()
     def encode(
         self,
@@ -421,12 +348,16 @@ class OmniRetrieverWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         features = inputs.dataset.features
-        if "video" in features or "audio" in features:
-            inputs.collate_fn = OmniRetrieverCollator(
-                target_sampling_rate=self.AUDIO_SAMPLING_RATE,
-                num_frames=self.NUM_FRAMES,
-                max_samples=self.max_audio_samples,
+        if "video" in features:
+            inputs = DataLoader(
+                inputs.dataset,
+                batch_size=self.video_batch_size,
+                collate_fn=self._collate,
+                num_workers=inputs.num_workers,
+                shuffle=False,
             )
+        elif "audio" in features:
+            inputs.collate_fn = self._collate
 
         all_embeddings: list[torch.Tensor] = []
         for batch in tqdm(inputs, desc="Encoding"):
@@ -449,15 +380,8 @@ omniretriever_7b = ModelMeta(
     revision="99328f1c5ce88695fa7070aac5b4a817aab60698",
     release_date="2026-05-27",
     languages=["eng-Latn"],
-    # Measured on the loaded model: WAVE-7B backbone (9,410,651,007) plus the
-    # adapter's LoRA parameters (6,881,280). Excludes the duplicate copies PEFT
-    # creates for `modules_to_save`, which already exist in the backbone.
     n_parameters=9_417_532_287,
-    # vocab_size (152064) * hidden_size (3584) of the WAVE-7B text config
     n_embedding_parameters=544_997_376,
-    # bf16 footprint of what is actually resident: 9,805,652,351 live parameters
-    # (the logical model plus the copies PEFT keeps for `modules_to_save`) at
-    # 2 bytes each. Deliberately larger than n_parameters * 2 for that reason.
     memory_usage_mb=18703,
     max_tokens=32768,
     embed_dim=3584,
