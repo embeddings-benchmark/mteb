@@ -37,17 +37,20 @@ _REWRITE = (
     "Provide a better search query for a web search engine to answer the "
     "given question. Reply with only the query.\n\nQuestion: {q}"
 )
-_HYDE = (
-    "Write a short passage that plausibly answers the question. "
-    "Reply with only the passage.\n\nQuestion: {q}"
-)
+# HyDE prompt from Gao et al. (arXiv:2212.10496), web search instruction.
+_HYDE = "Please write a passage to answer the question.\n\nQuestion: {q}\n\nPassage:"
+# Listwise formulation from Sun et al. (arXiv:2304.09542), with document ids in
+# place of positional identifiers so the reply fits a json schema.
 _RERANK = (
-    "Rank the documents by relevance to the question. Reply with a JSON array "
-    "of document ids, best first.\n\nQuestion: {q}\n\nDocuments:\n{docs}"
+    "Rank the documents below based on their relevance to the search query. "
+    "The most relevant documents should be listed first. Reply with the "
+    "document ids only.\n\nSearch Query: {q}\n\nDocuments:\n{docs}"
 )
+# Multiple queries per question follow the open-domain rewriter of Ma et al.
+# (arXiv:2305.14283), table 1.
 _MULTI_QUERY = (
-    "Write {n} diverse search queries for the question, one per line. "
-    "Reply with only the queries.\n\nQuestion: {q}"
+    "Provide {n} search queries for a web search engine to answer the given "
+    "question, one per line. Reply with only the queries.\n\nQuestion: {q}"
 )
 _HOP_QUERY = (
     "You are searching a corpus for documents relevant to a question. Given "
