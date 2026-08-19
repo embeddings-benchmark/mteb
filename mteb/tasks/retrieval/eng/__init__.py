@@ -140,6 +140,7 @@ from .didemo_retrieval import (
     DiDeMoVA2TRetrieval,
     DiDeMoVT2ARetrieval,
 )
+from .edir_it2i_retrieval import EDIRIT2IRetrieval
 from .edis_t2it_retrieval import EDIST2ITRetrieval
 from .elastic_kb_retrieval import ElasticKBRetrieval
 from .emo_vdb import EmoVDBA2TRetrieval, EmoVDBT2ARetrieval
@@ -601,6 +602,7 @@ __all__ = [
     "DiDeMoV2TRetrieval",
     "DiDeMoVA2TRetrieval",
     "DiDeMoVT2ARetrieval",
+    "EDIRIT2IRetrieval",
     "EDIST2ITRetrieval",
     "EPBench",
     "ESGReports",
