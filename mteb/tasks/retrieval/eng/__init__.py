@@ -140,6 +140,7 @@ from .didemo_retrieval import (
     DiDeMoVA2TRetrieval,
     DiDeMoVT2ARetrieval,
 )
+from .droid_retrieval import DROIDIT2VRetrieval
 from .edis_t2it_retrieval import EDIST2ITRetrieval
 from .elastic_kb_retrieval import ElasticKBRetrieval
 from .emo_vdb import EmoVDBA2TRetrieval, EmoVDBT2ARetrieval
@@ -592,6 +593,7 @@ __all__ = [
     "DBPedia",
     "DBPediaHardNegatives",
     "DBPediaHardNegativesV2",
+    "DROIDIT2VRetrieval",
     "DeepPlanning",
     "DiDeMoA2VRetrieval",
     "DiDeMoAT2VRetrieval",
