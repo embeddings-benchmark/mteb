@@ -278,7 +278,8 @@ def _docs_block(
     known = [d for d in doc_ids if d in doc_id_to_idx]
     rows = corpus.select([doc_id_to_idx[d] for d in known])
     block = "\n".join(
-        f"[{d}] {row.get('text', '')[:snippet_chars]}" for d, row in zip(known, rows)
+        f"[{d}] {row.get('text', '')[:snippet_chars]}"
+        for d, row in zip(known, rows, strict=True)
     )
     return block, known
 
