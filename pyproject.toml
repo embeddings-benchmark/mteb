@@ -164,6 +164,7 @@ qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
 qwen_omni_utils = ["qwen_omni_utils"]
 embeddinggemma = ["transformers>=4.56.0"]
 # ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
+gme = ["transformers<4.52.0"]
 
 [dependency-groups]
 lint = [
@@ -512,6 +513,7 @@ conflicts = [
         { extra = "nemotron-rerank" }, # conflicting versions of transformers
         { extra = "modernbert" }, # conflicting versions of transformers
         { extra = "sparse-encoder" }, # conflicting version of sentence-transformers
+        { extra = "gme" }, # requires transformers<4.52.0
     ],
 ]
 
