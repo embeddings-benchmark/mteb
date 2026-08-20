@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import logging
 import re
 from collections import defaultdict
@@ -9,7 +8,6 @@ from pathlib import Path
 from typing import Any, ClassVar
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
-from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
@@ -317,68 +315,6 @@ class _BioVITARetrieval(AbsTaskRetrieval):
     # pool for every candidate to be scored and no taxon group to be dropped.
     _top_k = 2048
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self._candidate_taxa: dict[str, dict[str, dict[str, list[str]]]] = {}
-        self._correct_taxon: dict[str, dict[str, dict[str, str]]] = {}
-        self._doc_taxon: dict[str, dict[str, dict[str, str]]] = {}
-
-        self.dataset = {
-            subset: {"test": self._build_split(subset, level)}
-            for subset, level in _SUBSET_LEVELS.items()
-        }
-        self.data_loaded = True
-
-    def _build_split(self, subset: str, level: str) -> RetrievalSplitData:  # noqa: PLR0914
-        import pandas as pd
-
-        corpus, corpus_ids, corpus_taxa = _load_index(self.document_modality, level)
-        query_index, query_index_ids, _ = _load_index(self.query_modality, level)
-
-        tasks = pd.read_csv(_download_csv(f"benchmark/{level}/{self.csv_name}"))
-        query_ids = [str(query_id) for query_id in tasks["query_id"]]
-        row_of_payload = {payload: row for row, payload in enumerate(query_index_ids)}
-        queries = (
-            query_index.select(
-                [row_of_payload[str(payload)] for payload in tasks["query_payload_id"]]
-            )
-            .remove_columns("id")
-            .add_column("id", query_ids)
-        )
-
-        relevant_docs: dict[str, dict[str, int]] = {}
-        top_ranked: dict[str, list[str]] = {}
-        candidate_taxa: dict[str, list[str]] = {}
-        correct_taxon: dict[str, str] = {}
-
-        for query_id, correct, taxa_json, ids_json in zip(
-            query_ids,
-            tasks["correct_taxon"],
-            tasks["candidates_taxa"],
-            tasks["candidates_target_ids"],
-        ):
-            taxa = [str(taxon) for taxon in json.loads(taxa_json)]
-            groups = [[str(int(i)) for i in group] for group in json.loads(ids_json)]
-            candidate_taxa[query_id] = taxa
-            correct_taxon[query_id] = str(correct)
-            top_ranked[query_id] = [doc_id for group in groups for doc_id in group]
-            relevant_docs[query_id] = dict.fromkeys(groups[taxa.index(str(correct))], 1)
-
-        self._candidate_taxa.setdefault(subset, {})["test"] = candidate_taxa
-        self._correct_taxon.setdefault(subset, {})["test"] = correct_taxon
-        self._doc_taxon.setdefault(subset, {})["test"] = dict(
-            zip(corpus_ids, corpus_taxa)
-        )
-
-        return RetrievalSplitData(
-            corpus=corpus,
-            queries=queries,
-            relevant_docs=relevant_docs,
-            top_ranked=top_ranked,
-        )
-
     def task_specific_scores(
         self,
         scores: dict[str, dict[str, float]],
@@ -422,9 +358,19 @@ class _BioVITARetrieval(AbsTaskRetrieval):
         `make_score_dict` and are document-level; they are *not* the official
         BioVITA numbers and are not comparable with the paper.
         """
-        candidate_taxa = self._candidate_taxa[hf_subset][hf_split]
-        correct_taxon = self._correct_taxon[hf_subset][hf_split]
-        doc_taxon = self._doc_taxon[hf_subset][hf_split]
+        split_data = self.dataset[hf_subset][hf_split]
+        queries = split_data["queries"]
+        corpus = split_data["corpus"]
+
+        candidate_taxa = dict(
+            zip(queries["id"], queries["candidate_taxa"], strict=True)
+        )
+        correct_taxon = dict(
+            zip(queries["id"], queries["correct_taxon"], strict=True)
+        )
+        doc_taxon = dict(
+            zip(corpus["id"], corpus["taxon"], strict=True)
+        )
 
         hits = dict.fromkeys(self.k_values, 0)
         total = 0
@@ -469,7 +415,10 @@ class BioVITAA2TRetrieval(_BioVITARetrieval):
             arrow="audio-to-text", doc_modality="text"
         ),
         reference=_REFERENCE,
-        dataset={"path": _PATH, "revision": _REVISION},
+        dataset={
+            "path": "myang333/BioVITAA2TRetrieval",
+            "revision": "c9a425f0673eb14782d83e1481a4dff54a1e7e59",
+        },
         type="Any2AnyRetrieval",
         category="a2t",
         modalities=["audio", "text"],
@@ -499,7 +448,10 @@ class BioVITAT2ARetrieval(_BioVITARetrieval):
             arrow="text-to-audio", doc_modality="audio"
         ),
         reference=_REFERENCE,
-        dataset={"path": _PATH, "revision": _REVISION},
+        dataset={
+            "path": "myang333/BioVITAT2ARetrieval",
+            "revision": "571c2116c5bd50fcbe1223021d543610d45a066e",
+        },
         type="Any2AnyRetrieval",
         category="t2a",
         modalities=["text", "audio"],
@@ -529,7 +481,10 @@ class BioVITAA2IRetrieval(_BioVITARetrieval):
             arrow="audio-to-image", doc_modality="image"
         ),
         reference=_REFERENCE,
-        dataset={"path": _PATH, "revision": _REVISION},
+        dataset={
+            "path": "myang333/BioVITAA2IRetrieval",
+            "revision": "7ffdaf3a1215eff081623522d23365f19da80478",
+        },
         type="Any2AnyRetrieval",
         category="a2i",
         modalities=["audio", "image"],
@@ -559,7 +514,10 @@ class BioVITAI2ARetrieval(_BioVITARetrieval):
             arrow="image-to-audio", doc_modality="audio"
         ),
         reference=_REFERENCE,
-        dataset={"path": _PATH, "revision": _REVISION},
+        dataset={
+            "path": "myang333/BioVITAI2ARetrieval",
+            "revision": "d94581a139e8793be31fbe5d9ee9b221f310f4d3",
+        },
         type="Any2AnyRetrieval",
         category="i2a",
         modalities=["image", "audio"],
@@ -589,7 +547,10 @@ class BioVITAI2TRetrieval(_BioVITARetrieval):
             arrow="image-to-text", doc_modality="text"
         ),
         reference=_REFERENCE,
-        dataset={"path": _PATH, "revision": _REVISION},
+        dataset={
+            "path": "myang333/BioVITAI2TRetrieval",
+            "revision": "fa7f2ac1456130e7158958e4324f981bb5308668",
+        },
         type="Any2AnyRetrieval",
         category="i2t",
         modalities=["image", "text"],
@@ -619,7 +580,10 @@ class BioVITAT2IRetrieval(_BioVITARetrieval):
             arrow="text-to-image", doc_modality="image"
         ),
         reference=_REFERENCE,
-        dataset={"path": _PATH, "revision": _REVISION},
+        dataset={
+            "path": "myang333/BioVITAT2IRetrieval",
+            "revision": "fa59ba155cc59354c388e454c705a93bb9d984ab",
+        },
         type="Any2AnyRetrieval",
         category="t2i",
         modalities=["text", "image"],
