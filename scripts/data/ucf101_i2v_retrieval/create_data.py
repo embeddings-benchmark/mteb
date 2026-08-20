@@ -284,7 +284,9 @@ def main() -> None:
                     f"{Path(r['query_clip']).stem}_f{r['query_frame_idx']:04d}"
                     for r in kept
                 ],
-                "image": [str(work / "query_frames" / f"{r['group']}.png") for r in kept],
+                "image": [
+                    str(work / "query_frames" / f"{r['group']}.png") for r in kept
+                ],
             }
         )
         .cast_column("_id", Value("string"))
