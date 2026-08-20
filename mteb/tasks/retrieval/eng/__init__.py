@@ -194,6 +194,7 @@ from .incompe_bench_retrieval import (
 )
 from .info_seek_it2it_retrieval import InfoSeekIT2ITRetrieval
 from .info_seek_it2t_retrieval import InfoSeekIT2TRetrieval
+from .insave_vt2v_retrieval import InsAVE80KVT2VRetrieval
 from .irpapers_t2i_retrieval import IRPapersT2IRetrieval
 from .irpapers_t2it_retrieval import IRPapersT2ITRetrieval
 from .jl_corpus import JLCorpusA2TRetrieval, JLCorpusT2ARetrieval
@@ -237,6 +238,7 @@ from .lmeb_retrieval import (
 )
 from .lotte_retrieval import LoTTERetrieval
 from .macs import MACSA2TRetrieval, MACST2ARetrieval
+from .mars_vl_pairs import MarsVLPairsI2TRetrieval, MarsVLPairsT2IRetrieval
 from .medical_qa_retrieval import MedicalQARetrieval
 from .memotion_i2t_retrieval import MemotionI2TRetrieval
 from .memotion_t2i_retrieval import MemotionT2IRetrieval
@@ -246,6 +248,7 @@ from .ml_questions import MLQuestionsRetrieval
 from .mm_long_bench_doc_retrieval import MMLongBenchDocRetrieval
 from .mmdocir_t2i_retrieval import MMDocIRT2IRetrieval
 from .mmdocir_t2it_retrieval import MMDocIRT2ITRetrieval
+from .mmedit_retrieval import MMEditAT2ARetrieval
 from .moment_seeker import MomentSeekerTI2VRetrieval, MomentSeekerTV2VRetrieval
 from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval
 from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
@@ -657,6 +660,7 @@ __all__ = [
     "IncompeBenchStrictRetrieval",
     "InfoSeekIT2ITRetrieval",
     "InfoSeekIT2TRetrieval",
+    "InsAVE80KVT2VRetrieval",
     "JLCorpusA2TRetrieval",
     "JLCorpusT2ARetrieval",
     "KnowMeBench",
@@ -690,6 +694,7 @@ __all__ = [
     "MLQuestionsRetrieval",
     "MMDocIRT2IRetrieval",
     "MMDocIRT2ITRetrieval",
+    "MMEditAT2ARetrieval",
     "MMLongBenchDocRetrieval",
     "MSCOCOI2TRetrieval",
     "MSCOCOT2IRetrieval",
@@ -697,6 +702,8 @@ __all__ = [
     "MSMARCOv2",
     "MSVDT2VRetrieval",
     "MSVDV2TRetrieval",
+    "MarsVLPairsI2TRetrieval",
+    "MarsVLPairsT2IRetrieval",
     "MedicalQARetrieval",
     "MemBench",
     "MemGovern",
