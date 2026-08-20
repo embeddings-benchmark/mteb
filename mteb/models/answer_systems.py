@@ -58,7 +58,7 @@ class AnswerProtocol(Protocol):
 def _answer_meta(kind: str, model: ChatModelProtocol) -> ModelMeta:
     llm_name = (getattr(model, "name", None) or "llm").rsplit("/", 1)[-1]
     return ModelMeta.create_empty(
-        overwrites={"name": f"mteb/answer-{kind}-{llm_name}", "model_type": ["hybrid"]}
+        overwrites={"name": f"answer-{kind}-{llm_name}", "model_type": ["hybrid"]}
     )
 
 
