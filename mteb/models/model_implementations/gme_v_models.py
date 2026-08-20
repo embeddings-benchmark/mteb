@@ -63,7 +63,7 @@ class Encoder(torch.nn.Module):
         **kwargs,
     ) -> torch.Tensor:
         if inputs_embeds is None:
-            inputs_embeds = self.base.model.embed_tokens(input_ids)
+            inputs_embeds = self.base.get_input_embeddings()(input_ids)
             if pixel_values is not None:
                 pixel_values = pixel_values.type(self.base.visual.get_dtype())
                 image_embeds = self.base.visual(
@@ -79,7 +79,8 @@ class Encoder(torch.nn.Module):
             if attention_mask is not None:
                 attention_mask = attention_mask.to(inputs_embeds.device)
 
-        outputs = self.base.model(
+        language_model = getattr(self.base.model, "language_model", self.base.model)
+        outputs = language_model(
             input_ids=None,
             position_ids=position_ids,
             attention_mask=attention_mask,
@@ -193,7 +194,7 @@ class GmeQwen2VL(AbsEncoder):
         self.model = self.model.to(self.device)
         all_embeddings = []
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Fused Encoding"):
-            batch_size = len(batch["text"]) or len(batch["image"])
+            batch_size = len(batch["text"]) if "text" in batch else len(batch["image"])
             if "text" in batch:
                 text_batch = batch["text"]
             else:
