@@ -3,9 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_DATASET_PATH = "myang333/InsAVE80KVT2VRetrieval"
-_DATASET_REVISION = "8bf85ebf9183bde4217688c3cc1ba0e8de4b95b7"
-
 
 class InsAVE80KVT2VRetrieval(AbsTaskRetrieval):
     """Instruction-conditioned video+text to video retrieval derived from InsAVE-80K."""
@@ -28,7 +25,10 @@ class InsAVE80KVT2VRetrieval(AbsTaskRetrieval):
             "scores here are not comparable to any number reported in the paper."
         ),
         reference="https://arxiv.org/abs/2605.18467",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        dataset={
+            "path": "myang333/InsAVE80KVT2VRetrieval",
+            "revision": "8bf85ebf9183bde4217688c3cc1ba0e8de4b95b7",
+        },
         type="Any2AnyRetrieval",
         category="vt2v",
         modalities=["video", "text"],
