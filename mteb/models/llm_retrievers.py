@@ -646,12 +646,12 @@ class MultiHopRetriever:
 class MultiQueryRetriever:
     """LLM writes query variants; base rankings fuse via reciprocal rank fusion.
 
-    Reference: Cormack et al., Reciprocal Rank Fusion (SIGIR 2009) for the fusion;
-    multi-query expansion follows common RAG practice.
+    References: Ma et al., Query Rewriting for Retrieval-Augmented LLMs
+    (arXiv:2305.14283) for generating several queries per question, and
+    Cormack et al., Reciprocal Rank Fusion (SIGIR 2009) for the fusion.
 
     The original query and num_queries LLM variants are searched together,
-    and the per-variant rankings merge with the same reciprocal rank fusion
-    used by HybridSearch.
+    and the per-variant rankings merge with reciprocal rank fusion.
     """
 
     def __init__(
