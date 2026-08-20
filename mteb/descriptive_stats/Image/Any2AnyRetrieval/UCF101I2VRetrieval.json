@@ -1,0 +1,64 @@
+{
+    "test": {
+        "num_samples": 674,
+        "num_queries": 337,
+        "num_documents": 337,
+        "number_of_characters": 0,
+        "documents_text_statistics": null,
+        "documents_image_statistics": null,
+        "documents_audio_statistics": null,
+        "documents_video_statistics": {
+            "total_duration_seconds": 2220.96,
+            "total_frames": 55524,
+            "min_width": 320,
+            "average_width": 320.0,
+            "max_width": 320,
+            "min_height": 240,
+            "average_height": 240.0,
+            "max_height": 240,
+            "min_duration_seconds": 1.2,
+            "average_duration_seconds": 6.590385756676558,
+            "max_duration_seconds": 28.64,
+            "unique_videos": 337,
+            "average_fps": 25.0,
+            "fps": {
+                "25": 337
+            },
+            "min_resolution": [
+                320,
+                240
+            ],
+            "average_resolution": [
+                320.0,
+                240.0
+            ],
+            "max_resolution": [
+                320,
+                240
+            ],
+            "resolutions": {
+                "320x240": 337
+            }
+        },
+        "queries_text_statistics": null,
+        "queries_image_statistics": {
+            "min_image_width": 320,
+            "average_image_width": 320.0,
+            "max_image_width": 320,
+            "min_image_height": 240,
+            "average_image_height": 240.0,
+            "max_image_height": 240,
+            "unique_images": 337
+        },
+        "queries_audio_statistics": null,
+        "queries_video_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 337,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 1,
+            "unique_relevant_docs": 337
+        },
+        "top_ranked_statistics": null
+    }
+}
