@@ -141,7 +141,12 @@ def get_rank_from_dict(
     dict_of_results: dict[str, float], doc_id: str
 ) -> tuple[int, float]:
     tuple_of_id_score = dict_of_results.items()
-    sorted_by_score = sorted(tuple_of_id_score, key=lambda x: x[1], reverse=True)
+    # tie-break by doc id descending, matching the other rank computations in this module
+    # (#5092); a score-only sort is stable, so a tied doc's rank followed dict insertion
+    # order and leaked into p-MRR, which weights rank as 1/rank
+    sorted_by_score = sorted(
+        tuple_of_id_score, key=lambda x: (x[1], x[0]), reverse=True
+    )
     for i, (id, score) in enumerate(sorted_by_score):
         if id == doc_id:
             return i + 1, score

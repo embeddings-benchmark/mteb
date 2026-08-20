@@ -84,6 +84,7 @@ class NanoSCIDOCSRetrieval(AbsTaskRetrieval):
             for query_id, corpus_id in zip(
                 self.relevant_docs[split]["query-id"],
                 self.relevant_docs[split]["corpus-id"],
+                strict=True,
             ):
                 relevant_docs[split][query_id][corpus_id] = 1
         self.relevant_docs = relevant_docs

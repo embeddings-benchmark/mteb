@@ -47,6 +47,7 @@ class LitSearchRetrieval(AbsTaskRetrieval):
             zip(
                 [f"q{x + 1}" for x in range(len(query_ds["full"]))],
                 query_ds["full"]["query"],
+                strict=True,
             )
         )
 
@@ -58,11 +59,14 @@ class LitSearchRetrieval(AbsTaskRetrieval):
                 corpus_ds["full"]["corpusid"],
                 corpus_ds["full"]["title"],
                 corpus_ds["full"]["abstract"],
+                strict=True,
             )
         }
 
         self.relevant_docs["test"] = {
-            f"q{e + 1}": dict(zip([f"d{i}" for i in ids], range(1, len(ids) + 1)))
+            f"q{e + 1}": dict(
+                zip([f"d{i}" for i in ids], range(1, len(ids) + 1), strict=True)
+            )
             for e, ids in enumerate(query_ds["full"]["corpusids"])
         }
 

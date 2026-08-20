@@ -187,7 +187,10 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
                     # Add documents and relevance information
                     for doc_id, doc_text, relevance in zip(
-                        item["doc_ids"], item["doc_texts"], item["relevance_scores"]
+                        item["doc_ids"],
+                        item["doc_texts"],
+                        item["relevance_scores"],
+                        strict=True,
                     ):
                         corpus.append(
                             {

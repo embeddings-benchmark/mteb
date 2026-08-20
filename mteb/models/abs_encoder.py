@@ -171,7 +171,7 @@ class AbsEncoder(ABC):
                 except KeyError:
                     msg = f"Task name {task_name} is not valid. {valid_keys_msg}"
                     logger.warning(msg)
-                    warnings.warn(msg)
+                    warnings.warn(msg, stacklevel=2)
                     invalid_task_messages.add(msg)
                     invalid_keys.add(task_key)
 
@@ -219,7 +219,7 @@ class AbsEncoder(ABC):
                 return prompt[prompt_type.value]
             msg = f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
             return ""
 
         if prompt:

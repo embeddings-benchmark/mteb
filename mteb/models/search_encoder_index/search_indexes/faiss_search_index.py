@@ -141,7 +141,7 @@ class FaissSearchIndex:
             if not ranked_ids:
                 msg = f"No top-ranked documents for query {query_id}"
                 logger.warning(msg)
-                warnings.warn(msg)
+                warnings.warn(msg, stacklevel=2)
                 scores_all.append([])
                 idxs_all.append([])
                 continue

@@ -88,7 +88,7 @@ Zong, Chengqing},
 
         text2id = {}
         n = 0
-        for t, q, cont, ans in zip(titles, questions, contexts, answers):
+        for t, q, cont, ans in zip(titles, questions, contexts, answers, strict=True):
             self.queries[split][str(n)] = q
             q_n = n
             n += 1

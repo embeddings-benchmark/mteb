@@ -132,7 +132,9 @@ class CachedEmbeddingWrapper:
                     new_vectors = new_vectors.cpu().numpy()
                 cache.add(uncached_items, new_vectors)
                 cache.save()
-                for vector, original_idx in zip(new_vectors, uncached_indices):
+                for vector, original_idx in zip(
+                    new_vectors, uncached_indices, strict=True
+                ):
                     newly_encoded[original_idx] = vector
             else:
                 logger.info("All items found in cache")
