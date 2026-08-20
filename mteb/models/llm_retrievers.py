@@ -65,12 +65,16 @@ _HOP_READ = (
 )
 
 
-def _wrapper_meta(kind: str, base: SearchProtocol) -> ModelMeta:
+def _wrapper_meta(
+    kind: str, base: SearchProtocol, model: ChatModelProtocol
+) -> ModelMeta:
+    """Name a composed retriever after its method, its LLM, and its base."""
     base_meta = getattr(base, "mteb_model_meta", None)
     base_name = (getattr(base_meta, "name", None) or "unknown").rsplit("/", 1)[-1]
+    llm_name = (getattr(model, "name", None) or "llm").rsplit("/", 1)[-1]
     return ModelMeta.create_empty(
         overwrites={
-            "name": f"{kind}-{base_name}",
+            "name": f"{kind}-{llm_name}-{base_name}",
             "model_type": ["hybrid"],
         }
     )
@@ -156,7 +160,7 @@ class QueryRewriteRetriever:
         self.base = base
         self.model = model
         self.prompt = prompt
-        self.mteb_model_meta = _wrapper_meta("query-rewrite", base)
+        self.mteb_model_meta = _wrapper_meta("query-rewrite", base, model)
 
     def index(
         self,
@@ -219,7 +223,7 @@ class HyDERetriever:
         self.base = base
         self.model = model
         self.prompt = prompt
-        self.mteb_model_meta = _wrapper_meta("hyde", base)
+        self.mteb_model_meta = _wrapper_meta("hyde", base, model)
 
     def index(
         self,
@@ -324,7 +328,7 @@ class RerankRetriever:
         self.model = model
         self.prompt = prompt
         self.snippet_chars = snippet_chars
-        self.mteb_model_meta = _wrapper_meta("llm-rerank", base)
+        self.mteb_model_meta = _wrapper_meta("llm-rerank", base, model)
         self.task_corpus: CorpusDatasetType | None = None
         self._doc_id_to_idx: dict[str, int] = {}
 
@@ -418,7 +422,7 @@ class TournamentRerankRetriever:
         self.model = model
         self.prompt = prompt
         self.snippet_chars = snippet_chars
-        self.mteb_model_meta = _wrapper_meta("tournament-rerank", base)
+        self.mteb_model_meta = _wrapper_meta("tournament-rerank", base, model)
         self.task_corpus: CorpusDatasetType | None = None
         self._doc_id_to_idx: dict[str, int] = {}
 
@@ -539,7 +543,7 @@ class MultiHopRetriever:
         self.model = model
         self.prompt = _RERANK
         self.snippet_chars = snippet_chars
-        self.mteb_model_meta = _wrapper_meta("multi-hop", base)
+        self.mteb_model_meta = _wrapper_meta("multi-hop", base, model)
         self.task_corpus: CorpusDatasetType | None = None
         self._doc_id_to_idx: dict[str, int] = {}
 
@@ -664,7 +668,7 @@ class MultiQueryRetriever:
     ) -> None:
         self.base = base
         self.model = model
-        self.mteb_model_meta = _wrapper_meta("multi-query", base)
+        self.mteb_model_meta = _wrapper_meta("multi-query", base, model)
         self.num_queries = num_queries
         self.rrf_k = rrf_k
 
