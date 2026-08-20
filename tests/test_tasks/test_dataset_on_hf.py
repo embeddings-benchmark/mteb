@@ -62,6 +62,6 @@ def test_dataset_on_hf(dataset_revision: tuple[str, str]):
         huggingface_hub.errors.RepositoryNotFoundError,
         huggingface_hub.errors.RevisionNotFoundError,
     ):
-        assert False, f"Dataset {repo_id} - {revision} not available"
+        raise AssertionError(f"Dataset {repo_id} - {revision} not available") from None
     except Exception as e:
-        assert False, f"Dataset {repo_id} - {revision} failed with {e}"
+        raise AssertionError(f"Dataset {repo_id} - {revision} failed with {e}") from e

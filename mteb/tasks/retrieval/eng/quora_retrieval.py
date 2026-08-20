@@ -39,7 +39,7 @@ class QuoraRetrieval(AbsTaskRetrieval):
         },
         description=(
             "QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a"
-            + " question, find other (duplicate) questions."
+            " question, find other (duplicate) questions."
         ),
         prompt={
             "query": "Given a question, retrieve questions that are semantically equivalent to the given question"
@@ -59,7 +59,7 @@ class QuoraRetrievalHardNegatives(AbsTaskRetrieval):
         },
         description=(
             "QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a"
-            + " question, find other (duplicate) questions. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct."
+            " question, find other (duplicate) questions. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct."
         ),
         adapted_from=["QuoraRetrieval"],
         superseded_by="QuoraRetrievalHardNegatives.v2",

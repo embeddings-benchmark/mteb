@@ -129,7 +129,8 @@ def vggish_loader(*args, **kwargs):
                     if sr is None:
                         warnings.warn(
                             f"No sampling_rate provided for an audio sample. "
-                            f"Assuming {self.sampling_rate} Hz (model default)."
+                            f"Assuming {self.sampling_rate} Hz (model default).",
+                            stacklevel=2,
                         )
                         sr = self.sampling_rate
 

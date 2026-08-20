@@ -101,7 +101,8 @@ def _batch_to_modality_dicts(
     modality_batch = {k: v for k, v in batch.items() if k in supported_modalities}
     LogOnce(logger).info(f"Model will encode modalities {list(modality_batch.keys())}")
     return [
-        dict(zip(modality_batch, sample)) for sample in zip(*modality_batch.values())
+        dict(zip(modality_batch, sample, strict=True))
+        for sample in zip(*modality_batch.values(), strict=True)
     ]
 
 
@@ -115,7 +116,7 @@ def _resolve_model_prompts(
     elif model_prompts and built_in_prompts:
         msg = f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
         logger.warning(msg)
-        warnings.warn(msg)
+        warnings.warn(msg, stacklevel=2)
         model.prompts = model_prompts
 
     resolved_prompts, invalid_prompts = AbsEncoder.validate_task_to_prompt_name(
@@ -125,7 +126,7 @@ def _resolve_model_prompts(
         invalid_prompts_str = "\n".join(invalid_prompts)
         msg = f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts_str}"
         logger.warning(msg)
-        warnings.warn(msg)
+        warnings.warn(msg, stacklevel=2)
     return resolved_prompts
 
 
@@ -314,7 +315,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         ):
             msg = f"SentenceTransformers that use prompts most often need to be configured with at least 'query' and 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
 
         self.fps = fps
         self.max_frames = max_frames
@@ -538,7 +539,7 @@ class CrossEncoderWrapper:
         return cast(
             "Array",
             self.model.predict(
-                list(zip(queries, corpus)),
+                list(zip(queries, corpus, strict=True)),
                 **kwargs,
             ),
         )

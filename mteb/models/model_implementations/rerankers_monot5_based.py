@@ -129,11 +129,13 @@ class MonoT5Reranker(RerankerWrapper):
         passages = [text for batch in inputs2 for text in batch["text"]]
 
         if instructions is not None and instructions[0] is not None:
-            queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
+            queries = [
+                f"{q} {i}".strip() for i, q in zip(instructions, queries, strict=True)
+            ]
 
         prompts = [
             self.prompt_template.format(query=query, text=text)
-            for (query, text) in zip(queries, passages)
+            for (query, text) in zip(queries, passages, strict=True)
         ]
 
         tokens = self.tokenizer(
@@ -237,12 +239,12 @@ Relevant: """
             # logger.info(f"Adding instructions to LLAMA queries")
             queries = [
                 self.query_instruct_template.format(instruction=i, query=q).strip()
-                for i, q in zip(instructions, queries)
+                for i, q in zip(instructions, queries, strict=True)
             ]
 
         prompts = [
             self.template.format(query=query, text=text)
-            for (query, text) in zip(queries, passages)
+            for (query, text) in zip(queries, passages, strict=True)
         ]
         if "{query}" in prompts[0]:
             raise ValueError("Query not replaced")

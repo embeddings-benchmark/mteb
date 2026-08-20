@@ -283,7 +283,7 @@ def get_tasks(  # noqa: PLR0913, PLR0917
         if domains or task_types or categories:
             logger.warning(
                 "When `tasks` is provided, other filters like domains, task_types, and categories are ignored. "
-                + "If you want to filter a list of tasks, please use `mteb.filter_tasks` instead."
+                "If you want to filter a list of tasks, please use `mteb.filter_tasks` instead."
             )
         _tasks = []
         for task in tasks:
@@ -359,7 +359,7 @@ def get_task(
         _task_name = _TASK_RENAMES[task_name]
         msg = f"The task with the given name '{task_name}' has been renamed to '{_task_name}'. To prevent this warning use the new name."
         logger.warning(msg)
-        warnings.warn(msg)
+        warnings.warn(msg, stacklevel=2)
 
     if task_name not in _TASKS_REGISTRY:
         close_matches = difflib.get_close_matches(task_name, _TASKS_REGISTRY.keys())

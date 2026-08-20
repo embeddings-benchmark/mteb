@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.18.19"
+version = "2.19.7"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -97,16 +97,18 @@ github = ["PyGithub>=1.60"]
 # model specific optional dependencies:
 peft = ["peft>=0.11.0"]
 flagembedding = ["FlagEmbedding==1.3.4"]
-jina = ["einops>=0.8.0"]
+jina = ["einops>=0.8.0", "sentence-transformers>=3.1.0"]
 jina-clip = ["peft>=0.15.2", "einops>=0.8.0", "transformers>=4.52.0,<5.0.0", "torchvision>=0.22.1", "timm>=1.0.15,<1.1.0"]
 jina-v4 = ["peft>=0.15.2", "transformers>=4.52.0,<5.0.0", "torchvision>=0.22.1"]
 flash_attention = ["flash-attn>=2.6.3"]
+omniretriever = ["peft>=0.11.0", "transformers>=4.51.0,<4.52.0"]
 colvec1_1 = ["transformers>=5.14.1,<6.0.0"]
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
 model2vec = ["model2vec>=0.3.0"]
 pylate = ["pylate>=1.3.1"]
 msclap = ["msclap>=1.3.4", "soundfile>=0.13.1"]
 bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
+boto3 = ["boto3>=1.34.0"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
 blip2 = ["salesforce-lavis>=1.0.2"]
@@ -145,6 +147,14 @@ torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
 moca = ["transformers>=4.49.0,<4.53"]
 transformers-v4 = ["transformers<5"]
+transformers-v5 = ["transformers>=5"]
+e5-v = ["transformers<=4.44.2"] # https://github.com/embeddings-benchmark/mteb/issues/1647
+# NV-Embed previously needs sentence-transformers==2.7.0, which cannot be expressed here:
+# mteb itself requires sentence-transformers>=3.0.0, so the extra would be unsatisfiable.
+nvembed = ["transformers==4.42.4"]
+nemotron-rerank = ["transformers==4.47.1"]
+modernbert = ["transformers>=4.48.0"]
+sparse-encoder = ["sentence-transformers>=5.0.0"]
 cosmos-embed1 = ["transformers<5", "einops>=0.8.0", "torchvision>=0.16.0"]
 siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
 tipsv2 = ["sentencepiece>=0.2.0", "protobuf>=3.0.0"]
@@ -154,6 +164,7 @@ qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
 qwen_omni_utils = ["qwen_omni_utils"]
 embeddinggemma = ["transformers>=4.56.0"]
 # ebind = ["ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71", "soundfile>=0.13.1", "transformers>=4.57.1,!=5.0.0"]
+gme = ["transformers<4.52.0"]
 
 [dependency-groups]
 lint = [
@@ -311,6 +322,8 @@ select = [
     "EXE",     # shebang/executable-bit consistency
     "INT",     # gettext f-string misuse
     "ASYNC",   # blocking calls in async functions
+    "ISC",     # implicit string concatenation
+    "B",       # flake8-bugbear
 ]
 
 ignore = [
@@ -332,6 +345,7 @@ ignore = [
     "PLR0912",  # too many branches
     "PLR0915",  # too many statements
     "PLW0717",  # too-many-statements-in-try-clause
+    "ISC001",   # single-line implicit concat; conflicts with `ruff format`
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
@@ -354,6 +368,7 @@ preview = true
     "S602",  # allow shell=True in tests
     "S603",  # allow subprocess calls in tests
     "PLC2701",  # Private name import
+    "PLR6301",  # Method could be a function - pytest test methods are instance methods
 ]
 "mteb/mocks/*" = [
     "RUF012",
@@ -385,9 +400,6 @@ preview = true
     "TC002",
 ]
 
-
-[tool.ruff.lint.flake8-implicit-str-concat]
-allow-multiline = false
 
 [tool.ruff.lint.pep8-naming]
 ignore-names = [
@@ -485,7 +497,9 @@ conflicts = [
         { extra = "msclap" },
         { extra = "muq" },
         { extra = "moca" }, # needs transformers with _update_causal_mask
+        { extra = "omniretriever" },
         { extra = "transformers-v4" },
+        { extra = "transformers-v5" },
         { extra = "cosmos-embed1" }, # remote code needs transformers<5
         { extra = "qwen-vl" },
         { extra = "ps3" }, # ps3-torch pins transformers<=4.49.0
@@ -493,6 +507,13 @@ conflicts = [
         { extra = "embeddinggemma" },
         # { extra = "ebind" },
         { extra = "visrag-ret" }, # conflicting version of timm with blip2
+        { extra = "e5-v" }, # conflicting versions of transformers
+        { extra = "nvembed" }, # conflicting versions of transformers
+        { extra = "flagembedding" }, # FlagEmbedding pins transformers>=4.44.2
+        { extra = "nemotron-rerank" }, # conflicting versions of transformers
+        { extra = "modernbert" }, # conflicting versions of transformers
+        { extra = "sparse-encoder" }, # conflicting version of sentence-transformers
+        { extra = "gme" }, # requires transformers<4.52.0
     ],
 ]
 
@@ -579,6 +600,7 @@ extend-ignore-words-re = [
 extend-ignore-re = [
     "author.*",  # ignore authors in citations
     "editor.*",  # ignore authors in citations
+    "FIne-Grained Music retrievAl",  # stylised paper title (FIGMA)
 ]
 
 [tool.typos.files]

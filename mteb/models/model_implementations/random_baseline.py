@@ -531,7 +531,7 @@ class RandomCrossEncoderBaseline:
         embeddings1 = _batch_to_embeddings(inputs1, self.embedding_dim)
         embeddings2 = _batch_to_embeddings(inputs2, self.embedding_dim)
         similarities = []
-        for emb1, emb2 in zip(embeddings1, embeddings2):
+        for emb1, emb2 in zip(embeddings1, embeddings2, strict=True):
             norm1 = np.linalg.norm(emb1)
             norm2 = np.linalg.norm(emb2)
             normalized1 = emb1 / (norm1 + 1e-10)
@@ -771,7 +771,7 @@ class RandomColBERTBaseline:
             candidate_scores = scores[i, candidate_idxs]
             top_n = min(top_k, len(candidate_ids))
             top_vals, top_idx = torch.topk(candidate_scores, top_n)
-            for val, idx in zip(top_vals.tolist(), top_idx.tolist()):
+            for val, idx in zip(top_vals.tolist(), top_idx.tolist(), strict=True):
                 results[qid][candidate_ids[idx]] = val
 
         self.task_corpus = None

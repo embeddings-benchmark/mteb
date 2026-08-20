@@ -28,7 +28,7 @@ def vista_loader(model_name, **kwargs):
     except ImportError:
         raise ImportError(
             "Please install `visual_bge`, refer to https://github.com/FlagOpen/FlagEmbedding/tree/master/research/visual_bge#install-flagembedding."
-        )
+        ) from None
 
     class VisualizedBGEWrapper(Visualized_BGE, AbsEncoder):
         """Setting up VISTA

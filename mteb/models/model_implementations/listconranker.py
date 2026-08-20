@@ -64,7 +64,7 @@ class ListConRanker(RerankerWrapper):
         query = queries[0]
         tmp_passages = []
         if kwargs.get("traditional_inference"):
-            for q, p in zip(queries, passages):
+            for q, p in zip(queries, passages, strict=True):
                 if query == q:
                     tmp_passages.append(p)
                 else:
@@ -78,7 +78,7 @@ class ListConRanker(RerankerWrapper):
                 scores = self.model.multi_passage(query_passages_tuples)
                 final_scores += scores
         else:
-            for q, p in zip(queries, passages):
+            for q, p in zip(queries, passages, strict=True):
                 if query == q:
                     tmp_passages.append(p)
                 else:

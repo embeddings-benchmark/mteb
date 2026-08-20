@@ -21,7 +21,7 @@ def _load_data(
             revision=revision,
         )
         query_ds = query_ds.map(
-            lambda x: {
+            lambda x, split=split: {
                 "id": f"query-{split}-{x['query-id']}",
                 "text": x["query"],
                 "modality": "text",
@@ -37,7 +37,7 @@ def _load_data(
             revision=revision,
         )
         corpus_ds = corpus_ds.map(
-            lambda x: {
+            lambda x, split=split: {
                 "id": f"corpus-{split}-{x['corpus-id']}",
                 "modality": "image",
             },

@@ -21,6 +21,9 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# Default abstention rates for the nAUC computation: 0.0, 0.1, ..., 0.9
+_DEFAULT_ABSTENTION_RATES = np.linspace(0, 1, 11)[:-1]
+
 
 def mrr(
     qrels: RelevantDocumentsType,
@@ -75,6 +78,7 @@ def recall_cap(
             denominator = min(len(query_relevant_docs), k)
             if denominator == 0:
                 capped_recall[f"R_cap_at_{k}"].append(None)
+                continue
             capped_recall[f"R_cap_at_{k}"].append(len(retrieved_docs) / denominator)
     return capped_recall
 
@@ -88,7 +92,7 @@ def hole(
 
     annotated_corpus = set()
     for _, docs in qrels.items():
-        for doc_id, score in docs.items():
+        for doc_id in docs:
             annotated_corpus.add(doc_id)
 
     k_max = max(k_values)
@@ -138,7 +142,12 @@ def get_rank_from_dict(
     dict_of_results: dict[str, float], doc_id: str
 ) -> tuple[int, float]:
     tuple_of_id_score = dict_of_results.items()
-    sorted_by_score = sorted(tuple_of_id_score, key=lambda x: x[1], reverse=True)
+    # tie-break by doc id descending, matching the other rank computations in this module
+    # (#5092); a score-only sort is stable, so a tied doc's rank followed dict insertion
+    # order and leaked into p-MRR, which weights rank as 1/rank
+    sorted_by_score = sorted(
+        tuple_of_id_score, key=lambda x: (x[1], x[0]), reverse=True
+    )
     for i, (id, score) in enumerate(sorted_by_score):
         if id == doc_id:
             return i + 1, score
@@ -158,7 +167,7 @@ def calculate_pmrr(
             continue
         original_qid_run = original_run[qid + "-og"]
         new_qid_run = new_run[qid + "-changed"]
-        for idx, changed_doc in enumerate(cur_changed_qrels):
+        for changed_doc in cur_changed_qrels:
             original_rank, original_score = get_rank_from_dict(
                 original_qid_run, changed_doc
             )
@@ -294,7 +303,7 @@ def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
 def nauc(
     conf_scores: NDArray[np.floating],
     metrics: NDArray[np.floating],
-    abstention_rates: NDArray[np.floating] = np.linspace(0, 1, 11)[:-1],
+    abstention_rates: NDArray[np.floating] = _DEFAULT_ABSTENTION_RATES,
 ) -> float:
     """Computes normalized Area Under the Curve (nAUC) on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
 
@@ -316,7 +325,7 @@ def nauc(
     def abstention_curve(
         conf_scores: NDArray[np.floating],
         metrics: NDArray[np.floating],
-        abstention_rates: NDArray[np.floating] = np.linspace(0, 1, 11)[:-1],
+        abstention_rates: NDArray[np.floating] = _DEFAULT_ABSTENTION_RATES,
     ) -> NDArray[np.floating]:
         """Computes the raw abstention curve for a given set of evaluated instances and corresponding confidence scores
 
