@@ -459,6 +459,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "DalajClassification",
         "DanishPoliticalCommentsClassification",
         "DeepSentiPers",
+        "EDIRIT2IRetrieval",
         "EDIST2ITRetrieval",
         "ESCIReranking",
         "EmitClassification",
@@ -808,6 +809,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "AROVisualAttribution",
         "AROVisualRelation",
         "CIRRIT2IRetrieval",
+        "EDIRIT2IRetrieval",
         "EDIST2ITRetrieval",
         "EncyclopediaVQAIT2ITRetrieval",
         "FER2013",  # documented to contain duplicate/near-duplicate images

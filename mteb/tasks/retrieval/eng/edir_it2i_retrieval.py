@@ -31,12 +31,12 @@ class EDIRIT2IRetrieval(AbsTaskRetrieval):
         sample_creation="LM-generated and verified",
         bibtex_citation=r"""
 @inproceedings{song-etal-2026-rethinking-composed,
-  title = {Rethinking Composed Image Retrieval Evaluation: A Fine-Grained Benchmark from Image Editing},
   author = {Song, Tingyu and Zhang, Yanzhao and Li, Mingxin and Guo, Zhuoning and Long, Dingkun and Xie, Pengjun and Zhang, Siyue and Zhao, Yilun and Wu, Shu},
   booktitle = {Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages = {46224--46242},
-  year = {2026},
+  title = {Rethinking Composed Image Retrieval Evaluation: A Fine-Grained Benchmark from Image Editing},
   url = {https://aclanthology.org/2026.acl-long.2144/},
+  year = {2026},
 }
 """,
     )
