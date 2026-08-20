@@ -14,7 +14,7 @@ INTERNVIDEO2_CITATION = """
 internvideo2_clip_1b_224p_f8 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(num_frames=8, trust_remote_code=True),
-    name="OpenGVLab/InternVideo2-CLIP-1B-224p-f8",
+    name="OpenGVLab/InternVideo2-CLIP-1B-224p-f8",  # discussions/3
     revision="2e08ec173489fc13a6e4ca2d9807927b73c653a3",
     release_date="2024-03-22",
     languages=["eng-Latn"],
