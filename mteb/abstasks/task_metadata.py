@@ -404,6 +404,7 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
     "PairClassification": "pair-classification",
     "VideoClassification": "classification",
     "VideoClustering": "clustering",
+    "VideoMultilabelClassification": "classification",
     "VideoPairClassification": "pair-classification",
     "VideoZeroshotClassification": "classification",
     "VideoCentricQA": "retrieval",
