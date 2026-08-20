@@ -34,7 +34,6 @@ giga_embeddings_480M = ModelMeta(
     citation=None,
     contacts=None,
     output_dtypes=None,
-    extra_requirements_groups=None,
 )
 
 giga_embeddings_3B = ModelMeta(
