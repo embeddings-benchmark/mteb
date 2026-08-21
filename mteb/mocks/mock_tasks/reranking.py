@@ -78,6 +78,12 @@ class MockRerankingTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
+            "text_corpus_overlap_statistics": {
+                "num_queries": 2,
+                "min_query_character_ngram_overlap": 0.5625,
+                "average_query_character_ngram_overlap": 0.6221590909090908,
+                "max_query_character_ngram_overlap": 0.6818181818181818,
+            },
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
                 "min_top_ranked_per_query": 2,
@@ -135,6 +141,12 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
             },
+            "text_corpus_overlap_statistics": {
+                "num_queries": 4,
+                "min_query_character_ngram_overlap": 0.5625,
+                "average_query_character_ngram_overlap": 0.6221590909090908,
+                "max_query_character_ngram_overlap": 0.6818181818181818,
+            },
             "top_ranked_statistics": {
                 "num_top_ranked": 8,
                 "min_top_ranked_per_query": 2,
@@ -174,6 +186,12 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
+                    "text_corpus_overlap_statistics": {
+                        "num_queries": 2,
+                        "min_query_character_ngram_overlap": 0.5625,
+                        "average_query_character_ngram_overlap": 0.6221590909090908,
+                        "max_query_character_ngram_overlap": 0.6818181818181818,
+                    },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
                         "min_top_ranked_per_query": 2,
@@ -212,6 +230,12 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                         "average_relevant_docs_per_query": 1.0,
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
+                    },
+                    "text_corpus_overlap_statistics": {
+                        "num_queries": 2,
+                        "min_query_character_ngram_overlap": 0.5625,
+                        "average_query_character_ngram_overlap": 0.6221590909090908,
+                        "max_query_character_ngram_overlap": 0.6818181818181818,
                     },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
@@ -275,6 +299,12 @@ class MockInstructionReranking(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
+            "text_corpus_overlap_statistics": {
+                "num_queries": 2,
+                "min_query_character_ngram_overlap": 0.3,
+                "average_query_character_ngram_overlap": 0.35833333333333334,
+                "max_query_character_ngram_overlap": 0.4166666666666667,
+            },
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
                 "min_top_ranked_per_query": 2,
@@ -331,6 +361,12 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
             },
+            "text_corpus_overlap_statistics": {
+                "num_queries": 4,
+                "min_query_character_ngram_overlap": 0.3,
+                "average_query_character_ngram_overlap": 0.35833333333333334,
+                "max_query_character_ngram_overlap": 0.4166666666666667,
+            },
             "top_ranked_statistics": {
                 "num_top_ranked": 8,
                 "min_top_ranked_per_query": 2,
@@ -370,6 +406,12 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
                     },
+                    "text_corpus_overlap_statistics": {
+                        "num_queries": 2,
+                        "min_query_character_ngram_overlap": 0.3,
+                        "average_query_character_ngram_overlap": 0.35833333333333334,
+                        "max_query_character_ngram_overlap": 0.4166666666666667,
+                    },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
                         "min_top_ranked_per_query": 2,
@@ -408,6 +450,12 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                         "average_relevant_docs_per_query": 1.0,
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
+                    },
+                    "text_corpus_overlap_statistics": {
+                        "num_queries": 2,
+                        "min_query_character_ngram_overlap": 0.3,
+                        "average_query_character_ngram_overlap": 0.35833333333333334,
+                        "max_query_character_ngram_overlap": 0.4166666666666667,
                     },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
@@ -484,6 +532,7 @@ class MockAudioReranking(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
             },
+            "text_corpus_overlap_statistics": None,
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
                 "min_top_ranked_per_query": 2,

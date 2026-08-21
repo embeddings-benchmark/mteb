@@ -31,6 +31,7 @@ from mteb.types.statistics import RetrievalDescriptiveStatistics
 from ._statistics_calculation import (
     calculate_relevant_docs_statistics,
     calculate_single_input_modality_statistics,
+    calculate_text_corpus_overlap_statistics,
     calculate_top_ranked_statistics,
 )
 from .abstask import AbsTask
@@ -485,14 +486,20 @@ class AbsTaskRetrieval(AbsTask):
             top_ranked = {}
             for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 split_data = self.dataset[hf_subset][split]
+                subset_queries = _prefix_dataset_ids(
+                    split_data["queries"], hf_subset, split
+                )
+                subset_corpus = _prefix_dataset_ids(
+                    split_data["corpus"], hf_subset, split
+                )
                 if queries is None:
-                    queries = split_data["queries"]
+                    queries = subset_queries
                 else:
-                    queries = concatenate_datasets([queries, split_data["queries"]])
+                    queries = concatenate_datasets([queries, subset_queries])
                 if corpus is None:
-                    corpus = split_data["corpus"]
+                    corpus = subset_corpus
                 else:
-                    corpus = concatenate_datasets([corpus, split_data["corpus"]])
+                    corpus = concatenate_datasets([corpus, subset_corpus])
 
                 relevant_docs.update(
                     _process_relevant_docs(
@@ -576,6 +583,19 @@ class AbsTaskRetrieval(AbsTask):
         )
 
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
+        text_corpus_overlap_statistics = None
+        if "text" in queries_col_inputs and "text" in corpus_col_inputs:
+            query_text_by_id = dict(
+                zip(queries["id"], queries_col_inputs["text"], strict=True)
+            )
+            corpus_text_by_id = dict(
+                zip(corpus["id"], corpus_col_inputs["text"], strict=True)
+            )
+
+            text_corpus_overlap_statistics = calculate_text_corpus_overlap_statistics(
+                query_text_by_id,
+                corpus_text_by_id,
+            )
         top_ranked_statistics = (
             calculate_top_ranked_statistics(top_ranked, num_queries)
             if top_ranked is not None and num_queries and len(top_ranked) > 0
@@ -596,6 +616,7 @@ class AbsTaskRetrieval(AbsTask):
             queries_audio_statistics=queries_stats["audio_statistics"],
             queries_video_statistics=queries_stats["video_statistics"],
             relevant_docs_statistics=relevant_docs_statistics,
+            text_corpus_overlap_statistics=text_corpus_overlap_statistics,
             top_ranked_statistics=top_ranked_statistics,
         )
 
@@ -758,3 +779,9 @@ def _process_relevant_docs(
             f"{split}_{hf_subset}_{doc_id}": value for doc_id, value in relevant.items()
         }
     return return_collection
+
+
+def _prefix_dataset_ids(collection: Dataset, hf_subset: str, split: str) -> Dataset:
+    """Prepend split and subset to dataset IDs to keep aggregate IDs unique."""
+    prefix = f"{split}_{hf_subset}_"
+    return collection.map(lambda row: {"id": f"{prefix}{row['id']}"})

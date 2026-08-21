@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import unicodedata
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any, cast
@@ -15,6 +16,7 @@ from mteb.types.statistics import (
     RelevantDocsStatistics,
     ScoreStatistics,
     SingleInputModalityStatistics,
+    TextCorpusOverlapStatistics,
     TextStatistics,
     TopRankedStatistics,
     VideoStatistics,
@@ -414,6 +416,69 @@ def calculate_relevant_docs_statistics(
         max_relevant_docs_per_query=max(qrels_lengths),
         unique_relevant_docs=unique_qrels,
     )
+
+
+def calculate_text_corpus_overlap_statistics(
+    queries: Mapping[str, str],
+    corpus: Mapping[str, str],
+) -> TextCorpusOverlapStatistics | None:
+    """Calculate query character n-gram coverage across the full corpus."""
+    all_query_ngrams: set[str] = set()
+    for query_text in queries.values():
+        all_query_ngrams.update(_character_ngrams(query_text))
+
+    if not all_query_ngrams:
+        return None
+
+    covered_query_ngrams: set[str] = set()
+    has_corpus_ngrams = False
+    for document_text in tqdm(corpus.values(), desc="Calculating text corpus overlap"):
+        document_ngrams = _character_ngrams(document_text)
+        has_corpus_ngrams = has_corpus_ngrams or bool(document_ngrams)
+        covered_query_ngrams.update(document_ngrams & all_query_ngrams)
+
+    if not has_corpus_ngrams:
+        return None
+
+    num_queries = 0
+    total_overlap = 0.0
+    min_overlap = 1.0
+    max_overlap = 0.0
+    for query_text in queries.values():
+        current_query_ngrams = _character_ngrams(query_text)
+        if not current_query_ngrams:
+            continue
+        overlap = len(current_query_ngrams & covered_query_ngrams) / len(
+            current_query_ngrams
+        )
+        num_queries += 1
+        total_overlap += overlap
+        min_overlap = min(min_overlap, overlap)
+        max_overlap = max(max_overlap, overlap)
+
+    if num_queries == 0:
+        return None
+
+    return TextCorpusOverlapStatistics(
+        num_queries=num_queries,
+        min_query_character_ngram_overlap=min_overlap,
+        average_query_character_ngram_overlap=total_overlap / num_queries,
+        max_query_character_ngram_overlap=max_overlap,
+    )
+
+
+def _character_ngrams(text: str, n: int = 4) -> set[str]:
+    """Return normalized character n-grams without punctuation or whitespace."""
+    normalized_text = unicodedata.normalize("NFKC", text).casefold()
+    normalized_text = "".join(
+        char
+        for char in normalized_text
+        if unicodedata.category(char)[0] in {"L", "M", "N"}
+    )
+    return {
+        normalized_text[start : start + n]
+        for start in range(len(normalized_text) - n + 1)
+    }
 
 
 def calculate_single_input_modality_statistics(
