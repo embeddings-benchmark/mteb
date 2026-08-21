@@ -137,7 +137,9 @@ def _load_and_validate_source(source_dir: Path) -> SourceData:
         if str(row.get("image")) != str(row["id"]):
             raise ValueError(f"Corpus image does not match ID: {row!r}")
     for row in source.queries:
-        if not isinstance(row.get("image"), str) or not isinstance(row.get("text"), str):
+        if not isinstance(row.get("image"), str) or not isinstance(
+            row.get("text"), str
+        ):
             raise ValueError(f"Invalid query row: {row!r}")
     for row in source.instances:
         positives = row.get("pos")
@@ -217,7 +219,9 @@ def _extract_required_remote_media(
                         continue
                 member_file = archive.extractfile(member)
                 if member_file is None:
-                    raise ValueError(f"Cannot extract EDIR archive member: {member.name}")
+                    raise ValueError(
+                        f"Cannot extract EDIR archive member: {member.name}"
+                    )
                 with destination.open("wb") as target:
                     shutil.copyfileobj(member_file, target)
                 extracted.add(name)
@@ -228,7 +232,9 @@ def _extract_required_remote_media(
         raise FileNotFoundError(f"EDIR archive is missing {len(missing)} images")
 
 
-def _build_datasets(source: SourceData, media_dir: Path) -> tuple[Dataset, Dataset, Dataset]:
+def _build_datasets(
+    source: SourceData, media_dir: Path
+) -> tuple[Dataset, Dataset, Dataset]:
     instances_by_qid = {str(row["qid"]): row for row in source.instances}
     corpus = Dataset.from_dict(
         {
