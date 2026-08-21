@@ -3,8 +3,8 @@ from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
 
 class IntPhys2VideoZeroShot(AbsTaskZeroShotClassification):
-    _DATASET_PATH = "artist/IntPhys2VideoZeroShot"
-    _DATASET_REVISION = "9ceb62a8a1fdf1b9f0c276430f72e3eb30426bbe"
+    _DATASET_PATH = "mteb/IntPhys2VideoZeroShot"
+    _DATASET_REVISION = "503c0a2f8e624472ff3e44cdc6065ec68c9df2ed"
     _LABEL_NAMES = (
         "object behavior is inconsistent with Earth's physical laws",
         "object behavior is consistent with Earth's physical laws",
