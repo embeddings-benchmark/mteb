@@ -39,4 +39,8 @@ class EDIRIT2IRetrieval(AbsTaskRetrieval):
   year = {2026},
 }
 """,
+        prompt={
+            "query": "Given an image, find a similar everyday image with the described changes: ",
+            "document": "Represent the given image. ",
+        },
     )
