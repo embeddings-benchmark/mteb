@@ -1,4 +1,12 @@
 from .ask_ubuntu_dup_questions import AskUbuntuDupQuestions
+from .biovita import (
+    BioVITAA2IReranking,
+    BioVITAA2TReranking,
+    BioVITAI2AReranking,
+    BioVITAI2TReranking,
+    BioVITAT2AReranking,
+    BioVITAT2IReranking,
+)
 from .built_bench_reranking import BuiltBenchReranking
 from .ecommerce_product_relevance_reranking import ERESSReranking
 from .fs_dnoisy18k_audio_reranking import FSDnoisy18kAudioReranking
@@ -20,6 +28,12 @@ from .web_linx_candidates_reranking import WebLINXCandidatesReranking
 
 __all__ = [
     "AskUbuntuDupQuestions",
+    "BioVITAA2IReranking",
+    "BioVITAA2TReranking",
+    "BioVITAI2AReranking",
+    "BioVITAI2TReranking",
+    "BioVITAT2AReranking",
+    "BioVITAT2IReranking",
     "BuiltBenchReranking",
     "ERESSReranking",
     "FSDnoisy18kAudioReranking",
