@@ -159,6 +159,7 @@ from .fgmcaps_retrieval import FGMCapsA2TRetrieval, FGMCapsT2ARetrieval
 from .fi_qa2018_retrieval import FiQA2018
 from .fin_qa_retrieval import FinQARetrieval
 from .finance_bench_retrieval import FinanceBenchRetrieval
+from .finecvr_retrieval import FineCVRVT2VRetrieval
 from .flare_retrieval import (
     FLAREAudioT2VARetrieval,
     FLAREUnifiedT2VARetrieval,
@@ -628,6 +629,7 @@ __all__ = [
     "FiQA2018",
     "FinQARetrieval",
     "FinanceBenchRetrieval",
+    "FineCVRVT2VRetrieval",
     "Flickr30kI2TRetrieval",
     "Flickr30kT2IRetrieval",
     "FlickrAudioToImageRetrieval",

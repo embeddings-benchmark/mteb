@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import argparse
 import json
-import tarfile
-from collections import Counter
+import subprocess
+import tempfile
 from pathlib import Path
 
-from datasets import Dataset
+from datasets import Dataset, DatasetDict, Video
 from huggingface_hub import hf_hub_download
 
 
@@ -100,35 +100,48 @@ def validate(
 
 
 
-def validate_media(corpus_ids: list[str], tar_path: str) -> None:
-    needed = set(corpus_ids)
-    counts: Counter[str] = Counter()
 
-    with tarfile.open(tar_path, "r:gz") as tf:
-        for member in tf:
-            if not member.isfile() or not member.name.endswith(".jpg"):
-                continue
+def pack_frames_to_video(frame_paths: list[Path], output_path: Path) -> None:
+    with tempfile.NamedTemporaryFile("w", suffix=".txt") as f:
+        for frame_path in sorted(frame_paths):
+            f.write(f"file '{frame_path}'\n")
+        f.flush()
+        subprocess.run(
+            [
+                "ffmpeg", "-y",
+                "-f", "concat",
+                "-safe", "0",
+                "-r", "2",
+                "-i", f.name,
+                "-c:v", "libx264",
+                "-pix_fmt", "yuv420p",
+                str(output_path),
+            ],
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
 
-            parts = member.name.split("/")
-            if len(parts) < 4:
-                continue
 
-            clip_id = "/".join(parts[1:3])
-            if clip_id in needed:
-                counts[clip_id] += 1
 
-    missing = sorted(needed - counts.keys())
-    wrong_frame_count = sorted(
-        (clip_id, counts[clip_id])
-        for clip_id in needed
-        if counts[clip_id] != 8
-    )
+def pack_all_videos(
+    corpus_ids: list[str],
+    frames_root: Path,
+    video_dir: Path,
+) -> None:
+    video_dir.mkdir(parents=True, exist_ok=True)
 
-    assert not missing, f"Missing benchmark clips: {missing[:10]}"
-    assert not wrong_frame_count, (
-        f"Expected exactly 8 frames per benchmark clip: "
-        f"{wrong_frame_count[:10]}"
-    )
+    for clip_id in corpus_ids:
+        output_path = video_dir / f"{clip_id.replace('/', '__')}.mp4"
+        if output_path.exists():
+            continue
+
+        frame_paths = sorted((frames_root / clip_id).glob("*.jpg"))
+        if len(frame_paths) != 8:
+            raise ValueError(f"{clip_id}: expected 8 frames, got {len(frame_paths)}")
+
+        pack_frames_to_video(frame_paths, output_path)
+
 
 
 def build_datasets(
@@ -136,11 +149,35 @@ def build_datasets(
     queries: list[dict],
     qrels: list[dict],
     top_ranked: list[dict],
+    video_dir: Path,
 ) -> dict[str, Dataset]:
     corpus_ds = Dataset.from_list(
-        [{"id": corpus_id} for corpus_id in corpus_ids]
+        [
+            {
+                "id": corpus_id,
+                "video": str(video_dir / f"{corpus_id.replace('/', '__')}.mp4"),
+            }
+            for corpus_id in corpus_ids
+        ]
     )
-    queries_ds = Dataset.from_list(queries)
+
+    corpus_ds = corpus_ds.cast_column("video", Video())
+
+    queries_ds = Dataset.from_list(
+        [
+            {
+                "id": query["id"],
+                "text": query["text"],
+                "video": str(
+                    video_dir / f"{query['source_id'].replace('/', '__')}.mp4"
+                ),
+            }
+            for query in queries
+        ]
+    )
+
+    queries_ds = queries_ds.cast_column("video", Video())
+
     qrels_ds = Dataset.from_list(qrels)
     top_ranked_ds = Dataset.from_list(top_ranked)
 
@@ -155,9 +192,21 @@ def build_datasets(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--tar-path",
+        "--frames-root",
+        type=Path,
         required=True,
-        help="Path to the downloaded FineCVR finecvr.tar.gz archive.",
+        help="Path to the extracted finecvr frame root.",
+    )
+    parser.add_argument(
+        "--video-dir",
+        type=Path,
+        required=True,
+        help="Directory for packed FineCVR mp4 files.",
+    )
+    parser.add_argument("--push-to-hub", action="store_true")
+    parser.add_argument(
+        "--repo-id",
+        default="myang333/FineCVRVT2VRetrieval",
     )
     args = parser.parse_args()
 
@@ -165,8 +214,15 @@ def main() -> None:
     corpus_ids, queries, qrels, top_ranked = build_metadata(data)
 
     validate(corpus_ids, queries, qrels, top_ranked)
-    validate_media(corpus_ids, args.tar_path)
-    datasets = build_datasets(corpus_ids, queries, qrels, top_ranked)
+    pack_all_videos(corpus_ids, args.frames_root, args.video_dir)
+
+    datasets = build_datasets(
+        corpus_ids,
+        queries,
+        qrels,
+        top_ranked,
+        args.video_dir,
+    )
 
     print(f"corpus: {len(corpus_ids)}")
     print(f"queries: {len(queries)}")
@@ -174,12 +230,16 @@ def main() -> None:
     print(f"top_ranked: {len(top_ranked)}")
     print(f"candidates/query: {len(top_ranked[0]['corpus-ids'])}")
     print()
-    print("query example:", queries[0])
-    print("qrel example:", qrels[0])
-    print("top-ranked first 5:", top_ranked[0]["corpus-ids"][:5])
-    print()
     for name, dataset in datasets.items():
         print(f"{name} features:", dataset.features)
+
+    if args.push_to_hub:
+        for name, dataset in datasets.items():
+            print(f"Pushing {name}...")
+            DatasetDict({"test": dataset}).push_to_hub(
+                args.repo_id,
+                name,
+            )
 
     print()
     print("All sanity checks passed.")
