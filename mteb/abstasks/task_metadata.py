@@ -419,6 +419,7 @@ class MetadataDatasetDict(TypedDict, total=False):
         revision: The revision of the dataset.
         name: The name the dataset config.
         split: The split of the dataset.
+        writer_batch_size: Number of examples per Arrow write operation.
         trust_remote_code: Whether to use `trust_remote_code`. Datasets shouldn't use this since,
          because datasets `v4` doesn't support this. This parameter is left for compatibility with forks/external usage.
     """
@@ -427,6 +428,7 @@ class MetadataDatasetDict(TypedDict, total=False):
     revision: Required[str]
     name: str
     split: str
+    writer_batch_size: int
     trust_remote_code: bool
 
 
