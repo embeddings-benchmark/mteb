@@ -143,10 +143,16 @@ def phase_build(args: argparse.Namespace) -> None:
     for cand in accepted:
         idx = cand["episode_index"]
         query_rows.append(
-            {"id": f"q-ep{idx:06d}", "video": str(fetch(video_path(idx, QUERY_CAM), cache_dir))}
+            {
+                "id": f"q-ep{idx:06d}",
+                "video": str(fetch(video_path(idx, QUERY_CAM), cache_dir)),
+            }
         )
         corpus_rows.append(
-            {"id": f"c-ep{idx:06d}", "video": str(fetch(video_path(idx, CORPUS_CAM), cache_dir))}
+            {
+                "id": f"c-ep{idx:06d}",
+                "video": str(fetch(video_path(idx, CORPUS_CAM), cache_dir)),
+            }
         )
         qrel_rows.append(
             {"query-id": f"q-ep{idx:06d}", "corpus-id": f"c-ep{idx:06d}", "score": 1}
