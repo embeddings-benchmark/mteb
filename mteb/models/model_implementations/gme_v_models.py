@@ -183,13 +183,20 @@ class GmeQwen2VL(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         instruction = self.get_instruction(task_metadata, prompt_type)
-        if prompt_type == PromptType.document:
+        has_document_prompt = isinstance(task_metadata.prompt, dict) and (
+            PromptType.document.value in task_metadata.prompt
+        )
+        if self.prompts_dict is not None:
+            has_document_prompt = has_document_prompt or any(
+                key in self.prompts_dict
+                for key in (
+                    task_metadata.name,
+                    task_metadata.type,
+                    PromptType.document.value,
+                )
+            )
+        if prompt_type == PromptType.document and not has_document_prompt:
             instruction = None
-        elif instruction is None:
-            instruction = self.get_instruction(task_metadata, prompt_type)
-            # NOTE: copied from the old get_gme_instruction function.
-            if isinstance(instruction, str) and instruction[-1] != ".":
-                instruction += "."
         self.model = self.model.to(self.device)
         all_embeddings = []
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Fused Encoding"):
