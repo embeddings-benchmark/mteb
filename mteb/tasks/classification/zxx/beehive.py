@@ -13,8 +13,6 @@ class BeehiveStatesClassification(AbsTaskClassification):
         dataset={
             "path": "artist/BeehiveStatesClassification",
             "revision": "2f920226b3153596c01c52fb5b25e5c26c516fae",
-            # Load one long recording per Arrow batch to limit peak memory.
-            "writer_batch_size": 1,
         },
         type="AudioClassification",
         category="a2c",
