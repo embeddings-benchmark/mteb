@@ -337,6 +337,7 @@ from .real_mm_rag_retrieval import (
     RealMMRAGTechSlidesRetrieval,
 )
 from .rp2k_i2i_retrieval import RP2kI2IRetrieval
+from .rt1_retrieval import RT1T2VRetrieval, RT1V2TRetrieval
 from .sci_fact_retrieval import SciFact
 from .sci_mmir_i2t_retrieval import SciMMIRI2TRetrieval
 from .sci_mmir_t2i_retrieval import SciMMIRT2IRetrieval
@@ -765,6 +766,8 @@ __all__ = [
     "RParisEasyI2IRetrieval",
     "RParisHardI2IRetrieval",
     "RParisMediumI2IRetrieval",
+    "RT1T2VRetrieval",
+    "RT1V2TRetrieval",
     "ReMe",
     "ReMuQIT2TRetrieval",
     "RealMMRAGFinReportRetrieval",
