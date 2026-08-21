@@ -496,9 +496,7 @@ class AbsTaskClassification(AbsTask):
 
         label_counter: dict[str, int] = defaultdict(int)
         sampled_idxs = []
-        labels = dataset.select_columns([self.label_column_name])[
-            self.label_column_name
-        ]
+        labels = dataset[self.label_column_name]
 
         for i in idxs:
             label = labels[i]
