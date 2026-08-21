@@ -1,5 +1,6 @@
 from .lp_music_caps import LPMusicCapsMTTA2TRetrieval, LPMusicCapsMTTT2ARetrieval
 from .music_caps import MusicCapsA2TRetrieval, MusicCapsT2ARetrieval
+from .n_synth_retrieval import NSynthInstrumentFamilyA2ARetrieval
 from .song_describer import SongDescriberA2TRetrieval, SongDescriberT2ARetrieval
 from .sound_descs import SoundDescsA2TRetrieval, SoundDescsT2ARetrieval
 from .stanford_i2v_retrieval import (
@@ -15,6 +16,7 @@ __all__ = [
     "LPMusicCapsMTTT2ARetrieval",
     "MusicCapsA2TRetrieval",
     "MusicCapsT2ARetrieval",
+    "NSynthInstrumentFamilyA2ARetrieval",
     "SongDescriberA2TRetrieval",
     "SongDescriberT2ARetrieval",
     "SoundDescsA2TRetrieval",
