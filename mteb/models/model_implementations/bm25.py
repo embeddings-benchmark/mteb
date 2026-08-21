@@ -9,6 +9,7 @@ from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from typing import Any
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import SearchProtocol
@@ -163,6 +164,10 @@ class BM25Tokenizer:
             self._tok_arg = tokenizer if tokenizer is not None else detected_tok
 
         self.freq_threshold = freq_threshold
+        # Kept so the resolved settings can be reported alongside the scores;
+        # `stemmer_lang` is otherwise only a local and is lost after __init__.
+        self.stemmer_language = stemmer_lang
+        self.n_freq_stopwords: int | None = None
         self._raw_tok = None  # resolved callable (custom path only)
         self._combined_stops: frozenset[str] = frozenset()
         self._combined_list: list[str] | None = None  # bm25s path cache
@@ -211,6 +216,7 @@ class BM25Tokenizer:
             )
             self._combined_stops = named_stops
             self._combined_list = list(named_stops) if named_stops else None
+            self.n_freq_stopwords = 0
             return bm25s.tokenize(
                 corpus_texts, stopwords=self._combined_list, stemmer=self.stemmer
             )
@@ -233,6 +239,7 @@ class BM25Tokenizer:
 
         self._combined_stops = freq_stops
         self._combined_list = list(freq_stops) if freq_stops else None
+        self.n_freq_stopwords = len(freq_stops)
 
         stop_ids = frozenset(raw.vocab[t] for t in freq_stops if t in raw.vocab)
         filtered_ids = [
@@ -268,6 +275,7 @@ class BM25Tokenizer:
             _get_stopwords(self.stopwords_key) if self.stopwords_key else frozenset()
         )
         self._combined_stops = named_stops | freq_stops
+        self.n_freq_stopwords = len(freq_stops)
 
         filtered = [
             [t for t in toks if t not in self._combined_stops]
@@ -281,6 +289,23 @@ class BM25Tokenizer:
             for text in texts
         ]
         return self._to_tokenized(token_lists)
+
+    def resolved_config(self) -> dict[str, Any]:
+        """The settings this tokenizer actually resolved to, for the result file.
+
+        Defaults are language- and version-dependent, so `mteb_version` alone does not
+        identify them. `n_freq_stopwords` is None until `fit_transform` has run.
+        """
+        tok = self._tok_arg
+        return {
+            "stopwords_key": self.stopwords_key,
+            "stemmer_language": self.stemmer_language,
+            "tokenizer": tok
+            if isinstance(tok, str) or tok is None
+            else getattr(tok, "__name__", type(tok).__name__),
+            "freq_threshold": self.freq_threshold,
+            "n_freq_stopwords": self.n_freq_stopwords,
+        }
 
     @staticmethod
     def _named_tok(name: str) -> Callable[[str], list[str]]:
@@ -370,6 +395,11 @@ class BM25Search:
             ]
 
         return _tok
+
+    def resolved_config(self) -> dict[str, Any] | None:
+        """What the tokenizer resolved to, or None before `index` has run."""
+        tokenizer = getattr(self, "_tokenizer", None)
+        return tokenizer.resolved_config() if tokenizer is not None else None
 
     def index(
         self,

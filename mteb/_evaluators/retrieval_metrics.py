@@ -434,7 +434,7 @@ def robustness_at_10(
     return sum(robustness_scores) / len(robustness_scores)
 
 
-def make_score_dict(
+def make_score_dict(  # noqa: PLR0913
     *,
     ndcg: dict[str, float],
     _map: dict[str, float],
@@ -446,6 +446,7 @@ def make_score_dict(
     hit_rate: dict[str, float],
     task_scores: dict[str, float],
     previous_results_model_meta: dict[str, Any] | None = None,
+    search_config: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     return {
         **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
@@ -471,6 +472,7 @@ def make_score_dict(
             if previous_results_model_meta
             else {}
         ),
+        **({"search_config": search_config} if search_config else {}),
     }
 
 
