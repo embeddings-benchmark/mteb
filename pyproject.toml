@@ -169,6 +169,9 @@ embeddinggemma = ["transformers>=4.56.0"]
 languagebind = [
     "languagebind[video,audio]==0.1.0",
     "transformers>=4.40.0,<4.46",
+    "torchcodec>=0.1.0 ; sys_platform == 'linux'",
+    "librosa>=0.10.0",
+    "datasets>=3.3.0,<5.0.0",
 ]
 gme = ["transformers<4.52.0"]
 
@@ -350,7 +353,6 @@ ignore = [
     "PLC0415",   # import outside of top-level
     "PLR0912",  # too many branches
     "PLR0915",  # too many statements
-    "PLW0717",  # too-many-statements-in-try-clause
     "ISC001",   # single-line implicit concat; conflicts with `ruff format`
 ]
 future-annotations = true  # For TC rules

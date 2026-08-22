@@ -154,17 +154,16 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
     def _transform_video_frames(self, frames: torch.Tensor) -> torch.Tensor:
         """Apply LanguageBind's video transform to pre-decoded frames.
 
-        torchcodec yields (T, H, W, C) uint8 frames; LanguageBind expects
+        torchcodec yields (T, C, H, W) uint8 frames; LanguageBind expects
         (C, T, H, W) float ready for the OpenCLIP visual tower.
         """
         if frames.ndim != 4:
             raise ValueError(
-                f"Expected 4D video tensor (T, H, W, C); got shape {tuple(frames.shape)}"
+                f"Expected 4D video tensor (T, C, H, W); got shape {tuple(frames.shape)}"
             )
-        # (T, H, W, C) -> (C, T, H, W)
-        video = frames.permute(3, 0, 1, 2).float()
-        transformed = self.processor.transform({"video": video})
-        return transformed["video"]
+        # (T, C, H, W) -> (C, T, H, W)
+        video = frames.permute(1, 0, 2, 3).float()
+        return self.processor.transform(video)
 
     @torch.inference_mode()
     def get_video_embeddings(
