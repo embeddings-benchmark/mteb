@@ -70,7 +70,9 @@ def test_bf16_compression():
     assert embeddings.dtype == torch.float32
 
 
-@pytest.mark.parametrize("level, bits", [(OutputDType.INT8, 8), (OutputDType.INT4, 4)])
+@pytest.mark.parametrize(
+    ("level", "bits"), [(OutputDType.INT8, 8), (OutputDType.INT4, 4)]
+)
 def test_int_compression(level: OutputDType, bits: int):
     model = mteb.get_model("mteb/baseline-random-encoder")
     wrapper = CompressionWrapper(model, level)
@@ -85,7 +87,7 @@ def test_int_compression(level: OutputDType, bits: int):
 
 
 @pytest.mark.parametrize(
-    "level, bits", [(OutputDType.UINT8, 8), (OutputDType.UINT4, 4)]
+    ("level", "bits"), [(OutputDType.UINT8, 8), (OutputDType.UINT4, 4)]
 )
 def test_uint_compression(level: OutputDType, bits: int):
     model = mteb.get_model("mteb/baseline-random-encoder")

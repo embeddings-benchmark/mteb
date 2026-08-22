@@ -254,7 +254,7 @@ class TestCachedEmbeddingWrapper:
 
 
 @pytest.mark.parametrize(
-    "task, model",
+    ("task", "model"),
     [
         (
             MockMultiChoiceTask(),

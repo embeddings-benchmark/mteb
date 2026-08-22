@@ -9,7 +9,7 @@ from mteb.types import PromptType
 
 
 @pytest.mark.parametrize(
-    "google_task_type, expected",
+    ("google_task_type", "expected"),
     [
         ("RETRIEVAL_QUERY", "task: search result | query: example text"),
         ("QUESTION_ANSWERING", "task: question answering | query: example text"),

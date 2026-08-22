@@ -338,6 +338,7 @@ ignore = [
     "PLR0915",  # too many statements
     "PLW0717",  # too-many-statements-in-try-clause
     "ISC001",   # single-line implicit concat; conflicts with `ruff format`
+    "PT018",    # composite assertions; splitting `assert a and b` is not always clearer
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
@@ -392,11 +393,6 @@ preview = true
     "TC002",
 ]
 
-
-[tool.ruff.lint.flake8-pytest-style]
-# The suite already writes `parametrize("a, b", ...)` at every multi-name call
-# site, so enforce that rather than rewriting them all to tuples.
-parametrize-names-type = "csv"
 
 [tool.ruff.lint.pep8-naming]
 ignore-names = [

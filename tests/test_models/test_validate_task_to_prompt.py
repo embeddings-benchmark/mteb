@@ -68,7 +68,7 @@ def test_validate_task_to_prompt_name_fails_and_raises(
 
 
 @pytest.mark.parametrize(
-    "task_prompt_dict, expected_valid, expected_invalid",
+    ("task_prompt_dict", "expected_valid", "expected_invalid"),
     [
         ({"task_name": "prompt_name"}, 0, 1),
         ({"task_name-query": "prompt_name"}, 0, 1),

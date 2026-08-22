@@ -71,7 +71,7 @@ def _omni_prompts() -> dict:
 
 
 @pytest.mark.parametrize(
-    "prompt_type,task_type,expected_task,expected_prompt",
+    ("prompt_type", "task_type", "expected_task", "expected_prompt"),
     [
         (PromptType.query, "Retrieval", "retrieval", "Query: "),
         (PromptType.document, "Retrieval", "retrieval", "Document: "),
@@ -90,7 +90,7 @@ def test_prefix_by_task_type(prompt_type, task_type, expected_task, expected_pro
 
 
 @pytest.mark.parametrize(
-    "prompt_type,task_type,expected_task,expected_prompt",
+    ("prompt_type", "task_type", "expected_task", "expected_prompt"),
     [
         (PromptType.query, "Any2AnyRetrieval", "retrieval", "Query: "),
         # Text-input paths always get prefix regardless of task type label
@@ -108,7 +108,7 @@ def test_simplified_fallback(prompt_type, task_type, expected_task, expected_pro
 
 
 @pytest.mark.parametrize(
-    "prompt_type,task_type,expected_task,expected_prompt",
+    ("prompt_type", "task_type", "expected_task", "expected_prompt"),
     [
         (PromptType.query, "ImageClassification", "retrieval", "Query: "),
         (PromptType.query, "AudioClassification", "retrieval", "Query: "),

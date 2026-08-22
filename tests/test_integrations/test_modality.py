@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 @pytest.mark.parametrize(
-    "task, modalities",
+    ("task", "modalities"),
     [
         # Task needs image and text, model only text
         (MockImageTextPairClassificationTask(), ["text"]),

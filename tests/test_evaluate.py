@@ -40,7 +40,7 @@ mock_retrieval = (
 
 
 @pytest.mark.parametrize(
-    "model, task, expected_score",
+    ("model", "task", "expected_score"),
     [mock_classification, mock_retrieval],
     ids=["mock_classification", "mock_retrieval"],
 )
@@ -58,7 +58,7 @@ def test_evaluate(model: EncoderProtocol, task: AbsTask, expected_score: float):
 
 
 @pytest.mark.parametrize(
-    "model, tasks",
+    ("model", "tasks"),
     [(MockSentenceTransformer(), [MockClassificationTask(), MockRetrievalTask()])],
     ids=["mock_clf_and_retrieval"],
 )
@@ -68,7 +68,9 @@ def test_evaluate_w_multiple_tasks(model: EncoderProtocol, tasks: list[AbsTask])
 
 
 @pytest.mark.parametrize(
-    "model, task, expected_score", [mock_classification], ids=["mock_classification"]
+    ("model", "task", "expected_score"),
+    [mock_classification],
+    ids=["mock_classification"],
 )
 def test_evaluate_with_cache(
     model: EncoderProtocol, task: AbsTask, expected_score: float, tmp_path: Path
@@ -159,7 +161,7 @@ def test_evaluate_with_overwrite_strategy_never(tmp_path: Path):
 
 
 @pytest.mark.parametrize(
-    "model, task, expected_score,splits",
+    ("model", "task", "expected_score", "splits"),
     [
         (MockSentenceTransformer(), MockClassificationTask(), 1, ["train"])
     ],  # default split is "test" so this will run "train" and then ["test", "train"], also means that expected score can be different
@@ -208,7 +210,7 @@ def test_cache_hit(task: AbsTask):
 
 
 @pytest.mark.parametrize(
-    "model, task, expected_score",
+    ("model", "task", "expected_score"),
     [(MockSentenceTransformer(), MockMultilingualRetrievalTask(), 0.63093)],
     ids=["mock_retrieval"],
 )
@@ -240,7 +242,7 @@ def test_evaluate_w_missing_subset(
 
 
 @pytest.mark.parametrize(
-    "model, task, expected_score, splits",
+    ("model", "task", "expected_score", "splits"),
     [(*mock_classification, ["train"])],
     ids=["mock_classification"],
 )

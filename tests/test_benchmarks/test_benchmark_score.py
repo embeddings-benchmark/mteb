@@ -324,10 +324,7 @@ def test_get_score_matches_summary_table_means(mock_mteb_cache: ResultCache):
             sm = srow.get(summary_col)
             if gs is None and sm is None:
                 continue
-            assert gs is not None, (
-                f"{model_name}: get_score[{gs_key}]={gs!r} vs summary[{summary_col}]={sm!r}"
-            )
-            assert sm is not None, (
+            assert gs is not None and sm is not None, (
                 f"{model_name}: get_score[{gs_key}]={gs!r} vs summary[{summary_col}]={sm!r}"
             )
             assert np.isclose(gs, sm), (
@@ -363,10 +360,7 @@ def _assert_score_parity(
                 f"{model_name} summary[{summary_col}] should be None, got {sm!r}"
             )
             continue
-        assert gs is not None, (
-            f"{model_name} {gs_key}/{summary_col}: get_score={gs!r} vs summary={sm!r}"
-        )
-        assert sm is not None, (
+        assert gs is not None and sm is not None, (
             f"{model_name} {gs_key}/{summary_col}: get_score={gs!r} vs summary={sm!r}"
         )
         assert np.isclose(gs, sm), (
