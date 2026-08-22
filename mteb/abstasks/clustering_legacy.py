@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 
     from mteb.models import MTEBModels
     from mteb.timing import TimingStack
-    from mteb.types import EncodeKwargs, ScoresDict
+    from mteb.types import EncodeKwargs, Modalities, ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +60,9 @@ class AbsTaskClusteringLegacy(AbsTask):
     evaluator: type[ClusteringEvaluator] = ClusteringEvaluator
     input_column_name: str = "sentences"
     label_column_name: str = "labels"
+
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        return {self.input_column_name: self.modalities[0]}
 
     def _evaluate_subset(
         self,

@@ -78,6 +78,27 @@ def _multilabel_subsampling(
     return dataset_dict
 
 
+def _pair_content_columns(
+    columns: tuple[str | Mapping[str, Modalities], str | Mapping[str, Modalities]],
+    modalities: list[Modalities],
+) -> dict[str, Modalities]:
+    """The content columns of a task comparing two inputs, mapped to the modality of each.
+
+    An input is either a single column, whose modality is then the task's only one, or already a mapping from
+    column to modality. A plain column name on a task with several modalities is ambiguous, so nothing is returned
+    in that case and the caller reports the task as not declaring its columns.
+    """
+    resolved: dict[str, Modalities] = {}
+    for column in columns:
+        if isinstance(column, str):
+            if len(modalities) != 1:
+                return {}
+            resolved[column] = modalities[0]
+        else:
+            resolved.update(column)
+    return resolved
+
+
 class AbsTask(ABC):  # noqa: PLR0904
     """The abstract class for the tasks. All tasks in `mteb` inherit from this class.
 
@@ -89,6 +110,9 @@ class AbsTask(ABC):  # noqa: PLR0904
         seed: The random seed used for reproducibility.
         hf_subsets: The list of Huggingface subsets to use.
         data_loaded: Denotes if the dataset is loaded or not. This is used to avoid loading the dataset multiple times.
+        data_modified: Denotes if the dataset was modified locally by a filter from `mteb.quality`. Such a task
+            carries a name of its own, e.g. `MassiveIntentClassification (remove_duplicates)`, so that its scores
+            are not confused with results on the published dataset.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
         fast_loading: **Deprecated**. Denotes if the task should be loaded using the fast loading method.
             This is only possible if the dataset have a "default" config. We don't recommend to use this method, and suggest to use different subsets for loading datasets.
@@ -100,6 +124,7 @@ class AbsTask(ABC):  # noqa: PLR0904
     _eval_splits: Sequence[str] | None = None
     dataset: dict[HFSubset, DatasetDict] | None = None
     data_loaded: bool = False
+    data_modified: bool = False
     hf_subsets: list[HFSubset]
     fast_loading: bool = False
 
@@ -591,6 +616,24 @@ class AbsTask(ABC):  # noqa: PLR0904
         self.hf_subsets = subsets_to_keep
         return self
 
+    def _get_content_columns(self) -> dict[str, Modalities]:  # noqa: PLR6301
+        """The dataset columns holding the task's content, mapped to the modality of that content.
+
+        This is what the filters in `mteb.quality` compare samples on. Subclasses point it at their own column
+        names, e.g. `{"text": "text"}` for a text classification task or `{"image": "image"}` for an image one. It
+        is empty when a task does not declare its columns, which makes those filters raise rather than silently do
+        nothing.
+        """
+        return {}
+
+    def _get_symmetric_sides(self) -> tuple[list[str], list[str]] | None:  # noqa: PLR6301
+        """The two sides of a task whose inputs mean the same thing when swapped, or None if order matters.
+
+        A symmetric task treats `(a, b)` and `(b, a)` as one sample, so the filters in `mteb.quality` compare them
+        as equal. This mirrors the `symmetric` flag the descriptive statistics use when counting unique pairs.
+        """
+        return None
+
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
@@ -798,6 +841,11 @@ class AbsTask(ABC):  # noqa: PLR0904
         if self.data_loaded:
             self.dataset = None
             self.data_loaded = False
+            if self.data_modified:
+                # reloading fetches the published dataset again, so the task is no longer a cleaned one:
+                # drop the instance-level metadata a filter added, falling back to the published metadata
+                self.data_modified = False
+                self.__dict__.pop("metadata", None)
             logger.info(f"Unloaded dataset {self.metadata.name} from memory.")
         else:
             msg = f"Dataset `{self.metadata.name}` is not loaded, cannot unload it."

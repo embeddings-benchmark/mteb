@@ -279,6 +279,22 @@ class AbsTaskRetrieval(AbsTask):
             self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        """The corpus and query columns holding the documents, mapped to their modality.
+
+        Retrieval stores each modality in a column named after the modality itself. Text also carries an optional
+        `title`, which is part of the document: a corpus entry is encoded as `"{title} {text}"`. Queries have no
+        title, so a filter compares whichever of these columns the corpus and the queries actually have.
+        """
+        columns: dict[str, Modalities] = {}
+        for modality in self.metadata.modalities:
+            if modality == "text":
+                columns["title"] = "text"
+                columns["text"] = "text"
+            else:
+                columns[modality] = modality
+        return columns
+
     def evaluate(
         self,
         model: MTEBModels,
