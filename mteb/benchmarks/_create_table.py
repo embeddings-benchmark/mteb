@@ -4,13 +4,18 @@ import functools
 import re
 from collections import defaultdict
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Literal
 
 import numpy as np
 import polars as pl
 
-from mteb.benchmarks.benchmark import _PRIMARY_METRIC_PRIORITY, BenchmarkAggregation
+from mteb.benchmarks._benchmark_metrics import _is_whole_task_ref
+from mteb.benchmarks.benchmark import (
+    _PRIMARY_METRIC_PRIORITY,
+    BenchmarkAggregation,
+    CustomGrouping,
+)
 from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.models.model_implementations import MODEL_REGISTRY
 
@@ -39,6 +44,12 @@ class SummaryTable:
         mean_public_col: Public split column, or ``None`` when the primary
             metric IS the public mean (no separate breakdown).
         mean_private_col: Private split column, or ``None``.
+        custom_group_cols: dimension name -> ordered polars column names
+            (``__cg__{dimension}::{label}``) that dimension produced, or
+            ``{}`` when no `CustomGrouping` was requested. Read explicitly
+            by `mteb.api.aggregators` instead of being inferred by scanning
+            `df.columns`, so custom-group columns never get conflated with
+            the `TASK_TYPES` columns there.
         is_empty: True for the ``No results`` sentinel — consumers short-circuit.
     """
 
@@ -48,6 +59,7 @@ class SummaryTable:
     task_type_mean_col: str | None = "Mean (TaskType)"
     mean_public_col: str | None = None
     mean_private_col: str | None = None
+    custom_group_cols: dict[str, tuple[str, ...]] = field(default_factory=dict)
     is_empty: bool = False
 
 
@@ -402,6 +414,91 @@ def _get_means_per_types(
     return type_exprs, type_cols
 
 
+_CUSTOM_GROUP_COL_PREFIX = "__cg__"
+
+
+@dataclass(frozen=True, slots=True)
+class _ScopePivot:
+    """One row per model, one column per ``f"{task}::{subset}::{split}"`` cell.
+
+    Finer-grained than (and kept separate from) `MEAN_SUBSET`'s own
+    `(task, subset)`-mean-over-splits pivot. Built only when a
+    `CustomGrouping` has scoped (subset-/split-narrowed) task entries.
+    """
+
+    wide: pl.DataFrame
+    cols: set[str]
+
+
+def _build_per_scope_pivot(pl_df: pl.DataFrame) -> _ScopePivot | None:
+    """Build the `(task, subset, split)`-grain pivot backing scoped `CustomGroup` entries.
+
+    Deliberately skips `_null_incomplete_scores`: that policy nulls a model
+    for not running every split of a subset, which doesn't apply here since
+    a scoped entry only ever asks for the exact cells it names. A genuinely
+    missing cell is still absent from the pivot and still nulls via
+    `ignore_nulls=False` in :func:`_get_means_per_custom_group`.
+    """
+    if pl_df.is_empty() or "model_name" not in pl_df.columns:
+        return None
+    per_scope_long = pl_df.group_by(["model_name", "task_name", "subset", "split"]).agg(
+        pl.col("score").mean()
+    )
+    keyed = per_scope_long.with_columns(
+        (pl.col("task_name") + "::" + pl.col("subset") + "::" + pl.col("split")).alias(
+            "_tss"
+        )
+    )
+    wide = keyed.pivot(on="_tss", index="model_name", values="score")
+    cols = {c for c in wide.columns if c != "model_name"}
+    if not cols:
+        return None
+    return _ScopePivot(wide=wide, cols=cols)
+
+
+def _get_means_per_custom_group(
+    task_cols: list[str],
+    scope_pivot: _ScopePivot | None,
+    grouping: CustomGrouping,
+) -> tuple[list[pl.Expr], list[str]]:
+    """Per-custom-group mean expressions for one `CustomGrouping` dimension.
+
+    Each entry contributes exactly one data point to its group's mean: a
+    whole-task entry is `pl.col(name)`; a scoped entry is
+    `pl.mean_horizontal(cells, ignore_nulls=False)` over just its own
+    `(subset, split)` cells, nested into the group's outer mean so a
+    many-cell entry can't outweigh a single-task one.
+    """
+    cols: list[str] = []
+    exprs: list[pl.Expr] = []
+    task_col_set = set(task_cols)
+    scope_cols = scope_pivot.cols if scope_pivot is not None else set()
+    for group in grouping.groups:
+        component_exprs: list[pl.Expr] = []
+        for task_ref in group.tasks:
+            name = task_ref.metadata.name
+            if _is_whole_task_ref(task_ref):
+                if name in task_col_set:
+                    component_exprs.append(pl.col(name))
+                continue
+            cell_cols = [
+                f"{name}::{subset}::{split}"
+                for subset in task_ref.hf_subsets
+                for split in task_ref.eval_splits
+                if f"{name}::{subset}::{split}" in scope_cols
+            ]
+            if cell_cols:
+                component_exprs.append(
+                    pl.mean_horizontal(cell_cols, ignore_nulls=False)
+                )
+        if not component_exprs:
+            continue
+        col = f"{_CUSTOM_GROUP_COL_PREFIX}{grouping.name}::{group.label}"
+        cols.append(col)
+        exprs.append(pl.mean_horizontal(component_exprs, ignore_nulls=False).alias(col))
+    return exprs, cols
+
+
 @functools.lru_cache(maxsize=1)
 def _static_model_meta() -> dict[str, dict[str, Any]]:
     """Cached per-model metadata dict keyed by ``model_name``.
@@ -474,14 +571,15 @@ def _order_summary_cols(
     rank_col: str,
     mean_cols: Sequence[str],
     type_cols: Sequence[str],
+    custom_group_cols: Sequence[str] = (),
     extra_trailing: Sequence[str] = (),
 ) -> pl.DataFrame:
     """Reorder ``joint_table`` into the canonical summary column layout.
 
     Layout: ``rank_col | Model | meta cols | mean_cols | type_cols |
-    extra_trailing | Release Date``. Columns not present in ``joint_table``
-    are silently dropped — keeps the four ``_create_summary_table_*``
-    builders from each re-spelling the ordering.
+    custom_group_cols | extra_trailing | Release Date``. Columns not present
+    in ``joint_table`` are silently dropped — keeps the four
+    ``_create_summary_table_*`` builders from each re-spelling the ordering.
     """
     ordering = [
         rank_col,
@@ -489,6 +587,7 @@ def _order_summary_cols(
         *_STANDARD_META_COLS,
         *mean_cols,
         *type_cols,
+        *custom_group_cols,
         *extra_trailing,
         "Release Date",
     ]
@@ -618,6 +717,7 @@ def _finalize_summary(
     metadata: _SummaryMetadata,
     sort_by: str | Sequence[str] | None,
     rank_column_name: str | None,
+    custom_group_cols_by_dim: dict[str, list[str]] | None = None,
 ) -> SummaryTable:
     """Attach model metadata, sort, rank, order columns, wrap in SummaryTable.
 
@@ -637,6 +737,9 @@ def _finalize_summary(
             ``"Rank"``); ``Rank (Borda)`` stays as a trailing column.
         rank_column_name: Name for the 1-indexed rank column added when
             ``sort_by`` is set. Falls back to ``"Rank"`` when ``None``.
+        custom_group_cols_by_dim: dimension name -> ordered custom-group
+            column names, surfaced after ``type_cols``. Empty/``None`` hides
+            them entirely (mirrors ``type_cols``).
 
     Returns:
         SummaryTable: Ready-to-style summary with metadata attached and
@@ -662,12 +765,18 @@ def _finalize_summary(
         rank_col = "Rank (Borda)"
         extra_trailing = ()
 
+    custom_group_cols_by_dim = custom_group_cols_by_dim or {}
+    flat_custom_group_cols = [
+        c for cols in custom_group_cols_by_dim.values() for c in cols
+    ]
+
     return SummaryTable(
         df=_order_summary_cols(
             joint_table,
             rank_col=rank_col,
             mean_cols=metadata.mean_cols,
             type_cols=type_cols,
+            custom_group_cols=flat_custom_group_cols,
             extra_trailing=extra_trailing,
         ),
         rank_col=rank_col,
@@ -675,13 +784,16 @@ def _finalize_summary(
         task_type_mean_col=metadata.task_type_mean_col,
         mean_public_col=metadata.mean_public_col,
         mean_private_col=metadata.mean_private_col,
+        custom_group_cols={
+            dim: tuple(cols) for dim, cols in custom_group_cols_by_dim.items()
+        },
     )
 
 
 def _create_summary_table(  # noqa: PLR0914
     pl_df: pl.DataFrame,
     *,
-    aggregations: Sequence[BenchmarkAggregation] | None = None,
+    aggregations: Sequence[BenchmarkAggregation | CustomGrouping] | None = None,
     sort_by: str | Sequence[str] | None = None,
     rank_column_name: str | None = None,
 ) -> SummaryTable:
@@ -716,9 +828,14 @@ def _create_summary_table(  # noqa: PLR0914
             enables subset-weighted aggregation.
         aggregations: Sequence of
             [BenchmarkAggregation][mteb.benchmarks.benchmark.BenchmarkAggregation]
-            members (forwarded from
+            members mixed freely with
+            [CustomGrouping][mteb.benchmarks.benchmark.CustomGrouping] instances
+            (forwarded from
             [Benchmark.aggregations][mteb.benchmarks.benchmark.Benchmark.aggregations]).
-            Defaults to `(MEAN_TASK, MEAN_TASK_TYPE, TASK_TYPES)`.
+            Defaults to `(MEAN_TASK, MEAN_TASK_TYPE, TASK_TYPES)`. Each
+            `CustomGrouping` present adds one mean column per group, namespaced
+            `__cg__{dimension}::{label}` (see
+            [_get_means_per_custom_group][mteb.benchmarks._create_table._get_means_per_custom_group]).
         sort_by: Column(s) to sort rows by. `None` sorts by the default
             (`Mean (Subset)` when `MEAN_SUBSET` is requested, else
             `Rank (Borda)`). A string or sequence of strings sorts by those
@@ -741,6 +858,9 @@ def _create_summary_table(  # noqa: PLR0914
         )
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return _no_results_summary()
+
+    enum_aggregations = [a for a in aggregations if isinstance(a, BenchmarkAggregation)]
+    custom_groupings = [a for a in aggregations if isinstance(a, CustomGrouping)]
 
     want_task_types = BenchmarkAggregation.TASK_TYPES in aggregations
     want_subset = BenchmarkAggregation.MEAN_SUBSET in aggregations
@@ -783,6 +903,25 @@ def _create_summary_table(  # noqa: PLR0914
     public_col, private_col = BenchmarkAggregation.PUBLIC_PRIVATE.summary_columns
 
     type_exprs, type_cols = _get_means_per_types(task_cols)
+
+    scope_pivot = (
+        _build_per_scope_pivot(pl_df)
+        if any(g.has_scoped_refs for g in custom_groupings)
+        else None
+    )
+
+    custom_group_exprs: list[pl.Expr] = []
+    custom_group_cols_by_dim: dict[str, list[str]] = {}
+    for grouping in custom_groupings:
+        exprs, cols = _get_means_per_custom_group(task_cols, scope_pivot, grouping)
+        custom_group_exprs.extend(exprs)
+        if grouping.name in custom_group_cols_by_dim:
+            raise ValueError(
+                f"Duplicate CustomGrouping.name detected: {grouping.name!r}. "
+                "Custom grouping names must be unique within a benchmark."
+            )
+        custom_group_cols_by_dim[grouping.name] = cols
+
     joint_table = per_task.select(
         "model_name",
         *type_exprs,
@@ -790,6 +929,20 @@ def _create_summary_table(  # noqa: PLR0914
         _mean_or_null(public_present, public_col),
         _mean_or_null(private_present, private_col),
     ).with_columns(_skipna_false_mean(type_cols).alias(mean_task_type_col))
+
+    if custom_group_exprs:
+        # Scoped entries reference scope_pivot.wide's columns, which don't
+        # exist on per_task -- evaluate against the joined source, then
+        # join the result back in.
+        custom_group_source = (
+            per_task.join(scope_pivot.wide, on="model_name", how="left")
+            if scope_pivot is not None
+            else per_task
+        )
+        custom_group_table = custom_group_source.select(
+            "model_name", *custom_group_exprs
+        )
+        joint_table = joint_table.join(custom_group_table, on="model_name", how="left")
 
     # Mean (Subset) + subset-partition Borda only when the benchmark actually
     # wants subset weighting — costs an extra group_by we'd otherwise skip.
@@ -821,9 +974,12 @@ def _create_summary_table(  # noqa: PLR0914
 
     joint_table = joint_table.join(borda_df, on="model_name", how="left")
 
+    # Only BenchmarkAggregation columns are ever dropped here — a
+    # CustomGrouping's columns are computed only when the dimension is
+    # present in `aggregations` (above), so there's nothing to drop for it.
     drop_cols: list[str] = []
     for agg in BenchmarkAggregation:
-        if agg in aggregations:
+        if agg in enum_aggregations:
             continue
         if agg is BenchmarkAggregation.TASK_TYPES:
             drop_cols.extend(type_cols)
@@ -836,9 +992,10 @@ def _create_summary_table(  # noqa: PLR0914
         joint_table,
         task_cols=task_cols,
         type_cols=type_cols if want_task_types else [],
-        metadata=_summary_metadata(aggregations),
+        metadata=_summary_metadata(enum_aggregations),
         sort_by=sort_by,
         rank_column_name=rank_column_name,
+        custom_group_cols_by_dim=custom_group_cols_by_dim,
     )
 
 

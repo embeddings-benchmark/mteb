@@ -20,6 +20,8 @@ from mteb.api.schemas import (
     BenchmarkPerLanguageSchema,
     BenchmarkSummarySchema,
     BucketLeaderSchema,
+    CustomGroupingSchema,
+    CustomGroupSchema,
     LeaderModelSchema,
     LeaderRowSchema,
     ModelScoreRowSchema,
@@ -28,7 +30,13 @@ from mteb.api.schemas import (
     TaskScoreRowSchema,
     TaskScoresSchema,
 )
-from mteb.benchmarks._create_table import _format_max_tokens
+from mteb.benchmarks._benchmark_metrics import (
+    _is_whole_task_ref,
+    _recompute_lenient_custom_groups,
+    _recompute_lenient_means,
+)
+from mteb.benchmarks._create_table import _CUSTOM_GROUP_COL_PREFIX, _format_max_tokens
+from mteb.benchmarks.benchmark import CustomGrouping
 from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.languages import language_label
 from mteb.models.model_implementations import MODEL_REGISTRY
@@ -169,33 +177,6 @@ def _filter_long_df_by_languages(
     )
 
 
-def _recompute_lenient_means(
-    scores_by_task: dict[str, float],
-    task_to_type: dict[str, str],
-) -> tuple[dict[str, float], float | None, float | None]:
-    """Recompute means over only the tasks a model actually ran.
-
-    Why: used in the language-filtered path so partial-coverage models don't
-    collapse to null. Per-task-type bucketing prevents a single dense type
-    (e.g. Classification with 20 tasks) from outweighing sparser ones.
-    """
-    type_buckets: dict[str, list[float]] = {}
-    for tname, score in scores_by_task.items():
-        ttype = task_to_type.get(tname)
-        if ttype is None:
-            continue
-        type_buckets.setdefault(ttype, []).append(float(score))
-
-    scores_by_task_type = {
-        ttype: sum(vals) / len(vals) for ttype, vals in type_buckets.items() if vals
-    }
-    task_vals = list(scores_by_task.values())
-    mean_task = sum(task_vals) / len(task_vals) if task_vals else None
-    type_vals = list(scores_by_task_type.values())
-    mean_type = sum(type_vals) / len(type_vals) if type_vals else None
-    return scores_by_task_type, mean_task, mean_type
-
-
 async def build_benchmark_summary(  # noqa: PLR0914
     name: str,
     cache: ResultCache,
@@ -244,13 +225,33 @@ async def build_benchmark_summary(  # noqa: PLR0914
 
     trained_on_by_model = _trained_on_map_cached(bench.name)
 
-    type_cols = [c for c in summary_pl.columns if c not in _SUMMARY_META_COLS]
+    custom_group_cols_by_dim: dict[str, tuple[str, ...]] = summary.custom_group_cols
+    all_custom_group_cols = {
+        c for cols in custom_group_cols_by_dim.values() for c in cols
+    }
+    type_cols = [
+        c
+        for c in summary_pl.columns
+        if c not in _SUMMARY_META_COLS and c not in all_custom_group_cols
+    ]
 
-    # Lenient means under language filter so partial-coverage models don't
-    # collapse to null; strict otherwise so they can't outrank full-coverage peers.
+    declared_by_dim: dict[str, CustomGrouping] = {
+        a.name: a for a in bench.aggregations if isinstance(a, CustomGrouping)
+    }
+
     language_filtered = bool(languages)
     task_to_type: dict[str, str] = (
         {tm.name: tm.type for tm in tasks_meta} if language_filtered else {}
+    )
+
+    custom_group_task_to_label: dict[str, dict[str, str]] = (
+        {
+            dim: g.task_to_label
+            for dim, g in declared_by_dim.items()
+            if not g.has_scoped_refs
+        }
+        if language_filtered
+        else {}
     )
 
     # Off-thread: ``model_construct`` releases the GIL in pydantic-core.
@@ -263,7 +264,44 @@ async def build_benchmark_summary(  # noqa: PLR0914
         trained_on_by_model,
         task_to_type,
         language_filtered,
+        custom_group_cols_by_dim,
+        custom_group_task_to_label,
     )
+
+    # The polars frame only carries labels (column names), not descriptions or
+    # task membership — join both back in from the benchmark's static
+    # CustomGrouping declaration, matched by (dimension, label). Membership
+    # (`tasks`) is what lets the frontend recompute scoresByCustomGroup under
+    # its client-side task-type/domain/modality filters.
+    custom_groupings_out: list[CustomGroupingSchema] = []
+    for dim, cols in custom_group_cols_by_dim.items():
+        declared = declared_by_dim.get(dim)
+        group_by_label = {g.label: g for g in declared.groups} if declared else {}
+        labels = [c.removeprefix(f"{_CUSTOM_GROUP_COL_PREFIX}{dim}::") for c in cols]
+        out_groups: list[CustomGroupSchema] = []
+        for label in labels:
+            declared_group = group_by_label.get(label)
+            if declared_group is None:
+                tasks_out: list[str] = []
+                tasks_complete = True
+            else:
+                tasks_out = [
+                    t.metadata.name
+                    for t in declared_group.tasks
+                    if _is_whole_task_ref(t)
+                ]
+                tasks_complete = all(
+                    _is_whole_task_ref(t) for t in declared_group.tasks
+                )
+            out_groups.append(
+                CustomGroupSchema(
+                    label=label,
+                    description=declared_group.description if declared_group else None,
+                    tasks=tasks_out,
+                    tasks_complete=tasks_complete,
+                )
+            )
+        custom_groupings_out.append(CustomGroupingSchema(name=dim, groups=out_groups))
 
     return BenchmarkSummarySchema(
         benchmark_name=bench.name,
@@ -272,6 +310,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
         tasks_meta=tasks_meta,
         rows=rows,
         aggregations=bench_schema.aggregations,
+        custom_groupings=custom_groupings_out,
         show_zero_shot=bench_schema.show_zero_shot,
     )
 
@@ -284,8 +323,12 @@ def _build_summary_rows(
     trained_on_by_model: dict[str, tuple[str, ...]],
     task_to_type: dict[str, str],
     language_filtered: bool,
+    custom_group_cols_by_dim: dict[str, tuple[str, ...]] | None = None,
+    custom_group_task_to_label: dict[str, dict[str, str]] | None = None,
 ) -> list[SummaryRowSchema]:
     """Sync row-construction loop; off-loaded via ``asyncio.to_thread``."""
+    custom_group_cols_by_dim = custom_group_cols_by_dim or {}
+    custom_group_task_to_label = custom_group_task_to_label or {}
     rows: list[SummaryRowSchema] = []
     for idx, row in enumerate(summary_pl.iter_rows(named=True)):
         full = row["Model"]
@@ -309,10 +352,27 @@ def _build_summary_rows(
         }
         scores_by_task = per_task_rows.get(full, {})
 
+        scores_by_custom_group = {
+            dim: {
+                label: v
+                for col in cols
+                if (label := col.removeprefix(f"{_CUSTOM_GROUP_COL_PREFIX}{dim}::"))
+                and (v := row[col]) is not None
+            }
+            for dim, cols in custom_group_cols_by_dim.items()
+        }
+
         if language_filtered and scores_by_task:
             scores_by_task_type, mean_task, mean_type = _recompute_lenient_means(
                 scores_by_task, task_to_type
             )
+
+            scores_by_custom_group = {
+                **scores_by_custom_group,
+                **_recompute_lenient_custom_groups(
+                    scores_by_task, custom_group_task_to_label
+                ),
+            }
 
         rows.append(
             SummaryRowSchema.model_construct(
@@ -337,6 +397,7 @@ def _build_summary_rows(
                 ),
                 scores_by_task_type=scores_by_task_type,
                 scores_by_task=scores_by_task,
+                scores_by_custom_group=scores_by_custom_group,
                 trained_on_tasks=list(trained_on_by_model.get(full, ())),
             )
         )
