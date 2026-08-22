@@ -353,6 +353,7 @@ ignore = [
     "PLC0415",   # import outside of top-level
     "PLR0912",  # too many branches
     "PLR0915",  # too many statements
+    "PLW0717",  # too-many-statements-in-try-clause
     "ISC001",   # single-line implicit concat; conflicts with `ruff format`
 ]
 future-annotations = true  # For TC rules
