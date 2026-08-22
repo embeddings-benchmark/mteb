@@ -1,3 +1,4 @@
+from .acm_composed_audio_retrieval import ACMComposedAudioRetrieval
 from .activitynet_captions_retrieval import (
     ActivityNetCaptionsT2VRetrieval,
     ActivityNetCaptionsV2TRetrieval,
@@ -448,6 +449,7 @@ from .youcook2_retrieval import (
 )
 
 __all__ = [
+    "ACMComposedAudioRetrieval",
     "CUB200I2I",
     "FEVER",
     "FORBI2I",
