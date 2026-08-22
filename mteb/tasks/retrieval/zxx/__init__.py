@@ -1,3 +1,8 @@
+from .fivr_5k_retrieval import (
+    FIVR5KCSVRRetrieval,
+    FIVR5KDSVRRetrieval,
+    FIVR5KISVRRetrieval,
+)
 from .lp_music_caps import LPMusicCapsMTTA2TRetrieval, LPMusicCapsMTTT2ARetrieval
 from .music_caps import MusicCapsA2TRetrieval, MusicCapsT2ARetrieval
 from .song_describer import SongDescriberA2TRetrieval, SongDescriberT2ARetrieval
@@ -11,6 +16,9 @@ from .vim_sketch_retrieval import VimSketchA2ARetrieval
 from .vsc2022_retrieval import VSC2022Retrieval
 
 __all__ = [
+    "FIVR5KCSVRRetrieval",
+    "FIVR5KDSVRRetrieval",
+    "FIVR5KISVRRetrieval",
     "LPMusicCapsMTTA2TRetrieval",
     "LPMusicCapsMTTT2ARetrieval",
     "MusicCapsA2TRetrieval",
