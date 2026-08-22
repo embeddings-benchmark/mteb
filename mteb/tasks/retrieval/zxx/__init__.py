@@ -1,4 +1,5 @@
 from .lp_music_caps import LPMusicCapsMTTA2TRetrieval, LPMusicCapsMTTT2ARetrieval
+from .moving_fashion_retrieval import MovingFashionV2IRetrieval
 from .music_caps import MusicCapsA2TRetrieval, MusicCapsT2ARetrieval
 from .song_describer import SongDescriberA2TRetrieval, SongDescriberT2ARetrieval
 from .sound_descs import SoundDescsA2TRetrieval, SoundDescsT2ARetrieval
@@ -10,6 +11,7 @@ from .vsc2022_retrieval import VSC2022Retrieval
 __all__ = [
     "LPMusicCapsMTTA2TRetrieval",
     "LPMusicCapsMTTT2ARetrieval",
+    "MovingFashionV2IRetrieval",
     "MusicCapsA2TRetrieval",
     "MusicCapsT2ARetrieval",
     "SongDescriberA2TRetrieval",
