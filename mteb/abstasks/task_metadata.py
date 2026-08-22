@@ -161,6 +161,7 @@ TaskDomain = Literal[
     "Egocentric",  # first-person / wearable-camera video
     "Nature",  # animals, wildlife, natural environments
     "Animation",  # cartoon / animated / synthetic content
+    "Robotics",  # robot manipulation / embodied-agent content
 ]
 """
 The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though
@@ -404,6 +405,7 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
     "PairClassification": "pair-classification",
     "VideoClassification": "classification",
     "VideoClustering": "clustering",
+    "VideoMultilabelClassification": "classification",
     "VideoPairClassification": "pair-classification",
     "VideoZeroshotClassification": "classification",
     "VideoCentricQA": "retrieval",
