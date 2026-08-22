@@ -326,6 +326,7 @@ select = [
     "ASYNC",   # blocking calls in async functions
     "ISC",     # implicit string concatenation
     "B",       # flake8-bugbear
+    "PT",      # flake8-pytest-style
 ]
 
 ignore = [
@@ -348,6 +349,7 @@ ignore = [
     "PLR0915",  # too many statements
     "PLW0717",  # too-many-statements-in-try-clause
     "ISC001",   # single-line implicit concat; conflicts with `ruff format`
+    "PT018",    # composite assertions; splitting `assert a and b` is not always clearer
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
