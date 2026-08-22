@@ -1,17 +1,15 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict, cast
 
-import torch
+import numpy as np
 from datasets import Dataset
 from sklearn import metrics
 
 from mteb._evaluators import ZeroShotClassificationEvaluator
 from mteb.models import EncoderProtocol
-from mteb.types.statistics import (
-    SplitDescriptiveStatistics,
-)
+from mteb.types.statistics import ZeroShotClassificationDescriptiveStatistics
 
 from ._statistics_calculation import (
     calculate_label_statistics,
@@ -25,41 +23,10 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
-    from mteb.types import EncodeKwargs, Modalities
-    from mteb.types.statistics import (
-        AudioStatistics,
-        ImageStatistics,
-        LabelStatistics,
-        TextStatistics,
-        VideoStatistics,
-    )
+    from mteb.timing import TimingStack
+    from mteb.types import Array, EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
-
-
-class ZeroShotClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for ZeroShotClassification
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-
-        text_statistics: Statistics for texts
-        image_statistics: Statistics for images
-        audio_statistics: Statistics for audio
-        video_statistics: Statistics for video
-        label_statistics: Statistics for dataset labels
-
-        candidates_labels_text_statistics: Statistics for candidate labels text
-    """
-
-    num_samples: int
-
-    text_statistics: TextStatistics | None
-    image_statistics: ImageStatistics | None
-    audio_statistics: AudioStatistics | None
-    video_statistics: VideoStatistics | None
-    label_statistics: LabelStatistics
-    candidates_labels_text_statistics: TextStatistics
 
 
 class ZeroShotClassificationMetrics(TypedDict):
@@ -67,9 +34,25 @@ class ZeroShotClassificationMetrics(TypedDict):
 
     Attributes:
         accuracy: Accuracy of the model.
+        f1: F1 score (macro).
+        f1_weighted: Weighted F1 score.
+        precision: Precision score (macro).
+        precision_weighted: Weighted precision score.
+        recall: Recall score (macro).
+        recall_weighted: Weighted recall score.
+        ap: Average precision score (macro) for binary classification.
+        ap_weighted: Weighted average precision score for binary classification.
     """
 
     accuracy: float
+    f1: float
+    f1_weighted: float
+    precision: float
+    precision_weighted: float
+    recall: float
+    recall_weighted: float
+    ap: float | None
+    ap_weighted: float | None
 
 
 class AbsTaskZeroShotClassification(AbsTask):
@@ -80,7 +63,9 @@ class AbsTaskZeroShotClassification(AbsTask):
     Attributes:
         dataset: Huggingface dataset containing the data for the task. Dataset must contain columns specified by self.input_column_name and self.label_column_name.
         input_column_name: Name of the column containing the inputs (image or text).
-        label_column_name: Name of the column containing the labels (str).
+        label_column_name: Name of the column containing the labels. Labels must be
+            integer indices of the candidate labels or strings matching an entry of
+            `get_candidate_labels`.
     """
 
     input_column_name: str | Sequence[Modalities] = "image"
@@ -147,6 +132,7 @@ class AbsTaskZeroShotClassification(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ZeroShotClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -165,6 +151,7 @@ class AbsTaskZeroShotClassification(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         probs = evaluator(
@@ -183,18 +170,80 @@ class AbsTaskZeroShotClassification(AbsTask):
             )
 
         return self._calculate_scores(
-            data_split[self.label_column_name],
-            torch.tensor(probs).argmax(dim=1).tolist(),
+            self._normalize_labels(
+                data_split[self.label_column_name],
+                candidate_labels,
+            ),
+            probs,
         )
+
+    @staticmethod
+    def _normalize_labels(
+        labels: list[int] | list[str], candidate_labels: list[str]
+    ) -> list[int]:
+        """Convert dataset labels to integer indices of the candidate labels.
+
+        Predictions are always integer indices into ``candidate_labels``, while
+        datasets store labels either as integer class indices (e.g. a
+        ``ClassLabel`` column) or as strings. scikit-learn >= 1.9 raises an
+        error when ``y_true`` contains strings and ``y_pred`` is numeric, so
+        string labels are mapped to their index in ``candidate_labels``.
+
+        Args:
+            labels: Labels as stored in the dataset.
+            candidate_labels: Candidate labels returned by `get_candidate_labels`.
+
+        Returns:
+            Labels as integer indices into ``candidate_labels``.
+
+        Raises:
+            ValueError: If a string label does not match any candidate label.
+        """
+        if not labels or not isinstance(labels[0], str):
+            return cast("list[int]", labels)
+
+        label_to_index = {label: idx for idx, label in enumerate(candidate_labels)}
+        unknown_labels = sorted(set(labels) - label_to_index.keys())
+        if unknown_labels:
+            raise ValueError(
+                "String labels must match an entry of `get_candidate_labels` to "
+                f"be mapped to a candidate index, but {unknown_labels} do not. "
+                "Alternatively, store labels as integer indices of the candidate "
+                "labels."
+            )
+        return [label_to_index[label] for label in labels]
 
     def _calculate_scores(  # noqa: PLR6301
         self,
         labels: list[int],
-        predictions: list[float],
+        probs: Array,
     ) -> ZeroShotClassificationMetrics:
-        return ZeroShotClassificationMetrics(
+        predictions = probs.argmax(1)
+        scores = ZeroShotClassificationMetrics(
             accuracy=metrics.accuracy_score(labels, predictions),
+            f1=metrics.f1_score(labels, predictions, average="macro"),
+            f1_weighted=metrics.f1_score(labels, predictions, average="weighted"),
+            precision=metrics.precision_score(labels, predictions, average="macro"),
+            precision_weighted=metrics.precision_score(
+                labels, predictions, average="weighted"
+            ),
+            recall=metrics.recall_score(labels, predictions, average="macro"),
+            recall_weighted=metrics.recall_score(
+                labels, predictions, average="weighted"
+            ),
+            ap=None,
+            ap_weighted=None,
         )
+
+        if len(np.unique(labels)) == 2:
+            positive_scores = probs[:, 1]
+            scores["ap"] = metrics.average_precision_score(
+                labels, positive_scores, average="macro"
+            )
+            scores["ap_weighted"] = metrics.average_precision_score(
+                labels, positive_scores, average="weighted"
+            )
+        return scores
 
     def _push_dataset_to_hub(
         self,

@@ -1,7 +1,7 @@
 {
     "train": {
         "num_samples": 6951,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": null,
         "image_statistics": null,
         "audio_statistics": {
@@ -68,7 +68,7 @@
         "hf_subset_descriptive_stats": {
             "en-GB": {
                 "num_samples": 592,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {
@@ -135,7 +135,7 @@
             },
             "fr-FR": {
                 "num_samples": 539,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {
@@ -202,7 +202,7 @@
             },
             "it-IT": {
                 "num_samples": 696,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {
@@ -269,7 +269,7 @@
             },
             "es-ES": {
                 "num_samples": 486,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {
@@ -336,7 +336,7 @@
             },
             "pt-PT": {
                 "num_samples": 604,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {
@@ -403,7 +403,7 @@
             },
             "de-DE": {
                 "num_samples": 611,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {
@@ -470,7 +470,7 @@
             },
             "nl-NL": {
                 "num_samples": 654,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {
@@ -537,7 +537,7 @@
             },
             "ru-RU": {
                 "num_samples": 539,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {
@@ -604,7 +604,7 @@
             },
             "pl-PL": {
                 "num_samples": 562,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {
@@ -671,7 +671,7 @@
             },
             "cs-CZ": {
                 "num_samples": 574,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {
@@ -738,7 +738,7 @@
             },
             "ko-KR": {
                 "num_samples": 592,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {
@@ -805,7 +805,7 @@
             },
             "zh-CN": {
                 "num_samples": 502,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {

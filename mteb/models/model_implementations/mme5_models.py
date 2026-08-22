@@ -3,11 +3,11 @@ from mteb.models.model_meta import (
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerMultimodalEncoderWrapper,
+    SentenceTransformerEncoderWrapper,
 )
 
 mme5_mllama = ModelMeta(
-    loader=SentenceTransformerMultimodalEncoderWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={
         "trust_remote_code": True,
     },

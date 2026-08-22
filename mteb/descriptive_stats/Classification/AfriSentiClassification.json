@@ -1,7 +1,7 @@
 {
     "test": {
         "num_samples": 18222,
-        "number_texts_intersect_with_train": 595,
+        "samples_in_train": 595,
         "text_statistics": {
             "total_text_length": 1378570,
             "min_text_length": 6,
@@ -30,7 +30,7 @@
         "hf_subset_descriptive_stats": {
             "amh": {
                 "num_samples": 1999,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 161648,
                     "min_text_length": 11,
@@ -59,7 +59,7 @@
             },
             "arq": {
                 "num_samples": 958,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 63912,
                     "min_text_length": 11,
@@ -88,7 +88,7 @@
             },
             "ary": {
                 "num_samples": 2048,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 154042,
                     "min_text_length": 10,
@@ -117,7 +117,7 @@
             },
             "hau": {
                 "num_samples": 2048,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 137138,
                     "min_text_length": 11,
@@ -143,7 +143,7 @@
             },
             "ibo": {
                 "num_samples": 2048,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 103924,
                     "min_text_length": 9,
@@ -169,7 +169,7 @@
             },
             "kin": {
                 "num_samples": 1026,
-                "number_texts_intersect_with_train": 29,
+                "samples_in_train": 29,
                 "text_statistics": {
                     "total_text_length": 113162,
                     "min_text_length": 21,
@@ -198,7 +198,7 @@
             },
             "por": {
                 "num_samples": 2048,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 161831,
                     "min_text_length": 17,
@@ -227,7 +227,7 @@
             },
             "pcm": {
                 "num_samples": 2048,
-                "number_texts_intersect_with_train": 371,
+                "samples_in_train": 371,
                 "text_statistics": {
                     "total_text_length": 170833,
                     "min_text_length": 8,
@@ -256,7 +256,7 @@
             },
             "swa": {
                 "num_samples": 748,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 83744,
                     "min_text_length": 10,
@@ -285,7 +285,7 @@
             },
             "twi": {
                 "num_samples": 949,
-                "number_texts_intersect_with_train": 195,
+                "samples_in_train": 195,
                 "text_statistics": {
                     "total_text_length": 41424,
                     "min_text_length": 11,
@@ -314,7 +314,7 @@
             },
             "tso": {
                 "num_samples": 254,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 13844,
                     "min_text_length": 7,
@@ -343,7 +343,7 @@
             },
             "yor": {
                 "num_samples": 2048,
-                "number_texts_intersect_with_train": 0,
+                "samples_in_train": 0,
                 "text_statistics": {
                     "total_text_length": 173068,
                     "min_text_length": 6,
@@ -371,7 +371,7 @@
     },
     "train": {
         "num_samples": 63685,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": {
             "total_text_length": 5446582,
             "min_text_length": 1,
@@ -400,7 +400,7 @@
         "hf_subset_descriptive_stats": {
             "amh": {
                 "num_samples": 5984,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 427540,
                     "min_text_length": 1,
@@ -429,7 +429,7 @@
             },
             "arq": {
                 "num_samples": 1651,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 105426,
                     "min_text_length": 11,
@@ -458,7 +458,7 @@
             },
             "ary": {
                 "num_samples": 5583,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 420832,
                     "min_text_length": 4,
@@ -487,7 +487,7 @@
             },
             "hau": {
                 "num_samples": 14172,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 1106209,
                     "min_text_length": 17,
@@ -516,7 +516,7 @@
             },
             "ibo": {
                 "num_samples": 10192,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 709705,
                     "min_text_length": 11,
@@ -545,7 +545,7 @@
             },
             "kin": {
                 "num_samples": 3302,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 361836,
                     "min_text_length": 23,
@@ -574,7 +574,7 @@
             },
             "por": {
                 "num_samples": 3063,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 319410,
                     "min_text_length": 15,
@@ -603,7 +603,7 @@
             },
             "pcm": {
                 "num_samples": 5121,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 594073,
                     "min_text_length": 9,
@@ -632,7 +632,7 @@
             },
             "swa": {
                 "num_samples": 1810,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 195694,
                     "min_text_length": 11,
@@ -661,7 +661,7 @@
             },
             "twi": {
                 "num_samples": 3481,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 157623,
                     "min_text_length": 11,
@@ -690,7 +690,7 @@
             },
             "tso": {
                 "num_samples": 804,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 45865,
                     "min_text_length": 11,
@@ -719,7 +719,7 @@
             },
             "yor": {
                 "num_samples": 8522,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": {
                     "total_text_length": 1002369,
                     "min_text_length": 9,

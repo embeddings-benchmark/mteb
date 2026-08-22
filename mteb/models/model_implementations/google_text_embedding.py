@@ -90,7 +90,7 @@ class GoogleTextEmbeddingModel(AbsEncoder):
                 TextEmbeddingInput(
                     text if text else " ", task_type=google_task_type, title=title
                 )
-                for text, title in zip(texts, titles)
+                for text, title in zip(texts, titles, strict=True)
             ]
         else:
             inputs = [

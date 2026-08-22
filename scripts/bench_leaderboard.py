@@ -47,7 +47,6 @@ from mteb.leaderboard.app import (
     MODEL_TYPE_CHOICES,
     _benchmark_full_languages,
     _filter_models,
-    _leaderboard_parquet_path,
 )
 from mteb.leaderboard.table import (
     apply_per_language_styling_from_benchmark,
@@ -125,7 +124,7 @@ def load_all_benchmark_results(
     cache: ResultCache, benchmarks, *, measure_build: bool
 ) -> dict[str, pl.DataFrame]:
     """Return the per-benchmark polars dict, measuring whichever startup path is used."""
-    parquet_path = _leaderboard_parquet_path(cache)
+    parquet_path = cache.leaderboard_parquet_path
 
     if measure_build or not parquet_path.exists():
         hdr(

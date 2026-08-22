@@ -6,12 +6,11 @@ import logging
 from collections import defaultdict
 from functools import cached_property
 from importlib.metadata import version
-from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 from huggingface_hub import EvalResult
-from packaging.version import Version
+from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, field_validator, model_validator
 from typing_extensions import deprecated
 
@@ -28,13 +27,14 @@ from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
+from mteb.timing import PhaseTiming, TimingStack
 from mteb.types import (
     ScoresDict,
     SplitName,
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Mapping
+    from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
     from pathlib import Path
 
     from typing_extensions import Self
@@ -173,6 +173,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     evaluation_time: float | None
     kg_co2_emissions: float | None = None
     date: datetime.datetime | None = None
+    evaluation_phases: list[PhaseTiming] | None = None
 
     @classmethod
     def from_task_results(
@@ -182,6 +183,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
         date: datetime.datetime | None = None,
+        evaluation_phases: list[PhaseTiming] | None = None,
     ) -> TaskResult:
         """Create a TaskResult from the task and scores.
 
@@ -193,6 +195,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_time: The time taken to evaluate the model.
             kg_co2_emissions: The kg of CO2 emissions produced by the model during evaluation.
             date: The date the model was trained on.
+            evaluation_phases: A list of dicts describing the start, end, and name of each phase.
         """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
@@ -228,6 +231,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_time=evaluation_time,
             kg_co2_emissions=kg_co2_emissions,
             date=date,
+            evaluation_phases=evaluation_phases,
         )
 
     @field_validator("scores")
@@ -235,7 +239,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def _validate_scores(
         cls, v: dict[SplitName, list[ScoresDict]]
     ) -> dict[SplitName, list[ScoresDict]]:
-        for split, hf_subset_scores in v.items():
+        for hf_subset_scores in v.values():
             for hf_subset_score in hf_subset_scores:
                 if not isinstance(hf_subset_score, dict):
                     raise ValueError("Scores should be a dictionary")
@@ -266,27 +270,27 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         try:
             _ = json.dumps(scores)
         except Exception as e:
-            raise ValueError(f"Scores are not json serializable: {e}")
+            raise ValueError(f"Scores are not json serializable: {e}") from e
 
     @property
     def languages(self) -> list[str]:
-        """Get the languages present in the scores."""
+        """The languages present in the scores."""
         langs = []
-        for split, split_res in self.scores.items():
+        for split_res in self.scores.values():
             for entry in split_res:
                 langs.extend([lang.split("-")[0] for lang in entry["languages"]])
         return list(set(langs))
 
     @cached_property
     def task(self) -> AbsTask:
-        """Get the task associated with the result."""
+        """The task associated with the result."""
         from mteb.get_tasks import get_task
 
         return get_task(self.task_name)
 
     @property
     def domains(self) -> list[TaskDomain]:
-        """Get the domains of the task."""
+        """The domains of the task."""
         doms = self.task.metadata.domains
         if doms is None:
             doms = []
@@ -294,7 +298,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
     @property
     def task_type(self) -> str:
-        """Get the type of the task."""
+        """The type of the task."""
         return cast("str", self.task.metadata.type)
 
     @property
@@ -304,22 +308,29 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
     @property
     def main_score(self) -> float:
-        """Get the main score of the result."""
+        """The main score of the result."""
         return self.get_score()
 
     @property
     def hf_subsets(self) -> list[str]:
-        """Get the hf_subsets present in the scores."""
+        """The hf_subsets present in the scores."""
         hf_subsets = set()
-        for split, split_res in self.scores.items():
+        for split_res in self.scores.values():
             for entry in split_res:
                 hf_subsets.add(entry["hf_subset"])
         return list(hf_subsets)
 
     @property
     def eval_splits(self) -> list[str]:
-        """Get the eval splits present in the scores."""
+        """The eval splits present in the scores."""
         return list(self.scores.keys())
+
+    def plot_evaluation_phases(self) -> str:
+        """Plots a text-based bar chart of the recorded evaluation phases."""
+        ts = TimingStack()
+        if self.evaluation_phases:
+            ts.phases = self.evaluation_phases
+        return ts.plot()
 
     def to_dict(self) -> dict[str, Any]:
         """Convert the TaskResult to a dictionary.
@@ -389,14 +400,11 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             except Exception as e:
                 raise ValueError(
                     f"Error loading TaskResult from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
-                )
+                ) from e
         data = json.loads(json_str)
+        min_version = cls._parse_mteb_version_min(data.get("mteb_version"))
         pre_1_11_load = (
-            (
-                "mteb_version" in data
-                and data["mteb_version"] is not None
-                and Version(data["mteb_version"]) < Version("1.11.0")
-            )
+            (min_version is not None and min_version < Version("1.11.0"))
             or "mteb_version" not in data
         )  # assume it is before 1.11.0 if the version is not present
 
@@ -410,11 +418,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             )
             obj = cls._convert_from_before_v1_11_0(data)
 
-        pre_v_12_48 = (
-            "mteb_version" in data
-            and data["mteb_version"] is not None
-            and Version(data["mteb_version"]) < Version("1.12.48")
-        )
+        pre_v_12_48 = min_version is not None and min_version < Version("1.12.48")
 
         if pre_v_12_48:
             cls._fix_pair_classification_scores(obj)
@@ -433,7 +437,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             task = get_task(obj.task_name)
 
         if task.metadata.type == "PairClassification":  # noqa: PLR1702
-            for split, split_scores in obj.scores.items():
+            for split_scores in obj.scores.values():
                 for hf_subset_scores in split_scores:
                     # concatenate score e.g. ["max"]["ap"] -> ["max_ap"]
                     for key in list(hf_subset_scores.keys()):
@@ -459,7 +463,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
         # calculate evaluation time across all splits (move to top level)
         evaluation_time = 0
-        for split, split_score in scores.items():
+        for split_score in scores.values():
             if "evaluation_time" in split_score:
                 evaluation_time += split_score.pop("evaluation_time")
 
@@ -489,8 +493,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
         # make sure that main score exists
         main_score = task.metadata.main_score
-        for split, split_score in scores.items():
-            for hf_subset, hf_subset_scores in split_score.items():
+        for split_score in scores.values():
+            for hf_subset_scores in split_score.values():
                 for name, prev_name in [
                     (ScoringFunction.COSINE.value, "cos_sim"),
                     (ScoringFunction.MANHATTAN.value, "manhattan"),
@@ -531,6 +535,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             scores,
             evaluation_time,
             kg_co2_emissions=None,
+            evaluation_phases=data.get("evaluation_phases"),
         )
         result.dataset_revision = dataset_revision
         result.mteb_version = mteb_version
@@ -753,9 +758,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def is_mergeable(
         self,
         result: TaskResult | AbsTask,
-        criteria: list[str] | list[Criteria] = [
-            "dataset_revision",
-        ],
+        criteria: Sequence[str] | Sequence[Criteria] = ("dataset_revision",),
         raise_error: bool = False,
     ) -> bool:
         """Checks if the TaskResult object can be merged with another TaskResult or Task.
@@ -811,9 +814,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def merge(
         self,
         new_results: TaskResult,
-        criteria: list[str] | list[Criteria] = [
-            "dataset_revision",
-        ],
+        criteria: Sequence[str] | Sequence[Criteria] = ("dataset_revision",),
     ) -> TaskResult:
         """Merges two TaskResult objects.
 
@@ -855,7 +856,29 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             merged_evaluation_time = (self.evaluation_time or 0.0) + (
                 new_results.evaluation_time or 0.0
             )
+
+        merged_evaluation_phases: list[PhaseTiming] | None = None
+        if (
+            self.evaluation_phases is not None
+            or new_results.evaluation_phases is not None
+        ):
+            merged_evaluation_phases = []
+            if self.evaluation_phases is not None:
+                merged_evaluation_phases.extend(self.evaluation_phases)
+            if new_results.evaluation_phases is not None:
+                offset = self.evaluation_time or (
+                    max(p["end"] for p in self.evaluation_phases)
+                    if self.evaluation_phases
+                    else 0.0
+                )
+                for phase in new_results.evaluation_phases:
+                    merged_phase = phase.copy()
+                    merged_phase["start"] += offset
+                    merged_phase["end"] += offset
+                    merged_evaluation_phases.append(merged_phase)
+
         date = self.date
+
         if new_results.date is not None and (date is None or new_results.date > date):
             date = new_results.date
         mteb_ver = self._compute_top_level_mteb_version(merged_scores)
@@ -868,9 +891,30 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_time=merged_evaluation_time,
             kg_co2_emissions=merged_kg_co2_emissions,
             date=date,
+            evaluation_phases=merged_evaluation_phases,
         )
 
         return merged_results
+
+    @staticmethod
+    def _parse_mteb_version_min(version_str: str | None) -> Version | None:
+        """Parse a stored mteb_version, which may be a range like "2.12.16-2.15.4".
+
+        Returns the minimum version of the range, or the parsed version for a
+        single version string. Returns None if the input is None or unparsable.
+        """
+        if version_str is None:
+            return None
+        try:
+            return Version(version_str)
+        except InvalidVersion:
+            pass
+        if "-" in version_str:
+            try:
+                return Version(version_str.split("-", 1)[0])
+            except InvalidVersion:
+                return None
+        return None
 
     @staticmethod
     def _compute_top_level_mteb_version(
@@ -1051,22 +1095,60 @@ def _read_run_settings_from_file(path: Path) -> list[dict[str, Any]]:
     return run_settings
 
 
-def _write_and_merge_keyed_json(
-    path: Path,
-    entries: list[dict[str, Any]],
-    *,
-    key_fields: tuple[str, str, str] = ("task", "split", "subset"),
-) -> None:
-    """Write entries to `.jsonl`, if it already exist it will merge it, replacing any existing entries with the same key."""
-    existing_entries = _read_run_settings_from_file(path)
-    new_keys = {tuple(entry.get(field) for field in key_fields) for entry in entries}
-    filtered_existing = [
-        entry
-        for entry in existing_entries
-        if tuple(entry.get(field) for field in key_fields) not in new_keys
-    ]
-    all_entries = filtered_existing + entries
+def _expand_run_settings_entry(
+    entry: dict[str, Any],
+) -> Iterator[tuple[tuple[str, str, str], str, dict[str, Any]]]:
+    """Expand an entry into one (task, split, subset), settings tuple per evaluated subset."""
+    settings = dict(entry)
+    task = settings.pop("task", None)
+    # entries written before splits and subsets were combined stored a single "split" and "subset"
+    splits = settings.pop("splits", None)
+    if splits is None:
+        splits = [settings.pop("split", None)]
+    subsets = settings.pop("subsets", None)
+    if subsets is None:
+        subsets = [settings.pop("subset", None)]
+
+    key = json.dumps(settings, sort_keys=True, default=str)
+    for split in splits:
+        for subset in subsets:
+            if split is not None and subset is not None:
+                yield (task, split, subset), key, settings
+
+
+def _write_and_merge_keyed_json(path: Path, entries: list[dict[str, Any]]) -> None:
+    """Write entries to `.jsonl`, if it already exist it will merge it.
+
+    Every (task, split, subset) is stored once, with the settings of the last entry that evaluated it. Rows are then
+    combined as far as possible: splits of a task sharing both their settings and their subsets are written as a single
+    row listing all of its splits and subsets.
+    """
+    settings_by_key: dict[str, dict[str, Any]] = {}
+    # (task, split, subset) -> settings key, later entries overwrite the settings of earlier ones
+    run_settings: dict[tuple[str, str, str], str] = {}
+    for entry in [*_read_run_settings_from_file(path), *entries]:
+        for scope, key, settings in _expand_run_settings_entry(entry):
+            settings_by_key[key] = settings
+            run_settings[scope] = key
+
+    # (task, settings key) -> split -> subsets
+    grouped: dict[tuple[str, str], dict[str, list[str]]] = defaultdict(
+        lambda: defaultdict(list)
+    )
+    for (task, split, subset), key in run_settings.items():
+        grouped[(task, key)][split].append(subset)
 
     with path.open("w", encoding="utf-8") as f:
-        for entry in all_entries:
-            f.write(json.dumps(entry, default=str) + "\n")
+        for (task, key), splits in grouped.items():
+            # splits evaluated on the exact same subsets share a row
+            rows: dict[tuple[str, ...], list[str]] = defaultdict(list)
+            for split, subsets in splits.items():
+                rows[tuple(sorted(set(subsets)))].append(split)
+            for row_subsets, split_names in rows.items():
+                entry = {
+                    "task": task,
+                    "splits": sorted(split_names),
+                    **settings_by_key[key],
+                    "subsets": list(row_subsets),
+                }
+                f.write(json.dumps(entry, default=str) + "\n")

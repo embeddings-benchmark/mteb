@@ -34,7 +34,7 @@ def test_benchmark_aliases(alias, full_name):
 
 
 def test_benchmark_on_leaderboard():
-    on_leaderboard = "MTEB(Multilingual, v2)"
+    on_leaderboard = "RTEB(eng, beta)"
     not_on_leaderboard = "MTEB(Multilingual, v1)"
     benchmark = mteb.get_benchmarks(display_on_leaderboard=True)
     names = {b.name for b in benchmark}

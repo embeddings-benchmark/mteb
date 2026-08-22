@@ -22,7 +22,7 @@ class SomethingSomethingV2Classification(AbsTaskClassification):
             "2017-06-01",
             "2017-12-31",
         ),
-        domains=["Scene"],
+        domains=["Activity"],
         task_subtypes=["Activity recognition"],
         license="not specified",
         annotations_creators="human-annotated",

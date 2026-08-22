@@ -163,7 +163,8 @@ def voyage_v_loader(model_name, **kwargs):
                     ]
                     batch_texts = batch["text"]
                     interleaved_inputs = [
-                        [text, image] for image, text in zip(batch_images, batch_texts)
+                        [text, image]
+                        for image, text in zip(batch_images, batch_texts, strict=True)
                     ]
                     embeddings = self._multimodal_embed(
                         interleaved_inputs,

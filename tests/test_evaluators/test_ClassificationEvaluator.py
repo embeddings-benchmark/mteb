@@ -3,7 +3,8 @@ import pytest
 from sklearn.linear_model import LogisticRegression
 
 from mteb._evaluators import SklearnEvaluator
-from tests.mock_tasks import MockClassificationTask
+from mteb.mocks.mock_tasks import MockClassificationTask
+from mteb.timing import TimingStack
 
 
 @pytest.fixture
@@ -23,6 +24,7 @@ def test_expected_scores(mock_task):
         test_data,
         label_column_name=mock_task.label_column_name,
         evaluator_model=LogisticRegression(max_iter=10),
+        timer=TimingStack(),
     )
 
     rng = np.random.RandomState(42)
@@ -45,6 +47,7 @@ def test_deterministic_predictions(mock_task):
         test_data,
         label_column_name=mock_task.label_column_name,
         evaluator_model=LogisticRegression(max_iter=10),
+        timer=TimingStack(),
     )
 
     rng = np.random.RandomState(42)

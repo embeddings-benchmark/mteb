@@ -14,9 +14,7 @@ from mteb.abstasks._statistics_calculation import (
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.models_protocols import EncoderProtocol
-from mteb.types.statistics import (
-    SplitDescriptiveStatistics,
-)
+from mteb.types.statistics import ImageTextPairClassificationDescriptiveStatistics
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -24,27 +22,10 @@ if TYPE_CHECKING:
     from datasets import Dataset
 
     from mteb.models.models_protocols import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs
-    from mteb.types.statistics import (
-        ImageStatistics,
-        TextStatistics,
-    )
 
 logger = logging.getLogger(__name__)
-
-
-class ImageTextPairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for ImageTextPairClassification
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-        text_statistics: Statistics for text
-        image_statistics: Statistics for images
-    """
-
-    num_samples: int
-    text_statistics: TextStatistics
-    image_statistics: ImageStatistics
 
 
 class ImageTextPairClassificationMetrics(TypedDict):
@@ -140,6 +121,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ImageTextPairClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -171,6 +153,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
             num_images_per_sample=num_images_per_sample,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         scores: list[torch.Tensor] = evaluator(

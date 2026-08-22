@@ -7,11 +7,11 @@ from mteb.models.model_meta import (
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerMultimodalEncoderWrapper,
+    SentenceTransformerEncoderWrapper,
 )
 
 
-class OmniEmbedNemotronWrapper(SentenceTransformerMultimodalEncoderWrapper):
+class OmniEmbedNemotronWrapper(SentenceTransformerEncoderWrapper):
     """Thin wrapper that configures video/audio processing kwargs after loading."""
 
     def __init__(

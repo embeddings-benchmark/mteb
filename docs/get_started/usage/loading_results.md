@@ -45,7 +45,7 @@ You can download this using:
 import mteb
 
 cache = mteb.ResultCache()
-cache.download_from_remote() # download results from the remote repository
+cache.download_from_remote()  # download results from the remote repository
 ```
 
 From here, you can work with the cache as usual. For instance, if you are selecting the best model for your French and English retrieval task on legal documents, you could fetch the relevant tasks and create a dataframe of the results using the following code:
@@ -54,7 +54,9 @@ From here, you can work with the cache as usual. For instance, if you are select
 import mteb
 
 # select your tasks
-tasks = mteb.get_tasks(task_types=["Retrieval"], languages=["eng", "fra"], domains=["Legal"])
+tasks = mteb.get_tasks(
+    task_types=["Retrieval"], languages=["eng", "fra"], domains=["Legal"]
+)
 
 model_names = [
     "GritLM/GritLM-7B",
@@ -63,12 +65,12 @@ model_names = [
 
 
 cache = mteb.ResultCache()
-cache.download_from_remote() # download results from the remote repository. Might take a while the first time.
+cache.download_from_remote()  # download results from the remote repository. Might take a while the first time.
 
 results = cache.load_results(
     models=model_names,
     tasks=tasks,
-    include_remote=True, # default
+    include_remote=True,  # default
 )
 ```
 

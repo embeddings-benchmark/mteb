@@ -1,7 +1,7 @@
 {
     "validation": {
         "num_samples": 25250,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": null,
         "image_statistics": {
             "min_image_width": 287,
@@ -326,7 +326,7 @@
     },
     "train": {
         "num_samples": 75750,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": null,
         "image_statistics": {
             "min_image_width": 193,

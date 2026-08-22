@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>OG Hero Template</title>
+		<style>
+			@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&display=swap');
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				font-family: 'Inter', system-ui, sans-serif;
+				background: #000;
+			}
+			.card {
+				width: 1200px;
+				height: 630px;
+				position: relative;
+				background:
+					radial-gradient(
+						ellipse at top right,
+						rgba(91, 143, 255, 0.16) 0%,
+						transparent 55%
+					),
+					radial-gradient(
+						ellipse at bottom left,
+						rgba(91, 143, 255, 0.08) 0%,
+						transparent 60%
+					),
+					#0a0d12;
+				color: #f0f3f8;
+				overflow: hidden;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				padding: 64px 80px;
+				box-sizing: border-box;
+			}
+			.dots {
+				position: absolute;
+				inset: 0;
+				pointer-events: none;
+			}
+			.dots span {
+				position: absolute;
+				border-radius: 50%;
+				background: #5b8fff;
+			}
+			.card::after {
+				content: '';
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				height: 6px;
+				background: linear-gradient(90deg, #5b8fff 0%, #a06bff 70%, #5b8fff 100%);
+			}
+			.brand {
+				display: inline-flex;
+				align-items: center;
+				gap: 14px;
+				z-index: 2;
+				position: relative;
+			}
+			.badges {
+				position: absolute;
+				top: 56px;
+				right: 80px;
+				z-index: 3;
+				display: flex;
+				flex-direction: column;
+				align-items: flex-end;
+				gap: 10px;
+			}
+			.kind-badge {
+				display: inline-block;
+				padding: 12px 26px;
+				background: linear-gradient(180deg, #5b8fff 0%, #3d7bff 100%);
+				color: #ffffff;
+				font-size: 18px;
+				font-weight: 800;
+				letter-spacing: 0.16em;
+				text-transform: uppercase;
+				border-radius: 999px;
+				box-shadow:
+					0 6px 18px rgba(91, 143, 255, 0.35),
+					inset 0 1px 0 rgba(255, 255, 255, 0.25);
+			}
+			.type-badge {
+				display: inline-block;
+				padding: 9px 20px;
+				background: rgba(91, 143, 255, 0.14);
+				color: #c8d8ff;
+				border: 1px solid rgba(91, 143, 255, 0.35);
+				font-size: 15px;
+				font-weight: 700;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				border-radius: 999px;
+			}
+			.type-badge:empty {
+				display: none;
+			}
+			.brand img {
+				width: 36px;
+				height: 36px;
+				filter: drop-shadow(0 2px 6px rgba(91, 143, 255, 0.4));
+			}
+			.brand-text {
+				display: flex;
+				flex-direction: column;
+				gap: 3px;
+				line-height: 1;
+			}
+			.brand-name {
+				font-weight: 800;
+				font-size: 20px;
+				letter-spacing: 0.04em;
+				color: #e3eaf8;
+			}
+			.brand-eyebrow {
+				font-weight: 700;
+				font-size: 11px;
+				letter-spacing: 0.18em;
+				text-transform: uppercase;
+				color: #5b8fff;
+			}
+			.body {
+				position: relative;
+				z-index: 2;
+				display: flex;
+				flex-direction: column;
+				gap: 18px;
+				max-width: 920px;
+			}
+			.headline {
+				font-size: var(--headline-size, 92px);
+				font-weight: 900;
+				line-height: 1;
+				letter-spacing: -0.035em;
+				margin: 0;
+				background: linear-gradient(90deg, #ffffff 0%, #d3e0f8 100%);
+				-webkit-background-clip: text;
+				background-clip: text;
+				-webkit-text-fill-color: transparent;
+				overflow-wrap: anywhere;
+			}
+			.tagline {
+				font-size: 28px;
+				font-weight: 500;
+				color: #9aa8c5;
+				margin: 0;
+				letter-spacing: -0.005em;
+				line-height: 1.3;
+				overflow: hidden;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+			}
+			.stats {
+				position: relative;
+				z-index: 2;
+				display: flex;
+				align-items: baseline;
+				gap: 48px;
+			}
+			.stat-num {
+				font-size: 52px;
+				font-weight: 800;
+				line-height: 1;
+				color: #5b8fff;
+				font-variant-numeric: tabular-nums;
+				letter-spacing: -0.02em;
+				overflow-wrap: anywhere;
+			}
+			.stat-label {
+				display: block;
+				margin-top: 6px;
+				font-size: 16px;
+				font-weight: 600;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+				color: #6f7e9e;
+			}
+			.stat-sep {
+				width: 1px;
+				height: 56px;
+				background: rgba(154, 168, 197, 0.18);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="card" id="card">
+			<div class="dots" id="dots"></div>
+			<div class="brand">
+				<img src="dots-icon.png" alt="" />
+				<div class="brand-text">
+					<span class="brand-eyebrow" id="eyebrow">MTEB Leaderboard</span>
+					<span class="brand-name" id="brandName">mteb-leaderboard.hf.space</span>
+				</div>
+			</div>
+			<div class="badges">
+				<span class="kind-badge" id="kindBadge">Card</span>
+				<span class="type-badge" id="typeBadge"></span>
+			</div>
+			<div class="body">
+				<h1 class="headline" id="headline">MTEB Leaderboard</h1>
+				<p class="tagline" id="tagline">Massive Text Embedding Benchmark</p>
+			</div>
+			<div class="stats" id="stats"></div>
+		</div>
+
+		<script>
+			// Parse query string: eyebrow, title, tagline, headlineSize, stats=label1|num1,label2|num2,...
+			const q = new URLSearchParams(location.search);
+			if (q.get('eyebrow')) document.getElementById('eyebrow').textContent = q.get('eyebrow');
+			if (q.get('title')) document.getElementById('headline').textContent = q.get('title');
+			if (q.get('tagline')) document.getElementById('tagline').textContent = q.get('tagline');
+			if (q.get('headlineSize'))
+				document.getElementById('card').style.setProperty('--headline-size', q.get('headlineSize'));
+			const statsEl = document.getElementById('stats');
+			const raw = q.get('stats') || 'Benchmarks|75,Tasks|1 764,Models|725';
+			const items = raw.split(',').map((s) => s.split('|'));
+			items.forEach(([label, num], i) => {
+				if (i > 0) {
+					const sep = document.createElement('div');
+					sep.className = 'stat-sep';
+					statsEl.appendChild(sep);
+				}
+				const wrap = document.createElement('div');
+				const n = document.createElement('div');
+				n.className = 'stat-num';
+				n.textContent = num;
+				const l = document.createElement('div');
+				l.className = 'stat-label';
+				l.textContent = label;
+				wrap.appendChild(n);
+				wrap.appendChild(l);
+				statsEl.appendChild(wrap);
+			});
+
+			// Scattered dots
+			const dotsEl = document.getElementById('dots');
+			const dotSpec = [
+				[880, 60, 70, 0.18, '#6fa1ff'],
+				[1000, 200, 48, 0.22, '#3d7bff'],
+				[820, 380, 96, 0.12, '#5b8fff'],
+				[90, 480, 60, 0.18, '#6fa1ff'],
+				[1100, 460, 50, 0.2, '#3d7bff'],
+				[980, 110, 38, 0.4, '#5b8fff'],
+				[880, 250, 28, 0.5, '#6fa1ff'],
+				[1080, 320, 36, 0.4, '#4d83ff'],
+				[950, 480, 24, 0.55, '#6fa1ff'],
+				[740, 80, 22, 0.45, '#5b8fff'],
+				[1130, 80, 14, 0.85, '#87b3ff'],
+				[920, 360, 12, 0.8, '#5b8fff'],
+				[1050, 540, 16, 0.75, '#6fa1ff'],
+				[760, 480, 10, 0.7, '#87b3ff'],
+				[1140, 250, 12, 0.7, '#87b3ff']
+			];
+			dotSpec.forEach(([x, y, s, op, c]) => {
+				const d = document.createElement('span');
+				d.style.left = x + 'px';
+				d.style.top = y + 'px';
+				d.style.width = s + 'px';
+				d.style.height = s + 'px';
+				d.style.opacity = op;
+				d.style.background = c;
+				dotsEl.appendChild(d);
+			});
+		</script>
+	</body>
+</html>

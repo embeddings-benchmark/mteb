@@ -19,7 +19,7 @@ class MELDAudioVideoClassification(AbsTaskClassification):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2019-01-01", "2019-07-28"),  # around time of conference
-        domains=["Entertainment"],
+        domains=["Entertainment", "Spoken"],
         task_subtypes=["Emotion classification"],
         license="not specified",
         annotations_creators="human-annotated",
@@ -67,7 +67,7 @@ class MELDVideoClassification(AbsTaskClassification):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2019-01-01", "2019-07-28"),  # around time of conference
-        domains=["Entertainment"],
+        domains=["Entertainment", "Spoken"],
         task_subtypes=["Emotion classification"],
         license="not specified",
         annotations_creators="human-annotated",

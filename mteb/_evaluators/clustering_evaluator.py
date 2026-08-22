@@ -16,6 +16,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
@@ -32,6 +33,7 @@ class ClusteringEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         clustering_batch_size: int = 500,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
@@ -42,6 +44,7 @@ class ClusteringEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
+        self.timer = timer
 
     def __call__(
         self,
@@ -58,25 +61,36 @@ class ClusteringEvaluator(Evaluator):
             **encode_kwargs,
         )
 
-        logger.info("Running clustering - Encoding samples...")
-        embeddings = model.encode(
-            data_loader,
-            task_metadata=self.task_metadata,
-            hf_subset=self.hf_subset,
-            hf_split=self.hf_split,
-            **encode_kwargs,
-        )
+        with self.timer(
+            "Encoding",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running clustering - Encoding samples...",
+        ):
+            embeddings = model.encode(
+                data_loader,
+                task_metadata=self.task_metadata,
+                hf_subset=self.hf_subset,
+                hf_split=self.hf_split,
+                **encode_kwargs,
+            )
 
         labels = self.dataset[self.label_column_name]
 
-        logger.info("Running clustering - Fitting Mini-Batch K-Means...")
-        clustering_model = cluster.MiniBatchKMeans(
-            n_clusters=len(set(labels)),
-            batch_size=self.clustering_batch_size,
-            n_init="auto",
-            compute_labels=True,
-            random_state=self.seed,
-        )
-        clustering_model.fit(embeddings)
-        predicted_labels = cast("list[int]", clustering_model.labels_.tolist())
+        with self.timer(
+            "Scoring",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running clustering - Fitting Mini-Batch K-Means...",
+        ):
+            clustering_model = cluster.MiniBatchKMeans(
+                n_clusters=len(set(labels)),
+                batch_size=self.clustering_batch_size,
+                n_init="auto",
+                compute_labels=True,
+                random_state=self.seed,
+            )
+            clustering_model.fit(embeddings)
+        clustering_labels = clustering_model.labels_.tolist()
+        predicted_labels = cast("list[int]", clustering_labels)
         return predicted_labels

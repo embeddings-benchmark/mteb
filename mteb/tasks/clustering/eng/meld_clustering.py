@@ -49,7 +49,7 @@ class MELDEmotionAudioVideoClustering(AbsTaskClustering):
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=DATE,
-        domains=["Entertainment"],
+        domains=["Entertainment", "Spoken"],
         task_subtypes=["Emotion Clustering"],
         license="not specified",
         annotations_creators="human-annotated",
@@ -67,7 +67,7 @@ class MELDEmotionAudioVideoClustering(AbsTaskClustering):
         for split in self.metadata.eval_splits:
             ds = self.dataset[split]
             neutral_id = ds.features["emotion"].str2int("neutral")
-            ds = ds.filter(lambda x: x["emotion"] != neutral_id)
+            ds = ds.filter(lambda x, neutral_id=neutral_id: x["emotion"] != neutral_id)
             self.dataset[split] = ds.select_columns(["video", "audio", "emotion"])
 
 
@@ -85,7 +85,7 @@ class MELDEmotionVideoClustering(AbsTaskClustering):
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=DATE,
-        domains=["Entertainment"],
+        domains=["Entertainment", "Spoken"],
         task_subtypes=["Emotion Clustering"],
         license="not specified",
         annotations_creators="human-annotated",
@@ -103,7 +103,7 @@ class MELDEmotionVideoClustering(AbsTaskClustering):
         for split in self.metadata.eval_splits:
             ds = self.dataset[split]
             neutral_id = ds.features["emotion"].str2int("neutral")
-            ds = ds.filter(lambda x: x["emotion"] != neutral_id)
+            ds = ds.filter(lambda x, neutral_id=neutral_id: x["emotion"] != neutral_id)
             self.dataset[split] = ds.select_columns(["video", "emotion"])
 
 
@@ -120,7 +120,7 @@ class MELDSpeakerAudioVideoClustering(AbsTaskClustering):
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=DATE,
-        domains=["Entertainment"],
+        domains=["Entertainment", "Spoken"],
         task_subtypes=["Thematic clustering"],
         license="not specified",
         annotations_creators="human-annotated",
@@ -154,7 +154,7 @@ class MELDSpeakerVideoClustering(AbsTaskClustering):
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=DATE,
-        domains=["Entertainment"],
+        domains=["Entertainment", "Spoken"],
         task_subtypes=["Thematic clustering"],
         license="not specified",
         annotations_creators="human-annotated",

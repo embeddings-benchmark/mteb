@@ -1,7 +1,7 @@
 {
     "test": {
         "num_samples": 3591,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": null,
         "image_statistics": null,
         "audio_statistics": {
@@ -44,7 +44,7 @@
     },
     "train": {
         "num_samples": 1855,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": null,
         "image_statistics": null,
         "audio_statistics": {

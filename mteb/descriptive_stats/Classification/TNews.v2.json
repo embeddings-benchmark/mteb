@@ -1,7 +1,7 @@
 {
     "validation": {
         "num_samples": 9579,
-        "number_texts_intersect_with_train": 738,
+        "samples_in_train": 738,
         "text_statistics": {
             "total_text_length": 212648,
             "min_text_length": 4,
@@ -66,7 +66,7 @@
     },
     "train": {
         "num_samples": 49540,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": {
             "total_text_length": 1098926,
             "min_text_length": 2,

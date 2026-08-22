@@ -22,7 +22,7 @@ class EgoSchemaVideoCentricQA(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2023-08-17", "2023-08-17"),
-        domains=["Web"],
+        domains=["Egocentric", "Web"],
         task_subtypes=["Question answering"],
         license="cc-by-4.0",
         annotations_creators="human-annotated",

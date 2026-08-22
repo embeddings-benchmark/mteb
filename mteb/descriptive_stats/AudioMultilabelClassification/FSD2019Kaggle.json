@@ -1,7 +1,7 @@
 {
     "test": {
         "num_samples": 8962,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": null,
         "image_statistics": null,
         "audio_statistics": {
@@ -266,7 +266,7 @@
         "hf_subset_descriptive_stats": {
             "curated": {
                 "num_samples": 4481,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {
@@ -531,7 +531,7 @@
             },
             "noisy": {
                 "num_samples": 4481,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {
@@ -798,7 +798,7 @@
     },
     "train": {
         "num_samples": 24785,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": null,
         "image_statistics": null,
         "audio_statistics": {
@@ -1063,7 +1063,7 @@
         "hf_subset_descriptive_stats": {
             "curated": {
                 "num_samples": 4970,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {
@@ -1328,7 +1328,7 @@
             },
             "noisy": {
                 "num_samples": 19815,
-                "number_texts_intersect_with_train": null,
+                "samples_in_train": null,
                 "text_statistics": null,
                 "image_statistics": null,
                 "audio_statistics": {

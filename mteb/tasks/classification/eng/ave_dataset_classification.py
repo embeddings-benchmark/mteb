@@ -19,7 +19,7 @@ class AVEDatasetClassification(AbsTaskClassification):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2018-01-01", "2018-09-01"),  # some time before conference
-        domains=["Web", "AudioScene"],
+        domains=["AudioScene", "Web"],
         task_subtypes=["Environment Sound Classification"],
         license="not specified",
         annotations_creators="human-annotated",
@@ -60,7 +60,7 @@ class AVEDatasetVideoClassification(AbsTaskClassification):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2018-01-01", "2018-09-01"),
-        domains=["Web", "AudioScene"],
+        domains=["AudioScene", "Web"],
         task_subtypes=["Environment Sound Classification"],
         license="not specified",
         annotations_creators="human-annotated",

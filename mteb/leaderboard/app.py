@@ -7,7 +7,7 @@ import logging
 import tempfile
 import time
 import warnings
-from typing import TYPE_CHECKING, Literal, get_args
+from typing import Literal, get_args
 from urllib.parse import urlencode
 
 import cachetools
@@ -17,8 +17,12 @@ import polars as pl
 
 import mteb
 from mteb.benchmarks._create_table import _is_zero_shot_cached
-from mteb.benchmarks._leaderboard_menu import GP_BENCHMARK_ENTRIES, R_BENCHMARK_ENTRIES
-from mteb.benchmarks.benchmark import RtebBenchmark
+from mteb.benchmarks._leaderboard_menu import (
+    GP_BENCHMARK_ENTRIES,
+    R_BENCHMARK_ENTRIES,
+    MenuEntry,
+)
+from mteb.benchmarks.benchmark import Benchmark, RtebBenchmark
 from mteb.cache import ResultCache
 from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.leaderboard.benchmark_selector import (
@@ -40,10 +44,11 @@ from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 from mteb.models.model_meta import MODEL_TYPES
 from mteb.results.benchmark_results import BenchmarkResults
 
-if TYPE_CHECKING:
-    from pathlib import Path
-
 logger = logging.getLogger(__name__)
+
+# Shared default cache, constructed at import time exactly as the previous
+# `cache: ResultCache = ResultCache()` default argument was.
+_DEFAULT_CACHE = ResultCache()
 event_logger = EventLogger()
 
 
@@ -293,11 +298,7 @@ def _cache_on_benchmark_select(benchmark_name, all_benchmark_results):
 
 @cachetools.cached(
     cache={},
-    key=lambda benchmark_name,
-    type_select,
-    domain_select,
-    lang_select,
-    modality_select: (
+    key=lambda benchmark_name, type_select, domain_select, lang_select, modality_select: (
         hash(
             (
                 hash(benchmark_name),
@@ -338,11 +339,6 @@ def _cache_update_task_list(
     logger.debug(f"update_task_list callback: {elapsed}s")
 
     return benchmark_tasks, tasks_to_keep
-
-
-def _leaderboard_parquet_path(cache: ResultCache) -> Path:
-    """Path to the local per-benchmark leaderboard cache (single parquet file)."""
-    return cache.cache_path / "leaderboard" / "benchmark_results.parquet"
 
 
 @functools.lru_cache(maxsize=256)
@@ -424,7 +420,7 @@ def on_page_load(request: gr.Request):
 
 
 def get_leaderboard_app(  # noqa: PLR0914
-    cache: ResultCache = ResultCache(),
+    cache: ResultCache = _DEFAULT_CACHE,
     rebuild: bool = False,
     cache_repo_id: str = "mteb/results",
 ) -> gr.Blocks:
@@ -462,9 +458,22 @@ def get_leaderboard_app(  # noqa: PLR0914
 
     logger.info("Step 1/6: Fetching benchmarks...")
     bench_start = time.time()
-    benchmarks = sorted(
-        mteb.get_benchmarks(display_on_leaderboard=True), key=lambda x: x.name
-    )
+
+    seen: set[str] = set()
+    benchmarks: list[Benchmark] = []
+    pending: list[Benchmark | MenuEntry] = [
+        *GP_BENCHMARK_ENTRIES,
+        *R_BENCHMARK_ENTRIES,
+    ]
+    while pending:
+        entry = pending.pop()
+        if isinstance(entry, Benchmark):
+            if entry.name not in seen:
+                seen.add(entry.name)
+                benchmarks.append(entry)
+        else:
+            pending.extend(entry.benchmarks)
+    benchmarks.sort(key=lambda x: x.name)
     bench_time = time.time() - bench_start
     logger.info(
         f"Step 1/6 complete: Fetched {len(benchmarks)} benchmarks in {bench_time:.2f}s"
@@ -472,7 +481,7 @@ def get_leaderboard_app(  # noqa: PLR0914
 
     logger.info("Step 2/6: Loading benchmark results...")
     load_start = time.time()
-    parquet_path = _leaderboard_parquet_path(cache)
+    parquet_path = cache.leaderboard_parquet_path
     loaded: dict[str, pl.DataFrame] | None = None
     use_cache = not rebuild
 
@@ -582,9 +591,7 @@ def get_leaderboard_app(  # noqa: PLR0914
 
     logger.info("Step 5/6: Creating Gradio components...")
     component_start = time.time()
-    default_languages = sorted(
-        default_pl_df["language"].explode().drop_nulls().unique().to_list()
-    )
+    default_languages = sorted(_benchmark_full_languages(default_benchmark.name))
     default_task_types = sorted(
         {
             _TASKS_REGISTRY[t].metadata.type
@@ -979,7 +986,8 @@ def get_leaderboard_app(  # noqa: PLR0914
                 "desc",
             )
             sizes = {
-                n: _estimate_payload_size(o) for n, o in zip(output_names, outputs)
+                n: _estimate_payload_size(o)
+                for n, o in zip(output_names, outputs, strict=True)
             }
             total_size = sum(s for s in sizes.values() if s > 0)
             t9 = time.time()
@@ -1088,15 +1096,7 @@ def get_leaderboard_app(  # noqa: PLR0914
 
         @cachetools.cached(
             cache={},
-            key=lambda scores,
-            tasks,
-            availability,
-            compatibility,
-            instructions,
-            max_model_size,
-            zero_shot,
-            model_type_select,
-            request=None: (
+            key=lambda scores, tasks, availability, compatibility, instructions, max_model_size, zero_shot, model_type_select, request=None: (
                 hash(
                     (
                         id(scores),

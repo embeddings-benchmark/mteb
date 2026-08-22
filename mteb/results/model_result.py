@@ -248,7 +248,8 @@ class ModelResult(BaseModel):
                         )
                 except Exception as e:
                     warnings.warn(
-                        f"Couldn't get scores for {res.task_name} due to {e}."
+                        f"Couldn't get scores for {res.task_name} due to {e}.",
+                        stacklevel=2,
                     )
             return scores
         if format == "long":
@@ -281,7 +282,8 @@ class ModelResult(BaseModel):
                     entries.append(entry)
                 except Exception as e:
                     warnings.warn(
-                        f"Couldn't get scores for {task_res.task_name} due to {e}."
+                        f"Couldn't get scores for {task_res.task_name} due to {e}.",
+                        stacklevel=2,
                     )
             return entries
 
@@ -346,7 +348,7 @@ class ModelResult(BaseModel):
         if not scores_data:
             msg = "No scores data available. Returning empty DataFrame."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
             return pd.DataFrame()
 
         # Create DataFrame
@@ -380,7 +382,7 @@ class ModelResult(BaseModel):
 
     @property
     def languages(self) -> list[str]:
-        """Get all languages in the model results.
+        """All languages in the model results.
 
         Returns:
             A list of languages in the model results.
@@ -392,7 +394,7 @@ class ModelResult(BaseModel):
 
     @property
     def domains(self) -> list[str]:
-        """Get all domains in the model results.
+        """All domains in the model results.
 
         Returns:
             A list of domains in the model results.
@@ -405,7 +407,7 @@ class ModelResult(BaseModel):
 
     @property
     def task_types(self) -> list[str]:
-        """Get all task types in the model results.
+        """All task types in the model results.
 
         Returns:
             A list of task types in the model results.
@@ -414,7 +416,7 @@ class ModelResult(BaseModel):
 
     @property
     def task_names(self) -> list[str]:
-        """Get all task names in the model results.
+        """All task names in the model results.
 
         Returns:
             A list of task names in the model results.
@@ -423,7 +425,7 @@ class ModelResult(BaseModel):
 
     @property
     def modalities(self) -> list[Modalities]:
-        """Get all modalities in the task results.
+        """All modalities in the task results.
 
         Returns:
             A list of modalities in the task results.
@@ -481,7 +483,9 @@ class ModelResult(BaseModel):
             benchmarks = [benchmark] if isinstance(benchmark, Benchmark) else benchmark
             for cur_benchmark in benchmarks:
                 try:
-                    benchmark_score = cur_benchmark._get_model_score(self)["Mean(Task)"]
+                    benchmark_score = cur_benchmark._get_model_score(self).get(
+                        "Mean(Task)"
+                    )
                 except ValueError:
                     if raise_error:
                         raise
@@ -517,7 +521,7 @@ class ModelResult(BaseModel):
 
             if benchmark_results is not None and benchmarks is not None:
                 for cur_benchmark, benchmark_result in zip(
-                    benchmarks, benchmark_results
+                    benchmarks, benchmark_results, strict=True
                 ):
                     if cur_benchmark.name is None:
                         raise ValueError(
