@@ -114,16 +114,22 @@ def _string_to_vector(text: str | None, size: int) -> NDArray[np.floating]:
     return _bytes_to_vector(_text_to_bytes(text), size)
 
 
-def _image_to_vector(image: Image.Image, size: int) -> NDArray[np.floating]:
+def _image_to_vector(
+    image: Image.Image | None, size: int
+) -> NDArray[np.floating] | None:
     """Generate a deterministic random vector based on image content.
 
     Args:
-        image: PIL Image object.
+        image: PIL Image object, or ``None`` when this row omits the image
+            modality.
         size: Size of the output vector.
 
     Returns:
-        A numpy array of shape (size,) containing the random vector.
+        A numpy array of shape (size,) containing the random vector, or ``None``
+        when the image is absent.
     """
+    if image is None:
+        return None
     return _bytes_to_vector(_image_to_bytes(image), size)
 
 
@@ -222,7 +228,7 @@ def _batch_to_embeddings(
     embeddings = []
     for batch in tqdm(inputs, desc="Encoding batches", unit="batch"):
         text_embeddings = []
-        image_embeddings = []
+        image_embeddings: list[NDArray[np.floating] | None] = []
         audio_embeddings = []
         video_embeddings = []
 
@@ -265,7 +271,7 @@ def _batch_to_embeddings(
                 audio_embeddings,
                 video_embeddings,
             ]:
-                if i < len(embeddings_list):
+                if i < len(embeddings_list) and embeddings_list[i] is not None:
                     combined_embedding += embeddings_list[i]
                     count += 1
             if count > 0:

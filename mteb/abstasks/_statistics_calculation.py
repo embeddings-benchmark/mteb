@@ -428,6 +428,23 @@ def calculate_single_input_modality_statistics(
 ) -> SingleInputModalityStatistics:
     """Compute per-modality statistics for a single-input dataset."""
     _hashes = hashes or {}
+    # Mixed text-image datasets can contain text-only rows. A missing image
+    # does not describe the image modality and must not enter its statistics.
+    images = col_inputs.get("image")
+    image_hashes = _hashes.get("image")
+    if images is not None:
+        if image_hashes is not None and len(image_hashes) != len(images):
+            raise ValueError(
+                "Expected one image hash per input, got "
+                f"{len(image_hashes)} hashes for {len(images)} inputs"
+            )
+        present_indices = [
+            index for index, image in enumerate(images) if image is not None
+        ]
+        images = [images[index] for index in present_indices]
+        if image_hashes is not None:
+            image_hashes = [image_hashes[index] for index in present_indices]
+
     return SingleInputModalityStatistics(
         text_statistics=calculate_text_statistics(
             col_inputs["text"], hashes=_hashes.get("text")
@@ -435,9 +452,9 @@ def calculate_single_input_modality_statistics(
         if "text" in col_inputs
         else None,
         image_statistics=calculate_image_statistics(
-            col_inputs["image"], hashes=_hashes.get("image"), max_workers=max_workers
+            images, hashes=image_hashes, max_workers=max_workers
         )
-        if "image" in col_inputs
+        if images
         else None,
         audio_statistics=calculate_audio_statistics(
             col_inputs["audio"], hashes=_hashes.get("audio"), max_workers=max_workers
