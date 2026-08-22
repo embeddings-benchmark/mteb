@@ -675,6 +675,7 @@ NIFE = "NIFE"
 thw = "thw"
 ist = "ist" # spelling error in prompt for harrier-oss-v1
 shw = "SHW"
+SME = "SME"
 SHS = "SHS"  # SecondHandSongs / SHS100K dataset
 shs = "shs"
 nd = "nd"
