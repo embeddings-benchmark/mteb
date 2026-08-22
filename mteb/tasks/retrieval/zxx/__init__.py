@@ -6,6 +6,7 @@ from .stanford_i2v_retrieval import (
     StanfordI2VRetrieval,
     StanfordI2VVisualRetrieval,
 )
+from .ucf101_i2v_retrieval import UCF101I2VRetrieval
 from .urban_sound8k_retrieval import UrbanSound8KA2TRetrieval, UrbanSound8KT2ARetrieval
 from .vim_sketch_retrieval import VimSketchA2ARetrieval
 from .vsc2022_retrieval import VSC2022Retrieval
@@ -21,6 +22,7 @@ __all__ = [
     "SoundDescsT2ARetrieval",
     "StanfordI2VRetrieval",
     "StanfordI2VVisualRetrieval",
+    "UCF101I2VRetrieval",
     "UrbanSound8KA2TRetrieval",
     "UrbanSound8KT2ARetrieval",
     "VSC2022Retrieval",
