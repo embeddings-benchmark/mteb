@@ -245,6 +245,12 @@ from .memotion_t2i_retrieval import MemotionT2IRetrieval
 from .met_i2i_retrieval import METI2IRetrieval
 from .miao_retrieval import MIAOA2IRetrieval, MIAOI2ARetrieval
 from .ml_questions import MLQuestionsRetrieval
+from .mm_bright_retrieval import (
+    MMBrightIT2IRetrieval,
+    MMBrightIT2ITRetrieval,
+    MMBrightIT2TRetrieval,
+    MMBrightT2TRetrieval,
+)
 from .mm_long_bench_doc_retrieval import MMLongBenchDocRetrieval
 from .mmdocir_t2i_retrieval import MMDocIRT2IRetrieval
 from .mmdocir_t2it_retrieval import MMDocIRT2ITRetrieval
@@ -693,6 +699,10 @@ __all__ = [
     "MIAOA2IRetrieval",
     "MIAOI2ARetrieval",
     "MLQuestionsRetrieval",
+    "MMBrightIT2IRetrieval",
+    "MMBrightIT2ITRetrieval",
+    "MMBrightIT2TRetrieval",
+    "MMBrightT2TRetrieval",
     "MMDocIRT2IRetrieval",
     "MMDocIRT2ITRetrieval",
     "MMEditAT2ARetrieval",

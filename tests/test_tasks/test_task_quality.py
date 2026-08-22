@@ -191,6 +191,9 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MKQARetrieval",
         "MLQuestions",
         "MMDocIRT2ITRetrieval",
+        "MMBrightIT2ITRetrieval",  # source contains empty text
+        "MMBrightIT2TRetrieval",
+        "MMBrightT2TRetrieval",
         "MMVUVideoCentricQA",
         "MMarcoRetrieval",
         "MSMARCO",
@@ -518,6 +521,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MLSUMClusteringP2P",
         "MLSUMClusteringS2S",
         "MLSUMClusteringS2S.v2",
+        "MMBrightIT2IRetrieval",  # source contains duplicate passages/queries
+        "MMBrightIT2ITRetrieval",
+        "MMBrightIT2TRetrieval",
+        "MMBrightT2TRetrieval",
         "MMVUVideoCentricQA",
         "MMarcoReranking",
         "MSMARCOv2",
@@ -820,6 +827,9 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "LLaVAIT2TRetrieval",
         "MMLongBenchDocRetrieval",  # official corpus contains repeated rendered pages; preserve IDs to match qrels
         "MomentSeekerTI2VRetrieval",
+        "MMBrightIT2IRetrieval",  # source images are intentionally reused
+        "MMBrightIT2ITRetrieval",
+        "MMBrightIT2TRetrieval",
         "OVENIT2ITRetrieval",
         "PatchCamelyon",  # adjacent, overlapping WSI patches are inherent to the source data
         "PatchCamelyonZeroShot",  # adjacent, overlapping WSI patches are inherent to the source data
@@ -900,9 +910,13 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FORBI2IRetrieval",  # min 1x1px query image present
         "GLDv2I2IRetrieval",  # min 7x7px document image present
         "Imagenet1k",  # min 8x10px image present
+        "MMBrightIT2IRetrieval",  # source-faithful corpus includes 1x1 images
+        "MMBrightIT2ITRetrieval",  # source-faithful corpus includes 1x1 images
+        "MMBrightIT2TRetrieval",  # missing-image queries use a 1x1 blank image
     ],
     "zero_relevant_docs": [
         "BrightRetrieval",
+        "MMBrightIT2IRetrieval",  # released missing-image queries have no image qrel
         "TwitterHjerneRetrieval",
     ],
     "impossible_unique_count": [
