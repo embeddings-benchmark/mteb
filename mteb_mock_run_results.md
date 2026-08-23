@@ -1,24 +1,41 @@
-# Mock Run Results — judicialmind/greenleaf-law-embed-tiny
+# MTEB Mock-Run Results for `judicialmind/greenleaf-law-embed-tiny`
 
-Model loads and encodes correctly through the custom `GreenLeafEmbedWrapper`.
+| Task | Modality | Pass | Reason |
+| --- | --- | --- | --- |
+| MockMultilingualBitextMiningTask | text | ✓ | - |
+| MockMultilingualParallelBitextMiningTask | text | ✓ | - |
+| MockMultilingualClassificationTask | text | ✓ | - |
+| MockMultilingualClusteringTask | text | ✓ | - |
+| MockMultilingualClusteringFastTask | text | ✓ | - |
+| MockMultilingualPairClassificationTask | text | ✓ | - |
+| MockMultilingualRerankingTask | text | ✓ | - |
+| MockMultilingualRetrievalTask | text | ✓ | - |
+| MockMultilingualSTSTask | text | ✓ | - |
+| MockMultilingualMultilabelClassification | text | ✓ | - |
+| MockMultilingualSummarizationTask | text | ✓ | - |
+| MockMultilingualInstructionRetrieval | text | ✓ | - |
+| MockMultilingualInstructionReranking | text | ✓ | - |
+| MockBitextMiningTask | text | ✓ | - |
+| MockClassificationTask | text | ✓ | - |
+| MockRegressionTask | text | ✓ | - |
+| MockClusteringTask | text | ✓ | - |
+| LegacyMockClusteringFastTask | text | ✓ | - |
+| MockPairClassificationTask | text | ✓ | - |
+| MockRerankingTask | text | ✓ | - |
+| MockRetrievalTask | text | ✓ | - |
+| MockSTSTask | text | ✓ | - |
+| MockMultilabelClassification | text | ✓ | - |
+| MockSummarizationTask | text | ✓ | - |
+| MockInstructionRetrieval | text | ✓ | - |
+| MockInstructionReranking | text | ✓ | - |
+| MockRetrievalDialogTask | text | ✓ | - |
+| MockTextZeroShotClassification | text | ✓ | - |
 
-```
-Name: judicialmind/greenleaf-law-embed-tiny
-Revision: 7939f1bf2945e06f75191daa80feee191af38d13
-Parameters: 595,776,512
-Embed dim: 1024
-Max tokens: 32768
-License: apache-2.0
-Open weights: True
-Framework: Sentence Transformers, PyTorch, safetensors
-```
+## Summary by Modality
 
-Verified:
-- ModelMeta loads correctly
-- `GreenLeafEmbedWrapper` wraps SentenceTransformer with `trust_remote_code=True`
-- `mteb.evaluate()` runs successfully on MTEB(Law, v1) tasks
-- AILAStatutes: 58.79 (matches expected score)
-- All 8 MTEB(Law, v1) tasks complete without OOM on a single GH200 (97GB)
-- Embedding shape: (batch, 1024), float32
-- Mean pooling, cosine similarity
-- No instruction prefix required
+| Pass      | Modality | Failures |
+| --------- | -------- | -------- |
+| ✓ (28/28) | text     |  |
+| skipped   | image    |  |
+| skipped   | audio    |  |
+| skipped   | video    |  |
