@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
-"""Build the native MovingFashion video-to-image retrieval benchmark for MTEB.
+"""Build the bidirectional MovingFashion image/video retrieval tasks for MTEB.
 
 The official archive contains train and test annotations plus the corresponding
-Instagram videos and Net-A-Porter shop images. MTEB uses every available query
-from the official test split: videos are queries, shop images form the corpus,
-and every usable annotated video/image association is a binary relevance
-judgment. Repeated media paths are collapsed by path, preserving the source's
-genuine multi-positive cases.
-
-The published Hugging Face dataset retains the source benchmark's video-to-shop
-image orientation.
+Instagram videos and Net-A-Porter shop images. MTEB uses every usable association
+from the official test split in both video-to-image and image-to-video directions.
+Repeated media paths are collapsed by path, preserving the source's genuine
+multi-positive cases.
 
 Examples:
   # Download or resume the official source archive.
@@ -24,10 +20,13 @@ Examples:
   uv run python scripts/data/moving_fashion_retrieval/create_data.py \
       --archive /path/to/movingfashion.zip --save-to-disk
 
-  # Publish using the currently authenticated Hugging Face account.
+  # Publish both directions using the authenticated Hugging Face account.
   uv run python scripts/data/moving_fashion_retrieval/create_data.py \
-      --archive /path/to/movingfashion.zip --push \
-      --repo-id pranitchawla/MovingFashion
+      --archive /path/to/movingfashion.zip --push --direction both
+
+  # Publish only the reverse image-to-video task.
+  uv run python scripts/data/moving_fashion_retrieval/create_data.py \
+      --archive /path/to/movingfashion.zip --push --direction i2v
 """
 
 from __future__ import annotations
@@ -44,7 +43,7 @@ from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
 from pathlib import Path, PurePosixPath
-from typing import Any
+from typing import Any, Literal
 
 from datasets import Dataset, DatasetDict, Image, Value, Video
 from huggingface_hub import HfApi, create_repo, get_token
@@ -59,6 +58,8 @@ _LICENSE = "cc-by-nc-sa-4.0"
 _EXPECTED_ARCHIVE_SHA256 = (
     "20ae89a67a58d3dfc2304c2533d5a5c684eb6888aec9a7d7d3eda22b0a81f5f4"
 )
+
+Direction = Literal["v2i", "i2v"]
 
 
 @dataclass(frozen=True)
@@ -540,23 +541,29 @@ def _validate_test_media(
         )
 
 
-def _build_datasets(
-    test_associations: list[Association],
-    media_dir: Path,
-    videos: list[str],
-    images: list[str],
-) -> tuple[Dataset, Dataset, Dataset]:
+def _available_pairs(
+    test_associations: list[Association], videos: list[str], images: list[str]
+) -> list[tuple[str, str]]:
     video_ids = set(videos)
     image_ids = set(images)
-    pairs = sorted(
+    return sorted(
         {
             (row.video_path, row.image_path)
             for row in test_associations
             if row.video_path in video_ids and row.image_path in image_ids
         }
     )
-    video_ids = sorted(video_ids)
-    image_ids = sorted(image_ids)
+
+
+def _build_v2i_datasets(
+    test_associations: list[Association],
+    media_dir: Path,
+    videos: list[str],
+    images: list[str],
+) -> tuple[Dataset, Dataset, Dataset]:
+    pairs = _available_pairs(test_associations, videos, images)
+    video_ids = sorted(videos)
+    image_ids = sorted(images)
     queries = Dataset.from_dict(
         {
             "id": video_ids,
@@ -579,35 +586,98 @@ def _build_datasets(
     return corpus, queries, qrels
 
 
+def _build_i2v_datasets(
+    test_associations: list[Association],
+    media_dir: Path,
+    videos: list[str],
+    images: list[str],
+) -> tuple[Dataset, Dataset, Dataset]:
+    pairs = _available_pairs(test_associations, videos, images)
+    image_query_ids = sorted({image_path for _, image_path in pairs})
+    video_corpus_ids = sorted(videos)
+    queries = Dataset.from_dict(
+        {
+            "id": image_query_ids,
+            "image": [str(media_dir / image_id) for image_id in image_query_ids],
+        }
+    ).cast_column("image", Image())
+    corpus = Dataset.from_dict(
+        {
+            "id": video_corpus_ids,
+            "video": [str(media_dir / video_id) for video_id in video_corpus_ids],
+        }
+    ).cast_column("video", Video())
+    qrels = Dataset.from_dict(
+        {
+            "query-id": [image_path for _, image_path in pairs],
+            "corpus-id": [video_path for video_path, _ in pairs],
+            "score": [1] * len(pairs),
+        }
+    ).cast_column("score", Value("int32"))
+    return corpus, queries, qrels
+
+
 def _published_retrieval_summary(
     test_associations: list[Association], videos: list[str], images: list[str]
 ) -> dict[str, Any]:
     video_ids = set(videos)
     image_ids = set(images)
-    pairs = {
-        (row.video_path, row.image_path)
-        for row in test_associations
-        if row.video_path in video_ids and row.image_path in image_ids
-    }
+    pairs = set(_available_pairs(test_associations, videos, images))
+    videos_with_qrels = {video_path for video_path, _ in pairs}
     images_with_qrels = {image_path for _, image_path in pairs}
     return {
-        "v2i_queries": len(video_ids),
-        "v2i_corpus": len(image_ids),
-        "v2i_qrels": len(pairs),
-        "corpus_images_without_qrels": sorted(image_ids - images_with_qrels),
+        "v2i": {
+            "queries": len(video_ids),
+            "corpus": len(image_ids),
+            "qrels": len(pairs),
+            "multi_positive_queries": sum(
+                count > 1 for count in Counter(video for video, _ in pairs).values()
+            ),
+            "corpus_items_without_qrels": sorted(image_ids - images_with_qrels),
+        },
+        "i2v": {
+            "queries": len(images_with_qrels),
+            "corpus": len(video_ids),
+            "qrels": len(pairs),
+            "multi_positive_queries": sum(
+                count > 1 for count in Counter(image for _, image in pairs).values()
+            ),
+            "excluded_queries_without_qrels": sorted(image_ids - images_with_qrels),
+            "corpus_items_without_qrels": sorted(video_ids - videos_with_qrels),
+        },
     }
 
 
-def _dataset_card(summary: dict[str, Any]) -> str:
-    retrieval = summary["published_retrieval"]
+def _dataset_card(summary: dict[str, Any], direction: Direction) -> str:
+    retrieval = summary["published_retrieval"][direction]
     archive_sha256 = summary.get("archive_sha256", "not recorded")
+    if direction == "v2i":
+        pretty_name = "MovingFashion Video-to-Image Retrieval"
+        direction_tag = "video-to-image"
+        direction_name = "video-to-shop-image"
+        query_description = "video queries"
+        corpus_description = "shop images"
+        omission_description = (
+            "The missing test video query and its unusable qrel are excluded; "
+            "its available shop image remains in the corpus as a distractor."
+        )
+    else:
+        pretty_name = "MovingFashion Image-to-Video Retrieval"
+        direction_tag = "image-to-video"
+        direction_name = "shop-image-to-video"
+        query_description = "shop-image queries"
+        corpus_description = "social videos"
+        omission_description = (
+            "The shop image whose only annotated video is missing is excluded "
+            "from the query set together with its unusable qrel."
+        )
     return f"""---
 license: cc-by-nc-sa-4.0
-pretty_name: MovingFashion Retrieval
+pretty_name: {pretty_name}
 tags:
 - mteb
 - moeb
-- video-to-image
+- {direction_tag}
 - cross-modal-retrieval
 configs:
 - config_name: corpus
@@ -624,10 +694,10 @@ configs:
     path: queries/test-*
 ---
 
-# MovingFashion Retrieval
+# {pretty_name}
 
 Frozen MTEB/MOEB representation of the official MovingFashion test split for
-video-to-shop-image fashion retrieval.
+{direction_name} fashion retrieval.
 
 ## Construction
 
@@ -642,20 +712,20 @@ decodes all published test media. The source archive SHA-256 for this build is
 
 Media paths are used as IDs. Repeated paths are collapsed without discarding
 associations, so the source's multi-positive relevance structure is preserved.
-The Hub configs use the standard MTEB representation: `queries` contains video
-queries, `corpus` contains shop images, and `qrels` contains binary relevance
-judgments.
+The Hub configs use the standard MTEB representation: `queries` contains
+{query_description}, `corpus` contains {corpus_description}, and `qrels`
+contains binary relevance judgments.
 
 The official archive omits 22 train videos and one annotated test video. The
-missing test query and its unusable qrel are excluded; its available shop image
-remains in the corpus as a distractor. The construction script pins and reports
-all 23 source omissions rather than silently dropping them.
+{omission_description} The construction script pins and reports all 23 source
+omissions rather than silently dropping them.
 
 ## Evaluation contents
 
-- Video-to-image: {retrieval["v2i_queries"]} queries,
-  {retrieval["v2i_corpus"]} corpus images, and {retrieval["v2i_qrels"]} qrels.
-- Corpus images without a qrel: {len(retrieval["corpus_images_without_qrels"])}.
+- {direction_name}: {retrieval["queries"]} queries,
+  {retrieval["corpus"]} corpus items, and {retrieval["qrels"]} qrels.
+- Queries with multiple positives: {retrieval["multi_positive_queries"]}.
+- Corpus items without a qrel: {len(retrieval["corpus_items_without_qrels"])}.
 - Source difficulty labels: `0` is hard and `1` is regular. They are audited
   during construction but are not used to filter the benchmark.
 
@@ -696,9 +766,13 @@ See the [paper]({_PAPER_URL}) and [official code]({_SOURCE_REPO_URL}).
 
 
 def _save_datasets(
-    work_dir: Path, corpus: Dataset, queries: Dataset, qrels: Dataset
+    work_dir: Path,
+    direction: Direction,
+    corpus: Dataset,
+    queries: Dataset,
+    qrels: Dataset,
 ) -> None:
-    export_dir = work_dir / "mteb_export"
+    export_dir = work_dir / "mteb_export" / direction
     export_dir.mkdir(parents=True, exist_ok=True)
     DatasetDict({"test": corpus}).save_to_disk(export_dir / "corpus")
     DatasetDict({"test": queries}).save_to_disk(export_dir / "queries")
@@ -708,6 +782,7 @@ def _save_datasets(
 
 def _publish(
     repo_id: str,
+    direction: Direction,
     corpus: Dataset,
     queries: Dataset,
     qrels: Dataset,
@@ -722,25 +797,25 @@ def _publish(
     create_repo(repo_id, repo_type="dataset", token=token, exist_ok=True)
     api = HfApi(token=token)
     api.upload_file(
-        path_or_fileobj=_dataset_card(summary).encode(),
+        path_or_fileobj=_dataset_card(summary, direction).encode(),
         path_in_repo="README.md",
         repo_id=repo_id,
         repo_type="dataset",
-        commit_message="Add MovingFashion dataset card",
+        commit_message=f"Add MovingFashion {direction} dataset card",
     )
     DatasetDict({"test": corpus}).push_to_hub(
         repo_id,
         "corpus",
         token=token,
         max_shard_size="500MB",
-        commit_message="Add MovingFashion image corpus",
+        commit_message=f"Add MovingFashion {direction} corpus",
     )
     DatasetDict({"test": queries}).push_to_hub(
         repo_id,
         "queries",
         token=token,
         max_shard_size="500MB",
-        commit_message="Add MovingFashion video queries",
+        commit_message=f"Add MovingFashion {direction} queries",
     )
     DatasetDict({"test": qrels}).push_to_hub(
         repo_id,
@@ -749,7 +824,9 @@ def _publish(
         commit_message="Add MovingFashion relevance judgments",
     )
     revision = api.dataset_info(repo_id).sha
-    (work_dir / "hub_revision.txt").write_text(f"{revision}\n", encoding="utf-8")
+    (work_dir / f"hub_revision_{direction}.txt").write_text(
+        f"{revision}\n", encoding="utf-8"
+    )
     return revision
 
 
@@ -767,7 +844,17 @@ def main() -> None:
     parser.add_argument(
         "--work-dir", type=Path, default=Path("/tmp/moving_fashion_retrieval")
     )
-    parser.add_argument("--repo-id", default="pranitchawla/MovingFashion")
+    parser.add_argument(
+        "--repo-id",
+        default="pranitchawla/MovingFashion",
+        help="Hugging Face repository for video-to-image retrieval",
+    )
+    parser.add_argument(
+        "--i2v-repo-id",
+        default="pranitchawla/MovingFashionI2VRetrieval",
+        help="Hugging Face repository for image-to-video retrieval",
+    )
+    parser.add_argument("--direction", choices=("v2i", "i2v", "both"), default="both")
     parser.add_argument("--save-to-disk", action="store_true")
     parser.add_argument("--push", action="store_true")
     parser.add_argument(
@@ -800,9 +887,7 @@ def main() -> None:
     summary = _audit_annotations(
         annotations, allow_source_changes=args.allow_source_changes
     )
-    corpus: Dataset | None = None
-    queries: Dataset | None = None
-    qrels: Dataset | None = None
+    datasets_by_direction: dict[Direction, tuple[Dataset, Dataset, Dataset]] = {}
     if archive is not None and members is not None:
         summary["archive"] = _validate_archive_paths(
             members, annotations, allow_source_changes=args.allow_source_changes
@@ -833,7 +918,10 @@ def main() -> None:
         summary["published_retrieval"] = _published_retrieval_summary(
             annotations["test"][0], videos, images
         )
-        corpus, queries, qrels = _build_datasets(
+        datasets_by_direction["v2i"] = _build_v2i_datasets(
+            annotations["test"][0], media_dir, videos, images
+        )
+        datasets_by_direction["i2v"] = _build_i2v_datasets(
             annotations["test"][0], media_dir, videos, images
         )
 
@@ -845,13 +933,25 @@ def main() -> None:
     )
     print(f"Wrote audit summary to {summary_path}")
 
+    directions: tuple[Direction, ...]
+    if args.direction == "both":
+        directions = ("v2i", "i2v")
+    else:
+        directions = (args.direction,)
+    repo_ids = {"v2i": args.repo_id, "i2v": args.i2v_repo_id}
+
     if args.save_to_disk:
-        assert corpus is not None and queries is not None and qrels is not None
-        _save_datasets(work_dir, corpus, queries, qrels)
+        for direction in directions:
+            corpus, queries, qrels = datasets_by_direction[direction]
+            _save_datasets(work_dir, direction, corpus, queries, qrels)
     if args.push:
-        assert corpus is not None and queries is not None and qrels is not None
-        revision = _publish(args.repo_id, corpus, queries, qrels, summary, work_dir)
-        print(f"Pushed {args.repo_id} at revision {revision}")
+        for direction in directions:
+            corpus, queries, qrels = datasets_by_direction[direction]
+            repo_id = repo_ids[direction]
+            revision = _publish(
+                repo_id, direction, corpus, queries, qrels, summary, work_dir
+            )
+            print(f"Pushed {repo_id} at revision {revision}")
 
 
 if __name__ == "__main__":
