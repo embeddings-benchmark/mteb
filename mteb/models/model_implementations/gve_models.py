@@ -123,7 +123,7 @@ class GVEWrapper(AbsEncoder):
             videos = batch.get("video", [None] * batch_size)
 
             conversations = []
-            for text, image, video in zip(texts, images, videos):
+            for text, image, video in zip(texts, images, videos, strict=True):
                 content = []
                 if video is not None:
                     content.append({"type": "video"})
