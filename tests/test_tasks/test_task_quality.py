@@ -283,6 +283,7 @@ KNOWN_ISSUES = {
     # Add new datasets below with an explanation of why it is added
     # "name" # explanation
     "HumanConceptsClustering",  # single-word concept items (e.g. "Bat", "Cat") are intentionally short by design
+    "MMarcoRetrievalMultilingual",  # CJK languages (ja, zh) have short queries and some translations (id, vi) are truncated in the original source dataset
 }
 
 
