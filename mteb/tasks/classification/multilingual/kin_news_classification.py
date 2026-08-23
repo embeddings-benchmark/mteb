@@ -30,7 +30,6 @@ class KinNewsClassification(AbsTaskClassification):
         category="t2c",
         modalities=["text"],
         eval_splits=["test"],
-        # Use HF builder config names as keys so MultiSubsetLoader loads correctly
         eval_langs={
             "kinnews_cleaned": ["kin-Latn"],  # Kinyarwanda
             "kirnews_cleaned": ["run-Latn"],  # Kirundi (ISO-639-3: run)
@@ -64,8 +63,6 @@ class KinNewsClassification(AbsTaskClassification):
                 ds = self.dataset[lang][split]
 
                 def transform_example(example):
-                    # Concatenate title and content for the text field
-                    # text = f"{example['title']} {example['content']}"
                     text = example["text"]
                     return {"text": text, "label": example["label"]}
 
