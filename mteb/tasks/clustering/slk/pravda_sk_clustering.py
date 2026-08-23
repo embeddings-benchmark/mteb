@@ -45,7 +45,7 @@ class PravdaSKTagClustering(AbsTaskClustering):
 
             sentences = [
                 f"{title} {summary}".strip()
-                for title, summary in zip(titles, summaries)
+                for title, summary in zip(titles, summaries, strict=False)
             ]
 
             labels = self.dataset[split]["assigned_label"]
@@ -94,7 +94,7 @@ class PravdaSKURLClustering(AbsTaskClustering):
 
             sentences = [
                 f"{title} {summary}".strip()
-                for title, summary in zip(titles, summaries)
+                for title, summary in zip(titles, summaries, strict=False)
             ]
 
             labels = self.dataset[split]["url_category"]
