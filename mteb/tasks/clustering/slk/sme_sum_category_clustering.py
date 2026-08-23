@@ -58,7 +58,9 @@ class SMESumCategoryClustering(AbsTaskClustering):
 
             sentences = []
             labels = []
-            for title, introduction, category in zip(titles, introductions, categories):
+            for title, introduction, category in zip(
+                titles, introductions, categories, strict=False
+            ):
                 if category is not None and category != "none":
                     sentences.append(f"{title} {introduction}".strip())
                     labels.append(category)
