@@ -89,11 +89,13 @@ class BGEReranker(RerankerWrapper):
                 raise ValueError(
                     f"Expected {len(queries)} instructions, got {len(instructions)}"
                 )
-            queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
+            queries = [
+                f"{q} {i}".strip() for i, q in zip(instructions, queries, strict=True)
+            ]
 
         if len(queries) != len(passages):
             raise ValueError(f"Expected {len(queries)} passages, got {len(passages)}")
-        query_passage_tuples = list(zip(queries, passages))
+        query_passage_tuples = list(zip(queries, passages, strict=True))
         scores = self.model.compute_score(query_passage_tuples, normalize=True)
         if len(scores) != len(queries):
             raise ValueError(f"Expected {len(queries)} scores, got {len(scores)}")
@@ -143,13 +145,15 @@ class JinaReranker(RerankerWrapper):
         passages = [text for batch in inputs2 for text in batch["text"]]
 
         if instructions is not None and instructions[0] is not None:
-            queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
+            queries = [
+                f"{q} {i}".strip() for i, q in zip(instructions, queries, strict=True)
+            ]
 
         if self.first_print:
             logger.info(f"Using {queries[0]}")
             self.first_print = False
 
-        sentence_pairs = list(zip(queries, passages))
+        sentence_pairs = list(zip(queries, passages, strict=True))
         scores = self.model.predict(sentence_pairs, convert_to_tensor=True)
         return scores
 

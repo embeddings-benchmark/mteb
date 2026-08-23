@@ -5,7 +5,6 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import torch
-from datasets import Dataset
 
 from mteb._create_dataloaders import (
     create_dataloader,
@@ -315,6 +314,7 @@ class SearchEncoderWrapper:
             for sub_corpus_id, score in zip(
                 cos_scores_top_k_idx[query_itr],
                 cos_scores_top_k_values[query_itr],
+                strict=True,
             ):
                 corpus_id = sub_corpus_ids[sub_corpus_id]
                 if len(result_heaps[query_id]) < top_k:
@@ -428,6 +428,7 @@ class SearchEncoderWrapper:
         for doc_idx, score in zip(
             scores_top_k_idx[0].tolist(),
             scores_top_k_values[0].tolist(),
+            strict=True,
         ):
             corpus_id = ranked_ids[doc_idx]
             heapq.heappush(result_heaps[query_id], (score, corpus_id))
@@ -540,8 +541,8 @@ class SearchCrossEncoderWrapper:
         query_id_to_idx = {row: i for i, row in enumerate(queries["id"])}
         doc_id_to_idx = {doc: idx for idx, doc in enumerate(self.task_corpus["id"])}
 
-        total_queries = []
-        total_docs = []
+        query_indices: list[int] = []
+        doc_indices: list[int] = []
         doc_pairs_ids: list[tuple[str, str]] = []
         for query_id, corpus_ids in top_ranked.items():
             if query_id not in top_ranked:
@@ -552,18 +553,24 @@ class SearchCrossEncoderWrapper:
             query_idx = query_id_to_idx[query_id]
             for corpus_id in corpus_ids:
                 doc_pairs_ids.append((query_id, corpus_id))
-                total_queries.append(queries[query_idx])
-                total_docs.append(self.task_corpus[doc_id_to_idx[corpus_id]])
+                query_indices.append(query_idx)
+                doc_indices.append(doc_id_to_idx[corpus_id])
 
+        # select() builds an indices-mapping view over the existing datasets
+        # instead of materializing one copied (and, for images, decoded) row per
+        # pair, which for image corpora multiplies memory by top_k x decode size.
         queries_loader = create_dataloader(
-            Dataset.from_list(total_queries),
+            queries.select(query_indices),
             task_metadata=task_metadata,
-            prompt_type=PromptType.document,
+            # PromptType.query, matching SearchEncoderWrapper: on mixed-modality
+            # tasks the query rows carry the query modality, and a
+            # document prompt type would prepare them with the corpus modality.
+            prompt_type=PromptType.query,
             num_proc=num_proc,
             **encode_kwargs,
         )
         corpus_loader = create_dataloader(
-            Dataset.from_list(total_docs),
+            self.task_corpus.select(doc_indices),
             task_metadata=task_metadata,
             prompt_type=PromptType.document,
             num_proc=num_proc,
@@ -578,7 +585,9 @@ class SearchCrossEncoderWrapper:
         )
 
         results: RetrievalOutputType = {qid: {} for qid in queries["id"]}
-        for (query_id, corpus_id), score in zip(doc_pairs_ids, predictions):
+        for (query_id, corpus_id), score in zip(
+            doc_pairs_ids, predictions, strict=True
+        ):
             results[query_id][corpus_id] = float(score)
 
         return results

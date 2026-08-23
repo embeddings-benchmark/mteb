@@ -223,7 +223,9 @@ class VLM2VecWrapper(AbsEncoder):
                     input_ids, pixel_values, image_sizes = [], [], []
                     batch_text = batch["text"]
                     batch_image = batch["image"]
-                    for item_image, item_text in zip(batch_image, batch_text):
+                    for item_image, item_text in zip(
+                        batch_image, batch_text, strict=True
+                    ):
                         inputs = self.processor(
                             f"<|image_1|> Represent the given image with the following question: {item_text}",
                             item_image,

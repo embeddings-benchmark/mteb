@@ -27,16 +27,22 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{OndrejowaSlovakSum24,
+@inproceedings{ondrejova-suppa-2024-slovaksum,
+  address = {Torino, Italia},
   author = {Ondrejová, Viktória and Šuppa, Marek},
-  booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation},
-  date = {2024},
+  booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024)},
+  editor = {Calzolari, Nicoletta and Kan, Min-Yen and Hoste, Veronique and Lenci, Alessandro and Sakti, Sakriani and Xue, Nianwen},
+  month = may,
+  pages = {14916--14922},
+  publisher = {ELRA and ICCL},
   title = {SlovakSum: A Large Scale Slovak Summarization Dataset},
+  url = {https://aclanthology.org/2024.lrec-main.1298/},
+  year = {2024},
 }
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, **kwargs) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}

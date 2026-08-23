@@ -6,7 +6,7 @@ from datasets import Dataset
 
 import mteb
 from mteb import HybridSearch
-from tests.mock_tasks import MockRetrievalTask
+from mteb.mocks.mock_tasks import MockRetrievalTask
 
 
 def test_hybrid_search_init_and_meta():

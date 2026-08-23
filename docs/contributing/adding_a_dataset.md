@@ -27,6 +27,7 @@ from datasets import load_dataset
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.classification import AbsTaskClassification
 
+
 class MyNewTask(AbsTaskClassification):
     # metadata contains information such as title, description, metrics etc.
     metadata = TaskMetadata(...)
@@ -40,7 +41,7 @@ class MyNewTask(AbsTaskClassification):
         self.dataset = load_dataset(
             **self.metadata.dataset,
         )
-        self.dataset_transform() # optional processing
+        self.dataset_transform()  # optional processing
         self.data_loaded = True
 
     # dataset transform, which allow you to process the dataset
@@ -94,7 +95,7 @@ Once we have decided on task, we can implement them as follows:
                 "path": "mteb/poem_sentiment",
                 "revision": "9fdc57b89ccc09a8d9256f376112d626878e51a7",
             },
-            prompt="Classify poem verses as positive or negative"
+            prompt="Classify poem verses as positive or negative",
         )
 
         label_column_name = "label"
@@ -114,7 +115,7 @@ Once we have decided on task, we can implement them as follows:
     task = MyClassificationtask()
     task.load_data()
 
-    print(task.dataset["test"][0]) # check one of the samples:
+    print(task.dataset["test"][0])  # check one of the samples:
     # {'id': 1, 'text': 'shall yet be glad for him, and he shall bless', 'label': 1}
 
     # ensure that we can evaluate the model on the task
@@ -137,6 +138,7 @@ Once we have decided on task, we can implement them as follows:
     ```python
     import mteb
     from mteb.abstasks import AbsTaskClustering
+
 
     class MyClusteringTask(AbsTaskClustering):
         metadata = mteb.TaskMetadata(  # minimal metadata
@@ -225,6 +227,73 @@ Once we have decided on task, we can implement them as follows:
     # 0.021194685839832323
     ```
 
+
+=== "Multiple Choice Retrieval"
+
+    A multiple choice retrieval task is a retrieval task where each query is only compared against a fixed set of
+    candidate documents (the "choices") instead of the full corpus, and the goal is to pick the single correct one.
+    This is expressed by populating the `top_ranked` split, which maps each query to the list of candidate document
+    ids that should be ranked for it. Because there is exactly one correct choice per query, the main score is usually
+    `accuracy` rather than `ndcg_at_10`.
+
+    In practice the candidates are often already encoded in `relevant_docs` (with the correct choice(s) marked as
+    relevant and the distractors as non-relevant), so we can build the `top_ranked` split from it in
+    `dataset_transform`. Below we use the [BLINK](https://huggingface.co/datasets/mteb/blink-it2t-multi) dataset, where
+    the model must retrieve the correct text answer given an image and a question:
+
+    ```python
+    from collections import defaultdict
+
+    import mteb
+    from mteb.abstasks import AbsTaskRetrieval
+
+
+    class MyMultipleChoiceRetrievalTask(AbsTaskRetrieval):
+        metadata = mteb.TaskMetadata(  # minimal metadata
+            name="MyMultipleChoiceRetrievalTask",
+            description="Retrieve the correct text answer based on images and specific retrieval instructions.",
+            main_score="accuracy",  # accuracy since there is a single correct choice per query
+            eval_langs=["eng-Latn"],
+            eval_splits=["test"],
+            type="VisionCentricQA",  # a retrieval-style type; use "Retrieval" for a text-only task
+            category="it2t",
+            modalities=["text", "image"],
+            dataset={
+                "path": "mteb/blink-it2t-multi",
+                "revision": "772e1c8461c0dff10b32f52326d55a67f0d3ca94",
+            },
+        )
+
+        def dataset_transform(self, **kwargs) -> None:
+            # build the `top_ranked` (candidate) split from the relevant documents:
+            # every scored document for a query - both the correct choice and the
+            # distractors - becomes a candidate that gets ranked for that query.
+            for subset, split_data in self.dataset.items():
+                for split, dataset in split_data.items():
+                    top_ranked = defaultdict(list)
+                    for query_id, relevant in dataset["relevant_docs"].items():
+                        for corpus_id, score in relevant.items():
+                            top_ranked[query_id].append(corpus_id)
+                    dataset["top_ranked"] = top_ranked
+    ```
+
+    Once we have the task we can then test to make sure that everything works as intended:
+
+    ```python
+    # ensure that the dataset can be loaded and transformed properly
+    task = MyMultipleChoiceRetrievalTask()
+    task.load_data()
+
+    test_set = task.dataset["default"]["test"]  # default unless there are multiple subsets
+    query_id = next(iter(test_set["relevant_docs"]))
+    print(test_set["top_ranked"][query_id])  # the candidate documents ranked for this query
+    # ['<candidate_id_1>', '<candidate_id_2>', ...]
+
+    # ensure that we can evaluate a model on the task
+    mdl = mteb.get_model("mteb/baseline-random-encoder")
+    results = mteb.evaluate(mdl, task)
+    print(results[0].get_score())  # print the accuracy score of the random baseline
+    ```
 
 === "Multilingual Semantic Similarity"
 
@@ -388,6 +457,7 @@ Once we have decided on task, we can implement them as follows:
         from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
         from datasets import Dataset
 
+
         class MyRetrievalTask(AbsTaskRetrieval):
             metadata = mteb.TaskMetadata(  # minimal metadata
                 name="MyRetrievalTask",
@@ -481,19 +551,27 @@ TaskMetadata(
         "revision": "9fdc57b89ccc09a8d9256f376112d626878e51a7",
     },
     type="Classification",
-    category="t2c", # text-2-class
+    category="t2c",  # text-2-class
     modalities=["text"],
     eval_splits=["validation", "test"],
     eval_langs=["eng-Latn"],
     main_score="accuracy",
-    date=("1700-01-01", "1900-01-01"), # a very rough guess of the date range of the poems, we do not have exact dates for all poems
+    date=(
+        "1700-01-01",
+        "1900-01-01",
+    ),  # a very rough guess of the date range of the poems, we do not have exact dates for all poems
     domains=["Written", "Fiction", "Poetry"],
-    task_subtypes=["Sentiment/Hate speech"], # if no subtypes match then just use []
+    task_subtypes=["Sentiment/Hate speech"],  # if no subtypes match then just use []
     license="cc-by-4.0",
     annotations_creators="human-annotated",
-    dialect=["eng-Latn-US", "en-Latn-GB"], # dialects is often unknown if so just use []
-    sample_creation="found", # the text was not created for the purpose of the dataset, but rather found and annotated
-    adapted_from=["PoemSentimentClassification"], # Previous version of the dataset, can be None
+    dialect=[
+        "eng-Latn-US",
+        "en-Latn-GB",
+    ],  # dialects is often unknown if so just use []
+    sample_creation="found",  # the text was not created for the purpose of the dataset, but rather found and annotated
+    adapted_from=[
+        "PoemSentimentClassification"
+    ],  # Previous version of the dataset, can be None
     bibtex_citation=r"""
 @misc{sheng2020investigating,
   archiveprefix = {arXiv},
@@ -517,8 +595,9 @@ You can then update class to utilize the new dataset on the hub and remove the `
 ```python
 import mteb
 
-class MyTask(...):
-    ...
+
+class MyTask(...): ...
+
 
 task = MyTask()
 repo_name = f"myorg/{task.metadata.name}"
@@ -559,6 +638,7 @@ An easy way to test it is using:
 === "Python"
     ```python
     import mteb
+
     # sample model:
     model = mteb.get_model("mteb/baseline-random encoder")
     task = mteb.get_task("{name of your task}")

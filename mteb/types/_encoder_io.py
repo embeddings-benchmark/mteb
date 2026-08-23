@@ -151,8 +151,6 @@ class MultimodalInput(  # type: ignore[misc]
 ):
     """The input to the encoder for multimodal data."""
 
-    pass
-
 
 class OutputDType(HelpfulStrEnum):
     """Enum for valid compression levels.

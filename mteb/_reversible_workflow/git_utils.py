@@ -98,7 +98,7 @@ def get_current_branch(repo_path: Path) -> str:
         logger.debug(f"Current branch: {branch}")
         return branch
     except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"Failed to get current branch: {e}")
+        raise RuntimeError(f"Failed to get current branch: {e}") from e
 
 
 def restore_branch(repo_path: Path, original_branch: str) -> None:
@@ -122,7 +122,9 @@ def restore_branch(repo_path: Path, original_branch: str) -> None:
         )
         logger.info(f"Restored to original branch '{original_branch}'")
     except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"Failed to restore to branch '{original_branch}': {e}")
+        raise RuntimeError(
+            f"Failed to restore to branch '{original_branch}': {e}"
+        ) from e
 
 
 def delete_branch(repo_path: Path, branch_name: str) -> None:
@@ -286,7 +288,7 @@ def create_pull_request(
     except ImportError:
         raise ImportError(
             "PyGithub is not installed. Please install it using `pip install 'mteb[github]'`"
-        )
+        ) from None
 
     logger.info("Creating PR using PyGithub")
     token = get_github_token()

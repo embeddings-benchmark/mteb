@@ -194,7 +194,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 "The length of names and revisions must be the same or revisions must be None."
             )
 
-        for name, revision in zip(names, _revisions):
+        for name, revision in zip(names, _revisions, strict=True):
             if isinstance(name, ModelMeta):
                 if name.name is None:
                     raise ValueError("name in ModelMeta is None. It must be a string.")
@@ -360,7 +360,8 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                     )
                 except Exception as e:
                     warnings.warn(
-                        f"Couldn't get scores for {model_res.model_name}({model_res.model_revision}), due to: {e}"
+                        f"Couldn't get scores for {model_res.model_name}({model_res.model_revision}), due to: {e}",
+                        stacklevel=2,
                     )
         if format == "long":
             for model_res in self:
@@ -377,7 +378,8 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                     )
                 except Exception as e:
                     warnings.warn(
-                        f"Couldn't get scores for {model_res.model_name}({model_res.model_revision}), due to: {e}"
+                        f"Couldn't get scores for {model_res.model_name}({model_res.model_revision}), due to: {e}",
+                        stacklevel=2,
                     )
         return entries
 
@@ -423,7 +425,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         if df is None:
             msg = "No scores data available. Returning empty DataFrame."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
             return pd.DataFrame()
 
         columns = ["model_name"]
@@ -523,7 +525,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         if training_sets:
             df["trained_on"] = [
                 tn in training_sets.get(mn, frozenset())
-                for mn, tn in zip(df["model_name"], df["task_name"])
+                for mn, tn in zip(df["model_name"], df["task_name"], strict=True)
             ]
         else:
             df["trained_on"] = False
@@ -833,7 +835,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @property
     def languages(self) -> list[str]:
-        """Get all languages in the benchmark results.
+        """All languages in the benchmark results.
 
         Returns:
             A list of languages in ISO 639-1 format.
@@ -845,7 +847,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @property
     def domains(self) -> list[str]:
-        """Get all domains in the benchmark results.
+        """All domains in the benchmark results.
 
         Returns:
             A list of domains in ISO 639-1 format.
@@ -857,7 +859,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @property
     def task_types(self) -> list[str]:
-        """Get all task types in the benchmark results.
+        """All task types in the benchmark results.
 
         Returns:
             A list of task types.
@@ -869,7 +871,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @property
     def task_names(self) -> list[str]:
-        """Get all task names in the benchmark results.
+        """All task names in the benchmark results.
 
         Returns:
             A list of task names.
@@ -881,7 +883,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @property
     def modalities(self) -> list[str]:
-        """Get all modalities in the benchmark results.
+        """All modalities in the benchmark results.
 
         Returns:
             A list of modalities.
@@ -893,7 +895,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @property
     def model_names(self) -> list[str]:
-        """Get all model names in the benchmark results.
+        """All model names in the benchmark results.
 
         Returns:
             A list of model names.
@@ -902,7 +904,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @property
     def model_revisions(self) -> list[dict[str, str | None]]:
-        """Get all model revisions in the benchmark results.
+        """All model revisions in the benchmark results.
 
         Returns:
             A list of dictionaries with model names and revisions.

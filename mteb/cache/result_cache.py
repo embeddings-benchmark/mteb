@@ -10,7 +10,7 @@ import subprocess
 import warnings
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
-from datetime import datetime
+from datetime import datetime, timezone
 from importlib.metadata import version
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
@@ -224,7 +224,7 @@ class ResultCache:
 
     @property
     def remote_repo_path(self) -> Path:
-        """Get the path to the remote repository clone.
+        """The path to the remote repository clone.
 
         Returns:
             The path to the remote repository clone.
@@ -253,7 +253,7 @@ class ResultCache:
 
     @property
     def remote_results_path(self) -> Path:
-        """Get the path to the remote results directory.
+        """The path to the remote results directory.
 
         Returns:
             The path to the remote results directory.
@@ -300,7 +300,7 @@ class ResultCache:
         if model_revision is None:
             msg = "`model_revision` is not specified, attempting to load the latest revision. To disable this behavior, specify the 'model_revision` explicitly."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
             # get revs from paths
             revisions = [p for p in model_path.glob("*") if p.is_dir()]
             if not revisions:
@@ -412,18 +412,21 @@ class ResultCache:
 
         run_settings_list: list[dict[str, Any]] = []
         for split, split_scores in task_result.scores.items():
-            for score_entry in split_scores:
-                hf_subset = score_entry.get("hf_subset", "default")
-                run_settings = {
-                    "task": task_result.task_name,
-                    "split": split,
-                    "subset": hf_subset,
-                    "version": version_dict,
-                    "encode_kwargs": json.loads(json.dumps(encode_kwargs, default=str))
-                    if encode_kwargs is not None
-                    else {},
-                }
-                run_settings_list.append(run_settings)
+            run_settings = {
+                "task": task_result.task_name,
+                "splits": [split],
+                "version": version_dict,
+                "encode_kwargs": json.loads(json.dumps(encode_kwargs, default=str))
+                if encode_kwargs is not None
+                else {},
+                "subsets": sorted(
+                    {
+                        score_entry.get("hf_subset", "default")
+                        for score_entry in split_scores
+                    }
+                ),
+            }
+            run_settings_list.append(run_settings)
 
         if run_settings_list:
             run_settings_path = result_path.parent / "run_settings.jsonl"
@@ -431,7 +434,7 @@ class ResultCache:
 
     @property
     def default_cache_path(self) -> Path:
-        """Get the local cache directory for MTEB results.
+        """The local cache directory for MTEB results.
 
         Returns:
             The path to the local cache directory.
@@ -484,7 +487,7 @@ class ResultCache:
             if remote_url != remote:
                 msg = (
                     f"remote repository '{remote}' does not match the one in {results_directory},  which is '{remote_url}'."
-                    + " Please remove the directory and try again."
+                    " Please remove the directory and try again."
                 )
                 raise ValueError(msg)
 
@@ -701,7 +704,7 @@ class ResultCache:
         else:
             msg = f"Cache directory `{self.cache_path}` does not exist."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
 
     def _load_from_cache(
         self,
@@ -1020,7 +1023,9 @@ class ResultCache:
                 model_name_and_revision.append((model_name, revision, experiment_name))
             return [
                 p
-                for model_revision, p in zip(model_name_and_revision, paths)
+                for model_revision, p in zip(
+                    model_name_and_revision, paths, strict=True
+                )
                 if model_revision in name_and_revision
             ]
 
@@ -1228,7 +1233,7 @@ class ResultCache:
             >>> print(f"PR created: {submission['pr_url']}")
         """
         # Always create a new branch to keep the original branch clean
-        branch_name = f"mteb-results-{int(datetime.now().timestamp())}"
+        branch_name = f"mteb-results-{int(datetime.now(timezone.utc).timestamp())}"
         normalized_models = self._normalize_models(models)
 
         try:
@@ -1364,7 +1369,8 @@ class ResultCache:
         ):
             warnings.warn(
                 "experiment_kwargs is specified but load_experiments is not set to MATCH_KWARGS."
-                "No results will be loaded."
+                "No results will be loaded.",
+                stacklevel=2,
             )
 
         models_as_model_meta = models is not None and isinstance(
