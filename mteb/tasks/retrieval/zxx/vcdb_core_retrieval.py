@@ -33,10 +33,7 @@ class VCDBCoreRetrieval(AbsTaskRetrieval):
         date=("2014-01-01", "2014-12-31"),
         domains=["Web"],
         task_subtypes=["Duplicate Detection"],
-        license=(
-            "https://web.archive.org/web/20251123150707/"
-            "https://fvl.fudan.edu.cn/dataset/vcdb/list.htm"
-        ),
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
@@ -91,10 +88,7 @@ class VCDBCoreAudioRetrieval(AbsTaskRetrieval):
         date=("2014-01-01", "2014-12-31"),
         domains=["Web"],
         task_subtypes=["Duplicate Detection"],
-        license=(
-            "https://web.archive.org/web/20251123150707/"
-            "https://fvl.fudan.edu.cn/dataset/vcdb/list.htm"
-        ),
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
