@@ -4,6 +4,10 @@ from .ave_dataset_pc import (
     AVEDatasetVPairClassification,
 )
 from .cremad import CREMADPairClassification
+from .dtd_pair_classification import DTDPairClassification
+from .eurosat_pair_classification import EuroSATPairClassification
+from .fer2013_pair_classification import FER2013PairClassification
+from .fgvc_aircraft_pair_classification import FGVCAircraftPairClassification
 from .human_animal_cartoon_pc import (
     HumanAnimalCartoonVAPairClassification,
     HumanAnimalCartoonVPairClassification,
@@ -18,6 +22,7 @@ from .music_avqa_pc import (
     MusicAVQAVPairClassification,
 )
 from .nmsqa import NMSQAPairClassification
+from .oxford_flowers_pair_classification import OxfordFlowersPairClassification
 from .pub_chem_ai_sentence_paraphrase_pc import PubChemAISentenceParaphrasePC
 from .pub_chem_smilespc import PubChemSMILESPC
 from .pub_chem_synonym_pc import PubChemSynonymPC
@@ -40,6 +45,10 @@ __all__ = [
     "AVEDatasetVPairClassification",
     "AVSpeakerBenchPairClassification",
     "CREMADPairClassification",
+    "DTDPairClassification",
+    "EuroSATPairClassification",
+    "FER2013PairClassification",
+    "FGVCAircraftPairClassification",
     "HumanAnimalCartoonVAPairClassification",
     "HumanAnimalCartoonVPairClassification",
     "LegalBenchPC",
@@ -48,6 +57,7 @@ __all__ = [
     "MusicAVQAVAPairClassification",
     "MusicAVQAVPairClassification",
     "NMSQAPairClassification",
+    "OxfordFlowersPairClassification",
     "PubChemAISentenceParaphrasePC",
     "PubChemSMILESPC",
     "PubChemSynonymPC",
