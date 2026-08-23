@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Construct and package a checksum-pinned surviving-public-media EVVE set.
 
-The official EVVE metadata identifies media by YouTube ID. This script freezes
-the reproducibly obtainable 2,110-video subset of the 2,410 IDs retained by the
-public S2VS feature artifact, downloads a compact progressive representation,
-validates every retained item, and builds the MTEB corpus / queries / qrels
-configurations. Downloads are resumable and failures never silently change the
-benchmark.
+The official EVVE metadata identifies media by YouTube ID. This script fetches
+three small, checksum-pinned construction inputs from the immutable Hugging Face
+dataset revision below instead of storing generated manifests in MTEB. It then
+freezes the reproducibly obtainable 2,110-video subset of the 2,410 IDs retained
+by the public S2VS feature artifact, downloads a compact progressive
+representation, validates every retained item, and builds the MTEB corpus /
+queries / qrels configurations. Downloads are resumable and failures never
+silently change the benchmark.
 
 Examples:
     uv run python scripts/data/evve/create_data.py \
@@ -19,6 +21,10 @@ Examples:
     uv run python scripts/data/evve/create_data.py \
         --work-dir /tmp/evve-mteb \
         --repo-id Cerru02/EVVE --push
+
+For an offline metadata audit, first place the three files listed in
+CONSTRUCTION_ASSET_SHA256 in one directory, then pass that directory with
+--construction-dir. Their checksums are always verified.
 """
 
 from __future__ import annotations
@@ -54,15 +60,30 @@ EVALUATOR_URL = (
     f"https://raw.githubusercontent.com/fyang93/BURST/{EVALUATOR_REVISION}/eval_evve.py"
 )
 EVALUATOR_SHA256 = "49dd29a499857764972b6b8959ad18dd94d80f8b34e8c4814c05076609fd93fd"
-S2VS_PROTOCOL_MANIFEST = Path(__file__).with_name("s2vs-2023-video-ids.txt")
+CONSTRUCTION_DATASET_REPO = "Cerru02/EVVE"
+CONSTRUCTION_DATASET_REVISION = "88f505f0a77f0ee0a14f2d7e098aaea08507bbe5"
+# These derived inputs preserve web state that cannot be reconstructed later:
+# the S2VS feature-artifact IDs, the successful public-media acquisition set,
+# and the checksum-pinned archive fallbacks. The dataset revision above is their
+# immutable distribution source; the comments in dataset_card explain how each
+# file was produced from the upstream EVVE/S2VS materials.
+S2VS_PROTOCOL_MANIFEST = "s2vs-2023-video-ids.txt"
 S2VS_PROTOCOL_MANIFEST_SHA256 = (
     "d7a84d997fcc23c6bb10db1902203b5c0d6ad65c65c4f8257b4295c690fb1c1c"
 )
-PROTOCOL_MANIFEST = Path(__file__).with_name("surviving-public-media-video-ids.txt")
-MEDIA_SOURCE_OVERRIDES = Path(__file__).with_name("media-source-overrides.json")
+PROTOCOL_MANIFEST = "surviving-public-media-video-ids.txt"
+MEDIA_SOURCE_OVERRIDES = "media-source-overrides.json"
 PROTOCOL_MANIFEST_SHA256 = (
     "ebf63bd9f524a1ab15104657e0448ddd4a1cbfb5720795ca9569703fbffcb0e6"
 )
+MEDIA_SOURCE_OVERRIDES_SHA256 = (
+    "3fb004549047e942be5e193b816c4fb18efdfcf9c166cb949016d5b1fd184d6d"
+)
+CONSTRUCTION_ASSET_SHA256 = {
+    S2VS_PROTOCOL_MANIFEST: S2VS_PROTOCOL_MANIFEST_SHA256,
+    PROTOCOL_MANIFEST: PROTOCOL_MANIFEST_SHA256,
+    MEDIA_SOURCE_OVERRIDES: MEDIA_SOURCE_OVERRIDES_SHA256,
+}
 
 EXPECTED_QUERIES = 466
 EXPECTED_DATABASE = 1_644
@@ -96,6 +117,13 @@ class Protocol:
     event_stats: tuple[dict[str, int | str], ...]
 
 
+@dataclass(frozen=True)
+class ConstructionAssets:
+    s2vs_protocol_manifest: Path
+    protocol_manifest: Path
+    media_source_overrides: Path
+
+
 class DownloadFailure(Exception):
     """A non-fatal media download failure collected in the audit log."""
 
@@ -111,6 +139,54 @@ class _RestrictedUnpickler(pickle.Unpickler):
 
 def _sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def resolve_construction_assets(
+    work_dir: Path, construction_dir: Path | None = None
+) -> ConstructionAssets:
+    """Resolve and verify the three frozen inputs omitted from the MTEB tree."""
+    destination_dir = (construction_dir or work_dir / "construction").resolve()
+    if construction_dir is None:
+        destination_dir.mkdir(parents=True, exist_ok=True)
+
+    resolved: dict[str, Path] = {}
+    for filename, expected_digest in CONSTRUCTION_ASSET_SHA256.items():
+        destination = destination_dir / filename
+        if not destination.is_file():
+            if construction_dir is not None:
+                raise FileNotFoundError(
+                    f"missing construction asset in --construction-dir: {destination}"
+                )
+            from huggingface_hub import hf_hub_download
+
+            downloaded = Path(
+                hf_hub_download(
+                    repo_id=CONSTRUCTION_DATASET_REPO,
+                    filename=f"construction/{filename}",
+                    repo_type="dataset",
+                    revision=CONSTRUCTION_DATASET_REVISION,
+                    local_dir=work_dir,
+                )
+            ).resolve()
+            if downloaded != destination:
+                raise RuntimeError(
+                    f"construction asset downloaded to {downloaded}; "
+                    f"expected {destination}"
+                )
+
+        digest = _sha256(destination.read_bytes())
+        if digest != expected_digest:
+            raise ValueError(
+                f"construction asset checksum mismatch for {destination}: "
+                f"{digest}; expected {expected_digest}"
+            )
+        resolved[filename] = destination
+
+    return ConstructionAssets(
+        s2vs_protocol_manifest=resolved[S2VS_PROTOCOL_MANIFEST],
+        protocol_manifest=resolved[PROTOCOL_MANIFEST],
+        media_source_overrides=resolved[MEDIA_SOURCE_OVERRIDES],
+    )
 
 
 def load_annotations(path: Path) -> dict[str, Any]:
@@ -152,14 +228,10 @@ def fetch_annotations(work_dir: Path) -> Path:
     return destination
 
 
-def load_protocol_ids(path: Path = PROTOCOL_MANIFEST) -> tuple[str, ...]:
+def load_protocol_ids(path: Path, expected_digest: str) -> tuple[str, ...]:
     data = path.read_bytes()
     digest = _sha256(data)
-    expected_digest = {
-        PROTOCOL_MANIFEST: PROTOCOL_MANIFEST_SHA256,
-        S2VS_PROTOCOL_MANIFEST: S2VS_PROTOCOL_MANIFEST_SHA256,
-    }.get(path)
-    if expected_digest is not None and digest != expected_digest:
+    if digest != expected_digest:
         raise ValueError(
             f"protocol manifest checksum mismatch: {digest}; expected {expected_digest}"
         )
@@ -193,18 +265,24 @@ def load_download_ids(path: Path, protocol_ids: tuple[str, ...]) -> tuple[str, .
 
 
 def load_media_source_overrides(
-    path: Path = MEDIA_SOURCE_OVERRIDES,
+    path: Path,
+    protocol_ids: tuple[str, ...],
 ) -> dict[str, dict[str, str]]:
-    if not path.is_file():
-        return {}
-    payload = json.loads(path.read_text(encoding="utf-8"))
+    data = path.read_bytes()
+    digest = _sha256(data)
+    if digest != MEDIA_SOURCE_OVERRIDES_SHA256:
+        raise ValueError(
+            f"media source override checksum mismatch: {digest}; "
+            f"expected {MEDIA_SOURCE_OVERRIDES_SHA256}"
+        )
+    payload = json.loads(data)
     if not isinstance(payload, dict):
         raise ValueError("media source overrides must be a JSON object")
 
-    protocol_ids = set(load_protocol_ids())
+    protocol_id_set = set(protocol_ids)
     overrides: dict[str, dict[str, str]] = {}
     for video_id, raw_record in payload.items():
-        if video_id not in protocol_ids or not isinstance(raw_record, dict):
+        if video_id not in protocol_id_set or not isinstance(raw_record, dict):
             raise ValueError(f"invalid media source override for {video_id!r}")
         record = {str(key): str(value) for key, value in raw_record.items()}
         if set(record) != {"extension", "sha256", "url"}:
@@ -388,14 +466,18 @@ def protocol_summary(
             "annotations_revision": ANNOTATIONS_REVISION,
             "annotations_url": ANNOTATIONS_URL,
             "annotations_sha256": ANNOTATIONS_SHA256,
+            "construction_dataset_repo": CONSTRUCTION_DATASET_REPO,
+            "construction_dataset_revision": CONSTRUCTION_DATASET_REVISION,
             "feature_artifact_url": FEATURES_URL,
             "surviving_evaluator_revision": EVALUATOR_REVISION,
             "surviving_evaluator_url": EVALUATOR_URL,
             "surviving_evaluator_sha256": EVALUATOR_SHA256,
-            "s2vs_protocol_manifest": S2VS_PROTOCOL_MANIFEST.name,
+            "s2vs_protocol_manifest": S2VS_PROTOCOL_MANIFEST,
             "s2vs_protocol_manifest_sha256": S2VS_PROTOCOL_MANIFEST_SHA256,
-            "protocol_manifest": PROTOCOL_MANIFEST.name,
+            "protocol_manifest": PROTOCOL_MANIFEST,
             "protocol_manifest_sha256": PROTOCOL_MANIFEST_SHA256,
+            "media_source_overrides": MEDIA_SOURCE_OVERRIDES,
+            "media_source_overrides_sha256": MEDIA_SOURCE_OVERRIDES_SHA256,
         },
         "published_original": {
             "queries": PUBLISHED_ORIGINAL_QUERIES,
@@ -812,9 +894,8 @@ def write_media_manifest(
     video_ids: tuple[str, ...],
     media: dict[str, Path],
     destination: Path,
-    source_overrides: dict[str, dict[str, str]] | None = None,
+    source_overrides: dict[str, dict[str, str]],
 ) -> None:
-    source_overrides = source_overrides or load_media_source_overrides()
     missing = sorted(set(video_ids) - set(media))
     if missing:
         raise ValueError(
@@ -871,9 +952,8 @@ def index_media(media_root: Path) -> dict[str, Path]:
 def build_datasets(
     protocol: Protocol,
     media: dict[str, Path],
-    source_overrides: dict[str, dict[str, str]] | None = None,
+    source_overrides: dict[str, dict[str, str]],
 ) -> dict[str, Any]:
-    source_overrides = source_overrides or load_media_source_overrides()
     required = set(protocol.queries) | set(protocol.database)
     missing = sorted(required - set(media))
     if missing:
@@ -950,11 +1030,14 @@ def build_datasets(
 
 
 def export_local_dataset(
-    protocol: Protocol, media: dict[str, Path], output_dir: Path
+    protocol: Protocol,
+    media: dict[str, Path],
+    source_overrides: dict[str, dict[str, str]],
+    output_dir: Path,
 ) -> None:
     from datasets import DatasetDict
 
-    datasets = build_datasets(protocol, media)
+    datasets = build_datasets(protocol, media, source_overrides)
     output_dir.mkdir(parents=True, exist_ok=False)
     for config, dataset in datasets.items():
         DatasetDict({"test": dataset}).save_to_disk(output_dir / config)
@@ -1038,6 +1121,16 @@ videos. Exact attrition is reproducible as the set difference between
 IDs) and `construction/surviving-public-media-video-ids.txt`
 ({evaluation["queries"] + evaluation["database"]:,} IDs).
 
+Those two manifests and `construction/media-source-overrides.json` are frozen in
+the immutable Hugging Face revision
+[`{CONSTRUCTION_DATASET_REVISION}`](https://huggingface.co/datasets/{CONSTRUCTION_DATASET_REPO}/tree/{CONSTRUCTION_DATASET_REVISION}/construction).
+They are not copied into the MTEB source tree. The construction script downloads
+them from that revision and verifies these SHA-256 checksums before use:
+
+- `{S2VS_PROTOCOL_MANIFEST}`: `{S2VS_PROTOCOL_MANIFEST_SHA256}`;
+- `{PROTOCOL_MANIFEST}`: `{PROTOCOL_MANIFEST_SHA256}`;
+- `{MEDIA_SOURCE_OVERRIDES}`: `{MEDIA_SOURCE_OVERRIDES_SHA256}`.
+
 `media-manifest.jsonl` records the exact frozen ID, packaged filename, original
 and acquisition URLs, byte count, and SHA-256 checksum for every video. The
 manifest's own SHA-256 is `{media_manifest_sha256}`. Construction fails if any
@@ -1084,19 +1177,30 @@ captures are used only where listed explicitly in the source-override manifest.
 No applicable dataset-wide redistribution license for the original videos was
 identified; the archived project page also contains no explicit third-party
 redistribution prohibition. Copyright remains with the respective video rights
-holders. The license is therefore recorded as **not specified**. This provenance
-statement does not claim that video copyright was transferred to EVVE or to
-this repository, or that redistribution is authorized.
+holders. Hugging Face card metadata therefore records the dataset-wide license
+as `unknown`, while MTEB's `TaskMetadata` uses its corresponding value, `not
+specified`. This provenance statement does not claim that video copyright was
+transferred to EVVE or to this repository, or that redistribution is authorized.
 
 The EVVE project page states separately that its software is BSD-licensed and
-its released descriptors are free. Those terms are not presented here as a
-license for the packaged videos.
+its released descriptors are free. The pinned S2VS source repository is
+MIT-licensed. Those source-specific terms are not presented here as a license
+for the packaged videos, so assigning BSD or MIT to the dataset as a whole would
+be inaccurate.
+
+| Component | License or status reported by its source |
+|---|---|
+| MTEB construction code | Apache-2.0 (MTEB repository license) |
+| Pinned S2VS source repository | MIT |
+| EVVE software and released descriptors | BSD / described as free on the EVVE project page |
+| Packaged third-party videos | No dataset-wide license identified (`not specified`) |
 
 ## Sources
 
 - [Archived EVVE project page](https://web.archive.org/web/20241102150758id_/http://pascal.inrialpes.fr/data2/evve/index.html)
 - [Original paper](https://openaccess.thecvf.com/content_cvpr_2013/html/Revaud_Event_Retrieval_in_2013_CVPR_paper.html)
 - [Pinned S2VS annotations](https://github.com/gkordo/s2vs/tree/{ANNOTATIONS_REVISION})
+- [S2VS MIT license](https://github.com/gkordo/s2vs/blob/{ANNOTATIONS_REVISION}/LICENSE)
 - [S2VS EVVE feature artifact]({FEATURES_URL})
 
 ## Citation
@@ -1116,6 +1220,8 @@ license for the packaged videos.
 def push_dataset(
     protocol: Protocol,
     media: dict[str, Path],
+    source_overrides: dict[str, dict[str, str]],
+    construction_assets: ConstructionAssets,
     *,
     repo_id: str,
     work_dir: Path,
@@ -1137,7 +1243,7 @@ def push_dataset(
         )
 
     api.create_repo(repo_id, repo_type="dataset", private=True, exist_ok=True)
-    for config, dataset in build_datasets(protocol, media).items():
+    for config, dataset in build_datasets(protocol, media, source_overrides).items():
         DatasetDict({"test": dataset}).push_to_hub(
             repo_id,
             config,
@@ -1155,16 +1261,16 @@ def push_dataset(
         (card_path, "README.md"),
         (Path(__file__), "construction/create_data.py"),
         (
-            PROTOCOL_MANIFEST,
-            f"construction/{PROTOCOL_MANIFEST.name}",
+            construction_assets.protocol_manifest,
+            f"construction/{PROTOCOL_MANIFEST}",
         ),
         (
-            S2VS_PROTOCOL_MANIFEST,
-            f"construction/{S2VS_PROTOCOL_MANIFEST.name}",
+            construction_assets.s2vs_protocol_manifest,
+            f"construction/{S2VS_PROTOCOL_MANIFEST}",
         ),
         (
-            MEDIA_SOURCE_OVERRIDES,
-            f"construction/{MEDIA_SOURCE_OVERRIDES.name}",
+            construction_assets.media_source_overrides,
+            f"construction/{MEDIA_SOURCE_OVERRIDES}",
         ),
         (media_manifest_path, media_manifest_path.name),
         (media_audit_path, media_audit_path.name),
@@ -1190,6 +1296,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--work-dir", type=Path, default=Path("/tmp/evve-mteb"))
     parser.add_argument("--repo-id", default="Cerru02/EVVE")
+    parser.add_argument(
+        "--construction-dir",
+        type=Path,
+        help=(
+            "Read the three frozen construction inputs from this directory "
+            "instead of downloading them from the pinned Hugging Face revision"
+        ),
+    )
     parser.add_argument(
         "--annotations",
         type=Path,
@@ -1250,11 +1364,26 @@ def main() -> None:
     args = parser.parse_args()
 
     args.work_dir.mkdir(parents=True, exist_ok=True)
+    construction_assets = resolve_construction_assets(
+        args.work_dir, args.construction_dir
+    )
+    s2vs_protocol_ids = load_protocol_ids(
+        construction_assets.s2vs_protocol_manifest,
+        S2VS_PROTOCOL_MANIFEST_SHA256,
+    )
+    protocol_ids = load_protocol_ids(
+        construction_assets.protocol_manifest,
+        PROTOCOL_MANIFEST_SHA256,
+    )
+    source_overrides = load_media_source_overrides(
+        construction_assets.media_source_overrides,
+        protocol_ids,
+    )
     annotation_path = args.annotations or fetch_annotations(args.work_dir)
     annotations = load_annotations(annotation_path)
     before_filter = build_protocol(
         annotations,
-        load_protocol_ids(S2VS_PROTOCOL_MANIFEST),
+        s2vs_protocol_ids,
         enforce_expected_counts=False,
     )
     before_counts = _protocol_counts(before_filter)
@@ -1269,7 +1398,7 @@ def main() -> None:
             "S2VS protocol counts changed: "
             f"{actual_before_counts}; expected {expected_before_counts}"
         )
-    protocol = build_protocol(annotations, load_protocol_ids())
+    protocol = build_protocol(annotations, protocol_ids)
     summary = protocol_summary(protocol, before_filter)
     summary_path = args.work_dir / "protocol-summary.json"
     summary_path.write_text(
@@ -1280,7 +1409,6 @@ def main() -> None:
 
     media_root = (args.media_root or args.work_dir / "media").resolve()
     if args.download:
-        protocol_ids = load_protocol_ids()
         download_ids = (
             load_download_ids(args.download_id_file, protocol_ids)
             if args.download_id_file is not None
@@ -1296,7 +1424,7 @@ def main() -> None:
             sleep_min=args.sleep_interval,
             sleep_max=args.max_sleep_interval,
             extra_args=tuple(args.yt_dlp_arg),
-            source_overrides=load_media_source_overrides(),
+            source_overrides=source_overrides,
             limit=args.limit,
             failure_log=args.work_dir / "download-failures.jsonl",
         )
@@ -1337,10 +1465,10 @@ def main() -> None:
 
     media_manifest_path = args.work_dir / "media-manifest.jsonl"
     write_media_manifest(
-        load_protocol_ids(),
+        protocol_ids,
         media,
         media_manifest_path,
-        load_media_source_overrides(),
+        source_overrides,
     )
     print(f"Wrote {media_manifest_path}")
 
@@ -1348,6 +1476,8 @@ def main() -> None:
         revision = push_dataset(
             protocol,
             media,
+            source_overrides,
+            construction_assets,
             repo_id=args.repo_id,
             work_dir=args.work_dir,
             summary=summary,
@@ -1356,7 +1486,7 @@ def main() -> None:
         print(f"Pushed {args.repo_id} @ {revision}")
     elif should_package:
         output_dir = args.output_dir or args.work_dir / "mteb_export"
-        export_local_dataset(protocol, media, output_dir)
+        export_local_dataset(protocol, media, source_overrides, output_dir)
         print(f"Wrote local MTEB datasets to {output_dir}")
 
 
