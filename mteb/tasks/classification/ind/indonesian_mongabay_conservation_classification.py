@@ -68,7 +68,9 @@ Purwarianti, Ayu},
         train_split = self.dataset["train"]
         train_docs: list = []
         train_labels: list = []
-        for text, label in zip(train_split["text"], train_split["softlabel"]):
+        for text, label in zip(
+            train_split["text"], train_split["softlabel"], strict=True
+        ):
             soft_label = ast.literal_eval(label)
             if len(soft_label) == len(class_labels):
                 train_docs.append(text)
@@ -87,7 +89,9 @@ Purwarianti, Ayu},
         # For evaluation
         for split in splits:
             ds_split = self.dataset[split]
-            for text, label in zip(ds_split["text"], ds_split["softlabel"]):
+            for text, label in zip(
+                ds_split["text"], ds_split["softlabel"], strict=True
+            ):
                 if label in class_labels:
                     documents.append(text)
                     labels.append(class_labels.index(label))

@@ -196,7 +196,7 @@ def test_benchmark_results(cache_path: Path) -> None:
     assert "Classification" in df.columns
     assert "Retrieval" in df.columns
     assert df.shape[0] == 2
-    assert df.at[0, "Mean (Task)"] == pytest.approx(0.616616)
+    assert df.loc[0, "Mean (Task)"] == pytest.approx(0.616616)
 
 
 @pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
@@ -297,7 +297,7 @@ def test_generate_model_card_with_table_and_benchmarks(
 
     # Compare each data row
     for i, (output_row, golden_row) in enumerate(
-        zip(output_data_rows, golden_data_rows)
+        zip(output_data_rows, golden_data_rows, strict=True)
     ):
         assert output_row == golden_row, (
             f"Row {i} doesn't match.\nExpected: {golden_row}\nGot: {output_row}"
