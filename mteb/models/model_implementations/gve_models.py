@@ -143,6 +143,11 @@ class GVEWrapper(AbsEncoder):
             prompts = self.processor.apply_chat_template(
                 conversations, tokenize=False, add_generation_prompt=True
             )
+            # GVE pools the <|endoftext|> token appended after the assistant
+            # turn (the GME-lineage training convention), not the bare
+            # generation prompt. Verified on the authors' UVRB MSRVTT split:
+            # R@1 0.31 -> 0.44 (paper: 0.431) with this token appended.
+            prompts = [p + "<|endoftext|>" for p in prompts]
 
             image_inputs = [img.convert("RGB") for img in images if img is not None]
             video_inputs = [vid for vid in videos if vid is not None]
