@@ -8,38 +8,15 @@ for flexible quantization (bf16, int8, binary).
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-if TYPE_CHECKING:
-    from sentence_transformers import SentenceTransformer
-
 logger = logging.getLogger(__name__)
 
-
-class GreenLeafEmbedWrapper(SentenceTransformerEncoderWrapper):
-    """Wrapper for GreenLeaf Law Embed models.
-
-    These models use trust_remote_code=True for custom bidirectional
-    attention and flexible quantization support.
-    """
-
-    def __init__(self, model_name: str, revision: str | None = None, **kwargs):
-        from sentence_transformers import SentenceTransformer
-
-        model = SentenceTransformer(
-            model_name,
-            revision=revision,
-            trust_remote_code=True,
-        )
-        super().__init__(model=model, **kwargs)
-
-
 greenleaf_law_embed_tiny = ModelMeta(
-    loader=GreenLeafEmbedWrapper,
-    loader_kwargs={},
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs={"trust_remote_code": True},
     name="judicialmind/greenleaf-law-embed-tiny",
     model_type=["dense"],
     languages=["eng-Latn"],
