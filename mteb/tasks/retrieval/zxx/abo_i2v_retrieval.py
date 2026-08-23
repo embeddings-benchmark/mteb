@@ -45,7 +45,7 @@ class ABOI2VRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2110.06199",
         dataset={
             "path": "hubxrt/ABO-I2V",
-            "revision": "d99aa44bf13b322748fc16faf0ec7489ed3653db",
+            "revision": "579f00a6d09a8b10295bc986911f832882577d62",
         },
         type="Any2AnyRetrieval",
         category="i2v",
