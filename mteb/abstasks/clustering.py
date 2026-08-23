@@ -13,7 +13,7 @@ from sklearn.metrics.cluster import adjusted_mutual_info_score, v_measure_score
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
-from mteb.types import Array, HFSubset
+from mteb.types import HFSubset
 from mteb.types.statistics import ClusteringFastDescriptiveStatistics
 
 from ._statistics_calculation import (
@@ -384,7 +384,7 @@ def _convert_to_fast(
                     "The clusters are not sampled from the same distribution as they have different labels."
                 )
 
-            for l, s in zip(lab, sents):
+            for l, s in zip(lab, sents, strict=True):
                 if s not in sent_set:
                     labels.append(l)
                     sentences.append(s)

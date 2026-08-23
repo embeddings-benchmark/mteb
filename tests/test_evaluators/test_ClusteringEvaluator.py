@@ -8,17 +8,17 @@ from sklearn.metrics import v_measure_score
 from torch.utils.data import DataLoader
 
 from mteb._evaluators import ClusteringEvaluator
+from mteb.mocks.mock_tasks.clustering import MockClusteringTask
 from mteb.timing import TimingStack
-from tests.mock_tasks import MockClusteringTask
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
 
 
 class TestClusteringEvaluator:
-    def test_clustering_v_measure(self):  # noqa: PLR6301
+    def test_clustering_v_measure(self):
         class Model:
-            def encode(  # noqa: PLR6301
+            def encode(
                 self,
                 sentences: DataLoader,
                 task_metadata,

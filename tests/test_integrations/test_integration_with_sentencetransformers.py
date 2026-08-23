@@ -9,12 +9,12 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
 from mteb.abstasks import AbsTask
-from mteb.models import ModelMeta
-from tests.mock_tasks import (
+from mteb.mocks import MOCK_TASK_TEST_GRID
+from mteb.mocks.mock_tasks import (
     MockInstructionReranking,
     MockRerankingTask,
 )
-from tests.task_grid import MOCK_TASK_TEST_GRID
+from mteb.models import ModelMeta
 
 logging.basicConfig(level=logging.INFO)
 

@@ -48,12 +48,12 @@ class NumpyCache:
                     "Vectors file not initialized. Call _initialize_vectors_file() first."
                 )
 
-            for item, vec in zip(items, vectors):
+            for item, vec in zip(items, vectors, strict=True):
                 item_hash = _hash_item(item)
                 if item_hash in self.hash_to_index:
                     msg = f"Hash collision or duplicate item for hash {item_hash}. Overwriting existing vector."
                     logger.warning(msg)
-                    warnings.warn(msg)
+                    warnings.warn(msg, stacklevel=2)
                     index = self.hash_to_index[item_hash]
                 else:
                     index = len(self.hash_to_index)
@@ -127,7 +127,7 @@ class NumpyCache:
         else:
             msg = "Dimension file not found. Vector dimension remains uninitialized."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
 
     def save(self) -> None:
         """Persist VectorCacheMap to disk."""
@@ -173,12 +173,12 @@ class NumpyCache:
                 else:
                     msg = "Vector dimension not set. Unable to load vectors file."
                     logger.warning(msg)
-                    warnings.warn(msg)
+                    warnings.warn(msg, stacklevel=2)
                 logger.info(f"Loaded VectorCacheMap from {self.directory}")
             else:
                 msg = "No existing files found. Initialized empty VectorCacheMap."
                 logger.warning(msg)
-                warnings.warn(msg)
+                warnings.warn(msg, stacklevel=2)
         except Exception as e:
             logger.error(f"Error loading VectorCacheMap: {str(e)}")
             raise

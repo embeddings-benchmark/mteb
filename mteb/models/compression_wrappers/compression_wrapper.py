@@ -77,12 +77,12 @@ class CompressionWrapper:
                 f"directly by the model."
             )
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
         logger.info("Initialized CompressionWrapper.")
 
     @property
     def mteb_model_meta(self) -> ModelMeta | None:
-        """Return wrapped model meta data."""
+        """The wrapped model meta data."""
         return self.model.mteb_model_meta
 
     def encode(
@@ -211,7 +211,7 @@ class CompressionWrapper:
                 f"{len(embeddings)}). Parameters are likely unstable and results might not generalize."
             )
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
 
         mins, maxs = (
             torch.min(embeddings, dim=0).values,

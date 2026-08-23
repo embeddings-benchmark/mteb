@@ -7,7 +7,7 @@ import pytest
 import mteb
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.get_tasks import get_tasks
-from tests.task_grid import (
+from mteb.mocks import (
     MOCK_MIEB_TASK_GRID_AS_STRING,
     MOCK_TASK_TEST_GRID_AS_STRING,
 )
@@ -23,9 +23,7 @@ tasks = [
 ]
 
 
-datasets_not_available = [
-    "AfriSentiLangClassification",
-]
+datasets_not_available = []
 
 
 _original_dataset_revisions = list(
@@ -64,6 +62,6 @@ def test_dataset_on_hf(dataset_revision: tuple[str, str]):
         huggingface_hub.errors.RepositoryNotFoundError,
         huggingface_hub.errors.RevisionNotFoundError,
     ):
-        assert False, f"Dataset {repo_id} - {revision} not available"
+        raise AssertionError(f"Dataset {repo_id} - {revision} not available") from None
     except Exception as e:
-        assert False, f"Dataset {repo_id} - {revision} failed with {e}"
+        raise AssertionError(f"Dataset {repo_id} - {revision} failed with {e}") from e

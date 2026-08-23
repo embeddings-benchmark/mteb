@@ -42,7 +42,7 @@ def _load_data(
         )
 
         queries[split] = split_dataset.map(
-            lambda x, idx: {
+            lambda x, idx, split=split: {
                 "id": f"query-{split}-{idx}",
                 "text": x["question"],
                 "modality": "image,text",
@@ -74,12 +74,12 @@ def _load_data(
             corpus_ids = [corpus_id for _, corpus_id in corpus_to_id.items()]
             docs = [doc for doc, _ in corpus_to_id.items()]
         corpus_records = []
-        for corpus_id, doc in zip(corpus_ids, docs):
+        for corpus_id, doc in zip(corpus_ids, docs, strict=True):
             corpus_records.append({"id": corpus_id, "text": doc, "modality": "text"})
         corpus[split] = Dataset.from_list(corpus_records)
 
         for query_id, relevant in relevant_docs[split].items():
-            for corpus_id, score in relevant.items():
+            for corpus_id in relevant:
                 top_ranked[split][query_id].append(corpus_id)
 
     return corpus, queries, relevant_docs, top_ranked
