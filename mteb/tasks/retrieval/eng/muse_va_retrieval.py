@@ -28,7 +28,7 @@ class MUSEVAA2IRetrieval(AbsTaskRetrieval):
         reference=_REFERENCE,
         dataset={
             "path": "Wissam42/MUSE-VA-A2I",
-            "revision": "main",
+            "revision": "761cd11f21c1dad47a3fa82160ff5a77ee8cb705",
         },
         type="Any2AnyRetrieval",
         category="a2i",
@@ -60,7 +60,7 @@ class MUSEVAI2ARetrieval(AbsTaskRetrieval):
         reference=_REFERENCE,
         dataset={
             "path": "Wissam42/MUSE-VA-I2A",
-            "revision": "main",
+            "revision": "84ec3222e6fd1456db6599fcaf335b3f8c80f9d5",
         },
         type="Any2AnyRetrieval",
         category="i2a",
