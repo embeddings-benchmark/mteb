@@ -34,6 +34,7 @@ class ColPaliEngineWrapper(AbsEncoder):
         processor_class: type,
         revision: str | None = None,
         device: str | None = None,
+        query_prefix: str | None = None,
         **kwargs,
     ):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -49,6 +50,8 @@ class ColPaliEngineWrapper(AbsEncoder):
 
         # Load processor
         self.processor = processor_class.from_pretrained(model_name)
+        if query_prefix is not None:
+            self.processor.query_prefix = query_prefix
 
     def encode(
         self,
@@ -165,6 +168,7 @@ class ColPaliWrapper(ColPaliEngineWrapper):
         model_name: str = "vidore/colpali-v1.3",
         revision: str | None = None,
         device: str | None = None,
+        query_prefix: str = "Query: ",
         **kwargs,
     ):
         from colpali_engine.models import ColPali, ColPaliProcessor
@@ -175,6 +179,7 @@ class ColPaliWrapper(ColPaliEngineWrapper):
             processor_class=ColPaliProcessor,
             revision=revision,
             device=device,
+            query_prefix=query_prefix,
             **kwargs,
         )
 

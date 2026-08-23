@@ -65,8 +65,6 @@ _MISSING_N_EMBEDDING_MODELS = [
     "OrlikB/st-polish-kartonberta-base-alpha-v1",
     "jinaai/jina-clip-v2",
     "baseline/Human",
-    "mteb/baseline-random-cross-encoder",
-    "mteb/baseline-random-encoder",
     "VAGOsolutions/SauerkrautLM-ColLFM2-450M-v0.1",
     "MCINext/Hakim",
     "MCINext/Hakim-small",
@@ -79,8 +77,6 @@ _MISSING_N_EMBEDDING_MODELS = [
     "microsoft/msclap-2022",
     "microsoft/msclap-2023",
     "Qwen/Qwen2-Audio-7B",
-    "mteb/baseline-random-cross-encoder",
-    "mteb/baseline-random-encoder",
     "OpenMuQ/MuQ-MuLan-large",
     "microsoft/speecht5_asr",
     "microsoft/speecht5_tts",
@@ -506,7 +502,7 @@ def test_model_meta_dependencies_not_existing_group():
     )
     with pytest.raises(
         ValueError,
-        match="Unknown extras group\(s\) for mteb: \['test_group'\]. .*",
+        match=r"Unknown extras group\(s\) for mteb: \['test_group'\]. .*",
     ):
         model_meta._check_requirements()
 
