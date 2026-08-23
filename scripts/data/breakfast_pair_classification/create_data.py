@@ -116,10 +116,6 @@ def main() -> None:
         create_repo(args.repo_id, repo_type="dataset", token=token, exist_ok=True)
         out.push_to_hub(args.repo_id, split="test", token=token)
         print(f"Pushed {args.repo_id}")
-        print(
-            "Pin the Hub commit SHA in "
-            "mteb/tasks/pair_classification/eng/breakfast_pc.py TaskMetadata."
-        )
     else:
         out_dir = args.work_dir / "mteb_export"
         out_dir.mkdir(parents=True, exist_ok=True)

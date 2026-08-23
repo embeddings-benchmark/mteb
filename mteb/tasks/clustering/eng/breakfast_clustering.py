@@ -3,17 +3,6 @@ from __future__ import annotations
 from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_BIBTEX = r"""
-@inproceedings{kuehne2014language,
-  author = {Kuehne, Hilde and Arslan, Ali and Serre, Thomas},
-  booktitle = {2014 IEEE Conference on Computer Vision and Pattern Recognition},
-  doi = {10.1109/CVPR.2014.338},
-  pages = {3325-3332},
-  title = {The Language of Actions: Recovering the Syntax and Semantics of Goal-Directed Human Activities},
-  year = {2014},
-}
-"""
-
 
 class BreakfastClustering(AbsTaskClustering):
     metadata = TaskMetadata(
@@ -41,7 +30,16 @@ class BreakfastClustering(AbsTaskClustering):
         dialect=[],
         modalities=["video"],
         sample_creation="found",
-        bibtex_citation=_BIBTEX,
+        bibtex_citation=r"""
+@inproceedings{kuehne2014language,
+  author = {Kuehne, Hilde and Arslan, Ali and Serre, Thomas},
+  booktitle = {2014 IEEE Conference on Computer Vision and Pattern Recognition},
+  doi = {10.1109/CVPR.2014.338},
+  pages = {3325-3332},
+  title = {The Language of Actions: Recovering the Syntax and Semantics of Goal-Directed Human Activities},
+  year = {2014},
+}
+""",
         is_beta=True,
     )
     max_fraction_of_documents_to_embed = None
