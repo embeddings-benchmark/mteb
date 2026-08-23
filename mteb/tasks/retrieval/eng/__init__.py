@@ -266,6 +266,7 @@ from .msr_vtt import (
 )
 from .msvd_t2v_retrieval import MSVDT2VRetrieval
 from .msvd_v2t_retrieval import MSVDV2TRetrieval
+from .muse_va_retrieval import MUSEVAA2IRetrieval, MUSEVAI2ARetrieval
 from .nano_argu_ana_retrieval import NanoArguAnaRetrieval
 from .nano_climate_fever_retrieval import NanoClimateFeverRetrieval
 from .nano_db_pedia_retrieval import NanoDBPediaRetrieval
@@ -703,6 +704,8 @@ __all__ = [
     "MSMARCOv2",
     "MSVDT2VRetrieval",
     "MSVDV2TRetrieval",
+    "MUSEVAA2IRetrieval",
+    "MUSEVAI2ARetrieval",
     "MarsVLPairsI2TRetrieval",
     "MarsVLPairsT2IRetrieval",
     "MedicalQARetrieval",
