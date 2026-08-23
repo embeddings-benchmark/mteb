@@ -50,26 +50,3 @@ class KinNewsClassification(AbsTaskClassification):
 }
 """,
     )
-
-    def dataset_transform(self, **kwargs) -> None:
-        """
-        Transform the dataset to MTEB expected format:
-
-        * column **text**: concatenation of title and content
-        * column **label**: int (0-13 for the 14 news topics)
-        """
-        for lang in self.dataset:
-            for split in self.dataset[lang]:
-                ds = self.dataset[lang][split]
-
-                def transform_example(example):
-                    text = example["text"]
-                    return {"text": text, "label": example["label"]}
-
-                ds = ds.map(
-                    transform_example,
-                    remove_columns=ds.column_names,
-                    desc=f"{lang}/{split}",
-                )
-
-                self.dataset[lang][split] = ds
