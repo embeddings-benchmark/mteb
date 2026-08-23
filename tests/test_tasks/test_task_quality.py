@@ -193,6 +193,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MMDocIRT2ITRetrieval",
         "MMVUVideoCentricQA",
         "MMarcoRetrieval",
+        "MMarcoRetrievalMultilingual",  # CJK languages (ja, zh) have short queries and some translations (id, vi) are truncated in the original source dataset
         "MSMARCO",
         "MSMARCO-Fa",
         "MSMARCO-PL",
