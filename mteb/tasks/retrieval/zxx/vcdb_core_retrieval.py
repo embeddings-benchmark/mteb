@@ -72,13 +72,15 @@ class VCDBCoreAudioRetrieval(AbsTaskRetrieval):
             "video without an audio stream is excluded. The human temporal video "
             "annotations are collapsed into 5,584 unique symmetric relationships "
             "(11,168 directed qrels), so relevance is inherited from video-level "
-            "copy annotations rather than independently judged for audio. The "
-            "separate VCDB 100K-video background collection is not included."
+            "copy annotations rather than independently judged for audio. The 527 "
+            "tracks contain 461 unique audio files; repeated soundtracks from "
+            "distinct source videos are retained as meaningful copy-detection items. "
+            "The separate VCDB 100K-video background collection is not included."
         ),
         reference="https://doi.org/10.1007/978-3-319-10590-1_24",
         dataset={
             "path": "pranitchawla/VCDB-Core-Audio",
-            "revision": "e8802b443919f11538eab1c0a173a7382494c299",
+            "revision": "2304cf0464474d444982925012f1ea680ea77f03",
         },
         type="Any2AnyRetrieval",
         category="a2a",

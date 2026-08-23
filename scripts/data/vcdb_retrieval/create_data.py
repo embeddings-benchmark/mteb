@@ -962,6 +962,9 @@ def _audio_dataset_card(summary: dict[str, Any]) -> str:
     )
     audio_summary = summary["audio"]
     retrieval = audio_summary["retrieval"]
+    unique_packaged_audio = len(
+        {item["packaged_sha256"] for item in audio_summary["tracks"]}
+    )
     reencoded_rows = "\n".join(
         f"- `{item['video_id']}`: `{item['source_codec']}` to AAC; "
         f"output SHA-256 `{item['packaged_sha256']}`"
@@ -1002,6 +1005,7 @@ does not grant additional rights beyond the source terms.
 
 - Raw core videos: {summary["raw_video_count"]}
 - Videos with an audio stream: {retrieval["corpus_audio_tracks"]}
+- Unique packaged audio files (SHA-256): {unique_packaged_audio}
 - Videos without an audio stream: {len(audio_summary["missing_video_ids"])}
 - Audio queries: {retrieval["queries"]}
 - Unique undirected relevant pairs: {retrieval["unique_undirected_video_pairs"]}
@@ -1010,6 +1014,9 @@ does not grant additional rights beyond the source terms.
 Stable IDs remain the original topic-relative video paths. The source video
 without audio, `{audio_summary["missing_video_ids"][0]}`, is excluded. Qrels
 involving it are removed, and every retained query has at least one positive.
+The {retrieval["corpus_audio_tracks"] - unique_packaged_audio} repeated audio files
+belong to distinct source video IDs and are retained as meaningful positives for
+copy detection.
 
 Relevance is derived from VCDB's human segment-level video copy annotations:
 multiple annotations for the same source-video pair are collapsed, and both
