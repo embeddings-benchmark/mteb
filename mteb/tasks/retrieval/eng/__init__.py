@@ -336,6 +336,7 @@ from .real_mm_rag_retrieval import (
     RealMMRAGTechReportRetrieval,
     RealMMRAGTechSlidesRetrieval,
 )
+from .reflectra_retrieval import ReflectraI2ARetrieval
 from .rp2k_i2i_retrieval import RP2kI2IRetrieval
 from .rt1_retrieval import RT1T2VRetrieval, RT1V2TRetrieval
 from .sci_fact_retrieval import SciFact
@@ -774,6 +775,7 @@ __all__ = [
     "RealMMRAGFinSlidesRetrieval",
     "RealMMRAGTechReportRetrieval",
     "RealMMRAGTechSlidesRetrieval",
+    "ReflectraI2ARetrieval",
     "SHS100KA2ARetrieval",
     "SOPI2IRetrieval",
     "SSW60A2IRetrieval",
