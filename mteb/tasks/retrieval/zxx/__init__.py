@@ -4,7 +4,7 @@ from .song_describer import SongDescriberA2TRetrieval, SongDescriberT2ARetrieval
 from .sound_descs import SoundDescsA2TRetrieval, SoundDescsT2ARetrieval
 from .stanford_i2v_retrieval import StanfordI2VRetrieval
 from .urban_sound8k_retrieval import UrbanSound8KA2TRetrieval, UrbanSound8KT2ARetrieval
-from .vcdb_core_retrieval import VCDBCoreRetrieval
+from .vcdb_core_retrieval import VCDBCoreAudioRetrieval, VCDBCoreRetrieval
 from .vim_sketch_retrieval import VimSketchA2ARetrieval
 from .vsc2022_retrieval import VSC2022Retrieval
 
@@ -20,6 +20,7 @@ __all__ = [
     "StanfordI2VRetrieval",
     "UrbanSound8KA2TRetrieval",
     "UrbanSound8KT2ARetrieval",
+    "VCDBCoreAudioRetrieval",
     "VCDBCoreRetrieval",
     "VSC2022Retrieval",
     "VimSketchA2ARetrieval",
