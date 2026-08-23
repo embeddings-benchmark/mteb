@@ -34,6 +34,6 @@ greenleaf_law_embed_tiny = ModelMeta(
     use_instructions=False,
     reference="https://huggingface.co/judicialmind/greenleaf-law-embed-tiny",
     public_training_code=None,
-    public_training_data=None,
+    public_training_data="https://huggingface.co/datasets/judicialmind/legal-training-dataset",
     training_datasets=None,
 )
