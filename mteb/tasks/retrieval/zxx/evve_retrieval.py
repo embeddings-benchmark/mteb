@@ -85,7 +85,7 @@ class EVVERetrieval(AbsTaskRetrieval):
         reference="https://openaccess.thecvf.com/content_cvpr_2013/html/Revaud_Event_Retrieval_in_2013_CVPR_paper.html",
         dataset={
             "path": "Cerru02/EVVE",
-            "revision": "88f505f0a77f0ee0a14f2d7e098aaea08507bbe5",
+            "revision": "0a7d35a4358992882a9989a4e64d1f1ce7a7c78c",
         },
         type="Any2AnyRetrieval",
         category="v2v",
