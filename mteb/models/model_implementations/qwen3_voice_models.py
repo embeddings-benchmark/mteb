@@ -51,16 +51,17 @@ class Qwen3VoiceEmbeddingWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
-        all_embeddings = []
-
         max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, max_samples=max_samples
+        )
+        all_embeddings = []
 
         for batch in tqdm(
             inputs,
             disable=not show_progress_bar,
         ):
-            audio_arrays = [audio["array"][:max_samples] for audio in batch["audio"]]
+            audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             feature_inputs = self.feature_extractor(
                 audio_arrays,
@@ -101,7 +102,7 @@ qwen3_voice_embedding_1_7b = ModelMeta(
     max_tokens=float("inf"),
     n_parameters=12_001_088,
     n_embedding_parameters=0,
-    memory_usage_mb=None,
+    memory_usage_mb=23,
     embed_dim=2048,
     license="apache-2.0",
     reference="https://huggingface.co/marksverdhei/Qwen3-Voice-Embedding-12Hz-1.7B",
@@ -134,7 +135,7 @@ qwen3_voice_embedding_0_6b = ModelMeta(
     max_tokens=float("inf"),
     n_parameters=8_854_336,
     n_embedding_parameters=0,
-    memory_usage_mb=None,
+    memory_usage_mb=17,
     embed_dim=1024,
     license="apache-2.0",
     reference="https://huggingface.co/marksverdhei/Qwen3-Voice-Embedding-12Hz-0.6B",
