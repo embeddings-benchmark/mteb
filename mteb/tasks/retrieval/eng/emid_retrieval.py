@@ -26,8 +26,8 @@ class EMIDA2IRetrieval(AbsTaskRetrieval):
         "is relevant to its three emotion-matched images.",
         reference=_REFERENCE,
         dataset={
-            "path": "Wissam42/EMID-A2I",
-            "revision": "cfc073f00e8d96b7d6e4cb4d45994038acf4ddd6",
+            "path": "mteb/EMID-A2I",
+            "revision": "ad98feb363b0745966e7722f6af11944c6c90571",
         },
         type="Any2AnyRetrieval",
         category="a2i",
@@ -58,8 +58,8 @@ class EMIDI2ARetrieval(AbsTaskRetrieval):
         "relevant to its paired music clip.",
         reference=_REFERENCE,
         dataset={
-            "path": "Wissam42/EMID-I2A",
-            "revision": "597891ed8fd025b382b21b0ed8dbe76a28020e8b",
+            "path": "mteb/EMID-I2A",
+            "revision": "a917e98ded77d0576302d1ad2e99d9f970618537",
         },
         type="Any2AnyRetrieval",
         category="i2a",
