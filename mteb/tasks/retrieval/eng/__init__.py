@@ -249,6 +249,7 @@ from .mm_long_bench_doc_retrieval import MMLongBenchDocRetrieval
 from .mmdocir_t2i_retrieval import MMDocIRT2IRetrieval
 from .mmdocir_t2it_retrieval import MMDocIRT2ITRetrieval
 from .mmedit_retrieval import MMEditAT2ARetrieval
+from .speech_edit_acoustic import SpeechEditAcousticRetrieval
 from .moment_seeker import MomentSeekerTI2VRetrieval, MomentSeekerTV2VRetrieval
 from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval
 from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
@@ -797,6 +798,7 @@ __all__ = [
     "SpartQA",
     "SpeechCocoA2IRetrieval",
     "SpeechCocoI2ARetrieval",
+    "SpeechEditAcousticRetrieval",
     "SpokenCOCOA2IRetrieval",
     "SpokenCOCOI2ARetrieval",
     "SpokenSQuADT2ARetrieval",
