@@ -31,11 +31,11 @@ class SpeechEditAcousticRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{speecheditbench2024,
-  title={SpeechEditBench: A Benchmark for Speech Editing},
-  author={DiscreteSpeech},
-  year={2024},
-  url={https://huggingface.co/datasets/DiscreteSpeech/SpeechEditBench}
+@article{zhang2026speecheditbench,
+  title={SpeechEditBench: A Bilingual Multi-Attribute Benchmark for Instruction-Guided Speech Editing},
+  author={Zhang, Hanlin and Tan, Daxin and Tao, Dehua and Chen, Xiao and Tan, Haochen and Song, Linqi},
+  journal={arXiv preprint arXiv:2606.01804},
+  year={2026}
 }
 """,
         prompt={
