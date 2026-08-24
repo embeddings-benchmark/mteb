@@ -1,0 +1,45 @@
+{
+    "test": {
+        "num_samples": 2000,
+        "unique_pairs": 2000,
+        "number_of_characters": null,
+        "text1_statistics": null,
+        "image1_statistics": {
+            "min_image_width": 800,
+            "average_image_width": 1105.169,
+            "max_image_width": 1600,
+            "min_image_height": 436,
+            "average_image_height": 752.6415,
+            "max_image_height": 1197,
+            "unique_images": 1471
+        },
+        "audio1_statistics": null,
+        "video1_statistics": null,
+        "text2_statistics": null,
+        "image2_statistics": {
+            "min_image_width": 800,
+            "average_image_width": 1101.658,
+            "max_image_width": 1600,
+            "min_image_height": 436,
+            "average_image_height": 749.18,
+            "max_image_height": 1137,
+            "unique_images": 1469
+        },
+        "audio2_statistics": null,
+        "video2_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "0": {
+                    "count": 1000
+                },
+                "1": {
+                    "count": 1000
+                }
+            }
+        }
+    }
+}
