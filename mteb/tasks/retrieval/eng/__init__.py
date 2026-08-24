@@ -142,7 +142,6 @@ from .didemo_retrieval import (
 )
 from .edis_t2it_retrieval import EDIST2ITRetrieval
 from .elastic_kb_retrieval import ElasticKBRetrieval
-from .emid_retrieval import EMIDA2IRetrieval, EMIDI2ARetrieval
 from .emo_vdb import EmoVDBA2TRetrieval, EmoVDBT2ARetrieval
 from .encyclopedia_vqa_it2it_retrieval import EncyclopediaVQAIT2ITRetrieval
 from .english_finance1_retrieval import EnglishFinance1Retrieval
@@ -607,8 +606,6 @@ __all__ = [
     "DiDeMoVA2TRetrieval",
     "DiDeMoVT2ARetrieval",
     "EDIST2ITRetrieval",
-    "EMIDA2IRetrieval",
-    "EMIDI2ARetrieval",
     "EPBench",
     "ESGReports",
     "ElasticKBRetrieval",
