@@ -8,6 +8,8 @@ Retrieval (instance-level, up to three relevant targets per query):
   - {repo-prefix}-A2I  (audio query → image corpus)
   - {repo-prefix}-I2A  (image query → audio corpus)
 
+Exports a seeded subsample of 1,000 audio anchors with deduplicated media.
+
 Pair classification (emotion-aligned vs mismatched audio–image pairs):
   - {repo-prefix}-PC-AI
 
@@ -22,6 +24,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import os
 import random
 from pathlib import Path
@@ -35,6 +38,8 @@ _AUDIO_COL = "Audio_Filename"
 _IMAGE_COLS = ("Image1_filename", "Image2_filename", "Image3_filename")
 _PC_SEED = 42
 _PC_MAX_PER_SIDE = 2048
+_RETRIEVAL_SEED = 42
+_RETRIEVAL_MAX_QUERIES = 1000
 
 
 def _push_retrieval_direction(
@@ -61,6 +66,26 @@ def _push_retrieval_direction(
     queries.save_to_disk(out / "queries")
     qrels.save_to_disk(out / "qrels")
     print(f"Wrote {out}")
+
+
+def _media_bytes(cell) -> bytes | None:
+    if cell is None:
+        return None
+    if isinstance(cell, dict):
+        raw = cell.get("bytes")
+        if raw:
+            return bytes(raw)
+        path = cell.get("path")
+        if path and Path(path).is_file():
+            return Path(path).read_bytes()
+    return None
+
+
+def _media_hash(cell) -> str | None:
+    raw = _media_bytes(cell)
+    if not raw:
+        return None
+    return hashlib.md5(raw, usedforsecurity=False).hexdigest()
 
 
 def _media_ok(cell) -> bool:
@@ -123,6 +148,95 @@ def _expand_rows(
     if not audio_ids:
         raise SystemExit("No valid EMID rows after filtering empty media")
     return audio_ids, audios, image_ids, images, emotions, images_by_audio
+
+
+def _canonicalize_retrieval(
+    audio_ids: list[str],
+    audios: list,
+    image_ids: list[str],
+    images: list,
+    images_by_audio: dict[str, list[str]],
+    *,
+    seed: int,
+    max_queries: int,
+) -> tuple[
+    list[str],
+    list,
+    list[str],
+    list,
+    dict[str, list[str]],
+]:
+    """Deduplicate media by content hash and subsample audio queries."""
+    audio_hash_to_id: dict[str, str] = {}
+    audio_id_remap: dict[str, str] = {}
+    canonical_audio_ids: list[str] = []
+    canonical_audios: list = []
+
+    for audio_id, audio in zip(audio_ids, audios, strict=True):
+        media_hash = _media_hash(audio)
+        if media_hash is None:
+            continue
+        canonical_id = audio_hash_to_id.get(media_hash)
+        if canonical_id is None:
+            audio_hash_to_id[media_hash] = audio_id
+            canonical_id = audio_id
+            canonical_audio_ids.append(audio_id)
+            canonical_audios.append(audio)
+        audio_id_remap[audio_id] = canonical_id
+
+    image_hash_to_id: dict[str, str] = {}
+    image_id_remap: dict[str, str] = {}
+    canonical_image_ids: list[str] = []
+    canonical_images: list = []
+
+    for image_id, image in zip(image_ids, images, strict=True):
+        media_hash = _media_hash(image)
+        if media_hash is None:
+            continue
+        canonical_id = image_hash_to_id.get(media_hash)
+        if canonical_id is None:
+            image_hash_to_id[media_hash] = image_id
+            canonical_id = image_id
+            canonical_image_ids.append(image_id)
+            canonical_images.append(image)
+        image_id_remap[image_id] = canonical_id
+
+    remapped_images_by_audio: dict[str, list[str]] = {}
+    for audio_id, image_ids_for_audio in images_by_audio.items():
+        canonical_audio_id = audio_id_remap.get(audio_id)
+        if canonical_audio_id is None:
+            continue
+        if canonical_audio_id not in remapped_images_by_audio:
+            remapped_images_by_audio[canonical_audio_id] = []
+        seen_images: set[str] = set(remapped_images_by_audio[canonical_audio_id])
+        for image_id in image_ids_for_audio:
+            canonical_image_id = image_id_remap.get(image_id)
+            if canonical_image_id is None or canonical_image_id in seen_images:
+                continue
+            remapped_images_by_audio[canonical_audio_id].append(canonical_image_id)
+            seen_images.add(canonical_image_id)
+
+    remapped_images_by_audio = {
+        audio_id: image_ids_for_audio
+        for audio_id, image_ids_for_audio in remapped_images_by_audio.items()
+        if image_ids_for_audio
+    }
+
+    rng = random.Random(seed)
+    sampled_audio_ids = list(remapped_images_by_audio)
+    rng.shuffle(sampled_audio_ids)
+    sampled_audio_ids = sampled_audio_ids[: min(max_queries, len(sampled_audio_ids))]
+    sampled_images_by_audio = {
+        audio_id: remapped_images_by_audio[audio_id] for audio_id in sampled_audio_ids
+    }
+
+    return (
+        canonical_audio_ids,
+        canonical_audios,
+        canonical_image_ids,
+        canonical_images,
+        sampled_images_by_audio,
+    )
 
 
 def _build_pc(
@@ -200,35 +314,89 @@ def main() -> None:
 
     audio_ids, audios, image_ids, images, emotions, images_by_audio = _expand_rows(ds)
     print(
-        f"Kept {len(audio_ids)} audios / {len(image_ids)} images "
+        f"Expanded to {len(audio_ids)} audios / {len(image_ids)} images "
         f"({len(images_by_audio)} queries with >=1 image)"
     )
 
-    a2i_corpus = Dataset.from_dict({"id": image_ids, "image": images}).cast_column(
-        "image", Image()
+    (
+        retrieval_audio_ids,
+        retrieval_audios,
+        retrieval_image_ids,
+        retrieval_images,
+        retrieval_images_by_audio,
+    ) = _canonicalize_retrieval(
+        audio_ids,
+        audios,
+        image_ids,
+        images,
+        images_by_audio,
+        seed=_RETRIEVAL_SEED,
+        max_queries=_RETRIEVAL_MAX_QUERIES,
     )
-    a2i_queries = Dataset.from_dict({"id": audio_ids, "audio": audios}).cast_column(
-        "audio", Audio()
+    print(
+        f"Retrieval export: {len(retrieval_audio_ids)} unique audios / "
+        f"{len(retrieval_image_ids)} unique images / "
+        f"{len(retrieval_images_by_audio)} sampled queries"
     )
+
+    id_to_audio = dict(zip(retrieval_audio_ids, retrieval_audios, strict=True))
+    id_to_image = dict(zip(retrieval_image_ids, retrieval_images, strict=True))
+
+    used_audio_ids = list(retrieval_images_by_audio)
+    used_image_ids: list[str] = []
+    seen_image_hashes: set[str] = set()
+    for image_ids_for_audio in retrieval_images_by_audio.values():
+        for image_id in image_ids_for_audio:
+            image_hash = _media_hash(id_to_image[image_id])
+            if image_hash is None or image_hash in seen_image_hashes:
+                continue
+            seen_image_hashes.add(image_hash)
+            used_image_ids.append(image_id)
+
+    a2i_corpus = Dataset.from_dict(
+        {
+            "id": used_image_ids,
+            "image": [id_to_image[iid] for iid in used_image_ids],
+        }
+    ).cast_column("image", Image())
+    a2i_queries = Dataset.from_dict(
+        {
+            "id": used_audio_ids,
+            "audio": [id_to_audio[aid] for aid in used_audio_ids],
+        }
+    ).cast_column("audio", Audio())
     a2i_qrels = {"query-id": [], "corpus-id": [], "score": []}
-    for aid, iids in images_by_audio.items():
+    for aid, iids in retrieval_images_by_audio.items():
         for iid in iids:
             a2i_qrels["query-id"].append(aid)
             a2i_qrels["corpus-id"].append(iid)
             a2i_qrels["score"].append(1)
 
-    i2a_corpus = Dataset.from_dict({"id": audio_ids, "audio": audios}).cast_column(
-        "audio", Audio()
-    )
-    i2a_queries = Dataset.from_dict({"id": image_ids, "image": images}).cast_column(
-        "image", Image()
-    )
     i2a_qrels = {"query-id": [], "corpus-id": [], "score": []}
-    for aid, iids in images_by_audio.items():
+    seen_image_hashes = set()
+    for aid, iids in retrieval_images_by_audio.items():
         for iid in iids:
+            image_hash = _media_hash(id_to_image[iid])
+            if image_hash is None or image_hash in seen_image_hashes:
+                continue
+            seen_image_hashes.add(image_hash)
             i2a_qrels["query-id"].append(iid)
             i2a_qrels["corpus-id"].append(aid)
             i2a_qrels["score"].append(1)
+
+    i2a_audio_ids = sorted({aid for aid in i2a_qrels["corpus-id"]})
+    i2a_corpus = Dataset.from_dict(
+        {
+            "id": i2a_audio_ids,
+            "audio": [id_to_audio[aid] for aid in i2a_audio_ids],
+        }
+    ).cast_column("audio", Audio())
+    i2a_queries = Dataset.from_dict(
+        {
+            "id": used_image_ids,
+            "image": [id_to_image[iid] for iid in used_image_ids],
+        }
+    ).cast_column("image", Image())
 
     pc_ds = _build_pc(
         audio_ids,

@@ -27,7 +27,7 @@ class EMIDA2IRetrieval(AbsTaskRetrieval):
         reference=_REFERENCE,
         dataset={
             "path": "Wissam42/EMID-A2I",
-            "revision": "c31390371865180b1e2c6a2b1c271164060510b4",
+            "revision": "cfc073f00e8d96b7d6e4cb4d45994038acf4ddd6",
         },
         type="Any2AnyRetrieval",
         category="a2i",
@@ -59,7 +59,7 @@ class EMIDI2ARetrieval(AbsTaskRetrieval):
         reference=_REFERENCE,
         dataset={
             "path": "Wissam42/EMID-I2A",
-            "revision": "7952e30bc10e00fd466f43d65b8c2686e3012f06",
+            "revision": "597891ed8fd025b382b21b0ed8dbe76a28020e8b",
         },
         type="Any2AnyRetrieval",
         category="i2a",
