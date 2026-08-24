@@ -30,6 +30,7 @@ jobs:
       timeout-minutes: 5
       run: |
         set -euxo pipefail
+        uv python install 3.10
         PYTHON="$(uv python find 3.10)"
         "$PYTHON" --version
         timeout 120s "$PYTHON" -m venv /tmp/stdlib-venv
