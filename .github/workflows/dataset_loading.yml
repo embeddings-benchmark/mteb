@@ -19,8 +19,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v6
 
+    - name: Install uv
+      uses: astral-sh/setup-uv@v8.2.0
+      with:
+        enable-cache: true
+        version: "0.10.12"
+        python-version: '3.11'
+
     - name: Install dependencies
-      run: pip install mteb pytest pytest-rerunfailures
+      run: uv pip install mteb pytest pytest-rerunfailures
 
     - name: Run dataset loading tests
       env:
