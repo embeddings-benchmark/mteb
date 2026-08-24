@@ -12,7 +12,7 @@ class SpeechEditAcousticRetrieval(AbsTaskRetrieval):
             "Each query combines an original speech recording with a natural-language editing instruction, "
             "and the goal is to retrieve the corresponding edited target recording."
         ),
-        reference="https://huggingface.co/datasets/DiscreteSpeech/SpeechEditBench",
+        reference="https://arxiv.org/abs/2606.01804",
         dataset={
             "path": "deep9539/speech_edit_acoustic",
             "revision": "27955b1e1dfc1b433602a26f697a9d19de710d36",
