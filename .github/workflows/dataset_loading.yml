@@ -27,7 +27,10 @@ jobs:
         python-version: '3.11'
 
     - name: Install dependencies
-      run: uv pip install --system mteb pytest pytest-rerunfailures
+      run: |
+        uv python install 3.11
+        "$(uv python find 3.11)" -m venv .venv
+        uv pip install mteb pytest pytest-rerunfailures
 
     - name: Run dataset loading tests
       env:
