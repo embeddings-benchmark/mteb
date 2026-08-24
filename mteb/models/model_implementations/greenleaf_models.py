@@ -12,7 +12,6 @@ import logging
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-logger = logging.getLogger(__name__)
 
 greenleaf_law_embed_tiny = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
