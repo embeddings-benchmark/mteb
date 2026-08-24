@@ -19,48 +19,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v6
 
-    - name: Install uv
-      uses: astral-sh/setup-uv@v8.2.0
-      with:
-        enable-cache: true
-        version: "0.10.12"
-        python-version: '3.10'
-
-    - name: Trace uv sync
-      timeout-minutes: 25
-      continue-on-error: true
-      env:
-        RUST_LOG: uv=trace
-        UV_LOG_CONTEXT: "1"
-        UV_NO_PROGRESS: "1"
-        UV_CACHE_DIR: ${{ runner.temp }}/uv-cache-${{ github.run_id }}-${{ github.run_attempt }}
-        UV_LOCK_TIMEOUT: "60"
-      run: |
-        set -o pipefail
-        echo "--- testing --no-install-project ---"
-        timeout --signal=TERM --kill-after=30s 10m \
-          uv sync --group test --frozen --no-install-project -vv 2>&1 | tee uv-sync-no-project.log || true
-        rm -rf .venv
-        echo "--- testing without --group test ---"
-        timeout --signal=TERM --kill-after=30s 10m \
-          uv sync --frozen --no-install-project -vv 2>&1 | tee uv-sync-base.log || true
-        rm -rf .venv
-
-    - name: Upload uv trace logs
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: uv-sync-trace
-        path: |
-          uv-sync-no-project.log
-          uv-sync-base.log
-
     - name: Install dependencies
-      timeout-minutes: 10
-      run: |
-        rm -rf .venv
-        "$(uv python find 3.10)" -m venv .venv
-        uv sync --group test --frozen --verbose
+      run: pip install mteb pytest pytest-rerunfailures
 
     - name: Run dataset loading tests
       env:
