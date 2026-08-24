@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - "mteb/tasks/**.py"
+      - ".github/workflows/dataset_loading.yml"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -23,22 +24,13 @@ jobs:
       with:
         enable-cache: true
         version: "0.10.12"
-        python-version: '3.10'
+        python-version: '3.11'
 
     - name: Install dependencies
-      timeout-minutes: 5
-      id: sync
-      continue-on-error: true
       run: |
-        uv sync --group test --frozen --verbose
-
-    - name: Create venv manually and sync (fallback)
-      if: steps.sync.outcome == 'failure'
-      timeout-minutes: 10
-      run: |
-        rm -rf .venv
-        $(uv python find) -m venv .venv
-        uv sync --group test --frozen --verbose
+        uv python install 3.11
+        "$(uv python find 3.11)" -m venv .venv
+        uv pip install mteb pytest pytest-rerunfailures bibtexparser gitpython
 
     - name: Run dataset loading tests
       env:
