@@ -33,7 +33,7 @@ class ClothoMomentRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{munakata2025language,
-  title={Language-based Audio Moment Retrieval},
+  title={Language-based audio moment retrieval},
   author={Munakata, Hokuto and Nishimura, Taichi and Nakada, Shota and Komatsu, Tatsuya},
   booktitle={ICASSP 2025-2025 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   pages={1--5},
