@@ -27,8 +27,8 @@ class MUSEVAA2IRetrieval(AbsTaskRetrieval):
         "is to retrieve the image that matches the music clip.",
         reference=_REFERENCE,
         dataset={
-            "path": "Wissam42/MUSE-VA-A2I",
-            "revision": "761cd11f21c1dad47a3fa82160ff5a77ee8cb705",
+            "path": "mteb/MUSE-VA-A2I",
+            "revision": "0f35857db60c708e4b477981ed54c641bac97eca",
         },
         type="Any2AnyRetrieval",
         category="a2i",
@@ -59,8 +59,8 @@ class MUSEVAI2ARetrieval(AbsTaskRetrieval):
         "retrieve the music clip that matches the image.",
         reference=_REFERENCE,
         dataset={
-            "path": "Wissam42/MUSE-VA-I2A",
-            "revision": "84ec3222e6fd1456db6599fcaf335b3f8c80f9d5",
+            "path": "mteb/MUSE-VA-I2A",
+            "revision": "0cf8ca2cc4377959380ad0b27963345a50f76a5d",
         },
         type="Any2AnyRetrieval",
         category="i2a",
