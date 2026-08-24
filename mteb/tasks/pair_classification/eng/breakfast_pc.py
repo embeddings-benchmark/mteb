@@ -16,8 +16,8 @@ class BreakfastPairClassification(AbsTaskPairClassification):
         ),
         reference="https://ieeexplore.ieee.org/document/6909500",
         dataset={
-            "path": "Wissam42/Breakfast-PC-V",
-            "revision": "9ff45d989f5280ba90075694ad0060d79184410d",
+            "path": "mteb/Breakfast-PC-V",
+            "revision": "5c29a53b9045d7bc862d68ff56db3eeb7aaed069",
         },
         type="VideoPairClassification",
         category="v2v",
