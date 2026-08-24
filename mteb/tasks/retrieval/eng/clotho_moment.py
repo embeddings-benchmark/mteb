@@ -16,7 +16,7 @@ class ClothoMomentRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2409.15672",
         dataset={
             "path": "deep9539/clotho-moment",
-            "revision": "main",
+            "revision": "12472536c0a2a26f9824204673ffe36eefb3e24b",
         },
         type="Any2AnyRetrieval",
         category="at2a",
