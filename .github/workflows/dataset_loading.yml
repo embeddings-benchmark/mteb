@@ -30,7 +30,7 @@ jobs:
       timeout-minutes: 25
       continue-on-error: true
       env:
-        RUST_LOG: trace
+        RUST_LOG: uv=trace
         UV_LOG_CONTEXT: "1"
         UV_NO_PROGRESS: "1"
         UV_CACHE_DIR: ${{ runner.temp }}/uv-cache-${{ github.run_id }}-${{ github.run_attempt }}
