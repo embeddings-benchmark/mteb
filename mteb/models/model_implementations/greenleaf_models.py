@@ -7,11 +7,8 @@ for flexible quantization (bf16, int8, binary).
 
 from __future__ import annotations
 
-import logging
-
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-
 
 greenleaf_law_embed_tiny = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
