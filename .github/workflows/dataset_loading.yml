@@ -26,9 +26,19 @@ jobs:
         python-version: '3.10'
 
     - name: Install dependencies
-      timeout-minutes: 30
+      timeout-minutes: 5
+      id: sync
+      continue-on-error: true
       run: |
-        uv sync --extra image --group dev --frozen --verbose
+        uv sync --group test --frozen --verbose
+
+    - name: Create venv manually and sync (fallback)
+      if: steps.sync.outcome == 'failure'
+      timeout-minutes: 10
+      run: |
+        rm -rf .venv
+        $(uv python find) -m venv .venv
+        uv sync --group test --frozen --verbose
 
     - name: Run dataset loading tests
       env:
