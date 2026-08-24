@@ -26,12 +26,21 @@ jobs:
         version: "0.10.12"
         python-version: '3.10'
 
+    - name: Diagnose venv creation
+      timeout-minutes: 5
+      run: |
+        set -euxo pipefail
+        PYTHON="$(uv python find 3.10)"
+        "$PYTHON" --version
+        timeout 120s "$PYTHON" -m venv /tmp/stdlib-venv
+        /tmp/stdlib-venv/bin/python --version
+        timeout 120s uv venv /tmp/uv-venv --python "$PYTHON" -vv
+
     - name: Install dependencies
       timeout-minutes: 10
-      env:
-        UV_CACHE_DIR: ${{ runner.temp }}/uv-cache-${{ github.run_id }}-${{ github.run_attempt }}
-        UV_LOCK_TIMEOUT: "60"
       run: |
+        rm -rf .venv
+        "$(uv python find 3.10)" -m venv .venv
         uv sync --group test --frozen --verbose
 
     - name: Run dataset loading tests
