@@ -1,9 +1,21 @@
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
+from unittest.mock import patch
 
+from mteb._create_dataloaders import create_dataloader as _create_dataloader
 from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from datasets import Dataset
+
+    from mteb.models.models_protocols import MTEBModels
+    from mteb.timing import TimingStack
+    from mteb.types import EncodeKwargs
 
 
 class EMIDPairClassification(AbsTaskPairClassification):
@@ -47,3 +59,44 @@ class EMIDPairClassification(AbsTaskPairClassification):
     input1_column_name: ClassVar[dict[str, str]] = {"audio": "audio"}
     input2_column_name: ClassVar[dict[str, str]] = {"image": "image"}
     label_column_name: str = "label"
+    # category a2i → query prepares audio only, document prepares image only
+    input1_prompt_type = PromptType.query
+    input2_prompt_type = PromptType.document
+
+    def _evaluate_subset(
+        self,
+        model: MTEBModels,
+        data_split: Dataset,
+        *,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: EncodeKwargs,
+        prediction_folder: Path | None = None,
+        num_proc: int | None = None,
+        timer: TimingStack,
+        **kwargs: Any,
+    ) -> dict[str, float]:
+        # Shared PairClassificationEvaluator omits prompt_type when building
+        # dataloaders, so asymmetric a2i still tries to prepare both modalities
+        # and KeyErrors on the audio-only side. Inject side prompt types.
+        prompts = iter([self.input1_prompt_type, self.input2_prompt_type])
+
+        def create_dataloader(dataset: Dataset, **dl_kwargs: Any):
+            dl_kwargs["prompt_type"] = next(prompts)
+            return _create_dataloader(dataset, **dl_kwargs)
+
+        with patch(
+            "mteb._evaluators.pair_classification_evaluator.create_dataloader",
+            create_dataloader,
+        ):
+            return super()._evaluate_subset(
+                model,
+                data_split,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                encode_kwargs=encode_kwargs,
+                prediction_folder=prediction_folder,
+                num_proc=num_proc,
+                timer=timer,
+                **kwargs,
+            )
