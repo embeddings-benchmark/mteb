@@ -22,7 +22,7 @@ class SpeechEditAcousticRetrieval(AbsTaskRetrieval):
         modalities=["audio", "text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
+        main_score="hit_rate_at_1",
         date=("2024-01-01", "2026-08-23"),
         domains=["Spoken"],
         task_subtypes=["Speech Retrieval"],
