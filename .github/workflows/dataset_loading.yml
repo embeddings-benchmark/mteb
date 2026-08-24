@@ -26,8 +26,9 @@ jobs:
         python-version: '3.10'
 
     - name: Install dependencies
+      timeout-minutes: 30
       run: |
-        uv sync --extra image --group dev --frozen
+        uv sync --extra image --group dev --frozen --verbose
 
     - name: Run dataset loading tests
       env:
