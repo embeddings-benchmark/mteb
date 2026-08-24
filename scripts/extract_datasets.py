@@ -2,6 +2,9 @@ import argparse
 import ast
 import logging
 import os
+from pathlib import Path
+
+from git import Repo
 
 from scripts.extract_model_names import get_changed_files
 
@@ -63,7 +66,23 @@ def extract_datasets(files: list[str]) -> list[tuple[str, str]]:
         logging.debug(f"Set CUSTOM_DATASET_REVISIONS={custom_revisions}")
 
         print(f'export CUSTOM_DATASET_REVISIONS="{custom_revisions}"')
+    else:
+        # Keep the test module from falling back to the full dataset sweep.
+        print('export CUSTOM_DATASET_REVISIONS="__EMPTY__"')
     return unique_datasets
+
+
+def extract_added_datasets(base_branch: str) -> list[tuple[str, str]]:
+    """Extract datasets declared by task files added on the current branch."""
+    changed_files = get_changed_files(base_branch, startswith="mteb/tasks/")
+    repo = Repo(Path(__file__).parent.parent)
+    base_commit = repo.commit(f"origin/{base_branch}")
+    head_commit = repo.commit("HEAD")
+    added_paths = {
+        diff.b_path for diff in base_commit.diff(head_commit, diff_filter="A")
+    }
+    added_files = [file for file in changed_files if file in added_paths]
+    return extract_datasets(added_files)
 
 
 def extract_dataset_from_metadata(call_node: ast.Call) -> tuple[str, str] | None:
@@ -129,7 +148,6 @@ if __name__ == "__main__":
     args = parse_args()
 
     base_branch = args.base_branch
-    changed_files = get_changed_files(base_branch, startswith="mteb/tasks/")
-    dataset_tuples = extract_datasets(changed_files)
+    dataset_tuples = extract_added_datasets(base_branch)
 
     logging.debug(f"Found {len(dataset_tuples)} unique datasets.")
