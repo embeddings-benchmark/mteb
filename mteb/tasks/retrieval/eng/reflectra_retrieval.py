@@ -17,7 +17,7 @@ class ReflectraI2ARetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/AraNge/reflectra-benchmark",
         dataset={
             "path": "Wissam42/Reflectra-I2A",
-            "revision": "26d44f3452f3d1be242fa9e6c4d9f8ebfa840af1",
+            "revision": "73167e920e77c3aeea687ac82daa7e6909e8b2db",
         },
         type="Any2AnyRetrieval",
         category="i2a",
