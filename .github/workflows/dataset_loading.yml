@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - "mteb/tasks/**.py"
+      - ".github/workflows/dataset_loading.yml"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
