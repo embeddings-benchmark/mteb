@@ -151,8 +151,11 @@ class Wave7BWrapper(AbsEncoder):
         # standalone checkpoint after `from_pretrained`, regardless of what
         # `from_pretrained` already populated it with (see train_qwen.py's
         # `run_test` path). Replicated here for a faithful reproduction.
-        # load_state_dict copies onto whatever device the target params are
-        # already on, so this works fine with the model already placed.
+        # No explicit .to(device) needed: self.model is already placed by
+        # device_map above, and Module.load_state_dict copies each tensor
+        # onto its *target* parameter's existing device (self.model.beats'
+        # params), regardless of what device the source state dict (loaded
+        # here on CPU via map_location="cpu") is on.
         beats_ckpt = torch.load(beats_path, map_location="cpu")
         self.model.beats.load_state_dict(beats_ckpt["model"])
 
@@ -164,6 +167,12 @@ class Wave7BWrapper(AbsEncoder):
         processor = copy.deepcopy(self.processor.image_processor)
         image = image.convert("RGB")
         width, height = image.size
+        # Qwen2VLImageProcessor's own smart_resize already upscales images
+        # below its min_pixels bound, so this rarely fires on real inputs --
+        # kept anyway since it's WAVE's own process_image_unified behavior
+        # (harmless no-op when unneeded, and cheap insurance against a
+        # min_pixels configuration where smart_resize's upscale alone
+        # wouldn't reach the 28px patch-size floor).
         if width < 28 or height < 28:
             pad_width = max(0, 28 - width)
             pad_height = max(0, 28 - height)
@@ -191,16 +200,20 @@ class Wave7BWrapper(AbsEncoder):
         WAVE computes fps = sampled_frames / video_length, which can differ
         from the nominal rate whenever the frame cap binds or a short video
         keeps all its frames, and derives video_second_per_grid from that
-        actual fps. Replicated here using the sampled frame count and the
-        source video's duration.
+        actual fps (qwenvl/data/data_qwen.py's video_decord, line 274 in the
+        WAVE GitHub repo: `fps = len(frame_idx) / video_length`). Replicated
+        here using the sampled frame count and the source video's duration.
         """
         if frames.ndim == 4 and frames.shape[1] == 3 and frames.shape[-1] != 3:
             frames = frames.permute(0, 2, 3, 1)
         frames = frames.contiguous()
-        image_processor = self.processor.image_processor
-        video_proc = image_processor(images=None, videos=frames, return_tensors="pt")
+        video_proc = self.processor.image_processor(
+            images=None, videos=frames, return_tensors="pt"
+        )
         fps = frames.shape[0] / duration if duration else self.fps
-        video_second_per_grid = [image_processor.temporal_patch_size / fps]
+        video_second_per_grid = [
+            self.processor.image_processor.temporal_patch_size / fps
+        ]
         return (
             video_proc["pixel_values_videos"],
             video_proc["video_grid_thw"],
@@ -219,7 +232,6 @@ class Wave7BWrapper(AbsEncoder):
         not part of WAVE's own preprocessing.
         """
         array = np.asarray(array, dtype=np.float32)
-        feature_extractor = self.processor.feature_extractor
         segment_samples = 300 * _SAMPLING_RATE
         segments = [
             array[k : k + segment_samples]
@@ -234,7 +246,7 @@ class Wave7BWrapper(AbsEncoder):
                 segment = np.pad(  # noqa: PLW2901
                     segment, (0, _SAMPLING_RATE - segment.shape[0])
                 )
-            features = feature_extractor(
+            features = self.processor.feature_extractor(
                 segment,
                 sampling_rate=_SAMPLING_RATE,
                 padding="max_length",
@@ -300,6 +312,13 @@ class Wave7BWrapper(AbsEncoder):
         )
         text_input = text_input[0].split("<|im_start|>user\n")[-1].strip()
 
+        # replace_multimodal_special_tokens (processing_qwen2_5_omni.py, bundled
+        # in the checkpoint repo) calls next() on each of these arguments
+        # internally -- it expects iterators, not plain lists/values, hence the
+        # explicit iter() wrapping. position_id_per_seconds=25 and the
+        # seconds_per_chunk formula are copied verbatim from WAVE's own
+        # qwenvl/data/data_qwen.py (process_omni_conversations, lines 449-450
+        # in the WAVE GitHub repo), not derived independently.
         text_input = self.processor.replace_multimodal_special_tokens(
             [text_input],
             iter([audio_length]) if audio_inputs is not None else iter([]),
@@ -465,7 +484,11 @@ wave_7b = ModelMeta(
     release_date="2026-02-11",
     max_tokens=131_072,
     n_parameters=9_410_651_007,
-    n_embedding_parameters=0,
+    # classify_linear, the all-layer fusion head that actually produces the
+    # embedding (two Linear layers: hidden_size*num_hidden_layers -> hidden_size
+    # -> hidden_size, i.e. 3584*28*3584 + 3584 + 3584*3584 + 3584 for WAVE-7B's
+    # config), not zero like a plain last-hidden-state pooling model.
+    n_embedding_parameters=372_513_792,
     memory_usage_mb=17949,
     embed_dim=3584,
     license="apache-2.0",
