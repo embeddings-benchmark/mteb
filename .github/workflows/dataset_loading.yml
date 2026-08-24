@@ -30,7 +30,7 @@ jobs:
       run: |
         uv python install 3.11
         "$(uv python find 3.11)" -m venv .venv
-        uv pip install mteb pytest pytest-rerunfailures
+        uv pip install mteb pytest pytest-rerunfailures bibtexparser
 
     - name: Run dataset loading tests
       env:
