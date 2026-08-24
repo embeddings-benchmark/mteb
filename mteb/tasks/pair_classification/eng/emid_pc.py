@@ -29,8 +29,8 @@ class EMIDPairClassification(AbsTaskPairClassification):
         ),
         reference="https://arxiv.org/abs/2308.07622",
         dataset={
-            "path": "Wissam42/EMID-PC-AI",
-            "revision": "7758c20e79039527e717939e1c7590777f989489",
+            "path": "mteb/EMID-PC-AI",
+            "revision": "625b47142af487b5b9566fa6ed7403c0eb5e56e8",
         },
         type="AudioPairClassification",
         category="a2i",
