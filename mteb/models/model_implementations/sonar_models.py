@@ -61,21 +61,31 @@ class SONARWrapper(AbsEncoder):
         """Resolve the SONAR-format language code ('eng_Latn') for this batch.
 
         Uses the task's own eval_langs rather than parsing hf_subset, since
-        subset names have no guaranteed format. For bitext subsets this list
-        has two entries (source, target); queries use the source side,
-        documents use the target side. eval_langs uses BCP47 ('eng-Latn'),
-        SONAR wants underscore-joined FLORES-200-style codes ('eng_Latn').
+        subset names have no guaranteed format. eval_langs uses BCP47
+        ('eng-Latn'), SONAR wants underscore-joined FLORES-200-style codes
+        ('eng_Latn').
 
-        Tasks with `parallel_subsets=True` (e.g. FLORES) instead pass a
-        single already-resolved language code as hf_subset -- one per
-        dataset column, not a key into eval_langs -- so it's used as-is.
+        Tasks with `parallel_subsets=True` (e.g. FLORES, the task SONAR is
+        reproduced against) pass a single already-resolved language code as
+        hf_subset directly -- one per dataset column, not a key into
+        eval_langs -- so that case is unambiguous and used as-is.
+
+        For a subset whose eval_langs entry has two languages (a bitext
+        pair), there is *no* framework-enforced ordering: FLORES/BUCC name
+        the subset to match [source, target], but DiaBLa defines the same
+        pair both ways ("fr-en": [fra, eng] and "en-fr": [eng, fra]), and
+        mteb's BitextMiningEvaluator calls encode() once per dataset column
+        with the *same* hf_subset and no prompt_type for either column, so
+        there's no signal here to tell which physical column is being
+        encoded. langs[0]/langs[-1] by prompt_type is therefore a
+        best-effort heuristic (right whenever the subset name matches the
+        list order, which held for every case checked), not a guarantee --
+        a genuinely reliable fix needs mteb's evaluator to pass which
+        column/side is being encoded, which it currently doesn't.
         """
         langscripts = task_metadata.hf_subsets_to_langscripts
         if hf_subset in langscripts:
             langs = langscripts[hf_subset]
-            # Position-based, not name-based: bitext eval_langs lists are
-            # always [source, target] by convention, so index 0/-1 holds
-            # regardless of how the subset itself happens to be named.
             lang = langs[-1] if prompt_type == PromptType.document else langs[0]
         else:
             lang = hf_subset or "eng_Latn"
