@@ -227,7 +227,16 @@ class AbsEncoder(ABC):
 
         from mteb.get_tasks import get_task
 
-        abstask = get_task(task_name=task_metadata.name)
+        try:
+            abstask = get_task(task_name=task_metadata.name)
+        except KeyError:
+            # Tasks constructed outside the registry (e.g. the mock tasks used by
+            # `mteb mock-run`) have no registry entry to read a default prompt from.
+            logger.debug(
+                "Task '%s' is not in the task registry; using an empty instruction.",
+                task_metadata.name,
+            )
+            return ""
         return abstask.abstask_prompt
 
     def format_instruction(
