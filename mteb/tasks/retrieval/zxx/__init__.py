@@ -1,4 +1,5 @@
 from .abo_i2v_retrieval import ABOI2VRetrieval
+from .evve_retrieval import EVVERetrieval
 from .lp_music_caps import LPMusicCapsMTTA2TRetrieval, LPMusicCapsMTTT2ARetrieval
 from .music_caps import MusicCapsA2TRetrieval, MusicCapsT2ARetrieval
 from .song_describer import SongDescriberA2TRetrieval, SongDescriberT2ARetrieval
@@ -13,6 +14,7 @@ from .vsc2022_retrieval import VSC2022Retrieval
 
 __all__ = [
     "ABOI2VRetrieval",
+    "EVVERetrieval",
     "LPMusicCapsMTTA2TRetrieval",
     "LPMusicCapsMTTT2ARetrieval",
     "MusicCapsA2TRetrieval",

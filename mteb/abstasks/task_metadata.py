@@ -74,6 +74,7 @@ TaskSubtype = Literal[
     "Scene recognition",
     "Caption Pairing",
     "Emotion recognition",
+    "Event Retrieval",
     "Textures recognition",
     "Activity recognition",
     "Physical plausibility classification",

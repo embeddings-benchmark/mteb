@@ -193,6 +193,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MMDocIRT2ITRetrieval",
         "MMVUVideoCentricQA",
         "MMarcoRetrieval",
+        "MMarcoRetrievalMultilingual",  # CJK languages (ja, zh) have short queries and some translations (id, vi) are truncated in the original source dataset
         "MSMARCO",
         "MSMARCO-Fa",
         "MSMARCO-PL",
@@ -310,6 +311,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SentimentDKSF",
         "SinhalaNewsClassification",
         "SlovakMovieReviewSentimentClassification",
+        "SlovakPharmacyDrMaxReranking",  # real e-commerce search-query log; 2/4676 queries are 1-char noise
         "SpanishNewsClusteringP2P",
         "SpeechCommandsZeroshotv0.01",
         "SpeechCommandsZeroshotv0.02",
@@ -647,6 +649,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WebFAQRetrieval",
         "WebLINXCandidatesReranking",
         "WebQAT2ITRetrieval",
+        "WebVidCoVRIT2VRetrieval",
         "WikiClusteringP2P",
         "WikiClusteringP2P.v2",
         "WikiSQLRetrieval",
@@ -834,6 +837,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SugarCrepe",
         "VQA2IT2TRetrieval",
         "WebQAT2ITRetrieval",
+        "WebVidCoVRIT2VRetrieval",
         "XFlickr30kCoT2IRetrieval",
         "XM3600T2IRetrieval",
     ],
@@ -844,6 +848,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "ESC50PairClassification",  # pairs constructed combinatorially from a small pool of audio clips
         "FalseFriendsGermanEnglish",
         "LinceMTBitextMining",
+        "OpusSlovakEnglishBitextMining",  # OPUS-100's subtitle/legal-document mix naturally repeats short common phrases
         "ParsinluEntail",
         "Query2Query",
         "RUParaPhraserSTS",
