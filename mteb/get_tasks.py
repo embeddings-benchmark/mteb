@@ -112,7 +112,7 @@ def get_abstask_prompt(task_type: str) -> str:
     if task_type in _TASK_TYPE_TO_PROMPT:
         return _TASK_TYPE_TO_PROMPT[task_type]
 
-    simplified_task_type = _TASKTYPE2SIMPLIFIEDTASKTYPE.get(task_type)  # type: ignore[arg-type]
+    simplified_task_type = _TASKTYPE2SIMPLIFIEDTASKTYPE.get(task_type)
     if simplified_task_type in _SIMPLIFIED_TASK_TYPE_TO_PROMPT:
         return _SIMPLIFIED_TASK_TYPE_TO_PROMPT[simplified_task_type]
 
