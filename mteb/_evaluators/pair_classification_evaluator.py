@@ -113,6 +113,7 @@ class PairClassificationEvaluator(Evaluator):
                 create_dataloader(
                     self.dataset.select_columns(cols1).rename_columns(ds1_col_names),
                     task_metadata=self.task_metadata,
+                    prompt_type=self.input1_prompt_type,
                     input_column=self.task_metadata.modalities[0]
                     if (
                         isinstance(self.input1_column_name, str)
@@ -147,6 +148,7 @@ class PairClassificationEvaluator(Evaluator):
                 create_dataloader(
                     self.dataset.select_columns(cols2).rename_columns(ds2_col_names),
                     task_metadata=self.task_metadata,
+                    prompt_type=self.input2_prompt_type,
                     input_column=self.task_metadata.modalities[0]
                     if (
                         isinstance(self.input2_column_name, str)
