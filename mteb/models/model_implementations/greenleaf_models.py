@@ -15,7 +15,44 @@ greenleaf_law_embed_tiny = ModelMeta(
     loader_kwargs={"trust_remote_code": True},
     name="judicialmind/greenleaf-law-embed-tiny",
     model_type=["dense"],
-    languages=["eng-Latn"],
+    languages=[
+        "eng-Latn",  # English
+        "deu-Latn",  # German
+        "fra-Latn",  # French
+        "spa-Latn",  # Spanish
+        "ita-Latn",  # Italian
+        "por-Latn",  # Portuguese
+        "nld-Latn",  # Dutch
+        "zho-Hans",  # Chinese (Simplified)
+        "jpn-Jpan",  # Japanese
+        "kor-Kore",  # Korean
+        "ara-Arab",  # Arabic
+        "hin-Deva",  # Hindi
+        "rus-Cyrl",  # Russian
+        "tur-Latn",  # Turkish
+        "pol-Latn",  # Polish
+        "vie-Latn",  # Vietnamese
+        "tha-Thai",  # Thai
+        "ind-Latn",  # Indonesian
+        "msa-Latn",  # Malay
+        "swe-Latn",  # Swedish
+        "nor-Latn",  # Norwegian
+        "dan-Latn",  # Danish
+        "fin-Latn",  # Finnish
+        "ces-Latn",  # Czech
+        "hun-Latn",  # Hungarian
+        "ron-Latn",  # Romanian
+        "ell-Grek",  # Greek
+        "heb-Hebr",  # Hebrew
+        "ukr-Cyrl",  # Ukrainian
+        "bul-Cyrl",  # Bulgarian
+        "hrv-Latn",  # Croatian
+        "slk-Latn",  # Slovak
+        "slv-Latn",  # Slovenian
+        "lit-Latn",  # Lithuanian
+        "lav-Latn",  # Latvian
+        "est-Latn",  # Estonian
+    ],
     open_weights=True,
     revision="bff06c9474bda26e7b5883640821d6910689eb82",
     release_date="2026-08-22",
