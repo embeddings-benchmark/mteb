@@ -22,12 +22,13 @@ class EMIDPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="EMIDPairClassification",
         description=(
-            "Pair classification on EMID: determining whether a music clip and an "
-            "image share the same emotion category. Positive pairs are true "
-            "audio–image matches from EMID; negatives pair a clip with an image "
-            "from a different emotion."
+            "Pair classification on EMID (Emotionally paired Music and Image "
+            "Dataset): determining whether a music clip and an image are "
+            "emotionally aligned under EMID's 13-dimension emotion model. "
+            "Positive pairs are true audio–image matches from EMID; negatives "
+            "pair a clip with an image from a different emotion."
         ),
-        reference="https://arxiv.org/abs/2308.07622",
+        reference="https://doi.org/10.1145/3607541.3616821",
         dataset={
             "path": "mteb/EMID-PC-AI",
             "revision": "625b47142af487b5b9566fa6ed7403c0eb5e56e8",
@@ -44,12 +45,14 @@ class EMIDPairClassification(AbsTaskPairClassification):
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio", "image"],
-        sample_creation="found",
+        sample_creation="created",
         bibtex_citation=r"""
-@article{zhang2023emid,
-  author = {Zhang, Yujie and others},
-  journal = {arXiv preprint arXiv:2308.07622},
-  title = {Emotionally Paired Music and Image Dataset},
+@inproceedings{zou2023emid,
+  author = {Zou, Jialing and Mei, Jiahao and Ye, Guangze and Huai, Tianyu and Shen, Qiwei and Dong, Daoguo},
+  booktitle = {Proceedings of the 1st International Workshop on Multimedia Content Generation and Evaluation: New Methods and Practice},
+  doi = {10.1145/3607541.3616821},
+  pages = {41--48},
+  title = {{EMID}: An Emotional Aligned Dataset in Audio-Visual Modality},
   year = {2023},
 }
 """,
