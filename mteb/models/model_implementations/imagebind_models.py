@@ -113,7 +113,9 @@ class ImageBindWrapper(AbsEncoder):
                 waveform = torch.nn.functional.pad(
                     waveform, (0, min_len - waveform.shape[1])
                 )
-            timepoints = get_clip_timepoints(clip_sampler, waveform.size(1) / sample_rate)
+            timepoints = get_clip_timepoints(
+                clip_sampler, waveform.size(1) / sample_rate
+            )
             clips = []
             for start, end in timepoints:
                 clip = waveform[:, int(start * sample_rate) : int(end * sample_rate)]
