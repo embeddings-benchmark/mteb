@@ -397,7 +397,9 @@ class GeeVecAPIModel(AbsEncoder):
         api_model_name = self._resolve_api_model_name(effective_domain)
 
         mask_sents = [(i, t) for i, t in enumerate(sentences) if t.strip()]
-        mask, no_empty_sent = list(zip(*mask_sents)) if mask_sents else ([], [])
+        mask, no_empty_sent = (
+            list(zip(*mask_sents, strict=True)) if mask_sents else ([], [])
+        )
 
         no_empty_embeddings = []
         for i in range(0, len(no_empty_sent), max_batch_size):

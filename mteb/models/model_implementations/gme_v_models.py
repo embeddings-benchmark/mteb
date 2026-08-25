@@ -113,7 +113,7 @@ class Encoder(torch.nn.Module):
         instruction = instruction or self.default_instruction
         # Inputs must be batched
         input_texts, input_images = [], []
-        for t, i in zip(texts, images):
+        for t, i in zip(texts, images, strict=True):
             input_str = ""
             if i is None:
                 input_images = None  # All examples in the same batch are consistent
@@ -193,7 +193,7 @@ class GmeQwen2VL(AbsEncoder):
         self.model = self.model.to(self.device)
         all_embeddings = []
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Fused Encoding"):
-            batch_size = len(batch["text"]) or len(batch["image"])
+            batch_size = len(batch["text"]) if "text" in batch else len(batch["image"])
             if "text" in batch:
                 text_batch = batch["text"]
             else:
@@ -266,7 +266,7 @@ def smart_resize(
     if max(h_bar, w_bar) / min(h_bar, w_bar) > MAX_RATIO:
         msg = f"Absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(h_bar, w_bar) / min(h_bar, w_bar)}"
         logger.warning(msg)
-        warnings.warn(msg)
+        warnings.warn(msg, stacklevel=2)
         if h_bar > w_bar:
             h_bar = w_bar * MAX_RATIO
         else:
@@ -365,6 +365,7 @@ gme_qwen2vl_2b = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=GME_CITATION,
+    extra_requirements_groups=["gme"],
 )
 
 gme_qwen2vl_7b = ModelMeta(
@@ -390,4 +391,5 @@ gme_qwen2vl_7b = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=GME_CITATION,
+    extra_requirements_groups=["gme"],
 )

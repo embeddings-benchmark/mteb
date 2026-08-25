@@ -3,6 +3,7 @@ from .ave_dataset_pc import (
     AVEDatasetVAPairClassification,
     AVEDatasetVPairClassification,
 )
+from .breakfast_pc import BreakfastPairClassification
 from .cremad import CREMADPairClassification
 from .human_animal_cartoon_pc import (
     HumanAnimalCartoonVAPairClassification,
@@ -29,6 +30,7 @@ from .ravdess_av_pc import (
 from .sprint_duplicate_questions_pc import SprintDuplicateQuestionsPC
 from .twitter_sem_eval2015_pc import TwitterSemEval2015PC
 from .twitter_url_corpus_pc import TwitterURLCorpus
+from .velociti import VELOCITIPairClassification
 from .videocon_pc import VideoConPairClassification
 from .vinoground_pc import VinogroundPairClassification
 from .vocal_sound import VocalSoundPairClassification
@@ -38,6 +40,7 @@ __all__ = [
     "AVEDatasetVAPairClassification",
     "AVEDatasetVPairClassification",
     "AVSpeakerBenchPairClassification",
+    "BreakfastPairClassification",
     "CREMADPairClassification",
     "HumanAnimalCartoonVAPairClassification",
     "HumanAnimalCartoonVPairClassification",
@@ -56,6 +59,7 @@ __all__ = [
     "SprintDuplicateQuestionsPC",
     "TwitterSemEval2015PC",
     "TwitterURLCorpus",
+    "VELOCITIPairClassification",
     "VideoConPairClassification",
     "VinogroundPairClassification",
     "VocalSoundPairClassification",

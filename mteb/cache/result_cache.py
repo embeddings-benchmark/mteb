@@ -300,7 +300,7 @@ class ResultCache:
         if model_revision is None:
             msg = "`model_revision` is not specified, attempting to load the latest revision. To disable this behavior, specify the 'model_revision` explicitly."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
             # get revs from paths
             revisions = [p for p in model_path.glob("*") if p.is_dir()]
             if not revisions:
@@ -704,7 +704,7 @@ class ResultCache:
         else:
             msg = f"Cache directory `{self.cache_path}` does not exist."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
 
     def _load_from_cache(
         self,
@@ -1023,7 +1023,9 @@ class ResultCache:
                 model_name_and_revision.append((model_name, revision, experiment_name))
             return [
                 p
-                for model_revision, p in zip(model_name_and_revision, paths)
+                for model_revision, p in zip(
+                    model_name_and_revision, paths, strict=True
+                )
                 if model_revision in name_and_revision
             ]
 
@@ -1367,7 +1369,8 @@ class ResultCache:
         ):
             warnings.warn(
                 "experiment_kwargs is specified but load_experiments is not set to MATCH_KWARGS."
-                "No results will be loaded."
+                "No results will be loaded.",
+                stacklevel=2,
             )
 
         models_as_model_meta = models is not None and isinstance(

@@ -158,7 +158,7 @@ class QueryRewriteRetriever:
         self.base = base
         self.llm = llm
         self.prompt = prompt
-        self.mteb_model_meta = _wrapper_meta("query-rewrite", base, model)
+        self.mteb_model_meta = _wrapper_meta("query-rewrite", base, llm)
 
     def index(
         self,
@@ -221,7 +221,7 @@ class HyDERetriever:
         self.base = base
         self.llm = llm
         self.prompt = prompt
-        self.mteb_model_meta = _wrapper_meta("hyde", base, model)
+        self.mteb_model_meta = _wrapper_meta("hyde", base, llm)
 
     def index(
         self,
@@ -326,7 +326,7 @@ class RerankRetriever:
         self.llm = llm
         self.prompt = prompt
         self.snippet_chars = snippet_chars
-        self.mteb_model_meta = _wrapper_meta("llm-rerank", base, model)
+        self.mteb_model_meta = _wrapper_meta("llm-rerank", base, llm)
         self.task_corpus: CorpusDatasetType | None = None
         self._doc_id_to_idx: dict[str, int] = {}
 
@@ -420,7 +420,7 @@ class TournamentRerankRetriever:
         self.llm = llm
         self.prompt = prompt
         self.snippet_chars = snippet_chars
-        self.mteb_model_meta = _wrapper_meta("tournament-rerank", base, model)
+        self.mteb_model_meta = _wrapper_meta("tournament-rerank", base, llm)
         self.task_corpus: CorpusDatasetType | None = None
         self._doc_id_to_idx: dict[str, int] = {}
 
@@ -541,7 +541,7 @@ class MultiHopRetriever:
         self.llm = llm
         self.prompt = _RERANK
         self.snippet_chars = snippet_chars
-        self.mteb_model_meta = _wrapper_meta("multi-hop", base, model)
+        self.mteb_model_meta = _wrapper_meta("multi-hop", base, llm)
         self.task_corpus: CorpusDatasetType | None = None
         self._doc_id_to_idx: dict[str, int] = {}
 
@@ -666,7 +666,7 @@ class MultiQueryRetriever:
     ) -> None:
         self.base = base
         self.llm = llm
-        self.mteb_model_meta = _wrapper_meta("multi-query", base, model)
+        self.mteb_model_meta = _wrapper_meta("multi-query", base, llm)
         self.num_queries = num_queries
         self.rrf_k = rrf_k
 
