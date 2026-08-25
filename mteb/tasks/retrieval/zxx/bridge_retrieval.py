@@ -43,7 +43,7 @@ class BridgeV2VRetrieval(AbsTaskRetrieval):
         date=("2021-01-01", "2023-08-31"),
         domains=["Robotics", "Scene"],
         task_subtypes=[],
-        license="apache-2.0",
+        license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
