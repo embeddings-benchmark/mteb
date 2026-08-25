@@ -16,12 +16,13 @@ _LIBERO_DESCRIPTION_TAIL = (
     "Built from the LIBERO lifelong robot learning benchmark "
     "(libero_spatial/object/goal/10 suites: 40 tabletop-manipulation tasks, "
     "1,693 human-teleoperated demonstrations rendered at 256x256, 10 fps). "
-    "Per task, episodes are split into disjoint query and corpus pools, so a "
-    "query's own source episode is never in the corpus and exact frame "
-    "matching cannot solve the task. Relevance is task-level and "
-    "multi-positive; distractors include same-scene episodes of other goals, "
-    "so retrieval requires matching the achieved goal state rather than the "
-    "scene."
+    "Per task, 10 episodes are held out as queries and the remaining "
+    "episodes form the corpus, so the query's own episode never appears in "
+    "the corpus and exact frame matching cannot solve the task. A corpus "
+    "item is relevant if and only if it comes from an episode of the same "
+    "task as the query (19-40 relevant items per query); every other item "
+    "is non-relevant, including episodes recorded in the same scene that "
+    "accomplish a different goal, so matching the scene alone is not enough."
 )
 
 
@@ -48,7 +49,7 @@ class LIBEROI2VRetrieval(AbsTaskRetrieval):
         date=("2023-03-01", "2023-11-01"),
         domains=["Robotics", "Scene"],
         task_subtypes=["Cross-Modal Retrieval"],
-        license="mit",
+        license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="rendered",
@@ -85,7 +86,7 @@ class LIBEROV2IRetrieval(AbsTaskRetrieval):
         date=("2023-03-01", "2023-11-01"),
         domains=["Robotics", "Scene"],
         task_subtypes=["Cross-Modal Retrieval"],
-        license="mit",
+        license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="rendered",
