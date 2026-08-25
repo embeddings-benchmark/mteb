@@ -17,7 +17,7 @@ from mteb.abstasks import (
 from mteb.filter_tasks import filter_tasks
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable, Sequence
+    from collections.abc import Iterable, Iterator, Sequence
 
     from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
     from mteb.types import Modalities
@@ -74,52 +74,63 @@ _SIMILAR_TASKS = _create_similar_tasks(TASK_LIST)
 def _create_task_type_to_prompt_mapping(
     tasks: Iterable[type[AbsTask]],
 ) -> dict[str, str]:
-    """Create a mapping from task type to the default prompt of its abstask class."""
+    """Create a mapping from task type to the prompt defined by its abstask (base) class."""
     type_to_prompt: dict[str, str] = {}
     for cls in tasks:
+        # `abstask_prompt` is defined on the abstask (base) class, e.g. `AbsTaskRetrieval`, and is
+        # only annotated on `AbsTask` itself, so it can be missing (e.g. zero-shot classification)
         prompt = getattr(cls, "abstask_prompt", None)
         if prompt:
             type_to_prompt.setdefault(cls.metadata.type, prompt)
     return type_to_prompt
 
 
-_TASK_TYPE_TO_PROMPT = _create_task_type_to_prompt_mapping(TASK_LIST)
+def _iter_task_subclasses() -> Iterator[type[AbsTask]]:
+    """Iterate over all currently imported (non-abstract) subclasses of `AbsTask`.
 
-# fallback for task types that no task in the registry implements (yet)
-_SIMPLIFIED_TASK_TYPE_TO_PROMPT: dict[str, str] = {
-    "retrieval": "Retrieve text based on user query.",
-    "clustering": "Identify categories in user passages.",
-    "classification": "Classify user passages.",
-    "semantic-similarity": "Retrieve semantically similar text.",
-    "pair-classification": "Retrieve text that are semantically similar to the given text.",
-}
+    Contrary to the task registry this also includes tasks that are not a part of mteb, such as
+    mock tasks and user defined tasks.
+    """
+    stack: list[Any] = [AbsTask]
+    seen: set[Any] = set()
+    while stack:
+        for subclass in stack.pop().__subclasses__():
+            if subclass in seen:
+                continue
+            seen.add(subclass)
+            stack.append(subclass)
+            if getattr(subclass, "metadata", None) is not None:
+                yield subclass
+
+
+_TASK_TYPE_TO_PROMPT = _create_task_type_to_prompt_mapping(TASK_LIST)
 
 
 def get_abstask_prompt(task_type: str) -> str:
-    """Get the default prompt (`AbsTask.abstask_prompt`) for a given task type.
+    """Get the prompt (`AbsTask.abstask_prompt`) defined by the abstask class of a task type.
 
-    This is derived from the task type instead of the task name, such that it also works for
-    tasks that are not a part of the task registry (e.g. mock tasks or custom tasks).
+    The prompt is resolved from the task type instead of the task name, such that it also works for
+    tasks that are not a part of the task registry (e.g. mock tasks or user defined tasks).
 
     Args:
         task_type: The type of the task, e.g. "Retrieval".
 
     Returns:
-        The default prompt for the task type or an empty string if no prompt is defined for the task type.
+        The prompt of the abstask class of the task type, or an empty string if its abstask class
+            doesn't define one (e.g. zero-shot classification).
     """
-    from mteb.abstasks.task_metadata import _TASKTYPE2SIMPLIFIEDTASKTYPE
-
     if task_type in _TASK_TYPE_TO_PROMPT:
         return _TASK_TYPE_TO_PROMPT[task_type]
 
-    simplified_task_type = _TASKTYPE2SIMPLIFIEDTASKTYPE.get(task_type)
-    if simplified_task_type in _SIMPLIFIED_TASK_TYPE_TO_PROMPT:
-        return _SIMPLIFIED_TASK_TYPE_TO_PROMPT[simplified_task_type]
-
-    log_once.warning(
-        f"No default prompt found for task type '{task_type}'. Using an empty prompt."
-    )
-    return ""
+    # no task in the registry uses this task type, fall back to the imported task classes
+    prompt = _create_task_type_to_prompt_mapping(_iter_task_subclasses()).get(task_type)
+    if prompt is None:
+        log_once.warning(
+            f"No prompt found on the abstask class of task type '{task_type}'. Using an empty prompt."
+        )
+        return ""
+    _TASK_TYPE_TO_PROMPT[task_type] = prompt
+    return prompt
 
 
 _DEFAULT_PROPRIETIES = (
