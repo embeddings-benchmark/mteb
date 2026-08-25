@@ -20,9 +20,11 @@ _MANISKILL_DESCRIPTION_TAIL = (
     "rendered at 256x256. Goal-state images come from the base sensor "
     "camera while videos come from the human render camera, so queries and "
     "documents never share a viewpoint and exact frame matching cannot "
-    "solve the task. Per task, episodes are split into disjoint query and "
-    "corpus pools; relevance is task-level and multi-positive, and the "
-    "query's own source episode is never in the corpus."
+    "solve the task. Per task, 10 episodes are held out as queries and the "
+    "other 140 form the corpus, so the query's own episode never appears in "
+    "the corpus. A corpus item is relevant if and only if it comes from an "
+    "episode of the same task as the query (140 relevant items per query); "
+    "items from the other seven tasks are non-relevant."
 )
 
 
