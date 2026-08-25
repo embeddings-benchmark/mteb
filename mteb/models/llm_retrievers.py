@@ -65,13 +65,11 @@ _HOP_READ = (
 )
 
 
-def _wrapper_meta(
-    kind: str, base: SearchProtocol, model: ChatModelProtocol
-) -> ModelMeta:
+def _wrapper_meta(kind: str, base: SearchProtocol, llm: ChatModelProtocol) -> ModelMeta:
     """Name a composed retriever after its method, its LLM, and its base."""
     base_meta = getattr(base, "mteb_model_meta", None)
     base_name = (getattr(base_meta, "name", None) or "unknown").rsplit("/", 1)[-1]
-    llm_name = (getattr(model, "name", None) or "llm").rsplit("/", 1)[-1]
+    llm_name = (getattr(llm, "name", None) or "llm").rsplit("/", 1)[-1]
     return ModelMeta.create_empty(
         overwrites={
             "name": f"{kind}-{llm_name}-{base_name}",
@@ -133,11 +131,11 @@ def _to_scores(ordered: list[str], top_k: int) -> dict[str, float]:
 
 
 def _transform_queries(
-    queries: QueryDatasetType, model: ChatModelProtocol, template: str
+    queries: QueryDatasetType, llm: ChatModelProtocol, template: str
 ) -> QueryDatasetType:
     rows = []
     for row in queries:
-        out = model.generate(
+        out = llm.generate(
             [{"role": "user", "content": template.format(q=row["text"])}]
         )
         rows.append({"id": row["id"], "text": out.text.strip() or row["text"]})
@@ -153,12 +151,12 @@ class QueryRewriteRetriever:
     def __init__(
         self,
         base: SearchProtocol,
-        model: ChatModelProtocol,
+        llm: ChatModelProtocol,
         *,
         prompt: str = _REWRITE,
     ) -> None:
         self.base = base
-        self.model = model
+        self.llm = llm
         self.prompt = prompt
         self.mteb_model_meta = _wrapper_meta("query-rewrite", base, model)
 
@@ -196,7 +194,7 @@ class QueryRewriteRetriever:
     ) -> RetrievalOutputType:
         """Rewrite each query with the LLM, then search the base retriever."""
         return self.base.search(
-            _transform_queries(queries, self.model, self.prompt),
+            _transform_queries(queries, self.llm, self.prompt),
             task_metadata=task_metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
@@ -216,12 +214,12 @@ class HyDERetriever:
     def __init__(
         self,
         base: SearchProtocol,
-        model: ChatModelProtocol,
+        llm: ChatModelProtocol,
         *,
         prompt: str = _HYDE,
     ) -> None:
         self.base = base
-        self.model = model
+        self.llm = llm
         self.prompt = prompt
         self.mteb_model_meta = _wrapper_meta("hyde", base, model)
 
@@ -259,7 +257,7 @@ class HyDERetriever:
     ) -> RetrievalOutputType:
         """Write a passage for each query with the LLM, then search with it."""
         return self.base.search(
-            _transform_queries(queries, self.model, self.prompt),
+            _transform_queries(queries, self.llm, self.prompt),
             task_metadata=task_metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
@@ -289,7 +287,7 @@ def _docs_block(
 
 
 def _listwise_rank(
-    model: ChatModelProtocol,
+    llm: ChatModelProtocol,
     prompt: str,
     qid: str,
     query: str,
@@ -297,7 +295,7 @@ def _listwise_rank(
     docs: str,
 ) -> list[str]:
     """LLM listwise ordering of candidates; unranked ids keep their order."""
-    out = model.generate(
+    out = llm.generate(
         [{"role": "user", "content": prompt.format(q=query, docs=docs)}],
         response_format=_RANKING_SCHEMA,
     )
@@ -318,14 +316,14 @@ class RerankRetriever:
     def __init__(
         self,
         base: SearchProtocol,
-        model: ChatModelProtocol,
+        llm: ChatModelProtocol,
         *,
         pool_size: int = 20,
         snippet_chars: int = 500,
         prompt: str = _RERANK,
     ) -> None:
         self.base = base
-        self.model = model
+        self.llm = llm
         self.prompt = prompt
         self.snippet_chars = snippet_chars
         self.mteb_model_meta = _wrapper_meta("llm-rerank", base, model)
@@ -387,7 +385,7 @@ class RerankRetriever:
                 self.task_corpus, self._doc_id_to_idx, candidates, self.snippet_chars
             )
             ordered = _listwise_rank(
-                self.model, self.prompt, qid, query_text[qid], candidates, docs
+                self.llm, self.prompt, qid, query_text[qid], candidates, docs
             )
             results[qid] = _to_scores(ordered, top_k)
         return results
@@ -408,7 +406,7 @@ class TournamentRerankRetriever:
     def __init__(
         self,
         base: SearchProtocol,
-        model: ChatModelProtocol,
+        llm: ChatModelProtocol,
         *,
         pool_size: int = 100,
         batch_size: int = 20,
@@ -419,7 +417,7 @@ class TournamentRerankRetriever:
         if promote_k >= batch_size:
             raise ValueError("promote_k must be smaller than batch_size.")
         self.base = base
-        self.model = model
+        self.llm = llm
         self.prompt = prompt
         self.snippet_chars = snippet_chars
         self.mteb_model_meta = _wrapper_meta("tournament-rerank", base, model)
@@ -490,7 +488,7 @@ class TournamentRerankRetriever:
                         self.task_corpus, self._doc_id_to_idx, batch, self.snippet_chars
                     )
                     ranked = _listwise_rank(
-                        self.model, self.prompt, qid, query_text[qid], batch, docs
+                        self.llm, self.prompt, qid, query_text[qid], batch, docs
                     )
                     survivors += ranked[: self.promote_k]
                     tail += ranked[self.promote_k :]
@@ -500,7 +498,7 @@ class TournamentRerankRetriever:
                 self.task_corpus, self._doc_id_to_idx, candidates, self.snippet_chars
             )
             ordered = _listwise_rank(
-                self.model, self.prompt, qid, query_text[qid], candidates, docs
+                self.llm, self.prompt, qid, query_text[qid], candidates, docs
             )
             for tail in reversed(tails):
                 ordered += tail
@@ -533,14 +531,14 @@ class MultiHopRetriever:
     def __init__(
         self,
         base: SearchProtocol,
-        model: ChatModelProtocol,
+        llm: ChatModelProtocol,
         *,
         hops: int = 4,
         per_hop: int = 25,
         snippet_chars: int = 500,
     ) -> None:
         self.base = base
-        self.model = model
+        self.llm = llm
         self.prompt = _RERANK
         self.snippet_chars = snippet_chars
         self.mteb_model_meta = _wrapper_meta("multi-hop", base, model)
@@ -592,7 +590,7 @@ class MultiHopRetriever:
             pool: dict[str, float] = {}
             notes: list[str] = []
             for _ in range(self.hops):
-                out = self.model.generate(
+                out = self.llm.generate(
                     [
                         {
                             "role": "user",
@@ -623,7 +621,7 @@ class MultiHopRetriever:
                 hop_docs, _ = _docs_block(
                     self.task_corpus, self._doc_id_to_idx, batch, self.snippet_chars
                 )
-                read = self.model.generate(
+                read = self.llm.generate(
                     [
                         {
                             "role": "user",
@@ -661,13 +659,13 @@ class MultiQueryRetriever:
     def __init__(
         self,
         base: SearchProtocol,
-        model: ChatModelProtocol,
+        llm: ChatModelProtocol,
         *,
         num_queries: int = 3,
         rrf_k: int = 60,
     ) -> None:
         self.base = base
-        self.model = model
+        self.llm = llm
         self.mteb_model_meta = _wrapper_meta("multi-query", base, model)
         self.num_queries = num_queries
         self.rrf_k = rrf_k
@@ -708,7 +706,7 @@ class MultiQueryRetriever:
         results: dict[str, dict[str, float]] = {}
         for row in queries:
             qid, question = row["id"], row["text"]
-            out = self.model.generate(
+            out = self.llm.generate(
                 [
                     {
                         "role": "user",
