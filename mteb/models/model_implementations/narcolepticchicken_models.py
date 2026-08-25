@@ -27,7 +27,10 @@ narcolepticchicken_octen_law_8b_v1 = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=set(),
+    # WikiQA TRAIN was used directly. GerDaLIRSmall and LeCaRDv2 are marked
+    # conservatively because the training pack contains disclosed
+    # cross-direction benchmark-adjacent near-duplicates for those tasks.
+    training_datasets={"GerDaLIRSmall", "LeCaRDv2", "WikiQA"},
     citation=OCTEN_LAW_8B_V1_CITATION,
     adapted_from='Octen/Octen-Embedding-8B',
 )
