@@ -142,6 +142,7 @@ from .didemo_retrieval import (
 )
 from .edis_t2it_retrieval import EDIST2ITRetrieval
 from .elastic_kb_retrieval import ElasticKBRetrieval
+from .emid_retrieval import EMIDA2IRetrieval, EMIDI2ARetrieval
 from .emo_vdb import EmoVDBA2TRetrieval, EmoVDBT2ARetrieval
 from .encyclopedia_vqa_it2it_retrieval import EncyclopediaVQAIT2ITRetrieval
 from .english_finance1_retrieval import EnglishFinance1Retrieval
@@ -435,6 +436,7 @@ from .viz_wiz_it2t_retrieval import VizWizIT2TRetrieval
 from .vqa2_it2t_retrieval import VQA2IT2TRetrieval
 from .web_qa_t2it_retrieval import WebQAT2ITRetrieval
 from .web_qa_t2t_retrieval import WebQAT2TRetrieval
+from .webvid_covr_retrieval import WebVidCoVRIT2VRetrieval
 from .wino_grande_retrieval import WinoGrande
 from .youcook2_retrieval import (
     YouCook2A2VRetrieval,
@@ -606,6 +608,8 @@ __all__ = [
     "DiDeMoVA2TRetrieval",
     "DiDeMoVT2ARetrieval",
     "EDIST2ITRetrieval",
+    "EMIDA2IRetrieval",
+    "EMIDI2ARetrieval",
     "EPBench",
     "ESGReports",
     "ElasticKBRetrieval",
@@ -862,6 +866,7 @@ __all__ = [
     "VizWizIT2TRetrieval",
     "WebQAT2ITRetrieval",
     "WebQAT2TRetrieval",
+    "WebVidCoVRIT2VRetrieval",
     "WinoGrande",
     "YouCook2A2VRetrieval",
     "YouCook2AT2VRetrieval",

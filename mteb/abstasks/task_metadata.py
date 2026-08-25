@@ -74,6 +74,7 @@ TaskSubtype = Literal[
     "Scene recognition",
     "Caption Pairing",
     "Emotion recognition",
+    "Event Retrieval",
     "Textures recognition",
     "Activity recognition",
     "Physical plausibility classification",
@@ -287,6 +288,7 @@ TaskCategory = Literal[
     "i2v",
     "i2va",
     "it2v",
+    "v2i",
 ]
 """The category of the task.
 
@@ -331,6 +333,7 @@ TaskCategory = Literal[
 39. i2v: image to video
 40. i2va: image to video+audio
 41. it2v: image+text to video
+42. v2i: video to image
 """
 
 _MODALITY_CODES: dict[str, str] = {

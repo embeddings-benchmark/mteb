@@ -656,6 +656,8 @@ extend-ignore-re = [
 
 [tool.typos.type.py.extend-identifiers]
 BulgarianStoreReviewSentimentClassfication = "BulgarianStoreReviewSentimentClassfication"
+SciRepEvalFoSClassification = "SciRepEvalFoSClassification"
+FoS = "FoS"
 LaBSE = "LaBSE"
 
 [tool.typos.type.py.extend-words]
@@ -683,6 +685,7 @@ NIFE = "NIFE"
 thw = "thw"
 ist = "ist" # spelling error in prompt for harrier-oss-v1
 shw = "SHW"
+SME = "SME"
 SHS = "SHS"  # SecondHandSongs / SHS100K dataset
 shs = "shs"
 nd = "nd"
