@@ -31,16 +31,14 @@ class ClothoMomentRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@inproceedings{munakata2025language,
-  title={Language-based audio moment retrieval},
-  author={Munakata, Hokuto and Nishimura, Taichi and Nakada, Shota and Komatsu, Tatsuya},
-  booktitle={ICASSP 2025-2025 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
-  pages={1--5},
-  year={2025},
-  organization={IEEE}
-}
-""",
+        bibtex_citation=r"""@inproceedings{munakata2025language,
+  author = {Munakata, Hokuto and Nishimura, Taichi and Nakada, Shota and Komatsu, Tatsuya},
+  booktitle = {ICASSP 2025-2025 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  organization = {IEEE},
+  pages = {1--5},
+  title = {Language-based audio moment retrieval},
+  year = {2025}
+}""",
         prompt={
             "query": "Given the background audio and a description of a moment, retrieve the audio segment containing that moment."
         },
