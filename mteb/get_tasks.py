@@ -71,6 +71,57 @@ _TASKS_REGISTRY = _create_name_to_task_mapping(TASK_LIST)
 _SIMILAR_TASKS = _create_similar_tasks(TASK_LIST)
 
 
+def _create_task_type_to_prompt_mapping(
+    tasks: Iterable[type[AbsTask]],
+) -> dict[str, str]:
+    """Create a mapping from task type to the default prompt of its abstask class."""
+    type_to_prompt: dict[str, str] = {}
+    for cls in tasks:
+        prompt = getattr(cls, "abstask_prompt", None)
+        if prompt:
+            type_to_prompt.setdefault(cls.metadata.type, prompt)
+    return type_to_prompt
+
+
+_TASK_TYPE_TO_PROMPT = _create_task_type_to_prompt_mapping(TASK_LIST)
+
+# fallback for task types that no task in the registry implements (yet)
+_SIMPLIFIED_TASK_TYPE_TO_PROMPT: dict[str, str] = {
+    "retrieval": "Retrieve text based on user query.",
+    "clustering": "Identify categories in user passages.",
+    "classification": "Classify user passages.",
+    "semantic-similarity": "Retrieve semantically similar text.",
+    "pair-classification": "Retrieve text that are semantically similar to the given text.",
+}
+
+
+def get_abstask_prompt(task_type: str) -> str:
+    """Get the default prompt (`AbsTask.abstask_prompt`) for a given task type.
+
+    This is derived from the task type instead of the task name, such that it also works for
+    tasks that are not a part of the task registry (e.g. mock tasks or custom tasks).
+
+    Args:
+        task_type: The type of the task, e.g. "Retrieval".
+
+    Returns:
+        The default prompt for the task type or an empty string if no prompt is defined for the task type.
+    """
+    from mteb.abstasks.task_metadata import _TASKTYPE2SIMPLIFIEDTASKTYPE
+
+    if task_type in _TASK_TYPE_TO_PROMPT:
+        return _TASK_TYPE_TO_PROMPT[task_type]
+
+    simplified_task_type = _TASKTYPE2SIMPLIFIEDTASKTYPE.get(task_type)  # type: ignore[arg-type]
+    if simplified_task_type in _SIMPLIFIED_TASK_TYPE_TO_PROMPT:
+        return _SIMPLIFIED_TASK_TYPE_TO_PROMPT[simplified_task_type]
+
+    log_once.warning(
+        f"No default prompt found for task type '{task_type}'. Using an empty prompt."
+    )
+    return ""
+
+
 _DEFAULT_PROPRIETIES = (
     "name",
     "type",
