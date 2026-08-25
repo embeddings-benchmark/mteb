@@ -40,7 +40,6 @@ class EDIRIT2IRetrieval(AbsTaskRetrieval):
 }
 """,
         prompt={
-            "query": "Given an image, find a similar everyday image with the described changes: ",
-            "document": "Represent the given image. ",
+            "query": "Given an image, find a similar image satisfying the query.",
         },
     )
