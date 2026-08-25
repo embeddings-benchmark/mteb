@@ -1,3 +1,4 @@
+from .abo_i2v_retrieval import ABOI2VRetrieval
 from .evve_retrieval import EVVERetrieval
 from .lp_music_caps import LPMusicCapsMTTA2TRetrieval, LPMusicCapsMTTT2ARetrieval
 from .moving_fashion_retrieval import (
@@ -16,6 +17,7 @@ from .vim_sketch_retrieval import VimSketchA2ARetrieval
 from .vsc2022_retrieval import VSC2022Retrieval
 
 __all__ = [
+    "ABOI2VRetrieval",
     "EVVERetrieval",
     "LPMusicCapsMTTA2TRetrieval",
     "LPMusicCapsMTTT2ARetrieval",
