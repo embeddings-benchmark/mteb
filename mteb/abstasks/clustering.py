@@ -72,18 +72,15 @@ def _evaluate_clustering_bootstrapped(
         max_depth = max(map(len, labels))
     # Evaluate on each level til max depth
     for i_level in range(max_depth):
-        level_labels: list[str | int] = []
-        # Assign -1 to gold label if the level is not there
-        for label in labels:
-            if len(label) > i_level:
-                level_labels.append(label[i_level])
-            else:
-                level_labels.append(-1)
-        np_level_labels = np.array(level_labels)
-        valid_idx = np.array(
-            [level_label != -1 for level_label in np_level_labels]
-        )  # Could be level_labels != -1 but fails with FutureWarning: elementwise comparison failed
-        np_level_labels = np_level_labels[valid_idx]
+        # Drop the documents whose label path does not reach this level, rather
+        # than give them a sentinel gold label and filter on it afterwards. An
+        # earlier version appended -1 for those documents, but np.array() on a
+        # mixed list of str and int returns a string array, so the sentinel
+        # became the string "-1" and the filter kept every document.
+        valid_idx = np.array([len(label) > i_level for label in labels])
+        np_level_labels = np.array(
+            [label[i_level] for label in labels if len(label) > i_level]
+        )
         level_embeddings = embeddings[valid_idx]
         clustering_model = MiniBatchKMeans(
             n_clusters=np.unique(np_level_labels).size,
