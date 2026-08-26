@@ -1,5 +1,6 @@
 from .abo_i2v_retrieval import ABOI2VRetrieval
 from .evve_retrieval import EVVERetrieval
+from .libero_retrieval import LIBEROI2VRetrieval, LIBEROV2IRetrieval
 from .lp_music_caps import LPMusicCapsMTTA2TRetrieval, LPMusicCapsMTTT2ARetrieval
 from .moving_fashion_retrieval import (
     MovingFashionI2VRetrieval,
@@ -19,6 +20,8 @@ from .vsc2022_retrieval import VSC2022Retrieval
 __all__ = [
     "ABOI2VRetrieval",
     "EVVERetrieval",
+    "LIBEROI2VRetrieval",
+    "LIBEROV2IRetrieval",
     "LPMusicCapsMTTA2TRetrieval",
     "LPMusicCapsMTTT2ARetrieval",
     "MovingFashionI2VRetrieval",
