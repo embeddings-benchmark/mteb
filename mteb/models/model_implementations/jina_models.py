@@ -387,16 +387,16 @@ class Jinav4ModelMeta(ModelMeta):
         device: str | None = None,
         *,
         embed_dim: int | None = None,
-        vector_type: Literal[SUPPORTED_VECTOR_TYPES] = "single_vector",
         **kwargs: Any,
     ) -> MTEBModels:
-        model = super().load_model(
-            device=device, embed_dim=embed_dim, vector_type=vector_type, **kwargs
-        )
+        model = super().load_model(device=device, embed_dim=embed_dim, **kwargs)
+        vector_type = kwargs.pop(
+            "vector_type", "single_vector"
+        )  # didn't add to args to not trigger experiments
         if vector_type == "multi_vector":
             model.mteb_model_meta = model.mteb_model_meta.model_copy(
                 update={
-                    "model_type": "late-interaction",
+                    "model_type": ["late-interaction"],
                 }
             )
         return model
@@ -526,7 +526,15 @@ class JinaV4Wrapper(AbsEncoder):
                     )
                 ]
             else:
-                embeddings = text_embeddings + image_embeddings
+                # `encode_text`/`encode_image` return a list with one vector per
+                # input, so the two lists must be fused per example rather than
+                # concatenated - otherwise one input yields two embeddings.
+                embeddings = torch.nn.functional.normalize(
+                    torch.stack(list(text_embeddings))
+                    + torch.stack(list(image_embeddings)),
+                    p=2,
+                    dim=-1,
+                )
         elif text_embeddings is not None:
             embeddings = text_embeddings
         elif image_embeddings is not None:
@@ -643,13 +651,13 @@ class JinaV4Wrapper(AbsEncoder):
                 "vector_type must be one of the following: [`single_vector`, `multi_vector`]"
             )
 
-    @staticmethod
     def score_single_vector(
+        self,
         qs: torch.Tensor | list[torch.Tensor],
         ps: torch.Tensor | list[torch.Tensor],
     ) -> torch.Tensor:
         """Compute the dot product score for the given single-vector query and passage embeddings."""
-        device = "cpu"
+        device = self.model.device
 
         if len(qs) == 0:
             raise ValueError("No queries provided")
@@ -665,21 +673,19 @@ class JinaV4Wrapper(AbsEncoder):
 
         qs_stacked = normalize_input(qs).to(device)
         ps_stacked = normalize_input(ps).to(device)
-
-        # Compute scores
-        scores = torch.einsum("bd,cd->bc", qs_stacked, ps_stacked).to(torch.float32)
-
-        # Squeeze if single query
+        scores = (
+            torch.einsum("bd,cd->bc", qs_stacked, ps_stacked).to(torch.float32).cpu()
+        )
         return scores.squeeze(0) if scores.shape[0] == 1 else scores
 
-    @staticmethod
     def score_multi_vector(
+        self,
         qs: list[torch.Tensor],
         ps: list[torch.Tensor],
         batch_size: int = 16,
     ) -> torch.Tensor:
         """Compute the MaxSim score (ColBERT-like) for the given multi-vector query and passage embeddings."""
-        device = "cpu"
+        device = self.model.device
 
         if len(qs) == 0:
             raise ValueError("No queries provided")

@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 @pytest.mark.parametrize(
-    "task, modalities",
+    ("task", "modalities"),
     [
         # Task needs image and text, model only text
         (MockImageTextPairClassificationTask(), ["text"]),
@@ -40,7 +40,7 @@ def test_task_modality_filtering(task, modalities):
     model_meta = model_meta.model_copy(update={"modalities": modalities})
     model.mteb_model_meta = model_meta
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="but none overlap with"):
         mteb.evaluate(
             model,
             task,
