@@ -91,7 +91,6 @@ from .clotho import ClothoA2TRetrieval, ClothoT2ARetrieval
 from .cmu_arctic import CMUArcticA2TRetrieval, CMUArcticT2ARetrieval
 from .covers80_retrieval import Covers80A2ARetrieval
 from .covr_r_retrieval import CoVRRVT2VRetrieval
-from .dense_webvid_covr_retrieval import DenseWebVidCoVRVT2VRetrieval
 from .cqa_dupstack_android_retrieval import CQADupstackAndroidRetrieval
 from .cqa_dupstack_english_retrieval import CQADupstackEnglishRetrieval
 from .cqa_dupstack_gaming_retrieval import CQADupstackGamingRetrieval
@@ -126,6 +125,7 @@ from .dapfam_patent_retrieval import (
     DAPFAMOutTitlAbsToTitlAbsRetrieval,
 )
 from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives, DBPediaHardNegativesV2
+from .dense_webvid_covr_retrieval import DenseWebVidCoVRVT2VRetrieval
 from .didemo_retrieval import (
     DiDeMoA2VRetrieval,
     DiDeMoAT2VRetrieval,
@@ -560,7 +560,6 @@ __all__ = [
     "Covers80A2ARetrieval",
     "CovidQA",
     "DAPFAMAllTitlAbsClmToFullTextRetrieval",
-    "DenseWebVidCoVRVT2VRetrieval",
     "DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval",
     "DAPFAMAllTitlAbsClmToTitlAbsRetrieval",
     "DAPFAMAllTitlAbsToFullTextRetrieval",
@@ -582,6 +581,7 @@ __all__ = [
     "DBPediaHardNegatives",
     "DBPediaHardNegativesV2",
     "DeepPlanning",
+    "DenseWebVidCoVRVT2VRetrieval",
     "DiDeMoA2VRetrieval",
     "DiDeMoAT2VRetrieval",
     "DiDeMoT2VARetrieval",

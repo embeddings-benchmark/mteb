@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-from datasets import load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
-from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
@@ -18,7 +15,7 @@ class DenseWebVidCoVRVT2VRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2508.14039",
         dataset={
             "path": "nik1995/Dense-WebVid-CoVR",
-            "revision": "main",
+            "revision": "988f558c4497429f98b2b16789863aba403449d7",
         },
         type="Any2AnyRetrieval",
         category="vt2v",
@@ -46,23 +43,3 @@ class DenseWebVidCoVRVT2VRetrieval(AbsTaskRetrieval):
         },
         is_beta=True,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        if self.data_loaded:
-            return
-        path = self.metadata.dataset["path"]
-        revision = self.metadata.dataset["revision"]
-        corpus = load_dataset(path, "corpus", split="test", revision=revision)
-        queries = load_dataset(path, "queries", split="test", revision=revision)
-        qrels_ds = load_dataset(path, "qrels", split="test", revision=revision)
-        qrels: dict[str, dict[str, int]] = {}
-        for row in qrels_ds:
-            qrels.setdefault(row["query-id"], {})[row["corpus-id"]] = int(row["score"])
-        self.dataset = {
-            "default": {
-                "test": RetrievalSplitData(
-                    corpus=corpus, queries=queries, relevant_docs=qrels, top_ranked=None
-                )
-            }
-        }
-        self.data_loaded = True

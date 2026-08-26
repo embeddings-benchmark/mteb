@@ -880,6 +880,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WorldSenseAudioVideoZeroShot",
     ],
     "duplicate_video": [
+        "DenseWebVidCoVRVT2VRetrieval",  # multiple rows have same video with different instruction
         "MMVUVideoCentricQA",
         "MomentSeekerTV2VRetrieval",
         "StanfordI2VRetrieval",  # official 3,401-ID manifest contains 3,325 unique video contents
