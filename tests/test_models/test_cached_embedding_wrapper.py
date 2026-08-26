@@ -61,7 +61,7 @@ class DummyModel(RandomEncoderBaseline):
 
 
 class TestCachedEmbeddingWrapper:
-    @pytest.fixture(scope="function")
+    @pytest.fixture
     def cache_dir(self, tmp_path):
         cache_path = tmp_path / "test_cache"
         yield cache_path
@@ -254,7 +254,7 @@ class TestCachedEmbeddingWrapper:
 
 
 @pytest.mark.parametrize(
-    "task, model",
+    ("task", "model"),
     [
         (
             MockMultiChoiceTask(),

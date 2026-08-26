@@ -85,8 +85,8 @@ class MemotionT2IRetrieval(AbsTaskRetrieval):
         description="Retrieve memes based on captions.",
         reference="https://aclanthology.org/2020.semeval-1.99/",
         dataset={
-            "path": "mteb/MMSoc_Memotion",
-            "revision": "f77e225ae55c1987b0b8cbf6badd1c10296f5f34",
+            "path": "mteb/MMSoc_Memotion_corrected",
+            "revision": "15bac69b0c917ecd824b8a13827e517b83727878",
         },
         type="Any2AnyRetrieval",
         category="t2i",

@@ -65,6 +65,7 @@ if TYPE_CHECKING:
         CrossEncoderModelCardData,
         SentenceTransformerModelCardData,
     )
+    from sentence_transformers.sparse_encoder import SparseEncoder
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
@@ -132,7 +133,12 @@ FRAMEWORKS = Literal[
 ]
 
 MODEL_TYPES = Literal[
-    "dense", "cross-encoder", "late-interaction", "sparse", "router", "hybrid"
+    "dense",
+    "cross-encoder",
+    "late-interaction",
+    "sparse",
+    "router",
+    "hybrid",
 ]
 
 # Licenses considered "open" (OSI-approved or otherwise free/libre) when computing the
@@ -715,13 +721,34 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             or "cross-encoder" in model_name_lower
         )
 
+    @staticmethod
+    def _modules_indicate_sparse_encoder(
+        modules_config: list[dict[str, Any]] | dict[str, Any] | None,
+    ) -> bool:
+        """Detect a SparseEncoder architecture from modules.json entries.
+
+        Sparse encoder modules (e.g. MLMTransformer, SpladePooling, SparseStaticEmbedding) all live
+        under the ``sentence_transformers.sparse_encoder`` namespace, which lets us recognize a sparse
+        model even when ``config_sentence_transformers.json`` doesn't declare ``model_type``.
+        """
+        if not modules_config:
+            return False
+        modules = (
+            modules_config if isinstance(modules_config, list) else [modules_config]
+        )
+        return any(
+            "sparse_encoder" in module.get("type", "")
+            for module in modules
+            if isinstance(module, dict)
+        )
+
     @classmethod
     def _resolve_loader(
         cls,
         model_name: str,
         config_sbert: dict[str, Any] | None,
         sbert_config: dict[str, Any] | None,
-        modules_config: dict[str, Any] | None,
+        modules_config: list[dict[str, Any]] | dict[str, Any] | None,
         config: dict[str, Any] | None,
         revision: str | None = None,
     ) -> tuple[Callable[..., MTEBModels], MODEL_TYPES, list[Modalities]]:
@@ -729,15 +756,23 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
         - SentenceTransformer  → SentenceTransformerEncoderWrapper
         - CrossEncoder         → CrossEncoderWrapper
+        - SparseEncoder        → SparseEncoderWrapper
         """
         from mteb.models import (
             CrossEncoderWrapper,
             SentenceTransformerEncoderWrapper,
+            SparseEncoderWrapper,
         )
 
         st_model_type = config_sbert.get("model_type") if config_sbert else None
-        if st_model_type not in {"SentenceTransformer", "CrossEncoder"}:
-            if modules_config:
+        if st_model_type not in {
+            "SentenceTransformer",
+            "CrossEncoder",
+            "SparseEncoder",
+        }:
+            if cls._modules_indicate_sparse_encoder(modules_config):
+                st_model_type = "SparseEncoder"
+            elif modules_config:
                 st_model_type = "SentenceTransformer"
             else:
                 fallback = cls._detect_model_type(model_name, revision, config)
@@ -748,10 +783,11 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 )
 
         modalities = cls._detect_modalities_from_sbert_config(sbert_config)
-        is_cross_encoder = st_model_type == "CrossEncoder"
 
-        if is_cross_encoder:
+        if st_model_type == "CrossEncoder":
             return CrossEncoderWrapper, "cross-encoder", modalities
+        elif st_model_type == "SparseEncoder":
+            return SparseEncoderWrapper, "sparse", modalities
         elif st_model_type == "SentenceTransformer":
             return SentenceTransformerEncoderWrapper, "dense", modalities
         else:
@@ -944,6 +980,34 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                     model
                 ),
                 adapted_from=_get_source_model(model.model_card_data)
+                if hasattr(model, "model_card_data")
+                else None,
+            )
+        )
+
+    @classmethod
+    def _from_sparse_encoder_model(cls, model: SparseEncoder) -> Self:
+        """Generates a ModelMeta from only a SparseEncoder model, without fetching any additional metadata from HuggingFace Hub."""
+        from mteb.models import SparseEncoderWrapper
+
+        name: str | None = (
+            model.model_card_data.model_name
+            if model.model_card_data.model_name
+            else model.model_card_data.base_model
+        )
+        return cls.create_empty(
+            overwrites=dict(
+                name=name,
+                revision=model.model_card_data.base_model_revision,
+                loader=SparseEncoderWrapper,
+                max_tokens=model.get_max_seq_length(),
+                embed_dim=model.get_embedding_dimension(),
+                similarity_fn_name=ScoringFunction.from_str(model.similarity_fn_name)
+                if model.similarity_fn_name
+                else None,
+                framework=["Sentence Transformers", "PyTorch"],
+                model_type=["sparse"],
+                adapted_from=_get_source_model(model.model_card_data)  # type: ignore[arg-type]
                 if hasattr(model, "model_card_data")
                 else None,
             )
@@ -1197,6 +1261,38 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             meta_hub = cls._from_hub(name, revision)
             # prioritize metadata from the model card but fill missing fields from the hub
             meta = meta_hub.merge(meta)
+
+        return meta
+
+    @classmethod
+    def from_sparse_encoder_model(
+        cls,
+        model: SparseEncoder,
+        revision: str | None = None,
+        fetch_from_hf: bool = False,
+    ) -> Self:
+        """Generates a ModelMeta from a SparseEncoder model.
+
+        Args:
+            model: SparseEncoder model.
+            revision: Revision of the model.
+            fetch_from_hf: Whether to fetch additional metadata from HuggingFace Hub based on the model name. If False, only metadata that can be
+                extracted from the SparseEncoder model will be used.
+
+        Returns:
+            The generated ModelMeta.
+        """
+        meta = cls._from_sparse_encoder_model(model)
+        if fetch_from_hf:
+            if meta.name is None:
+                logger.warning(
+                    "Model name is not set in metadata extracted from SparseEncoder model. Cannot fetch additional metadata from HuggingFace Hub."
+                )
+            else:
+                name = meta.name
+                meta_hub = cls._from_hub(name, revision)
+                # prioritize metadata from the model card but fill missing fields from the hub
+                meta = meta_hub.merge(meta)
 
         return meta
 

@@ -85,6 +85,8 @@ SFR_Embedding_Code_2B_R = ModelMeta(
     ),
     name="Salesforce/SFR-Embedding-Code-2B_R",
     model_type=["dense"],
+    # its remote code imports transformers.cache_utils.HybridCache, removed in v5
+    extra_requirements_groups=["transformers-v4"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="c73d8631a005876ed5abde34db514b1fb6566973",
