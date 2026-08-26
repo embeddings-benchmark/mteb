@@ -27,8 +27,7 @@ def load_annotations() -> list[dict]:
 
 def build_metadata(data: list[dict]):
     corpus_ids = sorted(
-        {row["source"] for row in data}
-        | {row["target"] for row in data}
+        {row["source"] for row in data} | {row["target"] for row in data}
     )
 
     queries = []
@@ -78,9 +77,6 @@ def validate(
         assert query["source_id"] in corpus_ids
 
 
-
-
-
 def pack_frames_to_video(frame_paths: list[Path], output_path: Path) -> None:
     with tempfile.NamedTemporaryFile("w", suffix=".txt") as f:
         for frame_path in sorted(frame_paths):
@@ -88,20 +84,26 @@ def pack_frames_to_video(frame_paths: list[Path], output_path: Path) -> None:
         f.flush()
         subprocess.run(
             [
-                "ffmpeg", "-y",
-                "-f", "concat",
-                "-safe", "0",
-                "-r", "2",
-                "-i", f.name,
-                "-c:v", "libx264",
-                "-pix_fmt", "yuv420p",
+                "ffmpeg",
+                "-y",
+                "-f",
+                "concat",
+                "-safe",
+                "0",
+                "-r",
+                "2",
+                "-i",
+                f.name,
+                "-c:v",
+                "libx264",
+                "-pix_fmt",
+                "yuv420p",
                 str(output_path),
             ],
             check=True,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
-
 
 
 def pack_all_videos(
@@ -121,7 +123,6 @@ def pack_all_videos(
             raise ValueError(f"{clip_id}: expected 8 frames, got {len(frame_paths)}")
 
         pack_frames_to_video(frame_paths, output_path)
-
 
 
 def build_datasets(
