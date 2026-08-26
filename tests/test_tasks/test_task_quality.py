@@ -193,6 +193,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MMDocIRT2ITRetrieval",
         "MMVUVideoCentricQA",
         "MMarcoRetrieval",
+        "MMarcoRetrievalMultilingual",  # CJK languages (ja, zh) have short queries and some translations (id, vi) are truncated in the original source dataset
         "MSMARCO",
         "MSMARCO-Fa",
         "MSMARCO-PL",
@@ -310,6 +311,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SentimentDKSF",
         "SinhalaNewsClassification",
         "SlovakMovieReviewSentimentClassification",
+        "SlovakPharmacyDrMaxReranking",  # real e-commerce search-query log; 2/4676 queries are 1-char noise
         "SpanishNewsClusteringP2P",
         "SpeechCommandsZeroshotv0.01",
         "SpeechCommandsZeroshotv0.02",
@@ -647,6 +649,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WebFAQRetrieval",
         "WebLINXCandidatesReranking",
         "WebQAT2ITRetrieval",
+        "WebVidCoVRIT2VRetrieval",
         "WikiClusteringP2P",
         "WikiClusteringP2P.v2",
         "WikiSQLRetrieval",
@@ -834,6 +837,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SugarCrepe",
         "VQA2IT2TRetrieval",
         "WebQAT2ITRetrieval",
+        "WebVidCoVRIT2VRetrieval",
         "XFlickr30kCoT2IRetrieval",
         "XM3600T2IRetrieval",
     ],
@@ -844,6 +848,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "ESC50PairClassification",  # pairs constructed combinatorially from a small pool of audio clips
         "FalseFriendsGermanEnglish",
         "LinceMTBitextMining",
+        "OpusSlovakEnglishBitextMining",  # OPUS-100's subtitle/legal-document mix naturally repeats short common phrases
         "ParsinluEntail",
         "Query2Query",
         "RUParaPhraserSTS",
@@ -884,10 +889,17 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MMVUVideoCentricQA",
         "MomentSeekerTV2VRetrieval",
         "StanfordI2VRetrieval",  # official 3,401-ID manifest contains 3,325 unique video contents
+        "StanfordI2VVisualRetrieval",  # same official manifest as StanfordI2VRetrieval
         "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseAudioVideoZeroShot",
         "WorldSenseVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseVideoZeroShot",
+    ],
+    "missing_qrel_corpus_ids": [
+        "ArguAna",  # 5 missing qrel document IDs
+        "InfoSeekIT2TRetrieval",  # qrels/corpus pool mismatch
+        "OVENIT2ITRetrieval",  # qrels/corpus pool mismatch
+        "OVENIT2TRetrieval",  # qrels/corpus pool mismatch
     ],
     "relevant_docs_exceed_corpus": [
         "MSMARCO-FaHardNegatives",
@@ -1286,24 +1298,48 @@ def _field_quality(
     return errors
 
 
-def _relevant_docs_bound_quality(
+def _relevant_docs_integrity_quality(
     name: str, split: str, split_stats: SplitDescriptiveStatistics
 ) -> list[tuple[str, str]]:
-    """Relevant docs referenced in qrels must be a subset of the corpus."""
+    """Qrels must only reference query and document IDs present in the split."""
     relevant_docs_stats = split_stats.get("relevant_docs_statistics")
-    num_documents = split_stats.get("num_documents")
-    if not isinstance(relevant_docs_stats, dict) or num_documents is None:
+    if not isinstance(relevant_docs_stats, dict):
         return []
 
+    errors: list[tuple[str, str]] = []
+
+    num_missing_query_ids = relevant_docs_stats.get("num_missing_query_ids")
+    if num_missing_query_ids:
+        errors.append(
+            (
+                "missing_qrel_query_ids",
+                f"{name} ({split}) has qrels keyed on queries missing from the split ({num_missing_query_ids=}).",
+            )
+        )
+
+    num_documents = split_stats.get("num_documents")
     unique_relevant_docs = relevant_docs_stats.get("unique_relevant_docs")
-    if unique_relevant_docs is not None and unique_relevant_docs > num_documents:
-        return [
+    num_missing_corpus_ids = relevant_docs_stats.get("num_missing_corpus_ids")
+    if num_missing_corpus_ids is not None:
+        if num_missing_corpus_ids:
+            errors.append(
+                (
+                    "missing_qrel_corpus_ids",
+                    f"{name} ({split}) has qrels referencing documents missing from the corpus ({num_missing_corpus_ids=}, {unique_relevant_docs=}).",
+                )
+            )
+    elif (
+        num_documents is not None
+        and unique_relevant_docs is not None
+        and unique_relevant_docs > num_documents
+    ):
+        errors.append(
             (
                 "relevant_docs_exceed_corpus",
                 f"{name} ({split}) has more unique relevant docs than documents in the corpus ({unique_relevant_docs=}, {num_documents=}), qrels likely reference IDs missing from the corpus.",
             )
-        ]
-    return []
+        )
+    return errors
 
 
 def _audio_video_pair_quality(
@@ -1373,7 +1409,7 @@ def _split_quality(
         )
         errors += _field_quality(name, split, field, stats, expected_count)
 
-    errors += _relevant_docs_bound_quality(name, split, split_stats)
+    errors += _relevant_docs_integrity_quality(name, split, split_stats)
     errors += _audio_video_pair_quality(name, split, split_stats)
 
     # train-test leakage

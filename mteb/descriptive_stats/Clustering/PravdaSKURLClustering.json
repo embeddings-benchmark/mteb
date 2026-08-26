@@ -1,0 +1,171 @@
+{
+    "test": {
+        "num_samples": 15000,
+        "text_statistics": {
+            "total_text_length": 4291493,
+            "min_text_length": 66,
+            "average_text_length": 286.09953333333334,
+            "max_text_length": 968,
+            "unique_texts": 15000
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 50,
+            "labels": {
+                "vat/obraz-a-zvuk": {
+                    "count": 300
+                },
+                "kultura/hudba": {
+                    "count": 300
+                },
+                "spravy/cierna-kronika": {
+                    "count": 300
+                },
+                "zurnal/rozhovory": {
+                    "count": 300
+                },
+                "zurnal/fenomen": {
+                    "count": 300
+                },
+                "zdravie/zdrava-vyziva": {
+                    "count": 300
+                },
+                "koktail/sexi-soubiznis": {
+                    "count": 300
+                },
+                "auto/magazin": {
+                    "count": 300
+                },
+                "ekonomika/ludia": {
+                    "count": 300
+                },
+                "sportweb/tenis": {
+                    "count": 300
+                },
+                "ekonomika/energetika": {
+                    "count": 300
+                },
+                "spravy/tlac": {
+                    "count": 300
+                },
+                "zdravie/zdravie-a-prevencia": {
+                    "count": 300
+                },
+                "cestovanie/hory": {
+                    "count": 300
+                },
+                "cestovanie/cestovny-ruch": {
+                    "count": 300
+                },
+                "auto/doprava": {
+                    "count": 300
+                },
+                "vat/komunikacia": {
+                    "count": 300
+                },
+                "ekonomika/firmy-a-trhy": {
+                    "count": 300
+                },
+                "zdravie/tlac": {
+                    "count": 300
+                },
+                "ekonomika/krajina": {
+                    "count": 300
+                },
+                "vat/tlac": {
+                    "count": 300
+                },
+                "sportweb/cyklistika": {
+                    "count": 300
+                },
+                "koktail/miss-a-modelky": {
+                    "count": 300
+                },
+                "kultura/galeria": {
+                    "count": 300
+                },
+                "vat/zem": {
+                    "count": 300
+                },
+                "kultura/film-a-televizia": {
+                    "count": 300
+                },
+                "kultura/divadlo": {
+                    "count": 300
+                },
+                "koktail/hviezdne-kauzy": {
+                    "count": 300
+                },
+                "vat/vesmir": {
+                    "count": 300
+                },
+                "zurnal/neznama-historia": {
+                    "count": 300
+                },
+                "uzitocna/praca-a-kariera": {
+                    "count": 300
+                },
+                "vat/technologie": {
+                    "count": 300
+                },
+                "sportweb/ofsajd": {
+                    "count": 300
+                },
+                "koktail/z-obrazovky-i-spoza-nej": {
+                    "count": 300
+                },
+                "spravy/svet": {
+                    "count": 300
+                },
+                "spravy/zaujimavosti": {
+                    "count": 300
+                },
+                "sportweb/ostatne-sporty": {
+                    "count": 300
+                },
+                "sportweb/tlac": {
+                    "count": 300
+                },
+                "zurnal/spolocnost": {
+                    "count": 300
+                },
+                "sportweb/atletika": {
+                    "count": 300
+                },
+                "cestovanie/more": {
+                    "count": 300
+                },
+                "auto/novinky": {
+                    "count": 300
+                },
+                "sportweb/zimne-sporty": {
+                    "count": 300
+                },
+                "vat/clovek": {
+                    "count": 300
+                },
+                "spravy/domace": {
+                    "count": 300
+                },
+                "cestovanie/exotika": {
+                    "count": 300
+                },
+                "cestovanie/mesta": {
+                    "count": 300
+                },
+                "spravy/regiony": {
+                    "count": 300
+                },
+                "koktail/na-cervenom-koberci": {
+                    "count": 300
+                },
+                "koktail/tlac": {
+                    "count": 300
+                }
+            }
+        }
+    }
+}

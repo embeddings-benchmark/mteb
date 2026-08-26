@@ -21,7 +21,7 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Mapping
+    from collections.abc import Callable, Iterable, Mapping
 
     from PIL import Image
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
@@ -398,8 +398,11 @@ def calculate_top_ranked_statistics(
 
 def calculate_relevant_docs_statistics(
     relevant_docs: Mapping[str, Mapping[str, int]],
+    query_ids: Iterable[str],
+    corpus_ids: Iterable[str],
 ) -> RelevantDocsStatistics:
-    unique_qrels = len({doc for qid in relevant_docs for doc in relevant_docs[qid]})
+    qrel_query_ids = set(relevant_docs)
+    qrel_corpus_ids = {doc for qid in relevant_docs for doc in relevant_docs[qid]}
     # number of qrels that are not 0
     qrels_lengths = [
         sum(1 for doc_id in docs if docs[doc_id] != 0)
@@ -412,7 +415,9 @@ def calculate_relevant_docs_statistics(
         min_relevant_docs_per_query=min(qrels_lengths),
         average_relevant_docs_per_query=qrels_per_doc,
         max_relevant_docs_per_query=max(qrels_lengths),
-        unique_relevant_docs=unique_qrels,
+        unique_relevant_docs=len(qrel_corpus_ids),
+        num_missing_query_ids=len(qrel_query_ids.difference(query_ids)),
+        num_missing_corpus_ids=len(qrel_corpus_ids.difference(corpus_ids)),
     )
 
 

@@ -1,17 +1,30 @@
+from .abo_i2v_retrieval import ABOI2VRetrieval
 from .bridge_retrieval import BridgeV2VRetrieval
+from .evve_retrieval import EVVERetrieval
 from .lp_music_caps import LPMusicCapsMTTA2TRetrieval, LPMusicCapsMTTT2ARetrieval
+from .moving_fashion_retrieval import (
+    MovingFashionI2VRetrieval,
+    MovingFashionV2IRetrieval,
+)
 from .music_caps import MusicCapsA2TRetrieval, MusicCapsT2ARetrieval
 from .song_describer import SongDescriberA2TRetrieval, SongDescriberT2ARetrieval
 from .sound_descs import SoundDescsA2TRetrieval, SoundDescsT2ARetrieval
-from .stanford_i2v_retrieval import StanfordI2VRetrieval
+from .stanford_i2v_retrieval import (
+    StanfordI2VRetrieval,
+    StanfordI2VVisualRetrieval,
+)
 from .urban_sound8k_retrieval import UrbanSound8KA2TRetrieval, UrbanSound8KT2ARetrieval
 from .vim_sketch_retrieval import VimSketchA2ARetrieval
 from .vsc2022_retrieval import VSC2022Retrieval
 
 __all__ = [
+    "ABOI2VRetrieval",
     "BridgeV2VRetrieval",
+    "EVVERetrieval",
     "LPMusicCapsMTTA2TRetrieval",
     "LPMusicCapsMTTT2ARetrieval",
+    "MovingFashionI2VRetrieval",
+    "MovingFashionV2IRetrieval",
     "MusicCapsA2TRetrieval",
     "MusicCapsT2ARetrieval",
     "SongDescriberA2TRetrieval",
@@ -19,6 +32,7 @@ __all__ = [
     "SoundDescsA2TRetrieval",
     "SoundDescsT2ARetrieval",
     "StanfordI2VRetrieval",
+    "StanfordI2VVisualRetrieval",
     "UrbanSound8KA2TRetrieval",
     "UrbanSound8KT2ARetrieval",
     "VSC2022Retrieval",
