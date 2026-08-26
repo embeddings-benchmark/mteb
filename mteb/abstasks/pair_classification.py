@@ -208,8 +208,8 @@ class AbsTaskPairClassification(AbsTask):
         )
 
         number_of_characters = (
-            pair_stats["text1_statistics"]["total_text_length"]
-            + pair_stats["text2_statistics"]["total_text_length"]
+            pair_stats["text1_statistics"].get("total_text_length", 0)
+            + pair_stats["text2_statistics"].get("total_text_length", 0)
             if pair_stats["text1_statistics"]
             else None
         )
