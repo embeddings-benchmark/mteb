@@ -60,4 +60,3 @@ class XModBench(AbsTaskAggregate):
     )
 
 
-__all__ = ["XModBench"]
