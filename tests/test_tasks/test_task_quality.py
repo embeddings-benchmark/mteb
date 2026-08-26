@@ -46,10 +46,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BSARDRetrieval.v2",
         "BengaliDocumentClassification",
         "BibleNLPBitextMining",
-        "BioVITAA2TRetrieval",  # genus-level text is the bare genus name, which can be 3 characters
-        "BioVITAI2TRetrieval",
-        "BioVITAT2ARetrieval",
-        "BioVITAT2IRetrieval",
+        "BioVITAA2TReranking",  # genus-level text is the bare genus name, which can be 3 characters
+        "BioVITAI2TReranking",
+        "BioVITAT2AReranking",
+        "BioVITAT2IReranking",
         "BlurbsClusteringS2S",
         "BlurbsClusteringS2S.v2",
         "BornholmBitextMining",
@@ -435,10 +435,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BengaliHateSpeechClassification",
         "BengaliSentimentAnalysis",
         "BeytooteClustering",
-        "BioVITAA2TRetrieval",  # genus-level text repeats across the species of a genus; the official candidate groups require one entry per species row
-        "BioVITAI2TRetrieval",
-        "BioVITAT2ARetrieval",
-        "BioVITAT2IRetrieval",
+        "BioVITAA2TReranking",  # genus-level text repeats across the species of a genus; the official candidate groups require one entry per species row
+        "BioVITAI2TReranking",
+        "BioVITAT2AReranking",
+        "BioVITAT2IReranking",
         "BiorxivClusteringP2P",
         "BiorxivClusteringS2S",
         "BlurbsClusteringP2P",
@@ -815,10 +815,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "AROFlickrOrder",
         "AROVisualAttribution",
         "AROVisualRelation",
-        "BioVITAA2IRetrieval",  # the species and genus subsets share one image index, so the cross-subset aggregate counts each image twice
-        "BioVITAI2ARetrieval",
-        "BioVITAI2TRetrieval",
-        "BioVITAT2IRetrieval",
+        "BioVITAA2IReranking",  # the species and genus subsets share one image index, so the cross-subset aggregate counts each image twice
+        "BioVITAI2AReranking",
+        "BioVITAI2TReranking",
+        "BioVITAT2IReranking",
         "CIRRIT2IRetrieval",
         "EDIST2ITRetrieval",
         "EncyclopediaVQAIT2ITRetrieval",
@@ -871,10 +871,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     "duplicate_audio": [
         "AmbientAcousticContext",
         "AmbientAcousticContextClustering",
-        "BioVITAA2IRetrieval",  # the species and genus subsets share one audio index, so the cross-subset aggregate counts each clip twice
-        "BioVITAA2TRetrieval",
-        "BioVITAI2ARetrieval",
-        "BioVITAT2ARetrieval",
+        "BioVITAA2IReranking",  # the species and genus subsets share one audio index, so the cross-subset aggregate counts each clip twice
+        "BioVITAA2TReranking",
+        "BioVITAI2AReranking",
+        "BioVITAT2AReranking",
         "CLDAT2ARetrieval",
         "FSD2019Kaggle",
         "GTZANGenre",  # repeated short clips sampled from the same tracks
