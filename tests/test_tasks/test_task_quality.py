@@ -861,6 +861,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     "duplicate_audio": [
         "AmbientAcousticContext",
         "AmbientAcousticContextClustering",
+        "ClothoMomentRetrieval",  # different instruction used over duplicate video
         "CLDAT2ARetrieval",
         "FSD2019Kaggle",
         "GTZANGenre",  # repeated short clips sampled from the same tracks
