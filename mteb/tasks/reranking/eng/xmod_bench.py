@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskCategory
-    from mteb.types import Modalities
+    from mteb.types import ISOLanguageScript, Modalities
 
 dataset = {
     "path": "jupyterjazz/XModBench-MTEB",
@@ -49,15 +49,14 @@ def _metadata(
     category: TaskCategory,
     modalities: list[Modalities],
     description: str,
+    languages: list[ISOLanguageScript] | None = None,
 ) -> TaskMetadata:
     return TaskMetadata(
         name=name,
         description=description,
         category=category,
         modalities=modalities,
-        # The direction is a Hub configuration, not a language. A one-entry
-        # mapping makes the standard retrieval-format loader select that config.
-        eval_langs={direction: ["eng-Latn", "zho-Hans"]},
+        eval_langs={direction: languages if languages is not None else ["eng-Latn"]},
         **_COMMON_METADATA,
     )
 
@@ -68,6 +67,7 @@ class XModBenchAT2TReranking(AbsTaskRetrieval):
         direction="at2t",
         category="at2t",
         modalities=["audio", "text"],
+        languages=["eng-Latn", "zho-Hans"],
         description=(
             "XModBench-Lite audio+text-to-text multiple-choice question "
             "answering. Given an audio condition and semantic question, rank "
@@ -190,6 +190,7 @@ class XModBenchIT2TReranking(AbsTaskRetrieval):
         direction="it2t",
         category="it2t",
         modalities=["image", "text"],
+        languages=["eng-Latn", "zho-Hans"],
         description=(
             "XModBench-Lite image+text-to-text multiple-choice question "
             "answering. Given an image condition and semantic question, rank "
