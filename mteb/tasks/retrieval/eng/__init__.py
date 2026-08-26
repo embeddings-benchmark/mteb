@@ -432,18 +432,6 @@ from .vqa2_it2t_retrieval import VQA2IT2TRetrieval
 from .web_qa_t2it_retrieval import WebQAT2ITRetrieval
 from .web_qa_t2t_retrieval import WebQAT2TRetrieval
 from .wino_grande_retrieval import WinoGrande
-from .xmod_bench import (
-    XModBenchAT2IRetrieval,
-    XModBenchAT2TRetrieval,
-    XModBenchAT2VRetrieval,
-    XModBenchIT2ARetrieval,
-    XModBenchIT2TRetrieval,
-    XModBenchT2ARetrieval,
-    XModBenchT2IRetrieval,
-    XModBenchT2VRetrieval,
-    XModBenchVT2ARetrieval,
-    XModBenchVT2TRetrieval,
-)
 from .youcook2_retrieval import (
     YouCook2A2VRetrieval,
     YouCook2AT2VRetrieval,
@@ -865,16 +853,6 @@ __all__ = [
     "WebQAT2ITRetrieval",
     "WebQAT2TRetrieval",
     "WinoGrande",
-    "XModBenchAT2IRetrieval",
-    "XModBenchAT2TRetrieval",
-    "XModBenchAT2VRetrieval",
-    "XModBenchIT2ARetrieval",
-    "XModBenchIT2TRetrieval",
-    "XModBenchT2ARetrieval",
-    "XModBenchT2IRetrieval",
-    "XModBenchT2VRetrieval",
-    "XModBenchVT2ARetrieval",
-    "XModBenchVT2TRetrieval",
     "YouCook2A2VRetrieval",
     "YouCook2AT2VRetrieval",
     "YouCook2T2VARetrieval",

@@ -27,7 +27,7 @@ _CITATION = r"""
 _COMMON_METADATA = dict(
     dataset=_DATASET,
     reference=_REFERENCE,
-    type="Any2AnyRetrieval",
+    type="Any2AnyReranking",
     eval_splits=["test"],
     main_score="accuracy",
     date=("2025-10-16", "2025-10-16"),
@@ -56,15 +56,15 @@ def _metadata(
         category=category,
         modalities=modalities,
         # The direction is a Hub configuration, not a language. A one-entry
-        # mapping makes the standard retrieval loader select that config.
+        # mapping makes the standard retrieval-format loader select that config.
         eval_langs={direction: ["eng-Latn", "zho-Hans"]},
         **_COMMON_METADATA,
     )
 
 
-class XModBenchAT2TRetrieval(AbsTaskRetrieval):
+class XModBenchAT2TReranking(AbsTaskRetrieval):
     metadata = _metadata(
-        name="XModBenchAT2TRetrieval",
+        name="XModBenchAT2TReranking",
         direction="at2t",
         category="at2t",
         modalities=["audio", "text"],
@@ -77,9 +77,9 @@ class XModBenchAT2TRetrieval(AbsTaskRetrieval):
     )
 
 
-class XModBenchAT2IRetrieval(AbsTaskRetrieval):
+class XModBenchAT2IReranking(AbsTaskRetrieval):
     metadata = _metadata(
-        name="XModBenchAT2IRetrieval",
+        name="XModBenchAT2IReranking",
         direction="at2i",
         category="at2i",
         modalities=["audio", "text", "image"],
@@ -92,9 +92,9 @@ class XModBenchAT2IRetrieval(AbsTaskRetrieval):
     )
 
 
-class XModBenchAT2VRetrieval(AbsTaskRetrieval):
+class XModBenchAT2VReranking(AbsTaskRetrieval):
     metadata = _metadata(
-        name="XModBenchAT2VRetrieval",
+        name="XModBenchAT2VReranking",
         direction="at2v",
         category="at2v",
         modalities=["audio", "text", "video"],
@@ -108,9 +108,9 @@ class XModBenchAT2VRetrieval(AbsTaskRetrieval):
     )
 
 
-class XModBenchT2ARetrieval(AbsTaskRetrieval):
+class XModBenchT2AReranking(AbsTaskRetrieval):
     metadata = _metadata(
-        name="XModBenchT2ARetrieval",
+        name="XModBenchT2AReranking",
         direction="t2a",
         category="t2a",
         modalities=["text", "audio"],
@@ -122,9 +122,9 @@ class XModBenchT2ARetrieval(AbsTaskRetrieval):
     )
 
 
-class XModBenchT2IRetrieval(AbsTaskRetrieval):
+class XModBenchT2IReranking(AbsTaskRetrieval):
     metadata = _metadata(
-        name="XModBenchT2IRetrieval",
+        name="XModBenchT2IReranking",
         direction="t2i",
         category="t2i",
         modalities=["text", "image"],
@@ -137,9 +137,9 @@ class XModBenchT2IRetrieval(AbsTaskRetrieval):
     )
 
 
-class XModBenchT2VRetrieval(AbsTaskRetrieval):
+class XModBenchT2VReranking(AbsTaskRetrieval):
     metadata = _metadata(
-        name="XModBenchT2VRetrieval",
+        name="XModBenchT2VReranking",
         direction="t2v",
         category="t2v",
         modalities=["text", "video"],
@@ -153,9 +153,9 @@ class XModBenchT2VRetrieval(AbsTaskRetrieval):
     )
 
 
-class XModBenchIT2ARetrieval(AbsTaskRetrieval):
+class XModBenchIT2AReranking(AbsTaskRetrieval):
     metadata = _metadata(
-        name="XModBenchIT2ARetrieval",
+        name="XModBenchIT2AReranking",
         direction="it2a",
         category="it2a",
         modalities=["image", "text", "audio"],
@@ -168,9 +168,9 @@ class XModBenchIT2ARetrieval(AbsTaskRetrieval):
     )
 
 
-class XModBenchVT2ARetrieval(AbsTaskRetrieval):
+class XModBenchVT2AReranking(AbsTaskRetrieval):
     metadata = _metadata(
-        name="XModBenchVT2ARetrieval",
+        name="XModBenchVT2AReranking",
         direction="vt2a",
         category="vt2a",
         modalities=["video", "text", "audio"],
@@ -184,9 +184,9 @@ class XModBenchVT2ARetrieval(AbsTaskRetrieval):
     )
 
 
-class XModBenchIT2TRetrieval(AbsTaskRetrieval):
+class XModBenchIT2TReranking(AbsTaskRetrieval):
     metadata = _metadata(
-        name="XModBenchIT2TRetrieval",
+        name="XModBenchIT2TReranking",
         direction="it2t",
         category="it2t",
         modalities=["image", "text"],
@@ -199,9 +199,9 @@ class XModBenchIT2TRetrieval(AbsTaskRetrieval):
     )
 
 
-class XModBenchVT2TRetrieval(AbsTaskRetrieval):
+class XModBenchVT2TReranking(AbsTaskRetrieval):
     metadata = _metadata(
-        name="XModBenchVT2TRetrieval",
+        name="XModBenchVT2TReranking",
         direction="vt2t",
         category="vt2t",
         modalities=["video", "text"],
@@ -213,17 +213,3 @@ class XModBenchVT2TRetrieval(AbsTaskRetrieval):
             "questions that reference undecodable source MP4s."
         ),
     )
-
-
-__all__ = [
-    "XModBenchAT2IRetrieval",
-    "XModBenchAT2TRetrieval",
-    "XModBenchAT2VRetrieval",
-    "XModBenchIT2ARetrieval",
-    "XModBenchIT2TRetrieval",
-    "XModBenchT2ARetrieval",
-    "XModBenchT2IRetrieval",
-    "XModBenchT2VRetrieval",
-    "XModBenchVT2ARetrieval",
-    "XModBenchVT2TRetrieval",
-]

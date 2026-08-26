@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the XModBench-Lite multiple-choice retrieval datasets for MTEB.
+"""Build the XModBench-Lite multiple-choice reranking datasets for MTEB.
 
 The published Lite split contains six canonical configurations where Vision is
 the union of Image and Video. MTEB assigns modalities at task level, so this
@@ -147,7 +147,7 @@ _ANSWER_FORMAT_RE = re.compile(
 
 @dataclass
 class RetrievalParts:
-    """Rows for the four standard MTEB retrieval dataset configurations."""
+    """Rows for the four standard MTEB retrieval-format configurations."""
 
     queries: list[dict[str, Any]] = field(default_factory=list)
     corpus: list[dict[str, Any]] = field(default_factory=list)
@@ -157,7 +157,7 @@ class RetrievalParts:
 
 @dataclass
 class BuildResult:
-    """Converted retrieval directions and source metadata."""
+    """Converted reranking directions and source metadata."""
 
     directions: dict[str, RetrievalParts]
     metadata: list[dict[str, Any]]
@@ -539,7 +539,7 @@ def _validate_build(
         if len(parts.corpus) != 4 * len(parts.queries):
             raise ValueError(f"{direction} does not have four candidates per query")
         if not (len(parts.queries) == len(parts.qrels) == len(parts.top_ranked)):
-            raise ValueError(f"Inconsistent retrieval row counts in {direction}")
+            raise ValueError(f"Inconsistent reranking row counts in {direction}")
 
         corpus_id_set = set(corpus_ids)
         for qrel, top_ranked in zip(parts.qrels, parts.top_ranked, strict=True):
@@ -611,7 +611,7 @@ def _print_summary(result: BuildResult) -> None:
         f"Lite builder: https://github.com/{LITE_BUILDER}/tree/"
         f"{LITE_BUILDER_REVISION}"
     )
-    print("\nConcrete retrieval directions:")
+    print("\nConcrete reranking directions:")
     for direction, parts in result.directions.items():
         print(
             f"  {direction:5s} queries={len(parts.queries):4d} "
@@ -675,64 +675,6 @@ def _save_datasets(datasets: dict[str, DatasetDict], output_dir: Path) -> None:
         print(f"Saved {config_name} to {destination}")
 
 
-def _calculate_descriptive_stats(
-    datasets: dict[str, DatasetDict],
-    result: BuildResult,
-    *,
-    num_proc: int | None,
-    directions: set[str] | None = None,
-) -> None:
-    """Calculate MTEB statistics from local media without redownloading Hub data."""
-    from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
-    from mteb.tasks.retrieval.eng.xmod_bench import (
-        XModBenchAT2IRetrieval,
-        XModBenchAT2TRetrieval,
-        XModBenchAT2VRetrieval,
-        XModBenchIT2ARetrieval,
-        XModBenchIT2TRetrieval,
-        XModBenchT2ARetrieval,
-        XModBenchT2IRetrieval,
-        XModBenchT2VRetrieval,
-        XModBenchVT2ARetrieval,
-        XModBenchVT2TRetrieval,
-    )
-
-    tasks = [
-        XModBenchAT2TRetrieval(),
-        XModBenchAT2IRetrieval(),
-        XModBenchAT2VRetrieval(),
-        XModBenchT2ARetrieval(),
-        XModBenchT2IRetrieval(),
-        XModBenchT2VRetrieval(),
-        XModBenchIT2ARetrieval(),
-        XModBenchVT2ARetrieval(),
-        XModBenchIT2TRetrieval(),
-        XModBenchVT2TRetrieval(),
-    ]
-    for task in tasks:
-        direction = task.metadata.hf_subsets[0]
-        if directions is not None and direction not in directions:
-            continue
-        parts = result.directions[direction]
-        relevant_docs = {
-            row["query-id"]: {row["corpus-id"]: row["score"]} for row in parts.qrels
-        }
-        top_ranked = {row["query-id"]: row["corpus-ids"] for row in parts.top_ranked}
-        task.dataset = {
-            direction: {
-                "test": RetrievalSplitData(
-                    queries=datasets[f"{direction}-queries"]["test"],
-                    corpus=datasets[f"{direction}-corpus"]["test"],
-                    relevant_docs=relevant_docs,
-                    top_ranked=top_ranked,
-                )
-            }
-        }
-        task.data_loaded = True
-        task.calculate_descriptive_statistics(overwrite_results=True, num_proc=num_proc)
-        print(f"Calculated descriptive statistics for {task.metadata.name}")
-
-
 def _card_body() -> str:
     return f"""
 # XModBench-Lite for MTEB
@@ -754,7 +696,7 @@ timestamp by TorchCodec 0.14. The `exclusions` configuration records every
 omitted source row, media path, usage, and reason. Original source indices are
 preserved in retained IDs.
 
-Each question is represented as a retrieval problem with four candidates, one
+Each question is represented as a reranking problem with four candidates, one
 relevant document, and a `top_ranked` list that restricts evaluation to the
 original answer choices. Accuracy is therefore equivalent to the source
 multiple-choice metric.
@@ -858,23 +800,6 @@ def main() -> None:
         action="store_true",
         help="Save all processed Hugging Face configurations locally",
     )
-    parser.add_argument(
-        "--calculate-stats",
-        action="store_true",
-        help="Calculate MTEB descriptive statistics from the local media",
-    )
-    parser.add_argument(
-        "--stats-workers",
-        type=int,
-        default=None,
-        help="Worker threads used to hash media for --calculate-stats",
-    )
-    parser.add_argument(
-        "--stats-directions",
-        nargs="+",
-        choices=sorted(DIRECTION_CODES.values()),
-        help="Only calculate statistics for these concrete directions",
-    )
     parser.add_argument("--push", action="store_true", help="Push configs to Hub")
     parser.add_argument("--repo-id", help="Destination Hub dataset ID for --push")
     parser.add_argument(
@@ -901,25 +826,17 @@ def main() -> None:
         source_dir = args.source_dir
         downloaded_media_root = None
     media_root = args.media_root or downloaded_media_root
-    if (args.save_to_disk or args.push or args.calculate_stats) and media_root is None:
+    if (args.save_to_disk or args.push) and media_root is None:
         parser.error(
-            "Media packaging and statistics require --download-media or an "
-            "existing --media-root"
+            "Media packaging requires --download-media or an existing --media-root"
         )
 
     result = build_from_source(source_dir, media_root=media_root)
     _print_summary(result)
-    if not args.save_to_disk and not args.push and not args.calculate_stats:
+    if not args.save_to_disk and not args.push:
         return
 
     datasets = _as_datasets(result)
-    if args.calculate_stats:
-        _calculate_descriptive_stats(
-            datasets,
-            result,
-            num_proc=args.stats_workers,
-            directions=set(args.stats_directions) if args.stats_directions else None,
-        )
     if args.save_to_disk:
         _save_datasets(datasets, args.work_dir / "processed")
     if args.push:

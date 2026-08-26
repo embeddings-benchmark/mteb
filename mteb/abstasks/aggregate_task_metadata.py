@@ -72,6 +72,21 @@ class AggregateTaskMetadata(TaskMetadata):
     reference: str | None = None
     bibtex_citation: str | None = None
 
+    def is_filled(self) -> bool:
+        """Allow mixed-category aggregates to omit a single category."""
+        optional_fields = {
+            "prompt",
+            "adapted_from",
+            "contributed_by",
+            "superseded_by",
+            "category",
+        }
+        return all(
+            getattr(self, field_name) is not None
+            for field_name in self.__class__.model_fields
+            if field_name not in optional_fields
+        )
+
     @model_validator(mode="after")
     def _compute_unfilled_cases(self) -> Self:
         if not self.eval_langs:

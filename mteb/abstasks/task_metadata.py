@@ -184,6 +184,7 @@ SampleCreationMethod = Literal[
 """How the text was created. It can be an important factor for understanding the quality of a dataset. E.g. used to filter out machine-translated datasets."""
 
 MIEB_TASK_TYPE = (
+    "Any2AnyReranking",
     "Any2AnyRetrieval",
     "Any2AnyMultilingualRetrieval",
     "VisionCentricQA",
@@ -197,6 +198,7 @@ MIEB_TASK_TYPE = (
 )
 
 MAEB_TASK_TYPE = (
+    "Any2AnyReranking",
     "AudioClustering",
     "AudioMultilabelClassification",
     "AudioReranking",
@@ -207,6 +209,7 @@ MAEB_TASK_TYPE = (
 )
 
 MVEB_TASK_TYPE = (
+    "Any2AnyReranking",
     "VideoClassification",
     "VideoClustering",
     "VideoMultilabelClassification",
@@ -380,6 +383,7 @@ SimplifiedTaskType = Literal[
 ]
 
 _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
+    "Any2AnyReranking": "retrieval",
     "Any2AnyRetrieval": "retrieval",
     "Any2AnyMultilingualRetrieval": "retrieval",
     "VisionCentricQA": "retrieval",
@@ -980,6 +984,7 @@ class TaskMetadata(BaseModel):
             "InstructionReranking": ["text-ranking"],
             # Image
             "Any2AnyMultiChoice": ["visual-question-answering"],
+            "Any2AnyReranking": ["visual-question-answering"],
             "Any2AnyMultilingualRetrieval": ["visual-document-retrieval"],
             "VisionCentricQA": ["visual-question-answering"],
             "ImageClustering": ["image-feature-extraction"],
