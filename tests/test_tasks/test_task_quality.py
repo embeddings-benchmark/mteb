@@ -404,6 +404,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProSustainableLivingRetrieval",
     ],
     "duplicate_text": [
+        "FineCVRVT2VRetrieval",  # repeated instructions are valid across different video edits
         "AfriHateClassification",
         "AfriSentiClassification",
         "AllegroReviews",
@@ -880,6 +881,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WorldSenseAudioVideoZeroShot",
     ],
     "duplicate_video": [
+        "FineCVRVT2VRetrieval",  # one source video can have multiple edit targets
         "MMVUVideoCentricQA",
         "MomentSeekerTV2VRetrieval",
         "StanfordI2VRetrieval",  # official 3,401-ID manifest contains 3,325 unique video contents
