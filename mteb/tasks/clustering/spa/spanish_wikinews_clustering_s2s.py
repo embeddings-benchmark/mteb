@@ -37,10 +37,10 @@ class SpanishWikinewsClusteringS2S(AbsTaskClustering):
         bibtex_citation=r"""
 @misc{henriquez2026spanishwikinewsclustering,
   author = {Henríquez, Clemente},
-  title = {SpanishWikinewsClustering},
-  year = {2026},
   publisher = {Hugging Face},
-  url = {https://huggingface.co/datasets/ClementeH/SpanishWikinewsClustering}
+  title = {SpanishWikinewsClustering},
+  url = {https://huggingface.co/datasets/ClementeH/SpanishWikinewsClustering},
+  year = {2026},
 }
 """,
         prompt="Identifica el tema principal de la noticia a partir del título.",
