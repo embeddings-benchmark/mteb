@@ -47,7 +47,6 @@ class XModBench(AbsTaskAggregate):
         type="Any2AnyReranking",
         modalities=["audio", "image", "text", "video"],
         eval_splits=["test"],
-        is_public=True,
         bibtex_citation=r"""
 @inproceedings{wang2026xmodbench,
   author = {Wang, Xingrui and Liu, Jiang and Huang, Chao and Yu, Xiaodong and Wang, Ze and Sun, Ximeng and Wu, Jialian and Yuille, Alan and Barsoum, Emad and Liu, Zicheng},
