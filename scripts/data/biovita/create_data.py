@@ -215,6 +215,8 @@ def audio_fallbacks(paths: tuple[Path, ...]) -> tuple[dict[str, Any], ...] | Non
         payloads.append(
             {"bytes": _wav_bytes(samples, int(sampling_rate)), "path": str(path)}
         )
+
+
 def load_index(modality: str, level: str) -> tuple[Any, list[str], list[str]]:
     """One modality index as a HF dataset of `id` plus the payload column.
 
@@ -270,9 +272,7 @@ def build_split(
         corpus_raw = pd.read_csv(
             download_csv(f"benchmark/{document_modality}_index.csv")
         )
-        query_raw = pd.read_csv(
-            download_csv(f"benchmark/{query_modality}_index.csv")
-        )
+        query_raw = pd.read_csv(download_csv(f"benchmark/{query_modality}_index.csv"))
 
         corpus_ids = [str(i) for i in corpus_raw["id"]]
         corpus_taxa = [str(t) for t in corpus_raw[level]]
@@ -298,9 +298,7 @@ def build_split(
     tasks = pd.read_csv(download_csv(f"benchmark/{level}/{csv_name}"))
     query_ids = [str(query_id) for query_id in tasks["query_id"]]
 
-    row_of_payload = {
-        payload: row for row, payload in enumerate(query_index_ids)
-    }
+    row_of_payload = {payload: row for row, payload in enumerate(query_index_ids)}
 
     queries = (
         query_index.select(
@@ -322,10 +320,7 @@ def build_split(
         tasks["candidates_target_ids"],
     ):
         taxa = [str(taxon) for taxon in json.loads(taxa_json)]
-        groups = [
-            [str(int(i)) for i in group]
-            for group in json.loads(ids_json)
-        ]
+        groups = [[str(int(i)) for i in group] for group in json.loads(ids_json)]
 
         correct = str(correct)
         candidate_taxa.append(taxa)
@@ -343,9 +338,7 @@ def build_split(
         top_ranked.append(
             {
                 "query-id": query_id,
-                "corpus-ids": [
-                    doc_id for group in groups for doc_id in group
-                ],
+                "corpus-ids": [doc_id for group in groups for doc_id in group],
             }
         )
 
