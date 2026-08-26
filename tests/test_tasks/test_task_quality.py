@@ -406,6 +406,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProSustainableLivingRetrieval",
     ],
     "duplicate_text": [
+        "FineCVRVT2VRetrieval",  # repeated instructions are valid across different video edits
         "AfriHateClassification",
         "AfriSentiClassification",
         "AllegroReviews",
@@ -889,6 +890,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WorldSenseAudioVideoZeroShot",
     ],
     "duplicate_video": [
+        "FineCVRVT2VRetrieval",  # one source video can have multiple edit targets
         "InsAVE80KVT2VRetrieval",  # reverse couples re-release the same clip under two names
         "MMVUVideoCentricQA",
         "MomentSeekerTV2VRetrieval",
