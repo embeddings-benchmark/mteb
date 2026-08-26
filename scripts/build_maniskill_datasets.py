@@ -10,6 +10,10 @@ Construction:
   viewpoints: the environment's human render camera (full episode video)
   and the base sensor camera (final goal-state image only), so queries
   and documents never share a viewpoint.
+- Episodes are deduplicated by seed first (the official demo files repeat
+  seeds, i.e. the same initial scene, which replay to identical or
+  near-identical trajectories), then the first EPISODES_PER_TASK unique
+  successful episodes are kept.
 - Per task, episodes are deterministically split into a query pool
   (QUERIES_PER_TASK episodes) and a corpus pool (the rest); a query's own
   source episode is never in the corpus. Relevance is task-level and
@@ -137,9 +141,21 @@ def phase_render(args: argparse.Namespace) -> None:
         if not traj_path.exists():
             download_demo(argparse.Namespace(uid=task, output_dir=None, quiet=False))
         meta = json.load(open(str(traj_path).replace(".h5", ".json")))
-        episodes = [e for e in meta["episodes"] if e.get("success", False)]
+        # The official demo files reuse episode seeds, i.e. the same initial
+        # scene (312 of the 1,000 PegInsertionSide-v1 episodes repeat an
+        # earlier seed and replay to byte-identical trajectories; PullCubeTool
+        # repeats are near-identical), so keep only the first episode per seed.
+        episodes, seen_seeds = [], set()
+        for e in meta["episodes"]:
+            if e.get("success", False) and e["episode_seed"] not in seen_seeds:
+                seen_seeds.add(e["episode_seed"])
+                episodes.append(e)
+        n_success = sum(1 for e in meta["episodes"] if e.get("success", False))
         episodes = episodes[: args.episodes_per_task]
-        print(f"{task}: rendering {len(episodes)} successful episodes")
+        print(
+            f"{task}: rendering {len(episodes)} successful episodes "
+            f"({n_success - len(seen_seeds)} duplicate-seed episodes skipped)"
+        )
 
         env = gym.make(
             meta["env_info"]["env_id"],

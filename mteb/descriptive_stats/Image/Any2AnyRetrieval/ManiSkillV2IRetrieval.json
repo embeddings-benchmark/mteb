@@ -12,7 +12,7 @@
             "min_image_height": 256,
             "average_image_height": 256.0,
             "max_image_height": 256,
-            "unique_images": 1095
+            "unique_images": 1120
         },
         "documents_audio_statistics": null,
         "documents_video_statistics": null,
@@ -57,7 +57,9 @@
             "min_relevant_docs_per_query": 140,
             "average_relevant_docs_per_query": 140.0,
             "max_relevant_docs_per_query": 140,
-            "unique_relevant_docs": 1120
+            "unique_relevant_docs": 1120,
+            "num_missing_query_ids": 0,
+            "num_missing_corpus_ids": 0
         },
         "top_ranked_statistics": null
     }

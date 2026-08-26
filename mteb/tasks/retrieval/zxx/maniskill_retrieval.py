@@ -40,7 +40,7 @@ class ManiSkillI2VRetrieval(AbsTaskRetrieval):
         reference="https://github.com/haosulab/ManiSkill",
         dataset={
             "path": "ZhixuLi/ManiSkill-I2V",
-            "revision": "f17c20b260d58aa5d59c8515d858b90816d8ab25",
+            "revision": "6d8be5a8f7b0b77fae5c46edda399bd7ef739f2f",
         },
         type="Any2AnyRetrieval",
         category="i2v",
@@ -79,7 +79,7 @@ class ManiSkillV2IRetrieval(AbsTaskRetrieval):
         reference="https://github.com/haosulab/ManiSkill",
         dataset={
             "path": "ZhixuLi/ManiSkill-V2I",
-            "revision": "9ec1e78ade4c02a33eaa4d05b868ecde3fcd68fa",
+            "revision": "879e9072f1820c13e3deecf30eefc5b9fc45f593",
         },
         type="Any2AnyRetrieval",
         category="v2i",
