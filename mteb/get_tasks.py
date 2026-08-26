@@ -77,8 +77,6 @@ def _create_task_type_to_prompt_mapping(
     """Create a mapping from task type to the prompt defined by its abstask (base) class."""
     type_to_prompt: dict[str, str] = {}
     for cls in tasks:
-        # `abstask_prompt` is defined on the abstask (base) class, e.g. `AbsTaskRetrieval`, and is
-        # only annotated on `AbsTask` itself, so it can be missing (e.g. zero-shot classification)
         prompt = getattr(cls, "abstask_prompt", None)
         if prompt:
             type_to_prompt.setdefault(cls.metadata.type, prompt)
