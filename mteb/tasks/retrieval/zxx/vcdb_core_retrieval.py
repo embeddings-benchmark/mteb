@@ -56,32 +56,31 @@ class VCDBCoreRetrieval(AbsTaskRetrieval):
     )
 
 
-class VCDBCoreAudioRetrieval(AbsTaskRetrieval):
-    """Retrieve audio from core videos with a copied segment in common."""
+class VCDBCoreAudioVideoRetrieval(AbsTaskRetrieval):
+    """Retrieve core audio-video items with a copied segment in common."""
 
     ignore_identical_ids = True
 
     metadata = TaskMetadata(
-        name="VCDBCoreAudioRetrieval",
+        name="VCDBCoreAudioVideoRetrieval",
         description=(
-            "Audio-to-audio retrieval derived from the VCDB core video copy-detection "
-            "dataset. Audio is available for 527 of the 528 core videos; the one "
-            "video without an audio stream is excluded. The human temporal video "
-            "annotations are collapsed into 5,584 unique symmetric relationships "
-            "(11,168 directed qrels), so relevance is inherited from video-level "
-            "copy annotations rather than independently judged for audio. The 527 "
-            "tracks contain 461 unique audio files; repeated soundtracks from "
-            "distinct source videos are retained as meaningful copy-detection items. "
-            "The separate VCDB 100K-video background collection is not included."
+            "Joint audio-video retrieval derived from the VCDB core video "
+            "copy-detection dataset. Audio is available for 527 of the 528 core "
+            "videos; the one video without an audio stream is excluded. The human "
+            "temporal video annotations are collapsed into 5,584 unique symmetric "
+            "relationships (11,168 directed qrels). Audio is paired with the "
+            "annotated video content as an additional retrieval signal rather than "
+            "being judged independently. The separate VCDB 100K-video background "
+            "collection is not included."
         ),
         reference="https://doi.org/10.1007/978-3-319-10590-1_24",
         dataset={
-            "path": "pranitchawla/VCDB-Core-Audio",
-            "revision": "2304cf0464474d444982925012f1ea680ea77f03",
+            "path": "pranitchawla/VCDB-Core-AudioVideo",
+            "revision": "bbe7611e17dab01c7f937b858ae15c5cb979e94f",
         },
         type="Any2AnyRetrieval",
-        category="a2a",
-        modalities=["audio"],
+        category="va2va",
+        modalities=["video", "audio"],
         eval_splits=["test"],
         eval_langs=["zxx-Zxxx"],
         main_score="map_at_10",
@@ -89,7 +88,7 @@ class VCDBCoreAudioRetrieval(AbsTaskRetrieval):
         domains=["Web"],
         task_subtypes=["Duplicate Detection"],
         license="not specified",
-        annotations_creators="derived",
+        annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
@@ -104,8 +103,8 @@ class VCDBCoreAudioRetrieval(AbsTaskRetrieval):
 """,
         prompt={
             "query": (
-                "Retrieve another audio track whose source video contains an "
-                "annotated copied segment in common with this one."
+                "Retrieve another video and its audio that contain an annotated "
+                "copied segment in common with this item."
             )
         },
     )

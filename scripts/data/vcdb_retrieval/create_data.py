@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the VCDB core set as MTEB video and audio retrieval datasets.
+"""Build the VCDB core set as MTEB video and audio-video retrieval datasets.
 
 The source is the official multipart ``core_dataset`` archive distributed by
 Fudan University. Download the twelve parts manually from the VCDB page so the
@@ -18,14 +18,14 @@ opt-in and requires a logged-in Hugging Face account:
         --repo-id pranitchawla/VCDB-Core \
         --push
 
-Audio extraction is published separately so the original video task remains
-unchanged and the one source video without an audio stream can be excluded:
+The joint audio-video variant is published separately so the original video
+task remains unchanged and the one source video without audio can be excluded:
 
     uv run python scripts/data/vcdb_retrieval/create_data.py \
         --source-dir /path/to/archive-parts \
         --work-dir /tmp/vcdb-core \
-        --audio-repo-id pranitchawla/VCDB-Core-Audio \
-        --push-audio
+        --audio-video-repo-id pranitchawla/VCDB-Core-AudioVideo \
+        --push-audio-video
 """
 
 from __future__ import annotations
@@ -758,12 +758,15 @@ def _build_datasets(
     return corpus, queries, qrels, annotation_dataset, summary
 
 
-def _build_audio_datasets(
-    audio: list[AudioInfo], annotations: list[Annotation]
+def _build_audio_video_datasets(
+    videos: list[VideoInfo], audio: list[AudioInfo], annotations: list[Annotation]
 ) -> tuple[Dataset, Dataset, Dataset, dict[str, Any]]:
-    audio_ids = [item.id for item in audio]
-    audio_id_set = set(audio_ids)
-    path_by_id = {item.id: item.path for item in audio}
+    audio_video_ids = [item.id for item in audio]
+    audio_video_id_set = set(audio_video_ids)
+    video_path_by_id = {item.id: item.path for item in videos}
+    audio_path_by_id = {item.id: item.path for item in audio}
+    if not audio_video_id_set <= set(video_path_by_id):
+        raise RuntimeError("Audio-video IDs are not a subset of the video corpus")
     all_unordered_pairs = {
         tuple(sorted((annotation.video_a_id, annotation.video_b_id)))
         for annotation in annotations
@@ -772,7 +775,7 @@ def _build_audio_datasets(
     unordered_pairs = sorted(
         (video_a, video_b)
         for video_a, video_b in all_unordered_pairs
-        if video_a in audio_id_set and video_b in audio_id_set
+        if video_a in audio_video_id_set and video_b in audio_video_id_set
     )
     directed_pairs = sorted(
         pair
@@ -781,12 +784,28 @@ def _build_audio_datasets(
     )
     query_ids = sorted({query_id for query_id, _ in directed_pairs})
 
-    corpus = Dataset.from_dict(
-        {"id": audio_ids, "audio": [path_by_id[id_] for id_ in audio_ids]}
-    ).cast_column("audio", Audio())
-    queries = Dataset.from_dict(
-        {"id": query_ids, "audio": [path_by_id[id_] for id_ in query_ids]}
-    ).cast_column("audio", Audio())
+    corpus = (
+        Dataset.from_dict(
+            {
+                "id": audio_video_ids,
+                "video": [video_path_by_id[id_] for id_ in audio_video_ids],
+                "audio": [audio_path_by_id[id_] for id_ in audio_video_ids],
+            }
+        )
+        .cast_column("video", Video())
+        .cast_column("audio", Audio())
+    )
+    queries = (
+        Dataset.from_dict(
+            {
+                "id": query_ids,
+                "video": [video_path_by_id[id_] for id_ in query_ids],
+                "audio": [audio_path_by_id[id_] for id_ in query_ids],
+            }
+        )
+        .cast_column("video", Video())
+        .cast_column("audio", Audio())
+    )
     qrels = Dataset.from_dict(
         {
             "query-id": [query_id for query_id, _ in directed_pairs],
@@ -797,34 +816,34 @@ def _build_audio_datasets(
 
     qrel_set = set(directed_pairs)
     if len(qrel_set) != len(directed_pairs):
-        raise RuntimeError("Duplicate directed audio qrels")
+        raise RuntimeError("Duplicate directed audio-video qrels")
     if any(
-        query_id not in audio_id_set or corpus_id not in audio_id_set
+        query_id not in audio_video_id_set or corpus_id not in audio_video_id_set
         for query_id, corpus_id in qrel_set
     ):
-        raise RuntimeError("Audio qrel references an unavailable track")
+        raise RuntimeError("Audio-video qrel references an unavailable item")
     if any(query_id == corpus_id for query_id, corpus_id in qrel_set):
-        raise RuntimeError("Self relation found in audio qrels")
+        raise RuntimeError("Self relation found in audio-video qrels")
     if any((corpus_id, query_id) not in qrel_set for query_id, corpus_id in qrel_set):
-        raise RuntimeError("Audio qrels are not symmetric")
+        raise RuntimeError("Audio-video qrels are not symmetric")
     qrels_per_query = Counter(query_id for query_id, _ in directed_pairs)
     if set(qrels_per_query) != set(query_ids) or any(
         count < 1 for count in qrels_per_query.values()
     ):
-        raise RuntimeError("Every audio query must have at least one positive")
+        raise RuntimeError("Every audio-video query must have at least one positive")
 
     summary = {
-        "corpus_audio_tracks": len(audio_ids),
+        "corpus_audio_video_items": len(audio_video_ids),
         "queries": len(query_ids),
         "unique_undirected_video_pairs": len(unordered_pairs),
         "directed_qrels": len(directed_pairs),
         "directed_qrels_removed_for_missing_audio": 2
         * (len(all_unordered_pairs) - len(unordered_pairs)),
         "implicit_negatives_per_query_min": min(
-            len(audio_ids) - 1 - count for count in qrels_per_query.values()
+            len(audio_video_ids) - 1 - count for count in qrels_per_query.values()
         ),
         "implicit_negatives_per_query_max": max(
-            len(audio_ids) - 1 - count for count in qrels_per_query.values()
+            len(audio_video_ids) - 1 - count for count in qrels_per_query.values()
         ),
         "positives_per_query": dict(sorted(Counter(qrels_per_query.values()).items())),
     }
@@ -955,13 +974,13 @@ Paper: [{_PAPER_URL}]({_PAPER_URL})
 """
 
 
-def _audio_dataset_card(summary: dict[str, Any]) -> str:
+def _audio_video_dataset_card(summary: dict[str, Any]) -> str:
     archive_hashes = "\n".join(
         f"- `{name}`: `{metadata['sha256']}` ({metadata['size_bytes']} bytes)"
         for name, metadata in summary["archive_parts"].items()
     )
     audio_summary = summary["audio"]
-    retrieval = audio_summary["retrieval"]
+    retrieval = audio_summary["audio_video_retrieval"]
     unique_packaged_audio = len(
         {item["packaged_sha256"] for item in audio_summary["tracks"]}
     )
@@ -972,22 +991,24 @@ def _audio_dataset_card(summary: dict[str, Any]) -> str:
     )
     return f"""---
 license: other
-pretty_name: VCDB Core Audio Retrieval
+pretty_name: VCDB Core Audio-Video Retrieval
 task_categories:
 - other
 tags:
 - mteb
 - moeb
-- audio-retrieval
+- audio-video-retrieval
+- video-copy-detection
 - duplicate-detection
 - research-only
 ---
 
-# VCDB Core Audio Retrieval
+# VCDB Core Audio-Video Retrieval
 
-This repository packages audio extracted from the **528-video core set** of
-VCDB as a symmetric audio-to-audio retrieval task for MTEB/MOEB. The separate
-100,000-video background collection is not included.
+This repository packages synchronized video and extracted audio from the
+**528-video core set** of VCDB as a symmetric video+audio-to-video+audio
+retrieval task for MTEB/MOEB. The separate 100,000-video background collection
+is not included.
 
 ## Terms and provenance
 
@@ -1004,23 +1025,24 @@ does not grant additional rights beyond the source terms.
 ## Construction
 
 - Raw core videos: {summary["raw_video_count"]}
-- Videos with an audio stream: {retrieval["corpus_audio_tracks"]}
+- Audio-video corpus items: {retrieval["corpus_audio_video_items"]}
 - Unique packaged audio files (SHA-256): {unique_packaged_audio}
 - Videos without an audio stream: {len(audio_summary["missing_video_ids"])}
-- Audio queries: {retrieval["queries"]}
+- Audio-video queries: {retrieval["queries"]}
 - Unique undirected relevant pairs: {retrieval["unique_undirected_video_pairs"]}
 - Directed binary qrels: {retrieval["directed_qrels"]}
 
 Stable IDs remain the original topic-relative video paths. The source video
 without audio, `{audio_summary["missing_video_ids"][0]}`, is excluded. Qrels
 involving it are removed, and every retained query has at least one positive.
-The {retrieval["corpus_audio_tracks"] - unique_packaged_audio} repeated audio files
-belong to distinct source video IDs and are retained as meaningful positives for
-copy detection.
+The {retrieval["corpus_audio_video_items"] - unique_packaged_audio} repeated
+audio files belong to distinct source videos and are retained because the joint
+audio-video items remain distinct copy-detection examples.
 
 Relevance is derived from VCDB's human segment-level video copy annotations:
 multiple annotations for the same source-video pair are collapsed, and both
-directions are emitted. These are not independent audio-copy judgments.
+directions are emitted. Audio similarity was not independently judged; audio is
+an additional signal paired with the human-annotated video content.
 
 ## Audio extraction
 
@@ -1038,8 +1060,8 @@ Re-encoded tracks:
 
 ## Configurations
 
-- `corpus` (`test`): `id: string`, `audio: Audio`
-- `queries` (`test`): `id: string`, `audio: Audio`
+- `corpus` (`test`): `id: string`, `video: Video`, `audio: Audio`
+- `queries` (`test`): `id: string`, `video: Video`, `audio: Audio`
 - `qrels` (`test`): `query-id: string`, `corpus-id: string`, `score: int32`
 
 ## Source archive SHA-256
@@ -1048,10 +1070,10 @@ Re-encoded tracks:
 
 ## Limitations
 
-VCDB was designed for temporal partial-copy detection in video. Copied visual
-segments may have modified or replaced sound, so audio-only relevance can be
-noisy. This adaptation also uses only the core set and cannot reproduce the
-paper's segment-level F1 score or complete 100K-background protocol.
+VCDB was designed for temporal partial-copy detection in video, and the audio
+signal may have been modified or replaced in copied segments. This adaptation
+evaluates whole audio-video items, uses only the core set, and cannot reproduce
+the paper's segment-level F1 score or complete 100K-background protocol.
 
 ## Citation
 
@@ -1089,7 +1111,7 @@ def _save_local(
     )
 
 
-def _save_audio_local(
+def _save_audio_video_local(
     work_dir: Path,
     corpus: Dataset,
     queries: Dataset,
@@ -1097,7 +1119,7 @@ def _save_audio_local(
     card: str,
     summary: dict[str, Any],
 ) -> None:
-    export_dir = work_dir / "audio_export"
+    export_dir = work_dir / "audio_video_export"
     if export_dir.exists():
         shutil.rmtree(export_dir)
     export_dir.mkdir(parents=True)
@@ -1154,7 +1176,7 @@ def _publish(
     return api.dataset_info(repo_id).sha
 
 
-def _publish_audio(
+def _publish_audio_video(
     repo_id: str,
     corpus: Dataset,
     queries: Dataset,
@@ -1166,7 +1188,7 @@ def _publish_audio(
     token = get_token()
     if not token:
         raise RuntimeError(
-            "--push-audio requires `hf auth login` or HF_TOKEN in the environment"
+            "--push-audio-video requires `hf auth login` or HF_TOKEN in the environment"
         )
     create_repo(repo_id, repo_type="dataset", private=False, exist_ok=True, token=token)
     api = HfApi(token=token)
@@ -1175,7 +1197,7 @@ def _publish_audio(
         path_in_repo="README.md",
         repo_id=repo_id,
         repo_type="dataset",
-        commit_message="Add VCDB Core Audio dataset card and terms",
+        commit_message="Add VCDB Core Audio-Video dataset card and terms",
     )
     for name, dataset in {
         "corpus": corpus,
@@ -1186,7 +1208,7 @@ def _publish_audio(
             repo_id,
             name,
             token=token,
-            commit_message=f"Add VCDB Core Audio {name} configuration",
+            commit_message=f"Add VCDB Core Audio-Video {name} configuration",
             num_proc=max(1, upload_workers),
         )
     api.upload_file(
@@ -1196,7 +1218,7 @@ def _publish_audio(
         path_in_repo="audit.json",
         repo_id=repo_id,
         repo_type="dataset",
-        commit_message="Add VCDB Core Audio construction audit",
+        commit_message="Add VCDB Core Audio-Video construction audit",
     )
     return api.dataset_info(repo_id).sha
 
@@ -1216,7 +1238,9 @@ def _parse_args() -> argparse.Namespace:
         help="Scratch/output directory outside the Git repository",
     )
     parser.add_argument("--repo-id", default="pranitchawla/VCDB-Core")
-    parser.add_argument("--audio-repo-id", default="pranitchawla/VCDB-Core-Audio")
+    parser.add_argument(
+        "--audio-video-repo-id", default="pranitchawla/VCDB-Core-AudioVideo"
+    )
     parser.add_argument("--workers", type=int, default=min(8, os.cpu_count() or 1))
     parser.add_argument(
         "--upload-workers",
@@ -1230,9 +1254,9 @@ def _parse_args() -> argparse.Namespace:
         help="Publish the video dataset; requires an authenticated account",
     )
     parser.add_argument(
-        "--push-audio",
+        "--push-audio-video",
         action="store_true",
-        help="Publish the extracted audio dataset; requires an authenticated account",
+        help="Publish the joint audio-video dataset; requires an authenticated account",
     )
     return parser.parse_args()
 
@@ -1256,8 +1280,8 @@ def main() -> None:
     corpus, queries, qrels, annotation_dataset, retrieval_summary = _build_datasets(
         videos, annotations
     )
-    audio_corpus, audio_queries, audio_qrels, audio_retrieval_summary = (
-        _build_audio_datasets(audio, annotations)
+    audio_video_corpus, audio_video_queries, audio_video_qrels, av_retrieval_summary = (
+        _build_audio_video_datasets(videos, audio, annotations)
     )
 
     transcoded_videos = [
@@ -1306,18 +1330,18 @@ def main() -> None:
             ),
             "reencoded_tracks": reencoded_audio,
             "tracks": audio_tracks,
-            "retrieval": audio_retrieval_summary,
+            "audio_video_retrieval": av_retrieval_summary,
         },
     }
     card = _dataset_card(summary)
-    audio_card = _audio_dataset_card(summary)
+    audio_video_card = _audio_video_dataset_card(summary)
     _save_local(work_dir, corpus, queries, qrels, annotation_dataset, card, summary)
-    _save_audio_local(
+    _save_audio_video_local(
         work_dir,
-        audio_corpus,
-        audio_queries,
-        audio_qrels,
-        audio_card,
+        audio_video_corpus,
+        audio_video_queries,
+        audio_video_qrels,
+        audio_video_card,
         summary,
     )
 
@@ -1334,22 +1358,24 @@ def main() -> None:
         )
         print(f"Published https://huggingface.co/datasets/{args.repo_id}")
         print(f"Pinned revision: {revision}")
-    if args.push_audio:
-        audio_revision = _publish_audio(
-            args.audio_repo_id,
-            audio_corpus,
-            audio_queries,
-            audio_qrels,
-            audio_card,
+    if args.push_audio_video:
+        audio_video_revision = _publish_audio_video(
+            args.audio_video_repo_id,
+            audio_video_corpus,
+            audio_video_queries,
+            audio_video_qrels,
+            audio_video_card,
             summary,
             args.upload_workers,
         )
-        print(f"Published https://huggingface.co/datasets/{args.audio_repo_id}")
-        print(f"Pinned audio revision: {audio_revision}")
-    if not args.push and not args.push_audio:
+        print(f"Published https://huggingface.co/datasets/{args.audio_video_repo_id}")
+        print(f"Pinned audio-video revision: {audio_video_revision}")
+    if not args.push and not args.push_audio_video:
         print(f"Video export: {work_dir / 'export'}")
-        print(f"Audio export: {work_dir / 'audio_export'}")
-        print("Re-run with --push and/or --push-audio after reviewing the audits.")
+        print(f"Audio-video export: {work_dir / 'audio_video_export'}")
+        print(
+            "Re-run with --push and/or --push-audio-video after reviewing the audits."
+        )
 
 
 if __name__ == "__main__":

@@ -876,7 +876,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SpeechCommandsZeroshotv0.01",
         "SpeechCommandsZeroshotv0.02",
         "StanfordI2VRetrieval",  # official manifest contains repeated video+audio clips
-        "VCDBCoreAudioRetrieval",  # distinct copied videos can have identical soundtracks
+        "VCDBCoreAudioVideoRetrieval",  # distinct copied videos can have identical soundtracks
         "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseAudioVideoZeroShot",
     ],
