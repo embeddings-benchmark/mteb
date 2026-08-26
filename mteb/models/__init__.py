@@ -20,6 +20,7 @@ from .search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
 from .sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
+    SparseEncoderWrapper,
     sentence_transformers_loader,
 )
 
@@ -41,5 +42,6 @@ __all__ = [
     "SearchEncoderWrapper",
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
+    "SparseEncoderWrapper",
     "sentence_transformers_loader",
 ]

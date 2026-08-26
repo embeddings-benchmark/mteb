@@ -76,6 +76,7 @@ from .miracl_retrieval import (
 from .miracl_vision_retrieval import MIRACLVisionRetrieval
 from .mkqa_retrieval import MKQARetrieval
 from .mlqa_retrieval import MLQARetrieval
+from .mmarco_retrieval import MMarcoRetrievalMultilingual
 from .mr_tidy_retrieval import MrTidyRetrieval
 from .multi_long_doc_retrieval import MultiLongDocRetrieval
 from .mupler_retrieval import MuPLeRRetrieval
@@ -214,6 +215,7 @@ __all__ = [
     "MIRACLVisionRetrieval",
     "MKQARetrieval",
     "MLQARetrieval",
+    "MMarcoRetrievalMultilingual",
     "MintakaRetrieval",
     "MrTidyRetrieval",
     "MuPLeRRetrieval",

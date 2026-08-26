@@ -1,4 +1,5 @@
 from .ambient_acoustic_context import AmbientAcousticContextClassification
+from .beehive import BeehiveStatesClassification
 from .beijing_opera import BeijingOpera
 from .bird_clef import BirdCLEFClassification
 from .diving48_classification import Diving48ClassificationV1, Diving48ClassificationV2
@@ -16,6 +17,7 @@ from .urban_sound8k import UrbanSound8kClassification
 
 __all__ = [
     "AmbientAcousticContextClassification",
+    "BeehiveStatesClassification",
     "BeijingOpera",
     "BirdCLEFClassification",
     "Diving48ClassificationV1",
