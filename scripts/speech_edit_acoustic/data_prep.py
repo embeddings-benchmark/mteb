@@ -94,7 +94,9 @@ def process_and_upload(
         qrel_rows["corpus-id"].append(corpus_id)
         qrel_rows["score"].append(1)
 
-    print(f"Constructed {len(query_rows['id'])} queries and {len(corpus_rows['id'])} corpus items.")
+    print(
+        f"Constructed {len(query_rows['id'])} queries and {len(corpus_rows['id'])} corpus items."
+    )
 
     # 4. Create Hugging Face Datasets
     print("Casting columns to Arrow schemas and Audio features...")
@@ -120,7 +122,9 @@ def process_and_upload(
     # 5. Output / Upload
     if push:
         if not token:
-            raise ValueError("Hugging Face Hub token (token or HF_TOKEN env var) must be provided to push.")
+            raise ValueError(
+                "Hugging Face Hub token (token or HF_TOKEN env var) must be provided to push."
+            )
         print(f"Creating repository {repo_id} (or checking existence)...")
         create_repo(repo_id, repo_type="dataset", token=token, exist_ok=True)
 
@@ -171,6 +175,7 @@ Each query combines an original/source speech recording with a natural-language 
 - **qrels**: `query-id` (string), `corpus-id` (string), and binary `score` (int32)
 """
         from huggingface_hub import HfApi
+
         HfApi(token=token).upload_file(
             path_or_fileobj=readme_content.encode("utf-8"),
             path_in_repo="README.md",
@@ -180,7 +185,9 @@ Each query combines an original/source speech recording with a natural-language 
         )
 
         sha = dataset_info(repo_id, token=token).sha
-        print(f"\nSuccessfully pushed dataset to Hub!\nRepo ID: {repo_id}\nRevision (SHA): {sha}\n")
+        print(
+            f"\nSuccessfully pushed dataset to Hub!\nRepo ID: {repo_id}\nRevision (SHA): {sha}\n"
+        )
     else:
         if output_dir:
             output_dir.mkdir(parents=True, exist_ok=True)
@@ -188,15 +195,31 @@ Each query combines an original/source speech recording with a natural-language 
                 dataset_dict.save_to_disk(output_dir / config_name)
             print(f"Saved dataset locally to {output_dir}")
         else:
-            print("No action taken. Pass --push or --output-dir to save the constructed dataset.")
+            print(
+                "No action taken. Pass --push or --output-dir to save the constructed dataset."
+            )
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Prepare SpeechEditBench acoustic retrieval task.")
-    parser.add_argument("--repo-id", type=str, default="deep9539/speech_edit_acoustic", help="Hugging Face repository ID")
-    parser.add_argument("--token", type=str, default=os.environ.get("HF_TOKEN"), help="Hugging Face write token")
+    parser = argparse.ArgumentParser(
+        description="Prepare SpeechEditBench acoustic retrieval task."
+    )
+    parser.add_argument(
+        "--repo-id",
+        type=str,
+        default="deep9539/speech_edit_acoustic",
+        help="Hugging Face repository ID",
+    )
+    parser.add_argument(
+        "--token",
+        type=str,
+        default=os.environ.get("HF_TOKEN"),
+        help="Hugging Face write token",
+    )
     parser.add_argument("--push", action="store_true", help="Push dataset to HF Hub")
-    parser.add_argument("--output-dir", type=Path, help="Local directory to save processed datasets")
+    parser.add_argument(
+        "--output-dir", type=Path, help="Local directory to save processed datasets"
+    )
     args = parser.parse_args()
 
     process_and_upload(
