@@ -74,8 +74,10 @@ TaskSubtype = Literal[
     "Scene recognition",
     "Caption Pairing",
     "Emotion recognition",
+    "Event Retrieval",
     "Textures recognition",
     "Activity recognition",
+    "Physical plausibility classification",
     "Tumor detection",
     "Duplicate Detection",
     "Rendered semantic textual similarity",
@@ -407,6 +409,7 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
     "PairClassification": "pair-classification",
     "VideoClassification": "classification",
     "VideoClustering": "clustering",
+    "VideoMultilabelClassification": "classification",
     "VideoPairClassification": "pair-classification",
     "VideoZeroshotClassification": "classification",
     "VideoCentricQA": "retrieval",
@@ -906,6 +909,7 @@ class TaskMetadata(BaseModel):
             "Emotion recognition": ["sentiment-scoring"],
             "Textures recognition": [],
             "Activity recognition": [],
+            "Physical plausibility classification": [],
             "Tumor detection": [],
             "Duplicate Detection": [],
             "Rendered semantic textual similarity": [
@@ -995,6 +999,7 @@ class TaskMetadata(BaseModel):
             "AudioPairClassification": ["audio-classification"],
             # video
             "VideoCentricQA": ["visual-question-answering"],
+            "VideoZeroshotClassification": ["video-classification"],
         }
         if self.type == "ZeroShotClassification":
             if self.modalities == ["image"]:

@@ -193,7 +193,7 @@ class GmeQwen2VL(AbsEncoder):
         self.model = self.model.to(self.device)
         all_embeddings = []
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Fused Encoding"):
-            batch_size = len(batch["text"]) or len(batch["image"])
+            batch_size = len(batch["text"]) if "text" in batch else len(batch["image"])
             if "text" in batch:
                 text_batch = batch["text"]
             else:
@@ -365,6 +365,7 @@ gme_qwen2vl_2b = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=GME_CITATION,
+    extra_requirements_groups=["gme"],
 )
 
 gme_qwen2vl_7b = ModelMeta(
@@ -390,4 +391,5 @@ gme_qwen2vl_7b = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=GME_CITATION,
+    extra_requirements_groups=["gme"],
 )

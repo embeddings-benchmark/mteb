@@ -150,4 +150,4 @@ extra:
       link: https://github.com/embeddings-benchmark/mteb
 
 validation:
-  unresolved_references: false
+  invalid_links: false

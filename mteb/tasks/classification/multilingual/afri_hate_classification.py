@@ -98,31 +98,3 @@ Wang, Lu},
 }
 """,
     )
-
-    def dataset_transform(self, **kwargs) -> None:
-        """
-        Transform the dataset to MTEB expected format:
-
-        * column **text**: tweet content (str)
-        * column **label**: int (0=normal, 1=abusive, 2=hate)
-        """
-        # Map label strings to integers
-        label_map = {"Normal": 0, "Abuse": 1, "Hate": 2}
-
-        def transform_labels(example):
-            return {
-                "text": example["tweet"],
-                "label": label_map[example["label"]],
-            }
-
-        for lang in self.dataset:
-            for split in self.dataset[lang]:
-                ds = self.dataset[lang][split]
-
-                ds = ds.map(
-                    transform_labels,
-                    remove_columns=ds.column_names,
-                    desc=f"{lang}/{split}",
-                )
-
-                self.dataset[lang][split] = ds

@@ -32,7 +32,7 @@ QUERY_INSTR = "Given a biology post, retrieve relevant passages"
 
 
 @pytest.mark.parametrize(
-    "template, prompt_type, expected",
+    ("template", "prompt_type", "expected"),
     [
         # Callable template: fires even on empty input (document side)
         (_gritlm_template, PromptType.document, "<|embed|>\n"),

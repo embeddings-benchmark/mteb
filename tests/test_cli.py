@@ -54,7 +54,9 @@ run_task_fixures = [
 ]
 
 
-@pytest.mark.parametrize("model_name,task_name,model_revision", run_task_fixures)
+@pytest.mark.parametrize(
+    ("model_name", "task_name", "model_revision"), run_task_fixures
+)
 def test_run_task(
     model_name: str,
     task_name: str,
@@ -142,7 +144,7 @@ def test_create_meta(tmp_path):
 
 
 @pytest.mark.parametrize(
-    "existing_readme_name, gold_readme_name",
+    ("existing_readme_name", "gold_readme_name"),
     [
         ("existing_readme.md", "model_card_gold_existing.md"),
         ("model_card_without_frontmatter.md", "model_card_gold_without_frontmatter.md"),
@@ -223,7 +225,7 @@ def test_leaderboard_help():
 
 
 @pytest.mark.parametrize(
-    "cache_path_input,host,port,share,test_description",
+    ("cache_path_input", "host", "port", "share", "test_description"),
     [
         ("custom", "localhost", 8080, True, "custom cache path"),
         (None, "127.0.0.1", 7860, False, "default cache path"),

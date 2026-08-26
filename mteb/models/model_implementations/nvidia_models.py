@@ -5,10 +5,8 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 import torch.nn.functional as F
-from packaging.version import Version
 from tqdm.auto import tqdm
 from transformers import AutoModel, AutoTokenizer
-from transformers import __version__ as transformers_version
 
 from mteb.models import CrossEncoderWrapper, SentenceTransformerEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
@@ -120,7 +118,7 @@ nvidia_training_datasets = {
 
 
 class _NVEmbedWrapper(InstructSentenceTransformerModel):
-    """Inherited, because nvembed requires `sbert==2`, but it doesn't have tokenizers kwargs"""
+    """Inherited, because nvembed requires `sbert==2`, but it doesn't have tokenizers kwargs."""
 
     def __init__(
         self,
@@ -138,20 +136,11 @@ class _NVEmbedWrapper(InstructSentenceTransformerModel):
     ):
         from sentence_transformers import __version__ as sbert_version
 
-        required_transformers_version = "4.42.4"
-        required_sbert_version = "2.7.0"
-
-        if Version(transformers_version) != Version(required_transformers_version):
-            raise RuntimeError(
-                f"transformers version {transformers_version} is not match with required "
-                f"install version {required_transformers_version} to run `nvidia/NV-Embed-v2`"
-            )
-
-        if Version(sbert_version) != Version(required_sbert_version):
-            raise RuntimeError(
-                f"sbert version {sbert_version} is not match with required "
-                f"install version {required_sbert_version} to run `nvidia/NV-Embed-v2`"
-            )
+        logger.warning(
+            f"{model_name} was previously required to run with sentence-transformers==2.7.0, "
+            f"but mteb requires sentence-transformers>=3.0.0, so it is now running on "
+            f"{sbert_version}. Results might not reproduce the previously reported scores."
+        )
 
         from sentence_transformers import SentenceTransformer
 
@@ -211,7 +200,7 @@ NV_embed_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=NV_RETRIEVER_CITATION,
-    extra_requirements_groups=["flash_attention"],
+    extra_requirements_groups=["flash_attention", "nvembed"],
 )
 
 NV_embed_v1 = ModelMeta(
@@ -244,7 +233,7 @@ NV_embed_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=NV_RETRIEVER_CITATION,
-    extra_requirements_groups=["flash_attention"],
+    extra_requirements_groups=["flash_attention", "nvembed"],
 )
 
 llama_embed_nemotron_evaluated_languages = [
@@ -424,13 +413,6 @@ class LlamaEmbedNemotron(AbsEncoder):
         revision: str,
         device: str | None = None,
     ) -> None:
-        required_transformers_version = "4.51.0"
-        if Version(transformers_version) != Version(required_transformers_version):
-            raise ImportError(
-                f"{model_name} requires transformers library version {required_transformers_version}, but it was not found in your environment. "
-                f"If you want to load {model_name} model, please run `pip install 'mteb[llama-embed-nemotron]'` to install the required package."
-            )
-
         self.model_name = model_name
         self.revision = revision
         self.max_seq_length = 4096
@@ -632,7 +614,7 @@ llama_embed_nemotron_8b = ModelMeta(
     public_training_data="https://huggingface.co/datasets/nvidia/embed-nemotron-dataset-v1",
     contacts=["ybabakhin"],
     citation=LlamaEmbedNemotron_CITATION,
-    extra_requirements_groups=["flash_attention"],
+    extra_requirements_groups=["flash_attention", "llama-embed-nemotron"],
 )
 
 
@@ -767,14 +749,6 @@ nemotron_3_embed_8b_bf16 = ModelMeta(
 
 
 def _nemotron_rerank_model(model: str, revision: str, **kwargs) -> CrossEncoderWrapper:
-    required_transformers_version = "4.47.1"
-
-    if Version(transformers_version) != Version(required_transformers_version):
-        raise RuntimeError(
-            f"transformers version {transformers_version} is not match with required "
-            f"install version {required_transformers_version} to run `nvidia/llama-nemotron-rerank-1b-v2`"
-        )
-
     return CrossEncoderWrapper(
         model=model,
         revision=revision,
@@ -791,6 +765,7 @@ nemotron_rerank_1b_v2 = ModelMeta(
         model_kwargs={"torch_dtype": torch.float32},
     ),
     name="nvidia/llama-nemotron-rerank-1b-v2",
+    extra_requirements_groups=["nemotron-rerank"],
     revision="78efcfdc23b53a753f6c73f2d78b18132a34ac4d",
     release_date="2025-10-16",
     languages=["eng-Latn"],
