@@ -216,6 +216,8 @@ def audio_fallbacks(paths: tuple[Path, ...]) -> tuple[dict[str, Any], ...] | Non
             {"bytes": _wav_bytes(samples, int(sampling_rate)), "path": str(path)}
         )
 
+    return tuple(payloads)
+
 
 def load_index(modality: str, level: str) -> tuple[Any, list[str], list[str]]:
     """One modality index as a HF dataset of `id` plus the payload column.
