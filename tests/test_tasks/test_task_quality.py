@@ -881,6 +881,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Kinetics700VA",
         "Kinetics700VAZeroShot",
         "NSynth",  # repeated notes across instrument/pitch/velocity combinations
+        "NSynthInstrumentFamilyClustering",  # same upstream duplicate notes as NSynth
         "SpeechCommands",  # many repeated recordings of the same short command word
         "SpeechCommandsZeroshotv0.01",
         "SpeechCommandsZeroshotv0.02",
