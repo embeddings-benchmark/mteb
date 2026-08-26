@@ -447,6 +447,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "CMedQAv1-reranking",
         "CMedQAv2-reranking",
         "ClimateFEVER.v2",
+        "ClothoMomentRetrieval",  # same instruction with different audio
         "ClusTREC-Covid",
         "CodeFeedbackST",
         "CodeSearchNetCCRetrieval",
@@ -868,6 +869,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     "duplicate_audio": [
         "AmbientAcousticContext",
         "AmbientAcousticContextClustering",
+        "ClothoMomentRetrieval",  # same audio with different instruction
         "CLDAT2ARetrieval",
         "FSD2019Kaggle",
         "GTZANGenre",  # repeated short clips sampled from the same tracks

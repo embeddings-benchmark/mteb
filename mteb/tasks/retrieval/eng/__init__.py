@@ -93,6 +93,7 @@ from .clotho import (
     ClothoT2ARetrieval,
     ClothoT2ARetrievalV2,
 )
+from .clotho_moment import ClothoMomentRetrieval
 from .cmu_arctic import CMUArcticA2TRetrieval, CMUArcticT2ARetrieval
 from .covers80_retrieval import Covers80A2ARetrieval
 from .covr_r_retrieval import CoVRRVT2VRetrieval
@@ -572,6 +573,7 @@ __all__ = [
     "ClimateFEVERRetrievalv2",
     "ClothoA2TRetrieval",
     "ClothoA2TRetrievalV2",
+    "ClothoMomentRetrieval",
     "ClothoT2ARetrieval",
     "ClothoT2ARetrievalV2",
     "CoVRRVT2VRetrieval",
