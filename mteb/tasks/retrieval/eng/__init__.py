@@ -1,3 +1,4 @@
+from .acm_composed_audio_retrieval import ACMComposedAudioRetrieval
 from .activitynet_captions_retrieval import (
     ActivityNetCaptionsT2VRetrieval,
     ActivityNetCaptionsV2TRetrieval,
@@ -475,6 +476,7 @@ __all__ = [
     "TRECCOVID",
     "TRECDL2019",
     "TRECDL2020",
+    "ACMComposedAudioRetrieval",
     "ADVANCEA2IRetrieval",
     "ADVANCEI2ARetrieval",
     "AILACasedocs",

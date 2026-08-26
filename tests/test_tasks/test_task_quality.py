@@ -867,6 +867,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VoxPopuliAccentPairClassification",  # pairs constructed combinatorially from a small pool of audio clips
     ],
     "duplicate_audio": [
+        "ACMComposedAudioRetrieval",  # composed audio retrieval naturally reuses source audios with different query instructions
         "AmbientAcousticContext",
         "AmbientAcousticContextClustering",
         "ClothoMomentRetrieval",  # same audio with different instruction
