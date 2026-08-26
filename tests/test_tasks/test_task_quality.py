@@ -609,6 +609,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SpanishPassageRetrievalS2P",
         "SpanishPassageRetrievalS2S",
         "SpartQA",
+        "SpeechEditAcousticRetrieval",  # repeated instruction for speech edit
         "SpokenSQuADT2ARetrieval",
         "StackExchangeClustering",
         "StackExchangeClustering-VN",
@@ -878,7 +879,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SpeechCommands",  # many repeated recordings of the same short command word
         "SpeechCommandsZeroshotv0.01",
         "SpeechCommandsZeroshotv0.02",
-        "SpeechEditAcousticRetrieval",  # repeated instruction for speech edit
         "StanfordI2VRetrieval",  # official manifest contains repeated video+audio clips
         "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseAudioVideoZeroShot",
