@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.models.model_meta import ModelMeta
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 OCTEN_LAW_8B_V1_CITATION = "@misc{octen-law-8b-v1,\n  title={Octen Law 8B v1: a multilingual legal text embedding model},\n  author={narcolepticchicken},\n  year={2026},\n  howpublished={\\url{https://huggingface.co/narcolepticchicken/octen-law-8b-v1}}\n}"
@@ -21,7 +21,7 @@ narcolepticchicken_octen_law_8b_v1 = ModelMeta(
     max_tokens=40_960,
     license="apache-2.0",
     reference="https://huggingface.co/narcolepticchicken/octen-law-8b-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch", "Transformers"],
     use_instructions=True,
     public_training_code=None,
