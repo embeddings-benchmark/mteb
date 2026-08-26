@@ -451,7 +451,6 @@ from .youcook2_retrieval import (
 )
 
 __all__ = [
-    "ACMComposedAudioRetrieval",
     "CUB200I2I",
     "FEVER",
     "FORBI2I",
@@ -475,6 +474,7 @@ __all__ = [
     "TRECCOVID",
     "TRECDL2019",
     "TRECDL2020",
+    "ACMComposedAudioRetrieval",
     "ADVANCEA2IRetrieval",
     "ADVANCEI2ARetrieval",
     "AILACasedocs",
