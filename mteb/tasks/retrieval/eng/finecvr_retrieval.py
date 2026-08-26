@@ -13,7 +13,7 @@ class FineCVRVT2VRetrieval(AbsTaskRetrieval):
         reference="https://github.com/May2333/FDCA",
         dataset={
             "path": "myang333/FineCVRVT2VRetrieval",
-            "revision": "946a9651bd740d6c30ab7c5a1484b1c46bd197af",
+            "revision": "24e057a45717a3c62fe7e7a87232379ab8d75327",
         },
         type="Any2AnyRetrieval",
         category="vt2v",

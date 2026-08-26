@@ -33,7 +33,6 @@ def build_metadata(data: list[dict]):
 
     queries = []
     qrels = []
-    top_ranked = []
 
     for i, row in enumerate(data):
         query_id = f"query-{i:05d}"
@@ -57,45 +56,26 @@ def build_metadata(data: list[dict]):
             }
         )
 
-        # FineCVR evaluates against a global gallery while excluding
-        # the query's own reference video from retrieval candidates.
-        top_ranked.append(
-            {
-                "query-id": query_id,
-                "corpus-ids": [
-                    corpus_id
-                    for corpus_id in corpus_ids
-                    if corpus_id != source_id
-                ],
-            }
-        )
-
-    return corpus_ids, queries, qrels, top_ranked
+    return corpus_ids, queries, qrels
 
 
 def validate(
     corpus_ids: list[str],
     queries: list[dict],
     qrels: list[dict],
-    top_ranked: list[dict],
 ) -> None:
     assert len(corpus_ids) == 2165
     assert len(queries) == 2000
     assert len(qrels) == 2000
-    assert len(top_ranked) == 2000
 
     assert len(set(corpus_ids)) == len(corpus_ids)
     assert len({q["id"] for q in queries}) == len(queries)
 
-    for query, qrel, ranked in zip(queries, qrels, top_ranked):
+    for query, qrel in zip(queries, qrels):
         assert query["id"] == qrel["query-id"]
-        assert query["id"] == ranked["query-id"]
         assert query["source_id"] != qrel["corpus-id"]
         assert qrel["corpus-id"] in corpus_ids
         assert query["source_id"] in corpus_ids
-        assert query["source_id"] not in ranked["corpus-ids"]
-        assert qrel["corpus-id"] in ranked["corpus-ids"]
-        assert len(ranked["corpus-ids"]) == 2164
 
 
 
@@ -148,7 +128,6 @@ def build_datasets(
     corpus_ids: list[str],
     queries: list[dict],
     qrels: list[dict],
-    top_ranked: list[dict],
     video_dir: Path,
 ) -> dict[str, Dataset]:
     corpus_ds = Dataset.from_list(
@@ -179,13 +158,11 @@ def build_datasets(
     queries_ds = queries_ds.cast_column("video", Video())
 
     qrels_ds = Dataset.from_list(qrels)
-    top_ranked_ds = Dataset.from_list(top_ranked)
 
     return {
         "corpus": corpus_ds,
         "queries": queries_ds,
         "qrels": qrels_ds,
-        "top_ranked": top_ranked_ds,
     }
 
 
@@ -211,24 +188,21 @@ def main() -> None:
     args = parser.parse_args()
 
     data = load_annotations()
-    corpus_ids, queries, qrels, top_ranked = build_metadata(data)
+    corpus_ids, queries, qrels = build_metadata(data)
 
-    validate(corpus_ids, queries, qrels, top_ranked)
+    validate(corpus_ids, queries, qrels)
     pack_all_videos(corpus_ids, args.frames_root, args.video_dir)
 
     datasets = build_datasets(
         corpus_ids,
         queries,
         qrels,
-        top_ranked,
         args.video_dir,
     )
 
     print(f"corpus: {len(corpus_ids)}")
     print(f"queries: {len(queries)}")
     print(f"qrels: {len(qrels)}")
-    print(f"top_ranked: {len(top_ranked)}")
-    print(f"candidates/query: {len(top_ranked[0]['corpus-ids'])}")
     print()
     for name, dataset in datasets.items():
         print(f"{name} features:", dataset.features)
