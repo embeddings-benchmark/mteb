@@ -20,13 +20,18 @@ surface form, the label used is each verb_class's most frequent `verb`
 string.
 
 25 verb classes with at least CLIPS_PER_CLASS available clips are
-selected (by descending clip count, ties broken by class id) and
-CLIPS_PER_CLASS clips are sampled from each, for 500 clips total. Only
-the ~500 selected clips are downloaded, not the full 37,455-clip mirror.
+selected (by descending clip count, ties broken by class id). By
+default CLIPS_PER_CLASS clips are sampled from each, for 500 clips
+total (only those ~500 clips are downloaded, not the full mirror).
+With --full, every available clip for those same 25 classes is used
+instead (34,564 clips as of this writing, a genuinely full, unsampled
+version of the same 25-class task, not the entire ~90-class mirror).
 
 Usage:
     python scripts/data/epic_kitchens100_clustering/create_data.py \\
         --push-to-hub yaswanth169/EPIC-KITCHENS100-VideoClustering
+    python scripts/data/epic_kitchens100_clustering/create_data.py --full \\
+        --push-to-hub yaswanth169/EPIC-KITCHENS100-VideoClustering-Full
 """
 
 from __future__ import annotations
@@ -36,7 +41,7 @@ import random
 from collections import Counter, defaultdict
 
 from datasets import Dataset, DatasetDict, Video, load_dataset
-from huggingface_hub import hf_hub_download, list_repo_files
+from huggingface_hub import list_repo_files, snapshot_download
 
 SOURCE_DATASET = "lightly-ai/epic-kitchens-100-clips"
 SOURCE_SPLIT = "train"
@@ -52,7 +57,7 @@ def _available_clips() -> dict[str, str]:
     return {path.rsplit("/", 1)[-1][:-4]: path for path in clips}
 
 
-def build_split(seed: int = SEED) -> Dataset:
+def build_split(seed: int = SEED, full: bool = False) -> Dataset:
     clip_paths = _available_clips()
 
     metadata = load_dataset(SOURCE_DATASET, split=SOURCE_SPLIT)
@@ -76,24 +81,39 @@ def build_split(seed: int = SEED) -> Dataset:
     )
 
     rng = random.Random(seed)
-    rows: list[dict] = []
+    selections: list[tuple[str, str]] = []  # (narration_id, label)
     for verb_class in eligible:
         label = verb_counts[verb_class].most_common(1)[0][0]
         narration_ids = list(by_class[verb_class])
         rng.shuffle(narration_ids)
-        for narration_id in narration_ids[:CLIPS_PER_CLASS]:
-            local_path = hf_hub_download(
-                repo_id=SOURCE_DATASET,
-                repo_type="dataset",
-                filename=clip_paths[narration_id],
-            )
-            rows.append(
-                {
-                    "narration_id": narration_id,
-                    "video": local_path,
-                    "label": label,
-                }
-            )
+        chosen = narration_ids if full else narration_ids[:CLIPS_PER_CLASS]
+        selections.extend((narration_id, label) for narration_id in chosen)
+
+    # One bulk snapshot_download instead of one hf_hub_download per clip --
+    # thousands of individual calls have too much per-file overhead at
+    # --full scale (34,564 clips). At --full scale, allow_patterns as a list
+    # of exact filenames also backfires: huggingface_hub matches every
+    # pattern against every remote file, so 34,564 patterns x 37,455 files
+    # is ~1.3B comparisons -- effectively hangs. Since --full already wants
+    # 92% of the whole clips/ folder, download it with one glob instead.
+    if full:
+        local_root = snapshot_download(
+            repo_id=SOURCE_DATASET, repo_type="dataset", allow_patterns=["clips/**/*.mp4"]
+        )
+    else:
+        patterns = [clip_paths[narration_id] for narration_id, _ in selections]
+        local_root = snapshot_download(
+            repo_id=SOURCE_DATASET, repo_type="dataset", allow_patterns=patterns
+        )
+
+    rows = [
+        {
+            "narration_id": narration_id,
+            "video": f"{local_root}/{clip_paths[narration_id]}",
+            "label": label,
+        }
+        for narration_id, label in selections
+    ]
 
     dataset = Dataset.from_list(rows)
     return dataset.cast_column("video", Video())
@@ -102,12 +122,18 @@ def build_split(seed: int = SEED) -> Dataset:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--push-to-hub", default=None, help="HF repo id to push to")
+    parser.add_argument(
+        "--full",
+        action="store_true",
+        help="Use every available clip per class instead of capping at CLIPS_PER_CLASS",
+    )
     args = parser.parse_args()
 
-    dataset = build_split()
+    dataset = build_split(full=args.full)
 
     print(f"clips: {len(dataset)}, classes: {len(set(dataset['label']))}")
-    assert len(dataset) == NUM_CLASSES * CLIPS_PER_CLASS
+    if not args.full:
+        assert len(dataset) == NUM_CLASSES * CLIPS_PER_CLASS
     assert len(set(dataset["label"])) == NUM_CLASSES
     assert len(set(dataset["narration_id"])) == len(dataset)
 
