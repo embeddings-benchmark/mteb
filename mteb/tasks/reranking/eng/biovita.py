@@ -84,7 +84,7 @@ class BioVITAA2TReranking(_BioVITAReranking):
         reference=_REFERENCE,
         dataset={
             "path": "myang333/BioVITAA2TRetrieval",
-            "revision": "c9a425f0673eb14782d83e1481a4dff54a1e7e59",
+            "revision": "e5cef5bd77ae85a62e54536a2f29de5a6cc0c32e",
         },
         type="Reranking",
         category="a2t",
@@ -111,7 +111,7 @@ class BioVITAT2AReranking(_BioVITAReranking):
         reference=_REFERENCE,
         dataset={
             "path": "myang333/BioVITAT2ARetrieval",
-            "revision": "571c2116c5bd50fcbe1223021d543610d45a066e",
+            "revision": "0ea901959456c96cdc31659a82256a8a2386d498",
         },
         type="Reranking",
         category="t2a",
@@ -138,7 +138,7 @@ class BioVITAA2IReranking(_BioVITAReranking):
         reference=_REFERENCE,
         dataset={
             "path": "myang333/BioVITAA2IRetrieval",
-            "revision": "7ffdaf3a1215eff081623522d23365f19da80478",
+            "revision": "8a63b554297a556cc56175e73b8c7239f713e2c9",
         },
         type="Reranking",
         category="a2i",
@@ -165,7 +165,7 @@ class BioVITAI2AReranking(_BioVITAReranking):
         reference=_REFERENCE,
         dataset={
             "path": "myang333/BioVITAI2ARetrieval",
-            "revision": "d94581a139e8793be31fbe5d9ee9b221f310f4d3",
+            "revision": "2a7ef5884dc53e03854c824916eb1c45e946969c",
         },
         type="Reranking",
         category="i2a",
