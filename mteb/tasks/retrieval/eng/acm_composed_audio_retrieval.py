@@ -38,6 +38,7 @@ class ACMComposedAudioRetrieval(AbsTaskRetrieval):
         license="mit",
         annotations_creators="derived",
         dialect=[],
+        is_beta=True,
         sample_creation="found",
         bibtex_citation=r"""
 @article{huynh2026omniret,
