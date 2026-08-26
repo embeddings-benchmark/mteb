@@ -40,7 +40,7 @@ def extract_datasets(files: list[str]) -> list[tuple[str, str]]:
                         for target in node.targets:
                             if (
                                 isinstance(target, ast.Name)
-                                and target.id.casefold().endswith("dataset")
+                                and target.id == "dataset"
                                 and isinstance(node.value, ast.Dict)
                             ):
                                 dataset_info = extract_dataset_from_dict(node.value)

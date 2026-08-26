@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskCategory
     from mteb.types import Modalities
 
-_DATASET = {
+dataset = {
     "path": "jupyterjazz/XModBench-MTEB",
     "revision": "db1d4695d359be83e8fa34575970c6d9c58dbfb4",
 }
@@ -25,7 +25,7 @@ _CITATION = r"""
 """
 
 _COMMON_METADATA = dict(
-    dataset=_DATASET,
+    dataset=dataset,
     reference=_REFERENCE,
     type="Any2AnyReranking",
     eval_splits=["test"],
