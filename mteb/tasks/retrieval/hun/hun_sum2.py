@@ -48,7 +48,7 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         ds = load_dataset(**self.metadata.dataset, split=self.metadata.eval_splits)
-        ds = dict(zip(self.metadata.eval_splits, ds))
+        ds = dict(zip(self.metadata.eval_splits, ds, strict=True))
         for split_name, split in ds.items():
             self.corpus[split_name] = {}
             self.queries[split_name] = {}

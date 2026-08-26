@@ -145,7 +145,7 @@ class TimingStack:
         lines = []
         prev_group: tuple[str | None, str | None] = (None, None)
 
-        for phase, label in zip(self.phases, labels):
+        for phase, label in zip(self.phases, labels, strict=True):
             cur_group = (phase.get("split"), phase.get("subset"))
             if prev_group not in {cur_group, (None, None)}:
                 lines.append("")

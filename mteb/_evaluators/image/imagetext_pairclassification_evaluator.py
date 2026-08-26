@@ -164,7 +164,9 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         all_scores = []
 
         with self.timer("Scoring", split=self.hf_split, subset=self.hf_subset):
-            for img_emb, txt_emb in zip(norm_image_embeddings, norm_text_embeddings):
+            for img_emb, txt_emb in zip(
+                norm_image_embeddings, norm_text_embeddings, strict=True
+            ):
                 scores = (
                     img_emb @ txt_emb.t()
                 )  # shape = (num_images_per_sample x num_texts_per_sample)

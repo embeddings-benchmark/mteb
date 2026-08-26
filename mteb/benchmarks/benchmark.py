@@ -605,13 +605,13 @@ class Benchmark:
                 borda_list = (
                     per_task_pl.select(_get_borda_rank(task_cols)).to_series().to_list()
                 )
-                for name, rank in zip(per_task_df.index, borda_list):
+                for name, rank in zip(per_task_df.index, borda_list, strict=True):
                     scores[name]["Rank"] = int(rank)
             else:
-                for name, model_scores in scores.items():
+                for model_scores in scores.values():
                     model_scores["Rank"] = None
         else:
-            for name, model_scores in scores.items():
+            for model_scores in scores.values():
                 model_scores["Rank"] = None
 
         return scores

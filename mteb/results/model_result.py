@@ -248,7 +248,8 @@ class ModelResult(BaseModel):
                         )
                 except Exception as e:
                     warnings.warn(
-                        f"Couldn't get scores for {res.task_name} due to {e}."
+                        f"Couldn't get scores for {res.task_name} due to {e}.",
+                        stacklevel=2,
                     )
             return scores
         if format == "long":
@@ -281,7 +282,8 @@ class ModelResult(BaseModel):
                     entries.append(entry)
                 except Exception as e:
                     warnings.warn(
-                        f"Couldn't get scores for {task_res.task_name} due to {e}."
+                        f"Couldn't get scores for {task_res.task_name} due to {e}.",
+                        stacklevel=2,
                     )
             return entries
 
@@ -346,7 +348,7 @@ class ModelResult(BaseModel):
         if not scores_data:
             msg = "No scores data available. Returning empty DataFrame."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
             return pd.DataFrame()
 
         # Create DataFrame
@@ -519,7 +521,7 @@ class ModelResult(BaseModel):
 
             if benchmark_results is not None and benchmarks is not None:
                 for cur_benchmark, benchmark_result in zip(
-                    benchmarks, benchmark_results
+                    benchmarks, benchmark_results, strict=True
                 ):
                     if cur_benchmark.name is None:
                         raise ValueError(

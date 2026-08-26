@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import torch
-from packaging import version
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -14,10 +13,6 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
-
-E5_V_TRANSFORMERS_VERSION = (
-    "4.44.2"  # Issue 1647: Only works with transformers==4.44.2.
-)
 
 E5_V_CITATION = """@article{jiang2024e5v,
       title={E5-V: Universal Embeddings with Multimodal Large Language Models},
@@ -39,15 +34,7 @@ class E5VModel(AbsEncoder):
         composed_prompt=None,
         **kwargs: Any,
     ):
-        import transformers
         from transformers import LlavaNextForConditionalGeneration, LlavaNextProcessor
-
-        if version.parse(transformers.__version__) > version.parse(
-            E5_V_TRANSFORMERS_VERSION
-        ):
-            raise ImportError(
-                f"This wrapper only works with transformers=={E5_V_TRANSFORMERS_VERSION}"
-            )
 
         self.model_name = model_name
         self.processor = LlavaNextProcessor.from_pretrained(
@@ -166,6 +153,7 @@ e5_v = ModelMeta(
     ),
     name="royokong/e5-v",
     model_type=["dense"],
+    extra_requirements_groups=["e5-v"],
     languages=["eng-Latn"],
     revision="0c1f22679417b3ae925d779442221c40cd1861ab",
     release_date="2024-07-17",

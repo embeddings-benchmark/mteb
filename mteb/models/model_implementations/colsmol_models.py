@@ -22,6 +22,7 @@ class ColSmolWrapper(ColPaliEngineWrapper):
         revision: str | None = None,
         device: str | None = None,
         attn_implementation: str | None = None,
+        query_prefix: str = "Query: ",
         **kwargs,
     ):
         from colpali_engine.models import ColIdefics3, ColIdefics3Processor
@@ -38,6 +39,7 @@ class ColSmolWrapper(ColPaliEngineWrapper):
             processor_class=ColIdefics3Processor,
             revision=revision,
             device=device,
+            query_prefix=query_prefix,
             **kwargs,
         )
 

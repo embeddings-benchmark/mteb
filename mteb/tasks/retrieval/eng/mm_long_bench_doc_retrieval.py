@@ -23,7 +23,7 @@ def _load_data(
             num_proc=num_proc,
         )
         queries[split] = query_ds.map(
-            lambda row: {
+            lambda row, split=split: {
                 "id": f"query-{split}-{row['query-id']}",
                 "text": row["query"],
             },
@@ -39,7 +39,7 @@ def _load_data(
             num_proc=num_proc,
         )
         corpus[split] = corpus_ds.map(
-            lambda row: {
+            lambda row, split=split: {
                 "id": f"corpus-{split}-{row['corpus-id']}",
             },
             remove_columns=["corpus-id"],
