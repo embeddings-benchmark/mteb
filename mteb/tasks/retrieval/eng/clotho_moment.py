@@ -37,7 +37,7 @@ class ClothoMomentRetrieval(AbsTaskRetrieval):
   organization = {IEEE},
   pages = {1--5},
   title = {Language-based audio moment retrieval},
-  year = {2025}
+  year = {2025},
 }""",
         prompt={
             "query": "Given the background audio and a description of a moment, retrieve the audio segment containing that moment."
