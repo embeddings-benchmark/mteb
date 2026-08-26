@@ -20,9 +20,6 @@ class _BioVITAReranking(AbsTaskRetrieval):
     # The official evaluation reports Top-1/Top-5 accuracy; its script also
     # computes Top-10.
     k_values = (1, 5, 10)
-    # Candidate pools reach 1509 documents, so `_top_k` must cover the largest
-    # pool for every candidate to be scored and no taxon group to be dropped.
-    _top_k = 2048
 
     def task_specific_scores(
         self,
@@ -32,40 +29,11 @@ class _BioVITAReranking(AbsTaskRetrieval):
         hf_split: str,
         hf_subset: str,
     ) -> dict[str, float]:
-        """Official BioVITA scoring: rank the 100 candidate taxa by max-pooled similarity.
+        """Compute BioVITA's official taxon-level Top-k accuracy.
 
-        BioVITA does not rank documents -- it ranks *taxa*. Each query comes with
-        100 candidate taxa, and a taxon is represented by every sample of that
-        taxon in the index (1 text, but up to 95 images or 28 clips). Following
-        `eval_benchmark.py`, a taxon scores the **maximum** similarity over its
-        own samples, the 100 taxa are sorted by that score, and Top@k asks
-        whether the correct taxon is among the top k taxa. Max-pooling is what
-        makes the taxon the unit of competition: a species with 15 images must
-        not out-rank one with 3 simply by having more chances to appear in a
-        document-level top-k list.
-
-        MTEB's built-in document-level reranking metrics cannot express this, because they rank
-        and count individual documents rather than groups of documents. Where a
-        taxon owns several samples, the two readings come apart:
-
-        * Recall@k divides by the number of relevant documents, so a query whose
-          correct taxon holds several samples cannot reach 1.0 by retrieving one
-          of them -- yet the official metric counts that as a hit.
-        * Top@1 alone has a document-level twin: the top-ranked document's taxon
-          is the top-ranked taxon, so precision@1 and hit_rate@1 agree with it.
-        * For k > 1 there is no correspondence at all, because k taxa can span an
-          arbitrary number of documents, so no document-level cut-off matches the
-          official k-taxon cut-off.
-
-        `taxon_top_1_accuracy` is therefore the `main_score`: it is the paper's
-        headline metric (reported there as "Top-1 accuracy") and the only k where
-        the official and document-level readings coincide. The `taxon_` prefix
-        keeps it visibly distinct from the document-level `accuracy` below.
-
-        Note for readers of the result files: the standard `accuracy`,
-        `recall_at_k`, `ndcg_at_k` ... entries are still emitted by
-        `make_score_dict` and are document-level; they are *not* the official
-        BioVITA numbers and are not comparable with the paper.
+        Each candidate taxon can contain multiple documents. Following the
+        reference evaluation, we max-pool document similarities per taxon and
+        rank the 100 candidate taxa. Standard MTEB metrics remain document-level.
         """
         split_data = self.dataset[hf_subset][hf_split]
         queries = split_data["queries"]
@@ -110,7 +78,6 @@ class _BioVITAReranking(AbsTaskRetrieval):
 
 
 class BioVITAA2TReranking(_BioVITAReranking):
-
     metadata = TaskMetadata(
         name="BioVITAA2TReranking",
         description="Given a wildlife audio recording, rerank candidate taxon names from the official candidate pool. Each query has 100 candidate taxa, which are ranked by similarity to their text representations. Performance is reported as taxon-level Top-1, Top-5, and Top-10 accuracy on the unseen species and unseen genus subsets.",
@@ -138,7 +105,6 @@ class BioVITAA2TReranking(_BioVITAReranking):
 
 
 class BioVITAT2AReranking(_BioVITAReranking):
-
     metadata = TaskMetadata(
         name="BioVITAT2AReranking",
         description="Given a taxon name, rerank candidate audio recordings by taxon relevance from the official candidate pool. Each query has 100 candidate taxa; a taxon is scored by the maximum similarity over its audio recordings. Performance is reported as taxon-level Top-1, Top-5, and Top-10 accuracy on the unseen species and unseen genus subsets.",
@@ -166,7 +132,6 @@ class BioVITAT2AReranking(_BioVITAReranking):
 
 
 class BioVITAA2IReranking(_BioVITAReranking):
-
     metadata = TaskMetadata(
         name="BioVITAA2IReranking",
         description="Given a wildlife audio recording, rerank candidate images by taxon relevance from the official candidate pool. Each query has 100 candidate taxa; a taxon is scored by the maximum similarity over its images. Performance is reported as taxon-level Top-1, Top-5, and Top-10 accuracy on the unseen species and unseen genus subsets.",
@@ -194,7 +159,6 @@ class BioVITAA2IReranking(_BioVITAReranking):
 
 
 class BioVITAI2AReranking(_BioVITAReranking):
-
     metadata = TaskMetadata(
         name="BioVITAI2AReranking",
         description="Given a wildlife image, rerank candidate audio recordings by taxon relevance from the official candidate pool. Each query has 100 candidate taxa; a taxon is scored by the maximum similarity over its audio recordings. Performance is reported as taxon-level Top-1, Top-5, and Top-10 accuracy on the unseen species and unseen genus subsets.",
@@ -222,7 +186,6 @@ class BioVITAI2AReranking(_BioVITAReranking):
 
 
 class BioVITAI2TReranking(_BioVITAReranking):
-
     metadata = TaskMetadata(
         name="BioVITAI2TReranking",
         description="Given a wildlife image, rerank candidate taxon names from the official candidate pool. Each query has 100 candidate taxa, which are ranked by similarity to their text representations. Performance is reported as taxon-level Top-1, Top-5, and Top-10 accuracy on the unseen species and unseen genus subsets.",
@@ -250,7 +213,6 @@ class BioVITAI2TReranking(_BioVITAReranking):
 
 
 class BioVITAT2IReranking(_BioVITAReranking):
-
     metadata = TaskMetadata(
         name="BioVITAT2IReranking",
         description="Given a taxon name, rerank candidate images by taxon relevance from the official candidate pool. Each query has 100 candidate taxa; a taxon is scored by the maximum similarity over its images. Performance is reported as taxon-level Top-1, Top-5, and Top-10 accuracy on the unseen species and unseen genus subsets.",
