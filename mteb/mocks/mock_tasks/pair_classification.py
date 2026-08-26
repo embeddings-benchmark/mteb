@@ -1020,10 +1020,10 @@ class MockSymCustomVideoAudioPairClassificationTaskV2(AbsTaskPairClassification)
         self.data_loaded = True
 
 
-class MockSymCustomTextImagePairClassificationTaskV2(AbsTaskPairClassification):
+class MockAsymCustomTextImagePairClassificationTaskV2(AbsTaskPairClassification):
     metadata = TaskMetadata(
         type="VideoPairClassification",
-        name="MockSymCustomTextImagePairClassificationTaskV2",
+        name="MockAsymCustomTextImagePairClassificationTaskV2",
         main_score="max_ap",
         **general_args,  # type: ignore[arg-type]
     )

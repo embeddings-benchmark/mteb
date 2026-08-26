@@ -30,6 +30,7 @@ from .clustering import (
     MockVideoClusteringTask,
 )
 from .pair_classification import (
+    MockAsymCustomTextImagePairClassificationTaskV2,
     MockAsymVideoAudioPairClassificationTask,
     MockAsymVideoAudioPairClassificationTaskV2,
     MockAudioPairClassification,
@@ -38,7 +39,6 @@ from .pair_classification import (
     MockMultilingualPairClassificationTask,
     MockPairClassificationTask,
     MockPairImageClassificationTask,
-    MockSymCustomTextImagePairClassificationTaskV2,
     MockSymCustomVideoAudioPairClassificationTaskV2,
     MockVideoAudioPairClassificationTask,
     MockVideoPairClassificationTask,
@@ -95,6 +95,7 @@ __all__ = [
     "MockAny2AnyRetrievalI2TTask",
     "MockAny2AnyRetrievalT2ATask",
     "MockAny2AnyRetrievalT2ITask",
+    "MockAsymCustomTextImagePairClassificationTaskV2",
     "MockAsymVideoAudioPairClassificationTask",
     "MockAsymVideoAudioPairClassificationTaskV2",
     "MockAudioClassification",
@@ -138,7 +139,6 @@ __all__ = [
     "MockRetrievalTask",
     "MockSTSTask",
     "MockSummarizationTask",
-    "MockSymCustomTextImagePairClassificationTaskV2",
     "MockSymCustomVideoAudiSTSTask",
     "MockSymCustomVideoAudioPairClassificationTaskV2",
     "MockTextZeroShotClassificationTask",

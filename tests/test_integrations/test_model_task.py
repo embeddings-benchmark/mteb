@@ -25,7 +25,7 @@ from mteb.mocks import (
     MockSymCustomVideoAudioPairClassificationTaskV2,
     MockVideoAudioPairClassificationTask,
 )
-from mteb.mocks.mock_tasks import MockSymCustomTextImagePairClassificationTaskV2
+from mteb.mocks.mock_tasks import MockAsymCustomTextImagePairClassificationTaskV2
 
 logging.basicConfig(level=logging.INFO)
 
@@ -182,7 +182,7 @@ def test_benchmark_video_colbert(task: str | AbsTask, model: mteb.EncoderProtoco
 @pytest.mark.parametrize(
     "task",
     [
-        MockSymCustomTextImagePairClassificationTaskV2(),
+        MockAsymCustomTextImagePairClassificationTaskV2(),
         MockSymCustomVideoAudioPairClassificationTaskV2(),
         MockAsymVideoAudioPairClassificationTaskV2(),
         MockAsymVideoAudioPairClassificationTask(),
