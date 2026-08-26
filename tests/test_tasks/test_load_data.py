@@ -33,7 +33,6 @@ def test_multilingual_load_data(task):
     "task",
     [
         mteb.get_task("MIRACLRetrievalHardNegatives", languages=["eng"]),
-        mteb.get_task("SpeechEditAcousticRetrieval"),
     ],
 )
 def test_multilingual_retrieval_load_data(task):

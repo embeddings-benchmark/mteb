@@ -26,7 +26,7 @@ class SpeechEditAcousticRetrieval(AbsTaskRetrieval):
         date=("2024-01-01", "2026-08-23"),
         domains=["Spoken"],
         task_subtypes=["Speech Retrieval"],
-        license="cc-by-4.0",
+        license="apache-2.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
