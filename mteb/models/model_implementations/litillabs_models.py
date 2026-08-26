@@ -3,12 +3,12 @@ from __future__ import annotations
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-OCTEN_LAW_8B_V1_CITATION = "@misc{octen-law-8b-v1,\n  title={Octen Law 8B v1: a multilingual legal text embedding model},\n  author={narcolepticchicken},\n  year={2026},\n  howpublished={\\url{https://huggingface.co/narcolepticchicken/octen-law-8b-v1}}\n}"
+OCTEN_LAW_8B_V1_CITATION = "@misc{octen-law-8b-v1,\n  title={Octen Law 8B v1: a multilingual legal text embedding model},\n  author={{Litil Labs}},\n  year={2026},\n  howpublished={\\url{https://huggingface.co/litillabs/octen-law-8b-v1}}\n}"
 
 
-narcolepticchicken_octen_law_8b_v1 = ModelMeta(
+litillabs_octen_law_8b_v1 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
-    name="narcolepticchicken/octen-law-8b-v1",
+    name="litillabs/octen-law-8b-v1",
     model_type=["dense"],
     languages=["eng-Latn", "deu-Latn", "zho-Hans"],
     open_weights=True,
@@ -20,7 +20,7 @@ narcolepticchicken_octen_law_8b_v1 = ModelMeta(
     embed_dim=4096,
     max_tokens=40_960,
     license="apache-2.0",
-    reference="https://huggingface.co/narcolepticchicken/octen-law-8b-v1",
+    reference="https://huggingface.co/litillabs/octen-law-8b-v1",
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch", "Transformers"],
     use_instructions=True,
