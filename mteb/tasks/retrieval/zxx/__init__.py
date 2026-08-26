@@ -2,6 +2,7 @@ from .abo_i2v_retrieval import ABOI2VRetrieval
 from .evve_retrieval import EVVERetrieval
 from .libero_retrieval import LIBEROI2VRetrieval, LIBEROV2IRetrieval
 from .lp_music_caps import LPMusicCapsMTTA2TRetrieval, LPMusicCapsMTTT2ARetrieval
+from .maniskill_retrieval import ManiSkillI2VRetrieval, ManiSkillV2IRetrieval
 from .moving_fashion_retrieval import (
     MovingFashionI2VRetrieval,
     MovingFashionV2IRetrieval,
@@ -24,6 +25,8 @@ __all__ = [
     "LIBEROV2IRetrieval",
     "LPMusicCapsMTTA2TRetrieval",
     "LPMusicCapsMTTT2ARetrieval",
+    "ManiSkillI2VRetrieval",
+    "ManiSkillV2IRetrieval",
     "MovingFashionI2VRetrieval",
     "MovingFashionV2IRetrieval",
     "MusicCapsA2TRetrieval",
