@@ -1,6 +1,24 @@
 import pytrec_eval
 
-from mteb._evaluators.retrieval_metrics import calculate_pmrr, mrr
+from mteb._evaluators.retrieval_metrics import calculate_pmrr, mrr, recall_cap
+
+
+def test_recall_cap_no_relevant_docs_yields_none():
+    # a query whose qrels hold only non-relevant (relevance 0) judgments has an empty
+    # relevant set, so the R_cap denominator is 0. The zero guard should record None and
+    # skip the division; without the skip it fell through and raised ZeroDivisionError.
+    qrels = {"q1": {"d1": 0, "d2": 0}}
+    results = {"q1": {"d1": 0.9, "d2": 0.1}}
+
+    assert recall_cap(qrels, results, [10]) == {"R_cap_at_10": [None]}
+
+
+def test_recall_cap_counts_capped_relevant_hits():
+    # normal path stays intact: 2 relevant docs retrieved, capped at min(#relevant, k).
+    qrels = {"q1": {"d1": 1, "d2": 1, "d3": 0}}
+    results = {"q1": {"d1": 0.9, "d2": 0.8, "d3": 0.1}}
+
+    assert recall_cap(qrels, results, [10]) == {"R_cap_at_10": [1.0]}
 
 
 def test_mrr_tiebreak_independent_of_insertion_order():

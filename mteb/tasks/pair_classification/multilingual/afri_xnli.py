@@ -52,21 +52,3 @@ class AfriXNLI(AbsTaskPairClassification):
         sample_creation="created",
         bibtex_citation="",
     )
-
-    def dataset_transform(self, **kwargs):
-        for lang in self.dataset:
-            for split in self.dataset[lang]:
-                # keep only entail (0) / contradict (2)
-                ds = self.dataset[lang][split].filter(lambda x: x["label"] in {0, 2})
-
-                # map to binary labels and standard column names
-                def map_labels(example):
-                    return {
-                        "sentence1": example["premise"],
-                        "sentence2": example["hypothesis"],
-                        "labels": 0 if example["label"] == 2 else 1,
-                    }
-
-                self.dataset[lang][split] = ds.map(
-                    map_labels, remove_columns=ds.column_names
-                )

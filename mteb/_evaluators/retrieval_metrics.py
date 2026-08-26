@@ -78,6 +78,7 @@ def recall_cap(
             denominator = min(len(query_relevant_docs), k)
             if denominator == 0:
                 capped_recall[f"R_cap_at_{k}"].append(None)
+                continue
             capped_recall[f"R_cap_at_{k}"].append(len(retrieved_docs) / denominator)
     return capped_recall
 
