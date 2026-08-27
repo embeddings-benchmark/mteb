@@ -58,7 +58,7 @@ class DummyTask(AbsTask):
         return {}
 
 
-@pytest.fixture()
+@pytest.fixture
 def task_result():
     scores = {
         "train": {

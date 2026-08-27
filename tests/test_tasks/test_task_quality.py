@@ -447,6 +447,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "CMedQAv1-reranking",
         "CMedQAv2-reranking",
         "ClimateFEVER.v2",
+        "ClothoMomentRetrieval",  # same instruction with different audio
         "ClusTREC-Covid",
         "CodeFeedbackST",
         "CodeSearchNetCCRetrieval",
@@ -461,6 +462,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "DalajClassification",
         "DanishPoliticalCommentsClassification",
         "DeepSentiPers",
+        "EDIRIT2IRetrieval",
         "EDIST2ITRetrieval",
         "ESCIReranking",
         "EmitClassification",
@@ -609,6 +611,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SpanishPassageRetrievalS2P",
         "SpanishPassageRetrievalS2S",
         "SpartQA",
+        "SpeechEditAcousticRetrieval",  # repeated instruction for speech edit
         "SpokenSQuADT2ARetrieval",
         "StackExchangeClustering",
         "StackExchangeClustering-VN",
@@ -811,6 +814,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "AROVisualAttribution",
         "AROVisualRelation",
         "CIRRIT2IRetrieval",
+        "EDIRIT2IRetrieval",
         "EDIST2ITRetrieval",
         "EncyclopediaVQAIT2ITRetrieval",
         "FER2013",  # documented to contain duplicate/near-duplicate images
@@ -864,8 +868,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VoxPopuliAccentPairClassification",  # pairs constructed combinatorially from a small pool of audio clips
     ],
     "duplicate_audio": [
+        "ACMComposedAudioRetrieval",  # composed audio retrieval naturally reuses source audios with different query instructions
         "AmbientAcousticContext",
         "AmbientAcousticContextClustering",
+        "ClothoMomentRetrieval",  # same audio with different instruction
         "CLDAT2ARetrieval",
         "FSD2019Kaggle",
         "GTZANGenre",  # repeated short clips sampled from the same tracks
@@ -877,14 +883,17 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Kinetics700VA",
         "Kinetics700VAZeroShot",
         "NSynth",  # repeated notes across instrument/pitch/velocity combinations
+        "NSynthInstrumentFamilyClustering",  # same upstream duplicate notes as NSynth
         "SpeechCommands",  # many repeated recordings of the same short command word
         "SpeechCommandsZeroshotv0.01",
         "SpeechCommandsZeroshotv0.02",
         "StanfordI2VRetrieval",  # official manifest contains repeated video+audio clips
+        "VCDBCoreAudioVideoRetrieval",  # distinct copied videos can have identical soundtracks
         "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseAudioVideoZeroShot",
     ],
     "duplicate_video": [
+        "DenseWebVidCoVRVT2VRetrieval",  # multiple rows have same video with different instruction
         "InsAVE80KVT2VRetrieval",  # reverse couples re-release the same clip under two names
         "MMVUVideoCentricQA",
         "MomentSeekerTV2VRetrieval",
