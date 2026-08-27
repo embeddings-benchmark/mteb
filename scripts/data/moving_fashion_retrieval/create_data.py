@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
-"""Build the bidirectional MovingFashion image/video retrieval tasks for MTEB.
+"""Build MovingFashion retrieval and audit its V2I pair-classification task.
 
 The official archive contains train and test annotations plus the corresponding
 Instagram videos and Net-A-Porter shop images. MTEB uses every usable association
 from the official test split in both video-to-image and image-to-video directions.
 Repeated media paths are collapsed by path, preserving the source's genuine
 multi-positive cases.
+
+The pair-classification task reuses the published V2I retrieval media. At task
+load time it turns every qrel into a positive and creates one deterministic,
+source-matched negative per positive, so no second copy of the media is needed.
 
 Examples:
   # Download or resume the official source archive.
@@ -49,12 +53,17 @@ from datasets import Dataset, DatasetDict, Image, Value, Video
 from huggingface_hub import HfApi, create_repo, get_token
 from PIL import Image as PILImage
 
+from mteb.tasks.pair_classification.zxx.moving_fashion_pc import (
+    build_balanced_pair_manifest,
+)
+
 _PROJECT_URL = "https://humaticslab.github.io/retrieval/movingfashion"
 _PAPER_URL = "https://arxiv.org/abs/2110.02627"
 _SOURCE_REPO_URL = "https://github.com/HumaticsLAB/SEAM-Match-RCNN"
 _SOURCE_REPO_REVISION = "4ca15d147ce87f0385c0c9779eac49e55c727ec8"
 _SOURCE_DOWNLOAD_URL = "https://bit.ly/4bTZGeS"
 _LICENSE = "cc-by-nc-sa-4.0"
+_SOURCE_IMAGE_SUFFIX = {0: ".png", 1: ".jpg"}
 _EXPECTED_ARCHIVE_SHA256 = (
     "20ae89a67a58d3dfc2304c2533d5a5c684eb6888aec9a7d7d3eda22b0a81f5f4"
 )
@@ -100,6 +109,15 @@ _EXPECTED_TEST_UNIQUE_PAIRS = 1342
 _EXPECTED_TEST_DUPLICATE_VIDEO_GROUPS = 13
 _EXPECTED_TEST_DUPLICATE_IMAGE_GROUPS = 1
 _EXPECTED_TOTAL_UNIQUE_VIDEOS = 14855
+_EXPECTED_PUBLISHED_PAIR_CLASSIFICATION = {
+    "samples": 2682,
+    "positive_pairs": 1341,
+    "negative_pairs": 1341,
+    "unique_videos": 1328,
+    "unique_images": 1341,
+    "unique_negative_images": 1340,
+    "source_subsets": {"hard": 654, "regular": 2028},
+}
 _EXPECTED_MISSING_MEDIA = {
     "train": {
         "videos/0096903c8314b3870a7af2a425953536.mp4",
@@ -286,6 +304,17 @@ def _audit_annotations(
             raise RuntimeError(
                 f"Unexpected {split} annotation statistics. Expected "
                 f"{asdict(expected)}, found {actual}. Review the source before rebuilding."
+            )
+        invalid_source_images = [
+            row.image_path
+            for row in annotations[split][0]
+            if PurePosixPath(row.image_path).suffix.lower()
+            != _SOURCE_IMAGE_SUFFIX[row.source]
+        ]
+        if invalid_source_images:
+            raise RuntimeError(
+                f"{split} contains image paths that do not match their official "
+                f"source subset: {invalid_source_images[:10]}"
             )
 
     train_associations = annotations["train"][0]
@@ -648,6 +677,33 @@ def _published_retrieval_summary(
     }
 
 
+def _published_pair_classification_summary(
+    test_associations: list[Association], videos: list[str], images: list[str]
+) -> dict[str, Any]:
+    pairs = _available_pairs(test_associations, videos, images)
+    manifest = build_balanced_pair_manifest(
+        videos,
+        images,
+        [video_id for video_id, _ in pairs],
+        [image_id for _, image_id in pairs],
+    )
+    negative_images = [
+        image_id
+        for image_id, label in zip(manifest["image_id"], manifest["label"], strict=True)
+        if label == 0
+    ]
+    labels = Counter(manifest["label"])
+    return {
+        "samples": len(manifest["label"]),
+        "positive_pairs": labels[1],
+        "negative_pairs": labels[0],
+        "unique_videos": len(set(manifest["video_id"])),
+        "unique_images": len(set(manifest["image_id"])),
+        "unique_negative_images": len(set(negative_images)),
+        "source_subsets": dict(sorted(Counter(manifest["source_subset"]).items())),
+    }
+
+
 def _dataset_card(summary: dict[str, Any], direction: Direction) -> str:
     retrieval = summary["published_retrieval"][direction]
     archive_sha256 = summary.get("archive_sha256", "not recorded")
@@ -918,6 +974,18 @@ def main() -> None:
         summary["published_retrieval"] = _published_retrieval_summary(
             annotations["test"][0], videos, images
         )
+        pair_summary = _published_pair_classification_summary(
+            annotations["test"][0], videos, images
+        )
+        summary["published_pair_classification"] = pair_summary
+        if (
+            not args.allow_source_changes
+            and pair_summary != _EXPECTED_PUBLISHED_PAIR_CLASSIFICATION
+        ):
+            raise RuntimeError(
+                "Unexpected pair-classification structure. Expected "
+                f"{_EXPECTED_PUBLISHED_PAIR_CLASSIFICATION}, found {pair_summary}."
+            )
         datasets_by_direction["v2i"] = _build_v2i_datasets(
             annotations["test"][0], media_dir, videos, images
         )
