@@ -1,4 +1,3 @@
-from .fsd50k_retrieval import FSD50KA2ARetrieval
 from .lp_music_caps import LPMusicCapsMTTA2TRetrieval, LPMusicCapsMTTT2ARetrieval
 from .music_caps import MusicCapsA2TRetrieval, MusicCapsT2ARetrieval
 from .song_describer import SongDescriberA2TRetrieval, SongDescriberT2ARetrieval
@@ -9,7 +8,6 @@ from .vim_sketch_retrieval import VimSketchA2ARetrieval
 from .vsc2022_retrieval import VSC2022Retrieval
 
 __all__ = [
-    "FSD50KA2ARetrieval",
     "LPMusicCapsMTTA2TRetrieval",
     "LPMusicCapsMTTT2ARetrieval",
     "MusicCapsA2TRetrieval",
