@@ -5,6 +5,7 @@ from .amazon_counterfactual_classification import AmazonCounterfactualClassifica
 from .amazon_reviews_classification import AmazonReviewsClassification
 from .catalonia_tweet_classification import CataloniaTweetClassification
 from .cyrillic_turkic_lang_classification import CyrillicTurkicLangClassification
+from .glami_1m import GLAMI1MMultimodalClassification
 from .hin_dialect_classification import HinDialectClassification
 from .hume_multilingual_sentiment_classification import (
     HUMEMultilingualSentimentClassification,
@@ -54,6 +55,7 @@ __all__ = [
     "AmazonReviewsClassification",
     "CataloniaTweetClassification",
     "CyrillicTurkicLangClassification",
+    "GLAMI1MMultimodalClassification",
     "HUMEMultilingualSentimentClassification",
     "HinDialectClassification",
     "IndicLangClassification",

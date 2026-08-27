@@ -480,6 +480,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FrenchBookReviews",
         "FrenkEnClassification",
         "FrenkHrClassification",
+        "GLAMI1MMultimodalClassification",  # product records can share text
         "GigaSpeechA2TRetrieval",
         "GigaSpeechT2ARetrieval",
         "HebrewSentimentAnalysis",
@@ -821,6 +822,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FER2013ZeroShot",  # documented to contain duplicate/near-duplicate images
         "FORBI2IRetrieval",  # fingerprint corpus contains near-duplicate captures of the same print
         "FashionIQIT2IRetrieval",
+        "GLAMI1MMultimodalClassification",  # product records can reuse an image
         "ImageCoDeT2IRetrieval",
         "InfoSeekIT2ITRetrieval",
         "InfoSeekIT2TRetrieval",
