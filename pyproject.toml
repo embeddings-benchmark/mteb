@@ -683,6 +683,7 @@ Altas = "Altas"
 matche = "matche"
 expresso = "expresso"
 Expresso = "Expresso"
+tema = "tema" # Spanish word used in task prompts
 NIFE = "NIFE"
 thw = "thw"
 ist = "ist" # spelling error in prompt for harrier-oss-v1
