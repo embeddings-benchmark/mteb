@@ -611,6 +611,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SpanishPassageRetrievalS2P",
         "SpanishPassageRetrievalS2S",
         "SpartQA",
+        "SpeechEditAcousticRetrieval",  # repeated instruction for speech edit
         "SpokenSQuADT2ARetrieval",
         "StackExchangeClustering",
         "StackExchangeClustering-VN",
