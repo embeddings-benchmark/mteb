@@ -156,6 +156,7 @@ class BitextMiningEvaluator(Evaluator):
                     for sub_corpus_id, score in zip(
                         cos_scores_top_k_idx[query_itr],
                         cos_scores_top_k_values[query_itr],
+                        strict=True,
                     ):
                         corpus_id = corpus_start_idx + sub_corpus_id
                         query_id = query_start_idx + query_itr

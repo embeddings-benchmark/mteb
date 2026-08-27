@@ -69,7 +69,7 @@ class SNLRetrieval(AbsTaskRetrieval):
             article = ds["article"]
 
             n = 0
-            for headl, art in zip(headline, article):
+            for headl, art in zip(headline, article, strict=True):
                 self.queries[split][str(n)] = headl
                 q_n = n
                 n += 1

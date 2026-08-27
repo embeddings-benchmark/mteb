@@ -108,6 +108,7 @@ def _convert_conv_history_to_query(
         warnings.warn(
             "Conversations are a list of strings. Used 'user' role for all turns.",
             category=UserWarning,
+            stacklevel=2,
         )
     # otherwise, it's a list of dictionaries, which we need to convert to strings
     elif isinstance(conversation, list) and isinstance(conversation[0], dict):

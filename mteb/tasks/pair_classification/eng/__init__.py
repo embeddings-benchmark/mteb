@@ -3,6 +3,7 @@ from .ave_dataset_pc import (
     AVEDatasetVAPairClassification,
     AVEDatasetVPairClassification,
 )
+from .breakfast_pc import BreakfastPairClassification
 from .cremad import CREMADPairClassification
 from .human_animal_cartoon_pc import (
     HumanAnimalCartoonVAPairClassification,
@@ -39,6 +40,7 @@ __all__ = [
     "AVEDatasetVAPairClassification",
     "AVEDatasetVPairClassification",
     "AVSpeakerBenchPairClassification",
+    "BreakfastPairClassification",
     "CREMADPairClassification",
     "HumanAnimalCartoonVAPairClassification",
     "HumanAnimalCartoonVPairClassification",

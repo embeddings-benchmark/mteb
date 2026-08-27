@@ -449,7 +449,7 @@ class BM25Search:
             )
 
             # Iterate over results
-            for doc_idx, score in zip(query_results, scores):
+            for doc_idx, score in zip(query_results, scores, strict=True):
                 doc_id = self.corpus_idx_to_id[doc_idx]
 
                 # handle reranking with a filtered set of documents

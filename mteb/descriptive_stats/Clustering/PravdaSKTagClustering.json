@@ -1,0 +1,171 @@
+{
+    "test": {
+        "num_samples": 15000,
+        "text_statistics": {
+            "total_text_length": 4662988,
+            "min_text_length": 45,
+            "average_text_length": 310.86586666666665,
+            "max_text_length": 994,
+            "unique_texts": 15000
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 50,
+            "labels": {
+                "#Robert Fico": {
+                    "count": 300
+                },
+                "#Igor Matovi\u010d": {
+                    "count": 300
+                },
+                "#Peter Pellegrini": {
+                    "count": 300
+                },
+                "#Zuzana \u010caputov\u00e1": {
+                    "count": 300
+                },
+                "#Andrej Kiska": {
+                    "count": 300
+                },
+                "#Smer": {
+                    "count": 300
+                },
+                "#Richard Sul\u00edk": {
+                    "count": 300
+                },
+                "#strana SaS": {
+                    "count": 300
+                },
+                "#Andrej Danko": {
+                    "count": 300
+                },
+                "#zdravotn\u00edctvo": {
+                    "count": 300
+                },
+                "#Eduard Heger": {
+                    "count": 300
+                },
+                "#korupcia": {
+                    "count": 300
+                },
+                "#Rusko": {
+                    "count": 300
+                },
+                "#USA": {
+                    "count": 300
+                },
+                "#Ukrajina": {
+                    "count": 300
+                },
+                "#Nemecko": {
+                    "count": 300
+                },
+                "#\u010c\u00edna": {
+                    "count": 300
+                },
+                "#Ve\u013ek\u00e1 Brit\u00e1nia": {
+                    "count": 300
+                },
+                "#Izrael": {
+                    "count": 300
+                },
+                "#Franc\u00fazsko": {
+                    "count": 300
+                },
+                "#Po\u013esko": {
+                    "count": 300
+                },
+                "#Turecko": {
+                    "count": 300
+                },
+                "#Ma\u010farsko": {
+                    "count": 300
+                },
+                "#Ir\u00e1n": {
+                    "count": 300
+                },
+                "#\u0160panielsko": {
+                    "count": 300
+                },
+                "#K\u013dDR": {
+                    "count": 300
+                },
+                "#Japonsko": {
+                    "count": 300
+                },
+                "#vojna na Ukrajine": {
+                    "count": 300
+                },
+                "#koronav\u00edrus": {
+                    "count": 300
+                },
+                "#Covid-19": {
+                    "count": 300
+                },
+                "#Brexit": {
+                    "count": 300
+                },
+                "#Islamsk\u00fd \u0161t\u00e1t": {
+                    "count": 300
+                },
+                "#ute\u010denci": {
+                    "count": 300
+                },
+                "#migranti": {
+                    "count": 300
+                },
+                "#\u0161kolstvo": {
+                    "count": 300
+                },
+                "#E\u00da": {
+                    "count": 300
+                },
+                "#Eur\u00f3pska \u00fania": {
+                    "count": 300
+                },
+                "#NATO": {
+                    "count": 300
+                },
+                "#Donald Trump": {
+                    "count": 300
+                },
+                "#plyn": {
+                    "count": 300
+                },
+                "#ropa": {
+                    "count": 300
+                },
+                "#dane": {
+                    "count": 300
+                },
+                "#euroz\u00f3na": {
+                    "count": 300
+                },
+                "#elektromobily": {
+                    "count": 300
+                },
+                "#Bratislava": {
+                    "count": 300
+                },
+                "#Slovensko": {
+                    "count": 300
+                },
+                "#pol\u00edcia": {
+                    "count": 300
+                },
+                "#s\u00fad": {
+                    "count": 300
+                },
+                "#Peter Sagan": {
+                    "count": 300
+                },
+                "#Petra Vlhov\u00e1": {
+                    "count": 300
+                }
+            }
+        }
+    }
+}

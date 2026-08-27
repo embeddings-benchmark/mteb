@@ -190,7 +190,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
                     "Make sure you have access to the dataset and that you have set up the authentication correctly. To disable this warning set `public_only=False`"
                 )
                 logger.warning(msg)
-                warnings.warn(msg)
+                warnings.warn(msg, stacklevel=2)
                 return TaskError(
                     task_name=task.metadata.name,
                     exception=str(e),

@@ -94,7 +94,7 @@ Piperidis, Stelios},
             article = ds["text"]
 
             n = 0
-            for summ, art in zip(summary, article):
+            for summ, art in zip(summary, article, strict=True):
                 self.queries[split][str(n)] = summ
                 q_n = n
                 n += 1

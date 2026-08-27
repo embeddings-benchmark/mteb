@@ -164,7 +164,8 @@ def test_compute_mean_subset(mock_mteb_cache: ResultCache):
 
         polars_value = summary_by_model[model_result.model_name].get("Mean (Subset)")
         python_value = helper_out["Mean(Subset)"]
-        assert polars_value is not None and python_value is not None
+        assert polars_value is not None
+        assert python_value is not None
         assert np.isclose(polars_value, python_value), (
             f"{model_result.model_name}: polars={polars_value:.6f} "
             f"vs python={python_value:.6f}"
@@ -305,7 +306,7 @@ def test_get_score_matches_summary_table_means(mock_mteb_cache: ResultCache):
     # Pair (get_score key, summary column) for each aggregation surfaced.
     parity_pairs: list[tuple[str, str]] = []
     for agg in bench.aggregations:
-        parity_pairs.extend(zip(agg.get_score_keys, agg.summary_columns))
+        parity_pairs.extend(zip(agg.get_score_keys, agg.summary_columns, strict=True))
     # TASK_TYPES is dynamic — match observed type names directly.
     if BenchmarkAggregation.TASK_TYPES in bench.aggregations:
         type_names = {t.metadata.type for t in bench.tasks}
@@ -399,14 +400,16 @@ def test_get_score_matches_summary_table_on_partial_split_coverage(
         row["Model"]: row
         for row in bench._create_summary_table(pl_df).df.iter_rows(named=True)
     }
-    assert full in get_score_out and full in summary_by_model
-    assert partial in get_score_out and partial in summary_by_model
+    assert full in get_score_out
+    assert full in summary_by_model
+    assert partial in get_score_out
+    assert partial in summary_by_model
 
     # All three tasks are Classification, so there's exactly one dynamic
     # TASK_TYPES column/key to pair up alongside the fixed aggregation keys.
     parity_pairs: list[tuple[str, str]] = [("Classification", "Classification")]
     for agg in bench.aggregations:
-        parity_pairs.extend(zip(agg.get_score_keys, agg.summary_columns))
+        parity_pairs.extend(zip(agg.get_score_keys, agg.summary_columns, strict=True))
 
     _assert_score_parity(
         full,

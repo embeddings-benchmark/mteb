@@ -74,7 +74,7 @@ def _load_data(
             corpus_ids = [corpus_id for _, corpus_id in corpus_to_id.items()]
             docs = [doc for doc, _ in corpus_to_id.items()]
         corpus_records = []
-        for corpus_id, doc in zip(corpus_ids, docs):
+        for corpus_id, doc in zip(corpus_ids, docs, strict=True):
             corpus_records.append({"id": corpus_id, "text": doc, "modality": "text"})
         corpus[split] = Dataset.from_list(corpus_records)
 
