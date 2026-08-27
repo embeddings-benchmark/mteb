@@ -2125,3 +2125,32 @@ ember_v1 = ModelMeta(
       year={2023},
 }""",
 )
+amgix__static_retrieval_multilingual_69m_v1 = ModelMeta(
+    name="amgix/static-retrieval-multilingual-69m-v1",
+    model_type=["dense"],
+    revision="f777a93cd958b280b6c7fad5aaac3cd59d676822",
+    release_date="2026-08-16",
+    languages=None,
+    loader=SentenceTransformerEncoderWrapper,
+    n_parameters=69_095_424,
+    n_embedding_parameters=69_095_424,
+    memory_usage_mb=274,
+    max_tokens=None,
+    embed_dim=384,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers", "safetensors"],
+    reference="https://huggingface.co/amgix/static-retrieval-multilingual-69m-v1",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=None,
+    training_datasets={
+        "MSMARCO",  # mMARCO
+        "FiQA2018",  # FIQA
+        # Not in MTEB: GooAQ, S2ORC, Free-Law-Project/opinions-synthetic-query-512
+        # MIRACL languages: ar, bn, en, es, fa, fi, fr, hi, id, ja, ko, ru, sw, te, th, zh
+    },
+    adapted_from="ibm-granite/granite-embedding-97m-multilingual-r2",
+    superseded_by=None,
+)
