@@ -1,0 +1,14 @@
+{
+  "mteb/baseline-random-encoder": {
+    "sample_500": 0.206985104275261,
+    "full_34564": 0.009280359492247668
+  },
+  "microsoft/xclip-base-patch32": {
+    "sample_500": 0.3223593854393346,
+    "full_34564": 0.11213904994969681
+  },
+  "microsoft/xclip-base-patch16": {
+    "sample_500": 0.3347405002520268,
+    "full_34564": 0.11987334778093876
+  }
+}
