@@ -138,6 +138,7 @@ from .vidore3_bench_retrieval import (
 )
 from .web_faq_retrieval import WebFAQRetrieval
 from .wikipedia_retrieval_multilingual import WikipediaRetrievalMultilingual
+from .wit_i2t_retrieval import WITI2TRetrieval
 from .wit_t2i_retrieval import WITT2IRetrieval
 from .x_flickr30k_co_t2i_retrieval import XFlickr30kCoT2IRetrieval
 from .x_market_retrieval import XMarket
@@ -267,6 +268,7 @@ __all__ = [
     "Vidore3PhysicsRetrievalv2",
     "Vidore3TelecomRetrieval",
     "Vidore3TelecomRetrievalv2",
+    "WITI2TRetrieval",
     "WITT2IRetrieval",
     "WebFAQRetrieval",
     "WikipediaRetrievalMultilingual",

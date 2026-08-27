@@ -379,6 +379,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VisualNewsT2IRetrieval",
         "VizWizIT2TRetrieval",
         "VoyageMMarcoReranking",
+        "WITI2TRetrieval",  # official WIT includes valid short titles/proper names
         "WITT2IRetrieval",
         "WRIMEClassification",
         "WRIMEClassification.v2",
@@ -656,6 +657,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WikiClusteringP2P",
         "WikiClusteringP2P.v2",
         "WikiSQLRetrieval",
+        "WITI2TRetrieval",  # distinct WIT records can share the same caption
         "XM3600T2IRetrieval",
         "XMarket",
         "XPQARetrieval",
@@ -842,6 +844,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VQA2IT2TRetrieval",
         "WebQAT2ITRetrieval",
         "WebVidCoVRIT2VRetrieval",
+        "WITI2TRetrieval",  # images can recur across WIT records and languages
         "XFlickr30kCoT2IRetrieval",
         "XM3600T2IRetrieval",
     ],
