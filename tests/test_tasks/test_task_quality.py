@@ -842,6 +842,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VQA2IT2TRetrieval",
         "WebQAT2ITRetrieval",
         "WebVidCoVRIT2VRetrieval",
+        "XFlickr30kCoI2TRetrieval",  # the same image corpus is reused across languages
         "XFlickr30kCoT2IRetrieval",
         "XM3600T2IRetrieval",
     ],
