@@ -529,6 +529,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MTOPDomainVNClassification",
         "MTOPIntentClassification",
         "MTOPIntentVNClassification",
+        "MVLSIBSent2Img",  # official k=1 protocol repeats each sentence with three candidate sets
         "MalayalamNewsClassification",
         "MasakhaNEWSClassification",
         "MassiveIntentClassification",
@@ -825,6 +826,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "InfoSeekIT2ITRetrieval",
         "InfoSeekIT2TRetrieval",
         "LLaVAIT2TRetrieval",
+        "MVLSIBSent2Img",  # the same 70-image corpus is reused for every language
         "MMLongBenchDocRetrieval",  # official corpus contains repeated rendered pages; preserve IDs to match qrels
         "MomentSeekerTI2VRetrieval",
         "OVENIT2ITRetrieval",
