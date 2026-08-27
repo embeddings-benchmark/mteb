@@ -132,6 +132,7 @@ from .dapfam_patent_retrieval import (
     DAPFAMOutTitlAbsToTitlAbsRetrieval,
 )
 from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives, DBPediaHardNegativesV2
+from .dense_webvid_covr_retrieval import DenseWebVidCoVRVT2VRetrieval
 from .didemo_retrieval import (
     DiDeMoA2VRetrieval,
     DiDeMoAT2VRetrieval,
@@ -605,6 +606,7 @@ __all__ = [
     "DBPediaHardNegatives",
     "DBPediaHardNegativesV2",
     "DeepPlanning",
+    "DenseWebVidCoVRVT2VRetrieval",
     "DiDeMoA2VRetrieval",
     "DiDeMoAT2VRetrieval",
     "DiDeMoT2VARetrieval",
