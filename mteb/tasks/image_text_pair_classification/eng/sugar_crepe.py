@@ -12,7 +12,15 @@ class SugarCrepe(AbsTaskImageTextPairClassification):
 
     metadata = TaskMetadata(
         name="SugarCrepe",
-        description="Compositionality Evaluation of images to their captions.",
+        description=(
+            "Compositionality Evaluation of images to their captions. "
+            "Note that 572 of the 7511 pairs (7.6%) have a caption and "
+            "negative_caption that are the same words in a different order "
+            "(the swap_obj and swap_att subsets of the source benchmark). A "
+            "model whose text representation is order-insensitive scores "
+            "chance on those pairs by construction, capping its text_acc at "
+            "0.962."
+        ),
         reference="https://proceedings.neurips.cc/paper_files/paper/2023/hash/63461de0b4cb760fc498e85b18a7fe81-Abstract-Datasets_and_Benchmarks.html",
         dataset={
             "path": "mteb/SUGARCREPE_fmt",
