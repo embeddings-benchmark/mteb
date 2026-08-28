@@ -89,7 +89,7 @@ def _load_model(
     # Load the existing registered wrapper directly after the experiment-specific
     # requirements file has installed the dependency.
     try:
-        return EBindWrapper(
+        model = EBindWrapper(
             model_name=model_name,
             revision=ebind_audio_vision.revision,
             device=device,
@@ -102,6 +102,20 @@ def _load_model(
             "EBind is not installed. Run `pip install -r "
             "scripts/requirements_moving_fashion_v2i_ebind.txt` first."
         ) from error
+
+    loader_kwargs = {
+        **ebind_audio_vision.loader_kwargs,
+        **model_kwargs,
+        "device": device,
+    }
+    model.mteb_model_meta = ebind_audio_vision.model_copy(
+        deep=True,
+        update={
+            "experiment_kwargs": model_kwargs or None,
+            "loader_kwargs": loader_kwargs,
+        },
+    )
+    return model
 
 
 def _select_smoke_rows(
