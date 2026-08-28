@@ -144,10 +144,9 @@ qwen3_vl_embedding_8b = ModelMeta(
 
 
 dna_vl_steer_2b = ModelMeta(
-    # Same architecture and loader as Qwen/Qwen3-VL-Embedding-2B; only the early
-    # residual-stream layers differ, so every capacity field is inherited unchanged.
     loader=Qwen3VLEmbeddingWrapper,
     name="dnotitia/DNA-VL-STEER-2B",
+    adapted_from="Qwen/Qwen3-VL-Embedding-2B",
     model_type=["dense"],
     # Calibrated on all 36 XM3600 languages (the base entry declares eng-Latn only).
     languages=[
