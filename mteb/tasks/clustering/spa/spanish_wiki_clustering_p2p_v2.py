@@ -42,5 +42,5 @@ class SpanishWikiClusteringP2PV2(AbsTaskClustering):
   year = {2026},
 }
 """,
-        prompt="Agrupa los pasajes enciclopédicos en español por su tema principal.",
+        prompt="Agrupa los pasajes enciclopédicos en español según el asunto tratado.",
     )
