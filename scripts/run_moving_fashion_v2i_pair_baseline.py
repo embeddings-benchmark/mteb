@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """Run a multimodal baseline on MovingFashion V2I pair classification.
 
-The default invocation is intended for a Colab GPU runtime::
+The default uses EBind's audio/vision checkpoint, which embeds images and
+videos in the same space and samples eight video frames. Install its pinned
+source dependency before running::
+
+    pip install -r scripts/requirements_moving_fashion_v2i_ebind.txt
 
     python scripts/run_moving_fashion_v2i_pair_baseline.py \
         --output-folder /content/mteb-results
@@ -21,18 +25,26 @@ import torch
 
 import mteb
 from mteb.cache import ResultCache
+from mteb.models.model_implementations.ebind_models import (
+    EBindWrapper,
+    ebind_audio_vision,
+)
 from mteb.tasks.pair_classification.zxx.moving_fashion_pc import (
     MovingFashionV2IPairClassification,
 )
 
-_DEFAULT_MODEL = "jinaai/jina-embeddings-v5-omni-nano"
+_DEFAULT_MODEL = "encord-team/ebind-audio-vision"
 
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--model", default=_DEFAULT_MODEL)
+    parser.add_argument(
+        "--model",
+        default=_DEFAULT_MODEL,
+        help=f"MTEB model name (default: {_DEFAULT_MODEL}).",
+    )
     parser.add_argument("--device", default="cuda")
-    parser.add_argument("--batch-size", type=int, default=1)
+    parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument(
         "--output-folder",
         type=Path,
@@ -65,6 +77,31 @@ def _parse_args() -> argparse.Namespace:
     if args.num_frames is not None and args.num_frames < 1:
         parser.error("--num-frames must be positive")
     return args
+
+
+def _load_model(
+    model_name: str, device: str, model_kwargs: dict[str, int | float | None]
+):
+    if model_name != _DEFAULT_MODEL:
+        return mteb.get_model(model_name, device=device, **model_kwargs)
+
+    # MTEB cannot publish EBind's Git dependency as a package extra on PyPI.
+    # Load the existing registered wrapper directly after the experiment-specific
+    # requirements file has installed the dependency.
+    try:
+        return EBindWrapper(
+            model_name=model_name,
+            revision=ebind_audio_vision.revision,
+            device=device,
+            **model_kwargs,
+        )
+    except ModuleNotFoundError as error:
+        if error.name != "ebind":
+            raise
+        raise RuntimeError(
+            "EBind is not installed. Run `pip install -r "
+            "scripts/requirements_moving_fashion_v2i_ebind.txt` first."
+        ) from error
 
 
 def _select_smoke_rows(
@@ -101,7 +138,8 @@ def main() -> None:
     if args.num_frames is not None:
         model_kwargs = {"fps": None, "num_frames": args.num_frames}
 
-    model = mteb.get_model(args.model, device=args.device, **model_kwargs)
+    print(f"Model: {args.model}")
+    model = _load_model(args.model, args.device, model_kwargs)
     task = MovingFashionV2IPairClassification()
     if args.smoke_videos:
         _select_smoke_rows(task, args.smoke_videos)
