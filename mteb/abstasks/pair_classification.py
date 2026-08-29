@@ -206,13 +206,20 @@ class AbsTaskPairClassification(AbsTask):
             n,
             max_workers=num_proc,
         )
+        number_of_characters = None
 
-        number_of_characters = (
-            pair_stats["text1_statistics"]["total_text_length"]
-            + pair_stats["text2_statistics"]["total_text_length"]
-            if pair_stats["text1_statistics"]
-            else None
-        )
+        if (
+            pair_stats["text1_statistics"] is not None
+            and pair_stats["text2_statistics"] is not None
+        ):
+            number_of_characters = (
+                pair_stats["text1_statistics"]["total_text_length"]
+                + pair_stats["text2_statistics"]["total_text_length"]
+            )
+        elif pair_stats["text1_statistics"] is not None:
+            number_of_characters = pair_stats["text1_statistics"]["total_text_length"]
+        elif pair_stats["text2_statistics"] is not None:
+            number_of_characters = pair_stats["text2_statistics"]["total_text_length"]
 
         return PairClassificationDescriptiveStatistics(
             num_samples=n,

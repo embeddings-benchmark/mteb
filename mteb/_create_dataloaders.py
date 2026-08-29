@@ -276,11 +276,13 @@ def _prepare_dataset(
                 dataset = _combine_queries_with_instruction_text(dataset)
 
     if "image" in modalities:
-        dataset = _prepare_image_dataset(
-            dataset,
-            image_column_name=input_column if input_column else "image",
-            num_proc=num_proc,
-        )
+        image_column_name = "image" if input_column is None else input_column
+        if input_column in dataset.column_names:
+            dataset = _prepare_image_dataset(
+                dataset,
+                image_column_name=image_column_name,
+                num_proc=num_proc,
+            )
     for modality in ("audio", "video"):
         if modality in modalities:
             if (
