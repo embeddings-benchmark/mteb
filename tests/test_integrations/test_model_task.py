@@ -8,6 +8,7 @@ below.
 """
 
 import logging
+import sys
 
 import pytest
 
@@ -65,14 +66,14 @@ EXPECTED_SCORES = {
     (DENSE_MODEL, "MockTextZeroShotClassification"): 1.0,
     (DENSE_MODEL, "MockAudioClusteringTask"): 1.0,
     (DENSE_MODEL, "MockAudioMultilabelClassification"): 1.0,
-    (DENSE_MODEL, "MockAudioZeroshotClassification"): 0.5,
+    (DENSE_MODEL, "MockAudioZeroshotClassification"): 1.0,
     (DENSE_MODEL, "MockAny2AnyRetrievalT2A"): 1.0,
     (DENSE_MODEL, "MockAny2AnyRetrievalA2T"): 1.0,
     (DENSE_MODEL, "MockAny2AnyRetrievalA2A"): 1.0,
     (DENSE_MODEL, "MockAudioReranking"): 1.0,
     (DENSE_MODEL, "MockAudioClassification"): 1.0,
     (DENSE_MODEL, "MockAudioClassificationCrossVal"): 1.0,
-    (DENSE_MODEL, "AbsTaskAudioPairClassification"): 0.5,
+    (DENSE_MODEL, "AbsTaskAudioPairClassification"): 1.0,
     (DENSE_MODEL, "MockAny2AnyRetrievalI2T"): 0.63093,
     (DENSE_MODEL, "MockAny2AnyRetrievalT2I"): 0.81546,
     (DENSE_MODEL, "MockVisionCentricQA"): 1.0,
@@ -91,10 +92,10 @@ EXPECTED_SCORES = {
     (DENSE_MODEL, "MockVideoClassification"): 1.0,
     (DENSE_MODEL, "MockVideoClusteringTask"): 1.0,
     (DENSE_MODEL, "MockVideoMultilabelClassification"): 1.0,
-    (DENSE_MODEL, "MockVideoZeroshotClassification"): 0.5,
-    (DENSE_MODEL, "MockVideoPairClassification"): 0.5,
-    (DENSE_MODEL, "MockVideoRetrievalV2T"): 0.63093,
-    (DENSE_MODEL, "MockVideoRetrievalT2V"): 0.63093,
+    (DENSE_MODEL, "MockVideoZeroshotClassification"): 1.0,
+    (DENSE_MODEL, "MockVideoPairClassification"): 1.0,
+    (DENSE_MODEL, "MockVideoRetrievalV2T"): 0.81546,
+    (DENSE_MODEL, "MockVideoRetrievalT2V"): 0.81546,
     (SPARSE_MODEL, "MockMultilingualBitextMiningTask"): 0.5,
     (SPARSE_MODEL, "MockMultilingualParallelBitextMiningTask"): 0.75,
     (SPARSE_MODEL, "MockMultilingualClassificationTask"): 1.0,
@@ -125,7 +126,7 @@ EXPECTED_SCORES = {
     (SPARSE_MODEL, "MockTextZeroShotClassification"): 1.0,
     (SPARSE_MODEL, "MockAudioClusteringTask"): 1.0,
     (SPARSE_MODEL, "MockAudioMultilabelClassification"): 1.0,
-    (SPARSE_MODEL, "MockAudioZeroshotClassification"): 0.5,
+    (SPARSE_MODEL, "MockAudioZeroshotClassification"): 0.0,
     (SPARSE_MODEL, "MockAny2AnyRetrievalT2A"): 0.81546,
     (SPARSE_MODEL, "MockAny2AnyRetrievalA2T"): 0.81546,
     (SPARSE_MODEL, "MockAny2AnyRetrievalA2A"): 1.0,
@@ -151,10 +152,10 @@ EXPECTED_SCORES = {
     (SPARSE_MODEL, "MockVideoClassification"): 1.0,
     (SPARSE_MODEL, "MockVideoClusteringTask"): 1.0,
     (SPARSE_MODEL, "MockVideoMultilabelClassification"): 1.0,
-    (SPARSE_MODEL, "MockVideoZeroshotClassification"): 0.5,
+    (SPARSE_MODEL, "MockVideoZeroshotClassification"): 0.0,
     (SPARSE_MODEL, "MockVideoPairClassification"): 0.5,
-    (SPARSE_MODEL, "MockVideoRetrievalV2T"): 0.63093,
-    (SPARSE_MODEL, "MockVideoRetrievalT2V"): 0.63093,
+    (SPARSE_MODEL, "MockVideoRetrievalV2T"): 1.0,
+    (SPARSE_MODEL, "MockVideoRetrievalT2V"): 1.0,
     (COLBERT_MODEL, "MockMultilingualRerankingTask"): 0.75,
     (COLBERT_MODEL, "MockMultilingualRetrievalTask"): 0.81546,
     (COLBERT_MODEL, "MockMultilingualInstructionRetrieval"): 0.63093,
@@ -164,7 +165,7 @@ EXPECTED_SCORES = {
     (COLBERT_MODEL, "MockInstructionRetrieval"): 0.63093,
     (COLBERT_MODEL, "MockInstructionReranking"): 0.63093,
     (COLBERT_MODEL, "MockRetrievalDialogTask"): 1.0,
-    (COLBERT_MODEL, "MockAny2AnyRetrievalT2A"): 0.63093,
+    (COLBERT_MODEL, "MockAny2AnyRetrievalT2A"): 0.81546,
     (COLBERT_MODEL, "MockAny2AnyRetrievalA2T"): 0.81546,
     (COLBERT_MODEL, "MockAny2AnyRetrievalA2A"): 1.0,
     (COLBERT_MODEL, "MockAudioReranking"): 1.0,
@@ -172,11 +173,31 @@ EXPECTED_SCORES = {
     (COLBERT_MODEL, "MockAny2AnyRetrievalT2I"): 0.63093,
     (COLBERT_MODEL, "MockVisionCentricQA"): 1.0,
     (COLBERT_MODEL, "MockMultilingualVisionCentricQA"): 1.0,
-    (COLBERT_MODEL, "MockVideoRetrievalV2T"): 0.63093,
+    (COLBERT_MODEL, "MockVideoRetrievalV2T"): 0.81546,
     (COLBERT_MODEL, "MockVideoRetrievalT2V"): 0.81546,
     (CROSS_ENCODER_MODEL, "MockRerankingTask"): 0.75,
     (CROSS_ENCODER_MODEL, "MockAudioReranking"): 1.0,
 }
+
+# Audio/video decoding differs between the macOS and Linux/Windows codec stacks. Because the
+# random baselines hash decoded media bytes, keep strict expected scores for each codec family.
+if sys.platform == "darwin":
+    EXPECTED_SCORES.update(
+        {
+            (DENSE_MODEL, "MockAudioZeroshotClassification"): 0.5,
+            (DENSE_MODEL, "AbsTaskAudioPairClassification"): 0.5,
+            (SPARSE_MODEL, "MockAudioZeroshotClassification"): 0.5,
+            (COLBERT_MODEL, "MockAny2AnyRetrievalT2A"): 0.63093,
+            (DENSE_MODEL, "MockVideoZeroshotClassification"): 0.5,
+            (DENSE_MODEL, "MockVideoPairClassification"): 0.5,
+            (DENSE_MODEL, "MockVideoRetrievalV2T"): 0.63093,
+            (DENSE_MODEL, "MockVideoRetrievalT2V"): 0.63093,
+            (SPARSE_MODEL, "MockVideoZeroshotClassification"): 0.5,
+            (SPARSE_MODEL, "MockVideoRetrievalV2T"): 0.63093,
+            (SPARSE_MODEL, "MockVideoRetrievalT2V"): 0.63093,
+            (COLBERT_MODEL, "MockVideoRetrievalV2T"): 0.63093,
+        }
+    )
 
 
 def _evaluate_and_assert_score(
