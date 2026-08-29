@@ -94,6 +94,14 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--analysis-seed", type=int, default=42)
     parser.add_argument("--random-trials", type=int, default=1_000)
     parser.add_argument("--bootstrap-samples", type=int, default=1_000)
+    parser.add_argument(
+        "--analysis-only",
+        action="store_true",
+        help=(
+            "Skip model loading and encoding, then analyze existing pair-level "
+            "predictions under --output-folder."
+        ),
+    )
     args = parser.parse_args()
     if args.batch_size < 1:
         parser.error("--batch-size must be positive")
@@ -105,6 +113,8 @@ def _parse_args() -> argparse.Namespace:
         parser.error("--random-trials must be positive")
     if args.bootstrap_samples < 1:
         parser.error("--bootstrap-samples must be positive")
+    if args.analysis_only and args.smoke_videos:
+        parser.error("--analysis-only cannot be combined with --smoke-videos")
     return args
 
 
@@ -191,7 +201,7 @@ def _write_pair_manifest(
         "dataset_revision": task.metadata.dataset["revision"],
         "split": "test",
         "rows": {
-            column: dataset[column]
+            column: list(dataset[column])
             for column in ("video_id", "image_id", "label", "source_subset")
         },
     }
@@ -199,8 +209,72 @@ def _write_pair_manifest(
     output_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
 
 
+def _find_prediction_folder(
+    output_folder: Path,
+    prediction_folder: Path | None,
+    prediction_file_name: str,
+) -> Path:
+    if prediction_folder is not None:
+        return prediction_folder
+    matches = list((output_folder / "predictions").rglob(prediction_file_name))
+    if not matches:
+        raise FileNotFoundError(
+            f"No {prediction_file_name} found under {output_folder / 'predictions'}"
+        )
+    if len(matches) > 1:
+        raise RuntimeError(
+            "Multiple prediction files were found; select one with "
+            f"--prediction-folder: {[str(path.parent) for path in matches]}"
+        )
+    return matches[0].parent
+
+
+def _run_analysis(
+    task: MovingFashionV2IPairClassification,
+    prediction_folder: Path,
+    *,
+    random_trials: int,
+    bootstrap_samples: int,
+    seed: int,
+) -> None:
+    predictions_path = prediction_folder / task.prediction_file_name
+    if not predictions_path.exists():
+        raise FileNotFoundError(f"Pair-level predictions not found: {predictions_path}")
+    pairs_path = prediction_folder / f"{task.metadata.name}_pairs.json"
+    analysis_path = prediction_folder / f"{task.metadata.name}_analysis.json"
+    _write_pair_manifest(task, pairs_path)
+    analysis = analyze_predictions(
+        predictions_path,
+        pairs_path,
+        random_trials=random_trials,
+        bootstrap_samples=bootstrap_samples,
+        seed=seed,
+    )
+    write_analysis(analysis, analysis_path)
+    print_summary(analysis)
+    print(f"predictions_file={predictions_path.resolve()}")
+    print(f"pairs_file={pairs_path.resolve()}")
+    print(f"analysis_file={analysis_path.resolve()}")
+
+
 def main() -> None:
     args = _parse_args()
+    task = MovingFashionV2IPairClassification()
+    if args.analysis_only:
+        analysis_prediction_folder = _find_prediction_folder(
+            args.output_folder,
+            args.prediction_folder,
+            task.prediction_file_name,
+        )
+        _run_analysis(
+            task,
+            analysis_prediction_folder,
+            random_trials=args.random_trials,
+            bootstrap_samples=args.bootstrap_samples,
+            seed=args.analysis_seed,
+        )
+        return
+
     if args.device.startswith("cuda"):
         if not torch.cuda.is_available():
             raise RuntimeError(
@@ -215,12 +289,11 @@ def main() -> None:
 
     print(f"Model: {args.model}")
     model = _load_model(args.model, args.device, model_kwargs)
-    task = MovingFashionV2IPairClassification()
     if args.smoke_videos:
         _select_smoke_rows(task, args.smoke_videos)
 
     cache = None if args.smoke_videos else ResultCache(args.output_folder)
-    prediction_folder = None
+    prediction_folder: Path | None = None
     if not args.smoke_videos:
         prediction_folder = args.prediction_folder or _default_prediction_folder(
             args.output_folder, model
@@ -241,27 +314,13 @@ def main() -> None:
     if cache is not None:
         print(f"results_folder={args.output_folder.resolve()}")
     if prediction_folder is not None:
-        predictions_path = prediction_folder / task.prediction_file_name
-        if not predictions_path.exists():
-            raise RuntimeError(
-                "Aggregate metrics were loaded from cache, but pair-level predictions "
-                "are unavailable. Rerun with --overwrite-strategy always."
-            )
-        pairs_path = prediction_folder / f"{task.metadata.name}_pairs.json"
-        analysis_path = prediction_folder / f"{task.metadata.name}_analysis.json"
-        _write_pair_manifest(task, pairs_path)
-        analysis = analyze_predictions(
-            predictions_path,
-            pairs_path,
+        _run_analysis(
+            task,
+            prediction_folder,
             random_trials=args.random_trials,
             bootstrap_samples=args.bootstrap_samples,
             seed=args.analysis_seed,
         )
-        write_analysis(analysis, analysis_path)
-        print_summary(analysis)
-        print(f"predictions_file={predictions_path.resolve()}")
-        print(f"pairs_file={pairs_path.resolve()}")
-        print(f"analysis_file={analysis_path.resolve()}")
 
 
 if __name__ == "__main__":

@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
+
+from datasets import Dataset
 
 from scripts import run_moving_fashion_v2i_pair_baseline as runner
 
@@ -77,4 +80,41 @@ def test_builds_model_and_experiment_specific_prediction_folder() -> None:
 
     assert folder == Path(
         "results/predictions/organization__model/revision-1/fps_None__num_frames_8"
+    )
+
+
+def test_writes_huggingface_columns_as_json_lists(tmp_path) -> None:
+    task = runner.MovingFashionV2IPairClassification()
+    task.dataset = {
+        "test": Dataset.from_dict(
+            {
+                "video_id": ["v1", "v1"],
+                "image_id": ["i1", "i2"],
+                "label": [1, 0],
+                "source_subset": ["hard", "hard"],
+            }
+        )
+    }
+    task.data_loaded = True
+    output_path = tmp_path / "pairs.json"
+
+    runner._write_pair_manifest(task, output_path)
+
+    manifest = json.loads(output_path.read_text())
+    assert manifest["rows"] == {
+        "video_id": ["v1", "v1"],
+        "image_id": ["i1", "i2"],
+        "label": [1, 0],
+        "source_subset": ["hard", "hard"],
+    }
+
+
+def test_finds_single_saved_prediction_folder(tmp_path) -> None:
+    expected_folder = tmp_path / "predictions" / "model" / "experiment"
+    expected_folder.mkdir(parents=True)
+    (expected_folder / "Task_predictions.json").write_text("{}")
+
+    assert (
+        runner._find_prediction_folder(tmp_path, None, "Task_predictions.json")
+        == expected_folder
     )
