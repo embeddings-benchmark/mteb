@@ -90,4 +90,4 @@ print(results[0].task_name)  # MassiveIntentClassification (remove_duplicates)
 !!! note
     As cleaning the dataset changes the score, we do not accept scores from modified datasets on the
     [leaderboard](https://huggingface.co/spaces/mteb/leaderboard). We do however allow a cleaned version of a
-    dataset to be [submitted to MTEB](../../contributing/adding_a_dataset.md#contributing-the-fix).
+    dataset to be [submitted to MTEB](../../contributing/adding_a_dataset.md#improving-or-cleaning-a-task).
