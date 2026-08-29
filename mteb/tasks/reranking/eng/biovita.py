@@ -57,8 +57,8 @@ class _BioVITAReranking(AbsTaskRetrieval):
                     continue
                 if taxon not in best or score > best[taxon]:
                     best[taxon] = score
-            # Ties keep the candidate order of the official CSV, matching the
-            # index order `torch.topk` falls back on in the reference script.
+            # Use the official candidate order as a deterministic tie-break
+            # when taxon scores are equal.
             ranked = sorted(
                 taxa,
                 key=lambda taxon: (
