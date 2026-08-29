@@ -44,8 +44,6 @@ class AbsTaskPairClassification(AbsTask):
         dataset: A HuggingFace dataset containing the data for the task. Should contain the following columns: sentence1, sentence2, labels.
         input1_column_name: The name of the column containing the first sentence in the pair.
         input2_column_name: The name of the column containing the second sentence in the pair.
-        input1_id_column_name: Optional stable ID used to encode repeated first inputs once.
-        input2_id_column_name: Optional stable ID used to encode repeated second inputs once.
         label_column_name: The name of the column containing the labels for the pairs. Labels should be 0 or 1.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
         input1_prompt_type: Type of prompt of first input. Used for asymmetric tasks.
@@ -55,8 +53,6 @@ class AbsTaskPairClassification(AbsTask):
     abstask_prompt = "Retrieve text that are semantically similar to the given text."
     input1_column_name: str | Mapping[str, Modalities] = "sentence1"
     input2_column_name: str | Mapping[str, Modalities] = "sentence2"
-    input1_id_column_name: str | None = None
-    input2_id_column_name: str | None = None
     label_column_name: str = "labels"
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
@@ -86,8 +82,6 @@ class AbsTaskPairClassification(AbsTask):
             data_split,
             input1_column_name=self.input1_column_name,
             input2_column_name=self.input2_column_name,
-            input1_id_column_name=self.input1_id_column_name,
-            input2_id_column_name=self.input2_id_column_name,
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,

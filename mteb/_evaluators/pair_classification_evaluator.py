@@ -77,8 +77,6 @@ class PairClassificationEvaluator(Evaluator):
         timer: TimingStack,
         **kwargs: Any,
     ) -> None:
-        self.input1_id_column_name = kwargs.pop("input1_id_column_name", None)
-        self.input2_id_column_name = kwargs.pop("input2_id_column_name", None)
         super().__init__(**kwargs)
         self.dataset = dataset
         self.input1_column_name = input1_column_name
@@ -90,68 +88,36 @@ class PairClassificationEvaluator(Evaluator):
         self.input2_prompt_type = input2_prompt_type
         self.timer = timer
 
-    def _deduplicate_by_id(
-        self, id_column_name: str | None
-    ) -> tuple[Dataset, list[int] | None]:
-        if id_column_name is None:
-            return self.dataset, None
-        if id_column_name not in self.dataset.column_names:
-            raise ValueError(
-                f"Pair-classification ID column {id_column_name!r} is missing"
-            )
-
-        unique_indices: list[int] = []
-        unique_index_by_id: dict[Any, int] = {}
-        inverse_indices: list[int] = []
-        for row_index, item_id in enumerate(self.dataset[id_column_name]):
-            if item_id not in unique_index_by_id:
-                unique_index_by_id[item_id] = len(unique_indices)
-                unique_indices.append(row_index)
-            inverse_indices.append(unique_index_by_id[item_id])
-
-        logger.info(
-            "Encoding %d unique values from %d pair rows using ID column %s",
-            len(unique_indices),
-            len(self.dataset),
-            id_column_name,
-        )
-        return self.dataset.select(unique_indices), inverse_indices
-
-    def _encode_input(
+    def __call__(
         self,
         model: EncoderProtocol,
-        column_name: str | Mapping[str, str],
-        id_column_name: str | None,
-        prompt_type: PromptType | None,
-        input_number: int,
         encode_kwargs: EncodeKwargs,
-        num_proc: int | None,
-    ) -> Any:
-        if isinstance(column_name, str):
-            columns: str | list[str] = column_name
-            renamed_columns: Mapping[str, str] = {
-                column_name: self.task_metadata.modalities[0]
+        num_proc: int | None = None,
+    ) -> PairClassificationDistances:
+        if isinstance(self.input1_column_name, str):
+            cols1: str | list[str] = self.input1_column_name
+            ds1_col_names: Mapping[str, str] = {
+                self.input1_column_name: self.task_metadata.modalities[0]
             }
         else:
-            columns = list(column_name)
-            renamed_columns = column_name
+            cols1 = list(self.input1_column_name)
+            ds1_col_names = self.input1_column_name
 
-        dataset, inverse_indices = self._deduplicate_by_id(id_column_name)
         with self.timer(
-            f"Encoding samples {input_number}",
+            "Encoding samples 1",
             split=self.hf_split,
             subset=self.hf_subset,
-            log_message=(
-                f"Running pair classification - Encoding samples ({input_number}/2)"
-            ),
+            log_message="Running pair classification - Encoding samples (1/2)",
         ):
-            embeddings = model.encode(
+            embeddings1 = model.encode(
                 create_dataloader(
-                    dataset.select_columns(columns).rename_columns(renamed_columns),
+                    self.dataset.select_columns(cols1).rename_columns(ds1_col_names),
                     task_metadata=self.task_metadata,
                     input_column=self.task_metadata.modalities[0]
-                    if isinstance(column_name, str)
-                    and len(self.task_metadata.modalities) == 1
+                    if (
+                        isinstance(self.input1_column_name, str)
+                        and len(self.task_metadata.modalities) == 1
+                    )
                     else None,
                     num_proc=num_proc,
                     **encode_kwargs,
@@ -159,37 +125,43 @@ class PairClassificationEvaluator(Evaluator):
                 task_metadata=self.task_metadata,
                 hf_split=self.hf_split,
                 hf_subset=self.hf_subset,
-                prompt_type=prompt_type,
+                prompt_type=self.input1_prompt_type,
                 **encode_kwargs,
             )
-        if inverse_indices is not None:
-            embeddings = np.asarray(embeddings)[inverse_indices]
-        return embeddings
+        if isinstance(self.input2_column_name, str):
+            cols2: str | list[str] = self.input2_column_name
+            ds2_col_names: Mapping[str, str] = {
+                self.input2_column_name: self.task_metadata.modalities[0]
+            }
+        else:
+            cols2 = list(self.input2_column_name)
+            ds2_col_names = self.input2_column_name
 
-    def __call__(
-        self,
-        model: EncoderProtocol,
-        encode_kwargs: EncodeKwargs,
-        num_proc: int | None = None,
-    ) -> PairClassificationDistances:
-        embeddings1 = self._encode_input(
-            model,
-            self.input1_column_name,
-            self.input1_id_column_name,
-            self.input1_prompt_type,
-            1,
-            encode_kwargs,
-            num_proc,
-        )
-        embeddings2 = self._encode_input(
-            model,
-            self.input2_column_name,
-            self.input2_id_column_name,
-            self.input2_prompt_type,
-            2,
-            encode_kwargs,
-            num_proc,
-        )
+        with self.timer(
+            "Encoding samples 2",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running pair classification - Encoding samples (2/2)",
+        ):
+            embeddings2 = model.encode(
+                create_dataloader(
+                    self.dataset.select_columns(cols2).rename_columns(ds2_col_names),
+                    task_metadata=self.task_metadata,
+                    input_column=self.task_metadata.modalities[0]
+                    if (
+                        isinstance(self.input2_column_name, str)
+                        and len(self.task_metadata.modalities) == 1
+                    )
+                    else None,
+                    num_proc=num_proc,
+                    **encode_kwargs,
+                ),
+                task_metadata=self.task_metadata,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
+                prompt_type=self.input2_prompt_type,
+                **encode_kwargs,
+            )
 
         with self.timer(
             "Scoring",

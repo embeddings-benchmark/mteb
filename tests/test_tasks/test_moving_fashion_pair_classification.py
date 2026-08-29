@@ -105,8 +105,6 @@ def test_task_load_data_reuses_retrieval_configs(monkeypatch) -> None:
 
     monkeypatch.setattr(moving_fashion_pc, "load_dataset", fake_load_dataset)
     task = MovingFashionV2IPairClassification()
-    assert task.input1_id_column_name == "video_id"
-    assert task.input2_id_column_name == "image_id"
     task.load_data()
 
     assert len(task.dataset["test"]) == 4

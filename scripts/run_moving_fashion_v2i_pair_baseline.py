@@ -12,9 +12,9 @@ source dependency before running::
 
 Use ``--smoke-videos`` to validate the environment without caching a partial
 result. Omit ``--num-frames`` for the official model configuration; setting it
-is useful only for a faster diagnostic run. Full runs encode unique media once,
-save pair-level scores, and automatically report random-ranking, source-subset,
-and video-cluster-bootstrap analyses.
+is useful only for a faster diagnostic run. Full runs save pair-level scores and
+automatically report random-ranking, source-subset, and video-cluster-bootstrap
+analyses.
 """
 
 from __future__ import annotations

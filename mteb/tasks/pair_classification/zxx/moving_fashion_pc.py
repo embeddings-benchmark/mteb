@@ -225,8 +225,6 @@ class MovingFashionV2IPairClassification(AbsTaskPairClassification):
 
     input1_column_name: ClassVar[Mapping[str, str]] = {"video": "video"}
     input2_column_name: ClassVar[Mapping[str, str]] = {"image": "image"}
-    input1_id_column_name = "video_id"
-    input2_id_column_name = "image_id"
     input1_prompt_type = PromptType.query
     input2_prompt_type = PromptType.document
     label_column_name = "label"
