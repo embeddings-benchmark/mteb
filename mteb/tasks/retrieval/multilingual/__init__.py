@@ -139,8 +139,10 @@ from .vidore3_bench_retrieval import (
 from .web_faq_retrieval import WebFAQRetrieval
 from .wikipedia_retrieval_multilingual import WikipediaRetrievalMultilingual
 from .wit_t2i_retrieval import WITT2IRetrieval
-from .x_flickr30k_co_i2t_retrieval import XFlickr30kCoI2TRetrieval
-from .x_flickr30k_co_t2i_retrieval import XFlickr30kCoT2IRetrieval
+from .x_flickr30k_co_t2i_retrieval import (
+    XFlickr30kCoI2TRetrieval,
+    XFlickr30kCoT2IRetrieval,
+)
 from .x_market_retrieval import XMarket
 from .x_qu_ad_retrieval import XQuADRetrieval
 from .xm3600_t2i_retrieval import XM3600T2IRetrieval
