@@ -368,6 +368,7 @@ def convert_source_row(
                 condition["input"], condition_modality, media_root=media_root
             ),
         }
+    query["category"] = row["category"]
 
     corpus = []
     corpus_ids = []

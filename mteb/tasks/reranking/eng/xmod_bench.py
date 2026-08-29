@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 dataset = {
     "path": "jupyterjazz/XModBench-MTEB",
-    "revision": "db1d4695d359be83e8fa34575970c6d9c58dbfb4",
+    "revision": "ab71d2be1ba618cb0f0138231f70b82b3c9a02b3",
 }
 _REFERENCE = "https://arxiv.org/abs/2510.15148"
 _CITATION = r"""
