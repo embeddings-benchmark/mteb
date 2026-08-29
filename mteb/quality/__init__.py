@@ -9,9 +9,6 @@ from mteb.quality import remove_duplicates
 task = remove_duplicates(mteb.get_task("MassiveIntentClassification"))
 ```
 
-Only deduplication is exposed for now. `mteb/abstasks/_data_filter/` holds further filters -- train/test leakage,
-contradictory labels, and creating a test split -- that are implemented but not yet reachable from here; see
-https://github.com/embeddings-benchmark/mteb/issues/3672 for which of them to expose and how.
 """
 
 from __future__ import annotations

@@ -1,6 +1,5 @@
 """Tests for `mteb.quality`."""
 
-import logging
 from collections.abc import Callable
 
 import pytest
@@ -25,7 +24,6 @@ from mteb.quality import (
     strip_whitespace,
 )
 from mteb.quality._filters import (
-    _check_unusable_data,
     _derived_task_name,
     _keep_first_occurrence,
     _row_key,
@@ -87,8 +85,6 @@ def test_remove_duplicates_returns_a_copy_and_leaves_the_original_alone() -> Non
 
     assert cleaned is not task
     assert task.dataset["test"]["text"] == before
-    assert not task.data_modified
-    assert cleaned.data_modified
     assert len(cleaned.dataset["test"]) < len(task.dataset["test"])
 
 
@@ -255,14 +251,6 @@ def test_remove_duplicates_raises_when_nothing_is_selected() -> None:
         task = remove_duplicates(task, splits=["nope"])
 
 
-def test_a_filter_that_removes_nothing_leaves_the_task_unmodified() -> None:
-    task = _classification_task()
-
-    task = remove_duplicates(task, splits=["train"])
-
-    assert not task.data_modified
-
-
 def test_filtering_renames_the_task_after_the_filter() -> None:
     task = _classification_task()
 
@@ -270,7 +258,6 @@ def test_filtering_renames_the_task_after_the_filter() -> None:
 
     assert cleaned.metadata.name == "MockClassificationTask (remove_duplicates)"
     assert cleaned.metadata.adapted_from == ["MockClassificationTask"]
-    assert cleaned.data_modified
     # the published task, and every other instance of it, keeps its own name
     assert task.metadata.name == "MockClassificationTask"
     assert MockClassificationTask.metadata.name == "MockClassificationTask"
@@ -288,13 +275,12 @@ def test_reapplying_the_same_filter_does_not_repeat_it_in_the_name() -> None:
     assert cleaned.metadata.name == "MockClassificationTask (remove_duplicates)"
 
 
-def test_unloading_the_data_clears_the_modified_flag() -> None:
-    task = _classification_task()
-    task.data_modified = True
+def test_unloading_the_data_restores_the_published_identity() -> None:
+    cleaned = remove_duplicates(_classification_task())
 
-    task.unload_data()
+    cleaned.unload_data()
 
-    assert not task.data_modified
+    assert cleaned.metadata.name == "MockClassificationTask"
 
 
 def test_a_cleaned_task_can_be_evaluated() -> None:
@@ -326,36 +312,6 @@ def test_a_result_records_the_cleaned_task_name() -> None:
     result = TaskResult.from_task_results(cleaned, scores, evaluation_time=1.0)
 
     assert result.task_name == "MockClassificationTask (remove_duplicates)"
-
-
-def test_an_emptied_split_is_reported(caplog: pytest.LogCaptureFixture) -> None:
-    # deduplication alone cannot empty a split, but the staged filters can
-    task = _classification_task()
-    task.dataset["test"] = task.dataset["test"].select([])
-
-    with caplog.at_level(logging.WARNING, logger="mteb.quality._filters"):
-        _check_unusable_data(task)
-
-    assert any("splits ['test']" in m and "empty" in m for m in caplog.messages)
-
-
-def test_a_label_that_filtering_made_untrainable_is_reported(
-    caplog: pytest.LogCaptureFixture,
-) -> None:
-    task = MockClassificationTask()
-    task.dataset = DatasetDict(
-        {
-            "train": Dataset.from_dict({"text": ["dup", "dup"], "label": [0, 1]}),
-            "test": Dataset.from_dict({"text": ["a test text"], "label": [1]}),
-        }
-    )
-    task.data_loaded = True
-
-    # deduplicating train drops the only example of label 1
-    with caplog.at_level(logging.WARNING, logger="mteb.quality._classification"):
-        task = remove_duplicates(task, splits=["train"])
-
-    assert any("can never be predicted" in m for m in caplog.messages)
 
 
 def _retrieval_split(task: MockRetrievalTask) -> tuple[str, str]:
@@ -575,7 +531,7 @@ def test_the_original_task_is_untouched_for_every_dataset_shape() -> None:
         assert cleaned is not task
         assert cleaned.dataset is not task.dataset
         assert repr(task.dataset) == before
-        assert not task.data_modified
+        assert task.metadata.name == type(task).metadata.name
 
 
 def test_an_aggregate_task_is_copied_with_its_subtasks() -> None:
@@ -585,7 +541,7 @@ def test_an_aggregate_task_is_copied_with_its_subtasks() -> None:
 
     assert cleaned is not task
     assert all(a is not b for a, b in zip(cleaned.tasks, task.tasks, strict=True))
-    assert not any(t.data_modified for t in task.tasks)
+    assert all(t.metadata.name == type(t).metadata.name for t in task.tasks)
 
 
 def test_normalization_accepts_any_callable() -> None:

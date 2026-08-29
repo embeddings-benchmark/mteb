@@ -7,36 +7,19 @@ from typing import TYPE_CHECKING
 
 from mteb.abstasks.retrieval import _filter_queries_without_positives
 
-from ._filters import _iter_row_content, _row_key, _warn
+from ._filters import _iter_row_content, _row_key
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
     from datasets import Dataset
 
-    from mteb.abstasks.retrieval import AbsTaskRetrieval
     from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
     from mteb.types import Modalities
 
     from ._filters import KeepIndicesFn, Normalization
 
 logger = logging.getLogger(__name__)
-
-
-def _check_empty_retrieval_splits(task: AbsTaskRetrieval) -> None:
-    """Report splits that a filter left without documents or without queries."""
-    for subset, splits_data in task.dataset.items():
-        for split, split_data in splits_data.items():
-            empty = sorted(
-                name
-                for name in ("corpus", "queries")
-                if len(split_data[name]) == 0  # type: ignore[literal-required]
-            )
-            if empty:
-                _warn(
-                    f"Filtering left the {' and the '.join(empty)} of the '{split}' split of "
-                    f"'{task.metadata.name}' (subset '{subset}') empty. Evaluating it will fail."
-                )
 
 
 def _columns_present_in(

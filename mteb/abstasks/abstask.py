@@ -110,9 +110,6 @@ class AbsTask(ABC):  # noqa: PLR0904
         seed: The random seed used for reproducibility.
         hf_subsets: The list of Huggingface subsets to use.
         data_loaded: Denotes if the dataset is loaded or not. This is used to avoid loading the dataset multiple times.
-        data_modified: Denotes if the dataset was modified locally by a filter from `mteb.quality`. Such a task
-            carries a name of its own, e.g. `MassiveIntentClassification (remove_duplicates)`, so that its scores
-            are not confused with results on the published dataset.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
         fast_loading: **Deprecated**. Denotes if the task should be loaded using the fast loading method.
             This is only possible if the dataset have a "default" config. We don't recommend to use this method, and suggest to use different subsets for loading datasets.
@@ -124,7 +121,6 @@ class AbsTask(ABC):  # noqa: PLR0904
     _eval_splits: Sequence[str] | None = None
     dataset: dict[HFSubset, DatasetDict] | None = None
     data_loaded: bool = False
-    data_modified: bool = False
     hf_subsets: list[HFSubset]
     fast_loading: bool = False
 
@@ -841,11 +837,9 @@ class AbsTask(ABC):  # noqa: PLR0904
         if self.data_loaded:
             self.dataset = None
             self.data_loaded = False
-            if self.data_modified:
-                # reloading fetches the published dataset again, so the task is no longer a cleaned one:
-                # drop the instance-level metadata a filter added, falling back to the published metadata
-                self.data_modified = False
-                self.__dict__.pop("metadata", None)
+            # a filter from `mteb.quality` gives a cleaned task metadata of its own; reloading fetches the
+            # published data again, so drop that override and fall back to the published metadata
+            self.__dict__.pop("metadata", None)
             logger.info(f"Unloaded dataset {self.metadata.name} from memory.")
         else:
             msg = f"Dataset `{self.metadata.name}` is not loaded, cannot unload it."

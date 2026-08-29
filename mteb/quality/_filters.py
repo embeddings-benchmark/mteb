@@ -24,7 +24,6 @@ from datasets import Dataset, DatasetDict
 
 from mteb._content_hashes import MODALITY_HASH_FNS
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
-from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 
 if TYPE_CHECKING:
@@ -92,9 +91,6 @@ class _Filter:
 
 SUPPORTED_MODALITIES: frozenset[str] = frozenset(MODALITY_HASH_FNS)
 """The modalities a filter can compare, i.e. those the descriptive statistics know how to hash."""
-
-_MIN_TRAIN_EXAMPLES_PER_LABEL = 2
-"""Stratified subsampling and the train/test split both need at least this many examples of each label."""
 
 
 def _normalize(value: Any, normalization: Normalization) -> str:
@@ -378,29 +374,6 @@ def _no_split_matched_message(
     return f"The given splits and subsets do not select any data of '{task_name}'. The task has {listed}."
 
 
-def _check_unusable_data(task: AbsTask) -> None:
-    """Report data that a filter left in a state the evaluators cannot handle."""
-    from ._classification import _check_label_distribution
-    from ._retrieval import _check_empty_retrieval_splits
-
-    if isinstance(task, AbsTaskRetrieval):
-        _check_empty_retrieval_splits(task)
-        return
-
-    for subset, dataset_dict in _datasets_by_subset(task).items():
-        empty = sorted(split for split, ds in dataset_dict.items() if len(ds) == 0)
-        if empty:
-            _warn(
-                f"Filtering left the splits {empty} of '{task.metadata.name}' (subset '{subset}') empty. "
-                "Evaluating them will fail."
-            )
-
-    if isinstance(task, AbsTaskClassification):
-        _check_label_distribution(
-            task, min_examples_per_label=_MIN_TRAIN_EXAMPLES_PER_LABEL
-        )
-
-
 def _resolve_columns(
     task: AbsTask, filter_name: str, columns: Sequence[str] | None
 ) -> dict[str, Modalities]:
@@ -467,7 +440,8 @@ def _filter_task_rows(
         A copy of the task holding the filtered data.
 
     Raises:
-        ValueError: If `columns`, `splits` or `subsets` select none of the task's data.
+        ValueError: If `columns` names a column the task does not declare, or if `splits` and `subsets` together
+            match none of the task's splits.
     """
     from ._retrieval import _filter_retrieval_split
 
@@ -488,8 +462,10 @@ def _filter_task_rows(
         cleaned_aggregate = copy.copy(task)
         cleaned_aggregate.tasks = sub_tasks
         cleaned_aggregate.taskname_to_task = {t.metadata.name: t for t in sub_tasks}
-        cleaned_aggregate.data_modified = any(t.data_modified for t in sub_tasks)
-        if cleaned_aggregate.data_modified:
+        if any(
+            cleaned_sub.metadata.name != original.metadata.name
+            for cleaned_sub, original in zip(sub_tasks, task.tasks, strict=True)
+        ):
             _rename_as_cleaned(cleaned_aggregate, task.metadata, filter_.name)
         return cleaned_aggregate
 
@@ -539,14 +515,12 @@ def _filter_task_rows(
     cleaned = copy.copy(task)
     cleaned.dataset = by_subset["default"] if flat else by_subset
     if n_removed:
-        cleaned.data_modified = True
         _rename_as_cleaned(cleaned, task.metadata, filter_.name)
         _warn(
             f"`{filter_.name}` removed {n_removed} samples from '{task.metadata.name}' "
             f"(columns={sorted(col_modalities)}). The cleaned task is '{cleaned.metadata.name}', and its scores "
             f"are not comparable to results on '{task.metadata.name}'."
         )
-        _check_unusable_data(cleaned)
     else:
         logger.info(
             f"`{filter_.name}` removed nothing from '{task.metadata.name}' "
@@ -570,9 +544,9 @@ def remove_duplicates(
     both to the same string; images, audio and video match when their content hashes are equal. Duplicates are
     removed within each split, so a sample appearing in both the train and the test split is kept in both.
 
-    The task passed in is left untouched, and a cleaned copy is returned. The copy is marked with `data_modified`,
-    so [`mteb.evaluate`][mteb.evaluate] refuses to run it: its scores would not be comparable to results on the
-    published dataset while being indistinguishable from them.
+    The task passed in is left untouched, and a cleaned copy is returned. The copy is named after the filters
+    applied to it, e.g. `MassiveIntentClassification (remove_duplicates)`, so that its scores are recorded against
+    that id rather than against the published dataset.
 
     For a retrieval task the corpus and the queries are deduplicated together with their relevance judgements: a
     judgement pointing at a removed duplicate is moved to the copy that was kept, so no query loses a positive
@@ -593,7 +567,8 @@ def remove_duplicates(
         A copy of the task holding the deduplicated data.
 
     Raises:
-        ValueError: If `columns`, `splits` or `subsets` select none of the task's data.
+        ValueError: If `columns` names a column the task does not declare, or if `splits` and `subsets` together
+            match none of the task's splits.
 
     Examples:
         >>> import mteb

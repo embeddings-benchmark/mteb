@@ -621,7 +621,7 @@ By default, this method caches the results and loads them from cache on subseque
 If the statistics show that the dataset does contain duplicates, very short documents or other quality concerns, see [Cleaning task data](../get_started/advanced_usage/cleaning_task_data.md) for how to find and remove them.
 
 
-### Contributing the fix
+### Improving or cleaning a task
 
 If a dataset needs cleaning, everyone benefits from fixing it once rather than in each user's script. Submit the
 cleaned data as a **new version of the task** rather than as scores. A new version:
