@@ -12,14 +12,18 @@ source dependency before running::
 
 Use ``--smoke-videos`` to validate the environment without caching a partial
 result. Omit ``--num-frames`` for the official model configuration; setting it
-is useful only for a faster diagnostic run.
+is useful only for a faster diagnostic run. Full runs encode unique media once,
+save pair-level scores, and automatically report random-ranking, source-subset,
+and video-cluster-bootstrap analyses.
 """
 
 from __future__ import annotations
 
 import argparse
+import json
 from collections import Counter
 from pathlib import Path
+from typing import Any
 
 import torch
 
@@ -32,6 +36,19 @@ from mteb.models.model_implementations.ebind_models import (
 from mteb.tasks.pair_classification.zxx.moving_fashion_pc import (
     MovingFashionV2IPairClassification,
 )
+
+if __package__:
+    from scripts.analyze_moving_fashion_v2i_pair_predictions import (
+        analyze_predictions,
+        print_summary,
+        write_analysis,
+    )
+else:  # Support `python scripts/run_...py` from the repo root.
+    from analyze_moving_fashion_v2i_pair_predictions import (  # type: ignore[import-not-found, no-redef]
+        analyze_predictions,
+        print_summary,
+        write_analysis,
+    )
 
 _DEFAULT_MODEL = "encord-team/ebind-audio-vision"
 
@@ -49,6 +66,11 @@ def _parse_args() -> argparse.Namespace:
         "--output-folder",
         type=Path,
         default=Path("results/moving-fashion-v2i-pair"),
+    )
+    parser.add_argument(
+        "--prediction-folder",
+        type=Path,
+        help="Override the model-specific folder used for pair-level predictions.",
     )
     parser.add_argument(
         "--overwrite-strategy",
@@ -69,6 +91,9 @@ def _parse_args() -> argparse.Namespace:
             "the model's official configuration."
         ),
     )
+    parser.add_argument("--analysis-seed", type=int, default=42)
+    parser.add_argument("--random-trials", type=int, default=1_000)
+    parser.add_argument("--bootstrap-samples", type=int, default=1_000)
     args = parser.parse_args()
     if args.batch_size < 1:
         parser.error("--batch-size must be positive")
@@ -76,12 +101,14 @@ def _parse_args() -> argparse.Namespace:
         parser.error("--smoke-videos cannot be negative")
     if args.num_frames is not None and args.num_frames < 1:
         parser.error("--num-frames must be positive")
+    if args.random_trials < 1:
+        parser.error("--random-trials must be positive")
+    if args.bootstrap_samples < 1:
+        parser.error("--bootstrap-samples must be positive")
     return args
 
 
-def _load_model(
-    model_name: str, device: str, model_kwargs: dict[str, int | float | None]
-):
+def _load_model(model_name: str, device: str, model_kwargs: dict[str, Any]) -> Any:
     if model_name != _DEFAULT_MODEL:
         return mteb.get_model(model_name, device=device, **model_kwargs)
 
@@ -122,6 +149,8 @@ def _select_smoke_rows(
     task: MovingFashionV2IPairClassification, number_of_videos: int
 ) -> None:
     task.load_data()
+    if task.dataset is None:
+        raise RuntimeError("MovingFashion task did not load a dataset")
     dataset = task.dataset["test"]
     selected_video_ids = list(dict.fromkeys(dataset["video_id"]))[:number_of_videos]
     selected_video_ids_set = set(selected_video_ids)
@@ -138,6 +167,38 @@ def _select_smoke_rows(
     )
 
 
+def _default_prediction_folder(output_folder: Path, model: Any) -> Path:
+    metadata = model.mteb_model_meta
+    model_name = str(metadata.name).replace("/", "__")
+    revision = str(metadata.revision or "no_revision_available")
+    experiment_kwargs = metadata.experiment_kwargs or {}
+    experiment = (
+        "__".join(f"{key}_{value}" for key, value in sorted(experiment_kwargs.items()))
+        or "official_defaults"
+    )
+    return output_folder / "predictions" / model_name / revision / experiment
+
+
+def _write_pair_manifest(
+    task: MovingFashionV2IPairClassification, output_path: Path
+) -> None:
+    task.load_data()
+    if task.dataset is None:
+        raise RuntimeError("MovingFashion task did not load a dataset")
+    dataset = task.dataset["test"]
+    payload = {
+        "task_name": task.metadata.name,
+        "dataset_revision": task.metadata.dataset["revision"],
+        "split": "test",
+        "rows": {
+            column: dataset[column]
+            for column in ("video_id", "image_id", "label", "source_subset")
+        },
+    }
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+
+
 def main() -> None:
     args = _parse_args()
     if args.device.startswith("cuda"):
@@ -148,7 +209,7 @@ def main() -> None:
             )
         print(f"GPU: {torch.cuda.get_device_name(0)}")
 
-    model_kwargs = {}
+    model_kwargs: dict[str, Any] = {}
     if args.num_frames is not None:
         model_kwargs = {"fps": None, "num_frames": args.num_frames}
 
@@ -159,6 +220,11 @@ def main() -> None:
         _select_smoke_rows(task, args.smoke_videos)
 
     cache = None if args.smoke_videos else ResultCache(args.output_folder)
+    prediction_folder = None
+    if not args.smoke_videos:
+        prediction_folder = args.prediction_folder or _default_prediction_folder(
+            args.output_folder, model
+        )
     result = mteb.evaluate(
         model,
         task,
@@ -166,6 +232,7 @@ def main() -> None:
         overwrite_strategy=args.overwrite_strategy,
         encode_kwargs={"batch_size": args.batch_size},
         co2_tracker=False,
+        prediction_folder=prediction_folder,
     )
     task_result = result.task_results[0]
     prefix = "SMOKE ONLY - " if args.smoke_videos else ""
@@ -173,6 +240,28 @@ def main() -> None:
     print(f"evaluation_time_seconds={task_result.evaluation_time:.2f}")
     if cache is not None:
         print(f"results_folder={args.output_folder.resolve()}")
+    if prediction_folder is not None:
+        predictions_path = prediction_folder / task.prediction_file_name
+        if not predictions_path.exists():
+            raise RuntimeError(
+                "Aggregate metrics were loaded from cache, but pair-level predictions "
+                "are unavailable. Rerun with --overwrite-strategy always."
+            )
+        pairs_path = prediction_folder / f"{task.metadata.name}_pairs.json"
+        analysis_path = prediction_folder / f"{task.metadata.name}_analysis.json"
+        _write_pair_manifest(task, pairs_path)
+        analysis = analyze_predictions(
+            predictions_path,
+            pairs_path,
+            random_trials=args.random_trials,
+            bootstrap_samples=args.bootstrap_samples,
+            seed=args.analysis_seed,
+        )
+        write_analysis(analysis, analysis_path)
+        print_summary(analysis)
+        print(f"predictions_file={predictions_path.resolve()}")
+        print(f"pairs_file={pairs_path.resolve()}")
+        print(f"analysis_file={analysis_path.resolve()}")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 
@@ -61,3 +62,19 @@ def test_loads_other_models_through_mteb_registry(monkeypatch) -> None:
         "device": "cuda",
         "num_frames": 4,
     }
+
+
+def test_builds_model_and_experiment_specific_prediction_folder() -> None:
+    model = SimpleNamespace(
+        mteb_model_meta=SimpleNamespace(
+            name="organization/model",
+            revision="revision-1",
+            experiment_kwargs={"num_frames": 8, "fps": None},
+        )
+    )
+
+    folder = runner._default_prediction_folder(Path("results"), model)
+
+    assert folder == Path(
+        "results/predictions/organization__model/revision-1/fps_None__num_frames_8"
+    )
