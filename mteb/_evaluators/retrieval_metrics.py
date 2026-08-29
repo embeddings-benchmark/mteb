@@ -148,8 +148,8 @@ def get_rank_from_dict(
     sorted_by_score = sorted(
         tuple_of_id_score, key=lambda x: (x[1], x[0]), reverse=True
     )
-    for i, (id, score) in enumerate(sorted_by_score):
-        if id == doc_id:
+    for i, (cur_doc_id, score) in enumerate(sorted_by_score):
+        if cur_doc_id == doc_id:
             return i + 1, score
 
     return len(sorted_by_score) + 1, 0

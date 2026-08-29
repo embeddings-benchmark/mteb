@@ -334,6 +334,7 @@ select = [
     "ISC",     # implicit string concatenation
     "B",       # flake8-bugbear
     "PT",      # flake8-pytest-style
+    "A",       # flake8-builtins, don't shadow builtins
 ]
 
 ignore = [

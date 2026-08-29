@@ -90,11 +90,11 @@ class MTEBTasks(tuple[AbsTask]):
         return "MTEBTasks" + super().__repr__()
 
     @staticmethod
-    def _extract_property_from_task(task: AbsTask, property: str) -> Any:
-        if hasattr(task.metadata, property):
-            return getattr(task.metadata, property)
-        elif hasattr(task, property):
-            return getattr(task, property)
+    def _extract_property_from_task(task: AbsTask, property_name: str) -> Any:
+        if hasattr(task.metadata, property_name):
+            return getattr(task.metadata, property_name)
+        elif hasattr(task, property_name):
+            return getattr(task, property_name)
         else:
             raise KeyError("Property neither in Task attribute or in task metadata.")
 
