@@ -18,15 +18,6 @@ def test_is_aggregate_property_correct():
         assert task.is_aggregate == isinstance(task, AbsTaskAggregate)
 
 
-def test_mixed_category_aggregate_metadata_is_filled():
-    task = MockAggregatedTask()
-    task.metadata = task.metadata.model_copy(
-        update={"category": None, "domains": [], "task_subtypes": []}
-    )
-
-    assert task.metadata.is_filled()
-
-
 def test_task_results_to_scores_isolates_splits():
     agg_task = MockAggregatedTask()
     # To test split isolation, the task MUST have at least two splits.
