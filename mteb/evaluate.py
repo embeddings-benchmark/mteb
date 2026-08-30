@@ -17,9 +17,9 @@ from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
-from mteb.models.search_wrappers import MultiVectorEncoderWrapper
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
+    MultiVectorWrapper,
     SentenceTransformerEncoderWrapper,
     SparseEncoderWrapper,
 )
@@ -75,55 +75,28 @@ class OverwriteStrategy(HelpfulStrEnum):
     ONLY_CACHE = "only-cache"
 
 
-def _is_sentence_transformers_model(model: object) -> bool:
-    """Whether `model`'s class lives in the `sentence_transformers` package.
-
-    Used to decide whether a failed optional import (`SparseEncoder`, `MultiVectorEncoder`) is
-    worth surfacing as an actionable error: a non-sentence-transformers model (already-wrapped
-    `MTEBModels`, a custom `EncoderProtocol` implementation, ...) can never be one of these, so it
-    should never be penalized for an unrelated sentence-transformers version gap.
-    """
-    return type(model).__module__.startswith("sentence_transformers")
-
-
 def _is_sparse_encoder(model: object) -> TypeGuard[SparseEncoder]:
-    """Whether `model` is a `sentence_transformers.sparse_encoder.SparseEncoder` instance.
-
-    `SparseEncoder` requires sentence-transformers >= 5.0.0, newer than mteb's own floor (>= 3.0.0).
-    If `model` looks like a sentence-transformers model but that version gap is why it can't be
-    checked, raise rather than silently returning False for it.
-    """
     try:
         from sentence_transformers.sparse_encoder import SparseEncoder
     except ImportError:
-        if _is_sentence_transformers_model(model):
-            raise ImportError(
-                "This looks like a sentence-transformers model, but 'SparseEncoder' isn't available "
-                "in your installed version. Please upgrade with `pip install -U sentence-transformers` "
-                "(>= 5.0.0) to use SparseEncoder models with mteb."
-            ) from None
-        return False
+        raise ImportError(
+            "This looks like a sentence-transformers model, but 'SparseEncoder' isn't available "
+            "in your installed version. Please upgrade with `pip install -U sentence-transformers` "
+            "(>= 5.0.0) to use SparseEncoder models with mteb."
+        ) from None
     return isinstance(model, SparseEncoder)
 
 
 def _is_multi_vector_encoder(model: object) -> TypeGuard[MultiVectorEncoder]:
-    """Whether `model` is a `sentence_transformers.MultiVectorEncoder` instance.
-
-    `MultiVectorEncoder` requires sentence-transformers >= 6.0.0, newer than mteb's own floor
-    (>= 3.0.0). If `model` looks like a sentence-transformers model but that version gap is why it
-    can't be checked, raise rather than silently returning False for it.
-    """
     try:
         from sentence_transformers import MultiVectorEncoder
     except ImportError:
-        if _is_sentence_transformers_model(model):
-            raise ImportError(
-                "This looks like a sentence-transformers model, but 'MultiVectorEncoder' isn't "
-                "available in your installed version. Please upgrade with "
-                "`pip install -U sentence-transformers` (>= 6.0.0) to use MultiVectorEncoder models "
-                "with mteb."
-            ) from None
-        return False
+        raise ImportError(
+            "This looks like a sentence-transformers model, but 'MultiVectorEncoder' isn't "
+            "available in your installed version. Please upgrade with "
+            "`pip install -U sentence-transformers` (>= 6.0.0) to use MultiVectorEncoder models "
+            "with mteb."
+        ) from None
     return isinstance(model, MultiVectorEncoder)
 
 
@@ -151,7 +124,7 @@ def _sanitize_model(
         wrapped_model = SparseEncoderWrapper(model)
         meta = wrapped_model.mteb_model_meta
     elif _is_multi_vector_encoder(model):
-        wrapped_model = MultiVectorEncoderWrapper(model)
+        wrapped_model = MultiVectorWrapper(model)
         meta = wrapped_model.mteb_model_meta
     else:
         meta = ModelMeta.create_empty() if not isinstance(model, ModelMeta) else model

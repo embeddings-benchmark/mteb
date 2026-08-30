@@ -758,16 +758,20 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         - SentenceTransformer  → SentenceTransformerEncoderWrapper
         - CrossEncoder         → CrossEncoderWrapper
         - SparseEncoder        → SparseEncoderWrapper
-        - MultiVectorEncoder   → MultiVectorEncoderWrapper
+        - MultiVectorEncoder   → MultiVectorWrapper
         """
         from mteb.models import (
             CrossEncoderWrapper,
-            MultiVectorEncoderWrapper,
+            MultiVectorWrapper,
             SentenceTransformerEncoderWrapper,
             SparseEncoderWrapper,
         )
 
         st_model_type = config_sbert.get("model_type") if config_sbert else None
+        # "ColBERT" is the legacy PyLate v3 spelling; sentence-transformers' MultiVectorEncoder
+        # itself normalizes it the same way when reading config_sentence_transformers.json.
+        if st_model_type == "ColBERT":
+            st_model_type = "MultiVectorEncoder"
         if st_model_type not in {
             "SentenceTransformer",
             "CrossEncoder",
@@ -793,7 +797,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         if st_model_type == "SparseEncoder":
             return SparseEncoderWrapper, "sparse", modalities
         if st_model_type == "MultiVectorEncoder":
-            return MultiVectorEncoderWrapper, "late-interaction", modalities
+            return MultiVectorWrapper, "late-interaction", modalities
         if st_model_type == "SentenceTransformer":
             return SentenceTransformerEncoderWrapper, "dense", modalities
         raise ValueError("Unsupported model type")
@@ -1021,7 +1025,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     @classmethod
     def _from_multi_vector_encoder_model(cls, model: MultiVectorEncoder) -> Self:
         """Generates a ModelMeta from only a MultiVectorEncoder model, without fetching any additional metadata from HuggingFace Hub."""
-        from mteb.models import MultiVectorEncoderWrapper
+        from mteb.models import MultiVectorWrapper
 
         name: str | None = (
             model.model_card_data.model_name
@@ -1032,7 +1036,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             overwrites=dict(
                 name=name,
                 revision=model.model_card_data.base_model_revision,
-                loader=MultiVectorEncoderWrapper,
+                loader=MultiVectorWrapper,
                 max_tokens=model.get_max_seq_length(),
                 embed_dim=model.get_embedding_dimension(),
                 similarity_fn_name=ScoringFunction.MAX_SIM,

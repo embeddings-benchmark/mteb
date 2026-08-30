@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import heapq
 import logging
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any
 
+import numpy as np
 import torch
 
 from mteb._create_dataloaders import (
@@ -14,7 +15,8 @@ from mteb.types import (
 )
 
 if TYPE_CHECKING:
-    from sentence_transformers import MultiVectorEncoder
+    from collections.abc import Callable
+
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -30,9 +32,210 @@ if TYPE_CHECKING:
 
     from .models_protocols import CrossEncoderProtocol, EncoderProtocol
     from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
-    from .sentence_transformer_wrapper import MultiVectorTokenEncoder
 
 logger = logging.getLogger(__name__)
+
+
+def chunked_full_corpus_search(  # noqa: PLR0913
+    *,
+    task_corpus: CorpusDatasetType,
+    corpus_chunk_size: int,
+    query_idx_to_id: dict[int, str],
+    query_embeddings: Array,
+    task_metadata: TaskMetadata,
+    hf_subset: str,
+    hf_split: str,
+    top_k: int,
+    encode_kwargs: EncodeKwargs,
+    encode_fn: Callable[..., Array],
+    similarity_fn: Callable[[Array, Array], Array],
+    search_k_offset: int = 0,
+    num_proc: int | None = None,
+) -> dict[str, list[tuple[float, str]]]:
+    """Chunk over `task_corpus`, encode + score each chunk against `query_embeddings`, and merge per-query top-k results with a heap.
+
+    Shared by `SearchEncoderWrapper` (for any `EncoderProtocol` model, via
+    `encode_fn=model.encode`/`similarity_fn=model.similarity`) and
+    `MultiVectorSearchEncoderWrapper` ([mteb.models.sentence_transformer_wrapper][], via
+    `encode_fn=self._encode`/`similarity_fn=self.model.similarity`, since `MultiVectorWrapper`
+    deliberately has no public `encode()` -- see its docstring). Kept as a plain function taking
+    `encode_fn`/`similarity_fn` callables, rather than a shared base class, since the two callers
+    can't share one via inheritance: `SearchEncoderWrapper` wraps an *external* `EncoderProtocol`
+    object (`self.model.encode(...)`), while `MultiVectorSearchEncoderWrapper` is a self-referential mixin
+    (`self._encode(...)`) -- inheriting one from the other would collide on the meaning of
+    `self.model` and reintroduce the very `encode()` exposure `MultiVectorWrapper` is built to
+    avoid.
+
+    Args:
+        task_corpus: The (already-indexed) corpus to search.
+        corpus_chunk_size: Number of documents to encode and score at once.
+        query_idx_to_id: Maps each query's position in `query_embeddings` to its query ID.
+        query_embeddings: Pre-encoded query embeddings.
+        task_metadata: Metadata of the task, forwarded to `encode_fn`.
+        hf_subset: Subset of the current task, forwarded to `encode_fn`.
+        hf_split: Split of the current task, forwarded to `encode_fn`.
+        top_k: Number of top documents to keep per query.
+        encode_kwargs: Additional arguments to pass to `encode_fn`.
+        encode_fn: Encodes a document dataloader into embeddings, matching `EncoderProtocol.encode`.
+        similarity_fn: Scores query embeddings against document embeddings, matching
+            `EncoderProtocol.similarity`.
+        search_k_offset: Added to `top_k` for the per-chunk `torch.topk` call (before the
+            cross-chunk heap merge trims back down to `top_k`). `SearchEncoderWrapper` has
+            historically used 1 here; `MultiVectorSearchEncoderWrapper` uses 0.
+        num_proc: Number of processes to use for dataloading.
+
+    Returns:
+        A dictionary mapping query IDs to a list of `(score, corpus_id)` tuples.
+    """
+    result_heaps: dict[str, list[tuple[float, str]]] = {
+        qid: [] for qid in query_idx_to_id.values()
+    }
+    itr = range(0, len(task_corpus), corpus_chunk_size)
+    for batch_num, corpus_start_idx in enumerate(itr):
+        logger.info(f"Encoding corpus chunk {batch_num + 1}/{len(itr)}...")
+        corpus_end_idx = min(corpus_start_idx + corpus_chunk_size, len(task_corpus))
+        sub_corpus = task_corpus.select(range(corpus_start_idx, corpus_end_idx))
+        sub_corpus_ids = list(sub_corpus["id"])
+
+        sub_corpus_embeddings = encode_fn(
+            create_dataloader(
+                sub_corpus,
+                task_metadata=task_metadata,
+                prompt_type=PromptType.document,
+                batch_size=encode_kwargs.get("batch_size", 32),
+                num_proc=num_proc,
+            ),
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=PromptType.document,
+            **encode_kwargs,
+        )
+
+        scores = torch.as_tensor(similarity_fn(query_embeddings, sub_corpus_embeddings))
+        top_k_values, top_k_idx = torch.topk(
+            scores,
+            min(top_k + search_k_offset, scores.shape[1]),
+            dim=1,
+            largest=True,
+        )
+        top_k_idx_list = top_k_idx.cpu().tolist()
+        top_k_values_list = top_k_values.cpu().tolist()
+
+        for q_idx, qid in query_idx_to_id.items():
+            for idx, score in zip(
+                top_k_idx_list[q_idx], top_k_values_list[q_idx], strict=True
+            ):
+                corpus_id = sub_corpus_ids[idx]
+                if len(result_heaps[qid]) < top_k:
+                    heapq.heappush(result_heaps[qid], (score, corpus_id))
+                else:
+                    heapq.heappushpop(result_heaps[qid], (score, corpus_id))
+    return result_heaps
+
+
+def rerank_top_ranked_documents(  # noqa: PLR0913
+    *,
+    task_corpus: CorpusDatasetType,
+    query_idx_to_id: dict[int, str],
+    query_embeddings: Array,
+    top_ranked: TopRankedDocumentsType,
+    top_k: int,
+    task_metadata: TaskMetadata,
+    hf_subset: str,
+    hf_split: str,
+    encode_kwargs: EncodeKwargs,
+    encode_fn: Callable[..., Array],
+    similarity_fn: Callable[[Array, Array], Array],
+    num_proc: int | None = None,
+) -> dict[str, list[tuple[float, str]]]:
+    """Encode the full corpus once, then rerank each query's pre-ranked `top_ranked` candidates against it.
+
+    Shared by `SearchEncoderWrapper` and `MultiVectorSearchEncoderWrapper` -- see
+    `chunked_full_corpus_search` for why this is a plain function rather than a shared base class.
+
+    Args:
+        task_corpus: The (already-indexed) corpus the `top_ranked` document IDs are drawn from.
+        query_idx_to_id: Maps each query's position in `query_embeddings` to its query ID.
+        query_embeddings: Pre-encoded query embeddings.
+        top_ranked: Maps each query ID to its pre-ranked candidate document IDs.
+        top_k: Number of top documents to keep per query.
+        task_metadata: Metadata of the task, forwarded to `encode_fn`.
+        hf_subset: Subset of the current task, forwarded to `encode_fn`.
+        hf_split: Split of the current task, forwarded to `encode_fn`.
+        encode_kwargs: Additional arguments to pass to `encode_fn`.
+        encode_fn: Encodes a document dataloader into embeddings, matching `EncoderProtocol.encode`.
+        similarity_fn: Scores query embeddings against document embeddings, matching
+            `EncoderProtocol.similarity`.
+        num_proc: Number of processes to use for dataloading.
+
+    Returns:
+        A dictionary mapping query IDs to a list of `(score, corpus_id)` tuples.
+    """
+    result_heaps: dict[str, list[tuple[float, str]]] = {
+        qid: [] for qid in query_idx_to_id.values()
+    }
+    doc_id_to_idx = {doc: idx for idx, doc in enumerate(task_corpus["id"])}
+
+    all_doc_embeddings = encode_fn(
+        create_dataloader(
+            task_corpus,
+            task_metadata=task_metadata,
+            prompt_type=PromptType.document,
+            batch_size=encode_kwargs.get("batch_size", 32),
+            num_proc=num_proc,
+        ),
+        task_metadata=task_metadata,
+        hf_split=hf_split,
+        hf_subset=hf_subset,
+        prompt_type=PromptType.document,
+        **encode_kwargs,
+    )
+
+    for q_idx, qid in query_idx_to_id.items():
+        if qid not in top_ranked:
+            logger.warning(f"No pre-ranked documents found for query {qid}")
+            continue
+        ranked_ids = top_ranked[qid]
+        if not ranked_ids:
+            continue
+
+        doc_indices = [doc_id_to_idx[doc_id] for doc_id in ranked_ids]
+        candidate_embeddings: Array | list[Any]
+        if isinstance(all_doc_embeddings, (torch.Tensor, np.ndarray)):
+            candidate_embeddings = all_doc_embeddings[doc_indices]
+        else:
+            # Ragged (variable-length) multi-vector embeddings: a plain list of per-document
+            # tensors, which doesn't support fancy indexing with a list of indices.
+            candidate_embeddings = [all_doc_embeddings[idx] for idx in doc_indices]
+
+        # Ensure the query embedding is scored as a batch of one.
+        query_embedding = torch.as_tensor(query_embeddings[q_idx]).unsqueeze(0)
+
+        scores = torch.as_tensor(similarity_fn(query_embedding, candidate_embeddings))
+
+        is_nan = torch.isnan(scores)
+        if is_nan.sum() > 0:
+            raise ValueError(
+                f"NaN values detected in the similarity scores: {is_nan.sum()}"
+            )
+
+        scores_top_k_values, scores_top_k_idx = torch.topk(
+            scores,
+            min(top_k, len(ranked_ids)),
+            dim=1,
+            largest=True,
+        )
+        scores_top_k_values = scores_top_k_values.cpu()
+        scores_top_k_idx = scores_top_k_idx.cpu()
+
+        for doc_idx, score in zip(
+            scores_top_k_idx[0].tolist(), scores_top_k_values[0].tolist(), strict=True
+        ):
+            corpus_id = ranked_ids[doc_idx]
+            heapq.heappush(result_heaps[qid], (score, corpus_id))
+
+    return result_heaps
 
 
 class SearchEncoderWrapper:
@@ -233,67 +436,23 @@ class SearchEncoderWrapper:
         top_k: int,
         encode_kwargs: EncodeKwargs,
     ) -> dict[str, list[tuple[float, str]]]:
-        logger.info("Encoding Corpus in batches (this might take a while)...")
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
 
-        itr = range(0, len(self.task_corpus), self.corpus_chunk_size)
-
-        result_heaps: dict[str, list[tuple[float, str]]] = {
-            qid: [] for qid in query_idx_to_id.values()
-        }
-        for batch_num, corpus_start_idx in enumerate(itr):
-            logger.info(f"Encoding Batch {batch_num + 1}/{len(itr)}...")
-            corpus_end_idx = min(
-                corpus_start_idx + self.corpus_chunk_size,
-                len(self.task_corpus),
-            )
-            sub_corpus = self.task_corpus.select(
-                range(corpus_start_idx, corpus_end_idx)
-            )
-            sub_corpus_ids = sub_corpus["id"]
-            sub_corpus_embeddings = self.model.encode(
-                create_dataloader(
-                    sub_corpus,
-                    task_metadata=task_metadata,
-                    prompt_type=PromptType.document,
-                    **encode_kwargs,
-                ),
-                task_metadata=task_metadata,
-                hf_split=hf_split,
-                hf_subset=hf_subset,
-                prompt_type=PromptType.document,
-                **encode_kwargs,
-            )
-
-            # Compute similarities using either cosine-similarity or dot product
-            logger.info("Computing Similarities...")
-            scores = self.model.similarity(query_embeddings, sub_corpus_embeddings)
-
-            # get top-k values
-            cos_scores_top_k_values_tensor, cos_scores_top_k_idx_tensor = torch.topk(
-                torch.as_tensor(scores),
-                min(
-                    top_k + 1,
-                    len(scores[1]) if len(scores) > 1 else len(scores[-1]),
-                ),
-                dim=1,
-                largest=True,
-            )
-            cos_scores_top_k_idx = cos_scores_top_k_idx_tensor.cpu().tolist()
-            cos_scores_top_k_values = cos_scores_top_k_values_tensor.cpu().tolist()
-
-            sub_corpus_ids = list(sub_corpus_ids)
-            result_heaps = self._sort_full_corpus_results(
-                result_heaps=result_heaps,
-                query_idx_to_id=query_idx_to_id,
-                query_embeddings=query_embeddings,
-                cos_scores_top_k_idx=cos_scores_top_k_idx,
-                cos_scores_top_k_values=cos_scores_top_k_values,
-                sub_corpus_ids=sub_corpus_ids,
-                top_k=top_k,
-            )
-        return result_heaps
+        return chunked_full_corpus_search(
+            task_corpus=self.task_corpus,
+            corpus_chunk_size=self.corpus_chunk_size,
+            query_idx_to_id=query_idx_to_id,
+            query_embeddings=query_embeddings,
+            task_metadata=task_metadata,
+            hf_subset=hf_subset,
+            hf_split=hf_split,
+            top_k=top_k,
+            encode_kwargs=encode_kwargs,
+            encode_fn=self.model.encode,
+            similarity_fn=self.model.similarity,
+            search_k_offset=1,
+        )
 
     def _sort_full_corpus_results(  # noqa: PLR6301
         self,
@@ -346,79 +505,20 @@ class SearchEncoderWrapper:
         """
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
-        result_heaps: dict[str, list[tuple[float, str]]] = {
-            qid: [] for qid in query_idx_to_id.values()
-        }
-        doc_id_to_idx = {doc: idx for idx, doc in enumerate(self.task_corpus["id"])}
 
-        all_doc_embeddings = self.model.encode(
-            create_dataloader(
-                self.task_corpus,
-                task_metadata=task_metadata,
-                prompt_type=PromptType.document,
-                **encode_kwargs,
-            ),
+        return rerank_top_ranked_documents(
+            task_corpus=self.task_corpus,
+            query_idx_to_id=query_idx_to_id,
+            query_embeddings=query_embeddings,
+            top_ranked=top_ranked,
+            top_k=top_k,
             task_metadata=task_metadata,
-            hf_split=hf_split,
             hf_subset=hf_subset,
-            prompt_type=PromptType.document,
-            **encode_kwargs,
+            hf_split=hf_split,
+            encode_kwargs=encode_kwargs,
+            encode_fn=self.model.encode,
+            similarity_fn=self.model.similarity,
         )
-
-        # Process each query
-        for query_idx, query_embedding in enumerate(query_embeddings):
-            query_id = query_idx_to_id[query_idx]
-            if query_id not in top_ranked:
-                msg = f"No pre-ranked documents found for query {query_id}"
-                logger.warning(msg)
-                continue
-
-            ranked_ids = top_ranked[query_id]
-            doc_indices = [doc_id_to_idx[doc_id] for doc_id in ranked_ids]
-            query_doc_embeddings: torch.Tensor | list[Any]
-            if isinstance(all_doc_embeddings, torch.Tensor):
-                query_doc_embeddings = all_doc_embeddings[doc_indices]
-            else:
-                # Ragged (variable-length) multi-vector embeddings: a plain list of per-document
-                # tensors, which doesn't support fancy indexing with a tensor of indices.
-                query_doc_embeddings = [all_doc_embeddings[idx] for idx in doc_indices]
-
-            # Ensure query embedding is on the correct device and has correct shape
-            query_embedding = torch.as_tensor(query_embedding).unsqueeze(0)  # noqa: PLW2901
-
-            scores = self.model.similarity(
-                query_embedding,
-                cast("Array", query_doc_embeddings),
-            )
-            scores = torch.as_tensor(scores)
-
-            # Handle NaN values
-            is_nan = torch.isnan(scores)
-            if is_nan.sum() > 0:
-                raise ValueError(
-                    f"NaN values detected in the similarity scores: {is_nan.sum()}"
-                )
-
-            # Compute top-k scores
-            scores_top_k_values, scores_top_k_idx = torch.topk(
-                scores,
-                min(top_k, len(ranked_ids)),
-                dim=1,
-                largest=True,
-            )
-
-            # Move results back to CPU for heap operations
-            scores_top_k_values = scores_top_k_values.cpu()
-            scores_top_k_idx = scores_top_k_idx.cpu()
-
-            result_heaps = self._rerank_sort_results(
-                result_heaps=result_heaps,
-                query_id=query_id,
-                ranked_ids=ranked_ids,
-                scores_top_k_idx=scores_top_k_idx,
-                scores_top_k_values=scores_top_k_values,
-            )
-        return result_heaps
 
     def _rerank_sort_results(  # noqa: PLR6301
         self,
@@ -477,81 +577,6 @@ class SearchEncoderWrapper:
     ) -> Array:
         """Compute the pairwise similarity between two collections of embeddings."""
         return self.model.similarity_pairwise(embeddings1, embeddings2)
-
-
-class _MultiVectorTokenEncoderAsEncoderProtocol:
-    """Adapts a `MultiVectorTokenEncoder`'s `_encode` to the `encode()` name `SearchEncoderWrapper` calls internally.
-
-    Doesn't give `MultiVectorTokenEncoder` itself a public `encode()` -- see its docstring for why
-    that matters. Purely internal plumbing for `MultiVectorEncoderWrapper`; not a public class.
-    """
-
-    def __init__(self, encoder: MultiVectorTokenEncoder) -> None:
-        self._encoder = encoder
-        self.mteb_model_meta = encoder.mteb_model_meta
-
-    def encode(self, *args: Any, **kwargs: Any) -> Array:
-        return self._encoder._encode(*args, **kwargs)
-
-    def similarity(self, *args: Any, **kwargs: Any) -> Array:
-        return self._encoder.similarity(*args, **kwargs)
-
-    def similarity_pairwise(self, *args: Any, **kwargs: Any) -> Array:
-        return self._encoder.similarity_pairwise(*args, **kwargs)
-
-
-class MultiVectorEncoderWrapper(SearchEncoderWrapper):
-    """`SearchProtocol` wrapper for sentence-transformers' native `MultiVectorEncoder` models (ColBERT-style late interaction, e.g. `lightonai/LateOn` or the "Sentence Transformers" usage of `vidore/colpali-v1.3`).
-
-    Registered as the model `loader` directly (rather than being auto-wrapped in
-    `SearchEncoderWrapper`, like a plain `EncoderProtocol` model would be): late-interaction models
-    produce a ragged, variable-length sequence of per-token embeddings rather than a single
-    fixed-size vector, so -- like `MultiVectorModel` for PyLate models -- they don't reduce to a
-    single embedding and are retrieval-only.
-
-    Subclasses `SearchEncoderWrapper` to reuse its brute-force chunked search unchanged: MaxSim
-    scoring via the model's own `similarity()` already accepts ragged multi-vector embeddings, and
-    `_rerank_documents` indexes per-document embeddings as a plain list rather than with tensor
-    fancy-indexing for the same reason, so both the full-corpus and pre-ranked-candidate paths work
-    as-is.
-    """
-
-    def __init__(
-        self,
-        model: str | MultiVectorEncoder,
-        revision: str | None = None,
-        device: str | None = None,
-        model_prompts: dict[str, str] | None = None,
-        corpus_chunk_size: int = 50_000,
-        **kwargs: Any,
-    ) -> None:
-        """Wrapper for MultiVectorEncoder models.
-
-        Args:
-            model: The MultiVectorEncoder model to use. Can be a string (model name) or a
-                MultiVectorEncoder model.
-            revision: The revision of the model to use.
-            device: The device used to load the model.
-            model_prompts: A dictionary mapping task names to prompt names. See
-                `SentenceTransformerEncoderWrapper` for the order of priority used to select a prompt.
-            corpus_chunk_size: Number of corpus documents to encode and score against the queries at
-                once, during a full-corpus search.
-            **kwargs: Additional arguments to pass to the MultiVectorEncoder model.
-        """
-        from .sentence_transformer_wrapper import MultiVectorTokenEncoder
-
-        encoder = MultiVectorTokenEncoder(
-            model,
-            revision=revision,
-            device=device,
-            model_prompts=model_prompts,
-            loader=type(self),
-            **kwargs,
-        )
-        super().__init__(
-            _MultiVectorTokenEncoderAsEncoderProtocol(encoder),
-            corpus_chunk_size=corpus_chunk_size,
-        )
 
 
 class SearchCrossEncoderWrapper:

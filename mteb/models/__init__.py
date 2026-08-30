@@ -17,13 +17,13 @@ from .search_encoder_index.search_backend_protocol import (
     IndexEncoderSearchProtocol,
 )
 from .search_wrappers import (
-    MultiVectorEncoderWrapper,
     SearchCrossEncoderWrapper,
     SearchEncoderWrapper,
 )
 from .sentence_transformer_wrapper import (
     CrossEncoderWrapper,
-    MultiVectorTokenEncoder,
+    MultiVectorSearchEncoderWrapper,
+    MultiVectorWrapper,
     SentenceTransformerEncoderWrapper,
     SparseEncoderWrapper,
     sentence_transformers_loader,
@@ -40,8 +40,8 @@ __all__ = [
     "IndexEncoderSearchProtocol",
     "MTEBModels",
     "ModelMeta",
-    "MultiVectorEncoderWrapper",
-    "MultiVectorTokenEncoder",
+    "MultiVectorSearchEncoderWrapper",
+    "MultiVectorWrapper",
     "OpenAIAPIEncodeWrapper",
     "OpenAIAPIRerankWrapper",
     "OpenAIAPITokenEmbedWrapper",
