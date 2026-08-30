@@ -1,0 +1,77 @@
+{
+    "test": {
+        "num_samples": 1620,
+        "num_queries": 540,
+        "num_documents": 1080,
+        "number_of_characters": 0,
+        "documents_text_statistics": null,
+        "documents_image_statistics": null,
+        "documents_audio_statistics": {
+            "total_duration_seconds": 2710.4499999999985,
+            "min_duration_seconds": 1.49,
+            "average_duration_seconds": 2.5096759259259245,
+            "max_duration_seconds": 3.62,
+            "unique_audios": 1080,
+            "average_sampling_rate": 16000.0,
+            "sampling_rates": {
+                "16000": 1080
+            }
+        },
+        "documents_video_statistics": {
+            "total_duration_seconds": 2783.83333333333,
+            "total_frames": 66812,
+            "min_width": 854,
+            "average_width": 863.8888888888889,
+            "max_width": 864,
+            "min_height": 480,
+            "average_height": 480.0,
+            "max_height": 480,
+            "min_duration_seconds": 1.5833333333333333,
+            "average_duration_seconds": 2.5776234567901204,
+            "max_duration_seconds": 3.7083333333333335,
+            "unique_videos": 1080,
+            "average_fps": 24.0,
+            "fps": {
+                "24": 1080
+            },
+            "min_resolution": [
+                854,
+                480
+            ],
+            "average_resolution": [
+                863.8888888888889,
+                480.0
+            ],
+            "max_resolution": [
+                864,
+                480
+            ],
+            "resolutions": {
+                "854x480": 12,
+                "864x480": 1068
+            }
+        },
+        "queries_text_statistics": null,
+        "queries_image_statistics": {
+            "min_image_width": 720,
+            "average_image_width": 720.0,
+            "max_image_width": 720,
+            "min_image_height": 480,
+            "average_image_height": 480.0,
+            "max_image_height": 480,
+            "unique_images": 540
+        },
+        "queries_audio_statistics": null,
+        "queries_video_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 10800,
+            "min_relevant_docs_per_query": 20,
+            "average_relevant_docs_per_query": 20.0,
+            "max_relevant_docs_per_query": 20,
+            "unique_relevant_docs": 1080,
+            "num_missing_query_ids": 0,
+            "num_missing_corpus_ids": 0
+        },
+        "top_ranked_statistics": null
+    }
+}
