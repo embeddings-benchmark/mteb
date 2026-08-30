@@ -53,17 +53,20 @@ def test_importing_types_does_not_import_torch() -> None:
 
 
 def test_array_is_still_importable_at_runtime() -> None:
-    """`Array` is lazily built, but `from mteb.types import Array` is public and documented."""
+    """`from mteb.types import Array` is public and documented, so it must not need torch.
+
+    The `torch.Tensor` arm of the alias only exists for type checkers; the runtime value is the
+    numpy-only fallback, which is fine because `Array` is only ever used as an annotation.
+    """
     output = _run(
         """
         import numpy as np
-        import torch
         from numpy.typing import NDArray
 
         from mteb.types import Array
 
-        expected = NDArray[np.floating | np.integer | np.bool_] | torch.Tensor
-        print(Array == expected)
+        print(Array == NDArray[np.floating | np.integer | np.bool_])
+        print("torch" in sys.modules)
         """
     )
-    assert output == "True"
+    assert output.splitlines() == ["True", "False"]

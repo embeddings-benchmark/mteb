@@ -138,9 +138,6 @@ plugins:
             heading_level: 3
             show_source: true
             show_root_heading: true
-            # `!^_[^_]` is mkdocstrings' default (hide private members); `__getattr__` is import
-            # machinery for lazily-resolved types and is not part of the documented API.
-            filters: ["!^_[^_]", "!^__getattr__$"]
 
 extra_javascript:
   - javascripts/extra.js

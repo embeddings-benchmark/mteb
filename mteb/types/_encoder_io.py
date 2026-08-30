@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeAlias, TypedDict, cast
+from typing import TYPE_CHECKING, TypeAlias, TypedDict, cast
 
 import numpy as np
 from datasets import Dataset
@@ -34,20 +34,11 @@ class EncodeKwargs(TypedDict):
 if TYPE_CHECKING:
     Array: TypeAlias = NDArray[np.floating | np.integer | np.bool_] | torch.Tensor
     """General array type, can be a numpy array (float, int, or bool) or a torch tensor."""
-
-
-def __getattr__(name: str) -> Any:
-    """Resolve `Array` on first access so that importing this module does not import torch.
-
-    `Array` is part of the public API (`from mteb.types import Array`), so it has to stay
-    importable at runtime, but it is only ever used as an annotation. Building it lazily keeps
-    `import mteb` torch-free for metadata- and results-only users.
-    """
-    if name == "Array":
-        import torch
-
-        return NDArray[np.floating | np.integer | np.bool_] | torch.Tensor
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+else:
+    # Importing torch here would make `import mteb` pull in the full torch stack, which
+    # results-only users do not need. `Array` is only ever used as an annotation (never
+    # introspected at runtime), so the runtime value can drop the `torch.Tensor` arm.
+    Array: TypeAlias = NDArray[np.floating | np.integer | np.bool_]
 
 
 # --- Input types ---
