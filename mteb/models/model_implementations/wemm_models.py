@@ -1,9 +1,7 @@
 from __future__ import annotations
 
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerEncoderWrapper,
-)
 
 WEMM_CITATION = """@article{wemm-embedding,
       title={WeMM-Embedding: WeChat Multi-Modal Embedding Technical Report}, 
@@ -16,7 +14,7 @@ WEMM_CITATION = """@article{wemm-embedding,
 }"""
 
 wemm_embedding_2b = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(trust_remote_code=True),
     name="tencent/WeMM-Embedding-2B",
     model_type=["dense"],
@@ -43,7 +41,7 @@ wemm_embedding_2b = ModelMeta(
 )
 
 wemm_embedding_4b = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(trust_remote_code=True),
     name="tencent/WeMM-Embedding-4B",
     model_type=["dense"],
@@ -70,7 +68,7 @@ wemm_embedding_4b = ModelMeta(
 )
 
 wemm_embedding_9b = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(trust_remote_code=True),
     name="tencent/WeMM-Embedding-9B",
     model_type=["dense"],
