@@ -1,6 +1,0 @@
-# EBind is installed from its pinned training-code revision because it is not
-# published on PyPI. Keep this direct reference outside pyproject.toml so MTEB's
-# PyPI package metadata remains publishable.
-ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71
-soundfile>=0.13.1
-transformers>=4.57.1,!=5.0.0
