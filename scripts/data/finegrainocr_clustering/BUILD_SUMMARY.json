@@ -1,0 +1,35 @@
+{
+  "source_commit": "9ce19719123fd33a994b103b6e91c37a640ce92b",
+  "selection_seed": 42,
+  "cap_per_class": 20,
+  "rows": 4919,
+  "classes": 256,
+  "min_rows_per_class": 6,
+  "max_rows_per_class": 20,
+  "barcode_redacted_rows": 1357,
+  "barcode_redacted_sequences": 1760,
+  "text_characters": {
+    "min": 3,
+    "median": 254,
+    "p95": 1415,
+    "max": 3027
+  },
+  "exact_duplicate_text_rows": 4,
+  "cross_class_exact_duplicate_text_groups": 0,
+  "image_max_edge": 512,
+  "jpeg_quality": 90,
+  "processed_image_bytes": 79117877,
+  "image_width": {
+    "min": 512,
+    "median": 512,
+    "max": 512
+  },
+  "image_height": {
+    "min": 384,
+    "median": 384,
+    "max": 384
+  },
+  "selected_source_compressed_bytes": 2866365935,
+  "coalesced_image_transfer_bytes": 7138264648,
+  "image_archive_ranges": 541
+}

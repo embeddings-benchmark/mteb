@@ -117,6 +117,58 @@ Redact all OCR digit sequences containing 8–14 digits, allowing spaces or
 hyphens between digits. This removes exact and alternate barcode identifiers
 while retaining product names, ingredients, and other useful package text.
 
+## Reproducible local build
+
+`create_data.py` implements the complete selective build. It pins and verifies
+the ZIP index and validation OCR span by SHA-256, coalesces selected image byte
+ranges, resumes partial downloads, checks every ZIP member's CRC-32 and
+uncompressed size, resizes the images, redacts barcode-like OCR, validates the
+result, and saves a Hugging Face `DatasetDict`.
+
+```bash
+python -m scripts.data.finegrainocr_clustering.create_data \
+  --cache-dir .cache/finegrainocr-it-clustering \
+  --output-dir .cache/finegrainocr-it-clustering/dataset \
+  --workers 8
+```
+
+The completed local build has 4,919 rows and occupies 78 MB on disk. Its
+processed JPEG payload is 79,117,877 bytes. All images are 512×384, all OCR is
+non-empty, and no 8–14 digit barcode-like sequence remains. Barcode redaction
+changed 1,357 rows (1,760 sequences). After redaction there are four exact
+duplicate text rows and no exact text shared between different classes. See
+`BUILD_SUMMARY.json` for the machine-readable audit.
+
+The default 4 MiB range-coalescing threshold made 541 resumable HTTP requests
+and transferred 7,138,264,648 bytes. Setting `--max-gap-mib 0` reduces transfer
+to about 2.86 GB at the cost of roughly 3,250 requests.
+
+## Baseline experiments
+
+`run_baselines.py` caches each model's image and text embeddings and runs the
+MTEB clustering protocol: 10 bootstrap repeats of 16,384 rows sampled with
+replacement, 256-cluster MiniBatch K-means, seed 42, and V-measure plus AMI.
+
+```bash
+python -m scripts.data.finegrainocr_clustering.run_baselines \
+  .cache/finegrainocr-it-clustering/dataset \
+  --output-dir .cache/finegrainocr-it-clustering/baselines
+```
+
+The two pinned CPU baselines confirm that the benchmark is learnable without
+being saturated and that both modalities contain cluster signal:
+
+| Model | Random V | Image V | Text V | MTEB add V | Best normalized fusion V |
+|---|---:|---:|---:|---:|---:|
+| CLIP ViT-B/32 | 0.1466 | 0.7263 | 0.6957 | **0.7664** | 0.7608 (75% image) |
+| SigLIP B/16-256 | 0.1278 | 0.7912 | 0.6948 | 0.7681 | **0.8065** (75% image) |
+
+CLIP's exact MTEB additive fusion improves over both unimodal variants. SigLIP
+has differently scaled image and text vectors, so raw addition is worse than
+image-only, while normalized 75% image / 25% text fusion improves over it. This
+makes the task useful for testing both cross-modal information and fusion
+calibration. Full V-measure and AMI results are in `BASELINE_RESULTS.md`.
+
 ## OCR quality audit
 
 All validation OCR files occupy one contiguous archive range,
@@ -160,15 +212,10 @@ selected members.
 
 1. Ask the MOEB maintainer to approve FineGrainOCR as an `IT -> class`
    clustering task, explicitly disclosing that the text is OCR-derived.
-2. Turn the range-extraction proof into a resumable, parallel construction
-   script with CRC checks, barcode redaction, image resizing, and a dataset card.
-3. Upload the processed 4,919-row test set to the MTEB Hugging Face organization
+2. Upload the processed 4,919-row test set to the MTEB Hugging Face organization
    and pin its revision.
-4. Add `it2c` metadata support, the task definition, registration, tests, and
+3. Add `it2c` metadata support, the task definition, registration, tests, and
    descriptive statistics.
-5. Run one genuinely joint image+text embedding baseline plus image-only and
-   text-only diagnostic ablations. Check that the joint task is neither random
-   nor saturated and that both modalities add signal.
 
 ## Draft tracker comment
 
