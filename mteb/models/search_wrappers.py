@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import heapq
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import torch
 
@@ -14,6 +14,7 @@ from mteb.types import (
 )
 
 if TYPE_CHECKING:
+    from sentence_transformers import MultiVectorEncoder
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -29,6 +30,7 @@ if TYPE_CHECKING:
 
     from .models_protocols import CrossEncoderProtocol, EncoderProtocol
     from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
+    from .sentence_transformer_wrapper import MultiVectorTokenEncoder
 
 logger = logging.getLogger(__name__)
 
@@ -372,15 +374,21 @@ class SearchEncoderWrapper:
                 continue
 
             ranked_ids = top_ranked[query_id]
-            doc_indices = torch.tensor([doc_id_to_idx[doc_id] for doc_id in ranked_ids])
-            query_doc_embeddings = torch.as_tensor(all_doc_embeddings[doc_indices])
+            doc_indices = [doc_id_to_idx[doc_id] for doc_id in ranked_ids]
+            query_doc_embeddings: torch.Tensor | list[Any]
+            if isinstance(all_doc_embeddings, torch.Tensor):
+                query_doc_embeddings = all_doc_embeddings[doc_indices]
+            else:
+                # Ragged (variable-length) multi-vector embeddings: a plain list of per-document
+                # tensors, which doesn't support fancy indexing with a tensor of indices.
+                query_doc_embeddings = [all_doc_embeddings[idx] for idx in doc_indices]
 
             # Ensure query embedding is on the correct device and has correct shape
             query_embedding = torch.as_tensor(query_embedding).unsqueeze(0)  # noqa: PLW2901
 
             scores = self.model.similarity(
                 query_embedding,
-                query_doc_embeddings,
+                cast("Array", query_doc_embeddings),
             )
             scores = torch.as_tensor(scores)
 
@@ -469,6 +477,81 @@ class SearchEncoderWrapper:
     ) -> Array:
         """Compute the pairwise similarity between two collections of embeddings."""
         return self.model.similarity_pairwise(embeddings1, embeddings2)
+
+
+class _MultiVectorTokenEncoderAsEncoderProtocol:
+    """Adapts a `MultiVectorTokenEncoder`'s `_encode` to the `encode()` name `SearchEncoderWrapper` calls internally.
+
+    Doesn't give `MultiVectorTokenEncoder` itself a public `encode()` -- see its docstring for why
+    that matters. Purely internal plumbing for `MultiVectorEncoderWrapper`; not a public class.
+    """
+
+    def __init__(self, encoder: MultiVectorTokenEncoder) -> None:
+        self._encoder = encoder
+        self.mteb_model_meta = encoder.mteb_model_meta
+
+    def encode(self, *args: Any, **kwargs: Any) -> Array:
+        return self._encoder._encode(*args, **kwargs)
+
+    def similarity(self, *args: Any, **kwargs: Any) -> Array:
+        return self._encoder.similarity(*args, **kwargs)
+
+    def similarity_pairwise(self, *args: Any, **kwargs: Any) -> Array:
+        return self._encoder.similarity_pairwise(*args, **kwargs)
+
+
+class MultiVectorEncoderWrapper(SearchEncoderWrapper):
+    """`SearchProtocol` wrapper for sentence-transformers' native `MultiVectorEncoder` models (ColBERT-style late interaction, e.g. `lightonai/LateOn` or the "Sentence Transformers" usage of `vidore/colpali-v1.3`).
+
+    Registered as the model `loader` directly (rather than being auto-wrapped in
+    `SearchEncoderWrapper`, like a plain `EncoderProtocol` model would be): late-interaction models
+    produce a ragged, variable-length sequence of per-token embeddings rather than a single
+    fixed-size vector, so -- like `MultiVectorModel` for PyLate models -- they don't reduce to a
+    single embedding and are retrieval-only.
+
+    Subclasses `SearchEncoderWrapper` to reuse its brute-force chunked search unchanged: MaxSim
+    scoring via the model's own `similarity()` already accepts ragged multi-vector embeddings, and
+    `_rerank_documents` indexes per-document embeddings as a plain list rather than with tensor
+    fancy-indexing for the same reason, so both the full-corpus and pre-ranked-candidate paths work
+    as-is.
+    """
+
+    def __init__(
+        self,
+        model: str | MultiVectorEncoder,
+        revision: str | None = None,
+        device: str | None = None,
+        model_prompts: dict[str, str] | None = None,
+        corpus_chunk_size: int = 50_000,
+        **kwargs: Any,
+    ) -> None:
+        """Wrapper for MultiVectorEncoder models.
+
+        Args:
+            model: The MultiVectorEncoder model to use. Can be a string (model name) or a
+                MultiVectorEncoder model.
+            revision: The revision of the model to use.
+            device: The device used to load the model.
+            model_prompts: A dictionary mapping task names to prompt names. See
+                `SentenceTransformerEncoderWrapper` for the order of priority used to select a prompt.
+            corpus_chunk_size: Number of corpus documents to encode and score against the queries at
+                once, during a full-corpus search.
+            **kwargs: Additional arguments to pass to the MultiVectorEncoder model.
+        """
+        from .sentence_transformer_wrapper import MultiVectorTokenEncoder
+
+        encoder = MultiVectorTokenEncoder(
+            model,
+            revision=revision,
+            device=device,
+            model_prompts=model_prompts,
+            loader=type(self),
+            **kwargs,
+        )
+        super().__init__(
+            _MultiVectorTokenEncoderAsEncoderProtocol(encoder),
+            corpus_chunk_size=corpus_chunk_size,
+        )
 
 
 class SearchCrossEncoderWrapper:

@@ -15,21 +15,32 @@ from mteb.models import ModelMeta
 from mteb.types import OutputDType, PromptType
 
 from .abs_encoder import AbsEncoder, get_prompt_name
+from .model_meta import ScoringFunction
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-    from sentence_transformers import CrossEncoder, SentenceTransformer
+    from sentence_transformers import (
+        CrossEncoder,
+        MultiVectorEncoder,
+        SentenceTransformer,
+    )
     from sentence_transformers.sparse_encoder import SparseEncoder
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, EncodeKwargs, Modalities
+    from mteb.types import (
+        Array,
+        BatchedInput,
+        EncodeKwargs,
+        Modalities,
+    )
 
 logger = logging.getLogger(__name__)
 
 SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
+SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION = "6.0.0"
 
 
 @deprecated(
@@ -152,7 +163,7 @@ def _resolve_prompt(
 
 
 def _select_encode_function(
-    model: SentenceTransformer | SparseEncoder,
+    model: SentenceTransformer | SparseEncoder | MultiVectorEncoder,
     prompt_type: PromptType | None,
     *,
     has_query_encode: bool = True,
@@ -177,6 +188,15 @@ def _postprocess_dense_embeddings(embeddings: Any) -> Any:
 def _concatenate_sparse_batches(batches: list[torch.Tensor]) -> torch.Tensor:
     """Concatenate per-batch sparse tensors along dim 0 (sparse tensors don't support `np.concatenate`)."""
     return torch.cat(batches, dim=0)
+
+
+def _concatenate_ragged_batches(batches: list[list[Any]]) -> list[Any]:
+    """Flatten per-batch lists of variable-length (ragged) multi-vector embeddings into one list.
+
+    Multi-vector encoders return one tensor per input, each with its own number of token
+    embeddings, so batches can't be stacked with `np.concatenate` like fixed-size dense embeddings.
+    """
+    return [embedding for batch in batches for embedding in batch]
 
 
 def _is_sparse_compatible_task(task_metadata: TaskMetadata) -> bool:
@@ -685,5 +705,148 @@ class SparseEncoderWrapper(AbsEncoder):
             modalities=self.mteb_model_meta.modalities,
             postprocess_batch=postprocess_batch,
             concatenate_batches=_concatenate_sparse_batches,
+            **kwargs,
+        )
+
+
+class MultiVectorTokenEncoder:
+    """Encodes inputs into per-token multi-vector embeddings via sentence-transformers' native `MultiVectorEncoder`.
+
+    Deliberately does *not* implement `EncoderProtocol` (no public `encode()`): unlike
+    `SentenceTransformerEncoderWrapper`, encoding here produces a *ragged* list of variable-length
+    per-token tensors rather than a single fixed-size vector per input, which most non-retrieval
+    tasks (STS, Classification, ...) don't know how to consume. Presenting a public `encode()` would
+    let such a task run against it directly and fail confusingly deep inside its evaluator, instead
+    of the clear, early guard mteb otherwise gives for a `SearchProtocol`-only model. Use
+    `MultiVectorEncoderWrapper` ([mteb.models.search_wrappers][]) for retrieval/reranking: it wraps
+    an instance of this class in a `SearchEncoderWrapper` to add `index()`/`search()`, and is the
+    class registered as the `loader` for `MultiVectorEncoder`-backed models in the mteb registry.
+
+    Exposed directly (rather than kept private) so it can be composed into your own retrieval
+    backend that expects to drive encoding itself -- see `_encode`.
+
+    Supports both text-only and multimodal (text + image) inputs, following the same
+    auto-detection pattern as `SentenceTransformerEncoderWrapper`.
+    """
+
+    mteb_model_meta: ModelMeta
+
+    def __init__(
+        self,
+        model: str | MultiVectorEncoder,
+        revision: str | None = None,
+        device: str | None = None,
+        model_prompts: dict[str, str] | None = None,
+        *,
+        loader: type | None = None,
+        **kwargs: Any,
+    ) -> None:
+        """Encoder for MultiVectorEncoder models.
+
+        Args:
+            model: The MultiVectorEncoder model to use. Can be a string (model name) or a
+                MultiVectorEncoder model.
+            revision: The revision of the model to use.
+            device: The device used to load the model.
+            model_prompts: A dictionary mapping task names to prompt names. See
+                `SentenceTransformerEncoderWrapper` for the order of priority used to select a prompt.
+            loader: The class to record as `ModelMeta.loader` when `model` is a string (only
+                relevant for metadata round-tripping outside the model registry). Defaults to
+                `type(self)`; `MultiVectorEncoderWrapper` passes itself so reloading from the
+                resulting metadata reconstructs the search-capable wrapper, not this inner encoder.
+            **kwargs: Additional arguments to pass to the MultiVectorEncoder model.
+        """
+        import sentence_transformers
+
+        if (
+            Version(sentence_transformers.__version__).release
+            < Version(SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION).release
+        ):
+            raise ImportError(
+                f"sentence-transformers version must be >= {SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION} to load a MultiVectorEncoder model."
+            )
+        from sentence_transformers import MultiVectorEncoder
+
+        if isinstance(model, str):
+            self.model = MultiVectorEncoder(
+                model, revision=revision, device=device, **kwargs
+            )
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    name=model,
+                    revision=revision,
+                    loader=loader or type(self),
+                    model_type=["late-interaction"],
+                    similarity_fn_name=ScoringFunction.MAX_SIM,
+                )
+            )
+        else:
+            self.model = model
+            self.mteb_model_meta = ModelMeta.from_multi_vector_encoder_model(self.model)
+
+        self.model_prompts = _resolve_model_prompts(self.model, model_prompts)
+
+    def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the MaxSim similarity between two collections of multi-vector embeddings."""
+        return cast("Array", self.model.similarity(embeddings1, embeddings2))
+
+    def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the pairwise MaxSim similarity between matched multi-vector embedding pairs."""
+        return cast("Array", self.model.similarity_pairwise(embeddings1, embeddings2))
+
+    def _encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Unpack[EncodeKwargs],
+    ) -> Array:
+        """Encode the given inputs into per-token multi-vector embeddings.
+
+        Args:
+            inputs: The inputs (text, or text + image for multimodal models) to encode.
+            task_metadata: The metadata of the task. Used to determine which prompt to use from
+                `model_prompts`, following the same priority order as
+                `SentenceTransformerEncoderWrapper.encode`.
+            hf_split: Split of current task.
+            hf_subset: Subset of current task.
+            prompt_type: The name type of prompt (query or document).
+            **kwargs: Additional arguments to pass to the encoder.
+
+        Returns:
+            A list of per-input token embeddings, one variable-length `(num_tokens, embed_dim)`
+            tensor per input.
+        """
+        precision = kwargs.pop("precision", None)
+        if precision not in {None, "float32"}:
+            msg = (
+                "MultiVectorEncoderWrapper does not support the 'precision' argument: token "
+                f"embeddings are always returned in full precision. Ignoring precision={precision!r}."
+            )
+            logger.warning(msg)
+            warnings.warn(msg, stacklevel=2)
+
+        prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
+
+        is_multimodal = _setup_modality_collator(
+            inputs,
+            fps=None,
+            max_frames=None,
+            num_frames=None,
+            target_sampling_rate=None,
+            max_samples=None,
+        )
+        encode_function = _select_encode_function(self.model, prompt_type)
+
+        return _encode_batches(
+            inputs,
+            is_multimodal=is_multimodal,
+            encode_function=encode_function,
+            prompt=prompt,
+            modalities=self.mteb_model_meta.modalities,
+            concatenate_batches=_concatenate_ragged_batches,
             **kwargs,
         )

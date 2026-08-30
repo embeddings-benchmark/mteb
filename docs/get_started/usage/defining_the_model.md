@@ -43,7 +43,7 @@ on `MTEB`:
     import mteb
     from sentence_transformers import SentenceTransformer
 
-    model = SentenceTransformers("sentence-transformers/LaBSE")
+    model = SentenceTransformer("sentence-transformers/LaBSE")
 
     # select the desired tasks and evaluate
     tasks = mteb.get_tasks(tasks=["Banking77Classification"])
@@ -63,10 +63,42 @@ on `MTEB`:
     results = mteb.evaluate(model, tasks=tasks)
     ```
 
+=== "SparseEncoder"
 
+    ```python
+    import mteb
+    from sentence_transformers.sparse_encoder import SparseEncoder
+
+    model = SparseEncoder("naver/splade-v3")
+
+    # select the desired tasks and evaluate
+    tasks = mteb.get_tasks(tasks=["Banking77Classification"])
+    results = mteb.evaluate(model, tasks=tasks)
+    ```
+
+    !!! warning
+        Requires sentence-transformers >= 5.0.0.
+
+=== "MultiVectorEncoder"
+
+    ```python
+    import mteb
+    from sentence_transformers import MultiVectorEncoder
+
+    model = MultiVectorEncoder("lightonai/GTE-ModernColBERT-v1")
+
+    # MultiVectorEncoder (ColBERT-style late interaction) produces a sequence of per-token
+    # embeddings per input rather than a single fixed-size vector, so it only supports
+    # retrieval-shaped tasks (Retrieval, Reranking)
+    tasks = mteb.get_tasks(tasks=["AskUbuntuDupQuestions"])
+    results = mteb.evaluate(model, tasks=tasks)
+    ```
+
+    !!! warning
+        Requires sentence-transformers >= 6.0.0.
 
 !!! note
-    We do recommend using `mteb.get_model` which will by default load the model using the implementation in `mteb` if there is one, otherwise it will use `SentenceTransformers` or `CrossEncoder` from [sentence transformers](https://www.sbert.net/) if appropriate. The `mteb` implementations typically differ due to models requiring specific prompts or similar hyperparameters, and not specifying these may reduce performance (e.g. the [multilingual e5 models](https://huggingface.co/collections/intfloat/multilingual-e5-text-embeddings-67b2b8bb9bff40dec9fb3534) require specific prompts).
+    We do recommend using `mteb.get_model` which will by default load the model using the implementation in `mteb` if there is one, otherwise it will use `SentenceTransformers`, `CrossEncoder`, `SparseEncoder`, or `MultiVectorEncoder` from [sentence transformers](https://www.sbert.net/) if appropriate. The `mteb` implementations typically differ due to models requiring specific prompts or similar hyperparameters, and not specifying these may reduce performance (e.g. the [multilingual e5 models](https://huggingface.co/collections/intfloat/multilingual-e5-text-embeddings-67b2b8bb9bff40dec9fb3534) require specific prompts).
 
 ## Using a Custom Model
 
