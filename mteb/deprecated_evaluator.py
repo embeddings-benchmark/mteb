@@ -201,11 +201,10 @@ class MTEB:
 
         missing_splits = []
         for split in task_eval_splits:
-            if split not in existing_results.scores:
-                missing_splits.append(split)
-            elif not existing_results.scores[
-                split
-            ]:  # Check if the split has any scores
+            if (
+                split not in existing_results.scores
+                or not existing_results.scores[split]
+            ):
                 missing_splits.append(split)
 
         return missing_splits

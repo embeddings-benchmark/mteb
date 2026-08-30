@@ -348,19 +348,16 @@ class AbsTaskPairClassification(AbsTask):
 
         best_f1 = best_precision = best_recall = 0.0
         threshold = 0
-        nextract = 0
         ncorrect = 0
         total_num_duplicates = sum(labels)
 
-        for i in range(len(rows) - 1):
-            score, label = rows[i]
-            nextract += 1
-
+        for i, (_score, label) in enumerate(rows[:-1]):
             if label == 1:
                 ncorrect += 1
 
             if ncorrect > 0:
-                precision = ncorrect / nextract
+                # i is 0-based, so i + 1 is the number of rows extracted so far
+                precision = ncorrect / (i + 1)
                 recall = ncorrect / total_num_duplicates
                 f1 = 2 * precision * recall / (precision + recall)
                 if f1 > best_f1:

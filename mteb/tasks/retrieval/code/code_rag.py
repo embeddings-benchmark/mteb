@@ -138,8 +138,9 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
         titles = ds["title"]
         texts = ds["text"]
         parsed = ds["parsed"]
-        idx = 0
-        for title, text, _mt in zip(titles, texts, parsed, strict=True):
+        for idx, (title, text, _mt) in enumerate(
+            zip(titles, texts, parsed, strict=True)
+        ):
             # in code-rag-bench,
             # query=doc(code)
             # text=query+doc(code)
@@ -153,8 +154,6 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
             self.relevant_docs[split][query_id] = {
                 doc_id: 1
             }  # only one correct matches
-
-            idx += 1
 
 
 class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
@@ -253,8 +252,7 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         self.corpus[split] = {}
 
         texts = ds["text"]
-        idx = 0
-        for text in texts:
+        for idx, text in enumerate(texts):
             # in code-rag-bench,
             # text = query + "\n" + doc
             query, doc = split_by_first_newline(text)
@@ -267,4 +265,3 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
             self.relevant_docs[split][query_id] = {
                 doc_id: 1
             }  # only one correct matches
-            idx += 1

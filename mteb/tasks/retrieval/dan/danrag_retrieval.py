@@ -65,7 +65,7 @@ def _load_danrag_data(
             relevant_docs = {
                 query_id: dict.fromkeys(valid_pages, 1)
                 for query_id, valid_pages in zip(
-                    raw_queries["id"], raw_queries["valid_pages"]
+                    raw_queries["id"], raw_queries["valid_pages"], strict=True
                 )
             }
 

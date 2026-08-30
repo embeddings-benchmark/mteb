@@ -1084,9 +1084,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         sbert_config = _get_json_from_hub(
             model_name, "sentence_bert_config.json", "model", revision=revision
         )
-        if sbert_config:
-            if max_tokens is None:
-                max_tokens = sbert_config.get("max_seq_length", None)
+        if sbert_config and max_tokens is None:
+            max_tokens = sbert_config.get("max_seq_length", None)
         # have model type, similarity function fields
         config_sbert = _get_json_from_hub(
             model_name, "config_sentence_transformers.json", "model", revision=revision
