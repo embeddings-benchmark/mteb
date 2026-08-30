@@ -14,16 +14,6 @@ _DATASET_PATH = "romrawinjp/multi30k"
 _DATASET_REVISION = "110e827dac7d6aabe6201d13bbdbc7413630390d"
 
 _BIBTEX = r"""
-@inproceedings{elliott2016multi30k,
-  address = {Berlin, Germany},
-  author = {Elliott, Desmond and Frank, Stella and Sima'an, Khalil and Specia, Lucia},
-  booktitle = {Proceedings of the 5th Workshop on Vision and Language},
-  pages = {70--74},
-  publisher = {Association for Computational Linguistics},
-  title = {Multi30K: Multilingual English-German Image Descriptions},
-  year = {2016},
-}
-
 @inproceedings{barrault2018findings,
   address = {Belgium, Brussels},
   author = {Barrault, Lo{\"i}c and Bougares, Fethi and Specia, Lucia and Lala, Chiraag and Elliott, Desmond and Frank, Stella},
@@ -32,6 +22,16 @@ _BIBTEX = r"""
   publisher = {Association for Computational Linguistics},
   title = {Findings of the Third Shared Task on Multimodal Machine Translation},
   year = {2018},
+}
+
+@inproceedings{elliott2016multi30k,
+  address = {Berlin, Germany},
+  author = {Elliott, Desmond and Frank, Stella and Sima'an, Khalil and Specia, Lucia},
+  booktitle = {Proceedings of the 5th Workshop on Vision and Language},
+  pages = {70--74},
+  publisher = {Association for Computational Linguistics},
+  title = {Multi30K: Multilingual English-German Image Descriptions},
+  year = {2016},
 }
 """
 
