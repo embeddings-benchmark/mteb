@@ -107,6 +107,7 @@ from .news_retrieval import GlobalNewsRetrieval, PublicNewsRetrieval
 from .public_health_qa_retrieval import PublicHealthQARetrieval
 from .ru_sci_bench_retrieval import RuSciBenchCiteRetrieval, RuSciBenchCociteRetrieval
 from .statcan_dialogue_dataset_retrieval import StatcanDialogueDatasetRetrieval
+from .vaani_retrieval import VaaniA2IRetrieval, VaaniI2ARetrieval
 from .vdr_multilingual_retrieval import VDRMultilingualRetrieval
 from .vidore2_bench_retrieval import (
     Vidore2BioMedicalLecturesRetrieval,
@@ -243,6 +244,8 @@ __all__ = [
     "RuSciBenchCociteRetrieval",
     "StatcanDialogueDatasetRetrieval",
     "VDRMultilingualRetrieval",
+    "VaaniA2IRetrieval",
+    "VaaniI2ARetrieval",
     "Vidore2BioMedicalLecturesRetrieval",
     "Vidore2ESGReportsHLRetrieval",
     "Vidore2ESGReportsRetrieval",
