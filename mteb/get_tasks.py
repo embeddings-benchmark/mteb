@@ -93,10 +93,9 @@ class MTEBTasks(tuple[AbsTask]):
     def _extract_property_from_task(task: AbsTask, property_name: str) -> Any:
         if hasattr(task.metadata, property_name):
             return getattr(task.metadata, property_name)
-        elif hasattr(task, property_name):
+        if hasattr(task, property_name):
             return getattr(task, property_name)
-        else:
-            raise KeyError("Property neither in Task attribute or in task metadata.")
+        raise KeyError("Property neither in Task attribute or in task metadata.")
 
     @property
     def languages(self) -> set[str]:
@@ -180,8 +179,7 @@ class MTEBTasks(tuple[AbsTask]):
             ending = "]" if isinstance(cell, list) else "}"
             cell = sorted(cell)
             return str(cell[:limit_n_entries])[:-1] + ", ..." + ending
-        else:
-            return str(cell)
+        return str(cell)
 
     def to_latex(
         self,

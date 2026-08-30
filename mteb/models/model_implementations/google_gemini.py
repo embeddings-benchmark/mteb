@@ -373,6 +373,9 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
                                 )
                             else:
                                 raise
+                    raise RuntimeError(
+                        "embed_one exhausted all retries without returning or raising"
+                    )
 
             if show_progress_bar:
                 from tqdm.asyncio import tqdm as async_tqdm

@@ -130,9 +130,8 @@ def required_memory_string(mem_in_mb: int | None) -> str:
         return "not specified"
     if mem_in_mb < 1024:
         return f"{mem_in_mb} MB"
-    else:
-        mem_in_gb = mem_in_mb / 1024
-        return f"{mem_in_gb:.1f} GB"
+    mem_in_gb = mem_in_mb / 1024
+    return f"{mem_in_gb:.1f} GB"
 
 
 def format_model_entry(meta: ModelMeta) -> str:

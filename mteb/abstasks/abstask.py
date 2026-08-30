@@ -333,8 +333,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                     return _multilabel_subsampling(
                         dataset_dict, seed, splits, label, n_samples
                     )
-                else:
-                    raise e
+                raise e
 
         for split in splits:
             if n_samples >= len(dataset_dict[split]):

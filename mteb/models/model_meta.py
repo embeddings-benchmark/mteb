@@ -510,7 +510,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                     "Model does not support loading with a different embedding dimension. "
                     "You can change supported embedding dimensions in `meta.embed_dim`."
                 )
-            elif isinstance(_self.embed_dim, list) and embed_dim not in _self.embed_dim:
+            if isinstance(_self.embed_dim, list) and embed_dim not in _self.embed_dim:
                 raise ValueError(
                     f"Requested embedding dimension {embed_dim} is not in the model's supported embedding dimensions {_self.embed_dim}."
                 )
@@ -786,12 +786,11 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
         if st_model_type == "CrossEncoder":
             return CrossEncoderWrapper, "cross-encoder", modalities
-        elif st_model_type == "SparseEncoder":
+        if st_model_type == "SparseEncoder":
             return SparseEncoderWrapper, "sparse", modalities
-        elif st_model_type == "SentenceTransformer":
+        if st_model_type == "SentenceTransformer":
             return SentenceTransformerEncoderWrapper, "dense", modalities
-        else:
-            raise ValueError("Unsupported model type")
+        raise ValueError("Unsupported model type")
 
     @classmethod
     def _detect_model_type_and_loader(
@@ -944,7 +943,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         ):
             emb = model.model.get_input_embeddings()
             return int(np.prod(emb.weight.shape))
-        elif isinstance(model, SentenceTransformer):
+        if isinstance(model, SentenceTransformer):
             vocab = None
             try:
                 vocab = len(model.tokenizer.vocab)

@@ -213,6 +213,7 @@ def retry_with_rate_limit(
                         f"Cohere API error (attempt {attempt + 1}/{max_retries}): {e}. Retrying in {delay}s..."
                     )
                     time.sleep(delay)
+            return None
 
         return wrapper
 
