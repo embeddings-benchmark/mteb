@@ -24,42 +24,6 @@ WEMM_CITATION = """@article{wemm-embedding,
 }"""
 
 
-class DataLoaderWrapper:
-    """Wraps a DataLoader to convert pre-decoded video frame tensors to lists of PIL images."""
-
-    def __init__(self, dataloader: DataLoader[BatchedInput]) -> None:
-        self.dataloader = dataloader
-
-    def __len__(self) -> int:
-        return len(self.dataloader)
-
-    @property
-    def dataset(self) -> Any:
-        return self.dataloader.dataset
-
-    @property
-    def collate_fn(self) -> Any:
-        return self.dataloader.collate_fn
-
-    @collate_fn.setter
-    def collate_fn(self, value: Any) -> None:
-        self.dataloader.collate_fn = value
-
-    def __iter__(self) -> Any:
-        for batch in self.dataloader:
-            if "video" in batch:
-                batch["video"] = [
-                    [
-                        to_pil_image(f.permute(2, 0, 1) if f.ndim == 3 and f.shape[-1] == 3 else f)
-                        for f in v.cpu()
-                    ]
-                    if isinstance(v, torch.Tensor)
-                    else v
-                    for v in batch["video"]
-                ]
-            yield batch
-
-
 class WeMMEncoderWrapper(AbsEncoder):
     """Custom raw transformers encoder wrapper for WeChat WeMM Embedding models."""
 
@@ -68,6 +32,9 @@ class WeMMEncoderWrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
         from transformers import AutoModel, AutoProcessor
@@ -83,6 +50,14 @@ class WeMMEncoderWrapper(AbsEncoder):
             torch_dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
         ).to(self.device).eval()
 
+        # Ensure padding token is configured for batched execution
+        if self.processor.tokenizer.pad_token_id is None:
+            self.processor.tokenizer.pad_token = self.processor.tokenizer.eos_token
+
+        # Store sampling parameters for VideoCollator
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
         self.target_sampling_rate = 16000
 
     def encode(
@@ -95,8 +70,8 @@ class WeMMEncoderWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        wrapped_inputs = DataLoaderWrapper(inputs)
-        features = wrapped_inputs.dataset.features
+        # A. Setup the standard MTEB VideoCollator on the inputs if video is present
+        features = inputs.dataset.features
         has_video = "video" in features
         is_multimodal = has_video or "image" in features
 
@@ -105,41 +80,71 @@ class WeMMEncoderWrapper(AbsEncoder):
         if has_video:
             from mteb.models.modality_collators import VideoCollator
 
-            wrapped_inputs.dataloader.collate_fn = VideoCollator(
+            inputs.collate_fn = VideoCollator(
                 target_sampling_rate=self.target_sampling_rate,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
             )
 
         all_embeddings = []
 
-        for batch in tqdm(wrapped_inputs, desc="Encoding batches"):
+        # B. Process the batches sequentially from MTEB's DataLoader directly
+        for batch in tqdm(inputs, desc="Encoding batches"):
             texts = batch.get("text")
             images = batch.get("image")
             videos = batch.get("video")
 
+            # C. Convert pre-decoded video frame tensors to lists of PIL images inline
+            if videos is not None:
+                processed_videos = []
+                for video_item in videos:
+                    if isinstance(video_item, torch.Tensor):
+                        frames = []
+                        video_item_cpu = video_item.cpu()
+                        for i in range(video_item_cpu.shape[0]):
+                            frame = video_item_cpu[i]
+                            if frame.ndim == 3 and frame.shape[-1] == 3 and frame.shape[0] != 3:
+                                frame = frame.permute(2, 0, 1)
+                            frames.append(to_pil_image(frame))
+                        processed_videos.append(frames)
+                    else:
+                        processed_videos.append(video_item)
+                videos = processed_videos
+
             batch_size = len(images) if images else (len(videos) if videos else len(texts))
             batch_messages = []
 
+            # D. Build raw conversational messages (interleaved, strictly inside "user" turn)
             for i in range(batch_size):
                 content = []
+                # 1. Visual first (preserves Tencent's required ordering)
                 if images and images[i] is not None:
                     content.append({"type": "image", "image": images[i]})
                 if videos and videos[i] is not None:
                     content.append({"type": "video", "video": videos[i]})
+
+                # 2. Task instruction
                 if instruction:
                     content.append({"type": "text", "text": instruction})
+
+                # 3. Local dataset text
                 if texts and texts[i]:
                     content.append({"type": "text", "text": str(texts[i])})
 
+                # Fallback to plain text if empty
                 if not content and texts:
                     content.append({"type": "text", "text": str(texts[i])})
 
                 batch_messages.append([{"role": "user", "content": content}])
 
+            # E. Render the chat template natively
             text_inputs = [
                 self.processor.apply_chat_template(conv, tokenize=False, add_generation_prompt=False)
                 for conv in batch_messages
             ]
 
+            # F. Extract vision features and prepare model inputs (padding=True is required for batching!)
             if is_multimodal:
                 from qwen_vl_utils import process_vision_info
 
@@ -160,15 +165,18 @@ class WeMMEncoderWrapper(AbsEncoder):
                     images=images_processed,
                     videos=videos_processed,
                     video_metadata=video_metadata,
+                    padding=True,
                     return_tensors="pt",
                     **video_kwargs,
                 ).to(self.model.device)
             else:
                 inputs_pt = self.processor(
                     text=text_inputs,
+                    padding=True,
                     return_tensors="pt",
                 ).to(self.model.device)
 
+            # G. Perform the forward pass and L2 normalize
             with torch.inference_mode():
                 embedding_outputs = self.model.embedding(**inputs_pt)
                 embedding_outputs = torch.nn.functional.normalize(embedding_outputs, dim=-1)
