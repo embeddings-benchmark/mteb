@@ -206,13 +206,20 @@ class AbsTaskPairClassification(AbsTask):
             n,
             max_workers=num_proc,
         )
+        number_of_characters = None
 
-        number_of_characters = (
-            pair_stats["text1_statistics"]["total_text_length"]
-            + pair_stats["text2_statistics"]["total_text_length"]
-            if pair_stats["text1_statistics"]
-            else None
-        )
+        if (
+            pair_stats["text1_statistics"] is not None
+            and pair_stats["text2_statistics"] is not None
+        ):
+            number_of_characters = (
+                pair_stats["text1_statistics"]["total_text_length"]
+                + pair_stats["text2_statistics"]["total_text_length"]
+            )
+        elif pair_stats["text1_statistics"] is not None:
+            number_of_characters = pair_stats["text1_statistics"]["total_text_length"]
+        elif pair_stats["text2_statistics"] is not None:
+            number_of_characters = pair_stats["text2_statistics"]["total_text_length"]
 
         return PairClassificationDescriptiveStatistics(
             num_samples=n,
@@ -309,7 +316,7 @@ class AbsTaskPairClassification(AbsTask):
         labels: NDArray[np.int64],
         high_score_more_similar: bool,
     ) -> tuple[float, float]:
-        rows = list(zip(scores, labels))
+        rows = list(zip(scores, labels, strict=True))
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
 
         max_acc = 0
@@ -335,7 +342,7 @@ class AbsTaskPairClassification(AbsTask):
     ) -> tuple[float, float, float, float]:
         scores = np.asarray(scores)
 
-        rows = list(zip(scores, labels))
+        rows = list(zip(scores, labels, strict=True))
 
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
 

@@ -314,6 +314,7 @@ class SearchEncoderWrapper:
             for sub_corpus_id, score in zip(
                 cos_scores_top_k_idx[query_itr],
                 cos_scores_top_k_values[query_itr],
+                strict=True,
             ):
                 corpus_id = sub_corpus_ids[sub_corpus_id]
                 if len(result_heaps[query_id]) < top_k:
@@ -427,6 +428,7 @@ class SearchEncoderWrapper:
         for doc_idx, score in zip(
             scores_top_k_idx[0].tolist(),
             scores_top_k_values[0].tolist(),
+            strict=True,
         ):
             corpus_id = ranked_ids[doc_idx]
             heapq.heappush(result_heaps[query_id], (score, corpus_id))
@@ -583,7 +585,9 @@ class SearchCrossEncoderWrapper:
         )
 
         results: RetrievalOutputType = {qid: {} for qid in queries["id"]}
-        for (query_id, corpus_id), score in zip(doc_pairs_ids, predictions):
+        for (query_id, corpus_id), score in zip(
+            doc_pairs_ids, predictions, strict=True
+        ):
             results[query_id][corpus_id] = float(score)
 
         return results
