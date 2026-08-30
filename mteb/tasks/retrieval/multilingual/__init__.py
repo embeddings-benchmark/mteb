@@ -145,7 +145,7 @@ from .x_flickr30k_co_t2i_retrieval import (
 )
 from .x_market_retrieval import XMarket
 from .x_qu_ad_retrieval import XQuADRetrieval
-from .xm3600_t2i_retrieval import XM3600T2IRetrieval
+from .xm3600_t2i_retrieval import XM3600I2TRetrieval, XM3600T2IRetrieval
 from .xpqa_retrieval import XPQARetrieval
 
 __all__ = [
@@ -275,6 +275,7 @@ __all__ = [
     "WikipediaRetrievalMultilingual",
     "XFlickr30kCoI2TRetrieval",
     "XFlickr30kCoT2IRetrieval",
+    "XM3600I2TRetrieval",
     "XM3600T2IRetrieval",
     "XMarket",
     "XPQARetrieval",
