@@ -1,6 +1,7 @@
-from datasets import Dataset, DatasetDict, Image, load_dataset
+from datasets import Dataset, Image, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -36,13 +37,7 @@ _BIBTEX = r"""
 """
 
 
-def _load_multi30k_data(
-    path: str,
-    langs: list[str],
-    splits: list[str],
-    direction: str,
-    revision: str | None = None,
-):
+def _load_multi30k(task: AbsTaskRetrieval, direction: str) -> None:
     """Load Multi30k into MTEB retrieval format.
 
     Multi30k stores one row per image with parallel captions in four columns
@@ -51,11 +46,14 @@ def _load_multi30k_data(
     per split and shared. `direction` selects which side is the query: "t2i"
     retrieves images from captions, "i2t" retrieves captions from images.
     """
-    corpus = {lang: dict.fromkeys(splits) for lang in langs}
-    queries = {lang: dict.fromkeys(splits) for lang in langs}
-    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
+    if task.data_loaded:
+        return
 
-    for split in splits:
+    path = task.metadata.dataset["path"]
+    revision = task.metadata.dataset["revision"]
+    task.dataset = {}
+
+    for split in task.metadata.eval_splits:
         data = load_dataset(path, split=split, revision=revision)
         row_ids = [str(i) for i in range(len(data))]
 
@@ -63,38 +61,30 @@ def _load_multi30k_data(
         # than map so the image bytes are never decoded and re-encoded.
         image_side = data.select_columns(["image"])
         image_side = image_side.add_column("id", [f"image-{i}" for i in row_ids])
-        image_side = image_side.add_column("modality", ["image"] * len(row_ids))
-        image_side = image_side.add_column("text", [None] * len(row_ids))
         image_side = image_side.cast_column("image", Image())
 
-        for lang in langs:
+        for lang in task.hf_subsets:
             text_side = Dataset.from_dict(
-                {
-                    "id": [f"text-{i}" for i in row_ids],
-                    "text": data[lang],
-                    "modality": ["text"] * len(row_ids),
-                    "image": [None] * len(row_ids),
-                }
+                {"id": [f"text-{i}" for i in row_ids], "text": data[lang]}
             )
 
             if direction == "t2i":
-                query_side, doc_side = text_side, image_side
+                queries, corpus = text_side, image_side
                 query_prefix, doc_prefix = "text", "image"
             else:
-                query_side, doc_side = image_side, text_side
+                queries, corpus = image_side, text_side
                 query_prefix, doc_prefix = "image", "text"
 
-            corpus[lang][split] = doc_side
-            queries[lang][split] = query_side
-            relevant_docs[lang][split] = {
-                f"{query_prefix}-{i}": {f"{doc_prefix}-{i}": 1} for i in row_ids
-            }
+            task.dataset.setdefault(lang, {})[split] = RetrievalSplitData(
+                queries=queries,
+                corpus=corpus,
+                relevant_docs={
+                    f"{query_prefix}-{i}": {f"{doc_prefix}-{i}": 1} for i in row_ids
+                },
+                top_ranked=None,
+            )
 
-    corpus = DatasetDict({lang: DatasetDict(s) for lang, s in corpus.items()})
-    queries = DatasetDict({lang: DatasetDict(s) for lang, s in queries.items()})
-    relevant_docs = DatasetDict(relevant_docs)
-
-    return corpus, queries, relevant_docs
+    task.data_loaded = True
 
 
 class Multi30kT2IRetrieval(AbsTaskRetrieval):
@@ -123,18 +113,7 @@ class Multi30kT2IRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_multi30k_data(
-            path=self.metadata.dataset["path"],
-            langs=self.hf_subsets,
-            splits=self.metadata.eval_splits,
-            direction="t2i",
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
+        _load_multi30k(self, "t2i")
 
 
 class Multi30kI2TRetrieval(AbsTaskRetrieval):
@@ -163,15 +142,4 @@ class Multi30kI2TRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_multi30k_data(
-            path=self.metadata.dataset["path"],
-            langs=self.hf_subsets,
-            splits=self.metadata.eval_splits,
-            direction="i2t",
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
+        _load_multi30k(self, "i2t")
