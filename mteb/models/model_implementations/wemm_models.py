@@ -1,28 +1,31 @@
 from __future__ import annotations
 
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 from torchvision.transforms.functional import to_pil_image
 from tqdm.auto import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 WEMM_CITATION = """@article{wemm-embedding,
-      title={WeMM-Embedding: WeChat Multi-Modal Embedding Technical Report}, 
+      title={WeMM-Embedding: WeChat Multi-Modal Embedding Technical Report},
       author={Junjie Zhou and Ke Mei and Lei Li and Tianyi Wang and Fengyun Rao and Jing Lyu},
       year={2026},
       eprint={2608.24053},
       archivePrefix={arXiv},
       primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2608.24053}, 
+      url={https://arxiv.org/abs/2608.24053},
 }"""
 
 
@@ -89,7 +92,11 @@ class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
             if videos is not None:
                 videos = [
                     [
-                        to_pil_image(f.permute(2, 0, 1) if f.ndim == 3 and f.shape[-1] == 3 else f)
+                        to_pil_image(
+                            f.permute(2, 0, 1)
+                            if f.ndim == 3 and f.shape[-1] == 3
+                            else f
+                        )
                         for f in v.cpu()
                     ]
                     if isinstance(v, torch.Tensor)
@@ -98,12 +105,16 @@ class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
                 ]
 
             # C. Build unified list of inputs (string for text, dict for multimodal)
-            batch_size = len(texts) if texts else (len(images) if images else len(videos))
+            batch_size = (
+                len(texts) if texts else (len(images) if images else len(videos))
+            )
             batched_input = []
 
             for i in range(batch_size):
                 # Interleave/concatenate instruction and local query text (instruction first)
-                text_content = " ".join([t for t in [instruction, texts[i] if texts else None] if t])
+                text_content = " ".join(
+                    [t for t in [instruction, texts[i] if texts else None] if t]
+                )
 
                 if is_multimodal:
                     sample = {}
