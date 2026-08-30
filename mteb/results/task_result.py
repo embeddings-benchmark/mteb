@@ -612,7 +612,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     raise ValueError(f"Missing main score for subset: {hf_subset}")
                 if subsets and hf_subset not in subsets:
                     continue
-                elif subsets:
+                if subsets:
                     val_sum += main_score
                     n_val += 1
                     continue

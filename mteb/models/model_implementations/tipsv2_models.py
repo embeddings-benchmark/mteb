@@ -122,9 +122,9 @@ class TIPSv2Model(AbsEncoder):
             if len(text_embeddings) != len(image_embeddings):
                 raise ValueError("The number of texts and images must be equal")
             return text_embeddings + image_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError("No text or image features found in input")
 

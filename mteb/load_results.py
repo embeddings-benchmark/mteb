@@ -120,7 +120,7 @@ def load_results(  # noqa: PLR0914
             model_name = model_name.replace("__", "/")
             if models_to_keep is not None and model_name not in models_to_keep:
                 continue
-            elif models_to_keep is not None and models_to_keep[model_name] is not None:
+            if models_to_keep is not None and models_to_keep[model_name] is not None:
                 if models_to_keep[model_name] != revision:
                     continue
 

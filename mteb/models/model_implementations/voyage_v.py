@@ -174,7 +174,7 @@ def voyage_v_loader(model_name, **kwargs):
                     interleaved_embeddings.append(torch.tensor(embeddings))
                 interleaved_embeddings = torch.vstack(interleaved_embeddings)
                 return interleaved_embeddings
-            elif "text" in inputs.dataset.features:
+            if "text" in inputs.dataset.features:
                 text_embeddings = self.get_text_embeddings(
                     inputs, input_type=input_type
                 )
@@ -185,7 +185,7 @@ def voyage_v_loader(model_name, **kwargs):
 
             if text_embeddings is not None:
                 return text_embeddings
-            elif image_embeddings is not None:
+            if image_embeddings is not None:
                 return image_embeddings
             raise ValueError
 

@@ -78,12 +78,15 @@ def _aggregate_and_pivot(
             aggfunc=aggregation_fn_pandas,  # type: ignore[arg-type]
             observed=True,
         ).reset_index()
-    elif output_format == "long":
+    if output_format == "long":
         return (
             df.groupby(columns + index_columns, observed=True)
             .agg(score=("score", aggregation_fn_pandas))
             .reset_index()
         )
+    raise ValueError(
+        f"Unknown output_format {output_format!r}, expected 'wide' or 'long'."
+    )
 
 
 class ModelResult(BaseModel):
@@ -286,6 +289,9 @@ class ModelResult(BaseModel):
                         stacklevel=2,
                     )
             return entries
+        raise ValueError(
+            f"Unknown output_format {output_format!r}, expected 'wide' or 'long'."
+        )
 
     def _get_score_for_table(self) -> list[dict[str, str | float | list[str]]]:
         scores_data = []

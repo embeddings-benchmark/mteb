@@ -267,8 +267,7 @@ def evaluate_p_mrr_change(
 def rank_score(x: dict[str, float]) -> float:
     if x["og_rank"] >= x["new_rank"]:
         return ((1 / x["og_rank"]) / (1 / x["new_rank"])) - 1
-    else:
-        return 1 - ((1 / x["new_rank"]) / (1 / x["og_rank"]))
+    return 1 - ((1 / x["new_rank"]) / (1 / x["og_rank"]))
 
 
 def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
