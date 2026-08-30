@@ -2,11 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, cast
 
-import numpy as np
-import torch
-from torchvision.transforms.functional import to_pil_image
-from tqdm.auto import tqdm
-
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
@@ -18,41 +13,9 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
-WEMM_CITATION = """@article{wemm-embedding,
-      title={WeMM-Embedding: WeChat Multi-Modal Embedding Technical Report},
-      author={Junjie Zhou and Ke Mei and Lei Li and Tianyi Wang and Fengyun Rao and Jing Lyu},
-      year={2026},
-      eprint={2608.24053},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2608.24053},
-}"""
-
 
 class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
     """Custom SentenceTransformer encoder wrapper for WeChat WeMM Embedding models."""
-
-    def __init__(
-        self,
-        model_name: str,
-        revision: str | None = None,
-        device: str | None = None,
-        fps: float | None = 2.0,
-        max_frames: int | None = 64,
-        num_frames: int | None = None,
-        target_sampling_rate: int = 16000,
-        **kwargs: Any,
-    ) -> None:
-        super().__init__(
-            model_name=model_name,
-            revision=revision,
-            device=device,
-            **kwargs,
-        )
-        self.fps = fps
-        self.max_frames = max_frames
-        self.num_frames = num_frames
-        self.target_sampling_rate = target_sampling_rate
 
     def encode(
         self,
@@ -64,7 +27,10 @@ class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        # A. Setup standard MTEB VideoCollator on the inputs if video is present
+        import numpy as np
+        from torchvision.transforms.functional import to_pil_image
+        from tqdm.auto import tqdm
+
         features = inputs.dataset.features
         has_video = "video" in features
         is_multimodal = has_video or "image" in features
@@ -73,7 +39,7 @@ class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
             from mteb.models.modality_collators import VideoCollator
 
             inputs.collate_fn = VideoCollator(
-                target_sampling_rate=self.target_sampling_rate,
+                target_sampling_rate=self.target_sampling_rate or 16000,
                 fps=self.fps,
                 max_frames=self.max_frames,
                 num_frames=self.num_frames,
@@ -82,17 +48,15 @@ class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
         instruction = self.get_task_instruction(task_metadata, prompt_type)
         all_embeddings = []
 
-        # B. Process batches from MTEB's DataLoader
+        # Process batches from MTEB's DataLoader
         for batch in tqdm(inputs, desc="Encoding batches"):
             texts = batch.get("text")
             images = batch.get("image")
             videos = batch.get("video")
 
-            # Inline video frame tensor conversion (using compact list comprehension)
             if videos is not None:
                 videos = [
                     [
-                        # Convert HWC tensor format to CHW before calling to_pil_image
                         to_pil_image(
                             f.permute(2, 0, 1)
                             if f.ndim == 3 and f.shape[-1] == 3
@@ -100,26 +64,19 @@ class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
                         )
                         for f in v.cpu()
                     ]
-                    if isinstance(v, torch.Tensor)
-                    else v
                     for v in videos
                 ]
 
-            # C. Build unified list of inputs (string for text, dict for multimodal)
-            batch_size = (
-                len(texts) if texts else (len(images) if images else len(videos))
-            )
+            batch_size = len(texts or images or videos or [])
             batched_input = []
 
             for i in range(batch_size):
-                # Interleave/concatenate instruction and local query text (instruction first)
                 text_content = " ".join(
                     [t for t in [instruction, texts[i] if texts else None] if t]
                 )
 
                 if is_multimodal:
                     sample = {}
-                    # Insert visual keys first to ensure they precede the text tokens
                     if images and images[i] is not None:
                         sample["image"] = images[i]
                     if videos and videos[i] is not None:
@@ -130,16 +87,34 @@ class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
                 else:
                     batched_input.append(text_content)
 
-            # Call SentenceTransformer's encode with prompt=None to bypass system-role wrapping
-            embeddings = self.model.encode(batched_input, prompt=None, **kwargs)
+            embeddings = self.model.encode(batched_input, **kwargs)
             all_embeddings.append(embeddings)
 
         return cast("Array", np.concatenate(all_embeddings, axis=0))
 
 
+# --- Private module-level constants ---
+
+_WEMM_CITATION = """@article{wemm-embedding,
+      title={WeMM-Embedding: WeChat Multi-Modal Embedding Technical Report},
+      author={Junjie Zhou and Ke Mei and Lei Li and Tianyi Wang and Fengyun Rao and Jing Lyu},
+      year={2026},
+      eprint={2608.24053},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2608.24053},
+}"""
+
+_WEMM_LOADER_KWARGS = dict(
+    trust_remote_code=True,
+    fps=2.0,
+    max_frames=64,
+)
+
+
 wemm_embedding_2b = ModelMeta(
     loader=WeMMEncoderWrapper,
-    loader_kwargs=dict(trust_remote_code=True),
+    loader_kwargs=_WEMM_LOADER_KWARGS,
     name="tencent/WeMM-Embedding-2B",
     model_type=["dense"],
     modalities=["text", "image", "video"],
@@ -149,7 +124,7 @@ wemm_embedding_2b = ModelMeta(
     release_date="2026-08-25",
     n_parameters=2_210_000_000,
     n_embedding_parameters=508_063_744,
-    memory_usage_mb=None,
+    memory_usage_mb=4215,
     max_tokens=262144,
     embed_dim=[64, 128, 256, 512, 1024, 2048],
     license="apache-2.0",
@@ -157,7 +132,7 @@ wemm_embedding_2b = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     use_instructions=True,
-    citation=WEMM_CITATION,
+    citation=_WEMM_CITATION,
     public_training_code="https://github.com/Tencent/WeMM-Embedding",
     public_training_data=None,
     training_datasets=None,
@@ -166,7 +141,7 @@ wemm_embedding_2b = ModelMeta(
 
 wemm_embedding_4b = ModelMeta(
     loader=WeMMEncoderWrapper,
-    loader_kwargs=dict(trust_remote_code=True),
+    loader_kwargs=_WEMM_LOADER_KWARGS,
     name="tencent/WeMM-Embedding-4B",
     model_type=["dense"],
     modalities=["text", "image", "video"],
@@ -176,7 +151,7 @@ wemm_embedding_4b = ModelMeta(
     release_date="2026-08-25",
     n_parameters=4_250_000_000,
     n_embedding_parameters=635_079_680,
-    memory_usage_mb=None,
+    memory_usage_mb=8106,
     max_tokens=262144,
     embed_dim=[64, 128, 256, 512, 1024, 2560],
     license="apache-2.0",
@@ -184,7 +159,7 @@ wemm_embedding_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     use_instructions=True,
-    citation=WEMM_CITATION,
+    citation=_WEMM_CITATION,
     public_training_code="https://github.com/Tencent/WeMM-Embedding",
     public_training_data=None,
     training_datasets=None,
@@ -193,7 +168,7 @@ wemm_embedding_4b = ModelMeta(
 
 wemm_embedding_9b = ModelMeta(
     loader=WeMMEncoderWrapper,
-    loader_kwargs=dict(trust_remote_code=True),
+    loader_kwargs=_WEMM_LOADER_KWARGS,
     name="tencent/WeMM-Embedding-9B",
     model_type=["dense"],
     modalities=["text", "image", "video"],
@@ -203,7 +178,7 @@ wemm_embedding_9b = ModelMeta(
     release_date="2026-08-25",
     n_parameters=9_000_000_000,
     n_embedding_parameters=1_016_127_488,
-    memory_usage_mb=None,
+    memory_usage_mb=17166,
     max_tokens=262144,
     embed_dim=[64, 128, 256, 512, 1024, 2048, 4096],
     license="apache-2.0",
@@ -211,7 +186,7 @@ wemm_embedding_9b = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     use_instructions=True,
-    citation=WEMM_CITATION,
+    citation=_WEMM_CITATION,
     public_training_code="https://github.com/Tencent/WeMM-Embedding",
     public_training_data=None,
     training_datasets=None,
