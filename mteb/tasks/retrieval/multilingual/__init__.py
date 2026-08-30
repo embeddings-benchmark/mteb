@@ -136,6 +136,7 @@ from .vidore3_bench_retrieval import (
     Vidore3TelecomRetrieval,
     Vidore3TelecomRetrievalv2,
 )
+from .waxal_retrieval import WaxalA2TRetrieval, WaxalT2ARetrieval
 from .web_faq_retrieval import WebFAQRetrieval
 from .wikipedia_retrieval_multilingual import WikipediaRetrievalMultilingual
 from .wit_t2i_retrieval import WITT2IRetrieval
@@ -268,6 +269,8 @@ __all__ = [
     "Vidore3TelecomRetrieval",
     "Vidore3TelecomRetrievalv2",
     "WITT2IRetrieval",
+    "WaxalA2TRetrieval",
+    "WaxalT2ARetrieval",
     "WebFAQRetrieval",
     "WikipediaRetrievalMultilingual",
     "XFlickr30kCoT2IRetrieval",
