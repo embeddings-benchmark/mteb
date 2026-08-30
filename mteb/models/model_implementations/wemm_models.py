@@ -9,10 +9,8 @@ from torchvision.transforms.functional import to_pil_image
 from tqdm.auto import tqdm
 
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerEncoderWrapper,
-)
 from mteb.types import Array, BatchedInput, PromptType
 
 WEMM_CITATION = """@article{wemm-embedding,
@@ -62,8 +60,30 @@ class DataLoaderWrapper:
             yield batch
 
 
-class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
-    """Custom SentenceTransformer encoder wrapper for WeChat WeMM Embedding models."""
+class WeMMEncoderWrapper(AbsEncoder):
+    """Custom raw transformers encoder wrapper for WeChat WeMM Embedding models."""
+
+    def __init__(
+        self,
+        model_name: str,
+        revision: str | None = None,
+        device: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        from transformers import AutoModel, AutoProcessor
+
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.processor = AutoProcessor.from_pretrained(
+            model_name, revision=revision, trust_remote_code=True
+        )
+        self.model = AutoModel.from_pretrained(
+            model_name,
+            revision=revision,
+            trust_remote_code=True,
+            torch_dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
+        ).to(self.device).eval()
+
+        self.target_sampling_rate = 16000
 
     def encode(
         self,
@@ -75,74 +95,86 @@ class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        # A. Wrap the inputs (enables standard video frame decoding)
         wrapped_inputs = DataLoaderWrapper(inputs)
-
-        # B. Check features to see if evaluating a multimodal task (WeMM supports image and video)
         features = wrapped_inputs.dataset.features
         has_video = "video" in features
         is_multimodal = has_video or "image" in features
 
-        # C. Retrieve the public task instruction / prompt
         instruction = self.get_task_instruction(task_metadata, prompt_type)
 
-        if is_multimodal:
-            # Setup standard video collator if video modality is active
-            if has_video:
-                from mteb.models.modality_collators import VideoCollator
+        if has_video:
+            from mteb.models.modality_collators import VideoCollator
 
-                wrapped_inputs.dataloader.collate_fn = VideoCollator(
-                    target_sampling_rate=self.target_sampling_rate or 16000,
-                    fps=self.fps,
-                    max_frames=self.max_frames,
-                    num_frames=self.num_frames,
-                    max_samples=self.max_samples,
+            wrapped_inputs.dataloader.collate_fn = VideoCollator(
+                target_sampling_rate=self.target_sampling_rate,
+            )
+
+        all_embeddings = []
+
+        for batch in tqdm(wrapped_inputs, desc="Encoding batches"):
+            texts = batch.get("text")
+            images = batch.get("image")
+            videos = batch.get("video")
+
+            batch_size = len(images) if images else (len(videos) if videos else len(texts))
+            batch_messages = []
+
+            for i in range(batch_size):
+                content = []
+                if images and images[i] is not None:
+                    content.append({"type": "image", "image": images[i]})
+                if videos and videos[i] is not None:
+                    content.append({"type": "video", "video": videos[i]})
+                if instruction:
+                    content.append({"type": "text", "text": instruction})
+                if texts and texts[i]:
+                    content.append({"type": "text", "text": str(texts[i])})
+
+                if not content and texts:
+                    content.append({"type": "text", "text": str(texts[i])})
+
+                batch_messages.append([{"role": "user", "content": content}])
+
+            text_inputs = [
+                self.processor.apply_chat_template(conv, tokenize=False, add_generation_prompt=False)
+                for conv in batch_messages
+            ]
+
+            if is_multimodal:
+                from qwen_vl_utils import process_vision_info
+
+                images_processed, videos_processed, video_kwargs = process_vision_info(
+                    batch_messages,
+                    image_patch_size=16,
+                    return_video_kwargs=True,
+                    return_video_metadata=True,
                 )
+                if videos_processed is not None:
+                    videos_processed, video_metadata = zip(*videos_processed)
+                    videos_processed, video_metadata = list(videos_processed), list(video_metadata)
+                else:
+                    video_metadata = None
 
-            all_embeddings = []
-            for batch in tqdm(wrapped_inputs, desc="Building multimodal embeddings"):
-                texts = batch.get("text")
-                images = batch.get("image")
-                videos = batch.get("video")
+                inputs_pt = self.processor(
+                    text=text_inputs,
+                    images=images_processed,
+                    videos=videos_processed,
+                    video_metadata=video_metadata,
+                    return_tensors="pt",
+                    **video_kwargs,
+                ).to(self.model.device)
+            else:
+                inputs_pt = self.processor(
+                    text=text_inputs,
+                    return_tensors="pt",
+                ).to(self.model.device)
 
-                batch_size = len(images) if images else (len(videos) if videos else len(texts))
-                batched_input = []
+            with torch.inference_mode():
+                embedding_outputs = self.model.embedding(**inputs_pt)
+                embedding_outputs = torch.nn.functional.normalize(embedding_outputs, dim=-1)
+                all_embeddings.append(embedding_outputs.cpu().float().numpy())
 
-                # Build native interleaved "role: user" chat message lists
-                for i in range(batch_size):
-                    content = []
-                    # 1. Image / Video first
-                    if images and images[i] is not None:
-                        content.append({"type": "image", "image": images[i]})
-                    if videos and videos[i] is not None:
-                        content.append({"type": "video", "video": videos[i]})
-
-                    # 2. Task instruction as a separate text item in the content list
-                    if instruction:
-                        content.append({"type": "text", "text": instruction})
-
-                    # 3. Local dataset query text as a separate text item in the content list
-                    if texts and texts[i]:
-                        content.append({"type": "text", "text": str(texts[i])})
-
-                    batched_input.append({"role": "user", "content": content})
-
-                # Encode the structured user turns directly with prompt=None
-                embeddings = self.model.encode(batched_input, prompt=None, **kwargs)
-                all_embeddings.append(embeddings)
-
-            return cast("Array", np.concatenate(all_embeddings, axis=0))
-
-        # D. Fallback to standard text path
-        sentences = [text for batch in wrapped_inputs for text in batch["text"]]
-        return cast(
-            "Array",
-            self.model.encode(
-                sentences,
-                prompt=instruction,
-                **kwargs,
-            ),
-        )
+        return cast("Array", np.concatenate(all_embeddings, axis=0))
 
 
 wemm_embedding_2b = ModelMeta(
