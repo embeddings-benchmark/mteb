@@ -144,9 +144,7 @@ class WeMMEncoderWrapper(AbsEncoder):
                 for conv in batch_messages
             ]
 
-            # F. Extract vision features and prepare model inputs
-            # NOTE: We pass text_kwargs={"padding": True} to ensure transformers' tokenizer 
-            # always receives the padding instruction during batched evaluations.
+            # F. Extract vision features and prepare model inputs (padding=True is restored here!)
             if is_multimodal:
                 from qwen_vl_utils import process_vision_info
 
@@ -167,14 +165,14 @@ class WeMMEncoderWrapper(AbsEncoder):
                     images=images_processed,
                     videos=videos_processed,
                     video_metadata=video_metadata,
-                    text_kwargs={"padding": True},
+                    padding=True,
                     return_tensors="pt",
                     **video_kwargs,
                 ).to(self.model.device)
             else:
                 inputs_pt = self.processor(
                     text=text_inputs,
-                    text_kwargs={"padding": True},
+                    padding=True,
                     return_tensors="pt",
                 ).to(self.model.device)
 
