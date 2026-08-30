@@ -20,6 +20,14 @@ from .audiocaps_av_retrieval import (
     AudioCapsAVVA2TRetrieval,
     AudioCapsAVVT2ARetrieval,
 )
+from .avcaps_retrieval import (
+    AVCapsA2TRetrieval,
+    AVCapsT2ARetrieval,
+    AVCapsT2VARetrieval,
+    AVCapsT2VRetrieval,
+    AVCapsV2TRetrieval,
+    AVCapsVA2TRetrieval,
+)
 from .avmeme_exam_retrieval import (
     AVMemeExamA2VRetrieval,
     AVMemeExamAT2VRetrieval,
@@ -485,6 +493,12 @@ __all__ = [
     "AILACasedocs",
     "AILAStatutes",
     "ARCChallenge",
+    "AVCapsA2TRetrieval",
+    "AVCapsT2ARetrieval",
+    "AVCapsT2VARetrieval",
+    "AVCapsT2VRetrieval",
+    "AVCapsV2TRetrieval",
+    "AVCapsVA2TRetrieval",
     "AVMemeExamA2VRetrieval",
     "AVMemeExamAT2VRetrieval",
     "AVMemeExamT2VARetrieval",
