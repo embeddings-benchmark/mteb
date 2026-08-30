@@ -104,9 +104,9 @@ def format_task_entry(task: mteb.AbsTask) -> str:  # noqa: PLR0914
         description += f" Contributed by {task.metadata.contributed_by}."
     raw_license = task.metadata.license or "not specified"
     if raw_license.startswith(("http://", "https://")):
-        license = f"[custom]({raw_license})"
+        license_str = f"[custom]({raw_license})"
     else:
-        license = raw_license
+        license_str = raw_license
     reference = task.metadata.reference
     dataset_name = task.metadata.dataset["path"]
     if not reference and not isinstance(task, AbsTaskAggregate):
@@ -135,10 +135,10 @@ def format_task_entry(task: mteb.AbsTask) -> str:  # noqa: PLR0914
     if not isinstance(task, AbsTaskAggregate):
         dataset_line = (
             f"**Dataset:** [`{dataset_name}`](https://huggingface.co/datasets/{dataset_name}) "
-            f"• **License:** {license}{learn_more}"
+            f"• **License:** {license_str}{learn_more}"
         )
     else:
-        dataset_line = f"**License:** {license}{learn_more}"
+        dataset_line = f"**License:** {license_str}{learn_more}"
 
     entry = task_entry.format(
         task_name=task.metadata.name,
