@@ -29,6 +29,28 @@ WEMM_CITATION = """@article{wemm-embedding,
 class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
     """Custom SentenceTransformer encoder wrapper for WeChat WeMM Embedding models."""
 
+    def __init__(
+        self,
+        model_name: str,
+        revision: str | None = None,
+        device: str | None = None,
+        fps: float | None = 2.0,
+        max_frames: int | None = 64,
+        num_frames: int | None = None,
+        target_sampling_rate: int = 16000,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(
+            model_name=model_name,
+            revision=revision,
+            device=device,
+            **kwargs,
+        )
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.target_sampling_rate = target_sampling_rate
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -39,7 +61,7 @@ class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        # A. Setup standard MTEB VideoCollator on the inputs if video is active
+        # A. Setup standard MTEB VideoCollator on the inputs if video is present
         features = inputs.dataset.features
         has_video = "video" in features
         is_multimodal = has_video or "image" in features
