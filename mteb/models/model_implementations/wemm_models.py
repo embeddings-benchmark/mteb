@@ -1,7 +1,19 @@
 from __future__ import annotations
 
-from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
+from typing import Any
+
+import numpy as np
+import torch
+from torch.utils.data import DataLoader
+from torchvision.transforms.functional import to_pil_image
+from tqdm.auto import tqdm
+
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import (
+    SentenceTransformerEncoderWrapper,
+)
+from mteb.types import Array, BatchedInput, PromptType
 
 WEMM_CITATION = """@article{wemm-embedding,
       title={WeMM-Embedding: WeChat Multi-Modal Embedding Technical Report}, 
@@ -13,8 +25,128 @@ WEMM_CITATION = """@article{wemm-embedding,
       url={https://arxiv.org/abs/2608.24053}, 
 }"""
 
+
+class DataLoaderWrapper:
+    """Wraps a DataLoader to convert pre-decoded video frame tensors to lists of PIL images."""
+
+    def __init__(self, dataloader: DataLoader[BatchedInput]) -> None:
+        self.dataloader = dataloader
+
+    def __len__(self) -> int:
+        return len(self.dataloader)
+
+    @property
+    def dataset(self) -> Any:
+        return self.dataloader.dataset
+
+    @property
+    def collate_fn(self) -> Any:
+        return self.dataloader.collate_fn
+
+    @collate_fn.setter
+    def collate_fn(self, value: Any) -> None:
+        self.dataloader.collate_fn = value
+
+    def __iter__(self) -> Any:
+        for batch in self.dataloader:
+            if "video" in batch:
+                batch["video"] = [
+                    [
+                        to_pil_image(f.permute(2, 0, 1) if f.ndim == 3 and f.shape[-1] == 3 else f)
+                        for f in v.cpu()
+                    ]
+                    if isinstance(v, torch.Tensor)
+                    else v
+                    for v in batch["video"]
+                ]
+            yield batch
+
+
+class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
+    """Custom SentenceTransformer encoder wrapper for WeChat WeMM Embedding models."""
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        # A. Wrap the inputs (enables standard video frame decoding)
+        wrapped_inputs = DataLoaderWrapper(inputs)
+
+        # B. Check features to see if evaluating a multimodal task (WeMM supports image and video)
+        features = wrapped_inputs.dataset.features
+        has_video = "video" in features
+        is_multimodal = has_video or "image" in features
+
+        # C. Retrieve the public task instruction / prompt
+        instruction = self.get_task_instruction(task_metadata, prompt_type)
+
+        if is_multimodal:
+            # Setup standard video collator if video modality is active
+            if has_video:
+                from mteb.models.modality_collators import VideoCollator
+
+                wrapped_inputs.dataloader.collate_fn = VideoCollator(
+                    target_sampling_rate=self.target_sampling_rate or 16000,
+                    fps=self.fps,
+                    max_frames=self.max_frames,
+                    num_frames=self.num_frames,
+                    max_samples=self.max_samples,
+                )
+
+            all_embeddings = []
+            for batch in tqdm(wrapped_inputs, desc="Building multimodal embeddings"):
+                texts = batch.get("text")
+                images = batch.get("image")
+                videos = batch.get("video")
+
+                batch_size = len(images) if images else (len(videos) if videos else len(texts))
+                batched_input = []
+
+                # Build native interleaved "role: user" chat message lists
+                for i in range(batch_size):
+                    content = []
+                    # 1. Image / Video first
+                    if images and images[i] is not None:
+                        content.append({"type": "image", "image": images[i]})
+                    if videos and videos[i] is not None:
+                        content.append({"type": "video", "video": videos[i]})
+
+                    # 2. Task instruction as a separate text item in the content list
+                    if instruction:
+                        content.append({"type": "text", "text": instruction})
+
+                    # 3. Local dataset query text as a separate text item in the content list
+                    if texts and texts[i]:
+                        content.append({"type": "text", "text": str(texts[i])})
+
+                    batched_input.append({"role": "user", "content": content})
+
+                # Encode the structured user turns directly with prompt=None
+                embeddings = self.model.encode(batched_input, prompt=None, **kwargs)
+                all_embeddings.append(embeddings)
+
+            return cast("Array", np.concatenate(all_embeddings, axis=0))
+
+        # D. Fallback to standard text path
+        sentences = [text for batch in wrapped_inputs for text in batch["text"]]
+        return cast(
+            "Array",
+            self.model.encode(
+                sentences,
+                prompt=instruction,
+                **kwargs,
+            ),
+        )
+
+
 wemm_embedding_2b = ModelMeta(
-    loader=InstructSentenceTransformerModel,
+    loader=WeMMEncoderWrapper,
     loader_kwargs=dict(trust_remote_code=True),
     name="tencent/WeMM-Embedding-2B",
     model_type=["dense"],
@@ -41,7 +173,7 @@ wemm_embedding_2b = ModelMeta(
 )
 
 wemm_embedding_4b = ModelMeta(
-    loader=InstructSentenceTransformerModel,
+    loader=WeMMEncoderWrapper,
     loader_kwargs=dict(trust_remote_code=True),
     name="tencent/WeMM-Embedding-4B",
     model_type=["dense"],
@@ -68,7 +200,7 @@ wemm_embedding_4b = ModelMeta(
 )
 
 wemm_embedding_9b = ModelMeta(
-    loader=InstructSentenceTransformerModel,
+    loader=WeMMEncoderWrapper,
     loader_kwargs=dict(trust_remote_code=True),
     name="tencent/WeMM-Embedding-9B",
     model_type=["dense"],
