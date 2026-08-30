@@ -386,7 +386,7 @@ def paired_accuracy(
     """
     # group the queries by the query id
     query_keys = set()
-    for key in qrels.keys():
+    for key in qrels:
         query_keys.add(key.split("_")[0])
 
     paired_scores = []
@@ -417,7 +417,7 @@ def robustness_at_10(
         The robustness at 10 score
     """
     query_keys = defaultdict(list)
-    for key in qrels.keys():
+    for key in qrels:
         query_keys[key.split("_")[0]].append(key)
 
     robustness_scores = []
@@ -494,7 +494,7 @@ def parse_metrics_from_scores(
         defaultdict(list),
     )
 
-    for query_id in scores.keys():
+    for query_id in scores:
         for k in k_values:
             all_ndcgs[f"NDCG@{k}"].append(scores[query_id]["ndcg_cut_" + str(k)])
             all_aps[f"MAP@{k}"].append(scores[query_id]["map_cut_" + str(k)])
@@ -542,7 +542,7 @@ def max_over_subqueries(
         A dictionary with the scores, prefixed with "max_over_subqueries_"
     """
     query_keys = defaultdict(list)
-    for key in qrels.keys():
+    for key in qrels:
         query_keys["_".join(key.split("_")[:-1])].append(key)
 
     new_results = {}
@@ -619,7 +619,7 @@ def calculate_retrieval_scores(  # noqa: PLR0914
     )
     naucs_mrr = evaluate_abstention(results, mrr_scores)
 
-    avg_mrr = {k: sum(mrr_scores[k]) / len(mrr_scores[k]) for k in mrr_scores.keys()}
+    avg_mrr = {k: sum(mrr_scores[k]) / len(mrr_scores[k]) for k in mrr_scores}
     return RetrievalEvaluationResult(
         all_scores=scores,
         ndcg=ndcg,

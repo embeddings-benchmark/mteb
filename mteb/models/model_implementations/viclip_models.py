@@ -61,9 +61,7 @@ class ViCLIPWrapper(AbsEncoder):
         """Normalize (T, C, H, W) frame tensor to ViCLIP input format."""
         import torch.nn.functional as F
 
-        if frames.dtype == torch.uint8:
-            frames = frames.float() / 255.0
-        elif frames.max() > 1.0:
+        if frames.dtype == torch.uint8 or frames.max() > 1.0:
             frames = frames.float() / 255.0
         else:
             frames = frames.float()

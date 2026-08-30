@@ -206,9 +206,10 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         for model_res in self.model_results:
             model_name = model_res.model_name
             revision = model_res.model_revision
-            if model_name in name_rev:
-                if name_rev[model_name] is None or revision == name_rev[model_name]:
-                    models_res.append(model_res)
+            if model_name in name_rev and (
+                name_rev[model_name] is None or revision == name_rev[model_name]
+            ):
+                models_res.append(model_res)
 
         return type(self).model_construct(model_results=models_res)
 
