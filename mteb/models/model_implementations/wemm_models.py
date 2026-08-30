@@ -92,6 +92,7 @@ class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
             if videos is not None:
                 videos = [
                     [
+                        # Convert HWC tensor format to CHW before calling to_pil_image
                         to_pil_image(
                             f.permute(2, 0, 1)
                             if f.ndim == 3 and f.shape[-1] == 3
