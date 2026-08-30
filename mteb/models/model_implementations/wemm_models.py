@@ -90,7 +90,7 @@ class WeMMEncoderWrapper(AbsEncoder):
         all_embeddings = []
 
         # B. Process the batches sequentially from MTEB's DataLoader directly
-        for batch in tqdm(inputs, desc="Encoding batches"):
+        for batch in tqdm(wrapped_inputs := inputs, desc="Encoding batches"):
             texts = batch.get("text")
             images = batch.get("image")
             videos = batch.get("video")
@@ -144,7 +144,9 @@ class WeMMEncoderWrapper(AbsEncoder):
                 for conv in batch_messages
             ]
 
-            # F. Extract vision features and prepare model inputs (padding=True is required for batching!)
+            # F. Extract vision features and prepare model inputs
+            # NOTE: We pass text_kwargs={"padding": True} to ensure transformers' tokenizer 
+            # always receives the padding instruction during batched evaluations.
             if is_multimodal:
                 from qwen_vl_utils import process_vision_info
 
@@ -165,14 +167,14 @@ class WeMMEncoderWrapper(AbsEncoder):
                     images=images_processed,
                     videos=videos_processed,
                     video_metadata=video_metadata,
-                    padding=True,
+                    text_kwargs={"padding": True},
                     return_tensors="pt",
                     **video_kwargs,
                 ).to(self.model.device)
             else:
                 inputs_pt = self.processor(
                     text=text_inputs,
-                    padding=True,
+                    text_kwargs={"padding": True},
                     return_tensors="pt",
                 ).to(self.model.device)
 
