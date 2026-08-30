@@ -58,7 +58,7 @@ Fishel, Mark},
         self,
         num_proc: int | None = None,
     ):
-        for lang in self.dataset.keys():
+        for lang in self.dataset:
             # convert label to a 0/1 label
             labels = self.dataset[lang]["train"]["label"]
             lab2idx = {lab: idx for idx, lab in enumerate(set(labels))}

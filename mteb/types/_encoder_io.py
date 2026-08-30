@@ -180,9 +180,9 @@ class OutputDType(HelpfulStrEnum):
         """
         if self == OutputDType.UINT4:
             return torch.uint8
-        elif self == OutputDType.INT4:
+        if self == OutputDType.INT4:
             return torch.int8
-        elif self == OutputDType.BINARY:
+        if self == OutputDType.BINARY:
             return torch.bool
         return cast("torch.dtype", getattr(torch, self.value))
 

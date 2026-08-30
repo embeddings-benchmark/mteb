@@ -48,9 +48,7 @@ class BitextMiningEvaluator(Evaluator):
     ) -> dict[str, list[dict[str, float]]]:
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
-            subsets = [
-                col for col in self.sentences.features.keys() if col in pair_elements
-            ]
+            subsets = [col for col in self.sentences.features if col in pair_elements]
         else:
             # BUCC outputs a dict instead of a Dataset
             subsets = list(pair_elements)

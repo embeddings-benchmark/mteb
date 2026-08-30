@@ -100,11 +100,10 @@ def _fold_tie_break(
     """
     if len(M) == 1:
         return int(M[0])
-    else:
-        max_val = max(desired_samples_per_fold[M])
-        m_prim = np.where(np.array(desired_samples_per_fold) == max_val)[0]
-        m_prim = np.array([x for x in m_prim if x in M])
-        return int(random_state.choice(m_prim, 1)[0])
+    max_val = max(desired_samples_per_fold[M])
+    m_prim = np.where(np.array(desired_samples_per_fold) == max_val)[0]
+    m_prim = np.array([x for x in m_prim if x in M])
+    return int(random_state.choice(m_prim, 1)[0])
 
 
 def _get_most_desired_combination(samples_with_combination: dict[Any, Any]) -> Any:

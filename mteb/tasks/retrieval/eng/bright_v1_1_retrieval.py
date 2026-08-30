@@ -122,7 +122,7 @@ class BrightBiologyRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="biology",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -166,7 +166,7 @@ class BrightEarthScienceRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="earth_science",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -210,7 +210,7 @@ class BrightEconomicsRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="economics",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -254,7 +254,7 @@ class BrightPsychologyRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="psychology",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -298,7 +298,7 @@ class BrightRoboticsRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="robotics",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -342,7 +342,7 @@ class BrightStackoverflowRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="stackoverflow",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -386,7 +386,7 @@ class BrightSustainableLivingRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="sustainable_living",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -430,7 +430,7 @@ class BrightPonyRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="pony",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -474,7 +474,7 @@ class BrightLeetcodeRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="leetcode",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -518,7 +518,7 @@ class BrightAopsRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="aops",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -562,7 +562,7 @@ class BrightTheoremQATheoremsRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="theoremqa_theorems",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -606,7 +606,7 @@ class BrightTheoremQAQuestionsRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="theoremqa_questions",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -650,7 +650,7 @@ class BrightBiologyLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="biology",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -694,7 +694,7 @@ class BrightEarthScienceLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="earth_science",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -738,7 +738,7 @@ class BrightEconomicsLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="economics",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -782,7 +782,7 @@ class BrightPsychologyLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="psychology",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -826,7 +826,7 @@ class BrightRoboticsLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="robotics",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -870,7 +870,7 @@ class BrightStackoverflowLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="stackoverflow",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -914,7 +914,7 @@ class BrightSustainableLivingLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="sustainable_living",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -958,7 +958,7 @@ class BrightPonyLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="pony",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )

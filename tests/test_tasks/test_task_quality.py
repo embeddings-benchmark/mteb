@@ -109,6 +109,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "DKHateClassification",
         "DanishMedicinesAgencyBitextMining",
         "DanishPoliticalCommentsClassification",
+        "DanRAGT2ITRetrieval",  # some image-bearing pages have no extracted text
         "DiaBlaBitextMining",
         "DuRetrieval",
         "DutchNewsArticlesRetrieval",
@@ -461,6 +462,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "DS1000Retrieval",
         "DalajClassification",
         "DanishPoliticalCommentsClassification",
+        "DanRAGT2ITRetrieval",  # repeated page text is present in the source benchmark
         "DeepSentiPers",
         "EDIRIT2IRetrieval",
         "EDIST2ITRetrieval",
@@ -842,6 +844,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VQA2IT2TRetrieval",
         "WebQAT2ITRetrieval",
         "WebVidCoVRIT2VRetrieval",
+        "XFlickr30kCoI2TRetrieval",  # the same image corpus is reused across languages
         "XFlickr30kCoT2IRetrieval",
         "XM3600T2IRetrieval",
     ],

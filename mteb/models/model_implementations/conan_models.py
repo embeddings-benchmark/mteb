@@ -87,6 +87,7 @@ class RateLimiter:
                 else:
                     logger.error(f"Max retries reached. Last error: {str(e)}")
                     raise
+        return None
 
 
 class Client:
