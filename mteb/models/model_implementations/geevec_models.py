@@ -397,7 +397,9 @@ class GeeVecAPIModel(AbsEncoder):
         api_model_name = self._resolve_api_model_name(effective_domain)
 
         mask_sents = [(i, t) for i, t in enumerate(sentences) if t.strip()]
-        mask, no_empty_sent = list(zip(*mask_sents)) if mask_sents else ([], [])
+        mask, no_empty_sent = (
+            list(zip(*mask_sents, strict=True)) if mask_sents else ([], [])
+        )
 
         no_empty_embeddings = []
         for i in range(0, len(no_empty_sent), max_batch_size):
@@ -536,25 +538,24 @@ class GeeVecAPIModel(AbsEncoder):
                 optional_fields = {}
                 continue
 
-            if response.status_code == 400 and self._is_context_window_error(
-                response.text
+            # Adaptive fallback: progressively shorten each input until it fits.
+            if (
+                response.status_code == 400
+                and self._is_context_window_error(response.text)
+                and current_max_chars > self._min_input_chars
             ):
-                # Adaptive fallback: progressively shorten each input until it fits.
-                if current_max_chars > self._min_input_chars:
-                    next_max_chars = max(
-                        self._min_input_chars, int(current_max_chars * 0.8)
+                next_max_chars = max(
+                    self._min_input_chars, int(current_max_chars * 0.8)
+                )
+                if next_max_chars < current_max_chars:
+                    logger.warning(
+                        "GeeVec API context window exceeded; reducing max chars per text from %s to %s and retrying.",
+                        current_max_chars,
+                        next_max_chars,
                     )
-                    if next_max_chars < current_max_chars:
-                        logger.warning(
-                            "GeeVec API context window exceeded; reducing max chars per text from %s to %s and retrying.",
-                            current_max_chars,
-                            next_max_chars,
-                        )
-                        current_max_chars = next_max_chars
-                        req_texts = self._truncate_texts_by_chars(
-                            texts, current_max_chars
-                        )
-                        continue
+                    current_max_chars = next_max_chars
+                    req_texts = self._truncate_texts_by_chars(texts, current_max_chars)
+                    continue
 
             if response.status_code >= 400:
                 raise RuntimeError(

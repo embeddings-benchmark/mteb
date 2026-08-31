@@ -36,7 +36,7 @@ def _load_data(
             num_proc=num_proc,
         )
         query_ds = query_ds.map(
-            lambda x: {
+            lambda x, split=split: {
                 "id": f"query-{split}-{x['query-id']}",
                 "text": x["query"],
                 "modality": "text",
@@ -53,7 +53,7 @@ def _load_data(
             num_proc=num_proc,
         )
         corpus_ds = corpus_ds.map(
-            lambda x: {
+            lambda x, split=split: {
                 "id": f"corpus-{split}-{x['corpus-id']}",
                 "modality": "image",
             },
@@ -82,7 +82,9 @@ def _load_data(
                 relevant_docs[split][qid][did] = int(row["score"])
         else:
             for lang in langs:
-                filtered_query_ds = query_ds.filter(lambda x: x["language"] == lang)
+                filtered_query_ds = query_ds.filter(
+                    lambda x, lang=lang: x["language"] == lang
+                )
                 queries[lang][split] = filtered_query_ds.select_columns(["id", "text"])
 
                 corpus[lang][split] = corpus_ds

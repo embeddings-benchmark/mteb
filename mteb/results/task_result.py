@@ -34,7 +34,7 @@ from mteb.types import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Mapping
+    from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
     from pathlib import Path
 
     from typing_extensions import Self
@@ -239,7 +239,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def _validate_scores(
         cls, v: dict[SplitName, list[ScoresDict]]
     ) -> dict[SplitName, list[ScoresDict]]:
-        for split, hf_subset_scores in v.items():
+        for hf_subset_scores in v.values():
             for hf_subset_score in hf_subset_scores:
                 if not isinstance(hf_subset_score, dict):
                     raise ValueError("Scores should be a dictionary")
@@ -270,13 +270,13 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         try:
             _ = json.dumps(scores)
         except Exception as e:
-            raise ValueError(f"Scores are not json serializable: {e}")
+            raise ValueError(f"Scores are not json serializable: {e}") from e
 
     @property
     def languages(self) -> list[str]:
         """The languages present in the scores."""
         langs = []
-        for split, split_res in self.scores.items():
+        for split_res in self.scores.values():
             for entry in split_res:
                 langs.extend([lang.split("-")[0] for lang in entry["languages"]])
         return list(set(langs))
@@ -315,7 +315,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def hf_subsets(self) -> list[str]:
         """The hf_subsets present in the scores."""
         hf_subsets = set()
-        for split, split_res in self.scores.items():
+        for split_res in self.scores.values():
             for entry in split_res:
                 hf_subsets.add(entry["hf_subset"])
         return list(hf_subsets)
@@ -400,7 +400,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             except Exception as e:
                 raise ValueError(
                     f"Error loading TaskResult from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
-                )
+                ) from e
         data = json.loads(json_str)
         min_version = cls._parse_mteb_version_min(data.get("mteb_version"))
         pre_1_11_load = (
@@ -437,7 +437,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             task = get_task(obj.task_name)
 
         if task.metadata.type == "PairClassification":  # noqa: PLR1702
-            for split, split_scores in obj.scores.items():
+            for split_scores in obj.scores.values():
                 for hf_subset_scores in split_scores:
                     # concatenate score e.g. ["max"]["ap"] -> ["max_ap"]
                     for key in list(hf_subset_scores.keys()):
@@ -463,7 +463,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
         # calculate evaluation time across all splits (move to top level)
         evaluation_time = 0
-        for split, split_score in scores.items():
+        for split_score in scores.values():
             if "evaluation_time" in split_score:
                 evaluation_time += split_score.pop("evaluation_time")
 
@@ -493,8 +493,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
 
         # make sure that main score exists
         main_score = task.metadata.main_score
-        for split, split_score in scores.items():
-            for hf_subset, hf_subset_scores in split_score.items():
+        for split_score in scores.values():
+            for hf_subset_scores in split_score.values():
                 for name, prev_name in [
                     (ScoringFunction.COSINE.value, "cos_sim"),
                     (ScoringFunction.MANHATTAN.value, "manhattan"),
@@ -526,9 +526,9 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             "1.1.3.dev0",
         ]:
             scores["test"]["fr"] = scores["test"].pop("default")
-        if task_name == "XPQARetrieval":  # subset were renamed from "fr" to "fra-fra"
-            if "test" in scores and "fr" in scores["test"]:
-                scores["test"]["fra-fra"] = scores["test"].pop("fr")
+        # subset were renamed from "fr" to "fra-fra"
+        if task_name == "XPQARetrieval" and "test" in scores and "fr" in scores["test"]:
+            scores["test"]["fra-fra"] = scores["test"].pop("fr")
 
         result: TaskResult = TaskResult.from_task_results(
             task,
@@ -612,7 +612,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     raise ValueError(f"Missing main score for subset: {hf_subset}")
                 if subsets and hf_subset not in subsets:
                     continue
-                elif subsets:
+                if subsets:
                     val_sum += main_score
                     n_val += 1
                     continue
@@ -758,9 +758,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def is_mergeable(
         self,
         result: TaskResult | AbsTask,
-        criteria: list[str] | list[Criteria] = [
-            "dataset_revision",
-        ],
+        criteria: Sequence[str] | Sequence[Criteria] = ("dataset_revision",),
         raise_error: bool = False,
     ) -> bool:
         """Checks if the TaskResult object can be merged with another TaskResult or Task.
@@ -816,9 +814,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def merge(
         self,
         new_results: TaskResult,
-        criteria: list[str] | list[Criteria] = [
-            "dataset_revision",
-        ],
+        criteria: Sequence[str] | Sequence[Criteria] = ("dataset_revision",),
     ) -> TaskResult:
         """Merges two TaskResult objects.
 
@@ -1099,22 +1095,60 @@ def _read_run_settings_from_file(path: Path) -> list[dict[str, Any]]:
     return run_settings
 
 
-def _write_and_merge_keyed_json(
-    path: Path,
-    entries: list[dict[str, Any]],
-    *,
-    key_fields: tuple[str, str, str] = ("task", "split", "subset"),
-) -> None:
-    """Write entries to `.jsonl`, if it already exist it will merge it, replacing any existing entries with the same key."""
-    existing_entries = _read_run_settings_from_file(path)
-    new_keys = {tuple(entry.get(field) for field in key_fields) for entry in entries}
-    filtered_existing = [
-        entry
-        for entry in existing_entries
-        if tuple(entry.get(field) for field in key_fields) not in new_keys
-    ]
-    all_entries = filtered_existing + entries
+def _expand_run_settings_entry(
+    entry: dict[str, Any],
+) -> Iterator[tuple[tuple[str, str, str], str, dict[str, Any]]]:
+    """Expand an entry into one (task, split, subset), settings tuple per evaluated subset."""
+    settings = dict(entry)
+    task = settings.pop("task", None)
+    # entries written before splits and subsets were combined stored a single "split" and "subset"
+    splits = settings.pop("splits", None)
+    if splits is None:
+        splits = [settings.pop("split", None)]
+    subsets = settings.pop("subsets", None)
+    if subsets is None:
+        subsets = [settings.pop("subset", None)]
+
+    key = json.dumps(settings, sort_keys=True, default=str)
+    for split in splits:
+        for subset in subsets:
+            if split is not None and subset is not None:
+                yield (task, split, subset), key, settings
+
+
+def _write_and_merge_keyed_json(path: Path, entries: list[dict[str, Any]]) -> None:
+    """Write entries to `.jsonl`, if it already exist it will merge it.
+
+    Every (task, split, subset) is stored once, with the settings of the last entry that evaluated it. Rows are then
+    combined as far as possible: splits of a task sharing both their settings and their subsets are written as a single
+    row listing all of its splits and subsets.
+    """
+    settings_by_key: dict[str, dict[str, Any]] = {}
+    # (task, split, subset) -> settings key, later entries overwrite the settings of earlier ones
+    run_settings: dict[tuple[str, str, str], str] = {}
+    for entry in [*_read_run_settings_from_file(path), *entries]:
+        for scope, key, settings in _expand_run_settings_entry(entry):
+            settings_by_key[key] = settings
+            run_settings[scope] = key
+
+    # (task, settings key) -> split -> subsets
+    grouped: dict[tuple[str, str], dict[str, list[str]]] = defaultdict(
+        lambda: defaultdict(list)
+    )
+    for (task, split, subset), key in run_settings.items():
+        grouped[(task, key)][split].append(subset)
 
     with path.open("w", encoding="utf-8") as f:
-        for entry in all_entries:
-            f.write(json.dumps(entry, default=str) + "\n")
+        for (task, key), splits in grouped.items():
+            # splits evaluated on the exact same subsets share a row
+            rows: dict[tuple[str, ...], list[str]] = defaultdict(list)
+            for split, subsets in splits.items():
+                rows[tuple(sorted(set(subsets)))].append(split)
+            for row_subsets, split_names in rows.items():
+                entry = {
+                    "task": task,
+                    "splits": sorted(split_names),
+                    **settings_by_key[key],
+                    "subsets": list(row_subsets),
+                }
+                f.write(json.dumps(entry, default=str) + "\n")

@@ -17,7 +17,7 @@ PT_MATRYOSHKA_EMBEDDING_CITATION = """
 
 SERAFIM_CITATION = """
 @InProceedings{epia2024serafim,
-    title={Open Sentence Embeddings for Portuguese with the Serafim PT* encoders family}, 
+    title={Open Sentence Embeddings for Portuguese with the Serafim PT* encoders family},
     author={Luís Gomes and António Branco and João Silva and João Rodrigues and Rodrigo Santos},
     editor={Manuel Filipe Santos and José Machado and Paulo Novais and Paulo Cortez and Pedro Miguel Moreira},
     booktitle={Progress in Artificial Intelligence},

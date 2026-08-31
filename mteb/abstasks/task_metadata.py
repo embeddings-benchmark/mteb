@@ -74,8 +74,10 @@ TaskSubtype = Literal[
     "Scene recognition",
     "Caption Pairing",
     "Emotion recognition",
+    "Event Retrieval",
     "Textures recognition",
     "Activity recognition",
+    "Physical plausibility classification",
     "Tumor detection",
     "Duplicate Detection",
     "Rendered semantic textual similarity",
@@ -161,6 +163,7 @@ TaskDomain = Literal[
     "Egocentric",  # first-person / wearable-camera video
     "Nature",  # animals, wildlife, natural environments
     "Animation",  # cartoon / animated / synthetic content
+    "Robotics",  # robot manipulation / embodied-agent content
 ]
 """
 The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though
@@ -282,7 +285,10 @@ TaskCategory = Literal[
     "at2v",
     "a2i",
     "i2a",
+    "i2v",
+    "i2va",
     "it2v",
+    "v2i",
 ]
 """The category of the task.
 
@@ -324,7 +330,10 @@ TaskCategory = Literal[
 36. a2v: audio to video
 37. a2i: audio to image
 38. i2a: image to audio
-39. it2v: image+text to video
+39. i2v: image to video
+40. i2va: image to video+audio
+41. it2v: image+text to video
+42. v2i: video to image
 """
 
 _MODALITY_CODES: dict[str, str] = {
@@ -400,6 +409,7 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
     "PairClassification": "pair-classification",
     "VideoClassification": "classification",
     "VideoClustering": "clustering",
+    "VideoMultilabelClassification": "classification",
     "VideoPairClassification": "pair-classification",
     "VideoZeroshotClassification": "classification",
     "VideoCentricQA": "retrieval",
@@ -734,7 +744,7 @@ class TaskMetadata(BaseModel):
         descriptive_stats = ""
         if self.descriptive_stats is not None:
             descriptive_stats_ = self.descriptive_stats
-            for split, split_stat in descriptive_stats_.items():
+            for split_stat in descriptive_stats_.values():
                 if len(split_stat.get("hf_subset_descriptive_stats", {})) > 10:
                     split_stat.pop("hf_subset_descriptive_stats", {})
             descriptive_stats = json.dumps(descriptive_stats_, indent=4)
@@ -899,6 +909,7 @@ class TaskMetadata(BaseModel):
             "Emotion recognition": ["sentiment-scoring"],
             "Textures recognition": [],
             "Activity recognition": [],
+            "Physical plausibility classification": [],
             "Tumor detection": [],
             "Duplicate Detection": [],
             "Rendered semantic textual similarity": [
@@ -988,6 +999,7 @@ class TaskMetadata(BaseModel):
             "AudioPairClassification": ["audio-classification"],
             # video
             "VideoCentricQA": ["visual-question-answering"],
+            "VideoZeroshotClassification": ["video-classification"],
         }
         if self.type == "ZeroShotClassification":
             if self.modalities == ["image"]:
@@ -1013,6 +1025,8 @@ class TaskMetadata(BaseModel):
             dataset_type.append("audio-to-audio")
         if self.category in ["a2t", "t2a", "at2t", "t2at", "at2at", "a2at"]:  # noqa: PLR6201
             dataset_type.extend(["text-to-audio"])
+        if self.category in {"i2v", "i2va"}:
+            dataset_type.append("image-to-video")
         return dataset_type
 
     def _hf_languages(self) -> list[str]:

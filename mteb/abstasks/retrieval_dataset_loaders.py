@@ -215,7 +215,7 @@ class RetrievalDatasetLoader:
         qrels_ds = qrels_ds.to_polars()
         # filter queries with no qrels
         qrels_dict = {
-            query_id[0]: dict(zip(group["corpus-id"], group["score"]))
+            query_id[0]: dict(zip(group["corpus-id"], group["score"], strict=True))
             for query_id, group in qrels_ds.group_by("query-id", maintain_order=False)
         }
 
@@ -244,7 +244,7 @@ class RetrievalDatasetLoader:
 
         queries = top_ranked_ds["query-id"].to_list()
         corpus_lists = top_ranked_ds["corpus-ids"].to_list()
-        top_ranked_dict = dict(zip(queries, corpus_lists))
+        top_ranked_dict = dict(zip(queries, corpus_lists, strict=True))
         logger.info(f"Top ranked loaded: {len(top_ranked_ds)}")
         return top_ranked_dict
 

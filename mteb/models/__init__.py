@@ -8,11 +8,19 @@ from .models_protocols import (
     MTEBModels,
     SearchProtocol,
 )
-from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
+from .openai_wrappers import (
+    OpenAIAPIEncodeWrapper,
+    OpenAIAPIRerankWrapper,
+    OpenAIAPITokenEmbedWrapper,
+)
+from .search_encoder_index.search_backend_protocol import (
+    IndexEncoderSearchProtocol,
+)
 from .search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
 from .sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
+    SparseEncoderWrapper,
     sentence_transformers_loader,
 )
 
@@ -27,9 +35,13 @@ __all__ = [
     "IndexEncoderSearchProtocol",
     "MTEBModels",
     "ModelMeta",
+    "OpenAIAPIEncodeWrapper",
+    "OpenAIAPIRerankWrapper",
+    "OpenAIAPITokenEmbedWrapper",
     "SearchCrossEncoderWrapper",
     "SearchEncoderWrapper",
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
+    "SparseEncoderWrapper",
     "sentence_transformers_loader",
 ]

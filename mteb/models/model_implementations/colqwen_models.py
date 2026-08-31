@@ -33,6 +33,7 @@ class ColQwen2Wrapper(ColPaliEngineWrapper):
         model_name: str = "vidore/colqwen2-v1.0",
         revision: str | None = None,
         device: str | None = None,
+        query_prefix: str = "Query: ",
         **kwargs,
     ):
         from colpali_engine.models import ColQwen2, ColQwen2Processor
@@ -43,6 +44,7 @@ class ColQwen2Wrapper(ColPaliEngineWrapper):
             processor_class=ColQwen2Processor,
             revision=revision,
             device=device,
+            query_prefix=query_prefix,
             **kwargs,
         )
 
@@ -56,6 +58,7 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         revision: str | None = None,
         device: str | None = None,
         attn_implementation: str | None = None,
+        query_prefix: str = "Query: ",
         **kwargs,
     ):
         from colpali_engine.models import ColQwen2_5, ColQwen2_5_Processor
@@ -72,6 +75,7 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
             processor_class=ColQwen2_5_Processor,
             revision=revision,
             device=device,
+            query_prefix=query_prefix,
             **kwargs,
         )
 
@@ -167,11 +171,10 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
                     texts = batch["text"]
                 else:
                     texts = None
-                if contains_both:
-                    if len(imgs) != len(texts):
-                        raise ValueError(
-                            f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
-                        )
+                if contains_both and len(imgs) != len(texts):
+                    raise ValueError(
+                        f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
+                    )
 
                 if contains_image:
                     imgs = [img.convert("RGB") for img in imgs]
@@ -299,11 +302,10 @@ class ColQwen3Wrapper(AbsEncoder):
                     texts = batch["text"]
                 else:
                     texts = None
-                if contains_both:
-                    if len(imgs) != len(texts):
-                        raise ValueError(
-                            f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
-                        )
+                if contains_both and len(imgs) != len(texts):
+                    raise ValueError(
+                        f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
+                    )
 
                 inputs = self.processor(images=imgs, text=texts)
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}

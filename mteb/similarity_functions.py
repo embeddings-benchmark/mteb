@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 import torch
 
@@ -66,9 +66,9 @@ def select_similarity(
     """
     if similarity_fn is ScoringFunction.COSINE:
         return cos_sim(embedding1, embedding2)
-    elif similarity_fn is ScoringFunction.DOT_PRODUCT:
+    if similarity_fn is ScoringFunction.DOT_PRODUCT:
         return dot_score(embedding1, embedding2)
-    elif similarity_fn is ScoringFunction.EUCLIDEAN:
+    if similarity_fn is ScoringFunction.EUCLIDEAN:
         return euclidean_sim(embedding1, embedding2)
     raise ValueError(f"Unsupported similarity function: {similarity_fn}")
 
@@ -90,9 +90,9 @@ def select_pairwise_similarity(
     """
     if similarity_fn is ScoringFunction.COSINE:
         return pairwise_cos_sim(embedding1, embedding2)
-    elif similarity_fn is ScoringFunction.DOT_PRODUCT:
+    if similarity_fn is ScoringFunction.DOT_PRODUCT:
         return pairwise_dot_score(embedding1, embedding2)
-    elif similarity_fn is ScoringFunction.EUCLIDEAN:
+    if similarity_fn is ScoringFunction.EUCLIDEAN:
         return pairwise_euclidean_sim(embedding1, embedding2)
     raise ValueError(f"Unsupported similarity function: {similarity_fn}")
 
@@ -147,8 +147,7 @@ def cos_sim(a: Array, b: Array) -> torch.Tensor:
     if should_compile:
         _cos_sim_core_compiled = torch.compile(_cos_sim_core)
         return _cos_sim_core_compiled(a, b)
-    else:
-        return _cos_sim_core(a, b)
+    return _cos_sim_core(a, b)
 
 
 # https://github.com/UKPLab/sentence-transformers/blob/3fd59c3d122f2148e22b6338447b45d850fb6ea4/sentence_transformers/util.py#L125
@@ -167,16 +166,23 @@ def pairwise_cos_sim(a: Array, b: Array) -> Array:
     return pairwise_dot_score(_normalize_embeddings(a), _normalize_embeddings(b))
 
 
-def max_sim(a: Array, b: Array) -> torch.Tensor:
+def max_sim(a: Array, b: Array, batch_size: int = 128) -> torch.Tensor:
     """Compute the maximum pairwise similarity between tokens.
 
     Given two tensors `a` and `b` of shape (batch_size, num_tokens, token_dim),
     this function computes the maximum similarity `max_sim(a[i], b[j])` for all
     pairs of tokens `i` and `j` across the two inputs.
 
+    `a` and `b` are scored in `batch_size`-sized chunks along their leading (batch)
+    dimension, rather than all at once: the full `(len(a), len(b), num_tokens_a,
+    num_tokens_b)` intermediate tensor from a single `einsum` call would otherwise be
+    held in memory simultaneously, which can exhaust memory even for moderately
+    sized inputs (e.g. a few thousand documents).
+
     Args:
         a: Tensor of shape (batch_size, num_tokens, token_dim).
         b: Tensor of shape (batch_size, num_tokens, token_dim).
+        batch_size: Number of rows of `a` and of `b` to score against each other at a time.
 
     Returns:
         A tensor containing the maximum similarity values for each batch.
@@ -190,13 +196,17 @@ def max_sim(a: Array, b: Array) -> torch.Tensor:
     if len(b.shape) == 2:
         b = b.reshape(1, *b.shape)
 
-    scores = torch.einsum(
-        "ash,bth->abst",
-        a,
-        b,
-    )
+    row_chunks = []
+    for a_start in range(0, a.size(0), batch_size):
+        a_chunk = a[a_start : a_start + batch_size]
+        col_chunks = []
+        for b_start in range(0, b.size(0), batch_size):
+            b_chunk = b[b_start : b_start + batch_size]
+            scores = torch.einsum("ash,bth->abst", a_chunk, b_chunk)
+            col_chunks.append(scores.max(axis=-1).values.sum(axis=-1))  # type: ignore[call-overload]
+        row_chunks.append(torch.cat(col_chunks, dim=1))
 
-    return cast("torch.Tensor", scores.max(axis=-1).values.sum(axis=-1))  # type: ignore[call-overload]
+    return torch.cat(row_chunks, dim=0)
 
 
 # https://github.com/lightonai/pylate/blob/2d094a724866d6e15701781528368438081c0157/pylate/scores/scores.py#L67C1-L122C38
@@ -216,7 +226,7 @@ def pairwise_max_sim(
     scores = []
 
     for query_embedding, document_embedding in zip(
-        queries_embeddings, documents_embeddings
+        queries_embeddings, documents_embeddings, strict=True
     ):
         query_embedding = _convert_to_tensor(query_embedding)  # noqa: PLW2901
         document_embedding = _convert_to_tensor(document_embedding)  # noqa: PLW2901
@@ -265,8 +275,7 @@ def dot_score(a: Array, b: Array) -> torch.Tensor:
     ):
         _dot_score_core_compiled = torch.compile(_dot_score_core)
         return _dot_score_core_compiled(a, b)
-    else:
-        return _dot_score_core(a, b)
+    return _dot_score_core(a, b)
 
 
 def pairwise_dot_score(a: Array, b: Array) -> Array:

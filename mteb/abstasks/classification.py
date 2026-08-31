@@ -438,7 +438,7 @@ class AbsTaskClassification(AbsTask):
                 if (values := [s[k] for s in scores if s[k] is not None])  # type: ignore[literal-required]
                 else np.nan
             )
-            for k in scores[0].keys()
+            for k in scores[0]
         }
         logger.info(f"Running {self.metadata.name} - Finished.")
         return FullClassificationMetrics(  # type: ignore[no-any-return]
@@ -496,9 +496,10 @@ class AbsTaskClassification(AbsTask):
 
         label_counter: dict[str, int] = defaultdict(int)
         sampled_idxs = []
+        labels = dataset[self.label_column_name]
 
         for i in idxs:
-            label = dataset[i][self.label_column_name]
+            label = labels[i]
             if label_counter[label] < self.samples_per_label:
                 sampled_idxs.append(i)
                 label_counter[label] += 1

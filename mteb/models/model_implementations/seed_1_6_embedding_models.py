@@ -19,6 +19,8 @@ from mteb.models.model_meta import ModelMeta
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from PIL import Image
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -28,9 +30,9 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def pil_to_base64(image, format="jpeg"):
+def pil_to_base64(image, image_format="jpeg"):
     buffer = BytesIO()
-    image.save(buffer, format=format)
+    image.save(buffer, format=image_format)
     img_bytes = buffer.getvalue()
     encoded_bytes = base64.b64encode(img_bytes)
     return encoded_bytes.decode("utf-8")
@@ -156,7 +158,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         max_tokens: int,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
-        available_embed_dims: list[int | None] = [None],
+        available_embed_dims: Sequence[int | None] = (None,),
         **kwargs,
     ) -> None:
         """Wrapper for Seed embedding API."""

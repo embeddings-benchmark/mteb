@@ -20,6 +20,7 @@ from tqdm.auto import tqdm
 
 from mteb._hf_integration.eval_model import HFEvalMeta, HFEvalTaskConfig
 from mteb._hf_integration.hf_hub_utils import _get_file_on_hub
+from mteb._log_once import LogOnce
 from mteb._set_seed import _set_seed
 from mteb.languages import LanguageScripts
 from mteb.models import (
@@ -30,7 +31,7 @@ from mteb.models import (
 from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Iterator, Mapping
 
     from typing_extensions import Self
 
@@ -43,12 +44,13 @@ if TYPE_CHECKING:
 
 
 logger = logging.getLogger(__name__)
+log_once = LogOnce(logger)
 
 
 def _multilabel_subsampling(
     dataset_dict: DatasetDict,
     seed: int,
-    splits: list[str] = ["test"],
+    splits: Sequence[str] = ("test",),
     label: str = "label",
     n_samples: int = 2048,
 ) -> DatasetDict:
@@ -120,16 +122,16 @@ class AbsTask(ABC):  # noqa: PLR0904
         if self.metadata.is_beta:
             msg = f"The task '{self.metadata.name}' is currently in beta. This means that the dataset is still being tested and may be subject to changes. This means that the scores of this dataset is liable to change and should be used with caution."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
 
     def check_if_dataset_is_superseded(self) -> None:
         """Check if the dataset is superseded by a newer version."""
         if self.superseded_by:
             msg = f"The task '{self.metadata.name}' is superseded by '{self.superseded_by}'. We recommend using the newer version of the task unless you are running a specific benchmark. See `get_task('{self.superseded_by}').metadata.description` to get a description of the task and changes."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:  # noqa: B027 -- optional hook, deliberately not abstract
         """A transform operations applied to the dataset after loading.
 
         This method is useful when the dataset from Huggingface is not in an `mteb` compatible format.
@@ -139,7 +141,6 @@ class AbsTask(ABC):  # noqa: PLR0904
             num_proc: Number of processes to use for the transformation.
             kwargs: Additional keyword arguments passed to the load_dataset function. Keep for forward compatibility.
         """
-        pass
 
     def evaluate(
         self,
@@ -307,7 +308,7 @@ class AbsTask(ABC):  # noqa: PLR0904
     def stratified_subsampling(
         dataset_dict: DatasetDict,
         seed: int,
-        splits: list[str] = ["test"],
+        splits: Sequence[str] = ("test",),
         label: str = "label",
         n_samples: int = 2048,
     ) -> DatasetDict:
@@ -332,8 +333,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                     return _multilabel_subsampling(
                         dataset_dict, seed, splits, label, n_samples
                     )
-                else:
-                    raise e
+                raise e
 
         for split in splits:
             if n_samples >= len(dataset_dict[split]):
@@ -401,7 +401,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         """
         self.dataset = {}
         merged_dataset = load_dataset(**self.metadata.dataset)  # load "default" subset
-        for split in merged_dataset.keys():
+        for split in merged_dataset:
             df_split = merged_dataset[split].to_polars()
             df_grouped = dict(df_split.group_by(["lang"]))
             for lang in set(df_split["lang"].unique()) & set(self.hf_subsets):
@@ -580,9 +580,12 @@ class AbsTask(ABC):  # noqa: PLR0904
                         subsets_to_keep.append(hf_subset)
                         break
 
-            if exclusive_language_filter is True and languages:
-                if lang_scripts.contains_languages(langs):
-                    subsets_to_keep.append(hf_subset)
+            if (
+                exclusive_language_filter is True
+                and languages
+                and lang_scripts.contains_languages(langs)
+            ):
+                subsets_to_keep.append(hf_subset)
 
         if len(subsets_to_keep) == 0:
             raise ValueError(
@@ -808,3 +811,53 @@ class AbsTask(ABC):  # noqa: PLR0904
     def superseded_by(self) -> str | None:
         """If the dataset is superseded by another dataset, return the name of the new dataset."""
         return self.metadata.superseded_by
+
+
+def get_abstask_prompt(task_name: str) -> str:
+    """Get the prompt defined by the abstask class (`AbsTask.abstask_prompt`) of a task.
+
+    The task is resolved from the imported task classes instead of the task registry, such that it
+    doesn't only work for tasks within mteb, but also for tasks outside of it, e.g. mock tasks or
+    user defined tasks.
+
+    Args:
+        task_name: The name of the task, e.g. "SciFact".
+
+    Returns:
+        The prompt defined by the abstask class of the task, or an empty string if its abstask class
+            doesn't define one.
+    """
+    if task_name not in _task_name_to_prompt:
+        prompt = ""
+        for task_cls in _iter_task_subclasses():
+            # `abstask_prompt` is defined on the abstask class, e.g. `AbsTaskRetrieval`, and is only
+            # annotated on `AbsTask`, so abstasks such as `AbsTaskAggregate` don't define one
+            if task_cls.metadata.name == task_name:
+                prompt = getattr(task_cls, "abstask_prompt", "")
+                if prompt:
+                    break
+        _task_name_to_prompt[task_name] = prompt
+
+    prompt = _task_name_to_prompt[task_name]
+    if not prompt:
+        log_once.warning(
+            f"No prompt found on the abstask class of task '{task_name}'. Using an empty prompt."
+        )
+    return prompt
+
+
+def _iter_task_subclasses() -> Iterator[type[AbsTask]]:
+    """Iterate over the imported subclasses of `AbsTask` that define a metadata."""
+    stack: list[Any] = [AbsTask]
+    seen: set[Any] = set()
+    while stack:
+        for subclass in stack.pop().__subclasses__():
+            if subclass in seen:
+                continue
+            seen.add(subclass)
+            stack.append(subclass)
+            if getattr(subclass, "metadata", None) is not None:
+                yield subclass
+
+
+_task_name_to_prompt: dict[str, str] = {}

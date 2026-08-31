@@ -46,7 +46,7 @@ Mirco Ravanelli},
 
     def dataset_transform(self, **kwargs):
         # remove rows where age is "not_defined" or "eighties" <- only 1 label so messes up stratified subsampling
-        for split in self.dataset.keys():
+        for split in self.dataset:
             self.dataset[split] = self.dataset[split].filter(
                 lambda example: example["age"] not in ["not_defined", "eighties"]  # noqa: PLR6201
             )

@@ -84,17 +84,18 @@ _DEFAULT_PROPRIETIES = (
 class MTEBTasks(tuple[AbsTask]):
     """A tuple of tasks with additional methods to get an overview of the tasks."""
 
+    __slots__ = ()
+
     def __repr__(self) -> str:
         return "MTEBTasks" + super().__repr__()
 
     @staticmethod
-    def _extract_property_from_task(task: AbsTask, property: str) -> Any:
-        if hasattr(task.metadata, property):
-            return getattr(task.metadata, property)
-        elif hasattr(task, property):
-            return getattr(task, property)
-        else:
-            raise KeyError("Property neither in Task attribute or in task metadata.")
+    def _extract_property_from_task(task: AbsTask, property_name: str) -> Any:
+        if hasattr(task.metadata, property_name):
+            return getattr(task.metadata, property_name)
+        if hasattr(task, property_name):
+            return getattr(task, property_name)
+        raise KeyError("Property neither in Task attribute or in task metadata.")
 
     @property
     def languages(self) -> set[str]:
@@ -178,8 +179,7 @@ class MTEBTasks(tuple[AbsTask]):
             ending = "]" if isinstance(cell, list) else "}"
             cell = sorted(cell)
             return str(cell[:limit_n_entries])[:-1] + ", ..." + ending
-        else:
-            return str(cell)
+        return str(cell)
 
     def to_latex(
         self,
@@ -281,7 +281,7 @@ def get_tasks(  # noqa: PLR0913, PLR0917
         if domains or task_types or categories:
             logger.warning(
                 "When `tasks` is provided, other filters like domains, task_types, and categories are ignored. "
-                + "If you want to filter a list of tasks, please use `mteb.filter_tasks` instead."
+                "If you want to filter a list of tasks, please use `mteb.filter_tasks` instead."
             )
         _tasks = []
         for task in tasks:
@@ -357,7 +357,7 @@ def get_task(
         _task_name = _TASK_RENAMES[task_name]
         msg = f"The task with the given name '{task_name}' has been renamed to '{_task_name}'. To prevent this warning use the new name."
         logger.warning(msg)
-        warnings.warn(msg)
+        warnings.warn(msg, stacklevel=2)
 
     if task_name not in _TASKS_REGISTRY:
         close_matches = difflib.get_close_matches(task_name, _TASKS_REGISTRY.keys())

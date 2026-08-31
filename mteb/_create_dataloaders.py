@@ -108,6 +108,7 @@ def _convert_conv_history_to_query(
         warnings.warn(
             "Conversations are a list of strings. Used 'user' role for all turns.",
             category=UserWarning,
+            stacklevel=2,
         )
     # otherwise, it's a list of dictionaries, which we need to convert to strings
     elif isinstance(conversation, list) and isinstance(conversation[0], dict):
@@ -116,7 +117,7 @@ def _convert_conv_history_to_query(
         for i, turn in enumerate(conversation):
             error_msg = (
                 "When converting conversations lists of dictionary to string, each turn in the conversation "
-                + "must be a dictionary with 'role' and 'content' keys"
+                "must be a dictionary with 'role' and 'content' keys"
             )
             if not isinstance(turn, dict):
                 raise ValueError(f"Turn {i} is not a dictionary. " + error_msg)
@@ -275,19 +276,20 @@ def _prepare_dataset(
                 dataset = _combine_queries_with_instruction_text(dataset)
 
     if "image" in modalities:
-        dataset = _prepare_image_dataset(
-            dataset,
-            image_column_name=input_column if input_column else "image",
-            num_proc=num_proc,
-        )
+        image_column_name = "image" if input_column is None else input_column
+        if input_column in dataset.column_names:
+            dataset = _prepare_image_dataset(
+                dataset,
+                image_column_name=image_column_name,
+                num_proc=num_proc,
+            )
     for modality in ("audio", "video"):
-        if modality in modalities:
-            if (
-                input_column
-                and input_column in dataset.column_names
-                and modality not in dataset.column_names
-            ):
-                dataset = dataset.rename_column(input_column, modality)
+        if modality in modalities and (
+            input_column
+            and input_column in dataset.column_names
+            and modality not in dataset.column_names
+        ):
+            dataset = dataset.rename_column(input_column, modality)
 
     # Drop modality columns not needed for this prompt type to avoid
     # None values in the collate function (e.g. text=None in image-only corpus)

@@ -103,10 +103,10 @@ def format_task_entry(task: mteb.AbsTask) -> str:  # noqa: PLR0914
     if task.metadata.contributed_by:
         description += f" Contributed by {task.metadata.contributed_by}."
     raw_license = task.metadata.license or "not specified"
-    if raw_license.startswith("http://") or raw_license.startswith("https://"):
-        license = f"[custom]({raw_license})"
+    if raw_license.startswith(("http://", "https://")):
+        license_str = f"[custom]({raw_license})"
     else:
-        license = raw_license
+        license_str = raw_license
     reference = task.metadata.reference
     dataset_name = task.metadata.dataset["path"]
     if not reference and not isinstance(task, AbsTaskAggregate):
@@ -135,10 +135,10 @@ def format_task_entry(task: mteb.AbsTask) -> str:  # noqa: PLR0914
     if not isinstance(task, AbsTaskAggregate):
         dataset_line = (
             f"**Dataset:** [`{dataset_name}`](https://huggingface.co/datasets/{dataset_name}) "
-            f"• **License:** {license}{learn_more}"
+            f"• **License:** {license_str}{learn_more}"
         )
     else:
-        dataset_line = f"**License:** {license}{learn_more}"
+        dataset_line = f"**License:** {license_str}{learn_more}"
 
     entry = task_entry.format(
         task_name=task.metadata.name,
@@ -215,11 +215,11 @@ def main(input_path: Path, output_path: Path) -> None:
     for tt, stt in _TASKTYPE2SIMPLIFIEDTASKTYPE.items():
         stask_types[stt].append(tt)
 
-    for stt, tt in stask_types.items():
+    for stt, task_types in stask_types.items():
         # For each simplified task type, combine the markdown entries of the corresponding task types, each consisting of the tasks of that type.
         mds = []
 
-        for tt in sorted(tt):  # noqa: PLW2901
+        for tt in sorted(task_types):
             tt_tasks = task_types2tasks.get(tt, [])
             if not tt_tasks:
                 continue

@@ -94,10 +94,10 @@ class VLM2VecWrapper(AbsEncoder):
             num_crops=4,
         )
 
-    def encode_input(self, input):
-        hidden_states = self.mdl(**input, return_dict=True, output_hidden_states=True)
+    def encode_input(self, inputs):
+        hidden_states = self.mdl(**inputs, return_dict=True, output_hidden_states=True)
         hidden_states = hidden_states.hidden_states[-1]
-        pooled_output = self._pooling(hidden_states, input["attention_mask"])
+        pooled_output = self._pooling(hidden_states, inputs["attention_mask"])
         return pooled_output
 
     def _pooling(self, last_hidden_state, attention_mask):
@@ -223,7 +223,9 @@ class VLM2VecWrapper(AbsEncoder):
                     input_ids, pixel_values, image_sizes = [], [], []
                     batch_text = batch["text"]
                     batch_image = batch["image"]
-                    for item_image, item_text in zip(batch_image, batch_text):
+                    for item_image, item_text in zip(
+                        batch_image, batch_text, strict=True
+                    ):
                         inputs = self.processor(
                             f"<|image_1|> Represent the given image with the following question: {item_text}",
                             item_image,

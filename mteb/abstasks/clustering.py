@@ -384,7 +384,7 @@ def _convert_to_fast(
                     "The clusters are not sampled from the same distribution as they have different labels."
                 )
 
-            for l, s in zip(lab, sents):
+            for l, s in zip(lab, sents, strict=True):
                 if s not in sent_set:
                     labels.append(l)
                     sentences.append(s)

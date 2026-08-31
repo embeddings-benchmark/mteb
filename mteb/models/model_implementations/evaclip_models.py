@@ -37,7 +37,7 @@ def evaclip_loader(model_name, **kwargs):
             "`pip install ninja timm`"
             "`pip install -v -U git+https://github.com/facebookresearch/xformers.git@main#egg=xformers`"
             "`git clone https://github.com/NVIDIA/apex && cd apex && pip install -v --disable-pip-version-check --no-build-isolation --no-cache-dir ./`"
-        )
+        ) from None
 
     class EvaCLIPWrapper(AbsEncoder):
         def __init__(
@@ -119,9 +119,9 @@ def evaclip_loader(model_name, **kwargs):
                     )
                 fused_embeddings = text_embeddings + image_embeddings
                 return fused_embeddings
-            elif text_embeddings is not None:
+            if text_embeddings is not None:
                 return text_embeddings
-            elif image_embeddings is not None:
+            if image_embeddings is not None:
                 return image_embeddings
             raise ValueError
 

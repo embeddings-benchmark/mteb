@@ -270,7 +270,7 @@ class LightOnListwiseRerankerWrapper:
             if not windows:
                 continue
             permutations = self._rank_windows_batched(windows, batch_size=batch_size)
-            for (query_idx, p, end), perm in zip(meta, permutations):
+            for (query_idx, p, end), perm in zip(meta, permutations, strict=True):
                 order = orders[query_idx]
                 order[p:end] = [order[p + j] for j in perm]
         return orders
@@ -310,7 +310,7 @@ class LightOnListwiseRerankerWrapper:
             documents.extend(images if images is not None else texts)
         group_queries: list[str] = []
         group_docs: list[list[str | Image.Image]] = []
-        for query, document in zip(queries, documents):
+        for query, document in zip(queries, documents, strict=True):
             if not group_queries or query != group_queries[-1]:
                 group_queries.append(query)
                 group_docs.append([])

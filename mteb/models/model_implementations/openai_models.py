@@ -84,7 +84,9 @@ class OpenAIModel(AbsEncoder):
         sentences = [text for batch in inputs for text in batch["text"]]
 
         mask_sents = [(i, t) for i, t in enumerate(sentences) if t.strip()]
-        mask, no_empty_sent = list(zip(*mask_sents)) if mask_sents else ([], [])
+        mask, no_empty_sent = (
+            list(zip(*mask_sents, strict=True)) if mask_sents else ([], [])
+        )
         trimmed_sentences = []
         for sentence in no_empty_sent:
             encoded_sentence = self._encoding.encode(sentence)
@@ -111,7 +113,7 @@ class OpenAIModel(AbsEncoder):
         # Set dimensions only for models that support it
         dimensions = (
             self._embed_dim or NotGiven()
-            if not self.model_name == "text-embedding-ada-002"
+            if self.model_name != "text-embedding-ada-002"
             else NotGiven()
         )
         default_kwargs = dict(

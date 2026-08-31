@@ -45,6 +45,10 @@ from mteb.models.model_meta import MODEL_TYPES
 from mteb.results.benchmark_results import BenchmarkResults
 
 logger = logging.getLogger(__name__)
+
+# Shared default cache, constructed at import time exactly as the previous
+# `cache: ResultCache = ResultCache()` default argument was.
+_DEFAULT_CACHE = ResultCache()
 event_logger = EventLogger()
 
 
@@ -76,9 +80,9 @@ def _set_benchmark_on_load(request: gr.Request):
 
 
 def _download_table(table: pd.DataFrame) -> str:
-    file = tempfile.NamedTemporaryFile(delete=False, suffix=".csv")
-    table.to_csv(file)
-    return file.name
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".csv") as file:
+        table.to_csv(file)
+        return file.name
 
 
 def _update_citation(benchmark_name: str) -> str:
@@ -215,9 +219,8 @@ def _filter_models(
         if is_model_zero_shot is None:
             if zero_shot_setting in ["remove_unknown", "only_zero_shot"]:  # noqa: PLR6201
                 continue
-        elif not is_model_zero_shot:
-            if zero_shot_setting == "only_zero_shot":
-                continue
+        elif not is_model_zero_shot and zero_shot_setting == "only_zero_shot":
+            continue
         models_to_keep.add(model_meta.name)
     return list(models_to_keep)
 
@@ -225,9 +228,7 @@ def _filter_models(
 def _should_show_zero_shot_filter(benchmark_name: str) -> bool:
     benchmark = mteb.get_benchmark(benchmark_name)
 
-    if isinstance(benchmark, RtebBenchmark):
-        return False
-    return True
+    return not isinstance(benchmark, RtebBenchmark)
 
 
 @cachetools.cached(
@@ -416,7 +417,7 @@ def on_page_load(request: gr.Request):
 
 
 def get_leaderboard_app(  # noqa: PLR0914
-    cache: ResultCache = ResultCache(),
+    cache: ResultCache = _DEFAULT_CACHE,
     rebuild: bool = False,
     cache_repo_id: str = "mteb/results",
 ) -> gr.Blocks:
@@ -982,7 +983,8 @@ def get_leaderboard_app(  # noqa: PLR0914
                 "desc",
             )
             sizes = {
-                n: _estimate_payload_size(o) for n, o in zip(output_names, outputs)
+                n: _estimate_payload_size(o)
+                for n, o in zip(output_names, outputs, strict=True)
             }
             total_size = sum(s for s in sizes.values() if s > 0)
             t9 = time.time()
