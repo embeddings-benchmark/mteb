@@ -837,8 +837,8 @@ class AbsTask(ABC):  # noqa: PLR0904
         if self.data_loaded:
             self.dataset = None
             self.data_loaded = False
-            # a filter from `mteb.quality` gives a cleaned task metadata of its own; reloading fetches the
-            # published data again, so drop that override and fall back to the published metadata
+            # a task whose data was filtered carries metadata of its own describing that data; unloading it
+            # leaves only the published data to reload, so restore the published metadata alongside
             self.__dict__.pop("metadata", None)
             logger.info(f"Unloaded dataset {self.metadata.name} from memory.")
         else:

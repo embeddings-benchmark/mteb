@@ -7,7 +7,11 @@ import pytest
 from datasets import Dataset, DatasetDict
 
 import mteb
+from mteb.abstasks.abstask import AbsTask
 from mteb.mocks import (
+    MockAny2AnyRetrievalI2TTask,
+    MockAudioClassification,
+    MockAudioClusteringTask,
     MockClassificationTask,
     MockClusteringTask,
     MockImageClassificationTask,
@@ -16,6 +20,8 @@ from mteb.mocks import (
     MockRerankingTask,
     MockRetrievalTask,
     MockSTSTask,
+    MockVideoClassification,
+    MockVideoClusteringTask,
 )
 from mteb.mocks.mock_tasks.reranking import MockAggregatedTask
 from mteb.quality import remove_duplicates
@@ -210,18 +216,30 @@ def test_remove_duplicates_applies_within_a_row_of_a_clustering_task() -> None:
     assert row["labels"] == [0, 2]
 
 
-def test_remove_duplicates_compares_images_by_content() -> None:
-    task = MockImageClassificationTask()
+@pytest.mark.parametrize(
+    ("task_class", "column"),
+    [
+        (MockImageClassificationTask, "image"),
+        (MockAudioClassification, "audio"),
+        (MockVideoClassification, "video"),
+    ],
+)
+def test_remove_duplicates_compares_non_text_by_content(
+    task_class: type[AbsTask], column: str
+) -> None:
+    task = task_class()
     task.load_data()
-    split = next(iter(task.metadata.eval_splits))
-    images = task.dataset[split]["image"]
+    split = next(iter(task.dataset))
+    values = task.dataset[split][column]
+    # the first value repeated, so only a content hash can tell rows 0 and 1 apart from row 2
     task.dataset[split] = Dataset.from_dict(
-        {"image": [images[0], images[0], images[1]], "label": [0, 1, 2]}
+        {column: [values[0], values[0], values[1]], "label": [0, 1, 2]},
+        features=task.dataset[split].features,
     )
 
-    task = remove_duplicates(task)
+    cleaned = remove_duplicates(task)
 
-    assert task.dataset[split]["label"] == [0, 2]
+    assert cleaned.dataset[split]["label"] == [0, 2]
 
 
 def test_remove_duplicates_raises_for_unknown_columns() -> None:
@@ -521,14 +539,18 @@ def test_the_original_task_is_untouched_for_every_dataset_shape() -> None:
         assert task.metadata.name == type(task).metadata.name
 
 
-def test_an_aggregate_task_is_copied_with_its_subtasks() -> None:
+def test_an_aggregate_task_points_at_the_tasks_it_aggregates() -> None:
     task = MockAggregatedTask()
 
-    cleaned = remove_duplicates(task)
+    with pytest.raises(NotImplementedError, match="aggregates other tasks"):
+        remove_duplicates(task)
 
-    assert cleaned is not task
-    assert all(a is not b for a, b in zip(cleaned.tasks, task.tasks, strict=True))
-    assert all(t.metadata.name == type(t).metadata.name for t in task.tasks)
+    # the tasks it aggregates are filtered individually
+    cleaned = [remove_duplicates(sub_task) for sub_task in task.tasks]
+    assert all(
+        isinstance(sub_task, type(orig))
+        for sub_task, orig in zip(cleaned, task.tasks, strict=True)
+    )
 
 
 def test_normalization_accepts_any_callable() -> None:
@@ -582,3 +604,52 @@ def test_the_copy_shares_no_mutable_state_with_the_original() -> None:
     # mutating one in place leaves the other alone
     cleaned.hf_subsets.remove("fra")
     assert task.hf_subsets == ["eng", "fra"]
+
+
+@pytest.mark.parametrize(
+    "task_class", [MockAudioClusteringTask, MockVideoClusteringTask]
+)
+def test_remove_duplicates_handles_non_text_clustering(
+    task_class: type[AbsTask],
+) -> None:
+    task = task_class()
+    task.load_data()
+    split = next(iter(task.dataset))
+    column = next(iter(task._get_content_columns()))
+    values = task.dataset[split][column]
+    labels = task.dataset[split][task.label_column_name]
+    task.dataset[split] = Dataset.from_dict(
+        {column: [values[0], values[0], values[1]], task.label_column_name: labels[:3]},
+        features=task.dataset[split].features,
+    )
+
+    cleaned = remove_duplicates(task)
+
+    assert len(cleaned.dataset[split]) == 2
+
+
+def test_retrieval_compares_each_side_on_its_own_modality() -> None:
+    # an any-to-any task holds a different modality on each side: text documents, image queries
+    task = MockAny2AnyRetrievalI2TTask()
+    task.load_data()
+    subset, split = _retrieval_split(task)
+    data = task.dataset[subset][split]
+    images = data["queries"]["image"]
+
+    data["corpus"] = Dataset.from_dict(
+        {"id": ["d1", "d2"], "text": ["same doc", "same doc"]}
+    )
+    data["queries"] = Dataset.from_dict(
+        {"id": ["q1", "q2"], "image": [images[0], images[0]]},
+        features=data["queries"].features,
+    )
+    data["relevant_docs"] = {"q1": {"d1": 1}, "q2": {"d2": 1}}
+    data["top_ranked"] = None
+
+    cleaned = remove_duplicates(task)
+
+    cleaned_data = cleaned.dataset[subset][split]
+    # the corpus deduplicates on text, the queries on the hash of their image
+    assert cleaned_data["corpus"]["id"] == ["d1"]
+    assert cleaned_data["queries"]["id"] == ["q1"]
+    assert cleaned_data["relevant_docs"] == {"q1": {"d1": 1}}

@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 
 from mteb.abstasks.retrieval import _filter_queries_without_positives
 
-from ._filters import _iter_row_content, _row_key
+from ._filters import _content_readers, _iter_row_content, _row_key
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -23,24 +23,26 @@ logger = logging.getLogger(__name__)
 
 
 def _columns_present_in(
-    dataset: Dataset, col_modalities: Mapping[str, Modalities], side: str
+    dataset: Dataset, declared_columns: Mapping[str, Modalities], side: str
 ) -> dict[str, Modalities]:
-    """The compared columns that `dataset` actually has.
+    """Narrow the task's declared content columns down to the ones `dataset` actually holds.
 
-    The corpus and the queries do not hold the same columns -- only a corpus entry has a `title` -- so each side is
-    compared on the columns it has rather than on their intersection.
+    A task declares the union of its content columns, but the corpus and the queries rarely hold the same ones:
+    only a corpus entry has a `title`, and an any-to-any task puts a different modality on each side, e.g. an
+    image corpus searched by text queries. Each side is therefore compared on what it has, not on what the two
+    have in common.
 
     Raises:
-        ValueError: If the dataset has none of the compared columns.
+        ValueError: If the dataset holds none of the declared columns.
     """
     present = {
         column: modality
-        for column, modality in col_modalities.items()
+        for column, modality in declared_columns.items()
         if column in dataset.column_names
     }
     if not present:
         raise ValueError(
-            f"Cannot filter the {side} on {sorted(col_modalities)}: it only has the columns "
+            f"Cannot filter the {side} on {sorted(declared_columns)}: it only has the columns "
             f"{dataset.column_names}."
         )
     return present
@@ -64,10 +66,11 @@ def _select_kept_entries(
         The filtered dataset, the ids it kept, and a mapping from the id of a removed entry to the id of the first
         kept entry with the same content. That mapping is empty unless `remap_duplicates` is set.
     """
-    rows = _iter_row_content(
+    # built once: reading the rows twice below must not hash the same images or audio twice
+    readers = _content_readers(
         dataset, col_modalities, normalization=normalization, num_proc=num_proc
     )
-    keep = keep_fn(rows)
+    keep = keep_fn(_iter_row_content(readers))
     ids = dataset["id"]
     kept_ids = {ids[i] for i in keep}
 
@@ -75,10 +78,7 @@ def _select_kept_entries(
     if remap_duplicates:
         keep_set = set(keep)
         canonical: dict[bytes, str] = {}
-        all_rows = _iter_row_content(
-            dataset, col_modalities, normalization=normalization, num_proc=num_proc
-        )
-        for i, row in enumerate(all_rows):
+        for i, row in enumerate(_iter_row_content(readers)):
             key = _row_key(row)
             if i in keep_set:
                 canonical.setdefault(key, ids[i])
@@ -91,7 +91,7 @@ def _select_kept_entries(
 def _filter_retrieval_split(  # noqa: PLR0914
     split_data: RetrievalSplitData,
     keep_fn: KeepIndicesFn,
-    col_modalities: Mapping[str, Modalities],
+    declared_columns: Mapping[str, Modalities],
     *,
     normalization: Normalization,
     remap_duplicates: bool = False,
@@ -102,7 +102,8 @@ def _filter_retrieval_split(  # noqa: PLR0914
     Args:
         split_data: The corpus, queries, relevance judgements and top-ranked documents of one split.
         keep_fn: Decides which documents and queries to keep.
-        col_modalities: The columns of the corpus and the queries to compare, mapped to their modality.
+        declared_columns: Every content column the task declares, mapped to its modality. Each of the corpus
+            and the queries is compared on whichever of them it holds, so the two sides need not match.
         normalization: How to rewrite text before comparing it.
         remap_duplicates: Whether a removed document or query should hand its relevance judgements over to the
             first kept entry with the same content. This is what makes deduplication lossless; for a filter that
@@ -116,8 +117,8 @@ def _filter_retrieval_split(  # noqa: PLR0914
         ValueError: If the corpus or the queries have none of the compared columns.
     """
     old_corpus, old_queries = split_data["corpus"], split_data["queries"]
-    corpus_columns = _columns_present_in(old_corpus, col_modalities, "corpus")
-    query_columns = _columns_present_in(old_queries, col_modalities, "queries")
+    corpus_columns = _columns_present_in(old_corpus, declared_columns, "corpus")
+    query_columns = _columns_present_in(old_queries, declared_columns, "queries")
 
     corpus, kept_doc_ids, doc_replacements = _select_kept_entries(
         old_corpus,
