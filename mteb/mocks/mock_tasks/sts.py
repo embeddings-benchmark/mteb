@@ -245,6 +245,7 @@ class MockVisualSTSTask(AbsTaskSTS):
                 "average_image_height": 100.0,
                 "max_image_height": 100,
                 "unique_images": 2,
+                "constant_images": 0,
             },
             "image2_statistics": {
                 "min_image_width": 100,
@@ -254,6 +255,7 @@ class MockVisualSTSTask(AbsTaskSTS):
                 "average_image_height": 100.0,
                 "max_image_height": 100,
                 "unique_images": 2,
+                "constant_images": 0,
             },
             "audio1_statistics": None,
             "video1_statistics": None,

@@ -21,7 +21,7 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Mapping
+    from collections.abc import Callable, Container, Iterable, Mapping
 
     from PIL import Image
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
@@ -125,10 +125,61 @@ def calculate_text_statistics(
     )
 
 
+def is_constant_image(image: Image.Image) -> bool:
+    """Whether every pixel of the image is the same colour.
+
+    Such an image carries no visual signal at all. It is usually not a quirk of
+    the source material but a failed image fetch that was silently replaced by a
+    blank frame, which makes it missing data rather than noise: as a query it
+    cannot be answered, and as a labelled sample it cannot be learned from.
+    """
+    extrema = image.getextrema()
+    if extrema is None:
+        return False
+    if isinstance(extrema[0], tuple):  # one (min, max) pair per band
+        return all(lo == hi for lo, hi in extrema)
+    return extrema[0] == extrema[1]
+
+
+def compute_constant_image_flags(
+    images: list[Image.Image], max_workers: int | None = None
+) -> list[bool]:
+    """Return a per-image flag saying whether that image is a single colour.
+
+    Extracted so a caller that also needs to know *which* images are constant
+    (to intersect them with qrels) can reuse the result instead of decoding
+    every image a second time.
+    """
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        return list(executor.map(is_constant_image, images))
+
+
+def count_queries_with_all_gold_constant(
+    relevant_docs: Mapping[str, Mapping[str, int]],
+    constant_doc_ids: Container[str],
+) -> int:
+    """Number of queries whose *entire* gold set is constant images.
+
+    A constant document is only an evaluation defect when the query has nothing
+    else to retrieve. Corpora routinely carry a handful of blank images that no
+    qrel references, and class-judged tasks give a query hundreds of positives
+    where one blank changes nothing; neither is a broken query. Requiring the
+    whole gold set to be constant is what separates those from a query that
+    genuinely cannot be answered.
+    """
+    broken = 0
+    for docs in relevant_docs.values():
+        gold = [doc_id for doc_id, score in docs.items() if score > 0]
+        if gold and all(doc_id in constant_doc_ids for doc_id in gold):
+            broken += 1
+    return broken
+
+
 def calculate_image_statistics(
     images: list[Image.Image],
     hashes: list[str] | None = None,
     max_workers: int | None = None,
+    constant_flags: list[bool] | None = None,
 ) -> ImageStatistics:
     """Calculate descriptive statistics for a list of images.
 
@@ -138,12 +189,16 @@ def calculate_image_statistics(
         hashes: Optional pre-computed MD5 hashes (from `compute_image_hashes`).
             When provided the function skips recomputing them.
         max_workers: Maximum number of worker threads for parallel hash computation.
+        constant_flags: Optional pre-computed flags (from `compute_constant_image_flags`).
+            When provided the function skips recomputing them.
 
     Returns:
         ImageStatistics: A dictionary containing the descriptive statistics.
     """
     if hashes is None:
         hashes = compute_image_hashes(images, max_workers=max_workers)
+    if constant_flags is None:
+        constant_flags = compute_constant_image_flags(images, max_workers=max_workers)
     img_widths, img_heights = [], []
     for img in tqdm(images, desc="Computing image statistics"):
         width, height = img.size
@@ -158,6 +213,7 @@ def calculate_image_statistics(
         average_image_height=sum(img_heights) / len(img_heights),
         max_image_height=max(img_heights),
         unique_images=len(set(hashes)),
+        constant_images=sum(constant_flags),
     )
 
 
@@ -400,6 +456,7 @@ def calculate_relevant_docs_statistics(
     relevant_docs: Mapping[str, Mapping[str, int]],
     query_ids: Iterable[str],
     corpus_ids: Iterable[str],
+    constant_doc_ids: Container[str] | None = None,
 ) -> RelevantDocsStatistics:
     qrel_query_ids = set(relevant_docs)
     qrel_corpus_ids = {doc for qid in relevant_docs for doc in relevant_docs[qid]}
@@ -418,6 +475,11 @@ def calculate_relevant_docs_statistics(
         unique_relevant_docs=len(qrel_corpus_ids),
         num_missing_query_ids=len(qrel_query_ids.difference(query_ids)),
         num_missing_corpus_ids=len(qrel_corpus_ids.difference(corpus_ids)),
+        queries_with_all_gold_constant=(
+            count_queries_with_all_gold_constant(relevant_docs, constant_doc_ids)
+            if constant_doc_ids is not None
+            else 0
+        ),
     )
 
 
@@ -425,6 +487,7 @@ def calculate_single_input_modality_statistics(
     col_inputs: dict[Modalities, list[Any]],
     hashes: dict[str, list[str]] | None = None,
     max_workers: int | None = None,
+    constant_image_flags: list[bool] | None = None,
 ) -> SingleInputModalityStatistics:
     """Compute per-modality statistics for a single-input dataset."""
     _hashes = hashes or {}
@@ -435,7 +498,10 @@ def calculate_single_input_modality_statistics(
         if "text" in col_inputs
         else None,
         image_statistics=calculate_image_statistics(
-            col_inputs["image"], hashes=_hashes.get("image"), max_workers=max_workers
+            col_inputs["image"],
+            hashes=_hashes.get("image"),
+            max_workers=max_workers,
+            constant_flags=constant_image_flags,
         )
         if "image" in col_inputs
         else None,

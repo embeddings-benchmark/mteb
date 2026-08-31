@@ -1008,6 +1008,11 @@ def _is_duplicate_check_exempt(field: str) -> bool:
     )
 
 
+def _is_document_field(field: str) -> bool:
+    """Whether a stats field describes retrieval documents rather than an evaluated unit."""
+    return field.startswith("documents_")
+
+
 def _is_impossible_count_exempt(field: str) -> bool:
     return field in _DUPLICATE_CHECK_EXEMPT_FIELDS
 
@@ -1093,6 +1098,23 @@ def _image_field_quality(
     name: str, split: str, field: str, stats: ImageStatistics
 ) -> tuple[int, list[tuple[str, str]]]:
     errors: list[tuple[str, str]] = []
+
+    # A single-colour image carries no visual signal, but whether that breaks the
+    # evaluation depends on what the column *is*. A query or a labelled sample is
+    # itself the unit being evaluated, so a blank one can never be answered or
+    # learned from. A document is only unretrievable when it is the whole of some
+    # query's gold set, which qrels decide, not this column -- that case is
+    # reported separately as `queries_with_all_gold_constant`. `.get` because
+    # stats generated before this field existed simply omit it.
+    constant_images = stats.get("constant_images")
+    if constant_images and not _is_document_field(field):
+        errors.append(
+            (
+                f"constant_image:{field}",
+                f"{name} ({split}) contains single-colour images in {field} ({constant_images=}), these carry no visual signal and cannot be answered or learned from.",
+            )
+        )
+
     min_image_width = stats["min_image_width"]
     min_image_height = stats["min_image_height"]
     if not (min_image_width > _MIN_IMAGE_DIMENSION) or not (
@@ -1323,6 +1345,21 @@ def _relevant_docs_integrity_quality(
             (
                 "missing_qrel_query_ids",
                 f"{name} ({split}) has qrels keyed on queries missing from the split ({num_missing_query_ids=}).",
+            )
+        )
+
+    # A constant document only breaks evaluation when a query has nothing else to
+    # retrieve. Corpora carry blank images no qrel references, and class-judged
+    # tasks give a query hundreds of positives where one blank changes nothing;
+    # neither is a defect. Only a wholly-constant gold set is.
+    queries_with_all_gold_constant = relevant_docs_stats.get(
+        "queries_with_all_gold_constant"
+    )
+    if queries_with_all_gold_constant:
+        errors.append(
+            (
+                "constant_gold_documents",
+                f"{name} ({split}) has queries whose every relevant document is a single-colour image ({queries_with_all_gold_constant=}), so those queries cannot be answered.",
             )
         )
 
