@@ -139,9 +139,9 @@ class E5VModel(AbsEncoder):
                     ).hidden_states[-1][:, -1, :]
                     all_fused_embeddings.append(outputs.cpu())
             return torch.cat(all_fused_embeddings, dim=0)
-        elif "text" in inputs.dataset.features:
+        if "text" in inputs.dataset.features:
             return self.get_text_embeddings(inputs, **kwargs)
-        elif "image" in inputs.dataset.features:
+        if "image" in inputs.dataset.features:
             return self.get_image_embeddings(inputs, **kwargs)
         raise ValueError
 

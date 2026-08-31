@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import logging
-import re
-from pathlib import Path
+from io import BytesIO
 from typing import TYPE_CHECKING, Any, Literal
 
 import pyarrow as pa
@@ -14,6 +13,7 @@ from datasets import (
     Value,
 )
 from huggingface_hub import hf_hub_download
+from PIL import Image as PILImage
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -27,45 +27,43 @@ logger = logging.getLogger(__name__)
 DATASET_PATH = "mm-bright/MM-BRIGHT"
 DATASET_REVISION = "97702ca9ea81cd0a25288e74a9402439550d6bd4"
 PAPER_REFERENCE = "https://arxiv.org/abs/2601.09562"
-PAIR_SEPARATOR = "|||"
 
-DOMAINS = (
-    "academia",
-    "apple",
-    "askubuntu",
-    "aviation",
-    "bioacoustics",
-    "bioinformatics",
-    "biology",
-    "bitcoin",
-    "chemistry",
-    "christianity",
-    "crypto",
-    "earthscience",
-    "economics",
-    "gaming",
-    "gis",
-    "islam",
-    "law",
-    "math",
-    "medicalsciences",
-    "philosophy",
-    "physics",
-    "pm",
-    "psychology",
-    "quant",
-    "quantumcomputing",
-    "robotics",
-    "salesforce",
-    "sustainability",
-    "travel",
-)
+_DOMAINS = {
+    "academia": ("Academia", "Academia"),
+    "apple": ("Apple", "Apple"),
+    "askubuntu": ("AskUbuntu", "Ask Ubuntu"),
+    "aviation": ("Aviation", "Aviation"),
+    "bioacoustics": ("Bioacoustics", "Bioacoustics"),
+    "bioinformatics": ("Bioinformatics", "Bioinformatics"),
+    "biology": ("Biology", "Biology"),
+    "bitcoin": ("Bitcoin", "Bitcoin"),
+    "chemistry": ("Chemistry", "Chemistry"),
+    "christianity": ("Christianity", "Christianity"),
+    "crypto": ("Crypto", "Cryptography"),
+    "earthscience": ("EarthScience", "Earth Science"),
+    "economics": ("Economics", "Economics"),
+    "gaming": ("Gaming", "Gaming"),
+    "gis": ("GIS", "GIS"),
+    "islam": ("Islam", "Islam"),
+    "law": ("Law", "Law"),
+    "math": ("Math", "Mathematics"),
+    "medicalsciences": ("MedicalSciences", "Medical Sciences"),
+    "philosophy": ("Philosophy", "Philosophy"),
+    "physics": ("Physics", "Physics"),
+    "pm": ("ProjectManagement", "Project Management"),
+    "psychology": ("Psychology", "Psychology"),
+    "quant": ("Quant", "Quantitative Finance"),
+    "quantumcomputing": ("QuantumComputing", "Quantum Computing"),
+    "robotics": ("Robotics", "Robotics"),
+    "salesforce": ("Salesforce", "Salesforce"),
+    "sustainability": ("Sustainability", "Sustainability"),
+    "travel": ("Travel", "Travel"),
+}
 
-_TaskVariant = Literal["t2t", "it2t", "it2i", "it2it"]
+_TaskVariant = Literal["t2t", "it2t", "it2i"]
 _IMAGE_FEATURE = Image(mode="RGB")
-_PAIR_FEATURES = Features(
-    {"id": Value("string"), "text": Value("string"), "image": _IMAGE_FEATURE}
-)
+# The official evaluator uses a white placeholder when a query has no usable image.
+_BLANK_IMAGE = PILImage.new("RGB", (224, 224), "white")
 _QUERY_FEATURES = Features(
     {
         "id": Value("string"),
@@ -73,12 +71,10 @@ _QUERY_FEATURES = Features(
         "image": _IMAGE_FEATURE,
     }
 )
-
 _COMMON_METADATA = dict(
     reference=PAPER_REFERENCE,
     dataset={"path": DATASET_PATH, "revision": DATASET_REVISION},
     eval_splits=["test"],
-    eval_langs={domain: ["eng-Latn"] for domain in DOMAINS},
     main_score="ndcg_at_10",
     date=("2025-01-01", "2026-01-15"),
     domains=["Academic", "Web", "Medical", "Legal", "Religious"],
@@ -158,6 +154,28 @@ def _load_image_data(domain: str, config: str) -> Dataset:
     )
 
 
+def _concatenate_images_vertically(blobs: list[bytes]) -> PILImage.Image | None:
+    images = []
+    for blob in blobs:
+        try:
+            with PILImage.open(BytesIO(blob)) as image:
+                images.append(image.convert("RGB"))
+        except (OSError, ValueError):
+            continue
+    if not images:
+        return None
+
+    width = max(image.width for image in images)
+    combined = PILImage.new(
+        "RGB", (width, sum(image.height for image in images)), "white"
+    )
+    top = 0
+    for image in images:
+        combined.paste(image, ((width - image.width) // 2, top))
+        top += image.height
+    return combined
+
+
 def _load_multimodal_queries(domain: str, examples: Dataset) -> Dataset:
     raw_images = _load_parquet("examples_images", domain).select_columns(
         ["path", "bytes"]
@@ -170,18 +188,20 @@ def _load_multimodal_queries(domain: str, examples: Dataset) -> Dataset:
     rows = []
     missing_query_image_ids = set()
     for example in examples:
-        images = [
-            {"path": path, "bytes": image_lookup[path]}
-            for path in example["image_paths"]
-            if path in image_lookup
-        ]
-        if not images:
+        image = _concatenate_images_vertically(
+            [
+                image_lookup[path]
+                for path in example["image_paths"]
+                if path in image_lookup
+            ]
+        )
+        if image is None:
             missing_query_image_ids.add(example["id"])
         rows.append(
             {
                 "id": example["id"],
                 "text": example["query"],
-                "image": images[0] if images else None,
+                "image": image if image is not None else _BLANK_IMAGE,
             }
         )
     if missing_query_image_ids:
@@ -203,104 +223,23 @@ def _text_qrels(examples: Dataset) -> dict:
     }
 
 
-def _ordered_unique(*groups: list[str]) -> list[str]:
-    return list(dict.fromkeys(item for group in groups for item in group))
-
-
-def _document_candidates(examples: Dataset) -> dict[str, list[str]]:
-    return {
-        example["id"]: _ordered_unique(example["gold_ids"], example["negative_ids"])
-        for example in examples
-    }
-
-
-def _select_candidates(
-    dataset: Dataset,
-    top_ranked: dict[str, list[str]],
-    *,
-    description: str,
-) -> Dataset:
-    dataset_ids = dataset["id"]
-    candidate_ids = {
-        candidate_id
-        for query_candidates in top_ranked.values()
-        for candidate_id in query_candidates
-    }
-    missing_ids = candidate_ids - set(dataset_ids)
-    if missing_ids:
-        first_missing = min(missing_ids)
-        raise ValueError(
-            f"{description} references {len(missing_ids)} missing candidates; "
-            f"first missing ID: {first_missing}"
-        )
-    return dataset.select(
-        [index for index, item_id in enumerate(dataset_ids) if item_id in candidate_ids]
-    )
-
-
-def _annotated_image_candidates(
-    examples: Dataset,
-    available_image_ids: set[str],
+def _full_corpus_without_excluded_ids(
+    documents: Dataset, examples: Dataset
 ) -> dict[str, list[str]]:
+    document_ids = list(documents["id"])
     top_ranked = {}
     for example in examples:
-        candidate_ids = _ordered_unique(
-            [item["image_path"] for item in example["positive_images"]],
-            [item["image_path"] for item in example["negative_images"]],
+        excluded_ids = set(example["negative_ids"])
+        top_ranked[example["id"]] = (
+            [
+                document_id
+                for document_id in document_ids
+                if document_id not in excluded_ids
+            ]
+            if excluded_ids
+            else document_ids
         )
-        top_ranked[example["id"]] = [
-            candidate_id
-            for candidate_id in candidate_ids
-            if candidate_id in available_image_ids
-        ]
     return top_ranked
-
-
-def _filter_evaluable_image_queries(
-    queries: Dataset,
-    top_ranked: dict[str, list[str]],
-    qrels: dict,
-    *,
-    domain: str,
-) -> tuple[Dataset, dict[str, list[str]], dict]:
-    """Keep queries scored by the source evaluator, which omits empty qrels."""
-    evaluable_ids = [
-        query_id
-        for query_id in queries["id"]
-        if top_ranked[query_id] and qrels[query_id]
-    ]
-    if len(evaluable_ids) != len(queries):
-        logger.warning(
-            "Dropping %d %s image-reranking queries without a usable positive "
-            "and candidate set",
-            len(queries) - len(evaluable_ids),
-            domain,
-        )
-    evaluable_id_set = set(evaluable_ids)
-    query_indices = [
-        index
-        for index, query_id in enumerate(queries["id"])
-        if query_id in evaluable_id_set
-    ]
-    return (
-        queries.select(query_indices),
-        {query_id: top_ranked[query_id] for query_id in evaluable_ids},
-        {query_id: qrels[query_id] for query_id in evaluable_ids},
-    )
-
-
-def _document_base(document_id: str) -> str | None:
-    parts = Path(document_id).stem.split("_")
-    # Hard negatives use a 16-character hash rather than an image source key.
-    if len(parts) >= 3 and re.fullmatch(r"[0-9a-f]{16}", parts[1]):
-        return None
-    if parts and re.fullmatch(r"[0-9a-f]{8}", parts[0]):
-        return parts[0]
-    return None
-
-
-def _pair_id(document_id: str, image_id: str) -> str:
-    return f"{document_id}{PAIR_SEPARATOR}{image_id}"
 
 
 def _positive_image_qrels(
@@ -317,159 +256,66 @@ def _positive_image_qrels(
     return qrels
 
 
-def _matching_candidate_documents(
-    source_passage_id: str,
-    candidate_document_ids: list[str],
-) -> list[str]:
-    """Resolve an image's source to its released candidate passage chunk."""
-    if source_passage_id in candidate_document_ids:
-        return [source_passage_id]
-    source_base = _document_base(source_passage_id)
-    if source_base is None:
-        return []
-    return [
-        document_id
-        for document_id in candidate_document_ids
-        if _document_base(document_id) == source_base
+def _filter_queries_without_relevant_images(
+    queries: Dataset, qrels: dict, *, domain: str
+) -> tuple[Dataset, dict]:
+    query_ids = queries["id"]
+    valid_indices = [
+        index for index, query_id in enumerate(query_ids) if qrels[query_id]
     ]
-
-
-def _pair_reranking_data(
-    documents: Dataset,
-    images: Dataset,
-    examples: Dataset,
-) -> tuple[Dataset, dict, dict[str, list[str]]]:
-    """Build Task 4 candidates with graded text and text-image relevance."""
-    document_lookup = {
-        document["id"]: document["text"]
-        for document in documents.select_columns(["id", "text"])
-    }
-    image_column = images.data.column("image")
-    image_lookup = {
-        image_id: image_column[index].as_py()
-        for index, image_id in enumerate(images["id"])
-    }
-
-    corpus_rows: dict[str, dict] = {}
-    qrels = {}
-    top_ranked = {}
-    for example in examples:
-        candidate_document_ids = _ordered_unique(
-            example["gold_ids"], example["negative_ids"]
+    if len(valid_indices) != len(queries):
+        logger.warning(
+            "Dropping %d %s image-retrieval queries without a usable positive image",
+            len(queries) - len(valid_indices),
+            domain,
         )
-        candidate_pair_ids = []
-        relevant = {}
-
-        for document_id in candidate_document_ids:
-            corpus_rows.setdefault(
-                document_id,
-                {
-                    "id": document_id,
-                    "text": document_lookup[document_id],
-                    "image": None,
-                },
-            )
-            candidate_pair_ids.append(document_id)
-            if document_id in example["gold_ids"]:
-                relevant[document_id] = 1
-
-        for field, relevance in (("positive_images", 2), ("negative_images", 0)):
-            for item in example[field]:
-                image_id = item["image_path"]
-                image = image_lookup.get(image_id)
-                if image is None:
-                    continue
-                matching_documents = _matching_candidate_documents(
-                    item["source_passage_id"], candidate_document_ids
-                )
-                for document_id in matching_documents:
-                    pair_id = _pair_id(document_id, image_id)
-                    corpus_rows.setdefault(
-                        pair_id,
-                        {
-                            "id": pair_id,
-                            "text": document_lookup[document_id],
-                            "image": image,
-                        },
-                    )
-                    candidate_pair_ids.append(pair_id)
-                    if relevance and document_id in example["gold_ids"]:
-                        relevant[pair_id] = relevance
-
-        qrels[example["id"]] = relevant
-        top_ranked[example["id"]] = list(dict.fromkeys(candidate_pair_ids))
-
+    valid_ids = [query_ids[index] for index in valid_indices]
     return (
-        Dataset.from_list(list(corpus_rows.values()), features=_PAIR_FEATURES),
-        qrels,
-        top_ranked,
+        queries.select(valid_indices),
+        {query_id: qrels[query_id] for query_id in valid_ids},
     )
 
 
 def _load_domain(domain: str, variant: _TaskVariant) -> RetrievalSplitData:
-    documents = _load_documents(domain)
     config = "examples" if variant == "t2t" else "examples_multimodal"
     examples = _load_parquet(config, domain)
 
-    if variant == "t2t":
-        top_ranked = _document_candidates(examples)
+    if variant == "it2i":
+        queries = _load_multimodal_queries(domain, examples)
+        images = _load_image_data(domain, "document_images")
+        qrels = _positive_image_qrels(examples, set(images["id"]))
+        queries, qrels = _filter_queries_without_relevant_images(
+            queries, qrels, domain=domain
+        )
         return {
-            "corpus": _select_candidates(
-                documents, top_ranked, description=f"{domain} text reranking"
-            ),
+            "corpus": images,
+            "queries": queries,
+            "relevant_docs": qrels,
+            # Task 3 negative_ids are text IDs, so they cannot exclude image IDs.
+            "top_ranked": None,
+        }
+
+    documents = _load_documents(domain)
+    if variant == "t2t":
+        return {
+            "corpus": documents,
             "queries": _text_queries(examples),
             "relevant_docs": _text_qrels(examples),
-            "top_ranked": top_ranked,
+            "top_ranked": _full_corpus_without_excluded_ids(documents, examples),
         }
 
     queries = _load_multimodal_queries(domain, examples)
-    if variant == "it2t":
-        top_ranked = _document_candidates(examples)
-        return {
-            "corpus": _select_candidates(
-                documents, top_ranked, description=f"{domain} multimodal reranking"
-            ),
-            "queries": queries,
-            "relevant_docs": _text_qrels(examples),
-            "top_ranked": top_ranked,
-        }
-
-    images = _load_image_data(domain, "document_images")
-    if variant == "it2i":
-        available_image_ids = set(images["id"])
-        top_ranked = _annotated_image_candidates(examples, available_image_ids)
-        qrels = _positive_image_qrels(examples, available_image_ids)
-        queries, top_ranked, qrels = _filter_evaluable_image_queries(
-            queries, top_ranked, qrels, domain=domain
-        )
-        return {
-            "corpus": _select_candidates(
-                images, top_ranked, description=f"{domain} image reranking"
-            ),
-            "queries": queries,
-            "relevant_docs": qrels,
-            "top_ranked": top_ranked,
-        }
-
-    document_top_ranked = _document_candidates(examples)
-    candidate_documents = _select_candidates(
-        documents,
-        document_top_ranked,
-        description=f"{domain} pair reranking",
-    )
-    pair_corpus, qrels, top_ranked = _pair_reranking_data(
-        candidate_documents, images, examples
-    )
     return {
-        "corpus": pair_corpus,
+        "corpus": documents,
         "queries": queries,
-        "relevant_docs": qrels,
-        "top_ranked": top_ranked,
+        "relevant_docs": _text_qrels(examples),
+        "top_ranked": _full_corpus_without_excluded_ids(documents, examples),
     }
 
 
-def _load_mm_bright_data(
+def _load_mm_bright_domain(
     task: AbsTaskRetrieval,
+    domain: str,
     variant: _TaskVariant,
     timer: TimingStack | None = None,
 ) -> None:
@@ -477,104 +323,679 @@ def _load_mm_bright_data(
         return
     timer = timer or TimingStack()
     with timer("Data loading", log_message=f"Loading dataset {task.metadata.name}..."):
-        task.dataset = {
-            domain: {"test": _load_domain(domain, variant)}
-            for domain in task.hf_subsets
-        }
+        task.dataset = {"default": {"test": _load_domain(domain, variant)}}
     task.data_loaded = True
 
 
-class MMBrightT2TRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
-        name="MMBrightT2TRetrieval",
-        description="MM-BRIGHT text queries reranking annotated positive and hard-negative technical passages across 29 domains.",
-        type="Reranking",
-        category="t2t",
-        modalities=["text"],
-        task_subtypes=["Reasoning as Retrieval"],
-        prompt={
-            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
-        },
+def _domain_metadata(domain: str, variant: _TaskVariant) -> TaskMetadata:
+    class_name, display_name = _DOMAINS[domain]
+    if variant == "t2t":
+        suffix = "T2TRetrieval"
+        task_type = "Retrieval"
+        modalities = ["text"]
+        task_subtypes = ["Reasoning as Retrieval"]
+        description = (
+            f"MM-BRIGHT text queries retrieving reasoning-intensive technical "
+            f"passages in the {display_name} domain."
+        )
+        prompt = (
+            "Given a technical question, retrieve passages that provide the "
+            "reasoning needed to answer it."
+        )
+    elif variant == "it2t":
+        suffix = "IT2TRetrieval"
+        task_type = "Any2AnyRetrieval"
+        modalities = ["text", "image"]
+        task_subtypes = ["Reasoning as Retrieval", "Image Text Retrieval"]
+        description = (
+            f"MM-BRIGHT text-and-image queries retrieving reasoning-intensive "
+            f"technical passages in the {display_name} domain."
+        )
+        prompt = (
+            "Given a technical question and its images, retrieve passages that "
+            "provide the reasoning needed to answer it."
+        )
+    else:
+        suffix = "IT2IRetrieval"
+        task_type = "Any2AnyRetrieval"
+        modalities = ["text", "image"]
+        task_subtypes = ["Reasoning as Retrieval", "Image Text Retrieval"]
+        description = (
+            f"MM-BRIGHT text-and-image queries retrieving relevant technical "
+            f"images in the {display_name} domain."
+        )
+        prompt = (
+            "Given a technical question and its images, retrieve images that "
+            "provide relevant visual evidence."
+        )
+
+    return TaskMetadata(
+        name=f"MMBright{class_name}{suffix}",
+        description=description,
+        type=task_type,
+        category=variant,
+        modalities=modalities,
+        task_subtypes=task_subtypes,
+        prompt={"query": prompt},
+        eval_langs=["eng-Latn"],
         **_COMMON_METADATA,
     )
 
-    def load_data(
-        self,
-        num_proc: int | None = None,
-        *,
-        timer: TimingStack | None = None,
-        **kwargs: Any,
-    ) -> None:
-        _load_mm_bright_data(self, "t2t", timer=timer)
+
+def _load_data(
+    self: AbsTaskRetrieval,
+    num_proc: int | None = None,
+    *,
+    timer: TimingStack | None = None,
+    **kwargs: Any,
+) -> None:
+    _load_mm_bright_domain(self, self.domain, self.variant, timer=timer)
 
 
-class MMBrightIT2TRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
-        name="MMBrightIT2TRetrieval",
-        description="MM-BRIGHT text-and-image queries reranking annotated positive and hard-negative technical passages across 29 domains.",
-        type="Any2AnyRetrieval",
-        category="it2t",
-        modalities=["text", "image"],
-        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
-        prompt={
-            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
-        },
-        **_COMMON_METADATA,
-    )
-
-    def load_data(
-        self,
-        num_proc: int | None = None,
-        *,
-        timer: TimingStack | None = None,
-        **kwargs: Any,
-    ) -> None:
-        _load_mm_bright_data(self, "it2t", timer=timer)
+class MMBrightAcademiaT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "academia"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
 
 
-class MMBrightIT2IRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
-        name="MMBrightIT2IRetrieval",
-        description="MM-BRIGHT text-and-image queries reranking annotated positive and negative technical images across 29 domains.",
-        type="Any2AnyRetrieval",
-        category="it2i",
-        modalities=["text", "image"],
-        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
-        prompt={
-            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
-        },
-        **_COMMON_METADATA,
-    )
-
-    def load_data(
-        self,
-        num_proc: int | None = None,
-        *,
-        timer: TimingStack | None = None,
-        **kwargs: Any,
-    ) -> None:
-        _load_mm_bright_data(self, "it2i", timer=timer)
+class MMBrightAcademiaIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "academia"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
 
 
-class MMBrightIT2ITRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
-        name="MMBrightIT2ITRetrieval",
-        description="MM-BRIGHT text-and-image queries reranking graded passage-and-image evidence against annotated hard negatives across 29 domains.",
-        type="Any2AnyRetrieval",
-        category="it2it",
-        modalities=["text", "image"],
-        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
-        prompt={
-            "query": "Given a technical question and its images, retrieve passage-and-image pairs that provide the reasoning needed to answer it."
-        },
-        **_COMMON_METADATA,
-    )
+class MMBrightAcademiaIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "academia"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
 
-    def load_data(
-        self,
-        num_proc: int | None = None,
-        *,
-        timer: TimingStack | None = None,
-        **kwargs: Any,
-    ) -> None:
-        _load_mm_bright_data(self, "it2it", timer=timer)
+
+class MMBrightAppleT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "apple"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightAppleIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "apple"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightAppleIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "apple"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightAskUbuntuT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "askubuntu"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightAskUbuntuIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "askubuntu"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightAskUbuntuIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "askubuntu"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightAviationT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "aviation"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightAviationIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "aviation"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightAviationIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "aviation"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightBioacousticsT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "bioacoustics"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightBioacousticsIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "bioacoustics"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightBioacousticsIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "bioacoustics"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightBioinformaticsT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "bioinformatics"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightBioinformaticsIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "bioinformatics"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightBioinformaticsIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "bioinformatics"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightBiologyT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "biology"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightBiologyIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "biology"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightBiologyIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "biology"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightBitcoinT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "bitcoin"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightBitcoinIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "bitcoin"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightBitcoinIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "bitcoin"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightChemistryT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "chemistry"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightChemistryIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "chemistry"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightChemistryIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "chemistry"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightChristianityT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "christianity"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightChristianityIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "christianity"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightChristianityIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "christianity"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightCryptoT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "crypto"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightCryptoIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "crypto"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightCryptoIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "crypto"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightEarthScienceT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "earthscience"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightEarthScienceIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "earthscience"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightEarthScienceIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "earthscience"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightEconomicsT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "economics"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightEconomicsIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "economics"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightEconomicsIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "economics"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightGamingT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "gaming"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightGamingIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "gaming"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightGamingIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "gaming"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightGIST2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "gis"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightGISIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "gis"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightGISIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "gis"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightIslamT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "islam"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightIslamIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "islam"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightIslamIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "islam"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightLawT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "law"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightLawIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "law"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightLawIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "law"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightMathT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "math"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightMathIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "math"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightMathIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "math"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightMedicalSciencesT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "medicalsciences"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightMedicalSciencesIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "medicalsciences"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightMedicalSciencesIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "medicalsciences"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightPhilosophyT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "philosophy"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightPhilosophyIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "philosophy"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightPhilosophyIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "philosophy"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightPhysicsT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "physics"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightPhysicsIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "physics"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightPhysicsIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "physics"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightProjectManagementT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "pm"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightProjectManagementIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "pm"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightProjectManagementIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "pm"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightPsychologyT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "psychology"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightPsychologyIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "psychology"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightPsychologyIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "psychology"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightQuantT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "quant"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightQuantIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "quant"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightQuantIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "quant"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightQuantumComputingT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "quantumcomputing"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightQuantumComputingIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "quantumcomputing"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightQuantumComputingIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "quantumcomputing"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightRoboticsT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "robotics"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightRoboticsIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "robotics"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightRoboticsIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "robotics"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightSalesforceT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "salesforce"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightSalesforceIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "salesforce"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightSalesforceIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "salesforce"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightSustainabilityT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "sustainability"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightSustainabilityIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "sustainability"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightSustainabilityIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "sustainability"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightTravelT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "travel"
+    variant = "t2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightTravelIT2TRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "travel"
+    variant = "it2t"
+    metadata = _domain_metadata(domain, variant)
+
+
+class MMBrightTravelIT2IRetrieval(AbsTaskRetrieval):
+    load_data = _load_data
+    domain = "travel"
+    variant = "it2i"
+    metadata = _domain_metadata(domain, variant)

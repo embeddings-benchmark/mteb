@@ -76,6 +76,7 @@ from .miracl_retrieval import (
 from .miracl_vision_retrieval import MIRACLVisionRetrieval
 from .mkqa_retrieval import MKQARetrieval
 from .mlqa_retrieval import MLQARetrieval
+from .mmarco_retrieval import MMarcoRetrievalMultilingual
 from .mr_tidy_retrieval import MrTidyRetrieval
 from .multi_long_doc_retrieval import MultiLongDocRetrieval
 from .mupler_retrieval import MuPLeRRetrieval
@@ -138,10 +139,13 @@ from .vidore3_bench_retrieval import (
 from .web_faq_retrieval import WebFAQRetrieval
 from .wikipedia_retrieval_multilingual import WikipediaRetrievalMultilingual
 from .wit_t2i_retrieval import WITT2IRetrieval
-from .x_flickr30k_co_t2i_retrieval import XFlickr30kCoT2IRetrieval
+from .x_flickr30k_co_t2i_retrieval import (
+    XFlickr30kCoI2TRetrieval,
+    XFlickr30kCoT2IRetrieval,
+)
 from .x_market_retrieval import XMarket
 from .x_qu_ad_retrieval import XQuADRetrieval
-from .xm3600_t2i_retrieval import XM3600T2IRetrieval
+from .xm3600_t2i_retrieval import XM3600I2TRetrieval, XM3600T2IRetrieval
 from .xpqa_retrieval import XPQARetrieval
 
 __all__ = [
@@ -214,6 +218,7 @@ __all__ = [
     "MIRACLVisionRetrieval",
     "MKQARetrieval",
     "MLQARetrieval",
+    "MMarcoRetrievalMultilingual",
     "MintakaRetrieval",
     "MrTidyRetrieval",
     "MuPLeRRetrieval",
@@ -268,7 +273,9 @@ __all__ = [
     "WITT2IRetrieval",
     "WebFAQRetrieval",
     "WikipediaRetrievalMultilingual",
+    "XFlickr30kCoI2TRetrieval",
     "XFlickr30kCoT2IRetrieval",
+    "XM3600I2TRetrieval",
     "XM3600T2IRetrieval",
     "XMarket",
     "XPQARetrieval",

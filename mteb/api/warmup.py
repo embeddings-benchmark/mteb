@@ -49,33 +49,37 @@ def _prewarm_training_datasets() -> None:
 
     Why: first summary build otherwise pays ~2.5s per first-seen model.
     """
-    with _timed(f"training-datasets ({len(MODEL_REGISTRY)} models)"):
-        with ThreadPoolExecutor(max_workers=16, thread_name_prefix="warm-td") as ex:
-            list(ex.map(_training_datasets_cached, MODEL_REGISTRY))
+    with (
+        _timed(f"training-datasets ({len(MODEL_REGISTRY)} models)"),
+        ThreadPoolExecutor(max_workers=16, thread_name_prefix="warm-td") as ex,
+    ):
+        list(ex.map(_training_datasets_cached, MODEL_REGISTRY))
 
 
 def _prewarm_list_schemas() -> None:
     """Pre-build the unfiltered list schemas + serialised bytes (threaded)."""
-    with _timed("list schemas"):
-        with ThreadPoolExecutor(max_workers=4, thread_name_prefix="warm-list") as ex:
-            futures = [
-                ex.submit(_menu_schemas_bytes),
-                ex.submit(_benchmark_schemas_bytes),
-                ex.submit(_filtered_task_schemas_bytes, None, None, None, None, None),
-                ex.submit(
-                    _filtered_model_schemas_bytes,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    False,
-                ),
-            ]
-            for f in futures:
-                f.result()
+    with (
+        _timed("list schemas"),
+        ThreadPoolExecutor(max_workers=4, thread_name_prefix="warm-list") as ex,
+    ):
+        futures = [
+            ex.submit(_menu_schemas_bytes),
+            ex.submit(_benchmark_schemas_bytes),
+            ex.submit(_filtered_task_schemas_bytes, None, None, None, None, None),
+            ex.submit(
+                _filtered_model_schemas_bytes,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                False,
+            ),
+        ]
+        for f in futures:
+            f.result()
 
 
 def _load_per_benchmark_frames_logged() -> None:

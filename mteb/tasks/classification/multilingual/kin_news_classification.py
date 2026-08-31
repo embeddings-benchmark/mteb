@@ -30,7 +30,6 @@ class KinNewsClassification(AbsTaskClassification):
         category="t2c",
         modalities=["text"],
         eval_splits=["test"],
-        # Use HF builder config names as keys so MultiSubsetLoader loads correctly
         eval_langs={
             "kinnews_cleaned": ["kin-Latn"],  # Kinyarwanda
             "kirnews_cleaned": ["run-Latn"],  # Kirundi (ISO-639-3: run)
@@ -51,28 +50,3 @@ class KinNewsClassification(AbsTaskClassification):
 }
 """,
     )
-
-    def dataset_transform(self, **kwargs) -> None:
-        """
-        Transform the dataset to MTEB expected format:
-
-        * column **text**: concatenation of title and content
-        * column **label**: int (0-13 for the 14 news topics)
-        """
-        for lang in self.dataset:
-            for split in self.dataset[lang]:
-                ds = self.dataset[lang][split]
-
-                def transform_example(example):
-                    # Concatenate title and content for the text field
-                    text = f"{example['title']} {example['content']}"
-
-                    return {"text": text, "label": example["label"]}
-
-                ds = ds.map(
-                    transform_example,
-                    remove_columns=ds.column_names,
-                    desc=f"{lang}/{split}",
-                )
-
-                self.dataset[lang][split] = ds

@@ -193,9 +193,12 @@ def get_compatible_mock_tasks(
             continue
 
         # SearchProtocol / Retrieval-only models (like BM25)
-        if isinstance(model, SearchProtocol) and not isinstance(model, EncoderProtocol):
-            if not task._support_search:
-                continue
+        if (
+            isinstance(model, SearchProtocol)
+            and not isinstance(model, EncoderProtocol)
+            and not task._support_search
+        ):
+            continue
 
         # CrossEncoder models
         if isinstance(model, CrossEncoderProtocol) and not task._support_cross_encoder:

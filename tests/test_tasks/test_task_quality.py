@@ -109,6 +109,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "DKHateClassification",
         "DanishMedicinesAgencyBitextMining",
         "DanishPoliticalCommentsClassification",
+        "DanRAGT2ITRetrieval",  # some image-bearing pages have no extracted text
         "DiaBlaBitextMining",
         "DuRetrieval",
         "DutchNewsArticlesRetrieval",
@@ -191,8 +192,15 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MKQARetrieval",
         "MLQuestions",
         "MMDocIRT2ITRetrieval",
+        "MMBrightAcademiaIT2TRetrieval",  # source contains empty text
+        "MMBrightAcademiaT2TRetrieval",
+        "MMBrightBiologyIT2TRetrieval",
+        "MMBrightBiologyT2TRetrieval",
+        "MMBrightQuantumComputingIT2TRetrieval",
+        "MMBrightQuantumComputingT2TRetrieval",
         "MMVUVideoCentricQA",
         "MMarcoRetrieval",
+        "MMarcoRetrievalMultilingual",  # CJK languages (ja, zh) have short queries and some translations (id, vi) are truncated in the original source dataset
         "MSMARCO",
         "MSMARCO-Fa",
         "MSMARCO-PL",
@@ -310,6 +318,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SentimentDKSF",
         "SinhalaNewsClassification",
         "SlovakMovieReviewSentimentClassification",
+        "SlovakPharmacyDrMaxReranking",  # real e-commerce search-query log; 2/4676 queries are 1-char noise
         "SpanishNewsClusteringP2P",
         "SpeechCommandsZeroshotv0.01",
         "SpeechCommandsZeroshotv0.02",
@@ -387,6 +396,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WisesightSentimentClassification",
         "WisesightSentimentClassification.v2",
         "XGlueWPRReranking",
+        "XM3600I2TRetrieval",  # official captions include one-character strings
         "XM3600T2IRetrieval",
         "XMarket",
         "XNLI",
@@ -445,6 +455,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "CMedQAv1-reranking",
         "CMedQAv2-reranking",
         "ClimateFEVER.v2",
+        "ClothoMomentRetrieval",  # same instruction with different audio
         "ClusTREC-Covid",
         "CodeFeedbackST",
         "CodeSearchNetCCRetrieval",
@@ -458,7 +469,9 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "DS1000Retrieval",
         "DalajClassification",
         "DanishPoliticalCommentsClassification",
+        "DanRAGT2ITRetrieval",  # repeated page text is present in the source benchmark
         "DeepSentiPers",
+        "EDIRIT2IRetrieval",
         "EDIST2ITRetrieval",
         "ESCIReranking",
         "EmitClassification",
@@ -518,10 +531,65 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MLSUMClusteringP2P",
         "MLSUMClusteringS2S",
         "MLSUMClusteringS2S.v2",
-        "MMBrightIT2IRetrieval",  # source contains duplicate passages/queries
-        "MMBrightIT2ITRetrieval",
-        "MMBrightIT2TRetrieval",
-        "MMBrightT2TRetrieval",
+        "MMBrightAcademiaIT2TRetrieval",  # source contains duplicate passages/queries
+        "MMBrightAcademiaT2TRetrieval",
+        "MMBrightAppleIT2TRetrieval",
+        "MMBrightAppleT2TRetrieval",
+        "MMBrightAskUbuntuIT2TRetrieval",
+        "MMBrightAskUbuntuT2TRetrieval",
+        "MMBrightAviationIT2TRetrieval",
+        "MMBrightAviationT2TRetrieval",
+        "MMBrightBioacousticsIT2TRetrieval",
+        "MMBrightBioacousticsT2TRetrieval",
+        "MMBrightBioinformaticsIT2IRetrieval",
+        "MMBrightBioinformaticsIT2TRetrieval",
+        "MMBrightBioinformaticsT2TRetrieval",
+        "MMBrightBiologyIT2TRetrieval",
+        "MMBrightBiologyT2TRetrieval",
+        "MMBrightBitcoinIT2TRetrieval",
+        "MMBrightBitcoinT2TRetrieval",
+        "MMBrightChemistryIT2TRetrieval",
+        "MMBrightChemistryT2TRetrieval",
+        "MMBrightChristianityIT2TRetrieval",
+        "MMBrightChristianityT2TRetrieval",
+        "MMBrightCryptoIT2TRetrieval",
+        "MMBrightCryptoT2TRetrieval",
+        "MMBrightEarthScienceIT2TRetrieval",
+        "MMBrightEarthScienceT2TRetrieval",
+        "MMBrightEconomicsIT2TRetrieval",
+        "MMBrightEconomicsT2TRetrieval",
+        "MMBrightGISIT2TRetrieval",
+        "MMBrightGIST2TRetrieval",
+        "MMBrightGamingIT2TRetrieval",
+        "MMBrightGamingT2TRetrieval",
+        "MMBrightIslamIT2TRetrieval",
+        "MMBrightIslamT2TRetrieval",
+        "MMBrightLawIT2TRetrieval",
+        "MMBrightLawT2TRetrieval",
+        "MMBrightMathIT2TRetrieval",
+        "MMBrightMathT2TRetrieval",
+        "MMBrightMedicalSciencesIT2TRetrieval",
+        "MMBrightMedicalSciencesT2TRetrieval",
+        "MMBrightPhilosophyIT2TRetrieval",
+        "MMBrightPhilosophyT2TRetrieval",
+        "MMBrightPhysicsIT2TRetrieval",
+        "MMBrightPhysicsT2TRetrieval",
+        "MMBrightProjectManagementIT2TRetrieval",
+        "MMBrightProjectManagementT2TRetrieval",
+        "MMBrightPsychologyIT2TRetrieval",
+        "MMBrightPsychologyT2TRetrieval",
+        "MMBrightQuantIT2TRetrieval",
+        "MMBrightQuantT2TRetrieval",
+        "MMBrightQuantumComputingIT2TRetrieval",
+        "MMBrightQuantumComputingT2TRetrieval",
+        "MMBrightRoboticsIT2TRetrieval",
+        "MMBrightRoboticsT2TRetrieval",
+        "MMBrightSalesforceIT2TRetrieval",
+        "MMBrightSalesforceT2TRetrieval",
+        "MMBrightSustainabilityIT2TRetrieval",
+        "MMBrightSustainabilityT2TRetrieval",
+        "MMBrightTravelIT2TRetrieval",
+        "MMBrightTravelT2TRetrieval",
         "MMVUVideoCentricQA",
         "MMarcoReranking",
         "MSMARCOv2",
@@ -611,6 +679,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SpanishPassageRetrievalS2P",
         "SpanishPassageRetrievalS2S",
         "SpartQA",
+        "SpeechEditAcousticRetrieval",  # repeated instruction for speech edit
         "SpokenSQuADT2ARetrieval",
         "StackExchangeClustering",
         "StackExchangeClustering-VN",
@@ -651,9 +720,11 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WebFAQRetrieval",
         "WebLINXCandidatesReranking",
         "WebQAT2ITRetrieval",
+        "WebVidCoVRIT2VRetrieval",
         "WikiClusteringP2P",
         "WikiClusteringP2P.v2",
         "WikiSQLRetrieval",
+        "XM3600I2TRetrieval",  # captions are intentionally preserved verbatim
         "XM3600T2IRetrieval",
         "XMarket",
         "XPQARetrieval",
@@ -812,6 +883,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "AROVisualAttribution",
         "AROVisualRelation",
         "CIRRIT2IRetrieval",
+        "EDIRIT2IRetrieval",
         "EDIST2ITRetrieval",
         "EncyclopediaVQAIT2ITRetrieval",
         "FER2013",  # documented to contain duplicate/near-duplicate images
@@ -824,9 +896,40 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "LLaVAIT2TRetrieval",
         "MMLongBenchDocRetrieval",  # official corpus contains repeated rendered pages; preserve IDs to match qrels
         "MomentSeekerTI2VRetrieval",
-        "MMBrightIT2IRetrieval",  # source images are intentionally reused
-        "MMBrightIT2ITRetrieval",
-        "MMBrightIT2TRetrieval",
+        "MMBrightAcademiaIT2IRetrieval",  # source images are intentionally reused
+        "MMBrightAppleIT2IRetrieval",
+        "MMBrightAskUbuntuIT2IRetrieval",
+        "MMBrightAviationIT2IRetrieval",
+        "MMBrightBioacousticsIT2IRetrieval",
+        "MMBrightBioinformaticsIT2IRetrieval",
+        "MMBrightBioinformaticsIT2TRetrieval",
+        "MMBrightBiologyIT2IRetrieval",
+        "MMBrightBitcoinIT2IRetrieval",
+        "MMBrightChemistryIT2IRetrieval",
+        "MMBrightChristianityIT2IRetrieval",
+        "MMBrightCryptoIT2IRetrieval",
+        "MMBrightEarthScienceIT2IRetrieval",
+        "MMBrightEarthScienceIT2TRetrieval",
+        "MMBrightEconomicsIT2IRetrieval",
+        "MMBrightGISIT2IRetrieval",
+        "MMBrightGamingIT2IRetrieval",
+        "MMBrightIslamIT2IRetrieval",
+        "MMBrightLawIT2IRetrieval",
+        "MMBrightMathIT2IRetrieval",
+        "MMBrightMedicalSciencesIT2IRetrieval",
+        "MMBrightPhilosophyIT2IRetrieval",
+        "MMBrightPhysicsIT2IRetrieval",
+        "MMBrightPhysicsIT2TRetrieval",
+        "MMBrightProjectManagementIT2IRetrieval",
+        "MMBrightPsychologyIT2IRetrieval",
+        "MMBrightQuantIT2IRetrieval",
+        "MMBrightQuantumComputingIT2IRetrieval",
+        "MMBrightQuantumComputingIT2TRetrieval",
+        "MMBrightRoboticsIT2IRetrieval",
+        "MMBrightSalesforceIT2IRetrieval",
+        "MMBrightSustainabilityIT2IRetrieval",
+        "MMBrightSustainabilityIT2TRetrieval",
+        "MMBrightTravelIT2IRetrieval",
         "OVENIT2ITRetrieval",
         "PatchCamelyon",  # adjacent, overlapping WSI patches are inherent to the source data
         "PatchCamelyonZeroShot",  # adjacent, overlapping WSI patches are inherent to the source data
@@ -841,7 +944,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SugarCrepe",
         "VQA2IT2TRetrieval",
         "WebQAT2ITRetrieval",
+        "WebVidCoVRIT2VRetrieval",
+        "XFlickr30kCoI2TRetrieval",  # the same image corpus is reused across languages
         "XFlickr30kCoT2IRetrieval",
+        "XM3600I2TRetrieval",  # the same image corpus is reused across languages
         "XM3600T2IRetrieval",
     ],
     "duplicate_pairs": [
@@ -851,6 +957,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "ESC50PairClassification",  # pairs constructed combinatorially from a small pool of audio clips
         "FalseFriendsGermanEnglish",
         "LinceMTBitextMining",
+        "OpusSlovakEnglishBitextMining",  # OPUS-100's subtitle/legal-document mix naturally repeats short common phrases
         "ParsinluEntail",
         "Query2Query",
         "RUParaPhraserSTS",
@@ -866,8 +973,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VoxPopuliAccentPairClassification",  # pairs constructed combinatorially from a small pool of audio clips
     ],
     "duplicate_audio": [
+        "ACMComposedAudioRetrieval",  # composed audio retrieval naturally reuses source audios with different query instructions
         "AmbientAcousticContext",
         "AmbientAcousticContextClustering",
+        "ClothoMomentRetrieval",  # same audio with different instruction
         "CLDAT2ARetrieval",
         "FSD2019Kaggle",
         "GTZANGenre",  # repeated short clips sampled from the same tracks
@@ -879,14 +988,17 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Kinetics700VA",
         "Kinetics700VAZeroShot",
         "NSynth",  # repeated notes across instrument/pitch/velocity combinations
+        "NSynthInstrumentFamilyClustering",  # same upstream duplicate notes as NSynth
         "SpeechCommands",  # many repeated recordings of the same short command word
         "SpeechCommandsZeroshotv0.01",
         "SpeechCommandsZeroshotv0.02",
         "StanfordI2VRetrieval",  # official manifest contains repeated video+audio clips
+        "VCDBCoreAudioVideoRetrieval",  # distinct copied videos can have identical soundtracks
         "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseAudioVideoZeroShot",
     ],
     "duplicate_video": [
+        "DenseWebVidCoVRVT2VRetrieval",  # multiple rows have same video with different instruction
         "InsAVE80KVT2VRetrieval",  # reverse couples re-release the same clip under two names
         "MMVUVideoCentricQA",
         "MomentSeekerTV2VRetrieval",
@@ -913,8 +1025,23 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FORBI2IRetrieval",  # min 1x1px query image present
         "GLDv2I2IRetrieval",  # min 7x7px document image present
         "Imagenet1k",  # min 8x10px image present
-        "MMBrightIT2IRetrieval",  # source-faithful corpus includes 1x1 images
-        "MMBrightIT2ITRetrieval",  # source-faithful corpus includes 1x1 images
+        "MMBrightAcademiaIT2IRetrieval",  # source-faithful corpus includes very small images
+        "MMBrightAppleIT2IRetrieval",
+        "MMBrightAviationIT2IRetrieval",
+        "MMBrightBiologyIT2IRetrieval",
+        "MMBrightChemistryIT2IRetrieval",
+        "MMBrightChristianityIT2IRetrieval",
+        "MMBrightEarthScienceIT2IRetrieval",
+        "MMBrightGISIT2IRetrieval",
+        "MMBrightLawIT2IRetrieval",
+        "MMBrightMedicalSciencesIT2IRetrieval",
+        "MMBrightPhysicsIT2IRetrieval",
+        "MMBrightProjectManagementIT2IRetrieval",
+        "MMBrightPsychologyIT2IRetrieval",
+        "MMBrightQuantumComputingIT2IRetrieval",
+        "MMBrightRoboticsIT2IRetrieval",
+        "MMBrightSustainabilityIT2IRetrieval",
+        "MMBrightTravelIT2IRetrieval",
     ],
     "zero_relevant_docs": [
         "BrightRetrieval",

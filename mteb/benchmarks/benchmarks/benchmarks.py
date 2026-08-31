@@ -86,7 +86,7 @@ MTEB_EN = Benchmark(
 MTEB_ENG_CLASSIC = Benchmark(
     name="MTEB(eng, v1)",
     aliases=["MTEB(eng, classic)", "MTEB"],
-    display_name="English Legacy",
+    display_name="English",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/gb.svg",
     tasks=MTEBTasks(
         get_tasks(
@@ -181,7 +181,7 @@ MTEB_ENG_CLASSIC = Benchmark(
 MTEB_MAIN_RU = Benchmark(
     name="MTEB(rus, v1)",
     aliases=["MTEB(rus)"],
-    display_name="Russian legacy",
+    display_name="Russian",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ru.svg",
     tasks=MTEBTasks(
         get_tasks(
@@ -885,6 +885,82 @@ MTEB_PT = Benchmark(
     contacts=["Lucas-Okamura"],
 )
 
+MTEB_SLK = Benchmark(
+    name="MTEB(slk, v1)",
+    aliases=["MTEB(slk)"],
+    display_name="Slovak",
+    icon="https://github.com/lipis/flag-icons/raw/59d15a43b2e643fc94e519904d148c616dec20e7/flags/4x3/sk.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["slk"],
+            tasks=[
+                # Retrieval
+                "BelebeleRetrieval",
+                "SlovakSumRetrieval",
+                "SMESumRetrieval",
+                "SKQuadRetrieval",
+                "WebFAQRetrieval",
+                # STS
+                "SlovakSTS",
+                "SlovakSumSTS",
+                # Pair Classification
+                "SlovakNLI",
+                "SlovakRTE",
+                "DemagogSKNLI",
+                # Classification
+                "SlovakHateSpeechClassification.v2",
+                "SlovakMovieReviewSentimentClassification.v2",
+                "SIB200Classification",
+                "MultilingualSentimentClassification",
+                "SlovakParlaSentClassification",
+                "MultiEupSlovakPartyClassification",
+                "MultiEupSlovakGenderClassification",
+                # Reranking
+                "SkQuadReranking",
+                "SlovakPharmacyDrMaxReranking",
+                "SlovakPharmacyMojaLekarenReranking",
+                # Clustering
+                "SIB200ClusteringS2S",
+                "PravdaSKTagClustering",
+                "PravdaSKURLClustering",
+                "SlovakSumURLClustering",
+                "SMESumCategoryClustering",
+                # BitextMining
+                "OpusSlovakEnglishBitextMining",
+                "Tatoeba",
+            ],
+        )
+        + (
+            get_task(
+                "FloresBitextMining",
+                hf_subsets=["eng_Latn-slk_Latn", "ces_Latn-slk_Latn"],
+            ),
+        )
+        + (
+            get_task(
+                "NTREXBitextMining",
+                hf_subsets=["eng_Latn-slk_Latn", "ces_Latn-slk_Latn"],
+            ),
+        )
+        + (get_task("WebFAQBitextMiningQuestions", hf_subsets=["eng-slk", "ces-slk"]),)
+        + (get_task("WebFAQBitextMiningQAs", hf_subsets=["eng-slk", "ces-slk"]),)
+    ),
+    description="""Slovak Massive Text Embedding Benchmark (SkMTEB), the first comprehensive benchmark for text embeddings in Slovak, a low-resource West Slavic language. SkMTEB consists of 31 tasks across 7 task types, with tasks adapted from both existing and novel resources.""",
+    reference="https://arxiv.org/abs/2606.13647",
+    citation=r"""
+@misc{suppa2026skmteb,
+  archiveprefix = {arXiv},
+  author = {Marek Šuppa and Andrej Ridzik and Daniel Hládek and Natália Kňažeková and Viktória Ondrejová},
+  eprint = {2606.13647},
+  primaryclass = {cs.CL},
+  title = {SkMTEB: Slovak Massive Text Embedding Benchmark and Model Adaptation},
+  url = {https://arxiv.org/abs/2606.13647},
+  year = {2026},
+}
+""",
+    contacts=["andrejridzik", "hladek", "mrshu"],
+)
+
 MTEB_SPA = Benchmark(
     name="MTEB(spa, v1)",
     aliases=["MTEB(spa)"],
@@ -1140,7 +1216,7 @@ MTEB_multilingual_v2 = Benchmark(
 MTEB_JPN = Benchmark(
     name="MTEB(jpn, v1)",
     aliases=["MTEB(jpn)"],
-    display_name="Japanese Legacy",
+    display_name="Japanese",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
     tasks=get_tasks(
         languages=["jpn"],
@@ -1884,7 +1960,7 @@ C_MTEB = Benchmark(
 FA_MTEB = Benchmark(
     name="MTEB(fas, v1)",
     aliases=["FaMTEB(fas, beta)"],
-    display_name="Farsi Legacy",
+    display_name="Farsi",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
     tasks=get_tasks(
         languages=["fas"],
@@ -1969,6 +2045,7 @@ FA_MTEB = Benchmark(
 }
 """,
     contacts=["mehran-sarmadi", "ERfun", "morteza20"],
+    superseded_by=["MTEB(fas, v2)"],
 )
 
 FA_MTEB_2 = Benchmark(

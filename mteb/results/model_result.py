@@ -47,7 +47,7 @@ def _aggregate_and_pivot(
     df: pd.DataFrame,
     columns: list[str],
     aggregation_level: Literal["subset", "split", "task", "language"],
-    format: Literal["wide", "long"],
+    output_format: Literal["wide", "long"],
     aggregation_fn: Callable[[list[Score]], Any] | str | None,
 ) -> pd.DataFrame:
     if aggregation_level == "subset":
@@ -70,7 +70,7 @@ def _aggregate_and_pivot(
     # Pass "mean" string rather than np.mean to avoid a pandas FutureWarning:
     aggregation_fn_pandas = "mean" if aggregation_fn is None else aggregation_fn
 
-    if format == "wide":
+    if output_format == "wide":
         return df.pivot_table(
             index=index_columns,
             columns=columns,
@@ -78,12 +78,15 @@ def _aggregate_and_pivot(
             aggfunc=aggregation_fn_pandas,  # type: ignore[arg-type]
             observed=True,
         ).reset_index()
-    elif format == "long":
+    if output_format == "long":
         return (
             df.groupby(columns + index_columns, observed=True)
             .agg(score=("score", aggregation_fn_pandas))
             .reset_index()
         )
+    raise ValueError(
+        f"Unknown output_format {output_format!r}, expected 'wide' or 'long'."
+    )
 
 
 class ModelResult(BaseModel):
@@ -193,7 +196,7 @@ class ModelResult(BaseModel):
         scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] | None = None,
         aggregation: Callable[[list[Score]], Any] | None = None,
-        format: Literal["wide"] = "wide",
+        output_format: Literal["wide"] = "wide",
     ) -> dict[str, float]: ...
 
     @overload
@@ -205,7 +208,7 @@ class ModelResult(BaseModel):
         scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] | None = None,
         aggregation: Callable[[list[Score]], Any] | None = None,
-        format: Literal["long"] = "long",
+        output_format: Literal["long"] = "long",
     ) -> list[dict[str, str | float | None]]: ...
 
     def _get_scores(
@@ -216,7 +219,7 @@ class ModelResult(BaseModel):
         scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] | None = None,
         aggregation: Callable[[list[Score]], Any] | None = None,
-        format: Literal["wide", "long"] = "wide",
+        output_format: Literal["wide", "long"] = "wide",
     ) -> dict[str, float] | list[dict[str, str | float | None]]:
         if (getter is not None) or (aggregation is not None) or (scripts is not None):
             use_fast = False
@@ -229,7 +232,7 @@ class ModelResult(BaseModel):
         aggregation = cast("Callable[[list[Score]], Any]", aggregation)
         getter = cast("Callable[[ScoresDict], Score]", getter)
 
-        if format == "wide":
+        if output_format == "wide":
             scores = {}
             for res in self.task_results:
                 try:
@@ -252,7 +255,7 @@ class ModelResult(BaseModel):
                         stacklevel=2,
                     )
             return scores
-        if format == "long":
+        if output_format == "long":
             entries = []
             for task_res in self.task_results:
                 try:
@@ -286,6 +289,9 @@ class ModelResult(BaseModel):
                         stacklevel=2,
                     )
             return entries
+        raise ValueError(
+            f"Unknown output_format {output_format!r}, expected 'wide' or 'long'."
+        )
 
     def _get_score_for_table(self) -> list[dict[str, str | float | list[str]]]:
         scores_data = []
@@ -312,7 +318,7 @@ class ModelResult(BaseModel):
         aggregation_level: Literal["subset", "split", "task"] = "task",
         aggregation_fn: Callable[[list[Score]], Any] | str | None = None,
         include_model_revision: bool = False,
-        format: Literal["wide", "long"] = "wide",
+        format: Literal["wide", "long"] = "wide",  # noqa: A002  # public API, renaming would break callers
     ) -> pd.DataFrame:
         """Get a DataFrame with the scores for all models and tasks.
 
@@ -364,7 +370,7 @@ class ModelResult(BaseModel):
             df,
             columns=_columns,
             aggregation_level=aggregation_level,
-            format=format,
+            output_format=format,
             aggregation_fn=aggregation_fn,
         )
 
