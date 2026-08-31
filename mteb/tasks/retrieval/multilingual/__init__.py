@@ -15,6 +15,7 @@ from .cross_lingual_semantic_discrimination_wmt21 import (
 from .cur_ev1_retrieval import CUREv1Retrieval
 from .euro_pirq_retrieval import EuroPIRQRetrieval
 from .fleurs import FleursA2TRetrieval, FleursT2ARetrieval
+from .glami_1m_t2i_retrieval import GLAMI1MT2IRetrieval
 from .google_svq import GoogleSVQA2TRetrieval, GoogleSVQT2ARetrieval
 from .indic_qa_retrieval import IndicQARetrieval
 from .jam_alt import (
@@ -159,6 +160,7 @@ __all__ = [
     "EuroPIRQRetrieval",
     "FleursA2TRetrieval",
     "FleursT2ARetrieval",
+    "GLAMI1MT2IRetrieval",
     "GlobalNewsRetrieval",
     "GoogleSVQA2TRetrieval",
     "GoogleSVQT2ARetrieval",
