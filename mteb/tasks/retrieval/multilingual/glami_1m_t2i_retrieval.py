@@ -12,7 +12,7 @@ class GLAMI1MT2IRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2211.14451",
         dataset={
             "path": "artist/glami-1m-t2i-mteb",
-            "revision": "072397185348006567b5be8e4071b6b196c1be53",
+            "revision": "20969505f3edaa4f2b239155ec16a4c986b1b195",
         },
         type="Any2AnyMultilingualRetrieval",
         category="t2i",
@@ -54,3 +54,17 @@ class GLAMI1MT2IRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find the fashion product image matching this description."},
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+        for subset in self.hf_subsets:
+            for split in self.eval_splits:
+                queries = self.dataset[subset][split]["queries"]
+                combined_text = [
+                    f"{title}\n{description}" if description else title
+                    for title, description in zip(
+                        queries["title"], queries["text"], strict=True
+                    )
+                ]
+                self.dataset[subset][split]["queries"] = queries.remove_columns(
+                    ["title", "text"]
+                ).add_column("text", combined_text)

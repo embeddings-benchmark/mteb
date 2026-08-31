@@ -52,12 +52,6 @@ SOURCE_ARCHIVE_SHA256 = (
 )
 
 
-def _text(row: dict[str, str]) -> str:
-    name = row["name"].strip()
-    description = row["description"].strip()
-    return f"{name}\n{description}" if description else name
-
-
 def build(source_dir: Path) -> tuple[dict[str, dict[str, Dataset]], dict]:
     rows_by_language: dict[str, list[dict[str, str]]] = defaultdict(list)
     with (source_dir / "GLAMI-1M-test.csv").open(
@@ -69,13 +63,13 @@ def build(source_dir: Path) -> tuple[dict[str, dict[str, Dataset]], dict]:
     configs = {}
     manifest = {}
     for language, rows in sorted(rows_by_language.items()):
-        query_ids: dict[str, str] = {}
+        query_ids: dict[tuple[str, str], str] = {}
         image_paths: dict[str, Path] = {}
         qrels = set()
 
         for row in rows:
-            text = _text(row)
-            query_id = query_ids.setdefault(text, f"query-{row['item_id']}")
+            query = (row["name"].strip(), row["description"].strip())
+            query_id = query_ids.setdefault(query, f"query-{row['item_id']}")
             corpus_id = f"image-{row['image_id']}"
             image_paths.setdefault(
                 corpus_id, source_dir / "images" / f"{row['image_id']}.jpg"
@@ -86,8 +80,13 @@ def build(source_dir: Path) -> tuple[dict[str, dict[str, Dataset]], dict]:
         if missing:
             raise FileNotFoundError(missing[0])
 
+        query_fields = list(query_ids)
         queries = Dataset.from_dict(
-            {"id": list(query_ids.values()), "text": list(query_ids.keys())}
+            {
+                "id": list(query_ids.values()),
+                "title": [title for title, _ in query_fields],
+                "text": [description for _, description in query_fields],
+            }
         )
         corpus = Dataset.from_dict(
             {
