@@ -75,9 +75,9 @@ class ColVec1Wrapper(AbsEncoder):
                     "The number of texts and images must have the same length"
                 )
             return text_embeddings + image_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError("No text or image features found in inputs.")
 

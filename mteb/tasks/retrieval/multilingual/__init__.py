@@ -138,12 +138,14 @@ from .vidore3_bench_retrieval import (
 )
 from .web_faq_retrieval import WebFAQRetrieval
 from .wikipedia_retrieval_multilingual import WikipediaRetrievalMultilingual
-from .wit_i2t_retrieval import WITI2TRetrieval
-from .wit_t2i_retrieval import WITT2IRetrieval
-from .x_flickr30k_co_t2i_retrieval import XFlickr30kCoT2IRetrieval
+from .wit_t2i_retrieval import WITI2TRetrieval, WITT2IRetrieval
+from .x_flickr30k_co_t2i_retrieval import (
+    XFlickr30kCoI2TRetrieval,
+    XFlickr30kCoT2IRetrieval,
+)
 from .x_market_retrieval import XMarket
 from .x_qu_ad_retrieval import XQuADRetrieval
-from .xm3600_t2i_retrieval import XM3600T2IRetrieval
+from .xm3600_t2i_retrieval import XM3600I2TRetrieval, XM3600T2IRetrieval
 from .xpqa_retrieval import XPQARetrieval
 
 __all__ = [
@@ -272,7 +274,9 @@ __all__ = [
     "WITT2IRetrieval",
     "WebFAQRetrieval",
     "WikipediaRetrievalMultilingual",
+    "XFlickr30kCoI2TRetrieval",
     "XFlickr30kCoT2IRetrieval",
+    "XM3600I2TRetrieval",
     "XM3600T2IRetrieval",
     "XMarket",
     "XPQARetrieval",
