@@ -10,6 +10,9 @@ def split_labels(record: dict) -> dict:
 
 
 class VGHierarchicalClusteringP2P(AbsTaskClustering):
+    # Pinned to the behaviour these scores were published under. New
+    # hierarchical tasks should leave this at the default.
+    drop_unlabelled_documents = False
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 
@@ -57,6 +60,9 @@ class VGHierarchicalClusteringP2P(AbsTaskClustering):
 
 
 class VGHierarchicalClusteringS2S(AbsTaskClustering):
+    # Pinned to the behaviour these scores were published under. New
+    # hierarchical tasks should leave this at the default.
+    drop_unlabelled_documents = False
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 

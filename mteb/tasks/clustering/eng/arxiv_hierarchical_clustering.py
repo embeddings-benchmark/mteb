@@ -14,6 +14,10 @@ def split_labels(record: dict) -> dict:
 
 
 class ArXivHierarchicalClusteringP2P(AbsTaskClustering):
+    # Pinned to the behaviour these scores were published under. New
+    # hierarchical tasks should leave this at the default.
+    drop_unlabelled_documents = False
+
     metadata = TaskMetadata(
         name="ArXivHierarchicalClusteringP2P",
         description="Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
@@ -57,6 +61,10 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClustering):
 
 
 class ArXivHierarchicalClusteringS2S(AbsTaskClustering):
+    # Pinned to the behaviour these scores were published under. New
+    # hierarchical tasks should leave this at the default.
+    drop_unlabelled_documents = False
+
     metadata = TaskMetadata(
         name="ArXivHierarchicalClusteringS2S",
         description="Clustering of titles from arxiv. Clustering of 30 sets, either on the main or secondary category",

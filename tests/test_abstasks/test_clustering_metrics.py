@@ -126,3 +126,85 @@ def test_level_cluster_count_excludes_documents_without_a_label():
     # Level 0 is reached by every document, so it is unaffected.
     for assignment in assignments["Level 0"]:
         assert len(set(assignment)) == 1
+
+
+def _run_with(embeddings, labels, *, drop_unlabelled_documents):
+    return _evaluate_clustering_bootstrapped(
+        embeddings,
+        labels,
+        n_clusters=2,
+        cluster_size=len(embeddings),
+        kmean_batch_size=64,
+        max_depth=None,
+        rng_state=random.Random(0),
+        seed=0,
+        drop_unlabelled_documents=drop_unlabelled_documents,
+    )
+
+
+def test_flag_off_keeps_the_documents_and_scores_them_as_one_class():
+    # The older behaviour, kept for reproducibility: the documents whose label
+    # stops at level 0 are given the sentinel and, because these labels are
+    # strings, survive the filter and are scored as a third gold class.
+    embeddings, labels = _ragged_dataset()
+    scores, assignments = _run_with(embeddings, labels, drop_unlabelled_documents=False)
+
+    for assignment in assignments["Level 1"]:
+        assert len(set(assignment)) == 3
+    assert max(scores["v_measure"]["Level 1"]) < 1.0
+
+
+def test_flag_off_with_integer_labels_drops_them_instead():
+    # The same flag value, the opposite outcome. np.array() on a mixed list of
+    # int and int stays an integer array, so the sentinel really is -1 and the
+    # filter does fire. Which of the two happens is decided by the dataset's
+    # label dtype, not by the option, which is why the option exists.
+    embeddings, string_labels = _ragged_dataset()
+    labels = [
+        [int(part[-1]) if part != "Top" else 9 for part in label]
+        for label in string_labels
+    ]
+
+    _, assignments = _run_with(embeddings, labels, drop_unlabelled_documents=False)
+
+    for assignment in assignments["Level 1"]:
+        assert len(set(assignment)) == 2
+
+
+def test_flag_makes_no_difference_when_every_label_reaches_every_level():
+    # A task whose label paths all reach the same depth selects the same
+    # documents under both settings, so the option cannot move its score. This
+    # is why only the hierarchical tasks are affected.
+    embeddings, labels = _well_separated_dataset(n_clusters=3, points_per_cluster=20)
+
+    dropped, dropped_assignments = _run_with(
+        embeddings, labels, drop_unlabelled_documents=True
+    )
+    kept, kept_assignments = _run_with(
+        embeddings, labels, drop_unlabelled_documents=False
+    )
+
+    assert dropped == kept
+    assert dropped_assignments == kept_assignments
+
+
+def test_default_is_to_drop():
+    from mteb.abstasks.clustering import AbsTaskClustering
+
+    assert AbsTaskClustering.drop_unlabelled_documents is True
+
+
+def test_existing_hierarchical_tasks_stay_on_the_published_behaviour():
+    # These six were scored before the option existed. Flipping any of them
+    # changes numbers that are already published.
+    pinned = [
+        "ArXivHierarchicalClusteringP2P",
+        "ArXivHierarchicalClusteringS2S",
+        "SNLHierarchicalClusteringP2P",
+        "SNLHierarchicalClusteringS2S",
+        "VGHierarchicalClusteringP2P",
+        "VGHierarchicalClusteringS2S",
+    ]
+    for name in pinned:
+        task = mteb.get_task(name)
+        assert task.drop_unlabelled_documents is False, name

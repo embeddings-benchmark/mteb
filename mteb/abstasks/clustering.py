@@ -46,11 +46,17 @@ def _evaluate_clustering_bootstrapped(
     max_depth: int | None,
     rng_state: random.Random,
     seed: int,
+    drop_unlabelled_documents: bool = True,
 ) -> tuple[dict[str, dict[str, list[float]]], dict[str, list[list[int]]]]:
     """Bootstrapped evaluation of clustering performance.
 
     The bootstrapping is done by sampling N samples from the corpus and clustering them. It is done without replacement to get a diverse set of
     samples.
+
+    `drop_unlabelled_documents` decides what happens at a given level to the documents
+    whose label path is shorter than that level: drop them, or keep them under the
+    sentinel gold label -1, which is the older behaviour. See
+    `AbsTaskClustering.drop_unlabelled_documents`.
 
     Returns:
         A tuple containing:
@@ -72,15 +78,45 @@ def _evaluate_clustering_bootstrapped(
         max_depth = max(map(len, labels))
     # Evaluate on each level til max depth
     for i_level in range(max_depth):
-        # Drop the documents whose label path does not reach this level, rather
-        # than give them a sentinel gold label and filter on it afterwards. An
-        # earlier version appended -1 for those documents, but np.array() on a
-        # mixed list of str and int returns a string array, so the sentinel
-        # became the string "-1" and the filter kept every document.
-        valid_idx = np.array([len(label) > i_level for label in labels])
-        np_level_labels = np.array(
-            [label[i_level] for label in labels if len(label) > i_level]
-        )
+        if drop_unlabelled_documents:
+            # Drop the documents whose label path does not reach this level,
+            # rather than give them a sentinel gold label and filter on it
+            # afterwards.
+            valid_idx = np.array([len(label) > i_level for label in labels])
+            if not valid_idx.all():
+                logger.warning(
+                    "Level %d: dropping %d of %d documents that have no label at "
+                    "this level. Set drop_unlabelled_documents=False on the task to "
+                    "score them as one shared class instead, which is the older "
+                    "behaviour.",
+                    i_level,
+                    len(labels) - int(valid_idx.sum()),
+                    len(labels),
+                )
+            np_level_labels = np.array(
+                [label[i_level] for label in labels if len(label) > i_level]
+            )
+        else:
+            # The older behaviour, kept so that published results stay
+            # reproducible. Note that it is not one consistent rule: np.array()
+            # on a mixed list of str and int returns a string array, so for
+            # string labels the sentinel becomes "-1", the filter below never
+            # matches, and every document is kept and scored as one shared
+            # class. For integer labels the filter does fire and they are
+            # dropped. Which of the two happens is decided by the dataset's
+            # label dtype.
+            level_labels: list[str | int] = []
+            # Assign -1 to gold label if the level is not there
+            for label in labels:
+                if len(label) > i_level:
+                    level_labels.append(label[i_level])
+                else:
+                    level_labels.append(-1)
+            np_level_labels = np.array(level_labels)
+            valid_idx = np.array(
+                [level_label != -1 for level_label in np_level_labels]
+            )  # Could be level_labels != -1 but fails with FutureWarning: elementwise comparison failed
+            np_level_labels = np_level_labels[valid_idx]
         level_embeddings = embeddings[valid_idx]
         clustering_model = MiniBatchKMeans(
             n_clusters=np.unique(np_level_labels).size,
@@ -128,6 +164,13 @@ class AbsTaskClustering(AbsTask):
         n_clusters: Number of clustering experiments to run.
         k_mean_batch_size: Batch size to use for k-means clustering.
         max_depth: Maximum depth to evaluate clustering. If None, evaluates all levels.
+        drop_unlabelled_documents: For a hierarchical task, whether a document whose label
+            path is shorter than the level being scored is dropped at that level rather than
+            scored. Those documents have nothing in common except a missing label, so keeping
+            them asks the model to find a class that is not really there. Defaults to True.
+            The hierarchical tasks that existed before this option was added set it to False
+            so their published scores stay reproducible. A task whose label paths all reach
+            the same depth is unaffected either way, since no document is ever dropped.
         input_column_name: Name of the column(s) containing the input sentences or data points. Default is "sentences".
             Can be a string for single-column tasks or a list of strings for multimodal tasks (e.g. ["video", "audio"]).
             When specified as a list, values must be the default column names as defined in the encoder I/O types
@@ -142,6 +185,7 @@ class AbsTaskClustering(AbsTask):
     n_clusters: int = 10
     k_mean_batch_size: int = 512
     max_depth = None
+    drop_unlabelled_documents: bool = True
     abstask_prompt = "Identify categories in user passages."
     input_column_name: str | Sequence[Modalities] = "sentences"
     label_column_name: str = "labels"
@@ -250,6 +294,7 @@ class AbsTaskClustering(AbsTask):
                 max_depth=self.max_depth,
                 rng_state=self.rng_state,
                 seed=self.seed,
+                drop_unlabelled_documents=self.drop_unlabelled_documents,
             )
 
         if prediction_folder:
