@@ -80,9 +80,9 @@ def _set_benchmark_on_load(request: gr.Request):
 
 
 def _download_table(table: pd.DataFrame) -> str:
-    file = tempfile.NamedTemporaryFile(delete=False, suffix=".csv")
-    table.to_csv(file)
-    return file.name
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".csv") as file:
+        table.to_csv(file)
+        return file.name
 
 
 def _update_citation(benchmark_name: str) -> str:
@@ -219,9 +219,8 @@ def _filter_models(
         if is_model_zero_shot is None:
             if zero_shot_setting in ["remove_unknown", "only_zero_shot"]:  # noqa: PLR6201
                 continue
-        elif not is_model_zero_shot:
-            if zero_shot_setting == "only_zero_shot":
-                continue
+        elif not is_model_zero_shot and zero_shot_setting == "only_zero_shot":
+            continue
         models_to_keep.add(model_meta.name)
     return list(models_to_keep)
 
@@ -229,9 +228,7 @@ def _filter_models(
 def _should_show_zero_shot_filter(benchmark_name: str) -> bool:
     benchmark = mteb.get_benchmark(benchmark_name)
 
-    if isinstance(benchmark, RtebBenchmark):
-        return False
-    return True
+    return not isinstance(benchmark, RtebBenchmark)
 
 
 @cachetools.cached(

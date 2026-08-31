@@ -79,10 +79,7 @@ class SeedTextEmbeddingModel(AbsEncoder):
             )
 
         if prompt_type == PromptType("query") or prompt_type is None:
-            if task_name in TASK_NAME_TO_INSTRUCTION:
-                instruction = TASK_NAME_TO_INSTRUCTION[task_name]
-            else:
-                instruction = DEFAULT_INSTRUCTION
+            instruction = TASK_NAME_TO_INSTRUCTION.get(task_name, DEFAULT_INSTRUCTION)
             inputs = [instruction + i for i in inputs]
 
         response = self._client.embeddings.create(

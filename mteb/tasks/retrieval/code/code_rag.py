@@ -85,10 +85,10 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
             # text = query + "\n" + doc(code)
             query, doc = split_by_first_newline(text)
 
-            id = mt["task_id"]
+            task_id = mt["task_id"]
 
-            query_id = id
-            doc_id = f"doc_{id}"
+            query_id = task_id
+            doc_id = f"doc_{task_id}"
             self.queries[split][query_id] = query
             self.corpus[split][doc_id] = {"title": "", "text": doc}
 
@@ -138,23 +138,22 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
         titles = ds["title"]
         texts = ds["text"]
         parsed = ds["parsed"]
-        id = 0
-        for title, text, _mt in zip(titles, texts, parsed, strict=True):
+        for idx, (title, text, _mt) in enumerate(
+            zip(titles, texts, parsed, strict=True)
+        ):
             # in code-rag-bench,
             # query=doc(code)
             # text=query+doc(code)
             query, doc = title, text
 
-            query_id = str(id)
-            doc_id = f"doc_{id}"
+            query_id = str(idx)
+            doc_id = f"doc_{idx}"
             self.queries[split][query_id] = query
             self.corpus[split][doc_id] = {"title": "", "text": doc}
 
             self.relevant_docs[split][query_id] = {
                 doc_id: 1
             }  # only one correct matches
-
-            id += 1
 
 
 class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
@@ -197,7 +196,7 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
 
         texts = ds["doc_content"]
 
-        id = 0
+        idx = 0
         for text in texts:
             # text format "document title \n document content"
             query, doc = split_by_first_newline(text)
@@ -205,13 +204,13 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
             # some library documents doesn't have query-doc pair
             if not doc:
                 continue
-            query_id = str(id)
-            doc_id = f"doc_{id}"
+            query_id = str(idx)
+            doc_id = f"doc_{idx}"
             self.queries[split][query_id] = query
             self.corpus[split][doc_id] = {"title": "", "text": doc}
             # only one correct match
             self.relevant_docs[split][query_id] = {doc_id: 1}
-            id += 1
+            idx += 1
 
 
 class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
@@ -253,18 +252,16 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         self.corpus[split] = {}
 
         texts = ds["text"]
-        id = 0
-        for text in texts:
+        for idx, text in enumerate(texts):
             # in code-rag-bench,
             # text = query + "\n" + doc
             query, doc = split_by_first_newline(text)
 
-            query_id = str(id)
-            doc_id = f"doc_{id}"
+            query_id = str(idx)
+            doc_id = f"doc_{idx}"
             self.queries[split][query_id] = query
             self.corpus[split][doc_id] = {"title": "", "text": doc}
 
             self.relevant_docs[split][query_id] = {
                 doc_id: 1
             }  # only one correct matches
-            id += 1
