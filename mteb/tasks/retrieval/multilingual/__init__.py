@@ -14,7 +14,12 @@ from .cross_lingual_semantic_discrimination_wmt21 import (
 )
 from .cur_ev1_retrieval import CUREv1Retrieval
 from .euro_pirq_retrieval import EuroPIRQRetrieval
-from .fleurs import FleursA2TRetrieval, FleursT2ARetrieval
+from .fleurs import (
+    FleursA2TRetrieval,
+    FleursA2TRetrievalV2,
+    FleursT2ARetrieval,
+    FleursT2ARetrievalV2,
+)
 from .google_svq import GoogleSVQA2TRetrieval, GoogleSVQT2ARetrieval
 from .indic_qa_retrieval import IndicQARetrieval
 from .jam_alt import (
@@ -138,7 +143,7 @@ from .vidore3_bench_retrieval import (
 )
 from .web_faq_retrieval import WebFAQRetrieval
 from .wikipedia_retrieval_multilingual import WikipediaRetrievalMultilingual
-from .wit_t2i_retrieval import WITT2IRetrieval
+from .wit_t2i_retrieval import WITI2TRetrieval, WITT2IRetrieval
 from .x_flickr30k_co_t2i_retrieval import (
     XFlickr30kCoI2TRetrieval,
     XFlickr30kCoT2IRetrieval,
@@ -161,7 +166,9 @@ __all__ = [
     "CrossLingualSemanticDiscriminationWMT21",
     "EuroPIRQRetrieval",
     "FleursA2TRetrieval",
+    "FleursA2TRetrievalV2",
     "FleursT2ARetrieval",
+    "FleursT2ARetrievalV2",
     "GlobalNewsRetrieval",
     "GoogleSVQA2TRetrieval",
     "GoogleSVQT2ARetrieval",
@@ -270,6 +277,7 @@ __all__ = [
     "Vidore3PhysicsRetrievalv2",
     "Vidore3TelecomRetrieval",
     "Vidore3TelecomRetrievalv2",
+    "WITI2TRetrieval",
     "WITT2IRetrieval",
     "WebFAQRetrieval",
     "WikipediaRetrievalMultilingual",

@@ -381,6 +381,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VisualNewsT2IRetrieval",
         "VizWizIT2TRetrieval",
         "VoyageMMarcoReranking",
+        "WITI2TRetrieval",  # official WIT includes valid short titles/proper names
         "WITT2IRetrieval",
         "WRIMEClassification",
         "WRIMEClassification.v2",
@@ -458,6 +459,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "CodeTransOceanDL",
         "Core17InstructionRetrieval",
         "CosQA",
+        "CrisisMMDHumanitarianClassification",  # one tweet can pair with several separately annotated images
+        "CrisisMMDInformativeClassification",  # one tweet can pair with several separately annotated images
         "CzechProductReviewSentimentClassification",
         "CzechSoMeSentimentClassification",
         "DKHateClassification",
@@ -533,6 +536,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MTOPDomainVNClassification",
         "MTOPIntentClassification",
         "MTOPIntentVNClassification",
+        "MVLSIBSent2Img",  # k=1 repeats sentences across candidate sets
         "MalayalamNewsClassification",
         "MasakhaNEWSClassification",
         "MassiveIntentClassification",
@@ -660,6 +664,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WikiClusteringP2P",
         "WikiClusteringP2P.v2",
         "WikiSQLRetrieval",
+        "WITI2TRetrieval",  # distinct WIT records can share the same caption
         "XM3600I2TRetrieval",  # captions are intentionally preserved verbatim
         "XM3600T2IRetrieval",
         "XMarket",
@@ -830,6 +835,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "InfoSeekIT2ITRetrieval",
         "InfoSeekIT2TRetrieval",
         "LLaVAIT2TRetrieval",
+        "MVLSIBSent2Img",  # all languages share the same 70 images
         "MMLongBenchDocRetrieval",  # official corpus contains repeated rendered pages; preserve IDs to match qrels
         "MomentSeekerTI2VRetrieval",
         "OVENIT2ITRetrieval",
@@ -847,6 +853,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VQA2IT2TRetrieval",
         "WebQAT2ITRetrieval",
         "WebVidCoVRIT2VRetrieval",
+        "WITI2TRetrieval",  # images can recur across WIT records and languages
         "XFlickr30kCoI2TRetrieval",  # the same image corpus is reused across languages
         "XFlickr30kCoT2IRetrieval",
         "XM3600I2TRetrieval",  # the same image corpus is reused across languages
