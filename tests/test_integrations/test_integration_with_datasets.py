@@ -1,9 +1,12 @@
 """test that mteb.evaluate's integration with datasets"""
 
 import logging
+import sys
 from pathlib import Path
 
 import pytest
+import sklearn
+from packaging.version import Version
 
 import mteb
 from mteb.abstasks import AbsTask
@@ -33,9 +36,9 @@ EXPECTED_SCORES = {
     (SPARSE_MODEL, "TwentyNewsgroupsClustering"): 0.05676,
     (SPARSE_MODEL, "TwentyNewsgroupsClustering.v2"): 0.07125,
     (SPARSE_MODEL, "LccSentimentClassification"): 0.32600,
-    (SPARSE_MODEL, "FarsTail"): 0.53990,
+    (SPARSE_MODEL, "FarsTail"): 0.53992,
     (SPARSE_MODEL, "BrazilianToxicTweetsClassification"): 0.19370,
-    (SPARSE_MODEL, "FaroeseSTS"): 0.02229,
+    (SPARSE_MODEL, "FaroeseSTS"): 0.02216,
     (SPARSE_MODEL, "SummEval"): 0.26734,
     (SPARSE_MODEL, "TwitterHjerneRetrieval"): 0.02910,
     (SPARSE_MODEL, "SciDocsRR"): 0.25355,
@@ -44,6 +47,28 @@ EXPECTED_SCORES = {
     (COLBERT_MODEL, "TwitterHjerneRetrieval"): 0.01750,
     (CROSS_ENCODER_MODEL, "SciDocsRR"): 0.25268,
 }
+
+# The minimum supported scikit-learn releases produce different deterministic KMeans
+# assignments than 1.8+ for the same fixed embeddings and random state.
+if Version(sklearn.__version__) < Version("1.8.0"):
+    EXPECTED_SCORES.update(
+        {
+            (DENSE_MODEL, "TwentyNewsgroupsClustering"): 0.04560,
+            (DENSE_MODEL, "TwentyNewsgroupsClustering.v2"): 0.06337,
+            (SPARSE_MODEL, "TwentyNewsgroupsClustering"): 0.05358,
+            (SPARSE_MODEL, "TwentyNewsgroupsClustering.v2"): 0.07122,
+        }
+    )
+
+# The macOS numerical stack produces slightly different sparse pair-classification and STS
+# scores than the Linux/Windows stacks. Keep strict expected scores for each platform family.
+if sys.platform == "darwin":
+    EXPECTED_SCORES.update(
+        {
+            (SPARSE_MODEL, "FarsTail"): 0.53990,
+            (SPARSE_MODEL, "FaroeseSTS"): 0.02229,
+        }
+    )
 
 
 def _assert_score(result: mteb.TaskResult, model_name: str) -> None:
