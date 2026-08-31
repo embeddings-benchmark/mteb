@@ -105,7 +105,10 @@ def read_pool(path: Path) -> list[dict[str, Any]]:
         raise ValueError(f"Expected {EXPECTED_RECORDS} records, found {len(records)}")
     if len({record["article_id"] for record in records}) != len(records):
         raise ValueError("The source pool contains duplicate article IDs")
-    if any(not isinstance(record["text"], str) or not record["text"].strip() for record in records):
+    if any(
+        not isinstance(record["text"], str) or not record["text"].strip()
+        for record in records
+    ):
         raise ValueError("The source pool contains an empty text")
     if len({record["text"] for record in records}) != len(records):
         raise ValueError("The source pool contains duplicate texts")
@@ -113,7 +116,9 @@ def read_pool(path: Path) -> list[dict[str, Any]]:
     label_counts = Counter(record["label"] for record in records)
     expected_counts = Counter({label: EXPECTED_PER_LABEL for label in LABELS})
     if label_counts != expected_counts:
-        raise ValueError(f"Unexpected label counts: {dict(sorted(label_counts.items()))}")
+        raise ValueError(
+            f"Unexpected label counts: {dict(sorted(label_counts.items()))}"
+        )
     return sorted(records, key=lambda record: str(record["article_id"]))
 
 
@@ -147,7 +152,8 @@ def build_dataset(records: list[dict[str, Any]]) -> tuple[DatasetDict, Dataset]:
                     record["category_evidence"], ensure_ascii=False, sort_keys=True
                 ),
                 "extraction_rule": record.get(
-                    "extraction_rule", "final-pool-v1/depth=1/exclusive/evidence-preserved"
+                    "extraction_rule",
+                    "final-pool-v1/depth=1/exclusive/evidence-preserved",
                 ),
             }
             for record in records
@@ -166,12 +172,16 @@ def validate_evaluation(dataset: Dataset) -> None:
         raise ValueError("The evaluation split contains an empty text")
     if len(set(dataset["sentences"])) != EXPECTED_RECORDS:
         raise ValueError("The evaluation split contains duplicate texts")
-    expected_counts = Counter({index: EXPECTED_PER_LABEL for index in range(len(LABELS))})
+    expected_counts = Counter(
+        {index: EXPECTED_PER_LABEL for index in range(len(LABELS))}
+    )
     if Counter(dataset["labels"]) != expected_counts:
         raise ValueError("The evaluation split is not balanced 6 × 200")
 
 
-def build_from_published_source(repo_id: str, revision: str) -> tuple[DatasetDict, Path, Path]:
+def build_from_published_source(
+    repo_id: str, revision: str
+) -> tuple[DatasetDict, Path, Path]:
     """Load the immutable public release and its provenance sidecars."""
     source = load_dataset(repo_id, revision=revision, split="test")
     validate_evaluation(source)
@@ -272,11 +282,15 @@ def main() -> None:
         type=Path,
         help="Optional audited final-pool JSONL; omit to use the public source release",
     )
-    parser.add_argument("--output-dir", required=True, type=Path, help="New release directory")
+    parser.add_argument(
+        "--output-dir", required=True, type=Path, help="New release directory"
+    )
     parser.add_argument("--source-repo", default=SOURCE_REPO)
     parser.add_argument("--source-revision", default=SOURCE_REVISION)
     parser.add_argument("--repo-id", help="Optional Hugging Face dataset repository")
-    parser.add_argument("--push", action="store_true", help="Upload the inspected output")
+    parser.add_argument(
+        "--push", action="store_true", help="Upload the inspected output"
+    )
     args = parser.parse_args()
 
     if args.push and not args.repo_id:
