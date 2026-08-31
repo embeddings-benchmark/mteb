@@ -13,16 +13,8 @@ task = remove_duplicates(mteb.get_task("MassiveIntentClassification"))
 
 from __future__ import annotations
 
-from ._filters import (
-    alphanumeric_text,
-    casefold_text,
-    remove_duplicates,
-    strip_whitespace,
-)
+from ._filters import remove_duplicates
 
 __all__ = [
-    "alphanumeric_text",
-    "casefold_text",
     "remove_duplicates",
-    "strip_whitespace",
 ]

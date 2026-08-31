@@ -5,13 +5,11 @@ icon: lucide/brush-cleaning
 
 # Cleaning Task Data
 
-Some datasets have quality issues. A dataset may repeat the same document many times, or contain documents that are
-empty or too short to carry meaning. Both distort a benchmark: a duplicated document is scored twice, and an empty one is scored on nothing.
+Some datasets have quality issues. A dataset may repeat the same document many times, or contain documents that are empty or too short to carry meaning. Both distort a benchmark: a duplicated document is scored twice, and an empty one is scored on nothing.
 
 ## Spotting the issue
 
-The descriptive statistics of a task are the quickest way to see this. They are published with the task, so you can
-inspect them without downloading the data:
+The descriptive statistics of a task are the quickest way to see this. They are published with the task, so you can inspect them without downloading the data:
 
 ```python
 import mteb
@@ -26,8 +24,7 @@ print(stats["text_statistics"]["min_text_length"])  # 2
 
 Fewer unique texts than samples means the split contains duplicates -- four of them here. A small `min_text_length` points the other way, at documents too short to be meaningful.
 
-For a task you are developing, compute the statistics yourself with
-[`task.calculate_descriptive_statistics()`][mteb.AbsTask.calculate_descriptive_statistics].
+For a task you are developing, compute the statistics yourself with [`task.calculate_descriptive_statistics()`][mteb.AbsTask.calculate_descriptive_statistics].
 
 ## Available filters
 
@@ -49,20 +46,27 @@ print({split: len(data) for split, data in cleaned.dataset["en"].items()})
 # {'train': 11468, 'test': 2970, 'validation': 2031}, from 11514 / 2974 / 2033
 ```
 
-Two texts are duplicates when `normalization` rewrites both to the same string. It defaults to stripping surrounding whitespace, and you pass any function to loosen that:
+Two texts are duplicates when `normalization` rewrites both to the same string. It defaults to `str.strip`, so
+only surrounding whitespace is ignored. Pass any function of your own to loosen that:
 
 ```python
-from mteb.quality import alphanumeric_text, casefold_text
+import re
 
-# "Wake me up!" == "wake me up!"
+
+def casefold_text(text: str) -> str:
+    """Also ignore case, so that "Wake me up!" and "wake me up!" match."""
+    return text.strip().casefold()
+
+
+def alphanumeric_text(text: str) -> str:
+    """Also ignore punctuation and repeated whitespace, so that "e-mail" and "email" match."""
+    return " ".join(re.sub(r"[^\w\s]", "", text.casefold()).split())
+
+
 cleaned = remove_duplicates(task, normalization=casefold_text)
-
-# "Wake me up!" == "wake me up", and "e-mail" == "email"
-cleaned = remove_duplicates(task, normalization=alphanumeric_text)
 ```
 
-Only text is normalized; images, audio and video are compared by an exact hash of their content, so the filter works on any task but does not match a re-encoded or
-rescaled copy of a sample. Retrieval tasks keep their relevance judgements valid: a judgement pointing at a removed duplicate moves to the copy that was kept.
+Only text is normalized; images, audio and video are compared by an exact hash of their content, so the filter works on any task but does not match a re-encoded or rescaled copy of a sample. Retrieval tasks keep their relevance judgements valid: a judgement pointing at a removed duplicate moves to the copy that was kept.
 
 ## Cleaning produces a new task
 
@@ -75,12 +79,10 @@ print(task.metadata.name)  # MassiveIntentClassification
 print(cleaned.metadata.name)  # MassiveIntentClassification (remove_duplicates)
 ```
 
-Each filter adds its name to the list, so applying a second one gives
-`MassiveIntentClassification (remove_duplicates, filter_short)`. The task you passed in keeps its own name, and
+Each filter adds its name to the list, so applying a second one gives `MassiveIntentClassification (remove_duplicates, filter_short)`. The task you passed in keeps its own name, and
 `adapted_from` on the copy records where the data came from.
 
-That id is what keeps the result honest. You evaluate a cleaned task as usual, and its scores are recorded against
-the cleaned id rather than against the published dataset:
+That id is what keeps the result honest. You evaluate a cleaned task as usual, and its scores are recorded against the cleaned id rather than against the published dataset:
 
 ```python
 results = mteb.evaluate(model, [cleaned])

@@ -23,6 +23,7 @@ from typing import TYPE_CHECKING, Any, TypeVar, cast
 from datasets import Dataset, DatasetDict
 
 from mteb._content_hashes import MODALITY_HASH_FNS
+from mteb._set_seed import _set_seed
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 
@@ -40,31 +41,16 @@ T = TypeVar("T", bound="AbsTask")
 Normalization = Callable[[str], str]
 """Rewrites a text into the form a filter compares it in.
 
+The default only strips surrounding whitespace. Pass your own to ignore more, e.g. case or punctuation.
+
 Only text is normalized. Images, audio and video are compared by an exact hash of their content, so a re-encoded
 or rescaled copy of a sample does not currently match the original.
 """
 
-_PUNCTUATION = re.compile(r"[^\w\s]", flags=re.UNICODE)
 
-
-def strip_whitespace(text: str) -> str:
+def _strip_whitespace(text: str) -> str:
     """Ignore surrounding whitespace, so that texts must otherwise be identical to match. The default."""
     return text.strip()
-
-
-def casefold_text(text: str) -> str:
-    """Also ignore case, so that `"Hello"` and `"hello"` match."""
-    return text.strip().casefold()
-
-
-def alphanumeric_text(text: str) -> str:
-    """Also ignore punctuation and repeated whitespace, so that `"e-mail"` and `"email"` match.
-
-    Punctuation is dropped rather than replaced by a space, so word boundaries still tell texts apart: `"e mail"`
-    does not match `"email"`. This is the most aggressive of the three and can merge texts a reader would
-    distinguish, e.g. source code or anything where punctuation carries meaning.
-    """
-    return " ".join(_PUNCTUATION.sub("", text.casefold()).split())
 
 
 KeepIndicesFn = Callable[[Iterable[tuple[str, ...]]], list[int]]
@@ -138,7 +124,7 @@ def _iter_row_content(
     dataset: Dataset,
     col_modalities: Mapping[str, Modalities],
     *,
-    normalization: Normalization = strip_whitespace,
+    normalization: Normalization = _strip_whitespace,
     num_proc: int | None = None,
     symmetric_sides: tuple[list[str], list[str]] | None = None,
 ) -> Iterator[tuple[str, ...]]:
@@ -239,7 +225,7 @@ def _apply_row_filter(
     col_modalities: Mapping[str, Modalities],
     keep_fn: KeepIndicesFn,
     *,
-    normalization: Normalization = strip_whitespace,
+    normalization: Normalization = _strip_whitespace,
     num_proc: int | None = None,
     symmetric_sides: tuple[list[str], list[str]] | None = None,
 ) -> tuple[Dataset, int]:
@@ -317,6 +303,19 @@ def _warn(msg: str) -> None:
 _APPLIED_FILTERS = re.compile(r"^(?P<base>.*?) \((?P<filters>[^()]*)\)$")
 
 
+def _independent_copy(task: T) -> T:
+    """A copy of `task` that shares no mutable state with it.
+
+    `copy.copy` would leave the two pointing at the same list of subsets and the same random number generators, so
+    working with one task could reach into the other: narrowing the copy's languages in place would narrow the
+    original's, and drawing from one generator would advance the other's sampling.
+    """
+    cleaned = copy.copy(task)
+    cleaned.hf_subsets = list(task.hf_subsets)
+    cleaned.rng_state, cleaned.np_rng = _set_seed(task.seed)
+    return cleaned
+
+
 def _derived_task_name(name: str, filter_name: str) -> str:
     """The name a task takes once `filter_name` has been applied to it.
 
@@ -380,12 +379,7 @@ def _resolve_columns(
     """The columns a filter should compare, mapped to the modality of their content."""
     col_modalities = task._get_content_columns()
     if columns is not None:
-        unknown = [column for column in columns if column not in col_modalities]
-        if unknown:
-            raise ValueError(
-                f"'{task.metadata.name}' does not declare the columns {unknown}. It has "
-                f"{sorted(col_modalities)}."
-            )
+        # a column the task does not declare raises a KeyError naming it
         col_modalities = {column: col_modalities[column] for column in columns}
 
     if not col_modalities:
@@ -416,7 +410,7 @@ def _filter_task_rows(
     task: T,
     filter_: _Filter,
     *,
-    normalization: Normalization = strip_whitespace,
+    normalization: Normalization = _strip_whitespace,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
     subsets: Sequence[HFSubset] | None = None,
@@ -440,8 +434,8 @@ def _filter_task_rows(
         A copy of the task holding the filtered data.
 
     Raises:
-        ValueError: If `columns` names a column the task does not declare, or if `splits` and `subsets` together
-            match none of the task's splits.
+        ValueError: If `splits` and `subsets` together match none of the task's splits.
+        KeyError: If `columns` names a column the task does not declare.
     """
     from ._retrieval import _filter_retrieval_split
 
@@ -459,7 +453,7 @@ def _filter_task_rows(
             )
             for sub_task in task.tasks
         ]
-        cleaned_aggregate = copy.copy(task)
+        cleaned_aggregate = _independent_copy(task)
         cleaned_aggregate.tasks = sub_tasks
         cleaned_aggregate.taskname_to_task = {t.metadata.name: t for t in sub_tasks}
         if any(
@@ -512,7 +506,7 @@ def _filter_task_rows(
     if n_filtered_splits == 0:
         raise ValueError(_no_split_matched_message(task.metadata.name, available))
 
-    cleaned = copy.copy(task)
+    cleaned = _independent_copy(task)
     cleaned.dataset = by_subset["default"] if flat else by_subset
     if n_removed:
         _rename_as_cleaned(cleaned, task.metadata, filter_.name)
@@ -532,7 +526,7 @@ def _filter_task_rows(
 def remove_duplicates(
     task: T,
     *,
-    normalization: Normalization = strip_whitespace,
+    normalization: Normalization = _strip_whitespace,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
     subsets: Sequence[HFSubset] | None = None,
@@ -567,8 +561,9 @@ def remove_duplicates(
         A copy of the task holding the deduplicated data.
 
     Raises:
-        ValueError: If `columns` names a column the task does not declare, or if `splits` and `subsets` together
-            match none of the task's splits.
+        ValueError: If `splits` and `subsets` together match none of the task's splits, which would otherwise
+            filter nothing at all.
+        KeyError: If `columns` names a column the task does not declare.
 
     Examples:
         >>> import mteb

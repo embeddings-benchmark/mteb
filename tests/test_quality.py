@@ -1,5 +1,6 @@
 """Tests for `mteb.quality`."""
 
+import re
 from collections.abc import Callable
 
 import pytest
@@ -17,18 +18,18 @@ from mteb.mocks import (
     MockSTSTask,
 )
 from mteb.mocks.mock_tasks.reranking import MockAggregatedTask
-from mteb.quality import (
-    alphanumeric_text,
-    casefold_text,
-    remove_duplicates,
-    strip_whitespace,
-)
+from mteb.quality import remove_duplicates
 from mteb.quality._filters import (
     _derived_task_name,
     _keep_first_occurrence,
     _row_key,
 )
 from mteb.results import TaskResult
+
+
+def _alphanumeric(text: str) -> str:
+    """An example of a looser comparison: ignore case, punctuation and repeated whitespace."""
+    return " ".join(re.sub(r"[^\w\s]", "", text.casefold()).split())
 
 
 def _classification_task() -> MockClassificationTask:
@@ -108,12 +109,12 @@ def test_remove_duplicates_loads_the_data_when_it_is_not_loaded() -> None:
 @pytest.mark.parametrize(
     ("normalization", "expected"),
     [
+        (str.strip, ["Wake me up!", "wake me up", "wake me up!", "wake  me  up"]),
         (
-            strip_whitespace,
-            ["Wake me up!", "wake me up", "wake me up!", "wake  me  up"],
+            lambda text: text.strip().casefold(),
+            ["Wake me up!", "wake me up", "wake  me  up"],
         ),
-        (casefold_text, ["Wake me up!", "wake me up", "wake  me  up"]),
-        (alphanumeric_text, ["Wake me up!"]),
+        (_alphanumeric, ["Wake me up!"]),
     ],
 )
 def test_normalization_controls_how_close_a_duplicate_has_to_be(
@@ -129,20 +130,6 @@ def test_normalization_controls_how_close_a_duplicate_has_to_be(
     cleaned = remove_duplicates(task, normalization=normalization)
 
     assert cleaned.dataset["test"]["text"] == expected
-
-
-def test_a_normalization_that_drops_punctuation_does_not_split_words() -> None:
-    task = MockClassificationTask()
-    texts = ["e-mail", "email", "e mail"]
-    task.dataset = DatasetDict(
-        {"test": Dataset.from_dict({"text": texts, "label": [0, 1, 2]})}
-    )
-    task.data_loaded = True
-
-    task = remove_duplicates(task, normalization=alphanumeric_text)
-
-    # "e-mail" and "email" match, but whitespace is collapsed rather than removed
-    assert task.dataset["test"]["text"] == ["e-mail", "e mail"]
 
 
 def _multilingual_task() -> MockMultilingualClassificationTask:
@@ -240,8 +227,8 @@ def test_remove_duplicates_compares_images_by_content() -> None:
 def test_remove_duplicates_raises_for_unknown_columns() -> None:
     task = _classification_task()
 
-    with pytest.raises(ValueError, match="does not declare the columns"):
-        task = remove_duplicates(task, columns=["not_a_column"])
+    with pytest.raises(KeyError, match="not_a_column"):
+        remove_duplicates(task, columns=["not_a_column"])
 
 
 def test_remove_duplicates_raises_when_nothing_is_selected() -> None:
@@ -353,7 +340,7 @@ def test_retrieval_remap_uses_the_same_normalization_as_the_filter() -> None:
         "top_ranked": None,
     }
 
-    task = remove_duplicates(task, normalization=alphanumeric_text)
+    task = remove_duplicates(task, normalization=_alphanumeric)
 
     data = task.dataset[subset][split]
     assert data["corpus"]["id"] == ["d1"]
@@ -581,3 +568,17 @@ def test_derived_task_name_extends_rather_than_nests(
     name: str, filter_name: str, expected: str
 ) -> None:
     assert _derived_task_name(name, filter_name) == expected
+
+
+def test_the_copy_shares_no_mutable_state_with_the_original() -> None:
+    task = _multilingual_task()
+
+    cleaned = remove_duplicates(task)
+
+    assert cleaned.hf_subsets is not task.hf_subsets
+    assert cleaned.rng_state is not task.rng_state
+    assert cleaned.np_rng is not task.np_rng
+
+    # mutating one in place leaves the other alone
+    cleaned.hf_subsets.remove("fra")
+    assert task.hf_subsets == ["eng", "fra"]
