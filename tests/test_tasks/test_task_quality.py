@@ -109,6 +109,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "DKHateClassification",
         "DanishMedicinesAgencyBitextMining",
         "DanishPoliticalCommentsClassification",
+        "DanRAGT2ITRetrieval",  # some image-bearing pages have no extracted text
         "DiaBlaBitextMining",
         "DuRetrieval",
         "DutchNewsArticlesRetrieval",
@@ -379,6 +380,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VisualNewsT2IRetrieval",
         "VizWizIT2TRetrieval",
         "VoyageMMarcoReranking",
+        "WITI2TRetrieval",  # official WIT includes valid short titles/proper names
         "WITT2IRetrieval",
         "WRIMEClassification",
         "WRIMEClassification.v2",
@@ -389,6 +391,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WisesightSentimentClassification",
         "WisesightSentimentClassification.v2",
         "XGlueWPRReranking",
+        "XM3600I2TRetrieval",  # official captions include one-character strings
         "XM3600T2IRetrieval",
         "XMarket",
         "XNLI",
@@ -461,6 +464,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "DS1000Retrieval",
         "DalajClassification",
         "DanishPoliticalCommentsClassification",
+        "DanRAGT2ITRetrieval",  # repeated page text is present in the source benchmark
         "DeepSentiPers",
         "EDIRIT2IRetrieval",
         "EDIST2ITRetrieval",
@@ -656,6 +660,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WikiClusteringP2P",
         "WikiClusteringP2P.v2",
         "WikiSQLRetrieval",
+        "WITI2TRetrieval",  # distinct WIT records can share the same caption
+        "XM3600I2TRetrieval",  # captions are intentionally preserved verbatim
         "XM3600T2IRetrieval",
         "XMarket",
         "XPQARetrieval",
@@ -821,7 +827,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FER2013ZeroShot",  # documented to contain duplicate/near-duplicate images
         "FORBI2IRetrieval",  # fingerprint corpus contains near-duplicate captures of the same print
         "FashionIQIT2IRetrieval",
-        "GLAMI1MT2IRetrieval",  # product images recur across country/language storefronts
+        "GLAMI1MT2IRetrieval",  # images recur across language subsets
         "ImageCoDeT2IRetrieval",
         "InfoSeekIT2ITRetrieval",
         "InfoSeekIT2TRetrieval",
@@ -843,7 +849,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VQA2IT2TRetrieval",
         "WebQAT2ITRetrieval",
         "WebVidCoVRIT2VRetrieval",
+        "WITI2TRetrieval",  # images can recur across WIT records and languages
+        "XFlickr30kCoI2TRetrieval",  # the same image corpus is reused across languages
         "XFlickr30kCoT2IRetrieval",
+        "XM3600I2TRetrieval",  # the same image corpus is reused across languages
         "XM3600T2IRetrieval",
     ],
     "duplicate_pairs": [

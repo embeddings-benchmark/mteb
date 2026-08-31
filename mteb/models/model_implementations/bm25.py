@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import unicodedata
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 from mteb._create_dataloaders import _combine_queries_with_instruction_text
 from mteb.models.model_meta import ModelMeta
@@ -329,6 +329,10 @@ class BM25Search:
         stemmer_language: str | None = None,
         freq_threshold: float = 0.9,
         tokenizer: str | Callable[[str], list[str]] | None = None,
+        k1: float = 1.5,
+        b: float = 0.75,
+        delta: float = 0.5,
+        method: Literal["robertson", "lucene", "atire"] = "lucene",
         **kwargs,
     ):
         """
@@ -350,6 +354,10 @@ class BM25Search:
         self._tokenizer = None
         self.retriever = None
         self.corpus_idx_to_id: dict[int, str] = {}
+        self.k1 = k1
+        self.b = b
+        self.delta = delta
+        self.method = method
 
     @staticmethod
     def _resolve_tokenizer(
@@ -404,7 +412,12 @@ class BM25Search:
         logger.info(
             f"Indexing Corpus... {len(encoded_corpus.ids):,} documents, {len(encoded_corpus.vocab):,} vocab"
         )
-        self.retriever = bm25s.BM25()
+        self.retriever = bm25s.BM25(
+            k1=self.k1,
+            b=self.b,
+            delta=self.delta,
+            method=self.method,
+        )
         self.retriever.index(encoded_corpus)
         self.corpus_idx_to_id = {i: row["id"] for i, row in enumerate(corpus)}
 

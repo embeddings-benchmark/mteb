@@ -132,9 +132,9 @@ class NemotronColEmbedVL(AbsEncoder):
             raise NotImplementedError(
                 "Fused embeddings are not supported yet. Please use get_text_embeddings or get_image_embeddings."
             )
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError
 

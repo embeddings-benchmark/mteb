@@ -80,8 +80,10 @@ class XQuADRetrieval(AbsTaskRetrieval):
             data = data.filter(lambda x: x["answers"]["text"] != "")  # noqa: PLC1901
 
             question_ids = {
-                question: id
-                for id, question in zip(data["id"], data["question"], strict=True)
+                question: question_id
+                for question_id, question in zip(
+                    data["id"], data["question"], strict=True
+                )
             }
             context_ids = {
                 context: sha256(context.encode("utf-8")).hexdigest()

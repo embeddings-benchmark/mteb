@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.20.4"
+version = "2.20.5"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -334,6 +334,9 @@ select = [
     "ISC",     # implicit string concatenation
     "B",       # flake8-bugbear
     "PT",      # flake8-pytest-style
+    "A",       # flake8-builtins, don't shadow builtins
+    "RET",     # flake8-return
+    "SIM",     # flake8-simplify
 ]
 
 ignore = [
@@ -357,6 +360,8 @@ ignore = [
     "PLW0717",  # too-many-statements-in-try-clause
     "ISC001",   # single-line implicit concat; conflicts with `ruff format`
     "PT018",    # composite assertions; splitting `assert a and b` is not always clearer
+    "RET504",   # unnecessary-assign; named intermediate results often aid readability
+    "SIM108",   # ternary over if/else is a style preference, and displaces inline comments
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
@@ -402,6 +407,8 @@ preview = true
     # gradio would try to validate typehints
     "TC002",
     "TC001",
+    # nested `with` blocks mirror the gradio layout hierarchy; collapsing them hides it
+    "SIM117",
 ]
 "mteb/types/statistics.py" = [
     # pydantic / FastAPI resolve TypedDict annotations at runtime when building
@@ -615,6 +622,7 @@ extend-ignore-re = [
     "author.*",  # ignore authors in citations
     "editor.*",  # ignore authors in citations
     "FIne-Grained Music retrievAl",  # stylised paper title (FIGMA)
+    "@\\w+\\{[^,\n]+,",  # bibtex entry keys are arbitrary identifiers
 ]
 
 [tool.typos.files]

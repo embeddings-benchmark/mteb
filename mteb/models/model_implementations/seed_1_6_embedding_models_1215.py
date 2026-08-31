@@ -60,11 +60,11 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         self._embed_dim = embed_dim
         self._available_embed_dims = [2048, 1024]
 
-    def pil_to_base64(self, image, format="jpeg"):  # noqa: PLR6301
+    def pil_to_base64(self, image, image_format="jpeg"):  # noqa: PLR6301
         if image is None:
             return None
         buffer = BytesIO()
-        image.save(buffer, format=format)
+        image.save(buffer, format=image_format)
         img_bytes = buffer.getvalue()
         encoded_bytes = base64.b64encode(img_bytes)
         return encoded_bytes.decode("utf-8")

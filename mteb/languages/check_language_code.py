@@ -25,10 +25,9 @@ def check_language_code(code: str) -> None:
     if script == "Code":
         if lang in PROGRAMMING_LANGS:
             return  # override for code
-        else:
-            raise ValueError(
-                f"Programming language {lang} is not a valid programming language."
-            )
+        raise ValueError(
+            f"Programming language {lang} is not a valid programming language."
+        )
     if (
         lang is not None
         and lang not in ISO_TO_LANGUAGE
