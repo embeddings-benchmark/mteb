@@ -458,6 +458,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "CodeTransOceanDL",
         "Core17InstructionRetrieval",
         "CosQA",
+        "CrisisMMDHumanitarianClassification",  # one tweet can pair with several separately annotated images
+        "CrisisMMDInformativeClassification",  # one tweet can pair with several separately annotated images
         "CzechProductReviewSentimentClassification",
         "CzechSoMeSentimentClassification",
         "DKHateClassification",
