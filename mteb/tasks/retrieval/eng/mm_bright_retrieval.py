@@ -13,13 +13,14 @@ from datasets import (
     Value,
 )
 from huggingface_hub import hf_hub_download
-from PIL import Image as PILImage
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
+    from PIL import Image as PILImage
+
     from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 
 logger = logging.getLogger(__name__)
@@ -62,8 +63,6 @@ _DOMAINS = {
 
 _TaskVariant = Literal["t2t", "it2t", "it2i"]
 _IMAGE_FEATURE = Image(mode="RGB")
-# The official evaluator uses a white placeholder when a query has no usable image.
-_BLANK_IMAGE = PILImage.new("RGB", (224, 224), "white")
 _QUERY_FEATURES = Features(
     {
         "id": Value("string"),
@@ -155,6 +154,8 @@ def _load_image_data(domain: str, config: str) -> Dataset:
 
 
 def _concatenate_images_vertically(blobs: list[bytes]) -> PILImage.Image | None:
+    from PIL import Image as PILImage
+
     images = []
     for blob in blobs:
         try:
@@ -196,12 +197,15 @@ def _load_multimodal_queries(domain: str, examples: Dataset) -> Dataset:
             ]
         )
         if image is None:
+            from PIL import Image as PILImage
+
             missing_query_image_ids.add(example["id"])
+            image = PILImage.new("RGB", (224, 224), "white")
         rows.append(
             {
                 "id": example["id"],
                 "text": example["query"],
-                "image": image if image is not None else _BLANK_IMAGE,
+                "image": image,
             }
         )
     if missing_query_image_ids:
