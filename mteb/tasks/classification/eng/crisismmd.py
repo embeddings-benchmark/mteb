@@ -26,13 +26,11 @@ _CITATION = r"""
 """
 
 
-class _CrisisMMDClassification(AbsTaskClassification):
+class CrisisMMDInformativeClassification(AbsTaskClassification):
     input_column_name: ClassVar[tuple[str, str]] = ("image", "text")
     samples_per_label: int = 16
     n_experiments: int = 5
 
-
-class CrisisMMDInformativeClassification(_CrisisMMDClassification):
     metadata = TaskMetadata(
         name="CrisisMMDInformativeClassification",
         description=(
@@ -68,7 +66,11 @@ class CrisisMMDInformativeClassification(_CrisisMMDClassification):
     )
 
 
-class CrisisMMDHumanitarianClassification(_CrisisMMDClassification):
+class CrisisMMDHumanitarianClassification(AbsTaskClassification):
+    input_column_name: ClassVar[tuple[str, str]] = ("image", "text")
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="CrisisMMDHumanitarianClassification",
         description=(
