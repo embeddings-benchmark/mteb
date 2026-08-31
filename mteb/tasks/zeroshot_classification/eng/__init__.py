@@ -12,10 +12,6 @@ from .caltech101 import Caltech101ZeroShotClassification
 from .cifar import CIFAR10ZeroShotClassification, CIFAR100ZeroShotClassification
 from .clevr import CLEVR, CLEVRCount
 from .country211 import Country211ZeroShotClassification
-from .crisismmd import (
-    CrisisMMDHumanitarianZeroShotClassification,
-    CrisisMMDInformativeZeroShotClassification,
-)
 from .dtd import DTDZeroShotClassification
 from .euro_sat import EuroSATZeroShotClassification
 from .fer2013 import FER2013ZeroShotClassification
@@ -94,8 +90,6 @@ __all__ = [
     "CLEVRCount",
     "Caltech101ZeroShotClassification",
     "Country211ZeroShotClassification",
-    "CrisisMMDHumanitarianZeroShotClassification",
-    "CrisisMMDInformativeZeroShotClassification",
     "DTDZeroShotClassification",
     "EuroSATZeroShotClassification",
     "FER2013ZeroShotClassification",
