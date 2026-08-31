@@ -43,8 +43,9 @@ spaces or hyphens, are replaced by `[BARCODE]`. This prevents printed GTINs from
 revealing the class identifier while retaining product names and other package
 text.
 
-The dataset is built by
-`scripts/data/finegrainocr_clustering/create_data.py` in the MTEB repository.
+The construction script and its focused tests are preserved on the
+[`codex/finegrainocr-build-scripts`](https://github.com/PranitChawla/mteb/tree/codex/finegrainocr-build-scripts/scripts/data/finegrainocr_clustering)
+branch.
 
 ## Provenance and license
 

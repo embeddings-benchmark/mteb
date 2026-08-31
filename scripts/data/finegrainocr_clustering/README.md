@@ -117,20 +117,16 @@ Redact all OCR digit sequences containing 8–14 digits, allowing spaces or
 hyphens between digits. This removes exact and alternate barcode identifiers
 while retaining product names, ingredients, and other useful package text.
 
-## Reproducible local build
+## Completed local build
 
-`create_data.py` implements the complete selective build. It pins and verifies
-the ZIP index and validation OCR span by SHA-256, coalesces selected image byte
-ranges, resumes partial downloads, checks every ZIP member's CRC-32 and
-uncompressed size, resizes the images, redacts barcode-like OCR, validates the
-result, and saves a Hugging Face `DatasetDict`.
-
-```bash
-python -m scripts.data.finegrainocr_clustering.create_data \
-  --cache-dir .cache/finegrainocr-it-clustering \
-  --output-dir .cache/finegrainocr-it-clustering/dataset \
-  --workers 8
-```
+The selective builder pins and verifies the ZIP index and validation OCR span
+by SHA-256, coalesces selected image byte ranges, resumes partial downloads,
+checks every ZIP member's CRC-32 and uncompressed size, resizes the images,
+redacts barcode-like OCR, validates the result, and saves a Hugging Face
+`DatasetDict`. To keep this task branch focused, the builder and its focused
+tests are preserved on the
+[`codex/finegrainocr-build-scripts`](https://github.com/PranitChawla/mteb/tree/codex/finegrainocr-build-scripts/scripts/data/finegrainocr_clustering)
+branch.
 
 The completed local build has 4,919 rows and occupies 78 MB on disk. Its
 processed JPEG payload is 79,117,877 bytes. All images are 512×384, all OCR is
