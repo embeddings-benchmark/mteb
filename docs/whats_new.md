@@ -11,7 +11,10 @@ This section is an overview of releases for more information check out the autog
 
 ### Cleaning low-quality samples from a task
 
-Datasets sometimes repeat the same sample many times, which distorts a benchmark by scoring the same document twice. The new `mteb.quality` module removes such samples before a task is evaluated, starting with deduplication.
+It is sadly far too common to quality concern in modern benchmarks. While MTEB already have test to ensure that new additions does not have typical quality concerns, these tests does not apply to local tasks or earlier submissions. Similarly, we often accept datasets with known quality concerns to ensure compatibility with published work.
+
+However, in an effort to make it easier to develop high-quality tasks, we now introduce the `mteb.quality` module. It starts out with a simple deduplication function, but builds the foundation for a future addition of quality filters and it is build in a way that ensure reproducibility when changing the task.
+For an example of use:
 
 ```python
 import mteb
@@ -24,7 +27,7 @@ print(cleaned.metadata.name)
 # MassiveIntentClassification (remove_duplicates)
 ```
 
-The task you pass in is left untouched and a cleaned copy is returned, named after the filters applied to it. That id is what keeps results honest: a cleaned task is evaluated like any other, and its scores are recorded against the cleaned name rather than against the published dataset.
+The task you pass in is left untouched and a cleaned copy is returned, named after the filters applied to it. That id ensures that the cleaned and current version aren't interchanged: a cleaned task is evaluated like any other, and its scores are recorded against the cleaned name rather than against the published dataset.
 
 Duplicates are found across every modality -- text compares as text, while images, audio and video compare by a hash of their content -- and retrieval tasks keep their relevance judgements valid as documents are removed.
 
