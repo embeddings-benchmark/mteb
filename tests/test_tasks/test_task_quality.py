@@ -533,6 +533,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MTOPDomainVNClassification",
         "MTOPIntentClassification",
         "MTOPIntentVNClassification",
+        "MVLSIBSent2Img",  # k=1 repeats sentences across candidate sets
         "MalayalamNewsClassification",
         "MasakhaNEWSClassification",
         "MassiveIntentClassification",
@@ -831,6 +832,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "InfoSeekIT2ITRetrieval",
         "InfoSeekIT2TRetrieval",
         "LLaVAIT2TRetrieval",
+        "MVLSIBSent2Img",  # all languages share the same 70 images
         "MMLongBenchDocRetrieval",  # official corpus contains repeated rendered pages; preserve IDs to match qrels
         "MomentSeekerTI2VRetrieval",
         "OVENIT2ITRetrieval",
