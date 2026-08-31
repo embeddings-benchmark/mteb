@@ -115,16 +115,14 @@ _FLEURS_EVAL_LANGS = {
 
 
 def _audio_paths(split_dataset: datasets.Dataset) -> list[str]:
-    """Return row-aligned audio paths without decoding audio.
-    """
+    """Return row-aligned audio paths without decoding audio."""
     audio_column = split_dataset.with_format("arrow")[:].column("audio")
     paths = audio_column.combine_chunks().field("path").to_pylist()
     return [p or "" for p in paths]
 
 
 def _recording_ids(ids: list[str], audio_paths: list[str]) -> list[str]:
-    """Return a unique id per recording, `{sentence_id}-{rank}`.
-    """
+    """Return a unique id per recording, `{sentence_id}-{rank}`."""
     groups: dict[str, list[int]] = defaultdict(list)
     for i, sentence_id in enumerate(ids):
         groups[sentence_id].append(i)
@@ -153,7 +151,7 @@ def _build_recording_level_split(
 
     # one document per unique sentence, first-seen order
     sentence_text: dict[str, str] = {}
-    for sentence_id, text in zip(ids, transcriptions):
+    for sentence_id, text in zip(ids, transcriptions, strict=True):
         sentence_text[sentence_id] = text
     text_ds = Dataset.from_dict(
         {"id": list(sentence_text), "text": list(sentence_text.values())}
@@ -161,7 +159,7 @@ def _build_recording_level_split(
 
     # T2A: every recording of the sentence is a correct answer
     t2a_relevant_docs: dict[str, dict[str, int]] = defaultdict(dict)
-    for sentence_id, recording_id in zip(ids, recording_ids):
+    for sentence_id, recording_id in zip(ids, recording_ids, strict=True):
         t2a_relevant_docs[sentence_id][recording_id] = 1
 
     # A2T: the recording's own sentence. Distinct sentence ids can share identical text
@@ -170,8 +168,8 @@ def _build_recording_level_split(
     for sentence_id, text in sentence_text.items():
         text_to_sentence_ids[text].append(sentence_id)
     a2t_relevant_docs = {
-        recording_id: {s: 1 for s in text_to_sentence_ids[text]}
-        for recording_id, text in zip(recording_ids, transcriptions)
+        recording_id: dict.fromkeys(text_to_sentence_ids[text], 1)
+        for recording_id, text in zip(recording_ids, transcriptions, strict=True)
     }
 
     return audio_ds, text_ds, dict(t2a_relevant_docs), a2t_relevant_docs
@@ -460,4 +458,3 @@ class FleursT2ARetrievalV2(AbsTaskRetrieval):
                 self.queries[lang][split] = text_ds
                 self.corpus[lang][split] = audio_ds
                 self.relevant_docs[lang][split] = t2a_relevant_docs
-
