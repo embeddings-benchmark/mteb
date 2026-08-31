@@ -130,6 +130,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FiQA2018-Fa",
         "FiQA2018-NL",
         "FilipinoHateSpeechClassification",
+        "FineGrainOCRITClustering",  # OCR can be short, but every sample also has a product image
         "FinParaSTS",
         "FinToxicityClassification",
         "FrenchBookReviews",

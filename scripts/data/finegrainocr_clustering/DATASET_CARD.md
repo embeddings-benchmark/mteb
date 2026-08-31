@@ -63,10 +63,15 @@ branch.
 ## Citation
 
 ```bibtex
-@article{hansen2024finegrainocr,
-  title = {FineGrainOCR: A dataset for text recognition in the wild},
+@article{pettersson2024,
+  title = {Multimodal fine-grained grocery product recognition using image and OCR text},
+  author = {Pettersson, Tobias and Riveiro, Maria and L{\"o}fstr{\"o}m, Tuwe},
   journal = {Machine Vision and Applications},
+  volume = {35},
+  number = {4},
+  pages = {79},
   year = {2024},
-  doi = {10.1007/s00138-024-01549-9}
+  publisher = {Springer},
+  doi = {10.1007/s00138-024-01549-9},
 }
 ```

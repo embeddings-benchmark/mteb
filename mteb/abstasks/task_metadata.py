@@ -251,6 +251,7 @@ TaskCategory = Literal[
     "i2c",
     "i2t",
     "t2i",
+    "it2c",
     "it2t",
     "it2i",
     "i2it",
@@ -298,42 +299,43 @@ TaskCategory = Literal[
 4. i2c: image to category
 5. i2t: image to text
 6. t2i: text to image
-7. it2t: image+text to text
-8. it2i: image+text to image
-9. i2it: image to image+text
-10. t2it: text to image+text
-11. it2it: image+text to image+text
-12. a2a: audio to audio
-13. a2c: audio to category
-14. a2t: audio to text
-15. t2a: text to audio
-16. at2t: audio+text to text
-17. at2a: audio+text to audio
-18. a2at: audio to audio+text
-19. t2at: text to audio+text
-20. at2at: audio+text to audio+text
-21. v2v: video to video
-22. v2c: video to category
-23. v2t: video to text
-24. t2v: text to video
-25. vt2t: video+text to text
-26. vt2v: video+text to video
-27. v2vt: video to video+text
-28. t2vt: text to video+text
-29. vt2vt: video+text to video+text
-30. va2c: video+audio to category
-31. va2t: video+audio to text
-32. t2va: text to video+audio
-33. vat2t: video+audio+text to text
-34. va2va: video+audio to video+audio
-35. v2a: video to audio
-36. a2v: audio to video
-37. a2i: audio to image
-38. i2a: image to audio
-39. i2v: image to video
-40. i2va: image to video+audio
-41. it2v: image+text to video
-42. v2i: video to image
+7. it2c: image+text to category
+8. it2t: image+text to text
+9. it2i: image+text to image
+10. i2it: image to image+text
+11. t2it: text to image+text
+12. it2it: image+text to image+text
+13. a2a: audio to audio
+14. a2c: audio to category
+15. a2t: audio to text
+16. t2a: text to audio
+17. at2t: audio+text to text
+18. at2a: audio+text to audio
+19. a2at: audio to audio+text
+20. t2at: text to audio+text
+21. at2at: audio+text to audio+text
+22. v2v: video to video
+23. v2c: video to category
+24. v2t: video to text
+25. t2v: text to video
+26. vt2t: video+text to text
+27. vt2v: video+text to video
+28. v2vt: video to video+text
+29. t2vt: text to video+text
+30. vt2vt: video+text to video+text
+31. va2c: video+audio to category
+32. va2t: video+audio to text
+33. t2va: text to video+audio
+34. vat2t: video+audio+text to text
+35. va2va: video+audio to video+audio
+36. v2a: video to audio
+37. a2v: audio to video
+38. a2i: audio to image
+39. i2a: image to audio
+40. i2v: image to video
+41. i2va: image to video+audio
+42. it2v: image+text to video
+43. v2i: video to image
 """
 
 _MODALITY_CODES: dict[str, str] = {

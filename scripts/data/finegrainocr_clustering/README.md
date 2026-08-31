@@ -1,14 +1,14 @@
-# FineGrainOCR image+text clustering exploration
+# FineGrainOCR image+text clustering task
 
-## Recommendation
+## Overview
 
-FineGrainOCR is a strong candidate for the missing non-audio/video cross-modal
-clustering coverage in MOEB. It has native image+OCR pairs, 256 fine-grained
+FineGrainOCR fills the missing non-audio/video cross-modal clustering coverage
+in MOEB. It has native image+OCR pairs, 256 fine-grained
 grocery-product classes, barcode-grounded rather than subjective labels, and a
 CC0-1.0 source license. The source paper reports that image and OCR features are
 complementary and that multimodal fusion outperforms either unimodal model.
 
-Proposed MTEB task:
+MTEB task:
 
 - Name: `FineGrainOCRITClustering`
 - Type: `ImageClustering`
@@ -21,10 +21,9 @@ Proposed MTEB task:
 - Main score: V-measure
 - License: `cc0-1.0`
 
-Do not add the task definition until a maintainer agrees with the formulation.
-The dataset proposal should call out that OCR is derived from the product image,
-and that long numeric sequences will be redacted to prevent the class barcode
-from becoming a shortcut.
+The formulation explicitly treats OCR as text derived from the product image.
+Long numeric sequences are redacted to prevent a printed class barcode from
+becoming a shortcut.
 
 ## Why not the other candidates?
 
@@ -38,8 +37,8 @@ from becoming a shortcut.
 - GLAMI-1M: a very good fit, but another contributor already opened MTEB PR
   #5331 for its multimodal classification task.
 
-FineGrainOCR was not mentioned by any existing MTEB issue or PR when checked on
-2026-08-30.
+Before this work, FineGrainOCR was not mentioned by an existing MTEB issue or
+PR when checked on 2026-08-30.
 
 ## Provenance
 
@@ -49,6 +48,16 @@ FineGrainOCR was not mentioned by any existing MTEB issue or PR when checked on
 - License: CC0-1.0 in the source repository
 - Source archive: the Dropbox URL in the source README
 - Observed archive size: 53,728,458,454 bytes
+
+## Hosted evaluation dataset
+
+The processed evaluation set is public at
+[`pranitchawla/FineGrainOCRITClustering`](https://huggingface.co/datasets/pranitchawla/FineGrainOCRITClustering)
+and the task pins immutable revision
+`a4f4ce3b2297be58a02b158d925eccb5b35d5b98`. Loading that revision yields
+4,919 test rows, 256 `ClassLabel` product IDs, and the columns `image`, `text`,
+`label`, and `sample_id`. The uploaded images were decoded successfully during
+post-upload validation.
 
 The paper explains that an automated checkout's barcode scanners register the
 product class while a camera captures the product from unconstrained customer
@@ -91,7 +100,7 @@ Observed source layout:
 
 There are 256 classes and no image-only or text-only samples.
 
-## Proposed evaluation subset
+## Evaluation subset
 
 Rank validation samples within each class using SHA-256 of
 `seed + class_id + sample_stem`, retain up to 20 per class, and skip empty OCR.
@@ -117,7 +126,7 @@ Redact all OCR digit sequences containing 8–14 digits, allowing spaces or
 hyphens between digits. This removes exact and alternate barcode identifiers
 while retaining product names, ingredients, and other useful package text.
 
-## Completed local build
+## Completed dataset build
 
 The selective builder pins and verifies the ZIP index and validation OCR span
 by SHA-256, coalesces selected image byte ranges, resumes partial downloads,
@@ -128,7 +137,7 @@ tests are preserved on the
 [`codex/finegrainocr-build-scripts`](https://github.com/PranitChawla/mteb/tree/codex/finegrainocr-build-scripts/scripts/data/finegrainocr_clustering)
 branch.
 
-The completed local build has 4,919 rows and occupies 78 MB on disk. Its
+The completed build has 4,919 rows and occupies 78 MB on disk. Its
 processed JPEG payload is 79,117,877 bytes. All images are 512×384, all OCR is
 non-empty, and no 8–14 digit barcode-like sequence remains. Barcode redaction
 changed 1,357 rows (1,760 sequences). After redaction there are four exact
@@ -204,27 +213,14 @@ was a valid 2,592×1,944 JPEG and the matching OCR JSON had the expected Google
 Vision schema. This verifies that a construction script can download only the
 selected members.
 
-## Remaining work
+## MTEB integration
 
-1. Ask the MOEB maintainer to approve FineGrainOCR as an `IT -> class`
-   clustering task, explicitly disclosing that the text is OCR-derived.
-2. Upload the processed 4,919-row test set to the MTEB Hugging Face organization
-   and pin its revision.
-3. Add `it2c` metadata support, the task definition, registration, tests, and
-   descriptive statistics.
+`FineGrainOCRITClustering` is registered as an `ImageClustering` task with the
+new `it2c` (image+text to category) metadata category. It selects only the
+`image`, `text`, and `label` columns for evaluation and embeds every test row.
+The checked-in descriptive statistics cover both input modalities and all 256
+classes.
 
-## Draft tracker comment
-
-> For the missing cross-modal clustering task, I propose FineGrainOCR as an
-> image+text (`IT -> class`) clustering benchmark. It contains 91,794 paired
-> product images and Google Vision OCR texts across 256 barcode-registered
-> grocery-product classes and is released under CC0-1.0. Unlike Memotion, the
-> cluster labels are scanner-grounded product identities rather than subjective
-> judgments. The paper reports that image and OCR features complement each other
-> and multimodal fusion outperforms unimodal models. I audited the official
-> archive and found complete image/OCR pairing. To keep evaluation practical, I
-> would use a deterministic, class-capped subset of the source validation split:
-> 4,919 non-empty pairs, 6–20 per class, with images resized to the paper-tested
-> 512-pixel setting. I would redact 8–14 digit OCR sequences so printed barcodes
-> cannot leak the class identifier. Would this formulation fit the intended
-> cross-modal clustering gap?
+An end-to-end run through `mteb.evaluate` with the pinned CLIP ViT-B/32 model
+completed successfully and reproduced the standalone additive-fusion baseline
+to two decimal places (V-measure 0.77).
