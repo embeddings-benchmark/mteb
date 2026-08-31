@@ -89,6 +89,11 @@ EXPECTED_SCORES = {
     (DENSE_MODEL, "MockImageClusteringFastTask"): 1.0,
     (DENSE_MODEL, "MockImageRegressionTask"): 1.0,
     (DENSE_MODEL, "MockPairImageClassificationTask"): 1.0,
+    (DENSE_MODEL, "MockAsymCustomTextImagePairClassificationTaskV2"): 1.0,
+    (DENSE_MODEL, "MockSymCustomVideoAudioPairClassificationTaskV2"): 0.5,
+    (DENSE_MODEL, "MockAsymVideoAudioPairClassificationTaskV2"): 0.5,
+    (DENSE_MODEL, "MockAsymVideoAudioPairClassificationTask"): 0.5,
+    (DENSE_MODEL, "MockVideoAudioPairClassification"): 1.0,
     (DENSE_MODEL, "MockVideoClassification"): 1.0,
     (DENSE_MODEL, "MockVideoClusteringTask"): 1.0,
     (DENSE_MODEL, "MockVideoMultilabelClassification"): 1.0,
@@ -355,11 +360,9 @@ def test_benchmark_video_colbert(task: AbsTask, model: mteb.EncoderProtocol):
     ],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model", [mteb.get_model("mteb/baseline-random-encoder")])
-def test_benchmark_pair_classification(
-    task: str | AbsTask, model: mteb.EncoderProtocol
-):
-    """Test that a task can be fetched and run"""
+@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL)])
+def test_benchmark_pair_classification(task: AbsTask, model: mteb.EncoderProtocol):
+    """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Video dependencies are not installed")
     pytest.importorskip("torchaudio", reason="Video dependencies are not installed")
-    mteb.evaluate(model, task, cache=None)
+    _evaluate_and_assert_score(model, task, DENSE_MODEL)
