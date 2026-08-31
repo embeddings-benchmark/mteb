@@ -9,15 +9,15 @@ class FineGrainOCRITClustering(AbsTaskClustering):
         name="FineGrainOCRITClustering",
         description=(
             "Clustering grocery products from paired checkout images and Google "
-            "Vision OCR text. This deterministic, class-capped subset of the "
-            "FineGrainOCR validation split contains 4,919 examples from 256 "
-            "barcode-registered product classes. Barcode-like digit sequences "
-            "are redacted from the OCR text to prevent label leakage."
+            "Vision OCR text. The usable FineGrainOCR validation split contains "
+            "18,389 examples from 256 barcode-registered product classes; 27 "
+            "source rows with empty OCR are excluded. Barcode-like digit "
+            "sequences are redacted from the OCR text to prevent label leakage."
         ),
         reference="https://doi.org/10.1007/s00138-024-01549-9",
         dataset={
             "path": "pranitchawla/FineGrainOCRITClustering",
-            "revision": "a4f4ce3b2297be58a02b158d925eccb5b35d5b98",
+            "revision": "02e86cf4e8dbeb0811ea5e889f7359eb7ae1b5f5",
         },
         type="ImageClustering",
         category="it2c",

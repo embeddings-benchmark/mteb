@@ -2,15 +2,14 @@
 
 The Dropbox-hosted source archive supports HTTP byte ranges. Download its ZIP
 central directory, then pass that file to this script to audit the split layout,
-image/OCR pairing, class balance, and the transfer size of a class-balanced
-subset before fetching any media.
+image/OCR pairing, class distribution, and validation-split transfer size before
+fetching any media.
 """
 
 from __future__ import annotations
 
 import argparse
 import binascii
-import hashlib
 import json
 import re
 import statistics
@@ -216,41 +215,26 @@ def _group_members(
     return members, grouped
 
 
-def _select_validation_keys(
+def _validation_keys(
     grouped: dict[tuple[str, str, str], dict[str, ZipEntry]],
-    cap_per_class: int,
-    seed: int,
     eligible_keys: set[tuple[str, str, str]] | None = None,
 ) -> list[tuple[str, str, str]]:
-    validation_by_class: dict[str, list[tuple[str, str, str]]] = defaultdict(list)
-    for key, pair in grouped.items():
-        split, class_id, stem = key
-        if (
-            split == "validation"
-            and set(pair) == {"image", "text"}
-            and (eligible_keys is None or key in eligible_keys)
-        ):
-            validation_by_class[class_id].append(key)
+    """Return every paired validation key, optionally restricted for eligibility."""
 
-    selected: list[tuple[str, str, str]] = []
-    for class_id in sorted(validation_by_class):
-        ranked = sorted(
-            validation_by_class[class_id],
-            key=lambda key: hashlib.sha256(
-                f"{seed}\0{class_id}\0{key[2]}".encode()
-            ).digest(),
-        )
-        selected.extend(ranked[:cap_per_class])
-    return selected
+    return sorted(
+        key
+        for key, pair in grouped.items()
+        if key[0] == "validation"
+        and set(pair) == {"image", "text"}
+        and (eligible_keys is None or key in eligible_keys)
+    )
 
 
-def validation_manifest(
-    entries: list[ZipEntry], cap_per_class: int, seed: int
-) -> list[dict[str, Any]]:
-    """Create a deterministic manifest for selective range extraction."""
+def validation_manifest(entries: list[ZipEntry]) -> list[dict[str, Any]]:
+    """Create a deterministic manifest for validation range extraction."""
 
     _, grouped = _group_members(entries)
-    selected_keys = _select_validation_keys(grouped, cap_per_class, seed)
+    validation_keys = _validation_keys(grouped)
     return [
         {
             "class_id": class_id,
@@ -258,7 +242,7 @@ def validation_manifest(
             "image": asdict(grouped[(split, class_id, stem)]["image"]),
             "text": asdict(grouped[(split, class_id, stem)]["text"]),
         }
-        for split, class_id, stem in selected_keys
+        for split, class_id, stem in validation_keys
     ]
 
 
@@ -330,13 +314,11 @@ def audit_validation_text(
     entries: list[ZipEntry],
     span_path: Path,
     span_offset: int,
-    cap_per_class: int,
-    seed: int,
 ) -> dict[str, Any]:
     """Audit OCR quality and direct barcode-label leakage."""
 
     _, grouped = _group_members(entries)
-    selected_keys = set(_select_validation_keys(grouped, cap_per_class, seed))
+    validation_keys = set(_validation_keys(grouped))
     span = span_path.read_bytes()
     locale_counts: Counter[str] = Counter()
     char_lengths: list[int] = []
@@ -346,9 +328,9 @@ def audit_validation_text(
     empty_descriptions = 0
     label_digit_matches = 0
     barcode_like_texts = 0
-    selected_empty_descriptions = 0
-    selected_label_digit_matches = 0
-    selected_char_lengths: list[int] = []
+    validation_empty_descriptions = 0
+    validation_label_digit_matches = 0
+    validation_char_lengths: list[int] = []
     nonempty_keys: set[tuple[str, str, str]] = set()
     descriptions: dict[tuple[str, str, str], str] = {}
     label_matches: dict[tuple[str, str, str], bool] = {}
@@ -382,25 +364,23 @@ def audit_validation_text(
         barcode_like_texts += has_barcode_like_text
         empty_descriptions += not description.strip()
 
-        if key in selected_keys:
-            selected_char_lengths.append(len(description))
-            selected_empty_descriptions += not description.strip()
-            selected_label_digit_matches += has_label_digits
+        if key in validation_keys:
+            validation_char_lengths.append(len(description))
+            validation_empty_descriptions += not description.strip()
+            validation_label_digit_matches += has_label_digits
 
     cross_class_duplicate_groups = sum(
         len(classes) > 1 for classes in description_classes.values()
     )
     duplicated_rows = sum(count - 1 for count in exact_descriptions.values())
-    clean_selected_keys = _select_validation_keys(
+    nonempty_validation_keys = _validation_keys(
         grouped,
-        cap_per_class,
-        seed,
         eligible_keys=nonempty_keys,
     )
-    clean_class_counts = Counter(key[1] for key in clean_selected_keys)
-    clean_source_bytes = sum(
+    nonempty_class_counts = Counter(key[1] for key in nonempty_validation_keys)
+    nonempty_source_bytes = sum(
         grouped[key][modality].compressed_size
-        for key in clean_selected_keys
+        for key in nonempty_validation_keys
         for modality in ("image", "text")
     )
     return {
@@ -420,28 +400,28 @@ def audit_validation_text(
             "exact_duplicate_rows": duplicated_rows,
             "cross_class_exact_duplicate_groups": cross_class_duplicate_groups,
         },
-        "selected_validation": {
-            "samples": len(selected_keys),
-            "empty_descriptions": selected_empty_descriptions,
-            "direct_class_id_digit_matches": selected_label_digit_matches,
-            "description_characters": _text_distribution(selected_char_lengths),
+        "paired_validation": {
+            "samples": len(validation_keys),
+            "empty_descriptions": validation_empty_descriptions,
+            "direct_class_id_digit_matches": validation_label_digit_matches,
+            "description_characters": _text_distribution(validation_char_lengths),
         },
-        "recommended_nonempty_selection": {
-            "samples": len(clean_selected_keys),
-            "classes": len(clean_class_counts),
-            "class_distribution": _distribution(list(clean_class_counts.values())),
-            "source_compressed_bytes": clean_source_bytes,
+        "nonempty_validation": {
+            "samples": len(nonempty_validation_keys),
+            "classes": len(nonempty_class_counts),
+            "class_distribution": _distribution(list(nonempty_class_counts.values())),
+            "source_compressed_bytes": nonempty_source_bytes,
             "direct_class_id_digit_matches_to_redact": sum(
-                label_matches[key] for key in clean_selected_keys
+                label_matches[key] for key in nonempty_validation_keys
             ),
             "description_characters": _text_distribution(
-                [len(descriptions[key]) for key in clean_selected_keys]
+                [len(descriptions[key]) for key in nonempty_validation_keys]
             ),
         },
     }
 
 
-def summarize(entries: list[ZipEntry], cap_per_class: int, seed: int) -> dict[str, Any]:
+def summarize(entries: list[ZipEntry]) -> dict[str, Any]:
     members, grouped = _group_members(entries)
     class_counts: Counter[tuple[str, str]] = Counter()
     modalities: Counter[tuple[str, str]] = Counter()
@@ -462,11 +442,11 @@ def summarize(entries: list[ZipEntry], cap_per_class: int, seed: int) -> dict[st
         split, class_id, _ = key
         if split == "validation":
             validation_by_class[class_id].append(key)
-    selected_keys = _select_validation_keys(grouped, cap_per_class, seed)
+    validation_keys = _validation_keys(grouped)
 
-    selected_compressed_bytes = sum(
+    validation_compressed_bytes = sum(
         grouped[key][modality].compressed_size
-        for key in selected_keys
+        for key in validation_keys
         for modality in ("image", "text")
     )
     per_split_classes: dict[str, list[int]] = defaultdict(list)
@@ -503,12 +483,10 @@ def summarize(entries: list[ZipEntry], cap_per_class: int, seed: int) -> dict[st
             split: _distribution(counts)
             for split, counts in sorted(per_split_classes.items())
         },
-        "balanced_validation_plan": {
-            "cap_per_class": cap_per_class,
-            "selection_seed": seed,
+        "validation_plan": {
             "classes": len(validation_by_class),
-            "paired_samples": len(selected_keys),
-            "compressed_bytes": selected_compressed_bytes,
+            "paired_samples": len(validation_keys),
+            "compressed_bytes": validation_compressed_bytes,
         },
         "first_entries": [asdict(entry) for entry in entries[:5]],
     }
@@ -520,18 +498,6 @@ def parse_args() -> argparse.Namespace:
         "central_directory",
         type=Path,
         help="File containing only the ZIP central-directory byte range.",
-    )
-    parser.add_argument(
-        "--cap-per-class",
-        type=int,
-        default=20,
-        help="Maximum paired validation samples per class for the transfer plan.",
-    )
-    parser.add_argument(
-        "--seed",
-        type=int,
-        default=42,
-        help="Seed included in the stable SHA-256 ranking used for subsampling.",
     )
     parser.add_argument(
         "--manifest-out",
@@ -553,10 +519,8 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    if args.cap_per_class < 1:
-        raise ValueError("--cap-per-class must be positive")
     entries = parse_central_directory(args.central_directory)
-    summary = summarize(entries, args.cap_per_class, args.seed)
+    summary = summarize(entries)
     if args.validation_text_span:
         text_members = [
             member
@@ -577,12 +541,10 @@ def main() -> None:
             entries,
             args.validation_text_span,
             span_offset,
-            args.cap_per_class,
-            args.seed,
         )
     print(json.dumps(summary, indent=2))
     if args.manifest_out:
-        manifest = validation_manifest(entries, args.cap_per_class, args.seed)
+        manifest = validation_manifest(entries)
         args.manifest_out.write_text(json.dumps(manifest, indent=2) + "\n")
 
 

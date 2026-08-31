@@ -1,12 +1,12 @@
 {
     "test": {
-        "num_samples": 4919,
+        "num_samples": 18389,
         "text_statistics": {
-            "total_text_length": 2072610,
+            "total_text_length": 7917274,
             "min_text_length": 3,
-            "average_text_length": 421.34783492579794,
-            "max_text_length": 3027,
-            "unique_texts": 4915
+            "average_text_length": 430.54402088204904,
+            "max_text_length": 3628,
+            "unique_texts": 18294
         },
         "image_statistics": {
             "min_image_width": 512,
@@ -15,7 +15,7 @@
             "min_image_height": 384,
             "average_image_height": 384.0,
             "max_image_height": 384,
-            "unique_images": 4919
+            "unique_images": 18389
         },
         "audio_statistics": null,
         "video_statistics": null,
@@ -26,157 +26,157 @@
             "unique_labels": 256,
             "labels": {
                 "0": {
-                    "count": 20
+                    "count": 100
                 },
                 "1": {
-                    "count": 20
+                    "count": 100
                 },
                 "2": {
-                    "count": 20
+                    "count": 100
                 },
                 "3": {
-                    "count": 20
+                    "count": 100
                 },
                 "4": {
-                    "count": 20
+                    "count": 72
                 },
                 "5": {
-                    "count": 20
+                    "count": 94
                 },
                 "6": {
-                    "count": 20
+                    "count": 96
                 },
                 "7": {
-                    "count": 20
+                    "count": 91
                 },
                 "8": {
-                    "count": 20
+                    "count": 55
                 },
                 "9": {
-                    "count": 20
+                    "count": 63
                 },
                 "10": {
-                    "count": 20
+                    "count": 62
                 },
                 "11": {
-                    "count": 20
+                    "count": 85
                 },
                 "12": {
-                    "count": 20
+                    "count": 100
                 },
                 "13": {
-                    "count": 20
+                    "count": 48
                 },
                 "14": {
-                    "count": 20
+                    "count": 77
                 },
                 "15": {
-                    "count": 20
+                    "count": 38
                 },
                 "16": {
-                    "count": 20
+                    "count": 99
                 },
                 "17": {
-                    "count": 20
+                    "count": 77
                 },
                 "18": {
-                    "count": 20
+                    "count": 76
                 },
                 "19": {
-                    "count": 20
+                    "count": 100
                 },
                 "20": {
-                    "count": 20
+                    "count": 100
                 },
                 "21": {
-                    "count": 20
+                    "count": 95
                 },
                 "22": {
-                    "count": 20
+                    "count": 100
                 },
                 "23": {
-                    "count": 20
+                    "count": 92
                 },
                 "24": {
-                    "count": 20
+                    "count": 100
                 },
                 "25": {
-                    "count": 20
+                    "count": 100
                 },
                 "26": {
-                    "count": 20
+                    "count": 100
                 },
                 "27": {
-                    "count": 20
+                    "count": 57
                 },
                 "28": {
-                    "count": 20
+                    "count": 84
                 },
                 "29": {
-                    "count": 20
+                    "count": 63
                 },
                 "30": {
-                    "count": 20
+                    "count": 64
                 },
                 "31": {
-                    "count": 20
+                    "count": 55
                 },
                 "32": {
-                    "count": 20
+                    "count": 66
                 },
                 "33": {
-                    "count": 20
+                    "count": 86
                 },
                 "34": {
-                    "count": 20
+                    "count": 41
                 },
                 "35": {
-                    "count": 20
+                    "count": 79
                 },
                 "36": {
-                    "count": 20
+                    "count": 100
                 },
                 "37": {
-                    "count": 20
+                    "count": 100
                 },
                 "38": {
-                    "count": 20
+                    "count": 100
                 },
                 "39": {
-                    "count": 20
+                    "count": 100
                 },
                 "40": {
-                    "count": 20
+                    "count": 99
                 },
                 "41": {
-                    "count": 20
+                    "count": 100
                 },
                 "42": {
-                    "count": 20
+                    "count": 100
                 },
                 "43": {
-                    "count": 20
+                    "count": 83
                 },
                 "44": {
-                    "count": 20
+                    "count": 91
                 },
                 "45": {
-                    "count": 20
+                    "count": 58
                 },
                 "46": {
-                    "count": 20
+                    "count": 57
                 },
                 "47": {
-                    "count": 20
+                    "count": 100
                 },
                 "48": {
-                    "count": 20
+                    "count": 97
                 },
                 "49": {
-                    "count": 20
+                    "count": 100
                 },
                 "50": {
-                    "count": 20
+                    "count": 35
                 },
                 "51": {
                     "count": 17
@@ -185,445 +185,445 @@
                     "count": 16
                 },
                 "53": {
-                    "count": 20
+                    "count": 76
                 },
                 "54": {
-                    "count": 20
+                    "count": 68
                 },
                 "55": {
-                    "count": 20
+                    "count": 100
                 },
                 "56": {
-                    "count": 20
+                    "count": 95
                 },
                 "57": {
-                    "count": 20
+                    "count": 100
                 },
                 "58": {
-                    "count": 20
+                    "count": 77
                 },
                 "59": {
-                    "count": 20
+                    "count": 100
                 },
                 "60": {
-                    "count": 20
+                    "count": 72
                 },
                 "61": {
-                    "count": 20
+                    "count": 82
                 },
                 "62": {
-                    "count": 20
+                    "count": 35
                 },
                 "63": {
-                    "count": 20
+                    "count": 67
                 },
                 "64": {
-                    "count": 20
+                    "count": 86
                 },
                 "65": {
-                    "count": 20
+                    "count": 89
                 },
                 "66": {
-                    "count": 20
+                    "count": 99
                 },
                 "67": {
-                    "count": 20
+                    "count": 100
                 },
                 "68": {
-                    "count": 20
+                    "count": 99
                 },
                 "69": {
-                    "count": 20
+                    "count": 100
                 },
                 "70": {
-                    "count": 20
+                    "count": 61
                 },
                 "71": {
-                    "count": 20
+                    "count": 101
                 },
                 "72": {
-                    "count": 20
+                    "count": 77
                 },
                 "73": {
-                    "count": 20
+                    "count": 49
                 },
                 "74": {
-                    "count": 20
+                    "count": 100
                 },
                 "75": {
-                    "count": 20
+                    "count": 41
                 },
                 "76": {
-                    "count": 20
+                    "count": 54
                 },
                 "77": {
-                    "count": 20
+                    "count": 79
                 },
                 "78": {
-                    "count": 20
+                    "count": 38
                 },
                 "79": {
-                    "count": 20
+                    "count": 100
                 },
                 "80": {
-                    "count": 20
+                    "count": 100
                 },
                 "81": {
-                    "count": 20
+                    "count": 100
                 },
                 "82": {
                     "count": 16
                 },
                 "83": {
-                    "count": 20
+                    "count": 76
                 },
                 "84": {
-                    "count": 20
+                    "count": 66
                 },
                 "85": {
-                    "count": 20
+                    "count": 72
                 },
                 "86": {
-                    "count": 20
+                    "count": 100
                 },
                 "87": {
-                    "count": 20
+                    "count": 75
                 },
                 "88": {
-                    "count": 20
+                    "count": 100
                 },
                 "89": {
-                    "count": 20
+                    "count": 100
                 },
                 "90": {
-                    "count": 20
+                    "count": 75
                 },
                 "91": {
-                    "count": 20
+                    "count": 53
                 },
                 "92": {
-                    "count": 20
+                    "count": 100
                 },
                 "93": {
-                    "count": 20
+                    "count": 100
                 },
                 "94": {
-                    "count": 20
+                    "count": 68
                 },
                 "95": {
-                    "count": 20
+                    "count": 100
                 },
                 "96": {
-                    "count": 20
+                    "count": 100
                 },
                 "97": {
-                    "count": 20
+                    "count": 100
                 },
                 "98": {
-                    "count": 20
+                    "count": 100
                 },
                 "99": {
-                    "count": 20
+                    "count": 100
                 },
                 "100": {
-                    "count": 20
+                    "count": 73
                 },
                 "101": {
-                    "count": 20
+                    "count": 70
                 },
                 "102": {
-                    "count": 20
+                    "count": 76
                 },
                 "103": {
-                    "count": 20
+                    "count": 49
                 },
                 "104": {
-                    "count": 20
+                    "count": 82
                 },
                 "105": {
-                    "count": 20
+                    "count": 79
                 },
                 "106": {
-                    "count": 20
+                    "count": 52
                 },
                 "107": {
-                    "count": 20
+                    "count": 89
                 },
                 "108": {
-                    "count": 20
+                    "count": 46
                 },
                 "109": {
-                    "count": 20
+                    "count": 98
                 },
                 "110": {
-                    "count": 20
+                    "count": 40
                 },
                 "111": {
-                    "count": 20
+                    "count": 44
                 },
                 "112": {
-                    "count": 20
+                    "count": 93
                 },
                 "113": {
-                    "count": 20
+                    "count": 80
                 },
                 "114": {
-                    "count": 20
+                    "count": 66
                 },
                 "115": {
-                    "count": 20
+                    "count": 68
                 },
                 "116": {
-                    "count": 20
+                    "count": 100
                 },
                 "117": {
-                    "count": 20
+                    "count": 53
                 },
                 "118": {
-                    "count": 20
+                    "count": 99
                 },
                 "119": {
-                    "count": 20
+                    "count": 36
                 },
                 "120": {
-                    "count": 20
+                    "count": 83
                 },
                 "121": {
-                    "count": 20
+                    "count": 42
                 },
                 "122": {
-                    "count": 20
+                    "count": 66
                 },
                 "123": {
-                    "count": 20
+                    "count": 100
                 },
                 "124": {
-                    "count": 20
+                    "count": 100
                 },
                 "125": {
-                    "count": 20
+                    "count": 60
                 },
                 "126": {
-                    "count": 20
+                    "count": 39
                 },
                 "127": {
-                    "count": 20
+                    "count": 88
                 },
                 "128": {
-                    "count": 20
+                    "count": 100
                 },
                 "129": {
-                    "count": 20
+                    "count": 100
                 },
                 "130": {
-                    "count": 20
+                    "count": 116
                 },
                 "131": {
-                    "count": 20
+                    "count": 100
                 },
                 "132": {
-                    "count": 20
+                    "count": 100
                 },
                 "133": {
-                    "count": 20
+                    "count": 104
                 },
                 "134": {
-                    "count": 20
+                    "count": 96
                 },
                 "135": {
-                    "count": 20
+                    "count": 100
                 },
                 "136": {
-                    "count": 20
+                    "count": 71
                 },
                 "137": {
-                    "count": 20
+                    "count": 66
                 },
                 "138": {
-                    "count": 20
+                    "count": 98
                 },
                 "139": {
-                    "count": 20
+                    "count": 100
                 },
                 "140": {
-                    "count": 20
+                    "count": 37
                 },
                 "141": {
-                    "count": 20
+                    "count": 73
                 },
                 "142": {
-                    "count": 20
+                    "count": 100
                 },
                 "143": {
-                    "count": 20
+                    "count": 142
                 },
                 "144": {
-                    "count": 20
+                    "count": 101
                 },
                 "145": {
-                    "count": 20
+                    "count": 147
                 },
                 "146": {
-                    "count": 20
+                    "count": 100
                 },
                 "147": {
-                    "count": 20
+                    "count": 100
                 },
                 "148": {
-                    "count": 20
+                    "count": 100
                 },
                 "149": {
-                    "count": 20
+                    "count": 75
                 },
                 "150": {
-                    "count": 20
+                    "count": 100
                 },
                 "151": {
-                    "count": 20
+                    "count": 100
                 },
                 "152": {
-                    "count": 20
+                    "count": 147
                 },
                 "153": {
-                    "count": 20
+                    "count": 100
                 },
                 "154": {
-                    "count": 20
+                    "count": 81
                 },
                 "155": {
-                    "count": 20
+                    "count": 145
                 },
                 "156": {
-                    "count": 20
+                    "count": 100
                 },
                 "157": {
-                    "count": 20
+                    "count": 100
                 },
                 "158": {
-                    "count": 20
+                    "count": 100
                 },
                 "159": {
-                    "count": 20
+                    "count": 100
                 },
                 "160": {
-                    "count": 20
+                    "count": 102
                 },
                 "161": {
-                    "count": 20
+                    "count": 104
                 },
                 "162": {
-                    "count": 20
+                    "count": 95
                 },
                 "163": {
-                    "count": 20
+                    "count": 100
                 },
                 "164": {
-                    "count": 20
+                    "count": 100
                 },
                 "165": {
-                    "count": 20
+                    "count": 100
                 },
                 "166": {
-                    "count": 20
+                    "count": 100
                 },
                 "167": {
-                    "count": 20
+                    "count": 99
                 },
                 "168": {
-                    "count": 20
+                    "count": 81
                 },
                 "169": {
-                    "count": 20
+                    "count": 85
                 },
                 "170": {
-                    "count": 20
+                    "count": 100
                 },
                 "171": {
-                    "count": 20
+                    "count": 100
                 },
                 "172": {
-                    "count": 20
+                    "count": 100
                 },
                 "173": {
-                    "count": 20
+                    "count": 48
                 },
                 "174": {
-                    "count": 20
+                    "count": 58
                 },
                 "175": {
-                    "count": 20
+                    "count": 100
                 },
                 "176": {
-                    "count": 20
+                    "count": 100
                 },
                 "177": {
-                    "count": 20
+                    "count": 55
                 },
                 "178": {
-                    "count": 20
+                    "count": 109
                 },
                 "179": {
-                    "count": 20
+                    "count": 78
                 },
                 "180": {
-                    "count": 20
+                    "count": 76
                 },
                 "181": {
-                    "count": 20
+                    "count": 100
                 },
                 "182": {
-                    "count": 20
+                    "count": 84
                 },
                 "183": {
-                    "count": 20
+                    "count": 71
                 },
                 "184": {
-                    "count": 20
+                    "count": 52
                 },
                 "185": {
-                    "count": 20
+                    "count": 59
                 },
                 "186": {
-                    "count": 20
+                    "count": 80
                 },
                 "187": {
-                    "count": 20
+                    "count": 100
                 },
                 "188": {
-                    "count": 20
+                    "count": 100
                 },
                 "189": {
-                    "count": 20
+                    "count": 68
                 },
                 "190": {
-                    "count": 20
+                    "count": 78
                 },
                 "191": {
-                    "count": 20
+                    "count": 79
                 },
                 "192": {
-                    "count": 20
+                    "count": 46
                 },
                 "193": {
-                    "count": 20
+                    "count": 69
                 },
                 "194": {
-                    "count": 20
+                    "count": 89
                 },
                 "195": {
-                    "count": 20
+                    "count": 100
                 },
                 "196": {
                     "count": 19
                 },
                 "197": {
-                    "count": 20
+                    "count": 30
                 },
                 "198": {
-                    "count": 20
+                    "count": 31
                 },
                 "199": {
-                    "count": 20
+                    "count": 46
                 },
                 "200": {
                     "count": 15
@@ -638,22 +638,22 @@
                     "count": 15
                 },
                 "204": {
-                    "count": 20
+                    "count": 50
                 },
                 "205": {
-                    "count": 20
+                    "count": 25
                 },
                 "206": {
                     "count": 19
                 },
                 "207": {
-                    "count": 20
+                    "count": 33
                 },
                 "208": {
                     "count": 7
                 },
                 "209": {
-                    "count": 20
+                    "count": 30
                 },
                 "210": {
                     "count": 9
@@ -674,7 +674,7 @@
                     "count": 11
                 },
                 "216": {
-                    "count": 20
+                    "count": 31
                 },
                 "217": {
                     "count": 11
@@ -710,10 +710,10 @@
                     "count": 15
                 },
                 "228": {
-                    "count": 20
+                    "count": 33
                 },
                 "229": {
-                    "count": 20
+                    "count": 31
                 },
                 "230": {
                     "count": 19
@@ -725,10 +725,10 @@
                     "count": 19
                 },
                 "233": {
-                    "count": 20
+                    "count": 31
                 },
                 "234": {
-                    "count": 20
+                    "count": 34
                 },
                 "235": {
                     "count": 13
@@ -746,52 +746,52 @@
                     "count": 14
                 },
                 "240": {
-                    "count": 20
+                    "count": 62
                 },
                 "241": {
-                    "count": 20
+                    "count": 80
                 },
                 "242": {
-                    "count": 20
+                    "count": 52
                 },
                 "243": {
-                    "count": 20
+                    "count": 100
                 },
                 "244": {
-                    "count": 20
+                    "count": 78
                 },
                 "245": {
-                    "count": 20
+                    "count": 55
                 },
                 "246": {
-                    "count": 20
+                    "count": 48
                 },
                 "247": {
-                    "count": 20
+                    "count": 99
                 },
                 "248": {
-                    "count": 20
+                    "count": 100
                 },
                 "249": {
-                    "count": 20
+                    "count": 100
                 },
                 "250": {
-                    "count": 20
+                    "count": 99
                 },
                 "251": {
-                    "count": 20
+                    "count": 98
                 },
                 "252": {
-                    "count": 20
+                    "count": 41
                 },
                 "253": {
-                    "count": 20
+                    "count": 35
                 },
                 "254": {
-                    "count": 20
+                    "count": 100
                 },
                 "255": {
-                    "count": 20
+                    "count": 38
                 }
             }
         }

@@ -16,8 +16,7 @@ MTEB task:
 - Modalities: `image`, `text`
 - Input columns: `("image", "text")`
 - Label: the source product-class directory (a barcode/GTIN identifier)
-- Evaluation data: a deterministic class-capped subset of the source validation
-  split
+- Evaluation data: every source validation pair with non-empty OCR
 - Main score: V-measure
 - License: `cc0-1.0`
 
@@ -54,9 +53,10 @@ PR when checked on 2026-08-30.
 The processed evaluation set is public at
 [`pranitchawla/FineGrainOCRITClustering`](https://huggingface.co/datasets/pranitchawla/FineGrainOCRITClustering)
 and the task pins immutable revision
-`a4f4ce3b2297be58a02b158d925eccb5b35d5b98`. Loading that revision yields
-4,919 test rows, 256 `ClassLabel` product IDs, and the columns `image`, `text`,
-`label`, and `sample_id`. The uploaded images were decoded successfully during
+`02e86cf4e8dbeb0811ea5e889f7359eb7ae1b5f5`. Loading that revision yields
+18,389 test rows, 256 `ClassLabel` product IDs, and the columns `image`, `text`,
+`label`, and `sample_id`. The 27 source validation pairs with empty OCR are the
+only rows excluded. The uploaded images were decoded successfully during
 post-upload validation.
 
 The paper explains that an automated checkout's barcode scanners register the
@@ -66,8 +66,8 @@ class identity substantially less ambiguous than Memotion's subjective labels.
 
 ## Archive audit
 
-The 50 GB archive supports HTTP byte ranges, so its ZIP index and a selected
-subset can be fetched without downloading the entire file.
+The 50 GB archive supports HTTP byte ranges, so its ZIP index and validation
+data can be fetched without downloading the entire file.
 
 The inspected ZIP64 central directory has:
 
@@ -86,8 +86,6 @@ curl -L \
 
 python scripts/data/finegrainocr_clustering/analyze_archive.py \
   /tmp/finegrainocr-central-directory.bin \
-  --cap-per-class 20 \
-  --seed 42 \
   --manifest-out /tmp/finegrainocr-validation-manifest.json
 ```
 
@@ -100,17 +98,15 @@ Observed source layout:
 
 There are 256 classes and no image-only or text-only samples.
 
-## Evaluation subset
+## Evaluation data
 
-Rank validation samples within each class using SHA-256 of
-`seed + class_id + sample_stem`, retain up to 20 per class, and skip empty OCR.
-This yields:
+Retain every validation image+text pair with non-empty OCR. This yields:
 
-- 4,919 image+text pairs across all 256 classes
-- 6–20 examples per class (median 20)
-- 2,866,365,935 compressed source bytes for the selected ZIP members
-- 13 selected OCR strings containing the exact class ID, which must be redacted
-- no selected empty OCR strings
+- 18,389 image+text pairs across all 256 classes
+- 6–147 examples per class
+- 10,664,221,585 compressed source bytes for the retained ZIP members
+- 27 source validation rows excluded because their OCR description is empty
+- 59 OCR strings containing the exact class ID, which must be redacted
 
 Use the first Google Vision result's `description` field. This matches the
 paper's representation: all detected words concatenated in the API's default
@@ -120,7 +116,7 @@ handle truncation.
 Resize images so the longest edge is 512 pixels and encode as optimized JPEG at
 quality 90. The paper explicitly evaluates 512-pixel images. In the extraction
 smoke test, one 2,592×1,944 source JPEG shrank from 633,106 to 21,718 bytes, so
-the hosted subset should be on the order of 100–200 MB rather than gigabytes.
+the hosted dataset remains hundreds of megabytes rather than tens of gigabytes.
 
 Redact all OCR digit sequences containing 8–14 digits, allowing spaces or
 hyphens between digits. This removes exact and alternate barcode identifiers
@@ -128,8 +124,8 @@ while retaining product names, ingredients, and other useful package text.
 
 ## Completed dataset build
 
-The selective builder pins and verifies the ZIP index and validation OCR span
-by SHA-256, coalesces selected image byte ranges, resumes partial downloads,
+The range-based builder pins and verifies the ZIP index and validation OCR span
+by SHA-256, coalesces validation image byte ranges, resumes partial downloads,
 checks every ZIP member's CRC-32 and uncompressed size, resizes the images,
 redacts barcode-like OCR, validates the result, and saves a Hugging Face
 `DatasetDict`. To keep this task branch focused, the builder and its focused
@@ -137,16 +133,15 @@ tests are preserved on the
 [`codex/finegrainocr-build-scripts`](https://github.com/PranitChawla/mteb/tree/codex/finegrainocr-build-scripts/scripts/data/finegrainocr_clustering)
 branch.
 
-The completed build has 4,919 rows and occupies 78 MB on disk. Its
-processed JPEG payload is 79,117,877 bytes. All images are 512×384, all OCR is
-non-empty, and no 8–14 digit barcode-like sequence remains. Barcode redaction
-changed 1,357 rows (1,760 sequences). After redaction there are four exact
-duplicate text rows and no exact text shared between different classes. See
+The completed build has 18,389 rows and occupies 289 MB on disk. Its processed
+JPEG payload is 292,796,337 bytes. All images are 512×384, all OCR is non-empty,
+and no 8–14 digit barcode-like sequence remains. Barcode redaction changed
+5,130 rows (6,725 sequences). After redaction there are 95 exact duplicate text
+rows and 11 exact-text groups shared between different classes. See
 `BUILD_SUMMARY.json` for the machine-readable audit.
 
-The default 4 MiB range-coalescing threshold made 541 resumable HTTP requests
-and transferred 7,138,264,648 bytes. Setting `--max-gap-mib 0` reduces transfer
-to about 2.86 GB at the cost of roughly 3,250 requests.
+The default 4 MiB range-coalescing threshold made 160 resumable HTTP requests
+and transferred 10,636,823,036 bytes.
 
 ## Baseline experiments
 
@@ -165,8 +160,8 @@ being saturated and that both modalities contain cluster signal:
 
 | Model | Random V | Image V | Text V | MTEB add V | Best normalized fusion V |
 |---|---:|---:|---:|---:|---:|
-| CLIP ViT-B/32 | 0.1466 | 0.7263 | 0.6957 | **0.7664** | 0.7608 (75% image) |
-| SigLIP B/16-256 | 0.1278 | 0.7912 | 0.6948 | 0.7681 | **0.8065** (75% image) |
+| CLIP ViT-B/32 | 0.0669 | 0.7033 | 0.6649 | **0.7503** | 0.7442 (50% image) |
+| SigLIP B/16-256 | 0.0599 | 0.7800 | 0.6741 | 0.7559 | **0.7966** (75% image) |
 
 CLIP's exact MTEB additive fusion improves over both unimodal variants. SigLIP
 has differently scaled image and text vectors, so raw addition is worse than
@@ -199,14 +194,12 @@ curl -L \
 
 python scripts/data/finegrainocr_clustering/analyze_archive.py \
   /tmp/finegrainocr-central-directory.bin \
-  --cap-per-class 20 \
-  --seed 42 \
   --validation-text-span /tmp/finegrainocr-validation-text-span.bin
 ```
 
 ## Selective extraction proof
 
-A selected image and its OCR JSON were fetched independently from the remote ZIP
+An image and its OCR JSON were fetched independently from the remote ZIP
 using their central-directory offsets, decompressed with raw DEFLATE, and checked
 against their central-directory CRC-32 and uncompressed sizes. The decoded image
 was a valid 2,592×1,944 JPEG and the matching OCR JSON had the expected Google
@@ -221,6 +214,6 @@ new `it2c` (image+text to category) metadata category. It selects only the
 The checked-in descriptive statistics cover both input modalities and all 256
 classes.
 
-An end-to-end run through `mteb.evaluate` with the pinned CLIP ViT-B/32 model
-completed successfully and reproduced the standalone additive-fusion baseline
-to two decimal places (V-measure 0.77).
+The standalone baseline runner uses the same image-plus-text addition as the
+MTEB CLIP and SigLIP wrappers and exercises the clustering defaults used by
+`AbsTaskClustering`.

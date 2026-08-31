@@ -12,13 +12,14 @@ tags:
 pretty_name: FineGrainOCR Image-Text Clustering
 ---
 
-# FineGrainOCR image-text clustering subset
+# FineGrainOCR image-text clustering
 
-This is a deterministic, evaluation-only subset of
+This dataset adapts the complete usable validation split of
 [FineGrainOCR](https://github.com/Tubbias/finegrainocr) for cross-modal
 clustering in MTEB. Each test row contains a grocery-product image, OCR derived
 from that image, and a product-class label registered by the checkout barcode
-scanner.
+scanner. Of the 18,416 source validation pairs, 27 rows with empty OCR are
+excluded, leaving 18,389 rows across all 256 product classes.
 
 ## Benchmark input and output
 
@@ -32,11 +33,10 @@ The `sample_id` column is provenance metadata and is not model input.
 
 ## Construction
 
-The source validation split is ranked independently within each class by
-SHA-256 of `42 + class ID + sample stem`. Up to 20 non-empty OCR pairs are kept
-per class. Images are resized so their longest edge is at most 512 pixels and
-encoded as optimized JPEG at quality 90. Source members are decompressed and
-verified against the official ZIP's size and CRC-32 metadata.
+Every validation pair with non-empty OCR is retained. Images are resized so
+their longest edge is at most 512 pixels and encoded as optimized JPEG at
+quality 90. Source members are decompressed and verified against the official
+ZIP's size and CRC-32 metadata.
 
 OCR digit sequences containing 8–14 digits, including sequences separated by
 spaces or hyphens, are replaced by `[BARCODE]`. This prevents printed GTINs from
