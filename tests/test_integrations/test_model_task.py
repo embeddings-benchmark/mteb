@@ -9,6 +9,7 @@ below.
 
 import logging
 import sys
+from dataclasses import dataclass
 
 import pytest
 
@@ -30,180 +31,208 @@ from mteb.mocks.mock_tasks import MockAsymCustomTextImagePairClassificationTaskV
 
 logging.basicConfig(level=logging.INFO)
 
-DENSE_MODEL = "mteb/baseline-random-encoder"
-SPARSE_MODEL = "mteb/baseline-random-sparse-encoder"
-COLBERT_MODEL = "mteb/baseline-random-colbert"
-CROSS_ENCODER_MODEL = "mteb/baseline-random-cross-encoder"
 
-EXPECTED_SCORES = {
-    (DENSE_MODEL, "MockMultilingualBitextMiningTask"): 1.0,
-    (DENSE_MODEL, "MockMultilingualParallelBitextMiningTask"): 1.0,
-    (DENSE_MODEL, "MockMultilingualClassificationTask"): 1.0,
-    (DENSE_MODEL, "MockMultilingualClusteringTask"): 1.0,
-    (DENSE_MODEL, "MockMultilingualClusteringFastTask"): 1.0,
-    (DENSE_MODEL, "MockMultilingualPairClassificationTask"): 0.5,
-    (DENSE_MODEL, "MockMultilingualRerankingTask"): 0.75,
-    (DENSE_MODEL, "MockMultilingualRetrievalTask"): 0.81546,
-    (DENSE_MODEL, "MockMultilingualSTSTask"): -1.0,
-    (DENSE_MODEL, "MockMultilingualMultilabelClassification"): 1.0,
-    (DENSE_MODEL, "MockMultilingualSummarizationTask"): 0.0,
-    (DENSE_MODEL, "MockMultilingualInstructionRetrieval"): 0.63093,
-    (DENSE_MODEL, "MockMultilingualInstructionReranking"): 0.63093,
-    (DENSE_MODEL, "MockBitextMiningTask"): 1.0,
-    (DENSE_MODEL, "MockClassificationTask"): 1.0,
-    (DENSE_MODEL, "MockRegressionTask"): 1.0,
-    (DENSE_MODEL, "MockClusteringTask"): 1.0,
-    (DENSE_MODEL, "LegacyMockClusteringFastTask"): 1.0,
-    (DENSE_MODEL, "MockPairClassificationTask"): 0.5,
-    (DENSE_MODEL, "MockRerankingTask"): 0.75,
-    (DENSE_MODEL, "MockRetrievalTask"): 0.81546,
-    (DENSE_MODEL, "MockSTSTask"): -1.0,
-    (DENSE_MODEL, "MockMultilabelClassification"): 1.0,
-    (DENSE_MODEL, "MockSummarizationTask"): 0.0,
-    (DENSE_MODEL, "MockInstructionRetrieval"): 0.63093,
-    (DENSE_MODEL, "MockInstructionReranking"): 0.63093,
-    (DENSE_MODEL, "MockRetrievalDialogTask"): 0.81546,
-    (DENSE_MODEL, "MockTextZeroShotClassification"): 1.0,
-    (DENSE_MODEL, "MockAudioClusteringTask"): 1.0,
-    (DENSE_MODEL, "MockAudioMultilabelClassification"): 1.0,
-    (DENSE_MODEL, "MockAudioZeroshotClassification"): 1.0,
-    (DENSE_MODEL, "MockAny2AnyRetrievalT2A"): 1.0,
-    (DENSE_MODEL, "MockAny2AnyRetrievalA2T"): 1.0,
-    (DENSE_MODEL, "MockAny2AnyRetrievalA2A"): 1.0,
-    (DENSE_MODEL, "MockAudioReranking"): 1.0,
-    (DENSE_MODEL, "MockAudioClassification"): 1.0,
-    (DENSE_MODEL, "MockAudioClassificationCrossVal"): 1.0,
-    (DENSE_MODEL, "AbsTaskAudioPairClassification"): 1.0,
-    (DENSE_MODEL, "MockAny2AnyRetrievalI2T"): 0.63093,
-    (DENSE_MODEL, "MockAny2AnyRetrievalT2I"): 0.81546,
-    (DENSE_MODEL, "MockVisionCentricQA"): 1.0,
-    (DENSE_MODEL, "MockImageClassification"): 1.0,
-    (DENSE_MODEL, "MockImageClustering"): 1.0,
-    (DENSE_MODEL, "MockImageTextPairClassification"): 1.0,
-    (DENSE_MODEL, "MockVisualSTS"): float("nan"),
-    (DENSE_MODEL, "MockZeroShotClassification"): 1.0,
-    (DENSE_MODEL, "MockImageMultilabelClassification"): 1.0,
-    (DENSE_MODEL, "MockMultilingualImageClassification"): 1.0,
-    (DENSE_MODEL, "MockMultilingualImageTextPairClassification"): 1.0,
-    (DENSE_MODEL, "MockMultilingualVisionCentricQA"): 1.0,
-    (DENSE_MODEL, "MockImageClusteringFastTask"): 1.0,
-    (DENSE_MODEL, "MockImageRegressionTask"): 1.0,
-    (DENSE_MODEL, "MockPairImageClassificationTask"): 1.0,
-    (DENSE_MODEL, "MockAsymCustomTextImagePairClassificationTaskV2"): 1.0,
-    (DENSE_MODEL, "MockSymCustomVideoAudioPairClassificationTaskV2"): 1.0,
-    (DENSE_MODEL, "MockAsymVideoAudioPairClassificationTaskV2"): 1.0,
-    (DENSE_MODEL, "MockAsymVideoAudioPairClassificationTask"): 1.0,
-    (DENSE_MODEL, "MockVideoAudioPairClassification"): 1.0,
-    (DENSE_MODEL, "MockVideoClassification"): 1.0,
-    (DENSE_MODEL, "MockVideoClusteringTask"): 1.0,
-    (DENSE_MODEL, "MockVideoMultilabelClassification"): 1.0,
-    (DENSE_MODEL, "MockVideoZeroshotClassification"): 1.0,
-    (DENSE_MODEL, "MockVideoPairClassification"): 1.0,
-    (DENSE_MODEL, "MockVideoRetrievalV2T"): 0.81546,
-    (DENSE_MODEL, "MockVideoRetrievalT2V"): 0.81546,
-    (SPARSE_MODEL, "MockMultilingualBitextMiningTask"): 0.5,
-    (SPARSE_MODEL, "MockMultilingualParallelBitextMiningTask"): 0.75,
-    (SPARSE_MODEL, "MockMultilingualClassificationTask"): 1.0,
-    (SPARSE_MODEL, "MockMultilingualClusteringTask"): 1.0,
-    (SPARSE_MODEL, "MockMultilingualClusteringFastTask"): 1.0,
-    (SPARSE_MODEL, "MockMultilingualPairClassificationTask"): 0.5,
-    (SPARSE_MODEL, "MockMultilingualRerankingTask"): 0.75,
-    (SPARSE_MODEL, "MockMultilingualRetrievalTask"): 0.81546,
-    (SPARSE_MODEL, "MockMultilingualSTSTask"): -1.0,
-    (SPARSE_MODEL, "MockMultilingualMultilabelClassification"): 1.0,
-    (SPARSE_MODEL, "MockMultilingualSummarizationTask"): 0.0,
-    (SPARSE_MODEL, "MockMultilingualInstructionRetrieval"): 0.63093,
-    (SPARSE_MODEL, "MockMultilingualInstructionReranking"): 0.63093,
-    (SPARSE_MODEL, "MockBitextMiningTask"): 0.5,
-    (SPARSE_MODEL, "MockClassificationTask"): 1.0,
-    (SPARSE_MODEL, "MockRegressionTask"): 1.0,
-    (SPARSE_MODEL, "MockClusteringTask"): 1.0,
-    (SPARSE_MODEL, "LegacyMockClusteringFastTask"): 1.0,
-    (SPARSE_MODEL, "MockPairClassificationTask"): 0.5,
-    (SPARSE_MODEL, "MockRerankingTask"): 0.75,
-    (SPARSE_MODEL, "MockRetrievalTask"): 0.81546,
-    (SPARSE_MODEL, "MockSTSTask"): -1.0,
-    (SPARSE_MODEL, "MockMultilabelClassification"): 1.0,
-    (SPARSE_MODEL, "MockSummarizationTask"): 0.0,
-    (SPARSE_MODEL, "MockInstructionRetrieval"): 0.63093,
-    (SPARSE_MODEL, "MockInstructionReranking"): 0.63093,
-    (SPARSE_MODEL, "MockRetrievalDialogTask"): 1.0,
-    (SPARSE_MODEL, "MockTextZeroShotClassification"): 1.0,
-    (SPARSE_MODEL, "MockAudioClusteringTask"): 1.0,
-    (SPARSE_MODEL, "MockAudioMultilabelClassification"): 1.0,
-    (SPARSE_MODEL, "MockAudioZeroshotClassification"): 0.0,
-    (SPARSE_MODEL, "MockAny2AnyRetrievalT2A"): 0.81546,
-    (SPARSE_MODEL, "MockAny2AnyRetrievalA2T"): 0.81546,
-    (SPARSE_MODEL, "MockAny2AnyRetrievalA2A"): 1.0,
-    (SPARSE_MODEL, "MockAudioReranking"): 1.0,
-    (SPARSE_MODEL, "MockAudioClassification"): 1.0,
-    (SPARSE_MODEL, "MockAudioClassificationCrossVal"): 1.0,
-    (SPARSE_MODEL, "AbsTaskAudioPairClassification"): 0.5,
-    (SPARSE_MODEL, "MockAny2AnyRetrievalI2T"): 0.81546,
-    (SPARSE_MODEL, "MockAny2AnyRetrievalT2I"): 1.0,
-    (SPARSE_MODEL, "MockVisionCentricQA"): 1.0,
-    (SPARSE_MODEL, "MockImageClassification"): 1.0,
-    (SPARSE_MODEL, "MockImageClustering"): 1.0,
-    (SPARSE_MODEL, "MockImageTextPairClassification"): 1.0,
-    (SPARSE_MODEL, "MockVisualSTS"): float("nan"),
-    (SPARSE_MODEL, "MockZeroShotClassification"): 0.5,
-    (SPARSE_MODEL, "MockImageMultilabelClassification"): 1.0,
-    (SPARSE_MODEL, "MockMultilingualImageClassification"): 1.0,
-    (SPARSE_MODEL, "MockMultilingualImageTextPairClassification"): 1.0,
-    (SPARSE_MODEL, "MockMultilingualVisionCentricQA"): 1.0,
-    (SPARSE_MODEL, "MockImageClusteringFastTask"): 1.0,
-    (SPARSE_MODEL, "MockImageRegressionTask"): -1.0,
-    (SPARSE_MODEL, "MockPairImageClassificationTask"): 1.0,
-    (SPARSE_MODEL, "MockVideoClassification"): 1.0,
-    (SPARSE_MODEL, "MockVideoClusteringTask"): 1.0,
-    (SPARSE_MODEL, "MockVideoMultilabelClassification"): 1.0,
-    (SPARSE_MODEL, "MockVideoZeroshotClassification"): 0.0,
-    (SPARSE_MODEL, "MockVideoPairClassification"): 0.5,
-    (SPARSE_MODEL, "MockVideoRetrievalV2T"): 1.0,
-    (SPARSE_MODEL, "MockVideoRetrievalT2V"): 1.0,
-    (COLBERT_MODEL, "MockMultilingualRerankingTask"): 0.75,
-    (COLBERT_MODEL, "MockMultilingualRetrievalTask"): 0.81546,
-    (COLBERT_MODEL, "MockMultilingualInstructionRetrieval"): 0.63093,
-    (COLBERT_MODEL, "MockMultilingualInstructionReranking"): 0.63093,
-    (COLBERT_MODEL, "MockRerankingTask"): 0.75,
-    (COLBERT_MODEL, "MockRetrievalTask"): 0.81546,
-    (COLBERT_MODEL, "MockInstructionRetrieval"): 0.63093,
-    (COLBERT_MODEL, "MockInstructionReranking"): 0.63093,
-    (COLBERT_MODEL, "MockRetrievalDialogTask"): 1.0,
-    (COLBERT_MODEL, "MockAny2AnyRetrievalT2A"): 0.81546,
-    (COLBERT_MODEL, "MockAny2AnyRetrievalA2T"): 0.81546,
-    (COLBERT_MODEL, "MockAny2AnyRetrievalA2A"): 1.0,
-    (COLBERT_MODEL, "MockAudioReranking"): 1.0,
-    (COLBERT_MODEL, "MockAny2AnyRetrievalI2T"): 0.81546,
-    (COLBERT_MODEL, "MockAny2AnyRetrievalT2I"): 0.63093,
-    (COLBERT_MODEL, "MockVisionCentricQA"): 1.0,
-    (COLBERT_MODEL, "MockMultilingualVisionCentricQA"): 1.0,
-    (COLBERT_MODEL, "MockVideoRetrievalV2T"): 0.81546,
-    (COLBERT_MODEL, "MockVideoRetrievalT2V"): 0.81546,
-    (CROSS_ENCODER_MODEL, "MockRerankingTask"): 0.75,
-    (CROSS_ENCODER_MODEL, "MockAudioReranking"): 1.0,
-}
+@dataclass
+class ModelInfo:
+    name: str
+    expected_scores: dict[str, float]
+
+
+DENSE_MODEL = ModelInfo(
+    name="mteb/baseline-random-encoder",
+    expected_scores={
+        "MockMultilingualBitextMiningTask": 1.0,
+        "MockMultilingualParallelBitextMiningTask": 1.0,
+        "MockMultilingualClassificationTask": 1.0,
+        "MockMultilingualClusteringTask": 1.0,
+        "MockMultilingualClusteringFastTask": 1.0,
+        "MockMultilingualPairClassificationTask": 0.5,
+        "MockMultilingualRerankingTask": 0.75,
+        "MockMultilingualRetrievalTask": 0.81546,
+        "MockMultilingualSTSTask": -1.0,
+        "MockMultilingualMultilabelClassification": 1.0,
+        "MockMultilingualSummarizationTask": 0.0,
+        "MockMultilingualInstructionRetrieval": 0.63093,
+        "MockMultilingualInstructionReranking": 0.63093,
+        "MockBitextMiningTask": 1.0,
+        "MockClassificationTask": 1.0,
+        "MockRegressionTask": 1.0,
+        "MockClusteringTask": 1.0,
+        "LegacyMockClusteringFastTask": 1.0,
+        "MockPairClassificationTask": 0.5,
+        "MockRerankingTask": 0.75,
+        "MockRetrievalTask": 0.81546,
+        "MockSTSTask": -1.0,
+        "MockMultilabelClassification": 1.0,
+        "MockSummarizationTask": 0.0,
+        "MockInstructionRetrieval": 0.63093,
+        "MockInstructionReranking": 0.63093,
+        "MockRetrievalDialogTask": 0.81546,
+        "MockTextZeroShotClassification": 1.0,
+        "MockAudioClusteringTask": 1.0,
+        "MockAudioMultilabelClassification": 1.0,
+        "MockAudioZeroshotClassification": 1.0,
+        "MockAny2AnyRetrievalT2A": 1.0,
+        "MockAny2AnyRetrievalA2T": 1.0,
+        "MockAny2AnyRetrievalA2A": 1.0,
+        "MockAudioReranking": 1.0,
+        "MockAudioClassification": 1.0,
+        "MockAudioClassificationCrossVal": 1.0,
+        "AbsTaskAudioPairClassification": 1.0,
+        "MockAny2AnyRetrievalI2T": 0.63093,
+        "MockAny2AnyRetrievalT2I": 0.81546,
+        "MockVisionCentricQA": 1.0,
+        "MockImageClassification": 1.0,
+        "MockImageClustering": 1.0,
+        "MockImageTextPairClassification": 1.0,
+        "MockVisualSTS": float("nan"),
+        "MockZeroShotClassification": 1.0,
+        "MockImageMultilabelClassification": 1.0,
+        "MockMultilingualImageClassification": 1.0,
+        "MockMultilingualImageTextPairClassification": 1.0,
+        "MockMultilingualVisionCentricQA": 1.0,
+        "MockImageClusteringFastTask": 1.0,
+        "MockImageRegressionTask": 1.0,
+        "MockPairImageClassificationTask": 1.0,
+        "MockAsymCustomTextImagePairClassificationTaskV2": 1.0,
+        "MockSymCustomVideoAudioPairClassificationTaskV2": 1.0,
+        "MockAsymVideoAudioPairClassificationTaskV2": 1.0,
+        "MockAsymVideoAudioPairClassificationTask": 1.0,
+        "MockVideoAudioPairClassification": 1.0,
+        "MockVideoClassification": 1.0,
+        "MockVideoClusteringTask": 1.0,
+        "MockVideoMultilabelClassification": 1.0,
+        "MockVideoZeroshotClassification": 1.0,
+        "MockVideoPairClassification": 1.0,
+        "MockVideoRetrievalV2T": 0.81546,
+        "MockVideoRetrievalT2V": 0.81546,
+    },
+)
+SPARSE_MODEL = ModelInfo(
+    name="mteb/baseline-random-sparse-encoder",
+    expected_scores={
+        "MockMultilingualBitextMiningTask": 0.5,
+        "MockMultilingualParallelBitextMiningTask": 0.75,
+        "MockMultilingualClassificationTask": 1.0,
+        "MockMultilingualClusteringTask": 1.0,
+        "MockMultilingualClusteringFastTask": 1.0,
+        "MockMultilingualPairClassificationTask": 0.5,
+        "MockMultilingualRerankingTask": 0.75,
+        "MockMultilingualRetrievalTask": 0.81546,
+        "MockMultilingualSTSTask": -1.0,
+        "MockMultilingualMultilabelClassification": 1.0,
+        "MockMultilingualSummarizationTask": 0.0,
+        "MockMultilingualInstructionRetrieval": 0.63093,
+        "MockMultilingualInstructionReranking": 0.63093,
+        "MockBitextMiningTask": 0.5,
+        "MockClassificationTask": 1.0,
+        "MockRegressionTask": 1.0,
+        "MockClusteringTask": 1.0,
+        "LegacyMockClusteringFastTask": 1.0,
+        "MockPairClassificationTask": 0.5,
+        "MockRerankingTask": 0.75,
+        "MockRetrievalTask": 0.81546,
+        "MockSTSTask": -1.0,
+        "MockMultilabelClassification": 1.0,
+        "MockSummarizationTask": 0.0,
+        "MockInstructionRetrieval": 0.63093,
+        "MockInstructionReranking": 0.63093,
+        "MockRetrievalDialogTask": 1.0,
+        "MockTextZeroShotClassification": 1.0,
+        "MockAudioClusteringTask": 1.0,
+        "MockAudioMultilabelClassification": 1.0,
+        "MockAudioZeroshotClassification": 0.0,
+        "MockAny2AnyRetrievalT2A": 0.81546,
+        "MockAny2AnyRetrievalA2T": 0.81546,
+        "MockAny2AnyRetrievalA2A": 1.0,
+        "MockAudioReranking": 1.0,
+        "MockAudioClassification": 1.0,
+        "MockAudioClassificationCrossVal": 1.0,
+        "AbsTaskAudioPairClassification": 0.5,
+        "MockAny2AnyRetrievalI2T": 0.81546,
+        "MockAny2AnyRetrievalT2I": 1.0,
+        "MockVisionCentricQA": 1.0,
+        "MockImageClassification": 1.0,
+        "MockImageClustering": 1.0,
+        "MockImageTextPairClassification": 1.0,
+        "MockVisualSTS": float("nan"),
+        "MockZeroShotClassification": 0.5,
+        "MockImageMultilabelClassification": 1.0,
+        "MockMultilingualImageClassification": 1.0,
+        "MockMultilingualImageTextPairClassification": 1.0,
+        "MockMultilingualVisionCentricQA": 1.0,
+        "MockImageClusteringFastTask": 1.0,
+        "MockImageRegressionTask": -1.0,
+        "MockPairImageClassificationTask": 1.0,
+        "MockVideoClassification": 1.0,
+        "MockVideoClusteringTask": 1.0,
+        "MockVideoMultilabelClassification": 1.0,
+        "MockVideoZeroshotClassification": 0.0,
+        "MockVideoPairClassification": 0.5,
+        "MockVideoRetrievalV2T": 1.0,
+        "MockVideoRetrievalT2V": 1.0,
+    },
+)
+COLBERT_MODEL = ModelInfo(
+    name="mteb/baseline-random-colbert",
+    expected_scores={
+        "MockMultilingualRerankingTask": 0.75,
+        "MockMultilingualRetrievalTask": 0.81546,
+        "MockMultilingualInstructionRetrieval": 0.63093,
+        "MockMultilingualInstructionReranking": 0.63093,
+        "MockRerankingTask": 0.75,
+        "MockRetrievalTask": 0.81546,
+        "MockInstructionRetrieval": 0.63093,
+        "MockInstructionReranking": 0.63093,
+        "MockRetrievalDialogTask": 1.0,
+        "MockAny2AnyRetrievalT2A": 0.81546,
+        "MockAny2AnyRetrievalA2T": 0.81546,
+        "MockAny2AnyRetrievalA2A": 1.0,
+        "MockAudioReranking": 1.0,
+        "MockAny2AnyRetrievalI2T": 0.81546,
+        "MockAny2AnyRetrievalT2I": 0.63093,
+        "MockVisionCentricQA": 1.0,
+        "MockMultilingualVisionCentricQA": 1.0,
+        "MockVideoRetrievalV2T": 0.81546,
+        "MockVideoRetrievalT2V": 0.81546,
+    },
+)
+CROSS_ENCODER_MODEL = ModelInfo(
+    name="mteb/baseline-random-cross-encoder",
+    expected_scores={
+        "MockRerankingTask": 0.75,
+        "MockAudioReranking": 1.0,
+    },
+)
 
 # Audio/video decoding differs between the macOS and Linux/Windows codec stacks. Because the
 # random baselines hash decoded media bytes, keep strict expected scores for each codec family.
 if sys.platform == "darwin":
-    EXPECTED_SCORES.update(
+    DENSE_MODEL.expected_scores.update(
         {
-            (DENSE_MODEL, "MockAudioZeroshotClassification"): 0.5,
-            (DENSE_MODEL, "AbsTaskAudioPairClassification"): 0.5,
-            (SPARSE_MODEL, "MockAudioZeroshotClassification"): 0.5,
-            (COLBERT_MODEL, "MockAny2AnyRetrievalT2A"): 0.63093,
-            (DENSE_MODEL, "MockVideoZeroshotClassification"): 0.5,
-            (DENSE_MODEL, "MockVideoPairClassification"): 0.5,
-            (DENSE_MODEL, "MockVideoRetrievalV2T"): 0.63093,
-            (DENSE_MODEL, "MockVideoRetrievalT2V"): 0.63093,
-            (DENSE_MODEL, "MockSymCustomVideoAudioPairClassificationTaskV2"): 0.5,
-            (DENSE_MODEL, "MockAsymVideoAudioPairClassificationTaskV2"): 0.5,
-            (DENSE_MODEL, "MockAsymVideoAudioPairClassificationTask"): 0.5,
-            (SPARSE_MODEL, "MockVideoZeroshotClassification"): 0.5,
-            (SPARSE_MODEL, "MockVideoRetrievalV2T"): 0.63093,
-            (SPARSE_MODEL, "MockVideoRetrievalT2V"): 0.63093,
-            (COLBERT_MODEL, "MockVideoRetrievalV2T"): 0.63093,
+            "MockAudioZeroshotClassification": 0.5,
+            "AbsTaskAudioPairClassification": 0.5,
+            "MockVideoZeroshotClassification": 0.5,
+            "MockVideoPairClassification": 0.5,
+            "MockVideoRetrievalV2T": 0.63093,
+            "MockVideoRetrievalT2V": 0.63093,
+            "MockSymCustomVideoAudioPairClassificationTaskV2": 0.5,
+            "MockAsymVideoAudioPairClassificationTaskV2": 0.5,
+            "MockAsymVideoAudioPairClassificationTask": 0.5,
+        }
+    )
+    SPARSE_MODEL.expected_scores.update(
+        {
+            "MockAudioZeroshotClassification": 0.5,
+            "MockVideoZeroshotClassification": 0.5,
+            "MockVideoRetrievalV2T": 0.63093,
+            "MockVideoRetrievalT2V": 0.63093,
+        }
+    )
+    COLBERT_MODEL.expected_scores.update(
+        {
+            "MockAny2AnyRetrievalT2A": 0.63093,
+            "MockVideoRetrievalV2T": 0.63093,
         }
     )
 
@@ -211,29 +240,29 @@ if sys.platform == "darwin":
 def _evaluate_and_assert_score(
     model: mteb.EncoderProtocol,
     task: AbsTask,
-    model_name: str,
+    model_info: ModelInfo,
 ) -> None:
     # Parametrized task objects are created at collection time and reused by tests assigned
     # to the same xdist worker. Evaluate a fresh task so scores do not depend on test order.
     task = type(task)()
     results = mteb.evaluate(model, task, cache=None)
     result = results[0]
-    expected_score = EXPECTED_SCORES[(model_name, result.task_name)]
+    expected_score = model_info.expected_scores[result.task_name]
 
     assert result.get_score() == pytest.approx(expected_score, abs=1e-5, nan_ok=True), (
-        f"{model_name} final score changed for {result.task_name}"
+        f"{model_info.name} final score changed for {result.task_name}"
     )
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL.name)])
 def test_benchmark_text_encoder(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     _evaluate_and_assert_score(model, task, DENSE_MODEL)
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(SPARSE_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(SPARSE_MODEL.name)])
 def test_benchmark_text_sparse_encoder(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     _evaluate_and_assert_score(model, task, SPARSE_MODEL)
@@ -244,21 +273,21 @@ def test_benchmark_text_sparse_encoder(task: AbsTask, model: mteb.EncoderProtoco
     [t for t in MOCK_TASK_TEST_GRID if t.metadata.simplified_task_type == "retrieval"],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model", [mteb.get_model(COLBERT_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(COLBERT_MODEL.name)])
 def test_benchmark_text_colbert(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     _evaluate_and_assert_score(model, task, COLBERT_MODEL)
 
 
 @pytest.mark.parametrize("task", [MockRerankingTask()], ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(CROSS_ENCODER_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(CROSS_ENCODER_MODEL.name)])
 def test_benchmark_text_cross_encoder(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     _evaluate_and_assert_score(model, task, CROSS_ENCODER_MODEL)
 
 
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL.name)])
 def test_benchmark_audio_encoder(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
@@ -266,7 +295,7 @@ def test_benchmark_audio_encoder(task: AbsTask, model: mteb.EncoderProtocol):
 
 
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(SPARSE_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(SPARSE_MODEL.name)])
 def test_benchmark_audio_sparse_encoder(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
@@ -278,7 +307,7 @@ def test_benchmark_audio_sparse_encoder(task: AbsTask, model: mteb.EncoderProtoc
     [t for t in MOCK_MAEB_TASK_GRID if t.metadata.simplified_task_type == "retrieval"],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model", [mteb.get_model(COLBERT_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(COLBERT_MODEL.name)])
 def test_benchmark_audio_colbert(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
@@ -286,7 +315,7 @@ def test_benchmark_audio_colbert(task: AbsTask, model: mteb.EncoderProtocol):
 
 
 @pytest.mark.parametrize("task", [MockAudioReranking()], ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(CROSS_ENCODER_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(CROSS_ENCODER_MODEL.name)])
 def test_benchmark_audio_cross_encoder(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
@@ -294,7 +323,7 @@ def test_benchmark_audio_cross_encoder(task: AbsTask, model: mteb.EncoderProtoco
 
 
 @pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL.name)])
 def test_benchmark_image_encoder(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Image dependencies are not installed")
@@ -302,7 +331,7 @@ def test_benchmark_image_encoder(task: AbsTask, model: mteb.EncoderProtocol):
 
 
 @pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(SPARSE_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(SPARSE_MODEL.name)])
 def test_benchmark_image_sparse_encoder(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Image dependencies are not installed")
@@ -314,7 +343,7 @@ def test_benchmark_image_sparse_encoder(task: AbsTask, model: mteb.EncoderProtoc
     [t for t in MOCK_MIEB_TASK_GRID if t.metadata.simplified_task_type == "retrieval"],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model", [mteb.get_model(COLBERT_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(COLBERT_MODEL.name)])
 def test_benchmark_image_colbert(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Image dependencies are not installed")
@@ -322,7 +351,7 @@ def test_benchmark_image_colbert(task: AbsTask, model: mteb.EncoderProtocol):
 
 
 @pytest.mark.parametrize("task", MOCK_MVEB_TASK_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL.name)])
 def test_benchmark_video_encoder(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Video dependencies are not installed")
@@ -331,7 +360,7 @@ def test_benchmark_video_encoder(task: AbsTask, model: mteb.EncoderProtocol):
 
 
 @pytest.mark.parametrize("task", MOCK_MVEB_TASK_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(SPARSE_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(SPARSE_MODEL.name)])
 def test_benchmark_video_sparse_encoder(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Video dependencies are not installed")
@@ -344,7 +373,7 @@ def test_benchmark_video_sparse_encoder(task: AbsTask, model: mteb.EncoderProtoc
     [t for t in MOCK_MVEB_TASK_GRID if t.metadata.simplified_task_type == "retrieval"],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model", [mteb.get_model(COLBERT_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(COLBERT_MODEL.name)])
 def test_benchmark_video_colbert(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Video dependencies are not installed")
@@ -363,7 +392,7 @@ def test_benchmark_video_colbert(task: AbsTask, model: mteb.EncoderProtocol):
     ],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL)])
+@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL.name)])
 def test_benchmark_pair_classification(task: AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Video dependencies are not installed")

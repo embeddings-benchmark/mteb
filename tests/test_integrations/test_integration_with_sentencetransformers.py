@@ -1,6 +1,7 @@
 """test that mteb.evaluate integrates with SentenceTransformers"""
 
 import logging
+from dataclasses import dataclass
 
 import pytest
 import sentence_transformers
@@ -18,62 +19,74 @@ from mteb.models import ModelMeta
 
 logging.basicConfig(level=logging.INFO)
 
-SENTENCE_TRANSFORMER_MODEL = "average_word_embeddings_levy_dependency"
-CROSS_ENCODER_MODEL = "cross-encoder/ms-marco-TinyBERT-L2-v2"
 
-EXPECTED_SCORES = {
-    (SENTENCE_TRANSFORMER_MODEL, "MockMultilingualBitextMiningTask"): 0.5,
-    (SENTENCE_TRANSFORMER_MODEL, "MockMultilingualParallelBitextMiningTask"): 0.5,
-    (SENTENCE_TRANSFORMER_MODEL, "MockMultilingualClassificationTask"): 0.5,
-    (SENTENCE_TRANSFORMER_MODEL, "MockMultilingualClusteringTask"): 0.0,
-    (SENTENCE_TRANSFORMER_MODEL, "MockMultilingualClusteringFastTask"): 0.0,
-    (SENTENCE_TRANSFORMER_MODEL, "MockMultilingualPairClassificationTask"): 1.0,
-    (SENTENCE_TRANSFORMER_MODEL, "MockMultilingualRerankingTask"): 0.75,
-    (SENTENCE_TRANSFORMER_MODEL, "MockMultilingualRetrievalTask"): 0.81546,
-    (SENTENCE_TRANSFORMER_MODEL, "MockMultilingualSTSTask"): 1.0,
-    (SENTENCE_TRANSFORMER_MODEL, "MockMultilingualMultilabelClassification"): 1.0,
-    (SENTENCE_TRANSFORMER_MODEL, "MockMultilingualSummarizationTask"): float("nan"),
-    (SENTENCE_TRANSFORMER_MODEL, "MockMultilingualInstructionRetrieval"): 0.81546,
-    (SENTENCE_TRANSFORMER_MODEL, "MockMultilingualInstructionReranking"): 0.81546,
-    (SENTENCE_TRANSFORMER_MODEL, "MockBitextMiningTask"): 0.5,
-    (SENTENCE_TRANSFORMER_MODEL, "MockClassificationTask"): 0.5,
-    (SENTENCE_TRANSFORMER_MODEL, "MockRegressionTask"): float("nan"),
-    (SENTENCE_TRANSFORMER_MODEL, "MockClusteringTask"): 0.0,
-    (SENTENCE_TRANSFORMER_MODEL, "LegacyMockClusteringFastTask"): 0.0,
-    (SENTENCE_TRANSFORMER_MODEL, "MockPairClassificationTask"): 1.0,
-    (SENTENCE_TRANSFORMER_MODEL, "MockRerankingTask"): 0.75,
-    (SENTENCE_TRANSFORMER_MODEL, "MockRetrievalTask"): 0.81546,
-    (SENTENCE_TRANSFORMER_MODEL, "MockSTSTask"): 1.0,
-    (SENTENCE_TRANSFORMER_MODEL, "MockMultilabelClassification"): 1.0,
-    (SENTENCE_TRANSFORMER_MODEL, "MockSummarizationTask"): float("nan"),
-    (SENTENCE_TRANSFORMER_MODEL, "MockInstructionRetrieval"): 0.81546,
-    (SENTENCE_TRANSFORMER_MODEL, "MockInstructionReranking"): 0.81546,
-    (SENTENCE_TRANSFORMER_MODEL, "MockRetrievalDialogTask"): 0.81546,
-    (SENTENCE_TRANSFORMER_MODEL, "MockTextZeroShotClassification"): 0.5,
-    (CROSS_ENCODER_MODEL, "MockRerankingTask"): 0.5,
-    (CROSS_ENCODER_MODEL, "MockInstructionReranking"): 0.63093,
-}
+@dataclass
+class ModelInfo:
+    name: str
+    expected_scores: dict[str, float]
+
+
+SENTENCE_TRANSFORMER_MODEL = ModelInfo(
+    name="average_word_embeddings_levy_dependency",
+    expected_scores={
+        "MockMultilingualBitextMiningTask": 0.5,
+        "MockMultilingualParallelBitextMiningTask": 0.5,
+        "MockMultilingualClassificationTask": 0.5,
+        "MockMultilingualClusteringTask": 0.0,
+        "MockMultilingualClusteringFastTask": 0.0,
+        "MockMultilingualPairClassificationTask": 1.0,
+        "MockMultilingualRerankingTask": 0.75,
+        "MockMultilingualRetrievalTask": 0.81546,
+        "MockMultilingualSTSTask": 1.0,
+        "MockMultilingualMultilabelClassification": 1.0,
+        "MockMultilingualSummarizationTask": float("nan"),
+        "MockMultilingualInstructionRetrieval": 0.81546,
+        "MockMultilingualInstructionReranking": 0.81546,
+        "MockBitextMiningTask": 0.5,
+        "MockClassificationTask": 0.5,
+        "MockRegressionTask": float("nan"),
+        "MockClusteringTask": 0.0,
+        "LegacyMockClusteringFastTask": 0.0,
+        "MockPairClassificationTask": 1.0,
+        "MockRerankingTask": 0.75,
+        "MockRetrievalTask": 0.81546,
+        "MockSTSTask": 1.0,
+        "MockMultilabelClassification": 1.0,
+        "MockSummarizationTask": float("nan"),
+        "MockInstructionRetrieval": 0.81546,
+        "MockInstructionReranking": 0.81546,
+        "MockRetrievalDialogTask": 0.81546,
+        "MockTextZeroShotClassification": 0.5,
+    },
+)
+CROSS_ENCODER_MODEL = ModelInfo(
+    name="cross-encoder/ms-marco-TinyBERT-L2-v2",
+    expected_scores={
+        "MockRerankingTask": 0.5,
+        "MockInstructionReranking": 0.63093,
+    },
+)
 
 
 def _evaluate_and_assert_score(
     model: SentenceTransformer | CrossEncoder,
     task: AbsTask,
-    model_name: str,
+    model_info: ModelInfo,
 ) -> None:
     task = type(task)()
     result = mteb.evaluate(model, task, cache=None)[0]
-    expected_score = EXPECTED_SCORES[(model_name, result.task_name)]
+    expected_score = model_info.expected_scores[result.task_name]
 
     assert result.get_score() == pytest.approx(expected_score, abs=1e-5, nan_ok=True), (
-        f"{model_name} final score changed for {result.task_name}"
+        f"{model_info.name} final score changed for {result.task_name}"
     )
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model_name", [SENTENCE_TRANSFORMER_MODEL])
-def test_sentence_transformer_integration(task: AbsTask, model_name: str):
+@pytest.mark.parametrize("model_info", [SENTENCE_TRANSFORMER_MODEL])
+def test_sentence_transformer_integration(task: AbsTask, model_info: ModelInfo):
     """Test that a task can be fetched and produces the expected final score."""
-    model = SentenceTransformer(model_name)
+    model = SentenceTransformer(model_info.name)
     # Prior to https://github.com/embeddings-benchmark/mteb/pull/3079 the
     # SentenceTransformerWrapper would set the model's prompts to None because
     # the mock tasks are not in the MTEB task registry. The linked PR changes
@@ -82,7 +95,7 @@ def test_sentence_transformer_integration(task: AbsTask, model_name: str):
     # behavior and focus the test on the tasks instead of the prompts.
     # Using empty dict instead of None to avoid TypeError in SentenceTransformers 5.0.0+
     model.prompts = {}
-    _evaluate_and_assert_score(model, task, model_name)
+    _evaluate_and_assert_score(model, task, model_info)
 
 
 @pytest.mark.parametrize(
@@ -93,11 +106,13 @@ def test_sentence_transformer_integration(task: AbsTask, model_name: str):
     ],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model_name", [CROSS_ENCODER_MODEL])
-def test_sentence_transformer_integration_cross_encoder(task: AbsTask, model_name: str):
+@pytest.mark.parametrize("model_info", [CROSS_ENCODER_MODEL])
+def test_sentence_transformer_integration_cross_encoder(
+    task: AbsTask, model_info: ModelInfo
+):
     """Test that a task can be fetched and produces the expected final score."""
-    model = CrossEncoder(model_name)
-    _evaluate_and_assert_score(model, task, model_name)
+    model = CrossEncoder(model_info.name)
+    _evaluate_and_assert_score(model, task, model_info)
 
 
 def test_model_meta_load_sentence_transformer_metadata_from_model():
