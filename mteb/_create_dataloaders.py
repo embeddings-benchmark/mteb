@@ -284,13 +284,12 @@ def _prepare_dataset(
                 num_proc=num_proc,
             )
     for modality in ("audio", "video"):
-        if modality in modalities:
-            if (
-                input_column
-                and input_column in dataset.column_names
-                and modality not in dataset.column_names
-            ):
-                dataset = dataset.rename_column(input_column, modality)
+        if modality in modalities and (
+            input_column
+            and input_column in dataset.column_names
+            and modality not in dataset.column_names
+        ):
+            dataset = dataset.rename_column(input_column, modality)
 
     # Drop modality columns not needed for this prompt type to avoid
     # None values in the collate function (e.g. text=None in image-only corpus)

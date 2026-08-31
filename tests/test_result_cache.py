@@ -633,13 +633,15 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path):
 
     # Avoid fetching from the remote so the test reliably reaches PR creation.
     # Mock _create_pull_request to fail.
-    with patch.object(cache, "download_from_remote", return_value=None):
-        with patch(
+    with (
+        patch.object(cache, "download_from_remote", return_value=None),
+        patch(
             "mteb._reversible_workflow.git_utils.create_pull_request",
             side_effect=Exception("GitHub API error"),
-        ):
-            with pytest.raises(Exception, match="GitHub API error"):
-                cache.submit_results(models=[test_model], create_pr=True)
+        ),
+        pytest.raises(Exception, match="GitHub API error"),
+    ):
+        cache.submit_results(models=[test_model], create_pr=True)
 
     # Verify user is back on original branch
     result = subprocess.run(

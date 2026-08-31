@@ -37,7 +37,7 @@ def test_all_splits_evaluated(model, tasks, tmp_path):
         verbosity=2,
     )
 
-    assert "MockRetrievalTask" == results[0].task_name
+    assert results[0].task_name == "MockRetrievalTask"
     last_evaluated_splits = evaluation._get_last_evaluated_splits()
     assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val", "test"}
     assert len(last_evaluated_splits["MockRetrievalTask"]) == 2
@@ -53,7 +53,7 @@ def test_one_missing_split(model, tasks, tmp_path):
         verbosity=2,
     )
 
-    assert "MockRetrievalTask" == results[0].task_name
+    assert results[0].task_name == "MockRetrievalTask"
     last_evaluated_splits = evaluation._get_last_evaluated_splits()
     assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val"}
     assert len(last_evaluated_splits["MockRetrievalTask"]) == 1
@@ -66,7 +66,7 @@ def test_one_missing_split(model, tasks, tmp_path):
         verbosity=2,
     )
 
-    assert "MockRetrievalTask" == results2[0].task_name
+    assert results2[0].task_name == "MockRetrievalTask"
     last_evaluated_splits = evaluation._get_last_evaluated_splits()
     assert set(last_evaluated_splits["MockRetrievalTask"]) == {"test"}
     assert len(last_evaluated_splits["MockRetrievalTask"]) == 1
@@ -109,7 +109,7 @@ def test_all_languages_evaluated(model, multilingual_tasks, tmp_path):
         verbosity=2,
         eval_subsets=None,
     )
-    assert "MockMultilingualRetrievalTask" == results[0].task_name
+    assert results[0].task_name == "MockMultilingualRetrievalTask"
     last_evaluated_splits = evaluation._get_last_evaluated_splits()
     assert "MockMultilingualRetrievalTask" in last_evaluated_splits
     assert len(last_evaluated_splits["MockMultilingualRetrievalTask"]) == 1
@@ -128,7 +128,7 @@ def test_missing_language(model, multilingual_tasks, tmp_path):
         eval_subsets=["eng"],
     )
 
-    assert "MockMultilingualRetrievalTask" == results[0].task_name
+    assert results[0].task_name == "MockMultilingualRetrievalTask"
     last_evaluated_splits = evaluation._get_last_evaluated_splits()
     assert "MockMultilingualRetrievalTask" in last_evaluated_splits
     assert len(last_evaluated_splits["MockMultilingualRetrievalTask"]) == 1
@@ -307,7 +307,7 @@ def test_all_splits_evaluated_with_overwrite(model, tasks, tmp_path):
         verbosity=2,
     )
 
-    assert "MockRetrievalTask" == results[0].task_name
+    assert results[0].task_name == "MockRetrievalTask"
     last_evaluated_splits = evaluation._get_last_evaluated_splits()
     assert len(last_evaluated_splits["MockRetrievalTask"]) == 1
     assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val"}
@@ -320,7 +320,7 @@ def test_all_splits_evaluated_with_overwrite(model, tasks, tmp_path):
         verbosity=2,
         overwrite_results=True,
     )
-    assert "MockRetrievalTask" == results2[0].task_name
+    assert results2[0].task_name == "MockRetrievalTask"
     last_evaluated_splits = evaluation._get_last_evaluated_splits()
     assert len(last_evaluated_splits["MockRetrievalTask"]) == 2
     assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val", "test"}

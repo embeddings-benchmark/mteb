@@ -236,15 +236,14 @@ def _video_to_mp4_bytes(frames: torch.Tensor, *, fps: float) -> bytes:
         raise ValueError(f"Expected a positive video FPS, got {fps}")
 
     video_frames = frames.detach().cpu()
-    if video_frames.is_floating_point():
-        # TorchCodec currently returns uint8, but accepting normalized tensors
-        # makes this boundary safe for other frame providers too.
-        if video_frames.numel():
-            min_value = video_frames.min().item()
-            max_value = video_frames.max().item()
+    # TorchCodec currently returns uint8, but accepting normalized tensors
+    # makes this boundary safe for other frame providers too.
+    if video_frames.is_floating_point() and video_frames.numel():
+        min_value = video_frames.min().item()
+        max_value = video_frames.max().item()
 
-            if min_value >= 0 and max_value <= 1:
-                video_frames = torch.mul(video_frames, 255)
+        if min_value >= 0 and max_value <= 1:
+            video_frames = torch.mul(video_frames, 255)
     if video_frames.dtype != torch.uint8:
         video_frames = video_frames.clamp(0, 255).to(torch.uint8)
 
@@ -373,6 +372,9 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
                                 )
                             else:
                                 raise
+                    raise RuntimeError(
+                        "embed_one exhausted all retries without returning or raising"
+                    )
 
             if show_progress_bar:
                 from tqdm.asyncio import tqdm as async_tqdm

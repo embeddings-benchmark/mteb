@@ -253,7 +253,7 @@ class EventLogger:
         self,
         session_id: str,
         benchmark: str | None = None,
-        format: str = "csv",
+        file_format: str = "csv",
         row_count: int | None = None,
         **kwargs,
     ):
@@ -262,14 +262,14 @@ class EventLogger:
         Args:
             session_id: Session ID
             benchmark: Current benchmark
-            format: Download format (e.g., csv, json)
+            file_format: Download format (e.g., csv, json)
             row_count: Number of rows downloaded
             **kwargs (Any): Additional context.
         """
         event = TableDownloadEvent.create(
             session_id=session_id,
             benchmark=benchmark,
-            format=format,
+            file_format=file_format,
             row_count=row_count,
             **kwargs,
         )

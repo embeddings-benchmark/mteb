@@ -941,5 +941,4 @@ class BibleNLPBitextMining(AbsTaskBitextMining):
             parts[index1], parts[index2] = parts[index2], parts[index1]
             new_string = "-".join(parts)
             return new_string
-        else:
-            return string
+        return string

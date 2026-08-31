@@ -1,7 +1,8 @@
-from mteb.abstasks.classification import AbsTaskClassification
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_LANGS = {
+_LANGUAGES = {
+    "ace_Arab": ["ace-Arab"],
     "ace_Latn": ["ace-Latn"],
     "acm_Arab": ["acm-Arab"],
     "acq_Arab": ["acq-Arab"],
@@ -12,6 +13,7 @@ _LANGS = {
     "als_Latn": ["als-Latn"],
     "amh_Ethi": ["amh-Ethi"],
     "apc_Arab": ["apc-Arab"],
+    "arb_Arab": ["arb-Arab"],
     "arb_Latn": ["arb-Latn"],
     "ars_Arab": ["ars-Arab"],
     "ary_Arab": ["ary-Arab"],
@@ -29,6 +31,7 @@ _LANGS = {
     "bem_Latn": ["bem-Latn"],
     "ben_Beng": ["ben-Beng"],
     "bho_Deva": ["bho-Deva"],
+    "bjn_Arab": ["bjn-Arab"],
     "bjn_Latn": ["bjn-Latn"],
     "bod_Tibt": ["bod-Tibt"],
     "bos_Latn": ["bos-Latn"],
@@ -84,6 +87,7 @@ _LANGS = {
     "kac_Latn": ["kac-Latn"],
     "kam_Latn": ["kam-Latn"],
     "kan_Knda": ["kan-Knda"],
+    "kas_Arab": ["kas-Arab"],
     "kas_Deva": ["kas-Deva"],
     "kat_Geor": ["kat-Geor"],
     "kaz_Cyrl": ["kaz-Cyrl"],
@@ -96,6 +100,7 @@ _LANGS = {
     "kir_Cyrl": ["kir-Cyrl"],
     "kmb_Latn": ["kmb-Latn"],
     "kmr_Latn": ["kmr-Latn"],
+    "knc_Arab": ["knc-Arab"],
     "knc_Latn": ["knc-Latn"],
     "kon_Latn": ["kon-Latn"],
     "kor_Hang": ["kor-Hang"],
@@ -116,6 +121,7 @@ _LANGS = {
     "mai_Deva": ["mai-Deva"],
     "mal_Mlym": ["mal-Mlym"],
     "mar_Deva": ["mar-Deva"],
+    "min_Arab": ["min-Arab"],
     "min_Latn": ["min-Latn"],
     "mkd_Cyrl": ["mkd-Cyrl"],
     "mlt_Latn": ["mlt-Latn"],
@@ -168,6 +174,7 @@ _LANGS = {
     "swh_Latn": ["swh-Latn"],
     "szl_Latn": ["szl-Latn"],
     "tam_Taml": ["tam-Taml"],
+    "taq_Latn": ["taq-Latn"],
     "taq_Tfng": ["taq-Tfng"],
     "tat_Cyrl": ["tat-Cyrl"],
     "tel_Telu": ["tel-Telu"],
@@ -196,137 +203,58 @@ _LANGS = {
     "ydd_Hebr": ["ydd-Hebr"],
     "yor_Latn": ["yor-Latn"],
     "yue_Hant": ["yue-Hant"],
+    "zho_Hans": ["zho-Hans"],
     "zho_Hant": ["zho-Hant"],
     "zsm_Latn": ["zsm-Latn"],
     "zul_Latn": ["zul-Latn"],
 }
 
 
-class SIB200Classification(AbsTaskClassification):
-    metadata = TaskMetadata(
-        name="SIB200Classification",
-        description="SIB-200 is the largest publicly available topic classification dataset based on Flores-200 covering 205 languages and dialects annotated. The dataset is annotated in English for the topics, science/technology, travel, politics, sports, health, entertainment, and geography. The labels are then transferred to the other languages in Flores-200 which are human-translated.",
-        reference="https://arxiv.org/abs/2309.07445",
-        dataset={
-            "path": "mteb/sib200",
-            "revision": "a74d7350ea12af010cfb1c21e34f1f81fd2e615b",
-        },
-        type="Classification",
-        category="t2c",
-        modalities=["text"],
-        eval_splits=["train", "validation", "test"],
-        eval_langs=_LANGS,
-        main_score="accuracy",
-        date=("2023-09-14", "2024-01-27"),
-        domains=["News", "Written"],
-        task_subtypes=["Topic classification"],
-        license="cc-by-sa-4.0",
-        annotations_creators="expert-annotated",  # expert annotated for English --> human translations
-        dialect=[],
-        sample_creation="human-translated and localized",
-        bibtex_citation=r"""
-@article{adelani2023sib,
-  author = {Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
-  journal = {arXiv preprint arXiv:2309.07445},
-  title = {SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
-  year = {2023},
-}
-""",
-        superseded_by="SIB200Classification.v2",
-    )
+class MVLSIBSent2Img(AbsTaskRetrieval):
+    """MVL-SIB single-reference sentence-to-image benchmark."""
 
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        for lang in self.dataset:
-            self.dataset[lang] = self.dataset[lang].class_encode_column("category")
-            self.dataset[lang] = self.dataset[lang].rename_columns(
-                {"category": "label"}
-            )
-            self.dataset[lang] = self.dataset[lang].remove_columns(["index_id"])
-
-
-_TOPICS = [
-    "travel",
-    "politics",
-    "science",
-    "sports",
-    "technology",
-    "health",
-    "nature",
-    "entertainment",
-    "geography",
-    "business",
-    "disasters",
-    "crime",
-    "education",
-    "religion",
-]
-_TOPIC2ID = {name: idx for idx, name in enumerate(_TOPICS)}
-
-
-class SIB200ClassificationV2(AbsTaskClassification):
-    """SIB-200 (14 topics) multilingual classification benchmark."""
+    k_values = (1, 2, 3, 4)
 
     metadata = TaskMetadata(
-        name="SIB200Classification.v2",
+        name="MVLSIBSent2Img",
         description=(
-            "SIB-200 is the largest publicly available topic classification "
-            "dataset based on Flores-200 covering 205 languages and dialects. "
-            "Version 2 includes 14 labels instead of 7 labels, making the task "
-            "more challenging while preserving the original multilingual setup."
+            "Choose the topically matching image from four candidates for one "
+            "reference sentence. This is the paper's single-reference (k=1) "
+            "sentence-to-image setting in all 205 SIB-200 languages and scripts."
         ),
-        reference="https://arxiv.org/abs/2309.07445",
+        reference="https://aclanthology.org/2025.findings-acl.838/",
         dataset={
-            "path": "mteb/sib200.v2",
-            "revision": "4d46813bbbb029383bbc385c0eb7a5a638686bdd",
+            "path": "artist/mvl-sib-sent2img-mteb",
+            "revision": "3323e2ec3edfaed11c2802b6640dd61091c3755e",
         },
-        type="Classification",
-        category="t2c",
-        modalities=["text"],
+        type="Reranking",
+        category="t2i",
+        modalities=["text", "image"],
         eval_splits=["test"],
-        eval_langs=_LANGS,
+        eval_langs=_LANGUAGES,
         main_score="accuracy",
-        date=("2023-09-14", "2024-01-27"),
-        domains=["News", "Written"],
-        task_subtypes=["Topic classification"],
-        license="cc-by-4.0",
-        annotations_creators="expert-annotated",
+        date=("2025-02-18", "2025-02-18"),
+        domains=["News", "Scene", "Written"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
         dialect=[],
-        sample_creation="human-translated and localized",
+        sample_creation="multiple",
+        adapted_from=["SIB200Classification"],
+        is_beta=True,
         bibtex_citation=r"""
-@article{adelani2023sib,
-  author = {Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
-  journal = {arXiv preprint arXiv:2309.07445},
-  title = {SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
-  year = {2023},
+@inproceedings{schmidt-etal-2025-mvl,
+  address = {Vienna, Austria},
+  author = {Fabian David Schmidt and Florian Schneider and Chris Biemann and Goran Glava{\v{s}}},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2025},
+  doi = {10.18653/v1/2025.findings-acl.838},
+  month = jul,
+  pages = {16285--16312},
+  publisher = {Association for Computational Linguistics},
+  title = {{MVL-SIB}: A Massively Multilingual Vision-Language Benchmark for Cross-Modal Topical Matching},
+  url = {https://aclanthology.org/2025.findings-acl.838/},
+  year = {2025},
 }
 """,
+        prompt={"query": "Find the image matching this reference sentence."},
     )
-
-    def dataset_transform(self, **kwargs) -> None:
-        """
-        Convert each split to the MTEB format:
-        * text: str
-        * label: int
-        """
-        for lang in self.dataset:
-            for split in self.dataset[lang]:
-                ds = self.dataset[lang][split]
-
-                cols = ds.column_names
-                text_col = next(
-                    c for c in ("text", "sentence", "utterance") if c in cols
-                )
-                lab_col = next(c for c in ("label", "labels", "category") if c in cols)
-
-                def to_mteb(example, lab_col=lab_col, text_col=text_col):
-                    raw_label = example[lab_col]
-                    if isinstance(raw_label, str):
-                        label = _TOPIC2ID[raw_label]
-                    else:
-                        label = int(raw_label)
-                    return {"text": example[text_col], "label": label}
-
-                self.dataset[lang][split] = ds.map(to_mteb, remove_columns=cols)

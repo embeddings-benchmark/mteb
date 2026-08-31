@@ -191,8 +191,7 @@ def _style_number_of_parameters(num_params: float) -> str:
     """Anything bigger than 1B is shown in billions with 1 decimal (e.g. 1.712 > 1.7) while anything smaller as 0.xxx B (e.g. 0.345 remains 0.345)"""
     if num_params >= 1:
         return f"{num_params:.1f}"
-    else:
-        return f"{num_params:.3f}"
+    return f"{num_params:.3f}"
 
 
 def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:

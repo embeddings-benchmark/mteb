@@ -97,14 +97,13 @@ class BedrockModel(AbsEncoder):
         )
         if self._provider == "amazon":
             return self._encode_amazon(inputs, show_progress_bar)
-        elif self._provider == "cohere":
+        if self._provider == "cohere":
             prompt_name = self.get_prompt_name(task_metadata, prompt_type)
             cohere_task_type = self.model_prompts.get(prompt_name, "search_document")
             return self._encode_cohere(inputs, cohere_task_type, show_progress_bar)
-        else:
-            raise ValueError(
-                f"Unknown provider '{self._provider}'. Must be 'amazon' or 'cohere'."
-            )
+        raise ValueError(
+            f"Unknown provider '{self._provider}'. Must be 'amazon' or 'cohere'."
+        )
 
     def _encode_amazon(
         self, sentences: list[str], show_progress_bar: bool = False

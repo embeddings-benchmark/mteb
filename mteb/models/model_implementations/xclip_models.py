@@ -121,9 +121,9 @@ class XCLIPModel(AbsEncoder):
                     "The number of texts and videos must have the same length"
                 )
             return text_embeddings + video_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif video_embeddings is not None:
+        if video_embeddings is not None:
             return video_embeddings
 
         raise ValueError(

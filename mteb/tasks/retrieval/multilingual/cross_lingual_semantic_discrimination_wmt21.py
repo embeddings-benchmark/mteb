@@ -86,10 +86,9 @@ class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval):
                 relevant_docs[lang_pair][split] = {}
 
                 # Generate unique IDs for queries and documents
-                query_id_counter = 1
                 document_id_counter = 1
 
-                for row in dataset_raw[lang_pair]:
+                for query_id_counter, row in enumerate(dataset_raw[lang_pair], start=1):
                     query_text = row["Source"]
                     positive_text = [row["Target"]]
                     negative_texts = [
@@ -102,7 +101,6 @@ class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval):
                     # Assign unique ID to the query
                     query_id = f"Q{query_id_counter}"
                     queries[lang_pair][split][query_id] = query_text
-                    query_id_counter += 1
 
                     # Add true parallel and distractors to corpus with unique id.
                     for text in positive_text + negative_texts:
