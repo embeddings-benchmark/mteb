@@ -1,7 +1,6 @@
-from datasets import Dataset, Image, load_dataset
+from __future__ import annotations
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
-from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -10,9 +9,6 @@ _LANGUAGES = {
     "de": ["deu-Latn"],
     "fr": ["fra-Latn"],
 }
-
-_DATASET_PATH = "romrawinjp/multi30k"
-_DATASET_REVISION = "110e827dac7d6aabe6201d13bbdbc7413630390d"
 
 _BIBTEX = r"""
 @inproceedings{barrault2018findings,
@@ -36,66 +32,28 @@ _BIBTEX = r"""
 }
 """
 
-
-def _load_multi30k(task: AbsTaskRetrieval, direction: str) -> None:
-    """Load Multi30k into MTEB retrieval format.
-
-    Multi30k stores one row per image with parallel captions in four columns
-    (en/cs/de/fr), so the image side is identical across every language subset
-    and only the caption side changes. The image side is therefore built once
-    per split and shared. `direction` selects which side is the query: "t2i"
-    retrieves images from captions, "i2t" retrieves captions from images.
-    """
-    if task.data_loaded:
-        return
-
-    path = task.metadata.dataset["path"]
-    revision = task.metadata.dataset["revision"]
-    task.dataset = {}
-
-    for split in task.metadata.eval_splits:
-        data = load_dataset(path, split=split, revision=revision)
-        row_ids = [str(i) for i in range(len(data))]
-
-        # Built once and reused across languages. add_column is used rather
-        # than map so the image bytes are never decoded and re-encoded.
-        image_side = data.select_columns(["image"])
-        image_side = image_side.add_column("id", [f"image-{i}" for i in row_ids])
-        image_side = image_side.cast_column("image", Image())
-
-        for lang in task.hf_subsets:
-            text_side = Dataset.from_dict(
-                {"id": [f"text-{i}" for i in row_ids], "text": data[lang]}
-            )
-
-            if direction == "t2i":
-                queries, corpus = text_side, image_side
-                query_prefix, doc_prefix = "text", "image"
-            else:
-                queries, corpus = image_side, text_side
-                query_prefix, doc_prefix = "image", "text"
-
-            task.dataset.setdefault(lang, {})[split] = RetrievalSplitData(
-                queries=queries,
-                corpus=corpus,
-                relevant_docs={
-                    f"{query_prefix}-{i}": {f"{doc_prefix}-{i}": 1} for i in row_ids
-                },
-                top_ranked=None,
-            )
-
-    task.data_loaded = True
+_DESCRIPTION_TAIL = (
+    "The Czech, German and French captions are independent human translations describing "
+    "the same Flickr30k image rather than machine translations, so the four language "
+    "subsets are directly comparable. Built from the 1,000-image test split of "
+    "romrawinjp/multi30k; the image side is identical across subsets and is stored once "
+    "rather than duplicated per language. Construction script: "
+    "scripts/data/multi30k_retrieval/create_data.py."
+)
 
 
 class Multi30kT2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Multi30kT2IRetrieval",
         description=(
-            "Retrieve Flickr30k images from parallel English, Czech, German and "
-            "French descriptions of the same image."
+            "Retrieve Flickr30k images from parallel English, Czech, German and French "
+            "descriptions of the same image. " + _DESCRIPTION_TAIL
         ),
         reference="https://aclanthology.org/W16-3210/",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        dataset={
+            "path": "vnahata/Multi30k-T2I",
+            "revision": "b41de7a143914c34c751b60f139fa8b5d7cd5211",
+        },
         type="Any2AnyMultilingualRetrieval",
         category="t2i",
         eval_splits=["test"],
@@ -112,19 +70,19 @@ class Multi30kT2IRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_multi30k(self, "t2i")
-
 
 class Multi30kI2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Multi30kI2TRetrieval",
         description=(
-            "Retrieve English, Czech, German and French descriptions from a "
-            "Flickr30k image, testing cross-lingual image-to-text alignment."
+            "Retrieve English, Czech, German and French descriptions from a Flickr30k "
+            "image, testing cross-lingual image-to-text alignment. " + _DESCRIPTION_TAIL
         ),
         reference="https://aclanthology.org/W16-3210/",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        dataset={
+            "path": "vnahata/Multi30k-I2T",
+            "revision": "43493b9dd88a89493b0f5904a4118012b5b66acf",
+        },
         type="Any2AnyMultilingualRetrieval",
         category="i2t",
         eval_splits=["test"],
@@ -140,6 +98,3 @@ class Multi30kI2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        _load_multi30k(self, "i2t")
