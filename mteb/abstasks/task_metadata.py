@@ -94,6 +94,7 @@ TaskSubtype = Literal[
     "Spoken Language Identification",
     "Stroke Classification of Musical Instrument",
     "Tonic Classification of Musical Instrument",
+    "Speaker Identification",
     "Speaker Count Identification",
     "Species Classification",
     "Spoken Digit Classification",
