@@ -21,9 +21,10 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-# Band schema per task. This is model configuration, not a prompt: the schema
-# names the 14 frequency bands the encoder conditions its export gate on. The
-# two -scifact models pin their schema server-side and ignore this; the general
+# Band schema per task. This selects the 14 frequency bands the encoder
+# conditions its export gate on, and nothing else -- the query instruction is a
+# separate request field that mteb fills from the task metadata. The two
+# -scifact models pin their schema server-side and ignore this; the general
 # models have no default and require one.
 TASK_SCHEMA_IDS: dict[str, str] = {
     "SciFact": "biomedical:scifact:2.0.0",
@@ -89,12 +90,19 @@ class PaprEmbedAPIModel(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        input_type: Literal["query", "document"] = (
-            "query" if _is_query(prompt_type) else "document"
-        )
+        is_query = _is_query(prompt_type)
+        input_type: Literal["query", "document"] = "query" if is_query else "document"
         texts = _collect_texts(inputs)
         if not texts:
             return np.zeros((0, self._embed_dim), dtype=np.float32)
+
+        # mteb owns the instruction. The API takes it as an explicit field and
+        # applies exactly what it is given, so the prompt this model is scored
+        # with is the task's registered one, visible here rather than chosen
+        # server-side. Documents are not instructed.
+        instruction = (
+            self.get_instruction(task_metadata, prompt_type) if is_query else None
+        )
 
         schema_id = TASK_SCHEMA_IDS.get(getattr(task_metadata, "name", "") or "")
         vectors: list[list[float]] = []
@@ -104,6 +112,8 @@ class PaprEmbedAPIModel(AbsEncoder):
                 "input": batch,
                 "input_type": input_type,
             }
+            if is_query:
+                payload["instruction"] = instruction or ""
             if schema_id:
                 payload["schema_id"] = schema_id
             if self.reasoning:
