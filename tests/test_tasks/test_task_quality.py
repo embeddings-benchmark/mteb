@@ -818,6 +818,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "YueOpenriceReviewClassification",
     ],
     "duplicate_image": [
+        "AfriMCQACategoryClassification",  # several questions are asked about one photograph
         "AROCocoOrder",
         "AROFlickrOrder",
         "AROVisualAttribution",
