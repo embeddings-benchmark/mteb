@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import inspect
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -198,12 +197,6 @@ class BioVITAWrapper(AbsEncoder):
             if hasattr(feature_extractor, "return_attention_mask"):
                 feature_extractor.return_attention_mask = False
 
-        try:
-            signature = inspect.signature(self.audio_processor.__call__)
-            self._audio_kw = "audio" if "audio" in signature.parameters else "audios"
-        except Exception:
-            self._audio_kw = "audio"
-
         # Load BioVITA's fine-tuned CLAP weights and 512 -> 768 adapter.
         clap_path = hf_hub_download(
             repo_id=model_name,
@@ -297,8 +290,6 @@ class BioVITAWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
-        from PIL import Image
-
         embeddings = []
 
         for batch in tqdm(
@@ -306,17 +297,12 @@ class BioVITAWrapper(AbsEncoder):
             disable=not show_progress_bar,
             desc="Encoding BioVITA images",
         ):
-            processed_images = []
-
-            for image in batch["image"]:
-                try:
-                    processed = self.image_preprocess(image.convert("RGB"))
-                except Exception:
-                    processed = self.image_preprocess(Image.new("RGB", (224, 224)))
-
-                processed_images.append(processed)
-
-            image_tensor = torch.stack(processed_images).to(self.device)
+            image_tensor = torch.stack(
+                [
+                    self.image_preprocess(image.convert("RGB"))
+                    for image in batch["image"]
+                ]
+            ).to(self.device)
 
             with torch.autocast(
                 device_type="cuda",
@@ -352,20 +338,12 @@ class BioVITAWrapper(AbsEncoder):
         ):
             waveforms = [audio["array"] for audio in batch["audio"]]
 
-            processor_kwargs = {
-                self._audio_kw: waveforms,
-                "sampling_rate": TARGET_SAMPLING_RATE,
-                "return_tensors": "pt",
-                "padding": True,
-            }
-
-            try:
-                audio_inputs = self.audio_processor(**processor_kwargs)
-            except TypeError:
-                alternate_kw = "audios" if self._audio_kw == "audio" else "audio"
-                processor_kwargs.pop(self._audio_kw)
-                processor_kwargs[alternate_kw] = waveforms
-                audio_inputs = self.audio_processor(**processor_kwargs)
+            audio_inputs = self.audio_processor(
+                audio=waveforms,
+                sampling_rate=TARGET_SAMPLING_RATE,
+                return_tensors="pt",
+                padding=True,
+            )
 
             audio_inputs = {
                 key: value.to(self.device) for key, value in audio_inputs.items()
@@ -382,19 +360,9 @@ class BioVITAWrapper(AbsEncoder):
                 dtype=self._amp_dtype,
                 enabled=self._use_amp,
             ):
-                features = self.clap.get_audio_features(**audio_inputs)
+                audio_outputs = self.clap.get_audio_features(**audio_inputs)
 
-            # Transformers 5.x may return BaseModelOutputWithPooling
-            # instead of a raw tensor.
-            if not torch.is_tensor(features):
-                if hasattr(features, "pooler_output"):
-                    features = features.pooler_output
-                else:
-                    raise TypeError(
-                        f"Unexpected CLAP audio output type: {type(features)}"
-                    )
-
-            features = self.audio_adapter(features)
+            features = self.audio_adapter(audio_outputs.pooler_output)
             features = F.normalize(
                 features,
                 dim=-1,
@@ -502,5 +470,10 @@ biovita = ModelMeta(
     training_datasets=None,
     model_type=["dense"],
     citation=BIOVITA_CITATION,
-    extra_requirements_groups=["image", "audio", "open_clip_torch"],
+    extra_requirements_groups=[
+        "image",
+        "audio",
+        "open_clip_torch",
+        "transformers-v5",
+    ],
 )
