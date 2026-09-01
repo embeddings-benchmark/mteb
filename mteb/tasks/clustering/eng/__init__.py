@@ -3,7 +3,9 @@ from .arxiv_clustering_p2p import ArxivClusteringP2P, ArxivClusteringP2PFast
 from .arxiv_clustering_s2s import ArxivClusteringS2S
 from .arxiv_hierarchical_clustering import (
     ArXivHierarchicalClusteringP2P,
+    ArXivHierarchicalClusteringP2PV2,
     ArXivHierarchicalClusteringS2S,
+    ArXivHierarchicalClusteringS2SV2,
 )
 from .ave_dataset_clustering import (
     AVEDatasetAudioVideoClustering,
@@ -71,7 +73,9 @@ __all__ = [
     "AVEDatasetVideoClustering",
     "AmbientAcousticContextClustering",
     "ArXivHierarchicalClusteringP2P",
+    "ArXivHierarchicalClusteringP2PV2",
     "ArXivHierarchicalClusteringS2S",
+    "ArXivHierarchicalClusteringS2SV2",
     "ArxivClusteringP2P",
     "ArxivClusteringP2PFast",
     "ArxivClusteringS2S",

@@ -46,7 +46,7 @@ def _evaluate_clustering_bootstrapped(
     max_depth: int | None,
     rng_state: random.Random,
     seed: int,
-    drop_unlabelled_documents: bool = True,
+    drop_unlabelled_documents: bool = False,
 ) -> tuple[dict[str, dict[str, list[float]]], dict[str, list[list[int]]]]:
     """Bootstrapped evaluation of clustering performance.
 
@@ -86,9 +86,8 @@ def _evaluate_clustering_bootstrapped(
             if not valid_idx.all():
                 logger.warning(
                     "Level %d: dropping %d of %d documents that have no label at "
-                    "this level. Set drop_unlabelled_documents=False on the task to "
-                    "score them as one shared class instead, which is the older "
-                    "behaviour.",
+                    "this level, because drop_unlabelled_documents is set on this task. "
+                    "The older behaviour scores them as one shared class.",
                     i_level,
                     len(labels) - int(valid_idx.sum()),
                     len(labels),
@@ -167,10 +166,11 @@ class AbsTaskClustering(AbsTask):
         drop_unlabelled_documents: For a hierarchical task, whether a document whose label
             path is shorter than the level being scored is dropped at that level rather than
             scored. Those documents have nothing in common except a missing label, so keeping
-            them asks the model to find a class that is not really there. Defaults to True.
-            The hierarchical tasks that existed before this option was added set it to False
-            so their published scores stay reproducible. A task whose label paths all reach
-            the same depth is unaffected either way, since no document is ever dropped.
+            them asks the model to find a class that is not really there. Defaults to False,
+            which is the behaviour every published hierarchical score was produced under.
+            New tasks that want the corrected behaviour set it to True; the .v2 hierarchical
+            tasks do. A task whose label paths all reach the same depth is unaffected either
+            way, since no document is ever dropped.
         input_column_name: Name of the column(s) containing the input sentences or data points. Default is "sentences".
             Can be a string for single-column tasks or a list of strings for multimodal tasks (e.g. ["video", "audio"]).
             When specified as a list, values must be the default column names as defined in the encoder I/O types
@@ -185,7 +185,7 @@ class AbsTaskClustering(AbsTask):
     n_clusters: int = 10
     k_mean_batch_size: int = 512
     max_depth = None
-    drop_unlabelled_documents: bool = True
+    drop_unlabelled_documents: bool = False
     abstask_prompt = "Identify categories in user passages."
     input_column_name: str | Sequence[Modalities] = "sentences"
     label_column_name: str = "labels"
