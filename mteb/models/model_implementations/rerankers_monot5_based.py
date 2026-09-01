@@ -78,8 +78,8 @@ class MonoT5Reranker(RerankerWrapper):
         self.token_false_id, self.token_true_id = self.get_prediction_tokens(
             model_name_or_path,
             self.tokenizer,
-            kwargs["token_false"] if "token_false" in kwargs else None,
-            kwargs["token_true"] if "token_true" in kwargs else None,
+            kwargs.get("token_false"),
+            kwargs.get("token_true"),
         )
         logger.info(f"Using max_length of {self.tokenizer.model_max_length}")
         logger.info(f"Using token_false_id of {self.token_false_id}")
@@ -100,15 +100,13 @@ class MonoT5Reranker(RerankerWrapper):
                 token_false_id = tokenizer.get_vocab()[token_false]
                 token_true_id = tokenizer.get_vocab()[token_true]
                 return token_false_id, token_true_id
-            else:
-                raise Exception(
-                    f"We don't know the indexes for the non-relevant/relevant tokens for\
+            raise Exception(
+                f"We don't know the indexes for the non-relevant/relevant tokens for\
                         the checkpoint {model_name_or_path} and you did not provide any."
-                )
-        else:
-            token_false_id = tokenizer.get_vocab()[token_false]
-            token_true_id = tokenizer.get_vocab()[token_true]
-            return token_false_id, token_true_id
+            )
+        token_false_id = tokenizer.get_vocab()[token_false]
+        token_true_id = tokenizer.get_vocab()[token_true]
+        return token_false_id, token_true_id
 
     @torch.inference_mode()
     def predict(

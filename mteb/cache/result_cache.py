@@ -361,9 +361,9 @@ class ResultCache:
                 remote=True,
                 experiment_name=experiment_name,
             )
-            if remote_result_path.exists() and prioritize_remote:
-                result_path = remote_result_path
-            elif not result_path.exists():
+            if (
+                remote_result_path.exists() and prioritize_remote
+            ) or not result_path.exists():
                 result_path = remote_result_path
 
         if not result_path.exists():
@@ -867,7 +867,7 @@ class ResultCache:
 
         def _get_paths(base_path: Path, experiments: LoadExperimentEnum) -> list[Path]:
             paths = _cache_paths(base_path)
-            if not experiments == LoadExperimentEnum.NO_EXPERIMENTS:
+            if experiments != LoadExperimentEnum.NO_EXPERIMENTS:
                 paths += _experiments_paths(base_path)
             return paths
 

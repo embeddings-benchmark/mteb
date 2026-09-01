@@ -43,8 +43,10 @@ class GreekCivicsQA(AbsTaskRetrieval):
         relevant_docs = {eval_split: {}}
 
         question_ids = {
-            question: str(id)
-            for id, question in zip(data_raw["id"], data_raw["question"], strict=True)
+            question: str(question_id)
+            for question_id, question in zip(
+                data_raw["id"], data_raw["question"], strict=True
+            )
         }
 
         context_ids = {

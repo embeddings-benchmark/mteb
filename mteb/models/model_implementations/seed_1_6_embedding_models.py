@@ -30,9 +30,9 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def pil_to_base64(image, format="jpeg"):
+def pil_to_base64(image, image_format="jpeg"):
     buffer = BytesIO()
-    image.save(buffer, format=format)
+    image.save(buffer, format=image_format)
     img_bytes = buffer.getvalue()
     encoded_bytes = base64.b64encode(img_bytes)
     return encoded_bytes.decode("utf-8")

@@ -86,7 +86,7 @@ MTEB_EN = Benchmark(
 MTEB_ENG_CLASSIC = Benchmark(
     name="MTEB(eng, v1)",
     aliases=["MTEB(eng, classic)", "MTEB"],
-    display_name="English Legacy",
+    display_name="English",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/gb.svg",
     tasks=MTEBTasks(
         get_tasks(
@@ -181,7 +181,7 @@ MTEB_ENG_CLASSIC = Benchmark(
 MTEB_MAIN_RU = Benchmark(
     name="MTEB(rus, v1)",
     aliases=["MTEB(rus)"],
-    display_name="Russian legacy",
+    display_name="Russian",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ru.svg",
     tasks=MTEBTasks(
         get_tasks(
@@ -1216,7 +1216,7 @@ MTEB_multilingual_v2 = Benchmark(
 MTEB_JPN = Benchmark(
     name="MTEB(jpn, v1)",
     aliases=["MTEB(jpn)"],
-    display_name="Japanese Legacy",
+    display_name="Japanese",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
     tasks=get_tasks(
         languages=["jpn"],
@@ -1960,7 +1960,7 @@ C_MTEB = Benchmark(
 FA_MTEB = Benchmark(
     name="MTEB(fas, v1)",
     aliases=["FaMTEB(fas, beta)"],
-    display_name="Farsi Legacy",
+    display_name="Farsi",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
     tasks=get_tasks(
         languages=["fas"],
@@ -2045,6 +2045,7 @@ FA_MTEB = Benchmark(
 }
 """,
     contacts=["mehran-sarmadi", "ERfun", "morteza20"],
+    superseded_by=["MTEB(fas, v2)"],
 )
 
 FA_MTEB_2 = Benchmark(

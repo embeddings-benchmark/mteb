@@ -58,8 +58,7 @@ def check_uniques(example, uniques):
     if example["hash"] in uniques:
         uniques.remove(example["hash"])
         return True
-    else:
-        return False
+    return False
 
 
 class IN22ConvBitextMining(AbsTaskBitextMining):

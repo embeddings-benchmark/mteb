@@ -66,9 +66,9 @@ def select_similarity(
     """
     if similarity_fn is ScoringFunction.COSINE:
         return cos_sim(embedding1, embedding2)
-    elif similarity_fn is ScoringFunction.DOT_PRODUCT:
+    if similarity_fn is ScoringFunction.DOT_PRODUCT:
         return dot_score(embedding1, embedding2)
-    elif similarity_fn is ScoringFunction.EUCLIDEAN:
+    if similarity_fn is ScoringFunction.EUCLIDEAN:
         return euclidean_sim(embedding1, embedding2)
     raise ValueError(f"Unsupported similarity function: {similarity_fn}")
 
@@ -90,9 +90,9 @@ def select_pairwise_similarity(
     """
     if similarity_fn is ScoringFunction.COSINE:
         return pairwise_cos_sim(embedding1, embedding2)
-    elif similarity_fn is ScoringFunction.DOT_PRODUCT:
+    if similarity_fn is ScoringFunction.DOT_PRODUCT:
         return pairwise_dot_score(embedding1, embedding2)
-    elif similarity_fn is ScoringFunction.EUCLIDEAN:
+    if similarity_fn is ScoringFunction.EUCLIDEAN:
         return pairwise_euclidean_sim(embedding1, embedding2)
     raise ValueError(f"Unsupported similarity function: {similarity_fn}")
 
@@ -147,8 +147,7 @@ def cos_sim(a: Array, b: Array) -> torch.Tensor:
     if should_compile:
         _cos_sim_core_compiled = torch.compile(_cos_sim_core)
         return _cos_sim_core_compiled(a, b)
-    else:
-        return _cos_sim_core(a, b)
+    return _cos_sim_core(a, b)
 
 
 # https://github.com/UKPLab/sentence-transformers/blob/3fd59c3d122f2148e22b6338447b45d850fb6ea4/sentence_transformers/util.py#L125
@@ -276,8 +275,7 @@ def dot_score(a: Array, b: Array) -> torch.Tensor:
     ):
         _dot_score_core_compiled = torch.compile(_dot_score_core)
         return _dot_score_core_compiled(a, b)
-    else:
-        return _dot_score_core(a, b)
+    return _dot_score_core(a, b)
 
 
 def pairwise_dot_score(a: Array, b: Array) -> Array:

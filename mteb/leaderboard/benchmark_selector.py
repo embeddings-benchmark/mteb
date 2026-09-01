@@ -37,8 +37,7 @@ def _create_button(
     def _update_variant(state: str) -> gr.Button:
         if state == label_to_value[label]:
             return gr.Button(variant="primary")
-        else:
-            return gr.Button(variant="secondary")
+        return gr.Button(variant="secondary")
 
     def _update_value() -> str:
         return label_to_value[label]

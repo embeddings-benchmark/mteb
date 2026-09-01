@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import os
 import pathlib
 import tempfile
@@ -182,10 +183,8 @@ class OmniVinciWrapper(AbsEncoder):
 
         finally:
             for f in temp_files:
-                try:
+                with contextlib.suppress(OSError):
                     pathlib.Path(f).unlink()
-                except OSError:
-                    pass
 
     @torch.inference_mode()
     def encode(

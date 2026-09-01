@@ -160,13 +160,13 @@ class TableDownloadEvent(BaseEvent):
         cls,
         session_id: str,
         benchmark: str | None = None,
-        format: str = "csv",
+        file_format: str = "csv",
         row_count: int | None = None,
         properties: dict[str, Any] | None = None,
         **kwargs,
     ) -> TableDownloadEvent:
         """Convenience creation method"""
-        merged = {"format": format}
+        merged = {"format": file_format}
         if row_count is not None:
             merged["row_count"] = row_count
         if properties:
