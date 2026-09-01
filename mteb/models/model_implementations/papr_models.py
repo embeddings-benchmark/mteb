@@ -21,10 +21,10 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-# Per-task holographic schema served by the public API. The instruction is
-# applied server-side from this schema, so the encoder MUST send raw query
-# text (batch["query"]), never mteb's already-instructed batch["text"].
-# Reproducing the submitted SciFact numbers requires this mapping.
+# Band schema per task. This is model configuration, not a prompt: the schema
+# names the 14 frequency bands the encoder conditions its export gate on. The
+# two -scifact models pin their schema server-side and ignore this; the general
+# models have no default and require one.
 TASK_SCHEMA_IDS: dict[str, str] = {
     "SciFact": "biomedical:scifact:2.0.0",
 }
@@ -51,11 +51,6 @@ class PaprEmbedAPIModel(AbsEncoder):
 
     Auth: ``PAPR_API_KEY`` (https://dashboard.papr.ai). Optional
     ``PAPR_BASE_URL`` overrides the default production endpoint.
-
-    Query batches use ``batch["query"]`` (raw text). Sending ``batch["text"]``
-    would double-instruct every query because the server already applies the
-    schema instruction. That is the same rule the public eval harness uses
-    (https://github.com/Papr-ai/papr-embed-evals).
     """
 
     def __init__(
@@ -97,7 +92,7 @@ class PaprEmbedAPIModel(AbsEncoder):
         input_type: Literal["query", "document"] = (
             "query" if _is_query(prompt_type) else "document"
         )
-        texts = _collect_texts(inputs, input_type)
+        texts = _collect_texts(inputs)
         if not texts:
             return np.zeros((0, self._embed_dim), dtype=np.float32)
 
@@ -139,9 +134,7 @@ class PaprEmbedAPIModel(AbsEncoder):
             except urllib.error.URLError as exc:
                 last_error = f"transport error: {exc}"
             time.sleep(min(60.0, 2.0**attempt))
-        raise RuntimeError(
-            f"Papr embeddings API failed after retries ({last_error})"
-        )
+        raise RuntimeError(f"Papr embeddings API failed after retries ({last_error})")
 
 
 def _is_query(prompt_type: PromptType | None) -> bool:
@@ -151,15 +144,10 @@ def _is_query(prompt_type: PromptType | None) -> bool:
     return str(value).lower() == "query"
 
 
-def _collect_texts(
-    inputs: DataLoader[BatchedInput], input_type: str
-) -> list[str]:
+def _collect_texts(inputs: DataLoader[BatchedInput]) -> list[str]:
     texts: list[str] = []
     for batch in inputs:
-        if input_type == "query" and batch.get("query") is not None:
-            texts.extend(str(text) for text in batch["query"])
-        else:
-            texts.extend(str(text) for text in batch["text"])
+        texts.extend(str(text) for text in batch["text"])
     return texts
 
 
@@ -180,84 +168,167 @@ def _batches(texts: list[str]) -> list[list[str]]:
     return batches
 
 
-def _papr_meta(
-    *,
-    name: str,
-    papr_model_id: str,
-    n_parameters: int | None,
-    embed_dim: int,
-    reasoning: dict[str, str] | None = None,
-) -> ModelMeta:
-    return ModelMeta(
-        name=name,
-        model_type=["dense"],
-        revision="api",
-        release_date="2026-08-20",
-        languages=["eng-Latn"],
-        loader=PaprEmbedAPIModel,
-        loader_kwargs=dict(
-            papr_model_id=papr_model_id,
-            embed_dim=embed_dim,
-            reasoning=reasoning,
-        ),
-        max_tokens=2048,
-        embed_dim=embed_dim,
-        open_weights=False,
-        n_parameters=n_parameters,
-        n_embedding_parameters=None,
-        memory_usage_mb=None,
-        license=None,
-        reference="https://github.com/Papr-ai/papr-embed-evals",
-        similarity_fn_name=ScoringFunction.COSINE,
-        framework=["API"],
-        use_instructions=True,
-        public_training_code=None,
-        public_training_data=None,
-        training_datasets=PAPR_TRAINING_DATASETS,
-    )
-
-
-papr_embed_v1_0_6b_scifact = _papr_meta(
+papr_embed_v1_0_6b_scifact = ModelMeta(
     name="papr/papr-embed-v1-0.6b-scifact",
-    papr_model_id="papr-embed-v1-0.6b-scifact",
-    n_parameters=628_000_000,
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-08-20",
+    languages=["eng-Latn"],
+    loader=PaprEmbedAPIModel,
+    loader_kwargs=dict(
+        papr_model_id="papr-embed-v1-0.6b-scifact",
+        embed_dim=3968,
+    ),
+    max_tokens=2048,
     embed_dim=3968,
+    open_weights=False,
+    n_parameters=628_000_000,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://github.com/Papr-ai/papr-embed-evals",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=PAPR_TRAINING_DATASETS,
 )
 
-papr_embed_v1_0_6b_scifact_reasoning = _papr_meta(
+papr_embed_v1_0_6b_scifact_reasoning = ModelMeta(
     name="papr/papr-embed-v1-0.6b-scifact-reasoning-frontier-max",
-    papr_model_id="papr-embed-v1-0.6b-scifact",
-    n_parameters=628_000_000,
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-08-20",
+    languages=["eng-Latn"],
+    loader=PaprEmbedAPIModel,
+    loader_kwargs=dict(
+        papr_model_id="papr-embed-v1-0.6b-scifact",
+        embed_dim=3968,
+        reasoning={"tier": "frontier", "effort": "max"},
+    ),
+    max_tokens=2048,
     embed_dim=3968,
-    reasoning={"tier": "frontier", "effort": "max"},
+    open_weights=False,
+    n_parameters=628_000_000,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://github.com/Papr-ai/papr-embed-evals",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=PAPR_TRAINING_DATASETS,
 )
 
-papr_embed_v1_0_6b = _papr_meta(
+papr_embed_v1_0_6b = ModelMeta(
     name="papr/papr-embed-v1-0.6b",
-    papr_model_id="papr-embed-v1-0.6b",
-    n_parameters=628_000_000,
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-08-20",
+    languages=["eng-Latn"],
+    loader=PaprEmbedAPIModel,
+    loader_kwargs=dict(
+        papr_model_id="papr-embed-v1-0.6b",
+        embed_dim=3968,
+    ),
+    max_tokens=2048,
     embed_dim=3968,
+    open_weights=False,
+    n_parameters=628_000_000,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://github.com/Papr-ai/papr-embed-evals",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=PAPR_TRAINING_DATASETS,
 )
 
-papr_embed_v1_0_6b_reasoning = _papr_meta(
+papr_embed_v1_0_6b_reasoning = ModelMeta(
     name="papr/papr-embed-v1-0.6b-reasoning-frontier-max",
-    papr_model_id="papr-embed-v1-0.6b",
-    n_parameters=628_000_000,
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-08-20",
+    languages=["eng-Latn"],
+    loader=PaprEmbedAPIModel,
+    loader_kwargs=dict(
+        papr_model_id="papr-embed-v1-0.6b",
+        embed_dim=3968,
+        reasoning={"tier": "frontier", "effort": "max"},
+    ),
+    max_tokens=2048,
     embed_dim=3968,
-    reasoning={"tier": "frontier", "effort": "max"},
+    open_weights=False,
+    n_parameters=628_000_000,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://github.com/Papr-ai/papr-embed-evals",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=PAPR_TRAINING_DATASETS,
 )
 
-papr_embed_v1_4b = _papr_meta(
+papr_embed_v1_4b = ModelMeta(
     name="papr/papr-embed-v1-4b",
-    papr_model_id="papr-embed-v1-4b",
-    n_parameters=4_020_000_000,
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-08-20",
+    languages=["eng-Latn"],
+    loader=PaprEmbedAPIModel,
+    loader_kwargs=dict(
+        papr_model_id="papr-embed-v1-4b",
+        embed_dim=5504,
+    ),
+    max_tokens=2048,
     embed_dim=5504,
+    open_weights=False,
+    n_parameters=4_020_000_000,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://github.com/Papr-ai/papr-embed-evals",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=PAPR_TRAINING_DATASETS,
 )
 
-papr_embed_v1_4b_reasoning = _papr_meta(
+papr_embed_v1_4b_reasoning = ModelMeta(
     name="papr/papr-embed-v1-4b-reasoning-frontier-max",
-    papr_model_id="papr-embed-v1-4b",
-    n_parameters=4_020_000_000,
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-08-20",
+    languages=["eng-Latn"],
+    loader=PaprEmbedAPIModel,
+    loader_kwargs=dict(
+        papr_model_id="papr-embed-v1-4b",
+        embed_dim=5504,
+        reasoning={"tier": "frontier", "effort": "max"},
+    ),
+    max_tokens=2048,
     embed_dim=5504,
-    reasoning={"tier": "frontier", "effort": "max"},
+    open_weights=False,
+    n_parameters=4_020_000_000,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://github.com/Papr-ai/papr-embed-evals",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=PAPR_TRAINING_DATASETS,
 )
