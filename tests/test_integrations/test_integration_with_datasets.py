@@ -2,7 +2,7 @@
 
 import logging
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import pytest
@@ -20,6 +20,10 @@ logging.basicConfig(level=logging.INFO)
 class ModelInfo:
     name: str
     expected_scores: dict[str, float]
+    model: mteb.EncoderProtocol = field(init=False, repr=False)
+
+    def __post_init__(self) -> None:
+        self.model = mteb.get_model(self.name)
 
 
 DENSE_MODEL = ModelInfo(
@@ -101,27 +105,24 @@ def _assert_score(result: mteb.TaskResult, model_info: ModelInfo) -> None:
 
 
 def _evaluate_and_assert_score(
-    model: mteb.EncoderProtocol,
     task: AbsTask,
     model_info: ModelInfo,
 ) -> None:
     task = mteb.get_task(task.metadata.name)
-    result = mteb.evaluate(model, task, cache=None)[0]
+    result = mteb.evaluate(model_info.model, task, cache=None)[0]
     _assert_score(result, model_info)
 
 
 @pytest.mark.parametrize("task", TASK_TEST_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL.name)])
-def test_benchmark_datasets(task: AbsTask, model: mteb.EncoderProtocol, tmp_path: Path):
+def test_benchmark_datasets(task: AbsTask, tmp_path: Path):
     """Test that a task can be fetched and produces the expected final score."""
-    _evaluate_and_assert_score(model, task, DENSE_MODEL)
+    _evaluate_and_assert_score(task, DENSE_MODEL)
 
 
 @pytest.mark.parametrize("task", TASK_TEST_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(SPARSE_MODEL.name)])
-def test_benchmark_datasets_sparse_encoder(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_datasets_sparse_encoder(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
-    _evaluate_and_assert_score(model, task, SPARSE_MODEL)
+    _evaluate_and_assert_score(task, SPARSE_MODEL)
 
 
 @pytest.mark.parametrize(
@@ -132,9 +133,8 @@ def test_benchmark_datasets_sparse_encoder(task: AbsTask, model: mteb.EncoderPro
     [mteb.get_task("TwitterHjerneRetrieval")],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model", [mteb.get_model(COLBERT_MODEL.name)])
-def test_benchmark_datasets_colbert(task: AbsTask, model: mteb.EncoderProtocol):
-    _evaluate_and_assert_score(model, task, COLBERT_MODEL)
+def test_benchmark_datasets_colbert(task: AbsTask):
+    _evaluate_and_assert_score(task, COLBERT_MODEL)
 
 
 @pytest.mark.parametrize(
@@ -142,17 +142,15 @@ def test_benchmark_datasets_colbert(task: AbsTask, model: mteb.EncoderProtocol):
     [t for t in TASK_TEST_GRID if t.metadata.type == "Reranking"],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model", [mteb.get_model(CROSS_ENCODER_MODEL.name)])
-def test_benchmark_datasets_cross_encoder(task: AbsTask, model: mteb.EncoderProtocol):
-    _evaluate_and_assert_score(model, task, CROSS_ENCODER_MODEL)
+def test_benchmark_datasets_cross_encoder(task: AbsTask):
+    _evaluate_and_assert_score(task, CROSS_ENCODER_MODEL)
 
 
 def test_run_task_multiple_times():
     """Regression test for https://github.com/embeddings-benchmark/mteb/issues/4397"""
-    model = mteb.get_model(DENSE_MODEL.name)
     # Core17InstructionRetrieval already in TASK_TEST_GRID
     task = mteb.get_task("Core17InstructionRetrieval")
-    first_result = mteb.evaluate(model, task, cache=None)[0]
-    second_result = mteb.evaluate(model, task, cache=None)[0]
+    first_result = mteb.evaluate(DENSE_MODEL.model, task, cache=None)[0]
+    second_result = mteb.evaluate(DENSE_MODEL.model, task, cache=None)[0]
     _assert_score(first_result, DENSE_MODEL)
     _assert_score(second_result, DENSE_MODEL)

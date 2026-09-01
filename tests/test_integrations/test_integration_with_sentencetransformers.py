@@ -1,7 +1,7 @@
 """test that mteb.evaluate integrates with SentenceTransformers"""
 
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import pytest
 import sentence_transformers
@@ -24,10 +24,15 @@ logging.basicConfig(level=logging.INFO)
 class ModelInfo:
     name: str
     expected_scores: dict[str, float]
+    model_type: type[SentenceTransformer] | type[CrossEncoder] = field(repr=False)
+
+    def load_model(self) -> SentenceTransformer | CrossEncoder:
+        return self.model_type(self.name)
 
 
 SENTENCE_TRANSFORMER_MODEL = ModelInfo(
     name="average_word_embeddings_levy_dependency",
+    model_type=SentenceTransformer,
     expected_scores={
         "MockMultilingualBitextMiningTask": 0.5,
         "MockMultilingualParallelBitextMiningTask": 0.5,
@@ -61,6 +66,7 @@ SENTENCE_TRANSFORMER_MODEL = ModelInfo(
 )
 CROSS_ENCODER_MODEL = ModelInfo(
     name="cross-encoder/ms-marco-TinyBERT-L2-v2",
+    model_type=CrossEncoder,
     expected_scores={
         "MockRerankingTask": 0.5,
         "MockInstructionReranking": 0.63093,
@@ -69,10 +75,20 @@ CROSS_ENCODER_MODEL = ModelInfo(
 
 
 def _evaluate_and_assert_score(
-    model: SentenceTransformer | CrossEncoder,
     task: AbsTask,
     model_info: ModelInfo,
 ) -> None:
+    model = model_info.load_model()
+    if isinstance(model, SentenceTransformer):
+        # Prior to https://github.com/embeddings-benchmark/mteb/pull/3079 the
+        # SentenceTransformerWrapper would set the model's prompts to None because
+        # the mock tasks are not in the MTEB task registry. The linked PR changes
+        # this behavior and keeps the prompts as configured by the model, so this
+        # test sets the prompts to an empty dict explicitly to preserve the legacy
+        # behavior and focus the test on the tasks instead of the prompts.
+        # Using empty dict instead of None to avoid TypeError in SentenceTransformers 5.0.0+
+        model.prompts = {}
+
     task = type(task)()
     result = mteb.evaluate(model, task, cache=None)[0]
     expected_score = model_info.expected_scores[result.task_name]
@@ -83,19 +99,9 @@ def _evaluate_and_assert_score(
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model_info", [SENTENCE_TRANSFORMER_MODEL])
-def test_sentence_transformer_integration(task: AbsTask, model_info: ModelInfo):
+def test_sentence_transformer_integration(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
-    model = SentenceTransformer(model_info.name)
-    # Prior to https://github.com/embeddings-benchmark/mteb/pull/3079 the
-    # SentenceTransformerWrapper would set the model's prompts to None because
-    # the mock tasks are not in the MTEB task registry. The linked PR changes
-    # this behavior and keeps the prompts as configured by the model, so this
-    # test now sets the prompts to an empty dict explicitly to preserve the legacy
-    # behavior and focus the test on the tasks instead of the prompts.
-    # Using empty dict instead of None to avoid TypeError in SentenceTransformers 5.0.0+
-    model.prompts = {}
-    _evaluate_and_assert_score(model, task, model_info)
+    _evaluate_and_assert_score(task, SENTENCE_TRANSFORMER_MODEL)
 
 
 @pytest.mark.parametrize(
@@ -106,13 +112,9 @@ def test_sentence_transformer_integration(task: AbsTask, model_info: ModelInfo):
     ],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model_info", [CROSS_ENCODER_MODEL])
-def test_sentence_transformer_integration_cross_encoder(
-    task: AbsTask, model_info: ModelInfo
-):
+def test_sentence_transformer_integration_cross_encoder(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
-    model = CrossEncoder(model_info.name)
-    _evaluate_and_assert_score(model, task, model_info)
+    _evaluate_and_assert_score(task, CROSS_ENCODER_MODEL)
 
 
 def test_model_meta_load_sentence_transformer_metadata_from_model():

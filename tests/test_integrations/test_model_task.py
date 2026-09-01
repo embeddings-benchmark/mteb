@@ -9,7 +9,7 @@ below.
 
 import logging
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import pytest
 
@@ -36,6 +36,10 @@ logging.basicConfig(level=logging.INFO)
 class ModelInfo:
     name: str
     expected_scores: dict[str, float]
+    model: mteb.EncoderProtocol = field(init=False, repr=False)
+
+    def __post_init__(self) -> None:
+        self.model = mteb.get_model(self.name)
 
 
 DENSE_MODEL = ModelInfo(
@@ -238,14 +242,13 @@ if sys.platform == "darwin":
 
 
 def _evaluate_and_assert_score(
-    model: mteb.EncoderProtocol,
     task: AbsTask,
     model_info: ModelInfo,
 ) -> None:
     # Parametrized task objects are created at collection time and reused by tests assigned
     # to the same xdist worker. Evaluate a fresh task so scores do not depend on test order.
     task = type(task)()
-    results = mteb.evaluate(model, task, cache=None)
+    results = mteb.evaluate(model_info.model, task, cache=None)
     result = results[0]
     expected_score = model_info.expected_scores[result.task_name]
 
@@ -255,17 +258,15 @@ def _evaluate_and_assert_score(
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL.name)])
-def test_benchmark_text_encoder(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_text_encoder(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
-    _evaluate_and_assert_score(model, task, DENSE_MODEL)
+    _evaluate_and_assert_score(task, DENSE_MODEL)
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(SPARSE_MODEL.name)])
-def test_benchmark_text_sparse_encoder(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_text_sparse_encoder(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
-    _evaluate_and_assert_score(model, task, SPARSE_MODEL)
+    _evaluate_and_assert_score(task, SPARSE_MODEL)
 
 
 @pytest.mark.parametrize(
@@ -273,33 +274,29 @@ def test_benchmark_text_sparse_encoder(task: AbsTask, model: mteb.EncoderProtoco
     [t for t in MOCK_TASK_TEST_GRID if t.metadata.simplified_task_type == "retrieval"],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model", [mteb.get_model(COLBERT_MODEL.name)])
-def test_benchmark_text_colbert(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_text_colbert(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
-    _evaluate_and_assert_score(model, task, COLBERT_MODEL)
+    _evaluate_and_assert_score(task, COLBERT_MODEL)
 
 
 @pytest.mark.parametrize("task", [MockRerankingTask()], ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(CROSS_ENCODER_MODEL.name)])
-def test_benchmark_text_cross_encoder(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_text_cross_encoder(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
-    _evaluate_and_assert_score(model, task, CROSS_ENCODER_MODEL)
+    _evaluate_and_assert_score(task, CROSS_ENCODER_MODEL)
 
 
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL.name)])
-def test_benchmark_audio_encoder(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_audio_encoder(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
-    _evaluate_and_assert_score(model, task, DENSE_MODEL)
+    _evaluate_and_assert_score(task, DENSE_MODEL)
 
 
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(SPARSE_MODEL.name)])
-def test_benchmark_audio_sparse_encoder(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_audio_sparse_encoder(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
-    _evaluate_and_assert_score(model, task, SPARSE_MODEL)
+    _evaluate_and_assert_score(task, SPARSE_MODEL)
 
 
 @pytest.mark.parametrize(
@@ -307,35 +304,31 @@ def test_benchmark_audio_sparse_encoder(task: AbsTask, model: mteb.EncoderProtoc
     [t for t in MOCK_MAEB_TASK_GRID if t.metadata.simplified_task_type == "retrieval"],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model", [mteb.get_model(COLBERT_MODEL.name)])
-def test_benchmark_audio_colbert(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_audio_colbert(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
-    _evaluate_and_assert_score(model, task, COLBERT_MODEL)
+    _evaluate_and_assert_score(task, COLBERT_MODEL)
 
 
 @pytest.mark.parametrize("task", [MockAudioReranking()], ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(CROSS_ENCODER_MODEL.name)])
-def test_benchmark_audio_cross_encoder(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_audio_cross_encoder(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
-    _evaluate_and_assert_score(model, task, CROSS_ENCODER_MODEL)
+    _evaluate_and_assert_score(task, CROSS_ENCODER_MODEL)
 
 
 @pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL.name)])
-def test_benchmark_image_encoder(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_image_encoder(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Image dependencies are not installed")
-    _evaluate_and_assert_score(model, task, DENSE_MODEL)
+    _evaluate_and_assert_score(task, DENSE_MODEL)
 
 
 @pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(SPARSE_MODEL.name)])
-def test_benchmark_image_sparse_encoder(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_image_sparse_encoder(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Image dependencies are not installed")
-    _evaluate_and_assert_score(model, task, SPARSE_MODEL)
+    _evaluate_and_assert_score(task, SPARSE_MODEL)
 
 
 @pytest.mark.parametrize(
@@ -343,29 +336,26 @@ def test_benchmark_image_sparse_encoder(task: AbsTask, model: mteb.EncoderProtoc
     [t for t in MOCK_MIEB_TASK_GRID if t.metadata.simplified_task_type == "retrieval"],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model", [mteb.get_model(COLBERT_MODEL.name)])
-def test_benchmark_image_colbert(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_image_colbert(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Image dependencies are not installed")
-    _evaluate_and_assert_score(model, task, COLBERT_MODEL)
+    _evaluate_and_assert_score(task, COLBERT_MODEL)
 
 
 @pytest.mark.parametrize("task", MOCK_MVEB_TASK_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL.name)])
-def test_benchmark_video_encoder(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_video_encoder(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Video dependencies are not installed")
     pytest.importorskip("torchaudio", reason="Video dependencies are not installed")
-    _evaluate_and_assert_score(model, task, DENSE_MODEL)
+    _evaluate_and_assert_score(task, DENSE_MODEL)
 
 
 @pytest.mark.parametrize("task", MOCK_MVEB_TASK_GRID, ids=lambda t: t.metadata.name)
-@pytest.mark.parametrize("model", [mteb.get_model(SPARSE_MODEL.name)])
-def test_benchmark_video_sparse_encoder(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_video_sparse_encoder(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Video dependencies are not installed")
     pytest.importorskip("torchaudio", reason="Video dependencies are not installed")
-    _evaluate_and_assert_score(model, task, SPARSE_MODEL)
+    _evaluate_and_assert_score(task, SPARSE_MODEL)
 
 
 @pytest.mark.parametrize(
@@ -373,12 +363,11 @@ def test_benchmark_video_sparse_encoder(task: AbsTask, model: mteb.EncoderProtoc
     [t for t in MOCK_MVEB_TASK_GRID if t.metadata.simplified_task_type == "retrieval"],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model", [mteb.get_model(COLBERT_MODEL.name)])
-def test_benchmark_video_colbert(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_video_colbert(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Video dependencies are not installed")
     pytest.importorskip("torchaudio", reason="Video dependencies are not installed")
-    _evaluate_and_assert_score(model, task, COLBERT_MODEL)
+    _evaluate_and_assert_score(task, COLBERT_MODEL)
 
 
 @pytest.mark.parametrize(
@@ -392,9 +381,8 @@ def test_benchmark_video_colbert(task: AbsTask, model: mteb.EncoderProtocol):
     ],
     ids=lambda t: t.metadata.name,
 )
-@pytest.mark.parametrize("model", [mteb.get_model(DENSE_MODEL.name)])
-def test_benchmark_pair_classification(task: AbsTask, model: mteb.EncoderProtocol):
+def test_benchmark_pair_classification(task: AbsTask):
     """Test that a task can be fetched and produces the expected final score."""
     pytest.importorskip("torchvision", reason="Video dependencies are not installed")
     pytest.importorskip("torchaudio", reason="Video dependencies are not installed")
-    _evaluate_and_assert_score(model, task, DENSE_MODEL)
+    _evaluate_and_assert_score(task, DENSE_MODEL)
