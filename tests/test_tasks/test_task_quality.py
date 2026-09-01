@@ -895,6 +895,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Kinetics600VAZeroShot",
         "Kinetics700VA",
         "Kinetics700VAZeroShot",
+        "MCIFA2TRetrieval",  # the same talk corpus is reused across languages
+        "MCIFT2ARetrieval",
         "NSynth",  # repeated notes across instrument/pitch/velocity combinations
         "NSynthInstrumentFamilyClustering",  # same upstream duplicate notes as NSynth
         "SpeechCommands",  # many repeated recordings of the same short command word
@@ -906,6 +908,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WorldSenseAudioVideoZeroShot",
     ],
     "duplicate_video": [
+        "MCIFT2VRetrieval",  # the same talk corpus is reused across languages
+        "MCIFV2TRetrieval",
         "DenseWebVidCoVRVT2VRetrieval",  # multiple rows have same video with different instruction
         "InsAVE80KVT2VRetrieval",  # reverse couples re-release the same clip under two names
         "MMVUVideoCentricQA",

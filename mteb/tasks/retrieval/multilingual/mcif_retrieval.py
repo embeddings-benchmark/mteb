@@ -7,7 +7,7 @@ from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _DATASET_PATH = "vnahata/MCIF-retrieval"
-_DATASET_REVISION = "112f5bb92217b25845cf3fc28be529bc1439cc1f"
+_DATASET_REVISION = "7a1761cb7cf7378b8d2cf16e3715309482952c2c"
 
 _LANGUAGES = {
     "en": ["eng-Latn"],
